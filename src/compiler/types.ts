@@ -950,6 +950,7 @@ module ts {
         Union              = 0x00004000,  // Union
         Anonymous          = 0x00008000,  // Anonymous
         FromSignature      = 0x00010000,  // Created for signature assignment check
+        Unwidened          = 0x00020000,  // Unwidened type (is or contains Undefined or Null type)
 
         Intrinsic  = Any | String | Number | Boolean | Void | Undefined | Null,
         StringLike = String | StringLiteral,

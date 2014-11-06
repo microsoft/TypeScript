@@ -123,8 +123,8 @@ module ts {
         var numberType = createIntrinsicType(TypeFlags.Number, "number");
         var booleanType = createIntrinsicType(TypeFlags.Boolean, "boolean");
         var voidType = createIntrinsicType(TypeFlags.Void, "void");
-        var undefinedType = createIntrinsicType(TypeFlags.Undefined, "undefined");
-        var nullType = createIntrinsicType(TypeFlags.Null, "null");
+        var undefinedType = createIntrinsicType(TypeFlags.Undefined | TypeFlags.Unwidened, "undefined");
+        var nullType = createIntrinsicType(TypeFlags.Null | TypeFlags.Unwidened, "null");
         var unknownType = createIntrinsicType(TypeFlags.Any, "unknown");
         var resolvingType = createIntrinsicType(TypeFlags.Any, "__resolving__");
 
@@ -1643,48 +1643,19 @@ module ts {
             // Use the type of the initializer expression if one is present
             if (declaration.initializer) {
                 var type = checkAndMarkExpression(declaration.initializer);
-                // Widening of property assignments is handled by checkObjectLiteral, exclude them here
                 if (declaration.kind !== SyntaxKind.PropertyAssignment) {
-                    var unwidenedType = type;
+                    reportErrorsFromWidening(declaration, type);
                     type = getWidenedType(type);
-                    if (type !== unwidenedType) {
-                        checkImplicitAny(type);
-                    }
                 }
                 return type;
             }
             // Rest parameters default to type any[], other parameters default to type any
             var type = declaration.flags & NodeFlags.Rest ? createArrayType(anyType) : anyType;
-            checkImplicitAny(type);
-            return type;
-
-            function checkImplicitAny(type: Type) {
-                if (!fullTypeCheck || !compilerOptions.noImplicitAny) {
-                    return;
-                }
-                // We need to have ended up with 'any', 'any[]', 'any[][]', etc.
-                if (getInnermostTypeOfNestedArrayTypes(type) !== anyType) {
-                    return;
-                }
-                // Ignore privates within ambient contexts; they exist purely for documentative purposes to avoid name clashing.
-                // (e.g. privates within .d.ts files do not expose type information)
-                if (isPrivateWithinAmbient(declaration) || (declaration.kind === SyntaxKind.Parameter && isPrivateWithinAmbient(declaration.parent))) {
-                    return;
-                }
-                switch (declaration.kind) {
-                    case SyntaxKind.Property:
-                        var diagnostic = Diagnostics.Member_0_implicitly_has_an_1_type;
-                        break;
-                    case SyntaxKind.Parameter:
-                        var diagnostic = declaration.flags & NodeFlags.Rest ?
-                            Diagnostics.Rest_parameter_0_implicitly_has_an_any_type :
-                            Diagnostics.Parameter_0_implicitly_has_an_1_type;
-                        break;
-                    default:
-                        var diagnostic = Diagnostics.Variable_0_implicitly_has_an_1_type;
-                }
-                error(declaration, diagnostic, identifierToString(declaration.name), typeToString(type));
+            // Report implicit any errors unless this is a private property within an ambient declaration
+            if (compilerOptions.noImplicitAny && !isPrivateWithinAmbient(declaration) && !(declaration.kind === SyntaxKind.Parameter && isPrivateWithinAmbient(declaration.parent))) {
+                reportImplicitAnyError(declaration, type);
             }
+            return type;
         }
 
         function getTypeOfVariableOrParameterOrProperty(symbol: Symbol): Type {
@@ -2671,11 +2642,16 @@ module ts {
             }
         }
 
+        function getUnwidenedFlagOfTypes(types: Type[]): TypeFlags {
+            return forEach(types, t => t.flags & TypeFlags.Unwidened) || 0;
+        }
+
         function createTypeReference(target: GenericType, typeArguments: Type[]): TypeReference {
             var id = getTypeListId(typeArguments);
             var type = target.instantiations[id];
             if (!type) {
-                type = target.instantiations[id] = <TypeReference>createObjectType(TypeFlags.Reference, target.symbol);
+                var flags = TypeFlags.Reference | getUnwidenedFlagOfTypes(typeArguments);
+                type = target.instantiations[id] = <TypeReference>createObjectType(flags, target.symbol);
                 type.target = target;
                 type.typeArguments = typeArguments;
             }
@@ -2935,7 +2911,7 @@ module ts {
             var id = getTypeListId(sortedTypes);
             var type = unionTypes[id];
             if (!type) {
-                type = unionTypes[id] = <UnionType>createObjectType(TypeFlags.Union);
+                type = unionTypes[id] = <UnionType>createObjectType(TypeFlags.Union | getUnwidenedFlagOfTypes(sortedTypes));
                 type.types = sortedTypes;
             }
             return type;
@@ -3894,76 +3870,107 @@ module ts {
             return type.flags & TypeFlags.Reference && (<TypeReference>type).target === globalArrayType;
         }
 
-        function getInnermostTypeOfNestedArrayTypes(type: Type): Type {
-            while (isArrayType(type)) {
-                type = (<GenericType>type).typeArguments[0];
+        function getWidenedTypeOfObjectLiteral(type: Type): Type {
+            var properties = getPropertiesOfObjectType(type);
+            var members: SymbolTable = {};
+            forEach(properties, p => {
+                var symbol = <TransientSymbol>createSymbol(p.flags | SymbolFlags.Transient, p.name);
+                symbol.declarations = p.declarations;
+                symbol.parent = p.parent;
+                symbol.type = getWidenedType(getTypeOfSymbol(p));
+                symbol.target = p;
+                if (p.valueDeclaration) symbol.valueDeclaration = p.valueDeclaration;
+                members[symbol.name] = symbol;
+            });
+            var stringIndexType = getIndexTypeOfType(type, IndexKind.String);
+            var numberIndexType = getIndexTypeOfType(type, IndexKind.Number);
+            if (stringIndexType) stringIndexType = getWidenedType(stringIndexType);
+            if (numberIndexType) numberIndexType = getWidenedType(numberIndexType);
+            return createAnonymousType(type.symbol, members, emptyArray, emptyArray, stringIndexType, numberIndexType);
+        }
+
+        function getWidenedType(type: Type): Type {
+            if (type.flags & TypeFlags.Unwidened) {
+                if (type.flags & (TypeFlags.Undefined | TypeFlags.Null)) {
+                    return anyType;
+                }
+                if (type.flags & TypeFlags.Union) {
+                    return getUnionType(map((<UnionType>type).types, t => getWidenedType(t)));
+                }
+                if (isTypeOfObjectLiteral(type)) {
+                    return getWidenedTypeOfObjectLiteral(type);
+                }
+                if (isArrayType(type)) {
+                    return createArrayType(getWidenedType((<TypeReference>type).typeArguments[0]));
+                }
             }
             return type;
         }
 
-        /* If we are widening on a literal, then we may need to the 'node' parameter for reporting purposes */
-        function getWidenedType(type: Type, suppressNoImplicitAnyErrors?: boolean): Type {
-            if (type.flags & (TypeFlags.Undefined | TypeFlags.Null)) {
-                return anyType;
-            }
+        function reportWideningErrorsInType(type: Type): boolean {
             if (type.flags & TypeFlags.Union) {
-                return getWidenedTypeOfUnion(type);
-            }
-            if (isTypeOfObjectLiteral(type)) {
-                return getWidenedTypeOfObjectLiteral(type);
+                var errorReported = false;
+                forEach((<UnionType>type).types, t => {
+                    if (reportWideningErrorsInType(t)) {
+                        errorReported = true;
+                    }
+                });
+                return errorReported;
             }
             if (isArrayType(type)) {
-                return getWidenedTypeOfArrayLiteral(type);
+                return reportWideningErrorsInType((<TypeReference>type).typeArguments[0]);
             }
-            return type;
-
-            function getWidenedTypeOfUnion(type: Type): Type {
-                return getUnionType(map((<UnionType>type).types, t => getWidenedType(t, suppressNoImplicitAnyErrors)));
-            }
-
-            function getWidenedTypeOfObjectLiteral(type: Type): Type {
-                var properties = getPropertiesOfObjectType(type);
-                if (properties.length) {
-                    var widenedTypes: Type[] = [];
-                    var propTypeWasWidened: boolean = false;
-                    forEach(properties, p => {
-                        var propType = getTypeOfSymbol(p);
-                        var widenedType = getWidenedType(propType);
-                        if (propType !== widenedType) {
-                            propTypeWasWidened = true;
-                            if (!suppressNoImplicitAnyErrors && compilerOptions.noImplicitAny && getInnermostTypeOfNestedArrayTypes(widenedType) === anyType) {
-                                error(p.valueDeclaration, Diagnostics.Object_literal_s_property_0_implicitly_has_an_1_type, p.name, typeToString(widenedType));
-                            }
+            if (isTypeOfObjectLiteral(type)) {
+                var errorReported = false;
+                forEach(getPropertiesOfObjectType(type), p => {
+                    var t = getTypeOfSymbol(p);
+                    if (t.flags & TypeFlags.Unwidened) {
+                        if (!reportWideningErrorsInType(t)) {
+                            error(p.valueDeclaration, Diagnostics.Object_literal_s_property_0_implicitly_has_an_1_type, p.name, typeToString(getWidenedType(t)));
                         }
-                        widenedTypes.push(widenedType);
-                    });
-                    if (propTypeWasWidened) {
-                        var members: SymbolTable = {};
-                        var index = 0;
-                        forEach(properties, p => {
-                            var symbol = <TransientSymbol>createSymbol(SymbolFlags.Property | SymbolFlags.Transient | p.flags, p.name);
-                            symbol.declarations = p.declarations;
-                            symbol.parent = p.parent;
-                            symbol.type = widenedTypes[index++];
-                            symbol.target = p;
-                            if (p.valueDeclaration) symbol.valueDeclaration = p.valueDeclaration;
-                            members[symbol.name] = symbol;
-                        });
-                        var stringIndexType = getIndexTypeOfType(type, IndexKind.String);
-                        var numberIndexType = getIndexTypeOfType(type, IndexKind.Number);
-                        if (stringIndexType) stringIndexType = getWidenedType(stringIndexType);
-                        if (numberIndexType) numberIndexType = getWidenedType(numberIndexType);
-                        type = createAnonymousType(type.symbol, members, emptyArray, emptyArray, stringIndexType, numberIndexType);
+                        errorReported = true;
                     }
-                }
-                return type;
+                });
+                return errorReported;
             }
+            return false;
+        }
 
-            function getWidenedTypeOfArrayLiteral(type: Type): Type {
-                var elementType = (<TypeReference>type).typeArguments[0];
-                var widenedType = getWidenedType(elementType, suppressNoImplicitAnyErrors);
-                type = elementType !== widenedType ? createArrayType(widenedType) : type;
-                return type;
+        function reportImplicitAnyError(declaration: Declaration, type: Type) {
+            var typeAsString = typeToString(getWidenedType(type));
+            switch (declaration.kind) {
+                case SyntaxKind.Property:
+                    var diagnostic = Diagnostics.Member_0_implicitly_has_an_1_type;
+                    break;
+                case SyntaxKind.Parameter:
+                    var diagnostic = declaration.flags & NodeFlags.Rest ?
+                        Diagnostics.Rest_parameter_0_implicitly_has_an_any_type :
+                        Diagnostics.Parameter_0_implicitly_has_an_1_type;
+                    break;
+                case SyntaxKind.FunctionDeclaration:
+                case SyntaxKind.Method:
+                case SyntaxKind.GetAccessor:
+                case SyntaxKind.SetAccessor:
+                case SyntaxKind.FunctionExpression:
+                case SyntaxKind.ArrowFunction:
+                    if (!declaration.name) {
+                        error(declaration, Diagnostics.Function_expression_which_lacks_return_type_annotation_implicitly_has_an_0_return_type, typeAsString);
+                        return;
+                    }
+                    var diagnostic = Diagnostics._0_which_lacks_return_type_annotation_implicitly_has_an_1_return_type;
+                    break;
+                default:
+                    var diagnostic = Diagnostics.Variable_0_implicitly_has_an_1_type;
+            }
+            error(declaration, diagnostic, identifierToString(declaration.name), typeAsString);
+        }
+
+        function reportErrorsFromWidening(declaration: Declaration, type: Type) {
+            if (fullTypeCheck && compilerOptions.noImplicitAny && type.flags & TypeFlags.Unwidened) {
+                // Report implicit any error within type if possible, otherwise report error on declaration
+                if (!reportWideningErrorsInType(type)) {
+                    reportImplicitAnyError(declaration, type);
+                }
             }
         }
 
@@ -4944,11 +4951,13 @@ module ts {
             var members = node.symbol.members;
             var properties: SymbolTable = {};
             var contextualType = getContextualType(node);
+            var typeFlags: TypeFlags;
             for (var id in members) {
                 if (hasProperty(members, id)) {
                     var member = members[id];
                     if (member.flags & SymbolFlags.Property) {
                         var type = checkExpression((<PropertyDeclaration>member.declarations[0]).initializer, contextualMapper);
+                        typeFlags |= type.flags;
                         var prop = <TransientSymbol>createSymbol(SymbolFlags.Property | SymbolFlags.Transient | member.flags, member.name);
                         prop.declarations = member.declarations;
                         prop.parent = member.parent;
@@ -4978,7 +4987,9 @@ module ts {
             }
             var stringIndexType = getIndexType(IndexKind.String);
             var numberIndexType = getIndexType(IndexKind.Number);
-            return createAnonymousType(node.symbol, properties, emptyArray, emptyArray, stringIndexType, numberIndexType);
+            var result = createAnonymousType(node.symbol, properties, emptyArray, emptyArray, stringIndexType, numberIndexType);
+            result.flags |= (typeFlags & TypeFlags.Unwidened);
+            return result;
 
             function getIndexType(kind: IndexKind) {
                 if (contextualType && contextualTypeHasIndexSignature(contextualType, kind)) {
@@ -5673,7 +5684,7 @@ module ts {
             var exprType = checkExpression(node.operand);
             var targetType = getTypeFromTypeNode(node.type);
             if (fullTypeCheck && targetType !== unknownType) {
-                var widenedType = getWidenedType(exprType, /*supressNoImplicitAnyErrors*/ true);
+                var widenedType = getWidenedType(exprType);
                 if (!(isTypeAssignableTo(targetType, widenedType))) {
                     checkTypeAssignableTo(exprType, targetType, node, Diagnostics.Neither_type_0_nor_type_1_is_assignable_to_the_other);
                 }
@@ -5704,48 +5715,26 @@ module ts {
         function getReturnTypeFromBody(func: FunctionDeclaration, contextualMapper?: TypeMapper): Type {
             var contextualSignature = getContextualSignature(func);
             if (func.body.kind !== SyntaxKind.FunctionBlock) {
-                var unwidenedType = checkAndMarkExpression(func.body, contextualMapper);
-                var widenedType = getWidenedType(unwidenedType);
-
-                if (fullTypeCheck && compilerOptions.noImplicitAny && !contextualSignature && widenedType !== unwidenedType && getInnermostTypeOfNestedArrayTypes(widenedType) === anyType) {
-                    error(func, Diagnostics.Function_expression_which_lacks_return_type_annotation_implicitly_has_an_0_return_type, typeToString(widenedType));
-                }
-
-                return widenedType;
+                var type = checkAndMarkExpression(func.body, contextualMapper);
             }
-
-            // Aggregate the types of expressions within all the return statements.
-            var types = checkAndAggregateReturnExpressionTypes(<Block>func.body, contextualMapper);
-
-            // Try to return the best common type if we have any return expressions.
-            if (types.length > 0) {
+            else {
+                // Aggregate the types of expressions within all the return statements.
+                var types = checkAndAggregateReturnExpressionTypes(<Block>func.body, contextualMapper);
+                if (types.length === 0) {
+                    return voidType;
+                }
                 // When return statements are contextually typed we allow the return type to be a union type. Otherwise we require the
                 // return expressions to have a best common supertype.
-                var commonType = contextualSignature ? getUnionType(types) : getCommonSupertype(types);
-                if (!commonType) {
+                var type = contextualSignature ? getUnionType(types) : getCommonSupertype(types);
+                if (!type) {
                     error(func, Diagnostics.No_best_common_type_exists_among_return_expressions);
-                    
                     return unknownType;
                 }
-
-                var widenedType = getWidenedType(commonType);
-
-                // Check and report for noImplicitAny if the best common type implicitly gets widened to an 'any'/arrays-of-'any' type.
-                if (fullTypeCheck && compilerOptions.noImplicitAny && !contextualSignature && widenedType !== commonType && getInnermostTypeOfNestedArrayTypes(widenedType) === anyType) {
-                    var typeName = typeToString(widenedType);
-
-                    if (func.name) {
-                        error(func, Diagnostics._0_which_lacks_return_type_annotation_implicitly_has_an_1_return_type, identifierToString(func.name), typeName);
-                    }
-                    else {
-                        error(func, Diagnostics.Function_expression_which_lacks_return_type_annotation_implicitly_has_an_0_return_type, typeName);
-                    }
-                }
-
-                return widenedType;
             }
-
-            return voidType;
+            if (!contextualSignature) {
+                reportErrorsFromWidening(func, type);
+            }
+            return getWidenedType(type);
         }
 
         /// Returns a set of types relating to every return expression relating to a function block.
@@ -6946,20 +6935,10 @@ module ts {
                 checkIfNonVoidFunctionHasReturnExpressionsOrSingleThrowStatment(node, getTypeFromTypeNode(node.type));
             }
 
-            // If there is no body and no explicit return type, then report an error.
-            if (fullTypeCheck && compilerOptions.noImplicitAny && !node.body && !node.type) {
-                // Ignore privates within ambient contexts; they exist purely for documentative purposes to avoid name clashing.
-                // (e.g. privates within .d.ts files do not expose type information)
-                if (!isPrivateWithinAmbient(node)) {
-                    var typeName = typeToString(anyType);
-
-                    if (node.name) {
-                        error(node, Diagnostics._0_which_lacks_return_type_annotation_implicitly_has_an_1_return_type, identifierToString(node.name), typeName);
-                    }
-                    else {
-                        error(node, Diagnostics.Function_expression_which_lacks_return_type_annotation_implicitly_has_an_0_return_type, typeName);
-                    }
-                }
+            // Report an implicit any error if there is no body, no explicit return type, and node is not a private method
+            // in an ambient context
+            if (compilerOptions.noImplicitAny && !node.body && !node.type && !isPrivateWithinAmbient(node)) {
+                reportImplicitAnyError(node, anyType);
             }
         }
 
