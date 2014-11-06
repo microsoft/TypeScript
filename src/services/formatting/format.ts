@@ -449,24 +449,6 @@ module ts.formatting {
                         }
                     }
                     else {
-                        var increaseIndentation = SmartIndenter.nodeContentIsAlwaysIndented(child.kind);
-                        if (!increaseIndentation) {
-                            switch (child.kind) {
-                                case SyntaxKind.IfStatement:
-                                case SyntaxKind.ForInStatement:
-                                case SyntaxKind.ForStatement:
-                                case SyntaxKind.WhileStatement:
-                                case SyntaxKind.DoStatement:
-                                case SyntaxKind.FunctionExpression:
-                                case SyntaxKind.FunctionDeclaration:
-                                case SyntaxKind.Method:
-                                case SyntaxKind.GetAccessor:
-                                case SyntaxKind.SetAccessor:
-                                    increaseIndentation = true;
-                                    break;
-                            }
-                        }
-
                         if (SmartIndenter.childStartsOnTheSameLineWithElseInIfStatement(node, child, childStart.line, sourceFile)) {
                             childIndentationAmount = nodeIndentation.getBaseIndentation();
                         }
@@ -474,12 +456,31 @@ module ts.formatting {
                             childIndentationAmount = nodeIndentation.getBaseIndentation() + nodeIndentation.getDelta();
                         }
 
-                        if (increaseIndentation) {
-                            childDelta = options.IndentSize;
-                        }
+
                     }                    
-                } 
-                
+                }
+
+                var increaseIndentation = SmartIndenter.nodeContentIsAlwaysIndented(child.kind);
+                if (!increaseIndentation) {
+                    switch (child.kind) {
+                        case SyntaxKind.IfStatement:
+                        case SyntaxKind.ForInStatement:
+                        case SyntaxKind.ForStatement:
+                        case SyntaxKind.WhileStatement:
+                        case SyntaxKind.DoStatement:
+                        case SyntaxKind.FunctionExpression:
+                        case SyntaxKind.FunctionDeclaration:
+                        case SyntaxKind.Method:
+                        case SyntaxKind.GetAccessor:
+                        case SyntaxKind.SetAccessor:
+                            increaseIndentation = true;
+                            break;
+                    }
+                }
+                if (increaseIndentation) {
+                    childDelta = options.IndentSize;
+                }
+
                 if (nodeEffectiveStartLine === childStart.line) {
                     childIndentationAmount = nodeIndentation.getBaseIndentation();
                     childDelta = Math.min(options.IndentSize, delta + childDelta);
