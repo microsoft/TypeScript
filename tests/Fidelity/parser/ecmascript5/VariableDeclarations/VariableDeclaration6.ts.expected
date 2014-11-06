@@ -1,0 +1,73 @@
+{
+    "isDeclaration": false,
+    "languageVersion": "EcmaScript5",
+    "diagnostics": [
+        {
+            "start": 0,
+            "length": 3,
+            "diagnosticCode": "'{0}' list cannot be empty.",
+            "arguments": [
+                "variable declaration"
+            ]
+        }
+    ],
+    "sourceUnit": {
+        "kind": "SourceUnit",
+        "fullStart": 0,
+        "fullEnd": 3,
+        "start": 0,
+        "end": 3,
+        "fullWidth": 3,
+        "width": 3,
+        "moduleElements": [
+            {
+                "kind": "VariableStatement",
+                "fullStart": 0,
+                "fullEnd": 3,
+                "start": 0,
+                "end": 3,
+                "fullWidth": 3,
+                "width": 3,
+                "modifiers": [],
+                "variableDeclaration": {
+                    "kind": "VariableDeclaration",
+                    "fullStart": 0,
+                    "fullEnd": 3,
+                    "start": 0,
+                    "end": 3,
+                    "fullWidth": 3,
+                    "width": 3,
+                    "varKeyword": {
+                        "kind": "VarKeyword",
+                        "fullStart": 0,
+                        "fullEnd": 3,
+                        "start": 0,
+                        "end": 3,
+                        "fullWidth": 3,
+                        "width": 3,
+                        "text": "var",
+                        "value": "var",
+                        "valueText": "var"
+                    },
+                    "variableDeclarators": []
+                }
+            }
+        ],
+        "endOfFileToken": {
+            "kind": "EndOfFileToken",
+            "fullStart": 3,
+            "fullEnd": 3,
+            "start": 3,
+            "end": 3,
+            "fullWidth": 0,
+            "width": 0,
+            "text": ""
+        }
+    },
+    "lineMap": {
+        "lineStarts": [
+            0
+        ],
+        "length": 3
+    }
+}

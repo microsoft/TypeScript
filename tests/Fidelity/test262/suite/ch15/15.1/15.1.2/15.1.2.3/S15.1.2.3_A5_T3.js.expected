@@ -1,0 +1,1632 @@
+{
+    "isDeclaration": false,
+    "languageVersion": "EcmaScript5",
+    "sourceUnit": {
+        "kind": "SourceUnit",
+        "fullStart": 0,
+        "fullEnd": 689,
+        "start": 318,
+        "end": 689,
+        "fullWidth": 689,
+        "width": 371,
+        "moduleElements": [
+            {
+                "kind": "IfStatement",
+                "fullStart": 0,
+                "fullEnd": 428,
+                "start": 318,
+                "end": 427,
+                "fullWidth": 428,
+                "width": 109,
+                "ifKeyword": {
+                    "kind": "IfKeyword",
+                    "fullStart": 0,
+                    "fullEnd": 321,
+                    "start": 318,
+                    "end": 320,
+                    "fullWidth": 321,
+                    "width": 2,
+                    "text": "if",
+                    "value": "if",
+                    "valueText": "if",
+                    "hasLeadingTrivia": true,
+                    "hasLeadingComment": true,
+                    "hasLeadingNewLine": true,
+                    "hasTrailingTrivia": true,
+                    "leadingTrivia": [
+                        {
+                            "kind": "SingleLineCommentTrivia",
+                            "fullStart": 0,
+                            "fullEnd": 60,
+                            "text": "// Copyright 2009 the Sputnik authors.  All rights reserved."
+                        },
+                        {
+                            "kind": "NewLineTrivia",
+                            "fullStart": 60,
+                            "fullEnd": 61,
+                            "text": "\n"
+                        },
+                        {
+                            "kind": "SingleLineCommentTrivia",
+                            "fullStart": 61,
+                            "fullEnd": 131,
+                            "text": "// This code is governed by the BSD license found in the LICENSE file."
+                        },
+                        {
+                            "kind": "NewLineTrivia",
+                            "fullStart": 131,
+                            "fullEnd": 132,
+                            "text": "\n"
+                        },
+                        {
+                            "kind": "NewLineTrivia",
+                            "fullStart": 132,
+                            "fullEnd": 133,
+                            "text": "\n"
+                        },
+                        {
+                            "kind": "MultiLineCommentTrivia",
+                            "fullStart": 133,
+                            "fullEnd": 306,
+                            "text": "/**\n * Return the number value for the MV of Result(4)\n *\n * @path ch15/15.1/15.1.2/15.1.2.3/S15.1.2.3_A5_T3.js\n * @description Checking . DecimalDigits ExponentPart_opt\n */"
+                        },
+                        {
+                            "kind": "NewLineTrivia",
+                            "fullStart": 306,
+                            "fullEnd": 307,
+                            "text": "\n"
+                        },
+                        {
+                            "kind": "NewLineTrivia",
+                            "fullStart": 307,
+                            "fullEnd": 308,
+                            "text": "\n"
+                        },
+                        {
+                            "kind": "SingleLineCommentTrivia",
+                            "fullStart": 308,
+                            "fullEnd": 317,
+                            "text": "//CHECK#1"
+                        },
+                        {
+                            "kind": "NewLineTrivia",
+                            "fullStart": 317,
+                            "fullEnd": 318,
+                            "text": "\n"
+                        }
+                    ],
+                    "trailingTrivia": [
+                        {
+                            "kind": "WhitespaceTrivia",
+                            "fullStart": 320,
+                            "fullEnd": 321,
+                            "text": " "
+                        }
+                    ]
+                },
+                "openParenToken": {
+                    "kind": "OpenParenToken",
+                    "fullStart": 321,
+                    "fullEnd": 322,
+                    "start": 321,
+                    "end": 322,
+                    "fullWidth": 1,
+                    "width": 1,
+                    "text": "(",
+                    "value": "(",
+                    "valueText": "("
+                },
+                "condition": {
+                    "kind": "BinaryExpression",
+                    "fullStart": 322,
+                    "fullEnd": 347,
+                    "start": 322,
+                    "end": 347,
+                    "fullWidth": 25,
+                    "width": 25,
+                    "left": {
+                        "kind": "InvocationExpression",
+                        "fullStart": 322,
+                        "fullEnd": 340,
+                        "start": 322,
+                        "end": 339,
+                        "fullWidth": 18,
+                        "width": 17,
+                        "expression": {
+                            "kind": "IdentifierName",
+                            "fullStart": 322,
+                            "fullEnd": 332,
+                            "start": 322,
+                            "end": 332,
+                            "fullWidth": 10,
+                            "width": 10,
+                            "text": "parseFloat",
+                            "value": "parseFloat",
+                            "valueText": "parseFloat"
+                        },
+                        "argumentList": {
+                            "kind": "ArgumentList",
+                            "fullStart": 332,
+                            "fullEnd": 340,
+                            "start": 332,
+                            "end": 339,
+                            "fullWidth": 8,
+                            "width": 7,
+                            "openParenToken": {
+                                "kind": "OpenParenToken",
+                                "fullStart": 332,
+                                "fullEnd": 333,
+                                "start": 332,
+                                "end": 333,
+                                "fullWidth": 1,
+                                "width": 1,
+                                "text": "(",
+                                "value": "(",
+                                "valueText": "("
+                            },
+                            "arguments": [
+                                {
+                                    "kind": "StringLiteral",
+                                    "fullStart": 333,
+                                    "fullEnd": 338,
+                                    "start": 333,
+                                    "end": 338,
+                                    "fullWidth": 5,
+                                    "width": 5,
+                                    "text": "\"+.1\"",
+                                    "value": "+.1",
+                                    "valueText": "+.1"
+                                }
+                            ],
+                            "closeParenToken": {
+                                "kind": "CloseParenToken",
+                                "fullStart": 338,
+                                "fullEnd": 340,
+                                "start": 338,
+                                "end": 339,
+                                "fullWidth": 2,
+                                "width": 1,
+                                "text": ")",
+                                "value": ")",
+                                "valueText": ")",
+                                "hasTrailingTrivia": true,
+                                "trailingTrivia": [
+                                    {
+                                        "kind": "WhitespaceTrivia",
+                                        "fullStart": 339,
+                                        "fullEnd": 340,
+                                        "text": " "
+                                    }
+                                ]
+                            }
+                        }
+                    },
+                    "operatorToken": {
+                        "kind": "ExclamationEqualsEqualsToken",
+                        "fullStart": 340,
+                        "fullEnd": 344,
+                        "start": 340,
+                        "end": 343,
+                        "fullWidth": 4,
+                        "width": 3,
+                        "text": "!==",
+                        "value": "!==",
+                        "valueText": "!==",
+                        "hasTrailingTrivia": true,
+                        "trailingTrivia": [
+                            {
+                                "kind": "WhitespaceTrivia",
+                                "fullStart": 343,
+                                "fullEnd": 344,
+                                "text": " "
+                            }
+                        ]
+                    },
+                    "right": {
+                        "kind": "NumericLiteral",
+                        "fullStart": 344,
+                        "fullEnd": 347,
+                        "start": 344,
+                        "end": 347,
+                        "fullWidth": 3,
+                        "width": 3,
+                        "text": "0.1",
+                        "value": 0.1,
+                        "valueText": "0.1"
+                    }
+                },
+                "closeParenToken": {
+                    "kind": "CloseParenToken",
+                    "fullStart": 347,
+                    "fullEnd": 349,
+                    "start": 347,
+                    "end": 348,
+                    "fullWidth": 2,
+                    "width": 1,
+                    "text": ")",
+                    "value": ")",
+                    "valueText": ")",
+                    "hasTrailingTrivia": true,
+                    "trailingTrivia": [
+                        {
+                            "kind": "WhitespaceTrivia",
+                            "fullStart": 348,
+                            "fullEnd": 349,
+                            "text": " "
+                        }
+                    ]
+                },
+                "statement": {
+                    "kind": "Block",
+                    "fullStart": 349,
+                    "fullEnd": 428,
+                    "start": 349,
+                    "end": 427,
+                    "fullWidth": 79,
+                    "width": 78,
+                    "openBraceToken": {
+                        "kind": "OpenBraceToken",
+                        "fullStart": 349,
+                        "fullEnd": 351,
+                        "start": 349,
+                        "end": 350,
+                        "fullWidth": 2,
+                        "width": 1,
+                        "text": "{",
+                        "value": "{",
+                        "valueText": "{",
+                        "hasTrailingTrivia": true,
+                        "hasTrailingNewLine": true,
+                        "trailingTrivia": [
+                            {
+                                "kind": "NewLineTrivia",
+                                "fullStart": 350,
+                                "fullEnd": 351,
+                                "text": "\n"
+                            }
+                        ]
+                    },
+                    "statements": [
+                        {
+                            "kind": "ExpressionStatement",
+                            "fullStart": 351,
+                            "fullEnd": 426,
+                            "start": 353,
+                            "end": 425,
+                            "fullWidth": 75,
+                            "width": 72,
+                            "expression": {
+                                "kind": "InvocationExpression",
+                                "fullStart": 351,
+                                "fullEnd": 424,
+                                "start": 353,
+                                "end": 424,
+                                "fullWidth": 73,
+                                "width": 71,
+                                "expression": {
+                                    "kind": "IdentifierName",
+                                    "fullStart": 351,
+                                    "fullEnd": 359,
+                                    "start": 353,
+                                    "end": 359,
+                                    "fullWidth": 8,
+                                    "width": 6,
+                                    "text": "$ERROR",
+                                    "value": "$ERROR",
+                                    "valueText": "$ERROR",
+                                    "hasLeadingTrivia": true,
+                                    "leadingTrivia": [
+                                        {
+                                            "kind": "WhitespaceTrivia",
+                                            "fullStart": 351,
+                                            "fullEnd": 353,
+                                            "text": "  "
+                                        }
+                                    ]
+                                },
+                                "argumentList": {
+                                    "kind": "ArgumentList",
+                                    "fullStart": 359,
+                                    "fullEnd": 424,
+                                    "start": 359,
+                                    "end": 424,
+                                    "fullWidth": 65,
+                                    "width": 65,
+                                    "openParenToken": {
+                                        "kind": "OpenParenToken",
+                                        "fullStart": 359,
+                                        "fullEnd": 360,
+                                        "start": 359,
+                                        "end": 360,
+                                        "fullWidth": 1,
+                                        "width": 1,
+                                        "text": "(",
+                                        "value": "(",
+                                        "valueText": "("
+                                    },
+                                    "arguments": [
+                                        {
+                                            "kind": "BinaryExpression",
+                                            "fullStart": 360,
+                                            "fullEnd": 423,
+                                            "start": 360,
+                                            "end": 423,
+                                            "fullWidth": 63,
+                                            "width": 63,
+                                            "left": {
+                                                "kind": "StringLiteral",
+                                                "fullStart": 360,
+                                                "fullEnd": 402,
+                                                "start": 360,
+                                                "end": 401,
+                                                "fullWidth": 42,
+                                                "width": 41,
+                                                "text": "'#1: parseFloat(\"+.1\") === 0.1. Actual: '",
+                                                "value": "#1: parseFloat(\"+.1\") === 0.1. Actual: ",
+                                                "valueText": "#1: parseFloat(\"+.1\") === 0.1. Actual: ",
+                                                "hasTrailingTrivia": true,
+                                                "trailingTrivia": [
+                                                    {
+                                                        "kind": "WhitespaceTrivia",
+                                                        "fullStart": 401,
+                                                        "fullEnd": 402,
+                                                        "text": " "
+                                                    }
+                                                ]
+                                            },
+                                            "operatorToken": {
+                                                "kind": "PlusToken",
+                                                "fullStart": 402,
+                                                "fullEnd": 404,
+                                                "start": 402,
+                                                "end": 403,
+                                                "fullWidth": 2,
+                                                "width": 1,
+                                                "text": "+",
+                                                "value": "+",
+                                                "valueText": "+",
+                                                "hasTrailingTrivia": true,
+                                                "trailingTrivia": [
+                                                    {
+                                                        "kind": "WhitespaceTrivia",
+                                                        "fullStart": 403,
+                                                        "fullEnd": 404,
+                                                        "text": " "
+                                                    }
+                                                ]
+                                            },
+                                            "right": {
+                                                "kind": "ParenthesizedExpression",
+                                                "fullStart": 404,
+                                                "fullEnd": 423,
+                                                "start": 404,
+                                                "end": 423,
+                                                "fullWidth": 19,
+                                                "width": 19,
+                                                "openParenToken": {
+                                                    "kind": "OpenParenToken",
+                                                    "fullStart": 404,
+                                                    "fullEnd": 405,
+                                                    "start": 404,
+                                                    "end": 405,
+                                                    "fullWidth": 1,
+                                                    "width": 1,
+                                                    "text": "(",
+                                                    "value": "(",
+                                                    "valueText": "("
+                                                },
+                                                "expression": {
+                                                    "kind": "InvocationExpression",
+                                                    "fullStart": 405,
+                                                    "fullEnd": 422,
+                                                    "start": 405,
+                                                    "end": 422,
+                                                    "fullWidth": 17,
+                                                    "width": 17,
+                                                    "expression": {
+                                                        "kind": "IdentifierName",
+                                                        "fullStart": 405,
+                                                        "fullEnd": 415,
+                                                        "start": 405,
+                                                        "end": 415,
+                                                        "fullWidth": 10,
+                                                        "width": 10,
+                                                        "text": "parseFloat",
+                                                        "value": "parseFloat",
+                                                        "valueText": "parseFloat"
+                                                    },
+                                                    "argumentList": {
+                                                        "kind": "ArgumentList",
+                                                        "fullStart": 415,
+                                                        "fullEnd": 422,
+                                                        "start": 415,
+                                                        "end": 422,
+                                                        "fullWidth": 7,
+                                                        "width": 7,
+                                                        "openParenToken": {
+                                                            "kind": "OpenParenToken",
+                                                            "fullStart": 415,
+                                                            "fullEnd": 416,
+                                                            "start": 415,
+                                                            "end": 416,
+                                                            "fullWidth": 1,
+                                                            "width": 1,
+                                                            "text": "(",
+                                                            "value": "(",
+                                                            "valueText": "("
+                                                        },
+                                                        "arguments": [
+                                                            {
+                                                                "kind": "StringLiteral",
+                                                                "fullStart": 416,
+                                                                "fullEnd": 421,
+                                                                "start": 416,
+                                                                "end": 421,
+                                                                "fullWidth": 5,
+                                                                "width": 5,
+                                                                "text": "\"+.1\"",
+                                                                "value": "+.1",
+                                                                "valueText": "+.1"
+                                                            }
+                                                        ],
+                                                        "closeParenToken": {
+                                                            "kind": "CloseParenToken",
+                                                            "fullStart": 421,
+                                                            "fullEnd": 422,
+                                                            "start": 421,
+                                                            "end": 422,
+                                                            "fullWidth": 1,
+                                                            "width": 1,
+                                                            "text": ")",
+                                                            "value": ")",
+                                                            "valueText": ")"
+                                                        }
+                                                    }
+                                                },
+                                                "closeParenToken": {
+                                                    "kind": "CloseParenToken",
+                                                    "fullStart": 422,
+                                                    "fullEnd": 423,
+                                                    "start": 422,
+                                                    "end": 423,
+                                                    "fullWidth": 1,
+                                                    "width": 1,
+                                                    "text": ")",
+                                                    "value": ")",
+                                                    "valueText": ")"
+                                                }
+                                            }
+                                        }
+                                    ],
+                                    "closeParenToken": {
+                                        "kind": "CloseParenToken",
+                                        "fullStart": 423,
+                                        "fullEnd": 424,
+                                        "start": 423,
+                                        "end": 424,
+                                        "fullWidth": 1,
+                                        "width": 1,
+                                        "text": ")",
+                                        "value": ")",
+                                        "valueText": ")"
+                                    }
+                                }
+                            },
+                            "semicolonToken": {
+                                "kind": "SemicolonToken",
+                                "fullStart": 424,
+                                "fullEnd": 426,
+                                "start": 424,
+                                "end": 425,
+                                "fullWidth": 2,
+                                "width": 1,
+                                "text": ";",
+                                "value": ";",
+                                "valueText": ";",
+                                "hasTrailingTrivia": true,
+                                "hasTrailingNewLine": true,
+                                "trailingTrivia": [
+                                    {
+                                        "kind": "NewLineTrivia",
+                                        "fullStart": 425,
+                                        "fullEnd": 426,
+                                        "text": "\n"
+                                    }
+                                ]
+                            }
+                        }
+                    ],
+                    "closeBraceToken": {
+                        "kind": "CloseBraceToken",
+                        "fullStart": 426,
+                        "fullEnd": 428,
+                        "start": 426,
+                        "end": 427,
+                        "fullWidth": 2,
+                        "width": 1,
+                        "text": "}",
+                        "value": "}",
+                        "valueText": "}",
+                        "hasTrailingTrivia": true,
+                        "hasTrailingNewLine": true,
+                        "trailingTrivia": [
+                            {
+                                "kind": "NewLineTrivia",
+                                "fullStart": 427,
+                                "fullEnd": 428,
+                                "text": "\n"
+                            }
+                        ]
+                    }
+                }
+            },
+            {
+                "kind": "IfStatement",
+                "fullStart": 428,
+                "fullEnd": 551,
+                "start": 439,
+                "end": 550,
+                "fullWidth": 123,
+                "width": 111,
+                "ifKeyword": {
+                    "kind": "IfKeyword",
+                    "fullStart": 428,
+                    "fullEnd": 442,
+                    "start": 439,
+                    "end": 441,
+                    "fullWidth": 14,
+                    "width": 2,
+                    "text": "if",
+                    "value": "if",
+                    "valueText": "if",
+                    "hasLeadingTrivia": true,
+                    "hasLeadingComment": true,
+                    "hasLeadingNewLine": true,
+                    "hasTrailingTrivia": true,
+                    "leadingTrivia": [
+                        {
+                            "kind": "NewLineTrivia",
+                            "fullStart": 428,
+                            "fullEnd": 429,
+                            "text": "\n"
+                        },
+                        {
+                            "kind": "SingleLineCommentTrivia",
+                            "fullStart": 429,
+                            "fullEnd": 438,
+                            "text": "//CHECK#2"
+                        },
+                        {
+                            "kind": "NewLineTrivia",
+                            "fullStart": 438,
+                            "fullEnd": 439,
+                            "text": "\n"
+                        }
+                    ],
+                    "trailingTrivia": [
+                        {
+                            "kind": "WhitespaceTrivia",
+                            "fullStart": 441,
+                            "fullEnd": 442,
+                            "text": " "
+                        }
+                    ]
+                },
+                "openParenToken": {
+                    "kind": "OpenParenToken",
+                    "fullStart": 442,
+                    "fullEnd": 443,
+                    "start": 442,
+                    "end": 443,
+                    "fullWidth": 1,
+                    "width": 1,
+                    "text": "(",
+                    "value": "(",
+                    "valueText": "("
+                },
+                "condition": {
+                    "kind": "BinaryExpression",
+                    "fullStart": 443,
+                    "fullEnd": 469,
+                    "start": 443,
+                    "end": 469,
+                    "fullWidth": 26,
+                    "width": 26,
+                    "left": {
+                        "kind": "InvocationExpression",
+                        "fullStart": 443,
+                        "fullEnd": 461,
+                        "start": 443,
+                        "end": 460,
+                        "fullWidth": 18,
+                        "width": 17,
+                        "expression": {
+                            "kind": "IdentifierName",
+                            "fullStart": 443,
+                            "fullEnd": 453,
+                            "start": 443,
+                            "end": 453,
+                            "fullWidth": 10,
+                            "width": 10,
+                            "text": "parseFloat",
+                            "value": "parseFloat",
+                            "valueText": "parseFloat"
+                        },
+                        "argumentList": {
+                            "kind": "ArgumentList",
+                            "fullStart": 453,
+                            "fullEnd": 461,
+                            "start": 453,
+                            "end": 460,
+                            "fullWidth": 8,
+                            "width": 7,
+                            "openParenToken": {
+                                "kind": "OpenParenToken",
+                                "fullStart": 453,
+                                "fullEnd": 454,
+                                "start": 453,
+                                "end": 454,
+                                "fullWidth": 1,
+                                "width": 1,
+                                "text": "(",
+                                "value": "(",
+                                "valueText": "("
+                            },
+                            "arguments": [
+                                {
+                                    "kind": "StringLiteral",
+                                    "fullStart": 454,
+                                    "fullEnd": 459,
+                                    "start": 454,
+                                    "end": 459,
+                                    "fullWidth": 5,
+                                    "width": 5,
+                                    "text": "\".01\"",
+                                    "value": ".01",
+                                    "valueText": ".01"
+                                }
+                            ],
+                            "closeParenToken": {
+                                "kind": "CloseParenToken",
+                                "fullStart": 459,
+                                "fullEnd": 461,
+                                "start": 459,
+                                "end": 460,
+                                "fullWidth": 2,
+                                "width": 1,
+                                "text": ")",
+                                "value": ")",
+                                "valueText": ")",
+                                "hasTrailingTrivia": true,
+                                "trailingTrivia": [
+                                    {
+                                        "kind": "WhitespaceTrivia",
+                                        "fullStart": 460,
+                                        "fullEnd": 461,
+                                        "text": " "
+                                    }
+                                ]
+                            }
+                        }
+                    },
+                    "operatorToken": {
+                        "kind": "ExclamationEqualsEqualsToken",
+                        "fullStart": 461,
+                        "fullEnd": 465,
+                        "start": 461,
+                        "end": 464,
+                        "fullWidth": 4,
+                        "width": 3,
+                        "text": "!==",
+                        "value": "!==",
+                        "valueText": "!==",
+                        "hasTrailingTrivia": true,
+                        "trailingTrivia": [
+                            {
+                                "kind": "WhitespaceTrivia",
+                                "fullStart": 464,
+                                "fullEnd": 465,
+                                "text": " "
+                            }
+                        ]
+                    },
+                    "right": {
+                        "kind": "NumericLiteral",
+                        "fullStart": 465,
+                        "fullEnd": 469,
+                        "start": 465,
+                        "end": 469,
+                        "fullWidth": 4,
+                        "width": 4,
+                        "text": "0.01",
+                        "value": 0.01,
+                        "valueText": "0.01"
+                    }
+                },
+                "closeParenToken": {
+                    "kind": "CloseParenToken",
+                    "fullStart": 469,
+                    "fullEnd": 471,
+                    "start": 469,
+                    "end": 470,
+                    "fullWidth": 2,
+                    "width": 1,
+                    "text": ")",
+                    "value": ")",
+                    "valueText": ")",
+                    "hasTrailingTrivia": true,
+                    "trailingTrivia": [
+                        {
+                            "kind": "WhitespaceTrivia",
+                            "fullStart": 470,
+                            "fullEnd": 471,
+                            "text": " "
+                        }
+                    ]
+                },
+                "statement": {
+                    "kind": "Block",
+                    "fullStart": 471,
+                    "fullEnd": 551,
+                    "start": 471,
+                    "end": 550,
+                    "fullWidth": 80,
+                    "width": 79,
+                    "openBraceToken": {
+                        "kind": "OpenBraceToken",
+                        "fullStart": 471,
+                        "fullEnd": 473,
+                        "start": 471,
+                        "end": 472,
+                        "fullWidth": 2,
+                        "width": 1,
+                        "text": "{",
+                        "value": "{",
+                        "valueText": "{",
+                        "hasTrailingTrivia": true,
+                        "hasTrailingNewLine": true,
+                        "trailingTrivia": [
+                            {
+                                "kind": "NewLineTrivia",
+                                "fullStart": 472,
+                                "fullEnd": 473,
+                                "text": "\n"
+                            }
+                        ]
+                    },
+                    "statements": [
+                        {
+                            "kind": "ExpressionStatement",
+                            "fullStart": 473,
+                            "fullEnd": 549,
+                            "start": 475,
+                            "end": 548,
+                            "fullWidth": 76,
+                            "width": 73,
+                            "expression": {
+                                "kind": "InvocationExpression",
+                                "fullStart": 473,
+                                "fullEnd": 547,
+                                "start": 475,
+                                "end": 547,
+                                "fullWidth": 74,
+                                "width": 72,
+                                "expression": {
+                                    "kind": "IdentifierName",
+                                    "fullStart": 473,
+                                    "fullEnd": 481,
+                                    "start": 475,
+                                    "end": 481,
+                                    "fullWidth": 8,
+                                    "width": 6,
+                                    "text": "$ERROR",
+                                    "value": "$ERROR",
+                                    "valueText": "$ERROR",
+                                    "hasLeadingTrivia": true,
+                                    "leadingTrivia": [
+                                        {
+                                            "kind": "WhitespaceTrivia",
+                                            "fullStart": 473,
+                                            "fullEnd": 475,
+                                            "text": "  "
+                                        }
+                                    ]
+                                },
+                                "argumentList": {
+                                    "kind": "ArgumentList",
+                                    "fullStart": 481,
+                                    "fullEnd": 547,
+                                    "start": 481,
+                                    "end": 547,
+                                    "fullWidth": 66,
+                                    "width": 66,
+                                    "openParenToken": {
+                                        "kind": "OpenParenToken",
+                                        "fullStart": 481,
+                                        "fullEnd": 482,
+                                        "start": 481,
+                                        "end": 482,
+                                        "fullWidth": 1,
+                                        "width": 1,
+                                        "text": "(",
+                                        "value": "(",
+                                        "valueText": "("
+                                    },
+                                    "arguments": [
+                                        {
+                                            "kind": "BinaryExpression",
+                                            "fullStart": 482,
+                                            "fullEnd": 546,
+                                            "start": 482,
+                                            "end": 546,
+                                            "fullWidth": 64,
+                                            "width": 64,
+                                            "left": {
+                                                "kind": "StringLiteral",
+                                                "fullStart": 482,
+                                                "fullEnd": 525,
+                                                "start": 482,
+                                                "end": 524,
+                                                "fullWidth": 43,
+                                                "width": 42,
+                                                "text": "'#2: parseFloat(\".01\") === 0.01. Actual: '",
+                                                "value": "#2: parseFloat(\".01\") === 0.01. Actual: ",
+                                                "valueText": "#2: parseFloat(\".01\") === 0.01. Actual: ",
+                                                "hasTrailingTrivia": true,
+                                                "trailingTrivia": [
+                                                    {
+                                                        "kind": "WhitespaceTrivia",
+                                                        "fullStart": 524,
+                                                        "fullEnd": 525,
+                                                        "text": " "
+                                                    }
+                                                ]
+                                            },
+                                            "operatorToken": {
+                                                "kind": "PlusToken",
+                                                "fullStart": 525,
+                                                "fullEnd": 527,
+                                                "start": 525,
+                                                "end": 526,
+                                                "fullWidth": 2,
+                                                "width": 1,
+                                                "text": "+",
+                                                "value": "+",
+                                                "valueText": "+",
+                                                "hasTrailingTrivia": true,
+                                                "trailingTrivia": [
+                                                    {
+                                                        "kind": "WhitespaceTrivia",
+                                                        "fullStart": 526,
+                                                        "fullEnd": 527,
+                                                        "text": " "
+                                                    }
+                                                ]
+                                            },
+                                            "right": {
+                                                "kind": "ParenthesizedExpression",
+                                                "fullStart": 527,
+                                                "fullEnd": 546,
+                                                "start": 527,
+                                                "end": 546,
+                                                "fullWidth": 19,
+                                                "width": 19,
+                                                "openParenToken": {
+                                                    "kind": "OpenParenToken",
+                                                    "fullStart": 527,
+                                                    "fullEnd": 528,
+                                                    "start": 527,
+                                                    "end": 528,
+                                                    "fullWidth": 1,
+                                                    "width": 1,
+                                                    "text": "(",
+                                                    "value": "(",
+                                                    "valueText": "("
+                                                },
+                                                "expression": {
+                                                    "kind": "InvocationExpression",
+                                                    "fullStart": 528,
+                                                    "fullEnd": 545,
+                                                    "start": 528,
+                                                    "end": 545,
+                                                    "fullWidth": 17,
+                                                    "width": 17,
+                                                    "expression": {
+                                                        "kind": "IdentifierName",
+                                                        "fullStart": 528,
+                                                        "fullEnd": 538,
+                                                        "start": 528,
+                                                        "end": 538,
+                                                        "fullWidth": 10,
+                                                        "width": 10,
+                                                        "text": "parseFloat",
+                                                        "value": "parseFloat",
+                                                        "valueText": "parseFloat"
+                                                    },
+                                                    "argumentList": {
+                                                        "kind": "ArgumentList",
+                                                        "fullStart": 538,
+                                                        "fullEnd": 545,
+                                                        "start": 538,
+                                                        "end": 545,
+                                                        "fullWidth": 7,
+                                                        "width": 7,
+                                                        "openParenToken": {
+                                                            "kind": "OpenParenToken",
+                                                            "fullStart": 538,
+                                                            "fullEnd": 539,
+                                                            "start": 538,
+                                                            "end": 539,
+                                                            "fullWidth": 1,
+                                                            "width": 1,
+                                                            "text": "(",
+                                                            "value": "(",
+                                                            "valueText": "("
+                                                        },
+                                                        "arguments": [
+                                                            {
+                                                                "kind": "StringLiteral",
+                                                                "fullStart": 539,
+                                                                "fullEnd": 544,
+                                                                "start": 539,
+                                                                "end": 544,
+                                                                "fullWidth": 5,
+                                                                "width": 5,
+                                                                "text": "\".01\"",
+                                                                "value": ".01",
+                                                                "valueText": ".01"
+                                                            }
+                                                        ],
+                                                        "closeParenToken": {
+                                                            "kind": "CloseParenToken",
+                                                            "fullStart": 544,
+                                                            "fullEnd": 545,
+                                                            "start": 544,
+                                                            "end": 545,
+                                                            "fullWidth": 1,
+                                                            "width": 1,
+                                                            "text": ")",
+                                                            "value": ")",
+                                                            "valueText": ")"
+                                                        }
+                                                    }
+                                                },
+                                                "closeParenToken": {
+                                                    "kind": "CloseParenToken",
+                                                    "fullStart": 545,
+                                                    "fullEnd": 546,
+                                                    "start": 545,
+                                                    "end": 546,
+                                                    "fullWidth": 1,
+                                                    "width": 1,
+                                                    "text": ")",
+                                                    "value": ")",
+                                                    "valueText": ")"
+                                                }
+                                            }
+                                        }
+                                    ],
+                                    "closeParenToken": {
+                                        "kind": "CloseParenToken",
+                                        "fullStart": 546,
+                                        "fullEnd": 547,
+                                        "start": 546,
+                                        "end": 547,
+                                        "fullWidth": 1,
+                                        "width": 1,
+                                        "text": ")",
+                                        "value": ")",
+                                        "valueText": ")"
+                                    }
+                                }
+                            },
+                            "semicolonToken": {
+                                "kind": "SemicolonToken",
+                                "fullStart": 547,
+                                "fullEnd": 549,
+                                "start": 547,
+                                "end": 548,
+                                "fullWidth": 2,
+                                "width": 1,
+                                "text": ";",
+                                "value": ";",
+                                "valueText": ";",
+                                "hasTrailingTrivia": true,
+                                "hasTrailingNewLine": true,
+                                "trailingTrivia": [
+                                    {
+                                        "kind": "NewLineTrivia",
+                                        "fullStart": 548,
+                                        "fullEnd": 549,
+                                        "text": "\n"
+                                    }
+                                ]
+                            }
+                        }
+                    ],
+                    "closeBraceToken": {
+                        "kind": "CloseBraceToken",
+                        "fullStart": 549,
+                        "fullEnd": 551,
+                        "start": 549,
+                        "end": 550,
+                        "fullWidth": 2,
+                        "width": 1,
+                        "text": "}",
+                        "value": "}",
+                        "valueText": "}",
+                        "hasTrailingTrivia": true,
+                        "hasTrailingNewLine": true,
+                        "trailingTrivia": [
+                            {
+                                "kind": "NewLineTrivia",
+                                "fullStart": 550,
+                                "fullEnd": 551,
+                                "text": "\n"
+                            }
+                        ]
+                    }
+                }
+            },
+            {
+                "kind": "IfStatement",
+                "fullStart": 551,
+                "fullEnd": 688,
+                "start": 562,
+                "end": 687,
+                "fullWidth": 137,
+                "width": 125,
+                "ifKeyword": {
+                    "kind": "IfKeyword",
+                    "fullStart": 551,
+                    "fullEnd": 565,
+                    "start": 562,
+                    "end": 564,
+                    "fullWidth": 14,
+                    "width": 2,
+                    "text": "if",
+                    "value": "if",
+                    "valueText": "if",
+                    "hasLeadingTrivia": true,
+                    "hasLeadingComment": true,
+                    "hasLeadingNewLine": true,
+                    "hasTrailingTrivia": true,
+                    "leadingTrivia": [
+                        {
+                            "kind": "NewLineTrivia",
+                            "fullStart": 551,
+                            "fullEnd": 552,
+                            "text": "\n"
+                        },
+                        {
+                            "kind": "SingleLineCommentTrivia",
+                            "fullStart": 552,
+                            "fullEnd": 561,
+                            "text": "//CHECK#3"
+                        },
+                        {
+                            "kind": "NewLineTrivia",
+                            "fullStart": 561,
+                            "fullEnd": 562,
+                            "text": "\n"
+                        }
+                    ],
+                    "trailingTrivia": [
+                        {
+                            "kind": "WhitespaceTrivia",
+                            "fullStart": 564,
+                            "fullEnd": 565,
+                            "text": " "
+                        }
+                    ]
+                },
+                "openParenToken": {
+                    "kind": "OpenParenToken",
+                    "fullStart": 565,
+                    "fullEnd": 566,
+                    "start": 565,
+                    "end": 566,
+                    "fullWidth": 1,
+                    "width": 1,
+                    "text": "(",
+                    "value": "(",
+                    "valueText": "("
+                },
+                "condition": {
+                    "kind": "BinaryExpression",
+                    "fullStart": 566,
+                    "fullEnd": 597,
+                    "start": 566,
+                    "end": 597,
+                    "fullWidth": 31,
+                    "width": 31,
+                    "left": {
+                        "kind": "InvocationExpression",
+                        "fullStart": 566,
+                        "fullEnd": 588,
+                        "start": 566,
+                        "end": 587,
+                        "fullWidth": 22,
+                        "width": 21,
+                        "expression": {
+                            "kind": "IdentifierName",
+                            "fullStart": 566,
+                            "fullEnd": 576,
+                            "start": 566,
+                            "end": 576,
+                            "fullWidth": 10,
+                            "width": 10,
+                            "text": "parseFloat",
+                            "value": "parseFloat",
+                            "valueText": "parseFloat"
+                        },
+                        "argumentList": {
+                            "kind": "ArgumentList",
+                            "fullStart": 576,
+                            "fullEnd": 588,
+                            "start": 576,
+                            "end": 587,
+                            "fullWidth": 12,
+                            "width": 11,
+                            "openParenToken": {
+                                "kind": "OpenParenToken",
+                                "fullStart": 576,
+                                "fullEnd": 577,
+                                "start": 576,
+                                "end": 577,
+                                "fullWidth": 1,
+                                "width": 1,
+                                "text": "(",
+                                "value": "(",
+                                "valueText": "("
+                            },
+                            "arguments": [
+                                {
+                                    "kind": "StringLiteral",
+                                    "fullStart": 577,
+                                    "fullEnd": 586,
+                                    "start": 577,
+                                    "end": 586,
+                                    "fullWidth": 9,
+                                    "width": 9,
+                                    "text": "\"+.22e-1\"",
+                                    "value": "+.22e-1",
+                                    "valueText": "+.22e-1"
+                                }
+                            ],
+                            "closeParenToken": {
+                                "kind": "CloseParenToken",
+                                "fullStart": 586,
+                                "fullEnd": 588,
+                                "start": 586,
+                                "end": 587,
+                                "fullWidth": 2,
+                                "width": 1,
+                                "text": ")",
+                                "value": ")",
+                                "valueText": ")",
+                                "hasTrailingTrivia": true,
+                                "trailingTrivia": [
+                                    {
+                                        "kind": "WhitespaceTrivia",
+                                        "fullStart": 587,
+                                        "fullEnd": 588,
+                                        "text": " "
+                                    }
+                                ]
+                            }
+                        }
+                    },
+                    "operatorToken": {
+                        "kind": "ExclamationEqualsEqualsToken",
+                        "fullStart": 588,
+                        "fullEnd": 592,
+                        "start": 588,
+                        "end": 591,
+                        "fullWidth": 4,
+                        "width": 3,
+                        "text": "!==",
+                        "value": "!==",
+                        "valueText": "!==",
+                        "hasTrailingTrivia": true,
+                        "trailingTrivia": [
+                            {
+                                "kind": "WhitespaceTrivia",
+                                "fullStart": 591,
+                                "fullEnd": 592,
+                                "text": " "
+                            }
+                        ]
+                    },
+                    "right": {
+                        "kind": "NumericLiteral",
+                        "fullStart": 592,
+                        "fullEnd": 597,
+                        "start": 592,
+                        "end": 597,
+                        "fullWidth": 5,
+                        "width": 5,
+                        "text": "0.022",
+                        "value": 0.022,
+                        "valueText": "0.022"
+                    }
+                },
+                "closeParenToken": {
+                    "kind": "CloseParenToken",
+                    "fullStart": 597,
+                    "fullEnd": 599,
+                    "start": 597,
+                    "end": 598,
+                    "fullWidth": 2,
+                    "width": 1,
+                    "text": ")",
+                    "value": ")",
+                    "valueText": ")",
+                    "hasTrailingTrivia": true,
+                    "trailingTrivia": [
+                        {
+                            "kind": "WhitespaceTrivia",
+                            "fullStart": 598,
+                            "fullEnd": 599,
+                            "text": " "
+                        }
+                    ]
+                },
+                "statement": {
+                    "kind": "Block",
+                    "fullStart": 599,
+                    "fullEnd": 688,
+                    "start": 599,
+                    "end": 687,
+                    "fullWidth": 89,
+                    "width": 88,
+                    "openBraceToken": {
+                        "kind": "OpenBraceToken",
+                        "fullStart": 599,
+                        "fullEnd": 601,
+                        "start": 599,
+                        "end": 600,
+                        "fullWidth": 2,
+                        "width": 1,
+                        "text": "{",
+                        "value": "{",
+                        "valueText": "{",
+                        "hasTrailingTrivia": true,
+                        "hasTrailingNewLine": true,
+                        "trailingTrivia": [
+                            {
+                                "kind": "NewLineTrivia",
+                                "fullStart": 600,
+                                "fullEnd": 601,
+                                "text": "\n"
+                            }
+                        ]
+                    },
+                    "statements": [
+                        {
+                            "kind": "ExpressionStatement",
+                            "fullStart": 601,
+                            "fullEnd": 686,
+                            "start": 603,
+                            "end": 685,
+                            "fullWidth": 85,
+                            "width": 82,
+                            "expression": {
+                                "kind": "InvocationExpression",
+                                "fullStart": 601,
+                                "fullEnd": 684,
+                                "start": 603,
+                                "end": 684,
+                                "fullWidth": 83,
+                                "width": 81,
+                                "expression": {
+                                    "kind": "IdentifierName",
+                                    "fullStart": 601,
+                                    "fullEnd": 609,
+                                    "start": 603,
+                                    "end": 609,
+                                    "fullWidth": 8,
+                                    "width": 6,
+                                    "text": "$ERROR",
+                                    "value": "$ERROR",
+                                    "valueText": "$ERROR",
+                                    "hasLeadingTrivia": true,
+                                    "leadingTrivia": [
+                                        {
+                                            "kind": "WhitespaceTrivia",
+                                            "fullStart": 601,
+                                            "fullEnd": 603,
+                                            "text": "  "
+                                        }
+                                    ]
+                                },
+                                "argumentList": {
+                                    "kind": "ArgumentList",
+                                    "fullStart": 609,
+                                    "fullEnd": 684,
+                                    "start": 609,
+                                    "end": 684,
+                                    "fullWidth": 75,
+                                    "width": 75,
+                                    "openParenToken": {
+                                        "kind": "OpenParenToken",
+                                        "fullStart": 609,
+                                        "fullEnd": 610,
+                                        "start": 609,
+                                        "end": 610,
+                                        "fullWidth": 1,
+                                        "width": 1,
+                                        "text": "(",
+                                        "value": "(",
+                                        "valueText": "("
+                                    },
+                                    "arguments": [
+                                        {
+                                            "kind": "BinaryExpression",
+                                            "fullStart": 610,
+                                            "fullEnd": 683,
+                                            "start": 610,
+                                            "end": 683,
+                                            "fullWidth": 73,
+                                            "width": 73,
+                                            "left": {
+                                                "kind": "StringLiteral",
+                                                "fullStart": 610,
+                                                "fullEnd": 658,
+                                                "start": 610,
+                                                "end": 657,
+                                                "fullWidth": 48,
+                                                "width": 47,
+                                                "text": "'#3: parseFloat(\"+.22e-1\") === 0.022. Actual: '",
+                                                "value": "#3: parseFloat(\"+.22e-1\") === 0.022. Actual: ",
+                                                "valueText": "#3: parseFloat(\"+.22e-1\") === 0.022. Actual: ",
+                                                "hasTrailingTrivia": true,
+                                                "trailingTrivia": [
+                                                    {
+                                                        "kind": "WhitespaceTrivia",
+                                                        "fullStart": 657,
+                                                        "fullEnd": 658,
+                                                        "text": " "
+                                                    }
+                                                ]
+                                            },
+                                            "operatorToken": {
+                                                "kind": "PlusToken",
+                                                "fullStart": 658,
+                                                "fullEnd": 660,
+                                                "start": 658,
+                                                "end": 659,
+                                                "fullWidth": 2,
+                                                "width": 1,
+                                                "text": "+",
+                                                "value": "+",
+                                                "valueText": "+",
+                                                "hasTrailingTrivia": true,
+                                                "trailingTrivia": [
+                                                    {
+                                                        "kind": "WhitespaceTrivia",
+                                                        "fullStart": 659,
+                                                        "fullEnd": 660,
+                                                        "text": " "
+                                                    }
+                                                ]
+                                            },
+                                            "right": {
+                                                "kind": "ParenthesizedExpression",
+                                                "fullStart": 660,
+                                                "fullEnd": 683,
+                                                "start": 660,
+                                                "end": 683,
+                                                "fullWidth": 23,
+                                                "width": 23,
+                                                "openParenToken": {
+                                                    "kind": "OpenParenToken",
+                                                    "fullStart": 660,
+                                                    "fullEnd": 661,
+                                                    "start": 660,
+                                                    "end": 661,
+                                                    "fullWidth": 1,
+                                                    "width": 1,
+                                                    "text": "(",
+                                                    "value": "(",
+                                                    "valueText": "("
+                                                },
+                                                "expression": {
+                                                    "kind": "InvocationExpression",
+                                                    "fullStart": 661,
+                                                    "fullEnd": 682,
+                                                    "start": 661,
+                                                    "end": 682,
+                                                    "fullWidth": 21,
+                                                    "width": 21,
+                                                    "expression": {
+                                                        "kind": "IdentifierName",
+                                                        "fullStart": 661,
+                                                        "fullEnd": 671,
+                                                        "start": 661,
+                                                        "end": 671,
+                                                        "fullWidth": 10,
+                                                        "width": 10,
+                                                        "text": "parseFloat",
+                                                        "value": "parseFloat",
+                                                        "valueText": "parseFloat"
+                                                    },
+                                                    "argumentList": {
+                                                        "kind": "ArgumentList",
+                                                        "fullStart": 671,
+                                                        "fullEnd": 682,
+                                                        "start": 671,
+                                                        "end": 682,
+                                                        "fullWidth": 11,
+                                                        "width": 11,
+                                                        "openParenToken": {
+                                                            "kind": "OpenParenToken",
+                                                            "fullStart": 671,
+                                                            "fullEnd": 672,
+                                                            "start": 671,
+                                                            "end": 672,
+                                                            "fullWidth": 1,
+                                                            "width": 1,
+                                                            "text": "(",
+                                                            "value": "(",
+                                                            "valueText": "("
+                                                        },
+                                                        "arguments": [
+                                                            {
+                                                                "kind": "StringLiteral",
+                                                                "fullStart": 672,
+                                                                "fullEnd": 681,
+                                                                "start": 672,
+                                                                "end": 681,
+                                                                "fullWidth": 9,
+                                                                "width": 9,
+                                                                "text": "\"+.22e-1\"",
+                                                                "value": "+.22e-1",
+                                                                "valueText": "+.22e-1"
+                                                            }
+                                                        ],
+                                                        "closeParenToken": {
+                                                            "kind": "CloseParenToken",
+                                                            "fullStart": 681,
+                                                            "fullEnd": 682,
+                                                            "start": 681,
+                                                            "end": 682,
+                                                            "fullWidth": 1,
+                                                            "width": 1,
+                                                            "text": ")",
+                                                            "value": ")",
+                                                            "valueText": ")"
+                                                        }
+                                                    }
+                                                },
+                                                "closeParenToken": {
+                                                    "kind": "CloseParenToken",
+                                                    "fullStart": 682,
+                                                    "fullEnd": 683,
+                                                    "start": 682,
+                                                    "end": 683,
+                                                    "fullWidth": 1,
+                                                    "width": 1,
+                                                    "text": ")",
+                                                    "value": ")",
+                                                    "valueText": ")"
+                                                }
+                                            }
+                                        }
+                                    ],
+                                    "closeParenToken": {
+                                        "kind": "CloseParenToken",
+                                        "fullStart": 683,
+                                        "fullEnd": 684,
+                                        "start": 683,
+                                        "end": 684,
+                                        "fullWidth": 1,
+                                        "width": 1,
+                                        "text": ")",
+                                        "value": ")",
+                                        "valueText": ")"
+                                    }
+                                }
+                            },
+                            "semicolonToken": {
+                                "kind": "SemicolonToken",
+                                "fullStart": 684,
+                                "fullEnd": 686,
+                                "start": 684,
+                                "end": 685,
+                                "fullWidth": 2,
+                                "width": 1,
+                                "text": ";",
+                                "value": ";",
+                                "valueText": ";",
+                                "hasTrailingTrivia": true,
+                                "hasTrailingNewLine": true,
+                                "trailingTrivia": [
+                                    {
+                                        "kind": "NewLineTrivia",
+                                        "fullStart": 685,
+                                        "fullEnd": 686,
+                                        "text": "\n"
+                                    }
+                                ]
+                            }
+                        }
+                    ],
+                    "closeBraceToken": {
+                        "kind": "CloseBraceToken",
+                        "fullStart": 686,
+                        "fullEnd": 688,
+                        "start": 686,
+                        "end": 687,
+                        "fullWidth": 2,
+                        "width": 1,
+                        "text": "}",
+                        "value": "}",
+                        "valueText": "}",
+                        "hasTrailingTrivia": true,
+                        "hasTrailingNewLine": true,
+                        "trailingTrivia": [
+                            {
+                                "kind": "NewLineTrivia",
+                                "fullStart": 687,
+                                "fullEnd": 688,
+                                "text": "\n"
+                            }
+                        ]
+                    }
+                }
+            }
+        ],
+        "endOfFileToken": {
+            "kind": "EndOfFileToken",
+            "fullStart": 688,
+            "fullEnd": 689,
+            "start": 689,
+            "end": 689,
+            "fullWidth": 1,
+            "width": 0,
+            "text": "",
+            "hasLeadingTrivia": true,
+            "hasLeadingNewLine": true,
+            "leadingTrivia": [
+                {
+                    "kind": "NewLineTrivia",
+                    "fullStart": 688,
+                    "fullEnd": 689,
+                    "text": "\n"
+                }
+            ]
+        }
+    },
+    "lineMap": {
+        "lineStarts": [
+            0,
+            61,
+            132,
+            133,
+            137,
+            188,
+            191,
+            245,
+            303,
+            307,
+            308,
+            318,
+            351,
+            426,
+            428,
+            429,
+            439,
+            473,
+            549,
+            551,
+            552,
+            562,
+            601,
+            686,
+            688,
+            689
+        ],
+        "length": 689
+    }
+}

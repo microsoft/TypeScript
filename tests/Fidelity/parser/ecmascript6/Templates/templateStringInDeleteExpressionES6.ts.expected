@@ -1,0 +1,156 @@
+{
+    "isDeclaration": false,
+    "languageVersion": "EcmaScript6",
+    "sourceUnit": {
+        "kind": "SourceUnit",
+        "fullStart": 0,
+        "fullEnd": 37,
+        "start": 17,
+        "end": 37,
+        "fullWidth": 37,
+        "width": 20,
+        "moduleElements": [
+            {
+                "kind": "ExpressionStatement",
+                "fullStart": 0,
+                "fullEnd": 37,
+                "start": 17,
+                "end": 37,
+                "fullWidth": 37,
+                "width": 20,
+                "expression": {
+                    "kind": "DeleteExpression",
+                    "fullStart": 0,
+                    "fullEnd": 36,
+                    "start": 17,
+                    "end": 36,
+                    "fullWidth": 36,
+                    "width": 19,
+                    "deleteKeyword": {
+                        "kind": "DeleteKeyword",
+                        "fullStart": 0,
+                        "fullEnd": 24,
+                        "start": 17,
+                        "end": 23,
+                        "fullWidth": 24,
+                        "width": 6,
+                        "text": "delete",
+                        "value": "delete",
+                        "valueText": "delete",
+                        "hasLeadingTrivia": true,
+                        "hasLeadingComment": true,
+                        "hasLeadingNewLine": true,
+                        "hasTrailingTrivia": true,
+                        "leadingTrivia": [
+                            {
+                                "kind": "SingleLineCommentTrivia",
+                                "fullStart": 0,
+                                "fullEnd": 15,
+                                "text": "// @target: ES6"
+                            },
+                            {
+                                "kind": "NewLineTrivia",
+                                "fullStart": 15,
+                                "fullEnd": 17,
+                                "text": "\r\n"
+                            }
+                        ],
+                        "trailingTrivia": [
+                            {
+                                "kind": "WhitespaceTrivia",
+                                "fullStart": 23,
+                                "fullEnd": 24,
+                                "text": " "
+                            }
+                        ]
+                    },
+                    "expression": {
+                        "kind": "TemplateExpression",
+                        "fullStart": 24,
+                        "fullEnd": 36,
+                        "start": 24,
+                        "end": 36,
+                        "fullWidth": 12,
+                        "width": 12,
+                        "templateStartToken": {
+                            "kind": "TemplateStartToken",
+                            "fullStart": 24,
+                            "fullEnd": 30,
+                            "start": 24,
+                            "end": 30,
+                            "fullWidth": 6,
+                            "width": 6,
+                            "text": "`abc${",
+                            "value": "abc",
+                            "valueText": "abc"
+                        },
+                        "templateClauses": [
+                            {
+                                "kind": "TemplateClause",
+                                "fullStart": 30,
+                                "fullEnd": 36,
+                                "start": 30,
+                                "end": 36,
+                                "fullWidth": 6,
+                                "width": 6,
+                                "expression": {
+                                    "kind": "NumericLiteral",
+                                    "fullStart": 30,
+                                    "fullEnd": 31,
+                                    "start": 30,
+                                    "end": 31,
+                                    "fullWidth": 1,
+                                    "width": 1,
+                                    "text": "0",
+                                    "value": 0,
+                                    "valueText": "0"
+                                },
+                                "templateMiddleOrEndToken": {
+                                    "kind": "TemplateEndToken",
+                                    "fullStart": 31,
+                                    "fullEnd": 36,
+                                    "start": 31,
+                                    "end": 36,
+                                    "fullWidth": 5,
+                                    "width": 5,
+                                    "text": "}abc`",
+                                    "value": "abc",
+                                    "valueText": "abc"
+                                }
+                            }
+                        ]
+                    }
+                },
+                "semicolonToken": {
+                    "kind": "SemicolonToken",
+                    "fullStart": 36,
+                    "fullEnd": 37,
+                    "start": 36,
+                    "end": 37,
+                    "fullWidth": 1,
+                    "width": 1,
+                    "text": ";",
+                    "value": ";",
+                    "valueText": ";"
+                }
+            }
+        ],
+        "endOfFileToken": {
+            "kind": "EndOfFileToken",
+            "fullStart": 37,
+            "fullEnd": 37,
+            "start": 37,
+            "end": 37,
+            "fullWidth": 0,
+            "width": 0,
+            "text": ""
+        }
+    },
+    "lineMap": {
+        "lineStarts": [
+            0,
+            17
+        ],
+        "length": 37
+    }
+}

@@ -1,0 +1,171 @@
+{
+    "isDeclaration": false,
+    "languageVersion": "EcmaScript6",
+    "sourceUnit": {
+        "kind": "SourceUnit",
+        "fullStart": 0,
+        "fullEnd": 35,
+        "start": 17,
+        "end": 35,
+        "fullWidth": 35,
+        "width": 18,
+        "moduleElements": [
+            {
+                "kind": "ExpressionStatement",
+                "fullStart": 0,
+                "fullEnd": 35,
+                "start": 17,
+                "end": 35,
+                "fullWidth": 35,
+                "width": 18,
+                "expression": {
+                    "kind": "ElementAccessExpression",
+                    "fullStart": 0,
+                    "fullEnd": 34,
+                    "start": 17,
+                    "end": 34,
+                    "fullWidth": 34,
+                    "width": 17,
+                    "expression": {
+                        "kind": "TemplateExpression",
+                        "fullStart": 0,
+                        "fullEnd": 29,
+                        "start": 17,
+                        "end": 29,
+                        "fullWidth": 29,
+                        "width": 12,
+                        "templateStartToken": {
+                            "kind": "TemplateStartToken",
+                            "fullStart": 0,
+                            "fullEnd": 23,
+                            "start": 17,
+                            "end": 23,
+                            "fullWidth": 23,
+                            "width": 6,
+                            "text": "`abc${",
+                            "value": "abc",
+                            "valueText": "abc",
+                            "hasLeadingTrivia": true,
+                            "hasLeadingComment": true,
+                            "hasLeadingNewLine": true,
+                            "leadingTrivia": [
+                                {
+                                    "kind": "SingleLineCommentTrivia",
+                                    "fullStart": 0,
+                                    "fullEnd": 15,
+                                    "text": "// @target: ES6"
+                                },
+                                {
+                                    "kind": "NewLineTrivia",
+                                    "fullStart": 15,
+                                    "fullEnd": 17,
+                                    "text": "\r\n"
+                                }
+                            ]
+                        },
+                        "templateClauses": [
+                            {
+                                "kind": "TemplateClause",
+                                "fullStart": 23,
+                                "fullEnd": 29,
+                                "start": 23,
+                                "end": 29,
+                                "fullWidth": 6,
+                                "width": 6,
+                                "expression": {
+                                    "kind": "NumericLiteral",
+                                    "fullStart": 23,
+                                    "fullEnd": 24,
+                                    "start": 23,
+                                    "end": 24,
+                                    "fullWidth": 1,
+                                    "width": 1,
+                                    "text": "0",
+                                    "value": 0,
+                                    "valueText": "0"
+                                },
+                                "templateMiddleOrEndToken": {
+                                    "kind": "TemplateEndToken",
+                                    "fullStart": 24,
+                                    "fullEnd": 29,
+                                    "start": 24,
+                                    "end": 29,
+                                    "fullWidth": 5,
+                                    "width": 5,
+                                    "text": "}abc`",
+                                    "value": "abc",
+                                    "valueText": "abc"
+                                }
+                            }
+                        ]
+                    },
+                    "openBracketToken": {
+                        "kind": "OpenBracketToken",
+                        "fullStart": 29,
+                        "fullEnd": 30,
+                        "start": 29,
+                        "end": 30,
+                        "fullWidth": 1,
+                        "width": 1,
+                        "text": "[",
+                        "value": "[",
+                        "valueText": "["
+                    },
+                    "argumentExpression": {
+                        "kind": "NoSubstitutionTemplateToken",
+                        "fullStart": 30,
+                        "fullEnd": 33,
+                        "start": 30,
+                        "end": 33,
+                        "fullWidth": 3,
+                        "width": 3,
+                        "text": "`0`",
+                        "value": "0",
+                        "valueText": "0"
+                    },
+                    "closeBracketToken": {
+                        "kind": "CloseBracketToken",
+                        "fullStart": 33,
+                        "fullEnd": 34,
+                        "start": 33,
+                        "end": 34,
+                        "fullWidth": 1,
+                        "width": 1,
+                        "text": "]",
+                        "value": "]",
+                        "valueText": "]"
+                    }
+                },
+                "semicolonToken": {
+                    "kind": "SemicolonToken",
+                    "fullStart": 34,
+                    "fullEnd": 35,
+                    "start": 34,
+                    "end": 35,
+                    "fullWidth": 1,
+                    "width": 1,
+                    "text": ";",
+                    "value": ";",
+                    "valueText": ";"
+                }
+            }
+        ],
+        "endOfFileToken": {
+            "kind": "EndOfFileToken",
+            "fullStart": 35,
+            "fullEnd": 35,
+            "start": 35,
+            "end": 35,
+            "fullWidth": 0,
+            "width": 0,
+            "text": ""
+        }
+    },
+    "lineMap": {
+        "lineStarts": [
+            0,
+            17
+        ],
+        "length": 35
+    }
+}

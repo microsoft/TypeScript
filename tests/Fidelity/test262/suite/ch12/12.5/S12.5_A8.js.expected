@@ -1,0 +1,255 @@
+{
+    "isDeclaration": false,
+    "languageVersion": "EcmaScript5",
+    "diagnostics": [
+        {
+            "start": 392,
+            "length": 1,
+            "diagnosticCode": "Expression expected."
+        }
+    ],
+    "sourceUnit": {
+        "kind": "SourceUnit",
+        "fullStart": 0,
+        "fullEnd": 478,
+        "start": 389,
+        "end": 478,
+        "fullWidth": 478,
+        "width": 89,
+        "isIncrementallyUnusable": true,
+        "moduleElements": [
+            {
+                "kind": "IfStatement",
+                "fullStart": 0,
+                "fullEnd": 395,
+                "start": 389,
+                "end": 394,
+                "fullWidth": 395,
+                "width": 5,
+                "isIncrementallyUnusable": true,
+                "ifKeyword": {
+                    "kind": "IfKeyword",
+                    "fullStart": 0,
+                    "fullEnd": 391,
+                    "start": 389,
+                    "end": 391,
+                    "fullWidth": 391,
+                    "width": 2,
+                    "text": "if",
+                    "value": "if",
+                    "valueText": "if",
+                    "hasLeadingTrivia": true,
+                    "hasLeadingComment": true,
+                    "hasLeadingNewLine": true,
+                    "leadingTrivia": [
+                        {
+                            "kind": "SingleLineCommentTrivia",
+                            "fullStart": 0,
+                            "fullEnd": 60,
+                            "text": "// Copyright 2009 the Sputnik authors.  All rights reserved."
+                        },
+                        {
+                            "kind": "NewLineTrivia",
+                            "fullStart": 60,
+                            "fullEnd": 61,
+                            "text": "\n"
+                        },
+                        {
+                            "kind": "SingleLineCommentTrivia",
+                            "fullStart": 61,
+                            "fullEnd": 131,
+                            "text": "// This code is governed by the BSD license found in the LICENSE file."
+                        },
+                        {
+                            "kind": "NewLineTrivia",
+                            "fullStart": 131,
+                            "fullEnd": 132,
+                            "text": "\n"
+                        },
+                        {
+                            "kind": "NewLineTrivia",
+                            "fullStart": 132,
+                            "fullEnd": 133,
+                            "text": "\n"
+                        },
+                        {
+                            "kind": "MultiLineCommentTrivia",
+                            "fullStart": 133,
+                            "fullEnd": 298,
+                            "text": "/**\n * In the \"if\" Statement empty expression is not allowed\n *\n * @path ch12/12.5/S12.5_A8.js\n * @description Checking if execution of \"if()\" fails\n * @negative\n */"
+                        },
+                        {
+                            "kind": "NewLineTrivia",
+                            "fullStart": 298,
+                            "fullEnd": 299,
+                            "text": "\n"
+                        },
+                        {
+                            "kind": "NewLineTrivia",
+                            "fullStart": 299,
+                            "fullEnd": 300,
+                            "text": "\n"
+                        },
+                        {
+                            "kind": "SingleLineCommentTrivia",
+                            "fullStart": 300,
+                            "fullEnd": 378,
+                            "text": "//////////////////////////////////////////////////////////////////////////////"
+                        },
+                        {
+                            "kind": "NewLineTrivia",
+                            "fullStart": 378,
+                            "fullEnd": 379,
+                            "text": "\n"
+                        },
+                        {
+                            "kind": "SingleLineCommentTrivia",
+                            "fullStart": 379,
+                            "fullEnd": 388,
+                            "text": "//CHECK#1"
+                        },
+                        {
+                            "kind": "NewLineTrivia",
+                            "fullStart": 388,
+                            "fullEnd": 389,
+                            "text": "\n"
+                        }
+                    ]
+                },
+                "openParenToken": {
+                    "kind": "OpenParenToken",
+                    "fullStart": 391,
+                    "fullEnd": 392,
+                    "start": 391,
+                    "end": 392,
+                    "fullWidth": 1,
+                    "width": 1,
+                    "text": "(",
+                    "value": "(",
+                    "valueText": "("
+                },
+                "condition": {
+                    "kind": "IdentifierName",
+                    "fullStart": 392,
+                    "fullEnd": 392,
+                    "start": 392,
+                    "end": 392,
+                    "fullWidth": 0,
+                    "width": 0,
+                    "text": ""
+                },
+                "closeParenToken": {
+                    "kind": "CloseParenToken",
+                    "fullStart": 392,
+                    "fullEnd": 393,
+                    "start": 392,
+                    "end": 393,
+                    "fullWidth": 1,
+                    "width": 1,
+                    "text": ")",
+                    "value": ")",
+                    "valueText": ")"
+                },
+                "statement": {
+                    "kind": "EmptyStatement",
+                    "fullStart": 393,
+                    "fullEnd": 395,
+                    "start": 393,
+                    "end": 394,
+                    "fullWidth": 2,
+                    "width": 1,
+                    "semicolonToken": {
+                        "kind": "SemicolonToken",
+                        "fullStart": 393,
+                        "fullEnd": 395,
+                        "start": 393,
+                        "end": 394,
+                        "fullWidth": 2,
+                        "width": 1,
+                        "text": ";",
+                        "value": ";",
+                        "valueText": ";",
+                        "hasTrailingTrivia": true,
+                        "hasTrailingNewLine": true,
+                        "trailingTrivia": [
+                            {
+                                "kind": "NewLineTrivia",
+                                "fullStart": 394,
+                                "fullEnd": 395,
+                                "text": "\n"
+                            }
+                        ]
+                    }
+                }
+            }
+        ],
+        "endOfFileToken": {
+            "kind": "EndOfFileToken",
+            "fullStart": 395,
+            "fullEnd": 478,
+            "start": 478,
+            "end": 478,
+            "fullWidth": 83,
+            "width": 0,
+            "text": "",
+            "hasLeadingTrivia": true,
+            "hasLeadingComment": true,
+            "hasLeadingNewLine": true,
+            "leadingTrivia": [
+                {
+                    "kind": "SingleLineCommentTrivia",
+                    "fullStart": 395,
+                    "fullEnd": 397,
+                    "text": "//"
+                },
+                {
+                    "kind": "NewLineTrivia",
+                    "fullStart": 397,
+                    "fullEnd": 398,
+                    "text": "\n"
+                },
+                {
+                    "kind": "SingleLineCommentTrivia",
+                    "fullStart": 398,
+                    "fullEnd": 476,
+                    "text": "//////////////////////////////////////////////////////////////////////////////"
+                },
+                {
+                    "kind": "NewLineTrivia",
+                    "fullStart": 476,
+                    "fullEnd": 477,
+                    "text": "\n"
+                },
+                {
+                    "kind": "NewLineTrivia",
+                    "fullStart": 477,
+                    "fullEnd": 478,
+                    "text": "\n"
+                }
+            ]
+        }
+    },
+    "lineMap": {
+        "lineStarts": [
+            0,
+            61,
+            132,
+            133,
+            137,
+            194,
+            197,
+            228,
+            282,
+            295,
+            299,
+            300,
+            379,
+            389,
+            395,
+            398,
+            477,
+            478
+        ],
+        "length": 478
+    }
+}

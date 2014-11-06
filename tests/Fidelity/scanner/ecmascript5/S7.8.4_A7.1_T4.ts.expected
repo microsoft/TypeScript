@@ -1,0 +1,118 @@
+{
+    "diagnostics": [
+        {
+            "start": 354,
+            "length": 5,
+            "diagnosticCode": "Unrecognized escape sequence."
+        }
+    ],
+    "tokens": [
+        {
+            "kind": "StringLiteral",
+            "fullStart": 0,
+            "fullEnd": 362,
+            "start": 353,
+            "end": 361,
+            "fullWidth": 362,
+            "width": 8,
+            "text": "\"\\u000G\"",
+            "value": "\u0000",
+            "valueText": "\u0000",
+            "hasLeadingTrivia": true,
+            "hasLeadingComment": true,
+            "hasLeadingNewLine": true,
+            "hasTrailingTrivia": true,
+            "hasTrailingNewLine": true,
+            "leadingTrivia": [
+                {
+                    "kind": "SingleLineCommentTrivia",
+                    "fullStart": 0,
+                    "fullEnd": 60,
+                    "text": "// Copyright 2009 the Sputnik authors.  All rights reserved."
+                },
+                {
+                    "kind": "NewLineTrivia",
+                    "fullStart": 60,
+                    "fullEnd": 61,
+                    "text": "\n"
+                },
+                {
+                    "kind": "SingleLineCommentTrivia",
+                    "fullStart": 61,
+                    "fullEnd": 131,
+                    "text": "// This code is governed by the BSD license found in the LICENSE file."
+                },
+                {
+                    "kind": "NewLineTrivia",
+                    "fullStart": 131,
+                    "fullEnd": 132,
+                    "text": "\n"
+                },
+                {
+                    "kind": "NewLineTrivia",
+                    "fullStart": 132,
+                    "fullEnd": 133,
+                    "text": "\n"
+                },
+                {
+                    "kind": "MultiLineCommentTrivia",
+                    "fullStart": 133,
+                    "fullEnd": 342,
+                    "text": "/**\n * EscapeSequence :: UnicodeEscapeSequence :: u HexDigit HexDigit HexDigit HexDigit\n *\n * @path ch07/7.8/7.8.4/S7.8.4_A7.1_T4.js\n * @description UnicodeEscapeSequence :: u000G is incorrect\n * @negative\n */"
+                },
+                {
+                    "kind": "NewLineTrivia",
+                    "fullStart": 342,
+                    "fullEnd": 343,
+                    "text": "\n"
+                },
+                {
+                    "kind": "NewLineTrivia",
+                    "fullStart": 343,
+                    "fullEnd": 344,
+                    "text": "\n"
+                },
+                {
+                    "kind": "SingleLineCommentTrivia",
+                    "fullStart": 344,
+                    "fullEnd": 352,
+                    "text": "//CHECK#"
+                },
+                {
+                    "kind": "NewLineTrivia",
+                    "fullStart": 352,
+                    "fullEnd": 353,
+                    "text": "\n"
+                }
+            ],
+            "trailingTrivia": [
+                {
+                    "kind": "NewLineTrivia",
+                    "fullStart": 361,
+                    "fullEnd": 362,
+                    "text": "\n"
+                }
+            ]
+        },
+        {
+            "kind": "EndOfFileToken",
+            "fullStart": 362,
+            "fullEnd": 363,
+            "start": 363,
+            "end": 363,
+            "fullWidth": 1,
+            "width": 0,
+            "text": "",
+            "hasLeadingTrivia": true,
+            "hasLeadingNewLine": true,
+            "leadingTrivia": [
+                {
+                    "kind": "NewLineTrivia",
+                    "fullStart": 362,
+                    "fullEnd": 363,
+                    "text": "\n"
+                }
+            ]
+        }
+    ]
+}

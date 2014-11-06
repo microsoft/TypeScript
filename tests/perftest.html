@@ -1,0 +1,79 @@
+<html>
+<head>
+    <title>
+        Perftest
+    </title>
+    <style>
+        textarea {
+            width: 95%;
+            height: 120px;
+            border: 3px solid #cccccc;
+            padding: 5px;
+            font-family: Tahoma, sans-serif;
+        }
+
+        #container {
+            width: 100%;
+        }
+
+        #header {
+            height: 50px;
+            text-align: center;
+        }
+
+        #content {
+            text-align: left;
+            width: 950px;
+            min-height: 300px;
+            margin: 0px auto;
+        }
+
+        #main {
+            float: left;
+            width: 700px;
+        }
+
+        #side {
+            float: right;
+            width: 250px;
+            text-align: left;
+            padding-top: 75px;
+        }
+    </style>
+    <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.9.1.js"></script>
+    <script language="javascript" src="file.ts.js"></script>
+    <script language="javascript" src="incremental.js"></script>
+    <script language="javascript">
+        function write(str) {
+            var outputPane = $("#outputPane");
+            outputPane.val(outputPane.val() + str);
+        }
+        
+        var runTest;
+
+        function refresh() {
+            $("#outputPane").val("");
+            runTest = prepareTestRunner(text.text, write);
+        }
+
+        refresh();
+    </script>
+</head>
+<body>
+    <div id="container">
+        <div id="header">
+            <h1>Perftest</h1>
+        </div>
+        <div id="content">
+            <div id="main">
+                <h1>Output:</h1>
+                <textarea id="outputPane"></textarea>
+            </div>
+            <div id="side">
+                <button onclick="runTest()">Run</button>
+                <button onclick="refresh()">Refresh</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

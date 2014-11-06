@@ -1,0 +1,21 @@
+[
+    {
+        "kind": "EndOfFileToken",
+        "fullStart": 0,
+        "fullEnd": 4,
+        "start": 4,
+        "end": 4,
+        "fullWidth": 4,
+        "width": 0,
+        "text": "",
+        "hasLeadingTrivia": true,
+        "leadingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "fullStart": 0,
+                "fullEnd": 4,
+                "text": "    "
+            }
+        ]
+    }
+]

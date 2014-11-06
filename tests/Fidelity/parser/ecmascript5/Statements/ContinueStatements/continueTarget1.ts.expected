@@ -1,0 +1,145 @@
+{
+    "isDeclaration": false,
+    "languageVersion": "EcmaScript5",
+    "diagnostics": [
+        {
+            "start": 11,
+            "length": 16,
+            "diagnosticCode": "'continue' statement can only be used within an enclosing iteration statement."
+        }
+    ],
+    "sourceUnit": {
+        "kind": "SourceUnit",
+        "fullStart": 0,
+        "fullEnd": 27,
+        "start": 0,
+        "end": 27,
+        "fullWidth": 27,
+        "width": 27,
+        "moduleElements": [
+            {
+                "kind": "LabeledStatement",
+                "fullStart": 0,
+                "fullEnd": 27,
+                "start": 0,
+                "end": 27,
+                "fullWidth": 27,
+                "width": 27,
+                "identifier": {
+                    "kind": "IdentifierName",
+                    "fullStart": 0,
+                    "fullEnd": 6,
+                    "start": 0,
+                    "end": 6,
+                    "fullWidth": 6,
+                    "width": 6,
+                    "text": "target",
+                    "value": "target",
+                    "valueText": "target"
+                },
+                "colonToken": {
+                    "kind": "ColonToken",
+                    "fullStart": 6,
+                    "fullEnd": 9,
+                    "start": 6,
+                    "end": 7,
+                    "fullWidth": 3,
+                    "width": 1,
+                    "text": ":",
+                    "value": ":",
+                    "valueText": ":",
+                    "hasTrailingTrivia": true,
+                    "hasTrailingNewLine": true,
+                    "trailingTrivia": [
+                        {
+                            "kind": "NewLineTrivia",
+                            "fullStart": 7,
+                            "fullEnd": 9,
+                            "text": "\r\n"
+                        }
+                    ]
+                },
+                "statement": {
+                    "kind": "ContinueStatement",
+                    "fullStart": 9,
+                    "fullEnd": 27,
+                    "start": 11,
+                    "end": 27,
+                    "fullWidth": 18,
+                    "width": 16,
+                    "continueKeyword": {
+                        "kind": "ContinueKeyword",
+                        "fullStart": 9,
+                        "fullEnd": 20,
+                        "start": 11,
+                        "end": 19,
+                        "fullWidth": 11,
+                        "width": 8,
+                        "text": "continue",
+                        "value": "continue",
+                        "valueText": "continue",
+                        "hasLeadingTrivia": true,
+                        "hasTrailingTrivia": true,
+                        "leadingTrivia": [
+                            {
+                                "kind": "WhitespaceTrivia",
+                                "fullStart": 9,
+                                "fullEnd": 11,
+                                "text": "  "
+                            }
+                        ],
+                        "trailingTrivia": [
+                            {
+                                "kind": "WhitespaceTrivia",
+                                "fullStart": 19,
+                                "fullEnd": 20,
+                                "text": " "
+                            }
+                        ]
+                    },
+                    "identifier": {
+                        "kind": "IdentifierName",
+                        "fullStart": 20,
+                        "fullEnd": 26,
+                        "start": 20,
+                        "end": 26,
+                        "fullWidth": 6,
+                        "width": 6,
+                        "text": "target",
+                        "value": "target",
+                        "valueText": "target"
+                    },
+                    "semicolonToken": {
+                        "kind": "SemicolonToken",
+                        "fullStart": 26,
+                        "fullEnd": 27,
+                        "start": 26,
+                        "end": 27,
+                        "fullWidth": 1,
+                        "width": 1,
+                        "text": ";",
+                        "value": ";",
+                        "valueText": ";"
+                    }
+                }
+            }
+        ],
+        "endOfFileToken": {
+            "kind": "EndOfFileToken",
+            "fullStart": 27,
+            "fullEnd": 27,
+            "start": 27,
+            "end": 27,
+            "fullWidth": 0,
+            "width": 0,
+            "text": ""
+        }
+    },
+    "lineMap": {
+        "lineStarts": [
+            0,
+            9
+        ],
+        "length": 27
+    }
+}

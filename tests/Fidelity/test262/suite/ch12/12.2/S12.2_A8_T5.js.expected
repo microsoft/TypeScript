@@ -1,0 +1,287 @@
+{
+    "isDeclaration": false,
+    "languageVersion": "EcmaScript5",
+    "diagnostics": [
+        {
+            "start": 412,
+            "length": 2,
+            "diagnosticCode": "Unexpected token; '{0}' expected.",
+            "arguments": [
+                "identifier"
+            ]
+        }
+    ],
+    "sourceUnit": {
+        "kind": "SourceUnit",
+        "fullStart": 0,
+        "fullEnd": 500,
+        "start": 408,
+        "end": 500,
+        "fullWidth": 500,
+        "width": 92,
+        "isIncrementallyUnusable": true,
+        "moduleElements": [
+            {
+                "kind": "VariableStatement",
+                "fullStart": 0,
+                "fullEnd": 412,
+                "start": 408,
+                "end": 411,
+                "fullWidth": 412,
+                "width": 3,
+                "isIncrementallyUnusable": true,
+                "modifiers": [],
+                "variableDeclaration": {
+                    "kind": "VariableDeclaration",
+                    "fullStart": 0,
+                    "fullEnd": 412,
+                    "start": 408,
+                    "end": 411,
+                    "fullWidth": 412,
+                    "width": 3,
+                    "varKeyword": {
+                        "kind": "VarKeyword",
+                        "fullStart": 0,
+                        "fullEnd": 412,
+                        "start": 408,
+                        "end": 411,
+                        "fullWidth": 412,
+                        "width": 3,
+                        "text": "var",
+                        "value": "var",
+                        "valueText": "var",
+                        "hasLeadingTrivia": true,
+                        "hasLeadingComment": true,
+                        "hasLeadingNewLine": true,
+                        "hasTrailingTrivia": true,
+                        "leadingTrivia": [
+                            {
+                                "kind": "SingleLineCommentTrivia",
+                                "fullStart": 0,
+                                "fullEnd": 60,
+                                "text": "// Copyright 2009 the Sputnik authors.  All rights reserved."
+                            },
+                            {
+                                "kind": "NewLineTrivia",
+                                "fullStart": 60,
+                                "fullEnd": 61,
+                                "text": "\n"
+                            },
+                            {
+                                "kind": "SingleLineCommentTrivia",
+                                "fullStart": 61,
+                                "fullEnd": 131,
+                                "text": "// This code is governed by the BSD license found in the LICENSE file."
+                            },
+                            {
+                                "kind": "NewLineTrivia",
+                                "fullStart": 131,
+                                "fullEnd": 132,
+                                "text": "\n"
+                            },
+                            {
+                                "kind": "NewLineTrivia",
+                                "fullStart": 132,
+                                "fullEnd": 133,
+                                "text": "\n"
+                            },
+                            {
+                                "kind": "MultiLineCommentTrivia",
+                                "fullStart": 133,
+                                "fullEnd": 317,
+                                "text": "/**\n * Only AssignmentExpression is admitted when variable is initialized\n *\n * @path ch12/12.2/S12.2_A8_T5.js\n * @description Checking if execution of \"var --x\" fails\n * @negative\n */"
+                            },
+                            {
+                                "kind": "NewLineTrivia",
+                                "fullStart": 317,
+                                "fullEnd": 318,
+                                "text": "\n"
+                            },
+                            {
+                                "kind": "NewLineTrivia",
+                                "fullStart": 318,
+                                "fullEnd": 319,
+                                "text": "\n"
+                            },
+                            {
+                                "kind": "SingleLineCommentTrivia",
+                                "fullStart": 319,
+                                "fullEnd": 397,
+                                "text": "//////////////////////////////////////////////////////////////////////////////"
+                            },
+                            {
+                                "kind": "NewLineTrivia",
+                                "fullStart": 397,
+                                "fullEnd": 398,
+                                "text": "\n"
+                            },
+                            {
+                                "kind": "SingleLineCommentTrivia",
+                                "fullStart": 398,
+                                "fullEnd": 407,
+                                "text": "//CHECK#1"
+                            },
+                            {
+                                "kind": "NewLineTrivia",
+                                "fullStart": 407,
+                                "fullEnd": 408,
+                                "text": "\n"
+                            }
+                        ],
+                        "trailingTrivia": [
+                            {
+                                "kind": "WhitespaceTrivia",
+                                "fullStart": 411,
+                                "fullEnd": 412,
+                                "text": " "
+                            }
+                        ]
+                    },
+                    "variableDeclarators": []
+                },
+                "semicolonToken": {
+                    "kind": "SemicolonToken",
+                    "fullStart": 412,
+                    "fullEnd": 412,
+                    "start": 412,
+                    "end": 412,
+                    "fullWidth": 0,
+                    "width": 0,
+                    "text": ""
+                }
+            },
+            {
+                "kind": "ExpressionStatement",
+                "fullStart": 412,
+                "fullEnd": 417,
+                "start": 412,
+                "end": 416,
+                "fullWidth": 5,
+                "width": 4,
+                "expression": {
+                    "kind": "PrefixUnaryExpression",
+                    "fullStart": 412,
+                    "fullEnd": 415,
+                    "start": 412,
+                    "end": 415,
+                    "fullWidth": 3,
+                    "width": 3,
+                    "operatorToken": {
+                        "kind": "MinusMinusToken",
+                        "fullStart": 412,
+                        "fullEnd": 414,
+                        "start": 412,
+                        "end": 414,
+                        "fullWidth": 2,
+                        "width": 2,
+                        "text": "--",
+                        "value": "--",
+                        "valueText": "--"
+                    },
+                    "operand": {
+                        "kind": "IdentifierName",
+                        "fullStart": 414,
+                        "fullEnd": 415,
+                        "start": 414,
+                        "end": 415,
+                        "fullWidth": 1,
+                        "width": 1,
+                        "text": "x",
+                        "value": "x",
+                        "valueText": "x"
+                    }
+                },
+                "semicolonToken": {
+                    "kind": "SemicolonToken",
+                    "fullStart": 415,
+                    "fullEnd": 417,
+                    "start": 415,
+                    "end": 416,
+                    "fullWidth": 2,
+                    "width": 1,
+                    "text": ";",
+                    "value": ";",
+                    "valueText": ";",
+                    "hasTrailingTrivia": true,
+                    "hasTrailingNewLine": true,
+                    "trailingTrivia": [
+                        {
+                            "kind": "NewLineTrivia",
+                            "fullStart": 416,
+                            "fullEnd": 417,
+                            "text": "\n"
+                        }
+                    ]
+                }
+            }
+        ],
+        "endOfFileToken": {
+            "kind": "EndOfFileToken",
+            "fullStart": 417,
+            "fullEnd": 500,
+            "start": 500,
+            "end": 500,
+            "fullWidth": 83,
+            "width": 0,
+            "text": "",
+            "hasLeadingTrivia": true,
+            "hasLeadingComment": true,
+            "hasLeadingNewLine": true,
+            "leadingTrivia": [
+                {
+                    "kind": "SingleLineCommentTrivia",
+                    "fullStart": 417,
+                    "fullEnd": 419,
+                    "text": "//"
+                },
+                {
+                    "kind": "NewLineTrivia",
+                    "fullStart": 419,
+                    "fullEnd": 420,
+                    "text": "\n"
+                },
+                {
+                    "kind": "SingleLineCommentTrivia",
+                    "fullStart": 420,
+                    "fullEnd": 498,
+                    "text": "//////////////////////////////////////////////////////////////////////////////"
+                },
+                {
+                    "kind": "NewLineTrivia",
+                    "fullStart": 498,
+                    "fullEnd": 499,
+                    "text": "\n"
+                },
+                {
+                    "kind": "NewLineTrivia",
+                    "fullStart": 499,
+                    "fullEnd": 500,
+                    "text": "\n"
+                }
+            ]
+        }
+    },
+    "lineMap": {
+        "lineStarts": [
+            0,
+            61,
+            132,
+            133,
+            137,
+            207,
+            210,
+            244,
+            301,
+            314,
+            318,
+            319,
+            398,
+            408,
+            417,
+            420,
+            499,
+            500
+        ],
+        "length": 500
+    }
+}

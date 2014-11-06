@@ -1,0 +1,185 @@
+{
+    "tokens": {
+        "0": {
+            "kind": "RegularExpressionLiteral",
+            "fullStart": 0,
+            "fullEnd": 5,
+            "start": 0,
+            "end": 5,
+            "fullWidth": 5,
+            "width": 5,
+            "text": "/foo/",
+            "value": {},
+            "valueText": "/foo/"
+        },
+        "1": {
+            "kind": "RegularExpressionLiteral",
+            "fullStart": 0,
+            "fullEnd": 5,
+            "start": 0,
+            "end": 5,
+            "fullWidth": 5,
+            "width": 5,
+            "text": "/foo/",
+            "value": {},
+            "valueText": "/foo/"
+        },
+        "2": {
+            "kind": "RegularExpressionLiteral",
+            "fullStart": 0,
+            "fullEnd": 5,
+            "start": 0,
+            "end": 5,
+            "fullWidth": 5,
+            "width": 5,
+            "text": "/foo/",
+            "value": {},
+            "valueText": "/foo/"
+        },
+        "3": {
+            "kind": "RegularExpressionLiteral",
+            "fullStart": 0,
+            "fullEnd": 5,
+            "start": 0,
+            "end": 5,
+            "fullWidth": 5,
+            "width": 5,
+            "text": "/foo/",
+            "value": {},
+            "valueText": "/foo/"
+        },
+        "4": {
+            "kind": "RegularExpressionLiteral",
+            "fullStart": 0,
+            "fullEnd": 5,
+            "start": 0,
+            "end": 5,
+            "fullWidth": 5,
+            "width": 5,
+            "text": "/foo/",
+            "value": {},
+            "valueText": "/foo/"
+        },
+        "5": {
+            "kind": "EndOfFileToken",
+            "fullStart": 5,
+            "fullEnd": 5,
+            "start": 5,
+            "end": 5,
+            "fullWidth": 0,
+            "width": 0,
+            "text": ""
+        }
+    },
+    "tokensOnLeft": {
+        "0": null,
+        "1": {
+            "kind": "RegularExpressionLiteral",
+            "fullStart": 0,
+            "fullEnd": 5,
+            "start": 0,
+            "end": 5,
+            "fullWidth": 5,
+            "width": 5,
+            "text": "/foo/",
+            "value": {},
+            "valueText": "/foo/"
+        },
+        "2": {
+            "kind": "RegularExpressionLiteral",
+            "fullStart": 0,
+            "fullEnd": 5,
+            "start": 0,
+            "end": 5,
+            "fullWidth": 5,
+            "width": 5,
+            "text": "/foo/",
+            "value": {},
+            "valueText": "/foo/"
+        },
+        "3": {
+            "kind": "RegularExpressionLiteral",
+            "fullStart": 0,
+            "fullEnd": 5,
+            "start": 0,
+            "end": 5,
+            "fullWidth": 5,
+            "width": 5,
+            "text": "/foo/",
+            "value": {},
+            "valueText": "/foo/"
+        },
+        "4": {
+            "kind": "RegularExpressionLiteral",
+            "fullStart": 0,
+            "fullEnd": 5,
+            "start": 0,
+            "end": 5,
+            "fullWidth": 5,
+            "width": 5,
+            "text": "/foo/",
+            "value": {},
+            "valueText": "/foo/"
+        },
+        "5": {
+            "kind": "RegularExpressionLiteral",
+            "fullStart": 0,
+            "fullEnd": 5,
+            "start": 0,
+            "end": 5,
+            "fullWidth": 5,
+            "width": 5,
+            "text": "/foo/",
+            "value": {},
+            "valueText": "/foo/"
+        }
+    },
+    "leftToRight": [
+        {
+            "kind": "RegularExpressionLiteral",
+            "fullStart": 0,
+            "fullEnd": 5,
+            "start": 0,
+            "end": 5,
+            "fullWidth": 5,
+            "width": 5,
+            "text": "/foo/",
+            "value": {},
+            "valueText": "/foo/"
+        },
+        {
+            "kind": "EndOfFileToken",
+            "fullStart": 5,
+            "fullEnd": 5,
+            "start": 5,
+            "end": 5,
+            "fullWidth": 0,
+            "width": 0,
+            "text": ""
+        }
+    ],
+    "rightToLeft": [
+        {
+            "kind": "EndOfFileToken",
+            "fullStart": 5,
+            "fullEnd": 5,
+            "start": 5,
+            "end": 5,
+            "fullWidth": 0,
+            "width": 0,
+            "text": ""
+        },
+        {
+            "kind": "RegularExpressionLiteral",
+            "fullStart": 0,
+            "fullEnd": 5,
+            "start": 0,
+            "end": 5,
+            "fullWidth": 5,
+            "width": 5,
+            "text": "/foo/",
+            "value": {},
+            "valueText": "/foo/"
+        }
+    ]
+}

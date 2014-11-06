@@ -1,0 +1,79 @@
+{
+    "isDeclaration": false,
+    "languageVersion": "EcmaScript5",
+    "diagnostics": [
+        {
+            "start": 8,
+            "length": 1,
+            "diagnosticCode": "Unexpected character {0}.",
+            "arguments": [
+                "\"\\\""
+            ]
+        },
+        {
+            "start": 8,
+            "length": 1,
+            "diagnosticCode": "Unexpected token; '{0}' expected.",
+            "arguments": [
+                "module, class, interface, enum, import or statement"
+            ]
+        }
+    ],
+    "sourceUnit": {
+        "kind": "SourceUnit",
+        "fullStart": 0,
+        "fullEnd": 9,
+        "start": 9,
+        "end": 9,
+        "fullWidth": 9,
+        "width": 0,
+        "isIncrementallyUnusable": true,
+        "moduleElements": [],
+        "endOfFileToken": {
+            "kind": "EndOfFileToken",
+            "fullStart": 0,
+            "fullEnd": 9,
+            "start": 9,
+            "end": 9,
+            "fullWidth": 9,
+            "width": 0,
+            "text": "",
+            "hasLeadingTrivia": true,
+            "hasLeadingComment": true,
+            "hasLeadingSkippedText": true,
+            "leadingTrivia": [
+                {
+                    "kind": "MultiLineCommentTrivia",
+                    "fullStart": 0,
+                    "fullEnd": 7,
+                    "text": "/*foo*/"
+                },
+                {
+                    "kind": "WhitespaceTrivia",
+                    "fullStart": 7,
+                    "fullEnd": 8,
+                    "text": " "
+                },
+                {
+                    "kind": "SkippedTokenTrivia",
+                    "skippedToken": {
+                        "kind": "ErrorToken",
+                        "fullStart": 8,
+                        "fullEnd": 9,
+                        "start": 8,
+                        "end": 9,
+                        "fullWidth": 1,
+                        "width": 1,
+                        "text": "\\"
+                    }
+                }
+            ]
+        }
+    },
+    "lineMap": {
+        "lineStarts": [
+            0
+        ],
+        "length": 9
+    }
+}

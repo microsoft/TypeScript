@@ -1,0 +1,242 @@
+{
+    "isDeclaration": false,
+    "languageVersion": "EcmaScript5",
+    "sourceUnit": {
+        "kind": "SourceUnit",
+        "fullStart": 0,
+        "fullEnd": 48,
+        "start": 0,
+        "end": 48,
+        "fullWidth": 48,
+        "width": 48,
+        "moduleElements": [
+            {
+                "kind": "ExpressionStatement",
+                "fullStart": 0,
+                "fullEnd": 15,
+                "start": 0,
+                "end": 13,
+                "fullWidth": 15,
+                "width": 13,
+                "expression": {
+                    "kind": "StringLiteral",
+                    "fullStart": 0,
+                    "fullEnd": 12,
+                    "start": 0,
+                    "end": 12,
+                    "fullWidth": 12,
+                    "width": 12,
+                    "text": "\"use strict\"",
+                    "value": "use strict",
+                    "valueText": "use strict"
+                },
+                "semicolonToken": {
+                    "kind": "SemicolonToken",
+                    "fullStart": 12,
+                    "fullEnd": 15,
+                    "start": 12,
+                    "end": 13,
+                    "fullWidth": 3,
+                    "width": 1,
+                    "text": ";",
+                    "value": ";",
+                    "valueText": ";",
+                    "hasTrailingTrivia": true,
+                    "hasTrailingNewLine": true,
+                    "trailingTrivia": [
+                        {
+                            "kind": "NewLineTrivia",
+                            "fullStart": 13,
+                            "fullEnd": 15,
+                            "text": "\r\n"
+                        }
+                    ]
+                }
+            },
+            {
+                "kind": "EnumDeclaration",
+                "fullStart": 15,
+                "fullEnd": 48,
+                "start": 17,
+                "end": 46,
+                "fullWidth": 33,
+                "width": 29,
+                "parsedInStrictMode": true,
+                "modifiers": [],
+                "enumKeyword": {
+                    "kind": "EnumKeyword",
+                    "fullStart": 15,
+                    "fullEnd": 22,
+                    "start": 17,
+                    "end": 21,
+                    "fullWidth": 7,
+                    "width": 4,
+                    "text": "enum",
+                    "value": "enum",
+                    "valueText": "enum",
+                    "hasLeadingTrivia": true,
+                    "hasLeadingNewLine": true,
+                    "hasTrailingTrivia": true,
+                    "leadingTrivia": [
+                        {
+                            "kind": "NewLineTrivia",
+                            "fullStart": 15,
+                            "fullEnd": 17,
+                            "text": "\r\n"
+                        }
+                    ],
+                    "trailingTrivia": [
+                        {
+                            "kind": "WhitespaceTrivia",
+                            "fullStart": 21,
+                            "fullEnd": 22,
+                            "text": " "
+                        }
+                    ]
+                },
+                "identifier": {
+                    "kind": "IdentifierName",
+                    "fullStart": 22,
+                    "fullEnd": 26,
+                    "start": 22,
+                    "end": 25,
+                    "fullWidth": 4,
+                    "width": 3,
+                    "text": "Bar",
+                    "value": "Bar",
+                    "valueText": "Bar",
+                    "hasTrailingTrivia": true,
+                    "trailingTrivia": [
+                        {
+                            "kind": "WhitespaceTrivia",
+                            "fullStart": 25,
+                            "fullEnd": 26,
+                            "text": " "
+                        }
+                    ]
+                },
+                "openBraceToken": {
+                    "kind": "OpenBraceToken",
+                    "fullStart": 26,
+                    "fullEnd": 29,
+                    "start": 26,
+                    "end": 27,
+                    "fullWidth": 3,
+                    "width": 1,
+                    "text": "{",
+                    "value": "{",
+                    "valueText": "{",
+                    "hasTrailingTrivia": true,
+                    "hasTrailingNewLine": true,
+                    "trailingTrivia": [
+                        {
+                            "kind": "NewLineTrivia",
+                            "fullStart": 27,
+                            "fullEnd": 29,
+                            "text": "\r\n"
+                        }
+                    ]
+                },
+                "enumElements": [
+                    {
+                        "kind": "EnumElement",
+                        "fullStart": 29,
+                        "fullEnd": 42,
+                        "start": 33,
+                        "end": 42,
+                        "fullWidth": 13,
+                        "width": 9,
+                        "parsedInStrictMode": true,
+                        "propertyName": {
+                            "kind": "IdentifierName",
+                            "fullStart": 29,
+                            "fullEnd": 42,
+                            "start": 33,
+                            "end": 42,
+                            "fullWidth": 13,
+                            "width": 9,
+                            "text": "interface",
+                            "value": "interface",
+                            "valueText": "interface",
+                            "isKeywordConvertedToIdentifier": true,
+                            "hasLeadingTrivia": true,
+                            "leadingTrivia": [
+                                {
+                                    "kind": "WhitespaceTrivia",
+                                    "fullStart": 29,
+                                    "fullEnd": 33,
+                                    "text": "    "
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "kind": "CommaToken",
+                        "fullStart": 42,
+                        "fullEnd": 45,
+                        "start": 42,
+                        "end": 43,
+                        "fullWidth": 3,
+                        "width": 1,
+                        "text": ",",
+                        "value": ",",
+                        "valueText": ",",
+                        "hasTrailingTrivia": true,
+                        "hasTrailingNewLine": true,
+                        "trailingTrivia": [
+                            {
+                                "kind": "NewLineTrivia",
+                                "fullStart": 43,
+                                "fullEnd": 45,
+                                "text": "\r\n"
+                            }
+                        ]
+                    }
+                ],
+                "closeBraceToken": {
+                    "kind": "CloseBraceToken",
+                    "fullStart": 45,
+                    "fullEnd": 48,
+                    "start": 45,
+                    "end": 46,
+                    "fullWidth": 3,
+                    "width": 1,
+                    "text": "}",
+                    "value": "}",
+                    "valueText": "}",
+                    "hasTrailingTrivia": true,
+                    "hasTrailingNewLine": true,
+                    "trailingTrivia": [
+                        {
+                            "kind": "NewLineTrivia",
+                            "fullStart": 46,
+                            "fullEnd": 48,
+                            "text": "\r\n"
+                        }
+                    ]
+                }
+            }
+        ],
+        "endOfFileToken": {
+            "kind": "EndOfFileToken",
+            "fullStart": 48,
+            "fullEnd": 48,
+            "start": 48,
+            "end": 48,
+            "fullWidth": 0,
+            "width": 0,
+            "text": ""
+        }
+    },
+    "lineMap": {
+        "lineStarts": [
+            0,
+            15,
+            17,
+            29,
+            45,
+            48
+        ],
+        "length": 48
+    }
+}

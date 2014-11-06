@@ -1,0 +1,138 @@
+{
+    "isDeclaration": false,
+    "languageVersion": "EcmaScript5",
+    "sourceUnit": {
+        "kind": "SourceUnit",
+        "fullStart": 0,
+        "fullEnd": 24,
+        "start": 0,
+        "end": 24,
+        "fullWidth": 24,
+        "width": 24,
+        "moduleElements": [
+            {
+                "kind": "LabeledStatement",
+                "fullStart": 0,
+                "fullEnd": 24,
+                "start": 0,
+                "end": 24,
+                "fullWidth": 24,
+                "width": 24,
+                "identifier": {
+                    "kind": "IdentifierName",
+                    "fullStart": 0,
+                    "fullEnd": 6,
+                    "start": 0,
+                    "end": 6,
+                    "fullWidth": 6,
+                    "width": 6,
+                    "text": "target",
+                    "value": "target",
+                    "valueText": "target"
+                },
+                "colonToken": {
+                    "kind": "ColonToken",
+                    "fullStart": 6,
+                    "fullEnd": 9,
+                    "start": 6,
+                    "end": 7,
+                    "fullWidth": 3,
+                    "width": 1,
+                    "text": ":",
+                    "value": ":",
+                    "valueText": ":",
+                    "hasTrailingTrivia": true,
+                    "hasTrailingNewLine": true,
+                    "trailingTrivia": [
+                        {
+                            "kind": "NewLineTrivia",
+                            "fullStart": 7,
+                            "fullEnd": 9,
+                            "text": "\r\n"
+                        }
+                    ]
+                },
+                "statement": {
+                    "kind": "BreakStatement",
+                    "fullStart": 9,
+                    "fullEnd": 24,
+                    "start": 11,
+                    "end": 24,
+                    "fullWidth": 15,
+                    "width": 13,
+                    "breakKeyword": {
+                        "kind": "BreakKeyword",
+                        "fullStart": 9,
+                        "fullEnd": 17,
+                        "start": 11,
+                        "end": 16,
+                        "fullWidth": 8,
+                        "width": 5,
+                        "text": "break",
+                        "value": "break",
+                        "valueText": "break",
+                        "hasLeadingTrivia": true,
+                        "hasTrailingTrivia": true,
+                        "leadingTrivia": [
+                            {
+                                "kind": "WhitespaceTrivia",
+                                "fullStart": 9,
+                                "fullEnd": 11,
+                                "text": "  "
+                            }
+                        ],
+                        "trailingTrivia": [
+                            {
+                                "kind": "WhitespaceTrivia",
+                                "fullStart": 16,
+                                "fullEnd": 17,
+                                "text": " "
+                            }
+                        ]
+                    },
+                    "identifier": {
+                        "kind": "IdentifierName",
+                        "fullStart": 17,
+                        "fullEnd": 23,
+                        "start": 17,
+                        "end": 23,
+                        "fullWidth": 6,
+                        "width": 6,
+                        "text": "target",
+                        "value": "target",
+                        "valueText": "target"
+                    },
+                    "semicolonToken": {
+                        "kind": "SemicolonToken",
+                        "fullStart": 23,
+                        "fullEnd": 24,
+                        "start": 23,
+                        "end": 24,
+                        "fullWidth": 1,
+                        "width": 1,
+                        "text": ";",
+                        "value": ";",
+                        "valueText": ";"
+                    }
+                }
+            }
+        ],
+        "endOfFileToken": {
+            "kind": "EndOfFileToken",
+            "fullStart": 24,
+            "fullEnd": 24,
+            "start": 24,
+            "end": 24,
+            "fullWidth": 0,
+            "width": 0,
+            "text": ""
+        }
+    },
+    "lineMap": {
+        "lineStarts": [
+            0,
+            9
+        ],
+        "length": 24
+    }
+}

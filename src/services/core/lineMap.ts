@@ -59,7 +59,7 @@ module TypeScript {
             return this.lineStarts()[lineNumber];
         }
 
-        public fillLineAndCharacterFromPosition(position: number, lineAndCharacter: ILineAndCharacter): void {
+        public fillLineAndCharacterFromPosition(position: number, lineAndCharacter: { line: number; character: number }): void {
             if (position < 0 || position > this.length) {
                 throw Errors.argumentOutOfRange("position");
             }

@@ -1,0 +1,126 @@
+{
+    "isDeclaration": true,
+    "languageVersion": "EcmaScript5",
+    "diagnostics": [
+        {
+            "start": 7,
+            "length": 1,
+            "diagnosticCode": "A 'declare' modifier is required for a top level declaration in a .d.ts file."
+        }
+    ],
+    "sourceUnit": {
+        "kind": "SourceUnit",
+        "fullStart": 0,
+        "fullEnd": 13,
+        "start": 0,
+        "end": 13,
+        "fullWidth": 13,
+        "width": 13,
+        "moduleElements": [
+            {
+                "kind": "ModuleDeclaration",
+                "fullStart": 0,
+                "fullEnd": 13,
+                "start": 0,
+                "end": 13,
+                "fullWidth": 13,
+                "width": 13,
+                "modifiers": [],
+                "moduleKeyword": {
+                    "kind": "ModuleKeyword",
+                    "fullStart": 0,
+                    "fullEnd": 7,
+                    "start": 0,
+                    "end": 6,
+                    "fullWidth": 7,
+                    "width": 6,
+                    "text": "module",
+                    "value": "module",
+                    "valueText": "module",
+                    "hasTrailingTrivia": true,
+                    "trailingTrivia": [
+                        {
+                            "kind": "WhitespaceTrivia",
+                            "fullStart": 6,
+                            "fullEnd": 7,
+                            "text": " "
+                        }
+                    ]
+                },
+                "name": {
+                    "kind": "IdentifierName",
+                    "fullStart": 7,
+                    "fullEnd": 9,
+                    "start": 7,
+                    "end": 8,
+                    "fullWidth": 2,
+                    "width": 1,
+                    "text": "M",
+                    "value": "M",
+                    "valueText": "M",
+                    "hasTrailingTrivia": true,
+                    "trailingTrivia": [
+                        {
+                            "kind": "WhitespaceTrivia",
+                            "fullStart": 8,
+                            "fullEnd": 9,
+                            "text": " "
+                        }
+                    ]
+                },
+                "openBraceToken": {
+                    "kind": "OpenBraceToken",
+                    "fullStart": 9,
+                    "fullEnd": 12,
+                    "start": 9,
+                    "end": 10,
+                    "fullWidth": 3,
+                    "width": 1,
+                    "text": "{",
+                    "value": "{",
+                    "valueText": "{",
+                    "hasTrailingTrivia": true,
+                    "hasTrailingNewLine": true,
+                    "trailingTrivia": [
+                        {
+                            "kind": "NewLineTrivia",
+                            "fullStart": 10,
+                            "fullEnd": 12,
+                            "text": "\r\n"
+                        }
+                    ]
+                },
+                "moduleElements": [],
+                "closeBraceToken": {
+                    "kind": "CloseBraceToken",
+                    "fullStart": 12,
+                    "fullEnd": 13,
+                    "start": 12,
+                    "end": 13,
+                    "fullWidth": 1,
+                    "width": 1,
+                    "text": "}",
+                    "value": "}",
+                    "valueText": "}"
+                }
+            }
+        ],
+        "endOfFileToken": {
+            "kind": "EndOfFileToken",
+            "fullStart": 13,
+            "fullEnd": 13,
+            "start": 13,
+            "end": 13,
+            "fullWidth": 0,
+            "width": 0,
+            "text": ""
+        }
+    },
+    "lineMap": {
+        "lineStarts": [
+            0,
+            12
+        ],
+        "length": 13
+    }
+}

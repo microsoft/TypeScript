@@ -1,0 +1,316 @@
+{
+    "tokens": {
+        "0": {
+            "kind": "EndOfFileToken",
+            "fullStart": 0,
+            "fullEnd": 8,
+            "start": 8,
+            "end": 8,
+            "fullWidth": 8,
+            "width": 0,
+            "text": "",
+            "hasLeadingTrivia": true,
+            "hasLeadingComment": true,
+            "hasLeadingNewLine": true,
+            "leadingTrivia": [
+                {
+                    "kind": "SingleLineCommentTrivia",
+                    "fullStart": 0,
+                    "fullEnd": 6,
+                    "text": "// Foo"
+                },
+                {
+                    "kind": "NewLineTrivia",
+                    "fullStart": 6,
+                    "fullEnd": 8,
+                    "text": "\r\n"
+                }
+            ]
+        },
+        "1": {
+            "kind": "EndOfFileToken",
+            "fullStart": 0,
+            "fullEnd": 8,
+            "start": 8,
+            "end": 8,
+            "fullWidth": 8,
+            "width": 0,
+            "text": "",
+            "hasLeadingTrivia": true,
+            "hasLeadingComment": true,
+            "hasLeadingNewLine": true,
+            "leadingTrivia": [
+                {
+                    "kind": "SingleLineCommentTrivia",
+                    "fullStart": 0,
+                    "fullEnd": 6,
+                    "text": "// Foo"
+                },
+                {
+                    "kind": "NewLineTrivia",
+                    "fullStart": 6,
+                    "fullEnd": 8,
+                    "text": "\r\n"
+                }
+            ]
+        },
+        "2": {
+            "kind": "EndOfFileToken",
+            "fullStart": 0,
+            "fullEnd": 8,
+            "start": 8,
+            "end": 8,
+            "fullWidth": 8,
+            "width": 0,
+            "text": "",
+            "hasLeadingTrivia": true,
+            "hasLeadingComment": true,
+            "hasLeadingNewLine": true,
+            "leadingTrivia": [
+                {
+                    "kind": "SingleLineCommentTrivia",
+                    "fullStart": 0,
+                    "fullEnd": 6,
+                    "text": "// Foo"
+                },
+                {
+                    "kind": "NewLineTrivia",
+                    "fullStart": 6,
+                    "fullEnd": 8,
+                    "text": "\r\n"
+                }
+            ]
+        },
+        "3": {
+            "kind": "EndOfFileToken",
+            "fullStart": 0,
+            "fullEnd": 8,
+            "start": 8,
+            "end": 8,
+            "fullWidth": 8,
+            "width": 0,
+            "text": "",
+            "hasLeadingTrivia": true,
+            "hasLeadingComment": true,
+            "hasLeadingNewLine": true,
+            "leadingTrivia": [
+                {
+                    "kind": "SingleLineCommentTrivia",
+                    "fullStart": 0,
+                    "fullEnd": 6,
+                    "text": "// Foo"
+                },
+                {
+                    "kind": "NewLineTrivia",
+                    "fullStart": 6,
+                    "fullEnd": 8,
+                    "text": "\r\n"
+                }
+            ]
+        },
+        "4": {
+            "kind": "EndOfFileToken",
+            "fullStart": 0,
+            "fullEnd": 8,
+            "start": 8,
+            "end": 8,
+            "fullWidth": 8,
+            "width": 0,
+            "text": "",
+            "hasLeadingTrivia": true,
+            "hasLeadingComment": true,
+            "hasLeadingNewLine": true,
+            "leadingTrivia": [
+                {
+                    "kind": "SingleLineCommentTrivia",
+                    "fullStart": 0,
+                    "fullEnd": 6,
+                    "text": "// Foo"
+                },
+                {
+                    "kind": "NewLineTrivia",
+                    "fullStart": 6,
+                    "fullEnd": 8,
+                    "text": "\r\n"
+                }
+            ]
+        },
+        "5": {
+            "kind": "EndOfFileToken",
+            "fullStart": 0,
+            "fullEnd": 8,
+            "start": 8,
+            "end": 8,
+            "fullWidth": 8,
+            "width": 0,
+            "text": "",
+            "hasLeadingTrivia": true,
+            "hasLeadingComment": true,
+            "hasLeadingNewLine": true,
+            "leadingTrivia": [
+                {
+                    "kind": "SingleLineCommentTrivia",
+                    "fullStart": 0,
+                    "fullEnd": 6,
+                    "text": "// Foo"
+                },
+                {
+                    "kind": "NewLineTrivia",
+                    "fullStart": 6,
+                    "fullEnd": 8,
+                    "text": "\r\n"
+                }
+            ]
+        },
+        "6": {
+            "kind": "EndOfFileToken",
+            "fullStart": 0,
+            "fullEnd": 8,
+            "start": 8,
+            "end": 8,
+            "fullWidth": 8,
+            "width": 0,
+            "text": "",
+            "hasLeadingTrivia": true,
+            "hasLeadingComment": true,
+            "hasLeadingNewLine": true,
+            "leadingTrivia": [
+                {
+                    "kind": "SingleLineCommentTrivia",
+                    "fullStart": 0,
+                    "fullEnd": 6,
+                    "text": "// Foo"
+                },
+                {
+                    "kind": "NewLineTrivia",
+                    "fullStart": 6,
+                    "fullEnd": 8,
+                    "text": "\r\n"
+                }
+            ]
+        },
+        "7": {
+            "kind": "EndOfFileToken",
+            "fullStart": 0,
+            "fullEnd": 8,
+            "start": 8,
+            "end": 8,
+            "fullWidth": 8,
+            "width": 0,
+            "text": "",
+            "hasLeadingTrivia": true,
+            "hasLeadingComment": true,
+            "hasLeadingNewLine": true,
+            "leadingTrivia": [
+                {
+                    "kind": "SingleLineCommentTrivia",
+                    "fullStart": 0,
+                    "fullEnd": 6,
+                    "text": "// Foo"
+                },
+                {
+                    "kind": "NewLineTrivia",
+                    "fullStart": 6,
+                    "fullEnd": 8,
+                    "text": "\r\n"
+                }
+            ]
+        },
+        "8": {
+            "kind": "EndOfFileToken",
+            "fullStart": 0,
+            "fullEnd": 8,
+            "start": 8,
+            "end": 8,
+            "fullWidth": 8,
+            "width": 0,
+            "text": "",
+            "hasLeadingTrivia": true,
+            "hasLeadingComment": true,
+            "hasLeadingNewLine": true,
+            "leadingTrivia": [
+                {
+                    "kind": "SingleLineCommentTrivia",
+                    "fullStart": 0,
+                    "fullEnd": 6,
+                    "text": "// Foo"
+                },
+                {
+                    "kind": "NewLineTrivia",
+                    "fullStart": 6,
+                    "fullEnd": 8,
+                    "text": "\r\n"
+                }
+            ]
+        }
+    },
+    "tokensOnLeft": {
+        "0": null,
+        "1": null,
+        "2": null,
+        "3": null,
+        "4": null,
+        "5": null,
+        "6": null,
+        "7": null,
+        "8": null
+    },
+    "leftToRight": [
+        {
+            "kind": "EndOfFileToken",
+            "fullStart": 0,
+            "fullEnd": 8,
+            "start": 8,
+            "end": 8,
+            "fullWidth": 8,
+            "width": 0,
+            "text": "",
+            "hasLeadingTrivia": true,
+            "hasLeadingComment": true,
+            "hasLeadingNewLine": true,
+            "leadingTrivia": [
+                {
+                    "kind": "SingleLineCommentTrivia",
+                    "fullStart": 0,
+                    "fullEnd": 6,
+                    "text": "// Foo"
+                },
+                {
+                    "kind": "NewLineTrivia",
+                    "fullStart": 6,
+                    "fullEnd": 8,
+                    "text": "\r\n"
+                }
+            ]
+        }
+    ],
+    "rightToLeft": [
+        {
+            "kind": "EndOfFileToken",
+            "fullStart": 0,
+            "fullEnd": 8,
+            "start": 8,
+            "end": 8,
+            "fullWidth": 8,
+            "width": 0,
+            "text": "",
+            "hasLeadingTrivia": true,
+            "hasLeadingComment": true,
+            "hasLeadingNewLine": true,
+            "leadingTrivia": [
+                {
+                    "kind": "SingleLineCommentTrivia",
+                    "fullStart": 0,
+                    "fullEnd": 6,
+                    "text": "// Foo"
+                },
+                {
+                    "kind": "NewLineTrivia",
+                    "fullStart": 6,
+                    "fullEnd": 8,
+                    "text": "\r\n"
+                }
+            ]
+        }
+    ]
+}

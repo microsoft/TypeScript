@@ -1,0 +1,183 @@
+{
+    "isDeclaration": false,
+    "languageVersion": "EcmaScript6",
+    "sourceUnit": {
+        "kind": "SourceUnit",
+        "fullStart": 0,
+        "fullEnd": 76,
+        "start": 17,
+        "end": 76,
+        "fullWidth": 76,
+        "width": 59,
+        "moduleElements": [
+            {
+                "kind": "ExpressionStatement",
+                "fullStart": 0,
+                "fullEnd": 76,
+                "start": 17,
+                "end": 76,
+                "fullWidth": 76,
+                "width": 59,
+                "expression": {
+                    "kind": "TemplateExpression",
+                    "fullStart": 0,
+                    "fullEnd": 76,
+                    "start": 17,
+                    "end": 76,
+                    "fullWidth": 76,
+                    "width": 59,
+                    "templateStartToken": {
+                        "kind": "TemplateStartToken",
+                        "fullStart": 0,
+                        "fullEnd": 31,
+                        "start": 17,
+                        "end": 30,
+                        "fullWidth": 31,
+                        "width": 13,
+                        "text": "` /**head  ${",
+                        "value": " /**head  ",
+                        "valueText": " /**head  ",
+                        "hasLeadingTrivia": true,
+                        "hasLeadingComment": true,
+                        "hasLeadingNewLine": true,
+                        "hasTrailingTrivia": true,
+                        "leadingTrivia": [
+                            {
+                                "kind": "SingleLineCommentTrivia",
+                                "fullStart": 0,
+                                "fullEnd": 15,
+                                "text": "// @target: ES6"
+                            },
+                            {
+                                "kind": "NewLineTrivia",
+                                "fullStart": 15,
+                                "fullEnd": 17,
+                                "text": "\r\n"
+                            }
+                        ],
+                        "trailingTrivia": [
+                            {
+                                "kind": "WhitespaceTrivia",
+                                "fullStart": 30,
+                                "fullEnd": 31,
+                                "text": " "
+                            }
+                        ]
+                    },
+                    "templateClauses": [
+                        {
+                            "kind": "TemplateClause",
+                            "fullStart": 31,
+                            "fullEnd": 56,
+                            "start": 31,
+                            "end": 55,
+                            "fullWidth": 25,
+                            "width": 24,
+                            "expression": {
+                                "kind": "NumericLiteral",
+                                "fullStart": 31,
+                                "fullEnd": 34,
+                                "start": 31,
+                                "end": 33,
+                                "fullWidth": 3,
+                                "width": 2,
+                                "text": "10",
+                                "value": 10,
+                                "valueText": "10",
+                                "hasTrailingTrivia": true,
+                                "trailingTrivia": [
+                                    {
+                                        "kind": "WhitespaceTrivia",
+                                        "fullStart": 33,
+                                        "fullEnd": 34,
+                                        "text": " "
+                                    }
+                                ]
+                            },
+                            "templateMiddleOrEndToken": {
+                                "kind": "TemplateMiddleToken",
+                                "fullStart": 34,
+                                "fullEnd": 56,
+                                "start": 34,
+                                "end": 55,
+                                "fullWidth": 22,
+                                "width": 21,
+                                "text": "} // still middle  ${",
+                                "value": " // still middle  ",
+                                "valueText": " // still middle  ",
+                                "hasTrailingTrivia": true,
+                                "trailingTrivia": [
+                                    {
+                                        "kind": "WhitespaceTrivia",
+                                        "fullStart": 55,
+                                        "fullEnd": 56,
+                                        "text": " "
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "kind": "TemplateClause",
+                            "fullStart": 56,
+                            "fullEnd": 76,
+                            "start": 56,
+                            "end": 76,
+                            "fullWidth": 20,
+                            "width": 20,
+                            "expression": {
+                                "kind": "NumericLiteral",
+                                "fullStart": 56,
+                                "fullEnd": 59,
+                                "start": 56,
+                                "end": 58,
+                                "fullWidth": 3,
+                                "width": 2,
+                                "text": "20",
+                                "value": 20,
+                                "valueText": "20",
+                                "hasTrailingTrivia": true,
+                                "trailingTrivia": [
+                                    {
+                                        "kind": "WhitespaceTrivia",
+                                        "fullStart": 58,
+                                        "fullEnd": 59,
+                                        "text": " "
+                                    }
+                                ]
+                            },
+                            "templateMiddleOrEndToken": {
+                                "kind": "TemplateEndToken",
+                                "fullStart": 59,
+                                "fullEnd": 76,
+                                "start": 59,
+                                "end": 76,
+                                "fullWidth": 17,
+                                "width": 17,
+                                "text": "} /* still tail `",
+                                "value": " /* still tail ",
+                                "valueText": " /* still tail "
+                            }
+                        }
+                    ]
+                }
+            }
+        ],
+        "endOfFileToken": {
+            "kind": "EndOfFileToken",
+            "fullStart": 76,
+            "fullEnd": 76,
+            "start": 76,
+            "end": 76,
+            "fullWidth": 0,
+            "width": 0,
+            "text": ""
+        }
+    },
+    "lineMap": {
+        "lineStarts": [
+            0,
+            17
+        ],
+        "length": 76
+    }
+}

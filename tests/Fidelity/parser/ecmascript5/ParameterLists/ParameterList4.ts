@@ -1,0 +1,2 @@
+function F(public A) {
+}

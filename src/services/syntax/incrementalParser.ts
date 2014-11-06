@@ -529,6 +529,8 @@ module TypeScript.IncrementalParser {
         }
 
         function consumeToken(currentToken: ISyntaxToken): void {
+            // Debug.assert(currentToken.fullWidth() > 0 || currentToken.kind === SyntaxKind.EndOfFileToken);
+
             // This token may have come from the old source unit, or from the new text.  Handle
             // both accordingly.
 

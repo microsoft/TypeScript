@@ -1,0 +1,256 @@
+{
+    "isDeclaration": false,
+    "languageVersion": "EcmaScript5",
+    "sourceUnit": {
+        "kind": "SourceUnit",
+        "fullStart": 0,
+        "fullEnd": 14,
+        "start": 0,
+        "end": 14,
+        "fullWidth": 14,
+        "width": 14,
+        "moduleElements": [
+            {
+                "kind": "ExpressionStatement",
+                "fullStart": 0,
+                "fullEnd": 14,
+                "start": 0,
+                "end": 14,
+                "fullWidth": 14,
+                "width": 14,
+                "expression": {
+                    "kind": "InvocationExpression",
+                    "fullStart": 0,
+                    "fullEnd": 13,
+                    "start": 0,
+                    "end": 13,
+                    "fullWidth": 13,
+                    "width": 13,
+                    "expression": {
+                        "kind": "IdentifierName",
+                        "fullStart": 0,
+                        "fullEnd": 1,
+                        "start": 0,
+                        "end": 1,
+                        "fullWidth": 1,
+                        "width": 1,
+                        "text": "f",
+                        "value": "f",
+                        "valueText": "f"
+                    },
+                    "argumentList": {
+                        "kind": "ArgumentList",
+                        "fullStart": 1,
+                        "fullEnd": 13,
+                        "start": 1,
+                        "end": 13,
+                        "fullWidth": 12,
+                        "width": 12,
+                        "openParenToken": {
+                            "kind": "OpenParenToken",
+                            "fullStart": 1,
+                            "fullEnd": 2,
+                            "start": 1,
+                            "end": 2,
+                            "fullWidth": 1,
+                            "width": 1,
+                            "text": "(",
+                            "value": "(",
+                            "valueText": "("
+                        },
+                        "arguments": [
+                            {
+                                "kind": "InvocationExpression",
+                                "fullStart": 2,
+                                "fullEnd": 12,
+                                "start": 2,
+                                "end": 12,
+                                "fullWidth": 10,
+                                "width": 10,
+                                "expression": {
+                                    "kind": "IdentifierName",
+                                    "fullStart": 2,
+                                    "fullEnd": 3,
+                                    "start": 2,
+                                    "end": 3,
+                                    "fullWidth": 1,
+                                    "width": 1,
+                                    "text": "g",
+                                    "value": "g",
+                                    "valueText": "g"
+                                },
+                                "argumentList": {
+                                    "kind": "ArgumentList",
+                                    "fullStart": 3,
+                                    "fullEnd": 12,
+                                    "start": 3,
+                                    "end": 12,
+                                    "fullWidth": 9,
+                                    "width": 9,
+                                    "typeArgumentList": {
+                                        "kind": "TypeArgumentList",
+                                        "fullStart": 3,
+                                        "fullEnd": 9,
+                                        "start": 3,
+                                        "end": 9,
+                                        "fullWidth": 6,
+                                        "width": 6,
+                                        "lessThanToken": {
+                                            "kind": "LessThanToken",
+                                            "fullStart": 3,
+                                            "fullEnd": 4,
+                                            "start": 3,
+                                            "end": 4,
+                                            "fullWidth": 1,
+                                            "width": 1,
+                                            "text": "<",
+                                            "value": "<",
+                                            "valueText": "<"
+                                        },
+                                        "typeArguments": [
+                                            {
+                                                "kind": "IdentifierName",
+                                                "fullStart": 4,
+                                                "fullEnd": 5,
+                                                "start": 4,
+                                                "end": 5,
+                                                "fullWidth": 1,
+                                                "width": 1,
+                                                "text": "A",
+                                                "value": "A",
+                                                "valueText": "A"
+                                            },
+                                            {
+                                                "kind": "CommaToken",
+                                                "fullStart": 5,
+                                                "fullEnd": 7,
+                                                "start": 5,
+                                                "end": 6,
+                                                "fullWidth": 2,
+                                                "width": 1,
+                                                "text": ",",
+                                                "value": ",",
+                                                "valueText": ",",
+                                                "hasTrailingTrivia": true,
+                                                "trailingTrivia": [
+                                                    {
+                                                        "kind": "WhitespaceTrivia",
+                                                        "fullStart": 6,
+                                                        "fullEnd": 7,
+                                                        "text": " "
+                                                    }
+                                                ]
+                                            },
+                                            {
+                                                "kind": "IdentifierName",
+                                                "fullStart": 7,
+                                                "fullEnd": 8,
+                                                "start": 7,
+                                                "end": 8,
+                                                "fullWidth": 1,
+                                                "width": 1,
+                                                "text": "B",
+                                                "value": "B",
+                                                "valueText": "B"
+                                            }
+                                        ],
+                                        "greaterThanToken": {
+                                            "kind": "GreaterThanToken",
+                                            "fullStart": 8,
+                                            "fullEnd": 9,
+                                            "start": 8,
+                                            "end": 9,
+                                            "fullWidth": 1,
+                                            "width": 1,
+                                            "text": ">",
+                                            "value": ">",
+                                            "valueText": ">"
+                                        }
+                                    },
+                                    "openParenToken": {
+                                        "kind": "OpenParenToken",
+                                        "fullStart": 9,
+                                        "fullEnd": 10,
+                                        "start": 9,
+                                        "end": 10,
+                                        "fullWidth": 1,
+                                        "width": 1,
+                                        "text": "(",
+                                        "value": "(",
+                                        "valueText": "("
+                                    },
+                                    "arguments": [
+                                        {
+                                            "kind": "NumericLiteral",
+                                            "fullStart": 10,
+                                            "fullEnd": 11,
+                                            "start": 10,
+                                            "end": 11,
+                                            "fullWidth": 1,
+                                            "width": 1,
+                                            "text": "7",
+                                            "value": 7,
+                                            "valueText": "7"
+                                        }
+                                    ],
+                                    "closeParenToken": {
+                                        "kind": "CloseParenToken",
+                                        "fullStart": 11,
+                                        "fullEnd": 12,
+                                        "start": 11,
+                                        "end": 12,
+                                        "fullWidth": 1,
+                                        "width": 1,
+                                        "text": ")",
+                                        "value": ")",
+                                        "valueText": ")"
+                                    }
+                                }
+                            }
+                        ],
+                        "closeParenToken": {
+                            "kind": "CloseParenToken",
+                            "fullStart": 12,
+                            "fullEnd": 13,
+                            "start": 12,
+                            "end": 13,
+                            "fullWidth": 1,
+                            "width": 1,
+                            "text": ")",
+                            "value": ")",
+                            "valueText": ")"
+                        }
+                    }
+                },
+                "semicolonToken": {
+                    "kind": "SemicolonToken",
+                    "fullStart": 13,
+                    "fullEnd": 14,
+                    "start": 13,
+                    "end": 14,
+                    "fullWidth": 1,
+                    "width": 1,
+                    "text": ";",
+                    "value": ";",
+                    "valueText": ";"
+                }
+            }
+        ],
+        "endOfFileToken": {
+            "kind": "EndOfFileToken",
+            "fullStart": 14,
+            "fullEnd": 14,
+            "start": 14,
+            "end": 14,
+            "fullWidth": 0,
+            "width": 0,
+            "text": ""
+        }
+    },
+    "lineMap": {
+        "lineStarts": [
+            0
+        ],
+        "length": 14
+    }
+}

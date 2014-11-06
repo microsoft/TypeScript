@@ -1,0 +1,219 @@
+{
+    "isDeclaration": false,
+    "languageVersion": "EcmaScript5",
+    "sourceUnit": {
+        "kind": "SourceUnit",
+        "fullStart": 0,
+        "fullEnd": 388,
+        "start": 348,
+        "end": 388,
+        "fullWidth": 388,
+        "width": 40,
+        "moduleElements": [
+            {
+                "kind": "ExpressionStatement",
+                "fullStart": 0,
+                "fullEnd": 387,
+                "start": 348,
+                "end": 386,
+                "fullWidth": 387,
+                "width": 38,
+                "expression": {
+                    "kind": "InvocationExpression",
+                    "fullStart": 0,
+                    "fullEnd": 385,
+                    "start": 348,
+                    "end": 385,
+                    "fullWidth": 385,
+                    "width": 37,
+                    "expression": {
+                        "kind": "IdentifierName",
+                        "fullStart": 0,
+                        "fullEnd": 352,
+                        "start": 348,
+                        "end": 352,
+                        "fullWidth": 352,
+                        "width": 4,
+                        "text": "eval",
+                        "value": "eval",
+                        "valueText": "eval",
+                        "hasLeadingTrivia": true,
+                        "hasLeadingComment": true,
+                        "hasLeadingNewLine": true,
+                        "leadingTrivia": [
+                            {
+                                "kind": "SingleLineCommentTrivia",
+                                "fullStart": 0,
+                                "fullEnd": 60,
+                                "text": "// Copyright 2009 the Sputnik authors.  All rights reserved."
+                            },
+                            {
+                                "kind": "NewLineTrivia",
+                                "fullStart": 60,
+                                "fullEnd": 61,
+                                "text": "\n"
+                            },
+                            {
+                                "kind": "SingleLineCommentTrivia",
+                                "fullStart": 61,
+                                "fullEnd": 131,
+                                "text": "// This code is governed by the BSD license found in the LICENSE file."
+                            },
+                            {
+                                "kind": "NewLineTrivia",
+                                "fullStart": 131,
+                                "fullEnd": 132,
+                                "text": "\n"
+                            },
+                            {
+                                "kind": "NewLineTrivia",
+                                "fullStart": 132,
+                                "fullEnd": 133,
+                                "text": "\n"
+                            },
+                            {
+                                "kind": "MultiLineCommentTrivia",
+                                "fullStart": 133,
+                                "fullEnd": 335,
+                                "text": "/**\n * Single line comments can not contain CARRIAGE RETURN (U+000D) inside\n *\n * @path ch07/7.3/S7.3_A3.2_T1.js\n * @description Insert CARRIAGE RETURN (\\u000D) into single line comment\n * @negative\n */"
+                            },
+                            {
+                                "kind": "NewLineTrivia",
+                                "fullStart": 335,
+                                "fullEnd": 336,
+                                "text": "\n"
+                            },
+                            {
+                                "kind": "NewLineTrivia",
+                                "fullStart": 336,
+                                "fullEnd": 337,
+                                "text": "\n"
+                            },
+                            {
+                                "kind": "SingleLineCommentTrivia",
+                                "fullStart": 337,
+                                "fullEnd": 347,
+                                "text": "// CHECK#1"
+                            },
+                            {
+                                "kind": "NewLineTrivia",
+                                "fullStart": 347,
+                                "fullEnd": 348,
+                                "text": "\n"
+                            }
+                        ]
+                    },
+                    "argumentList": {
+                        "kind": "ArgumentList",
+                        "fullStart": 352,
+                        "fullEnd": 385,
+                        "start": 352,
+                        "end": 385,
+                        "fullWidth": 33,
+                        "width": 33,
+                        "openParenToken": {
+                            "kind": "OpenParenToken",
+                            "fullStart": 352,
+                            "fullEnd": 353,
+                            "start": 352,
+                            "end": 353,
+                            "fullWidth": 1,
+                            "width": 1,
+                            "text": "(",
+                            "value": "(",
+                            "valueText": "("
+                        },
+                        "arguments": [
+                            {
+                                "kind": "StringLiteral",
+                                "fullStart": 353,
+                                "fullEnd": 384,
+                                "start": 353,
+                                "end": 384,
+                                "fullWidth": 31,
+                                "width": 31,
+                                "text": "\"// single line \\u000D comment\"",
+                                "value": "// single line \r comment",
+                                "valueText": "// single line \r comment"
+                            }
+                        ],
+                        "closeParenToken": {
+                            "kind": "CloseParenToken",
+                            "fullStart": 384,
+                            "fullEnd": 385,
+                            "start": 384,
+                            "end": 385,
+                            "fullWidth": 1,
+                            "width": 1,
+                            "text": ")",
+                            "value": ")",
+                            "valueText": ")"
+                        }
+                    }
+                },
+                "semicolonToken": {
+                    "kind": "SemicolonToken",
+                    "fullStart": 385,
+                    "fullEnd": 387,
+                    "start": 385,
+                    "end": 386,
+                    "fullWidth": 2,
+                    "width": 1,
+                    "text": ";",
+                    "value": ";",
+                    "valueText": ";",
+                    "hasTrailingTrivia": true,
+                    "hasTrailingNewLine": true,
+                    "trailingTrivia": [
+                        {
+                            "kind": "NewLineTrivia",
+                            "fullStart": 386,
+                            "fullEnd": 387,
+                            "text": "\n"
+                        }
+                    ]
+                }
+            }
+        ],
+        "endOfFileToken": {
+            "kind": "EndOfFileToken",
+            "fullStart": 387,
+            "fullEnd": 388,
+            "start": 388,
+            "end": 388,
+            "fullWidth": 1,
+            "width": 0,
+            "text": "",
+            "hasLeadingTrivia": true,
+            "hasLeadingNewLine": true,
+            "leadingTrivia": [
+                {
+                    "kind": "NewLineTrivia",
+                    "fullStart": 387,
+                    "fullEnd": 388,
+                    "text": "\n"
+                }
+            ]
+        }
+    },
+    "lineMap": {
+        "lineStarts": [
+            0,
+            61,
+            132,
+            133,
+            137,
+            209,
+            212,
+            246,
+            319,
+            332,
+            336,
+            337,
+            348,
+            387,
+            388
+        ],
+        "length": 388
+    }
+}

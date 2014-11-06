@@ -1,0 +1,277 @@
+{
+    "isDeclaration": false,
+    "languageVersion": "EcmaScript5",
+    "sourceUnit": {
+        "kind": "SourceUnit",
+        "fullStart": 0,
+        "fullEnd": 644,
+        "start": 396,
+        "end": 644,
+        "fullWidth": 644,
+        "width": 248,
+        "moduleElements": [
+            {
+                "kind": "VariableStatement",
+                "fullStart": 0,
+                "fullEnd": 561,
+                "start": 396,
+                "end": 560,
+                "fullWidth": 561,
+                "width": 164,
+                "modifiers": [],
+                "variableDeclaration": {
+                    "kind": "VariableDeclaration",
+                    "fullStart": 0,
+                    "fullEnd": 559,
+                    "start": 396,
+                    "end": 559,
+                    "fullWidth": 559,
+                    "width": 163,
+                    "varKeyword": {
+                        "kind": "VarKeyword",
+                        "fullStart": 0,
+                        "fullEnd": 400,
+                        "start": 396,
+                        "end": 399,
+                        "fullWidth": 400,
+                        "width": 3,
+                        "text": "var",
+                        "value": "var",
+                        "valueText": "var",
+                        "hasLeadingTrivia": true,
+                        "hasLeadingComment": true,
+                        "hasLeadingNewLine": true,
+                        "hasTrailingTrivia": true,
+                        "leadingTrivia": [
+                            {
+                                "kind": "SingleLineCommentTrivia",
+                                "fullStart": 0,
+                                "fullEnd": 60,
+                                "text": "// Copyright 2009 the Sputnik authors.  All rights reserved."
+                            },
+                            {
+                                "kind": "NewLineTrivia",
+                                "fullStart": 60,
+                                "fullEnd": 61,
+                                "text": "\n"
+                            },
+                            {
+                                "kind": "SingleLineCommentTrivia",
+                                "fullStart": 61,
+                                "fullEnd": 131,
+                                "text": "// This code is governed by the BSD license found in the LICENSE file."
+                            },
+                            {
+                                "kind": "NewLineTrivia",
+                                "fullStart": 131,
+                                "fullEnd": 132,
+                                "text": "\n"
+                            },
+                            {
+                                "kind": "NewLineTrivia",
+                                "fullStart": 132,
+                                "fullEnd": 133,
+                                "text": "\n"
+                            },
+                            {
+                                "kind": "MultiLineCommentTrivia",
+                                "fullStart": 133,
+                                "fullEnd": 305,
+                                "text": "/**\n * Presence of reserved words in string literal are allowed\n *\n * @path ch08/8.4/S8.4_A11.js\n * @description Create string variable, thet include all reserved words\n */"
+                            },
+                            {
+                                "kind": "NewLineTrivia",
+                                "fullStart": 305,
+                                "fullEnd": 306,
+                                "text": "\n"
+                            },
+                            {
+                                "kind": "NewLineTrivia",
+                                "fullStart": 306,
+                                "fullEnd": 307,
+                                "text": "\n"
+                            },
+                            {
+                                "kind": "SingleLineCommentTrivia",
+                                "fullStart": 307,
+                                "fullEnd": 385,
+                                "text": "//////////////////////////////////////////////////////////////////////////////"
+                            },
+                            {
+                                "kind": "NewLineTrivia",
+                                "fullStart": 385,
+                                "fullEnd": 386,
+                                "text": "\n"
+                            },
+                            {
+                                "kind": "SingleLineCommentTrivia",
+                                "fullStart": 386,
+                                "fullEnd": 395,
+                                "text": "//CHECK#1"
+                            },
+                            {
+                                "kind": "NewLineTrivia",
+                                "fullStart": 395,
+                                "fullEnd": 396,
+                                "text": "\n"
+                            }
+                        ],
+                        "trailingTrivia": [
+                            {
+                                "kind": "WhitespaceTrivia",
+                                "fullStart": 399,
+                                "fullEnd": 400,
+                                "text": " "
+                            }
+                        ]
+                    },
+                    "variableDeclarators": [
+                        {
+                            "kind": "VariableDeclarator",
+                            "fullStart": 400,
+                            "fullEnd": 559,
+                            "start": 400,
+                            "end": 559,
+                            "fullWidth": 159,
+                            "width": 159,
+                            "propertyName": {
+                                "kind": "IdentifierName",
+                                "fullStart": 400,
+                                "fullEnd": 408,
+                                "start": 400,
+                                "end": 408,
+                                "fullWidth": 8,
+                                "width": 8,
+                                "text": "__delete",
+                                "value": "__delete",
+                                "valueText": "___delete"
+                            },
+                            "equalsValueClause": {
+                                "kind": "EqualsValueClause",
+                                "fullStart": 408,
+                                "fullEnd": 559,
+                                "start": 408,
+                                "end": 559,
+                                "fullWidth": 151,
+                                "width": 151,
+                                "equalsToken": {
+                                    "kind": "EqualsToken",
+                                    "fullStart": 408,
+                                    "fullEnd": 409,
+                                    "start": 408,
+                                    "end": 409,
+                                    "fullWidth": 1,
+                                    "width": 1,
+                                    "text": "=",
+                                    "value": "=",
+                                    "valueText": "="
+                                },
+                                "value": {
+                                    "kind": "StringLiteral",
+                                    "fullStart": 409,
+                                    "fullEnd": 559,
+                                    "start": 409,
+                                    "end": 559,
+                                    "fullWidth": 150,
+                                    "width": 150,
+                                    "text": "\" break else new var case finally return void catch for switch while continue function this with default if throw delete in try do instanceof typeof \"",
+                                    "value": " break else new var case finally return void catch for switch while continue function this with default if throw delete in try do instanceof typeof ",
+                                    "valueText": " break else new var case finally return void catch for switch while continue function this with default if throw delete in try do instanceof typeof "
+                                }
+                            }
+                        }
+                    ]
+                },
+                "semicolonToken": {
+                    "kind": "SemicolonToken",
+                    "fullStart": 559,
+                    "fullEnd": 561,
+                    "start": 559,
+                    "end": 560,
+                    "fullWidth": 2,
+                    "width": 1,
+                    "text": ";",
+                    "value": ";",
+                    "valueText": ";",
+                    "hasTrailingTrivia": true,
+                    "hasTrailingNewLine": true,
+                    "trailingTrivia": [
+                        {
+                            "kind": "NewLineTrivia",
+                            "fullStart": 560,
+                            "fullEnd": 561,
+                            "text": "\n"
+                        }
+                    ]
+                }
+            }
+        ],
+        "endOfFileToken": {
+            "kind": "EndOfFileToken",
+            "fullStart": 561,
+            "fullEnd": 644,
+            "start": 644,
+            "end": 644,
+            "fullWidth": 83,
+            "width": 0,
+            "text": "",
+            "hasLeadingTrivia": true,
+            "hasLeadingComment": true,
+            "hasLeadingNewLine": true,
+            "leadingTrivia": [
+                {
+                    "kind": "SingleLineCommentTrivia",
+                    "fullStart": 561,
+                    "fullEnd": 563,
+                    "text": "//"
+                },
+                {
+                    "kind": "NewLineTrivia",
+                    "fullStart": 563,
+                    "fullEnd": 564,
+                    "text": "\n"
+                },
+                {
+                    "kind": "SingleLineCommentTrivia",
+                    "fullStart": 564,
+                    "fullEnd": 642,
+                    "text": "//////////////////////////////////////////////////////////////////////////////"
+                },
+                {
+                    "kind": "NewLineTrivia",
+                    "fullStart": 642,
+                    "fullEnd": 643,
+                    "text": "\n"
+                },
+                {
+                    "kind": "NewLineTrivia",
+                    "fullStart": 643,
+                    "fullEnd": 644,
+                    "text": "\n"
+                }
+            ]
+        }
+    },
+    "lineMap": {
+        "lineStarts": [
+            0,
+            61,
+            132,
+            133,
+            137,
+            197,
+            200,
+            230,
+            302,
+            306,
+            307,
+            386,
+            396,
+            561,
+            564,
+            643,
+            644
+        ],
+        "length": 644
+    }
+}

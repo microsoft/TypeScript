@@ -1,0 +1,215 @@
+{
+    "isDeclaration": false,
+    "languageVersion": "EcmaScript5",
+    "sourceUnit": {
+        "kind": "SourceUnit",
+        "fullStart": 0,
+        "fullEnd": 367,
+        "start": 354,
+        "end": 367,
+        "fullWidth": 367,
+        "width": 13,
+        "moduleElements": [
+            {
+                "kind": "ExpressionStatement",
+                "fullStart": 0,
+                "fullEnd": 366,
+                "start": 354,
+                "end": 365,
+                "fullWidth": 366,
+                "width": 11,
+                "expression": {
+                    "kind": "ObjectCreationExpression",
+                    "fullStart": 0,
+                    "fullEnd": 364,
+                    "start": 354,
+                    "end": 364,
+                    "fullWidth": 364,
+                    "width": 10,
+                    "newKeyword": {
+                        "kind": "NewKeyword",
+                        "fullStart": 0,
+                        "fullEnd": 358,
+                        "start": 354,
+                        "end": 357,
+                        "fullWidth": 358,
+                        "width": 3,
+                        "text": "new",
+                        "value": "new",
+                        "valueText": "new",
+                        "hasLeadingTrivia": true,
+                        "hasLeadingComment": true,
+                        "hasLeadingNewLine": true,
+                        "hasTrailingTrivia": true,
+                        "leadingTrivia": [
+                            {
+                                "kind": "SingleLineCommentTrivia",
+                                "fullStart": 0,
+                                "fullEnd": 60,
+                                "text": "// Copyright 2009 the Sputnik authors.  All rights reserved."
+                            },
+                            {
+                                "kind": "NewLineTrivia",
+                                "fullStart": 60,
+                                "fullEnd": 61,
+                                "text": "\n"
+                            },
+                            {
+                                "kind": "SingleLineCommentTrivia",
+                                "fullStart": 61,
+                                "fullEnd": 131,
+                                "text": "// This code is governed by the BSD license found in the LICENSE file."
+                            },
+                            {
+                                "kind": "NewLineTrivia",
+                                "fullStart": 131,
+                                "fullEnd": 132,
+                                "text": "\n"
+                            },
+                            {
+                                "kind": "NewLineTrivia",
+                                "fullStart": 132,
+                                "fullEnd": 133,
+                                "text": "\n"
+                            },
+                            {
+                                "kind": "MultiLineCommentTrivia",
+                                "fullStart": 133,
+                                "fullEnd": 352,
+                                "text": "/**\n * The global object does not have a [[Construct]] property\n *\n * @path ch15/15.1/S15.1_A1_T2.js\n * @description It is not possible to use the global object as a constructor\n * with the new operator\n * @negative\n */"
+                            },
+                            {
+                                "kind": "NewLineTrivia",
+                                "fullStart": 352,
+                                "fullEnd": 353,
+                                "text": "\n"
+                            },
+                            {
+                                "kind": "NewLineTrivia",
+                                "fullStart": 353,
+                                "fullEnd": 354,
+                                "text": "\n"
+                            }
+                        ],
+                        "trailingTrivia": [
+                            {
+                                "kind": "WhitespaceTrivia",
+                                "fullStart": 357,
+                                "fullEnd": 358,
+                                "text": " "
+                            }
+                        ]
+                    },
+                    "expression": {
+                        "kind": "ThisKeyword",
+                        "fullStart": 358,
+                        "fullEnd": 362,
+                        "start": 358,
+                        "end": 362,
+                        "fullWidth": 4,
+                        "width": 4,
+                        "text": "this",
+                        "value": "this",
+                        "valueText": "this"
+                    },
+                    "argumentList": {
+                        "kind": "ArgumentList",
+                        "fullStart": 362,
+                        "fullEnd": 364,
+                        "start": 362,
+                        "end": 364,
+                        "fullWidth": 2,
+                        "width": 2,
+                        "openParenToken": {
+                            "kind": "OpenParenToken",
+                            "fullStart": 362,
+                            "fullEnd": 363,
+                            "start": 362,
+                            "end": 363,
+                            "fullWidth": 1,
+                            "width": 1,
+                            "text": "(",
+                            "value": "(",
+                            "valueText": "("
+                        },
+                        "arguments": [],
+                        "closeParenToken": {
+                            "kind": "CloseParenToken",
+                            "fullStart": 363,
+                            "fullEnd": 364,
+                            "start": 363,
+                            "end": 364,
+                            "fullWidth": 1,
+                            "width": 1,
+                            "text": ")",
+                            "value": ")",
+                            "valueText": ")"
+                        }
+                    }
+                },
+                "semicolonToken": {
+                    "kind": "SemicolonToken",
+                    "fullStart": 364,
+                    "fullEnd": 366,
+                    "start": 364,
+                    "end": 365,
+                    "fullWidth": 2,
+                    "width": 1,
+                    "text": ";",
+                    "value": ";",
+                    "valueText": ";",
+                    "hasTrailingTrivia": true,
+                    "hasTrailingNewLine": true,
+                    "trailingTrivia": [
+                        {
+                            "kind": "NewLineTrivia",
+                            "fullStart": 365,
+                            "fullEnd": 366,
+                            "text": "\n"
+                        }
+                    ]
+                }
+            }
+        ],
+        "endOfFileToken": {
+            "kind": "EndOfFileToken",
+            "fullStart": 366,
+            "fullEnd": 367,
+            "start": 367,
+            "end": 367,
+            "fullWidth": 1,
+            "width": 0,
+            "text": "",
+            "hasLeadingTrivia": true,
+            "hasLeadingNewLine": true,
+            "leadingTrivia": [
+                {
+                    "kind": "NewLineTrivia",
+                    "fullStart": 366,
+                    "fullEnd": 367,
+                    "text": "\n"
+                }
+            ]
+        }
+    },
+    "lineMap": {
+        "lineStarts": [
+            0,
+            61,
+            132,
+            133,
+            137,
+            197,
+            200,
+            234,
+            311,
+            336,
+            349,
+            353,
+            354,
+            366,
+            367
+        ],
+        "length": 367
+    }
+}

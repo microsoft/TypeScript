@@ -1,0 +1,85 @@
+{
+    "isDeclaration": false,
+    "languageVersion": "EcmaScript5",
+    "sourceUnit": {
+        "kind": "SourceUnit",
+        "fullStart": 0,
+        "fullEnd": 7,
+        "start": 0,
+        "end": 7,
+        "fullWidth": 7,
+        "width": 7,
+        "moduleElements": [
+            {
+                "kind": "ExpressionStatement",
+                "fullStart": 0,
+                "fullEnd": 7,
+                "start": 0,
+                "end": 7,
+                "fullWidth": 7,
+                "width": 7,
+                "expression": {
+                    "kind": "PrefixUnaryExpression",
+                    "fullStart": 0,
+                    "fullEnd": 6,
+                    "start": 0,
+                    "end": 6,
+                    "fullWidth": 6,
+                    "width": 6,
+                    "operatorToken": {
+                        "kind": "PlusPlusToken",
+                        "fullStart": 0,
+                        "fullEnd": 2,
+                        "start": 0,
+                        "end": 2,
+                        "fullWidth": 2,
+                        "width": 2,
+                        "text": "++",
+                        "value": "++",
+                        "valueText": "++"
+                    },
+                    "operand": {
+                        "kind": "ThisKeyword",
+                        "fullStart": 2,
+                        "fullEnd": 6,
+                        "start": 2,
+                        "end": 6,
+                        "fullWidth": 4,
+                        "width": 4,
+                        "text": "this",
+                        "value": "this",
+                        "valueText": "this"
+                    }
+                },
+                "semicolonToken": {
+                    "kind": "SemicolonToken",
+                    "fullStart": 6,
+                    "fullEnd": 7,
+                    "start": 6,
+                    "end": 7,
+                    "fullWidth": 1,
+                    "width": 1,
+                    "text": ";",
+                    "value": ";",
+                    "valueText": ";"
+                }
+            }
+        ],
+        "endOfFileToken": {
+            "kind": "EndOfFileToken",
+            "fullStart": 7,
+            "fullEnd": 7,
+            "start": 7,
+            "end": 7,
+            "fullWidth": 0,
+            "width": 0,
+            "text": ""
+        }
+    },
+    "lineMap": {
+        "lineStarts": [
+            0
+        ],
+        "length": 7
+    }
+}

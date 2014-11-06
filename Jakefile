@@ -82,7 +82,7 @@ var harnessSources = [
 ].map(function (f) {
     return path.join(harnessDirectory, f);
 }).concat([
-	"services/colorization.ts",
+    "services/colorization.ts",
     "services/documentRegistry.ts"
 ].map(function (f) {
     return path.join(unittestsDirectory, f);
@@ -563,3 +563,34 @@ task('tsc-instrumented', [loggedIOJsPath, instrumenterJsPath, tscFile], function
     });
     ex.run();
 }, { async: true });
+
+
+var fidelityTestsOutFile = "tests/Fidelity/program.js";
+var fidelityTestsInFile1 = "tests/Fidelity/Program.ts";
+var fidelityTestsInFile2 = "tests/Fidelity/incremental/IncrementalParserTests.ts";
+compileFile(fidelityTestsOutFile, [fidelityTestsInFile1], [tscFile, fidelityTestsInFile1, fidelityTestsInFile2].concat(compilerSources.concat(servicesSources)), [], true);
+
+
+desc("Builds and runs the Fidelity tests");
+task("run-fidelity-tests", [fidelityTestsOutFile], function() {
+    host = process.env.host || process.env.TYPESCRIPT_HOST || "node";
+    var cmd = host + " " + fidelityTestsOutFile;
+    console.log(cmd);
+    exec(cmd);
+}, {async: true});
+
+
+// Syntax Generator
+var syntaxGeneratorOutFile = servicesDirectory + "syntax/SyntaxGenerator.js";
+var syntaxGeneratorInFile = servicesDirectory + "syntax/SyntaxGenerator.ts";
+file(servicesDirectory + "syntax/syntaxKind.ts");
+file(servicesDirectory + "syntax/syntaxFacts.ts");
+compileFile(syntaxGeneratorOutFile, [syntaxGeneratorInFile], [syntaxGeneratorInFile, servicesDirectory + "syntax/syntaxKind.ts", servicesDirectory + "syntax/syntaxFacts.ts"], [], /*useBuiltCompiler:*/ false);
+
+desc("Builds and runs the syntax generator");
+task("run-syntax-generator", [syntaxGeneratorOutFile], function() {
+	host = process.env.host || process.env.TYPESCRIPT_HOST || "node";
+	var cmd = host + " " + syntaxGeneratorOutFile;
+	console.log(cmd);	
+	exec(cmd);
+}, {async: true});

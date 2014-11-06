@@ -1,0 +1,159 @@
+{
+    "isDeclaration": false,
+    "languageVersion": "EcmaScript5",
+    "diagnostics": [
+        {
+            "start": 6,
+            "length": 1,
+            "diagnosticCode": "Expression expected."
+        },
+        {
+            "start": 7,
+            "length": 0,
+            "diagnosticCode": "'{0}' expected.",
+            "arguments": [
+                ")"
+            ]
+        }
+    ],
+    "sourceUnit": {
+        "kind": "SourceUnit",
+        "fullStart": 0,
+        "fullEnd": 7,
+        "start": 0,
+        "end": 7,
+        "fullWidth": 7,
+        "width": 7,
+        "isIncrementallyUnusable": true,
+        "moduleElements": [
+            {
+                "kind": "ExpressionStatement",
+                "fullStart": 0,
+                "fullEnd": 7,
+                "start": 0,
+                "end": 7,
+                "fullWidth": 7,
+                "width": 7,
+                "isIncrementallyUnusable": true,
+                "expression": {
+                    "kind": "InvocationExpression",
+                    "fullStart": 0,
+                    "fullEnd": 7,
+                    "start": 0,
+                    "end": 7,
+                    "fullWidth": 7,
+                    "width": 7,
+                    "isIncrementallyUnusable": true,
+                    "expression": {
+                        "kind": "IdentifierName",
+                        "fullStart": 0,
+                        "fullEnd": 3,
+                        "start": 0,
+                        "end": 3,
+                        "fullWidth": 3,
+                        "width": 3,
+                        "text": "Foo",
+                        "value": "Foo",
+                        "valueText": "Foo"
+                    },
+                    "argumentList": {
+                        "kind": "ArgumentList",
+                        "fullStart": 3,
+                        "fullEnd": 7,
+                        "start": 3,
+                        "end": 7,
+                        "fullWidth": 4,
+                        "width": 4,
+                        "isIncrementallyUnusable": true,
+                        "openParenToken": {
+                            "kind": "OpenParenToken",
+                            "fullStart": 3,
+                            "fullEnd": 4,
+                            "start": 3,
+                            "end": 4,
+                            "fullWidth": 1,
+                            "width": 1,
+                            "text": "(",
+                            "value": "(",
+                            "valueText": "("
+                        },
+                        "arguments": [
+                            {
+                                "kind": "IdentifierName",
+                                "fullStart": 4,
+                                "fullEnd": 5,
+                                "start": 4,
+                                "end": 5,
+                                "fullWidth": 1,
+                                "width": 1,
+                                "text": "a",
+                                "value": "a",
+                                "valueText": "a"
+                            },
+                            {
+                                "kind": "CommaToken",
+                                "fullStart": 5,
+                                "fullEnd": 6,
+                                "start": 5,
+                                "end": 6,
+                                "fullWidth": 1,
+                                "width": 1,
+                                "text": ",",
+                                "value": ",",
+                                "valueText": ","
+                            },
+                            {
+                                "kind": "IdentifierName",
+                                "fullStart": 6,
+                                "fullEnd": 6,
+                                "start": 6,
+                                "end": 6,
+                                "fullWidth": 0,
+                                "width": 0,
+                                "text": ""
+                            },
+                            {
+                                "kind": "CommaToken",
+                                "fullStart": 6,
+                                "fullEnd": 7,
+                                "start": 6,
+                                "end": 7,
+                                "fullWidth": 1,
+                                "width": 1,
+                                "text": ",",
+                                "value": ",",
+                                "valueText": ","
+                            }
+                        ],
+                        "closeParenToken": {
+                            "kind": "CloseParenToken",
+                            "fullStart": 7,
+                            "fullEnd": 7,
+                            "start": 7,
+                            "end": 7,
+                            "fullWidth": 0,
+                            "width": 0,
+                            "text": ""
+                        }
+                    }
+                }
+            }
+        ],
+        "endOfFileToken": {
+            "kind": "EndOfFileToken",
+            "fullStart": 7,
+            "fullEnd": 7,
+            "start": 7,
+            "end": 7,
+            "fullWidth": 0,
+            "width": 0,
+            "text": ""
+        }
+    },
+    "lineMap": {
+        "lineStarts": [
+            0
+        ],
+        "length": 7
+    }
+}

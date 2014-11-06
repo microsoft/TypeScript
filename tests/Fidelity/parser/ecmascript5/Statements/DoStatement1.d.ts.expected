@@ -1,0 +1,193 @@
+{
+    "isDeclaration": true,
+    "languageVersion": "EcmaScript5",
+    "diagnostics": [
+        {
+            "start": 0,
+            "length": 2,
+            "diagnosticCode": "Statements are not allowed in ambient contexts."
+        }
+    ],
+    "sourceUnit": {
+        "kind": "SourceUnit",
+        "fullStart": 0,
+        "fullEnd": 19,
+        "start": 0,
+        "end": 19,
+        "fullWidth": 19,
+        "width": 19,
+        "moduleElements": [
+            {
+                "kind": "DoStatement",
+                "fullStart": 0,
+                "fullEnd": 19,
+                "start": 0,
+                "end": 19,
+                "fullWidth": 19,
+                "width": 19,
+                "doKeyword": {
+                    "kind": "DoKeyword",
+                    "fullStart": 0,
+                    "fullEnd": 3,
+                    "start": 0,
+                    "end": 2,
+                    "fullWidth": 3,
+                    "width": 2,
+                    "text": "do",
+                    "value": "do",
+                    "valueText": "do",
+                    "hasTrailingTrivia": true,
+                    "trailingTrivia": [
+                        {
+                            "kind": "WhitespaceTrivia",
+                            "fullStart": 2,
+                            "fullEnd": 3,
+                            "text": " "
+                        }
+                    ]
+                },
+                "statement": {
+                    "kind": "Block",
+                    "fullStart": 3,
+                    "fullEnd": 9,
+                    "start": 3,
+                    "end": 7,
+                    "fullWidth": 6,
+                    "width": 4,
+                    "openBraceToken": {
+                        "kind": "OpenBraceToken",
+                        "fullStart": 3,
+                        "fullEnd": 6,
+                        "start": 3,
+                        "end": 4,
+                        "fullWidth": 3,
+                        "width": 1,
+                        "text": "{",
+                        "value": "{",
+                        "valueText": "{",
+                        "hasTrailingTrivia": true,
+                        "hasTrailingNewLine": true,
+                        "trailingTrivia": [
+                            {
+                                "kind": "NewLineTrivia",
+                                "fullStart": 4,
+                                "fullEnd": 6,
+                                "text": "\r\n"
+                            }
+                        ]
+                    },
+                    "statements": [],
+                    "closeBraceToken": {
+                        "kind": "CloseBraceToken",
+                        "fullStart": 6,
+                        "fullEnd": 9,
+                        "start": 6,
+                        "end": 7,
+                        "fullWidth": 3,
+                        "width": 1,
+                        "text": "}",
+                        "value": "}",
+                        "valueText": "}",
+                        "hasTrailingTrivia": true,
+                        "hasTrailingNewLine": true,
+                        "trailingTrivia": [
+                            {
+                                "kind": "NewLineTrivia",
+                                "fullStart": 7,
+                                "fullEnd": 9,
+                                "text": "\r\n"
+                            }
+                        ]
+                    }
+                },
+                "whileKeyword": {
+                    "kind": "WhileKeyword",
+                    "fullStart": 9,
+                    "fullEnd": 15,
+                    "start": 9,
+                    "end": 14,
+                    "fullWidth": 6,
+                    "width": 5,
+                    "text": "while",
+                    "value": "while",
+                    "valueText": "while",
+                    "hasTrailingTrivia": true,
+                    "trailingTrivia": [
+                        {
+                            "kind": "WhitespaceTrivia",
+                            "fullStart": 14,
+                            "fullEnd": 15,
+                            "text": " "
+                        }
+                    ]
+                },
+                "openParenToken": {
+                    "kind": "OpenParenToken",
+                    "fullStart": 15,
+                    "fullEnd": 16,
+                    "start": 15,
+                    "end": 16,
+                    "fullWidth": 1,
+                    "width": 1,
+                    "text": "(",
+                    "value": "(",
+                    "valueText": "("
+                },
+                "condition": {
+                    "kind": "IdentifierName",
+                    "fullStart": 16,
+                    "fullEnd": 17,
+                    "start": 16,
+                    "end": 17,
+                    "fullWidth": 1,
+                    "width": 1,
+                    "text": "e",
+                    "value": "e",
+                    "valueText": "e"
+                },
+                "closeParenToken": {
+                    "kind": "CloseParenToken",
+                    "fullStart": 17,
+                    "fullEnd": 18,
+                    "start": 17,
+                    "end": 18,
+                    "fullWidth": 1,
+                    "width": 1,
+                    "text": ")",
+                    "value": ")",
+                    "valueText": ")"
+                },
+                "semicolonToken": {
+                    "kind": "SemicolonToken",
+                    "fullStart": 18,
+                    "fullEnd": 19,
+                    "start": 18,
+                    "end": 19,
+                    "fullWidth": 1,
+                    "width": 1,
+                    "text": ";",
+                    "value": ";",
+                    "valueText": ";"
+                }
+            }
+        ],
+        "endOfFileToken": {
+            "kind": "EndOfFileToken",
+            "fullStart": 19,
+            "fullEnd": 19,
+            "start": 19,
+            "end": 19,
+            "fullWidth": 0,
+            "width": 0,
+            "text": ""
+        }
+    },
+    "lineMap": {
+        "lineStarts": [
+            0,
+            6,
+            9
+        ],
+        "length": 19
+    }
+}

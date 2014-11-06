@@ -1,0 +1,215 @@
+{
+    "isDeclaration": false,
+    "languageVersion": "EcmaScript5",
+    "diagnostics": [
+        {
+            "start": 8,
+            "length": 7,
+            "diagnosticCode": "'{0}' list cannot be empty.",
+            "arguments": [
+                "extends"
+            ]
+        }
+    ],
+    "sourceUnit": {
+        "kind": "SourceUnit",
+        "fullStart": 0,
+        "fullEnd": 33,
+        "start": 0,
+        "end": 33,
+        "fullWidth": 33,
+        "width": 33,
+        "moduleElements": [
+            {
+                "kind": "ClassDeclaration",
+                "fullStart": 0,
+                "fullEnd": 33,
+                "start": 0,
+                "end": 33,
+                "fullWidth": 33,
+                "width": 33,
+                "modifiers": [],
+                "classKeyword": {
+                    "kind": "ClassKeyword",
+                    "fullStart": 0,
+                    "fullEnd": 6,
+                    "start": 0,
+                    "end": 5,
+                    "fullWidth": 6,
+                    "width": 5,
+                    "text": "class",
+                    "value": "class",
+                    "valueText": "class",
+                    "hasTrailingTrivia": true,
+                    "trailingTrivia": [
+                        {
+                            "kind": "WhitespaceTrivia",
+                            "fullStart": 5,
+                            "fullEnd": 6,
+                            "text": " "
+                        }
+                    ]
+                },
+                "identifier": {
+                    "kind": "IdentifierName",
+                    "fullStart": 6,
+                    "fullEnd": 8,
+                    "start": 6,
+                    "end": 7,
+                    "fullWidth": 2,
+                    "width": 1,
+                    "text": "C",
+                    "value": "C",
+                    "valueText": "C",
+                    "hasTrailingTrivia": true,
+                    "trailingTrivia": [
+                        {
+                            "kind": "WhitespaceTrivia",
+                            "fullStart": 7,
+                            "fullEnd": 8,
+                            "text": " "
+                        }
+                    ]
+                },
+                "heritageClauses": [
+                    {
+                        "kind": "HeritageClause",
+                        "fullStart": 8,
+                        "fullEnd": 16,
+                        "start": 8,
+                        "end": 15,
+                        "fullWidth": 8,
+                        "width": 7,
+                        "extendsOrImplementsKeyword": {
+                            "kind": "ExtendsKeyword",
+                            "fullStart": 8,
+                            "fullEnd": 16,
+                            "start": 8,
+                            "end": 15,
+                            "fullWidth": 8,
+                            "width": 7,
+                            "text": "extends",
+                            "value": "extends",
+                            "valueText": "extends",
+                            "hasTrailingTrivia": true,
+                            "trailingTrivia": [
+                                {
+                                    "kind": "WhitespaceTrivia",
+                                    "fullStart": 15,
+                                    "fullEnd": 16,
+                                    "text": " "
+                                }
+                            ]
+                        },
+                        "typeNames": []
+                    },
+                    {
+                        "kind": "HeritageClause",
+                        "fullStart": 16,
+                        "fullEnd": 29,
+                        "start": 16,
+                        "end": 28,
+                        "fullWidth": 13,
+                        "width": 12,
+                        "extendsOrImplementsKeyword": {
+                            "kind": "ImplementsKeyword",
+                            "fullStart": 16,
+                            "fullEnd": 27,
+                            "start": 16,
+                            "end": 26,
+                            "fullWidth": 11,
+                            "width": 10,
+                            "text": "implements",
+                            "value": "implements",
+                            "valueText": "implements",
+                            "hasTrailingTrivia": true,
+                            "trailingTrivia": [
+                                {
+                                    "kind": "WhitespaceTrivia",
+                                    "fullStart": 26,
+                                    "fullEnd": 27,
+                                    "text": " "
+                                }
+                            ]
+                        },
+                        "typeNames": [
+                            {
+                                "kind": "IdentifierName",
+                                "fullStart": 27,
+                                "fullEnd": 29,
+                                "start": 27,
+                                "end": 28,
+                                "fullWidth": 2,
+                                "width": 1,
+                                "text": "A",
+                                "value": "A",
+                                "valueText": "A",
+                                "hasTrailingTrivia": true,
+                                "trailingTrivia": [
+                                    {
+                                        "kind": "WhitespaceTrivia",
+                                        "fullStart": 28,
+                                        "fullEnd": 29,
+                                        "text": " "
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "openBraceToken": {
+                    "kind": "OpenBraceToken",
+                    "fullStart": 29,
+                    "fullEnd": 32,
+                    "start": 29,
+                    "end": 30,
+                    "fullWidth": 3,
+                    "width": 1,
+                    "text": "{",
+                    "value": "{",
+                    "valueText": "{",
+                    "hasTrailingTrivia": true,
+                    "hasTrailingNewLine": true,
+                    "trailingTrivia": [
+                        {
+                            "kind": "NewLineTrivia",
+                            "fullStart": 30,
+                            "fullEnd": 32,
+                            "text": "\r\n"
+                        }
+                    ]
+                },
+                "classElements": [],
+                "closeBraceToken": {
+                    "kind": "CloseBraceToken",
+                    "fullStart": 32,
+                    "fullEnd": 33,
+                    "start": 32,
+                    "end": 33,
+                    "fullWidth": 1,
+                    "width": 1,
+                    "text": "}",
+                    "value": "}",
+                    "valueText": "}"
+                }
+            }
+        ],
+        "endOfFileToken": {
+            "kind": "EndOfFileToken",
+            "fullStart": 33,
+            "fullEnd": 33,
+            "start": 33,
+            "end": 33,
+            "fullWidth": 0,
+            "width": 0,
+            "text": ""
+        }
+    },
+    "lineMap": {
+        "lineStarts": [
+            0,
+            32
+        ],
+        "length": 33
+    }
+}

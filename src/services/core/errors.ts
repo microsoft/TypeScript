@@ -1,4 +1,4 @@
-///<reference path='references.ts' />
+// ///<reference path='references.ts' />
 
 module TypeScript {
     export class Errors {

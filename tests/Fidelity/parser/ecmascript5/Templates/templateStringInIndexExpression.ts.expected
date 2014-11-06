@@ -1,0 +1,153 @@
+{
+    "isDeclaration": false,
+    "languageVersion": "EcmaScript5",
+    "sourceUnit": {
+        "kind": "SourceUnit",
+        "fullStart": 0,
+        "fullEnd": 18,
+        "start": 0,
+        "end": 18,
+        "fullWidth": 18,
+        "width": 18,
+        "moduleElements": [
+            {
+                "kind": "ExpressionStatement",
+                "fullStart": 0,
+                "fullEnd": 18,
+                "start": 0,
+                "end": 18,
+                "fullWidth": 18,
+                "width": 18,
+                "expression": {
+                    "kind": "ElementAccessExpression",
+                    "fullStart": 0,
+                    "fullEnd": 17,
+                    "start": 0,
+                    "end": 17,
+                    "fullWidth": 17,
+                    "width": 17,
+                    "expression": {
+                        "kind": "TemplateExpression",
+                        "fullStart": 0,
+                        "fullEnd": 12,
+                        "start": 0,
+                        "end": 12,
+                        "fullWidth": 12,
+                        "width": 12,
+                        "templateStartToken": {
+                            "kind": "TemplateStartToken",
+                            "fullStart": 0,
+                            "fullEnd": 6,
+                            "start": 0,
+                            "end": 6,
+                            "fullWidth": 6,
+                            "width": 6,
+                            "text": "`abc${",
+                            "value": "abc",
+                            "valueText": "abc"
+                        },
+                        "templateClauses": [
+                            {
+                                "kind": "TemplateClause",
+                                "fullStart": 6,
+                                "fullEnd": 12,
+                                "start": 6,
+                                "end": 12,
+                                "fullWidth": 6,
+                                "width": 6,
+                                "expression": {
+                                    "kind": "NumericLiteral",
+                                    "fullStart": 6,
+                                    "fullEnd": 7,
+                                    "start": 6,
+                                    "end": 7,
+                                    "fullWidth": 1,
+                                    "width": 1,
+                                    "text": "0",
+                                    "value": 0,
+                                    "valueText": "0"
+                                },
+                                "templateMiddleOrEndToken": {
+                                    "kind": "TemplateEndToken",
+                                    "fullStart": 7,
+                                    "fullEnd": 12,
+                                    "start": 7,
+                                    "end": 12,
+                                    "fullWidth": 5,
+                                    "width": 5,
+                                    "text": "}abc`",
+                                    "value": "abc",
+                                    "valueText": "abc"
+                                }
+                            }
+                        ]
+                    },
+                    "openBracketToken": {
+                        "kind": "OpenBracketToken",
+                        "fullStart": 12,
+                        "fullEnd": 13,
+                        "start": 12,
+                        "end": 13,
+                        "fullWidth": 1,
+                        "width": 1,
+                        "text": "[",
+                        "value": "[",
+                        "valueText": "["
+                    },
+                    "argumentExpression": {
+                        "kind": "NoSubstitutionTemplateToken",
+                        "fullStart": 13,
+                        "fullEnd": 16,
+                        "start": 13,
+                        "end": 16,
+                        "fullWidth": 3,
+                        "width": 3,
+                        "text": "`0`",
+                        "value": "0",
+                        "valueText": "0"
+                    },
+                    "closeBracketToken": {
+                        "kind": "CloseBracketToken",
+                        "fullStart": 16,
+                        "fullEnd": 17,
+                        "start": 16,
+                        "end": 17,
+                        "fullWidth": 1,
+                        "width": 1,
+                        "text": "]",
+                        "value": "]",
+                        "valueText": "]"
+                    }
+                },
+                "semicolonToken": {
+                    "kind": "SemicolonToken",
+                    "fullStart": 17,
+                    "fullEnd": 18,
+                    "start": 17,
+                    "end": 18,
+                    "fullWidth": 1,
+                    "width": 1,
+                    "text": ";",
+                    "value": ";",
+                    "valueText": ";"
+                }
+            }
+        ],
+        "endOfFileToken": {
+            "kind": "EndOfFileToken",
+            "fullStart": 18,
+            "fullEnd": 18,
+            "start": 18,
+            "end": 18,
+            "fullWidth": 0,
+            "width": 0,
+            "text": ""
+        }
+    },
+    "lineMap": {
+        "lineStarts": [
+            0
+        ],
+        "length": 18
+    }
+}

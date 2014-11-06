@@ -1,0 +1,113 @@
+{
+    "tokens": {
+        "0": {
+            "kind": "EndOfFileToken",
+            "fullStart": 0,
+            "fullEnd": 2,
+            "start": 2,
+            "end": 2,
+            "fullWidth": 2,
+            "width": 0,
+            "text": "",
+            "hasLeadingTrivia": true,
+            "hasLeadingNewLine": true,
+            "leadingTrivia": [
+                {
+                    "kind": "NewLineTrivia",
+                    "fullStart": 0,
+                    "fullEnd": 2,
+                    "text": "\r\n"
+                }
+            ]
+        },
+        "1": {
+            "kind": "EndOfFileToken",
+            "fullStart": 0,
+            "fullEnd": 2,
+            "start": 2,
+            "end": 2,
+            "fullWidth": 2,
+            "width": 0,
+            "text": "",
+            "hasLeadingTrivia": true,
+            "hasLeadingNewLine": true,
+            "leadingTrivia": [
+                {
+                    "kind": "NewLineTrivia",
+                    "fullStart": 0,
+                    "fullEnd": 2,
+                    "text": "\r\n"
+                }
+            ]
+        },
+        "2": {
+            "kind": "EndOfFileToken",
+            "fullStart": 0,
+            "fullEnd": 2,
+            "start": 2,
+            "end": 2,
+            "fullWidth": 2,
+            "width": 0,
+            "text": "",
+            "hasLeadingTrivia": true,
+            "hasLeadingNewLine": true,
+            "leadingTrivia": [
+                {
+                    "kind": "NewLineTrivia",
+                    "fullStart": 0,
+                    "fullEnd": 2,
+                    "text": "\r\n"
+                }
+            ]
+        }
+    },
+    "tokensOnLeft": {
+        "0": null,
+        "1": null,
+        "2": null
+    },
+    "leftToRight": [
+        {
+            "kind": "EndOfFileToken",
+            "fullStart": 0,
+            "fullEnd": 2,
+            "start": 2,
+            "end": 2,
+            "fullWidth": 2,
+            "width": 0,
+            "text": "",
+            "hasLeadingTrivia": true,
+            "hasLeadingNewLine": true,
+            "leadingTrivia": [
+                {
+                    "kind": "NewLineTrivia",
+                    "fullStart": 0,
+                    "fullEnd": 2,
+                    "text": "\r\n"
+                }
+            ]
+        }
+    ],
+    "rightToLeft": [
+        {
+            "kind": "EndOfFileToken",
+            "fullStart": 0,
+            "fullEnd": 2,
+            "start": 2,
+            "end": 2,
+            "fullWidth": 2,
+            "width": 0,
+            "text": "",
+            "hasLeadingTrivia": true,
+            "hasLeadingNewLine": true,
+            "leadingTrivia": [
+                {
+                    "kind": "NewLineTrivia",
+                    "fullStart": 0,
+                    "fullEnd": 2,
+                    "text": "\r\n"
+                }
+            ]
+        }
+    ]
+}

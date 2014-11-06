@@ -1,0 +1,148 @@
+{
+    "isDeclaration": false,
+    "languageVersion": "EcmaScript5",
+    "diagnostics": [
+        {
+            "start": 362,
+            "length": 5,
+            "diagnosticCode": "Unexpected token; '{0}' expected.",
+            "arguments": [
+                "module, class, interface, enum, import or statement"
+            ]
+        }
+    ],
+    "sourceUnit": {
+        "kind": "SourceUnit",
+        "fullStart": 0,
+        "fullEnd": 369,
+        "start": 369,
+        "end": 369,
+        "fullWidth": 369,
+        "width": 0,
+        "isIncrementallyUnusable": true,
+        "moduleElements": [],
+        "endOfFileToken": {
+            "kind": "EndOfFileToken",
+            "fullStart": 0,
+            "fullEnd": 369,
+            "start": 369,
+            "end": 369,
+            "fullWidth": 369,
+            "width": 0,
+            "text": "",
+            "hasLeadingTrivia": true,
+            "hasLeadingComment": true,
+            "hasLeadingNewLine": true,
+            "hasLeadingSkippedText": true,
+            "leadingTrivia": [
+                {
+                    "kind": "SingleLineCommentTrivia",
+                    "fullStart": 0,
+                    "fullEnd": 60,
+                    "text": "// Copyright 2009 the Sputnik authors.  All rights reserved."
+                },
+                {
+                    "kind": "NewLineTrivia",
+                    "fullStart": 60,
+                    "fullEnd": 61,
+                    "text": "\n"
+                },
+                {
+                    "kind": "SingleLineCommentTrivia",
+                    "fullStart": 61,
+                    "fullEnd": 131,
+                    "text": "// This code is governed by the BSD license found in the LICENSE file."
+                },
+                {
+                    "kind": "NewLineTrivia",
+                    "fullStart": 131,
+                    "fullEnd": 132,
+                    "text": "\n"
+                },
+                {
+                    "kind": "NewLineTrivia",
+                    "fullStart": 132,
+                    "fullEnd": 133,
+                    "text": "\n"
+                },
+                {
+                    "kind": "MultiLineCommentTrivia",
+                    "fullStart": 133,
+                    "fullEnd": 349,
+                    "text": "/**\n * TryStatement: \"try Block Catch\" or \"try Block Finally\" or \"try Block Catch Finally\"\n *\n * @path ch12/12.14/S12.14_A16_T2.js\n * @description Checking if execution of \"catch\" with no \"try\" fails\n * @negative\n */"
+                },
+                {
+                    "kind": "NewLineTrivia",
+                    "fullStart": 349,
+                    "fullEnd": 350,
+                    "text": "\n"
+                },
+                {
+                    "kind": "NewLineTrivia",
+                    "fullStart": 350,
+                    "fullEnd": 351,
+                    "text": "\n"
+                },
+                {
+                    "kind": "SingleLineCommentTrivia",
+                    "fullStart": 351,
+                    "fullEnd": 361,
+                    "text": "// CHECK#1"
+                },
+                {
+                    "kind": "NewLineTrivia",
+                    "fullStart": 361,
+                    "fullEnd": 362,
+                    "text": "\n"
+                },
+                {
+                    "kind": "SkippedTokenTrivia",
+                    "skippedToken": {
+                        "kind": "CatchKeyword",
+                        "fullStart": 362,
+                        "fullEnd": 367,
+                        "start": 362,
+                        "end": 367,
+                        "fullWidth": 5,
+                        "width": 5,
+                        "text": "catch",
+                        "value": "catch",
+                        "valueText": "catch"
+                    }
+                },
+                {
+                    "kind": "NewLineTrivia",
+                    "fullStart": 367,
+                    "fullEnd": 368,
+                    "text": "\n"
+                },
+                {
+                    "kind": "NewLineTrivia",
+                    "fullStart": 368,
+                    "fullEnd": 369,
+                    "text": "\n"
+                }
+            ]
+        }
+    },
+    "lineMap": {
+        "lineStarts": [
+            0,
+            61,
+            132,
+            133,
+            137,
+            224,
+            227,
+            264,
+            333,
+            346,
+            350,
+            351,
+            362,
+            368,
+            369
+        ],
+        "length": 369
+    }
+}
