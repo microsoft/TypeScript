@@ -2784,10 +2784,10 @@ module ts {
 
             if (flags & SymbolFlags.Property) {
                 if (flags & SymbolFlags.UnionProperty) {
-                    // If union property is result of union of non method (property/accessors), it is labeled as property
+                    // If union property is result of union of non method (property/accessors/variables), it is labeled as property
                     var unionPropertyKind = forEach(typeInfoResolver.getRootSymbols(symbol), rootSymbol => {
                         var rootSymbolFlags = rootSymbol.getFlags();
-                        if (rootSymbolFlags & (SymbolFlags.Property | SymbolFlags.GetAccessor | SymbolFlags.SetAccessor)) {
+                        if (rootSymbolFlags & (SymbolFlags.PropertyOrAccessor | SymbolFlags.Variable)) {
                             return ScriptElementKind.memberVariableElement;
                         }
                         Debug.assert(!!(rootSymbolFlags & SymbolFlags.Method));
