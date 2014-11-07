@@ -2784,15 +2784,24 @@ module ts {
 
             if (flags & SymbolFlags.Property) {
                 if (flags & SymbolFlags.UnionProperty) {
-                    return forEach(typeInfoResolver.getRootSymbols(symbol), rootSymbol => {
+                    // If union property is result of union of non method (property/accessors), it is labeled as property
+                    var unionPropertyKind = forEach(typeInfoResolver.getRootSymbols(symbol), rootSymbol => {
                         var rootSymbolFlags = rootSymbol.getFlags();
-                        if (rootSymbolFlags & SymbolFlags.Property) {
+                        if (rootSymbolFlags & (SymbolFlags.Property | SymbolFlags.GetAccessor | SymbolFlags.SetAccessor)) {
                             return ScriptElementKind.memberVariableElement;
                         }
-                        if (rootSymbolFlags & SymbolFlags.GetAccessor) return ScriptElementKind.memberVariableElement;
-                        if (rootSymbolFlags & SymbolFlags.SetAccessor) return ScriptElementKind.memberVariableElement;
-                        Debug.assert((rootSymbolFlags & SymbolFlags.Method) !== undefined);
-                    }) || ScriptElementKind.memberFunctionElement;
+                        Debug.assert(!!(rootSymbolFlags & SymbolFlags.Method));
+                    });
+                    if (!unionPropertyKind) {
+                        // If this was union of all methods, 
+                        //make sure it has call signatures before we can label it as method
+                        var typeOfUnionProperty = typeInfoResolver.getTypeOfSymbol(symbol);
+                        if (typeOfUnionProperty.getCallSignatures().length) {
+                            return ScriptElementKind.memberFunctionElement;
+                        }
+                        return ScriptElementKind.memberVariableElement;
+                    }
+                    return unionPropertyKind;
                 }
                 return ScriptElementKind.memberVariableElement;
             }
