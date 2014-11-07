@@ -283,35 +283,8 @@ module ts.formatting {
                     processChildNode(child, Indentation.Unknown, nodeStartLine, /*isListElement*/ false)
                 },
                 nodes => {
-                    var listStartToken = SyntaxKind.Unknown;
-                    var listEndToken = SyntaxKind.Unknown;
-                    switch (node.kind) {
-                        case SyntaxKind.Constructor:
-                        case SyntaxKind.FunctionDeclaration:
-                        case SyntaxKind.FunctionExpression:
-                        case SyntaxKind.Method:
-                        case SyntaxKind.ArrowFunction:
-                            if ((<FunctionDeclaration>node).typeParameters === nodes) {
-                                listStartToken = SyntaxKind.LessThanToken
-                                listEndToken = SyntaxKind.GreaterThanToken;
-                            }
-                            else if ((<FunctionDeclaration>node).parameters === nodes) {
-                                listStartToken = SyntaxKind.OpenParenToken;
-                                listEndToken = SyntaxKind.CloseParenToken;
-                            }
-                            break;
-                        case SyntaxKind.CallExpression:
-                        case SyntaxKind.NewExpression:
-                            if ((<CallExpression>node).typeArguments === nodes) {
-                                listStartToken = SyntaxKind.LessThanToken
-                                listEndToken = SyntaxKind.GreaterThanToken;
-                            }
-                            else if ((<CallExpression>node).arguments === nodes) {
-                                listStartToken = SyntaxKind.OpenParenToken;
-                                listEndToken = SyntaxKind.CloseParenToken;
-                            }
-                            break;
-                    }
+                    var listStartToken = getOpenTokenForList(node, nodes);
+                    var listEndToken = getCloseTokenForOpenToken(listStartToken);
 
                     if (listStartToken !== SyntaxKind.Unknown) {
                         // try to consume open token
@@ -351,8 +324,7 @@ module ts.formatting {
                             }
                         }
                     }
-                }
-                );
+                });
 
             // this eats up last tokens in the node
             while (formattingScanner.isOnToken()) {
@@ -506,9 +478,6 @@ module ts.formatting {
                                         indentNextTokenOrTrivia = false;
                                     }
                                     break;
-                                case SyntaxKind.WhitespaceTrivia:
-                                    // TODO
-                                    break;
                                 case SyntaxKind.NewLineTrivia:
                                     indentNextTokenOrTrivia = true;
                                     break;
@@ -574,16 +543,14 @@ module ts.formatting {
                 applyRuleEdits(rule, previousItem, previousStartLine, currentItem, currentStartLine);
 
                 if (rule.Operation.Action & (RuleAction.Space | RuleAction.Delete) && currentStartLine !== previousStartLine) {
-                    // Old code:
                     // Handle the case where the next line is moved to be the end of this line. 
-                    // In this case we don't indent the next line in the next pass.                    
+                    // In this case we don't indent the next line in the next pass.
                     lastTriviaWasNewLine = false;
                     if (currentParent.getStart(sourceFile) === currentItem.pos) {
                         lineAdded = false;
                     }
                 }
                 else if (rule.Operation.Action & RuleAction.NewLine && currentStartLine === previousStartLine) {
-                    // Old code:
                     // Handle the case where token2 is moved to the new line. 
                     // In this case we indent token2 in the next pass but we set
                     // sameLineIndent flag to notify the indenter that the indentation is within the line.
@@ -799,8 +766,46 @@ module ts.formatting {
             case SyntaxKind.GetAccessor:
             case SyntaxKind.SetAccessor:
                 return true;
+        }
+
+        return false;
+    }
+
+    function getOpenTokenForList(node: Node, list: Node[]) {
+        switch (node.kind) {
+            case SyntaxKind.Constructor:
+            case SyntaxKind.FunctionDeclaration:
+            case SyntaxKind.FunctionExpression:
+            case SyntaxKind.Method:
+            case SyntaxKind.ArrowFunction:
+                if ((<FunctionDeclaration>node).typeParameters === list) {
+                    return SyntaxKind.LessThanToken;
+                }
+                else if ((<FunctionDeclaration>node).parameters === list) {
+                    return SyntaxKind.OpenParenToken;
+                }
+                break;
+            case SyntaxKind.CallExpression:
+            case SyntaxKind.NewExpression:
+                if ((<CallExpression>node).typeArguments === list) {
+                    return SyntaxKind.LessThanToken;
+                }
+                else if ((<CallExpression>node).arguments === list) {
+                    return SyntaxKind.OpenParenToken;
+                }
                 break;
         }
-        return false;
+        return SyntaxKind.Unknown;
+    }
+
+    function getCloseTokenForOpenToken(k: SyntaxKind) {
+        switch (k) {
+            case SyntaxKind.OpenParenToken:
+                return SyntaxKind.CloseParenToken;
+            case SyntaxKind.LessThanToken:
+                return SyntaxKind.GreaterThanToken;
+            default:
+                return SyntaxKind.Unknown;
+        }
     }
 }
