@@ -254,9 +254,7 @@ module ts.formatting {
             }
         }
 
-        function getListItemIndentation(nodes: Node[], index: number, parentStartLine: number, options: EditorOptions): number {
-            Debug.assert(index >= 0 && index < nodes.length);
-            var node = nodes[index];
+        function getListItemIndentation(node: Node, parentStartLine: number, options: EditorOptions): number {
             var start = node.getStart(sourceFile);
             var nodeStartLine = sourceFile.getLineAndCharacterFromPosition(start).line;
             var startLinePosition = getStartPositionOfLine(nodeStartLine, sourceFile);
@@ -276,7 +274,7 @@ module ts.formatting {
             forEachChild(
                 node,
                 child => {
-                    processChildNode(child, Indentation.Unknown, nodeStartLine, /*containingList*/ undefined, /*listElementIndex*/ -1)
+                    processChildNode(child, Indentation.Unknown, nodeStartLine, /*isListElement*/ false)
                 },
                 nodes => {
                     var listStartToken = SyntaxKind.Unknown;
@@ -314,14 +312,13 @@ module ts.formatting {
                         if (formattingScanner.isOnToken()) {
                             var tokenInfo = formattingScanner.readTokenInfo(node);
                             if (tokenInfo.token.kind === listStartToken) {
+                                var tokenStartLine = sourceFile.getLineAndCharacterFromPosition(tokenInfo.token.pos).line;
                                 // make sure that this token does not belong to the child
                                 var startTokenIndentation = nodeIndentation;
                                 var tokenStartLine = sourceFile.getLineAndCharacterFromPosition(tokenInfo.token.pos).line;
                                 var oldDelta = -1;
                                 if (node.parent.kind !== SyntaxKind.SourceFile && tokenStartLine !== nodeStartLine) {
                                     oldDelta = nodeIndentation.setDelta(options.IndentSize);
-                                    //var indentation = nodeIndentation.getIndentation() + options.IndentSize;
-                                    //startTokenIndentation = getDynamicIndentation(node, indentation, indentation, nodeIndentation);
                                 }
                                 doConsumeTokenAndAdvanceScanner(tokenInfo, node, startTokenIndentation);
                                 if (oldDelta !== -1) {
@@ -334,7 +331,7 @@ module ts.formatting {
                     var inheritedIndentation: number = Indentation.Unknown;
                     var effectiveStartLine = tokenStartLine || nodeStartLine;
                     for (var i = 0, len = nodes.length; i < len; ++i) {
-                        inheritedIndentation = processChildNode(nodes[i], inheritedIndentation, effectiveStartLine, /*containingList*/ nodes, /*listElementIndex*/ i)
+                        inheritedIndentation = processChildNode(nodes[i], inheritedIndentation, effectiveStartLine, /*isListElement*/ true)
                     }
 
                     if (listEndToken !== SyntaxKind.Unknown) {
@@ -348,7 +345,6 @@ module ts.formatting {
                             }
                         }
                     }
-
                 }
                 );
 
@@ -365,9 +361,12 @@ module ts.formatting {
                 doConsumeTokenAndAdvanceScanner(tokenInfo, node, nodeIndentation);
             }
 
-            /// Local functions
+            function processChildNode(
+                child: Node, 
+                inheritedIndentation: number, 
+                childEffectiveStartLine: number, 
+                isListElement: boolean): number {
 
-            function processChildNode(child: Node, inheritedIndentation: number, nodeEffectiveStartLine: number, containingList: Node[], listElementIndex: number): number {
                 if (child.kind === SyntaxKind.Missing) {
                     return inheritedIndentation;
                 }
@@ -388,26 +387,24 @@ module ts.formatting {
 
                 var childStart = sourceFile.getLineAndCharacterFromPosition(start);
                 var actualIndentation = inheritedIndentation;
-                var childIndentationAmount: number;
-                var childDelta: number = 0;
+                var childIndentationAmount = Indentation.Unknown;
+                var childDelta = 0;
                 var isChildInRange = rangeOverlapsWithStartEnd(originalRange, start, child.getEnd());
-                if (containingList) {
+                if (isListElement) {
                     if (isChildInRange) {
                         if (inheritedIndentation !== Indentation.Unknown) {
                             childIndentationAmount = inheritedIndentation;
-                            childDelta = 0;
                         }
                     }
                     else {
-                        var actualIndentation = getListItemIndentation(containingList, listElementIndex, nodeEffectiveStartLine, options);
+                        var actualIndentation = getListItemIndentation(child, childEffectiveStartLine, options);
                         if (actualIndentation !== Indentation.Unknown) {
                             inheritedIndentation = childIndentationAmount = actualIndentation;
-                            childDelta = 0;
                         }
                     }
                 }
 
-                if (childIndentationAmount === undefined) {
+                if (childIndentationAmount === Indentation.Unknown) {
                     if (isSomeBlock(child.kind)) {
                         // child is indented
                         childDelta = options.IndentSize;
@@ -432,7 +429,7 @@ module ts.formatting {
                     childDelta = options.IndentSize;
                 }
 
-                if (nodeEffectiveStartLine === childStart.line) {
+                if (childEffectiveStartLine === childStart.line) {
                     childIndentationAmount = nodeIndentation.getIndentation();
                     childDelta = Math.min(options.IndentSize, delta + childDelta);
                 }
@@ -441,7 +438,7 @@ module ts.formatting {
                 if (isToken(child)) {
                     var tokenInfo = formattingScanner.readTokenInfo(node);
                     Debug.assert(tokenInfo.token.end === child.end);
-                    var childIndentation = getDynamicIndentation(node, nodeEffectiveStartLine, childIndentationAmount, childIndentationAmount, childDelta);
+                    var childIndentation = getDynamicIndentation(node, childEffectiveStartLine, childIndentationAmount, childIndentationAmount, childDelta);
                     doConsumeTokenAndAdvanceScanner(tokenInfo, node, childIndentation);
                 }
                 else {
