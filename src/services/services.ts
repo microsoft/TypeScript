@@ -346,7 +346,8 @@ module ts {
             function isName(pos: number, end: number, sourceFile: SourceFile, name: string) {
                 return pos + name.length < end &&
                     sourceFile.text.substr(pos, name.length) === name &&
-                    isWhiteSpace(sourceFile.text.charCodeAt(pos + name.length));
+                    (isWhiteSpace(sourceFile.text.charCodeAt(pos + name.length)) ||
+                    isLineBreak(sourceFile.text.charCodeAt(pos + name.length)));
             }
 
             function isParamTag(pos: number, end: number, sourceFile: SourceFile) {
@@ -354,9 +355,19 @@ module ts {
                 return isName(pos, end, sourceFile, paramTag);
             }
 
+            function pushDocCommentLineText(docComments: SymbolDisplayPart[], text: string, blankLineCount: number) {
+                // Add the empty lines in between texts
+                while (blankLineCount) {
+                    docComments.push(textPart(""));
+                    blankLineCount--;
+                }
+                docComments.push(textPart(text));
+            }
+
             function getCleanedJsDocComment(pos: number, end: number, sourceFile: SourceFile) {
                 var spacesToRemoveAfterAsterisk: number;
                 var docComments: SymbolDisplayPart[] = [];
+                var blankLineCount = 0;
                 var isInParamTag = false;
 
                 while (pos < end) {
@@ -405,7 +416,12 @@ module ts {
                     // Continue with next line
                     pos = consumeLineBreaks(pos, end, sourceFile);
                     if (docCommentTextOfLine) {
-                        docComments.push(textPart(docCommentTextOfLine));
+                        pushDocCommentLineText(docComments, docCommentTextOfLine, blankLineCount);
+                        blankLineCount = 0;
+                    }
+                    else if (!isInParamTag && docComments.length) { 
+                        // This is blank line when there is text already parsed
+                        blankLineCount++;
                     }
                 }
 
@@ -417,6 +433,8 @@ module ts {
                 var paramDocComments: SymbolDisplayPart[] = [];
                 while (pos < end) {
                     if (isParamTag(pos, end, sourceFile)) {
+                        var blankLineCount = 0;
+                        var recordedParamTag = false;
                         // Consume leading spaces 
                         pos = consumeWhiteSpaces(pos + paramTag.length);
                         if (pos >= end) {
@@ -478,8 +496,13 @@ module ts {
                                 // at line break, set this comment line text and go to next line 
                                 if (isLineBreak(ch)) {
                                     if (paramHelpString) {
-                                        paramDocComments.push(textPart(paramHelpString));
+                                        pushDocCommentLineText(paramDocComments, paramHelpString, blankLineCount);
                                         paramHelpString = "";
+                                        blankLineCount = 0;
+                                        recordedParamTag = true;
+                                    }
+                                    else if (recordedParamTag) {
+                                        blankLineCount++;
                                     }
 
                                     // Get the pos after cleaning start of the line
@@ -500,7 +523,7 @@ module ts {
 
                             // If there is param help text, add it top the doc comments
                             if (paramHelpString) {
-                                paramDocComments.push(textPart(paramHelpString));
+                                pushDocCommentLineText(paramDocComments, paramHelpString, blankLineCount);
                             }
                             paramHelpStringMargin = undefined;
                         }
