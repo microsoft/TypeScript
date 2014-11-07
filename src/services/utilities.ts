@@ -259,6 +259,10 @@ module ts {
         return n.kind === SyntaxKind.StringLiteral || n.kind === SyntaxKind.NumericLiteral || isWord(n);
     }
 
+    export var switchToForwardSlashesRegEx = /\\/g;
+    export function switchToForwardSlashes(path: string) {
+        return path.replace(switchToForwardSlashesRegEx, "/");
+    }
     export function isComment(n: Node): boolean {
         return n.kind === SyntaxKind.SingleLineCommentTrivia || n.kind === SyntaxKind.MultiLineCommentTrivia;
     }

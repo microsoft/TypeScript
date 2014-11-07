@@ -745,6 +745,47 @@ module ts {
         nodeIsNestedInLabel(label: Identifier, requireIterationStatement: boolean, stopAtFunctionBoundary: boolean): ControlBlockContext;
     }
 
+    interface ReferencePathMatchResult {
+        fileReference?: FileReference
+        diagnostic?: DiagnosticMessage
+        isNoDefaultLib?: boolean
+    }
+
+    export function getFileReferenceFromReferencePath(comment: string, commentRange: CommentRange): ReferencePathMatchResult {
+        var simpleReferenceRegEx = /^\/\/\/\s*<reference\s+/gim;
+        var isNoDefaultLibRegEx = /^(\/\/\/\s*<reference\s+no-default-lib\s*=\s*)('|")(.+?)\2\s*\/>/gim;
+        if (simpleReferenceRegEx.exec(comment)) {
+            if (isNoDefaultLibRegEx.exec(comment)) {
+                return {
+                    isNoDefaultLib: true
+                }
+            }
+            else {
+                var matchResult = fullTripleSlashReferencePathRegEx.exec(comment);
+                if (matchResult) {
+                    var start = commentRange.pos;
+                    var end = commentRange.end;
+                    var fileRef = {
+                        pos: start,
+                        end: end,
+                        filename: matchResult[3]
+                    };
+                    return {
+                        fileReference: fileRef,
+                        isNoDefaultLib: false
+                    };
+                }
+                else {
+                    return {
+                        diagnostic: Diagnostics.Invalid_reference_directive_syntax,
+                        isNoDefaultLib: false
+                    };
+                }
+            }
+        }
+        return undefined;
+    }
+
     export function isKeyword(token: SyntaxKind): boolean {
         return SyntaxKind.FirstKeyword <= token && token <= SyntaxKind.LastKeyword;
     }
@@ -4168,28 +4209,16 @@ module ts {
             for (var i = 0; i < commentRanges.length; i++) {
                 var range = commentRanges[i];
                 var comment = sourceText.substring(range.pos, range.end);
-                var simpleReferenceRegEx = /^\/\/\/\s*<reference\s+/gim;
-                if (simpleReferenceRegEx.exec(comment)) {
-                    var isNoDefaultLibRegEx = /^(\/\/\/\s*<reference\s+no-default-lib=)('|")(.+?)\2\s*\/>/gim;
-                    if (isNoDefaultLibRegEx.exec(comment)) {
-                        file.hasNoDefaultLib = true;
+                var referencePathMatchResult = getFileReferenceFromReferencePath(comment, range);
+                if (referencePathMatchResult) {
+                    var fileReference = referencePathMatchResult.fileReference;
+                    file.hasNoDefaultLib = referencePathMatchResult.isNoDefaultLib;
+                    var diagnostic = referencePathMatchResult.diagnostic;
+                    if (fileReference) {
+                        referencedFiles.push(fileReference);
                     }
-                    else {
-                        var matchResult = fullTripleSlashReferencePathRegEx.exec(comment);
-                        var start = range.pos;
-                        var end = range.end;
-                        var length = end - start;
-                       
-                        if (!matchResult) {
-                            errorAtPos(start, length, Diagnostics.Invalid_reference_directive_syntax);
-                        }
-                        else {
-                            referencedFiles.push({
-                                pos: start,
-                                end: end,
-                                filename: matchResult[3]
-                            });
-                        }
+                    if (diagnostic) {
+                        errorAtPos(range.pos, range.end - range.pos, diagnostic);
                     }
                 }
                 else {
