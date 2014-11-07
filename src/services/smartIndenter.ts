@@ -321,9 +321,8 @@ module ts.formatting {
                 case SyntaxKind.ExportAssignment:
                 case SyntaxKind.ReturnStatement:
                     return true;
-                default:
-                    return false;
             }
+            return false;
         }
 
         export function shouldIndentChildNode(parent: Node, child: Node): boolean {

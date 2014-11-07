@@ -299,7 +299,7 @@ module ts.formatting {
                                 if (node.parent.kind !== SyntaxKind.SourceFile && tokenStartLine !== nodeStartLine) {
                                     oldDelta = nodeIndentation.setDelta(options.IndentSize);
                                 }
-                                doConsumeTokenAndAdvanceScanner(tokenInfo, node, startTokenIndentation);
+                                consumeTokenAndAdvanceScanner(tokenInfo, node, startTokenIndentation);
                                 if (oldDelta !== -1) {
                                     nodeIndentation.setDelta(oldDelta);
                                 }
@@ -319,7 +319,7 @@ module ts.formatting {
                             if (tokenInfo.token.kind === listEndToken && formattingScanner.lastTrailingTriviaWasNewLine()) {
                                 var old = nodeIndentation.setDelta(options.IndentSize);
                                 //var endTokenIndentation = nodeIndentation.getIndentation() + options.IndentSize;
-                                doConsumeTokenAndAdvanceScanner(tokenInfo, node, nodeIndentation);
+                                consumeTokenAndAdvanceScanner(tokenInfo, node, nodeIndentation);
                                 nodeIndentation.setDelta(old);
                             }
                         }
@@ -336,7 +336,7 @@ module ts.formatting {
                 if (SmartIndenter.nodeContentIsAlwaysIndented(node.kind) && node.end === tokenInfo.token.end) {
                     nodeIndentation.increaseCommentIndentation(options.IndentSize);
                 }
-                doConsumeTokenAndAdvanceScanner(tokenInfo, node, nodeIndentation);
+                consumeTokenAndAdvanceScanner(tokenInfo, node, nodeIndentation);
             }
 
             function processChildNode(
@@ -356,7 +356,7 @@ module ts.formatting {
                         break;
                     }
 
-                    doConsumeTokenAndAdvanceScanner(tokenInfo, node, nodeIndentation);
+                    consumeTokenAndAdvanceScanner(tokenInfo, node, nodeIndentation);
                 }
 
                 if (!formattingScanner.isOnToken()) {
@@ -385,7 +385,7 @@ module ts.formatting {
                 if (isToken(child)) {
                     var tokenInfo = formattingScanner.readTokenInfo(node);
                     Debug.assert(tokenInfo.token.end === child.end);
-                    doConsumeTokenAndAdvanceScanner(tokenInfo, node, nodeIndentation);
+                    consumeTokenAndAdvanceScanner(tokenInfo, node, nodeIndentation);
                     return inheritedIndentation;
                 }
 
@@ -421,76 +421,74 @@ module ts.formatting {
 
                 processNode(child, childContextNode, childStart.line, childIndentationAmount, childDelta);
                 childContextNode = node;
+
                 return inheritedIndentation;
             }
 
-            function doConsumeTokenAndAdvanceScanner(currentTokenInfo: TokenInfo, parent: Node, indentation: DynamicIndentation): void {
-                consumeTokenAndAdvanceScanner(currentTokenInfo, parent, childContextNode, indentation);
-                childContextNode = parent;
-            }
-        }
+            function consumeTokenAndAdvanceScanner(currentTokenInfo: TokenInfo, parent: Node, indentation: DynamicIndentation): void {
+                Debug.assert(rangeContainsRange(parent, currentTokenInfo.token));
 
-        function consumeTokenAndAdvanceScanner(currentTokenInfo: TokenInfo, parent: Node, contextNode: Node, indentation: DynamicIndentation): void {
-            Debug.assert(rangeContainsRange(parent, currentTokenInfo.token));
+                lastTriviaWasNewLine = formattingScanner.lastTrailingTriviaWasNewLine();
 
-            lastTriviaWasNewLine = formattingScanner.lastTrailingTriviaWasNewLine();
-
-            if (currentTokenInfo.leadingTrivia) {
-                processTrivia(currentTokenInfo.leadingTrivia, parent, contextNode, indentation);
-            }
-
-            var lineAdded: boolean;
-            var isTokenInRange = rangeContainsRange(originalRange, currentTokenInfo.token);
-            var indentToken: boolean = true;
-
-            var tokenStart = sourceFile.getLineAndCharacterFromPosition(currentTokenInfo.token.pos);
-            if (isTokenInRange) {
-                var prevStartLine = previousRangeStartLine;
-                lineAdded = processRange(currentTokenInfo.token, tokenStart, parent, contextNode, indentation);
-                if (lineAdded !== undefined) {
-                    indentToken = lineAdded;
-                }
-                else {
-                    indentToken = tokenStart.line !== prevStartLine;
-                }
-            }
-
-            if (currentTokenInfo.trailingTrivia) {
-                processTrivia(currentTokenInfo.trailingTrivia, parent, contextNode, indentation);
-            }
-
-
-            if (lastTriviaWasNewLine && indentToken) {
-                var indentNextTokenOrTrivia = true;
                 if (currentTokenInfo.leadingTrivia) {
-                    for (var i = 0, len = currentTokenInfo.leadingTrivia.length; i < len; ++i) {
-                        var triviaItem = currentTokenInfo.leadingTrivia[i];
-                        var triviaStartLine = sourceFile.getLineAndCharacterFromPosition(triviaItem.pos).line;
-                        if (rangeContainsRange(originalRange, triviaItem)) {
-                            switch (triviaItem.kind) {
-                                case SyntaxKind.MultiLineCommentTrivia:
-                                    indentMultilineComment(triviaItem, indentation.getCommentIndentation(), /*firstLineIsIndented*/ !indentNextTokenOrTrivia);
-                                    indentNextTokenOrTrivia = false;
-                                    break;
-                                case SyntaxKind.SingleLineCommentTrivia:
-                                    if (indentNextTokenOrTrivia) {
-                                        insertIndentation(triviaItem.pos, indentation.getCommentIndentation(), /*lineAdded*/ false);
+                    processTrivia(currentTokenInfo.leadingTrivia, parent, childContextNode, indentation);
+                }
+
+                var lineAdded: boolean;
+                var isTokenInRange = rangeContainsRange(originalRange, currentTokenInfo.token);
+                var indentToken: boolean = true;
+
+                var tokenStart = sourceFile.getLineAndCharacterFromPosition(currentTokenInfo.token.pos);
+                if (isTokenInRange) {
+                    var prevStartLine = previousRangeStartLine;
+                    lineAdded = processRange(currentTokenInfo.token, tokenStart, parent, childContextNode, indentation);
+                    if (lineAdded !== undefined) {
+                        indentToken = lineAdded;
+                    }
+                    else {
+                        indentToken = tokenStart.line !== prevStartLine;
+                    }
+                }
+
+                if (currentTokenInfo.trailingTrivia) {
+                    processTrivia(currentTokenInfo.trailingTrivia, parent, childContextNode, indentation);
+                }
+
+
+                if (lastTriviaWasNewLine && indentToken) {
+                    var indentNextTokenOrTrivia = true;
+                    if (currentTokenInfo.leadingTrivia) {
+                        for (var i = 0, len = currentTokenInfo.leadingTrivia.length; i < len; ++i) {
+                            var triviaItem = currentTokenInfo.leadingTrivia[i];
+                            var triviaStartLine = sourceFile.getLineAndCharacterFromPosition(triviaItem.pos).line;
+                            if (rangeContainsRange(originalRange, triviaItem)) {
+                                switch (triviaItem.kind) {
+                                    case SyntaxKind.MultiLineCommentTrivia:
+                                        indentMultilineComment(triviaItem, indentation.getCommentIndentation(), /*firstLineIsIndented*/ !indentNextTokenOrTrivia);
                                         indentNextTokenOrTrivia = false;
-                                    }
-                                    break;
-                                case SyntaxKind.NewLineTrivia:
-                                    indentNextTokenOrTrivia = true;
-                                    break;
+                                        break;
+                                    case SyntaxKind.SingleLineCommentTrivia:
+                                        if (indentNextTokenOrTrivia) {
+                                            insertIndentation(triviaItem.pos, indentation.getCommentIndentation(), /*lineAdded*/ false);
+                                            indentNextTokenOrTrivia = false;
+                                        }
+                                        break;
+                                    case SyntaxKind.NewLineTrivia:
+                                        indentNextTokenOrTrivia = true;
+                                        break;
+                                }
                             }
                         }
                     }
+                    if (isTokenInRange && !rangeContainsError(currentTokenInfo.token)) {
+                        insertIndentation(currentTokenInfo.token.pos, indentation.getEffectiveIndentation(tokenStart.line, currentTokenInfo.token.kind), lineAdded);
+                    }
                 }
-                if (isTokenInRange && !rangeContainsError(currentTokenInfo.token)) {
-                    insertIndentation(currentTokenInfo.token.pos, indentation.getEffectiveIndentation(tokenStart.line, currentTokenInfo.token.kind), lineAdded);
-                }
-            }
 
-            formattingScanner.advance();
+                formattingScanner.advance();
+
+                childContextNode = parent;
+            }
         }
 
         function processTrivia(trivia: TextRangeWithKind[], parent: Node, contextNode: Node, indentation: DynamicIndentation): void {
@@ -535,6 +533,7 @@ module ts.formatting {
             indentation: DynamicIndentation): boolean {
 
             formattingContext.updateContext(previousItem, previousParent, currentItem, currentParent, contextNode);
+
             var rule = rulesProvider.getRulesMap().GetRule(formattingContext);
 
             var trimTrailingWhitespaces: boolean;
@@ -640,8 +639,8 @@ module ts.formatting {
                 var startLinePos = getStartPositionOfLine(startLine, sourceFile);
                 var nonWhitespaceColumn =
                     i === 0
-                    ? nonWhitespaceColumnInFirstPart
-                    : SmartIndenter.findFirstNonWhitespaceColumn(parts[i].pos, parts[i].end, sourceFile, options);
+                        ? nonWhitespaceColumnInFirstPart
+                        : SmartIndenter.findFirstNonWhitespaceColumn(parts[i].pos, parts[i].end, sourceFile, options);
 
                 var newIndentation = nonWhitespaceColumn + delta;
                 if (newIndentation > 0) {
@@ -736,6 +735,7 @@ module ts.formatting {
             }
         }
     }
+
     function isSomeBlock(kind: SyntaxKind): boolean {
         switch (kind) {
             case SyntaxKind.Block:
@@ -745,9 +745,8 @@ module ts.formatting {
             case SyntaxKind.FinallyBlock:
             case SyntaxKind.ModuleBlock:
                 return true;
-            default:
-                return false;
         }
+        return false;
     }
 
     function shouldIndentChildNodes(kind: SyntaxKind): boolean {
@@ -794,7 +793,12 @@ module ts.formatting {
                     return SyntaxKind.OpenParenToken;
                 }
                 break;
+            case SyntaxKind.TypeReference:
+                if ((<TypeReferenceNode>node).typeArguments === list) {
+                    return SyntaxKind.LessThanToken;
+                }
         }
+
         return SyntaxKind.Unknown;
     }
 
@@ -804,8 +808,8 @@ module ts.formatting {
                 return SyntaxKind.CloseParenToken;
             case SyntaxKind.LessThanToken:
                 return SyntaxKind.GreaterThanToken;
-            default:
-                return SyntaxKind.Unknown;
         }
+
+        return SyntaxKind.Unknown;
     }
 }
