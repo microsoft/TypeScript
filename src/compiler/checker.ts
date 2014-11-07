@@ -4318,7 +4318,7 @@ module ts {
         function getNarrowedTypeOfSymbol(symbol: Symbol, node: Node) {
             var type = getTypeOfSymbol(symbol);
             // Only narrow when symbol is variable of a structured type
-            if (symbol.flags & SymbolFlags.Variable && type.flags & TypeFlags.Structured) {
+            if (node && (symbol.flags & SymbolFlags.Variable && type.flags & TypeFlags.Structured)) {
                 while (true) {
                     var child = node;
                     node = node.parent;
