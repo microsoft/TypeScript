@@ -305,7 +305,7 @@ module ts {
         type?: TypeNode;
     }
 
-    export type DeclarationName = Identifier | LiteralExpression | ComputedPropertyName;
+    export type DeclarationName = Identifier | LiteralExpression | ComputedPropertyName | BindingPattern;
 
     export interface Declaration extends Node {
         name?: DeclarationName;
@@ -323,8 +323,7 @@ module ts {
     export interface SignatureDeclaration extends Declaration, ParsedSignature { }
 
     export interface VariableDeclaration extends Declaration {
-        name: Identifier;
-        pattern?: BindingPattern;
+        name: Identifier | BindingPattern;
         type?: TypeNode;
         initializer?: Expression;
     }
@@ -334,15 +333,9 @@ module ts {
     }
 
     export interface PatternDeclaration extends Declaration {
-        propertyName?: Identifier;  // Binding property name
-        name?: Identifier;          // Declared variable name (pattern = undefined)
-        pattern?: BindingPattern;   // Nested binding pattern (name = undefined)
-        initializer?: Expression;   // Optional initializer
-    }
-
-    export interface NameOrPatternNode extends Node {
-        name?: Identifier;
-        pattern?: BindingPattern;
+        propertyName?: Identifier;          // Binding property name
+        name: Identifier | BindingPattern;  // Declared variable name (pattern = undefined)
+        initializer?: Expression;           // Optional initializer
     }
 
     export interface PropertyDeclaration extends Declaration {

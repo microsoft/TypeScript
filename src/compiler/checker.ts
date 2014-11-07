@@ -3974,7 +3974,7 @@ module ts {
                 default:
                     var diagnostic = Diagnostics.Variable_0_implicitly_has_an_1_type;
             }
-            error(declaration, diagnostic, identifierToString(declaration.name), typeAsString);
+            error(declaration, diagnostic, declarationNameToString(declaration.name), typeAsString);
         }
 
         function reportErrorsFromWidening(declaration: Declaration, type: Type) {
@@ -6339,11 +6339,15 @@ module ts {
             // TODO: Check multiple declarations are identical
         }
 
+        // TODO(andersh): Support destructuring
         function checkParameter(parameterDeclaration: ParameterDeclaration) {
+            if (isBindingPattern(parameterDeclaration.name)) {
+                return;
+            }
             checkVariableDeclaration(parameterDeclaration);
 
             if (fullTypeCheck) {
-                checkCollisionWithIndexVariableInGeneratedCode(parameterDeclaration, parameterDeclaration.name);
+                checkCollisionWithIndexVariableInGeneratedCode(parameterDeclaration, <Identifier>parameterDeclaration.name);
 
                 if (parameterDeclaration.flags & (NodeFlags.Public | NodeFlags.Private | NodeFlags.Protected) &&
                     !(parameterDeclaration.parent.kind === SyntaxKind.Constructor && (<ConstructorDeclaration>parameterDeclaration.parent).body)) {
@@ -7005,7 +7009,7 @@ module ts {
             }
 
             forEach(node.parameters, p => {
-                if (p.name && p.name.text === argumentsSymbol.name) {
+                if (p.name && !isBindingPattern(p.name) && (<Identifier>p.name).text === argumentsSymbol.name) {
                     error(p, Diagnostics.Duplicate_identifier_arguments_Compiler_uses_arguments_to_initialize_rest_parameters);
                 }
             });
@@ -7207,7 +7211,7 @@ module ts {
             if (node.initializer && (node.flags & NodeFlags.BlockScoped) === 0) {
                 var symbol = getSymbolOfNode(node);
                 if (symbol.flags & SymbolFlags.FunctionScopedVariable) {
-                    var localDeclarationSymbol = resolveName(node, node.name.text, SymbolFlags.Variable, /*nodeNotFoundErrorMessage*/ undefined, /*nameArg*/ undefined);
+                    var localDeclarationSymbol = resolveName(node, (<Identifier>node.name).text, SymbolFlags.Variable, /*nodeNotFoundErrorMessage*/ undefined, /*nameArg*/ undefined);
                     if (localDeclarationSymbol && localDeclarationSymbol !== symbol && localDeclarationSymbol.flags & SymbolFlags.BlockScopedVariable) {
                         if (getDeclarationFlagsFromSymbol(localDeclarationSymbol) & NodeFlags.Const) {
                             error(node, Diagnostics.Cannot_redeclare_block_scoped_variable_0, symbolToString(localDeclarationSymbol));
@@ -7217,7 +7221,15 @@ module ts {
             }
         }
 
+        function isBindingPattern(name: DeclarationName) {
+            return name.kind === SyntaxKind.ArrayBindingPattern || name.kind === SyntaxKind.ObjectBindingPattern;
+        }
+
+        // TODO(andersh): Support destructuring
         function checkVariableDeclaration(node: VariableDeclaration | PropertyDeclaration) {
+            if (isBindingPattern(node.name)) {
+                return;
+            }
             checkSourceElement(node.type);
             checkExportsOnMergedDeclarations(node);
 

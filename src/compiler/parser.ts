@@ -240,7 +240,6 @@ module ts {
             case SyntaxKind.PatternDeclaration:
                 return child((<PatternDeclaration>node).propertyName) ||
                     child((<PatternDeclaration>node).name) ||
-                    child((<PatternDeclaration>node).pattern) ||
                     child((<PatternDeclaration>node).initializer);
             case SyntaxKind.ArrayLiteral:
                 return children((<ArrayLiteral>node).elements);
@@ -1652,7 +1651,7 @@ module ts {
                 // It is a SyntaxError if the identifier eval or arguments appears within a FormalParameterList of a 
                 // strict mode FunctionLikeDeclaration or FunctionExpression(13.1) 
                 if (isInStrictMode && isEvalOrArgumentsIdentifier(parameter.name)) {
-                    reportInvalidUseInStrictMode(parameter.name);
+                    reportInvalidUseInStrictMode(<Identifier>parameter.name);
                     return;
                 }
                 else if (parameter.flags & NodeFlags.Rest) {
@@ -3397,14 +3396,14 @@ module ts {
                 var id = parseIdentifier();
                 if (parseOptional(SyntaxKind.ColonToken)) {
                     node.propertyName = id;
-                    parseIdentifierOrPatternOfNode(node, flags);
+                    node.name = parseIdentifierOrPattern(flags);
                 }
                 else {
                     node.name = id;
                 }
             }
             else {
-                parseIdentifierOrPatternOfNode(node, flags);
+                node.name = parseIdentifierOrPattern(flags);
             }
             return finishNode(node);
         }
@@ -3435,23 +3434,21 @@ module ts {
             return token === SyntaxKind.OpenBraceToken || token === SyntaxKind.OpenBracketToken || isIdentifier();
         }
 
-        function parseIdentifierOrPatternOfNode(node: NameOrPatternNode, flags: NodeFlags) {
+        function parseIdentifierOrPattern(flags: NodeFlags): Identifier | BindingPattern {
             if (token === SyntaxKind.OpenBracketToken) {
-                node.pattern = parseArrayBindingPattern(flags);
+                return parseArrayBindingPattern(flags);
             }
-            else if (token === SyntaxKind.OpenBraceToken) {
-                node.pattern = parseObjectBindingPattern(flags);
+            if (token === SyntaxKind.OpenBraceToken) {
+                return parseObjectBindingPattern(flags);
             }
-            else {
-                node.name = parseIdentifier();
-            }
+            return parseIdentifier();
         }
 
         function parseVariableDeclaration(flags: NodeFlags, noIn?: boolean): VariableDeclaration {
             var node = <VariableDeclaration>createNode(SyntaxKind.VariableDeclaration);
             node.flags = flags;
             var errorCountBeforeVariableDeclaration = file.syntacticErrors.length;
-            parseIdentifierOrPatternOfNode(node, flags);
+            node.name = parseIdentifierOrPattern(flags);
             node.type = parseTypeAnnotation();
 
             // Issue any initializer-related errors on the equals token
@@ -3468,7 +3465,7 @@ module ts {
             if (isInStrictMode && isEvalOrArgumentsIdentifier(node.name)) {
                 // It is a SyntaxError if a VariableDeclaration or VariableDeclarationNoIn occurs within strict code 
                 // and its Identifier is eval or arguments 
-                reportInvalidUseInStrictMode(node.name);
+                reportInvalidUseInStrictMode(<Identifier>node.name);
             }
             return finishNode(node);
         }
