@@ -241,6 +241,12 @@ module ts.formatting {
                             indentation -= options.IndentSize;
                             commentIndentation -= options.IndentSize;
                         }
+                        if (shouldIndentChildNodes(node.kind)) {
+                            delta = options.IndentSize;
+                        }
+                        else {
+                            delta = 0;
+                        }
                     }
                 },
                 increaseCommentIndentation: (delta) => {
@@ -362,9 +368,9 @@ module ts.formatting {
             }
 
             function processChildNode(
-                child: Node, 
-                inheritedIndentation: number, 
-                childEffectiveStartLine: number, 
+                child: Node,
+                inheritedIndentation: number,
+                childEffectiveStartLine: number,
                 isListElement: boolean): number {
 
                 if (child.kind === SyntaxKind.Missing) {
@@ -404,6 +410,13 @@ module ts.formatting {
                     }
                 }
 
+                if (isToken(child)) {
+                    var tokenInfo = formattingScanner.readTokenInfo(node);
+                    Debug.assert(tokenInfo.token.end === child.end);
+                    doConsumeTokenAndAdvanceScanner(tokenInfo, node, nodeIndentation);
+                    return inheritedIndentation;
+                }
+
                 if (childIndentationAmount === Indentation.Unknown) {
                     if (isSomeBlock(child.kind)) {
                         // child is indented
@@ -434,17 +447,8 @@ module ts.formatting {
                     childDelta = Math.min(options.IndentSize, delta + childDelta);
                 }
 
-                // ensure that current token is inside child node
-                if (isToken(child)) {
-                    var tokenInfo = formattingScanner.readTokenInfo(node);
-                    Debug.assert(tokenInfo.token.end === child.end);
-                    var childIndentation = getDynamicIndentation(node, childEffectiveStartLine, childIndentationAmount, childIndentationAmount, childDelta);
-                    doConsumeTokenAndAdvanceScanner(tokenInfo, node, childIndentation);
-                }
-                else {
-                    processNode(child, childContextNode, childStart.line, childIndentationAmount, childDelta);
-                    childContextNode = node;
-                }
+                processNode(child, childContextNode, childStart.line, childIndentationAmount, childDelta);
+                childContextNode = node;
                 return inheritedIndentation;
             }
 
