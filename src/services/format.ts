@@ -120,11 +120,8 @@ module ts.formatting {
         return find(sourceFile);
 
         function find(n: Node): Node {
-            if (!n) {
-                return undefined;
-            }
             var candidate = forEachChild(n, c => startEndContainsRange(c.getStart(sourceFile), c.end, range) && c);
-            return find(candidate) || n;
+            return (candidate && find(candidate)) || n;
         }
     }
 
@@ -207,13 +204,8 @@ module ts.formatting {
 
         return edits;
 
-        function getIndentationDelta(node: Node, lineAdded: boolean): number {
-            if (node.parent && SmartIndenter.shouldIndentChildNode(node.parent, node)) {
-                return lineAdded ? options.IndentSize : - options.IndentSize;
-            }
-            return 0;
-        }
-
+        // local functions
+        
         function getDynamicIndentation(node: Node, nodeStartLine: number, indentation: number, commentIndentation: number, delta: number): DynamicIndentation {
             return {
                 getEffectiveCommentIndentation: (line) => {
@@ -240,10 +232,15 @@ module ts.formatting {
                 getCommentIndentation: () => commentIndentation,
                 getDelta: () => delta,
                 recomputeIndentation: (lineAdded) => {
-                    var delta = getIndentationDelta(node, lineAdded);
-                    if (delta) {
-                        indentation += delta;
-                        commentIndentation += delta;
+                    if (node.parent && SmartIndenter.shouldIndentChildNode(node.parent, node)) {
+                        if (lineAdded) {
+                            indentation += options.IndentSize;
+                            commentIndentation += options.IndentSize;
+                        }
+                        else {
+                            indentation -= options.IndentSize;
+                            commentIndentation -= options.IndentSize;
+                        }
                     }
                 },
                 increaseCommentIndentation: (delta) => {
