@@ -17,16 +17,16 @@ module ts.formatting {
         RescanSlashToken
     }
 
-    export function getFormattingScanner(sourceFile: SourceFile, enclosingNode: Node, range: TextRange): FormattingScanner {
+    export function getFormattingScanner(sourceFile: SourceFile, startPos: number, endPos: number): FormattingScanner {
 
         scanner.setText(sourceFile.text);
-        scanner.setTextPos(enclosingNode.pos);
+        scanner.setTextPos(startPos);
 
         var wasNewLine: boolean = true;
         var leadingTrivia: TextRangeWithKind[];
         var trailingTrivia: TextRangeWithKind[];
         
-        var savedStartPos: number;
+        var savedPos: number;
         var lastScanAction: ScanAction;
         var lastTokenInfo: TokenInfo;
 
@@ -43,7 +43,7 @@ module ts.formatting {
 
         function advance(): void {
             lastTokenInfo = undefined;
-            var isStarted = scanner.getStartPos() !== enclosingNode.pos;
+            var isStarted = scanner.getStartPos() !== startPos;
 
             if (isStarted) {
                 if (trailingTrivia) {
@@ -63,9 +63,9 @@ module ts.formatting {
             }
 
             var t: SyntaxKind;
-            var startPos = scanner.getStartPos();
+            var pos = scanner.getStartPos();
 
-            while (startPos < range.end) {
+            while (pos < endPos) {
                 var t = scanner.getToken();
                 if (!isTrivia(t)) {
                     break;
@@ -74,12 +74,12 @@ module ts.formatting {
                 // consume leading trivia
                 scanner.scan();
                 var item = {
-                    pos: startPos,
+                    pos: pos,
                     end: scanner.getStartPos(),
                     kind: t
                 }
 
-                startPos = scanner.getStartPos();
+                pos = scanner.getStartPos();
 
                 if (!leadingTrivia) {
                     leadingTrivia = [];
@@ -87,7 +87,7 @@ module ts.formatting {
                 leadingTrivia.push(item);
             }
 
-            savedStartPos = scanner.getStartPos();
+            savedPos = scanner.getStartPos();
         }
 
         function shouldRescanGreaterThanToken(container: Node): boolean {
@@ -135,13 +135,12 @@ module ts.formatting {
                 return lastTokenInfo;
             }
 
-            if (scanner.getStartPos() !== savedStartPos) {
-                scanner.setTextPos(savedStartPos);
+            if (scanner.getStartPos() !== savedPos) {
+                scanner.setTextPos(savedPos);
                 scanner.scan();
             }
 
             var currentToken = scanner.getToken();
-            var endPos: number;
 
             if (expectedScanAction === ScanAction.RescanGreaterThanToken && currentToken === SyntaxKind.GreaterThanToken) {
                 currentToken = scanner.reScanGreaterToken();
@@ -157,15 +156,13 @@ module ts.formatting {
                 lastScanAction = ScanAction.Scan;
             }
 
-            endPos = scanner.getTextPos();
-
             var token: TextRangeWithKind = {
                 pos: scanner.getStartPos(),
                 end: scanner.getTextPos(),
                 kind: currentToken
             }
 
-            while(scanner.getStartPos() < range.end) {
+            while(scanner.getStartPos() < endPos) {
                 currentToken = scanner.scan();
                 if (!isTrivia(currentToken)) {
                     break;
@@ -199,7 +196,7 @@ module ts.formatting {
         function isOnToken(): boolean {
             var current = (lastTokenInfo && lastTokenInfo.token.kind) ||  scanner.getToken();
             var startPos = (lastTokenInfo && lastTokenInfo.token.pos) || scanner.getStartPos();
-            return startPos < range.end && current !== SyntaxKind.EndOfFileToken && !isTrivia(current);
+            return startPos < endPos && current !== SyntaxKind.EndOfFileToken && !isTrivia(current);
         }
     }
 }

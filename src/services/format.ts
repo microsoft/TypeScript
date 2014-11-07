@@ -185,7 +185,7 @@ module ts.formatting {
         var enclosingNode = findEnclosingNode(originalRange, sourceFile);
         var initialIndentation = SmartIndenter.getIndentationForNode(enclosingNode, originalRange, sourceFile, options);
 
-        var formattingScanner = getFormattingScanner(sourceFile, enclosingNode, originalRange);
+        var formattingScanner = getFormattingScanner(sourceFile, enclosingNode.pos, originalRange.end);
 
         var previousRangeHasError: boolean;
         var previousRange: TextRangeWithKind;
