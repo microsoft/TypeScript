@@ -357,10 +357,7 @@ module ts {
 
             function pushDocCommentLineText(docComments: SymbolDisplayPart[], text: string, blankLineCount: number) {
                 // Add the empty lines in between texts
-                while (blankLineCount) {
-                    docComments.push(textPart(""));
-                    blankLineCount--;
-                }
+                while (blankLineCount--) docComments.push(textPart(""));
                 docComments.push(textPart(text));
             }
 
