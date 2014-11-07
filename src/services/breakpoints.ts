@@ -194,8 +194,9 @@ module ts.BreakpointResolver {
                         // span in statement
                         return spanInNode((<WithStatement>node).statement);
 
-                    // No breakpoint in interface
+                    // No breakpoint in interface, type alias
                     case SyntaxKind.InterfaceDeclaration:
+                    case SyntaxKind.TypeAliasDeclaration:
                         return undefined;
 
                     // Tokens:
