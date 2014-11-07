@@ -224,7 +224,10 @@ module ts {
             return nodeHasTokens((<ExpressionStatement>n).expression);
         }
 
-        if (n.kind === SyntaxKind.EndOfFileToken || n.kind === SyntaxKind.OmittedExpression || n.kind === SyntaxKind.Missing) {
+        if (n.kind === SyntaxKind.EndOfFileToken ||
+            n.kind === SyntaxKind.OmittedExpression ||
+            n.kind === SyntaxKind.Missing ||
+            n.kind === SyntaxKind.Unknown) {
             return false;
         }
 
