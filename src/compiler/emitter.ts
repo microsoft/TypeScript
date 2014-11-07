@@ -1353,8 +1353,19 @@ module ts {
                 emitToken(SyntaxKind.CloseBraceToken, node.clauses.end);
             }
 
-            function isOnSameLine(node1: Node, node2: Node) {
+            function isOnSameLine(node1: Node, node2: Node): boolean {
                 return getLineOfLocalPosition(skipTrivia(currentSourceFile.text, node1.pos)) === getLineOfLocalPosition(skipTrivia(currentSourceFile.text, node2.pos));
+            }
+
+            function isCaseFallThru(node: CaseOrDefaultClause): boolean {
+                var isBreakExists: boolean = false ;
+                isBreakExists = forEach(node.statements, node => {
+                                    if (node.kind === SyntaxKind.BreakStatement) {
+                                        return true;
+                                    }
+                                });
+                
+                return ( node.statements.length === 0 || !isBreakExists );
             }
 
             function emitCaseOrDefaultClause(node: CaseOrDefaultClause) {
@@ -1375,6 +1386,13 @@ module ts {
                     increaseIndent();
                     emitLines(node.statements);
                     decreaseIndent();
+                }
+
+                if ( isCaseFallThru(node) )
+                {
+                    writeLine();
+                    write(" /* falls through */ ");
+                    writeLine();
                 }
             }
 
