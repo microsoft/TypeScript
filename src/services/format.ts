@@ -431,24 +431,7 @@ module ts.formatting {
                     }
                 }
 
-                var increaseIndentation = SmartIndenter.nodeContentIsAlwaysIndented(child.kind);
-                if (!increaseIndentation) {
-                    switch (child.kind) {
-                        case SyntaxKind.IfStatement:
-                        case SyntaxKind.ForInStatement:
-                        case SyntaxKind.ForStatement:
-                        case SyntaxKind.WhileStatement:
-                        case SyntaxKind.DoStatement:
-                        case SyntaxKind.FunctionExpression:
-                        case SyntaxKind.FunctionDeclaration:
-                        case SyntaxKind.Method:
-                        case SyntaxKind.GetAccessor:
-                        case SyntaxKind.SetAccessor:
-                            increaseIndentation = true;
-                            break;
-                    }
-                }
-                if (increaseIndentation) {
+                if (shouldIndentChildNodes(child.kind)) {
                     childDelta = options.IndentSize;
                 }
 
