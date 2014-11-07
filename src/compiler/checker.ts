@@ -6,7 +6,6 @@
 /// <reference path="emitter.ts"/>
 
 module ts {
-
     var nextSymbolId = 1;
     var nextNodeId = 1;
     var nextMergeId = 1;
@@ -56,6 +55,8 @@ module ts {
 
         return stringWriters.pop();
     }
+
+    type CallLikeExpression = CallExpression | TaggedTemplateExpression;
 
     /// fullTypeCheck denotes if this instance of the typechecker will be used to get semantic diagnostics.
     /// If fullTypeCheck === true,  then the typechecker should do every possible check to produce all errors
@@ -5183,7 +5184,7 @@ module ts {
             return unknownType;
         }
 
-        function resolveUntypedCall(node: CallExpression | TaggedTemplateExpression): Signature {
+        function resolveUntypedCall(node: CallLikeExpression): Signature {
             if (node.kind === SyntaxKind.TaggedTemplateExpression) {
                 checkExpression((<TaggedTemplateExpression>node).template);
             }
@@ -5195,52 +5196,78 @@ module ts {
             return anySignature;
         }
 
-        function resolveErrorCall(node: CallExpression | TaggedTemplateExpression): Signature {
+        function resolveErrorCall(node: CallLikeExpression): Signature {
             resolveUntypedCall(node);
             return unknownSignature;
         }
 
-        function signatureHasCorrectArity(node: CallExpression | TaggedTemplateExpression, args: Expression[], signature: Signature): boolean {
-            var isTaggedTemplate = node.kind === SyntaxKind.TaggedTemplateExpression;
-
-            if (!isTaggedTemplate && !(<CallExpression>node).arguments) {
-                // This only happens when we have something of the form:
-                //     new C
-                //
-                Debug.assert(node.kind === SyntaxKind.NewExpression);
-                return signature.minArgumentCount === 0;
-            }
-
-            // For IDE scenarios, since we may have an incomplete call, we make two modifications
-            // to arity checking.
-            //    1. A trailing comma is tantamount to adding another argument
-            //    2. If the call is incomplete (no closing paren) allow fewer arguments than expected
-            var numberOfArgs = !isTaggedTemplate && (<CallExpression>node).arguments.hasTrailingComma
-                ? args.length + 1
-                : args.length;
-            var hasTooManyArguments = !signature.hasRestParameter && numberOfArgs > signature.parameters.length;
-            var hasRightNumberOfTypeArguments = !(<CallExpression>node).typeArguments ||
-                (signature.typeParameters && (<CallExpression>node).typeArguments.length === signature.typeParameters.length);
-
-            if (hasTooManyArguments || !hasRightNumberOfTypeArguments) {
-                return false;
-            }
-
-            // If we are missing the close paren, the call is incomplete, and we should skip
-            // the lower bound check.
+        function hasCorrectArity(node: CallLikeExpression, args: Expression[], signature: Signature) {
+            var adjustedArgCount: number;
+            var typeArguments: NodeArray<TypeNode>;
             var callIsIncomplete = false;
-            if (isTaggedTemplate) {
-                var template = (<TaggedTemplateExpression>node).template;
-                if (template.kind === SyntaxKind.TemplateExpression) {
-                    var lastSpan = lastOrUndefined((<TemplateExpression>template).templateSpans)
+
+            if (node.kind === SyntaxKind.TaggedTemplateExpression) {
+                var tagExpression = <TaggedTemplateExpression>node;
+
+                adjustedArgCount = args.length;
+                typeArguments = undefined;
+
+                if (tagExpression.kind === SyntaxKind.TemplateExpression) {
+                    // If a tagged template expression lacks a tail literal, the call is incomplete.
+                    var template = <TemplateExpression>tagExpression.template;
+                    var lastSpan = lastOrUndefined(template.templateSpans);
+                    Debug.assert(lastSpan !== undefined); // we should always have at least one span.
                     callIsIncomplete = lastSpan === undefined || lastSpan.literal.kind !== SyntaxKind.TemplateTail;
                 }
             }
             else {
-                callIsIncomplete = (<CallExpression>node).arguments.end === node.end;
+                var callExpression = <CallExpression>node;
+                if (!callExpression.arguments) {
+                    // This only happens when we have something of the form: 'new C'
+                    Debug.assert(callExpression.kind === SyntaxKind.NewExpression);
+
+                    return signature.minArgumentCount === 0;
+                }
+                else {
+                    // For IDE scenarios we may have an incomplete call, so a trailing comma is tantamount to adding another argument.
+                    adjustedArgCount = callExpression.arguments.hasTrailingComma ? args.length + 1 : args.length;
+
+                    // If we are missing the close paren, the call is incomplete.
+                    callIsIncomplete = (<CallExpression>callExpression).arguments.end === callExpression.end;
+                }
+
+                typeArguments = callExpression.typeArguments;
             }
-            var hasEnoughArguments = numberOfArgs >= signature.minArgumentCount;
-            return callIsIncomplete || hasEnoughArguments;
+
+            return checkArity(adjustedArgCount, typeArguments, callIsIncomplete, signature);
+
+            /**
+             * @param adjustedArgCount The "apparent" number of arguments that we will have in this call.
+             * @param typeArguments    Type arguments node of the call if it exists; undefined otherwise.
+             * @param callIsIncomplete Whether or not a call is unfinished, and we should be "lenient" when we have too few arguments.
+             * @param signature        The signature whose arity we are comparing.
+             */
+            function checkArity(adjustedArgCount: number,
+                                typeArguments: NodeArray<TypeNode>,
+                                callIsIncomplete: boolean,
+                                signature: Signature): boolean {
+                // Too many arguments implies incorrect arity.
+                if (!signature.hasRestParameter && adjustedArgCount > signature.parameters.length) {
+                    return false;
+                }
+
+                // If the user supplied type arguments, but the number of type arguments does not match
+                // the declared number of type parameters, the call has an incorrect arity.
+                var hasRightNumberOfTypeArgs = !typeArguments ||
+                    (signature.typeParameters && typeArguments.length === signature.typeParameters.length);
+                if (!hasRightNumberOfTypeArgs) {
+                    return false;
+                }
+
+                // If the call is incomplete, we should skip the lower bound check.
+                var hasEnoughArguments = adjustedArgCount >= signature.minArgumentCount;
+                return callIsIncomplete || hasEnoughArguments;
+            }
         }
 
         // If type has a single call signature and no other members, return that signature. Otherwise, return undefined.
@@ -5332,7 +5359,7 @@ module ts {
             return typeArgumentsAreAssignable;
         }
 
-        function checkApplicableSignature(node: CallExpression | TaggedTemplateExpression, args: Node[], signature: Signature, relation: Map<Ternary>, excludeArgument: boolean[], reportErrors: boolean) {
+        function checkApplicableSignature(node: CallLikeExpression, args: Node[], signature: Signature, relation: Map<Ternary>, excludeArgument: boolean[], reportErrors: boolean) {
             for (var i = 0; i < args.length; i++) {
                 var arg = args[i];
                 var argType: Type;
@@ -5371,16 +5398,18 @@ module ts {
          *
          * If 'node' is a CallExpression or a NewExpression, then its argument list is returned.
          * If 'node' is a TaggedTemplateExpression, a new argument list is constructed from the substitution
-         *    expressions, where the first element of the argument list is the template portion for error reporting purposes.
+         *    expressions, where the first element of the list is the template for error reporting purposes.
          */
-        function getEffectiveCallArguments(node: CallExpression | TaggedTemplateExpression): Expression[] {
+        function getEffectiveCallArguments(node: CallLikeExpression): Expression[] {
             var args: Expression[];
             if (node.kind === SyntaxKind.TaggedTemplateExpression) {
                 var template = (<TaggedTemplateExpression>node).template;
                 args = [template];
 
                 if (template.kind === SyntaxKind.TemplateExpression) {
-                    args.push.apply(args, map((<TemplateExpression>template).templateSpans, span => span.expression));
+                    forEach((<TemplateExpression>template).templateSpans, span => {
+                        args.push(span.expression);
+                    });
                 }
             }
             else {
@@ -5390,7 +5419,7 @@ module ts {
             return args;
         }
 
-        function resolveCall(node: CallExpression | TaggedTemplateExpression, signatures: Signature[], candidatesOutArray: Signature[]): Signature {
+        function resolveCall(node: CallLikeExpression, signatures: Signature[], candidatesOutArray: Signature[]): Signature {
             var typeArguments = (<CallExpression>node).typeArguments;
             forEach(typeArguments, checkSourceElement);
 
@@ -5410,7 +5439,12 @@ module ts {
             //    - undefined: the argument at 'i' is *not* susceptible to permanent contextual typing.
             //    - false:     the argument at 'i' *was* and *has been* permanently contextually typed.
             //
-            // If the expression is a tagged template, then the first argument is implicitly the "cooked" strings array.
+            // The idea is that we will perform type argument inference & assignability checking once
+            // without using the susceptible parameters, and once more for each susceptible parameter,
+            // contextually typing each as we go along.
+            //
+            // For a tagged template, then the first argument be 'undefined' if necessary
+            // because it represents a TemplateStringsArray.
             var excludeArgument: boolean[];
             for (var i = isTaggedTemplate ? 1 : 0; i < args.length; i++) {
                 if (isContextSensitiveExpression(args[i])) {
@@ -5484,7 +5518,7 @@ module ts {
                 checkApplicableSignature(node, args, candidateForArgumentError, assignableRelation, /*excludeArgument*/ undefined, /*reportErrors*/ true);
             }
             else if (candidateForTypeArgumentError) {
-                if ((<CallExpression>node).typeArguments) {
+                if (!isTaggedTemplate && (<CallExpression>node).typeArguments) {
                     checkTypeArguments(candidateForTypeArgumentError, (<CallExpression>node).typeArguments, [], /*reportErrors*/ true)
                 }
                 else {
@@ -5510,7 +5544,7 @@ module ts {
             //  f({ |
             if (!fullTypeCheck) {
                 for (var i = 0, n = candidates.length; i < n; i++) {
-                    if (signatureHasCorrectArity(node, args, candidates[i])) {
+                    if (hasCorrectArity(node, args, candidates[i])) {
                         return candidates[i];
                     }
                 }
@@ -5520,7 +5554,7 @@ module ts {
 
             function chooseOverload(candidates: Signature[], relation: Map<Ternary>, excludeArgument: boolean[]) {
                 for (var i = 0; i < candidates.length; i++) {
-                    if (!signatureHasCorrectArity(node, args, candidates[i])) {
+                    if (!hasCorrectArity(node, args, candidates[i])) {
                         continue;
                     }
 
@@ -5751,7 +5785,7 @@ module ts {
 
         // candidatesOutArray is passed by signature help in the language service, and collectCandidates
         // must fill it up with the appropriate candidate signatures
-        function getResolvedSignature(node: CallExpression | TaggedTemplateExpression, candidatesOutArray?: Signature[]): Signature {
+        function getResolvedSignature(node: CallLikeExpression, candidatesOutArray?: Signature[]): Signature {
             var links = getNodeLinks(node);
             // If getResolvedSignature has already been called, we will have cached the resolvedSignature.
             // However, it is possible that either candidatesOutArray was not passed in the first time,
