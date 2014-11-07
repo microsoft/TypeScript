@@ -85,7 +85,7 @@ module ts {
             checkProgram: checkProgram,
             emitFiles: invokeEmitter,
             getParentOfSymbol: getParentOfSymbol,
-            getTypeOfSymbol: getTypeOfSymbol,
+            getNarrowedTypeOfSymbol: getNarrowedTypeOfSymbol,
             getDeclaredTypeOfSymbol: getDeclaredTypeOfSymbol,
             getPropertiesOfType: getPropertiesOfType,
             getPropertyOfType: getPropertyOfType,
