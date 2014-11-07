@@ -517,17 +517,6 @@ module ts {
             };
         }
 
-        private realizeDiagnosticWithFileName(diagnostic: Diagnostic): { fileName: string; message: string; start: number; length: number; category: string; } {
-            return {
-                fileName: diagnostic.file.filename,
-                message: diagnostic.messageText,
-                start: diagnostic.start,
-                length: diagnostic.length,
-                /// TODO: no need for the tolowerCase call
-                category: DiagnosticCategory[diagnostic.category].toLowerCase()
-            };
-        }
-
         public getSyntacticClassifications(fileName: string, start: number, length: number): string {
             return this.forwardJSONCall(
                 "getSyntacticClassifications('" + fileName + "', " + start + ", " + length + ")",
@@ -569,7 +558,7 @@ module ts {
                 "getCompilerOptionsDiagnostics()",
                 () => {
                     var errors = this.languageService.getCompilerOptionsDiagnostics();
-                    return errors.map(d => this.realizeDiagnosticWithFileName(d))
+                    return errors.map(LanguageServiceShimObject.realizeDiagnostic)
                 });
         }
 

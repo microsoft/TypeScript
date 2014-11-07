@@ -352,7 +352,8 @@ module ts {
             function isName(pos: number, end: number, sourceFile: SourceFile, name: string) {
                 return pos + name.length < end &&
                     sourceFile.text.substr(pos, name.length) === name &&
-                    isWhiteSpace(sourceFile.text.charCodeAt(pos + name.length));
+                    (isWhiteSpace(sourceFile.text.charCodeAt(pos + name.length)) ||
+                    isLineBreak(sourceFile.text.charCodeAt(pos + name.length)));
             }
 
             function isParamTag(pos: number, end: number, sourceFile: SourceFile) {
@@ -360,9 +361,16 @@ module ts {
                 return isName(pos, end, sourceFile, paramTag);
             }
 
+            function pushDocCommentLineText(docComments: SymbolDisplayPart[], text: string, blankLineCount: number) {
+                // Add the empty lines in between texts
+                while (blankLineCount--) docComments.push(textPart(""));
+                docComments.push(textPart(text));
+            }
+
             function getCleanedJsDocComment(pos: number, end: number, sourceFile: SourceFile) {
                 var spacesToRemoveAfterAsterisk: number;
                 var docComments: SymbolDisplayPart[] = [];
+                var blankLineCount = 0;
                 var isInParamTag = false;
 
                 while (pos < end) {
@@ -411,7 +419,12 @@ module ts {
                     // Continue with next line
                     pos = consumeLineBreaks(pos, end, sourceFile);
                     if (docCommentTextOfLine) {
-                        docComments.push(textPart(docCommentTextOfLine));
+                        pushDocCommentLineText(docComments, docCommentTextOfLine, blankLineCount);
+                        blankLineCount = 0;
+                    }
+                    else if (!isInParamTag && docComments.length) { 
+                        // This is blank line when there is text already parsed
+                        blankLineCount++;
                     }
                 }
 
@@ -423,6 +436,8 @@ module ts {
                 var paramDocComments: SymbolDisplayPart[] = [];
                 while (pos < end) {
                     if (isParamTag(pos, end, sourceFile)) {
+                        var blankLineCount = 0;
+                        var recordedParamTag = false;
                         // Consume leading spaces 
                         pos = consumeWhiteSpaces(pos + paramTag.length);
                         if (pos >= end) {
@@ -484,8 +499,13 @@ module ts {
                                 // at line break, set this comment line text and go to next line 
                                 if (isLineBreak(ch)) {
                                     if (paramHelpString) {
-                                        paramDocComments.push(textPart(paramHelpString));
+                                        pushDocCommentLineText(paramDocComments, paramHelpString, blankLineCount);
                                         paramHelpString = "";
+                                        blankLineCount = 0;
+                                        recordedParamTag = true;
+                                    }
+                                    else if (recordedParamTag) {
+                                        blankLineCount++;
                                     }
 
                                     // Get the pos after cleaning start of the line
@@ -506,7 +526,7 @@ module ts {
 
                             // If there is param help text, add it top the doc comments
                             if (paramHelpString) {
-                                paramDocComments.push(textPart(paramHelpString));
+                                pushDocCommentLineText(paramDocComments, paramHelpString, blankLineCount);
                             }
                             paramHelpStringMargin = undefined;
                         }
@@ -2682,6 +2702,7 @@ module ts {
                         case SyntaxKind.VarKeyword:
                         case SyntaxKind.GetKeyword:
                         case SyntaxKind.SetKeyword:
+                        case SyntaxKind.ImportKeyword:
                             return true;
                     }
 
@@ -2852,10 +2873,10 @@ module ts {
 
             if (flags & SymbolFlags.Property) {
                 if (flags & SymbolFlags.UnionProperty) {
-                    // If union property is result of union of non method (property/accessors), it is labeled as property
+                    // If union property is result of union of non method (property/accessors/variables), it is labeled as property
                     var unionPropertyKind = forEach(typeInfoResolver.getRootSymbols(symbol), rootSymbol => {
                         var rootSymbolFlags = rootSymbol.getFlags();
-                        if (rootSymbolFlags & (SymbolFlags.Property | SymbolFlags.GetAccessor | SymbolFlags.SetAccessor)) {
+                        if (rootSymbolFlags & (SymbolFlags.PropertyOrAccessor | SymbolFlags.Variable)) {
                             return ScriptElementKind.memberVariableElement;
                         }
                         Debug.assert(!!(rootSymbolFlags & SymbolFlags.Method));
@@ -3129,13 +3150,13 @@ module ts {
                 displayParts.push(keywordPart(SyntaxKind.ImportKeyword));
                 displayParts.push(spacePart());
                 addFullSymbolName(symbol);
-                displayParts.push(spacePart());
-                displayParts.push(punctuationPart(SyntaxKind.EqualsToken));
-                displayParts.push(spacePart());
                 ts.forEach(symbol.declarations, declaration => {
                     if (declaration.kind === SyntaxKind.ImportDeclaration) {
                         var importDeclaration = <ImportDeclaration>declaration;
                         if (importDeclaration.externalModuleName) {
+                            displayParts.push(spacePart());
+                            displayParts.push(punctuationPart(SyntaxKind.EqualsToken));
+                            displayParts.push(spacePart());
                             displayParts.push(keywordPart(SyntaxKind.RequireKeyword));
                             displayParts.push(punctuationPart(SyntaxKind.OpenParenToken));
                             displayParts.push(displayPart(getTextOfNode(importDeclaration.externalModuleName), SymbolDisplayPartKind.stringLiteral));
@@ -3143,7 +3164,12 @@ module ts {
                         }
                         else {
                             var internalAliasSymbol = typeResolver.getSymbolInfo(importDeclaration.entityName);
-                            addFullSymbolName(internalAliasSymbol, enclosingDeclaration);
+                            if (internalAliasSymbol) {
+                                displayParts.push(spacePart());
+                                displayParts.push(punctuationPart(SyntaxKind.EqualsToken));
+                                displayParts.push(spacePart());
+                                addFullSymbolName(internalAliasSymbol, enclosingDeclaration);
+                            }
                         }
                         return true;
                     }
