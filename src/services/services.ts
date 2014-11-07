@@ -2378,7 +2378,7 @@ module ts {
             return undefined;
         }
 
-        function createCompletionEntry(symbol: Symbol, typeChecker: TypeChecker): CompletionEntry {
+        function createCompletionEntry(symbol: Symbol, typeChecker: TypeChecker, location: Node): CompletionEntry {
             // Try to get a valid display name for this symbol, if we could not find one, then ignore it. 
             // We would like to only show things that can be added after a dot, so for instance numeric properties can
             // not be accessed with a dot (a.1 <- invalid)
@@ -2393,7 +2393,7 @@ module ts {
             //               We COULD also just do what 'getSymbolModifiers' does, which is to use the first declaration.
             return {
                 name: displayName,
-                kind: getSymbolKind(symbol, typeChecker),
+                kind: getSymbolKind(symbol, typeChecker, location),
                 kindModifiers: getSymbolModifiers(symbol)
             };
         }
@@ -2464,6 +2464,7 @@ module ts {
             };
             host.log("getCompletionsAtPosition: Syntactic work: " + (new Date().getTime() - syntacticStart));
 
+            var location = getTouchingPropertyName(sourceFile, position);
             // Populate the completion list
             var semanticStart = new Date().getTime();
             if (isRightOfDot) {
@@ -2545,7 +2546,7 @@ module ts {
             function getCompletionEntriesFromSymbols(symbols: Symbol[], session: CompletionSession): void {
                 var start = new Date().getTime();
                 forEach(symbols, symbol => {
-                    var entry = createCompletionEntry(symbol, session.typeChecker);
+                    var entry = createCompletionEntry(symbol, session.typeChecker, location);
                     if (entry && !lookUp(session.symbols, entry.name)) {
                         session.entries.push(entry);
                         session.symbols[entry.name] = symbol;
@@ -2757,14 +2758,13 @@ module ts {
 
             var symbol = lookUp(activeCompletionSession.symbols, entryName);
             if (symbol) {
-                var type = session.typeChecker.getTypeOfSymbol(symbol);
-                Debug.assert(type !== undefined, "Could not find type for symbol");
-                var completionEntry = createCompletionEntry(symbol, session.typeChecker);
+                var location = getTouchingPropertyName(sourceFile, position);
+                var completionEntry = createCompletionEntry(symbol, session.typeChecker, location);
                 // TODO(drosen): Right now we just permit *all* semantic meanings when calling 'getSymbolKind'
                 //               which is permissible given that it is backwards compatible; but really we should consider
                 //               passing the meaning for the node so that we don't report that a suggestion for a value is an interface.
                 //               We COULD also just do what 'getSymbolModifiers' does, which is to use the first declaration.
-                var location = getTouchingPropertyName(sourceFile, position);
+                Debug.assert(session.typeChecker.getNarrowedTypeOfSymbol(symbol, location) !== undefined, "Could not find type for symbol");
                 var displayPartsDocumentationsAndSymbolKind = getSymbolDisplayPartsDocumentationAndSymbolKind(symbol, getSourceFile(filename), location, session.typeChecker, location, SemanticMeaning.All);
                 return {
                     name: entryName,
@@ -2809,7 +2809,7 @@ module ts {
         }
 
         // TODO(drosen): use contextual SemanticMeaning.
-        function getSymbolKind(symbol: Symbol, typeResolver: TypeChecker): string {
+        function getSymbolKind(symbol: Symbol, typeResolver: TypeChecker, location?: Node): string {
             var flags = symbol.getFlags();
 
             if (flags & SymbolFlags.Class) return ScriptElementKind.classElement;
@@ -2818,7 +2818,7 @@ module ts {
             if (flags & SymbolFlags.Interface) return ScriptElementKind.interfaceElement;
             if (flags & SymbolFlags.TypeParameter) return ScriptElementKind.typeParameterElement;
             
-            var result = getSymbolKindOfConstructorPropertyMethodAccessorFunctionOrVar(symbol, flags, typeResolver);
+            var result = getSymbolKindOfConstructorPropertyMethodAccessorFunctionOrVar(symbol, flags, typeResolver, location);
             if (result === ScriptElementKind.unknown) {
                 if (flags & SymbolFlags.TypeParameter) return ScriptElementKind.typeParameterElement;
                 if (flags & SymbolFlags.EnumMember) return ScriptElementKind.variableElement;
@@ -2828,7 +2828,7 @@ module ts {
             return result;
         }
 
-        function getSymbolKindOfConstructorPropertyMethodAccessorFunctionOrVar(symbol: Symbol, flags: SymbolFlags, typeResolver: TypeChecker) {
+        function getSymbolKindOfConstructorPropertyMethodAccessorFunctionOrVar(symbol: Symbol, flags: SymbolFlags, typeResolver: TypeChecker, location: Node) {
             if (typeResolver.isUndefinedSymbol(symbol)) {
                 return ScriptElementKind.variableElement;
             }
@@ -2852,15 +2852,24 @@ module ts {
 
             if (flags & SymbolFlags.Property) {
                 if (flags & SymbolFlags.UnionProperty) {
-                    return forEach(typeInfoResolver.getRootSymbols(symbol), rootSymbol => {
+                    // If union property is result of union of non method (property/accessors), it is labeled as property
+                    var unionPropertyKind = forEach(typeInfoResolver.getRootSymbols(symbol), rootSymbol => {
                         var rootSymbolFlags = rootSymbol.getFlags();
-                        if (rootSymbolFlags & SymbolFlags.Property) {
+                        if (rootSymbolFlags & (SymbolFlags.Property | SymbolFlags.GetAccessor | SymbolFlags.SetAccessor)) {
                             return ScriptElementKind.memberVariableElement;
                         }
-                        if (rootSymbolFlags & SymbolFlags.GetAccessor) return ScriptElementKind.memberVariableElement;
-                        if (rootSymbolFlags & SymbolFlags.SetAccessor) return ScriptElementKind.memberVariableElement;
-                        Debug.assert((rootSymbolFlags & SymbolFlags.Method) !== undefined);
-                    }) || ScriptElementKind.memberFunctionElement;
+                        Debug.assert(!!(rootSymbolFlags & SymbolFlags.Method));
+                    });
+                    if (!unionPropertyKind) {
+                        // If this was union of all methods, 
+                        //make sure it has call signatures before we can label it as method
+                        var typeOfUnionProperty = typeInfoResolver.getNarrowedTypeOfSymbol(symbol, location);
+                        if (typeOfUnionProperty.getCallSignatures().length) {
+                            return ScriptElementKind.memberFunctionElement;
+                        }
+                        return ScriptElementKind.memberVariableElement;
+                    }
+                    return unionPropertyKind;
                 }
                 return ScriptElementKind.memberVariableElement;
             }
@@ -2918,7 +2927,7 @@ module ts {
             var displayParts: SymbolDisplayPart[] = [];
             var documentation: SymbolDisplayPart[];
             var symbolFlags = symbol.flags;
-            var symbolKind = getSymbolKindOfConstructorPropertyMethodAccessorFunctionOrVar(symbol, symbolFlags, typeResolver);
+            var symbolKind = getSymbolKindOfConstructorPropertyMethodAccessorFunctionOrVar(symbol, symbolFlags, typeResolver, location);
             var hasAddedSymbolInfo: boolean;
             // Class at constructor site need to be shown as constructor apart from property,method, vars
             if (symbolKind !== ScriptElementKind.unknown || symbolFlags & SymbolFlags.Class || symbolFlags & SymbolFlags.Import) {
@@ -2927,7 +2936,7 @@ module ts {
                     symbolKind = ScriptElementKind.memberVariableElement;
                 }
 
-                var type = typeResolver.getTypeOfSymbol(symbol);
+                var type = typeResolver.getNarrowedTypeOfSymbol(symbol, location);
                 if (type) {
                     if (location.parent && location.parent.kind === SyntaxKind.PropertyAccess) {
                         var right = (<PropertyAccess>location.parent).right;
@@ -3173,7 +3182,7 @@ module ts {
                     }
                 }
                 else {
-                    symbolKind = getSymbolKind(symbol, typeResolver);
+                    symbolKind = getSymbolKind(symbol, typeResolver, location);
                 }
             }
 
