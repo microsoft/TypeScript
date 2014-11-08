@@ -3507,6 +3507,10 @@ module ts {
                     if (hasKind(node.parent, SyntaxKind.GetAccessor) || hasKind(node.parent, SyntaxKind.SetAccessor)) {
                         return getGetAndSetOccurrences(<AccessorDeclaration>node.parent);
                     }
+                default:
+                    if (isModifier(node.kind) && node.parent && isDeclaration(node.parent)) {
+                        return getModifierOccurrences(node.kind, node.parent);
+                    }
             }
 
             return undefined;
@@ -3850,6 +3854,72 @@ module ts {
 
                     if (accessor) {
                         forEach(accessor.getChildren(), child => pushKeywordIf(keywords, child, SyntaxKind.GetKeyword, SyntaxKind.SetKeyword));
+                    }
+                }
+            }
+
+            function getModifierOccurrences(modifier: SyntaxKind, exportedDeclaration: Declaration) {
+                var container = exportedDeclaration.parent;
+
+                // Make sure we only highlight the keyword when it makes sense to do so.
+                if (exportedDeclaration.flags & NodeFlags.AccessibilityModifier) {
+                    if (!(hasKind(container, SyntaxKind.ClassDeclaration) ||
+                        (exportedDeclaration.kind === SyntaxKind.Parameter && hasKind(container, SyntaxKind.Constructor)))) {
+                        return undefined;
+                    }
+                }
+                else if (exportedDeclaration.flags & NodeFlags.Static) {
+                    if (!(hasKind(container, SyntaxKind.ClassDeclaration))) {
+                        return undefined;
+                    }
+                }
+                else if (exportedDeclaration.flags & (NodeFlags.Export | NodeFlags.Ambient)) {
+                    if (!(hasKind(container, SyntaxKind.ModuleBlock) || hasKind(container, SyntaxKind.SourceFile))) {
+                        return undefined;
+                    }
+                }
+
+                var keywords: Node[] = [];
+
+                var modifierFlag: NodeFlags = getFlagFromModifier(modifier);
+
+                var nodes: Node[];
+
+                if (container.kind === SyntaxKind.ModuleBlock) {
+                    nodes = (<Block>container).statements;
+                }
+                else if (container.kind === SyntaxKind.ClassDeclaration) {
+                    nodes = (<ClassDeclaration>container).members;
+                }
+                else if (container.kind === SyntaxKind.Constructor) {
+                    nodes = (<Node[]>(<ConstructorDeclaration>container).parameters).concat(
+                        (<ClassDeclaration>container.parent).members);
+                }
+
+                forEach(nodes, node => {
+                    if (node.flags & modifierFlag) {
+                        forEach(node.getChildren(), child => pushKeywordIf(keywords, child, modifier));
+                    }
+                });
+
+                return map(keywords, getReferenceEntryFromNode);
+
+                function getFlagFromModifier(modifier: SyntaxKind) {
+                    switch (modifier) {
+                        case SyntaxKind.PublicKeyword:
+                            return NodeFlags.Public;
+                        case SyntaxKind.PrivateKeyword:
+                            return NodeFlags.Private;
+                        case SyntaxKind.ProtectedKeyword:
+                            return NodeFlags.Protected;
+                        case SyntaxKind.StaticKeyword:
+                            return NodeFlags.Static;
+                        case SyntaxKind.ExportKeyword:
+                            return NodeFlags.Export;
+                        case SyntaxKind.DeclareKeyword:
+                            return NodeFlags.Ambient;
+                        default:
+                            Debug.fail();
                     }
                 }
             }
