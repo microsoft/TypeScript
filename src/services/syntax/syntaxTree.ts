@@ -556,7 +556,8 @@ module TypeScript {
         }
 
         public visitMethodSignature(node: MethodSignatureSyntax): void {
-            if (this.checkForTemplatePropertyName(node.propertyName)) {
+            if (this.checkForDisallowedTemplatePropertyName(node.propertyName) ||
+                this.checkForDisallowedComputedPropertyName(node.propertyName)) {
                 return;
             }
 
@@ -564,7 +565,8 @@ module TypeScript {
         }
 
         public visitPropertySignature(node: PropertySignatureSyntax): void {
-            if (this.checkForTemplatePropertyName(node.propertyName)) {
+            if (this.checkForDisallowedTemplatePropertyName(node.propertyName) ||
+                this.checkForDisallowedComputedPropertyName(node.propertyName)) {
                 return;
             }
 
@@ -573,7 +575,7 @@ module TypeScript {
 
         public visitMemberFunctionDeclaration(node: MemberFunctionDeclarationSyntax): void {
             if (this.checkClassElementModifiers(node.modifiers) ||
-                this.checkForTemplatePropertyName(node.propertyName)) {
+                this.checkForDisallowedTemplatePropertyName(node.propertyName)) {
                 return;
             }
 
@@ -624,12 +626,12 @@ module TypeScript {
 
         public visitGetAccessor(node: GetAccessorSyntax): void {
             if (this.checkForAccessorDeclarationInAmbientContext(node) ||
-                this.checkEcmaScriptVersionIsAtLeast(node.propertyName, ts.ScriptTarget.ES5, DiagnosticCode.Accessors_are_only_available_when_targeting_ECMAScript_5_and_higher) ||
+                this.checkEcmaScriptVersionIsAtLeast(node.getKeyword, ts.ScriptTarget.ES5, DiagnosticCode.Accessors_are_only_available_when_targeting_ECMAScript_5_and_higher) ||
                 this.checkForDisallowedModifiers(node.modifiers) ||
                 this.checkClassElementModifiers(node.modifiers) ||
                 this.checkForDisallowedAccessorTypeParameters(node.callSignature) ||
                 this.checkGetAccessorParameter(node) ||
-                this.checkForTemplatePropertyName(node.propertyName)) {
+                this.checkForDisallowedTemplatePropertyName(node.propertyName)) {
                 return;
             }
 
@@ -691,7 +693,7 @@ module TypeScript {
         }
 
         public visitSimplePropertyAssignment(node: SimplePropertyAssignmentSyntax): void {
-            if (this.checkForTemplatePropertyName(node.propertyName)) {
+            if (this.checkForDisallowedTemplatePropertyName(node.propertyName)) {
                 return;
             }
 
@@ -700,13 +702,13 @@ module TypeScript {
 
         public visitSetAccessor(node: SetAccessorSyntax): void {
             if (this.checkForAccessorDeclarationInAmbientContext(node) ||
-                this.checkEcmaScriptVersionIsAtLeast(node.propertyName, ts.ScriptTarget.ES5, DiagnosticCode.Accessors_are_only_available_when_targeting_ECMAScript_5_and_higher) ||
+                this.checkEcmaScriptVersionIsAtLeast(node.setKeyword, ts.ScriptTarget.ES5, DiagnosticCode.Accessors_are_only_available_when_targeting_ECMAScript_5_and_higher) ||
                 this.checkForDisallowedModifiers(node.modifiers) ||
                 this.checkClassElementModifiers(node.modifiers) ||
                 this.checkForDisallowedAccessorTypeParameters(node.callSignature) ||
                 this.checkForDisallowedSetAccessorTypeAnnotation(node) ||
                 this.checkSetAccessorParameter(node) ||
-                this.checkForTemplatePropertyName(node.propertyName)) {
+                this.checkForDisallowedTemplatePropertyName(node.propertyName)) {
                 return;
             }
 
@@ -747,7 +749,8 @@ module TypeScript {
         }
 
         public visitEnumElement(node: EnumElementSyntax): void {
-            if (this.checkForTemplatePropertyName(node.propertyName)) {
+            if (this.checkForDisallowedTemplatePropertyName(node.propertyName) ||
+                this.checkForDisallowedComputedPropertyName(node.propertyName)) {
                 return;
             }
 
@@ -1338,7 +1341,7 @@ module TypeScript {
         }
 
         public visitFunctionPropertyAssignment(node: FunctionPropertyAssignmentSyntax): void {
-            if (this.checkForTemplatePropertyName(node.propertyName)) {
+            if (this.checkForDisallowedTemplatePropertyName(node.propertyName)) {
                 return;
             }
 
@@ -1410,16 +1413,25 @@ module TypeScript {
         public visitVariableDeclarator(node: VariableDeclaratorSyntax): void {
             if (this.checkVariableDeclaratorInitializer(node) ||
                 this.checkVariableDeclaratorIdentifier(node) ||
-                this.checkForTemplatePropertyName(node.propertyName)) {
+                this.checkForDisallowedTemplatePropertyName(node.propertyName)) {
                 return;
             }
 
             super.visitVariableDeclarator(node);
         }
 
-        private checkForTemplatePropertyName(token: ISyntaxToken): boolean {
-            if (token.kind === SyntaxKind.NoSubstitutionTemplateToken) {
-                this.pushDiagnostic(token, DiagnosticCode.Template_literal_cannot_be_used_as_an_element_name);
+        private checkForDisallowedTemplatePropertyName(propertyName: IPropertyNameSyntax): boolean {
+            if (propertyName.kind === SyntaxKind.NoSubstitutionTemplateToken) {
+                this.pushDiagnostic(propertyName, DiagnosticCode.Template_literal_cannot_be_used_as_an_element_name);
+                return true;
+            }
+
+            return false;
+        }
+
+        private checkForDisallowedComputedPropertyName(propertyName: IPropertyNameSyntax): boolean {
+            if (propertyName.kind === SyntaxKind.ComputedPropertyName) {
+                this.pushDiagnostic(propertyName, DiagnosticCode.Computed_property_names_cannot_be_used_here);
                 return true;
             }
 
@@ -1428,7 +1440,8 @@ module TypeScript {
 
         private checkVariableDeclaratorIdentifier(node: VariableDeclaratorSyntax): boolean {
             if (node.parent.kind !== SyntaxKind.MemberVariableDeclaration) {
-                if (this.checkForDisallowedEvalOrArguments(node, node.propertyName)) {
+                Debug.assert(isToken(node.propertyName), "A normal variable declarator must always have a token for a name.");
+                if (this.checkForDisallowedEvalOrArguments(node, <ISyntaxToken>node.propertyName)) {
                     return true;
                 }
             }
