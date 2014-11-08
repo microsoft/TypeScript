@@ -2189,10 +2189,6 @@ module FourSlash {
             return result;
         }
 
-        private getCurrentLineNumberOneBased() {
-            return this.languageServiceShimHost.positionToZeroBasedLineCol(this.activeFile.fileName, this.currentCaretPosition).line + 1;
-        }
-
         private getLineColStringAtPosition(position: number) {
             var pos = this.languageServiceShimHost.positionToZeroBasedLineCol(this.activeFile.fileName, position);
             return 'line ' + (pos.line + 1) + ', col ' + pos.character;
