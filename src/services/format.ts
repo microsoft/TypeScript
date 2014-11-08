@@ -176,9 +176,14 @@ module ts.formatting {
         var formattingContext = new FormattingContext(sourceFile, requestKind);
 
         var enclosingNode = findEnclosingNode(originalRange, sourceFile);
-        var initialIndentation = SmartIndenter.getIndentationForNode(enclosingNode, originalRange, sourceFile, options);
-
-        var formattingScanner = getFormattingScanner(sourceFile, enclosingNode.pos, originalRange.end);
+        if (enclosingNode.kind === SyntaxKind.SourceFile) {
+            var formattingScanner = getFormattingScanner(sourceFile, originalRange.pos, originalRange.end);
+            var initialIndentation = 0;
+        }
+        else {
+            var formattingScanner = getFormattingScanner(sourceFile, enclosingNode.pos, originalRange.end);
+            var initialIndentation = SmartIndenter.getIndentationForNode(enclosingNode, originalRange, sourceFile, options);
+        }
 
         var previousRangeHasError: boolean;
         var previousRange: TextRangeWithKind;
@@ -321,11 +326,26 @@ module ts.formatting {
                 effectiveParentStartLine: number,
                 isListItem: boolean): number {
 
+                var childStartPos = child.getStart(sourceFile);
+
+                var childStart = sourceFile.getLineAndCharacterFromPosition(childStartPos);
+                var childIndentationAmount =
+                    isListItem
+                    ? tryComputeIndentationForListItem(childStartPos, child.end, effectiveParentStartLine, originalRange, inheritedIndentation)
+                    : Indentation.Unknown;
+
+                if (isListItem && childIndentationAmount !== Indentation.Unknown) {
+                    inheritedIndentation = childIndentationAmount;
+                }
+
+                if (!rangeOverlapsWithStartEnd(originalRange, child.pos, child.end)) {
+                    return inheritedIndentation;
+                }
+
                 if (child.kind === SyntaxKind.Missing) {
                     return inheritedIndentation;
                 }
 
-                var childStartPos = child.getStart(sourceFile);
                 while (formattingScanner.isOnToken()) {
                     var tokenInfo = formattingScanner.readTokenInfo(node);
                     if (tokenInfo.token.end > childStartPos) {
@@ -337,16 +357,6 @@ module ts.formatting {
 
                 if (!formattingScanner.isOnToken()) {
                     return inheritedIndentation;
-                }
-
-                var childStart = sourceFile.getLineAndCharacterFromPosition(childStartPos);
-                var childIndentationAmount =
-                    isListItem
-                    ? tryComputeIndentationForListItem(childStartPos, child.end, effectiveParentStartLine, originalRange, inheritedIndentation)
-                    : Indentation.Unknown;
-
-                if (isListItem && childIndentationAmount !== Indentation.Unknown) {
-                    inheritedIndentation = childIndentationAmount;
                 }
 
                 if (isToken(child)) {
