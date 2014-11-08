@@ -298,7 +298,7 @@ module ts.formatting {
                     if (listEndToken !== SyntaxKind.Unknown) {
                         if (formattingScanner.isOnToken()) {
                             var tokenInfo = formattingScanner.readTokenInfo(node);
-                            if (tokenInfo.token.kind === listEndToken && formattingScanner.lastTrailingTriviaWasNewLine()) {
+                            if (tokenInfo.token.kind === listEndToken) {
                                 consumeTokenAndAdvanceScanner(tokenInfo, node, listIndentation);
                             }
                         }
