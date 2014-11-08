@@ -285,12 +285,10 @@ class CompilerBaselineRunner extends RunnerBase {
                             typeLines.push('=== ' + file.unitName + ' ===\r\n');
                             for (var i = 0; i < codeLines.length; i++) {
                                 var currentCodeLine = codeLines[i];
-                                var lastLine = typeLines[typeLines.length];
                                 typeLines.push(currentCodeLine + '\r\n');
                                 if (typeMap[file.unitName]) {
                                     var typeInfo = typeMap[file.unitName][i];
                                     if (typeInfo) {
-                                        var leadingSpaces = '';
                                         typeInfo.forEach(ty => {
                                             typeLines.push('>' + ty + '\r\n');
                                         });
