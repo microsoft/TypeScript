@@ -4618,7 +4618,6 @@ module ts {
             // Initialize writer for CompilerHost.writeFile
             writer = getEmitOutputWriter;
 
-            var syntacticDiagnostics: Diagnostic[] = [];
             var containSyntacticErrors = false;
 
             if (shouldEmitToOwnFile) {
@@ -5557,7 +5556,6 @@ module ts {
 
         function getClassificationsForLine(text: string, lexState: EndOfLineState): ClassificationResult {
             var offset = 0;
-            var lastTokenOrCommentEnd = 0;
             var token = SyntaxKind.Unknown;
             var lastNonTriviaToken = SyntaxKind.Unknown;
 
