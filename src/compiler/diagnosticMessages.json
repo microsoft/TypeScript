@@ -1076,7 +1076,22 @@
         "category": "Error",
         "code": 2457
     },
-
+    "Not all code paths return a value": {
+        "category": "Error",
+        "code": 2458
+    },
+    "Unreachable code detected": {
+        "category": "Error",
+        "code": 2459
+    },
+    "Unused label": {
+        "category": "Error",
+        "code": 2460
+    },
+    "Fallthrough case in switch": {
+        "category": "Error",
+        "code": 2461
+    },
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
         "code": 4000
