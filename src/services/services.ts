@@ -3858,33 +3858,31 @@ module ts {
                 }
             }
 
-            function getModifierOccurrences(modifier: SyntaxKind, exportedDeclaration: Declaration) {
-                var container = exportedDeclaration.parent;
+            function getModifierOccurrences(modifier: SyntaxKind, declaration: Declaration) {
+                var container = declaration.parent;
 
                 // Make sure we only highlight the keyword when it makes sense to do so.
-                if (exportedDeclaration.flags & NodeFlags.AccessibilityModifier) {
-                    if (!(hasKind(container, SyntaxKind.ClassDeclaration) ||
-                        (exportedDeclaration.kind === SyntaxKind.Parameter && hasKind(container, SyntaxKind.Constructor)))) {
+                if (declaration.flags & NodeFlags.AccessibilityModifier) {
+                    if (!(container.kind === SyntaxKind.ClassDeclaration ||
+                        (declaration.kind === SyntaxKind.Parameter && hasKind(container, SyntaxKind.Constructor)))) {
                         return undefined;
                     }
                 }
-                else if (exportedDeclaration.flags & NodeFlags.Static) {
-                    if (!(hasKind(container, SyntaxKind.ClassDeclaration))) {
+                else if (declaration.flags & NodeFlags.Static) {
+                    if (container.kind !== SyntaxKind.ClassDeclaration) {
                         return undefined;
                     }
                 }
-                else if (exportedDeclaration.flags & (NodeFlags.Export | NodeFlags.Ambient)) {
-                    if (!(hasKind(container, SyntaxKind.ModuleBlock) || hasKind(container, SyntaxKind.SourceFile))) {
+                else if (declaration.flags & (NodeFlags.Export | NodeFlags.Ambient)) {
+                    if (!(container.kind === SyntaxKind.ModuleBlock || container.kind === SyntaxKind.SourceFile)) {
                         return undefined;
                     }
                 }
 
                 var keywords: Node[] = [];
-
                 var modifierFlag: NodeFlags = getFlagFromModifier(modifier);
 
                 var nodes: Node[];
-
                 if (container.kind === SyntaxKind.ModuleBlock) {
                     nodes = (<Block>container).statements;
                 }
