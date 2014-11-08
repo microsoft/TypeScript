@@ -491,6 +491,7 @@ module ts {
             case SyntaxKind.BinaryExpression:
             case SyntaxKind.ConditionalExpression:
             case SyntaxKind.TemplateExpression:
+            case SyntaxKind.NoSubstitutionTemplateLiteral:
             case SyntaxKind.OmittedExpression:
                 return true;
             case SyntaxKind.QualifiedName:
@@ -503,7 +504,6 @@ module ts {
             // fall through
             case SyntaxKind.NumericLiteral:
             case SyntaxKind.StringLiteral:
-            case SyntaxKind.NoSubstitutionTemplateLiteral:
                 var parent = node.parent;
                 switch (parent.kind) {
                     case SyntaxKind.VariableDeclaration:
@@ -532,6 +532,8 @@ module ts {
                             (<ForInStatement>parent).expression === node;
                     case SyntaxKind.TypeAssertion:
                         return node === (<TypeAssertion>parent).operand;
+                    case SyntaxKind.TemplateSpan:
+                        return node === (<TemplateSpan>parent).expression;
                     default:
                         if (isExpression(parent)) {
                             return true;
