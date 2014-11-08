@@ -564,7 +564,6 @@ module ts {
         return false;
     }
 
-
     export function isDeclaration(node: Node): boolean {
         switch (node.kind) {
             case SyntaxKind.TypeParameter:
@@ -750,6 +749,20 @@ module ts {
 
     export function isTrivia(token: SyntaxKind) {
         return SyntaxKind.FirstTriviaToken <= token && token <= SyntaxKind.LastTriviaToken;
+    }
+
+    export function isUnterminatedTemplateEnd(node: LiteralExpression) {
+        Debug.assert(node.kind === SyntaxKind.NoSubstitutionTemplateLiteral || node.kind === SyntaxKind.TemplateTail);
+        var sourceText = getSourceFileOfNode(node).text;
+
+        // If we're not at the EOF, we know we must be terminated.
+        if (node.end !== sourceText.length) {
+            return false;
+        }
+
+        // If we didn't end in a backtick, we must still be in the middle of a template.
+        // If we did, make sure that it's not the *initial* backtick.
+        return sourceText.charCodeAt(node.end - 1) !== CharacterCodes.backtick || node.text.length === 0;
     }
 
     export function isModifier(token: SyntaxKind): boolean {

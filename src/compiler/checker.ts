@@ -56,8 +56,6 @@ module ts {
         return stringWriters.pop();
     }
 
-    type CallLikeExpression = CallExpression | TaggedTemplateExpression;
-
     /// fullTypeCheck denotes if this instance of the typechecker will be used to get semantic diagnostics.
     /// If fullTypeCheck === true,  then the typechecker should do every possible check to produce all errors
     /// If fullTypeCheck === false, the typechecker can take shortcuts and skip checks that only produce errors.
@@ -5204,20 +5202,30 @@ module ts {
         function hasCorrectArity(node: CallLikeExpression, args: Expression[], signature: Signature) {
             var adjustedArgCount: number;
             var typeArguments: NodeArray<TypeNode>;
-            var callIsIncomplete = false;
+            var callIsIncomplete: boolean;
 
             if (node.kind === SyntaxKind.TaggedTemplateExpression) {
                 var tagExpression = <TaggedTemplateExpression>node;
 
+                // Even if the call is incomplete, we'll have a missing expression as our last argument,
+                // so we can say the count is just the arg list length
                 adjustedArgCount = args.length;
                 typeArguments = undefined;
 
-                if (tagExpression.kind === SyntaxKind.TemplateExpression) {
+                if (tagExpression.template.kind === SyntaxKind.TemplateExpression) {
                     // If a tagged template expression lacks a tail literal, the call is incomplete.
-                    var template = <TemplateExpression>tagExpression.template;
-                    var lastSpan = lastOrUndefined(template.templateSpans);
+                    // Specifically, a template only can end in a TemplateTail or a Missing literal.
+                    var templateExpression = <TemplateExpression>tagExpression.template;
+                    var lastSpan = lastOrUndefined(templateExpression.templateSpans);
                     Debug.assert(lastSpan !== undefined); // we should always have at least one span.
-                    callIsIncomplete = lastSpan === undefined || lastSpan.literal.kind !== SyntaxKind.TemplateTail;
+                    callIsIncomplete = lastSpan.literal.kind === SyntaxKind.Missing || isUnterminatedTemplateEnd(lastSpan.literal);
+                }
+                else {
+                    // If the template didn't end in a backtick, or its beginning occurred right prior to EOF,
+                    // then this might actually turn out to be a TemplateHead in the future;
+                    // so we consider the call to be incomplete.
+                    var templateLiteral = <LiteralExpression>tagExpression.template;
+                    callIsIncomplete = isUnterminatedTemplateEnd(templateLiteral);
                 }
             }
             else {
@@ -5228,16 +5236,16 @@ module ts {
 
                     return signature.minArgumentCount === 0;
                 }
-                else {
-                    // For IDE scenarios we may have an incomplete call, so a trailing comma is tantamount to adding another argument.
-                    adjustedArgCount = callExpression.arguments.hasTrailingComma ? args.length + 1 : args.length;
+                
+                // For IDE scenarios we may have an incomplete call, so a trailing comma is tantamount to adding another argument.
+                adjustedArgCount = callExpression.arguments.hasTrailingComma ? args.length + 1 : args.length;
 
-                    // If we are missing the close paren, the call is incomplete.
-                    callIsIncomplete = (<CallExpression>callExpression).arguments.end === callExpression.end;
-                }
+                // If we are missing the close paren, the call is incomplete.
+                callIsIncomplete = (<CallExpression>callExpression).arguments.end === callExpression.end;
 
                 typeArguments = callExpression.typeArguments;
             }
+
 
             return checkArity(adjustedArgCount, typeArguments, callIsIncomplete, signature);
 
@@ -5420,7 +5428,9 @@ module ts {
         }
 
         function resolveCall(node: CallLikeExpression, signatures: Signature[], candidatesOutArray: Signature[]): Signature {
-            var typeArguments = (<CallExpression>node).typeArguments;
+            var isTaggedTemplate = node.kind === SyntaxKind.TaggedTemplateExpression;
+
+            var typeArguments = isTaggedTemplate ? undefined : (<CallExpression>node).typeArguments;
             forEach(typeArguments, checkSourceElement);
 
             var candidates = candidatesOutArray || [];
@@ -5432,7 +5442,6 @@ module ts {
             }
 
             var args = getEffectiveCallArguments(node);
-            var isTaggedTemplate = node.kind === SyntaxKind.TaggedTemplateExpression;
             
             // The following applies to any value of 'excludeArgument[i]':
             //    - true:      the argument at 'i' is susceptible to a one-time permanent contextual typing.
@@ -5440,8 +5449,8 @@ module ts {
             //    - false:     the argument at 'i' *was* and *has been* permanently contextually typed.
             //
             // The idea is that we will perform type argument inference & assignability checking once
-            // without using the susceptible parameters, and once more for each susceptible parameter,
-            // contextually typing each as we go along.
+            // without using the susceptible parameters that are functions, and once more for each of those
+            // parameters, contextually typing each as we go along.
             //
             // For a tagged template, then the first argument be 'undefined' if necessary
             // because it represents a TemplateStringsArray.
@@ -5492,14 +5501,14 @@ module ts {
             // is just important for choosing the best signature. So in the case where there is only one
             // signature, the subtype pass is useless. So skipping it is an optimization.
             if (candidates.length > 1) {
-                result = chooseOverload(candidates, subtypeRelation, excludeArgument);
+                result = chooseOverload(candidates, subtypeRelation);
             }
             if (!result) {
                 // Reinitialize these pointers for round two
                 candidateForArgumentError = undefined;
                 candidateForTypeArgumentError = undefined;
                 resultOfFailedInference = undefined;
-                result = chooseOverload(candidates, assignableRelation, excludeArgument);
+                result = chooseOverload(candidates, assignableRelation);
             }
             if (result) {
                 return result;
@@ -5552,7 +5561,7 @@ module ts {
 
             return resolveErrorCall(node);
 
-            function chooseOverload(candidates: Signature[], relation: Map<Ternary>, excludeArgument: boolean[]) {
+            function chooseOverload(candidates: Signature[], relation: Map<Ternary>) {
                 for (var i = 0; i < candidates.length; i++) {
                     if (!hasCorrectArity(node, args, candidates[i])) {
                         continue;
@@ -5566,9 +5575,9 @@ module ts {
                         if (candidate.typeParameters) {
                             var typeArgumentTypes: Type[];
                             var typeArgumentsAreValid: boolean;
-                            if ((<CallExpression>node).typeArguments) {
+                            if (typeArguments) {
                                 typeArgumentTypes = new Array<Type>(candidate.typeParameters.length);
-                                typeArgumentsAreValid = checkTypeArguments(candidate, (<CallExpression>node).typeArguments, typeArgumentTypes, /*reportErrors*/ false)
+                                typeArgumentsAreValid = checkTypeArguments(candidate, typeArguments, typeArgumentTypes, /*reportErrors*/ false)
                             }
                             else {
                                 inferenceResult = inferTypeArguments(candidate, args, excludeArgument);
@@ -5602,7 +5611,7 @@ module ts {
                         }
                         else {
                             candidateForTypeArgumentError = originalCandidate;
-                            if (!(<CallExpression>node).typeArguments) {
+                            if (!typeArguments) {
                                 resultOfFailedInference = inferenceResult;
                             }
                         }
