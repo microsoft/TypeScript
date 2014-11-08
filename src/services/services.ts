@@ -761,10 +761,6 @@ module ts {
             return this.namedDeclarations;
         }
 
-        private isDeclareFile(): boolean {
-            return TypeScript.isDTSFile(this.filename);
-        }
-
         public update(scriptSnapshot: TypeScript.IScriptSnapshot, version: string, isOpen: boolean, textChangeRange: TypeScript.TextChangeRange): SourceFile {
             if (textChangeRange && Debug.shouldAssert(AssertionLevel.Normal)) {
                 var oldText = this.scriptSnapshot;
