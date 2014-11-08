@@ -125,7 +125,7 @@ module ts.formatting {
             }
 
             var expectedScanAction = 
-                shouldRescanSlashToken(n)
+                shouldRescanGreaterThanToken(n)
                 ? ScanAction.RescanGreaterThanToken
                 : shouldRescanSlashToken(n) 
                     ? ScanAction.RescanSlashToken 

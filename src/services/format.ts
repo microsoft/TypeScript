@@ -20,12 +20,10 @@ module ts.formatting {
     }
 
     interface DynamicIndentation {
-        getEffectiveIndentation(tokenLine: number, kind: SyntaxKind): number;
-        getEffectiveCommentIndentation(commentLine: number): number;
-        getDelta(): number;
+        getIndentationForToken(tokenLine: number, tokenKind: SyntaxKind): number;
+        getIndentationForComment(owningToken: SyntaxKind): number;
         getIndentation(): number;
-        getCommentIndentation(): number;
-        increaseCommentIndentation(delta: number): void;
+        getDelta(): number;
         recomputeIndentation(lineAddedByFormatting: boolean): void;
     }
 
@@ -128,42 +126,41 @@ module ts.formatting {
         if (!errors.length) {
             return rangeHasNoErrors;
         }
-        else {
-            // pick only errors that fall in range
-            var sorted = errors
-                .filter(d => d.isParseError && (d.start >= originalRange.pos && d.start + d.length < originalRange.end))
-                .sort((e1, e2) => e1.start - e2.start);
+        
+        // pick only errors that fall in range
+        var sorted = errors
+            .filter(d => d.isParseError && (d.start >= originalRange.pos && d.start + d.length < originalRange.end))
+            .sort((e1, e2) => e1.start - e2.start);
 
-            if (!sorted.length) {
-                return rangeHasNoErrors;
-            }
+        if (!sorted.length) {
+            return rangeHasNoErrors;
+        }
 
-            var index = 0;
-            return r => {
-                while (true) {
-                    if (index >= sorted.length) {
-                        return false;
-                    }
-                    else {
-                        var curr = sorted[index];
-                        if (r.end <= curr.start) {
-                            return false;
-                        }
-                        else {
-                            var s = Math.max(r.pos, curr.start);
-                            var e = Math.min(r.end, curr.start + curr.length);
-                            if (s < e) {
-                                return true;
-                            }
-                            index++;
-                        }
-                    }
+        var index = 0;
+
+        return r => {
+            while (true) {
+                if (index >= sorted.length) {
+                    return false;
                 }
-            };
 
-            function rangeHasNoErrors(r: TextRange): boolean {
-                return false;
+                var error = sorted[index];
+                if (r.end <= error.start) {
+                    return false;
+                }
+
+                var s = Math.max(r.pos, error.start);
+                var e = Math.min(r.end, error.start + error.length);
+                if (s < e) {
+                    return true;
+                }
+
+                index++;
             }
+        };
+
+        function rangeHasNoErrors(r: TextRange): boolean {
+            return false;
         }
     }
 
@@ -205,16 +202,23 @@ module ts.formatting {
 
         // local functions
         
-        function getDynamicIndentation(node: Node, nodeStartLine: number, indentation: number, commentIndentation: number, delta: number): DynamicIndentation {
+        function getDynamicIndentation(node: Node, nodeStartLine: number, indentation: number, delta: number): DynamicIndentation {
             return {
-                getEffectiveCommentIndentation: (line) => {
-                    if (nodeStartLine !== line) {
-                        return commentIndentation + delta;
-                    }
-                    return commentIndentation;
-                },
-                getEffectiveIndentation: (line, kind) => {
+                getIndentationForComment: (kind) => {
                     switch (kind) {
+                        // preceding comment to the token that closes the indentation scope inherits the indentation from the scope
+                        // ..  {
+                        //     // comment
+                        // }
+                        case SyntaxKind.CloseBraceToken:
+                        case SyntaxKind.CloseBracketToken:
+                            return indentation + delta;
+                    }
+                    return indentation;
+                },
+                getIndentationForToken: (line, kind) => {
+                    switch (kind) {
+                        // open and close brace, 'else' and 'while' (in do statement) tokens has indentation of the parent
                         case SyntaxKind.OpenBraceToken:
                         case SyntaxKind.CloseBraceToken:
                         case SyntaxKind.OpenBracketToken:
@@ -224,21 +228,17 @@ module ts.formatting {
                             return indentation;
                         default:
                             return nodeStartLine !== line ? indentation + delta : indentation;
-
                     }
                 },
                 getIndentation: () => indentation,
-                getCommentIndentation: () => commentIndentation,
                 getDelta: () => delta,
                 recomputeIndentation: (lineAdded) => {
                     if (node.parent && SmartIndenter.shouldIndentChildNode(node.parent, node)) {
                         if (lineAdded) {
                             indentation += options.IndentSize;
-                            commentIndentation += options.IndentSize;
                         }
                         else {
                             indentation -= options.IndentSize;
-                            commentIndentation -= options.IndentSize;
                         }
                         if (shouldIndentChildNodes(node.kind)) {
                             delta = options.IndentSize;
@@ -248,9 +248,6 @@ module ts.formatting {
                         }
                     }
                 },
-                increaseCommentIndentation: (delta) => {
-                    commentIndentation += delta;
-                },
             }
         }
 
@@ -259,7 +256,7 @@ module ts.formatting {
                 return;
             }
 
-            var nodeIndentation = getDynamicIndentation(node, nodeStartLine, indentation, indentation, delta);
+            var nodeIndentation = getDynamicIndentation(node, nodeStartLine, indentation, delta);
 
             var childContextNode = contextNode;
             forEachChild(
@@ -283,8 +280,7 @@ module ts.formatting {
                             else if (tokenInfo.token.kind === listStartToken) {
                                 var tokenStartLine = sourceFile.getLineAndCharacterFromPosition(tokenInfo.token.pos).line;
                                 var indentation = computeIndentation(tokenInfo.token, tokenStartLine, Indentation.Unknown, node, nodeStartLine);
-                                listIndentation = getDynamicIndentation(node, nodeStartLine, indentation.indentation, indentation.indentation, indentation.delta);
-                                // make sure that this token does not belong to the child
+                                listIndentation = getDynamicIndentation(node, nodeStartLine, indentation.indentation, indentation.delta);
                                 consumeTokenAndAdvanceScanner(tokenInfo, node, listIndentation);
                             }
                             else {
@@ -314,10 +310,6 @@ module ts.formatting {
                 var tokenInfo = formattingScanner.readTokenInfo(node);
                 if (tokenInfo.token.end > node.end) {
                     break;
-                }
-
-                if (SmartIndenter.nodeContentIsAlwaysIndented(node.kind) && node.end === tokenInfo.token.end) {
-                    nodeIndentation.increaseCommentIndentation(options.IndentSize);
                 }
                 consumeTokenAndAdvanceScanner(tokenInfo, node, nodeIndentation);
             }
@@ -400,7 +392,7 @@ module ts.formatting {
 
                 var delta = 0;
                 if (indentation === Indentation.Unknown) {
-                    if (isSomeBlock(node.kind)) {                        
+                    if (isSomeBlock(node.kind)) {
                         delta = options.IndentSize;
                         if (isSomeBlock(parent.kind) ||
                             parent.kind === SyntaxKind.SourceFile ||
@@ -466,34 +458,36 @@ module ts.formatting {
                     processTrivia(currentTokenInfo.trailingTrivia, parent, childContextNode, indentation);
                 }
 
-
                 if (lastTriviaWasNewLine && indentToken) {
                     var indentNextTokenOrTrivia = true;
                     if (currentTokenInfo.leadingTrivia) {
                         for (var i = 0, len = currentTokenInfo.leadingTrivia.length; i < len; ++i) {
                             var triviaItem = currentTokenInfo.leadingTrivia[i];
+                            if (!rangeContainsRange(originalRange, triviaItem)) {
+                                continue;
+                            }
+
                             var triviaStartLine = sourceFile.getLineAndCharacterFromPosition(triviaItem.pos).line;
-                            if (rangeContainsRange(originalRange, triviaItem)) {
-                                switch (triviaItem.kind) {
-                                    case SyntaxKind.MultiLineCommentTrivia:
-                                        indentMultilineComment(triviaItem, indentation.getCommentIndentation(), /*firstLineIsIndented*/ !indentNextTokenOrTrivia);
+                            switch (triviaItem.kind) {
+                                case SyntaxKind.MultiLineCommentTrivia:
+                                    indentMultilineComment(triviaItem, indentation.getIndentationForComment(currentTokenInfo.token.kind), /*firstLineIsIndented*/ !indentNextTokenOrTrivia);
+                                    indentNextTokenOrTrivia = false;
+                                    break;
+                                case SyntaxKind.SingleLineCommentTrivia:
+                                    if (indentNextTokenOrTrivia) {
+                                        insertIndentation(triviaItem.pos, indentation.getIndentationForComment(currentTokenInfo.token.kind), /*lineAdded*/ false);
                                         indentNextTokenOrTrivia = false;
-                                        break;
-                                    case SyntaxKind.SingleLineCommentTrivia:
-                                        if (indentNextTokenOrTrivia) {
-                                            insertIndentation(triviaItem.pos, indentation.getCommentIndentation(), /*lineAdded*/ false);
-                                            indentNextTokenOrTrivia = false;
-                                        }
-                                        break;
-                                    case SyntaxKind.NewLineTrivia:
-                                        indentNextTokenOrTrivia = true;
-                                        break;
-                                }
+                                    }
+                                    break;
+                                case SyntaxKind.NewLineTrivia:
+                                    indentNextTokenOrTrivia = true;
+                                    break;
                             }
                         }
                     }
+
                     if (isTokenInRange && !rangeContainsError(currentTokenInfo.token)) {
-                        insertIndentation(currentTokenInfo.token.pos, indentation.getEffectiveIndentation(tokenStart.line, currentTokenInfo.token.kind), lineAdded);
+                        insertIndentation(currentTokenInfo.token.pos, indentation.getIndentationForToken(tokenStart.line, currentTokenInfo.token.kind), lineAdded);
                     }
                 }
 
