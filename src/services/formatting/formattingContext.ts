@@ -109,7 +109,7 @@ module TypeScript.Services.Formatting {
             var block = <BlockSyntax>node.node();
 
             // Now check if they are on the same line
-            return this.snapshot.getLineNumberFromPosition(end(block.openBraceToken)) === 
+            return this.snapshot.getLineNumberFromPosition(fullEnd(block.openBraceToken)) === 
                    this.snapshot.getLineNumberFromPosition(start(block.closeBraceToken));
         }
     }

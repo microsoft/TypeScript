@@ -127,7 +127,6 @@ module TypeScript.Syntax {
 
     export function skippedTokenTrivia(token: ISyntaxToken, text: ISimpleText): ISyntaxTrivia {
         Debug.assert(!token.hasLeadingTrivia());
-        Debug.assert(!token.hasTrailingTrivia());
         Debug.assert(token.fullWidth() > 0);
         return new SkippedTokenTrivia(token, token.fullText(text));
     }

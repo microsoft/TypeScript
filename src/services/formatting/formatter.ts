@@ -96,11 +96,6 @@ module TypeScript.Services.Formatting {
             }
             this.previousTokenParent = this.parent().clone(this.indentationNodeContextPool());
             position += width(token);
-
-            // Extract any trailing comments
-            if (token.trailingTriviaWidth() !== 0) {
-                this.processTrivia(token.trailingTrivia(), position);
-            }
         }
 
         private processTrivia(triviaList: ISyntaxTriviaList, fullStart: number) {
