@@ -66,8 +66,23 @@ module TypeScript.Services.Formatting {
             // Process any leading trivia if any
             var triviaList = token.leadingTrivia();
             if (triviaList) {
+                var seenNewLine = position === 0;
+
                 for (var i = 0, length = triviaList.count(); i < length; i++, position += trivia.fullWidth()) {
                     var trivia = triviaList.syntaxTriviaAt(i);
+
+                    // Skip all trivia up to the first newline we see.  We consider this trivia to 
+                    // 'belong' to the previous token.
+                    if (!seenNewLine) {
+                        if (trivia.kind !== SyntaxKind.NewLineTrivia) {
+                            continue;
+                        }
+                        else {
+                            seenNewLine = true;
+                            continue;
+                        }
+                    }
+
                     // Skip this trivia if it is not in the span
                     if (!this.textSpan().containsTextSpan(new TextSpan(position, trivia.fullWidth()))) {
                         continue;
