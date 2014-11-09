@@ -1,7 +1,7 @@
 ///<reference path='services.ts' />
-///<reference path='format\indentation.ts' />
-///<reference path='format\formattingScanner.ts' />
-///<reference path='format\rulesProvider.ts' />
+///<reference path='formatting\indentation.ts' />
+///<reference path='formatting\formattingScanner.ts' />
+///<reference path='formatting\rulesProvider.ts' />
 
 module ts.formatting {
 
@@ -111,6 +111,8 @@ module ts.formatting {
             case SyntaxKind.ModuleBlock:
                 return rangeContainsRange((<Block>parent).statements, node)
         }
+
+        return false;
     }
 
     function findEnclosingNode(range: TextRange, sourceFile: SourceFile): Node {

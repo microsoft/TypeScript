@@ -13,15 +13,14 @@
 // limitations under the License.
 //
 
-/// <reference path="formatting.ts"/>
+/// <reference path="references.ts"/>
 
-module TypeScript.Services.Formatting {
-    export enum FormattingRequestKind {
+module ts.formatting {
+    export const enum FormattingRequestKind {
         FormatDocument,
         FormatSelection,
         FormatOnEnter,
         FormatOnSemicolon,
-        FormatOnClosingCurlyBrace,
-        FormatOnPaste
+        FormatOnClosingCurlyBrace
     }
 }

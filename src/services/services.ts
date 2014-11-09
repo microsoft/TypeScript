@@ -11,9 +11,8 @@
 /// <reference path='indentation.ts' />
 /// <reference path='signatureHelp.ts' />
 /// <reference path='utilities.ts' />
-/// <reference path='formatting\formatting.ts' />
 /// <reference path='smartIndenter.ts' />
-/// <reference path='format.ts' />
+/// <reference path='formatting.ts' />
 
 /// <reference path='core\references.ts' />
 /// <reference path='resources\references.ts' />
@@ -2083,7 +2082,6 @@ module ts {
 
     export function createLanguageService(host: LanguageServiceHost, documentRegistry: DocumentRegistry): LanguageService {
         var syntaxTreeCache: SyntaxTreeCache = new SyntaxTreeCache(host);
-        var formattingRulesProvider: TypeScript.Services.Formatting.RulesProvider;
         var ruleProvider: ts.formatting.RulesProvider;
         var hostCache: HostCache; // A cache of all the information about the files on the host side.
         var program: Program;
@@ -5138,36 +5136,11 @@ module ts {
             return result;
         }
 
-        function getFormattingManager(filename: string, options: FormatCodeOptions) {
-            // Ensure rules are initialized and up to date wrt to formatting options
-            if (formattingRulesProvider == null) {
-                formattingRulesProvider = new TypeScript.Services.Formatting.RulesProvider(host);
-            }
-
-            formattingRulesProvider.ensureUpToDate(options);
-
-            // Get the Syntax Tree
-            var syntaxTree = getSyntaxTree(filename);
-
-            // Convert IScriptSnapshot to ITextSnapshot
-            var scriptSnapshot = syntaxTreeCache.getCurrentScriptSnapshot(filename);
-            var scriptText = TypeScript.SimpleText.fromScriptSnapshot(scriptSnapshot);
-            var textSnapshot = new TypeScript.Services.Formatting.TextSnapshot(scriptText);
-
-            var manager = new TypeScript.Services.Formatting.FormattingManager(syntaxTree, textSnapshot, formattingRulesProvider, options);
-
-            return manager;
-        }
-
         function getFormattingEditsForRange(fileName: string, start: number, end: number, options: FormatCodeOptions): TextChange[] {
             fileName = TypeScript.switchToForwardSlashes(fileName);
             var options = copyFormatCodeOptions(options);
             var sourceFile = getCurrentSourceFile(fileName);
-            var edits = formatting.formatSelection(start, end, sourceFile, getRuleProvider(options), options);
-            return edits;
-
-            var manager = getFormattingManager(fileName, options);
-            return manager.formatSelection(start, end);
+            return formatting.formatSelection(start, end, sourceFile, getRuleProvider(options), options);
         }
 
         function getFormattingEditsForDocument(fileName: string, options: FormatCodeOptions): TextChange[] {
@@ -5175,38 +5148,23 @@ module ts {
 
             var sourceFile = getCurrentSourceFile(fileName);
             var options = copyFormatCodeOptions(options)
-            var edits = formatting.formatDocument(sourceFile, getRuleProvider(options), options);
-            return edits;
-
-            var manager = getFormattingManager(fileName, options);
-            return manager.formatDocument();
+            return formatting.formatDocument(sourceFile, getRuleProvider(options), options);
         }
 
         function getFormattingEditsAfterKeystroke(fileName: string, position: number, key: string, options: FormatCodeOptions): TextChange[] {
             fileName = TypeScript.switchToForwardSlashes(fileName);
 
-            var manager = getFormattingManager(fileName, options);
-
             var sourceFile = getCurrentSourceFile(fileName);
             var options = copyFormatCodeOptions(options);
 
             if (key === "}") {
-                var edits = formatting.formatOnClosingCurly(position, sourceFile, getRuleProvider(options), options);
-                return edits;
-
-                return manager.formatOnClosingCurlyBrace(position);
+                return formatting.formatOnClosingCurly(position, sourceFile, getRuleProvider(options), options);
             }
             else if (key === ";") {
-                var edits = formatting.formatOnSemicolon(position, sourceFile, getRuleProvider(options), options);
-                return edits;
-
-                return manager.formatOnSemicolon(position);
+                return formatting.formatOnSemicolon(position, sourceFile, getRuleProvider(options), options);
             }
             else if (key === "\n") {
-                var edits = formatting.formatOnEnter(position, sourceFile, getRuleProvider(options), options);
-                return edits;
-
-                return manager.formatOnEnter(position);
+                return formatting.formatOnEnter(position, sourceFile, getRuleProvider(options), options);
             }
 
             return [];
