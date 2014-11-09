@@ -15,7 +15,7 @@ module ts.formatting {
         trailingTrivia: TextRangeWithKind[];
     }
 
-    const enum Indentation {
+    const enum Constants {
         Unknown = -1
     }
 
@@ -25,6 +25,11 @@ module ts.formatting {
         getIndentation(): number;
         getDelta(): number;
         recomputeIndentation(lineAddedByFormatting: boolean): void;
+    }
+
+    interface Indentation {
+        indentation: number;
+        delta: number
     }
 
     export function formatOnEnter(position: number, sourceFile: SourceFile, rulesProvider: RulesProvider, options: FormatCodeOptions): TextChange[] {
@@ -201,7 +206,73 @@ module ts.formatting {
         return edits;
 
         // local functions
+
+        function tryComputeIndentationForListItem(startPos: number, endPos: number, effectiveParentStartLine: number, range: TextRange, inheritedIndentation: number): number {
+            if (rangeOverlapsWithStartEnd(range, startPos, endPos)) {
+                if (inheritedIndentation !== Constants.Unknown) {
+                    return inheritedIndentation;
+                }
+            }
+            else {
+                var startLine = sourceFile.getLineAndCharacterFromPosition(startPos).line;
+                var startLinePosition = getStartLinePositionForPosition(startPos, sourceFile);
+                var column = SmartIndenter.findFirstNonWhitespaceColumn(startLinePosition, startPos, sourceFile, options);
+                if (startLine !== effectiveParentStartLine || startPos === column) {
+                    return column
+                }
+            }
+
+            return Constants.Unknown;
+        }
         
+        function computeIndentation(
+            node: TextRangeWithKind,
+            startLine: number,
+            inheritedIndentation: number,
+            parent: Node,
+            parentIndentation: DynamicIndentation,
+            effectiveParentStartLine: number): Indentation {
+
+            var indentation = inheritedIndentation;
+            var delta = 0;
+            if (indentation === Constants.Unknown) {
+                if (isSomeBlock(node.kind)) {
+                    delta = options.IndentSize;
+                    if (isSomeBlock(parent.kind) ||
+                        parent.kind === SyntaxKind.SourceFile ||
+                        parent.kind === SyntaxKind.CaseClause ||
+                        parent.kind === SyntaxKind.DefaultClause) {
+
+                        indentation = parentIndentation.getIndentation() + parentIndentation.getDelta();
+                    }
+                    else {
+                        indentation = parentIndentation.getIndentation();
+                    }
+                }
+                else {
+                    if (SmartIndenter.childStartsOnTheSameLineWithElseInIfStatement(parent, <Node>node, startLine, sourceFile)) {
+                        indentation = parentIndentation.getIndentation();
+                    }
+                    else {
+                        indentation = parentIndentation.getIndentation() + parentIndentation.getDelta();
+                    }
+                }
+            }
+
+            if (SmartIndenter.shouldIndentChildNode(node.kind, SyntaxKind.Unknown)) {
+                delta = options.IndentSize;
+            }
+
+            if (effectiveParentStartLine === startLine) {
+                indentation = parentIndentation.getIndentation();
+                delta = Math.min(options.IndentSize, parentIndentation.getDelta() + delta);
+            }
+            return {
+                indentation: indentation,
+                delta: delta
+            }
+        }
+
         function getDynamicIndentation(node: Node, nodeStartLine: number, indentation: number, delta: number): DynamicIndentation {
             return {
                 getIndentationForComment: (kind) => {
@@ -262,7 +333,7 @@ module ts.formatting {
             forEachChild(
                 node,
                 child => {
-                    processChildNode(child, Indentation.Unknown, nodeIndentation, nodeStartLine, /*isListElement*/ false)
+                    processChildNode(child, Constants.Unknown, nodeIndentation, nodeStartLine, /*isListElement*/ false)
                 },
                 (nodes: NodeArray<Node>) => {
                     var listStartToken = getOpenTokenForList(node, nodes);
@@ -279,7 +350,7 @@ module ts.formatting {
                             }
                             else if (tokenInfo.token.kind === listStartToken) {
                                 var tokenStartLine = sourceFile.getLineAndCharacterFromPosition(tokenInfo.token.pos).line;
-                                var indentation = computeIndentation(tokenInfo.token, tokenStartLine, Indentation.Unknown, node, nodeStartLine);
+                                var indentation = computeIndentation(tokenInfo.token, tokenStartLine, Constants.Unknown, node, nodeIndentation, tokenStartLine);
                                 listIndentation = getDynamicIndentation(node, nodeStartLine, indentation.indentation, indentation.delta);
                                 consumeTokenAndAdvanceScanner(tokenInfo, node, listIndentation);
                             }
@@ -289,7 +360,7 @@ module ts.formatting {
                         }
                     }
 
-                    var inheritedIndentation: number = Indentation.Unknown;
+                    var inheritedIndentation = Constants.Unknown;
                     var effectiveStartLine = tokenStartLine || nodeStartLine;
                     for (var i = 0, len = nodes.length; i < len; ++i) {
                         inheritedIndentation = processChildNode(nodes[i], inheritedIndentation, listIndentation, effectiveStartLine, /*isListElement*/ true)
@@ -327,9 +398,9 @@ module ts.formatting {
                 var childIndentationAmount =
                     isListItem
                     ? tryComputeIndentationForListItem(childStartPos, child.end, effectiveParentStartLine, originalRange, inheritedIndentation)
-                    : Indentation.Unknown;
+                    : Constants.Unknown;
 
-                if (isListItem && childIndentationAmount !== Indentation.Unknown) {
+                if (isListItem && childIndentationAmount !== Constants.Unknown) {
                     inheritedIndentation = childIndentationAmount;
                 }
 
@@ -361,77 +432,13 @@ module ts.formatting {
                     return inheritedIndentation;
                 }
 
-                var childIndentation = computeIndentation(child, childStart.line, childIndentationAmount, node, effectiveParentStartLine);
+                var childIndentation = computeIndentation(child, childStart.line, childIndentationAmount, node, nodeIndentation, effectiveParentStartLine);
 
                 processNode(child, childContextNode, childStart.line, childIndentation.indentation, childIndentation.delta);
 
                 childContextNode = node;
 
                 return inheritedIndentation;
-            }
-
-            function tryComputeIndentationForListItem(startPos: number, endPos: number, effectiveParentStartLine: number, range: TextRange, inheritedIndentation: number): number {
-                if (rangeOverlapsWithStartEnd(range, startPos, endPos)) {
-                    if (inheritedIndentation !== Indentation.Unknown) {
-                        return inheritedIndentation;
-                    }
-                }
-                else {
-                    var startLine = sourceFile.getLineAndCharacterFromPosition(startPos).line;
-                    var startLinePosition = getStartLinePositionForPosition(startPos, sourceFile);
-                    var column = SmartIndenter.findFirstNonWhitespaceColumn(startLinePosition, startPos, sourceFile, options);
-                    if (startLine !== effectiveParentStartLine || startPos === column) {
-                        return column
-                    }
-                }
-
-                return Indentation.Unknown;
-            }
-
-            function computeIndentation(
-                node: TextRangeWithKind,
-                startLine: number,
-                indentation: number,
-                parent: Node,
-                effectiveParentStartLine: number): { indentation: number; delta: number } {
-
-                var delta = 0;
-                if (indentation === Indentation.Unknown) {
-                    if (isSomeBlock(node.kind)) {
-                        delta = options.IndentSize;
-                        if (isSomeBlock(parent.kind) ||
-                            parent.kind === SyntaxKind.SourceFile ||
-                            parent.kind === SyntaxKind.CaseClause ||
-                            parent.kind === SyntaxKind.DefaultClause) {
-
-                            indentation = nodeIndentation.getIndentation() + nodeIndentation.getDelta();
-                        }
-                        else {
-                            indentation = nodeIndentation.getIndentation();
-                        }
-                    }
-                    else {
-                        if (SmartIndenter.childStartsOnTheSameLineWithElseInIfStatement(parent, <Node>node, startLine, sourceFile)) {
-                            indentation = nodeIndentation.getIndentation();
-                        }
-                        else {
-                            indentation = nodeIndentation.getIndentation() + nodeIndentation.getDelta();
-                        }
-                    }
-                }
-
-                if (SmartIndenter.shouldIndentChildNode(node.kind, SyntaxKind.Unknown)) {
-                    delta = options.IndentSize;
-                }
-
-                if (effectiveParentStartLine === startLine) {
-                    indentation = nodeIndentation.getIndentation();
-                    delta = Math.min(options.IndentSize, nodeIndentation.getDelta() + delta);
-                }
-                return {
-                    indentation: indentation,
-                    delta: delta
-                }
             }
 
             function consumeTokenAndAdvanceScanner(currentTokenInfo: TokenInfo, parent: Node, indentation: DynamicIndentation): void {
