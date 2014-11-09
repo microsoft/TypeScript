@@ -442,22 +442,8 @@ module TypeScript.Parser {
             return createMissingToken(SyntaxKind.IdentifierName, token, diagnosticCode);
         }
 
-        function previousTokenHasTrailingNewLine(token: ISyntaxToken): boolean {
+        function isOnDifferentLineThanPreviousToken(token: ISyntaxToken): boolean {
             return token.hasLeadingNewLine();
-
-            //var tokenFullStart = token.fullStart();
-            //if (tokenFullStart === 0) {
-            //    // First token in the document.  Thus it has no 'previous' token, and there is 
-            //    // no preceding newline.
-            //    return false;
-            //}
-
-            //// If our previous token ended with a newline, then *by definition* we must have started
-            //// at the beginning of a line.  
-            //var lineNumber = source.text.lineMap().getLineNumberFromPosition(tokenFullStart);
-            //var lineStart = source.text.lineMap().getLineStartPosition(lineNumber);
-
-            //return lineStart == tokenFullStart;
         }
 
         function canEatAutomaticSemicolon(allowWithoutNewLine: boolean): boolean {
@@ -479,7 +465,7 @@ module TypeScript.Parser {
             }
 
             // It is also allowed if there is a newline between the last token seen and the next one.
-            if (previousTokenHasTrailingNewLine(token)) {
+            if (isOnDifferentLineThanPreviousToken(token)) {
                 return true;
             }
 
@@ -849,7 +835,7 @@ module TypeScript.Parser {
             // In the first case though, ASI will not take effect because there is not a
             // line terminator after the keyword.
             if (SyntaxFacts.isAnyKeyword(_currentToken.kind) &&
-                previousTokenHasTrailingNewLine(_currentToken)) {
+                isOnDifferentLineThanPreviousToken(_currentToken)) {
 
                 var token1 = peekToken(1);
                 if (!existsNewLineBetweenTokens(_currentToken, token1, source.text) &&
@@ -1110,7 +1096,7 @@ module TypeScript.Parser {
                 case SyntaxKind.EndOfFileToken:
                     return true;
                 default:
-                    return previousTokenHasTrailingNewLine(nextToken);
+                    return isOnDifferentLineThanPreviousToken(nextToken);
             }
         }
 
@@ -2185,7 +2171,7 @@ module TypeScript.Parser {
             // It's not uncommon during typing for the user to miss writing the '=' token.  Check if
             // there is no newline after the last token and if we're on an expression.  If so, parse
             // this as an equals-value clause with a missing equals.
-            if (!previousTokenHasTrailingNewLine(token0)) {
+            if (!isOnDifferentLineThanPreviousToken(token0)) {
                 var tokenKind = token0.kind;
 
                 // The 'isExpression' call below returns true for "=>".  That's because it smartly
@@ -2617,7 +2603,7 @@ module TypeScript.Parser {
                 case SyntaxKind.MinusMinusToken:
                     // Because of automatic semicolon insertion, we should only consume the ++ or -- 
                     // if it is on the same line as the previous token.
-                    if (previousTokenHasTrailingNewLine(_currentToken)) {
+                    if (isOnDifferentLineThanPreviousToken(_currentToken)) {
                         break;
                     }
 
@@ -3510,7 +3496,7 @@ module TypeScript.Parser {
             while (type) {
                 var _currentToken = currentToken();
 
-                if (previousTokenHasTrailingNewLine(_currentToken) ||
+                if (isOnDifferentLineThanPreviousToken(_currentToken) ||
                     _currentToken.kind !== SyntaxKind.OpenBracketToken) {
                     break;
                 }
@@ -3563,7 +3549,7 @@ module TypeScript.Parser {
             //      TypeName   [no LineTerminator here]   TypeArgumentsopt
             //
             // Only consume type arguments if they appear on the same line.
-            if (previousTokenHasTrailingNewLine(currentToken())) {
+            if (isOnDifferentLineThanPreviousToken(currentToken())) {
                 return name;
             }
 
