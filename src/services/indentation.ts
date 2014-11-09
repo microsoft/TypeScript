@@ -71,11 +71,11 @@ module TypeScript.Indentation {
 
         for (var i = leadingTrivia.count() - 1; i >= 0; i--) {
             var trivia = leadingTrivia.syntaxTriviaAt(i);
-            if (trivia.kind() === SyntaxKind.NewLineTrivia) {
+            if (trivia.kind === SyntaxKind.NewLineTrivia) {
                 break;
             }
 
-            if (trivia.kind() === SyntaxKind.MultiLineCommentTrivia) {
+            if (trivia.kind === SyntaxKind.MultiLineCommentTrivia) {
                 var lineSegments = Syntax.splitMultiLineCommentTriviaIntoMultipleLines(trivia);
                 leadingTextInReverse.push(ArrayUtilities.last(lineSegments));
 

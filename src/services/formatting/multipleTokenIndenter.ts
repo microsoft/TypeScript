@@ -73,7 +73,7 @@ module TypeScript.Services.Formatting {
                         continue;
                     }
 
-                    switch (trivia.kind()) {
+                    switch (trivia.kind) {
                         case SyntaxKind.MultiLineCommentTrivia:
                             // We will only indent the first line of the multiline comment if we were planning to indent the next trivia. However,
                             // subsequent lines will always be indented

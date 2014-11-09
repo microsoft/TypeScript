@@ -91,7 +91,7 @@ module TypeScript.Services.Formatting {
 
                 // Only track new lines on tokens within the range. Make sure to check that the last trivia is a newline, and not just one of the trivia
                 var trivia = token.trailingTrivia();
-                this._lastTriviaWasNewLine = trivia.hasNewLine() && trivia.syntaxTriviaAt(trivia.count() - 1).kind() == SyntaxKind.NewLineTrivia;
+                this._lastTriviaWasNewLine = trivia.hasNewLine() && trivia.syntaxTriviaAt(trivia.count() - 1).kind == SyntaxKind.NewLineTrivia;
             }
 
             // Update the position

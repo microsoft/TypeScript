@@ -28,7 +28,7 @@ module TypeScript.Syntax {
     }
 
     export function isUnterminatedMultilineCommentTrivia(trivia: ISyntaxTrivia): boolean {
-        if (trivia && trivia.kind() === SyntaxKind.MultiLineCommentTrivia) {
+        if (trivia && trivia.kind === SyntaxKind.MultiLineCommentTrivia) {
             var text = trivia.fullText();
             return text.length < 4 || text.substring(text.length - 2) !== "*/";
         }
@@ -42,7 +42,7 @@ module TypeScript.Syntax {
                 return true;
             }
             else if (position === end) {
-                return trivia.kind() === SyntaxKind.SingleLineCommentTrivia || isUnterminatedMultilineCommentTrivia(trivia);
+                return trivia.kind === SyntaxKind.SingleLineCommentTrivia || isUnterminatedMultilineCommentTrivia(trivia);
             }
         }
 

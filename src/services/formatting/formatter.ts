@@ -110,7 +110,7 @@ module TypeScript.Services.Formatting {
                 var trivia = triviaList.syntaxTriviaAt(i);
                 // For a comment, format it like it is a token. For skipped text, eat it up as a token, but skip the formatting
                 if (trivia.isComment() || trivia.isSkippedToken()) {
-                    var currentTokenSpan = new TokenSpan(trivia.kind(), position, trivia.fullWidth());
+                    var currentTokenSpan = new TokenSpan(trivia.kind, position, trivia.fullWidth());
                     if (this.textSpan().containsTextSpan(currentTokenSpan)) {
                         if (trivia.isComment() && this.previousTokenSpan) {
                             // Note that formatPair calls TrimWhitespaceInLineRange in between the 2 tokens
