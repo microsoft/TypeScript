@@ -8,17 +8,18 @@ module ts {
     export function getEndLinePosition(line: number, sourceFile: SourceFile): number {
         Debug.assert(line >= 1);
         var lineStarts = sourceFile.getLineStarts();
-
-        line = line - 1;
-        if (line === lineStarts.length - 1) {
+        
+        // lines returned by SourceFile.getLineAndCharacterForPosition are 1-based
+        var lineIndex = line - 1;
+        if (lineIndex === lineStarts.length - 1) {
             // last line - return EOF
             return sourceFile.text.length - 1;
         }
         else {
             // current line start
-            var start = lineStarts[line];
+            var start = lineStarts[lineIndex];
             // take the start position of the next line -1 = it should be some line break
-            var pos = lineStarts[line + 1] - 1;
+            var pos = lineStarts[lineIndex + 1] - 1;
             Debug.assert(isLineBreak(sourceFile.text.charCodeAt(pos)));
             // walk backwards skipping line breaks, stop the the beginning of current line.
             // i.e:
@@ -55,8 +56,12 @@ module ts {
     }
 
     export function rangeOverlapsWithStartEnd(r1: TextRange, start: number, end: number) {
-        var start = Math.max(r1.pos, start);
-        var end = Math.min(r1.end, end);
+        return startEndOverlapsWithStartEnd(r1.pos, r1.end, start, end);
+    }
+
+    export function startEndOverlapsWithStartEnd(start1: number, end1: number, start2: number, end2: number) {
+        var start = Math.max(start1, start2);
+        var end = Math.min(end1, end2);
         return start < end;
     }
 

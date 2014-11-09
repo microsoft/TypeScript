@@ -151,9 +151,7 @@ module ts.formatting {
                     return false;
                 }
 
-                var s = Math.max(r.pos, error.start);
-                var e = Math.min(r.end, error.start + error.length);
-                if (s < e) {
+                if (startEndOverlapsWithStartEnd(r.pos, r.end, error.start, error.start + error.length)) {
                     return true;
                 }
 
@@ -177,15 +175,10 @@ module ts.formatting {
         // formatting context to be used by rules provider to get rules
         var formattingContext = new FormattingContext(sourceFile, requestKind);
 
+        var formattingScanner = getFormattingScanner(sourceFile, originalRange.pos, originalRange.end);
+
         var enclosingNode = findEnclosingNode(originalRange, sourceFile);
-        if (enclosingNode.kind === SyntaxKind.SourceFile) {
-            var formattingScanner = getFormattingScanner(sourceFile, originalRange.pos, originalRange.end);
-            var initialIndentation = 0;
-        }
-        else {
-            var formattingScanner = getFormattingScanner(sourceFile, enclosingNode.pos, originalRange.end);
-            var initialIndentation = SmartIndenter.getIndentationForNode(enclosingNode, originalRange, sourceFile, options);
-        }
+        var initialIndentation = SmartIndenter.getIndentationForNode(enclosingNode, originalRange, sourceFile, options);
 
         var previousRangeHasError: boolean;
         var previousRange: TextRangeWithKind;

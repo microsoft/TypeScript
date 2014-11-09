@@ -8,7 +8,6 @@
 /// <reference path='outliningElementsCollector.ts' />
 /// <reference path='navigationBar.ts' />
 /// <reference path='breakpoints.ts' />
-/// <reference path='indentation.ts' />
 /// <reference path='signatureHelp.ts' />
 /// <reference path='utilities.ts' />
 /// <reference path='smartIndenter.ts' />
