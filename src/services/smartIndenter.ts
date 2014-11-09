@@ -37,7 +37,7 @@ module ts.formatting {
             var indentationDelta: number;
 
             while (current) {
-                if (positionBelongsToNode(current, position, sourceFile) && shouldIndentChildNode(current, previous)) {
+                if (positionBelongsToNode(current, position, sourceFile) && shouldIndentChildNode(current.kind, previous ? previous.kind : SyntaxKind.Unknown)) {
                     currentStart = getStartLineAndCharacterForNode(current, sourceFile);
 
                     if (nextTokenIsCurlyBraceOnSameLineAsCursor(precedingToken, current, lineAtPosition, sourceFile)) {
@@ -114,7 +114,7 @@ module ts.formatting {
                 }
 
                 // increase indentation if parent node wants its content to be indented and parent and child nodes don't start on the same line
-                if (shouldIndentChildNode(parent, current) && !parentAndChildShareLine) {
+                if (shouldIndentChildNode(parent.kind, current.kind) && !parentAndChildShareLine) {
                     indentationDelta += options.IndentSize;
                 }
 
@@ -205,6 +205,8 @@ module ts.formatting {
                 var elseKeywordStartLine =  getStartLineAndCharacterForNode(elseKeyword, sourceFile).line;
                 return elseKeywordStartLine === childStartLine;
             }
+
+            return false;
         }
 
         function getActualIndentationForListItem(node: Node, sourceFile: SourceFile, options: EditorOptions): number {
@@ -325,20 +327,25 @@ module ts.formatting {
             return false;
         }
 
-        export function shouldIndentChildNode(parent: Node, child: Node): boolean {
-            if (nodeContentIsAlwaysIndented(parent.kind)) {
+        export function shouldIndentChildNode(parent: SyntaxKind, child: SyntaxKind): boolean {
+            if (nodeContentIsAlwaysIndented(parent)) {
                 return true;
             }
-            switch (parent.kind) {
+            switch (parent) {
                 case SyntaxKind.DoStatement:
                 case SyntaxKind.WhileStatement:
                 case SyntaxKind.ForInStatement:
                 case SyntaxKind.ForStatement:
                 case SyntaxKind.IfStatement:
-                    return child && child.kind !== SyntaxKind.Block;
+                    return child !== SyntaxKind.Block;
                 case SyntaxKind.FunctionDeclaration:
                 case SyntaxKind.FunctionExpression:
-                    return child && child.kind !== SyntaxKind.FunctionBlock;
+                case SyntaxKind.Method:
+                case SyntaxKind.ArrowFunction:
+                case SyntaxKind.Constructor:
+                case SyntaxKind.GetAccessor:
+                case SyntaxKind.SetAccessor:
+                    return child !== SyntaxKind.FunctionBlock;
                 default:
                     return false;
             }

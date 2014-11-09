@@ -192,7 +192,7 @@ module ts.formatting {
 
         if (formattingScanner.isOnToken()) {
             var startLine = sourceFile.getLineAndCharacterFromPosition(enclosingNode.getStart(sourceFile)).line;
-            var delta = shouldIndentChildNodes(enclosingNode.kind) ? options.IndentSize : 0;
+            var delta = SmartIndenter.shouldIndentChildNode(enclosingNode.kind, SyntaxKind.Unknown) ? options.IndentSize : 0;
             processNode(enclosingNode, enclosingNode, startLine, initialIndentation, delta);
         }
 
@@ -233,14 +233,14 @@ module ts.formatting {
                 getIndentation: () => indentation,
                 getDelta: () => delta,
                 recomputeIndentation: (lineAdded) => {
-                    if (node.parent && SmartIndenter.shouldIndentChildNode(node.parent, node)) {
+                    if (node.parent && SmartIndenter.shouldIndentChildNode(node.parent.kind, node.kind)) {
                         if (lineAdded) {
                             indentation += options.IndentSize;
                         }
                         else {
                             indentation -= options.IndentSize;
                         }
-                        if (shouldIndentChildNodes(node.kind)) {
+                        if (SmartIndenter.shouldIndentChildNode(node.kind, SyntaxKind.Unknown)) {
                             delta = options.IndentSize;
                         }
                         else {
@@ -420,7 +420,7 @@ module ts.formatting {
                     }
                 }
 
-                if (shouldIndentChildNodes(node.kind)) {
+                if (SmartIndenter.shouldIndentChildNode(node.kind, SyntaxKind.Unknown)) {
                     delta = options.IndentSize;
                 }
 
@@ -757,29 +757,6 @@ module ts.formatting {
             case SyntaxKind.ModuleBlock:
                 return true;
         }
-        return false;
-    }
-
-    function shouldIndentChildNodes(kind: SyntaxKind): boolean {
-        if (SmartIndenter.nodeContentIsAlwaysIndented(kind)) {
-            return true;
-        }
-        switch (kind) {
-            case SyntaxKind.IfStatement:
-            case SyntaxKind.ForInStatement:
-            case SyntaxKind.ForStatement:
-            case SyntaxKind.WhileStatement:
-            case SyntaxKind.DoStatement:
-            case SyntaxKind.FunctionExpression:
-            case SyntaxKind.FunctionDeclaration:
-            case SyntaxKind.ArrowFunction:
-            case SyntaxKind.Method:
-            case SyntaxKind.GetAccessor:
-            case SyntaxKind.SetAccessor:
-            case SyntaxKind.Constructor:
-                return true;
-        }
-
         return false;
     }
 
