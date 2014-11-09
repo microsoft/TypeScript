@@ -34,7 +34,6 @@ module ts.formatting {
         }
 
         static create3(left: SyntaxKind, right: Shared.TokenRange): RuleDescriptor
-            //: this(TokenRange.FromToken(left), right)
         {
             return RuleDescriptor.create4(Shared.TokenRange.FromToken(left), right);
         }

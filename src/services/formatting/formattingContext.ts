@@ -33,11 +33,11 @@ module ts.formatting {
         }
 
         public updateContext(currentRange: TextRangeWithKind, currentTokenParent: Node, nextRange: TextRangeWithKind, nextTokenParent: Node, commonParent: Node) {
-            Debug.assert(currentRange != null, "currentTokenSpan is null");
-            Debug.assert(currentTokenParent != null, "currentTokenParent is null");
-            Debug.assert(nextRange != null, "nextTokenSpan is null");
-            Debug.assert(nextTokenParent != null, "nextTokenParent is null");
-            Debug.assert(commonParent != null, "commonParent is null");
+            Debug.assert(currentRange !== undefined, "currentTokenSpan is null");
+            Debug.assert(currentTokenParent !== undefined, "currentTokenParent is null");
+            Debug.assert(nextRange !== undefined, "nextTokenSpan is null");
+            Debug.assert(nextTokenParent !== undefined, "nextTokenParent is null");
+            Debug.assert(commonParent !== undefined, "commonParent is null");
 
             this.currentTokenSpan = currentRange;
             this.currentTokenParent = currentTokenParent;
