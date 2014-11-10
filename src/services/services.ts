@@ -4802,7 +4802,7 @@ module ts {
 
                         var start = signatureInfoString.length;
                         signatureInfoString += displayPartsToString(parameter.displayParts);
-                        var end = signatureInfoString.length - 1;
+                        var end = signatureInfoString.length;
 
                         // add the parameter to the list
                         parameters.push({
