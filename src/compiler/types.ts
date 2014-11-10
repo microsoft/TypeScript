@@ -164,7 +164,6 @@ module ts {
         // Binding patterns
         ObjectBindingPattern,
         ArrayBindingPattern,
-        PatternDeclaration,
         // Expression
         ArrayLiteral,
         ObjectLiteral,
@@ -323,20 +322,17 @@ module ts {
     export interface SignatureDeclaration extends Declaration, ParsedSignature { }
 
     export interface VariableDeclaration extends Declaration {
-        name: Identifier | BindingPattern;
-        type?: TypeNode;
-        initializer?: Expression;
+        propertyName?: Identifier;          // Binding property name (in object binding pattern)
+        name: Identifier | BindingPattern;  // Declared variable name
+        type?: TypeNode;                    // Optional type annotation
+        initializer?: Expression;           // Optional initializer
     }
 
     export interface BindingPattern extends Node {
-        declarations: PatternDeclaration[];
+        elements: NodeArray<BindingElement>;
     }
 
-    export interface PatternDeclaration extends Declaration {
-        propertyName?: Identifier;          // Binding property name
-        name: Identifier | BindingPattern;  // Declared variable name (pattern = undefined)
-        initializer?: Expression;           // Optional initializer
-    }
+    export interface BindingElement extends VariableDeclaration { }
 
     export interface PropertyDeclaration extends Declaration {
         type?: TypeNode;
@@ -866,7 +862,7 @@ module ts {
         Prototype              = 0x20000000,  // Prototype property (no source representation)
         UnionProperty          = 0x40000000,  // Property in union type
 
-        Enum                   = RegularEnum | ConstEnum,
+        Enum      = RegularEnum | ConstEnum,
         Variable  = FunctionScopedVariable | BlockScopedVariable,
         Value     = Variable | Property | EnumMember | Function | Class | Enum | ValueModule | Method | GetAccessor | SetAccessor,
         Type      = Class | Interface | Enum | TypeLiteral | ObjectLiteral | TypeParameter | TypeAlias,

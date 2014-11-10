@@ -990,6 +990,18 @@ module ts {
                 }
             }
 
+            function emitObjectBindingPattern(node: BindingPattern) {
+                write("{ ");
+                emitCommaList(node.elements, /*includeTrailingComma*/ true);
+                write(" }");
+            }
+
+            function emitArrayBindingPattern(node: BindingPattern) {
+                write("[");
+                emitCommaList(node.elements, /*includeTrailingComma*/ true);
+                write("]");
+            }
+
             function emitArrayLiteral(node: ArrayLiteral) {
                 if (node.flags & NodeFlags.MultiLine) {
                     write("[");
@@ -1437,7 +1449,16 @@ module ts {
 
             function emitVariableDeclaration(node: VariableDeclaration) {
                 emitLeadingComments(node);
-                emitModuleMemberName(node);
+                if (node.propertyName) {
+                    emit(node.propertyName);
+                    write(": ");
+                }
+                if (node.name.kind === SyntaxKind.Identifier) {
+                    emitModuleMemberName(node);
+                }
+                else {
+                    emit(node.name);
+                }
                 emitOptional(" = ", node.initializer);
                 emitTrailingComments(node);
             }
@@ -2207,11 +2228,9 @@ module ts {
                 if (!node) {
                     return;
                 }
-
                 if (node.flags & NodeFlags.Ambient) {
                     return emitPinnedOrTripleSlashComments(node);
                 }
-
                 switch (node.kind) {
                     case SyntaxKind.Identifier:
                         return emitIdentifier(<Identifier>node);
@@ -2244,6 +2263,10 @@ module ts {
                         return emitTemplateSpan(<TemplateSpan>node);
                     case SyntaxKind.QualifiedName:
                         return emitPropertyAccess(<QualifiedName>node);
+                    case SyntaxKind.ObjectBindingPattern:
+                        return emitObjectBindingPattern(<BindingPattern>node);
+                    case SyntaxKind.ArrayBindingPattern:
+                        return emitArrayBindingPattern(<BindingPattern>node);
                     case SyntaxKind.ArrayLiteral:
                         return emitArrayLiteral(<ArrayLiteral>node);
                     case SyntaxKind.ObjectLiteral:

@@ -1628,10 +1628,47 @@ module ts {
             return classType.typeParameters ? createTypeReference(<GenericType>classType, map(classType.typeParameters, _ => anyType)) : classType;
         }
 
-        function getTypeOfVariableOrPropertyDeclaration(declaration: VariableDeclaration | PropertyDeclaration): Type {
+        function getTypeOfPropertyOfType(type: Type, name: string): Type {
+            var prop = getPropertyOfType(type, name);
+            return prop ? getTypeOfSymbol(prop) : undefined;
+        }
+
+        function getTypeForBindingElement(declaration: BindingElement): Type {
+            var pattern = <BindingPattern>declaration.parent;
+            var parentType = getTypeForVariableDeclaration(<VariableDeclaration>pattern.parent);
+            if (parentType === unknownType) {
+                return unknownType;
+            }
+            if (!parentType || parentType === anyType) {
+                if (declaration.initializer) {
+                    return checkExpressionCached(declaration.initializer);
+                }
+                return parentType;
+            }
+            if (pattern.kind === SyntaxKind.ObjectBindingPattern) {
+                var name = (declaration.propertyName || <Identifier>declaration.name).text;
+                var type = getTypeOfPropertyOfType(parentType, name) ||
+                    isNumericName(name) && getIndexTypeOfType(parentType, IndexKind.Number) ||
+                    getIndexTypeOfType(parentType, IndexKind.String);
+            }
+            else {
+                var index = indexOf(pattern.elements, declaration);
+                var type = getTypeOfPropertyOfType(parentType, "" + index) || getIndexTypeOfType(parentType, IndexKind.Number);
+            }
+            if (!type) {
+                // Error: Type {0} has no property {1}
+                return unknownType;
+            }
+            return type;
+        }
+
+        function getTypeForVariableDeclaration(declaration: VariableDeclaration | PropertyDeclaration): Type {
             // A variable declared in a for..in statement is always of type any
             if (declaration.parent.kind === SyntaxKind.ForInStatement) {
                 return anyType;
+            }
+            if (isBindingPattern(declaration.parent)) {
+                return getTypeForBindingElement(<BindingElement>declaration);
             }
             // Use type from type annotation if one is present
             if (declaration.type) {
@@ -1654,7 +1691,26 @@ module ts {
             }
             // Use the type of the initializer expression if one is present
             if (declaration.initializer) {
-                var type = checkAndMarkExpression(declaration.initializer);
+                return checkExpressionCached(declaration.initializer);
+            }
+            // No type specified and nothing can be inferred
+            return undefined;
+        }
+
+        function getWidenedTypeForVariableDeclaration(declaration: VariableDeclaration | PropertyDeclaration): Type {
+            var type = getTypeForVariableDeclaration(declaration);
+            if (type) {
+                return getWidenedType(type);
+            }
+            if (declaration.flags & NodeFlags.Rest) {
+                return createArrayType(anyType);
+            }
+            return anyType;
+        }
+
+        function getTypeOfVariableOrPropertyDeclaration(declaration: VariableDeclaration | PropertyDeclaration): Type {
+            var type = getTypeForVariableDeclaration(declaration);
+            if (type) {
                 if (declaration.kind !== SyntaxKind.PropertyAssignment) {
                     reportErrorsFromWidening(declaration, type);
                     type = getWidenedType(type);
@@ -1669,6 +1725,48 @@ module ts {
             }
             return type;
         }
+
+        //function getTypeOfVariableOrPropertyDeclaration(declaration: VariableDeclaration | PropertyDeclaration): Type {
+        //    // A variable declared in a for..in statement is always of type any
+        //    if (declaration.parent.kind === SyntaxKind.ForInStatement) {
+        //        return anyType;
+        //    }
+        //    // Use type from type annotation if one is present
+        //    if (declaration.type) {
+        //        return getTypeFromTypeNode(declaration.type);
+        //    }
+        //    if (declaration.kind === SyntaxKind.Parameter) {
+        //        var func = <FunctionLikeDeclaration>declaration.parent;
+        //        // For a parameter of a set accessor, use the type of the get accessor if one is present
+        //        if (func.kind === SyntaxKind.SetAccessor) {
+        //            var getter = <AccessorDeclaration>getDeclarationOfKind(declaration.parent.symbol, SyntaxKind.GetAccessor);
+        //            if (getter) {
+        //                return getReturnTypeOfSignature(getSignatureFromDeclaration(getter));
+        //            }
+        //        }
+        //        // Use contextual parameter type if one is available
+        //        var type = getContextuallyTypedParameterType(<ParameterDeclaration>declaration);
+        //        if (type) {
+        //            return type;
+        //        }
+        //    }
+        //    // Use the type of the initializer expression if one is present
+        //    if (declaration.initializer) {
+        //        var type = checkAndMarkExpression(declaration.initializer);
+        //        if (declaration.kind !== SyntaxKind.PropertyAssignment) {
+        //            reportErrorsFromWidening(declaration, type);
+        //            type = getWidenedType(type);
+        //        }
+        //        return type;
+        //    }
+        //    // Rest parameters default to type any[], other parameters default to type any
+        //    var type = declaration.flags & NodeFlags.Rest ? createArrayType(anyType) : anyType;
+        //    // Report implicit any errors unless this is a private property within an ambient declaration
+        //    if (compilerOptions.noImplicitAny && !isPrivateWithinAmbient(declaration) && !(declaration.kind === SyntaxKind.Parameter && isPrivateWithinAmbient(declaration.parent))) {
+        //        reportImplicitAnyError(declaration, type);
+        //    }
+        //    return type;
+        //}
 
         function getTypeOfVariableOrParameterOrProperty(symbol: Symbol): Type {
             var links = getSymbolLinks(symbol);
@@ -4245,6 +4343,10 @@ module ts {
             return type;
         }
 
+        function hasInitializer(node: VariableDeclaration): boolean {
+            return !!(node.initializer || isBindingPattern(node.parent) && hasInitializer(<VariableDeclaration>node.parent.parent));
+        }
+
         // Check if a given variable is assigned within a given syntax node
         function isVariableAssignedWithin(symbol: Symbol, node: Node): boolean {
             var links = getNodeLinks(node);
@@ -4273,7 +4375,7 @@ module ts {
             }
 
             function isAssignedInVariableDeclaration(node: VariableDeclaration) {
-                if (getSymbolOfNode(node) === symbol && node.initializer) {
+                if (!isBindingPattern(node.name) && getSymbolOfNode(node) === symbol && hasInitializer(node)) {
                     return true;
                 }
                 return forEachChild(node, isAssignedIn);
@@ -4284,7 +4386,6 @@ module ts {
                     case SyntaxKind.BinaryExpression:
                         return isAssignedInBinaryExpression(<BinaryExpression>node);
                     case SyntaxKind.VariableDeclaration:
-                    case SyntaxKind.PatternDeclaration:
                         return isAssignedInVariableDeclaration(<VariableDeclaration>node);
                     case SyntaxKind.ObjectBindingPattern:
                     case SyntaxKind.ArrayBindingPattern:
@@ -5743,7 +5844,7 @@ module ts {
         function getReturnTypeFromBody(func: FunctionLikeDeclaration, contextualMapper?: TypeMapper): Type {
             var contextualSignature = getContextualSignature(func);
             if (func.body.kind !== SyntaxKind.FunctionBlock) {
-                var type = checkAndMarkExpression(func.body, contextualMapper);
+                var type = checkExpressionCached(func.body, contextualMapper);
             }
             else {
                 // Aggregate the types of expressions within all the return statements.
@@ -5772,7 +5873,7 @@ module ts {
             forEachReturnStatement(body, returnStatement => {
                 var expr = returnStatement.expression;
                 if (expr) {
-                    var type = checkAndMarkExpression(expr, contextualMapper);
+                    var type = checkExpressionCached(expr, contextualMapper);
                     if (!contains(aggregatedTypes, type)) {
                         aggregatedTypes.push(type);
                     }
@@ -6225,10 +6326,12 @@ module ts {
             return result;
         }
 
-        function checkAndMarkExpression(node: Expression, contextualMapper?: TypeMapper): Type {
-            var result = checkExpression(node, contextualMapper);
-            getNodeLinks(node).flags |= NodeCheckFlags.TypeChecked;
-            return result;
+        function checkExpressionCached(node: Expression, contextualMapper?: TypeMapper): Type {
+            var links = getNodeLinks(node);
+            if (!links.resolvedType) {
+                links.resolvedType = checkExpression(node, contextualMapper);
+            }
+            return links.resolvedType;
         }
 
         // Checks an expression and returns its type. The contextualMapper parameter serves two purposes: When
@@ -7221,53 +7324,40 @@ module ts {
             }
         }
 
-        function isBindingPattern(name: DeclarationName) {
-            return name.kind === SyntaxKind.ArrayBindingPattern || name.kind === SyntaxKind.ObjectBindingPattern;
-        }
-
-        // TODO(andersh): Support destructuring
         function checkVariableDeclaration(node: VariableDeclaration | PropertyDeclaration) {
             if (isBindingPattern(node.name)) {
+                forEach((<BindingPattern>node.name).elements, e => {
+                    if (e.kind === SyntaxKind.VariableDeclaration) {
+                        checkVariableDeclaration(e);
+                    }
+                });
+                if (node.initializer) {
+                    checkTypeAssignableTo(checkExpressionCached(node.initializer), getWidenedTypeForVariableDeclaration(node), node, /*headMessage*/ undefined);
+                }
                 return;
             }
             checkSourceElement(node.type);
-            checkExportsOnMergedDeclarations(node);
-
-            if (fullTypeCheck) {
-                var symbol = getSymbolOfNode(node);
-
-                var typeOfValueDeclaration = getTypeOfVariableOrParameterOrProperty(symbol);
-                var type: Type;
-                var useTypeFromValueDeclaration = node === symbol.valueDeclaration;
-                if (useTypeFromValueDeclaration) {
-                    type = typeOfValueDeclaration;
-                }
-                else {
-                    type = getTypeOfVariableOrPropertyDeclaration(node);
-                }
-
-
+            var symbol = getSymbolOfNode(node);
+            var type = getTypeOfVariableOrParameterOrProperty(symbol);
+            if (node === symbol.valueDeclaration) {
                 if (node.initializer) {
-                    if (!(getNodeLinks(node.initializer).flags & NodeCheckFlags.TypeChecked)) {
-                        // Use default messages
-                        checkTypeAssignableTo(checkAndMarkExpression(node.initializer), type, node, /*headMessage*/ undefined);
-                    }
-                    //TODO(jfreeman): Check that it is not a computed property
-                    checkCollisionWithConstDeclarations(<VariableDeclaration>node);
-                }
-
-                checkCollisionWithCapturedSuperVariable(node, node.name);
-                checkCollisionWithCapturedThisVariable(node, node.name);
-                checkCollisionWithRequireExportsInGeneratedCode(node, node.name);
-                if (!useTypeFromValueDeclaration) {
-                    // TypeScript 1.0 spec (April 2014): 5.1
-                    // Multiple declarations for the same variable name in the same declaration space are permitted,
-                    // provided that each declaration associates the same type with the variable.
-                    if (typeOfValueDeclaration !== unknownType && type !== unknownType && !isTypeIdenticalTo(typeOfValueDeclaration, type)) {
-                        error(node.name, Diagnostics.Subsequent_variable_declarations_must_have_the_same_type_Variable_0_must_be_of_type_1_but_here_has_type_2, declarationNameToString(node.name), typeToString(typeOfValueDeclaration), typeToString(type));
-                    }
+                    checkTypeAssignableTo(checkExpressionCached(node.initializer), type, node, /*headMessage*/ undefined);
                 }
             }
+            else {
+                var declarationType = getWidenedTypeForVariableDeclaration(node);
+                if (type !== unknownType && declarationType !== unknownType && !isTypeIdenticalTo(type, declarationType)) {
+                    error(node.name, Diagnostics.Subsequent_variable_declarations_must_have_the_same_type_Variable_0_must_be_of_type_1_but_here_has_type_2, declarationNameToString(node.name), typeToString(type), typeToString(declarationType));
+                }
+                if (node.initializer) {
+                    checkTypeAssignableTo(checkExpressionCached(node.initializer), declarationType, node, /*headMessage*/ undefined);
+                }
+            }
+            checkExportsOnMergedDeclarations(node);
+            checkCollisionWithConstDeclarations(<VariableDeclaration>node);
+            checkCollisionWithCapturedSuperVariable(node, node.name);
+            checkCollisionWithCapturedThisVariable(node, node.name);
+            checkCollisionWithRequireExportsInGeneratedCode(node, node.name);
         }
 
         function checkVariableStatement(node: VariableStatement) {
@@ -7345,33 +7435,27 @@ module ts {
             // TODO: Check that target label is valid
         }
 
+        function isGetAccessorWithAnnotatatedSetAccessor(node: FunctionLikeDeclaration) {
+            return !!(node.kind === SyntaxKind.GetAccessor && getSetAccessorTypeAnnotationNode(<AccessorDeclaration>getDeclarationOfKind(node.symbol, SyntaxKind.SetAccessor)));
+        }
+
         function checkReturnStatement(node: ReturnStatement) {
-            if (node.expression && !(getNodeLinks(node.expression).flags & NodeCheckFlags.TypeChecked)) {
+            if (node.expression) {
                 var func = getContainingFunction(node);
                 if (func) {
+                    var returnType = getReturnTypeOfSignature(getSignatureFromDeclaration(func));
+                    var exprType = checkExpressionCached(node.expression);
                     if (func.kind === SyntaxKind.SetAccessor) {
-                        if (node.expression) {
-                            error(node.expression, Diagnostics.Setters_cannot_return_a_value);
-                        }
+                        error(node.expression, Diagnostics.Setters_cannot_return_a_value);
                     }
                     else {
-                        var returnType = getReturnTypeOfSignature(getSignatureFromDeclaration(func));
-                        // do assignability check only if we short circuited in determining return type
-                        // - function has explicit type annotation
-                        // - function is getter with no type annotation and setter parameter type is used
-                        // - function is a constructor (will be special cased below)
-                        var checkAssignability =
-                            func.type ||
-                            (func.kind === SyntaxKind.GetAccessor && getSetAccessorTypeAnnotationNode(<AccessorDeclaration>getDeclarationOfKind(func.symbol, SyntaxKind.SetAccessor)));
-                        if (checkAssignability) {
-                            checkTypeAssignableTo(checkExpression(node.expression), returnType, node.expression, /*headMessage*/ undefined);
-                        }
-                        else if (func.kind == SyntaxKind.Constructor) {
-                            // constructor doesn't have explicit return type annotation and yet its return type is known - declaring type
-                            // handle constructors and issue specialized error message for them.
-                            if (!isTypeAssignableTo(checkExpression(node.expression), returnType)) {
+                        if (func.kind === SyntaxKind.Constructor) {
+                            if (!isTypeAssignableTo(exprType, returnType)) {
                                 error(node.expression, Diagnostics.Return_type_of_constructor_signature_must_be_assignable_to_the_instance_type_of_the_class);
                             }
+                        }
+                        else if (func.type || isGetAccessorWithAnnotatatedSetAccessor(func)) {
+                            checkTypeAssignableTo(exprType, returnType, node.expression, /*headMessage*/ undefined);
                         }
                     }
                 }
@@ -8201,7 +8285,6 @@ module ts {
                 case SyntaxKind.Property:
                 case SyntaxKind.ObjectBindingPattern:
                 case SyntaxKind.ArrayBindingPattern:
-                case SyntaxKind.PatternDeclaration:
                 case SyntaxKind.ArrayLiteral:
                 case SyntaxKind.ObjectLiteral:
                 case SyntaxKind.PropertyAssignment:

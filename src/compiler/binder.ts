@@ -340,17 +340,14 @@ module ts {
                     bindDeclaration(<Declaration>node, SymbolFlags.FunctionScopedVariable, SymbolFlags.ParameterExcludes, /*isBlockScopeContainer*/ false);
                     break;
                 case SyntaxKind.VariableDeclaration:
-                case SyntaxKind.PatternDeclaration:
-                    if ((<Declaration>node).name) {
-                        if (node.flags & NodeFlags.BlockScoped) {
-                            bindBlockScopedVariableDeclaration(<Declaration>node);
-                        }
-                        else {
-                            bindDeclaration(<Declaration>node, SymbolFlags.FunctionScopedVariable, SymbolFlags.FunctionScopedVariableExcludes, /*isBlockScopeContainer*/ false);
-                        }
+                    if (isBindingPattern((<Declaration>node).name)) {
+                        bindChildren(node, 0, /*isBlockScopeContainer*/ false);
+                    }
+                    else if (node.flags & NodeFlags.BlockScoped) {
+                        bindBlockScopedVariableDeclaration(<Declaration>node);
                     }
                     else {
-                        bindChildren(node, 0, /*isBlockScopeContainer*/ false);
+                        bindDeclaration(<Declaration>node, SymbolFlags.FunctionScopedVariable, SymbolFlags.FunctionScopedVariableExcludes, /*isBlockScopeContainer*/ false);
                     }
                     break;
                 case SyntaxKind.Property:
