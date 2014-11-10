@@ -4227,6 +4227,9 @@ module ts {
                     forEach(getPropertySymbolsFromContextualType(location), contextualSymbol => {
                         result.push.apply(result, typeInfoResolver.getRootSymbols(contextualSymbol));
                     });
+                    if (location.kind === SyntaxKind.Identifier && location.parent.kind === SyntaxKind.ShortHandPropertyAssignment) {
+                        result.push(typeInfoResolver.resolveEntityNameForShortHandPropertyAssignment(location));
+                    }
                 }
 
                 // If this is a union property, add all the symbols from all its source symbols in all unioned types.

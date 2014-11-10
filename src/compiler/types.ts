@@ -733,6 +733,7 @@ module ts {
         getEnumMemberValue(node: EnumMember): number;
         isValidPropertyAccess(node: PropertyAccess, propertyName: string): boolean;
         getAliasedSymbol(symbol: Symbol): Symbol;
+        resolveEntityNameForShortHandPropertyAssignment(location: Node): Symbol;
     }
 
     export interface SymbolDisplayBuilder {

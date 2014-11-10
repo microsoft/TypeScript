@@ -110,7 +110,8 @@ module ts {
             getAliasedSymbol: resolveImport,
             isUndefinedSymbol: symbol => symbol === undefinedSymbol,
             isArgumentsSymbol: symbol => symbol === argumentsSymbol,
-            hasEarlyErrors: hasEarlyErrors
+            hasEarlyErrors: hasEarlyErrors,
+            resolveEntityNameForShortHandPropertyAssignment: resolveEntityNameForShortHandPropertyAssignment,
         };
 
         var undefinedSymbol = createSymbol(SymbolFlags.Property | SymbolFlags.Transient, "undefined");
@@ -535,6 +536,10 @@ module ts {
             }
             Debug.assert((symbol.flags & SymbolFlags.Instantiated) === 0, "Should never get an instantiated symbol here.");
             return symbol.flags & meaning ? symbol : resolveImport(symbol);
+        }
+
+        function resolveEntityNameForShortHandPropertyAssignment(location: Node): Symbol {
+            return resolveEntityName(location, <Identifier>location, SymbolFlags.Value);
         }
 
         function isExternalModuleNameRelative(moduleName: string): boolean {
