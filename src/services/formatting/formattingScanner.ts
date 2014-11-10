@@ -1,7 +1,7 @@
 /// <reference path="..\..\compiler\scanner.ts"/>
 
 module ts.formatting {
-    var scanner = createScanner(ScriptTarget.ES5, /*skipTrivia*/ false);
+    var scanner = createScanner(ScriptTarget.Latest, /*skipTrivia*/ false);
 
     export interface FormattingScanner {
         advance(): void;
@@ -64,7 +64,8 @@ module ts.formatting {
 
             var t: SyntaxKind;
             var pos = scanner.getStartPos();
-
+            
+            // Read leading trivia and token
             while (pos < endPos) {
                 var t = scanner.getToken();
                 if (!isTrivia(t)) {
@@ -116,14 +117,16 @@ module ts.formatting {
 
         function readTokenInfo(n: Node): TokenInfo {
             if (!isOnToken()) {
+                // scanner is not on the token (either advance was not called yet or scanner is already past the end position)
                 return {
                     leadingTrivia: leadingTrivia,
                     trailingTrivia: undefined,
                     token: undefined
                 };
-
             }
 
+            // normally scanner returns the smallest available token
+            // check the kind of context node to determine if scanner should have more greedy behavior and consume more text.
             var expectedScanAction = 
                 shouldRescanGreaterThanToken(n)
                 ? ScanAction.RescanGreaterThanToken
@@ -132,10 +135,14 @@ module ts.formatting {
                     : ScanAction.Scan
 
             if (lastTokenInfo && expectedScanAction === lastScanAction) {
+                // readTokenInfo was called before with the same expected scan action.
+                // No need to re-scan text, return existing 'lastTokenInfo'
                 return lastTokenInfo;
             }
 
             if (scanner.getStartPos() !== savedPos) {
+                Debug.assert(lastTokenInfo !== undefined);
+                // readTokenInfo was called before but scan action differs - rescan text
                 scanner.setTextPos(savedPos);
                 scanner.scan();
             }
@@ -162,6 +169,7 @@ module ts.formatting {
                 kind: currentToken
             }
 
+            // consume trailing trivia
             while(scanner.getStartPos() < endPos) {
                 currentToken = scanner.scan();
                 if (!isTrivia(currentToken)) {
