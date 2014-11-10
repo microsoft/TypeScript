@@ -870,18 +870,15 @@ module TypeScript.Parser {
         }
 
         function parseEnumDeclaration(): EnumDeclarationSyntax {
-            var modifiers = parseModifiers();
-            var enumKeyword = eatToken(SyntaxKind.EnumKeyword);
-            var identifier = eatIdentifierToken();
+            var openBraceToken: ISyntaxToken;
 
-            var openBraceToken = eatToken(SyntaxKind.OpenBraceToken);
-            var enumElements: ISeparatedSyntaxList<EnumElementSyntax>;
-
-            if (openBraceToken.fullWidth() > 0) {
-                enumElements = parseSeparatedSyntaxList<EnumElementSyntax>(ListParsingState.EnumDeclaration_EnumElements);
-            }
-
-            return new EnumDeclarationSyntax(parseNodeData, modifiers, enumKeyword, identifier, openBraceToken, enumElements || <any>[], eatToken(SyntaxKind.CloseBraceToken));
+            return new EnumDeclarationSyntax(parseNodeData, 
+                parseModifiers(), 
+                eatToken(SyntaxKind.EnumKeyword), 
+                eatIdentifierToken(), 
+                openBraceToken = eatToken(SyntaxKind.OpenBraceToken),
+                openBraceToken.fullWidth() > 0 ? parseSeparatedSyntaxList<EnumElementSyntax>(ListParsingState.EnumDeclaration_EnumElements) : [],
+                eatToken(SyntaxKind.CloseBraceToken));
         }
 
         function isEnumElement(inErrorRecovery: boolean): boolean {
@@ -974,16 +971,9 @@ module TypeScript.Parser {
         }
 
         function parseHeritageClauses(): HeritageClauseSyntax[] {
-            var heritageClauses: HeritageClauseSyntax[];
-
-            if (isHeritageClause()) {
-                // NOTE: we can pass "undefined" for the skipped tokens here as we know we can't get
-                // any leading skipped tokens. We have an 'extends' or 'implements' keyword, so 
-                // any skipped tokeds will get attached to that instead.
-                heritageClauses = parseSyntaxList<HeritageClauseSyntax>(ListParsingState.ClassOrInterfaceDeclaration_HeritageClauses, undefined);
-            }
-
-            return heritageClauses || [];
+            return isHeritageClause()
+                ? parseSyntaxList<HeritageClauseSyntax>(ListParsingState.ClassOrInterfaceDeclaration_HeritageClauses)
+                : [];
         }
 
         function tryParseHeritageClauseTypeName(): ITypeSyntax {
@@ -991,20 +981,16 @@ module TypeScript.Parser {
         }
 
         function parseClassDeclaration(): ClassDeclarationSyntax {
-            var modifiers = parseModifiers();
-            var classKeyword = eatToken(SyntaxKind.ClassKeyword);
-            var identifier = eatIdentifierToken();
-            var typeParameterList = tryParseTypeParameterList(/*requireCompleteTypeParameterList:*/ false);
-            var heritageClauses = parseHeritageClauses();
-            var openBraceToken = eatToken(SyntaxKind.OpenBraceToken);
-            var classElements: IClassElementSyntax[];
-
-            if (openBraceToken.fullWidth() > 0) {
-                classElements = parseSyntaxList<IClassElementSyntax>(ListParsingState.ClassDeclaration_ClassElements);
-            };
-
+            var openBraceToken: ISyntaxToken;
             return new ClassDeclarationSyntax(parseNodeData,
-                modifiers, classKeyword, identifier, typeParameterList, heritageClauses, openBraceToken, classElements || [], eatToken(SyntaxKind.CloseBraceToken));
+                parseModifiers(), 
+                eatToken(SyntaxKind.ClassKeyword), 
+                eatIdentifierToken(), 
+                tryParseTypeParameterList(/*requireCompleteTypeParameterList:*/ false), 
+                parseHeritageClauses(), 
+                openBraceToken = eatToken(SyntaxKind.OpenBraceToken), 
+                openBraceToken.fullWidth() > 0 ? parseSyntaxList<IClassElementSyntax>(ListParsingState.ClassDeclaration_ClassElements) : [],
+                eatToken(SyntaxKind.CloseBraceToken));
         }
 
         function isAccessor(modifierCount: number, inErrorRecovery: boolean): boolean {
@@ -1268,32 +1254,27 @@ module TypeScript.Parser {
                 moduleName = parseName(/*allowIdentifierNames*/ false);
             }
 
-            var openBraceToken = eatToken(SyntaxKind.OpenBraceToken);
-
-            var moduleElements: IModuleElementSyntax[];
-            if (openBraceToken.fullWidth() > 0) {
-                moduleElements = parseSyntaxList<IModuleElementSyntax>(ListParsingState.ModuleDeclaration_ModuleElements);
-            }
-
+            var openBraceToken: ISyntaxToken;
             return new ModuleDeclarationSyntax(parseNodeData,
-                modifiers, moduleKeyword, moduleName, stringLiteral, openBraceToken, moduleElements || [], eatToken(SyntaxKind.CloseBraceToken));
+                modifiers, moduleKeyword, moduleName, stringLiteral, 
+                openBraceToken = eatToken(SyntaxKind.OpenBraceToken), 
+                openBraceToken.fullWidth() > 0 ? parseSyntaxList<IModuleElementSyntax>(ListParsingState.ModuleDeclaration_ModuleElements) : [],
+                eatToken(SyntaxKind.CloseBraceToken));
         }
 
         function parseInterfaceDeclaration(): InterfaceDeclarationSyntax {
             return new InterfaceDeclarationSyntax(parseNodeData,
-                parseModifiers(), eatToken(SyntaxKind.InterfaceKeyword), eatIdentifierToken(),
+                parseModifiers(),eatToken(SyntaxKind.InterfaceKeyword), eatIdentifierToken(),
                 tryParseTypeParameterList(/*requireCompleteTypeParameterList:*/ false), parseHeritageClauses(), parseObjectType());
         }
 
         function parseObjectType(): ObjectTypeSyntax {
-            var openBraceToken = eatToken(SyntaxKind.OpenBraceToken);
-
-            var typeMembers: ISeparatedSyntaxList<ITypeMemberSyntax>;
-            if (openBraceToken.fullWidth() > 0) {
-                typeMembers = parseSeparatedSyntaxList<ITypeMemberSyntax>(ListParsingState.ObjectType_TypeMembers);
-            }
-
-            return new ObjectTypeSyntax(parseNodeData, openBraceToken, typeMembers || <any>[], eatToken(SyntaxKind.CloseBraceToken));
+            var openBraceToken: ISyntaxToken;
+            
+            return new ObjectTypeSyntax(parseNodeData,
+                openBraceToken = eatToken(SyntaxKind.OpenBraceToken),
+                openBraceToken.fullWidth() > 0 ? parseSeparatedSyntaxList<ITypeMemberSyntax>(ListParsingState.ObjectType_TypeMembers) : [],
+                eatToken(SyntaxKind.CloseBraceToken));
         }
 
         function parseTupleType(currentToken: ISyntaxToken): TupleTypeSyntax {
@@ -1868,31 +1849,25 @@ module TypeScript.Parser {
                 consumeToken(continueKeyword), tryEatBreakOrContinueLabel(), eatExplicitOrAutomaticSemicolon(/*allowWithoutNewline:*/ false));
         }
 
+        function parseSwitchExpression(openParenToken: ISyntaxToken) {
+            return openParenToken.fullWidth() === 0 && currentToken().kind === SyntaxKind.OpenBraceToken
+                ? eatIdentifierToken()
+                : parseExpression(/*allowIn:*/ true);
+        }
+
         function parseSwitchStatement(switchKeyword: ISyntaxToken) {
             // Debug.assert(isSwitchStatement());
+            var openParenToken: ISyntaxToken;
+            var openBraceToken: ISyntaxToken;
 
-            switchKeyword = consumeToken(switchKeyword);
-            var openParenToken = eatToken(SyntaxKind.OpenParenToken);
-            var expression: IExpressionSyntax;
-
-            // if we have  "switch {"
-            // then don't try to consume the { as the start of an expression.
-            if (openParenToken.fullWidth() === 0 && currentToken().kind === SyntaxKind.OpenBraceToken) {
-                expression = eatIdentifierToken();
-            }
-            else {
-                expression = parseExpression(/*allowIn:*/ true);
-            }
-
-            var closeParenToken = eatToken(SyntaxKind.CloseParenToken);
-            var openBraceToken = eatToken(SyntaxKind.OpenBraceToken);
-
-            var switchClauses: ISwitchClauseSyntax[];
-            if (openBraceToken.fullWidth() > 0) {
-                switchClauses = parseSyntaxList<ISwitchClauseSyntax>(ListParsingState.SwitchStatement_SwitchClauses);
-            }
-
-            return new SwitchStatementSyntax(parseNodeData, switchKeyword, openParenToken, expression, closeParenToken, openBraceToken, switchClauses || [], eatToken(SyntaxKind.CloseBraceToken));
+            return new SwitchStatementSyntax(parseNodeData,
+                consumeToken(switchKeyword), 
+                openParenToken = eatToken(SyntaxKind.OpenParenToken),
+                parseSwitchExpression(openParenToken),
+                eatToken(SyntaxKind.CloseParenToken), 
+                openBraceToken = eatToken(SyntaxKind.OpenBraceToken),
+                openBraceToken.fullWidth() > 0 ? parseSyntaxList<ISwitchClauseSyntax>(ListParsingState.SwitchStatement_SwitchClauses) : [],
+                eatToken(SyntaxKind.CloseBraceToken));
         }
 
         function isSwitchClause(): boolean {
@@ -3380,14 +3355,12 @@ module TypeScript.Parser {
         }
 
         function parseParameterList(): ParameterListSyntax {
-            var openParenToken = eatToken(SyntaxKind.OpenParenToken);
-            var parameters: ISeparatedSyntaxList<ParameterSyntax>;
+            var openParenToken: ISyntaxToken;
 
-            if (openParenToken.fullWidth() > 0) {
-                parameters = parseSeparatedSyntaxList<ParameterSyntax>(ListParsingState.ParameterList_Parameters);
-            }
-
-            return new ParameterListSyntax(parseNodeData, openParenToken, parameters || <any>[], eatToken(SyntaxKind.CloseParenToken));
+            return new ParameterListSyntax(parseNodeData,
+                openParenToken = eatToken(SyntaxKind.OpenParenToken),
+                openParenToken.fullWidth() > 0 ? parseSeparatedSyntaxList<ParameterSyntax>(ListParsingState.ParameterList_Parameters) : [],
+                eatToken(SyntaxKind.CloseParenToken));
         }
 
         function parseOptionalTypeAnnotation(allowStringLiteral: boolean): TypeAnnotationSyntax {
@@ -3717,10 +3690,7 @@ module TypeScript.Parser {
         }
 
         // Returns true if we should abort parsing.
-        function abortParsingListOrMoveToNextToken<T extends ISyntaxNodeOrToken>(
-                currentListType: ListParsingState,
-                nodeAndSeparators: ISyntaxNodeOrToken[]): boolean {
-
+        function abortParsingListOrMoveToNextToken<T extends ISyntaxNodeOrToken>(currentListType: ListParsingState): boolean {
             // Ok.  We're at a token that is not a terminator for the list and wasn't the start of 
             // an item in the list. Definitely report an error for this token.
             reportUnexpectedTokenDiagnostic(currentListType);
@@ -3746,22 +3716,22 @@ module TypeScript.Parser {
             return false;
         }
 
-        function tryParseExpectedListItem(
-                currentListType: ListParsingState, inErrorRecovery: boolean, items: ISyntaxNodeOrToken[], processItems: (items: ISyntaxNodeOrToken[]) => void): boolean {
-            var item = tryParseExpectedListItemWorker(currentListType, inErrorRecovery);
+        function tryParseExpectedListItem<T extends ISyntaxNodeOrToken>(
+                currentListType: ListParsingState,
+                inErrorRecovery: boolean,
+                items: T[],
+                processItems: (items: ISyntaxNodeOrToken[]) => void): void {
+            var item = <T>tryParseExpectedListItemWorker(currentListType, inErrorRecovery);
 
-            if (item === undefined) {
-                return false;
+            if (item !== undefined) {
+                // Debug.assert(item !== undefined);
+
+                items.push(item);
+
+                if (processItems) {
+                    processItems(items);
+                }
             }
-            // Debug.assert(item !== undefined);
-
-            items.push(item);
-
-            if (processItems) {
-                processItems(items);
-            }
-
-            return true;
         }
 
         function listIsTerminated(currentListType: ListParsingState): boolean {
@@ -3775,9 +3745,10 @@ module TypeScript.Parser {
             while (true) {
                 // Try to parse an item of the list.  If we fail then decide if we need to abort or 
                 // continue parsing.
-                var succeeded = tryParseExpectedListItem(currentListType, /*inErrorRecovery:*/ false, items, processItems);
+                var oldItemsLength = items.length;
+                tryParseExpectedListItem(currentListType, /*inErrorRecovery:*/ false, items, processItems);
 
-                if (!succeeded) {
+                if (items.length === oldItemsLength) {
                     // We weren't able to parse out a list element.
 
                     // That may have been because the list is complete.  In that case, break out 
@@ -3788,7 +3759,7 @@ module TypeScript.Parser {
 
                     // List wasn't complete and we didn't get an item.  Figure out if we should bail out
                     // or skip a token and continue.
-                    var abort = abortParsingListOrMoveToNextToken(currentListType, items);
+                    var abort = abortParsingListOrMoveToNextToken(currentListType);
                     if (abort) {
                         break;
                     }
@@ -3820,9 +3791,10 @@ module TypeScript.Parser {
                 // continue parsing.
 
                 // Debug.assert(oldItemsCount % 2 === 0);
-                var succeeded = tryParseExpectedListItem(currentListType, inErrorRecovery, nodesAndSeparators, /*processItems:*/ undefined);
+                var oldArrayLength = nodesAndSeparators.length;
+                tryParseExpectedListItem(currentListType, inErrorRecovery, nodesAndSeparators, /*processItems:*/ undefined);
 
-                if (!succeeded) {
+                if (nodesAndSeparators.length === oldArrayLength) {
                     // We weren't able to parse out a list element.
                     // Debug.assert(items === undefined || items.length % 2 === 0);
                     
@@ -3834,7 +3806,7 @@ module TypeScript.Parser {
 
                     // List wasn't complete and we didn't get an item.  Figure out if we should bail out
                     // or skip a token and continue.
-                    var abort = abortParsingListOrMoveToNextToken(currentListType, nodesAndSeparators);
+                    var abort = abortParsingListOrMoveToNextToken(currentListType);
                     if (abort) {
                         break;
                     }
