@@ -1641,8 +1641,7 @@ var definitions = [
         children: [
             { name: 'forKeyword', isToken: true, excludeFromAST: true },
             { name: 'openParenToken', isToken: true, excludeFromAST: true },
-            { name: 'variableDeclaration', type: 'VariableDeclarationSyntax', isOptional: true },
-            { name: 'initializer', type: 'IExpressionSyntax', isOptional: true },
+            { name: 'initializer', type: 'VariableDeclarationSyntax | IExpressionSyntax', isOptional: true },
             { name: 'firstSemicolonToken', isToken: true, tokenKinds: ['SemicolonToken'], excludeFromAST: true },
             { name: 'condition', type: 'IExpressionSyntax', isOptional: true },
             { name: 'secondSemicolonToken', isToken: true, tokenKinds: ['SemicolonToken'], excludeFromAST: true },
@@ -1658,10 +1657,9 @@ var definitions = [
         children: [
             { name: 'forKeyword', isToken: true, excludeFromAST: true },
             { name: 'openParenToken', isToken: true, excludeFromAST: true },
-            { name: 'variableDeclaration', type: 'VariableDeclarationSyntax', isOptional: true },
-            { name: 'left', type: 'IExpressionSyntax', isOptional: true },
+            { name: 'left', type: 'VariableDeclarationSyntax | IExpressionSyntax' },
             { name: 'inKeyword', isToken: true, excludeFromAST: true },
-            { name: 'expression', type: 'IExpressionSyntax' },
+            { name: 'right', type: 'IExpressionSyntax' },
             { name: 'closeParenToken', isToken: true, excludeFromAST: true },
             { name: 'statement', type: 'IStatementSyntax' }
         ]

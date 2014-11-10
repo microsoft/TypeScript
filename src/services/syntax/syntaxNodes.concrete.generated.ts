@@ -800,11 +800,10 @@ module TypeScript {
         }
     }
 
-    export var ForStatementSyntax: ForStatementConstructor = <any>function(data: number, forKeyword: ISyntaxToken, openParenToken: ISyntaxToken, variableDeclaration: VariableDeclarationSyntax, initializer: IExpressionSyntax, firstSemicolonToken: ISyntaxToken, condition: IExpressionSyntax, secondSemicolonToken: ISyntaxToken, incrementor: IExpressionSyntax, closeParenToken: ISyntaxToken, statement: IStatementSyntax) {
+    export var ForStatementSyntax: ForStatementConstructor = <any>function(data: number, forKeyword: ISyntaxToken, openParenToken: ISyntaxToken, initializer: VariableDeclarationSyntax | IExpressionSyntax, firstSemicolonToken: ISyntaxToken, condition: IExpressionSyntax, secondSemicolonToken: ISyntaxToken, incrementor: IExpressionSyntax, closeParenToken: ISyntaxToken, statement: IStatementSyntax) {
         if (data) { this.__data = data; }
         this.forKeyword = forKeyword,
         this.openParenToken = openParenToken,
-        this.variableDeclaration = variableDeclaration,
         this.initializer = initializer,
         this.firstSemicolonToken = firstSemicolonToken,
         this.condition = condition,
@@ -814,7 +813,6 @@ module TypeScript {
         this.statement = statement,
         forKeyword.parent = this,
         openParenToken.parent = this,
-        variableDeclaration && (variableDeclaration.parent = this),
         initializer && (initializer.parent = this),
         firstSemicolonToken.parent = this,
         condition && (condition.parent = this),
@@ -824,53 +822,49 @@ module TypeScript {
         statement.parent = this;
     };
     ForStatementSyntax.prototype.kind = SyntaxKind.ForStatement;
-    ForStatementSyntax.prototype.childCount = 10;
+    ForStatementSyntax.prototype.childCount = 9;
     ForStatementSyntax.prototype.childAt = function(index: number): ISyntaxElement {
         switch (index) {
             case 0: return this.forKeyword;
             case 1: return this.openParenToken;
-            case 2: return this.variableDeclaration;
-            case 3: return this.initializer;
-            case 4: return this.firstSemicolonToken;
-            case 5: return this.condition;
-            case 6: return this.secondSemicolonToken;
-            case 7: return this.incrementor;
-            case 8: return this.closeParenToken;
-            case 9: return this.statement;
+            case 2: return this.initializer;
+            case 3: return this.firstSemicolonToken;
+            case 4: return this.condition;
+            case 5: return this.secondSemicolonToken;
+            case 6: return this.incrementor;
+            case 7: return this.closeParenToken;
+            case 8: return this.statement;
         }
     }
 
-    export var ForInStatementSyntax: ForInStatementConstructor = <any>function(data: number, forKeyword: ISyntaxToken, openParenToken: ISyntaxToken, variableDeclaration: VariableDeclarationSyntax, left: IExpressionSyntax, inKeyword: ISyntaxToken, expression: IExpressionSyntax, closeParenToken: ISyntaxToken, statement: IStatementSyntax) {
+    export var ForInStatementSyntax: ForInStatementConstructor = <any>function(data: number, forKeyword: ISyntaxToken, openParenToken: ISyntaxToken, left: VariableDeclarationSyntax | IExpressionSyntax, inKeyword: ISyntaxToken, right: IExpressionSyntax, closeParenToken: ISyntaxToken, statement: IStatementSyntax) {
         if (data) { this.__data = data; }
         this.forKeyword = forKeyword,
         this.openParenToken = openParenToken,
-        this.variableDeclaration = variableDeclaration,
         this.left = left,
         this.inKeyword = inKeyword,
-        this.expression = expression,
+        this.right = right,
         this.closeParenToken = closeParenToken,
         this.statement = statement,
         forKeyword.parent = this,
         openParenToken.parent = this,
-        variableDeclaration && (variableDeclaration.parent = this),
-        left && (left.parent = this),
+        left.parent = this,
         inKeyword.parent = this,
-        expression.parent = this,
+        right.parent = this,
         closeParenToken.parent = this,
         statement.parent = this;
     };
     ForInStatementSyntax.prototype.kind = SyntaxKind.ForInStatement;
-    ForInStatementSyntax.prototype.childCount = 8;
+    ForInStatementSyntax.prototype.childCount = 7;
     ForInStatementSyntax.prototype.childAt = function(index: number): ISyntaxElement {
         switch (index) {
             case 0: return this.forKeyword;
             case 1: return this.openParenToken;
-            case 2: return this.variableDeclaration;
-            case 3: return this.left;
-            case 4: return this.inKeyword;
-            case 5: return this.expression;
-            case 6: return this.closeParenToken;
-            case 7: return this.statement;
+            case 2: return this.left;
+            case 3: return this.inKeyword;
+            case 4: return this.right;
+            case 5: return this.closeParenToken;
+            case 6: return this.statement;
         }
     }
 

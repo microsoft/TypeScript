@@ -820,8 +820,7 @@ module TypeScript.PrettyPrinter {
             this.appendToken(node.forKeyword);
             this.ensureSpace();
             this.appendToken(node.openParenToken);
-            this.appendNode(node.variableDeclaration);
-            this.appendElement(node.initializer);
+            visitNodeOrToken(this, node.initializer);
             this.appendToken(node.firstSemicolonToken);
 
             if (node.condition) {
@@ -844,12 +843,11 @@ module TypeScript.PrettyPrinter {
             this.appendToken(node.forKeyword);
             this.ensureSpace();
             this.appendToken(node.openParenToken);
-            this.appendNode(node.variableDeclaration);
             this.appendElement(node.left);
             this.ensureSpace();
             this.appendToken(node.inKeyword);
             this.ensureSpace();
-            this.appendElement(node.expression);
+            this.appendElement(node.right);
             this.appendToken(node.closeParenToken);
             this.appendBlockOrStatement(node.statement);
         }

@@ -1710,61 +1710,46 @@ module TypeScript.Parser {
 
             var _currentToken = currentToken();
             var tokenKind = _currentToken.kind;
-            if (tokenKind === SyntaxKind.VarKeyword) {
-                // for ( var VariableDeclarationListNoIn; Expressionopt ; Expressionopt ) Statement
+
+            // If we see 'for ( ;' then there is no initializer, and this must be a 'for' statement.
+            // If we don't see a semicolon, then parse our a variable declaration or an initializer
+            // expression.  Both could be hte start of a 'for' or 'for-in' statement. So, after that
+            // check to see if we have an 'in' keyword to make the final determination as to what we
+            // have.
+
+            // When trying to parse either a variable declaration or an expression do not allow 'in'
+            // to be parsed, as that will actually be consumed by the 'for in' statement production
+            // instead.  Also, we allow any expression here (even though the grammar only allows for
+            // LeftHandSideExpression).  We will make sure we actually have a LHS expression in the 
+            // grammar walker.
+            var initializer = tokenKind === SyntaxKind.SemicolonToken
+                ? undefined
+                : tokenKind === SyntaxKind.VarKeyword
+                    ? parseVariableDeclaration(/*allowIn:*/ false)
+                    : parseExpression(/*allowIn:*/ false);
+
+            // In order to be a 'for-in' statement, we had to have an initializer of some sort, and
+            // we had to actually get an 'in' keyword.
+            if (initializer !== undefined && currentToken().kind === SyntaxKind.InKeyword) {
                 // for ( var VariableDeclarationNoIn in Expression ) Statement
-                return parseForOrForInStatementWithVariableDeclaration(forKeyword, openParenToken);
-            }
-            else if (tokenKind === SyntaxKind.SemicolonToken) {
-                // for ( ; Expressionopt ; Expressionopt ) Statement
-                return parseForStatementWithNoVariableDeclarationOrInitializer(forKeyword, openParenToken);
+                // for ( LeftHandSideExpression in Expression ) Statement
+                return new ForInStatementSyntax(parseNodeData,
+                    forKeyword, openParenToken, initializer, eatToken(SyntaxKind.InKeyword),
+                    parseExpression(/*allowIn:*/ true), eatToken(SyntaxKind.CloseParenToken), parseStatement(/*inErrorRecovery:*/ false));
             }
             else {
-                // for ( ExpressionNoInopt; Expressionopt ; Expressionopt ) Statement
-                // for ( LeftHandSideExpression in Expression ) Statement
-                return parseForOrForInStatementWithInitializer(forKeyword, openParenToken);
+                // NOTE: From the es5 section on Automatic Semicolon Insertion.
+                // a semicolon is never inserted automatically if the semicolon would then ... become 
+                // one of the two semicolons in the header of a for statement
+
+                // for (ExpressionNoInopt; Expressionopt ; Expressionopt ) Statement
+                // for (var VariableDeclarationListNoIn; Expressionopt; Expressionopt) Statement
+                return new ForStatementSyntax(parseNodeData,
+                    forKeyword, openParenToken, initializer,
+                    eatToken(SyntaxKind.SemicolonToken), tryParseForStatementCondition(),
+                    eatToken(SyntaxKind.SemicolonToken), tryParseForStatementIncrementor(),
+                    eatToken(SyntaxKind.CloseParenToken), parseStatement(/*inErrorRecovery:*/ false));
             }
-        }
-
-        function parseForOrForInStatementWithVariableDeclaration(forKeyword: ISyntaxToken, openParenToken: ISyntaxToken): IStatementSyntax {
-            // Debug.assert(forKeyword.kind === SyntaxKind.ForKeyword && openParenToken.kind === SyntaxKind.OpenParenToken);
-            // Debug.assert(currentToken().kind === SyntaxKind.VarKeyword);
-
-            // for ( var VariableDeclarationListNoIn; Expressionopt ; Expressionopt ) Statement
-            // for ( var VariableDeclarationNoIn in Expression ) Statement
-
-            var variableDeclaration = parseVariableDeclaration(/*allowIn:*/ false);
-            return currentToken().kind === SyntaxKind.InKeyword 
-                ? parseForInStatementWithVariableDeclarationOrInitializer(forKeyword, openParenToken, variableDeclaration, undefined)
-                : parseForStatementWithVariableDeclarationOrInitializer(forKeyword, openParenToken, variableDeclaration, undefined);
-        }
-
-        function parseForInStatementWithVariableDeclarationOrInitializer(forKeyword: ISyntaxToken, openParenToken: ISyntaxToken, variableDeclaration: VariableDeclarationSyntax, initializer: IExpressionSyntax): ForInStatementSyntax {
-            // for ( var VariableDeclarationNoIn in Expression ) Statement
-
-            return new ForInStatementSyntax(parseNodeData,
-                forKeyword, openParenToken, variableDeclaration, initializer, eatToken(SyntaxKind.InKeyword),
-                parseExpression(/*allowIn:*/ true), eatToken(SyntaxKind.CloseParenToken), parseStatement(/*inErrorRecovery:*/ false));
-        }
-
-        function parseForOrForInStatementWithInitializer(forKeyword: ISyntaxToken, openParenToken: ISyntaxToken): IStatementSyntax {
-            // Debug.assert(forKeyword.kind === SyntaxKind.ForKeyword && openParenToken.kind === SyntaxKind.OpenParenToken);
-
-            // for ( ExpressionNoInopt; Expressionopt ; Expressionopt ) Statement
-            // for ( LeftHandSideExpression in Expression ) Statement
-
-            var initializer = parseExpression(/*allowIn:*/ false);
-            return currentToken().kind === SyntaxKind.InKeyword
-                ? parseForInStatementWithVariableDeclarationOrInitializer(forKeyword, openParenToken, undefined, initializer)
-                : parseForStatementWithVariableDeclarationOrInitializer(forKeyword, openParenToken, undefined, initializer);
-        }
-
-        function parseForStatementWithNoVariableDeclarationOrInitializer(forKeyword: ISyntaxToken, openParenToken: ISyntaxToken): ForStatementSyntax {
-            // Debug.assert(forKeyword.kind === SyntaxKind.ForKeyword && openParenToken.kind === SyntaxKind.OpenParenToken);
-            // Debug.assert(currentToken().kind === SyntaxKind.SemicolonToken);
-            // for ( ; Expressionopt ; Expressionopt ) Statement
-
-            return parseForStatementWithVariableDeclarationOrInitializer(forKeyword, openParenToken, /*variableDeclaration:*/ undefined, /*initializer:*/ undefined);
         }
 
         function tryParseForStatementCondition(): IExpressionSyntax {
@@ -1786,18 +1771,6 @@ module TypeScript.Parser {
             }
 
             return undefined;
-        }
-
-        function parseForStatementWithVariableDeclarationOrInitializer(forKeyword: ISyntaxToken, openParenToken: ISyntaxToken, variableDeclaration: VariableDeclarationSyntax, initializer: IExpressionSyntax): ForStatementSyntax {
-            // NOTE: From the es5 section on Automatic Semicolon Insertion.
-            // a semicolon is never inserted automatically if the semicolon would then ... become 
-            // one of the two semicolons in the header of a for statement
-
-            return new ForStatementSyntax(parseNodeData,
-                forKeyword, openParenToken, variableDeclaration, initializer,
-                eatToken(SyntaxKind.SemicolonToken), tryParseForStatementCondition(),
-                eatToken(SyntaxKind.SemicolonToken), tryParseForStatementIncrementor(),
-                eatToken(SyntaxKind.CloseParenToken), parseStatement(/*inErrorRecovery:*/ false));
         }
 
         function tryEatBreakOrContinueLabel(): ISyntaxToken {

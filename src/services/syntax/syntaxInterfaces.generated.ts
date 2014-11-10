@@ -296,8 +296,7 @@ module TypeScript {
     export interface ForStatementSyntax extends ISyntaxNode, IStatementSyntax {
         forKeyword: ISyntaxToken;
         openParenToken: ISyntaxToken;
-        variableDeclaration: VariableDeclarationSyntax;
-        initializer: IExpressionSyntax;
+        initializer: VariableDeclarationSyntax | IExpressionSyntax;
         firstSemicolonToken: ISyntaxToken;
         condition: IExpressionSyntax;
         secondSemicolonToken: ISyntaxToken;
@@ -305,19 +304,18 @@ module TypeScript {
         closeParenToken: ISyntaxToken;
         statement: IStatementSyntax;
     }
-    export interface ForStatementConstructor { new (data: number, forKeyword: ISyntaxToken, openParenToken: ISyntaxToken, variableDeclaration: VariableDeclarationSyntax, initializer: IExpressionSyntax, firstSemicolonToken: ISyntaxToken, condition: IExpressionSyntax, secondSemicolonToken: ISyntaxToken, incrementor: IExpressionSyntax, closeParenToken: ISyntaxToken, statement: IStatementSyntax): ForStatementSyntax }
+    export interface ForStatementConstructor { new (data: number, forKeyword: ISyntaxToken, openParenToken: ISyntaxToken, initializer: VariableDeclarationSyntax | IExpressionSyntax, firstSemicolonToken: ISyntaxToken, condition: IExpressionSyntax, secondSemicolonToken: ISyntaxToken, incrementor: IExpressionSyntax, closeParenToken: ISyntaxToken, statement: IStatementSyntax): ForStatementSyntax }
 
     export interface ForInStatementSyntax extends ISyntaxNode, IStatementSyntax {
         forKeyword: ISyntaxToken;
         openParenToken: ISyntaxToken;
-        variableDeclaration: VariableDeclarationSyntax;
-        left: IExpressionSyntax;
+        left: VariableDeclarationSyntax | IExpressionSyntax;
         inKeyword: ISyntaxToken;
-        expression: IExpressionSyntax;
+        right: IExpressionSyntax;
         closeParenToken: ISyntaxToken;
         statement: IStatementSyntax;
     }
-    export interface ForInStatementConstructor { new (data: number, forKeyword: ISyntaxToken, openParenToken: ISyntaxToken, variableDeclaration: VariableDeclarationSyntax, left: IExpressionSyntax, inKeyword: ISyntaxToken, expression: IExpressionSyntax, closeParenToken: ISyntaxToken, statement: IStatementSyntax): ForInStatementSyntax }
+    export interface ForInStatementConstructor { new (data: number, forKeyword: ISyntaxToken, openParenToken: ISyntaxToken, left: VariableDeclarationSyntax | IExpressionSyntax, inKeyword: ISyntaxToken, right: IExpressionSyntax, closeParenToken: ISyntaxToken, statement: IStatementSyntax): ForInStatementSyntax }
 
     export interface EmptyStatementSyntax extends ISyntaxNode, IStatementSyntax {
         semicolonToken: ISyntaxToken;

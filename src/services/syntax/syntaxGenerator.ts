@@ -790,8 +790,7 @@ var definitions:ITypeDefinition[] = [
         children: [
             <any>{ name: 'forKeyword', isToken: true, excludeFromAST: true },
             <any>{ name: 'openParenToken', isToken: true, excludeFromAST: true },
-            <any>{ name: 'variableDeclaration', type: 'VariableDeclarationSyntax', isOptional: true },
-            <any>{ name: 'initializer', type: 'IExpressionSyntax', isOptional: true },
+            <any>{ name: 'initializer', type: 'VariableDeclarationSyntax | IExpressionSyntax', isOptional: true },
             <any>{ name: 'firstSemicolonToken', isToken: true, tokenKinds: ['SemicolonToken'], excludeFromAST: true },
             <any>{ name: 'condition', type: 'IExpressionSyntax', isOptional: true },
             <any>{ name: 'secondSemicolonToken', isToken: true, tokenKinds: ['SemicolonToken'], excludeFromAST: true },
@@ -807,10 +806,9 @@ var definitions:ITypeDefinition[] = [
         children: [
             <any>{ name: 'forKeyword', isToken: true, excludeFromAST: true },
             <any>{ name: 'openParenToken', isToken: true, excludeFromAST: true },
-            <any>{ name: 'variableDeclaration', type: 'VariableDeclarationSyntax', isOptional: true },
-            <any>{ name: 'left', type: 'IExpressionSyntax', isOptional: true },
+            <any>{ name: 'left', type: 'VariableDeclarationSyntax | IExpressionSyntax' },
             <any>{ name: 'inKeyword', isToken: true, excludeFromAST: true },
-            <any>{ name: 'expression', type: 'IExpressionSyntax' },
+            <any>{ name: 'right', type: 'IExpressionSyntax' },
             <any>{ name: 'closeParenToken', isToken: true, excludeFromAST: true },
             <any>{ name: 'statement', type: 'IStatementSyntax' }
         ]
