@@ -99,15 +99,13 @@ module TypeScript {
             this.visitToken(node.functionKeyword);
             this.visitToken(node.identifier);
             visitNodeOrToken(this, node.callSignature);
-            visitNodeOrToken(this, node.block);
-            this.visitOptionalToken(node.semicolonToken);
+            visitNodeOrToken(this, node.body);
         }
 
         public visitModuleDeclaration(node: ModuleDeclarationSyntax): void {
             this.visitList(node.modifiers);
             this.visitToken(node.moduleKeyword);
             visitNodeOrToken(this, node.name);
-            this.visitOptionalToken(node.stringLiteral);
             this.visitToken(node.openBraceToken);
             this.visitList(node.moduleElements);
             this.visitToken(node.closeBraceToken);
@@ -153,8 +151,7 @@ module TypeScript {
             this.visitList(node.modifiers);
             visitNodeOrToken(this, node.propertyName);
             visitNodeOrToken(this, node.callSignature);
-            visitNodeOrToken(this, node.block);
-            this.visitOptionalToken(node.semicolonToken);
+            visitNodeOrToken(this, node.body);
         }
 
         public visitMemberVariableDeclaration(node: MemberVariableDeclarationSyntax): void {
@@ -167,8 +164,7 @@ module TypeScript {
             this.visitList(node.modifiers);
             this.visitToken(node.constructorKeyword);
             visitNodeOrToken(this, node.callSignature);
-            visitNodeOrToken(this, node.block);
-            this.visitOptionalToken(node.semicolonToken);
+            visitNodeOrToken(this, node.body);
         }
 
         public visitIndexMemberDeclaration(node: IndexMemberDeclarationSyntax): void {
@@ -280,7 +276,6 @@ module TypeScript {
         public visitForStatement(node: ForStatementSyntax): void {
             this.visitToken(node.forKeyword);
             this.visitToken(node.openParenToken);
-            visitNodeOrToken(this, node.variableDeclaration);
             visitNodeOrToken(this, node.initializer);
             this.visitToken(node.firstSemicolonToken);
             visitNodeOrToken(this, node.condition);
@@ -293,10 +288,9 @@ module TypeScript {
         public visitForInStatement(node: ForInStatementSyntax): void {
             this.visitToken(node.forKeyword);
             this.visitToken(node.openParenToken);
-            visitNodeOrToken(this, node.variableDeclaration);
             visitNodeOrToken(this, node.left);
             this.visitToken(node.inKeyword);
-            visitNodeOrToken(this, node.expression);
+            visitNodeOrToken(this, node.right);
             this.visitToken(node.closeParenToken);
             visitNodeOrToken(this, node.statement);
         }
@@ -432,15 +426,13 @@ module TypeScript {
         public visitParenthesizedArrowFunctionExpression(node: ParenthesizedArrowFunctionExpressionSyntax): void {
             visitNodeOrToken(this, node.callSignature);
             this.visitToken(node.equalsGreaterThanToken);
-            visitNodeOrToken(this, node.block);
-            visitNodeOrToken(this, node.expression);
+            visitNodeOrToken(this, node.body);
         }
 
         public visitSimpleArrowFunctionExpression(node: SimpleArrowFunctionExpressionSyntax): void {
             visitNodeOrToken(this, node.parameter);
             this.visitToken(node.equalsGreaterThanToken);
-            visitNodeOrToken(this, node.block);
-            visitNodeOrToken(this, node.expression);
+            visitNodeOrToken(this, node.body);
         }
 
         public visitCastExpression(node: CastExpressionSyntax): void {

@@ -13,7 +13,7 @@ format.document();
 goTo.marker('1');
 verify.currentLineContentIs('foo(): Bar { }');
 goTo.marker('2');
-verify.currentLineContentIs('function Foo      () #   { }');
+verify.currentLineContentIs('function Foo() #   { }');
 goTo.marker('3');
 verify.currentLineContentIs('4+:5');
 goTo.marker('4');
