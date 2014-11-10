@@ -1130,21 +1130,13 @@ module TypeScript.Parser {
         }
 
         function parseConstructorDeclaration(): ConstructorDeclarationSyntax {
-            var modifiers = parseModifiers();
-            var constructorKeyword = eatToken(SyntaxKind.ConstructorKeyword);
-            var callSignature = parseCallSignature(/*requireCompleteTypeParameterList:*/ false);
-
-            var semicolonToken: ISyntaxToken = undefined;
-            var block: BlockSyntax = undefined;
-
-            if (isBlock()) {
-                block = parseBlock(/*parseStatementsEvenWithNoOpenBrace:*/ false, /*checkForStrictMode:*/ true);
-            }
-            else {
-                semicolonToken = eatExplicitOrAutomaticSemicolon(/*allowWithoutNewline:*/ false);
-            }
-
-            return new ConstructorDeclarationSyntax(parseNodeData, modifiers, constructorKeyword, callSignature, block, semicolonToken);
+            return new ConstructorDeclarationSyntax(parseNodeData, 
+                parseModifiers(), 
+                eatToken(SyntaxKind.ConstructorKeyword), 
+                parseCallSignature(/*requireCompleteTypeParameterList:*/ false),
+                isBlock()
+                    ? parseBlock(/*parseStatementsEvenWithNoOpenBrace:*/ false, /*checkForStrictMode:*/ true)
+                    : eatExplicitOrAutomaticSemicolon(/*allowWithoutNewline:*/ false));
         }
 
         function parseMemberFunctionDeclaration(modifiers: ISyntaxToken[], propertyName: IPropertyNameSyntax): MemberFunctionDeclarationSyntax {
@@ -1153,18 +1145,11 @@ module TypeScript.Parser {
             // If we got an errant => then we want to parse what's coming up without requiring an
             // open brace.
             var parseBlockEvenWithNoOpenBrace = tryAddUnexpectedEqualsGreaterThanToken(callSignature);
+            var blockOrSemicolonToken = parseBlockEvenWithNoOpenBrace || isBlock()
+                ? parseBlock(parseBlockEvenWithNoOpenBrace, /*checkForStrictMode:*/ true)
+                : eatExplicitOrAutomaticSemicolon(/*allowWithoutNewline:*/ false);
 
-            var block: BlockSyntax = undefined;
-            var semicolon: ISyntaxToken = undefined;
-
-            if (parseBlockEvenWithNoOpenBrace || isBlock()) {
-                block = parseBlock(parseBlockEvenWithNoOpenBrace, /*checkForStrictMode:*/ true);
-            }
-            else {
-                semicolon = eatExplicitOrAutomaticSemicolon(/*allowWithoutNewline:*/ false);
-            }
-
-            return new MemberFunctionDeclarationSyntax(parseNodeData, modifiers, propertyName, callSignature, block, semicolon);
+            return new MemberFunctionDeclarationSyntax(parseNodeData, modifiers, propertyName, callSignature, blockOrSemicolonToken);
         }
         
         function parseMemberVariableDeclaration(modifiers: ISyntaxToken[], propertyName: IPropertyNameSyntax): MemberVariableDeclarationSyntax {
@@ -1226,18 +1211,12 @@ module TypeScript.Parser {
             // open brace.
             var parseBlockEvenWithNoOpenBrace = tryAddUnexpectedEqualsGreaterThanToken(callSignature);
 
-            var semicolonToken: ISyntaxToken = undefined;
-            var block: BlockSyntax = undefined;
-
             // Parse a block if we're on a bock, or if we saw a '=>'
-            if (parseBlockEvenWithNoOpenBrace || isBlock()) {
-                block = parseBlock(parseBlockEvenWithNoOpenBrace, /*checkForStrictMode:*/ true);
-            }
-            else {
-                semicolonToken = eatExplicitOrAutomaticSemicolon(/*allowWithoutNewline:*/ false);
-            }
+            var blockOrSemicolonToken = parseBlockEvenWithNoOpenBrace || isBlock()
+                ? parseBlock(parseBlockEvenWithNoOpenBrace, /*checkForStrictMode:*/ true)
+                : eatExplicitOrAutomaticSemicolon(/*allowWithoutNewline:*/ false);
 
-            return new FunctionDeclarationSyntax(parseNodeData, modifiers, functionKeyword, identifier, callSignature, block, semicolonToken);
+            return new FunctionDeclarationSyntax(parseNodeData, modifiers, functionKeyword, identifier, callSignature, blockOrSemicolonToken);
         }
 
         function parseModuleName(): INameSyntax {

@@ -160,8 +160,7 @@ var definitions:ITypeDefinition[] = [
             <any>{ name: 'functionKeyword', isToken: true, excludeFromAST: true },
             <any>{ name: 'identifier', isToken: true, tokenKinds: ['IdentifierName'] },
             <any>{ name: 'callSignature', type: 'CallSignatureSyntax' },
-            <any>{ name: 'block', type: 'BlockSyntax', isOptional: true },
-            <any>{ name: 'semicolonToken', isToken: true, isOptional: true, excludeFromAST: true }
+            <any>{ name: 'body', type: 'BlockSyntax | ISyntaxToken' }
         ]
     },
     <any>{
@@ -638,8 +637,7 @@ var definitions:ITypeDefinition[] = [
             <any>{ name: 'modifiers', isList: true, elementType: 'ISyntaxToken' },
             <any>{ name: 'constructorKeyword', isToken: true },
             <any>{ name: 'callSignature', type: 'CallSignatureSyntax' },
-            <any>{ name: 'block', type: 'BlockSyntax', isOptional: true },
-            <any>{ name: 'semicolonToken', isToken: true, isOptional: true, excludeFromAST: true }
+            <any>{ name: 'body', type: 'BlockSyntax | ISyntaxToken', }
         ],
         isTypeScriptSpecific: true
     },
@@ -651,8 +649,7 @@ var definitions:ITypeDefinition[] = [
             <any>{ name: 'modifiers', isList: true, elementType: 'ISyntaxToken' },
             <any>{ name: 'propertyName', type: 'IPropertyNameSyntax' },
             <any>{ name: 'callSignature', type: 'CallSignatureSyntax' },
-            <any>{ name: 'block', type: 'BlockSyntax', isOptional: true },
-            <any>{ name: 'semicolonToken', isToken: true, isOptional: true, excludeFromAST: true }
+            <any>{ name: 'body', type: 'BlockSyntax | ISyntaxToken' }
         ],
         isTypeScriptSpecific: true
     },

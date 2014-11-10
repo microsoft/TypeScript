@@ -99,8 +99,7 @@ module TypeScript {
             this.visitToken(node.functionKeyword);
             this.visitToken(node.identifier);
             visitNodeOrToken(this, node.callSignature);
-            visitNodeOrToken(this, node.block);
-            this.visitOptionalToken(node.semicolonToken);
+            visitNodeOrToken(this, node.body);
         }
 
         public visitModuleDeclaration(node: ModuleDeclarationSyntax): void {
@@ -152,8 +151,7 @@ module TypeScript {
             this.visitList(node.modifiers);
             visitNodeOrToken(this, node.propertyName);
             visitNodeOrToken(this, node.callSignature);
-            visitNodeOrToken(this, node.block);
-            this.visitOptionalToken(node.semicolonToken);
+            visitNodeOrToken(this, node.body);
         }
 
         public visitMemberVariableDeclaration(node: MemberVariableDeclarationSyntax): void {
@@ -166,8 +164,7 @@ module TypeScript {
             this.visitList(node.modifiers);
             this.visitToken(node.constructorKeyword);
             visitNodeOrToken(this, node.callSignature);
-            visitNodeOrToken(this, node.block);
-            this.visitOptionalToken(node.semicolonToken);
+            visitNodeOrToken(this, node.body);
         }
 
         public visitIndexMemberDeclaration(node: IndexMemberDeclarationSyntax): void {

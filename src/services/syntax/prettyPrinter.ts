@@ -316,13 +316,13 @@ module TypeScript.PrettyPrinter {
             this.appendToken(node.closeBraceToken);
         }
 
-        private appendBlockOrSemicolon(block: BlockSyntax, semicolonToken: ISyntaxToken) {
-            if (block) {
+        private appendBlockOrSemicolon(body: BlockSyntax | ISyntaxToken) {
+            if (body.kind === SyntaxKind.Block) {
                 this.ensureSpace();
-                visitNodeOrToken(this, block);
+                visitNodeOrToken(this, body);
             }
             else {
-                this.appendToken(semicolonToken);
+                this.appendToken(<ISyntaxToken>body);
             }
         }
 
@@ -333,7 +333,7 @@ module TypeScript.PrettyPrinter {
             this.ensureSpace();
             this.appendToken(node.identifier);
             this.appendNode(node.callSignature);
-            this.appendBlockOrSemicolon(node.block, node.semicolonToken);
+            this.appendBlockOrSemicolon(node.body);
         }
 
         public visitVariableStatement(node: VariableStatementSyntax): void {
@@ -668,7 +668,7 @@ module TypeScript.PrettyPrinter {
         public visitConstructorDeclaration(node: ConstructorDeclarationSyntax): void {
             this.appendToken(node.constructorKeyword);
             visitNodeOrToken(this, node.callSignature);
-            this.appendBlockOrSemicolon(node.block, node.semicolonToken);
+            this.appendBlockOrSemicolon(node.body);
         }
 
         public visitIndexMemberDeclaration(node: IndexMemberDeclarationSyntax): void {
@@ -683,7 +683,7 @@ module TypeScript.PrettyPrinter {
             this.ensureSpace();
             visitNodeOrToken(this, node.propertyName);
             visitNodeOrToken(this, node.callSignature);
-            this.appendBlockOrSemicolon(node.block, node.semicolonToken);
+            this.appendBlockOrSemicolon(node.body);
         }
 
         public visitGetAccessor(node: GetAccessorSyntax): void {
