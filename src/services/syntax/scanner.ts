@@ -613,26 +613,31 @@ module TypeScript.Scanner {
             return createTrivia(SyntaxKind.MultiLineCommentTrivia, absoluteStartIndex);
         }
 
-        function skipMultiLineCommentTrivia(): number {
+        function skipMultiLineCommentTrivia(): void {
             // The '2' is for the "/*" we consumed.
+            var _index = index + 2;
+            var _end = end;
+
             index += 2;
 
             while (true) {
-                if (index === end) {
+                if (_index === _end) {
                     reportDiagnostic(end, 0, DiagnosticCode._0_expected, ["*/"]);
-                    return;
+                    break;
                 }
 
-                if ((index + 1) < end &&
-                    str.charCodeAt(index) === CharacterCodes.asterisk &&
-                    str.charCodeAt(index + 1) === CharacterCodes.slash) {
+                if ((_index + 1) < _end &&
+                    str.charCodeAt(_index) === CharacterCodes.asterisk &&
+                    str.charCodeAt(_index + 1) === CharacterCodes.slash) {
 
-                    index += 2;
-                    return;
+                    _index += 2;
+                    break;
                 }
 
-                index++;
+                _index++;
             }
+
+            index = _index;
         }
 
         function scanLineTerminatorSequenceTrivia(ch: number): ISyntaxTrivia {
