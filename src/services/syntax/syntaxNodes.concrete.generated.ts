@@ -249,7 +249,7 @@ module TypeScript {
         functionKeyword.parent = this,
         identifier.parent = this,
         callSignature.parent = this,
-        body.parent = this;
+        body && (body.parent = this);
     };
     FunctionDeclarationSyntax.prototype.kind = SyntaxKind.FunctionDeclaration;
     FunctionDeclarationSyntax.prototype.childCount = 5;
@@ -412,7 +412,7 @@ module TypeScript {
         modifiers.parent = this,
         propertyName.parent = this,
         callSignature.parent = this,
-        body.parent = this;
+        body && (body.parent = this);
     };
     MemberFunctionDeclarationSyntax.prototype.kind = SyntaxKind.MemberFunctionDeclaration;
     MemberFunctionDeclarationSyntax.prototype.childCount = 4;
@@ -453,7 +453,7 @@ module TypeScript {
         modifiers.parent = this,
         constructorKeyword.parent = this,
         callSignature.parent = this,
-        body.parent = this;
+        body && (body.parent = this);
     };
     ConstructorDeclarationSyntax.prototype.kind = SyntaxKind.ConstructorDeclaration;
     ConstructorDeclarationSyntax.prototype.childCount = 4;

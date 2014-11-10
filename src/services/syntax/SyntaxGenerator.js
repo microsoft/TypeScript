@@ -1014,7 +1014,7 @@ var definitions = [
             { name: 'functionKeyword', isToken: true, excludeFromAST: true },
             { name: 'identifier', isToken: true, tokenKinds: ['IdentifierName'] },
             { name: 'callSignature', type: 'CallSignatureSyntax' },
-            { name: 'body', type: 'BlockSyntax | ISyntaxToken' }
+            { name: 'body', type: 'BlockSyntax | ISyntaxToken', isOptional: true }
         ]
     },
     {
@@ -1486,7 +1486,7 @@ var definitions = [
             { name: 'modifiers', isList: true, elementType: 'ISyntaxToken' },
             { name: 'constructorKeyword', isToken: true },
             { name: 'callSignature', type: 'CallSignatureSyntax' },
-            { name: 'body', type: 'BlockSyntax | ISyntaxToken' }
+            { name: 'body', type: 'BlockSyntax | ISyntaxToken', isOptional: true }
         ],
         isTypeScriptSpecific: true
     },
@@ -1498,7 +1498,7 @@ var definitions = [
             { name: 'modifiers', isList: true, elementType: 'ISyntaxToken' },
             { name: 'propertyName', type: 'IPropertyNameSyntax' },
             { name: 'callSignature', type: 'CallSignatureSyntax' },
-            { name: 'body', type: 'BlockSyntax | ISyntaxToken' }
+            { name: 'body', type: 'BlockSyntax | ISyntaxToken', isOptional: true }
         ],
         isTypeScriptSpecific: true
     },
