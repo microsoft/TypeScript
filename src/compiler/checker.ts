@@ -1001,28 +1001,9 @@ module ts {
             var symbol = resolveName(enclosingDeclaration, (<Identifier>firstIdentifier).text, meaning, /*nodeNotFoundErrorMessage*/ undefined, /*nameArg*/ undefined);
 
             // Verify if the symbol is accessible
-            var isVisible = hasVisibleDeclarations(symbol);
-            if (isVisible) {
-                return isVisible;
-            }
-
-            // Not visible populate error info
-            var errorSymbolName: string;
-            var errorModuleName: string;
-            // TODO(shkamat) For now lets just do this for alias declarations, but in all cases only first identifier text should be enough
-            if (entityName.parent.kind === SyntaxKind.ImportDeclaration) {
-                errorSymbolName = getTextOfNode(firstIdentifier);
-            }
-            else {
-                errorSymbolName = getTextOfNode(entityName);
-                errorModuleName = entityName.kind === SyntaxKind.QualifiedName ?
-                getTextOfNode(firstIdentifier) :
-                undefined;
-            }
-            return <SymbolAccessiblityResult>{
+            return hasVisibleDeclarations(symbol) || <SymbolAccessiblityResult>{
                 accessibility: SymbolAccessibility.NotAccessible,
-                errorSymbolName: errorSymbolName,
-                errorModuleName: errorModuleName
+                errorSymbolName: getTextOfNode(firstIdentifier),
             };
         }
 

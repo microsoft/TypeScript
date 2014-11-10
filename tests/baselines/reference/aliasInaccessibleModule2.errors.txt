@@ -1,4 +1,4 @@
-tests/cases/compiler/aliasInaccessibleModule2.ts(7,5): error TS4000: Import declaration 'R' is using private name 'N'.
+tests/cases/compiler/aliasInaccessibleModule2.ts(7,16): error TS4000: Import declaration 'R' is using private name 'N'.
 
 
 ==== tests/cases/compiler/aliasInaccessibleModule2.ts (1 errors) ====
@@ -9,7 +9,7 @@ tests/cases/compiler/aliasInaccessibleModule2.ts(7,5): error TS4000: Import decl
             
         }
         import R = N;
-        ~~~~~~~~~~~~~
+                   ~
 !!! error TS4000: Import declaration 'R' is using private name 'N'.
         export import X = R;
     }
