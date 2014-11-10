@@ -959,15 +959,6 @@ module ts {
         ConvertTabsToSpaces: boolean;
     }
 
-    export function copyEditorOptions(o: EditorOptions): EditorOptions {
-        return {
-            IndentSize: o.IndentSize,
-            TabSize: o.TabSize,
-            NewLineCharacter: o.NewLineCharacter,
-            ConvertTabsToSpaces: o.ConvertTabsToSpaces
-        };
-    }
-
     export interface FormatCodeOptions extends EditorOptions {
         InsertSpaceAfterCommaDelimiter: boolean;
         InsertSpaceAfterSemicolonInForStatements: boolean;
@@ -977,23 +968,6 @@ module ts {
         InsertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis: boolean;
         PlaceOpenBraceOnNewLineForFunctions: boolean;
         PlaceOpenBraceOnNewLineForControlBlocks: boolean;
-    }
-
-    export function copyFormatCodeOptions(o: FormatCodeOptions): FormatCodeOptions {
-        return {
-            IndentSize: o.IndentSize,
-            TabSize: o.TabSize,
-            NewLineCharacter: o.NewLineCharacter,
-            ConvertTabsToSpaces: o.ConvertTabsToSpaces,
-            InsertSpaceAfterCommaDelimiter: o.InsertSpaceAfterCommaDelimiter,
-            InsertSpaceAfterSemicolonInForStatements: o.InsertSpaceAfterSemicolonInForStatements,
-            InsertSpaceBeforeAndAfterBinaryOperators: o.InsertSpaceBeforeAndAfterBinaryOperators,
-            InsertSpaceAfterKeywordsInControlFlowStatements: o.InsertSpaceAfterKeywordsInControlFlowStatements,
-            InsertSpaceAfterFunctionKeywordForAnonymousFunctions: o.InsertSpaceAfterFunctionKeywordForAnonymousFunctions,
-            InsertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis: o.InsertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis,
-            PlaceOpenBraceOnNewLineForFunctions: o.PlaceOpenBraceOnNewLineForFunctions,
-            PlaceOpenBraceOnNewLineForControlBlocks: o.PlaceOpenBraceOnNewLineForControlBlocks
-        };
     }
 
     export interface DefinitionInfo {
@@ -5224,7 +5198,7 @@ module ts {
 
             var start = new Date().getTime();
 
-            var result = formatting.SmartIndenter.getIndentation(position, sourceFile, copyEditorOptions(editorOptions));
+            var result = formatting.SmartIndenter.getIndentation(position, sourceFile, editorOptions);
             host.log("getIndentationAtPosition: computeIndentation  : " + (new Date().getTime() - start));
 
             return result;
@@ -5232,7 +5206,6 @@ module ts {
 
         function getFormattingEditsForRange(fileName: string, start: number, end: number, options: FormatCodeOptions): TextChange[] {
             fileName = switchToForwardSlashes(fileName);
-            var options = copyFormatCodeOptions(options);
             var sourceFile = getCurrentSourceFile(fileName);
             return formatting.formatSelection(start, end, sourceFile, getRuleProvider(options), options);
         }
@@ -5241,7 +5214,6 @@ module ts {
             fileName = switchToForwardSlashes(fileName);
 
             var sourceFile = getCurrentSourceFile(fileName);
-            var options = copyFormatCodeOptions(options)
             return formatting.formatDocument(sourceFile, getRuleProvider(options), options);
         }
 
@@ -5249,7 +5221,6 @@ module ts {
             fileName = switchToForwardSlashes(fileName);
 
             var sourceFile = getCurrentSourceFile(fileName);
-            var options = copyFormatCodeOptions(options);
 
             if (key === "}") {
                 return formatting.formatOnClosingCurly(position, sourceFile, getRuleProvider(options), options);

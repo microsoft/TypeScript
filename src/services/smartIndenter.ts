@@ -298,7 +298,7 @@ module ts.formatting {
             return column;
         }
 
-        export function nodeContentIsAlwaysIndented(kind: SyntaxKind): boolean {
+        function nodeContentIsAlwaysIndented(kind: SyntaxKind): boolean {
             switch (kind) {
                 case SyntaxKind.ClassDeclaration:
                 case SyntaxKind.InterfaceDeclaration:

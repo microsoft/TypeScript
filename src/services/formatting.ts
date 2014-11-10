@@ -26,13 +26,24 @@ module ts.formatting {
      * { var x;
      * }
      * Normally indentation is applied only to the first token in line so at glance 'var' should not be touched. 
-     * However if some format rule removes new line between ')' and '{' 'var' will become
+     * However if some format rule adds new line between '}' and 'var' 'var' will become
      * the first token in line so it should be indented
      */
     interface DynamicIndentation {
         getIndentationForToken(tokenLine: number, tokenKind: SyntaxKind): number;
         getIndentationForComment(owningToken: SyntaxKind): number;
+        /**
+          * Indentation for open and close tokens of the node if it is block or another node that needs special indentation
+          * ... {
+          * .........<child>
+          * ....}
+          *  ____ - indentation
+          *      ____ - delta
+          **/
         getIndentation(): number;
+        /**
+          * Prefered relative indentation for child nodes
+          */
         getDelta(): number;
         recomputeIndentation(lineAddedByFormatting: boolean): void;
     }
@@ -99,6 +110,14 @@ module ts.formatting {
         }
 
         // walk up and search for the parent node that ends at the same position with precedingToken.
+        // for cases like this
+        // 
+        // var x = 1;
+        // while (true) {
+        // } 
+        // after typing close curly in while statement we want to reformat just the while statement.
+        // However if we just walk upwards searching for the parent that has the same end value - 
+        // we'll end up with the whole source file. isListElement allows to stop on the list element level
         var current = precedingToken;
         while (current &&
             current.parent &&
@@ -138,7 +157,14 @@ module ts.formatting {
 
         function find(n: Node): Node {
             var candidate = forEachChild(n, c => startEndContainsRange(c.getStart(sourceFile), c.end, range) && c);
-            return (candidate && find(candidate)) || n;
+            if (candidate) {
+                var result = find(candidate);
+                if (result) {
+                    return result;
+                }
+            }
+
+            return n;
         }
     }
 
@@ -230,9 +256,11 @@ module ts.formatting {
         // local functions
 
         /** Tries to compute the indentation for a list element.
-          * If list element is not in range then function will pick its actual indentation 
+          * If list element is not in range then 
+          * function will pick its actual indentation 
           * so it can be pushed downstream as inherited indentation.
-          * If list element is in the range - its indentation will be equal to inherited indentation from its predecessors.
+          * If list element is in the range - its indentation will be equal 
+          * to inherited indentation from its predecessors.
           */
         function tryComputeIndentationForListItem(startPos: number, 
             endPos: number, 
@@ -440,8 +468,7 @@ module ts.formatting {
                 var childStartPos = child.getStart(sourceFile);
 
                 var childStart = sourceFile.getLineAndCharacterFromPosition(childStartPos);
-                var childIndentationAmount =
-                    isListItem
+                var childIndentationAmount = isListItem
                     ? tryComputeIndentationForListItem(childStartPos, child.end, parentStartLine, originalRange, inheritedIndentation)
                     : Constants.Unknown;
 
