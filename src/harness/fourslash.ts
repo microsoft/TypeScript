@@ -2074,10 +2074,6 @@ module FourSlash {
             }
         }
 
-        private getEOF(): number {
-            return this.languageServiceShimHost.getScriptSnapshot(this.activeFile.fileName).getLength();
-        }
-
         // Get the text of the entire line the caret is currently at
         private getCurrentLineContent() {
             // The current caret position (in line/col terms)
@@ -2191,14 +2187,6 @@ module FourSlash {
             }
 
             return result;
-        }
-
-        private getCurrentLineNumberZeroBased() {
-            return this.getCurrentLineNumberOneBased() - 1;
-        }
-
-        private getCurrentLineNumberOneBased() {
-            return this.languageServiceShimHost.positionToZeroBasedLineCol(this.activeFile.fileName, this.currentCaretPosition).line + 1;
         }
 
         private getLineColStringAtPosition(position: number) {

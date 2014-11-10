@@ -6683,7 +6683,6 @@ module ts {
                 return;
             }
 
-            var symbol = getSymbolOfNode(signatureDeclarationNode);
             // TypeScript 1.0 spec (April 2014): 3.7.2.4
             // Every specialized call or construct signature in an object type must be assignable
             // to at least one non-specialized call or construct signature in the same object type
@@ -8811,7 +8810,6 @@ module ts {
                 // parent is not source file or it is not reference to internal module
                 return false;
             }
-            var symbol = getSymbolOfNode(node);
             return isImportResolvedToValue(getSymbolOfNode(node));
         }
 

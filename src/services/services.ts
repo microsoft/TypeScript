@@ -144,7 +144,7 @@ module ts {
             while (pos < end) {
                 var token = scanner.scan();
                 var textPos = scanner.getTextPos();
-                var node = nodes.push(createNode(token, pos, textPos, NodeFlags.Synthetic, this));
+                nodes.push(createNode(token, pos, textPos, NodeFlags.Synthetic, this));
                 pos = textPos;
             }
             return pos;
@@ -662,8 +662,6 @@ module ts {
         }
     }
 
-    var incrementalParse: IncrementalParse = TypeScript.IncrementalParser.parse;
-
     class SourceFileObject extends NodeObject implements SourceFile {
         public filename: string;
         public text: string;
@@ -761,10 +759,6 @@ module ts {
             }
 
             return this.namedDeclarations;
-        }
-
-        private isDeclareFile(): boolean {
-            return TypeScript.isDTSFile(this.filename);
         }
 
         public update(scriptSnapshot: TypeScript.IScriptSnapshot, version: string, isOpen: boolean, textChangeRange: TypeScript.TextChangeRange): SourceFile {
@@ -2572,7 +2566,7 @@ module ts {
                         session.symbols[entry.name] = symbol;
                     }
                 });
-                host.log("getCompletionsAtPosition: getCompletionEntriesFromSymbols: " + (new Date().getTime() - semanticStart));
+                host.log("getCompletionsAtPosition: getCompletionEntriesFromSymbols: " + (new Date().getTime() - start));
             }
 
             function isCompletionListBlocker(previousToken: Node): boolean {
@@ -2580,7 +2574,7 @@ module ts {
                 var result = isInStringOrRegularExpressionOrTemplateLiteral(previousToken) ||
                     isIdentifierDefinitionLocation(previousToken) ||
                     isRightOfIllegalDot(previousToken);
-                host.log("getCompletionsAtPosition: isCompletionListBlocker: " + (new Date().getTime() - semanticStart));
+                host.log("getCompletionsAtPosition: isCompletionListBlocker: " + (new Date().getTime() - start));
                 return result;
             }
 
@@ -3735,9 +3729,6 @@ module ts {
 
                 pushKeywordIf(keywords, switchStatement.getFirstToken(), SyntaxKind.SwitchKeyword);
 
-                // Types of break statements we can grab on to.
-                var breakSearchType = BreakContinueSearchType.All;
-
                 // Go through each clause in the switch statement, collecting the 'case'/'default' keywords.
                 forEach(switchStatement.clauses, clause => {
                     pushKeywordIf(keywords, clause.getFirstToken(), SyntaxKind.CaseKeyword, SyntaxKind.DefaultKeyword);
@@ -4611,7 +4602,6 @@ module ts {
             var targetSourceFile = program.getSourceFile(filename);  // Current selected file to be output
             // If --out flag is not specified, shouldEmitToOwnFile is true. Otherwise shouldEmitToOwnFile is false.
             var shouldEmitToOwnFile = ts.shouldEmitToOwnFile(targetSourceFile, compilerOptions);
-            var emitDeclaration = compilerOptions.declaration;
             var emitOutput: EmitOutput = {
                 outputFiles: [],
                 emitOutputStatus: undefined,
@@ -4628,7 +4618,6 @@ module ts {
             // Initialize writer for CompilerHost.writeFile
             writer = getEmitOutputWriter;
 
-            var syntacticDiagnostics: Diagnostic[] = [];
             var containSyntacticErrors = false;
 
             if (shouldEmitToOwnFile) {
@@ -5567,7 +5556,6 @@ module ts {
 
         function getClassificationsForLine(text: string, lexState: EndOfLineState): ClassificationResult {
             var offset = 0;
-            var lastTokenOrCommentEnd = 0;
             var token = SyntaxKind.Unknown;
             var lastNonTriviaToken = SyntaxKind.Unknown;
 
