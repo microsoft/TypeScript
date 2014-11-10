@@ -998,7 +998,7 @@ var definitions = [
         children: [
             { name: 'modifiers', isList: true, elementType: 'ISyntaxToken' },
             { name: 'moduleKeyword', isToken: true, excludeFromAST: true },
-            { name: 'name', type: 'INameSyntax', isOptional: true },
+            { name: 'name', type: 'INameSyntax' },
             { name: 'openBraceToken', isToken: true, excludeFromAST: true },
             { name: 'moduleElements', isList: true, elementType: 'IModuleElementSyntax' },
             { name: 'closeBraceToken', isToken: true, excludeFromAST: true }
@@ -1094,8 +1094,7 @@ var definitions = [
         children: [
             { name: 'parameter', type: 'ParameterSyntax' },
             { name: 'equalsGreaterThanToken', isToken: true, excludeFromAST: true },
-            { name: 'block', type: 'BlockSyntax', isOptional: true },
-            { name: 'expression', type: 'IExpressionSyntax', isOptional: true }
+            { name: 'body', type: 'BlockSyntax | IExpressionSyntax' }
         ],
         isTypeScriptSpecific: true
     },
@@ -1106,8 +1105,7 @@ var definitions = [
         children: [
             { name: 'callSignature', type: 'CallSignatureSyntax' },
             { name: 'equalsGreaterThanToken', isToken: true, excludeFromAST: true },
-            { name: 'block', type: 'BlockSyntax', isOptional: true },
-            { name: 'expression', type: 'IExpressionSyntax', isOptional: true }
+            { name: 'body', type: 'BlockSyntax | IExpressionSyntax' }
         ],
         isTypeScriptSpecific: true
     },

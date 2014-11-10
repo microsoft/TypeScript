@@ -273,7 +273,7 @@ module TypeScript {
         this.closeBraceToken = closeBraceToken,
         modifiers.parent = this,
         moduleKeyword.parent = this,
-        name && (name.parent = this),
+        name.parent = this,
         openBraceToken.parent = this,
         moduleElements.parent = this,
         closeBraceToken.parent = this;
@@ -1279,47 +1279,41 @@ module TypeScript {
         }
     }
 
-    export var ParenthesizedArrowFunctionExpressionSyntax: ParenthesizedArrowFunctionExpressionConstructor = <any>function(data: number, callSignature: CallSignatureSyntax, equalsGreaterThanToken: ISyntaxToken, block: BlockSyntax, expression: IExpressionSyntax) {
+    export var ParenthesizedArrowFunctionExpressionSyntax: ParenthesizedArrowFunctionExpressionConstructor = <any>function(data: number, callSignature: CallSignatureSyntax, equalsGreaterThanToken: ISyntaxToken, body: BlockSyntax | IExpressionSyntax) {
         if (data) { this.__data = data; }
         this.callSignature = callSignature,
         this.equalsGreaterThanToken = equalsGreaterThanToken,
-        this.block = block,
-        this.expression = expression,
+        this.body = body,
         callSignature.parent = this,
         equalsGreaterThanToken.parent = this,
-        block && (block.parent = this),
-        expression && (expression.parent = this);
+        body.parent = this;
     };
     ParenthesizedArrowFunctionExpressionSyntax.prototype.kind = SyntaxKind.ParenthesizedArrowFunctionExpression;
-    ParenthesizedArrowFunctionExpressionSyntax.prototype.childCount = 4;
+    ParenthesizedArrowFunctionExpressionSyntax.prototype.childCount = 3;
     ParenthesizedArrowFunctionExpressionSyntax.prototype.childAt = function(index: number): ISyntaxElement {
         switch (index) {
             case 0: return this.callSignature;
             case 1: return this.equalsGreaterThanToken;
-            case 2: return this.block;
-            case 3: return this.expression;
+            case 2: return this.body;
         }
     }
 
-    export var SimpleArrowFunctionExpressionSyntax: SimpleArrowFunctionExpressionConstructor = <any>function(data: number, parameter: ParameterSyntax, equalsGreaterThanToken: ISyntaxToken, block: BlockSyntax, expression: IExpressionSyntax) {
+    export var SimpleArrowFunctionExpressionSyntax: SimpleArrowFunctionExpressionConstructor = <any>function(data: number, parameter: ParameterSyntax, equalsGreaterThanToken: ISyntaxToken, body: BlockSyntax | IExpressionSyntax) {
         if (data) { this.__data = data; }
         this.parameter = parameter,
         this.equalsGreaterThanToken = equalsGreaterThanToken,
-        this.block = block,
-        this.expression = expression,
+        this.body = body,
         parameter.parent = this,
         equalsGreaterThanToken.parent = this,
-        block && (block.parent = this),
-        expression && (expression.parent = this);
+        body.parent = this;
     };
     SimpleArrowFunctionExpressionSyntax.prototype.kind = SyntaxKind.SimpleArrowFunctionExpression;
-    SimpleArrowFunctionExpressionSyntax.prototype.childCount = 4;
+    SimpleArrowFunctionExpressionSyntax.prototype.childCount = 3;
     SimpleArrowFunctionExpressionSyntax.prototype.childAt = function(index: number): ISyntaxElement {
         switch (index) {
             case 0: return this.parameter;
             case 1: return this.equalsGreaterThanToken;
-            case 2: return this.block;
-            case 3: return this.expression;
+            case 2: return this.body;
         }
     }
 

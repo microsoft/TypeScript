@@ -144,7 +144,7 @@ var definitions:ITypeDefinition[] = [
         children: [
             <any>{ name: 'modifiers', isList: true, elementType: 'ISyntaxToken' },
             <any>{ name: 'moduleKeyword', isToken: true, excludeFromAST: true },
-            <any>{ name: 'name', type: 'INameSyntax', isOptional: true },
+            <any>{ name: 'name', type: 'INameSyntax' },
             <any>{ name: 'openBraceToken', isToken: true, excludeFromAST: true },
             <any>{ name: 'moduleElements', isList: true, elementType: 'IModuleElementSyntax' },
             <any>{ name: 'closeBraceToken', isToken: true, excludeFromAST: true }
@@ -240,8 +240,7 @@ var definitions:ITypeDefinition[] = [
         children: [
             <any>{ name: 'parameter', type: 'ParameterSyntax' },
             <any>{ name: 'equalsGreaterThanToken', isToken: true, excludeFromAST: true },
-            <any>{ name: 'block', type: 'BlockSyntax', isOptional: true },
-            <any>{ name: 'expression', type: 'IExpressionSyntax', isOptional: true }
+            <any>{ name: 'body', type: 'BlockSyntax | IExpressionSyntax' }
         ],
         isTypeScriptSpecific: true
     },
@@ -252,8 +251,7 @@ var definitions:ITypeDefinition[] = [
         children: [
             <any>{ name: 'callSignature', type: 'CallSignatureSyntax' },
             <any>{ name: 'equalsGreaterThanToken', isToken: true, excludeFromAST: true },
-            <any>{ name: 'block', type: 'BlockSyntax', isOptional: true },
-            <any>{ name: 'expression', type: 'IExpressionSyntax', isOptional: true }
+            <any>{ name: 'body', type: 'BlockSyntax | IExpressionSyntax' }
         ],
         isTypeScriptSpecific: true
     },

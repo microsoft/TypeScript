@@ -2876,15 +2876,19 @@ module TypeScript.Parser {
                 return undefined;
             }
 
-            var equalsGreaterThanToken = eatToken(SyntaxKind.EqualsGreaterThanToken);
+            return new ParenthesizedArrowFunctionExpressionSyntax(parseNodeData,
+                callSignature,
+                eatToken(SyntaxKind.EqualsGreaterThanToken),
+                parseArrowFunctionBody());
+        }
 
+        function parseArrowFunctionBody(): BlockSyntax | IExpressionSyntax {
             var block = tryParseArrowFunctionBlock();
-            var expression: IExpressionSyntax = undefined;
-            if (block === undefined) {
-                expression = tryParseAssignmentExpressionOrHigher(/*force:*/ true, /*allowIn:*/ true);
+            if (block !== undefined) {
+                return block;
             }
 
-            return new ParenthesizedArrowFunctionExpressionSyntax(parseNodeData, callSignature, equalsGreaterThanToken, block, expression);
+            return tryParseAssignmentExpressionOrHigher(/*force:*/ true, /*allowIn:*/ true);
         }
 
         function tryParseArrowFunctionBlock(): BlockSyntax {
@@ -2930,17 +2934,10 @@ module TypeScript.Parser {
 
         function parseSimpleArrowFunctionExpression(): SimpleArrowFunctionExpressionSyntax {
             // Debug.assert(isSimpleArrowFunctionExpression());
-
-            var parameter = eatSimpleParameter();
-            var equalsGreaterThanToken = eatToken(SyntaxKind.EqualsGreaterThanToken);
-
-            var block = tryParseArrowFunctionBlock();
-            var expression: IExpressionSyntax = undefined;
-            if (block === undefined) {
-                expression = tryParseAssignmentExpressionOrHigher(/*force:*/ true, /*allowIn:*/ true);
-            }
-
-            return new SimpleArrowFunctionExpressionSyntax(parseNodeData, parameter, equalsGreaterThanToken, block, expression);
+            return new SimpleArrowFunctionExpressionSyntax(parseNodeData, 
+                eatSimpleParameter(), 
+                eatToken(SyntaxKind.EqualsGreaterThanToken),
+                parseArrowFunctionBody());
         }
 
         function isBlock(): boolean {
