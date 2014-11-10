@@ -62,9 +62,10 @@ module ts {
         return identifier.length >= 3 && identifier.charCodeAt(0) === CharacterCodes._ && identifier.charCodeAt(1) === CharacterCodes._ && identifier.charCodeAt(2) === CharacterCodes._ ? identifier.substr(1) : identifier;
     }
 
+    // TODO(jfreeman): Implement declarationNameToString for computed properties
     // Return display name of an identifier
-    export function identifierToString(identifier: Identifier) {
-        return identifier.kind === SyntaxKind.Missing ? "(Missing)" : getTextOfNode(identifier);
+    export function declarationNameToString(name: DeclarationName) {
+        return name.kind === SyntaxKind.Missing ? "(Missing)" : getTextOfNode(name);
     }
 
     export function createDiagnosticForNode(node: Node, message: DiagnosticMessage, arg0?: any, arg1?: any, arg2?: any): Diagnostic {
@@ -213,11 +214,11 @@ module ts {
             case SyntaxKind.FunctionExpression:
             case SyntaxKind.FunctionDeclaration:
             case SyntaxKind.ArrowFunction:
-                return child((<FunctionDeclaration>node).name) ||
-                    children((<FunctionDeclaration>node).typeParameters) ||
-                    children((<FunctionDeclaration>node).parameters) ||
-                    child((<FunctionDeclaration>node).type) ||
-                    child((<FunctionDeclaration>node).body);
+                return child((<FunctionLikeDeclaration>node).name) ||
+                    children((<FunctionLikeDeclaration>node).typeParameters) ||
+                    children((<FunctionLikeDeclaration>node).parameters) ||
+                    child((<FunctionLikeDeclaration>node).type) ||
+                    child((<FunctionLikeDeclaration>node).body);
             case SyntaxKind.TypeReference:
                 return child((<TypeReferenceNode>node).typeName) ||
                     children((<TypeReferenceNode>node).typeArguments);
@@ -490,6 +491,7 @@ module ts {
             case SyntaxKind.BinaryExpression:
             case SyntaxKind.ConditionalExpression:
             case SyntaxKind.TemplateExpression:
+            case SyntaxKind.NoSubstitutionTemplateLiteral:
             case SyntaxKind.OmittedExpression:
                 return true;
             case SyntaxKind.QualifiedName:
@@ -502,7 +504,6 @@ module ts {
             // fall through
             case SyntaxKind.NumericLiteral:
             case SyntaxKind.StringLiteral:
-            case SyntaxKind.NoSubstitutionTemplateLiteral:
                 var parent = node.parent;
                 switch (parent.kind) {
                     case SyntaxKind.VariableDeclaration:
@@ -531,6 +532,8 @@ module ts {
                             (<ForInStatement>parent).expression === node;
                     case SyntaxKind.TypeAssertion:
                         return node === (<TypeAssertion>parent).operand;
+                    case SyntaxKind.TemplateSpan:
+                        return node === (<TemplateSpan>parent).expression;
                     default:
                         if (isExpression(parent)) {
                             return true;
@@ -744,6 +747,47 @@ module ts {
         nodeIsNestedInLabel(label: Identifier, requireIterationStatement: boolean, stopAtFunctionBoundary: boolean): ControlBlockContext;
     }
 
+    interface ReferencePathMatchResult {
+        fileReference?: FileReference
+        diagnostic?: DiagnosticMessage
+        isNoDefaultLib?: boolean
+    }
+
+    export function getFileReferenceFromReferencePath(comment: string, commentRange: CommentRange): ReferencePathMatchResult {
+        var simpleReferenceRegEx = /^\/\/\/\s*<reference\s+/gim;
+        var isNoDefaultLibRegEx = /^(\/\/\/\s*<reference\s+no-default-lib\s*=\s*)('|")(.+?)\2\s*\/>/gim;
+        if (simpleReferenceRegEx.exec(comment)) {
+            if (isNoDefaultLibRegEx.exec(comment)) {
+                return {
+                    isNoDefaultLib: true
+                }
+            }
+            else {
+                var matchResult = fullTripleSlashReferencePathRegEx.exec(comment);
+                if (matchResult) {
+                    var start = commentRange.pos;
+                    var end = commentRange.end;
+                    var fileRef = {
+                        pos: start,
+                        end: end,
+                        filename: matchResult[3]
+                    };
+                    return {
+                        fileReference: fileRef,
+                        isNoDefaultLib: false
+                    };
+                }
+                else {
+                    return {
+                        diagnostic: Diagnostics.Invalid_reference_directive_syntax,
+                        isNoDefaultLib: false
+                    };
+                }
+            }
+        }
+        return undefined;
+    }
+
     export function isKeyword(token: SyntaxKind): boolean {
         return SyntaxKind.FirstKeyword <= token && token <= SyntaxKind.LastKeyword;
     }
@@ -924,7 +968,7 @@ module ts {
         }
 
         function reportInvalidUseInStrictMode(node: Identifier): void {
-            // identifierToString cannot be used here since it uses a backreference to 'parent' that is not yet set
+            // declarationNameToString cannot be used here since it uses a backreference to 'parent' that is not yet set
             var name = sourceText.substring(skipTrivia(sourceText, node.pos), node.end);
             grammarErrorOnNode(node, Diagnostics.Invalid_use_of_0_in_strict_mode, name);
         }
@@ -1631,7 +1675,7 @@ module ts {
                 // Identifier in a PropertySetParameterList of a PropertyAssignment that is contained in strict code 
                 // or if its FunctionBody is strict code(11.1.5).
                 // It is a SyntaxError if the identifier eval or arguments appears within a FormalParameterList of a 
-                // strict mode FunctionDeclaration or FunctionExpression(13.1) 
+                // strict mode FunctionLikeDeclaration or FunctionExpression(13.1) 
                 if (isInStrictMode && isEvalOrArgumentsIdentifier(parameter.name)) {
                     reportInvalidUseInStrictMode(parameter.name);
                     return;
@@ -2712,9 +2756,13 @@ module ts {
             var SetAccesor =  4;
             var GetOrSetAccessor = GetAccessor | SetAccesor;
             forEach(node.properties, (p: Declaration) => {
+                // TODO(jfreeman): continue if we have a computed property
                 if (p.kind === SyntaxKind.OmittedExpression) {
                     return;
                 }
+
+                var name = <Identifier>p.name;
+
                 // ECMA-262 11.1.5 Object Initialiser 
                 // If previous is not undefined then throw a SyntaxError exception if any of the following conditions are true
                 // a.This production is contained in strict code and IsDataDescriptor(previous) is true and 
@@ -2737,26 +2785,26 @@ module ts {
                     Debug.fail("Unexpected syntax kind:" + p.kind);
                 }
 
-                if (!hasProperty(seen, p.name.text)) {
-                    seen[p.name.text] = currentKind;
+                if (!hasProperty(seen, name.text)) {
+                    seen[name.text] = currentKind;
                 }
                 else {
-                    var existingKind = seen[p.name.text];
+                    var existingKind = seen[name.text];
                     if (currentKind === Property && existingKind === Property) {
                         if (isInStrictMode) {
-                            grammarErrorOnNode(p.name, Diagnostics.An_object_literal_cannot_have_multiple_properties_with_the_same_name_in_strict_mode);
+                            grammarErrorOnNode(name, Diagnostics.An_object_literal_cannot_have_multiple_properties_with_the_same_name_in_strict_mode);
                         }
                     }
                     else if ((currentKind & GetOrSetAccessor) && (existingKind & GetOrSetAccessor)) {
                         if (existingKind !== GetOrSetAccessor && currentKind !== existingKind) {
-                            seen[p.name.text] = currentKind | existingKind;
+                            seen[name.text] = currentKind | existingKind;
                         }
                         else {
-                            grammarErrorOnNode(p.name, Diagnostics.An_object_literal_cannot_have_multiple_get_Slashset_accessors_with_the_same_name);
+                            grammarErrorOnNode(name, Diagnostics.An_object_literal_cannot_have_multiple_get_Slashset_accessors_with_the_same_name);
                         }
                     }
                     else {
-                        grammarErrorOnNode(p.name, Diagnostics.An_object_literal_cannot_have_property_and_accessor_with_the_same_name);
+                        grammarErrorOnNode(name, Diagnostics.An_object_literal_cannot_have_property_and_accessor_with_the_same_name);
                     }
                 }
             });
@@ -2771,7 +2819,7 @@ module ts {
             var body = parseBody(/* ignoreMissingOpenBrace */ false);
             if (name && isInStrictMode && isEvalOrArgumentsIdentifier(name)) {
                 // It is a SyntaxError to use within strict mode code the identifiers eval or arguments as the 
-                // Identifier of a FunctionDeclaration or FunctionExpression or as a formal parameter name(13.1)
+                // Identifier of a FunctionLikeDeclaration or FunctionExpression or as a formal parameter name(13.1)
                 reportInvalidUseInStrictMode(name);
             }
             return makeFunctionExpression(SyntaxKind.FunctionExpression, pos, name, sig, body);
@@ -3437,8 +3485,8 @@ module ts {
             return node;
         }
 
-        function parseFunctionDeclaration(pos?: number, flags?: NodeFlags): FunctionDeclaration {
-            var node = <FunctionDeclaration>createNode(SyntaxKind.FunctionDeclaration, pos);
+        function parseFunctionDeclaration(pos?: number, flags?: NodeFlags): FunctionLikeDeclaration {
+            var node = <FunctionLikeDeclaration>createNode(SyntaxKind.FunctionDeclaration, pos);
             if (flags) node.flags = flags;
             parseExpected(SyntaxKind.FunctionKeyword);
             node.name = parseIdentifier();
@@ -3447,10 +3495,10 @@ module ts {
             node.parameters = sig.parameters;
             node.type = sig.type;
             node.body = parseAndCheckFunctionBody(/*isConstructor*/ false);
-            if (isInStrictMode && isEvalOrArgumentsIdentifier(node.name)) {
+            if (isInStrictMode && isEvalOrArgumentsIdentifier(node.name) && node.name.kind === SyntaxKind.Identifier) {
                 // It is a SyntaxError to use within strict mode code the identifiers eval or arguments as the 
-                // Identifier of a FunctionDeclaration or FunctionExpression or as a formal parameter name(13.1)
-                reportInvalidUseInStrictMode(node.name);
+                // Identifier of a FunctionLikeDeclaration or FunctionExpression or as a formal parameter name(13.1)
+                reportInvalidUseInStrictMode(<Identifier>node.name);
             }
             return finishNode(node);
         }
@@ -3567,7 +3615,7 @@ module ts {
             // A common error is to try to declare an accessor in an ambient class.
             if (inAmbientContext && canParseSemicolon()) {
                 parseSemicolon();
-                node.body = createMissingNode();
+                node.body = <Block>createMissingNode();
             }
             else {
                 node.body = parseBody(/* ignoreMissingOpenBrace */ false);
@@ -4163,28 +4211,16 @@ module ts {
             for (var i = 0; i < commentRanges.length; i++) {
                 var range = commentRanges[i];
                 var comment = sourceText.substring(range.pos, range.end);
-                var simpleReferenceRegEx = /^\/\/\/\s*<reference\s+/gim;
-                if (simpleReferenceRegEx.exec(comment)) {
-                    var isNoDefaultLibRegEx = /^(\/\/\/\s*<reference\s+no-default-lib=)('|")(.+?)\2\s*\/>/gim;
-                    if (isNoDefaultLibRegEx.exec(comment)) {
-                        file.hasNoDefaultLib = true;
+                var referencePathMatchResult = getFileReferenceFromReferencePath(comment, range);
+                if (referencePathMatchResult) {
+                    var fileReference = referencePathMatchResult.fileReference;
+                    file.hasNoDefaultLib = referencePathMatchResult.isNoDefaultLib;
+                    var diagnostic = referencePathMatchResult.diagnostic;
+                    if (fileReference) {
+                        referencedFiles.push(fileReference);
                     }
-                    else {
-                        var matchResult = fullTripleSlashReferencePathRegEx.exec(comment);
-                        var start = range.pos;
-                        var end = range.end;
-                        var length = end - start;
-                       
-                        if (!matchResult) {
-                            errorAtPos(start, length, Diagnostics.Invalid_reference_directive_syntax);
-                        }
-                        else {
-                            referencedFiles.push({
-                                pos: start,
-                                end: end,
-                                filename: matchResult[3]
-                            });
-                        }
+                    if (diagnostic) {
+                        errorAtPos(range.pos, range.end - range.pos, diagnostic);
                     }
                 }
                 else {

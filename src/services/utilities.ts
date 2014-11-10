@@ -284,7 +284,10 @@ module ts {
             return nodeHasTokens((<ExpressionStatement>n).expression);
         }
 
-        if (n.kind === SyntaxKind.EndOfFileToken || n.kind === SyntaxKind.OmittedExpression || n.kind === SyntaxKind.Missing) {
+        if (n.kind === SyntaxKind.EndOfFileToken ||
+            n.kind === SyntaxKind.OmittedExpression ||
+            n.kind === SyntaxKind.Missing ||
+            n.kind === SyntaxKind.Unknown) {
             return false;
         }
 
@@ -298,7 +301,7 @@ module ts {
         }
 
         if (isAnyFunction(node) || node.kind === SyntaxKind.ClassDeclaration || node.kind === SyntaxKind.InterfaceDeclaration) {
-            return (<FunctionDeclaration>node).typeParameters;
+            return (<FunctionLikeDeclaration>node).typeParameters;
         }
 
         return undefined;
@@ -316,6 +319,10 @@ module ts {
         return kind === SyntaxKind.StringLiteral || kind === SyntaxKind.NumericLiteral || isWord(kind);
     }
 
+    export var switchToForwardSlashesRegEx = /\\/g;
+    export function switchToForwardSlashes(path: string) {
+        return path.replace(switchToForwardSlashesRegEx, "/");
+    }
     export function isComment(kind: SyntaxKind): boolean {
         return kind === SyntaxKind.SingleLineCommentTrivia || kind === SyntaxKind.MultiLineCommentTrivia;
     }

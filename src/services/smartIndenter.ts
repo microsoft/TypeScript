@@ -394,7 +394,7 @@ module ts.formatting {
                 case SyntaxKind.FunctionExpression:
                 case SyntaxKind.Method:
                 case SyntaxKind.ArrowFunction:
-                    return !(<FunctionDeclaration>n).body || isCompletedNode((<FunctionDeclaration>n).body, sourceFile);
+                    return !(<FunctionLikeDeclaration>n).body || isCompletedNode((<FunctionLikeDeclaration>n).body, sourceFile);
                 case SyntaxKind.ModuleDeclaration:
                     return (<ModuleDeclaration>n).body && isCompletedNode((<ModuleDeclaration>n).body, sourceFile);
                 case SyntaxKind.IfStatement:

@@ -187,7 +187,7 @@ var definitions:ITypeDefinition[] = [
         name: 'VariableDeclaratorSyntax',
         baseType: 'ISyntaxNode',
         children: [
-            <any>{ name: 'propertyName', isToken: true },
+            <any>{ name: 'propertyName', type: 'IPropertyNameSyntax' },
             <any>{ name: 'typeAnnotation', type: 'TypeAnnotationSyntax', isOptional: true, isTypeScriptSpecific: true },
             <any>{ name: 'equalsValueClause', type: 'EqualsValueClauseSyntax', isOptional: true }
         ]
@@ -525,7 +525,7 @@ var definitions:ITypeDefinition[] = [
         baseType: 'ISyntaxNode',
         interfaces: ['ITypeMemberSyntax'],
         children: [
-            <any>{ name: 'propertyName', isToken: true, tokenKinds: ['IdentifierName', 'StringLiteral', 'NumericLiteral'] },
+            <any>{ name: 'propertyName', type: 'IPropertyNameSyntax' },
             <any>{ name: 'questionToken', isToken: true, isOptional: true, itTypeScriptSpecific: true },
             <any>{ name: 'callSignature', type: 'CallSignatureSyntax' }
         ]
@@ -547,7 +547,7 @@ var definitions:ITypeDefinition[] = [
         baseType: 'ISyntaxNode',
         interfaces: ['ITypeMemberSyntax'],
         children: [
-            <any>{ name: 'propertyName', isToken: true, tokenKinds: ['IdentifierName', 'StringLiteral', 'NumericLiteral'] },
+            <any>{ name: 'propertyName', type: 'IPropertyNameSyntax' },
             <any>{ name: 'questionToken', isToken: true, isOptional: true },
             <any>{ name: 'typeAnnotation', type: 'TypeAnnotationSyntax', isOptional: true }
         ],
@@ -650,7 +650,7 @@ var definitions:ITypeDefinition[] = [
         interfaces: ['IMemberDeclarationSyntax'],
         children: [
             <any>{ name: 'modifiers', isList: true, elementType: 'ISyntaxToken' },
-            <any>{ name: 'propertyName', isToken: true, tokenKinds: ['IdentifierName', 'StringLiteral', 'NumericLiteral'] },
+            <any>{ name: 'propertyName', type: 'IPropertyNameSyntax' },
             <any>{ name: 'callSignature', type: 'CallSignatureSyntax' },
             <any>{ name: 'block', type: 'BlockSyntax', isOptional: true },
             <any>{ name: 'semicolonToken', isToken: true, isOptional: true, excludeFromAST: true }
@@ -664,7 +664,7 @@ var definitions:ITypeDefinition[] = [
         children: [
             <any>{ name: 'modifiers', isList: true, elementType: 'ISyntaxToken', isTypeScriptSpecific: true },
             <any>{ name: 'getKeyword', isToken: true, excludeFromAST: true },
-            <any>{ name: 'propertyName', isToken: true, tokenKinds: ['IdentifierName', 'StringLiteral', 'NumericLiteral'] },
+            <any>{ name: 'propertyName', type: 'IPropertyNameSyntax' },
             <any>{ name: 'callSignature', type: 'CallSignatureSyntax' },
             <any>{ name: 'block', type: 'BlockSyntax' }
         ]
@@ -676,7 +676,7 @@ var definitions:ITypeDefinition[] = [
         children: [
             <any>{ name: 'modifiers', isList: true, elementType: 'ISyntaxToken', isTypeScriptSpecific: true },
             <any>{ name: 'setKeyword', isToken: true, excludeFromAST: true },
-            <any>{ name: 'propertyName', isToken: true, tokenKinds: ['IdentifierName', 'StringLiteral', 'NumericLiteral'] },
+            <any>{ name: 'propertyName', type: 'IPropertyNameSyntax' },
             <any>{ name: 'callSignature', type: 'CallSignatureSyntax' },
             <any>{ name: 'block', type: 'BlockSyntax' }
         ],
@@ -863,7 +863,7 @@ var definitions:ITypeDefinition[] = [
         name: 'EnumElementSyntax',
         baseType: 'ISyntaxNode',
         children: [
-            <any>{ name: 'propertyName', isToken: true, tokenKinds: ['IdentifierName', 'StringLiteral', 'NumericLiteral'] },
+            <any>{ name: 'propertyName', type: 'IPropertyNameSyntax' },
             <any>{ name: 'equalsValueClause', type: 'EqualsValueClauseSyntax', isOptional: true }
         ]
     },
@@ -890,11 +890,21 @@ var definitions:ITypeDefinition[] = [
         ]
     },
     <any>{
+        name: 'ComputedPropertyNameSyntax',
+        baseType: 'ISyntaxNode',
+        interfaces: ['IPropertyNameSyntax'],
+        children: [
+            <any>{ name: 'openBracketToken', isToken: true },
+            <any>{ name: 'expression', type: 'IExpressionSyntax' },
+            <any>{ name: 'closeBracketToken', isToken: true }
+        ]
+    },
+    <any>{
         name: 'SimplePropertyAssignmentSyntax',
         baseType: 'ISyntaxNode',
         interfaces: ['IPropertyAssignmentSyntax'],
         children: [
-            <any>{ name: 'propertyName', isToken: true, tokenKinds: ['IdentifierName', 'StringLiteral', 'NumericLiteral'] },
+            <any>{ name: 'propertyName', type: 'IPropertyNameSyntax' },
             <any>{ name: 'colonToken', isToken: true, excludeFromAST: true },
             <any>{ name: 'expression', type: 'IExpressionSyntax' }
         ]
@@ -904,7 +914,7 @@ var definitions:ITypeDefinition[] = [
         baseType: 'ISyntaxNode',
         interfaces: ['IPropertyAssignmentSyntax'],
         children: [
-            <any>{ name: 'propertyName', isToken: true, tokenKinds: ['IdentifierName', 'StringLiteral', 'NumericLiteral'] },
+            <any>{ name: 'propertyName', type: 'IPropertyNameSyntax' },
             <any>{ name: 'callSignature', type: 'CallSignatureSyntax' },
             <any>{ name: 'block', type: 'BlockSyntax' }
         ]

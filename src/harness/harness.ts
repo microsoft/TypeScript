@@ -1092,7 +1092,6 @@ module Harness {
             /** @param fileResults an array of strings for the fileName and an ITextWriter with its code */
             constructor(fileResults: GeneratedFile[], errors: HarnessDiagnostic[], public program: ts.Program,
                 public currentDirectoryForProgram: string, private sourceMapData: ts.SourceMapData[]) {
-                var lines: string[] = [];
 
                 fileResults.forEach(emittedFile => {
                     if (isDTS(emittedFile.fileName)) {
@@ -1246,7 +1245,6 @@ module Harness {
 
     /** Support class for baseline files */
     export module Baseline {
-        var firstRun = true;
 
         export interface BaselineOptions {
             LineEndingSensitive?: boolean;
@@ -1287,8 +1285,7 @@ module Harness {
                 IO.createDirectory(dirName);
                 fileCache[dirName] = true;
             }
-            var parentDir = IO.directoryName(actualFilename); // .../tests/baselines/local
-            var parentParentDir = IO.directoryName(IO.directoryName(actualFilename)) // .../tests/baselines
+
             // Create folders if needed
             createDirectoryStructure(Harness.IO.directoryName(actualFilename));
 
