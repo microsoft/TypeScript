@@ -297,7 +297,6 @@ module ts.formatting {
             var delta = 0;
             if (indentation === Constants.Unknown) {
                 if (isSomeBlock(node.kind)) {
-                    delta = options.IndentSize;
                     // blocks should be indented in 
                     // - other blocks
                     // - source file 
