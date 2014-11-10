@@ -1240,23 +1240,18 @@ module TypeScript.Parser {
             return new FunctionDeclarationSyntax(parseNodeData, modifiers, functionKeyword, identifier, callSignature, block, semicolonToken);
         }
 
+        function parseModuleName(): INameSyntax {
+            return currentToken().kind === SyntaxKind.StringLiteral
+                ? eatToken(SyntaxKind.StringLiteral)
+                : parseName(/*allowIdentifierNames*/ false);
+        }
+
         function parseModuleDeclaration(): ModuleDeclarationSyntax {
-            var modifiers = parseModifiers();
-            var moduleKeyword = eatToken(SyntaxKind.ModuleKeyword);
-
-            var moduleName: INameSyntax = undefined;
-            var stringLiteral: ISyntaxToken = undefined;
-
-            if (currentToken().kind === SyntaxKind.StringLiteral) {
-                stringLiteral = eatToken(SyntaxKind.StringLiteral);
-            }
-            else {
-                moduleName = parseName(/*allowIdentifierNames*/ false);
-            }
-
             var openBraceToken: ISyntaxToken;
             return new ModuleDeclarationSyntax(parseNodeData,
-                modifiers, moduleKeyword, moduleName, stringLiteral, 
+                parseModifiers(),
+                eatToken(SyntaxKind.ModuleKeyword),
+                parseModuleName(), 
                 openBraceToken = eatToken(SyntaxKind.OpenBraceToken), 
                 openBraceToken.fullWidth() > 0 ? parseSyntaxList<IModuleElementSyntax>(ListParsingState.ModuleDeclaration_ModuleElements) : [],
                 eatToken(SyntaxKind.CloseBraceToken));
@@ -3595,17 +3590,18 @@ module TypeScript.Parser {
         }
 
         function parseFunctionType(): FunctionTypeSyntax {
-            var typeParameterList = tryParseTypeParameterList(/*requireCompleteTypeParameterList:*/ false);
-            var parameterList = parseParameterList();
-
             return new FunctionTypeSyntax(parseNodeData,
-                typeParameterList, parameterList, eatToken(SyntaxKind.EqualsGreaterThanToken), parseType());
+                tryParseTypeParameterList(/*requireCompleteTypeParameterList:*/ false), 
+                parseParameterList(),
+                eatToken(SyntaxKind.EqualsGreaterThanToken), parseType());
         }
 
         function parseConstructorType(): ConstructorTypeSyntax {
             return new ConstructorTypeSyntax(parseNodeData,
-                eatToken(SyntaxKind.NewKeyword), tryParseTypeParameterList(/*requireCompleteTypeParameterList:*/ false),
-                parseParameterList(), eatToken(SyntaxKind.EqualsGreaterThanToken), parseType());
+                eatToken(SyntaxKind.NewKeyword),
+                tryParseTypeParameterList(/*requireCompleteTypeParameterList:*/ false),
+                parseParameterList(),
+                eatToken(SyntaxKind.EqualsGreaterThanToken), parseType());
         }
 
         function isParameter(): boolean {

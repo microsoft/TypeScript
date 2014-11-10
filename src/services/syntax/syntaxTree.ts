@@ -814,7 +814,7 @@ module TypeScript {
         }
 
         private checkForDisallowedImportDeclaration(node: ModuleDeclarationSyntax): boolean {
-            if (!node.stringLiteral) {
+            if (node.name.kind !== SyntaxKind.StringLiteral) {
                 for (var i = 0, n = node.moduleElements.length; i < n; i++) {
                     var child = node.moduleElements[i];
                     if (child.kind === SyntaxKind.ImportDeclaration) {
@@ -849,21 +849,21 @@ module TypeScript {
 
         public visitModuleDeclaration(node: ModuleDeclarationSyntax): void {
             if (this.checkForDisallowedDeclareModifier(node.modifiers) ||
-                this.checkForRequiredDeclareModifier(node, node.stringLiteral ? node.stringLiteral : firstToken(node.name), node.modifiers) ||
+                this.checkForRequiredDeclareModifier(node, firstToken(node.name), node.modifiers) ||
                 this.checkModuleElementModifiers(node.modifiers) ||
                 this.checkForDisallowedImportDeclaration(node)) {
 
                 return;
             }
 
-            if (node.stringLiteral) {
+            if (node.name.kind === SyntaxKind.StringLiteral) {
                 if (!this.inAmbientDeclaration && !SyntaxUtilities.containsToken(node.modifiers, SyntaxKind.DeclareKeyword)) {
-                    this.pushDiagnostic(node.stringLiteral, DiagnosticCode.Only_ambient_modules_can_use_quoted_names);
+                    this.pushDiagnostic(node.name, DiagnosticCode.Only_ambient_modules_can_use_quoted_names);
                     return;
                 }
             }
 
-            if (!node.stringLiteral && this.checkForDisallowedExportAssignment(node)) {
+            if (node.name.kind !== SyntaxKind.StringLiteral && this.checkForDisallowedExportAssignment(node)) {
                 return;
             }
 

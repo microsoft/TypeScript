@@ -999,7 +999,6 @@ var definitions = [
             { name: 'modifiers', isList: true, elementType: 'ISyntaxToken' },
             { name: 'moduleKeyword', isToken: true, excludeFromAST: true },
             { name: 'name', type: 'INameSyntax', isOptional: true },
-            { name: 'stringLiteral', isToken: true, isOptional: true, tokenKinds: ['StringLiteral'] },
             { name: 'openBraceToken', isToken: true, excludeFromAST: true },
             { name: 'moduleElements', isList: true, elementType: 'IModuleElementSyntax' },
             { name: 'closeBraceToken', isToken: true, excludeFromAST: true }

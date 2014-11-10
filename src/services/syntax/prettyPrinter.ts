@@ -305,9 +305,6 @@ module TypeScript.PrettyPrinter {
             this.ensureSpace();
             this.appendElement(node.name);
             this.ensureSpace();
-            this.appendToken(node.stringLiteral);
-            this.ensureSpace();
-
             this.appendToken(node.openBraceToken);
             this.ensureNewLine();
 

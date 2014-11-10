@@ -103,12 +103,11 @@ module TypeScript {
         modifiers: ISyntaxToken[];
         moduleKeyword: ISyntaxToken;
         name: INameSyntax;
-        stringLiteral: ISyntaxToken;
         openBraceToken: ISyntaxToken;
         moduleElements: IModuleElementSyntax[];
         closeBraceToken: ISyntaxToken;
     }
-    export interface ModuleDeclarationConstructor { new (data: number, modifiers: ISyntaxToken[], moduleKeyword: ISyntaxToken, name: INameSyntax, stringLiteral: ISyntaxToken, openBraceToken: ISyntaxToken, moduleElements: IModuleElementSyntax[], closeBraceToken: ISyntaxToken): ModuleDeclarationSyntax }
+    export interface ModuleDeclarationConstructor { new (data: number, modifiers: ISyntaxToken[], moduleKeyword: ISyntaxToken, name: INameSyntax, openBraceToken: ISyntaxToken, moduleElements: IModuleElementSyntax[], closeBraceToken: ISyntaxToken): ModuleDeclarationSyntax }
 
     export interface ClassDeclarationSyntax extends ISyntaxNode, IModuleElementSyntax {
         modifiers: ISyntaxToken[];

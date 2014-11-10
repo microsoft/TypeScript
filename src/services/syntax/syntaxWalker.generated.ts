@@ -107,7 +107,6 @@ module TypeScript {
             this.visitList(node.modifiers);
             this.visitToken(node.moduleKeyword);
             visitNodeOrToken(this, node.name);
-            this.visitOptionalToken(node.stringLiteral);
             this.visitToken(node.openBraceToken);
             this.visitList(node.moduleElements);
             this.visitToken(node.closeBraceToken);

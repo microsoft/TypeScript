@@ -266,34 +266,31 @@ module TypeScript {
         }
     }
 
-    export var ModuleDeclarationSyntax: ModuleDeclarationConstructor = <any>function(data: number, modifiers: ISyntaxToken[], moduleKeyword: ISyntaxToken, name: INameSyntax, stringLiteral: ISyntaxToken, openBraceToken: ISyntaxToken, moduleElements: IModuleElementSyntax[], closeBraceToken: ISyntaxToken) {
+    export var ModuleDeclarationSyntax: ModuleDeclarationConstructor = <any>function(data: number, modifiers: ISyntaxToken[], moduleKeyword: ISyntaxToken, name: INameSyntax, openBraceToken: ISyntaxToken, moduleElements: IModuleElementSyntax[], closeBraceToken: ISyntaxToken) {
         if (data) { this.__data = data; }
         this.modifiers = modifiers,
         this.moduleKeyword = moduleKeyword,
         this.name = name,
-        this.stringLiteral = stringLiteral,
         this.openBraceToken = openBraceToken,
         this.moduleElements = moduleElements,
         this.closeBraceToken = closeBraceToken,
         modifiers.parent = this,
         moduleKeyword.parent = this,
         name && (name.parent = this),
-        stringLiteral && (stringLiteral.parent = this),
         openBraceToken.parent = this,
         moduleElements.parent = this,
         closeBraceToken.parent = this;
     };
     ModuleDeclarationSyntax.prototype.kind = SyntaxKind.ModuleDeclaration;
-    ModuleDeclarationSyntax.prototype.childCount = 7;
+    ModuleDeclarationSyntax.prototype.childCount = 6;
     ModuleDeclarationSyntax.prototype.childAt = function(index: number): ISyntaxElement {
         switch (index) {
             case 0: return this.modifiers;
             case 1: return this.moduleKeyword;
             case 2: return this.name;
-            case 3: return this.stringLiteral;
-            case 4: return this.openBraceToken;
-            case 5: return this.moduleElements;
-            case 6: return this.closeBraceToken;
+            case 3: return this.openBraceToken;
+            case 4: return this.moduleElements;
+            case 5: return this.closeBraceToken;
         }
     }
 
