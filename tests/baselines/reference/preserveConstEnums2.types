@@ -1,0 +1,19 @@
+=== tests/cases/compiler/preserveConstEnums2.ts ===
+module M {
+>M : typeof M
+
+  const enum E {
+>E : E
+
+    Value = 1, Value2 = Value
+>Value : E
+>Value2 : E
+>Value : E
+  }
+}
+
+// Module M should be considered instantiated if we have preserveConstEnum set.
+var v = M;
+>v : typeof M
+>M : typeof M
+

@@ -5152,7 +5152,7 @@ module ts {
 
             if (objectType === unknownType) return unknownType;
 
-            if (isConstEnumObjectType(objectType) && node.index.kind !== SyntaxKind.StringLiteral) {
+            if (isConstEnumObjectType(objectType) && node.index.kind !== SyntaxKind.StringLiteral && !compilerOptions.preserveConstEnums) {
                 error(node.index, Diagnostics.Index_expression_arguments_in_const_enums_must_be_of_type_string);
             }
 
@@ -6284,7 +6284,7 @@ module ts {
                 }
             }
 
-            if (isConstEnumObjectType(type)) {
+            if (isConstEnumObjectType(type) && !compilerOptions.preserveConstEnums) {
                 // enum object type for const enums are only permitted in:
                 // - 'left' in property access 
                 // - 'object' in indexed access
@@ -6972,7 +6972,7 @@ module ts {
                     case SyntaxKind.InterfaceDeclaration:
                         return SymbolFlags.ExportType;
                     case SyntaxKind.ModuleDeclaration:
-                        return (<ModuleDeclaration>d).name.kind === SyntaxKind.StringLiteral || getModuleInstanceState(d) !== ModuleInstanceState.NonInstantiated
+                        return (<ModuleDeclaration>d).name.kind === SyntaxKind.StringLiteral || getModuleInstanceState(d, compilerOptions) !== ModuleInstanceState.NonInstantiated
                             ? SymbolFlags.ExportNamespace | SymbolFlags.ExportValue
                             : SymbolFlags.ExportNamespace;
                     case SyntaxKind.ClassDeclaration:
@@ -7212,7 +7212,7 @@ module ts {
             }
 
             // Uninstantiated modules shouldnt do this check
-            if (node.kind === SyntaxKind.ModuleDeclaration && getModuleInstanceState(node) !== ModuleInstanceState.Instantiated) {
+            if (node.kind === SyntaxKind.ModuleDeclaration && getModuleInstanceState(node, compilerOptions) !== ModuleInstanceState.Instantiated) {
                 return;
             }
 
@@ -8928,7 +8928,7 @@ module ts {
         function initializeTypeChecker() {
             // Bind all source files and propagate errors
             forEach(program.getSourceFiles(), file => {
-                bindSourceFile(file);
+                bindSourceFile(file, compilerOptions);
                 forEach(file.semanticErrors, addDiagnostic);
             });
             // Initialize global symbol table

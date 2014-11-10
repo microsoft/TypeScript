@@ -1,0 +1,33 @@
+=== tests/cases/compiler/preserveConstEnums1.ts ===
+const enum E {
+>E : E
+
+    Value = 1, Value2 = Value
+>Value : E
+>Value2 : E
+>Value : E
+}
+
+// Referencing E as a value is allowed if preserveConstEnums is true.
+var s: string;
+>s : string
+
+var n: number;
+>n : number
+
+var x = E;
+>x : typeof E
+>E : typeof E
+
+var y = E[s];
+>y : any
+>E[s] : any
+>E : typeof E
+>s : string
+
+var z = E[n];
+>z : string
+>E[n] : string
+>E : typeof E
+>n : number
+
