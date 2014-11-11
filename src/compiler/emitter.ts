@@ -2949,51 +2949,35 @@ module ts {
                         var diagnosticMessage: DiagnosticMessage;
                         switch (node.parent.kind) {
                             case SyntaxKind.ClassDeclaration:
-                                diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
-                                Diagnostics.Type_parameter_0_of_exported_class_has_or_is_using_name_1_from_private_module_2 :
-                                Diagnostics.Type_parameter_0_of_exported_class_has_or_is_using_private_name_1;
+                                diagnosticMessage = Diagnostics.Type_parameter_0_of_exported_class_has_or_is_using_private_name_1;
                                 break;
 
                             case SyntaxKind.InterfaceDeclaration:
-                                diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
-                                Diagnostics.Type_parameter_0_of_exported_interface_has_or_is_using_name_1_from_private_module_2 :
-                                Diagnostics.Type_parameter_0_of_exported_interface_has_or_is_using_private_name_1;
+                                diagnosticMessage = Diagnostics.Type_parameter_0_of_exported_interface_has_or_is_using_private_name_1;
                                 break;
 
                             case SyntaxKind.ConstructSignature:
-                                diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
-                                Diagnostics.Type_parameter_0_of_constructor_signature_from_exported_interface_has_or_is_using_name_1_from_private_module_2 :
-                                Diagnostics.Type_parameter_0_of_constructor_signature_from_exported_interface_has_or_is_using_private_name_1;
+                                diagnosticMessage = Diagnostics.Type_parameter_0_of_constructor_signature_from_exported_interface_has_or_is_using_private_name_1;
                                 break;
 
                             case SyntaxKind.CallSignature:
-                                diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
-                                Diagnostics.Type_parameter_0_of_call_signature_from_exported_interface_has_or_is_using_name_1_from_private_module_2 :
-                                Diagnostics.Type_parameter_0_of_call_signature_from_exported_interface_has_or_is_using_private_name_1;
+                                diagnosticMessage = Diagnostics.Type_parameter_0_of_call_signature_from_exported_interface_has_or_is_using_private_name_1;
                                 break;
 
                             case SyntaxKind.Method:
                                 if (node.parent.flags & NodeFlags.Static) {
-                                    diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
-                                    Diagnostics.Type_parameter_0_of_public_static_method_from_exported_class_has_or_is_using_name_1_from_private_module_2 :
-                                    Diagnostics.Type_parameter_0_of_public_static_method_from_exported_class_has_or_is_using_private_name_1;
+                                    diagnosticMessage = Diagnostics.Type_parameter_0_of_public_static_method_from_exported_class_has_or_is_using_private_name_1;
                                 }
                                 else if (node.parent.parent.kind === SyntaxKind.ClassDeclaration) {
-                                    diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
-                                    Diagnostics.Type_parameter_0_of_public_method_from_exported_class_has_or_is_using_name_1_from_private_module_2 :
-                                    Diagnostics.Type_parameter_0_of_public_method_from_exported_class_has_or_is_using_private_name_1;
+                                    diagnosticMessage = Diagnostics.Type_parameter_0_of_public_method_from_exported_class_has_or_is_using_private_name_1;
                                 }
                                 else {
-                                    diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
-                                    Diagnostics.Type_parameter_0_of_method_from_exported_interface_has_or_is_using_name_1_from_private_module_2 :
-                                    Diagnostics.Type_parameter_0_of_method_from_exported_interface_has_or_is_using_private_name_1;
+                                    diagnosticMessage = Diagnostics.Type_parameter_0_of_method_from_exported_interface_has_or_is_using_private_name_1;
                                 }
                                 break;
 
                             case SyntaxKind.FunctionDeclaration:
-                                diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
-                                Diagnostics.Type_parameter_0_of_exported_function_has_or_is_using_name_1_from_private_module_2 :
-                                Diagnostics.Type_parameter_0_of_exported_function_has_or_is_using_private_name_1;
+                                diagnosticMessage = Diagnostics.Type_parameter_0_of_exported_function_has_or_is_using_private_name_1;
                                 break;
 
                             default:
@@ -3028,29 +3012,14 @@ module ts {
                         var diagnosticMessage: DiagnosticMessage;
                         // Heritage clause is written by user so it can always be named
                         if (node.parent.kind === SyntaxKind.ClassDeclaration) {
-                            // Class
-                            if (symbolAccesibilityResult.errorModuleName) {
-                                // Module is inaccessible
-                                diagnosticMessage = isImplementsList ?
-                                Diagnostics.Implements_clause_of_exported_class_0_has_or_is_using_name_1_from_private_module_2 :
-                                Diagnostics.Extends_clause_of_exported_class_0_has_or_is_using_name_1_from_private_module_2;
-                            }
-                            else {
-                                // Class or Interface implemented/extended is inaccessible
-                                diagnosticMessage = isImplementsList ?
-                                Diagnostics.Implements_clause_of_exported_class_0_has_or_is_using_private_name_1 :
-                                Diagnostics.Extends_clause_of_exported_class_0_has_or_is_using_private_name_1;
-                            }
+                            // Class or Interface implemented/extended is inaccessible
+                            diagnosticMessage = isImplementsList ?
+                            Diagnostics.Implements_clause_of_exported_class_0_has_or_is_using_private_name_1 :
+                            Diagnostics.Extends_clause_of_exported_class_0_has_or_is_using_private_name_1;
                         }
                         else {
-                            if (symbolAccesibilityResult.errorModuleName) {
-                                // Module is inaccessible
-                                diagnosticMessage = Diagnostics.Extends_clause_of_exported_interface_0_has_or_is_using_name_1_from_private_module_2;
-                            }
-                            else {
-                                // interface is inaccessible
-                                diagnosticMessage = Diagnostics.Extends_clause_of_exported_interface_0_has_or_is_using_private_name_1;
-                            }
+                            // interface is inaccessible
+                            diagnosticMessage = Diagnostics.Extends_clause_of_exported_interface_0_has_or_is_using_private_name_1;
                         }
 
                         return {
