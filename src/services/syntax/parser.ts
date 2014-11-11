@@ -1027,34 +1027,34 @@ module TypeScript.Parser {
             return isPropertyName(/*peekIndex:*/ modifierCount + 1, inErrorRecovery);
         }
 
-        function parseAccessor(checkForStrictMode: boolean): IAccessorSyntax {
+        function parseAccessor(): IAccessorSyntax {
             var modifiers = parseModifiers();
             var _currenToken = currentToken();
             var tokenKind = _currenToken.kind;
 
             if (tokenKind === SyntaxKind.GetKeyword) {
-                return parseGetMemberAccessorDeclaration(modifiers, _currenToken, checkForStrictMode);
+                return parseGetAccessor(modifiers, _currenToken);
             }
             else if (tokenKind === SyntaxKind.SetKeyword) {
-                return parseSetMemberAccessorDeclaration(modifiers, _currenToken, checkForStrictMode);
+                return parseSetccessor(modifiers, _currenToken);
             }
             else {
                 throw Errors.invalidOperation();
             }
         }
 
-        function parseGetMemberAccessorDeclaration(modifiers: ISyntaxToken[], getKeyword: ISyntaxToken, checkForStrictMode: boolean): GetAccessorSyntax {
+        function parseGetAccessor(modifiers: ISyntaxToken[], getKeyword: ISyntaxToken): GetAccessorSyntax {
             return new GetAccessorSyntax(parseNodeData,
                 modifiers, consumeToken(getKeyword), parsePropertyName(),
                 parseCallSignature(/*requireCompleteTypeParameterList:*/ false),
-                parseBlock(/*parseStatementsEvenWithNoOpenBrace:*/ false, checkForStrictMode));
+                parseFunctionBlock(/*parseStatementsEvenWithNoOpenBrace:*/ false));
         }
 
-        function parseSetMemberAccessorDeclaration(modifiers: ISyntaxToken[], setKeyword: ISyntaxToken, checkForStrictMode: boolean): SetAccessorSyntax {
+        function parseSetccessor(modifiers: ISyntaxToken[], setKeyword: ISyntaxToken): SetAccessorSyntax {
             return new SetAccessorSyntax(parseNodeData,
                 modifiers, consumeToken(setKeyword), parsePropertyName(),
                 parseCallSignature(/*requireCompleteTypeParameterList:*/ false),
-                parseBlock(/*parseStatementsEvenWithNoOpenBrace:*/ false, checkForStrictMode));
+                parseFunctionBlock(/*parseStatementsEvenWithNoOpenBrace:*/ false));
         }
 
         function isClassElement(inErrorRecovery: boolean): boolean {
@@ -1127,7 +1127,7 @@ module TypeScript.Parser {
                 return parseIndexMemberDeclaration();
             }
             else if (isAccessor(_modifierCount, inErrorRecovery)) {
-                return parseAccessor(/*checkForStrictMode:*/ false);
+                return parseAccessor();
             }
             else if (isMemberVariableOrFunctionDeclaration(/*peekIndex:*/ _modifierCount, inErrorRecovery)) {
                 var modifiers = parseModifiers();
@@ -1159,7 +1159,7 @@ module TypeScript.Parser {
                 eatToken(SyntaxKind.ConstructorKeyword), 
                 parseCallSignature(/*requireCompleteTypeParameterList:*/ false),
                 isBlock()
-                    ? parseBlock(/*parseStatementsEvenWithNoOpenBrace:*/ false, /*checkForStrictMode:*/ true)
+                    ? parseFunctionBlock(/*parseStatementsEvenWithNoOpenBrace:*/ false)
                     : eatExplicitOrAutomaticSemicolon(/*allowWithoutNewline:*/ false));
         }
 
@@ -1170,7 +1170,7 @@ module TypeScript.Parser {
             // open brace.
             var parseBlockEvenWithNoOpenBrace = tryAddUnexpectedEqualsGreaterThanToken(callSignature);
             var blockOrSemicolonToken = parseBlockEvenWithNoOpenBrace || isBlock()
-                ? parseBlock(parseBlockEvenWithNoOpenBrace, /*checkForStrictMode:*/ true)
+                ? parseFunctionBlock(parseBlockEvenWithNoOpenBrace)
                 : eatExplicitOrAutomaticSemicolon(/*allowWithoutNewline:*/ false);
 
             return new MemberFunctionDeclarationSyntax(parseNodeData, modifiers, propertyName, callSignature, blockOrSemicolonToken);
@@ -1237,7 +1237,7 @@ module TypeScript.Parser {
 
             // Parse a block if we're on a bock, or if we saw a '=>'
             var blockOrSemicolonToken = parseBlockEvenWithNoOpenBrace || isBlock()
-                ? parseBlock(parseBlockEvenWithNoOpenBrace, /*checkForStrictMode:*/ true)
+                ? parseFunctionBlock(parseBlockEvenWithNoOpenBrace)
                 : eatExplicitOrAutomaticSemicolon(/*allowWithoutNewline:*/ false);
 
             return new FunctionDeclarationSyntax(parseNodeData, modifiers, functionKeyword, identifier, callSignature, blockOrSemicolonToken);
@@ -1591,7 +1591,7 @@ module TypeScript.Parser {
                     }
 
                 case SyntaxKind.IfKeyword: return parseIfStatement(_currentToken);
-                case SyntaxKind.OpenBraceToken: return parseBlock(/*parseStatementsEvenWithNoOpenBrace:*/ false, /*checkForStrictMode:*/ false);
+                case SyntaxKind.OpenBraceToken: return parseStatementBlock();
                 case SyntaxKind.ReturnKeyword: return parseReturnStatement(_currentToken);
                 case SyntaxKind.SwitchKeyword: return parseSwitchStatement(_currentToken);
                 case SyntaxKind.ThrowKeyword: return parseThrowStatement(_currentToken);
@@ -1663,7 +1663,7 @@ module TypeScript.Parser {
 
             var savedListParsingState = listParsingState;
             listParsingState |= (1 << ListParsingState.TryBlock_Statements);
-            var block = parseBlock(/*parseStatementsEvenWithNoOpenBrace:*/ false, /*checkForStrictMode:*/ false);
+            var block = parseStatementBlock();
             listParsingState = savedListParsingState;
 
             var catchClause: CatchClauseSyntax = undefined;
@@ -1684,7 +1684,7 @@ module TypeScript.Parser {
         function parseCatchClauseBlock(): BlockSyntax {
             var savedListParsingState = listParsingState;
             listParsingState |= (1 << ListParsingState.CatchBlock_Statements);
-            var block = parseBlock(/*parseStatementsEvenWithNoOpenBrace:*/ false, /*checkForStrictMode:*/ false);
+            var block = parseStatementBlock();
             listParsingState = savedListParsingState;
 
             return block;
@@ -1698,7 +1698,8 @@ module TypeScript.Parser {
 
         function parseFinallyClause(): FinallyClauseSyntax {
             return new FinallyClauseSyntax(parseNodeData,
-                eatToken(SyntaxKind.FinallyKeyword), parseBlock(/*parseStatementsEvenWithNoOpenBrace:*/ false, /*checkForStrictMode:*/ false));
+                eatToken(SyntaxKind.FinallyKeyword),
+                parseStatementBlock());
         }
 
         function parseWithStatement(withKeyword: ISyntaxToken): WithStatementSyntax {
@@ -2825,7 +2826,7 @@ module TypeScript.Parser {
             return new FunctionExpressionSyntax(parseNodeData,
                 consumeToken(functionKeyword), eatOptionalIdentifierToken(),
                 parseCallSignature(/*requireCompleteTypeParameterList:*/ false),
-                parseBlock(/*parseStatementsEvenWithNoOpenBrace:*/ false, /*checkForStrictMode:*/ true));
+                parseFunctionBlock(/*parseStatementsEvenWithNoOpenBrace:*/ false));
         }
 
         function parseObjectCreationExpression(newKeyword: ISyntaxToken): ObjectCreationExpressionSyntax {
@@ -2959,7 +2960,7 @@ module TypeScript.Parser {
             //      { FunctionBody }
 
             if (isBlock()) {
-                return parseBlock(/*parseStatementsEvenWithNoOpenBrace:*/ false, /*checkForStrictMode:*/ false);
+                return parseFunctionBlock(/*parseStatementsEvenWithNoOpenBrace:*/ false);
             }
 
             // We didn't have a block.  However, we may be in an error situation.  For example,
@@ -2978,7 +2979,7 @@ module TypeScript.Parser {
                 !isFunctionDeclaration(_modifierCount)) {
                 // We've seen a statement (and it isn't an expressionStatement like 'foo()'), 
                 // so treat this like a block with a missing open brace.
-                return parseBlock(/*parseStatementsEvenWithNoOpenBrace:*/ true, /*checkForStrictMode:*/ false);
+                return parseFunctionBlock(/*parseStatementsEvenWithNoOpenBrace:*/ true);
             }
 
             return parseAssignmentExpressionOrHigher();
@@ -3179,7 +3180,7 @@ module TypeScript.Parser {
             // Debug.assert(isPropertyAssignment(/*inErrorRecovery:*/ false));
 
             if (isAccessor(modifierCount(), inErrorRecovery)) {
-                return parseAccessor(/*checkForStrictMode:*/ true);
+                return parseAccessor();
             }
 
             // Note: we don't want to call parsePropertyName here yet as it will convert a keyword
@@ -3308,7 +3309,7 @@ module TypeScript.Parser {
         function parseFunctionPropertyAssignment(propertyName: IPropertyNameSyntax): FunctionPropertyAssignmentSyntax {
             return new FunctionPropertyAssignmentSyntax(parseNodeData,
                 propertyName, parseCallSignature(/*requireCompleteTypeParameterList:*/ false),
-                parseBlock(/*parseBlockEvenWithNoOpenBrace:*/ false, /*checkForStrictMode:*/ true));
+                parseFunctionBlock(/*parseBlockEvenWithNoOpenBrace:*/ false));
         }
 
         function parseArrayLiteralExpression(openBracketToken: ISyntaxToken): ArrayLiteralExpressionSyntax {
@@ -3317,6 +3318,20 @@ module TypeScript.Parser {
                 consumeToken(openBracketToken), 
                 parseSeparatedSyntaxList<IExpressionSyntax>(ListParsingState.ArrayLiteralExpression_AssignmentExpressions),
                 eatToken(SyntaxKind.CloseBracketToken));
+        }
+
+        function parseFunctionBlock(parseBlockEvenWithNoOpenBrace: boolean): BlockSyntax {
+            return parseBlock(parseBlockEvenWithNoOpenBrace, /*checkForStrictMode:*/ true);
+        }
+
+        function parseStatementBlock(): BlockSyntax {
+            // Different from function blocks in that we don't check for strict mode, nor do accept
+            // a block without an open curly.
+            var openBraceToken: ISyntaxToken;
+            return new BlockSyntax(parseNodeData, 
+                openBraceToken = eatToken(SyntaxKind.OpenBraceToken), 
+                openBraceToken.fullWidth() > 0 ? parseSyntaxList<IStatementSyntax>(ListParsingState.Block_Statements) : [],
+                eatToken(SyntaxKind.CloseBraceToken));
         }
 
         function parseBlock(parseBlockEvenWithNoOpenBrace: boolean, checkForStrictMode: boolean): BlockSyntax {
