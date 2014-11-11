@@ -5249,6 +5249,7 @@ module ts {
                     // then this might actually turn out to be a TemplateHead in the future;
                     // so we consider the call to be incomplete.
                     var templateLiteral = <LiteralExpression>tagExpression.template;
+                    Debug.assert(templateLiteral.kind === SyntaxKind.NoSubstitutionTemplateLiteral);
                     callIsIncomplete = isUnterminatedTemplateEnd(templateLiteral);
                 }
             }
