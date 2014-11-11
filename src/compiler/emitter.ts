@@ -2840,7 +2840,7 @@ module ts {
                 }
                 writer.writeLine();
 
-                function getImportEntityNameVisibilityError(symbolAccesibilityResult: SymbolAccessiblityResult) {
+                function getImportEntityNameVisibilityError(symbolAccesibilityResult: SymbolAccessiblityResult): SymbolAccessibilityDiagnostic {
                     return {
                         diagnosticMessage: Diagnostics.Import_declaration_0_is_using_private_name_1,
                         errorNode: node,
@@ -2884,15 +2884,10 @@ module ts {
                     write(";");
                     writeLine();
                 }
-                function getTypeAliasDeclarationVisibilityError(symbolAccesibilityResult: SymbolAccessiblityResult) {
-                    var diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
-                        symbolAccesibilityResult.accessibility === SymbolAccessibility.CannotBeNamed ?
-                        Diagnostics.Exported_type_alias_0_has_or_is_using_name_1_from_external_module_2_but_cannot_be_named :
-                        Diagnostics.Exported_type_alias_0_has_or_is_using_name_1_from_private_module_2 :
-                        Diagnostics.Exported_type_alias_0_has_or_is_using_private_name_1;
+                function getTypeAliasDeclarationVisibilityError(symbolAccesibilityResult: SymbolAccessiblityResult): SymbolAccessibilityDiagnostic {
                     return {
-                        diagnosticMessage: diagnosticMessage,
-                        errorNode: node,
+                        diagnosticMessage: Diagnostics.Exported_type_alias_0_has_or_is_using_private_name_1,
+                        errorNode: node.type,
                         typeName: node.name
                     };
                 }
