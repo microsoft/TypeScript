@@ -8467,7 +8467,7 @@ module ts {
                 // above them to find the lowest container
                 case SyntaxKind.Identifier:
                     // If the identifier is the RHS of a qualified name, then it's a type iff its parent is.
-                    if (node.parent.kind === SyntaxKind.QualifiedName) {
+                    if (node.parent.kind === SyntaxKind.QualifiedName && (<QualifiedName>node.parent).right === node) {
                         node = node.parent;
                     }
                     // fall through
