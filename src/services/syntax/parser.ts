@@ -890,19 +890,21 @@ module TypeScript.Parser {
             return isPropertyName(/*peekToken:*/ 0, inErrorRecovery);
         }
 
-        function enableAllowInAnd<T>(func: () => T): T {
-            if (!disallowIn) {
-                return func();
+        function allowInAnd<T>(func: () => T): T {
+            if (disallowIn) {
+                setDisallowIn(false);
+                var result = func();
+                setDisallowIn(true);
+                return result;
             }
-
-            setDisallowIn(false);
-            var result = func();
-            setDisallowIn(true);
-            return result;
+            
+            // no need to do anything special if 'in' is already allowed.
+            return func();
         }
 
-        function disableAllowInAnd<T>(func: () => T): T {
+        function disallowInAnd<T>(func: () => T): T {
             if (disallowIn) {
+                // no need to do anything special if 'in' is already disallowed.
                 return func();
             }
 
@@ -913,7 +915,7 @@ module TypeScript.Parser {
         }
         
         function tryParseEnumElementEqualsValueClause(): EqualsValueClauseSyntax {
-            return isEqualsValueClause(/*inParameter*/ false) ? enableAllowInAnd(parseEqualsValueClause) : undefined;
+            return isEqualsValueClause(/*inParameter*/ false) ? allowInAnd(parseEqualsValueClause) : undefined;
         }
 
         function tryParseEnumElement(inErrorRecovery: boolean): EnumElementSyntax {
@@ -1179,7 +1181,7 @@ module TypeScript.Parser {
                 modifiers,
                 new VariableDeclaratorSyntax(parseNodeData, propertyName,
                     parseOptionalTypeAnnotation(/*allowStringLiteral:*/ false), 
-                    isEqualsValueClause(/*inParameter*/ false) ? enableAllowInAnd(parseEqualsValueClause) : undefined),
+                    isEqualsValueClause(/*inParameter*/ false) ? allowInAnd(parseEqualsValueClause) : undefined),
                 eatExplicitOrAutomaticSemicolon(/*allowWithoutNewline:*/ false));
         }
 
@@ -1644,7 +1646,7 @@ module TypeScript.Parser {
             //  do;while(0)x will have a semicolon inserted before x.
             return new DoStatementSyntax(parseNodeData,
                 consumeToken(doKeyword), parseStatement(/*inErrorRecovery:*/ false), eatToken(SyntaxKind.WhileKeyword), eatToken(SyntaxKind.OpenParenToken),
-                enableAllowInAnd(parseExpression), eatToken(SyntaxKind.CloseParenToken), eatExplicitOrAutomaticSemicolon(/*allowWithoutNewline:*/ true));
+                allowInAnd(parseExpression), eatToken(SyntaxKind.CloseParenToken), eatExplicitOrAutomaticSemicolon(/*allowWithoutNewline:*/ true));
         }
 
         function isLabeledStatement(currentToken: ISyntaxToken): boolean {
@@ -1706,7 +1708,7 @@ module TypeScript.Parser {
             return new WithStatementSyntax(parseNodeData,
                 consumeToken(withKeyword),
                 eatToken(SyntaxKind.OpenParenToken),
-                enableAllowInAnd(parseExpression),
+                allowInAnd(parseExpression),
                 eatToken(SyntaxKind.CloseParenToken),
                 parseStatement(/*inErrorRecovery:*/ false));
         }
@@ -1718,7 +1720,7 @@ module TypeScript.Parser {
             return new WhileStatementSyntax(parseNodeData,
                 consumeToken(whileKeyword),
                 eatToken(SyntaxKind.OpenParenToken),
-                enableAllowInAnd(parseExpression),
+                allowInAnd(parseExpression),
                 eatToken(SyntaxKind.CloseParenToken),
                 parseStatement(/*inErrorRecovery:*/ false));
         }
@@ -1764,8 +1766,8 @@ module TypeScript.Parser {
             var initializer = tokenKind === SyntaxKind.SemicolonToken
                 ? undefined
                 : tokenKind === SyntaxKind.VarKeyword
-                    ? disableAllowInAnd(parseVariableDeclaration)
-                    : disableAllowInAnd(parseExpression)
+                    ? disallowInAnd(parseVariableDeclaration)
+                    : disallowInAnd(parseExpression)
 
             // In order to be a 'for-in' statement, we had to have an initializer of some sort, and
             // we had to actually get an 'in' keyword.
@@ -1776,7 +1778,7 @@ module TypeScript.Parser {
 
                 return new ForInStatementSyntax(parseNodeData,
                     forKeyword, openParenToken, initializer, eatToken(SyntaxKind.InKeyword),
-                    enableAllowInAnd(parseExpression), eatToken(SyntaxKind.CloseParenToken), parseStatement(/*inErrorRecovery:*/ false));
+                    allowInAnd(parseExpression), eatToken(SyntaxKind.CloseParenToken), parseStatement(/*inErrorRecovery:*/ false));
             }
             else {
                 // NOTE: From the es5 section on Automatic Semicolon Insertion.
@@ -1800,7 +1802,7 @@ module TypeScript.Parser {
             if (tokenKind !== SyntaxKind.SemicolonToken &&
                 tokenKind !== SyntaxKind.CloseParenToken &&
                 tokenKind !== SyntaxKind.EndOfFileToken) {
-                return enableAllowInAnd(parseExpression);
+                return allowInAnd(parseExpression);
             }
 
             return undefined;
@@ -1811,7 +1813,7 @@ module TypeScript.Parser {
             var tokenKind = currentToken().kind;
             if (tokenKind !== SyntaxKind.CloseParenToken &&
                 tokenKind !== SyntaxKind.EndOfFileToken) {
-                return enableAllowInAnd(parseExpression);
+                return allowInAnd(parseExpression);
             }
 
             return undefined;
@@ -1846,7 +1848,7 @@ module TypeScript.Parser {
 
             return openParenToken.fullWidth() === 0 && currentToken().kind === SyntaxKind.OpenBraceToken
                 ? eatIdentifierToken()
-                : enableAllowInAnd(parseExpression);
+                : allowInAnd(parseExpression);
         }
 
         function parseSwitchStatement(switchKeyword: ISyntaxToken) {
@@ -1901,7 +1903,7 @@ module TypeScript.Parser {
 
             return new CaseSwitchClauseSyntax(parseNodeData,
                 consumeToken(caseKeyword),
-                enableAllowInAnd(parseExpression),
+                allowInAnd(parseExpression),
                 eatToken(SyntaxKind.ColonToken), 
                 parseSyntaxList<IStatementSyntax>(ListParsingState.SwitchClause_Statements));
         }
@@ -1924,7 +1926,7 @@ module TypeScript.Parser {
             // directly as that might consume an expression on the following line.  
             return canEatExplicitOrAutomaticSemicolon(/*allowWithoutNewline:*/ false)
                 ? createMissingToken(SyntaxKind.IdentifierName, undefined)
-                : enableAllowInAnd(parseExpression);
+                : allowInAnd(parseExpression);
         }
 
         function parseThrowStatement(throwKeyword: ISyntaxToken): ThrowStatementSyntax {
@@ -1936,7 +1938,7 @@ module TypeScript.Parser {
             // ReturnStatement[Yield] :
             //      return [no LineTerminator here]Expression[In, ?Yield];
 
-            return !canEatExplicitOrAutomaticSemicolon(/*allowWithoutNewline:*/ false) ? enableAllowInAnd(parseExpression) : undefined;
+            return !canEatExplicitOrAutomaticSemicolon(/*allowWithoutNewline:*/ false) ? allowInAnd(parseExpression) : undefined;
         }
 
         function parseReturnStatement(returnKeyword: ISyntaxToken): ReturnStatementSyntax {
@@ -1965,7 +1967,7 @@ module TypeScript.Parser {
                 return new OmittedExpressionSyntax(parseNodeData);
             }
 
-            return enableAllowInAnd(tryParseAssignmentExpressionOrHigher_NoForce);
+            return allowInAnd(tryParseAssignmentExpressionOrHigher_NoForce);
         }
 
         function isExpression(currentToken: ISyntaxToken): boolean {
@@ -2044,7 +2046,7 @@ module TypeScript.Parser {
             //      [lookahead not-in {{, function, class, let [ }] Expression[In, ?Yield];
 
             return new ExpressionStatementSyntax(parseNodeData,
-                enableAllowInAnd(parseExpression),
+                allowInAnd(parseExpression),
                 eatExplicitOrAutomaticSemicolon(/*allowWithoutNewline:*/ false));
         }
 
@@ -2056,7 +2058,7 @@ module TypeScript.Parser {
             return new IfStatementSyntax(parseNodeData,
                 consumeToken(ifKeyword),
                 eatToken(SyntaxKind.OpenParenToken),
-                enableAllowInAnd(parseExpression),
+                allowInAnd(parseExpression),
                 eatToken(SyntaxKind.CloseParenToken),
                 parseStatement(/*inErrorRecovery:*/ false), parseOptionalElseClause());
         }
@@ -2078,7 +2080,7 @@ module TypeScript.Parser {
             //      var VariableDeclarationList[In, ?Yield];
 
             return new VariableStatementSyntax(parseNodeData,
-                parseModifiers(), enableAllowInAnd(parseVariableDeclaration), eatExplicitOrAutomaticSemicolon(/*allowWithoutNewline:*/ false));
+                parseModifiers(), allowInAnd(parseVariableDeclaration), eatExplicitOrAutomaticSemicolon(/*allowWithoutNewline:*/ false));
         }
 
         function parseVariableDeclaration(): VariableDeclarationSyntax {
@@ -2342,7 +2344,7 @@ module TypeScript.Parser {
             // allowed in the 'true' part of a conditional expression.
 
             return new ConditionalExpressionSyntax(parseNodeData,
-                leftOperand, consumeToken(_currentToken), enableAllowInAnd(tryParseAssignmentExpressionOrHigher_Force),
+                leftOperand, consumeToken(_currentToken), allowInAnd(tryParseAssignmentExpressionOrHigher_Force),
                 eatToken(SyntaxKind.ColonToken), tryParseAssignmentExpressionOrHigher(/*force:*/ true));
         }
 
@@ -2693,7 +2695,7 @@ module TypeScript.Parser {
             // cause a missing identiifer to be created), so that we will then consume the
             // comma and the following list items).
             var force = currentToken().kind === SyntaxKind.CommaToken;
-            return enableAllowInAnd(force ? tryParseAssignmentExpressionOrHigher_Force : tryParseAssignmentExpressionOrHigher_NoForce);
+            return allowInAnd(force ? tryParseAssignmentExpressionOrHigher_Force : tryParseAssignmentExpressionOrHigher_NoForce);
         }
 
         function parseElementAccessArgumentExpression(openBracketToken: ISyntaxToken, inObjectCreation: boolean) {
@@ -2711,7 +2713,7 @@ module TypeScript.Parser {
                 return Syntax.emptyToken(SyntaxKind.IdentifierName);
             }
             else {
-                return enableAllowInAnd(parseExpression);
+                return allowInAnd(parseExpression);
             }
         }
 
@@ -2857,7 +2859,7 @@ module TypeScript.Parser {
             // TemplateHead Expression[In, ?Yield]
             // [Lexical goal InputElementTemplateTail] TemplateSpans[?Yield]
 
-            var expression = enableAllowInAnd(parseExpression);
+            var expression = allowInAnd(parseExpression);
             var token = currentToken();
 
             if (token.kind === SyntaxKind.CloseBraceToken) {
@@ -2884,7 +2886,7 @@ module TypeScript.Parser {
 
             return new ParenthesizedExpressionSyntax(parseNodeData,
                 consumeToken(openParenToken),
-                enableAllowInAnd(parseExpression),
+                allowInAnd(parseExpression),
                 eatToken(SyntaxKind.CloseParenToken));
         }
 
@@ -3216,7 +3218,7 @@ module TypeScript.Parser {
                     // Also, if we have an identifier and it is followed by a colon then this is 
                     // definitely a simple property assignment.
                     return new SimplePropertyAssignmentSyntax(parseNodeData,
-                        propertyName, eatToken(SyntaxKind.ColonToken), enableAllowInAnd(tryParseAssignmentExpressionOrHigher_Force));
+                        propertyName, eatToken(SyntaxKind.ColonToken), allowInAnd(tryParseAssignmentExpressionOrHigher_Force));
                 }
             }
 
@@ -3289,7 +3291,7 @@ module TypeScript.Parser {
 
             return new ComputedPropertyNameSyntax(parseNodeData,
                 consumeToken(openBracketToken),
-                enableAllowInAnd(tryParseAssignmentExpressionOrHigher_Force),
+                allowInAnd(tryParseAssignmentExpressionOrHigher_Force),
                 eatToken(SyntaxKind.CloseBracketToken));
         }
 
