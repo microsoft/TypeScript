@@ -450,8 +450,14 @@ interface Math {
 
     /**
       * Returns the square root of the sum of squares of its arguments.
+      * @param values Values to compute the square root for.
+      *     If no arguments are passed, the result is +0.
+      *     If there is only one argument, the result is the absolute value.
+      *     If any argument is +Infinity or -Infinity, the result is +Infinity.
+      *     If any argument is NaN, the result is NaN.
+      *     If all arguments are either +0 or −0, the result is +0.
       */
-    hypot(value1: number, value2: number, ...values: number[] ): number;
+    hypot(...values: number[] ): number;
 
     /**
       * Returns the integral part of the a numeric expression, x, removing any fractional digits.
