@@ -1,0 +1,35 @@
+=== tests/cases/compiler/declFileTypeAlias.ts ===
+interface Window {
+>Window : Window
+
+    someMethod();
+>someMethod : () => any
+}
+module M {
+>M : typeof M
+
+    export type Value = string | number | boolean;
+>Value : string | number | boolean
+
+    export var x: Value;
+>x : Value
+>Value : Value
+}
+module M {
+>M : typeof M
+
+    export type W = Window | string;
+>W : string | Window
+>Window : Window
+
+    export module N {
+>N : typeof N
+
+        export class Window { }
+>Window : Window
+
+        export var p: W;
+>p : W
+>W : W
+    }
+}
