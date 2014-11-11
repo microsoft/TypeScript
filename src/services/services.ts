@@ -144,7 +144,7 @@ module ts {
             while (pos < end) {
                 var token = scanner.scan();
                 var textPos = scanner.getTextPos();
-                var node = nodes.push(createNode(token, pos, textPos, NodeFlags.Synthetic, this));
+                nodes.push(createNode(token, pos, textPos, NodeFlags.Synthetic, this));
                 pos = textPos;
             }
             return pos;
@@ -662,8 +662,6 @@ module ts {
         }
     }
 
-    var incrementalParse: IncrementalParse = TypeScript.IncrementalParser.parse;
-
     class SourceFileObject extends NodeObject implements SourceFile {
         public filename: string;
         public text: string;
@@ -761,10 +759,6 @@ module ts {
             }
 
             return this.namedDeclarations;
-        }
-
-        private isDeclareFile(): boolean {
-            return TypeScript.isDTSFile(this.filename);
         }
 
         public update(scriptSnapshot: TypeScript.IScriptSnapshot, version: string, isOpen: boolean, textChangeRange: TypeScript.TextChangeRange): SourceFile {
@@ -1535,7 +1529,7 @@ module ts {
             var filenames = host.getScriptFileNames();
             for (var i = 0, n = filenames.length; i < n; i++) {
                 var filename = filenames[i];
-                this.filenameToEntry[switchToForwardSlashes(filename)] = {
+                this.filenameToEntry[normalizeSlashes(filename)] = {
                     filename: filename,
                     version: host.getScriptVersion(filename),
                     isOpen: host.getScriptIsOpen(filename)
@@ -1550,7 +1544,7 @@ module ts {
         }
 
         public getEntry(filename: string): HostFileInformation {
-            filename = switchToForwardSlashes(filename);
+            filename = normalizeSlashes(filename);
             return lookUp(this.filenameToEntry, filename);
         }
 
@@ -2328,7 +2322,7 @@ module ts {
         function getSyntacticDiagnostics(filename: string) {
             synchronizeHostData();
 
-            filename = switchToForwardSlashes(filename);
+            filename = normalizeSlashes(filename);
 
             return program.getDiagnostics(getSourceFile(filename).getSourceFile());
         }
@@ -2340,7 +2334,7 @@ module ts {
         function getSemanticDiagnostics(filename: string) {
             synchronizeHostData();
 
-            filename = switchToForwardSlashes(filename)
+            filename = normalizeSlashes(filename)
             var compilerOptions = program.getCompilerOptions();
             var checker = getFullTypeCheckChecker();
             var targetSourceFile = getSourceFile(filename);
@@ -2421,7 +2415,7 @@ module ts {
         function getCompletionsAtPosition(filename: string, position: number, isMemberCompletion: boolean) {
             synchronizeHostData();
 
-            filename = switchToForwardSlashes(filename);
+            filename = normalizeSlashes(filename);
 
             var syntacticStart = new Date().getTime();
             var sourceFile = getSourceFile(filename);
@@ -2572,7 +2566,7 @@ module ts {
                         session.symbols[entry.name] = symbol;
                     }
                 });
-                host.log("getCompletionsAtPosition: getCompletionEntriesFromSymbols: " + (new Date().getTime() - semanticStart));
+                host.log("getCompletionsAtPosition: getCompletionEntriesFromSymbols: " + (new Date().getTime() - start));
             }
 
             function isCompletionListBlocker(previousToken: Node): boolean {
@@ -2580,7 +2574,7 @@ module ts {
                 var result = isInStringOrRegularExpressionOrTemplateLiteral(previousToken) ||
                     isIdentifierDefinitionLocation(previousToken) ||
                     isRightOfIllegalDot(previousToken);
-                host.log("getCompletionsAtPosition: isCompletionListBlocker: " + (new Date().getTime() - semanticStart));
+                host.log("getCompletionsAtPosition: isCompletionListBlocker: " + (new Date().getTime() - start));
                 return result;
             }
 
@@ -2766,7 +2760,7 @@ module ts {
         function getCompletionEntryDetails(filename: string, position: number, entryName: string): CompletionEntryDetails {
             // Note: No need to call synchronizeHostData, as we have captured all the data we need
             //       in the getCompletionsAtPosition earlier
-            filename = switchToForwardSlashes(filename);
+            filename = normalizeSlashes(filename);
 
             var sourceFile = getSourceFile(filename);
 
@@ -3266,7 +3260,7 @@ module ts {
         function getQuickInfoAtPosition(fileName: string, position: number): QuickInfo {
             synchronizeHostData();
 
-            fileName = switchToForwardSlashes(fileName);
+            fileName = normalizeSlashes(fileName);
             var sourceFile = getSourceFile(fileName);
             var node = getTouchingPropertyName(sourceFile, position);
             if (!node) {
@@ -3368,7 +3362,7 @@ module ts {
 
             synchronizeHostData();
 
-            filename = switchToForwardSlashes(filename);
+            filename = normalizeSlashes(filename);
             var sourceFile = getSourceFile(filename);
 
             var node = getTouchingPropertyName(sourceFile, position);
@@ -3432,7 +3426,7 @@ module ts {
         function getOccurrencesAtPosition(filename: string, position: number): ReferenceEntry[] {
             synchronizeHostData();
 
-            filename = switchToForwardSlashes(filename);
+            filename = normalizeSlashes(filename);
             var sourceFile = getSourceFile(filename);
 
             var node = getTouchingWord(sourceFile, position);
@@ -3735,9 +3729,6 @@ module ts {
 
                 pushKeywordIf(keywords, switchStatement.getFirstToken(), SyntaxKind.SwitchKeyword);
 
-                // Types of break statements we can grab on to.
-                var breakSearchType = BreakContinueSearchType.All;
-
                 // Go through each clause in the switch statement, collecting the 'case'/'default' keywords.
                 forEach(switchStatement.clauses, clause => {
                     pushKeywordIf(keywords, clause.getFirstToken(), SyntaxKind.CaseKeyword, SyntaxKind.DefaultKeyword);
@@ -3885,7 +3876,7 @@ module ts {
         function findReferences(fileName: string, position: number, findInStrings: boolean, findInComments: boolean): ReferenceEntry[] {
             synchronizeHostData();
 
-            fileName = switchToForwardSlashes(fileName);
+            fileName = normalizeSlashes(fileName);
             var sourceFile = getSourceFile(fileName);
 
             var node = getTouchingPropertyName(sourceFile, position);
@@ -4606,12 +4597,11 @@ module ts {
 
         function getEmitOutput(filename: string): EmitOutput {
             synchronizeHostData();
-            filename = switchToForwardSlashes(filename);
+            filename = normalizeSlashes(filename);
             var compilerOptions = program.getCompilerOptions();
             var targetSourceFile = program.getSourceFile(filename);  // Current selected file to be output
             // If --out flag is not specified, shouldEmitToOwnFile is true. Otherwise shouldEmitToOwnFile is false.
             var shouldEmitToOwnFile = ts.shouldEmitToOwnFile(targetSourceFile, compilerOptions);
-            var emitDeclaration = compilerOptions.declaration;
             var emitOutput: EmitOutput = {
                 outputFiles: [],
                 emitOutputStatus: undefined,
@@ -4628,7 +4618,6 @@ module ts {
             // Initialize writer for CompilerHost.writeFile
             writer = getEmitOutputWriter;
 
-            var syntacticDiagnostics: Diagnostic[] = [];
             var containSyntacticErrors = false;
 
             if (shouldEmitToOwnFile) {
@@ -4782,7 +4771,7 @@ module ts {
         function getSignatureHelpItems(fileName: string, position: number): SignatureHelpItems {
             synchronizeHostData();
 
-            fileName = switchToForwardSlashes(fileName);
+            fileName = normalizeSlashes(fileName);
             var sourceFile = getSourceFile(fileName);
 
             return SignatureHelp.getSignatureHelpItems(sourceFile, position, typeInfoResolver, cancellationToken);
@@ -4813,7 +4802,7 @@ module ts {
 
                         var start = signatureInfoString.length;
                         signatureInfoString += displayPartsToString(parameter.displayParts);
-                        var end = signatureInfoString.length - 1;
+                        var end = signatureInfoString.length;
 
                         // add the parameter to the list
                         parameters.push({
@@ -4852,12 +4841,12 @@ module ts {
 
         /// Syntactic features
         function getSyntaxTree(filename: string): TypeScript.SyntaxTree {
-            filename = switchToForwardSlashes(filename);
+            filename = normalizeSlashes(filename);
             return syntaxTreeCache.getCurrentFileSyntaxTree(filename);
         }
 
         function getCurrentSourceFile(filename: string): SourceFile {
-            filename = switchToForwardSlashes(filename);
+            filename = normalizeSlashes(filename);
             var currentSourceFile = syntaxTreeCache.getCurrentSourceFile(filename);
             return currentSourceFile;
         }
@@ -4924,14 +4913,14 @@ module ts {
         }
 
         function getNavigationBarItems(filename: string): NavigationBarItem[] {
-            filename = switchToForwardSlashes(filename);
+            filename = normalizeSlashes(filename);
 
             return NavigationBar.getNavigationBarItems(getCurrentSourceFile(filename));
         }
 
         function getSemanticClassifications(fileName: string, span: TypeScript.TextSpan): ClassifiedSpan[] {
             synchronizeHostData();
-            fileName = switchToForwardSlashes(fileName);
+            fileName = normalizeSlashes(fileName);
 
             var sourceFile = getSourceFile(fileName);
 
@@ -5002,7 +4991,7 @@ module ts {
 
         function getSyntacticClassifications(fileName: string, span: TypeScript.TextSpan): ClassifiedSpan[] {
             // doesn't use compiler - no need to synchronize with host
-            fileName = switchToForwardSlashes(fileName);
+            fileName = normalizeSlashes(fileName);
             var sourceFile = getCurrentSourceFile(fileName);
 
             var result: ClassifiedSpan[] = [];
@@ -5132,7 +5121,7 @@ module ts {
 
         function getOutliningSpans(filename: string): OutliningSpan[] {
             // doesn't use compiler - no need to synchronize with host
-            filename = switchToForwardSlashes(filename);
+            filename = normalizeSlashes(filename);
             var sourceFile = getCurrentSourceFile(filename);
             return OutliningElementsCollector.collectElements(sourceFile);
         }
@@ -5191,7 +5180,7 @@ module ts {
         }
 
         function getIndentationAtPosition(filename: string, position: number, editorOptions: EditorOptions) {
-            filename = switchToForwardSlashes(filename);
+            filename = normalizeSlashes(filename);
 
             var start = new Date().getTime();
             var sourceFile = getCurrentSourceFile(filename);
@@ -5228,21 +5217,21 @@ module ts {
         }
 
         function getFormattingEditsForRange(fileName: string, start: number, end: number, options: FormatCodeOptions): TextChange[] {
-            fileName = switchToForwardSlashes(fileName);
+            fileName = normalizeSlashes(fileName);
 
             var manager = getFormattingManager(fileName, options);
             return manager.formatSelection(start, end);
         }
 
         function getFormattingEditsForDocument(fileName: string, options: FormatCodeOptions): TextChange[] {
-            fileName = switchToForwardSlashes(fileName);
+            fileName = normalizeSlashes(fileName);
 
             var manager = getFormattingManager(fileName, options);
             return manager.formatDocument();
         }
 
         function getFormattingEditsAfterKeystroke(fileName: string, position: number, key: string, options: FormatCodeOptions): TextChange[] {
-            fileName = switchToForwardSlashes(fileName);
+            fileName = normalizeSlashes(fileName);
 
             var manager = getFormattingManager(fileName, options);
 
@@ -5268,7 +5257,7 @@ module ts {
             // anything away.
             synchronizeHostData();
 
-            filename = TypeScript.switchToForwardSlashes(filename);
+            filename = normalizeSlashes(filename);
 
             var sourceFile = getSourceFile(filename);
 
@@ -5428,7 +5417,7 @@ module ts {
         function getRenameInfo(fileName: string, position: number): RenameInfo {
             synchronizeHostData();
 
-            fileName = switchToForwardSlashes(fileName);
+            fileName = normalizeSlashes(fileName);
             var sourceFile = getSourceFile(fileName);
 
             var node = getTouchingWord(sourceFile, position);
@@ -5567,7 +5556,6 @@ module ts {
 
         function getClassificationsForLine(text: string, lexState: EndOfLineState): ClassificationResult {
             var offset = 0;
-            var lastTokenOrCommentEnd = 0;
             var token = SyntaxKind.Unknown;
             var lastNonTriviaToken = SyntaxKind.Unknown;
 

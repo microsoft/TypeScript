@@ -144,8 +144,7 @@ var definitions:ITypeDefinition[] = [
         children: [
             <any>{ name: 'modifiers', isList: true, elementType: 'ISyntaxToken' },
             <any>{ name: 'moduleKeyword', isToken: true, excludeFromAST: true },
-            <any>{ name: 'name', type: 'INameSyntax', isOptional: true },
-            <any>{ name: 'stringLiteral', isToken: true, isOptional: true, tokenKinds: ['StringLiteral'] },
+            <any>{ name: 'name', type: 'INameSyntax' },
             <any>{ name: 'openBraceToken', isToken: true, excludeFromAST: true },
             <any>{ name: 'moduleElements', isList: true, elementType: 'IModuleElementSyntax' },
             <any>{ name: 'closeBraceToken', isToken: true, excludeFromAST: true }
@@ -161,8 +160,7 @@ var definitions:ITypeDefinition[] = [
             <any>{ name: 'functionKeyword', isToken: true, excludeFromAST: true },
             <any>{ name: 'identifier', isToken: true, tokenKinds: ['IdentifierName'] },
             <any>{ name: 'callSignature', type: 'CallSignatureSyntax' },
-            <any>{ name: 'block', type: 'BlockSyntax', isOptional: true },
-            <any>{ name: 'semicolonToken', isToken: true, isOptional: true, excludeFromAST: true }
+            <any>{ name: 'body', type: 'BlockSyntax | ISyntaxToken', isOptional: true }
         ]
     },
     <any>{
@@ -242,8 +240,7 @@ var definitions:ITypeDefinition[] = [
         children: [
             <any>{ name: 'parameter', type: 'ParameterSyntax' },
             <any>{ name: 'equalsGreaterThanToken', isToken: true, excludeFromAST: true },
-            <any>{ name: 'block', type: 'BlockSyntax', isOptional: true },
-            <any>{ name: 'expression', type: 'IExpressionSyntax', isOptional: true }
+            <any>{ name: 'body', type: 'BlockSyntax | IExpressionSyntax' }
         ],
         isTypeScriptSpecific: true
     },
@@ -254,8 +251,7 @@ var definitions:ITypeDefinition[] = [
         children: [
             <any>{ name: 'callSignature', type: 'CallSignatureSyntax' },
             <any>{ name: 'equalsGreaterThanToken', isToken: true, excludeFromAST: true },
-            <any>{ name: 'block', type: 'BlockSyntax', isOptional: true },
-            <any>{ name: 'expression', type: 'IExpressionSyntax', isOptional: true }
+            <any>{ name: 'body', type: 'BlockSyntax | IExpressionSyntax' }
         ],
         isTypeScriptSpecific: true
     },
@@ -639,8 +635,7 @@ var definitions:ITypeDefinition[] = [
             <any>{ name: 'modifiers', isList: true, elementType: 'ISyntaxToken' },
             <any>{ name: 'constructorKeyword', isToken: true },
             <any>{ name: 'callSignature', type: 'CallSignatureSyntax' },
-            <any>{ name: 'block', type: 'BlockSyntax', isOptional: true },
-            <any>{ name: 'semicolonToken', isToken: true, isOptional: true, excludeFromAST: true }
+            <any>{ name: 'body', type: 'BlockSyntax | ISyntaxToken', isOptional: true  }
         ],
         isTypeScriptSpecific: true
     },
@@ -652,8 +647,7 @@ var definitions:ITypeDefinition[] = [
             <any>{ name: 'modifiers', isList: true, elementType: 'ISyntaxToken' },
             <any>{ name: 'propertyName', type: 'IPropertyNameSyntax' },
             <any>{ name: 'callSignature', type: 'CallSignatureSyntax' },
-            <any>{ name: 'block', type: 'BlockSyntax', isOptional: true },
-            <any>{ name: 'semicolonToken', isToken: true, isOptional: true, excludeFromAST: true }
+            <any>{ name: 'body', type: 'BlockSyntax | ISyntaxToken', isOptional: true  }
         ],
         isTypeScriptSpecific: true
     },
@@ -796,8 +790,7 @@ var definitions:ITypeDefinition[] = [
         children: [
             <any>{ name: 'forKeyword', isToken: true, excludeFromAST: true },
             <any>{ name: 'openParenToken', isToken: true, excludeFromAST: true },
-            <any>{ name: 'variableDeclaration', type: 'VariableDeclarationSyntax', isOptional: true },
-            <any>{ name: 'initializer', type: 'IExpressionSyntax', isOptional: true },
+            <any>{ name: 'initializer', type: 'VariableDeclarationSyntax | IExpressionSyntax', isOptional: true },
             <any>{ name: 'firstSemicolonToken', isToken: true, tokenKinds: ['SemicolonToken'], excludeFromAST: true },
             <any>{ name: 'condition', type: 'IExpressionSyntax', isOptional: true },
             <any>{ name: 'secondSemicolonToken', isToken: true, tokenKinds: ['SemicolonToken'], excludeFromAST: true },
@@ -813,10 +806,9 @@ var definitions:ITypeDefinition[] = [
         children: [
             <any>{ name: 'forKeyword', isToken: true, excludeFromAST: true },
             <any>{ name: 'openParenToken', isToken: true, excludeFromAST: true },
-            <any>{ name: 'variableDeclaration', type: 'VariableDeclarationSyntax', isOptional: true },
-            <any>{ name: 'left', type: 'IExpressionSyntax', isOptional: true },
+            <any>{ name: 'left', type: 'VariableDeclarationSyntax | IExpressionSyntax' },
             <any>{ name: 'inKeyword', isToken: true, excludeFromAST: true },
-            <any>{ name: 'expression', type: 'IExpressionSyntax' },
+            <any>{ name: 'right', type: 'IExpressionSyntax' },
             <any>{ name: 'closeParenToken', isToken: true, excludeFromAST: true },
             <any>{ name: 'statement', type: 'IStatementSyntax' }
         ]
