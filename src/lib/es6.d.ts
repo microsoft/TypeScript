@@ -742,31 +742,26 @@ declare var Float32Array;
 interface Float64Array { }
 declare var Float64Array;
 
-interface Handler<T> {
-    getOwnPropertyDescriptor? (target: T, propertyKey: PropertyKey): string;
-    getOwnPropertyNames? (target: T): string[]; // Object.getOwnPropertyNames(proxy) 
-    getPrototypeOf? (target: T): any; // Object.getPrototypeOf(proxy)
-    defineProperty? (target: T, propertyKey: PropertyKey, desc: string): boolean; // Object.defineProperty(proxy,name,desc)
-    deleteProperty? (target: T, propertyKey: PropertyKey): boolean; // delete proxy[name]
-    freeze? (target: T): boolean; // Object.freeze(proxy)
-    seal? (target: T): boolean; // Object.seal(proxy)
-    preventExtensions? (target: T): boolean; // Object.preventExtensions(proxy)
-    isFrozen? (target: T): boolean; // Object.isFrozen(proxy)
-    isSealed? (target: T): boolean; // Object.isSealed(proxy)
-    isExtensible? (target: T): boolean; // Object.isExtensible(proxy)
-    has? (target: T, propertyKey: PropertyKey): boolean; // name in proxy
-    hasOwn? (target: T, propertyKey: PropertyKey): boolean; // ({}).hasOwnProperty.call(proxy,name)
-    get? (target: T, propertyKey: PropertyKey, receiver: any): any; // receiver[name]
-    set? (target: T, propertyKey: PropertyKey, val: any, receiver: any): boolean; // receiver[name] = val
-    enumerate? (target: T): Iterator<T>; // for (name in proxy) (iterator should yield all enumerable own and inherited properties)
-    keys? (target: T): string[]; // Object.keys(proxy) (return array of enumerable own properties only)
-    apply? (target: T, thisArg, args): any; // proxy(...args)
-    construct? (target: T, args): any;// new proxy(...args)
+interface ProxyHandler<T> {
+    getPrototypeOf? (target: T): any;
+    setPrototypeOf? (target: T, v: any): boolean;
+    isExtensible? (target: T): boolean;
+    preventExtensions? (target: T): boolean;
+    getOwnPropertyDescriptor? (target: T, p: PropertyKey): PropertyDescriptor;
+    has? (target: T, p: PropertyKey): boolean;
+    get? (target: T, p: PropertyKey, receiver: any): any;
+    set? (target: T, p: PropertyKey, value: any, receiver: any): boolean;
+    deleteProperty? (target: T, p: PropertyKey): boolean;
+    defineProperty? (target: T, p: PropertyKey, attributes: PropertyDescriptor): boolean;
+    enumerate? (target: T): PropertyKey[];
+    ownKeys? (target: T): PropertyKey[];
+    apply? (target: T, thisArg: any, argArray?: any): any;
+    construct? (target: T, thisArg: any, argArray?: any): any;
 }
 
 declare var Proxy: {
-    <T>(target: T, handeler: Handler<T>): T;
-    new <T>(target: T, handeler: Handler<T>): T
+    revocable<T>(target: T, handler: ProxyHandler<T>): { proxy: T; revoke: () => void; };
+    new <T>(target: T, handeler: ProxyHandler<T>): T
 };
 
 declare var Reflect: {
