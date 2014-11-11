@@ -238,8 +238,8 @@ interface Array<T> {
 }
 
 interface ArrayConstructor {
-    from<T, U>(arrayLike: ArrayLike<T>, mapfn: (s: T) => U, thisArg?: any): Array<U>;
-    from<T, U>(iterable: Iterable<T>, mapfn: (s: T) => U, thisArg?: any): Array<U>;
+    from<T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): Array<U>;
+    from<T, U>(iterable: Iterable<T>, mapfn: (v: T, k: number) => U, thisArg?: any): Array<U>;
     from<T>(arrayLike: ArrayLike<T>): Array<T>;
     from<T>(iterable: Iterable<T>): Array<T>;
     of<T>(...items: T[]): Array<T>;
