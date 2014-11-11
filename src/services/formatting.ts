@@ -226,6 +226,21 @@ module ts.formatting {
         }
     }
 
+    /**
+      * Start of the original range might fall inside the comment - scanner will not yield appropriate results
+      * This function will look for token that is located before the start of target range 
+      * and return its end as start position for the scanner.
+      */
+    function getScanStartPosition(enclosingNode: Node, originalRange: TextRange, sourceFile: SourceFile): number {
+        var start = enclosingNode.getStart(sourceFile);
+        if (start === originalRange.pos && enclosingNode.end === originalRange.end) {
+            return start;
+        }
+
+        var precedingToken = findPrecedingToken(enclosingNode.pos, sourceFile);
+        return precedingToken ? precedingToken.end : originalRange.pos;
+    }
+
     function formatSpan(originalRange: TextRange,
         sourceFile: SourceFile,
         options: FormatCodeOptions,
@@ -237,10 +252,11 @@ module ts.formatting {
         // formatting context is used by rules provider
         var formattingContext = new FormattingContext(sourceFile, requestKind);
 
-        var formattingScanner = getFormattingScanner(sourceFile, originalRange.pos, originalRange.end);
-
         // find the smallest node that fully wraps the range and compute the initial indentation for the node
         var enclosingNode = findEnclosingNode(originalRange, sourceFile);
+
+        var formattingScanner = getFormattingScanner(sourceFile, getScanStartPosition(enclosingNode, originalRange, sourceFile), originalRange.end);
+
         var initialIndentation = SmartIndenter.getIndentationForNode(enclosingNode, originalRange, sourceFile, options);
 
         var previousRangeHasError: boolean;
@@ -401,6 +417,18 @@ module ts.formatting {
             }
 
             var nodeDynamicIndentation = getDynamicIndentation(node, nodeStartLine, indentation, delta);
+
+            // a useful observations when tracking context node
+            //        /
+            //      [a]
+            //   /   |   \ 
+            //  [b] [c] [d]
+            // node 'a' is a context node for nodes 'b', 'c', 'd' 
+            // except for the leftmost leaf token in [b] - in this case context node ('e') is located somewhere above 'a'
+            // this rule can be applied recursively to child nodes of 'a'.
+            // 
+            // context node is set to parent node value after processing every child node
+            // context node is set to parent of the token after processing every token
 
             var childContextNode = contextNode;
 

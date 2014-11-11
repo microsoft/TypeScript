@@ -11,4 +11,4 @@ goTo.marker();
 edit.insert('}');
 goTo.marker('comment');
 // Comment below multi-line 'if' condition formatting
-verify.currentLineContentIs('    // This is a comment');
+verify.currentLineContentIs('     // This is a comment');
