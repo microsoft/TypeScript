@@ -1,0 +1,15 @@
+=== tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesAssignment.ts ===
+var id: number = 10000;
+>id : number
+
+var name: string = "my name";
+>name : string
+
+var person: { name: string; id: number } = { name, id };
+>person : { name: string; id: number; }
+>name : string
+>id : number
+>{ name, id } : { name: string; id: number; }
+>name : string
+>id : number
+
