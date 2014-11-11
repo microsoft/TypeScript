@@ -368,7 +368,7 @@ interface Generator<T> extends Iterator<T> {
     // [Symbol.toStringTag]: string;
 }
 
-interface MATH {
+interface Math {
     /**
       * Returns the number of leading zero bits in the 32-bit binary representation of a number.
       * @param x A numeric expression.
