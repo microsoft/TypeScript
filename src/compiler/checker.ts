@@ -5271,6 +5271,8 @@ module ts {
                 typeArguments = callExpression.typeArguments;
             }
 
+            Debug.assert(adjustedArgCount !== undefined, "'adjustedArgCount' undefined");
+            Debug.assert(callIsIncomplete !== undefined, "'callIsIncomplete' undefined");
 
             return checkArity(adjustedArgCount, typeArguments, callIsIncomplete, signature);
 
