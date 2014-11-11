@@ -42,7 +42,16 @@ module ts.formatting {
           **/
         getIndentation(): number;
         /**
-          * Prefered relative indentation for child nodes
+          * Prefered relative indentation for child nodes.
+          * Delta is used to carry the indentation info
+          * foo(bar({
+          *     $
+          * }))
+          * Both 'foo', 'bar' introduce new indentation with delta = 4, but total indentation in $ is not 8. 
+          * foo: { indentation: 0, delta: 4 }
+          * bar: { indentation: foo.indentation + foo.delta = 4, delta: 4} however 'foo' and 'bar' are on the same line
+          * so bar inherits indentation from foo and bar.delta will be 4
+          * 
           */
         getDelta(): number;
         recomputeIndentation(lineAddedByFormatting: boolean): void;
@@ -290,11 +299,10 @@ module ts.formatting {
             startLine: number,
             inheritedIndentation: number,
             parent: Node,
-            parentIndentation: DynamicIndentation,
+            parentDynamicIndentation: DynamicIndentation,
             effectiveParentStartLine: number): Indentation {
 
             var indentation = inheritedIndentation;
-            var delta = 0;
             if (indentation === Constants.Unknown) {
                 if (isSomeBlock(node.kind)) {
                     // blocks should be indented in 
@@ -306,32 +314,30 @@ module ts.formatting {
                         parent.kind === SyntaxKind.CaseClause ||
                         parent.kind === SyntaxKind.DefaultClause) {
 
-                        indentation = parentIndentation.getIndentation() + parentIndentation.getDelta();
+                        indentation = parentDynamicIndentation.getIndentation() + parentDynamicIndentation.getDelta();
                     }
                     else {
-                        indentation = parentIndentation.getIndentation();
+                        indentation = parentDynamicIndentation.getIndentation();
                     }
                 }
                 else {
                     if (SmartIndenter.childStartsOnTheSameLineWithElseInIfStatement(parent, node, startLine, sourceFile)) {
-                        indentation = parentIndentation.getIndentation();
+                        indentation = parentDynamicIndentation.getIndentation();
                     }
                     else {
-                        indentation = parentIndentation.getIndentation() + parentIndentation.getDelta();
+                        indentation = parentDynamicIndentation.getIndentation() + parentDynamicIndentation.getDelta();
                     }
                 }
             }
 
-            if (SmartIndenter.shouldIndentChildNode(node.kind, SyntaxKind.Unknown)) {
-                delta = options.IndentSize;
-            }
+            var delta = SmartIndenter.shouldIndentChildNode(node.kind, SyntaxKind.Unknown) ? options.IndentSize : 0;
 
             if (effectiveParentStartLine === startLine) {
                 // if node is located on the same line with the parent
                 // - inherit indentation from the parent
                 // - push children if either parent of node itself has non-zero delta
-                indentation = parentIndentation.getIndentation();
-                delta = Math.min(options.IndentSize, parentIndentation.getDelta() + delta);
+                indentation = parentDynamicIndentation.getIndentation();
+                delta = Math.min(options.IndentSize, parentDynamicIndentation.getDelta() + delta);
             }
             return {
                 indentation: indentation,
@@ -394,19 +400,22 @@ module ts.formatting {
                 return;
             }
 
-            var nodeIndentation = getDynamicIndentation(node, nodeStartLine, indentation, delta);
+            var nodeDynamicIndentation = getDynamicIndentation(node, nodeStartLine, indentation, delta);
 
             var childContextNode = contextNode;
+
+            // if there are any tokens that logically belong to node and interleave child nodes
+            // such tokens will be consumed in processChildNode for for the child that follows them
             forEachChild(
                 node,
                 child => {
-                    processChildNode(child, Constants.Unknown, nodeIndentation, nodeStartLine, /*isListElement*/ false)
+                    processChildNode(child, /*inheritedIndentation*/ Constants.Unknown, nodeDynamicIndentation, nodeStartLine, /*isListElement*/ false)
                 },
                 (nodes: NodeArray<Node>) => {
                     var listStartToken = getOpenTokenForList(node, nodes);
                     var listEndToken = getCloseTokenForOpenToken(listStartToken);
 
-                    var listIndentation = nodeIndentation;
+                    var listDynamicIndentation = nodeDynamicIndentation;
                     var startLine = nodeStartLine;
 
                     if (listStartToken !== SyntaxKind.Unknown) {
@@ -420,21 +429,21 @@ module ts.formatting {
                                 // consume list start token
                                 startLine = sourceFile.getLineAndCharacterFromPosition(tokenInfo.token.pos).line;
                                 var indentation = 
-                                    computeIndentation(tokenInfo.token, startLine, Constants.Unknown, node, nodeIndentation, startLine);
+                                    computeIndentation(tokenInfo.token, startLine, Constants.Unknown, node, nodeDynamicIndentation, startLine);
 
-                                listIndentation = getDynamicIndentation(node, nodeStartLine, indentation.indentation, indentation.delta);
-                                consumeTokenAndAdvanceScanner(tokenInfo, node, listIndentation);
+                                listDynamicIndentation = getDynamicIndentation(node, nodeStartLine, indentation.indentation, indentation.delta);
+                                consumeTokenAndAdvanceScanner(tokenInfo, node, listDynamicIndentation);
                             }
                             else {
                                 // consume any tokens that precede the list as child elements of 'node' using its indentation scope
-                                consumeTokenAndAdvanceScanner(tokenInfo, node, nodeIndentation);
+                                consumeTokenAndAdvanceScanner(tokenInfo, node, nodeDynamicIndentation);
                             }
                         }
                     }
 
                     var inheritedIndentation = Constants.Unknown;
                     for (var i = 0, len = nodes.length; i < len; ++i) {
-                        inheritedIndentation = processChildNode(nodes[i], inheritedIndentation, listIndentation, startLine, /*isListElement*/ true)
+                        inheritedIndentation = processChildNode(nodes[i], inheritedIndentation, listDynamicIndentation, startLine, /*isListElement*/ true)
                     }
 
                     if (listEndToken !== SyntaxKind.Unknown) {
@@ -442,7 +451,7 @@ module ts.formatting {
                             var tokenInfo = formattingScanner.readTokenInfo(node);
                             if (tokenInfo.token.kind === listEndToken) {
                                 // consume list end token
-                                consumeTokenAndAdvanceScanner(tokenInfo, node, listIndentation);
+                                consumeTokenAndAdvanceScanner(tokenInfo, node, listDynamicIndentation);
                             }
                         }
                     }
@@ -454,13 +463,13 @@ module ts.formatting {
                 if (tokenInfo.token.end > node.end) {
                     break;
                 }
-                consumeTokenAndAdvanceScanner(tokenInfo, node, nodeIndentation);
+                consumeTokenAndAdvanceScanner(tokenInfo, node, nodeDynamicIndentation);
             }
 
             function processChildNode(
                 child: Node,
                 inheritedIndentation: number,
-                nodeIndentation: DynamicIndentation,
+                nodeDynamicIndentation: DynamicIndentation,
                 parentStartLine: number,
                 isListItem: boolean): number {
 
@@ -491,7 +500,7 @@ module ts.formatting {
                         break;
                     }
 
-                    consumeTokenAndAdvanceScanner(tokenInfo, node, nodeIndentation);
+                    consumeTokenAndAdvanceScanner(tokenInfo, node, nodeDynamicIndentation);
                 }
 
                 if (!formattingScanner.isOnToken()) {
@@ -502,11 +511,11 @@ module ts.formatting {
                     // if child node is a token, it does not impact indentation, proceed it using parent indentation scope rules
                     var tokenInfo = formattingScanner.readTokenInfo(node);
                     Debug.assert(tokenInfo.token.end === child.end);
-                    consumeTokenAndAdvanceScanner(tokenInfo, node, nodeIndentation);
+                    consumeTokenAndAdvanceScanner(tokenInfo, node, nodeDynamicIndentation);
                     return inheritedIndentation;
                 }
 
-                var childIndentation = computeIndentation(child, childStart.line, childIndentationAmount, node, nodeIndentation, parentStartLine);
+                var childIndentation = computeIndentation(child, childStart.line, childIndentationAmount, node, nodeDynamicIndentation, parentStartLine);
 
                 processNode(child, childContextNode, childStart.line, childIndentation.indentation, childIndentation.delta);
 
@@ -515,14 +524,14 @@ module ts.formatting {
                 return inheritedIndentation;
             }
 
-            function consumeTokenAndAdvanceScanner(currentTokenInfo: TokenInfo, parent: Node, indentation: DynamicIndentation): void {
+            function consumeTokenAndAdvanceScanner(currentTokenInfo: TokenInfo, parent: Node, dynamicIndentation: DynamicIndentation): void {
                 Debug.assert(rangeContainsRange(parent, currentTokenInfo.token));
 
                 var lastTriviaWasNewLine = formattingScanner.lastTrailingTriviaWasNewLine();
                 var indentToken = false;
 
                 if (currentTokenInfo.leadingTrivia) {
-                    processTrivia(currentTokenInfo.leadingTrivia, parent, childContextNode, indentation);
+                    processTrivia(currentTokenInfo.leadingTrivia, parent, childContextNode, dynamicIndentation);
                 }
 
                 var lineAdded: boolean;
@@ -532,7 +541,7 @@ module ts.formatting {
                 if (isTokenInRange) {
                     // save prevStartLine since processRange will overwrite this value with current ones
                     var prevStartLine = previousRangeStartLine;
-                    lineAdded = processRange(currentTokenInfo.token, tokenStart, parent, childContextNode, indentation);
+                    lineAdded = processRange(currentTokenInfo.token, tokenStart, parent, childContextNode, dynamicIndentation);
                     if (lineAdded !== undefined) {
                         indentToken = lineAdded;
                     }
@@ -542,7 +551,7 @@ module ts.formatting {
                 }
 
                 if (currentTokenInfo.trailingTrivia) {
-                    processTrivia(currentTokenInfo.trailingTrivia, parent, childContextNode, indentation);
+                    processTrivia(currentTokenInfo.trailingTrivia, parent, childContextNode, dynamicIndentation);
                 }
 
                 if (indentToken) {
@@ -557,13 +566,13 @@ module ts.formatting {
                             var triviaStartLine = sourceFile.getLineAndCharacterFromPosition(triviaItem.pos).line;
                             switch (triviaItem.kind) {
                                 case SyntaxKind.MultiLineCommentTrivia:
-                                    var commentIndentation = indentation.getIndentationForComment(currentTokenInfo.token.kind);
+                                    var commentIndentation = dynamicIndentation.getIndentationForComment(currentTokenInfo.token.kind);
                                     indentMultilineComment(triviaItem, commentIndentation, /*firstLineIsIndented*/ !indentNextTokenOrTrivia);
                                     indentNextTokenOrTrivia = false;
                                     break;
                                 case SyntaxKind.SingleLineCommentTrivia:
                                     if (indentNextTokenOrTrivia) {
-                                        var commentIndentation = indentation.getIndentationForComment(currentTokenInfo.token.kind);
+                                        var commentIndentation = dynamicIndentation.getIndentationForComment(currentTokenInfo.token.kind);
                                         insertIndentation(triviaItem.pos, commentIndentation, /*lineAdded*/ false);
                                         indentNextTokenOrTrivia = false;
                                     }
@@ -577,7 +586,7 @@ module ts.formatting {
 
                     // indent token only if is it is in target range and does not overlap with any error ranges
                     if (isTokenInRange && !rangeContainsError(currentTokenInfo.token)) {
-                        var tokenIndentation = indentation.getIndentationForToken(tokenStart.line, currentTokenInfo.token.kind);
+                        var tokenIndentation = dynamicIndentation.getIndentationForToken(tokenStart.line, currentTokenInfo.token.kind);
                         insertIndentation(currentTokenInfo.token.pos, tokenIndentation, lineAdded);
                     }
                 }
@@ -588,17 +597,22 @@ module ts.formatting {
             }
         }
 
-        function processTrivia(trivia: TextRangeWithKind[], parent: Node, contextNode: Node, indentation: DynamicIndentation): void {
+        function processTrivia(trivia: TextRangeWithKind[], parent: Node, contextNode: Node, dynamicIndentation: DynamicIndentation): void {
             for (var i = 0, len = trivia.length; i < len; ++i) {
                 var triviaItem = trivia[i];
                 if (isComment(triviaItem.kind) && rangeContainsRange(originalRange, triviaItem)) {
                     var triviaItemStart = sourceFile.getLineAndCharacterFromPosition(triviaItem.pos);
-                    processRange(triviaItem, triviaItemStart, parent, contextNode, indentation);
+                    processRange(triviaItem, triviaItemStart, parent, contextNode, dynamicIndentation);
                 }
             }
         }
 
-        function processRange(range: TextRangeWithKind, rangeStart: LineAndCharacter, parent: Node, contextNode: Node, indentation: DynamicIndentation): boolean {
+        function processRange(range: TextRangeWithKind, 
+            rangeStart: LineAndCharacter, 
+            parent: Node, 
+            contextNode: Node, 
+            dynamicIndentation: DynamicIndentation): boolean {
+            
             var rangeHasError = rangeContainsError(range);
             var lineAdded: boolean;
             if (!rangeHasError && !previousRangeHasError) {
@@ -609,7 +623,7 @@ module ts.formatting {
                 }
                 else {
                     lineAdded = 
-                        processPair(range, rangeStart.line, parent, previousRange, previousRangeStartLine, previousParent, contextNode, indentation)
+                        processPair(range, rangeStart.line, parent, previousRange, previousRangeStartLine, previousParent, contextNode, dynamicIndentation)
                 }
             }
 
@@ -628,7 +642,7 @@ module ts.formatting {
             previousStartLine: number,
             previousParent: Node,
             contextNode: Node,
-            indentation: DynamicIndentation): boolean {
+            dynamicIndentation: DynamicIndentation): boolean {
 
             formattingContext.updateContext(previousItem, previousParent, currentItem, currentParent, contextNode);
 
@@ -656,7 +670,7 @@ module ts.formatting {
                 }
 
                 if (lineAdded !== undefined) {
-                    indentation.recomputeIndentation(lineAdded);
+                    dynamicIndentation.recomputeIndentation(lineAdded);
                 }
 
                 // We need to trim trailing whitespace between the tokens if they were on different lines, and no rule was applied to put them on the same line
