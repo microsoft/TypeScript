@@ -211,7 +211,7 @@ interface Array<T> {
     /** 
         Returns an array of key, value pairs for every entry in the arrray
     */
-    entries(): Array<[number, T]>;
+    entries(): Iterator<[number, T]>;
 
     /** 
         Returns an list of keys in the arrray
@@ -548,7 +548,7 @@ interface RegExp {
 interface Map<K, V> {
     clear(): void;
     delete(key: K): boolean;
-    entries(): [K, V][];
+    entries(): Iterator<[K, V]>;
     forEach(callbackfn: (value: V, index: K, map: Map<K, V>) => void, thisArg?: any): void;
     get(key: K): V;
     has(key: K): boolean;
@@ -583,7 +583,7 @@ interface Set<T> {
     add(value: T): Set<T>;
     clear(): void;
     delete(value: T): boolean;
-    entries(): [T, T][];
+    entries(): Iterator<[T, T]>;
     forEach(callbackfn: (value: T, index: T, set: Set<T>) => void, thisArg?: any): void;
     has(value: T): boolean;
     keys(): T[];
@@ -677,7 +677,7 @@ interface Int8Array {
     byteLength: number;
     byteOffset: number;
     copyWithin(target: number, start: number, end?: number): Int8Array;
-    entries(): Array<[number, number]>;
+    entries(): Iterator<[number, number]>;
     every(callbackfn: (value: number, index: number, array: Int8Array) => boolean, thisArg?: any): boolean;
     fill(value: number, start?: number, end?: number): Int8Array;
     filter(callbackfn: (value: number, index: number, array: Int8Array) => boolean, thisArg?: any): Int8Array;
@@ -689,7 +689,7 @@ interface Int8Array {
     keys(): number[];
     lastIndexOf(searchElement: number, fromIndex?: number): number;
     length: number;
-    map<U>(callbackfn: (value: number, index: number, array: Int8Array) => U, thisArg?: any): U[];
+    map(callbackfn: (value: number, index: number, array: Int8Array) => number, thisArg?: any): Int8Array;
     reduce(callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Int8Array) => number, initialValue?: number): number;
     reduce<U>(callbackfn: (previousValue: U, currentValue: number, currentIndex: number, array: Int8Array) => U, initialValue: U): U;
     reduceRight(callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Int8Array) => number, initialValue?: number): number;
@@ -716,32 +716,416 @@ declare var Int8Array: {
     new (buffer: ArrayBuffer, byteOffset?: number, length?: number): Int8Array;
     BYTES_PER_ELEMENT: number;
     of(...items: number[]): Int8Array;
+    from(arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Int8Array;
 };
 
-interface Uint8Array { }
-declare var Uint8Array;
+/**
+  * A typed array of 8-bit unsigned integer values. The contents are initialized to 0. If the requested number of bytes could not be allocated an exception is raised.
+  */
+interface Uint8Array {
+    BYTES_PER_ELEMENT: number;
+    buffer: ArrayBuffer;
+    byteLength: number;
+    byteOffset: number;
+    copyWithin(target: number, start: number, end?: number): Uint8Array;
+    entries(): Iterator<[number, number]>;
+    every(callbackfn: (value: number, index: number, array: Uint8Array) => boolean, thisArg?: any): boolean;
+    fill(value: number, start?: number, end?: number): Uint8Array;
+    filter(callbackfn: (value: number, index: number, array: Uint8Array) => boolean, thisArg?: any): Uint8Array;
+    find(predicate: (value: number, index: number, obj: Array<number>) => boolean, thisArg?: any): number;
+    findIndex(predicate: (value: number) => boolean, thisArg?: any): number;
+    forEach(callbackfn: (value: number, index: number, array: Uint8Array) => void, thisArg?: any): void;
+    indexOf(searchElement: number, fromIndex?: number): number;
+    join(separator?: string): string;
+    keys(): number[];
+    lastIndexOf(searchElement: number, fromIndex?: number): number;
+    length: number;
+    map(callbackfn: (value: number, index: number, array: Uint8Array) => number, thisArg?: any): Uint8Array;
+    reduce(callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Uint8Array) => number, initialValue?: number): number;
+    reduce<U>(callbackfn: (previousValue: U, currentValue: number, currentIndex: number, array: Uint8Array) => U, initialValue: U): U;
+    reduceRight(callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Uint8Array) => number, initialValue?: number): number;
+    reduceRight<U>(callbackfn: (previousValue: U, currentValue: number, currentIndex: number, array: Uint8Array) => U, initialValue: U): U;
+    reverse(): Uint8Array;
+    set(index: number, value: number): void;
+    set(array: Uint8Array, offset?: number): void;
+    slice(start?: number, end?: number): Uint8Array;
+    some(callbackfn: (value: number, index: number, array: Uint8Array) => boolean, thisArg?: any): boolean;
+    sort(compareFn?: (a: number, b: number) => number): Uint8Array;
+    subarray(begin: number, end?: number): Uint8Array;
+    toLocaleString(): string;
+    toString(): string;
+    values(): Uint8Array;
+    [index: number]: number;
+    // [Symbol.iterator] (): number;
+}
 
-interface Uint8ClampedArray { }
-declare var Uint8ClampedArray;
+declare var Uint8Array: {
+    prototype: Uint8Array;
+    new (length: number): Uint8Array;
+    new (array: Uint8Array): Uint8Array;
+    new (array: number[]): Uint8Array;
+    new (buffer: ArrayBuffer, byteOffset?: number, length?: number): Uint8Array;
+    BYTES_PER_ELEMENT: number;
+    of(...items: number[]): Uint8Array;
+    from(arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint8Array;
+};
 
-interface Int16Array { }
-declare var Int16Array;
+/**
+  * A typed array of 8-bit unsigned integer (clamped) values. The contents are initialized to 0. If the requested number of bytes could not be allocated an exception is raised.
+  */
+interface Uint8ClampedArray {
+    BYTES_PER_ELEMENT: number;
+    buffer: ArrayBuffer;
+    byteLength: number;
+    byteOffset: number;
+    copyWithin(target: number, start: number, end?: number): Uint8ClampedArray;
+    entries(): Iterator<[number, number]>;
+    every(callbackfn: (value: number, index: number, array: Uint8ClampedArray) => boolean, thisArg?: any): boolean;
+    fill(value: number, start?: number, end?: number): Uint8ClampedArray;
+    filter(callbackfn: (value: number, index: number, array: Uint8ClampedArray) => boolean, thisArg?: any): Uint8ClampedArray;
+    find(predicate: (value: number, index: number, obj: Array<number>) => boolean, thisArg?: any): number;
+    findIndex(predicate: (value: number) => boolean, thisArg?: any): number;
+    forEach(callbackfn: (value: number, index: number, array: Uint8ClampedArray) => void, thisArg?: any): void;
+    indexOf(searchElement: number, fromIndex?: number): number;
+    join(separator?: string): string;
+    keys(): number[];
+    lastIndexOf(searchElement: number, fromIndex?: number): number;
+    length: number;
+    map(callbackfn: (value: number, index: number, array: Uint8ClampedArray) => number, thisArg?: any): Uint8ClampedArray;
+    reduce(callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Uint8ClampedArray) => number, initialValue?: number): number;
+    reduce<U>(callbackfn: (previousValue: U, currentValue: number, currentIndex: number, array: Uint8ClampedArray) => U, initialValue: U): U;
+    reduceRight(callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Uint8ClampedArray) => number, initialValue?: number): number;
+    reduceRight<U>(callbackfn: (previousValue: U, currentValue: number, currentIndex: number, array: Uint8ClampedArray) => U, initialValue: U): U;
+    reverse(): Uint8ClampedArray;
+    set(index: number, value: number): void;
+    set(array: Uint8ClampedArray, offset?: number): void;
+    slice(start?: number, end?: number): Uint8ClampedArray;
+    some(callbackfn: (value: number, index: number, array: Uint8ClampedArray) => boolean, thisArg?: any): boolean;
+    sort(compareFn?: (a: number, b: number) => number): Uint8ClampedArray;
+    subarray(begin: number, end?: number): Uint8ClampedArray;
+    toLocaleString(): string;
+    toString(): string;
+    values(): Uint8ClampedArray;
+    [index: number]: number;
+    // [Symbol.iterator] (): number;
+}
 
-interface Uint16Array { }
-declare var Uint16Array;
+declare var Uint8ClampedArray: {
+    prototype: Uint8ClampedArray;
+    new (length: number): Uint8ClampedArray;
+    new (array: Uint8ClampedArray): Uint8ClampedArray;
+    new (array: number[]): Uint8ClampedArray;
+    new (buffer: ArrayBuffer, byteOffset?: number, length?: number): Uint8ClampedArray;
+    BYTES_PER_ELEMENT: number;
+    of(...items: number[]): Uint8ClampedArray;
+    from(arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint8ClampedArray;
+};
 
-interface Int32Array { }
-declare var Int32Array;
+/**
+  * A typed array of 16-bit signed integer values. The contents are initialized to 0. If the requested number of bytes could not be allocated an exception is raised.
+  */
+interface Int16Array {
+    BYTES_PER_ELEMENT: number;
+    buffer: ArrayBuffer;
+    byteLength: number;
+    byteOffset: number;
+    copyWithin(target: number, start: number, end?: number): Int16Array;
+    entries(): Iterator<[number, number]>;
+    every(callbackfn: (value: number, index: number, array: Int16Array) => boolean, thisArg?: any): boolean;
+    fill(value: number, start?: number, end?: number): Int16Array;
+    filter(callbackfn: (value: number, index: number, array: Int16Array) => boolean, thisArg?: any): Int16Array;
+    find(predicate: (value: number, index: number, obj: Array<number>) => boolean, thisArg?: any): number;
+    findIndex(predicate: (value: number) => boolean, thisArg?: any): number;
+    forEach(callbackfn: (value: number, index: number, array: Int16Array) => void, thisArg?: any): void;
+    indexOf(searchElement: number, fromIndex?: number): number;
+    join(separator?: string): string;
+    keys(): number[];
+    lastIndexOf(searchElement: number, fromIndex?: number): number;
+    length: number;
+    map(callbackfn: (value: number, index: number, array: Int16Array) => number, thisArg?: any): Int16Array;
+    reduce(callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Int16Array) => number, initialValue?: number): number;
+    reduce<U>(callbackfn: (previousValue: U, currentValue: number, currentIndex: number, array: Int16Array) => U, initialValue: U): U;
+    reduceRight(callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Int16Array) => number, initialValue?: number): number;
+    reduceRight<U>(callbackfn: (previousValue: U, currentValue: number, currentIndex: number, array: Int16Array) => U, initialValue: U): U;
+    reverse(): Int16Array;
+    set(index: number, value: number): void;
+    set(array: Int16Array, offset?: number): void;
+    slice(start?: number, end?: number): Int16Array;
+    some(callbackfn: (value: number, index: number, array: Int16Array) => boolean, thisArg?: any): boolean;
+    sort(compareFn?: (a: number, b: number) => number): Int16Array;
+    subarray(begin: number, end?: number): Int16Array;
+    toLocaleString(): string;
+    toString(): string;
+    values(): Int16Array;
+    [index: number]: number;
+    // [Symbol.iterator] (): number;
+}
 
-interface Uint32Array { }
-declare var Uint32Array;
+declare var Int16Array: {
+    prototype: Int16Array;
+    new (length: number): Int16Array;
+    new (array: Int16Array): Int16Array;
+    new (array: number[]): Int16Array;
+    new (buffer: ArrayBuffer, byteOffset?: number, length?: number): Int16Array;
+    BYTES_PER_ELEMENT: number;
+    of(...items: number[]): Int16Array;
+    from(arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Int16Array;
+};
 
-interface Float32Array { }
-declare var Float32Array;
+/**
+  * A typed array of 16-bit unsinged integer values. The contents are initialized to 0. If the requested number of bytes could not be allocated an exception is raised.
+  */
+interface Uint16Array {
+    BYTES_PER_ELEMENT: number;
+    buffer: ArrayBuffer;
+    byteLength: number;
+    byteOffset: number;
+    copyWithin(target: number, start: number, end?: number): Uint16Array;
+    entries(): Iterator<[number, number]>;
+    every(callbackfn: (value: number, index: number, array: Uint16Array) => boolean, thisArg?: any): boolean;
+    fill(value: number, start?: number, end?: number): Uint16Array;
+    filter(callbackfn: (value: number, index: number, array: Uint16Array) => boolean, thisArg?: any): Uint16Array;
+    find(predicate: (value: number, index: number, obj: Array<number>) => boolean, thisArg?: any): number;
+    findIndex(predicate: (value: number) => boolean, thisArg?: any): number;
+    forEach(callbackfn: (value: number, index: number, array: Uint16Array) => void, thisArg?: any): void;
+    indexOf(searchElement: number, fromIndex?: number): number;
+    join(separator?: string): string;
+    keys(): number[];
+    lastIndexOf(searchElement: number, fromIndex?: number): number;
+    length: number;
+    map(callbackfn: (value: number, index: number, array: Uint16Array) => number, thisArg?: any): Uint16Array;
+    reduce(callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Uint16Array) => number, initialValue?: number): number;
+    reduce<U>(callbackfn: (previousValue: U, currentValue: number, currentIndex: number, array: Uint16Array) => U, initialValue: U): U;
+    reduceRight(callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Uint16Array) => number, initialValue?: number): number;
+    reduceRight<U>(callbackfn: (previousValue: U, currentValue: number, currentIndex: number, array: Uint16Array) => U, initialValue: U): U;
+    reverse(): Uint16Array;
+    set(index: number, value: number): void;
+    set(array: Uint16Array, offset?: number): void;
+    slice(start?: number, end?: number): Uint16Array;
+    some(callbackfn: (value: number, index: number, array: Uint16Array) => boolean, thisArg?: any): boolean;
+    sort(compareFn?: (a: number, b: number) => number): Uint16Array;
+    subarray(begin: number, end?: number): Uint16Array;
+    toLocaleString(): string;
+    toString(): string;
+    values(): Uint16Array;
+    [index: number]: number;
+    // [Symbol.iterator] (): number;
+}
 
-interface Float64Array { }
-declare var Float64Array;
+declare var Uint16Array: {
+    prototype: Uint16Array;
+    new (length: number): Uint16Array;
+    new (array: Uint16Array): Uint16Array;
+    new (array: number[]): Uint16Array;
+    new (buffer: ArrayBuffer, byteOffset?: number, length?: number): Uint16Array;
+    BYTES_PER_ELEMENT: number;
+    of(...items: number[]): Uint16Array;
+    from(arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint16Array;
+};
 
+/**
+  * A typed array of 32-bit signed integer values. The contents are initialized to 0. If the requested number of bytes could not be allocated an exception is raised.
+  */
+interface Int32Array {
+    BYTES_PER_ELEMENT: number;
+    buffer: ArrayBuffer;
+    byteLength: number;
+    byteOffset: number;
+    copyWithin(target: number, start: number, end?: number): Int32Array;
+    entries(): Iterator<[number, number]>;
+    every(callbackfn: (value: number, index: number, array: Int32Array) => boolean, thisArg?: any): boolean;
+    fill(value: number, start?: number, end?: number): Int32Array;
+    filter(callbackfn: (value: number, index: number, array: Int32Array) => boolean, thisArg?: any): Int32Array;
+    find(predicate: (value: number, index: number, obj: Array<number>) => boolean, thisArg?: any): number;
+    findIndex(predicate: (value: number) => boolean, thisArg?: any): number;
+    forEach(callbackfn: (value: number, index: number, array: Int32Array) => void, thisArg?: any): void;
+    indexOf(searchElement: number, fromIndex?: number): number;
+    join(separator?: string): string;
+    keys(): number[];
+    lastIndexOf(searchElement: number, fromIndex?: number): number;
+    length: number;
+    map(callbackfn: (value: number, index: number, array: Int32Array) => number, thisArg?: any): Int32Array;
+    reduce(callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Int32Array) => number, initialValue?: number): number;
+    reduce<U>(callbackfn: (previousValue: U, currentValue: number, currentIndex: number, array: Int32Array) => U, initialValue: U): U;
+    reduceRight(callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Int32Array) => number, initialValue?: number): number;
+    reduceRight<U>(callbackfn: (previousValue: U, currentValue: number, currentIndex: number, array: Int32Array) => U, initialValue: U): U;
+    reverse(): Int32Array;
+    set(index: number, value: number): void;
+    set(array: Int32Array, offset?: number): void;
+    slice(start?: number, end?: number): Int32Array;
+    some(callbackfn: (value: number, index: number, array: Int32Array) => boolean, thisArg?: any): boolean;
+    sort(compareFn?: (a: number, b: number) => number): Int32Array;
+    subarray(begin: number, end?: number): Int32Array;
+    toLocaleString(): string;
+    toString(): string;
+    values(): Int32Array;
+    [index: number]: number;
+    // [Symbol.iterator] (): number;
+}
+
+declare var Int32Array: {
+    prototype: Int32Array;
+    new (length: number): Int32Array;
+    new (array: Int32Array): Int32Array;
+    new (array: number[]): Int32Array;
+    new (buffer: ArrayBuffer, byteOffset?: number, length?: number): Int32Array;
+    BYTES_PER_ELEMENT: number;
+    of(...items: number[]): Int32Array;
+    from(arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Int32Array;
+};
+
+/**
+  * A typed array of 32-bit unsigned integer values. The contents are initialized to 0. If the requested number of bytes could not be allocated an exception is raised.
+  */
+interface Uint32Array {
+    BYTES_PER_ELEMENT: number;
+    buffer: ArrayBuffer;
+    byteLength: number;
+    byteOffset: number;
+    copyWithin(target: number, start: number, end?: number): Uint32Array;
+    entries(): Iterator<[number, number]>;
+    every(callbackfn: (value: number, index: number, array: Uint32Array) => boolean, thisArg?: any): boolean;
+    fill(value: number, start?: number, end?: number): Uint32Array;
+    filter(callbackfn: (value: number, index: number, array: Uint32Array) => boolean, thisArg?: any): Uint32Array;
+    find(predicate: (value: number, index: number, obj: Array<number>) => boolean, thisArg?: any): number;
+    findIndex(predicate: (value: number) => boolean, thisArg?: any): number;
+    forEach(callbackfn: (value: number, index: number, array: Uint32Array) => void, thisArg?: any): void;
+    indexOf(searchElement: number, fromIndex?: number): number;
+    join(separator?: string): string;
+    keys(): number[];
+    lastIndexOf(searchElement: number, fromIndex?: number): number;
+    length: number;
+    map(callbackfn: (value: number, index: number, array: Uint32Array) => number, thisArg?: any): Uint32Array;
+    reduce(callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Uint32Array) => number, initialValue?: number): number;
+    reduce<U>(callbackfn: (previousValue: U, currentValue: number, currentIndex: number, array: Uint32Array) => U, initialValue: U): U;
+    reduceRight(callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Uint32Array) => number, initialValue?: number): number;
+    reduceRight<U>(callbackfn: (previousValue: U, currentValue: number, currentIndex: number, array: Uint32Array) => U, initialValue: U): U;
+    reverse(): Uint32Array;
+    set(index: number, value: number): void;
+    set(array: Uint32Array, offset?: number): void;
+    slice(start?: number, end?: number): Uint32Array;
+    some(callbackfn: (value: number, index: number, array: Uint32Array) => boolean, thisArg?: any): boolean;
+    sort(compareFn?: (a: number, b: number) => number): Uint32Array;
+    subarray(begin: number, end?: number): Uint32Array;
+    toLocaleString(): string;
+    toString(): string;
+    values(): Uint32Array;
+    [index: number]: number;
+    // [Symbol.iterator] (): number;
+}
+
+declare var Uint32Array: {
+    prototype: Uint32Array;
+    new (length: number): Uint32Array;
+    new (array: Uint32Array): Uint32Array;
+    new (array: number[]): Uint32Array;
+    new (buffer: ArrayBuffer, byteOffset?: number, length?: number): Uint32Array;
+    BYTES_PER_ELEMENT: number;
+    of(...items: number[]): Uint32Array;
+    from(arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint32Array;
+};
+
+/**
+  * A typed array of 32-bit float values. The contents are initialized to 0. If the requested number of bytes could not be allocated an exception is raised.
+  */
+interface Float32Array {
+    BYTES_PER_ELEMENT: number;
+    buffer: ArrayBuffer;
+    byteLength: number;
+    byteOffset: number;
+    copyWithin(target: number, start: number, end?: number): Float32Array;
+    entries(): Iterator<[number, number]>;
+    every(callbackfn: (value: number, index: number, array: Float32Array) => boolean, thisArg?: any): boolean;
+    fill(value: number, start?: number, end?: number): Float32Array;
+    filter(callbackfn: (value: number, index: number, array: Float32Array) => boolean, thisArg?: any): Float32Array;
+    find(predicate: (value: number, index: number, obj: Array<number>) => boolean, thisArg?: any): number;
+    findIndex(predicate: (value: number) => boolean, thisArg?: any): number;
+    forEach(callbackfn: (value: number, index: number, array: Float32Array) => void, thisArg?: any): void;
+    indexOf(searchElement: number, fromIndex?: number): number;
+    join(separator?: string): string;
+    keys(): number[];
+    lastIndexOf(searchElement: number, fromIndex?: number): number;
+    length: number;
+    map(callbackfn: (value: number, index: number, array: Float32Array) => number, thisArg?: any): Float32Array;
+    reduce(callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Float32Array) => number, initialValue?: number): number;
+    reduce<U>(callbackfn: (previousValue: U, currentValue: number, currentIndex: number, array: Float32Array) => U, initialValue: U): U;
+    reduceRight(callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Float32Array) => number, initialValue?: number): number;
+    reduceRight<U>(callbackfn: (previousValue: U, currentValue: number, currentIndex: number, array: Float32Array) => U, initialValue: U): U;
+    reverse(): Float32Array;
+    set(index: number, value: number): void;
+    set(array: Float32Array, offset?: number): void;
+    slice(start?: number, end?: number): Float32Array;
+    some(callbackfn: (value: number, index: number, array: Float32Array) => boolean, thisArg?: any): boolean;
+    sort(compareFn?: (a: number, b: number) => number): Float32Array;
+    subarray(begin: number, end?: number): Float32Array;
+    toLocaleString(): string;
+    toString(): string;
+    values(): Float32Array;
+    [index: number]: number;
+    // [Symbol.iterator] (): number;
+}
+
+declare var Float32Array: {
+    prototype: Float32Array;
+    new (length: number): Float32Array;
+    new (array: Float32Array): Float32Array;
+    new (array: number[]): Float32Array;
+    new (buffer: ArrayBuffer, byteOffset?: number, length?: number): Float32Array;
+    BYTES_PER_ELEMENT: number;
+    of(...items: number[]): Float32Array;
+    from(arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Float32Array;
+};
+
+/**
+  * A typed array of 64-bit float values. The contents are initialized to 0. If the requested number of bytes could not be allocated an exception is raised.
+  */
+interface Float64Array {
+    BYTES_PER_ELEMENT: number;
+    buffer: ArrayBuffer;
+    byteLength: number;
+    byteOffset: number;
+    copyWithin(target: number, start: number, end?: number): Float64Array;
+    entries(): Iterator<[number, number]>;
+    every(callbackfn: (value: number, index: number, array: Float64Array) => boolean, thisArg?: any): boolean;
+    fill(value: number, start?: number, end?: number): Float64Array;
+    filter(callbackfn: (value: number, index: number, array: Float64Array) => boolean, thisArg?: any): Float64Array;
+    find(predicate: (value: number, index: number, obj: Array<number>) => boolean, thisArg?: any): number;
+    findIndex(predicate: (value: number) => boolean, thisArg?: any): number;
+    forEach(callbackfn: (value: number, index: number, array: Float64Array) => void, thisArg?: any): void;
+    indexOf(searchElement: number, fromIndex?: number): number;
+    join(separator?: string): string;
+    keys(): number[];
+    lastIndexOf(searchElement: number, fromIndex?: number): number;
+    length: number;
+    map(callbackfn: (value: number, index: number, array: Float64Array) => number, thisArg?: any): Float64Array;
+    reduce(callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Float64Array) => number, initialValue?: number): number;
+    reduce<U>(callbackfn: (previousValue: U, currentValue: number, currentIndex: number, array: Float64Array) => U, initialValue: U): U;
+    reduceRight(callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Float64Array) => number, initialValue?: number): number;
+    reduceRight<U>(callbackfn: (previousValue: U, currentValue: number, currentIndex: number, array: Float64Array) => U, initialValue: U): U;
+    reverse(): Float64Array;
+    set(index: number, value: number): void;
+    set(array: Float64Array, offset?: number): void;
+    slice(start?: number, end?: number): Float64Array;
+    some(callbackfn: (value: number, index: number, array: Float64Array) => boolean, thisArg?: any): boolean;
+    sort(compareFn?: (a: number, b: number) => number): Float64Array;
+    subarray(begin: number, end?: number): Float64Array;
+    toLocaleString(): string;
+    toString(): string;
+    values(): Float64Array;
+    [index: number]: number;
+    // [Symbol.iterator] (): number;
+}
+
+declare var Float64Array: {
+    prototype: Float64Array;
+    new (length: number): Float64Array;
+    new (array: Float64Array): Float64Array;
+    new (array: number[]): Float64Array;
+    new (buffer: ArrayBuffer, byteOffset?: number, length?: number): Float64Array;
+    BYTES_PER_ELEMENT: number;
+    of(...items: number[]): Float64Array;
+    from(arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Float64Array;
+};
 interface ProxyHandler<T> {
     getPrototypeOf? (target: T): any;
     setPrototypeOf? (target: T, v: any): boolean;
