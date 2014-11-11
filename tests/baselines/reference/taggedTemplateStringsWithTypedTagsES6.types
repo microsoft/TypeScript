@@ -39,34 +39,34 @@ f `abc${1}def${2}ghi`;
 >f : I
 
 f `abc`.member
->f `abc`.member : any
+>f `abc`.member : I
 >f : I
->member : any
+>member : I
 
 f `abc${1}def${2}ghi`.member;
->f `abc${1}def${2}ghi`.member : any
+>f `abc${1}def${2}ghi`.member : I
 >f : I
->member : any
+>member : I
 
 f `abc`["member"];
->f `abc`["member"] : any
+>f `abc`["member"] : I
 >f : I
 
 f `abc${1}def${2}ghi`["member"];
->f `abc${1}def${2}ghi`["member"] : any
+>f `abc${1}def${2}ghi`["member"] : I
 >f : I
 
 f `abc`[0].member `abc${1}def${2}ghi`;
->f `abc`[0].member : any
->f `abc`[0] : any
+>f `abc`[0].member : I
+>f `abc`[0] : I
 >f : I
->member : any
+>member : I
 
 f `abc${1}def${2}ghi`["member"].member `abc${1}def${2}ghi`;
->f `abc${1}def${2}ghi`["member"].member : any
->f `abc${1}def${2}ghi`["member"] : any
+>f `abc${1}def${2}ghi`["member"].member : I
+>f `abc${1}def${2}ghi`["member"] : I
 >f : I
->member : any
+>member : I
 
 f.thisIsNotATag(`abc`);
 >f.thisIsNotATag(`abc`) : void
