@@ -440,49 +440,7 @@ module ts.formatting {
                     processChildNode(child, /*inheritedIndentation*/ Constants.Unknown, nodeDynamicIndentation, nodeStartLine, /*isListElement*/ false)
                 },
                 (nodes: NodeArray<Node>) => {
-                    var listStartToken = getOpenTokenForList(node, nodes);
-                    var listEndToken = getCloseTokenForOpenToken(listStartToken);
-
-                    var listDynamicIndentation = nodeDynamicIndentation;
-                    var startLine = nodeStartLine;
-
-                    if (listStartToken !== SyntaxKind.Unknown) {
-                        // introduce a new indentation scope for lists (including list start and end tokens)
-                        while (formattingScanner.isOnToken()) {
-                            var tokenInfo = formattingScanner.readTokenInfo(node);
-                            if (tokenInfo.token.end > nodes.pos) {
-                                break;
-                            }
-                            else if (tokenInfo.token.kind === listStartToken) {
-                                // consume list start token
-                                startLine = sourceFile.getLineAndCharacterFromPosition(tokenInfo.token.pos).line;
-                                var indentation = 
-                                    computeIndentation(tokenInfo.token, startLine, Constants.Unknown, node, nodeDynamicIndentation, startLine);
-
-                                listDynamicIndentation = getDynamicIndentation(node, nodeStartLine, indentation.indentation, indentation.delta);
-                                consumeTokenAndAdvanceScanner(tokenInfo, node, listDynamicIndentation);
-                            }
-                            else {
-                                // consume any tokens that precede the list as child elements of 'node' using its indentation scope
-                                consumeTokenAndAdvanceScanner(tokenInfo, node, nodeDynamicIndentation);
-                            }
-                        }
-                    }
-
-                    var inheritedIndentation = Constants.Unknown;
-                    for (var i = 0, len = nodes.length; i < len; ++i) {
-                        inheritedIndentation = processChildNode(nodes[i], inheritedIndentation, listDynamicIndentation, startLine, /*isListElement*/ true)
-                    }
-
-                    if (listEndToken !== SyntaxKind.Unknown) {
-                        if (formattingScanner.isOnToken()) {
-                            var tokenInfo = formattingScanner.readTokenInfo(node);
-                            if (tokenInfo.token.kind === listEndToken) {
-                                // consume list end token
-                                consumeTokenAndAdvanceScanner(tokenInfo, node, listDynamicIndentation);
-                            }
-                        }
-                    }
+                    processChildNodes(nodes, node, nodeStartLine, nodeDynamicIndentation);
                 });
 
             // proceed any tokens in the node that are located after child nodes
@@ -550,6 +508,56 @@ module ts.formatting {
                 childContextNode = node;
 
                 return inheritedIndentation;
+            }
+
+            function processChildNodes(nodes: NodeArray<Node>, 
+                parent: Node, 
+                parentStartLine: number,
+                parentDynamicIndentation: DynamicIndentation): void {
+
+                var listStartToken = getOpenTokenForList(parent, nodes);
+                var listEndToken = getCloseTokenForOpenToken(listStartToken);
+
+                var listDynamicIndentation = parentDynamicIndentation;
+                var startLine = parentStartLine;
+
+                if (listStartToken !== SyntaxKind.Unknown) {
+                    // introduce a new indentation scope for lists (including list start and end tokens)
+                    while (formattingScanner.isOnToken()) {
+                        var tokenInfo = formattingScanner.readTokenInfo(parent);
+                        if (tokenInfo.token.end > nodes.pos) {
+                            break;
+                        }
+                        else if (tokenInfo.token.kind === listStartToken) {
+                            // consume list start token
+                            startLine = sourceFile.getLineAndCharacterFromPosition(tokenInfo.token.pos).line;
+                            var indentation =
+                                computeIndentation(tokenInfo.token, startLine, Constants.Unknown, parent, parentDynamicIndentation, startLine);
+
+                            listDynamicIndentation = getDynamicIndentation(parent, parentStartLine, indentation.indentation, indentation.delta);
+                            consumeTokenAndAdvanceScanner(tokenInfo, parent, listDynamicIndentation);
+                        }
+                        else {
+                            // consume any tokens that precede the list as child elements of 'node' using its indentation scope
+                            consumeTokenAndAdvanceScanner(tokenInfo, parent, parentDynamicIndentation);
+                        }
+                    }
+                }
+
+                var inheritedIndentation = Constants.Unknown;
+                for (var i = 0, len = nodes.length; i < len; ++i) {
+                    inheritedIndentation = processChildNode(nodes[i], inheritedIndentation, listDynamicIndentation, startLine, /*isListElement*/ true)
+                }
+
+                if (listEndToken !== SyntaxKind.Unknown) {
+                    if (formattingScanner.isOnToken()) {
+                        var tokenInfo = formattingScanner.readTokenInfo(parent);
+                        if (tokenInfo.token.kind === listEndToken) {
+                            // consume list end token
+                            consumeTokenAndAdvanceScanner(tokenInfo, parent, listDynamicIndentation);
+                        }
+                    }
+                }
             }
 
             function consumeTokenAndAdvanceScanner(currentTokenInfo: TokenInfo, parent: Node, dynamicIndentation: DynamicIndentation): void {
