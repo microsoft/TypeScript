@@ -858,7 +858,7 @@ module ts {
 
                     forEach(result.referencedFiles, refFile => {
                         convertResult.referencedFiles.push({
-                            path: switchToForwardSlashes(normalizePath(refFile.filename)),
+                            path: normalizePath(refFile.filename),
                             position: refFile.pos,
                             length: refFile.end - refFile.pos
                         });
@@ -866,7 +866,7 @@ module ts {
 
                     forEach(result.importedFiles, importedFile => {
                         convertResult.importedFiles.push({
-                            path: switchToForwardSlashes(importedFile.filename),
+                            path: normalizeSlashes(importedFile.filename),
                             position: importedFile.pos,
                             length: importedFile.end - importedFile.pos
                         });

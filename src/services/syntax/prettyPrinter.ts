@@ -305,9 +305,6 @@ module TypeScript.PrettyPrinter {
             this.ensureSpace();
             this.appendElement(node.name);
             this.ensureSpace();
-            this.appendToken(node.stringLiteral);
-            this.ensureSpace();
-
             this.appendToken(node.openBraceToken);
             this.ensureNewLine();
 
@@ -319,13 +316,13 @@ module TypeScript.PrettyPrinter {
             this.appendToken(node.closeBraceToken);
         }
 
-        private appendBlockOrSemicolon(block: BlockSyntax, semicolonToken: ISyntaxToken) {
-            if (block) {
+        private appendBlockOrSemicolon(body: BlockSyntax | ISyntaxToken) {
+            if (body.kind === SyntaxKind.Block) {
                 this.ensureSpace();
-                visitNodeOrToken(this, block);
+                visitNodeOrToken(this, body);
             }
             else {
-                this.appendToken(semicolonToken);
+                this.appendToken(<ISyntaxToken>body);
             }
         }
 
@@ -336,7 +333,7 @@ module TypeScript.PrettyPrinter {
             this.ensureSpace();
             this.appendToken(node.identifier);
             this.appendNode(node.callSignature);
-            this.appendBlockOrSemicolon(node.block, node.semicolonToken);
+            this.appendBlockOrSemicolon(node.body);
         }
 
         public visitVariableStatement(node: VariableStatementSyntax): void {
@@ -390,8 +387,7 @@ module TypeScript.PrettyPrinter {
             this.ensureSpace();
             this.appendToken(node.equalsGreaterThanToken);
             this.ensureSpace();
-            this.appendNode(node.block);
-            this.appendElement(node.expression);
+            visitNodeOrToken(this, node.body);
         }
 
         public visitParenthesizedArrowFunctionExpression(node: ParenthesizedArrowFunctionExpressionSyntax): void {
@@ -399,8 +395,7 @@ module TypeScript.PrettyPrinter {
             this.ensureSpace();
             this.appendToken(node.equalsGreaterThanToken);
             this.ensureSpace();
-            this.appendNode(node.block);
-            this.appendElement(node.expression);
+            visitNodeOrToken(this, node.body);
         }
 
         public visitQualifiedName(node: QualifiedNameSyntax): void {
@@ -671,7 +666,7 @@ module TypeScript.PrettyPrinter {
         public visitConstructorDeclaration(node: ConstructorDeclarationSyntax): void {
             this.appendToken(node.constructorKeyword);
             visitNodeOrToken(this, node.callSignature);
-            this.appendBlockOrSemicolon(node.block, node.semicolonToken);
+            this.appendBlockOrSemicolon(node.body);
         }
 
         public visitIndexMemberDeclaration(node: IndexMemberDeclarationSyntax): void {
@@ -686,7 +681,7 @@ module TypeScript.PrettyPrinter {
             this.ensureSpace();
             visitNodeOrToken(this, node.propertyName);
             visitNodeOrToken(this, node.callSignature);
-            this.appendBlockOrSemicolon(node.block, node.semicolonToken);
+            this.appendBlockOrSemicolon(node.body);
         }
 
         public visitGetAccessor(node: GetAccessorSyntax): void {
@@ -825,8 +820,7 @@ module TypeScript.PrettyPrinter {
             this.appendToken(node.forKeyword);
             this.ensureSpace();
             this.appendToken(node.openParenToken);
-            this.appendNode(node.variableDeclaration);
-            this.appendElement(node.initializer);
+            visitNodeOrToken(this, node.initializer);
             this.appendToken(node.firstSemicolonToken);
 
             if (node.condition) {
@@ -849,12 +843,11 @@ module TypeScript.PrettyPrinter {
             this.appendToken(node.forKeyword);
             this.ensureSpace();
             this.appendToken(node.openParenToken);
-            this.appendNode(node.variableDeclaration);
             this.appendElement(node.left);
             this.ensureSpace();
             this.appendToken(node.inKeyword);
             this.ensureSpace();
-            this.appendElement(node.expression);
+            this.appendElement(node.right);
             this.appendToken(node.closeParenToken);
             this.appendBlockOrStatement(node.statement);
         }
