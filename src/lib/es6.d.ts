@@ -1,4 +1,5 @@
-﻿
+﻿declare type PropertyKey = string | number | Symbol;
+
 interface Symbol {
     /** Returns a string representation of an object. */
     toString(): string;
@@ -104,6 +105,22 @@ interface ObjectConstructor {
       * @param proto The value of the new prototype or null.
       */
     setPrototypeOf(o: any, proto: any): any;
+
+    /**
+      * Gets the own property descriptor of the specified object. 
+      * An own property descriptor is one that is defined directly on the object and is not inherited from the object's prototype. 
+      * @param o Object that contains the property.
+      * @param p Name of the property.
+    */
+    getOwnPropertyDescriptor(o: any, propertyKey: PropertyKey): PropertyDescriptor;
+
+    /**
+      * Adds a property to an object, or modifies attributes of an existing property. 
+      * @param o Object on which to add or modify the property. This can be a native JavaScript object (that is, a user-defined object or a built in object) or a DOM object.
+      * @param p The property name.
+      * @param attributes Descriptor for the property. It can be for a data property or an accessor property.
+      */
+    defineProperty(o: any, propertyKey: PropertyKey, attributes: PropertyDescriptor): any;
 }
 
 interface Function {
@@ -726,21 +743,21 @@ interface Float64Array { }
 declare var Float64Array;
 
 interface Handler<T> {
-    getOwnPropertyDescriptor? (target: T, name: string): string;
+    getOwnPropertyDescriptor? (target: T, propertyKey: PropertyKey): string;
     getOwnPropertyNames? (target: T): string[]; // Object.getOwnPropertyNames(proxy) 
     getPrototypeOf? (target: T): any; // Object.getPrototypeOf(proxy)
-    defineProperty? (target: T, name: string, desc: string): boolean; // Object.defineProperty(proxy,name,desc)
-    deleteProperty? (target: T, name: string): boolean; // delete proxy[name]
+    defineProperty? (target: T, propertyKey: PropertyKey, desc: string): boolean; // Object.defineProperty(proxy,name,desc)
+    deleteProperty? (target: T, propertyKey: PropertyKey): boolean; // delete proxy[name]
     freeze? (target: T): boolean; // Object.freeze(proxy)
     seal? (target: T): boolean; // Object.seal(proxy)
     preventExtensions? (target: T): boolean; // Object.preventExtensions(proxy)
     isFrozen? (target: T): boolean; // Object.isFrozen(proxy)
     isSealed? (target: T): boolean; // Object.isSealed(proxy)
     isExtensible? (target: T): boolean; // Object.isExtensible(proxy)
-    has? (target: T, name: string): boolean; // name in proxy
-    hasOwn? (target: T, name: string): boolean; // ({}).hasOwnProperty.call(proxy,name)
-    get? (target: T, name: string, receiver: any): any; // receiver[name]
-    set? (target: T, name: string, val: any, receiver: any): boolean; // receiver[name] = val
+    has? (target: T, propertyKey: PropertyKey): boolean; // name in proxy
+    hasOwn? (target: T, propertyKey: PropertyKey): boolean; // ({}).hasOwnProperty.call(proxy,name)
+    get? (target: T, propertyKey: PropertyKey, receiver: any): any; // receiver[name]
+    set? (target: T, propertyKey: PropertyKey, val: any, receiver: any): boolean; // receiver[name] = val
     enumerate? (target: T): Iterator<T>; // for (name in proxy) (iterator should yield all enumerable own and inherited properties)
     keys? (target: T): string[]; // Object.keys(proxy) (return array of enumerable own properties only)
     apply? (target: T, thisArg, args): any; // proxy(...args)
@@ -751,8 +768,6 @@ declare var Proxy: {
     <T>(target: T, handeler: Handler<T>): T;
     new <T>(target: T, handeler: Handler<T>): T
 };
-
-declare type PropertyKey = string | number | Symbol;
 
 declare var Reflect: {
     apply(target: Function, thisArgument: any, argumentsList: ArrayLike<any>): any;
