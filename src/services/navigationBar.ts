@@ -38,26 +38,45 @@ module ts.NavigationBar {
 
             return indent;
         }
-          
+
         function getChildNodes(nodes: Node[]): Node[] {
-            var childNodes: Node[] = [];    
+            var childNodes: Node[] = [];
 
-            for (var i = 0, n = nodes.length; i < n; i++) {
-                var node = nodes[i];
-
-                if (node.kind === SyntaxKind.ClassDeclaration ||
-                    node.kind === SyntaxKind.EnumDeclaration ||
-                    node.kind === SyntaxKind.InterfaceDeclaration ||
-                    node.kind === SyntaxKind.ModuleDeclaration ||
-                    node.kind === SyntaxKind.FunctionDeclaration) {
-
-                    childNodes.push(node);
-                }
-                else if (node.kind === SyntaxKind.VariableStatement) {
-                    childNodes.push.apply(childNodes, (<VariableStatement>node).declarations);
+            function visit(node: Node) {
+                switch (node.kind) {
+                    case SyntaxKind.VariableStatement:
+                        forEach((<VariableStatement>node).declarations, visit);
+                        break;
+                    case SyntaxKind.VariableDeclaration:
+                        if (isBindingPattern(node)) {
+                            forEach((<BindingPattern>(<VariableDeclaration>node).name).elements, visit);
+                            break;
+                        }
+                    case SyntaxKind.ClassDeclaration:
+                    case SyntaxKind.EnumDeclaration:
+                    case SyntaxKind.InterfaceDeclaration:
+                    case SyntaxKind.ModuleDeclaration:
+                    case SyntaxKind.FunctionDeclaration:
+                        childNodes.push(node);
                 }
             }
 
+            //for (var i = 0, n = nodes.length; i < n; i++) {
+            //    var node = nodes[i];
+
+            //    if (node.kind === SyntaxKind.ClassDeclaration ||
+            //        node.kind === SyntaxKind.EnumDeclaration ||
+            //        node.kind === SyntaxKind.InterfaceDeclaration ||
+            //        node.kind === SyntaxKind.ModuleDeclaration ||
+            //        node.kind === SyntaxKind.FunctionDeclaration) {
+
+            //        childNodes.push(node);
+            //    }
+            //    else if (node.kind === SyntaxKind.VariableStatement) {
+            //        childNodes.push.apply(childNodes, (<VariableStatement>node).declarations);
+            //    }
+            //}
+            forEach(nodes, visit);
             return sortNodes(childNodes);
         }
 

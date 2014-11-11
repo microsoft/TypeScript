@@ -124,6 +124,8 @@ module ts {
         Tagged_templates_are_only_available_when_targeting_ECMAScript_6_and_higher: { code: 1159, category: DiagnosticCategory.Error, key: "Tagged templates are only available when targeting ECMAScript 6 and higher." },
         Property_destructuring_pattern_expected: { code: 1160, category: DiagnosticCategory.Error, key: "Property destructuring pattern expected." },
         Array_element_destructuring_pattern_expected: { code: 1161, category: DiagnosticCategory.Error, key: "Array element destructuring pattern expected." },
+        A_destructuring_declaration_must_have_an_initializer: { code: 1162, category: DiagnosticCategory.Error, key: "A destructuring declaration must have an initializer." },
+        Destructuring_declarations_are_not_allowed_in_ambient_contexts: { code: 1163, category: DiagnosticCategory.Error, key: "Destructuring declarations are not allowed in ambient contexts." },
         Duplicate_identifier_0: { code: 2300, category: DiagnosticCategory.Error, key: "Duplicate identifier '{0}'." },
         Initializer_of_instance_member_variable_0_cannot_reference_identifier_1_declared_in_the_constructor: { code: 2301, category: DiagnosticCategory.Error, key: "Initializer of instance member variable '{0}' cannot reference identifier '{1}' declared in the constructor." },
         Static_members_cannot_reference_class_type_parameters: { code: 2302, category: DiagnosticCategory.Error, key: "Static members cannot reference class type parameters." },

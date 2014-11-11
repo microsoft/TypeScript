@@ -3466,11 +3466,25 @@ module ts {
             var initializerFirstTokenLength = scanner.getTextPos() - initializerStart;
             node.initializer = parseInitializer(/*inParameter*/ false, noIn);
 
-            if (inAmbientContext && node.initializer && errorCountBeforeVariableDeclaration === file.syntacticErrors.length) {
-                grammarErrorAtPos(initializerStart, initializerFirstTokenLength, Diagnostics.Initializers_are_not_allowed_in_ambient_contexts);
-            }
-            if (!inAmbientContext && !node.initializer && flags & NodeFlags.Const) {
-                grammarErrorOnNode(node, Diagnostics.const_declarations_must_be_initialized);
+            if (errorCountBeforeVariableDeclaration === file.syntacticErrors.length) {
+                if (inAmbientContext) {
+                    if (isBindingPattern(node.name)) {
+                        grammarErrorOnNode(node, Diagnostics.Destructuring_declarations_are_not_allowed_in_ambient_contexts);
+                    }
+                    else if (node.initializer) {
+                        grammarErrorAtPos(initializerStart, initializerFirstTokenLength, Diagnostics.Initializers_are_not_allowed_in_ambient_contexts);
+                    }
+                }
+                else {
+                    if (!node.initializer) {
+                        if (isBindingPattern(node.name)) {
+                            grammarErrorOnNode(node, Diagnostics.A_destructuring_declaration_must_have_an_initializer);
+                        }
+                        else if (flags & NodeFlags.Const) {
+                            grammarErrorOnNode(node, Diagnostics.const_declarations_must_be_initialized);
+                        }
+                    }
+                }
             }
             return finishNode(node);
         }

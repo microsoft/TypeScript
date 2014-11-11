@@ -487,6 +487,14 @@
         "category": "Error",
         "code": 1161
     },
+    "A destructuring declaration must have an initializer.": {
+        "category": "Error",
+        "code": 1162
+    },
+    "Destructuring declarations are not allowed in ambient contexts.": {
+        "category": "Error",
+        "code": 1163
+    },
 
     "Duplicate identifier '{0}'.": {
         "category": "Error",
