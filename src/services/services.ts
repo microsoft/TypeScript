@@ -4061,6 +4061,14 @@ module ts {
                         if (referenceSymbol && isRelatableToSearchSet(searchSymbols, referenceSymbol, referenceLocation)) {
                             result.push(getReferenceEntryFromNode(referenceLocation));
                         }
+                        // TODO (yuisu): Comment
+                        else if (referenceSymbol && referenceSymbol.declarations[0].kind === SyntaxKind.ShortHandPropertyAssignment) {
+                            var referenceSymbolDeclName = referenceSymbol.declarations[0].name;
+                            if (searchSymbols.indexOf(typeInfoResolver.resolveEntityNameForShortHandPropertyAssignment(referenceSymbolDeclName)) >= 0 &&
+                                !(<SymbolLinks>referenceSymbol).target) {
+                                result.push(getReferenceEntryFromNode(referenceSymbolDeclName));
+                            }
+                        }
                     });
                 }
 
@@ -4227,6 +4235,8 @@ module ts {
                     forEach(getPropertySymbolsFromContextualType(location), contextualSymbol => {
                         result.push.apply(result, typeInfoResolver.getRootSymbols(contextualSymbol));
                     });
+
+                    // Add the symbol in the case of short-hand property assignment
                     if (location.kind === SyntaxKind.Identifier && location.parent.kind === SyntaxKind.ShortHandPropertyAssignment) {
                         result.push(typeInfoResolver.resolveEntityNameForShortHandPropertyAssignment(location));
                     }
