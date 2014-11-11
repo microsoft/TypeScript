@@ -712,6 +712,8 @@ module ts {
                             // fall through
                         case SyntaxKind.Constructor:
                         case SyntaxKind.VariableStatement:
+                        case SyntaxKind.ObjectBindingPattern:
+                        case SyntaxKind.ArrayBindingPattern:
                         case SyntaxKind.ModuleBlock:
                         case SyntaxKind.FunctionBlock:
                             forEachChild(node, visit);
@@ -724,6 +726,10 @@ module ts {
                             }
                             // fall through
                         case SyntaxKind.VariableDeclaration:
+                            if (isBindingPattern((<VariableDeclaration>node).name)) {
+                                forEachChild((<VariableDeclaration>node).name, visit);
+                                break;
+                            }
                         case SyntaxKind.EnumMember:
                         case SyntaxKind.Property:
                             namedDeclarations.push(<Declaration>node);
