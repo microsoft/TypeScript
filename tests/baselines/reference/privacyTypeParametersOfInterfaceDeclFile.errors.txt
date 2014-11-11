@@ -99,7 +99,7 @@ tests/cases/compiler/privacyTypeParametersOfInterfaceDeclFile.ts(125,89): error 
     
     
     export interface publicInterfaceWithPrivateModuleTypeParameterConstraints<T extends privateModule.publicClassInPrivateModule> { // Error
-                                                                                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                                                                                        ~~~~~~~~~~~~~
 !!! error TS4004: Type parameter 'T' of exported interface has or is using private name 'privateModule'.
     }
     
@@ -184,7 +184,7 @@ tests/cases/compiler/privacyTypeParametersOfInterfaceDeclFile.ts(125,89): error 
         }
     
         export interface publicInterfaceWithPrivateModuleTypeParameterConstraints<T extends privateModule.publicClassInPrivateModule> { // Error
-                                                                                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                                                                                            ~~~~~~~~~~~~~
 !!! error TS4004: Type parameter 'T' of exported interface has or is using private name 'privateModule'.
         }
     

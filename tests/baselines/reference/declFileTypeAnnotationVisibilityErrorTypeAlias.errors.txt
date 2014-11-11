@@ -50,7 +50,7 @@ tests/cases/compiler/declFileTypeAnnotationVisibilityErrorTypeAlias.ts(39,24): e
     
         type t111 = m3.public1;
         export type t112 = m3.public1; // error
-                           ~~~~~~~~~~
+                           ~~
 !!! error TS4081: Exported type alias 't112' has or is using private name 'm3'.
     }
     

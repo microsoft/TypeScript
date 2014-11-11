@@ -29,7 +29,7 @@ tests/cases/compiler/privacyInterfaceExtendsClauseDeclFile_externalModule.ts(68,
         interface privateInterfaceImplementingFromPrivateModuleInterface extends privateModule.publicInterfaceInPrivateModule {
         }
         export interface publicInterfaceImplementingFromPrivateModuleInterface extends privateModule.publicInterfaceInPrivateModule { // Should error
-                                                                                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                                                                                       ~~~~~~~~~~~~~
 !!! error TS4022: Extends clause of exported interface 'publicInterfaceImplementingFromPrivateModuleInterface' has or is using private name 'privateModule'.
         }
     
@@ -83,7 +83,7 @@ tests/cases/compiler/privacyInterfaceExtendsClauseDeclFile_externalModule.ts(68,
     interface privateInterfaceImplementingFromPrivateModuleInterface extends privateModule.publicInterfaceInPrivateModule {
     }
     export interface publicInterfaceImplementingFromPrivateModuleInterface extends privateModule.publicInterfaceInPrivateModule { // Should error
-                                                                                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                                                                                   ~~~~~~~~~~~~~
 !!! error TS4022: Extends clause of exported interface 'publicInterfaceImplementingFromPrivateModuleInterface' has or is using private name 'privateModule'.
     }
     

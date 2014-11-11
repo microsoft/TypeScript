@@ -50,7 +50,7 @@ tests/cases/compiler/privacyTypeParametersOfClassDeclFile.ts(98,75): error TS400
     }
     
     export class publicClassWithTypeParametersFromPrivateModule<T extends privateModule.publicClassInPrivateModule> { // Error
-                                                                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                                                                          ~~~~~~~~~~~~~
 !!! error TS4002: Type parameter 'T' of exported class has or is using private name 'privateModule'.
         myMethod(val: T): T {
             return val;
@@ -109,7 +109,7 @@ tests/cases/compiler/privacyTypeParametersOfClassDeclFile.ts(98,75): error TS400
         }
     
         export class publicClassWithTypeParametersFromPrivateModule<T extends privateModule.publicClassInPrivateModule> { // Error
-                                                                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                                                                              ~~~~~~~~~~~~~
 !!! error TS4002: Type parameter 'T' of exported class has or is using private name 'privateModule'.
             myMethod(val: T): T {
                 return val;

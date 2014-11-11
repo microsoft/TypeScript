@@ -49,7 +49,7 @@ tests/cases/compiler/declFileTypeAnnotationVisibilityErrorParameterOfFunction.ts
         }
     
         export function foo113(param: m2.public2) {
-                                      ~~~~~~~~~~
+                                      ~~
 !!! error TS4078: Parameter 'param' of exported function has or is using private name 'm2'.
         }
         export function foo114(param = new m2.public2()) {

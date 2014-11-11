@@ -792,10 +792,11 @@ module ts {
     export interface SymbolVisibilityResult {
         accessibility: SymbolAccessibility;
         aliasesToMakeVisible?: ImportDeclaration[]; // aliases that need to have this symbol visible
+        errorSymbolName?: string; // Optional symbol name that results in error
+        errorNode?: Node; // optional node that results in error
     }
 
     export interface SymbolAccessiblityResult extends SymbolVisibilityResult {
-        errorSymbolName?: string // Optional symbol name that results in error
         errorModuleName?: string // If the symbol is not visible from module, module's name
     }
 

@@ -182,33 +182,33 @@ tests/cases/compiler/privacyTypeParameterOfFunctionDeclFile.ts(293,78): error TS
     
     export interface publicInterfaceWithPrivatModuleTypeParameters {
         new <T extends privateModule.publicClass>(): privateModule.publicClass;  // Error
-                       ~~~~~~~~~~~~~~~~~~~~~~~~~
+                       ~~~~~~~~~~~~~
 !!! error TS4006: Type parameter 'T' of constructor signature from exported interface has or is using private name 'privateModule'.
-                                                     ~~~~~~~~~~~~~~~~~~~~~~~~~
+                                                     ~~~~~~~~~~~~~
 !!! error TS4045: Return type of constructor signature from exported interface has or is using private name 'privateModule'.
         <T extends privateModule.publicClass>(): privateModule.publicClass;  // Error
-                   ~~~~~~~~~~~~~~~~~~~~~~~~~
+                   ~~~~~~~~~~~~~
 !!! error TS4008: Type parameter 'T' of call signature from exported interface has or is using private name 'privateModule'.
-                                                 ~~~~~~~~~~~~~~~~~~~~~~~~~
+                                                 ~~~~~~~~~~~~~
 !!! error TS4047: Return type of call signature from exported interface has or is using private name 'privateModule'.
         myMethod<T extends privateModule.publicClass>(): privateModule.publicClass;  // Error
-                           ~~~~~~~~~~~~~~~~~~~~~~~~~
+                           ~~~~~~~~~~~~~
 !!! error TS4014: Type parameter 'T' of method from exported interface has or is using private name 'privateModule'.
-                                                         ~~~~~~~~~~~~~~~~~~~~~~~~~
+                                                         ~~~~~~~~~~~~~
 !!! error TS4057: Return type of method from exported interface has or is using private name 'privateModule'.
     }
     export class publicClassWithWithPrivateModuleTypeParameters {
         static myPublicStaticMethod<T extends privateModule.publicClass>() {  // Error
-                                              ~~~~~~~~~~~~~~~~~~~~~~~~~
+                                              ~~~~~~~~~~~~~
 !!! error TS4010: Type parameter 'T' of public static method from exported class has or is using private name 'privateModule'.
         }
         myPublicMethod<T extends privateModule.publicClass>() {  // Error
-                                 ~~~~~~~~~~~~~~~~~~~~~~~~~
+                                 ~~~~~~~~~~~~~
 !!! error TS4012: Type parameter 'T' of public method from exported class has or is using private name 'privateModule'.
         }
     }
     export function publicFunctionWithPrivateMopduleTypeParameters<T extends privateModule.publicClass>() {  // Error
-                                                                             ~~~~~~~~~~~~~~~~~~~~~~~~~
+                                                                             ~~~~~~~~~~~~~
 !!! error TS4016: Type parameter 'T' of exported function has or is using private name 'privateModule'.
     }
     
@@ -374,33 +374,33 @@ tests/cases/compiler/privacyTypeParameterOfFunctionDeclFile.ts(293,78): error TS
     
         export interface publicInterfaceWithPrivatModuleTypeParameters {
             new <T extends privateModule.publicClass>(): privateModule.publicClass;  // Error
-                           ~~~~~~~~~~~~~~~~~~~~~~~~~
+                           ~~~~~~~~~~~~~
 !!! error TS4006: Type parameter 'T' of constructor signature from exported interface has or is using private name 'privateModule'.
-                                                         ~~~~~~~~~~~~~~~~~~~~~~~~~
+                                                         ~~~~~~~~~~~~~
 !!! error TS4045: Return type of constructor signature from exported interface has or is using private name 'privateModule'.
             <T extends privateModule.publicClass>(): privateModule.publicClass;  // Error
-                       ~~~~~~~~~~~~~~~~~~~~~~~~~
+                       ~~~~~~~~~~~~~
 !!! error TS4008: Type parameter 'T' of call signature from exported interface has or is using private name 'privateModule'.
-                                                     ~~~~~~~~~~~~~~~~~~~~~~~~~
+                                                     ~~~~~~~~~~~~~
 !!! error TS4047: Return type of call signature from exported interface has or is using private name 'privateModule'.
             myMethod<T extends privateModule.publicClass>(): privateModule.publicClass;  // Error
-                               ~~~~~~~~~~~~~~~~~~~~~~~~~
+                               ~~~~~~~~~~~~~
 !!! error TS4014: Type parameter 'T' of method from exported interface has or is using private name 'privateModule'.
-                                                             ~~~~~~~~~~~~~~~~~~~~~~~~~
+                                                             ~~~~~~~~~~~~~
 !!! error TS4057: Return type of method from exported interface has or is using private name 'privateModule'.
         }
         export class publicClassWithWithPrivateModuleTypeParameters {
             static myPublicStaticMethod<T extends privateModule.publicClass>() {  // Error
-                                                  ~~~~~~~~~~~~~~~~~~~~~~~~~
+                                                  ~~~~~~~~~~~~~
 !!! error TS4010: Type parameter 'T' of public static method from exported class has or is using private name 'privateModule'.
             }
             myPublicMethod<T extends privateModule.publicClass>() {  // Error
-                                     ~~~~~~~~~~~~~~~~~~~~~~~~~
+                                     ~~~~~~~~~~~~~
 !!! error TS4012: Type parameter 'T' of public method from exported class has or is using private name 'privateModule'.
             }
         }
         export function publicFunctionWithPrivateMopduleTypeParameters<T extends privateModule.publicClass>() {  // Error
-                                                                                 ~~~~~~~~~~~~~~~~~~~~~~~~~
+                                                                                 ~~~~~~~~~~~~~
 !!! error TS4016: Type parameter 'T' of exported function has or is using private name 'privateModule'.
         }
     

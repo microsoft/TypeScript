@@ -1001,9 +1001,10 @@ module ts {
             var symbol = resolveName(enclosingDeclaration, (<Identifier>firstIdentifier).text, meaning, /*nodeNotFoundErrorMessage*/ undefined, /*nameArg*/ undefined);
 
             // Verify if the symbol is accessible
-            return hasVisibleDeclarations(symbol) || <SymbolAccessiblityResult>{
+            return hasVisibleDeclarations(symbol) || <SymbolVisibilityResult>{
                 accessibility: SymbolAccessibility.NotAccessible,
                 errorSymbolName: getTextOfNode(firstIdentifier),
+                errorNode: firstIdentifier
             };
         }
 

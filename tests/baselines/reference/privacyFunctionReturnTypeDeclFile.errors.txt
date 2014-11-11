@@ -264,26 +264,26 @@ tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(429,85)
     
     export interface publicInterfaceWithPrivateModuleParameterTypes {
         new (): privateModule.publicClass; // Error
-                ~~~~~~~~~~~~~~~~~~~~~~~~~
+                ~~~~~~~~~~~~~
 !!! error TS4045: Return type of constructor signature from exported interface has or is using private name 'privateModule'.
         (): privateModule.publicClass; // Error
-            ~~~~~~~~~~~~~~~~~~~~~~~~~
+            ~~~~~~~~~~~~~
 !!! error TS4047: Return type of call signature from exported interface has or is using private name 'privateModule'.
         [x: number]: privateModule.publicClass // Error
-                     ~~~~~~~~~~~~~~~~~~~~~~~~~
+                     ~~~~~~~~~~~~~
 !!! error TS4049: Return type of index signature from exported interface has or is using private name 'privateModule'.
         myMethod(): privateModule.publicClass; // Error
-                    ~~~~~~~~~~~~~~~~~~~~~~~~~
+                    ~~~~~~~~~~~~~
 !!! error TS4057: Return type of method from exported interface has or is using private name 'privateModule'.
     }
     export class publicClassWithPrivateModuleParameterTypes {
         static myPublicStaticMethod(): privateModule.publicClass { // Error
-                                       ~~~~~~~~~~~~~~~~~~~~~~~~~
+                                       ~~~~~~~~~~~~~
 !!! error TS4052: Return type of public static method from exported class has or is using private name 'privateModule'.
             return null;
         }
         myPublicMethod(): privateModule.publicClass { // Error
-                          ~~~~~~~~~~~~~~~~~~~~~~~~~
+                          ~~~~~~~~~~~~~
 !!! error TS4055: Return type of public method from exported class has or is using private name 'privateModule'.
             return null;
         }
@@ -299,7 +299,7 @@ tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(429,85)
         }
     }
     export function publicFunctionWithPrivateModuleParameterTypes(): privateModule.publicClass { // Error
-                                                                     ~~~~~~~~~~~~~~~~~~~~~~~~~
+                                                                     ~~~~~~~~~~~~~
 !!! error TS4060: Return type of exported function has or is using private name 'privateModule'.
         return null;
     }
@@ -309,7 +309,7 @@ tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(429,85)
         return new privateModule.publicClass();
     }
     export declare function publicAmbientFunctionWithPrivateModuleParameterTypes(): privateModule.publicClass; // Error
-                                                                                    ~~~~~~~~~~~~~~~~~~~~~~~~~
+                                                                                    ~~~~~~~~~~~~~
 !!! error TS4060: Return type of exported function has or is using private name 'privateModule'.
     
     interface privateInterfaceWithPrivateModuleParameterTypes {
@@ -537,26 +537,26 @@ tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(429,85)
     
         export interface publicInterfaceWithPrivateModuleParameterTypes {
             new (): privateModule.publicClass; // Error
-                    ~~~~~~~~~~~~~~~~~~~~~~~~~
+                    ~~~~~~~~~~~~~
 !!! error TS4045: Return type of constructor signature from exported interface has or is using private name 'privateModule'.
             (): privateModule.publicClass; // Error
-                ~~~~~~~~~~~~~~~~~~~~~~~~~
+                ~~~~~~~~~~~~~
 !!! error TS4047: Return type of call signature from exported interface has or is using private name 'privateModule'.
             [x: number]: privateModule.publicClass; // Error
-                         ~~~~~~~~~~~~~~~~~~~~~~~~~
+                         ~~~~~~~~~~~~~
 !!! error TS4049: Return type of index signature from exported interface has or is using private name 'privateModule'.
             myMethod(): privateModule.publicClass; // Error
-                        ~~~~~~~~~~~~~~~~~~~~~~~~~
+                        ~~~~~~~~~~~~~
 !!! error TS4057: Return type of method from exported interface has or is using private name 'privateModule'.
         }
         export class publicClassWithPrivateModuleParameterTypes {
             static myPublicStaticMethod(): privateModule.publicClass { // Error
-                                           ~~~~~~~~~~~~~~~~~~~~~~~~~
+                                           ~~~~~~~~~~~~~
 !!! error TS4052: Return type of public static method from exported class has or is using private name 'privateModule'.
                 return null;
             }
             myPublicMethod(): privateModule.publicClass { // Error
-                              ~~~~~~~~~~~~~~~~~~~~~~~~~
+                              ~~~~~~~~~~~~~
 !!! error TS4055: Return type of public method from exported class has or is using private name 'privateModule'.
                 return null;
             }
@@ -572,7 +572,7 @@ tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(429,85)
             }
         }
         export function publicFunctionWithPrivateModuleParameterTypes(): privateModule.publicClass { // Error
-                                                                         ~~~~~~~~~~~~~~~~~~~~~~~~~
+                                                                         ~~~~~~~~~~~~~
 !!! error TS4060: Return type of exported function has or is using private name 'privateModule'.
             return null;
         }
@@ -582,7 +582,7 @@ tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(429,85)
             return new privateModule.publicClass();
         }
         export declare function publicAmbientFunctionWithPrivateModuleParameterTypes(): privateModule.publicClass; // Error
-                                                                                        ~~~~~~~~~~~~~~~~~~~~~~~~~
+                                                                                        ~~~~~~~~~~~~~
 !!! error TS4060: Return type of exported function has or is using private name 'privateModule'.
     
         interface privateInterfaceWithPrivateModuleParameterTypes {
@@ -1314,26 +1314,26 @@ tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(429,85)
     
         export interface publicInterfaceWithPrivateModuleParameterTypes {
             new (): privateModule.publicClass; // Error
-                    ~~~~~~~~~~~~~~~~~~~~~~~~~
+                    ~~~~~~~~~~~~~
 !!! error TS4045: Return type of constructor signature from exported interface has or is using private name 'privateModule'.
             (): privateModule.publicClass; // Error
-                ~~~~~~~~~~~~~~~~~~~~~~~~~
+                ~~~~~~~~~~~~~
 !!! error TS4047: Return type of call signature from exported interface has or is using private name 'privateModule'.
             [x: number]: privateModule.publicClass; // Error
-                         ~~~~~~~~~~~~~~~~~~~~~~~~~
+                         ~~~~~~~~~~~~~
 !!! error TS4049: Return type of index signature from exported interface has or is using private name 'privateModule'.
             myMethod(): privateModule.publicClass; // Error
-                        ~~~~~~~~~~~~~~~~~~~~~~~~~
+                        ~~~~~~~~~~~~~
 !!! error TS4057: Return type of method from exported interface has or is using private name 'privateModule'.
         }
         export class publicClassWithPrivateModuleParameterTypes {
             static myPublicStaticMethod(): privateModule.publicClass { // Error
-                                           ~~~~~~~~~~~~~~~~~~~~~~~~~
+                                           ~~~~~~~~~~~~~
 !!! error TS4052: Return type of public static method from exported class has or is using private name 'privateModule'.
                 return null;
             }
             myPublicMethod(): privateModule.publicClass { // Error
-                              ~~~~~~~~~~~~~~~~~~~~~~~~~
+                              ~~~~~~~~~~~~~
 !!! error TS4055: Return type of public method from exported class has or is using private name 'privateModule'.
                 return null;
             }
@@ -1349,7 +1349,7 @@ tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(429,85)
             }
         }
         export function publicFunctionWithPrivateModuleParameterTypes(): privateModule.publicClass { // Error
-                                                                         ~~~~~~~~~~~~~~~~~~~~~~~~~
+                                                                         ~~~~~~~~~~~~~
 !!! error TS4060: Return type of exported function has or is using private name 'privateModule'.
             return null;
         }
@@ -1359,7 +1359,7 @@ tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts(429,85)
             return new privateModule.publicClass();
         }
         export declare function publicAmbientFunctionWithPrivateModuleParameterTypes(): privateModule.publicClass; // Error
-                                                                                        ~~~~~~~~~~~~~~~~~~~~~~~~~
+                                                                                        ~~~~~~~~~~~~~
 !!! error TS4060: Return type of exported function has or is using private name 'privateModule'.
     
         interface privateInterfaceWithPrivateModuleParameterTypes {

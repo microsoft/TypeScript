@@ -2562,7 +2562,7 @@ module ts {
                 setWriter(oldWriter);
             }
 
-            function handleSymbolAccessibilityError(symbolAccesibilityResult: SymbolAccessiblityResult, errorNode?: Node) {
+            function handleSymbolAccessibilityError(symbolAccesibilityResult: SymbolAccessiblityResult) {
                 if (symbolAccesibilityResult.accessibility === SymbolAccessibility.Accessible) {
                     // write the aliases
                     if (symbolAccesibilityResult && symbolAccesibilityResult.aliasesToMakeVisible) {
@@ -2575,14 +2575,14 @@ module ts {
                     var errorInfo = writer.getSymbolAccessibilityDiagnostic(symbolAccesibilityResult);
                     if (errorInfo) {
                         if (errorInfo.typeName) {
-                            diagnostics.push(createDiagnosticForNode(errorNode || errorInfo.errorNode,
+                            diagnostics.push(createDiagnosticForNode(symbolAccesibilityResult.errorNode || errorInfo.errorNode,
                                 errorInfo.diagnosticMessage,
                                 getSourceTextOfLocalNode(errorInfo.typeName),
                                 symbolAccesibilityResult.errorSymbolName,
                                 symbolAccesibilityResult.errorModuleName));
                         }
                         else {
-                            diagnostics.push(createDiagnosticForNode(errorNode || errorInfo.errorNode,
+                            diagnostics.push(createDiagnosticForNode(symbolAccesibilityResult.errorNode || errorInfo.errorNode,
                                 errorInfo.diagnosticMessage,
                                 symbolAccesibilityResult.errorSymbolName,
                                 symbolAccesibilityResult.errorModuleName));
@@ -2690,7 +2690,7 @@ module ts {
                         // Aliases can be written asynchronously so use correct enclosing declaration
                         entityName.parent.kind === SyntaxKind.ImportDeclaration ? entityName.parent : enclosingDeclaration);
 
-                    handleSymbolAccessibilityError(visibilityResult, entityName);
+                    handleSymbolAccessibilityError(visibilityResult);
                     writeEntityName(entityName);
 
                     function writeEntityName(entityName: EntityName) {

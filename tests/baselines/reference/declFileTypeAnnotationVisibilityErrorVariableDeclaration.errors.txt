@@ -39,7 +39,7 @@ tests/cases/compiler/declFileTypeAnnotationVisibilityErrorVariableDeclaration.ts
         var y3 = new m2.public2();
     
         export var k3: m2.public2;
-                       ~~~~~~~~~~
+                       ~~
 !!! error TS4025: Exported variable 'k3' has or is using private name 'm2'.
         export var l3 = new m2.public2();
                    ~~

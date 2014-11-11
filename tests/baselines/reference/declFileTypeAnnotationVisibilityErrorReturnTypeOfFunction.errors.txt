@@ -59,7 +59,7 @@ tests/cases/compiler/declFileTypeAnnotationVisibilityErrorReturnTypeOfFunction.t
         }
     
         export function foo113(): m2.public2 {
-                                  ~~~~~~~~~~
+                                  ~~
 !!! error TS4060: Return type of exported function has or is using private name 'm2'.
             return;
         }

@@ -93,7 +93,7 @@ tests/cases/compiler/declFileTypeAnnotationVisibilityErrorAccessors.ts(93,23): e
     
             // getter with annotation
             get foo111(): m2.public2 {
-                          ~~~~~~~~~~
+                          ~~
 !!! error TS4043: Return type of public property getter from exported class has or is using private name 'm2'.
                 return;
             }
@@ -107,7 +107,7 @@ tests/cases/compiler/declFileTypeAnnotationVisibilityErrorAccessors.ts(93,23): e
     
             // setter with annotation
             set foo113(param: m2.public2) {
-                              ~~~~~~~~~~
+                              ~~
 !!! error TS4037: Parameter 'foo113' of public property setter from exported class has or is using private name 'm2'.
             }
     
@@ -116,13 +116,13 @@ tests/cases/compiler/declFileTypeAnnotationVisibilityErrorAccessors.ts(93,23): e
                 return new m2.public2();
             }
             set foo114(param: m2.public2) {
-                              ~~~~~~~~~~
+                              ~~
 !!! error TS4037: Parameter 'foo114' of public property setter from exported class has or is using private name 'm2'.
             }
     
             // Both - with annotation
             get foo115(): m2.public2 {
-                          ~~~~~~~~~~
+                          ~~
 !!! error TS4043: Return type of public property getter from exported class has or is using private name 'm2'.
                 return;
             }
