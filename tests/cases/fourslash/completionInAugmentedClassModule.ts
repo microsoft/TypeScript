@@ -5,5 +5,4 @@
 ////var x: m3f./**/
 
 goTo.marker();
-debugger;
 verify.not.completionListContains("foo");
