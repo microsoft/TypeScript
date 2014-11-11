@@ -15,10 +15,6 @@ class FourslashRunner extends RunnerBase {
         }
 
         describe("fourslash tests", () => {
-            before(() => {
-                Harness.Compiler.getCompiler({ useExistingInstance: false });
-            });
-
             this.tests.forEach((fn: string) => {
                 fn = ts.normalizeSlashes(fn);
                 var justName = fn.replace(/^.*[\\\/]/, '');
@@ -32,10 +28,6 @@ class FourslashRunner extends RunnerBase {
                         FourSlash.runFourSlashTest(fn);
                     });
                 }
-            });
-
-            after(() => {
-                Harness.Compiler.getCompiler({ useExistingInstance: false });
             });
         });
 

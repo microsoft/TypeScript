@@ -1029,7 +1029,7 @@ module Harness {
         /** Returns the singleton harness compiler instance for generating and running tests.
             If required a fresh compiler instance will be created, otherwise the existing singleton will be re-used.
         */
-        export function getCompiler(opts?: { useExistingInstance: boolean; optionsForFreshInstance?: { useMinimalDefaultLib: boolean; noImplicitAny: boolean; } }) {
+        export function getCompiler() {
             return harnessCompiler = harnessCompiler || new HarnessCompiler();
         }
 
