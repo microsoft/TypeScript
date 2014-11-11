@@ -437,7 +437,7 @@ module ts.formatting {
             forEachChild(
                 node,
                 child => {
-                    processChildNode(child, /*inheritedIndentation*/ Constants.Unknown, nodeDynamicIndentation, nodeStartLine, /*isListElement*/ false)
+                    processChildNode(child, /*inheritedIndentation*/ Constants.Unknown, node, nodeDynamicIndentation, nodeStartLine, /*isListElement*/ false)
                 },
                 (nodes: NodeArray<Node>) => {
                     processChildNodes(nodes, node, nodeStartLine, nodeDynamicIndentation);
@@ -455,19 +455,22 @@ module ts.formatting {
             function processChildNode(
                 child: Node,
                 inheritedIndentation: number,
-                nodeDynamicIndentation: DynamicIndentation,
+                parent: Node,
+                parentDynamicIndentation: DynamicIndentation,
                 parentStartLine: number,
                 isListItem: boolean): number {
 
                 var childStartPos = child.getStart(sourceFile);
 
                 var childStart = sourceFile.getLineAndCharacterFromPosition(childStartPos);
-                var childIndentationAmount = isListItem
-                    ? tryComputeIndentationForListItem(childStartPos, child.end, parentStartLine, originalRange, inheritedIndentation)
-                    : Constants.Unknown;
 
-                if (isListItem && childIndentationAmount !== Constants.Unknown) {
-                    inheritedIndentation = childIndentationAmount;
+                // if child is a list item - try to get its indentation
+                var childIndentationAmount = Constants.Unknown;
+                if (isListItem) {
+                    childIndentationAmount = tryComputeIndentationForListItem(childStartPos, child.end, parentStartLine, originalRange, inheritedIndentation);
+                    if (childIndentationAmount !== Constants.Unknown) {
+                        inheritedIndentation = childIndentationAmount;
+                    }
                 }
 
                 // child node is outside the target range - do not dive inside
@@ -486,7 +489,7 @@ module ts.formatting {
                         break;
                     }
 
-                    consumeTokenAndAdvanceScanner(tokenInfo, node, nodeDynamicIndentation);
+                    consumeTokenAndAdvanceScanner(tokenInfo, node, parentDynamicIndentation);
                 }
 
                 if (!formattingScanner.isOnToken()) {
@@ -497,11 +500,11 @@ module ts.formatting {
                     // if child node is a token, it does not impact indentation, proceed it using parent indentation scope rules
                     var tokenInfo = formattingScanner.readTokenInfo(node);
                     Debug.assert(tokenInfo.token.end === child.end);
-                    consumeTokenAndAdvanceScanner(tokenInfo, node, nodeDynamicIndentation);
+                    consumeTokenAndAdvanceScanner(tokenInfo, node, parentDynamicIndentation);
                     return inheritedIndentation;
                 }
 
-                var childIndentation = computeIndentation(child, childStart.line, childIndentationAmount, node, nodeDynamicIndentation, parentStartLine);
+                var childIndentation = computeIndentation(child, childStart.line, childIndentationAmount, node, parentDynamicIndentation, parentStartLine);
 
                 processNode(child, childContextNode, childStart.line, childIndentation.indentation, childIndentation.delta);
 
@@ -546,7 +549,7 @@ module ts.formatting {
 
                 var inheritedIndentation = Constants.Unknown;
                 for (var i = 0, len = nodes.length; i < len; ++i) {
-                    inheritedIndentation = processChildNode(nodes[i], inheritedIndentation, listDynamicIndentation, startLine, /*isListElement*/ true)
+                    inheritedIndentation = processChildNode(nodes[i], inheritedIndentation, node, listDynamicIndentation, startLine, /*isListElement*/ true)
                 }
 
                 if (listEndToken !== SyntaxKind.Unknown) {
