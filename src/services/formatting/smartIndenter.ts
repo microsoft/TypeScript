@@ -175,7 +175,7 @@ module ts.formatting {
         function childStartsOnTheSameLineWithElseInIfStatement(parent: Node, child: Node, childStartLine: number, sourceFile: SourceFile): boolean {
             if (parent.kind === SyntaxKind.IfStatement && (<IfStatement>parent).elseStatement === child) {
                 var elseKeyword = findChildOfKind(parent, SyntaxKind.ElseKeyword, sourceFile);
-                Debug.assert(elseKeyword);
+                Debug.assert(elseKeyword !== undefined);
 
                 var elseKeywordStartLine =  getStartLineAndCharacterForNode(elseKeyword, sourceFile).line;
                 return elseKeywordStartLine === childStartLine;
@@ -361,7 +361,7 @@ module ts.formatting {
                 case SyntaxKind.FunctionExpression:
                 case SyntaxKind.Method:
                 case SyntaxKind.ArrowFunction:
-                    return !(<FunctionDeclaration>n).body || isCompletedNode((<FunctionDeclaration>n).body, sourceFile);
+                    return !(<FunctionLikeDeclaration>n).body || isCompletedNode((<FunctionLikeDeclaration>n).body, sourceFile);
                 case SyntaxKind.ModuleDeclaration:
                     return (<ModuleDeclaration>n).body && isCompletedNode((<ModuleDeclaration>n).body, sourceFile);
                 case SyntaxKind.IfStatement:

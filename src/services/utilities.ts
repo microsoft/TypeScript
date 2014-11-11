@@ -197,7 +197,7 @@ module ts {
                 }
             }
 
-            Debug.assert(startNode || n.kind === SyntaxKind.SourceFile);
+            Debug.assert(startNode !== undefined || n.kind === SyntaxKind.SourceFile);
 
             // Here we know that none of child token nodes embrace the position, 
             // the only known case is when position is at the end of the file.
@@ -224,7 +224,10 @@ module ts {
             return nodeHasTokens((<ExpressionStatement>n).expression);
         }
 
-        if (n.kind === SyntaxKind.EndOfFileToken || n.kind === SyntaxKind.OmittedExpression || n.kind === SyntaxKind.Missing) {
+        if (n.kind === SyntaxKind.EndOfFileToken ||
+            n.kind === SyntaxKind.OmittedExpression ||
+            n.kind === SyntaxKind.Missing ||
+            n.kind === SyntaxKind.Unknown) {
             return false;
         }
 
@@ -238,7 +241,7 @@ module ts {
         }
 
         if (isAnyFunction(node) || node.kind === SyntaxKind.ClassDeclaration || node.kind === SyntaxKind.InterfaceDeclaration) {
-            return (<FunctionDeclaration>node).typeParameters;
+            return (<FunctionLikeDeclaration>node).typeParameters;
         }
 
         return undefined;

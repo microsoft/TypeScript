@@ -92,7 +92,7 @@ tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(40,13)
 tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(40,46): error TS2300: Duplicate identifier 'a'.
 tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(43,12): error TS2380: 'get' and 'set' accessor must have the same type.
 tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(43,43): error TS2380: 'get' and 'set' accessor must have the same type.
-tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(44,29): error TS2323: Type 'number' is not assignable to type 'string'.
+tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(44,29): error TS2322: Type 'number' is not assignable to type 'string'.
 tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(45,12): error TS2380: 'get' and 'set' accessor must have the same type.
 tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(45,51): error TS2380: 'get' and 'set' accessor must have the same type.
 
@@ -331,7 +331,7 @@ tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(45,51)
 !!! error TS2380: 'get' and 'set' accessor must have the same type.
     var g2 = { get a() { return 4; }, set a(n: string) { } };
                                 ~
-!!! error TS2323: Type 'number' is not assignable to type 'string'.
+!!! error TS2322: Type 'number' is not assignable to type 'string'.
     var g3 = { get a(): number { return undefined; }, set a(n: string) { } };
                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2380: 'get' and 'set' accessor must have the same type.

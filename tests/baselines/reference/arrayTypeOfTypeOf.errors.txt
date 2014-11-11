@@ -2,9 +2,9 @@ tests/cases/conformance/types/specifyingTypes/typeLiterals/arrayTypeOfTypeOf.ts(
 tests/cases/conformance/types/specifyingTypes/typeLiterals/arrayTypeOfTypeOf.ts(6,30): error TS1109: Expression expected.
 tests/cases/conformance/types/specifyingTypes/typeLiterals/arrayTypeOfTypeOf.ts(7,22): error TS1005: '=' expected.
 tests/cases/conformance/types/specifyingTypes/typeLiterals/arrayTypeOfTypeOf.ts(7,32): error TS1109: Expression expected.
-tests/cases/conformance/types/specifyingTypes/typeLiterals/arrayTypeOfTypeOf.ts(6,5): error TS2323: Type 'number' is not assignable to type 'ArrayConstructor'.
+tests/cases/conformance/types/specifyingTypes/typeLiterals/arrayTypeOfTypeOf.ts(6,5): error TS2322: Type 'number' is not assignable to type 'ArrayConstructor'.
   Property 'isArray' is missing in type 'Number'.
-tests/cases/conformance/types/specifyingTypes/typeLiterals/arrayTypeOfTypeOf.ts(7,5): error TS2323: Type 'number' is not assignable to type 'ArrayConstructor'.
+tests/cases/conformance/types/specifyingTypes/typeLiterals/arrayTypeOfTypeOf.ts(7,5): error TS2322: Type 'number' is not assignable to type 'ArrayConstructor'.
 
 
 ==== tests/cases/conformance/types/specifyingTypes/typeLiterals/arrayTypeOfTypeOf.ts (6 errors) ====
@@ -19,12 +19,12 @@ tests/cases/conformance/types/specifyingTypes/typeLiterals/arrayTypeOfTypeOf.ts(
                                  ~
 !!! error TS1109: Expression expected.
         ~~~
-!!! error TS2323: Type 'number' is not assignable to type 'ArrayConstructor'.
-!!! error TS2323:   Property 'isArray' is missing in type 'Number'.
+!!! error TS2322: Type 'number' is not assignable to type 'ArrayConstructor'.
+!!! error TS2322:   Property 'isArray' is missing in type 'Number'.
     var xs4: typeof Array<typeof x>;
                          ~
 !!! error TS1005: '=' expected.
                                    ~
 !!! error TS1109: Expression expected.
         ~~~
-!!! error TS2323: Type 'number' is not assignable to type 'ArrayConstructor'.
+!!! error TS2322: Type 'number' is not assignable to type 'ArrayConstructor'.

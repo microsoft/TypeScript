@@ -66,14 +66,29 @@ module TypeScript.Services.Formatting {
             // Process any leading trivia if any
             var triviaList = token.leadingTrivia();
             if (triviaList) {
+                var seenNewLine = position === 0;
+
                 for (var i = 0, length = triviaList.count(); i < length; i++, position += trivia.fullWidth()) {
                     var trivia = triviaList.syntaxTriviaAt(i);
+
+                    // Skip all trivia up to the first newline we see.  We consider this trivia to 
+                    // 'belong' to the previous token.
+                    if (!seenNewLine) {
+                        if (trivia.kind !== SyntaxKind.NewLineTrivia) {
+                            continue;
+                        }
+                        else {
+                            seenNewLine = true;
+                            continue;
+                        }
+                    }
+
                     // Skip this trivia if it is not in the span
                     if (!this.textSpan().containsTextSpan(new TextSpan(position, trivia.fullWidth()))) {
                         continue;
                     }
 
-                    switch (trivia.kind()) {
+                    switch (trivia.kind) {
                         case SyntaxKind.MultiLineCommentTrivia:
                             // We will only indent the first line of the multiline comment if we were planning to indent the next trivia. However,
                             // subsequent lines will always be indented
@@ -119,7 +134,7 @@ module TypeScript.Services.Formatting {
 
             }
 
-            if (token.kind() !== SyntaxKind.EndOfFileToken && indentNextTokenOrTrivia) {
+            if (token.kind !== SyntaxKind.EndOfFileToken && indentNextTokenOrTrivia) {
                 // If the last trivia item was a new line, or no trivia items were encounterd record the 
                 // indentation edit at the token position
                 if (indentationString.length > 0) {

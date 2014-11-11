@@ -52,7 +52,7 @@ module TypeScript.Services.Formatting {
             rulesProvider: RulesProvider,
             formattingRequestKind: FormattingRequestKind): TextEditInfo[] {
             var walker = new Formatter(textSpan, sourceUnit, indentFirstToken, options, snapshot, rulesProvider, formattingRequestKind);
-            visitNodeOrToken(walker, sourceUnit);
+            walker.walk(sourceUnit);
             return walker.edits();
         }
 
@@ -78,7 +78,7 @@ module TypeScript.Services.Formatting {
             }
 
             // Push the token
-            var currentTokenSpan = new TokenSpan(token.kind(), position, width(token));
+            var currentTokenSpan = new TokenSpan(token.kind, position, width(token));
             if (!this.parent().hasSkippedOrMissingTokenChild()) {
                 if (this.previousTokenSpan) {
                     // Note that formatPair calls TrimWhitespaceInLineRange in between the 2 tokens
@@ -96,11 +96,6 @@ module TypeScript.Services.Formatting {
             }
             this.previousTokenParent = this.parent().clone(this.indentationNodeContextPool());
             position += width(token);
-
-            // Extract any trailing comments
-            if (token.trailingTriviaWidth() !== 0) {
-                this.processTrivia(token.trailingTrivia(), position);
-            }
         }
 
         private processTrivia(triviaList: ISyntaxTriviaList, fullStart: number) {
@@ -110,7 +105,7 @@ module TypeScript.Services.Formatting {
                 var trivia = triviaList.syntaxTriviaAt(i);
                 // For a comment, format it like it is a token. For skipped text, eat it up as a token, but skip the formatting
                 if (trivia.isComment() || trivia.isSkippedToken()) {
-                    var currentTokenSpan = new TokenSpan(trivia.kind(), position, trivia.fullWidth());
+                    var currentTokenSpan = new TokenSpan(trivia.kind, position, trivia.fullWidth());
                     if (this.textSpan().containsTextSpan(currentTokenSpan)) {
                         if (trivia.isComment() && this.previousTokenSpan) {
                             // Note that formatPair calls TrimWhitespaceInLineRange in between the 2 tokens

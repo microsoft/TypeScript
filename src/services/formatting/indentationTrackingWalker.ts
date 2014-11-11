@@ -16,7 +16,7 @@
 ///<reference path='formatting.ts' />
 
 module TypeScript.Services.Formatting {
-    export class IndentationTrackingWalker extends SyntaxWalker {
+    export class IndentationTrackingWalker {
         private _position: number = 0;
         private _parent: IndentationNodeContext = null;
         private _textSpan: TextSpan;
@@ -26,8 +26,6 @@ module TypeScript.Services.Formatting {
         private _text: ISimpleText;
 
         constructor(textSpan: TextSpan, sourceUnit: SourceUnitSyntax, snapshot: ITextSnapshot, indentFirstToken: boolean, public options: FormattingOptions) {
-            super();
-
             // Create a pool object to manage context nodes while walking the tree
             this._indentationNodeContextPool = new IndentationNodeContextPool();
 
@@ -92,15 +90,37 @@ module TypeScript.Services.Formatting {
                 this.visitTokenInSpan(token);
 
                 // Only track new lines on tokens within the range. Make sure to check that the last trivia is a newline, and not just one of the trivia
-                var trivia = token.trailingTrivia();
-                this._lastTriviaWasNewLine = trivia.hasNewLine() && trivia.syntaxTriviaAt(trivia.count() - 1).kind() == SyntaxKind.NewLineTrivia;
+                var _nextToken = nextToken(token);
+                if (_nextToken && _nextToken.hasLeadingTrivia()) {
+                    var trivia = _nextToken.leadingTrivia();
+                    this._lastTriviaWasNewLine = trivia.hasNewLine();
+                }
+                else {
+                    this._lastTriviaWasNewLine = false;
+                }
             }
 
             // Update the position
             this._position += token.fullWidth();
         }
 
-        public visitNode(node: ISyntaxNode): void {
+        public walk(element: ISyntaxElement) {
+            if (element) {
+                if (isToken(element)) {
+                    this.visitToken(<ISyntaxToken>element);
+                }
+                else if (element.kind === SyntaxKind.List) {
+                    for (var i = 0, n = childCount(element); i < n; i++) {
+                        this.walk(childAt(element, i));
+                    }
+                }
+                else {
+                    this.visitNode(<ISyntaxNode>element);
+                }
+            }
+        }
+
+        private visitNode(node: ISyntaxNode): void {
             var nodeSpan = new TextSpan(this._position, fullWidth(node));
 
             if (nodeSpan.intersectsWithTextSpan(this._textSpan)) {
@@ -112,7 +132,9 @@ module TypeScript.Services.Formatting {
                 this._parent = this._indentationNodeContextPool.getNode(currentParent, node, this._position, indentation.indentationAmount, indentation.indentationAmountDelta);
 
                 // Visit node
-                visitNodeOrToken(this, node);
+                for (var i = 0, n = childCount(node); i < n; i++) {
+                    this.walk(childAt(node, i));
+                }
 
                 // Reset state
                 this._indentationNodeContextPool.releaseNode(this._parent);
@@ -132,9 +154,9 @@ module TypeScript.Services.Formatting {
             // }
             // Also in a do-while statement, the while should be indented like the parent.
             if (firstToken(this._parent.node()) === token ||
-                token.kind() === SyntaxKind.OpenBraceToken || token.kind() === SyntaxKind.CloseBraceToken ||
-                token.kind() === SyntaxKind.OpenBracketToken || token.kind() === SyntaxKind.CloseBracketToken ||
-                (token.kind() === SyntaxKind.WhileKeyword && this._parent.node().kind() == SyntaxKind.DoStatement)) {
+                token.kind === SyntaxKind.OpenBraceToken || token.kind === SyntaxKind.CloseBraceToken ||
+                token.kind === SyntaxKind.OpenBracketToken || token.kind === SyntaxKind.CloseBracketToken ||
+                (token.kind === SyntaxKind.WhileKeyword && this._parent.node().kind == SyntaxKind.DoStatement)) {
                 return this._parent.indentationAmount();
             }
 
@@ -145,7 +167,7 @@ module TypeScript.Services.Formatting {
             // If this is token terminating an indentation scope, leading comments should be indented to follow the children 
             // indentation level and not the node
 
-            if (token.kind() === SyntaxKind.CloseBraceToken || token.kind() === SyntaxKind.CloseBracketToken) {
+            if (token.kind === SyntaxKind.CloseBraceToken || token.kind === SyntaxKind.CloseBracketToken) {
                 return (this._parent.indentationAmount() + this._parent.childIndentationAmountDelta());
             }
             return this._parent.indentationAmount();
@@ -197,7 +219,7 @@ module TypeScript.Services.Formatting {
             var indentationAmountDelta: number;
             var parentNode = parent.node();
 
-            switch (node.kind()) {
+            switch (node.kind) {
                 default:
                     // General case
                     // This node should follow the child indentation set by its parent
@@ -337,7 +359,7 @@ module TypeScript.Services.Formatting {
 
         private forceRecomputeIndentationOfParent(tokenStart: number, newLineAdded: boolean /*as opposed to removed*/): void {
             var parent = this._parent;
-            if (parent.fullStart() === tokenStart) {
+            if (start(parent.node()) === tokenStart) {
                 // Temporarily pop the parent before recomputing
                 this._parent = parent.parent();
                 var indentation = this.getNodeIndentation(parent.node(), /* newLineInsertedByFormatting */ newLineAdded);

@@ -3,7 +3,7 @@
 ////module TestModule {
 /////**/
 ////}
-
+debugger;
 goTo.marker("");
 edit.paste(" class TestClass{\r\n\
 private   foo;\r\n\

@@ -1,4 +1,4 @@
-tests/cases/compiler/widenToAny2.ts(4,5): error TS2323: Type 'string' is not assignable to type 'number'.
+tests/cases/compiler/widenToAny2.ts(4,5): error TS2322: Type 'string' is not assignable to type 'number'.
 
 
 ==== tests/cases/compiler/widenToAny2.ts (1 errors) ====
@@ -7,5 +7,5 @@ tests/cases/compiler/widenToAny2.ts(4,5): error TS2323: Type 'string' is not ass
     }
     var z3:number = foo3([undefined, "def"]);  // Type is any, but should be string
         ~~
-!!! error TS2323: Type 'string' is not assignable to type 'number'.
+!!! error TS2322: Type 'string' is not assignable to type 'number'.
     

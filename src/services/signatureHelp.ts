@@ -219,7 +219,7 @@ module ts.SignatureHelp {
                 // Find the list that starts right *after* the < or ( token.
                 // If the user has just opened a list, consider this item 0.
                 var list = getChildListThatStartsWithOpenerToken(parent, node, sourceFile);
-                Debug.assert(list);
+                Debug.assert(list !== undefined);
                 return {
                     list: list,
                     listItemIndex: 0
@@ -244,7 +244,7 @@ module ts.SignatureHelp {
                 // If the node is not a subspan of its parent, this is a big problem.
                 // There have been crashes that might be caused by this violation.
                 if (n.pos < n.parent.pos || n.end > n.parent.end) {
-                    Debug.fail("Node of kind " + SyntaxKind[n.kind] + " is not a subspan of its parent of kind " + SyntaxKind[n.parent.kind]);
+                    Debug.fail("Node of kind " + n.kind + " is not a subspan of its parent of kind " + n.parent.kind);
                 }
 
                 var argumentInfo = getImmediatelyContainingArgumentInfo(n);

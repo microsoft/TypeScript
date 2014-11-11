@@ -2,9 +2,8 @@
 
 module TypeScript {
     export function visitNodeOrToken(visitor: ISyntaxVisitor, element: ISyntaxNodeOrToken): any {
-        if (element === null) { return null; }
-        if (isToken(element)) { return visitor.visitToken(<ISyntaxToken>element); }
-        switch (element.kind()) {
+        if (element === undefined) { return undefined; }
+        switch (element.kind) {
             case SyntaxKind.SourceUnit: return visitor.visitSourceUnit(<SourceUnitSyntax>element);
             case SyntaxKind.QualifiedName: return visitor.visitQualifiedName(<QualifiedNameSyntax>element);
             case SyntaxKind.ObjectType: return visitor.visitObjectType(<ObjectTypeSyntax>element);
@@ -14,6 +13,8 @@ module TypeScript {
             case SyntaxKind.GenericType: return visitor.visitGenericType(<GenericTypeSyntax>element);
             case SyntaxKind.TypeQuery: return visitor.visitTypeQuery(<TypeQuerySyntax>element);
             case SyntaxKind.TupleType: return visitor.visitTupleType(<TupleTypeSyntax>element);
+            case SyntaxKind.UnionType: return visitor.visitUnionType(<UnionTypeSyntax>element);
+            case SyntaxKind.ParenthesizedType: return visitor.visitParenthesizedType(<ParenthesizedTypeSyntax>element);
             case SyntaxKind.InterfaceDeclaration: return visitor.visitInterfaceDeclaration(<InterfaceDeclarationSyntax>element);
             case SyntaxKind.FunctionDeclaration: return visitor.visitFunctionDeclaration(<FunctionDeclarationSyntax>element);
             case SyntaxKind.ModuleDeclaration: return visitor.visitModuleDeclaration(<ModuleDeclarationSyntax>element);
@@ -50,16 +51,13 @@ module TypeScript {
             case SyntaxKind.DoStatement: return visitor.visitDoStatement(<DoStatementSyntax>element);
             case SyntaxKind.DebuggerStatement: return visitor.visitDebuggerStatement(<DebuggerStatementSyntax>element);
             case SyntaxKind.WithStatement: return visitor.visitWithStatement(<WithStatementSyntax>element);
-            case SyntaxKind.PreIncrementExpression: case SyntaxKind.PreDecrementExpression: case SyntaxKind.PlusExpression: case SyntaxKind.NegateExpression: case SyntaxKind.BitwiseNotExpression: case SyntaxKind.LogicalNotExpression:
-                return visitor.visitPrefixUnaryExpression(<PrefixUnaryExpressionSyntax>element);
+            case SyntaxKind.PrefixUnaryExpression: return visitor.visitPrefixUnaryExpression(<PrefixUnaryExpressionSyntax>element);
             case SyntaxKind.DeleteExpression: return visitor.visitDeleteExpression(<DeleteExpressionSyntax>element);
             case SyntaxKind.TypeOfExpression: return visitor.visitTypeOfExpression(<TypeOfExpressionSyntax>element);
             case SyntaxKind.VoidExpression: return visitor.visitVoidExpression(<VoidExpressionSyntax>element);
             case SyntaxKind.ConditionalExpression: return visitor.visitConditionalExpression(<ConditionalExpressionSyntax>element);
-            case SyntaxKind.MultiplyExpression: case SyntaxKind.DivideExpression: case SyntaxKind.ModuloExpression: case SyntaxKind.AddExpression: case SyntaxKind.SubtractExpression: case SyntaxKind.LeftShiftExpression: case SyntaxKind.SignedRightShiftExpression: case SyntaxKind.UnsignedRightShiftExpression: case SyntaxKind.LessThanExpression: case SyntaxKind.GreaterThanExpression: case SyntaxKind.LessThanOrEqualExpression: case SyntaxKind.GreaterThanOrEqualExpression: case SyntaxKind.InstanceOfExpression: case SyntaxKind.InExpression: case SyntaxKind.EqualsWithTypeConversionExpression: case SyntaxKind.NotEqualsWithTypeConversionExpression: case SyntaxKind.EqualsExpression: case SyntaxKind.NotEqualsExpression: case SyntaxKind.BitwiseAndExpression: case SyntaxKind.BitwiseExclusiveOrExpression: case SyntaxKind.BitwiseOrExpression: case SyntaxKind.LogicalAndExpression: case SyntaxKind.LogicalOrExpression: case SyntaxKind.OrAssignmentExpression: case SyntaxKind.AndAssignmentExpression: case SyntaxKind.ExclusiveOrAssignmentExpression: case SyntaxKind.LeftShiftAssignmentExpression: case SyntaxKind.SignedRightShiftAssignmentExpression: case SyntaxKind.UnsignedRightShiftAssignmentExpression: case SyntaxKind.AddAssignmentExpression: case SyntaxKind.SubtractAssignmentExpression: case SyntaxKind.MultiplyAssignmentExpression: case SyntaxKind.DivideAssignmentExpression: case SyntaxKind.ModuloAssignmentExpression: case SyntaxKind.AssignmentExpression: case SyntaxKind.CommaExpression:
-                return visitor.visitBinaryExpression(<BinaryExpressionSyntax>element);
-            case SyntaxKind.PostIncrementExpression: case SyntaxKind.PostDecrementExpression:
-                return visitor.visitPostfixUnaryExpression(<PostfixUnaryExpressionSyntax>element);
+            case SyntaxKind.BinaryExpression: return visitor.visitBinaryExpression(<BinaryExpressionSyntax>element);
+            case SyntaxKind.PostfixUnaryExpression: return visitor.visitPostfixUnaryExpression(<PostfixUnaryExpressionSyntax>element);
             case SyntaxKind.MemberAccessExpression: return visitor.visitMemberAccessExpression(<MemberAccessExpressionSyntax>element);
             case SyntaxKind.InvocationExpression: return visitor.visitInvocationExpression(<InvocationExpressionSyntax>element);
             case SyntaxKind.ArrayLiteralExpression: return visitor.visitArrayLiteralExpression(<ArrayLiteralExpressionSyntax>element);
@@ -72,20 +70,22 @@ module TypeScript {
             case SyntaxKind.ElementAccessExpression: return visitor.visitElementAccessExpression(<ElementAccessExpressionSyntax>element);
             case SyntaxKind.FunctionExpression: return visitor.visitFunctionExpression(<FunctionExpressionSyntax>element);
             case SyntaxKind.OmittedExpression: return visitor.visitOmittedExpression(<OmittedExpressionSyntax>element);
+            case SyntaxKind.TemplateExpression: return visitor.visitTemplateExpression(<TemplateExpressionSyntax>element);
+            case SyntaxKind.TemplateAccessExpression: return visitor.visitTemplateAccessExpression(<TemplateAccessExpressionSyntax>element);
             case SyntaxKind.VariableDeclaration: return visitor.visitVariableDeclaration(<VariableDeclarationSyntax>element);
             case SyntaxKind.VariableDeclarator: return visitor.visitVariableDeclarator(<VariableDeclaratorSyntax>element);
             case SyntaxKind.ArgumentList: return visitor.visitArgumentList(<ArgumentListSyntax>element);
             case SyntaxKind.ParameterList: return visitor.visitParameterList(<ParameterListSyntax>element);
             case SyntaxKind.TypeArgumentList: return visitor.visitTypeArgumentList(<TypeArgumentListSyntax>element);
             case SyntaxKind.TypeParameterList: return visitor.visitTypeParameterList(<TypeParameterListSyntax>element);
-            case SyntaxKind.ExtendsHeritageClause: case SyntaxKind.ImplementsHeritageClause:
-                return visitor.visitHeritageClause(<HeritageClauseSyntax>element);
+            case SyntaxKind.HeritageClause: return visitor.visitHeritageClause(<HeritageClauseSyntax>element);
             case SyntaxKind.EqualsValueClause: return visitor.visitEqualsValueClause(<EqualsValueClauseSyntax>element);
             case SyntaxKind.CaseSwitchClause: return visitor.visitCaseSwitchClause(<CaseSwitchClauseSyntax>element);
             case SyntaxKind.DefaultSwitchClause: return visitor.visitDefaultSwitchClause(<DefaultSwitchClauseSyntax>element);
             case SyntaxKind.ElseClause: return visitor.visitElseClause(<ElseClauseSyntax>element);
             case SyntaxKind.CatchClause: return visitor.visitCatchClause(<CatchClauseSyntax>element);
             case SyntaxKind.FinallyClause: return visitor.visitFinallyClause(<FinallyClauseSyntax>element);
+            case SyntaxKind.TemplateClause: return visitor.visitTemplateClause(<TemplateClauseSyntax>element);
             case SyntaxKind.TypeParameter: return visitor.visitTypeParameter(<TypeParameterSyntax>element);
             case SyntaxKind.Constraint: return visitor.visitConstraint(<ConstraintSyntax>element);
             case SyntaxKind.SimplePropertyAssignment: return visitor.visitSimplePropertyAssignment(<SimplePropertyAssignmentSyntax>element);
@@ -93,11 +93,11 @@ module TypeScript {
             case SyntaxKind.Parameter: return visitor.visitParameter(<ParameterSyntax>element);
             case SyntaxKind.EnumElement: return visitor.visitEnumElement(<EnumElementSyntax>element);
             case SyntaxKind.TypeAnnotation: return visitor.visitTypeAnnotation(<TypeAnnotationSyntax>element);
+            case SyntaxKind.ComputedPropertyName: return visitor.visitComputedPropertyName(<ComputedPropertyNameSyntax>element);
             case SyntaxKind.ExternalModuleReference: return visitor.visitExternalModuleReference(<ExternalModuleReferenceSyntax>element);
             case SyntaxKind.ModuleNameModuleReference: return visitor.visitModuleNameModuleReference(<ModuleNameModuleReferenceSyntax>element);
+            default: return visitor.visitToken(<ISyntaxToken>element);
         }
-
-        throw Errors.invalidOperation();
     }
 
     export interface ISyntaxVisitor {
@@ -111,6 +111,8 @@ module TypeScript {
         visitGenericType(node: GenericTypeSyntax): any;
         visitTypeQuery(node: TypeQuerySyntax): any;
         visitTupleType(node: TupleTypeSyntax): any;
+        visitUnionType(node: UnionTypeSyntax): any;
+        visitParenthesizedType(node: ParenthesizedTypeSyntax): any;
         visitInterfaceDeclaration(node: InterfaceDeclarationSyntax): any;
         visitFunctionDeclaration(node: FunctionDeclarationSyntax): any;
         visitModuleDeclaration(node: ModuleDeclarationSyntax): any;
@@ -166,6 +168,8 @@ module TypeScript {
         visitElementAccessExpression(node: ElementAccessExpressionSyntax): any;
         visitFunctionExpression(node: FunctionExpressionSyntax): any;
         visitOmittedExpression(node: OmittedExpressionSyntax): any;
+        visitTemplateExpression(node: TemplateExpressionSyntax): any;
+        visitTemplateAccessExpression(node: TemplateAccessExpressionSyntax): any;
         visitVariableDeclaration(node: VariableDeclarationSyntax): any;
         visitVariableDeclarator(node: VariableDeclaratorSyntax): any;
         visitArgumentList(node: ArgumentListSyntax): any;
@@ -179,6 +183,7 @@ module TypeScript {
         visitElseClause(node: ElseClauseSyntax): any;
         visitCatchClause(node: CatchClauseSyntax): any;
         visitFinallyClause(node: FinallyClauseSyntax): any;
+        visitTemplateClause(node: TemplateClauseSyntax): any;
         visitTypeParameter(node: TypeParameterSyntax): any;
         visitConstraint(node: ConstraintSyntax): any;
         visitSimplePropertyAssignment(node: SimplePropertyAssignmentSyntax): any;
@@ -186,6 +191,7 @@ module TypeScript {
         visitParameter(node: ParameterSyntax): any;
         visitEnumElement(node: EnumElementSyntax): any;
         visitTypeAnnotation(node: TypeAnnotationSyntax): any;
+        visitComputedPropertyName(node: ComputedPropertyNameSyntax): any;
         visitExternalModuleReference(node: ExternalModuleReferenceSyntax): any;
         visitModuleNameModuleReference(node: ModuleNameModuleReferenceSyntax): any;
     }
