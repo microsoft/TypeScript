@@ -570,7 +570,7 @@ interface WeakMap<K, V> {
     delete(key: K): boolean;
     get(key: K): V;
     has(key: K): boolean;
-    set(key: K, value: V): WeakMap<K, V>;
+    set(key: K, value?: V): WeakMap<K, V>;
     // [Symbol.toStringTag]: string;
 }
 
