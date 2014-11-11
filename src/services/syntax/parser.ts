@@ -1047,14 +1047,14 @@ module TypeScript.Parser {
             return new GetAccessorSyntax(parseNodeData,
                 modifiers, consumeToken(getKeyword), parsePropertyName(),
                 parseCallSignature(/*requireCompleteTypeParameterList:*/ false),
-                parseFunctionBlock(/*parseStatementsEvenWithNoOpenBrace:*/ false));
+                parseFunctionBlock());
         }
 
         function parseSetccessor(modifiers: ISyntaxToken[], setKeyword: ISyntaxToken): SetAccessorSyntax {
             return new SetAccessorSyntax(parseNodeData,
                 modifiers, consumeToken(setKeyword), parsePropertyName(),
                 parseCallSignature(/*requireCompleteTypeParameterList:*/ false),
-                parseFunctionBlock(/*parseStatementsEvenWithNoOpenBrace:*/ false));
+                parseFunctionBlock());
         }
 
         function isClassElement(inErrorRecovery: boolean): boolean {
@@ -1154,26 +1154,25 @@ module TypeScript.Parser {
         }
 
         function parseConstructorDeclaration(): ConstructorDeclarationSyntax {
+            // Note: if we see an arrow after the close paren, then try to parse out a function 
+            // block anyways.  It's likely the user just though '=> expr' was legal anywhere a 
+            // block was legal.
             return new ConstructorDeclarationSyntax(parseNodeData, 
                 parseModifiers(), 
                 eatToken(SyntaxKind.ConstructorKeyword), 
                 parseCallSignature(/*requireCompleteTypeParameterList:*/ false),
-                isBlock()
-                    ? parseFunctionBlock(/*parseStatementsEvenWithNoOpenBrace:*/ false)
-                    : eatExplicitOrAutomaticSemicolon(/*allowWithoutNewline:*/ false));
+                isBlockOrArrow() ? parseFunctionBlock() : eatExplicitOrAutomaticSemicolon(/*allowWithoutNewline:*/ false));
         }
 
         function parseMemberFunctionDeclaration(modifiers: ISyntaxToken[], propertyName: IPropertyNameSyntax): MemberFunctionDeclarationSyntax {
-            var callSignature = parseCallSignature(/*requireCompleteTypeParameterList:*/ false);
-
-            // If we got an errant => then we want to parse what's coming up without requiring an
-            // open brace.
-            var parseBlockEvenWithNoOpenBrace = tryAddUnexpectedEqualsGreaterThanToken(callSignature);
-            var blockOrSemicolonToken = parseBlockEvenWithNoOpenBrace || isBlock()
-                ? parseFunctionBlock(parseBlockEvenWithNoOpenBrace)
-                : eatExplicitOrAutomaticSemicolon(/*allowWithoutNewline:*/ false);
-
-            return new MemberFunctionDeclarationSyntax(parseNodeData, modifiers, propertyName, callSignature, blockOrSemicolonToken);
+            // Note: if we see an arrow after the close paren, then try to parse out a function 
+            // block anyways.  It's likely the user just though '=> expr' was legal anywhere a 
+            // block was legal.
+            return new MemberFunctionDeclarationSyntax(parseNodeData,
+                modifiers,
+                propertyName,
+                parseCallSignature(/*requireCompleteTypeParameterList:*/ false),
+                isBlockOrArrow() ? parseFunctionBlock() : eatExplicitOrAutomaticSemicolon(/*allowWithoutNewline:*/ false));
         }
         
         function parseMemberVariableDeclaration(modifiers: ISyntaxToken[], propertyName: IPropertyNameSyntax): MemberVariableDeclarationSyntax {
@@ -1194,53 +1193,20 @@ module TypeScript.Parser {
                 parseModifiers(), parseIndexSignature(), eatExplicitOrAutomaticSemicolon(/*allowWithoutNewLine:*/ false));
         }
 
-        function tryAddUnexpectedEqualsGreaterThanToken(callSignature: CallSignatureSyntax): boolean {
-            var token0 = currentToken();
-
-            var hasEqualsGreaterThanToken = token0.kind === SyntaxKind.EqualsGreaterThanToken;
-            if (hasEqualsGreaterThanToken) {
-                // We can only do this if the call signature actually contains a final token that we 
-                // could add the => to.
-                var _lastToken = lastToken(callSignature);
-                if (_lastToken && _lastToken.fullWidth() > 0) {
-                    // Previously the language allowed "function f() => expr;" as a shorthand for 
-                    // "function f() { return expr; }.
-                    // 
-                    // Detect if the user is typing this and attempt recovery.
-                    var diagnostic = new Diagnostic(fileName, source.text.lineMap(),
-                        start(token0, source.text), width(token0), DiagnosticCode.Unexpected_token_0_expected, [SyntaxFacts.getText(SyntaxKind.OpenBraceToken)]);
-                    addDiagnostic(diagnostic);
-
-                    // Skip over the =>   It will get attached to whatever comes next.
-                    skipToken(token0);
-                    return true;
-                }
-            }
-
-
-            return false;
-        }
-
         function isFunctionDeclaration(modifierCount: number): boolean {
             return peekToken(modifierCount).kind === SyntaxKind.FunctionKeyword;
         }
 
         function parseFunctionDeclaration(): FunctionDeclarationSyntax {
-            var modifiers = parseModifiers();
-            var functionKeyword = eatToken(SyntaxKind.FunctionKeyword);
-            var identifier = eatIdentifierToken();
-            var callSignature = parseCallSignature(/*requireCompleteTypeParameterList:*/ false);
-
-            // If we got an errant => then we want to parse what's coming up without requiring an
-            // open brace.
-            var parseBlockEvenWithNoOpenBrace = tryAddUnexpectedEqualsGreaterThanToken(callSignature);
-
-            // Parse a block if we're on a bock, or if we saw a '=>'
-            var blockOrSemicolonToken = parseBlockEvenWithNoOpenBrace || isBlock()
-                ? parseFunctionBlock(parseBlockEvenWithNoOpenBrace)
-                : eatExplicitOrAutomaticSemicolon(/*allowWithoutNewline:*/ false);
-
-            return new FunctionDeclarationSyntax(parseNodeData, modifiers, functionKeyword, identifier, callSignature, blockOrSemicolonToken);
+            // Note: if we see an arrow after the close paren, then try to parse out a function 
+            // block anyways.  It's likely the user just though '=> expr' was legal anywhere a 
+            // block was legal.
+            return new FunctionDeclarationSyntax(parseNodeData, 
+                parseModifiers(), 
+                eatToken(SyntaxKind.FunctionKeyword), 
+                eatIdentifierToken(), 
+                parseCallSignature(/*requireCompleteTypeParameterList:*/ false), 
+                isBlockOrArrow() ? parseFunctionBlock() : eatExplicitOrAutomaticSemicolon(/*allowWithoutNewline:*/ false));
         }
 
         function parseModuleName(): INameSyntax {
@@ -2826,7 +2792,7 @@ module TypeScript.Parser {
             return new FunctionExpressionSyntax(parseNodeData,
                 consumeToken(functionKeyword), eatOptionalIdentifierToken(),
                 parseCallSignature(/*requireCompleteTypeParameterList:*/ false),
-                parseFunctionBlock(/*parseStatementsEvenWithNoOpenBrace:*/ false));
+                parseFunctionBlock());
         }
 
         function parseObjectCreationExpression(newKeyword: ISyntaxToken): ObjectCreationExpressionSyntax {
@@ -2960,7 +2926,7 @@ module TypeScript.Parser {
             //      { FunctionBody }
 
             if (isBlock()) {
-                return parseFunctionBlock(/*parseStatementsEvenWithNoOpenBrace:*/ false);
+                return parseFunctionBlock();
             }
 
             // We didn't have a block.  However, we may be in an error situation.  For example,
@@ -2975,11 +2941,14 @@ module TypeScript.Parser {
             // up preemptively closing the containing construct.
             var _modifierCount = modifierCount();
             if (isStatement(_modifierCount, /*inErrorRecovery:*/ false) &&
-                !isExpressionStatement(currentToken()) &&
-                !isFunctionDeclaration(_modifierCount)) {
-                // We've seen a statement (and it isn't an expressionStatement like 'foo()'), 
-                // so treat this like a block with a missing open brace.
-                return parseFunctionBlock(/*parseStatementsEvenWithNoOpenBrace:*/ true);
+                !isExpression(currentToken())) {
+                // We've seen a statement (and it isn't an expressionStatement like 'foo()'), so 
+                // treat this like a block with a missing open brace.
+
+                return new BlockSyntax(parseNodeData, 
+                    eatToken(SyntaxKind.OpenBraceToken),
+                    parseFunctionBlockStatements(),
+                    eatToken(SyntaxKind.CloseBraceToken));
             }
 
             return parseAssignmentExpressionOrHigher();
@@ -3007,6 +2976,11 @@ module TypeScript.Parser {
 
         function isBlock(): boolean {
             return currentToken().kind === SyntaxKind.OpenBraceToken;
+        }
+
+        function isBlockOrArrow(): boolean {
+            var _currentToken = currentToken();
+            return _currentToken.kind === SyntaxKind.OpenBraceToken || _currentToken.kind === SyntaxKind.EqualsGreaterThanToken;
         }
 
         function isDefinitelyArrowFunctionExpression(): boolean {
@@ -3308,8 +3282,9 @@ module TypeScript.Parser {
 
         function parseFunctionPropertyAssignment(propertyName: IPropertyNameSyntax): FunctionPropertyAssignmentSyntax {
             return new FunctionPropertyAssignmentSyntax(parseNodeData,
-                propertyName, parseCallSignature(/*requireCompleteTypeParameterList:*/ false),
-                parseFunctionBlock(/*parseBlockEvenWithNoOpenBrace:*/ false));
+                propertyName,
+                parseCallSignature(/*requireCompleteTypeParameterList:*/ false),
+                parseFunctionBlock());
         }
 
         function parseArrayLiteralExpression(openBracketToken: ISyntaxToken): ArrayLiteralExpressionSyntax {
@@ -3320,34 +3295,72 @@ module TypeScript.Parser {
                 eatToken(SyntaxKind.CloseBracketToken));
         }
 
-        function parseFunctionBlock(parseBlockEvenWithNoOpenBrace: boolean): BlockSyntax {
-            return parseBlock(parseBlockEvenWithNoOpenBrace, /*checkForStrictMode:*/ true);
+        function tryAddUnexpectedEqualsGreaterThanToken(callSignature: CallSignatureSyntax): boolean {
+            var token0 = currentToken();
+
+            var hasEqualsGreaterThanToken = token0.kind === SyntaxKind.EqualsGreaterThanToken;
+            if (hasEqualsGreaterThanToken) {
+                // We can only do this if the call signature actually contains a final token that we 
+                // could add the => to.
+                var _lastToken = lastToken(callSignature);
+                if (_lastToken && _lastToken.fullWidth() > 0) {
+                    // Previously the language allowed "function f() => expr;" as a shorthand for 
+                    // "function f() { return expr; }.
+                    // 
+                    // Detect if the user is typing this and attempt recovery.
+                    var diagnostic = new Diagnostic(fileName, source.text.lineMap(),
+                        start(token0, source.text), width(token0), DiagnosticCode.Unexpected_token_0_expected, [SyntaxFacts.getText(SyntaxKind.OpenBraceToken)]);
+                    addDiagnostic(diagnostic);
+
+                    // Skip over the =>   It will get attached to whatever comes next.
+                    skipToken(token0);
+                    return true;
+                }
+            }
+
+
+            return false;
         }
 
         function parseStatementBlock(): BlockSyntax {
             // Different from function blocks in that we don't check for strict mode, nor do accept
             // a block without an open curly.
             var openBraceToken: ISyntaxToken;
-            return new BlockSyntax(parseNodeData, 
-                openBraceToken = eatToken(SyntaxKind.OpenBraceToken), 
+            return new BlockSyntax(parseNodeData,
+                openBraceToken = eatToken(SyntaxKind.OpenBraceToken),
                 openBraceToken.fullWidth() > 0 ? parseSyntaxList<IStatementSyntax>(ListParsingState.Block_Statements) : [],
                 eatToken(SyntaxKind.CloseBraceToken));
         }
 
-        function parseBlock(parseBlockEvenWithNoOpenBrace: boolean, checkForStrictMode: boolean): BlockSyntax {
-            var openBraceToken = eatToken(SyntaxKind.OpenBraceToken);
-            var statements: IStatementSyntax[];
+        function parseFunctionBlock(): BlockSyntax {
+            // If we got an errant => then we want to parse what's coming up without requiring an
+            // open brace.  ItWe do this because it's not uncommon for people to get confused as to
+            // where/when they can use an => and we want to have good error recovery here.
+            var token0 = currentToken();
 
-            if (parseBlockEvenWithNoOpenBrace || openBraceToken.fullWidth() > 0) {
-                var savedIsInStrictMode = strictMode;
-                
-                var processItems = checkForStrictMode ? updateStrictModeState : undefined;
-                var statements = parseSyntaxList<IStatementSyntax>(ListParsingState.Block_Statements, processItems);
+            var hasEqualsGreaterThanToken = token0.kind === SyntaxKind.EqualsGreaterThanToken;
+            if (hasEqualsGreaterThanToken) {
+                addDiagnostic(new Diagnostic(fileName, source.text.lineMap(),
+                    start(token0, source.text), width(token0), DiagnosticCode.Unexpected_token_0_expected, [SyntaxFacts.getText(SyntaxKind.OpenBraceToken)]));
 
-                setStrictMode(savedIsInStrictMode);
+                // Skip over the =>   It will get attached to whatever comes next.
+                skipToken(token0);
             }
 
-            return new BlockSyntax(parseNodeData, openBraceToken, statements || [], eatToken(SyntaxKind.CloseBraceToken));
+            var openBraceToken = eatToken(SyntaxKind.OpenBraceToken);
+            var statements = hasEqualsGreaterThanToken || openBraceToken.fullWidth() > 0
+                ? parseFunctionBlockStatements()
+                : [];
+
+            return new BlockSyntax(parseNodeData, openBraceToken, statements, eatToken(SyntaxKind.CloseBraceToken));
+        }
+
+        function parseFunctionBlockStatements() {
+            var savedIsInStrictMode = strictMode;
+            var statements = parseSyntaxList<IStatementSyntax>(ListParsingState.Block_Statements, updateStrictModeState);
+            setStrictMode(savedIsInStrictMode);
+
+            return statements;
         }
 
         function parseCallSignature(requireCompleteTypeParameterList: boolean): CallSignatureSyntax {
