@@ -1967,7 +1967,7 @@ module TypeScript.Parser {
                 return new OmittedExpressionSyntax(parseNodeData);
             }
 
-            return allowInAnd(tryParseAssignmentExpressionOrHigher_NoForce);
+            return allowInAnd(tryParseAssignmentExpressionOrHigher);
         }
 
         function isExpression(currentToken: ISyntaxToken): boolean {
@@ -2191,7 +2191,8 @@ module TypeScript.Parser {
             //     = AssignmentExpression[?In, ?Yield]
 
             return new EqualsValueClauseSyntax(parseNodeData,
-                eatToken(SyntaxKind.EqualsToken), tryParseAssignmentExpressionOrHigher(/*force:*/ true));
+                eatToken(SyntaxKind.EqualsToken),
+                parseAssignmentExpressionOrHigher());
         }
 
         function parseExpression(): IExpressionSyntax {
@@ -2199,33 +2200,35 @@ module TypeScript.Parser {
             //      AssignmentExpression[in] 
             //      Expression[in] , AssignmentExpression[in]
 
-            var leftOperand = tryParseAssignmentExpressionOrHigher(/*force:*/ true);
+            var leftOperand = parseAssignmentExpressionOrHigher();
             while (true) {
                 var _currentToken = currentToken();
                 if (_currentToken.kind !== SyntaxKind.CommaToken) {
                     break;
                 }
 
-                leftOperand = new BinaryExpressionSyntax(parseNodeData, leftOperand, consumeToken(_currentToken), 
-                    tryParseAssignmentExpressionOrHigher(/*force:*/ true));
+                leftOperand = new BinaryExpressionSyntax(parseNodeData,
+                    leftOperand,
+                    consumeToken(_currentToken), 
+                    parseAssignmentExpressionOrHigher());
             }
 
             return leftOperand;
         }
 
-        function tryParseAssignmentExpressionOrHigher_NoForce(): IExpressionSyntax {
-            return tryParseAssignmentExpressionOrHigher(/*force:*/ false);
+        function tryParseAssignmentExpressionOrHigher(): IExpressionSyntax {
+            return tryParseAssignmentExpressionOrHigherWorker(/*force:*/ false);
         }
 
-        function tryParseAssignmentExpressionOrHigher_Force(): IExpressionSyntax {
-            return tryParseAssignmentExpressionOrHigher(/*force:*/ true);
+        function parseAssignmentExpressionOrHigher(): IExpressionSyntax {
+            return tryParseAssignmentExpressionOrHigherWorker(/*force:*/ true);
         }
 
         // Called when you need to parse an expression, but you do not want to allow 'CommaExpressions'.
         // i.e. if you have "var a = 1, b = 2" then when we parse '1' we want to parse with higher 
         // precedence than 'comma'.  Otherwise we'll get: "var a = (1, (b = 2))", instead of
         // "var a = (1), b = (2)");
-        function tryParseAssignmentExpressionOrHigher(force: boolean): IExpressionSyntax {
+        function tryParseAssignmentExpressionOrHigherWorker(force: boolean): IExpressionSyntax {
             // Augmented by TypeScript:
             //
             //  AssignmentExpression[in]:
@@ -2278,8 +2281,10 @@ module TypeScript.Parser {
 
                 // Check for recursive assignment expressions.
                 if (SyntaxFacts.isAssignmentOperatorToken(operatorToken.kind)) {
-                    return new BinaryExpressionSyntax(parseNodeData, leftOperand, consumeToken(operatorToken), 
-                        tryParseAssignmentExpressionOrHigher(/*force:*/ true));
+                    return new BinaryExpressionSyntax(parseNodeData,
+                        leftOperand,
+                        consumeToken(operatorToken), 
+                        parseAssignmentExpressionOrHigher());
                 }
             }
 
@@ -2340,12 +2345,15 @@ module TypeScript.Parser {
                 return leftOperand;
             }
 
-            // Note: we explicitly do *not* pass 'allowIn' to the whenTrue part.  An 'in' expression is always
-            // allowed in the 'true' part of a conditional expression.
+            // Note: we explicitly 'allowIn' in the whenTrue part of the condition expression, and 
+            // we do not that for the 'whenFalse' part.  
 
             return new ConditionalExpressionSyntax(parseNodeData,
-                leftOperand, consumeToken(_currentToken), allowInAnd(tryParseAssignmentExpressionOrHigher_Force),
-                eatToken(SyntaxKind.ColonToken), tryParseAssignmentExpressionOrHigher(/*force:*/ true));
+                leftOperand,
+                consumeToken(_currentToken),
+                allowInAnd(parseAssignmentExpressionOrHigher),
+                eatToken(SyntaxKind.ColonToken),
+                parseAssignmentExpressionOrHigher());
         }
 
         function parseBinaryExpressionRest(precedence: BinaryExpressionPrecedence, leftOperand: IExpressionSyntax): IExpressionSyntax {
@@ -2695,7 +2703,7 @@ module TypeScript.Parser {
             // cause a missing identiifer to be created), so that we will then consume the
             // comma and the following list items).
             var force = currentToken().kind === SyntaxKind.CommaToken;
-            return allowInAnd(force ? tryParseAssignmentExpressionOrHigher_Force : tryParseAssignmentExpressionOrHigher_NoForce);
+            return allowInAnd(force ? parseAssignmentExpressionOrHigher : tryParseAssignmentExpressionOrHigher);
         }
 
         function parseElementAccessArgumentExpression(openBracketToken: ISyntaxToken, inObjectCreation: boolean) {
@@ -2973,7 +2981,7 @@ module TypeScript.Parser {
                 return parseBlock(/*parseStatementsEvenWithNoOpenBrace:*/ true, /*checkForStrictMode:*/ false);
             }
 
-            return tryParseAssignmentExpressionOrHigher(/*force:*/ true);
+            return parseAssignmentExpressionOrHigher();
         }
 
         function isSimpleArrowFunctionExpression(_currentToken: ISyntaxToken): boolean {
@@ -3218,7 +3226,9 @@ module TypeScript.Parser {
                     // Also, if we have an identifier and it is followed by a colon then this is 
                     // definitely a simple property assignment.
                     return new SimplePropertyAssignmentSyntax(parseNodeData,
-                        propertyName, eatToken(SyntaxKind.ColonToken), allowInAnd(tryParseAssignmentExpressionOrHigher_Force));
+                        propertyName,
+                        eatToken(SyntaxKind.ColonToken),
+                        allowInAnd(parseAssignmentExpressionOrHigher));
                 }
             }
 
@@ -3291,7 +3301,7 @@ module TypeScript.Parser {
 
             return new ComputedPropertyNameSyntax(parseNodeData,
                 consumeToken(openBracketToken),
-                allowInAnd(tryParseAssignmentExpressionOrHigher_Force),
+                allowInAnd(parseAssignmentExpressionOrHigher),
                 eatToken(SyntaxKind.CloseBracketToken));
         }
 
