@@ -128,14 +128,6 @@ module TypeScript.Parser {
         // array.  We may also, during speculative parsing, attach our skipped tokens to some
         // new token.  When we rewind we need to restore whatever skipped tokens we started with.
         skippedTokens: ISyntaxToken[];
-
-        // isInStrictMode and listParsingState should not have to be tracked by a rewind point.
-        // Because they are naturally mutated and restored based on the normal stack movement of 
-        // the parser, they should automatically return to whatever value they had to begin with
-        // if the parser decides to rewind or not.  However, to ensure that this is true, we track
-        // these variables and check if they have the same value when we're rewinding/releasing.
-        isInStrictMode: boolean;
-        listParsingState: ListParsingState;
     }
 
     // Contains the actual logic to parse typescript/javascript.  This is the code that generally
@@ -162,7 +154,8 @@ module TypeScript.Parser {
         // TODO: do we need to store/restore this when speculative parsing?  I don't think so.  The
         // parsing logic already handles storing/restoring this and should work properly even if we're
         // speculative parsing.
-        var isInStrictMode: boolean = false;
+        var strictMode: boolean = false;
+        var disallowIn: boolean = false;
 
         // Current state of the parser.  If we need to rewind we will store and reset these values as
         // appropriate.
@@ -214,10 +207,6 @@ module TypeScript.Parser {
             rewindPoint.diagnosticsCount = diagnostics.length;
             rewindPoint.skippedTokens = _skippedTokens ? _skippedTokens.slice(0) : undefined;
 
-            // Values we keep around for debug asserting purposes.
-            rewindPoint.isInStrictMode = isInStrictMode;
-            rewindPoint.listParsingState = listParsingState;
-
             return rewindPoint;
         }
 
@@ -255,7 +244,7 @@ module TypeScript.Parser {
             // Note: we *can* reuse tokens when the strict mode changes.  That's because tokens
             // are unaffected by strict mode.  It's just the parser will decide what to do with it
             // differently depending on what mode it is in.
-            if (!node || parsedInStrictMode(node) !== isInStrictMode) {
+            if (!node || parsedInStrictMode(node) !== strictMode || parsedInDisallowInMode(node) !== disallowIn) {
                 return undefined;
             }
 
@@ -391,7 +380,7 @@ module TypeScript.Parser {
                 if (tokenKind <= SyntaxKind.LastFutureReservedStrictKeyword) {
                     // Could be a keyword or identifier.  It's an identifier if we're not in strict
                     // mode.
-                    return !isInStrictMode;
+                    return !strictMode;
                 }
 
                 // If it's typescript keyword, then it's actually a javascript identifier.
@@ -575,16 +564,27 @@ module TypeScript.Parser {
             throw Errors.invalidOperation();
         }
 
-        function setStrictMode(_isInStrictMode: boolean) {
-            isInStrictMode = _isInStrictMode;
-            parseNodeData = _isInStrictMode ? SyntaxConstants.NodeParsedInStrictModeMask : 0;
+        function updateParseNodeData() {
+            parseNodeData =
+                (strictMode ? SyntaxConstants.NodeParsedInStrictModeMask : 0) |
+                (disallowIn ? SyntaxConstants.NodeParsedInDisallowInMask : 0);
+        }
+
+        function setStrictMode(val: boolean) {
+            strictMode = val;
+            updateParseNodeData();
+        }
+
+        function setDisallowIn(val: boolean) {
+            disallowIn = val;
+            updateParseNodeData();
         }
 
         function parseSourceUnit(): SourceUnitSyntax {
             // Note: saving and restoring the 'isInStrictMode' state is not really necessary here
             // (as it will never be read afterwards).  However, for symmetry with the rest of the
             // parsing code, we do the same here.
-            var savedIsInStrictMode = isInStrictMode
+            var savedIsInStrictMode = strictMode
 
             // Note: any skipped tokens produced after the end of all the module elements will be
             // added as skipped trivia to the start of the EOF token.
@@ -611,7 +611,7 @@ module TypeScript.Parser {
         }
 
         function updateStrictModeState(items: any[]): void {
-            if (!isInStrictMode) {
+            if (!strictMode) {
                 // Check if all the items are directive prologue elements.
                 for (var i = 0, n = items.length; i < n; i++) {
                     if (!isDirectivePrologueElement(items[i])) {
@@ -890,8 +890,32 @@ module TypeScript.Parser {
             return isPropertyName(/*peekToken:*/ 0, inErrorRecovery);
         }
 
+        function allowInAnd<T>(func: () => T): T {
+            if (disallowIn) {
+                setDisallowIn(false);
+                var result = func();
+                setDisallowIn(true);
+                return result;
+            }
+            
+            // no need to do anything special if 'in' is already allowed.
+            return func();
+        }
+
+        function disallowInAnd<T>(func: () => T): T {
+            if (disallowIn) {
+                // no need to do anything special if 'in' is already disallowed.
+                return func();
+            }
+
+            setDisallowIn(true);
+            var result = func();
+            setDisallowIn(false);
+            return result;
+        }
+        
         function tryParseEnumElementEqualsValueClause(): EqualsValueClauseSyntax {
-            return isEqualsValueClause(/*inParameter*/ false) ? parseEqualsValueClause(/*allowIn:*/ true) : undefined;
+            return isEqualsValueClause(/*inParameter*/ false) ? allowInAnd(parseEqualsValueClause) : undefined;
         }
 
         function tryParseEnumElement(inErrorRecovery: boolean): EnumElementSyntax {
@@ -1157,7 +1181,7 @@ module TypeScript.Parser {
                 modifiers,
                 new VariableDeclaratorSyntax(parseNodeData, propertyName,
                     parseOptionalTypeAnnotation(/*allowStringLiteral:*/ false), 
-                    isEqualsValueClause(/*inParameter*/ false) ? parseEqualsValueClause(/*allowIn:*/ true) : undefined),
+                    isEqualsValueClause(/*inParameter*/ false) ? allowInAnd(parseEqualsValueClause) : undefined),
                 eatExplicitOrAutomaticSemicolon(/*allowWithoutNewline:*/ false));
         }
 
@@ -1613,13 +1637,16 @@ module TypeScript.Parser {
         }
 
         function parseDoStatement(doKeyword: ISyntaxToken): DoStatementSyntax {
+            // IterationStatement[Yield, Return] :
+            //      do Statement[?Yield, ?Return]while (Expression[In, ?Yield]); opt
+
             // From: https://mail.mozilla.org/pipermail/es-discuss/2011-August/016188.html
             // 157 min --- All allen at wirfs-brock.com CONF --- "do{;}while(false)false" prohibited in 
             // spec but allowed in consensus reality. Approved -- this is the de-facto standard whereby
             //  do;while(0)x will have a semicolon inserted before x.
             return new DoStatementSyntax(parseNodeData,
                 consumeToken(doKeyword), parseStatement(/*inErrorRecovery:*/ false), eatToken(SyntaxKind.WhileKeyword), eatToken(SyntaxKind.OpenParenToken),
-                parseExpression(/*allowIn:*/ true), eatToken(SyntaxKind.CloseParenToken), eatExplicitOrAutomaticSemicolon(/*allowWithoutNewline:*/ true));
+                allowInAnd(parseExpression), eatToken(SyntaxKind.CloseParenToken), eatExplicitOrAutomaticSemicolon(/*allowWithoutNewline:*/ true));
         }
 
         function isLabeledStatement(currentToken: ISyntaxToken): boolean {
@@ -1675,13 +1702,27 @@ module TypeScript.Parser {
         }
 
         function parseWithStatement(withKeyword: ISyntaxToken): WithStatementSyntax {
+            // WithStatement[Yield, Return] :
+            //      with (Expression[In, ?Yield]) Statement[?Yield, ?Return]
+
             return new WithStatementSyntax(parseNodeData,
-                consumeToken(withKeyword), eatToken(SyntaxKind.OpenParenToken), parseExpression(/*allowIn:*/ true), eatToken(SyntaxKind.CloseParenToken), parseStatement(/*inErrorRecovery:*/ false));
+                consumeToken(withKeyword),
+                eatToken(SyntaxKind.OpenParenToken),
+                allowInAnd(parseExpression),
+                eatToken(SyntaxKind.CloseParenToken),
+                parseStatement(/*inErrorRecovery:*/ false));
         }
 
         function parseWhileStatement(whileKeyword: ISyntaxToken): WhileStatementSyntax {
+            // IterationStatement[Yield, Return] :
+            //      while (Expression[In, ?Yield]) Statement[?Yield, ?Return]
+
             return new WhileStatementSyntax(parseNodeData,
-                consumeToken(whileKeyword), eatToken(SyntaxKind.OpenParenToken), parseExpression(/*allowIn:*/ true), eatToken(SyntaxKind.CloseParenToken), parseStatement(/*inErrorRecovery:*/ false));
+                consumeToken(whileKeyword),
+                eatToken(SyntaxKind.OpenParenToken),
+                allowInAnd(parseExpression),
+                eatToken(SyntaxKind.CloseParenToken),
+                parseStatement(/*inErrorRecovery:*/ false));
         }
 
         function isEmptyStatement(currentToken: ISyntaxToken, inErrorRecovery: boolean): boolean {
@@ -1725,17 +1766,19 @@ module TypeScript.Parser {
             var initializer = tokenKind === SyntaxKind.SemicolonToken
                 ? undefined
                 : tokenKind === SyntaxKind.VarKeyword
-                    ? parseVariableDeclaration(/*allowIn:*/ false)
-                    : parseExpression(/*allowIn:*/ false);
+                    ? disallowInAnd(parseVariableDeclaration)
+                    : disallowInAnd(parseExpression)
 
             // In order to be a 'for-in' statement, we had to have an initializer of some sort, and
             // we had to actually get an 'in' keyword.
             if (initializer !== undefined && currentToken().kind === SyntaxKind.InKeyword) {
-                // for ( var VariableDeclarationNoIn in Expression ) Statement
-                // for ( LeftHandSideExpression in Expression ) Statement
+                // for ([lookahead not-in {let [ }] LeftHandSideExpression[?Yield] in Expression[In, ?Yield] ) Statement[?Yield, ?Return]
+                // for ( var ForBinding[?Yield] in Expression[In, ?Yield] ) Statement[?Yield, ?Return]
+                // for ( ForDeclaration[?Yield] in Expression[In, ?Yield] ) Statement[?Yield, ?Return]
+
                 return new ForInStatementSyntax(parseNodeData,
                     forKeyword, openParenToken, initializer, eatToken(SyntaxKind.InKeyword),
-                    parseExpression(/*allowIn:*/ true), eatToken(SyntaxKind.CloseParenToken), parseStatement(/*inErrorRecovery:*/ false));
+                    allowInAnd(parseExpression), eatToken(SyntaxKind.CloseParenToken), parseStatement(/*inErrorRecovery:*/ false));
             }
             else {
                 // NOTE: From the es5 section on Automatic Semicolon Insertion.
@@ -1753,21 +1796,24 @@ module TypeScript.Parser {
         }
 
         function tryParseForStatementCondition(): IExpressionSyntax {
+            // for ( Expression[?Yield]opt ; Expression[In, ?Yield]opt ; Expression[In, ?Yield]opt )
+
             var tokenKind = currentToken().kind;
             if (tokenKind !== SyntaxKind.SemicolonToken &&
                 tokenKind !== SyntaxKind.CloseParenToken &&
                 tokenKind !== SyntaxKind.EndOfFileToken) {
-                return parseExpression(/*allowIn:*/ true);
+                return allowInAnd(parseExpression);
             }
 
             return undefined;
         }
 
         function tryParseForStatementIncrementor(): IExpressionSyntax {
+            // for ( Expression[?Yield]opt ; Expression[In, ?Yield]opt ; Expression[In, ?Yield]opt )
             var tokenKind = currentToken().kind;
             if (tokenKind !== SyntaxKind.CloseParenToken &&
                 tokenKind !== SyntaxKind.EndOfFileToken) {
-                return parseExpression(/*allowIn:*/ true);
+                return allowInAnd(parseExpression);
             }
 
             return undefined;
@@ -1797,9 +1843,12 @@ module TypeScript.Parser {
         }
 
         function parseSwitchExpression(openParenToken: ISyntaxToken) {
+            // SwitchStatement[Yield, Return] :
+            //      switch (Expression[In, ?Yield] ) CaseBlock[?Yield, ?Return]
+
             return openParenToken.fullWidth() === 0 && currentToken().kind === SyntaxKind.OpenBraceToken
                 ? eatIdentifierToken()
-                : parseExpression(/*allowIn:*/ true);
+                : allowInAnd(parseExpression);
         }
 
         function parseSwitchStatement(switchKeyword: ISyntaxToken) {
@@ -1849,10 +1898,12 @@ module TypeScript.Parser {
 
         function parseCaseSwitchClause(caseKeyword: ISyntaxToken): CaseSwitchClauseSyntax {
             // Debug.assert(isCaseSwitchClause());
+            // CaseClause[Yield, Return] :
+            //      case Expression[In, ?Yield] : StatementList[?Yield, ?Return]opt
 
-            return new CaseSwitchClauseSyntax(parseNodeData, 
+            return new CaseSwitchClauseSyntax(parseNodeData,
                 consumeToken(caseKeyword),
-                parseExpression(/*allowIn:*/ true), 
+                allowInAnd(parseExpression),
                 eatToken(SyntaxKind.ColonToken), 
                 parseSyntaxList<IStatementSyntax>(ListParsingState.SwitchClause_Statements));
         }
@@ -1867,12 +1918,15 @@ module TypeScript.Parser {
         }
 
         function parseThrowStatementExpression(): IExpressionSyntax {
+            // ThrowStatement[Yield] :
+            //      throw [no LineTerminator here]Expression[In, ?Yield];
+
             // Because of automatic semicolon insertion, we need to report error if this 
             // throw could be terminated with a semicolon.  Note: we can't call 'parseExpression'
             // directly as that might consume an expression on the following line.  
             return canEatExplicitOrAutomaticSemicolon(/*allowWithoutNewline:*/ false)
                 ? createMissingToken(SyntaxKind.IdentifierName, undefined)
-                : parseExpression(/*allowIn:*/ true);
+                : allowInAnd(parseExpression);
         }
 
         function parseThrowStatement(throwKeyword: ISyntaxToken): ThrowStatementSyntax {
@@ -1881,7 +1935,10 @@ module TypeScript.Parser {
         }
 
         function tryParseReturnStatementExpression(): IExpressionSyntax {
-            return !canEatExplicitOrAutomaticSemicolon(/*allowWithoutNewline:*/ false) ? parseExpression(/*allowIn:*/ true) : undefined;
+            // ReturnStatement[Yield] :
+            //      return [no LineTerminator here]Expression[In, ?Yield];
+
+            return !canEatExplicitOrAutomaticSemicolon(/*allowWithoutNewline:*/ false) ? allowInAnd(parseExpression) : undefined;
         }
 
         function parseReturnStatement(returnKeyword: ISyntaxToken): ReturnStatementSyntax {
@@ -1903,11 +1960,14 @@ module TypeScript.Parser {
         function tryParseAssignmentOrOmittedExpression(): IExpressionSyntax {
             // Debug.assert(isAssignmentOrOmittedExpression());
 
+            // ElementList[Yield] :
+            //      Elisionopt AssignmentExpression[In, ?Yield]
+
             if (currentToken().kind === SyntaxKind.CommaToken) {
                 return new OmittedExpressionSyntax(parseNodeData);
             }
 
-            return tryParseAssignmentExpressionOrHigher(/*force:*/ false, /*allowIn:*/ true);
+            return allowInAnd(tryParseAssignmentExpressionOrHigher_NoForce);
         }
 
         function isExpression(currentToken: ISyntaxToken): boolean {
@@ -1982,13 +2042,25 @@ module TypeScript.Parser {
         }
 
         function parseExpressionStatement(): ExpressionStatementSyntax {
-            return new ExpressionStatementSyntax(parseNodeData, parseExpression(/*allowIn:*/ true), eatExplicitOrAutomaticSemicolon(/*allowWithoutNewline:*/ false));
+            // ExpressionStatement[Yield] :
+            //      [lookahead not-in {{, function, class, let [ }] Expression[In, ?Yield];
+
+            return new ExpressionStatementSyntax(parseNodeData,
+                allowInAnd(parseExpression),
+                eatExplicitOrAutomaticSemicolon(/*allowWithoutNewline:*/ false));
         }
 
         function parseIfStatement(ifKeyword: ISyntaxToken): IfStatementSyntax {
+            // IfStatement[Yield, Return] :
+            //   if (Expression[In, ?Yield]) Statement[?Yield, ?Return] else Statement[?Yield, ?Return]
+            //   if (Expression[In, ?Yield]) Statement[?Yield, ?Return]
+
             return new IfStatementSyntax(parseNodeData,
-                consumeToken(ifKeyword), eatToken(SyntaxKind.OpenParenToken), parseExpression(/*allowIn:*/ true),
-                eatToken(SyntaxKind.CloseParenToken), parseStatement(/*inErrorRecovery:*/ false), parseOptionalElseClause());
+                consumeToken(ifKeyword),
+                eatToken(SyntaxKind.OpenParenToken),
+                allowInAnd(parseExpression),
+                eatToken(SyntaxKind.CloseParenToken),
+                parseStatement(/*inErrorRecovery:*/ false), parseOptionalElseClause());
         }
 
         function parseOptionalElseClause(): ElseClauseSyntax {
@@ -2004,20 +2076,19 @@ module TypeScript.Parser {
         }
 
         function parseVariableStatement(): VariableStatementSyntax {
+            // VariableStatement[Yield] :
+            //      var VariableDeclarationList[In, ?Yield];
+
             return new VariableStatementSyntax(parseNodeData,
-                parseModifiers(), parseVariableDeclaration(/*allowIn:*/ true), eatExplicitOrAutomaticSemicolon(/*allowWithoutNewline:*/ false));
+                parseModifiers(), allowInAnd(parseVariableDeclaration), eatExplicitOrAutomaticSemicolon(/*allowWithoutNewline:*/ false));
         }
 
-        function parseVariableDeclaration(allowIn: boolean): VariableDeclarationSyntax {
+        function parseVariableDeclaration(): VariableDeclarationSyntax {
             // Debug.assert(currentToken().kind === SyntaxKind.VarKeyword);
-
-            var listParsingState = allowIn
-                ? ListParsingState.VariableDeclaration_VariableDeclarators_AllowIn
-                : ListParsingState.VariableDeclaration_VariableDeclarators_DisallowIn;
 
             return new VariableDeclarationSyntax(parseNodeData,
                 eatToken(SyntaxKind.VarKeyword),
-                parseSeparatedSyntaxList<VariableDeclaratorSyntax>(listParsingState));
+                parseSeparatedSyntaxList<VariableDeclaratorSyntax>(ListParsingState.VariableDeclaration_VariableDeclarators));
         }
 
         function isVariableDeclarator(): boolean {
@@ -2052,13 +2123,7 @@ module TypeScript.Parser {
             return variableDeclarator.equalsValueClause === undefined;
         }
 
-        function tryParseVariableDeclarator(allowIn: boolean): VariableDeclaratorSyntax {
-            // TODO(cyrusn): What if the 'allowIn' context has changed between when we last parsed 
-            // and now?  We could end up with an incorrect tree.  For example, say we had in the old 
-            // tree "var i = a in b".  Then, in the new tree the declarator portion moved into:
-            // "for (var i = a in b".  We would not want to reuse the declarator as the "in b" portion 
-            // would need to be consumed by the for declaration instead.  Need to see if it is possible
-            // to hit this case.
+        function tryParseVariableDeclarator(): VariableDeclaratorSyntax {
             var node = currentNode();
             if (canReuseVariableDeclaratorNode(node)) {
                 consumeNode(node);
@@ -2077,7 +2142,7 @@ module TypeScript.Parser {
                 typeAnnotation = parseOptionalTypeAnnotation(/*allowStringLiteral:*/ false);
 
                 if (isEqualsValueClause(/*inParameter*/ false)) {
-                    equalsValueClause = parseEqualsValueClause(allowIn);
+                    equalsValueClause = parseEqualsValueClause();
                 }
             }
 
@@ -2121,17 +2186,20 @@ module TypeScript.Parser {
             return false;
         }
 
-        function parseEqualsValueClause(allowIn: boolean): EqualsValueClauseSyntax {
+        function parseEqualsValueClause(): EqualsValueClauseSyntax {
+            // Initializer[In, Yield] :
+            //     = AssignmentExpression[?In, ?Yield]
+
             return new EqualsValueClauseSyntax(parseNodeData,
-                eatToken(SyntaxKind.EqualsToken), tryParseAssignmentExpressionOrHigher(/*force:*/ true, allowIn));
+                eatToken(SyntaxKind.EqualsToken), tryParseAssignmentExpressionOrHigher(/*force:*/ true));
         }
 
-        function parseExpression(allowIn: boolean): IExpressionSyntax {
+        function parseExpression(): IExpressionSyntax {
             // Expression[in]:
             //      AssignmentExpression[in] 
             //      Expression[in] , AssignmentExpression[in]
 
-            var leftOperand = tryParseAssignmentExpressionOrHigher(/*force:*/ true, allowIn);
+            var leftOperand = tryParseAssignmentExpressionOrHigher(/*force:*/ true);
             while (true) {
                 var _currentToken = currentToken();
                 if (_currentToken.kind !== SyntaxKind.CommaToken) {
@@ -2139,17 +2207,25 @@ module TypeScript.Parser {
                 }
 
                 leftOperand = new BinaryExpressionSyntax(parseNodeData, leftOperand, consumeToken(_currentToken), 
-                    tryParseAssignmentExpressionOrHigher(/*force:*/ true, allowIn));
+                    tryParseAssignmentExpressionOrHigher(/*force:*/ true));
             }
 
             return leftOperand;
+        }
+
+        function tryParseAssignmentExpressionOrHigher_NoForce(): IExpressionSyntax {
+            return tryParseAssignmentExpressionOrHigher(/*force:*/ false);
+        }
+
+        function tryParseAssignmentExpressionOrHigher_Force(): IExpressionSyntax {
+            return tryParseAssignmentExpressionOrHigher(/*force:*/ true);
         }
 
         // Called when you need to parse an expression, but you do not want to allow 'CommaExpressions'.
         // i.e. if you have "var a = 1, b = 2" then when we parse '1' we want to parse with higher 
         // precedence than 'comma'.  Otherwise we'll get: "var a = (1, (b = 2))", instead of
         // "var a = (1), b = (2)");
-        function tryParseAssignmentExpressionOrHigher(force: boolean, allowIn: boolean): IExpressionSyntax {
+        function tryParseAssignmentExpressionOrHigher(force: boolean): IExpressionSyntax {
             // Augmented by TypeScript:
             //
             //  AssignmentExpression[in]:
@@ -2190,7 +2266,7 @@ module TypeScript.Parser {
             // Otherwise, we try to parse out the conditional expression bit.  We want to allow any 
             // binary expression here, so we pass in the 'lowest' precedence here so that it matches
             // and consumes anything.
-            var leftOperand = tryParseBinaryExpressionOrHigher(_currentToken, force, BinaryExpressionPrecedence.Lowest, allowIn);
+            var leftOperand = tryParseBinaryExpressionOrHigher(_currentToken, force, BinaryExpressionPrecedence.Lowest);
             if (leftOperand === undefined) {
                 return undefined;
             }
@@ -2203,12 +2279,12 @@ module TypeScript.Parser {
                 // Check for recursive assignment expressions.
                 if (SyntaxFacts.isAssignmentOperatorToken(operatorToken.kind)) {
                     return new BinaryExpressionSyntax(parseNodeData, leftOperand, consumeToken(operatorToken), 
-                        tryParseAssignmentExpressionOrHigher(/*force:*/ true, allowIn));
+                        tryParseAssignmentExpressionOrHigher(/*force:*/ true));
                 }
             }
 
             // It wasn't an assignment or a lambda.  This is a conditional expression:
-            return parseConditionalExpressionRest(allowIn, leftOperand);
+            return parseConditionalExpressionRest(leftOperand);
         }
 
         function tryParseAnyArrowFunctionExpression(_currentToken: ISyntaxToken): IExpressionSyntax {
@@ -2237,7 +2313,7 @@ module TypeScript.Parser {
             }
         }
 
-        function tryParseBinaryExpressionOrHigher(_currentToken: ISyntaxToken, force: boolean, precedence: BinaryExpressionPrecedence, allowIn: boolean): IExpressionSyntax {
+        function tryParseBinaryExpressionOrHigher(_currentToken: ISyntaxToken, force: boolean, precedence: BinaryExpressionPrecedence): IExpressionSyntax {
             // The binary expressions are incredibly left recursive in their definitions. We 
             // clearly can't implement that through recursion.  So, instead, we first bottom out 
             // of all the recursion by jumping to this production and consuming a UnaryExpression 
@@ -2251,10 +2327,10 @@ module TypeScript.Parser {
             }
 
             // We then pop up the stack consuming the other side of the binary exprssion if it exists.
-            return parseBinaryExpressionRest(precedence, allowIn, leftOperand);
+            return parseBinaryExpressionRest(precedence, leftOperand);
         }
 
-        function parseConditionalExpressionRest(allowIn: boolean, leftOperand: IExpressionSyntax): IExpressionSyntax {
+        function parseConditionalExpressionRest(leftOperand: IExpressionSyntax): IExpressionSyntax {
             // Note: we are passed in an expression which was produced from parseBinaryExpressionOrHigher.
 
             var _currentToken = currentToken();
@@ -2268,11 +2344,11 @@ module TypeScript.Parser {
             // allowed in the 'true' part of a conditional expression.
 
             return new ConditionalExpressionSyntax(parseNodeData,
-                leftOperand, consumeToken(_currentToken), tryParseAssignmentExpressionOrHigher(/*force:*/ true, /*allowIn:*/ true),
-                eatToken(SyntaxKind.ColonToken), tryParseAssignmentExpressionOrHigher(/*force:*/ true, allowIn));
+                leftOperand, consumeToken(_currentToken), allowInAnd(tryParseAssignmentExpressionOrHigher_Force),
+                eatToken(SyntaxKind.ColonToken), tryParseAssignmentExpressionOrHigher(/*force:*/ true));
         }
 
-        function parseBinaryExpressionRest(precedence: BinaryExpressionPrecedence, allowIn: boolean, leftOperand: IExpressionSyntax): IExpressionSyntax {
+        function parseBinaryExpressionRest(precedence: BinaryExpressionPrecedence, leftOperand: IExpressionSyntax): IExpressionSyntax {
             while (true) {
                 // We either have a binary operator here, or we're finished.  We call 
                 // currentOperatorToken versus currentToken here so that we merge token sequences
@@ -2291,7 +2367,7 @@ module TypeScript.Parser {
                 }
 
                 // also, if it's the 'in' operator, only allow if our caller allows it.
-                if (tokenKind === SyntaxKind.InKeyword && !allowIn) {
+                if (tokenKind === SyntaxKind.InKeyword && disallowIn) {
                     break;
                 }
 
@@ -2309,7 +2385,7 @@ module TypeScript.Parser {
                 // Now skip the operator token we're on.
 
                 leftOperand = new BinaryExpressionSyntax(parseNodeData, leftOperand, consumeToken(operatorToken), 
-                    tryParseBinaryExpressionOrHigher(currentToken(), /*force:*/ true, newPrecedence, allowIn));
+                    tryParseBinaryExpressionOrHigher(currentToken(), /*force:*/ true, newPrecedence));
             }
 
             return leftOperand;
@@ -2608,18 +2684,23 @@ module TypeScript.Parser {
         }
 
         function tryParseArgumentListExpression(): IExpressionSyntax {
+            // ArgumentList[Yield] :
+            //      AssignmentExpression[In, ?Yield]
+
             // Generally while parsing lists, we don't want to 'force' the parser to parse
-            // the item.  That way, if the expected item isn't htere, we can bail out and
+            // the item.  That way, if the expected item isn't there, we can bail out and
             // move to a higher stage of list parsing.  However, it's extremely common to 
             // see something like "Foo(, a".  in this case, even though there isn't an expression
             // after the open paren, we still want to force parsing an expression (which will
             // cause a missing identiifer to be created), so that we will then consume the
             // comma and the following list items).
             var force = currentToken().kind === SyntaxKind.CommaToken;
-            return tryParseAssignmentExpressionOrHigher(force, /*allowIn:*/ true);
+            return allowInAnd(force ? tryParseAssignmentExpressionOrHigher_Force : tryParseAssignmentExpressionOrHigher_NoForce);
         }
 
         function parseElementAccessArgumentExpression(openBracketToken: ISyntaxToken, inObjectCreation: boolean) {
+            // MemberExpression[?Yield] [ Expression[In, ?Yield] ]
+
             // It's not uncommon for a user to write: "new Type[]".  Check for that common pattern
             // and report a better error message.
             if (inObjectCreation && currentToken().kind === SyntaxKind.CloseBracketToken) {
@@ -2632,7 +2713,7 @@ module TypeScript.Parser {
                 return Syntax.emptyToken(SyntaxKind.IdentifierName);
             }
             else {
-                return parseExpression(/*allowIn:*/ true);
+                return allowInAnd(parseExpression);
             }
         }
 
@@ -2773,7 +2854,12 @@ module TypeScript.Parser {
         }
 
         function parseTemplateClause(): TemplateClauseSyntax {
-            var expression = parseExpression(/*allowIn:*/ true);
+            // TemplateLiteral[Yield] : See 12.2.8
+            // NoSubstitutionTemplate
+            // TemplateHead Expression[In, ?Yield]
+            // [Lexical goal InputElementTemplateTail] TemplateSpans[?Yield]
+
+            var expression = allowInAnd(parseExpression);
             var token = currentToken();
 
             if (token.kind === SyntaxKind.CloseBraceToken) {
@@ -2796,8 +2882,12 @@ module TypeScript.Parser {
         }
 
         function parseParenthesizedExpression(openParenToken: ISyntaxToken): ParenthesizedExpressionSyntax {
+            // ( Expression[In, ?Yield] )
+
             return new ParenthesizedExpressionSyntax(parseNodeData,
-                consumeToken(openParenToken), parseExpression(/*allowIn:*/ true), eatToken(SyntaxKind.CloseParenToken));
+                consumeToken(openParenToken),
+                allowInAnd(parseExpression),
+                eatToken(SyntaxKind.CloseParenToken));
         }
 
         function tryParseParenthesizedArrowFunctionExpression(): ParenthesizedArrowFunctionExpressionSyntax {
@@ -2856,41 +2946,34 @@ module TypeScript.Parser {
         }
 
         function parseArrowFunctionBody(): BlockSyntax | IExpressionSyntax {
-            var block = tryParseArrowFunctionBlock();
-            if (block !== undefined) {
-                return block;
-            }
+            // ConciseBody[In] :
+            //      [lookahead not in {] AssignmentExpression[?In]
+            //      { FunctionBody }
 
-            return tryParseAssignmentExpressionOrHigher(/*force:*/ true, /*allowIn:*/ true);
-        }
-
-        function tryParseArrowFunctionBlock(): BlockSyntax {
             if (isBlock()) {
                 return parseBlock(/*parseStatementsEvenWithNoOpenBrace:*/ false, /*checkForStrictMode:*/ false);
             }
-            else {
-                // We didn't have a block.  However, we may be in an error situation.  For example,
-                // if the user wrote:
-                //
-                //  a => 
-                //      var v = 0;
-                //  }
-                //
-                // (i.e. they're missing the open brace).  See if that's the case so we can try to 
-                // recover better.  If we don't do this, then the next close curly we see may end
-                // up preemptively closing the containing construct.
-                var _modifierCount = modifierCount();
-                if (isStatement(_modifierCount, /*inErrorRecovery:*/ false) &&
-                    !isExpressionStatement(currentToken()) &&
-                    !isFunctionDeclaration(_modifierCount)) {
-                    // We've seen a statement (and it isn't an expressionStatement like 'foo()'), 
-                    // so treat this like a block with a missing open brace.
-                    return parseBlock(/*parseStatementsEvenWithNoOpenBrace:*/ true, /*checkForStrictMode:*/ false);
-                }
-                else {
-                    return undefined;
-                }
+
+            // We didn't have a block.  However, we may be in an error situation.  For example,
+            // if the user wrote:
+            //
+            //  a => 
+            //      var v = 0;
+            //  }
+            //
+            // (i.e. they're missing the open brace).  See if that's the case so we can try to 
+            // recover better.  If we don't do this, then the next close curly we see may end
+            // up preemptively closing the containing construct.
+            var _modifierCount = modifierCount();
+            if (isStatement(_modifierCount, /*inErrorRecovery:*/ false) &&
+                !isExpressionStatement(currentToken()) &&
+                !isFunctionDeclaration(_modifierCount)) {
+                // We've seen a statement (and it isn't an expressionStatement like 'foo()'), 
+                // so treat this like a block with a missing open brace.
+                return parseBlock(/*parseStatementsEvenWithNoOpenBrace:*/ true, /*checkForStrictMode:*/ false);
             }
+
+            return tryParseAssignmentExpressionOrHigher(/*force:*/ true);
         }
 
         function isSimpleArrowFunctionExpression(_currentToken: ISyntaxToken): boolean {
@@ -3126,6 +3209,8 @@ module TypeScript.Parser {
                     return parseFunctionPropertyAssignment(propertyName);
                 }
                 else {
+                    // PropertyName[?Yield] : AssignmentExpression[In, ?Yield]
+
                     // If we didn't have an identifier, then we must have gotten a keyword or a
                     // literal.  Neither of these are allowed in a shorthand property, so this must
                     // be a simple property assignment.
@@ -3133,7 +3218,7 @@ module TypeScript.Parser {
                     // Also, if we have an identifier and it is followed by a colon then this is 
                     // definitely a simple property assignment.
                     return new SimplePropertyAssignmentSyntax(parseNodeData,
-                        propertyName, eatToken(SyntaxKind.ColonToken), tryParseAssignmentExpressionOrHigher(/*force:*/ true, /*allowIn:*/ true));
+                        propertyName, eatToken(SyntaxKind.ColonToken), allowInAnd(tryParseAssignmentExpressionOrHigher_Force));
                 }
             }
 
@@ -3201,8 +3286,13 @@ module TypeScript.Parser {
         }
 
         function parseComputedPropertyName(openBracketToken: ISyntaxToken): ComputedPropertyNameSyntax {
+            // ComputedPropertyName[Yield] :
+            //      [AssignmentExpression[In, ?Yield]]
+
             return new ComputedPropertyNameSyntax(parseNodeData,
-                consumeToken(openBracketToken), tryParseAssignmentExpressionOrHigher(/*force:*/ true, /*allowIn:*/ true), eatToken(SyntaxKind.CloseBracketToken));
+                consumeToken(openBracketToken),
+                allowInAnd(tryParseAssignmentExpressionOrHigher_Force),
+                eatToken(SyntaxKind.CloseBracketToken));
         }
 
         function parseFunctionPropertyAssignment(propertyName: IPropertyNameSyntax): FunctionPropertyAssignmentSyntax {
@@ -3224,7 +3314,7 @@ module TypeScript.Parser {
             var statements: IStatementSyntax[];
 
             if (parseBlockEvenWithNoOpenBrace || openBraceToken.fullWidth() > 0) {
-                var savedIsInStrictMode = isInStrictMode;
+                var savedIsInStrictMode = strictMode;
                 
                 var processItems = checkForStrictMode ? updateStrictModeState : undefined;
                 var statements = parseSyntaxList<IStatementSyntax>(ListParsingState.Block_Statements, processItems);
@@ -3606,7 +3696,7 @@ module TypeScript.Parser {
 
             var equalsValueClause: EqualsValueClauseSyntax = undefined;
             if (isEqualsValueClause(/*inParameter*/ true)) {
-                equalsValueClause = parseEqualsValueClause(/*allowIn:*/ true);
+                equalsValueClause = parseEqualsValueClause();
             }
 
             return new ParameterSyntax(parseNodeData, dotDotDotToken, modifiers, identifier, questionToken, typeAnnotation, equalsValueClause);
@@ -3865,8 +3955,7 @@ module TypeScript.Parser {
                 case ListParsingState.ObjectType_TypeMembers:                               return isExpectedObjectType_TypeMembersTerminator();
                 case ListParsingState.ClassOrInterfaceDeclaration_HeritageClauses:          return isExpectedClassOrInterfaceDeclaration_HeritageClausesTerminator();
                 case ListParsingState.HeritageClause_TypeNameList:                          return isExpectedHeritageClause_TypeNameListTerminator();
-                case ListParsingState.VariableDeclaration_VariableDeclarators_AllowIn:      return isExpectedVariableDeclaration_VariableDeclarators_AllowInTerminator();
-                case ListParsingState.VariableDeclaration_VariableDeclarators_DisallowIn:   return isExpectedVariableDeclaration_VariableDeclarators_DisallowInTerminator();
+                case ListParsingState.VariableDeclaration_VariableDeclarators:              return isExpectedVariableDeclaration_VariableDeclaratorsTerminator();
                 case ListParsingState.ArgumentList_AssignmentExpressions:                   return isExpectedArgumentList_AssignmentExpressionsTerminator();
                 case ListParsingState.ObjectLiteralExpression_PropertyAssignments:          return isExpectedObjectLiteralExpression_PropertyAssignmentsTerminator();
                 case ListParsingState.ArrayLiteralExpression_AssignmentExpressions:         return isExpectedLiteralExpression_AssignmentExpressionsTerminator();
@@ -3986,35 +4075,36 @@ module TypeScript.Parser {
             return false;
         }
 
-        function isExpectedVariableDeclaration_VariableDeclarators_DisallowInTerminator(): boolean {
-            // This is the case when we're parsing variable declarations in a for/for-in statement.
-            var tokenKind = currentToken().kind;
+        function isExpectedVariableDeclaration_VariableDeclaratorsTerminator(): boolean {
+            if (disallowIn) {
+                // This is the case when we're parsing variable declarations in a for/for-in statement.
+                var tokenKind = currentToken().kind;
 
-            if (tokenKind === SyntaxKind.SemicolonToken ||
-                tokenKind === SyntaxKind.CloseParenToken) {
-                return true;
+                if (tokenKind === SyntaxKind.SemicolonToken ||
+                    tokenKind === SyntaxKind.CloseParenToken) {
+                    return true;
+                }
+
+                if (tokenKind === SyntaxKind.InKeyword) {
+                    return true;
+                }
+
+                return false;
             }
+            else {
+                //// This is the case when we're parsing variable declarations in a variable statement.
 
-            if (tokenKind === SyntaxKind.InKeyword) {
-                return true;
+                // ERROR RECOVERY TWEAK:
+                // For better error recovery, if we see a => then we just stop immediately.  We've got an
+                // arrow function here and it's going to be very unlikely that we'll resynchronize and get
+                // another variable declaration.
+                if (currentToken().kind === SyntaxKind.EqualsGreaterThanToken) {
+                    return true;
+                }
+
+                // We're done when we can eat a semicolon.
+                return canEatExplicitOrAutomaticSemicolon(/*allowWithoutNewline:*/ false);
             }
-
-            return false;
-        }
-
-        function isExpectedVariableDeclaration_VariableDeclarators_AllowInTerminator(): boolean {
-            //// This is the case when we're parsing variable declarations in a variable statement.
-
-            // ERROR RECOVERY TWEAK:
-            // For better error recovery, if we see a => then we just stop immediately.  We've got an
-            // arrow function here and it's going to be very unlikely that we'll resynchronize and get
-            // another variable declaration.
-            if (currentToken().kind === SyntaxKind.EqualsGreaterThanToken) {
-                return true;
-            }
-
-            // We're done when we can eat a semicolon.
-            return canEatExplicitOrAutomaticSemicolon(/*allowWithoutNewline:*/ false);
         }
 
         function isExpectedClassOrInterfaceDeclaration_HeritageClausesTerminator(): boolean {
@@ -4085,22 +4175,21 @@ module TypeScript.Parser {
                 // used so we can abort out of the try block if we see a 'catch' or 'finally'
                 // keyword.  There are no additional list items that they add, so we just
                 // return 'false' here.
-                case ListParsingState.TryBlock_Statements:                                  return false;
-                case ListParsingState.CatchBlock_Statements:                                return false;
-                case ListParsingState.EnumDeclaration_EnumElements:                         return isEnumElement(inErrorRecovery);
-                case ListParsingState.ObjectType_TypeMembers:                               return isTypeMember(inErrorRecovery);
-                case ListParsingState.ClassOrInterfaceDeclaration_HeritageClauses:          return isHeritageClause();
-                case ListParsingState.HeritageClause_TypeNameList:                          return isHeritageClauseTypeName();
-                case ListParsingState.VariableDeclaration_VariableDeclarators_AllowIn:      return isVariableDeclarator();
-                case ListParsingState.VariableDeclaration_VariableDeclarators_DisallowIn:   return isVariableDeclarator();
-                case ListParsingState.ArgumentList_AssignmentExpressions:                   return isExpectedArgumentList_AssignmentExpression();
-                case ListParsingState.ObjectLiteralExpression_PropertyAssignments:          return isPropertyAssignment(inErrorRecovery);
-                case ListParsingState.ArrayLiteralExpression_AssignmentExpressions:         return isAssignmentOrOmittedExpression();
-                case ListParsingState.ParameterList_Parameters:                             return isParameter();
-                case ListParsingState.IndexSignature_Parameters:                            return isParameter();
-                case ListParsingState.TypeArgumentList_Types:                               return isType();
-                case ListParsingState.TypeParameterList_TypeParameters:                     return isTypeParameter();
-                case ListParsingState.TupleType_Types:                                      return isType();
+                case ListParsingState.TryBlock_Statements:                          return false;
+                case ListParsingState.CatchBlock_Statements:                        return false;
+                case ListParsingState.EnumDeclaration_EnumElements:                 return isEnumElement(inErrorRecovery);
+                case ListParsingState.ObjectType_TypeMembers:                       return isTypeMember(inErrorRecovery);
+                case ListParsingState.ClassOrInterfaceDeclaration_HeritageClauses:  return isHeritageClause();
+                case ListParsingState.HeritageClause_TypeNameList:                  return isHeritageClauseTypeName();
+                case ListParsingState.VariableDeclaration_VariableDeclarators:      return isVariableDeclarator();
+                case ListParsingState.ArgumentList_AssignmentExpressions:           return isExpectedArgumentList_AssignmentExpression();
+                case ListParsingState.ObjectLiteralExpression_PropertyAssignments:  return isPropertyAssignment(inErrorRecovery);
+                case ListParsingState.ArrayLiteralExpression_AssignmentExpressions: return isAssignmentOrOmittedExpression();
+                case ListParsingState.ParameterList_Parameters:                     return isParameter();
+                case ListParsingState.IndexSignature_Parameters:                    return isParameter();
+                case ListParsingState.TypeArgumentList_Types:                       return isType();
+                case ListParsingState.TypeParameterList_TypeParameters:             return isTypeParameter();
+                case ListParsingState.TupleType_Types:                              return isType();
                 default: throw Errors.invalidOperation();
             }
         }
@@ -4123,55 +4212,53 @@ module TypeScript.Parser {
 
         function tryParseExpectedListItemWorker(currentListType: ListParsingState, inErrorRecovery: boolean): ISyntaxNodeOrToken {
             switch (currentListType) {
-                case ListParsingState.SourceUnit_ModuleElements:                            return tryParseModuleElement(inErrorRecovery);
-                case ListParsingState.ClassDeclaration_ClassElements:                       return tryParseClassElement(inErrorRecovery);
-                case ListParsingState.ModuleDeclaration_ModuleElements:                     return tryParseModuleElement(inErrorRecovery);
-                case ListParsingState.SwitchStatement_SwitchClauses:                        return tryParseSwitchClause();
-                case ListParsingState.SwitchClause_Statements:                              return tryParseStatement(inErrorRecovery);
-                case ListParsingState.Block_Statements:                                     return tryParseStatement(inErrorRecovery);
-                case ListParsingState.TryBlock_Statements:                                  return tryParseStatement(inErrorRecovery);
-                case ListParsingState.CatchBlock_Statements:                                return tryParseStatement(inErrorRecovery);
-                case ListParsingState.EnumDeclaration_EnumElements:                         return tryParseEnumElement(inErrorRecovery);
-                case ListParsingState.ObjectType_TypeMembers:                               return tryParseTypeMember(inErrorRecovery);
-                case ListParsingState.ClassOrInterfaceDeclaration_HeritageClauses:          return tryParseHeritageClause();
-                case ListParsingState.HeritageClause_TypeNameList:                          return tryParseHeritageClauseTypeName();
-                case ListParsingState.VariableDeclaration_VariableDeclarators_AllowIn:      return tryParseVariableDeclarator(/*allowIn:*/ true);
-                case ListParsingState.VariableDeclaration_VariableDeclarators_DisallowIn:   return tryParseVariableDeclarator(/*allowIn:*/ false);
-                case ListParsingState.ArgumentList_AssignmentExpressions:                   return tryParseArgumentListExpression();
-                case ListParsingState.ObjectLiteralExpression_PropertyAssignments:          return tryParsePropertyAssignment(inErrorRecovery);
-                case ListParsingState.ArrayLiteralExpression_AssignmentExpressions:         return tryParseAssignmentOrOmittedExpression();
-                case ListParsingState.ParameterList_Parameters:                             return tryParseParameter();
-                case ListParsingState.IndexSignature_Parameters:                            return tryParseParameter();
-                case ListParsingState.TypeArgumentList_Types:                               return tryParseType();
-                case ListParsingState.TypeParameterList_TypeParameters:                     return tryParseTypeParameter();
-                case ListParsingState.TupleType_Types:                                      return tryParseType();
+                case ListParsingState.SourceUnit_ModuleElements:                    return tryParseModuleElement(inErrorRecovery);
+                case ListParsingState.ClassDeclaration_ClassElements:               return tryParseClassElement(inErrorRecovery);
+                case ListParsingState.ModuleDeclaration_ModuleElements:             return tryParseModuleElement(inErrorRecovery);
+                case ListParsingState.SwitchStatement_SwitchClauses:                return tryParseSwitchClause();
+                case ListParsingState.SwitchClause_Statements:                      return tryParseStatement(inErrorRecovery);
+                case ListParsingState.Block_Statements:                             return tryParseStatement(inErrorRecovery);
+                case ListParsingState.TryBlock_Statements:                          return tryParseStatement(inErrorRecovery);
+                case ListParsingState.CatchBlock_Statements:                        return tryParseStatement(inErrorRecovery);
+                case ListParsingState.EnumDeclaration_EnumElements:                 return tryParseEnumElement(inErrorRecovery);
+                case ListParsingState.ObjectType_TypeMembers:                       return tryParseTypeMember(inErrorRecovery);
+                case ListParsingState.ClassOrInterfaceDeclaration_HeritageClauses:  return tryParseHeritageClause();
+                case ListParsingState.HeritageClause_TypeNameList:                  return tryParseHeritageClauseTypeName();
+                case ListParsingState.VariableDeclaration_VariableDeclarators:      return tryParseVariableDeclarator();
+                case ListParsingState.ArgumentList_AssignmentExpressions:           return tryParseArgumentListExpression();
+                case ListParsingState.ObjectLiteralExpression_PropertyAssignments:  return tryParsePropertyAssignment(inErrorRecovery);
+                case ListParsingState.ArrayLiteralExpression_AssignmentExpressions: return tryParseAssignmentOrOmittedExpression();
+                case ListParsingState.ParameterList_Parameters:                     return tryParseParameter();
+                case ListParsingState.IndexSignature_Parameters:                    return tryParseParameter();
+                case ListParsingState.TypeArgumentList_Types:                       return tryParseType();
+                case ListParsingState.TypeParameterList_TypeParameters:             return tryParseTypeParameter();
+                case ListParsingState.TupleType_Types:                              return tryParseType();
                 default: throw Errors.invalidOperation();
             }
         }
 
         function getExpectedListElementType(currentListType: ListParsingState): string {
             switch (currentListType) {
-                case ListParsingState.SourceUnit_ModuleElements:                            return getLocalizedText(DiagnosticCode.module_class_interface_enum_import_or_statement, undefined);
-                case ListParsingState.ClassOrInterfaceDeclaration_HeritageClauses:          return '{';
-                case ListParsingState.ClassDeclaration_ClassElements:                       return getLocalizedText(DiagnosticCode.constructor_function_accessor_or_variable, undefined);
-                case ListParsingState.ModuleDeclaration_ModuleElements:                     return getLocalizedText(DiagnosticCode.module_class_interface_enum_import_or_statement, undefined);
-                case ListParsingState.SwitchStatement_SwitchClauses:                        return getLocalizedText(DiagnosticCode.case_or_default_clause, undefined);
-                case ListParsingState.SwitchClause_Statements:                              return getLocalizedText(DiagnosticCode.statement, undefined);
-                case ListParsingState.Block_Statements:                                     return getLocalizedText(DiagnosticCode.statement, undefined);
-                case ListParsingState.VariableDeclaration_VariableDeclarators_AllowIn:      return getLocalizedText(DiagnosticCode.identifier, undefined);
-                case ListParsingState.VariableDeclaration_VariableDeclarators_DisallowIn:   return getLocalizedText(DiagnosticCode.identifier, undefined);
-                case ListParsingState.EnumDeclaration_EnumElements:                         return getLocalizedText(DiagnosticCode.identifier, undefined);
-                case ListParsingState.ObjectType_TypeMembers:                               return getLocalizedText(DiagnosticCode.call_construct_index_property_or_function_signature, undefined);
-                case ListParsingState.ArgumentList_AssignmentExpressions:                   return getLocalizedText(DiagnosticCode.expression, undefined);
-                case ListParsingState.HeritageClause_TypeNameList:                          return getLocalizedText(DiagnosticCode.type_name, undefined);
-                case ListParsingState.ObjectLiteralExpression_PropertyAssignments:          return getLocalizedText(DiagnosticCode.property_or_accessor, undefined);
-                case ListParsingState.ParameterList_Parameters:                             return getLocalizedText(DiagnosticCode.parameter, undefined);
-                case ListParsingState.IndexSignature_Parameters:                            return getLocalizedText(DiagnosticCode.parameter, undefined);
-                case ListParsingState.TypeArgumentList_Types:                               return getLocalizedText(DiagnosticCode.type, undefined);
-                case ListParsingState.TypeParameterList_TypeParameters:                     return getLocalizedText(DiagnosticCode.type_parameter, undefined);
-                case ListParsingState.TupleType_Types:                                      return getLocalizedText(DiagnosticCode.type, undefined);
-                case ListParsingState.ArrayLiteralExpression_AssignmentExpressions:         return getLocalizedText(DiagnosticCode.expression, undefined);
-                default:                                                                    throw Errors.invalidOperation();
+                case ListParsingState.SourceUnit_ModuleElements:                    return getLocalizedText(DiagnosticCode.module_class_interface_enum_import_or_statement, undefined);
+                case ListParsingState.ClassOrInterfaceDeclaration_HeritageClauses:  return '{';
+                case ListParsingState.ClassDeclaration_ClassElements:               return getLocalizedText(DiagnosticCode.constructor_function_accessor_or_variable, undefined);
+                case ListParsingState.ModuleDeclaration_ModuleElements:             return getLocalizedText(DiagnosticCode.module_class_interface_enum_import_or_statement, undefined);
+                case ListParsingState.SwitchStatement_SwitchClauses:                return getLocalizedText(DiagnosticCode.case_or_default_clause, undefined);
+                case ListParsingState.SwitchClause_Statements:                      return getLocalizedText(DiagnosticCode.statement, undefined);
+                case ListParsingState.Block_Statements:                             return getLocalizedText(DiagnosticCode.statement, undefined);
+                case ListParsingState.VariableDeclaration_VariableDeclarators:      return getLocalizedText(DiagnosticCode.identifier, undefined);
+                case ListParsingState.EnumDeclaration_EnumElements:                 return getLocalizedText(DiagnosticCode.identifier, undefined);
+                case ListParsingState.ObjectType_TypeMembers:                       return getLocalizedText(DiagnosticCode.call_construct_index_property_or_function_signature, undefined);
+                case ListParsingState.ArgumentList_AssignmentExpressions:           return getLocalizedText(DiagnosticCode.expression, undefined);
+                case ListParsingState.HeritageClause_TypeNameList:                  return getLocalizedText(DiagnosticCode.type_name, undefined);
+                case ListParsingState.ObjectLiteralExpression_PropertyAssignments:  return getLocalizedText(DiagnosticCode.property_or_accessor, undefined);
+                case ListParsingState.ParameterList_Parameters:                     return getLocalizedText(DiagnosticCode.parameter, undefined);
+                case ListParsingState.IndexSignature_Parameters:                    return getLocalizedText(DiagnosticCode.parameter, undefined);
+                case ListParsingState.TypeArgumentList_Types:                       return getLocalizedText(DiagnosticCode.type, undefined);
+                case ListParsingState.TypeParameterList_TypeParameters:             return getLocalizedText(DiagnosticCode.type_parameter, undefined);
+                case ListParsingState.TupleType_Types:                              return getLocalizedText(DiagnosticCode.type, undefined);
+                case ListParsingState.ArrayLiteralExpression_AssignmentExpressions: return getLocalizedText(DiagnosticCode.expression, undefined);
+                default:                                                            throw Errors.invalidOperation();
             }
         }
 
@@ -4271,32 +4358,34 @@ module TypeScript.Parser {
     // consume the token and add it to our list of 'skipped tokens'.  We will then repeat the 
     // above algorithm until we resynchronize at some point.
     enum ListParsingState {
-        SourceUnit_ModuleElements = 0,
-        ClassDeclaration_ClassElements = 1,
-        ModuleDeclaration_ModuleElements = 2,
-        SwitchStatement_SwitchClauses = 3,
-        SwitchClause_Statements = 4,
-        Block_Statements = 5,
-        TryBlock_Statements = 6,
-        CatchBlock_Statements = 7,
-        EnumDeclaration_EnumElements = 8,
-        ObjectType_TypeMembers = 9,
-        ClassOrInterfaceDeclaration_HeritageClauses = 10,
-        HeritageClause_TypeNameList = 11,
-        VariableDeclaration_VariableDeclarators_AllowIn = 12,
-        VariableDeclaration_VariableDeclarators_DisallowIn = 13,
-        ArgumentList_AssignmentExpressions = 14,
-        ObjectLiteralExpression_PropertyAssignments = 15,
-        ArrayLiteralExpression_AssignmentExpressions = 16,
-        ParameterList_Parameters = 17,
-        IndexSignature_Parameters = 18,
-        TypeArgumentList_Types = 19,
-        TypeParameterList_TypeParameters = 20,
-        TupleType_Types = 21,
+        SourceUnit_ModuleElements,
+        ClassDeclaration_ClassElements,
+        ModuleDeclaration_ModuleElements,
+        SwitchStatement_SwitchClauses,
+        SwitchClause_Statements,
+        Block_Statements,
+        TryBlock_Statements,
+        CatchBlock_Statements,
+        EnumDeclaration_EnumElements,
+        ObjectType_TypeMembers,
+        ClassOrInterfaceDeclaration_HeritageClauses,
+        HeritageClause_TypeNameList,
+        VariableDeclaration_VariableDeclarators,
+        ArgumentList_AssignmentExpressions,
+        ObjectLiteralExpression_PropertyAssignments,
+        ArrayLiteralExpression_AssignmentExpressions,
+        ParameterList_Parameters,
+        IndexSignature_Parameters,
+        TypeArgumentList_Types,
+        TypeParameterList_TypeParameters,
+        TupleType_Types,
 
         FirstListParsingState = SourceUnit_ModuleElements,
         LastListParsingState = TupleType_Types,
     }
+
+    // We use this enum to set bits.  So make sure we have enough bits available.
+    Debug.assert(ListParsingState.LastListParsingState <= 30);
 
     // We keep the parser around as a singleton.  This is because calling createParser is actually
     // expensive in V8 currently.  We then clear it after a parse so that it doesn't  keep state 
