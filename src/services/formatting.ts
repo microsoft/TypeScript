@@ -238,7 +238,8 @@ module ts.formatting {
         }
 
         var precedingToken = findPrecedingToken(enclosingNode.pos, sourceFile);
-        return precedingToken ? precedingToken.end : originalRange.pos;
+        // no preceding token found - start from the beginning of enclosing node
+        return precedingToken ? precedingToken.end : enclosingNode.pos;
     }
 
     function formatSpan(originalRange: TextRange,
