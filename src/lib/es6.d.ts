@@ -553,7 +553,7 @@ interface Map<K, V> {
     get(key: K): V;
     has(key: K): boolean;
     keys(): K[];
-    set(key: K, value: V): Map<K, V>;
+    set(key: K, value?: V): Map<K, V>;
     size: number;
     values(): V[];
     // [Symbol.Iterator]():Iterator<[K,V]>;
