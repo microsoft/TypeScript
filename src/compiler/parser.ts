@@ -40,6 +40,9 @@ module ts {
     }
 
     export function getTokenPosOfNode(node: Node, sourceFile?: SourceFile): number {
+        if (node.pos === node.end) {
+            return node.pos;
+        }
         return skipTrivia((sourceFile || getSourceFileOfNode(node)).text, node.pos);
     }
 
