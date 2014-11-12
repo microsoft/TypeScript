@@ -163,7 +163,36 @@ module TypeScript.Parser {
         // all nodes would need extra state on them to store this info.
         //
         // Note:  'allowIn' and 'allowYield' track 1:1 with the [in] and [yield] concepts in the ES6
-        // grammar specification.  
+        // grammar specification.
+        //
+        // An important thing about these context concepts.  By default they are effectively inherited
+        // while parsing through every grammar production.  i.e. if you don't change them, then when
+        // you parse a sub-production, it will have the same context values as hte parent production.
+        // This is great most of the time.  After all, consider all the 'expression' grammar productions
+        // and how nearly all of them pass along the 'in' and 'yield' context values:
+        //
+        // EqualityExpression[In, Yield] :
+        //      RelationalExpression[?In, ?Yield]
+        //      EqualityExpression[?In, ?Yield] == RelationalExpression[?In, ?Yield]
+        //      EqualityExpression[?In, ?Yield] != RelationalExpression[?In, ?Yield]
+        //      EqualityExpression[?In, ?Yield] === RelationalExpression[?In, ?Yield]
+        //      EqualityExpression[?In, ?Yield] !== RelationalExpression[?In, ?Yield]
+        //
+        // Where you have to be careful is then understanding what the points are in the grammar 
+        // where the values are *not* passed along.  For example:
+        //
+        // PropertyName[Yield,GeneratorParameter] :
+        //      LiteralPropertyName
+        //      [+GeneratorParameter]ComputedPropertyName
+        //      [~GeneratorParameter]ComputedPropertyName[?Yield]
+        //
+        // Here this is saying that if the GeneratorParameter context flag is set, that we should 
+        // explicitly set the 'yield' context flag to false before calling into the ComputedPropertyName
+        // production.  Conversely, if the GeneratorParameter context flag is not set, then we 
+        // should leave the 'yield' context flag alone.
+        //
+        // Getting this all correct is tricky and requires careful reading of the grammar to 
+        // understand when these values should be changed versus when they should be inherited.
         var strictMode: boolean = false;
         var disallowIn: boolean = false;
         var allowYield: boolean = false;
