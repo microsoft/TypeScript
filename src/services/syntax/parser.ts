@@ -1081,14 +1081,14 @@ module TypeScript.Parser {
 
         function parseAccessor(): IAccessorSyntax {
             var modifiers = parseModifiers();
-            var _currenToken = currentToken();
-            var tokenKind = _currenToken.kind;
+            var _currentToken = currentToken();
+            var tokenKind = _currentToken.kind;
 
             if (tokenKind === SyntaxKind.GetKeyword) {
-                return parseGetAccessor(modifiers, _currenToken);
+                return parseGetAccessor(modifiers, _currentToken);
             }
             else if (tokenKind === SyntaxKind.SetKeyword) {
-                return parseSetAccessor(modifiers, _currenToken);
+                return parseSetAccessor(modifiers, _currentToken);
             }
             else {
                 throw Errors.invalidOperation();
@@ -3445,33 +3445,6 @@ module TypeScript.Parser {
                 consumeToken(openBracketToken), 
                 parseSeparatedSyntaxList<IExpressionSyntax>(ListParsingState.ArrayLiteralExpression_AssignmentExpressions),
                 eatToken(SyntaxKind.CloseBracketToken));
-        }
-
-        function tryAddUnexpectedEqualsGreaterThanToken(callSignature: CallSignatureSyntax): boolean {
-            var token0 = currentToken();
-
-            var hasEqualsGreaterThanToken = token0.kind === SyntaxKind.EqualsGreaterThanToken;
-            if (hasEqualsGreaterThanToken) {
-                // We can only do this if the call signature actually contains a final token that we 
-                // could add the => to.
-                var _lastToken = lastToken(callSignature);
-                if (_lastToken && _lastToken.fullWidth() > 0) {
-                    // Previously the language allowed "function f() => expr;" as a shorthand for 
-                    // "function f() { return expr; }.
-                    // 
-                    // Detect if the user is typing this and attempt recovery.
-                    var diagnostic = new Diagnostic(fileName, source.text.lineMap(),
-                        start(token0, source.text), width(token0), DiagnosticCode.Unexpected_token_0_expected, [SyntaxFacts.getText(SyntaxKind.OpenBraceToken)]);
-                    addDiagnostic(diagnostic);
-
-                    // Skip over the =>   It will get attached to whatever comes next.
-                    skipToken(token0);
-                    return true;
-                }
-            }
-
-
-            return false;
         }
 
         function parseStatementBlock(): BlockSyntax {
