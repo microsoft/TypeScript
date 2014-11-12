@@ -1646,20 +1646,22 @@ module ts {
                 return parentType;
             }
             if (pattern.kind === SyntaxKind.ObjectBindingPattern) {
-                var name = (declaration.propertyName || <Identifier>declaration.name).text;
-                var type = getTypeOfPropertyOfType(parentType, name) ||
-                    isNumericName(name) && getIndexTypeOfType(parentType, IndexKind.Number) ||
+                var name = declaration.propertyName || <Identifier>declaration.name;
+                var type = getTypeOfPropertyOfType(parentType, name.text) ||
+                    isNumericName(name.text) && getIndexTypeOfType(parentType, IndexKind.Number) ||
                     getIndexTypeOfType(parentType, IndexKind.String);
+                if (!type) {
+                    error(name, Diagnostics.Type_0_has_no_property_1_and_no_string_index_signature, typeToString(parentType), declarationNameToString(name));
+                }
             }
             else {
                 var index = indexOf(pattern.elements, declaration);
                 var type = getTypeOfPropertyOfType(parentType, "" + index) || getIndexTypeOfType(parentType, IndexKind.Number);
+                if (!type) {
+                    error(declaration, Diagnostics.Type_0_has_no_property_1_and_no_numeric_index_signature, typeToString(parentType), "" + index);
+                }
             }
-            if (!type) {
-                // Error: Type {0} has no property {1}
-                return unknownType;
-            }
-            return type;
+            return type || unknownType;
         }
 
         function getTypeForVariableDeclaration(declaration: VariableDeclaration | PropertyDeclaration): Type {

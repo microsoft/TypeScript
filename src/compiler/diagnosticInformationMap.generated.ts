@@ -274,6 +274,8 @@ module ts {
         Type_argument_candidate_1_is_not_a_valid_type_argument_because_it_is_not_a_supertype_of_candidate_0: { code: 2455, category: DiagnosticCategory.Error, key: "Type argument candidate '{1}' is not a valid type argument because it is not a supertype of candidate '{0}'." },
         Type_alias_0_circularly_references_itself: { code: 2456, category: DiagnosticCategory.Error, key: "Type alias '{0}' circularly references itself." },
         Type_alias_name_cannot_be_0: { code: 2457, category: DiagnosticCategory.Error, key: "Type alias name cannot be '{0}'" },
+        Type_0_has_no_property_1_and_no_string_index_signature: { code: 2458, category: DiagnosticCategory.Error, key: "Type '{0}' has no property '{1}' and no string index signature." },
+        Type_0_has_no_property_1_and_no_numeric_index_signature: { code: 2459, category: DiagnosticCategory.Error, key: "Type '{0}' has no property '{1}' and no numeric index signature." },
         Import_declaration_0_is_using_private_name_1: { code: 4000, category: DiagnosticCategory.Error, key: "Import declaration '{0}' is using private name '{1}'." },
         Type_parameter_0_of_exported_class_has_or_is_using_name_1_from_private_module_2: { code: 4001, category: DiagnosticCategory.Error, key: "Type parameter '{0}' of exported class has or is using name '{1}' from private module '{2}'." },
         Type_parameter_0_of_exported_class_has_or_is_using_private_name_1: { code: 4002, category: DiagnosticCategory.Error, key: "Type parameter '{0}' of exported class has or is using private name '{1}'." },
