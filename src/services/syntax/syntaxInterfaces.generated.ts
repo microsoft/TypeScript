@@ -640,11 +640,12 @@ module TypeScript {
     export interface SimplePropertyAssignmentConstructor { new (data: number, propertyName: IPropertyNameSyntax, colonToken: ISyntaxToken, expression: IExpressionSyntax): SimplePropertyAssignmentSyntax }
 
     export interface FunctionPropertyAssignmentSyntax extends ISyntaxNode, IPropertyAssignmentSyntax {
+        asterixToken: ISyntaxToken;
         propertyName: IPropertyNameSyntax;
         callSignature: CallSignatureSyntax;
         block: BlockSyntax;
     }
-    export interface FunctionPropertyAssignmentConstructor { new (data: number, propertyName: IPropertyNameSyntax, callSignature: CallSignatureSyntax, block: BlockSyntax): FunctionPropertyAssignmentSyntax }
+    export interface FunctionPropertyAssignmentConstructor { new (data: number, asterixToken: ISyntaxToken, propertyName: IPropertyNameSyntax, callSignature: CallSignatureSyntax, block: BlockSyntax): FunctionPropertyAssignmentSyntax }
 
     export interface ParameterSyntax extends ISyntaxNode {
         dotDotDotToken: ISyntaxToken;

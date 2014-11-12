@@ -1741,22 +1741,25 @@ module TypeScript {
         }
     }
 
-    export var FunctionPropertyAssignmentSyntax: FunctionPropertyAssignmentConstructor = <any>function(data: number, propertyName: IPropertyNameSyntax, callSignature: CallSignatureSyntax, block: BlockSyntax) {
+    export var FunctionPropertyAssignmentSyntax: FunctionPropertyAssignmentConstructor = <any>function(data: number, asterixToken: ISyntaxToken, propertyName: IPropertyNameSyntax, callSignature: CallSignatureSyntax, block: BlockSyntax) {
         if (data) { this.__data = data; }
+        this.asterixToken = asterixToken,
         this.propertyName = propertyName,
         this.callSignature = callSignature,
         this.block = block,
+        asterixToken && (asterixToken.parent = this),
         propertyName.parent = this,
         callSignature.parent = this,
         block.parent = this;
     };
     FunctionPropertyAssignmentSyntax.prototype.kind = SyntaxKind.FunctionPropertyAssignment;
-    FunctionPropertyAssignmentSyntax.prototype.childCount = 3;
+    FunctionPropertyAssignmentSyntax.prototype.childCount = 4;
     FunctionPropertyAssignmentSyntax.prototype.childAt = function(index: number): ISyntaxElement {
         switch (index) {
-            case 0: return this.propertyName;
-            case 1: return this.callSignature;
-            case 2: return this.block;
+            case 0: return this.asterixToken;
+            case 1: return this.propertyName;
+            case 2: return this.callSignature;
+            case 3: return this.block;
         }
     }
 

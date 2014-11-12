@@ -1759,6 +1759,7 @@ var definitions = [
         baseType: 'ISyntaxNode',
         interfaces: ['IPropertyAssignmentSyntax'],
         children: [
+            { name: 'asterixToken', isToken: true, isOptional: true },
             { name: 'propertyName', type: 'IPropertyNameSyntax' },
             { name: 'callSignature', type: 'CallSignatureSyntax' },
             { name: 'block', type: 'BlockSyntax' }

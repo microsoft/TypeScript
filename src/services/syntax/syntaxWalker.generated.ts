@@ -572,6 +572,7 @@ module TypeScript {
         }
 
         public visitFunctionPropertyAssignment(node: FunctionPropertyAssignmentSyntax): void {
+            this.visitOptionalToken(node.asterixToken);
             visitNodeOrToken(this, node.propertyName);
             visitNodeOrToken(this, node.callSignature);
             visitNodeOrToken(this, node.block);

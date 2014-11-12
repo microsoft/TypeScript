@@ -3217,16 +3217,19 @@ module TypeScript.Parser {
                 }
             }
 
-            // All the rest of the property assignments start with property names.  They are:
+            // All the rest of the property assignments start with property names or an asterix token.  They are:
             //      id: e
             //      [e1]: e2
             //      id() { }
             //      [e]() { } 
-            if (isPropertyName(/*peekIndex:*/ 0, inErrorRecovery)) {
+            //      *id() { }
+            //      *[e]() { } 
+            if (_currentToken.kind === SyntaxKind.AsteriskToken || isPropertyName(/*peekIndex:*/ 0, inErrorRecovery)) {
+                var asterixToken = tryEatToken(SyntaxKind.AsteriskToken);
                 var propertyName = parsePropertyName();
 
-                if (isCallSignature(/*peekIndex:*/ 0)) {
-                    return parseFunctionPropertyAssignment(propertyName);
+                if (asterixToken !== undefined || isCallSignature(/*peekIndex:*/ 0)) {
+                    return parseFunctionPropertyAssignment(asterixToken, propertyName);
                 }
                 else {
                     // PropertyName[?Yield] : AssignmentExpression[In, ?Yield]
@@ -3249,6 +3252,7 @@ module TypeScript.Parser {
 
         function isPropertyAssignment(inErrorRecovery: boolean): boolean {
             return isAccessor(modifierCount(), inErrorRecovery) ||
+                   currentToken().kind === SyntaxKind.AsteriskToken ||
                    isPropertyName(/*peekIndex:*/ 0, inErrorRecovery);
         }
 
@@ -3320,8 +3324,9 @@ module TypeScript.Parser {
                 eatToken(SyntaxKind.CloseBracketToken));
         }
 
-        function parseFunctionPropertyAssignment(propertyName: IPropertyNameSyntax): FunctionPropertyAssignmentSyntax {
+        function parseFunctionPropertyAssignment(asterixToken: ISyntaxToken, propertyName: IPropertyNameSyntax): FunctionPropertyAssignmentSyntax {
             return new FunctionPropertyAssignmentSyntax(parseNodeData,
+                asterixToken,
                 propertyName,
                 parseCallSignature(/*requireCompleteTypeParameterList:*/ false),
                 parseFunctionBlock());

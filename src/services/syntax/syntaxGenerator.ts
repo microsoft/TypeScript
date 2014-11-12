@@ -907,6 +907,7 @@ var definitions:ITypeDefinition[] = [
         baseType: 'ISyntaxNode',
         interfaces: ['IPropertyAssignmentSyntax'],
         children: [
+            <any>{ name: 'asterixToken', isToken: true, isOptional: true },
             <any>{ name: 'propertyName', type: 'IPropertyNameSyntax' },
             <any>{ name: 'callSignature', type: 'CallSignatureSyntax' },
             <any>{ name: 'block', type: 'BlockSyntax' }
