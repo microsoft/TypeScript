@@ -122,6 +122,17 @@ module ts {
         return result;
     }
 
+    /**
+     * Returns the last element of an array if non-empty, undefined otherwise.
+     */
+    export function lastOrUndefined<T>(array: T[]): T {
+        if (array.length === 0) {
+            return undefined;
+        }
+
+        return array[array.length - 1];
+    }
+
     export function binarySearch(array: number[], value: number): number {
         var low = 0;
         var high = array.length - 1;

@@ -491,6 +491,7 @@ module ts {
             case SyntaxKind.BinaryExpression:
             case SyntaxKind.ConditionalExpression:
             case SyntaxKind.TemplateExpression:
+            case SyntaxKind.NoSubstitutionTemplateLiteral:
             case SyntaxKind.OmittedExpression:
                 return true;
             case SyntaxKind.QualifiedName:
@@ -503,7 +504,6 @@ module ts {
             // fall through
             case SyntaxKind.NumericLiteral:
             case SyntaxKind.StringLiteral:
-            case SyntaxKind.NoSubstitutionTemplateLiteral:
                 var parent = node.parent;
                 switch (parent.kind) {
                     case SyntaxKind.VariableDeclaration:
@@ -532,6 +532,8 @@ module ts {
                             (<ForInStatement>parent).expression === node;
                     case SyntaxKind.TypeAssertion:
                         return node === (<TypeAssertion>parent).operand;
+                    case SyntaxKind.TemplateSpan:
+                        return node === (<TemplateSpan>parent).expression;
                     default:
                         if (isExpression(parent)) {
                             return true;
@@ -564,7 +566,6 @@ module ts {
         }
         return false;
     }
-
 
     export function isDeclaration(node: Node): boolean {
         switch (node.kind) {
@@ -745,12 +746,67 @@ module ts {
         nodeIsNestedInLabel(label: Identifier, requireIterationStatement: boolean, stopAtFunctionBoundary: boolean): ControlBlockContext;
     }
 
+    export interface ReferencePathMatchResult {
+        fileReference?: FileReference
+        diagnostic?: DiagnosticMessage
+        isNoDefaultLib?: boolean
+    }
+
+    export function getFileReferenceFromReferencePath(comment: string, commentRange: CommentRange): ReferencePathMatchResult {
+        var simpleReferenceRegEx = /^\/\/\/\s*<reference\s+/gim;
+        var isNoDefaultLibRegEx = /^(\/\/\/\s*<reference\s+no-default-lib\s*=\s*)('|")(.+?)\2\s*\/>/gim;
+        if (simpleReferenceRegEx.exec(comment)) {
+            if (isNoDefaultLibRegEx.exec(comment)) {
+                return {
+                    isNoDefaultLib: true
+                }
+            }
+            else {
+                var matchResult = fullTripleSlashReferencePathRegEx.exec(comment);
+                if (matchResult) {
+                    var start = commentRange.pos;
+                    var end = commentRange.end;
+                    var fileRef = {
+                        pos: start,
+                        end: end,
+                        filename: matchResult[3]
+                    };
+                    return {
+                        fileReference: fileRef,
+                        isNoDefaultLib: false
+                    };
+                }
+                else {
+                    return {
+                        diagnostic: Diagnostics.Invalid_reference_directive_syntax,
+                        isNoDefaultLib: false
+                    };
+                }
+            }
+        }
+        return undefined;
+    }
+
     export function isKeyword(token: SyntaxKind): boolean {
         return SyntaxKind.FirstKeyword <= token && token <= SyntaxKind.LastKeyword;
     }
 
     export function isTrivia(token: SyntaxKind) {
         return SyntaxKind.FirstTriviaToken <= token && token <= SyntaxKind.LastTriviaToken;
+    }
+
+    export function isUnterminatedTemplateEnd(node: LiteralExpression) {
+        Debug.assert(node.kind === SyntaxKind.NoSubstitutionTemplateLiteral || node.kind === SyntaxKind.TemplateTail);
+        var sourceText = getSourceFileOfNode(node).text;
+
+        // If we're not at the EOF, we know we must be terminated.
+        if (node.end !== sourceText.length) {
+            return false;
+        }
+
+        // If we didn't end in a backtick, we must still be in the middle of a template.
+        // If we did, make sure that it's not the *initial* backtick.
+        return sourceText.charCodeAt(node.end - 1) !== CharacterCodes.backtick || node.text.length === 0;
     }
 
     export function isModifier(token: SyntaxKind): boolean {
@@ -1102,6 +1158,7 @@ module ts {
         }
 
         function internIdentifier(text: string): string {
+            text = escapeIdentifier(text);
             return hasProperty(identifiers, text) ? identifiers[text] : (identifiers[text] = text);
         }
 
@@ -1112,8 +1169,7 @@ module ts {
             identifierCount++;
             if (isIdentifier) {
                 var node = <Identifier>createNode(SyntaxKind.Identifier);
-                var text = escapeIdentifier(scanner.getTokenValue());
-                node.text = internIdentifier(text);
+                node.text = internIdentifier(scanner.getTokenValue());
                 nextToken();
                 return finishNode(node);
             }
@@ -4168,28 +4224,16 @@ module ts {
             for (var i = 0; i < commentRanges.length; i++) {
                 var range = commentRanges[i];
                 var comment = sourceText.substring(range.pos, range.end);
-                var simpleReferenceRegEx = /^\/\/\/\s*<reference\s+/gim;
-                if (simpleReferenceRegEx.exec(comment)) {
-                    var isNoDefaultLibRegEx = /^(\/\/\/\s*<reference\s+no-default-lib=)('|")(.+?)\2\s*\/>/gim;
-                    if (isNoDefaultLibRegEx.exec(comment)) {
-                        file.hasNoDefaultLib = true;
+                var referencePathMatchResult = getFileReferenceFromReferencePath(comment, range);
+                if (referencePathMatchResult) {
+                    var fileReference = referencePathMatchResult.fileReference;
+                    file.hasNoDefaultLib = referencePathMatchResult.isNoDefaultLib;
+                    var diagnostic = referencePathMatchResult.diagnostic;
+                    if (fileReference) {
+                        referencedFiles.push(fileReference);
                     }
-                    else {
-                        var matchResult = fullTripleSlashReferencePathRegEx.exec(comment);
-                        var start = range.pos;
-                        var end = range.end;
-                        var length = end - start;
-                       
-                        if (!matchResult) {
-                            errorAtPos(start, length, Diagnostics.Invalid_reference_directive_syntax);
-                        }
-                        else {
-                            referencedFiles.push({
-                                pos: start,
-                                end: end,
-                                filename: matchResult[3]
-                            });
-                        }
+                    if (diagnostic) {
+                        errorAtPos(range.pos, range.end - range.pos, diagnostic);
                     }
                 }
                 else {

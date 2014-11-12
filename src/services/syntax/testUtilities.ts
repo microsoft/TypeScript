@@ -69,10 +69,8 @@ module TypeScript {
             token1.fullStart() === token2.fullStart() &&
             TypeScript.fullEnd(token1) === TypeScript.fullEnd(token2) &&
             TypeScript.start(token1, text1) === TypeScript.start(token2, text2) &&
-            TypeScript.end(token1, text1) === TypeScript.end(token2, text2) &&
             token1.text() === token2.text() &&
-            triviaListStructuralEquals(token1.leadingTrivia(text1), token2.leadingTrivia(text2)) &&
-            triviaListStructuralEquals(token1.trailingTrivia(text1), token2.trailingTrivia(text2));
+            triviaListStructuralEquals(token1.leadingTrivia(text1), token2.leadingTrivia(text2));
     }
 
     export function triviaListStructuralEquals(triviaList1: TypeScript.ISyntaxTriviaList, triviaList2: TypeScript.ISyntaxTriviaList): boolean {
@@ -147,10 +145,6 @@ module TypeScript {
         }
 
         if (TypeScript.start(element1) !== TypeScript.start(element2)) {
-            return false;
-        }
-
-        if (TypeScript.end(element1) !== TypeScript.end(element2)) {
             return false;
         }
 
