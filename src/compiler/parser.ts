@@ -1167,6 +1167,7 @@ module ts {
         }
 
         function internIdentifier(text: string): string {
+            text = escapeIdentifier(text);
             return hasProperty(identifiers, text) ? identifiers[text] : (identifiers[text] = text);
         }
 
@@ -1177,8 +1178,7 @@ module ts {
             identifierCount++;
             if (isIdentifier) {
                 var node = <Identifier>createNode(SyntaxKind.Identifier);
-                var text = escapeIdentifier(scanner.getTokenValue());
-                node.text = internIdentifier(text);
+                node.text = internIdentifier(scanner.getTokenValue());
                 nextToken();
                 return finishNode(node);
             }

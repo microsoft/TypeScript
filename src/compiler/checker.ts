@@ -4474,7 +4474,7 @@ module ts {
             if (symbol.flags & SymbolFlags.Import) {
                 // Mark the import as referenced so that we emit it in the final .js file.
                 // exception: identifiers that appear in type queries, const enums, modules that contain only const enums
-                getSymbolLinks(symbol).referenced = !isInTypeQuery(node) && !isConstEnumOrConstEnumOnlyModule(resolveImport(symbol));
+                getSymbolLinks(symbol).referenced = getSymbolLinks(symbol).referenced || (!isInTypeQuery(node) && !isConstEnumOrConstEnumOnlyModule(resolveImport(symbol)));
             }
 
             checkCollisionWithCapturedSuperVariable(node, node);
