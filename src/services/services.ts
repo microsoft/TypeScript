@@ -3383,11 +3383,10 @@ module ts {
             /// Triple slash reference comments
             var comment = forEach(sourceFile.referencedFiles, r => (r.pos <= position && position < r.end) ? r : undefined);
             if (comment) {
-                var targetFilename = isRootedDiskPath(comment.filename) ? comment.filename : combinePaths(getDirectoryPath(filename), comment.filename);
-                targetFilename = normalizePath(targetFilename);
-                if (program.getSourceFile(targetFilename)) {
+                var referenceFile = tryResolveScriptReference(program, sourceFile, comment);
+                if (referenceFile) {
                     return [{
-                        fileName: targetFilename,
+                        fileName: referenceFile.filename,
                         textSpan: TypeScript.TextSpan.fromBounds(0, 0),
                         kind: ScriptElementKind.scriptElement,
                         name: comment.filename,

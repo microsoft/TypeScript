@@ -8,13 +8,13 @@
     "baselineCheck": true,
     "resolvedInputFiles": [
         "lib.d.ts",
-        "../../../src/ts/Manager/FieldManager.ts",
         "../../../typings/tsd.ts",
         "FieldManager.ts"
     ],
     "emittedFiles": [
-        "../../../src/ts/Manager/FieldManager.js",
         "../../../typings/tsd.js",
-        "FieldManager.js"
+        "../../../typings/tsd.d.ts",
+        "FieldManager.js",
+        "FieldManager.d.ts"
     ]
 }

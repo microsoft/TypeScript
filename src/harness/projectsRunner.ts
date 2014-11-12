@@ -274,20 +274,50 @@ class ProjectRunner extends RunnerBase {
         }
 
         function compileCompileDTsFiles(compilerResult: BatchCompileProjectTestCaseResult) {
-            var inputDtsSourceFiles = ts.map(ts.filter(compilerResult.program.getSourceFiles(),
-                sourceFile => Harness.Compiler.isDTS(sourceFile.filename)),
-                sourceFile => {
-                    return { emittedFileName: sourceFile.filename, code: sourceFile.text };
-                });
+            var allInputFiles: { emittedFileName: string; code: string; }[] = [];
+            var compilerOptions = compilerResult.program.getCompilerOptions();
+            var compilerHost = compilerResult.program.getCompilerHost();
+            ts.forEach(compilerResult.program.getSourceFiles(), sourceFile => {
+                if (Harness.Compiler.isDTS(sourceFile.filename)) {
+                    allInputFiles.unshift({ emittedFileName: sourceFile.filename, code: sourceFile.text });
+                }
+                else if (ts.shouldEmitToOwnFile(sourceFile, compilerResult.program.getCompilerOptions())) {
+                    if (compilerOptions.outDir) {
+                        var sourceFilePath = ts.getNormalizedAbsolutePath(sourceFile.filename, compilerHost.getCurrentDirectory());
+                        sourceFilePath = sourceFilePath.replace(compilerResult.program.getCommonSourceDirectory(), "");
+                        var emitOutputFilePathWithoutExtension = ts.removeFileExtension(ts.combinePaths(compilerOptions.outDir, sourceFilePath));
+                    }
+                    else {
+                        var emitOutputFilePathWithoutExtension = ts.removeFileExtension(sourceFile.filename);
+                    }
 
-            var ouputDtsFiles = ts.filter(compilerResult.outputFiles, ouputFile => Harness.Compiler.isDTS(ouputFile.emittedFileName));
-            var allInputFiles = inputDtsSourceFiles.concat(ouputDtsFiles);
+                    var outputDtsFileName = emitOutputFilePathWithoutExtension + ".d.ts";
+                    allInputFiles.unshift(findOutpuDtsFile(outputDtsFileName));
+                }
+                else {
+                    var outputDtsFileName = ts.removeFileExtension(compilerOptions.out) + ".d.ts";
+                    var outputDtsFile = findOutpuDtsFile(outputDtsFileName);
+                    if (!ts.contains(allInputFiles, outputDtsFile)) {
+                        allInputFiles.unshift(outputDtsFile);
+                    }
+                }
+            });
+
+            console.log("inputFiles");
+            ts.forEach(allInputFiles, inputFile => {
+                console.log(inputFile.emittedFileName);
+            });
+
             return compileProjectFiles(compilerResult.moduleKind,getInputFiles, getSourceFileText, writeFile);
 
+            function findOutpuDtsFile(fileName: string) {
+                return ts.forEach(compilerResult.outputFiles, outputFile => outputFile.emittedFileName === fileName ? outputFile : undefined);
+            }
             function getInputFiles() {
                 return ts.map(allInputFiles, outputFile => outputFile.emittedFileName);
             }
             function getSourceFileText(filename: string): string {
+                console.log("Reading: " + filename + ": " + (ts.forEach(allInputFiles, inputFile => inputFile.emittedFileName === filename ? inputFile.code : undefined) !== undefined));
                 return ts.forEach(allInputFiles, inputFile => inputFile.emittedFileName === filename ? inputFile.code : undefined);
             }
 
