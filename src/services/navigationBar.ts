@@ -238,6 +238,9 @@ module ts.NavigationBar {
                     if (node.flags & NodeFlags.Const) {
                         return createItem(node, getTextOfNode((<VariableDeclaration>node).name), ts.ScriptElementKind.constantElement);
                     }
+                    else if (node.flags & NodeFlags.Let) {
+                        return createItem(node, getTextOfNode((<VariableDeclaration>node).name), ts.ScriptElementKind.letElement);
+                    }
                     else {
                         return createItem(node, getTextOfNode((<VariableDeclaration>node).name), ts.ScriptElementKind.variableElement);
                     }

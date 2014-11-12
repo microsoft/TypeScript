@@ -1225,6 +1225,8 @@ module ts {
         static alias = "alias";
 
         static constantElement = "constant";
+
+        static letElement = "let";
     }
 
     export class ScriptElementKindModifier {
@@ -2857,8 +2859,11 @@ module ts {
                 if (isFirstDeclarationOfSymbolParameter(symbol)) {
                     return ScriptElementKind.parameterElement;
                 }
-                else if(symbol.valueDeclaration && symbol.valueDeclaration.flags & NodeFlags.Const) {
+                else if (symbol.valueDeclaration && symbol.valueDeclaration.flags & NodeFlags.Const) {
                     return ScriptElementKind.constantElement;
+                }
+                else if (forEach(symbol.declarations, declaration => declaration.flags & NodeFlags.Let)) {
+                    return ScriptElementKind.letElement;
                 }
                 return isLocalVariableOrFunction(symbol) ? ScriptElementKind.localVariableElement : ScriptElementKind.variableElement;
             }
@@ -2915,7 +2920,11 @@ module ts {
                 case SyntaxKind.InterfaceDeclaration: return ScriptElementKind.interfaceElement;
                 case SyntaxKind.TypeAliasDeclaration: return ScriptElementKind.typeElement;
                 case SyntaxKind.EnumDeclaration: return ScriptElementKind.enumElement;
-                case SyntaxKind.VariableDeclaration: return node.flags & NodeFlags.Const ? ScriptElementKind.constantElement: ScriptElementKind.variableElement;
+                case SyntaxKind.VariableDeclaration: return node.flags & NodeFlags.Const ?
+                    ScriptElementKind.constantElement :
+                    node.flags & NodeFlags.Let ?
+                    ScriptElementKind.letElement :
+                    ScriptElementKind.variableElement;
                 case SyntaxKind.FunctionDeclaration: return ScriptElementKind.functionElement;
                 case SyntaxKind.GetAccessor: return ScriptElementKind.memberGetAccessorElement;
                 case SyntaxKind.SetAccessor: return ScriptElementKind.memberSetAccessorElement;
