@@ -34,12 +34,16 @@ module ts {
         return file.filename + "(" + loc.line + "," + loc.character + ")";
     }
 
-
     export function getStartPosOfNode(node: Node): number {
         return node.pos;
     }
 
     export function getTokenPosOfNode(node: Node, sourceFile?: SourceFile): number {
+        // With nodes that have no width (i.e. 'Missing' nodes), we actually *don't*
+        // want to skip trivia because this will launch us forward to the next token.
+        if (node.pos === node.end) {
+            return node.pos;
+        }
         return skipTrivia((sourceFile || getSourceFileOfNode(node)).text, node.pos);
     }
 
