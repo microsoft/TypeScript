@@ -2859,7 +2859,7 @@ module ts {
                 if (isFirstDeclarationOfSymbolParameter(symbol)) {
                     return ScriptElementKind.parameterElement;
                 }
-                else if (symbol.valueDeclaration && symbol.valueDeclaration.flags & NodeFlags.Const) {
+                else if (symbol.valueDeclaration && isConst(symbol.valueDeclaration)) {
                     return ScriptElementKind.constantElement;
                 }
                 else if (forEach(symbol.declarations, declaration => declaration.flags & NodeFlags.Let)) {
@@ -2920,11 +2920,11 @@ module ts {
                 case SyntaxKind.InterfaceDeclaration: return ScriptElementKind.interfaceElement;
                 case SyntaxKind.TypeAliasDeclaration: return ScriptElementKind.typeElement;
                 case SyntaxKind.EnumDeclaration: return ScriptElementKind.enumElement;
-                case SyntaxKind.VariableDeclaration: return node.flags & NodeFlags.Const ?
-                    ScriptElementKind.constantElement :
-                    node.flags & NodeFlags.Let ?
-                    ScriptElementKind.letElement :
-                    ScriptElementKind.variableElement;
+                case SyntaxKind.VariableDeclaration: return isConst(node)
+                    ? ScriptElementKind.constantElement
+                    : node.flags & NodeFlags.Let
+                        ? ScriptElementKind.letElement
+                        : ScriptElementKind.variableElement;
                 case SyntaxKind.FunctionDeclaration: return ScriptElementKind.functionElement;
                 case SyntaxKind.GetAccessor: return ScriptElementKind.memberGetAccessorElement;
                 case SyntaxKind.SetAccessor: return ScriptElementKind.memberSetAccessorElement;
@@ -3099,8 +3099,7 @@ module ts {
             }
             if (symbolFlags & SymbolFlags.Enum) {
                 addNewLineIfDisplayPartsExist();
-                if (forEach(symbol.declarations, declaration =>
-                    declaration.kind === SyntaxKind.EnumDeclaration && isConstEnumDeclaration(<EnumDeclaration>declaration))) {
+                if (forEach(symbol.declarations, declaration => isConstEnumDeclaration(declaration))) {
                     displayParts.push(keywordPart(SyntaxKind.ConstKeyword));
                     displayParts.push(spacePart());
                 }

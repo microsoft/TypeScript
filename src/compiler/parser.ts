@@ -116,8 +116,16 @@ module ts {
         return (file.flags & NodeFlags.DeclarationFile) !== 0;
     }
 
-    export function isConstEnumDeclaration(node: EnumDeclaration): boolean {
-        return (node.flags & NodeFlags.Const) !== 0;
+    export function isConstEnumDeclaration(node: Declaration): boolean {
+        return node.kind === SyntaxKind.EnumDeclaration && !!(node.flags & NodeFlags.Const);
+    }
+
+    export function isConst(node: Declaration): boolean {
+        return !!(node.flags & NodeFlags.Const);
+    }
+
+    export function isLet(node: Declaration): boolean {
+        return !!(node.flags & NodeFlags.Let);
     }
 
     export function isPrologueDirective(node: Node): boolean {
@@ -3480,18 +3488,18 @@ module ts {
                 grammarErrorOnNode(node, Diagnostics.Variable_declaration_list_cannot_be_empty);
             }
             if (languageVersion < ScriptTarget.ES6) {
-                if (node.flags & NodeFlags.Let) {
+                if (isLet(node)) {
                     grammarErrorOnNode(node, Diagnostics.let_declarations_are_only_available_when_targeting_ECMAScript_6_and_higher);
                 }
-                else if (node.flags & NodeFlags.Const) {
+                else if (isConst(node)) {
                     grammarErrorOnNode(node, Diagnostics.const_declarations_are_only_available_when_targeting_ECMAScript_6_and_higher);
                 }
             }
             else if (!allowLetAndConstDeclarations) {
-                if (node.flags & NodeFlags.Let) {
+                if (isLet(node)) {
                     grammarErrorOnNode(node, Diagnostics.let_declarations_can_only_be_declared_inside_a_block);
                 }
-                else if (node.flags & NodeFlags.Const) {
+                else if (isConst(node)) {
                     grammarErrorOnNode(node, Diagnostics.const_declarations_can_only_be_declared_inside_a_block);
                 }
             }
