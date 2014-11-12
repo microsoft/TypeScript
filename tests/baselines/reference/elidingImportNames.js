@@ -20,6 +20,7 @@ exports.main = 10;
 //// [elidingImportNames_main1.js]
 exports.main = 10;
 //// [elidingImportNames_test.js]
+var a = require('elidingImportNames_main'); // alias used in typeof
 var b = a;
 var x;
 var a2 = require('elidingImportNames_main1'); // alias not used in typeof
