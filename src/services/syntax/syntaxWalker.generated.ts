@@ -472,6 +472,12 @@ module TypeScript {
             visitNodeOrToken(this, node.templateExpression);
         }
 
+        public visitYieldExpression(node: YieldExpressionSyntax): void {
+            this.visitToken(node.yieldKeyword);
+            this.visitOptionalToken(node.asterixToken);
+            visitNodeOrToken(this, node.expression);
+        }
+
         public visitVariableDeclaration(node: VariableDeclarationSyntax): void {
             this.visitToken(node.varKeyword);
             this.visitList(node.variableDeclarators);

@@ -35,6 +35,15 @@ module TypeScript {
         return (info & SyntaxConstants.NodeParsedInDisallowInMask) !== 0;
     }
 
+    export function parsedInAllowYieldMode(node: ISyntaxNode): boolean {
+        var info = node.__data;
+        if (info === undefined) {
+            return false;
+        }
+
+        return (info & SyntaxConstants.NodeParsedInAllowYieldMask) !== 0;
+    }
+
     export function previousToken(token: ISyntaxToken): ISyntaxToken {
         var start = token.fullStart();
         if (start === 0) {

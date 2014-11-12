@@ -599,30 +599,31 @@ var TypeScript;
         SyntaxKind[SyntaxKind["OmittedExpression"] = 187] = "OmittedExpression";
         SyntaxKind[SyntaxKind["TemplateExpression"] = 188] = "TemplateExpression";
         SyntaxKind[SyntaxKind["TemplateAccessExpression"] = 189] = "TemplateAccessExpression";
-        SyntaxKind[SyntaxKind["VariableDeclaration"] = 190] = "VariableDeclaration";
-        SyntaxKind[SyntaxKind["VariableDeclarator"] = 191] = "VariableDeclarator";
-        SyntaxKind[SyntaxKind["ArgumentList"] = 192] = "ArgumentList";
-        SyntaxKind[SyntaxKind["ParameterList"] = 193] = "ParameterList";
-        SyntaxKind[SyntaxKind["TypeArgumentList"] = 194] = "TypeArgumentList";
-        SyntaxKind[SyntaxKind["TypeParameterList"] = 195] = "TypeParameterList";
-        SyntaxKind[SyntaxKind["HeritageClause"] = 196] = "HeritageClause";
-        SyntaxKind[SyntaxKind["EqualsValueClause"] = 197] = "EqualsValueClause";
-        SyntaxKind[SyntaxKind["CaseSwitchClause"] = 198] = "CaseSwitchClause";
-        SyntaxKind[SyntaxKind["DefaultSwitchClause"] = 199] = "DefaultSwitchClause";
-        SyntaxKind[SyntaxKind["ElseClause"] = 200] = "ElseClause";
-        SyntaxKind[SyntaxKind["CatchClause"] = 201] = "CatchClause";
-        SyntaxKind[SyntaxKind["FinallyClause"] = 202] = "FinallyClause";
-        SyntaxKind[SyntaxKind["TemplateClause"] = 203] = "TemplateClause";
-        SyntaxKind[SyntaxKind["TypeParameter"] = 204] = "TypeParameter";
-        SyntaxKind[SyntaxKind["Constraint"] = 205] = "Constraint";
-        SyntaxKind[SyntaxKind["SimplePropertyAssignment"] = 206] = "SimplePropertyAssignment";
-        SyntaxKind[SyntaxKind["FunctionPropertyAssignment"] = 207] = "FunctionPropertyAssignment";
-        SyntaxKind[SyntaxKind["Parameter"] = 208] = "Parameter";
-        SyntaxKind[SyntaxKind["EnumElement"] = 209] = "EnumElement";
-        SyntaxKind[SyntaxKind["TypeAnnotation"] = 210] = "TypeAnnotation";
-        SyntaxKind[SyntaxKind["ComputedPropertyName"] = 211] = "ComputedPropertyName";
-        SyntaxKind[SyntaxKind["ExternalModuleReference"] = 212] = "ExternalModuleReference";
-        SyntaxKind[SyntaxKind["ModuleNameModuleReference"] = 213] = "ModuleNameModuleReference";
+        SyntaxKind[SyntaxKind["YieldExpression"] = 190] = "YieldExpression";
+        SyntaxKind[SyntaxKind["VariableDeclaration"] = 191] = "VariableDeclaration";
+        SyntaxKind[SyntaxKind["VariableDeclarator"] = 192] = "VariableDeclarator";
+        SyntaxKind[SyntaxKind["ArgumentList"] = 193] = "ArgumentList";
+        SyntaxKind[SyntaxKind["ParameterList"] = 194] = "ParameterList";
+        SyntaxKind[SyntaxKind["TypeArgumentList"] = 195] = "TypeArgumentList";
+        SyntaxKind[SyntaxKind["TypeParameterList"] = 196] = "TypeParameterList";
+        SyntaxKind[SyntaxKind["HeritageClause"] = 197] = "HeritageClause";
+        SyntaxKind[SyntaxKind["EqualsValueClause"] = 198] = "EqualsValueClause";
+        SyntaxKind[SyntaxKind["CaseSwitchClause"] = 199] = "CaseSwitchClause";
+        SyntaxKind[SyntaxKind["DefaultSwitchClause"] = 200] = "DefaultSwitchClause";
+        SyntaxKind[SyntaxKind["ElseClause"] = 201] = "ElseClause";
+        SyntaxKind[SyntaxKind["CatchClause"] = 202] = "CatchClause";
+        SyntaxKind[SyntaxKind["FinallyClause"] = 203] = "FinallyClause";
+        SyntaxKind[SyntaxKind["TemplateClause"] = 204] = "TemplateClause";
+        SyntaxKind[SyntaxKind["TypeParameter"] = 205] = "TypeParameter";
+        SyntaxKind[SyntaxKind["Constraint"] = 206] = "Constraint";
+        SyntaxKind[SyntaxKind["SimplePropertyAssignment"] = 207] = "SimplePropertyAssignment";
+        SyntaxKind[SyntaxKind["FunctionPropertyAssignment"] = 208] = "FunctionPropertyAssignment";
+        SyntaxKind[SyntaxKind["Parameter"] = 209] = "Parameter";
+        SyntaxKind[SyntaxKind["EnumElement"] = 210] = "EnumElement";
+        SyntaxKind[SyntaxKind["TypeAnnotation"] = 211] = "TypeAnnotation";
+        SyntaxKind[SyntaxKind["ComputedPropertyName"] = 212] = "ComputedPropertyName";
+        SyntaxKind[SyntaxKind["ExternalModuleReference"] = 213] = "ExternalModuleReference";
+        SyntaxKind[SyntaxKind["ModuleNameModuleReference"] = 214] = "ModuleNameModuleReference";
         SyntaxKind[SyntaxKind["FirstStandardKeyword"] = SyntaxKind.BreakKeyword] = "FirstStandardKeyword";
         SyntaxKind[SyntaxKind["LastStandardKeyword"] = SyntaxKind.WithKeyword] = "LastStandardKeyword";
         SyntaxKind[SyntaxKind["FirstFutureReservedKeyword"] = SyntaxKind.ClassKeyword] = "FirstFutureReservedKeyword";
@@ -1865,6 +1866,16 @@ var definitions = [
         children: [
             { name: 'voidKeyword', isToken: true, excludeFromAST: true },
             { name: 'expression', type: 'IUnaryExpressionSyntax' }
+        ]
+    },
+    {
+        name: 'YieldExpressionSyntax',
+        baseType: 'ISyntaxNode',
+        interfaces: ['IExpressionSyntax'],
+        children: [
+            { name: 'yieldKeyword', isToken: true },
+            { name: 'asterixToken', isToken: true, isOptional: true },
+            { name: 'expression', type: 'IExpressionSyntax', isOptional: true }
         ]
     },
     {

@@ -1555,11 +1555,20 @@ module TypeScript {
 
         public visitDeleteExpression(node: DeleteExpressionSyntax): void {
             if (parsedInStrictMode(node) && node.expression.kind === SyntaxKind.IdentifierName) {
-                this.pushDiagnostic(firstToken(node), DiagnosticCode.delete_cannot_be_called_on_an_identifier_in_strict_mode);
+                this.pushDiagnostic(node.deleteKeyword, DiagnosticCode.delete_cannot_be_called_on_an_identifier_in_strict_mode);
                 return;
             }
 
             super.visitDeleteExpression(node);
+        }
+
+        public visitYieldExpression(node: YieldExpressionSyntax): void {
+            if (!parsedInAllowYieldMode(node)) {
+                this.pushDiagnostic(node.yieldKeyword, DiagnosticCode.yield_expression_must_be_contained_within_a_generator_declaration);
+                return;
+            }
+
+            super.visitYieldExpression(node);
         }
 
         private checkIllegalAssignment(node: BinaryExpressionSyntax): boolean {

@@ -523,6 +523,13 @@ module TypeScript {
     }
     export interface TemplateAccessExpressionConstructor { new (data: number, expression: ILeftHandSideExpressionSyntax, templateExpression: IPrimaryExpressionSyntax): TemplateAccessExpressionSyntax }
 
+    export interface YieldExpressionSyntax extends ISyntaxNode, IExpressionSyntax {
+        yieldKeyword: ISyntaxToken;
+        asterixToken: ISyntaxToken;
+        expression: IExpressionSyntax;
+    }
+    export interface YieldExpressionConstructor { new (data: number, yieldKeyword: ISyntaxToken, asterixToken: ISyntaxToken, expression: IExpressionSyntax): YieldExpressionSyntax }
+
     export interface VariableDeclarationSyntax extends ISyntaxNode {
         varKeyword: ISyntaxToken;
         variableDeclarators: ISeparatedSyntaxList<VariableDeclaratorSyntax>;

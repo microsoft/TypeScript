@@ -1427,6 +1427,25 @@ module TypeScript {
         }
     }
 
+    export var YieldExpressionSyntax: YieldExpressionConstructor = <any>function(data: number, yieldKeyword: ISyntaxToken, asterixToken: ISyntaxToken, expression: IExpressionSyntax) {
+        if (data) { this.__data = data; }
+        this.yieldKeyword = yieldKeyword,
+        this.asterixToken = asterixToken,
+        this.expression = expression,
+        yieldKeyword.parent = this,
+        asterixToken && (asterixToken.parent = this),
+        expression && (expression.parent = this);
+    };
+    YieldExpressionSyntax.prototype.kind = SyntaxKind.YieldExpression;
+    YieldExpressionSyntax.prototype.childCount = 3;
+    YieldExpressionSyntax.prototype.childAt = function(index: number): ISyntaxElement {
+        switch (index) {
+            case 0: return this.yieldKeyword;
+            case 1: return this.asterixToken;
+            case 2: return this.expression;
+        }
+    }
+
     export var VariableDeclarationSyntax: VariableDeclarationConstructor = <any>function(data: number, varKeyword: ISyntaxToken, variableDeclarators: ISeparatedSyntaxList<VariableDeclaratorSyntax>) {
         if (data) { this.__data = data; }
         this.varKeyword = varKeyword,

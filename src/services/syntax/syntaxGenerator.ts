@@ -1006,6 +1006,15 @@ var definitions:ITypeDefinition[] = [
             <any>{ name: 'expression', type: 'IUnaryExpressionSyntax' }]
     },
     <any>{
+        name: 'YieldExpressionSyntax',
+        baseType: 'ISyntaxNode',
+        interfaces: ['IExpressionSyntax'],
+        children: [
+            <any>{ name: 'yieldKeyword', isToken: true },
+            <any>{ name: 'asterixToken', isToken: true, isOptional: true },
+            <any>{ name: 'expression', type: 'IExpressionSyntax', isOptional: true }]
+    },
+    <any>{
         name: 'DebuggerStatementSyntax',
         baseType: 'ISyntaxNode',
         interfaces: ['IStatementSyntax'],
