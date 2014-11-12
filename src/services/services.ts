@@ -668,6 +668,7 @@ module ts {
         public getLineAndCharacterFromPosition(position: number): { line: number; character: number } { return null; }
         public getPositionFromLineAndCharacter(line: number, character: number): number { return -1; }
         public amdDependencies: string[];
+        public amdModuleName: string;
         public referencedFiles: FileReference[];
         public syntacticErrors: Diagnostic[];
         public semanticErrors: Diagnostic[];

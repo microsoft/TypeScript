@@ -630,6 +630,7 @@ module ts {
         getLineAndCharacterFromPosition(position: number): { line: number; character: number };
         getPositionFromLineAndCharacter(line: number, character: number): number;
         amdDependencies: string[];
+        amdModuleName: string;
         referencedFiles: FileReference[];
         syntacticErrors: Diagnostic[];
         semanticErrors: Diagnostic[];
