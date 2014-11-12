@@ -3099,6 +3099,11 @@ module ts {
             }
             if (symbolFlags & SymbolFlags.Enum) {
                 addNewLineIfDisplayPartsExist();
+                if (forEach(symbol.declarations, declaration =>
+                    declaration.kind === SyntaxKind.EnumDeclaration && isConstEnumDeclaration(<EnumDeclaration>declaration))) {
+                    displayParts.push(keywordPart(SyntaxKind.ConstKeyword));
+                    displayParts.push(spacePart());
+                }
                 displayParts.push(keywordPart(SyntaxKind.EnumKeyword));
                 displayParts.push(spacePart());
                 addFullSymbolName(symbol);
