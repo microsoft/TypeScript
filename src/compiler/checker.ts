@@ -1699,76 +1699,21 @@ module ts {
             return undefined;
         }
 
-        function getWidenedTypeForVariableDeclaration(declaration: VariableDeclaration | PropertyDeclaration): Type {
+        function getWidenedTypeForVariableDeclaration(declaration: VariableDeclaration | PropertyDeclaration, reportErrors?: boolean): Type {
             var type = getTypeForVariableDeclaration(declaration);
             if (type) {
-                return getWidenedType(type);
-            }
-            if (declaration.flags & NodeFlags.Rest) {
-                return createArrayType(anyType);
-            }
-            return anyType;
-        }
-
-        function getTypeOfVariableOrPropertyDeclaration(declaration: VariableDeclaration | PropertyDeclaration): Type {
-            var type = getTypeForVariableDeclaration(declaration);
-            if (type) {
-                if (declaration.kind !== SyntaxKind.PropertyAssignment) {
+                if (reportErrors) {
                     reportErrorsFromWidening(declaration, type);
-                    type = getWidenedType(type);
                 }
-                return type;
+                return declaration.kind !== SyntaxKind.PropertyAssignment ? getWidenedType(type) : type;
             }
-            // Rest parameters default to type any[], other parameters default to type any
-            var type = declaration.flags & NodeFlags.Rest ? createArrayType(anyType) : anyType;
-            // Report implicit any errors unless this is a private property within an ambient declaration
-            if (compilerOptions.noImplicitAny && !isPrivateWithinAmbient(declaration) && !(declaration.kind === SyntaxKind.Parameter && isPrivateWithinAmbient(declaration.parent))) {
+            // Rest parameters default to type any[], other parameters default to type any            type = declaration.flags & NodeFlags.Rest ? createArrayType(anyType) : anyType;
+             // Report implicit any errors unless this is a private property within an ambient declaration
+            if (reportErrors && compilerOptions.noImplicitAny && !isPrivateWithinAmbient(declaration) && !(declaration.kind === SyntaxKind.Parameter && isPrivateWithinAmbient(declaration.parent))) {
                 reportImplicitAnyError(declaration, type);
             }
             return type;
         }
-
-        //function getTypeOfVariableOrPropertyDeclaration(declaration: VariableDeclaration | PropertyDeclaration): Type {
-        //    // A variable declared in a for..in statement is always of type any
-        //    if (declaration.parent.kind === SyntaxKind.ForInStatement) {
-        //        return anyType;
-        //    }
-        //    // Use type from type annotation if one is present
-        //    if (declaration.type) {
-        //        return getTypeFromTypeNode(declaration.type);
-        //    }
-        //    if (declaration.kind === SyntaxKind.Parameter) {
-        //        var func = <FunctionLikeDeclaration>declaration.parent;
-        //        // For a parameter of a set accessor, use the type of the get accessor if one is present
-        //        if (func.kind === SyntaxKind.SetAccessor) {
-        //            var getter = <AccessorDeclaration>getDeclarationOfKind(declaration.parent.symbol, SyntaxKind.GetAccessor);
-        //            if (getter) {
-        //                return getReturnTypeOfSignature(getSignatureFromDeclaration(getter));
-        //            }
-        //        }
-        //        // Use contextual parameter type if one is available
-        //        var type = getContextuallyTypedParameterType(<ParameterDeclaration>declaration);
-        //        if (type) {
-        //            return type;
-        //        }
-        //    }
-        //    // Use the type of the initializer expression if one is present
-        //    if (declaration.initializer) {
-        //        var type = checkAndMarkExpression(declaration.initializer);
-        //        if (declaration.kind !== SyntaxKind.PropertyAssignment) {
-        //            reportErrorsFromWidening(declaration, type);
-        //            type = getWidenedType(type);
-        //        }
-        //        return type;
-        //    }
-        //    // Rest parameters default to type any[], other parameters default to type any
-        //    var type = declaration.flags & NodeFlags.Rest ? createArrayType(anyType) : anyType;
-        //    // Report implicit any errors unless this is a private property within an ambient declaration
-        //    if (compilerOptions.noImplicitAny && !isPrivateWithinAmbient(declaration) && !(declaration.kind === SyntaxKind.Parameter && isPrivateWithinAmbient(declaration.parent))) {
-        //        reportImplicitAnyError(declaration, type);
-        //    }
-        //    return type;
-        //}
 
         function getTypeOfVariableOrParameterOrProperty(symbol: Symbol): Type {
             var links = getSymbolLinks(symbol);
@@ -1784,7 +1729,7 @@ module ts {
                 }
                 // Handle variable, parameter or property
                 links.type = resolvingType;
-                var type = getTypeOfVariableOrPropertyDeclaration(<VariableDeclaration>declaration);
+                var type = getWidenedTypeForVariableDeclaration(<VariableDeclaration>declaration, /*reportErrors*/ true);
                 if (links.type === resolvingType) {
                     links.type = type;
                 }
