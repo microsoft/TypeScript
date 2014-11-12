@@ -1,0 +1,23 @@
+../../../src/ts/Manager/FieldManager.ts(3,7): error TS2300: Duplicate identifier 'FieldManager'.
+FieldManager.ts(3,7): error TS2300: Duplicate identifier 'FieldManager'.
+
+
+==== ../../../src/ts/Manager/FieldManager.ts (1 errors) ====
+    /// <reference path="../../../typings/tsd.ts" />
+    
+    class FieldManager {
+          ~~~~~~~~~~~~
+!!! error TS2300: Duplicate identifier 'FieldManager'.
+    }
+==== ../../../typings/tsd.ts (0 errors) ====
+    /// <reference path="../src/ts/Manager/FieldManager.ts" />
+    // This is tsd.ts
+    class tsd {
+    }
+==== FieldManager.ts (1 errors) ====
+    /// <reference path="../../../typings/tsd.ts" />
+    
+    class FieldManager {
+          ~~~~~~~~~~~~
+!!! error TS2300: Duplicate identifier 'FieldManager'.
+    }

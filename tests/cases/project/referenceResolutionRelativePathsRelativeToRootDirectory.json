@@ -1,0 +1,9 @@
+{
+    "scenario": "referenceResolution1_FromFieldManagerFolder_RelativepathToFieldManager",
+    "projectRoot": "tests/cases/projects/ReferenceResolution/src/ts/Manager",
+    "inputFiles": [
+        "../../../src/ts/Manager/FieldManager.ts"
+    ],
+    "declaration": true,
+    "baselineCheck": true
+}

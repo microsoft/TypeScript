@@ -1,0 +1,9 @@
+{
+    "scenario": "referenceResolution1_FromFieldManagerFolder_NoResolve",
+    "projectRoot": "tests/cases/projects/ReferenceResolution/src/ts/Manager",
+    "inputFiles": [
+        "FieldManager.ts",
+        "../../../typings/tsd.ts"
+    ],
+    "noResolve":  true
+}

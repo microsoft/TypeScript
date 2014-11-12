@@ -1,0 +1,20 @@
+{
+    "scenario": "referenceResolution1_FromFieldManagerFolder_FromRootDirectory",
+    "projectRoot": "tests/cases/projects/ReferenceResolution",
+    "inputFiles": [
+        "src/ts/Manager/FieldManager.ts"
+    ],
+    "declaration": true,
+    "baselineCheck": true,
+    "resolvedInputFiles": [
+        "lib.d.ts",
+        "typings/tsd.ts",
+        "src/ts/Manager/FieldManager.ts"
+    ],
+    "emittedFiles": [
+        "typings/tsd.js",
+        "typings/tsd.d.ts",
+        "src/ts/Manager/FieldManager.js",
+        "src/ts/Manager/FieldManager.d.ts"
+    ]
+}

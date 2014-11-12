@@ -17,6 +17,7 @@ interface ProjectRunnerTestCase {
     baselineCheck?: boolean; // Verify the baselines of output files, if this is false, we will write to output to the disk but there is no verification of baselines
     runTest?: boolean; // Run the resulting test
     bug?: string; // If there is any bug associated with this test case
+    noResolve?: boolean;
 }
 
 interface ProjectRunnerTestCaseResolutionInfo extends ProjectRunnerTestCase {
@@ -162,7 +163,8 @@ class ProjectRunner extends RunnerBase {
                     outDir: testCase.outDir,
                     mapRoot: testCase.resolveMapRoot && testCase.mapRoot ? sys.resolvePath(testCase.mapRoot) : testCase.mapRoot,
                     sourceRoot: testCase.resolveSourceRoot && testCase.sourceRoot ? sys.resolvePath(testCase.sourceRoot) : testCase.sourceRoot,
-                    module: moduleKind
+                    module: moduleKind,
+                    noResolve: testCase.noResolve
                 };
             }
 
