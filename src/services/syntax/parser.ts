@@ -163,6 +163,7 @@ module TypeScript.Parser {
         // all nodes would need extra state on them to store this info.
         var strictMode: boolean = false;
         var disallowIn: boolean = false;
+        var allowYield: boolean = false;
 
         // Current state of the parser.  If we need to rewind we will store and reset these values as
         // appropriate.
@@ -957,8 +958,9 @@ module TypeScript.Parser {
             if (isModifierKind(token.kind)) {
                 // These are modifiers only if we see an actual keyword, identifier, string literal
                 // or number following.
-                // Note: we also allow [ for error conditions.  
-                // [   is for:     static [a: number]
+                // 
+                // [   is for:     static [a: number]  ...
+                // [   is for:     static [computedProp()]  ...
                 var nextToken = peekToken(index + 1);
                 var nextTokenKind = nextToken.kind;
 
@@ -967,6 +969,8 @@ module TypeScript.Parser {
                     case SyntaxKind.OpenBracketToken:
                     case SyntaxKind.NumericLiteral:
                     case SyntaxKind.StringLiteral:
+                    case SyntaxKind.NoSubstitutionTemplateToken:
+                    case SyntaxKind.AsteriskToken:
                         return true;
                     default:
                         return SyntaxFacts.isAnyKeyword(nextTokenKind);
@@ -1079,12 +1083,29 @@ module TypeScript.Parser {
         }
 
         function isMemberVariableOrFunctionDeclaration(peekIndex: number, inErrorRecovery: boolean) {
+            var tokenN = peekToken(peekIndex);
+            var tokenNKind = tokenN.kind;
+
+            // If we have a '*', then this is a generator function.
+            if (tokenNKind === SyntaxKind.AsteriskToken) {
+                if (inErrorRecovery) {
+                    // If we're in error recovery, we might see a random * that is part of some
+                    // expression.  Really, in order to view this as a generator function, we want
+                    // to see at least '*id<' or '*id('.  Otherwise, we won't think of this as the
+                    // start of a member variable/function.
+                    return peekToken(peekIndex + 1).kind === SyntaxKind.IdentifierName &&
+                        (peekToken(peekIndex + 2).kind === SyntaxKind.LessThanToken || peekToken(peekIndex + 2).kind === SyntaxKind.OpenParenToken);
+                }
+
+                return true;
+            }
+
             // Check if its the start of a property or method.  Both must start with a property name.
             if (!isPropertyName(peekIndex, inErrorRecovery)) {
                 return false;
             }
 
-            if (!SyntaxFacts.isAnyKeyword(peekToken(peekIndex).kind)) {
+            if (!SyntaxFacts.isAnyKeyword(tokenNKind)) {
                 // It wasn't a keyword.  So this is definitely a member variable or function.
                 return true;
             }
@@ -1138,10 +1159,15 @@ module TypeScript.Parser {
             }
             else if (isMemberVariableOrFunctionDeclaration(/*peekIndex:*/ _modifierCount, inErrorRecovery)) {
                 var modifiers = parseModifiers();
+                var asterixToken = tryEatToken(SyntaxKind.AsteriskToken);
                 var propertyName = parsePropertyName();
 
-                if (isCallSignature(/*peekIndex:*/ 0)) {
-                    return parseMemberFunctionDeclaration(modifiers, propertyName);
+                // If we got a '*', then this is definitely a method.  If we didn't get a '*', then
+                // we must have gotten a property name.  And if that's all we have, we have to check
+                // if we have a call signature.  If so, then this is a member function, otherwise
+                // it's a member variable.
+                if (asterixToken || isCallSignature(/*peekIndex:*/ 0)) {
+                    return parseMemberFunctionDeclaration(modifiers, asterixToken, propertyName);
                 }
                 else {
                     return parseMemberVariableDeclaration(modifiers, propertyName);
@@ -1171,12 +1197,13 @@ module TypeScript.Parser {
                 isBlockOrArrow() ? parseFunctionBlock() : eatExplicitOrAutomaticSemicolon(/*allowWithoutNewline:*/ false));
         }
 
-        function parseMemberFunctionDeclaration(modifiers: ISyntaxToken[], propertyName: IPropertyNameSyntax): MemberFunctionDeclarationSyntax {
+        function parseMemberFunctionDeclaration(modifiers: ISyntaxToken[], asterixToken: ISyntaxToken, propertyName: IPropertyNameSyntax): MemberFunctionDeclarationSyntax {
             // Note: if we see an arrow after the close paren, then try to parse out a function 
             // block anyways.  It's likely the user just though '=> expr' was legal anywhere a 
             // block was legal.
             return new MemberFunctionDeclarationSyntax(parseNodeData,
                 modifiers,
+                asterixToken,
                 propertyName,
                 parseCallSignature(/*requireCompleteTypeParameterList:*/ false),
                 isBlockOrArrow() ? parseFunctionBlock() : eatExplicitOrAutomaticSemicolon(/*allowWithoutNewline:*/ false));
@@ -1211,6 +1238,7 @@ module TypeScript.Parser {
             return new FunctionDeclarationSyntax(parseNodeData, 
                 parseModifiers(), 
                 eatToken(SyntaxKind.FunctionKeyword), 
+                tryEatToken(SyntaxKind.AsteriskToken),
                 eatIdentifierToken(), 
                 parseCallSignature(/*requireCompleteTypeParameterList:*/ false), 
                 isBlockOrArrow() ? parseFunctionBlock() : eatExplicitOrAutomaticSemicolon(/*allowWithoutNewline:*/ false));
@@ -2797,7 +2825,9 @@ module TypeScript.Parser {
 
         function parseFunctionExpression(functionKeyword: ISyntaxToken): FunctionExpressionSyntax {
             return new FunctionExpressionSyntax(parseNodeData,
-                consumeToken(functionKeyword), eatOptionalIdentifierToken(),
+                consumeToken(functionKeyword),
+                tryEatToken(SyntaxKind.AsteriskToken),
+                eatOptionalIdentifierToken(),
                 parseCallSignature(/*requireCompleteTypeParameterList:*/ false),
                 parseFunctionBlock());
         }
@@ -3271,9 +3301,12 @@ module TypeScript.Parser {
                 // If it was a keyword, convert it to an identifier name.
                 return eatIdentifierNameToken();
             }
-            else {
+            else if (isLiteralPropertyName(_currentToken)) {
                 // Must have been a literal.
                 return consumeToken(_currentToken);
+            }
+            else {
+                return eatIdentifierToken();
             }
         }
 

@@ -97,6 +97,7 @@ module TypeScript {
         public visitFunctionDeclaration(node: FunctionDeclarationSyntax): void {
             this.visitList(node.modifiers);
             this.visitToken(node.functionKeyword);
+            this.visitOptionalToken(node.asterixToken);
             this.visitToken(node.identifier);
             visitNodeOrToken(this, node.callSignature);
             visitNodeOrToken(this, node.body);
@@ -149,6 +150,7 @@ module TypeScript {
 
         public visitMemberFunctionDeclaration(node: MemberFunctionDeclarationSyntax): void {
             this.visitList(node.modifiers);
+            this.visitOptionalToken(node.asterixToken);
             visitNodeOrToken(this, node.propertyName);
             visitNodeOrToken(this, node.callSignature);
             visitNodeOrToken(this, node.body);
@@ -451,6 +453,7 @@ module TypeScript {
 
         public visitFunctionExpression(node: FunctionExpressionSyntax): void {
             this.visitToken(node.functionKeyword);
+            this.visitOptionalToken(node.asterixToken);
             this.visitOptionalToken(node.identifier);
             visitNodeOrToken(this, node.callSignature);
             visitNodeOrToken(this, node.block);
