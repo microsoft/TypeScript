@@ -1242,30 +1242,41 @@ module ts {
             return createIdentifier(token >= SyntaxKind.Identifier);
         }
 
-        function isPropertyName(): boolean {
+        function isLiteralPropertyName(): boolean {
             return token >= SyntaxKind.Identifier ||
                 token === SyntaxKind.StringLiteral ||
                 token === SyntaxKind.NumericLiteral;
         }
 
-        function parsePropertyName(): Identifier {
+        function parsePropertyName(): DeclarationName {
             if (token === SyntaxKind.StringLiteral || token === SyntaxKind.NumericLiteral) {
                 return parseLiteralNode(/*internName:*/ true);
+            }
+            if (token === SyntaxKind.OpenBracketToken) {
+                return parseComputedPropertyName();
             }
             return parseIdentifierName();
         }
 
+        function parseComputedPropertyName(): ComputedPropertyName {
+            var node = <ComputedPropertyName>createNode(SyntaxKind.ComputedPropertyName);
+            parseExpected(SyntaxKind.OpenBracketToken);
+            node.expression = parseAssignmentExpression(/*noIn*/ false);
+            parseExpected(SyntaxKind.CloseBracketToken);
+            return finishNode(node);
+        }
+        
         function parseContextualModifier(t: SyntaxKind): boolean {
             return token === t && tryParse(() => {
                 nextToken();
-                return token === SyntaxKind.OpenBracketToken || isPropertyName();
+                return token === SyntaxKind.OpenBracketToken || isLiteralPropertyName();
             });
         }
 
         function parseAnyContextualModifier(): boolean {
             return isModifier(token) && tryParse(() => {
                 nextToken();
-                return token === SyntaxKind.OpenBracketToken || token === SyntaxKind.AsteriskToken || isPropertyName();
+                return token === SyntaxKind.OpenBracketToken || isPropertyName();
             });
         }
 
@@ -1285,9 +1296,11 @@ module ts {
                 case ParsingContext.ClassMembers:
                     return lookAhead(isClassMemberStart);
                 case ParsingContext.EnumMembers:
-                    return isPropertyName();
+                    // Include open bracket computed properties. This technically also lets in indexers,
+                    // which would be a candidate for improved error reporting.
+                    return token === SyntaxKind.OpenBracketToken || isLiteralPropertyName();
                 case ParsingContext.ObjectLiteralMembers:
-                    return token === SyntaxKind.AsteriskToken || isPropertyName();
+                    return token === SyntaxKind.OpenBracketToken || token === SyntaxKind.AsteriskToken || isLiteralPropertyName();
                 case ParsingContext.BaseTypeReferences:
                     return isIdentifier() && ((token !== SyntaxKind.ExtendsKeyword && token !== SyntaxKind.ImplementsKeyword) || !lookAhead(() => (nextToken(), isIdentifier())));
                 case ParsingContext.VariableDeclarations:
@@ -1774,6 +1787,42 @@ module ts {
             return finishNode(node);
         }
 
+        function isIndexSignature(): boolean {
+            if (token !== SyntaxKind.OpenBracketToken) {
+                return false;
+            }
+
+            return lookAhead(() => {
+                // The only allowed sequence is:
+                //
+                //   [id:
+                //
+                // However, for error recovery, we also check the following cases:
+                //
+                //   [...
+                //   [id,
+                //   [public id
+                //   [private id
+                //   [protected id
+                //   []
+                //
+                if (nextToken() === SyntaxKind.DotDotDotToken
+                    || token === SyntaxKind.CloseBracketToken
+                    || token === SyntaxKind.PublicKeyword
+                    || token === SyntaxKind.PrivateKeyword
+                    || token === SyntaxKind.ProtectedKeyword) {
+
+                    return true;
+                }
+
+                if (!isIdentifier()) {
+                    return false;
+                }
+
+                return nextToken() === SyntaxKind.ColonToken || token === SyntaxKind.CommaToken;
+            });
+        }
+
         function parseIndexSignatureMember(fullStart: number, modifiers: ModifiersArray): SignatureDeclaration {
             var node = <SignatureDeclaration>createNode(SyntaxKind.IndexSignature, fullStart);
             setModifiers(node, modifiers);
@@ -1817,10 +1866,10 @@ module ts {
             switch (token) {
                 case SyntaxKind.OpenParenToken:
                 case SyntaxKind.LessThanToken:
-                case SyntaxKind.OpenBracketToken:
+                case SyntaxKind.OpenBracketToken: // Both for indexers and computed properties
                     return true;
                 default:
-                    return isPropertyName() && lookAhead(() => nextToken() === SyntaxKind.OpenParenToken || token === SyntaxKind.LessThanToken || token === SyntaxKind.QuestionToken ||
+                    return isLiteralPropertyName() && lookAhead(() => nextToken() === SyntaxKind.OpenParenToken || token === SyntaxKind.LessThanToken || token === SyntaxKind.QuestionToken ||
                         token === SyntaxKind.ColonToken || canParseSemicolon());
             }
         }
@@ -1831,7 +1880,8 @@ module ts {
                 case SyntaxKind.LessThanToken:
                     return parseSignatureMember(SyntaxKind.CallSignature, SyntaxKind.ColonToken);
                 case SyntaxKind.OpenBracketToken:
-                    return parseIndexSignatureMember(scanner.getStartPos(), /*modifiers:*/ undefined);
+                    // Indexer or computed property
+                    return isIndexSignature() ? parseIndexSignatureMember(scanner.getStartPos(), /*modifiers:*/ undefined) : parsePropertyOrMethod();
                 case SyntaxKind.NewKeyword:
                     if (lookAhead(() => nextToken() === SyntaxKind.OpenParenToken || token === SyntaxKind.LessThanToken)) {
                         return parseSignatureMember(SyntaxKind.ConstructSignature, SyntaxKind.ColonToken);
@@ -3368,12 +3418,12 @@ module ts {
 
             // Try to get the first property-like token following all modifiers.
             // This can either be an identifier or the 'get' or 'set' keywords.
-            if (isPropertyName()) {
+            if (isLiteralPropertyName()) {
                 idToken = token;
                 nextToken();
             }
 
-            // Index signatures are class members; we can parse.
+            // Index signatures and computed properties are class members; we can parse.
             if (token === SyntaxKind.OpenBracketToken) {
                 return true;
             }
@@ -3442,11 +3492,14 @@ module ts {
             if (token === SyntaxKind.ConstructorKeyword) {
                 return parseConstructorDeclaration(fullStart, modifiers);
             }
-            if (token >= SyntaxKind.Identifier || token === SyntaxKind.StringLiteral || token === SyntaxKind.NumericLiteral || token === SyntaxKind.AsteriskToken) {
-                return parsePropertyMemberDeclaration(fullStart, modifiers);
-            }
-            if (token === SyntaxKind.OpenBracketToken) {
+            if (isIndexSignature()) {
                 return parseIndexSignatureMember(fullStart, modifiers);
+            }
+            // It is very important that we check this *after* checking indexers because
+            // the [ token can start an index signature or a computed property name
+            if (token >= SyntaxKind.Identifier || token === SyntaxKind.StringLiteral || token === SyntaxKind.NumericLiteral ||
+                token === SyntaxKind.AsteriskToken || token === SyntaxKind.OpenBracketToken) {
+                return parsePropertyMemberDeclaration(fullStart, modifiers);
             }
 
             // 'isClassMemberStart' should have hinted not to attempt parsing.
@@ -4438,8 +4491,7 @@ module ts {
 
             for (var i = 0, n = node.properties.length; i < n; i++) {
                 var prop = node.properties[i];
-                // TODO(jfreeman): continue if we have a computed property
-                if (prop.kind === SyntaxKind.OmittedExpression) {
+                if (prop.kind === SyntaxKind.OmittedExpression || p.name.kind === SyntaxKind.ComputedPropertyName) {
                     continue;
                 }
 
