@@ -927,13 +927,14 @@ module ts {
                 }
             }
 
-            function isNonExpressionIdentifier(node: Identifier) {
+            function isNotExpressionIdentifier(node: Identifier) {
                 var parent = node.parent;
                 switch (parent.kind) {
                     case SyntaxKind.Parameter:
                     case SyntaxKind.VariableDeclaration:
                     case SyntaxKind.Property:
                     case SyntaxKind.PropertyAssignment:
+                    case SyntaxKind.ShortHandPropertyAssignment:
                     case SyntaxKind.EnumMember:
                     case SyntaxKind.Method:
                     case SyntaxKind.FunctionDeclaration:
@@ -957,15 +958,22 @@ module ts {
                 }
             }
 
-            function emitIdentifier(node: Identifier) {
-                if (!isNonExpressionIdentifier(node)) {
-                    var prefix = resolver.getExpressionNamePrefix(node);
-                    if (prefix) {
-                        write(prefix);
-                        write(".");
-                    }
+            function emitExpressionIdentifier(node: Identifier) {
+                var prefix = resolver.getExpressionNamePrefix(node);
+                if (prefix) {
+                    write(prefix);
+                    write(".");
                 }
                 write(getSourceTextOfLocalNode(node));
+            }
+
+            function emitIdentifier(node: Identifier) {
+                if (!isNotExpressionIdentifier(node)) {
+                    emitExpressionIdentifier(node);
+                }
+                else {
+                    write(getSourceTextOfLocalNode(node));
+                }
             }
 
             function emitThis(node: Node) {
@@ -1034,13 +1042,32 @@ module ts {
             }
 
             function emitShortHandPropertyAssignment(node: ShortHandPropertyDeclaration) {
-                emitLeadingComments(node);
-                emit(node.name);
-                if (compilerOptions.target !== ScriptTarget.ES6) {
-                    write(": ");
+                function emitAsNormalPropertyAssignment() {
+                    emitLeadingComments(node);
+                    // Emit identifier as an identifier
                     emit(node.name);
+                    write(": ");
+                    // Even though this is stored as identified because it is in short-hand property assignment, treated it as expression 
+                    emitExpressionIdentifier(node.name);
+                    emitTrailingComments(node);
                 }
-                emitTrailingComments(node);
+
+                if (compilerOptions.target < ScriptTarget.ES6) {
+                    emitAsNormalPropertyAssignment();
+                }
+                else if (compilerOptions.target >= ScriptTarget.ES6) {
+                    // If short-hand property has a prefix, then regardless of the target version, we will emit it as normal property assignment
+                    var prefix = resolver.getExpressionNamePrefix(node.name);
+                    if (prefix) {
+                        emitAsNormalPropertyAssignment();
+                    }
+                    // If short-hand property has no prefix, emit it as short-hand.
+                    else {
+                        emitLeadingComments(node);
+                        emit(node.name);
+                        emitTrailingComments(node);
+                    }
+                }
             }
 
             function tryEmitConstantValue(node: PropertyAccess | IndexedAccess): boolean {
