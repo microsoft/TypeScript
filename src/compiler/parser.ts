@@ -1261,7 +1261,7 @@ module ts {
         function parseComputedPropertyName(): ComputedPropertyName {
             var node = <ComputedPropertyName>createNode(SyntaxKind.ComputedPropertyName);
             parseExpected(SyntaxKind.OpenBracketToken);
-            node.expression = parseAssignmentExpression(/*noIn*/ false);
+            node.expression = allowInAnd(parseAssignmentExpression);
             parseExpected(SyntaxKind.CloseBracketToken);
             return finishNode(node);
         }
@@ -1276,7 +1276,7 @@ module ts {
         function parseAnyContextualModifier(): boolean {
             return isModifier(token) && tryParse(() => {
                 nextToken();
-                return token === SyntaxKind.OpenBracketToken || isPropertyName();
+                return token === SyntaxKind.OpenBracketToken || isLiteralPropertyName();
             });
         }
 
@@ -1801,6 +1801,9 @@ module ts {
                 //
                 //   [...
                 //   [id,
+                //   [id?,
+                //   [id?:
+                //   [id?]
                 //   [public id
                 //   [private id
                 //   [protected id
@@ -1819,7 +1822,22 @@ module ts {
                     return false;
                 }
 
-                return nextToken() === SyntaxKind.ColonToken || token === SyntaxKind.CommaToken;
+                // A colon signifies a well formed indexer
+                // A comma should be a badly formed indexer because comma expressions are not allowed
+                // in computed properties.
+                if (nextToken() === SyntaxKind.ColonToken || token === SyntaxKind.CommaToken) {
+                    return true;
+                }
+
+                // Question mark could be an indexer with an optional property,
+                // or it could be a conditional expression in a computed property.
+                if (token !== SyntaxKind.QuestionToken) {
+                    return false;
+                }
+
+                // If any of the following tokens are after the question mark, it cannot
+                // be a conditional expression, so treat it as an indexer.
+                return nextToken() === SyntaxKind.ColonToken || token === SyntaxKind.CommaToken || token === SyntaxKind.CloseBracketToken;
             });
         }
 
@@ -3991,6 +4009,7 @@ module ts {
                 case SyntaxKind.BinaryExpression:               return checkBinaryExpression(<BinaryExpression>node);
                 case SyntaxKind.CatchBlock:                     return checkCatchBlock(<CatchBlock>node);
                 case SyntaxKind.ClassDeclaration:               return checkClassDeclaration(<ClassDeclaration>node);
+                case SyntaxKind.ComputedPropertyName:           return checkComputedPropertyName(<ComputedPropertyName>node);
                 case SyntaxKind.Constructor:                    return checkConstructor(<ConstructorDeclaration>node);
                 case SyntaxKind.ExportAssignment:               return checkExportAssignment(<ExportAssignment>node);
                 case SyntaxKind.ForInStatement:                 return checkForInStatement(<ForInStatement>node);
@@ -4278,13 +4297,17 @@ module ts {
             var enumIsConst = (enumDecl.flags & NodeFlags.Const) !== 0;
 
             var hasError = false;
+
             // skip checks below for const enums  - they allow arbitrary initializers as long as they can be evaluated to constant expressions.
             // since all values are known in compile time - it is not necessary to check that constant enum section precedes computed enum members.
             if (!enumIsConst) {
                 var inConstantEnumMemberSection = true;
                 for (var i = 0, n = enumDecl.members.length; i < n; i++) {
                     var node = enumDecl.members[i];
-                    if (inAmbientContext) {
+                    if (node.name.kind === SyntaxKind.ComputedPropertyName) {
+                        hasError = grammarErrorOnNode(node.name, Diagnostics.Computed_property_names_are_not_allowed_in_enums);
+                    }
+                    else if (inAmbientContext) {
                         if (node.initializer && !isIntegerLiteral(node.initializer)) {
                             hasError = grammarErrorOnNode(node.name, Diagnostics.Ambient_enum_elements_can_only_have_integer_literal_initializers) || hasError;
                         }
@@ -4438,10 +4461,25 @@ module ts {
         }
 
         function checkMethod(node: MethodDeclaration) {
-            return checkAnyParsedSignature(node) ||
+            if (checkAnyParsedSignature(node) ||
                 checkForBodyInAmbientContext(node.body, /*isConstructor:*/ false) ||
-                (node.parent.kind === SyntaxKind.ClassDeclaration && checkForInvalidQuestionMark(node, Diagnostics.A_class_member_cannot_be_declared_optional)) ||
-                checkForGenerator(node);
+                checkForGenerator(node)) {
+                return true;
+            }
+            if (node.parent.kind === SyntaxKind.ClassDeclaration) {
+                if (checkForInvalidQuestionMark(node, Diagnostics.A_class_member_cannot_be_declared_optional)) {
+                    return true;
+                }
+                // Technically, computed properties in ambient contexts is disallowed 
+                // for property declarations and accessors too, not just methods.
+                // However, property declarations disallow computed names in general,
+                // and accessors are not allowed in ambient contexts in general,
+                // so this error only really matters for methods.
+                return inAmbientContext && checkForDisallowedComputedProperty(node.name, Diagnostics.Computed_property_names_are_not_allowed_in_an_ambient_context);
+            }
+            else if (node.parent.kind === SyntaxKind.InterfaceDeclaration || node.parent.kind === SyntaxKind.TypeLiteral) {
+                return checkForDisallowedComputedProperty(node.name, Diagnostics.Computed_property_names_are_not_allowed_in_interfaces_or_type_literals);
+            }
         }
 
         function checkForBodyInAmbientContext(body: Block | Expression, isConstructor: boolean): boolean {
@@ -4775,8 +4813,31 @@ module ts {
         }
 
         function checkProperty(node: PropertyDeclaration) {
-            return (node.parent.kind === SyntaxKind.ClassDeclaration && checkForInvalidQuestionMark(node, Diagnostics.A_class_member_cannot_be_declared_optional)) ||
-                checkForInitializerInAmbientContext(node);
+            if (node.parent.kind === SyntaxKind.ClassDeclaration) {
+                if (checkForInvalidQuestionMark(node, Diagnostics.A_class_member_cannot_be_declared_optional) ||
+                    checkForDisallowedComputedProperty(node.name, Diagnostics.Computed_property_names_are_not_allowed_in_class_property_declarations)) {
+                    return true;
+                }
+            }
+            else if (node.parent.kind === SyntaxKind.InterfaceDeclaration || node.parent.kind === SyntaxKind.TypeLiteral) {
+                if (checkForDisallowedComputedProperty(node.name, Diagnostics.Computed_property_names_are_not_allowed_in_interfaces_or_type_literals)) {
+                    return true;
+                }
+            }
+
+            checkForInitializerInAmbientContext(node);
+        }
+
+        function checkComputedPropertyName(node: ComputedPropertyName) {
+            if (languageVersion < ScriptTarget.ES6) {
+                return grammarErrorOnNode(node, Diagnostics.Computed_property_names_are_only_available_when_targeting_ECMAScript_6_and_higher);
+            }
+        }
+
+        function checkForDisallowedComputedProperty(node: DeclarationName, message: DiagnosticMessage) {
+            if (node.kind === SyntaxKind.ComputedPropertyName) {
+                return grammarErrorOnNode(node, message);
+            }
         }
 
         function checkForInitializerInAmbientContext(node: PropertyDeclaration) {

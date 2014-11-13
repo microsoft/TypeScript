@@ -489,11 +489,31 @@
     },
     "An object member cannot be declared optional.": {
         "category": "Error",
+        "code": 1160
+    },
+    "Computed property names are not allowed in interfaces or type literals.": {
+        "category": "Error",
+        "code": 1161
+    },
+    "Computed property names are not allowed in enums.": {
+        "category": "Error",
         "code": 1162
     },
     "'yield' expression must be contained_within a generator declaration.": {
         "category": "Error",
         "code": 1163
+    },
+    "Computed property names are not allowed in an ambient context.": {
+        "category": "Error",
+        "code": 1163
+    },
+    "Computed property names are not allowed in class property declarations.": {
+        "category": "Error",
+        "code": 1164
+    },
+    "Computed property names are only available when targeting ECMAScript 6 and higher.": {
+        "category": "Error",
+        "code": 1165
     },
 
     "Duplicate identifier '{0}'.": {
