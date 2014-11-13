@@ -9102,7 +9102,10 @@ module ts {
             globalNumberType = getGlobalType("Number");
             globalBooleanType = getGlobalType("Boolean");
             globalRegExpType = getGlobalType("RegExp");
-            globalTemplateStringsArrayType = getGlobalType("TemplateStringsArray");
+
+            if (compilerOptions.target >= ScriptTarget.ES6) {
+                globalTemplateStringsArrayType = getGlobalType("TemplateStringsArray");
+            }
         }
 
         initializeTypeChecker();
