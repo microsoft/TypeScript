@@ -1969,7 +1969,7 @@ module ts {
     /** Returns true if node is a name of an object literal property, e.g. "a" in x = { "a": 1 } */
     function isNameOfPropertyAssignment(node: Node): boolean {
         return (node.kind === SyntaxKind.Identifier || node.kind === SyntaxKind.StringLiteral || node.kind === SyntaxKind.NumericLiteral) &&
-            (node.parent.kind === SyntaxKind.PropertyAssignment || node.parent.kind === SyntaxKind.ShortHandPropertyAssignment) && (<PropertyDeclaration>node.parent).name === node;
+            (node.parent.kind === SyntaxKind.PropertyAssignment || node.parent.kind === SyntaxKind.ShorthandPropertyAssignment) && (<PropertyDeclaration>node.parent).name === node;
     }
 
     function isLiteralNameOfPropertyDeclarationOrIndexAccess(node: Node): boolean {
@@ -2648,7 +2648,7 @@ module ts {
 
                 var existingMemberNames: Map<boolean> = {};
                 forEach(existingMembers, m => {
-                    if (m.kind !== SyntaxKind.PropertyAssignment && m.kind !== SyntaxKind.ShortHandPropertyAssignment) {
+                    if (m.kind !== SyntaxKind.PropertyAssignment && m.kind !== SyntaxKind.ShorthandPropertyAssignment) {
                         // Ignore omitted expressions for missing members in the object literal
                         return;
                     }
@@ -4062,9 +4062,9 @@ module ts {
                             result.push(getReferenceEntryFromNode(referenceLocation));
                         }
                         // TODO (yuisu): Comment
-                        else if (referenceSymbol && referenceSymbol.declarations[0].kind === SyntaxKind.ShortHandPropertyAssignment) {
+                        else if (referenceSymbol && referenceSymbol.declarations[0].kind === SyntaxKind.ShorthandPropertyAssignment) {
                             var referenceSymbolDeclName = referenceSymbol.declarations[0].name;
-                            if (searchSymbols.indexOf(typeInfoResolver.resolveEntityNameForShortHandPropertyAssignment(referenceSymbolDeclName)) >= 0 &&
+                            if (searchSymbols.indexOf(typeInfoResolver.getValueSymbolInfo(referenceSymbolDeclName)) >= 0 &&
                                 !(<SymbolLinks>referenceSymbol).target) {
                                 result.push(getReferenceEntryFromNode(referenceSymbolDeclName));
                             }
@@ -4237,8 +4237,8 @@ module ts {
                     });
 
                     // Add the symbol in the case of short-hand property assignment
-                    if (location.kind === SyntaxKind.Identifier && location.parent.kind === SyntaxKind.ShortHandPropertyAssignment) {
-                        result.push(typeInfoResolver.resolveEntityNameForShortHandPropertyAssignment(location));
+                    if (location.kind === SyntaxKind.Identifier && location.parent.kind === SyntaxKind.ShorthandPropertyAssignment) {
+                        result.push(typeInfoResolver.getValueSymbolInfo(location));
                     }
                 }
 
@@ -4582,7 +4582,7 @@ module ts {
                 case SyntaxKind.VariableDeclaration:
                 case SyntaxKind.Property:
                 case SyntaxKind.PropertyAssignment:
-                case SyntaxKind.ShortHandPropertyAssignment:
+                case SyntaxKind.ShorthandPropertyAssignment:
                 case SyntaxKind.EnumMember:
                 case SyntaxKind.Method:
                 case SyntaxKind.Constructor:

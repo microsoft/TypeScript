@@ -94,6 +94,7 @@ module ts {
             getReturnTypeOfSignature: getReturnTypeOfSignature,
             getSymbolsInScope: getSymbolsInScope,
             getSymbolInfo: getSymbolInfo,
+            getValueSymbolInfo: getValueSymbolInfo,
             getTypeOfNode: getTypeOfNode,
             typeToString: typeToString,
             getSymbolDisplayBuilder: getSymbolDisplayBuilder,
@@ -111,7 +112,6 @@ module ts {
             isUndefinedSymbol: symbol => symbol === undefinedSymbol,
             isArgumentsSymbol: symbol => symbol === argumentsSymbol,
             hasEarlyErrors: hasEarlyErrors,
-            resolveEntityNameForShortHandPropertyAssignment: resolveEntityNameForShortHandPropertyAssignment,
         };
 
         var undefinedSymbol = createSymbol(SymbolFlags.Property | SymbolFlags.Transient, "undefined");
@@ -536,10 +536,6 @@ module ts {
             }
             Debug.assert((symbol.flags & SymbolFlags.Instantiated) === 0, "Should never get an instantiated symbol here.");
             return symbol.flags & meaning ? symbol : resolveImport(symbol);
-        }
-
-        function resolveEntityNameForShortHandPropertyAssignment(location: Node): Symbol {
-            return resolveEntityName(location, <Identifier>location, SymbolFlags.Value);
         }
 
         function isExternalModuleNameRelative(moduleName: string): boolean {
@@ -1672,8 +1668,8 @@ module ts {
             }
 
             // If it is a short-hand property assignment; Use the type of the identifier
-            if (declaration.kind === SyntaxKind.ShortHandPropertyAssignment) {
-                var type = checkIdentifier(<Identifier>(declaration.name));
+            if (declaration.kind === SyntaxKind.ShorthandPropertyAssignment) {
+                var type = checkIdentifier(<Identifier>declaration.name);
                 return type
             }
 
@@ -4986,6 +4982,7 @@ module ts {
                             type = checkExpression(memberDecl.initializer, contextualMapper);
                         }
                         else {
+                            Debug.assert(memberDecl.kind === SyntaxKind.ShorthandPropertyAssignment);
                             type = checkExpression(memberDecl.name, contextualMapper);
                         }
                         var prop = <TransientSymbol>createSymbol(SymbolFlags.Property | SymbolFlags.Transient | member.flags, member.name);
@@ -8645,6 +8642,11 @@ module ts {
                     break;
             }
             return undefined;
+        }
+
+        function getValueSymbolInfo(node: Node): Symbol {
+            // Get symbol information as value
+            return resolveEntityName(node, <Identifier>node, SymbolFlags.Value);
         }
 
         function getTypeOfNode(node: Node): Type {

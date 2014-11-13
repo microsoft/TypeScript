@@ -57,6 +57,6 @@ var m;
     var z = m.x;
     var y = {
         a: m.x,
-        m.x
+        x: m.x
     };
 })(m || (m = {}));

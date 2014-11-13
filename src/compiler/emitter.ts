@@ -934,7 +934,7 @@ module ts {
                     case SyntaxKind.VariableDeclaration:
                     case SyntaxKind.Property:
                     case SyntaxKind.PropertyAssignment:
-                    case SyntaxKind.ShortHandPropertyAssignment:
+                    case SyntaxKind.ShorthandPropertyAssignment:
                     case SyntaxKind.EnumMember:
                     case SyntaxKind.Method:
                     case SyntaxKind.FunctionDeclaration:
@@ -2287,7 +2287,7 @@ module ts {
                         return emitObjectLiteral(<ObjectLiteral>node);
                     case SyntaxKind.PropertyAssignment:
                         return emitPropertyAssignment(<PropertyDeclaration>node);
-                    case SyntaxKind.ShortHandPropertyAssignment:
+                    case SyntaxKind.ShorthandPropertyAssignment:
                         return emitShortHandPropertyAssignment(<ShortHandPropertyDeclaration>node);
                     case SyntaxKind.PropertyAccess:
                         return emitPropertyAccess(<PropertyAccess>node);

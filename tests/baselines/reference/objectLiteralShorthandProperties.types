@@ -1,4 +1,4 @@
-=== tests/cases/compiler/objectLiteralShorthandProperties.ts ===
+=== tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandProperties.ts ===
 var a, b, c;
 >a : any
 >b : any

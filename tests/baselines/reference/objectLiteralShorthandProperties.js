@@ -26,7 +26,7 @@ var x1 = {
     a: a
 };
 var x2 = {
-    a: a
+    a: a,
 };
 var x3 = {
     a: 0,

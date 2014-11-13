@@ -165,7 +165,7 @@ module ts {
         ArrayLiteral,
         ObjectLiteral,
         PropertyAssignment,
-        ShortHandPropertyAssignment,
+        ShorthandPropertyAssignment,
         PropertyAccess,
         IndexedAccess,
         CallExpression,
@@ -330,7 +330,7 @@ module ts {
         initializer?: Expression;
     }
 
-    export interface ShortHandPropertyDeclaration extends PropertyDeclaration {
+    export interface ShortHandPropertyDeclaration extends Declaration {
         name: Identifier;
     }
 
@@ -715,6 +715,7 @@ module ts {
         getReturnTypeOfSignature(signature: Signature): Type;
         getSymbolsInScope(location: Node, meaning: SymbolFlags): Symbol[];
         getSymbolInfo(node: Node): Symbol;
+        getValueSymbolInfo(node: Node): Symbol;
         getTypeOfNode(node: Node): Type;
         typeToString(type: Type, enclosingDeclaration?: Node, flags?: TypeFormatFlags): string;
         symbolToString(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags): string;
@@ -733,7 +734,6 @@ module ts {
         getEnumMemberValue(node: EnumMember): number;
         isValidPropertyAccess(node: PropertyAccess, propertyName: string): boolean;
         getAliasedSymbol(symbol: Symbol): Symbol;
-        resolveEntityNameForShortHandPropertyAssignment(location: Node): Symbol;
     }
 
     export interface SymbolDisplayBuilder {

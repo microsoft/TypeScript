@@ -1,4 +1,4 @@
-=== tests/cases/compiler/objectLiteralShorthandProperties3.ts ===
+=== tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandProperties3.ts ===
 // module export
 
 module m {
