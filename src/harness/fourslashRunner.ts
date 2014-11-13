@@ -20,7 +20,7 @@ class FourslashRunner extends RunnerBase {
             });
 
             this.tests.forEach((fn: string) => {
-                fn = Harness.Path.switchToForwardSlashes(fn);
+                fn = ts.normalizeSlashes(fn);
                 var justName = fn.replace(/^.*[\\\/]/, '');
 
                 // Convert to relative path

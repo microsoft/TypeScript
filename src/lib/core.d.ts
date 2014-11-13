@@ -484,6 +484,10 @@ declare var Number: {
     POSITIVE_INFINITY: number;
 }
 
+interface TemplateStringsArray extends Array<string> {
+    raw: string[];
+}
+
 interface Math {
     /** The mathematical constant e. This is Euler's number, the base of natural logarithms. */
     E: number;

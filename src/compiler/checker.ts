@@ -6,7 +6,6 @@
 /// <reference path="emitter.ts"/>
 
 module ts {
-
     var nextSymbolId = 1;
     var nextNodeId = 1;
     var nextMergeId = 1;
@@ -147,6 +146,7 @@ module ts {
         var globalNumberType: ObjectType;
         var globalBooleanType: ObjectType;
         var globalRegExpType: ObjectType;
+        var globalTemplateStringsArrayType: ObjectType;
 
         var tupleTypes: Map<TupleType> = {};
         var unionTypes: Map<UnionType> = {};
@@ -4474,7 +4474,7 @@ module ts {
             if (symbol.flags & SymbolFlags.Import) {
                 // Mark the import as referenced so that we emit it in the final .js file.
                 // exception: identifiers that appear in type queries, const enums, modules that contain only const enums
-                getSymbolLinks(symbol).referenced = !isInTypeQuery(node) && !isConstEnumOrConstEnumOnlyModule(resolveImport(symbol));
+                getSymbolLinks(symbol).referenced = getSymbolLinks(symbol).referenced || (!isInTypeQuery(node) && !isConstEnumOrConstEnumOnlyModule(resolveImport(symbol)));
             }
 
             checkCollisionWithCapturedSuperVariable(node, node);
@@ -5206,45 +5206,103 @@ module ts {
             return unknownType;
         }
 
-        function resolveUntypedCall(node: CallExpression): Signature {
-            forEach(node.arguments, argument => {
-                checkExpression(argument);
-            });
+        function resolveUntypedCall(node: CallLikeExpression): Signature {
+            if (node.kind === SyntaxKind.TaggedTemplateExpression) {
+                checkExpression((<TaggedTemplateExpression>node).template);
+            }
+            else {
+                forEach((<CallExpression>node).arguments, argument => {
+                    checkExpression(argument);
+                });
+            }
             return anySignature;
         }
 
-        function resolveErrorCall(node: CallExpression): Signature {
+        function resolveErrorCall(node: CallLikeExpression): Signature {
             resolveUntypedCall(node);
             return unknownSignature;
         }
 
-        function signatureHasCorrectArity(node: CallExpression, signature: Signature): boolean {
-            if (!node.arguments) {
-                // This only happens when we have something of the form:
-                //     new C
-                //
-                return signature.minArgumentCount === 0;
+        function hasCorrectArity(node: CallLikeExpression, args: Expression[], signature: Signature) {
+            var adjustedArgCount: number;
+            var typeArguments: NodeArray<TypeNode>;
+            var callIsIncomplete: boolean;
+
+            if (node.kind === SyntaxKind.TaggedTemplateExpression) {
+                var tagExpression = <TaggedTemplateExpression>node;
+
+                // Even if the call is incomplete, we'll have a missing expression as our last argument,
+                // so we can say the count is just the arg list length
+                adjustedArgCount = args.length;
+                typeArguments = undefined;
+
+                if (tagExpression.template.kind === SyntaxKind.TemplateExpression) {
+                    // If a tagged template expression lacks a tail literal, the call is incomplete.
+                    // Specifically, a template only can end in a TemplateTail or a Missing literal.
+                    var templateExpression = <TemplateExpression>tagExpression.template;
+                    var lastSpan = lastOrUndefined(templateExpression.templateSpans);
+                    Debug.assert(lastSpan !== undefined); // we should always have at least one span.
+                    callIsIncomplete = lastSpan.literal.kind === SyntaxKind.Missing || isUnterminatedTemplateEnd(lastSpan.literal);
+                }
+                else {
+                    // If the template didn't end in a backtick, or its beginning occurred right prior to EOF,
+                    // then this might actually turn out to be a TemplateHead in the future;
+                    // so we consider the call to be incomplete.
+                    var templateLiteral = <LiteralExpression>tagExpression.template;
+                    Debug.assert(templateLiteral.kind === SyntaxKind.NoSubstitutionTemplateLiteral);
+                    callIsIncomplete = isUnterminatedTemplateEnd(templateLiteral);
+                }
+            }
+            else {
+                var callExpression = <CallExpression>node;
+                if (!callExpression.arguments) {
+                    // This only happens when we have something of the form: 'new C'
+                    Debug.assert(callExpression.kind === SyntaxKind.NewExpression);
+
+                    return signature.minArgumentCount === 0;
+                }
+                
+                // For IDE scenarios we may have an incomplete call, so a trailing comma is tantamount to adding another argument.
+                adjustedArgCount = callExpression.arguments.hasTrailingComma ? args.length + 1 : args.length;
+
+                // If we are missing the close paren, the call is incomplete.
+                callIsIncomplete = (<CallExpression>callExpression).arguments.end === callExpression.end;
+
+                typeArguments = callExpression.typeArguments;
             }
 
-            // For IDE scenarios, since we may have an incomplete call, we make two modifications
-            // to arity checking.
-            //    1. A trailing comma is tantamount to adding another argument
-            //    2. If the call is incomplete (no closing paren) allow fewer arguments than expected
-            var args = node.arguments;
-            var numberOfArgs = args.hasTrailingComma ? args.length + 1 : args.length;
-            var hasTooManyArguments = !signature.hasRestParameter && numberOfArgs > signature.parameters.length;
-            var hasRightNumberOfTypeArguments = !node.typeArguments ||
-                (signature.typeParameters && node.typeArguments.length === signature.typeParameters.length);
+            Debug.assert(adjustedArgCount !== undefined, "'adjustedArgCount' undefined");
+            Debug.assert(callIsIncomplete !== undefined, "'callIsIncomplete' undefined");
 
-            if (hasTooManyArguments || !hasRightNumberOfTypeArguments) {
-                return false;
+            return checkArity(adjustedArgCount, typeArguments, callIsIncomplete, signature);
+
+            /**
+             * @param adjustedArgCount The "apparent" number of arguments that we will have in this call.
+             * @param typeArguments    Type arguments node of the call if it exists; undefined otherwise.
+             * @param callIsIncomplete Whether or not a call is unfinished, and we should be "lenient" when we have too few arguments.
+             * @param signature        The signature whose arity we are comparing.
+             */
+            function checkArity(adjustedArgCount: number,
+                                typeArguments: NodeArray<TypeNode>,
+                                callIsIncomplete: boolean,
+                                signature: Signature): boolean {
+                // Too many arguments implies incorrect arity.
+                if (!signature.hasRestParameter && adjustedArgCount > signature.parameters.length) {
+                    return false;
+                }
+
+                // If the user supplied type arguments, but the number of type arguments does not match
+                // the declared number of type parameters, the call has an incorrect arity.
+                var hasRightNumberOfTypeArgs = !typeArguments ||
+                    (signature.typeParameters && typeArguments.length === signature.typeParameters.length);
+                if (!hasRightNumberOfTypeArgs) {
+                    return false;
+                }
+
+                // If the call is incomplete, we should skip the lower bound check.
+                var hasEnoughArguments = adjustedArgCount >= signature.minArgumentCount;
+                return callIsIncomplete || hasEnoughArguments;
             }
-
-            // If we are missing the close paren, the call is incomplete, and we should skip
-            // the lower bound check.
-            var callIsIncomplete = args.end === node.end;
-            var hasEnoughArguments = numberOfArgs >= signature.minArgumentCount;
-            return callIsIncomplete || hasEnoughArguments;
         }
 
         // If type has a single call signature and no other members, return that signature. Otherwise, return undefined.
@@ -5280,15 +5338,23 @@ module ts {
                 }
                 if (!excludeArgument || excludeArgument[i] === undefined) {
                     var parameterType = getTypeAtPosition(signature, i);
+
+                    if (i === 0 && args[i].parent.kind === SyntaxKind.TaggedTemplateExpression) {
+                        inferTypes(context, globalTemplateStringsArrayType, parameterType);
+                        continue;
+                    }
+
                     inferTypes(context, checkExpressionWithContextualType(args[i], parameterType, mapper), parameterType);
                 }
             }
+
             // Next, infer from those context sensitive arguments that are no longer excluded
             if (excludeArgument) {
                 for (var i = 0; i < args.length; i++) {
                     if (args[i].kind === SyntaxKind.OmittedExpression) {
                         continue;
                     }
+                    // No need to special-case tagged templates; their excludeArgument value will be 'undefined'.
                     if (excludeArgument[i] === false) {
                         var parameterType = getTypeAtPosition(signature, i);
                         inferTypes(context, checkExpressionWithContextualType(args[i], parameterType, mapper), parameterType);
@@ -5328,31 +5394,72 @@ module ts {
             return typeArgumentsAreAssignable;
         }
 
-        function checkApplicableSignature(node: CallExpression, signature: Signature, relation: Map<Ternary>, excludeArgument: boolean[], reportErrors: boolean) {
-            if (node.arguments) {
-                for (var i = 0; i < node.arguments.length; i++) {
-                    var arg = node.arguments[i];
-                    if (arg.kind === SyntaxKind.OmittedExpression) {
-                        continue;
-                    }
-                    var paramType = getTypeAtPosition(signature, i);
+        function checkApplicableSignature(node: CallLikeExpression, args: Node[], signature: Signature, relation: Map<Ternary>, excludeArgument: boolean[], reportErrors: boolean) {
+            for (var i = 0; i < args.length; i++) {
+                var arg = args[i];
+                var argType: Type;
+
+                if (arg.kind === SyntaxKind.OmittedExpression) {
+                    continue;
+                }
+
+                var paramType = getTypeAtPosition(signature, i);
+
+                if (i === 0 && node.kind === SyntaxKind.TaggedTemplateExpression) {
+                    // A tagged template expression has something of a
+                    // "virtual" parameter with the "cooked" strings array type.
+                    argType = globalTemplateStringsArrayType;
+                }
+                else {
                     // String literals get string literal types unless we're reporting errors
-                    var argType = arg.kind === SyntaxKind.StringLiteral && !reportErrors ?
-                        getStringLiteralType(<LiteralExpression>arg) :
-                        checkExpressionWithContextualType(arg, paramType, excludeArgument && excludeArgument[i] ? identityMapper : undefined);
-                    // Use argument expression as error location when reporting errors
-                    var isValidArgument = checkTypeRelatedTo(argType, paramType, relation, reportErrors ? arg : undefined,
-                        Diagnostics.Argument_of_type_0_is_not_assignable_to_parameter_of_type_1);
-                    if (!isValidArgument) {
-                        return false;
-                    }
+                    argType = arg.kind === SyntaxKind.StringLiteral && !reportErrors
+                        ? getStringLiteralType(<LiteralExpression>arg)
+                        : checkExpressionWithContextualType(arg, paramType, excludeArgument && excludeArgument[i] ? identityMapper : undefined);
+                }
+
+                // Use argument expression as error location when reporting errors
+                var isValidArgument = checkTypeRelatedTo(argType, paramType, relation, reportErrors ? arg : undefined,
+                    Diagnostics.Argument_of_type_0_is_not_assignable_to_parameter_of_type_1);
+                if (!isValidArgument) {
+                    return false;
                 }
             }
+
             return true;
         }
 
-        function resolveCall(node: CallExpression, signatures: Signature[], candidatesOutArray: Signature[]): Signature {
-            forEach(node.typeArguments, checkSourceElement);
+        /**
+         * Returns the effective arguments for an expression that works like a function invokation.
+         *
+         * If 'node' is a CallExpression or a NewExpression, then its argument list is returned.
+         * If 'node' is a TaggedTemplateExpression, a new argument list is constructed from the substitution
+         *    expressions, where the first element of the list is the template for error reporting purposes.
+         */
+        function getEffectiveCallArguments(node: CallLikeExpression): Expression[] {
+            var args: Expression[];
+            if (node.kind === SyntaxKind.TaggedTemplateExpression) {
+                var template = (<TaggedTemplateExpression>node).template;
+                args = [template];
+
+                if (template.kind === SyntaxKind.TemplateExpression) {
+                    forEach((<TemplateExpression>template).templateSpans, span => {
+                        args.push(span.expression);
+                    });
+                }
+            }
+            else {
+                args = (<CallExpression>node).arguments || emptyArray;
+            }
+
+            return args;
+        }
+
+        function resolveCall(node: CallLikeExpression, signatures: Signature[], candidatesOutArray: Signature[]): Signature {
+            var isTaggedTemplate = node.kind === SyntaxKind.TaggedTemplateExpression;
+
+            var typeArguments = isTaggedTemplate ? undefined : (<CallExpression>node).typeArguments;
+            forEach(typeArguments, checkSourceElement);
+
             var candidates = candidatesOutArray || [];
             // collectCandidates fills up the candidates array directly
             collectCandidates();
@@ -5360,11 +5467,26 @@ module ts {
                 error(node, Diagnostics.Supplied_parameters_do_not_match_any_signature_of_call_target);
                 return resolveErrorCall(node);
             }
-            var args = node.arguments || emptyArray;
+
+            var args = getEffectiveCallArguments(node);
+            
+            // The following applies to any value of 'excludeArgument[i]':
+            //    - true:      the argument at 'i' is susceptible to a one-time permanent contextual typing.
+            //    - undefined: the argument at 'i' is *not* susceptible to permanent contextual typing.
+            //    - false:     the argument at 'i' *was* and *has been* permanently contextually typed.
+            //
+            // The idea is that we will perform type argument inference & assignability checking once
+            // without using the susceptible parameters that are functions, and once more for each of those
+            // parameters, contextually typing each as we go along.
+            //
+            // For a tagged template, then the first argument be 'undefined' if necessary
+            // because it represents a TemplateStringsArray.
             var excludeArgument: boolean[];
-            for (var i = 0; i < args.length; i++) {
+            for (var i = isTaggedTemplate ? 1 : 0; i < args.length; i++) {
                 if (isContextSensitiveExpression(args[i])) {
-                    if (!excludeArgument) excludeArgument = new Array(args.length);
+                    if (!excludeArgument) {
+                        excludeArgument = new Array(args.length);
+                    }
                     excludeArgument[i] = true;
                 }
             }
@@ -5406,14 +5528,14 @@ module ts {
             // is just important for choosing the best signature. So in the case where there is only one
             // signature, the subtype pass is useless. So skipping it is an optimization.
             if (candidates.length > 1) {
-                result = chooseOverload(candidates, subtypeRelation, excludeArgument);
+                result = chooseOverload(candidates, subtypeRelation);
             }
             if (!result) {
                 // Reinitialize these pointers for round two
                 candidateForArgumentError = undefined;
                 candidateForTypeArgumentError = undefined;
                 resultOfFailedInference = undefined;
-                result = chooseOverload(candidates, assignableRelation, excludeArgument);
+                result = chooseOverload(candidates, assignableRelation);
             }
             if (result) {
                 return result;
@@ -5429,11 +5551,11 @@ module ts {
                 // in arguments too early. If possible, we'd like to only type them once we know the correct
                 // overload. However, this matters for the case where the call is correct. When the call is
                 // an error, we don't need to exclude any arguments, although it would cause no harm to do so.
-                checkApplicableSignature(node, candidateForArgumentError, assignableRelation, /*excludeArgument*/ undefined, /*reportErrors*/ true);
+                checkApplicableSignature(node, args, candidateForArgumentError, assignableRelation, /*excludeArgument*/ undefined, /*reportErrors*/ true);
             }
             else if (candidateForTypeArgumentError) {
-                if (node.typeArguments) {
-                    checkTypeArguments(candidateForTypeArgumentError, node.typeArguments, [], /*reportErrors*/ true)
+                if (!isTaggedTemplate && (<CallExpression>node).typeArguments) {
+                    checkTypeArguments(candidateForTypeArgumentError, (<CallExpression>node).typeArguments, [], /*reportErrors*/ true)
                 }
                 else {
                     Debug.assert(resultOfFailedInference.failedTypeParameterIndex >= 0);
@@ -5444,7 +5566,7 @@ module ts {
                         Diagnostics.The_type_argument_for_type_parameter_0_cannot_be_inferred_from_the_usage_Consider_specifying_the_type_arguments_explicitly,
                         typeToString(failedTypeParameter));
 
-                    reportNoCommonSupertypeError(inferenceCandidates, node.func, diagnosticChainHead);
+                    reportNoCommonSupertypeError(inferenceCandidates, (<CallExpression>node).func || (<TaggedTemplateExpression>node).tag, diagnosticChainHead);
                 }
             }
             else {
@@ -5458,7 +5580,7 @@ module ts {
             //  f({ |
             if (!fullTypeCheck) {
                 for (var i = 0, n = candidates.length; i < n; i++) {
-                    if (signatureHasCorrectArity(node, candidates[i])) {
+                    if (hasCorrectArity(node, args, candidates[i])) {
                         return candidates[i];
                     }
                 }
@@ -5466,9 +5588,9 @@ module ts {
 
             return resolveErrorCall(node);
 
-            function chooseOverload(candidates: Signature[], relation: Map<Ternary>, excludeArgument: boolean[]) {
+            function chooseOverload(candidates: Signature[], relation: Map<Ternary>) {
                 for (var i = 0; i < candidates.length; i++) {
-                    if (!signatureHasCorrectArity(node, candidates[i])) {
+                    if (!hasCorrectArity(node, args, candidates[i])) {
                         continue;
                     }
 
@@ -5480,9 +5602,9 @@ module ts {
                         if (candidate.typeParameters) {
                             var typeArgumentTypes: Type[];
                             var typeArgumentsAreValid: boolean;
-                            if (node.typeArguments) {
+                            if (typeArguments) {
                                 typeArgumentTypes = new Array<Type>(candidate.typeParameters.length);
-                                typeArgumentsAreValid = checkTypeArguments(candidate, node.typeArguments, typeArgumentTypes, /*reportErrors*/ false)
+                                typeArgumentsAreValid = checkTypeArguments(candidate, typeArguments, typeArgumentTypes, /*reportErrors*/ false)
                             }
                             else {
                                 inferenceResult = inferTypeArguments(candidate, args, excludeArgument);
@@ -5494,7 +5616,7 @@ module ts {
                             }
                             candidate = getSignatureInstantiation(candidate, typeArgumentTypes);
                         }
-                        if (!checkApplicableSignature(node, candidate, relation, excludeArgument, /*reportErrors*/ false)) {
+                        if (!checkApplicableSignature(node, args, candidate, relation, excludeArgument, /*reportErrors*/ false)) {
                             break;
                         }
                         var index = excludeArgument ? indexOf(excludeArgument, true) : -1;
@@ -5516,7 +5638,7 @@ module ts {
                         }
                         else {
                             candidateForTypeArgumentError = originalCandidate;
-                            if (!node.typeArguments) {
+                            if (!typeArguments) {
                                 resultOfFailedInference = inferenceResult;
                             }
                         }
@@ -5627,7 +5749,6 @@ module ts {
 
         function resolveNewExpression(node: NewExpression, candidatesOutArray: Signature[]): Signature {
             var expressionType = checkExpression(node.func);
-
             // TS 1.0 spec: 4.11
             // If ConstructExpr is of type Any, Args can be any argument
             // list and the result of the operation is of type Any.
@@ -5675,9 +5796,32 @@ module ts {
             return resolveErrorCall(node);
         }
 
+        function resolveTaggedTemplateExpression(node: TaggedTemplateExpression, candidatesOutArray: Signature[]): Signature {
+            var tagType = checkExpression(node.tag);
+            var apparentType = getApparentType(tagType);
+
+            if (apparentType === unknownType) {
+                // Another error has already been reported
+                return resolveErrorCall(node);
+            }
+
+            var callSignatures = getSignaturesOfType(apparentType, SignatureKind.Call);
+
+            if (tagType === anyType || (!callSignatures.length && !(tagType.flags & TypeFlags.Union) && isTypeAssignableTo(tagType, globalFunctionType))) {
+                return resolveUntypedCall(node);
+            }
+
+            if (!callSignatures.length) {
+                error(node, Diagnostics.Cannot_invoke_an_expression_whose_type_lacks_a_call_signature);
+                return resolveErrorCall(node);
+            }
+
+            return resolveCall(node, callSignatures, candidatesOutArray);
+        }
+
         // candidatesOutArray is passed by signature help in the language service, and collectCandidates
         // must fill it up with the appropriate candidate signatures
-        function getResolvedSignature(node: CallExpression, candidatesOutArray?: Signature[]): Signature {
+        function getResolvedSignature(node: CallLikeExpression, candidatesOutArray?: Signature[]): Signature {
             var links = getNodeLinks(node);
             // If getResolvedSignature has already been called, we will have cached the resolvedSignature.
             // However, it is possible that either candidatesOutArray was not passed in the first time,
@@ -5685,9 +5829,19 @@ module ts {
             // to correctly fill the candidatesOutArray.
             if (!links.resolvedSignature || candidatesOutArray) {
                 links.resolvedSignature = anySignature;
-                links.resolvedSignature = node.kind === SyntaxKind.CallExpression
-                    ? resolveCallExpression(node, candidatesOutArray)
-                    : resolveNewExpression(node, candidatesOutArray);
+
+                if (node.kind === SyntaxKind.CallExpression) {
+                    links.resolvedSignature = resolveCallExpression(<CallExpression>node, candidatesOutArray);
+                }
+                else if (node.kind === SyntaxKind.NewExpression) {
+                    links.resolvedSignature = resolveNewExpression(<NewExpression>node, candidatesOutArray);
+                }
+                else if (node.kind === SyntaxKind.TaggedTemplateExpression) {
+                    links.resolvedSignature = resolveTaggedTemplateExpression(<TaggedTemplateExpression>node, candidatesOutArray);
+                }
+                else {
+                    Debug.fail("Branch in 'getResolvedSignature' should be unreachable.");
+                }
             }
             return links.resolvedSignature;
         }
@@ -5711,10 +5865,7 @@ module ts {
         }
 
         function checkTaggedTemplateExpression(node: TaggedTemplateExpression): Type {
-            // TODO (drosen): Make sure substitutions are assignable to the tag's arguments.
-            checkExpression(node.tag);
-            checkExpression(node.template);
-            return anyType;
+            return getReturnTypeOfSignature(getResolvedSignature(node));
         }
 
         function checkTypeAssertion(node: TypeAssertion): Type {
@@ -6683,7 +6834,6 @@ module ts {
                 return;
             }
 
-            var symbol = getSymbolOfNode(signatureDeclarationNode);
             // TypeScript 1.0 spec (April 2014): 3.7.2.4
             // Every specialized call or construct signature in an object type must be assignable
             // to at least one non-specialized call or construct signature in the same object type
@@ -8468,7 +8618,7 @@ module ts {
                 // above them to find the lowest container
                 case SyntaxKind.Identifier:
                     // If the identifier is the RHS of a qualified name, then it's a type iff its parent is.
-                    if (node.parent.kind === SyntaxKind.QualifiedName) {
+                    if (node.parent.kind === SyntaxKind.QualifiedName && (<QualifiedName>node.parent).right === node) {
                         node = node.parent;
                     }
                     // fall through
@@ -8811,7 +8961,6 @@ module ts {
                 // parent is not source file or it is not reference to internal module
                 return false;
             }
-            var symbol = getSymbolOfNode(node);
             return isImportResolvedToValue(getSymbolOfNode(node));
         }
 
@@ -8953,6 +9102,7 @@ module ts {
             globalNumberType = getGlobalType("Number");
             globalBooleanType = getGlobalType("Boolean");
             globalRegExpType = getGlobalType("RegExp");
+            globalTemplateStringsArrayType = getGlobalType("TemplateStringsArray");
         }
 
         initializeTypeChecker();

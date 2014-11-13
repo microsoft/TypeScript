@@ -220,19 +220,13 @@ module ts {
     }
 
     function nodeHasTokens(n: Node): boolean {
-        if (n.kind === SyntaxKind.ExpressionStatement) {
-            return nodeHasTokens((<ExpressionStatement>n).expression);
-        }
-
-        if (n.kind === SyntaxKind.EndOfFileToken ||
-            n.kind === SyntaxKind.OmittedExpression ||
-            n.kind === SyntaxKind.Missing ||
-            n.kind === SyntaxKind.Unknown) {
+        if (n.kind === SyntaxKind.Unknown) {
             return false;
         }
 
-        // SyntaxList is already realized so getChildCount should be fast and non-expensive
-        return n.kind !== SyntaxKind.SyntaxList || n.getChildCount() !== 0;
+        // If we have a token or node that has a non-zero width, it must have tokens.
+        // Note, that getWidth() does not take trivia into account.
+        return n.getWidth() !== 0;
     }
 
     export function getTypeArgumentOrTypeParameterList(node: Node): NodeArray<Node> {
@@ -259,10 +253,6 @@ module ts {
         return n.kind === SyntaxKind.StringLiteral || n.kind === SyntaxKind.NumericLiteral || isWord(n);
     }
 
-    export var switchToForwardSlashesRegEx = /\\/g;
-    export function switchToForwardSlashes(path: string) {
-        return path.replace(switchToForwardSlashesRegEx, "/");
-    }
     export function isComment(n: Node): boolean {
         return n.kind === SyntaxKind.SingleLineCommentTrivia || n.kind === SyntaxKind.MultiLineCommentTrivia;
     }

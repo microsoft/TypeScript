@@ -1,0 +1,274 @@
+=== tests/cases/conformance/expressions/typeGuards/typeGuardsInFunctionAndModuleBlock.ts ===
+// typeguards are scoped in function/module block
+
+function foo(x: number | string | boolean) {
+>foo : (x: string | number | boolean) => string
+>x : string | number | boolean
+
+    return typeof x === "string"
+>typeof x === "string"        ? x        : function f() {            var b = x; // new scope - number | boolean | string            return typeof x === "boolean"                ? x.toString() // boolean                : x.toString(); // number | string        } () : string
+>typeof x === "string" : boolean
+>typeof x : string
+>x : string | number | boolean
+
+        ? x
+>x : string
+
+        : function f() {
+>function f() {            var b = x; // new scope - number | boolean | string            return typeof x === "boolean"                ? x.toString() // boolean                : x.toString(); // number | string        } () : string
+>function f() {            var b = x; // new scope - number | boolean | string            return typeof x === "boolean"                ? x.toString() // boolean                : x.toString(); // number | string        } : () => string
+>f : () => string
+
+            var b = x; // new scope - number | boolean | string
+>b : string | number | boolean
+>x : string | number | boolean
+
+            return typeof x === "boolean"
+>typeof x === "boolean"                ? x.toString() // boolean                : x.toString() : string
+>typeof x === "boolean" : boolean
+>typeof x : string
+>x : string | number | boolean
+
+                ? x.toString() // boolean
+>x.toString() : string
+>x.toString : () => string
+>x : boolean
+>toString : () => string
+
+                : x.toString(); // number | string
+>x.toString() : string
+>x.toString : () => string
+>x : string | number
+>toString : () => string
+
+        } ();
+}
+function foo2(x: number | string | boolean) {
+>foo2 : (x: string | number | boolean) => string
+>x : string | number | boolean
+
+    return typeof x === "string"
+>typeof x === "string"        ? x        : function f(a: number | boolean) {            var b = x; // new scope - number | boolean | string            return typeof x === "boolean"                ? x.toString() // boolean                : x.toString(); // number | string        } (x) : string
+>typeof x === "string" : boolean
+>typeof x : string
+>x : string | number | boolean
+
+        ? x
+>x : string
+
+        : function f(a: number | boolean) {
+>function f(a: number | boolean) {            var b = x; // new scope - number | boolean | string            return typeof x === "boolean"                ? x.toString() // boolean                : x.toString(); // number | string        } (x) : string
+>function f(a: number | boolean) {            var b = x; // new scope - number | boolean | string            return typeof x === "boolean"                ? x.toString() // boolean                : x.toString(); // number | string        } : (a: number | boolean) => string
+>f : (a: number | boolean) => string
+>a : number | boolean
+
+            var b = x; // new scope - number | boolean | string
+>b : string | number | boolean
+>x : string | number | boolean
+
+            return typeof x === "boolean"
+>typeof x === "boolean"                ? x.toString() // boolean                : x.toString() : string
+>typeof x === "boolean" : boolean
+>typeof x : string
+>x : string | number | boolean
+
+                ? x.toString() // boolean
+>x.toString() : string
+>x.toString : () => string
+>x : boolean
+>toString : () => string
+
+                : x.toString(); // number | string
+>x.toString() : string
+>x.toString : () => string
+>x : string | number
+>toString : () => string
+
+        } (x); // x here is narrowed to number | boolean
+>x : number | boolean
+}
+function foo3(x: number | string | boolean) {
+>foo3 : (x: string | number | boolean) => string
+>x : string | number | boolean
+
+    return typeof x === "string"
+>typeof x === "string"        ? x        : (() => {            var b = x; // new scope - number | boolean | string            return typeof x === "boolean"                ? x.toString() // boolean                : x.toString(); // number | string        })() : string
+>typeof x === "string" : boolean
+>typeof x : string
+>x : string | number | boolean
+
+        ? x
+>x : string
+
+        : (() => {
+>(() => {            var b = x; // new scope - number | boolean | string            return typeof x === "boolean"                ? x.toString() // boolean                : x.toString(); // number | string        })() : string
+>(() => {            var b = x; // new scope - number | boolean | string            return typeof x === "boolean"                ? x.toString() // boolean                : x.toString(); // number | string        }) : () => string
+>() => {            var b = x; // new scope - number | boolean | string            return typeof x === "boolean"                ? x.toString() // boolean                : x.toString(); // number | string        } : () => string
+
+            var b = x; // new scope - number | boolean | string
+>b : string | number | boolean
+>x : string | number | boolean
+
+            return typeof x === "boolean"
+>typeof x === "boolean"                ? x.toString() // boolean                : x.toString() : string
+>typeof x === "boolean" : boolean
+>typeof x : string
+>x : string | number | boolean
+
+                ? x.toString() // boolean
+>x.toString() : string
+>x.toString : () => string
+>x : boolean
+>toString : () => string
+
+                : x.toString(); // number | string
+>x.toString() : string
+>x.toString : () => string
+>x : string | number
+>toString : () => string
+
+        })();
+}
+function foo4(x: number | string | boolean) {
+>foo4 : (x: string | number | boolean) => string
+>x : string | number | boolean
+
+    return typeof x === "string"
+>typeof x === "string"        ? x        : ((a: number | boolean) => {            var b = x; // new scope - number | boolean | string            return typeof x === "boolean"                ? x.toString() // boolean                : x.toString(); // number | string        })(x) : string
+>typeof x === "string" : boolean
+>typeof x : string
+>x : string | number | boolean
+
+        ? x
+>x : string
+
+        : ((a: number | boolean) => {
+>((a: number | boolean) => {            var b = x; // new scope - number | boolean | string            return typeof x === "boolean"                ? x.toString() // boolean                : x.toString(); // number | string        })(x) : string
+>((a: number | boolean) => {            var b = x; // new scope - number | boolean | string            return typeof x === "boolean"                ? x.toString() // boolean                : x.toString(); // number | string        }) : (a: number | boolean) => string
+>(a: number | boolean) => {            var b = x; // new scope - number | boolean | string            return typeof x === "boolean"                ? x.toString() // boolean                : x.toString(); // number | string        } : (a: number | boolean) => string
+>a : number | boolean
+
+            var b = x; // new scope - number | boolean | string
+>b : string | number | boolean
+>x : string | number | boolean
+
+            return typeof x === "boolean"
+>typeof x === "boolean"                ? x.toString() // boolean                : x.toString() : string
+>typeof x === "boolean" : boolean
+>typeof x : string
+>x : string | number | boolean
+
+                ? x.toString() // boolean
+>x.toString() : string
+>x.toString : () => string
+>x : boolean
+>toString : () => string
+
+                : x.toString(); // number | string
+>x.toString() : string
+>x.toString : () => string
+>x : string | number
+>toString : () => string
+
+        })(x); // x here is narrowed to number | boolean
+>x : number | boolean
+}
+module m {
+>m : typeof m
+
+    var x: number | string | boolean;
+>x : string | number | boolean
+
+    module m2 {
+>m2 : typeof m2
+
+        var b = x; // new scope - number | boolean | string
+>b : string | number | boolean
+>x : string | number | boolean
+
+        var y: string;
+>y : string
+
+        if (typeof x === "string") {
+>typeof x === "string" : boolean
+>typeof x : string
+>x : string | number | boolean
+
+            y = x // string;
+>y = x : string
+>y : string
+>x : string
+
+        } else {
+            y = typeof x === "boolean"
+>y = typeof x === "boolean"            ? x.toString() // boolean            : x.toString() : string
+>y : string
+>typeof x === "boolean"            ? x.toString() // boolean            : x.toString() : string
+>typeof x === "boolean" : boolean
+>typeof x : string
+>x : number | boolean
+
+            ? x.toString() // boolean
+>x.toString() : string
+>x.toString : () => string
+>x : boolean
+>toString : () => string
+
+            : x.toString(); // number
+>x.toString() : string
+>x.toString : (radix?: number) => string
+>x : number
+>toString : (radix?: number) => string
+        }
+    }
+}
+module m1 {
+>m1 : typeof m1
+
+    var x: number | string | boolean;
+>x : string | number | boolean
+
+    module m2.m3 {
+>m2 : typeof m2
+>m3 : typeof m3
+
+        var b = x; // new scope - number | boolean | string
+>b : string | number | boolean
+>x : string | number | boolean
+
+        var y: string;
+>y : string
+
+        if (typeof x === "string") {
+>typeof x === "string" : boolean
+>typeof x : string
+>x : string | number | boolean
+
+            y = x // string;
+>y = x : string
+>y : string
+>x : string
+
+        } else {
+            y = typeof x === "boolean"
+>y = typeof x === "boolean"            ? x.toString() // boolean            : x.toString() : string
+>y : string
+>typeof x === "boolean"            ? x.toString() // boolean            : x.toString() : string
+>typeof x === "boolean" : boolean
+>typeof x : string
+>x : number | boolean
+
+            ? x.toString() // boolean
+>x.toString() : string
+>x.toString : () => string
+>x : boolean
+>toString : () => string
+
+            : x.toString(); // number
+>x.toString() : string
+>x.toString : (radix?: number) => string
+>x : number
+>toString : (radix?: number) => string
+        }
+    }
+}

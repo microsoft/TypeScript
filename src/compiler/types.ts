@@ -477,6 +477,8 @@ module ts {
         template: LiteralExpression | TemplateExpression;
     }
 
+    export type CallLikeExpression = CallExpression | NewExpression | TaggedTemplateExpression;
+
     export interface TypeAssertion extends Expression {
         type: TypeNode;
         operand: Expression;
