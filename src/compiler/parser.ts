@@ -583,6 +583,7 @@ module ts {
             case SyntaxKind.FunctionDeclaration:
             case SyntaxKind.GetAccessor:
             case SyntaxKind.SetAccessor:
+            case SyntaxKind.Constructor:
             case SyntaxKind.ClassDeclaration:
             case SyntaxKind.InterfaceDeclaration:
             case SyntaxKind.TypeAliasDeclaration:
