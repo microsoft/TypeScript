@@ -3,6 +3,6 @@ function foo(x: string = '');
 function foo(x = '') { }
 
 //// [defaultValueInFunctionOverload1.js]
-function foo(x) {
-    if (x === void 0) { x = ''; }
+function foo() {
+    var x = (arguments[0] === void 0) ? '' : arguments[0];
 }

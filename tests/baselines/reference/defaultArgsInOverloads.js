@@ -20,17 +20,17 @@ interface I {
 var f: (a = 3) => number;
 
 //// [defaultArgsInOverloads.js]
-function fun(a) {
-    if (a === void 0) { a = null; }
+function fun() {
+    var a = (arguments[0] === void 0) ? null : arguments[0];
 }
 var C = (function () {
     function C() {
     }
-    C.prototype.fun = function (a) {
-        if (a === void 0) { a = null; }
+    C.prototype.fun = function () {
+        var a = (arguments[0] === void 0) ? null : arguments[0];
     };
-    C.fun = function (a) {
-        if (a === void 0) { a = null; }
+    C.fun = function () {
+        var a = (arguments[0] === void 0) ? null : arguments[0];
     };
     return C;
 })();

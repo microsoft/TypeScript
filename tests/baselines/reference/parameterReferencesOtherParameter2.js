@@ -16,8 +16,8 @@ var Model = (function () {
     return Model;
 })();
 var UI = (function () {
-    function UI(model, foo) {
-        if (foo === void 0) { foo = model.name; }
+    function UI(model) {
+        var foo = (arguments[1] === void 0) ? model.name : arguments[1];
     }
     return UI;
 })();

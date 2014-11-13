@@ -136,8 +136,8 @@ var EmptyTypes;
     var f = (function () {
         function f() {
         }
-        f.prototype.voidIfAny = function (x, y) {
-            if (y === void 0) { y = false; }
+        f.prototype.voidIfAny = function (x) {
+            var y = (arguments[1] === void 0) ? false : arguments[1];
             return null;
         };
         f.prototype.x = function () {
@@ -195,8 +195,8 @@ var NonEmptyTypes;
     var f = (function () {
         function f() {
         }
-        f.prototype.voidIfAny = function (x, y) {
-            if (y === void 0) { y = false; }
+        f.prototype.voidIfAny = function (x) {
+            var y = (arguments[1] === void 0) ? false : arguments[1];
             return null;
         };
         f.prototype.x = function () {

@@ -551,6 +551,15 @@ module ts {
         return s.parameters.length > 0 && (s.parameters[s.parameters.length - 1].flags & NodeFlags.Rest) !== 0;
     }
 
+    export function getSignatureArity(s: SignatureDeclaration): number {
+        for (var i = 0; i < s.parameters.length; i++) {
+            if (s.parameters[i].initializer) {
+                return i;
+            }
+        }
+        return s.parameters.length - (hasRestParameters(s) ? 1 : 0);
+    }
+
     export function isLiteralKind(kind: SyntaxKind): boolean {
         return SyntaxKind.FirstLiteralToken <= kind && kind <= SyntaxKind.LastLiteralToken;
     }

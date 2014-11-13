@@ -226,20 +226,20 @@ function thisFunc() {
     var x;
 }
 // Function signature with optional parameter, no type annotation and initializer has initializer's type
-function opt1(n) {
-    if (n === void 0) { n = 4; }
+function opt1() {
+    var n = (arguments[0] === void 0) ? 4 : arguments[0];
     var m = n;
     var m;
 }
 // Function signature with optional parameter, no type annotation and initializer has initializer's widened type
-function opt2(n) {
-    if (n === void 0) { n = { x: null, y: undefined }; }
+function opt2() {
+    var n = (arguments[0] === void 0) ? { x: null, y: undefined } : arguments[0];
     var m = n;
     var m;
 }
 // Function signature with initializer referencing other parameter to the left
-function opt3(n, m) {
-    if (m === void 0) { m = n; }
+function opt3(n) {
+    var m = (arguments[1] === void 0) ? n : arguments[1];
     var y = m;
     var y;
 }

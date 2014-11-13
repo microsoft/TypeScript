@@ -6,8 +6,8 @@ class Foo {
 
 //// [parameterPropertyReferencingOtherParameter.js]
 var Foo = (function () {
-    function Foo(x, y) {
-        if (y === void 0) { y = x; }
+    function Foo(x) {
+        var y = (arguments[1] === void 0) ? x : arguments[1];
         this.x = x;
         this.y = y;
     }

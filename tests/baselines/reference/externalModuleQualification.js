@@ -14,8 +14,8 @@ class NavigateAction {
 //// [externalModuleQualification.js]
 exports.ID = "test";
 var DiffEditor = (function () {
-    function DiffEditor(id) {
-        if (id === void 0) { id = exports.ID; }
+    function DiffEditor() {
+        var id = (arguments[0] === void 0) ? exports.ID : arguments[0];
     }
     return DiffEditor;
 })();

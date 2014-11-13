@@ -11,26 +11,26 @@ function foo7<T, U extends T, V extends U>(x: V, y: U = x) { } // should be ok
 
 //// [genericCallWithObjectTypeArgsAndInitializers.js]
 // Generic typed parameters with initializers
-function foo(x) {
-    if (x === void 0) { x = null; }
+function foo() {
+    var x = (arguments[0] === void 0) ? null : arguments[0];
     return x;
 } // ok
-function foo2(x) {
-    if (x === void 0) { x = undefined; }
+function foo2() {
+    var x = (arguments[0] === void 0) ? undefined : arguments[0];
     return x;
 } // ok
-function foo3(x) {
-    if (x === void 0) { x = 1; }
+function foo3() {
+    var x = (arguments[0] === void 0) ? 1 : arguments[0];
 } // error
-function foo4(x, y) {
-    if (y === void 0) { y = x; }
+function foo4(x) {
+    var y = (arguments[1] === void 0) ? x : arguments[1];
 } // error
-function foo5(x, y) {
-    if (y === void 0) { y = x; }
+function foo5(x) {
+    var y = (arguments[1] === void 0) ? x : arguments[1];
 } // ok
-function foo6(x, y, z) {
-    if (z === void 0) { z = y; }
+function foo6(x, y) {
+    var z = (arguments[2] === void 0) ? y : arguments[2];
 } // error
-function foo7(x, y) {
-    if (y === void 0) { y = x; }
+function foo7(x) {
+    var y = (arguments[1] === void 0) ? x : arguments[1];
 } // should be ok

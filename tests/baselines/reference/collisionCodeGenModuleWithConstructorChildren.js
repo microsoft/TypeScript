@@ -28,8 +28,8 @@ var M;
 (function (_M) {
     _M.x = 3;
     var c = (function () {
-        function c(M, p) {
-            if (p === void 0) { p = _M.x; }
+        function c(M) {
+            var p = (arguments[1] === void 0) ? _M.x : arguments[1];
         }
         return c;
     })();
@@ -37,8 +37,8 @@ var M;
 var M;
 (function (_M) {
     var d = (function () {
-        function d(M, p) {
-            if (p === void 0) { p = _M.x; }
+        function d(M) {
+            var p = (arguments[1] === void 0) ? _M.x : arguments[1];
             this.M = M;
         }
         return d;

@@ -86,8 +86,8 @@ var TypeScript;
     var SyntaxNode = (function () {
         function SyntaxNode() {
         }
-        SyntaxNode.prototype.findToken = function (position, includeSkippedTokens) {
-            if (includeSkippedTokens === void 0) { includeSkippedTokens = false; }
+        SyntaxNode.prototype.findToken = function (position) {
+            var includeSkippedTokens = (arguments[1] === void 0) ? false : arguments[1];
             var positionedToken = this.findTokenInternal(null, position, 0);
             return null;
         };

@@ -40,7 +40,7 @@ var A = (function () {
     };
     return A;
 })();
-function bar(x) {
+function bar() {
     "use strict";
-    if (x === void 0) { x = 10; }
+    var x = (arguments[0] === void 0) ? 10 : arguments[0];
 }

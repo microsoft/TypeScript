@@ -23,8 +23,8 @@ module M {
 var M;
 (function (_M) {
     _M.x = 3;
-    function fn(M, p) {
-        if (p === void 0) { p = _M.x; }
+    function fn(M) {
+        var p = (arguments[1] === void 0) ? _M.x : arguments[1];
     }
 })(M || (M = {}));
 var M;
