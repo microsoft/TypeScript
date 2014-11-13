@@ -3505,7 +3505,8 @@ module ts {
                         return getGetAndSetOccurrences(<AccessorDeclaration>node.parent);
                     }
                 default:
-                    if (isModifier(node.kind) && node.parent && isDeclaration(node.parent)) {
+                    if (isModifier(node.kind) && node.parent &&
+                        (isDeclaration(node.parent) || node.parent.kind === SyntaxKind.VariableStatement)) {
                         return getModifierOccurrences(node.kind, node.parent);
                     }
             }
