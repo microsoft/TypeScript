@@ -15,6 +15,7 @@
 
 /// <reference path='..\services\services.ts' />
 /// <reference path='..\services\shims.ts' />
+/// <reference path='..\compiler\core.ts' />
 /// <reference path='..\compiler\sys.ts' />
 /// <reference path='external\mocha.d.ts'/>
 /// <reference path='external\chai.d.ts'/>
@@ -1002,8 +1003,12 @@ module Harness {
                 assert.equal(markedErrorCount, fileErrors.length, 'count of errors in ' + inputFile.unitName);
             });
 
+            var numLibraryDiagnostics = ts.countWhere(diagnostics, diagnostic => {
+                return diagnostic.filename && isLibraryFile(diagnostic.filename);
+            });
+
             // Verify we didn't miss any errors in total
-            assert.equal(totalErrorsReported, diagnostics.length, 'total number of errors');
+            assert.equal(totalErrorsReported + numLibraryDiagnostics, diagnostics.length, 'total number of errors');
 
             return minimalDiagnosticsToString(diagnostics) +
                 sys.newLine + sys.newLine + outputLines.join('\r\n');
