@@ -1,8 +1,8 @@
 /// <reference path="fourslash.ts" />
 
-////{| "itemName": "c", "kind": "constant", "parentName": "" |}const c = 10;
+////{| "itemName": "c", "kind": "const", "parentName": "" |}const c = 10;
 ////function foo() {
-////    {| "itemName": "d", "kind": "constant", "parentName": "foo" |}const d = 10;
+////    {| "itemName": "d", "kind": "const", "parentName": "foo" |}const d = 10;
 ////}
 
 test.markers().forEach(marker => {

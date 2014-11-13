@@ -236,9 +236,9 @@ module ts.NavigationBar {
 
                 case SyntaxKind.VariableDeclaration:
                     if (isConst(node)) {
-                        return createItem(node, getTextOfNode((<VariableDeclaration>node).name), ts.ScriptElementKind.constantElement);
+                        return createItem(node, getTextOfNode((<VariableDeclaration>node).name), ts.ScriptElementKind.constElement);
                     }
-                    else if (node.flags & NodeFlags.Let) {
+                    else if (isLet(node)) {
                         return createItem(node, getTextOfNode((<VariableDeclaration>node).name), ts.ScriptElementKind.letElement);
                     }
                     else {

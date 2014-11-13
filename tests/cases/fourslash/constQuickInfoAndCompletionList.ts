@@ -10,28 +10,28 @@
 ////    /*7*/
 ////}
 goTo.marker('1');
-verify.quickInfoIs("(constant) a: number");
+verify.quickInfoIs("(const) a: number");
 
 goTo.marker('2');
-verify.completionListContains("a", "(constant) a: number");
-verify.quickInfoIs("(constant) a: number");
+verify.completionListContains("a", "(const) a: number");
+verify.quickInfoIs("(const) a: number");
 
 goTo.marker('3');
-verify.completionListContains("a", "(constant) a: number");
+verify.completionListContains("a", "(const) a: number");
 
 goTo.marker('4');
-verify.quickInfoIs("(constant) b: number");
+verify.quickInfoIs("(const) b: number");
 
 goTo.marker('5');
-verify.completionListContains("a", "(constant) a: number");
-verify.completionListContains("b", "(constant) b: number");
-verify.quickInfoIs("(constant) b: number");
+verify.completionListContains("a", "(const) a: number");
+verify.completionListContains("b", "(const) b: number");
+verify.quickInfoIs("(const) b: number");
 
 goTo.marker('6');
-verify.completionListContains("a", "(constant) a: number");
-verify.completionListContains("b", "(constant) b: number");
-verify.quickInfoIs("(constant) a: number");
+verify.completionListContains("a", "(const) a: number");
+verify.completionListContains("b", "(const) b: number");
+verify.quickInfoIs("(const) a: number");
 
 goTo.marker('7');
-verify.completionListContains("a", "(constant) a: number");
-verify.completionListContains("b", "(constant) b: number");
+verify.completionListContains("a", "(const) a: number");
+verify.completionListContains("b", "(const) b: number");
