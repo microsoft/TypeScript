@@ -2097,14 +2097,10 @@ module ts {
                 var imports = getExternalImportDeclarations(node);
                 writeLine();
                 write("define(");
-                
                 if(node.amdModuleName) {
-                    write("\"" + node.amdModuleName + "\"");
-                    write(", ");
+                    write("\"" + node.amdModuleName + "\", ");
                 }
-
                 write("[\"require\", \"exports\"");
-
                 forEach(imports, imp => {
                     write(", ");
                     emitLiteral(imp.externalModuleName);
