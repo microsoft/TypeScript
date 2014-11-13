@@ -1,7 +1,7 @@
 ///<reference path='references.ts' />
 
 module TypeScript {
-    export enum SyntaxConstants {
+    export enum SyntaxNodeConstants {
         None = 0,
 
         // Masks that we use to place information about a node into a single int.  The first bit tells
@@ -18,11 +18,11 @@ module TypeScript {
         // The width of the node is stored in the remainder of the int.  This allows us up to 128MB
         // for a node by using all 27 bits.  However, in the common case, we'll use less than 27 bits
         // for the width.  Thus, the info will be stored in a single int in chakra.
-        NodeDataComputed              = 0x00000001, // 0000 0000 0000 0000 0000 0000 0000 0001
-        NodeIncrementallyUnusableMask = 0x00000002, // 0000 0000 0000 0000 0000 0000 0000 0010
-        NodeParsedInStrictModeMask    = 0x00000004, // 0000 0000 0000 0000 0000 0000 0000 0100
-        NodeParsedInDisallowInMask    = 0x00000008, // 0000 0000 0000 0000 0000 0000 0000 1000
-        NodeParsedInAllowYieldMask    = 0x00000010, // 0000 0000 0000 0000 0000 0000 0001 0000
-        NodeFullWidthShift            = 5,          // 1111 1111 1111 1111 1111 1111 1110 0000
+        DataComputed                = 0x00000001, // 0000 0000 0000 0000 0000 0000 0000 0001
+        IncrementallyUnusableMask   = 0x00000002, // 0000 0000 0000 0000 0000 0000 0000 0010
+        ParsedInStrictModeContext   = 0x00000004, // 0000 0000 0000 0000 0000 0000 0000 0100
+        ParsedInDisallowInContext   = 0x00000008, // 0000 0000 0000 0000 0000 0000 0000 1000
+        ParsedInYieldContext        = 0x00000010, // 0000 0000 0000 0000 0000 0000 0001 0000
+        NodeFullWidthShift          = 5,          // 1111 1111 1111 1111 1111 1111 1110 0000
     }
 }

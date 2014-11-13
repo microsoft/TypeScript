@@ -17,31 +17,31 @@ module TypeScript {
         return undefined;
     }
 
-    export function parsedInStrictMode(node: ISyntaxNode): boolean {
+    export function parsedInStrictModeContext(node: ISyntaxNode): boolean {
         var info = node.__data;
         if (info === undefined) {
             return false;
         }
 
-        return (info & SyntaxConstants.NodeParsedInStrictModeMask) !== 0;
+        return (info & SyntaxNodeConstants.ParsedInStrictModeContext) !== 0;
     }
 
-    export function parsedInDisallowInMode(node: ISyntaxNode): boolean {
+    export function parsedInDisallowInContext(node: ISyntaxNode): boolean {
         var info = node.__data;
         if (info === undefined) {
             return false;
         }
 
-        return (info & SyntaxConstants.NodeParsedInDisallowInMask) !== 0;
+        return (info & SyntaxNodeConstants.ParsedInDisallowInContext) !== 0;
     }
 
-    export function parsedInAllowYieldMode(node: ISyntaxNode): boolean {
+    export function parseInYieldContext(node: ISyntaxNode): boolean {
         var info = node.__data;
         if (info === undefined) {
             return false;
         }
 
-        return (info & SyntaxConstants.NodeParsedInAllowYieldMask) !== 0;
+        return (info & SyntaxNodeConstants.ParsedInYieldContext) !== 0;
     }
 
     export function previousToken(token: ISyntaxToken): ISyntaxToken {
@@ -275,7 +275,7 @@ module TypeScript {
         }
 
         var info = data(element);
-        return info >>> SyntaxConstants.NodeFullWidthShift;
+        return info >>> SyntaxNodeConstants.NodeFullWidthShift;
     }
 
     export function isIncrementallyUnusable(element: ISyntaxElement): boolean {
@@ -283,7 +283,7 @@ module TypeScript {
             return (<ISyntaxToken>element).isIncrementallyUnusable();
         }
 
-        return (data(element) & SyntaxConstants.NodeIncrementallyUnusableMask) !== 0;
+        return (data(element) & SyntaxNodeConstants.IncrementallyUnusableMask) !== 0;
     }
 
     function data(element: ISyntaxElement): number {
@@ -297,7 +297,7 @@ module TypeScript {
             info = 0;
         }
 
-        if ((info & SyntaxConstants.NodeDataComputed) === 0) {
+        if ((info & SyntaxNodeConstants.DataComputed) === 0) {
             info |= computeData(element);
             dataElement.__data = info;
         }
@@ -306,9 +306,9 @@ module TypeScript {
     }
 
     function combineData(fullWidth: number, isIncrementallyUnusable: boolean) {
-        return (fullWidth << SyntaxConstants.NodeFullWidthShift)
-            | (isIncrementallyUnusable ? SyntaxConstants.NodeIncrementallyUnusableMask : 0)
-            | SyntaxConstants.NodeDataComputed;
+        return (fullWidth << SyntaxNodeConstants.NodeFullWidthShift)
+            | (isIncrementallyUnusable ? SyntaxNodeConstants.IncrementallyUnusableMask : 0)
+            | SyntaxNodeConstants.DataComputed;
     }
 
     function listComputeData(list: ISyntaxNodeOrToken[]): number {
