@@ -174,7 +174,7 @@ module ts.SignatureHelp {
         kind: ArgumentListKind;
         invocation: CallLikeExpression;
         arguments: Node | NodeArray<TemplateSpan>;
-        argumentIndex: number;
+        argumentIndex?: number;
         argumentCount: number;
     }
 
@@ -194,7 +194,7 @@ module ts.SignatureHelp {
             return undefined;
         }
 
-        var call: CallLikeExpression = argumentInfo.invocation;
+        var call = argumentInfo.invocation;
         var candidates = <Signature[]>[];
         var resolvedSignature = typeInfoResolver.getResolvedSignature(call, candidates);
         cancellationToken.throwIfCancellationRequested();
@@ -254,16 +254,30 @@ module ts.SignatureHelp {
                 if (listItemInfo) {
                     var list = listItemInfo.list;
                     var isTypeArgList = callExpression.typeArguments && callExpression.typeArguments.pos === list.pos;
+
+                    // The listItemIndex we got back includes commas. Our goal is to return the index of the proper
+                    // item (not including commas). Here are some examples:
+                    //    1. foo(a, b, c #) -> the listItemIndex is 4, we want to return 2
+                    //    2. foo(a, b, # c) -> listItemIndex is 3, we want to return 2
+                    //    3. foo(#a) -> listItemIndex is 0, we want to return 0
+                    //
+                    // In general, we want to subtract the number of commas before the current index.
+                    // But if we are on a comma, we also want to pretend we are on the argument *following*
+                    // the comma. That amounts to taking the ceiling of half the index.
+                    var argumentIndex = (listItemInfo.listItemIndex + 1) >> 1;
+
                     return {
                         kind: isTypeArgList ? ArgumentListKind.TypeArguments : ArgumentListKind.CallArguments,
                         invocation: callExpression,
                         arguments: list,
-                        argumentIndex: (listItemInfo.listItemIndex + 1) >> 1,
+                        argumentIndex: argumentIndex,
                         argumentCount: getCommaBasedArgCount(list)
                     };
                 }
             }
             else if (node.parent.kind === SyntaxKind.TemplateExpression && node.parent.parent.kind === SyntaxKind.TaggedTemplateExpression) {
+                // TODO (drosen): Can't get sig help to trigger within the template head itself; only when directly to the right.
+                //                Also, need to ensure that this works on NoSubstitutionTemplateExpressions when unterminated.
                 Debug.assert(node.kind === SyntaxKind.TemplateHead, "Expected 'TemplateHead' as token.");
 
                 var templateExpression = <TemplateExpression>node.parent;
@@ -303,9 +317,9 @@ module ts.SignatureHelp {
             };
         }
 
-        // The number of arguments is the number of commas plus one, unless the list
-        // is completely empty, in which case there are 0 arguments.
         function getCommaBasedArgCount(argumentsList: Node) {
+            // The number of arguments is the number of commas plus one, unless the list
+            // is completely empty, in which case there are 0 arguments.
             return argumentsList.getChildCount() === 0
                 ? 0
                 : 1 + countWhere(argumentsList.getChildren(), arg => arg.kind === SyntaxKind.CommaToken);
@@ -373,16 +387,16 @@ module ts.SignatureHelp {
             var isTypeParameterList = argumentListInfo.kind === ArgumentListKind.TypeArguments;
 
             var invocation = argumentListInfo.invocation;
-            var invokerNode = getInvoker(invocation)
+            var invokerNode = getCallLikeInvoker(invocation)
             var invokerSymbol = typeInfoResolver.getSymbolInfo(invokerNode);
-            var callTargetDisplayParts = invokerSymbol && symbolToDisplayParts(typeInfoResolver, invokerSymbol, /*enclosingDeclaration*/ undefined, /*meaning*/ undefined);
+            var invokerDisplayParts = invokerSymbol && symbolToDisplayParts(typeInfoResolver, invokerSymbol, /*enclosingDeclaration*/ undefined, /*meaning*/ undefined);
             var items: SignatureHelpItem[] = map(candidates, candidateSignature => {
                 var signatureHelpParameters: SignatureHelpParameter[];
                 var prefixParts: SymbolDisplayPart[] = [];
                 var suffixParts: SymbolDisplayPart[] = [];
 
-                if (callTargetDisplayParts) {
-                    prefixParts.push.apply(prefixParts, callTargetDisplayParts);
+                if (invokerDisplayParts) {
+                    prefixParts.push.apply(prefixParts, invokerDisplayParts);
                 }
 
                 if (isTypeParameterList) {
@@ -430,15 +444,6 @@ module ts.SignatureHelp {
             var applicableSpanEnd = skipTrivia(sourceFile.text, argumentsList.end, /*stopAfterLineBreak*/ false);
             var applicableSpan = new TypeScript.TextSpan(applicableSpanStart, applicableSpanEnd - applicableSpanStart);
 
-            // The listItemIndex we got back includes commas. Our goal is to return the index of the proper
-            // item (not including commas). Here are some examples:
-            //    1. foo(a, b, c #) -> the listItemIndex is 4, we want to return 2
-            //    2. foo(a, b, # c) -> listItemIndex is 3, we want to return 2
-            //    3. foo(#a) -> listItemIndex is 0, we want to return 0
-            //
-            // In general, we want to subtract the number of commas before the current index.
-            // But if we are on a comma, we also want to pretend we are on the argument *following*
-            // the comma. That amounts to taking the ceiling of half the index.
             var argumentIndex = argumentListInfo.argumentIndex;
 
             // argumentCount is the *apparent* number of arguments.
