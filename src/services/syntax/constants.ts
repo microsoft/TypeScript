@@ -18,11 +18,12 @@ module TypeScript {
         // The width of the node is stored in the remainder of the int.  This allows us up to 128MB
         // for a node by using all 27 bits.  However, in the common case, we'll use less than 27 bits
         // for the width.  Thus, the info will be stored in a single int in chakra.
-        DataComputed                = 0x00000001, // 0000 0000 0000 0000 0000 0000 0000 0001
-        IncrementallyUnusableMask   = 0x00000002, // 0000 0000 0000 0000 0000 0000 0000 0010
-        ParsedInStrictModeContext   = 0x00000004, // 0000 0000 0000 0000 0000 0000 0000 0100
-        ParsedInDisallowInContext   = 0x00000008, // 0000 0000 0000 0000 0000 0000 0000 1000
-        ParsedInYieldContext        = 0x00000010, // 0000 0000 0000 0000 0000 0000 0001 0000
-        NodeFullWidthShift          = 5,          // 1111 1111 1111 1111 1111 1111 1110 0000
+        DataComputed                        = 0x00000001, // 0000 0000 0000 0000 0000 0000 0000 0001
+        IncrementallyUnusableMask           = 0x00000002, // 0000 0000 0000 0000 0000 0000 0000 0010
+        ParsedInStrictModeContext           = 0x00000004, // 0000 0000 0000 0000 0000 0000 0000 0100
+        ParsedInDisallowInContext           = 0x00000008, // 0000 0000 0000 0000 0000 0000 0000 1000
+        ParsedInYieldContext                = 0x00000010, // 0000 0000 0000 0000 0000 0000 0001 0000
+        ParsedInGeneratorParameterContext   = 0x00000020, // 0000 0000 0000 0000 0000 0000 0010 0000
+        FullWidthShift                      = 1 << 6,     // 1111 1111 1111 1111 1111 1111 1100 0000
     }
 }

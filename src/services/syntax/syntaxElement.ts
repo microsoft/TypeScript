@@ -35,13 +35,22 @@ module TypeScript {
         return (info & SyntaxNodeConstants.ParsedInDisallowInContext) !== 0;
     }
 
-    export function parseInYieldContext(node: ISyntaxNode): boolean {
+    export function parsedInYieldContext(node: ISyntaxNode): boolean {
         var info = node.__data;
         if (info === undefined) {
             return false;
         }
 
         return (info & SyntaxNodeConstants.ParsedInYieldContext) !== 0;
+    }
+
+    export function parsedInGeneratorParameterContext(node: ISyntaxNode): boolean {
+        var info = node.__data;
+        if (info === undefined) {
+            return false;
+        }
+
+        return (info & SyntaxNodeConstants.ParsedInGeneratorParameterContext) !== 0;
     }
 
     export function previousToken(token: ISyntaxToken): ISyntaxToken {
@@ -275,7 +284,7 @@ module TypeScript {
         }
 
         var info = data(element);
-        return info >>> SyntaxNodeConstants.NodeFullWidthShift;
+        return (info / SyntaxNodeConstants.FullWidthShift) | 0;
     }
 
     export function isIncrementallyUnusable(element: ISyntaxElement): boolean {
@@ -306,9 +315,9 @@ module TypeScript {
     }
 
     function combineData(fullWidth: number, isIncrementallyUnusable: boolean) {
-        return (fullWidth << SyntaxNodeConstants.NodeFullWidthShift)
-            | (isIncrementallyUnusable ? SyntaxNodeConstants.IncrementallyUnusableMask : 0)
-            | SyntaxNodeConstants.DataComputed;
+        return (fullWidth * SyntaxNodeConstants.FullWidthShift) +
+               (isIncrementallyUnusable ? SyntaxNodeConstants.IncrementallyUnusableMask : 0) +
+               SyntaxNodeConstants.DataComputed;
     }
 
     function listComputeData(list: ISyntaxNodeOrToken[]): number {

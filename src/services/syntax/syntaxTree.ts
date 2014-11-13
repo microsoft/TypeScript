@@ -1563,7 +1563,7 @@ module TypeScript {
         }
 
         public visitYieldExpression(node: YieldExpressionSyntax): void {
-            if (!parseInYieldContext(node)) {
+            if (!parsedInYieldContext(node)) {
                 this.pushDiagnostic(node.yieldKeyword, DiagnosticCode.yield_expression_must_be_contained_within_a_generator_declaration);
                 return;
             }
