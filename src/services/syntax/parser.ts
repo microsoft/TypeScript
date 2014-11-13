@@ -3778,6 +3778,23 @@ module TypeScript.Parser {
         }
 
         function tryParseType(): ITypeSyntax {
+            // The rules about 'yield' only apply to actual code/expression contexts.  They don't
+            // apply to 'type' contexts.  So we disable these parameters here before moving on.
+            var savedYieldContext = yieldContext;
+            var savedGeneratorParameterContext = generatorParameterContext;
+
+            setYieldContext(false);
+            setGeneratorParameterContext(false);
+
+            var result = tryParseTypeWorker();
+
+            setYieldContext(savedYieldContext);
+            setGeneratorParameterContext(savedGeneratorParameterContext);
+
+            return result;
+        }
+
+        function tryParseTypeWorker(): ITypeSyntax {
             if (isFunctionType()) {
                 return parseFunctionType();
             }
