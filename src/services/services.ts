@@ -3882,6 +3882,18 @@ module ts {
                 }
                 else if (container.kind === SyntaxKind.ClassDeclaration) {
                     nodes = (<ClassDeclaration>container).members;
+
+                    // If we're an accessibility modifier, we should search the constructor's parameter list
+                    // as well (i.e. don't look for 'static' parameters).
+                    if (modifierFlag & NodeFlags.AccessibilityModifier) {
+                        var constructor = forEach((<ClassDeclaration>container).members, member => {
+                            return member.kind === SyntaxKind.Constructor && <ConstructorDeclaration>member;
+                        });
+
+                        if (constructor) {
+                            nodes = nodes.concat(constructor.parameters);
+                        }
+                    }
                 }
                 else if (container.kind === SyntaxKind.Constructor) {
                     nodes = (<Node[]>(<ConstructorDeclaration>container).parameters).concat(
