@@ -7,7 +7,7 @@ module ts.BreakpointResolver {
     /**
      * Get the breakpoint span in given sourceFile
      */
-    export function spanInSourceFileAtLocation(sourceFile: SourceFile, position: number) {
+    export function spanInSourceFileAtLocation(sourceFile: SourceFile, position: number, compilerOptions: CompilerOptions) {
         // Cannot set breakpoint in dts file
         if (sourceFile.flags & NodeFlags.DeclarationFile) {
             return undefined;
@@ -178,7 +178,7 @@ module ts.BreakpointResolver {
 
                     case SyntaxKind.ModuleDeclaration:
                         // span on complete module if it is instantiated
-                        if (getModuleInstanceState(node) !== ModuleInstanceState.Instantiated) {
+                        if (getModuleInstanceState(node, compilerOptions) !== ModuleInstanceState.Instantiated) {
                             return undefined;
                         }
 
@@ -351,7 +351,7 @@ module ts.BreakpointResolver {
             function spanInBlock(block: Block): TypeScript.TextSpan {
                 switch (block.parent.kind) {
                     case SyntaxKind.ModuleDeclaration:
-                        if (getModuleInstanceState(block.parent) !== ModuleInstanceState.Instantiated) {
+                        if (getModuleInstanceState(block.parent, compilerOptions) !== ModuleInstanceState.Instantiated) {
                             return undefined;
                         }
 
@@ -408,7 +408,7 @@ module ts.BreakpointResolver {
                 switch (node.parent.kind) {
                     case SyntaxKind.ModuleBlock:
                         // If this is not instantiated module block no bp span
-                        if (getModuleInstanceState(node.parent.parent) !== ModuleInstanceState.Instantiated) {
+                        if (getModuleInstanceState(node.parent.parent, compilerOptions) !== ModuleInstanceState.Instantiated) {
                             return undefined;
                         }
 

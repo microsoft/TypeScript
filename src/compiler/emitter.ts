@@ -1979,7 +1979,7 @@ module ts {
             }
 
             function emitModuleDeclaration(node: ModuleDeclaration) {
-                if (getModuleInstanceState(node) !== ModuleInstanceState.Instantiated) {
+                if (getModuleInstanceState(node, compilerOptions) !== ModuleInstanceState.Instantiated) {
                     return emitPinnedOrTripleSlashComments(node);
                 }
                 emitLeadingComments(node);

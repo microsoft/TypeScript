@@ -11,14 +11,14 @@ module ts {
         ConstEnumOnly   = 2
     }
 
-    export function getModuleInstanceState(node: Node): ModuleInstanceState {
+    export function getModuleInstanceState(node: Node, compilerOptions: CompilerOptions): ModuleInstanceState {
         // A module is uninstantiated if it contains only 
         // 1. interface declarations
         if (node.kind === SyntaxKind.InterfaceDeclaration) {
             return ModuleInstanceState.NonInstantiated;
         }
         // 2. const enum declarations don't make module instantiated
-        else if (node.kind === SyntaxKind.EnumDeclaration && isConstEnumDeclaration(<EnumDeclaration>node)) {
+        else if (node.kind === SyntaxKind.EnumDeclaration && isConstEnumDeclaration(<EnumDeclaration>node) && !compilerOptions.preserveConstEnums) {
             return ModuleInstanceState.ConstEnumOnly;
         }
         // 3. non - exported import declarations
@@ -29,7 +29,7 @@ module ts {
         else if (node.kind === SyntaxKind.ModuleBlock) {
             var state = ModuleInstanceState.NonInstantiated;
             forEachChild(node, n => {
-                switch (getModuleInstanceState(n)) {
+                switch (getModuleInstanceState(n, compilerOptions)) {
                     case ModuleInstanceState.NonInstantiated:
                         // child is non-instantiated - continue searching
                         return false;
@@ -46,14 +46,14 @@ module ts {
             return state;
         }
         else if (node.kind === SyntaxKind.ModuleDeclaration) {
-            return getModuleInstanceState((<ModuleDeclaration>node).body);
+            return getModuleInstanceState((<ModuleDeclaration>node).body, compilerOptions);
         }
         else {
             return ModuleInstanceState.Instantiated;
         }
     }
 
-    export function bindSourceFile(file: SourceFile) {
+    export function bindSourceFile(file: SourceFile, options: CompilerOptions) {
 
         var parent: Node;
         var container: Declaration;
@@ -276,7 +276,7 @@ module ts {
                 bindDeclaration(node, SymbolFlags.ValueModule, SymbolFlags.ValueModuleExcludes, /*isBlockScopeContainer*/ true);
             }
             else {
-                var state = getModuleInstanceState(node);
+                var state = getModuleInstanceState(node, options);
                 if (state === ModuleInstanceState.NonInstantiated) {
                     bindDeclaration(node, SymbolFlags.NamespaceModule, SymbolFlags.NamespaceModuleExcludes, /*isBlockScopeContainer*/ true);
                 }

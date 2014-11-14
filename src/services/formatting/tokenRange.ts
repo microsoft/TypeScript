@@ -44,8 +44,8 @@ module TypeScript.Services.Formatting {
 
 
             public toString(): string {
-                return "[tokenRangeStart=" + SyntaxKind[this.tokens[0]] + "," +
-                 "tokenRangeEnd=" + SyntaxKind[this.tokens[this.tokens.length - 1]] + "]";
+                return "[tokenRangeStart=" + this.tokens[0] + "," +
+                 "tokenRangeEnd=" + this.tokens[this.tokens.length - 1] + "]";
             }
         }
 
@@ -78,7 +78,7 @@ module TypeScript.Services.Formatting {
             }
 
             public toString(): string {
-                return "[singleTokenKind=" + SyntaxKind[this.token] + "]";
+                return "[singleTokenKind=" + this.token + "]";
             }
         }
 

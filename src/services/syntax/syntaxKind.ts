@@ -1,7 +1,7 @@
 // If you change anything in this enum, make sure you run SyntaxGenerator again!
 
 module TypeScript {
-    export enum SyntaxKind {
+    export const enum SyntaxKind {
         // Variable width tokens, trivia and lists.
         None,
         List,

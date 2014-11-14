@@ -4689,7 +4689,7 @@ module ts {
                     if ((<ModuleDeclaration>node).name.kind === SyntaxKind.StringLiteral) {
                         return SemanticMeaning.Namespace | SemanticMeaning.Value;
                     }
-                    else if (getModuleInstanceState(node) === ModuleInstanceState.Instantiated) {
+                    else if (getModuleInstanceState(node, program.getCompilerOptions()) === ModuleInstanceState.Instantiated) {
                         return SemanticMeaning.Namespace | SemanticMeaning.Value;
                     }
                     else {
@@ -4912,7 +4912,7 @@ module ts {
         function getBreakpointStatementAtPosition(filename: string, position: number) {
             // doesn't use compiler - no need to synchronize with host
             filename = ts.normalizeSlashes(filename);
-            return BreakpointResolver.spanInSourceFileAtLocation(getCurrentSourceFile(filename), position);
+            return BreakpointResolver.spanInSourceFileAtLocation(getCurrentSourceFile(filename), position, host.getCompilationSettings());
         }
 
         function getNavigationBarItems(filename: string): NavigationBarItem[] {
@@ -4966,7 +4966,7 @@ module ts {
                  */
                 function hasValueSideModule(symbol: Symbol): boolean {
                     return forEach(symbol.declarations, declaration => {
-                        return declaration.kind === SyntaxKind.ModuleDeclaration && getModuleInstanceState(declaration) == ModuleInstanceState.Instantiated;
+                        return declaration.kind === SyntaxKind.ModuleDeclaration && getModuleInstanceState(declaration, program.getCompilerOptions()) == ModuleInstanceState.Instantiated;
                     });
                 }
             }
