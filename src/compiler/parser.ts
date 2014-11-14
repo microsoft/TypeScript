@@ -957,18 +957,16 @@ module ts {
             };
         })();
 
-        function getLineAndCharacterlFromSourcePosition(position: number) {
-            if (!lineStarts) {
-                lineStarts = getLineStarts(sourceText);
-            }
-            return getLineAndCharacterOfPosition(lineStarts, position);
+        function getLineStarts(): number[] {
+            return lineStarts || (lineStarts = computeLineStarts(sourceText));
+        }
+
+        function getLineAndCharacterFromSourcePosition(position: number) {
+            return getLineAndCharacterOfPosition(getLineStarts(), position);
         }
 
         function getPositionFromSourceLineAndCharacter(line: number, character: number): number {
-            if (!lineStarts) {
-                lineStarts = getLineStarts(sourceText);
-            }
-            return getPositionFromLineAndCharacter(lineStarts, line, character);
+            return getPositionFromLineAndCharacter(getLineStarts(), line, character);
         }
 
         function error(message: DiagnosticMessage, arg0?: any, arg1?: any, arg2?: any): void {
@@ -1011,7 +1009,9 @@ module ts {
                 ? file.syntacticErrors[file.syntacticErrors.length - 1].start
                 : -1;
             if (start !== lastErrorPos) {
-                file.syntacticErrors.push(createFileDiagnostic(file, start, length, message, arg0, arg1, arg2));
+                var diagnostic = createFileDiagnostic(file, start, length, message, arg0, arg1, arg2);
+                diagnostic.isParseError = true;
+                file.syntacticErrors.push(diagnostic);
             }
 
             if (lookAheadMode === LookAheadMode.NoErrorYet) {
@@ -4282,8 +4282,9 @@ module ts {
         file = <SourceFile>createRootNode(SyntaxKind.SourceFile, 0, sourceText.length, rootNodeFlags);
         file.filename = normalizePath(filename);
         file.text = sourceText;
-        file.getLineAndCharacterFromPosition = getLineAndCharacterlFromSourcePosition;
+        file.getLineAndCharacterFromPosition = getLineAndCharacterFromSourcePosition;
         file.getPositionFromLineAndCharacter = getPositionFromSourceLineAndCharacter;
+        file.getLineStarts = getLineStarts;
         file.syntacticErrors = [];
         file.semanticErrors = [];
         var referenceComments = processReferenceComments(); 

@@ -1297,7 +1297,7 @@ module TypeScript {
         }
 
         private checkForWithInStrictMode(node: WithStatementSyntax): boolean {
-            if (parsedInStrictMode(node)) {
+            if (parsedInStrictModeContext(node)) {
                 this.pushDiagnostic(firstToken(node), DiagnosticCode.with_statements_are_not_allowed_in_strict_mode);
                 return true;
             }
@@ -1509,7 +1509,7 @@ module TypeScript {
         }
 
         public visitPrefixUnaryExpression(node: PrefixUnaryExpressionSyntax): void {
-            if (parsedInStrictMode(node) && this.isPreIncrementOrDecrementExpression(node) && this.isEvalOrArguments(node.operand)) {
+            if (parsedInStrictModeContext(node) && this.isPreIncrementOrDecrementExpression(node) && this.isEvalOrArguments(node.operand)) {
                 this.pushDiagnostic(node.operatorToken, DiagnosticCode.Invalid_use_of_0_in_strict_mode, [this.getEvalOrArguments(node.operand)]);
             }
 
@@ -1517,7 +1517,7 @@ module TypeScript {
         }
 
         public visitPostfixUnaryExpression(node: PostfixUnaryExpressionSyntax): void {
-            if (parsedInStrictMode(node) && this.isEvalOrArguments(node.operand)) {
+            if (parsedInStrictModeContext(node) && this.isEvalOrArguments(node.operand)) {
                 this.pushDiagnostic(node.operatorToken, DiagnosticCode.Invalid_use_of_0_in_strict_mode, [this.getEvalOrArguments(node.operand)]);
             }
 
@@ -1534,7 +1534,7 @@ module TypeScript {
 
         private checkForDisallowedEvalOrArguments(node: ISyntaxNode, token: ISyntaxToken): boolean {
             if (token) {
-                if (parsedInStrictMode(node) && this.isEvalOrArguments(token)) {
+                if (parsedInStrictModeContext(node) && this.isEvalOrArguments(token)) {
                     this.pushDiagnostic(token, DiagnosticCode.Invalid_use_of_0_in_strict_mode, [this.getEvalOrArguments(token)]);
                     return true;
                 }
@@ -1554,16 +1554,25 @@ module TypeScript {
         }
 
         public visitDeleteExpression(node: DeleteExpressionSyntax): void {
-            if (parsedInStrictMode(node) && node.expression.kind === SyntaxKind.IdentifierName) {
-                this.pushDiagnostic(firstToken(node), DiagnosticCode.delete_cannot_be_called_on_an_identifier_in_strict_mode);
+            if (parsedInStrictModeContext(node) && node.expression.kind === SyntaxKind.IdentifierName) {
+                this.pushDiagnostic(node.deleteKeyword, DiagnosticCode.delete_cannot_be_called_on_an_identifier_in_strict_mode);
                 return;
             }
 
             super.visitDeleteExpression(node);
         }
 
+        public visitYieldExpression(node: YieldExpressionSyntax): void {
+            if (!parsedInYieldContext(node)) {
+                this.pushDiagnostic(node.yieldKeyword, DiagnosticCode.yield_expression_must_be_contained_within_a_generator_declaration);
+                return;
+            }
+
+            super.visitYieldExpression(node);
+        }
+
         private checkIllegalAssignment(node: BinaryExpressionSyntax): boolean {
-            if (parsedInStrictMode(node) && SyntaxFacts.isAssignmentOperatorToken(node.operatorToken.kind) && this.isEvalOrArguments(node.left)) {
+            if (parsedInStrictModeContext(node) && SyntaxFacts.isAssignmentOperatorToken(node.operatorToken.kind) && this.isEvalOrArguments(node.left)) {
                 this.pushDiagnostic(node.operatorToken, DiagnosticCode.Invalid_use_of_0_in_strict_mode, [this.getEvalOrArguments(node.left)]);
                 return true;
             }

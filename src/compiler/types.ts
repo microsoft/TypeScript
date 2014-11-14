@@ -245,7 +245,11 @@ module ts {
         FirstLiteralToken = NumericLiteral,
         LastLiteralToken = NoSubstitutionTemplateLiteral,
         FirstTemplateToken = NoSubstitutionTemplateLiteral,
-        LastTemplateToken = TemplateTail
+        LastTemplateToken = TemplateTail,
+        FirstOperator = SemicolonToken,
+        LastOperator = CaretEqualsToken,
+        FirstBinaryOperator = LessThanToken,
+        LastBinaryOperator = CaretEqualsToken
     }
 
     export const enum NodeFlags {
@@ -627,8 +631,9 @@ module ts {
     export interface SourceFile extends Block {
         filename: string;
         text: string;
-        getLineAndCharacterFromPosition(position: number): { line: number; character: number };
+        getLineAndCharacterFromPosition(position: number): LineAndCharacter;
         getPositionFromLineAndCharacter(line: number, character: number): number;
+        getLineStarts(): number[];
         amdDependencies: string[];
         referencedFiles: FileReference[];
         syntacticErrors: Diagnostic[];
@@ -1121,7 +1126,16 @@ module ts {
         messageText: string;
         category: DiagnosticCategory;
         code: number;
+        /**
+          * Early error - any error (can be produced at parsing\binding\typechecking step) that blocks emit
+          */
         isEarly?: boolean;
+        /**
+          * Parse error - error produced by parser when it scanner returns a token 
+          * that parser does not understand in its current state 
+          * (as opposed to grammar error when parser can interpret the token but interpretation is not legal from the grammar perespective)
+          */
+        isParseError?: boolean;
     }
 
     export enum DiagnosticCategory {
