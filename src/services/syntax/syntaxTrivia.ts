@@ -2,8 +2,8 @@
 
 module TypeScript {
     export interface ISyntaxTrivia {
-        parent?: ISyntaxTriviaList;
-        kind(): SyntaxKind;
+        parent: ISyntaxTriviaList;
+        kind: SyntaxKind;
 
         isWhitespace(): boolean;
         isComment(): boolean;
@@ -25,11 +25,9 @@ module TypeScript {
 
 module TypeScript.Syntax {
     class AbstractTrivia implements ISyntaxTrivia {
-        constructor(private _kind: SyntaxKind) {
-        }
+        public parent: ISyntaxTriviaList;
 
-        public kind(): SyntaxKind {
-            return this._kind;
+        constructor(public kind: SyntaxKind) {
         }
 
         public clone(): ISyntaxTrivia {
@@ -53,19 +51,19 @@ module TypeScript.Syntax {
         }
 
         public isWhitespace(): boolean {
-            return this.kind() === SyntaxKind.WhitespaceTrivia;
+            return this.kind === SyntaxKind.WhitespaceTrivia;
         }
 
         public isComment(): boolean {
-            return this.kind() === SyntaxKind.SingleLineCommentTrivia || this.kind() === SyntaxKind.MultiLineCommentTrivia;
+            return this.kind === SyntaxKind.SingleLineCommentTrivia || this.kind === SyntaxKind.MultiLineCommentTrivia;
         }
 
         public isNewLine(): boolean {
-            return this.kind() === SyntaxKind.NewLineTrivia;
+            return this.kind === SyntaxKind.NewLineTrivia;
         }
 
         public isSkippedToken(): boolean {
-            return this.kind() === SyntaxKind.SkippedTokenTrivia;
+            return this.kind === SyntaxKind.SkippedTokenTrivia;
         }
     }
 
@@ -103,7 +101,7 @@ module TypeScript.Syntax {
         }
 
         public clone(): ISyntaxTrivia {
-            return new DeferredTrivia(this.kind(), this._text, this._fullStart, this._fullWidth);
+            return new DeferredTrivia(this.kind, this._text, this._fullStart, this._fullWidth);
         }
 
         public fullStart(): number {
@@ -129,7 +127,6 @@ module TypeScript.Syntax {
 
     export function skippedTokenTrivia(token: ISyntaxToken, text: ISimpleText): ISyntaxTrivia {
         Debug.assert(!token.hasLeadingTrivia());
-        Debug.assert(!token.hasTrailingTrivia());
         Debug.assert(token.fullWidth() > 0);
         return new SkippedTokenTrivia(token, token.fullText(text));
     }

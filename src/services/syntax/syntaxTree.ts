@@ -814,7 +814,7 @@ module TypeScript {
         }
 
         private checkForDisallowedImportDeclaration(node: ModuleDeclarationSyntax): boolean {
-            if (!node.stringLiteral) {
+            if (node.name.kind !== SyntaxKind.StringLiteral) {
                 for (var i = 0, n = node.moduleElements.length; i < n; i++) {
                     var child = node.moduleElements[i];
                     if (child.kind === SyntaxKind.ImportDeclaration) {
@@ -849,21 +849,21 @@ module TypeScript {
 
         public visitModuleDeclaration(node: ModuleDeclarationSyntax): void {
             if (this.checkForDisallowedDeclareModifier(node.modifiers) ||
-                this.checkForRequiredDeclareModifier(node, node.stringLiteral ? node.stringLiteral : firstToken(node.name), node.modifiers) ||
+                this.checkForRequiredDeclareModifier(node, firstToken(node.name), node.modifiers) ||
                 this.checkModuleElementModifiers(node.modifiers) ||
                 this.checkForDisallowedImportDeclaration(node)) {
 
                 return;
             }
 
-            if (node.stringLiteral) {
+            if (node.name.kind === SyntaxKind.StringLiteral) {
                 if (!this.inAmbientDeclaration && !SyntaxUtilities.containsToken(node.modifiers, SyntaxKind.DeclareKeyword)) {
-                    this.pushDiagnostic(node.stringLiteral, DiagnosticCode.Only_ambient_modules_can_use_quoted_names);
+                    this.pushDiagnostic(node.name, DiagnosticCode.Only_ambient_modules_can_use_quoted_names);
                     return;
                 }
             }
 
-            if (!node.stringLiteral && this.checkForDisallowedExportAssignment(node)) {
+            if (node.name.kind !== SyntaxKind.StringLiteral && this.checkForDisallowedExportAssignment(node)) {
                 return;
             }
 
@@ -1158,7 +1158,7 @@ module TypeScript {
         }
 
         private checkForInLeftHandSideExpression(node: ForInStatementSyntax): boolean {
-            if (node.left && !SyntaxUtilities.isLeftHandSizeExpression(node.left)) {
+            if (node.left.kind !== SyntaxKind.VariableDeclaration && !SyntaxUtilities.isLeftHandSizeExpression(node.left)) {
                 this.pushDiagnostic(node.left, DiagnosticCode.Invalid_left_hand_side_in_for_in_statement);
                 return true;
             }
@@ -1170,8 +1170,8 @@ module TypeScript {
             // The parser accepts a Variable Declaration in a ForInStatement, but the grammar only
             // allows a very restricted form.  Specifically, there must be only a single Variable
             // Declarator in the Declaration.
-            if (node.variableDeclaration && node.variableDeclaration.variableDeclarators.length > 1) {
-                this.pushDiagnostic(node.variableDeclaration, DiagnosticCode.Only_a_single_variable_declaration_is_allowed_in_a_for_in_statement);
+            if (node.left.kind === SyntaxKind.VariableDeclaration && (<VariableDeclarationSyntax>node.left).variableDeclarators.length > 1) {
+                this.pushDiagnostic(node.left, DiagnosticCode.Only_a_single_variable_declaration_is_allowed_in_a_for_in_statement);
                 return true;
             }
 
@@ -1297,7 +1297,7 @@ module TypeScript {
         }
 
         private checkForWithInStrictMode(node: WithStatementSyntax): boolean {
-            if (parsedInStrictMode(node)) {
+            if (parsedInStrictModeContext(node)) {
                 this.pushDiagnostic(firstToken(node), DiagnosticCode.with_statements_are_not_allowed_in_strict_mode);
                 return true;
             }
@@ -1509,7 +1509,7 @@ module TypeScript {
         }
 
         public visitPrefixUnaryExpression(node: PrefixUnaryExpressionSyntax): void {
-            if (parsedInStrictMode(node) && this.isPreIncrementOrDecrementExpression(node) && this.isEvalOrArguments(node.operand)) {
+            if (parsedInStrictModeContext(node) && this.isPreIncrementOrDecrementExpression(node) && this.isEvalOrArguments(node.operand)) {
                 this.pushDiagnostic(node.operatorToken, DiagnosticCode.Invalid_use_of_0_in_strict_mode, [this.getEvalOrArguments(node.operand)]);
             }
 
@@ -1517,7 +1517,7 @@ module TypeScript {
         }
 
         public visitPostfixUnaryExpression(node: PostfixUnaryExpressionSyntax): void {
-            if (parsedInStrictMode(node) && this.isEvalOrArguments(node.operand)) {
+            if (parsedInStrictModeContext(node) && this.isEvalOrArguments(node.operand)) {
                 this.pushDiagnostic(node.operatorToken, DiagnosticCode.Invalid_use_of_0_in_strict_mode, [this.getEvalOrArguments(node.operand)]);
             }
 
@@ -1534,7 +1534,7 @@ module TypeScript {
 
         private checkForDisallowedEvalOrArguments(node: ISyntaxNode, token: ISyntaxToken): boolean {
             if (token) {
-                if (parsedInStrictMode(node) && this.isEvalOrArguments(token)) {
+                if (parsedInStrictModeContext(node) && this.isEvalOrArguments(token)) {
                     this.pushDiagnostic(token, DiagnosticCode.Invalid_use_of_0_in_strict_mode, [this.getEvalOrArguments(token)]);
                     return true;
                 }
@@ -1554,16 +1554,25 @@ module TypeScript {
         }
 
         public visitDeleteExpression(node: DeleteExpressionSyntax): void {
-            if (parsedInStrictMode(node) && node.expression.kind === SyntaxKind.IdentifierName) {
-                this.pushDiagnostic(firstToken(node), DiagnosticCode.delete_cannot_be_called_on_an_identifier_in_strict_mode);
+            if (parsedInStrictModeContext(node) && node.expression.kind === SyntaxKind.IdentifierName) {
+                this.pushDiagnostic(node.deleteKeyword, DiagnosticCode.delete_cannot_be_called_on_an_identifier_in_strict_mode);
                 return;
             }
 
             super.visitDeleteExpression(node);
         }
 
+        public visitYieldExpression(node: YieldExpressionSyntax): void {
+            if (!parsedInYieldContext(node)) {
+                this.pushDiagnostic(node.yieldKeyword, DiagnosticCode.yield_expression_must_be_contained_within_a_generator_declaration);
+                return;
+            }
+
+            super.visitYieldExpression(node);
+        }
+
         private checkIllegalAssignment(node: BinaryExpressionSyntax): boolean {
-            if (parsedInStrictMode(node) && SyntaxFacts.isAssignmentOperatorToken(node.operatorToken.kind) && this.isEvalOrArguments(node.left)) {
+            if (parsedInStrictModeContext(node) && SyntaxFacts.isAssignmentOperatorToken(node.operatorToken.kind) && this.isEvalOrArguments(node.left)) {
                 this.pushDiagnostic(node.operatorToken, DiagnosticCode.Invalid_use_of_0_in_strict_mode, [this.getEvalOrArguments(node.left)]);
                 return true;
             }

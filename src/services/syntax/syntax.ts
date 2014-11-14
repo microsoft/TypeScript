@@ -9,7 +9,7 @@ module TypeScript.Syntax {
             if (isToken(child)) {
                 var token = <ISyntaxToken>child;
                 // If a token is skipped, return true. Or if it is a missing token. The only empty token that is not missing is EOF
-                if (token.hasSkippedToken() || (width(token) === 0 && token.kind !== SyntaxKind.EndOfFileToken)) {
+                if (token.hasLeadingSkippedToken() || (fullWidth(token) === 0 && token.kind !== SyntaxKind.EndOfFileToken)) {
                     return true;
                 }
             }
@@ -28,7 +28,7 @@ module TypeScript.Syntax {
     }
 
     export function isUnterminatedMultilineCommentTrivia(trivia: ISyntaxTrivia): boolean {
-        if (trivia && trivia.kind() === SyntaxKind.MultiLineCommentTrivia) {
+        if (trivia && trivia.kind === SyntaxKind.MultiLineCommentTrivia) {
             var text = trivia.fullText();
             return text.length < 4 || text.substring(text.length - 2) !== "*/";
         }
@@ -42,79 +42,7 @@ module TypeScript.Syntax {
                 return true;
             }
             else if (position === end) {
-                return trivia.kind() === SyntaxKind.SingleLineCommentTrivia || isUnterminatedMultilineCommentTrivia(trivia);
-            }
-        }
-
-        return false;
-    }
-
-    export function isEntirelyInsideComment(sourceUnit: SourceUnitSyntax, position: number): boolean {
-        var positionedToken = findToken(sourceUnit, position);
-        var fullStart = positionedToken.fullStart();
-        var triviaList: ISyntaxTriviaList = undefined;
-        var lastTriviaBeforeToken: ISyntaxTrivia = undefined;
-
-        if (positionedToken.kind === SyntaxKind.EndOfFileToken) {
-            // Check if the trivia is leading on the EndOfFile token
-            if (positionedToken.hasLeadingTrivia()) {
-                triviaList = positionedToken.leadingTrivia();
-            }
-            // Or trailing on the previous token
-            else {
-                positionedToken = previousToken(positionedToken);
-                if (positionedToken) {
-                    if (positionedToken && positionedToken.hasTrailingTrivia()) {
-                        triviaList = positionedToken.trailingTrivia();
-                        fullStart = end(positionedToken);
-                    }
-                }
-            }
-        }
-        else {
-            if (position <= (fullStart + positionedToken.leadingTriviaWidth())) {
-                triviaList = positionedToken.leadingTrivia();
-            }
-            else if (position >= (fullStart + width(positionedToken))) {
-                triviaList = positionedToken.trailingTrivia();
-                fullStart = end(positionedToken);
-            }
-        }
-
-        if (triviaList) {
-            // Try to find the trivia matching the position
-            for (var i = 0, n = triviaList.count(); i < n; i++) {
-                var trivia = triviaList.syntaxTriviaAt(i);
-                if (position <= fullStart) {
-                    // Moved passed the trivia we need
-                    break;
-                }
-                else if (position <= fullStart + trivia.fullWidth() && trivia.isComment()) {
-                    // Found the comment trivia we were looking for
-                    lastTriviaBeforeToken = trivia;
-                    break;
-                }
-
-                fullStart += trivia.fullWidth();
-            }
-        }
-
-        return lastTriviaBeforeToken && isEntirelyInsideCommentTrivia(lastTriviaBeforeToken, fullStart, position);
-    }
-
-    export function isEntirelyInStringOrRegularExpressionLiteral(sourceUnit: SourceUnitSyntax, position: number): boolean {
-        var positionedToken = findToken(sourceUnit, position);
-
-        if (positionedToken) {
-            if (positionedToken.kind === SyntaxKind.EndOfFileToken) {
-                // EndOfFile token, enusre it did not follow an unterminated string literal
-                positionedToken = previousToken(positionedToken);
-                return positionedToken && positionedToken.trailingTriviaWidth() === 0 && isUnterminatedStringLiteral(positionedToken);
-            }
-            else if (position > start(positionedToken)) {
-                // Ensure position falls enterily within the literal if it is terminated, or the line if it is not
-                return (position < end(positionedToken) && (positionedToken.kind === TypeScript.SyntaxKind.StringLiteral || positionedToken.kind === TypeScript.SyntaxKind.RegularExpressionLiteral)) ||
-                    (position <= end(positionedToken) && isUnterminatedStringLiteral(positionedToken));
+                return trivia.kind === SyntaxKind.SingleLineCommentTrivia || isUnterminatedMultilineCommentTrivia(trivia);
             }
         }
 
@@ -203,32 +131,10 @@ module TypeScript.Syntax {
         // Debug.assert(position < positionedToken.fullEnd() || positionedToken.token().tokenKind === SyntaxKind.EndOfFileToken);
 
         // if position is after the end of the token, then this token is the token on the left.
-        if (width(positionedToken) > 0 && position >= end(positionedToken)) {
+        if (width(positionedToken) > 0 && position >= fullEnd(positionedToken)) {
             return positionedToken;
         }
 
         return previousToken(positionedToken);
-    }
-
-    export function firstTokenInLineContainingPosition(syntaxTree: SyntaxTree, position: number): ISyntaxToken {
-        var current = findToken(syntaxTree.sourceUnit(), position);
-        while (true) {
-            if (isFirstTokenInLine(current, syntaxTree.lineMap())) {
-                break;
-            }
-
-            current = previousToken(current);
-        }
-
-        return current;
-    }
-
-    function isFirstTokenInLine(token: ISyntaxToken, lineMap: LineMap): boolean {
-        var _previousToken = previousToken(token);
-        if (_previousToken === undefined) {
-            return true;
-        }
-        
-        return lineMap.getLineNumberFromPosition(end(_previousToken)) !== lineMap.getLineNumberFromPosition(start(token));
     }
 }
