@@ -2395,7 +2395,7 @@ module ts {
 
 
                 if (isValid) {
-                    return displayName;
+                    return unescapeIdentifier(displayName);
                 }
             }
 
@@ -2571,9 +2571,12 @@ module ts {
                 var start = new Date().getTime();
                 forEach(symbols, symbol => {
                     var entry = createCompletionEntry(symbol, session.typeChecker, location);
-                    if (entry && !lookUp(session.symbols, entry.name)) {
-                        session.entries.push(entry);
-                        session.symbols[entry.name] = symbol;
+                    if (entry) {
+                        var id = escapeIdentifier(entry.name);
+                        if (!lookUp(session.symbols, id)) {
+                            session.entries.push(entry);
+                            session.symbols[id] = symbol;
+                        }
                     }
                 });
                 host.log("getCompletionsAtPosition: getCompletionEntriesFromSymbols: " + (new Date().getTime() - start));
@@ -2781,7 +2784,7 @@ module ts {
                 return undefined;
             }
 
-            var symbol = lookUp(activeCompletionSession.symbols, entryName);
+            var symbol = lookUp(activeCompletionSession.symbols, escapeIdentifier(entryName));
             if (symbol) {
                 var location = getTouchingPropertyName(sourceFile, position);
                 var completionEntry = createCompletionEntry(symbol, session.typeChecker, location);

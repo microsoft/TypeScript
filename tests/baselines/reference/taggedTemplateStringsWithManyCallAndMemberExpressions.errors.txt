@@ -3,7 +3,7 @@ tests/cases/conformance/es6/templates/taggedTemplateStringsWithManyCallAndMember
 
 ==== tests/cases/conformance/es6/templates/taggedTemplateStringsWithManyCallAndMemberExpressions.ts (1 errors) ====
     interface I {
-        (strs: string[], subs: number[]): I;
+        (strs: string[], ...subs: number[]): I;
         member: {
             new (s: string): {
                 new (n: number): {

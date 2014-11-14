@@ -34,12 +34,16 @@ module ts {
         return file.filename + "(" + loc.line + "," + loc.character + ")";
     }
 
-
     export function getStartPosOfNode(node: Node): number {
         return node.pos;
     }
 
     export function getTokenPosOfNode(node: Node, sourceFile?: SourceFile): number {
+        // With nodes that have no width (i.e. 'Missing' nodes), we actually *don't*
+        // want to skip trivia because this will launch us forward to the next token.
+        if (node.pos === node.end) {
+            return node.pos;
+        }
         return skipTrivia((sourceFile || getSourceFileOfNode(node)).text, node.pos);
     }
 
@@ -567,7 +571,6 @@ module ts {
         return false;
     }
 
-
     export function isDeclaration(node: Node): boolean {
         switch (node.kind) {
             case SyntaxKind.TypeParameter:
@@ -747,7 +750,7 @@ module ts {
         nodeIsNestedInLabel(label: Identifier, requireIterationStatement: boolean, stopAtFunctionBoundary: boolean): ControlBlockContext;
     }
 
-    interface ReferencePathMatchResult {
+    export interface ReferencePathMatchResult {
         fileReference?: FileReference
         diagnostic?: DiagnosticMessage
         isNoDefaultLib?: boolean
@@ -794,6 +797,20 @@ module ts {
 
     export function isTrivia(token: SyntaxKind) {
         return SyntaxKind.FirstTriviaToken <= token && token <= SyntaxKind.LastTriviaToken;
+    }
+
+    export function isUnterminatedTemplateEnd(node: LiteralExpression) {
+        Debug.assert(node.kind === SyntaxKind.NoSubstitutionTemplateLiteral || node.kind === SyntaxKind.TemplateTail);
+        var sourceText = getSourceFileOfNode(node).text;
+
+        // If we're not at the EOF, we know we must be terminated.
+        if (node.end !== sourceText.length) {
+            return false;
+        }
+
+        // If we didn't end in a backtick, we must still be in the middle of a template.
+        // If we did, make sure that it's not the *initial* backtick.
+        return sourceText.charCodeAt(node.end - 1) !== CharacterCodes.backtick || node.text.length === 0;
     }
 
     export function isModifier(token: SyntaxKind): boolean {
@@ -1145,6 +1162,7 @@ module ts {
         }
 
         function internIdentifier(text: string): string {
+            text = escapeIdentifier(text);
             return hasProperty(identifiers, text) ? identifiers[text] : (identifiers[text] = text);
         }
 
@@ -1155,8 +1173,7 @@ module ts {
             identifierCount++;
             if (isIdentifier) {
                 var node = <Identifier>createNode(SyntaxKind.Identifier);
-                var text = escapeIdentifier(scanner.getTokenValue());
-                node.text = internIdentifier(text);
+                node.text = internIdentifier(scanner.getTokenValue());
                 nextToken();
                 return finishNode(node);
             }

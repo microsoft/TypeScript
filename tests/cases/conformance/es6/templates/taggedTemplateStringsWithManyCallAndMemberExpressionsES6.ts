@@ -1,6 +1,6 @@
 ﻿// @target: ES6
 interface I {
-    (strs: string[], subs: number[]): I;
+    (strs: string[], ...subs: number[]): I;
     member: {
         new (s: string): {
             new (n: number): {
