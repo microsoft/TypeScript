@@ -54,6 +54,10 @@ module ts.formatting {
           * 
           */
         getDelta(): number;
+        /**
+          * Formatter calls this function when rule adds or deletes new lines from the text 
+          * so indentation scope can adjust values of indentation and delta.
+          */
         recomputeIndentation(lineAddedByFormatting: boolean): void;
     }
 
@@ -387,6 +391,7 @@ module ts.formatting {
                         case SyntaxKind.WhileKeyword:
                             return indentation;
                         default:
+                            // if token line equals to the line of containing node (this is a first token in the node) - use node indentation
                             return nodeStartLine !== line ? indentation + delta : indentation;
                     }
                 },
@@ -487,6 +492,7 @@ module ts.formatting {
                     // proceed any parent tokens that are located prior to child.getStart()
                     var tokenInfo = formattingScanner.readTokenInfo(node);
                     if (tokenInfo.token.end > childStartPos) {
+                        // stop when formatting scanner advances past the beginning of the child
                         break;
                     }
 
@@ -530,6 +536,7 @@ module ts.formatting {
                     while (formattingScanner.isOnToken()) {
                         var tokenInfo = formattingScanner.readTokenInfo(parent);
                         if (tokenInfo.token.end > nodes.pos) {
+                            // stop when formatting scanner moves past the beginning of node list
                             break;
                         }
                         else if (tokenInfo.token.kind === listStartToken) {
