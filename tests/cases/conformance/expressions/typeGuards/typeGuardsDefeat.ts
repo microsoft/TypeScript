@@ -17,20 +17,20 @@ function foo2(x: number | string) {
         return x.length; // string
     }
     else {
-        (function f() {
-            x = 10;
-        })();
-        return x++; // number
+        var f = function () {
+            return x * x;
+        };
     }
+    x = "hello";
+    f();
 }
 function foo3(x: number | string) {
     if (typeof x === "string") {
         return x.length; // string
     }
     else {
-        (() => {
-            x = 10;
-        })();
-        return x++; // number
+        var f = () => x * x;
     }
+    x = "hello";
+    f();
 }

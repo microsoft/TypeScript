@@ -16,12 +16,6 @@ var c: C;
 //  where s is a string literal with the value 'string', 'number', or 'boolean',
 //  - when true, narrows the type of x to the given primitive type, or
 //  - when false, removes the primitive type from the type of x.
-if (typeof strOrNum === "boolean") {
-    bool = strOrNum; // boolean
-}
-else {
-    var z: string | number = strOrNum; // string | number
-}
 if (typeof strOrBool === "boolean") {
     bool = strOrBool; // boolean
 }
@@ -47,15 +41,18 @@ else {
     c = boolOrC; // C
 }
 
+// Narrowing occurs only if target type is a subtype of variable type
+if (typeof strOrNum === "boolean") {
+    var z1: string | number = strOrNum; // string | number
+}
+else {
+    var z2: string | number = strOrNum; // string | number
+}
+
+
 // A type guard of the form typeof x !== s, where s is a string literal,
 //  - when true, narrows the type of x by typeof x === s when false, or
 //  - when false, narrows the type of x by typeof x === s when true.
-if (typeof strOrNum !== "boolean") {
-    var z: string | number = strOrNum; // string | number
-}
-else {
-    bool = strOrNum; // boolean
-}
 if (typeof strOrBool !== "boolean") {
     str = strOrBool; // string
 }
@@ -79,4 +76,12 @@ if (typeof boolOrC !== "boolean") {
 }
 else {
     bool = boolOrC; // boolean
+}
+
+// Narrowing occurs only if target type is a subtype of variable type
+if (typeof strOrNum !== "boolean") {
+    var z1: string | number = strOrNum; // string | number
+}
+else {
+    var z2: string | number = strOrNum; // string | number
 }
