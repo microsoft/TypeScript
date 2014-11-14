@@ -1021,7 +1021,7 @@ module FourSlash {
             var resultString = "SpanInfo: " + JSON.stringify(spanInfo);
             if (spanInfo) {
                 var spanString = this.activeFile.content.substr(spanInfo.start(), spanInfo.length());
-                var spanLineMap = ts.getLineStarts(spanString);
+                var spanLineMap = ts.computeLineStarts(spanString);
                 for (var i = 0; i < spanLineMap.length; i++) {
                     if (!i) {
                         resultString += "\n";
@@ -1035,7 +1035,7 @@ module FourSlash {
         }
 
         private baselineCurrentFileLocations(getSpanAtPos: (pos: number) => TypeScript.TextSpan): string {
-            var fileLineMap = ts.getLineStarts(this.activeFile.content);
+            var fileLineMap = ts.computeLineStarts(this.activeFile.content);
             var nextLine = 0;
             var resultString = "";
             var currentLine: string;

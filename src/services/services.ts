@@ -8,11 +8,10 @@
 /// <reference path='outliningElementsCollector.ts' />
 /// <reference path='navigationBar.ts' />
 /// <reference path='breakpoints.ts' />
-/// <reference path='indentation.ts' />
 /// <reference path='signatureHelp.ts' />
 /// <reference path='utilities.ts' />
-/// <reference path='formatting\formatting.ts' />
-/// <reference path='formatting\smartIndenter.ts' />
+/// <reference path='smartIndenter.ts' />
+/// <reference path='formatting.ts' />
 
 /// <reference path='core\references.ts' />
 /// <reference path='resources\references.ts' />
@@ -667,6 +666,7 @@ module ts {
         public text: string;
         public getLineAndCharacterFromPosition(position: number): { line: number; character: number } { return null; }
         public getPositionFromLineAndCharacter(line: number, character: number): number { return -1; }
+        public getLineStarts(): number[] { return undefined; }
         public amdDependencies: string[];
         public referencedFiles: FileReference[];
         public syntacticErrors: Diagnostic[];
@@ -2137,7 +2137,7 @@ module ts {
 
     export function createLanguageService(host: LanguageServiceHost, documentRegistry: DocumentRegistry): LanguageService {
         var syntaxTreeCache: SyntaxTreeCache = new SyntaxTreeCache(host);
-        var formattingRulesProvider: TypeScript.Services.Formatting.RulesProvider;
+        var ruleProvider: ts.formatting.RulesProvider;
         var hostCache: HostCache; // A cache of all the information about the files on the host side.
         var program: Program;
 
@@ -2166,6 +2166,16 @@ module ts {
 
         function getFullTypeCheckChecker() {
             return fullTypeCheckChecker_doNotAccessDirectly || (fullTypeCheckChecker_doNotAccessDirectly = program.getTypeChecker(/*fullTypeCheck*/ true));
+        }
+
+        function getRuleProvider(options: FormatCodeOptions) {
+            // Ensure rules are initialized and up to date wrt to formatting options
+            if (!ruleProvider) {
+                ruleProvider = new ts.formatting.RulesProvider(host);
+            }
+
+            ruleProvider.ensureUpToDate(options);
+            return ruleProvider;
         }
 
         function createCompilerHost(): CompilerHost {
@@ -5044,7 +5054,7 @@ module ts {
                     }
                 }
 
-                if (isPunctuation(token)) {
+                if (isPunctuation(token.kind)) {
                     // the '=' in a variable declaration is special cased here.
                     if (token.parent.kind === SyntaxKind.BinaryExpression ||
                         token.parent.kind === SyntaxKind.VariableDeclaration ||
@@ -5190,62 +5200,39 @@ module ts {
             host.log("getIndentationAtPosition: getCurrentSourceFile: " + (new Date().getTime() - start));
 
             var start = new Date().getTime();
-            var options = new TypeScript.FormattingOptions(!editorOptions.ConvertTabsToSpaces, editorOptions.TabSize, editorOptions.IndentSize, editorOptions.NewLineCharacter)
 
-            var result = formatting.SmartIndenter.getIndentation(position, sourceFile, options);
+            var result = formatting.SmartIndenter.getIndentation(position, sourceFile, editorOptions);
             host.log("getIndentationAtPosition: computeIndentation  : " + (new Date().getTime() - start));
 
             return result;
         }
 
-        function getFormattingManager(filename: string, options: FormatCodeOptions) {
-            // Ensure rules are initialized and up to date wrt to formatting options
-            if (formattingRulesProvider == null) {
-                formattingRulesProvider = new TypeScript.Services.Formatting.RulesProvider(host);
-            }
-
-            formattingRulesProvider.ensureUpToDate(options);
-
-            // Get the Syntax Tree
-            var syntaxTree = getSyntaxTree(filename);
-
-            // Convert IScriptSnapshot to ITextSnapshot
-            var scriptSnapshot = syntaxTreeCache.getCurrentScriptSnapshot(filename);
-            var scriptText = TypeScript.SimpleText.fromScriptSnapshot(scriptSnapshot);
-            var textSnapshot = new TypeScript.Services.Formatting.TextSnapshot(scriptText);
-
-            var manager = new TypeScript.Services.Formatting.FormattingManager(syntaxTree, textSnapshot, formattingRulesProvider, options);
-
-            return manager;
-        }
-
         function getFormattingEditsForRange(fileName: string, start: number, end: number, options: FormatCodeOptions): TextChange[] {
             fileName = normalizeSlashes(fileName);
-
-            var manager = getFormattingManager(fileName, options);
-            return manager.formatSelection(start, end);
+            var sourceFile = getCurrentSourceFile(fileName);
+            return formatting.formatSelection(start, end, sourceFile, getRuleProvider(options), options);
         }
 
         function getFormattingEditsForDocument(fileName: string, options: FormatCodeOptions): TextChange[] {
             fileName = normalizeSlashes(fileName);
 
-            var manager = getFormattingManager(fileName, options);
-            return manager.formatDocument();
+            var sourceFile = getCurrentSourceFile(fileName);
+            return formatting.formatDocument(sourceFile, getRuleProvider(options), options);
         }
 
         function getFormattingEditsAfterKeystroke(fileName: string, position: number, key: string, options: FormatCodeOptions): TextChange[] {
             fileName = normalizeSlashes(fileName);
 
-            var manager = getFormattingManager(fileName, options);
+            var sourceFile = getCurrentSourceFile(fileName);
 
             if (key === "}") {
-                return manager.formatOnClosingCurlyBrace(position);
+                return formatting.formatOnClosingCurly(position, sourceFile, getRuleProvider(options), options);
             }
             else if (key === ";") {
-                return manager.formatOnSemicolon(position);
+                return formatting.formatOnSemicolon(position, sourceFile, getRuleProvider(options), options);
             }
             else if (key === "\n") {
-                return manager.formatOnEnter(position);
+                return formatting.formatOnEnter(position, sourceFile, getRuleProvider(options), options);
             }
 
             return [];

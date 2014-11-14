@@ -957,7 +957,7 @@ module Harness {
                 // Note: IE JS engine incorrectly handles consecutive delimiters here when using RegExp split, so
                 // we have to string-based splitting instead and try to figure out the delimiting chars
 
-                var lineStarts = ts.getLineStarts(inputFile.content);
+                var lineStarts = ts.computeLineStarts(inputFile.content);
                 var lines = inputFile.content.split('\n');
                 lines.forEach((line, lineIndex) => {
                     if (line.length > 0 && line.charAt(line.length - 1) === '\r') {
