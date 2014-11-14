@@ -234,6 +234,7 @@ module TypeScript {
         OmittedExpression,
         TemplateExpression,
         TemplateAccessExpression,
+        YieldExpression,
 
         // Variable declarations
         VariableDeclaration,
