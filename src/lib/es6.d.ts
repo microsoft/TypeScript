@@ -15,7 +15,7 @@ interface SymbolConstructor {
       * Returns a new unique Symbol value.
       * @param  description Description of the new Symbol object.
       */
-    new (description?: string): Symbol;
+    (description?: string|number): Symbol;
 
     /**
       * Returns a Symbol object from the global symbol registry matching the given key if found. 
@@ -76,6 +76,21 @@ interface SymbolConstructor {
 }
 
 declare var Symbol: SymbolConstructor;
+
+
+interface Object {
+    /**
+      * Determines whether an object has a property with the specified name. 
+      * @param v A property name.
+      */
+    hasOwnProperty(v: PropertyKey): boolean;
+
+    /** 
+      * Determines whether a specified property is enumerable.
+      * @param v A property name.
+      */
+    propertyIsEnumerable(v: PropertyKey): boolean;
+}
 
 interface ObjectConstructor {
     /**
