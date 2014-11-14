@@ -173,6 +173,29 @@ function foo4(x: number | string | boolean) {
         })(x); // x here is narrowed to number | boolean
 >x : number | boolean
 }
+// Type guards affect nested function expressions, but not nested function declarations
+function foo5(x: number | string | boolean) {
+>foo5 : (x: string | number | boolean) => void
+>x : string | number | boolean
+
+    if (typeof x === "string") {
+>typeof x === "string" : boolean
+>typeof x : string
+>x : string | number | boolean
+
+        var y = x; // string;
+>y : string
+>x : string
+
+        function foo() {
+>foo : () => void
+
+            var z = x; // number | string | boolean, type guard has no effect
+>z : string | number | boolean
+>x : string | number | boolean
+        }
+    }
+}
 module m {
 >m : typeof m
 
