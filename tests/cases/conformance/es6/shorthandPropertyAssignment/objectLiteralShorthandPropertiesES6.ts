@@ -1,4 +1,4 @@
-﻿// @target: es6
+// @target: es6
 var a, b, c;
 
 var x1 = {
@@ -18,14 +18,3 @@ var x3 = {
     parent: x3
 };
 
-module m {
-    export var x;
-}
-
-module m {
-    var z = x;
-    var y = {
-        a: x,
-        x
-    };
-}

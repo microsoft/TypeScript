@@ -1,4 +1,4 @@
-=== tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesTargetES6.ts ===
+=== tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesES6.ts ===
 var a, b, c;
 >a : any
 >b : any
@@ -47,31 +47,4 @@ var x3 = {
 
 };
 
-module m {
->m : typeof m
-
-    export var x;
->x : any
-}
-
-module m {
->m : typeof m
-
-    var z = x;
->z : any
->x : any
-
-    var y = {
->y : { a: any; x: any; }
->{        a: x,        x    } : { a: any; x: any; }
-
-        a: x,
->a : any
->x : any
-
-        x
->x : any
-
-    };
-}
 

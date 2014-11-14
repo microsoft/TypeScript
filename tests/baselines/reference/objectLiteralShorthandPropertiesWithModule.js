@@ -1,4 +1,4 @@
-//// [objectLiteralShorthandProperties3.ts]
+//// [objectLiteralShorthandPropertiesWithModule.ts]
 // module export
 
 module m {
@@ -14,7 +14,7 @@ module m {
 }
 
 
-//// [objectLiteralShorthandProperties3.js]
+//// [objectLiteralShorthandPropertiesWithModule.js]
 // module export
 var m;
 (function (m) {

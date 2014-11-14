@@ -1,5 +1,4 @@
-=== tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandProperties3.ts ===
-// module export
+=== tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesWithModuleES6.ts ===
 
 module m {
 >m : typeof m

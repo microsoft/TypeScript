@@ -1,4 +1,4 @@
-=== tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesAssignment.ts ===
+=== tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesAssignmentES6.ts ===
 var id: number = 10000;
 >id : number
 
@@ -13,7 +13,7 @@ var person: { name: string; id: number } = { name, id };
 >name : string
 >id : number
 
-function foo( obj:{ name: string }): void { };
+function foo(obj: { name: string }): void { };
 >foo : (obj: { name: string; }) => void
 >obj : { name: string; }
 >name : string
@@ -59,7 +59,7 @@ var person2: { name: string } = bar("Hello", 5);
 >bar("Hello", 5) : { name: string; id: number; }
 >bar : (name: string, id: number) => { name: string; id: number; }
 
-var person3: { name: string; id:number } = bar("Hello", 5);
+var person3: { name: string; id: number } = bar("Hello", 5);
 >person3 : { name: string; id: number; }
 >name : string
 >id : number
