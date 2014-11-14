@@ -9102,7 +9102,12 @@ module ts {
             globalNumberType = getGlobalType("Number");
             globalBooleanType = getGlobalType("Boolean");
             globalRegExpType = getGlobalType("RegExp");
-            globalTemplateStringsArrayType = getGlobalType("TemplateStringsArray");
+
+            // If we're in ES6 mode, load the TemplateStringsArray.
+            // Otherwise, default to 'unknown' for the purposes of type checking in LS scenarios.
+            globalTemplateStringsArrayType = compilerOptions.target >= ScriptTarget.ES6
+                ? getGlobalType("TemplateStringsArray")
+                : unknownType;
         }
 
         initializeTypeChecker();
