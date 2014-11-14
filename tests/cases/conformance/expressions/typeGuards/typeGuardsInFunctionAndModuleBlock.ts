@@ -4,40 +4,40 @@ function foo(x: number | string | boolean) {
     return typeof x === "string"
         ? x
         : function f() {
-            var b = x; // new scope - number | boolean | string
+            var b = x; // number | boolean
             return typeof x === "boolean"
                 ? x.toString() // boolean
-                : x.toString(); // number | string
+                : x.toString(); // number
         } ();
 }
 function foo2(x: number | string | boolean) {
     return typeof x === "string"
         ? x
         : function f(a: number | boolean) {
-            var b = x; // new scope - number | boolean | string
+            var b = x; // new scope - number | boolean
             return typeof x === "boolean"
                 ? x.toString() // boolean
-                : x.toString(); // number | string
+                : x.toString(); // number
         } (x); // x here is narrowed to number | boolean
 }
 function foo3(x: number | string | boolean) {
     return typeof x === "string"
         ? x
         : (() => {
-            var b = x; // new scope - number | boolean | string
+            var b = x; // new scope - number | boolean
             return typeof x === "boolean"
                 ? x.toString() // boolean
-                : x.toString(); // number | string
+                : x.toString(); // number
         })();
 }
 function foo4(x: number | string | boolean) {
     return typeof x === "string"
         ? x
         : ((a: number | boolean) => {
-            var b = x; // new scope - number | boolean | string
+            var b = x; // new scope - number | boolean
             return typeof x === "boolean"
                 ? x.toString() // boolean
-                : x.toString(); // number | string
+                : x.toString(); // number
         })(x); // x here is narrowed to number | boolean
 }
 module m {

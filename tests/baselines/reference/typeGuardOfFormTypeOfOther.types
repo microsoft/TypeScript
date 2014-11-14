@@ -48,21 +48,6 @@ var c: C;
 //  - when true, removes the primitive types string, number, and boolean from the type of x, or
 //  - when false, has no effect on the type of x.
 
-if (typeof strOrNumOrBool === "Object") {
->typeof strOrNumOrBool === "Object" : boolean
->typeof strOrNumOrBool : string
->strOrNumOrBool : string | number | boolean
-
-    emptyObj = strOrNumOrBool; // {}
->emptyObj = strOrNumOrBool : {}
->emptyObj : {}
->strOrNumOrBool : {}
-}
-else {
-    var r1: string | number | boolean = strOrNumOrBool; // string | number | boolean
->r1 : string | number | boolean
->strOrNumOrBool : string | number | boolean
-}
 if (typeof strOrC === "Object") {
 >typeof strOrC === "Object" : boolean
 >typeof strOrC : string
@@ -112,24 +97,25 @@ else {
 >boolOrC : boolean | C
 }
 
-// A type guard of the form typeof x !== s, where s is a string literal,
-//  - when true, narrows the type of x by typeof x === s when false, or
-//  - when false, narrows the type of x by typeof x === s when true.
-if (typeof strOrNumOrBool !== "Object") {
->typeof strOrNumOrBool !== "Object" : boolean
+// Narrowing occurs only if target type is a subtype of variable type
+if (typeof strOrNumOrBool === "Object") {
+>typeof strOrNumOrBool === "Object" : boolean
 >typeof strOrNumOrBool : string
 >strOrNumOrBool : string | number | boolean
 
-    var r1: string | number | boolean = strOrNumOrBool; // string | number | boolean
->r1 : string | number | boolean
+    var q1: string | number | boolean = strOrNumOrBool; // string | number | boolean
+>q1 : string | number | boolean
 >strOrNumOrBool : string | number | boolean
 }
 else {
-    emptyObj = strOrNumOrBool; // {}
->emptyObj = strOrNumOrBool : {}
->emptyObj : {}
->strOrNumOrBool : {}
+    var q2: string | number | boolean = strOrNumOrBool; // string | number | boolean
+>q2 : string | number | boolean
+>strOrNumOrBool : string | number | boolean
 }
+
+// A type guard of the form typeof x !== s, where s is a string literal,
+//  - when true, narrows the type of x by typeof x === s when false, or
+//  - when false, narrows the type of x by typeof x === s when true.
 if (typeof strOrC !== "Object") {
 >typeof strOrC !== "Object" : boolean
 >typeof strOrC : string
@@ -178,3 +164,20 @@ else {
 >c : C
 >boolOrC : C
 }
+
+// Narrowing occurs only if target type is a subtype of variable type
+if (typeof strOrNumOrBool !== "Object") {
+>typeof strOrNumOrBool !== "Object" : boolean
+>typeof strOrNumOrBool : string
+>strOrNumOrBool : string | number | boolean
+
+    var q1: string | number | boolean = strOrNumOrBool; // string | number | boolean
+>q1 : string | number | boolean
+>strOrNumOrBool : string | number | boolean
+}
+else {
+    var q2: string | number | boolean = strOrNumOrBool; // string | number | boolean
+>q2 : string | number | boolean
+>strOrNumOrBool : string | number | boolean
+}
+
