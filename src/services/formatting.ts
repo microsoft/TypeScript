@@ -241,7 +241,7 @@ module ts.formatting {
             return start;
         }
 
-        var precedingToken = findPrecedingToken(enclosingNode.pos, sourceFile);
+        var precedingToken = findPrecedingToken(originalRange.pos, sourceFile);
         // no preceding token found - start from the beginning of enclosing node
         return precedingToken ? precedingToken.end : enclosingNode.pos;
     }
