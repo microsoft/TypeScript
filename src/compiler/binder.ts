@@ -94,11 +94,15 @@ module ts {
             }
             switch (node.kind) {
                 case SyntaxKind.ConstructorType:
-                case SyntaxKind.Constructor: return "__constructor";
+                case SyntaxKind.Constructor:
+                    return "__constructor";
                 case SyntaxKind.FunctionType:
-                case SyntaxKind.CallSignature: return "__call";
-                case SyntaxKind.ConstructSignature: return "__new";
-                case SyntaxKind.IndexSignature: return "__index";
+                case SyntaxKind.CallSignature:
+                    return "__call";
+                case SyntaxKind.ConstructSignature:
+                    return "__new";
+                case SyntaxKind.IndexSignature:
+                    return "__index";
             }
         }
 
