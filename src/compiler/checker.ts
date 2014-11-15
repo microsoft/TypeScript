@@ -2969,13 +2969,15 @@ module ts {
                 // For a given function type "<...>(...) => T" we want to generate a type identical
                 // to: { <...>(...): T }
                 //
-                // We do that by making an anonymous type literal node, and then setting the function
-                // type as its sole member.  To the rest of the checker, this type will be 
-                // indistinguishable from an actual type literal you would have gotten had you used
-                // the long form.
+                // We do that by making an anonymous type literal type, that points to an anonymous
+                // type literal symbol, and then setting the function symbol as its sole of the type
+                // literal symbol.  To the rest of the checker, this type will be  indistinguishable 
+                // from an actual type literal type you would have gotten had you used the long form.
                 var symbol = new Symbol(SymbolFlags.TypeLiteral, "__type");
                 symbol.members = {};
                 symbol.members[node.kind === SyntaxKind.FunctionType ? "__call" : "__new"] = node.symbol;
+
+                Debug.assert(node.symbol.declarations.length === 1);
                 symbol.declarations = [node.symbol.declarations[0]];
 
                 node.symbol.parent = symbol;
@@ -5885,7 +5887,11 @@ module ts {
             }
             if (node.kind === SyntaxKind.NewExpression) {
                 var declaration = signature.declaration;
-                if (declaration && (declaration.kind !== SyntaxKind.Constructor && declaration.kind !== SyntaxKind.ConstructSignature && declaration.kind !== SyntaxKind.ConstructorType)) {
+                if (declaration &&
+                    declaration.kind !== SyntaxKind.Constructor &&
+                    declaration.kind !== SyntaxKind.ConstructSignature &&
+                    declaration.kind !== SyntaxKind.ConstructorType) {
+
                     // When resolved signature is a call signature (and not a construct signature) the result type is any
                     if (compilerOptions.noImplicitAny) {
                         error(node, Diagnostics.new_expression_whose_target_lacks_a_construct_signature_implicitly_has_an_any_type);
