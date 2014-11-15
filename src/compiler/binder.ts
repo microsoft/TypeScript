@@ -306,10 +306,23 @@ module ts {
         }
 
         function bindFunctionOrConstructorType(node: SignatureDeclaration) {
+            // For a given function type "<...>(...) => T" we want to generate a type identical
+            // to: { <...>(...): T }
+            //
+            // We do that by making an anonymous type literal type, that points to an anonymous
+            // type literal symbol, and then setting the function symbol as its sole of the type
+            // literal symbol.  To the rest of the system, this type will be  indistinguishable 
+            // from an actual type literal type you would have gotten had you used the long form.
+
             var symbolKind = node.kind === SyntaxKind.FunctionType ? SymbolFlags.CallSignature : SymbolFlags.ConstructSignature;
             var symbol = createSymbol(symbolKind, getDeclarationName(node));
             addDeclarationToSymbol(symbol, node, symbolKind);
             bindChildren(node, symbolKind, /*isBlockScopeContainer:*/ false);
+
+            var typeLiteralSymbol = createSymbol(SymbolFlags.TypeLiteral, "__type");
+            addDeclarationToSymbol(typeLiteralSymbol, node, SymbolFlags.TypeLiteral);
+            typeLiteralSymbol.members = {};
+            typeLiteralSymbol.members[node.kind === SyntaxKind.FunctionType ? "__call" : "__new"] = symbol
         }
 
         function bindAnonymousDeclaration(node: Node, symbolKind: SymbolFlags, name: string, isBlockScopeContainer: boolean) {

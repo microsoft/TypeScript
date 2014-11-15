@@ -2962,32 +2962,8 @@ module ts {
             }
             return links.resolvedType;
         }
-
-        function getTypefromFunctionOrConstructorTypeNode(node: SignatureDeclaration): Type {
-            var links = getNodeLinks(node);
-            if (!links.resolvedType) {
-                // For a given function type "<...>(...) => T" we want to generate a type identical
-                // to: { <...>(...): T }
-                //
-                // We do that by making an anonymous type literal type, that points to an anonymous
-                // type literal symbol, and then setting the function symbol as its sole of the type
-                // literal symbol.  To the rest of the checker, this type will be  indistinguishable 
-                // from an actual type literal type you would have gotten had you used the long form.
-                var symbol = new Symbol(SymbolFlags.TypeLiteral | SymbolFlags.Transient, "__type");
-                symbol.members = {};
-                symbol.members[node.kind === SyntaxKind.FunctionType ? "__call" : "__new"] = node.symbol;
-
-                Debug.assert(node.symbol.declarations.length === 1);
-                symbol.declarations = [node.symbol.declarations[0]];
-
-                node.symbol.parent = symbol;
-
-                links.resolvedType = createObjectType(TypeFlags.Anonymous, symbol);
-            }
-            return links.resolvedType;
-        }
-
-        function getTypeFromTypeLiteralNode(node: TypeLiteralNode): Type {
+        
+        function getTypeFromTypeLiteralOrFunctionOrConstructorTypeNode(node: Node): Type {
             var links = getNodeLinks(node);
             if (!links.resolvedType) {
                 // Deferred resolution of members is handled by resolveObjectTypeMembers
@@ -3039,9 +3015,8 @@ module ts {
                     return getTypeFromTypeNode((<ParenTypeNode>node).type);
                 case SyntaxKind.FunctionType:
                 case SyntaxKind.ConstructorType:
-                    return getTypefromFunctionOrConstructorTypeNode(<SignatureDeclaration>node);
                 case SyntaxKind.TypeLiteral:
-                    return getTypeFromTypeLiteralNode(<TypeLiteralNode>node);
+                    return getTypeFromTypeLiteralOrFunctionOrConstructorTypeNode(node);
                 // This function assumes that an identifier or qualified name is a type expression
                 // Callers should first ensure this by calling isTypeNode
                 case SyntaxKind.Identifier:
@@ -6834,7 +6809,7 @@ module ts {
         function checkTypeLiteral(node: TypeLiteralNode) {
             forEach(node.members, checkSourceElement);
             if (fullTypeCheck) {
-                var type = getTypeFromTypeLiteralNode(node);
+                var type = getTypeFromTypeLiteralOrFunctionOrConstructorTypeNode(node);
                 checkIndexConstraints(type);
                 checkTypeForDuplicateIndexSignatures(node);
             }
