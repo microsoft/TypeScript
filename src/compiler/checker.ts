@@ -2966,6 +2966,13 @@ module ts {
         function getTypefromFunctionOrConstructorTypeNode(node: SignatureDeclaration): Type {
             var links = getNodeLinks(node);
             if (!links.resolvedType) {
+                // For a given function type "<...>(...) => T" we want to generate a type identical
+                // to: { <...>(...): T }
+                //
+                // We do that by making an anonymous type literal node, and then setting the function
+                // type as its sole member.  To the rest of the checker, this type will be 
+                // indistinguishable from an actual type literal you would have gotten had you used
+                // the long form.
                 var symbol = new Symbol(SymbolFlags.TypeLiteral, "__type");
                 symbol.members = {};
                 symbol.members[node.kind === SyntaxKind.FunctionType ? "__call" : "__new"] = node.symbol;
