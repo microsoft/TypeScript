@@ -306,13 +306,12 @@ module ts {
         }
 
         function bindFunctionOrConstructorType(node: SignatureDeclaration) {
-            // For a given function type "<...>(...) => T" we want to generate a type identical
-            // to: { <...>(...): T }
+            // For a given function symbol "<...>(...) => T" we want to generate a symbol identical
+            // to the one we would get for: { <...>(...): T }
             //
-            // We do that by making an anonymous type literal type, that points to an anonymous
-            // type literal symbol, and then setting the function symbol as its sole of the type
-            // literal symbol.  To the rest of the system, this type will be  indistinguishable 
-            // from an actual type literal type you would have gotten had you used the long form.
+            // We do that by making an anonymous type literal symbol, and then setting the function 
+            // symbol as its sole member. To the rest of the system, this symbol will be  indistinguishable 
+            // from an actual type literal symbol you would have gotten had you used the long form.
 
             var symbolKind = node.kind === SyntaxKind.FunctionType ? SymbolFlags.CallSignature : SymbolFlags.ConstructSignature;
             var symbol = createSymbol(symbolKind, getDeclarationName(node));
