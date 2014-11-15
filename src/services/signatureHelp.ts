@@ -275,6 +275,9 @@ module ts.SignatureHelp {
                     };
                 }
             }
+            else if (node.kind === SyntaxKind.NoSubstitutionTemplateLiteral && node.parent.kind === SyntaxKind.TaggedTemplateExpression) {
+                return getArgumentListInfoForTemplate(<TaggedTemplateExpression>node.parent, /*argumentIndex*/ 0);
+            }
             else if (node.parent.kind === SyntaxKind.TemplateExpression && node.parent.parent.kind === SyntaxKind.TaggedTemplateExpression) {
                 Debug.assert(node.kind === SyntaxKind.TemplateHead, "Expected 'TemplateHead' as token.");
 
