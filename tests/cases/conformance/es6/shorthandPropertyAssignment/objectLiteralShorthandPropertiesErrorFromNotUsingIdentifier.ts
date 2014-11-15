@@ -16,3 +16,5 @@ var x = {
     a["ss"],
     a[1],
 };
+
+var v = { class };  // error

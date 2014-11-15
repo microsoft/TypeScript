@@ -2687,6 +2687,7 @@ module ts {
                 (<PropertyDeclaration>node).initializer = makeFunctionExpression(SyntaxKind.FunctionExpression, node.pos, undefined, sig, body);
                 return finishNode(node);
             }
+            // Disallow optional property assignment
             if (token === SyntaxKind.QuestionToken) {
                 var questionStart = scanner.getTokenPos();
                 grammarErrorAtPos(questionStart, scanner.getStartPos() - questionStart, Diagnostics.A_object_member_cannot_be_declared_optional);

@@ -1047,7 +1047,8 @@ module ts {
                     // Emit identifier as an identifier
                     emit(node.name);
                     write(": ");
-                    // Even though this is stored as identified because it is in short-hand property assignment, treated it as expression 
+                    // Even though this is stored as identified because it is in short-hand property assignment,
+                    // treated it as expression 
                     emitExpressionIdentifier(node.name);
                     emitTrailingComments(node);
                 }
