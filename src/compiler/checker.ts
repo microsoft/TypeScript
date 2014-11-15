@@ -2973,7 +2973,7 @@ module ts {
                 // type literal symbol, and then setting the function symbol as its sole of the type
                 // literal symbol.  To the rest of the checker, this type will be  indistinguishable 
                 // from an actual type literal type you would have gotten had you used the long form.
-                var symbol = new Symbol(SymbolFlags.TypeLiteral, "__type");
+                var symbol = new Symbol(SymbolFlags.TypeLiteral | SymbolFlags.Transient, "__type");
                 symbol.members = {};
                 symbol.members[node.kind === SyntaxKind.FunctionType ? "__call" : "__new"] = node.symbol;
 
