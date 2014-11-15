@@ -173,7 +173,7 @@ module ts.SignatureHelp {
     export interface ArgumentListInfo {
         kind: ArgumentListKind;
         invocation: CallLikeExpression;
-        arguments: Node | NodeArray<TemplateSpan>;
+        argumentRange: TextRange;
         argumentIndex?: number;
         argumentCount: number;
     }
@@ -238,7 +238,7 @@ module ts.SignatureHelp {
                     return {
                         kind: isTypeArgList ? ArgumentListKind.TypeArguments : ArgumentListKind.CallArguments,
                         invocation: callExpression,
-                        arguments: list,
+                        argumentRange: list,
                         argumentIndex: 0,
                         argumentCount: getCommaBasedArgCount(list)
                     };
@@ -269,22 +269,20 @@ module ts.SignatureHelp {
                     return {
                         kind: isTypeArgList ? ArgumentListKind.TypeArguments : ArgumentListKind.CallArguments,
                         invocation: callExpression,
-                        arguments: list,
+                        argumentRange: list,
                         argumentIndex: argumentIndex,
                         argumentCount: getCommaBasedArgCount(list)
                     };
                 }
             }
             else if (node.parent.kind === SyntaxKind.TemplateExpression && node.parent.parent.kind === SyntaxKind.TaggedTemplateExpression) {
-                // TODO (drosen): Can't get sig help to trigger within the template head itself; only when directly to the right.
-                //                Also, need to ensure that this works on NoSubstitutionTemplateExpressions when unterminated.
                 Debug.assert(node.kind === SyntaxKind.TemplateHead, "Expected 'TemplateHead' as token.");
 
                 var templateExpression = <TemplateExpression>node.parent;
                 var tagExpression = <TaggedTemplateExpression>templateExpression.parent;
 
                 // argumentIndex is 1 to adjust for the TemplateStringsArray
-                return getArgumentListInfoForTemplate(tagExpression, templateExpression.templateSpans, /*argumentIndex*/ 1);
+                return getArgumentListInfoForTemplate(tagExpression, /*argumentIndex*/ 1);
             }
             else if (node.parent.kind === SyntaxKind.TemplateSpan && node.parent.parent.parent.kind === SyntaxKind.TaggedTemplateExpression) {
                 var templateSpan = <TemplateSpan>node.parent;
@@ -297,13 +295,13 @@ module ts.SignatureHelp {
                 var spanIndex = templateExpression.templateSpans.indexOf(templateSpan);
                 var adjustedIndex = isTemplateLiteralKind(node.kind) ? spanIndex + 2 : spanIndex + 1
 
-                return getArgumentListInfoForTemplate(tagExpression, templateExpression.templateSpans, adjustedIndex);
+                return getArgumentListInfoForTemplate(tagExpression, adjustedIndex);
             }
             
             return undefined;
         }
 
-        function getArgumentListInfoForTemplate(tagExpression: TaggedTemplateExpression, spans: NodeArray<TemplateSpan>, argumentIndex: number): ArgumentListInfo {
+        function getArgumentListInfoForTemplate(tagExpression: TaggedTemplateExpression, argumentIndex: number): ArgumentListInfo {
             var argumentCount = tagExpression.template.kind === SyntaxKind.NoSubstitutionTemplateLiteral
                 ? 1
                 : (<TemplateExpression>tagExpression.template).templateSpans.length + 1;
@@ -311,7 +309,7 @@ module ts.SignatureHelp {
             return {
                 kind: ArgumentListKind.TaggedTemplateArguments,
                 invocation: tagExpression,
-                arguments: spans,
+                argumentRange: tagExpression.template,
                 argumentIndex: argumentIndex,
                 argumentCount: argumentCount
             };
@@ -383,7 +381,7 @@ module ts.SignatureHelp {
         }
 
         function createSignatureHelpItems(candidates: Signature[], bestSignature: Signature, argumentListInfo: ArgumentListInfo): SignatureHelpItems {
-            var argumentsList = argumentListInfo.arguments;
+            var argumentsList = argumentListInfo.argumentRange;
             var isTypeParameterList = argumentListInfo.kind === ArgumentListKind.TypeArguments;
 
             var invocation = argumentListInfo.invocation;
