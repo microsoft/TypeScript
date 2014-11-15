@@ -2523,6 +2523,8 @@ module ts {
             for (var i = 0, len = symbol.declarations.length; i < len; i++) {
                 var node = symbol.declarations[i];
                 switch (node.kind) {
+                    case SyntaxKind.FunctionType:
+                    case SyntaxKind.ConstructorType:
                     case SyntaxKind.FunctionDeclaration:
                     case SyntaxKind.Method:
                     case SyntaxKind.Constructor:
@@ -2961,6 +2963,21 @@ module ts {
             return links.resolvedType;
         }
 
+        function getTypefromFunctionOrConstructorTypeNode(node: SignatureDeclaration): Type {
+            var links = getNodeLinks(node);
+            if (!links.resolvedType) {
+                var symbol = new Symbol(SymbolFlags.TypeLiteral, "__type");
+                symbol.members = {};
+                symbol.members[node.kind === SyntaxKind.FunctionType ? "__call" : "__new"] = node.symbol;
+                symbol.declarations = [node.symbol.declarations[0]];
+
+                node.symbol.parent = symbol;
+
+                links.resolvedType = createObjectType(TypeFlags.Anonymous, symbol);
+            }
+            return links.resolvedType;
+        }
+
         function getTypeFromTypeLiteralNode(node: TypeLiteralNode): Type {
             var links = getNodeLinks(node);
             if (!links.resolvedType) {
@@ -3011,6 +3028,9 @@ module ts {
                     return getTypeFromUnionTypeNode(<UnionTypeNode>node);
                 case SyntaxKind.ParenType:
                     return getTypeFromTypeNode((<ParenTypeNode>node).type);
+                case SyntaxKind.FunctionType:
+                case SyntaxKind.ConstructorType:
+                    return getTypefromFunctionOrConstructorTypeNode(<SignatureDeclaration>node);
                 case SyntaxKind.TypeLiteral:
                     return getTypeFromTypeLiteralNode(<TypeLiteralNode>node);
                 // This function assumes that an identifier or qualified name is a type expression
@@ -5858,7 +5878,7 @@ module ts {
             }
             if (node.kind === SyntaxKind.NewExpression) {
                 var declaration = signature.declaration;
-                if (declaration && (declaration.kind !== SyntaxKind.Constructor && declaration.kind !== SyntaxKind.ConstructSignature)) {
+                if (declaration && (declaration.kind !== SyntaxKind.Constructor && declaration.kind !== SyntaxKind.ConstructSignature && declaration.kind !== SyntaxKind.ConstructorType)) {
                     // When resolved signature is a call signature (and not a construct signature) the result type is any
                     if (compilerOptions.noImplicitAny) {
                         error(node, Diagnostics.new_expression_whose_target_lacks_a_construct_signature_implicitly_has_an_any_type);
@@ -8275,6 +8295,8 @@ module ts {
                     return checkParameter(<ParameterDeclaration>node);
                 case SyntaxKind.Property:
                     return checkPropertyDeclaration(<PropertyDeclaration>node);
+                case SyntaxKind.FunctionType:
+                case SyntaxKind.ConstructorType:
                 case SyntaxKind.CallSignature:
                 case SyntaxKind.ConstructSignature:
                 case SyntaxKind.IndexSignature:
@@ -9047,7 +9069,9 @@ module ts {
         function writeTypeAtLocation(location: Node, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter) {
             // Get type of the symbol if this is the valid symbol otherwise get type at location
             var symbol = getSymbolOfNode(location);
-            var type = symbol && !(symbol.flags & SymbolFlags.TypeLiteral) ? getTypeOfSymbol(symbol) : getTypeFromTypeNode(location);
+            var type = symbol && !(symbol.flags & (SymbolFlags.TypeLiteral | SymbolFlags.CallSignature | SymbolFlags.ConstructSignature))
+                ? getTypeOfSymbol(symbol)
+                : getTypeFromTypeNode(location);
 
             getSymbolDisplayBuilder().buildTypeDisplay(type, writer, enclosingDeclaration, flags);
         }

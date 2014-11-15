@@ -205,6 +205,8 @@ module ts {
                 return child((<PropertyDeclaration>node).name) ||
                     child((<PropertyDeclaration>node).type) ||
                     child((<PropertyDeclaration>node).initializer);
+            case SyntaxKind.FunctionType:
+            case SyntaxKind.ConstructorType:
             case SyntaxKind.CallSignature:
             case SyntaxKind.ConstructSignature:
             case SyntaxKind.IndexSignature:
@@ -1882,16 +1884,16 @@ module ts {
             return finishNode(node);
         }
 
-        function parseFunctionType(signatureKind: SyntaxKind): TypeLiteralNode {
-            var node = <TypeLiteralNode>createNode(SyntaxKind.TypeLiteral);
-            var member = <SignatureDeclaration>createNode(signatureKind);
-            var sig = parseSignature(signatureKind, SyntaxKind.EqualsGreaterThanToken, /* returnTokenRequired */ true);
+        function parseFunctionType(typeKind: SyntaxKind): SignatureDeclaration {
+            var member = <SignatureDeclaration>createNode(typeKind);
+            var sig = parseSignature(typeKind === SyntaxKind.FunctionType ? SyntaxKind.CallSignature : SyntaxKind.ConstructSignature,
+                SyntaxKind.EqualsGreaterThanToken, /* returnTokenRequired */ true);
+
             member.typeParameters = sig.typeParameters;
             member.parameters = sig.parameters;
             member.type = sig.type;
             finishNode(member);
-            node.members = createNodeArray(member);
-            return finishNode(node);
+            return member;
         }
 
         function parseKeywordAndNoDot(): Node {
@@ -2011,10 +2013,10 @@ module ts {
 
         function parseType(): TypeNode {
             if (isStartOfFunctionType()) {
-                return parseFunctionType(SyntaxKind.CallSignature);
+                return parseFunctionType(SyntaxKind.FunctionType);
             }
             if (token === SyntaxKind.NewKeyword) {
-                return parseFunctionType(SyntaxKind.ConstructSignature);
+                return parseFunctionType(SyntaxKind.ConstructorType);
             }
             return parseUnionType();
         }

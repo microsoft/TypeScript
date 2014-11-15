@@ -155,6 +155,8 @@ module ts {
         IndexSignature,
         // Type
         TypeReference,
+        FunctionType,
+        ConstructorType,
         TypeQuery,
         TypeLiteral,
         ArrayType,
