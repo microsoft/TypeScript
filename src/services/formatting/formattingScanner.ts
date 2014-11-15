@@ -1,3 +1,4 @@
+/// <reference path="..\formatting.ts"/>
 /// <reference path="..\..\compiler\scanner.ts"/>
 
 module ts.formatting {
@@ -14,7 +15,8 @@ module ts.formatting {
     const enum ScanAction{
         Scan,
         RescanGreaterThanToken,
-        RescanSlashToken
+        RescanSlashToken,
+        RescanTemplateToken
     }
 
     export function getFormattingScanner(sourceFile: SourceFile, startPos: number, endPos: number): FormattingScanner {
@@ -111,6 +113,10 @@ module ts.formatting {
             return container.kind === SyntaxKind.RegularExpressionLiteral;
         }
 
+        function shouldRescanTemplateToken(container: Node): boolean {
+            return container.kind === SyntaxKind.TemplateSpan;
+        }
+
         function startsWithSlashToken(t: SyntaxKind): boolean {
             return t === SyntaxKind.SlashToken || t === SyntaxKind.SlashEqualsToken;
         }
@@ -132,7 +138,9 @@ module ts.formatting {
                 ? ScanAction.RescanGreaterThanToken
                 : shouldRescanSlashToken(n) 
                     ? ScanAction.RescanSlashToken 
-                    : ScanAction.Scan
+                    : shouldRescanTemplateToken(n)
+                        ? ScanAction.RescanTemplateToken
+                        : ScanAction.Scan
 
             if (lastTokenInfo && expectedScanAction === lastScanAction) {
                 // readTokenInfo was called before with the same expected scan action.
@@ -158,6 +166,10 @@ module ts.formatting {
                 currentToken = scanner.reScanSlashToken();
                 Debug.assert(n.kind === currentToken);
                 lastScanAction = ScanAction.RescanSlashToken;
+            }
+            else if (expectedScanAction === ScanAction.RescanTemplateToken && currentToken === SyntaxKind.CloseBraceToken) {
+                currentToken = scanner.reScanTemplateToken();
+                lastScanAction = ScanAction.RescanTemplateToken;
             }
             else {
                 lastScanAction = ScanAction.Scan;
