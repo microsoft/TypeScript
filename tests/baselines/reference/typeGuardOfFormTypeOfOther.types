@@ -1,0 +1,183 @@
+=== tests/cases/conformance/expressions/typeGuards/typeGuardOfFormTypeOfOther.ts ===
+class C { private p: string };
+>C : C
+>p : string
+
+var str: string;
+>str : string
+
+var bool: boolean;
+>bool : boolean
+
+var num: number;
+>num : number
+
+var strOrNum: string | number;
+>strOrNum : string | number
+
+var strOrBool: string | boolean;
+>strOrBool : string | boolean
+
+var numOrBool: number | boolean
+>numOrBool : number | boolean
+
+var strOrNumOrBool: string | number | boolean;
+>strOrNumOrBool : string | number | boolean
+
+var strOrC: string | C;
+>strOrC : string | C
+>C : C
+
+var numOrC: number | C;
+>numOrC : number | C
+>C : C
+
+var boolOrC: boolean | C;
+>boolOrC : boolean | C
+>C : C
+
+var emptyObj: {};
+>emptyObj : {}
+
+var c: C;
+>c : C
+>C : C
+
+// A type guard of the form typeof x === s, 
+// where s is a string literal with any value but 'string', 'number' or 'boolean',
+//  - when true, removes the primitive types string, number, and boolean from the type of x, or
+//  - when false, has no effect on the type of x.
+
+if (typeof strOrC === "Object") {
+>typeof strOrC === "Object" : boolean
+>typeof strOrC : string
+>strOrC : string | C
+
+    c = strOrC; // C
+>c = strOrC : C
+>c : C
+>strOrC : C
+}
+else {
+    var r2: string | C = strOrC; // string | C
+>r2 : string | C
+>C : C
+>strOrC : string | C
+}
+if (typeof numOrC === "Object") {
+>typeof numOrC === "Object" : boolean
+>typeof numOrC : string
+>numOrC : number | C
+
+    c = numOrC; // C
+>c = numOrC : C
+>c : C
+>numOrC : C
+}
+else {
+    var r3: number | C = numOrC; // number | C
+>r3 : number | C
+>C : C
+>numOrC : number | C
+}
+if (typeof boolOrC === "Object") {
+>typeof boolOrC === "Object" : boolean
+>typeof boolOrC : string
+>boolOrC : boolean | C
+
+    c = boolOrC; // C
+>c = boolOrC : C
+>c : C
+>boolOrC : C
+}
+else {
+    var r4: boolean | C = boolOrC; // boolean | C
+>r4 : boolean | C
+>C : C
+>boolOrC : boolean | C
+}
+
+// Narrowing occurs only if target type is a subtype of variable type
+if (typeof strOrNumOrBool === "Object") {
+>typeof strOrNumOrBool === "Object" : boolean
+>typeof strOrNumOrBool : string
+>strOrNumOrBool : string | number | boolean
+
+    var q1: string | number | boolean = strOrNumOrBool; // string | number | boolean
+>q1 : string | number | boolean
+>strOrNumOrBool : string | number | boolean
+}
+else {
+    var q2: string | number | boolean = strOrNumOrBool; // string | number | boolean
+>q2 : string | number | boolean
+>strOrNumOrBool : string | number | boolean
+}
+
+// A type guard of the form typeof x !== s, where s is a string literal,
+//  - when true, narrows the type of x by typeof x === s when false, or
+//  - when false, narrows the type of x by typeof x === s when true.
+if (typeof strOrC !== "Object") {
+>typeof strOrC !== "Object" : boolean
+>typeof strOrC : string
+>strOrC : string | C
+
+    var r2: string | C = strOrC; // string | C
+>r2 : string | C
+>C : C
+>strOrC : string | C
+}
+else {
+    c = strOrC; // C
+>c = strOrC : C
+>c : C
+>strOrC : C
+}
+if (typeof numOrC !== "Object") {
+>typeof numOrC !== "Object" : boolean
+>typeof numOrC : string
+>numOrC : number | C
+
+    var r3: number | C = numOrC; // number | C
+>r3 : number | C
+>C : C
+>numOrC : number | C
+}
+else {
+    c = numOrC; // C
+>c = numOrC : C
+>c : C
+>numOrC : C
+}
+if (typeof boolOrC !== "Object") {
+>typeof boolOrC !== "Object" : boolean
+>typeof boolOrC : string
+>boolOrC : boolean | C
+
+    var r4: boolean | C = boolOrC; // boolean | C
+>r4 : boolean | C
+>C : C
+>boolOrC : boolean | C
+}
+else {
+    c = boolOrC; // C
+>c = boolOrC : C
+>c : C
+>boolOrC : C
+}
+
+// Narrowing occurs only if target type is a subtype of variable type
+if (typeof strOrNumOrBool !== "Object") {
+>typeof strOrNumOrBool !== "Object" : boolean
+>typeof strOrNumOrBool : string
+>strOrNumOrBool : string | number | boolean
+
+    var q1: string | number | boolean = strOrNumOrBool; // string | number | boolean
+>q1 : string | number | boolean
+>strOrNumOrBool : string | number | boolean
+}
+else {
+    var q2: string | number | boolean = strOrNumOrBool; // string | number | boolean
+>q2 : string | number | boolean
+>strOrNumOrBool : string | number | boolean
+}
+

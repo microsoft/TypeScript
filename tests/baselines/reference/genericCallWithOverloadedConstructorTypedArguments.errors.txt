@@ -1,4 +1,5 @@
-tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithOverloadedConstructorTypedArguments.ts(36,14): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithOverloadedConstructorTypedArguments.ts(36,14): error TS2453: The type argument for type parameter 'T' cannot be inferred from the usage. Consider specifying the type arguments explicitly.
+  Type argument candidate 'boolean' is not a valid type argument because it is not a supertype of candidate 'number'.
 
 
 ==== tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithOverloadedConstructorTypedArguments.ts (1 errors) ====
@@ -38,8 +39,9 @@ tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithOve
         }
     
         var r8 = foo6(a); // error
-                 ~~~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
+                 ~~~~
+!!! error TS2453: The type argument for type parameter 'T' cannot be inferred from the usage. Consider specifying the type arguments explicitly.
+!!! error TS2453:   Type argument candidate 'boolean' is not a valid type argument because it is not a supertype of candidate 'number'.
         var r9 = foo6(b); // new any => string; new(x:any, y?:any) => string
     
         function foo7<T>(x:T, cb: { new(x: T): string; new(x: T, y?: T): string }) {

@@ -1,8 +1,8 @@
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithNumericIndexer.ts(32,11): error TS2416: Class 'B3<T>' incorrectly extends base class 'A<T>':
-  Index signatures are incompatible:
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithNumericIndexer.ts(32,11): error TS2415: Class 'B3<T>' incorrectly extends base class 'A<T>'.
+  Index signatures are incompatible.
     Type 'Derived' is not assignable to type 'T'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithNumericIndexer.ts(36,11): error TS2416: Class 'B4<T>' incorrectly extends base class 'A<T>':
-  Index signatures are incompatible:
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithNumericIndexer.ts(36,11): error TS2415: Class 'B4<T>' incorrectly extends base class 'A<T>'.
+  Index signatures are incompatible.
     Type 'Derived2' is not assignable to type 'T'.
 
 
@@ -40,17 +40,17 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
     
         class B3<T extends Base> extends A<T> {
               ~~
-!!! error TS2416: Class 'B3<T>' incorrectly extends base class 'A<T>':
-!!! error TS2416:   Index signatures are incompatible:
-!!! error TS2416:     Type 'Derived' is not assignable to type 'T'.
+!!! error TS2415: Class 'B3<T>' incorrectly extends base class 'A<T>'.
+!!! error TS2415:   Index signatures are incompatible.
+!!! error TS2415:     Type 'Derived' is not assignable to type 'T'.
             [x: number]: Derived; // error, BUG?
         }
     
         class B4<T extends Base> extends A<T> {
               ~~
-!!! error TS2416: Class 'B4<T>' incorrectly extends base class 'A<T>':
-!!! error TS2416:   Index signatures are incompatible:
-!!! error TS2416:     Type 'Derived2' is not assignable to type 'T'.
+!!! error TS2415: Class 'B4<T>' incorrectly extends base class 'A<T>'.
+!!! error TS2415:   Index signatures are incompatible.
+!!! error TS2415:     Type 'Derived2' is not assignable to type 'T'.
             [x: number]: Derived2; // error, BUG?
         }
     }

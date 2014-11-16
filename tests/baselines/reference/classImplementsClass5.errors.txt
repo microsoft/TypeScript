@@ -1,8 +1,8 @@
-tests/cases/compiler/classImplementsClass5.ts(5,7): error TS2421: Class 'C' incorrectly implements interface 'A':
+tests/cases/compiler/classImplementsClass5.ts(5,7): error TS2420: Class 'C' incorrectly implements interface 'A'.
   Types have separate declarations of a private property 'x'.
-tests/cases/compiler/classImplementsClass5.ts(16,1): error TS2322: Type 'C2' is not assignable to type 'C':
+tests/cases/compiler/classImplementsClass5.ts(16,1): error TS2322: Type 'C2' is not assignable to type 'C'.
   Types have separate declarations of a private property 'x'.
-tests/cases/compiler/classImplementsClass5.ts(17,1): error TS2322: Type 'C' is not assignable to type 'C2':
+tests/cases/compiler/classImplementsClass5.ts(17,1): error TS2322: Type 'C' is not assignable to type 'C2'.
   Types have separate declarations of a private property 'x'.
 
 
@@ -13,8 +13,8 @@ tests/cases/compiler/classImplementsClass5.ts(17,1): error TS2322: Type 'C' is n
     }
     class C implements A {
           ~
-!!! error TS2421: Class 'C' incorrectly implements interface 'A':
-!!! error TS2421:   Types have separate declarations of a private property 'x'.
+!!! error TS2420: Class 'C' incorrectly implements interface 'A'.
+!!! error TS2420:   Types have separate declarations of a private property 'x'.
         private x = 1;
         foo() {
             return 1;
@@ -27,9 +27,9 @@ tests/cases/compiler/classImplementsClass5.ts(17,1): error TS2322: Type 'C' is n
     var c2: C2;
     c = c2;
     ~
-!!! error TS2322: Type 'C2' is not assignable to type 'C':
+!!! error TS2322: Type 'C2' is not assignable to type 'C'.
 !!! error TS2322:   Types have separate declarations of a private property 'x'.
     c2 = c;
     ~~
-!!! error TS2322: Type 'C' is not assignable to type 'C2':
+!!! error TS2322: Type 'C' is not assignable to type 'C2'.
 !!! error TS2322:   Types have separate declarations of a private property 'x'.

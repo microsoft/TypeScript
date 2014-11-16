@@ -15,6 +15,7 @@
 
 /// <reference path='..\services\services.ts' />
 /// <reference path='..\services\shims.ts' />
+/// <reference path='..\compiler\core.ts' />
 /// <reference path='..\compiler\sys.ts' />
 /// <reference path='external\mocha.d.ts'/>
 /// <reference path='external\chai.d.ts'/>
@@ -30,7 +31,7 @@ module Utils {
     var global = <any>Function("return this").call(null);
 
     // Setup some globals based on the current environment
-    export enum ExecutionEnvironment {
+    export const enum ExecutionEnvironment {
         Node,
         Browser,
         CScript
@@ -117,14 +118,10 @@ module Harness.Path {
     }
 
     export function filePath(fullPath: string) {
-        fullPath = switchToForwardSlashes(fullPath);
+        fullPath = ts.normalizeSlashes(fullPath);
         var components = fullPath.split("/");
         var path: string[] = components.slice(0, components.length - 1);
         return path.join("/") + "/";
-    }
-
-    export function switchToForwardSlashes(path: string) {
-        return path.replace(/\\/g, "/").replace(/\/\//g, '/');
     }
 }
 
@@ -564,7 +561,7 @@ module Harness {
             // Register input files
             function register(file: { unitName: string; content: string; }) {
                 if (file.content !== undefined) {
-                    var filename = Path.switchToForwardSlashes(file.unitName);
+                    var filename = ts.normalizeSlashes(file.unitName);
                     filemap[getCanonicalFileName(filename)] = ts.createSourceFile(filename, file.content, scriptTarget, /*version:*/ "0");
                 }
             };
@@ -761,7 +758,6 @@ module Harness {
                         case 'codepage':
                         case 'createFileLog':
                         case 'filename':
-                        case 'propagateenumconstants':
                         case 'removecomments':
                         case 'watch':
                         case 'allowautomaticsemicoloninsertion':
@@ -776,7 +772,9 @@ module Harness {
                         case 'errortruncation':
                             options.noErrorTruncation = setting.value === 'false';
                             break;
-
+                        case 'preserveconstenums':
+                            options.preserveConstEnums = setting.value === 'true';
+                            break;
                         default:
                             throw new Error('Unsupported compiler setting ' + setting.flag);
                     }
@@ -785,7 +783,7 @@ module Harness {
                 var filemap: { [name: string]: ts.SourceFile; } = {};
                 var register = (file: { unitName: string; content: string; }) => {
                     if (file.content !== undefined) {
-                        var filename = Path.switchToForwardSlashes(file.unitName);
+                        var filename = ts.normalizeSlashes(file.unitName);
                         filemap[getCanonicalFileName(filename)] = ts.createSourceFile(filename, file.content, options.target, /*version:*/ "0");
                     }
                 };
@@ -962,7 +960,7 @@ module Harness {
                 // Note: IE JS engine incorrectly handles consecutive delimiters here when using RegExp split, so
                 // we have to string-based splitting instead and try to figure out the delimiting chars
 
-                var lineStarts = ts.getLineStarts(inputFile.content);
+                var lineStarts = ts.computeLineStarts(inputFile.content);
                 var lines = inputFile.content.split('\n');
                 lines.forEach((line, lineIndex) => {
                     if (line.length > 0 && line.charAt(line.length - 1) === '\r') {
@@ -1007,8 +1005,12 @@ module Harness {
                 assert.equal(markedErrorCount, fileErrors.length, 'count of errors in ' + inputFile.unitName);
             });
 
+            var numLibraryDiagnostics = ts.countWhere(diagnostics, diagnostic => {
+                return diagnostic.filename && isLibraryFile(diagnostic.filename);
+            });
+
             // Verify we didn't miss any errors in total
-            assert.equal(totalErrorsReported, diagnostics.length, 'total number of errors');
+            assert.equal(totalErrorsReported + numLibraryDiagnostics, diagnostics.length, 'total number of errors');
 
             return minimalDiagnosticsToString(diagnostics) +
                 sys.newLine + sys.newLine + outputLines.join('\r\n');
@@ -1093,7 +1095,6 @@ module Harness {
             /** @param fileResults an array of strings for the fileName and an ITextWriter with its code */
             constructor(fileResults: GeneratedFile[], errors: HarnessDiagnostic[], public program: ts.Program,
                 public currentDirectoryForProgram: string, private sourceMapData: ts.SourceMapData[]) {
-                var lines: string[] = [];
 
                 fileResults.forEach(emittedFile => {
                     if (isDTS(emittedFile.fileName)) {
@@ -1149,7 +1150,7 @@ module Harness {
         var optionRegex = /^[\/]{2}\s*@(\w+)\s*:\s*(\S*)/gm;  // multiple matches on multiple lines
 
         // List of allowed metadata names
-        var fileMetadataNames = ["filename", "comments", "declaration", "module", "nolib", "sourcemap", "target", "out", "outdir", "noemitonerror", "noimplicitany", "noresolve", "newline", "newlines", "emitbom", "errortruncation", "usecasesensitivefilenames"];
+        var fileMetadataNames = ["filename", "comments", "declaration", "module", "nolib", "sourcemap", "target", "out", "outdir", "noemitonerror","noimplicitany", "noresolve", "newline", "newlines", "emitbom", "errortruncation", "usecasesensitivefilenames", "preserveconstenums"];
 
         function extractCompilerSettings(content: string): CompilerSetting[] {
 
@@ -1247,7 +1248,6 @@ module Harness {
 
     /** Support class for baseline files */
     export module Baseline {
-        var firstRun = true;
 
         export interface BaselineOptions {
             LineEndingSensitive?: boolean;
@@ -1288,8 +1288,7 @@ module Harness {
                 IO.createDirectory(dirName);
                 fileCache[dirName] = true;
             }
-            var parentDir = IO.directoryName(actualFilename); // .../tests/baselines/local
-            var parentParentDir = IO.directoryName(IO.directoryName(actualFilename)) // .../tests/baselines
+
             // Create folders if needed
             createDirectoryStructure(Harness.IO.directoryName(actualFilename));
 

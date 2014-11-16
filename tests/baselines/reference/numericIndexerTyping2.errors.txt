@@ -1,5 +1,5 @@
-tests/cases/compiler/numericIndexerTyping2.ts(9,5): error TS2323: Type 'Date' is not assignable to type 'string'.
-tests/cases/compiler/numericIndexerTyping2.ts(12,5): error TS2323: Type 'Date' is not assignable to type 'string'.
+tests/cases/compiler/numericIndexerTyping2.ts(9,5): error TS2322: Type 'Date' is not assignable to type 'string'.
+tests/cases/compiler/numericIndexerTyping2.ts(12,5): error TS2322: Type 'Date' is not assignable to type 'string'.
 
 
 ==== tests/cases/compiler/numericIndexerTyping2.ts (2 errors) ====
@@ -13,9 +13,9 @@ tests/cases/compiler/numericIndexerTyping2.ts(12,5): error TS2323: Type 'Date' i
     var i: I;
     var r: string = i[1]; // error: numeric indexer returns the type of the string indexer
         ~
-!!! error TS2323: Type 'Date' is not assignable to type 'string'.
+!!! error TS2322: Type 'Date' is not assignable to type 'string'.
     
     var i2: I2;
     var r2: string = i2[1]; // error: numeric indexer returns the type of the string indexere
         ~~
-!!! error TS2323: Type 'Date' is not assignable to type 'string'.
+!!! error TS2322: Type 'Date' is not assignable to type 'string'.

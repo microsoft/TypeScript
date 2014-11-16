@@ -1,7 +1,7 @@
-tests/cases/compiler/stringIndexerAssignments2.ts(19,1): error TS2322: Type 'C2' is not assignable to type 'C1':
+tests/cases/compiler/stringIndexerAssignments2.ts(19,1): error TS2322: Type 'C2' is not assignable to type 'C1'.
   Index signature is missing in type 'C2'.
-tests/cases/compiler/stringIndexerAssignments2.ts(20,1): error TS2322: Type 'C3' is not assignable to type 'C1':
-  Types of property 'one' are incompatible:
+tests/cases/compiler/stringIndexerAssignments2.ts(20,1): error TS2322: Type 'C3' is not assignable to type 'C1'.
+  Types of property 'one' are incompatible.
     Type 'number' is not assignable to type 'string'.
 
 
@@ -26,10 +26,10 @@ tests/cases/compiler/stringIndexerAssignments2.ts(20,1): error TS2322: Type 'C3'
     
     x = a;
     ~
-!!! error TS2322: Type 'C2' is not assignable to type 'C1':
+!!! error TS2322: Type 'C2' is not assignable to type 'C1'.
 !!! error TS2322:   Index signature is missing in type 'C2'.
     x = b;
     ~
-!!! error TS2322: Type 'C3' is not assignable to type 'C1':
-!!! error TS2322:   Types of property 'one' are incompatible:
+!!! error TS2322: Type 'C3' is not assignable to type 'C1'.
+!!! error TS2322:   Types of property 'one' are incompatible.
 !!! error TS2322:     Type 'number' is not assignable to type 'string'.

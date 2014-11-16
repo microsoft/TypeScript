@@ -471,6 +471,14 @@
         "category": "Error",
         "code": 1157
     },
+    "Invalid template literal; expected '}'": {
+        "category": "Error",
+        "code": 1158
+    },
+    "Tagged templates are only available when targeting ECMAScript 6 and higher.": {
+        "category": "Error",
+        "code": 1159
+    },
 
     "Duplicate identifier '{0}'.": {
         "category": "Error",
@@ -552,7 +560,7 @@
         "category": "Error",
         "code": 2319
     },
-    "Interface '{0}' cannot simultaneously extend types '{1}' and '{2}':": {
+    "Interface '{0}' cannot simultaneously extend types '{1}' and '{2}'.": {
         "category": "Error",
         "code": 2320
     },
@@ -560,13 +568,9 @@
         "category": "Error",
         "code": 2321
     },
-    "Type '{0}' is not assignable to type '{1}':": {
-        "category": "Error",
-        "code": 2322
-    },
     "Type '{0}' is not assignable to type '{1}'.": {
         "category": "Error",
-        "code": 2323
+        "code": 2322
     },
     "Property '{0}' is missing in type '{1}'.": {
         "category": "Error",
@@ -576,7 +580,7 @@
         "category": "Error",
         "code": 2325
     },
-    "Types of property '{0}' are incompatible:": {
+    "Types of property '{0}' are incompatible.": {
         "category": "Error",
         "code": 2326
     },
@@ -584,7 +588,7 @@
         "category": "Error",
         "code": 2327
     },
-    "Types of parameters '{0}' and '{1}' are incompatible:": {
+    "Types of parameters '{0}' and '{1}' are incompatible.": {
         "category": "Error",
         "code": 2328
     },
@@ -592,7 +596,7 @@
         "category": "Error",
         "code": 2329
     },
-    "Index signatures are incompatible:": {
+    "Index signatures are incompatible.": {
         "category": "Error",
         "code": 2330
     },
@@ -644,10 +648,6 @@
         "category": "Error",
         "code": 2342
     },
-    "Type '{0}' does not satisfy the constraint '{1}':": {
-        "category": "Error",
-        "code": 2343
-    },
     "Type '{0}' does not satisfy the constraint '{1}'.": {
         "category": "Error",
         "code": 2344
@@ -683,10 +683,6 @@
     "Neither type '{0}' nor type '{1}' is assignable to the other.": {
         "category": "Error",
         "code": 2352
-    },
-    "Neither type '{0}' nor type '{1}' is assignable to the other:": {
-        "category": "Error",
-        "code": 2353
     },
     "No best common type exists among return expressions.": {
         "category": "Error",
@@ -928,17 +924,9 @@
         "category": "Error",
         "code": 2415
     },
-    "Class '{0}' incorrectly extends base class '{1}':": {
-        "category": "Error",
-        "code": 2416
-    },
     "Class static side '{0}' incorrectly extends base class static side '{1}'.": {
         "category": "Error",
         "code": 2417
-    },
-    "Class static side '{0}' incorrectly extends base class static side '{1}':": {
-        "category": "Error",
-        "code": 2418
     },
     "Type name '{0}' in extends clause does not reference constructor function for '{0}'.": {
         "category": "Error",
@@ -947,10 +935,6 @@
     "Class '{0}' incorrectly implements interface '{1}'.": {
         "category": "Error",
         "code": 2420
-    },
-    "Class '{0}' incorrectly implements interface '{1}':": {
-        "category": "Error",
-        "code": 2421
     },
     "A class may only implement another class or interface.": {
         "category": "Error",
@@ -979,10 +963,6 @@
     "All declarations of an interface must have identical type parameters.": {
         "category": "Error",
         "code": 2428
-    },
-    "Interface '{0}' incorrectly extends interface '{1}':": {
-        "category": "Error",
-        "code": 2429
     },
     "Interface '{0}' incorrectly extends interface '{1}'.": {
         "category": "Error",
@@ -1079,6 +1059,22 @@
     "An enum member cannot have a numeric name.": {
         "category": "Error",
         "code": 2452
+    },
+    "The type argument for type parameter '{0}' cannot be inferred from the usage. Consider specifying the type arguments explicitly.": {
+        "category": "Error",
+        "code": 2453
+    },
+    "Type argument candidate '{1}' is not a valid type argument because it is not a supertype of candidate '{0}'.": {
+        "category": "Error",
+        "code": 2455
+    },
+    "Type alias '{0}' circularly references itself.": {
+        "category": "Error",
+        "code": 2456
+    },
+    "Type alias name cannot be '{0}'": {
+        "category": "Error",
+        "code": 2457
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {
@@ -1397,13 +1393,47 @@
         "category": "Error",
         "code": 4078
     },
-
-    
+    "Exported type alias '{0}' has or is using name '{1}' from external module {2} but cannot be named.": {
+        "category": "Error",
+        "code": 4079
+    },
+    "Exported type alias '{0}' has or is using name '{1}' from private module '{2}'.": {
+        "category": "Error",
+        "code": 4080
+    },
+    "Exported type alias '{0}' has or is using private name '{1}'.": {
+        "category": "Error",
+        "code": 4081
+    },
+    "Enum declarations must all be const or non-const.": {
+        "category": "Error",
+        "code": 4082
+    },
+    "In 'const' enum declarations member initializer must be constant expression.": {
+        "category": "Error",
+        "code": 4083,
+        "isEarly": true
+    },
+    "'const' enums can only be used in property or index access expressions or the right hand side of an import declaration or export assignment.": {
+        "category": "Error",
+        "code": 4084
+    },
+    "Index expression arguments in 'const' enums must be of type 'string'.": {
+        "category": "Error",
+        "code": 4085
+    },
+    "'const' enum member initializer was evaluated to a non-finite value.": {
+        "category": "Error",
+        "code": 4086
+    },
+    "'const' enum member initializer was evaluated to disallowed value 'NaN'.": {
+        "category": "Error",
+        "code": 4087
+    },
     "The current host does not support the '{0}' option.": {
         "category": "Error",
         "code": 5001
     },
-
     "Cannot find the common subdirectory path for the input files.": {
         "category": "Error",
         "code": 5009
@@ -1456,9 +1486,13 @@
         "category": "Message",
         "code": 6006
     },
-    "Do not emit outputs if any type checking errors were reported.": {
+    "Do not erase const enum declarations in generated code.": {
         "category": "Message",
         "code": 6007
+    },
+    "Do not emit outputs if any type checking errors were reported.": {
+        "category": "Message",
+        "code": 6008
     },
     "Do not emit comments to output.": {
         "category": "Message",

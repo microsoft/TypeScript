@@ -1,5 +1,5 @@
-tests/cases/conformance/types/members/objectTypeWithCallSignatureHidingMembersOfFunctionAssignmentCompat.ts(8,1): error TS2323: Type 'Object' is not assignable to type 'I'.
-tests/cases/conformance/types/members/objectTypeWithCallSignatureHidingMembersOfFunctionAssignmentCompat.ts(14,1): error TS2323: Type 'Object' is not assignable to type '() => void'.
+tests/cases/conformance/types/members/objectTypeWithCallSignatureHidingMembersOfFunctionAssignmentCompat.ts(8,1): error TS2322: Type 'Object' is not assignable to type 'I'.
+tests/cases/conformance/types/members/objectTypeWithCallSignatureHidingMembersOfFunctionAssignmentCompat.ts(14,1): error TS2322: Type 'Object' is not assignable to type '() => void'.
 
 
 ==== tests/cases/conformance/types/members/objectTypeWithCallSignatureHidingMembersOfFunctionAssignmentCompat.ts (2 errors) ====
@@ -12,7 +12,7 @@ tests/cases/conformance/types/members/objectTypeWithCallSignatureHidingMembersOf
     f = i;
     i = f;
     ~
-!!! error TS2323: Type 'Object' is not assignable to type 'I'.
+!!! error TS2322: Type 'Object' is not assignable to type 'I'.
     
     var a: {
         (): void
@@ -20,4 +20,4 @@ tests/cases/conformance/types/members/objectTypeWithCallSignatureHidingMembersOf
     f = a;
     a = f;
     ~
-!!! error TS2323: Type 'Object' is not assignable to type '() => void'.
+!!! error TS2322: Type 'Object' is not assignable to type '() => void'.

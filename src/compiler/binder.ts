@@ -5,25 +5,51 @@
 
 module ts {
 
-    export function isInstantiated(node: Node): boolean {
+    export const enum ModuleInstanceState {
+        NonInstantiated = 0,
+        Instantiated    = 1,
+        ConstEnumOnly   = 2
+    }
+
+    export function getModuleInstanceState(node: Node): ModuleInstanceState {
         // A module is uninstantiated if it contains only 
         // 1. interface declarations
         if (node.kind === SyntaxKind.InterfaceDeclaration) {
-            return false;
+            return ModuleInstanceState.NonInstantiated;
         }
-        // 2. non - exported import declarations
+        // 2. const enum declarations don't make module instantiated
+        else if (node.kind === SyntaxKind.EnumDeclaration && isConstEnumDeclaration(<EnumDeclaration>node)) {
+            return ModuleInstanceState.ConstEnumOnly;
+        }
+        // 3. non - exported import declarations
         else if (node.kind === SyntaxKind.ImportDeclaration && !(node.flags & NodeFlags.Export)) {
-            return false;
+            return ModuleInstanceState.NonInstantiated;
         }
-        // 3. other uninstantiated module declarations.
-        else if (node.kind === SyntaxKind.ModuleBlock && !forEachChild(node, isInstantiated)) {
-            return false;
+        // 4. other uninstantiated module declarations.
+        else if (node.kind === SyntaxKind.ModuleBlock) {
+            var state = ModuleInstanceState.NonInstantiated;
+            forEachChild(node, n => {
+                switch (getModuleInstanceState(n)) {
+                    case ModuleInstanceState.NonInstantiated:
+                        // child is non-instantiated - continue searching
+                        return false;
+                    case ModuleInstanceState.ConstEnumOnly:
+                        // child is const enum only - record state and continue searching
+                        state = ModuleInstanceState.ConstEnumOnly;
+                        return false;
+                    case ModuleInstanceState.Instantiated:
+                        // child is instantiated - record state and stop
+                        state = ModuleInstanceState.Instantiated;
+                        return true;
+                }
+            });
+            return state;
         }
-        else if (node.kind === SyntaxKind.ModuleDeclaration && !isInstantiated((<ModuleDeclaration>node).body)) {
-            return false;
+        else if (node.kind === SyntaxKind.ModuleDeclaration) {
+            return getModuleInstanceState((<ModuleDeclaration>node).body);
         }
         else {
-            return true;
+            return ModuleInstanceState.Instantiated;
         }
     }
 
@@ -58,23 +84,30 @@ module ts {
             if (symbolKind & SymbolFlags.Value && !symbol.valueDeclaration) symbol.valueDeclaration = node;
         }
 
+        // TODO(jfreeman): Implement getDeclarationName for property name
         function getDeclarationName(node: Declaration): string {
             if (node.name) {
                 if (node.kind === SyntaxKind.ModuleDeclaration && node.name.kind === SyntaxKind.StringLiteral) {
-                    return '"' + node.name.text + '"';
+                    return '"' + (<LiteralExpression>node.name).text + '"';
                 }
-                return node.name.text;
+                return (<Identifier>node.name).text;
             }
             switch (node.kind) {
-                case SyntaxKind.Constructor: return "__constructor";
-                case SyntaxKind.CallSignature: return "__call";
-                case SyntaxKind.ConstructSignature: return "__new";
-                case SyntaxKind.IndexSignature: return "__index";
+                case SyntaxKind.ConstructorType:
+                case SyntaxKind.Constructor:
+                    return "__constructor";
+                case SyntaxKind.FunctionType:
+                case SyntaxKind.CallSignature:
+                    return "__call";
+                case SyntaxKind.ConstructSignature:
+                    return "__new";
+                case SyntaxKind.IndexSignature:
+                    return "__index";
             }
         }
 
         function getDisplayName(node: Declaration): string {
-            return node.name ? identifierToString(node.name) : getDeclarationName(node);
+            return node.name ? declarationNameToString(node.name) : getDeclarationName(node);
         }
 
         function declareSymbol(symbols: SymbolTable, parent: Symbol, node: Declaration, includes: SymbolFlags, excludes: SymbolFlags): Symbol {
@@ -87,8 +120,11 @@ module ts {
                     }
                     // Report errors every position with duplicate declaration
                     // Report errors on previous encountered declarations
-                    var message = symbol.flags & SymbolFlags.BlockScopedVariable ? Diagnostics.Cannot_redeclare_block_scoped_variable_0 : Diagnostics.Duplicate_identifier_0;
-                    forEach(symbol.declarations, (declaration) => {
+                    var message = symbol.flags & SymbolFlags.BlockScopedVariable
+                        ? Diagnostics.Cannot_redeclare_block_scoped_variable_0 
+                        : Diagnostics.Duplicate_identifier_0;
+
+                    forEach(symbol.declarations, declaration => {
                         file.semanticErrors.push(createDiagnosticForNode(declaration.name, message, getDisplayName(declaration)));
                     });
                     file.semanticErrors.push(createDiagnosticForNode(node.name, message, getDisplayName(node)));
@@ -206,6 +242,8 @@ module ts {
                         declareModuleMember(node, symbolKind, symbolExcludes);
                         break;
                     }
+                case SyntaxKind.FunctionType:
+                case SyntaxKind.ConstructorType:
                 case SyntaxKind.CallSignature:
                 case SyntaxKind.ConstructSignature:
                 case SyntaxKind.IndexSignature:
@@ -248,12 +286,42 @@ module ts {
             if (node.name.kind === SyntaxKind.StringLiteral) {
                 bindDeclaration(node, SymbolFlags.ValueModule, SymbolFlags.ValueModuleExcludes, /*isBlockScopeContainer*/ true);
             }
-            else if (isInstantiated(node)) {
-                bindDeclaration(node, SymbolFlags.ValueModule, SymbolFlags.ValueModuleExcludes, /*isBlockScopeContainer*/ true);
-            }
             else {
-                bindDeclaration(node, SymbolFlags.NamespaceModule, SymbolFlags.NamespaceModuleExcludes, /*isBlockScopeContainer*/ true);
+                var state = getModuleInstanceState(node);
+                if (state === ModuleInstanceState.NonInstantiated) {
+                    bindDeclaration(node, SymbolFlags.NamespaceModule, SymbolFlags.NamespaceModuleExcludes, /*isBlockScopeContainer*/ true);
+                }
+                else {
+                    bindDeclaration(node, SymbolFlags.ValueModule, SymbolFlags.ValueModuleExcludes, /*isBlockScopeContainer*/ true);
+                    if (state === ModuleInstanceState.ConstEnumOnly) {
+                        // mark value module as module that contains only enums
+                        node.symbol.constEnumOnlyModule = true;
+                    }
+                    else if (node.symbol.constEnumOnlyModule) {
+                        // const only value module was merged with instantiated module - reset flag
+                        node.symbol.constEnumOnlyModule = false;
+                    }
+                }
             }
+        }
+
+        function bindFunctionOrConstructorType(node: SignatureDeclaration) {
+            // For a given function symbol "<...>(...) => T" we want to generate a symbol identical
+            // to the one we would get for: { <...>(...): T }
+            //
+            // We do that by making an anonymous type literal symbol, and then setting the function 
+            // symbol as its sole member. To the rest of the system, this symbol will be  indistinguishable 
+            // from an actual type literal symbol you would have gotten had you used the long form.
+
+            var symbolKind = node.kind === SyntaxKind.FunctionType ? SymbolFlags.CallSignature : SymbolFlags.ConstructSignature;
+            var symbol = createSymbol(symbolKind, getDeclarationName(node));
+            addDeclarationToSymbol(symbol, node, symbolKind);
+            bindChildren(node, symbolKind, /*isBlockScopeContainer:*/ false);
+
+            var typeLiteralSymbol = createSymbol(SymbolFlags.TypeLiteral, "__type");
+            addDeclarationToSymbol(typeLiteralSymbol, node, SymbolFlags.TypeLiteral);
+            typeLiteralSymbol.members = {};
+            typeLiteralSymbol.members[node.kind === SyntaxKind.FunctionType ? "__call" : "__new"] = symbol
         }
 
         function bindAnonymousDeclaration(node: Node, symbolKind: SymbolFlags, name: string, isBlockScopeContainer: boolean) {
@@ -320,11 +388,11 @@ module ts {
                 case SyntaxKind.CallSignature:
                     bindDeclaration(<Declaration>node, SymbolFlags.CallSignature, 0, /*isBlockScopeContainer*/ false);
                     break;
-                case SyntaxKind.Method:
-                    bindDeclaration(<Declaration>node, SymbolFlags.Method, SymbolFlags.MethodExcludes, /*isBlockScopeContainer*/ true);
-                    break;
                 case SyntaxKind.ConstructSignature:
                     bindDeclaration(<Declaration>node, SymbolFlags.ConstructSignature, 0, /*isBlockScopeContainer*/ true);
+                    break;
+                case SyntaxKind.Method:
+                    bindDeclaration(<Declaration>node, SymbolFlags.Method, SymbolFlags.MethodExcludes, /*isBlockScopeContainer*/ true);
                     break;
                 case SyntaxKind.IndexSignature:
                     bindDeclaration(<Declaration>node, SymbolFlags.IndexSignature, 0, /*isBlockScopeContainer*/ false);
@@ -341,6 +409,12 @@ module ts {
                 case SyntaxKind.SetAccessor:
                     bindDeclaration(<Declaration>node, SymbolFlags.SetAccessor, SymbolFlags.SetAccessorExcludes, /*isBlockScopeContainer*/ true);
                     break;
+
+                case SyntaxKind.FunctionType:
+                case SyntaxKind.ConstructorType:
+                    bindFunctionOrConstructorType(<SignatureDeclaration>node);
+                    break;
+
                 case SyntaxKind.TypeLiteral:
                     bindAnonymousDeclaration(node, SymbolFlags.TypeLiteral, "__type", /*isBlockScopeContainer*/ false);
                     break;
@@ -360,8 +434,16 @@ module ts {
                 case SyntaxKind.InterfaceDeclaration:
                     bindDeclaration(<Declaration>node, SymbolFlags.Interface, SymbolFlags.InterfaceExcludes, /*isBlockScopeContainer*/ false);
                     break;
+                case SyntaxKind.TypeAliasDeclaration:
+                    bindDeclaration(<Declaration>node, SymbolFlags.TypeAlias, SymbolFlags.TypeAliasExcludes, /*isBlockScopeContainer*/ false);
+                    break;
                 case SyntaxKind.EnumDeclaration:
-                    bindDeclaration(<Declaration>node, SymbolFlags.Enum, SymbolFlags.EnumExcludes, /*isBlockScopeContainer*/ false);
+                    if (isConstEnumDeclaration(<EnumDeclaration>node)) {
+                        bindDeclaration(<Declaration>node, SymbolFlags.ConstEnum, SymbolFlags.ConstEnumExcludes, /*isBlockScopeContainer*/ false);
+                    }
+                    else {
+                        bindDeclaration(<Declaration>node, SymbolFlags.RegularEnum, SymbolFlags.RegularEnumExcludes, /*isBlockScopeContainer*/ false);
+                    }
                     break;
                 case SyntaxKind.ModuleDeclaration:
                     bindModuleDeclaration(<ModuleDeclaration>node);

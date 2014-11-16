@@ -1,5 +1,5 @@
 tests/cases/compiler/crashInsourcePropertyIsRelatableToTargetProperty.ts(5,1): error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
-tests/cases/compiler/crashInsourcePropertyIsRelatableToTargetProperty.ts(9,5): error TS2322: Type '(x: "hi", items: string[]) => typeof foo' is not assignable to type 'D':
+tests/cases/compiler/crashInsourcePropertyIsRelatableToTargetProperty.ts(9,5): error TS2322: Type '(x: "hi", items: string[]) => typeof foo' is not assignable to type 'D'.
   Property 'x' is missing in type '(x: "hi", items: string[]) => typeof foo'.
 
 
@@ -16,6 +16,6 @@ tests/cases/compiler/crashInsourcePropertyIsRelatableToTargetProperty.ts(9,5): e
     }
     var a: D = foo("hi", []);
         ~
-!!! error TS2322: Type '(x: "hi", items: string[]) => typeof foo' is not assignable to type 'D':
+!!! error TS2322: Type '(x: "hi", items: string[]) => typeof foo' is not assignable to type 'D'.
 !!! error TS2322:   Property 'x' is missing in type '(x: "hi", items: string[]) => typeof foo'.
     

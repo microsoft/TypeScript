@@ -1,9 +1,14 @@
 ///<reference path='references.ts' />
 
 module TypeScript {
+    export interface ILineAndCharacter {
+        line: number;
+        character: number;
+    }
+
     export class LineMap {
         public static empty = new LineMap(() => [0], 0);
-        private _lineStarts: number[] = null;
+        private _lineStarts: number[] = undefined;
 
         constructor(private _computeLineStarts: () => number[], private length: number) {
         }
@@ -18,7 +23,7 @@ module TypeScript {
         }
 
         public lineStarts(): number[] {
-            if (this._lineStarts === null) {
+            if (!this._lineStarts) {
                 this._lineStarts = this._computeLineStarts();
             }
 

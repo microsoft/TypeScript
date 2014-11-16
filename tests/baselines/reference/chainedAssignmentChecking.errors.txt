@@ -1,6 +1,6 @@
-tests/cases/compiler/chainedAssignmentChecking.ts(21,1): error TS2322: Type 'Z' is not assignable to type 'X':
+tests/cases/compiler/chainedAssignmentChecking.ts(21,1): error TS2322: Type 'Z' is not assignable to type 'X'.
   Property 'a' is missing in type 'Z'.
-tests/cases/compiler/chainedAssignmentChecking.ts(21,6): error TS2322: Type 'Z' is not assignable to type 'Y':
+tests/cases/compiler/chainedAssignmentChecking.ts(21,6): error TS2322: Type 'Z' is not assignable to type 'Y'.
   Property 'a' is missing in type 'Z'.
 
 
@@ -27,9 +27,9 @@ tests/cases/compiler/chainedAssignmentChecking.ts(21,6): error TS2322: Type 'Z' 
     
     c1 = c2 = c3; // Should be error
     ~~
-!!! error TS2322: Type 'Z' is not assignable to type 'X':
+!!! error TS2322: Type 'Z' is not assignable to type 'X'.
 !!! error TS2322:   Property 'a' is missing in type 'Z'.
          ~~
-!!! error TS2322: Type 'Z' is not assignable to type 'Y':
+!!! error TS2322: Type 'Z' is not assignable to type 'Y'.
 !!! error TS2322:   Property 'a' is missing in type 'Z'.
     

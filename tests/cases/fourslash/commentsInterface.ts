@@ -235,7 +235,7 @@ verify.completionListContains("i3_i", "(var) i3_i: i3", "");
 goTo.marker('41');
 verify.quickInfoIs("(method) i3.f(a: number): string", "Function i3 f");
 verify.memberListContains("f", "(method) i3.f(a: number): string", "Function i3 f");
-verify.memberListContains("l", "(property) i3.l: (b: number) => string", "i3 l");
+verify.memberListContains("l", "(property) i3.l: (b: number) => string", "");
 verify.memberListContains("x", "(property) i3.x: number", "Comment i3 x");
 verify.memberListContains("nc_f", "(method) i3.nc_f(a: number): string", "");
 verify.memberListContains("nc_l", "(property) i3.nc_l: (b: number) => string", "");

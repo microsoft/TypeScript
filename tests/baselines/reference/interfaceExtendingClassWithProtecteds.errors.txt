@@ -1,4 +1,4 @@
-tests/cases/conformance/interfaces/interfacesExtendingClasses/interfaceExtendingClassWithProtecteds.ts(5,11): error TS2429: Interface 'I' incorrectly extends interface 'Foo':
+tests/cases/conformance/interfaces/interfacesExtendingClasses/interfaceExtendingClassWithProtecteds.ts(5,11): error TS2430: Interface 'I' incorrectly extends interface 'Foo'.
   Property 'x' is protected but type 'I' is not a class derived from 'Foo'.
 tests/cases/conformance/interfaces/interfacesExtendingClasses/interfaceExtendingClassWithProtecteds.ts(15,10): error TS2445: Property 'x' is protected and only accessible within class 'Foo' and its subclasses.
 
@@ -10,8 +10,8 @@ tests/cases/conformance/interfaces/interfacesExtendingClasses/interfaceExtending
     
     interface I extends Foo { // error
               ~
-!!! error TS2429: Interface 'I' incorrectly extends interface 'Foo':
-!!! error TS2429:   Property 'x' is protected but type 'I' is not a class derived from 'Foo'.
+!!! error TS2430: Interface 'I' incorrectly extends interface 'Foo'.
+!!! error TS2430:   Property 'x' is protected but type 'I' is not a class derived from 'Foo'.
         x: string;
     }
     

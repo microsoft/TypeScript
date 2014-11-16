@@ -1,0 +1,25 @@
+tests/cases/compiler/templateStringsArrayTypeDefinedInES5Mode.ts(10,1): error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
+lib.d.ts(502,11): error TS2300: Duplicate identifier 'TemplateStringsArray'.
+tests/cases/compiler/templateStringsArrayTypeDefinedInES5Mode.ts(2,7): error TS2300: Duplicate identifier 'TemplateStringsArray'.
+tests/cases/compiler/templateStringsArrayTypeDefinedInES5Mode.ts(8,3): error TS2345: Argument of type '{ [x: number]: undefined; }' is not assignable to parameter of type 'TemplateStringsArray'.
+  Property 'raw' is missing in type '{ [x: number]: undefined; }'.
+
+
+==== tests/cases/compiler/templateStringsArrayTypeDefinedInES5Mode.ts (3 errors) ====
+    
+    class TemplateStringsArray {
+          ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2300: Duplicate identifier 'TemplateStringsArray'.
+    }
+    
+    function f(x: TemplateStringsArray, y: number, z: number) {
+    }
+    
+    f({}, 10, 10);
+      ~~
+!!! error TS2345: Argument of type '{ [x: number]: undefined; }' is not assignable to parameter of type 'TemplateStringsArray'.
+!!! error TS2345:   Property 'raw' is missing in type '{ [x: number]: undefined; }'.
+    
+    f `abcdef${ 1234 }${ 5678 }ghijkl`;
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.

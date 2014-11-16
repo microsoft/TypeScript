@@ -1,0 +1,82 @@
+=== tests/cases/conformance/es6/templates/taggedTemplateStringsWithTypedTagsES6.ts ===
+interface I {
+>I : I
+
+    (stringParts: string[], ...rest: number[]): I;
+>stringParts : string[]
+>rest : number[]
+>I : I
+
+    g: I;
+>g : I
+>I : I
+
+    h: I;
+>h : I
+>I : I
+
+    member: I;
+>member : I
+>I : I
+
+    thisIsNotATag(x: string): void
+>thisIsNotATag : (x: string) => void
+>x : string
+
+    [x: number]: I;
+>x : number
+>I : I
+}
+
+var f: I;
+>f : I
+>I : I
+
+f `abc`
+>f : I
+
+f `abc${1}def${2}ghi`;
+>f : I
+
+f `abc`.member
+>f `abc`.member : I
+>f : I
+>member : I
+
+f `abc${1}def${2}ghi`.member;
+>f `abc${1}def${2}ghi`.member : I
+>f : I
+>member : I
+
+f `abc`["member"];
+>f `abc`["member"] : I
+>f : I
+
+f `abc${1}def${2}ghi`["member"];
+>f `abc${1}def${2}ghi`["member"] : I
+>f : I
+
+f `abc`[0].member `abc${1}def${2}ghi`;
+>f `abc`[0].member : I
+>f `abc`[0] : I
+>f : I
+>member : I
+
+f `abc${1}def${2}ghi`["member"].member `abc${1}def${2}ghi`;
+>f `abc${1}def${2}ghi`["member"].member : I
+>f `abc${1}def${2}ghi`["member"] : I
+>f : I
+>member : I
+
+f.thisIsNotATag(`abc`);
+>f.thisIsNotATag(`abc`) : void
+>f.thisIsNotATag : (x: string) => void
+>f : I
+>thisIsNotATag : (x: string) => void
+
+f.thisIsNotATag(`abc${1}def${2}ghi`);
+>f.thisIsNotATag(`abc${1}def${2}ghi`) : void
+>f.thisIsNotATag : (x: string) => void
+>f : I
+>thisIsNotATag : (x: string) => void
+

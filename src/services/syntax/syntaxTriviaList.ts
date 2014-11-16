@@ -28,10 +28,6 @@ module TypeScript {
 
 module TypeScript.Syntax {
     class EmptyTriviaList implements ISyntaxTriviaList {
-        public kind() {
-            return SyntaxKind.TriviaList;
-        }
-
         public isShared(): boolean {
             return true;
         }
@@ -80,7 +76,7 @@ module TypeScript.Syntax {
     export var emptyTriviaList: ISyntaxTriviaList = new EmptyTriviaList();
 
     function isComment(trivia: ISyntaxTrivia): boolean {
-        return trivia.kind() === SyntaxKind.MultiLineCommentTrivia || trivia.kind() === SyntaxKind.SingleLineCommentTrivia;
+        return trivia.kind === SyntaxKind.MultiLineCommentTrivia || trivia.kind === SyntaxKind.SingleLineCommentTrivia;
     }
 
     class SingletonSyntaxTriviaList implements ISyntaxTriviaList {
@@ -89,10 +85,6 @@ module TypeScript.Syntax {
         constructor(item: ISyntaxTrivia) {
             this.item = item.clone();
             this.item.parent = this;
-        }
-
-        public kind() {
-            return SyntaxKind.TriviaList;
         }
 
         public isShared(): boolean {
@@ -128,11 +120,11 @@ module TypeScript.Syntax {
         }
 
         public hasNewLine(): boolean {
-            return this.item.kind() === SyntaxKind.NewLineTrivia;
+            return this.item.kind === SyntaxKind.NewLineTrivia;
         }
 
         public hasSkippedToken(): boolean {
-            return this.item.kind() === SyntaxKind.SkippedTokenTrivia;
+            return this.item.kind === SyntaxKind.SkippedTokenTrivia;
         }
 
         public toArray(): ISyntaxTrivia[] {
@@ -153,10 +145,6 @@ module TypeScript.Syntax {
                 cloned.parent = this;
                 return cloned;
             });
-        }
-
-        public kind() {
-            return SyntaxKind.TriviaList;
         }
 
         public isShared(): boolean {
@@ -205,7 +193,7 @@ module TypeScript.Syntax {
 
         public hasNewLine(): boolean {
             for (var i = 0; i < this.trivia.length; i++) {
-                if (this.trivia[i].kind() === SyntaxKind.NewLineTrivia) {
+                if (this.trivia[i].kind === SyntaxKind.NewLineTrivia) {
                     return true;
                 }
             }
@@ -215,7 +203,7 @@ module TypeScript.Syntax {
 
         public hasSkippedToken(): boolean {
             for (var i = 0; i < this.trivia.length; i++) {
-                if (this.trivia[i].kind() === SyntaxKind.SkippedTokenTrivia) {
+                if (this.trivia[i].kind === SyntaxKind.SkippedTokenTrivia) {
                     return true;
                 }
             }
@@ -233,7 +221,7 @@ module TypeScript.Syntax {
     }
 
     export function triviaList(trivia: ISyntaxTrivia[]): ISyntaxTriviaList {
-        if (trivia === undefined || trivia === null || trivia.length === 0) {
+        if (!trivia || trivia.length === 0) {
             return Syntax.emptyTriviaList;
         }
 

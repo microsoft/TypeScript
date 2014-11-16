@@ -1,4 +1,4 @@
-tests/cases/compiler/implementPublicPropertyAsPrivate.ts(4,7): error TS2421: Class 'C' incorrectly implements interface 'I':
+tests/cases/compiler/implementPublicPropertyAsPrivate.ts(4,7): error TS2420: Class 'C' incorrectly implements interface 'I'.
   Property 'x' is private in type 'C' but not in type 'I'.
 
 
@@ -8,7 +8,7 @@ tests/cases/compiler/implementPublicPropertyAsPrivate.ts(4,7): error TS2421: Cla
     }
     class C implements I {
           ~
-!!! error TS2421: Class 'C' incorrectly implements interface 'I':
-!!! error TS2421:   Property 'x' is private in type 'C' but not in type 'I'.
+!!! error TS2420: Class 'C' incorrectly implements interface 'I'.
+!!! error TS2420:   Property 'x' is private in type 'C' but not in type 'I'.
         private x = 0; // should raise error at class decl
     }

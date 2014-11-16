@@ -1,6 +1,6 @@
-tests/cases/compiler/typeParameterArgumentEquivalence4.ts(4,5): error TS2322: Type '(item: any) => T' is not assignable to type '(item: any) => U':
+tests/cases/compiler/typeParameterArgumentEquivalence4.ts(4,5): error TS2322: Type '(item: any) => T' is not assignable to type '(item: any) => U'.
   Type 'T' is not assignable to type 'U'.
-tests/cases/compiler/typeParameterArgumentEquivalence4.ts(5,5): error TS2322: Type '(item: any) => U' is not assignable to type '(item: any) => T':
+tests/cases/compiler/typeParameterArgumentEquivalence4.ts(5,5): error TS2322: Type '(item: any) => U' is not assignable to type '(item: any) => T'.
   Type 'U' is not assignable to type 'T'.
 
 
@@ -10,11 +10,11 @@ tests/cases/compiler/typeParameterArgumentEquivalence4.ts(5,5): error TS2322: Ty
         var y: (item) => T;
         x = y;  // Should be an error
         ~
-!!! error TS2322: Type '(item: any) => T' is not assignable to type '(item: any) => U':
+!!! error TS2322: Type '(item: any) => T' is not assignable to type '(item: any) => U'.
 !!! error TS2322:   Type 'T' is not assignable to type 'U'.
         y = x;  // Shound be an error
         ~
-!!! error TS2322: Type '(item: any) => U' is not assignable to type '(item: any) => T':
+!!! error TS2322: Type '(item: any) => U' is not assignable to type '(item: any) => T'.
 !!! error TS2322:   Type 'U' is not assignable to type 'T'.
     }
     

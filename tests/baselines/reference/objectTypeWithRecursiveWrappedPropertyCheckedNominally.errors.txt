@@ -1,16 +1,16 @@
-tests/cases/conformance/types/typeRelationships/recursiveTypes/objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts(20,1): error TS2322: Type 'MyList<string>' is not assignable to type 'List<number>':
-  Types of property 'data' are incompatible:
+tests/cases/conformance/types/typeRelationships/recursiveTypes/objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts(20,1): error TS2322: Type 'MyList<string>' is not assignable to type 'List<number>'.
+  Types of property 'data' are incompatible.
     Type 'string' is not assignable to type 'number'.
-tests/cases/conformance/types/typeRelationships/recursiveTypes/objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts(22,1): error TS2322: Type 'MyList<number>' is not assignable to type 'List<string>':
-  Types of property 'data' are incompatible:
+tests/cases/conformance/types/typeRelationships/recursiveTypes/objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts(22,1): error TS2322: Type 'MyList<number>' is not assignable to type 'List<string>'.
+  Types of property 'data' are incompatible.
     Type 'number' is not assignable to type 'string'.
-tests/cases/conformance/types/typeRelationships/recursiveTypes/objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts(30,5): error TS2323: Type 'U' is not assignable to type 'T'.
-tests/cases/conformance/types/typeRelationships/recursiveTypes/objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts(31,5): error TS2323: Type 'T' is not assignable to type 'U'.
+tests/cases/conformance/types/typeRelationships/recursiveTypes/objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts(30,5): error TS2322: Type 'U' is not assignable to type 'T'.
+tests/cases/conformance/types/typeRelationships/recursiveTypes/objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts(31,5): error TS2322: Type 'T' is not assignable to type 'U'.
 tests/cases/conformance/types/typeRelationships/recursiveTypes/objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts(41,15): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
-tests/cases/conformance/types/typeRelationships/recursiveTypes/objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts(42,5): error TS2323: Type 'U' is not assignable to type 'T'.
-tests/cases/conformance/types/typeRelationships/recursiveTypes/objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts(43,5): error TS2323: Type 'T' is not assignable to type 'U'.
-tests/cases/conformance/types/typeRelationships/recursiveTypes/objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts(48,5): error TS2323: Type 'T' is not assignable to type 'List<number>'.
-tests/cases/conformance/types/typeRelationships/recursiveTypes/objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts(50,5): error TS2323: Type 'T' is not assignable to type 'MyList<number>'.
+tests/cases/conformance/types/typeRelationships/recursiveTypes/objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts(42,5): error TS2322: Type 'U' is not assignable to type 'T'.
+tests/cases/conformance/types/typeRelationships/recursiveTypes/objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts(43,5): error TS2322: Type 'T' is not assignable to type 'U'.
+tests/cases/conformance/types/typeRelationships/recursiveTypes/objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts(48,5): error TS2322: Type 'T' is not assignable to type 'List<number>'.
+tests/cases/conformance/types/typeRelationships/recursiveTypes/objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts(50,5): error TS2322: Type 'T' is not assignable to type 'MyList<number>'.
 
 
 ==== tests/cases/conformance/types/typeRelationships/recursiveTypes/objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts (9 errors) ====
@@ -35,14 +35,14 @@ tests/cases/conformance/types/typeRelationships/recursiveTypes/objectTypeWithRec
     list1 = myList1; // error, not nominally equal
     list1 = myList2; // error, type mismatch
     ~~~~~
-!!! error TS2322: Type 'MyList<string>' is not assignable to type 'List<number>':
-!!! error TS2322:   Types of property 'data' are incompatible:
+!!! error TS2322: Type 'MyList<string>' is not assignable to type 'List<number>'.
+!!! error TS2322:   Types of property 'data' are incompatible.
 !!! error TS2322:     Type 'string' is not assignable to type 'number'.
     
     list2 = myList1; // error, not nominally equal
     ~~~~~
-!!! error TS2322: Type 'MyList<number>' is not assignable to type 'List<string>':
-!!! error TS2322:   Types of property 'data' are incompatible:
+!!! error TS2322: Type 'MyList<number>' is not assignable to type 'List<string>'.
+!!! error TS2322:   Types of property 'data' are incompatible.
 !!! error TS2322:     Type 'number' is not assignable to type 'string'.
     list2 = myList2; // error, type mismatch
     
@@ -53,10 +53,10 @@ tests/cases/conformance/types/typeRelationships/recursiveTypes/objectTypeWithRec
     function foo<T extends List<number>, U extends MyList<number>>(t: T, u: U) {
         t = u; // error
         ~
-!!! error TS2323: Type 'U' is not assignable to type 'T'.
+!!! error TS2322: Type 'U' is not assignable to type 'T'.
         u = t; // error
         ~
-!!! error TS2323: Type 'T' is not assignable to type 'U'.
+!!! error TS2322: Type 'T' is not assignable to type 'U'.
     
         var a: List<number>;
         var b: MyList<number>;
@@ -71,20 +71,20 @@ tests/cases/conformance/types/typeRelationships/recursiveTypes/objectTypeWithRec
 !!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
         t = u; // error
         ~
-!!! error TS2323: Type 'U' is not assignable to type 'T'.
+!!! error TS2322: Type 'U' is not assignable to type 'T'.
         u = t; // was error, ok after constraint made illegal, doesn't matter
         ~
-!!! error TS2323: Type 'T' is not assignable to type 'U'.
+!!! error TS2322: Type 'T' is not assignable to type 'U'.
     
         var a: List<number>;
         var b: MyList<number>;
     
         a = t; // error
         ~
-!!! error TS2323: Type 'T' is not assignable to type 'List<number>'.
+!!! error TS2322: Type 'T' is not assignable to type 'List<number>'.
         a = u; // error
         b = t; // ok
         ~
-!!! error TS2323: Type 'T' is not assignable to type 'MyList<number>'.
+!!! error TS2322: Type 'T' is not assignable to type 'MyList<number>'.
         b = u; // ok
     }
