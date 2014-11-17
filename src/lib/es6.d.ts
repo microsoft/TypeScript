@@ -34,13 +34,13 @@ interface SymbolConstructor {
     // Well-known Symbols
 
     /** 
-      * A method that determines if a constructor object recognizes an object as one of the constructor’s 
-      * instances.Called by the semantics of the instanceof operator. 
+      * A method that determines if a constructor object recognizes an object as one of the 
+      * constructor’s instances.Called by the semantics of the instanceof operator. 
       */
     hasInstance: Symbol;
 
     /** 
-      * A Boolean value that if true indicates that an object should be flatten to its array elements 
+      * A Boolean value that if true indicates that an object should be flatten to its array elements
       * by Array.prototype.concat.
       */
     isConcatSpreadable: Symbol;
@@ -51,8 +51,8 @@ interface SymbolConstructor {
     isRegExp: Symbol;
 
     /** 
-      * A method that returns the default iterator for an object.Called by the semantics of the for-of 
-      * statement. 
+      * A method that returns the default iterator for an object.Called by the semantics of the 
+      * for-of statement. 
       */
     iterator: Symbol;
 
@@ -69,8 +69,8 @@ interface SymbolConstructor {
     toStringTag: Symbol;
 
     /** 
-      * An Object whose own property names are property names that are excluded from the with environment 
-      * bindings of the associated objects.
+      * An Object whose own property names are property names that are excluded from the with 
+      * environment bindings of the associated objects.
       */
     unscopables: Symbol;
 }
@@ -103,7 +103,7 @@ interface ObjectConstructor {
 
     /**
       * Returns an array of all symbol properties found directly on object o.
-      * @param o Object to retrive the symbols from.
+      * @param o Object to retrieve the symbols from.
       */
     getOwnPropertySymbols(o: any): Symbol[];
 
@@ -123,7 +123,8 @@ interface ObjectConstructor {
 
     /**
       * Gets the own property descriptor of the specified object. 
-      * An own property descriptor is one that is defined directly on the object and is not inherited from the object's prototype. 
+      * An own property descriptor is one that is defined directly on the object and is not 
+      * inherited from the object's prototype. 
       * @param o Object that contains the property.
       * @param p Name of the property.
     */
@@ -131,37 +132,40 @@ interface ObjectConstructor {
 
     /**
       * Adds a property to an object, or modifies attributes of an existing property. 
-      * @param o Object on which to add or modify the property. This can be a native JavaScript object (that is, a user-defined object or a built in object) or a DOM object.
+      * @param o Object on which to add or modify the property. This can be a native JavaScript 
+      * object (that is, a user-defined object or a built in object) or a DOM object.
       * @param p The property name.
-      * @param attributes Descriptor for the property. It can be for a data property or an accessor property.
+      * @param attributes Descriptor for the property. It can be for a data property or an accessor
+      *  property.
       */
     defineProperty(o: any, propertyKey: PropertyKey, attributes: PropertyDescriptor): any;
 }
 
 interface Function {
     /** 
-      * Returns a new function object that is identical to the argument object in all ways except for 
-      * its identity and the value of its HomeObject internal slot. 
+      * Returns a new function object that is identical to the argument object in all ways except 
+      * for its identity and the value of its HomeObject internal slot. 
       */
     toMethod(newHome: Object): Function;
 
     /**
-      * Teturns the name of the function. Function names are read-only and can not be changed.
+      * Returns the name of the function. Function names are read-only and can not be changed.
       */
     name: string;
 }
 
 interface NumberConstructor {
     /**
-      * The value of Number.EPSILON is the difference between 1 and the smallest value greater than 1 that 
-      * is representable as a Number value, which is approximately 2.2204460492503130808472633361816 x 10‍−‍16.
+      * The value of Number.EPSILON is the difference between 1 and the smallest value greater than 1
+      * that is representable as a Number value, which is approximately: 
+      * 2.2204460492503130808472633361816 x 10‍−‍16.
       */
     EPSILON: number;
 
     /**
       * Returns true if passed value is finite.
-      * Unlike the global isFininte, Number.isFinite doesn't forcibly convert the parameter to a number. 
-      * Only finite values of the type number, result in true.
+      * Unlike the global isFininte, Number.isFinite doesn't forcibly convert the parameter to a 
+      * number. Only finite values of the type number, result in true.
       * @param number A numeric value.
       */
     isFinite(number: number): boolean;
@@ -173,9 +177,9 @@ interface NumberConstructor {
     isInteger(number: number): boolean;
 
     /**
-      * Returns a Boolean value that indicates whether a value is the reserved value NaN (not a number). 
-      * Unlike the global isNaN(), Number.isNaN() doesn't forcefully convert the parameter to a number. 
-      * Only values of the type number, that are also NaN, result in true.
+      * Returns a Boolean value that indicates whether a value is the reserved value NaN (not a 
+      * number). Unlike the global isNaN(), Number.isNaN() doesn't forcefully convert the parameter
+      * to a number. Only values of the type number, that are also NaN, result in true.
       * @param number A numeric value.
       */
     isNaN(number: number): boolean;
@@ -187,13 +191,15 @@ interface NumberConstructor {
     isSafeInteger(number: number): boolean;
 
     /** 
-      * The value of the largest integer n such that n and n + 1 are both exactly representable as a Number value. 
+      * The value of the largest integer n such that n and n + 1 are both exactly representable as 
+      * a Number value. 
       * The value of Number.MIN_SAFE_INTEGER is 9007199254740991 2^53 − 1.
       */
     MAX_SAFE_INTEGER: number;
 
     /** 
-      * The value of the smallest integer n such that n and n − 1 are both exactly representable as a Number value. 
+      * The value of the smallest integer n such that n and n − 1 are both exactly representable as 
+      * a Number value. 
       * The value of Number.MIN_SAFE_INTEGER is −9007199254740991 (−(2^53 − 1)).
       */
     MIN_SAFE_INTEGER: number;
@@ -221,76 +227,119 @@ interface ArrayLike<T> {
 
 interface Array<T> {
     /** Iterator */
-    // [Symbol.iterator] (): T;
+    // [Symbol.iterator] (): Iterator<T>;
 
     /** 
-        Returns an array of key, value pairs for every entry in the arrray
-    */
+      * Returns an array of key, value pairs for every entry in the array
+      */
     entries(): Iterator<[number, T]>;
 
     /** 
-        Returns an list of keys in the arrray
-    */
+      * Returns an list of keys in the array
+      */
     keys(): number[];
 
     /** 
-        Returns an list of values in the arrray
-    */
+      * Returns an list of values in the array
+      */
     values(): T[];
 
     /** 
-        Returns the value of the first element in the array where predicate is true, and undefined otherwise
-        @parm predicate find calls predicate once for each element of the array, in ascending order, until it finds one where predicate returns true. If such an element is found, find immediately returns that element value. Otherwise, find returns undefined.
-        @param thisArg If provided, it will be used as the this value for each invocation of predicate. If it is not provided, undefined is used instead.
-    */
+      * Returns the value of the first element in the array where predicate is true, and undefined 
+      * otherwise.
+      * @param predicate find calls predicate once for each element of the array, in ascending 
+      * order, until it finds one where predicate returns true. If such an element is found, find 
+      * immediately returns that element value. Otherwise, find returns undefined.
+      * @param thisArg If provided, it will be used as the this value for each invocation of 
+      * predicate. If it is not provided, undefined is used instead.
+      */
     find(predicate: (value: T, index: number, obj: Array<T>) => boolean, thisArg?: any): T;
 
     /** 
-        Returns the index of the first element in the array where predicate is true, and undefined otherwise
-        @parm predicate find calls predicate once for each element of the array, in ascending order, until it finds one where predicate returns true. If such an element is found, find immediately returns that element value. Otherwise, find returns undefined.
-        @param thisArg If provided, it will be used as the this value for each invocation of predicate. If it is not provided, undefined is used instead.
-    */
+      * Returns the index of the first element in the array where predicate is true, and undefined 
+      * otherwise.
+      * @param predicate find calls predicate once for each element of the array, in ascending 
+      * order, until it finds one where predicate returns true. If such an element is found, find 
+      * immediately returns that element value. Otherwise, find returns undefined.
+      * @param thisArg If provided, it will be used as the this value for each invocation of 
+      * predicate. If it is not provided, undefined is used instead.
+      */
     findIndex(predicate: (value: T) => boolean, thisArg?: any): number;
 
     /**
-        Returns the this object after filling the section identified by start and end with value
-        @param value value to fill array section with
-        @param start index to start filling the array at. If start is negative, it is treated as length+start where length is the length of the array. 
-        @param end index to stop filling the array at. If end is negative, it is treated as length+end.
-    */
+      * Returns the this object after filling the section identified by start and end with value
+      * @param value value to fill array section with
+      * @param start index to start filling the array at. If start is negative, it is treated as 
+      * length+start where length is the length of the array. 
+      * @param end index to stop filling the array at. If end is negative, it is treated as 
+      * length+end.
+      */
     fill(value: T, start?: number, end?: number): T[];
 
     /** 
-        Returns the this object after copying a section of the array identified by start and end to the same array starting at position target
-        @param target If target is negative, it is treated as length+target where length is the length of the array. 
-        @param start If start is negative, it is treated as length+start. If end is negative, it is treated as length+end.
-        @param end If not specified, length of the this object is used as its default value. 
-     */
+      * Returns the this object after copying a section of the array identified by start and end
+      * to the same array starting at position target
+      * @param target If target is negative, it is treated as length+target where length is the 
+      * length of the array. 
+      * @param start If start is negative, it is treated as length+start. If end is negative, it 
+      * is treated as length+end.
+      * @param end If not specified, length of the this object is used as its default value. 
+      */
     copyWithin(target: number, start: number, end?: number): T[];
 }
 
 interface ArrayConstructor {
+    /**
+      * Creates an array from an array-like object.
+      * @param arrayLike An array-like object to convert to an array.
+      * @param mapfn A mapping function to call on every element of the array.
+      * @param thisArg Value of 'this' used to invoke the mapfn.
+      */
     from<T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): Array<U>;
+
+    /**
+      * Creates an array from an iterable object.
+      * @param iterable An iterable object to convert to an array.
+      * @param mapfn A mapping function to call on every element of the array.
+      * @param thisArg Value of 'this' used to invoke the mapfn.
+      */
     from<T, U>(iterable: Iterable<T>, mapfn: (v: T, k: number) => U, thisArg?: any): Array<U>;
+
+    /**
+      * Creates an array from an array-like object.
+      * @param arrayLike An array-like object to convert to an array.
+      */
     from<T>(arrayLike: ArrayLike<T>): Array<T>;
+
+    /**
+      * Creates an array from an iterable object.
+      * @param iterable An iterable object to convert to an array.
+      */
     from<T>(iterable: Iterable<T>): Array<T>;
+
+    /**
+      * Returns a new array from a set of elements.
+      * @param items A set of elements to include in the new array object.
+      */
     of<T>(...items: T[]): Array<T>;
 }
 
 interface String {
     /** Iterator */
-    // [Symbol.iterator] (): string;
+    // [Symbol.iterator] (): Iterator<string>;
 
     /**
-      *  Returns a nonnegative integer Number less than 1114112 (0x110000) that is the code point value of the UTF-16 encoded code point starting 
-      *  at the string element at position pos in the String resulting from converting this object to a String. 
-      *  If there is no element at that position, the result is undefined. 
-      *  If a valid UTF-16 surrogate pair does not begin at pos, the result is the code unit at pos.
+      * Returns a nonnegative integer Number less than 1114112 (0x110000) that is the code point 
+      * value of the UTF-16 encoded code point starting at the string element at position pos in 
+      * the String resulting from converting this object to a String. 
+      * If there is no element at that position, the result is undefined. 
+      * If a valid UTF-16 surrogate pair does not begin at pos, the result is the code unit at pos.
       */
     codePointAt(pos: number): number;
 
     /**
-      * Returns true if searchString appears as a substring of the result of converting this object to a String, at one or more positions that are 
+      * Returns true if searchString appears as a substring of the result of converting this 
+      * object to a String, at one or more positions that are 
       * greater than or equal to position; otherwise, returns false.
       * @param searchString search string 
       * @param position If position is undefined, 0 is assumed, so as to search all of the String.
@@ -298,26 +347,31 @@ interface String {
     contains(searchString: string, position?: number): boolean;
 
     /**
-      * Returns true if the sequence of elements of searchString converted to a String is the same as the corresponding elements of this object 
-      * (converted to a String) starting at endPosition – length(this). Otherwise returns false.
+      * Returns true if the sequence of elements of searchString converted to a String is the 
+      * same as the corresponding elements of this object (converted to a String) starting at 
+      * endPosition – length(this). Otherwise returns false.
       */
     endsWith(searchString: string, endPosition?: number): boolean;
 
     /**
-      * Returns the String value result of normalizing the string into the normalization form named by form as specified in Unicode Standard Annex #15, Unicode Normalization Forms.
-      * @param form Applicaple values: "NFC", "NFD", "NFKC", or "NFKD", If not specified default is "NFC"
+      * Returns the String value result of normalizing the string into the normalization form 
+      * named by form as specified in Unicode Standard Annex #15, Unicode Normalization Forms.
+      * @param form Applicable values: "NFC", "NFD", "NFKC", or "NFKD", If not specified default
+      * is "NFC"
       */
     normalize(form?: string): string;
 
     /**
-      * Returns a String value that is made from count copies appended together. If count is 0, T is the empty String is returned.
+      * Returns a String value that is made from count copies appended together. If count is 0, 
+      * T is the empty String is returned.
       * @param count number of copies to append
       */
     repeat(count: number): string;
 
     /**
-      * Returns true if the sequence of elements of searchString converted to a String is the same as the corresponding elements of this object 
-      * (converted to a String) starting at position. Otherwise returns false.
+      * Returns true if the sequence of elements of searchString converted to a String is the 
+      * same as the corresponding elements of this object (converted to a String) starting at 
+      * position. Otherwise returns false.
       */
     startsWith(searchString: string, position?: number): boolean;
 
@@ -339,19 +393,19 @@ interface String {
     /** Returns a <tt> HTML element */
     fixed(): string
 
-    /** Returns a <font> HTML element and sets the color attribure value */
+    /** Returns a <font> HTML element and sets the color attribute value */
     fontcolor(color: string): string
 
-    /** Returns a <font> HTML element and sets the size attribure value */
+    /** Returns a <font> HTML element and sets the size attribute value */
     fontsize(size: number): string;
 
-    /** Returns a <font> HTML element and sets the size attribure value */
+    /** Returns a <font> HTML element and sets the size attribute value */
     fontsize(size: string): string;
 
     /** Returns an <i> HTML element */
     italics(): string;
 
-    /** Returns an <a> HTML element and sets the href attribure value */
+    /** Returns an <a> HTML element and sets the href attribute value */
     link(url: string): string;
 
     /** Returns a <small> HTML element */
@@ -369,15 +423,23 @@ interface String {
 
 interface StringConstructor {
     /**
-      * Return the String value whose elements are, in order, the elements in the List elements. If length is 0, the empty string is returned.
+      * Return the String value whose elements are, in order, the elements in the List elements.
+      * If length is 0, the empty string is returned.
       */
     fromCodePoint(...codePoints: number[]): string;
 
     /**
-      * String.raw is intended for use as a tag function of a Tagged Template String. When called as such the first argument will be a well formed 
-      * template call site object and the rest parameter will contain the substitution values
+      * String.raw is intended for use as a tag function of a Tagged Template String. When called
+      * as such the first argument will be a well formed template call site object and the rest 
+      * parameter will contain the substitution values.
+      * @param template A well-formed template string call site representation.
+      * @param substitutions A set of substitution values.
       */
-    raw(callSite: { raw: string; }, ...substitutions: any[]);
+    raw(template: TemplateStringsArray, ...substitutions: any[]);
+}
+
+interface TemplateStringsArray extends Array<string> {
+    raw: string[];
 }
 
 interface IteratorResult<T> {
@@ -439,7 +501,8 @@ interface Math {
     log1p(x: number): number;
 
     /**
-      * Returns the result of (e^x - 1) of x (e raised to the power of x, where e is the base of the natural logarithms).
+      * Returns the result of (e^x - 1) of x (e raised to the power of x, where e is the base of 
+      * the natural logarithms).
       * @param x A numeric expression.
       */
     expm1(x: number): number;
@@ -514,7 +577,7 @@ interface Math {
 }
 
 interface RegExp {
-    // [Symbol.isRegExp]: Boolean;
+    // [Symbol.isRegExp]: boolean;
 
     /** 
       * Matches a string with a regular expression, and returns an array containing the results of 
@@ -541,21 +604,21 @@ interface RegExp {
       *
       * If the regular expression that contains capturing parentheses, then each time separator is 
       * matched the results (including any undefined results) of the capturing parentheses are spliced.
-      * @param string string value to slpit
-      * @param limit if not undefined, the output array is truncated so that it contains no more than 
-      * limit elements.
+      * @param string string value to split
+      * @param limit if not undefined, the output array is truncated so that it contains no more 
+      * than limit elements.
       */
     split(string: string, limit?: number): string[];
 
     /** 
-      * Returns a Boolean value indicating the state of the sticky flag (y) used with a regular expression. 
-      * Default is false. Read-only. 
+      * Returns a Boolean value indicating the state of the sticky flag (y) used with a regular 
+      * expression. Default is false. Read-only. 
       */
     sticky: boolean;
 
     /** 
-      * Returns a Boolean value indicating the state of the unicode flag (u) used with a regular expression. 
-      * Default is false. Read-only. 
+      * Returns a Boolean value indicating the state of the Unicode flag (u) used with a regular 
+      * expression. Default is false. Read-only. 
       */
     unicode: boolean;
 }
@@ -571,7 +634,7 @@ interface Map<K, V> {
     set(key: K, value?: V): Map<K, V>;
     size: number;
     values(): V[];
-    // [Symbol.Iterator]():Iterator<[K,V]>;
+    // [Symbol.iterator]():Iterator<[K,V]>;
     // [Symbol.toStringTag]: string;
 }
 
@@ -604,7 +667,7 @@ interface Set<T> {
     keys(): T[];
     size: number;
     values(): T[];
-    // [Symbol.Iterator]():Iterator<T>;
+    // [Symbol.iterator]():Iterator<T>;
     // [Symbol.toStringTag]: string;
 }
 
@@ -684,7 +747,8 @@ declare var DataView: {
 };
 
 /**
-  * A typed array of 8-bit integer values. The contents are initialized to 0. If the requested number of bytes could not be allocated an exception is raised.
+  * A typed array of 8-bit integer values. The contents are initialized to 0. If the requested 
+  * number of bytes could not be allocated an exception is raised.
   */
 interface Int8Array {
     BYTES_PER_ELEMENT: number;
@@ -720,7 +784,7 @@ interface Int8Array {
     toString(): string;
     values(): Int8Array;
     [index: number]: number;
-    // [Symbol.iterator] (): number;
+    // [Symbol.iterator] (): Iterator<number>;
 }
 
 declare var Int8Array: {
@@ -735,7 +799,8 @@ declare var Int8Array: {
 };
 
 /**
-  * A typed array of 8-bit unsigned integer values. The contents are initialized to 0. If the requested number of bytes could not be allocated an exception is raised.
+  * A typed array of 8-bit unsigned integer values. The contents are initialized to 0. If the 
+  * requested number of bytes could not be allocated an exception is raised.
   */
 interface Uint8Array {
     BYTES_PER_ELEMENT: number;
@@ -771,7 +836,7 @@ interface Uint8Array {
     toString(): string;
     values(): Uint8Array;
     [index: number]: number;
-    // [Symbol.iterator] (): number;
+    // [Symbol.iterator] (): Iterator<number>;
 }
 
 declare var Uint8Array: {
@@ -786,7 +851,8 @@ declare var Uint8Array: {
 };
 
 /**
-  * A typed array of 8-bit unsigned integer (clamped) values. The contents are initialized to 0. If the requested number of bytes could not be allocated an exception is raised.
+  * A typed array of 8-bit unsigned integer (clamped) values. The contents are initialized to 0. 
+  * If the requested number of bytes could not be allocated an exception is raised.
   */
 interface Uint8ClampedArray {
     BYTES_PER_ELEMENT: number;
@@ -822,7 +888,7 @@ interface Uint8ClampedArray {
     toString(): string;
     values(): Uint8ClampedArray;
     [index: number]: number;
-    // [Symbol.iterator] (): number;
+    // [Symbol.iterator] (): Iterator<number>;
 }
 
 declare var Uint8ClampedArray: {
@@ -837,7 +903,8 @@ declare var Uint8ClampedArray: {
 };
 
 /**
-  * A typed array of 16-bit signed integer values. The contents are initialized to 0. If the requested number of bytes could not be allocated an exception is raised.
+  * A typed array of 16-bit signed integer values. The contents are initialized to 0. If the 
+  * requested number of bytes could not be allocated an exception is raised.
   */
 interface Int16Array {
     BYTES_PER_ELEMENT: number;
@@ -873,7 +940,7 @@ interface Int16Array {
     toString(): string;
     values(): Int16Array;
     [index: number]: number;
-    // [Symbol.iterator] (): number;
+    // [Symbol.iterator] (): Iterator<number>;
 }
 
 declare var Int16Array: {
@@ -888,7 +955,8 @@ declare var Int16Array: {
 };
 
 /**
-  * A typed array of 16-bit unsinged integer values. The contents are initialized to 0. If the requested number of bytes could not be allocated an exception is raised.
+  * A typed array of 16-bit unsigned integer values. The contents are initialized to 0. If the 
+  * requested number of bytes could not be allocated an exception is raised.
   */
 interface Uint16Array {
     BYTES_PER_ELEMENT: number;
@@ -924,7 +992,7 @@ interface Uint16Array {
     toString(): string;
     values(): Uint16Array;
     [index: number]: number;
-    // [Symbol.iterator] (): number;
+    // [Symbol.iterator] (): Iterator<number>;
 }
 
 declare var Uint16Array: {
@@ -939,7 +1007,8 @@ declare var Uint16Array: {
 };
 
 /**
-  * A typed array of 32-bit signed integer values. The contents are initialized to 0. If the requested number of bytes could not be allocated an exception is raised.
+  * A typed array of 32-bit signed integer values. The contents are initialized to 0. If the 
+  * requested number of bytes could not be allocated an exception is raised.
   */
 interface Int32Array {
     BYTES_PER_ELEMENT: number;
@@ -975,7 +1044,7 @@ interface Int32Array {
     toString(): string;
     values(): Int32Array;
     [index: number]: number;
-    // [Symbol.iterator] (): number;
+    // [Symbol.iterator] (): Iterator<number>;
 }
 
 declare var Int32Array: {
@@ -990,7 +1059,8 @@ declare var Int32Array: {
 };
 
 /**
-  * A typed array of 32-bit unsigned integer values. The contents are initialized to 0. If the requested number of bytes could not be allocated an exception is raised.
+  * A typed array of 32-bit unsigned integer values. The contents are initialized to 0. If the 
+  * requested number of bytes could not be allocated an exception is raised.
   */
 interface Uint32Array {
     BYTES_PER_ELEMENT: number;
@@ -1026,7 +1096,7 @@ interface Uint32Array {
     toString(): string;
     values(): Uint32Array;
     [index: number]: number;
-    // [Symbol.iterator] (): number;
+    // [Symbol.iterator] (): Iterator<number>;
 }
 
 declare var Uint32Array: {
@@ -1041,7 +1111,8 @@ declare var Uint32Array: {
 };
 
 /**
-  * A typed array of 32-bit float values. The contents are initialized to 0. If the requested number of bytes could not be allocated an exception is raised.
+  * A typed array of 32-bit float values. The contents are initialized to 0. If the requested number
+  * of bytes could not be allocated an exception is raised.
   */
 interface Float32Array {
     BYTES_PER_ELEMENT: number;
@@ -1077,7 +1148,7 @@ interface Float32Array {
     toString(): string;
     values(): Float32Array;
     [index: number]: number;
-    // [Symbol.iterator] (): number;
+    // [Symbol.iterator] (): Iterator<number>;
 }
 
 declare var Float32Array: {
@@ -1092,7 +1163,8 @@ declare var Float32Array: {
 };
 
 /**
-  * A typed array of 64-bit float values. The contents are initialized to 0. If the requested number of bytes could not be allocated an exception is raised.
+  * A typed array of 64-bit float values. The contents are initialized to 0. If the requested 
+  * number of bytes could not be allocated an exception is raised.
   */
 interface Float64Array {
     BYTES_PER_ELEMENT: number;
@@ -1128,7 +1200,7 @@ interface Float64Array {
     toString(): string;
     values(): Float64Array;
     [index: number]: number;
-    // [Symbol.iterator] (): number;
+    // [Symbol.iterator] (): Iterator<number>;
 }
 
 declare var Float64Array: {
@@ -1206,26 +1278,31 @@ interface Promise<T> {
 interface PromiseConstructor {
     /**
      * Creates a new Promise.
-     * @param init A callback used to initialize the promise. This callback is passed two arguments: a resolve callback used resolve the promise with a value or the result of another promise, and a reject callback used to reject the promise with a provided reason or error.
+     * @param init A callback used to initialize the promise. This callback is passed two arguments: 
+     * a resolve callback used resolve the promise with a value or the result of another promise, 
+     * and a reject callback used to reject the promise with a provided reason or error.
      */
     new <T>(init: (resolve: (value?: T | Promise<T>) => void, reject: (reason?: any) => void) => void): Promise<T>;
 
     /**
-     * Creates a Promise that is resolved with an array of results when all of the provided Promises resolve, or rejected when any Promise is rejected.
+     * Creates a Promise that is resolved with an array of results when all of the provided Promises 
+     * resolve, or rejected when any Promise is rejected.
      * @param values An array of Promises.
      * @returns A new Promise.
      */
     all<T>(values: (T | Promise<T>)[]): Promise<T[]>;
 
     /**
-     * Creates a Promise that is resolved with an array of results when all of the provided Promises resolve, or rejected when any Promise is rejected.
+     * Creates a Promise that is resolved with an array of results when all of the provided Promises
+     * resolve, or rejected when any Promise is rejected.
      * @param values An array of values.
      * @returns A new Promise.
      */
     all(values: Promise<void>[]): Promise<void>;
 
     /**
-     * Creates a Promise that is resolved or rejected when any of the provided Promises are resolved or rejected.
+     * Creates a Promise that is resolved or rejected when any of the provided Promises are resolved 
+     * or rejected.
      * @param values An array of Promises.
      * @returns A new Promise.
      */
