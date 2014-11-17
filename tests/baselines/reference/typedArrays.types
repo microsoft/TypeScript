@@ -1,0 +1,788 @@
+=== tests/cases/compiler/typedArrays.ts ===
+
+function CreateTypedArrayTypes() {
+>CreateTypedArrayTypes : () => any[]
+
+    var typedArrays = [];
+>typedArrays : any[]
+>[] : undefined[]
+
+    typedArrays[0] = Int8Array;
+>typedArrays[0] = Int8Array : { new (length: number): Int8Array; new (array: Int8Array): Int8Array; new (array: number[]): Int8Array; new (buffer: ArrayBuffer, byteOffset?: number, length?: number): Int8Array; prototype: Int8Array; BYTES_PER_ELEMENT: number; of(...items: number[]): Int8Array; from(arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Int8Array; }
+>typedArrays[0] : any
+>typedArrays : any[]
+>Int8Array : { new (length: number): Int8Array; new (array: Int8Array): Int8Array; new (array: number[]): Int8Array; new (buffer: ArrayBuffer, byteOffset?: number, length?: number): Int8Array; prototype: Int8Array; BYTES_PER_ELEMENT: number; of(...items: number[]): Int8Array; from(arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Int8Array; }
+
+    typedArrays[1] = Uint8Array;
+>typedArrays[1] = Uint8Array : { new (length: number): Uint8Array; new (array: Uint8Array): Uint8Array; new (array: number[]): Uint8Array; new (buffer: ArrayBuffer, byteOffset?: number, length?: number): Uint8Array; prototype: Uint8Array; BYTES_PER_ELEMENT: number; of(...items: number[]): Uint8Array; from(arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint8Array; }
+>typedArrays[1] : any
+>typedArrays : any[]
+>Uint8Array : { new (length: number): Uint8Array; new (array: Uint8Array): Uint8Array; new (array: number[]): Uint8Array; new (buffer: ArrayBuffer, byteOffset?: number, length?: number): Uint8Array; prototype: Uint8Array; BYTES_PER_ELEMENT: number; of(...items: number[]): Uint8Array; from(arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint8Array; }
+
+    typedArrays[2] = Int16Array;
+>typedArrays[2] = Int16Array : { new (length: number): Int16Array; new (array: Int16Array): Int16Array; new (array: number[]): Int16Array; new (buffer: ArrayBuffer, byteOffset?: number, length?: number): Int16Array; prototype: Int16Array; BYTES_PER_ELEMENT: number; of(...items: number[]): Int16Array; from(arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Int16Array; }
+>typedArrays[2] : any
+>typedArrays : any[]
+>Int16Array : { new (length: number): Int16Array; new (array: Int16Array): Int16Array; new (array: number[]): Int16Array; new (buffer: ArrayBuffer, byteOffset?: number, length?: number): Int16Array; prototype: Int16Array; BYTES_PER_ELEMENT: number; of(...items: number[]): Int16Array; from(arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Int16Array; }
+
+    typedArrays[3] = Uint16Array;
+>typedArrays[3] = Uint16Array : { new (length: number): Uint16Array; new (array: Uint16Array): Uint16Array; new (array: number[]): Uint16Array; new (buffer: ArrayBuffer, byteOffset?: number, length?: number): Uint16Array; prototype: Uint16Array; BYTES_PER_ELEMENT: number; of(...items: number[]): Uint16Array; from(arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint16Array; }
+>typedArrays[3] : any
+>typedArrays : any[]
+>Uint16Array : { new (length: number): Uint16Array; new (array: Uint16Array): Uint16Array; new (array: number[]): Uint16Array; new (buffer: ArrayBuffer, byteOffset?: number, length?: number): Uint16Array; prototype: Uint16Array; BYTES_PER_ELEMENT: number; of(...items: number[]): Uint16Array; from(arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint16Array; }
+
+    typedArrays[4] = Int32Array;
+>typedArrays[4] = Int32Array : { new (length: number): Int32Array; new (array: Int32Array): Int32Array; new (array: number[]): Int32Array; new (buffer: ArrayBuffer, byteOffset?: number, length?: number): Int32Array; prototype: Int32Array; BYTES_PER_ELEMENT: number; of(...items: number[]): Int32Array; from(arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Int32Array; }
+>typedArrays[4] : any
+>typedArrays : any[]
+>Int32Array : { new (length: number): Int32Array; new (array: Int32Array): Int32Array; new (array: number[]): Int32Array; new (buffer: ArrayBuffer, byteOffset?: number, length?: number): Int32Array; prototype: Int32Array; BYTES_PER_ELEMENT: number; of(...items: number[]): Int32Array; from(arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Int32Array; }
+
+    typedArrays[5] = Uint32Array;
+>typedArrays[5] = Uint32Array : { new (length: number): Uint32Array; new (array: Uint32Array): Uint32Array; new (array: number[]): Uint32Array; new (buffer: ArrayBuffer, byteOffset?: number, length?: number): Uint32Array; prototype: Uint32Array; BYTES_PER_ELEMENT: number; of(...items: number[]): Uint32Array; from(arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint32Array; }
+>typedArrays[5] : any
+>typedArrays : any[]
+>Uint32Array : { new (length: number): Uint32Array; new (array: Uint32Array): Uint32Array; new (array: number[]): Uint32Array; new (buffer: ArrayBuffer, byteOffset?: number, length?: number): Uint32Array; prototype: Uint32Array; BYTES_PER_ELEMENT: number; of(...items: number[]): Uint32Array; from(arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint32Array; }
+
+    typedArrays[6] = Float32Array;
+>typedArrays[6] = Float32Array : { new (length: number): Float32Array; new (array: Float32Array): Float32Array; new (array: number[]): Float32Array; new (buffer: ArrayBuffer, byteOffset?: number, length?: number): Float32Array; prototype: Float32Array; BYTES_PER_ELEMENT: number; of(...items: number[]): Float32Array; from(arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Float32Array; }
+>typedArrays[6] : any
+>typedArrays : any[]
+>Float32Array : { new (length: number): Float32Array; new (array: Float32Array): Float32Array; new (array: number[]): Float32Array; new (buffer: ArrayBuffer, byteOffset?: number, length?: number): Float32Array; prototype: Float32Array; BYTES_PER_ELEMENT: number; of(...items: number[]): Float32Array; from(arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Float32Array; }
+
+    typedArrays[7] = Float64Array;
+>typedArrays[7] = Float64Array : { new (length: number): Float64Array; new (array: Float64Array): Float64Array; new (array: number[]): Float64Array; new (buffer: ArrayBuffer, byteOffset?: number, length?: number): Float64Array; prototype: Float64Array; BYTES_PER_ELEMENT: number; of(...items: number[]): Float64Array; from(arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Float64Array; }
+>typedArrays[7] : any
+>typedArrays : any[]
+>Float64Array : { new (length: number): Float64Array; new (array: Float64Array): Float64Array; new (array: number[]): Float64Array; new (buffer: ArrayBuffer, byteOffset?: number, length?: number): Float64Array; prototype: Float64Array; BYTES_PER_ELEMENT: number; of(...items: number[]): Float64Array; from(arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Float64Array; }
+
+    typedArrays[8] = Uint8ClampedArray;
+>typedArrays[8] = Uint8ClampedArray : { new (length: number): Uint8ClampedArray; new (array: Uint8ClampedArray): Uint8ClampedArray; new (array: number[]): Uint8ClampedArray; new (buffer: ArrayBuffer, byteOffset?: number, length?: number): Uint8ClampedArray; prototype: Uint8ClampedArray; BYTES_PER_ELEMENT: number; of(...items: number[]): Uint8ClampedArray; from(arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint8ClampedArray; }
+>typedArrays[8] : any
+>typedArrays : any[]
+>Uint8ClampedArray : { new (length: number): Uint8ClampedArray; new (array: Uint8ClampedArray): Uint8ClampedArray; new (array: number[]): Uint8ClampedArray; new (buffer: ArrayBuffer, byteOffset?: number, length?: number): Uint8ClampedArray; prototype: Uint8ClampedArray; BYTES_PER_ELEMENT: number; of(...items: number[]): Uint8ClampedArray; from(arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint8ClampedArray; }
+
+    return typedArrays;
+>typedArrays : any[]
+}
+
+function CreateTypedArrayInstancesFromLength(obj: number) {
+>CreateTypedArrayInstancesFromLength : (obj: number) => any[]
+>obj : number
+
+    var typedArrays = [];
+>typedArrays : any[]
+>[] : undefined[]
+
+    typedArrays[0] = new Int8Array(obj);
+>typedArrays[0] = new Int8Array(obj) : Int8Array
+>typedArrays[0] : any
+>typedArrays : any[]
+>new Int8Array(obj) : Int8Array
+>Int8Array : { new (length: number): Int8Array; new (array: Int8Array): Int8Array; new (array: number[]): Int8Array; new (buffer: ArrayBuffer, byteOffset?: number, length?: number): Int8Array; prototype: Int8Array; BYTES_PER_ELEMENT: number; of(...items: number[]): Int8Array; from(arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Int8Array; }
+>obj : number
+
+    typedArrays[1] = new Uint8Array(obj);
+>typedArrays[1] = new Uint8Array(obj) : Uint8Array
+>typedArrays[1] : any
+>typedArrays : any[]
+>new Uint8Array(obj) : Uint8Array
+>Uint8Array : { new (length: number): Uint8Array; new (array: Uint8Array): Uint8Array; new (array: number[]): Uint8Array; new (buffer: ArrayBuffer, byteOffset?: number, length?: number): Uint8Array; prototype: Uint8Array; BYTES_PER_ELEMENT: number; of(...items: number[]): Uint8Array; from(arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint8Array; }
+>obj : number
+
+    typedArrays[2] = new Int16Array(obj);
+>typedArrays[2] = new Int16Array(obj) : Int16Array
+>typedArrays[2] : any
+>typedArrays : any[]
+>new Int16Array(obj) : Int16Array
+>Int16Array : { new (length: number): Int16Array; new (array: Int16Array): Int16Array; new (array: number[]): Int16Array; new (buffer: ArrayBuffer, byteOffset?: number, length?: number): Int16Array; prototype: Int16Array; BYTES_PER_ELEMENT: number; of(...items: number[]): Int16Array; from(arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Int16Array; }
+>obj : number
+
+    typedArrays[3] = new Uint16Array(obj);
+>typedArrays[3] = new Uint16Array(obj) : Uint16Array
+>typedArrays[3] : any
+>typedArrays : any[]
+>new Uint16Array(obj) : Uint16Array
+>Uint16Array : { new (length: number): Uint16Array; new (array: Uint16Array): Uint16Array; new (array: number[]): Uint16Array; new (buffer: ArrayBuffer, byteOffset?: number, length?: number): Uint16Array; prototype: Uint16Array; BYTES_PER_ELEMENT: number; of(...items: number[]): Uint16Array; from(arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint16Array; }
+>obj : number
+
+    typedArrays[4] = new Int32Array(obj);
+>typedArrays[4] = new Int32Array(obj) : Int32Array
+>typedArrays[4] : any
+>typedArrays : any[]
+>new Int32Array(obj) : Int32Array
+>Int32Array : { new (length: number): Int32Array; new (array: Int32Array): Int32Array; new (array: number[]): Int32Array; new (buffer: ArrayBuffer, byteOffset?: number, length?: number): Int32Array; prototype: Int32Array; BYTES_PER_ELEMENT: number; of(...items: number[]): Int32Array; from(arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Int32Array; }
+>obj : number
+
+    typedArrays[5] = new Uint32Array(obj);
+>typedArrays[5] = new Uint32Array(obj) : Uint32Array
+>typedArrays[5] : any
+>typedArrays : any[]
+>new Uint32Array(obj) : Uint32Array
+>Uint32Array : { new (length: number): Uint32Array; new (array: Uint32Array): Uint32Array; new (array: number[]): Uint32Array; new (buffer: ArrayBuffer, byteOffset?: number, length?: number): Uint32Array; prototype: Uint32Array; BYTES_PER_ELEMENT: number; of(...items: number[]): Uint32Array; from(arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint32Array; }
+>obj : number
+
+    typedArrays[6] = new Float32Array(obj);
+>typedArrays[6] = new Float32Array(obj) : Float32Array
+>typedArrays[6] : any
+>typedArrays : any[]
+>new Float32Array(obj) : Float32Array
+>Float32Array : { new (length: number): Float32Array; new (array: Float32Array): Float32Array; new (array: number[]): Float32Array; new (buffer: ArrayBuffer, byteOffset?: number, length?: number): Float32Array; prototype: Float32Array; BYTES_PER_ELEMENT: number; of(...items: number[]): Float32Array; from(arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Float32Array; }
+>obj : number
+
+    typedArrays[7] = new Float64Array(obj);
+>typedArrays[7] = new Float64Array(obj) : Float64Array
+>typedArrays[7] : any
+>typedArrays : any[]
+>new Float64Array(obj) : Float64Array
+>Float64Array : { new (length: number): Float64Array; new (array: Float64Array): Float64Array; new (array: number[]): Float64Array; new (buffer: ArrayBuffer, byteOffset?: number, length?: number): Float64Array; prototype: Float64Array; BYTES_PER_ELEMENT: number; of(...items: number[]): Float64Array; from(arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Float64Array; }
+>obj : number
+
+    typedArrays[8] = new Uint8ClampedArray(obj);
+>typedArrays[8] = new Uint8ClampedArray(obj) : Uint8ClampedArray
+>typedArrays[8] : any
+>typedArrays : any[]
+>new Uint8ClampedArray(obj) : Uint8ClampedArray
+>Uint8ClampedArray : { new (length: number): Uint8ClampedArray; new (array: Uint8ClampedArray): Uint8ClampedArray; new (array: number[]): Uint8ClampedArray; new (buffer: ArrayBuffer, byteOffset?: number, length?: number): Uint8ClampedArray; prototype: Uint8ClampedArray; BYTES_PER_ELEMENT: number; of(...items: number[]): Uint8ClampedArray; from(arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint8ClampedArray; }
+>obj : number
+
+    return typedArrays;
+>typedArrays : any[]
+}
+
+function CreateTypedArrayInstancesFromArray(obj: number[]) {
+>CreateTypedArrayInstancesFromArray : (obj: number[]) => any[]
+>obj : number[]
+
+    var typedArrays = [];
+>typedArrays : any[]
+>[] : undefined[]
+
+    typedArrays[0] = new Int8Array(obj);
+>typedArrays[0] = new Int8Array(obj) : Int8Array
+>typedArrays[0] : any
+>typedArrays : any[]
+>new Int8Array(obj) : Int8Array
+>Int8Array : { new (length: number): Int8Array; new (array: Int8Array): Int8Array; new (array: number[]): Int8Array; new (buffer: ArrayBuffer, byteOffset?: number, length?: number): Int8Array; prototype: Int8Array; BYTES_PER_ELEMENT: number; of(...items: number[]): Int8Array; from(arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Int8Array; }
+>obj : number[]
+
+    typedArrays[1] = new Uint8Array(obj);
+>typedArrays[1] = new Uint8Array(obj) : Uint8Array
+>typedArrays[1] : any
+>typedArrays : any[]
+>new Uint8Array(obj) : Uint8Array
+>Uint8Array : { new (length: number): Uint8Array; new (array: Uint8Array): Uint8Array; new (array: number[]): Uint8Array; new (buffer: ArrayBuffer, byteOffset?: number, length?: number): Uint8Array; prototype: Uint8Array; BYTES_PER_ELEMENT: number; of(...items: number[]): Uint8Array; from(arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint8Array; }
+>obj : number[]
+
+    typedArrays[2] = new Int16Array(obj);
+>typedArrays[2] = new Int16Array(obj) : Int16Array
+>typedArrays[2] : any
+>typedArrays : any[]
+>new Int16Array(obj) : Int16Array
+>Int16Array : { new (length: number): Int16Array; new (array: Int16Array): Int16Array; new (array: number[]): Int16Array; new (buffer: ArrayBuffer, byteOffset?: number, length?: number): Int16Array; prototype: Int16Array; BYTES_PER_ELEMENT: number; of(...items: number[]): Int16Array; from(arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Int16Array; }
+>obj : number[]
+
+    typedArrays[3] = new Uint16Array(obj);
+>typedArrays[3] = new Uint16Array(obj) : Uint16Array
+>typedArrays[3] : any
+>typedArrays : any[]
+>new Uint16Array(obj) : Uint16Array
+>Uint16Array : { new (length: number): Uint16Array; new (array: Uint16Array): Uint16Array; new (array: number[]): Uint16Array; new (buffer: ArrayBuffer, byteOffset?: number, length?: number): Uint16Array; prototype: Uint16Array; BYTES_PER_ELEMENT: number; of(...items: number[]): Uint16Array; from(arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint16Array; }
+>obj : number[]
+
+    typedArrays[4] = new Int32Array(obj);
+>typedArrays[4] = new Int32Array(obj) : Int32Array
+>typedArrays[4] : any
+>typedArrays : any[]
+>new Int32Array(obj) : Int32Array
+>Int32Array : { new (length: number): Int32Array; new (array: Int32Array): Int32Array; new (array: number[]): Int32Array; new (buffer: ArrayBuffer, byteOffset?: number, length?: number): Int32Array; prototype: Int32Array; BYTES_PER_ELEMENT: number; of(...items: number[]): Int32Array; from(arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Int32Array; }
+>obj : number[]
+
+    typedArrays[5] = new Uint32Array(obj);
+>typedArrays[5] = new Uint32Array(obj) : Uint32Array
+>typedArrays[5] : any
+>typedArrays : any[]
+>new Uint32Array(obj) : Uint32Array
+>Uint32Array : { new (length: number): Uint32Array; new (array: Uint32Array): Uint32Array; new (array: number[]): Uint32Array; new (buffer: ArrayBuffer, byteOffset?: number, length?: number): Uint32Array; prototype: Uint32Array; BYTES_PER_ELEMENT: number; of(...items: number[]): Uint32Array; from(arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint32Array; }
+>obj : number[]
+
+    typedArrays[6] = new Float32Array(obj);
+>typedArrays[6] = new Float32Array(obj) : Float32Array
+>typedArrays[6] : any
+>typedArrays : any[]
+>new Float32Array(obj) : Float32Array
+>Float32Array : { new (length: number): Float32Array; new (array: Float32Array): Float32Array; new (array: number[]): Float32Array; new (buffer: ArrayBuffer, byteOffset?: number, length?: number): Float32Array; prototype: Float32Array; BYTES_PER_ELEMENT: number; of(...items: number[]): Float32Array; from(arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Float32Array; }
+>obj : number[]
+
+    typedArrays[7] = new Float64Array(obj);
+>typedArrays[7] = new Float64Array(obj) : Float64Array
+>typedArrays[7] : any
+>typedArrays : any[]
+>new Float64Array(obj) : Float64Array
+>Float64Array : { new (length: number): Float64Array; new (array: Float64Array): Float64Array; new (array: number[]): Float64Array; new (buffer: ArrayBuffer, byteOffset?: number, length?: number): Float64Array; prototype: Float64Array; BYTES_PER_ELEMENT: number; of(...items: number[]): Float64Array; from(arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Float64Array; }
+>obj : number[]
+
+    typedArrays[8] = new Uint8ClampedArray(obj);
+>typedArrays[8] = new Uint8ClampedArray(obj) : Uint8ClampedArray
+>typedArrays[8] : any
+>typedArrays : any[]
+>new Uint8ClampedArray(obj) : Uint8ClampedArray
+>Uint8ClampedArray : { new (length: number): Uint8ClampedArray; new (array: Uint8ClampedArray): Uint8ClampedArray; new (array: number[]): Uint8ClampedArray; new (buffer: ArrayBuffer, byteOffset?: number, length?: number): Uint8ClampedArray; prototype: Uint8ClampedArray; BYTES_PER_ELEMENT: number; of(...items: number[]): Uint8ClampedArray; from(arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint8ClampedArray; }
+>obj : number[]
+
+    return typedArrays;
+>typedArrays : any[]
+}
+
+function CreateIntegerTypedArraysFromArray2(obj:number[]) {
+>CreateIntegerTypedArraysFromArray2 : (obj: number[]) => any[]
+>obj : number[]
+
+    var typedArrays = [];
+>typedArrays : any[]
+>[] : undefined[]
+
+    typedArrays[0] = Int8Array.from(obj);
+>typedArrays[0] = Int8Array.from(obj) : Int8Array
+>typedArrays[0] : any
+>typedArrays : any[]
+>Int8Array.from(obj) : Int8Array
+>Int8Array.from : (arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any) => Int8Array
+>Int8Array : { new (length: number): Int8Array; new (array: Int8Array): Int8Array; new (array: number[]): Int8Array; new (buffer: ArrayBuffer, byteOffset?: number, length?: number): Int8Array; prototype: Int8Array; BYTES_PER_ELEMENT: number; of(...items: number[]): Int8Array; from(arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Int8Array; }
+>from : (arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any) => Int8Array
+>obj : number[]
+
+    typedArrays[1] = Uint8Array.from(obj);
+>typedArrays[1] = Uint8Array.from(obj) : Uint8Array
+>typedArrays[1] : any
+>typedArrays : any[]
+>Uint8Array.from(obj) : Uint8Array
+>Uint8Array.from : (arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any) => Uint8Array
+>Uint8Array : { new (length: number): Uint8Array; new (array: Uint8Array): Uint8Array; new (array: number[]): Uint8Array; new (buffer: ArrayBuffer, byteOffset?: number, length?: number): Uint8Array; prototype: Uint8Array; BYTES_PER_ELEMENT: number; of(...items: number[]): Uint8Array; from(arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint8Array; }
+>from : (arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any) => Uint8Array
+>obj : number[]
+
+    typedArrays[2] = Int16Array.from(obj);
+>typedArrays[2] = Int16Array.from(obj) : Int16Array
+>typedArrays[2] : any
+>typedArrays : any[]
+>Int16Array.from(obj) : Int16Array
+>Int16Array.from : (arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any) => Int16Array
+>Int16Array : { new (length: number): Int16Array; new (array: Int16Array): Int16Array; new (array: number[]): Int16Array; new (buffer: ArrayBuffer, byteOffset?: number, length?: number): Int16Array; prototype: Int16Array; BYTES_PER_ELEMENT: number; of(...items: number[]): Int16Array; from(arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Int16Array; }
+>from : (arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any) => Int16Array
+>obj : number[]
+
+    typedArrays[3] = Uint16Array.from(obj);
+>typedArrays[3] = Uint16Array.from(obj) : Uint16Array
+>typedArrays[3] : any
+>typedArrays : any[]
+>Uint16Array.from(obj) : Uint16Array
+>Uint16Array.from : (arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any) => Uint16Array
+>Uint16Array : { new (length: number): Uint16Array; new (array: Uint16Array): Uint16Array; new (array: number[]): Uint16Array; new (buffer: ArrayBuffer, byteOffset?: number, length?: number): Uint16Array; prototype: Uint16Array; BYTES_PER_ELEMENT: number; of(...items: number[]): Uint16Array; from(arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint16Array; }
+>from : (arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any) => Uint16Array
+>obj : number[]
+
+    typedArrays[4] = Int32Array.from(obj);
+>typedArrays[4] = Int32Array.from(obj) : Int32Array
+>typedArrays[4] : any
+>typedArrays : any[]
+>Int32Array.from(obj) : Int32Array
+>Int32Array.from : (arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any) => Int32Array
+>Int32Array : { new (length: number): Int32Array; new (array: Int32Array): Int32Array; new (array: number[]): Int32Array; new (buffer: ArrayBuffer, byteOffset?: number, length?: number): Int32Array; prototype: Int32Array; BYTES_PER_ELEMENT: number; of(...items: number[]): Int32Array; from(arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Int32Array; }
+>from : (arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any) => Int32Array
+>obj : number[]
+
+    typedArrays[5] = Uint32Array.from(obj);
+>typedArrays[5] = Uint32Array.from(obj) : Uint32Array
+>typedArrays[5] : any
+>typedArrays : any[]
+>Uint32Array.from(obj) : Uint32Array
+>Uint32Array.from : (arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any) => Uint32Array
+>Uint32Array : { new (length: number): Uint32Array; new (array: Uint32Array): Uint32Array; new (array: number[]): Uint32Array; new (buffer: ArrayBuffer, byteOffset?: number, length?: number): Uint32Array; prototype: Uint32Array; BYTES_PER_ELEMENT: number; of(...items: number[]): Uint32Array; from(arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint32Array; }
+>from : (arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any) => Uint32Array
+>obj : number[]
+
+    typedArrays[6] = Float32Array.from(obj);
+>typedArrays[6] = Float32Array.from(obj) : Float32Array
+>typedArrays[6] : any
+>typedArrays : any[]
+>Float32Array.from(obj) : Float32Array
+>Float32Array.from : (arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any) => Float32Array
+>Float32Array : { new (length: number): Float32Array; new (array: Float32Array): Float32Array; new (array: number[]): Float32Array; new (buffer: ArrayBuffer, byteOffset?: number, length?: number): Float32Array; prototype: Float32Array; BYTES_PER_ELEMENT: number; of(...items: number[]): Float32Array; from(arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Float32Array; }
+>from : (arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any) => Float32Array
+>obj : number[]
+
+    typedArrays[7] = Float64Array.from(obj);
+>typedArrays[7] = Float64Array.from(obj) : Float64Array
+>typedArrays[7] : any
+>typedArrays : any[]
+>Float64Array.from(obj) : Float64Array
+>Float64Array.from : (arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any) => Float64Array
+>Float64Array : { new (length: number): Float64Array; new (array: Float64Array): Float64Array; new (array: number[]): Float64Array; new (buffer: ArrayBuffer, byteOffset?: number, length?: number): Float64Array; prototype: Float64Array; BYTES_PER_ELEMENT: number; of(...items: number[]): Float64Array; from(arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Float64Array; }
+>from : (arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any) => Float64Array
+>obj : number[]
+
+    typedArrays[8] = Uint8ClampedArray.from(obj);
+>typedArrays[8] = Uint8ClampedArray.from(obj) : Uint8ClampedArray
+>typedArrays[8] : any
+>typedArrays : any[]
+>Uint8ClampedArray.from(obj) : Uint8ClampedArray
+>Uint8ClampedArray.from : (arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any) => Uint8ClampedArray
+>Uint8ClampedArray : { new (length: number): Uint8ClampedArray; new (array: Uint8ClampedArray): Uint8ClampedArray; new (array: number[]): Uint8ClampedArray; new (buffer: ArrayBuffer, byteOffset?: number, length?: number): Uint8ClampedArray; prototype: Uint8ClampedArray; BYTES_PER_ELEMENT: number; of(...items: number[]): Uint8ClampedArray; from(arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint8ClampedArray; }
+>from : (arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any) => Uint8ClampedArray
+>obj : number[]
+
+    return typedArrays;
+>typedArrays : any[]
+}
+
+function CreateIntegerTypedArraysFromArrayLike(obj:ArrayLike<number>) {
+>CreateIntegerTypedArraysFromArrayLike : (obj: ArrayLike<number>) => any[]
+>obj : ArrayLike<number>
+>ArrayLike : ArrayLike<T>
+
+    var typedArrays = [];
+>typedArrays : any[]
+>[] : undefined[]
+
+    typedArrays[0] = Int8Array.from(obj);
+>typedArrays[0] = Int8Array.from(obj) : Int8Array
+>typedArrays[0] : any
+>typedArrays : any[]
+>Int8Array.from(obj) : Int8Array
+>Int8Array.from : (arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any) => Int8Array
+>Int8Array : { new (length: number): Int8Array; new (array: Int8Array): Int8Array; new (array: number[]): Int8Array; new (buffer: ArrayBuffer, byteOffset?: number, length?: number): Int8Array; prototype: Int8Array; BYTES_PER_ELEMENT: number; of(...items: number[]): Int8Array; from(arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Int8Array; }
+>from : (arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any) => Int8Array
+>obj : ArrayLike<number>
+
+    typedArrays[1] = Uint8Array.from(obj);
+>typedArrays[1] = Uint8Array.from(obj) : Uint8Array
+>typedArrays[1] : any
+>typedArrays : any[]
+>Uint8Array.from(obj) : Uint8Array
+>Uint8Array.from : (arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any) => Uint8Array
+>Uint8Array : { new (length: number): Uint8Array; new (array: Uint8Array): Uint8Array; new (array: number[]): Uint8Array; new (buffer: ArrayBuffer, byteOffset?: number, length?: number): Uint8Array; prototype: Uint8Array; BYTES_PER_ELEMENT: number; of(...items: number[]): Uint8Array; from(arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint8Array; }
+>from : (arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any) => Uint8Array
+>obj : ArrayLike<number>
+
+    typedArrays[2] = Int16Array.from(obj);
+>typedArrays[2] = Int16Array.from(obj) : Int16Array
+>typedArrays[2] : any
+>typedArrays : any[]
+>Int16Array.from(obj) : Int16Array
+>Int16Array.from : (arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any) => Int16Array
+>Int16Array : { new (length: number): Int16Array; new (array: Int16Array): Int16Array; new (array: number[]): Int16Array; new (buffer: ArrayBuffer, byteOffset?: number, length?: number): Int16Array; prototype: Int16Array; BYTES_PER_ELEMENT: number; of(...items: number[]): Int16Array; from(arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Int16Array; }
+>from : (arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any) => Int16Array
+>obj : ArrayLike<number>
+
+    typedArrays[3] = Uint16Array.from(obj);
+>typedArrays[3] = Uint16Array.from(obj) : Uint16Array
+>typedArrays[3] : any
+>typedArrays : any[]
+>Uint16Array.from(obj) : Uint16Array
+>Uint16Array.from : (arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any) => Uint16Array
+>Uint16Array : { new (length: number): Uint16Array; new (array: Uint16Array): Uint16Array; new (array: number[]): Uint16Array; new (buffer: ArrayBuffer, byteOffset?: number, length?: number): Uint16Array; prototype: Uint16Array; BYTES_PER_ELEMENT: number; of(...items: number[]): Uint16Array; from(arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint16Array; }
+>from : (arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any) => Uint16Array
+>obj : ArrayLike<number>
+
+    typedArrays[4] = Int32Array.from(obj);
+>typedArrays[4] = Int32Array.from(obj) : Int32Array
+>typedArrays[4] : any
+>typedArrays : any[]
+>Int32Array.from(obj) : Int32Array
+>Int32Array.from : (arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any) => Int32Array
+>Int32Array : { new (length: number): Int32Array; new (array: Int32Array): Int32Array; new (array: number[]): Int32Array; new (buffer: ArrayBuffer, byteOffset?: number, length?: number): Int32Array; prototype: Int32Array; BYTES_PER_ELEMENT: number; of(...items: number[]): Int32Array; from(arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Int32Array; }
+>from : (arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any) => Int32Array
+>obj : ArrayLike<number>
+
+    typedArrays[5] = Uint32Array.from(obj);
+>typedArrays[5] = Uint32Array.from(obj) : Uint32Array
+>typedArrays[5] : any
+>typedArrays : any[]
+>Uint32Array.from(obj) : Uint32Array
+>Uint32Array.from : (arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any) => Uint32Array
+>Uint32Array : { new (length: number): Uint32Array; new (array: Uint32Array): Uint32Array; new (array: number[]): Uint32Array; new (buffer: ArrayBuffer, byteOffset?: number, length?: number): Uint32Array; prototype: Uint32Array; BYTES_PER_ELEMENT: number; of(...items: number[]): Uint32Array; from(arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint32Array; }
+>from : (arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any) => Uint32Array
+>obj : ArrayLike<number>
+
+    typedArrays[6] = Float32Array.from(obj);
+>typedArrays[6] = Float32Array.from(obj) : Float32Array
+>typedArrays[6] : any
+>typedArrays : any[]
+>Float32Array.from(obj) : Float32Array
+>Float32Array.from : (arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any) => Float32Array
+>Float32Array : { new (length: number): Float32Array; new (array: Float32Array): Float32Array; new (array: number[]): Float32Array; new (buffer: ArrayBuffer, byteOffset?: number, length?: number): Float32Array; prototype: Float32Array; BYTES_PER_ELEMENT: number; of(...items: number[]): Float32Array; from(arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Float32Array; }
+>from : (arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any) => Float32Array
+>obj : ArrayLike<number>
+
+    typedArrays[7] = Float64Array.from(obj);
+>typedArrays[7] = Float64Array.from(obj) : Float64Array
+>typedArrays[7] : any
+>typedArrays : any[]
+>Float64Array.from(obj) : Float64Array
+>Float64Array.from : (arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any) => Float64Array
+>Float64Array : { new (length: number): Float64Array; new (array: Float64Array): Float64Array; new (array: number[]): Float64Array; new (buffer: ArrayBuffer, byteOffset?: number, length?: number): Float64Array; prototype: Float64Array; BYTES_PER_ELEMENT: number; of(...items: number[]): Float64Array; from(arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Float64Array; }
+>from : (arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any) => Float64Array
+>obj : ArrayLike<number>
+
+    typedArrays[8] = Uint8ClampedArray.from(obj);
+>typedArrays[8] = Uint8ClampedArray.from(obj) : Uint8ClampedArray
+>typedArrays[8] : any
+>typedArrays : any[]
+>Uint8ClampedArray.from(obj) : Uint8ClampedArray
+>Uint8ClampedArray.from : (arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any) => Uint8ClampedArray
+>Uint8ClampedArray : { new (length: number): Uint8ClampedArray; new (array: Uint8ClampedArray): Uint8ClampedArray; new (array: number[]): Uint8ClampedArray; new (buffer: ArrayBuffer, byteOffset?: number, length?: number): Uint8ClampedArray; prototype: Uint8ClampedArray; BYTES_PER_ELEMENT: number; of(...items: number[]): Uint8ClampedArray; from(arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint8ClampedArray; }
+>from : (arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any) => Uint8ClampedArray
+>obj : ArrayLike<number>
+
+    return typedArrays;
+>typedArrays : any[]
+}
+
+/*
+function CreateTypedArraysOf(obj) {
+    var typedArrays = [];
+    typedArrays[0] = Int8Array.of(...obj);
+    typedArrays[1] = Uint8Array.of(...obj);
+    typedArrays[2] = Int16Array.of(...obj);
+    typedArrays[3] = Uint16Array.of(...obj);
+    typedArrays[4] = Int32Array.of(...obj);
+    typedArrays[5] = Uint32Array.of(...obj);
+    typedArrays[6] = Float32Array.of(...obj);
+    typedArrays[7] = Float64Array.of(...obj);
+    typedArrays[8] = Uint8ClampedArray.of(...obj);
+
+    return typedArrays;
+}
+*/
+
+function CreateTypedArraysOf2() {
+>CreateTypedArraysOf2 : () => any[]
+
+    var typedArrays = [];
+>typedArrays : any[]
+>[] : undefined[]
+
+    typedArrays[0] = Int8Array.of(1,2,3,4);
+>typedArrays[0] = Int8Array.of(1,2,3,4) : Int8Array
+>typedArrays[0] : any
+>typedArrays : any[]
+>Int8Array.of(1,2,3,4) : Int8Array
+>Int8Array.of : (...items: number[]) => Int8Array
+>Int8Array : { new (length: number): Int8Array; new (array: Int8Array): Int8Array; new (array: number[]): Int8Array; new (buffer: ArrayBuffer, byteOffset?: number, length?: number): Int8Array; prototype: Int8Array; BYTES_PER_ELEMENT: number; of(...items: number[]): Int8Array; from(arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Int8Array; }
+>of : (...items: number[]) => Int8Array
+
+    typedArrays[1] = Uint8Array.of(1,2,3,4);
+>typedArrays[1] = Uint8Array.of(1,2,3,4) : Uint8Array
+>typedArrays[1] : any
+>typedArrays : any[]
+>Uint8Array.of(1,2,3,4) : Uint8Array
+>Uint8Array.of : (...items: number[]) => Uint8Array
+>Uint8Array : { new (length: number): Uint8Array; new (array: Uint8Array): Uint8Array; new (array: number[]): Uint8Array; new (buffer: ArrayBuffer, byteOffset?: number, length?: number): Uint8Array; prototype: Uint8Array; BYTES_PER_ELEMENT: number; of(...items: number[]): Uint8Array; from(arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint8Array; }
+>of : (...items: number[]) => Uint8Array
+
+    typedArrays[2] = Int16Array.of(1,2,3,4);
+>typedArrays[2] = Int16Array.of(1,2,3,4) : Int16Array
+>typedArrays[2] : any
+>typedArrays : any[]
+>Int16Array.of(1,2,3,4) : Int16Array
+>Int16Array.of : (...items: number[]) => Int16Array
+>Int16Array : { new (length: number): Int16Array; new (array: Int16Array): Int16Array; new (array: number[]): Int16Array; new (buffer: ArrayBuffer, byteOffset?: number, length?: number): Int16Array; prototype: Int16Array; BYTES_PER_ELEMENT: number; of(...items: number[]): Int16Array; from(arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Int16Array; }
+>of : (...items: number[]) => Int16Array
+
+    typedArrays[3] = Uint16Array.of(1,2,3,4);
+>typedArrays[3] = Uint16Array.of(1,2,3,4) : Uint16Array
+>typedArrays[3] : any
+>typedArrays : any[]
+>Uint16Array.of(1,2,3,4) : Uint16Array
+>Uint16Array.of : (...items: number[]) => Uint16Array
+>Uint16Array : { new (length: number): Uint16Array; new (array: Uint16Array): Uint16Array; new (array: number[]): Uint16Array; new (buffer: ArrayBuffer, byteOffset?: number, length?: number): Uint16Array; prototype: Uint16Array; BYTES_PER_ELEMENT: number; of(...items: number[]): Uint16Array; from(arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint16Array; }
+>of : (...items: number[]) => Uint16Array
+
+    typedArrays[4] = Int32Array.of(1,2,3,4);
+>typedArrays[4] = Int32Array.of(1,2,3,4) : Int32Array
+>typedArrays[4] : any
+>typedArrays : any[]
+>Int32Array.of(1,2,3,4) : Int32Array
+>Int32Array.of : (...items: number[]) => Int32Array
+>Int32Array : { new (length: number): Int32Array; new (array: Int32Array): Int32Array; new (array: number[]): Int32Array; new (buffer: ArrayBuffer, byteOffset?: number, length?: number): Int32Array; prototype: Int32Array; BYTES_PER_ELEMENT: number; of(...items: number[]): Int32Array; from(arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Int32Array; }
+>of : (...items: number[]) => Int32Array
+
+    typedArrays[5] = Uint32Array.of(1,2,3,4);
+>typedArrays[5] = Uint32Array.of(1,2,3,4) : Uint32Array
+>typedArrays[5] : any
+>typedArrays : any[]
+>Uint32Array.of(1,2,3,4) : Uint32Array
+>Uint32Array.of : (...items: number[]) => Uint32Array
+>Uint32Array : { new (length: number): Uint32Array; new (array: Uint32Array): Uint32Array; new (array: number[]): Uint32Array; new (buffer: ArrayBuffer, byteOffset?: number, length?: number): Uint32Array; prototype: Uint32Array; BYTES_PER_ELEMENT: number; of(...items: number[]): Uint32Array; from(arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint32Array; }
+>of : (...items: number[]) => Uint32Array
+
+    typedArrays[6] = Float32Array.of(1,2,3,4);
+>typedArrays[6] = Float32Array.of(1,2,3,4) : Float32Array
+>typedArrays[6] : any
+>typedArrays : any[]
+>Float32Array.of(1,2,3,4) : Float32Array
+>Float32Array.of : (...items: number[]) => Float32Array
+>Float32Array : { new (length: number): Float32Array; new (array: Float32Array): Float32Array; new (array: number[]): Float32Array; new (buffer: ArrayBuffer, byteOffset?: number, length?: number): Float32Array; prototype: Float32Array; BYTES_PER_ELEMENT: number; of(...items: number[]): Float32Array; from(arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Float32Array; }
+>of : (...items: number[]) => Float32Array
+
+    typedArrays[7] = Float64Array.of(1,2,3,4);
+>typedArrays[7] = Float64Array.of(1,2,3,4) : Float64Array
+>typedArrays[7] : any
+>typedArrays : any[]
+>Float64Array.of(1,2,3,4) : Float64Array
+>Float64Array.of : (...items: number[]) => Float64Array
+>Float64Array : { new (length: number): Float64Array; new (array: Float64Array): Float64Array; new (array: number[]): Float64Array; new (buffer: ArrayBuffer, byteOffset?: number, length?: number): Float64Array; prototype: Float64Array; BYTES_PER_ELEMENT: number; of(...items: number[]): Float64Array; from(arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Float64Array; }
+>of : (...items: number[]) => Float64Array
+
+    typedArrays[8] = Uint8ClampedArray.of(1,2,3,4);
+>typedArrays[8] = Uint8ClampedArray.of(1,2,3,4) : Uint8ClampedArray
+>typedArrays[8] : any
+>typedArrays : any[]
+>Uint8ClampedArray.of(1,2,3,4) : Uint8ClampedArray
+>Uint8ClampedArray.of : (...items: number[]) => Uint8ClampedArray
+>Uint8ClampedArray : { new (length: number): Uint8ClampedArray; new (array: Uint8ClampedArray): Uint8ClampedArray; new (array: number[]): Uint8ClampedArray; new (buffer: ArrayBuffer, byteOffset?: number, length?: number): Uint8ClampedArray; prototype: Uint8ClampedArray; BYTES_PER_ELEMENT: number; of(...items: number[]): Uint8ClampedArray; from(arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint8ClampedArray; }
+>of : (...items: number[]) => Uint8ClampedArray
+
+    return typedArrays;
+>typedArrays : any[]
+}
+
+function CreateTypedArraysFromMapFn(obj:ArrayLike<number>, mapFn: (n:number, v:number)=> number) {
+>CreateTypedArraysFromMapFn : (obj: ArrayLike<number>, mapFn: (n: number, v: number) => number) => any[]
+>obj : ArrayLike<number>
+>ArrayLike : ArrayLike<T>
+>mapFn : (n: number, v: number) => number
+>n : number
+>v : number
+
+    var typedArrays = [];
+>typedArrays : any[]
+>[] : undefined[]
+
+    typedArrays[0] = Int8Array.from(obj, mapFn);
+>typedArrays[0] = Int8Array.from(obj, mapFn) : Int8Array
+>typedArrays[0] : any
+>typedArrays : any[]
+>Int8Array.from(obj, mapFn) : Int8Array
+>Int8Array.from : (arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any) => Int8Array
+>Int8Array : { new (length: number): Int8Array; new (array: Int8Array): Int8Array; new (array: number[]): Int8Array; new (buffer: ArrayBuffer, byteOffset?: number, length?: number): Int8Array; prototype: Int8Array; BYTES_PER_ELEMENT: number; of(...items: number[]): Int8Array; from(arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Int8Array; }
+>from : (arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any) => Int8Array
+>obj : ArrayLike<number>
+>mapFn : (n: number, v: number) => number
+
+    typedArrays[1] = Uint8Array.from(obj, mapFn);
+>typedArrays[1] = Uint8Array.from(obj, mapFn) : Uint8Array
+>typedArrays[1] : any
+>typedArrays : any[]
+>Uint8Array.from(obj, mapFn) : Uint8Array
+>Uint8Array.from : (arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any) => Uint8Array
+>Uint8Array : { new (length: number): Uint8Array; new (array: Uint8Array): Uint8Array; new (array: number[]): Uint8Array; new (buffer: ArrayBuffer, byteOffset?: number, length?: number): Uint8Array; prototype: Uint8Array; BYTES_PER_ELEMENT: number; of(...items: number[]): Uint8Array; from(arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint8Array; }
+>from : (arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any) => Uint8Array
+>obj : ArrayLike<number>
+>mapFn : (n: number, v: number) => number
+
+    typedArrays[2] = Int16Array.from(obj, mapFn);
+>typedArrays[2] = Int16Array.from(obj, mapFn) : Int16Array
+>typedArrays[2] : any
+>typedArrays : any[]
+>Int16Array.from(obj, mapFn) : Int16Array
+>Int16Array.from : (arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any) => Int16Array
+>Int16Array : { new (length: number): Int16Array; new (array: Int16Array): Int16Array; new (array: number[]): Int16Array; new (buffer: ArrayBuffer, byteOffset?: number, length?: number): Int16Array; prototype: Int16Array; BYTES_PER_ELEMENT: number; of(...items: number[]): Int16Array; from(arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Int16Array; }
+>from : (arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any) => Int16Array
+>obj : ArrayLike<number>
+>mapFn : (n: number, v: number) => number
+
+    typedArrays[3] = Uint16Array.from(obj, mapFn);
+>typedArrays[3] = Uint16Array.from(obj, mapFn) : Uint16Array
+>typedArrays[3] : any
+>typedArrays : any[]
+>Uint16Array.from(obj, mapFn) : Uint16Array
+>Uint16Array.from : (arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any) => Uint16Array
+>Uint16Array : { new (length: number): Uint16Array; new (array: Uint16Array): Uint16Array; new (array: number[]): Uint16Array; new (buffer: ArrayBuffer, byteOffset?: number, length?: number): Uint16Array; prototype: Uint16Array; BYTES_PER_ELEMENT: number; of(...items: number[]): Uint16Array; from(arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint16Array; }
+>from : (arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any) => Uint16Array
+>obj : ArrayLike<number>
+>mapFn : (n: number, v: number) => number
+
+    typedArrays[4] = Int32Array.from(obj, mapFn);
+>typedArrays[4] = Int32Array.from(obj, mapFn) : Int32Array
+>typedArrays[4] : any
+>typedArrays : any[]
+>Int32Array.from(obj, mapFn) : Int32Array
+>Int32Array.from : (arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any) => Int32Array
+>Int32Array : { new (length: number): Int32Array; new (array: Int32Array): Int32Array; new (array: number[]): Int32Array; new (buffer: ArrayBuffer, byteOffset?: number, length?: number): Int32Array; prototype: Int32Array; BYTES_PER_ELEMENT: number; of(...items: number[]): Int32Array; from(arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Int32Array; }
+>from : (arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any) => Int32Array
+>obj : ArrayLike<number>
+>mapFn : (n: number, v: number) => number
+
+    typedArrays[5] = Uint32Array.from(obj, mapFn);
+>typedArrays[5] = Uint32Array.from(obj, mapFn) : Uint32Array
+>typedArrays[5] : any
+>typedArrays : any[]
+>Uint32Array.from(obj, mapFn) : Uint32Array
+>Uint32Array.from : (arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any) => Uint32Array
+>Uint32Array : { new (length: number): Uint32Array; new (array: Uint32Array): Uint32Array; new (array: number[]): Uint32Array; new (buffer: ArrayBuffer, byteOffset?: number, length?: number): Uint32Array; prototype: Uint32Array; BYTES_PER_ELEMENT: number; of(...items: number[]): Uint32Array; from(arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint32Array; }
+>from : (arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any) => Uint32Array
+>obj : ArrayLike<number>
+>mapFn : (n: number, v: number) => number
+
+    typedArrays[6] = Float32Array.from(obj, mapFn);
+>typedArrays[6] = Float32Array.from(obj, mapFn) : Float32Array
+>typedArrays[6] : any
+>typedArrays : any[]
+>Float32Array.from(obj, mapFn) : Float32Array
+>Float32Array.from : (arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any) => Float32Array
+>Float32Array : { new (length: number): Float32Array; new (array: Float32Array): Float32Array; new (array: number[]): Float32Array; new (buffer: ArrayBuffer, byteOffset?: number, length?: number): Float32Array; prototype: Float32Array; BYTES_PER_ELEMENT: number; of(...items: number[]): Float32Array; from(arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Float32Array; }
+>from : (arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any) => Float32Array
+>obj : ArrayLike<number>
+>mapFn : (n: number, v: number) => number
+
+    typedArrays[7] = Float64Array.from(obj, mapFn);
+>typedArrays[7] = Float64Array.from(obj, mapFn) : Float64Array
+>typedArrays[7] : any
+>typedArrays : any[]
+>Float64Array.from(obj, mapFn) : Float64Array
+>Float64Array.from : (arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any) => Float64Array
+>Float64Array : { new (length: number): Float64Array; new (array: Float64Array): Float64Array; new (array: number[]): Float64Array; new (buffer: ArrayBuffer, byteOffset?: number, length?: number): Float64Array; prototype: Float64Array; BYTES_PER_ELEMENT: number; of(...items: number[]): Float64Array; from(arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Float64Array; }
+>from : (arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any) => Float64Array
+>obj : ArrayLike<number>
+>mapFn : (n: number, v: number) => number
+
+    typedArrays[8] = Uint8ClampedArray.from(obj, mapFn);
+>typedArrays[8] = Uint8ClampedArray.from(obj, mapFn) : Uint8ClampedArray
+>typedArrays[8] : any
+>typedArrays : any[]
+>Uint8ClampedArray.from(obj, mapFn) : Uint8ClampedArray
+>Uint8ClampedArray.from : (arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any) => Uint8ClampedArray
+>Uint8ClampedArray : { new (length: number): Uint8ClampedArray; new (array: Uint8ClampedArray): Uint8ClampedArray; new (array: number[]): Uint8ClampedArray; new (buffer: ArrayBuffer, byteOffset?: number, length?: number): Uint8ClampedArray; prototype: Uint8ClampedArray; BYTES_PER_ELEMENT: number; of(...items: number[]): Uint8ClampedArray; from(arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint8ClampedArray; }
+>from : (arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any) => Uint8ClampedArray
+>obj : ArrayLike<number>
+>mapFn : (n: number, v: number) => number
+
+    return typedArrays;
+>typedArrays : any[]
+}
+
+function CreateTypedArraysFromThisObj(obj:ArrayLike<number>, mapFn: (n:number, v:number)=> number, thisArg: {}) {
+>CreateTypedArraysFromThisObj : (obj: ArrayLike<number>, mapFn: (n: number, v: number) => number, thisArg: {}) => any[]
+>obj : ArrayLike<number>
+>ArrayLike : ArrayLike<T>
+>mapFn : (n: number, v: number) => number
+>n : number
+>v : number
+>thisArg : {}
+
+    var typedArrays = [];
+>typedArrays : any[]
+>[] : undefined[]
+
+    typedArrays[0] = Int8Array.from(obj, mapFn, thisArg);
+>typedArrays[0] = Int8Array.from(obj, mapFn, thisArg) : Int8Array
+>typedArrays[0] : any
+>typedArrays : any[]
+>Int8Array.from(obj, mapFn, thisArg) : Int8Array
+>Int8Array.from : (arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any) => Int8Array
+>Int8Array : { new (length: number): Int8Array; new (array: Int8Array): Int8Array; new (array: number[]): Int8Array; new (buffer: ArrayBuffer, byteOffset?: number, length?: number): Int8Array; prototype: Int8Array; BYTES_PER_ELEMENT: number; of(...items: number[]): Int8Array; from(arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Int8Array; }
+>from : (arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any) => Int8Array
+>obj : ArrayLike<number>
+>mapFn : (n: number, v: number) => number
+>thisArg : {}
+
+    typedArrays[1] = Uint8Array.from(obj, mapFn, thisArg);
+>typedArrays[1] = Uint8Array.from(obj, mapFn, thisArg) : Uint8Array
+>typedArrays[1] : any
+>typedArrays : any[]
+>Uint8Array.from(obj, mapFn, thisArg) : Uint8Array
+>Uint8Array.from : (arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any) => Uint8Array
+>Uint8Array : { new (length: number): Uint8Array; new (array: Uint8Array): Uint8Array; new (array: number[]): Uint8Array; new (buffer: ArrayBuffer, byteOffset?: number, length?: number): Uint8Array; prototype: Uint8Array; BYTES_PER_ELEMENT: number; of(...items: number[]): Uint8Array; from(arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint8Array; }
+>from : (arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any) => Uint8Array
+>obj : ArrayLike<number>
+>mapFn : (n: number, v: number) => number
+>thisArg : {}
+
+    typedArrays[2] = Int16Array.from(obj, mapFn, thisArg);
+>typedArrays[2] = Int16Array.from(obj, mapFn, thisArg) : Int16Array
+>typedArrays[2] : any
+>typedArrays : any[]
+>Int16Array.from(obj, mapFn, thisArg) : Int16Array
+>Int16Array.from : (arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any) => Int16Array
+>Int16Array : { new (length: number): Int16Array; new (array: Int16Array): Int16Array; new (array: number[]): Int16Array; new (buffer: ArrayBuffer, byteOffset?: number, length?: number): Int16Array; prototype: Int16Array; BYTES_PER_ELEMENT: number; of(...items: number[]): Int16Array; from(arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Int16Array; }
+>from : (arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any) => Int16Array
+>obj : ArrayLike<number>
+>mapFn : (n: number, v: number) => number
+>thisArg : {}
+
+    typedArrays[3] = Uint16Array.from(obj, mapFn, thisArg);
+>typedArrays[3] = Uint16Array.from(obj, mapFn, thisArg) : Uint16Array
+>typedArrays[3] : any
+>typedArrays : any[]
+>Uint16Array.from(obj, mapFn, thisArg) : Uint16Array
+>Uint16Array.from : (arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any) => Uint16Array
+>Uint16Array : { new (length: number): Uint16Array; new (array: Uint16Array): Uint16Array; new (array: number[]): Uint16Array; new (buffer: ArrayBuffer, byteOffset?: number, length?: number): Uint16Array; prototype: Uint16Array; BYTES_PER_ELEMENT: number; of(...items: number[]): Uint16Array; from(arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint16Array; }
+>from : (arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any) => Uint16Array
+>obj : ArrayLike<number>
+>mapFn : (n: number, v: number) => number
+>thisArg : {}
+
+    typedArrays[4] = Int32Array.from(obj, mapFn, thisArg);
+>typedArrays[4] = Int32Array.from(obj, mapFn, thisArg) : Int32Array
+>typedArrays[4] : any
+>typedArrays : any[]
+>Int32Array.from(obj, mapFn, thisArg) : Int32Array
+>Int32Array.from : (arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any) => Int32Array
+>Int32Array : { new (length: number): Int32Array; new (array: Int32Array): Int32Array; new (array: number[]): Int32Array; new (buffer: ArrayBuffer, byteOffset?: number, length?: number): Int32Array; prototype: Int32Array; BYTES_PER_ELEMENT: number; of(...items: number[]): Int32Array; from(arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Int32Array; }
+>from : (arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any) => Int32Array
+>obj : ArrayLike<number>
+>mapFn : (n: number, v: number) => number
+>thisArg : {}
+
+    typedArrays[5] = Uint32Array.from(obj, mapFn, thisArg);
+>typedArrays[5] = Uint32Array.from(obj, mapFn, thisArg) : Uint32Array
+>typedArrays[5] : any
+>typedArrays : any[]
+>Uint32Array.from(obj, mapFn, thisArg) : Uint32Array
+>Uint32Array.from : (arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any) => Uint32Array
+>Uint32Array : { new (length: number): Uint32Array; new (array: Uint32Array): Uint32Array; new (array: number[]): Uint32Array; new (buffer: ArrayBuffer, byteOffset?: number, length?: number): Uint32Array; prototype: Uint32Array; BYTES_PER_ELEMENT: number; of(...items: number[]): Uint32Array; from(arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint32Array; }
+>from : (arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any) => Uint32Array
+>obj : ArrayLike<number>
+>mapFn : (n: number, v: number) => number
+>thisArg : {}
+
+    typedArrays[6] = Float32Array.from(obj, mapFn, thisArg);
+>typedArrays[6] = Float32Array.from(obj, mapFn, thisArg) : Float32Array
+>typedArrays[6] : any
+>typedArrays : any[]
+>Float32Array.from(obj, mapFn, thisArg) : Float32Array
+>Float32Array.from : (arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any) => Float32Array
+>Float32Array : { new (length: number): Float32Array; new (array: Float32Array): Float32Array; new (array: number[]): Float32Array; new (buffer: ArrayBuffer, byteOffset?: number, length?: number): Float32Array; prototype: Float32Array; BYTES_PER_ELEMENT: number; of(...items: number[]): Float32Array; from(arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Float32Array; }
+>from : (arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any) => Float32Array
+>obj : ArrayLike<number>
+>mapFn : (n: number, v: number) => number
+>thisArg : {}
+
+    typedArrays[7] = Float64Array.from(obj, mapFn, thisArg);
+>typedArrays[7] = Float64Array.from(obj, mapFn, thisArg) : Float64Array
+>typedArrays[7] : any
+>typedArrays : any[]
+>Float64Array.from(obj, mapFn, thisArg) : Float64Array
+>Float64Array.from : (arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any) => Float64Array
+>Float64Array : { new (length: number): Float64Array; new (array: Float64Array): Float64Array; new (array: number[]): Float64Array; new (buffer: ArrayBuffer, byteOffset?: number, length?: number): Float64Array; prototype: Float64Array; BYTES_PER_ELEMENT: number; of(...items: number[]): Float64Array; from(arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Float64Array; }
+>from : (arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any) => Float64Array
+>obj : ArrayLike<number>
+>mapFn : (n: number, v: number) => number
+>thisArg : {}
+
+    typedArrays[8] = Uint8ClampedArray.from(obj, mapFn, thisArg);
+>typedArrays[8] = Uint8ClampedArray.from(obj, mapFn, thisArg) : Uint8ClampedArray
+>typedArrays[8] : any
+>typedArrays : any[]
+>Uint8ClampedArray.from(obj, mapFn, thisArg) : Uint8ClampedArray
+>Uint8ClampedArray.from : (arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any) => Uint8ClampedArray
+>Uint8ClampedArray : { new (length: number): Uint8ClampedArray; new (array: Uint8ClampedArray): Uint8ClampedArray; new (array: number[]): Uint8ClampedArray; new (buffer: ArrayBuffer, byteOffset?: number, length?: number): Uint8ClampedArray; prototype: Uint8ClampedArray; BYTES_PER_ELEMENT: number; of(...items: number[]): Uint8ClampedArray; from(arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint8ClampedArray; }
+>from : (arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any) => Uint8ClampedArray
+>obj : ArrayLike<number>
+>mapFn : (n: number, v: number) => number
+>thisArg : {}
+
+    return typedArrays;
+>typedArrays : any[]
+}
