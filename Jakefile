@@ -78,6 +78,7 @@ var harnessSources = [
     "projectsRunner.ts",
     "loggedIO.ts",
     "rwcRunner.ts",
+    "test262Runner.ts",
     "runner.ts"
 ].map(function (f) {
     return path.join(harnessDirectory, f);
@@ -347,6 +348,9 @@ var refBaseline = "tests/baselines/reference/";
 var localRwcBaseline = "tests/baselines/rwc/local/";
 var refRwcBaseline = "tests/baselines/rwc/reference/";
 
+var localTest262Baseline = "tests/baselines/test262/local/";
+var refTest262Baseline = "tests/baselines/test262/reference/";
+
 desc("Builds the test infrastructure using the built compiler");
 task("tests", ["local", run].concat(libraryTargets));
 
@@ -513,6 +517,12 @@ desc("Makes the most recent rwc test results the new baseline, overwriting the o
 task("baseline-accept-rwc", function() {
     jake.rmRf(refRwcBaseline);
     fs.renameSync(localRwcBaseline, refRwcBaseline);
+});
+
+desc("Makes the most recent test262 test results the new baseline, overwriting the old baseline");
+task("baseline-accept-test262", function() {
+    jake.rmRf(refTest262Baseline);
+    fs.renameSync(localTest262Baseline, refTest262Baseline);
 });
 
 

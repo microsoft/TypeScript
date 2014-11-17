@@ -10,7 +10,7 @@ const enum CompilerTestType {
 }
 
 class CompilerBaselineRunner extends RunnerBase {
-    protected basePath = 'tests/cases';
+    private basePath = 'tests/cases';
     private errors: boolean;
     private emit: boolean;
     private decl: boolean;

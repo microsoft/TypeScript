@@ -20,7 +20,7 @@ module RWC {
         }
     }
 
-    function collateOutputs(outputFiles: Harness.Compiler.GeneratedFile[], clean?: (s: string) => string) {
+    export function collateOutputs(outputFiles: Harness.Compiler.GeneratedFile[], clean?: (s: string) => string) {
         // Collect, test, and sort the filenames
         function cleanName(fn: string) {
             var lastSlash = ts.normalizeSlashes(fn).lastIndexOf('/');

@@ -537,6 +537,8 @@ module Harness {
 
         export var defaultLibFileName = 'lib.d.ts';
         export var defaultLibSourceFile = ts.createSourceFile(defaultLibFileName, IO.readFile(libFolder + 'lib.core.d.ts'), /*languageVersion*/ ts.ScriptTarget.Latest, /*version:*/ "0");
+        export var defaultES6LibSourceFile = ts.createSourceFile(defaultLibFileName, IO.readFile(libFolder + 'lib.es6.d.ts'), /*languageVersion*/ ts.ScriptTarget.Latest, /*version:*/ "0");
+
 
         // Cache these between executions so we don't have to re-parse them for every test
         export var fourslashFilename = 'fourslash.ts';
@@ -579,9 +581,8 @@ module Harness {
                         return fourslashSourceFile;
                     }
                     else {
-                        var lib = defaultLibFileName;
                         if (fn === defaultLibFileName) {
-                            return defaultLibSourceFile;
+                            return languageVersion === ts.ScriptTarget.ES6 ? defaultES6LibSourceFile : defaultLibSourceFile;
                         }
                         // Don't throw here -- the compiler might be looking for a test that actually doesn't exist as part of the TC
                         return null;
@@ -799,7 +800,6 @@ module Harness {
                 checker.checkProgram();
 
                 var hasEarlyErrors = checker.hasEarlyErrors();
-
                 // only emit if there weren't parse errors
                 var emitResult: ts.EmitResult;
                 if (!hadParseErrors && !hasEarlyErrors) {
@@ -1008,20 +1008,6 @@ module Harness {
             return minimalDiagnosticsToString(diagnostics) +
                 sys.newLine + sys.newLine + outputLines.join('\r\n');
         }
-
-        /* TODO: Delete?
-        export function makeDefaultCompilerSettings(options?: { useMinimalDefaultLib: boolean; noImplicitAny: boolean; }) {
-            var useMinimalDefaultLib = options ? options.useMinimalDefaultLib : true;
-            var noImplicitAny = options ? options.noImplicitAny : false;
-            var settings = new TypeScript.CompilationSettings();
-            settings.codeGenTarget = TypeScript.LanguageVersion.EcmaScript5;
-            settings.moduleGenTarget = TypeScript.ModuleGenTarget.Synchronous;
-            settings.noLib = useMinimalDefaultLib;
-            settings.noResolve = false;
-            settings.noImplicitAny = noImplicitAny;
-            return settings;
-        }
-        */
 
         /** The harness' compiler instance used when tests are actually run. Reseting or changing settings of this compiler instance must be done within a test case (i.e., describe/it) */
         var harnessCompiler: HarnessCompiler;

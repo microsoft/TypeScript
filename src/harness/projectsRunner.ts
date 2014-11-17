@@ -169,7 +169,7 @@ class ProjectRunner extends RunnerBase {
             function getSourceFile(filename: string, languageVersion: ts.ScriptTarget): ts.SourceFile {
                 var sourceFile: ts.SourceFile = undefined;
                 if (filename === Harness.Compiler.defaultLibFileName) {
-                    sourceFile = Harness.Compiler.defaultLibSourceFile;
+                    sourceFile = languageVersion === ts.ScriptTarget.ES6 ? Harness.Compiler.defaultES6LibSourceFile : Harness.Compiler.defaultLibSourceFile;
                 }
                 else {
                     var text = getSourceFileText(filename);
