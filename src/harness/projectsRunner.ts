@@ -184,7 +184,7 @@ class ProjectRunner extends RunnerBase {
             function createCompilerHost(): ts.CompilerHost {
                 return {
                     getSourceFile: getSourceFile,
-                    getDefaultLibFilename: () => "lib.d.ts",
+                    getDefaultLibFilename: options => options.target === ts.ScriptTarget.ES6 ? "lib.es6.d.ts" : "lib.d.ts",
                     writeFile: writeFile,
                     getCurrentDirectory: getCurrentDirectory,
                     getCanonicalFileName: Harness.Compiler.getCanonicalFileName,
