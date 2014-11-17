@@ -3234,9 +3234,9 @@ module ts {
 
         // TYPE CHECKING
 
-        var subtypeRelation: Map<Ternary> = {};
-        var assignableRelation: Map<Ternary> = {};
-        var identityRelation: Map<Ternary> = {};
+        var subtypeRelation: Map<boolean> = {};
+        var assignableRelation: Map<boolean> = {};
+        var identityRelation: Map<boolean> = {};
 
         function isTypeIdenticalTo(source: Type, target: Type): boolean {
             return checkTypeRelatedTo(source, target, identityRelation, /*errorNode*/ undefined);
@@ -3271,7 +3271,7 @@ module ts {
         function checkTypeRelatedTo(
             source: Type,
             target: Type,
-            relation: Map<Ternary>,
+            relation: Map<boolean>,
             errorNode: Node,
             headMessage?: DiagnosticMessage,
             containingMessageChain?: DiagnosticMessageChain): boolean {
@@ -3279,6 +3279,7 @@ module ts {
             var errorInfo: DiagnosticMessageChain;
             var sourceStack: ObjectType[];
             var targetStack: ObjectType[];
+            var maybeStack: Map<boolean>[];
             var expandingFlags: number;
             var depth = 0;
             var overflow = false;
@@ -3437,12 +3438,12 @@ module ts {
                 var id = source.id + "," + target.id;
                 var related = relation[id];
                 if (related !== undefined) {
-                    return related;
+                    return related ? Ternary.True : Ternary.False;
                 }
                 if (depth > 0) {
                     for (var i = 0; i < depth; i++) {
                         // If source and target are already being compared, consider them related with assumptions
-                        if (source === sourceStack[i] && target === targetStack[i]) {
+                        if (maybeStack[i][id]) {
                             return Ternary.Maybe;
                         }
                     }
@@ -3454,16 +3455,19 @@ module ts {
                 else {
                     sourceStack = [];
                     targetStack = [];
+                    maybeStack = [];
                     expandingFlags = 0;
                 }
                 sourceStack[depth] = source;
                 targetStack[depth] = target;
+                maybeStack[depth] = {};
+                maybeStack[depth][id] = true;
                 depth++;
                 var saveExpandingFlags = expandingFlags;
                 if (!(expandingFlags & 1) && isDeeplyNestedGeneric(source, sourceStack)) expandingFlags |= 1;
                 if (!(expandingFlags & 2) && isDeeplyNestedGeneric(target, targetStack)) expandingFlags |= 2;
                 if (expandingFlags === 3) {
-                    var result = Ternary.True;
+                    var result = Ternary.Maybe;
                 }
                 else {
                     var result = propertiesRelatedTo(source, target, reportErrors);
@@ -3482,9 +3486,18 @@ module ts {
                 }
                 expandingFlags = saveExpandingFlags;
                 depth--;
-                // Only cache results that are free of assumptions
-                if (result !== Ternary.Maybe) {
-                    relation[id] = result;
+                if (result) {
+                    var maybeCache = maybeStack[depth];
+                    // If result is definitely true, copy assumptions to global cache, else copy to next level up
+                    var destinationCache = result === Ternary.True || depth === 0 ? relation : maybeStack[depth - 1];
+                    for (var p in maybeCache) {
+                        destinationCache[p] = maybeCache[p];
+                    }
+                }
+                else {
+                    // A false result goes straight into global cache (when something is false under assumptions it
+                    // will also be false without assumptions)
+                    relation[id] = false;
                 }
                 return result;
             }
@@ -5420,7 +5433,7 @@ module ts {
             return typeArgumentsAreAssignable;
         }
 
-        function checkApplicableSignature(node: CallLikeExpression, args: Node[], signature: Signature, relation: Map<Ternary>, excludeArgument: boolean[], reportErrors: boolean) {
+        function checkApplicableSignature(node: CallLikeExpression, args: Node[], signature: Signature, relation: Map<boolean>, excludeArgument: boolean[], reportErrors: boolean) {
             for (var i = 0; i < args.length; i++) {
                 var arg = args[i];
                 var argType: Type;
@@ -5614,7 +5627,7 @@ module ts {
 
             return resolveErrorCall(node);
 
-            function chooseOverload(candidates: Signature[], relation: Map<Ternary>) {
+            function chooseOverload(candidates: Signature[], relation: Map<boolean>) {
                 for (var i = 0; i < candidates.length; i++) {
                     if (!hasCorrectArity(node, args, candidates[i])) {
                         continue;
