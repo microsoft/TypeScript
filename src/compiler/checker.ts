@@ -3454,7 +3454,7 @@ module ts {
                 if (!(expandingFlags & 1) && isDeeplyNestedGeneric(source, sourceStack)) expandingFlags |= 1;
                 if (!(expandingFlags & 2) && isDeeplyNestedGeneric(target, targetStack)) expandingFlags |= 2;
                 if (expandingFlags === 3) {
-                    var result = Ternary.True;
+                    var result = Ternary.Maybe;
                 }
                 else {
                     var result = propertiesRelatedTo(source, target, reportErrors);
@@ -3474,11 +3474,11 @@ module ts {
                 expandingFlags = saveExpandingFlags;
                 depth--;
                 if (result) {
-                    var sourceCache = maybeStack[depth];
+                    var maybeCache = maybeStack[depth];
                     // If result is definitely true, copy assumptions to global cache, else copy to next level up
-                    var targetCache = result === Ternary.True || depth === 0 ? relation : maybeStack[depth - 1];
-                    for (var p in sourceCache) {
-                        targetCache[p] = sourceCache[p];
+                    var destinationCache = result === Ternary.True || depth === 0 ? relation : maybeStack[depth - 1];
+                    for (var p in maybeCache) {
+                        destinationCache[p] = maybeCache[p];
                     }
                 }
                 else {
