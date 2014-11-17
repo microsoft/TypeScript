@@ -383,6 +383,8 @@ module ts {
                 return child((<TemplateExpression>node).head) || children((<TemplateExpression>node).templateSpans);
             case SyntaxKind.TemplateSpan:
                 return child((<TemplateSpan>node).expression) || child((<TemplateSpan>node).literal);
+            case SyntaxKind.ComputedPropertyName:
+                return child((<ComputedPropertyName>node).expression);
         }
     }
 

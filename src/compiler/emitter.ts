@@ -277,24 +277,37 @@ module ts {
         var firstAccessor: AccessorDeclaration;
         var getAccessor: AccessorDeclaration;
         var setAccessor: AccessorDeclaration;
-        forEach(node.members, (member: Declaration) => {
-            // TODO(jfreeman): Handle computed names for accessor matching
-            if ((member.kind === SyntaxKind.GetAccessor || member.kind === SyntaxKind.SetAccessor) &&
-                (<Identifier>member.name).text === (<Identifier>accessor.name).text &&
-                (member.flags & NodeFlags.Static) === (accessor.flags & NodeFlags.Static)) {
-                if (!firstAccessor) {
-                    firstAccessor = <AccessorDeclaration>member;
-                }
-
-                if (member.kind === SyntaxKind.GetAccessor && !getAccessor) {
-                    getAccessor = <AccessorDeclaration>member;
-                }
-
-                if (member.kind === SyntaxKind.SetAccessor && !setAccessor) {
-                    setAccessor = <AccessorDeclaration>member;
-                }
+        if (accessor.name.kind === SyntaxKind.ComputedPropertyName) {
+            firstAccessor = accessor;
+            if (accessor.kind === SyntaxKind.GetAccessor) {
+                getAccessor = accessor;
             }
-        });
+            else if (accessor.kind === SyntaxKind.SetAccessor) {
+                setAccessor = accessor;
+            }
+            else {
+                Debug.fail("Accessor has wrong kind");
+            }
+        }
+        else {
+            forEach(node.members,(member: Declaration) => {
+                if ((member.kind === SyntaxKind.GetAccessor || member.kind === SyntaxKind.SetAccessor) &&
+                    (<Identifier>member.name).text === (<Identifier>accessor.name).text &&
+                    (member.flags & NodeFlags.Static) === (accessor.flags & NodeFlags.Static)) {
+                    if (!firstAccessor) {
+                        firstAccessor = <AccessorDeclaration>member;
+                    }
+
+                    if (member.kind === SyntaxKind.GetAccessor && !getAccessor) {
+                        getAccessor = <AccessorDeclaration>member;
+                    }
+
+                    if (member.kind === SyntaxKind.SetAccessor && !setAccessor) {
+                        setAccessor = <AccessorDeclaration>member;
+                    }
+                }
+            });
+        }
         return {
             firstAccessor,
             getAccessor,
@@ -2069,6 +2082,9 @@ module ts {
                 if (node.kind === SyntaxKind.StringLiteral) {
                     emitLiteral(<LiteralExpression>node);
                 }
+                else if (node.kind === SyntaxKind.ComputedPropertyName) {
+                    emit((<ComputedPropertyName>node).expression);
+                }
                 else {
                     write("\"");
 
@@ -2189,6 +2205,12 @@ module ts {
                 }
             }
 
+            function emitComputedPropertyName(node: ComputedPropertyName) {
+                write("[");
+                emit(node.expression);
+                write("]");
+            }
+    
             function emitPropertyAssignment(node: PropertyDeclaration) {
                 emitLeadingComments(node);
                 emit(node.name);
@@ -2864,12 +2886,14 @@ module ts {
                 });
             }
 
-            // TODO(jfreeman): Account for computed property name
-            function emitMemberAccess(memberName: DeclarationName) {
+            function emitMemberAccessForPropertyName(memberName: DeclarationName) {
                 if (memberName.kind === SyntaxKind.StringLiteral || memberName.kind === SyntaxKind.NumericLiteral) {
                     write("[");
                     emitNode(memberName);
                     write("]");
+                }
+                else if (memberName.kind === SyntaxKind.ComputedPropertyName) {
+                    emitComputedPropertyName(<ComputedPropertyName>memberName);
                 }
                 else {
                     write(".");
@@ -2890,7 +2914,7 @@ module ts {
                         else {
                             write("this");
                         }
-                        emitMemberAccess((<PropertyDeclaration>member).name);
+                        emitMemberAccessForPropertyName((<PropertyDeclaration>member).name);
                         emitEnd((<PropertyDeclaration>member).name);
                         write(" = ");
                         emit((<PropertyDeclaration>member).initializer);
@@ -2916,7 +2940,7 @@ module ts {
                         if (!(member.flags & NodeFlags.Static)) {
                             write(".prototype");
                         }
-                        emitMemberAccess((<MethodDeclaration>member).name);
+                        emitMemberAccessForPropertyName((<MethodDeclaration>member).name);
                         emitEnd((<MethodDeclaration>member).name);
                         write(" = ");
                         emitStart(member);
@@ -3453,6 +3477,8 @@ module ts {
                         return emitPropertyAssignment(<PropertyDeclaration>node);
                     case SyntaxKind.ShorthandPropertyAssignment:
                         return emitShortHandPropertyAssignment(<ShortHandPropertyDeclaration>node);
+                    case SyntaxKind.ComputedPropertyName:
+                        return emitComputedPropertyName(<ComputedPropertyName>node);
                     case SyntaxKind.PropertyAccess:
                         return emitPropertyAccess(<PropertyAccess>node);
                     case SyntaxKind.IndexedAccess:
