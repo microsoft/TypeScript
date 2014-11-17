@@ -4,7 +4,6 @@
 /// <reference path="..\compiler\parser.ts"/>
 /// <reference path="..\compiler\checker.ts"/>
 
-/// <reference path='syntax\incrementalParser.ts' />
 /// <reference path='outliningElementsCollector.ts' />
 /// <reference path='navigationBar.ts' />
 /// <reference path='breakpoints.ts' />
@@ -12,17 +11,6 @@
 /// <reference path='utilities.ts' />
 /// <reference path='smartIndenter.ts' />
 /// <reference path='formatting.ts' />
-
-/// <reference path='core\references.ts' />
-/// <reference path='resources\references.ts' />
-/// <reference path='text\references.ts' />
-/// <reference path='syntax\references.ts' />
-/// <reference path='compiler\diagnostics.ts' />
-/// <reference path='compiler\hashTable.ts' />
-/// <reference path='compiler\ast.ts' />
-/// <reference path='compiler\astWalker.ts' />
-/// <reference path='compiler\astHelpers.ts' />
-/// <reference path='compiler\pathUtils.ts' />
 
 module ts {
     export interface Node {
@@ -1263,10 +1251,6 @@ module ts {
         prefix = 3
     }
 
-    interface IncrementalParse {
-        (oldSyntaxTree: TypeScript.SyntaxTree, textChangeRange: TypeScript.TextChangeRange, newText: TypeScript.ISimpleText): TypeScript.SyntaxTree
-    }
-
     /// Language Service
 
     interface CompletionSession {
@@ -1606,7 +1590,6 @@ module ts {
         private currentFilename: string = "";
         private currentFileVersion: string = null;
         private currentSourceFile: SourceFile = null;
-        private currentFileSyntaxTree: TypeScript.SyntaxTree = null;
 
         constructor(private host: LanguageServiceHost) {
             this.hostCache = new HostCache(host);
@@ -1614,20 +1597,15 @@ module ts {
 
         private initialize(filename: string) {
             // ensure that both source file and syntax tree are either initialized or not initialized
-            Debug.assert(!!this.currentFileSyntaxTree === !!this.currentSourceFile);
             var start = new Date().getTime();
             this.hostCache = new HostCache(this.host);
             this.host.log("SyntaxTreeCache.Initialize: new HostCache: " + (new Date().getTime() - start));
 
             var version = this.hostCache.getVersion(filename);
-            var syntaxTree: TypeScript.SyntaxTree = null;
             var sourceFile: SourceFile;
 
-            if (this.currentFileSyntaxTree === null || this.currentFilename !== filename) {
+            if (this.currentFilename !== filename) {
                 var scriptSnapshot = this.hostCache.getScriptSnapshot(filename);
-                var start = new Date().getTime();
-                syntaxTree = this.createSyntaxTree(filename, scriptSnapshot);
-                this.host.log("SyntaxTreeCache.Initialize: createSyntaxTree: " + (new Date().getTime() - start));
 
                 var start = new Date().getTime();
                 sourceFile = createSourceFileFromScriptSnapshot(filename, scriptSnapshot, getDefaultCompilerOptions(), version, /*isOpen*/ true);
@@ -1639,11 +1617,6 @@ module ts {
             }
             else if (this.currentFileVersion !== version) {
                 var scriptSnapshot = this.hostCache.getScriptSnapshot(filename);
-
-                var start = new Date().getTime();
-                syntaxTree = this.updateSyntaxTree(filename, scriptSnapshot,
-                    this.currentSourceFile.getScriptSnapshot(), this.currentFileSyntaxTree, this.currentFileVersion);
-                this.host.log("SyntaxTreeCache.Initialize: updateSyntaxTree: " + (new Date().getTime() - start));
 
                 var editRange = this.hostCache.getChangeRange(filename, this.currentFileVersion, this.currentSourceFile.getScriptSnapshot());
 
@@ -1658,12 +1631,10 @@ module ts {
                 this.host.log("SyntaxTreeCache.Initialize: fixupParentRefs : " + (new Date().getTime() - start));
             }
 
-            if (syntaxTree !== null) {
-                Debug.assert(sourceFile !== undefined);
+            if (sourceFile) {
                 // All done, ensure state is up to date
                 this.currentFileVersion = version;
                 this.currentFilename = filename;
-                this.currentFileSyntaxTree = syntaxTree;
                 this.currentSourceFile = sourceFile;
             }
 
@@ -1684,111 +1655,13 @@ module ts {
             }
         }
 
-        public getCurrentFileSyntaxTree(filename: string): TypeScript.SyntaxTree {
-            this.initialize(filename);
-            return this.currentFileSyntaxTree;
-        }
-
         public getCurrentSourceFile(filename: string): SourceFile {
             this.initialize(filename);
             return this.currentSourceFile;
         }
 
         public getCurrentScriptSnapshot(filename: string): TypeScript.IScriptSnapshot {
-            // update currentFileScriptSnapshot as a part of 'getCurrentFileSyntaxTree' call
-            this.getCurrentFileSyntaxTree(filename);
             return this.getCurrentSourceFile(filename).getScriptSnapshot();
-        }
-
-        private createSyntaxTree(filename: string, scriptSnapshot: TypeScript.IScriptSnapshot): TypeScript.SyntaxTree {
-            var text = TypeScript.SimpleText.fromScriptSnapshot(scriptSnapshot);
-
-            // For the purposes of features that use this syntax tree, we can just use the default
-            // compilation settings.  The features only use the syntax (and not the diagnostics),
-            // and the syntax isn't affected by the compilation settings.
-            var syntaxTree = TypeScript.Parser.parse(filename, text, getDefaultCompilerOptions().target, TypeScript.isDTSFile(filename));
-
-            return syntaxTree;
-        }
-
-        private updateSyntaxTree(filename: string, scriptSnapshot: TypeScript.IScriptSnapshot, previousScriptSnapshot: TypeScript.IScriptSnapshot, previousSyntaxTree: TypeScript.SyntaxTree, previousFileVersion: string): TypeScript.SyntaxTree {
-            var editRange = this.hostCache.getChangeRange(filename, previousFileVersion, previousScriptSnapshot);
-
-            // Debug.assert(newLength >= 0);
-
-            // The host considers the entire buffer changed.  So parse a completely new tree.
-            if (editRange === null) {
-                return this.createSyntaxTree(filename, scriptSnapshot);
-            }
-
-            var nextSyntaxTree = TypeScript.IncrementalParser.parse(
-                previousSyntaxTree, editRange, TypeScript.SimpleText.fromScriptSnapshot(scriptSnapshot));
-
-            this.ensureInvariants(filename, editRange, nextSyntaxTree, previousScriptSnapshot, scriptSnapshot);
-
-            return nextSyntaxTree;
-        }
-
-        private ensureInvariants(filename: string, editRange: TypeScript.TextChangeRange, incrementalTree: TypeScript.SyntaxTree, oldScriptSnapshot: TypeScript.IScriptSnapshot, newScriptSnapshot: TypeScript.IScriptSnapshot) {
-            // First, verify that the edit range and the script snapshots make sense.
-
-            // If this fires, then the edit range is completely bogus.  Somehow the lengths of the
-            // old snapshot, the change range and the new snapshot aren't in sync.  This is very
-            // bad.
-            var expectedNewLength = oldScriptSnapshot.getLength() - editRange.span().length() + editRange.newLength();
-            var actualNewLength = newScriptSnapshot.getLength();
-
-            function provideMoreDebugInfo() {
-
-                var debugInformation = ["expected length:", expectedNewLength, "and actual length:", actualNewLength, "are not equal\r\n"];
-
-                var oldSpan = editRange.span();
-
-                function prettyPrintString(s: string): string {
-                    return '"' + s.replace(/\r/g, '\\r').replace(/\n/g, '\\n') + '"';
-                }
-
-                debugInformation.push('Edit range (old text) (start: ' + oldSpan.start() + ', end: ' + oldSpan.end() + ') \r\n');
-                debugInformation.push('Old text edit range contents: ' + prettyPrintString(oldScriptSnapshot.getText(oldSpan.start(), oldSpan.end())));
-
-                var newSpan = editRange.newSpan();
-
-                debugInformation.push('Edit range (new text) (start: ' + newSpan.start() + ', end: ' + newSpan.end() + ') \r\n');
-                debugInformation.push('New text edit range contents: ' + prettyPrintString(newScriptSnapshot.getText(newSpan.start(), newSpan.end())));
-
-                return debugInformation.join(' ');
-            }
-
-            Debug.assert(
-                expectedNewLength === actualNewLength,
-                "Expected length is different from actual!",
-                provideMoreDebugInfo);
-
-            if (Debug.shouldAssert(AssertionLevel.VeryAggressive)) {
-                // If this fires, the text change range is bogus.  It says the change starts at point 
-                // 'X', but we can see a text difference *before* that point.
-                var oldPrefixText = oldScriptSnapshot.getText(0, editRange.span().start());
-                var newPrefixText = newScriptSnapshot.getText(0, editRange.span().start());
-                Debug.assert(oldPrefixText === newPrefixText, 'Expected equal prefix texts!');
-
-                // If this fires, the text change range is bogus.  It says the change goes only up to
-                // point 'X', but we can see a text difference *after* that point.
-                var oldSuffixText = oldScriptSnapshot.getText(editRange.span().end(), oldScriptSnapshot.getLength());
-                var newSuffixText = newScriptSnapshot.getText(editRange.newSpan().end(), newScriptSnapshot.getLength());
-                Debug.assert(oldSuffixText === newSuffixText, 'Expected equal suffix texts!');
-
-                // Ok, text change range and script snapshots look ok.  Let's verify that our 
-                // incremental parsing worked properly.
-                //var normalTree = this.createSyntaxTree(filename, newScriptSnapshot);
-                //Debug.assert(normalTree.structuralEquals(incrementalTree), 'Expected equal incremental and normal trees');
-
-                // Ok, the trees looked good.  So at least our incremental parser agrees with the 
-                // normal parser.  Now, verify that the incremental tree matches the contents of the 
-                // script snapshot.
-                var incrementalTreeText = TypeScript.fullText(incrementalTree.sourceUnit());
-                var actualSnapshotText = newScriptSnapshot.getText(0, newScriptSnapshot.getLength());
-                Debug.assert(incrementalTreeText === actualSnapshotText, 'Expected full texts to be equal');
-            }
         }
     }
 
@@ -4883,11 +4756,6 @@ module ts {
         }
 
         /// Syntactic features
-        function getSyntaxTree(filename: string): TypeScript.SyntaxTree {
-            filename = normalizeSlashes(filename);
-            return syntaxTreeCache.getCurrentFileSyntaxTree(filename);
-        }
-
         function getCurrentSourceFile(filename: string): SourceFile {
             filename = normalizeSlashes(filename);
             var currentSourceFile = syntaxTreeCache.getCurrentSourceFile(filename);
