@@ -1333,3 +1333,9 @@ interface PromiseConstructor {
 }
 
 declare var Promise: PromiseConstructor;
+
+interface ArrayBufferView {
+    buffer: ArrayBuffer;
+    byteOffset: number;
+    byteLength: number;
+}
