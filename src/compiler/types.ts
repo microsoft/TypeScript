@@ -1152,6 +1152,7 @@ module ts {
         version?: boolean;
         watch?: boolean;
         preserveConstEnums?: boolean;
+        allowNonTsExtensions?: boolean;
         [option: string]: string | number | boolean;
     }
 
