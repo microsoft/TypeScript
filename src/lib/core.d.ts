@@ -428,13 +428,13 @@ declare var String: StringConstructor;
 interface Boolean {
 }
 
-interface BoolenConstructor {
+interface BooleanConstructor {
     new (value?: any): Boolean;
     (value?: any): boolean;
     prototype: Boolean;
 }
 
-declare var Boolean: BoolenConstructor;
+declare var Boolean: BooleanConstructor;
 
 interface Number {
     /**
