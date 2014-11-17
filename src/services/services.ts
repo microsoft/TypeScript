@@ -2051,7 +2051,7 @@ module ts {
     /** Returns true if node is a name of an object literal property, e.g. "a" in x = { "a": 1 } */
     function isNameOfPropertyAssignment(node: Node): boolean {
         return (node.kind === SyntaxKind.Identifier || node.kind === SyntaxKind.StringLiteral || node.kind === SyntaxKind.NumericLiteral) &&
-            node.parent.kind === SyntaxKind.PropertyAssignment && (<PropertyDeclaration>node.parent).name === node;
+            (node.parent.kind === SyntaxKind.PropertyAssignment || node.parent.kind === SyntaxKind.ShorthandPropertyAssignment) && (<PropertyDeclaration>node.parent).name === node;
     }
 
     function isLiteralNameOfPropertyDeclarationOrIndexAccess(node: Node): boolean {
@@ -2745,7 +2745,7 @@ module ts {
 
                 var existingMemberNames: Map<boolean> = {};
                 forEach(existingMembers, m => {
-                    if (m.kind !== SyntaxKind.PropertyAssignment) {
+                    if (m.kind !== SyntaxKind.PropertyAssignment && m.kind !== SyntaxKind.ShorthandPropertyAssignment) {
                         // Ignore omitted expressions for missing members in the object literal
                         return;
                     }
@@ -4165,8 +4165,21 @@ module ts {
                         }
 
                         var referenceSymbol = typeInfoResolver.getSymbolInfo(referenceLocation);
-                        if (referenceSymbol && isRelatableToSearchSet(searchSymbols, referenceSymbol, referenceLocation)) {
-                            result.push(getReferenceEntryFromNode(referenceLocation));
+                        if (referenceSymbol) {
+                            var referenceSymbolDeclaration = referenceSymbol.valueDeclaration;
+                            var shorthandValueSymbol = typeInfoResolver.getShorthandAssignmentValueSymbol(referenceSymbolDeclaration);
+                            if (isRelatableToSearchSet(searchSymbols, referenceSymbol, referenceLocation)) {
+                                result.push(getReferenceEntryFromNode(referenceLocation));
+                            }
+                            /* Because in short-hand property assignment, an identifier which stored as name of the short-hand property assignment
+                             * has two meaning : property name and property value. Therefore when we do findAllReference at the position where
+                             * an identifier is declared, the language service should return the position of the variable declaration as well as
+                             * the position in short-hand property assignment excluding property accessing. However, if we do findAllReference at the
+                             * position of property accessing, the referenceEntry of such position will be handled in the first case.
+                             */
+                            else if (!(referenceSymbol.flags & SymbolFlags.Transient) && searchSymbols.indexOf(shorthandValueSymbol) >= 0) {
+                                result.push(getReferenceEntryFromNode(referenceSymbolDeclaration.name));
+                            }
                         }
                     });
                 }
@@ -4334,6 +4347,22 @@ module ts {
                     forEach(getPropertySymbolsFromContextualType(location), contextualSymbol => {
                         result.push.apply(result, typeInfoResolver.getRootSymbols(contextualSymbol));
                     });
+
+                    /* Because in short-hand property assignment, location has two meaning : property name and as value of the property
+                     * When we do findAllReference at the position of the short-hand property assignment, we would want to have references to position of
+                     * property name and variable declaration of the identifier.
+                     * Like in below example, when querying for all references for an identifier 'name', of the property assignment, the language service
+                     * should show both 'name' in 'obj' and 'name' in variable declaration
+                     *      var name = "Foo";
+                     *      var obj = { name };
+                     * In order to do that, we will populate the search set with the value symbol of the identifier as a value of the property assignment
+                     * so that when matching with potential reference symbol, both symbols from property declaration and variable declaration
+                     * will be included correctly.
+                     */
+                    var shorthandValueSymbol = typeInfoResolver.getShorthandAssignmentValueSymbol(location.parent);
+                    if (shorthandValueSymbol) {
+                        result.push(shorthandValueSymbol);
+                    }
                 }
 
                 // If this is a union property, add all the symbols from all its source symbols in all unioned types.
@@ -4674,6 +4703,7 @@ module ts {
                 case SyntaxKind.VariableDeclaration:
                 case SyntaxKind.Property:
                 case SyntaxKind.PropertyAssignment:
+                case SyntaxKind.ShorthandPropertyAssignment:
                 case SyntaxKind.EnumMember:
                 case SyntaxKind.Method:
                 case SyntaxKind.Constructor:

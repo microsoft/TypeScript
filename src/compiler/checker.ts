@@ -93,6 +93,7 @@ module ts {
             getReturnTypeOfSignature: getReturnTypeOfSignature,
             getSymbolsInScope: getSymbolsInScope,
             getSymbolInfo: getSymbolInfo,
+            getShorthandAssignmentValueSymbol: getShorthandAssignmentValueSymbol,
             getTypeOfNode: getTypeOfNode,
             typeToString: typeToString,
             getSymbolDisplayBuilder: getSymbolDisplayBuilder,
@@ -109,6 +110,7 @@ module ts {
             getAliasedSymbol: resolveImport,
             isUndefinedSymbol: symbol => symbol === undefinedSymbol,
             isArgumentsSymbol: symbol => symbol === argumentsSymbol,
+            hasEarlyErrors: hasEarlyErrors,
             isEmitBlocked: isEmitBlocked
         };
 
@@ -1665,6 +1667,13 @@ module ts {
                 }
                 return type;
             }
+
+            // If it is a short-hand property assignment; Use the type of the identifier
+            if (declaration.kind === SyntaxKind.ShorthandPropertyAssignment) {
+                var type = checkIdentifier(<Identifier>declaration.name);
+                return type
+            }
+
             // Rest parameters default to type any[], other parameters default to type any
             var type = declaration.flags & NodeFlags.Rest ? createArrayType(anyType) : anyType;
             checkImplicitAny(type);
@@ -2399,7 +2408,7 @@ module ts {
         }
 
         // Return the symbol for the property with the given name in the given type. Creates synthetic union properties when
-        // necessary, maps primtive types and type parameters are to their apparent types, and augments with properties from
+        // necessary, maps primitive types and type parameters are to their apparent types, and augments with properties from
         // Object and Function as appropriate.
         function getPropertyOfType(type: Type, name: string): Symbol {
             if (type.flags & TypeFlags.Union) {
@@ -2434,7 +2443,7 @@ module ts {
         }
 
         // Return the signatures of the given kind in the given type. Creates synthetic union signatures when necessary and
-        // maps primtive types and type parameters are to their apparent types.
+        // maps primitive types and type parameters are to their apparent types.
         function getSignaturesOfType(type: Type, kind: SignatureKind): Signature[] {
             return getSignaturesOfObjectOrUnionType(getApparentType(type), kind);
         }
@@ -2447,7 +2456,7 @@ module ts {
         }
 
         // Return the index type of the given kind in the given type. Creates synthetic union index types when necessary and
-        // maps primtive types and type parameters are to their apparent types.
+        // maps primitive types and type parameters are to their apparent types.
         function getIndexTypeOfType(type: Type, kind: IndexKind): Type {
             return getIndexTypeOfObjectOrUnionType(getApparentType(type), kind);
         }
@@ -5000,7 +5009,15 @@ module ts {
                 if (hasProperty(members, id)) {
                     var member = members[id];
                     if (member.flags & SymbolFlags.Property) {
-                        var type = checkExpression((<PropertyDeclaration>member.declarations[0]).initializer, contextualMapper);
+                        var memberDecl = <PropertyDeclaration>member.declarations[0];
+                        var type: Type;
+                        if (memberDecl.kind === SyntaxKind.PropertyAssignment) {
+                            type = checkExpression(memberDecl.initializer, contextualMapper);
+                        }
+                        else {
+                            Debug.assert(memberDecl.kind === SyntaxKind.ShorthandPropertyAssignment);
+                            type = checkExpression(memberDecl.name, contextualMapper);
+                        }
                         var prop = <TransientSymbol>createSymbol(SymbolFlags.Property | SymbolFlags.Transient | member.flags, member.name);
                         prop.declarations = member.declarations;
                         prop.parent = member.parent;
@@ -8812,6 +8829,16 @@ module ts {
                         return getPropertyOfType(apparentType, (<LiteralExpression>node).text);
                     }
                     break;
+            }
+            return undefined;
+        }
+
+        function getShorthandAssignmentValueSymbol(location: Node): Symbol {
+            // The function returns a value symbol of an identifier in the short-hand property assignment.
+            // This is necessary as an identifier in short-hand property assignment can contains two meaning:
+            // property name and property value.
+            if (location && location.kind === SyntaxKind.ShorthandPropertyAssignment) {
+                return resolveEntityName(location, (<ShortHandPropertyDeclaration>location).name, SymbolFlags.Value);
             }
             return undefined;
         }
