@@ -539,7 +539,7 @@ module Harness {
 
         export var defaultLibFileName = 'lib.d.ts';
         export var defaultLibSourceFile = ts.createSourceFile(defaultLibFileName, IO.readFile(libFolder + 'lib.core.d.ts'), /*languageVersion*/ ts.ScriptTarget.Latest, /*version:*/ "0");
-        export var defaultES6LibSourceFile = ts.createSourceFile(defaultLibFileName, IO.readFile(libFolder + 'lib.es6.d.ts'), /*languageVersion*/ ts.ScriptTarget.Latest, /*version:*/ "0");
+        export var defaultES6LibSourceFile = ts.createSourceFile(defaultLibFileName, IO.readFile(libFolder + 'lib.core.es6.d.ts'), /*languageVersion*/ ts.ScriptTarget.Latest, /*version:*/ "0");
 
 
         // Cache these between executions so we don't have to re-parse them for every test
