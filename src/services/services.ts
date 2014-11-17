@@ -2334,7 +2334,7 @@ module ts {
 
             filename = normalizeSlashes(filename);
 
-            return program.getDiagnostics(getSourceFile(filename).getSourceFile());
+            return program.getDiagnostics(getSourceFile(filename));
         }
 
         /**
