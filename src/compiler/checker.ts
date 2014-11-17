@@ -109,7 +109,7 @@ module ts {
             getAliasedSymbol: resolveImport,
             isUndefinedSymbol: symbol => symbol === undefinedSymbol,
             isArgumentsSymbol: symbol => symbol === argumentsSymbol,
-            hasEarlyErrors: hasEarlyErrors
+            isEmitBlocked: isEmitBlocked
         };
 
         var undefinedSymbol = createSymbol(SymbolFlags.Property | SymbolFlags.Transient, "undefined");
@@ -8984,6 +8984,12 @@ module ts {
             return getDiagnostics().length > 0 || getGlobalDiagnostics().length > 0;
         }
 
+        function isEmitBlocked(sourceFile?: SourceFile): boolean {
+            return program.getDiagnostics(sourceFile).length !== 0 ||
+                hasEarlyErrors(sourceFile) ||
+                (compilerOptions.noEmitOnError && getDiagnostics(sourceFile).length !== 0);
+        }
+
         function hasEarlyErrors(sourceFile?: SourceFile): boolean {
             return forEach(getDiagnostics(sourceFile), d => d.isEarly);
         }
@@ -9080,7 +9086,7 @@ module ts {
                 getEnumMemberValue: getEnumMemberValue,
                 isTopLevelValueImportWithEntityName: isTopLevelValueImportWithEntityName,
                 hasSemanticErrors: hasSemanticErrors,
-                hasEarlyErrors: hasEarlyErrors,
+                isEmitBlocked: isEmitBlocked,
                 isDeclarationVisible: isDeclarationVisible,
                 isImplementationOfOverload: isImplementationOfOverload,
                 writeTypeAtLocation: writeTypeAtLocation,

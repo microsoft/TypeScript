@@ -373,6 +373,7 @@ module ts {
         Watch_input_files: { code: 6005, category: DiagnosticCategory.Message, key: "Watch input files." },
         Redirect_output_structure_to_the_directory: { code: 6006, category: DiagnosticCategory.Message, key: "Redirect output structure to the directory." },
         Do_not_erase_const_enum_declarations_in_generated_code: { code: 6007, category: DiagnosticCategory.Message, key: "Do not erase const enum declarations in generated code." },
+        Do_not_emit_outputs_if_any_type_checking_errors_were_reported: { code: 6008, category: DiagnosticCategory.Message, key: "Do not emit outputs if any type checking errors were reported." },
         Do_not_emit_comments_to_output: { code: 6009, category: DiagnosticCategory.Message, key: "Do not emit comments to output." },
         Specify_ECMAScript_target_version_Colon_ES3_default_ES5_or_ES6_experimental: { code: 6015, category: DiagnosticCategory.Message, key: "Specify ECMAScript target version: 'ES3' (default), 'ES5', or 'ES6' (experimental)" },
         Specify_module_code_generation_Colon_commonjs_or_amd: { code: 6016, category: DiagnosticCategory.Message, key: "Specify module code generation: 'commonjs' or 'amd'" },
