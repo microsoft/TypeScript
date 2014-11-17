@@ -819,6 +819,11 @@ module ts {
             return false;
         }
 
+        // We can only be unclosed if we have a tail or a no-sub template.
+        if (node.kind !== SyntaxKind.TemplateTail && node.kind !== SyntaxKind.NoSubstitutionTemplateLiteral) {
+            return false;
+        }
+
         // If we didn't end in a backtick, we must still be in the middle of a template.
         // If we did, make sure that it's not the *initial* backtick.
         return sourceText.charCodeAt(node.end - 1) !== CharacterCodes.backtick || node.text.length === 0;
