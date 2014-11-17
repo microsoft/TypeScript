@@ -700,6 +700,10 @@ module Harness {
                             }
                             break;
 
+                        case 'noemitonerror':
+                            options.noEmitOnError = !!setting.value;
+                            break;
+
                         case 'noresolve':
                             options.noResolve = !!setting.value;
                             break;
@@ -794,16 +798,14 @@ module Harness {
                     options.target,
                     useCaseSensitiveFileNames));
 
-                var hadParseErrors = program.getDiagnostics().length > 0;
-
                 var checker = program.getTypeChecker(/*fullTypeCheckMode*/ true);
                 checker.checkProgram();
 
-                var hasEarlyErrors = checker.hasEarlyErrors();
+                var isEmitBlocked = checker.isEmitBlocked();
 
                 // only emit if there weren't parse errors
                 var emitResult: ts.EmitResult;
-                if (!hadParseErrors && !hasEarlyErrors) {
+                if (!isEmitBlocked) {
                     emitResult = checker.emitFiles();
                 }
 
@@ -1148,7 +1150,7 @@ module Harness {
         var optionRegex = /^[\/]{2}\s*@(\w+)\s*:\s*(\S*)/gm;  // multiple matches on multiple lines
 
         // List of allowed metadata names
-        var fileMetadataNames = ["filename", "comments", "declaration", "module", "nolib", "sourcemap", "target", "out", "outdir", "noimplicitany", "noresolve", "newline", "newlines", "emitbom", "errortruncation", "usecasesensitivefilenames", "preserveconstenums"];
+        var fileMetadataNames = ["filename", "comments", "declaration", "module", "nolib", "sourcemap", "target", "out", "outdir", "noemitonerror","noimplicitany", "noresolve", "newline", "newlines", "emitbom", "errortruncation", "usecasesensitivefilenames", "preserveconstenums"];
 
         function extractCompilerSettings(content: string): CompilerSetting[] {
 

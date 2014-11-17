@@ -109,7 +109,7 @@ module ts {
             getAliasedSymbol: resolveImport,
             isUndefinedSymbol: symbol => symbol === undefinedSymbol,
             isArgumentsSymbol: symbol => symbol === argumentsSymbol,
-            hasEarlyErrors: hasEarlyErrors
+            isEmitBlocked: isEmitBlocked
         };
 
         var undefinedSymbol = createSymbol(SymbolFlags.Property | SymbolFlags.Transient, "undefined");
@@ -2523,6 +2523,8 @@ module ts {
             for (var i = 0, len = symbol.declarations.length; i < len; i++) {
                 var node = symbol.declarations[i];
                 switch (node.kind) {
+                    case SyntaxKind.FunctionType:
+                    case SyntaxKind.ConstructorType:
                     case SyntaxKind.FunctionDeclaration:
                     case SyntaxKind.Method:
                     case SyntaxKind.Constructor:
@@ -2960,8 +2962,8 @@ module ts {
             }
             return links.resolvedType;
         }
-
-        function getTypeFromTypeLiteralNode(node: TypeLiteralNode): Type {
+        
+        function getTypeFromTypeLiteralOrFunctionOrConstructorTypeNode(node: Node): Type {
             var links = getNodeLinks(node);
             if (!links.resolvedType) {
                 // Deferred resolution of members is handled by resolveObjectTypeMembers
@@ -3011,8 +3013,10 @@ module ts {
                     return getTypeFromUnionTypeNode(<UnionTypeNode>node);
                 case SyntaxKind.ParenType:
                     return getTypeFromTypeNode((<ParenTypeNode>node).type);
+                case SyntaxKind.FunctionType:
+                case SyntaxKind.ConstructorType:
                 case SyntaxKind.TypeLiteral:
-                    return getTypeFromTypeLiteralNode(<TypeLiteralNode>node);
+                    return getTypeFromTypeLiteralOrFunctionOrConstructorTypeNode(node);
                 // This function assumes that an identifier or qualified name is a type expression
                 // Callers should first ensure this by calling isTypeNode
                 case SyntaxKind.Identifier:
@@ -4319,13 +4323,9 @@ module ts {
             var type = getTypeOfSymbol(symbol);
             // Only narrow when symbol is variable of a structured type
             if (node && (symbol.flags & SymbolFlags.Variable && type.flags & TypeFlags.Structured)) {
-                while (true) {
+                loop: while (true) {
                     var child = node;
                     node = node.parent;
-                    // Stop at containing function or module block
-                    if (!node || node.kind === SyntaxKind.FunctionBlock || node.kind === SyntaxKind.ModuleBlock) {
-                        break;
-                    }
                     var narrowedType = type;
                     switch (node.kind) {
                         case SyntaxKind.IfStatement:
@@ -4351,9 +4351,18 @@ module ts {
                                 }
                             }
                             break;
+                        case SyntaxKind.SourceFile:
+                        case SyntaxKind.ModuleDeclaration:
+                        case SyntaxKind.FunctionDeclaration:
+                        case SyntaxKind.Method:
+                        case SyntaxKind.GetAccessor:
+                        case SyntaxKind.SetAccessor:
+                        case SyntaxKind.Constructor:
+                            // Stop at the first containing function or module declaration
+                            break loop;
                     }
-                    // Only use narrowed type if construct contains no assignments to variable
-                    if (narrowedType !== type) {
+                    // Use narrowed type if it is a subtype and construct contains no assignments to variable
+                    if (narrowedType !== type && isTypeSubtypeOf(narrowedType, type)) {
                         if (isVariableAssignedWithin(symbol, node)) {
                             break;
                         }
@@ -5853,7 +5862,11 @@ module ts {
             }
             if (node.kind === SyntaxKind.NewExpression) {
                 var declaration = signature.declaration;
-                if (declaration && (declaration.kind !== SyntaxKind.Constructor && declaration.kind !== SyntaxKind.ConstructSignature)) {
+                if (declaration &&
+                    declaration.kind !== SyntaxKind.Constructor &&
+                    declaration.kind !== SyntaxKind.ConstructSignature &&
+                    declaration.kind !== SyntaxKind.ConstructorType) {
+
                     // When resolved signature is a call signature (and not a construct signature) the result type is any
                     if (compilerOptions.noImplicitAny) {
                         error(node, Diagnostics.new_expression_whose_target_lacks_a_construct_signature_implicitly_has_an_any_type);
@@ -6796,7 +6809,7 @@ module ts {
         function checkTypeLiteral(node: TypeLiteralNode) {
             forEach(node.members, checkSourceElement);
             if (fullTypeCheck) {
-                var type = getTypeFromTypeLiteralNode(node);
+                var type = getTypeFromTypeLiteralOrFunctionOrConstructorTypeNode(node);
                 checkIndexConstraints(type);
                 checkTypeForDuplicateIndexSignatures(node);
             }
@@ -8270,6 +8283,8 @@ module ts {
                     return checkParameter(<ParameterDeclaration>node);
                 case SyntaxKind.Property:
                     return checkPropertyDeclaration(<PropertyDeclaration>node);
+                case SyntaxKind.FunctionType:
+                case SyntaxKind.ConstructorType:
                 case SyntaxKind.CallSignature:
                 case SyntaxKind.ConstructSignature:
                 case SyntaxKind.IndexSignature:
@@ -8969,6 +8984,12 @@ module ts {
             return getDiagnostics().length > 0 || getGlobalDiagnostics().length > 0;
         }
 
+        function isEmitBlocked(sourceFile?: SourceFile): boolean {
+            return program.getDiagnostics(sourceFile).length !== 0 ||
+                hasEarlyErrors(sourceFile) ||
+                (compilerOptions.noEmitOnError && getDiagnostics(sourceFile).length !== 0);
+        }
+
         function hasEarlyErrors(sourceFile?: SourceFile): boolean {
             return forEach(getDiagnostics(sourceFile), d => d.isEarly);
         }
@@ -9042,7 +9063,9 @@ module ts {
         function writeTypeAtLocation(location: Node, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter) {
             // Get type of the symbol if this is the valid symbol otherwise get type at location
             var symbol = getSymbolOfNode(location);
-            var type = symbol && !(symbol.flags & SymbolFlags.TypeLiteral) ? getTypeOfSymbol(symbol) : getTypeFromTypeNode(location);
+            var type = symbol && !(symbol.flags & (SymbolFlags.TypeLiteral | SymbolFlags.CallSignature | SymbolFlags.ConstructSignature))
+                ? getTypeOfSymbol(symbol)
+                : getTypeFromTypeNode(location);
 
             getSymbolDisplayBuilder().buildTypeDisplay(type, writer, enclosingDeclaration, flags);
         }
@@ -9063,7 +9086,7 @@ module ts {
                 getEnumMemberValue: getEnumMemberValue,
                 isTopLevelValueImportWithEntityName: isTopLevelValueImportWithEntityName,
                 hasSemanticErrors: hasSemanticErrors,
-                hasEarlyErrors: hasEarlyErrors,
+                isEmitBlocked: isEmitBlocked,
                 isDeclarationVisible: isDeclarationVisible,
                 isImplementationOfOverload: isImplementationOfOverload,
                 writeTypeAtLocation: writeTypeAtLocation,

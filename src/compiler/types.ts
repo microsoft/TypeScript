@@ -155,6 +155,8 @@ module ts {
         IndexSignature,
         // Type
         TypeReference,
+        FunctionType,
+        ConstructorType,
         TypeQuery,
         TypeLiteral,
         ArrayType,
@@ -730,7 +732,7 @@ module ts {
         isImplementationOfOverload(node: FunctionLikeDeclaration): boolean;
         isUndefinedSymbol(symbol: Symbol): boolean;
         isArgumentsSymbol(symbol: Symbol): boolean;
-        hasEarlyErrors(sourceFile?: SourceFile): boolean;
+        isEmitBlocked(sourceFile?: SourceFile): boolean;
         // Returns the constant value of this enum member, or 'undefined' if the enum member has a computed value.
         getEnumMemberValue(node: EnumMember): number;
         isValidPropertyAccess(node: PropertyAccess, propertyName: string): boolean;
@@ -821,7 +823,7 @@ module ts {
         isImportDeclarationEntityNameReferenceDeclarationVisibile(entityName: EntityName): SymbolAccessiblityResult;
         // Returns the constant value this property access resolves to, or 'undefined' for a non-constant
         getConstantValue(node: PropertyAccess | IndexedAccess): number;
-        hasEarlyErrors(sourceFile?: SourceFile): boolean;
+        isEmitBlocked(sourceFile?: SourceFile): boolean;
     }
 
     export const enum SymbolFlags {
@@ -1154,6 +1156,7 @@ module ts {
         locale?: string;
         mapRoot?: string;
         module?: ModuleKind;
+        noEmitOnError?: boolean;
         noErrorTruncation?: boolean;
         noImplicitAny?: boolean;
         noLib?: boolean;
