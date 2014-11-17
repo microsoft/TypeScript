@@ -82,8 +82,9 @@ var harnessSources = [
 ].map(function (f) {
     return path.join(harnessDirectory, f);
 }).concat([
-	"services/colorization.ts",
-    "services/documentRegistry.ts"
+    "services/colorization.ts",
+    "services/documentRegistry.ts",
+    "services/preProcessFile.ts"
 ].map(function (f) {
     return path.join(unittestsDirectory, f);
 }));

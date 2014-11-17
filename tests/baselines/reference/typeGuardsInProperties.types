@@ -1,0 +1,120 @@
+=== tests/cases/conformance/expressions/typeGuards/typeGuardsInProperties.ts ===
+
+// Note that type guards affect types of variables and parameters only and 
+// have no effect on members of objects such as properties. 
+
+var num: number;
+>num : number
+
+var strOrNum: string | number;
+>strOrNum : string | number
+
+class C1 {
+>C1 : C1
+
+    private pp1: string | number;
+>pp1 : string | number
+
+    pp2: string | number;
+>pp2 : string | number
+
+    // Inside public accessor getter
+    get pp3() {
+>pp3 : string | number
+
+        return strOrNum;
+>strOrNum : string | number
+    }
+    method() {
+>method : () => void
+
+        strOrNum = typeof this.pp1 === "string" && this.pp1; // string | number
+>strOrNum = typeof this.pp1 === "string" && this.pp1 : string | number
+>strOrNum : string | number
+>typeof this.pp1 === "string" && this.pp1 : string | number
+>typeof this.pp1 === "string" : boolean
+>typeof this.pp1 : string
+>this.pp1 : string | number
+>this : C1
+>pp1 : string | number
+>this.pp1 : string | number
+>this : C1
+>pp1 : string | number
+
+        strOrNum = typeof this.pp2 === "string" && this.pp2; // string | number
+>strOrNum = typeof this.pp2 === "string" && this.pp2 : string | number
+>strOrNum : string | number
+>typeof this.pp2 === "string" && this.pp2 : string | number
+>typeof this.pp2 === "string" : boolean
+>typeof this.pp2 : string
+>this.pp2 : string | number
+>this : C1
+>pp2 : string | number
+>this.pp2 : string | number
+>this : C1
+>pp2 : string | number
+
+        strOrNum = typeof this.pp3 === "string" && this.pp3; // string | number
+>strOrNum = typeof this.pp3 === "string" && this.pp3 : string | number
+>strOrNum : string | number
+>typeof this.pp3 === "string" && this.pp3 : string | number
+>typeof this.pp3 === "string" : boolean
+>typeof this.pp3 : string
+>this.pp3 : string | number
+>this : C1
+>pp3 : string | number
+>this.pp3 : string | number
+>this : C1
+>pp3 : string | number
+    }
+}
+var c1: C1;
+>c1 : C1
+>C1 : C1
+
+strOrNum = typeof c1.pp2 === "string" && c1.pp2; // string | number
+>strOrNum = typeof c1.pp2 === "string" && c1.pp2 : string | number
+>strOrNum : string | number
+>typeof c1.pp2 === "string" && c1.pp2 : string | number
+>typeof c1.pp2 === "string" : boolean
+>typeof c1.pp2 : string
+>c1.pp2 : string | number
+>c1 : C1
+>pp2 : string | number
+>c1.pp2 : string | number
+>c1 : C1
+>pp2 : string | number
+
+strOrNum = typeof c1.pp3 === "string" && c1.pp3; // string | number
+>strOrNum = typeof c1.pp3 === "string" && c1.pp3 : string | number
+>strOrNum : string | number
+>typeof c1.pp3 === "string" && c1.pp3 : string | number
+>typeof c1.pp3 === "string" : boolean
+>typeof c1.pp3 : string
+>c1.pp3 : string | number
+>c1 : C1
+>pp3 : string | number
+>c1.pp3 : string | number
+>c1 : C1
+>pp3 : string | number
+
+var obj1: {
+>obj1 : { x: string | number; }
+
+    x: string | number;
+>x : string | number
+
+};
+strOrNum = typeof obj1.x === "string" && obj1.x;  // string | number
+>strOrNum = typeof obj1.x === "string" && obj1.x : string | number
+>strOrNum : string | number
+>typeof obj1.x === "string" && obj1.x : string | number
+>typeof obj1.x === "string" : boolean
+>typeof obj1.x : string
+>obj1.x : string | number
+>obj1 : { x: string | number; }
+>x : string | number
+>obj1.x : string | number
+>obj1 : { x: string | number; }
+>x : string | number
+

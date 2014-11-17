@@ -55,6 +55,11 @@ module ts {
             error: Diagnostics.Argument_for_module_option_must_be_commonjs_or_amd
         },
         {
+            name: "noEmitOnError",
+            type: "boolean",
+            description: Diagnostics.Do_not_emit_outputs_if_any_type_checking_errors_were_reported,
+        },
+        {
             name: "noImplicitAny",
             type: "boolean",
             description: Diagnostics.Warn_on_expressions_and_declarations_with_an_implied_any_type,

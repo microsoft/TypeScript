@@ -1495,6 +1495,10 @@
         "category": "Message",
         "code": 6007
     },
+    "Do not emit outputs if any type checking errors were reported.": {
+        "category": "Message",
+        "code": 6008
+    },
     "Do not emit comments to output.": {
         "category": "Message",
         "code": 6009

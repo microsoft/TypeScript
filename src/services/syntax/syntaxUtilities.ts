@@ -36,7 +36,7 @@ module TypeScript {
             }
 
             var lineMap = text.lineMap();
-            var tokenLine = lineMap.getLineNumberFromPosition(end(token, text));
+            var tokenLine = lineMap.getLineNumberFromPosition(fullEnd(token));
             var nextTokenLine = lineMap.getLineNumberFromPosition(start(_nextToken, text));
 
             return tokenLine !== nextTokenLine;

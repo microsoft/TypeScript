@@ -1,0 +1,12 @@
+tests/cases/compiler/taggedTemplatesWithIncompleteNoSubstitutionTemplate2.ts(6,4): error TS1126: Unexpected end of text.
+
+
+==== tests/cases/compiler/taggedTemplatesWithIncompleteNoSubstitutionTemplate2.ts (1 errors) ====
+    
+    function f(x: TemplateStringsArray, y: string, z: string) {
+    }
+    
+    // Incomplete call, not enough parameters, at EOF.
+    f `
+       
+!!! error TS1126: Unexpected end of text.

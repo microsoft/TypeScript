@@ -136,10 +136,11 @@ module FourSlash {
        outDir: 'outDir',
        sourceMap: 'sourceMap',
        sourceRoot: 'sourceRoot',
+       resolveReference: 'ResolveReference',  // This flag is used to specify entry file for resolve file references. The flag is only allow once per test file
     };
 
     // List of allowed metadata names
-    var fileMetadataNames = [testOptMetadataNames.filename, testOptMetadataNames.emitThisFile];
+    var fileMetadataNames = [testOptMetadataNames.filename, testOptMetadataNames.emitThisFile, testOptMetadataNames.resolveReference];
     var globalMetadataNames = [testOptMetadataNames.baselineFile,  testOptMetadataNames.declaration,
         testOptMetadataNames.mapRoot, testOptMetadataNames.module, testOptMetadataNames.out,
         testOptMetadataNames.outDir, testOptMetadataNames.sourceMap, testOptMetadataNames.sourceRoot]
@@ -236,6 +237,25 @@ module FourSlash {
         throw new Error("Operation should be cancelled");
     }
 
+    // This function creates IScriptSnapshot object for testing getPreProcessedFileInfo
+    // Return object may lack some functionalities for other purposes.
+    function createScriptSnapShot(sourceText: string): TypeScript.IScriptSnapshot {
+        return {
+            getText: (start: number, end: number) => {
+                return sourceText.substr(start, end - start);
+            },
+            getLength: () => {
+                return sourceText.length;
+            },
+            getLineStartPositions: () => {
+                return <number[]>[];
+            },
+            getChangeRange: (oldSnapshot: TypeScript.IScriptSnapshot) => {
+                return <TypeScript.TextChangeRange>undefined;
+            }
+        };
+    }
+
     export class TestState {
         // Language service instance
         public languageServiceShimHost: Harness.LanguageService.TypeScriptLS;
@@ -264,6 +284,16 @@ module FourSlash {
         private scenarioActions: string[] = [];
         private taoInvalidReason: string = null;
 
+        private inputFiles: ts.Map<string> = {};  // Map between inputFile's filename and its content for easily looking up when resolving references
+        
+        // Add input file which has matched file name with the given reference-file path.
+        // This is necessary when resolveReference flag is specified
+        private addMatchedInputFile(referenceFilePath: string) {
+            var inputFile = this.inputFiles[referenceFilePath];
+            if (inputFile && !Harness.isLibraryFile(referenceFilePath)) {
+                this.languageServiceShimHost.addScript(referenceFilePath, inputFile);
+            }
+        }
 
         constructor(public testData: FourSlashData) {
             // Initialize the language service with all the scripts
@@ -273,57 +303,57 @@ module FourSlash {
             var compilationSettings = convertGlobalOptionsToCompilationSettings(this.testData.globalOptions);
             this.languageServiceShimHost.setCompilationSettings(compilationSettings);
 
-            var inputFiles: { unitName: string; content: string }[] = [];
+            var startResolveFileRef: FourSlashFile = undefined;
 
-            testData.files.forEach(file => {
-                var fixedPath = file.fileName.substr(file.fileName.indexOf('tests/'));
-            });
-
-            // NEWTODO: disable resolution for now.
-            // If the last unit contains require( or /// reference then consider it the only input file
-            // and the rest will be added via resolution. If not, then assume we have multiple files
-            // with 0 references in any of them. We could be smarter here to allow scenarios like
-            // 2 files without references and 1 file with a reference but we have 0 tests like that
-            // at the moment and an exhaustive search of the test files for that content could be quite slow.
-            var lastFile = testData.files[testData.files.length - 1];
-            //if (/require\(/.test(lastFile.content) || /reference\spath/.test(lastFile.content)) {
-            //    inputFiles.push({ unitName: lastFile.fileName, content: lastFile.content });
-            //} else {
-            inputFiles = testData.files.map(file => {
-                return { unitName: file.fileName, content: file.content };
-            });
-            //}
-
-
-            // NEWTODO: Re-implement commented-out section
-            //harnessCompiler.addInputFiles(inputFiles);
-            //try {
-            //    var resolvedFiles = harnessCompiler.resolve();
-
-            //    resolvedFiles.forEach(file => {
-            //        if (!Harness.isLibraryFile(file.path)) {
-            //            var fixedPath = file.path.substr(file.path.indexOf('tests/'));
-            //            var content = harnessCompiler.getContentForFile(fixedPath);
-            //            this.languageServiceShimHost.addScript(fixedPath, content);
-            //        }
-            //    });
-
-            //    this.languageServiceShimHost.addScript('lib.d.ts', Harness.Compiler.libTextMinimal);
-            //}
-            //finally {
-            //    // harness no longer needs the results of the above work, make sure the next test operations are in a clean state
-            //    harnessCompiler.reset();
-            //}
-
-            /// NEWTODO: For now do not resolve, just use the input files
-            inputFiles.forEach(file => {
-                if (!Harness.isLibraryFile(file.unitName)) {
-                    this.languageServiceShimHost.addScript(file.unitName, file.content);
+            ts.forEach(testData.files, file => {
+                // Create map between fileName and its content for easily looking up when resolveReference flag is specified
+                this.inputFiles[file.fileName] = file.content;
+                if (!startResolveFileRef && file.fileOptions[testOptMetadataNames.resolveReference]) {
+                    startResolveFileRef = file;
+                } else if (startResolveFileRef) {
+                    // If entry point for resolving file references is already specified, report duplication error
+                    throw new Error("There exists a Fourslash file which has resolveReference flag specified; remove duplicated resolveReference flag");
                 }
             });
 
-            this.languageServiceShimHost.addDefaultLibrary();
+            if (startResolveFileRef) {
+                // Add the entry-point file itself into the languageServiceShimHost
+                this.languageServiceShimHost.addScript(startResolveFileRef.fileName, startResolveFileRef.content);
 
+                var jsonResolvedResult = JSON.parse(this.languageServiceShimHost.getCoreService().getPreProcessedFileInfo(startResolveFileRef.fileName,
+                    createScriptSnapShot(startResolveFileRef.content)));
+                var resolvedResult = jsonResolvedResult.result;
+                var referencedFiles: ts.IFileReference[] = resolvedResult.referencedFiles;
+                var importedFiles: ts.IFileReference[] = resolvedResult.importedFiles;
+
+                // Add triple reference files into language-service host
+                ts.forEach(referencedFiles, referenceFile => {
+                    // Fourslash insert tests/cases/fourslash into inputFile.unitName so we will properly append the same base directory to refFile path
+                    var referenceFilePath = "tests/cases/fourslash/" + referenceFile.path;
+                    this.addMatchedInputFile(referenceFilePath);
+                });
+
+                // Add import files into language-service host
+                ts.forEach(importedFiles, importedFile => {
+                    // Fourslash insert tests/cases/fourslash into inputFile.unitName and import statement doesn't require ".ts"
+                    // so convert them before making appropriate comparison
+                    var importedFilePath = "tests/cases/fourslash/" + importedFile.path + ".ts";
+                    this.addMatchedInputFile(importedFilePath);
+                });
+
+                // Check if no-default-lib flag is false and if so add default library
+                if (!resolvedResult.isLibFile) {
+                    this.languageServiceShimHost.addDefaultLibrary();
+                }
+            } else {
+                // resolveReference file-option is not specified then do not resolve any files and include all inputFiles
+                ts.forEachKey(this.inputFiles, fileName => {
+                    if (!Harness.isLibraryFile(fileName)) {
+                        this.languageServiceShimHost.addScript(fileName, this.inputFiles[fileName]);
+                    }
+                });
+                this.languageServiceShimHost.addDefaultLibrary();
+            }
 
             // Sneak into the language service and get its compiler so we can examine the syntax trees
             this.languageService = this.languageServiceShimHost.getLanguageService().languageService;
@@ -991,7 +1021,7 @@ module FourSlash {
             var resultString = "SpanInfo: " + JSON.stringify(spanInfo);
             if (spanInfo) {
                 var spanString = this.activeFile.content.substr(spanInfo.start(), spanInfo.length());
-                var spanLineMap = ts.getLineStarts(spanString);
+                var spanLineMap = ts.computeLineStarts(spanString);
                 for (var i = 0; i < spanLineMap.length; i++) {
                     if (!i) {
                         resultString += "\n";
@@ -1005,7 +1035,7 @@ module FourSlash {
         }
 
         private baselineCurrentFileLocations(getSpanAtPos: (pos: number) => TypeScript.TextSpan): string {
-            var fileLineMap = ts.getLineStarts(this.activeFile.content);
+            var fileLineMap = ts.computeLineStarts(this.activeFile.content);
             var nextLine = 0;
             var resultString = "";
             var currentLine: string;
@@ -2044,10 +2074,6 @@ module FourSlash {
             }
         }
 
-        private getEOF(): number {
-            return this.languageServiceShimHost.getScriptSnapshot(this.activeFile.fileName).getLength();
-        }
-
         // Get the text of the entire line the caret is currently at
         private getCurrentLineContent() {
             // The current caret position (in line/col terms)
@@ -2161,14 +2187,6 @@ module FourSlash {
             }
 
             return result;
-        }
-
-        private getCurrentLineNumberZeroBased() {
-            return this.getCurrentLineNumberOneBased() - 1;
-        }
-
-        private getCurrentLineNumberOneBased() {
-            return this.languageServiceShimHost.positionToZeroBasedLineCol(this.activeFile.fileName, this.currentCaretPosition).line + 1;
         }
 
         private getLineColStringAtPosition(position: number) {

@@ -23,7 +23,7 @@ module RWC {
     function collateOutputs(outputFiles: Harness.Compiler.GeneratedFile[], clean?: (s: string) => string) {
         // Collect, test, and sort the filenames
         function cleanName(fn: string) {
-            var lastSlash = Harness.Path.switchToForwardSlashes(fn).lastIndexOf('/');
+            var lastSlash = ts.normalizeSlashes(fn).lastIndexOf('/');
             return fn.substr(lastSlash + 1).toLowerCase();
         }
         outputFiles.sort((a, b) => cleanName(a.fileName).localeCompare(cleanName(b.fileName)));
@@ -52,7 +52,7 @@ module RWC {
             var compilerResult: Harness.Compiler.CompilerResult;
             var compilerOptions: ts.CompilerOptions;
             var baselineOpts: Harness.Baseline.BaselineOptions = { Subfolder: 'rwc' };
-            var baseName = /(.*)\/(.*).json/.exec(Harness.Path.switchToForwardSlashes(jsonPath))[2];
+            var baseName = /(.*)\/(.*).json/.exec(ts.normalizeSlashes(jsonPath))[2];
             // Compile .d.ts files
             var declFileCompilationResult: {
                 declInputFiles: { unitName: string; content: string }[];
@@ -99,7 +99,7 @@ module RWC {
                     }
 
                     ts.forEach(ioLog.filesRead, fileRead => {
-                        var resolvedPath = Harness.Path.switchToForwardSlashes(sys.resolvePath(fileRead.path));
+                        var resolvedPath = ts.normalizeSlashes(sys.resolvePath(fileRead.path));
                         var inInputList = ts.forEach(inputFiles, inputFile=> inputFile.unitName === resolvedPath);
                         if (!inInputList) {
                             // Add the file to other files
@@ -117,7 +117,7 @@ module RWC {
                 });
 
                 function getHarnessCompilerInputUnit(fileName: string) {
-                    var resolvedPath = Harness.Path.switchToForwardSlashes(sys.resolvePath(fileName));
+                    var resolvedPath = ts.normalizeSlashes(sys.resolvePath(fileName));
                     try {
                         var content = sys.readFile(resolvedPath);
                     }

@@ -13,7 +13,7 @@ interface Foo<T> {
 }
 var Foo: new () => Foo.A<Foo<string>>;
 >Foo : new () => Foo.A<Foo<string>>
->Foo : Foo<T>
+>Foo : unknown
 >A : Foo.A<T>
 >Foo : Foo<T>
 

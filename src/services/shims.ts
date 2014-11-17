@@ -16,7 +16,6 @@
 /// <reference path='services.ts' />
 
 /// <reference path='compiler\pathUtils.ts' />
-/// <reference path='compiler\precompile.ts' />
 
 var debugObjectHost = (<any>this);
 
@@ -53,6 +52,17 @@ module ts {
         getCancellationToken(): CancellationToken;
         getCurrentDirectory(): string;
         getDefaultLibFilename(): string;
+    }
+
+    ///
+    /// Pre-processing
+    ///
+    // Note: This is being using by the host (VS) and is marshaled back and forth.
+    // When changing this make sure the changes are reflected in the managed side as well
+    export interface IFileReference {
+        path: string;
+        position: number;
+        length: number;
     }
 
     /** Public interface of a language service instance shim. */
@@ -507,17 +517,6 @@ module ts {
             };
         }
 
-        private realizeDiagnosticWithFileName(diagnostic: Diagnostic): { fileName: string; message: string; start: number; length: number; category: string; } {
-            return {
-                fileName: diagnostic.file.filename,
-                message: diagnostic.messageText,
-                start: diagnostic.start,
-                length: diagnostic.length,
-                /// TODO: no need for the tolowerCase call
-                category: DiagnosticCategory[diagnostic.category].toLowerCase()
-            };
-        }
-
         public getSyntacticClassifications(fileName: string, start: number, length: number): string {
             return this.forwardJSONCall(
                 "getSyntacticClassifications('" + fileName + "', " + start + ", " + length + ")",
@@ -559,7 +558,7 @@ module ts {
                 "getCompilerOptionsDiagnostics()",
                 () => {
                     var errors = this.languageService.getCompilerOptionsDiagnostics();
-                    return errors.map(d => this.realizeDiagnosticWithFileName(d))
+                    return errors.map(LanguageServiceShimObject.realizeDiagnostic)
                 });
         }
 
@@ -846,12 +845,33 @@ module ts {
             return forwardJSONCall(this.logger, actionDescription, action);
         }
 
-        public getPreProcessedFileInfo(fileName: string, sourceText: TypeScript.IScriptSnapshot): string {
+        public getPreProcessedFileInfo(fileName: string, sourceTextSnapshot: TypeScript.IScriptSnapshot): string {
             return this.forwardJSONCall(
                 "getPreProcessedFileInfo('" + fileName + "')",
                 () => {
-                    var result = TypeScript.preProcessFile(fileName, sourceText);
-                    return result;
+                    var result = preProcessFile(sourceTextSnapshot.getText(0, sourceTextSnapshot.getLength()));
+                    var convertResult = {
+                        referencedFiles: <IFileReference[]>[],
+                        importedFiles: <IFileReference[]>[],
+                        isLibFile: result.isLibFile
+                    };
+
+                    forEach(result.referencedFiles, refFile => {
+                        convertResult.referencedFiles.push({
+                            path: normalizePath(refFile.filename),
+                            position: refFile.pos,
+                            length: refFile.end - refFile.pos
+                        });
+                    });
+
+                    forEach(result.importedFiles, importedFile => {
+                        convertResult.importedFiles.push({
+                            path: normalizeSlashes(importedFile.filename),
+                            position: importedFile.pos,
+                            length: importedFile.end - importedFile.pos
+                        });
+                    });
+                    return convertResult;
                 });
         }
 

@@ -1,0 +1,37 @@
+tests/cases/conformance/es6/templates/taggedTemplateStringsWithOverloadResolution1_ES6.ts(12,20): error TS2345: Argument of type 'boolean' is not assignable to parameter of type 'string'.
+tests/cases/conformance/es6/templates/taggedTemplateStringsWithOverloadResolution1_ES6.ts(14,9): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/conformance/es6/templates/taggedTemplateStringsWithOverloadResolution1_ES6.ts(19,20): error TS2345: Argument of type 'boolean' is not assignable to parameter of type 'string'.
+tests/cases/conformance/es6/templates/taggedTemplateStringsWithOverloadResolution1_ES6.ts(21,9): error TS2346: Supplied parameters do not match any signature of call target.
+
+
+==== tests/cases/conformance/es6/templates/taggedTemplateStringsWithOverloadResolution1_ES6.ts (4 errors) ====
+    function foo(strs: string[]): number;
+    function foo(strs: string[], x: number): string;
+    function foo(strs: string[], x: number, y: number): boolean;
+    function foo(strs: string[], x: number, y: string): {};
+    function foo(...stuff: any[]): any {
+        return undefined;
+    }
+    
+    var a = foo([]);             // number
+    var b = foo([], 1);          // string
+    var c = foo([], 1, 2);       // boolean
+    var d = foo([], 1, true);    // boolean (with error)
+                       ~~~~
+!!! error TS2345: Argument of type 'boolean' is not assignable to parameter of type 'string'.
+    var e = foo([], 1, "2");     // {}
+    var f = foo([], 1, 2, 3);    // any (with error)
+            ~~~~~~~~~~~~~~~~
+!!! error TS2346: Supplied parameters do not match any signature of call target.
+    
+    var u = foo ``;              // number
+    var v = foo `${1}`;          // string
+    var w = foo `${1}${2}`;      // boolean
+    var x = foo `${1}${true}`;   // boolean (with error)
+                       ~~~~
+!!! error TS2345: Argument of type 'boolean' is not assignable to parameter of type 'string'.
+    var y = foo `${1}${"2"}`;    // {}
+    var z = foo `${1}${2}${3}`;  // any (with error)
+            ~~~~~~~~~~~~~~~~~~
+!!! error TS2346: Supplied parameters do not match any signature of call target.
+    

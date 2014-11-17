@@ -61,12 +61,12 @@ import clolias = clodule;
 
 var p: clolias.Point;
 >p : alias.Point
->clolias : clodule
+>clolias : unknown
 >Point : clolias.Point
 
 var p: clodule.Point;
 >p : alias.Point
->clodule : clodule
+>clodule : unknown
 >Point : clolias.Point
 
 var p: { x: number; y: number; };
