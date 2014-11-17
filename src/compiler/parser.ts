@@ -1,6 +1,7 @@
 /// <reference path="types.ts"/>
 /// <reference path="core.ts"/>
 /// <reference path="scanner.ts"/>
+/// <reference path="checker.ts"/>
 
 module ts {
     var nodeConstructors = new Array<new () => Node>(SyntaxKind.Count);
