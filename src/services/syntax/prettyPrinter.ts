@@ -1018,6 +1018,12 @@ module TypeScript.PrettyPrinter {
             visitNodeOrToken(this, node.expression);
         }
 
+        public visitYieldExpression(node: YieldExpressionSyntax): void {
+            this.appendToken(node.yieldKeyword);
+            this.ensureSpace();
+            visitNodeOrToken(this, node.expression);
+        }
+
         public visitDebuggerStatement(node: DebuggerStatementSyntax): void {
             this.appendToken(node.debuggerKeyword);
             this.appendToken(node.semicolonToken);

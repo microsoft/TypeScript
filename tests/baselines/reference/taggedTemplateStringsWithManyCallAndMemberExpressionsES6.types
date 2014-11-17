@@ -2,7 +2,7 @@
 interface I {
 >I : I
 
-    (strs: string[], subs: number[]): I;
+    (strs: string[], ...subs: number[]): I;
 >strs : string[]
 >subs : number[]
 >I : I
@@ -28,11 +28,11 @@ var f: I;
 var x = new new new f `abc${ 0 }def`.member("hello")(42) === true;
 >x : boolean
 >new new new f `abc${ 0 }def`.member("hello")(42) === true : boolean
->new new new f `abc${ 0 }def`.member("hello")(42) : any
->new new f `abc${ 0 }def`.member("hello")(42) : any
->new f `abc${ 0 }def`.member("hello") : any
->f `abc${ 0 }def`.member : any
+>new new new f `abc${ 0 }def`.member("hello")(42) : boolean
+>new new f `abc${ 0 }def`.member("hello")(42) : new () => boolean
+>new f `abc${ 0 }def`.member("hello") : new (n: number) => new () => boolean
+>f `abc${ 0 }def`.member : new (s: string) => new (n: number) => new () => boolean
 >f : I
->member : any
+>member : new (s: string) => new (n: number) => new () => boolean
 
 

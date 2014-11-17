@@ -495,6 +495,10 @@ interface NumberConstructor {
 /** An object that represents a number of any kind. All JavaScript numbers are 64-bit floating-point numbers. */
 declare var Number: NumberConstructor;
 
+interface TemplateStringsArray extends Array<string> {
+    raw: string[];
+}
+
 interface Math {
     /** The mathematical constant e. This is Euler's number, the base of natural logarithms. */
     E: number;

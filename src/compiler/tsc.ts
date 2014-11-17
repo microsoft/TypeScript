@@ -362,16 +362,16 @@ module ts {
             var checker = program.getTypeChecker(/*fullTypeCheckMode*/ true);
             var checkStart = new Date().getTime();
             errors = checker.getDiagnostics();
-            if (!checker.hasEarlyErrors()) {
+            if (checker.isEmitBlocked()) {
+                exitStatus = EmitReturnStatus.AllOutputGenerationSkipped;
+            }
+            else {
                 var emitStart = new Date().getTime();
                 var emitOutput = checker.emitFiles();
                 var emitErrors = emitOutput.errors;
                 exitStatus = emitOutput.emitResultStatus;
                 var reportStart = new Date().getTime();
                 errors = concatenate(errors, emitErrors);
-            }
-            else {
-                exitStatus = EmitReturnStatus.AllOutputGenerationSkipped;
             }
         }
 

@@ -246,7 +246,7 @@ module ts {
         return tokenStrings[t];
     }
 
-    export function getLineStarts(text: string): number[] {
+    export function computeLineStarts(text: string): number[] {
         var result: number[] = new Array();
         var pos = 0;
         var lineStart = 0;
@@ -294,7 +294,7 @@ module ts {
     }
 
     export function positionToLineAndCharacter(text: string, pos: number) {
-        var lineStarts = getLineStarts(text);
+        var lineStarts = computeLineStarts(text);
         return getLineAndCharacterOfPosition(lineStarts, pos);
     }
 

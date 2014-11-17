@@ -11,7 +11,7 @@ interface server {
 >server : server
 
     (): server.Server;
->server : server
+>server : unknown
 >Server : server.Server
 
     startTime: Date;

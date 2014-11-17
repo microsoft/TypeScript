@@ -438,10 +438,6 @@ interface StringConstructor {
     raw(template: TemplateStringsArray, ...substitutions: any[]);
 }
 
-interface TemplateStringsArray extends Array<string> {
-    raw: string[];
-}
-
 interface IteratorResult<T> {
     done: boolean;
     value: T;

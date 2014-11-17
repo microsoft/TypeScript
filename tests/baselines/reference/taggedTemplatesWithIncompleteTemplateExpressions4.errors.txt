@@ -1,0 +1,18 @@
+tests/cases/compiler/taggedTemplatesWithIncompleteTemplateExpressions4.ts(6,24): error TS1109: Expression expected.
+tests/cases/compiler/taggedTemplatesWithIncompleteTemplateExpressions4.ts(6,28): error TS1109: Expression expected.
+tests/cases/compiler/taggedTemplatesWithIncompleteTemplateExpressions4.ts(6,1): error TS2346: Supplied parameters do not match any signature of call target.
+
+
+==== tests/cases/compiler/taggedTemplatesWithIncompleteTemplateExpressions4.ts (3 errors) ====
+    
+    function f(x: TemplateStringsArray, y: string, z: string) {
+    }
+    
+    // Incomplete call, but too many parameters.
+    f `123qdawdrqw${ 1 }${ }${ 
+                           ~
+!!! error TS1109: Expression expected.
+                               
+!!! error TS1109: Expression expected.
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2346: Supplied parameters do not match any signature of call target.
