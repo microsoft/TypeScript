@@ -811,7 +811,7 @@ module ts {
     }
 
     export function isUnterminatedTemplateEnd(node: LiteralExpression) {
-        Debug.assert(node.kind === SyntaxKind.NoSubstitutionTemplateLiteral || node.kind === SyntaxKind.TemplateTail);
+        Debug.assert(isTemplateLiteralKind(node.kind));
         var sourceText = getSourceFileOfNode(node).text;
 
         // If we're not at the EOF, we know we must be terminated.

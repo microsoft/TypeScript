@@ -173,7 +173,7 @@ module ts.SignatureHelp {
     export interface ArgumentListInfo {
         kind: ArgumentListKind;
         invocation: CallLikeExpression;
-        argumentRange: TextRange;
+        argumentsSpan: TypeScript.TextSpan;
         argumentIndex?: number;
         argumentCount: number;
     }
@@ -186,7 +186,7 @@ module ts.SignatureHelp {
             return undefined;
         }
 
-        var argumentInfo = getContainingArgumentInfo(startingToken);
+        var argumentInfo = getContainingArgumentInfo(startingToken, position);
         cancellationToken.throwIfCancellationRequested();
 
         // Semantic filtering of signature help
@@ -209,7 +209,7 @@ module ts.SignatureHelp {
          * If node is an argument, returns its index in the argument list.
          * If not, returns -1.
          */
-        function getImmediatelyContainingArgumentInfo(node: Node): ArgumentListInfo {
+        function getImmediatelyContainingArgumentInfo(node: Node, position: number): ArgumentListInfo {
             var callLikeExpr: CallLikeExpression;
 
             if (node.parent.kind === SyntaxKind.CallExpression || node.parent.kind === SyntaxKind.NewExpression) {
@@ -238,7 +238,7 @@ module ts.SignatureHelp {
                     return {
                         kind: isTypeArgList ? ArgumentListKind.TypeArguments : ArgumentListKind.CallArguments,
                         invocation: callExpression,
-                        argumentRange: list,
+                        argumentsSpan: getApplicableSpanForArguments(list),
                         argumentIndex: 0,
                         argumentCount: getCommaBasedArgCount(list)
                     };
@@ -269,23 +269,25 @@ module ts.SignatureHelp {
                     return {
                         kind: isTypeArgList ? ArgumentListKind.TypeArguments : ArgumentListKind.CallArguments,
                         invocation: callExpression,
-                        argumentRange: list,
+                        argumentsSpan: getApplicableSpanForArguments(list),
                         argumentIndex: argumentIndex,
                         argumentCount: getCommaBasedArgCount(list)
                     };
                 }
             }
             else if (node.kind === SyntaxKind.NoSubstitutionTemplateLiteral && node.parent.kind === SyntaxKind.TaggedTemplateExpression) {
-                return getArgumentListInfoForTemplate(<TaggedTemplateExpression>node.parent, /*argumentIndex*/ 0);
+                // Check if we're actually inside the template;
+                // otherwise we'll fall out and return undefined.
+                if (isInsideTemplateLiteral(<LiteralExpression>node, position)) {
+                    return getArgumentListInfoForTemplate(<TaggedTemplateExpression>node.parent, /*argumentIndex*/ 0);
+                }
             }
-            else if (node.parent.kind === SyntaxKind.TemplateExpression && node.parent.parent.kind === SyntaxKind.TaggedTemplateExpression) {
-                Debug.assert(node.kind === SyntaxKind.TemplateHead, "Expected 'TemplateHead' as token.");
-
+            else if (node.kind === SyntaxKind.TemplateHead && node.parent.parent.kind === SyntaxKind.TaggedTemplateExpression) {
                 var templateExpression = <TemplateExpression>node.parent;
                 var tagExpression = <TaggedTemplateExpression>templateExpression.parent;
+                var argumentIndex = getArgumentIndexForTemplatePiece(/*spanIndex*/ 0, node, position);
 
-                // argumentIndex is 1 to adjust for the TemplateStringsArray
-                return getArgumentListInfoForTemplate(tagExpression, /*argumentIndex*/ 1);
+                return getArgumentListInfoForTemplate(tagExpression, argumentIndex);
             }
             else if (node.parent.kind === SyntaxKind.TemplateSpan && node.parent.parent.parent.kind === SyntaxKind.TaggedTemplateExpression) {
                 var templateSpan = <TemplateSpan>node.parent;
@@ -293,29 +295,23 @@ module ts.SignatureHelp {
                 var tagExpression = <TaggedTemplateExpression>templateExpression.parent;
                 Debug.assert(templateExpression.kind === SyntaxKind.TemplateExpression);
 
-                // We need to account for the TemplateStringsArray, so we add at least 1.
-                // Then, if we're on the template literal, we want to jump to the next argument,
-                var spanIndex = templateExpression.templateSpans.indexOf(templateSpan);
-                var adjustedIndex = isTemplateLiteralKind(node.kind) ? spanIndex + 2 : spanIndex + 1
+                // If we're just after a template tail, don't show signature help.
+                if (node.kind === SyntaxKind.TemplateTail && position >= node.getEnd() && !isUnterminatedTemplateEnd(<LiteralExpression>node)) {
+                    return undefined;
+                }
 
-                return getArgumentListInfoForTemplate(tagExpression, adjustedIndex);
+                // The cursor can either be in or after the template literal.
+                // If inside, we want to highlight the first argument.
+                // If after, we'll want to highlight the next parameter.
+                // We actually shouldn't be able to show up before because you should be at the left-most token.
+                
+                var spanIndex = templateExpression.templateSpans.indexOf(templateSpan);
+                var argumentIndex = getArgumentIndexForTemplatePiece(spanIndex, node, position);
+
+                return getArgumentListInfoForTemplate(tagExpression, argumentIndex);
             }
             
             return undefined;
-        }
-
-        function getArgumentListInfoForTemplate(tagExpression: TaggedTemplateExpression, argumentIndex: number): ArgumentListInfo {
-            var argumentCount = tagExpression.template.kind === SyntaxKind.NoSubstitutionTemplateLiteral
-                ? 1
-                : (<TemplateExpression>tagExpression.template).templateSpans.length + 1;
-
-            return {
-                kind: ArgumentListKind.TaggedTemplateArguments,
-                invocation: tagExpression,
-                argumentRange: tagExpression.template,
-                argumentIndex: argumentIndex,
-                argumentCount: argumentCount
-            };
         }
 
         function getCommaBasedArgCount(argumentsList: Node) {
@@ -326,7 +322,75 @@ module ts.SignatureHelp {
                 : 1 + countWhere(argumentsList.getChildren(), arg => arg.kind === SyntaxKind.CommaToken);
         }
 
-        function getContainingArgumentInfo(node: Node): ArgumentListInfo {
+        // spanIndex is either the index for a given template span, or 0 for a template head.
+        // This does not give appropriate results for a NoSubstitutionTemplateLiteral
+        function getArgumentIndexForTemplatePiece(spanIndex: number, node: Node, position: number): number {
+            // TemplateSpans are expression-template pairs, and ordered as such.
+            // Because of the TemplateStringsArray arg, we have to offset ourselves by 1 for substitution expressions.
+            // There are three cases we can encounter:
+            //      1. We are precisely in the template literal (argIndex = 0)
+            //      2. We are in or to the right of the substitution expression (argIndex = spanIndex + 1)
+            //      3. We are directly to the right of the template literal, but not
+            //          enough to put us in the substitution expression; we should consider ourselves part of
+            //          the *next* span's expression (argIndex = (spanIndex + 1) + 1).
+            //
+            // Example: f  `# abcd $#{#  1 + 1#  }# efghi ${ #"#hello"#  }  #  `
+            //              ^       ^ ^       ^   ^          ^ ^      ^     ^
+            // Cases:       1       1 3       2   1          3 2      2     1
+            Debug.assert(position >= node.getStart(), "Assumed 'position' could not occur before node.");
+            if (isTemplateLiteralKind(node.kind)) {
+                if (isInsideTemplateLiteral(<LiteralExpression>node, position)) {
+                    return 0;
+                }
+                return spanIndex + 2;
+            }
+            return spanIndex + 1;
+        }
+
+        function getArgumentListInfoForTemplate(tagExpression: TaggedTemplateExpression, argumentIndex: number): ArgumentListInfo {
+            var argumentCount = tagExpression.template.kind === SyntaxKind.NoSubstitutionTemplateLiteral
+                ? 1
+                : (<TemplateExpression>tagExpression.template).templateSpans.length + 1;
+
+            return {
+                kind: ArgumentListKind.TaggedTemplateArguments,
+                invocation: tagExpression,
+                argumentsSpan: getApplicableSpanForTaggedTemplate(tagExpression.template),
+                argumentIndex: argumentIndex,
+                argumentCount: argumentCount
+            };
+        }
+
+        function getApplicableSpanForArguments(argumentsList: Node): TypeScript.TextSpan {
+            // We use full start and skip trivia on the end because we want to include trivia on
+            // both sides. For example,
+            //
+            //    foo(   /*comment */     a, b, c      /*comment*/     )
+            //        |                                               |
+            //
+            // The applicable span is from the first bar to the second bar (inclusive,
+            // but not including parentheses)
+            var applicableSpanStart = argumentsList.pos;
+            var applicableSpanEnd = skipTrivia(sourceFile.text, argumentsList.end, /*stopAfterLineBreak*/ false);
+            return new TypeScript.TextSpan(applicableSpanStart, applicableSpanEnd - applicableSpanStart);
+        }
+
+        function getApplicableSpanForTaggedTemplate(template: TemplateExpression | LiteralExpression): TypeScript.TextSpan {
+            var applicableSpanStart = template.getStart();
+            var applicableSpanEnd = template.getEnd();
+
+            // Adjust the span end in case the template is unclosed - 
+            if (template.kind === SyntaxKind.TemplateExpression) {
+                var lastSpan = lastOrUndefined((<TemplateExpression>template).templateSpans);
+                if (lastSpan.literal.kind === SyntaxKind.Missing) {
+                    applicableSpanEnd = skipTrivia(sourceFile.text, template.end, /*stopAfterLineBreak*/ false);
+                }
+            }
+
+            return new TypeScript.TextSpan(applicableSpanStart, applicableSpanEnd - applicableSpanStart);
+        }
+
+        function getContainingArgumentInfo(node: Node, position: number): ArgumentListInfo {
             for (var n = node; n.kind !== SyntaxKind.SourceFile; n = n.parent) {
                 if (n.kind === SyntaxKind.FunctionBlock) {
                     return undefined;
@@ -338,7 +402,7 @@ module ts.SignatureHelp {
                     Debug.fail("Node of kind " + n.kind + " is not a subspan of its parent of kind " + n.parent.kind);
                 }
 
-                var argumentInfo = getImmediatelyContainingArgumentInfo(n);
+                var argumentInfo = getImmediatelyContainingArgumentInfo(n, position);
                 if (argumentInfo) {
                     return argumentInfo;
                 }
@@ -384,7 +448,7 @@ module ts.SignatureHelp {
         }
 
         function createSignatureHelpItems(candidates: Signature[], bestSignature: Signature, argumentListInfo: ArgumentListInfo): SignatureHelpItems {
-            var argumentsList = argumentListInfo.argumentRange;
+            var applicableSpan = argumentListInfo.argumentsSpan;
             var isTypeParameterList = argumentListInfo.kind === ArgumentListKind.TypeArguments;
 
             var invocation = argumentListInfo.invocation;
@@ -432,18 +496,6 @@ module ts.SignatureHelp {
                     documentation: candidateSignature.getDocumentationComment()
                 };
             });
-
-            // We use full start and skip trivia on the end because we want to include trivia on
-            // both sides. For example,
-            //
-            //    foo(   /*comment */     a, b, c      /*comment*/     )
-            //        |                                               |
-            //
-            // The applicable span is from the first bar to the second bar (inclusive,
-            // but not including parentheses)
-            var applicableSpanStart = argumentsList.pos;
-            var applicableSpanEnd = skipTrivia(sourceFile.text, argumentsList.end, /*stopAfterLineBreak*/ false);
-            var applicableSpan = new TypeScript.TextSpan(applicableSpanStart, applicableSpanEnd - applicableSpanStart);
 
             var argumentIndex = argumentListInfo.argumentIndex;
 
