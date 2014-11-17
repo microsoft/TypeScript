@@ -4528,13 +4528,11 @@ module ts {
             var inStrictMode = (node.parserContextFlags & ParserContextFlags.StrictMode) !== 0;
 
             for (var i = 0, n = node.properties.length; i < n; i++) {
-                var prop = node.properties[i];
-                if (prop.kind === SyntaxKind.OmittedExpression || p.name.kind === SyntaxKind.ComputedPropertyName) {
+                var prop = <Declaration>node.properties[i];
+                var name = <Identifier>prop.name;
+                if (prop.kind === SyntaxKind.OmittedExpression || name.kind === SyntaxKind.ComputedPropertyName) {
                     continue;
                 }
-
-                var p = <Declaration>prop;
-                var name = <Identifier>p.name;
 
                 // ECMA-262 11.1.5 Object Initialiser 
                 // If previous is not undefined then throw a SyntaxError exception if any of the following conditions are true
@@ -4545,20 +4543,20 @@ module ts {
                 //    d.IsAccessorDescriptor(previous) is true and IsAccessorDescriptor(propId.descriptor) is true 
                 // and either both previous and propId.descriptor have[[Get]] fields or both previous and propId.descriptor have[[Set]] fields 
                 var currentKind: number;
-                if (p.kind === SyntaxKind.PropertyAssignment) {
+                if (prop.kind === SyntaxKind.PropertyAssignment) {
                     currentKind = Property;
                 }
-                else if (p.kind === SyntaxKind.ShorthandPropertyAssignment) {
+                else if (prop.kind === SyntaxKind.ShorthandPropertyAssignment) {
                     currentKind = Property;
                 }
-                else if (p.kind === SyntaxKind.GetAccessor) {
+                else if (prop.kind === SyntaxKind.GetAccessor) {
                     currentKind = GetAccessor;
                 }
-                else if (p.kind === SyntaxKind.SetAccessor) {
+                else if (prop.kind === SyntaxKind.SetAccessor) {
                     currentKind = SetAccesor;
                 }
                 else {
-                    Debug.fail("Unexpected syntax kind:" + p.kind);
+                    Debug.fail("Unexpected syntax kind:" + prop.kind);
                 }
 
                 if (!hasProperty(seen, name.text)) {
