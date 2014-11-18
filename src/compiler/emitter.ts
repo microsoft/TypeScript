@@ -2134,7 +2134,11 @@ module ts {
             function emitAMDModule(node: SourceFile, startIndex: number) {
                 var imports = getExternalImportDeclarations(node);
                 writeLine();
-                write("define([\"require\", \"exports\"");
+                write("define(");
+                if(node.amdModuleName) {
+                    write("\"" + node.amdModuleName + "\", ");
+                }
+                write("[\"require\", \"exports\"");
                 forEach(imports, imp => {
                     write(", ");
                     emitLiteral(imp.externalModuleName);
