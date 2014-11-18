@@ -831,8 +831,18 @@ module ts {
         return false;
     }
 
+    interface SourceFileInternal extends SourceFile {
+        // Diagnostics produced only by the parser. Does not include any diagnostics produced by 
+        // doing grammar checks.
+        _parserDiagnostics: Diagnostic[];
+
+        // All diagnostics for the source file.  Should not be accessed directly.  Lazily created
+        // when getSyntacticDiagnostics is called.
+        _syntacticDiagnostics: Diagnostic[];
+    }
+
     export function createSourceFile(filename: string, sourceText: string, languageVersion: ScriptTarget, version: string, isOpen: boolean = false): SourceFile {
-        var file: SourceFile;
+        var file: SourceFileInternal;
         var scanner: Scanner;
         var token: SyntaxKind;
         var parsingContext: ParsingContext;
@@ -986,7 +996,7 @@ module ts {
             var start = span.end > span.pos ? skipTrivia(file.text, span.pos) : span.pos;
             var length = span.end - start;
 
-            file.syntacticErrors.push(createFileDiagnostic(file, start, length, message, arg0, arg1, arg2));
+            file._parserDiagnostics.push(createFileDiagnostic(file, start, length, message, arg0, arg1, arg2));
         }
 
         function reportInvalidUseInStrictMode(node: Identifier): void {
@@ -997,17 +1007,17 @@ module ts {
 
 
         function grammarErrorAtPos(start: number, length: number, message: DiagnosticMessage, arg0?: any, arg1?: any, arg2?: any): void {
-            file.syntacticErrors.push(createFileDiagnostic(file, start, length, message, arg0, arg1, arg2));
+            file._parserDiagnostics.push(createFileDiagnostic(file, start, length, message, arg0, arg1, arg2));
         }
 
         function errorAtPos(start: number, length: number, message: DiagnosticMessage, arg0?: any, arg1?: any, arg2?: any): void {
-            var lastErrorPos = file.syntacticErrors.length
-                ? file.syntacticErrors[file.syntacticErrors.length - 1].start
+            var lastErrorPos = file._parserDiagnostics.length
+                ? file._parserDiagnostics[file._parserDiagnostics.length - 1].start
                 : -1;
             if (start !== lastErrorPos) {
                 var diagnostic = createFileDiagnostic(file, start, length, message, arg0, arg1, arg2);
                 diagnostic.isParseError = true;
-                file.syntacticErrors.push(diagnostic);
+                file._parserDiagnostics.push(diagnostic);
             }
 
             if (lookAheadMode === LookAheadMode.NoErrorYet) {
@@ -1056,7 +1066,7 @@ module ts {
             // Keep track of the state we'll need to rollback to if lookahead fails (or if the 
             // caller asked us to always reset our state).
             var saveToken = token;
-            var saveSyntacticErrorsLength = file.syntacticErrors.length;
+            var saveSyntacticErrorsLength = file._parserDiagnostics.length;
 
             // Keep track of the current look ahead mode (this matters if we have nested 
             // speculative parsing).
@@ -1078,7 +1088,7 @@ module ts {
             lookAheadMode = saveLookAheadMode;
             if (!result || alwaysResetState) {
                 token = saveToken;
-                file.syntacticErrors.length = saveSyntacticErrorsLength;
+                file._parserDiagnostics.length = saveSyntacticErrorsLength;
             }
 
             return result;
@@ -1384,7 +1394,7 @@ module ts {
             result.pos = getNodePos();
             // Keep track of how many errors we had before the list started. If we don't see any new
             // errors resulting from the list being malformed, we are free to complain about a trailing comma.
-            var errorCountBeforeParsingList = file.syntacticErrors.length;
+            var errorCountBeforeParsingList = file._parserDiagnostics.length;
             var commaStart = -1; // Meaning the previous token was not a comma
             while (true) {
                 if (isListElement(kind, /* inErrorRecovery */ false)) {
@@ -1418,7 +1428,7 @@ module ts {
             // Check if the last token was a comma.
             if (commaStart >= 0) {
                 if (!allowTrailingComma) {
-                    if (file.syntacticErrors.length === errorCountBeforeParsingList) {
+                    if (file._parserDiagnostics.length === errorCountBeforeParsingList) {
                         // Report a grammar error so we don't affect lookahead
                         grammarErrorAtPos(commaStart, scanner.getStartPos() - commaStart, Diagnostics.Trailing_comma_not_allowed);
                     }
@@ -1747,13 +1757,13 @@ module ts {
 
         function parseIndexSignatureMember(): SignatureDeclaration {
             var node = <SignatureDeclaration>createNode(SyntaxKind.IndexSignature);
-            var errorCountBeforeIndexSignature = file.syntacticErrors.length;
+            var errorCountBeforeIndexSignature = file._parserDiagnostics.length;
             var indexerStart = scanner.getTokenPos();
             node.parameters = parseParameterList(SyntaxKind.OpenBracketToken, SyntaxKind.CloseBracketToken);
             var indexerLength = scanner.getStartPos() - indexerStart;
             node.type = parseTypeAnnotation();
             parseSemicolon();
-            if (file.syntacticErrors.length === errorCountBeforeIndexSignature) {
+            if (file._parserDiagnostics.length === errorCountBeforeIndexSignature) {
                 checkIndexSignature(node, indexerStart, indexerLength);
             }
             return finishNode(node);
@@ -1871,9 +1881,9 @@ module ts {
         function parseTupleType(): TupleTypeNode {
             var node = <TupleTypeNode>createNode(SyntaxKind.TupleType);
             var startTokenPos = scanner.getTokenPos();
-            var startErrorCount = file.syntacticErrors.length;
+            var startErrorCount = file._parserDiagnostics.length;
             node.elementTypes = parseBracketedList(ParsingContext.TupleElementTypes, parseType, SyntaxKind.OpenBracketToken, SyntaxKind.CloseBracketToken);
-            if (!node.elementTypes.length && file.syntacticErrors.length === startErrorCount) {
+            if (!node.elementTypes.length && file._parserDiagnostics.length === startErrorCount) {
                 grammarErrorAtPos(startTokenPos, scanner.getStartPos() - startTokenPos, Diagnostics.A_tuple_type_element_list_cannot_be_empty);
             }
             return finishNode(node);
@@ -2629,14 +2639,14 @@ module ts {
 
         function parseTypeArguments(): NodeArray<TypeNode> {
             var typeArgumentListStart = scanner.getTokenPos();
-            var errorCountBeforeTypeParameterList = file.syntacticErrors.length;
+            var errorCountBeforeTypeParameterList = file._parserDiagnostics.length;
             // We pass parseSingleTypeArgument instead of parseType as the element parser
             // because parseSingleTypeArgument knows how to parse a missing type argument.
             // This is useful for signature help. parseType has the disadvantage that when
             // it sees a missing type, it changes the LookAheadMode to Error, and the result
             // is a broken binary expression, which breaks signature help.
             var result = parseBracketedList(ParsingContext.TypeArguments, parseSingleTypeArgument, SyntaxKind.LessThanToken, SyntaxKind.GreaterThanToken);
-            if (!result.length && file.syntacticErrors.length === errorCountBeforeTypeParameterList) {
+            if (!result.length && file._parserDiagnostics.length === errorCountBeforeTypeParameterList) {
                 grammarErrorAtPos(typeArgumentListStart, scanner.getStartPos() - typeArgumentListStart, Diagnostics.Type_argument_list_cannot_be_empty);
             }
             return result;
@@ -3062,14 +3072,14 @@ module ts {
 
         function parseBreakOrContinueStatement(kind: SyntaxKind): BreakOrContinueStatement {
             var node = <BreakOrContinueStatement>createNode(kind);
-            var errorCountBeforeStatement = file.syntacticErrors.length;
+            var errorCountBeforeStatement = file._parserDiagnostics.length;
             parseExpected(kind === SyntaxKind.BreakStatement ? SyntaxKind.BreakKeyword : SyntaxKind.ContinueKeyword);
             if (!canParseSemicolon()) node.label = parseIdentifier();
             parseSemicolon();
             finishNode(node);
 
             // In an ambient context, we will already give an error for having a statement.
-            if (!inAmbientContext && errorCountBeforeStatement === file.syntacticErrors.length) {
+            if (!inAmbientContext && errorCountBeforeStatement === file._parserDiagnostics.length) {
                 if (node.label) {
                     checkBreakOrContinueStatementWithLabel(node);
                 }
@@ -3142,7 +3152,7 @@ module ts {
 
         function parseReturnStatement(): ReturnStatement {
             var node = <ReturnStatement>createNode(SyntaxKind.ReturnStatement);
-            var errorCountBeforeReturnStatement = file.syntacticErrors.length;
+            var errorCountBeforeReturnStatement = file._parserDiagnostics.length;
             var returnTokenStart = scanner.getTokenPos();
             var returnTokenLength = scanner.getTextPos() - returnTokenStart;
 
@@ -3151,7 +3161,7 @@ module ts {
             parseSemicolon();
 
             // In an ambient context, we will already give an error for having a statement.
-            if (!inFunctionBody && !inAmbientContext && errorCountBeforeReturnStatement === file.syntacticErrors.length) {
+            if (!inFunctionBody && !inAmbientContext && errorCountBeforeReturnStatement === file._parserDiagnostics.length) {
                 grammarErrorAtPos(returnTokenStart, returnTokenLength, Diagnostics.A_return_statement_can_only_be_used_within_a_function_body);
             }
             return finishNode(node);
@@ -3441,10 +3451,10 @@ module ts {
 
         function parseAndCheckFunctionBody(isConstructor: boolean): Block {
             var initialPosition = scanner.getTokenPos();
-            var errorCountBeforeBody = file.syntacticErrors.length;
+            var errorCountBeforeBody = file._parserDiagnostics.length;
             if (token === SyntaxKind.OpenBraceToken) {
                 var body = parseBody(/* ignoreMissingOpenBrace */ false);
-                if (body && inAmbientContext && file.syntacticErrors.length === errorCountBeforeBody) {
+                if (body && inAmbientContext && file._parserDiagnostics.length === errorCountBeforeBody) {
                     var diagnostic = isConstructor ? Diagnostics.A_constructor_implementation_cannot_be_declared_in_an_ambient_context : Diagnostics.A_function_implementation_cannot_be_declared_in_an_ambient_context;
                     grammarErrorAtPos(initialPosition, 1, diagnostic);
                 }
@@ -3462,7 +3472,7 @@ module ts {
         function parseVariableDeclaration(flags: NodeFlags, noIn?: boolean): VariableDeclaration {
             var node = <VariableDeclaration>createNode(SyntaxKind.VariableDeclaration);
             node.flags = flags;
-            var errorCountBeforeVariableDeclaration = file.syntacticErrors.length;
+            var errorCountBeforeVariableDeclaration = file._parserDiagnostics.length;
             node.name = parseIdentifier();
             node.type = parseTypeAnnotation();
 
@@ -3471,7 +3481,7 @@ module ts {
             var initializerFirstTokenLength = scanner.getTextPos() - initializerStart;
             node.initializer = parseInitializer(/*inParameter*/ false, noIn);
 
-            if (inAmbientContext && node.initializer && errorCountBeforeVariableDeclaration === file.syntacticErrors.length) {
+            if (inAmbientContext && node.initializer && errorCountBeforeVariableDeclaration === file._parserDiagnostics.length) {
                 grammarErrorAtPos(initializerStart, initializerFirstTokenLength, Diagnostics.Initializers_are_not_allowed_in_ambient_contexts);
             }
             if (!inAmbientContext && !node.initializer && flags & NodeFlags.Const) {
@@ -3493,7 +3503,7 @@ module ts {
         function parseVariableStatement(allowLetAndConstDeclarations: boolean, pos?: number, flags?: NodeFlags): VariableStatement {
             var node = <VariableStatement>createNode(SyntaxKind.VariableStatement, pos);
             if (flags) node.flags = flags;
-            var errorCountBeforeVarStatement = file.syntacticErrors.length;
+            var errorCountBeforeVarStatement = file._parserDiagnostics.length;
             if (token === SyntaxKind.LetKeyword) {
                 node.flags |= NodeFlags.Let;
             }
@@ -3507,7 +3517,7 @@ module ts {
             node.declarations = parseVariableDeclarationList(node.flags, /*noIn*/false);
             parseSemicolon();
             finishNode(node);
-            if (!node.declarations.length && file.syntacticErrors.length === errorCountBeforeVarStatement) {
+            if (!node.declarations.length && file._parserDiagnostics.length === errorCountBeforeVarStatement) {
                 grammarErrorOnNode(node, Diagnostics.Variable_declaration_list_cannot_be_empty);
             }
             if (languageVersion < ScriptTarget.ES6) {
@@ -3566,7 +3576,7 @@ module ts {
         }
 
         function parsePropertyMemberDeclaration(pos: number, flags: NodeFlags): Declaration {
-            var errorCountBeforePropertyDeclaration = file.syntacticErrors.length;
+            var errorCountBeforePropertyDeclaration = file._parserDiagnostics.length;
             var name = parsePropertyName();
 
             var questionStart = scanner.getTokenPos();
@@ -3596,7 +3606,7 @@ module ts {
                 property.initializer = parseInitializer(/*inParameter*/ false);
                 parseSemicolon();
 
-                if (inAmbientContext && property.initializer && errorCountBeforePropertyDeclaration === file.syntacticErrors.length) {
+                if (inAmbientContext && property.initializer && errorCountBeforePropertyDeclaration === file._parserDiagnostics.length) {
                     grammarErrorAtPos(initializerStart, initializerFirstTokenLength, Diagnostics.Initializers_are_not_allowed_in_ambient_contexts);
                 }
                 return finishNode(property);
@@ -3604,10 +3614,10 @@ module ts {
         }
 
         function parseAndCheckMemberAccessorDeclaration(kind: SyntaxKind, pos: number, flags: NodeFlags): MethodDeclaration {
-            var errorCountBeforeAccessor = file.syntacticErrors.length;
+            var errorCountBeforeAccessor = file._parserDiagnostics.length;
             var accessor = parseMemberAccessorDeclaration(kind, pos, flags);
 
-            if (errorCountBeforeAccessor === file.syntacticErrors.length) {
+            if (errorCountBeforeAccessor === file._parserDiagnostics.length) {
                 if (languageVersion < ScriptTarget.ES5) {
                     grammarErrorOnNode(accessor.name, Diagnostics.Accessors_are_only_available_when_targeting_ECMAScript_5_and_higher);
                 }
@@ -3901,7 +3911,7 @@ module ts {
         function parseClassDeclaration(pos: number, flags: NodeFlags): ClassDeclaration {
             var node = <ClassDeclaration>createNode(SyntaxKind.ClassDeclaration, pos);
             node.flags = flags;
-            var errorCountBeforeClassDeclaration = file.syntacticErrors.length;
+            var errorCountBeforeClassDeclaration = file._parserDiagnostics.length;
             parseExpected(SyntaxKind.ClassKeyword);
             node.name = parseIdentifier();
             node.typeParameters = parseTypeParameters();
@@ -3914,7 +3924,7 @@ module ts {
                 node.implementedTypes = parseDelimitedList(ParsingContext.BaseTypeReferences,
                     parseTypeReference, /*allowTrailingComma*/ false);
             }
-            var errorCountBeforeClassBody = file.syntacticErrors.length;
+            var errorCountBeforeClassBody = file._parserDiagnostics.length;
             if (parseExpected(SyntaxKind.OpenBraceToken)) {
                 node.members = parseList(ParsingContext.ClassMembers, /*checkForStrictMode*/ false, parseClassMemberDeclaration);
                 parseExpected(SyntaxKind.CloseBraceToken);
@@ -3931,7 +3941,7 @@ module ts {
         function parseInterfaceDeclaration(pos: number, flags: NodeFlags): InterfaceDeclaration {
             var node = <InterfaceDeclaration>createNode(SyntaxKind.InterfaceDeclaration, pos);
             node.flags = flags;
-            var errorCountBeforeInterfaceDeclaration = file.syntacticErrors.length;
+            var errorCountBeforeInterfaceDeclaration = file._parserDiagnostics.length;
             parseExpected(SyntaxKind.InterfaceKeyword);
             node.name = parseIdentifier();
             node.typeParameters = parseTypeParameters();
@@ -3943,7 +3953,7 @@ module ts {
                 node.baseTypes = parseDelimitedList(ParsingContext.BaseTypeReferences,
                     parseTypeReference, /*allowTrailingComma*/ false);
             }
-            var errorCountBeforeInterfaceBody = file.syntacticErrors.length;
+            var errorCountBeforeInterfaceBody = file._parserDiagnostics.length;
             node.members = parseTypeLiteral().members;
             if (node.baseTypes && !node.baseTypes.length && errorCountBeforeInterfaceBody === errorCountBeforeInterfaceDeclaration) {
                 grammarErrorAtPos(extendsKeywordStart, extendsKeywordLength, Diagnostics._0_list_cannot_be_empty, "extends");
@@ -3994,7 +4004,7 @@ module ts {
             // or any time an integer literal initializer is encountered.
             function parseAndCheckEnumMember(): EnumMember {
                 var node = <EnumMember>createNode(SyntaxKind.EnumMember);
-                var errorCountBeforeEnumMember = file.syntacticErrors.length;
+                var errorCountBeforeEnumMember = file._parserDiagnostics.length;
                 node.name = parsePropertyName();
                 node.initializer = parseInitializer(/*inParameter*/ false);
 
@@ -4002,14 +4012,14 @@ module ts {
                 // since all values are known in compile time - it is not necessary to check that constant enum section precedes computed enum members.
                 if (!enumIsConst) {
                     if (inAmbientContext) {
-                        if (node.initializer && !isIntegerLiteral(node.initializer) && errorCountBeforeEnumMember === file.syntacticErrors.length) {
+                        if (node.initializer && !isIntegerLiteral(node.initializer) && errorCountBeforeEnumMember === file._parserDiagnostics.length) {
                             grammarErrorOnNode(node.name, Diagnostics.Ambient_enum_elements_can_only_have_integer_literal_initializers);
                         }
                     }
                     else if (node.initializer) {
                         inConstantEnumMemberSection = isIntegerLiteral(node.initializer);
                     }
-                    else if (!inConstantEnumMemberSection && errorCountBeforeEnumMember === file.syntacticErrors.length) {
+                    else if (!inConstantEnumMemberSection && errorCountBeforeEnumMember === file._parserDiagnostics.length) {
                         grammarErrorOnNode(node.name, Diagnostics.Enum_member_must_have_initializer);
                     }
                 }
@@ -4073,10 +4083,10 @@ module ts {
             node.flags = flags;
             node.name = parseStringLiteral();
             if (!inAmbientContext) {
-                var errorCount = file.syntacticErrors.length;
+                var errorCount = file._parserDiagnostics.length;
                 // Only report this error if we have not already errored about a missing declare modifier,
                 // which would have been at or after pos
-                if (!errorCount || file.syntacticErrors[errorCount - 1].start < getTokenPos(pos)) {
+                if (!errorCount || file._parserDiagnostics[errorCount - 1].start < getTokenPos(pos)) {
                     grammarErrorOnNode(node.name, Diagnostics.Only_ambient_modules_can_use_quoted_names);
                 }
             }
@@ -4152,7 +4162,7 @@ module ts {
 
         function parseDeclaration(modifierContext: ModifierContext): Statement {
             var pos = getNodePos();
-            var errorCountBeforeModifiers = file.syntacticErrors.length;
+            var errorCountBeforeModifiers = file._parserDiagnostics.length;
             var flags = parseAndCheckModifiers(modifierContext);
 
             if (token === SyntaxKind.ExportKeyword) {
@@ -4160,7 +4170,7 @@ module ts {
                 nextToken();
                 if (parseOptional(SyntaxKind.EqualsToken)) {
                     var exportAssignmentTail = parseExportAssignmentTail(pos);
-                    if (flags !== 0 && errorCountBeforeModifiers === file.syntacticErrors.length) {
+                    if (flags !== 0 && errorCountBeforeModifiers === file._parserDiagnostics.length) {
                         var modifiersStart = skipTrivia(sourceText, pos);
                         grammarErrorAtPos(modifiersStart, modifiersEnd - modifiersStart, Diagnostics.An_export_assignment_cannot_have_modifiers);
                     }
@@ -4236,10 +4246,10 @@ module ts {
 
             var statementStart = scanner.getTokenPos();
             var statementFirstTokenLength = scanner.getTextPos() - statementStart;
-            var errorCountBeforeStatement = file.syntacticErrors.length;
+            var errorCountBeforeStatement = file._parserDiagnostics.length;
             var statement = parseStatement(/*allowLetAndConstDeclarations*/ true);
 
-            if (inAmbientContext && file.syntacticErrors.length === errorCountBeforeStatement) {
+            if (inAmbientContext && file._parserDiagnostics.length === errorCountBeforeStatement) {
                 grammarErrorAtPos(statementStart, statementFirstTokenLength, Diagnostics.Statements_are_not_allowed_in_ambient_contexts);
             }
 
@@ -4302,26 +4312,48 @@ module ts {
                 : undefined);
         }
 
+        function getSyntacticDiagnostics() {
+            if (file._syntacticDiagnostics === undefined) {
+                if (file._parserDiagnostics.length > 0) {
+                    // Don't bother doing any grammar checks if there are already parser errors.  
+                    // Otherwise we may end up with too many cascading errors.
+                    file._syntacticDiagnostics = file._parserDiagnostics;
+                }
+                else {
+                    // No parser errors were reported.  Perform our stricted grammar checks.
+                    file._syntacticDiagnostics = [];
+                    performGrammarChecks(file);
+                }
+
+                file._parserDiagnostics = undefined;
+            }
+
+            return file._syntacticDiagnostics
+        }
+
         scanner = createScanner(languageVersion, /*skipTrivia*/ true, sourceText, scanError, onComment);
         var rootNodeFlags: NodeFlags = 0;
         if (fileExtensionIs(filename, ".d.ts")) {
             rootNodeFlags = NodeFlags.DeclarationFile;
             inAmbientContext = true;
         }
-        file = <SourceFile>createRootNode(SyntaxKind.SourceFile, 0, sourceText.length, rootNodeFlags);
+        file = <SourceFileInternal>createRootNode(SyntaxKind.SourceFile, 0, sourceText.length, rootNodeFlags);
         file.filename = normalizePath(filename);
         file.text = sourceText;
         file.getLineAndCharacterFromPosition = getLineAndCharacterFromSourcePosition;
         file.getPositionFromLineAndCharacter = getPositionFromSourceLineAndCharacter;
         file.getLineStarts = getLineStarts;
-        file.syntacticErrors = [];
-        file.semanticErrors = [];
+        file.getSyntacticDiagnostics = getSyntacticDiagnostics;
+        file._parserDiagnostics = [];
+        file.semanticDiagnostics = [];
         var referenceComments = processReferenceComments(); 
         file.referencedFiles = referenceComments.referencedFiles;
         file.amdDependencies = referenceComments.amdDependencies;
         file.amdModuleName = referenceComments.amdModuleName;
+
         file.statements = parseList(ParsingContext.SourceElements, /*checkForStrictMode*/ true, parseSourceElement);
         file.externalModuleIndicator = getExternalModuleIndicator();
+
         file.nodeCount = nodeCount;
         file.identifierCount = identifierCount;
         file.version = version;
@@ -4329,6 +4361,9 @@ module ts {
         file.languageVersion = languageVersion;
         file.identifiers = identifiers;
         return file;
+    }
+
+    function performGrammarChecks(child: Node) {
     }
 
     export function createProgram(rootNames: string[], options: CompilerOptions, host: CompilerHost): Program {
@@ -4442,7 +4477,7 @@ module ts {
                     else {
                         files.push(file);
                     }
-                    forEach(file.syntacticErrors, e => {
+                    forEach(file.getSyntacticDiagnostics(), e => {
                         errors.push(e);
                     });
                 }

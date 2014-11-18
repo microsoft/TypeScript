@@ -9143,7 +9143,7 @@ module ts {
             // Bind all source files and propagate errors
             forEach(program.getSourceFiles(), file => {
                 bindSourceFile(file);
-                forEach(file.semanticErrors, addDiagnostic);
+                forEach(file.semanticDiagnostics, addDiagnostic);
             });
             // Initialize global symbol table
             forEach(program.getSourceFiles(), file => {

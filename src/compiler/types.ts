@@ -644,8 +644,8 @@ module ts {
         amdDependencies: string[];
         amdModuleName: string;
         referencedFiles: FileReference[];
-        syntacticErrors: Diagnostic[];
-        semanticErrors: Diagnostic[];
+        semanticDiagnostics: Diagnostic[];
+        getSyntacticDiagnostics(): Diagnostic[];
         hasNoDefaultLib: boolean;
         externalModuleIndicator: Node; // The first node that causes this file to be an external module
         nodeCount: number;
