@@ -4477,7 +4477,12 @@ module ts {
                 // However, property declarations disallow computed names in general,
                 // and accessors are not allowed in ambient contexts in general,
                 // so this error only really matters for methods.
-                return inAmbientContext && checkForDisallowedComputedProperty(node.name, Diagnostics.Computed_property_names_are_not_allowed_in_an_ambient_context);
+                if (inAmbientContext) {
+                    return checkForDisallowedComputedProperty(node.name, Diagnostics.Computed_property_names_are_not_allowed_in_an_ambient_context);
+                }
+                else if (!node.body) {
+                    return checkForDisallowedComputedProperty(node.name, Diagnostics.Computed_property_names_are_not_allowed_in_method_overloads);
+                }
             }
             else if (node.parent.kind === SyntaxKind.InterfaceDeclaration || node.parent.kind === SyntaxKind.TypeLiteral) {
                 return checkForDisallowedComputedProperty(node.name, Diagnostics.Computed_property_names_are_not_allowed_in_interfaces_or_type_literals);

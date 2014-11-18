@@ -1,9 +1,9 @@
-tests/cases/conformance/parser/ecmascript5/ComputedPropertyNames/parserES5ComputedPropertyName10.ts(2,4): error TS1164: Computed property names are not allowed in class property declarations.
+tests/cases/conformance/parser/ecmascript5/ComputedPropertyNames/parserES5ComputedPropertyName10.ts(2,4): error TS1166: Computed property names are not allowed in class property declarations.
 
 
 ==== tests/cases/conformance/parser/ecmascript5/ComputedPropertyNames/parserES5ComputedPropertyName10.ts (1 errors) ====
     class C {
        [e] = 1
        ~~~
-!!! error TS1164: Computed property names are not allowed in class property declarations.
+!!! error TS1166: Computed property names are not allowed in class property declarations.
     }

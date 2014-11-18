@@ -1,4 +1,4 @@
-tests/cases/conformance/parser/ecmascript5/ComputedPropertyNames/parserES5ComputedPropertyName11.ts(2,4): error TS1165: Computed property names are only available when targeting ECMAScript 6 and higher.
+tests/cases/conformance/parser/ecmascript5/ComputedPropertyNames/parserES5ComputedPropertyName11.ts(2,4): error TS1168: Computed property names are not allowed in method overloads.
 tests/cases/conformance/parser/ecmascript5/ComputedPropertyNames/parserES5ComputedPropertyName11.ts(2,4): error TS2391: Function implementation is missing or not immediately following the declaration.
 
 
@@ -6,7 +6,7 @@ tests/cases/conformance/parser/ecmascript5/ComputedPropertyNames/parserES5Comput
     class C {
        [e]();
        ~~~
-!!! error TS1165: Computed property names are only available when targeting ECMAScript 6 and higher.
+!!! error TS1168: Computed property names are not allowed in method overloads.
        ~~~
 !!! error TS2391: Function implementation is missing or not immediately following the declaration.
     }
