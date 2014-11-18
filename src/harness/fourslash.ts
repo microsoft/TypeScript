@@ -2241,11 +2241,12 @@ module FourSlash {
             (fn, contents) => result = contents,
             ts.ScriptTarget.Latest,
             sys.useCaseSensitiveFileNames);
-        var program = ts.createProgram([Harness.Compiler.fourslashFilename, fileName], { out: "fourslashTestOutput.js" }, host);
+        // TODO (drosen): We need to enforce checking on these tests.
+        var program = ts.createProgram([Harness.Compiler.fourslashFilename, fileName], { out: "fourslashTestOutput.js", noResolve: true }, host);
         var checker = ts.createTypeChecker(program, /*fullTypeCheckMode*/ true);
         checker.checkProgram();
 
-        var errs = checker.getDiagnostics(program.getSourceFile(fileName));
+        var errs = program.getDiagnostics().concat(checker.getDiagnostics());
         if (errs.length > 0) {
             throw new Error('Error compiling ' + fileName + ': ' + errs.map(e => e.messageText).join('\r\n'));
         }
