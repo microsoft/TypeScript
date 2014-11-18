@@ -131,6 +131,7 @@ module ts {
         Computed_property_names_are_not_allowed_in_an_ambient_context: { code: 1163, category: DiagnosticCategory.Error, key: "Computed property names are not allowed in an ambient context." },
         Computed_property_names_are_not_allowed_in_class_property_declarations: { code: 1164, category: DiagnosticCategory.Error, key: "Computed property names are not allowed in class property declarations." },
         Computed_property_names_are_only_available_when_targeting_ECMAScript_6_and_higher: { code: 1165, category: DiagnosticCategory.Error, key: "Computed property names are only available when targeting ECMAScript 6 and higher." },
+        Computed_property_names_are_not_allowed_in_method_overloads: { code: 1166, category: DiagnosticCategory.Error, key: "Computed property names are not allowed in method overloads." },
         Duplicate_identifier_0: { code: 2300, category: DiagnosticCategory.Error, key: "Duplicate identifier '{0}'." },
         Initializer_of_instance_member_variable_0_cannot_reference_identifier_1_declared_in_the_constructor: { code: 2301, category: DiagnosticCategory.Error, key: "Initializer of instance member variable '{0}' cannot reference identifier '{1}' declared in the constructor." },
         Static_members_cannot_reference_class_type_parameters: { code: 2302, category: DiagnosticCategory.Error, key: "Static members cannot reference class type parameters." },

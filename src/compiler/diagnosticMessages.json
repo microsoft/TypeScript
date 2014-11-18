@@ -515,6 +515,10 @@
         "category": "Error",
         "code": 1165
     },
+    "Computed property names are not allowed in method overloads.": {
+        "category": "Error",
+        "code": 1166
+    },
 
     "Duplicate identifier '{0}'.": {
         "category": "Error",
