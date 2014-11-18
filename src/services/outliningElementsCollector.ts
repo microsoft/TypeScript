@@ -24,8 +24,8 @@ module ts {
          * @param autoCollapse Whether or not this region should be automatically collapsed when 
          *        the 'Collapse to Definitions' command is invoked.
          */
-        textSpan: TypeScript.TextSpan;
-        hintSpan: TypeScript.TextSpan;
+        textSpan: TextSpan;
+        hintSpan: TextSpan;
         bannerText: string;
         autoCollapse: boolean;
     }
@@ -38,8 +38,8 @@ module ts {
             function addOutliningSpan(hintSpanNode: Node, startElement: Node, endElement: Node, autoCollapse: boolean) {
                 if (hintSpanNode && startElement && endElement) {
                     var span: OutliningSpan = {
-                        textSpan: TypeScript.TextSpan.fromBounds(startElement.pos, endElement.end),
-                        hintSpan: TypeScript.TextSpan.fromBounds(hintSpanNode.getStart(), hintSpanNode.end),
+                        textSpan: TextSpan.fromBounds(startElement.pos, endElement.end),
+                        hintSpan: TextSpan.fromBounds(hintSpanNode.getStart(), hintSpanNode.end),
                         bannerText: collapseText,
                         autoCollapse: autoCollapse
                     };
@@ -86,7 +86,7 @@ module ts {
                         else {
                             // Block was a standalone block.  In this case we want to only collapse
                             // the span of the block, independent of any parent span.
-                            var span = TypeScript.TextSpan.fromBounds(n.getStart(), n.end);
+                            var span = TextSpan.fromBounds(n.getStart(), n.end);
                             elements.push({
                                 textSpan: span,
                                 hintSpan: span,

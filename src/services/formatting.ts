@@ -834,7 +834,7 @@ module ts.formatting {
         }
 
         function newTextChange(start: number, len: number, newText: string): TextChange {
-            return { span: new TypeScript.TextSpan(start, len), newText: newText }
+            return { span: new TextSpan(start, len), newText: newText }
         }
 
         function recordDelete(start: number, len: number) {

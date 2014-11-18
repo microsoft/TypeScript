@@ -353,7 +353,7 @@ module ts.SignatureHelp {
             // but not including parentheses)
             var applicableSpanStart = argumentListOrTypeArgumentList.getFullStart();
             var applicableSpanEnd = skipTrivia(sourceFile.text, argumentListOrTypeArgumentList.end, /*stopAfterLineBreak*/ false);
-            var applicableSpan = new TypeScript.TextSpan(applicableSpanStart, applicableSpanEnd - applicableSpanStart);
+            var applicableSpan = new TextSpan(applicableSpanStart, applicableSpanEnd - applicableSpanStart);
 
             // The listItemIndex we got back includes commas. Our goal is to return the index of the proper
             // item (not including commas). Here are some examples:
