@@ -589,8 +589,8 @@ module Harness {
                     }
                 },
                 getDefaultLibFilename: () => defaultLibFileName,
-                writeFile: writeFile,
-                getCanonicalFileName: getCanonicalFileName,
+                writeFile,
+                getCanonicalFileName,
                 useCaseSensitiveFileNames: () => useCaseSensitiveFileNames,
                 getNewLine: ()=> sys.newLine
             };
@@ -806,7 +806,7 @@ module Harness {
                 // only emit if there weren't parse errors
                 var emitResult: ts.EmitResult;
                 if (!isEmitBlocked) {
-                    emitResult = checker.emitFiles();
+                    emitResult = checker.invokeEmitter();
                 }
 
                 var errors: HarnessDiagnostic[] = [];
@@ -845,7 +845,7 @@ module Harness {
                         declResult = compileResult;
                     }, settingsCallback, options);
 
-                    return { declInputFiles: declInputFiles, declOtherFiles: declOtherFiles, declResult: declResult };
+                    return { declInputFiles, declOtherFiles, declResult };
                 }
 
                 function addDtsFile(file: { unitName: string; content: string }, dtsFiles: { unitName: string; content: string }[]) {
@@ -1169,7 +1169,7 @@ module Harness {
             var settings = extractCompilerSettings(code);
 
             // List of all the subfiles we've parsed out
-            var files: TestUnitData[] = [];
+            var testUnitData: TestUnitData[] = [];
 
             var lines = Utils.splitContentByNewlines(code);
 
@@ -1205,7 +1205,7 @@ module Harness {
                                 originalFilePath: fileName,
                                 references: refs
                             };
-                        files.push(newTestFile);
+                        testUnitData.push(newTestFile);
 
                         // Reset local data
                         currentFileContent = null;
@@ -1230,7 +1230,7 @@ module Harness {
             }
 
             // normalize the fileName for the single file case
-            currentFileName = files.length > 0 ? currentFileName : Path.getFileName(fileName);
+            currentFileName = testUnitData.length > 0 ? currentFileName : Path.getFileName(fileName);
 
             // EOF, push whatever remains
             var newTestFile2 = {
@@ -1240,9 +1240,9 @@ module Harness {
                 originalFilePath: fileName,
                 references: refs
             };
-            files.push(newTestFile2);
+            testUnitData.push(newTestFile2);
 
-            return { settings: settings, testUnitData: files };
+            return { settings, testUnitData };
         }
     }
 
@@ -1338,7 +1338,7 @@ module Harness {
                 actual = actual.replace(/\r\n?/g, '\n');
             }
 
-            return { expected: expected, actual: actual };
+            return { expected, actual };
         }
 
         function writeComparison(expected: string, actual: string, relativeFilename: string, actualFilename: string, descriptionForDescribe: string) {
