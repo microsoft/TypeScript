@@ -15,7 +15,7 @@
         "category": "Error",
         "code": 1001
     },
-    "Missing close quote character.": {
+    "Unterminated string literal.": {
         "category": "Error",
         "code": 1002
     },
@@ -382,6 +382,14 @@
     "'yield' expression must be contained within a generator declaration.": {
         "category": "Error",
         "code": 1113
+    },
+    "Unterminated regular expression literal.": {
+        "category": "Error",
+        "code": 1114
+    },
+    "Unterminated template literal.": {
+        "category": "Error",
+        "code": 1115
     },
     "Duplicate identifier '{0}'.": {
         "category": "Error",
