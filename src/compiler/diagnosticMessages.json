@@ -1076,6 +1076,10 @@
         "category": "Error",
         "code": 2457
     },
+    "An AMD module cannot have multiple name assignments.": {
+        "category": "Error",
+        "code": 2458
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",

@@ -4242,6 +4242,9 @@ module ts {
                     var amdModuleNameRegEx = /^\/\/\/\s*<amd-module\s+name\s*=\s*('|")(.+?)\1/gim;
                     var amdModuleNameMatchResult = amdModuleNameRegEx.exec(comment);
                     if(amdModuleNameMatchResult) {
+                        if(amdModuleName) {
+                            errorAtPos(range.pos, range.end - range.pos, Diagnostics.An_AMD_module_cannot_have_multiple_name_assignments);
+                        }
                         amdModuleName = amdModuleNameMatchResult[2];
                     }
 
