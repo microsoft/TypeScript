@@ -164,13 +164,17 @@ module ts.SignatureHelp {
     //}
     var emptyArray: any[] = [];
 
-    export const enum ArgumentListKind {
+    const enum Constants {
+        HeadSpanIndex = -1
+    }
+
+    const enum ArgumentListKind {
         TypeArguments,
         CallArguments,
         TaggedTemplateArguments
     }
 
-    export interface ArgumentListInfo {
+    interface ArgumentListInfo {
         kind: ArgumentListKind;
         invocation: CallLikeExpression;
         argumentsSpan: TextSpan;
@@ -285,7 +289,7 @@ module ts.SignatureHelp {
             else if (node.kind === SyntaxKind.TemplateHead && node.parent.parent.kind === SyntaxKind.TaggedTemplateExpression) {
                 var templateExpression = <TemplateExpression>node.parent;
                 var tagExpression = <TaggedTemplateExpression>templateExpression.parent;
-                var argumentIndex = getArgumentIndexForTemplatePiece(/*spanIndex*/ 0, node, position);
+                var argumentIndex = getArgumentIndexForTemplatePiece(Constants.HeadSpanIndex, node, position);
 
                 return getArgumentListInfoForTemplate(tagExpression, argumentIndex);
             }
@@ -322,7 +326,7 @@ module ts.SignatureHelp {
                 : 1 + countWhere(argumentsList.getChildren(), arg => arg.kind === SyntaxKind.CommaToken);
         }
 
-        // spanIndex is either the index for a given template span, or 0 for a template head.
+        // spanIndex is either the index for a given template span, or Constants.HeadSpanIndex for a template head.
         // This does not give appropriate results for a NoSubstitutionTemplateLiteral
         function getArgumentIndexForTemplatePiece(spanIndex: number, node: Node, position: number): number {
             // TemplateSpans are expression-template pairs, and ordered as such.
@@ -336,7 +340,7 @@ module ts.SignatureHelp {
             //
             // Example: f  `# abcd $#{#  1 + 1#  }# efghi ${ #"#hello"#  }  #  `
             //              ^       ^ ^       ^   ^          ^ ^      ^     ^
-            // Cases:       1       1 3       2   1          3 2      2     1
+            // Case:        1       1 3       2   1          3 2      2     1
             Debug.assert(position >= node.getStart(), "Assumed 'position' could not occur before node.");
             if (isTemplateLiteralKind(node.kind)) {
                 if (isInsideTemplateLiteral(<LiteralExpression>node, position)) {
