@@ -8,4 +8,4 @@ test.markers().forEach(marker => {
     goTo.position(marker.position);
 
     verify.completionListItemsCountIsGreaterThan(0)
-}}
+});

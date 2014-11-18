@@ -202,6 +202,7 @@ module ts {
                     child((<ParameterDeclaration>node).initializer);
             case SyntaxKind.Property:
             case SyntaxKind.PropertyAssignment:
+            case SyntaxKind.ShorthandPropertyAssignment:
                 return child((<PropertyDeclaration>node).name) ||
                     child((<PropertyDeclaration>node).type) ||
                     child((<PropertyDeclaration>node).initializer);
@@ -589,6 +590,7 @@ module ts {
             case SyntaxKind.VariableDeclaration:
             case SyntaxKind.Property:
             case SyntaxKind.PropertyAssignment:
+            case SyntaxKind.ShorthandPropertyAssignment:
             case SyntaxKind.EnumMember:
             case SyntaxKind.Method:
             case SyntaxKind.FunctionDeclaration:
@@ -2743,10 +2745,14 @@ module ts {
             return finishNode(node);
         }
 
-        function parsePropertyAssignment(): PropertyDeclaration {
-            var node = <PropertyDeclaration>createNode(SyntaxKind.PropertyAssignment);
-            node.name = parsePropertyName();
+        function parsePropertyAssignment(): Declaration {
+            var nodePos = scanner.getStartPos();
+            var nameToken = token;
+            var propertyName = parsePropertyName();
+            var node: Declaration;
             if (token === SyntaxKind.OpenParenToken || token === SyntaxKind.LessThanToken) {
+                node = <PropertyDeclaration>createNode(SyntaxKind.PropertyAssignment, nodePos);
+                node.name = propertyName;
                 var sig = parseSignature(SyntaxKind.CallSignature, SyntaxKind.ColonToken, /* returnTokenRequired */ false);
                 var body = parseBody(/* ignoreMissingOpenBrace */ false);
                 // do not propagate property name as name for function expression
@@ -2754,11 +2760,26 @@ module ts {
                 // var x = 1;
                 // var y = { x() { } } 
                 // otherwise this will bring y.x into the scope of x which is incorrect
-                node.initializer = makeFunctionExpression(SyntaxKind.FunctionExpression, node.pos, undefined, sig, body);
+                (<PropertyDeclaration>node).initializer = makeFunctionExpression(SyntaxKind.FunctionExpression, node.pos, undefined, sig, body);
+                return finishNode(node);
+            }
+            // Disallow optional property assignment
+            if (token === SyntaxKind.QuestionToken) {
+                var questionStart = scanner.getTokenPos();
+                grammarErrorAtPos(questionStart, scanner.getStartPos() - questionStart, Diagnostics.A_object_member_cannot_be_declared_optional);
+                nextToken();
+            }
+
+            // Parse to check if it is short-hand property assignment or normal property assignment
+            if (token !== SyntaxKind.ColonToken && nameToken === SyntaxKind.Identifier) {
+                node = <ShortHandPropertyDeclaration>createNode(SyntaxKind.ShorthandPropertyAssignment, nodePos);
+                node.name = propertyName;
             }
             else {
+                node = <PropertyDeclaration>createNode(SyntaxKind.PropertyAssignment, nodePos);
+                node.name = propertyName;
                 parseExpected(SyntaxKind.ColonToken);
-                node.initializer = parseAssignmentExpression(false);
+                (<PropertyDeclaration>node).initializer = parseAssignmentExpression(false);
             }
             return finishNode(node);
         }
@@ -2806,6 +2827,9 @@ module ts {
                 // and either both previous and propId.descriptor have[[Get]] fields or both previous and propId.descriptor have[[Set]] fields 
                 var currentKind: number;
                 if (p.kind === SyntaxKind.PropertyAssignment) {
+                    currentKind = Property;
+                }
+                else if (p.kind === SyntaxKind.ShorthandPropertyAssignment) {
                     currentKind = Property;
                 }
                 else if (p.kind === SyntaxKind.GetAccessor) {

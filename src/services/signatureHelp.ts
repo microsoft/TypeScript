@@ -173,7 +173,7 @@ module ts.SignatureHelp {
     export interface ArgumentListInfo {
         kind: ArgumentListKind;
         invocation: CallLikeExpression;
-        argumentsSpan: TypeScript.TextSpan;
+        argumentsSpan: TextSpan;
         argumentIndex?: number;
         argumentCount: number;
     }
@@ -361,7 +361,7 @@ module ts.SignatureHelp {
             };
         }
 
-        function getApplicableSpanForArguments(argumentsList: Node): TypeScript.TextSpan {
+        function getApplicableSpanForArguments(argumentsList: Node): TextSpan {
             // We use full start and skip trivia on the end because we want to include trivia on
             // both sides. For example,
             //
@@ -370,12 +370,12 @@ module ts.SignatureHelp {
             //
             // The applicable span is from the first bar to the second bar (inclusive,
             // but not including parentheses)
-            var applicableSpanStart = argumentsList.pos;
-            var applicableSpanEnd = skipTrivia(sourceFile.text, argumentsList.end, /*stopAfterLineBreak*/ false);
-            return new TypeScript.TextSpan(applicableSpanStart, applicableSpanEnd - applicableSpanStart);
+            var applicableSpanStart = argumentsList.getFullStart();
+            var applicableSpanEnd = skipTrivia(sourceFile.text, argumentsList.getEnd(), /*stopAfterLineBreak*/ false);
+            return new TextSpan(applicableSpanStart, applicableSpanEnd - applicableSpanStart);
         }
 
-        function getApplicableSpanForTaggedTemplate(template: TemplateExpression | LiteralExpression): TypeScript.TextSpan {
+        function getApplicableSpanForTaggedTemplate(template: TemplateExpression | LiteralExpression): TextSpan {
             var applicableSpanStart = template.getStart();
             var applicableSpanEnd = template.getEnd();
 
@@ -387,7 +387,7 @@ module ts.SignatureHelp {
                 }
             }
 
-            return new TypeScript.TextSpan(applicableSpanStart, applicableSpanEnd - applicableSpanStart);
+            return new TextSpan(applicableSpanStart, applicableSpanEnd - applicableSpanStart);
         }
 
         function getContainingArgumentInfo(node: Node, position: number): ArgumentListInfo {

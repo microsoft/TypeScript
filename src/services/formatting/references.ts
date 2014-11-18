@@ -13,6 +13,7 @@
 // limitations under the License.
 //
 
+///<reference path='..\text.ts' />
 ///<reference path='..\services.ts' />
 ///<reference path='formattingContext.ts' />
 ///<reference path='formattingRequestKind.ts' />

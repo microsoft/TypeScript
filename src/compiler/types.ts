@@ -167,6 +167,7 @@ module ts {
         ArrayLiteral,
         ObjectLiteral,
         PropertyAssignment,
+        ShorthandPropertyAssignment,
         PropertyAccess,
         IndexedAccess,
         CallExpression,
@@ -333,6 +334,10 @@ module ts {
     export interface PropertyDeclaration extends Declaration {
         type?: TypeNode;
         initializer?: Expression;
+    }
+
+    export interface ShortHandPropertyDeclaration extends Declaration {
+        name: Identifier;
     }
 
     export interface ParameterDeclaration extends VariableDeclaration { }
@@ -719,6 +724,7 @@ module ts {
         getReturnTypeOfSignature(signature: Signature): Type;
         getSymbolsInScope(location: Node, meaning: SymbolFlags): Symbol[];
         getSymbolInfo(node: Node): Symbol;
+        getShorthandAssignmentValueSymbol(location: Node): Symbol;
         getTypeOfNode(node: Node): Type;
         typeToString(type: Type, enclosingDeclaration?: Node, flags?: TypeFormatFlags): string;
         symbolToString(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags): string;

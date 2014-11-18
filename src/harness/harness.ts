@@ -585,7 +585,7 @@ module Harness {
                             return defaultLibSourceFile;
                         }
                         // Don't throw here -- the compiler might be looking for a test that actually doesn't exist as part of the TC
-                        return null;
+                        return undefined;
                     }
                 },
                 getDefaultLibFilename: () => defaultLibFileName,
