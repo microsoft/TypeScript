@@ -1373,7 +1373,8 @@ module TypeScript.Parser {
 
         function parseFunctionDeclarationWorker(modifiers: ISyntaxToken[], functionKeyword: ISyntaxToken, asteriskToken: ISyntaxToken): FunctionDeclarationSyntax {
             // GeneratorDeclaration[Yield, Default] :
-            //      function * BindingIdentifier[?Yield](FormalParameters[Yield, GeneratorParameter]) { GeneratorBody[Yield] }
+            //      function * BindingIdentifier[?Yield](FormalParameters[Yield, GeneratorParameter]) { GeneratorBody[Yield] }
+
             var isGenerator = asteriskToken !== undefined;
             return new FunctionDeclarationSyntax(parseNodeData,
                 modifiers,
@@ -2167,14 +2168,9 @@ module TypeScript.Parser {
 
                 case SyntaxKind.SlashToken:
                 case SyntaxKind.SlashEqualsToken:
-                    // Note: if we see a / or /= token then we always consider this an expression.  Why?
-                    // Well, either that / or /= is actually a regular expression, in which case we're 
-                    // definitely an expression.  Or, it's actually a divide.  In which case, we *still*
-                    // want to think of ourself as an expression.  "But wait", you say.  '/' doesn't
-                    // start an expression.  That's true.  BUt like the above check for =>, for error
-                    // tolerance, we will consider ourselves in an expression.  We'll then parse out an
-                    // missing identifier and then will consume the / token naturally as a binary 
-                    // expression.
+                    // Note: if we see a / or /= token then we always consider this an expression. 
+                    // The / or /= will actually be the start of a regex that we will contextually
+                    // rescan.
 
                 // Simple epxressions.
                 case SyntaxKind.SuperKeyword:
@@ -2976,15 +2972,9 @@ module TypeScript.Parser {
 
                 case SyntaxKind.SlashToken:
                 case SyntaxKind.SlashEqualsToken:
-                    // If we see a standalone / or /= and we're expecting a term, then try to reparse
+                    // If we see a standalone / or /= and we're expecting an expression, then reparse
                     // it as a regular expression.
-                    var result = tryReparseDivideAsRegularExpression();
-
-                    // If we get a result, then use it. Otherwise, create a missing identifier so
-                    // that parsing can continue.  Note: we do this even if 'force' is false.  That's
-                    // because we *do* want to consider a standalone / as an expression that should be
-                    // returned from tryParseExpression even when 'force' is set to false.
-                    return result || eatIdentifierToken(DiagnosticCode.Expression_expected);
+                    return reparseDivideAsRegularExpression();
             }
 
             if (!force) {
@@ -2995,7 +2985,7 @@ module TypeScript.Parser {
             return eatIdentifierToken(DiagnosticCode.Expression_expected);
         }
 
-        function tryReparseDivideAsRegularExpression(): IPrimaryExpressionSyntax {
+        function reparseDivideAsRegularExpression(): IPrimaryExpressionSyntax {
             // If we see a / or /= token, then that may actually be the start of a regex in certain 
             // contexts.
 
@@ -3012,18 +3002,9 @@ module TypeScript.Parser {
             // Debug.assert(SyntaxFacts.isAnyDivideOrRegularExpressionToken(currentToken.kind));
 
             var tokenKind = currentToken.kind;
-            if (tokenKind === SyntaxKind.SlashToken || tokenKind === SyntaxKind.SlashEqualsToken) {
-                // Still came back as a / or /=.   This is not a regular expression literal.
-                return undefined;
-            }
-            else if (tokenKind === SyntaxKind.RegularExpressionLiteral) {
-                return consumeToken(currentToken);
-            }
-            else {
-                // Something *very* wrong happened.  This is an internal parser fault that we need 
-                // to figure out and fix.
-                throw Errors.invalidOperation();
-            }
+            Debug.assert(tokenKind === SyntaxKind.RegularExpressionLiteral);
+
+            return consumeToken(currentToken);
         }
 
         function parseTypeOfExpression(typeOfKeyword: ISyntaxToken): TypeOfExpressionSyntax {

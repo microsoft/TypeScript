@@ -215,7 +215,7 @@ module FourSlash {
         }
 
         public setCancelled(numberOfCalls: number = 0): void {
-            TypeScript.Debug.assert(numberOfCalls >= 0);
+            ts.Debug.assert(numberOfCalls >= 0);
             this.numberOfCallsBeforeCancellation = numberOfCalls;
         }
 
@@ -239,7 +239,7 @@ module FourSlash {
 
     // This function creates IScriptSnapshot object for testing getPreProcessedFileInfo
     // Return object may lack some functionalities for other purposes.
-    function createScriptSnapShot(sourceText: string): TypeScript.IScriptSnapshot {
+    function createScriptSnapShot(sourceText: string): ts.IScriptSnapshot {
         return {
             getText: (start: number, end: number) => {
                 return sourceText.substr(start, end - start);
@@ -250,8 +250,8 @@ module FourSlash {
             getLineStartPositions: () => {
                 return <number[]>[];
             },
-            getChangeRange: (oldSnapshot: TypeScript.IScriptSnapshot) => {
-                return <TypeScript.TextChangeRange>undefined;
+            getChangeRange: (oldSnapshot: ts.IScriptSnapshot) => {
+                return <ts.TextChangeRange>undefined;
             }
         };
     }
@@ -262,7 +262,7 @@ module FourSlash {
         private languageService: ts.LanguageService;
 
         // A reference to the language service's compiler state's compiler instance
-        private compiler: () => { getSyntaxTree(fileName: string): TypeScript.SyntaxTree; getSourceUnit(fileName: string): TypeScript.SourceUnitSyntax; };
+        private compiler: () => { getSyntaxTree(fileName: string): ts.SourceFile };
 
         // The current caret position in the active file
         public currentCaretPosition = 0;
@@ -403,8 +403,9 @@ module FourSlash {
         public goToPosition(pos: number) {
             this.currentCaretPosition = pos;
 
-            var lineCharPos = TypeScript.LineMap1.fromString(this.getCurrentFileContent()).getLineAndCharacterFromPosition(pos);
-            this.scenarioActions.push('<MoveCaretToLineAndChar LineNumber="' + (lineCharPos.line() + 1) + '" CharNumber="' + (lineCharPos.character() + 1) + '" />');
+            var lineStarts = ts.computeLineStarts(this.getCurrentFileContent());
+            var lineCharPos = ts.getLineAndCharacterOfPosition(lineStarts, pos);
+            this.scenarioActions.push('<MoveCaretToLineAndChar LineNumber="' + lineCharPos.line + '" CharNumber="' + lineCharPos.character + '" />');
         }
 
         public moveCaretRight(count = 1) {
@@ -1017,7 +1018,7 @@ module FourSlash {
 
         private alignmentForExtraInfo = 50;
 
-        private spanInfoToString(pos: number, spanInfo: TypeScript.TextSpan, prefixString: string) {
+        private spanInfoToString(pos: number, spanInfo: ts.TextSpan, prefixString: string) {
             var resultString = "SpanInfo: " + JSON.stringify(spanInfo);
             if (spanInfo) {
                 var spanString = this.activeFile.content.substr(spanInfo.start(), spanInfo.length());
@@ -1034,7 +1035,7 @@ module FourSlash {
             return resultString;
         }
 
-        private baselineCurrentFileLocations(getSpanAtPos: (pos: number) => TypeScript.TextSpan): string {
+        private baselineCurrentFileLocations(getSpanAtPos: (pos: number) => ts.TextSpan): string {
             var fileLineMap = ts.computeLineStarts(this.activeFile.content);
             var nextLine = 0;
             var resultString = "";
@@ -1748,14 +1749,14 @@ module FourSlash {
 
         public verifySemanticClassifications(expected: { classificationType: string; text: string }[]) {
             var actual = this.languageService.getSemanticClassifications(this.activeFile.fileName,
-                new TypeScript.TextSpan(0, this.activeFile.content.length));
+                new ts.TextSpan(0, this.activeFile.content.length));
 
             this.verifyClassifications(expected, actual);
         }
 
         public verifySyntacticClassifications(expected: { classificationType: string; text: string }[]) {
             var actual = this.languageService.getSyntacticClassifications(this.activeFile.fileName, 
-                new TypeScript.TextSpan(0, this.activeFile.content.length));
+                new ts.TextSpan(0, this.activeFile.content.length));
 
             this.verifyClassifications(expected, actual);
         }
@@ -1789,7 +1790,7 @@ module FourSlash {
             for (var i = 0; i < spans.length; i++) {
                 var expectedSpan = spans[i];
                 var actualComment = actual[i];
-                var actualCommentSpan = new TypeScript.TextSpan(actualComment.position, actualComment.message.length);
+                var actualCommentSpan = new ts.TextSpan(actualComment.position, actualComment.message.length);
 
                 if (expectedSpan.start !== actualCommentSpan.start() || expectedSpan.end !== actualCommentSpan.end()) {
                     this.raiseError('verifyOutliningSpans failed - span ' + (i + 1) + ' expected: (' + expectedSpan.start + ',' + expectedSpan.end + '),  actual: (' + actualCommentSpan.start() + ',' + actualCommentSpan.end() + ')');
@@ -2240,11 +2241,12 @@ module FourSlash {
             (fn, contents) => result = contents,
             ts.ScriptTarget.Latest,
             sys.useCaseSensitiveFileNames);
-        var program = ts.createProgram([Harness.Compiler.fourslashFilename, fileName], { out: "fourslashTestOutput.js" }, host);
+        // TODO (drosen): We need to enforce checking on these tests.
+        var program = ts.createProgram([Harness.Compiler.fourslashFilename, fileName], { out: "fourslashTestOutput.js", noResolve: true }, host);
         var checker = ts.createTypeChecker(program, /*fullTypeCheckMode*/ true);
         checker.checkProgram();
 
-        var errs = checker.getDiagnostics(program.getSourceFile(fileName));
+        var errs = program.getDiagnostics().concat(checker.getDiagnostics());
         if (errs.length > 0) {
             throw new Error('Error compiling ' + fileName + ': ' + errs.map(e => e.messageText).join('\r\n'));
         }
