@@ -774,13 +774,12 @@ module ts {
                 if (matchResult) {
                     var start = commentRange.pos;
                     var end = commentRange.end;
-                    var fileRef = {
-                        pos: start,
-                        end: end,
-                        filename: matchResult[3]
-                    };
                     return {
-                        fileReference: fileRef,
+                        fileReference: {
+                            pos: start,
+                            end: end,
+                            filename: matchResult[3]
+                        },
                         isNoDefaultLib: false
                     };
                 }
@@ -944,11 +943,11 @@ module ts {
             }
 
             return {
-                addLabel: addLabel,
-                pushCurrentLabelSet: pushCurrentLabelSet,
-                pushFunctionBoundary: pushFunctionBoundary,
-                pop: pop,
-                nodeIsNestedInLabel: nodeIsNestedInLabel,
+                addLabel,
+                pushCurrentLabelSet,
+                pushFunctionBoundary,
+                pop,
+                nodeIsNestedInLabel,
             };
         })();
 
@@ -1674,8 +1673,8 @@ module ts {
             }
 
             return {
-                typeParameters: typeParameters,
-                parameters: parameters,
+                typeParameters,
+                parameters,
                 type: type
             };
         }
@@ -4276,8 +4275,8 @@ module ts {
             }
             commentRanges = undefined;
             return {
-                referencedFiles: referencedFiles,
-                amdDependencies: amdDependencies
+                referencedFiles,
+                amdDependencies
             };
         }
 
