@@ -8,5 +8,5 @@ test.ranges().forEach(targetRange => {
 
     test.ranges().forEach(range => {
         verify.referencesAtPositionContains(range);
-    }
-}
+    });
+});
