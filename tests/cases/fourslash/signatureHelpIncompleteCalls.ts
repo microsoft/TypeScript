@@ -17,13 +17,13 @@
 
 goTo.marker('incompleteCalls1');
 verify.currentSignatureHelpIs("f1(): void");
-verify.currentSignatureParamterCountIs(0);
+verify.currentSignatureParameterCountIs(0);
 
 goTo.marker('incompleteCalls2');
-verify.currentSignatureParamterCountIs(1);
+verify.currentSignatureParameterCountIs(1);
 verify.currentSignatureHelpIs("f2(n: number): number");
 goTo.marker('incompleteCalls3');
-verify.currentSignatureParamterCountIs(2);
+verify.currentSignatureParameterCountIs(2);
 verify.currentSignatureHelpIs("f3(n: number, s: string): string");
 
 verify.currentParameterHelpArgumentNameIs("s");

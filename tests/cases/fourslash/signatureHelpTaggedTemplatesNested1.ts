@@ -10,6 +10,6 @@ test.markers().forEach(m => {
 
     verify.signatureHelpCountIs(1);
 
-    verify.currentSignatureParamterCountIs(4);
+    verify.currentSignatureParameterCountIs(4);
     verify.currentSignatureHelpIs('g(templateStrings: any, x: any, y: any, z: any): string');
 });

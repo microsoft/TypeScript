@@ -11,7 +11,7 @@ test.markers().forEach(m => {
     verify.signatureHelpCountIs(1);
     verify.signatureHelpArgumentCountIs(3);
 
-    verify.currentSignatureParamterCountIs(4);
+    verify.currentSignatureParameterCountIs(4);
     verify.currentSignatureHelpIs('f(templateStrings: any, x: any, y: any, z: any): number');
     verify.currentParameterHelpArgumentNameIs("y");
     verify.currentParameterSpanIs("y: any");
