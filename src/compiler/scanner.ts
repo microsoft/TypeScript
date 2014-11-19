@@ -1167,13 +1167,13 @@ module ts {
             hasPrecedingLineBreak: () => precedingLineBreak,
             isIdentifier: () => token === SyntaxKind.Identifier || token > SyntaxKind.LastReservedWord,
             isReservedWord: () => token >= SyntaxKind.FirstReservedWord && token <= SyntaxKind.LastReservedWord,
-            reScanGreaterToken: reScanGreaterToken,
-            reScanSlashToken: reScanSlashToken,
-            reScanTemplateToken: reScanTemplateToken,
-            scan: scan,
-            setText: setText,
-            setTextPos: setTextPos,
-            tryScan: tryScan,
+            reScanGreaterToken,
+            reScanSlashToken,
+            reScanTemplateToken,
+            scan,
+            setText,
+            setTextPos,
+            tryScan,
         };
     }
 }

@@ -749,29 +749,6 @@ module FourSlash {
             }
         }
 
-        public verifyImplementorsCountIs(count: number, localFilesOnly: boolean = true) {
-            var implementors = this.getImplementorsAtCaret();
-            var implementorsCount = 0;
-
-            if (localFilesOnly) {
-                var localFiles = this.testData.files.map<string>(file => file.fileName);
-                // Count only the references in local files. Filter the ones in lib and other files.
-                implementors.forEach((entry) => {
-                    if (localFiles.some((filename) => filename === entry.fileName)) {
-                        ++implementorsCount;
-                    }
-                });
-            }
-            else {
-                implementorsCount = implementors.length;
-            }
-
-            if (implementorsCount !== count) {
-                var condition = localFilesOnly ? "excluding libs" : "including libs";
-                this.raiseError("Expected implementors count (" + condition + ") to be " + count + ", but is actually " + implementors.length);
-            }
-        }
-
         private getMemberListAtCaret() {
             return this.languageService.getCompletionsAtPosition(this.activeFile.fileName, this.currentCaretPosition, true);
         }
@@ -786,10 +763,6 @@ module FourSlash {
 
         private getReferencesAtCaret() {
             return this.languageService.getReferencesAtPosition(this.activeFile.fileName, this.currentCaretPosition);
-        }
-
-        private getImplementorsAtCaret() {
-            return this.languageService.getImplementorsAtPosition(this.activeFile.fileName, this.currentCaretPosition);
         }
 
         private assertionMessage(name: string, actualValue: any, expectedValue: any) {
@@ -2250,7 +2223,7 @@ module FourSlash {
         if (errs.length > 0) {
             throw new Error('Error compiling ' + fileName + ': ' + errs.map(e => e.messageText).join('\r\n'));
         }
-        checker.emitFiles();
+        checker.invokeEmitter();
         result = result || ''; // Might have an empty fourslash file
 
         // Compile and execute the test
@@ -2284,7 +2257,7 @@ module FourSlash {
         // List of all the subfiles we've parsed out
         var files: FourSlashFile[] = [];
         // Global options
-        var opts: { [s: string]: string; } = {};
+        var globalOptions: { [s: string]: string; } = {};
         // Marker positions
 
         // Split up the input file by line
@@ -2292,7 +2265,7 @@ module FourSlash {
         // we have to string-based splitting instead and try to figure out the delimiting chars
         var lines = contents.split('\n');
 
-        var markerMap: MarkerMap = {};
+        var markerPositions: MarkerMap = {};
         var markers: Marker[] = [];
         var ranges: Range[] = [];
 
@@ -2333,7 +2306,7 @@ module FourSlash {
                         } else if (fileMetadataNamesIndex === fileMetadataNames.indexOf(testOptMetadataNames.filename)) {
                             // Found an @Filename directive, if this is not the first then create a new subfile
                             if (currentFileContent) {
-                                var file = parseFileContent(currentFileContent, currentFileName, markerMap, markers, ranges);
+                                var file = parseFileContent(currentFileContent, currentFileName, markerPositions, markers, ranges);
                                 file.fileOptions = currentFileOptions;
 
                                 // Store result file
@@ -2353,10 +2326,10 @@ module FourSlash {
                         }
                     } else {
                         // Check if the match is already existed in the global options
-                        if (opts[match[1]] !== undefined) {
+                        if (globalOptions[match[1]] !== undefined) {
                             throw new Error("Global Option : '" + match[1] + "' is already existed");
                         }
-                        opts[match[1]] = match[2];
+                        globalOptions[match[1]] = match[2];
                     }
                 }
             } else if (line == '' || lineLength === 0) {
@@ -2365,7 +2338,7 @@ module FourSlash {
             } else {
                 // Empty line or code line, terminate current subfile if there is one
                 if (currentFileContent) {
-                    var file = parseFileContent(currentFileContent, currentFileName, markerMap, markers, ranges);
+                    var file = parseFileContent(currentFileContent, currentFileName, markerPositions, markers, ranges);
                     file.fileOptions = currentFileOptions;
 
                     // Store result file
@@ -2380,11 +2353,11 @@ module FourSlash {
         }
 
         return {
-            markerPositions: markerMap,
-            markers: markers,
-            globalOptions: opts,
-            files: files,
-            ranges: ranges
+            markerPositions,
+            markers,
+            globalOptions,
+            files,
+            ranges
         };
     }
 
