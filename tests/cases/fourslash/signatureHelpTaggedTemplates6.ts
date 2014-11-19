@@ -9,9 +9,9 @@ test.markers().forEach(m => {
     goTo.position(m.position);
 
     verify.signatureHelpCountIs(1);
-    verify.signatureHelpArgumentCountIs(4);
+    verify.signatureHelpArgumentCountIs(1);
 
-    //verify.currentSignatureParamterCountIs(4);
+    verify.currentSignatureParamterCountIs(4);
     verify.currentSignatureHelpIs('g(templateStrings: any, x: any, y: any, z: any): string');
     verify.currentParameterHelpArgumentNameIs("templateStrings");
     verify.currentParameterSpanIs("templateStrings: any");
