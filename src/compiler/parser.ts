@@ -2733,7 +2733,7 @@ module ts {
 
         function parsePropertyAssignment(): Declaration {
             var nodePos = scanner.getStartPos();
-            var isTokenIdentifier = isIdentifier();
+            var tokenIsIdentifier = isIdentifier();
             var nameToken = token;
             var propertyName = parsePropertyName();
             var node: Declaration;
@@ -2753,12 +2753,12 @@ module ts {
             // Disallow optional property assignment
             if (token === SyntaxKind.QuestionToken) {
                 var questionStart = scanner.getTokenPos();
-                grammarErrorAtPos(questionStart, scanner.getStartPos() - questionStart, Diagnostics.A_object_member_cannot_be_declared_optional);
+                grammarErrorAtPos(questionStart, scanner.getStartPos() - questionStart, Diagnostics.An_object_member_cannot_be_declared_optional);
                 nextToken();
             }
 
             // Parse to check if it is short-hand property assignment or normal property assignment
-            if ((token === SyntaxKind.CommaToken || token === SyntaxKind.CloseBraceToken) && isTokenIdentifier) {
+            if ((token === SyntaxKind.CommaToken || token === SyntaxKind.CloseBraceToken) && tokenIsIdentifier) {
                 node = <ShortHandPropertyDeclaration>createNode(SyntaxKind.ShorthandPropertyAssignment, nodePos);
                 node.name = propertyName;
             }
