@@ -2733,6 +2733,7 @@ module ts {
 
         function parsePropertyAssignment(): Declaration {
             var nodePos = scanner.getStartPos();
+            var isTokenIdentifier = isIdentifier();
             var nameToken = token;
             var propertyName = parsePropertyName();
             var node: Declaration;
@@ -2757,7 +2758,7 @@ module ts {
             }
 
             // Parse to check if it is short-hand property assignment or normal property assignment
-            if (token !== SyntaxKind.ColonToken && nameToken === SyntaxKind.Identifier) {
+            if ((token === SyntaxKind.CommaToken || token === SyntaxKind.CloseBraceToken) && isTokenIdentifier) {
                 node = <ShortHandPropertyDeclaration>createNode(SyntaxKind.ShorthandPropertyAssignment, nodePos);
                 node.name = propertyName;
             }
