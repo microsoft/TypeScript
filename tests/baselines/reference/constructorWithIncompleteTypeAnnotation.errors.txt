@@ -7,14 +7,11 @@ tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(28,30): error TS
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(28,33): error TS1138: Parameter declaration expected.
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(28,34): error TS1005: ';' expected.
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(28,36): error TS1068: Unexpected token. A constructor, method, accessor, or property was expected.
-tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(30,21): error TS1108: A 'return' statement can only be used within a function body.
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(31,18): error TS1129: Statement expected.
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(38,17): error TS1109: Expression expected.
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(40,41): error TS1005: ';' expected.
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(40,45): error TS1002: Unterminated string literal.
-tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(43,21): error TS1108: A 'return' statement can only be used within a function body.
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(46,13): error TS1005: 'try' expected.
-tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(55,13): error TS1108: A 'return' statement can only be used within a function body.
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(58,5): error TS1128: Declaration or statement expected.
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(69,13): error TS1109: Expression expected.
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(72,37): error TS1127: Invalid character.
@@ -35,10 +32,8 @@ tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(234,14): error T
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(235,9): error TS1128: Declaration or statement expected.
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(235,27): error TS1005: ',' expected.
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(235,36): error TS1005: ';' expected.
-tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(236,13): error TS1108: A 'return' statement can only be used within a function body.
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(238,9): error TS1128: Declaration or statement expected.
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(238,26): error TS1005: ';' expected.
-tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(239,13): error TS1108: A 'return' statement can only be used within a function body.
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(241,5): error TS1128: Declaration or statement expected.
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(254,69): error TS1110: Type expected.
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(256,9): error TS1128: Declaration or statement expected.
@@ -93,7 +88,7 @@ tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(259,29): error T
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(259,37): error TS2304: Cannot find name 'string'.
 
 
-==== tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts (93 errors) ====
+==== tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts (88 errors) ====
     declare module "fs" {
         export class File {
             constructor(filename: string);
@@ -153,8 +148,6 @@ tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(259,37): error T
 !!! error TS2391: Function implementation is missing or not immediately following the declaration.
     
                         return 1;
-                        ~~~~~~
-!!! error TS1108: A 'return' statement can only be used within a function body.
                      ^ 
                      ~
 !!! error TS1129: Statement expected.
@@ -188,8 +181,6 @@ tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(259,37): error T
 !!! error TS2304: Cannot find name 'retValue'.
     
                         return 1;
-                        ~~~~~~
-!!! error TS1108: A 'return' statement can only be used within a function body.
                     }
                 }
                 catch (e) {
@@ -208,8 +199,6 @@ tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(259,37): error T
 !!! error TS2304: Cannot find name 'console'.
     
                 return 0;
-                ~~~~~~
-!!! error TS1108: A 'return' statement can only be used within a function body.
     
             }
         }
@@ -453,8 +442,6 @@ tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(259,37): error T
                                ~~~~~~
 !!! error TS2304: Cannot find name 'number'.
                 return val;
-                ~~~~~~
-!!! error TS1108: A 'return' statement can only be used within a function body.
             }
             public method2() {
             ~~~~~~
@@ -464,8 +451,6 @@ tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(259,37): error T
                    ~~~~~~~
 !!! error TS2304: Cannot find name 'method2'.
                 return 2 * this.method1(2);
-                ~~~~~~
-!!! error TS1108: A 'return' statement can only be used within a function body.
             }
         }
         ~

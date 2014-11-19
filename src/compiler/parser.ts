@@ -835,7 +835,6 @@ module ts {
 
         var lookAheadMode = LookAheadMode.NotLookingAhead;
         var inAmbientContext = false;
-        var inFunctionBody = false;
 
         function getLineStarts(): number[] {
             return lineStarts || (lineStarts = computeLineStarts(sourceText));
@@ -2062,7 +2061,7 @@ module ts {
             var body: Node;
 
             if (token === SyntaxKind.OpenBraceToken) {
-                body = parseBody(/* ignoreMissingOpenBrace */ false);
+                body = parseFunctionBlock(/* ignoreMissingOpenBrace */ false);
             }
             else if (isStatement(/* inErrorRecovery */ true) && !isStartOfExpressionStatement() && token !== SyntaxKind.FunctionKeyword) {
                 // Check if we got a plain statement (i.e. no expression-statements, no functions expressions/declarations)
@@ -2079,7 +2078,7 @@ module ts {
                 // up preemptively closing the containing construct.
                 //
                 // Note: even when 'ignoreMissingOpenBrace' is passed as true, parseBody will still error.
-                body = parseBody(/* ignoreMissingOpenBrace */ true);
+                body = parseFunctionBlock(/* ignoreMissingOpenBrace */ true);
             }
             else {
                 body = parseAssignmentExpression(noIn);
@@ -2431,7 +2430,7 @@ module ts {
                 node = <PropertyDeclaration>createNode(SyntaxKind.PropertyAssignment, nodePos);
                 node.name = propertyName;
                 var sig = parseSignature(SyntaxKind.CallSignature, SyntaxKind.ColonToken, /* returnTokenRequired */ false);
-                var body = parseBody(/* ignoreMissingOpenBrace */ false);
+                var body = parseFunctionBlock(/* ignoreMissingOpenBrace */ false);
                 // do not propagate property name as name for function expression
                 // for scenarios like 
                 // var x = 1;
@@ -2492,7 +2491,7 @@ module ts {
             parseExpected(SyntaxKind.FunctionKeyword);
             var name = isIdentifier() ? parseIdentifier() : undefined;
             var sig = parseSignature(SyntaxKind.CallSignature, SyntaxKind.ColonToken, /* returnTokenRequired */ false);
-            var body = parseBody(/* ignoreMissingOpenBrace */ false);
+            var body = parseFunctionBlock(/* ignoreMissingOpenBrace */ false);
             return makeFunctionExpression(SyntaxKind.FunctionExpression, pos, name, sig, body);
         }
 
@@ -2530,13 +2529,9 @@ module ts {
             return finishNode(node);
         }
 
-        function parseBody(ignoreMissingOpenBrace: boolean): Block {
-            var saveInFunctionBody = inFunctionBody;
-
-            inFunctionBody = true;
+        function parseFunctionBlock(ignoreMissingOpenBrace: boolean): Block {
             var block = parseBlock(ignoreMissingOpenBrace, /*checkForStrictMode*/ true);
             block.kind = SyntaxKind.FunctionBlock;
-            inFunctionBody = saveInFunctionBody;
 
             return block;
         }
@@ -2660,18 +2655,15 @@ module ts {
 
         function parseReturnStatement(): ReturnStatement {
             var node = <ReturnStatement>createNode(SyntaxKind.ReturnStatement);
-            var errorCountBeforeReturnStatement = file.parseDiagnostics.length;
             var returnTokenStart = scanner.getTokenPos();
             var returnTokenLength = scanner.getTextPos() - returnTokenStart;
 
             parseExpected(SyntaxKind.ReturnKeyword);
-            if (!canParseSemicolon()) node.expression = parseExpression();
-            parseSemicolon();
-
-            // In an ambient context, we will already give an error for having a statement.
-            if (!inFunctionBody && !inAmbientContext && errorCountBeforeReturnStatement === file.parseDiagnostics.length) {
-                grammarErrorAtPos(returnTokenStart, returnTokenLength, Diagnostics.A_return_statement_can_only_be_used_within_a_function_body);
+            if (!canParseSemicolon()) {
+                node.expression = parseExpression();
             }
+
+            parseSemicolon();
             return finishNode(node);
         }
 
@@ -2914,7 +2906,7 @@ module ts {
 
         function parseFunctionBlockOrSemicolon(): Block {
             if (token === SyntaxKind.OpenBraceToken) {
-                return parseBody(/* ignoreMissingOpenBrace */ false);
+                return parseFunctionBlock(/* ignoreMissingOpenBrace */ false);
             }
 
             if (canParseSemicolon()) {
@@ -3045,7 +3037,7 @@ module ts {
                 node.body = <Block>createMissingNode();
             }
             else {
-                node.body = parseBody(/* ignoreMissingOpenBrace */ false);
+                node.body = parseFunctionBlock(/* ignoreMissingOpenBrace */ false);
             }
 
             return finishNode(node);
@@ -3293,7 +3285,6 @@ module ts {
             if (parseOptional(SyntaxKind.ImplementsKeyword)) {
                 node.implementedTypes = parseDelimitedList(ParsingContext.BaseTypeReferences, parseTypeReference);
             }
-            var errorCountBeforeClassBody = file.parseDiagnostics.length;
             if (parseExpected(SyntaxKind.OpenBraceToken)) {
                 node.members = parseList(ParsingContext.ClassMembers, /*checkForStrictMode*/ false, parseClassMemberDeclaration);
                 parseExpected(SyntaxKind.CloseBraceToken);
@@ -3700,6 +3691,7 @@ module ts {
 
         // We're automatically in an ambient context if this is a .d.ts file.
         var inAmbientContext = fileExtensionIs(file.filename, ".d.ts");
+        var inFunctionBlock = false;
         var parent: Node;
         visitNode(file);
 
@@ -3709,6 +3701,11 @@ module ts {
             node.parent = parent;
             parent = node;
 
+            var savedInFunctionBlock = inFunctionBlock;
+            if (node.kind === SyntaxKind.FunctionBlock) {
+                inFunctionBlock = true;
+            }
+
             var savedInAmbientContext = inAmbientContext
             if (node.flags & NodeFlags.Ambient) {
                 inAmbientContext = true;
@@ -3717,6 +3714,7 @@ module ts {
             checkNode(node);
 
             inAmbientContext = savedInAmbientContext;
+            inFunctionBlock = savedInFunctionBlock;
             parent = savedParent;
         }
 
@@ -3724,7 +3722,7 @@ module ts {
             // First, check if you have a statement in a place where it is not allowed.  We want 
             // to do this before recursing, because we'd prefer to report these errors at the top
             // level instead of at some nested level.
-            if (checkForStatementInAmbientContext(node)) {
+            if (inAmbientContext && checkForStatementInAmbientContext(node)) {
                 return;
             }
 
@@ -3772,6 +3770,7 @@ module ts {
                 case SyntaxKind.PostfixOperator:                return visitPostfixOperator(<UnaryExpression>node);
                 case SyntaxKind.PrefixOperator:                 return visitPrefixOperator(<UnaryExpression>node);
                 case SyntaxKind.PropertyAssignment:             return visitPropertyAssignment(<PropertyDeclaration>node);
+                case SyntaxKind.ReturnStatement:                return visitReturnStatement(<ReturnStatement>node);
                 case SyntaxKind.SetAccessor:                    return visitSetAccessor(<MethodDeclaration>node);
                 case SyntaxKind.ShorthandPropertyAssignment:    return visitShorthandPropertyAssignment(<ShortHandPropertyDeclaration>node);
                 case SyntaxKind.SwitchStatement:                return visitSwitchStatement(<SwitchStatement>node);
@@ -3814,27 +3813,25 @@ module ts {
         }
 
         function checkForStatementInAmbientContext(node: Node): boolean {
-            if (inAmbientContext) {
-                switch (node.kind) {
-                    case SyntaxKind.Block:
-                    case SyntaxKind.EmptyStatement:
-                    case SyntaxKind.IfStatement:
-                    case SyntaxKind.DoStatement:
-                    case SyntaxKind.WhileStatement:
-                    case SyntaxKind.ForStatement:
-                    case SyntaxKind.ForInStatement:
-                    case SyntaxKind.ContinueStatement:
-                    case SyntaxKind.BreakStatement:
-                    case SyntaxKind.ReturnStatement:
-                    case SyntaxKind.WithStatement:
-                    case SyntaxKind.SwitchStatement:
-                    case SyntaxKind.ThrowStatement:
-                    case SyntaxKind.TryStatement:
-                    case SyntaxKind.DebuggerStatement:
-                    case SyntaxKind.LabeledStatement:
-                    case SyntaxKind.ExpressionStatement:
-                        return grammarErrorOnFirstToken(node, Diagnostics.Statements_are_not_allowed_in_ambient_contexts);
-                }
+            switch (node.kind) {
+                case SyntaxKind.Block:
+                case SyntaxKind.EmptyStatement:
+                case SyntaxKind.IfStatement:
+                case SyntaxKind.DoStatement:
+                case SyntaxKind.WhileStatement:
+                case SyntaxKind.ForStatement:
+                case SyntaxKind.ForInStatement:
+                case SyntaxKind.ContinueStatement:
+                case SyntaxKind.BreakStatement:
+                case SyntaxKind.ReturnStatement:
+                case SyntaxKind.WithStatement:
+                case SyntaxKind.SwitchStatement:
+                case SyntaxKind.ThrowStatement:
+                case SyntaxKind.TryStatement:
+                case SyntaxKind.DebuggerStatement:
+                case SyntaxKind.LabeledStatement:
+                case SyntaxKind.ExpressionStatement:
+                    return grammarErrorOnFirstToken(node, Diagnostics.Statements_are_not_allowed_in_ambient_contexts);
             }
         }
 
@@ -4359,6 +4356,12 @@ module ts {
             if (node.flags & NodeFlags.QuestionMark) {
                 var pos = skipTrivia(sourceText, node.name.end);
                 return grammarErrorAtPos(pos, "?".length, message);
+            }
+        }
+
+        function visitReturnStatement(node: ReturnStatement) {
+            if (!inFunctionBlock) {
+                grammarErrorOnFirstToken(node, Diagnostics.A_return_statement_can_only_be_used_within_a_function_body);
             }
         }
 
