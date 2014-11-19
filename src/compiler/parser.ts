@@ -3782,15 +3782,6 @@ module ts {
             }
             else {
                 node.body = parseModuleBody();
-                forEach((<Block>node.body).statements, s => {
-                    if (s.kind === SyntaxKind.ExportAssignment) {
-                        // Export assignments are not allowed in an internal module
-                        grammarErrorOnNode(s, Diagnostics.An_export_assignment_cannot_be_used_in_an_internal_module);
-                    }
-                    else if (s.kind === SyntaxKind.ImportDeclaration && (<ImportDeclaration>s).externalModuleName) {
-                        grammarErrorOnNode(s, Diagnostics.Import_declarations_in_an_internal_module_cannot_reference_an_external_module);
-                    }
-                });
             }
             return finishNode(node);
         }
@@ -4122,6 +4113,7 @@ module ts {
                 case SyntaxKind.GetAccessor:                return visitGetAccessor(<MethodDeclaration>node);
                 case SyntaxKind.IndexSignature:             return visitIndexSignature(<SignatureDeclaration>node);
                 case SyntaxKind.Method:                     return visitMethod(<MethodDeclaration>node);
+                case SyntaxKind.ModuleDeclaration:          return visitModuleDeclaration(<ModuleDeclaration>node);
                 case SyntaxKind.ObjectLiteral:              return visitObjectLiteral(<ObjectLiteral>node);
                 case SyntaxKind.Parameter:                  return visitParameter(<ParameterDeclaration>node);
                 case SyntaxKind.PostfixOperator:            return visitPostfixOperator(<UnaryExpression>node);
@@ -4289,6 +4281,20 @@ module ts {
 
         function visitMethod(node: MethodDeclaration) {
             checkParameterList(node.parameters);
+        }
+
+        function visitModuleDeclaration(node: ModuleDeclaration): void {
+            if (node.name.kind === SyntaxKind.Identifier && node.body.kind === SyntaxKind.ModuleBlock) {
+                forEach((<Block>node.body).statements, s => {
+                    if (s.kind === SyntaxKind.ExportAssignment) {
+                        // Export assignments are not allowed in an internal module
+                        grammarErrorOnNode(s, Diagnostics.An_export_assignment_cannot_be_used_in_an_internal_module);
+                    }
+                    else if (s.kind === SyntaxKind.ImportDeclaration && (<ImportDeclaration>s).externalModuleName) {
+                        grammarErrorOnNode(s, Diagnostics.Import_declarations_in_an_internal_module_cannot_reference_an_external_module);
+                    }
+                });
+            }
         }
 
         function visitObjectLiteral(node: ObjectLiteral): void {
