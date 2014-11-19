@@ -845,22 +845,21 @@ module ts {
         Constructor            = 0x00004000,  // Constructor
         GetAccessor            = 0x00008000,  // Get accessor
         SetAccessor            = 0x00010000,  // Set accessor
-        CallSignature          = 0x00020000,  // Call signature
-        ConstructSignature     = 0x00040000,  // Construct signature
-        IndexSignature         = 0x00080000,  // Index signature
-        TypeParameter          = 0x00100000,  // Type parameter
-        TypeAlias              = 0x00200000,  // Type alias
+        Signature              = 0x00020000,  // Call, construct, or index signature
+        TypeParameter          = 0x00040000,  // Type parameter
+        TypeAlias              = 0x00080000,  // Type alias
 
         // Export markers (see comment in declareModuleMember in binder)
-        ExportValue            = 0x00400000,  // Exported value marker
-        ExportType             = 0x00800000,  // Exported type marker
-        ExportNamespace        = 0x01000000,  // Exported namespace marker
-        Import                 = 0x02000000,  // Import
-        Instantiated           = 0x04000000,  // Instantiated symbol
-        Merged                 = 0x08000000,  // Merged symbol (created during program binding)
-        Transient              = 0x10000000,  // Transient symbol (created during type check)
-        Prototype              = 0x20000000,  // Prototype property (no source representation)
-        UnionProperty          = 0x40000000,  // Property in union type
+        ExportValue            = 0x00100000,  // Exported value marker
+        ExportType             = 0x00200000,  // Exported type marker
+        ExportNamespace        = 0x00400000,  // Exported namespace marker
+        Import                 = 0x00800000,  // Import
+        Instantiated           = 0x01000000,  // Instantiated symbol
+        Merged                 = 0x02000000,  // Merged symbol (created during program binding)
+        Transient              = 0x04000000,  // Transient symbol (created during type check)
+        Prototype              = 0x08000000,  // Prototype property (no source representation)
+        UnionProperty          = 0x10000000,  // Property in union type
+        Optional               = 0x20000000,  // Optional property
 
         Enum      = RegularEnum | ConstEnum,
         Variable  = FunctionScopedVariable | BlockScopedVariable,
@@ -869,7 +868,6 @@ module ts {
         Namespace = ValueModule | NamespaceModule,
         Module    = ValueModule | NamespaceModule,
         Accessor  = GetAccessor | SetAccessor,
-        Signature = CallSignature | ConstructSignature | IndexSignature,
 
         // Variables can be redeclared, but can not redeclare a block-scoped declaration with the 
         // same name, or any other value that is not a variable, e.g. ValueModule or Class

@@ -411,6 +411,9 @@ module ts {
                 case SyntaxKind.GetAccessor:
                 case SyntaxKind.SetAccessor:
                 case SyntaxKind.Constructor:
+                case SyntaxKind.CallSignature:
+                case SyntaxKind.ConstructSignature:
+                case SyntaxKind.IndexSignature:
                     return true;
             }
         }
@@ -1245,7 +1248,7 @@ module ts {
                     return token === SyntaxKind.CloseBracketToken;
                 case ParsingContext.Parameters:
                     // Tokens other than ')' and ']' (the latter for index signatures) are here for better error recovery
-                    return token === SyntaxKind.CloseParenToken || token === SyntaxKind.CloseBracketToken || token === SyntaxKind.OpenBraceToken;
+                    return token === SyntaxKind.CloseParenToken || token === SyntaxKind.CloseBracketToken /*|| token === SyntaxKind.OpenBraceToken*/;
                 case ParsingContext.TypeArguments:
                     // Tokens other than '>' are here for better error recovery
                     return token === SyntaxKind.GreaterThanToken || token === SyntaxKind.OpenParenToken;
@@ -1568,7 +1571,7 @@ module ts {
         }
 
         function isStartOfParameter(): boolean {
-            return token === SyntaxKind.DotDotDotToken || isIdentifier() || isModifier(token);
+            return token === SyntaxKind.DotDotDotToken || isIdentifierOrPattern() || isModifier(token);
         }
 
         function parseParameter(flags: NodeFlags = 0): ParameterDeclaration {
@@ -1576,8 +1579,11 @@ module ts {
             node.flags |= parseAndCheckModifiers(ModifierContext.Parameters);
             if (parseOptional(SyntaxKind.DotDotDotToken)) {
                 node.flags |= NodeFlags.Rest;
+                node.name = parseIdentifier();
             }
-            node.name = parseIdentifier();
+            else {
+                node.name = parseIdentifierOrPattern(node.flags);
+            }
             if (node.name.kind === SyntaxKind.Missing && node.flags === 0 && isModifier(token)) {
                 // in cases like
                 // 'use strict' 
@@ -1645,16 +1651,7 @@ module ts {
 
             for (var i = 0; i < parameterCount; i++) {
                 var parameter = parameters[i];
-                // It is a SyntaxError if the Identifier "eval" or the Identifier "arguments" occurs as the 
-                // Identifier in a PropertySetParameterList of a PropertyAssignment that is contained in strict code 
-                // or if its FunctionBody is strict code(11.1.5).
-                // It is a SyntaxError if the identifier eval or arguments appears within a FormalParameterList of a 
-                // strict mode FunctionLikeDeclaration or FunctionExpression(13.1) 
-                if (isInStrictMode && isEvalOrArgumentsIdentifier(parameter.name)) {
-                    reportInvalidUseInStrictMode(<Identifier>parameter.name);
-                    return;
-                }
-                else if (parameter.flags & NodeFlags.Rest) {
+                if (parameter.flags & NodeFlags.Rest) {
                     if (i !== (parameterCount - 1)) {
                         grammarErrorOnNode(parameter.name, Diagnostics.A_rest_parameter_must_be_last_in_a_parameter_list);
                         return;

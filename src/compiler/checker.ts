@@ -741,17 +741,6 @@ module ts {
                 members, callSignatures, constructSignatures, stringIndexType, numberIndexType);
         }
 
-        function isOptionalProperty(propertySymbol: Symbol): boolean {
-            //  class C {
-            //      constructor(public x?) { }
-            //  }
-            //
-            // x is an optional parameter, but it is a required property.
-            return propertySymbol.valueDeclaration &&
-                propertySymbol.valueDeclaration.flags & NodeFlags.QuestionMark &&
-                propertySymbol.valueDeclaration.kind !== SyntaxKind.Parameter;
-        }
-
         function forEachSymbolTableInScope<T>(enclosingDeclaration: Node, callback: (symbolTable: SymbolTable) => T): T {
             var result: T;
             for (var location = enclosingDeclaration; location; location = location.parent) {
@@ -1366,7 +1355,7 @@ module ts {
                             var signatures = getSignaturesOfType(t, SignatureKind.Call);
                             for (var j = 0; j < signatures.length; j++) {
                                 buildSymbolDisplay(p, writer);
-                                if (isOptionalProperty(p)) {
+                                if (p.flags & SymbolFlags.Optional) {
                                     writePunctuation(writer, SyntaxKind.QuestionToken);
                                 }
                                 buildSignatureDisplay(signatures[j], writer, enclosingDeclaration, globalFlagsToPass, typeStack);
@@ -1376,7 +1365,7 @@ module ts {
                         }
                         else {
                             buildSymbolDisplay(p, writer);
-                            if (isOptionalProperty(p)) {
+                            if (p.flags & SymbolFlags.Optional) {
                                 writePunctuation(writer, SyntaxKind.QuestionToken);
                             }
                             writePunctuation(writer, SyntaxKind.ColonToken);
@@ -1699,6 +1688,31 @@ module ts {
             return undefined;
         }
 
+        function getTypeFromBindingElement(element: BindingElement): Type {
+            if (element.initializer) {
+                return getWidenedType(checkExpressionCached(element.initializer));
+            }
+            if (isBindingPattern(element.name)) {
+                return getTypeFromBindingPattern(<BindingPattern>element.name);
+            }
+            return anyType;
+        }
+
+        function getTypeFromBindingPattern(pattern: BindingPattern): Type {
+            if (pattern.kind === SyntaxKind.ArrayBindingPattern) {
+                return createTupleType(map(pattern.elements, getTypeFromBindingElement));
+            }
+            var members: SymbolTable = {};
+            forEach(pattern.elements, e => {
+                var flags = SymbolFlags.Property | SymbolFlags.Transient | (e.initializer ? SymbolFlags.Optional : 0);
+                var name = e.propertyName || <Identifier>e.name;
+                var symbol = <TransientSymbol>createSymbol(flags, name.text);
+                symbol.type = getTypeFromBindingElement(e);
+                members[symbol.name] = symbol;
+            });
+            return createAnonymousType(undefined, members, emptyArray, emptyArray, undefined, undefined);
+        }
+
         function getWidenedTypeForVariableDeclaration(declaration: VariableDeclaration | PropertyDeclaration, reportErrors?: boolean): Type {
             var type = getTypeForVariableDeclaration(declaration);
             if (type) {
@@ -1706,6 +1720,9 @@ module ts {
                     reportErrorsFromWidening(declaration, type);
                 }
                 return declaration.kind !== SyntaxKind.PropertyAssignment ? getWidenedType(type) : type;
+            }
+            if (isBindingPattern(declaration.name)) {
+                return getTypeFromBindingPattern(<BindingPattern>declaration.name);
             }
             // Rest parameters default to type any[], other parameters default to type any            type = declaration.flags & NodeFlags.Rest ? createArrayType(anyType) : anyType;
              // Report implicit any errors unless this is a private property within an ambient declaration
@@ -3528,7 +3545,7 @@ module ts {
                     var sourceProp = getPropertyOfType(source, targetProp.name);
                     if (sourceProp !== targetProp) {
                         if (!sourceProp) {
-                            if (relation === subtypeRelation || !isOptionalProperty(targetProp)) {
+                            if (relation === subtypeRelation || !(targetProp.flags & SymbolFlags.Optional)) {
                                 if (reportErrors) {
                                     reportError(Diagnostics.Property_0_is_missing_in_type_1, symbolToString(targetProp), typeToString(source));
                                 }
@@ -3580,7 +3597,7 @@ module ts {
                                 return Ternary.False;
                             }
                             result &= related;
-                            if (isOptionalProperty(sourceProp) && !isOptionalProperty(targetProp)) {
+                            if (sourceProp.flags & SymbolFlags.Optional && !(targetProp.flags & SymbolFlags.Optional)) {
                                 // TypeScript 1.0 spec (April 2014): 3.8.3
                                 // S is a subtype of a type T, and T is a supertype of S if ...
                                 // S' and T are object types and, for each member M in T..
@@ -3821,7 +3838,7 @@ module ts {
                 }
             }
             else {
-                if (isOptionalProperty(sourceProp) !== isOptionalProperty(targetProp)) {
+                if ((sourceProp.flags & SymbolFlags.Optional) !== (targetProp.flags & SymbolFlags.Optional)) {
                     return Ternary.False;
                 }
             }
@@ -6389,30 +6406,27 @@ module ts {
             // TODO: Check multiple declarations are identical
         }
 
-        // TODO(andersh): Support destructuring
-        function checkParameter(parameterDeclaration: ParameterDeclaration) {
-            if (isBindingPattern(parameterDeclaration.name)) {
+        function checkParameter(node: ParameterDeclaration) {
+            checkVariableDeclaration(node);
+            if (isBindingPattern(node.name)) {
                 return;
             }
-            checkVariableDeclaration(parameterDeclaration);
-
-            if (fullTypeCheck) {
-                checkCollisionWithIndexVariableInGeneratedCode(parameterDeclaration, <Identifier>parameterDeclaration.name);
-
-                if (parameterDeclaration.flags & (NodeFlags.Public | NodeFlags.Private | NodeFlags.Protected) &&
-                    !(parameterDeclaration.parent.kind === SyntaxKind.Constructor && (<ConstructorDeclaration>parameterDeclaration.parent).body)) {
-                    error(parameterDeclaration, Diagnostics.A_parameter_property_is_only_allowed_in_a_constructor_implementation);
+            checkCollisionWithIndexVariableInGeneratedCode(node, <Identifier>node.name);
+            var func = getContainingFunction(node);
+            if (node.flags & (NodeFlags.Public | NodeFlags.Private | NodeFlags.Protected) &&
+                !(func.kind === SyntaxKind.Constructor && func.body)) {
+                error(node, Diagnostics.A_parameter_property_is_only_allowed_in_a_constructor_implementation);
+            }
+            if (node.flags & NodeFlags.Rest) {
+                if (!isArrayType(getTypeOfSymbol(node.symbol))) {
+                    error(node, Diagnostics.A_rest_parameter_must_be_of_an_array_type);
                 }
-                if (parameterDeclaration.flags & NodeFlags.Rest) {
-                    if (!isArrayType(getTypeOfSymbol(parameterDeclaration.symbol))) {
-                        error(parameterDeclaration, Diagnostics.A_rest_parameter_must_be_of_an_array_type);
-                    }
+            }
+            if (node.initializer) {
+                if (!func.body) {
+                    error(node, Diagnostics.A_parameter_initializer_is_only_allowed_in_a_function_or_constructor_implementation);
                 }
-                else {
-                    if (parameterDeclaration.initializer && !(<FunctionLikeDeclaration>parameterDeclaration.parent).body) {
-                        error(parameterDeclaration, Diagnostics.A_parameter_initializer_is_only_allowed_in_a_function_or_constructor_implementation);
-                    }
-                }
+                checkReferencesInInitializer(node.initializer);
             }
 
             function checkReferencesInInitializer(n: Node): void {
@@ -6420,32 +6434,24 @@ module ts {
                     var referencedSymbol = getNodeLinks(n).resolvedSymbol;
                     // check FunctionLikeDeclaration.locals (stores parameters\function local variable) 
                     // if it contains entry with a specified name and if this entry matches the resolved symbol
-                    if (referencedSymbol && referencedSymbol !== unknownSymbol && getSymbol(parameterDeclaration.parent.locals, referencedSymbol.name, SymbolFlags.Value) === referencedSymbol) {
+                    if (referencedSymbol && referencedSymbol !== unknownSymbol && getSymbol(func.locals, referencedSymbol.name, SymbolFlags.Value) === referencedSymbol) {
                         if (referencedSymbol.valueDeclaration.kind === SyntaxKind.Parameter) {
-                            if (referencedSymbol.valueDeclaration === parameterDeclaration) {
-                                error(n, Diagnostics.Parameter_0_cannot_be_referenced_in_its_initializer, declarationNameToString(parameterDeclaration.name));
+                            if (referencedSymbol.valueDeclaration === node) {
+                                error(n, Diagnostics.Parameter_0_cannot_be_referenced_in_its_initializer, declarationNameToString(node.name));
                                 return;
                             }
-                            var enclosingOrReferencedParameter =
-                                forEach((<FunctionLikeDeclaration>parameterDeclaration.parent).parameters, p => p === parameterDeclaration || p === referencedSymbol.valueDeclaration ? p : undefined);
-
-                            if (enclosingOrReferencedParameter === referencedSymbol.valueDeclaration) {
+                            if (referencedSymbol.valueDeclaration.pos < node.pos) {
                                 // legal case - parameter initializer references some parameter strictly on left of current parameter declaration
                                 return;
                             }
                             // fall through to error reporting
                         }
-
-                        error(n, Diagnostics.Initializer_of_parameter_0_cannot_reference_identifier_1_declared_after_it, declarationNameToString(parameterDeclaration.name), declarationNameToString(<Identifier>n));
+                        error(n, Diagnostics.Initializer_of_parameter_0_cannot_reference_identifier_1_declared_after_it, declarationNameToString(node.name), declarationNameToString(<Identifier>n));
                     }
                 }
                 else {
                     forEachChild(n, checkReferencesInInitializer);
                 }
-            }
-
-            if (parameterDeclaration.initializer) {
-                checkReferencesInInitializer(parameterDeclaration.initializer);
             }
         }
 
@@ -7075,7 +7081,8 @@ module ts {
                 // - function has implementation (not a signature)
                 // - function has rest parameters
                 // - context is not ambient (otherwise no codegen impact)
-                if ((<FunctionLikeDeclaration>node.parent).body && hasRestParameters(<FunctionLikeDeclaration>node.parent) && !isInAmbientContext(node)) {
+                var func = getContainingFunction(node);
+                if (func.body && hasRestParameters(func) && !isInAmbientContext(node)) {
                     error(node, Diagnostics.Duplicate_identifier_i_Compiler_uses_i_to_initialize_rest_parameter);                    
                 }
                 return;
@@ -7122,7 +7129,7 @@ module ts {
             //        no - go up to the next level
             var current = node;
             while (current) {
-                var definedOnCurrentLevel = forEach(symbol.declarations, d => d.parent === current ? d : undefined);
+                var definedOnCurrentLevel = forEach(symbol.declarations, d => getContainingFunction(d) === current);
                 if (definedOnCurrentLevel) {
                     return;
                 }
@@ -7273,11 +7280,7 @@ module ts {
 
         function checkVariableDeclaration(node: VariableDeclaration | PropertyDeclaration) {
             if (isBindingPattern(node.name)) {
-                forEach((<BindingPattern>node.name).elements, e => {
-                    if (e.kind === SyntaxKind.VariableDeclaration) {
-                        checkVariableDeclaration(e);
-                    }
-                });
+                forEach((<BindingPattern>node.name).elements, checkSourceElement);
                 if (node.initializer) {
                     checkTypeAssignableTo(checkExpressionCached(node.initializer), getWidenedTypeForVariableDeclaration(node), node, /*headMessage*/ undefined);
                 }
@@ -7308,7 +7311,7 @@ module ts {
         }
 
         function checkVariableStatement(node: VariableStatement) {
-            forEach(node.declarations, checkVariableDeclaration);
+            forEach(node.declarations, checkSourceElement);
         }
 
         function checkExpressionStatement(node: ExpressionStatement) {
@@ -8184,7 +8187,7 @@ module ts {
                 case SyntaxKind.TryStatement:
                     return checkTryStatement(<TryStatement>node);
                 case SyntaxKind.VariableDeclaration:
-                    return Debug.fail("Checker encountered variable declaration");
+                    return checkVariableDeclaration(<VariableDeclaration>node);
                 case SyntaxKind.ClassDeclaration:
                     return checkClassDeclaration(<ClassDeclaration>node);
                 case SyntaxKind.InterfaceDeclaration:

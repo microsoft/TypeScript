@@ -330,6 +330,10 @@ module ts {
             bindChildren(node, SymbolFlags.BlockScopedVariable, /*isBlockScopeContainer*/ false);
         }
 
+        function getDestructuringParameterName(node: Declaration) {
+            return "__" + indexOf((<SignatureDeclaration>node.parent).parameters, node);
+        }
+
         function bind(node: Node) {
             node.parent = parent;
             switch (node.kind) {
@@ -337,7 +341,17 @@ module ts {
                     bindDeclaration(<Declaration>node, SymbolFlags.TypeParameter, SymbolFlags.TypeParameterExcludes, /*isBlockScopeContainer*/ false);
                     break;
                 case SyntaxKind.Parameter:
-                    bindDeclaration(<Declaration>node, SymbolFlags.FunctionScopedVariable, SymbolFlags.ParameterExcludes, /*isBlockScopeContainer*/ false);
+                    if (isBindingPattern((<Declaration>node).name)) {
+                        if (isBindingPattern(parent)) {
+                            bindChildren(node, 0, /*isBlockScopeContainer*/ false);
+                        }
+                        else {
+                            bindAnonymousDeclaration(node, SymbolFlags.FunctionScopedVariable, getDestructuringParameterName(node), /*isBlockScopeContainer*/ false);
+                        }
+                    }
+                    else {
+                        bindDeclaration(<Declaration>node, SymbolFlags.FunctionScopedVariable, SymbolFlags.ParameterExcludes, /*isBlockScopeContainer*/ false);
+                    }
                     break;
                 case SyntaxKind.VariableDeclaration:
                     if (isBindingPattern((<Declaration>node).name)) {
@@ -351,6 +365,8 @@ module ts {
                     }
                     break;
                 case SyntaxKind.Property:
+                    bindDeclaration(<Declaration>node, SymbolFlags.Property | (node.flags & NodeFlags.QuestionMark ? SymbolFlags.Optional : 0), SymbolFlags.PropertyExcludes, /*isBlockScopeContainer*/ false);
+                    break;
                 case SyntaxKind.PropertyAssignment:
                     bindDeclaration(<Declaration>node, SymbolFlags.Property, SymbolFlags.PropertyExcludes, /*isBlockScopeContainer*/ false);
                     break;
@@ -358,16 +374,12 @@ module ts {
                     bindDeclaration(<Declaration>node, SymbolFlags.EnumMember, SymbolFlags.EnumMemberExcludes, /*isBlockScopeContainer*/ false);
                     break;
                 case SyntaxKind.CallSignature:
-                    bindDeclaration(<Declaration>node, SymbolFlags.CallSignature, 0, /*isBlockScopeContainer*/ false);
+                case SyntaxKind.ConstructSignature:
+                case SyntaxKind.IndexSignature:
+                    bindDeclaration(<Declaration>node, SymbolFlags.Signature, 0, /*isBlockScopeContainer*/ false);
                     break;
                 case SyntaxKind.Method:
-                    bindDeclaration(<Declaration>node, SymbolFlags.Method, SymbolFlags.MethodExcludes, /*isBlockScopeContainer*/ true);
-                    break;
-                case SyntaxKind.ConstructSignature:
-                    bindDeclaration(<Declaration>node, SymbolFlags.ConstructSignature, 0, /*isBlockScopeContainer*/ true);
-                    break;
-                case SyntaxKind.IndexSignature:
-                    bindDeclaration(<Declaration>node, SymbolFlags.IndexSignature, 0, /*isBlockScopeContainer*/ false);
+                    bindDeclaration(<Declaration>node, SymbolFlags.Method | (node.flags & NodeFlags.QuestionMark ? SymbolFlags.Optional : 0), SymbolFlags.MethodExcludes, /*isBlockScopeContainer*/ true);
                     break;
                 case SyntaxKind.FunctionDeclaration:
                     bindDeclaration(<Declaration>node, SymbolFlags.Function, SymbolFlags.FunctionExcludes, /*isBlockScopeContainer*/ true);
