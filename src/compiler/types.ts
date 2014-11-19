@@ -256,19 +256,23 @@ module ts {
     }
 
     export const enum NodeFlags {
-        Export           = 0x00000001,  // Declarations
-        Ambient          = 0x00000002,  // Declarations
-        QuestionMark     = 0x00000004,  // Parameter/Property/Method
-        Rest             = 0x00000008,  // Parameter
-        Public           = 0x00000010,  // Property/Method
-        Private          = 0x00000020,  // Property/Method
-        Protected        = 0x00000040,  // Property/Method
-        Static           = 0x00000080,  // Property/Method
-        MultiLine        = 0x00000100,  // Multi-line array or object literal
-        Synthetic        = 0x00000200,  // Synthetic node (for full fidelity)
-        DeclarationFile  = 0x00000400,  // Node is a .d.ts file
-        Let              = 0x00000800,  // Variable declaration
-        Const            = 0x00001000,  // Variable declaration
+        Export              = 0x00000001,  // Declarations
+        Ambient             = 0x00000002,  // Declarations
+        QuestionMark        = 0x00000004,  // Parameter/Property/Method
+        Rest                = 0x00000008,  // Parameter
+        Public              = 0x00000010,  // Property/Method
+        Private             = 0x00000020,  // Property/Method
+        Protected           = 0x00000040,  // Property/Method
+        Static              = 0x00000080,  // Property/Method
+        MultiLine           = 0x00000100,  // Multi-line array or object literal
+        Synthetic           = 0x00000200,  // Synthetic node (for full fidelity)
+        DeclarationFile     = 0x00000400,  // Node is a .d.ts file
+        Let                 = 0x00000800,  // Variable declaration
+        Const               = 0x00001000,  // Variable declaration
+
+        // Set if this node was parsed in strict mode.  Used for grammar error checks, as well as
+        // checking if the node can be reused in incremental settings.
+        ParsedInStrictMode  = 0x00002000, 
 
         Modifier = Export | Ambient | Public | Private | Protected | Static,
         AccessibilityModifier = Public | Private | Protected,

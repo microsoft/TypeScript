@@ -1169,6 +1169,11 @@ module ts {
 
         function finishNode<T extends Node>(node: T): T {
             node.end = scanner.getStartPos();
+
+            if (isInStrictMode) {
+                node.flags |= NodeFlags.ParsedInStrictMode;
+            }
+
             return node;
         }
 
@@ -1703,16 +1708,7 @@ module ts {
 
             for (var i = 0; i < parameterCount; i++) {
                 var parameter = parameters[i];
-                // It is a SyntaxError if the Identifier "eval" or the Identifier "arguments" occurs as the 
-                // Identifier in a PropertySetParameterList of a PropertyAssignment that is contained in strict code 
-                // or if its FunctionBody is strict code(11.1.5).
-                // It is a SyntaxError if the identifier eval or arguments appears within a FormalParameterList of a 
-                // strict mode FunctionLikeDeclaration or FunctionExpression(13.1) 
-                if (isInStrictMode && isEvalOrArgumentsIdentifier(parameter.name)) {
-                    reportInvalidUseInStrictMode(parameter.name);
-                    return;
-                }
-                else if (parameter.flags & NodeFlags.Rest) {
+                if (parameter.flags & NodeFlags.Rest) {
                     if (i !== (parameterCount - 1)) {
                         grammarErrorOnNode(parameter.name, Diagnostics.A_rest_parameter_must_be_last_in_a_parameter_list);
                         return;
@@ -4322,7 +4318,7 @@ module ts {
                 else {
                     // No parser errors were reported.  Perform our stricted grammar checks.
                     file._syntacticDiagnostics = [];
-                    performGrammarChecks(file);
+                    performGrammarChecks(sourceText, file);
                 }
 
                 file._parserDiagnostics = undefined;
@@ -4363,8 +4359,53 @@ module ts {
         return file;
     }
 
-    function performGrammarChecks(child: Node) {
+    function performGrammarChecks(sourceText: string, file: SourceFileInternal) {
+        performNodeChecks(file);
+
+        function performNodeChecks(node: Node) {
+            // First recurse and perform all grammar checks on the children of this node.  If any
+            // children had an grammar error, then skip reporting errors for this node or anything
+            // higher.
+            if (forEachChild(node, performNodeChecks)) {
+                return true;
+            }
+
+            // No grammar errors on any of our children.  Check this node for grammar errors.
+            switch (node.kind) {
+                case SyntaxKind.Parameter:
+                    return performParameterChecks(<ParameterDeclaration>node);
+            }
+        }
+
+        function grammarErrorOnNode(node: Node, message: DiagnosticMessage, arg0?: any, arg1?: any, arg2?: any): void {
+            var span = getErrorSpanForNode(node);
+            var start = span.end > span.pos ? skipTrivia(file.text, span.pos) : span.pos;
+            var length = span.end - start;
+
+            file._syntacticDiagnostics.push(createFileDiagnostic(file, start, length, message, arg0, arg1, arg2));
+        }
+
+        function reportInvalidUseInStrictMode(node: Identifier): void {
+            // declarationNameToString cannot be used here since it uses a backreference to 'parent' that is not yet set
+            var name = sourceText.substring(skipTrivia(sourceText, node.pos), node.end);
+            grammarErrorOnNode(node, Diagnostics.Invalid_use_of_0_in_strict_mode, name);
+        }
+
+        function performParameterChecks(node: ParameterDeclaration): boolean {
+            // It is a SyntaxError if the Identifier "eval" or the Identifier "arguments" occurs as the 
+            // Identifier in a PropertySetParameterList of a PropertyAssignment that is contained in strict code 
+            // or if its FunctionBody is strict code(11.1.5).
+            // It is a SyntaxError if the identifier eval or arguments appears within a FormalParameterList of a 
+            // strict mode FunctionLikeDeclaration or FunctionExpression(13.1) 
+            if (node.flags & NodeFlags.ParsedInStrictMode && isEvalOrArgumentsIdentifier(node.name)) {
+                reportInvalidUseInStrictMode(node.name);
+                return true;
+            }
+
+            return false;
+        }
     }
+
 
     export function createProgram(rootNames: string[], options: CompilerOptions, host: CompilerHost): Program {
         var program: Program;
