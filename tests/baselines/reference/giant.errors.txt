@@ -10,27 +10,12 @@ tests/cases/compiler/giant.ts(93,9): error TS1005: '{' expected.
 tests/cases/compiler/giant.ts(95,9): error TS1005: '{' expected.
 tests/cases/compiler/giant.ts(99,9): error TS1005: '{' expected.
 tests/cases/compiler/giant.ts(101,5): error TS1005: '{' expected.
-tests/cases/compiler/giant.ts(154,39): error TS1037: A function implementation cannot be declared in an ambient context.
 tests/cases/compiler/giant.ts(168,9): error TS1005: '{' expected.
 tests/cases/compiler/giant.ts(170,9): error TS1005: '{' expected.
 tests/cases/compiler/giant.ts(172,9): error TS1005: '{' expected.
 tests/cases/compiler/giant.ts(174,9): error TS1005: '{' expected.
 tests/cases/compiler/giant.ts(178,9): error TS1005: '{' expected.
 tests/cases/compiler/giant.ts(180,5): error TS1005: '{' expected.
-tests/cases/compiler/giant.ts(233,39): error TS1037: A function implementation cannot be declared in an ambient context.
-tests/cases/compiler/giant.ts(238,35): error TS1037: A function implementation cannot be declared in an ambient context.
-tests/cases/compiler/giant.ts(240,24): error TS1111: A constructor implementation cannot be declared in an ambient context.
-tests/cases/compiler/giant.ts(243,21): error TS1037: A function implementation cannot be declared in an ambient context.
-tests/cases/compiler/giant.ts(244,22): error TS1037: A function implementation cannot be declared in an ambient context.
-tests/cases/compiler/giant.ts(245,22): error TS1037: A function implementation cannot be declared in an ambient context.
-tests/cases/compiler/giant.ts(247,31): error TS1037: A function implementation cannot be declared in an ambient context.
-tests/cases/compiler/giant.ts(249,23): error TS1037: A function implementation cannot be declared in an ambient context.
-tests/cases/compiler/giant.ts(251,32): error TS1037: A function implementation cannot be declared in an ambient context.
-tests/cases/compiler/giant.ts(254,21): error TS1037: A function implementation cannot be declared in an ambient context.
-tests/cases/compiler/giant.ts(255,31): error TS1037: A function implementation cannot be declared in an ambient context.
-tests/cases/compiler/giant.ts(257,22): error TS1037: A function implementation cannot be declared in an ambient context.
-tests/cases/compiler/giant.ts(262,22): error TS1037: A function implementation cannot be declared in an ambient context.
-tests/cases/compiler/giant.ts(267,30): error TS1037: A function implementation cannot be declared in an ambient context.
 tests/cases/compiler/giant.ts(283,5): error TS1005: '{' expected.
 tests/cases/compiler/giant.ts(285,5): error TS1005: '{' expected.
 tests/cases/compiler/giant.ts(287,5): error TS1005: '{' expected.
@@ -43,55 +28,16 @@ tests/cases/compiler/giant.ts(351,9): error TS1005: '{' expected.
 tests/cases/compiler/giant.ts(353,9): error TS1005: '{' expected.
 tests/cases/compiler/giant.ts(357,9): error TS1005: '{' expected.
 tests/cases/compiler/giant.ts(359,5): error TS1005: '{' expected.
-tests/cases/compiler/giant.ts(412,39): error TS1037: A function implementation cannot be declared in an ambient context.
 tests/cases/compiler/giant.ts(426,9): error TS1005: '{' expected.
 tests/cases/compiler/giant.ts(428,9): error TS1005: '{' expected.
 tests/cases/compiler/giant.ts(430,9): error TS1005: '{' expected.
 tests/cases/compiler/giant.ts(432,9): error TS1005: '{' expected.
 tests/cases/compiler/giant.ts(436,9): error TS1005: '{' expected.
 tests/cases/compiler/giant.ts(438,5): error TS1005: '{' expected.
-tests/cases/compiler/giant.ts(491,39): error TS1037: A function implementation cannot be declared in an ambient context.
-tests/cases/compiler/giant.ts(496,35): error TS1037: A function implementation cannot be declared in an ambient context.
-tests/cases/compiler/giant.ts(498,24): error TS1111: A constructor implementation cannot be declared in an ambient context.
-tests/cases/compiler/giant.ts(501,21): error TS1037: A function implementation cannot be declared in an ambient context.
-tests/cases/compiler/giant.ts(502,22): error TS1037: A function implementation cannot be declared in an ambient context.
-tests/cases/compiler/giant.ts(503,22): error TS1037: A function implementation cannot be declared in an ambient context.
-tests/cases/compiler/giant.ts(505,31): error TS1037: A function implementation cannot be declared in an ambient context.
-tests/cases/compiler/giant.ts(507,23): error TS1037: A function implementation cannot be declared in an ambient context.
-tests/cases/compiler/giant.ts(509,32): error TS1037: A function implementation cannot be declared in an ambient context.
-tests/cases/compiler/giant.ts(512,21): error TS1037: A function implementation cannot be declared in an ambient context.
-tests/cases/compiler/giant.ts(513,31): error TS1037: A function implementation cannot be declared in an ambient context.
-tests/cases/compiler/giant.ts(515,22): error TS1037: A function implementation cannot be declared in an ambient context.
-tests/cases/compiler/giant.ts(520,22): error TS1037: A function implementation cannot be declared in an ambient context.
-tests/cases/compiler/giant.ts(525,30): error TS1037: A function implementation cannot be declared in an ambient context.
-tests/cases/compiler/giant.ts(532,31): error TS1037: A function implementation cannot be declared in an ambient context.
-tests/cases/compiler/giant.ts(534,20): error TS1111: A constructor implementation cannot be declared in an ambient context.
-tests/cases/compiler/giant.ts(537,17): error TS1037: A function implementation cannot be declared in an ambient context.
-tests/cases/compiler/giant.ts(538,18): error TS1037: A function implementation cannot be declared in an ambient context.
-tests/cases/compiler/giant.ts(539,18): error TS1037: A function implementation cannot be declared in an ambient context.
-tests/cases/compiler/giant.ts(541,27): error TS1037: A function implementation cannot be declared in an ambient context.
-tests/cases/compiler/giant.ts(543,19): error TS1037: A function implementation cannot be declared in an ambient context.
-tests/cases/compiler/giant.ts(545,28): error TS1037: A function implementation cannot be declared in an ambient context.
-tests/cases/compiler/giant.ts(548,17): error TS1037: A function implementation cannot be declared in an ambient context.
-tests/cases/compiler/giant.ts(549,27): error TS1037: A function implementation cannot be declared in an ambient context.
-tests/cases/compiler/giant.ts(551,18): error TS1037: A function implementation cannot be declared in an ambient context.
-tests/cases/compiler/giant.ts(556,18): error TS1037: A function implementation cannot be declared in an ambient context.
-tests/cases/compiler/giant.ts(558,24): error TS1111: A constructor implementation cannot be declared in an ambient context.
-tests/cases/compiler/giant.ts(561,21): error TS1037: A function implementation cannot be declared in an ambient context.
-tests/cases/compiler/giant.ts(563,21): error TS1037: A function implementation cannot be declared in an ambient context.
-tests/cases/compiler/giant.ts(606,22): error TS1037: A function implementation cannot be declared in an ambient context.
-tests/cases/compiler/giant.ts(611,30): error TS1037: A function implementation cannot be declared in an ambient context.
 tests/cases/compiler/giant.ts(615,16): error TS1038: A 'declare' modifier cannot be used in an already ambient context.
 tests/cases/compiler/giant.ts(616,16): error TS1038: A 'declare' modifier cannot be used in an already ambient context.
-tests/cases/compiler/giant.ts(616,39): error TS1037: A function implementation cannot be declared in an ambient context.
 tests/cases/compiler/giant.ts(617,16): error TS1038: A 'declare' modifier cannot be used in an already ambient context.
 tests/cases/compiler/giant.ts(618,16): error TS1038: A 'declare' modifier cannot be used in an already ambient context.
-tests/cases/compiler/giant.ts(621,26): error TS1037: A function implementation cannot be declared in an ambient context.
-tests/cases/compiler/giant.ts(623,24): error TS1111: A constructor implementation cannot be declared in an ambient context.
-tests/cases/compiler/giant.ts(626,21): error TS1037: A function implementation cannot be declared in an ambient context.
-tests/cases/compiler/giant.ts(628,21): error TS1037: A function implementation cannot be declared in an ambient context.
-tests/cases/compiler/giant.ts(672,22): error TS1037: A function implementation cannot be declared in an ambient context.
-tests/cases/compiler/giant.ts(676,30): error TS1037: A function implementation cannot be declared in an ambient context.
 tests/cases/compiler/giant.ts(23,12): error TS2300: Duplicate identifier 'pgF'.
 tests/cases/compiler/giant.ts(24,16): error TS2300: Duplicate identifier 'pgF'.
 tests/cases/compiler/giant.ts(24,16): error TS2378: A 'get' accessor must return a value or consist of a single 'throw' statement.
@@ -228,7 +174,7 @@ tests/cases/compiler/giant.ts(602,9): error TS2386: Overload signatures must all
 tests/cases/compiler/giant.ts(668,9): error TS2386: Overload signatures must all be optional or required.
 
 
-==== tests/cases/compiler/giant.ts (228 errors) ====
+==== tests/cases/compiler/giant.ts (174 errors) ====
     
     /*
         Prefixes
@@ -471,8 +417,6 @@ tests/cases/compiler/giant.ts(668,9): error TS2386: Overload signatures must all
             export module eM { };
             export declare var eaV;
             export declare function eaF() { };
-                                          ~
-!!! error TS1037: A function implementation cannot be declared in an ambient context.
             export declare class eaC { };
             export declare module eaM { };
         }
@@ -596,54 +540,36 @@ tests/cases/compiler/giant.ts(668,9): error TS2386: Overload signatures must all
             export module eM { };
             export declare var eaV;
             export declare function eaF() { };
-                                          ~
-!!! error TS1037: A function implementation cannot be declared in an ambient context.
             export declare class eaC { };
             export declare module eaM { };
         }
         export declare var eaV;
         export declare function eaF() { };
-                                      ~
-!!! error TS1037: A function implementation cannot be declared in an ambient context.
         export declare class eaC {
             constructor () { }
-                           ~
-!!! error TS1111: A constructor implementation cannot be declared in an ambient context.
             public pV;
             private rV;
             public pF() { }
-                        ~
-!!! error TS1037: A function implementation cannot be declared in an ambient context.
             private rF() { }
-                         ~
-!!! error TS1037: A function implementation cannot be declared in an ambient context.
             public pgF() { }
-                         ~
-!!! error TS1037: A function implementation cannot be declared in an ambient context.
                    ~~~
 !!! error TS2300: Duplicate identifier 'pgF'.
             public get pgF()
                        ~~~
 !!! error TS2300: Duplicate identifier 'pgF'.
             public psF(param:any) { }
-                                  ~
-!!! error TS1037: A function implementation cannot be declared in an ambient context.
                    ~~~
 !!! error TS2300: Duplicate identifier 'psF'.
             public set psF(param:any)
                        ~~~
 !!! error TS2300: Duplicate identifier 'psF'.
             private rgF() { }
-                          ~
-!!! error TS1037: A function implementation cannot be declared in an ambient context.
                     ~~~
 !!! error TS2300: Duplicate identifier 'rgF'.
             private get rgF()
                         ~~~
 !!! error TS2300: Duplicate identifier 'rgF'.
             private rsF(param:any) { }
-                                   ~
-!!! error TS1037: A function implementation cannot be declared in an ambient context.
                     ~~~
 !!! error TS2300: Duplicate identifier 'rsF'.
             private set rsF(param:any)
@@ -651,19 +577,13 @@ tests/cases/compiler/giant.ts(668,9): error TS2386: Overload signatures must all
 !!! error TS2300: Duplicate identifier 'rsF'.
             static tV;
             static tF() { }
-                        ~
-!!! error TS1037: A function implementation cannot be declared in an ambient context.
             static tsF(param:any) { }
-                                  ~
-!!! error TS1037: A function implementation cannot be declared in an ambient context.
                    ~~~
 !!! error TS2300: Duplicate identifier 'tsF'.
             static set tsF(param:any)
                        ~~~
 !!! error TS2300: Duplicate identifier 'tsF'.
             static tgF() { }
-                         ~
-!!! error TS1037: A function implementation cannot be declared in an ambient context.
                    ~~~
 !!! error TS2300: Duplicate identifier 'tgF'.
             static get tgF()
@@ -673,15 +593,11 @@ tests/cases/compiler/giant.ts(668,9): error TS2386: Overload signatures must all
         export declare module eaM {
             var V;
             function F() { };
-                         ~
-!!! error TS1037: A function implementation cannot be declared in an ambient context.
             class C { }
             interface I { }
             module M { }
             export var eV;
             export function eF() { };
-                                 ~
-!!! error TS1037: A function implementation cannot be declared in an ambient context.
             export class eC { }
             export interface eI { }
             export module eM { }
@@ -915,8 +831,6 @@ tests/cases/compiler/giant.ts(668,9): error TS2386: Overload signatures must all
             export module eM { };
             export declare var eaV;
             export declare function eaF() { };
-                                          ~
-!!! error TS1037: A function implementation cannot be declared in an ambient context.
             export declare class eaC { };
             export declare module eaM { };
         }
@@ -1040,54 +954,36 @@ tests/cases/compiler/giant.ts(668,9): error TS2386: Overload signatures must all
             export module eM { };
             export declare var eaV;
             export declare function eaF() { };
-                                          ~
-!!! error TS1037: A function implementation cannot be declared in an ambient context.
             export declare class eaC { };
             export declare module eaM { };
         }
         export declare var eaV;
         export declare function eaF() { };
-                                      ~
-!!! error TS1037: A function implementation cannot be declared in an ambient context.
         export declare class eaC {
             constructor () { }
-                           ~
-!!! error TS1111: A constructor implementation cannot be declared in an ambient context.
             public pV;
             private rV;
             public pF() { }
-                        ~
-!!! error TS1037: A function implementation cannot be declared in an ambient context.
             private rF() { }
-                         ~
-!!! error TS1037: A function implementation cannot be declared in an ambient context.
             public pgF() { }
-                         ~
-!!! error TS1037: A function implementation cannot be declared in an ambient context.
                    ~~~
 !!! error TS2300: Duplicate identifier 'pgF'.
             public get pgF()
                        ~~~
 !!! error TS2300: Duplicate identifier 'pgF'.
             public psF(param:any) { }
-                                  ~
-!!! error TS1037: A function implementation cannot be declared in an ambient context.
                    ~~~
 !!! error TS2300: Duplicate identifier 'psF'.
             public set psF(param:any)
                        ~~~
 !!! error TS2300: Duplicate identifier 'psF'.
             private rgF() { }
-                          ~
-!!! error TS1037: A function implementation cannot be declared in an ambient context.
                     ~~~
 !!! error TS2300: Duplicate identifier 'rgF'.
             private get rgF()
                         ~~~
 !!! error TS2300: Duplicate identifier 'rgF'.
             private rsF(param:any) { }
-                                   ~
-!!! error TS1037: A function implementation cannot be declared in an ambient context.
                     ~~~
 !!! error TS2300: Duplicate identifier 'rsF'.
             private set rsF(param:any)
@@ -1095,19 +991,13 @@ tests/cases/compiler/giant.ts(668,9): error TS2386: Overload signatures must all
 !!! error TS2300: Duplicate identifier 'rsF'.
             static tV;
             static tF() { }
-                        ~
-!!! error TS1037: A function implementation cannot be declared in an ambient context.
             static tsF(param:any) { }
-                                  ~
-!!! error TS1037: A function implementation cannot be declared in an ambient context.
                    ~~~
 !!! error TS2300: Duplicate identifier 'tsF'.
             static set tsF(param:any)
                        ~~~
 !!! error TS2300: Duplicate identifier 'tsF'.
             static tgF() { }
-                         ~
-!!! error TS1037: A function implementation cannot be declared in an ambient context.
                    ~~~
 !!! error TS2300: Duplicate identifier 'tgF'.
             static get tgF()
@@ -1117,15 +1007,11 @@ tests/cases/compiler/giant.ts(668,9): error TS2386: Overload signatures must all
         export declare module eaM {
             var V;
             function F() { };
-                         ~
-!!! error TS1037: A function implementation cannot be declared in an ambient context.
             class C { }
             interface I { }
             module M { }
             export var eV;
             export function eF() { };
-                                 ~
-!!! error TS1037: A function implementation cannot be declared in an ambient context.
             export class eC { }
             export interface eI { }
             export module eM { }
@@ -1133,47 +1019,31 @@ tests/cases/compiler/giant.ts(668,9): error TS2386: Overload signatures must all
     }
     export declare var eaV;
     export declare function eaF() { };
-                                  ~
-!!! error TS1037: A function implementation cannot be declared in an ambient context.
     export declare class eaC {
         constructor () { }
-                       ~
-!!! error TS1111: A constructor implementation cannot be declared in an ambient context.
         public pV;
         private rV;
         public pF() { }
-                    ~
-!!! error TS1037: A function implementation cannot be declared in an ambient context.
         private rF() { }
-                     ~
-!!! error TS1037: A function implementation cannot be declared in an ambient context.
         public pgF() { }
-                     ~
-!!! error TS1037: A function implementation cannot be declared in an ambient context.
                ~~~
 !!! error TS2300: Duplicate identifier 'pgF'.
         public get pgF()
                    ~~~
 !!! error TS2300: Duplicate identifier 'pgF'.
         public psF(param:any) { }
-                              ~
-!!! error TS1037: A function implementation cannot be declared in an ambient context.
                ~~~
 !!! error TS2300: Duplicate identifier 'psF'.
         public set psF(param:any)
                    ~~~
 !!! error TS2300: Duplicate identifier 'psF'.
         private rgF() { }
-                      ~
-!!! error TS1037: A function implementation cannot be declared in an ambient context.
                 ~~~
 !!! error TS2300: Duplicate identifier 'rgF'.
         private get rgF()
                     ~~~
 !!! error TS2300: Duplicate identifier 'rgF'.
         private rsF(param:any) { }
-                               ~
-!!! error TS1037: A function implementation cannot be declared in an ambient context.
                 ~~~
 !!! error TS2300: Duplicate identifier 'rsF'.
         private set rsF(param:any)
@@ -1181,19 +1051,13 @@ tests/cases/compiler/giant.ts(668,9): error TS2386: Overload signatures must all
 !!! error TS2300: Duplicate identifier 'rsF'.
         static tV;
         static tF() { }
-                    ~
-!!! error TS1037: A function implementation cannot be declared in an ambient context.
         static tsF(param:any) { }
-                              ~
-!!! error TS1037: A function implementation cannot be declared in an ambient context.
                ~~~
 !!! error TS2300: Duplicate identifier 'tsF'.
         static set tsF(param:any)
                    ~~~
 !!! error TS2300: Duplicate identifier 'tsF'.
         static tgF() { }
-                     ~
-!!! error TS1037: A function implementation cannot be declared in an ambient context.
                ~~~
 !!! error TS2300: Duplicate identifier 'tgF'.
         static get tgF()
@@ -1203,21 +1067,13 @@ tests/cases/compiler/giant.ts(668,9): error TS2386: Overload signatures must all
     export declare module eaM {
         var V;
         function F() { };
-                     ~
-!!! error TS1037: A function implementation cannot be declared in an ambient context.
         class C {
             constructor () { }
-                           ~
-!!! error TS1111: A constructor implementation cannot be declared in an ambient context.
             public pV;
             private rV;
             public pF() { }
-                        ~
-!!! error TS1037: A function implementation cannot be declared in an ambient context.
             static tV;
             static tF() { }
-                        ~
-!!! error TS1037: A function implementation cannot be declared in an ambient context.
         }
         interface I {
             //Call Signature
@@ -1263,15 +1119,11 @@ tests/cases/compiler/giant.ts(668,9): error TS2386: Overload signatures must all
         module M {
             var V;
             function F() { };
-                         ~
-!!! error TS1037: A function implementation cannot be declared in an ambient context.
             class C { }
             interface I { }
             module M { }
             export var eV;
             export function eF() { };
-                                 ~
-!!! error TS1037: A function implementation cannot be declared in an ambient context.
             export class eC { }
             export interface eI { }
             export module eM { }
@@ -1281,8 +1133,6 @@ tests/cases/compiler/giant.ts(668,9): error TS2386: Overload signatures must all
             export declare function eaF() { };
                    ~~~~~~~
 !!! error TS1038: A 'declare' modifier cannot be used in an already ambient context.
-                                          ~
-!!! error TS1037: A function implementation cannot be declared in an ambient context.
             export declare class eaC { }
                    ~~~~~~~
 !!! error TS1038: A 'declare' modifier cannot be used in an already ambient context.
@@ -1292,21 +1142,13 @@ tests/cases/compiler/giant.ts(668,9): error TS2386: Overload signatures must all
         }
         export var eV;
         export function eF() { };
-                             ~
-!!! error TS1037: A function implementation cannot be declared in an ambient context.
         export class eC {
             constructor () { }
-                           ~
-!!! error TS1111: A constructor implementation cannot be declared in an ambient context.
             public pV;
             private rV;
             public pF() { }
-                        ~
-!!! error TS1037: A function implementation cannot be declared in an ambient context.
             static tV
             static tF() { }
-                        ~
-!!! error TS1037: A function implementation cannot be declared in an ambient context.
         }
         export interface eI {
             //Call Signature
@@ -1353,14 +1195,10 @@ tests/cases/compiler/giant.ts(668,9): error TS2386: Overload signatures must all
         export module eM {
             var V;
             function F() { };
-                         ~
-!!! error TS1037: A function implementation cannot be declared in an ambient context.
             class C { }
             module M { }
             export var eV;
             export function eF() { };
-                                 ~
-!!! error TS1037: A function implementation cannot be declared in an ambient context.
             export class eC { }
             export interface eI { }
             export module eM { }

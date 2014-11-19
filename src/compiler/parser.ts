@@ -3156,21 +3156,16 @@ module ts {
             }
         }
 
-        function parseAndCheckFunctionBody(isConstructor: boolean): Block {
-            var initialPosition = scanner.getTokenPos();
-            var errorCountBeforeBody = file._parserDiagnostics.length;
+        function parseFunctionBlockOrSemicolon(): Block {
             if (token === SyntaxKind.OpenBraceToken) {
-                var body = parseBody(/* ignoreMissingOpenBrace */ false);
-                if (body && inAmbientContext && file._parserDiagnostics.length === errorCountBeforeBody) {
-                    var diagnostic = isConstructor ? Diagnostics.A_constructor_implementation_cannot_be_declared_in_an_ambient_context : Diagnostics.A_function_implementation_cannot_be_declared_in_an_ambient_context;
-                    grammarErrorAtPos(initialPosition, 1, diagnostic);
-                }
-                return body;
+                return parseBody(/* ignoreMissingOpenBrace */ false);
             }
+
             if (canParseSemicolon()) {
                 parseSemicolon();
                 return undefined;
             }
+
             error(Diagnostics.Block_or_expected); // block or ';' expected
         }
 
@@ -3225,7 +3220,7 @@ module ts {
             node.typeParameters = sig.typeParameters;
             node.parameters = sig.parameters;
             node.type = sig.type;
-            node.body = parseAndCheckFunctionBody(/*isConstructor*/ false);
+            node.body = parseFunctionBlockOrSemicolon();
             return finishNode(node);
         }
 
@@ -3237,7 +3232,7 @@ module ts {
             node.typeParameters = sig.typeParameters;
             node.parameters = sig.parameters;
             node.type = sig.type;
-            node.body = parseAndCheckFunctionBody(/*isConstructor*/ true);
+            node.body = parseFunctionBlockOrSemicolon();
             return finishNode(node);
         }
 
@@ -3258,7 +3253,7 @@ module ts {
                 method.typeParameters = sig.typeParameters;
                 method.parameters = sig.parameters;
                 method.type = sig.type;
-                method.body = parseAndCheckFunctionBody(/*isConstructor*/ false);
+                method.body = parseFunctionBlockOrSemicolon();
                 return finishNode(method);
             }
             else {
@@ -4152,7 +4147,8 @@ module ts {
             checkTypeParameterList(node.typeParameters) ||
                 checkParameterList(node.parameters) ||
                 checkConstructorTypeParameters(node) ||
-                checkConstructorTypeAnnotation(node);
+                checkConstructorTypeAnnotation(node) ||
+                checkForBodyInAmbientContext(node.body, /*isConstructor:*/ true);
         }
 
         function checkConstructorTypeParameters(node: ConstructorDeclaration) {
@@ -4242,7 +4238,8 @@ module ts {
         function visitFunctionDeclaration(node: FunctionLikeDeclaration) {
             checkTypeParameterList(node.typeParameters) ||
                 checkParameterList(node.parameters) ||
-                checkFunctionName(node.name);
+                checkFunctionName(node.name) ||
+                checkForBodyInAmbientContext(node.body, /*isConstructor:*/ false);
         }
 
         function visitFunctionExpression(node: FunctionExpression) {
@@ -4314,7 +4311,17 @@ module ts {
 
         function visitMethod(node: MethodDeclaration) {
             checkTypeParameterList(node.typeParameters) ||
-                checkParameterList(node.parameters);
+                checkParameterList(node.parameters) ||
+                checkForBodyInAmbientContext(node.body, /*isConstructor:*/ false);
+        }
+
+        function checkForBodyInAmbientContext(body: Block | Expression, isConstructor: boolean): boolean {
+            if (inAmbientContext && body && body.kind === SyntaxKind.FunctionBlock) {
+                var diagnostic = isConstructor
+                    ? Diagnostics.A_constructor_implementation_cannot_be_declared_in_an_ambient_context
+                    : Diagnostics.A_function_implementation_cannot_be_declared_in_an_ambient_context;
+                return grammarErrorOnFirstToken(body, diagnostic);
+            }
         }
 
         function visitModuleDeclaration(node: ModuleDeclaration): void {
