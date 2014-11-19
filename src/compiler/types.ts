@@ -650,6 +650,15 @@ module ts {
         amdModuleName: string;
         referencedFiles: FileReference[];
         semanticDiagnostics: Diagnostic[];
+
+        // Parse errors refer specifically to things the parser could not understand at all (like 
+        // missing tokens, or tokens it didn't know how to deal with). Grammar errors are for 
+        // things the parser understood, but either the ES6 or TS grammars do not allow (like 
+        // putting an 'public' modifier on a 'class declaration').
+        parseDiagnostics: Diagnostic[];
+        grammarDiagnostics: Diagnostic[];
+
+        // Returns all 
         getSyntacticDiagnostics(): Diagnostic[];
         hasNoDefaultLib: boolean;
         externalModuleIndicator: Node; // The first node that causes this file to be an external module
