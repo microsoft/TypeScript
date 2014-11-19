@@ -635,12 +635,11 @@ module ts {
     }
 
     export function tryResolveScriptReference(program: Program, sourceFile: SourceFile, reference: FileReference) {
-        var referenceFileName = isRootedDiskPath(reference.filename) ? reference.filename : combinePaths(getDirectoryPath(sourceFile.filename), reference.filename);
-        referenceFileName = normalizePath(referenceFileName);
         if (!program.getCompilerOptions().noResolve) {
+            var referenceFileName = isRootedDiskPath(reference.filename) ? reference.filename : combinePaths(getDirectoryPath(sourceFile.filename), reference.filename);
             referenceFileName = getNormalizedAbsolutePath(referenceFileName, program.getCompilerHost().getCurrentDirectory());
+            return program.getSourceFile(referenceFileName);
         }
-        return program.getSourceFile(referenceFileName);
     }
 
     export function getAncestor(node: Node, kind: SyntaxKind): Node {
