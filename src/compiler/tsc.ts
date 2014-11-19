@@ -368,7 +368,7 @@ module ts {
             else {
                 var emitStart = new Date().getTime();
                 var emitOutput = checker.invokeEmitter();
-                var emitErrors = emitOutput.errors;
+                var emitErrors = emitOutput.diagnostics;
                 exitStatus = emitOutput.emitResultStatus;
                 var reportStart = new Date().getTime();
                 errors = concatenate(errors, emitErrors);

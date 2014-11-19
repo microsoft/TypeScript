@@ -132,7 +132,7 @@ class ProjectRunner extends RunnerBase {
                 var checker = program.getTypeChecker(/*fullTypeCheck*/ true);
                 errors = checker.getDiagnostics();
                 var emitResult = checker.invokeEmitter();
-                errors = ts.concatenate(errors, emitResult.errors);
+                errors = ts.concatenate(errors, emitResult.diagnostics);
                 sourceMapData = emitResult.sourceMaps;
 
                 // Clean up source map data that will be used in baselining

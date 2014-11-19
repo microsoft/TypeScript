@@ -810,7 +810,7 @@ module Harness {
                 }
 
                 var errors: HarnessDiagnostic[] = [];
-                program.getDiagnostics().concat(checker.getDiagnostics()).concat(emitResult ? emitResult.errors : []).forEach(err => {
+                program.getDiagnostics().concat(checker.getDiagnostics()).concat(emitResult ? emitResult.diagnostics : []).forEach(err => {
                     // TODO: new compiler formats errors after this point to add . and newlines so we'll just do it manually for now
                     errors.push(getMinimalDiagnostic(err));
                 });

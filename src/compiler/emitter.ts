@@ -3564,7 +3564,7 @@ module ts {
 
         return {
             emitResultStatus,
-            errors: diagnostics,
+            diagnostics,
             sourceMaps: sourceMapDataList
         };
     }
