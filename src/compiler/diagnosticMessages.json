@@ -488,7 +488,7 @@
         "code": 1161
     },
 
-    "A object member cannot be declared optional.": {
+    "An object member cannot be declared optional.": {
         "category": "Error",
         "code":  1160
     },
