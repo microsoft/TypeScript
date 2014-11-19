@@ -1056,6 +1056,7 @@ var ts;
         Type_argument_candidate_1_is_not_a_valid_type_argument_because_it_is_not_a_supertype_of_candidate_0: { code: 2455, category: 1 /* Error */, key: "Type argument candidate '{1}' is not a valid type argument because it is not a supertype of candidate '{0}'." },
         Type_alias_0_circularly_references_itself: { code: 2456, category: 1 /* Error */, key: "Type alias '{0}' circularly references itself." },
         Type_alias_name_cannot_be_0: { code: 2457, category: 1 /* Error */, key: "Type alias name cannot be '{0}'" },
+        An_AMD_module_cannot_have_multiple_name_assignments: { code: 2458, category: 1 /* Error */, key: "An AMD module cannot have multiple name assignments." },
         Import_declaration_0_is_using_private_name_1: { code: 4000, category: 1 /* Error */, key: "Import declaration '{0}' is using private name '{1}'." },
         Type_parameter_0_of_exported_class_has_or_is_using_name_1_from_private_module_2: { code: 4001, category: 1 /* Error */, key: "Type parameter '{0}' of exported class has or is using name '{1}' from private module '{2}'." },
         Type_parameter_0_of_exported_class_has_or_is_using_private_name_1: { code: 4002, category: 1 /* Error */, key: "Type parameter '{0}' of exported class has or is using private name '{1}'." },
@@ -5542,6 +5543,7 @@ var ts;
         function processReferenceComments() {
             var referencedFiles = [];
             var amdDependencies = [];
+            var amdModuleName;
             commentRanges = [];
             token = scanner.scan();
             for (var i = 0; i < commentRanges.length; i++) {
@@ -5560,6 +5562,14 @@ var ts;
                     }
                 }
                 else {
+                    var amdModuleNameRegEx = /^\/\/\/\s*<amd-module\s+name\s*=\s*('|")(.+?)\1/gim;
+                    var amdModuleNameMatchResult = amdModuleNameRegEx.exec(comment);
+                    if (amdModuleNameMatchResult) {
+                        if (amdModuleName) {
+                            errorAtPos(range.pos, range.end - range.pos, ts.Diagnostics.An_AMD_module_cannot_have_multiple_name_assignments);
+                        }
+                        amdModuleName = amdModuleNameMatchResult[2];
+                    }
                     var amdDependencyRegEx = /^\/\/\/\s*<amd-dependency\s+path\s*=\s*('|")(.+?)\1/gim;
                     var amdDependencyMatchResult = amdDependencyRegEx.exec(comment);
                     if (amdDependencyMatchResult) {
@@ -5570,7 +5580,8 @@ var ts;
             commentRanges = undefined;
             return {
                 referencedFiles: referencedFiles,
-                amdDependencies: amdDependencies
+                amdDependencies: amdDependencies,
+                amdModuleName: amdModuleName
             };
         }
         function getExternalModuleIndicator() {
@@ -5593,6 +5604,7 @@ var ts;
         var referenceComments = processReferenceComments();
         file.referencedFiles = referenceComments.referencedFiles;
         file.amdDependencies = referenceComments.amdDependencies;
+        file.amdModuleName = referenceComments.amdModuleName;
         file.statements = parseList(0 /* SourceElements */, true, parseSourceElement);
         file.externalModuleIndicator = getExternalModuleIndicator();
         file.nodeCount = nodeCount;
@@ -7953,7 +7965,11 @@ var ts;
             function emitAMDModule(node, startIndex) {
                 var imports = getExternalImportDeclarations(node);
                 writeLine();
-                write("define([\"require\", \"exports\"");
+                write("define(");
+                if (node.amdModuleName) {
+                    write("\"" + node.amdModuleName + "\", ");
+                }
+                write("[\"require\", \"exports\"");
                 ts.forEach(imports, function (imp) {
                     write(", ");
                     emitLiteral(imp.externalModuleName);

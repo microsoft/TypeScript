@@ -718,6 +718,7 @@ module ts {
         public getPositionFromLineAndCharacter(line: number, character: number): number { return -1; }
         public getLineStarts(): number[] { return undefined; }
         public amdDependencies: string[];
+        public amdModuleName: string;
         public referencedFiles: FileReference[];
         public syntacticErrors: Diagnostic[];
         public semanticErrors: Diagnostic[];
