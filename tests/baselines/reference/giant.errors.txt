@@ -388,7 +388,7 @@ tests/cases/compiler/giant.ts(668,9): error TS2386: Overload signatures must all
          ~
 !!! error TS1022: An index signature parameter must have a type annotation.
         [p1: string];
-        ~~~~~~~~~~~~
+        ~~~~~~~~~~~~~
 !!! error TS1021: An index signature must have a type annotation.
         [p2: string, p3: number];
          ~~
@@ -502,7 +502,7 @@ tests/cases/compiler/giant.ts(668,9): error TS2386: Overload signatures must all
              ~
 !!! error TS1022: An index signature parameter must have a type annotation.
             [p1: string];
-            ~~~~~~~~~~~~
+            ~~~~~~~~~~~~~
 !!! error TS1021: An index signature must have a type annotation.
             [p2: string, p3: number];
              ~~
@@ -633,7 +633,7 @@ tests/cases/compiler/giant.ts(668,9): error TS2386: Overload signatures must all
              ~
 !!! error TS1022: An index signature parameter must have a type annotation.
             [p1: string];
-            ~~~~~~~~~~~~
+            ~~~~~~~~~~~~~
 !!! error TS1021: An index signature must have a type annotation.
             [p2: string, p3: number];
              ~~
@@ -866,7 +866,7 @@ tests/cases/compiler/giant.ts(668,9): error TS2386: Overload signatures must all
          ~
 !!! error TS1022: An index signature parameter must have a type annotation.
         [p1: string];
-        ~~~~~~~~~~~~
+        ~~~~~~~~~~~~~
 !!! error TS1021: An index signature must have a type annotation.
         [p2: string, p3: number];
          ~~
@@ -980,7 +980,7 @@ tests/cases/compiler/giant.ts(668,9): error TS2386: Overload signatures must all
              ~
 !!! error TS1022: An index signature parameter must have a type annotation.
             [p1: string];
-            ~~~~~~~~~~~~
+            ~~~~~~~~~~~~~
 !!! error TS1021: An index signature must have a type annotation.
             [p2: string, p3: number];
              ~~
@@ -1111,7 +1111,7 @@ tests/cases/compiler/giant.ts(668,9): error TS2386: Overload signatures must all
              ~
 !!! error TS1022: An index signature parameter must have a type annotation.
             [p1: string];
-            ~~~~~~~~~~~~
+            ~~~~~~~~~~~~~
 !!! error TS1021: An index signature must have a type annotation.
             [p2: string, p3: number];
              ~~
@@ -1380,7 +1380,7 @@ tests/cases/compiler/giant.ts(668,9): error TS2386: Overload signatures must all
              ~
 !!! error TS1022: An index signature parameter must have a type annotation.
             [p1: string];
-            ~~~~~~~~~~~~
+            ~~~~~~~~~~~~~
 !!! error TS1021: An index signature must have a type annotation.
             [p2: string, p3: number];
              ~~
@@ -1484,7 +1484,7 @@ tests/cases/compiler/giant.ts(668,9): error TS2386: Overload signatures must all
              ~
 !!! error TS1022: An index signature parameter must have a type annotation.
             [p1: string];
-            ~~~~~~~~~~~~
+            ~~~~~~~~~~~~~
 !!! error TS1021: An index signature must have a type annotation.
             [p2: string, p3: number];
              ~~

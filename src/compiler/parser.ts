@@ -1719,52 +1719,46 @@ module ts {
             var indexerLength = scanner.getStartPos() - indexerStart;
             node.type = parseTypeAnnotation();
             parseSemicolon();
+            finishNode(node)
+
             if (file._parserDiagnostics.length === errorCountBeforeIndexSignature) {
-                checkIndexSignature(node, indexerStart, indexerLength);
+                checkIndexSignature(node);
             }
-            return finishNode(node);
+
+            return node;
         }
 
-        function checkIndexSignature(node: SignatureDeclaration, indexerStart: number, indexerLength: number): void {
+        function checkIndexSignature(node: SignatureDeclaration): void {
             var parameter = node.parameters[0];
             if (node.parameters.length !== 1) {
-                var arityDiagnostic = Diagnostics.An_index_signature_must_have_exactly_one_parameter;
                 if (parameter) {
-                    grammarErrorOnNode(parameter.name, arityDiagnostic);
+                    grammarErrorOnNode(parameter.name, Diagnostics.An_index_signature_must_have_exactly_one_parameter);
                 }
                 else {
-                    grammarErrorAtPos(indexerStart, indexerLength, arityDiagnostic);
+                    grammarErrorOnNode(node, Diagnostics.An_index_signature_must_have_exactly_one_parameter);
                 }
-                return;
             }
             else if (parameter.flags & NodeFlags.Rest) {
                 grammarErrorOnNode(parameter.name, Diagnostics.An_index_signature_cannot_have_a_rest_parameter);
-                return;
             }
             else if (parameter.flags & NodeFlags.Modifier) {
                 grammarErrorOnNode(parameter.name, Diagnostics.An_index_signature_parameter_cannot_have_an_accessibility_modifier);
-                return;
             }
             else if (parameter.flags & NodeFlags.QuestionMark) {
                 grammarErrorOnNode(parameter.name, Diagnostics.An_index_signature_parameter_cannot_have_a_question_mark);
-                return;
             }
             else if (parameter.initializer) {
                 grammarErrorOnNode(parameter.name, Diagnostics.An_index_signature_parameter_cannot_have_an_initializer);
-                return;
             }
             else if (!parameter.type) {
                 grammarErrorOnNode(parameter.name, Diagnostics.An_index_signature_parameter_must_have_a_type_annotation);
-                return;
             }
             else if (parameter.type.kind !== SyntaxKind.StringKeyword &&
                 parameter.type.kind !== SyntaxKind.NumberKeyword) {
                 grammarErrorOnNode(parameter.name, Diagnostics.An_index_signature_parameter_type_must_be_string_or_number);
-                return;
             }
             else if (!node.type) {
-                grammarErrorAtPos(indexerStart, indexerLength, Diagnostics.An_index_signature_must_have_a_type_annotation);
-                return;
+                grammarErrorOnNode(node, Diagnostics.An_index_signature_must_have_a_type_annotation);
             }
         }
 

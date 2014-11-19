@@ -130,7 +130,7 @@ tests/cases/compiler/intTypeCheck.ts(203,17): error TS2351: Cannot use 'new' wit
          ~
 !!! error TS1022: An index signature parameter must have a type annotation.
         [p1: string];
-        ~~~~~~~~~~~~
+        ~~~~~~~~~~~~~
 !!! error TS1021: An index signature must have a type annotation.
         [p2: string, p3: number];
          ~~
@@ -171,7 +171,7 @@ tests/cases/compiler/intTypeCheck.ts(203,17): error TS2351: Cannot use 'new' wit
          ~
 !!! error TS1022: An index signature parameter must have a type annotation.
         [p1: string];
-        ~~~~~~~~~~~~
+        ~~~~~~~~~~~~~
 !!! error TS1021: An index signature must have a type annotation.
         [p2: string, p3: number];
          ~~
