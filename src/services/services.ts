@@ -4693,6 +4693,7 @@ module ts {
                 case SyntaxKind.ImportDeclaration:
                     return SemanticMeaning.Value | SemanticMeaning.Type | SemanticMeaning.Namespace;
 
+                // An external module can be a Value
                 case SyntaxKind.SourceFile:
                     return SemanticMeaning.Namespace | SemanticMeaning.Value;
             }

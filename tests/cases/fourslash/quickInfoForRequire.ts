@@ -8,3 +8,4 @@
 
 goTo.marker('1');
 verify.quickInfoIs('module a');
+verify.referencesCountIs(0);
