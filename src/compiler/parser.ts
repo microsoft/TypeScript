@@ -3089,23 +3089,14 @@ module ts {
             parseExpected(SyntaxKind.CatchKeyword);
             parseExpected(SyntaxKind.OpenParenToken);
             var variable = parseIdentifier();
-            var typeAnnotationColonStart = scanner.getTokenPos();
-            var typeAnnotationColonLength = scanner.getTextPos() - typeAnnotationColonStart;
             var typeAnnotation = parseTypeAnnotation();
             parseExpected(SyntaxKind.CloseParenToken);
             var result = <CatchBlock>parseBlock(/* ignoreMissingOpenBrace */ false, /*checkForStrictMode*/ false);
             result.kind = SyntaxKind.CatchBlock;
             result.pos = pos;
             result.variable = variable;
+            result.type = typeAnnotation;
 
-            if (typeAnnotation) {
-                errorAtPos(typeAnnotationColonStart, typeAnnotationColonLength, Diagnostics.Catch_clause_parameter_cannot_have_a_type_annotation);
-            }
-            if (isInStrictMode && isEvalOrArgumentsIdentifier(variable)) {
-                // It is a SyntaxError if a TryStatement with a Catch occurs within strict code and the Identifier of the 
-                // Catch production is eval or arguments
-                reportInvalidUseInStrictMode(variable);
-            }
             return result;
         }
 
@@ -4086,6 +4077,7 @@ module ts {
             switch (node.kind) {
                 case SyntaxKind.ArrowFunction:              return visitArrowFunction(<FunctionExpression>node);
                 case SyntaxKind.CallSignature:              return visitCallSignature(<SignatureDeclaration>node);
+                case SyntaxKind.CatchBlock:                 return visitCatchBlock(<CatchBlock>node);
                 case SyntaxKind.Constructor:                return visitConstructor(<ConstructorDeclaration>node);
                 case SyntaxKind.ConstructorType:            return visitConstructorType(<SignatureDeclaration>node);
                 case SyntaxKind.ConstructSignature:         return visitConstructSignature(<SignatureDeclaration>node);
@@ -4134,6 +4126,18 @@ module ts {
 
         function visitCallSignature(node: ConstructorDeclaration) {
             checkParameterList(node.parameters);
+        }
+
+        function visitCatchBlock(node: CatchBlock) {
+            if (node.type) {
+                var colonStart = skipTrivia(sourceText, node.variable.end);
+                grammarErrorAtPos(colonStart, ":".length, Diagnostics.Catch_clause_parameter_cannot_have_a_type_annotation);
+            }
+            if (node.flags & NodeFlags.ParsedInStrictMode && isEvalOrArgumentsIdentifier(node.variable)) {
+                // It is a SyntaxError if a TryStatement with a Catch occurs within strict code and the Identifier of the 
+                // Catch production is eval or arguments
+                reportInvalidUseInStrictMode(node.variable);
+            }
         }
 
         function visitConstructor(node: ConstructorDeclaration) {

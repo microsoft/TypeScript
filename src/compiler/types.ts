@@ -584,6 +584,7 @@ module ts {
 
     export interface CatchBlock extends Block {
         variable: Identifier;
+        type?: TypeNode;
     }
 
     export interface ClassDeclaration extends Declaration {
