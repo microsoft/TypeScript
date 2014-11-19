@@ -3750,55 +3750,15 @@ module ts {
 
         function parseAndCheckEnumDeclaration(pos: number, flags: NodeFlags): EnumDeclaration {
             var enumIsConst = flags & NodeFlags.Const;
-            function isIntegerLiteral(expression: Expression): boolean {
-                function isInteger(literalExpression: LiteralExpression): boolean {
-                    // Allows for scientific notation since literalExpression.text was formed by
-                    // coercing a number to a string. Sometimes this coercion can yield a string
-                    // in scientific notation.
-                    // We also don't need special logic for hex because a hex integer is converted
-                    // to decimal when it is coerced.
-                    return /^[0-9]+([eE]\+?[0-9]+)?$/.test(literalExpression.text);
-                }
 
-                if (expression.kind === SyntaxKind.PrefixOperator) {
-                    var unaryExpression = <UnaryExpression>expression;
-                    if (unaryExpression.operator === SyntaxKind.PlusToken || unaryExpression.operator === SyntaxKind.MinusToken) {
-                        expression = unaryExpression.operand;
-                    }
-                }
-                if (expression.kind === SyntaxKind.NumericLiteral) {
-                    return isInteger(<LiteralExpression>expression);
-                }
-
-                return false;
-            }
-
-            var inConstantEnumMemberSection = true;
             // In an ambient declaration, the grammar only allows integer literals as initializers.
             // In a non-ambient declaration, the grammar allows uninitialized members only in a
             // ConstantEnumMemberSection, which starts at the beginning of an enum declaration
             // or any time an integer literal initializer is encountered.
-            function parseAndCheckEnumMember(): EnumMember {
+            function parseEnumMember(): EnumMember {
                 var node = <EnumMember>createNode(SyntaxKind.EnumMember);
-                var errorCountBeforeEnumMember = file._parserDiagnostics.length;
                 node.name = parsePropertyName();
                 node.initializer = parseInitializer(/*inParameter*/ false);
-
-                // skip checks below for const enums  - they allow arbitrary initializers as long as they can be evaluated to constant expressions.
-                // since all values are known in compile time - it is not necessary to check that constant enum section precedes computed enum members.
-                if (!enumIsConst) {
-                    if (inAmbientContext) {
-                        if (node.initializer && !isIntegerLiteral(node.initializer) && errorCountBeforeEnumMember === file._parserDiagnostics.length) {
-                            grammarErrorOnNode(node.name, Diagnostics.Ambient_enum_elements_can_only_have_integer_literal_initializers);
-                        }
-                    }
-                    else if (node.initializer) {
-                        inConstantEnumMemberSection = isIntegerLiteral(node.initializer);
-                    }
-                    else if (!inConstantEnumMemberSection && errorCountBeforeEnumMember === file._parserDiagnostics.length) {
-                        grammarErrorOnNode(node.name, Diagnostics.Enum_member_must_have_initializer);
-                    }
-                }
                 return finishNode(node);
             }
 
@@ -3811,7 +3771,7 @@ module ts {
             node.name = parseIdentifier();
             if (parseExpected(SyntaxKind.OpenBraceToken)) {
                 node.members = parseDelimitedList(ParsingContext.EnumMembers,
-                    parseAndCheckEnumMember, /*allowTrailingComma*/ true);
+                    parseEnumMember, /*allowTrailingComma*/ true);
                 parseExpected(SyntaxKind.CloseBraceToken);
             }
             else {
@@ -4174,6 +4134,7 @@ module ts {
                 case SyntaxKind.Constructor:                return visitConstructor(<ConstructorDeclaration>node);
                 case SyntaxKind.ConstructorType:            return visitConstructorType(<SignatureDeclaration>node);
                 case SyntaxKind.ConstructSignature:         return visitConstructSignature(<SignatureDeclaration>node);
+                case SyntaxKind.EnumDeclaration:            return visitEnumDeclaration(<EnumDeclaration>node);
                 case SyntaxKind.FunctionDeclaration:        return visitFunctionDeclaration(<FunctionLikeDeclaration>node);
                 case SyntaxKind.FunctionExpression:         return visitFunctionExpression(<FunctionExpression>node);
                 case SyntaxKind.FunctionType:               return visitFunctionType(<SignatureDeclaration>node);
@@ -4222,6 +4183,53 @@ module ts {
 
         function visitConstructSignature(node: FunctionLikeDeclaration) {
             checkParameterList(node.parameters);
+        }
+
+        function visitEnumDeclaration(enumDecl: EnumDeclaration) {
+            var enumIsConst = (enumDecl.flags & NodeFlags.Const) !== 0;
+
+            // skip checks below for const enums  - they allow arbitrary initializers as long as they can be evaluated to constant expressions.
+            // since all values are known in compile time - it is not necessary to check that constant enum section precedes computed enum members.
+            if (!enumIsConst) {
+                var inConstantEnumMemberSection = true;
+                for (var i = 0, n = enumDecl.members.length; i < n; i++) {
+                    var node = enumDecl.members[i];
+                    if (inAmbientContext) {
+                        if (node.initializer && !isIntegerLiteral(node.initializer)) {
+                            grammarErrorOnNode(node.name, Diagnostics.Ambient_enum_elements_can_only_have_integer_literal_initializers);
+                        }
+                    }
+                    else if (node.initializer) {
+                        inConstantEnumMemberSection = isIntegerLiteral(node.initializer);
+                    }
+                    else if (!inConstantEnumMemberSection) {
+                        grammarErrorOnNode(node.name, Diagnostics.Enum_member_must_have_initializer);
+                    }
+                }
+            }
+        }
+
+        function isIntegerLiteral(expression: Expression): boolean {
+            function isInteger(literalExpression: LiteralExpression): boolean {
+                // Allows for scientific notation since literalExpression.text was formed by
+                // coercing a number to a string. Sometimes this coercion can yield a string
+                // in scientific notation.
+                // We also don't need special logic for hex because a hex integer is converted
+                // to decimal when it is coerced.
+                return /^[0-9]+([eE]\+?[0-9]+)?$/.test(literalExpression.text);
+            }
+
+            if (expression.kind === SyntaxKind.PrefixOperator) {
+                var unaryExpression = <UnaryExpression>expression;
+                if (unaryExpression.operator === SyntaxKind.PlusToken || unaryExpression.operator === SyntaxKind.MinusToken) {
+                    expression = unaryExpression.operand;
+                }
+            }
+            if (expression.kind === SyntaxKind.NumericLiteral) {
+                return isInteger(<LiteralExpression>expression);
+            }
+
+            return false;
         }
 
         function visitFunctionDeclaration(node: FunctionLikeDeclaration) {
