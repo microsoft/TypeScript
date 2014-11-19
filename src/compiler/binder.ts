@@ -53,6 +53,10 @@ module ts {
         }
     }
 
+    export function hasUnknownComputedName(declaration: Declaration): boolean {
+        return declaration.name && declaration.name.kind === SyntaxKind.ComputedPropertyName;
+    }
+
     export function bindSourceFile(file: SourceFile) {
 
         var parent: Node;
@@ -84,13 +88,14 @@ module ts {
             if (symbolKind & SymbolFlags.Value && !symbol.valueDeclaration) symbol.valueDeclaration = node;
         }
 
-        // TODO(jfreeman): Implement getDeclarationName for property name
+        // Should not be called on a declaration with a computed property name.
         function getDeclarationName(node: Declaration): string {
             if (node.name) {
                 if (node.kind === SyntaxKind.ModuleDeclaration && node.name.kind === SyntaxKind.StringLiteral) {
                     return '"' + (<LiteralExpression>node.name).text + '"';
                 }
-                return (<Identifier>node.name).text;
+                Debug.assert(node.name.kind !== SyntaxKind.ComputedPropertyName);
+                return (<Identifier | LiteralExpression>node.name).text;
             }
             switch (node.kind) {
                 case SyntaxKind.ConstructorType:
@@ -111,6 +116,12 @@ module ts {
         }
 
         function declareSymbol(symbols: SymbolTable, parent: Symbol, node: Declaration, includes: SymbolFlags, excludes: SymbolFlags): Symbol {
+            // Nodes with computed property names will not get symbols, because the type checker
+            // does not make properties for them.
+            if (node.name && node.name.kind === SyntaxKind.ComputedPropertyName) {
+                return undefined;
+            }
+
             var name = getDeclarationName(node);
             if (name !== undefined) {
                 var symbol = hasProperty(symbols, name) ? symbols[name] : (symbols[name] = createSymbol(0, name));

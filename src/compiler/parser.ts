@@ -71,8 +71,9 @@ module ts {
         return identifier.length >= 3 && identifier.charCodeAt(0) === CharacterCodes._ && identifier.charCodeAt(1) === CharacterCodes._ && identifier.charCodeAt(2) === CharacterCodes._ ? identifier.substr(1) : identifier;
     }
 
-    // TODO(jfreeman): Implement declarationNameToString for computed properties
     // Return display name of an identifier
+    // Computed property names will just be emitted as "[<expr>]", where <expr> is the source
+    // text of the expression in the computed property.
     export function declarationNameToString(name: DeclarationName) {
         return name.kind === SyntaxKind.Missing ? "(Missing)" : getTextOfNode(name);
     }

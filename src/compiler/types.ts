@@ -371,11 +371,9 @@ module ts {
      * Examples:
      *  FunctionDeclaration
      *  MethodDeclaration
-     *  ConstructorDeclaration
      *  AccessorDeclaration
-     *  FunctionExpression
      */
-    export interface FunctionLikeDeclaration extends Declaration, ParsedSignature {
+    export interface FunctionLikeDeclaration extends SignatureDeclaration {
         asteriskToken?: Node;
         body?: Block | Expression;
     }
@@ -389,7 +387,7 @@ module ts {
         body?: Block;
     }
 
-    export interface ConstructorDeclaration extends FunctionLikeDeclaration {
+    export interface ConstructorDeclaration extends Node, ParsedSignature {
         body?: Block;
     }
 
@@ -458,7 +456,7 @@ module ts {
         whenFalse: Expression;
     }
 
-    export interface FunctionExpression extends Expression, FunctionLikeDeclaration {
+    export interface FunctionExpression extends Expression, SignatureDeclaration {
         name?: Identifier;
         body: Block | Expression;  // Required, whereas the member inherited from FunctionDeclaration is optional
     }
