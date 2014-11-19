@@ -303,11 +303,6 @@ class ProjectRunner extends RunnerBase {
                 }
             });
 
-            console.log("inputFiles");
-            ts.forEach(allInputFiles, inputFile => {
-                console.log(inputFile.emittedFileName);
-            });
-
             return compileProjectFiles(compilerResult.moduleKind,getInputFiles, getSourceFileText, writeFile);
 
             function findOutpuDtsFile(fileName: string) {
@@ -317,7 +312,6 @@ class ProjectRunner extends RunnerBase {
                 return ts.map(allInputFiles, outputFile => outputFile.emittedFileName);
             }
             function getSourceFileText(filename: string): string {
-                console.log("Reading: " + filename + ": " + (ts.forEach(allInputFiles, inputFile => inputFile.emittedFileName === filename ? inputFile.code : undefined) !== undefined));
                 return ts.forEach(allInputFiles, inputFile => inputFile.emittedFileName === filename ? inputFile.code : undefined);
             }
 

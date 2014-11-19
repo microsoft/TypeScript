@@ -1,7 +1,7 @@
-/// <reference path="../src/ts/Manager/FieldManager.ts" />
-// This is tsd.ts
-var tsd = (function () {
-    function tsd() {
+/// <reference path="../src/ts/foo/foo.ts" />
+// This is bar.ts
+var bar = (function () {
+    function bar() {
     }
-    return tsd;
+    return bar;
 })();

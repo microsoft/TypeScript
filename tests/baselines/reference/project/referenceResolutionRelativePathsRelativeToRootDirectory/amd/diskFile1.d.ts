@@ -1,3 +1,3 @@
-/// <reference path="../src/ts/Manager/FieldManager.d.ts" />
-declare class tsd {
+/// <reference path="../src/ts/foo/foo.d.ts" />
+declare class bar {
 }
