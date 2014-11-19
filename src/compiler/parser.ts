@@ -4093,7 +4093,7 @@ module ts {
         function checkForAtLeastOneTypeArgument(typeArguments: NodeArray<TypeNode>) {
             if (typeArguments && typeArguments.length === 0) {
                 var start = typeArguments.pos - "<".length;
-                var end = typeArguments.end + ">".length;
+                var end = skipTrivia(sourceText, typeArguments.end) + ">".length;
                 return grammarErrorAtPos(start, end - start, Diagnostics.Type_argument_list_cannot_be_empty);
             }
         }
@@ -4402,7 +4402,7 @@ module ts {
 
             if (typeParameters && typeParameters.length === 0) {
                 var start = typeParameters.pos - "<".length;
-                var end = typeParameters.end + ">".length;
+                var end = skipTrivia(sourceText, typeParameters.end) + ">".length;
                 return grammarErrorAtPos(start, end - start, Diagnostics.Type_parameter_list_cannot_be_empty);
             }
         }
