@@ -40,7 +40,6 @@ tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(238,9): error TS
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(238,26): error TS1005: ';' expected.
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(239,13): error TS1108: A 'return' statement can only be used within a function body.
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(241,5): error TS1128: Declaration or statement expected.
-tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(254,67): error TS1093: Type annotation cannot appear on a constructor declaration.
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(254,69): error TS1110: Type expected.
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(256,9): error TS1128: Declaration or statement expected.
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(256,31): error TS1005: ',' expected.
@@ -94,7 +93,7 @@ tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(259,29): error T
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(259,37): error TS2304: Cannot find name 'string'.
 
 
-==== tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts (94 errors) ====
+==== tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts (93 errors) ====
     declare module "fs" {
         export class File {
             constructor(filename: string);
@@ -486,8 +485,6 @@ tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(259,37): error T
             private otherValue = 42;
     
             constructor(private value: number, public name: string)  :  }
-                                                                      
-!!! error TS1093: Type annotation cannot appear on a constructor declaration.
                                                                         ~
 !!! error TS1110: Type expected.
             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

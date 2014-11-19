@@ -3373,12 +3373,6 @@ module ts {
             node.parameters = sig.parameters;
             node.type = sig.type;
             node.body = parseAndCheckFunctionBody(/*isConstructor*/ true);
-            if (node.typeParameters) {
-                grammarErrorAtPos(node.typeParameters.pos, node.typeParameters.end - node.typeParameters.pos, Diagnostics.Type_parameters_cannot_appear_on_a_constructor_declaration);
-            }
-            if (node.type) {
-                grammarErrorOnNode(node.type, Diagnostics.Type_annotation_cannot_appear_on_a_constructor_declaration);
-            }
             return finishNode(node);
         }
 
@@ -4167,7 +4161,21 @@ module ts {
         }
 
         function visitConstructor(node: ConstructorDeclaration) {
-            checkParameterList(node.parameters);
+            checkParameterList(node.parameters) ||
+                checkConstructorTypeParameters(node) ||
+                checkConstructorTypeAnnotation(node);
+        }
+
+        function checkConstructorTypeParameters(node: ConstructorDeclaration) {
+            if (node.typeParameters) {
+                return grammarErrorAtPos(node.typeParameters.pos, node.typeParameters.end - node.typeParameters.pos, Diagnostics.Type_parameters_cannot_appear_on_a_constructor_declaration);
+            }
+        }
+
+        function checkConstructorTypeAnnotation(node: ConstructorDeclaration) {
+            if (node.type) {
+                return grammarErrorOnNode(node.type, Diagnostics.Type_annotation_cannot_appear_on_a_constructor_declaration);
+            }
         }
 
         function visitConstructorType(node: SignatureDeclaration) {
