@@ -153,9 +153,9 @@ module ts {
 
         parseStrings(commandLine);
         return {
-            options: options,
-            filenames: filenames,
-            errors: errors
+            options,
+            filenames,
+            errors
         };
 
         function parseStrings(args: string[]) {

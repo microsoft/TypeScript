@@ -135,12 +135,6 @@ module ts {
 
         /**
          * Returns a JSON-encoded value of the type:
-         * { fileName: string; textSpan: { start: number; length: number}; isWriteAccess: boolean }[]
-         */
-        getImplementorsAtPosition(fileName: string, position: number): string;
-        
-        /**
-         * Returns a JSON-encoded value of the type:
          * { name: string; kind: string; kindModifiers: string; containerName: string; containerKind: string; matchKind: string; fileName: string; textSpan: { start: number; length: number}; } [] = [];
          */
         getNavigateToItems(searchValue: string): string;
@@ -695,16 +689,6 @@ module ts {
                     return this.languageService.getOccurrencesAtPosition(fileName, position);
                 });
         }
-
-        /// GET IMPLEMENTORS
-        public getImplementorsAtPosition(fileName: string, position: number): string {
-            return this.forwardJSONCall(
-                "getImplementorsAtPosition('" + fileName + "', " + position + ")",
-                () => {
-                    return this.languageService.getImplementorsAtPosition(fileName, position);
-                });
-        }
-
 
         /// COMPLETION LISTS
 
