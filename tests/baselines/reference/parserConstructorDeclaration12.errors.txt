@@ -39,22 +39,22 @@ tests/cases/compiler/parserConstructorDeclaration12.ts(9,3): error TS2392: Multi
       ~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2392: Multiple constructor implementations are not allowed.
       constructor< >() { }
-                 ~~
+                 ~~~
 !!! error TS1098: Type parameter list cannot be empty.
       ~~~~~~~~~~~~~~~~~~~~
 !!! error TS2392: Multiple constructor implementations are not allowed.
       constructor< > () { }
-                 ~~
+                 ~~~
 !!! error TS1098: Type parameter list cannot be empty.
       ~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2392: Multiple constructor implementations are not allowed.
       constructor < >() { }
-                  ~~
+                  ~~~
 !!! error TS1098: Type parameter list cannot be empty.
       ~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2392: Multiple constructor implementations are not allowed.
       constructor < > () { }
-                  ~~
+                  ~~~
 !!! error TS1098: Type parameter list cannot be empty.
       ~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2392: Multiple constructor implementations are not allowed.

@@ -1,5 +1,5 @@
 tests/cases/compiler/ambientGetters.ts(3,9): error TS1086: An accessor cannot be declared in an ambient context.
-tests/cases/compiler/ambientGetters.ts(7,9): error TS1086: An accessor cannot be declared in an ambient context.
+tests/cases/compiler/ambientGetters.ts(7,20): error TS1036: Statements are not allowed in ambient contexts.
 
 
 ==== tests/cases/compiler/ambientGetters.ts (2 errors) ====
@@ -12,6 +12,6 @@ tests/cases/compiler/ambientGetters.ts(7,9): error TS1086: An accessor cannot be
     
     declare class B {
         get length() { return 0; }
-            ~~~~~~
-!!! error TS1086: An accessor cannot be declared in an ambient context.
+                       ~~~~~~
+!!! error TS1036: Statements are not allowed in ambient contexts.
     }
