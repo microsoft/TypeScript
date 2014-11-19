@@ -2707,68 +2707,6 @@ module ts {
 
             node.properties = parseDelimitedList(ParsingContext.ObjectLiteralMembers, parseObjectLiteralMember, /*allowTrailingComma*/ true);
             parseExpected(SyntaxKind.CloseBraceToken);
-
-            var seen: Map<SymbolFlags> = {};
-            var Property    = 1;
-            var GetAccessor = 2;
-            var SetAccesor =  4;
-            var GetOrSetAccessor = GetAccessor | SetAccesor;
-            forEach(node.properties, (p: Declaration) => {
-                // TODO(jfreeman): continue if we have a computed property
-                if (p.kind === SyntaxKind.OmittedExpression) {
-                    return;
-                }
-
-                var name = <Identifier>p.name;
-
-                // ECMA-262 11.1.5 Object Initialiser 
-                // If previous is not undefined then throw a SyntaxError exception if any of the following conditions are true
-                // a.This production is contained in strict code and IsDataDescriptor(previous) is true and 
-                // IsDataDescriptor(propId.descriptor) is true.
-                //    b.IsDataDescriptor(previous) is true and IsAccessorDescriptor(propId.descriptor) is true.
-                //    c.IsAccessorDescriptor(previous) is true and IsDataDescriptor(propId.descriptor) is true.
-                //    d.IsAccessorDescriptor(previous) is true and IsAccessorDescriptor(propId.descriptor) is true 
-                // and either both previous and propId.descriptor have[[Get]] fields or both previous and propId.descriptor have[[Set]] fields 
-                var currentKind: number;
-                if (p.kind === SyntaxKind.PropertyAssignment) {
-                    currentKind = Property;
-                }
-                else if (p.kind === SyntaxKind.ShorthandPropertyAssignment) {
-                    currentKind = Property;
-                }
-                else if (p.kind === SyntaxKind.GetAccessor) {
-                    currentKind = GetAccessor;
-                }
-                else if (p.kind === SyntaxKind.SetAccessor) {
-                    currentKind = SetAccesor;
-                }
-                else {
-                    Debug.fail("Unexpected syntax kind:" + p.kind);
-                }
-
-                if (!hasProperty(seen, name.text)) {
-                    seen[name.text] = currentKind;
-                }
-                else {
-                    var existingKind = seen[name.text];
-                    if (currentKind === Property && existingKind === Property) {
-                        if (isInStrictMode) {
-                            grammarErrorOnNode(name, Diagnostics.An_object_literal_cannot_have_multiple_properties_with_the_same_name_in_strict_mode);
-                        }
-                    }
-                    else if ((currentKind & GetOrSetAccessor) && (existingKind & GetOrSetAccessor)) {
-                        if (existingKind !== GetOrSetAccessor && currentKind !== existingKind) {
-                            seen[name.text] = currentKind | existingKind;
-                        }
-                        else {
-                            grammarErrorOnNode(name, Diagnostics.An_object_literal_cannot_have_multiple_get_Slashset_accessors_with_the_same_name);
-                        }
-                    }
-                    else {
-                        grammarErrorOnNode(name, Diagnostics.An_object_literal_cannot_have_property_and_accessor_with_the_same_name);
-                    }
-                }
-            });
             return finishNode(node);
         }
 
@@ -4267,6 +4205,7 @@ module ts {
                 case SyntaxKind.GetAccessor:            return visitGetAccessor(<MethodDeclaration>node);
                 case SyntaxKind.IndexSignature:         return visitIndexSignature(<SignatureDeclaration>node);
                 case SyntaxKind.Method:                 return visitMethod(<MethodDeclaration>node);
+                case SyntaxKind.ObjectLiteral:          return visitObjectLiteral(<ObjectLiteral>node);
                 case SyntaxKind.Parameter:              return visitParameter(<ParameterDeclaration>node);
                 case SyntaxKind.SetAccessor:            return visitSetAccessor(<MethodDeclaration>node);
             }
@@ -4363,6 +4302,71 @@ module ts {
 
         function visitMethod(node: MethodDeclaration) {
             checkParameterList(node.parameters);
+        }
+
+        function visitObjectLiteral(node: ObjectLiteral): void {
+            var seen: Map<SymbolFlags> = {};
+            var Property = 1;
+            var GetAccessor = 2;
+            var SetAccesor = 4;
+            var GetOrSetAccessor = GetAccessor | SetAccesor;
+            var inStrictMode = (node.flags & NodeFlags.ParsedInStrictMode) !== 0;
+            forEach(node.properties, (p: Declaration) => {
+                // TODO(jfreeman): continue if we have a computed property
+                if (p.kind === SyntaxKind.OmittedExpression) {
+                    return;
+                }
+
+                var name = <Identifier>p.name;
+
+                // ECMA-262 11.1.5 Object Initialiser 
+                // If previous is not undefined then throw a SyntaxError exception if any of the following conditions are true
+                // a.This production is contained in strict code and IsDataDescriptor(previous) is true and 
+                // IsDataDescriptor(propId.descriptor) is true.
+                //    b.IsDataDescriptor(previous) is true and IsAccessorDescriptor(propId.descriptor) is true.
+                //    c.IsAccessorDescriptor(previous) is true and IsDataDescriptor(propId.descriptor) is true.
+                //    d.IsAccessorDescriptor(previous) is true and IsAccessorDescriptor(propId.descriptor) is true 
+                // and either both previous and propId.descriptor have[[Get]] fields or both previous and propId.descriptor have[[Set]] fields 
+                var currentKind: number;
+                if (p.kind === SyntaxKind.PropertyAssignment) {
+                    currentKind = Property;
+                }
+                else if (p.kind === SyntaxKind.ShorthandPropertyAssignment) {
+                    currentKind = Property;
+                }
+                else if (p.kind === SyntaxKind.GetAccessor) {
+                    currentKind = GetAccessor;
+                }
+                else if (p.kind === SyntaxKind.SetAccessor) {
+                    currentKind = SetAccesor;
+                }
+                else {
+                    Debug.fail("Unexpected syntax kind:" + p.kind);
+                }
+
+                if (!hasProperty(seen, name.text)) {
+                    seen[name.text] = currentKind;
+                }
+                else {
+                    var existingKind = seen[name.text];
+                    if (currentKind === Property && existingKind === Property) {
+                        if (inStrictMode) {
+                            grammarErrorOnNode(name, Diagnostics.An_object_literal_cannot_have_multiple_properties_with_the_same_name_in_strict_mode);
+                        }
+                    }
+                    else if ((currentKind & GetOrSetAccessor) && (existingKind & GetOrSetAccessor)) {
+                        if (existingKind !== GetOrSetAccessor && currentKind !== existingKind) {
+                            seen[name.text] = currentKind | existingKind;
+                        }
+                        else {
+                            grammarErrorOnNode(name, Diagnostics.An_object_literal_cannot_have_multiple_get_Slashset_accessors_with_the_same_name);
+                        }
+                    }
+                    else {
+                        grammarErrorOnNode(name, Diagnostics.An_object_literal_cannot_have_property_and_accessor_with_the_same_name);
+                    }
+                }
+            });
         }
 
         function visitParameter(node: ParameterDeclaration): void {
