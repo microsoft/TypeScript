@@ -2753,7 +2753,7 @@ module ts {
             // Disallow optional property assignment
             if (token === SyntaxKind.QuestionToken) {
                 var questionStart = scanner.getTokenPos();
-                grammarErrorAtPos(questionStart, scanner.getStartPos() - questionStart, Diagnostics.A_object_member_cannot_be_declared_optional);
+                grammarErrorAtPos(questionStart, scanner.getStartPos() - questionStart, Diagnostics.An_object_member_cannot_be_declared_optional);
                 nextToken();
             }
 
