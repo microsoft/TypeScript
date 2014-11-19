@@ -1,13 +1,10 @@
 tests/cases/conformance/externalModules/initializersInDeclarations.ts(5,7): error TS1039: Initializers are not allowed in ambient contexts.
 tests/cases/conformance/externalModules/initializersInDeclarations.ts(6,14): error TS1039: Initializers are not allowed in ambient contexts.
 tests/cases/conformance/externalModules/initializersInDeclarations.ts(7,16): error TS1037: A function implementation cannot be declared in an ambient context.
-tests/cases/conformance/externalModules/initializersInDeclarations.ts(12,15): error TS1039: Initializers are not allowed in ambient contexts.
-tests/cases/conformance/externalModules/initializersInDeclarations.ts(13,15): error TS1039: Initializers are not allowed in ambient contexts.
 tests/cases/conformance/externalModules/initializersInDeclarations.ts(16,2): error TS1036: Statements are not allowed in ambient contexts.
-tests/cases/conformance/externalModules/initializersInDeclarations.ts(18,16): error TS1039: Initializers are not allowed in ambient contexts.
 
 
-==== tests/cases/conformance/externalModules/initializersInDeclarations.ts (7 errors) ====
+==== tests/cases/conformance/externalModules/initializersInDeclarations.ts (4 errors) ====
     
     // Errors: Initializers & statements in declaration file
     
@@ -26,11 +23,7 @@ tests/cases/conformance/externalModules/initializersInDeclarations.ts(18,16): er
     }
     
     declare var x = [];
-                  ~
-!!! error TS1039: Initializers are not allowed in ambient contexts.
     declare var y = {};
-                  ~
-!!! error TS1039: Initializers are not allowed in ambient contexts.
     
     declare module M1 {
     	while(true);
@@ -38,6 +31,4 @@ tests/cases/conformance/externalModules/initializersInDeclarations.ts(18,16): er
 !!! error TS1036: Statements are not allowed in ambient contexts.
     
     	export var v1 = () => false;
-    	              ~
-!!! error TS1039: Initializers are not allowed in ambient contexts.
     }

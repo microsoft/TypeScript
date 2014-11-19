@@ -1005,7 +1005,6 @@ module ts {
             grammarErrorOnNode(node, Diagnostics.Invalid_use_of_0_in_strict_mode, name);
         }
 
-
         function grammarErrorAtPos(start: number, length: number, message: DiagnosticMessage, arg0?: any, arg1?: any, arg2?: any): void {
             file._parserDiagnostics.push(createFileDiagnostic(file, start, length, message, arg0, arg1, arg2));
         }
@@ -3292,7 +3291,6 @@ module ts {
         function parseVariableDeclaration(flags: NodeFlags, noIn?: boolean): VariableDeclaration {
             var node = <VariableDeclaration>createNode(SyntaxKind.VariableDeclaration);
             node.flags = flags;
-            var errorCountBeforeVariableDeclaration = file._parserDiagnostics.length;
             node.name = parseIdentifier();
             node.type = parseTypeAnnotation();
 
@@ -3301,17 +3299,6 @@ module ts {
             var initializerFirstTokenLength = scanner.getTextPos() - initializerStart;
             node.initializer = parseInitializer(/*inParameter*/ false, noIn);
 
-            if (inAmbientContext && node.initializer && errorCountBeforeVariableDeclaration === file._parserDiagnostics.length) {
-                grammarErrorAtPos(initializerStart, initializerFirstTokenLength, Diagnostics.Initializers_are_not_allowed_in_ambient_contexts);
-            }
-            if (!inAmbientContext && !node.initializer && flags & NodeFlags.Const) {
-                grammarErrorOnNode(node, Diagnostics.const_declarations_must_be_initialized);
-            }
-            if (isInStrictMode && isEvalOrArgumentsIdentifier(node.name)) {
-                // It is a SyntaxError if a VariableDeclaration or VariableDeclarationNoIn occurs within strict code 
-                // and its Identifier is eval or arguments 
-                reportInvalidUseInStrictMode(node.name);
-            }
             return finishNode(node);
         }
 
@@ -4147,6 +4134,7 @@ module ts {
                 case SyntaxKind.PrefixOperator:             return visitPrefixOperator(<UnaryExpression>node);
                 case SyntaxKind.SetAccessor:                return visitSetAccessor(<MethodDeclaration>node);
                 case SyntaxKind.TaggedTemplateExpression:   return visitTaggedTemplateExpression(<TaggedTemplateExpression>node);
+                case SyntaxKind.VariableDeclaration:        return visitVariableDeclaration(<VariableDeclaration>node);
             }
         }
 
@@ -4155,6 +4143,11 @@ module ts {
             var start = span.end > span.pos ? skipTrivia(file.text, span.pos) : span.pos;
             var length = span.end - start;
 
+            file._syntacticDiagnostics.push(createFileDiagnostic(file, start, length, message, arg0, arg1, arg2));
+            return true;
+        }
+
+        function grammarErrorAtPos(start: number, length: number, message: DiagnosticMessage, arg0?: any, arg1?: any, arg2?: any): boolean {
             file._syntacticDiagnostics.push(createFileDiagnostic(file, start, length, message, arg0, arg1, arg2));
             return true;
         }
@@ -4477,6 +4470,21 @@ module ts {
         function visitTaggedTemplateExpression(node: TaggedTemplateExpression) {
             if (languageVersion < ScriptTarget.ES6) {
                 grammarErrorOnNode(node, Diagnostics.Tagged_templates_are_only_available_when_targeting_ECMAScript_6_and_higher);
+            }
+        }
+
+        function visitVariableDeclaration(node: VariableDeclaration) {
+            if (inAmbientContext && node.initializer) {
+                var equalsPos = node.type ? skipTrivia(sourceText, node.type.end) : skipTrivia(sourceText, node.name.end);
+                grammarErrorAtPos(equalsPos, "=".length, Diagnostics.Initializers_are_not_allowed_in_ambient_contexts);
+            }
+            if (!inAmbientContext && !node.initializer && node.flags & NodeFlags.Const) {
+                grammarErrorOnNode(node, Diagnostics.const_declarations_must_be_initialized);
+            }
+            if (node.flags & NodeFlags.ParsedInStrictMode && isEvalOrArgumentsIdentifier(node.name)) {
+                // It is a SyntaxError if a VariableDeclaration or VariableDeclarationNoIn occurs within strict code 
+                // and its Identifier is eval or arguments 
+                reportInvalidUseInStrictMode(node.name);
             }
         }
     }

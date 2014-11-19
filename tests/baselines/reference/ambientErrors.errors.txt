@@ -1,6 +1,4 @@
-tests/cases/conformance/ambient/ambientErrors.ts(2,15): error TS1039: Initializers are not allowed in ambient contexts.
 tests/cases/conformance/ambient/ambientErrors.ts(20,24): error TS1037: A function implementation cannot be declared in an ambient context.
-tests/cases/conformance/ambient/ambientErrors.ts(34,11): error TS1039: Initializers are not allowed in ambient contexts.
 tests/cases/conformance/ambient/ambientErrors.ts(35,19): error TS1037: A function implementation cannot be declared in an ambient context.
 tests/cases/conformance/ambient/ambientErrors.ts(37,18): error TS1039: Initializers are not allowed in ambient contexts.
 tests/cases/conformance/ambient/ambientErrors.ts(38,11): error TS1039: Initializers are not allowed in ambient contexts.
@@ -14,11 +12,9 @@ tests/cases/conformance/ambient/ambientErrors.ts(51,16): error TS2436: Ambient e
 tests/cases/conformance/ambient/ambientErrors.ts(57,5): error TS2309: An export assignment cannot be used in a module with other exported elements.
 
 
-==== tests/cases/conformance/ambient/ambientErrors.ts (14 errors) ====
+==== tests/cases/conformance/ambient/ambientErrors.ts (12 errors) ====
     // Ambient variable with an initializer 
     declare var x = 4;
-                  ~
-!!! error TS1039: Initializers are not allowed in ambient contexts.
     
     // Ambient functions with invalid overloads
     declare function fn(x: number): string;
@@ -57,8 +53,6 @@ tests/cases/conformance/ambient/ambientErrors.ts(57,5): error TS2309: An export 
     // Ambient module with initializers for values, bodies for functions / classes
     declare module M1 {
         var x = 3;
-              ~
-!!! error TS1039: Initializers are not allowed in ambient contexts.
         function fn() { }
                       ~
 !!! error TS1037: A function implementation cannot be declared in an ambient context.
