@@ -1639,12 +1639,7 @@ module ts {
 
         function parseTupleType(): TupleTypeNode {
             var node = <TupleTypeNode>createNode(SyntaxKind.TupleType);
-            var startTokenPos = scanner.getTokenPos();
-            var startErrorCount = file.parseDiagnostics.length;
             node.elementTypes = parseBracketedList(ParsingContext.TupleElementTypes, parseType, SyntaxKind.OpenBracketToken, SyntaxKind.CloseBracketToken);
-            if (!node.elementTypes.length && file.parseDiagnostics.length === startErrorCount) {
-                grammarErrorAtPos(startTokenPos, scanner.getStartPos() - startTokenPos, Diagnostics.A_tuple_type_element_list_cannot_be_empty);
-            }
             return finishNode(node);
         }
 
@@ -4422,7 +4417,14 @@ module ts {
         }
 
         function visitTupleType(node: TupleTypeNode) {
-            checkForTrailingComma(node.elementTypes);
+            checkForTrailingComma(node.elementTypes) ||
+                checkForAtLeastOneType(node);
+        }
+
+        function checkForAtLeastOneType(node: TupleTypeNode): boolean {
+            if (node.elementTypes.length === 0) {
+                return grammarErrorOnNode(node, Diagnostics.A_tuple_type_element_list_cannot_be_empty)
+            }
         }
 
         function visitTypeReference(node: TypeReferenceNode) {
