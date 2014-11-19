@@ -155,6 +155,8 @@ module ts {
         IndexSignature,
         // Type
         TypeReference,
+        FunctionType,
+        ConstructorType,
         TypeQuery,
         TypeLiteral,
         ArrayType,
@@ -165,6 +167,7 @@ module ts {
         ArrayLiteral,
         ObjectLiteral,
         PropertyAssignment,
+        ShorthandPropertyAssignment,
         PropertyAccess,
         IndexedAccess,
         CallExpression,
@@ -245,7 +248,11 @@ module ts {
         FirstLiteralToken = NumericLiteral,
         LastLiteralToken = NoSubstitutionTemplateLiteral,
         FirstTemplateToken = NoSubstitutionTemplateLiteral,
-        LastTemplateToken = TemplateTail
+        LastTemplateToken = TemplateTail,
+        FirstOperator = SemicolonToken,
+        LastOperator = CaretEqualsToken,
+        FirstBinaryOperator = LessThanToken,
+        LastBinaryOperator = CaretEqualsToken
     }
 
     export const enum NodeFlags {
@@ -327,6 +334,10 @@ module ts {
     export interface PropertyDeclaration extends Declaration {
         type?: TypeNode;
         initializer?: Expression;
+    }
+
+    export interface ShortHandPropertyDeclaration extends Declaration {
+        name: Identifier;
     }
 
     export interface ParameterDeclaration extends VariableDeclaration { }
@@ -627,9 +638,11 @@ module ts {
     export interface SourceFile extends Block {
         filename: string;
         text: string;
-        getLineAndCharacterFromPosition(position: number): { line: number; character: number };
+        getLineAndCharacterFromPosition(position: number): LineAndCharacter;
         getPositionFromLineAndCharacter(line: number, character: number): number;
+        getLineStarts(): number[];
         amdDependencies: string[];
+        amdModuleName: string;
         referencedFiles: FileReference[];
         syntacticErrors: Diagnostic[];
         semanticErrors: Diagnostic[];
@@ -688,7 +701,7 @@ module ts {
 
     export interface EmitResult {
         emitResultStatus: EmitReturnStatus;
-        errors: Diagnostic[];
+        diagnostics: Diagnostic[];
         sourceMaps: SourceMapData[];  // Array of sourceMapData if compiler emitted sourcemaps
     }
 
@@ -701,7 +714,7 @@ module ts {
         getSymbolCount(): number;
         getTypeCount(): number;
         checkProgram(): void;
-        emitFiles(targetSourceFile?: SourceFile): EmitResult;
+        invokeEmitter(targetSourceFile?: SourceFile): EmitResult;
         getParentOfSymbol(symbol: Symbol): Symbol;
         getNarrowedTypeOfSymbol(symbol: Symbol, node: Node): Type;
         getDeclaredTypeOfSymbol(symbol: Symbol): Type;
@@ -712,6 +725,7 @@ module ts {
         getReturnTypeOfSignature(signature: Signature): Type;
         getSymbolsInScope(location: Node, meaning: SymbolFlags): Symbol[];
         getSymbolInfo(node: Node): Symbol;
+        getShorthandAssignmentValueSymbol(location: Node): Symbol;
         getTypeOfNode(node: Node): Type;
         typeToString(type: Type, enclosingDeclaration?: Node, flags?: TypeFormatFlags): string;
         symbolToString(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags): string;
@@ -725,7 +739,7 @@ module ts {
         isImplementationOfOverload(node: FunctionLikeDeclaration): boolean;
         isUndefinedSymbol(symbol: Symbol): boolean;
         isArgumentsSymbol(symbol: Symbol): boolean;
-        hasEarlyErrors(sourceFile?: SourceFile): boolean;
+        isEmitBlocked(sourceFile?: SourceFile): boolean;
         // Returns the constant value of this enum member, or 'undefined' if the enum member has a computed value.
         getEnumMemberValue(node: EnumMember): number;
         isValidPropertyAccess(node: PropertyAccess, propertyName: string): boolean;
@@ -816,7 +830,7 @@ module ts {
         isImportDeclarationEntityNameReferenceDeclarationVisibile(entityName: EntityName): SymbolAccessiblityResult;
         // Returns the constant value this property access resolves to, or 'undefined' for a non-constant
         getConstantValue(node: PropertyAccess | IndexedAccess): number;
-        hasEarlyErrors(sourceFile?: SourceFile): boolean;
+        isEmitBlocked(sourceFile?: SourceFile): boolean;
     }
 
     export const enum SymbolFlags {
@@ -1121,7 +1135,16 @@ module ts {
         messageText: string;
         category: DiagnosticCategory;
         code: number;
+        /**
+          * Early error - any error (can be produced at parsing\binding\typechecking step) that blocks emit
+          */
         isEarly?: boolean;
+        /**
+          * Parse error - error produced by parser when it scanner returns a token 
+          * that parser does not understand in its current state 
+          * (as opposed to grammar error when parser can interpret the token but interpretation is not legal from the grammar perespective)
+          */
+        isParseError?: boolean;
     }
 
     export enum DiagnosticCategory {
@@ -1140,6 +1163,7 @@ module ts {
         locale?: string;
         mapRoot?: string;
         module?: ModuleKind;
+        noEmitOnError?: boolean;
         noErrorTruncation?: boolean;
         noImplicitAny?: boolean;
         noLib?: boolean;

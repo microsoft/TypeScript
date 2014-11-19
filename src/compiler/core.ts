@@ -258,9 +258,9 @@ module ts {
         }
 
         return {
-            file: file,
-            start: start,
-            length: length,
+            file,
+            start,
+            length,
 
             messageText: text,
             category: message.category,
@@ -335,12 +335,12 @@ module ts {
         }
 
         return {
-            file: file,
-            start: start,
-            length: length,
-            code: code,
-            category: category,
-            messageText: messageText
+            file,
+            start,
+            length,
+            code,
+            category,
+            messageText
         };
     }
 

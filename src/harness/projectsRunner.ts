@@ -132,8 +132,8 @@ class ProjectRunner extends RunnerBase {
             if (!errors.length) {
                 var checker = program.getTypeChecker(/*fullTypeCheck*/ true);
                 errors = checker.getDiagnostics();
-                var emitResult = checker.emitFiles();
-                errors = ts.concatenate(errors, emitResult.errors);
+                var emitResult = checker.invokeEmitter();
+                errors = ts.concatenate(errors, emitResult.diagnostics);
                 sourceMapData = emitResult.sourceMaps;
 
                 // Clean up source map data that will be used in baselining
@@ -149,10 +149,10 @@ class ProjectRunner extends RunnerBase {
             }
 
             return {
-                moduleKind: moduleKind,
-                program: program,
-                errors: errors,
-                sourceMapData: sourceMapData
+                moduleKind,
+                program,
+                errors,
+                sourceMapData
             };
 
             function createCompilerOptions(): ts.CompilerOptions {
@@ -185,10 +185,10 @@ class ProjectRunner extends RunnerBase {
 
             function createCompilerHost(): ts.CompilerHost {
                 return {
-                    getSourceFile: getSourceFile,
+                    getSourceFile,
                     getDefaultLibFilename: () => "lib.d.ts",
-                    writeFile: writeFile,
-                    getCurrentDirectory: getCurrentDirectory,
+                    writeFile,
+                    getCurrentDirectory,
                     getCanonicalFileName: Harness.Compiler.getCanonicalFileName,
                     useCaseSensitiveFileNames: () => sys.useCaseSensitiveFileNames,
                     getNewLine: () => sys.newLine
@@ -203,12 +203,12 @@ class ProjectRunner extends RunnerBase {
 
             var projectCompilerResult = compileProjectFiles(moduleKind, () => testCase.inputFiles, getSourceFileText, writeFile);
             return {
-                moduleKind: moduleKind,
+                moduleKind,
                 program: projectCompilerResult.program,
                 sourceMapData: projectCompilerResult.sourceMapData,
-                outputFiles: outputFiles,
+                outputFiles,
                 errors: projectCompilerResult.errors,
-                nonSubfolderDiskFiles: nonSubfolderDiskFiles,
+                nonSubfolderDiskFiles,
             };
 
             function getSourceFileText(filename: string): string {

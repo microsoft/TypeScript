@@ -479,6 +479,19 @@
         "category": "Error",
         "code": 1159
     },
+    "Unterminated template literal.": {
+        "category": "Error",
+        "code": 1160
+    },
+    "Unterminated regular expression literal.": {
+        "category": "Error",
+        "code": 1161
+    },
+
+    "A object member cannot be declared optional.": {
+        "category": "Error",
+        "code":  1160
+    },
 
     "Duplicate identifier '{0}'.": {
         "category": "Error",
@@ -1076,6 +1089,10 @@
         "category": "Error",
         "code": 2457
     },
+    "An AMD module cannot have multiple name assignments.": {
+        "category": "Error",
+        "code": 2458
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
@@ -1489,6 +1506,10 @@
     "Do not erase const enum declarations in generated code.": {
         "category": "Message",
         "code": 6007
+    },
+    "Do not emit outputs if any type checking errors were reported.": {
+        "category": "Message",
+        "code": 6008
     },
     "Do not emit comments to output.": {
         "category": "Message",

@@ -20,6 +20,7 @@ module ts {
     interface ReferenceComments {
         referencedFiles: FileReference[];
         amdDependencies: string[];
+        amdModuleName: string;
     }
 
     export function getSourceFileOfNode(node: Node): SourceFile {
@@ -34,12 +35,16 @@ module ts {
         return file.filename + "(" + loc.line + "," + loc.character + ")";
     }
 
-
     export function getStartPosOfNode(node: Node): number {
         return node.pos;
     }
 
     export function getTokenPosOfNode(node: Node, sourceFile?: SourceFile): number {
+        // With nodes that have no width (i.e. 'Missing' nodes), we actually *don't*
+        // want to skip trivia because this will launch us forward to the next token.
+        if (node.pos === node.end) {
+            return node.pos;
+        }
         return skipTrivia((sourceFile || getSourceFileOfNode(node)).text, node.pos);
     }
 
@@ -198,9 +203,12 @@ module ts {
                     child((<ParameterDeclaration>node).initializer);
             case SyntaxKind.Property:
             case SyntaxKind.PropertyAssignment:
+            case SyntaxKind.ShorthandPropertyAssignment:
                 return child((<PropertyDeclaration>node).name) ||
                     child((<PropertyDeclaration>node).type) ||
                     child((<PropertyDeclaration>node).initializer);
+            case SyntaxKind.FunctionType:
+            case SyntaxKind.ConstructorType:
             case SyntaxKind.CallSignature:
             case SyntaxKind.ConstructSignature:
             case SyntaxKind.IndexSignature:
@@ -574,6 +582,7 @@ module ts {
             case SyntaxKind.VariableDeclaration:
             case SyntaxKind.Property:
             case SyntaxKind.PropertyAssignment:
+            case SyntaxKind.ShorthandPropertyAssignment:
             case SyntaxKind.EnumMember:
             case SyntaxKind.Method:
             case SyntaxKind.FunctionDeclaration:
@@ -774,13 +783,12 @@ module ts {
                 if (matchResult) {
                     var start = commentRange.pos;
                     var end = commentRange.end;
-                    var fileRef = {
-                        pos: start,
-                        end: end,
-                        filename: matchResult[3]
-                    };
                     return {
-                        fileReference: fileRef,
+                        fileReference: {
+                            pos: start,
+                            end: end,
+                            filename: matchResult[3]
+                        },
                         isNoDefaultLib: false
                     };
                 }
@@ -944,26 +952,24 @@ module ts {
             }
 
             return {
-                addLabel: addLabel,
-                pushCurrentLabelSet: pushCurrentLabelSet,
-                pushFunctionBoundary: pushFunctionBoundary,
-                pop: pop,
-                nodeIsNestedInLabel: nodeIsNestedInLabel,
+                addLabel,
+                pushCurrentLabelSet,
+                pushFunctionBoundary,
+                pop,
+                nodeIsNestedInLabel,
             };
         })();
 
-        function getLineAndCharacterlFromSourcePosition(position: number) {
-            if (!lineStarts) {
-                lineStarts = getLineStarts(sourceText);
-            }
-            return getLineAndCharacterOfPosition(lineStarts, position);
+        function getLineStarts(): number[] {
+            return lineStarts || (lineStarts = computeLineStarts(sourceText));
+        }
+
+        function getLineAndCharacterFromSourcePosition(position: number) {
+            return getLineAndCharacterOfPosition(getLineStarts(), position);
         }
 
         function getPositionFromSourceLineAndCharacter(line: number, character: number): number {
-            if (!lineStarts) {
-                lineStarts = getLineStarts(sourceText);
-            }
-            return getPositionFromLineAndCharacter(lineStarts, line, character);
+            return getPositionFromLineAndCharacter(getLineStarts(), line, character);
         }
 
         function error(message: DiagnosticMessage, arg0?: any, arg1?: any, arg2?: any): void {
@@ -1006,7 +1012,9 @@ module ts {
                 ? file.syntacticErrors[file.syntacticErrors.length - 1].start
                 : -1;
             if (start !== lastErrorPos) {
-                file.syntacticErrors.push(createFileDiagnostic(file, start, length, message, arg0, arg1, arg2));
+                var diagnostic = createFileDiagnostic(file, start, length, message, arg0, arg1, arg2);
+                diagnostic.isParseError = true;
+                file.syntacticErrors.push(diagnostic);
             }
 
             if (lookAheadMode === LookAheadMode.NoErrorYet) {
@@ -1674,8 +1682,8 @@ module ts {
             }
 
             return {
-                typeParameters: typeParameters,
-                parameters: parameters,
+                typeParameters,
+                parameters,
                 type: type
             };
         }
@@ -1886,16 +1894,16 @@ module ts {
             return finishNode(node);
         }
 
-        function parseFunctionType(signatureKind: SyntaxKind): TypeLiteralNode {
-            var node = <TypeLiteralNode>createNode(SyntaxKind.TypeLiteral);
-            var member = <SignatureDeclaration>createNode(signatureKind);
-            var sig = parseSignature(signatureKind, SyntaxKind.EqualsGreaterThanToken, /* returnTokenRequired */ true);
+        function parseFunctionType(typeKind: SyntaxKind): SignatureDeclaration {
+            var member = <SignatureDeclaration>createNode(typeKind);
+            var sig = parseSignature(typeKind === SyntaxKind.FunctionType ? SyntaxKind.CallSignature : SyntaxKind.ConstructSignature,
+                SyntaxKind.EqualsGreaterThanToken, /* returnTokenRequired */ true);
+
             member.typeParameters = sig.typeParameters;
             member.parameters = sig.parameters;
             member.type = sig.type;
             finishNode(member);
-            node.members = createNodeArray(member);
-            return finishNode(node);
+            return member;
         }
 
         function parseKeywordAndNoDot(): Node {
@@ -2015,10 +2023,10 @@ module ts {
 
         function parseType(): TypeNode {
             if (isStartOfFunctionType()) {
-                return parseFunctionType(SyntaxKind.CallSignature);
+                return parseFunctionType(SyntaxKind.FunctionType);
             }
             if (token === SyntaxKind.NewKeyword) {
-                return parseFunctionType(SyntaxKind.ConstructSignature);
+                return parseFunctionType(SyntaxKind.ConstructorType);
             }
             return parseUnionType();
         }
@@ -2731,10 +2739,14 @@ module ts {
             return finishNode(node);
         }
 
-        function parsePropertyAssignment(): PropertyDeclaration {
-            var node = <PropertyDeclaration>createNode(SyntaxKind.PropertyAssignment);
-            node.name = parsePropertyName();
+        function parsePropertyAssignment(): Declaration {
+            var nodePos = scanner.getStartPos();
+            var nameToken = token;
+            var propertyName = parsePropertyName();
+            var node: Declaration;
             if (token === SyntaxKind.OpenParenToken || token === SyntaxKind.LessThanToken) {
+                node = <PropertyDeclaration>createNode(SyntaxKind.PropertyAssignment, nodePos);
+                node.name = propertyName;
                 var sig = parseSignature(SyntaxKind.CallSignature, SyntaxKind.ColonToken, /* returnTokenRequired */ false);
                 var body = parseBody(/* ignoreMissingOpenBrace */ false);
                 // do not propagate property name as name for function expression
@@ -2742,11 +2754,26 @@ module ts {
                 // var x = 1;
                 // var y = { x() { } } 
                 // otherwise this will bring y.x into the scope of x which is incorrect
-                node.initializer = makeFunctionExpression(SyntaxKind.FunctionExpression, node.pos, undefined, sig, body);
+                (<PropertyDeclaration>node).initializer = makeFunctionExpression(SyntaxKind.FunctionExpression, node.pos, undefined, sig, body);
+                return finishNode(node);
+            }
+            // Disallow optional property assignment
+            if (token === SyntaxKind.QuestionToken) {
+                var questionStart = scanner.getTokenPos();
+                grammarErrorAtPos(questionStart, scanner.getStartPos() - questionStart, Diagnostics.A_object_member_cannot_be_declared_optional);
+                nextToken();
+            }
+
+            // Parse to check if it is short-hand property assignment or normal property assignment
+            if (token !== SyntaxKind.ColonToken && nameToken === SyntaxKind.Identifier) {
+                node = <ShortHandPropertyDeclaration>createNode(SyntaxKind.ShorthandPropertyAssignment, nodePos);
+                node.name = propertyName;
             }
             else {
+                node = <PropertyDeclaration>createNode(SyntaxKind.PropertyAssignment, nodePos);
+                node.name = propertyName;
                 parseExpected(SyntaxKind.ColonToken);
-                node.initializer = parseAssignmentExpression(false);
+                (<PropertyDeclaration>node).initializer = parseAssignmentExpression(false);
             }
             return finishNode(node);
         }
@@ -2794,6 +2821,9 @@ module ts {
                 // and either both previous and propId.descriptor have[[Get]] fields or both previous and propId.descriptor have[[Set]] fields 
                 var currentKind: number;
                 if (p.kind === SyntaxKind.PropertyAssignment) {
+                    currentKind = Property;
+                }
+                else if (p.kind === SyntaxKind.ShorthandPropertyAssignment) {
                     currentKind = Property;
                 }
                 else if (p.kind === SyntaxKind.GetAccessor) {
@@ -4226,6 +4256,7 @@ module ts {
         function processReferenceComments(): ReferenceComments {
             var referencedFiles: FileReference[] = [];
             var amdDependencies: string[] = [];
+            var amdModuleName: string;
             commentRanges = [];
             token = scanner.scan();
 
@@ -4245,6 +4276,15 @@ module ts {
                     }
                 }
                 else {
+                    var amdModuleNameRegEx = /^\/\/\/\s*<amd-module\s+name\s*=\s*('|")(.+?)\1/gim;
+                    var amdModuleNameMatchResult = amdModuleNameRegEx.exec(comment);
+                    if(amdModuleNameMatchResult) {
+                        if(amdModuleName) {
+                            errorAtPos(range.pos, range.end - range.pos, Diagnostics.An_AMD_module_cannot_have_multiple_name_assignments);
+                        }
+                        amdModuleName = amdModuleNameMatchResult[2];
+                    }
+
                     var amdDependencyRegEx = /^\/\/\/\s*<amd-dependency\s+path\s*=\s*('|")(.+?)\1/gim;
                     var amdDependencyMatchResult = amdDependencyRegEx.exec(comment);
                     if (amdDependencyMatchResult) {
@@ -4254,8 +4294,9 @@ module ts {
             }
             commentRanges = undefined;
             return {
-                referencedFiles: referencedFiles,
-                amdDependencies: amdDependencies
+                referencedFiles,
+                amdDependencies,
+                amdModuleName
             };
         }
 
@@ -4277,13 +4318,15 @@ module ts {
         file = <SourceFile>createRootNode(SyntaxKind.SourceFile, 0, sourceText.length, rootNodeFlags);
         file.filename = normalizePath(filename);
         file.text = sourceText;
-        file.getLineAndCharacterFromPosition = getLineAndCharacterlFromSourcePosition;
+        file.getLineAndCharacterFromPosition = getLineAndCharacterFromSourcePosition;
         file.getPositionFromLineAndCharacter = getPositionFromSourceLineAndCharacter;
+        file.getLineStarts = getLineStarts;
         file.syntacticErrors = [];
         file.semanticErrors = [];
         var referenceComments = processReferenceComments(); 
         file.referencedFiles = referenceComments.referencedFiles;
         file.amdDependencies = referenceComments.amdDependencies;
+        file.amdModuleName = referenceComments.amdModuleName;
         file.statements = parseList(ParsingContext.SourceElements, /*checkForStrictMode*/ true, parseSourceElement);
         file.externalModuleIndicator = getExternalModuleIndicator();
         file.nodeCount = nodeCount;
