@@ -4229,7 +4229,7 @@ module ts {
                 else {
                     // No parser errors were reported.  Perform our stricted grammar checks.
                     file._syntacticDiagnostics = [];
-                    performGrammarChecks(sourceText, file);
+                    checkGrammar(sourceText, file);
                 }
 
                 file._parserDiagnostics = undefined;
@@ -4270,17 +4270,17 @@ module ts {
         return file;
     }
 
-    function performGrammarChecks(sourceText: string, file: SourceFileInternal) {
+    function checkGrammar(sourceText: string, file: SourceFileInternal) {
         var syntacticDiagnostics = file._syntacticDiagnostics;
 
-        performNodeChecks(file);
+        visitNode(file);
 
-        function performNodeChecks(node: Node): void {
+        function visitNode(node: Node): void {
             // First recurse and perform all grammar checks on the children of this node.  If any
             // children had an grammar error, then skip reporting errors for this node or anything
             // higher.
             var diagnosticCount = syntacticDiagnostics.length;
-            forEachChild(node, performNodeChecks);
+            forEachChild(node, visitNode);
 
             if (diagnosticCount !== syntacticDiagnostics.length) {
                 return;
@@ -4288,91 +4288,98 @@ module ts {
 
             // No grammar errors on any of our children.  Check this node for grammar errors.
             switch (node.kind) {
-                case SyntaxKind.ArrowFunction:          return performArrowFunctionChecks(<FunctionExpression>node);
-                case SyntaxKind.CallSignature:          return performCallSignatureChecks(<SignatureDeclaration>node);
-                case SyntaxKind.Constructor:            return performConstructorChecks(<ConstructorDeclaration>node);
-                case SyntaxKind.ConstructorType:        return performConstructorTypeChecks(<SignatureDeclaration>node);
-                case SyntaxKind.ConstructSignature:     return performConstructSignatureChecks(<SignatureDeclaration>node);
-                case SyntaxKind.FunctionDeclaration:    return performFunctionDeclarationChecks(<FunctionLikeDeclaration>node);
-                case SyntaxKind.FunctionExpression:     return performFunctionExpressionChecks(<FunctionExpression>node);
-                case SyntaxKind.FunctionType:           return performFunctionTypeChecks(<SignatureDeclaration>node);
-                case SyntaxKind.GetAccessor:            return performGetAccessorChecks(<MethodDeclaration>node);
-                case SyntaxKind.IndexSignature:         return performIndexSignatureChecks(<SignatureDeclaration>node);
-                case SyntaxKind.Method:                 return performMethodChecks(<MethodDeclaration>node);
-                case SyntaxKind.Parameter:              return performParameterChecks(<ParameterDeclaration>node);
-                case SyntaxKind.SetAccessor:            return performSetAccessorChecks(<MethodDeclaration>node);
+                case SyntaxKind.ArrowFunction:          return visitArrowFunction(<FunctionExpression>node);
+                case SyntaxKind.CallSignature:          return visitCallSignature(<SignatureDeclaration>node);
+                case SyntaxKind.Constructor:            return visitConstructor(<ConstructorDeclaration>node);
+                case SyntaxKind.ConstructorType:        return visitConstructorType(<SignatureDeclaration>node);
+                case SyntaxKind.ConstructSignature:     return visitConstructSignature(<SignatureDeclaration>node);
+                case SyntaxKind.FunctionDeclaration:    return visitFunctionDeclaration(<FunctionLikeDeclaration>node);
+                case SyntaxKind.FunctionExpression:     return visitFunctionExpression(<FunctionExpression>node);
+                case SyntaxKind.FunctionType:           return visitFunctionType(<SignatureDeclaration>node);
+                case SyntaxKind.GetAccessor:            return visitGetAccessor(<MethodDeclaration>node);
+                case SyntaxKind.IndexSignature:         return visitIndexSignature(<SignatureDeclaration>node);
+                case SyntaxKind.Method:                 return visitMethod(<MethodDeclaration>node);
+                case SyntaxKind.Parameter:              return visitParameter(<ParameterDeclaration>node);
+                case SyntaxKind.SetAccessor:            return visitSetAccessor(<MethodDeclaration>node);
             }
         }
 
-        function grammarErrorOnNode(node: Node, message: DiagnosticMessage, arg0?: any, arg1?: any, arg2?: any): void {
+        function grammarErrorOnNode(node: Node, message: DiagnosticMessage, arg0?: any, arg1?: any, arg2?: any): boolean {
             var span = getErrorSpanForNode(node);
             var start = span.end > span.pos ? skipTrivia(file.text, span.pos) : span.pos;
             var length = span.end - start;
 
             file._syntacticDiagnostics.push(createFileDiagnostic(file, start, length, message, arg0, arg1, arg2));
+            return true;
         }
 
-        function reportInvalidUseInStrictMode(node: Identifier): void {
+        function reportInvalidUseInStrictMode(node: Identifier): boolean {
             // declarationNameToString cannot be used here since it uses a backreference to 'parent' that is not yet set
             var name = sourceText.substring(skipTrivia(sourceText, node.pos), node.end);
-            grammarErrorOnNode(node, Diagnostics.Invalid_use_of_0_in_strict_mode, name);
+            return grammarErrorOnNode(node, Diagnostics.Invalid_use_of_0_in_strict_mode, name);
         }
 
-        function performArrowFunctionChecks(node: FunctionExpression) {
+        function visitArrowFunction(node: FunctionExpression) {
             if (checkParameterList(node.parameters)) {
                 return;
             }
         }
 
-        function performCallSignatureChecks(node: ConstructorDeclaration) {
+        function visitCallSignature(node: ConstructorDeclaration) {
             if (checkParameterList(node.parameters)) {
                 return;
             }
         }
 
-        function performConstructorChecks(node: ConstructorDeclaration) {
+        function visitConstructor(node: ConstructorDeclaration) {
             if (checkParameterList(node.parameters)) {
                 return;
             }
         }
 
-        function performConstructorTypeChecks(node: SignatureDeclaration) {
+        function visitConstructorType(node: SignatureDeclaration) {
             if (checkParameterList(node.parameters)) {
                 return;
             }
         }
 
-        function performConstructSignatureChecks(node: FunctionLikeDeclaration) {
+        function visitConstructSignature(node: FunctionLikeDeclaration) {
             if (checkParameterList(node.parameters)) {
                 return;
             }
         }
 
-        function performFunctionDeclarationChecks(node: FunctionLikeDeclaration) {
+        function visitFunctionDeclaration(node: FunctionLikeDeclaration) {
             if (checkParameterList(node.parameters)) {
                 return;
             }
         }
 
-        function performFunctionExpressionChecks(node: FunctionExpression) {
+        function visitFunctionExpression(node: FunctionExpression) {
             if (checkParameterList(node.parameters)) {
                 return;
             }
         }
 
-        function performFunctionTypeChecks(node: SignatureDeclaration) {
+        function visitFunctionType(node: SignatureDeclaration) {
             if (checkParameterList(node.parameters)) {
                 return;
             }
         }
 
-        function performGetAccessorChecks(node: MethodDeclaration) {
+        function visitGetAccessor(node: MethodDeclaration) {
             if (checkParameterList(node.parameters)) {
                 return;
             }
         }
 
-        function performIndexSignatureChecks(node: SignatureDeclaration): void {
+        function visitIndexSignature(node: SignatureDeclaration): void {
+            if (checkIndexSignatureParameters(node)) {
+                return;
+            }
+        }
+
+        function checkIndexSignatureParameters(node: SignatureDeclaration): boolean {
             var parameter = node.parameters[0];
             if (node.parameters.length !== 1) {
                 if (parameter) {
@@ -4397,8 +4404,7 @@ module ts {
             else if (!parameter.type) {
                 return grammarErrorOnNode(parameter.name, Diagnostics.An_index_signature_parameter_must_have_a_type_annotation);
             }
-            else if (parameter.type.kind !== SyntaxKind.StringKeyword &&
-                     parameter.type.kind !== SyntaxKind.NumberKeyword) {
+            else if (parameter.type.kind !== SyntaxKind.StringKeyword && parameter.type.kind !== SyntaxKind.NumberKeyword) {
                 return grammarErrorOnNode(parameter.name, Diagnostics.An_index_signature_parameter_type_must_be_string_or_number);
             }
             else if (!node.type) {
@@ -4406,20 +4412,21 @@ module ts {
             }
         }
 
-        function performMethodChecks(node: MethodDeclaration) {
+        function visitMethod(node: MethodDeclaration) {
             if (checkParameterList(node.parameters)) {
                 return;
             }
         }
 
-        function performParameterChecks(node: ParameterDeclaration): void {
+        function visitParameter(node: ParameterDeclaration): void {
             // It is a SyntaxError if the Identifier "eval" or the Identifier "arguments" occurs as the 
             // Identifier in a PropertySetParameterList of a PropertyAssignment that is contained in strict code 
             // or if its FunctionBody is strict code(11.1.5).
             // It is a SyntaxError if the identifier eval or arguments appears within a FormalParameterList of a 
             // strict mode FunctionLikeDeclaration or FunctionExpression(13.1) 
             if (node.flags & NodeFlags.ParsedInStrictMode && isEvalOrArgumentsIdentifier(node.name)) {
-                return reportInvalidUseInStrictMode(node.name);
+                reportInvalidUseInStrictMode(node.name);
+                return;
             }
         }
 
@@ -4462,7 +4469,7 @@ module ts {
             }
         }
 
-        function performSetAccessorChecks(node: MethodDeclaration) {
+        function visitSetAccessor(node: MethodDeclaration) {
             if (checkParameterList(node.parameters)) {
                 return;
             }
