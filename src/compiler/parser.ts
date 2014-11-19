@@ -3533,16 +3533,13 @@ module ts {
         function parseClassDeclaration(pos: number, flags: NodeFlags): ClassDeclaration {
             var node = <ClassDeclaration>createNode(SyntaxKind.ClassDeclaration, pos);
             node.flags = flags;
-            var errorCountBeforeClassDeclaration = file._parserDiagnostics.length;
             parseExpected(SyntaxKind.ClassKeyword);
             node.name = parseIdentifier();
             node.typeParameters = parseTypeParameters();
             // TODO(jfreeman): Parse arbitrary sequence of heritage clauses and error for order and duplicates
+
             node.baseType = parseOptional(SyntaxKind.ExtendsKeyword) ? parseTypeReference() : undefined;
-            var implementsKeywordStart = scanner.getTokenPos();
-            var implementsKeywordLength: number;
             if (parseOptional(SyntaxKind.ImplementsKeyword)) {
-                implementsKeywordLength = scanner.getStartPos() - implementsKeywordStart;
                 node.implementedTypes = parseDelimitedList(ParsingContext.BaseTypeReferences, parseTypeReference);
             }
             var errorCountBeforeClassBody = file._parserDiagnostics.length;
@@ -3553,31 +3550,20 @@ module ts {
             else {
                 node.members = createMissingList<Declaration>();
             }
-            if (node.implementedTypes && !node.implementedTypes.length && errorCountBeforeClassBody === errorCountBeforeClassDeclaration) {
-                grammarErrorAtPos(implementsKeywordStart, implementsKeywordLength, Diagnostics._0_list_cannot_be_empty, "implements");
-            }
             return finishNode(node);
         }
 
         function parseInterfaceDeclaration(pos: number, flags: NodeFlags): InterfaceDeclaration {
             var node = <InterfaceDeclaration>createNode(SyntaxKind.InterfaceDeclaration, pos);
             node.flags = flags;
-            var errorCountBeforeInterfaceDeclaration = file._parserDiagnostics.length;
             parseExpected(SyntaxKind.InterfaceKeyword);
             node.name = parseIdentifier();
             node.typeParameters = parseTypeParameters();
             // TODO(jfreeman): Parse arbitrary sequence of heritage clauses and error for order and duplicates
-            var extendsKeywordStart = scanner.getTokenPos();
-            var extendsKeywordLength: number;
             if (parseOptional(SyntaxKind.ExtendsKeyword)) {
-                extendsKeywordLength = scanner.getStartPos() - extendsKeywordStart;
                 node.baseTypes = parseDelimitedList(ParsingContext.BaseTypeReferences, parseTypeReference);
             }
-            var errorCountBeforeInterfaceBody = file._parserDiagnostics.length;
             node.members = parseTypeLiteral().members;
-            if (node.baseTypes && !node.baseTypes.length && errorCountBeforeInterfaceBody === errorCountBeforeInterfaceDeclaration) {
-                grammarErrorAtPos(extendsKeywordStart, extendsKeywordLength, Diagnostics._0_list_cannot_be_empty, "extends");
-            }
             return finishNode(node);
         }
 
@@ -4152,7 +4138,14 @@ module ts {
         }
 
         function visitClassDeclaration(node: ClassDeclaration) {
-            checkForTrailingComma(node.implementedTypes);
+            checkForTrailingComma(node.implementedTypes) ||
+                checkForAtLeastOneHeritageClause(node.implementedTypes, "implements");
+        }
+
+        function checkForAtLeastOneHeritageClause(types: NodeArray<TypeNode>, listType: string): boolean {
+            if (types && types.length === 0) {
+                return grammarErrorAtPos(types.pos, 0, Diagnostics._0_list_cannot_be_empty, listType)
+            }
         }
 
         function visitConstructor(node: ConstructorDeclaration) {
@@ -4315,7 +4308,8 @@ module ts {
         }
 
         function visitInterfaceDeclaration(node: InterfaceDeclaration) {
-            checkForTrailingComma(node.baseTypes);
+            checkForTrailingComma(node.baseTypes) ||
+                checkForAtLeastOneHeritageClause(node.baseTypes, "extends");
         }
 
         function visitMethod(node: MethodDeclaration) {
