@@ -1,4 +1,3 @@
-tests/cases/conformance/es6/templates/templateStringInPropertyName1.ts(1,9): error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
 tests/cases/conformance/es6/templates/templateStringInPropertyName1.ts(2,5): error TS1136: Property assignment expected.
 tests/cases/conformance/es6/templates/templateStringInPropertyName1.ts(2,8): error TS1005: ',' expected.
 tests/cases/conformance/es6/templates/templateStringInPropertyName1.ts(2,10): error TS1134: Variable declaration expected.
@@ -6,13 +5,10 @@ tests/cases/conformance/es6/templates/templateStringInPropertyName1.ts(3,1): err
 tests/cases/conformance/es6/templates/templateStringInPropertyName1.ts(1,9): error TS2349: Cannot invoke an expression whose type lacks a call signature.
 
 
-==== tests/cases/conformance/es6/templates/templateStringInPropertyName1.ts (6 errors) ====
+==== tests/cases/conformance/es6/templates/templateStringInPropertyName1.ts (5 errors) ====
     var x = {
             ~
-            ~
         `a`: 321
-    ~~~~~~~
-!!! error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
         ~~~
 !!! error TS1136: Property assignment expected.
            ~

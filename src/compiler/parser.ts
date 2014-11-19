@@ -2526,11 +2526,6 @@ module ts {
                         ? parseLiteralNode()
                         : parseTemplateExpression();
                     expr = finishNode(tagExpression);
-
-                    if (languageVersion < ScriptTarget.ES6) {
-                        grammarErrorOnNode(expr, Diagnostics.Tagged_templates_are_only_available_when_targeting_ECMAScript_6_and_higher);
-                    }
-
                     continue;
                 }
 
@@ -4194,20 +4189,21 @@ module ts {
         function checkNode(node: Node) {
             // No grammar errors on any of our children.  Check this node for grammar errors.
             switch (node.kind) {
-                case SyntaxKind.ArrowFunction:          return visitArrowFunction(<FunctionExpression>node);
-                case SyntaxKind.CallSignature:          return visitCallSignature(<SignatureDeclaration>node);
-                case SyntaxKind.Constructor:            return visitConstructor(<ConstructorDeclaration>node);
-                case SyntaxKind.ConstructorType:        return visitConstructorType(<SignatureDeclaration>node);
-                case SyntaxKind.ConstructSignature:     return visitConstructSignature(<SignatureDeclaration>node);
-                case SyntaxKind.FunctionDeclaration:    return visitFunctionDeclaration(<FunctionLikeDeclaration>node);
-                case SyntaxKind.FunctionExpression:     return visitFunctionExpression(<FunctionExpression>node);
-                case SyntaxKind.FunctionType:           return visitFunctionType(<SignatureDeclaration>node);
-                case SyntaxKind.GetAccessor:            return visitGetAccessor(<MethodDeclaration>node);
-                case SyntaxKind.IndexSignature:         return visitIndexSignature(<SignatureDeclaration>node);
-                case SyntaxKind.Method:                 return visitMethod(<MethodDeclaration>node);
-                case SyntaxKind.ObjectLiteral:          return visitObjectLiteral(<ObjectLiteral>node);
-                case SyntaxKind.Parameter:              return visitParameter(<ParameterDeclaration>node);
-                case SyntaxKind.SetAccessor:            return visitSetAccessor(<MethodDeclaration>node);
+                case SyntaxKind.ArrowFunction:              return visitArrowFunction(<FunctionExpression>node);
+                case SyntaxKind.CallSignature:              return visitCallSignature(<SignatureDeclaration>node);
+                case SyntaxKind.Constructor:                return visitConstructor(<ConstructorDeclaration>node);
+                case SyntaxKind.ConstructorType:            return visitConstructorType(<SignatureDeclaration>node);
+                case SyntaxKind.ConstructSignature:         return visitConstructSignature(<SignatureDeclaration>node);
+                case SyntaxKind.FunctionDeclaration:        return visitFunctionDeclaration(<FunctionLikeDeclaration>node);
+                case SyntaxKind.FunctionExpression:         return visitFunctionExpression(<FunctionExpression>node);
+                case SyntaxKind.FunctionType:               return visitFunctionType(<SignatureDeclaration>node);
+                case SyntaxKind.GetAccessor:                return visitGetAccessor(<MethodDeclaration>node);
+                case SyntaxKind.IndexSignature:             return visitIndexSignature(<SignatureDeclaration>node);
+                case SyntaxKind.Method:                     return visitMethod(<MethodDeclaration>node);
+                case SyntaxKind.ObjectLiteral:              return visitObjectLiteral(<ObjectLiteral>node);
+                case SyntaxKind.Parameter:                  return visitParameter(<ParameterDeclaration>node);
+                case SyntaxKind.SetAccessor:                return visitSetAccessor(<MethodDeclaration>node);
+                case SyntaxKind.TaggedTemplateExpression:   return visitTaggedTemplateExpression(<TaggedTemplateExpression>node);
             }
         }
 
@@ -4460,6 +4456,12 @@ module ts {
                         return grammarErrorOnNode(accessor.name, Diagnostics.A_set_accessor_parameter_cannot_have_an_initializer);
                     }
                 }
+            }
+        }
+
+        function visitTaggedTemplateExpression(node: TaggedTemplateExpression) {
+            if (languageVersion < ScriptTarget.ES6) {
+                grammarErrorOnNode(node, Diagnostics.Tagged_templates_are_only_available_when_targeting_ECMAScript_6_and_higher);
             }
         }
     }
