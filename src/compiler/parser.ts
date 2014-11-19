@@ -999,12 +999,6 @@ module ts {
             file._parserDiagnostics.push(createFileDiagnostic(file, start, length, message, arg0, arg1, arg2));
         }
 
-        function reportInvalidUseInStrictMode(node: Identifier): void {
-            // declarationNameToString cannot be used here since it uses a backreference to 'parent' that is not yet set
-            var name = sourceText.substring(skipTrivia(sourceText, node.pos), node.end);
-            grammarErrorOnNode(node, Diagnostics.Invalid_use_of_0_in_strict_mode, name);
-        }
-
         function grammarErrorAtPos(start: number, length: number, message: DiagnosticMessage, arg0?: any, arg1?: any, arg2?: any): void {
             file._parserDiagnostics.push(createFileDiagnostic(file, start, length, message, arg0, arg1, arg2));
         }
@@ -2643,11 +2637,6 @@ module ts {
             var name = isIdentifier() ? parseIdentifier() : undefined;
             var sig = parseSignature(SyntaxKind.CallSignature, SyntaxKind.ColonToken, /* returnTokenRequired */ false);
             var body = parseBody(/* ignoreMissingOpenBrace */ false);
-            if (name && isInStrictMode && isEvalOrArgumentsIdentifier(name)) {
-                // It is a SyntaxError to use within strict mode code the identifiers eval or arguments as the 
-                // Identifier of a FunctionLikeDeclaration or FunctionExpression or as a formal parameter name(13.1)
-                reportInvalidUseInStrictMode(name);
-            }
             return makeFunctionExpression(SyntaxKind.FunctionExpression, pos, name, sig, body);
         }
 
@@ -3278,11 +3267,6 @@ module ts {
             node.parameters = sig.parameters;
             node.type = sig.type;
             node.body = parseAndCheckFunctionBody(/*isConstructor*/ false);
-            if (isInStrictMode && isEvalOrArgumentsIdentifier(node.name) && node.name.kind === SyntaxKind.Identifier) {
-                // It is a SyntaxError to use within strict mode code the identifiers eval or arguments as the 
-                // Identifier of a FunctionLikeDeclaration or FunctionExpression or as a formal parameter name(13.1)
-                reportInvalidUseInStrictMode(<Identifier>node.name);
-            }
             return finishNode(node);
         }
 
@@ -4221,12 +4205,22 @@ module ts {
 
         function visitFunctionDeclaration(node: FunctionLikeDeclaration) {
             checkTypeParameterList(node.typeParameters) ||
-                checkParameterList(node.parameters);
+                checkParameterList(node.parameters) ||
+                checkFunctionName(node.name);
         }
 
         function visitFunctionExpression(node: FunctionExpression) {
             checkTypeParameterList(node.typeParameters) ||
-                checkParameterList(node.parameters);
+                checkParameterList(node.parameters) ||
+                checkFunctionName(node.name);
+        }
+
+        function checkFunctionName(name: Node) {
+            if (name && name.flags & NodeFlags.ParsedInStrictMode && isEvalOrArgumentsIdentifier(name)) {
+                // It is a SyntaxError to use within strict mode code the identifiers eval or arguments as the 
+                // Identifier of a FunctionLikeDeclaration or FunctionExpression or as a formal parameter name(13.1)
+                return reportInvalidUseInStrictMode(<Identifier>name);
+            }
         }
 
         function visitFunctionType(node: SignatureDeclaration) {
@@ -4372,8 +4366,7 @@ module ts {
             // It is a SyntaxError if the identifier eval or arguments appears within a FormalParameterList of a 
             // strict mode FunctionLikeDeclaration or FunctionExpression(13.1) 
             if (node.flags & NodeFlags.ParsedInStrictMode && isEvalOrArgumentsIdentifier(node.name)) {
-                reportInvalidUseInStrictMode(node.name);
-                return true;
+                return reportInvalidUseInStrictMode(node.name);
             }
         }
 
