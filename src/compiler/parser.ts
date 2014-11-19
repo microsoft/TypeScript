@@ -2264,7 +2264,6 @@ module ts {
                 }
 
                 if (parseOptional(SyntaxKind.OpenBracketToken)) {
-
                     var indexedAccess = <IndexedAccess>createNode(SyntaxKind.IndexedAccess, expr.pos);
                     indexedAccess.object = expr;
 
@@ -2441,10 +2440,12 @@ module ts {
                 (<PropertyDeclaration>node).initializer = makeFunctionExpression(SyntaxKind.FunctionExpression, node.pos, undefined, sig, body);
                 return finishNode(node);
             }
-            // Disallow optional property assignment
+
+            var flags: NodeFlags = 0;
+
+            // Disallowing of optional property assignments happens in the grammar checker.
             if (token === SyntaxKind.QuestionToken) {
-                var questionStart = scanner.getTokenPos();
-                grammarErrorAtPos(questionStart, scanner.getStartPos() - questionStart, Diagnostics.A_object_member_cannot_be_declared_optional);
+                flags |= NodeFlags.QuestionMark;
                 nextToken();
             }
 
@@ -2459,6 +2460,8 @@ module ts {
                 parseExpected(SyntaxKind.ColonToken);
                 (<PropertyDeclaration>node).initializer = parseAssignmentExpression(false);
             }
+
+            node.flags = flags;
             return finishNode(node);
         }
 
@@ -3740,42 +3743,44 @@ module ts {
 
         function dispatch(node: Node) {
             switch (node.kind) {
-                case SyntaxKind.ArrowFunction:              return visitArrowFunction(<FunctionExpression>node);
-                case SyntaxKind.BinaryExpression:           return visitBinaryExpression(<BinaryExpression>node);
-                case SyntaxKind.BreakStatement:             return visitBreakOrContinueStatement(<BreakOrContinueStatement>node);
-                case SyntaxKind.CallExpression:             return visitCallExpression(<CallExpression>node);
-                case SyntaxKind.CallSignature:              return visitCallSignature(<SignatureDeclaration>node);
-                case SyntaxKind.CatchBlock:                 return visitCatchBlock(<CatchBlock>node);
-                case SyntaxKind.ClassDeclaration:           return visitClassDeclaration(<ClassDeclaration>node);
-                case SyntaxKind.Constructor:                return visitConstructor(<ConstructorDeclaration>node);
-                case SyntaxKind.ConstructorType:            return visitConstructorType(<SignatureDeclaration>node);
-                case SyntaxKind.ConstructSignature:         return visitConstructSignature(<SignatureDeclaration>node);
-                case SyntaxKind.ContinueStatement:          return visitBreakOrContinueStatement(<BreakOrContinueStatement>node);
-                case SyntaxKind.EnumDeclaration:            return visitEnumDeclaration(<EnumDeclaration>node);
-                case SyntaxKind.ForInStatement:             return visitForInStatement(<ForInStatement>node);
-                case SyntaxKind.ForStatement:               return visitForStatement(<ForStatement>node);
-                case SyntaxKind.FunctionDeclaration:        return visitFunctionDeclaration(<FunctionLikeDeclaration>node);
-                case SyntaxKind.FunctionExpression:         return visitFunctionExpression(<FunctionExpression>node);
-                case SyntaxKind.FunctionType:               return visitFunctionType(<SignatureDeclaration>node);
-                case SyntaxKind.GetAccessor:                return visitGetAccessor(<MethodDeclaration>node);
-                case SyntaxKind.IndexSignature:             return visitIndexSignature(<SignatureDeclaration>node);
-                case SyntaxKind.InterfaceDeclaration:       return visitInterfaceDeclaration(<InterfaceDeclaration>node);
-                case SyntaxKind.LabeledStatement:           return visitLabeledStatement(<LabeledStatement>node);
-                case SyntaxKind.Method:                     return visitMethod(<MethodDeclaration>node);
-                case SyntaxKind.ModuleDeclaration:          return visitModuleDeclaration(<ModuleDeclaration>node);
-                case SyntaxKind.NewExpression:              return visitNewExpression(<NewExpression>node);
-                case SyntaxKind.ObjectLiteral:              return visitObjectLiteral(<ObjectLiteral>node);
-                case SyntaxKind.Parameter:                  return visitParameter(<ParameterDeclaration>node);
-                case SyntaxKind.PostfixOperator:            return visitPostfixOperator(<UnaryExpression>node);
-                case SyntaxKind.PrefixOperator:             return visitPrefixOperator(<UnaryExpression>node);
-                case SyntaxKind.SetAccessor:                return visitSetAccessor(<MethodDeclaration>node);
-                case SyntaxKind.SwitchStatement:            return visitSwitchStatement(<SwitchStatement>node);
-                case SyntaxKind.TaggedTemplateExpression:   return visitTaggedTemplateExpression(<TaggedTemplateExpression>node);
-                case SyntaxKind.TupleType:                  return visitTupleType(<TupleTypeNode>node);
-                case SyntaxKind.TypeReference:              return visitTypeReference(<TypeReferenceNode>node);
-                case SyntaxKind.VariableDeclaration:        return visitVariableDeclaration(<VariableDeclaration>node);
-                case SyntaxKind.VariableStatement:          return visitVariableStatement(<VariableStatement>node);
-                case SyntaxKind.WithStatement:              return visitWithStatement(<WithStatement>node);
+                case SyntaxKind.ArrowFunction:                  return visitArrowFunction(<FunctionExpression>node);
+                case SyntaxKind.BinaryExpression:               return visitBinaryExpression(<BinaryExpression>node);
+                case SyntaxKind.BreakStatement:                 return visitBreakOrContinueStatement(<BreakOrContinueStatement>node);
+                case SyntaxKind.CallExpression:                 return visitCallExpression(<CallExpression>node);
+                case SyntaxKind.CallSignature:                  return visitCallSignature(<SignatureDeclaration>node);
+                case SyntaxKind.CatchBlock:                     return visitCatchBlock(<CatchBlock>node);
+                case SyntaxKind.ClassDeclaration:               return visitClassDeclaration(<ClassDeclaration>node);
+                case SyntaxKind.Constructor:                    return visitConstructor(<ConstructorDeclaration>node);
+                case SyntaxKind.ConstructorType:                return visitConstructorType(<SignatureDeclaration>node);
+                case SyntaxKind.ConstructSignature:             return visitConstructSignature(<SignatureDeclaration>node);
+                case SyntaxKind.ContinueStatement:              return visitBreakOrContinueStatement(<BreakOrContinueStatement>node);
+                case SyntaxKind.EnumDeclaration:                return visitEnumDeclaration(<EnumDeclaration>node);
+                case SyntaxKind.ForInStatement:                 return visitForInStatement(<ForInStatement>node);
+                case SyntaxKind.ForStatement:                   return visitForStatement(<ForStatement>node);
+                case SyntaxKind.FunctionDeclaration:            return visitFunctionDeclaration(<FunctionLikeDeclaration>node);
+                case SyntaxKind.FunctionExpression:             return visitFunctionExpression(<FunctionExpression>node);
+                case SyntaxKind.FunctionType:                   return visitFunctionType(<SignatureDeclaration>node);
+                case SyntaxKind.GetAccessor:                    return visitGetAccessor(<MethodDeclaration>node);
+                case SyntaxKind.IndexSignature:                 return visitIndexSignature(<SignatureDeclaration>node);
+                case SyntaxKind.InterfaceDeclaration:           return visitInterfaceDeclaration(<InterfaceDeclaration>node);
+                case SyntaxKind.LabeledStatement:               return visitLabeledStatement(<LabeledStatement>node);
+                case SyntaxKind.Method:                         return visitMethod(<MethodDeclaration>node);
+                case SyntaxKind.ModuleDeclaration:              return visitModuleDeclaration(<ModuleDeclaration>node);
+                case SyntaxKind.NewExpression:                  return visitNewExpression(<NewExpression>node);
+                case SyntaxKind.ObjectLiteral:                  return visitObjectLiteral(<ObjectLiteral>node);
+                case SyntaxKind.Parameter:                      return visitParameter(<ParameterDeclaration>node);
+                case SyntaxKind.PostfixOperator:                return visitPostfixOperator(<UnaryExpression>node);
+                case SyntaxKind.PrefixOperator:                 return visitPrefixOperator(<UnaryExpression>node);
+                case SyntaxKind.PropertyAssignment:             return visitPropertyAssignment(<PropertyDeclaration>node);
+                case SyntaxKind.SetAccessor:                    return visitSetAccessor(<MethodDeclaration>node);
+                case SyntaxKind.ShorthandPropertyAssignment:    return visitShorthandPropertyAssignment(<ShortHandPropertyDeclaration>node);
+                case SyntaxKind.SwitchStatement:                return visitSwitchStatement(<SwitchStatement>node);
+                case SyntaxKind.TaggedTemplateExpression:       return visitTaggedTemplateExpression(<TaggedTemplateExpression>node);
+                case SyntaxKind.TupleType:                      return visitTupleType(<TupleTypeNode>node);
+                case SyntaxKind.TypeReference:                  return visitTypeReference(<TypeReferenceNode>node);
+                case SyntaxKind.VariableDeclaration:            return visitVariableDeclaration(<VariableDeclaration>node);
+                case SyntaxKind.VariableStatement:              return visitVariableStatement(<VariableStatement>node);
+                case SyntaxKind.WithStatement:                  return visitWithStatement(<WithStatement>node);
             }
         }
 
@@ -4346,6 +4351,17 @@ module ts {
             }
         }
 
+        function visitPropertyAssignment(node: PropertyDeclaration) {
+            checkForInvalidQuestionMark(node, Diagnostics.An_object_member_cannot_be_declared_optional);
+        }
+
+        function checkForInvalidQuestionMark(node: Declaration, message: DiagnosticMessage) {
+            if (node.flags & NodeFlags.QuestionMark) {
+                var pos = skipTrivia(sourceText, node.name.end);
+                return grammarErrorAtPos(pos, "?".length, message);
+            }
+        }
+
         function visitSetAccessor(node: MethodDeclaration) {
             checkTypeParameterList(node.typeParameters) ||
                 checkParameterList(node.parameters) ||
@@ -4389,6 +4405,10 @@ module ts {
                     }
                 }
             }
+        }
+
+        function visitShorthandPropertyAssignment(node: ShortHandPropertyDeclaration): void {
+            checkForInvalidQuestionMark(node, Diagnostics.An_object_member_cannot_be_declared_optional);
         }
 
         function visitSwitchStatement(node: SwitchStatement) {
