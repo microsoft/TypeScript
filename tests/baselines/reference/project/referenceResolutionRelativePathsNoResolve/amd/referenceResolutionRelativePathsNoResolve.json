@@ -5,6 +5,8 @@
         "foo.ts",
         "../../../bar/bar.ts"
     ],
+    "declaration": true,
+    "baselineCheck": true,
     "resolvedInputFiles": [
         "lib.d.ts",
         "foo.ts",
@@ -12,6 +14,8 @@
     ],
     "emittedFiles": [
         "foo.js",
-        "../../../bar/bar.js"
+        "foo.d.ts",
+        "../../../bar/bar.js",
+        "../../../bar/bar.d.ts"
     ]
 }
