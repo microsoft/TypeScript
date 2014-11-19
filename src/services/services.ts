@@ -2751,7 +2751,7 @@ module ts {
             while (true) {
                 node = node.parent;
                 if (!node) {
-                    return node;
+                    return undefined;
                 }
                 switch (node.kind) {
                     case SyntaxKind.SourceFile:
@@ -3966,6 +3966,10 @@ module ts {
                     for (var i = 0, n = declarations.length; i < n; i++) {
                         var container = getContainerNode(declarations[i]);
 
+                        if (!container) {
+                            return undefined;
+                        }
+
                         if (scope && scope !== container) {
                             // Different declarations have different containers, bail out
                             return undefined;
@@ -4530,8 +4534,8 @@ module ts {
                             fileName: filename,
                             textSpan: TextSpan.fromBounds(declaration.getStart(), declaration.getEnd()),
                             // TODO(jfreeman): What should be the containerName when the container has a computed name?
-                            containerName: container.name ? (<Identifier>container.name).text : "",
-                            containerKind: container.name ? getNodeKind(container) : ""
+                            containerName: container && container.name ? (<Identifier>container.name).text : "",
+                            containerKind: container && container.name ? getNodeKind(container) : ""
                         });
                     }
                 }
@@ -4685,10 +4689,13 @@ module ts {
                     else {
                         return SemanticMeaning.Namespace;
                     }
-                    break;
 
                 case SyntaxKind.ImportDeclaration:
                     return SemanticMeaning.Value | SemanticMeaning.Type | SemanticMeaning.Namespace;
+
+                // An external module can be a Value
+                case SyntaxKind.SourceFile:
+                    return SemanticMeaning.Namespace | SemanticMeaning.Value;
             }
             Debug.fail("Unknown declaration type");
         }
