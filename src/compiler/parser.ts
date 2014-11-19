@@ -2721,14 +2721,10 @@ module ts {
         }
 
         // STATEMENTS
-        function parseStatementAllowingLetDeclaration() {
-            return parseStatement(/*allowLetAndConstDeclarations*/ true);
-        }
-
         function parseBlock(ignoreMissingOpenBrace: boolean, checkForStrictMode: boolean): Block {
             var node = <Block>createNode(SyntaxKind.Block);
             if (parseExpected(SyntaxKind.OpenBraceToken) || ignoreMissingOpenBrace) {
-                node.statements = parseList(ParsingContext.BlockStatements, checkForStrictMode, parseStatementAllowingLetDeclaration);
+                node.statements = parseList(ParsingContext.BlockStatements, checkForStrictMode, parseStatement);
                 parseExpected(SyntaxKind.CloseBraceToken);
             }
             else {
@@ -2774,8 +2770,8 @@ module ts {
             parseExpected(SyntaxKind.OpenParenToken);
             node.expression = parseExpression();
             parseExpected(SyntaxKind.CloseParenToken);
-            node.thenStatement = parseStatement(/*allowLetAndConstDeclarations*/ false);
-            node.elseStatement = parseOptional(SyntaxKind.ElseKeyword) ? parseStatement(/*allowLetAndConstDeclarations*/ false) : undefined;
+            node.thenStatement = parseStatement();
+            node.elseStatement = parseOptional(SyntaxKind.ElseKeyword) ? parseStatement() : undefined;
             return finishNode(node);
         }
 
@@ -2785,7 +2781,7 @@ module ts {
 
             var saveInIterationStatement = inIterationStatement;
             inIterationStatement = ControlBlockContext.Nested;
-            node.statement = parseStatement(/*allowLetAndConstDeclarations*/ false);
+            node.statement = parseStatement();
             inIterationStatement = saveInIterationStatement;
 
             parseExpected(SyntaxKind.WhileKeyword);
@@ -2810,7 +2806,7 @@ module ts {
 
             var saveInIterationStatement = inIterationStatement;
             inIterationStatement = ControlBlockContext.Nested;
-            node.statement = parseStatement(/*allowLetAndConstDeclarations*/ false);
+            node.statement = parseStatement();
             inIterationStatement = saveInIterationStatement;
 
             return finishNode(node);
@@ -2883,7 +2879,7 @@ module ts {
 
             var saveInIterationStatement = inIterationStatement;
             inIterationStatement = ControlBlockContext.Nested;
-            forOrForInStatement.statement = parseStatement(/*allowLetAndConstDeclarations*/ false);
+            forOrForInStatement.statement = parseStatement();
             inIterationStatement = saveInIterationStatement;
 
             return finishNode(forOrForInStatement);
@@ -2994,7 +2990,7 @@ module ts {
             parseExpected(SyntaxKind.OpenParenToken);
             node.expression = parseExpression();
             parseExpected(SyntaxKind.CloseParenToken);
-            node.statement = parseStatement(/*allowLetAndConstDeclarations*/ false);
+            node.statement = parseStatement();
             node = finishNode(node);
             if (isInStrictMode) {
                 // Strict mode code may not include a WithStatement. The occurrence of a WithStatement in such 
@@ -3009,7 +3005,7 @@ module ts {
             parseExpected(SyntaxKind.CaseKeyword);
             node.expression = parseExpression();
             parseExpected(SyntaxKind.ColonToken);
-            node.statements = parseList(ParsingContext.SwitchClauseStatements, /*checkForStrictMode*/ false, parseStatementAllowingLetDeclaration);
+            node.statements = parseList(ParsingContext.SwitchClauseStatements, /*checkForStrictMode*/ false, parseStatement);
             return finishNode(node);
         }
 
@@ -3017,7 +3013,7 @@ module ts {
             var node = <CaseOrDefaultClause>createNode(SyntaxKind.DefaultClause);
             parseExpected(SyntaxKind.DefaultKeyword);
             parseExpected(SyntaxKind.ColonToken);
-            node.statements = parseList(ParsingContext.SwitchClauseStatements, /*checkForStrictMode*/ false, parseStatementAllowingLetDeclaration);
+            node.statements = parseList(ParsingContext.SwitchClauseStatements, /*checkForStrictMode*/ false, parseStatement);
             return finishNode(node);
         }
 
@@ -3124,9 +3120,9 @@ module ts {
             return token === SyntaxKind.WhileKeyword || token === SyntaxKind.DoKeyword || token === SyntaxKind.ForKeyword;
         }
 
-        function parseStatementWithLabelSet(allowLetAndConstDeclarations: boolean): Statement {
+        function parseStatementWithLabelSet(): Statement {
             labelledStatementInfo.pushCurrentLabelSet(isIterationStatementStart());
-            var statement = parseStatement(allowLetAndConstDeclarations);
+            var statement = parseStatement();
             labelledStatementInfo.pop();
             return statement;
         }
@@ -3135,7 +3131,7 @@ module ts {
             return isIdentifier() && lookAhead(() => nextToken() === SyntaxKind.ColonToken);
         }
 
-        function parseLabeledStatement(allowLetAndConstDeclarations: boolean): LabeledStatement {
+        function parseLabeledStatement(): LabeledStatement {
             var node = <LabeledStatement>createNode(SyntaxKind.LabeledStatement);
             node.label = parseIdentifier();
             parseExpected(SyntaxKind.ColonToken);
@@ -3147,7 +3143,7 @@ module ts {
 
             // We only want to call parseStatementWithLabelSet when the label set is complete
             // Therefore, keep parsing labels until we know we're done.
-            node.statement = isLabel() ? parseLabeledStatement(allowLetAndConstDeclarations) : parseStatementWithLabelSet(allowLetAndConstDeclarations);
+            node.statement = isLabel() ? parseLabeledStatement() : parseStatementWithLabelSet();
             return finishNode(node);
         }
 
@@ -3220,7 +3216,7 @@ module ts {
             }
         }
 
-        function parseStatement(allowLetAndConstDeclarations: boolean): Statement {
+        function parseStatement(): Statement {
             switch (token) {
                 case SyntaxKind.OpenBraceToken:
                     return parseBlock(/* ignoreMissingOpenBrace */ false, /*checkForStrictMode*/ false);
@@ -3228,7 +3224,7 @@ module ts {
                 case SyntaxKind.LetKeyword:
                 case SyntaxKind.ConstKeyword:
                     // const here should always be parsed as const declaration because of check in 'isStatement' 
-                    return parseVariableStatement(allowLetAndConstDeclarations);
+                    return parseVariableStatement();
                 case SyntaxKind.FunctionKeyword:
                     return parseFunctionDeclaration();
                 case SyntaxKind.SemicolonToken:
@@ -3261,10 +3257,9 @@ module ts {
                 case SyntaxKind.DebuggerKeyword:
                     return parseDebuggerStatement();
                 default:
-                    if (isLabel()) {
-                        return parseLabeledStatement(allowLetAndConstDeclarations);
-                    }
-                    return parseExpressionStatement();
+                    return isLabel()
+                        ? parseLabeledStatement()
+                        : parseExpressionStatement();
             }
         }
 
@@ -3307,43 +3302,26 @@ module ts {
                 () => parseVariableDeclaration(flags, noIn), /*allowTrailingComma*/ false);
         }
 
-        function parseVariableStatement(allowLetAndConstDeclarations: boolean, pos?: number, flags?: NodeFlags): VariableStatement {
+        function parseVariableStatement(pos?: number, flags?: NodeFlags): VariableStatement {
             var node = <VariableStatement>createNode(SyntaxKind.VariableStatement, pos);
-            if (flags) node.flags = flags;
-            var errorCountBeforeVarStatement = file._parserDiagnostics.length;
+            if (flags) {
+                node.flags = flags;
+            }
+
             if (token === SyntaxKind.LetKeyword) {
                 node.flags |= NodeFlags.Let;
             }
             else if (token === SyntaxKind.ConstKeyword) {
                 node.flags |= NodeFlags.Const;
             }
-            else if (token !== SyntaxKind.VarKeyword) {
-                error(Diagnostics.var_let_or_const_expected);
+            else {
+                Debug.assert(token === SyntaxKind.VarKeyword);
             }
+
             nextToken();
             node.declarations = parseVariableDeclarationList(node.flags, /*noIn*/false);
             parseSemicolon();
-            finishNode(node);
-            if (!node.declarations.length && file._parserDiagnostics.length === errorCountBeforeVarStatement) {
-                grammarErrorOnNode(node, Diagnostics.Variable_declaration_list_cannot_be_empty);
-            }
-            if (languageVersion < ScriptTarget.ES6) {
-                if (node.flags & NodeFlags.Let) {
-                    grammarErrorOnNode(node, Diagnostics.let_declarations_are_only_available_when_targeting_ECMAScript_6_and_higher);
-                }
-                else if (node.flags & NodeFlags.Const) {
-                    grammarErrorOnNode(node, Diagnostics.const_declarations_are_only_available_when_targeting_ECMAScript_6_and_higher);
-                }
-            }
-            else if (!allowLetAndConstDeclarations) {
-                if (node.flags & NodeFlags.Let) {
-                    grammarErrorOnNode(node, Diagnostics.let_declarations_can_only_be_declared_inside_a_block);
-                }
-                else if (node.flags & NodeFlags.Const) {
-                    grammarErrorOnNode(node, Diagnostics.const_declarations_can_only_be_declared_inside_a_block);
-                }
-            }
-            return node;
+            return finishNode(node);
         }
 
         function parseFunctionDeclaration(pos?: number, flags?: NodeFlags): FunctionLikeDeclaration {
@@ -3895,7 +3873,7 @@ module ts {
             switch (token) {
                 case SyntaxKind.VarKeyword:
                 case SyntaxKind.LetKeyword:
-                    result = parseVariableStatement(/*allowLetAndConstDeclarations*/ true, pos, flags);
+                    result = parseVariableStatement(pos, flags);
                     break;
                 case SyntaxKind.ConstKeyword:
                     var isConstEnum = lookAhead(() => nextToken() === SyntaxKind.EnumKeyword);
@@ -3903,7 +3881,7 @@ module ts {
                         result = parseAndCheckEnumDeclaration(pos, flags | NodeFlags.Const);
                     }
                     else {
-                        result = parseVariableStatement(/*allowLetAndConstDeclarations*/ true, pos, flags);
+                        result = parseVariableStatement(pos, flags);
                     }
                     break;
                 case SyntaxKind.FunctionKeyword:
@@ -3955,7 +3933,7 @@ module ts {
             var statementStart = scanner.getTokenPos();
             var statementFirstTokenLength = scanner.getTextPos() - statementStart;
             var errorCountBeforeStatement = file._parserDiagnostics.length;
-            var statement = parseStatement(/*allowLetAndConstDeclarations*/ true);
+            var statement = parseStatement();
 
             if (inAmbientContext && file._parserDiagnostics.length === errorCountBeforeStatement) {
                 grammarErrorAtPos(statementStart, statementFirstTokenLength, Diagnostics.Statements_are_not_allowed_in_ambient_contexts);
@@ -4076,10 +4054,14 @@ module ts {
 
         // We're automatically in an ambient context if this is a .d.ts file.
         var inAmbientContext = fileExtensionIs(file.filename, ".d.ts");
-
+        var parent: Node;
         visitNode(file);
 
         function visitNode(node: Node): void {
+            var savedParent = parent;
+            node.parent = parent;
+            parent = node;
+
             // First recurse and perform all grammar checks on the children of this node. 
             var savedInAmbientContext = inAmbientContext
             if (node.flags & NodeFlags.Ambient) {
@@ -4096,6 +4078,7 @@ module ts {
             }
 
             inAmbientContext = savedInAmbientContext;
+            parent = savedParent;
         }
 
         function checkNode(node: Node) {
@@ -4121,6 +4104,7 @@ module ts {
                 case SyntaxKind.SetAccessor:                return visitSetAccessor(<MethodDeclaration>node);
                 case SyntaxKind.TaggedTemplateExpression:   return visitTaggedTemplateExpression(<TaggedTemplateExpression>node);
                 case SyntaxKind.VariableDeclaration:        return visitVariableDeclaration(<VariableDeclaration>node);
+                case SyntaxKind.VariableStatement:          return visitVariableStatement(<VariableStatement>node);
             }
         }
 
@@ -4501,6 +4485,44 @@ module ts {
                 reportInvalidUseInStrictMode(node.name);
             }
         }
+
+        function visitVariableStatement(node: VariableStatement) {
+            if (!node.declarations.length) {
+                grammarErrorOnNode(node, Diagnostics.Variable_declaration_list_cannot_be_empty);
+            }
+            if (languageVersion < ScriptTarget.ES6) {
+                if (node.flags & NodeFlags.Let) {
+                    grammarErrorOnNode(node, Diagnostics.let_declarations_are_only_available_when_targeting_ECMAScript_6_and_higher);
+                }
+                else if (node.flags & NodeFlags.Const) {
+                    grammarErrorOnNode(node, Diagnostics.const_declarations_are_only_available_when_targeting_ECMAScript_6_and_higher);
+                }
+            }
+            else if (!allowLetAndConstDeclarations(node.parent)) {
+                if (node.flags & NodeFlags.Let) {
+                    grammarErrorOnNode(node, Diagnostics.let_declarations_can_only_be_declared_inside_a_block);
+                }
+                else if (node.flags & NodeFlags.Const) {
+                    grammarErrorOnNode(node, Diagnostics.const_declarations_can_only_be_declared_inside_a_block);
+                }
+            }
+        }
+
+        function allowLetAndConstDeclarations(node: Node): boolean {
+            switch (node.kind) {
+                case SyntaxKind.IfStatement:
+                case SyntaxKind.DoStatement:
+                case SyntaxKind.WhileStatement:
+                case SyntaxKind.WithStatement:
+                case SyntaxKind.ForStatement:
+                case SyntaxKind.ForInStatement:
+                    return false;
+                case SyntaxKind.LabeledStatement:
+                    return allowLetAndConstDeclarations(node.parent);
+            }
+
+            return true;
+        } 
     }
 
     export function createProgram(rootNames: string[], options: CompilerOptions, host: CompilerHost): Program {
