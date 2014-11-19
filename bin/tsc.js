@@ -2806,13 +2806,12 @@ var ts;
                 if (matchResult) {
                     var start = commentRange.pos;
                     var end = commentRange.end;
-                    var fileRef = {
-                        pos: start,
-                        end: end,
-                        filename: matchResult[3]
-                    };
                     return {
-                        fileReference: fileRef,
+                        fileReference: {
+                            pos: start,
+                            end: end,
+                            filename: matchResult[3]
+                        },
                         isNoDefaultLib: false
                     };
                 }
@@ -9063,25 +9062,25 @@ var ts;
         diagnostics.sort(ts.compareDiagnostics);
         diagnostics = ts.deduplicateSortedDiagnostics(diagnostics);
         var hasEmitterError = ts.forEach(diagnostics, function (diagnostic) { return diagnostic.category === 1 /* Error */; });
-        var returnCode;
+        var emitResultStatus;
         if (isEmitBlocked) {
-            returnCode = 1 /* AllOutputGenerationSkipped */;
+            emitResultStatus = 1 /* AllOutputGenerationSkipped */;
         }
         else if (hasEmitterError) {
-            returnCode = 4 /* EmitErrorsEncountered */;
+            emitResultStatus = 4 /* EmitErrorsEncountered */;
         }
         else if (hasSemanticErrors && compilerOptions.declaration) {
-            returnCode = 3 /* DeclarationGenerationSkipped */;
+            emitResultStatus = 3 /* DeclarationGenerationSkipped */;
         }
         else if (hasSemanticErrors && !compilerOptions.declaration) {
-            returnCode = 2 /* JSGeneratedWithSemanticErrors */;
+            emitResultStatus = 2 /* JSGeneratedWithSemanticErrors */;
         }
         else {
-            returnCode = 0 /* Succeeded */;
+            emitResultStatus = 0 /* Succeeded */;
         }
         return {
-            emitResultStatus: returnCode,
-            errors: diagnostics,
+            emitResultStatus: emitResultStatus,
+            diagnostics: diagnostics,
             sourceMaps: sourceMapDataList
         };
     }
@@ -9140,14 +9139,16 @@ var ts;
         var compilerOptions = program.getCompilerOptions();
         var checker = {
             getProgram: function () { return program; },
-            getDiagnostics: getDiagnostics,
-            getGlobalDiagnostics: getGlobalDiagnostics,
             getNodeCount: function () { return ts.sum(program.getSourceFiles(), "nodeCount"); },
             getIdentifierCount: function () { return ts.sum(program.getSourceFiles(), "identifierCount"); },
             getSymbolCount: function () { return ts.sum(program.getSourceFiles(), "symbolCount"); },
             getTypeCount: function () { return typeCount; },
+            isUndefinedSymbol: function (symbol) { return symbol === undefinedSymbol; },
+            isArgumentsSymbol: function (symbol) { return symbol === argumentsSymbol; },
+            getDiagnostics: getDiagnostics,
+            getGlobalDiagnostics: getGlobalDiagnostics,
             checkProgram: checkProgram,
-            emitFiles: invokeEmitter,
+            invokeEmitter: invokeEmitter,
             getParentOfSymbol: getParentOfSymbol,
             getNarrowedTypeOfSymbol: getNarrowedTypeOfSymbol,
             getDeclaredTypeOfSymbol: getDeclaredTypeOfSymbol,
@@ -9173,8 +9174,6 @@ var ts;
             getSignatureFromDeclaration: getSignatureFromDeclaration,
             isImplementationOfOverload: isImplementationOfOverload,
             getAliasedSymbol: resolveImport,
-            isUndefinedSymbol: function (symbol) { return symbol === undefinedSymbol; },
-            isArgumentsSymbol: function (symbol) { return symbol === argumentsSymbol; },
             hasEarlyErrors: hasEarlyErrors,
             isEmitBlocked: isEmitBlocked
         };
@@ -16864,8 +16863,8 @@ var ts;
             }
             else {
                 var emitStart = new Date().getTime();
-                var emitOutput = checker.emitFiles();
-                var emitErrors = emitOutput.errors;
+                var emitOutput = checker.invokeEmitter();
+                var emitErrors = emitOutput.diagnostics;
                 exitStatus = emitOutput.emitResultStatus;
                 var reportStart = new Date().getTime();
                 errors = ts.concatenate(errors, emitErrors);
