@@ -3810,20 +3810,9 @@ module ts {
         }
 
         function parseSourceElementOrModuleElement(modifierContext: ModifierContext): Statement {
-            if (isDeclarationStart()) {
-                return parseDeclaration(modifierContext);
-            }
-
-            var statementStart = scanner.getTokenPos();
-            var statementFirstTokenLength = scanner.getTextPos() - statementStart;
-            var errorCountBeforeStatement = file._parserDiagnostics.length;
-            var statement = parseStatement();
-
-            if (inAmbientContext && file._parserDiagnostics.length === errorCountBeforeStatement) {
-                grammarErrorAtPos(statementStart, statementFirstTokenLength, Diagnostics.Statements_are_not_allowed_in_ambient_contexts);
-            }
-
-            return statement;
+            return isDeclarationStart()
+                ? parseDeclaration(modifierContext)
+                : parseStatement();
         }
 
         function processReferenceComments(): ReferenceComments {
@@ -3970,6 +3959,7 @@ module ts {
 
     function checkGrammar(sourceText: string, languageVersion: ScriptTarget, file: SourceFileInternal) {
         var syntacticDiagnostics = file._syntacticDiagnostics;
+        var scanner = createScanner(languageVersion, /*skipTrivia*/ true, sourceText);
 
         // We're automatically in an ambient context if this is a .d.ts file.
         var inAmbientContext = fileExtensionIs(file.filename, ".d.ts");
@@ -3977,31 +3967,44 @@ module ts {
         visitNode(file);
 
         function visitNode(node: Node): void {
+            // Store and restore our recursive state here.
             var savedParent = parent;
             node.parent = parent;
             parent = node;
 
-            // First recurse and perform all grammar checks on the children of this node. 
             var savedInAmbientContext = inAmbientContext
             if (node.flags & NodeFlags.Ambient) {
                 inAmbientContext = true;
             }
 
-            var diagnosticCount = syntacticDiagnostics.length;
-            forEachChild(node, visitNode);
-
-            // If any children had an grammar error, then skip reporting errors for this node or 
-            // anything higher.
-            if (diagnosticCount === syntacticDiagnostics.length) {
-                checkNode(node);
-            }
+            checkNode(node);
 
             inAmbientContext = savedInAmbientContext;
             parent = savedParent;
         }
 
         function checkNode(node: Node) {
-            // No grammar errors on any of our children.  Check this node for grammar errors.
+            // First, check if you have a statement in a place where it is not allowed.  We want 
+            // to do this before recursing, because we'd prefer to report these errors at the top
+            // level instead of at some nested level.
+            if (checkForStatementInAmbientContext(node)) {
+                return;
+            }
+
+            // Now recurse and perform all grammar checks on the children of this node. 
+            var diagnosticCount = syntacticDiagnostics.length;
+            forEachChild(node, visitNode);
+
+            // if we got any errors, just stop performing any more checks on this node or higher.
+            if (diagnosticCount !== syntacticDiagnostics.length) {
+                return;
+            }
+
+            // Now do node specific checks.
+            dispatch(node);
+        }
+
+        function dispatch(node: Node) {
             switch (node.kind) {
                 case SyntaxKind.ArrowFunction:              return visitArrowFunction(<FunctionExpression>node);
                 case SyntaxKind.BinaryExpression:           return visitBinaryExpression(<BinaryExpression>node);
@@ -4038,6 +4041,15 @@ module ts {
             }
         }
 
+        function grammarErrorOnFirstToken(node: Node, message: DiagnosticMessage, arg0?: any, arg1?: any, arg2?: any): boolean {
+            var start = skipTrivia(sourceText, node.pos);
+            scanner.setTextPos(start);
+            scanner.scan();
+            var end = scanner.getTextPos();
+            file._syntacticDiagnostics.push(createFileDiagnostic(file, start, end - start, message, arg0, arg1, arg2));
+            return true;
+        }
+
         function grammarErrorOnNode(node: Node, message: DiagnosticMessage, arg0?: any, arg1?: any, arg2?: any): boolean {
             var span = getErrorSpanForNode(node);
             var start = span.end > span.pos ? skipTrivia(file.text, span.pos) : span.pos;
@@ -4056,6 +4068,31 @@ module ts {
             // declarationNameToString cannot be used here since it uses a backreference to 'parent' that is not yet set
             var name = sourceText.substring(skipTrivia(sourceText, node.pos), node.end);
             return grammarErrorOnNode(node, Diagnostics.Invalid_use_of_0_in_strict_mode, name);
+        }
+
+        function checkForStatementInAmbientContext(node: Node): boolean {
+            if (inAmbientContext) {
+                switch (node.kind) {
+                    case SyntaxKind.Block:
+                    case SyntaxKind.EmptyStatement:
+                    case SyntaxKind.IfStatement:
+                    case SyntaxKind.DoStatement:
+                    case SyntaxKind.WhileStatement:
+                    case SyntaxKind.ForStatement:
+                    case SyntaxKind.ForInStatement:
+                    case SyntaxKind.ContinueStatement:
+                    case SyntaxKind.BreakStatement:
+                    case SyntaxKind.ReturnStatement:
+                    case SyntaxKind.WithStatement:
+                    case SyntaxKind.SwitchStatement:
+                    case SyntaxKind.ThrowStatement:
+                    case SyntaxKind.TryStatement:
+                    case SyntaxKind.DebuggerStatement:
+                    case SyntaxKind.LabeledStatement:
+                    case SyntaxKind.ExpressionStatement:
+                        return grammarErrorOnFirstToken(node, Diagnostics.Statements_are_not_allowed_in_ambient_contexts);
+                }
+            }
         }
 
         function visitArrowFunction(node: FunctionExpression) {

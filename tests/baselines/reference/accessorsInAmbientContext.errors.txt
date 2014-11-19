@@ -1,10 +1,10 @@
-tests/cases/compiler/accessorsInAmbientContext.ts(4,13): error TS1086: An accessor cannot be declared in an ambient context.
+tests/cases/compiler/accessorsInAmbientContext.ts(4,19): error TS1036: Statements are not allowed in ambient contexts.
 tests/cases/compiler/accessorsInAmbientContext.ts(5,13): error TS1086: An accessor cannot be declared in an ambient context.
-tests/cases/compiler/accessorsInAmbientContext.ts(7,20): error TS1086: An accessor cannot be declared in an ambient context.
+tests/cases/compiler/accessorsInAmbientContext.ts(7,26): error TS1036: Statements are not allowed in ambient contexts.
 tests/cases/compiler/accessorsInAmbientContext.ts(8,20): error TS1086: An accessor cannot be declared in an ambient context.
-tests/cases/compiler/accessorsInAmbientContext.ts(13,9): error TS1086: An accessor cannot be declared in an ambient context.
+tests/cases/compiler/accessorsInAmbientContext.ts(13,15): error TS1036: Statements are not allowed in ambient contexts.
 tests/cases/compiler/accessorsInAmbientContext.ts(14,9): error TS1086: An accessor cannot be declared in an ambient context.
-tests/cases/compiler/accessorsInAmbientContext.ts(16,16): error TS1086: An accessor cannot be declared in an ambient context.
+tests/cases/compiler/accessorsInAmbientContext.ts(16,22): error TS1036: Statements are not allowed in ambient contexts.
 tests/cases/compiler/accessorsInAmbientContext.ts(17,16): error TS1086: An accessor cannot be declared in an ambient context.
 
 
@@ -13,15 +13,15 @@ tests/cases/compiler/accessorsInAmbientContext.ts(17,16): error TS1086: An acces
     declare module M {
         class C {
             get X() { return 1; }
-                ~
-!!! error TS1086: An accessor cannot be declared in an ambient context.
+                      ~~~~~~
+!!! error TS1036: Statements are not allowed in ambient contexts.
             set X(v) { }
                 ~
 !!! error TS1086: An accessor cannot be declared in an ambient context.
     
             static get Y() { return 1; }
-                       ~
-!!! error TS1086: An accessor cannot be declared in an ambient context.
+                             ~~~~~~
+!!! error TS1036: Statements are not allowed in ambient contexts.
             static set Y(v) { }
                        ~
 !!! error TS1086: An accessor cannot be declared in an ambient context.
@@ -30,15 +30,15 @@ tests/cases/compiler/accessorsInAmbientContext.ts(17,16): error TS1086: An acces
     
     declare class C {
         get X() { return 1; }
-            ~
-!!! error TS1086: An accessor cannot be declared in an ambient context.
+                  ~~~~~~
+!!! error TS1036: Statements are not allowed in ambient contexts.
         set X(v) { }
             ~
 !!! error TS1086: An accessor cannot be declared in an ambient context.
     
         static get Y() { return 1; }
-                   ~
-!!! error TS1086: An accessor cannot be declared in an ambient context.
+                         ~~~~~~
+!!! error TS1036: Statements are not allowed in ambient contexts.
         static set Y(v) { }
                    ~
 !!! error TS1086: An accessor cannot be declared in an ambient context.
