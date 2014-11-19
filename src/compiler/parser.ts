@@ -1676,7 +1676,6 @@ module ts {
             }
             var typeParameters = parseTypeParameters();
             var parameters = parseParameterList(SyntaxKind.OpenParenToken, SyntaxKind.CloseParenToken);
-            checkParameterList(parameters);
 
             var type: TypeNode;
 
@@ -1700,45 +1699,6 @@ module ts {
         // parentheses, and sometimes use brackets.
         function parseParameterList(startDelimiter: SyntaxKind, endDelimiter: SyntaxKind) {
             return parseBracketedList(ParsingContext.Parameters, parseParameter, startDelimiter, endDelimiter);
-        }
-
-        function checkParameterList(parameters: NodeArray<ParameterDeclaration>): void {
-            var seenOptionalParameter = false;
-            var parameterCount = parameters.length;
-
-            for (var i = 0; i < parameterCount; i++) {
-                var parameter = parameters[i];
-                if (parameter.flags & NodeFlags.Rest) {
-                    if (i !== (parameterCount - 1)) {
-                        grammarErrorOnNode(parameter.name, Diagnostics.A_rest_parameter_must_be_last_in_a_parameter_list);
-                        return;
-                    }
-
-                    if (parameter.flags & NodeFlags.QuestionMark) {
-                        grammarErrorOnNode(parameter.name, Diagnostics.A_rest_parameter_cannot_be_optional);
-                        return;
-                    }
-
-                    if (parameter.initializer) {
-                        grammarErrorOnNode(parameter.name, Diagnostics.A_rest_parameter_cannot_have_an_initializer);
-                        return;
-                    }
-                }
-                else if (parameter.flags & NodeFlags.QuestionMark || parameter.initializer) {
-                    seenOptionalParameter = true;
-
-                    if (parameter.flags & NodeFlags.QuestionMark && parameter.initializer) {
-                        grammarErrorOnNode(parameter.name, Diagnostics.Parameter_cannot_have_question_mark_and_initializer);
-                        return;
-                    }
-                }
-                else {
-                    if (seenOptionalParameter) {
-                        grammarErrorOnNode(parameter.name, Diagnostics.A_required_parameter_cannot_follow_an_optional_parameter);
-                        return;
-                    }
-                }
-            }
         }
 
         function parseSignatureMember(kind: SyntaxKind, returnToken: SyntaxKind): SignatureDeclaration {
@@ -4372,9 +4332,21 @@ module ts {
 
             // No grammar errors on any of our children.  Check this node for grammar errors.
             switch (node.kind) {
-                case SyntaxKind.Parameter:
-                    return performParameterChecks(<ParameterDeclaration>node);
+                case SyntaxKind.ArrowFunction:          return performArrowFunctionChecks(<FunctionExpression>node);
+                case SyntaxKind.CallSignature:          return performCallSignatureChecks(<SignatureDeclaration>node);
+                case SyntaxKind.Constructor:            return performConstructorChecks(<ConstructorDeclaration>node);
+                case SyntaxKind.ConstructorType:        return performConstructorTypeChecks(<SignatureDeclaration>node);
+                case SyntaxKind.ConstructSignature:     return performConstructSignatureChecks(<SignatureDeclaration>node);
+                case SyntaxKind.FunctionDeclaration:    return performFunctionDeclarationChecks(<FunctionLikeDeclaration>node);
+                case SyntaxKind.FunctionExpression:     return performFunctionExpressionChecks(<FunctionExpression>node);
+                case SyntaxKind.FunctionType:           return performFunctionTypeChecks(<SignatureDeclaration>node);
+                case SyntaxKind.GetAccessor:            return performGetAccessorChecks(<MethodDeclaration>node);
+                case SyntaxKind.Method:                 return performMethodChecks(<MethodDeclaration>node);
+                case SyntaxKind.Parameter:              return performParameterChecks(<ParameterDeclaration>node);
+                case SyntaxKind.SetAccessor:            return performSetAccessorChecks(<MethodDeclaration>node);
             }
+
+            return false;
         }
 
         function grammarErrorOnNode(node: Node, message: DiagnosticMessage, arg0?: any, arg1?: any, arg2?: any): void {
@@ -4391,6 +4363,86 @@ module ts {
             grammarErrorOnNode(node, Diagnostics.Invalid_use_of_0_in_strict_mode, name);
         }
 
+        function performArrowFunctionChecks(node: FunctionExpression) {
+            if (performParameterListChecks(node.parameters)) {
+                return true;
+            }
+
+            return false;
+        }
+
+        function performCallSignatureChecks(node: ConstructorDeclaration) {
+            if (performParameterListChecks(node.parameters)) {
+                return true;
+            }
+
+            return false;
+        }
+
+        function performConstructorChecks(node: ConstructorDeclaration) {
+            if (performParameterListChecks(node.parameters)) {
+                return true;
+            }
+
+            return false;
+        }
+
+        function performConstructorTypeChecks(node: SignatureDeclaration) {
+            if (performParameterListChecks(node.parameters)) {
+                return true;
+            }
+
+            return false;
+        }
+
+        function performConstructSignatureChecks(node: FunctionLikeDeclaration) {
+            if (performParameterListChecks(node.parameters)) {
+                return true;
+            }
+
+            return false;
+        }
+
+        function performFunctionDeclarationChecks(node: FunctionLikeDeclaration) {
+            if (performParameterListChecks(node.parameters)) {
+                return true;
+            }
+
+            return false;
+        }
+
+        function performFunctionExpressionChecks(node: FunctionExpression) {
+            if (performParameterListChecks(node.parameters)) {
+                return true;
+            }
+
+            return false;
+        }
+
+        function performFunctionTypeChecks(node: SignatureDeclaration) {
+            if (performParameterListChecks(node.parameters)) {
+                return true;
+            }
+
+            return false;
+        }
+
+        function performGetAccessorChecks(node: MethodDeclaration) {
+            if (performParameterListChecks(node.parameters)) {
+                return true;
+            }
+
+            return false;
+        }
+
+        function performMethodChecks(node: MethodDeclaration) {
+            if (performParameterListChecks(node.parameters)) {
+                return true;
+            }
+
+            return false;
+        }
+
         function performParameterChecks(node: ParameterDeclaration): boolean {
             // It is a SyntaxError if the Identifier "eval" or the Identifier "arguments" occurs as the 
             // Identifier in a PropertySetParameterList of a PropertyAssignment that is contained in strict code 
@@ -4399,6 +4451,53 @@ module ts {
             // strict mode FunctionLikeDeclaration or FunctionExpression(13.1) 
             if (node.flags & NodeFlags.ParsedInStrictMode && isEvalOrArgumentsIdentifier(node.name)) {
                 reportInvalidUseInStrictMode(node.name);
+                return true;
+            }
+
+            return false;
+        }
+
+        function performParameterListChecks(parameters: NodeArray<ParameterDeclaration>): void {
+            var seenOptionalParameter = false;
+            var parameterCount = parameters.length;
+
+            for (var i = 0; i < parameterCount; i++) {
+                var parameter = parameters[i];
+                if (parameter.flags & NodeFlags.Rest) {
+                    if (i !== (parameterCount - 1)) {
+                        grammarErrorOnNode(parameter.name, Diagnostics.A_rest_parameter_must_be_last_in_a_parameter_list);
+                        return;
+                    }
+
+                    if (parameter.flags & NodeFlags.QuestionMark) {
+                        grammarErrorOnNode(parameter.name, Diagnostics.A_rest_parameter_cannot_be_optional);
+                        return;
+                    }
+
+                    if (parameter.initializer) {
+                        grammarErrorOnNode(parameter.name, Diagnostics.A_rest_parameter_cannot_have_an_initializer);
+                        return;
+                    }
+                }
+                else if (parameter.flags & NodeFlags.QuestionMark || parameter.initializer) {
+                    seenOptionalParameter = true;
+
+                    if (parameter.flags & NodeFlags.QuestionMark && parameter.initializer) {
+                        grammarErrorOnNode(parameter.name, Diagnostics.Parameter_cannot_have_question_mark_and_initializer);
+                        return;
+                    }
+                }
+                else {
+                    if (seenOptionalParameter) {
+                        grammarErrorOnNode(parameter.name, Diagnostics.A_required_parameter_cannot_follow_an_optional_parameter);
+                        return;
+                    }
+                }
+            }
+        }
+
+        function performSetAccessorChecks(node: MethodDeclaration) {
+            if (performParameterListChecks(node.parameters)) {
                 return true;
             }
 

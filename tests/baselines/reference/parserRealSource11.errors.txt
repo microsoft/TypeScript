@@ -1,6 +1,5 @@
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(4,1): error TS6053: File 'tests/cases/conformance/parser/ecmascript5/typescript.ts' not found.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(193,40): error TS1150: 'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.
-tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(867,29): error TS1015: Parameter cannot have question mark and initializer.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1009,45): error TS1150: 'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1024,47): error TS1150: 'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(13,22): error TS2304: Cannot find name 'Type'.
@@ -515,7 +514,7 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2356,30): error
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2356,48): error TS2304: Cannot find name 'TokenID'.
 
 
-==== tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts (515 errors) ====
+==== tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts (514 errors) ====
     // Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0. 
     // See LICENSE.txt in the project root for complete license information.
     
@@ -1815,8 +1814,6 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2356,48): error
             }
     
             public getAliasName(aliasAST?: AST = this.alias) : string {
-                                ~~~~~~~~
-!!! error TS1015: Parameter cannot have question mark and initializer.
                 if (aliasAST.nodeType == NodeType.Name) {
                                          ~~~~~~~~
 !!! error TS2304: Cannot find name 'NodeType'.
