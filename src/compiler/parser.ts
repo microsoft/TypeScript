@@ -2043,12 +2043,7 @@ module ts {
             // Now see if we might be in cases '2' or '3'.
             // If the expression was a LHS expression, and we have an assignment operator, then 
             // we're in '2' or '3'. Consume the assignment and return.
-            if (isLeftHandSideExpression(expr) && isAssignmentOperator()) {
-                if (isInStrictMode && isEvalOrArgumentsIdentifier(expr)) {
-                    // ECMA 262 (Annex C) The identifier eval or arguments may not appear as the LeftHandSideExpression of an 
-                    // Assignment operator(11.13) or of a PostfixExpression(11.3)
-                    reportInvalidUseInStrictMode(<Identifier>expr);
-                }
+            if (isLeftHandSideExpression(expr) && isAssignmentOperator(token)) {
                 var operator = token;
                 nextToken();
                 return makeBinaryExpression(expr, operator, parseAssignmentExpression(noIn));
@@ -2056,37 +2051,6 @@ module ts {
 
             // otherwise this was production '1'.  Return whatever we parsed so far.
             return expr;
-        }
-
-        function isLeftHandSideExpression(expr: Expression): boolean {
-            if (expr) {
-                switch (expr.kind) {
-                    case SyntaxKind.PropertyAccess:
-                    case SyntaxKind.IndexedAccess:
-                    case SyntaxKind.NewExpression:
-                    case SyntaxKind.CallExpression:
-                    case SyntaxKind.TaggedTemplateExpression:
-                    case SyntaxKind.ArrayLiteral:
-                    case SyntaxKind.ParenExpression:
-                    case SyntaxKind.ObjectLiteral:
-                    case SyntaxKind.FunctionExpression:
-                    case SyntaxKind.Identifier:
-                    case SyntaxKind.Missing:
-                    case SyntaxKind.RegularExpressionLiteral:
-                    case SyntaxKind.NumericLiteral:
-                    case SyntaxKind.StringLiteral:
-                    case SyntaxKind.NoSubstitutionTemplateLiteral:
-                    case SyntaxKind.TemplateExpression:
-                    case SyntaxKind.FalseKeyword:
-                    case SyntaxKind.NullKeyword:
-                    case SyntaxKind.ThisKeyword:
-                    case SyntaxKind.TrueKeyword:
-                    case SyntaxKind.SuperKeyword:
-                        return true;
-                }
-            }
-
-            return false;
         }
 
         function parseSimpleArrowFunctionExpression(identifier: Identifier): Expression {
@@ -2267,10 +2231,6 @@ module ts {
             }
 
             return makeFunctionExpression(SyntaxKind.ArrowFunction, pos, /* name */ undefined, sig, body);
-        }
-
-        function isAssignmentOperator(): boolean {
-            return token >= SyntaxKind.FirstAssignment && token <= SyntaxKind.LastAssignment;
         }
 
         function parseConditionalExpression(noIn?: boolean): Expression {
@@ -4033,6 +3993,41 @@ module ts {
         return file;
     }
 
+    function isLeftHandSideExpression(expr: Expression): boolean {
+        if (expr) {
+            switch (expr.kind) {
+                case SyntaxKind.PropertyAccess:
+                case SyntaxKind.IndexedAccess:
+                case SyntaxKind.NewExpression:
+                case SyntaxKind.CallExpression:
+                case SyntaxKind.TaggedTemplateExpression:
+                case SyntaxKind.ArrayLiteral:
+                case SyntaxKind.ParenExpression:
+                case SyntaxKind.ObjectLiteral:
+                case SyntaxKind.FunctionExpression:
+                case SyntaxKind.Identifier:
+                case SyntaxKind.Missing:
+                case SyntaxKind.RegularExpressionLiteral:
+                case SyntaxKind.NumericLiteral:
+                case SyntaxKind.StringLiteral:
+                case SyntaxKind.NoSubstitutionTemplateLiteral:
+                case SyntaxKind.TemplateExpression:
+                case SyntaxKind.FalseKeyword:
+                case SyntaxKind.NullKeyword:
+                case SyntaxKind.ThisKeyword:
+                case SyntaxKind.TrueKeyword:
+                case SyntaxKind.SuperKeyword:
+                    return true;
+            }
+        }
+
+        return false;
+    }
+
+    function isAssignmentOperator(token: SyntaxKind): boolean {
+        return token >= SyntaxKind.FirstAssignment && token <= SyntaxKind.LastAssignment;
+    }
+
     function checkGrammar(sourceText: string, languageVersion: ScriptTarget, file: SourceFileInternal) {
         var syntacticDiagnostics = file._syntacticDiagnostics;
 
@@ -4069,6 +4064,7 @@ module ts {
             // No grammar errors on any of our children.  Check this node for grammar errors.
             switch (node.kind) {
                 case SyntaxKind.ArrowFunction:              return visitArrowFunction(<FunctionExpression>node);
+                case SyntaxKind.BinaryExpression:           return visitBinaryExpression(<BinaryExpression>node);
                 case SyntaxKind.CallSignature:              return visitCallSignature(<SignatureDeclaration>node);
                 case SyntaxKind.CatchBlock:                 return visitCatchBlock(<CatchBlock>node);
                 case SyntaxKind.Constructor:                return visitConstructor(<ConstructorDeclaration>node);
@@ -4116,6 +4112,18 @@ module ts {
         function visitArrowFunction(node: FunctionExpression) {
             checkTypeParameterList(node.typeParameters) ||
                 checkParameterList(node.parameters);
+        }
+
+        function visitBinaryExpression(node: BinaryExpression) {
+            if (node.flags & NodeFlags.ParsedInStrictMode) {
+                if (isLeftHandSideExpression(node.left) && isAssignmentOperator(node.operator)) {
+                    if (isEvalOrArgumentsIdentifier(node.left)) {
+                        // ECMA 262 (Annex C) The identifier eval or arguments may not appear as the LeftHandSideExpression of an 
+                        // Assignment operator(11.13) or of a PostfixExpression(11.3)
+                        reportInvalidUseInStrictMode(<Identifier>node.left);
+                    }
+                }
+            }
         }
 
         function visitCallSignature(node: ConstructorDeclaration) {
