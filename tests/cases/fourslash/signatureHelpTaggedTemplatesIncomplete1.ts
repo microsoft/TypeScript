@@ -7,7 +7,10 @@
 
 test.markers().forEach(m => {
     goTo.position(m.position);
+
     verify.signatureHelpCountIs(1);
+    verify.signatureHelpArgumentCountIs(2);
+
     verify.currentSignatureParamterCountIs(4);
     verify.currentSignatureHelpIs('f(templateStrings: any, x: any, y: any, z: any): number');
     verify.currentParameterHelpArgumentNameIs("templateStrings");
