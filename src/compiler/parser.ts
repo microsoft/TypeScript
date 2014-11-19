@@ -2896,20 +2896,12 @@ module ts {
 
         function parseWithStatement(): WithStatement {
             var node = <WithStatement>createNode(SyntaxKind.WithStatement);
-            var startPos = scanner.getTokenPos();
             parseExpected(SyntaxKind.WithKeyword);
-            var endPos = scanner.getStartPos();
             parseExpected(SyntaxKind.OpenParenToken);
             node.expression = parseExpression();
             parseExpected(SyntaxKind.CloseParenToken);
             node.statement = parseStatement();
-            node = finishNode(node);
-            if (isInStrictMode) {
-                // Strict mode code may not include a WithStatement. The occurrence of a WithStatement in such 
-                // a context is an 
-                grammarErrorAtPos(startPos, endPos - startPos, Diagnostics.with_statements_are_not_allowed_in_strict_mode);
-            }
-            return node;
+            return finishNode(node);
         }
 
         function parseCaseClause(): CaseOrDefaultClause {
@@ -4019,6 +4011,7 @@ module ts {
                 case SyntaxKind.TypeReference:              return visitTypeReference(<TypeReferenceNode>node);
                 case SyntaxKind.VariableDeclaration:        return visitVariableDeclaration(<VariableDeclaration>node);
                 case SyntaxKind.VariableStatement:          return visitVariableStatement(<VariableStatement>node);
+                case SyntaxKind.WithStatement:              return visitWithStatement(<WithStatement>node);
             }
         }
 
@@ -4630,8 +4623,8 @@ module ts {
             }
         }
 
-        function allowLetAndConstDeclarations(node: Node): boolean {
-            switch (node.kind) {
+        function allowLetAndConstDeclarations(parent: Node): boolean {
+            switch (parent.kind) {
                 case SyntaxKind.IfStatement:
                 case SyntaxKind.DoStatement:
                 case SyntaxKind.WhileStatement:
@@ -4640,11 +4633,19 @@ module ts {
                 case SyntaxKind.ForInStatement:
                     return false;
                 case SyntaxKind.LabeledStatement:
-                    return allowLetAndConstDeclarations(node.parent);
+                    return allowLetAndConstDeclarations(parent.parent);
             }
 
             return true;
-        } 
+        }
+
+        function visitWithStatement(node: WithStatement): void {
+            if (node.flags & NodeFlags.ParsedInStrictMode) {
+                // Strict mode code may not include a WithStatement. The occurrence of a WithStatement in such 
+                // a context is an 
+                grammarErrorOnFirstToken(node, Diagnostics.with_statements_are_not_allowed_in_strict_mode);
+            }
+        }
     }
 
     export function createProgram(rootNames: string[], options: CompilerOptions, host: CompilerHost): Program {
