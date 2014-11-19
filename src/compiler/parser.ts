@@ -2457,18 +2457,12 @@ module ts {
         }
 
         function parseTypeArguments(): NodeArray<TypeNode> {
-            var typeArgumentListStart = scanner.getTokenPos();
-            var errorCountBeforeTypeParameterList = file._parserDiagnostics.length;
             // We pass parseSingleTypeArgument instead of parseType as the element parser
             // because parseSingleTypeArgument knows how to parse a missing type argument.
             // This is useful for signature help. parseType has the disadvantage that when
             // it sees a missing type, it changes the LookAheadMode to Error, and the result
             // is a broken binary expression, which breaks signature help.
-            var result = parseBracketedList(ParsingContext.TypeArguments, parseSingleTypeArgument, SyntaxKind.LessThanToken, SyntaxKind.GreaterThanToken);
-            if (!result.length && file._parserDiagnostics.length === errorCountBeforeTypeParameterList) {
-                grammarErrorAtPos(typeArgumentListStart, scanner.getStartPos() - typeArgumentListStart, Diagnostics.Type_argument_list_cannot_be_empty);
-            }
-            return result;
+            return parseBracketedList(ParsingContext.TypeArguments, parseSingleTypeArgument, SyntaxKind.LessThanToken, SyntaxKind.GreaterThanToken);
         }
 
         function parseSingleTypeArgument(): TypeNode {
@@ -4047,6 +4041,7 @@ module ts {
                 case SyntaxKind.SetAccessor:                return visitSetAccessor(<MethodDeclaration>node);
                 case SyntaxKind.TaggedTemplateExpression:   return visitTaggedTemplateExpression(<TaggedTemplateExpression>node);
                 case SyntaxKind.TupleType:                  return visitTupleType(<TupleTypeNode>node);
+                case SyntaxKind.TypeReference:              return visitTypeReference(<TypeReferenceNode>node);
                 case SyntaxKind.VariableDeclaration:        return visitVariableDeclaration(<VariableDeclaration>node);
                 case SyntaxKind.VariableStatement:          return visitVariableStatement(<VariableStatement>node);
             }
@@ -4091,7 +4086,16 @@ module ts {
 
         function visitCallExpression(node: CallExpression) {
             checkForTrailingComma(node.typeArguments) ||
+                checkForAtLeastOneTypeArgument(node.typeArguments) ||
                 checkForTrailingComma(node.arguments);
+        }
+
+        function checkForAtLeastOneTypeArgument(typeArguments: NodeArray<TypeNode>) {
+            if (typeArguments && typeArguments.length === 0) {
+                var start = typeArguments.pos - "<".length;
+                var end = typeArguments.end + ">".length;
+                return grammarErrorAtPos(start, end - start, Diagnostics.Type_argument_list_cannot_be_empty);
+            }
         }
 
         function checkForTrailingComma(list: NodeArray<Node>): boolean {
@@ -4307,6 +4311,7 @@ module ts {
 
         function visitNewExpression(node: NewExpression): void {
             checkForTrailingComma(node.typeArguments) ||
+                checkForAtLeastOneTypeArgument(node.typeArguments) ||
                 checkForTrailingComma(node.arguments);
         }
 
@@ -4518,6 +4523,10 @@ module ts {
 
         function visitTupleType(node: TupleTypeNode) {
             checkForTrailingComma(node.elementTypes);
+        }
+
+        function visitTypeReference(node: TypeReferenceNode) {
+            checkForAtLeastOneTypeArgument(node.typeArguments);
         }
 
         function visitVariableDeclaration(node: VariableDeclaration) {
