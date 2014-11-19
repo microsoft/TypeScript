@@ -1614,14 +1614,7 @@ module ts {
 
         function parseTypeParameters(): NodeArray<TypeParameterDeclaration> {
             if (token === SyntaxKind.LessThanToken) {
-                var pos = getNodePos();
-                var result = parseBracketedList(ParsingContext.TypeParameters, parseTypeParameter, SyntaxKind.LessThanToken, SyntaxKind.GreaterThanToken);
-                if (!result.length) {
-                    var start = getTokenPos(pos);
-                    var length = getNodePos() - start;
-                    errorAtPos(start, length, Diagnostics.Type_parameter_list_cannot_be_empty);
-                }
-                return result;
+                return parseBracketedList(ParsingContext.TypeParameters, parseTypeParameter, SyntaxKind.LessThanToken, SyntaxKind.GreaterThanToken);
             }
         }
 
@@ -4121,11 +4114,13 @@ module ts {
         }
 
         function visitArrowFunction(node: FunctionExpression) {
-            checkParameterList(node.parameters);
+            checkTypeParameterList(node.typeParameters) ||
+                checkParameterList(node.parameters);
         }
 
         function visitCallSignature(node: ConstructorDeclaration) {
-            checkParameterList(node.parameters);
+            checkTypeParameterList(node.typeParameters) ||
+                checkParameterList(node.parameters);
         }
 
         function visitCatchBlock(node: CatchBlock) {
@@ -4141,7 +4136,8 @@ module ts {
         }
 
         function visitConstructor(node: ConstructorDeclaration) {
-            checkParameterList(node.parameters) ||
+            checkTypeParameterList(node.typeParameters) ||
+                checkParameterList(node.parameters) ||
                 checkConstructorTypeParameters(node) ||
                 checkConstructorTypeAnnotation(node);
         }
@@ -4159,11 +4155,13 @@ module ts {
         }
 
         function visitConstructorType(node: SignatureDeclaration) {
-            checkParameterList(node.parameters);
+            checkTypeParameterList(node.typeParameters) ||
+                checkParameterList(node.parameters);
         }
 
         function visitConstructSignature(node: FunctionLikeDeclaration) {
-            checkParameterList(node.parameters);
+            checkTypeParameterList(node.typeParameters) ||
+                checkParameterList(node.parameters);
         }
 
         function visitEnumDeclaration(enumDecl: EnumDeclaration) {
@@ -4214,20 +4212,24 @@ module ts {
         }
 
         function visitFunctionDeclaration(node: FunctionLikeDeclaration) {
-            checkParameterList(node.parameters);
+            checkTypeParameterList(node.typeParameters) ||
+                checkParameterList(node.parameters);
         }
 
         function visitFunctionExpression(node: FunctionExpression) {
-            checkParameterList(node.parameters);
+            checkTypeParameterList(node.typeParameters) ||
+                checkParameterList(node.parameters);
         }
 
         function visitFunctionType(node: SignatureDeclaration) {
-            checkParameterList(node.parameters);
+            checkTypeParameterList(node.typeParameters) ||
+                checkParameterList(node.parameters);
         }
 
         function visitGetAccessor(node: MethodDeclaration) {
-            checkParameterList(node.parameters) ||
-            checkAccessor(node);
+            checkTypeParameterList(node.typeParameters) ||
+                checkParameterList(node.parameters) ||
+                checkAccessor(node);
         }
 
         function visitIndexSignature(node: SignatureDeclaration): void {
@@ -4268,7 +4270,8 @@ module ts {
         }
 
         function visitMethod(node: MethodDeclaration) {
-            checkParameterList(node.parameters);
+            checkTypeParameterList(node.typeParameters) ||
+                checkParameterList(node.parameters);
         }
 
         function visitModuleDeclaration(node: ModuleDeclaration): void {
@@ -4366,6 +4369,14 @@ module ts {
             }
         }
 
+        function checkTypeParameterList(typeParameters: NodeArray<TypeParameterDeclaration>): boolean {
+            if (typeParameters && typeParameters.length === 0) {
+                var start = typeParameters.pos - "<".length;
+                var end = typeParameters.end + ">".length;
+                return grammarErrorAtPos(start, end - start, Diagnostics.Type_parameter_list_cannot_be_empty);
+            }
+        }
+
         function checkParameterList(parameters: NodeArray<ParameterDeclaration>): boolean {
             var seenOptionalParameter = false;
             var parameterCount = parameters.length;
@@ -4426,8 +4437,9 @@ module ts {
         }
 
         function visitSetAccessor(node: MethodDeclaration) {
-            checkParameterList(node.parameters) ||
-            checkAccessor(node);
+            checkTypeParameterList(node.typeParameters) ||
+                checkParameterList(node.parameters) ||
+                checkAccessor(node);
         }
 
         function checkAccessor(accessor: MethodDeclaration): boolean {
