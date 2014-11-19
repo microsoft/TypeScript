@@ -2373,21 +2373,7 @@ module ts {
                 case SyntaxKind.MinusMinusToken:
                     var operator = token;
                     nextToken();
-                    var operand = parseUnaryExpression();
-                    if (isInStrictMode) {
-                        // The identifier eval or arguments may not appear as the LeftHandSideExpression of an 
-                        // Assignment operator(11.13) or of a PostfixExpression(11.3) or as the UnaryExpression 
-                        // operated upon by a Prefix Increment(11.4.4) or a Prefix Decrement(11.4.5) operator
-                        if ((operator === SyntaxKind.PlusPlusToken || operator === SyntaxKind.MinusMinusToken) && isEvalOrArgumentsIdentifier(operand)) {
-                            reportInvalidUseInStrictMode(<Identifier>operand);
-                        }
-                        else if (operator === SyntaxKind.DeleteKeyword && operand.kind === SyntaxKind.Identifier) {
-                            // When a delete operator occurs within strict mode code, a SyntaxError is thrown if its 
-                            // UnaryExpression is a direct reference to a variable, function argument, or function name
-                            grammarErrorOnNode(operand, Diagnostics.delete_cannot_be_called_on_an_identifier_in_strict_mode);
-                        }
-                    }
-                    return makeUnaryExpression(SyntaxKind.PrefixOperator, pos, operator, operand);
+                    return makeUnaryExpression(SyntaxKind.PrefixOperator, pos, operator, parseUnaryExpression());
                 case SyntaxKind.LessThanToken:
                     return parseTypeAssertion();
             }
@@ -2408,12 +2394,6 @@ module ts {
 
             Debug.assert(isLeftHandSideExpression(expr));
             if ((token === SyntaxKind.PlusPlusToken || token === SyntaxKind.MinusMinusToken) && !scanner.hasPrecedingLineBreak()) {
-                // The identifier eval or arguments may not appear as the LeftHandSideExpression of an 
-                // Assignment operator(11.13) or of a PostfixExpression(11.3) or as the UnaryExpression 
-                // operated upon by a Prefix Increment(11.4.4) or a Prefix Decrement(11.4.5) operator. 
-                if (isInStrictMode && isEvalOrArgumentsIdentifier(expr)) {
-                    reportInvalidUseInStrictMode(<Identifier>expr);
-                }
                 var operator = token;
                 nextToken();
                 expr = makeUnaryExpression(SyntaxKind.PostfixOperator, expr.pos, operator, expr);
@@ -4202,6 +4182,8 @@ module ts {
                 case SyntaxKind.Method:                     return visitMethod(<MethodDeclaration>node);
                 case SyntaxKind.ObjectLiteral:              return visitObjectLiteral(<ObjectLiteral>node);
                 case SyntaxKind.Parameter:                  return visitParameter(<ParameterDeclaration>node);
+                case SyntaxKind.PostfixOperator:            return visitPostfixOperator(<UnaryExpression>node);
+                case SyntaxKind.PrefixOperator:             return visitPrefixOperator(<UnaryExpression>node);
                 case SyntaxKind.SetAccessor:                return visitSetAccessor(<MethodDeclaration>node);
                 case SyntaxKind.TaggedTemplateExpression:   return visitTaggedTemplateExpression(<TaggedTemplateExpression>node);
             }
@@ -4411,6 +4393,31 @@ module ts {
                     if (seenOptionalParameter) {
                         return grammarErrorOnNode(parameter.name, Diagnostics.A_required_parameter_cannot_follow_an_optional_parameter);
                     }
+                }
+            }
+        }
+
+        function visitPostfixOperator(node: UnaryExpression) {
+            // The identifier eval or arguments may not appear as the LeftHandSideExpression of an 
+            // Assignment operator(11.13) or of a PostfixExpression(11.3) or as the UnaryExpression 
+            // operated upon by a Prefix Increment(11.4.4) or a Prefix Decrement(11.4.5) operator. 
+            if (node.flags & NodeFlags.ParsedInStrictMode && isEvalOrArgumentsIdentifier(node.operand)) {
+                reportInvalidUseInStrictMode(<Identifier>node.operand);
+            }
+        }
+
+        function visitPrefixOperator(node: UnaryExpression) {
+            if (node.flags & NodeFlags.ParsedInStrictMode) {
+                // The identifier eval or arguments may not appear as the LeftHandSideExpression of an 
+                // Assignment operator(11.13) or of a PostfixExpression(11.3) or as the UnaryExpression 
+                // operated upon by a Prefix Increment(11.4.4) or a Prefix Decrement(11.4.5) operator
+                if ((node.operator === SyntaxKind.PlusPlusToken || node.operator === SyntaxKind.MinusMinusToken) && isEvalOrArgumentsIdentifier(node.operand)) {
+                    reportInvalidUseInStrictMode(<Identifier>node.operand);
+                }
+                else if (node.operator === SyntaxKind.DeleteKeyword && node.operand.kind === SyntaxKind.Identifier) {
+                    // When a delete operator occurs within strict mode code, a SyntaxError is thrown if its 
+                    // UnaryExpression is a direct reference to a variable, function argument, or function name
+                    grammarErrorOnNode(node.operand, Diagnostics.delete_cannot_be_called_on_an_identifier_in_strict_mode);
                 }
             }
         }
