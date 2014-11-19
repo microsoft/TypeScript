@@ -456,7 +456,7 @@ module ts.SignatureHelp {
             var isTypeParameterList = argumentListInfo.kind === ArgumentListKind.TypeArguments;
 
             var invocation = argumentListInfo.invocation;
-            var invokerNode = getCallLikeInvoker(invocation)
+            var invokerNode = getInvokedExpression(invocation)
             var invokerSymbol = typeInfoResolver.getSymbolInfo(invokerNode);
             var invokerDisplayParts = invokerSymbol && symbolToDisplayParts(typeInfoResolver, invokerSymbol, /*enclosingDeclaration*/ undefined, /*meaning*/ undefined);
             var items: SignatureHelpItem[] = map(candidates, candidateSignature => {

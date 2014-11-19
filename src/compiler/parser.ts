@@ -475,7 +475,7 @@ module ts {
         }
     }
 
-    export function getCallLikeInvoker(node: CallLikeExpression): Expression {
+    export function getInvokedExpression(node: CallLikeExpression): Expression {
         if (node.kind === SyntaxKind.TaggedTemplateExpression) {
             return (<TaggedTemplateExpression>node).tag;
         }
