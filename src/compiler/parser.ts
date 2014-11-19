@@ -20,6 +20,7 @@ module ts {
     interface ReferenceComments {
         referencedFiles: FileReference[];
         amdDependencies: string[];
+        amdModuleName: string;
     }
 
     export function getSourceFileOfNode(node: Node): SourceFile {
@@ -4262,6 +4263,7 @@ module ts {
         function processReferenceComments(): ReferenceComments {
             var referencedFiles: FileReference[] = [];
             var amdDependencies: string[] = [];
+            var amdModuleName: string;
             commentRanges = [];
             token = scanner.scan();
 
@@ -4281,6 +4283,15 @@ module ts {
                     }
                 }
                 else {
+                    var amdModuleNameRegEx = /^\/\/\/\s*<amd-module\s+name\s*=\s*('|")(.+?)\1/gim;
+                    var amdModuleNameMatchResult = amdModuleNameRegEx.exec(comment);
+                    if(amdModuleNameMatchResult) {
+                        if(amdModuleName) {
+                            errorAtPos(range.pos, range.end - range.pos, Diagnostics.An_AMD_module_cannot_have_multiple_name_assignments);
+                        }
+                        amdModuleName = amdModuleNameMatchResult[2];
+                    }
+
                     var amdDependencyRegEx = /^\/\/\/\s*<amd-dependency\s+path\s*=\s*('|")(.+?)\1/gim;
                     var amdDependencyMatchResult = amdDependencyRegEx.exec(comment);
                     if (amdDependencyMatchResult) {
@@ -4291,7 +4302,8 @@ module ts {
             commentRanges = undefined;
             return {
                 referencedFiles: referencedFiles,
-                amdDependencies: amdDependencies
+                amdDependencies: amdDependencies,
+                amdModuleName: amdModuleName
             };
         }
 
@@ -4321,6 +4333,7 @@ module ts {
         var referenceComments = processReferenceComments(); 
         file.referencedFiles = referenceComments.referencedFiles;
         file.amdDependencies = referenceComments.amdDependencies;
+        file.amdModuleName = referenceComments.amdModuleName;
         file.statements = parseList(ParsingContext.SourceElements, /*checkForStrictMode*/ true, parseSourceElement);
         file.externalModuleIndicator = getExternalModuleIndicator();
         file.nodeCount = nodeCount;

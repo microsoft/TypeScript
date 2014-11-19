@@ -642,6 +642,7 @@ module ts {
         getPositionFromLineAndCharacter(line: number, character: number): number;
         getLineStarts(): number[];
         amdDependencies: string[];
+        amdModuleName: string;
         referencedFiles: FileReference[];
         syntacticErrors: Diagnostic[];
         semanticErrors: Diagnostic[];

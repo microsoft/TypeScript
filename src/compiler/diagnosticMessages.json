@@ -479,6 +479,14 @@
         "category": "Error",
         "code": 1159
     },
+    "Unterminated template literal.": {
+        "category": "Error",
+        "code": 1160
+    },
+    "Unterminated regular expression literal.": {
+        "category": "Error",
+        "code": 1161
+    },
 
     "A object member cannot be declared optional.": {
         "category": "Error",
@@ -1080,6 +1088,10 @@
     "Type alias name cannot be '{0}'": {
         "category": "Error",
         "code": 2457
+    },
+    "An AMD module cannot have multiple name assignments.": {
+        "category": "Error",
+        "code": 2458
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {

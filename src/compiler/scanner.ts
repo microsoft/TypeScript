@@ -553,7 +553,7 @@ module ts {
             while (true) {
                 if (pos >= len) {
                     result += text.substring(start, pos);
-                    error(Diagnostics.Unexpected_end_of_text);
+                    error(Diagnostics.Unterminated_string_literal);
                     break;
                 }
                 var ch = text.charCodeAt(pos);
@@ -593,7 +593,7 @@ module ts {
             while (true) {
                 if (pos >= len) {
                     contents += text.substring(start, pos);
-                    error(Diagnostics.Unexpected_end_of_text);
+                    error(Diagnostics.Unterminated_template_literal);
                     resultingToken = startedWithBacktick ? SyntaxKind.NoSubstitutionTemplateLiteral : SyntaxKind.TemplateTail;
                     break;
                 }
@@ -1066,19 +1066,19 @@ module ts {
                 var inEscape = false;
                 var inCharacterClass = false;
                 while (true) {
-                    // If we've hit EOF without closing off the regex,
-                    // simply return the token we originally parsed.
+                    // If we reach the end of a file, or hit a newline, then this is an unterminated
+                    // regex.  Report error and return what we have so far.
                     if (p >= len) {
-                        return token;
+                        error(Diagnostics.Unterminated_regular_expression_literal)
+                        break;
                     }
 
                     var ch = text.charCodeAt(p);
-
-                    // Line breaks are not permissible in the middle of a RegExp.
                     if (isLineBreak(ch)) {
-                        return token;
+                        error(Diagnostics.Unterminated_regular_expression_literal)
+                        break;
                     }
-                    
+
                     if (inEscape) {
                         // Parsing an escape character;
                         // reset the flag and just advance to the next char.
@@ -1087,6 +1087,7 @@ module ts {
                     else if (ch === CharacterCodes.slash && !inCharacterClass) {
                         // A slash within a character class is permissible,
                         // but in general it signals the end of the regexp literal.
+                        p++;
                         break;
                     }
                     else if (ch === CharacterCodes.openBracket) {
@@ -1100,8 +1101,8 @@ module ts {
                     }
                     p++;
                 }
-                p++;
-                while (isIdentifierPart(text.charCodeAt(p))) {
+
+                while (p < len && isIdentifierPart(text.charCodeAt(p))) {
                     p++;
                 }
                 pos = p;

@@ -2,7 +2,7 @@ tests/cases/conformance/es6/templates/templateStringWithEmbeddedYieldKeyword.ts(
 tests/cases/conformance/es6/templates/templateStringWithEmbeddedYieldKeyword.ts(1,15): error TS1005: ';' expected.
 tests/cases/conformance/es6/templates/templateStringWithEmbeddedYieldKeyword.ts(3,26): error TS1158: Invalid template literal; expected '}'
 tests/cases/conformance/es6/templates/templateStringWithEmbeddedYieldKeyword.ts(3,30): error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
-tests/cases/conformance/es6/templates/templateStringWithEmbeddedYieldKeyword.ts(5,1): error TS1126: Unexpected end of text.
+tests/cases/conformance/es6/templates/templateStringWithEmbeddedYieldKeyword.ts(5,1): error TS1160: Unterminated template literal.
 tests/cases/conformance/es6/templates/templateStringWithEmbeddedYieldKeyword.ts(1,11): error TS2304: Cannot find name 'gen'.
 tests/cases/conformance/es6/templates/templateStringWithEmbeddedYieldKeyword.ts(3,20): error TS2304: Cannot find name 'yield'.
 tests/cases/conformance/es6/templates/templateStringWithEmbeddedYieldKeyword.ts(3,30): error TS2304: Cannot find name 'def'.
@@ -31,4 +31,4 @@ tests/cases/conformance/es6/templates/templateStringWithEmbeddedYieldKeyword.ts(
     
 !!! error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
     
-!!! error TS1126: Unexpected end of text.
+!!! error TS1160: Unterminated template literal.

@@ -718,6 +718,7 @@ module ts {
         public getPositionFromLineAndCharacter(line: number, character: number): number { return -1; }
         public getLineStarts(): number[] { return undefined; }
         public amdDependencies: string[];
+        public amdModuleName: string;
         public referencedFiles: FileReference[];
         public syntacticErrors: Diagnostic[];
         public semanticErrors: Diagnostic[];
@@ -3350,6 +3351,23 @@ module ts {
             }
 
             var result: DefinitionInfo[] = [];
+
+            // Because name in short-hand property assignment has two different meanings: property name and property value,
+            // using go-to-definition at such position should go to the variable declaration of the property value rather than
+            // go to the declaration of the property name (in this case stay at the same position). However, if go-to-definition 
+            // is performed at the location of property access, we would like to go to definition of the property in the short-hand
+            // assignment. This case and others are handled by the following code.
+            if (node.parent.kind === SyntaxKind.ShorthandPropertyAssignment) {
+                var shorthandSymbol = typeInfoResolver.getShorthandAssignmentValueSymbol(symbol.valueDeclaration);
+                var shorthandDeclarations = shorthandSymbol.getDeclarations();
+                var shorthandSymbolKind = getSymbolKind(shorthandSymbol, typeInfoResolver);
+                var shorthandSymbolName = typeInfoResolver.symbolToString(shorthandSymbol);
+                var shorthandContainerName = typeInfoResolver.symbolToString(symbol.parent, node);
+                forEach(shorthandDeclarations, declaration => {
+                    result.push(getDefinitionInfo(declaration, shorthandSymbolKind, shorthandSymbolName, shorthandContainerName));
+                });
+                return result
+            }
 
             var declarations = symbol.getDeclarations();
             var symbolName = typeInfoResolver.symbolToString(symbol); // Do not get scoped name, just the name of the symbol
