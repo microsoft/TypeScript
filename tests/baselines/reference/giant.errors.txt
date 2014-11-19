@@ -4,18 +4,12 @@ tests/cases/compiler/giant.ts(29,5): error TS1005: '{' expected.
 tests/cases/compiler/giant.ts(31,5): error TS1005: '{' expected.
 tests/cases/compiler/giant.ts(35,5): error TS1005: '{' expected.
 tests/cases/compiler/giant.ts(37,1): error TS1005: '{' expected.
-tests/cases/compiler/giant.ts(61,6): error TS1022: An index signature parameter must have a type annotation.
-tests/cases/compiler/giant.ts(62,5): error TS1021: An index signature must have a type annotation.
-tests/cases/compiler/giant.ts(63,6): error TS1096: An index signature must have exactly one parameter.
 tests/cases/compiler/giant.ts(89,9): error TS1005: '{' expected.
 tests/cases/compiler/giant.ts(91,9): error TS1005: '{' expected.
 tests/cases/compiler/giant.ts(93,9): error TS1005: '{' expected.
 tests/cases/compiler/giant.ts(95,9): error TS1005: '{' expected.
 tests/cases/compiler/giant.ts(99,9): error TS1005: '{' expected.
 tests/cases/compiler/giant.ts(101,5): error TS1005: '{' expected.
-tests/cases/compiler/giant.ts(125,10): error TS1022: An index signature parameter must have a type annotation.
-tests/cases/compiler/giant.ts(126,9): error TS1021: An index signature must have a type annotation.
-tests/cases/compiler/giant.ts(127,10): error TS1096: An index signature must have exactly one parameter.
 tests/cases/compiler/giant.ts(154,39): error TS1037: A function implementation cannot be declared in an ambient context.
 tests/cases/compiler/giant.ts(168,9): error TS1005: '{' expected.
 tests/cases/compiler/giant.ts(170,9): error TS1005: '{' expected.
@@ -23,9 +17,6 @@ tests/cases/compiler/giant.ts(172,9): error TS1005: '{' expected.
 tests/cases/compiler/giant.ts(174,9): error TS1005: '{' expected.
 tests/cases/compiler/giant.ts(178,9): error TS1005: '{' expected.
 tests/cases/compiler/giant.ts(180,5): error TS1005: '{' expected.
-tests/cases/compiler/giant.ts(204,10): error TS1022: An index signature parameter must have a type annotation.
-tests/cases/compiler/giant.ts(205,9): error TS1021: An index signature must have a type annotation.
-tests/cases/compiler/giant.ts(206,10): error TS1096: An index signature must have exactly one parameter.
 tests/cases/compiler/giant.ts(233,39): error TS1037: A function implementation cannot be declared in an ambient context.
 tests/cases/compiler/giant.ts(238,35): error TS1037: A function implementation cannot be declared in an ambient context.
 tests/cases/compiler/giant.ts(240,24): error TS1111: A constructor implementation cannot be declared in an ambient context.
@@ -54,18 +45,12 @@ tests/cases/compiler/giant.ts(287,5): error TS1005: '{' expected.
 tests/cases/compiler/giant.ts(289,5): error TS1005: '{' expected.
 tests/cases/compiler/giant.ts(293,5): error TS1005: '{' expected.
 tests/cases/compiler/giant.ts(295,1): error TS1005: '{' expected.
-tests/cases/compiler/giant.ts(319,6): error TS1022: An index signature parameter must have a type annotation.
-tests/cases/compiler/giant.ts(320,5): error TS1021: An index signature must have a type annotation.
-tests/cases/compiler/giant.ts(321,6): error TS1096: An index signature must have exactly one parameter.
 tests/cases/compiler/giant.ts(347,9): error TS1005: '{' expected.
 tests/cases/compiler/giant.ts(349,9): error TS1005: '{' expected.
 tests/cases/compiler/giant.ts(351,9): error TS1005: '{' expected.
 tests/cases/compiler/giant.ts(353,9): error TS1005: '{' expected.
 tests/cases/compiler/giant.ts(357,9): error TS1005: '{' expected.
 tests/cases/compiler/giant.ts(359,5): error TS1005: '{' expected.
-tests/cases/compiler/giant.ts(383,10): error TS1022: An index signature parameter must have a type annotation.
-tests/cases/compiler/giant.ts(384,9): error TS1021: An index signature must have a type annotation.
-tests/cases/compiler/giant.ts(385,10): error TS1096: An index signature must have exactly one parameter.
 tests/cases/compiler/giant.ts(412,39): error TS1037: A function implementation cannot be declared in an ambient context.
 tests/cases/compiler/giant.ts(426,9): error TS1005: '{' expected.
 tests/cases/compiler/giant.ts(428,9): error TS1005: '{' expected.
@@ -73,9 +58,6 @@ tests/cases/compiler/giant.ts(430,9): error TS1005: '{' expected.
 tests/cases/compiler/giant.ts(432,9): error TS1005: '{' expected.
 tests/cases/compiler/giant.ts(436,9): error TS1005: '{' expected.
 tests/cases/compiler/giant.ts(438,5): error TS1005: '{' expected.
-tests/cases/compiler/giant.ts(462,10): error TS1022: An index signature parameter must have a type annotation.
-tests/cases/compiler/giant.ts(463,9): error TS1021: An index signature must have a type annotation.
-tests/cases/compiler/giant.ts(464,10): error TS1096: An index signature must have exactly one parameter.
 tests/cases/compiler/giant.ts(491,39): error TS1037: A function implementation cannot be declared in an ambient context.
 tests/cases/compiler/giant.ts(496,35): error TS1037: A function implementation cannot be declared in an ambient context.
 tests/cases/compiler/giant.ts(498,24): error TS1111: A constructor implementation cannot be declared in an ambient context.
@@ -120,9 +102,6 @@ tests/cases/compiler/giant.ts(556,21): error TS1036: Statements are not allowed 
 tests/cases/compiler/giant.ts(558,24): error TS1111: A constructor implementation cannot be declared in an ambient context.
 tests/cases/compiler/giant.ts(561,21): error TS1037: A function implementation cannot be declared in an ambient context.
 tests/cases/compiler/giant.ts(563,21): error TS1037: A function implementation cannot be declared in an ambient context.
-tests/cases/compiler/giant.ts(587,10): error TS1022: An index signature parameter must have a type annotation.
-tests/cases/compiler/giant.ts(588,9): error TS1021: An index signature must have a type annotation.
-tests/cases/compiler/giant.ts(589,10): error TS1096: An index signature must have exactly one parameter.
 tests/cases/compiler/giant.ts(606,22): error TS1037: A function implementation cannot be declared in an ambient context.
 tests/cases/compiler/giant.ts(606,25): error TS1036: Statements are not allowed in ambient contexts.
 tests/cases/compiler/giant.ts(611,30): error TS1037: A function implementation cannot be declared in an ambient context.
@@ -138,9 +117,6 @@ tests/cases/compiler/giant.ts(621,29): error TS1036: Statements are not allowed 
 tests/cases/compiler/giant.ts(623,24): error TS1111: A constructor implementation cannot be declared in an ambient context.
 tests/cases/compiler/giant.ts(626,21): error TS1037: A function implementation cannot be declared in an ambient context.
 tests/cases/compiler/giant.ts(628,21): error TS1037: A function implementation cannot be declared in an ambient context.
-tests/cases/compiler/giant.ts(653,10): error TS1022: An index signature parameter must have a type annotation.
-tests/cases/compiler/giant.ts(654,9): error TS1021: An index signature must have a type annotation.
-tests/cases/compiler/giant.ts(655,10): error TS1096: An index signature must have exactly one parameter.
 tests/cases/compiler/giant.ts(672,22): error TS1037: A function implementation cannot be declared in an ambient context.
 tests/cases/compiler/giant.ts(672,25): error TS1036: Statements are not allowed in ambient contexts.
 tests/cases/compiler/giant.ts(676,30): error TS1037: A function implementation cannot be declared in an ambient context.
@@ -281,7 +257,7 @@ tests/cases/compiler/giant.ts(602,9): error TS2386: Overload signatures must all
 tests/cases/compiler/giant.ts(668,9): error TS2386: Overload signatures must all be optional or required.
 
 
-==== tests/cases/compiler/giant.ts (281 errors) ====
+==== tests/cases/compiler/giant.ts (257 errors) ====
     
     /*
         Prefixes
@@ -385,14 +361,8 @@ tests/cases/compiler/giant.ts(668,9): error TS2386: Overload signatures must all
     
         //Index Signature
         [p];
-         ~
-!!! error TS1022: An index signature parameter must have a type annotation.
         [p1: string];
-        ~~~~~~~~~~~~~
-!!! error TS1021: An index signature must have a type annotation.
         [p2: string, p3: number];
-         ~~
-!!! error TS1096: An index signature must have exactly one parameter.
     
         //Property Signature
         p;
@@ -499,14 +469,8 @@ tests/cases/compiler/giant.ts(668,9): error TS2386: Overload signatures must all
     
             //Index Signature
             [p];
-             ~
-!!! error TS1022: An index signature parameter must have a type annotation.
             [p1: string];
-            ~~~~~~~~~~~~~
-!!! error TS1021: An index signature must have a type annotation.
             [p2: string, p3: number];
-             ~~
-!!! error TS1096: An index signature must have exactly one parameter.
     
             //Property Signature
             p;
@@ -630,14 +594,8 @@ tests/cases/compiler/giant.ts(668,9): error TS2386: Overload signatures must all
     
             //Index Signature
             [p];
-             ~
-!!! error TS1022: An index signature parameter must have a type annotation.
             [p1: string];
-            ~~~~~~~~~~~~~
-!!! error TS1021: An index signature must have a type annotation.
             [p2: string, p3: number];
-             ~~
-!!! error TS1096: An index signature must have exactly one parameter.
     
             //Property Signature
             p;
@@ -863,14 +821,8 @@ tests/cases/compiler/giant.ts(668,9): error TS2386: Overload signatures must all
     
         //Index Signature
         [p];
-         ~
-!!! error TS1022: An index signature parameter must have a type annotation.
         [p1: string];
-        ~~~~~~~~~~~~~
-!!! error TS1021: An index signature must have a type annotation.
         [p2: string, p3: number];
-         ~~
-!!! error TS1096: An index signature must have exactly one parameter.
     
         //Property Signature
         p;
@@ -977,14 +929,8 @@ tests/cases/compiler/giant.ts(668,9): error TS2386: Overload signatures must all
     
             //Index Signature
             [p];
-             ~
-!!! error TS1022: An index signature parameter must have a type annotation.
             [p1: string];
-            ~~~~~~~~~~~~~
-!!! error TS1021: An index signature must have a type annotation.
             [p2: string, p3: number];
-             ~~
-!!! error TS1096: An index signature must have exactly one parameter.
     
             //Property Signature
             p;
@@ -1108,14 +1054,8 @@ tests/cases/compiler/giant.ts(668,9): error TS2386: Overload signatures must all
     
             //Index Signature
             [p];
-             ~
-!!! error TS1022: An index signature parameter must have a type annotation.
             [p1: string];
-            ~~~~~~~~~~~~~
-!!! error TS1021: An index signature must have a type annotation.
             [p2: string, p3: number];
-             ~~
-!!! error TS1096: An index signature must have exactly one parameter.
     
             //Property Signature
             p;
@@ -1377,14 +1317,8 @@ tests/cases/compiler/giant.ts(668,9): error TS2386: Overload signatures must all
     
             //Index Signature
             [p];
-             ~
-!!! error TS1022: An index signature parameter must have a type annotation.
             [p1: string];
-            ~~~~~~~~~~~~~
-!!! error TS1021: An index signature must have a type annotation.
             [p2: string, p3: number];
-             ~~
-!!! error TS1096: An index signature must have exactly one parameter.
     
             //Property Signature
             p;
@@ -1481,14 +1415,8 @@ tests/cases/compiler/giant.ts(668,9): error TS2386: Overload signatures must all
     
             //Index Signature
             [p];
-             ~
-!!! error TS1022: An index signature parameter must have a type annotation.
             [p1: string];
-            ~~~~~~~~~~~~~
-!!! error TS1021: An index signature must have a type annotation.
             [p2: string, p3: number];
-             ~~
-!!! error TS1096: An index signature must have exactly one parameter.
     
             //Property Signature
             p;

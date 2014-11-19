@@ -1,9 +1,3 @@
-tests/cases/compiler/intTypeCheck.ts(35,6): error TS1022: An index signature parameter must have a type annotation.
-tests/cases/compiler/intTypeCheck.ts(36,5): error TS1021: An index signature must have a type annotation.
-tests/cases/compiler/intTypeCheck.ts(37,6): error TS1096: An index signature must have exactly one parameter.
-tests/cases/compiler/intTypeCheck.ts(70,6): error TS1022: An index signature parameter must have a type annotation.
-tests/cases/compiler/intTypeCheck.ts(71,5): error TS1021: An index signature must have a type annotation.
-tests/cases/compiler/intTypeCheck.ts(72,6): error TS1096: An index signature must have exactly one parameter.
 tests/cases/compiler/intTypeCheck.ts(104,20): error TS1109: Expression expected.
 tests/cases/compiler/intTypeCheck.ts(118,21): error TS1109: Expression expected.
 tests/cases/compiler/intTypeCheck.ts(132,21): error TS1109: Expression expected.
@@ -91,7 +85,7 @@ tests/cases/compiler/intTypeCheck.ts(202,22): error TS2304: Cannot find name 'i8
 tests/cases/compiler/intTypeCheck.ts(203,17): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
 
 
-==== tests/cases/compiler/intTypeCheck.ts (73 errors) ====
+==== tests/cases/compiler/intTypeCheck.ts (67 errors) ====
     interface i1 {
         //Property Signatures
         p;
@@ -127,14 +121,8 @@ tests/cases/compiler/intTypeCheck.ts(203,17): error TS2351: Cannot use 'new' wit
     interface i4 {
         //Index Signatures
         [p];
-         ~
-!!! error TS1022: An index signature parameter must have a type annotation.
         [p1: string];
-        ~~~~~~~~~~~~~
-!!! error TS1021: An index signature must have a type annotation.
         [p2: string, p3: number];
-         ~~
-!!! error TS1096: An index signature must have exactly one parameter.
     }
     interface i5 extends i1 { }
     interface i6 extends i2 { }
@@ -168,14 +156,8 @@ tests/cases/compiler/intTypeCheck.ts(203,17): error TS2351: Cannot use 'new' wit
     
         //Index Signatures
         [p];
-         ~
-!!! error TS1022: An index signature parameter must have a type annotation.
         [p1: string];
-        ~~~~~~~~~~~~~
-!!! error TS1021: An index signature must have a type annotation.
         [p2: string, p3: number];
-         ~~
-!!! error TS1096: An index signature must have exactly one parameter.
     
         //Property Signatures
         p;
