@@ -892,7 +892,6 @@ module ts {
         getDefinitionAtPosition(fileName: string, position: number): DefinitionInfo[];
         getReferencesAtPosition(fileName: string, position: number): ReferenceEntry[];
         getOccurrencesAtPosition(fileName: string, position: number): ReferenceEntry[];
-        getImplementorsAtPosition(fileName: string, position: number): ReferenceEntry[];
 
         getNavigateToItems(searchValue: string): NavigateToItem[];
         getNavigationBarItems(fileName: string): NavigationBarItem[];
@@ -5444,7 +5443,6 @@ module ts {
             getDefinitionAtPosition,
             getReferencesAtPosition,
             getOccurrencesAtPosition,
-            getImplementorsAtPosition: (filename, position) => [],
             getNameOrDottedNameSpan,
             getBreakpointStatementAtPosition,
             getNavigateToItems,
