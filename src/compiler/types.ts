@@ -539,7 +539,7 @@ module ts {
     }
 
     export interface ForInStatement extends IterationStatement {
-        declaration?: VariableDeclaration;
+        declarations?: NodeArray<VariableDeclaration>;
         variable?: Expression;
         expression: Expression;
     }

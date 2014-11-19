@@ -303,7 +303,7 @@ module ts {
                     child((<ForStatement>node).iterator) ||
                     child((<ForStatement>node).statement);
             case SyntaxKind.ForInStatement:
-                return child((<ForInStatement>node).declaration) ||
+                return children((<ForInStatement>node).declarations) ||
                     child((<ForInStatement>node).variable) ||
                     child((<ForInStatement>node).expression) ||
                     child((<ForInStatement>node).statement);
@@ -2750,27 +2750,12 @@ module ts {
             if (token !== SyntaxKind.SemicolonToken) {
                 if (parseOptional(SyntaxKind.VarKeyword)) {
                     var declarations = parseVariableDeclarationList(0, /*noIn*/ true);
-                    if (!declarations.length) {
-                        error(Diagnostics.Variable_declaration_list_cannot_be_empty);
-                    }
                 }
                 else if (parseOptional(SyntaxKind.LetKeyword)) {
                     var declarations = parseVariableDeclarationList(NodeFlags.Let, /*noIn*/ true);
-                    if (!declarations.length) {
-                        error(Diagnostics.Variable_declaration_list_cannot_be_empty);
-                    }
-                    if (languageVersion < ScriptTarget.ES6) {
-                        grammarErrorAtPos(declarations.pos, declarations.end - declarations.pos, Diagnostics.let_declarations_are_only_available_when_targeting_ECMAScript_6_and_higher);
-                    }
                 }
                 else if (parseOptional(SyntaxKind.ConstKeyword)) {
                     var declarations = parseVariableDeclarationList(NodeFlags.Const, /*noIn*/ true);
-                    if (!declarations.length) {
-                        error(Diagnostics.Variable_declaration_list_cannot_be_empty);
-                    }
-                    if (languageVersion < ScriptTarget.ES6) {
-                        grammarErrorAtPos(declarations.pos, declarations.end - declarations.pos, Diagnostics.const_declarations_are_only_available_when_targeting_ECMAScript_6_and_higher);
-                    }
                 }
                 else {
                     var varOrInit = parseExpression(true);
@@ -2780,10 +2765,7 @@ module ts {
             if (parseOptional(SyntaxKind.InKeyword)) {
                 var forInStatement = <ForInStatement>createNode(SyntaxKind.ForInStatement, pos);
                 if (declarations) {
-                    if (declarations.length > 1) {
-                        error(Diagnostics.Only_a_single_variable_declaration_is_allowed_in_a_for_in_statement);
-                    }
-                    forInStatement.declaration = declarations[0];
+                    forInStatement.declarations = declarations;
                 }
                 else {
                     forInStatement.variable = varOrInit;
@@ -4047,6 +4029,8 @@ module ts {
                 case SyntaxKind.ConstructorType:            return visitConstructorType(<SignatureDeclaration>node);
                 case SyntaxKind.ConstructSignature:         return visitConstructSignature(<SignatureDeclaration>node);
                 case SyntaxKind.EnumDeclaration:            return visitEnumDeclaration(<EnumDeclaration>node);
+                case SyntaxKind.ForInStatement:             return visitForInStatement(<ForInStatement>node);
+                case SyntaxKind.ForStatement:               return visitForStatement(<ForStatement>node);
                 case SyntaxKind.FunctionDeclaration:        return visitFunctionDeclaration(<FunctionLikeDeclaration>node);
                 case SyntaxKind.FunctionExpression:         return visitFunctionExpression(<FunctionExpression>node);
                 case SyntaxKind.FunctionType:               return visitFunctionType(<SignatureDeclaration>node);
@@ -4213,6 +4197,21 @@ module ts {
             }
 
             return false;
+        }
+
+        function visitForInStatement(node: ForInStatement) {
+            checkVariableDeclarations(node.declarations) ||
+                checkForMoreThanOneDeclaration(node.declarations);
+        }
+
+        function visitForStatement(node: ForStatement) {
+            checkVariableDeclarations(node.declarations);
+        }
+
+        function checkForMoreThanOneDeclaration(declarations: NodeArray<VariableDeclaration>) {
+            if (declarations && declarations.length > 1) {
+                return grammarErrorOnNode(declarations[1], Diagnostics.Only_a_single_variable_declaration_is_allowed_in_a_for_in_statement);
+            }
         }
 
         function visitFunctionDeclaration(node: FunctionLikeDeclaration) {
@@ -4536,28 +4535,40 @@ module ts {
             }
         }
 
-        function visitVariableStatement(node: VariableStatement) {
-            if (checkForTrailingComma(node.declarations)) {
-                return;
-            }
+        function checkVariableDeclarations(declarations: NodeArray<VariableDeclaration>): boolean {
+            if (declarations) {
+                if (checkForTrailingComma(declarations)) {
+                    return true;
+                }
 
-            if (!node.declarations.length) {
-                grammarErrorOnNode(node, Diagnostics.Variable_declaration_list_cannot_be_empty);
+                if (!declarations.length) {
+                    return grammarErrorAtPos(declarations.pos, declarations.end - declarations.pos, Diagnostics.Variable_declaration_list_cannot_be_empty);
+                }
+
+                var decl = declarations[0];
+                if (languageVersion < ScriptTarget.ES6) {
+                    if (decl.flags & NodeFlags.Let) {
+                        return grammarErrorOnNode(decl, Diagnostics.let_declarations_are_only_available_when_targeting_ECMAScript_6_and_higher);
+                    }
+                    else if (decl.flags & NodeFlags.Const) {
+                        return grammarErrorOnNode(decl, Diagnostics.const_declarations_are_only_available_when_targeting_ECMAScript_6_and_higher);
+                    }
+                }
             }
-            if (languageVersion < ScriptTarget.ES6) {
+        }
+
+        function visitVariableStatement(node: VariableStatement) {
+            checkVariableDeclarations(node.declarations) ||
+                checkForDisallowedLetOrConstStatement(node);
+        }
+
+        function checkForDisallowedLetOrConstStatement(node: VariableStatement) {
+            if (!allowLetAndConstDeclarations(node.parent)) {
                 if (node.flags & NodeFlags.Let) {
-                    grammarErrorOnNode(node, Diagnostics.let_declarations_are_only_available_when_targeting_ECMAScript_6_and_higher);
+                    return grammarErrorOnNode(node, Diagnostics.let_declarations_can_only_be_declared_inside_a_block);
                 }
                 else if (node.flags & NodeFlags.Const) {
-                    grammarErrorOnNode(node, Diagnostics.const_declarations_are_only_available_when_targeting_ECMAScript_6_and_higher);
-                }
-            }
-            else if (!allowLetAndConstDeclarations(node.parent)) {
-                if (node.flags & NodeFlags.Let) {
-                    grammarErrorOnNode(node, Diagnostics.let_declarations_can_only_be_declared_inside_a_block);
-                }
-                else if (node.flags & NodeFlags.Const) {
-                    grammarErrorOnNode(node, Diagnostics.const_declarations_can_only_be_declared_inside_a_block);
+                    return grammarErrorOnNode(node, Diagnostics.const_declarations_can_only_be_declared_inside_a_block);
                 }
             }
         }
