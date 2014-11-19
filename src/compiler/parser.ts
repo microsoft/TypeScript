@@ -2947,16 +2947,6 @@ module ts {
             inSwitchStatement = saveInSwitchStatement;
 
             parseExpected(SyntaxKind.CloseBraceToken);
-
-            // Error on duplicate 'default' clauses.
-            var defaultClauses: CaseOrDefaultClause[] = filter(node.clauses, clause => clause.kind === SyntaxKind.DefaultClause);
-            for (var i = 1, n = defaultClauses.length; i < n; i++) {
-                var clause = defaultClauses[i];
-                var start = skipTrivia(file.text, clause.pos);
-                var end = clause.statements.length > 0 ? clause.statements[0].pos : clause.end;
-                grammarErrorAtPos(start, end - start, Diagnostics.A_default_clause_cannot_appear_more_than_once_in_a_switch_statement);
-            }
-
             return finishNode(node);
         }
 
@@ -4039,6 +4029,7 @@ module ts {
                 case SyntaxKind.PostfixOperator:            return visitPostfixOperator(<UnaryExpression>node);
                 case SyntaxKind.PrefixOperator:             return visitPrefixOperator(<UnaryExpression>node);
                 case SyntaxKind.SetAccessor:                return visitSetAccessor(<MethodDeclaration>node);
+                case SyntaxKind.SwitchStatement:            return visitSwitchStatement(<SwitchStatement>node);
                 case SyntaxKind.TaggedTemplateExpression:   return visitTaggedTemplateExpression(<TaggedTemplateExpression>node);
                 case SyntaxKind.TupleType:                  return visitTupleType(<TupleTypeNode>node);
                 case SyntaxKind.TypeReference:              return visitTypeReference(<TypeReferenceNode>node);
@@ -4510,6 +4501,25 @@ module ts {
                     }
                     else if (parameter.initializer) {
                         return grammarErrorOnNode(accessor.name, Diagnostics.A_set_accessor_parameter_cannot_have_an_initializer);
+                    }
+                }
+            }
+        }
+
+        function visitSwitchStatement(node: SwitchStatement) {
+            var firstDefaultClause: CaseOrDefaultClause;
+
+            // Error on duplicate 'default' clauses.
+            for (var i = 0, n = node.clauses.length; i < n; i++) {
+                var clause = node.clauses[i];
+                if (clause.kind === SyntaxKind.DefaultClause) {
+                    if (firstDefaultClause === undefined) {
+                        firstDefaultClause = clause;
+                    }
+                    else {
+                        var start = skipTrivia(file.text, clause.pos);
+                        var end = clause.statements.length > 0 ? clause.statements[0].pos : clause.end;
+                        grammarErrorAtPos(start, end - start, Diagnostics.A_default_clause_cannot_appear_more_than_once_in_a_switch_statement);
                     }
                 }
             }
