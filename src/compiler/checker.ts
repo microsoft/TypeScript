@@ -1644,10 +1644,18 @@ module ts {
                 }
             }
             else {
-                var index = indexOf(pattern.elements, declaration);
-                var type = getTypeOfPropertyOfType(parentType, "" + index) || getIndexTypeOfType(parentType, IndexKind.Number);
-                if (!type) {
-                    error(declaration, Diagnostics.Type_0_has_no_property_1_and_no_numeric_index_signature, typeToString(parentType), "" + index);
+                if (getPropertyOfType(parentType, "0")) {
+                    var propName = "" + indexOf(pattern.elements, declaration);
+                    var type = getTypeOfPropertyOfType(parentType, propName);
+                    if (!type) {
+                        error(declaration, Diagnostics.Type_0_has_no_property_1, typeToString(parentType), propName);
+                    }
+                }
+                else {
+                    var type = getIndexTypeOfType(parentType, IndexKind.Number);
+                    if (!type) {
+                        error(declaration, Diagnostics.Type_0_has_no_numeric_index_signature, typeToString(parentType));
+                    }
                 }
             }
             return type || unknownType;
@@ -4775,7 +4783,13 @@ module ts {
                     return getTypeFromTypeNode(declaration.type);
                 }
                 if (declaration.kind === SyntaxKind.Parameter) {
-                    return getContextuallyTypedParameterType(declaration);
+                    var type = getContextuallyTypedParameterType(declaration);
+                    if (type) {
+                        return type;
+                    }
+                }
+                if (isBindingPattern(declaration.name)) {
+                    return getTypeFromBindingPattern(<BindingPattern>declaration.name);
                 }
             }
             return undefined;
