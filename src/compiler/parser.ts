@@ -3717,7 +3717,11 @@ module ts {
         }
 
         function visitArrowFunction(node: FunctionExpression) {
-            checkTypeParameterList(node.typeParameters) ||
+            checkParsedSignature(node);
+        }
+
+        function checkParsedSignature(node: ParsedSignature): boolean {
+            return checkTypeParameterList(node.typeParameters) ||
                 checkParameterList(node.parameters);
         }
 
@@ -3878,8 +3882,7 @@ module ts {
         }
 
         function visitCallSignature(node: ConstructorDeclaration) {
-            checkTypeParameterList(node.typeParameters) ||
-                checkParameterList(node.parameters);
+            checkParsedSignature(node);
         }
 
         function visitCatchBlock(node: CatchBlock) {
@@ -3906,8 +3909,7 @@ module ts {
         }
 
         function visitConstructor(node: ConstructorDeclaration) {
-            checkTypeParameterList(node.typeParameters) ||
-                checkParameterList(node.parameters) ||
+            checkParsedSignature(node) ||
                 checkConstructorTypeParameters(node) ||
                 checkConstructorTypeAnnotation(node) ||
                 checkForBodyInAmbientContext(node.body, /*isConstructor:*/ true);
@@ -3926,13 +3928,11 @@ module ts {
         }
 
         function visitConstructorType(node: SignatureDeclaration) {
-            checkTypeParameterList(node.typeParameters) ||
-                checkParameterList(node.parameters);
+            checkParsedSignature(node);
         }
 
         function visitConstructSignature(node: FunctionLikeDeclaration) {
-            checkTypeParameterList(node.typeParameters) ||
-                checkParameterList(node.parameters);
+            checkParsedSignature(node);
         }
 
         function visitEnumDeclaration(enumDecl: EnumDeclaration) {
@@ -4010,15 +4010,13 @@ module ts {
         }
 
         function visitFunctionDeclaration(node: FunctionLikeDeclaration) {
-            checkTypeParameterList(node.typeParameters) ||
-                checkParameterList(node.parameters) ||
+            checkParsedSignature(node) ||
                 checkFunctionName(node.name) ||
                 checkForBodyInAmbientContext(node.body, /*isConstructor:*/ false);
         }
 
         function visitFunctionExpression(node: FunctionExpression) {
-            checkTypeParameterList(node.typeParameters) ||
-                checkParameterList(node.parameters) ||
+            checkParsedSignature(node) ||
                 checkFunctionName(node.name);
         }
 
@@ -4031,13 +4029,11 @@ module ts {
         }
 
         function visitFunctionType(node: SignatureDeclaration) {
-            checkTypeParameterList(node.typeParameters) ||
-                checkParameterList(node.parameters);
+            checkParsedSignature(node);
         }
 
         function visitGetAccessor(node: MethodDeclaration) {
-            checkTypeParameterList(node.typeParameters) ||
-                checkParameterList(node.parameters) ||
+            checkParsedSignature(node) ||
                 checkAccessor(node);
         }
 
@@ -4102,8 +4098,7 @@ module ts {
         }
 
         function visitMethod(node: MethodDeclaration) {
-            checkTypeParameterList(node.typeParameters) ||
-                checkParameterList(node.parameters) ||
+            checkParsedSignature(node) ||
                 checkForBodyInAmbientContext(node.body, /*isConstructor:*/ false) ||
                 (node.parent.kind === SyntaxKind.ClassDeclaration && checkForInvalidQuestionMark(node, Diagnostics.A_class_member_cannot_be_declared_optional));
         }
@@ -4487,8 +4482,7 @@ module ts {
         }
 
         function visitSetAccessor(node: MethodDeclaration) {
-            checkTypeParameterList(node.typeParameters) ||
-                checkParameterList(node.parameters) ||
+            checkParsedSignature(node) ||
                 checkAccessor(node);
         }
 
