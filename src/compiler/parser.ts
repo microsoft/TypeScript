@@ -4066,10 +4066,10 @@ module ts {
 
                     if (statement.kind === SyntaxKind.ExportAssignment) {
                         // Export assignments are not allowed in an internal module
-                        return grammarErrorOnFirstToken(statement, Diagnostics.An_export_assignment_cannot_be_used_in_an_internal_module);
+                        return grammarErrorOnNode(statement, Diagnostics.An_export_assignment_cannot_be_used_in_an_internal_module);
                     }
                     else if (statement.kind === SyntaxKind.ImportDeclaration && (<ImportDeclaration>statement).externalModuleName) {
-                        return grammarErrorOnFirstToken(statement, Diagnostics.Import_declarations_in_an_internal_module_cannot_reference_an_external_module);
+                        return grammarErrorOnNode((<ImportDeclaration>statement).externalModuleName, Diagnostics.Import_declarations_in_an_internal_module_cannot_reference_an_external_module);
                     }
                 }
             }

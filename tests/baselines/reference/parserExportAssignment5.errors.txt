@@ -5,7 +5,7 @@ tests/cases/conformance/parser/ecmascript5/ExportAssignments/parserExportAssignm
 ==== tests/cases/conformance/parser/ecmascript5/ExportAssignments/parserExportAssignment5.ts (2 errors) ====
     module M {
         export = A;
-        ~~~~~~
+        ~~~~~~~~~~~
 !!! error TS1063: An export assignment cannot be used in an internal module.
         ~~~~~~~~~~~
 !!! error TS2304: Cannot find name 'A'.
