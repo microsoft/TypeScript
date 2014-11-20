@@ -869,14 +869,13 @@ module ts {
 
                 function templateNeedsParens(template: TemplateExpression, parent: Expression) {
                     switch (parent.kind) {
-                        case SyntaxKind.TaggedTemplateExpression:
-                            Debug.fail("Path should be unreachable; tagged templates not supported pre-ES6!");
-                            //return (<TaggedTemplateExpression>parent).tag === template;
                         case SyntaxKind.CallExpression:
                         case SyntaxKind.NewExpression:
                             return (<CallExpression>parent).func === template;
                         case SyntaxKind.ParenExpression:
                             return false;
+                        case SyntaxKind.TaggedTemplateExpression:
+                            Debug.fail("Path should be unreachable; tagged templates not supported pre-ES6.");
                         default:
                             return comparePrecedenceToBinaryPlus(parent) !== Comparison.LessThan;
                     }
