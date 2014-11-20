@@ -459,6 +459,10 @@ module ts {
         return normalizedPathComponents(path, rootLength);
     }
 
+    export function getNormalizedAbsolutePath(filename: string, currentDirectory: string) {
+        return getNormalizedPathFromPathComponents(getNormalizedPathComponents(filename, currentDirectory));
+    }
+
     export function getNormalizedPathFromPathComponents(pathComponents: string[]) {
         if (pathComponents && pathComponents.length) {
             return pathComponents[0] + pathComponents.slice(1).join(directorySeparator);

@@ -57,7 +57,7 @@ module ts {
         var newLine = program.getCompilerHost().getNewLine();
 
         function getSourceFilePathInNewDir(newDirPath: string, sourceFile: SourceFile) {
-            var sourceFilePath = getNormalizedPathFromPathComponents(getNormalizedPathComponents(sourceFile.filename, compilerHost.getCurrentDirectory()));
+            var sourceFilePath = getNormalizedAbsolutePath(sourceFile.filename, compilerHost.getCurrentDirectory());
             sourceFilePath = sourceFilePath.replace(program.getCommonSourceDirectory(), "");
             return combinePaths(newDirPath, sourceFilePath);
         }
@@ -3430,11 +3430,6 @@ module ts {
                 }
             }
 
-            function tryResolveScriptReference(sourceFile: SourceFile, reference: FileReference) {
-                var referenceFileName = normalizePath(combinePaths(getDirectoryPath(sourceFile.filename), reference.filename));
-                return program.getSourceFile(referenceFileName);
-            }
-
             // Contains the reference paths that needs to go in the declaration file. 
             // Collecting this separately because reference paths need to be first thing in the declaration file 
             // and we could be collecting these paths from multiple files into single one with --out option
@@ -3461,7 +3456,7 @@ module ts {
                 if (!compilerOptions.noResolve) {
                     var addedGlobalFileReference = false;
                     forEach(root.referencedFiles, fileReference => {
-                        var referencedFile = tryResolveScriptReference(root, fileReference);
+                        var referencedFile = tryResolveScriptReference(program, root, fileReference);
 
                         // All the references that are not going to be part of same file
                         if (referencedFile && ((referencedFile.flags & NodeFlags.DeclarationFile) || // This is a declare file reference
@@ -3486,7 +3481,7 @@ module ts {
                         // Check what references need to be added
                         if (!compilerOptions.noResolve) {
                             forEach(sourceFile.referencedFiles, fileReference => {
-                                var referencedFile = tryResolveScriptReference(sourceFile, fileReference);
+                                var referencedFile = tryResolveScriptReference(program, sourceFile, fileReference);
 
                                 // If the reference file is a declaration file or an external module, emit that reference
                                 if (referencedFile && (isExternalModuleOrDeclarationFile(referencedFile) &&

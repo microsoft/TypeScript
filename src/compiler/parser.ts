@@ -643,6 +643,14 @@ module ts {
         return false;
     }
 
+    export function tryResolveScriptReference(program: Program, sourceFile: SourceFile, reference: FileReference) {
+        if (!program.getCompilerOptions().noResolve) {
+            var referenceFileName = isRootedDiskPath(reference.filename) ? reference.filename : combinePaths(getDirectoryPath(sourceFile.filename), reference.filename);
+            referenceFileName = getNormalizedAbsolutePath(referenceFileName, program.getCompilerHost().getCurrentDirectory());
+            return program.getSourceFile(referenceFileName);
+        }
+    }
+
     export function getAncestor(node: Node, kind: SyntaxKind): Node {
         switch (kind) {
             // special-cases that can be come first
@@ -4695,13 +4703,15 @@ module ts {
             var canonicalName = host.getCanonicalFileName(filename);
             if (hasProperty(filesByName, canonicalName)) {
                 // We've already looked for this file, use cached result
-                var file = filesByName[canonicalName];
-                if (file && host.useCaseSensitiveFileNames() && canonicalName !== file.filename) {
-                    errors.push(createFileDiagnostic(refFile, refStart, refLength,
-                        Diagnostics.Filename_0_differs_from_already_included_filename_1_only_in_casing, filename, file.filename));
-                }
+                return getSourceFileFromCache(filename, canonicalName, /*useAbsolutePath*/ false);
             }
             else {
+                var normalizedAbsolutePath = getNormalizedAbsolutePath(filename, host.getCurrentDirectory());
+                var canonicalAbsolutePath = host.getCanonicalFileName(normalizedAbsolutePath);
+                if (hasProperty(filesByName, canonicalAbsolutePath)) {
+                    return getSourceFileFromCache(normalizedAbsolutePath, canonicalAbsolutePath, /*useAbsolutePath*/ true);
+                }
+
                 // We haven't looked for this file, do so now and cache result
                 var file = filesByName[canonicalName] = host.getSourceFile(filename, options.target, hostErrorMessage => {
                     errors.push(createFileDiagnostic(refFile, refStart, refLength,
@@ -4709,6 +4719,10 @@ module ts {
                 });
                 if (file) {
                     seenNoDefaultLib = seenNoDefaultLib || file.hasNoDefaultLib;
+
+                    // Set the source file for normalized absolute path
+                    filesByName[canonicalAbsolutePath] = file;
+
                     if (!options.noResolve) {
                         var basePath = getDirectoryPath(filename);
                         processReferencedFiles(file, basePath);
@@ -4726,6 +4740,18 @@ module ts {
                 }
             }
             return file;
+
+            function getSourceFileFromCache(filename: string, canonicalName: string, useAbsolutePath: boolean): SourceFile {
+                var file = filesByName[canonicalName];
+                if (file && host.useCaseSensitiveFileNames()) {
+                    var sourceFileName = useAbsolutePath ? getNormalizedAbsolutePath(file.filename, host.getCurrentDirectory()) : file.filename;
+                    if (canonicalName !== sourceFileName) {
+                        errors.push(createFileDiagnostic(refFile, refStart, refLength,
+                            Diagnostics.Filename_0_differs_from_already_included_filename_1_only_in_casing, filename, sourceFileName));
+                    }
+                }
+                return file;
+            }
         }
 
         function processReferencedFiles(file: SourceFile, basePath: string) {
