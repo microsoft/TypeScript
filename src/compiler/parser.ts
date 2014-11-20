@@ -412,16 +412,18 @@ module ts {
     export function isAnyFunction(node: Node): boolean {
         if (node) {
             switch (node.kind) {
-                case SyntaxKind.FunctionExpression:
-                case SyntaxKind.FunctionDeclaration:
-                case SyntaxKind.ArrowFunction:
                 case SyntaxKind.Method:
+                case SyntaxKind.Constructor:
                 case SyntaxKind.GetAccessor:
                 case SyntaxKind.SetAccessor:
-                case SyntaxKind.Constructor:
                 case SyntaxKind.CallSignature:
                 case SyntaxKind.ConstructSignature:
                 case SyntaxKind.IndexSignature:
+                case SyntaxKind.FunctionType:
+                case SyntaxKind.ConstructorType:
+                case SyntaxKind.FunctionExpression:
+                case SyntaxKind.ArrowFunction:
+                case SyntaxKind.FunctionDeclaration:
                     return true;
             }
         }
