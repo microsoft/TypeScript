@@ -75,41 +75,43 @@ module ts {
 
         var checker: TypeChecker = {
             getProgram: () => program,
-            getDiagnostics: getDiagnostics,
-            getGlobalDiagnostics: getGlobalDiagnostics,
             getNodeCount: () => sum(program.getSourceFiles(), "nodeCount"),
             getIdentifierCount: () => sum(program.getSourceFiles(), "identifierCount"),
             getSymbolCount: () => sum(program.getSourceFiles(), "symbolCount"),
             getTypeCount: () => typeCount,
-            checkProgram: checkProgram,
-            emitFiles: invokeEmitter,
-            getParentOfSymbol: getParentOfSymbol,
-            getNarrowedTypeOfSymbol: getNarrowedTypeOfSymbol,
-            getDeclaredTypeOfSymbol: getDeclaredTypeOfSymbol,
-            getPropertiesOfType: getPropertiesOfType,
-            getPropertyOfType: getPropertyOfType,
-            getSignaturesOfType: getSignaturesOfType,
-            getIndexTypeOfType: getIndexTypeOfType,
-            getReturnTypeOfSignature: getReturnTypeOfSignature,
-            getSymbolsInScope: getSymbolsInScope,
-            getSymbolInfo: getSymbolInfo,
-            getTypeOfNode: getTypeOfNode,
-            typeToString: typeToString,
-            getSymbolDisplayBuilder: getSymbolDisplayBuilder,
-            symbolToString: symbolToString,
-            getAugmentedPropertiesOfType: getAugmentedPropertiesOfType,
-            getRootSymbols: getRootSymbols,
-            getContextualType: getContextualType,
-            getFullyQualifiedName: getFullyQualifiedName,
-            getResolvedSignature: getResolvedSignature,
-            getEnumMemberValue: getEnumMemberValue,
-            isValidPropertyAccess: isValidPropertyAccess,
-            getSignatureFromDeclaration: getSignatureFromDeclaration,
-            isImplementationOfOverload: isImplementationOfOverload,
-            getAliasedSymbol: resolveImport,
             isUndefinedSymbol: symbol => symbol === undefinedSymbol,
             isArgumentsSymbol: symbol => symbol === argumentsSymbol,
-            hasEarlyErrors: hasEarlyErrors
+            getDiagnostics,
+            getGlobalDiagnostics,
+            checkProgram,
+            invokeEmitter,
+            getParentOfSymbol,
+            getNarrowedTypeOfSymbol,
+            getDeclaredTypeOfSymbol,
+            getPropertiesOfType,
+            getPropertyOfType,
+            getSignaturesOfType,
+            getIndexTypeOfType,
+            getReturnTypeOfSignature,
+            getSymbolsInScope,
+            getSymbolInfo,
+            getShorthandAssignmentValueSymbol,
+            getTypeOfNode,
+            typeToString,
+            getSymbolDisplayBuilder,
+            symbolToString,
+            getAugmentedPropertiesOfType,
+            getRootSymbols,
+            getContextualType,
+            getFullyQualifiedName,
+            getResolvedSignature,
+            getEnumMemberValue,
+            isValidPropertyAccess,
+            getSignatureFromDeclaration,
+            isImplementationOfOverload,
+            getAliasedSymbol: resolveImport,
+            hasEarlyErrors,
+            isEmitBlocked,
         };
 
         var undefinedSymbol = createSymbol(SymbolFlags.Property | SymbolFlags.Transient, "undefined");
@@ -951,7 +953,7 @@ module ts {
             if (forEach(symbol.declarations, declaration => !getIsDeclarationVisible(declaration))) {
                 return undefined;
             }
-            return { aliasesToMakeVisible: aliasesToMakeVisible };
+            return { aliasesToMakeVisible };
 
             function getIsDeclarationVisible(declaration: Declaration) {
                 if (!isDeclarationVisible(declaration)) {
@@ -1665,6 +1667,13 @@ module ts {
                 }
                 return type;
             }
+
+            // If it is a short-hand property assignment; Use the type of the identifier
+            if (declaration.kind === SyntaxKind.ShorthandPropertyAssignment) {
+                var type = checkIdentifier(<Identifier>declaration.name);
+                return type
+            }
+
             // Rest parameters default to type any[], other parameters default to type any
             var type = declaration.flags & NodeFlags.Rest ? createArrayType(anyType) : anyType;
             checkImplicitAny(type);
@@ -2399,7 +2408,7 @@ module ts {
         }
 
         // Return the symbol for the property with the given name in the given type. Creates synthetic union properties when
-        // necessary, maps primtive types and type parameters are to their apparent types, and augments with properties from
+        // necessary, maps primitive types and type parameters are to their apparent types, and augments with properties from
         // Object and Function as appropriate.
         function getPropertyOfType(type: Type, name: string): Symbol {
             if (type.flags & TypeFlags.Union) {
@@ -2434,7 +2443,7 @@ module ts {
         }
 
         // Return the signatures of the given kind in the given type. Creates synthetic union signatures when necessary and
-        // maps primtive types and type parameters are to their apparent types.
+        // maps primitive types and type parameters are to their apparent types.
         function getSignaturesOfType(type: Type, kind: SignatureKind): Signature[] {
             return getSignaturesOfObjectOrUnionType(getApparentType(type), kind);
         }
@@ -2447,7 +2456,7 @@ module ts {
         }
 
         // Return the index type of the given kind in the given type. Creates synthetic union index types when necessary and
-        // maps primtive types and type parameters are to their apparent types.
+        // maps primitive types and type parameters are to their apparent types.
         function getIndexTypeOfType(type: Type, kind: IndexKind): Type {
             return getIndexTypeOfObjectOrUnionType(getApparentType(type), kind);
         }
@@ -2523,6 +2532,8 @@ module ts {
             for (var i = 0, len = symbol.declarations.length; i < len; i++) {
                 var node = symbol.declarations[i];
                 switch (node.kind) {
+                    case SyntaxKind.FunctionType:
+                    case SyntaxKind.ConstructorType:
                     case SyntaxKind.FunctionDeclaration:
                     case SyntaxKind.Method:
                     case SyntaxKind.Constructor:
@@ -2960,8 +2971,8 @@ module ts {
             }
             return links.resolvedType;
         }
-
-        function getTypeFromTypeLiteralNode(node: TypeLiteralNode): Type {
+        
+        function getTypeFromTypeLiteralOrFunctionOrConstructorTypeNode(node: Node): Type {
             var links = getNodeLinks(node);
             if (!links.resolvedType) {
                 // Deferred resolution of members is handled by resolveObjectTypeMembers
@@ -3011,8 +3022,10 @@ module ts {
                     return getTypeFromUnionTypeNode(<UnionTypeNode>node);
                 case SyntaxKind.ParenType:
                     return getTypeFromTypeNode((<ParenTypeNode>node).type);
+                case SyntaxKind.FunctionType:
+                case SyntaxKind.ConstructorType:
                 case SyntaxKind.TypeLiteral:
-                    return getTypeFromTypeLiteralNode(<TypeLiteralNode>node);
+                    return getTypeFromTypeLiteralOrFunctionOrConstructorTypeNode(node);
                 // This function assumes that an identifier or qualified name is a type expression
                 // Callers should first ensure this by calling isTypeNode
                 case SyntaxKind.Identifier:
@@ -3221,9 +3234,9 @@ module ts {
 
         // TYPE CHECKING
 
-        var subtypeRelation: Map<Ternary> = {};
-        var assignableRelation: Map<Ternary> = {};
-        var identityRelation: Map<Ternary> = {};
+        var subtypeRelation: Map<boolean> = {};
+        var assignableRelation: Map<boolean> = {};
+        var identityRelation: Map<boolean> = {};
 
         function isTypeIdenticalTo(source: Type, target: Type): boolean {
             return checkTypeRelatedTo(source, target, identityRelation, /*errorNode*/ undefined);
@@ -3258,7 +3271,7 @@ module ts {
         function checkTypeRelatedTo(
             source: Type,
             target: Type,
-            relation: Map<Ternary>,
+            relation: Map<boolean>,
             errorNode: Node,
             headMessage?: DiagnosticMessage,
             containingMessageChain?: DiagnosticMessageChain): boolean {
@@ -3266,6 +3279,7 @@ module ts {
             var errorInfo: DiagnosticMessageChain;
             var sourceStack: ObjectType[];
             var targetStack: ObjectType[];
+            var maybeStack: Map<boolean>[];
             var expandingFlags: number;
             var depth = 0;
             var overflow = false;
@@ -3424,12 +3438,12 @@ module ts {
                 var id = source.id + "," + target.id;
                 var related = relation[id];
                 if (related !== undefined) {
-                    return related;
+                    return related ? Ternary.True : Ternary.False;
                 }
                 if (depth > 0) {
                     for (var i = 0; i < depth; i++) {
                         // If source and target are already being compared, consider them related with assumptions
-                        if (source === sourceStack[i] && target === targetStack[i]) {
+                        if (maybeStack[i][id]) {
                             return Ternary.Maybe;
                         }
                     }
@@ -3441,16 +3455,19 @@ module ts {
                 else {
                     sourceStack = [];
                     targetStack = [];
+                    maybeStack = [];
                     expandingFlags = 0;
                 }
                 sourceStack[depth] = source;
                 targetStack[depth] = target;
+                maybeStack[depth] = {};
+                maybeStack[depth][id] = true;
                 depth++;
                 var saveExpandingFlags = expandingFlags;
                 if (!(expandingFlags & 1) && isDeeplyNestedGeneric(source, sourceStack)) expandingFlags |= 1;
                 if (!(expandingFlags & 2) && isDeeplyNestedGeneric(target, targetStack)) expandingFlags |= 2;
                 if (expandingFlags === 3) {
-                    var result = Ternary.True;
+                    var result = Ternary.Maybe;
                 }
                 else {
                     var result = propertiesRelatedTo(source, target, reportErrors);
@@ -3469,9 +3486,18 @@ module ts {
                 }
                 expandingFlags = saveExpandingFlags;
                 depth--;
-                // Only cache results that are free of assumptions
-                if (result !== Ternary.Maybe) {
-                    relation[id] = result;
+                if (result) {
+                    var maybeCache = maybeStack[depth];
+                    // If result is definitely true, copy assumptions to global cache, else copy to next level up
+                    var destinationCache = result === Ternary.True || depth === 0 ? relation : maybeStack[depth - 1];
+                    for (var p in maybeCache) {
+                        destinationCache[p] = maybeCache[p];
+                    }
+                }
+                else {
+                    // A false result goes straight into global cache (when something is false under assumptions it
+                    // will also be false without assumptions)
+                    relation[id] = false;
                 }
                 return result;
             }
@@ -4319,13 +4345,9 @@ module ts {
             var type = getTypeOfSymbol(symbol);
             // Only narrow when symbol is variable of a structured type
             if (node && (symbol.flags & SymbolFlags.Variable && type.flags & TypeFlags.Structured)) {
-                while (true) {
+                loop: while (true) {
                     var child = node;
                     node = node.parent;
-                    // Stop at containing function or module block
-                    if (!node || node.kind === SyntaxKind.FunctionBlock || node.kind === SyntaxKind.ModuleBlock) {
-                        break;
-                    }
                     var narrowedType = type;
                     switch (node.kind) {
                         case SyntaxKind.IfStatement:
@@ -4351,9 +4373,18 @@ module ts {
                                 }
                             }
                             break;
+                        case SyntaxKind.SourceFile:
+                        case SyntaxKind.ModuleDeclaration:
+                        case SyntaxKind.FunctionDeclaration:
+                        case SyntaxKind.Method:
+                        case SyntaxKind.GetAccessor:
+                        case SyntaxKind.SetAccessor:
+                        case SyntaxKind.Constructor:
+                            // Stop at the first containing function or module declaration
+                            break loop;
                     }
-                    // Only use narrowed type if construct contains no assignments to variable
-                    if (narrowedType !== type) {
+                    // Use narrowed type if it is a subtype and construct contains no assignments to variable
+                    if (narrowedType !== type && isTypeSubtypeOf(narrowedType, type)) {
                         if (isVariableAssignedWithin(symbol, node)) {
                             break;
                         }
@@ -4991,7 +5022,15 @@ module ts {
                 if (hasProperty(members, id)) {
                     var member = members[id];
                     if (member.flags & SymbolFlags.Property) {
-                        var type = checkExpression((<PropertyDeclaration>member.declarations[0]).initializer, contextualMapper);
+                        var memberDecl = <PropertyDeclaration>member.declarations[0];
+                        var type: Type;
+                        if (memberDecl.kind === SyntaxKind.PropertyAssignment) {
+                            type = checkExpression(memberDecl.initializer, contextualMapper);
+                        }
+                        else {
+                            Debug.assert(memberDecl.kind === SyntaxKind.ShorthandPropertyAssignment);
+                            type = checkExpression(memberDecl.name, contextualMapper);
+                        }
                         var prop = <TransientSymbol>createSymbol(SymbolFlags.Property | SymbolFlags.Transient | member.flags, member.name);
                         prop.declarations = member.declarations;
                         prop.parent = member.parent;
@@ -5394,7 +5433,7 @@ module ts {
             return typeArgumentsAreAssignable;
         }
 
-        function checkApplicableSignature(node: CallLikeExpression, args: Node[], signature: Signature, relation: Map<Ternary>, excludeArgument: boolean[], reportErrors: boolean) {
+        function checkApplicableSignature(node: CallLikeExpression, args: Node[], signature: Signature, relation: Map<boolean>, excludeArgument: boolean[], reportErrors: boolean) {
             for (var i = 0; i < args.length; i++) {
                 var arg = args[i];
                 var argType: Type;
@@ -5588,7 +5627,7 @@ module ts {
 
             return resolveErrorCall(node);
 
-            function chooseOverload(candidates: Signature[], relation: Map<Ternary>) {
+            function chooseOverload(candidates: Signature[], relation: Map<boolean>) {
                 for (var i = 0; i < candidates.length; i++) {
                     if (!hasCorrectArity(node, args, candidates[i])) {
                         continue;
@@ -5853,7 +5892,11 @@ module ts {
             }
             if (node.kind === SyntaxKind.NewExpression) {
                 var declaration = signature.declaration;
-                if (declaration && (declaration.kind !== SyntaxKind.Constructor && declaration.kind !== SyntaxKind.ConstructSignature)) {
+                if (declaration &&
+                    declaration.kind !== SyntaxKind.Constructor &&
+                    declaration.kind !== SyntaxKind.ConstructSignature &&
+                    declaration.kind !== SyntaxKind.ConstructorType) {
+
                     // When resolved signature is a call signature (and not a construct signature) the result type is any
                     if (compilerOptions.noImplicitAny) {
                         error(node, Diagnostics.new_expression_whose_target_lacks_a_construct_signature_implicitly_has_an_any_type);
@@ -6796,7 +6839,7 @@ module ts {
         function checkTypeLiteral(node: TypeLiteralNode) {
             forEach(node.members, checkSourceElement);
             if (fullTypeCheck) {
-                var type = getTypeFromTypeLiteralNode(node);
+                var type = getTypeFromTypeLiteralOrFunctionOrConstructorTypeNode(node);
                 checkIndexConstraints(type);
                 checkTypeForDuplicateIndexSignatures(node);
             }
@@ -8270,6 +8313,8 @@ module ts {
                     return checkParameter(<ParameterDeclaration>node);
                 case SyntaxKind.Property:
                     return checkPropertyDeclaration(<PropertyDeclaration>node);
+                case SyntaxKind.FunctionType:
+                case SyntaxKind.ConstructorType:
                 case SyntaxKind.CallSignature:
                 case SyntaxKind.ConstructSignature:
                 case SyntaxKind.IndexSignature:
@@ -8801,6 +8846,16 @@ module ts {
             return undefined;
         }
 
+        function getShorthandAssignmentValueSymbol(location: Node): Symbol {
+            // The function returns a value symbol of an identifier in the short-hand property assignment.
+            // This is necessary as an identifier in short-hand property assignment can contains two meaning:
+            // property name and property value.
+            if (location && location.kind === SyntaxKind.ShorthandPropertyAssignment) {
+                return resolveEntityName(location, (<ShortHandPropertyDeclaration>location).name, SymbolFlags.Value);
+            }
+            return undefined;
+        }
+
         function getTypeOfNode(node: Node): Type {
             if (isInsideWithStatementBody(node)) {
                 // We cannot answer semantic questions within a with block, do not proceed any further
@@ -8969,6 +9024,12 @@ module ts {
             return getDiagnostics().length > 0 || getGlobalDiagnostics().length > 0;
         }
 
+        function isEmitBlocked(sourceFile?: SourceFile): boolean {
+            return program.getDiagnostics(sourceFile).length !== 0 ||
+                hasEarlyErrors(sourceFile) ||
+                (compilerOptions.noEmitOnError && getDiagnostics(sourceFile).length !== 0);
+        }
+
         function hasEarlyErrors(sourceFile?: SourceFile): boolean {
             return forEach(getDiagnostics(sourceFile), d => d.isEarly);
         }
@@ -9042,7 +9103,9 @@ module ts {
         function writeTypeAtLocation(location: Node, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter) {
             // Get type of the symbol if this is the valid symbol otherwise get type at location
             var symbol = getSymbolOfNode(location);
-            var type = symbol && !(symbol.flags & SymbolFlags.TypeLiteral) ? getTypeOfSymbol(symbol) : getTypeFromTypeNode(location);
+            var type = symbol && !(symbol.flags & (SymbolFlags.TypeLiteral | SymbolFlags.CallSignature | SymbolFlags.ConstructSignature))
+                ? getTypeOfSymbol(symbol)
+                : getTypeFromTypeNode(location);
 
             getSymbolDisplayBuilder().buildTypeDisplay(type, writer, enclosingDeclaration, flags);
         }
@@ -9055,22 +9118,22 @@ module ts {
         function invokeEmitter(targetSourceFile?: SourceFile) {
             var resolver: EmitResolver = {
                 getProgram: () => program,
-                getLocalNameOfContainer: getLocalNameOfContainer,
-                getExpressionNamePrefix: getExpressionNamePrefix,
-                getExportAssignmentName: getExportAssignmentName,
-                isReferencedImportDeclaration: isReferencedImportDeclaration,
-                getNodeCheckFlags: getNodeCheckFlags,
-                getEnumMemberValue: getEnumMemberValue,
-                isTopLevelValueImportWithEntityName: isTopLevelValueImportWithEntityName,
-                hasSemanticErrors: hasSemanticErrors,
-                hasEarlyErrors: hasEarlyErrors,
-                isDeclarationVisible: isDeclarationVisible,
-                isImplementationOfOverload: isImplementationOfOverload,
-                writeTypeAtLocation: writeTypeAtLocation,
-                writeReturnTypeOfSignatureDeclaration: writeReturnTypeOfSignatureDeclaration,
-                isSymbolAccessible: isSymbolAccessible,
-                isImportDeclarationEntityNameReferenceDeclarationVisibile: isImportDeclarationEntityNameReferenceDeclarationVisibile,
-                getConstantValue: getConstantValue,
+                getLocalNameOfContainer,
+                getExpressionNamePrefix,
+                getExportAssignmentName,
+                isReferencedImportDeclaration,
+                getNodeCheckFlags,
+                getEnumMemberValue,
+                isTopLevelValueImportWithEntityName,
+                hasSemanticErrors,
+                isEmitBlocked,
+                isDeclarationVisible,
+                isImplementationOfOverload,
+                writeTypeAtLocation,
+                writeReturnTypeOfSignatureDeclaration,
+                isSymbolAccessible,
+                isImportDeclarationEntityNameReferenceDeclarationVisibile,
+                getConstantValue,
             };
             checkProgram();
             return emitFiles(resolver, targetSourceFile);
@@ -9102,7 +9165,12 @@ module ts {
             globalNumberType = getGlobalType("Number");
             globalBooleanType = getGlobalType("Boolean");
             globalRegExpType = getGlobalType("RegExp");
-            globalTemplateStringsArrayType = getGlobalType("TemplateStringsArray");
+
+            // If we're in ES6 mode, load the TemplateStringsArray.
+            // Otherwise, default to 'unknown' for the purposes of type checking in LS scenarios.
+            globalTemplateStringsArrayType = compilerOptions.target >= ScriptTarget.ES6
+                ? getGlobalType("TemplateStringsArray")
+                : unknownType;
         }
 
         initializeTypeChecker();
