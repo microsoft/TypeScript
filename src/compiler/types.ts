@@ -273,6 +273,7 @@ module ts {
         // Set if this node was parsed in strict mode.  Used for grammar error checks, as well as
         // checking if the node can be reused in incremental settings.
         ParsedInStrictMode  = 0x00002000, 
+        OctalLiteral        = 0x00004000,
 
         Modifier = Export | Ambient | Public | Private | Protected | Static,
         AccessibilityModifier = Public | Private | Protected,
@@ -330,6 +331,9 @@ module ts {
     export interface TypeParameterDeclaration extends Declaration {
         name: Identifier;
         constraint?: TypeNode;
+
+        // For error recovery purposes.
+        expression?: Expression;
     }
 
     export interface SignatureDeclaration extends Declaration, ParsedSignature { }
@@ -720,7 +724,7 @@ module ts {
 
     export interface EmitResult {
         emitResultStatus: EmitReturnStatus;
-        errors: Diagnostic[];
+        diagnostics: Diagnostic[];
         sourceMaps: SourceMapData[];  // Array of sourceMapData if compiler emitted sourcemaps
     }
 
@@ -733,7 +737,7 @@ module ts {
         getSymbolCount(): number;
         getTypeCount(): number;
         checkProgram(): void;
-        emitFiles(targetSourceFile?: SourceFile): EmitResult;
+        invokeEmitter(targetSourceFile?: SourceFile): EmitResult;
         getParentOfSymbol(symbol: Symbol): Symbol;
         getNarrowedTypeOfSymbol(symbol: Symbol, node: Node): Type;
         getDeclaredTypeOfSymbol(symbol: Symbol): Type;

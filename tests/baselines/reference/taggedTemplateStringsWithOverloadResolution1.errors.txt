@@ -1,9 +1,9 @@
-tests/cases/conformance/es6/templates/taggedTemplateStringsWithOverloadResolution1.ts(16,9): error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
-tests/cases/conformance/es6/templates/taggedTemplateStringsWithOverloadResolution1.ts(17,9): error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
-tests/cases/conformance/es6/templates/taggedTemplateStringsWithOverloadResolution1.ts(18,9): error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
-tests/cases/conformance/es6/templates/taggedTemplateStringsWithOverloadResolution1.ts(19,9): error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
-tests/cases/conformance/es6/templates/taggedTemplateStringsWithOverloadResolution1.ts(20,9): error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
-tests/cases/conformance/es6/templates/taggedTemplateStringsWithOverloadResolution1.ts(21,9): error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
+tests/cases/conformance/es6/templates/taggedTemplateStringsWithOverloadResolution1.ts(16,13): error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
+tests/cases/conformance/es6/templates/taggedTemplateStringsWithOverloadResolution1.ts(17,13): error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
+tests/cases/conformance/es6/templates/taggedTemplateStringsWithOverloadResolution1.ts(18,13): error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
+tests/cases/conformance/es6/templates/taggedTemplateStringsWithOverloadResolution1.ts(19,13): error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
+tests/cases/conformance/es6/templates/taggedTemplateStringsWithOverloadResolution1.ts(20,13): error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
+tests/cases/conformance/es6/templates/taggedTemplateStringsWithOverloadResolution1.ts(21,13): error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
 tests/cases/conformance/es6/templates/taggedTemplateStringsWithOverloadResolution1.ts(12,20): error TS2345: Argument of type 'boolean' is not assignable to parameter of type 'string'.
 tests/cases/conformance/es6/templates/taggedTemplateStringsWithOverloadResolution1.ts(14,9): error TS2346: Supplied parameters do not match any signature of call target.
 tests/cases/conformance/es6/templates/taggedTemplateStringsWithOverloadResolution1.ts(19,20): error TS2345: Argument of type 'boolean' is not assignable to parameter of type 'string'.
@@ -31,24 +31,24 @@ tests/cases/conformance/es6/templates/taggedTemplateStringsWithOverloadResolutio
 !!! error TS2346: Supplied parameters do not match any signature of call target.
     
     var u = foo ``;              // number
-            ~~~~~~
+                ~~
 !!! error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
     var v = foo `${1}`;          // string
-            ~~~~~~~~~~
+                ~~~
 !!! error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
     var w = foo `${1}${2}`;      // boolean
-            ~~~~~~~~~~~~~~
+                ~~~
 !!! error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
     var x = foo `${1}${true}`;   // boolean (with error)
-            ~~~~~~~~~~~~~~~~~
+                ~~~
 !!! error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
                        ~~~~
 !!! error TS2345: Argument of type 'boolean' is not assignable to parameter of type 'string'.
     var y = foo `${1}${"2"}`;    // {}
-            ~~~~~~~~~~~~~~~~
+                ~~~
 !!! error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
     var z = foo `${1}${2}${3}`;  // any (with error)
-            ~~~~~~~~~~~~~~~~~~
+                ~~~
 !!! error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
             ~~~~~~~~~~~~~~~~~~
 !!! error TS2346: Supplied parameters do not match any signature of call target.

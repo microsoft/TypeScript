@@ -222,7 +222,8 @@ module ts.formatting {
             if (node.parent) {
                 switch (node.parent.kind) {
                     case SyntaxKind.TypeReference:
-                        if ((<TypeReferenceNode>node.parent).typeArguments) {
+                        if ((<TypeReferenceNode>node.parent).typeArguments &&
+                            rangeContainsStartEnd((<TypeReferenceNode>node.parent).typeArguments, node.getStart(sourceFile), node.getEnd())) {
                             return (<TypeReferenceNode>node.parent).typeArguments;
                         }
                         break;
@@ -236,21 +237,28 @@ module ts.formatting {
                     case SyntaxKind.Method:
                     case SyntaxKind.CallSignature:
                     case SyntaxKind.ConstructSignature:
-                        if ((<SignatureDeclaration>node.parent).typeParameters && node.end < (<SignatureDeclaration>node.parent).typeParameters.end) {
+                        var start = node.getStart(sourceFile);
+                        if ((<SignatureDeclaration>node.parent).typeParameters &&
+                            rangeContainsStartEnd((<SignatureDeclaration>node.parent).typeParameters, start, node.getEnd())) {
                             return (<SignatureDeclaration>node.parent).typeParameters;
                         }
-
-                        return (<SignatureDeclaration>node.parent).parameters;
+                        if (rangeContainsStartEnd((<SignatureDeclaration>node.parent).parameters, start, node.getEnd())) {
+                            return (<SignatureDeclaration>node.parent).parameters;
+                        }
+                        break;
                     case SyntaxKind.NewExpression:
                     case SyntaxKind.CallExpression:
-                        if ((<CallExpression>node.parent).typeArguments && node.end < (<CallExpression>node.parent).typeArguments.end) {
+                        var start = node.getStart(sourceFile);
+                        if ((<CallExpression>node.parent).typeArguments &&
+                            rangeContainsStartEnd((<CallExpression>node.parent).typeArguments, start, node.getEnd())) {
                             return (<CallExpression>node.parent).typeArguments;
                         }
-
-                        return (<CallExpression>node.parent).arguments;
+                        if (rangeContainsStartEnd((<CallExpression>node.parent).arguments, start, node.getEnd())) {
+                            return (<CallExpression>node.parent).arguments;
+                        }
+                        break;
                 }
             }
-
             return undefined;
         }
 

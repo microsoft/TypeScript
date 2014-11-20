@@ -4,7 +4,7 @@ test1.ts(2,2): error TS1147: Import declarations in an internal module cannot re
 ==== test1.ts (1 errors) ====
     export module myModule {
      import foo = require("test2");
-     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     ~~~~~~
 !!! error TS1147: Import declarations in an internal module cannot reference an external module.
      //console.log(foo.$);
     }

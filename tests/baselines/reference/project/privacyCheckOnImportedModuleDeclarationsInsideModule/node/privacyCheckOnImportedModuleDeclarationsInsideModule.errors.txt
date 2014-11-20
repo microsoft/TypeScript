@@ -4,7 +4,7 @@ testGlo.ts(2,5): error TS1147: Import declarations in an internal module cannot 
 ==== testGlo.ts (1 errors) ====
     module m2 {
         export import mExported = require("mExported");
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        ~~~~~~
 !!! error TS1147: Import declarations in an internal module cannot reference an external module.
         export var c1 = new mExported.me.class1;
         export function f1() {

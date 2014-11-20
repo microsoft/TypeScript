@@ -104,9 +104,9 @@ module ts {
                 }
             });
             return {
-                firstAccessor: firstAccessor,
-                getAccessor: getAccessor,
-                setAccessor: setAccessor
+                firstAccessor,
+                getAccessor,
+                setAccessor
             };
         }
 
@@ -2790,7 +2790,7 @@ module ts {
                         Diagnostics.Exported_type_alias_0_has_or_is_using_name_1_from_private_module_2 :
                         Diagnostics.Exported_type_alias_0_has_or_is_using_private_name_1;
                     return {
-                        diagnosticMessage: diagnosticMessage,
+                        diagnosticMessage,
                         errorNode: node,
                         typeName: node.name
                     };
@@ -2887,7 +2887,7 @@ module ts {
                         }
 
                         return {
-                            diagnosticMessage: diagnosticMessage,
+                            diagnosticMessage,
                             errorNode: node,
                             typeName: node.name
                         };
@@ -2952,7 +2952,7 @@ module ts {
                         }
 
                         return {
-                            diagnosticMessage: diagnosticMessage,
+                            diagnosticMessage,
                             errorNode: node,
                             typeName: (<Declaration>node.parent).name
                         };
@@ -3134,7 +3134,7 @@ module ts {
                             Diagnostics.Parameter_0_of_public_property_setter_from_exported_class_has_or_is_using_private_name_1;
                         }
                         return {
-                            diagnosticMessage: diagnosticMessage,
+                            diagnosticMessage,
                             errorNode: <Node>node.parameters[0],
                             // TODO(jfreeman): Investigate why we are passing node.name instead of node.parameters[0].name
                             typeName: node.name
@@ -3156,7 +3156,7 @@ module ts {
                             Diagnostics.Return_type_of_public_property_getter_from_exported_class_has_or_is_using_private_name_0;
                         }
                         return {
-                            diagnosticMessage: diagnosticMessage,
+                            diagnosticMessage,
                             errorNode: <Node>node.name,
                             typeName: undefined
                         };
@@ -3286,7 +3286,7 @@ module ts {
                     }
 
                     return {
-                        diagnosticMessage: diagnosticMessage,
+                        diagnosticMessage,
                         errorNode: <Node>node.name || node,
                     };
                 }
@@ -3371,7 +3371,7 @@ module ts {
                     }
 
                     return {
-                        diagnosticMessage: diagnosticMessage,
+                        diagnosticMessage,
                         errorNode: node,
                         typeName: node.name
                     };
@@ -3556,22 +3556,22 @@ module ts {
         var hasEmitterError = forEach(diagnostics, diagnostic => diagnostic.category === DiagnosticCategory.Error);
 
         // Check and update returnCode for syntactic and semantic
-        var returnCode: EmitReturnStatus;
+        var emitResultStatus: EmitReturnStatus;
         if (isEmitBlocked) {
-            returnCode = EmitReturnStatus.AllOutputGenerationSkipped;
+            emitResultStatus = EmitReturnStatus.AllOutputGenerationSkipped;
         } else if (hasEmitterError) {
-            returnCode = EmitReturnStatus.EmitErrorsEncountered;
+            emitResultStatus = EmitReturnStatus.EmitErrorsEncountered;
         } else if (hasSemanticErrors && compilerOptions.declaration) {
-            returnCode = EmitReturnStatus.DeclarationGenerationSkipped;
+            emitResultStatus = EmitReturnStatus.DeclarationGenerationSkipped;
         } else if (hasSemanticErrors && !compilerOptions.declaration) {
-            returnCode = EmitReturnStatus.JSGeneratedWithSemanticErrors;
+            emitResultStatus = EmitReturnStatus.JSGeneratedWithSemanticErrors;
         } else {
-            returnCode = EmitReturnStatus.Succeeded;
+            emitResultStatus = EmitReturnStatus.Succeeded;
         }
 
         return {
-            emitResultStatus: returnCode,
-            errors: diagnostics,
+            emitResultStatus,
+            diagnostics,
             sourceMaps: sourceMapDataList
         };
     }

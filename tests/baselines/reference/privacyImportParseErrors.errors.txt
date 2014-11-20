@@ -102,7 +102,7 @@ tests/cases/compiler/privacyImportParseErrors.ts(336,12): error TS2435: Ambient 
         var m1_im2_private_v4_private = m1_im2_private.f1();
     
         import m1_im3_private = require("m1_M3_public");
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        ~~~~~~
 !!! error TS1147: Import declarations in an internal module cannot reference an external module.
                                         ~~~~~~~~~~~~~~
 !!! error TS2307: Cannot find external module 'm1_M3_public'.
@@ -196,7 +196,7 @@ tests/cases/compiler/privacyImportParseErrors.ts(336,12): error TS2435: Ambient 
         var m1_im2_private_v4_private = m1_im2_private.f1();
     
         import m1_im3_private = require("m2_M3_public");
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        ~~~~~~
 !!! error TS1147: Import declarations in an internal module cannot reference an external module.
                                         ~~~~~~~~~~~~~~
 !!! error TS2307: Cannot find external module 'm2_M3_public'.
@@ -356,7 +356,7 @@ tests/cases/compiler/privacyImportParseErrors.ts(336,12): error TS2435: Ambient 
     
             module m5 {
                 import m5_errorImport = require("glo_M2_public");
-                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                ~~~~~~
 !!! error TS1147: Import declarations in an internal module cannot reference an external module.
                 import m5_nonerrorImport = glo_M1_public;
             }
@@ -395,7 +395,7 @@ tests/cases/compiler/privacyImportParseErrors.ts(336,12): error TS2435: Ambient 
     
             module m5 {
                 import m5_errorImport = require("glo_M4_private");
-                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                ~~~~~~
 !!! error TS1147: Import declarations in an internal module cannot reference an external module.
                 import m5_nonerrorImport = glo_M3_private;
             }
@@ -455,7 +455,7 @@ tests/cases/compiler/privacyImportParseErrors.ts(336,12): error TS2435: Ambient 
         module m4 {
             var a = 10;
             import m2 = require("use_glo_M1_public");
-            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            ~~~~~~
 !!! error TS1147: Import declarations in an internal module cannot reference an external module.
         }
     
@@ -466,7 +466,7 @@ tests/cases/compiler/privacyImportParseErrors.ts(336,12): error TS2435: Ambient 
         module m4 {
             var a = 10;
             import m2 = require("use_glo_M1_public");
-            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            ~~~~~~
 !!! error TS1147: Import declarations in an internal module cannot reference an external module.
         }
     

@@ -1,12 +1,12 @@
-tests/cases/conformance/es6/templates/taggedTemplateStringsWithIncompatibleTypedTags.ts(12,1): error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
-tests/cases/conformance/es6/templates/taggedTemplateStringsWithIncompatibleTypedTags.ts(14,1): error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
-tests/cases/conformance/es6/templates/taggedTemplateStringsWithIncompatibleTypedTags.ts(16,1): error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
-tests/cases/conformance/es6/templates/taggedTemplateStringsWithIncompatibleTypedTags.ts(18,1): error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
-tests/cases/conformance/es6/templates/taggedTemplateStringsWithIncompatibleTypedTags.ts(20,1): error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
-tests/cases/conformance/es6/templates/taggedTemplateStringsWithIncompatibleTypedTags.ts(22,1): error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
-tests/cases/conformance/es6/templates/taggedTemplateStringsWithIncompatibleTypedTags.ts(24,1): error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
-tests/cases/conformance/es6/templates/taggedTemplateStringsWithIncompatibleTypedTags.ts(26,1): error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
-tests/cases/conformance/es6/templates/taggedTemplateStringsWithIncompatibleTypedTags.ts(28,1): error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
+tests/cases/conformance/es6/templates/taggedTemplateStringsWithIncompatibleTypedTags.ts(12,3): error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
+tests/cases/conformance/es6/templates/taggedTemplateStringsWithIncompatibleTypedTags.ts(14,3): error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
+tests/cases/conformance/es6/templates/taggedTemplateStringsWithIncompatibleTypedTags.ts(16,3): error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
+tests/cases/conformance/es6/templates/taggedTemplateStringsWithIncompatibleTypedTags.ts(18,3): error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
+tests/cases/conformance/es6/templates/taggedTemplateStringsWithIncompatibleTypedTags.ts(20,3): error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
+tests/cases/conformance/es6/templates/taggedTemplateStringsWithIncompatibleTypedTags.ts(22,3): error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
+tests/cases/conformance/es6/templates/taggedTemplateStringsWithIncompatibleTypedTags.ts(24,3): error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
+tests/cases/conformance/es6/templates/taggedTemplateStringsWithIncompatibleTypedTags.ts(26,3): error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
+tests/cases/conformance/es6/templates/taggedTemplateStringsWithIncompatibleTypedTags.ts(28,3): error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
 tests/cases/conformance/es6/templates/taggedTemplateStringsWithIncompatibleTypedTags.ts(14,9): error TS2345: Argument of type 'number' is not assignable to parameter of type 'boolean'.
 tests/cases/conformance/es6/templates/taggedTemplateStringsWithIncompatibleTypedTags.ts(18,9): error TS2345: Argument of type 'number' is not assignable to parameter of type 'boolean'.
 tests/cases/conformance/es6/templates/taggedTemplateStringsWithIncompatibleTypedTags.ts(22,9): error TS2345: Argument of type 'number' is not assignable to parameter of type 'boolean'.
@@ -28,49 +28,49 @@ tests/cases/conformance/es6/templates/taggedTemplateStringsWithIncompatibleTyped
     var f: I;
     
     f `abc`
-    ~~~~~~~
+      ~~~~~
 !!! error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
     
     f `abc${1}def${2}ghi`;
-    ~~~~~~~~~~~~~~~~~~~~~
+      ~~~~~~
 !!! error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
             ~
 !!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'boolean'.
     
     f `abc`.member
-    ~~~~~~~
+      ~~~~~
 !!! error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
     
     f `abc${1}def${2}ghi`.member;
-    ~~~~~~~~~~~~~~~~~~~~~
+      ~~~~~~
 !!! error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
             ~
 !!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'boolean'.
     
     f `abc`["member"];
-    ~~~~~~~
+      ~~~~~
 !!! error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
     
     f `abc${1}def${2}ghi`["member"];
-    ~~~~~~~~~~~~~~~~~~~~~
+      ~~~~~~
 !!! error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
             ~
 !!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'boolean'.
     
     f `abc`[0].member `abc${1}def${2}ghi`;
-    ~~~~~~~
+      ~~~~~
 !!! error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
                             ~
 !!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'boolean'.
     
     f `abc${1}def${2}ghi`["member"].member `abc${1}def${2}ghi`;
-    ~~~~~~~~~~~~~~~~~~~~~
+      ~~~~~~
 !!! error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
             ~
 !!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'boolean'.
     
     f `abc${ true }def${ true }ghi`["member"].member `abc${ 1 }def${ 2 }ghi`;
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      ~~~~~~
 !!! error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
                                                             ~
 !!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'boolean'.

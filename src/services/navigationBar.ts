@@ -262,12 +262,12 @@ module ts.NavigationBar {
             }
 
             return {
-                text: text,
-                kind: kind,
-                kindModifiers: kindModifiers,
-                spans: spans,
-                childItems: childItems,
-                indent: indent,
+                text,
+                kind,
+                kindModifiers,
+                spans,
+                childItems,
+                indent,
                 bolded: false,
                 grayed: false
             };
