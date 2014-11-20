@@ -3555,7 +3555,7 @@ module ts {
                     inAmbientContext = true;
                 }
 
-                checkNode(node);
+                checkNodeAndChildren(node);
 
                 inAmbientContext = savedInAmbientContext;
                 inFunctionBlock = savedInFunctionBlock;
@@ -3564,7 +3564,7 @@ module ts {
             parent = savedParent;
         }
 
-        function checkNode(node: Node) {
+        function checkNodeAndChildren(node: Node) {
             var nodeKind = node.kind;
             // First, check if you have a statement in a place where it is not allowed.  We want 
             // to do this before recursing, because we'd prefer to report these errors at the top
@@ -3573,41 +3573,38 @@ module ts {
                 return;
             }
 
-            // Now recurse and perform all grammar checks on the children of this node. 
             var diagnosticCount = grammarDiagnostics.length;
-            forEachChild(node, visitNode);
+            checkNode(node, nodeKind);
 
             // if we got any errors, just stop performing any more checks on this node or higher.
             if (diagnosticCount !== grammarDiagnostics.length) {
                 return;
             }
 
+            // Otherwise, recurse and see if we have any errors below us.
+            forEachChild(node, visitNode);
+        }
+
+        function checkNode(node: Node, nodeKind: SyntaxKind): any {
             // Now do node specific checks.
             switch (nodeKind) {
-                case SyntaxKind.ArrowFunction: 
+                case SyntaxKind.ArrowFunction:
                 case SyntaxKind.CallSignature:
                 case SyntaxKind.ConstructorType:
                 case SyntaxKind.ConstructSignature:
                 case SyntaxKind.FunctionType:
-                    checkParsedSignature(<FunctionLikeDeclaration>node);
-                    break;
-                case SyntaxKind.BreakStatement: 
-                case SyntaxKind.ContinueStatement: 
-                    checkBreakOrContinueStatement(<BreakOrContinueStatement>node);
-                    break;
+                    return checkParsedSignature(<FunctionLikeDeclaration>node);
+                case SyntaxKind.BreakStatement:
+                case SyntaxKind.ContinueStatement:
+                    return checkBreakOrContinueStatement(<BreakOrContinueStatement>node);
                 case SyntaxKind.LabeledStatement:
-                    checkLabeledStatement(<LabeledStatement>node);
-                    break;
-                case SyntaxKind.CallExpression: 
+                    return checkLabeledStatement(<LabeledStatement>node);
+                case SyntaxKind.CallExpression:
                 case SyntaxKind.NewExpression:
-                    checkCallOrNewExpression(<NewExpression>node);
-                    break;
-                case SyntaxKind.EnumDeclaration:
-                    checkEnumInitializer(<EnumDeclaration>node);
-                    break;
-                case SyntaxKind.Parameter:
-                    checkParameter(<ParameterDeclaration>node);
-                    break;
+                    return checkCallOrNewExpression(<NewExpression>node);
+
+                case SyntaxKind.EnumDeclaration:                return checkEnumInitializer(<EnumDeclaration>node);
+                case SyntaxKind.Parameter:                      return checkParameter(<ParameterDeclaration>node);
                 case SyntaxKind.BinaryExpression:               return visitBinaryExpression(<BinaryExpression>node);
                 case SyntaxKind.CatchBlock:                     return visitCatchBlock(<CatchBlock>node);
                 case SyntaxKind.ClassDeclaration:               return visitClassDeclaration(<ClassDeclaration>node);

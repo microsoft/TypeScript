@@ -4,8 +4,8 @@ tests/cases/conformance/es6/templates/taggedTemplateStringsWithTypedTags.ts(16,3
 tests/cases/conformance/es6/templates/taggedTemplateStringsWithTypedTags.ts(18,3): error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
 tests/cases/conformance/es6/templates/taggedTemplateStringsWithTypedTags.ts(20,3): error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
 tests/cases/conformance/es6/templates/taggedTemplateStringsWithTypedTags.ts(22,3): error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
-tests/cases/conformance/es6/templates/taggedTemplateStringsWithTypedTags.ts(24,3): error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
-tests/cases/conformance/es6/templates/taggedTemplateStringsWithTypedTags.ts(26,3): error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
+tests/cases/conformance/es6/templates/taggedTemplateStringsWithTypedTags.ts(24,19): error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
+tests/cases/conformance/es6/templates/taggedTemplateStringsWithTypedTags.ts(26,40): error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
 
 
 ==== tests/cases/conformance/es6/templates/taggedTemplateStringsWithTypedTags.ts (8 errors) ====
@@ -45,11 +45,11 @@ tests/cases/conformance/es6/templates/taggedTemplateStringsWithTypedTags.ts(26,3
 !!! error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
     
     f `abc`[0].member `abc${1}def${2}ghi`;
-      ~~~~~
+                      ~~~~~~
 !!! error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
     
     f `abc${1}def${2}ghi`["member"].member `abc${1}def${2}ghi`;
-      ~~~~~~
+                                           ~~~~~~
 !!! error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
     
     f.thisIsNotATag(`abc`);

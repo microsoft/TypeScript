@@ -1,9 +1,14 @@
 tests/cases/compiler/switchStatementsWithMultipleDefaults.ts(9,5): error TS1113: A 'default' clause cannot appear more than once in a 'switch' statement.
 tests/cases/compiler/switchStatementsWithMultipleDefaults.ts(10,5): error TS1113: A 'default' clause cannot appear more than once in a 'switch' statement.
-tests/cases/compiler/switchStatementsWithMultipleDefaults.ts(28,22): error TS1108: A 'return' statement can only be used within a function body.
+tests/cases/compiler/switchStatementsWithMultipleDefaults.ts(21,13): error TS1113: A 'default' clause cannot appear more than once in a 'switch' statement.
+tests/cases/compiler/switchStatementsWithMultipleDefaults.ts(25,13): error TS1113: A 'default' clause cannot appear more than once in a 'switch' statement.
+tests/cases/compiler/switchStatementsWithMultipleDefaults.ts(26,13): error TS1113: A 'default' clause cannot appear more than once in a 'switch' statement.
+tests/cases/compiler/switchStatementsWithMultipleDefaults.ts(28,13): error TS1113: A 'default' clause cannot appear more than once in a 'switch' statement.
+tests/cases/compiler/switchStatementsWithMultipleDefaults.ts(29,13): error TS1113: A 'default' clause cannot appear more than once in a 'switch' statement.
+tests/cases/compiler/switchStatementsWithMultipleDefaults.ts(29,22): error TS1113: A 'default' clause cannot appear more than once in a 'switch' statement.
 
 
-==== tests/cases/compiler/switchStatementsWithMultipleDefaults.ts (3 errors) ====
+==== tests/cases/compiler/switchStatementsWithMultipleDefaults.ts (8 errors) ====
     
     var x = 10;
     
@@ -29,15 +34,25 @@ tests/cases/compiler/switchStatementsWithMultipleDefaults.ts(28,22): error TS110
             switch (x * x) {
                 default:    // No issues.
                 default:    // Error; second 'default' clause.
+                ~~~~~~~~
+!!! error TS1113: A 'default' clause cannot appear more than once in a 'switch' statement.
                     break;
                 case 10000:
                     x /= x;
                 default:    // Error, third 'default' clause
+                ~~~~~~~~
+!!! error TS1113: A 'default' clause cannot appear more than once in a 'switch' statement.
                 def\u0061ult: // Error, fourth 'default' clause.
+                ~~~~~~~~~~~~~
+!!! error TS1113: A 'default' clause cannot appear more than once in a 'switch' statement.
                 // Errors on fifth-seventh
                 default: return;
-                         ~~~~~~
-!!! error TS1108: A 'return' statement can only be used within a function body.
+                ~~~~~~~~
+!!! error TS1113: A 'default' clause cannot appear more than once in a 'switch' statement.
                 default: default:
+                ~~~~~~~~
+!!! error TS1113: A 'default' clause cannot appear more than once in a 'switch' statement.
+                         ~~~~~~~~
+!!! error TS1113: A 'default' clause cannot appear more than once in a 'switch' statement.
             }
     }
