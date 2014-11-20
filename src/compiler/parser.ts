@@ -3421,8 +3421,11 @@ module ts {
             return finishNode(node);
         }
 
-        function parseExportAssignmentTail(pos: number): ExportAssignment {
+        function parseExportAssignmentTail(pos: number, flags: NodeFlags): ExportAssignment {
             var node = <ExportAssignment>createNode(SyntaxKind.ExportAssignment, pos);
+            if (flags) {
+                node.flags = flags;
+            }
             node.exportName = parseIdentifier();
             parseSemicolon();
             return finishNode(node);
@@ -3460,19 +3463,13 @@ module ts {
 
         function parseDeclaration(modifierContext: ModifierContext): Statement {
             var pos = getNodePos();
-            var errorCountBeforeModifiers = file.parseDiagnostics.length;
             var flags = parseAndCheckModifiers(modifierContext);
 
             if (token === SyntaxKind.ExportKeyword) {
                 var modifiersEnd = scanner.getStartPos();
                 nextToken();
                 if (parseOptional(SyntaxKind.EqualsToken)) {
-                    var exportAssignmentTail = parseExportAssignmentTail(pos);
-                    if (flags !== 0 && errorCountBeforeModifiers === file.parseDiagnostics.length) {
-                        var modifiersStart = skipTrivia(sourceText, pos);
-                        grammarErrorAtPos(modifiersStart, modifiersEnd - modifiersStart, Diagnostics.An_export_assignment_cannot_have_modifiers);
-                    }
-                    return exportAssignmentTail;
+                    return parseExportAssignmentTail(pos, flags);
                 }
             }
 
@@ -3753,6 +3750,7 @@ module ts {
                 case SyntaxKind.ConstructSignature:             return visitConstructSignature(<SignatureDeclaration>node);
                 case SyntaxKind.ContinueStatement:              return visitBreakOrContinueStatement(<BreakOrContinueStatement>node);
                 case SyntaxKind.EnumDeclaration:                return visitEnumDeclaration(<EnumDeclaration>node);
+                case SyntaxKind.ExportAssignment:               return visitExportAssignment(<ExportAssignment>node);
                 case SyntaxKind.ForInStatement:                 return visitForInStatement(<ForInStatement>node);
                 case SyntaxKind.ForStatement:                   return visitForStatement(<ForStatement>node);
                 case SyntaxKind.FunctionDeclaration:            return visitFunctionDeclaration(<FunctionLikeDeclaration>node);
@@ -4067,6 +4065,12 @@ module ts {
             }
 
             return false;
+        }
+
+        function visitExportAssignment(node: ExportAssignment) {
+            if (node.flags & NodeFlags.Modifier) {
+                grammarErrorOnFirstToken(node, Diagnostics.An_export_assignment_cannot_have_modifiers);
+            }
         }
 
         function visitForInStatement(node: ForInStatement) {
