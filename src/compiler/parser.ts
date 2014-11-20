@@ -4240,12 +4240,15 @@ module ts {
             var SetAccesor = 4;
             var GetOrSetAccessor = GetAccessor | SetAccesor;
             var inStrictMode = (node.flags & NodeFlags.ParsedInStrictMode) !== 0;
-            forEach(node.properties, (p: Declaration) => {
+
+            for (var i = 0, n = node.properties.length; i < n; i++) {
+                var prop = node.properties[i];
                 // TODO(jfreeman): continue if we have a computed property
-                if (p.kind === SyntaxKind.OmittedExpression) {
-                    return;
+                if (prop.kind === SyntaxKind.OmittedExpression) {
+                    continue;
                 }
 
+                var p = <Declaration>prop;
                 var name = <Identifier>p.name;
 
                 // ECMA-262 11.1.5 Object Initialiser 
@@ -4295,7 +4298,7 @@ module ts {
                         grammarErrorOnNode(name, Diagnostics.An_object_literal_cannot_have_property_and_accessor_with_the_same_name);
                     }
                 }
-            });
+            }
         }
 
         function visitNumericLiteral(node: LiteralExpression): void {
