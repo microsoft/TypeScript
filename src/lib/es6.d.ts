@@ -11,6 +11,11 @@ interface Symbol {
 }
 
 interface SymbolConstructor {
+    /** 
+      * A reference to the prototype. 
+      */
+    prototype: Symbol;
+
     /**
       * Returns a new unique Symbol value.
       * @param  description Description of the new Symbol object.
@@ -35,12 +40,12 @@ interface SymbolConstructor {
 
     /** 
       * A method that determines if a constructor object recognizes an object as one of the 
-      * constructor’s instances.Called by the semantics of the instanceof operator. 
+      * constructor’s instances. Called by the semantics of the instanceof operator. 
       */
     hasInstance: Symbol;
 
     /** 
-      * A Boolean value that if true indicates that an object should be flatten to its array elements
+      * A Boolean value that if true indicates that an object should flatten to its array elements
       * by Array.prototype.concat.
       */
     isConcatSpreadable: Symbol;
@@ -235,12 +240,12 @@ interface Array<T> {
     /** 
       * Returns an list of keys in the array
       */
-    keys(): number[];
+    keys(): Iterator<number>;
 
     /** 
       * Returns an list of values in the array
       */
-    values(): T[];
+    values(): Iterator<T>;
 
     /** 
       * Returns the value of the first element in the array where predicate is true, and undefined 
@@ -438,10 +443,11 @@ interface StringConstructor {
 
 interface IteratorResult<T> {
     done: boolean;
-    value: T;
+    value?: T;
 }
 
 interface Iterator<T> {
+    //[Symbol.iterator](): Iterator<T>;
     next(): IteratorResult<T>;
 }
 
@@ -449,10 +455,25 @@ interface Iterable<T> {
   //[Symbol.iterator](): Iterator<T>;
 }
 
-// Generators
+interface GeneratorFunction extends Function {
+
+}
+
+interface GeneratorFunctionConstructor {
+    /**
+      * Creates a new Generator function.
+      * @param args A list of arguments the function accepts.
+      */
+    new (...args: string[]): GeneratorFunction;
+    (...args: string[]): GeneratorFunction;
+    prototype: GeneratorFunction;
+}
+declare var GeneratorFunction: GeneratorFunctionConstructor;
+
 interface Generator<T> extends Iterator<T> {
     next(value?: any): IteratorResult<T>;
-    throw(exception: any);
+    throw (exception: any);
+    return (value: T);
     // [Symbol.toStringTag]: string;
 }
 
@@ -624,10 +645,10 @@ interface Map<K, V> {
     forEach(callbackfn: (value: V, index: K, map: Map<K, V>) => void, thisArg?: any): void;
     get(key: K): V;
     has(key: K): boolean;
-    keys(): K[];
+    keys(): Iterator<K>;
     set(key: K, value?: V): Map<K, V>;
     size: number;
-    values(): V[];
+    values(): Iterator<V>;
     // [Symbol.iterator]():Iterator<[K,V]>;
     // [Symbol.toStringTag]: string;
 }
@@ -660,9 +681,9 @@ interface Set<T> {
     entries(): Iterator<[T, T]>;
     forEach(callbackfn: (value: T, index: T, set: Set<T>) => void, thisArg?: any): void;
     has(value: T): boolean;
-    keys(): T[];
+    keys(): Iterator<T>;
     size: number;
-    values(): T[];
+    values(): Iterator<T>;
     // [Symbol.iterator]():Iterator<T>;
     // [Symbol.toStringTag]: string;
 }
@@ -972,7 +993,7 @@ interface Int8Array {
     /** 
       * Returns an list of keys in the array
       */
-    keys(): number[];
+    keys(): Iterator<number>;
 
     /**
       * Returns the index of the last occurrence of a value in an array.
@@ -1109,7 +1130,7 @@ interface Int8Array {
     /** 
       * Returns an list of values in the array
       */
-    values(): Int8Array;
+    values(): Iterator<number>;
 
     [index: number]: number;
     // [Symbol.iterator] (): Iterator<number>;
@@ -1262,7 +1283,7 @@ interface Uint8Array {
     /** 
       * Returns an list of keys in the array
       */
-    keys(): number[];
+    keys(): Iterator<number>;
 
     /**
       * Returns the index of the last occurrence of a value in an array.
@@ -1399,7 +1420,7 @@ interface Uint8Array {
     /** 
       * Returns an list of values in the array
       */
-    values(): Uint8Array;
+    values(): Iterator<number>;
 
     [index: number]: number;
     // [Symbol.iterator] (): Iterator<number>;
@@ -1552,7 +1573,7 @@ interface Uint8ClampedArray {
     /** 
       * Returns an list of keys in the array
       */
-    keys(): number[];
+    keys(): Iterator<number>;
 
     /**
       * Returns the index of the last occurrence of a value in an array.
@@ -1689,7 +1710,7 @@ interface Uint8ClampedArray {
     /** 
       * Returns an list of values in the array
       */
-    values(): Uint8ClampedArray;
+    values(): Iterator<number>;
 
     [index: number]: number;
     // [Symbol.iterator] (): Iterator<number>;
@@ -1842,7 +1863,7 @@ interface Int16Array {
     /** 
       * Returns an list of keys in the array
       */
-    keys(): number[];
+    keys(): Iterator<number>;
 
     /**
       * Returns the index of the last occurrence of a value in an array.
@@ -1979,7 +2000,7 @@ interface Int16Array {
     /** 
       * Returns an list of values in the array
       */
-    values(): Int16Array;
+    values(): Iterator<number>;
 
     [index: number]: number;
     // [Symbol.iterator] (): Iterator<number>;
@@ -2132,7 +2153,7 @@ interface Uint16Array {
     /** 
       * Returns an list of keys in the array
       */
-    keys(): number[];
+    keys(): Iterator<number>;
 
     /**
       * Returns the index of the last occurrence of a value in an array.
@@ -2269,7 +2290,7 @@ interface Uint16Array {
     /** 
       * Returns an list of values in the array
       */
-    values(): Uint16Array;
+    values(): Iterator<number>;
 
     [index: number]: number;
     // [Symbol.iterator] (): Iterator<number>;
@@ -2422,7 +2443,7 @@ interface Int32Array {
     /** 
       * Returns an list of keys in the array
       */
-    keys(): number[];
+    keys(): Iterator<number>;
 
     /**
       * Returns the index of the last occurrence of a value in an array.
@@ -2559,7 +2580,7 @@ interface Int32Array {
     /** 
       * Returns an list of values in the array
       */
-    values(): Int32Array;
+    values(): Iterator<number>;
 
     [index: number]: number;
     // [Symbol.iterator] (): Iterator<number>;
@@ -2712,7 +2733,7 @@ interface Uint32Array {
     /** 
       * Returns an list of keys in the array
       */
-    keys(): number[];
+    keys(): Iterator<number>;
 
     /**
       * Returns the index of the last occurrence of a value in an array.
@@ -2849,7 +2870,7 @@ interface Uint32Array {
     /** 
       * Returns an list of values in the array
       */
-    values(): Uint32Array;
+    values(): Iterator<number>;
 
     [index: number]: number;
     // [Symbol.iterator] (): Iterator<number>;
@@ -3002,7 +3023,7 @@ interface Float32Array {
     /** 
       * Returns an list of keys in the array
       */
-    keys(): number[];
+    keys(): Iterator<number>;
 
     /**
       * Returns the index of the last occurrence of a value in an array.
@@ -3139,7 +3160,7 @@ interface Float32Array {
     /** 
       * Returns an list of values in the array
       */
-    values(): Float32Array;
+    values(): Iterator<number>;
 
     [index: number]: number;
     // [Symbol.iterator] (): Iterator<number>;
@@ -3292,7 +3313,7 @@ interface Float64Array {
     /** 
       * Returns an list of keys in the array
       */
-    keys(): number[];
+    keys(): Iterator<number>;
 
     /**
       * Returns the index of the last occurrence of a value in an array.
@@ -3429,7 +3450,7 @@ interface Float64Array {
     /** 
       * Returns an list of values in the array
       */
-    values(): Float64Array;
+    values(): Iterator<number>;
 
     [index: number]: number;
     // [Symbol.iterator] (): Iterator<number>;
@@ -3480,10 +3501,11 @@ interface ProxyHandler<T> {
     construct? (target: T, thisArg: any, argArray?: any): any;
 }
 
-declare var Proxy: {
+interface ProxyConstructor {
     revocable<T>(target: T, handler: ProxyHandler<T>): { proxy: T; revoke: () => void; };
     new <T>(target: T, handeler: ProxyHandler<T>): T
-};
+}
+declare var Proxy: ProxyConstructor;
 
 declare var Reflect: {
     apply(target: Function, thisArgument: any, argumentsList: ArrayLike<any>): any;
@@ -3524,6 +3546,11 @@ interface Promise<T> {
 }
 
 interface PromiseConstructor {
+    /** 
+      * A reference to the prototype. 
+      */
+    prototype: Promise<any>;
+
     /**
      * Creates a new Promise.
      * @param init A callback used to initialize the promise. This callback is passed two arguments: 
@@ -3531,6 +3558,8 @@ interface PromiseConstructor {
      * and a reject callback used to reject the promise with a provided reason or error.
      */
     new <T>(init: (resolve: (value?: T | Promise<T>) => void, reject: (reason?: any) => void) => void): Promise<T>;
+
+    <T>(init: (resolve: (value?: T | Promise<T>) => void, reject: (reason?: any) => void) => void): Promise<T>;
 
     /**
      * Creates a Promise that is resolved with an array of results when all of the provided Promises 
