@@ -865,10 +865,6 @@ module ts {
             errorAtPos(start, length, message, arg0, arg1, arg2);
         }
 
-        function grammarErrorAtPos(start: number, length: number, message: DiagnosticMessage, arg0?: any, arg1?: any, arg2?: any): void {
-            file.parseDiagnostics.push(createFileDiagnostic(file, start, length, message, arg0, arg1, arg2));
-        }
-
         function errorAtPos(start: number, length: number, message: DiagnosticMessage, arg0?: any, arg1?: any, arg2?: any): void {
             var lastErrorPos = file.parseDiagnostics.length
                 ? file.parseDiagnostics[file.parseDiagnostics.length - 1].start
@@ -2987,7 +2983,6 @@ module ts {
         }
 
         function parsePropertyMemberDeclaration(pos: number, modifiers: ModifiersArray): Declaration {
-            var errorCountBeforePropertyDeclaration = file.parseDiagnostics.length;
             var name = parsePropertyName();
             var flags = modifiers ? modifiers.flags : 0;
             var questionStart = scanner.getTokenPos();
@@ -3595,11 +3590,7 @@ module ts {
             }
 
             // Now do node specific checks.
-            dispatch(node, nodeKind);
-        }
-
-        function dispatch(node: Node, kind: SyntaxKind): void {
-            switch (kind) {
+            switch (nodeKind) {
                 case SyntaxKind.ArrowFunction: 
                 case SyntaxKind.CallSignature:
                 case SyntaxKind.ConstructorType:
