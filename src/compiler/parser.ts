@@ -842,10 +842,9 @@ module ts {
         var identifierCount = 0;
         var nodeCount = 0;
         var lineStarts: number[];
-        var isInStrictMode = false;
 
+        var isInStrictMode = false;
         var lookAheadMode = LookAheadMode.NotLookingAhead;
-        var inAmbientContext = false;
 
         function getLineStarts(): number[] {
             return lineStarts || (lineStarts = computeLineStarts(sourceText));
@@ -3046,16 +3045,7 @@ module ts {
             node.typeParameters = sig.typeParameters;
             node.parameters = sig.parameters;
             node.type = sig.type;
-
-            // A common error is to try to declare an accessor in an ambient class.
-            if (inAmbientContext && canParseSemicolon()) {
-                parseSemicolon();
-                node.body = <Block>createMissingNode();
-            }
-            else {
-                node.body = parseFunctionBlock(/* ignoreMissingOpenBrace */ false);
-            }
-
+            node.body = parseFunctionBlockOrSemicolon();
             return finishNode(node);
         }
 
@@ -3260,13 +3250,7 @@ module ts {
             var node = <ModuleDeclaration>createNode(SyntaxKind.ModuleDeclaration, pos);
             node.flags = flags;
             node.name = parseStringLiteral();
-
-            // For error recovery, just in case the user forgot the declare modifier on this ambient
-            // external module, treat it as ambient anyway.
-            var saveInAmbientContext = inAmbientContext;
-            inAmbientContext = true;
             node.body = parseModuleBody();
-            inAmbientContext = saveInAmbientContext;
             return finishNode(node);
         }
 
@@ -3345,10 +3329,6 @@ module ts {
                 }
             }
 
-            var saveInAmbientContext = inAmbientContext;
-            if (modifiers && modifiers.flags & NodeFlags.Ambient) {
-                inAmbientContext = true;
-            }
             var flags = modifiers ? modifiers.flags : 0;
             var result: Declaration;
             switch (token) {
@@ -3394,7 +3374,6 @@ module ts {
                 result.modifiers = modifiers;
             }
 
-            inAmbientContext = saveInAmbientContext;
             return result;
         }
 
@@ -3494,7 +3473,6 @@ module ts {
         var rootNodeFlags: NodeFlags = 0;
         if (fileExtensionIs(filename, ".d.ts")) {
             rootNodeFlags = NodeFlags.DeclarationFile;
-            inAmbientContext = true;
         }
         file = <SourceFileInternal>createRootNode(SyntaxKind.SourceFile, 0, sourceText.length, rootNodeFlags);
         file.filename = normalizePath(filename);
@@ -4492,6 +4470,9 @@ module ts {
             }
             else if (inAmbientContext) {
                 return grammarErrorOnNode(accessor.name, Diagnostics.An_accessor_cannot_be_declared_in_an_ambient_context);
+            }
+            else if (accessor.body === undefined) {
+                return grammarErrorAtPos(accessor.end - 1, ";".length, Diagnostics._0_expected, "{");
             }
             else if (accessor.typeParameters) {
                 return grammarErrorOnNode(accessor.name, Diagnostics.An_accessor_cannot_have_type_parameters);

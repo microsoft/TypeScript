@@ -1784,7 +1784,7 @@ module ts {
                     }
                     else {
                         // If there are no specified types, try to infer it from the body of the get accessor if it exists.
-                        if (getter) {
+                        if (getter && getter.body) {
                             type = getReturnTypeFromBody(getter);
                         }
                         // Otherwise, fall back to 'any'.
