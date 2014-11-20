@@ -29,15 +29,15 @@ function func3() {
     }
 }
 ;
-function func4(z, w) {
-    if (z === void 0) { z = null; }
-    if (w === void 0) { w = undefined; }
+function func4() {
+    var z = (arguments[0] === void 0) ? null : arguments[0];
+    var w = (arguments[1] === void 0) ? undefined : arguments[1];
 }
 ;
 // these shouldn't be errors
-function noError1(x, y) {
-    if (x === void 0) { x = 3; }
-    if (y === void 0) { y = 2; }
+function noError1() {
+    var x = (arguments[0] === void 0) ? 3 : arguments[0];
+    var y = (arguments[1] === void 0) ? 2 : arguments[1];
 }
 ;
 function noError2(x, y) {

@@ -154,8 +154,8 @@ var ConstructorWithOptionalParameterProperty = (function () {
 })();
 exports.ConstructorWithOptionalParameterProperty = ConstructorWithOptionalParameterProperty;
 var ConstructorWithParameterInitializer = (function () {
-    function ConstructorWithParameterInitializer(x) {
-        if (x === void 0) { x = "hello"; }
+    function ConstructorWithParameterInitializer() {
+        var x = (arguments[0] === void 0) ? "hello" : arguments[0];
         this.x = x;
     }
     return ConstructorWithParameterInitializer;
@@ -211,8 +211,8 @@ var GlobalConstructorWithOptionalParameterProperty = (function () {
     return GlobalConstructorWithOptionalParameterProperty;
 })();
 var GlobalConstructorWithParameterInitializer = (function () {
-    function GlobalConstructorWithParameterInitializer(x) {
-        if (x === void 0) { x = "hello"; }
+    function GlobalConstructorWithParameterInitializer() {
+        var x = (arguments[0] === void 0) ? "hello" : arguments[0];
         this.x = x;
     }
     return GlobalConstructorWithParameterInitializer;

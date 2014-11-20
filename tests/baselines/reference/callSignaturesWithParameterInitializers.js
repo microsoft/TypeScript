@@ -59,14 +59,14 @@ b.b(1);
 
 //// [callSignaturesWithParameterInitializers.js]
 // Optional parameters allow initializers only in implementation signatures
-function foo(x) {
-    if (x === void 0) { x = 1; }
+function foo() {
+    var x = (arguments[0] === void 0) ? 1 : arguments[0];
 }
-var f = function foo(x) {
-    if (x === void 0) { x = 1; }
+var f = function foo() {
+    var x = (arguments[0] === void 0) ? 1 : arguments[0];
 };
-var f2 = function (x, y) {
-    if (y === void 0) { y = 1; }
+var f2 = function (x) {
+    var y = (arguments[1] === void 0) ? 1 : arguments[1];
 };
 foo(1);
 foo();
@@ -77,8 +77,8 @@ f2(1, 2);
 var C = (function () {
     function C() {
     }
-    C.prototype.foo = function (x) {
-        if (x === void 0) { x = 1; }
+    C.prototype.foo = function () {
+        var x = (arguments[0] === void 0) ? 1 : arguments[0];
     };
     return C;
 })();
@@ -97,14 +97,14 @@ a(1);
 a.foo();
 a.foo(1);
 var b = {
-    foo: function (x) {
-        if (x === void 0) { x = 1; }
+    foo: function () {
+        var x = (arguments[0] === void 0) ? 1 : arguments[0];
     },
-    a: function foo(x, y) {
-        if (y === void 0) { y = 1; }
+    a: function foo(x) {
+        var y = (arguments[1] === void 0) ? 1 : arguments[1];
     },
-    b: function (x) {
-        if (x === void 0) { x = 1; }
+    b: function () {
+        var x = (arguments[0] === void 0) ? 1 : arguments[0];
     }
 };
 b.foo();

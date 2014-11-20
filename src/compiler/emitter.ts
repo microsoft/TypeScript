@@ -1505,22 +1505,27 @@ module ts {
             }
 
             function emitDefaultValueAssignments(node: FunctionLikeDeclaration) {
+                var arity = getSignatureArity(node);
+                var offset = 0;
                 forEach(node.parameters, param => {
                     if (param.initializer) {
                         writeLine();
-                        emitStart(param);
-                        write("if (");
-                        emitNode(param.name);
-                        write(" === void 0)");
-                        emitEnd(param);
-                        write(" { ");
+                        write("var ");
                         emitStart(param);
                         emitNode(param.name);
-                        write(" = ");
+                        write(" = (arguments[" + offset + "] === void 0) ? ");
                         emitNode(param.initializer);
                         emitEnd(param);
-                        write("; }");
+                        write(" : arguments[" + offset + "];")
+                    } else if (offset >= arity && (param.flags & NodeFlags.Rest) === 0) {
+                        writeLine();
+                        write("var ");
+                        emitStart(param);
+                        emitNode(param.name);
+                        emitEnd(param);
+                        write(" = arguments[" + offset + "];");
                     }
+                    offset++;
                 });
             }
 
@@ -1602,7 +1607,7 @@ module ts {
                 increaseIndent();
                 write("(");
                 if (node) {
-                    emitCommaList(node.parameters, /*includeTrailingComma*/ false, node.parameters.length - (hasRestParameters(node) ? 1 : 0));
+                    emitCommaList(node.parameters, /*includeTrailingComma*/ false, getSignatureArity(node));
                 }
                 write(")");
                 decreaseIndent();

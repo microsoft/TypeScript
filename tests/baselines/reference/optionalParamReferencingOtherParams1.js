@@ -4,8 +4,8 @@ function strange(x: number, y = x * 1, z = x + y) {
 }
 
 //// [optionalParamReferencingOtherParams1.js]
-function strange(x, y, z) {
-    if (y === void 0) { y = x * 1; }
-    if (z === void 0) { z = x + y; }
+function strange(x) {
+    var y = (arguments[1] === void 0) ? x * 1 : arguments[1];
+    var z = (arguments[2] === void 0) ? x + y : arguments[2];
     return z;
 }

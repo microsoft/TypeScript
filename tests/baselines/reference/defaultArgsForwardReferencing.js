@@ -38,62 +38,62 @@ class C {
 var x = (a = b, b = c, c = d) => { var d; };
 
 //// [defaultArgsForwardReferencing.js]
-function left(a, b, c) {
-    if (b === void 0) { b = a; }
-    if (c === void 0) { c = b; }
+function left(a) {
+    var b = (arguments[1] === void 0) ? a : arguments[1];
+    var c = (arguments[2] === void 0) ? b : arguments[2];
     a;
     b;
 }
-function right(a, b) {
-    if (a === void 0) { a = b; }
-    if (b === void 0) { b = a; }
+function right() {
+    var a = (arguments[0] === void 0) ? b : arguments[0];
+    var b = (arguments[1] === void 0) ? a : arguments[1];
     a;
     b;
 }
-function right2(a, b, c) {
-    if (a === void 0) { a = b; }
-    if (b === void 0) { b = c; }
-    if (c === void 0) { c = a; }
+function right2() {
+    var a = (arguments[0] === void 0) ? b : arguments[0];
+    var b = (arguments[1] === void 0) ? c : arguments[1];
+    var c = (arguments[2] === void 0) ? a : arguments[2];
     a;
     b;
     c;
 }
-function inside(a) {
-    if (a === void 0) { a = b; }
+function inside() {
+    var a = (arguments[0] === void 0) ? b : arguments[0];
     var b;
 }
 function outside() {
     var b;
-    function inside(a) {
-        if (a === void 0) { a = b; }
+    function inside() {
+        var a = (arguments[0] === void 0) ? b : arguments[0];
         var b;
     }
 }
-function defaultArgFunction(a, b) {
-    if (a === void 0) { a = function () {
+function defaultArgFunction() {
+    var a = (arguments[0] === void 0) ? function () {
         return b;
-    }; }
-    if (b === void 0) { b = 1; }
+    } : arguments[0];
+    var b = (arguments[1] === void 0) ? 1 : arguments[1];
 }
-function defaultArgArrow(a, b) {
-    if (a === void 0) { a = function () { return function () { return b; }; }; }
-    if (b === void 0) { b = 3; }
+function defaultArgArrow() {
+    var a = (arguments[0] === void 0) ? function () { return function () { return b; }; } : arguments[0];
+    var b = (arguments[1] === void 0) ? 3 : arguments[1];
 }
 var C = (function () {
-    function C(a, b) {
-        if (a === void 0) { a = b; }
-        if (b === void 0) { b = 1; }
+    function C() {
+        var a = (arguments[0] === void 0) ? b : arguments[0];
+        var b = (arguments[1] === void 0) ? 1 : arguments[1];
     }
-    C.prototype.method = function (a, b) {
-        if (a === void 0) { a = b; }
-        if (b === void 0) { b = 1; }
+    C.prototype.method = function () {
+        var a = (arguments[0] === void 0) ? b : arguments[0];
+        var b = (arguments[1] === void 0) ? 1 : arguments[1];
     };
     return C;
 })();
 // Function expressions
-var x = function (a, b, c) {
-    if (a === void 0) { a = b; }
-    if (b === void 0) { b = c; }
-    if (c === void 0) { c = d; }
+var x = function () {
+    var a = (arguments[0] === void 0) ? b : arguments[0];
+    var b = (arguments[1] === void 0) ? c : arguments[1];
+    var c = (arguments[2] === void 0) ? d : arguments[2];
     var d;
 };

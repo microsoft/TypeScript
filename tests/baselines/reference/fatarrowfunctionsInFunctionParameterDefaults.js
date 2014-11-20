@@ -10,10 +10,10 @@ fn.call(4); // Should be 4
 
 
 //// [fatarrowfunctionsInFunctionParameterDefaults.js]
-function fn(x, y) {
+function fn() {
     var _this = this;
-    if (x === void 0) { x = function () { return _this; }; }
-    if (y === void 0) { y = x(); }
+    var x = (arguments[0] === void 0) ? function () { return _this; } : arguments[0];
+    var y = (arguments[1] === void 0) ? x() : arguments[1];
     // should be 4
     return y;
 }

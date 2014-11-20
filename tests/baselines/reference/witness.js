@@ -144,8 +144,8 @@ var qq: any;
 // Initializers
 var varInit = varInit; // any
 var pInit;
-function fn(pInit) {
-    if (pInit === void 0) { pInit = pInit; }
+function fn() {
+    var pInit = (arguments[0] === void 0) ? pInit : arguments[0];
     var pInit;
 }
 var InitClass = (function () {

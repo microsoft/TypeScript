@@ -10,8 +10,8 @@ class ErrClass {
 //type of 'this' in constructor param list is the class instance type (error)
 var ErrClass = (function () {
     // Should be an error
-    function ErrClass(f) {
-        if (f === void 0) { f = this; }
+    function ErrClass() {
+        var f = (arguments[0] === void 0) ? this : arguments[0];
     }
     return ErrClass;
 })();

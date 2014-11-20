@@ -84,66 +84,57 @@ sourceFile:sourceMapValidationFunctions.ts
 >>>}
 1 >
 2 >^
-3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
   >
 2 >}
 1 >Emitted(5, 1) Source(5, 1) + SourceIndex(0) name (greet)
 2 >Emitted(5, 2) Source(5, 2) + SourceIndex(0) name (greet)
 ---
->>>function greet2(greeting, n, x) {
+>>>function greet2(greeting) {
 1->
 2 >^^^^^^^^^
 3 >         ^^^^^^
 4 >               ^
 5 >                ^^^^^^^^
-6 >                        ^^
-7 >                          ^
-8 >                           ^^
-9 >                             ^
-10>                              ^^^^->
+6 >                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >
 2 >function 
 3 >         greet2
 4 >               (
 5 >                greeting: string
-6 >                        , 
-7 >                          n = 10
-8 >                           , 
-9 >                             x?: string
 1->Emitted(6, 1) Source(6, 1) + SourceIndex(0)
 2 >Emitted(6, 10) Source(6, 10) + SourceIndex(0)
 3 >Emitted(6, 16) Source(6, 16) + SourceIndex(0)
 4 >Emitted(6, 17) Source(6, 17) + SourceIndex(0)
 5 >Emitted(6, 25) Source(6, 33) + SourceIndex(0)
-6 >Emitted(6, 27) Source(6, 35) + SourceIndex(0)
-7 >Emitted(6, 28) Source(6, 41) + SourceIndex(0)
-8 >Emitted(6, 30) Source(6, 43) + SourceIndex(0)
-9 >Emitted(6, 31) Source(6, 53) + SourceIndex(0)
 ---
->>>    if (n === void 0) { n = 10; }
-1->^^^^
-2 >    ^^^^^^^^^^^^^^^^^
-3 >                     ^^^
-4 >                        ^^^^^^
-1->
-2 >    n = 10
-3 >                     
-4 >                        n = 10
-1->Emitted(7, 5) Source(6, 35) + SourceIndex(0) name (greet2)
-2 >Emitted(7, 22) Source(6, 41) + SourceIndex(0) name (greet2)
-3 >Emitted(7, 25) Source(6, 35) + SourceIndex(0) name (greet2)
-4 >Emitted(7, 31) Source(6, 41) + SourceIndex(0) name (greet2)
+>>>    var n = (arguments[1] === void 0) ? 10 : arguments[1];
+1->^^^^^^^^
+2 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+1->, 
+2 >        n = 10
+1->Emitted(7, 9) Source(6, 35) + SourceIndex(0) name (greet2)
+2 >Emitted(7, 43) Source(6, 41) + SourceIndex(0) name (greet2)
+---
+>>>    var x = arguments[2];
+1 >^^^^^^^^
+2 >        ^
+3 >         ^^^^^^^^^^^^^^^^->
+1 >, 
+2 >        x?: string
+1 >Emitted(8, 9) Source(6, 43) + SourceIndex(0) name (greet2)
+2 >Emitted(8, 10) Source(6, 53) + SourceIndex(0) name (greet2)
 ---
 >>>    var restParams = [];
-1 >^^^^
+1->^^^^
 2 >    ^^^^^^^^^^^^^^^^^^^^
 3 >                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
-1 >, x?: string, 
+1->, 
 2 >    ...restParams: string[]
-1 >Emitted(8, 5) Source(6, 55) + SourceIndex(0) name (greet2)
-2 >Emitted(8, 25) Source(6, 78) + SourceIndex(0) name (greet2)
+1->Emitted(9, 5) Source(6, 55) + SourceIndex(0) name (greet2)
+2 >Emitted(9, 25) Source(6, 78) + SourceIndex(0) name (greet2)
 ---
 >>>    for (var _i = 3; _i < arguments.length; _i++) {
 1->^^^^^^^^^
@@ -158,20 +149,20 @@ sourceFile:sourceMapValidationFunctions.ts
 4 >                     ...restParams: string[]
 5 >                                           
 6 >                                            ...restParams: string[]
-1->Emitted(9, 10) Source(6, 55) + SourceIndex(0) name (greet2)
-2 >Emitted(9, 21) Source(6, 78) + SourceIndex(0) name (greet2)
-3 >Emitted(9, 22) Source(6, 55) + SourceIndex(0) name (greet2)
-4 >Emitted(9, 44) Source(6, 78) + SourceIndex(0) name (greet2)
-5 >Emitted(9, 45) Source(6, 55) + SourceIndex(0) name (greet2)
-6 >Emitted(9, 49) Source(6, 78) + SourceIndex(0) name (greet2)
+1->Emitted(10, 10) Source(6, 55) + SourceIndex(0) name (greet2)
+2 >Emitted(10, 21) Source(6, 78) + SourceIndex(0) name (greet2)
+3 >Emitted(10, 22) Source(6, 55) + SourceIndex(0) name (greet2)
+4 >Emitted(10, 44) Source(6, 78) + SourceIndex(0) name (greet2)
+5 >Emitted(10, 45) Source(6, 55) + SourceIndex(0) name (greet2)
+6 >Emitted(10, 49) Source(6, 78) + SourceIndex(0) name (greet2)
 ---
 >>>        restParams[_i - 3] = arguments[_i];
 1 >^^^^^^^^
 2 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 1 >
 2 >        ...restParams: string[]
-1 >Emitted(10, 9) Source(6, 55) + SourceIndex(0) name (greet2)
-2 >Emitted(10, 44) Source(6, 78) + SourceIndex(0) name (greet2)
+1 >Emitted(11, 9) Source(6, 55) + SourceIndex(0) name (greet2)
+2 >Emitted(11, 44) Source(6, 78) + SourceIndex(0) name (greet2)
 ---
 >>>    }
 >>>    greetings++;
@@ -185,10 +176,10 @@ sourceFile:sourceMapValidationFunctions.ts
 2 >    greetings
 3 >             ++
 4 >               ;
-1 >Emitted(12, 5) Source(7, 5) + SourceIndex(0) name (greet2)
-2 >Emitted(12, 14) Source(7, 14) + SourceIndex(0) name (greet2)
-3 >Emitted(12, 16) Source(7, 16) + SourceIndex(0) name (greet2)
-4 >Emitted(12, 17) Source(7, 17) + SourceIndex(0) name (greet2)
+1 >Emitted(13, 5) Source(7, 5) + SourceIndex(0) name (greet2)
+2 >Emitted(13, 14) Source(7, 14) + SourceIndex(0) name (greet2)
+3 >Emitted(13, 16) Source(7, 16) + SourceIndex(0) name (greet2)
+4 >Emitted(13, 17) Source(7, 17) + SourceIndex(0) name (greet2)
 ---
 >>>    return greetings;
 1->^^^^
@@ -202,75 +193,66 @@ sourceFile:sourceMapValidationFunctions.ts
 3 >           
 4 >           greetings
 5 >                    ;
-1->Emitted(13, 5) Source(8, 5) + SourceIndex(0) name (greet2)
-2 >Emitted(13, 11) Source(8, 11) + SourceIndex(0) name (greet2)
-3 >Emitted(13, 12) Source(8, 12) + SourceIndex(0) name (greet2)
-4 >Emitted(13, 21) Source(8, 21) + SourceIndex(0) name (greet2)
-5 >Emitted(13, 22) Source(8, 22) + SourceIndex(0) name (greet2)
+1->Emitted(14, 5) Source(8, 5) + SourceIndex(0) name (greet2)
+2 >Emitted(14, 11) Source(8, 11) + SourceIndex(0) name (greet2)
+3 >Emitted(14, 12) Source(8, 12) + SourceIndex(0) name (greet2)
+4 >Emitted(14, 21) Source(8, 21) + SourceIndex(0) name (greet2)
+5 >Emitted(14, 22) Source(8, 22) + SourceIndex(0) name (greet2)
 ---
 >>>}
 1 >
 2 >^
-3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+3 > ^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
   >
 2 >}
-1 >Emitted(14, 1) Source(9, 1) + SourceIndex(0) name (greet2)
-2 >Emitted(14, 2) Source(9, 2) + SourceIndex(0) name (greet2)
+1 >Emitted(15, 1) Source(9, 1) + SourceIndex(0) name (greet2)
+2 >Emitted(15, 2) Source(9, 2) + SourceIndex(0) name (greet2)
 ---
->>>function foo(greeting, n, x) {
+>>>function foo(greeting) {
 1->
 2 >^^^^^^^^^
 3 >         ^^^
 4 >            ^
 5 >             ^^^^^^^^
-6 >                     ^^
-7 >                       ^
-8 >                        ^^
-9 >                          ^
-10>                           ^^^^^^^->
+6 >                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >
 2 >function 
 3 >         foo
 4 >            (
 5 >             greeting: string
-6 >                     , 
-7 >                       n = 10
-8 >                        , 
-9 >                          x?: string
-1->Emitted(15, 1) Source(10, 1) + SourceIndex(0)
-2 >Emitted(15, 10) Source(10, 10) + SourceIndex(0)
-3 >Emitted(15, 13) Source(10, 13) + SourceIndex(0)
-4 >Emitted(15, 14) Source(10, 14) + SourceIndex(0)
-5 >Emitted(15, 22) Source(10, 30) + SourceIndex(0)
-6 >Emitted(15, 24) Source(10, 32) + SourceIndex(0)
-7 >Emitted(15, 25) Source(10, 38) + SourceIndex(0)
-8 >Emitted(15, 27) Source(10, 40) + SourceIndex(0)
-9 >Emitted(15, 28) Source(10, 50) + SourceIndex(0)
+1->Emitted(16, 1) Source(10, 1) + SourceIndex(0)
+2 >Emitted(16, 10) Source(10, 10) + SourceIndex(0)
+3 >Emitted(16, 13) Source(10, 13) + SourceIndex(0)
+4 >Emitted(16, 14) Source(10, 14) + SourceIndex(0)
+5 >Emitted(16, 22) Source(10, 30) + SourceIndex(0)
 ---
->>>    if (n === void 0) { n = 10; }
-1->^^^^
-2 >    ^^^^^^^^^^^^^^^^^
-3 >                     ^^^
-4 >                        ^^^^^^
-1->
-2 >    n = 10
-3 >                     
-4 >                        n = 10
-1->Emitted(16, 5) Source(10, 32) + SourceIndex(0) name (foo)
-2 >Emitted(16, 22) Source(10, 38) + SourceIndex(0) name (foo)
-3 >Emitted(16, 25) Source(10, 32) + SourceIndex(0) name (foo)
-4 >Emitted(16, 31) Source(10, 38) + SourceIndex(0) name (foo)
+>>>    var n = (arguments[1] === void 0) ? 10 : arguments[1];
+1->^^^^^^^^
+2 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+1->, 
+2 >        n = 10
+1->Emitted(17, 9) Source(10, 32) + SourceIndex(0) name (foo)
+2 >Emitted(17, 43) Source(10, 38) + SourceIndex(0) name (foo)
+---
+>>>    var x = arguments[2];
+1 >^^^^^^^^
+2 >        ^
+3 >         ^^^^^^^^^^^^^^^^->
+1 >, 
+2 >        x?: string
+1 >Emitted(18, 9) Source(10, 40) + SourceIndex(0) name (foo)
+2 >Emitted(18, 10) Source(10, 50) + SourceIndex(0) name (foo)
 ---
 >>>    var restParams = [];
-1 >^^^^
+1->^^^^
 2 >    ^^^^^^^^^^^^^^^^^^^^
 3 >                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
-1 >, x?: string, 
+1->, 
 2 >    ...restParams: string[]
-1 >Emitted(17, 5) Source(10, 52) + SourceIndex(0) name (foo)
-2 >Emitted(17, 25) Source(10, 75) + SourceIndex(0) name (foo)
+1->Emitted(19, 5) Source(10, 52) + SourceIndex(0) name (foo)
+2 >Emitted(19, 25) Source(10, 75) + SourceIndex(0) name (foo)
 ---
 >>>    for (var _i = 3; _i < arguments.length; _i++) {
 1->^^^^^^^^^
@@ -285,20 +267,20 @@ sourceFile:sourceMapValidationFunctions.ts
 4 >                     ...restParams: string[]
 5 >                                           
 6 >                                            ...restParams: string[]
-1->Emitted(18, 10) Source(10, 52) + SourceIndex(0) name (foo)
-2 >Emitted(18, 21) Source(10, 75) + SourceIndex(0) name (foo)
-3 >Emitted(18, 22) Source(10, 52) + SourceIndex(0) name (foo)
-4 >Emitted(18, 44) Source(10, 75) + SourceIndex(0) name (foo)
-5 >Emitted(18, 45) Source(10, 52) + SourceIndex(0) name (foo)
-6 >Emitted(18, 49) Source(10, 75) + SourceIndex(0) name (foo)
+1->Emitted(20, 10) Source(10, 52) + SourceIndex(0) name (foo)
+2 >Emitted(20, 21) Source(10, 75) + SourceIndex(0) name (foo)
+3 >Emitted(20, 22) Source(10, 52) + SourceIndex(0) name (foo)
+4 >Emitted(20, 44) Source(10, 75) + SourceIndex(0) name (foo)
+5 >Emitted(20, 45) Source(10, 52) + SourceIndex(0) name (foo)
+6 >Emitted(20, 49) Source(10, 75) + SourceIndex(0) name (foo)
 ---
 >>>        restParams[_i - 3] = arguments[_i];
 1 >^^^^^^^^
 2 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 1 >
 2 >        ...restParams: string[]
-1 >Emitted(19, 9) Source(10, 52) + SourceIndex(0) name (foo)
-2 >Emitted(19, 44) Source(10, 75) + SourceIndex(0) name (foo)
+1 >Emitted(21, 9) Source(10, 52) + SourceIndex(0) name (foo)
+2 >Emitted(21, 44) Source(10, 75) + SourceIndex(0) name (foo)
 ---
 >>>    }
 >>>    return;
@@ -310,9 +292,9 @@ sourceFile:sourceMapValidationFunctions.ts
   >    
 2 >    return
 3 >          ;
-1 >Emitted(21, 5) Source(12, 5) + SourceIndex(0) name (foo)
-2 >Emitted(21, 11) Source(12, 11) + SourceIndex(0) name (foo)
-3 >Emitted(21, 12) Source(12, 12) + SourceIndex(0) name (foo)
+1 >Emitted(23, 5) Source(12, 5) + SourceIndex(0) name (foo)
+2 >Emitted(23, 11) Source(12, 11) + SourceIndex(0) name (foo)
+3 >Emitted(23, 12) Source(12, 12) + SourceIndex(0) name (foo)
 ---
 >>>}
 1 >
@@ -321,7 +303,7 @@ sourceFile:sourceMapValidationFunctions.ts
 1 >
   >
 2 >}
-1 >Emitted(22, 1) Source(13, 1) + SourceIndex(0) name (foo)
-2 >Emitted(22, 2) Source(13, 2) + SourceIndex(0) name (foo)
+1 >Emitted(24, 1) Source(13, 1) + SourceIndex(0) name (foo)
+2 >Emitted(24, 2) Source(13, 2) + SourceIndex(0) name (foo)
 ---
 >>>//# sourceMappingURL=sourceMapValidationFunctions.js.map

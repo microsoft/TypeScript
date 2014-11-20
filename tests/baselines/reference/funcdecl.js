@@ -94,13 +94,13 @@ var withMultiParamsVar = withMultiParams;
 function withOptionalParams(a) {
 }
 var withOptionalParamsVar = withOptionalParams;
-function withInitializedParams(a, b0, b, c) {
-    if (b === void 0) { b = 30; }
-    if (c === void 0) { c = "string value"; }
+function withInitializedParams(a, b0) {
+    var b = (arguments[2] === void 0) ? 30 : arguments[2];
+    var c = (arguments[3] === void 0) ? "string value" : arguments[3];
 }
 var withInitializedParamsVar = withInitializedParams;
-function withOptionalInitializedParams(a, c) {
-    if (c === void 0) { c = "hello string"; }
+function withOptionalInitializedParams(a) {
+    var c = (arguments[1] === void 0) ? "hello string" : arguments[1];
 }
 var withOptionalInitializedParamsVar = withOptionalInitializedParams;
 function withRestParams(a) {

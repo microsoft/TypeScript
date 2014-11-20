@@ -22,22 +22,22 @@ class E<T extends Date> {
 
 //// [constructorImplementationWithDefaultValues.js]
 var C = (function () {
-    function C(x) {
-        if (x === void 0) { x = 1; }
+    function C() {
+        var x = (arguments[0] === void 0) ? 1 : arguments[0];
         var y = x;
     }
     return C;
 })();
 var D = (function () {
-    function D(x) {
-        if (x === void 0) { x = null; }
+    function D() {
+        var x = (arguments[0] === void 0) ? null : arguments[0];
         var y = x;
     }
     return D;
 })();
 var E = (function () {
-    function E(x) {
-        if (x === void 0) { x = null; }
+    function E() {
+        var x = (arguments[0] === void 0) ? null : arguments[0];
         var y = x;
     }
     return E;

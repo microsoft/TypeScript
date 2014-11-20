@@ -7,9 +7,9 @@ function strange(x = a, y = b) {
 
 //// [optionalParamReferencingOtherParams2.js]
 var a = 1;
-function strange(x, y) {
-    if (x === void 0) { x = a; }
-    if (y === void 0) { y = b; }
+function strange() {
+    var x = (arguments[0] === void 0) ? a : arguments[0];
+    var y = (arguments[1] === void 0) ? b : arguments[1];
     var b = "";
     return y;
 }

@@ -27,8 +27,8 @@ var B = (function () {
 })();
 var C = (function (_super) {
     __extends(C, _super);
-    function C(a) {
-        if (a === void 0) { a = _super.prototype.foo.call(this); }
+    function C() {
+        var a = (arguments[0] === void 0) ? _super.prototype.foo.call(this) : arguments[0];
     }
     return C;
 })(B);

@@ -20,10 +20,10 @@ var bar = (function () {
     bar.prototype.g = function () {
         return { a: null, b: undefined, c: void 4 };
     };
-    bar.prototype.h = function (x, y, z) {
-        if (x === void 0) { x = 4; }
-        if (y === void 0) { y = null; }
-        if (z === void 0) { z = ''; }
+    bar.prototype.h = function () {
+        var x = (arguments[0] === void 0) ? 4 : arguments[0];
+        var y = (arguments[1] === void 0) ? null : arguments[1];
+        var z = (arguments[2] === void 0) ? '' : arguments[2];
         x++;
     };
     return bar;

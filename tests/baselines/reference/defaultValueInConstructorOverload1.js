@@ -7,8 +7,8 @@ class C {
 
 //// [defaultValueInConstructorOverload1.js]
 var C = (function () {
-    function C(x) {
-        if (x === void 0) { x = ''; }
+    function C() {
+        var x = (arguments[0] === void 0) ? '' : arguments[0];
     }
     return C;
 })();
