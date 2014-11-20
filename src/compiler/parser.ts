@@ -3564,6 +3564,10 @@ module ts {
 
         // We're automatically in an ambient context if this is a .d.ts file.
         var inAmbientContext = fileExtensionIs(file.filename, ".d.ts");
+        if (inAmbientContext && checkTopLevelElementsForRequiredDeclareModifier(file)) {
+            return;
+        }
+
         var inFunctionBlock = false;
         var parent: Node;
         visitNode(file);
@@ -3595,10 +3599,11 @@ module ts {
         }
 
         function checkNode(node: Node) {
+            var nodeKind = node.kind;
             // First, check if you have a statement in a place where it is not allowed.  We want 
             // to do this before recursing, because we'd prefer to report these errors at the top
             // level instead of at some nested level.
-            if (inAmbientContext && checkForStatementInAmbientContext(node)) {
+            if (inAmbientContext && checkForStatementInAmbientContext(node, nodeKind)) {
                 return;
             }
 
@@ -3612,11 +3617,11 @@ module ts {
             }
 
             // Now do node specific checks.
-            dispatch(node);
+            dispatch(node, nodeKind);
         }
 
-        function dispatch(node: Node): void {
-            switch (node.kind) {
+        function dispatch(node: Node, kind: SyntaxKind): void {
+            switch (kind) {
                 case SyntaxKind.ArrowFunction:                  return visitArrowFunction(<FunctionExpression>node);
                 case SyntaxKind.BinaryExpression:               return visitBinaryExpression(<BinaryExpression>node);
                 case SyntaxKind.BreakStatement:                 return visitBreakOrContinueStatement(<BreakOrContinueStatement>node);
@@ -3693,8 +3698,43 @@ module ts {
             return grammarErrorOnNode(node, Diagnostics.Invalid_use_of_0_in_strict_mode, name);
         }
 
-        function checkForStatementInAmbientContext(node: Node): boolean {
-            switch (node.kind) {
+        function checkTopLevelElementsForRequiredDeclareModifier(file: SourceFile): boolean {
+            for (var i = 0, n = file.statements.length; i < n; i++) {
+                var decl = file.statements[i];
+                if (isDeclaration(decl) || decl.kind === SyntaxKind.VariableStatement) {
+                    if (checkTopLevelElementForRequiredDeclareModifier(decl)) {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        function checkTopLevelElementForRequiredDeclareModifier(node: Node): boolean {
+            // A declare modifier is required for any top level .d.ts declaration except export=, interfaces and imports:
+            // categories:
+            //
+            //  DeclarationElement:
+            //     ExportAssignment
+            //     export_opt   InterfaceDeclaration
+            //     export_opt   ImportDeclaration
+            //     export_opt   ExternalImportDeclaration
+            //     export_opt   AmbientDeclaration
+            //
+            if (node.kind === SyntaxKind.InterfaceDeclaration ||
+                node.kind === SyntaxKind.ImportDeclaration ||
+                node.kind === SyntaxKind.ExportAssignment ||
+                (node.flags & NodeFlags.Ambient) /*
+                (node.flags & NodeFlags.Export) */) {
+
+                return false;
+            }
+
+            return grammarErrorOnFirstToken(node, Diagnostics.A_declare_modifier_is_required_for_a_top_level_declaration_in_a_d_ts_file);
+        }
+
+
+        function checkForStatementInAmbientContext(node: Node, kind: SyntaxKind): boolean {
+            switch (kind) {
                 case SyntaxKind.Block:
                 case SyntaxKind.EmptyStatement:
                 case SyntaxKind.IfStatement:
@@ -4221,42 +4261,33 @@ module ts {
                     grammarErrorOnNode(node, Diagnostics.Octal_literals_are_not_available_when_targeting_ECMAScript_5_and_higher);
                 }
             }
-            }
-        function checkTopLevelDeclareModifierInAmbientContext(node: Node): boolean {
-            // A declare modifier is required for any top level .d.ts declaration except export=, interfaces and imports:
-            // categories:
-            //
-            //  DeclarationElement:
-            //     ExportAssignment
-            //     export_opt   InterfaceDeclaration
-            //     export_opt   ImportDeclaration
-            //     export_opt   ExternalImportDeclaration
-            //     export_opt   AmbientDeclaration
-            //
-
-            if (!inAmbientContext || 
-                !(isDeclaration(node) || node.kind === SyntaxKind.VariableStatement) || 
-                !node.parent || 
-                node.parent.kind !== SyntaxKind.SourceFile) {
-                return false;
-            }
-
-            if (node.kind === SyntaxKind.InterfaceDeclaration || 
-                node.kind === SyntaxKind.ImportDeclaration ||
-                node.kind === SyntaxKind.ExportAssignment ||
-                (node.flags & NodeFlags.Ambient) || 
-                (node.flags & NodeFlags.Export)) {
-
-                return false;
-            }
-
-            return grammarErrorOnFirstToken(node, Diagnostics.A_declare_modifier_is_required_for_a_top_level_declaration_in_a_d_ts_file);
         }
 
-
         function checkModifiers(node: Node): boolean {
+            switch (node.kind) {
+                case SyntaxKind.GetAccessor:
+                case SyntaxKind.SetAccessor:
+                case SyntaxKind.Constructor:
+                case SyntaxKind.Property:
+                case SyntaxKind.Method:
+                case SyntaxKind.IndexSignature:
+                case SyntaxKind.ClassDeclaration:
+                case SyntaxKind.InterfaceDeclaration:
+                case SyntaxKind.ModuleDeclaration:
+                case SyntaxKind.EnumDeclaration:
+                case SyntaxKind.ExportAssignment:
+                case SyntaxKind.VariableStatement:
+                case SyntaxKind.FunctionDeclaration:
+                case SyntaxKind.TypeAliasDeclaration:
+                case SyntaxKind.ImportDeclaration:
+                case SyntaxKind.Parameter:
+                    break;
+                default:
+                    return false;
+            }
+
             if (!node.modifiers) {
-                return checkTopLevelDeclareModifierInAmbientContext(node);
+                return;
             }
 
             var lastStatic: Node, lastPrivate: Node, lastProtected: Node, lastDeclare: Node;
@@ -4359,8 +4390,6 @@ module ts {
             else if (node.kind === SyntaxKind.InterfaceDeclaration && flags & NodeFlags.Ambient) {
                 return grammarErrorOnNode(lastDeclare, Diagnostics.A_declare_modifier_cannot_be_used_with_an_interface_declaration, "declare");
             }
-
-            return checkTopLevelDeclareModifierInAmbientContext(node);
         }
 
         function visitParameter(node: ParameterDeclaration): void {
