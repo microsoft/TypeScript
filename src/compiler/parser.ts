@@ -2968,7 +2968,9 @@ module ts {
 
             var questionStart = scanner.getTokenPos();
             if (parseOptional(SyntaxKind.QuestionToken)) {
-                errorAtPos(questionStart, scanner.getStartPos() - questionStart, Diagnostics.A_class_member_cannot_be_declared_optional);
+                // Note: this is not legal as per the grammar.  But we allow it in the parser and
+                // report an error in the grammar checker.
+                flags |= NodeFlags.QuestionMark;
             }
 
             if (token === SyntaxKind.OpenParenToken || token === SyntaxKind.LessThanToken) {
@@ -4179,7 +4181,8 @@ module ts {
         function visitMethod(node: MethodDeclaration) {
             checkTypeParameterList(node.typeParameters) ||
                 checkParameterList(node.parameters) ||
-                checkForBodyInAmbientContext(node.body, /*isConstructor:*/ false);
+                checkForBodyInAmbientContext(node.body, /*isConstructor:*/ false) ||
+                (node.parent.kind === SyntaxKind.ClassDeclaration && checkForInvalidQuestionMark(node, Diagnostics.A_class_member_cannot_be_declared_optional));
         }
 
         function checkForBodyInAmbientContext(body: Block | Expression, isConstructor: boolean): boolean {
@@ -4391,8 +4394,13 @@ module ts {
         }
 
         function visitProperty(node: PropertyDeclaration) {
+            (node.parent.kind === SyntaxKind.ClassDeclaration && checkForInvalidQuestionMark(node, Diagnostics.A_class_member_cannot_be_declared_optional)) ||
+                checkForInitializerInAmbientContext(node);
+        }
+
+        function checkForInitializerInAmbientContext(node: PropertyDeclaration) {
             if (inAmbientContext && node.initializer) {
-                grammarErrorOnFirstToken(node.initializer, Diagnostics.Initializers_are_not_allowed_in_ambient_contexts);
+                return grammarErrorOnFirstToken(node.initializer, Diagnostics.Initializers_are_not_allowed_in_ambient_contexts);
             }
         }
 

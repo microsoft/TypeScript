@@ -1,8 +1,9 @@
 tests/cases/conformance/types/objectTypeLiteral/methodSignatures/objectTypesWithOptionalProperties.ts(12,6): error TS1112: A class member cannot be declared optional.
 tests/cases/conformance/types/objectTypeLiteral/methodSignatures/objectTypesWithOptionalProperties.ts(20,6): error TS1112: A class member cannot be declared optional.
+tests/cases/conformance/types/objectTypeLiteral/methodSignatures/objectTypesWithOptionalProperties.ts(24,6): error TS1160: An object member cannot be declared optional.
 
 
-==== tests/cases/conformance/types/objectTypeLiteral/methodSignatures/objectTypesWithOptionalProperties.ts (2 errors) ====
+==== tests/cases/conformance/types/objectTypeLiteral/methodSignatures/objectTypesWithOptionalProperties.ts (3 errors) ====
     // Basic uses of optional properties
     
     var a: {
@@ -31,4 +32,6 @@ tests/cases/conformance/types/objectTypeLiteral/methodSignatures/objectTypesWith
     
     var b = {
         x?: 1 // error
+         ~
+!!! error TS1160: An object member cannot be declared optional.
     }
