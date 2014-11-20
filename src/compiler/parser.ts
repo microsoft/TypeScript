@@ -1395,9 +1395,9 @@ module ts {
             // never get a token like this. Instead, we would get 00 and 9 as two separate tokens.
             // We also do not need to check for negatives because any prefix operator would be part of a
             // parent unary expression.
-            if (node.kind === SyntaxKind.NumericLiteral &&
-                sourceText.charCodeAt(tokenPos) === CharacterCodes._0 &&
-                isOctalDigit(sourceText.charCodeAt(tokenPos + 1))) {
+            if (node.kind === SyntaxKind.NumericLiteral
+                && sourceText.charCodeAt(tokenPos) === CharacterCodes._0
+                && isOctalDigit(sourceText.charCodeAt(tokenPos + 1))) {
 
                 node.flags |= NodeFlags.OctalLiteral;
             }
@@ -1471,13 +1471,17 @@ module ts {
             return token === SyntaxKind.DotDotDotToken || isIdentifier() || isModifier(token);
         }
 
-        function parseParameter(flags: NodeFlags = 0): ParameterDeclaration {
-            var node = <ParameterDeclaration>createNode(SyntaxKind.Parameter);
-            var modifiers = parseModifiers(ModifierContext.Parameters);
+        function setModifiers(node: Node, modifiers: ModifiersArray) {
             if (modifiers) {
                 node.flags |= modifiers.flags;
                 node.modifiers = modifiers;
             }
+        }
+
+        function parseParameter(flags: NodeFlags = 0): ParameterDeclaration {
+            var node = <ParameterDeclaration>createNode(SyntaxKind.Parameter);
+            var modifiers = parseModifiers(ModifierContext.Parameters);
+            setModifiers(node, modifiers);
             if (parseOptional(SyntaxKind.DotDotDotToken)) {
                 node.flags |= NodeFlags.Rest;
             }
@@ -1554,10 +1558,7 @@ module ts {
 
         function parseIndexSignatureMember(modifiers: ModifiersArray, pos?: number): SignatureDeclaration {
             var node = <SignatureDeclaration>createNode(SyntaxKind.IndexSignature, pos);
-            if (modifiers) {
-                node.modifiers = modifiers;
-                node.flags = modifiers.flags;
-            }
+            setModifiers(node, modifiers);
 
             node.parameters = parseParameterList(SyntaxKind.OpenBracketToken, SyntaxKind.CloseBracketToken);
             node.type = parseTypeAnnotation();
@@ -2968,10 +2969,8 @@ module ts {
 
         function parseConstructorDeclaration(pos: number, modifiers: ModifiersArray): ConstructorDeclaration {
             var node = <ConstructorDeclaration>createNode(SyntaxKind.Constructor, pos);
-            if (modifiers) {
-                node.modifiers = modifiers;
-                node.flags = modifiers.flags;
-            }
+            setModifiers(node, modifiers);
+
             parseExpected(SyntaxKind.ConstructorKeyword);
             var sig = parseSignature(SyntaxKind.CallSignature, SyntaxKind.ColonToken, /* returnTokenRequired */ false);
             node.typeParameters = sig.typeParameters;
@@ -2994,9 +2993,8 @@ module ts {
 
             if (token === SyntaxKind.OpenParenToken || token === SyntaxKind.LessThanToken) {
                 var method = <MethodDeclaration>createNode(SyntaxKind.Method, pos);
-                if (modifiers) {
-                    method.modifiers = modifiers;
-                }
+                setModifiers(method, modifiers);
+
                 if (flags) {
                     method.flags = flags;
                 }
@@ -3011,9 +3009,8 @@ module ts {
             }
             else {
                 var property = <PropertyDeclaration>createNode(SyntaxKind.Property, pos);
-                if (modifiers) {
-                    property.modifiers = modifiers;
-                }
+                setModifiers(property, modifiers);
+
                 if (flags) {
                     property.flags = flags;
                 }
@@ -3031,10 +3028,8 @@ module ts {
 
         function parseMemberAccessorDeclaration(kind: SyntaxKind, pos: number, modifiers: ModifiersArray): MethodDeclaration {
             var node = <MethodDeclaration>createNode(kind, pos);
-            if (modifiers) {
-                node.modifiers = modifiers;
-                node.flags = modifiers.flags;
-            }
+            setModifiers(node, modifiers);
+
             node.name = parsePropertyName();
             var sig = parseSignature(SyntaxKind.CallSignature, SyntaxKind.ColonToken, /* returnTokenRequired */ false);
             node.typeParameters = sig.typeParameters;
@@ -3274,10 +3269,8 @@ module ts {
 
         function parseExportAssignmentTail(pos: number, modifiers: ModifiersArray): ExportAssignment {
             var node = <ExportAssignment>createNode(SyntaxKind.ExportAssignment, pos);
-            if (modifiers) {
-                node.modifiers = modifiers
-                node.flags = modifiers.flags;
-            }
+            setModifiers(node, modifiers);
+
             node.exportName = parseIdentifier();
             parseSemicolon();
             return finishNode(node);
@@ -3840,12 +3833,12 @@ module ts {
         }
 
         function checkArguments(arguments: NodeArray<Expression>) {
-            return checkForTrailingComma(arguments) ||
+            return checkForDisallowedTrailingComma(arguments) ||
                 checkForOmittedArgument(arguments);
         }
 
         function checkTypeArguments(typeArguments: NodeArray<TypeNode>) {
-            return checkForTrailingComma(typeArguments) ||
+            return checkForDisallowedTrailingComma(typeArguments) ||
                 checkForAtLeastOneTypeArgument(typeArguments) ||
                 checkForMissingTypeArgument(typeArguments);
         }
@@ -3880,7 +3873,7 @@ module ts {
             }
         }
 
-        function checkForTrailingComma(list: NodeArray<Node>): boolean {
+        function checkForDisallowedTrailingComma(list: NodeArray<Node>): boolean {
             if (list && list.hasTrailingComma) {
                 var start = list.end - ",".length;
                 var end = list.end;
@@ -3901,7 +3894,7 @@ module ts {
         }
 
         function visitClassDeclaration(node: ClassDeclaration) {
-            checkForTrailingComma(node.implementedTypes) ||
+            checkForDisallowedTrailingComma(node.implementedTypes) ||
                 checkForAtLeastOneHeritageClause(node.implementedTypes, "implements");
         }
 
@@ -4080,7 +4073,7 @@ module ts {
         }
 
         function visitInterfaceDeclaration(node: InterfaceDeclaration) {
-            checkForTrailingComma(node.baseTypes) ||
+            checkForDisallowedTrailingComma(node.baseTypes) ||
                 checkForAtLeastOneHeritageClause(node.baseTypes, "extends");
         }
 
@@ -4236,82 +4229,82 @@ module ts {
             var lastStatic: Node, lastPrivate: Node, lastProtected: Node, lastDeclare: Node;
             var flags = 0;
             for (var i = 0, n = node.modifiers.length; i < n; i++) {
-                var m = node.modifiers[i];
+                var modifier = node.modifiers[i];
 
-                switch (m.kind) {
+                switch (modifier.kind) {
                     case SyntaxKind.PublicKeyword:
                     case SyntaxKind.ProtectedKeyword:
                     case SyntaxKind.PrivateKeyword:
                         var text: string;
-                        if (m.kind === SyntaxKind.PublicKeyword) {
+                        if (modifier.kind === SyntaxKind.PublicKeyword) {
                             text = "public";
                         }
-                        else if (m.kind === SyntaxKind.ProtectedKeyword) {
+                        else if (modifier.kind === SyntaxKind.ProtectedKeyword) {
                             text = "protected";
-                            lastProtected = m;
+                            lastProtected = modifier;
                         }
                         else {
                             text = "private";
-                            lastPrivate = m;
+                            lastPrivate = modifier;
                         }
 
                         if (flags & NodeFlags.AccessibilityModifier) {
-                            return grammarErrorOnNode(m, Diagnostics.Accessibility_modifier_already_seen);
+                            return grammarErrorOnNode(modifier, Diagnostics.Accessibility_modifier_already_seen);
                         }
                         else if (flags & NodeFlags.Static) {
-                            return grammarErrorOnNode(m, Diagnostics._0_modifier_must_precede_1_modifier, text, "static");
+                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_must_precede_1_modifier, text, "static");
                         }
                         else if (node.parent.kind === SyntaxKind.ModuleBlock || node.parent.kind === SyntaxKind.SourceFile) {
-                            return grammarErrorOnNode(m, Diagnostics._0_modifier_cannot_appear_on_a_module_element, text);
+                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_appear_on_a_module_element, text);
                         }
-                        flags |= modifierToFlag(m.kind);
+                        flags |= modifierToFlag(modifier.kind);
                         break;
 
                     case SyntaxKind.StaticKeyword:
                         if (flags & NodeFlags.Static) {
-                            return grammarErrorOnNode(m, Diagnostics._0_modifier_already_seen, "static");
+                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_already_seen, "static");
                         }
                         else if (node.parent.kind === SyntaxKind.ModuleBlock || node.parent.kind === SyntaxKind.SourceFile) {
-                            return grammarErrorOnNode(m, Diagnostics._0_modifier_cannot_appear_on_a_module_element, "static");
+                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_appear_on_a_module_element, "static");
                         }
                         else if (node.kind === SyntaxKind.Parameter) {
-                            return grammarErrorOnNode(m, Diagnostics._0_modifier_cannot_appear_on_a_parameter, "static");
+                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_appear_on_a_parameter, "static");
                         }
                         flags |= NodeFlags.Static;
-                        lastStatic = m;
+                        lastStatic = modifier;
                         break;
 
                     case SyntaxKind.ExportKeyword:
                         if (flags & NodeFlags.Export) {
-                            return grammarErrorOnNode(m, Diagnostics._0_modifier_already_seen, "export");
+                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_already_seen, "export");
                         }
                         else if (flags & NodeFlags.Ambient) {
-                            return grammarErrorOnNode(m, Diagnostics._0_modifier_must_precede_1_modifier, "export", "declare");
+                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_must_precede_1_modifier, "export", "declare");
                         }
                         else if (node.parent.kind === SyntaxKind.ClassDeclaration) {
-                            return grammarErrorOnNode(m, Diagnostics._0_modifier_cannot_appear_on_a_class_element, "export");
+                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_appear_on_a_class_element, "export");
                         }
                         else if (node.kind === SyntaxKind.Parameter) {
-                            return grammarErrorOnNode(m, Diagnostics._0_modifier_cannot_appear_on_a_parameter, "export");
+                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_appear_on_a_parameter, "export");
                         }
                         flags |= NodeFlags.Export;
                         break;
 
                     case SyntaxKind.DeclareKeyword:
                         if (flags & NodeFlags.Ambient) {
-                            return grammarErrorOnNode(m, Diagnostics._0_modifier_already_seen, "declare");
+                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_already_seen, "declare");
                         }
                         else if (node.parent.kind === SyntaxKind.ClassDeclaration) {
-                            return grammarErrorOnNode(m, Diagnostics._0_modifier_cannot_appear_on_a_class_element, "declare");
+                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_appear_on_a_class_element, "declare");
                         }
                         else if (node.kind === SyntaxKind.Parameter) {
-                            return grammarErrorOnNode(m, Diagnostics._0_modifier_cannot_appear_on_a_parameter, "declare");
+                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_appear_on_a_parameter, "declare");
                         }
                         else if (inAmbientContext && node.parent.kind === SyntaxKind.ModuleBlock) {
-                            return grammarErrorOnNode(m, Diagnostics.A_declare_modifier_cannot_be_used_in_an_already_ambient_context);
+                            return grammarErrorOnNode(modifier, Diagnostics.A_declare_modifier_cannot_be_used_in_an_already_ambient_context);
                         }
                         flags |= NodeFlags.Ambient;
-                        lastDeclare = m;
+                        lastDeclare = modifier;
                         break;
                 }
             }
@@ -4347,7 +4340,7 @@ module ts {
         }
 
         function checkTypeParameterList(typeParameters: NodeArray<TypeParameterDeclaration>): boolean {
-            if (checkForTrailingComma(typeParameters)) {
+            if (checkForDisallowedTrailingComma(typeParameters)) {
                 return true;
             }
 
@@ -4359,7 +4352,7 @@ module ts {
         }
 
         function checkParameterList(parameters: NodeArray<ParameterDeclaration>): boolean {
-            if (checkForTrailingComma(parameters)) {
+            if (checkForDisallowedTrailingComma(parameters)) {
                 return true;
             }
 
@@ -4526,7 +4519,7 @@ module ts {
         }
 
         function visitTupleType(node: TupleTypeNode) {
-            checkForTrailingComma(node.elementTypes) ||
+            checkForDisallowedTrailingComma(node.elementTypes) ||
                 checkForAtLeastOneType(node);
         }
 
@@ -4563,7 +4556,7 @@ module ts {
 
         function checkVariableDeclarations(declarations: NodeArray<VariableDeclaration>): boolean {
             if (declarations) {
-                if (checkForTrailingComma(declarations)) {
+                if (checkForDisallowedTrailingComma(declarations)) {
                     return true;
                 }
 
