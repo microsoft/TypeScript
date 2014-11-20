@@ -2994,9 +2994,6 @@ module ts {
                 property.initializer = parseInitializer(/*inParameter*/ false);
                 parseSemicolon();
 
-                if (inAmbientContext && property.initializer && errorCountBeforePropertyDeclaration === file.parseDiagnostics.length) {
-                    grammarErrorAtPos(initializerStart, initializerFirstTokenLength, Diagnostics.Initializers_are_not_allowed_in_ambient_contexts);
-                }
                 return finishNode(property);
             }
         }
@@ -3739,6 +3736,7 @@ module ts {
                 case SyntaxKind.Parameter:                      return visitParameter(<ParameterDeclaration>node);
                 case SyntaxKind.PostfixOperator:                return visitPostfixOperator(<UnaryExpression>node);
                 case SyntaxKind.PrefixOperator:                 return visitPrefixOperator(<UnaryExpression>node);
+                case SyntaxKind.Property:                       return visitProperty(<PropertyDeclaration>node);
                 case SyntaxKind.PropertyAssignment:             return visitPropertyAssignment(<PropertyDeclaration>node);
                 case SyntaxKind.ReturnStatement:                return visitReturnStatement(<ReturnStatement>node);
                 case SyntaxKind.SetAccessor:                    return visitSetAccessor(<MethodDeclaration>node);
@@ -4378,6 +4376,12 @@ module ts {
                     // UnaryExpression is a direct reference to a variable, function argument, or function name
                     grammarErrorOnNode(node.operand, Diagnostics.delete_cannot_be_called_on_an_identifier_in_strict_mode);
                 }
+            }
+        }
+
+        function visitProperty(node: PropertyDeclaration) {
+            if (inAmbientContext && node.initializer) {
+                grammarErrorOnFirstToken(node.initializer, Diagnostics.Initializers_are_not_allowed_in_ambient_contexts);
             }
         }
 
