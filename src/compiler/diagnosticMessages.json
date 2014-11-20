@@ -479,21 +479,33 @@
         "category": "Error",
         "code": 1159
     },
-    "Property destructuring pattern expected.": {
+    "Unterminated template literal.": {
         "category": "Error",
         "code": 1160
     },
-    "Array element destructuring pattern expected.": {
+    "Unterminated regular expression literal.": {
         "category": "Error",
         "code": 1161
     },
+    "An object member cannot be declared optional.": {
+        "category": "Error",
+        "code":  1162
+    },
+    "Property destructuring pattern expected.": {
+        "category": "Error",
+        "code": 1163
+    },
+    "Array element destructuring pattern expected.": {
+        "category": "Error",
+        "code": 1164
+    },
     "A destructuring declaration must have an initializer.": {
         "category": "Error",
-        "code": 1162
+        "code": 1165
     },
     "Destructuring declarations are not allowed in ambient contexts.": {
         "category": "Error",
-        "code": 1163
+        "code": 1166
     },
 
     "Duplicate identifier '{0}'.": {
@@ -1092,17 +1104,21 @@
         "category": "Error",
         "code": 2457
     },
-    "Type '{0}' has no property '{1}' and no string index signature.": {
+    "An AMD module cannot have multiple name assignments.": {
         "category": "Error",
         "code": 2458
     },
-    "Type '{0}' has no property '{1}'.": {
+    "Type '{0}' has no property '{1}' and no string index signature.": {
         "category": "Error",
         "code": 2459
     },
-    "Type '{0}' has no numeric index signature.": {
+    "Type '{0}' has no property '{1}'.": {
         "category": "Error",
         "code": 2460
+    },
+    "Type '{0}' has no numeric index signature.": {
+        "category": "Error",
+        "code": 2461
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {
@@ -1517,6 +1533,10 @@
     "Do not erase const enum declarations in generated code.": {
         "category": "Message",
         "code": 6007
+    },
+    "Do not emit outputs if any type checking errors were reported.": {
+        "category": "Message",
+        "code": 6008
     },
     "Do not emit comments to output.": {
         "category": "Message",

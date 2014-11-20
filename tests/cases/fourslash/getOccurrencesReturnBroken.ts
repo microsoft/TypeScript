@@ -51,4 +51,4 @@ for (var i = 1; i <= test.markers().length; i++) {
             verify.occurrencesAtPositionCount(1); // 'return' is an instance member
             break;
     }
-});
+}

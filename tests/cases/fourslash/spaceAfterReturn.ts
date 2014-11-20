@@ -5,7 +5,7 @@
 ////return[1];/*2*/
 ////return    ;/*3*/
 ////}
-
+debugger;
 format.document();
 goTo.marker("1");
 verify.currentLineContentIs("    return 1;");

@@ -93,10 +93,16 @@ module ts {
                 return (<Identifier>node.name).text;
             }
             switch (node.kind) {
-                case SyntaxKind.Constructor: return "__constructor";
-                case SyntaxKind.CallSignature: return "__call";
-                case SyntaxKind.ConstructSignature: return "__new";
-                case SyntaxKind.IndexSignature: return "__index";
+                case SyntaxKind.ConstructorType:
+                case SyntaxKind.Constructor:
+                    return "__constructor";
+                case SyntaxKind.FunctionType:
+                case SyntaxKind.CallSignature:
+                    return "__call";
+                case SyntaxKind.ConstructSignature:
+                    return "__new";
+                case SyntaxKind.IndexSignature:
+                    return "__index";
             }
         }
 
@@ -114,8 +120,11 @@ module ts {
                     }
                     // Report errors every position with duplicate declaration
                     // Report errors on previous encountered declarations
-                    var message = symbol.flags & SymbolFlags.BlockScopedVariable ? Diagnostics.Cannot_redeclare_block_scoped_variable_0 : Diagnostics.Duplicate_identifier_0;
-                    forEach(symbol.declarations, (declaration) => {
+                    var message = symbol.flags & SymbolFlags.BlockScopedVariable
+                        ? Diagnostics.Cannot_redeclare_block_scoped_variable_0 
+                        : Diagnostics.Duplicate_identifier_0;
+
+                    forEach(symbol.declarations, declaration => {
                         file.semanticErrors.push(createDiagnosticForNode(declaration.name, message, getDisplayName(declaration)));
                     });
                     file.semanticErrors.push(createDiagnosticForNode(node.name, message, getDisplayName(node)));
@@ -233,6 +242,8 @@ module ts {
                         declareModuleMember(node, symbolKind, symbolExcludes);
                         break;
                     }
+                case SyntaxKind.FunctionType:
+                case SyntaxKind.ConstructorType:
                 case SyntaxKind.CallSignature:
                 case SyntaxKind.ConstructSignature:
                 case SyntaxKind.IndexSignature:
@@ -292,6 +303,24 @@ module ts {
                     }
                 }
             }
+        }
+
+        function bindFunctionOrConstructorType(node: SignatureDeclaration) {
+            // For a given function symbol "<...>(...) => T" we want to generate a symbol identical
+            // to the one we would get for: { <...>(...): T }
+            //
+            // We do that by making an anonymous type literal symbol, and then setting the function 
+            // symbol as its sole member. To the rest of the system, this symbol will be  indistinguishable 
+            // from an actual type literal symbol you would have gotten had you used the long form.
+
+            var symbol = createSymbol(SymbolFlags.Signature, getDeclarationName(node));
+            addDeclarationToSymbol(symbol, node, SymbolFlags.Signature);
+            bindChildren(node, SymbolFlags.Signature, /*isBlockScopeContainer:*/ false);
+
+            var typeLiteralSymbol = createSymbol(SymbolFlags.TypeLiteral, "__type");
+            addDeclarationToSymbol(typeLiteralSymbol, node, SymbolFlags.TypeLiteral);
+            typeLiteralSymbol.members = {};
+            typeLiteralSymbol.members[node.kind === SyntaxKind.FunctionType ? "__call" : "__new"] = symbol
         }
 
         function bindAnonymousDeclaration(node: Node, symbolKind: SymbolFlags, name: string, isBlockScopeContainer: boolean) {
@@ -368,6 +397,7 @@ module ts {
                     bindDeclaration(<Declaration>node, SymbolFlags.Property | (node.flags & NodeFlags.QuestionMark ? SymbolFlags.Optional : 0), SymbolFlags.PropertyExcludes, /*isBlockScopeContainer*/ false);
                     break;
                 case SyntaxKind.PropertyAssignment:
+                case SyntaxKind.ShorthandPropertyAssignment:
                     bindDeclaration(<Declaration>node, SymbolFlags.Property, SymbolFlags.PropertyExcludes, /*isBlockScopeContainer*/ false);
                     break;
                 case SyntaxKind.EnumMember:
@@ -393,6 +423,12 @@ module ts {
                 case SyntaxKind.SetAccessor:
                     bindDeclaration(<Declaration>node, SymbolFlags.SetAccessor, SymbolFlags.SetAccessorExcludes, /*isBlockScopeContainer*/ true);
                     break;
+
+                case SyntaxKind.FunctionType:
+                case SyntaxKind.ConstructorType:
+                    bindFunctionOrConstructorType(<SignatureDeclaration>node);
+                    break;
+
                 case SyntaxKind.TypeLiteral:
                     bindAnonymousDeclaration(node, SymbolFlags.TypeLiteral, "__type", /*isBlockScopeContainer*/ false);
                     break;

@@ -13,48 +13,48 @@
 // limitations under the License.
 //
 
-/// <reference path="formatting.ts"/>
+/// <reference path="references.ts"/>
 
-module TypeScript.Services.Formatting {
+module ts.formatting {
     export class FormattingContext {
-        public currentTokenSpan: TokenSpan = null;
-        public nextTokenSpan: TokenSpan = null;
-        public contextNode: IndentationNodeContext = null;
-        public currentTokenParent: IndentationNodeContext = null;
-        public nextTokenParent: IndentationNodeContext = null;
+        public currentTokenSpan: TextRangeWithKind;
+        public nextTokenSpan: TextRangeWithKind;
+        public contextNode: Node;
+        public currentTokenParent: Node;
+        public nextTokenParent: Node;
 
-        private contextNodeAllOnSameLine: boolean = null;
-        private nextNodeAllOnSameLine: boolean = null;
-        private tokensAreOnSameLine: boolean = null;
-        private contextNodeBlockIsOnOneLine: boolean = null;
-        private nextNodeBlockIsOnOneLine: boolean = null;
+        private contextNodeAllOnSameLine: boolean;
+        private nextNodeAllOnSameLine: boolean;
+        private tokensAreOnSameLine: boolean;
+        private contextNodeBlockIsOnOneLine: boolean;
+        private nextNodeBlockIsOnOneLine: boolean;
 
-        constructor(private snapshot: ITextSnapshot, public formattingRequestKind: FormattingRequestKind) {
-            Debug.assert(this.snapshot != null, "snapshot is null");
+        constructor(private sourceFile: SourceFile, public formattingRequestKind: FormattingRequestKind) {
         }
 
-        public updateContext(currentTokenSpan: TokenSpan, currentTokenParent: IndentationNodeContext, nextTokenSpan: TokenSpan, nextTokenParent: IndentationNodeContext, commonParent: IndentationNodeContext) {
-            Debug.assert(currentTokenSpan != null, "currentTokenSpan is null");
-            Debug.assert(currentTokenParent != null, "currentTokenParent is null");
-            Debug.assert(nextTokenSpan != null, "nextTokenSpan is null");
-            Debug.assert(nextTokenParent != null, "nextTokenParent is null");
-            Debug.assert(commonParent != null, "commonParent is null");
+        public updateContext(currentRange: TextRangeWithKind, currentTokenParent: Node, nextRange: TextRangeWithKind, nextTokenParent: Node, commonParent: Node) {
+            Debug.assert(currentRange !== undefined, "currentTokenSpan is null");
+            Debug.assert(currentTokenParent !== undefined, "currentTokenParent is null");
+            Debug.assert(nextRange !== undefined, "nextTokenSpan is null");
+            Debug.assert(nextTokenParent !== undefined, "nextTokenParent is null");
+            Debug.assert(commonParent !== undefined, "commonParent is null");
 
-            this.currentTokenSpan = currentTokenSpan;
+            this.currentTokenSpan = currentRange;
             this.currentTokenParent = currentTokenParent;
-            this.nextTokenSpan = nextTokenSpan;
+            this.nextTokenSpan = nextRange;
             this.nextTokenParent = nextTokenParent;
             this.contextNode = commonParent;
 
-            this.contextNodeAllOnSameLine = null;
-            this.nextNodeAllOnSameLine = null;
-            this.tokensAreOnSameLine = null;
-            this.contextNodeBlockIsOnOneLine = null;
-            this.nextNodeBlockIsOnOneLine = null;
+            // drop cached results
+            this.contextNodeAllOnSameLine = undefined;
+            this.nextNodeAllOnSameLine = undefined;
+            this.tokensAreOnSameLine = undefined;
+            this.contextNodeBlockIsOnOneLine = undefined;
+            this.nextNodeBlockIsOnOneLine = undefined;
         }
 
         public ContextNodeAllOnSameLine(): boolean {
-            if (this.contextNodeAllOnSameLine === null) {
+            if (this.contextNodeAllOnSameLine === undefined) {
                 this.contextNodeAllOnSameLine = this.NodeIsOnOneLine(this.contextNode);
             }
 
@@ -62,7 +62,7 @@ module TypeScript.Services.Formatting {
         }
 
         public NextNodeAllOnSameLine(): boolean {
-            if (this.nextNodeAllOnSameLine === null) {
+            if (this.nextNodeAllOnSameLine === undefined) {
                 this.nextNodeAllOnSameLine = this.NodeIsOnOneLine(this.nextTokenParent);
             }
 
@@ -70,10 +70,9 @@ module TypeScript.Services.Formatting {
         }
 
         public TokensAreOnSameLine(): boolean {
-            if (this.tokensAreOnSameLine === null) {
-                var startLine = this.snapshot.getLineNumberFromPosition(this.currentTokenSpan.start());
-                var endLine = this.snapshot.getLineNumberFromPosition(this.nextTokenSpan.start());
-
+            if (this.tokensAreOnSameLine === undefined) {
+                var startLine = this.sourceFile.getLineAndCharacterFromPosition(this.currentTokenSpan.pos).line;
+                var endLine = this.sourceFile.getLineAndCharacterFromPosition(this.nextTokenSpan.pos).line;
                 this.tokensAreOnSameLine = (startLine == endLine);
             }
 
@@ -81,7 +80,7 @@ module TypeScript.Services.Formatting {
         }
 
         public ContextNodeBlockIsOnOneLine() {
-            if (this.contextNodeBlockIsOnOneLine === null) {
+            if (this.contextNodeBlockIsOnOneLine === undefined) {
                 this.contextNodeBlockIsOnOneLine = this.BlockIsOnOneLine(this.contextNode);
             }
 
@@ -89,28 +88,28 @@ module TypeScript.Services.Formatting {
         }
 
         public NextNodeBlockIsOnOneLine() {
-            if (this.nextNodeBlockIsOnOneLine === null) {
+            if (this.nextNodeBlockIsOnOneLine === undefined) {
                 this.nextNodeBlockIsOnOneLine = this.BlockIsOnOneLine(this.nextTokenParent);
             }
 
             return this.nextNodeBlockIsOnOneLine;
         }
 
-        public NodeIsOnOneLine(node: IndentationNodeContext): boolean {
-            var startLine = this.snapshot.getLineNumberFromPosition(node.start());
-            var endLine = this.snapshot.getLineNumberFromPosition(node.end());
-
+        private NodeIsOnOneLine(node: Node): boolean {
+            var startLine = this.sourceFile.getLineAndCharacterFromPosition(node.getStart(this.sourceFile)).line;
+            var endLine = this.sourceFile.getLineAndCharacterFromPosition(node.getEnd()).line;
             return startLine == endLine;
         }
 
-        // Now we know we have a block (or a fake block represented by some other kind of node with an open and close brace as children).
-        // IMPORTANT!!! This relies on the invariant that IsBlockContext must return true ONLY for nodes with open and close braces as immediate children
-        public BlockIsOnOneLine(node: IndentationNodeContext): boolean {
-            var block = <BlockSyntax>node.node();
-
-            // Now check if they are on the same line
-            return this.snapshot.getLineNumberFromPosition(end(block.openBraceToken)) === 
-                   this.snapshot.getLineNumberFromPosition(start(block.closeBraceToken));
+        private BlockIsOnOneLine(node: Node): boolean {
+            var openBrace = findChildOfKind(node, SyntaxKind.OpenBraceToken, this.sourceFile);
+            var closeBrace = findChildOfKind(node, SyntaxKind.CloseBraceToken, this.sourceFile);
+            if (openBrace && closeBrace) {
+                var startLine = this.sourceFile.getLineAndCharacterFromPosition(openBrace.getEnd()).line;
+                var endLine = this.sourceFile.getLineAndCharacterFromPosition(closeBrace.getStart(this.sourceFile)).line;
+                return startLine === endLine;
+            }
+            return false;
         }
     }
 }
