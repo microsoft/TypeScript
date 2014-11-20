@@ -821,11 +821,10 @@ module ts {
 
                 Debug.assert(node.parent.kind !== SyntaxKind.TaggedTemplateExpression);
 
-                var templateNeedsParens = isExpression(node.parent)
-                    && node.parent.kind !== SyntaxKind.ParenExpression
-                    && comparePrecedenceToBinaryPlus(node.parent) !== Comparison.LessThan;
+                var emitOuterParens = isExpression(node.parent)
+                    && templateNeedsParens(node, <Expression>node.parent);
 
-                if (templateNeedsParens) {
+                if (emitOuterParens) {
                     write("(");
                 }
 
@@ -834,7 +833,7 @@ module ts {
                 forEach(node.templateSpans, templateSpan => {
                     // Check if the expression has operands and binds its operands less closely than binary '+'.
                     // If it does, we need to wrap the expression in parentheses. Otherwise, something like
-                    //    `abc${ 1 << 2}`
+                    //    `abc${ 1 << 2 }`
                     // becomes
                     //    "abc" + 1 << 2 + ""
                     // which is really
@@ -855,16 +854,31 @@ module ts {
                     }
 
                     // Only emit if the literal is non-empty.
-                    // The binary '+' operator is left-associative, so the first string concatenation will force
-                    // the result up to this point to be a string. Emitting a '+ ""' has no semantic effect.
+                    // The binary '+' operator is left-associative, so the first string concatenation
+                    // with the head will force the result up to this point to be a string.
+                    // Emitting a '+ ""' has no semantic effect for middles and tails.
                     if (templateSpan.literal.text.length !== 0) {
                         write(" + ")
                         emitLiteral(templateSpan.literal);
                     }
                 });
                 
-                if (templateNeedsParens) {
+                if (emitOuterParens) {
                     write(")");
+                }
+
+                function templateNeedsParens(template: TemplateExpression, parent: Expression) {
+                    switch (parent.kind) {
+                        case SyntaxKind.CallExpression:
+                        case SyntaxKind.NewExpression:
+                            return (<CallExpression>parent).func === template;
+                        case SyntaxKind.ParenExpression:
+                            return false;
+                        case SyntaxKind.TaggedTemplateExpression:
+                            Debug.fail("Path should be unreachable; tagged templates not supported pre-ES6.");
+                        default:
+                            return comparePrecedenceToBinaryPlus(parent) !== Comparison.LessThan;
+                    }
                 }
 
                 /**
@@ -899,7 +913,6 @@ module ts {
                             return Comparison.GreaterThan;
                     }
                 }
-
             }
 
             function emitTemplateSpan(span: TemplateSpan) {
