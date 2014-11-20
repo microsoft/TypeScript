@@ -4263,9 +4263,12 @@ module ts {
             if (!node.modifiers) {
                 return checkTopLevelDeclareModifierInAmbientContext(node);
             }
+
             var lastStatic: Node, lastPrivate: Node, lastProtected: Node, lastDeclare: Node;
             var flags = 0;
-            var hasErrors = forEach(node.modifiers, m => {
+            for (var i = 0, n = node.modifiers.length; i < n; i++) {
+                var m = node.modifiers[i];
+
                 switch (m.kind) {
                     case SyntaxKind.PublicKeyword:
                     case SyntaxKind.ProtectedKeyword:
@@ -4342,10 +4345,6 @@ module ts {
                         lastDeclare = m;
                         break;
                 }
-            });
-
-            if (hasErrors) {
-                return true;
             }
 
             if (node.kind === SyntaxKind.Constructor) {
