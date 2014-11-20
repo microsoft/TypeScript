@@ -1403,16 +1403,11 @@ module ts {
             // never get a token like this. Instead, we would get 00 and 9 as two separate tokens.
             // We also do not need to check for negatives because any prefix operator would be part of a
             // parent unary expression.
-            if (node.kind === SyntaxKind.NumericLiteral
-                && sourceText.charCodeAt(tokenPos) === CharacterCodes._0
-                && isOctalDigit(sourceText.charCodeAt(tokenPos + 1))) {
+            if (node.kind === SyntaxKind.NumericLiteral &&
+                sourceText.charCodeAt(tokenPos) === CharacterCodes._0 &&
+                isOctalDigit(sourceText.charCodeAt(tokenPos + 1))) {
 
-                if (isInStrictMode) {
-                    grammarErrorOnNode(node, Diagnostics.Octal_literals_are_not_allowed_in_strict_mode);
-                }
-                else if (languageVersion >= ScriptTarget.ES5) {
-                    grammarErrorOnNode(node, Diagnostics.Octal_literals_are_not_available_when_targeting_ECMAScript_5_and_higher);
-                }
+                node.flags |= NodeFlags.OctalLiteral;
             }
 
             return node;
@@ -3764,6 +3759,7 @@ module ts {
                 case SyntaxKind.ModuleDeclaration:              return visitModuleDeclaration(<ModuleDeclaration>node);
                 case SyntaxKind.NewExpression:                  return visitNewExpression(<NewExpression>node);
                 case SyntaxKind.ObjectLiteral:                  return visitObjectLiteral(<ObjectLiteral>node);
+                case SyntaxKind.NumericLiteral:                 return visitNumericLiteral(<LiteralExpression>node);
                 case SyntaxKind.Parameter:                      return visitParameter(<ParameterDeclaration>node);
                 case SyntaxKind.PostfixOperator:                return visitPostfixOperator(<UnaryExpression>node);
                 case SyntaxKind.PrefixOperator:                 return visitPrefixOperator(<UnaryExpression>node);
@@ -4260,6 +4256,17 @@ module ts {
                     }
                 }
             });
+        }
+
+        function visitNumericLiteral(node: LiteralExpression): void {
+            if (node.flags & NodeFlags.OctalLiteral) {
+                if (node.flags & NodeFlags.ParsedInStrictMode) {
+                    grammarErrorOnNode(node, Diagnostics.Octal_literals_are_not_allowed_in_strict_mode);
+                }
+                else if (languageVersion >= ScriptTarget.ES5) {
+                    grammarErrorOnNode(node, Diagnostics.Octal_literals_are_not_available_when_targeting_ECMAScript_5_and_higher);
+                }
+            }
         }
 
         function visitParameter(node: ParameterDeclaration): void {
