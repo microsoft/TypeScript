@@ -3526,14 +3526,12 @@ module ts {
 
     function checkGrammar(sourceText: string, languageVersion: ScriptTarget, file: SourceFileInternal) {
         var grammarDiagnostics = file.grammarDiagnostics;
+
+        // Create a scanner so we can find the start of tokens to report errors on.
         var scanner = createScanner(languageVersion, /*skipTrivia*/ true, sourceText);
 
         // We're automatically in an ambient context if this is a .d.ts file.
         var inAmbientContext = fileExtensionIs(file.filename, ".d.ts");
-        if (inAmbientContext && checkTopLevelElementsForRequiredDeclareModifier(file)) {
-            return;
-        }
-
         var inFunctionBlock = false;
         var parent: Node;
         visitNode(file);
@@ -3573,11 +3571,8 @@ module ts {
                 return;
             }
 
-            var diagnosticCount = grammarDiagnostics.length;
-            checkNode(node, nodeKind);
-
             // if we got any errors, just stop performing any more checks on this node or higher.
-            if (diagnosticCount !== grammarDiagnostics.length) {
+            if (checkNode(node, nodeKind)) {
                 return;
             }
 
@@ -3585,7 +3580,7 @@ module ts {
             forEachChild(node, visitNode);
         }
 
-        function checkNode(node: Node, nodeKind: SyntaxKind): any {
+        function checkNode(node: Node, nodeKind: SyntaxKind): boolean {
             // Now do node specific checks.
             switch (nodeKind) {
                 case SyntaxKind.ArrowFunction:
@@ -3593,50 +3588,50 @@ module ts {
                 case SyntaxKind.ConstructorType:
                 case SyntaxKind.ConstructSignature:
                 case SyntaxKind.FunctionType:
-                    return checkParsedSignature(<FunctionLikeDeclaration>node);
+                    return checkAnyParsedSignature(<FunctionLikeDeclaration>node);
                 case SyntaxKind.BreakStatement:
                 case SyntaxKind.ContinueStatement:
                     return checkBreakOrContinueStatement(<BreakOrContinueStatement>node);
-                case SyntaxKind.LabeledStatement:
-                    return checkLabeledStatement(<LabeledStatement>node);
                 case SyntaxKind.CallExpression:
                 case SyntaxKind.NewExpression:
                     return checkCallOrNewExpression(<NewExpression>node);
 
-                case SyntaxKind.EnumDeclaration:                return checkEnumInitializer(<EnumDeclaration>node);
+                case SyntaxKind.EnumDeclaration:                return checkEnumDeclaration(<EnumDeclaration>node);
                 case SyntaxKind.Parameter:                      return checkParameter(<ParameterDeclaration>node);
-                case SyntaxKind.BinaryExpression:               return visitBinaryExpression(<BinaryExpression>node);
-                case SyntaxKind.CatchBlock:                     return visitCatchBlock(<CatchBlock>node);
-                case SyntaxKind.ClassDeclaration:               return visitClassDeclaration(<ClassDeclaration>node);
-                case SyntaxKind.Constructor:                    return visitConstructor(<ConstructorDeclaration>node);
-                case SyntaxKind.ExportAssignment:               return visitExportAssignment(<ExportAssignment>node);
-                case SyntaxKind.ForInStatement:                 return visitForInStatement(<ForInStatement>node);
-                case SyntaxKind.ForStatement:                   return visitForStatement(<ForStatement>node);
-                case SyntaxKind.FunctionDeclaration:            return visitFunctionDeclaration(<FunctionLikeDeclaration>node);
-                case SyntaxKind.FunctionExpression:             return visitFunctionExpression(<FunctionExpression>node);
-                case SyntaxKind.GetAccessor:                    return visitGetAccessor(<MethodDeclaration>node);
-                case SyntaxKind.IndexedAccess:                  return visitIndexedAccess(<IndexedAccess>node);
-                case SyntaxKind.IndexSignature:                 return visitIndexSignature(<SignatureDeclaration>node);
-                case SyntaxKind.InterfaceDeclaration:           return visitInterfaceDeclaration(<InterfaceDeclaration>node);
-                case SyntaxKind.Method:                         return visitMethod(<MethodDeclaration>node);
-                case SyntaxKind.ModuleDeclaration:              return visitModuleDeclaration(<ModuleDeclaration>node);
-                case SyntaxKind.ObjectLiteral:                  return visitObjectLiteral(<ObjectLiteral>node);
-                case SyntaxKind.NumericLiteral:                 return visitNumericLiteral(<LiteralExpression>node);
-                case SyntaxKind.PostfixOperator:                return visitPostfixOperator(<UnaryExpression>node);
-                case SyntaxKind.PrefixOperator:                 return visitPrefixOperator(<UnaryExpression>node);
-                case SyntaxKind.Property:                       return visitProperty(<PropertyDeclaration>node);
-                case SyntaxKind.PropertyAssignment:             return visitPropertyAssignment(<PropertyDeclaration>node);
-                case SyntaxKind.ReturnStatement:                return visitReturnStatement(<ReturnStatement>node);
-                case SyntaxKind.SetAccessor:                    return visitSetAccessor(<MethodDeclaration>node);
-                case SyntaxKind.ShorthandPropertyAssignment:    return visitShorthandPropertyAssignment(<ShortHandPropertyDeclaration>node);
-                case SyntaxKind.SwitchStatement:                return visitSwitchStatement(<SwitchStatement>node);
-                case SyntaxKind.TaggedTemplateExpression:       return visitTaggedTemplateExpression(<TaggedTemplateExpression>node);
-                case SyntaxKind.TupleType:                      return visitTupleType(<TupleTypeNode>node);
-                case SyntaxKind.TypeParameter:                  return visitTypeParameter(<TypeParameterDeclaration>node);
-                case SyntaxKind.TypeReference:                  return visitTypeReference(<TypeReferenceNode>node);
-                case SyntaxKind.VariableDeclaration:            return visitVariableDeclaration(<VariableDeclaration>node);
-                case SyntaxKind.VariableStatement:              return visitVariableStatement(<VariableStatement>node);
-                case SyntaxKind.WithStatement:                  return visitWithStatement(<WithStatement>node);
+                case SyntaxKind.BinaryExpression:               return checkBinaryExpression(<BinaryExpression>node);
+                case SyntaxKind.CatchBlock:                     return checkCatchBlock(<CatchBlock>node);
+                case SyntaxKind.ClassDeclaration:               return checkClassDeclaration(<ClassDeclaration>node);
+                case SyntaxKind.Constructor:                    return checkConstructor(<ConstructorDeclaration>node);
+                case SyntaxKind.ExportAssignment:               return checkExportAssignment(<ExportAssignment>node);
+                case SyntaxKind.ForInStatement:                 return checkForInStatement(<ForInStatement>node);
+                case SyntaxKind.ForStatement:                   return checkForStatement(<ForStatement>node);
+                case SyntaxKind.FunctionDeclaration:            return checkFunctionDeclaration(<FunctionLikeDeclaration>node);
+                case SyntaxKind.FunctionExpression:             return checkFunctionExpression(<FunctionExpression>node);
+                case SyntaxKind.GetAccessor:                    return checkGetAccessor(<MethodDeclaration>node);
+                case SyntaxKind.IndexedAccess:                  return checkIndexedAccess(<IndexedAccess>node);
+                case SyntaxKind.IndexSignature:                 return checkIndexSignature(<SignatureDeclaration>node);
+                case SyntaxKind.InterfaceDeclaration:           return checkInterfaceDeclaration(<InterfaceDeclaration>node);
+                case SyntaxKind.LabeledStatement:               return checkLabeledStatement(<LabeledStatement>node);
+                case SyntaxKind.Method:                         return checkMethod(<MethodDeclaration>node);
+                case SyntaxKind.ModuleDeclaration:              return checkModuleDeclaration(<ModuleDeclaration>node);
+                case SyntaxKind.ObjectLiteral:                  return checkObjectLiteral(<ObjectLiteral>node);
+                case SyntaxKind.NumericLiteral:                 return checkNumericLiteral(<LiteralExpression>node);
+                case SyntaxKind.PostfixOperator:                return checkPostfixOperator(<UnaryExpression>node);
+                case SyntaxKind.PrefixOperator:                 return checkPrefixOperator(<UnaryExpression>node);
+                case SyntaxKind.Property:                       return checkProperty(<PropertyDeclaration>node);
+                case SyntaxKind.PropertyAssignment:             return checkPropertyAssignment(<PropertyDeclaration>node);
+                case SyntaxKind.ReturnStatement:                return checkReturnStatement(<ReturnStatement>node);
+                case SyntaxKind.SetAccessor:                    return checkSetAccessor(<MethodDeclaration>node);
+                case SyntaxKind.SourceFile:                     return checkSourceFile(<SourceFile>node);
+                case SyntaxKind.ShorthandPropertyAssignment:    return checkShorthandPropertyAssignment(<ShortHandPropertyDeclaration>node);
+                case SyntaxKind.SwitchStatement:                return checkSwitchStatement(<SwitchStatement>node);
+                case SyntaxKind.TaggedTemplateExpression:       return checkTaggedTemplateExpression(<TaggedTemplateExpression>node);
+                case SyntaxKind.TupleType:                      return checkTupleType(<TupleTypeNode>node);
+                case SyntaxKind.TypeParameter:                  return checkTypeParameter(<TypeParameterDeclaration>node);
+                case SyntaxKind.TypeReference:                  return checkTypeReference(<TypeReferenceNode>node);
+                case SyntaxKind.VariableDeclaration:            return checkVariableDeclaration(<VariableDeclaration>node);
+                case SyntaxKind.VariableStatement:              return checkVariableStatement(<VariableStatement>node);
+                case SyntaxKind.WithStatement:                  return checkWithStatement(<WithStatement>node);
             }
         }
 
@@ -3669,39 +3664,6 @@ module ts {
             return grammarErrorOnNode(node, Diagnostics.Invalid_use_of_0_in_strict_mode, name);
         }
 
-        function checkTopLevelElementsForRequiredDeclareModifier(file: SourceFile): boolean {
-            for (var i = 0, n = file.statements.length; i < n; i++) {
-                var decl = file.statements[i];
-                if (isDeclaration(decl) || decl.kind === SyntaxKind.VariableStatement) {
-                    if (checkTopLevelElementForRequiredDeclareModifier(decl)) {
-                        return true;
-                    }
-                }
-            }
-        }
-
-        function checkTopLevelElementForRequiredDeclareModifier(node: Node): boolean {
-            // A declare modifier is required for any top level .d.ts declaration except export=, interfaces and imports:
-            // categories:
-            //
-            //  DeclarationElement:
-            //     ExportAssignment
-            //     export_opt   InterfaceDeclaration
-            //     export_opt   ImportDeclaration
-            //     export_opt   ExternalImportDeclaration
-            //     export_opt   AmbientDeclaration
-            //
-            if (node.kind === SyntaxKind.InterfaceDeclaration ||
-                node.kind === SyntaxKind.ImportDeclaration ||
-                node.kind === SyntaxKind.ExportAssignment ||
-                (node.flags & NodeFlags.Ambient)) {
-
-                return false;
-            }
-
-            return grammarErrorOnFirstToken(node, Diagnostics.A_declare_modifier_is_required_for_a_top_level_declaration_in_a_d_ts_file);
-        }
-
         function checkForStatementInAmbientContext(node: Node, kind: SyntaxKind): boolean {
             switch (kind) {
                 case SyntaxKind.Block:
@@ -3725,18 +3687,18 @@ module ts {
             }
         }
 
-        function checkParsedSignature(node: ParsedSignature): boolean {
+        function checkAnyParsedSignature(node: ParsedSignature): boolean {
             return checkTypeParameterList(node.typeParameters) ||
                 checkParameterList(node.parameters);
         }
 
-        function visitBinaryExpression(node: BinaryExpression) {
+        function checkBinaryExpression(node: BinaryExpression) {
             if (node.flags & NodeFlags.ParsedInStrictMode) {
                 if (isLeftHandSideExpression(node.left) && isAssignmentOperator(node.operator)) {
                     if (isEvalOrArgumentsIdentifier(node.left)) {
                         // ECMA 262 (Annex C) The identifier eval or arguments may not appear as the LeftHandSideExpression of an 
                         // Assignment operator(11.13) or of a PostfixExpression(11.3)
-                        reportInvalidUseInStrictMode(<Identifier>node.left);
+                        return reportInvalidUseInStrictMode(<Identifier>node.left);
                     }
                 }
             }
@@ -3825,7 +3787,7 @@ module ts {
         }
 
         function checkCallOrNewExpression(node: CallExpression) {
-            checkTypeArguments(node.typeArguments) ||
+            return checkTypeArguments(node.typeArguments) ||
                 checkArguments(node.arguments);
         }
 
@@ -3878,20 +3840,20 @@ module ts {
             }
         }
 
-        function visitCatchBlock(node: CatchBlock) {
+        function checkCatchBlock(node: CatchBlock) {
             if (node.type) {
                 var colonStart = skipTrivia(sourceText, node.variable.end);
-                grammarErrorAtPos(colonStart, ":".length, Diagnostics.Catch_clause_parameter_cannot_have_a_type_annotation);
+                return grammarErrorAtPos(colonStart, ":".length, Diagnostics.Catch_clause_parameter_cannot_have_a_type_annotation);
             }
             if (node.flags & NodeFlags.ParsedInStrictMode && isEvalOrArgumentsIdentifier(node.variable)) {
                 // It is a SyntaxError if a TryStatement with a Catch occurs within strict code and the Identifier of the 
                 // Catch production is eval or arguments
-                reportInvalidUseInStrictMode(node.variable);
+                return reportInvalidUseInStrictMode(node.variable);
             }
         }
 
-        function visitClassDeclaration(node: ClassDeclaration) {
-            checkForDisallowedTrailingComma(node.implementedTypes) ||
+        function checkClassDeclaration(node: ClassDeclaration) {
+            return checkForDisallowedTrailingComma(node.implementedTypes) ||
                 checkForAtLeastOneHeritageClause(node.implementedTypes, "implements");
         }
 
@@ -3901,8 +3863,8 @@ module ts {
             }
         }
 
-        function visitConstructor(node: ConstructorDeclaration) {
-            checkParsedSignature(node) ||
+        function checkConstructor(node: ConstructorDeclaration) {
+            return checkAnyParsedSignature(node) ||
                 checkConstructorTypeParameters(node) ||
                 checkConstructorTypeAnnotation(node) ||
                 checkForBodyInAmbientContext(node.body, /*isConstructor:*/ true);
@@ -3920,7 +3882,7 @@ module ts {
             }
         }
 
-        function checkEnumInitializer(enumDecl: EnumDeclaration): boolean {
+        function checkEnumDeclaration(enumDecl: EnumDeclaration): boolean {
             var enumIsConst = (enumDecl.flags & NodeFlags.Const) !== 0;
 
             var hasError = false;
@@ -3943,6 +3905,7 @@ module ts {
                     }
                 }
             }
+
             return hasError;
         }
 
@@ -3969,19 +3932,19 @@ module ts {
             return false;
         }
 
-        function visitExportAssignment(node: ExportAssignment) {
+        function checkExportAssignment(node: ExportAssignment) {
             if (node.flags & NodeFlags.Modifier) {
-                grammarErrorOnFirstToken(node, Diagnostics.An_export_assignment_cannot_have_modifiers);
+                return grammarErrorOnFirstToken(node, Diagnostics.An_export_assignment_cannot_have_modifiers);
             }
         }
 
-        function visitForInStatement(node: ForInStatement) {
-            checkVariableDeclarations(node.declarations) ||
+        function checkForInStatement(node: ForInStatement) {
+            return checkVariableDeclarations(node.declarations) ||
                 checkForMoreThanOneDeclaration(node.declarations);
         }
 
-        function visitForStatement(node: ForStatement) {
-            checkVariableDeclarations(node.declarations);
+        function checkForStatement(node: ForStatement) {
+            return checkVariableDeclarations(node.declarations);
         }
 
         function checkForMoreThanOneDeclaration(declarations: NodeArray<VariableDeclaration>) {
@@ -3990,14 +3953,14 @@ module ts {
             }
         }
 
-        function visitFunctionDeclaration(node: FunctionLikeDeclaration) {
-            checkParsedSignature(node) ||
+        function checkFunctionDeclaration(node: FunctionLikeDeclaration) {
+            return checkAnyParsedSignature(node) ||
                 checkFunctionName(node.name) ||
                 checkForBodyInAmbientContext(node.body, /*isConstructor:*/ false);
         }
 
-        function visitFunctionExpression(node: FunctionExpression) {
-            checkParsedSignature(node) ||
+        function checkFunctionExpression(node: FunctionExpression) {
+            return checkAnyParsedSignature(node) ||
                 checkFunctionName(node.name);
         }
 
@@ -4009,24 +3972,24 @@ module ts {
             }
         }
 
-        function visitGetAccessor(node: MethodDeclaration) {
-            checkParsedSignature(node) ||
+        function checkGetAccessor(node: MethodDeclaration) {
+            return checkAnyParsedSignature(node) ||
                 checkAccessor(node);
         }
 
-        function visitIndexedAccess(node: IndexedAccess): void {
+        function checkIndexedAccess(node: IndexedAccess) {
             if (node.index.kind === SyntaxKind.Missing &&
                 node.parent.kind === SyntaxKind.NewExpression &&
                 (<NewExpression>node.parent).func === node) {
 
                 var start = skipTrivia(sourceText, node.parent.pos);
                 var end = node.end;
-                grammarErrorAtPos(start, end - start, Diagnostics.new_T_cannot_be_used_to_create_an_array_Use_new_Array_T_instead);
+                return grammarErrorAtPos(start, end - start, Diagnostics.new_T_cannot_be_used_to_create_an_array_Use_new_Array_T_instead);
             }
         }
 
-        function visitIndexSignature(node: SignatureDeclaration): void {
-            checkIndexSignatureParameters(node) ||
+        function checkIndexSignature(node: SignatureDeclaration): boolean {
+            return checkIndexSignatureParameters(node) ||
                 checkForIndexSignatureModifiers(node);
         }
 
@@ -4069,13 +4032,13 @@ module ts {
             }
         }
 
-        function visitInterfaceDeclaration(node: InterfaceDeclaration) {
-            checkForDisallowedTrailingComma(node.baseTypes) ||
+        function checkInterfaceDeclaration(node: InterfaceDeclaration) {
+            return checkForDisallowedTrailingComma(node.baseTypes) ||
                 checkForAtLeastOneHeritageClause(node.baseTypes, "extends");
         }
 
-        function visitMethod(node: MethodDeclaration) {
-            checkParsedSignature(node) ||
+        function checkMethod(node: MethodDeclaration) {
+            return checkAnyParsedSignature(node) ||
                 checkForBodyInAmbientContext(node.body, /*isConstructor:*/ false) ||
                 (node.parent.kind === SyntaxKind.ClassDeclaration && checkForInvalidQuestionMark(node, Diagnostics.A_class_member_cannot_be_declared_optional));
         }
@@ -4089,8 +4052,8 @@ module ts {
             }
         }
 
-        function visitModuleDeclaration(node: ModuleDeclaration): void {
-            checkModuleDeclarationName(node) ||
+        function checkModuleDeclaration(node: ModuleDeclaration): boolean {
+            return checkModuleDeclarationName(node) ||
                 checkModuleDeclarationStatements(node);
         }
         
@@ -4117,7 +4080,7 @@ module ts {
             }
         }
 
-        function visitObjectLiteral(node: ObjectLiteral): void {
+        function checkObjectLiteral(node: ObjectLiteral): boolean {
             var seen: Map<SymbolFlags> = {};
             var Property = 1;
             var GetAccessor = 2;
@@ -4175,23 +4138,23 @@ module ts {
                             seen[name.text] = currentKind | existingKind;
                         }
                         else {
-                            grammarErrorOnNode(name, Diagnostics.An_object_literal_cannot_have_multiple_get_Slashset_accessors_with_the_same_name);
+                            return grammarErrorOnNode(name, Diagnostics.An_object_literal_cannot_have_multiple_get_Slashset_accessors_with_the_same_name);
                         }
                     }
                     else {
-                        grammarErrorOnNode(name, Diagnostics.An_object_literal_cannot_have_property_and_accessor_with_the_same_name);
+                        return grammarErrorOnNode(name, Diagnostics.An_object_literal_cannot_have_property_and_accessor_with_the_same_name);
                     }
                 }
             }
         }
 
-        function visitNumericLiteral(node: LiteralExpression): void {
+        function checkNumericLiteral(node: LiteralExpression): boolean {
             if (node.flags & NodeFlags.OctalLiteral) {
                 if (node.flags & NodeFlags.ParsedInStrictMode) {
-                    grammarErrorOnNode(node, Diagnostics.Octal_literals_are_not_allowed_in_strict_mode);
+                    return grammarErrorOnNode(node, Diagnostics.Octal_literals_are_not_allowed_in_strict_mode);
                 }
                 else if (languageVersion >= ScriptTarget.ES5) {
-                    grammarErrorOnNode(node, Diagnostics.Octal_literals_are_not_available_when_targeting_ECMAScript_5_and_higher);
+                    return grammarErrorOnNode(node, Diagnostics.Octal_literals_are_not_available_when_targeting_ECMAScript_5_and_higher);
                 }
             }
         }
@@ -4386,33 +4349,33 @@ module ts {
             }
         }
 
-        function visitPostfixOperator(node: UnaryExpression) {
+        function checkPostfixOperator(node: UnaryExpression) {
             // The identifier eval or arguments may not appear as the LeftHandSideExpression of an 
             // Assignment operator(11.13) or of a PostfixExpression(11.3) or as the UnaryExpression 
             // operated upon by a Prefix Increment(11.4.4) or a Prefix Decrement(11.4.5) operator. 
             if (node.flags & NodeFlags.ParsedInStrictMode && isEvalOrArgumentsIdentifier(node.operand)) {
-                reportInvalidUseInStrictMode(<Identifier>node.operand);
+                return reportInvalidUseInStrictMode(<Identifier>node.operand);
             }
         }
 
-        function visitPrefixOperator(node: UnaryExpression) {
+        function checkPrefixOperator(node: UnaryExpression) {
             if (node.flags & NodeFlags.ParsedInStrictMode) {
                 // The identifier eval or arguments may not appear as the LeftHandSideExpression of an 
                 // Assignment operator(11.13) or of a PostfixExpression(11.3) or as the UnaryExpression 
                 // operated upon by a Prefix Increment(11.4.4) or a Prefix Decrement(11.4.5) operator
                 if ((node.operator === SyntaxKind.PlusPlusToken || node.operator === SyntaxKind.MinusMinusToken) && isEvalOrArgumentsIdentifier(node.operand)) {
-                    reportInvalidUseInStrictMode(<Identifier>node.operand);
+                    return reportInvalidUseInStrictMode(<Identifier>node.operand);
                 }
                 else if (node.operator === SyntaxKind.DeleteKeyword && node.operand.kind === SyntaxKind.Identifier) {
                     // When a delete operator occurs within strict mode code, a SyntaxError is thrown if its 
                     // UnaryExpression is a direct reference to a variable, function argument, or function name
-                    grammarErrorOnNode(node.operand, Diagnostics.delete_cannot_be_called_on_an_identifier_in_strict_mode);
+                    return grammarErrorOnNode(node.operand, Diagnostics.delete_cannot_be_called_on_an_identifier_in_strict_mode);
                 }
             }
         }
 
-        function visitProperty(node: PropertyDeclaration) {
-            (node.parent.kind === SyntaxKind.ClassDeclaration && checkForInvalidQuestionMark(node, Diagnostics.A_class_member_cannot_be_declared_optional)) ||
+        function checkProperty(node: PropertyDeclaration) {
+            return (node.parent.kind === SyntaxKind.ClassDeclaration && checkForInvalidQuestionMark(node, Diagnostics.A_class_member_cannot_be_declared_optional)) ||
                 checkForInitializerInAmbientContext(node);
         }
 
@@ -4422,8 +4385,8 @@ module ts {
             }
         }
 
-        function visitPropertyAssignment(node: PropertyDeclaration) {
-            checkForInvalidQuestionMark(node, Diagnostics.An_object_member_cannot_be_declared_optional);
+        function checkPropertyAssignment(node: PropertyDeclaration) {
+            return checkForInvalidQuestionMark(node, Diagnostics.An_object_member_cannot_be_declared_optional);
         }
 
         function checkForInvalidQuestionMark(node: Declaration, message: DiagnosticMessage) {
@@ -4433,14 +4396,14 @@ module ts {
             }
         }
 
-        function visitReturnStatement(node: ReturnStatement) {
+        function checkReturnStatement(node: ReturnStatement) {
             if (!inFunctionBlock) {
-                grammarErrorOnFirstToken(node, Diagnostics.A_return_statement_can_only_be_used_within_a_function_body);
+                return grammarErrorOnFirstToken(node, Diagnostics.A_return_statement_can_only_be_used_within_a_function_body);
             }
         }
 
-        function visitSetAccessor(node: MethodDeclaration) {
-            checkParsedSignature(node) ||
+        function checkSetAccessor(node: MethodDeclaration) {
+            return checkAnyParsedSignature(node) ||
                 checkAccessor(node);
         }
 
@@ -4486,11 +4449,48 @@ module ts {
             }
         }
 
-        function visitShorthandPropertyAssignment(node: ShortHandPropertyDeclaration): void {
-            checkForInvalidQuestionMark(node, Diagnostics.An_object_member_cannot_be_declared_optional);
+        function checkSourceFile(node: SourceFile): boolean {
+            return inAmbientContext && checkTopLevelElementsForRequiredDeclareModifier(file);
         }
 
-        function visitSwitchStatement(node: SwitchStatement) {
+        function checkTopLevelElementsForRequiredDeclareModifier(file: SourceFile): boolean {
+            for (var i = 0, n = file.statements.length; i < n; i++) {
+                var decl = file.statements[i];
+                if (isDeclaration(decl) || decl.kind === SyntaxKind.VariableStatement) {
+                    if (checkTopLevelElementForRequiredDeclareModifier(decl)) {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        function checkTopLevelElementForRequiredDeclareModifier(node: Node): boolean {
+            // A declare modifier is required for any top level .d.ts declaration except export=, interfaces and imports:
+            // categories:
+            //
+            //  DeclarationElement:
+            //     ExportAssignment
+            //     export_opt   InterfaceDeclaration
+            //     export_opt   ImportDeclaration
+            //     export_opt   ExternalImportDeclaration
+            //     export_opt   AmbientDeclaration
+            //
+            if (node.kind === SyntaxKind.InterfaceDeclaration ||
+                node.kind === SyntaxKind.ImportDeclaration ||
+                node.kind === SyntaxKind.ExportAssignment ||
+                (node.flags & NodeFlags.Ambient)) {
+
+                return false;
+            }
+
+            return grammarErrorOnFirstToken(node, Diagnostics.A_declare_modifier_is_required_for_a_top_level_declaration_in_a_d_ts_file);
+        }
+
+        function checkShorthandPropertyAssignment(node: ShortHandPropertyDeclaration): boolean {
+            return checkForInvalidQuestionMark(node, Diagnostics.An_object_member_cannot_be_declared_optional);
+        }
+
+        function checkSwitchStatement(node: SwitchStatement) {
             var firstDefaultClause: CaseOrDefaultClause;
 
             // Error on duplicate 'default' clauses.
@@ -4503,20 +4503,20 @@ module ts {
                     else {
                         var start = skipTrivia(file.text, clause.pos);
                         var end = clause.statements.length > 0 ? clause.statements[0].pos : clause.end;
-                        grammarErrorAtPos(start, end - start, Diagnostics.A_default_clause_cannot_appear_more_than_once_in_a_switch_statement);
+                        return grammarErrorAtPos(start, end - start, Diagnostics.A_default_clause_cannot_appear_more_than_once_in_a_switch_statement);
                     }
                 }
             }
         }
 
-        function visitTaggedTemplateExpression(node: TaggedTemplateExpression) {
+        function checkTaggedTemplateExpression(node: TaggedTemplateExpression) {
             if (languageVersion < ScriptTarget.ES6) {
-                grammarErrorOnFirstToken(node.template, Diagnostics.Tagged_templates_are_only_available_when_targeting_ECMAScript_6_and_higher);
+                return grammarErrorOnFirstToken(node.template, Diagnostics.Tagged_templates_are_only_available_when_targeting_ECMAScript_6_and_higher);
             }
         }
 
-        function visitTupleType(node: TupleTypeNode) {
-            checkForDisallowedTrailingComma(node.elementTypes) ||
+        function checkTupleType(node: TupleTypeNode) {
+            return checkForDisallowedTrailingComma(node.elementTypes) ||
                 checkForAtLeastOneType(node);
         }
 
@@ -4526,28 +4526,28 @@ module ts {
             }
         }
 
-        function visitTypeParameter(node: TypeParameterDeclaration) {
+        function checkTypeParameter(node: TypeParameterDeclaration) {
             if (node.expression) {
-                grammarErrorOnFirstToken(node.expression, Diagnostics.Type_expected);
+                return grammarErrorOnFirstToken(node.expression, Diagnostics.Type_expected);
             }
         }
 
-        function visitTypeReference(node: TypeReferenceNode) {
-            checkTypeArguments(node.typeArguments);
+        function checkTypeReference(node: TypeReferenceNode) {
+            return checkTypeArguments(node.typeArguments);
         }
 
-        function visitVariableDeclaration(node: VariableDeclaration) {
+        function checkVariableDeclaration(node: VariableDeclaration) {
             if (inAmbientContext && node.initializer) {
                 var equalsPos = node.type ? skipTrivia(sourceText, node.type.end) : skipTrivia(sourceText, node.name.end);
-                grammarErrorAtPos(equalsPos, "=".length, Diagnostics.Initializers_are_not_allowed_in_ambient_contexts);
+                return grammarErrorAtPos(equalsPos, "=".length, Diagnostics.Initializers_are_not_allowed_in_ambient_contexts);
             }
             if (!inAmbientContext && !node.initializer && node.flags & NodeFlags.Const) {
-                grammarErrorOnNode(node, Diagnostics.const_declarations_must_be_initialized);
+                return grammarErrorOnNode(node, Diagnostics.const_declarations_must_be_initialized);
             }
             if (node.flags & NodeFlags.ParsedInStrictMode && isEvalOrArgumentsIdentifier(node.name)) {
                 // It is a SyntaxError if a VariableDeclaration or VariableDeclarationNoIn occurs within strict code 
                 // and its Identifier is eval or arguments 
-                reportInvalidUseInStrictMode(node.name);
+                return reportInvalidUseInStrictMode(node.name);
             }
         }
 
@@ -4573,8 +4573,8 @@ module ts {
             }
         }
 
-        function visitVariableStatement(node: VariableStatement) {
-            checkVariableDeclarations(node.declarations) ||
+        function checkVariableStatement(node: VariableStatement) {
+            return checkVariableDeclarations(node.declarations) ||
                 checkForDisallowedLetOrConstStatement(node);
         }
 
@@ -4605,11 +4605,11 @@ module ts {
             return true;
         }
 
-        function visitWithStatement(node: WithStatement): void {
+        function checkWithStatement(node: WithStatement): boolean {
             if (node.flags & NodeFlags.ParsedInStrictMode) {
                 // Strict mode code may not include a WithStatement. The occurrence of a WithStatement in such 
                 // a context is an 
-                grammarErrorOnFirstToken(node, Diagnostics.with_statements_are_not_allowed_in_strict_mode);
+                return grammarErrorOnFirstToken(node, Diagnostics.with_statements_are_not_allowed_in_strict_mode);
             }
         }
     }
