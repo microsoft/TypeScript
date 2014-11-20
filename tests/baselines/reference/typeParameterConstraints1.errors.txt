@@ -23,7 +23,7 @@ tests/cases/compiler/typeParameterConstraints1.ts(12,26): error TS2304: Cannot f
                             ~
 !!! error TS1110: Type expected.
     function foo10<T extends (1)> (test: T) { }
-                             ~~~
+                             ~
 !!! error TS1110: Type expected.
     function foo11<T extends null> (test: T) { }
                              ~~~~

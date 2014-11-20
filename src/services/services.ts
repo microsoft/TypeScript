@@ -714,14 +714,20 @@ module ts {
     class SourceFileObject extends NodeObject implements SourceFile {
         public filename: string;
         public text: string;
+
+        // These methods will have their implementation overridden with the implementation the 
+        // compiler actually exports off of SourceFile.
         public getLineAndCharacterFromPosition(position: number): { line: number; character: number } { return null; }
         public getPositionFromLineAndCharacter(line: number, character: number): number { return -1; }
         public getLineStarts(): number[] { return undefined; }
+        public getSyntacticDiagnostics(): Diagnostic[] { return undefined; }
+
         public amdDependencies: string[];
         public amdModuleName: string;
         public referencedFiles: FileReference[];
-        public syntacticErrors: Diagnostic[];
-        public semanticErrors: Diagnostic[];
+        public parseDiagnostics: Diagnostic[];
+        public grammarDiagnostics: Diagnostic[];
+        public semanticDiagnostics: Diagnostic[];
         public hasNoDefaultLib: boolean;
         public externalModuleIndicator: Node; // The first node that causes this file to be an external module
         public nodeCount: number;

@@ -3,7 +3,6 @@ tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(17,1): err
 tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(18,1): error TS6053: File 'tests/cases/conformance/parser/ecmascript5/services/typescriptServices.ts' not found.
 tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(19,1): error TS6053: File 'tests/cases/conformance/parser/ecmascript5/RealWorld/diff.ts' not found.
 tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(1430,9): error TS1128: Declaration or statement expected.
-tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(2047,13): error TS1015: Parameter cannot have question mark and initializer.
 tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(21,21): error TS2305: Module 'Harness' has no exported member 'Assert'.
 tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(25,17): error TS2304: Cannot find name 'IIO'.
 tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(41,12): error TS2304: Cannot find name 'ActiveXObject'.
@@ -111,7 +110,7 @@ tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(1787,68): 
 tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(2030,32): error TS2304: Cannot find name 'Diff'.
 
 
-==== tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts (111 errors) ====
+==== tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts (110 errors) ====
     //﻿
     // Copyright (c) Microsoft Corporation.  All rights reserved.
     // 
@@ -2379,8 +2378,6 @@ tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(2030,32): 
                 relativeFilename: string,
                 generateContent: () => string,
                 runImmediately? = false,
-                ~~~~~~~~~~~~~~
-!!! error TS1015: Parameter cannot have question mark and initializer.
                 opts?: BaselineOptions) {
     
                 var actual = <string>undefined;

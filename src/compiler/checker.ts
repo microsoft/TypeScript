@@ -1784,7 +1784,7 @@ module ts {
                     }
                     else {
                         // If there are no specified types, try to infer it from the body of the get accessor if it exists.
-                        if (getter) {
+                        if (getter && getter.body) {
                             type = getReturnTypeFromBody(getter);
                         }
                         // Otherwise, fall back to 'any'.
@@ -7531,10 +7531,13 @@ module ts {
             // for (var VarDecl in Expr) Statement
             //   VarDecl must be a variable declaration without a type annotation that declares a variable of type Any,
             //   and Expr must be an expression of type Any, an object type, or a type parameter type.                        
-            if (node.declaration) {
-                checkVariableDeclaration(node.declaration);
-                if (node.declaration.type) {
-                    error(node.declaration, Diagnostics.The_left_hand_side_of_a_for_in_statement_cannot_use_a_type_annotation);
+            if (node.declarations) {
+                if (node.declarations.length >= 1) {
+                    var decl = node.declarations[0];
+                    checkVariableDeclaration(decl);
+                    if (decl.type) {
+                        error(decl, Diagnostics.The_left_hand_side_of_a_for_in_statement_cannot_use_a_type_annotation);
+                    }
                 }
             }
 
@@ -9143,7 +9146,7 @@ module ts {
             // Bind all source files and propagate errors
             forEach(program.getSourceFiles(), file => {
                 bindSourceFile(file);
-                forEach(file.semanticErrors, addDiagnostic);
+                forEach(file.semanticDiagnostics, addDiagnostic);
             });
             // Initialize global symbol table
             forEach(program.getSourceFiles(), file => {

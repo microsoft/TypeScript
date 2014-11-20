@@ -1349,15 +1349,18 @@ module ts {
                 var endPos = emitToken(SyntaxKind.ForKeyword, node.pos);
                 write(" ");
                 endPos = emitToken(SyntaxKind.OpenParenToken, endPos);
-                if (node.declaration) {
-                    if (node.declaration.flags & NodeFlags.Let) {
-                        emitToken(SyntaxKind.LetKeyword, endPos);
+                if (node.declarations) {
+                    if (node.declarations.length >= 1) {
+                        var decl = node.declarations[0];
+                        if (decl.flags & NodeFlags.Let) {
+                            emitToken(SyntaxKind.LetKeyword, endPos);
+                        }
+                        else {
+                            emitToken(SyntaxKind.VarKeyword, endPos);
+                        }
+                        write(" ");
+                        emit(decl);
                     }
-                    else {
-                        emitToken(SyntaxKind.VarKeyword, endPos);
-                    }
-                    write(" ");
-                    emit(node.declaration);
                 }
                 else {
                     emit(node.variable);

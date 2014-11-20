@@ -487,10 +487,9 @@
         "category": "Error",
         "code": 1161
     },
-
     "An object member cannot be declared optional.": {
         "category": "Error",
-        "code":  1160
+        "code": 1162
     },
 
     "Duplicate identifier '{0}'.": {
