@@ -1010,7 +1010,10 @@ module ts {
         function createNode(kind: SyntaxKind, pos?: number): Node {
             nodeCount++;
             var node = new (nodeConstructors[kind] || (nodeConstructors[kind] = objectAllocator.getNodeConstructor(kind)))();
-            if (!(pos >= 0)) pos = scanner.getStartPos();
+            if (!(pos >= 0)) {
+                pos = scanner.getStartPos();
+            }
+
             node.pos = pos;
             node.end = pos;
             return node;
@@ -2225,16 +2228,21 @@ module ts {
                     // the code would be implicitly: "name.keyword; identifierNameOrKeyword".  
                     // In the first case though, ASI will not take effect because there is not a
                     // line terminator after the keyword.
-                    if (scanner.hasPrecedingLineBreak() && scanner.isReservedWord() && lookAhead(() => scanner.isReservedWord())) {
-                        grammarErrorAtPos(dotOrBracketStart, scanner.getStartPos() - dotOrBracketStart, Diagnostics.Identifier_expected);
-                        var id = <Identifier>createMissingNode();
-                    }
-                    else {
-                        var id = parseIdentifierName();
+                    var id: Identifier;
+                    if (scanner.hasPrecedingLineBreak() && scanner.isReservedWord()) {
+                        var matchesPattern = lookAhead(() => {
+                            nextToken();
+                            return !scanner.hasPrecedingLineBreak() && (scanner.isIdentifier() || scanner.isReservedWord);
+                        });
+
+                        if (matchesPattern) {
+                            errorAtPos(dotOrBracketStart + 1, 0, Diagnostics.Identifier_expected);
+                            id = <Identifier>createMissingNode();
+                        }
                     }
 
                     propertyAccess.left = expr;
-                    propertyAccess.right = id;
+                    propertyAccess.right = id || parseIdentifierName();
                     expr = finishNode(propertyAccess);
                     continue;
                 }
