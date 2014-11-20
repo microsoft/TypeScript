@@ -3375,14 +3375,6 @@ module ts {
             var node = <ModuleDeclaration>createNode(SyntaxKind.ModuleDeclaration, pos);
             node.flags = flags;
             node.name = parseStringLiteral();
-            if (!inAmbientContext) {
-                var errorCount = file.parseDiagnostics.length;
-                // Only report this error if we have not already errored about a missing declare modifier,
-                // which would have been at or after pos
-                if (!errorCount || file.parseDiagnostics[errorCount - 1].start < getTokenPos(pos)) {
-                    grammarErrorOnNode(node.name, Diagnostics.Only_ambient_modules_can_use_quoted_names);
-                }
-            }
 
             // For error recovery, just in case the user forgot the declare modifier on this ambient
             // external module, treat it as ambient anyway.
@@ -4080,7 +4072,7 @@ module ts {
 
         function checkForMoreThanOneDeclaration(declarations: NodeArray<VariableDeclaration>) {
             if (declarations && declarations.length > 1) {
-                return grammarErrorOnNode(declarations[1], Diagnostics.Only_a_single_variable_declaration_is_allowed_in_a_for_in_statement);
+                return grammarErrorOnFirstToken(declarations[1], Diagnostics.Only_a_single_variable_declaration_is_allowed_in_a_for_in_statement);
             }
         }
 
@@ -4174,16 +4166,30 @@ module ts {
         }
 
         function visitModuleDeclaration(node: ModuleDeclaration): void {
+            checkModuleDeclarationName(node) ||
+                checkModuleDeclarationStatements(node);
+        }
+        
+        function checkModuleDeclarationName(node: ModuleDeclaration) {
+            if (!inAmbientContext && node.name.kind === SyntaxKind.StringLiteral) {
+                return grammarErrorOnNode(node.name, Diagnostics.Only_ambient_modules_can_use_quoted_names);
+            }
+        }
+
+        function checkModuleDeclarationStatements(node: ModuleDeclaration): boolean {
             if (node.name.kind === SyntaxKind.Identifier && node.body.kind === SyntaxKind.ModuleBlock) {
-                forEach((<Block>node.body).statements, s => {
-                    if (s.kind === SyntaxKind.ExportAssignment) {
+                var statements = (<Block>node.body).statements;
+                for (var i = 0, n = statements.length; i < n; i++) {
+                    var statement = statements[i];
+
+                    if (statement.kind === SyntaxKind.ExportAssignment) {
                         // Export assignments are not allowed in an internal module
-                        grammarErrorOnNode(s, Diagnostics.An_export_assignment_cannot_be_used_in_an_internal_module);
+                        return grammarErrorOnFirstToken(statement, Diagnostics.An_export_assignment_cannot_be_used_in_an_internal_module);
                     }
-                    else if (s.kind === SyntaxKind.ImportDeclaration && (<ImportDeclaration>s).externalModuleName) {
-                        grammarErrorOnNode(s, Diagnostics.Import_declarations_in_an_internal_module_cannot_reference_an_external_module);
+                    else if (statement.kind === SyntaxKind.ImportDeclaration && (<ImportDeclaration>statement).externalModuleName) {
+                        return grammarErrorOnFirstToken(statement, Diagnostics.Import_declarations_in_an_internal_module_cannot_reference_an_external_module);
                     }
-                });
+                }
             }
         }
 
@@ -4446,7 +4452,7 @@ module ts {
 
         function visitTaggedTemplateExpression(node: TaggedTemplateExpression) {
             if (languageVersion < ScriptTarget.ES6) {
-                grammarErrorOnNode(node, Diagnostics.Tagged_templates_are_only_available_when_targeting_ECMAScript_6_and_higher);
+                grammarErrorOnFirstToken(node.template, Diagnostics.Tagged_templates_are_only_available_when_targeting_ECMAScript_6_and_higher);
             }
         }
 
@@ -4493,10 +4499,10 @@ module ts {
                 var decl = declarations[0];
                 if (languageVersion < ScriptTarget.ES6) {
                     if (decl.flags & NodeFlags.Let) {
-                        return grammarErrorOnNode(decl, Diagnostics.let_declarations_are_only_available_when_targeting_ECMAScript_6_and_higher);
+                        return grammarErrorOnFirstToken(decl, Diagnostics.let_declarations_are_only_available_when_targeting_ECMAScript_6_and_higher);
                     }
                     else if (decl.flags & NodeFlags.Const) {
-                        return grammarErrorOnNode(decl, Diagnostics.const_declarations_are_only_available_when_targeting_ECMAScript_6_and_higher);
+                        return grammarErrorOnFirstToken(decl, Diagnostics.const_declarations_are_only_available_when_targeting_ECMAScript_6_and_higher);
                     }
                 }
             }

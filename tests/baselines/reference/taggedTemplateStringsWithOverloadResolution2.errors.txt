@@ -1,5 +1,5 @@
-tests/cases/conformance/es6/templates/taggedTemplateStringsWithOverloadResolution2.ts(8,9): error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
-tests/cases/conformance/es6/templates/taggedTemplateStringsWithOverloadResolution2.ts(17,9): error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
+tests/cases/conformance/es6/templates/taggedTemplateStringsWithOverloadResolution2.ts(8,14): error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
+tests/cases/conformance/es6/templates/taggedTemplateStringsWithOverloadResolution2.ts(17,14): error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
 
 
 ==== tests/cases/conformance/es6/templates/taggedTemplateStringsWithOverloadResolution2.ts (2 errors) ====
@@ -11,7 +11,7 @@ tests/cases/conformance/es6/templates/taggedTemplateStringsWithOverloadResolutio
     }
     
     var a = foo1 `${1}`;          // string
-            ~~~~~~~~~~~
+                 ~~~
 !!! error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
     var b = foo1([], 1);          // number
     
@@ -22,6 +22,6 @@ tests/cases/conformance/es6/templates/taggedTemplateStringsWithOverloadResolutio
     }
     
     var c = foo2 `${1}`;          // number
-            ~~~~~~~~~~~
+                 ~~~
 !!! error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
     var d = foo2([], 1);          // number
