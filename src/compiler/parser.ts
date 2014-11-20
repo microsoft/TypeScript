@@ -1028,8 +1028,8 @@ module ts {
             return node;
         }
 
-        function createMissingNode(): Node {
-            return createNode(SyntaxKind.Missing);
+        function createMissingNode(pos?: number): Node {
+            return createNode(SyntaxKind.Missing, pos);
         }
 
         function internIdentifier(text: string): string {
@@ -2254,7 +2254,6 @@ module ts {
                     // Check for that common pattern and report a better error message.
                     if (inNewExpression && parseOptional(SyntaxKind.CloseBracketToken)) {
                         indexedAccess.index = createMissingNode();
-                        errorAtPos(dotOrBracketStart, scanner.getStartPos() - dotOrBracketStart, Diagnostics.new_T_cannot_be_used_to_create_an_array_Use_new_Array_T_instead);
                     }
                     else {
                         indexedAccess.index = parseExpression();
@@ -3725,6 +3724,7 @@ module ts {
                 case SyntaxKind.FunctionExpression:             return visitFunctionExpression(<FunctionExpression>node);
                 case SyntaxKind.FunctionType:                   return visitFunctionType(<SignatureDeclaration>node);
                 case SyntaxKind.GetAccessor:                    return visitGetAccessor(<MethodDeclaration>node);
+                case SyntaxKind.IndexedAccess:                  return visitIndexedAccess(<IndexedAccess>node);
                 case SyntaxKind.IndexSignature:                 return visitIndexSignature(<SignatureDeclaration>node);
                 case SyntaxKind.InterfaceDeclaration:           return visitInterfaceDeclaration(<InterfaceDeclaration>node);
                 case SyntaxKind.LabeledStatement:               return visitLabeledStatement(<LabeledStatement>node);
@@ -4121,6 +4121,17 @@ module ts {
             checkTypeParameterList(node.typeParameters) ||
                 checkParameterList(node.parameters) ||
                 checkAccessor(node);
+        }
+
+        function visitIndexedAccess(node: IndexedAccess): void {
+            if (node.index.kind === SyntaxKind.Missing &&
+                node.parent.kind === SyntaxKind.NewExpression &&
+                (<NewExpression>node.parent).func === node) {
+
+                var start = skipTrivia(sourceText, node.parent.pos);
+                var end = node.end;
+                grammarErrorAtPos(start, end - start, Diagnostics.new_T_cannot_be_used_to_create_an_array_Use_new_Array_T_instead);
+            }
         }
 
         function visitIndexSignature(node: SignatureDeclaration): void {
