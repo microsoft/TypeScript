@@ -3843,11 +3843,15 @@ module ts {
                     case SyntaxKind.SourceFile:
                         nodes = (<Block>container).statements;
                         break;
+                    case SyntaxKind.Constructor:
+                        nodes = (<Node[]>(<ConstructorDeclaration>container).parameters).concat(
+                            (<ClassDeclaration>container.parent).members);
+                        break;
                     case SyntaxKind.ClassDeclaration:
                         nodes = (<ClassDeclaration>container).members;
 
-                        // If we're an accessibility modifier, we should search the constructor's parameter list
-                        // as well (i.e. don't look for 'static' parameters).
+                        // If we're an accessibility modifier, we're in an instance member and should search
+                        // the constructor's parameter list for instance members as well.
                         if (modifierFlag & NodeFlags.AccessibilityModifier) {
                             var constructor = forEach((<ClassDeclaration>container).members, member => {
                                 return member.kind === SyntaxKind.Constructor && <ConstructorDeclaration>member;
@@ -3857,10 +3861,6 @@ module ts {
                                 nodes = nodes.concat(constructor.parameters);
                             }
                         }
-                        break;
-                    case SyntaxKind.Constructor:
-                        nodes = (<Node[]>(<ConstructorDeclaration>container).parameters).concat(
-                            (<ClassDeclaration>container.parent).members);
                         break;
                     default:
                         Debug.fail("Invalid container kind.")
