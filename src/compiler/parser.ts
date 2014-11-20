@@ -1541,8 +1541,12 @@ module ts {
             return finishNode(node);
         }
 
-        function parseIndexSignatureMember(): SignatureDeclaration {
-            var node = <SignatureDeclaration>createNode(SyntaxKind.IndexSignature);
+        function parseIndexSignatureMember(flags: NodeFlags, pos?: number): SignatureDeclaration {
+            var node = <SignatureDeclaration>createNode(SyntaxKind.IndexSignature, pos);
+            if (flags) {
+                node.flags = flags;
+            }
+
             node.parameters = parseParameterList(SyntaxKind.OpenBracketToken, SyntaxKind.CloseBracketToken);
             node.type = parseTypeAnnotation();
             parseSemicolon();
@@ -1588,7 +1592,7 @@ module ts {
                 case SyntaxKind.LessThanToken:
                     return parseSignatureMember(SyntaxKind.CallSignature, SyntaxKind.ColonToken);
                 case SyntaxKind.OpenBracketToken:
-                    return parseIndexSignatureMember();
+                    return parseIndexSignatureMember(/*flags:*/ 0);
                 case SyntaxKind.NewKeyword:
                     if (lookAhead(() => nextToken() === SyntaxKind.OpenParenToken || token === SyntaxKind.LessThanToken)) {
                         return parseSignatureMember(SyntaxKind.ConstructSignature, SyntaxKind.ColonToken);
@@ -3238,12 +3242,7 @@ module ts {
                 return parsePropertyMemberDeclaration(pos, flags);
             }
             if (token === SyntaxKind.OpenBracketToken) {
-                if (flags) {
-                    var start = getTokenPos(pos);
-                    var length = getNodePos() - start;
-                    errorAtPos(start, length, Diagnostics.Modifiers_not_permitted_on_index_signature_members);
-                }
-                return parseIndexSignatureMember();
+                return parseIndexSignatureMember(flags, pos);
             }
 
             // 'isClassMemberStart' should have hinted not to attempt parsing.
@@ -4137,7 +4136,14 @@ module ts {
         }
 
         function visitIndexSignature(node: SignatureDeclaration): void {
-            checkIndexSignatureParameters(node);
+            checkIndexSignatureParameters(node) ||
+                checkForIndexSignatureModifiers(node);
+        }
+
+        function checkForIndexSignatureModifiers(node: SignatureDeclaration): boolean {
+            if (node.flags & NodeFlags.Modifier) {
+                return grammarErrorOnFirstToken(node, Diagnostics.Modifiers_not_permitted_on_index_signature_members);
+            }
         }
 
         function checkIndexSignatureParameters(node: SignatureDeclaration): boolean {
