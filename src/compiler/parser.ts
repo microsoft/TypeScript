@@ -3629,14 +3629,27 @@ module ts {
                 case SyntaxKind.FunctionType:
                     checkParsedSignature(<FunctionLikeDeclaration>node);
                     break;
+                case SyntaxKind.BreakStatement: 
+                case SyntaxKind.ContinueStatement: 
+                    checkBreakOrContinueStatement(<BreakOrContinueStatement>node);
+                    break;
+                case SyntaxKind.LabeledStatement:
+                    checkLabeledStatement(<LabeledStatement>node);
+                    break;
+                case SyntaxKind.CallExpression: 
+                case SyntaxKind.NewExpression:
+                    checkCallOrNewExpression(<NewExpression>node);
+                    break;
+                case SyntaxKind.EnumDeclaration:
+                    checkEnumInitializer(<EnumDeclaration>node);
+                    break;
+                case SyntaxKind.Parameter:
+                    checkParameter(<ParameterDeclaration>node);
+                    break;
                 case SyntaxKind.BinaryExpression:               return visitBinaryExpression(<BinaryExpression>node);
-                case SyntaxKind.BreakStatement:                 return visitBreakOrContinueStatement(<BreakOrContinueStatement>node);
-                case SyntaxKind.CallExpression:                 return visitCallExpression(<CallExpression>node);
                 case SyntaxKind.CatchBlock:                     return visitCatchBlock(<CatchBlock>node);
                 case SyntaxKind.ClassDeclaration:               return visitClassDeclaration(<ClassDeclaration>node);
                 case SyntaxKind.Constructor:                    return visitConstructor(<ConstructorDeclaration>node);
-                case SyntaxKind.ContinueStatement:              return visitBreakOrContinueStatement(<BreakOrContinueStatement>node);
-                case SyntaxKind.EnumDeclaration:                return visitEnumDeclaration(<EnumDeclaration>node);
                 case SyntaxKind.ExportAssignment:               return visitExportAssignment(<ExportAssignment>node);
                 case SyntaxKind.ForInStatement:                 return visitForInStatement(<ForInStatement>node);
                 case SyntaxKind.ForStatement:                   return visitForStatement(<ForStatement>node);
@@ -3646,13 +3659,10 @@ module ts {
                 case SyntaxKind.IndexedAccess:                  return visitIndexedAccess(<IndexedAccess>node);
                 case SyntaxKind.IndexSignature:                 return visitIndexSignature(<SignatureDeclaration>node);
                 case SyntaxKind.InterfaceDeclaration:           return visitInterfaceDeclaration(<InterfaceDeclaration>node);
-                case SyntaxKind.LabeledStatement:               return visitLabeledStatement(<LabeledStatement>node);
                 case SyntaxKind.Method:                         return visitMethod(<MethodDeclaration>node);
                 case SyntaxKind.ModuleDeclaration:              return visitModuleDeclaration(<ModuleDeclaration>node);
-                case SyntaxKind.NewExpression:                  return visitNewExpression(<NewExpression>node);
                 case SyntaxKind.ObjectLiteral:                  return visitObjectLiteral(<ObjectLiteral>node);
                 case SyntaxKind.NumericLiteral:                 return visitNumericLiteral(<LiteralExpression>node);
-                case SyntaxKind.Parameter:                      return visitParameter(<ParameterDeclaration>node);
                 case SyntaxKind.PostfixOperator:                return visitPostfixOperator(<UnaryExpression>node);
                 case SyntaxKind.PrefixOperator:                 return visitPrefixOperator(<UnaryExpression>node);
                 case SyntaxKind.Property:                       return visitProperty(<PropertyDeclaration>node);
@@ -3733,7 +3743,6 @@ module ts {
             return grammarErrorOnFirstToken(node, Diagnostics.A_declare_modifier_is_required_for_a_top_level_declaration_in_a_d_ts_file);
         }
 
-
         function checkForStatementInAmbientContext(node: Node, kind: SyntaxKind): boolean {
             switch (kind) {
                 case SyntaxKind.Block:
@@ -3772,14 +3781,6 @@ module ts {
                     }
                 }
             }
-        }
-
-        function visitBreakOrContinueStatement(node: BreakOrContinueStatement): void {
-            checkBreakOrContinueStatement(node);
-        }
-
-        function visitLabeledStatement(node: LabeledStatement): void {
-            checkLabeledStatement(node);
         }
 
         function isIterationStatement(node: Node, lookInLabeledStatements: boolean): boolean {
@@ -3864,7 +3865,7 @@ module ts {
             }
         }
 
-        function visitCallExpression(node: CallExpression) {
+        function checkCallOrNewExpression(node: CallExpression) {
             checkTypeArguments(node.typeArguments) ||
                 checkArguments(node.arguments);
         }
@@ -3958,10 +3959,6 @@ module ts {
             if (node.type) {
                 return grammarErrorOnNode(node.type, Diagnostics.Type_annotation_cannot_appear_on_a_constructor_declaration);
             }
-        }
-
-        function visitEnumDeclaration(enumDecl: EnumDeclaration) {
-            checkEnumInitializer(enumDecl);
         }
 
         function checkEnumInitializer(enumDecl: EnumDeclaration): boolean {
@@ -4161,11 +4158,6 @@ module ts {
             }
         }
 
-        function visitNewExpression(node: NewExpression): void {
-            checkTypeArguments(node.typeArguments) ||
-                checkArguments(node.arguments);
-        }
-
         function visitObjectLiteral(node: ObjectLiteral): void {
             var seen: Map<SymbolFlags> = {};
             var Property = 1;
@@ -4233,6 +4225,7 @@ module ts {
                 }
             }
         }
+
         function visitNumericLiteral(node: LiteralExpression): void {
             if (node.flags & NodeFlags.OctalLiteral) {
                 if (node.flags & NodeFlags.ParsedInStrictMode) {
@@ -4373,11 +4366,7 @@ module ts {
             }
         }
 
-        function visitParameter(node: ParameterDeclaration): void {
-            checkParameterName(node);
-        }
-
-        function checkParameterName(node: ParameterDeclaration): boolean {
+        function checkParameter(node: ParameterDeclaration): boolean {
             // It is a SyntaxError if the Identifier "eval" or the Identifier "arguments" occurs as the 
             // Identifier in a PropertySetParameterList of a PropertyAssignment that is contained in strict code 
             // or if its FunctionBody is strict code(11.1.5).
