@@ -288,10 +288,15 @@ module ts {
         locals?: SymbolTable;         // Locals associated with node (initialized by binding)
         nextContainer?: Node;         // Next container in declaration order (initialized by binding)
         localSymbol?: Symbol;         // Local symbol declared by node (initialized by binding only for exported nodes)
+        modifiers?: ModifiersArray;           // Array of modifiers
     }
 
     export interface NodeArray<T> extends Array<T>, TextRange {
         hasTrailingComma?: boolean;
+    }
+
+    export interface ModifiersArray extends Array<Node> {
+        flags: number;
     }
 
     export interface Identifier extends Node {

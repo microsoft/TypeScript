@@ -1,12 +1,9 @@
 tests/cases/conformance/parser/ecmascript5/IndexMemberDeclarations/parserIndexMemberDeclaration10.ts(2,4): error TS1145: Modifiers not permitted on index signature members.
-tests/cases/conformance/parser/ecmascript5/IndexMemberDeclarations/parserIndexMemberDeclaration10.ts(2,11): error TS1030: 'static' modifier already seen.
 
 
-==== tests/cases/conformance/parser/ecmascript5/IndexMemberDeclarations/parserIndexMemberDeclaration10.ts (2 errors) ====
+==== tests/cases/conformance/parser/ecmascript5/IndexMemberDeclarations/parserIndexMemberDeclaration10.ts (1 errors) ====
     class C {
        static static [x: string]: string;
        ~~~~~~~~~~~~~
 !!! error TS1145: Modifiers not permitted on index signature members.
-              ~~~~~~
-!!! error TS1030: 'static' modifier already seen.
     }

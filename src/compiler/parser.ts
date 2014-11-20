@@ -821,6 +821,18 @@ module ts {
         _syntacticDiagnostics: Diagnostic[];
     }
 
+    function modifierToFlag(token: SyntaxKind): NodeFlags {
+        switch (token) {
+            case SyntaxKind.StaticKeyword: return NodeFlags.Static;
+            case SyntaxKind.PublicKeyword: return NodeFlags.Public;
+            case SyntaxKind.ProtectedKeyword: return NodeFlags.Protected;
+            case SyntaxKind.PrivateKeyword: return NodeFlags.Private;
+            case SyntaxKind.ExportKeyword: return NodeFlags.Export;
+            case SyntaxKind.DeclareKeyword: return NodeFlags.Ambient;
+        }
+        return 0;
+    }
+
     export function createSourceFile(filename: string, sourceText: string, languageVersion: ScriptTarget, version: string, isOpen: boolean = false): SourceFile {
         var file: SourceFileInternal;
         var scanner: Scanner;
@@ -1488,7 +1500,11 @@ module ts {
 
         function parseParameter(flags: NodeFlags = 0): ParameterDeclaration {
             var node = <ParameterDeclaration>createNode(SyntaxKind.Parameter);
-            node.flags |= parseAndCheckModifiers(ModifierContext.Parameters);
+            var modifiers = parseModifiers(ModifierContext.Parameters);
+            if (modifiers) {
+                node.flags |= modifiers.flags;
+                node.modifiers = modifiers;
+            }
             if (parseOptional(SyntaxKind.DotDotDotToken)) {
                 node.flags |= NodeFlags.Rest;
             }
@@ -2472,7 +2488,7 @@ module ts {
             var initialToken = token;
             if (parseContextualModifier(SyntaxKind.GetKeyword) || parseContextualModifier(SyntaxKind.SetKeyword)) {
                 var kind = initialToken === SyntaxKind.GetKeyword ? SyntaxKind.GetAccessor : SyntaxKind.SetAccessor;
-                return parseMemberAccessorDeclaration(kind, initialPos, 0);
+                return parseMemberAccessorDeclaration(kind, initialPos, /*modifiers*/ undefined);
             }
             return parsePropertyAssignment();
         }
@@ -2982,19 +2998,23 @@ module ts {
             return finishNode(node);
         }
 
-        function parseConstructorDeclaration(pos: number, flags: NodeFlags): ConstructorDeclaration {
+        function parseConstructorDeclaration(pos: number, modifiers: ModifiersArray): ConstructorDeclaration {
             var node = <ConstructorDeclaration>createNode(SyntaxKind.Constructor, pos);
-            node.flags = flags;
+            if (modifiers) {
+                node.modifiers = modifiers;
+                node.flags = modifiers.flags;
+            }
             parseExpected(SyntaxKind.ConstructorKeyword);
             var sig = parseSignature(SyntaxKind.CallSignature, SyntaxKind.ColonToken, /* returnTokenRequired */ false);
             node.typeParameters = sig.typeParameters;
             node.parameters = sig.parameters;
             node.type = sig.type;
             node.body = parseFunctionBlockOrSemicolon();
+
             return finishNode(node);
         }
 
-        function parsePropertyMemberDeclaration(pos: number, flags: NodeFlags): Declaration {
+        function parsePropertyMemberDeclaration(pos: number, modifiers: ModifiersArray): Declaration {
             var errorCountBeforePropertyDeclaration = file.parseDiagnostics.length;
             var name = parsePropertyName();
 
@@ -3005,18 +3025,25 @@ module ts {
 
             if (token === SyntaxKind.OpenParenToken || token === SyntaxKind.LessThanToken) {
                 var method = <MethodDeclaration>createNode(SyntaxKind.Method, pos);
-                method.flags = flags;
+                if (modifiers) {
+                    method.modifiers = modifiers;
+                    method.flags = modifiers.flags;
+                }
                 method.name = name;
                 var sig = parseSignature(SyntaxKind.CallSignature, SyntaxKind.ColonToken, /* returnTokenRequired */ false);
                 method.typeParameters = sig.typeParameters;
                 method.parameters = sig.parameters;
                 method.type = sig.type;
                 method.body = parseFunctionBlockOrSemicolon();
+
                 return finishNode(method);
             }
             else {
                 var property = <PropertyDeclaration>createNode(SyntaxKind.Property, pos);
-                property.flags = flags;
+                if (modifiers) {
+                    property.modifiers = modifiers;
+                    property.flags = modifiers.flags;
+                }
                 property.name = name;
                 property.type = parseTypeAnnotation();
 
@@ -3032,9 +3059,12 @@ module ts {
             }
         }
 
-        function parseMemberAccessorDeclaration(kind: SyntaxKind, pos: number, flags: NodeFlags): MethodDeclaration {
+        function parseMemberAccessorDeclaration(kind: SyntaxKind, pos: number, modifiers: ModifiersArray): MethodDeclaration {
             var node = <MethodDeclaration>createNode(kind, pos);
-            node.flags = flags;
+            if (modifiers) {
+                node.modifiers = modifiers;
+                node.flags = modifiers.flags;
+            }
             node.name = parsePropertyName();
             var sig = parseSignature(SyntaxKind.CallSignature, SyntaxKind.ColonToken, /* returnTokenRequired */ false);
             node.typeParameters = sig.typeParameters;
@@ -3103,175 +3133,44 @@ module ts {
             return false;
         }
 
-        function parseAndCheckModifiers(context: ModifierContext): number {
+        function parseModifiers(context: ModifierContext): ModifiersArray {
             var flags = 0;
-            var lastStaticModifierStart: number;
-            var lastStaticModifierLength: number;
-            var lastDeclareModifierStart: number;
-            var lastDeclareModifierLength: number;
-            var lastPrivateModifierStart: number;
-            var lastPrivateModifierLength: number;
-            var lastProtectedModifierStart: number;
-            var lastProtectedModifierLength: number;
-
+            var modifiers: ModifiersArray;
             while (true) {
                 var modifierStart = scanner.getTokenPos();
                 var modifierToken = token;
 
-                // Try to parse the modifier
                 if (!parseAnyContextualModifier()) break;
 
-                var modifierLength = scanner.getStartPos() - modifierStart;
-
-                switch (modifierToken) {
-                    case SyntaxKind.PublicKeyword:
-                        if (flags & NodeFlags.AccessibilityModifier) {
-                            grammarErrorAtPos(modifierStart, modifierLength, Diagnostics.Accessibility_modifier_already_seen);
-                        }
-                        else if (flags & NodeFlags.Static) {
-                            grammarErrorAtPos(modifierStart, modifierLength, Diagnostics._0_modifier_must_precede_1_modifier, "public", "static");
-                        }
-                        else if (context === ModifierContext.ModuleElements || context === ModifierContext.SourceElements) {
-                            grammarErrorAtPos(modifierStart, modifierLength, Diagnostics._0_modifier_cannot_appear_on_a_module_element, "public");
-                        }
-                        flags |= NodeFlags.Public;
-                        break;
-
-                    case SyntaxKind.PrivateKeyword:
-                        if (flags & NodeFlags.AccessibilityModifier) {
-                            grammarErrorAtPos(modifierStart, modifierLength, Diagnostics.Accessibility_modifier_already_seen);
-                        }
-                        else if (flags & NodeFlags.Static) {
-                            grammarErrorAtPos(modifierStart, modifierLength, Diagnostics._0_modifier_must_precede_1_modifier, "private", "static");
-                        }
-                        else if (context === ModifierContext.ModuleElements || context === ModifierContext.SourceElements) {
-                            grammarErrorAtPos(modifierStart, modifierLength, Diagnostics._0_modifier_cannot_appear_on_a_module_element, "private");
-                        }
-                        lastPrivateModifierStart = modifierStart;
-                        lastPrivateModifierLength = modifierLength;
-                        flags |= NodeFlags.Private;
-                        break;
-
-                    case SyntaxKind.ProtectedKeyword:
-                        if (flags & NodeFlags.Public || flags & NodeFlags.Private || flags & NodeFlags.Protected) {
-                            grammarErrorAtPos(modifierStart, modifierLength, Diagnostics.Accessibility_modifier_already_seen);
-                        }
-                        else if (flags & NodeFlags.Static) {
-                            grammarErrorAtPos(modifierStart, modifierLength, Diagnostics._0_modifier_must_precede_1_modifier, "protected", "static");
-                        }
-                        else if (context === ModifierContext.ModuleElements || context === ModifierContext.SourceElements) {
-                            grammarErrorAtPos(modifierStart, modifierLength, Diagnostics._0_modifier_cannot_appear_on_a_module_element, "protected");
-                        }
-                        lastProtectedModifierStart = modifierStart;
-                        lastProtectedModifierLength = modifierLength;
-                        flags |= NodeFlags.Protected;
-                        break;
-
-                    case SyntaxKind.StaticKeyword:
-                        if (flags & NodeFlags.Static) {
-                            grammarErrorAtPos(modifierStart, modifierLength, Diagnostics._0_modifier_already_seen, "static");
-                        }
-                        else if (context === ModifierContext.ModuleElements || context === ModifierContext.SourceElements) {
-                            grammarErrorAtPos(modifierStart, modifierLength, Diagnostics._0_modifier_cannot_appear_on_a_module_element, "static");
-                        }
-                        else if (context === ModifierContext.Parameters) {
-                            grammarErrorAtPos(modifierStart, modifierLength, Diagnostics._0_modifier_cannot_appear_on_a_parameter, "static");
-                        }
-                        lastStaticModifierStart = modifierStart;
-                        lastStaticModifierLength = modifierLength;
-                        flags |= NodeFlags.Static;
-                        break;
-
-                    case SyntaxKind.ExportKeyword:
-                        if (flags & NodeFlags.Export) {
-                            grammarErrorAtPos(modifierStart, modifierLength, Diagnostics._0_modifier_already_seen, "export");
-                        }
-                        else if (flags & NodeFlags.Ambient) {
-                            grammarErrorAtPos(modifierStart, modifierLength, Diagnostics._0_modifier_must_precede_1_modifier, "export", "declare");
-                        }
-                        else if (context === ModifierContext.ClassMembers) {
-                            grammarErrorAtPos(modifierStart, modifierLength, Diagnostics._0_modifier_cannot_appear_on_a_class_element, "export");
-                        }
-                        else if (context === ModifierContext.Parameters) {
-                            grammarErrorAtPos(modifierStart, modifierLength, Diagnostics._0_modifier_cannot_appear_on_a_parameter, "export");
-                        }
-                        flags |= NodeFlags.Export;
-                        break;
-
-                    case SyntaxKind.DeclareKeyword:
-                        if (flags & NodeFlags.Ambient) {
-                            grammarErrorAtPos(modifierStart, modifierLength, Diagnostics._0_modifier_already_seen, "declare");
-                        }
-                        else if (context === ModifierContext.ClassMembers) {
-                            grammarErrorAtPos(modifierStart, modifierLength, Diagnostics._0_modifier_cannot_appear_on_a_class_element, "declare");
-                        }
-                        else if (context === ModifierContext.Parameters) {
-                            grammarErrorAtPos(modifierStart, modifierLength, Diagnostics._0_modifier_cannot_appear_on_a_parameter, "declare");
-                        }
-                        else if (inAmbientContext && context === ModifierContext.ModuleElements) {
-                            grammarErrorAtPos(modifierStart, modifierLength, Diagnostics.A_declare_modifier_cannot_be_used_in_an_already_ambient_context);
-                        }
-                        lastDeclareModifierStart = modifierStart;
-                        lastDeclareModifierLength = modifierLength;
-                        flags |= NodeFlags.Ambient;
-                        break;
+                if (!modifiers) {
+                    modifiers = <ModifiersArray>[];
                 }
+                flags |= modifierToFlag(modifierToken);
+                modifiers.push(finishNode(createNode(modifierToken, modifierStart))); 
             }
-
-            if (token === SyntaxKind.ConstructorKeyword && flags & NodeFlags.Static) {
-                grammarErrorAtPos(lastStaticModifierStart, lastStaticModifierLength, Diagnostics._0_modifier_cannot_appear_on_a_constructor_declaration, "static");
+            if (modifiers) {
+                modifiers.flags = flags;
             }
-            else if (token === SyntaxKind.ConstructorKeyword && flags & NodeFlags.Private) {
-                grammarErrorAtPos(lastPrivateModifierStart, lastPrivateModifierLength, Diagnostics._0_modifier_cannot_appear_on_a_constructor_declaration, "private");
-            }
-            else if (token === SyntaxKind.ConstructorKeyword && flags & NodeFlags.Protected) {
-                grammarErrorAtPos(lastProtectedModifierStart, lastProtectedModifierLength, Diagnostics._0_modifier_cannot_appear_on_a_constructor_declaration, "protected");
-            }
-            else if (token === SyntaxKind.ImportKeyword) {
-                if (flags & NodeFlags.Ambient) {
-                    grammarErrorAtPos(lastDeclareModifierStart, lastDeclareModifierLength, Diagnostics.A_declare_modifier_cannot_be_used_with_an_import_declaration, "declare");
-                }
-            }
-            else if (token === SyntaxKind.InterfaceKeyword) {
-                if (flags & NodeFlags.Ambient) {
-                    grammarErrorAtPos(lastDeclareModifierStart, lastDeclareModifierLength, Diagnostics.A_declare_modifier_cannot_be_used_with_an_interface_declaration, "declare");
-                }
-            }
-            else if (token !== SyntaxKind.ExportKeyword && !(flags & NodeFlags.Ambient) && inAmbientContext && context === ModifierContext.SourceElements) {
-                // A declare modifier is required for any top level .d.ts declaration except export=, interfaces and imports:
-                // categories:
-                //
-                //  DeclarationElement:
-                //     ExportAssignment
-                //     export_opt   InterfaceDeclaration
-                //     export_opt   ImportDeclaration
-                //     export_opt   ExternalImportDeclaration
-                //     export_opt   AmbientDeclaration
-                //
-                var declarationStart = scanner.getTokenPos();
-                var declarationFirstTokenLength = scanner.getTextPos() - declarationStart;
-                grammarErrorAtPos(declarationStart, declarationFirstTokenLength, Diagnostics.A_declare_modifier_is_required_for_a_top_level_declaration_in_a_d_ts_file);
-            }
-            return flags;
+            return modifiers;
         }
 
         function parseClassMemberDeclaration(): Declaration {
             var pos = getNodePos();
-            var flags = parseAndCheckModifiers(ModifierContext.ClassMembers);
+            var modifiers = parseModifiers(ModifierContext.ClassMembers);
             if (parseContextualModifier(SyntaxKind.GetKeyword)) {
-                return parseMemberAccessorDeclaration(SyntaxKind.GetAccessor, pos, flags);
+                return parseMemberAccessorDeclaration(SyntaxKind.GetAccessor, pos, modifiers);
             }
             if (parseContextualModifier(SyntaxKind.SetKeyword)) {
-                return parseMemberAccessorDeclaration(SyntaxKind.SetAccessor, pos, flags);
+                return parseMemberAccessorDeclaration(SyntaxKind.SetAccessor, pos, modifiers);
             }
             if (token === SyntaxKind.ConstructorKeyword) {
-                return parseConstructorDeclaration(pos, flags);
+                return parseConstructorDeclaration(pos, modifiers);
             }
             if (token >= SyntaxKind.Identifier || token === SyntaxKind.StringLiteral || token === SyntaxKind.NumericLiteral) {
-                return parsePropertyMemberDeclaration(pos, flags);
+                return parsePropertyMemberDeclaration(pos, modifiers);
             }
             if (token === SyntaxKind.OpenBracketToken) {
-                if (flags) {
+                if (modifiers) {
                     var start = getTokenPos(pos);
                     var length = getNodePos() - start;
                     errorAtPos(start, length, Diagnostics.Modifiers_not_permitted_on_index_signature_members);
@@ -3472,14 +3371,13 @@ module ts {
         function parseDeclaration(modifierContext: ModifierContext): Statement {
             var pos = getNodePos();
             var errorCountBeforeModifiers = file.parseDiagnostics.length;
-            var flags = parseAndCheckModifiers(modifierContext);
-
+            var modifiers = parseModifiers(modifierContext);
             if (token === SyntaxKind.ExportKeyword) {
                 var modifiersEnd = scanner.getStartPos();
                 nextToken();
                 if (parseOptional(SyntaxKind.EqualsToken)) {
                     var exportAssignmentTail = parseExportAssignmentTail(pos);
-                    if (flags !== 0 && errorCountBeforeModifiers === file.parseDiagnostics.length) {
+                    if (modifiers && errorCountBeforeModifiers === file.parseDiagnostics.length) {
                         var modifiersStart = skipTrivia(sourceText, pos);
                         grammarErrorAtPos(modifiersStart, modifiersEnd - modifiersStart, Diagnostics.An_export_assignment_cannot_have_modifiers);
                     }
@@ -3488,10 +3386,10 @@ module ts {
             }
 
             var saveInAmbientContext = inAmbientContext;
-            if (flags & NodeFlags.Ambient) {
+            if (modifiers && modifiers.flags & NodeFlags.Ambient) {
                 inAmbientContext = true;
             }
-
+            var flags = modifiers ? modifiers.flags : 0;
             var result: Declaration;
             switch (token) {
                 case SyntaxKind.VarKeyword:
@@ -3530,6 +3428,10 @@ module ts {
                     break;
                 default:
                     error(Diagnostics.Declaration_expected);
+            }
+
+            if (modifiers) {
+                result.modifiers = modifiers;
             }
 
             inAmbientContext = saveInAmbientContext;
@@ -3711,14 +3613,17 @@ module ts {
             node.parent = parent;
             parent = node;
 
-            var savedInAmbientContext = inAmbientContext
-            if (node.flags & NodeFlags.Ambient) {
-                inAmbientContext = true;
+            if (!checkModifiers(node)) {
+                var savedInAmbientContext = inAmbientContext
+                if (node.flags & NodeFlags.Ambient) {
+                    inAmbientContext = true;
+                }
+
+                checkNode(node);
+
+                inAmbientContext = savedInAmbientContext;
             }
 
-            checkNode(node);
-
-            inAmbientContext = savedInAmbientContext;
             parent = savedParent;
         }
 
@@ -3743,7 +3648,7 @@ module ts {
             dispatch(node);
         }
 
-        function dispatch(node: Node) {
+        function dispatch(node: Node): void {
             switch (node.kind) {
                 case SyntaxKind.ArrowFunction:              return visitArrowFunction(<FunctionExpression>node);
                 case SyntaxKind.BinaryExpression:           return visitBinaryExpression(<BinaryExpression>node);
@@ -4026,8 +3931,13 @@ module ts {
         }
 
         function visitEnumDeclaration(enumDecl: EnumDeclaration) {
+            checkEnumInitializer(enumDecl);
+        }
+
+        function checkEnumInitializer(enumDecl: EnumDeclaration): boolean {
             var enumIsConst = (enumDecl.flags & NodeFlags.Const) !== 0;
 
+            var hasError = false;
             // skip checks below for const enums  - they allow arbitrary initializers as long as they can be evaluated to constant expressions.
             // since all values are known in compile time - it is not necessary to check that constant enum section precedes computed enum members.
             if (!enumIsConst) {
@@ -4036,17 +3946,18 @@ module ts {
                     var node = enumDecl.members[i];
                     if (inAmbientContext) {
                         if (node.initializer && !isIntegerLiteral(node.initializer)) {
-                            grammarErrorOnNode(node.name, Diagnostics.Ambient_enum_elements_can_only_have_integer_literal_initializers);
+                            hasError = grammarErrorOnNode(node.name, Diagnostics.Ambient_enum_elements_can_only_have_integer_literal_initializers) || hasError;
                         }
                     }
                     else if (node.initializer) {
                         inConstantEnumMemberSection = isIntegerLiteral(node.initializer);
                     }
                     else if (!inConstantEnumMemberSection) {
-                        grammarErrorOnNode(node.name, Diagnostics.Enum_member_must_have_initializer);
+                        hasError = grammarErrorOnNode(node.name, Diagnostics.Enum_member_must_have_initializer) || hasError;
                     }
                 }
             }
+            return hasError;
         }
 
         function isIntegerLiteral(expression: Expression): boolean {
@@ -4177,14 +4088,18 @@ module ts {
         }
 
         function visitModuleDeclaration(node: ModuleDeclaration): void {
+            checkInternalModule(node);
+        }
+
+        function checkInternalModule(node: ModuleDeclaration): boolean {
             if (node.name.kind === SyntaxKind.Identifier && node.body.kind === SyntaxKind.ModuleBlock) {
-                forEach((<Block>node.body).statements, s => {
+                return forEach((<Block>node.body).statements, s => {
                     if (s.kind === SyntaxKind.ExportAssignment) {
                         // Export assignments are not allowed in an internal module
-                        grammarErrorOnNode(s, Diagnostics.An_export_assignment_cannot_be_used_in_an_internal_module);
+                        return grammarErrorOnNode(s, Diagnostics.An_export_assignment_cannot_be_used_in_an_internal_module);
                     }
                     else if (s.kind === SyntaxKind.ImportDeclaration && (<ImportDeclaration>s).externalModuleName) {
-                        grammarErrorOnNode(s, Diagnostics.Import_declarations_in_an_internal_module_cannot_reference_an_external_module);
+                        return grammarErrorOnNode(s, Diagnostics.Import_declarations_in_an_internal_module_cannot_reference_an_external_module);
                     }
                 });
             }
@@ -4259,6 +4174,148 @@ module ts {
                     }
                 }
             });
+        }
+
+        function checkTopLevelDeclareModifierInAmbientContext(node: Node): boolean {
+            // A declare modifier is required for any top level .d.ts declaration except export=, interfaces and imports:
+            // categories:
+            //
+            //  DeclarationElement:
+            //     ExportAssignment
+            //     export_opt   InterfaceDeclaration
+            //     export_opt   ImportDeclaration
+            //     export_opt   ExternalImportDeclaration
+            //     export_opt   AmbientDeclaration
+            //
+
+            if (!inAmbientContext || 
+                !(isDeclaration(node) || node.kind === SyntaxKind.VariableStatement) || 
+                !node.parent || 
+                node.parent.kind !== SyntaxKind.SourceFile) {
+                return false;
+            }
+
+            if (node.kind === SyntaxKind.InterfaceDeclaration || 
+                node.kind === SyntaxKind.ImportDeclaration ||
+                node.kind === SyntaxKind.ExportAssignment ||
+                (node.flags & NodeFlags.Ambient) || 
+                (node.flags & NodeFlags.Export)) {
+
+                return false;
+            }
+
+            return grammarErrorOnFirstToken(node, Diagnostics.A_declare_modifier_is_required_for_a_top_level_declaration_in_a_d_ts_file);
+        }
+
+
+        function checkModifiers(node: Node): boolean {
+            if (!node.modifiers) {
+                return checkTopLevelDeclareModifierInAmbientContext(node);
+            }
+            var lastStatic: Node, lastPrivate: Node, lastProtected: Node, lastDeclare: Node;
+            var flags = 0;
+            var hasErrors = forEach(node.modifiers, m => {
+                switch (m.kind) {
+                    case SyntaxKind.PublicKeyword:
+                    case SyntaxKind.ProtectedKeyword:
+                    case SyntaxKind.PrivateKeyword:
+                        var text: string;
+                        if (m.kind === SyntaxKind.PublicKeyword) {
+                            text = "public";
+                        }
+                        else if (m.kind === SyntaxKind.ProtectedKeyword) {
+                            text = "protected";
+                            lastProtected = m;
+                        }
+                        else {
+                            text = "private";
+                            lastPrivate = m;
+                        }
+
+                        if (flags & NodeFlags.AccessibilityModifier) {
+                            return grammarErrorOnNode(m, Diagnostics.Accessibility_modifier_already_seen);
+                        }
+                        else if (flags & NodeFlags.Static) {
+                            return grammarErrorOnNode(m, Diagnostics._0_modifier_must_precede_1_modifier, text, "static");
+                        }
+                        else if (node.parent.kind === SyntaxKind.ModuleBlock || node.parent.kind === SyntaxKind.SourceFile) {
+                            return grammarErrorOnNode(m, Diagnostics._0_modifier_cannot_appear_on_a_module_element, text);
+                        }
+                        flags |= modifierToFlag(m.kind);
+                        break;
+
+                    case SyntaxKind.StaticKeyword:
+                        if (flags & NodeFlags.Static) {
+                            return grammarErrorOnNode(m, Diagnostics._0_modifier_already_seen, "static");
+                        }
+                        else if (node.parent.kind === SyntaxKind.ModuleBlock || node.parent.kind === SyntaxKind.SourceFile) {
+                            return grammarErrorOnNode(m, Diagnostics._0_modifier_cannot_appear_on_a_module_element, "static");
+                        }
+                        else if (node.kind === SyntaxKind.Parameter) {
+                            return grammarErrorOnNode(m, Diagnostics._0_modifier_cannot_appear_on_a_parameter, "static");
+                        }
+                        flags |= NodeFlags.Static;
+                        lastStatic = m;
+                        break;
+
+                    case SyntaxKind.ExportKeyword:
+                        if (flags & NodeFlags.Export) {
+                            return grammarErrorOnNode(m, Diagnostics._0_modifier_already_seen, "export");
+                        }
+                        else if (flags & NodeFlags.Ambient) {
+                            return grammarErrorOnNode(m, Diagnostics._0_modifier_must_precede_1_modifier, "export", "declare");
+                        }
+                        else if (node.parent.kind === SyntaxKind.ClassDeclaration) {
+                            return grammarErrorOnNode(m, Diagnostics._0_modifier_cannot_appear_on_a_class_element, "export");
+                        }
+                        else if (node.kind === SyntaxKind.Parameter) {
+                            return grammarErrorOnNode(m, Diagnostics._0_modifier_cannot_appear_on_a_parameter, "export");
+                        }
+                        flags |= NodeFlags.Export;
+                        break;
+
+                    case SyntaxKind.DeclareKeyword:
+                        if (flags & NodeFlags.Ambient) {
+                            return grammarErrorOnNode(m, Diagnostics._0_modifier_already_seen, "declare");
+                        }
+                        else if (node.parent.kind === SyntaxKind.ClassDeclaration) {
+                            return grammarErrorOnNode(m, Diagnostics._0_modifier_cannot_appear_on_a_class_element, "declare");
+                        }
+                        else if (node.kind === SyntaxKind.Parameter) {
+                            return grammarErrorOnNode(m, Diagnostics._0_modifier_cannot_appear_on_a_parameter, "declare");
+                        }
+                        else if (inAmbientContext && node.parent.kind === SyntaxKind.ModuleBlock) {
+                            return grammarErrorOnNode(m, Diagnostics.A_declare_modifier_cannot_be_used_in_an_already_ambient_context);
+                        }
+                        flags |= NodeFlags.Ambient;
+                        lastDeclare = m;
+                        break;
+                }
+            });
+
+            if (hasErrors) {
+                return true;
+            }
+
+            if (node.kind === SyntaxKind.Constructor) {
+                if (flags & NodeFlags.Static) {
+                    return grammarErrorOnNode(lastStatic, Diagnostics._0_modifier_cannot_appear_on_a_constructor_declaration, "static");
+                }
+                else if (flags & NodeFlags.Protected) {
+                    return grammarErrorOnNode(lastProtected, Diagnostics._0_modifier_cannot_appear_on_a_constructor_declaration, "protected");
+                }
+                else if (flags & NodeFlags.Private) {
+                    return grammarErrorOnNode(lastPrivate, Diagnostics._0_modifier_cannot_appear_on_a_constructor_declaration, "private");
+                }
+            }
+            else if (node.kind === SyntaxKind.ImportDeclaration && flags & NodeFlags.Ambient) {
+                return grammarErrorOnNode(lastDeclare, Diagnostics.A_declare_modifier_cannot_be_used_with_an_import_declaration, "declare");
+            }
+            else if (node.kind === SyntaxKind.InterfaceDeclaration && flags & NodeFlags.Ambient) {
+                return grammarErrorOnNode(lastDeclare, Diagnostics.A_declare_modifier_cannot_be_used_with_an_interface_declaration, "declare");
+            }
+
+            return checkTopLevelDeclareModifierInAmbientContext(node);
         }
 
         function visitParameter(node: ParameterDeclaration): void {

@@ -34,10 +34,6 @@ tests/cases/compiler/giant.ts(430,9): error TS1005: '{' expected.
 tests/cases/compiler/giant.ts(432,9): error TS1005: '{' expected.
 tests/cases/compiler/giant.ts(436,9): error TS1005: '{' expected.
 tests/cases/compiler/giant.ts(438,5): error TS1005: '{' expected.
-tests/cases/compiler/giant.ts(615,16): error TS1038: A 'declare' modifier cannot be used in an already ambient context.
-tests/cases/compiler/giant.ts(616,16): error TS1038: A 'declare' modifier cannot be used in an already ambient context.
-tests/cases/compiler/giant.ts(617,16): error TS1038: A 'declare' modifier cannot be used in an already ambient context.
-tests/cases/compiler/giant.ts(618,16): error TS1038: A 'declare' modifier cannot be used in an already ambient context.
 tests/cases/compiler/giant.ts(23,12): error TS2300: Duplicate identifier 'pgF'.
 tests/cases/compiler/giant.ts(24,16): error TS2300: Duplicate identifier 'pgF'.
 tests/cases/compiler/giant.ts(24,16): error TS2378: A 'get' accessor must return a value or consist of a single 'throw' statement.
@@ -174,7 +170,7 @@ tests/cases/compiler/giant.ts(602,9): error TS2386: Overload signatures must all
 tests/cases/compiler/giant.ts(668,9): error TS2386: Overload signatures must all be optional or required.
 
 
-==== tests/cases/compiler/giant.ts (174 errors) ====
+==== tests/cases/compiler/giant.ts (170 errors) ====
     
     /*
         Prefixes
@@ -1128,17 +1124,9 @@ tests/cases/compiler/giant.ts(668,9): error TS2386: Overload signatures must all
             export interface eI { }
             export module eM { }
             export declare var eaV
-                   ~~~~~~~
-!!! error TS1038: A 'declare' modifier cannot be used in an already ambient context.
             export declare function eaF() { };
-                   ~~~~~~~
-!!! error TS1038: A 'declare' modifier cannot be used in an already ambient context.
             export declare class eaC { }
-                   ~~~~~~~
-!!! error TS1038: A 'declare' modifier cannot be used in an already ambient context.
             export declare module eaM { }
-                   ~~~~~~~
-!!! error TS1038: A 'declare' modifier cannot be used in an already ambient context.
         }
         export var eV;
         export function eF() { };

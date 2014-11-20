@@ -1,6 +1,11 @@
+tests/cases/compiler/privacyImportParseErrors.ts(59,5): error TS1147: Import declarations in an internal module cannot reference an external module.
+tests/cases/compiler/privacyImportParseErrors.ts(143,5): error TS1147: Import declarations in an internal module cannot reference an external module.
+tests/cases/compiler/privacyImportParseErrors.ts(277,13): error TS1147: Import declarations in an internal module cannot reference an external module.
+tests/cases/compiler/privacyImportParseErrors.ts(306,13): error TS1147: Import declarations in an internal module cannot reference an external module.
 tests/cases/compiler/privacyImportParseErrors.ts(314,9): error TS1038: A 'declare' modifier cannot be used in an already ambient context.
 tests/cases/compiler/privacyImportParseErrors.ts(326,9): error TS1029: 'export' modifier must precede 'declare' modifier.
-tests/cases/compiler/privacyImportParseErrors.ts(328,9): error TS1038: A 'declare' modifier cannot be used in an already ambient context.
+tests/cases/compiler/privacyImportParseErrors.ts(344,9): error TS1147: Import declarations in an internal module cannot reference an external module.
+tests/cases/compiler/privacyImportParseErrors.ts(353,9): error TS1147: Import declarations in an internal module cannot reference an external module.
 tests/cases/compiler/privacyImportParseErrors.ts(22,27): error TS2435: Ambient external modules cannot be nested in other modules.
 tests/cases/compiler/privacyImportParseErrors.ts(30,20): error TS2435: Ambient external modules cannot be nested in other modules.
 tests/cases/compiler/privacyImportParseErrors.ts(59,37): error TS2307: Cannot find external module 'm1_M3_public'.
@@ -33,7 +38,7 @@ tests/cases/compiler/privacyImportParseErrors.ts(333,16): error TS2435: Ambient 
 tests/cases/compiler/privacyImportParseErrors.ts(336,12): error TS2435: Ambient external modules cannot be nested in other modules.
 
 
-==== tests/cases/compiler/privacyImportParseErrors.ts (33 errors) ====
+==== tests/cases/compiler/privacyImportParseErrors.ts (38 errors) ====
     export module m1 {
         export module m1_M1_public {
             export class c1 {
@@ -97,6 +102,8 @@ tests/cases/compiler/privacyImportParseErrors.ts(336,12): error TS2435: Ambient 
         var m1_im2_private_v4_private = m1_im2_private.f1();
     
         import m1_im3_private = require("m1_M3_public");
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1147: Import declarations in an internal module cannot reference an external module.
                                         ~~~~~~~~~~~~~~
 !!! error TS2307: Cannot find external module 'm1_M3_public'.
         export var m1_im3_private_v1_public = m1_im3_private.c1;
@@ -189,6 +196,8 @@ tests/cases/compiler/privacyImportParseErrors.ts(336,12): error TS2435: Ambient 
         var m1_im2_private_v4_private = m1_im2_private.f1();
     
         import m1_im3_private = require("m2_M3_public");
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1147: Import declarations in an internal module cannot reference an external module.
                                         ~~~~~~~~~~~~~~
 !!! error TS2307: Cannot find external module 'm2_M3_public'.
         export var m1_im3_private_v1_public = m1_im3_private.c1;
@@ -347,6 +356,8 @@ tests/cases/compiler/privacyImportParseErrors.ts(336,12): error TS2435: Ambient 
     
             module m5 {
                 import m5_errorImport = require("glo_M2_public");
+                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1147: Import declarations in an internal module cannot reference an external module.
                 import m5_nonerrorImport = glo_M1_public;
             }
         }
@@ -384,6 +395,8 @@ tests/cases/compiler/privacyImportParseErrors.ts(336,12): error TS2435: Ambient 
     
             module m5 {
                 import m5_errorImport = require("glo_M4_private");
+                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1147: Import declarations in an internal module cannot reference an external module.
                 import m5_nonerrorImport = glo_M3_private;
             }
         }
@@ -420,8 +433,6 @@ tests/cases/compiler/privacyImportParseErrors.ts(336,12): error TS2435: Ambient 
 !!! error TS2435: Ambient external modules cannot be nested in other modules.
         module m2 {
             declare module "abc" {
-            ~~~~~~~
-!!! error TS1038: A 'declare' modifier cannot be used in an already ambient context.
                            ~~~~~
 !!! error TS2435: Ambient external modules cannot be nested in other modules.
             }
@@ -444,6 +455,8 @@ tests/cases/compiler/privacyImportParseErrors.ts(336,12): error TS2435: Ambient 
         module m4 {
             var a = 10;
             import m2 = require("use_glo_M1_public");
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1147: Import declarations in an internal module cannot reference an external module.
         }
     
     }
@@ -453,6 +466,8 @@ tests/cases/compiler/privacyImportParseErrors.ts(336,12): error TS2435: Ambient 
         module m4 {
             var a = 10;
             import m2 = require("use_glo_M1_public");
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1147: Import declarations in an internal module cannot reference an external module.
         }
     
     }
