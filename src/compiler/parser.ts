@@ -2376,25 +2376,18 @@ module ts {
             return finishNode(node);
         }
 
-        function parseAssignmentExpressionOrOmittedExpression(omittedExpressionDiagnostic: DiagnosticMessage): Expression {
-            if (token === SyntaxKind.CommaToken) {
-                if (omittedExpressionDiagnostic) {
-                    var errorStart = scanner.getTokenPos();
-                    var errorLength = scanner.getTextPos() - errorStart;
-                    grammarErrorAtPos(errorStart, errorLength, omittedExpressionDiagnostic);
-                }
-                return createNode(SyntaxKind.OmittedExpression);
-            }
-            
-            return parseAssignmentExpression();
+        function parseAssignmentExpressionOrOmittedExpression(): Expression {
+            return token === SyntaxKind.CommaToken
+                ? createNode(SyntaxKind.OmittedExpression)
+                : parseAssignmentExpression();
         }
 
         function parseArrayLiteralElement(): Expression {
-            return parseAssignmentExpressionOrOmittedExpression(/*omittedExpressionDiagnostic*/ undefined);
+            return parseAssignmentExpressionOrOmittedExpression();
         }
 
         function parseArgumentExpression(): Expression {
-            return parseAssignmentExpressionOrOmittedExpression(Diagnostics.Argument_expression_expected);
+            return parseAssignmentExpressionOrOmittedExpression();
         }
 
         function parseArrayLiteral(): ArrayLiteral {
@@ -3922,13 +3915,29 @@ module ts {
 
         function visitCallExpression(node: CallExpression) {
             checkTypeArguments(node.typeArguments) ||
-                checkForTrailingComma(node.arguments);
+                checkArguments(node.arguments);
+        }
+
+        function checkArguments(arguments: NodeArray<Expression>) {
+            return checkForTrailingComma(arguments) ||
+                checkForOmittedArgument(arguments);
         }
 
         function checkTypeArguments(typeArguments: NodeArray<TypeNode>) {
             return checkForTrailingComma(typeArguments) ||
                 checkForAtLeastOneTypeArgument(typeArguments) ||
                 checkForMissingTypeArgument(typeArguments);
+        }
+
+        function checkForOmittedArgument(arguments: NodeArray<Expression>) {
+            if (arguments) {
+                for (var i = 0, n = arguments.length; i < n; i++) {
+                    var arg = arguments[i];
+                    if (arg.kind === SyntaxKind.OmittedExpression) {
+                        return grammarErrorAtPos(arg.pos, 0, Diagnostics.Argument_expression_expected);
+                    }
+                }
+            }
         }
 
         function checkForMissingTypeArgument(typeArguments: NodeArray<TypeNode>) {
@@ -4203,7 +4212,7 @@ module ts {
 
         function visitNewExpression(node: NewExpression): void {
             checkTypeArguments(node.typeArguments) ||
-                checkForTrailingComma(node.arguments);
+                checkArguments(node.arguments);
         }
 
         function visitObjectLiteral(node: ObjectLiteral): void {
