@@ -759,13 +759,12 @@ module ts {
                 if (matchResult) {
                     var start = commentRange.pos;
                     var end = commentRange.end;
-                    var fileRef = {
-                        pos: start,
-                        end: end,
-                        filename: matchResult[3]
-                    };
                     return {
-                        fileReference: fileRef,
+                        fileReference: {
+                            pos: start,
+                            end: end,
+                            filename: matchResult[3]
+                        },
                         isNoDefaultLib: false
                     };
                 }
@@ -1520,8 +1519,8 @@ module ts {
             }
 
             return {
-                typeParameters: typeParameters,
-                parameters: parameters,
+                typeParameters,
+                parameters,
                 type: type
             };
         }
@@ -2408,6 +2407,7 @@ module ts {
 
         function parsePropertyAssignment(): Declaration {
             var nodePos = scanner.getStartPos();
+            var tokenIsIdentifier = isIdentifier();
             var nameToken = token;
             var propertyName = parsePropertyName();
             var node: Declaration;
@@ -2434,7 +2434,7 @@ module ts {
             }
 
             // Parse to check if it is short-hand property assignment or normal property assignment
-            if (token !== SyntaxKind.ColonToken && nameToken === SyntaxKind.Identifier) {
+            if ((token === SyntaxKind.CommaToken || token === SyntaxKind.CloseBraceToken) && tokenIsIdentifier) {
                 node = <ShortHandPropertyDeclaration>createNode(SyntaxKind.ShorthandPropertyAssignment, nodePos);
                 node.name = propertyName;
             }
@@ -3558,9 +3558,9 @@ module ts {
             }
             commentRanges = undefined;
             return {
-                referencedFiles: referencedFiles,
-                amdDependencies: amdDependencies,
-                amdModuleName: amdModuleName
+                referencedFiles,
+                amdDependencies,
+                amdModuleName
             };
         }
 

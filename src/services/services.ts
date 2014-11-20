@@ -899,7 +899,6 @@ module ts {
         getDefinitionAtPosition(fileName: string, position: number): DefinitionInfo[];
         getReferencesAtPosition(fileName: string, position: number): ReferenceEntry[];
         getOccurrencesAtPosition(fileName: string, position: number): ReferenceEntry[];
-        getImplementorsAtPosition(fileName: string, position: number): ReferenceEntry[];
 
         getNavigateToItems(searchValue: string): NavigateToItem[];
         getNavigationBarItems(fileName: string): NavigationBarItem[];
@@ -1376,8 +1375,8 @@ module ts {
             writeSpace: text => writeKind(text, SymbolDisplayPartKind.space),
             writeStringLiteral: text => writeKind(text, SymbolDisplayPartKind.stringLiteral),
             writeParameter: text => writeKind(text, SymbolDisplayPartKind.parameterName),
-            writeSymbol: writeSymbol,
-            writeLine: writeLine,
+            writeSymbol,
+            writeLine,
             increaseIndent: () => { indent++; },
             decreaseIndent: () => { indent--; },
             clear: resetWriter,
@@ -1767,7 +1766,7 @@ module ts {
                 sourceFiles.sort((x, y) => y.refCount - x.refCount);
                 return {
                     bucket: name,
-                    sourceFiles: sourceFiles
+                    sourceFiles
                 };
             });
             return JSON.stringify(bucketInfoArray, null, 2);
@@ -1833,10 +1832,10 @@ module ts {
         }
 
         return {
-            acquireDocument: acquireDocument,
-            updateDocument: updateDocument,
-            releaseDocument: releaseDocument,
-            reportStats: reportStats
+            acquireDocument,
+            updateDocument,
+            releaseDocument,
+            reportStats
         };
     }
 
@@ -1899,7 +1898,7 @@ module ts {
             processImport();
         }
         processTripleSlashDirectives();
-        return { referencedFiles: referencedFiles, importedFiles: importedFiles, isLibFile: isNoDefaultLib };
+        return { referencedFiles, importedFiles, isLibFile: isNoDefaultLib };
     }
 
     /// Helpers
@@ -2298,7 +2297,7 @@ module ts {
                 // Get emitter-diagnostics requires calling TypeChecker.emitFiles so we have to define CompilerHost.writer which does nothing because emitFiles function has side effects defined by CompilerHost.writer
                 var savedWriter = writer;
                 writer = (filename: string, data: string, writeByteOrderMark: boolean) => { };
-                allDiagnostics = allDiagnostics.concat(checker.emitFiles(targetSourceFile).errors);
+                allDiagnostics = allDiagnostics.concat(checker.invokeEmitter(targetSourceFile).diagnostics);
                 writer = savedWriter;
             }
             return allDiagnostics
@@ -2503,7 +2502,7 @@ module ts {
             host.log("getCompletionsAtPosition: Semantic work: " + (new Date().getTime() - semanticStart));
 
             return {
-                isMemberCompletion: isMemberCompletion,
+                isMemberCompletion,
                 entries: activeCompletionSession.entries
             };
 
@@ -2758,7 +2757,7 @@ module ts {
             while (true) {
                 node = node.parent;
                 if (!node) {
-                    return node;
+                    return undefined;
                 }
                 switch (node.kind) {
                     case SyntaxKind.SourceFile:
@@ -3163,7 +3162,7 @@ module ts {
                 documentation = symbol.getDocumentationComment();
             }
 
-            return { displayParts: displayParts, documentation: documentation, symbolKind: symbolKind };
+            return { displayParts, documentation, symbolKind };
 
             function addNewLineIfDisplayPartsExist() {
                 if (displayParts.length) {
@@ -3264,7 +3263,7 @@ module ts {
                     kind: symbolKind,
                     name: symbolName,
                     containerKind: undefined,
-                    containerName: containerName
+                    containerName
                 };
             }
 
@@ -3973,6 +3972,10 @@ module ts {
                     for (var i = 0, n = declarations.length; i < n; i++) {
                         var container = getContainerNode(declarations[i]);
 
+                        if (!container) {
+                            return undefined;
+                        }
+
                         if (scope && scope !== container) {
                             // Different declarations have different containers, bail out
                             return undefined;
@@ -4537,8 +4540,8 @@ module ts {
                             fileName: filename,
                             textSpan: TextSpan.fromBounds(declaration.getStart(), declaration.getEnd()),
                             // TODO(jfreeman): What should be the containerName when the container has a computed name?
-                            containerName: container.name ? (<Identifier>container.name).text : "",
-                            containerKind: container.name ? getNodeKind(container) : ""
+                            containerName: container && container.name ? (<Identifier>container.name).text : "",
+                            containerKind: container && container.name ? getNodeKind(container) : ""
                         });
                     }
                 }
@@ -4646,7 +4649,7 @@ module ts {
             // Perform semantic and force a type check before emit to ensure that all symbols are updated
             // EmitFiles will report if there is an error from TypeChecker and Emitter
             // Depend whether we will have to emit into a single file or not either emit only selected file in the project, emit all files into a single file
-            var emitFilesResult = getFullTypeCheckChecker().emitFiles(targetSourceFile);
+            var emitFilesResult = getFullTypeCheckChecker().invokeEmitter(targetSourceFile);
             emitOutput.emitOutputStatus = emitFilesResult.emitResultStatus;
 
             // Reset writer back to undefined to make sure that we produce an error message if CompilerHost.writeFile method is called when we are not in getEmitOutput
@@ -4692,10 +4695,13 @@ module ts {
                     else {
                         return SemanticMeaning.Namespace;
                     }
-                    break;
 
                 case SyntaxKind.ImportDeclaration:
                     return SemanticMeaning.Value | SemanticMeaning.Type | SemanticMeaning.Namespace;
+
+                // An external module can be a Value
+                case SyntaxKind.SourceFile:
+                    return SemanticMeaning.Namespace | SemanticMeaning.Value;
             }
             Debug.fail("Unknown declaration type");
         }
@@ -5427,46 +5433,45 @@ module ts {
                 return {
                     canRename: true,
                     localizedErrorMessage: undefined,
-                    displayName: displayName,
-                    fullDisplayName: fullDisplayName,
-                    kind: kind,
-                    kindModifiers: kindModifiers,
-                    triggerSpan: triggerSpan
+                    displayName,
+                    fullDisplayName,
+                    kind,
+                    kindModifiers,
+                    triggerSpan
                 };
             }
         }
 
         return {
-            dispose: dispose,
-            cleanupSemanticCache: cleanupSemanticCache,
-            getSyntacticDiagnostics: getSyntacticDiagnostics,
-            getSemanticDiagnostics: getSemanticDiagnostics,
-            getCompilerOptionsDiagnostics: getCompilerOptionsDiagnostics,
-            getSyntacticClassifications: getSyntacticClassifications,
-            getSemanticClassifications: getSemanticClassifications,
-            getCompletionsAtPosition: getCompletionsAtPosition,
-            getCompletionEntryDetails: getCompletionEntryDetails,
-            getSignatureHelpItems: getSignatureHelpItems,
-            getQuickInfoAtPosition: getQuickInfoAtPosition,
-            getDefinitionAtPosition: getDefinitionAtPosition,
-            getReferencesAtPosition: getReferencesAtPosition,
-            getOccurrencesAtPosition: getOccurrencesAtPosition,
-            getImplementorsAtPosition: (filename, position) => [],
-            getNameOrDottedNameSpan: getNameOrDottedNameSpan,
-            getBreakpointStatementAtPosition: getBreakpointStatementAtPosition,
-            getNavigateToItems: getNavigateToItems,
-            getRenameInfo: getRenameInfo,
-            findRenameLocations: findRenameLocations,
-            getNavigationBarItems: getNavigationBarItems,
-            getOutliningSpans: getOutliningSpans,
-            getTodoComments: getTodoComments,
-            getBraceMatchingAtPosition: getBraceMatchingAtPosition,
-            getIndentationAtPosition: getIndentationAtPosition,
-            getFormattingEditsForRange: getFormattingEditsForRange,
-            getFormattingEditsForDocument: getFormattingEditsForDocument,
-            getFormattingEditsAfterKeystroke: getFormattingEditsAfterKeystroke,
-            getEmitOutput: getEmitOutput,
-            getSignatureAtPosition: getSignatureAtPosition,
+            dispose,
+            cleanupSemanticCache,
+            getSyntacticDiagnostics,
+            getSemanticDiagnostics,
+            getCompilerOptionsDiagnostics,
+            getSyntacticClassifications,
+            getSemanticClassifications,
+            getCompletionsAtPosition,
+            getCompletionEntryDetails,
+            getSignatureHelpItems,
+            getQuickInfoAtPosition,
+            getDefinitionAtPosition,
+            getReferencesAtPosition,
+            getOccurrencesAtPosition,
+            getNameOrDottedNameSpan,
+            getBreakpointStatementAtPosition,
+            getNavigateToItems,
+            getRenameInfo,
+            findRenameLocations,
+            getNavigationBarItems,
+            getOutliningSpans,
+            getTodoComments,
+            getBraceMatchingAtPosition,
+            getIndentationAtPosition,
+            getFormattingEditsForRange,
+            getFormattingEditsForDocument,
+            getFormattingEditsAfterKeystroke,
+            getEmitOutput,
+            getSignatureAtPosition,
         };
     }
 
@@ -5764,9 +5769,7 @@ module ts {
             }
         }
 
-        return {
-            getClassificationsForLine: getClassificationsForLine
-        };
+        return { getClassificationsForLine };
     }
 
     function initializeServices() {

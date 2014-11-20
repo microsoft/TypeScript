@@ -2611,13 +2611,12 @@ var ts;
                 if (matchResult) {
                     var start = commentRange.pos;
                     var end = commentRange.end;
-                    var fileRef = {
-                        pos: start,
-                        end: end,
-                        filename: matchResult[3]
-                    };
                     return {
-                        fileReference: fileRef,
+                        fileReference: {
+                            pos: start,
+                            end: end,
+                            filename: matchResult[3]
+                        },
                         isNoDefaultLib: false
                     };
                 }
@@ -8868,25 +8867,25 @@ var ts;
         diagnostics.sort(ts.compareDiagnostics);
         diagnostics = ts.deduplicateSortedDiagnostics(diagnostics);
         var hasEmitterError = ts.forEach(diagnostics, function (diagnostic) { return diagnostic.category === 1 /* Error */; });
-        var returnCode;
+        var emitResultStatus;
         if (isEmitBlocked) {
-            returnCode = 1 /* AllOutputGenerationSkipped */;
+            emitResultStatus = 1 /* AllOutputGenerationSkipped */;
         }
         else if (hasEmitterError) {
-            returnCode = 4 /* EmitErrorsEncountered */;
+            emitResultStatus = 4 /* EmitErrorsEncountered */;
         }
         else if (hasSemanticErrors && compilerOptions.declaration) {
-            returnCode = 3 /* DeclarationGenerationSkipped */;
+            emitResultStatus = 3 /* DeclarationGenerationSkipped */;
         }
         else if (hasSemanticErrors && !compilerOptions.declaration) {
-            returnCode = 2 /* JSGeneratedWithSemanticErrors */;
+            emitResultStatus = 2 /* JSGeneratedWithSemanticErrors */;
         }
         else {
-            returnCode = 0 /* Succeeded */;
+            emitResultStatus = 0 /* Succeeded */;
         }
         return {
-            emitResultStatus: returnCode,
-            errors: diagnostics,
+            emitResultStatus: emitResultStatus,
+            diagnostics: diagnostics,
             sourceMaps: sourceMapDataList
         };
     }
@@ -8945,14 +8944,16 @@ var ts;
         var compilerOptions = program.getCompilerOptions();
         var checker = {
             getProgram: function () { return program; },
-            getDiagnostics: getDiagnostics,
-            getGlobalDiagnostics: getGlobalDiagnostics,
             getNodeCount: function () { return ts.sum(program.getSourceFiles(), "nodeCount"); },
             getIdentifierCount: function () { return ts.sum(program.getSourceFiles(), "identifierCount"); },
             getSymbolCount: function () { return ts.sum(program.getSourceFiles(), "symbolCount"); },
             getTypeCount: function () { return typeCount; },
+            isUndefinedSymbol: function (symbol) { return symbol === undefinedSymbol; },
+            isArgumentsSymbol: function (symbol) { return symbol === argumentsSymbol; },
+            getDiagnostics: getDiagnostics,
+            getGlobalDiagnostics: getGlobalDiagnostics,
             checkProgram: checkProgram,
-            emitFiles: invokeEmitter,
+            invokeEmitter: invokeEmitter,
             getParentOfSymbol: getParentOfSymbol,
             getNarrowedTypeOfSymbol: getNarrowedTypeOfSymbol,
             getDeclaredTypeOfSymbol: getDeclaredTypeOfSymbol,
@@ -8978,8 +8979,6 @@ var ts;
             getSignatureFromDeclaration: getSignatureFromDeclaration,
             isImplementationOfOverload: isImplementationOfOverload,
             getAliasedSymbol: resolveImport,
-            isUndefinedSymbol: function (symbol) { return symbol === undefinedSymbol; },
-            isArgumentsSymbol: function (symbol) { return symbol === argumentsSymbol; },
             hasEarlyErrors: hasEarlyErrors,
             isEmitBlocked: isEmitBlocked
         };
@@ -16739,33 +16738,33 @@ var ts;
                 var callTargetDisplayParts = callTargetSymbol && ts.symbolToDisplayParts(typeInfoResolver, callTargetSymbol, undefined, undefined);
                 var items = ts.map(candidates, function (candidateSignature) {
                     var signatureHelpParameters;
-                    var prefixParts = [];
-                    var suffixParts = [];
+                    var prefixDisplayParts = [];
+                    var suffixDisplayParts = [];
                     if (callTargetDisplayParts) {
-                        prefixParts.push.apply(prefixParts, callTargetDisplayParts);
+                        prefixDisplayParts.push.apply(prefixDisplayParts, callTargetDisplayParts);
                     }
                     if (isTypeParameterHelp) {
-                        prefixParts.push(ts.punctuationPart(23 /* LessThanToken */));
+                        prefixDisplayParts.push(ts.punctuationPart(23 /* LessThanToken */));
                         var typeParameters = candidateSignature.typeParameters;
                         signatureHelpParameters = typeParameters && typeParameters.length > 0 ? ts.map(typeParameters, createSignatureHelpParameterForTypeParameter) : emptyArray;
-                        suffixParts.push(ts.punctuationPart(24 /* GreaterThanToken */));
+                        suffixDisplayParts.push(ts.punctuationPart(24 /* GreaterThanToken */));
                         var parameterParts = ts.mapToDisplayParts(function (writer) { return typeInfoResolver.getSymbolDisplayBuilder().buildDisplayForParametersAndDelimiters(candidateSignature.parameters, writer, argumentListOrTypeArgumentList); });
-                        suffixParts.push.apply(suffixParts, parameterParts);
+                        suffixDisplayParts.push.apply(suffixDisplayParts, parameterParts);
                     }
                     else {
                         var typeParameterParts = ts.mapToDisplayParts(function (writer) { return typeInfoResolver.getSymbolDisplayBuilder().buildDisplayForTypeParametersAndDelimiters(candidateSignature.typeParameters, writer, argumentListOrTypeArgumentList); });
-                        prefixParts.push.apply(prefixParts, typeParameterParts);
-                        prefixParts.push(ts.punctuationPart(15 /* OpenParenToken */));
+                        prefixDisplayParts.push.apply(prefixDisplayParts, typeParameterParts);
+                        prefixDisplayParts.push(ts.punctuationPart(15 /* OpenParenToken */));
                         var parameters = candidateSignature.parameters;
                         signatureHelpParameters = parameters.length > 0 ? ts.map(parameters, createSignatureHelpParameterForParameter) : emptyArray;
-                        suffixParts.push(ts.punctuationPart(16 /* CloseParenToken */));
+                        suffixDisplayParts.push(ts.punctuationPart(16 /* CloseParenToken */));
                     }
                     var returnTypeParts = ts.mapToDisplayParts(function (writer) { return typeInfoResolver.getSymbolDisplayBuilder().buildReturnTypeDisplay(candidateSignature, writer, argumentListOrTypeArgumentList); });
-                    suffixParts.push.apply(suffixParts, returnTypeParts);
+                    suffixDisplayParts.push.apply(suffixDisplayParts, returnTypeParts);
                     return {
                         isVariadic: candidateSignature.hasRestParameter,
-                        prefixDisplayParts: prefixParts,
-                        suffixDisplayParts: suffixParts,
+                        prefixDisplayParts: prefixDisplayParts,
+                        suffixDisplayParts: suffixDisplayParts,
                         separatorDisplayParts: [ts.punctuationPart(22 /* CommaToken */), ts.spacePart()],
                         parameters: signatureHelpParameters,
                         documentation: candidateSignature.getDocumentationComment()
@@ -16865,15 +16864,15 @@ var ts;
     }
     ts.startEndOverlapsWithStartEnd = startEndOverlapsWithStartEnd;
     function findListItemInfo(node) {
-        var syntaxList = findContainingList(node);
-        if (!syntaxList) {
+        var list = findContainingList(node);
+        if (!list) {
             return undefined;
         }
-        var children = syntaxList.getChildren();
-        var index = ts.indexOf(children, node);
+        var children = list.getChildren();
+        var listItemIndex = ts.indexOf(children, node);
         return {
-            listItemIndex: index,
-            list: syntaxList
+            listItemIndex: listItemIndex,
+            list: list
         };
     }
     ts.findListItemInfo = findListItemInfo;
@@ -20503,7 +20502,7 @@ var ts;
                 var savedWriter = writer;
                 writer = function (filename, data, writeByteOrderMark) {
                 };
-                allDiagnostics = allDiagnostics.concat(checker.emitFiles(targetSourceFile).errors);
+                allDiagnostics = allDiagnostics.concat(checker.invokeEmitter(targetSourceFile).diagnostics);
                 writer = savedWriter;
             }
             return allDiagnostics;
@@ -22267,7 +22266,7 @@ var ts;
                 writer = undefined;
                 return emitOutput;
             }
-            var emitFilesResult = getFullTypeCheckChecker().emitFiles(targetSourceFile);
+            var emitFilesResult = getFullTypeCheckChecker().invokeEmitter(targetSourceFile);
             emitOutput.emitOutputStatus = emitFilesResult.emitResultStatus;
             writer = undefined;
             return emitOutput;
@@ -22829,7 +22828,6 @@ var ts;
             getDefinitionAtPosition: getDefinitionAtPosition,
             getReferencesAtPosition: getReferencesAtPosition,
             getOccurrencesAtPosition: getOccurrencesAtPosition,
-            getImplementorsAtPosition: function (filename, position) { return []; },
             getNameOrDottedNameSpan: getNameOrDottedNameSpan,
             getBreakpointStatementAtPosition: getBreakpointStatementAtPosition,
             getNavigateToItems: getNavigateToItems,
@@ -23049,9 +23047,7 @@ var ts;
                     return 5 /* Identifier */;
             }
         }
-        return {
-            getClassificationsForLine: getClassificationsForLine
-        };
+        return { getClassificationsForLine: getClassificationsForLine };
     }
     ts.createClassifier = createClassifier;
     function initializeServices() {
@@ -23772,12 +23768,6 @@ var ts;
             var _this = this;
             return this.forwardJSONCall("getOccurrencesAtPosition('" + fileName + "', " + position + ")", function () {
                 return _this.languageService.getOccurrencesAtPosition(fileName, position);
-            });
-        };
-        LanguageServiceShimObject.prototype.getImplementorsAtPosition = function (fileName, position) {
-            var _this = this;
-            return this.forwardJSONCall("getImplementorsAtPosition('" + fileName + "', " + position + ")", function () {
-                return _this.languageService.getImplementorsAtPosition(fileName, position);
             });
         };
         LanguageServiceShimObject.prototype.getCompletionsAtPosition = function (fileName, position, isMemberCompletion) {
