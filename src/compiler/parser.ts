@@ -2317,10 +2317,11 @@ module ts {
         }
 
         function parseSingleTypeArgument(): TypeNode {
+            // Be resilient to something like:   Foo<,,>();
+            // We want to parse this out as a type argument list (esp. for signature help), and we
+            // don't want to rollback just because we were missing a type arg.  The grammar checker
+            // will report the actual error later on.
             if (token === SyntaxKind.CommaToken) {
-                var errorStart = scanner.getTokenPos();
-                var errorLength = scanner.getTextPos() - errorStart;
-                grammarErrorAtPos(errorStart, errorLength, Diagnostics.Type_expected);
                 return createNode(SyntaxKind.Missing);
             }
 
@@ -3920,9 +3921,25 @@ module ts {
         }
 
         function visitCallExpression(node: CallExpression) {
-            checkForTrailingComma(node.typeArguments) ||
-                checkForAtLeastOneTypeArgument(node.typeArguments) ||
+            checkTypeArguments(node.typeArguments) ||
                 checkForTrailingComma(node.arguments);
+        }
+
+        function checkTypeArguments(typeArguments: NodeArray<TypeNode>) {
+            return checkForTrailingComma(typeArguments) ||
+                checkForAtLeastOneTypeArgument(typeArguments) ||
+                checkForMissingTypeArgument(typeArguments);
+        }
+
+        function checkForMissingTypeArgument(typeArguments: NodeArray<TypeNode>) {
+            if (typeArguments) {
+                for (var i = 0, n = typeArguments.length; i < n; i++) {
+                    var arg = typeArguments[i];
+                    if (arg.kind === SyntaxKind.Missing) {
+                        return grammarErrorAtPos(arg.pos, 0, Diagnostics.Type_expected);
+                    }
+                }
+            }
         }
 
         function checkForAtLeastOneTypeArgument(typeArguments: NodeArray<TypeNode>) {
@@ -4185,8 +4202,7 @@ module ts {
         }
 
         function visitNewExpression(node: NewExpression): void {
-            checkForTrailingComma(node.typeArguments) ||
-                checkForAtLeastOneTypeArgument(node.typeArguments) ||
+            checkTypeArguments(node.typeArguments) ||
                 checkForTrailingComma(node.arguments);
         }
 
@@ -4465,7 +4481,7 @@ module ts {
         }
 
         function visitTypeReference(node: TypeReferenceNode) {
-            checkForAtLeastOneTypeArgument(node.typeArguments);
+            checkTypeArguments(node.typeArguments);
         }
 
         function visitVariableDeclaration(node: VariableDeclaration) {
