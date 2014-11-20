@@ -3838,27 +3838,32 @@ module ts {
                 var modifierFlag: NodeFlags = getFlagFromModifier(modifier);
 
                 var nodes: Node[];
-                if (container.kind === SyntaxKind.ModuleBlock) {
-                    nodes = (<Block>container).statements;
-                }
-                else if (container.kind === SyntaxKind.ClassDeclaration) {
-                    nodes = (<ClassDeclaration>container).members;
+                switch (container.kind) {
+                    case SyntaxKind.ModuleBlock:
+                    case SyntaxKind.SourceFile:
+                        nodes = (<Block>container).statements;
+                        break;
+                    case SyntaxKind.ClassDeclaration:
+                        nodes = (<ClassDeclaration>container).members;
 
-                    // If we're an accessibility modifier, we should search the constructor's parameter list
-                    // as well (i.e. don't look for 'static' parameters).
-                    if (modifierFlag & NodeFlags.AccessibilityModifier) {
-                        var constructor = forEach((<ClassDeclaration>container).members, member => {
-                            return member.kind === SyntaxKind.Constructor && <ConstructorDeclaration>member;
-                        });
+                        // If we're an accessibility modifier, we should search the constructor's parameter list
+                        // as well (i.e. don't look for 'static' parameters).
+                        if (modifierFlag & NodeFlags.AccessibilityModifier) {
+                            var constructor = forEach((<ClassDeclaration>container).members, member => {
+                                return member.kind === SyntaxKind.Constructor && <ConstructorDeclaration>member;
+                            });
 
-                        if (constructor) {
-                            nodes = nodes.concat(constructor.parameters);
+                            if (constructor) {
+                                nodes = nodes.concat(constructor.parameters);
+                            }
                         }
-                    }
-                }
-                else if (container.kind === SyntaxKind.Constructor) {
-                    nodes = (<Node[]>(<ConstructorDeclaration>container).parameters).concat(
-                        (<ClassDeclaration>container.parent).members);
+                        break;
+                    case SyntaxKind.Constructor:
+                        nodes = (<Node[]>(<ConstructorDeclaration>container).parameters).concat(
+                            (<ClassDeclaration>container.parent).members);
+                        break;
+                    default:
+                        Debug.fail("Invalid container kind.")
                 }
 
                 forEach(nodes, node => {
