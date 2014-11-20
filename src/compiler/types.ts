@@ -326,6 +326,9 @@ module ts {
     export interface TypeParameterDeclaration extends Declaration {
         name: Identifier;
         constraint?: TypeNode;
+
+        // For error recovery purposes.
+        expression?: Expression;
     }
 
     export interface SignatureDeclaration extends Declaration, ParsedSignature { }

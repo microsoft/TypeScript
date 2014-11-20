@@ -855,23 +855,6 @@ module ts {
             errorAtPos(start, length, message, arg0, arg1, arg2);
         }
 
-        // This is just like createDiagnosticForNode except that it uses the current file
-        // being parsed instead of the file containing the node. This is because during
-        // parse, the nodes do not have parent pointers to get to the file.
-        //
-        // It is very intentional that we are not checking or changing the lookAheadMode value
-        // here. 'grammarErrorOnNode' is called when we are doing extra grammar checks and not
-        // when we are doing the actual parsing to determine what the user wrote.  In other 
-        // words, this function is called once we have already parsed the node, and are just
-        // applying some stricter checks on that node.
-        function grammarErrorOnNode(node: Node, message: DiagnosticMessage, arg0?: any, arg1?: any, arg2?: any): void {
-            var span = getErrorSpanForNode(node);
-            var start = span.end > span.pos ? skipTrivia(file.text, span.pos) : span.pos;
-            var length = span.end - start;
-
-            file.parseDiagnostics.push(createFileDiagnostic(file, start, length, message, arg0, arg1, arg2));
-        }
-
         function grammarErrorAtPos(start: number, length: number, message: DiagnosticMessage, arg0?: any, arg1?: any, arg2?: any): void {
             file.parseDiagnostics.push(createFileDiagnostic(file, start, length, message, arg0, arg1, arg2));
         }
@@ -1458,8 +1441,7 @@ module ts {
                     //      <T extends "">
                     //
                     // We do *not* want to consume the  >  as we're consuming the expression for "".
-                    var expr = parseUnaryExpression();
-                    grammarErrorOnNode(expr, Diagnostics.Type_expected);
+                    node.expression = parseUnaryExpression();
                 }
             }
 
@@ -3762,6 +3744,7 @@ module ts {
                 case SyntaxKind.SwitchStatement:                return visitSwitchStatement(<SwitchStatement>node);
                 case SyntaxKind.TaggedTemplateExpression:       return visitTaggedTemplateExpression(<TaggedTemplateExpression>node);
                 case SyntaxKind.TupleType:                      return visitTupleType(<TupleTypeNode>node);
+                case SyntaxKind.TypeParameter:                  return visitTypeParameter(<TypeParameterDeclaration>node);
                 case SyntaxKind.TypeReference:                  return visitTypeReference(<TypeReferenceNode>node);
                 case SyntaxKind.VariableDeclaration:            return visitVariableDeclaration(<VariableDeclaration>node);
                 case SyntaxKind.VariableStatement:              return visitVariableStatement(<VariableStatement>node);
@@ -4464,6 +4447,12 @@ module ts {
         function checkForAtLeastOneType(node: TupleTypeNode): boolean {
             if (node.elementTypes.length === 0) {
                 return grammarErrorOnNode(node, Diagnostics.A_tuple_type_element_list_cannot_be_empty)
+            }
+        }
+
+        function visitTypeParameter(node: TypeParameterDeclaration) {
+            if (node.expression) {
+                grammarErrorOnFirstToken(node.expression, Diagnostics.Type_expected);
             }
         }
 
