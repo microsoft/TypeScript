@@ -1,4 +1,4 @@
-tests/cases/conformance/parser/ecmascript5/RegularExpressions/parserRegularExpressionDivideAmbiguity4.ts(1,6): error TS1162: Unterminated regular expression literal.
+tests/cases/conformance/parser/ecmascript5/RegularExpressions/parserRegularExpressionDivideAmbiguity4.ts(1,6): error TS1161: Unterminated regular expression literal.
 tests/cases/conformance/parser/ecmascript5/RegularExpressions/parserRegularExpressionDivideAmbiguity4.ts(1,17): error TS1005: ')' expected.
 tests/cases/conformance/parser/ecmascript5/RegularExpressions/parserRegularExpressionDivideAmbiguity4.ts(1,1): error TS2304: Cannot find name 'foo'.
 
@@ -6,7 +6,7 @@ tests/cases/conformance/parser/ecmascript5/RegularExpressions/parserRegularExpre
 ==== tests/cases/conformance/parser/ecmascript5/RegularExpressions/parserRegularExpressionDivideAmbiguity4.ts (3 errors) ====
     foo(/notregexp);
          
-!!! error TS1162: Unterminated regular expression literal.
+!!! error TS1161: Unterminated regular expression literal.
                     
 !!! error TS1005: ')' expected.
     ~~~

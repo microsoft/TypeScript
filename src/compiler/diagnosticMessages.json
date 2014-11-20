@@ -479,15 +479,15 @@
         "category": "Error",
         "code": 1159
     },
-    "An object member cannot be declared optional.": {
-        "category": "Error",
-        "code":  1160
-    },
     "Unterminated template literal.": {
+        "category": "Error",
+        "code": 1160
+    },
+    "Unterminated regular expression literal.": {
         "category": "Error",
         "code": 1161
     },
-    "Unterminated regular expression literal.": {
+    "An object member cannot be declared optional.": {
         "category": "Error",
         "code": 1162
     },

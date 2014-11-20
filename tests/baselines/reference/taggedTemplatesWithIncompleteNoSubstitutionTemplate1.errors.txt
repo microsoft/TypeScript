@@ -1,4 +1,4 @@
-tests/cases/compiler/taggedTemplatesWithIncompleteNoSubstitutionTemplate1.ts(6,15): error TS1161: Unterminated template literal.
+tests/cases/compiler/taggedTemplatesWithIncompleteNoSubstitutionTemplate1.ts(6,15): error TS1160: Unterminated template literal.
 
 
 ==== tests/cases/compiler/taggedTemplatesWithIncompleteNoSubstitutionTemplate1.ts (1 errors) ====
@@ -9,4 +9,4 @@ tests/cases/compiler/taggedTemplatesWithIncompleteNoSubstitutionTemplate1.ts(6,1
     // Incomplete call, not enough parameters.
     f `123qdawdrqw
                   
-!!! error TS1161: Unterminated template literal.
+!!! error TS1160: Unterminated template literal.
