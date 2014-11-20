@@ -4427,13 +4427,10 @@ module ts {
                 return getSourceFileFromCache(filename, canonicalName, /*useAbsolutePath*/ false);
             }
             else {
-                // if --noResolve is not specified check if we have file for absolute path
-                if (!options.noResolve) {
-                    var normalizedAbsolutePath = getNormalizedAbsolutePath(filename, host.getCurrentDirectory());
-                    var canonicalAbsolutePath = host.getCanonicalFileName(normalizedAbsolutePath);
-                    if (hasProperty(filesByName, canonicalAbsolutePath)) {
-                        return getSourceFileFromCache(normalizedAbsolutePath, canonicalAbsolutePath, /*useAbsolutePath*/ true);
-                    }
+                var normalizedAbsolutePath = getNormalizedAbsolutePath(filename, host.getCurrentDirectory());
+                var canonicalAbsolutePath = host.getCanonicalFileName(normalizedAbsolutePath);
+                if (hasProperty(filesByName, canonicalAbsolutePath)) {
+                    return getSourceFileFromCache(normalizedAbsolutePath, canonicalAbsolutePath, /*useAbsolutePath*/ true);
                 }
 
                 // We haven't looked for this file, do so now and cache result
@@ -4443,10 +4440,11 @@ module ts {
                 });
                 if (file) {
                     seenNoDefaultLib = seenNoDefaultLib || file.hasNoDefaultLib;
-                    if (!options.noResolve) {
-                        // Set the source file for normalized absolute path
-                        filesByName[canonicalAbsolutePath] = file;
 
+                    // Set the source file for normalized absolute path
+                    filesByName[canonicalAbsolutePath] = file;
+
+                    if (!options.noResolve) {
                         var basePath = getDirectoryPath(filename);
                         processReferencedFiles(file, basePath);
                         processImportedModules(file, basePath);
