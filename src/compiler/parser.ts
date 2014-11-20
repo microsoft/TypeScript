@@ -3622,16 +3622,19 @@ module ts {
 
         function dispatch(node: Node, kind: SyntaxKind): void {
             switch (kind) {
-                case SyntaxKind.ArrowFunction:                  return visitArrowFunction(<FunctionExpression>node);
+                case SyntaxKind.ArrowFunction: 
+                case SyntaxKind.CallSignature:
+                case SyntaxKind.ConstructorType:
+                case SyntaxKind.ConstructSignature:
+                case SyntaxKind.FunctionType:
+                    checkParsedSignature(<FunctionLikeDeclaration>node);
+                    break;
                 case SyntaxKind.BinaryExpression:               return visitBinaryExpression(<BinaryExpression>node);
                 case SyntaxKind.BreakStatement:                 return visitBreakOrContinueStatement(<BreakOrContinueStatement>node);
                 case SyntaxKind.CallExpression:                 return visitCallExpression(<CallExpression>node);
-                case SyntaxKind.CallSignature:                  return visitCallSignature(<SignatureDeclaration>node);
                 case SyntaxKind.CatchBlock:                     return visitCatchBlock(<CatchBlock>node);
                 case SyntaxKind.ClassDeclaration:               return visitClassDeclaration(<ClassDeclaration>node);
                 case SyntaxKind.Constructor:                    return visitConstructor(<ConstructorDeclaration>node);
-                case SyntaxKind.ConstructorType:                return visitConstructorType(<SignatureDeclaration>node);
-                case SyntaxKind.ConstructSignature:             return visitConstructSignature(<SignatureDeclaration>node);
                 case SyntaxKind.ContinueStatement:              return visitBreakOrContinueStatement(<BreakOrContinueStatement>node);
                 case SyntaxKind.EnumDeclaration:                return visitEnumDeclaration(<EnumDeclaration>node);
                 case SyntaxKind.ExportAssignment:               return visitExportAssignment(<ExportAssignment>node);
@@ -3639,7 +3642,6 @@ module ts {
                 case SyntaxKind.ForStatement:                   return visitForStatement(<ForStatement>node);
                 case SyntaxKind.FunctionDeclaration:            return visitFunctionDeclaration(<FunctionLikeDeclaration>node);
                 case SyntaxKind.FunctionExpression:             return visitFunctionExpression(<FunctionExpression>node);
-                case SyntaxKind.FunctionType:                   return visitFunctionType(<SignatureDeclaration>node);
                 case SyntaxKind.GetAccessor:                    return visitGetAccessor(<MethodDeclaration>node);
                 case SyntaxKind.IndexedAccess:                  return visitIndexedAccess(<IndexedAccess>node);
                 case SyntaxKind.IndexSignature:                 return visitIndexSignature(<SignatureDeclaration>node);
@@ -3723,8 +3725,7 @@ module ts {
             if (node.kind === SyntaxKind.InterfaceDeclaration ||
                 node.kind === SyntaxKind.ImportDeclaration ||
                 node.kind === SyntaxKind.ExportAssignment ||
-                (node.flags & NodeFlags.Ambient) /*
-                (node.flags & NodeFlags.Export) */) {
+                (node.flags & NodeFlags.Ambient)) {
 
                 return false;
             }
@@ -3754,10 +3755,6 @@ module ts {
                 case SyntaxKind.ExpressionStatement:
                     return grammarErrorOnFirstToken(node, Diagnostics.Statements_are_not_allowed_in_ambient_contexts);
             }
-        }
-
-        function visitArrowFunction(node: FunctionExpression) {
-            checkParsedSignature(node);
         }
 
         function checkParsedSignature(node: ParsedSignature): boolean {
@@ -3921,10 +3918,6 @@ module ts {
             }
         }
 
-        function visitCallSignature(node: ConstructorDeclaration) {
-            checkParsedSignature(node);
-        }
-
         function visitCatchBlock(node: CatchBlock) {
             if (node.type) {
                 var colonStart = skipTrivia(sourceText, node.variable.end);
@@ -3965,14 +3958,6 @@ module ts {
             if (node.type) {
                 return grammarErrorOnNode(node.type, Diagnostics.Type_annotation_cannot_appear_on_a_constructor_declaration);
             }
-        }
-
-        function visitConstructorType(node: SignatureDeclaration) {
-            checkParsedSignature(node);
-        }
-
-        function visitConstructSignature(node: FunctionLikeDeclaration) {
-            checkParsedSignature(node);
         }
 
         function visitEnumDeclaration(enumDecl: EnumDeclaration) {
@@ -4066,10 +4051,6 @@ module ts {
                 // Identifier of a FunctionLikeDeclaration or FunctionExpression or as a formal parameter name(13.1)
                 return reportInvalidUseInStrictMode(<Identifier>name);
             }
-        }
-
-        function visitFunctionType(node: SignatureDeclaration) {
-            checkParsedSignature(node);
         }
 
         function visitGetAccessor(node: MethodDeclaration) {
