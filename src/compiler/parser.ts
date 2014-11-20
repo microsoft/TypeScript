@@ -814,12 +814,6 @@ module ts {
         return false;
     }
 
-    interface SourceFileInternal extends SourceFile {
-        // All diagnostics for the source file.  Should not be accessed directly.  Lazily created
-        // when getSyntacticDiagnostics is called.
-        _syntacticDiagnostics: Diagnostic[];
-    }
-
     function modifierToFlag(token: SyntaxKind): NodeFlags {
         switch (token) {
             case SyntaxKind.StaticKeyword: return NodeFlags.Static;
@@ -833,7 +827,7 @@ module ts {
     }
 
     export function createSourceFile(filename: string, sourceText: string, languageVersion: ScriptTarget, version: string, isOpen: boolean = false): SourceFile {
-        var file: SourceFileInternal;
+        var file: SourceFile;
         var scanner: Scanner;
         var token: SyntaxKind;
         var parsingContext: ParsingContext;
@@ -3439,22 +3433,23 @@ module ts {
                 : undefined);
         }
 
+        var syntacticDiagnostics: Diagnostic[];
         function getSyntacticDiagnostics() {
-            if (file._syntacticDiagnostics === undefined) {
+            if (syntacticDiagnostics === undefined) {
                 if (file.parseDiagnostics.length > 0) {
                     // Don't bother doing any grammar checks if there are already parser errors.  
                     // Otherwise we may end up with too many cascading errors.
-                    file._syntacticDiagnostics = file.parseDiagnostics;
+                    syntacticDiagnostics = file.parseDiagnostics;
                 }
                 else {
                     // No parser errors were reported.  Perform our stricter grammar checks.
-                    file._syntacticDiagnostics = file.grammarDiagnostics;
+                    syntacticDiagnostics = file.grammarDiagnostics;
                     checkGrammar(sourceText, languageVersion, file);
                 }
             }
 
-            Debug.assert(file._syntacticDiagnostics !== undefined);
-            return file._syntacticDiagnostics
+            Debug.assert(syntacticDiagnostics !== undefined);
+            return syntacticDiagnostics;
         }
 
         scanner = createScanner(languageVersion, /*skipTrivia*/ true, sourceText, scanError, onComment);
@@ -3462,7 +3457,7 @@ module ts {
         if (fileExtensionIs(filename, ".d.ts")) {
             rootNodeFlags = NodeFlags.DeclarationFile;
         }
-        file = <SourceFileInternal>createRootNode(SyntaxKind.SourceFile, 0, sourceText.length, rootNodeFlags);
+        file = <SourceFile>createRootNode(SyntaxKind.SourceFile, 0, sourceText.length, rootNodeFlags);
         file.filename = normalizePath(filename);
         file.text = sourceText;
         file.getLineAndCharacterFromPosition = getLineAndCharacterFromSourcePosition;
@@ -3524,7 +3519,7 @@ module ts {
         return token >= SyntaxKind.FirstAssignment && token <= SyntaxKind.LastAssignment;
     }
 
-    function checkGrammar(sourceText: string, languageVersion: ScriptTarget, file: SourceFileInternal) {
+    function checkGrammar(sourceText: string, languageVersion: ScriptTarget, file: SourceFile) {
         var grammarDiagnostics = file.grammarDiagnostics;
 
         // Create a scanner so we can find the start of tokens to report errors on.
