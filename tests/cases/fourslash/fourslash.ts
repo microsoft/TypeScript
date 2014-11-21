@@ -80,6 +80,10 @@ module FourSlashInterface {
             return FourSlash.currentTestState.getMarkers();
         }
 
+        public marker(name?: string): Marker {
+            return FourSlash.currentTestState.getMarkerByName(name);
+        }
+
         public ranges(): Range[] {
             return FourSlash.currentTestState.getRanges();
         }
@@ -405,11 +409,17 @@ module FourSlashInterface {
             FourSlash.currentTestState.verifyCompletionEntryDetails(entryName, text, documentation, kind);
         }
 
+        /**
+         * This method *requires* a contiguous, complete, and ordered stream of classifications for a file.
+         */
         public syntacticClassificationsAre(...classifications: { classificationType: string; text: string }[]) {
             FourSlash.currentTestState.verifySyntacticClassifications(classifications);
         }
 
-        public semanticClassificationsAre(...classifications: { classificationType: string; text: string }[]) {
+        /**
+         * This method *requires* an ordered stream of classifications for a file, and spans are highly recommended.
+         */
+        public semanticClassificationsAre(...classifications: { classificationType: string; text: string; textSpan?: TextSpan }[]) {
             FourSlash.currentTestState.verifySemanticClassifications(classifications);
         }
 
@@ -573,61 +583,69 @@ module FourSlashInterface {
         }
     }
 
-    export class classification {
-        public static comment(text: string): { classificationType: string; text: string } {
-            return { classificationType: "comment", text: text };
+    export module classification {
+        export function comment(text: string, position?: number): { classificationType: string; text: string; textSpan?: TextSpan } {
+            return getClassification("comment", text, position);
         }
 
-        public static identifier(text: string): { classificationType: string; text: string } {
-            return { classificationType: "identifier", text: text };
+        export function identifier(text: string, position?: number): { classificationType: string; text: string; textSpan?: TextSpan } {
+            return getClassification("identifier", text, position);
         }
 
-        public static keyword(text: string): { classificationType: string; text: string } {
-            return { classificationType: "keyword", text: text };
+        export function keyword(text: string, position?: number): { classificationType: string; text: string; textSpan?: TextSpan } {
+            return getClassification("keyword", text, position);
         }
 
-        public static numericLiteral(text: string): { classificationType: string; text: string } {
-            return { classificationType: "numericLiteral", text: text };
+        export function numericLiteral(text: string, position?: number): { classificationType: string; text: string; textSpan?: TextSpan } {
+            return getClassification("numericLiteral", text, position);
         }
 
-        public static operator(text: string): { classificationType: string; text: string } {
-            return { classificationType: "operator", text: text };
+        export function operator(text: string, position?: number): { classificationType: string; text: string; textSpan?: TextSpan } {
+            return getClassification("operator", text, position);
         }
 
-        public static stringLiteral(text: string): { classificationType: string; text: string } {
-            return { classificationType: "stringLiteral", text: text };
+        export function stringLiteral(text: string, position?: number): { classificationType: string; text: string; textSpan?: TextSpan } {
+            return getClassification("stringLiteral", text, position);
         }
 
-        public static whiteSpace(text: string): { classificationType: string; text: string } {
-            return { classificationType: "whiteSpace", text: text };
+        export function whiteSpace(text: string, position?: number): { classificationType: string; text: string; textSpan?: TextSpan } {
+            return getClassification("whiteSpace", text, position);
         }
 
-        public static text(text: string): { classificationType: string; text: string } {
-            return { classificationType: "text", text: text };
+        export function text(text: string, position?: number): { classificationType: string; text: string; textSpan?: TextSpan } {
+            return getClassification("text", text, position);
         }
 
-        public static punctuation(text: string): { classificationType: string; text: string } {
-            return { classificationType: "punctuation", text: text };
+        export function punctuation(text: string, position?: number): { classificationType: string; text: string; textSpan?: TextSpan } {
+            return getClassification("punctuation", text, position);
         }
 
-        public static className(text: string): { classificationType: string; text: string } {
-            return { classificationType: "className", text: text };
+        export function className(text: string, position?: number): { classificationType: string; text: string; textSpan?: TextSpan } {
+            return getClassification("className", text, position);
         }
 
-        public static enumName(text: string): { classificationType: string; text: string } {
-            return { classificationType: "enumName", text: text };
+        export function enumName(text: string, position?: number): { classificationType: string; text: string; textSpan?: TextSpan } {
+            return getClassification("enumName", text, position);
         }
 
-        public static interfaceName(text: string): { classificationType: string; text: string } {
-            return { classificationType: "interfaceName", text: text };
+        export function interfaceName(text: string, position?: number): { classificationType: string; text: string; textSpan?: TextSpan } {
+            return getClassification("interfaceName", text, position);
         }
 
-        public static moduleName(text: string): { classificationType: string; text: string } {
-            return { classificationType: "moduleName", text: text };
+        export function moduleName(text: string, position?: number): { classificationType: string; text: string; textSpan?: TextSpan } {
+            return getClassification("moduleName", text, position);
         }
 
-        public static typeParameterName(text: string): { classificationType: string; text: string } {
-            return { classificationType: "typeParameterName", text: text };
+        export function typeParameterName(text: string, position?: number): { classificationType: string; text: string; textSpan?: TextSpan } {
+            return getClassification("typeParameterName", text, position);
+        }
+
+        function getClassification(type: string, text: string, position?: number) {
+            return {
+                classificationType: type,
+                text: text,
+                textSpan: position === undefined ? undefined : { start: position, end: position + text.length }
+            };
         }
     }
 }
@@ -645,6 +663,7 @@ module fs {
 function verifyOperationIsCancelled(f) {
     FourSlash.verifyOperationIsCancelled(f);
 }
+
 var test = new FourSlashInterface.test_();
 var goTo = new FourSlashInterface.goTo();
 var verify = new FourSlashInterface.verify();

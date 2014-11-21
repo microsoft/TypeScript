@@ -1,5 +1,5 @@
 tests/cases/compiler/genericArrayExtenstions.ts(1,22): error TS1148: Cannot compile external modules unless the '--module' flag is provided.
-tests/cases/compiler/genericArrayExtenstions.ts(1,22): error TS2421: Class 'ObservableArray<T>' incorrectly implements interface 'T[]':
+tests/cases/compiler/genericArrayExtenstions.ts(1,22): error TS2420: Class 'ObservableArray<T>' incorrectly implements interface 'T[]'.
   Property 'length' is missing in type 'ObservableArray<T>'.
 
 
@@ -8,8 +8,8 @@ tests/cases/compiler/genericArrayExtenstions.ts(1,22): error TS2421: Class 'Obse
                          ~~~~~~~~~~~~~~~
 !!! error TS1148: Cannot compile external modules unless the '--module' flag is provided.
                          ~~~~~~~~~~~~~~~
-!!! error TS2421: Class 'ObservableArray<T>' incorrectly implements interface 'T[]':
-!!! error TS2421:   Property 'length' is missing in type 'ObservableArray<T>'.
+!!! error TS2420: Class 'ObservableArray<T>' incorrectly implements interface 'T[]'.
+!!! error TS2420:   Property 'length' is missing in type 'ObservableArray<T>'.
     concat<U extends T[]>(...items: U[]): T[];
     concat(...items: T[]): T[];
     }

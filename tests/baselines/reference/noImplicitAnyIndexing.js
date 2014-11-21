@@ -61,7 +61,7 @@ var strRepresentation2 = MyEmusEnum[0 /* emu */];
 // Should be implicit 'any' ; property access fails, no string indexer.
 var strRepresentation3 = MyEmusEnum["monehh"];
 // Should be okay; should be a MyEmusEnum
-var strRepresentation4 = MyEmusEnum["emu"];
+var strRepresentation4 = 0 /* "emu" */;
 // Should report an implicit 'any'.
 var x = {}["hi"];
 // Should report an implicit 'any'.

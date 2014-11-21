@@ -1,499 +1,698 @@
 ///<reference path='references.ts' />
 
 module TypeScript {
-    export enum NodeFlags {
-        Export   = 0x00000001,  // Declarations
-        Ambient  = 0x00000002,  // Declarations
-        Optional = 0x00000004,  // Parameter/Property/Method
-        Rest     = 0x00000008,  // Parameter
-        Public   = 0x00000010,  // Property/Method
-        Private  = 0x00000020,  // Property/Method
-        Static   = 0x00000040,  // Property/Method
+    export interface SourceUnitSyntax extends ISyntaxNode {
+        syntaxTree: SyntaxTree;
+        moduleElements: IModuleElementSyntax[];
+        endOfFileToken: ISyntaxToken;
     }
+    export interface SourceUnitConstructor { new (data: number, moduleElements: IModuleElementSyntax[], endOfFileToken: ISyntaxToken): SourceUnitSyntax }
 
-    interface SyntaxElement {
-        kind: SyntaxKind;
+    export interface QualifiedNameSyntax extends ISyntaxNode, INameSyntax {
+        left: INameSyntax;
+        dotToken: ISyntaxToken;
+        right: ISyntaxToken;
     }
+    export interface QualifiedNameConstructor { new (data: number, left: INameSyntax, dotToken: ISyntaxToken, right: ISyntaxToken): QualifiedNameSyntax }
+
+    export interface ObjectTypeSyntax extends ISyntaxNode, ITypeSyntax {
+        openBraceToken: ISyntaxToken;
+        typeMembers: ISeparatedSyntaxList<ITypeMemberSyntax>;
+        closeBraceToken: ISyntaxToken;
+    }
+    export interface ObjectTypeConstructor { new (data: number, openBraceToken: ISyntaxToken, typeMembers: ISeparatedSyntaxList<ITypeMemberSyntax>, closeBraceToken: ISyntaxToken): ObjectTypeSyntax }
 
-    interface SyntaxNode extends SyntaxElement {
-        flags: NodeFlags;
+    export interface FunctionTypeSyntax extends ISyntaxNode, ITypeSyntax {
+        typeParameterList: TypeParameterListSyntax;
+        parameterList: ParameterListSyntax;
+        equalsGreaterThanToken: ISyntaxToken;
+        type: ITypeSyntax;
+    }
+    export interface FunctionTypeConstructor { new (data: number, typeParameterList: TypeParameterListSyntax, parameterList: ParameterListSyntax, equalsGreaterThanToken: ISyntaxToken, type: ITypeSyntax): FunctionTypeSyntax }
+
+    export interface ArrayTypeSyntax extends ISyntaxNode, ITypeSyntax {
+        type: ITypeSyntax;
+        openBracketToken: ISyntaxToken;
+        closeBracketToken: ISyntaxToken;
+    }
+    export interface ArrayTypeConstructor { new (data: number, type: ITypeSyntax, openBracketToken: ISyntaxToken, closeBracketToken: ISyntaxToken): ArrayTypeSyntax }
+
+    export interface ConstructorTypeSyntax extends ISyntaxNode, ITypeSyntax {
+        newKeyword: ISyntaxToken;
+        typeParameterList: TypeParameterListSyntax;
+        parameterList: ParameterListSyntax;
+        equalsGreaterThanToken: ISyntaxToken;
+        type: ITypeSyntax;
+    }
+    export interface ConstructorTypeConstructor { new (data: number, newKeyword: ISyntaxToken, typeParameterList: TypeParameterListSyntax, parameterList: ParameterListSyntax, equalsGreaterThanToken: ISyntaxToken, type: ITypeSyntax): ConstructorTypeSyntax }
+
+    export interface GenericTypeSyntax extends ISyntaxNode, ITypeSyntax {
+        name: INameSyntax;
+        typeArgumentList: TypeArgumentListSyntax;
+    }
+    export interface GenericTypeConstructor { new (data: number, name: INameSyntax, typeArgumentList: TypeArgumentListSyntax): GenericTypeSyntax }
+
+    export interface TypeQuerySyntax extends ISyntaxNode, ITypeSyntax {
+        typeOfKeyword: ISyntaxToken;
+        name: INameSyntax;
+    }
+    export interface TypeQueryConstructor { new (data: number, typeOfKeyword: ISyntaxToken, name: INameSyntax): TypeQuerySyntax }
+
+    export interface TupleTypeSyntax extends ISyntaxNode, ITypeSyntax {
+        openBracketToken: ISyntaxToken;
+        types: ISeparatedSyntaxList<ITypeSyntax>;
+        closeBracketToken: ISyntaxToken;
+    }
+    export interface TupleTypeConstructor { new (data: number, openBracketToken: ISyntaxToken, types: ISeparatedSyntaxList<ITypeSyntax>, closeBracketToken: ISyntaxToken): TupleTypeSyntax }
+
+    export interface UnionTypeSyntax extends ISyntaxNode, ITypeSyntax {
+        left: ITypeSyntax;
+        barToken: ISyntaxToken;
+        right: ITypeSyntax;
+    }
+    export interface UnionTypeConstructor { new (data: number, left: ITypeSyntax, barToken: ISyntaxToken, right: ITypeSyntax): UnionTypeSyntax }
+
+    export interface ParenthesizedTypeSyntax extends ISyntaxNode, ITypeSyntax {
+        openParenToken: ISyntaxToken;
+        type: ITypeSyntax;
+        closeParenToken: ISyntaxToken;
+    }
+    export interface ParenthesizedTypeConstructor { new (data: number, openParenToken: ISyntaxToken, type: ITypeSyntax, closeParenToken: ISyntaxToken): ParenthesizedTypeSyntax }
+
+    export interface InterfaceDeclarationSyntax extends ISyntaxNode, IModuleElementSyntax {
+        modifiers: ISyntaxToken[];
+        interfaceKeyword: ISyntaxToken;
+        identifier: ISyntaxToken;
+        typeParameterList: TypeParameterListSyntax;
+        heritageClauses: HeritageClauseSyntax[];
+        body: ObjectTypeSyntax;
+    }
+    export interface InterfaceDeclarationConstructor { new (data: number, modifiers: ISyntaxToken[], interfaceKeyword: ISyntaxToken, identifier: ISyntaxToken, typeParameterList: TypeParameterListSyntax, heritageClauses: HeritageClauseSyntax[], body: ObjectTypeSyntax): InterfaceDeclarationSyntax }
+
+    export interface FunctionDeclarationSyntax extends ISyntaxNode, IStatementSyntax {
+        modifiers: ISyntaxToken[];
+        functionKeyword: ISyntaxToken;
+        asterixToken: ISyntaxToken;
+        identifier: ISyntaxToken;
+        callSignature: CallSignatureSyntax;
+        body: BlockSyntax | ISyntaxToken;
+    }
+    export interface FunctionDeclarationConstructor { new (data: number, modifiers: ISyntaxToken[], functionKeyword: ISyntaxToken, asterixToken: ISyntaxToken, identifier: ISyntaxToken, callSignature: CallSignatureSyntax, body: BlockSyntax | ISyntaxToken): FunctionDeclarationSyntax }
+
+    export interface ModuleDeclarationSyntax extends ISyntaxNode, IModuleElementSyntax {
+        modifiers: ISyntaxToken[];
+        moduleKeyword: ISyntaxToken;
+        name: INameSyntax;
+        openBraceToken: ISyntaxToken;
+        moduleElements: IModuleElementSyntax[];
+        closeBraceToken: ISyntaxToken;
+    }
+    export interface ModuleDeclarationConstructor { new (data: number, modifiers: ISyntaxToken[], moduleKeyword: ISyntaxToken, name: INameSyntax, openBraceToken: ISyntaxToken, moduleElements: IModuleElementSyntax[], closeBraceToken: ISyntaxToken): ModuleDeclarationSyntax }
+
+    export interface ClassDeclarationSyntax extends ISyntaxNode, IModuleElementSyntax {
+        modifiers: ISyntaxToken[];
+        classKeyword: ISyntaxToken;
+        identifier: ISyntaxToken;
+        typeParameterList: TypeParameterListSyntax;
+        heritageClauses: HeritageClauseSyntax[];
+        openBraceToken: ISyntaxToken;
+        classElements: IClassElementSyntax[];
+        closeBraceToken: ISyntaxToken;
+    }
+    export interface ClassDeclarationConstructor { new (data: number, modifiers: ISyntaxToken[], classKeyword: ISyntaxToken, identifier: ISyntaxToken, typeParameterList: TypeParameterListSyntax, heritageClauses: HeritageClauseSyntax[], openBraceToken: ISyntaxToken, classElements: IClassElementSyntax[], closeBraceToken: ISyntaxToken): ClassDeclarationSyntax }
+
+    export interface EnumDeclarationSyntax extends ISyntaxNode, IModuleElementSyntax {
+        modifiers: ISyntaxToken[];
+        enumKeyword: ISyntaxToken;
+        identifier: ISyntaxToken;
+        openBraceToken: ISyntaxToken;
+        enumElements: ISeparatedSyntaxList<EnumElementSyntax>;
+        closeBraceToken: ISyntaxToken;
+    }
+    export interface EnumDeclarationConstructor { new (data: number, modifiers: ISyntaxToken[], enumKeyword: ISyntaxToken, identifier: ISyntaxToken, openBraceToken: ISyntaxToken, enumElements: ISeparatedSyntaxList<EnumElementSyntax>, closeBraceToken: ISyntaxToken): EnumDeclarationSyntax }
+
+    export interface ImportDeclarationSyntax extends ISyntaxNode, IModuleElementSyntax {
+        modifiers: ISyntaxToken[];
+        importKeyword: ISyntaxToken;
+        identifier: ISyntaxToken;
+        equalsToken: ISyntaxToken;
+        moduleReference: IModuleReferenceSyntax;
+        semicolonToken: ISyntaxToken;
+    }
+    export interface ImportDeclarationConstructor { new (data: number, modifiers: ISyntaxToken[], importKeyword: ISyntaxToken, identifier: ISyntaxToken, equalsToken: ISyntaxToken, moduleReference: IModuleReferenceSyntax, semicolonToken: ISyntaxToken): ImportDeclarationSyntax }
+
+    export interface ExportAssignmentSyntax extends ISyntaxNode, IModuleElementSyntax {
+        exportKeyword: ISyntaxToken;
+        equalsToken: ISyntaxToken;
+        identifier: ISyntaxToken;
+        semicolonToken: ISyntaxToken;
+    }
+    export interface ExportAssignmentConstructor { new (data: number, exportKeyword: ISyntaxToken, equalsToken: ISyntaxToken, identifier: ISyntaxToken, semicolonToken: ISyntaxToken): ExportAssignmentSyntax }
+
+    export interface MemberFunctionDeclarationSyntax extends ISyntaxNode, IMemberDeclarationSyntax {
+        modifiers: ISyntaxToken[];
+        asterixToken: ISyntaxToken;
+        propertyName: IPropertyNameSyntax;
+        callSignature: CallSignatureSyntax;
+        body: BlockSyntax | ISyntaxToken;
+    }
+    export interface MemberFunctionDeclarationConstructor { new (data: number, modifiers: ISyntaxToken[], asterixToken: ISyntaxToken, propertyName: IPropertyNameSyntax, callSignature: CallSignatureSyntax, body: BlockSyntax | ISyntaxToken): MemberFunctionDeclarationSyntax }
+
+    export interface MemberVariableDeclarationSyntax extends ISyntaxNode, IMemberDeclarationSyntax {
+        modifiers: ISyntaxToken[];
+        variableDeclarator: VariableDeclaratorSyntax;
+        semicolonToken: ISyntaxToken;
+    }
+    export interface MemberVariableDeclarationConstructor { new (data: number, modifiers: ISyntaxToken[], variableDeclarator: VariableDeclaratorSyntax, semicolonToken: ISyntaxToken): MemberVariableDeclarationSyntax }
+
+    export interface ConstructorDeclarationSyntax extends ISyntaxNode, IClassElementSyntax {
+        modifiers: ISyntaxToken[];
+        constructorKeyword: ISyntaxToken;
+        callSignature: CallSignatureSyntax;
+        body: BlockSyntax | ISyntaxToken;
+    }
+    export interface ConstructorDeclarationConstructor { new (data: number, modifiers: ISyntaxToken[], constructorKeyword: ISyntaxToken, callSignature: CallSignatureSyntax, body: BlockSyntax | ISyntaxToken): ConstructorDeclarationSyntax }
+
+    export interface IndexMemberDeclarationSyntax extends ISyntaxNode, IClassElementSyntax {
+        modifiers: ISyntaxToken[];
+        indexSignature: IndexSignatureSyntax;
+        semicolonToken: ISyntaxToken;
+    }
+    export interface IndexMemberDeclarationConstructor { new (data: number, modifiers: ISyntaxToken[], indexSignature: IndexSignatureSyntax, semicolonToken: ISyntaxToken): IndexMemberDeclarationSyntax }
+
+    export interface GetAccessorSyntax extends ISyntaxNode, IAccessorSyntax {
+        modifiers: ISyntaxToken[];
+        getKeyword: ISyntaxToken;
+        propertyName: IPropertyNameSyntax;
+        callSignature: CallSignatureSyntax;
+        block: BlockSyntax;
+    }
+    export interface GetAccessorConstructor { new (data: number, modifiers: ISyntaxToken[], getKeyword: ISyntaxToken, propertyName: IPropertyNameSyntax, callSignature: CallSignatureSyntax, block: BlockSyntax): GetAccessorSyntax }
+
+    export interface SetAccessorSyntax extends ISyntaxNode, IAccessorSyntax {
+        modifiers: ISyntaxToken[];
+        setKeyword: ISyntaxToken;
+        propertyName: IPropertyNameSyntax;
+        callSignature: CallSignatureSyntax;
+        block: BlockSyntax;
+    }
+    export interface SetAccessorConstructor { new (data: number, modifiers: ISyntaxToken[], setKeyword: ISyntaxToken, propertyName: IPropertyNameSyntax, callSignature: CallSignatureSyntax, block: BlockSyntax): SetAccessorSyntax }
+
+    export interface PropertySignatureSyntax extends ISyntaxNode, ITypeMemberSyntax {
+        propertyName: IPropertyNameSyntax;
+        questionToken: ISyntaxToken;
+        typeAnnotation: TypeAnnotationSyntax;
+    }
+    export interface PropertySignatureConstructor { new (data: number, propertyName: IPropertyNameSyntax, questionToken: ISyntaxToken, typeAnnotation: TypeAnnotationSyntax): PropertySignatureSyntax }
+
+    export interface CallSignatureSyntax extends ISyntaxNode, ITypeMemberSyntax {
+        typeParameterList: TypeParameterListSyntax;
+        parameterList: ParameterListSyntax;
+        typeAnnotation: TypeAnnotationSyntax;
+    }
+    export interface CallSignatureConstructor { new (data: number, typeParameterList: TypeParameterListSyntax, parameterList: ParameterListSyntax, typeAnnotation: TypeAnnotationSyntax): CallSignatureSyntax }
+
+    export interface ConstructSignatureSyntax extends ISyntaxNode, ITypeMemberSyntax {
+        newKeyword: ISyntaxToken;
+        callSignature: CallSignatureSyntax;
+    }
+    export interface ConstructSignatureConstructor { new (data: number, newKeyword: ISyntaxToken, callSignature: CallSignatureSyntax): ConstructSignatureSyntax }
+
+    export interface IndexSignatureSyntax extends ISyntaxNode, ITypeMemberSyntax {
+        openBracketToken: ISyntaxToken;
+        parameters: ISeparatedSyntaxList<ParameterSyntax>;
+        closeBracketToken: ISyntaxToken;
+        typeAnnotation: TypeAnnotationSyntax;
+    }
+    export interface IndexSignatureConstructor { new (data: number, openBracketToken: ISyntaxToken, parameters: ISeparatedSyntaxList<ParameterSyntax>, closeBracketToken: ISyntaxToken, typeAnnotation: TypeAnnotationSyntax): IndexSignatureSyntax }
+
+    export interface MethodSignatureSyntax extends ISyntaxNode, ITypeMemberSyntax {
+        propertyName: IPropertyNameSyntax;
+        questionToken: ISyntaxToken;
+        callSignature: CallSignatureSyntax;
+    }
+    export interface MethodSignatureConstructor { new (data: number, propertyName: IPropertyNameSyntax, questionToken: ISyntaxToken, callSignature: CallSignatureSyntax): MethodSignatureSyntax }
+
+    export interface BlockSyntax extends ISyntaxNode, IStatementSyntax {
+        openBraceToken: ISyntaxToken;
+        statements: IStatementSyntax[];
+        closeBraceToken: ISyntaxToken;
+    }
+    export interface BlockConstructor { new (data: number, openBraceToken: ISyntaxToken, statements: IStatementSyntax[], closeBraceToken: ISyntaxToken): BlockSyntax }
+
+    export interface IfStatementSyntax extends ISyntaxNode, IStatementSyntax {
+        ifKeyword: ISyntaxToken;
+        openParenToken: ISyntaxToken;
+        condition: IExpressionSyntax;
+        closeParenToken: ISyntaxToken;
+        statement: IStatementSyntax;
+        elseClause: ElseClauseSyntax;
+    }
+    export interface IfStatementConstructor { new (data: number, ifKeyword: ISyntaxToken, openParenToken: ISyntaxToken, condition: IExpressionSyntax, closeParenToken: ISyntaxToken, statement: IStatementSyntax, elseClause: ElseClauseSyntax): IfStatementSyntax }
+
+    export interface VariableStatementSyntax extends ISyntaxNode, IStatementSyntax {
+        modifiers: ISyntaxToken[];
+        variableDeclaration: VariableDeclarationSyntax;
+        semicolonToken: ISyntaxToken;
+    }
+    export interface VariableStatementConstructor { new (data: number, modifiers: ISyntaxToken[], variableDeclaration: VariableDeclarationSyntax, semicolonToken: ISyntaxToken): VariableStatementSyntax }
+
+    export interface ExpressionStatementSyntax extends ISyntaxNode, IStatementSyntax {
+        expression: IExpressionSyntax;
+        semicolonToken: ISyntaxToken;
+    }
+    export interface ExpressionStatementConstructor { new (data: number, expression: IExpressionSyntax, semicolonToken: ISyntaxToken): ExpressionStatementSyntax }
+
+    export interface ReturnStatementSyntax extends ISyntaxNode, IStatementSyntax {
+        returnKeyword: ISyntaxToken;
+        expression: IExpressionSyntax;
+        semicolonToken: ISyntaxToken;
+    }
+    export interface ReturnStatementConstructor { new (data: number, returnKeyword: ISyntaxToken, expression: IExpressionSyntax, semicolonToken: ISyntaxToken): ReturnStatementSyntax }
+
+    export interface SwitchStatementSyntax extends ISyntaxNode, IStatementSyntax {
+        switchKeyword: ISyntaxToken;
+        openParenToken: ISyntaxToken;
+        expression: IExpressionSyntax;
+        closeParenToken: ISyntaxToken;
+        openBraceToken: ISyntaxToken;
+        switchClauses: ISwitchClauseSyntax[];
+        closeBraceToken: ISyntaxToken;
+    }
+    export interface SwitchStatementConstructor { new (data: number, switchKeyword: ISyntaxToken, openParenToken: ISyntaxToken, expression: IExpressionSyntax, closeParenToken: ISyntaxToken, openBraceToken: ISyntaxToken, switchClauses: ISwitchClauseSyntax[], closeBraceToken: ISyntaxToken): SwitchStatementSyntax }
+
+    export interface BreakStatementSyntax extends ISyntaxNode, IStatementSyntax {
+        breakKeyword: ISyntaxToken;
+        identifier: ISyntaxToken;
+        semicolonToken: ISyntaxToken;
+    }
+    export interface BreakStatementConstructor { new (data: number, breakKeyword: ISyntaxToken, identifier: ISyntaxToken, semicolonToken: ISyntaxToken): BreakStatementSyntax }
+
+    export interface ContinueStatementSyntax extends ISyntaxNode, IStatementSyntax {
+        continueKeyword: ISyntaxToken;
+        identifier: ISyntaxToken;
+        semicolonToken: ISyntaxToken;
+    }
+    export interface ContinueStatementConstructor { new (data: number, continueKeyword: ISyntaxToken, identifier: ISyntaxToken, semicolonToken: ISyntaxToken): ContinueStatementSyntax }
+
+    export interface ForStatementSyntax extends ISyntaxNode, IStatementSyntax {
+        forKeyword: ISyntaxToken;
+        openParenToken: ISyntaxToken;
+        initializer: VariableDeclarationSyntax | IExpressionSyntax;
+        firstSemicolonToken: ISyntaxToken;
+        condition: IExpressionSyntax;
+        secondSemicolonToken: ISyntaxToken;
+        incrementor: IExpressionSyntax;
+        closeParenToken: ISyntaxToken;
+        statement: IStatementSyntax;
     }
-
-    function nodeStart(node: Node): number {
-    }
-
-    function nodeWidth(node: Node): number {
-    }
-
-    interface SyntaxToken extends Name, PrimaryExpression {
-    }
-
-    // The raw text of the token, as written in the original source.
-    function tokenText(token: SyntaxToken): string {
-    }
-
-    // The token's javascript value.  i.e. 0.0 in the text would have the javascript number value: 0.
-    function tokenValue(token: SyntaxToken): any {
-    }
-
-    // The token's value in string form.  i.e. \u0041 in the source text would result in a string with the text: A.
-    function tokenValueText(token: SyntaxToken): string {
-    }
-
-    interface SyntaxList<T> extends SyntaxElement {
-        length: number;
-        item(index: number): T;
-    }
-
-    interface SourceUnit extends Node {
-        moduleElements: SyntaxList<ModuleElement>;
-    }
-
-    interface QualifiedName extends Name {
-        left: Name;
-        right: SyntaxToken;
-    }
-
-    interface ObjectType extends Type {
-        typeMembers: SyntaxList<TypeMember>;
-    }
-
-    interface FunctionType extends Type {
-        typeParameterList?: TypeParameterList;
-        parameterList: ParameterList;
-        type: Type;
-    }
-
-    interface ArrayType extends Type {
-        type: Type;
-    }
-
-    interface ConstructorType extends Type {
-        typeParameterList?: TypeParameterList;
-        parameterList: ParameterList;
-        type: Type;
-    }
-
-    interface GenericType extends Type {
-        name: Name;
-        typeArgumentList: TypeArgumentList;
-    }
-
-    interface TypeQuery extends Type {
-        name: Name;
-    }
-
-    interface InterfaceDeclaration extends ModuleElement {
-        identifier: SyntaxToken;
-        typeParameterList?: TypeParameterList;
-        heritageClauses: SyntaxList<HeritageClause>;
-        body: ObjectType;
-    }
-
-    interface FunctionDeclaration extends Statement {
-        identifier: SyntaxToken;
-        callSignature: CallSignature;
-        block?: Block;
-    }
-
-    interface ModuleDeclaration extends ModuleElement {
-        name?: Name;
-        stringLiteral?: SyntaxToken;
-        moduleElements: SyntaxList<ModuleElement>;
-    }
-
-    interface ClassDeclaration extends ModuleElement {
-        identifier: SyntaxToken;
-        typeParameterList?: TypeParameterList;
-        heritageClauses: SyntaxList<HeritageClause>;
-        classElements: SyntaxList<ClassElement>;
-    }
-
-    interface EnumDeclaration extends ModuleElement {
-        identifier: SyntaxToken;
-        enumElements: SyntaxList<EnumElement>;
-    }
-
-    interface ImportDeclaration extends ModuleElement {
-        identifier: SyntaxToken;
-        moduleReference: ModuleReference;
-    }
-
-    interface ExportAssignment extends ModuleElement {
-        identifier: SyntaxToken;
-    }
-
-    interface MemberFunctionDeclaration extends MemberDeclaration {
-        propertyName: SyntaxToken;
-        callSignature: CallSignature;
-        block?: Block;
-    }
-
-    interface MemberVariableDeclaration extends MemberDeclaration {
-        variableDeclarator: VariableDeclarator;
-    }
-
-    interface ConstructorDeclaration extends ClassElement {
-        callSignature: CallSignature;
-        block?: Block;
-    }
-
-    interface IndexMemberDeclaration extends ClassElement {
-        indexSignature: IndexSignature;
-    }
-
-    interface GetAccessor extends MemberDeclaration, PropertyAssignment {
-        propertyName: SyntaxToken;
-        callSignature: CallSignature;
-        block: Block;
+    export interface ForStatementConstructor { new (data: number, forKeyword: ISyntaxToken, openParenToken: ISyntaxToken, initializer: VariableDeclarationSyntax | IExpressionSyntax, firstSemicolonToken: ISyntaxToken, condition: IExpressionSyntax, secondSemicolonToken: ISyntaxToken, incrementor: IExpressionSyntax, closeParenToken: ISyntaxToken, statement: IStatementSyntax): ForStatementSyntax }
+
+    export interface ForInStatementSyntax extends ISyntaxNode, IStatementSyntax {
+        forKeyword: ISyntaxToken;
+        openParenToken: ISyntaxToken;
+        left: VariableDeclarationSyntax | IExpressionSyntax;
+        inKeyword: ISyntaxToken;
+        right: IExpressionSyntax;
+        closeParenToken: ISyntaxToken;
+        statement: IStatementSyntax;
+    }
+    export interface ForInStatementConstructor { new (data: number, forKeyword: ISyntaxToken, openParenToken: ISyntaxToken, left: VariableDeclarationSyntax | IExpressionSyntax, inKeyword: ISyntaxToken, right: IExpressionSyntax, closeParenToken: ISyntaxToken, statement: IStatementSyntax): ForInStatementSyntax }
+
+    export interface EmptyStatementSyntax extends ISyntaxNode, IStatementSyntax {
+        semicolonToken: ISyntaxToken;
     }
-
-    interface SetAccessor extends MemberDeclaration, PropertyAssignment {
-        propertyName: SyntaxToken;
-        callSignature: CallSignature;
-        block: Block;
-    }
-
-    interface PropertySignature extends TypeMember {
-        propertyName: SyntaxToken;
-        typeAnnotation?: TypeAnnotation;
-    }
-
-    interface CallSignature extends TypeMember {
-        typeParameterList?: TypeParameterList;
-        parameterList: ParameterList;
-        typeAnnotation?: TypeAnnotation;
-    }
-
-    interface ConstructSignature extends TypeMember {
-        callSignature: CallSignature;
-    }
-
-    interface IndexSignature extends TypeMember {
-        parameters: SyntaxList<Parameter>;
-        typeAnnotation?: TypeAnnotation;
-    }
-
-    interface MethodSignature extends TypeMember {
-        propertyName: SyntaxToken;
-        callSignature: CallSignature;
-    }
-
-    interface Block extends Statement {
-        statements: SyntaxList<Statement>;
-    }
-
-    interface IfStatement extends Statement {
-        condition: Expression;
-        statement: Statement;
-        elseClause?: ElseClause;
-    }
-
-    interface VariableStatement extends Statement {
-        variableDeclaration: VariableDeclaration;
-    }
-
-    interface ExpressionStatement extends Statement {
-        expression: Expression;
-    }
-
-    interface ReturnStatement extends Statement {
-        expression?: Expression;
-    }
-
-    interface SwitchStatement extends Statement {
-        expression: Expression;
-        switchClauses: SyntaxList<SwitchClause>;
-    }
-
-    interface BreakStatement extends Statement {
-        identifier?: SyntaxToken;
-    }
-
-    interface ContinueStatement extends Statement {
-        identifier?: SyntaxToken;
+    export interface EmptyStatementConstructor { new (data: number, semicolonToken: ISyntaxToken): EmptyStatementSyntax }
+
+    export interface ThrowStatementSyntax extends ISyntaxNode, IStatementSyntax {
+        throwKeyword: ISyntaxToken;
+        expression: IExpressionSyntax;
+        semicolonToken: ISyntaxToken;
     }
-
-    interface ForStatement extends Statement {
-        variableDeclaration?: VariableDeclaration;
-        initializer?: Expression;
-        condition?: Expression;
-        incrementor?: Expression;
-        statement: Statement;
-    }
-
-    interface ForInStatement extends Statement {
-        variableDeclaration?: VariableDeclaration;
-        left?: Expression;
-        expression: Expression;
-        statement: Statement;
-    }
-
-    interface ThrowStatement extends Statement {
-        expression: Expression;
-    }
-
-    interface WhileStatement extends Statement {
-        condition: Expression;
-        statement: Statement;
-    }
-
-    interface TryStatement extends Statement {
-        block: Block;
-        catchClause?: CatchClause;
-        finallyClause?: FinallyClause;
-    }
-
-    interface LabeledStatement extends Statement {
-        identifier: SyntaxToken;
-        statement: Statement;
-    }
-
-    interface DoStatement extends Statement {
-        statement: Statement;
-        condition: Expression;
-    }
-
-    interface WithStatement extends Statement {
-        condition: Expression;
-        statement: Statement;
-    }
-
-    interface PrefixUnaryExpression extends UnaryExpression {
-        operand: UnaryExpression;
-    }
-
-    interface DeleteExpression extends UnaryExpression {
-        expression: UnaryExpression;
-    }
-
-    interface TypeOfExpression extends UnaryExpression {
-        expression: UnaryExpression;
-    }
-
-    interface VoidExpression extends UnaryExpression {
-        expression: UnaryExpression;
-    }
-
-    interface ConditionalExpression extends Expression {
-        condition: Expression;
-        whenTrue: Expression;
-        whenFalse: Expression;
-    }
-
-    interface BinaryExpression extends Expression {
-        left: Expression;
-        right: Expression;
+    export interface ThrowStatementConstructor { new (data: number, throwKeyword: ISyntaxToken, expression: IExpressionSyntax, semicolonToken: ISyntaxToken): ThrowStatementSyntax }
+
+    export interface WhileStatementSyntax extends ISyntaxNode, IStatementSyntax {
+        whileKeyword: ISyntaxToken;
+        openParenToken: ISyntaxToken;
+        condition: IExpressionSyntax;
+        closeParenToken: ISyntaxToken;
+        statement: IStatementSyntax;
     }
+    export interface WhileStatementConstructor { new (data: number, whileKeyword: ISyntaxToken, openParenToken: ISyntaxToken, condition: IExpressionSyntax, closeParenToken: ISyntaxToken, statement: IStatementSyntax): WhileStatementSyntax }
 
-    interface PostfixUnaryExpression extends PostfixExpression {
-        operand: LeftHandSideExpression;
+    export interface TryStatementSyntax extends ISyntaxNode, IStatementSyntax {
+        tryKeyword: ISyntaxToken;
+        block: BlockSyntax;
+        catchClause: CatchClauseSyntax;
+        finallyClause: FinallyClauseSyntax;
     }
+    export interface TryStatementConstructor { new (data: number, tryKeyword: ISyntaxToken, block: BlockSyntax, catchClause: CatchClauseSyntax, finallyClause: FinallyClauseSyntax): TryStatementSyntax }
 
-    interface MemberAccessExpression extends MemberExpression, CallExpression {
-        expression: LeftHandSideExpression;
-        name: SyntaxToken;
+    export interface LabeledStatementSyntax extends ISyntaxNode, IStatementSyntax {
+        identifier: ISyntaxToken;
+        colonToken: ISyntaxToken;
+        statement: IStatementSyntax;
     }
+    export interface LabeledStatementConstructor { new (data: number, identifier: ISyntaxToken, colonToken: ISyntaxToken, statement: IStatementSyntax): LabeledStatementSyntax }
 
-    interface InvocationExpression extends CallExpression {
-        expression: LeftHandSideExpression;
-        argumentList: ArgumentList;
+    export interface DoStatementSyntax extends ISyntaxNode, IStatementSyntax {
+        doKeyword: ISyntaxToken;
+        statement: IStatementSyntax;
+        whileKeyword: ISyntaxToken;
+        openParenToken: ISyntaxToken;
+        condition: IExpressionSyntax;
+        closeParenToken: ISyntaxToken;
+        semicolonToken: ISyntaxToken;
     }
+    export interface DoStatementConstructor { new (data: number, doKeyword: ISyntaxToken, statement: IStatementSyntax, whileKeyword: ISyntaxToken, openParenToken: ISyntaxToken, condition: IExpressionSyntax, closeParenToken: ISyntaxToken, semicolonToken: ISyntaxToken): DoStatementSyntax }
 
-    interface ArrayLiteralExpression extends PrimaryExpression {
-        expressions: SyntaxList<Expression>;
+    export interface DebuggerStatementSyntax extends ISyntaxNode, IStatementSyntax {
+        debuggerKeyword: ISyntaxToken;
+        semicolonToken: ISyntaxToken;
     }
+    export interface DebuggerStatementConstructor { new (data: number, debuggerKeyword: ISyntaxToken, semicolonToken: ISyntaxToken): DebuggerStatementSyntax }
 
-    interface ObjectLiteralExpression extends PrimaryExpression {
-        propertyAssignments: SyntaxList<PropertyAssignment>;
+    export interface WithStatementSyntax extends ISyntaxNode, IStatementSyntax {
+        withKeyword: ISyntaxToken;
+        openParenToken: ISyntaxToken;
+        condition: IExpressionSyntax;
+        closeParenToken: ISyntaxToken;
+        statement: IStatementSyntax;
     }
+    export interface WithStatementConstructor { new (data: number, withKeyword: ISyntaxToken, openParenToken: ISyntaxToken, condition: IExpressionSyntax, closeParenToken: ISyntaxToken, statement: IStatementSyntax): WithStatementSyntax }
 
-    interface ObjectCreationExpression extends MemberExpression {
-        expression: MemberExpression;
-        argumentList?: ArgumentList;
+    export interface PrefixUnaryExpressionSyntax extends ISyntaxNode, IUnaryExpressionSyntax {
+        operatorToken: ISyntaxToken;
+        operand: IUnaryExpressionSyntax;
     }
+    export interface PrefixUnaryExpressionConstructor { new (data: number, operatorToken: ISyntaxToken, operand: IUnaryExpressionSyntax): PrefixUnaryExpressionSyntax }
 
-    interface ParenthesizedExpression extends PrimaryExpression {
-        expression: Expression;
+    export interface DeleteExpressionSyntax extends ISyntaxNode, IUnaryExpressionSyntax {
+        deleteKeyword: ISyntaxToken;
+        expression: IUnaryExpressionSyntax;
     }
+    export interface DeleteExpressionConstructor { new (data: number, deleteKeyword: ISyntaxToken, expression: IUnaryExpressionSyntax): DeleteExpressionSyntax }
 
-    interface ParenthesizedArrowFunctionExpression extends UnaryExpression {
-        callSignature: CallSignature;
-        block?: Block;
-        expression?: Expression;
+    export interface TypeOfExpressionSyntax extends ISyntaxNode, IUnaryExpressionSyntax {
+        typeOfKeyword: ISyntaxToken;
+        expression: IUnaryExpressionSyntax;
     }
+    export interface TypeOfExpressionConstructor { new (data: number, typeOfKeyword: ISyntaxToken, expression: IUnaryExpressionSyntax): TypeOfExpressionSyntax }
 
-    interface SimpleArrowFunctionExpression extends UnaryExpression {
-        parameter: Parameter;
-        block?: Block;
-        expression?: Expression;
+    export interface VoidExpressionSyntax extends ISyntaxNode, IUnaryExpressionSyntax {
+        voidKeyword: ISyntaxToken;
+        expression: IUnaryExpressionSyntax;
     }
+    export interface VoidExpressionConstructor { new (data: number, voidKeyword: ISyntaxToken, expression: IUnaryExpressionSyntax): VoidExpressionSyntax }
 
-    interface CastExpression extends UnaryExpression {
-        type: Type;
-        expression: UnaryExpression;
+    export interface ConditionalExpressionSyntax extends ISyntaxNode, IExpressionSyntax {
+        condition: IExpressionSyntax;
+        questionToken: ISyntaxToken;
+        whenTrue: IExpressionSyntax;
+        colonToken: ISyntaxToken;
+        whenFalse: IExpressionSyntax;
     }
+    export interface ConditionalExpressionConstructor { new (data: number, condition: IExpressionSyntax, questionToken: ISyntaxToken, whenTrue: IExpressionSyntax, colonToken: ISyntaxToken, whenFalse: IExpressionSyntax): ConditionalExpressionSyntax }
 
-    interface ElementAccessExpression extends MemberExpression, CallExpression {
-        expression: LeftHandSideExpression;
-        argumentExpression: Expression;
+    export interface BinaryExpressionSyntax extends ISyntaxNode, IExpressionSyntax {
+        left: IExpressionSyntax;
+        operatorToken: ISyntaxToken;
+        right: IExpressionSyntax;
     }
+    export interface BinaryExpressionConstructor { new (data: number, left: IExpressionSyntax, operatorToken: ISyntaxToken, right: IExpressionSyntax): BinaryExpressionSyntax }
 
-    interface FunctionExpression extends PrimaryExpression {
-        identifier?: SyntaxToken;
-        callSignature: CallSignature;
-        block: Block;
+    export interface PostfixUnaryExpressionSyntax extends ISyntaxNode, IPostfixExpressionSyntax {
+        operand: ILeftHandSideExpressionSyntax;
+        operatorToken: ISyntaxToken;
     }
+    export interface PostfixUnaryExpressionConstructor { new (data: number, operand: ILeftHandSideExpressionSyntax, operatorToken: ISyntaxToken): PostfixUnaryExpressionSyntax }
 
-    interface VariableDeclaration extends Node {
-        variableDeclarators: SyntaxList<VariableDeclarator>;
+    export interface MemberAccessExpressionSyntax extends ISyntaxNode, IMemberExpressionSyntax, ICallExpressionSyntax {
+        expression: ILeftHandSideExpressionSyntax;
+        dotToken: ISyntaxToken;
+        name: ISyntaxToken;
     }
+    export interface MemberAccessExpressionConstructor { new (data: number, expression: ILeftHandSideExpressionSyntax, dotToken: ISyntaxToken, name: ISyntaxToken): MemberAccessExpressionSyntax }
 
-    interface VariableDeclarator extends Node {
-        propertyName: SyntaxToken;
-        typeAnnotation?: TypeAnnotation;
-        equalsValueClause?: EqualsValueClause;
+    export interface InvocationExpressionSyntax extends ISyntaxNode, ICallExpressionSyntax {
+        expression: ILeftHandSideExpressionSyntax;
+        argumentList: ArgumentListSyntax;
     }
+    export interface InvocationExpressionConstructor { new (data: number, expression: ILeftHandSideExpressionSyntax, argumentList: ArgumentListSyntax): InvocationExpressionSyntax }
 
-    interface ArgumentList extends Node {
-        typeArgumentList?: TypeArgumentList;
-        arguments: SyntaxList<Expression>;
+    export interface ArrayLiteralExpressionSyntax extends ISyntaxNode, IPrimaryExpressionSyntax {
+        openBracketToken: ISyntaxToken;
+        expressions: ISeparatedSyntaxList<IExpressionSyntax>;
+        closeBracketToken: ISyntaxToken;
     }
+    export interface ArrayLiteralExpressionConstructor { new (data: number, openBracketToken: ISyntaxToken, expressions: ISeparatedSyntaxList<IExpressionSyntax>, closeBracketToken: ISyntaxToken): ArrayLiteralExpressionSyntax }
 
-    interface ParameterList extends Node {
-        parameters: SyntaxList<Parameter>;
+    export interface ObjectLiteralExpressionSyntax extends ISyntaxNode, IPrimaryExpressionSyntax {
+        openBraceToken: ISyntaxToken;
+        propertyAssignments: ISeparatedSyntaxList<IPropertyAssignmentSyntax>;
+        closeBraceToken: ISyntaxToken;
     }
+    export interface ObjectLiteralExpressionConstructor { new (data: number, openBraceToken: ISyntaxToken, propertyAssignments: ISeparatedSyntaxList<IPropertyAssignmentSyntax>, closeBraceToken: ISyntaxToken): ObjectLiteralExpressionSyntax }
 
-    interface TypeArgumentList extends Node {
-        typeArguments: SyntaxList<Type>;
+    export interface ObjectCreationExpressionSyntax extends ISyntaxNode, IPrimaryExpressionSyntax {
+        newKeyword: ISyntaxToken;
+        expression: IMemberExpressionSyntax;
+        argumentList: ArgumentListSyntax;
     }
+    export interface ObjectCreationExpressionConstructor { new (data: number, newKeyword: ISyntaxToken, expression: IMemberExpressionSyntax, argumentList: ArgumentListSyntax): ObjectCreationExpressionSyntax }
 
-    interface TypeParameterList extends Node {
-        typeParameters: SyntaxList<TypeParameter>;
+    export interface ParenthesizedExpressionSyntax extends ISyntaxNode, IPrimaryExpressionSyntax {
+        openParenToken: ISyntaxToken;
+        expression: IExpressionSyntax;
+        closeParenToken: ISyntaxToken;
     }
+    export interface ParenthesizedExpressionConstructor { new (data: number, openParenToken: ISyntaxToken, expression: IExpressionSyntax, closeParenToken: ISyntaxToken): ParenthesizedExpressionSyntax }
 
-    interface HeritageClause extends Node {
-        typeNames: SyntaxList<Name>;
+    export interface ParenthesizedArrowFunctionExpressionSyntax extends ISyntaxNode, IUnaryExpressionSyntax {
+        callSignature: CallSignatureSyntax;
+        equalsGreaterThanToken: ISyntaxToken;
+        body: BlockSyntax | IExpressionSyntax;
     }
+    export interface ParenthesizedArrowFunctionExpressionConstructor { new (data: number, callSignature: CallSignatureSyntax, equalsGreaterThanToken: ISyntaxToken, body: BlockSyntax | IExpressionSyntax): ParenthesizedArrowFunctionExpressionSyntax }
 
-    interface EqualsValueClause extends Node {
-        value: Expression;
+    export interface SimpleArrowFunctionExpressionSyntax extends ISyntaxNode, IUnaryExpressionSyntax {
+        parameter: ParameterSyntax;
+        equalsGreaterThanToken: ISyntaxToken;
+        body: BlockSyntax | IExpressionSyntax;
     }
+    export interface SimpleArrowFunctionExpressionConstructor { new (data: number, parameter: ParameterSyntax, equalsGreaterThanToken: ISyntaxToken, body: BlockSyntax | IExpressionSyntax): SimpleArrowFunctionExpressionSyntax }
 
-    interface CaseSwitchClause extends SwitchClause {
-        expression: Expression;
-        statements: SyntaxList<Statement>;
+    export interface CastExpressionSyntax extends ISyntaxNode, IUnaryExpressionSyntax {
+        lessThanToken: ISyntaxToken;
+        type: ITypeSyntax;
+        greaterThanToken: ISyntaxToken;
+        expression: IUnaryExpressionSyntax;
     }
+    export interface CastExpressionConstructor { new (data: number, lessThanToken: ISyntaxToken, type: ITypeSyntax, greaterThanToken: ISyntaxToken, expression: IUnaryExpressionSyntax): CastExpressionSyntax }
 
-    interface DefaultSwitchClause extends SwitchClause {
-        statements: SyntaxList<Statement>;
+    export interface ElementAccessExpressionSyntax extends ISyntaxNode, IMemberExpressionSyntax, ICallExpressionSyntax {
+        expression: ILeftHandSideExpressionSyntax;
+        openBracketToken: ISyntaxToken;
+        argumentExpression: IExpressionSyntax;
+        closeBracketToken: ISyntaxToken;
     }
+    export interface ElementAccessExpressionConstructor { new (data: number, expression: ILeftHandSideExpressionSyntax, openBracketToken: ISyntaxToken, argumentExpression: IExpressionSyntax, closeBracketToken: ISyntaxToken): ElementAccessExpressionSyntax }
 
-    interface ElseClause extends Node {
-        statement: Statement;
+    export interface FunctionExpressionSyntax extends ISyntaxNode, IPrimaryExpressionSyntax {
+        functionKeyword: ISyntaxToken;
+        asterixToken: ISyntaxToken;
+        identifier: ISyntaxToken;
+        callSignature: CallSignatureSyntax;
+        block: BlockSyntax;
     }
+    export interface FunctionExpressionConstructor { new (data: number, functionKeyword: ISyntaxToken, asterixToken: ISyntaxToken, identifier: ISyntaxToken, callSignature: CallSignatureSyntax, block: BlockSyntax): FunctionExpressionSyntax }
 
-    interface CatchClause extends Node {
-        identifier: SyntaxToken;
-        typeAnnotation?: TypeAnnotation;
-        block: Block;
+    export interface OmittedExpressionSyntax extends ISyntaxNode, IExpressionSyntax {
     }
+    export interface OmittedExpressionConstructor { new (data: number): OmittedExpressionSyntax }
 
-    interface FinallyClause extends Node {
-        block: Block;
+    export interface TemplateExpressionSyntax extends ISyntaxNode, IPrimaryExpressionSyntax {
+        templateStartToken: ISyntaxToken;
+        templateClauses: TemplateClauseSyntax[];
     }
+    export interface TemplateExpressionConstructor { new (data: number, templateStartToken: ISyntaxToken, templateClauses: TemplateClauseSyntax[]): TemplateExpressionSyntax }
 
-    interface TypeParameter extends Node {
-        identifier: SyntaxToken;
-        constraint?: Constraint;
+    export interface TemplateAccessExpressionSyntax extends ISyntaxNode, IMemberExpressionSyntax, ICallExpressionSyntax {
+        expression: ILeftHandSideExpressionSyntax;
+        templateExpression: IPrimaryExpressionSyntax;
     }
+    export interface TemplateAccessExpressionConstructor { new (data: number, expression: ILeftHandSideExpressionSyntax, templateExpression: IPrimaryExpressionSyntax): TemplateAccessExpressionSyntax }
 
-    interface Constraint extends Node {
-        type: Type;
+    export interface YieldExpressionSyntax extends ISyntaxNode, IExpressionSyntax {
+        yieldKeyword: ISyntaxToken;
+        asterixToken: ISyntaxToken;
+        expression: IExpressionSyntax;
     }
+    export interface YieldExpressionConstructor { new (data: number, yieldKeyword: ISyntaxToken, asterixToken: ISyntaxToken, expression: IExpressionSyntax): YieldExpressionSyntax }
 
-    interface SimplePropertyAssignment extends PropertyAssignment {
-        propertyName: SyntaxToken;
-        expression: Expression;
+    export interface VariableDeclarationSyntax extends ISyntaxNode {
+        varKeyword: ISyntaxToken;
+        variableDeclarators: ISeparatedSyntaxList<VariableDeclaratorSyntax>;
     }
+    export interface VariableDeclarationConstructor { new (data: number, varKeyword: ISyntaxToken, variableDeclarators: ISeparatedSyntaxList<VariableDeclaratorSyntax>): VariableDeclarationSyntax }
 
-    interface FunctionPropertyAssignment extends PropertyAssignment {
-        propertyName: SyntaxToken;
-        callSignature: CallSignature;
-        block: Block;
+    export interface VariableDeclaratorSyntax extends ISyntaxNode {
+        propertyName: IPropertyNameSyntax;
+        typeAnnotation: TypeAnnotationSyntax;
+        equalsValueClause: EqualsValueClauseSyntax;
     }
+    export interface VariableDeclaratorConstructor { new (data: number, propertyName: IPropertyNameSyntax, typeAnnotation: TypeAnnotationSyntax, equalsValueClause: EqualsValueClauseSyntax): VariableDeclaratorSyntax }
 
-    interface Parameter extends Node {
-        identifier: SyntaxToken;
-        typeAnnotation?: TypeAnnotation;
-        equalsValueClause?: EqualsValueClause;
+    export interface ArgumentListSyntax extends ISyntaxNode {
+        typeArgumentList: TypeArgumentListSyntax;
+        openParenToken: ISyntaxToken;
+        arguments: ISeparatedSyntaxList<IExpressionSyntax>;
+        closeParenToken: ISyntaxToken;
     }
+    export interface ArgumentListConstructor { new (data: number, typeArgumentList: TypeArgumentListSyntax, openParenToken: ISyntaxToken, _arguments: ISeparatedSyntaxList<IExpressionSyntax>, closeParenToken: ISyntaxToken): ArgumentListSyntax }
 
-    interface EnumElement extends Node {
-        propertyName: SyntaxToken;
-        equalsValueClause?: EqualsValueClause;
+    export interface ParameterListSyntax extends ISyntaxNode {
+        openParenToken: ISyntaxToken;
+        parameters: ISeparatedSyntaxList<ParameterSyntax>;
+        closeParenToken: ISyntaxToken;
     }
+    export interface ParameterListConstructor { new (data: number, openParenToken: ISyntaxToken, parameters: ISeparatedSyntaxList<ParameterSyntax>, closeParenToken: ISyntaxToken): ParameterListSyntax }
 
-    interface TypeAnnotation extends Node {
-        type: Type;
+    export interface TypeArgumentListSyntax extends ISyntaxNode {
+        lessThanToken: ISyntaxToken;
+        typeArguments: ISeparatedSyntaxList<ITypeSyntax>;
+        greaterThanToken: ISyntaxToken;
     }
+    export interface TypeArgumentListConstructor { new (data: number, lessThanToken: ISyntaxToken, typeArguments: ISeparatedSyntaxList<ITypeSyntax>, greaterThanToken: ISyntaxToken): TypeArgumentListSyntax }
 
-    interface ExternalModuleReference extends ModuleReference {
-        stringLiteral: SyntaxToken;
+    export interface TypeParameterListSyntax extends ISyntaxNode {
+        lessThanToken: ISyntaxToken;
+        typeParameters: ISeparatedSyntaxList<TypeParameterSyntax>;
+        greaterThanToken: ISyntaxToken;
     }
+    export interface TypeParameterListConstructor { new (data: number, lessThanToken: ISyntaxToken, typeParameters: ISeparatedSyntaxList<TypeParameterSyntax>, greaterThanToken: ISyntaxToken): TypeParameterListSyntax }
 
-    interface ModuleNameModuleReference extends ModuleReference {
-        moduleName: Name;
+    export interface HeritageClauseSyntax extends ISyntaxNode {
+        extendsOrImplementsKeyword: ISyntaxToken;
+        typeNames: ISeparatedSyntaxList<INameSyntax>;
     }
+    export interface HeritageClauseConstructor { new (data: number, extendsOrImplementsKeyword: ISyntaxToken, typeNames: ISeparatedSyntaxList<INameSyntax>): HeritageClauseSyntax }
 
-    interface MemberDeclaration extends ClassElement {
+    export interface EqualsValueClauseSyntax extends ISyntaxNode {
+        equalsToken: ISyntaxToken;
+        value: IExpressionSyntax;
     }
+    export interface EqualsValueClauseConstructor { new (data: number, equalsToken: ISyntaxToken, value: IExpressionSyntax): EqualsValueClauseSyntax }
 
-    interface Statement extends ModuleElement {
+    export interface CaseSwitchClauseSyntax extends ISyntaxNode, ISwitchClauseSyntax {
+        caseKeyword: ISyntaxToken;
+        expression: IExpressionSyntax;
+        colonToken: ISyntaxToken;
+        statements: IStatementSyntax[];
     }
+    export interface CaseSwitchClauseConstructor { new (data: number, caseKeyword: ISyntaxToken, expression: IExpressionSyntax, colonToken: ISyntaxToken, statements: IStatementSyntax[]): CaseSwitchClauseSyntax }
 
-    interface Name extends Type {
+    export interface DefaultSwitchClauseSyntax extends ISyntaxNode, ISwitchClauseSyntax {
+        defaultKeyword: ISyntaxToken;
+        colonToken: ISyntaxToken;
+        statements: IStatementSyntax[];
     }
+    export interface DefaultSwitchClauseConstructor { new (data: number, defaultKeyword: ISyntaxToken, colonToken: ISyntaxToken, statements: IStatementSyntax[]): DefaultSwitchClauseSyntax }
 
-    interface UnaryExpression extends Expression {
+    export interface ElseClauseSyntax extends ISyntaxNode {
+        elseKeyword: ISyntaxToken;
+        statement: IStatementSyntax;
     }
+    export interface ElseClauseConstructor { new (data: number, elseKeyword: ISyntaxToken, statement: IStatementSyntax): ElseClauseSyntax }
 
-    interface PostfixExpression extends UnaryExpression {
+    export interface CatchClauseSyntax extends ISyntaxNode {
+        catchKeyword: ISyntaxToken;
+        openParenToken: ISyntaxToken;
+        identifier: ISyntaxToken;
+        typeAnnotation: TypeAnnotationSyntax;
+        closeParenToken: ISyntaxToken;
+        block: BlockSyntax;
     }
+    export interface CatchClauseConstructor { new (data: number, catchKeyword: ISyntaxToken, openParenToken: ISyntaxToken, identifier: ISyntaxToken, typeAnnotation: TypeAnnotationSyntax, closeParenToken: ISyntaxToken, block: BlockSyntax): CatchClauseSyntax }
 
-    interface LeftHandSideExpression extends PostfixExpression {
+    export interface FinallyClauseSyntax extends ISyntaxNode {
+        finallyKeyword: ISyntaxToken;
+        block: BlockSyntax;
     }
+    export interface FinallyClauseConstructor { new (data: number, finallyKeyword: ISyntaxToken, block: BlockSyntax): FinallyClauseSyntax }
 
-    interface MemberExpression extends LeftHandSideExpression {
+    export interface TemplateClauseSyntax extends ISyntaxNode {
+        expression: IExpressionSyntax;
+        templateMiddleOrEndToken: ISyntaxToken;
     }
+    export interface TemplateClauseConstructor { new (data: number, expression: IExpressionSyntax, templateMiddleOrEndToken: ISyntaxToken): TemplateClauseSyntax }
 
-    interface CallExpression extends LeftHandSideExpression {
+    export interface TypeParameterSyntax extends ISyntaxNode {
+        identifier: ISyntaxToken;
+        constraint: ConstraintSyntax;
     }
+    export interface TypeParameterConstructor { new (data: number, identifier: ISyntaxToken, constraint: ConstraintSyntax): TypeParameterSyntax }
 
-    interface PrimaryExpression extends MemberExpression {
+    export interface ConstraintSyntax extends ISyntaxNode {
+        extendsKeyword: ISyntaxToken;
+        typeOrExpression: ISyntaxNodeOrToken;
     }
+    export interface ConstraintConstructor { new (data: number, extendsKeyword: ISyntaxToken, typeOrExpression: ISyntaxNodeOrToken): ConstraintSyntax }
 
-    interface ModuleElement extends SyntaxElement {
+    export interface SimplePropertyAssignmentSyntax extends ISyntaxNode, IPropertyAssignmentSyntax {
+        propertyName: IPropertyNameSyntax;
+        colonToken: ISyntaxToken;
+        expression: IExpressionSyntax;
     }
+    export interface SimplePropertyAssignmentConstructor { new (data: number, propertyName: IPropertyNameSyntax, colonToken: ISyntaxToken, expression: IExpressionSyntax): SimplePropertyAssignmentSyntax }
 
-    interface ModuleReference extends Node {
+    export interface FunctionPropertyAssignmentSyntax extends ISyntaxNode, IPropertyAssignmentSyntax {
+        asterixToken: ISyntaxToken;
+        propertyName: IPropertyNameSyntax;
+        callSignature: CallSignatureSyntax;
+        block: BlockSyntax;
     }
+    export interface FunctionPropertyAssignmentConstructor { new (data: number, asterixToken: ISyntaxToken, propertyName: IPropertyNameSyntax, callSignature: CallSignatureSyntax, block: BlockSyntax): FunctionPropertyAssignmentSyntax }
 
-    interface ClassElement extends Node {
+    export interface ParameterSyntax extends ISyntaxNode {
+        dotDotDotToken: ISyntaxToken;
+        modifiers: ISyntaxToken[];
+        identifier: ISyntaxToken;
+        questionToken: ISyntaxToken;
+        typeAnnotation: TypeAnnotationSyntax;
+        equalsValueClause: EqualsValueClauseSyntax;
     }
+    export interface ParameterConstructor { new (data: number, dotDotDotToken: ISyntaxToken, modifiers: ISyntaxToken[], identifier: ISyntaxToken, questionToken: ISyntaxToken, typeAnnotation: TypeAnnotationSyntax, equalsValueClause: EqualsValueClauseSyntax): ParameterSyntax }
 
-    interface TypeMember extends Node {
+    export interface EnumElementSyntax extends ISyntaxNode {
+        propertyName: IPropertyNameSyntax;
+        equalsValueClause: EqualsValueClauseSyntax;
     }
+    export interface EnumElementConstructor { new (data: number, propertyName: IPropertyNameSyntax, equalsValueClause: EqualsValueClauseSyntax): EnumElementSyntax }
 
-    interface PropertyAssignment extends Node {
+    export interface TypeAnnotationSyntax extends ISyntaxNode {
+        colonToken: ISyntaxToken;
+        type: ITypeSyntax;
     }
+    export interface TypeAnnotationConstructor { new (data: number, colonToken: ISyntaxToken, type: ITypeSyntax): TypeAnnotationSyntax }
 
-    interface SwitchClause extends Node {
+    export interface ComputedPropertyNameSyntax extends ISyntaxNode, IPropertyNameSyntax {
+        openBracketToken: ISyntaxToken;
+        expression: IExpressionSyntax;
+        closeBracketToken: ISyntaxToken;
     }
+    export interface ComputedPropertyNameConstructor { new (data: number, openBracketToken: ISyntaxToken, expression: IExpressionSyntax, closeBracketToken: ISyntaxToken): ComputedPropertyNameSyntax }
 
-    interface Expression extends SyntaxElement {
+    export interface ExternalModuleReferenceSyntax extends ISyntaxNode, IModuleReferenceSyntax {
+        requireKeyword: ISyntaxToken;
+        openParenToken: ISyntaxToken;
+        stringLiteral: ISyntaxToken;
+        closeParenToken: ISyntaxToken;
     }
+    export interface ExternalModuleReferenceConstructor { new (data: number, requireKeyword: ISyntaxToken, openParenToken: ISyntaxToken, stringLiteral: ISyntaxToken, closeParenToken: ISyntaxToken): ExternalModuleReferenceSyntax }
 
-    interface Type extends SyntaxElement {
+    export interface ModuleNameModuleReferenceSyntax extends ISyntaxNode, IModuleReferenceSyntax {
+        moduleName: INameSyntax;
     }
+    export interface ModuleNameModuleReferenceConstructor { new (data: number, moduleName: INameSyntax): ModuleNameModuleReferenceSyntax }
 }

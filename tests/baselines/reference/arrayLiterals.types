@@ -2,15 +2,15 @@
 // Empty array literal with no contextual type has type Undefined[]
 
 var arr1= [[], [1], ['']];
->arr1 : Array<string[] | number[]>
->[[], [1], ['']] : Array<string[] | number[]>
+>arr1 : (string[] | number[])[]
+>[[], [1], ['']] : (string[] | number[])[]
 >[] : undefined[]
 >[1] : number[]
 >[''] : string[]
 
 var arr2 = [[null], [1], ['']];
->arr2 : Array<string[] | number[]>
->[[null], [1], ['']] : Array<string[] | number[]>
+>arr2 : (string[] | number[])[]
+>[[null], [1], ['']] : (string[] | number[])[]
 >[null] : null[]
 >[1] : number[]
 >[''] : string[]
@@ -65,7 +65,7 @@ var context1: { [n: number]: { a: string; b: number; }; } = [{ a: '', b: 0, c: '
 >n : number
 >a : string
 >b : number
->[{ a: '', b: 0, c: '' }, { a: "", b: 3, c: 0 }] : Array<{ a: string; b: number; c: string; } | { a: string; b: number; c: number; }>
+>[{ a: '', b: 0, c: '' }, { a: "", b: 3, c: 0 }] : ({ a: string; b: number; c: string; } | { a: string; b: number; c: number; })[]
 >{ a: '', b: 0, c: '' } : { a: string; b: number; c: string; }
 >a : string
 >b : number
@@ -76,8 +76,8 @@ var context1: { [n: number]: { a: string; b: number; }; } = [{ a: '', b: 0, c: '
 >c : number
 
 var context2 = [{ a: '', b: 0, c: '' }, { a: "", b: 3, c: 0 }];
->context2 : Array<{ a: string; b: number; c: string; } | { a: string; b: number; c: number; }>
->[{ a: '', b: 0, c: '' }, { a: "", b: 3, c: 0 }] : Array<{ a: string; b: number; c: string; } | { a: string; b: number; c: number; }>
+>context2 : ({ a: string; b: number; c: string; } | { a: string; b: number; c: number; })[]
+>[{ a: '', b: 0, c: '' }, { a: "", b: 3, c: 0 }] : ({ a: string; b: number; c: string; } | { a: string; b: number; c: number; })[]
 >{ a: '', b: 0, c: '' } : { a: string; b: number; c: string; }
 >a : string
 >b : number
@@ -105,7 +105,7 @@ class Derived2 extends Base { private n };
 var context3: Base[] = [new Derived1(), new Derived2()];
 >context3 : Base[]
 >Base : Base
->[new Derived1(), new Derived2()] : Array<Derived1 | Derived2>
+>[new Derived1(), new Derived2()] : (Derived1 | Derived2)[]
 >new Derived1() : Derived1
 >Derived1 : typeof Derived1
 >new Derived2() : Derived2

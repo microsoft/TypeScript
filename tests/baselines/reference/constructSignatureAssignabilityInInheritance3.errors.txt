@@ -1,16 +1,16 @@
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance3.ts(41,19): error TS2429: Interface 'I2<T, U>' incorrectly extends interface 'A':
-  Types of property 'a2' are incompatible:
-    Type 'new (x: T) => U[]' is not assignable to type 'new (x: number) => string[]':
-      Types of parameters 'x' and 'x' are incompatible:
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance3.ts(41,19): error TS2430: Interface 'I2<T, U>' incorrectly extends interface 'A'.
+  Types of property 'a2' are incompatible.
+    Type 'new (x: T) => U[]' is not assignable to type 'new (x: number) => string[]'.
+      Types of parameters 'x' and 'x' are incompatible.
         Type 'T' is not assignable to type 'number'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance3.ts(50,19): error TS2429: Interface 'I4' incorrectly extends interface 'A':
-  Types of property 'a8' are incompatible:
-    Type 'new <T extends Base, U extends Derived>(x: (arg: T) => U, y: (arg2: { foo: number; }) => U) => (r: T) => U' is not assignable to type 'new (x: (arg: Base) => Derived, y: (arg2: Base) => Derived) => (r: Base) => Derived':
-      Types of parameters 'y' and 'y' are incompatible:
-        Type '(arg2: { foo: number; }) => any' is not assignable to type '(arg2: Base) => Derived':
-          Types of parameters 'arg2' and 'arg2' are incompatible:
-            Type '{ foo: number; }' is not assignable to type 'Base':
-              Types of property 'foo' are incompatible:
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance3.ts(50,19): error TS2430: Interface 'I4' incorrectly extends interface 'A'.
+  Types of property 'a8' are incompatible.
+    Type 'new <T extends Base, U extends Derived>(x: (arg: T) => U, y: (arg2: { foo: number; }) => U) => (r: T) => U' is not assignable to type 'new (x: (arg: Base) => Derived, y: (arg2: Base) => Derived) => (r: Base) => Derived'.
+      Types of parameters 'y' and 'y' are incompatible.
+        Type '(arg2: { foo: number; }) => any' is not assignable to type '(arg2: Base) => Derived'.
+          Types of parameters 'arg2' and 'arg2' are incompatible.
+            Type '{ foo: number; }' is not assignable to type 'Base'.
+              Types of property 'foo' are incompatible.
                 Type 'number' is not assignable to type 'string'.
 
 
@@ -57,11 +57,11 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/construc
     
             interface I2<T, U> extends A {
                       ~~
-!!! error TS2429: Interface 'I2<T, U>' incorrectly extends interface 'A':
-!!! error TS2429:   Types of property 'a2' are incompatible:
-!!! error TS2429:     Type 'new (x: T) => U[]' is not assignable to type 'new (x: number) => string[]':
-!!! error TS2429:       Types of parameters 'x' and 'x' are incompatible:
-!!! error TS2429:         Type 'T' is not assignable to type 'number'.
+!!! error TS2430: Interface 'I2<T, U>' incorrectly extends interface 'A'.
+!!! error TS2430:   Types of property 'a2' are incompatible.
+!!! error TS2430:     Type 'new (x: T) => U[]' is not assignable to type 'new (x: number) => string[]'.
+!!! error TS2430:       Types of parameters 'x' and 'x' are incompatible.
+!!! error TS2430:         Type 'T' is not assignable to type 'number'.
                 a2: new (x: T) => U[]; // error, no contextual signature instantiation since I2.a2 is not generic
             }
     
@@ -72,15 +72,15 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/construc
     
             interface I4 extends A {
                       ~~
-!!! error TS2429: Interface 'I4' incorrectly extends interface 'A':
-!!! error TS2429:   Types of property 'a8' are incompatible:
-!!! error TS2429:     Type 'new <T extends Base, U extends Derived>(x: (arg: T) => U, y: (arg2: { foo: number; }) => U) => (r: T) => U' is not assignable to type 'new (x: (arg: Base) => Derived, y: (arg2: Base) => Derived) => (r: Base) => Derived':
-!!! error TS2429:       Types of parameters 'y' and 'y' are incompatible:
-!!! error TS2429:         Type '(arg2: { foo: number; }) => any' is not assignable to type '(arg2: Base) => Derived':
-!!! error TS2429:           Types of parameters 'arg2' and 'arg2' are incompatible:
-!!! error TS2429:             Type '{ foo: number; }' is not assignable to type 'Base':
-!!! error TS2429:               Types of property 'foo' are incompatible:
-!!! error TS2429:                 Type 'number' is not assignable to type 'string'.
+!!! error TS2430: Interface 'I4' incorrectly extends interface 'A'.
+!!! error TS2430:   Types of property 'a8' are incompatible.
+!!! error TS2430:     Type 'new <T extends Base, U extends Derived>(x: (arg: T) => U, y: (arg2: { foo: number; }) => U) => (r: T) => U' is not assignable to type 'new (x: (arg: Base) => Derived, y: (arg2: Base) => Derived) => (r: Base) => Derived'.
+!!! error TS2430:       Types of parameters 'y' and 'y' are incompatible.
+!!! error TS2430:         Type '(arg2: { foo: number; }) => any' is not assignable to type '(arg2: Base) => Derived'.
+!!! error TS2430:           Types of parameters 'arg2' and 'arg2' are incompatible.
+!!! error TS2430:             Type '{ foo: number; }' is not assignable to type 'Base'.
+!!! error TS2430:               Types of property 'foo' are incompatible.
+!!! error TS2430:                 Type 'number' is not assignable to type 'string'.
                 a8: new <T extends Base, U extends Derived>(x: (arg: T) => U, y: (arg2: { foo: number; }) => U) => (r: T) => U; // error, type mismatch
             }
     

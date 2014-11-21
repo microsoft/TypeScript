@@ -1,7 +1,7 @@
 interface TypeWriterResult {
     line: number;
     column: number;
-    syntaxKind: string;
+    syntaxKind: number;
     sourceText: string;
     type: string;
 }
@@ -84,7 +84,7 @@ class TypeWriterWalker {
         this.results.push({
             line: lineAndCharacter.line - 1,
             column: lineAndCharacter.character,
-            syntaxKind: ts.SyntaxKind[node.kind],
+            syntaxKind: node.kind,
             sourceText: sourceText,
             type: this.checker.typeToString(type, node.parent, ts.TypeFormatFlags.NoTruncation | ts.TypeFormatFlags.WriteOwnNameForAnyLike)
         });
@@ -92,7 +92,7 @@ class TypeWriterWalker {
 
     private getTypeOfNode(node: ts.Node): ts.Type {
         var type = this.checker.getTypeOfNode(node);
-        ts.Debug.assert(type, "type doesn't exist");
+        ts.Debug.assert(type !== undefined, "type doesn't exist");
         return type;
     }
 }

@@ -1,0 +1,32 @@
+=== tests/cases/compiler/constDeclarations-scopes2.ts ===
+
+// global
+const c = "string";
+>c : string
+
+var n: number;
+>n : number
+
+var b: boolean;
+>b : boolean
+
+// for scope
+for (const c = 0; c < 10; n = c ) {
+>c : number
+>c < 10 : boolean
+>c : number
+>n = c : number
+>n : number
+>c : number
+
+    // for block
+    const c = false;
+>c : boolean
+
+    b = c;
+>b = c : boolean
+>b : boolean
+>c : boolean
+}
+
+

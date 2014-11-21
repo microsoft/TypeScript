@@ -1,4 +1,4 @@
-tests/cases/conformance/types/typeRelationships/typeAndMemberIdentity/objectTypesIdentityWithPrivates3.ts(25,1): error TS2353: Neither type 'C3<T2>' nor type 'C4' is assignable to the other:
+tests/cases/conformance/types/typeRelationships/typeAndMemberIdentity/objectTypesIdentityWithPrivates3.ts(25,1): error TS2352: Neither type 'C3<T2>' nor type 'C4' is assignable to the other.
   Property 'y' is missing in type 'C3<T2>'.
 
 
@@ -29,5 +29,5 @@ tests/cases/conformance/types/typeRelationships/typeAndMemberIdentity/objectType
     var c3: C3<T2>;
     <C4>c3; // Should fail (private x originates in the same declaration, but different types)
     ~~~~~~
-!!! error TS2353: Neither type 'C3<T2>' nor type 'C4' is assignable to the other:
-!!! error TS2353:   Property 'y' is missing in type 'C3<T2>'.
+!!! error TS2352: Neither type 'C3<T2>' nor type 'C4' is assignable to the other.
+!!! error TS2352:   Property 'y' is missing in type 'C3<T2>'.

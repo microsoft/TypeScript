@@ -1,5 +1,5 @@
-tests/cases/compiler/classSideInheritance3.ts(16,5): error TS2323: Type 'typeof B' is not assignable to type 'typeof A'.
-tests/cases/compiler/classSideInheritance3.ts(17,5): error TS2323: Type 'typeof B' is not assignable to type 'new (x: string) => A'.
+tests/cases/compiler/classSideInheritance3.ts(16,5): error TS2322: Type 'typeof B' is not assignable to type 'typeof A'.
+tests/cases/compiler/classSideInheritance3.ts(17,5): error TS2322: Type 'typeof B' is not assignable to type 'new (x: string) => A'.
 
 
 ==== tests/cases/compiler/classSideInheritance3.ts (2 errors) ====
@@ -20,8 +20,8 @@ tests/cases/compiler/classSideInheritance3.ts(17,5): error TS2323: Type 'typeof 
     
     var r1: typeof A = B; // error
         ~~
-!!! error TS2323: Type 'typeof B' is not assignable to type 'typeof A'.
+!!! error TS2322: Type 'typeof B' is not assignable to type 'typeof A'.
     var r2: new (x: string) => A = B; // error
         ~~
-!!! error TS2323: Type 'typeof B' is not assignable to type 'new (x: string) => A'.
+!!! error TS2322: Type 'typeof B' is not assignable to type 'new (x: string) => A'.
     var r3: typeof A = C; // ok

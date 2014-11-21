@@ -1,6 +1,6 @@
-tests/cases/compiler/interfacePropertiesWithSameName2.ts(10,11): error TS2320: Interface 'MoverShaker' cannot simultaneously extend types 'Mover' and 'Shaker':
+tests/cases/compiler/interfacePropertiesWithSameName2.ts(10,11): error TS2320: Interface 'MoverShaker' cannot simultaneously extend types 'Mover' and 'Shaker'.
   Named properties 'getStatus' of types 'Mover' and 'Shaker' are not identical.
-tests/cases/compiler/interfacePropertiesWithSameName2.ts(26,11): error TS2320: Interface 'MoverShaker2' cannot simultaneously extend types 'Mover' and 'Shaker':
+tests/cases/compiler/interfacePropertiesWithSameName2.ts(26,11): error TS2320: Interface 'MoverShaker2' cannot simultaneously extend types 'Mover' and 'Shaker'.
   Named properties 'getStatus' of types 'Mover' and 'Shaker' are not identical.
 
 
@@ -16,7 +16,7 @@ tests/cases/compiler/interfacePropertiesWithSameName2.ts(26,11): error TS2320: I
     
     interface MoverShaker extends Mover, Shaker {
               ~~~~~~~~~~~
-!!! error TS2320: Interface 'MoverShaker' cannot simultaneously extend types 'Mover' and 'Shaker':
+!!! error TS2320: Interface 'MoverShaker' cannot simultaneously extend types 'Mover' and 'Shaker'.
 !!! error TS2320:   Named properties 'getStatus' of types 'Mover' and 'Shaker' are not identical.
     
     }
@@ -35,7 +35,7 @@ tests/cases/compiler/interfacePropertiesWithSameName2.ts(26,11): error TS2320: I
     
     interface MoverShaker2 extends MoversAndShakers.Mover, MoversAndShakers.Shaker { } // error
               ~~~~~~~~~~~~
-!!! error TS2320: Interface 'MoverShaker2' cannot simultaneously extend types 'Mover' and 'Shaker':
+!!! error TS2320: Interface 'MoverShaker2' cannot simultaneously extend types 'Mover' and 'Shaker'.
 !!! error TS2320:   Named properties 'getStatus' of types 'Mover' and 'Shaker' are not identical.
     
     interface MoverShaker3 extends MoversAndShakers.Mover, MoversAndShakers.Shaker {

@@ -1,0 +1,29 @@
+tests/cases/conformance/es6/templates/templateStringWithEmbeddedYieldKeyword.ts(1,9): error TS1003: Identifier expected.
+tests/cases/conformance/es6/templates/templateStringWithEmbeddedYieldKeyword.ts(1,15): error TS1005: ';' expected.
+tests/cases/conformance/es6/templates/templateStringWithEmbeddedYieldKeyword.ts(3,26): error TS1158: Invalid template literal; expected '}'
+tests/cases/conformance/es6/templates/templateStringWithEmbeddedYieldKeyword.ts(5,1): error TS1160: Unterminated template literal.
+tests/cases/conformance/es6/templates/templateStringWithEmbeddedYieldKeyword.ts(1,11): error TS2304: Cannot find name 'gen'.
+tests/cases/conformance/es6/templates/templateStringWithEmbeddedYieldKeyword.ts(3,20): error TS2304: Cannot find name 'yield'.
+tests/cases/conformance/es6/templates/templateStringWithEmbeddedYieldKeyword.ts(3,30): error TS2304: Cannot find name 'def'.
+
+
+==== tests/cases/conformance/es6/templates/templateStringWithEmbeddedYieldKeyword.ts (7 errors) ====
+    function* gen {
+            ~
+!!! error TS1003: Identifier expected.
+                  ~
+!!! error TS1005: ';' expected.
+              ~~~
+!!! error TS2304: Cannot find name 'gen'.
+        // Once this is supported, yield *must* be parenthesized.
+        var x = `abc${ yield 10 }def`;
+                             ~~
+!!! error TS1158: Invalid template literal; expected '}'
+                       ~~~~~
+!!! error TS2304: Cannot find name 'yield'.
+                                 ~~~
+!!! error TS2304: Cannot find name 'def'.
+    }
+    
+    
+!!! error TS1160: Unterminated template literal.

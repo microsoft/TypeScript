@@ -476,8 +476,6 @@ module TypeScript {
                 //}
             }
 
-            var funcPullDecl = this.semanticInfoChain.getDeclForAST(funcDecl);
-            var funcSignature = funcPullDecl.getSignatureSymbol(this.semanticInfoChain);
             this.emitDeclarationComments(funcDecl);
 
             this.emitIndent();
@@ -603,11 +601,6 @@ module TypeScript {
         private emitConstructSignature(funcDecl: ConstructSignatureSyntax) {
             var funcPullDecl = this.semanticInfoChain.getDeclForAST(funcDecl);
 
-            var start = new Date().getTime();
-            var funcSymbol = this.semanticInfoChain.getSymbolForAST(funcDecl);
-
-            TypeScript.declarationEmitFunctionDeclarationGetSymbolTime += new Date().getTime() - start;
-
             this.emitDeclarationComments(funcDecl);
 
             this.emitIndent();
@@ -632,11 +625,6 @@ module TypeScript {
 
         private emitMethodSignature(funcDecl: MethodSignatureSyntax) {
             var funcPullDecl = this.semanticInfoChain.getDeclForAST(funcDecl);
-
-            var start = new Date().getTime();
-            var funcSymbol = this.semanticInfoChain.getSymbolForAST(funcDecl);
-
-            TypeScript.declarationEmitFunctionDeclarationGetSymbolTime += new Date().getTime() - start;
 
             this.emitDeclarationComments(funcDecl);
 
@@ -817,7 +805,6 @@ module TypeScript {
                 var parameter = funcDecl.callSignature.parameterList.parameters[i];
                 var parameterDecl = this.semanticInfoChain.getDeclForAST(parameter);
                 if (hasFlag(parameterDecl.flags, PullElementFlags.PropertyParameter)) {
-                    var funcPullDecl = this.semanticInfoChain.getDeclForAST(funcDecl);
                     this.emitDeclarationComments(parameter);
                     this.declFile.Write(this.getIndentString());
                     this.emitClassElementModifiers(parameter.modifiers);
@@ -838,7 +825,6 @@ module TypeScript {
 
             var className = classDecl.identifier.text();
             this.emitDeclarationComments(classDecl);
-            var classPullDecl = this.semanticInfoChain.getDeclForAST(classDecl);
             this.emitDeclFlags(classDecl, "class");
             this.declFile.Write(className);
 
@@ -934,7 +920,6 @@ module TypeScript {
 
             var interfaceName = interfaceDecl.identifier.text();
             this.emitDeclarationComments(interfaceDecl);
-            var interfacePullDecl = this.semanticInfoChain.getDeclForAST(interfaceDecl);
             this.emitDeclFlags(interfaceDecl, "interface");
             this.declFile.Write(interfaceName);
 
@@ -980,7 +965,6 @@ module TypeScript {
             }
 
             this.emitDeclarationComments(moduleDecl);
-            var modulePullDecl = this.semanticInfoChain.getDeclForAST(moduleDecl);
             this.emitDeclFlags(moduleDecl, "enum");
             this.declFile.WriteLine(moduleDecl.identifier.text() + " {");
 

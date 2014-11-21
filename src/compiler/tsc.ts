@@ -142,14 +142,19 @@ module ts {
             // otherwise use toLowerCase as a canonical form.
             return sys.useCaseSensitiveFileNames ? fileName : fileName.toLowerCase();
         }
-
+        
+        // returned by CScript sys environment
+        var unsupportedFileEncodingErrorCode = -2147024809;
+        
         function getSourceFile(filename: string, languageVersion: ScriptTarget, onError?: (message: string) => void): SourceFile {
             try {
                 var text = sys.readFile(filename, options.charset);
             }
             catch (e) {
                 if (onError) {
-                    onError(e.message);
+                    onError(e.number === unsupportedFileEncodingErrorCode ? 
+                                getDiagnosticText(Diagnostics.Unsupported_file_encoding) :
+                                e.message);
                 }
                 text = "";
             }
@@ -187,12 +192,12 @@ module ts {
         }
 
         return {
-            getSourceFile: getSourceFile,
+            getSourceFile,
             getDefaultLibFilename: () => combinePaths(getDirectoryPath(normalizePath(sys.getExecutingFilePath())), "lib.d.ts"),
-            writeFile: writeFile,
+            writeFile,
             getCurrentDirectory: () => currentDirectory || (currentDirectory = sys.getCurrentDirectory()),
             useCaseSensitiveFileNames: () => sys.useCaseSensitiveFileNames,
-            getCanonicalFileName: getCanonicalFileName,
+            getCanonicalFileName,
             getNewLine: () => sys.newLine
         };
     }
@@ -356,13 +361,18 @@ module ts {
         else {
             var checker = program.getTypeChecker(/*fullTypeCheckMode*/ true);
             var checkStart = new Date().getTime();
-            var semanticErrors = checker.getDiagnostics();
-            var emitStart = new Date().getTime();
-            var emitOutput = checker.emitFiles();
-            var emitErrors = emitOutput.errors;
-            exitStatus = emitOutput.emitResultStatus;
-            var reportStart = new Date().getTime();
-            errors = concatenate(semanticErrors, emitErrors);
+            errors = checker.getDiagnostics();
+            if (checker.isEmitBlocked()) {
+                exitStatus = EmitReturnStatus.AllOutputGenerationSkipped;
+            }
+            else {
+                var emitStart = new Date().getTime();
+                var emitOutput = checker.invokeEmitter();
+                var emitErrors = emitOutput.diagnostics;
+                exitStatus = emitOutput.emitResultStatus;
+                var reportStart = new Date().getTime();
+                errors = concatenate(errors, emitErrors);
+            }
         }
 
         reportDiagnostics(errors);
@@ -384,7 +394,7 @@ module ts {
             reportTimeStatistic("Total time", reportStart - parseStart);
         }
 
-        return { program: program, exitStatus: exitStatus }
+        return { program, exitStatus };
     }
 
     function printVersion() {

@@ -1,7 +1,6 @@
-tests/cases/compiler/objectLiteralIndexerErrors.ts(13,5): error TS2322: Type '{ [x: string]: A; [x: number]: A; 0: A; x: B; }' is not assignable to type '{ [x: string]: A; [x: number]: B; }':
-  Index signatures are incompatible:
-    Type 'A' is not assignable to type 'B':
-      Property 'y' is missing in type 'A'.
+tests/cases/compiler/objectLiteralIndexerErrors.ts(13,5): error TS2322: Type '{ [x: string]: A; [x: number]: A; 0: A; x: B; }' is not assignable to type '{ [x: string]: A; [x: number]: B; }'.
+  Index signatures are incompatible.
+    Type 'A' is not assignable to type 'B'.
 
 
 ==== tests/cases/compiler/objectLiteralIndexerErrors.ts (1 errors) ====
@@ -19,8 +18,7 @@ tests/cases/compiler/objectLiteralIndexerErrors.ts(13,5): error TS2322: Type '{ 
     
     var o1: { [s: string]: A;[n: number]: B; } = { x: b, 0: a }; // both indexers are A
         ~~
-!!! error TS2322: Type '{ [x: string]: A; [x: number]: A; 0: A; x: B; }' is not assignable to type '{ [x: string]: A; [x: number]: B; }':
-!!! error TS2322:   Index signatures are incompatible:
-!!! error TS2322:     Type 'A' is not assignable to type 'B':
-!!! error TS2322:       Property 'y' is missing in type 'A'.
+!!! error TS2322: Type '{ [x: string]: A; [x: number]: A; 0: A; x: B; }' is not assignable to type '{ [x: string]: A; [x: number]: B; }'.
+!!! error TS2322:   Index signatures are incompatible.
+!!! error TS2322:     Type 'A' is not assignable to type 'B'.
     o1 = { x: c, 0: a }; // string indexer is any, number indexer is A

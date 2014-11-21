@@ -24,6 +24,7 @@ module ts {
         isReservedWord(): boolean;
         reScanGreaterToken(): SyntaxKind;
         reScanSlashToken(): SyntaxKind;
+        reScanTemplateToken(): SyntaxKind;
         scan(): SyntaxKind;
         setText(text: string): void;
         setTextPos(textPos: number): void;
@@ -80,6 +81,7 @@ module ts {
         "throw": SyntaxKind.ThrowKeyword,
         "true": SyntaxKind.TrueKeyword,
         "try": SyntaxKind.TryKeyword,
+        "type": SyntaxKind.TypeKeyword,
         "typeof": SyntaxKind.TypeOfKeyword,
         "var": SyntaxKind.VarKeyword,
         "void": SyntaxKind.VoidKeyword,
@@ -244,7 +246,7 @@ module ts {
         return tokenStrings[t];
     }
 
-    export function getLineStarts(text: string): number[] {
+    export function computeLineStarts(text: string): number[] {
         var result: number[] = new Array();
         var pos = 0;
         var lineStart = 0;
@@ -292,7 +294,7 @@ module ts {
     }
 
     export function positionToLineAndCharacter(text: string, pos: number) {
-        var lineStarts = getLineStarts(text);
+        var lineStarts = computeLineStarts(text);
         return getLineAndCharacterOfPosition(lineStarts, pos);
     }
 
@@ -465,7 +467,7 @@ module ts {
         var len: number;       // Length of text
         var startPos: number;  // Start position of whitespace before current token
         var tokenPos: number;  // Start position of text of current token
-        var token: number;
+        var token: SyntaxKind;
         var tokenValue: string;
         var precedingLineBreak: boolean;
 
@@ -518,10 +520,10 @@ module ts {
             return +(text.substring(start, pos));
         }
 
-        function scanHexDigits(count: number, exact?: boolean): number {
+        function scanHexDigits(count: number, mustMatchCount?: boolean): number {
             var digits = 0;
             var value = 0;
-            while (digits < count || !exact) {
+            while (digits < count || !mustMatchCount) {
                 var ch = text.charCodeAt(pos);
                 if (ch >= CharacterCodes._0 && ch <= CharacterCodes._9) {
                     value = value * 16 + ch - CharacterCodes._0;
@@ -551,7 +553,7 @@ module ts {
             while (true) {
                 if (pos >= len) {
                     result += text.substring(start, pos);
-                    error(Diagnostics.Unexpected_end_of_text);
+                    error(Diagnostics.Unterminated_string_literal);
                     break;
                 }
                 var ch = text.charCodeAt(pos);
@@ -562,60 +564,7 @@ module ts {
                 }
                 if (ch === CharacterCodes.backslash) {
                     result += text.substring(start, pos);
-                    pos++;
-                    if (pos >= len) {
-                        error(Diagnostics.Unexpected_end_of_text);
-                        break;
-                    }
-                    ch = text.charCodeAt(pos++);
-                    switch (ch) {
-                        case CharacterCodes._0:
-                            result += "\0";
-                            break;
-                        case CharacterCodes.b:
-                            result += "\b";
-                            break;
-                        case CharacterCodes.t:
-                            result += "\t";
-                            break;
-                        case CharacterCodes.n:
-                            result += "\n";
-                            break;
-                        case CharacterCodes.v:
-                            result += "\v";
-                            break;
-                        case CharacterCodes.f:
-                            result += "\f";
-                            break;
-                        case CharacterCodes.r:
-                            result += "\r";
-                            break;
-                        case CharacterCodes.singleQuote:
-                            result += "\'";
-                            break;
-                        case CharacterCodes.doubleQuote:
-                            result += "\"";
-                            break;
-                        case CharacterCodes.x:
-                        case CharacterCodes.u:
-                            var ch = scanHexDigits(ch === CharacterCodes.x ? 2 : 4, true);
-                            if (ch >= 0) {
-                                result += String.fromCharCode(ch);
-                            }
-                            else {
-                                error(Diagnostics.Hexadecimal_digit_expected);
-                            }
-                            break;
-                        case CharacterCodes.carriageReturn:
-                            if (pos < len && text.charCodeAt(pos) === CharacterCodes.lineFeed) pos++;
-                            break;
-                        case CharacterCodes.lineFeed:
-                        case CharacterCodes.lineSeparator:
-                        case CharacterCodes.paragraphSeparator:
-                            break;
-                        default:
-                            result += String.fromCharCode(ch);
-                    }
+                    result += scanEscapeSequence();
                     start = pos;
                     continue;
                 }
@@ -629,13 +578,136 @@ module ts {
             return result;
         }
 
+        /**
+         * Sets the current 'tokenValue' and returns a NoSubstitutionTemplateLiteral or
+         * a literal component of a TemplateExpression.
+         */
+        function scanTemplateAndSetTokenValue(): SyntaxKind {
+            var startedWithBacktick = text.charCodeAt(pos) === CharacterCodes.backtick;
+
+            pos++;
+            var start = pos;
+            var contents = ""
+            var resultingToken: SyntaxKind;
+
+            while (true) {
+                if (pos >= len) {
+                    contents += text.substring(start, pos);
+                    error(Diagnostics.Unterminated_template_literal);
+                    resultingToken = startedWithBacktick ? SyntaxKind.NoSubstitutionTemplateLiteral : SyntaxKind.TemplateTail;
+                    break;
+                }
+
+                var currChar = text.charCodeAt(pos);
+
+                // '`'
+                if (currChar === CharacterCodes.backtick) {
+                    contents += text.substring(start, pos);
+                    pos++;
+                    resultingToken = startedWithBacktick ? SyntaxKind.NoSubstitutionTemplateLiteral : SyntaxKind.TemplateTail;
+                    break;
+                }
+
+                // '${'
+                if (currChar === CharacterCodes.$ && pos + 1 < len && text.charCodeAt(pos + 1) === CharacterCodes.openBrace) {
+                    contents += text.substring(start, pos);
+                    pos += 2;
+                    resultingToken = startedWithBacktick ? SyntaxKind.TemplateHead : SyntaxKind.TemplateMiddle;
+                    break;
+                }
+
+                // Escape character
+                if (currChar === CharacterCodes.backslash) {
+                    contents += text.substring(start, pos);
+                    contents += scanEscapeSequence();
+                    start = pos;
+                    continue;
+                }
+
+                // Speculated ECMAScript 6 Spec 11.8.6.1:
+                // <CR><LF> and <CR> LineTerminatorSequences are normalized to <LF> for Template Values
+                // An explicit EscapeSequence is needed to include a <CR> or <CR><LF> sequence.
+                if (currChar === CharacterCodes.carriageReturn) {
+                    contents += text.substring(start, pos);
+
+                    if (pos + 1 < len && text.charCodeAt(pos + 1) === CharacterCodes.lineFeed) {
+                        pos++;
+                    }
+                    pos++;
+                    contents += "\n";
+                    start = pos;
+                    continue;
+                }
+
+                pos++;
+            }
+
+            Debug.assert(resultingToken !== undefined);
+
+            tokenValue = contents;
+            return resultingToken;
+        }
+
+        function scanEscapeSequence(): string {
+            pos++;
+            if (pos >= len) {
+                error(Diagnostics.Unexpected_end_of_text);
+                return "";
+            }
+            var ch = text.charCodeAt(pos++);
+            switch (ch) {
+                case CharacterCodes._0:
+                    return "\0";
+                case CharacterCodes.b:
+                    return "\b";
+                case CharacterCodes.t:
+                    return "\t";
+                case CharacterCodes.n:
+                    return "\n";
+                case CharacterCodes.v:
+                    return "\v";
+                case CharacterCodes.f:
+                    return "\f";
+                case CharacterCodes.r:
+                    return "\r";
+                case CharacterCodes.singleQuote:
+                    return "\'";
+                case CharacterCodes.doubleQuote:
+                    return "\"";
+                case CharacterCodes.x:
+                case CharacterCodes.u:
+                    var ch = scanHexDigits(ch === CharacterCodes.x ? 2 : 4, /*mustMatchCount*/ true);
+                    if (ch >= 0) {
+                        return String.fromCharCode(ch);
+                    }
+                    else {
+                        error(Diagnostics.Hexadecimal_digit_expected);
+                        return ""
+                    }
+
+                // when encountering a LineContinuation (i.e. a backslash and a line terminator sequence),
+                // the line terminator is interpreted to be "the empty code unit sequence".
+                case CharacterCodes.carriageReturn:
+                    if (pos < len && text.charCodeAt(pos) === CharacterCodes.lineFeed) {
+                        pos++;
+                    }
+                    // fall through
+                case CharacterCodes.lineFeed:
+                case CharacterCodes.lineSeparator:
+                case CharacterCodes.paragraphSeparator:
+                    return ""
+                default:
+                    return String.fromCharCode(ch);
+            }
+        }
+
         // Current character is known to be a backslash. Check for Unicode escape of the form '\uXXXX'
         // and return code point value if valid Unicode escape is found. Otherwise return -1.
         function peekUnicodeEscape(): number {
             if (pos + 5 < len && text.charCodeAt(pos + 1) === CharacterCodes.u) {
                 var start = pos;
                 pos += 2;
-                var value = scanHexDigits(4, true);
+                var value = scanHexDigits(4, /*mustMatchCount*/ true);
                 pos = start;
                 return value;
             }
@@ -734,6 +806,8 @@ module ts {
                     case CharacterCodes.singleQuote:
                         tokenValue = scanString();
                         return token = SyntaxKind.StringLiteral;
+                    case CharacterCodes.backtick:
+                        return token = scanTemplateAndSetTokenValue()
                     case CharacterCodes.percent:
                         if (text.charCodeAt(pos + 1) === CharacterCodes.equals) {
                             return pos += 2, token = SyntaxKind.PercentEqualsToken;
@@ -851,18 +925,18 @@ module ts {
                     case CharacterCodes._0:
                         if (pos + 2 < len && (text.charCodeAt(pos + 1) === CharacterCodes.X || text.charCodeAt(pos + 1) === CharacterCodes.x)) {
                             pos += 2;
-                            var value = scanHexDigits(1, false);
+                            var value = scanHexDigits(1, /*mustMatchCount*/ false);
                             if (value < 0) {
                                 error(Diagnostics.Hexadecimal_digit_expected);
                                 value = 0;
                             }
                             tokenValue = "" + value;
-                            return SyntaxKind.NumericLiteral;
+                            return token = SyntaxKind.NumericLiteral;
                         }
                         // Try to parse as an octal
                         if (pos + 1 < len && isOctalDigit(text.charCodeAt(pos + 1))) {
                             tokenValue = "" + scanOctalDigits();
-                            return SyntaxKind.NumericLiteral;
+                            return token = SyntaxKind.NumericLiteral;
                         }
                         // This fall-through is a deviation from the EcmaScript grammar. The grammar says that a leading zero
                         // can only be followed by an octal digit, a dot, or the end of the number literal. However, we are being
@@ -992,19 +1066,19 @@ module ts {
                 var inEscape = false;
                 var inCharacterClass = false;
                 while (true) {
-                    // If we've hit EOF without closing off the regex,
-                    // simply return the token we originally parsed.
+                    // If we reach the end of a file, or hit a newline, then this is an unterminated
+                    // regex.  Report error and return what we have so far.
                     if (p >= len) {
-                        return token;
+                        error(Diagnostics.Unterminated_regular_expression_literal)
+                        break;
                     }
 
                     var ch = text.charCodeAt(p);
-
-                    // Line breaks are not permissible in the middle of a RegExp.
                     if (isLineBreak(ch)) {
-                        return token;
+                        error(Diagnostics.Unterminated_regular_expression_literal)
+                        break;
                     }
-                    
+
                     if (inEscape) {
                         // Parsing an escape character;
                         // reset the flag and just advance to the next char.
@@ -1013,6 +1087,7 @@ module ts {
                     else if (ch === CharacterCodes.slash && !inCharacterClass) {
                         // A slash within a character class is permissible,
                         // but in general it signals the end of the regexp literal.
+                        p++;
                         break;
                     }
                     else if (ch === CharacterCodes.openBracket) {
@@ -1026,8 +1101,8 @@ module ts {
                     }
                     p++;
                 }
-                p++;
-                while (isIdentifierPart(text.charCodeAt(p))) {
+
+                while (p < len && isIdentifierPart(text.charCodeAt(p))) {
                     p++;
                 }
                 pos = p;
@@ -1035,6 +1110,15 @@ module ts {
                 token = SyntaxKind.RegularExpressionLiteral;
             }
             return token;
+        }
+
+        /**
+         * Unconditionally back up and scan a template expression portion.
+         */
+        function reScanTemplateToken(): SyntaxKind {
+            Debug.assert(token === SyntaxKind.CloseBraceToken, "'reScanTemplateToken' should only be called on a '}'");
+            pos = tokenPos;
+            return token = scanTemplateAndSetTokenValue();
         }
 
         function tryScan<T>(callback: () => T): T {
@@ -1083,12 +1167,13 @@ module ts {
             hasPrecedingLineBreak: () => precedingLineBreak,
             isIdentifier: () => token === SyntaxKind.Identifier || token > SyntaxKind.LastReservedWord,
             isReservedWord: () => token >= SyntaxKind.FirstReservedWord && token <= SyntaxKind.LastReservedWord,
-            reScanGreaterToken: reScanGreaterToken,
-            reScanSlashToken: reScanSlashToken,
-            scan: scan,
-            setText: setText,
-            setTextPos: setTextPos,
-            tryScan: tryScan
+            reScanGreaterToken,
+            reScanSlashToken,
+            reScanTemplateToken,
+            scan,
+            setText,
+            setTextPos,
+            tryScan,
         };
     }
 }

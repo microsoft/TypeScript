@@ -136,17 +136,18 @@ module FourSlash {
        outDir: 'outDir',
        sourceMap: 'sourceMap',
        sourceRoot: 'sourceRoot',
+       resolveReference: 'ResolveReference',  // This flag is used to specify entry file for resolve file references. The flag is only allow once per test file
     };
 
     // List of allowed metadata names
-    var fileMetadataNames = [testOptMetadataNames.filename, testOptMetadataNames.emitThisFile];
+    var fileMetadataNames = [testOptMetadataNames.filename, testOptMetadataNames.emitThisFile, testOptMetadataNames.resolveReference];
     var globalMetadataNames = [testOptMetadataNames.baselineFile,  testOptMetadataNames.declaration,
         testOptMetadataNames.mapRoot, testOptMetadataNames.module, testOptMetadataNames.out,
         testOptMetadataNames.outDir, testOptMetadataNames.sourceMap, testOptMetadataNames.sourceRoot]
 
     function convertGlobalOptionsToCompilationSettings(globalOptions: { [idx: string]: string }): ts.CompilationSettings {
         var settings: ts.CompilationSettings = {};
-    // Convert all property in globalOptions into ts.CompilationSettings
+        // Convert all property in globalOptions into ts.CompilationSettings
         for (var prop in globalOptions) {
             if (globalOptions.hasOwnProperty(prop)) {
                 switch (prop) {
@@ -214,7 +215,7 @@ module FourSlash {
         }
 
         public setCancelled(numberOfCalls: number = 0): void {
-            TypeScript.Debug.assert(numberOfCalls >= 0);
+            ts.Debug.assert(numberOfCalls >= 0);
             this.numberOfCallsBeforeCancellation = numberOfCalls;
         }
 
@@ -236,13 +237,32 @@ module FourSlash {
         throw new Error("Operation should be cancelled");
     }
 
+    // This function creates IScriptSnapshot object for testing getPreProcessedFileInfo
+    // Return object may lack some functionalities for other purposes.
+    function createScriptSnapShot(sourceText: string): ts.IScriptSnapshot {
+        return {
+            getText: (start: number, end: number) => {
+                return sourceText.substr(start, end - start);
+            },
+            getLength: () => {
+                return sourceText.length;
+            },
+            getLineStartPositions: () => {
+                return <number[]>[];
+            },
+            getChangeRange: (oldSnapshot: ts.IScriptSnapshot) => {
+                return <ts.TextChangeRange>undefined;
+            }
+        };
+    }
+
     export class TestState {
         // Language service instance
         public languageServiceShimHost: Harness.LanguageService.TypeScriptLS;
         private languageService: ts.LanguageService;
 
         // A reference to the language service's compiler state's compiler instance
-        private compiler: () => { getSyntaxTree(fileName: string): TypeScript.SyntaxTree; getSourceUnit(fileName: string): TypeScript.SourceUnitSyntax; };
+        private compiler: () => { getSyntaxTree(fileName: string): ts.SourceFile };
 
         // The current caret position in the active file
         public currentCaretPosition = 0;
@@ -264,6 +284,16 @@ module FourSlash {
         private scenarioActions: string[] = [];
         private taoInvalidReason: string = null;
 
+        private inputFiles: ts.Map<string> = {};  // Map between inputFile's filename and its content for easily looking up when resolving references
+        
+        // Add input file which has matched file name with the given reference-file path.
+        // This is necessary when resolveReference flag is specified
+        private addMatchedInputFile(referenceFilePath: string) {
+            var inputFile = this.inputFiles[referenceFilePath];
+            if (inputFile && !Harness.isLibraryFile(referenceFilePath)) {
+                this.languageServiceShimHost.addScript(referenceFilePath, inputFile);
+            }
+        }
 
         constructor(public testData: FourSlashData) {
             // Initialize the language service with all the scripts
@@ -273,57 +303,57 @@ module FourSlash {
             var compilationSettings = convertGlobalOptionsToCompilationSettings(this.testData.globalOptions);
             this.languageServiceShimHost.setCompilationSettings(compilationSettings);
 
-            var inputFiles: { unitName: string; content: string }[] = [];
+            var startResolveFileRef: FourSlashFile = undefined;
 
-            testData.files.forEach(file => {
-                var fixedPath = file.fileName.substr(file.fileName.indexOf('tests/'));
-            });
-
-            // NEWTODO: disable resolution for now.
-            // If the last unit contains require( or /// reference then consider it the only input file
-            // and the rest will be added via resolution. If not, then assume we have multiple files
-            // with 0 references in any of them. We could be smarter here to allow scenarios like
-            // 2 files without references and 1 file with a reference but we have 0 tests like that
-            // at the moment and an exhaustive search of the test files for that content could be quite slow.
-            var lastFile = testData.files[testData.files.length - 1];
-            //if (/require\(/.test(lastFile.content) || /reference\spath/.test(lastFile.content)) {
-            //    inputFiles.push({ unitName: lastFile.fileName, content: lastFile.content });
-            //} else {
-            inputFiles = testData.files.map(file => {
-                return { unitName: file.fileName, content: file.content };
-            });
-            //}
-
-
-            // NEWTODO: Re-implement commented-out section
-            //harnessCompiler.addInputFiles(inputFiles);
-            //try {
-            //    var resolvedFiles = harnessCompiler.resolve();
-
-            //    resolvedFiles.forEach(file => {
-            //        if (!Harness.isLibraryFile(file.path)) {
-            //            var fixedPath = file.path.substr(file.path.indexOf('tests/'));
-            //            var content = harnessCompiler.getContentForFile(fixedPath);
-            //            this.languageServiceShimHost.addScript(fixedPath, content);
-            //        }
-            //    });
-
-            //    this.languageServiceShimHost.addScript('lib.d.ts', Harness.Compiler.libTextMinimal);
-            //}
-            //finally {
-            //    // harness no longer needs the results of the above work, make sure the next test operations are in a clean state
-            //    harnessCompiler.reset();
-            //}
-
-            /// NEWTODO: For now do not resolve, just use the input files
-            inputFiles.forEach(file => {
-                if (!Harness.isLibraryFile(file.unitName)) {
-                    this.languageServiceShimHost.addScript(file.unitName, file.content);
+            ts.forEach(testData.files, file => {
+                // Create map between fileName and its content for easily looking up when resolveReference flag is specified
+                this.inputFiles[file.fileName] = file.content;
+                if (!startResolveFileRef && file.fileOptions[testOptMetadataNames.resolveReference]) {
+                    startResolveFileRef = file;
+                } else if (startResolveFileRef) {
+                    // If entry point for resolving file references is already specified, report duplication error
+                    throw new Error("There exists a Fourslash file which has resolveReference flag specified; remove duplicated resolveReference flag");
                 }
             });
 
-            this.languageServiceShimHost.addDefaultLibrary();
+            if (startResolveFileRef) {
+                // Add the entry-point file itself into the languageServiceShimHost
+                this.languageServiceShimHost.addScript(startResolveFileRef.fileName, startResolveFileRef.content);
 
+                var jsonResolvedResult = JSON.parse(this.languageServiceShimHost.getCoreService().getPreProcessedFileInfo(startResolveFileRef.fileName,
+                    createScriptSnapShot(startResolveFileRef.content)));
+                var resolvedResult = jsonResolvedResult.result;
+                var referencedFiles: ts.IFileReference[] = resolvedResult.referencedFiles;
+                var importedFiles: ts.IFileReference[] = resolvedResult.importedFiles;
+
+                // Add triple reference files into language-service host
+                ts.forEach(referencedFiles, referenceFile => {
+                    // Fourslash insert tests/cases/fourslash into inputFile.unitName so we will properly append the same base directory to refFile path
+                    var referenceFilePath = "tests/cases/fourslash/" + referenceFile.path;
+                    this.addMatchedInputFile(referenceFilePath);
+                });
+
+                // Add import files into language-service host
+                ts.forEach(importedFiles, importedFile => {
+                    // Fourslash insert tests/cases/fourslash into inputFile.unitName and import statement doesn't require ".ts"
+                    // so convert them before making appropriate comparison
+                    var importedFilePath = "tests/cases/fourslash/" + importedFile.path + ".ts";
+                    this.addMatchedInputFile(importedFilePath);
+                });
+
+                // Check if no-default-lib flag is false and if so add default library
+                if (!resolvedResult.isLibFile) {
+                    this.languageServiceShimHost.addDefaultLibrary();
+                }
+            } else {
+                // resolveReference file-option is not specified then do not resolve any files and include all inputFiles
+                ts.forEachKey(this.inputFiles, fileName => {
+                    if (!Harness.isLibraryFile(fileName)) {
+                        this.languageServiceShimHost.addScript(fileName, this.inputFiles[fileName]);
+                    }
+                });
+                this.languageServiceShimHost.addDefaultLibrary();
+            }
 
             // Sneak into the language service and get its compiler so we can examine the syntax trees
             this.languageService = this.languageServiceShimHost.getLanguageService().languageService;
@@ -373,8 +403,9 @@ module FourSlash {
         public goToPosition(pos: number) {
             this.currentCaretPosition = pos;
 
-            var lineCharPos = TypeScript.LineMap1.fromString(this.getCurrentFileContent()).getLineAndCharacterFromPosition(pos);
-            this.scenarioActions.push('<MoveCaretToLineAndChar LineNumber="' + (lineCharPos.line() + 1) + '" CharNumber="' + (lineCharPos.character() + 1) + '" />');
+            var lineStarts = ts.computeLineStarts(this.getCurrentFileContent());
+            var lineCharPos = ts.getLineAndCharacterOfPosition(lineStarts, pos);
+            this.scenarioActions.push('<MoveCaretToLineAndChar LineNumber="' + lineCharPos.line + '" CharNumber="' + lineCharPos.character + '" />');
         }
 
         public moveCaretRight(count = 1) {
@@ -718,29 +749,6 @@ module FourSlash {
             }
         }
 
-        public verifyImplementorsCountIs(count: number, localFilesOnly: boolean = true) {
-            var implementors = this.getImplementorsAtCaret();
-            var implementorsCount = 0;
-
-            if (localFilesOnly) {
-                var localFiles = this.testData.files.map<string>(file => file.fileName);
-                // Count only the references in local files. Filter the ones in lib and other files.
-                implementors.forEach((entry) => {
-                    if (localFiles.some((filename) => filename === entry.fileName)) {
-                        ++implementorsCount;
-                    }
-                });
-            }
-            else {
-                implementorsCount = implementors.length;
-            }
-
-            if (implementorsCount !== count) {
-                var condition = localFilesOnly ? "excluding libs" : "including libs";
-                this.raiseError("Expected implementors count (" + condition + ") to be " + count + ", but is actually " + implementors.length);
-            }
-        }
-
         private getMemberListAtCaret() {
             return this.languageService.getCompletionsAtPosition(this.activeFile.fileName, this.currentCaretPosition, true);
         }
@@ -755,10 +763,6 @@ module FourSlash {
 
         private getReferencesAtCaret() {
             return this.languageService.getReferencesAtPosition(this.activeFile.fileName, this.currentCaretPosition);
-        }
-
-        private getImplementorsAtCaret() {
-            return this.languageService.getImplementorsAtPosition(this.activeFile.fileName, this.currentCaretPosition);
         }
 
         private assertionMessage(name: string, actualValue: any, expectedValue: any) {
@@ -1000,15 +1004,85 @@ module FourSlash {
             return item.parameters[currentParam];
         }
 
+        private alignmentForExtraInfo = 50;
+
+        private spanInfoToString(pos: number, spanInfo: ts.TextSpan, prefixString: string) {
+            var resultString = "SpanInfo: " + JSON.stringify(spanInfo);
+            if (spanInfo) {
+                var spanString = this.activeFile.content.substr(spanInfo.start(), spanInfo.length());
+                var spanLineMap = ts.computeLineStarts(spanString);
+                for (var i = 0; i < spanLineMap.length; i++) {
+                    if (!i) {
+                        resultString += "\n";
+                    }
+                    resultString += prefixString + spanString.substring(spanLineMap[i], spanLineMap[i + 1]);
+                }
+                resultString += "\n" + prefixString + ":=> (" + this.getLineColStringAtPosition(spanInfo.start()) + ") to (" + this.getLineColStringAtPosition(spanInfo.end()) + ")";
+            }
+
+            return resultString;
+        }
+
+        private baselineCurrentFileLocations(getSpanAtPos: (pos: number) => ts.TextSpan): string {
+            var fileLineMap = ts.computeLineStarts(this.activeFile.content);
+            var nextLine = 0;
+            var resultString = "";
+            var currentLine: string;
+            var previousSpanInfo: string;
+            var startColumn: number;
+            var length: number;
+            var prefixString = "    >";
+
+            var addSpanInfoString = () => {
+                if (previousSpanInfo) {
+                    resultString += currentLine;
+                    var thisLineMarker = repeatString(startColumn, " ") + repeatString(length, "~");
+                    thisLineMarker += repeatString(this.alignmentForExtraInfo - thisLineMarker.length - prefixString.length + 1, " ");
+                    resultString += thisLineMarker;
+                    resultString += "=> Pos: (" + (pos - length) + " to " + (pos - 1) + ") ";
+                    resultString += " " + previousSpanInfo;
+                    previousSpanInfo = undefined;
+                }
+            };
+
+            for (var pos = 0; pos < this.activeFile.content.length; pos++) {
+                if (pos === 0 || pos === fileLineMap[nextLine]) {
+                    nextLine++;
+                    addSpanInfoString();
+                    if (resultString.length) {
+                        resultString += "\n--------------------------------";
+                    }
+                    currentLine = "\n" + nextLine.toString() + repeatString(3 - nextLine.toString().length, " ") + ">" + this.activeFile.content.substring(pos, fileLineMap[nextLine]) + "\n    ";
+                    startColumn = 0;
+                    length = 0;
+                }
+                var spanInfo = this.spanInfoToString(pos, getSpanAtPos(pos), prefixString);
+                if (previousSpanInfo && previousSpanInfo !== spanInfo) {
+                    addSpanInfoString();
+                    previousSpanInfo = spanInfo;
+                    startColumn = startColumn + length;
+                    length = 1;
+                }
+                else {
+                    previousSpanInfo = spanInfo;
+                    length++;
+                }
+            }
+            addSpanInfoString();
+            return resultString;
+
+            function repeatString(count: number, char: string) {
+                var result = "";
+                for (var i = 0; i < count; i++) {
+                    result += char;
+                }
+                return result;
+            }
+        }
+
         public getBreakpointStatementLocation(pos: number) {
             this.taoInvalidReason = 'getBreakpointStatementLocation NYI';
-
-            var spanInfo = this.languageService.getBreakpointStatementAtPosition(this.activeFile.fileName, pos);
-            var resultString = "\n**Pos: " + pos + " SpanInfo: " + JSON.stringify(spanInfo) + "\n** Statement: ";
-            if (spanInfo !== null) {
-                resultString = resultString + this.activeFile.content.substr(spanInfo.start(), spanInfo.length());
-            }
-            return resultString;
+            return this.languageService.getBreakpointStatementAtPosition(this.activeFile.fileName, pos);
         }
 
         public baselineCurrentFileBreakpointLocations() {
@@ -1018,12 +1092,7 @@ module FourSlash {
                 "Breakpoint Locations for " + this.activeFile.fileName,
                 this.testData.globalOptions[testOptMetadataNames.baselineFile],
                 () => {
-                    var fileLength = this.languageServiceShimHost.getScriptSnapshot(this.activeFile.fileName).getLength();
-                    var resultString = "";
-                    for (var pos = 0; pos < fileLength; pos++) {
-                        resultString = resultString + this.getBreakpointStatementLocation(pos);
-                    }
-                    return resultString;
+                    return this.baselineCurrentFileLocations(pos => this.getBreakpointStatementLocation(pos));
                 },
                 true /* run immediately */);
         }
@@ -1071,7 +1140,7 @@ module FourSlash {
         }
 
         public printBreakpointLocation(pos: number) {
-            Harness.IO.log(this.getBreakpointStatementLocation(pos));
+            Harness.IO.log("\n**Pos: " + pos + " " + this.spanInfoToString(pos, this.getBreakpointStatementLocation(pos), "  "));
         }
 
         public printBreakpointAtCurrentLocation() {
@@ -1517,7 +1586,7 @@ module FourSlash {
                 throw new Error('verifyCaretAtMarker failed - expected to be in file "' + pos.fileName + '", but was in file "' + this.activeFile.fileName + '"');
             }
             if (pos.position !== this.currentCaretPosition) {
-                throw new Error('verifyCaretAtMarker failed - expected to be at marker "/*' + markerName + '*/, but was at position ' + this.currentCaretPosition + '(' + this.getLineColStringAtCaret() + ')');
+                throw new Error('verifyCaretAtMarker failed - expected to be at marker "/*' + markerName + '*/, but was at position ' + this.currentCaretPosition + '(' + this.getLineColStringAtPosition(this.currentCaretPosition) + ')');
             }
         }
 
@@ -1581,10 +1650,10 @@ module FourSlash {
             this.taoInvalidReason = 'verifyCurrentNameOrDottedNameSpanText NYI';
 
             var span = this.languageService.getNameOrDottedNameSpan(this.activeFile.fileName, this.currentCaretPosition, this.currentCaretPosition);
-            if (span === null) {
+            if (!span) {
                 this.raiseError('verifyCurrentNameOrDottedNameSpanText\n' +
                     '\tExpected: "' + text + '"\n' +
-                    '\t  Actual: null');
+                    '\t  Actual: undefined');
             }
 
             var actual = this.languageServiceShimHost.getScriptSnapshot(this.activeFile.fileName).getText(span.start(), span.end());
@@ -1596,12 +1665,8 @@ module FourSlash {
         }
 
         private getNameOrDottedNameSpan(pos: number) {
-            var spanInfo = this.languageService.getNameOrDottedNameSpan(this.activeFile.fileName, pos, pos);
-            var resultString = "\n**Pos: " + pos + " SpanInfo: " + JSON.stringify(spanInfo) + "\n** Statement: ";
-            if (spanInfo !== null) {
-                resultString = resultString + this.languageServiceShimHost.getScriptSnapshot(this.activeFile.fileName).getText(spanInfo.start(), spanInfo.end());
-            }
-            return resultString;
+            this.taoInvalidReason = 'getNameOrDottedNameSpan NYI';
+            return this.languageService.getNameOrDottedNameSpan(this.activeFile.fileName, pos, pos);
         }
 
         public baselineCurrentFileNameOrDottedNameSpans() {
@@ -1611,23 +1676,21 @@ module FourSlash {
                 "Name OrDottedNameSpans for " + this.activeFile.fileName,
                 this.testData.globalOptions[testOptMetadataNames.baselineFile],
                 () => {
-                    var fileLength = this.languageServiceShimHost.getScriptSnapshot(this.activeFile.fileName).getLength();
-                    var resultString = "";
-                    for (var pos = 0; pos < fileLength; pos++) {
-                        resultString = resultString + this.getNameOrDottedNameSpan(pos);
-                    }
-                    return resultString;
+                    return this.baselineCurrentFileLocations(pos =>
+                        this.getNameOrDottedNameSpan(pos));
                 },
                 true /* run immediately */);
         }
 
         public printNameOrDottedNameSpans(pos: number) {
-            Harness.IO.log(this.getNameOrDottedNameSpan(pos));
+            Harness.IO.log(this.spanInfoToString(pos, this.getNameOrDottedNameSpan(pos), "**"));
         }
 
-        private verifyClassifications(expected: { classificationType: string; text: string }[], actual: ts.ClassifiedSpan[]) {
+        private verifyClassifications(expected: { classificationType: string; text: string; textSpan?: TextSpan }[], actual: ts.ClassifiedSpan[]) {
             if (actual.length !== expected.length) {
-                this.raiseError('verifyClassifications failed - expected total classifications to be ' + expected.length + ', but was ' + actual.length);
+                this.raiseError('verifyClassifications failed - expected total classifications to be ' + expected.length +
+                                ', but was ' + actual.length +
+                                jsonMismatchString());
             }
 
             for (var i = 0; i < expected.length; i++) {
@@ -1638,29 +1701,50 @@ module FourSlash {
                 if (expectedType !== actualClassification.classificationType) {
                     this.raiseError('verifyClassifications failed - expected classifications type to be ' +
                         expectedType + ', but was ' +
-                        actualClassification.classificationType);
+                        actualClassification.classificationType +
+                        jsonMismatchString());
                 }
 
+                var expectedSpan = expectedClassification.textSpan;
                 var actualSpan = actualClassification.textSpan;
+
+                if (expectedSpan) {
+                    var expectedLength = expectedSpan.end - expectedSpan.start;
+
+                    if (expectedSpan.start !== actualSpan.start() || expectedLength !== actualSpan.length()) {
+                        this.raiseError("verifyClassifications failed - expected span of text to be " +
+                            "{start=" + expectedSpan.start + ", length=" + expectedLength + "}, but was " +
+                            "{start=" + actualSpan.start() + ", length=" + actualSpan.length() + "}" +
+                            jsonMismatchString());
+                    }
+                }
+
                 var actualText = this.activeFile.content.substr(actualSpan.start(), actualSpan.length());
                 if (expectedClassification.text !== actualText) {
-                    this.raiseError('verifyClassifications failed - expected classificatied text to be ' +
+                    this.raiseError('verifyClassifications failed - expected classified text to be ' +
                         expectedClassification.text + ', but was ' +
-                        actualText);
+                        actualText +
+                        jsonMismatchString());
                 }
+            }
+
+            function jsonMismatchString() {
+                return sys.newLine +
+                    "expected: '" + sys.newLine + JSON.stringify(expected, (k,v) => v, 2) + "'" + sys.newLine +
+                    "actual:   '" + sys.newLine + JSON.stringify(actual, (k, v) => v, 2) + "'";
             }
         }
 
         public verifySemanticClassifications(expected: { classificationType: string; text: string }[]) {
             var actual = this.languageService.getSemanticClassifications(this.activeFile.fileName,
-                new TypeScript.TextSpan(0, this.activeFile.content.length));
+                new ts.TextSpan(0, this.activeFile.content.length));
 
             this.verifyClassifications(expected, actual);
         }
 
         public verifySyntacticClassifications(expected: { classificationType: string; text: string }[]) {
             var actual = this.languageService.getSyntacticClassifications(this.activeFile.fileName, 
-                new TypeScript.TextSpan(0, this.activeFile.content.length));
+                new ts.TextSpan(0, this.activeFile.content.length));
 
             this.verifyClassifications(expected, actual);
         }
@@ -1694,7 +1778,7 @@ module FourSlash {
             for (var i = 0; i < spans.length; i++) {
                 var expectedSpan = spans[i];
                 var actualComment = actual[i];
-                var actualCommentSpan = new TypeScript.TextSpan(actualComment.position, actualComment.message.length);
+                var actualCommentSpan = new ts.TextSpan(actualComment.position, actualComment.message.length);
 
                 if (expectedSpan.start !== actualCommentSpan.start() || expectedSpan.end !== actualCommentSpan.end()) {
                     this.raiseError('verifyOutliningSpans failed - span ' + (i + 1) + ' expected: (' + expectedSpan.start + ',' + expectedSpan.end + '),  actual: (' + actualCommentSpan.start() + ',' + actualCommentSpan.end() + ')');
@@ -1979,10 +2063,6 @@ module FourSlash {
             }
         }
 
-        private getEOF(): number {
-            return this.languageServiceShimHost.getScriptSnapshot(this.activeFile.fileName).getLength();
-        }
-
         // Get the text of the entire line the caret is currently at
         private getCurrentLineContent() {
             // The current caret position (in line/col terms)
@@ -1999,7 +2079,8 @@ module FourSlash {
             var newlinePos = text.indexOf('\n');
             if (newlinePos === -1) {
                 return text;
-            } else {
+            }
+            else {
                 if (text.charAt(newlinePos - 1) === '\r') {
                     newlinePos--;
                 }
@@ -2097,16 +2178,8 @@ module FourSlash {
             return result;
         }
 
-        private getCurrentLineNumberZeroBased() {
-            return this.getCurrentLineNumberOneBased() - 1;
-        }
-
-        private getCurrentLineNumberOneBased() {
-            return this.languageServiceShimHost.positionToZeroBasedLineCol(this.activeFile.fileName, this.currentCaretPosition).line + 1;
-        }
-
-        private getLineColStringAtCaret() {
-            var pos = this.languageServiceShimHost.positionToZeroBasedLineCol(this.activeFile.fileName, this.currentCaretPosition);
+        private getLineColStringAtPosition(position: number) {
+            var pos = this.languageServiceShimHost.positionToZeroBasedLineCol(this.activeFile.fileName, position);
             return 'line ' + (pos.line + 1) + ', col ' + pos.character;
         }
 
@@ -2154,17 +2227,18 @@ module FourSlash {
         var host = Harness.Compiler.createCompilerHost([{ unitName: Harness.Compiler.fourslashFilename, content: undefined },
             { unitName: fileName, content: content }],
             (fn, contents) => result = contents,
-            ts.ScriptTarget.ES5,
+            ts.ScriptTarget.Latest,
             sys.useCaseSensitiveFileNames);
-        var program = ts.createProgram([Harness.Compiler.fourslashFilename, fileName], { out: "fourslashTestOutput.js" }, host);
+        // TODO (drosen): We need to enforce checking on these tests.
+        var program = ts.createProgram([Harness.Compiler.fourslashFilename, fileName], { out: "fourslashTestOutput.js", noResolve: true }, host);
         var checker = ts.createTypeChecker(program, /*fullTypeCheckMode*/ true);
         checker.checkProgram();
 
-        var errs = checker.getDiagnostics(program.getSourceFile(fileName));
+        var errs = program.getDiagnostics().concat(checker.getDiagnostics());
         if (errs.length > 0) {
             throw new Error('Error compiling ' + fileName + ': ' + errs.map(e => e.messageText).join('\r\n'));
         }
-        checker.emitFiles();
+        checker.invokeEmitter();
         result = result || ''; // Might have an empty fourslash file
 
         // Compile and execute the test
@@ -2198,7 +2272,7 @@ module FourSlash {
         // List of all the subfiles we've parsed out
         var files: FourSlashFile[] = [];
         // Global options
-        var opts: { [s: string]: string; } = {};
+        var globalOptions: { [s: string]: string; } = {};
         // Marker positions
 
         // Split up the input file by line
@@ -2206,7 +2280,7 @@ module FourSlash {
         // we have to string-based splitting instead and try to figure out the delimiting chars
         var lines = contents.split('\n');
 
-        var markerMap: MarkerMap = {};
+        var markerPositions: MarkerMap = {};
         var markers: Marker[] = [];
         var ranges: Range[] = [];
 
@@ -2247,7 +2321,7 @@ module FourSlash {
                         } else if (fileMetadataNamesIndex === fileMetadataNames.indexOf(testOptMetadataNames.filename)) {
                             // Found an @Filename directive, if this is not the first then create a new subfile
                             if (currentFileContent) {
-                                var file = parseFileContent(currentFileContent, currentFileName, markerMap, markers, ranges);
+                                var file = parseFileContent(currentFileContent, currentFileName, markerPositions, markers, ranges);
                                 file.fileOptions = currentFileOptions;
 
                                 // Store result file
@@ -2267,10 +2341,10 @@ module FourSlash {
                         }
                     } else {
                         // Check if the match is already existed in the global options
-                        if (opts[match[1]] !== undefined) {
+                        if (globalOptions[match[1]] !== undefined) {
                             throw new Error("Global Option : '" + match[1] + "' is already existed");
                         }
-                        opts[match[1]] = match[2];
+                        globalOptions[match[1]] = match[2];
                     }
                 }
             } else if (line == '' || lineLength === 0) {
@@ -2279,7 +2353,7 @@ module FourSlash {
             } else {
                 // Empty line or code line, terminate current subfile if there is one
                 if (currentFileContent) {
-                    var file = parseFileContent(currentFileContent, currentFileName, markerMap, markers, ranges);
+                    var file = parseFileContent(currentFileContent, currentFileName, markerPositions, markers, ranges);
                     file.fileOptions = currentFileOptions;
 
                     // Store result file
@@ -2294,15 +2368,15 @@ module FourSlash {
         }
 
         return {
-            markerPositions: markerMap,
-            markers: markers,
-            globalOptions: opts,
-            files: files,
-            ranges: ranges
+            markerPositions,
+            markers,
+            globalOptions,
+            files,
+            ranges
         };
     }
 
-    enum State {
+    const enum State {
         none,
         inSlashStarMarker,
         inObjectMarker

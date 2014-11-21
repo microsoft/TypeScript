@@ -219,7 +219,7 @@ throw [];
 >[] : undefined[]
 
 throw ['a', ['b']];
->['a', ['b']] : Array<string | string[]>
+>['a', ['b']] : (string | string[])[]
 >['b'] : string[]
 
 throw /[a-z]/;

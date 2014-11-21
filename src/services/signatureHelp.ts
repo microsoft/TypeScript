@@ -219,19 +219,19 @@ module ts.SignatureHelp {
                 // Find the list that starts right *after* the < or ( token.
                 // If the user has just opened a list, consider this item 0.
                 var list = getChildListThatStartsWithOpenerToken(parent, node, sourceFile);
-                Debug.assert(list);
+                Debug.assert(list !== undefined);
                 return {
-                    list: list,
+                    list,
                     listItemIndex: 0
                 };
             }
 
-            if (node.kind === SyntaxKind.GreaterThanToken
-                || node.kind === SyntaxKind.CloseParenToken
-                || node === parent.func) {
-                return undefined;
-            }
-
+            // findListItemInfo can return undefined if we are not in parent's argument list
+            // or type argument list. This includes cases where the cursor is:
+            //   - To the right of the closing paren
+            //   - Between the type arguments and the arguments (greater than token)
+            //   - On the target of the call (parent.func)
+            //   - On the 'new' keyword in a 'new' expression
             return findListItemInfo(node);
         }
 
@@ -244,7 +244,7 @@ module ts.SignatureHelp {
                 // If the node is not a subspan of its parent, this is a big problem.
                 // There have been crashes that might be caused by this violation.
                 if (n.pos < n.parent.pos || n.end > n.parent.end) {
-                    Debug.fail("Node of kind " + SyntaxKind[n.kind] + " is not a subspan of its parent of kind " + SyntaxKind[n.parent.kind]);
+                    Debug.fail("Node of kind " + n.kind + " is not a subspan of its parent of kind " + n.parent.kind);
                 }
 
                 var argumentInfo = getImmediatelyContainingArgumentInfo(n);
@@ -256,6 +256,13 @@ module ts.SignatureHelp {
                 // TODO: Handle generic call with incomplete syntax
             }
             return undefined;
+        }
+
+        function getChildListThatStartsWithOpenerToken(parent: Node, openerToken: Node, sourceFile: SourceFile): Node {
+            var children = parent.getChildren(sourceFile);
+            var indexOfOpenerToken = children.indexOf(openerToken);
+            Debug.assert(indexOfOpenerToken >= 0 && children.length > indexOfOpenerToken + 1);
+            return children[indexOfOpenerToken + 1];
         }
 
         /**
@@ -287,74 +294,51 @@ module ts.SignatureHelp {
 
         function createSignatureHelpItems(candidates: Signature[], bestSignature: Signature, argumentInfoOrTypeArgumentInfo: ListItemInfo): SignatureHelpItems {
             var argumentListOrTypeArgumentList = argumentInfoOrTypeArgumentInfo.list;
+            var parent = <CallExpression>argumentListOrTypeArgumentList.parent;
+            var isTypeParameterHelp = parent.typeArguments && parent.typeArguments.pos === argumentListOrTypeArgumentList.pos;
+            Debug.assert(isTypeParameterHelp || parent.arguments.pos === argumentListOrTypeArgumentList.pos);
+
+            var callTargetNode = (<CallExpression>argumentListOrTypeArgumentList.parent).func;
+            var callTargetSymbol = typeInfoResolver.getSymbolInfo(callTargetNode);
+            var callTargetDisplayParts = callTargetSymbol && symbolToDisplayParts(typeInfoResolver, callTargetSymbol, /*enclosingDeclaration*/ undefined, /*meaning*/ undefined);
             var items: SignatureHelpItem[] = map(candidates, candidateSignature => {
-                var parameters = candidateSignature.parameters;
-                var parameterHelpItems: SignatureHelpParameter[] = parameters.length === 0 ? emptyArray : map(parameters, p => {
-                    var displayParts: SymbolDisplayPart[] = [];
+                var signatureHelpParameters: SignatureHelpParameter[];
+                var prefixDisplayParts: SymbolDisplayPart[] = [];
+                var suffixDisplayParts: SymbolDisplayPart[] = [];
 
-                    if (candidateSignature.hasRestParameter && parameters[parameters.length - 1] === p) {
-                        displayParts.push(punctuationPart(SyntaxKind.DotDotDotToken));
-                    }
-
-                    displayParts.push(symbolPart(p.name, p));
-
-                    var isOptional = !!(p.valueDeclaration.flags & NodeFlags.QuestionMark);
-                    if (isOptional) {
-                        displayParts.push(punctuationPart(SyntaxKind.QuestionToken));
-                    }
-
-                    displayParts.push(punctuationPart(SyntaxKind.ColonToken));
-                    displayParts.push(spacePart());
-
-                    var typeParts = typeToDisplayParts(typeInfoResolver, typeInfoResolver.getTypeOfSymbol(p), argumentListOrTypeArgumentList);
-                    displayParts.push.apply(displayParts, typeParts);
-
-                    return {
-                        name: p.name,
-                        documentation: p.getDocumentationComment(),
-                        displayParts: displayParts,
-                        isOptional: isOptional
-                    };
-                });
-
-                var callTargetNode = (<CallExpression>argumentListOrTypeArgumentList.parent).func;
-                var callTargetSymbol = typeInfoResolver.getSymbolInfo(callTargetNode);
-
-                var prefixParts = callTargetSymbol ? symbolToDisplayParts(typeInfoResolver, callTargetSymbol, /*enclosingDeclaration*/ undefined, /*meaning*/ undefined) : [];
-
-                var separatorParts = [punctuationPart(SyntaxKind.CommaToken), spacePart()];
-
-                // TODO(jfreeman): Constraints?
-                if (candidateSignature.typeParameters && candidateSignature.typeParameters.length) {
-                    prefixParts.push(punctuationPart(SyntaxKind.LessThanToken));
-
-                    for (var i = 0, n = candidateSignature.typeParameters.length; i < n; i++) {
-                        if (i) {
-                            prefixParts.push.apply(prefixParts, separatorParts);
-                        }
-
-                        var tp = candidateSignature.typeParameters[i].symbol;
-                        prefixParts.push(symbolPart(tp.name, tp));
-                    }
-
-                    prefixParts.push(punctuationPart(SyntaxKind.GreaterThanToken));
+                if (callTargetDisplayParts) {
+                    prefixDisplayParts.push.apply(prefixDisplayParts, callTargetDisplayParts);
                 }
 
-                prefixParts.push(punctuationPart(SyntaxKind.OpenParenToken));
+                if (isTypeParameterHelp) {
+                    prefixDisplayParts.push(punctuationPart(SyntaxKind.LessThanToken));
+                    var typeParameters = candidateSignature.typeParameters;
+                    signatureHelpParameters = typeParameters && typeParameters.length > 0 ? map(typeParameters, createSignatureHelpParameterForTypeParameter) : emptyArray;
+                    suffixDisplayParts.push(punctuationPart(SyntaxKind.GreaterThanToken));
+                    var parameterParts = mapToDisplayParts(writer =>
+                        typeInfoResolver.getSymbolDisplayBuilder().buildDisplayForParametersAndDelimiters(candidateSignature.parameters, writer, argumentListOrTypeArgumentList));
+                    suffixDisplayParts.push.apply(suffixDisplayParts, parameterParts);
+                }
+                else {
+                    var typeParameterParts = mapToDisplayParts(writer =>
+                        typeInfoResolver.getSymbolDisplayBuilder().buildDisplayForTypeParametersAndDelimiters(candidateSignature.typeParameters, writer, argumentListOrTypeArgumentList));
+                    prefixDisplayParts.push.apply(prefixDisplayParts, typeParameterParts);
+                    prefixDisplayParts.push(punctuationPart(SyntaxKind.OpenParenToken));
+                    var parameters = candidateSignature.parameters;
+                    signatureHelpParameters = parameters.length > 0 ? map(parameters, createSignatureHelpParameterForParameter) : emptyArray;
+                    suffixDisplayParts.push(punctuationPart(SyntaxKind.CloseParenToken));
+                }
 
-                var suffixParts = [punctuationPart(SyntaxKind.CloseParenToken)];
-                suffixParts.push(punctuationPart(SyntaxKind.ColonToken));
-                suffixParts.push(spacePart());
-
-                var typeParts = typeToDisplayParts(typeInfoResolver, candidateSignature.getReturnType(), argumentListOrTypeArgumentList);
-                suffixParts.push.apply(suffixParts, typeParts);
+                var returnTypeParts = mapToDisplayParts(writer =>
+                    typeInfoResolver.getSymbolDisplayBuilder().buildReturnTypeDisplay(candidateSignature, writer, argumentListOrTypeArgumentList));
+                suffixDisplayParts.push.apply(suffixDisplayParts, returnTypeParts);
                 
                 return {
                     isVariadic: candidateSignature.hasRestParameter,
-                    prefixDisplayParts: prefixParts,
-                    suffixDisplayParts: suffixParts,
-                    separatorDisplayParts: separatorParts,
-                    parameters: parameterHelpItems,
+                    prefixDisplayParts,
+                    suffixDisplayParts,
+                    separatorDisplayParts: [punctuationPart(SyntaxKind.CommaToken), spacePart()],
+                    parameters: signatureHelpParameters,
                     documentation: candidateSignature.getDocumentationComment()
                 };
             });
@@ -369,7 +353,7 @@ module ts.SignatureHelp {
             // but not including parentheses)
             var applicableSpanStart = argumentListOrTypeArgumentList.getFullStart();
             var applicableSpanEnd = skipTrivia(sourceFile.text, argumentListOrTypeArgumentList.end, /*stopAfterLineBreak*/ false);
-            var applicableSpan = new TypeScript.TextSpan(applicableSpanStart, applicableSpanEnd - applicableSpanStart);
+            var applicableSpan = new TextSpan(applicableSpanStart, applicableSpanEnd - applicableSpanStart);
 
             // The listItemIndex we got back includes commas. Our goal is to return the index of the proper
             // item (not including commas). Here are some examples:
@@ -394,18 +378,38 @@ module ts.SignatureHelp {
             }
 
             return {
-                items: items,
-                applicableSpan: applicableSpan,
-                selectedItemIndex: selectedItemIndex,
-                argumentIndex: argumentIndex,
-                argumentCount: argumentCount
+                items,
+                applicableSpan,
+                selectedItemIndex,
+                argumentIndex,
+                argumentCount
             };
-        }
-    }
 
-    function getChildListThatStartsWithOpenerToken(parent: Node, openerToken: Node, sourceFile: SourceFile): Node {
-        var children = parent.getChildren(sourceFile);
-        var indexOfOpenerToken = children.indexOf(openerToken);
-        return children[indexOfOpenerToken + 1];
+            function createSignatureHelpParameterForParameter(parameter: Symbol): SignatureHelpParameter {
+                var displayParts = mapToDisplayParts(writer =>
+                    typeInfoResolver.getSymbolDisplayBuilder().buildParameterDisplay(parameter, writer, argumentListOrTypeArgumentList));
+
+                var isOptional = !!(parameter.valueDeclaration.flags & NodeFlags.QuestionMark);
+
+                return {
+                    name: parameter.name,
+                    documentation: parameter.getDocumentationComment(),
+                    displayParts,
+                    isOptional
+                };
+            }
+
+            function createSignatureHelpParameterForTypeParameter(typeParameter: TypeParameter): SignatureHelpParameter {
+                var displayParts = mapToDisplayParts(writer =>
+                    typeInfoResolver.getSymbolDisplayBuilder().buildTypeParameterDisplay(typeParameter, writer, argumentListOrTypeArgumentList));
+
+                return {
+                    name: typeParameter.symbol.name,
+                    documentation: emptyArray,
+                    displayParts,
+                    isOptional: false
+                };
+            }
+        }
     }
 }

@@ -5,25 +5,51 @@
 
 module ts {
 
-    export function isInstantiated(node: Node): boolean {
+    export const enum ModuleInstanceState {
+        NonInstantiated = 0,
+        Instantiated    = 1,
+        ConstEnumOnly   = 2
+    }
+
+    export function getModuleInstanceState(node: Node): ModuleInstanceState {
         // A module is uninstantiated if it contains only 
         // 1. interface declarations
         if (node.kind === SyntaxKind.InterfaceDeclaration) {
-            return false;
+            return ModuleInstanceState.NonInstantiated;
         }
-        // 2. non - exported import declarations
+        // 2. const enum declarations don't make module instantiated
+        else if (isConstEnumDeclaration(node)) {
+            return ModuleInstanceState.ConstEnumOnly;
+        }
+        // 3. non - exported import declarations
         else if (node.kind === SyntaxKind.ImportDeclaration && !(node.flags & NodeFlags.Export)) {
-            return false;
+            return ModuleInstanceState.NonInstantiated;
         }
-        // 3. other uninstantiated module declarations.
-        else if (node.kind === SyntaxKind.ModuleBlock && !forEachChild(node, isInstantiated)) {
-            return false;
+        // 4. other uninstantiated module declarations.
+        else if (node.kind === SyntaxKind.ModuleBlock) {
+            var state = ModuleInstanceState.NonInstantiated;
+            forEachChild(node, n => {
+                switch (getModuleInstanceState(n)) {
+                    case ModuleInstanceState.NonInstantiated:
+                        // child is non-instantiated - continue searching
+                        return false;
+                    case ModuleInstanceState.ConstEnumOnly:
+                        // child is const enum only - record state and continue searching
+                        state = ModuleInstanceState.ConstEnumOnly;
+                        return false;
+                    case ModuleInstanceState.Instantiated:
+                        // child is instantiated - record state and stop
+                        state = ModuleInstanceState.Instantiated;
+                        return true;
+                }
+            });
+            return state;
         }
-        else if (node.kind === SyntaxKind.ModuleDeclaration && !isInstantiated((<ModuleDeclaration>node).body)) {
-            return false;
+        else if (node.kind === SyntaxKind.ModuleDeclaration) {
+            return getModuleInstanceState((<ModuleDeclaration>node).body);
         }
         else {
-            return true;
+            return ModuleInstanceState.Instantiated;
         }
     }
 
@@ -31,13 +57,14 @@ module ts {
 
         var parent: Node;
         var container: Declaration;
+        var blockScopeContainer: Node;
         var lastContainer: Declaration;
         var symbolCount = 0;
         var Symbol = objectAllocator.getSymbolConstructor();
 
         if (!file.locals) {
             file.locals = {};
-            container = file;
+            container = blockScopeContainer = file;
             bind(file);
             file.symbolCount = symbolCount;
         }
@@ -57,23 +84,30 @@ module ts {
             if (symbolKind & SymbolFlags.Value && !symbol.valueDeclaration) symbol.valueDeclaration = node;
         }
 
+        // TODO(jfreeman): Implement getDeclarationName for property name
         function getDeclarationName(node: Declaration): string {
             if (node.name) {
                 if (node.kind === SyntaxKind.ModuleDeclaration && node.name.kind === SyntaxKind.StringLiteral) {
-                    return '"' + node.name.text + '"';
+                    return '"' + (<LiteralExpression>node.name).text + '"';
                 }
-                return node.name.text;
+                return (<Identifier>node.name).text;
             }
             switch (node.kind) {
-                case SyntaxKind.Constructor: return "__constructor";
-                case SyntaxKind.CallSignature: return "__call";
-                case SyntaxKind.ConstructSignature: return "__new";
-                case SyntaxKind.IndexSignature: return "__index";
+                case SyntaxKind.ConstructorType:
+                case SyntaxKind.Constructor:
+                    return "__constructor";
+                case SyntaxKind.FunctionType:
+                case SyntaxKind.CallSignature:
+                    return "__call";
+                case SyntaxKind.ConstructSignature:
+                    return "__new";
+                case SyntaxKind.IndexSignature:
+                    return "__index";
             }
         }
 
         function getDisplayName(node: Declaration): string {
-            return node.name ? identifierToString(node.name) : getDeclarationName(node);
+            return node.name ? declarationNameToString(node.name) : getDeclarationName(node);
         }
 
         function declareSymbol(symbols: SymbolTable, parent: Symbol, node: Declaration, includes: SymbolFlags, excludes: SymbolFlags): Symbol {
@@ -86,10 +120,14 @@ module ts {
                     }
                     // Report errors every position with duplicate declaration
                     // Report errors on previous encountered declarations
-                    forEach(symbol.declarations, (declaration) => {
-                        file.semanticErrors.push(createDiagnosticForNode(declaration.name, Diagnostics.Duplicate_identifier_0, getDisplayName(declaration)));
+                    var message = symbol.flags & SymbolFlags.BlockScopedVariable
+                        ? Diagnostics.Cannot_redeclare_block_scoped_variable_0 
+                        : Diagnostics.Duplicate_identifier_0;
+
+                    forEach(symbol.declarations, declaration => {
+                        file.semanticDiagnostics.push(createDiagnosticForNode(declaration.name, message, getDisplayName(declaration)));
                     });
-                    file.semanticErrors.push(createDiagnosticForNode(node.name, Diagnostics.Duplicate_identifier_0, getDisplayName(node)));
+                    file.semanticDiagnostics.push(createDiagnosticForNode(node.name, message, getDisplayName(node)));
 
                     symbol = createSymbol(0, name);
                 }
@@ -110,7 +148,7 @@ module ts {
                     if (node.name) {
                         node.name.parent = node;
                     }
-                    file.semanticErrors.push(createDiagnosticForNode(symbol.exports[prototypeSymbol.name].declarations[0],
+                    file.semanticDiagnostics.push(createDiagnosticForNode(symbol.exports[prototypeSymbol.name].declarations[0],
                         Diagnostics.Duplicate_identifier_0, prototypeSymbol.name));
                 }
                 symbol.exports[prototypeSymbol.name] = prototypeSymbol;
@@ -167,12 +205,13 @@ module ts {
 
         // All container nodes are kept on a linked list in declaration order. This list is used by the getLocalNameOfContainer function
         // in the type checker to validate that the local name used for a container is unique.
-        function bindChildren(node: Declaration, symbolKind: SymbolFlags) {
+        function bindChildren(node: Declaration, symbolKind: SymbolFlags, isBlockScopeContainer: boolean) {
             if (symbolKind & SymbolFlags.HasLocals) {
                 node.locals = {};
             }
             var saveParent = parent;
             var saveContainer = container;
+            var savedBlockScopeContainer = blockScopeContainer;
             parent = node;
             if (symbolKind & SymbolFlags.IsContainer) {
                 container = node;
@@ -184,12 +223,16 @@ module ts {
                     lastContainer = container;
                 }
             }
+            if (isBlockScopeContainer) {
+                blockScopeContainer = node;
+            }
             forEachChild(node, bind);
             container = saveContainer;
             parent = saveParent;
+            blockScopeContainer = savedBlockScopeContainer;
         }
 
-        function bindDeclaration(node: Declaration, symbolKind: SymbolFlags, symbolExcludes: SymbolFlags) {
+        function bindDeclaration(node: Declaration, symbolKind: SymbolFlags, symbolExcludes: SymbolFlags, isBlockScopeContainer: boolean) {
             switch (container.kind) {
                 case SyntaxKind.ModuleDeclaration:
                     declareModuleMember(node, symbolKind, symbolExcludes);
@@ -199,6 +242,8 @@ module ts {
                         declareModuleMember(node, symbolKind, symbolExcludes);
                         break;
                     }
+                case SyntaxKind.FunctionType:
+                case SyntaxKind.ConstructorType:
                 case SyntaxKind.CallSignature:
                 case SyntaxKind.ConstructSignature:
                 case SyntaxKind.IndexSignature:
@@ -225,121 +270,204 @@ module ts {
                     declareSymbol(container.symbol.exports, container.symbol, node, symbolKind, symbolExcludes);
                     break;
             }
-            bindChildren(node, symbolKind);
+            bindChildren(node, symbolKind, isBlockScopeContainer);
         }
 
         function bindConstructorDeclaration(node: ConstructorDeclaration) {
-            bindDeclaration(node, SymbolFlags.Constructor, 0);
+            bindDeclaration(node, SymbolFlags.Constructor, 0, /*isBlockScopeContainer*/ true);
             forEach(node.parameters, p => {
                 if (p.flags & (NodeFlags.Public | NodeFlags.Private | NodeFlags.Protected)) {
-                    bindDeclaration(p, SymbolFlags.Property, SymbolFlags.PropertyExcludes);
+                    bindDeclaration(p, SymbolFlags.Property, SymbolFlags.PropertyExcludes, /*isBlockScopeContainer*/ false);
                 }
             });
         }
 
         function bindModuleDeclaration(node: ModuleDeclaration) {
             if (node.name.kind === SyntaxKind.StringLiteral) {
-                bindDeclaration(node, SymbolFlags.ValueModule, SymbolFlags.ValueModuleExcludes);
-            }
-            else if (isInstantiated(node)) {
-                bindDeclaration(node, SymbolFlags.ValueModule, SymbolFlags.ValueModuleExcludes);
+                bindDeclaration(node, SymbolFlags.ValueModule, SymbolFlags.ValueModuleExcludes, /*isBlockScopeContainer*/ true);
             }
             else {
-                bindDeclaration(node, SymbolFlags.NamespaceModule, SymbolFlags.NamespaceModuleExcludes);
+                var state = getModuleInstanceState(node);
+                if (state === ModuleInstanceState.NonInstantiated) {
+                    bindDeclaration(node, SymbolFlags.NamespaceModule, SymbolFlags.NamespaceModuleExcludes, /*isBlockScopeContainer*/ true);
+                }
+                else {
+                    bindDeclaration(node, SymbolFlags.ValueModule, SymbolFlags.ValueModuleExcludes, /*isBlockScopeContainer*/ true);
+                    if (state === ModuleInstanceState.ConstEnumOnly) {
+                        // mark value module as module that contains only enums
+                        node.symbol.constEnumOnlyModule = true;
+                    }
+                    else if (node.symbol.constEnumOnlyModule) {
+                        // const only value module was merged with instantiated module - reset flag
+                        node.symbol.constEnumOnlyModule = false;
+                    }
+                }
             }
         }
 
-        function bindAnonymousDeclaration(node: Node, symbolKind: SymbolFlags, name: string) {
+        function bindFunctionOrConstructorType(node: SignatureDeclaration) {
+            // For a given function symbol "<...>(...) => T" we want to generate a symbol identical
+            // to the one we would get for: { <...>(...): T }
+            //
+            // We do that by making an anonymous type literal symbol, and then setting the function 
+            // symbol as its sole member. To the rest of the system, this symbol will be  indistinguishable 
+            // from an actual type literal symbol you would have gotten had you used the long form.
+
+            var symbolKind = node.kind === SyntaxKind.FunctionType ? SymbolFlags.CallSignature : SymbolFlags.ConstructSignature;
+            var symbol = createSymbol(symbolKind, getDeclarationName(node));
+            addDeclarationToSymbol(symbol, node, symbolKind);
+            bindChildren(node, symbolKind, /*isBlockScopeContainer:*/ false);
+
+            var typeLiteralSymbol = createSymbol(SymbolFlags.TypeLiteral, "__type");
+            addDeclarationToSymbol(typeLiteralSymbol, node, SymbolFlags.TypeLiteral);
+            typeLiteralSymbol.members = {};
+            typeLiteralSymbol.members[node.kind === SyntaxKind.FunctionType ? "__call" : "__new"] = symbol
+        }
+
+        function bindAnonymousDeclaration(node: Node, symbolKind: SymbolFlags, name: string, isBlockScopeContainer: boolean) {
             var symbol = createSymbol(symbolKind, name);
             addDeclarationToSymbol(symbol, node, symbolKind);
-            bindChildren(node, symbolKind);
+            bindChildren(node, symbolKind, isBlockScopeContainer);
         }
 
         function bindCatchVariableDeclaration(node: CatchBlock) {
-            var symbol = createSymbol(SymbolFlags.Variable, node.variable.text || "__missing");
-            addDeclarationToSymbol(symbol, node, SymbolFlags.Variable);
+            var symbol = createSymbol(SymbolFlags.FunctionScopedVariable, node.variable.text || "__missing");
+            addDeclarationToSymbol(symbol, node, SymbolFlags.FunctionScopedVariable);
             var saveParent = parent;
-            parent = node;
+            var savedBlockScopeContainer = blockScopeContainer;
+            parent = blockScopeContainer = node;
             forEachChild(node, bind);
             parent = saveParent;
+            blockScopeContainer = savedBlockScopeContainer;
+        }
+
+        function bindBlockScopedVariableDeclaration(node: Declaration) {
+            switch (blockScopeContainer.kind) {
+                case SyntaxKind.ModuleDeclaration:
+                    declareModuleMember(node, SymbolFlags.BlockScopedVariable, SymbolFlags.BlockScopedVariableExcludes);
+                    break;
+                case SyntaxKind.SourceFile:
+                    if (isExternalModule(<SourceFile>container)) {
+                        declareModuleMember(node, SymbolFlags.BlockScopedVariable, SymbolFlags.BlockScopedVariableExcludes);
+                        break;
+                    }
+                default:
+                    if (!blockScopeContainer.locals) {
+                        blockScopeContainer.locals = {};
+                    }
+                    declareSymbol(blockScopeContainer.locals, undefined, node, SymbolFlags.BlockScopedVariable, SymbolFlags.BlockScopedVariableExcludes);
+            }
+
+            bindChildren(node, SymbolFlags.BlockScopedVariable, /*isBlockScopeContainer*/ false);
         }
 
         function bind(node: Node) {
             node.parent = parent;
             switch (node.kind) {
                 case SyntaxKind.TypeParameter:
-                    bindDeclaration(<Declaration>node, SymbolFlags.TypeParameter, SymbolFlags.TypeParameterExcludes);
+                    bindDeclaration(<Declaration>node, SymbolFlags.TypeParameter, SymbolFlags.TypeParameterExcludes, /*isBlockScopeContainer*/ false);
                     break;
                 case SyntaxKind.Parameter:
-                    bindDeclaration(<Declaration>node, SymbolFlags.Variable, SymbolFlags.ParameterExcludes);
+                    bindDeclaration(<Declaration>node, SymbolFlags.FunctionScopedVariable, SymbolFlags.ParameterExcludes, /*isBlockScopeContainer*/ false);
                     break;
                 case SyntaxKind.VariableDeclaration:
-                    bindDeclaration(<Declaration>node, SymbolFlags.Variable, SymbolFlags.VariableExcludes);
+                    if (node.flags & NodeFlags.BlockScoped) {
+                        bindBlockScopedVariableDeclaration(<Declaration>node);
+                    }
+                    else {
+                        bindDeclaration(<Declaration>node, SymbolFlags.FunctionScopedVariable, SymbolFlags.FunctionScopedVariableExcludes, /*isBlockScopeContainer*/ false);
+                    }
                     break;
                 case SyntaxKind.Property:
                 case SyntaxKind.PropertyAssignment:
-                    bindDeclaration(<Declaration>node, SymbolFlags.Property, SymbolFlags.PropertyExcludes);
+                case SyntaxKind.ShorthandPropertyAssignment:
+                    bindDeclaration(<Declaration>node, SymbolFlags.Property, SymbolFlags.PropertyExcludes, /*isBlockScopeContainer*/ false);
                     break;
                 case SyntaxKind.EnumMember:
-                    bindDeclaration(<Declaration>node, SymbolFlags.EnumMember, SymbolFlags.EnumMemberExcludes);
+                    bindDeclaration(<Declaration>node, SymbolFlags.EnumMember, SymbolFlags.EnumMemberExcludes, /*isBlockScopeContainer*/ false);
                     break;
                 case SyntaxKind.CallSignature:
-                    bindDeclaration(<Declaration>node, SymbolFlags.CallSignature, 0);
-                    break;
-                case SyntaxKind.Method:
-                    bindDeclaration(<Declaration>node, SymbolFlags.Method, SymbolFlags.MethodExcludes);
+                    bindDeclaration(<Declaration>node, SymbolFlags.CallSignature, 0, /*isBlockScopeContainer*/ false);
                     break;
                 case SyntaxKind.ConstructSignature:
-                    bindDeclaration(<Declaration>node, SymbolFlags.ConstructSignature, 0);
+                    bindDeclaration(<Declaration>node, SymbolFlags.ConstructSignature, 0, /*isBlockScopeContainer*/ true);
+                    break;
+                case SyntaxKind.Method:
+                    bindDeclaration(<Declaration>node, SymbolFlags.Method, SymbolFlags.MethodExcludes, /*isBlockScopeContainer*/ true);
                     break;
                 case SyntaxKind.IndexSignature:
-                    bindDeclaration(<Declaration>node, SymbolFlags.IndexSignature, 0);
+                    bindDeclaration(<Declaration>node, SymbolFlags.IndexSignature, 0, /*isBlockScopeContainer*/ false);
                     break;
                 case SyntaxKind.FunctionDeclaration:
-                    bindDeclaration(<Declaration>node, SymbolFlags.Function, SymbolFlags.FunctionExcludes);
+                    bindDeclaration(<Declaration>node, SymbolFlags.Function, SymbolFlags.FunctionExcludes, /*isBlockScopeContainer*/ true);
                     break;
                 case SyntaxKind.Constructor:
                     bindConstructorDeclaration(<ConstructorDeclaration>node);
                     break;
                 case SyntaxKind.GetAccessor:
-                    bindDeclaration(<Declaration>node, SymbolFlags.GetAccessor, SymbolFlags.GetAccessorExcludes);
+                    bindDeclaration(<Declaration>node, SymbolFlags.GetAccessor, SymbolFlags.GetAccessorExcludes, /*isBlockScopeContainer*/ true);
                     break;
                 case SyntaxKind.SetAccessor:
-                    bindDeclaration(<Declaration>node, SymbolFlags.SetAccessor, SymbolFlags.SetAccessorExcludes);
+                    bindDeclaration(<Declaration>node, SymbolFlags.SetAccessor, SymbolFlags.SetAccessorExcludes, /*isBlockScopeContainer*/ true);
                     break;
+
+                case SyntaxKind.FunctionType:
+                case SyntaxKind.ConstructorType:
+                    bindFunctionOrConstructorType(<SignatureDeclaration>node);
+                    break;
+
                 case SyntaxKind.TypeLiteral:
-                    bindAnonymousDeclaration(node, SymbolFlags.TypeLiteral, "__type");
+                    bindAnonymousDeclaration(node, SymbolFlags.TypeLiteral, "__type", /*isBlockScopeContainer*/ false);
                     break;
                 case SyntaxKind.ObjectLiteral:
-                    bindAnonymousDeclaration(node, SymbolFlags.ObjectLiteral, "__object");
+                    bindAnonymousDeclaration(node, SymbolFlags.ObjectLiteral, "__object", /*isBlockScopeContainer*/ false);
                     break;
                 case SyntaxKind.FunctionExpression:
                 case SyntaxKind.ArrowFunction:
-                    bindAnonymousDeclaration(node, SymbolFlags.Function, "__function");
+                    bindAnonymousDeclaration(node, SymbolFlags.Function, "__function", /*isBlockScopeContainer*/ true);
                     break;
                 case SyntaxKind.CatchBlock:
                     bindCatchVariableDeclaration(<CatchBlock>node);
                     break;
                 case SyntaxKind.ClassDeclaration:
-                    bindDeclaration(<Declaration>node, SymbolFlags.Class, SymbolFlags.ClassExcludes);
+                    bindDeclaration(<Declaration>node, SymbolFlags.Class, SymbolFlags.ClassExcludes, /*isBlockScopeContainer*/ false);
                     break;
                 case SyntaxKind.InterfaceDeclaration:
-                    bindDeclaration(<Declaration>node, SymbolFlags.Interface, SymbolFlags.InterfaceExcludes);
+                    bindDeclaration(<Declaration>node, SymbolFlags.Interface, SymbolFlags.InterfaceExcludes, /*isBlockScopeContainer*/ false);
+                    break;
+                case SyntaxKind.TypeAliasDeclaration:
+                    bindDeclaration(<Declaration>node, SymbolFlags.TypeAlias, SymbolFlags.TypeAliasExcludes, /*isBlockScopeContainer*/ false);
                     break;
                 case SyntaxKind.EnumDeclaration:
-                    bindDeclaration(<Declaration>node, SymbolFlags.Enum, SymbolFlags.EnumExcludes);
+                    if (isConst(node)) {
+                        bindDeclaration(<Declaration>node, SymbolFlags.ConstEnum, SymbolFlags.ConstEnumExcludes, /*isBlockScopeContainer*/ false);
+                    }
+                    else {
+                        bindDeclaration(<Declaration>node, SymbolFlags.RegularEnum, SymbolFlags.RegularEnumExcludes, /*isBlockScopeContainer*/ false);
+                    }
                     break;
                 case SyntaxKind.ModuleDeclaration:
                     bindModuleDeclaration(<ModuleDeclaration>node);
                     break;
                 case SyntaxKind.ImportDeclaration:
-                    bindDeclaration(<Declaration>node, SymbolFlags.Import, SymbolFlags.ImportExcludes);
+                    bindDeclaration(<Declaration>node, SymbolFlags.Import, SymbolFlags.ImportExcludes, /*isBlockScopeContainer*/ false);
                     break;
                 case SyntaxKind.SourceFile:
                     if (isExternalModule(<SourceFile>node)) {
-                        bindAnonymousDeclaration(node, SymbolFlags.ValueModule, '"' + removeFileExtension((<SourceFile>node).filename) + '"');
+                        bindAnonymousDeclaration(node, SymbolFlags.ValueModule, '"' + removeFileExtension((<SourceFile>node).filename) + '"', /*isBlockScopeContainer*/ true);
                         break;
                     }
+
+                case SyntaxKind.Block:
+                case SyntaxKind.TryBlock:
+                case SyntaxKind.CatchBlock:
+                case SyntaxKind.FinallyBlock:
+                case SyntaxKind.ForStatement:
+                case SyntaxKind.ForInStatement:
+                case SyntaxKind.SwitchStatement:
+                    bindChildren(node, 0 , true);
+                    break;
+
                 default:
                     var saveParent = parent;
                     parent = node;

@@ -15,7 +15,7 @@ function f<T extends Base>(a: { x: T; y: T }) {
     return r;
 }
 
-var r1 = f({ x: new Derived(), y: new Derived2() }); // ok, both extend Base
+var r1 = f({ x: new Derived(), y: new Derived2() }); // error because neither is supertype of the other
 
 function f2<T extends Base, U extends { x: T; y: T }>(a: U) {
     var r: T;
@@ -30,7 +30,7 @@ function f3<T extends Base>(y: (a: T) => T, x: T) {
     return y(null);
 }
 
-// all ok - T gets fixed too early, but then defaults to Base and everything works out
+// all ok - second argument is processed before x is fixed
 var r4 = f3(x => x, new Base());
 var r5 = f3(x => x, new Derived());
 var r6 = f3(x => x, null);

@@ -10,6 +10,7 @@ var servicesDirectory = "src/services/";
 var harnessDirectory = "src/harness/";
 var libraryDirectory = "src/lib/";
 var scriptsDirectory = "scripts/";
+var unittestsDirectory = "tests/cases/unittests/";
 var docDirectory = "doc/";
 
 var builtDirectory = "built/";
@@ -54,6 +55,7 @@ var servicesSources = [
 ].map(function (f) {
     return path.join(compilerDirectory, f);
 }).concat([
+    "breakpoints.ts",
     "services.ts",
     "shims.ts",
     "signatureHelp.ts",
@@ -74,13 +76,18 @@ var harnessSources = [
     "typeWriter.ts",
     "fourslashRunner.ts",
     "projectsRunner.ts",
-    "unittestrunner.ts",
     "loggedIO.ts",
     "rwcRunner.ts",
     "runner.ts"
 ].map(function (f) {
     return path.join(harnessDirectory, f);
-});
+}).concat([
+    "services/colorization.ts",
+    "services/documentRegistry.ts",
+    "services/preProcessFile.ts"
+].map(function (f) {
+    return path.join(unittestsDirectory, f);
+}));
 
 var librarySourceMap = [
         { target: "lib.core.d.ts", sources: ["core.d.ts"] },
@@ -127,7 +134,7 @@ function concatenateFiles(destinationFile, sourceFiles) {
     fs.renameSync(temp, destinationFile);
 }
 
-var useDebugMode = false;
+var useDebugMode = true;
 var generateDeclarations = false;
 var host = (process.env.host || process.env.TYPESCRIPT_HOST || "node");
 var compilerFilename = "tsc.js";
@@ -142,15 +149,16 @@ var compilerFilename = "tsc.js";
 function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, noOutFile) {
     file(outFile, prereqs, function() {
         var dir = useBuiltCompiler ? builtLocalDirectory : LKGDirectory;
-        var options = "-removeComments --module commonjs -noImplicitAny "; //" -propagateEnumConstants "
+        var options = "-removeComments --module commonjs -noImplicitAny ";
         if (generateDeclarations) {
             options += "--declaration ";
         }
+
+        if (useDebugMode) {
+            options += "--preserveConstEnums ";
+        }
         
         var cmd = host + " " + dir + compilerFilename + " " + options + " ";
-        if (useDebugMode) {
-            cmd = cmd + " " + path.join(harnessDirectory, "external/es5compat.ts") + " " + path.join(harnessDirectory, "external/json2.ts") + " ";
-        }
         cmd = cmd + sources.join(" ") + (!noOutFile ? " -out " + outFile : "");
         if (useDebugMode) {
             cmd = cmd + " -sourcemap -mapRoot file:///" + path.resolve(path.dirname(outFile));
@@ -252,11 +260,10 @@ task("local", ["generate-diagnostics", "lib", tscFile, servicesFile]);
 
 
 // Local target to build the compiler and services
-desc("Emit debug mode files with sourcemaps");
-task("debug", function() {
-    useDebugMode = true;
+desc("Sets release mode flag");
+task("release", function() {
+    useDebugMode = false;
 });
-
 
 // Set the default task to "local"
 task("default", ["local"]);
@@ -279,7 +286,6 @@ var word2mdJs = path.join(scriptsDirectory, "word2md.js");
 var word2mdTs = path.join(scriptsDirectory, "word2md.ts");
 var specWord = path.join(docDirectory, "TypeScript Language Specification.docx");
 var specMd = path.join(docDirectory, "spec.md");
-var headerMd = path.join(docDirectory, "header.md");
 
 file(word2mdTs);
 
@@ -292,9 +298,8 @@ compileFile(word2mdJs,
 
 // The generated spec.md; built for the 'generate-spec' task
 file(specMd, [word2mdJs, specWord], function () {
-    jake.cpR(headerMd, specMd, {silent: true});
     var specWordFullPath = path.resolve(specWord);
-    var cmd = "cscript //nologo " + word2mdJs + ' "' + specWordFullPath + '" >>' + specMd;
+    var cmd = "cscript //nologo " + word2mdJs + ' "' + specWordFullPath + '" ' + specMd;
     console.log(cmd);
     child_process.exec(cmd, function () {
         complete();
@@ -308,7 +313,7 @@ task("generate-spec", [specMd])
 
 // Makes a new LKG. This target does not build anything, but errors if not all the outputs are present in the built/local directory
 desc("Makes a new LKG out of the built js files");
-task("LKG", libraryTargets, function() {
+task("LKG", ["clean", "release", "local"].concat(libraryTargets), function() {
     var expectedFiles = [tscFile, servicesFile].concat(libraryTargets);
     var missingFiles = expectedFiles.filter(function (f) {
         return !fs.existsSync(f);

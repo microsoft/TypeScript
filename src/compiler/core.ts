@@ -1,8 +1,28 @@
 /// <reference path="types.ts"/>
 
 module ts {
+
+    // Ternary values are defined such that
+    // x & y is False if either x or y is False.
+    // x & y is Maybe if either x or y is Maybe, but neither x or y is False.
+    // x & y is True if both x and y are True.
+    // x | y is False if both x and y are False.
+    // x | y is Maybe if either x or y is Maybe, but neither x or y is True.
+    // x | y is True if either x or y is True.
+    export const enum Ternary {
+        False = 0,
+        Maybe = 1,
+        True  = -1
+    }
+
     export interface Map<T> {
         [index: string]: T;
+    }
+
+    export const enum Comparison {
+        LessThan    = -1,
+        EqualTo     = 0,
+        GreaterThan = 1
     }
 
     export interface StringSet extends Map<any> { }
@@ -79,6 +99,7 @@ module ts {
     export function concatenate<T>(array1: T[], array2: T[]): T[] {
         if (!array2 || !array2.length) return array1;
         if (!array1 || !array1.length) return array2;
+
         return array1.concat(array2);
     }
 
@@ -99,6 +120,17 @@ module ts {
             result += array[i][prop];
         }
         return result;
+    }
+
+    /**
+     * Returns the last element of an array if non-empty, undefined otherwise.
+     */
+    export function lastOrUndefined<T>(array: T[]): T {
+        if (array.length === 0) {
+            return undefined;
+        }
+
+        return array[array.length - 1];
     }
 
     export function binarySearch(array: number[], value: number): number {
@@ -226,13 +258,14 @@ module ts {
         }
 
         return {
-            file: file,
-            start: start,
-            length: length,
+            file,
+            start,
+            length,
 
             messageText: text,
             category: message.category,
-            code: message.code
+            code: message.code,
+            isEarly: message.isEarly
         };
     }
 
@@ -251,7 +284,8 @@ module ts {
 
             messageText: text,
             category: message.category,
-            code: message.code
+            code: message.code,
+            isEarly: message.isEarly
         };
     }
 
@@ -270,6 +304,12 @@ module ts {
 
             next: details
         };
+    }
+
+    export function concatenateDiagnosticMessageChains(headChain: DiagnosticMessageChain, tailChain: DiagnosticMessageChain): DiagnosticMessageChain {
+        Debug.assert(!headChain.next);
+        headChain.next = tailChain;
+        return headChain;
     }
 
     export function flattenDiagnosticChain(file: SourceFile, start: number, length: number, diagnosticChain: DiagnosticMessageChain, newLine: string): Diagnostic {
@@ -295,20 +335,20 @@ module ts {
         }
 
         return {
-            file: file,
-            start: start,
-            length: length,
-            code: code,
-            category: category,
-            messageText: messageText
+            file,
+            start,
+            length,
+            code,
+            category,
+            messageText
         };
     }
 
-    export function compareValues<T>(a: T, b: T): number {
-        if (a === b) return 0;
-        if (a === undefined) return -1;
-        if (b === undefined) return 1;
-        return a < b ? -1 : 1;
+    export function compareValues<T>(a: T, b: T): Comparison {
+        if (a === b) return Comparison.EqualTo;
+        if (a === undefined) return Comparison.LessThan;
+        if (b === undefined) return Comparison.GreaterThan;
+        return a < b ? Comparison.LessThan : Comparison.GreaterThan;
     }
 
     function getDiagnosticFilename(diagnostic: Diagnostic): string {
@@ -333,7 +373,7 @@ module ts {
         var previousDiagnostic = diagnostics[0];
         for (var i = 1; i < diagnostics.length; i++) {
             var currentDiagnostic = diagnostics[i];
-            var isDupe = compareDiagnostics(currentDiagnostic, previousDiagnostic) === 0;
+            var isDupe = compareDiagnostics(currentDiagnostic, previousDiagnostic) === Comparison.EqualTo;
             if (!isDupe) {
                 newDiagnostics.push(currentDiagnostic);
                 previousDiagnostic = currentDiagnostic;
@@ -417,6 +457,10 @@ module ts {
         }
 
         return normalizedPathComponents(path, rootLength);
+    }
+
+    export function getNormalizedAbsolutePath(filename: string, currentDirectory: string) {
+        return getNormalizedPathFromPathComponents(getNormalizedPathComponents(filename, currentDirectory));
     }
 
     export function getNormalizedPathFromPathComponents(pathComponents: string[]) {
@@ -608,7 +652,7 @@ module ts {
         getSignatureConstructor: () => <any>Signature
     }
 
-    export enum AssertionLevel {
+    export const enum AssertionLevel {
         None = 0,
         Normal = 1,
         Aggressive = 2,
@@ -622,7 +666,7 @@ module ts {
             return currentAssertionLevel >= level;
         }
 
-        export function assert(expression: any, message?: string, verboseDebugInfo?: () => string): void {
+        export function assert(expression: boolean, message?: string, verboseDebugInfo?: () => string): void {
             if (!expression) {
                 var verboseDebugString = "";
                 if (verboseDebugInfo) {

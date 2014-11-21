@@ -24,7 +24,7 @@ module ts {
             type: "boolean",
         },
         {
-            name: "emitBOM", 
+            name: "emitBOM",
             type: "boolean"
         },
         {
@@ -53,6 +53,11 @@ module ts {
             description: Diagnostics.Specify_module_code_generation_Colon_commonjs_or_amd,
             paramType: Diagnostics.KIND,
             error: Diagnostics.Argument_for_module_option_must_be_commonjs_or_amd
+        },
+        {
+            name: "noEmitOnError",
+            type: "boolean",
+            description: Diagnostics.Do_not_emit_outputs_if_any_type_checking_errors_were_reported,
         },
         {
             name: "noImplicitAny",
@@ -102,10 +107,10 @@ module ts {
         {
             name: "target",
             shortName: "t",
-            type: { "es3": ScriptTarget.ES3, "es5": ScriptTarget.ES5 },
-            description: Diagnostics.Specify_ECMAScript_target_version_Colon_ES3_default_or_ES5,
+            type: { "es3": ScriptTarget.ES3, "es5": ScriptTarget.ES5, "es6": ScriptTarget.ES6 },
+            description: Diagnostics.Specify_ECMAScript_target_version_Colon_ES3_default_ES5_or_ES6_experimental,
             paramType: Diagnostics.VERSION,
-            error: Diagnostics.Argument_for_target_option_must_be_es3_or_es5
+            error: Diagnostics.Argument_for_target_option_must_be_es3_es5_or_es6
         },
         {
             name: "version",
@@ -118,6 +123,11 @@ module ts {
             shortName: "w",
             type: "boolean",
             description: Diagnostics.Watch_input_files,
+        },
+        {
+            name: "preserveConstEnums",
+            type: "boolean",
+            description: Diagnostics.Do_not_erase_const_enum_declarations_in_generated_code
         }
     ];
 
@@ -143,9 +153,9 @@ module ts {
 
         parseStrings(commandLine);
         return {
-            options: options,
-            filenames: filenames,
-            errors: errors
+            options,
+            filenames,
+            errors
         };
 
         function parseStrings(args: string[]) {
@@ -183,9 +193,10 @@ module ts {
                                 break;
                             // If not a primitive, the possible types are specified in what is effectively a map of options.
                             default:
-                                var value = (args[i++] || "").toLowerCase();
-                                if (hasProperty(opt.type, value)) {
-                                    options[opt.name] = opt.type[value];
+                                var map = <Map<number>>opt.type;
+                                var key = (args[i++] || "").toLowerCase();
+                                if (hasProperty(map, key)) {
+                                    options[opt.name] = map[key];
                                 }
                                 else {
                                     errors.push(createCompilerDiagnostic(opt.error));

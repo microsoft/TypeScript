@@ -5,8 +5,6 @@ module TypeScript {
         // Variable width tokens, trivia and lists.
         None,
         List,
-        SeparatedList,
-        TriviaList,
 
         // Trivia
         WhitespaceTrivia,
@@ -27,6 +25,12 @@ module TypeScript {
         RegularExpressionLiteral,
         NumericLiteral,
         StringLiteral,
+
+        // Template tokens
+        NoSubstitutionTemplateToken,
+        TemplateStartToken,
+        TemplateMiddleToken,
+        TemplateEndToken,
 
         // All fixed width tokens follow.
 
@@ -159,6 +163,8 @@ module TypeScript {
         GenericType,
         TypeQuery,
         TupleType,
+        UnionType,
+        ParenthesizedType,
 
         // Module elements.
         InterfaceDeclaration,
@@ -207,54 +213,13 @@ module TypeScript {
         WithStatement,
 
         // Expressions
-        PlusExpression,
-        NegateExpression,
-        BitwiseNotExpression,
-        LogicalNotExpression,
-        PreIncrementExpression,
-        PreDecrementExpression,
+        PrefixUnaryExpression,
         DeleteExpression,
         TypeOfExpression,
         VoidExpression,
-        CommaExpression,
-        AssignmentExpression,
-        AddAssignmentExpression,
-        SubtractAssignmentExpression,
-        MultiplyAssignmentExpression,
-        DivideAssignmentExpression,
-        ModuloAssignmentExpression,
-        AndAssignmentExpression,
-        ExclusiveOrAssignmentExpression,
-        OrAssignmentExpression,
-        LeftShiftAssignmentExpression,
-        SignedRightShiftAssignmentExpression,
-        UnsignedRightShiftAssignmentExpression,
         ConditionalExpression,
-        LogicalOrExpression,
-        LogicalAndExpression,
-        BitwiseOrExpression,
-        BitwiseExclusiveOrExpression,
-        BitwiseAndExpression,
-        EqualsWithTypeConversionExpression,
-        NotEqualsWithTypeConversionExpression,
-        EqualsExpression,
-        NotEqualsExpression,
-        LessThanExpression,
-        GreaterThanExpression,
-        LessThanOrEqualExpression,
-        GreaterThanOrEqualExpression,
-        InstanceOfExpression,
-        InExpression,
-        LeftShiftExpression,
-        SignedRightShiftExpression,
-        UnsignedRightShiftExpression,
-        MultiplyExpression,
-        DivideExpression,
-        ModuloExpression,
-        AddExpression,
-        SubtractExpression,
-        PostIncrementExpression,
-        PostDecrementExpression,
+        BinaryExpression,
+        PostfixUnaryExpression,
         MemberAccessExpression,
         InvocationExpression,
         ArrayLiteralExpression,
@@ -267,6 +232,9 @@ module TypeScript {
         ElementAccessExpression,
         FunctionExpression,
         OmittedExpression,
+        TemplateExpression,
+        TemplateAccessExpression,
+        YieldExpression,
 
         // Variable declarations
         VariableDeclaration,
@@ -279,14 +247,14 @@ module TypeScript {
         TypeParameterList,
 
         // Clauses
-        ExtendsHeritageClause,
-        ImplementsHeritageClause,
+        HeritageClause,
         EqualsValueClause,
         CaseSwitchClause,
         DefaultSwitchClause,
         ElseClause,
         CatchClause,
         FinallyClause,
+        TemplateClause,
 
         // Generics
         TypeParameter,
@@ -294,14 +262,13 @@ module TypeScript {
 
         // Property Assignment
         SimplePropertyAssignment,
-        // GetAccessorPropertyAssignment,
-        // SetAccessorPropertyAssignment,
         FunctionPropertyAssignment,
 
         // Misc.
         Parameter,
         EnumElement,
         TypeAnnotation,
+        ComputedPropertyName,
         ExternalModuleReference,
         ModuleNameModuleReference,
 
