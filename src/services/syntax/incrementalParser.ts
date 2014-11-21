@@ -700,7 +700,7 @@ module TypeScript.IncrementalParser {
     }
 
     var tokenCollectorWalker = new TokenCollectorWalker();
-    function updateTokenPositionsAndMarkElements(element: ISyntaxElementInternal, changeStart: number, changeRangeOldEnd: number, delta: number, fullStart: number): void {
+    function updateTokenPositionsAndMarkElements(element: ISyntaxElement, changeStart: number, changeRangeOldEnd: number, delta: number, fullStart: number): void {
             // First, try to skip past any elements that we dont' need to move.  We don't need to 
             // move any elements that don't start after the end of the change range.  
         if (fullStart > changeRangeOldEnd) {
@@ -714,13 +714,24 @@ module TypeScript.IncrementalParser {
             // be able to use.
             var fullEnd = fullStart + fullWidth(element);
             if (fullEnd >= changeStart) {
-                element.intersectsChange = true;
+                (<ISyntaxElementInternal>element).intersectsChange = true;
 
-                for (var i = 0, n = childCount(element); i < n; i++) {
-                    var child = <ISyntaxElementInternal>childAt(element, i);
-                    if (child) {
+                if (isList(element)) {
+                    var list = <ISyntaxNodeOrToken[]>element;
+                    for (var i = 0, n = list.length; i < n; i++) {
+                        var child: ISyntaxElement = list[i];
                         updateTokenPositionsAndMarkElements(child, changeStart, changeRangeOldEnd, delta, fullStart);
                         fullStart += fullWidth(child);
+                    }
+                }
+                else if (isNode(element)) {
+                    var node = <ISyntaxNode>element;
+                    for (var i = 0, n = node.childCount; i < n; i++) {
+                        var child = node.childAt(i);
+                        if (child) {
+                            updateTokenPositionsAndMarkElements(child, changeStart, changeRangeOldEnd, delta, fullStart);
+                            fullStart += fullWidth(child);
+                        }
                     }
                 }
             }
