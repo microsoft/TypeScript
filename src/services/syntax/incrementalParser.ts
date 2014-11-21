@@ -104,10 +104,6 @@ module TypeScript.IncrementalParser {
             // start of the tree.
             for (var i = 0; start > 0 && i <= maxLookahead; i++) {
                 var token = findToken(sourceUnit, start);
-
-                // Debug.assert(token.kind !== SyntaxKind.None);
-                // Debug.assert(token.kind() === SyntaxKind.EndOfFileToken || token.fullWidth() > 0);
-
                 var position = token.fullStart();
 
                 start = Math.max(0, position - 1);
@@ -254,7 +250,6 @@ module TypeScript.IncrementalParser {
             }
         }
 
-
         function currentNode(): ISyntaxNode {
             if (trySynchronizeCursorToPosition()) {
                 // Try to read a node.  If we can't then our caller will call back in and just try
@@ -288,8 +283,6 @@ module TypeScript.IncrementalParser {
         }
 
         function tryGetNodeFromOldSourceUnit(): ISyntaxNode {
-            // Debug.assert(canReadFromOldSourceUnit());
-
             // Keep moving the cursor down to the first node that is safe to return.  A node is 
             // safe to return if:
             //  a) it does not contain skipped text.
@@ -303,9 +296,7 @@ module TypeScript.IncrementalParser {
                     return undefined;
                 }
 
-                var isIncrementallyUnusuable = TypeScript.isIncrementallyUnusable(node);
-                if (!isIncrementallyUnusuable) {
-
+                if (!TypeScript.isIncrementallyUnusable(node)) {
                     // Didn't contain anything that would make it unusable.  Awesome.  This is
                     // a node we can reuse.
                     return node;
@@ -320,9 +311,10 @@ module TypeScript.IncrementalParser {
 
         function canReuseTokenFromOldSourceUnit(token: ISyntaxToken): boolean {
             // A token is safe to return if:
-            //  a) it does not contain skipped text.
-            //  b) it is not zero width.
-            //  c) it is not a contextual parser token.
+            //  a) it did not intersect the change range.
+            //  b) it does not contain skipped text.
+            //  c) it is not zero width.
+            //  d) it is not a contextual parser token.
             //
             // NOTE: It is safe to get a token regardless of what our strict context was/is.  That's 
             // because the strict context doesn't change what tokens are scanned, only how the 
@@ -342,8 +334,6 @@ module TypeScript.IncrementalParser {
         }
 
         function tryGetTokenFromOldSourceUnit(): ISyntaxToken {
-            // Debug.assert(canReadFromOldSourceUnit());
-
             // get the current token that the cursor is pointing at.
             var token = _oldSourceUnitCursor.currentToken();
 
@@ -363,8 +353,6 @@ module TypeScript.IncrementalParser {
         }
 
         function tryPeekTokenFromOldSourceUnit(n: number): ISyntaxToken {
-            // Debug.assert(canReadFromOldSourceUnit());
-
             // clone the existing cursor so we can move it forward and then restore ourselves back
             // to where we started from.
 
@@ -512,7 +500,6 @@ module TypeScript.IncrementalParser {
 
         // Makes this cursor into a deep copy of the cursor passed in.
         function deepCopyFrom(other: SyntaxCursor): void {
-            // Debug.assert(currentPieceIndex === -1);
             for (var i = 0, n = other.pieces.length; i < n; i++) {
                 var piece = other.pieces[i];
 
@@ -522,8 +509,6 @@ module TypeScript.IncrementalParser {
 
                 pushElement(piece.element, piece.indexInParent);
             }
-
-            // Debug.assert(currentPieceIndex === other.currentPieceIndex);
         }
 
         function isFinished(): boolean {
@@ -538,9 +523,6 @@ module TypeScript.IncrementalParser {
             var result = pieces[currentPieceIndex].element;
 
             // The current element must always be a node or a token.
-            // Debug.assert(result !== undefined);
-            // Debug.assert(result.isNode() || result.isToken());
-
             return <ISyntaxNodeOrToken>result;
         }
 
@@ -564,9 +546,6 @@ module TypeScript.IncrementalParser {
                 return;
             }
 
-            // The last element must be a token or a node.
-            // Debug.assert(isNode(nodeOrToken));
-
             // Either the node has some existent child, then move to it.  if it doesn't, then it's
             // an empty node.  Conceptually the first child of an empty node is really just the 
             // next sibling of the empty node.
@@ -585,8 +564,6 @@ module TypeScript.IncrementalParser {
 
             // This element must have been an empty node.  Moving to its 'first child' is equivalent to just
             // moving to the next sibling.
-
-            // Debug.assert(fullWidth(nodeOrToken) === 0);
             moveToNextSibling();
         }
 
@@ -630,15 +607,11 @@ module TypeScript.IncrementalParser {
             if (isList(element)) {
                 // We cannot ever get an empty list in our piece path.  Empty lists are 'shared' and
                 // we make sure to filter that out before pushing any children.
-                // Debug.assert(childCount(element) > 0);
-
                 pushElement(childAt(element, 0), /*indexInParent:*/ 0);
             }
         }
 
         function pushElement(element: ISyntaxElement, indexInParent: number): void {
-            // Debug.assert(element !== undefined);
-            // Debug.assert(indexInParent >= 0);
             currentPieceIndex++;
 
             // Reuse an existing piece if we have one.  Otherwise, push a new piece to our list.
@@ -660,7 +633,6 @@ module TypeScript.IncrementalParser {
                     continue;
                 }
 
-                // Debug.assert(isToken(element));
                 return;
             }
         }
@@ -669,7 +641,6 @@ module TypeScript.IncrementalParser {
             moveToFirstToken();
 
             var element = currentNodeOrToken();
-            // Debug.assert(element === undefined || element.isToken());
             return <ISyntaxToken>element;
         }
 
