@@ -338,7 +338,7 @@ module TypeScript.IncrementalParser {
             }
         }
 
-        function canReuseTokenFromOldSourceUnit(position: number, token: ISyntaxToken): boolean {
+        function canReuseTokenFromOldSourceUnit(token: ISyntaxToken): boolean {
             // A token is safe to return if:
             //  a) it does not contain skipped text.
             //  b) it is not zero width.
@@ -355,17 +355,10 @@ module TypeScript.IncrementalParser {
             // need to make sure that if that the parser asks for a *token* we don't return it.  
             // Converted identifiers can't ever be created by the scanner, and as such, should not 
             // be returned by this source.
-            if (token) {
-                // Didn't intersect with the change range.
-                if (!token.isIncrementallyUnusable() && !Scanner.isContextualToken(token)) {
-
-                    // Didn't contain anything that would make it unusable.  Awesome.  This is
-                    // a token we can reuse.
-                    return true;
-                }
-            }
-
-            return false;
+            return token &&
+                !(<ISyntaxElementInternal><ISyntaxElement>token).intersectsChange &&
+                !token.isIncrementallyUnusable() &&
+                !Scanner.isContextualToken(token);
         }
 
         function tryGetTokenFromOldSourceUnit(): ISyntaxToken {
@@ -374,8 +367,7 @@ module TypeScript.IncrementalParser {
             // get the current token that the cursor is pointing at.
             var token = _oldSourceUnitCursor.currentToken();
 
-            return canReuseTokenFromOldSourceUnit(absolutePosition(), token)
-                ? token : undefined;
+            return canReuseTokenFromOldSourceUnit(token) ? token : undefined;
         }
 
         function peekToken(n: number): ISyntaxToken {
@@ -407,11 +399,6 @@ module TypeScript.IncrementalParser {
         }
 
         function tryPeekTokenFromOldSourceUnitWorker(n: number): ISyntaxToken {
-            // In order to peek the 'nth' token we need all the tokens up to that point.  That way
-            // we know we know position that the nth token is at.  The position is necessary so 
-            // that we can test if this token (or any that precede it cross the change range).
-            var currentPosition = absolutePosition();
-
             // First, make sure the cursor is pointing at a token.
             _oldSourceUnitCursor.moveToFirstToken();
 
@@ -419,17 +406,15 @@ module TypeScript.IncrementalParser {
             for (var i = 0; i < n; i++) {
                 var interimToken = _oldSourceUnitCursor.currentToken();
 
-                if (!canReuseTokenFromOldSourceUnit(currentPosition, interimToken)) {
+                if (!canReuseTokenFromOldSourceUnit(interimToken)) {
                     return undefined;
                 }
 
-                currentPosition += interimToken.fullWidth();
                 _oldSourceUnitCursor.moveToNextSibling();
             }
 
             var token = _oldSourceUnitCursor.currentToken();
-            return canReuseTokenFromOldSourceUnit(currentPosition, token)
-                ? token : undefined;
+            return canReuseTokenFromOldSourceUnit(token) ? token : undefined;
         }
 
         function consumeNodeOrToken(nodeOrToken: ISyntaxNodeOrToken): void {
