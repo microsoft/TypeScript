@@ -60,24 +60,22 @@ module TypeScript.IncrementalParser {
         }
 
         var delta = _changeRange.newSpan().length() - _changeRange.span().length();
-        if (delta !== 0) {
-            // If we added or removed characters during the edit, then we need to go and adjust all
-            // the nodes after the edit.  Those nodes may move forward down (if we inserted chars)
-            // or they may move backward (if we deleted chars).
-            //
-            // Doing this helps us out in two ways.  First, it means that any nodes/tokens we want
-            // to reuse are already at the appropriate position in the new text.  That way when we
-            // reuse them, we don't have to figure out if they need to be adjusted.  Second, it makes
-            // it very easy to determine if we can reuse a node.  If the node's position is at where
-            // we are in the text, then we can reuse it.  Otherwise we can't.  If hte node's position
-            // is ahead of us, then we'll need to rescan tokens.  If the node's position is behind
-            // us, then we'll need to skip it or crumble it as appropriate
-            //
-            // Also, mark any syntax elements that intersect the changed span.  We know, up front,
-            // that we cannot reuse these elements.
-            updateTokenPositionsAndMarkElements(<ISyntaxElementInternal><ISyntaxElement>oldSourceUnit,
-                _changeRange.span().start(), _changeRange.span().end(),delta);
-        }
+        // If we added or removed characters during the edit, then we need to go and adjust all
+        // the nodes after the edit.  Those nodes may move forward down (if we inserted chars)
+        // or they may move backward (if we deleted chars).
+        //
+        // Doing this helps us out in two ways.  First, it means that any nodes/tokens we want
+        // to reuse are already at the appropriate position in the new text.  That way when we
+        // reuse them, we don't have to figure out if they need to be adjusted.  Second, it makes
+        // it very easy to determine if we can reuse a node.  If the node's position is at where
+        // we are in the text, then we can reuse it.  Otherwise we can't.  If hte node's position
+        // is ahead of us, then we'll need to rescan tokens.  If the node's position is behind
+        // us, then we'll need to skip it or crumble it as appropriate
+        //
+        // Also, mark any syntax elements that intersect the changed span.  We know, up front,
+        // that we cannot reuse these elements.
+        updateTokenPositionsAndMarkElements(<ISyntaxElementInternal><ISyntaxElement>oldSourceUnit,
+            _changeRange.span().start(), _changeRange.span().end(), delta);
 
         function release() {
             _scannerParserSource.release();
@@ -199,9 +197,9 @@ module TypeScript.IncrementalParser {
             // If our current absolute position is in the middle of the changed range in the new text
             // then we definitely can't read from the old source unit right now.
             var absolutePos = absolutePosition();
-            if (_changeRangeNewSpan.intersectsWithPosition(absolutePos)) {
-                return false;
-            }
+            //if (_changeRangeNewSpan.intersectsWithPosition(absolutePos)) {
+            //    return false;
+            //}
 
             // First, try to sync up with the new text if we're behind.
             syncCursorToNewTextIfBehind();
@@ -723,9 +721,10 @@ module TypeScript.IncrementalParser {
     function updateTokenPositionsAndMarkElements(element: ISyntaxElementInternal, changeStart: number, changeRangeOldEnd: number, delta: number): void {
         if (element) {
             // First, try to skip past any elements that we dont' need to move.  We don't need to 
-            // move any elements that don't start on or after the end of the change range.  
-            if (fullStart(element) >= changeRangeOldEnd) {
-                // This element started on or after the end of the edit.  We need to move it.
+            // move any elements that don't start after the end of the change range.  
+            if (fullStart(element) > changeRangeOldEnd) {
+                // Note, we only move elements that are truly after the end of the change range.
+                // We consider elements that are touching the end of the change range to be unusable.
                 forceUpdateTokenPositionsForElement(element, delta);
             }
             else {
@@ -740,7 +739,7 @@ module TypeScript.IncrementalParser {
                     }
                 }
                 // else {
-                // This element was totally before the edited range.  We don't need to do anything 
+                // This element ended strictly before the edited range.  We don't need to do anything 
                 // with it.
                 // }
             }
@@ -748,14 +747,17 @@ module TypeScript.IncrementalParser {
     }
 
     function forceUpdateTokenPositionsForElement(element: ISyntaxElement, delta: number) {
-        if (isList(element)) {
-            var list = <ISyntaxNodeOrToken[]>element;
-            for (var i = 0, n = list.length; i < n; i++) {
-                forceUpdateTokenPositionForNodeOrToken(list[i], delta);
+        // No need to move anything if the delta is 0.
+        if (delta !== 0) {
+            if (isList(element)) {
+                var list = <ISyntaxNodeOrToken[]>element;
+                for (var i = 0, n = list.length; i < n; i++) {
+                    forceUpdateTokenPositionForNodeOrToken(list[i], delta);
+                }
             }
-        }
-        else {
-            forceUpdateTokenPositionForNodeOrToken(<ISyntaxNodeOrToken>element, delta);
+            else {
+                forceUpdateTokenPositionForNodeOrToken(<ISyntaxNodeOrToken>element, delta);
+            }
         }
     }
 
