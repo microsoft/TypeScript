@@ -191,7 +191,7 @@ declare var complicatedArrayVar: {
     y: string;
 }[];
 declare var n1: {
-    [x: string]: number;
+    [s: string]: number;
 };
 declare var c: {
     new?(): any;
@@ -212,8 +212,12 @@ declare var d2: {
         x: number;
     };
 };
-declare var n2: () => void;
-declare var n4: (() => void)[];
+declare var n2: {
+    (): void;
+};
+declare var n4: {
+    (): void;
+}[];
 declare var d4: {
     foo(n: string, x: {
         x: number;

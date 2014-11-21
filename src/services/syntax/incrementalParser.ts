@@ -592,6 +592,7 @@ module TypeScript.IncrementalParser {
             text: text,
             fileName: fileName,
             languageVersion: languageVersion,
+            absolutePosition: absolutePosition,
             currentNode: currentNode,
             currentToken: currentToken,
             currentContextualToken: currentContextualToken,

@@ -828,11 +828,15 @@ module ts {
         CannotBeNamed
     }
 
-    export interface SymbolAccessiblityResult {
+    export interface SymbolVisibilityResult {
         accessibility: SymbolAccessibility;
-        errorSymbolName?: string // Optional symbol name that results in error
-        errorModuleName?: string // If the symbol is not visible from module, module's name
         aliasesToMakeVisible?: ImportDeclaration[]; // aliases that need to have this symbol visible
+        errorSymbolName?: string; // Optional symbol name that results in error
+        errorNode?: Node; // optional node that results in error
+    }
+
+    export interface SymbolAccessiblityResult extends SymbolVisibilityResult {
+        errorModuleName?: string // If the symbol is not visible from module, module's name
     }
 
     export interface EmitResolver {
@@ -850,7 +854,7 @@ module ts {
         writeTypeAtLocation(location: Node, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter): void;
         writeReturnTypeOfSignatureDeclaration(signatureDeclaration: SignatureDeclaration, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter): void;
         isSymbolAccessible(symbol: Symbol, enclosingDeclaration: Node, meaning: SymbolFlags): SymbolAccessiblityResult;
-        isImportDeclarationEntityNameReferenceDeclarationVisibile(entityName: EntityName): SymbolAccessiblityResult;
+        isEntityNameVisible(entityName: EntityName, enclosingDeclaration: Node): SymbolVisibilityResult;
         // Returns the constant value this property access resolves to, or 'undefined' for a non-constant
         getConstantValue(node: PropertyAccess | IndexedAccess): number;
         isEmitBlocked(sourceFile?: SourceFile): boolean;

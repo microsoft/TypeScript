@@ -45,6 +45,9 @@ module TypeScript.Parser {
         // but can affect the diagnostics produced while parsing.
         languageVersion: ts.ScriptTarget;
 
+        // The place in the source text that we're currently pointing at.
+        absolutePosition(): number;
+
         // The current syntax node the source is pointing at.  Only available in incremental settings.
         // The source can point at a node if that node doesn't intersect any of the text changes in
         // the file, and doesn't contain certain unacceptable constructs.  For example, if the node
@@ -541,13 +544,32 @@ module TypeScript.Parser {
             return eatToken(SyntaxKind.SemicolonToken);
         }
 
+        function createEmptyToken(kind: SyntaxKind): ISyntaxToken {
+            // The position of the empty token we're creating is not necessarily the position that 
+            // the parser is at now.  This is because we may have seen some existing missing tokens
+            // before finally deciding we needed a missing token.  For example, if you have:
+            //
+            //      Foo(a, #    <eof>
+            //
+            // We will need to create a empty token for the missing ")".  However, we will have
+            // skipped the "#" token, and thus will be right after the "#".  Because the "#" token
+            // will actually become *skipped* trivia on the *next* token we see, the close paren
+            // should not be considered to be after #, and should instead be after the ",".
+            //
+            // So, if we have any skipped tokens, then the position of the empty token should be
+            // the position of the first skipped token we have.  Otherwise it's just at the position
+            // of the parser.
+            var fullStart = _skippedTokens ? _skippedTokens[0].fullStart() : source.absolutePosition();
+            return Syntax.emptyToken(kind, fullStart);
+        }
+
         function createMissingToken(expectedKind: SyntaxKind, actual: ISyntaxToken, diagnosticCode?: string): ISyntaxToken {
             var diagnostic = getExpectedTokenDiagnostic(expectedKind, actual, diagnosticCode);
             addDiagnostic(diagnostic);
 
             // The missing token will be at the full start of the current token.  That way empty tokens
             // will always be between real tokens and not inside an actual token.
-            return Syntax.emptyToken(expectedKind);
+            return createEmptyToken(expectedKind);
         }
 
         function getExpectedTokenDiagnostic(expectedKind: SyntaxKind, actual?: ISyntaxToken, diagnosticCode?: string): Diagnostic {
@@ -2871,7 +2893,7 @@ module TypeScript.Parser {
                     addDiagnostic(diagnostic);
 
                     return new ArgumentListSyntax(parseNodeData, typeArgumentList,
-                        Syntax.emptyToken(SyntaxKind.OpenParenToken), <any>[], Syntax.emptyToken(SyntaxKind.CloseParenToken));
+                        createEmptyToken(SyntaxKind.OpenParenToken), <any>[], createEmptyToken(SyntaxKind.CloseParenToken));
                 }
                 else {
                     Debug.assert(token0.kind === SyntaxKind.OpenParenToken);
@@ -2931,7 +2953,7 @@ module TypeScript.Parser {
                     DiagnosticCode.new_T_cannot_be_used_to_create_an_array_Use_new_Array_T_instead, undefined);
                 addDiagnostic(diagnostic);
 
-                return Syntax.emptyToken(SyntaxKind.IdentifierName);
+                return createEmptyToken(SyntaxKind.IdentifierName);
             }
             else {
                 return allowInAnd(parseExpression);
@@ -3086,7 +3108,7 @@ module TypeScript.Parser {
             else {
                 var diagnostic = getExpectedTokenDiagnostic(SyntaxKind.CloseBraceToken);
                 addDiagnostic(diagnostic);
-                token = Syntax.emptyToken(SyntaxKind.TemplateEndToken);
+                token = createEmptyToken(SyntaxKind.TemplateEndToken);
             }
 
             return new TemplateClauseSyntax(parseNodeData, expression, token);
@@ -4219,7 +4241,7 @@ module TypeScript.Parser {
                 // consume the '}' just fine.  So ASI doesn't apply.
 
                 if (allowAutomaticSemicolonInsertion && canEatAutomaticSemicolon(/*allowWithoutNewline:*/ false)) {
-                    var semicolonToken = eatExplicitOrAutomaticSemicolon(/*allowWithoutNewline:*/ false) || Syntax.emptyToken(SyntaxKind.SemicolonToken);
+                    var semicolonToken = eatExplicitOrAutomaticSemicolon(/*allowWithoutNewline:*/ false) || createEmptyToken(SyntaxKind.SemicolonToken);
                     nodesAndSeparators.push(semicolonToken);
                     // Debug.assert(items.length % 2 === 0);
                     continue;

@@ -120,9 +120,9 @@ export declare module C {
     class B {
     }
     function F<T>(x: T): A<B>;
-    function F2<T>(x: T): A<B>;
-    function F3<T>(x: T): A<B>[];
-    function F4<T extends A<B>>(x: T): A<B>[];
+    function F2<T>(x: T): C.A<C.B>;
+    function F3<T>(x: T): C.A<C.B>[];
+    function F4<T extends A<B>>(x: T): Array<C.A<C.B>>;
     function F5<T>(): T;
     function F6<T extends A<B>>(x: T): T;
     class D<T> {
