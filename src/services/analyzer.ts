@@ -36,12 +36,12 @@ interface AnalyzedFile {
 function analyze(libFileName: string, files: string[], outputFolder: string): string[] {
     var program = createProgram(files);
     var fileNames = ts.map(program.getSourceFiles(), f => f.filename);
-    var scriptSnapshots: ts.Map<TypeScript.IScriptSnapshot> = {};
+    var scriptSnapshots: ts.Map<ts.IScriptSnapshot> = {};
 
     var checker = program.getTypeChecker(/*fullTypeCheckMode*/ false)
 
     ts.forEach(program.getSourceFiles(), f => {
-        scriptSnapshots[f.filename] = TypeScript.ScriptSnapshot.fromString(f.text);
+        scriptSnapshots[f.filename] = ts.ScriptSnapshot.fromString(f.text);
     });
 
     var host: ts.LanguageServiceHost = {
@@ -72,7 +72,7 @@ function analyze(libFileName: string, files: string[], outputFolder: string): st
     var processedFiles: string[] = [];
     for (var i = 0, len = sourceFiles.length; i < len; ++i) {
         var f = sourceFiles[i];
-        var fileSpan = new TypeScript.TextSpan(0, f.text.length);
+        var fileSpan = new ts.TextSpan(0, f.text.length);
 
         var syntacticClassifications = ls.getSyntacticClassifications(f.filename, fileSpan);
         var convertedSyntactic = convertClassifications(syntacticClassifications, f, /*addHyperlinks*/ true);
@@ -176,13 +176,13 @@ function analyze(libFileName: string, files: string[], outputFolder: string): st
                 case ts.SyntaxKind.TypeParameter:
                 case ts.SyntaxKind.VariableDeclaration:
                 case ts.SyntaxKind.FunctionDeclaration:
-                    return ts.identifierToString((<ts.Declaration>decl).name); // take a shortcut
+                    return ts.declarationNameToString((<ts.Declaration>decl).name); // take a shortcut
                 case ts.SyntaxKind.GetAccessor:
                 case ts.SyntaxKind.SetAccessor:
                 case ts.SyntaxKind.Property:
                 case ts.SyntaxKind.PropertyAssignment:
                     if (curr.parent && curr.parent.kind === ts.SyntaxKind.TypeLiteral) {
-                        return ts.identifierToString((<ts.Declaration>decl).name); // take a shortcut
+                        return ts.declarationNameToString((<ts.Declaration>decl).name); // take a shortcut
                     }
                 case ts.SyntaxKind.EnumMember:
                 case ts.SyntaxKind.ClassDeclaration:
@@ -190,7 +190,7 @@ function analyze(libFileName: string, files: string[], outputFolder: string): st
                 case ts.SyntaxKind.EnumDeclaration:
                 case ts.SyntaxKind.ModuleDeclaration:
                 case ts.SyntaxKind.ImportDeclaration:
-                    var currName = ts.identifierToString((<ts.Declaration>curr).name);
+                    var currName = ts.declarationNameToString((<ts.Declaration>curr).name);
                     name = name.length ? currName + "." + name : currName;
                 default:
                     curr = curr.parent;
@@ -230,7 +230,7 @@ function analyze(libFileName: string, files: string[], outputFolder: string): st
                         }
                         var declaration = token && getDeclarationForName(token);
                         if (declaration) {
-                            searchString = declaration.name && ts.identifierToString(declaration.name);
+                            searchString = declaration.name && ts.declarationNameToString(declaration.name);
                             definitionKind = getDeclarationName(declaration);
                             fullName = getQualifiedName(declaration);
                             if (declaration.name) {
@@ -243,7 +243,7 @@ function analyze(libFileName: string, files: string[], outputFolder: string): st
                         else if (token.kind === ts.SyntaxKind.Identifier && token.parent && token.parent.kind === ts.SyntaxKind.LabeledStatement) {
                             // label
                             definitionKind = "label";
-                            fullName = ts.identifierToString(<ts.Identifier>token);
+                            fullName = ts.declarationNameToString(<ts.Identifier>token);
                             definitionSymbolId = makeSymbolId(f.filename, token.getStart());
                         }
                         else  {

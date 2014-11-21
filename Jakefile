@@ -277,7 +277,7 @@ task("clean", function() {
 });
 
 var analyzerFile = path.join(builtLocalDirectory, "analyzer.js")
-compileFile(analyzerFile, ["src/services/compiler/precompile.ts", "src/services/analyzer.ts"], [builtLocalDirectory].concat(servicesSources), [], true, false, true);
+compileFile(analyzerFile, ["src/services/analyzer.ts"], [builtLocalDirectory].concat(servicesSources), [], true, false, true);
 
 desc("Builds analyzer");
 task("analyzer", [analyzerFile]);
