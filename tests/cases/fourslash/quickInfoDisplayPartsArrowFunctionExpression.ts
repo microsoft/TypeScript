@@ -17,7 +17,7 @@ function verifyInstance(instanceName: string, paramCount: number, type: string) 
         if (i) {
             displayParts.push({ text: ",", kind: "punctuation" }, { text: " ", kind: "space" });
         }
-        displayParts.push({ text: i ? "a" : "b", kind: "parameterName" }, { text: ":", kind: "punctuation" },
+        displayParts.push({ text: !i ? "a" : "b", kind: "parameterName" }, { text: ":", kind: "punctuation" },
             { text: " ", kind: "space" }, { text: type, kind: "keyword" });
     }
     displayParts.push({ text: ")", kind: "punctuation" }, { text: " ", kind: "space" },
