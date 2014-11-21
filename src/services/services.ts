@@ -911,6 +911,8 @@ module ts {
 
         getEmitOutput(fileName: string): EmitOutput;
 
+        getSourceFile(filename: string): SourceFile;
+
         dispose(): void;
     }
 
@@ -1143,7 +1145,7 @@ module ts {
     }
 
     export interface Classifier {
-        getClassificationsForLine(text: string, lexState: EndOfLineState): ClassificationResult;
+        getClassificationsForLine(text: string, lexState: EndOfLineState, classifyKeywordsInGenerics?: boolean): ClassificationResult;
     }
 
     export interface DocumentRegistry {
@@ -5370,6 +5372,7 @@ module ts {
             getFormattingEditsForDocument,
             getFormattingEditsAfterKeystroke,
             getEmitOutput,
+            getSourceFile: getCurrentSourceFile,
         };
     }
 
@@ -5429,7 +5432,8 @@ module ts {
             return true;
         }
 
-        function getClassificationsForLine(text: string, lexState: EndOfLineState): ClassificationResult {
+        // 'classifyKeywordsInGenerics' should be 'true' when a syntactic classifier is not present.
+        function getClassificationsForLine(text: string, lexState: EndOfLineState, classifyKeywordsInGenerics?: boolean): ClassificationResult {
             var offset = 0;
             var token = SyntaxKind.Unknown;
             var lastNonTriviaToken = SyntaxKind.Unknown;
@@ -5516,7 +5520,7 @@ module ts {
                              token === SyntaxKind.StringKeyword ||
                              token === SyntaxKind.NumberKeyword ||
                              token === SyntaxKind.BooleanKeyword) {
-                        if (angleBracketStack > 0) {
+                        if (angleBracketStack > 0 && !classifyKeywordsInGenerics) {
                             // If it looks like we're could be in something generic, don't classify this 
                             // as a keyword.  We may just get overwritten by the syntactic classifier,
                             // causing a noisy experience for the user.
