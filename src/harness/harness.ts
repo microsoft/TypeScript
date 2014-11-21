@@ -866,7 +866,7 @@ module Harness {
                                 var sourceFileName: string;
                                 if (ts.isExternalModule(sourceFile) || !options.out) {
                                     if (options.outDir) {
-                                        var sourceFilePath = ts.getNormalizedPathFromPathComponents(ts.getNormalizedPathComponents(sourceFile.filename, result.currentDirectoryForProgram));
+                                        var sourceFilePath = ts.getNormalizedAbsolutePath(sourceFile.filename, result.currentDirectoryForProgram);
                                         sourceFilePath = sourceFilePath.replace(result.program.getCommonSourceDirectory(), "");
                                         sourceFileName = ts.combinePaths(options.outDir, sourceFilePath);
                                     }
