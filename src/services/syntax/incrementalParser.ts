@@ -172,7 +172,7 @@ module TypeScript.IncrementalParser {
             return _outstandingRewindPointCount > 0;
         }
 
-        function canReadFromOldSourceUnit() {
+        function trySynchronizeCursorToPosition() {
             // If we're currently pinned, then do not want to touch the cursor.  Here's why.  First,
             // recall that we're 'pinned' when we're speculatively parsing.  So say we were to allow
             // returning old nodes/tokens while speculatively parsing. Then, the parser might start
@@ -194,64 +194,11 @@ module TypeScript.IncrementalParser {
                 return false;
             }
 
-            // If our current absolute position is in the middle of the changed range in the new text
-            // then we definitely can't read from the old source unit right now.
             var absolutePos = absolutePosition();
-            //if (_changeRangeNewSpan.intersectsWithPosition(absolutePos)) {
-            //    return false;
-            //}
-
-            // First, try to sync up with the new text if we're behind.
-            syncCursorToNewTextIfBehind();
-
-            // Now see what the position is of the node we're considering reusing.  If it's at our
-            // current position then we can *potentialy* reuse it.  We'll still need to do more 
-            // viability checks later on.  This will happen in tryGetNodeFromOldSourceUnit or
-            // tryGetTokenFromOldSourceUnit.
-            var currentNodeOrToken = _oldSourceUnitCursor.currentNodeOrToken();
-
-            // we should never return a node or token that intersects the change range.
-            Debug.assert(currentNodeOrToken === undefined || !(<ISyntaxElementInternal><ISyntaxElement>currentNodeOrToken).intersectsChange);
-            return currentNodeOrToken && fullStart(currentNodeOrToken) === absolutePos;
-        }
-
-        function currentNode(): ISyntaxNode {
-            if (canReadFromOldSourceUnit()) {
-                // Try to read a node.  If we can't then our caller will call back in and just try
-                // to get a token.
-                var node = tryGetNodeFromOldSourceUnit();
-                if (node) {
-                    return node;
-                }
-            }
-
-            // Either we were ahead of the old text, or we were pinned.  No node can be read here.
-            return undefined;
-        }
-
-        function currentToken(): ISyntaxToken {
-            if (canReadFromOldSourceUnit()) {
-                var token = tryGetTokenFromOldSourceUnit();
-                if (token) {
-                    return token;
-                }
-            }
-
-            // Either we couldn't read from the old source unit, or we weren't able to successfully
-            // get a token from it.  In this case we need to read a token from the underlying text.
-            return _scannerParserSource.currentToken();
-        }
-
-        function currentContextualToken(): ISyntaxToken {
-            // Just delegate to the underlying source to handle 
-            return _scannerParserSource.currentContextualToken();
-        }
-
-        function syncCursorToNewTextIfBehind() {
             while (true) {
                 if (_oldSourceUnitCursor.isFinished()) {
-                    // Can't sync up if the cursor is finished.
-                    return;
+                    // Can't synchronize the cursor to the current position if the cursor is finished.
+                    return false;
                 }
 
                 // Start with the current node or token the cursor is pointing at.
@@ -273,15 +220,17 @@ module TypeScript.IncrementalParser {
                     continue;
                 }
 
-                var absolutePos = absolutePosition();
-
                 var currentNodeOrTokenFullStart = fullStart(currentNodeOrToken);
+                if (currentNodeOrTokenFullStart === absolutePos) {
+                    // We were able to synchronize the cursor to the current position.  We can
+                    // read from the cursor
+                    return true;
+                }
+
                 if (currentNodeOrTokenFullStart >= absolutePos) {
-                    // The node or token is either where we're at, or ahead of where we're at. If 
-                    // it's where we're at, there's no work to be done.  If it's ahead of where 
-                    // we're at, we need to rescan tokens until we catch up.  in either case,
-                    // we don't need to sync the cursor.
-                    return;
+                    // The node or token is ahead of the current position. We'll need to rescan 
+                    // tokens until we catch up.
+                    return false;
                 }
 
                 // The node or is behind the current position we're at in the text.
@@ -303,6 +252,39 @@ module TypeScript.IncrementalParser {
                     _oldSourceUnitCursor.moveToFirstChild();
                 }
             }
+        }
+
+
+        function currentNode(): ISyntaxNode {
+            if (trySynchronizeCursorToPosition()) {
+                // Try to read a node.  If we can't then our caller will call back in and just try
+                // to get a token.
+                var node = tryGetNodeFromOldSourceUnit();
+                if (node) {
+                    return node;
+                }
+            }
+
+            // Either we were ahead of the old text, or we were pinned.  No node can be read here.
+            return undefined;
+        }
+
+        function currentToken(): ISyntaxToken {
+            if (trySynchronizeCursorToPosition()) {
+                var token = tryGetTokenFromOldSourceUnit();
+                if (token) {
+                    return token;
+                }
+            }
+
+            // Either we couldn't read from the old source unit, or we weren't able to successfully
+            // get a token from it.  In this case we need to read a token from the underlying text.
+            return _scannerParserSource.currentToken();
+        }
+
+        function currentContextualToken(): ISyntaxToken {
+            // Just delegate to the underlying source to handle 
+            return _scannerParserSource.currentContextualToken();
         }
 
         function tryGetNodeFromOldSourceUnit(): ISyntaxNode {
@@ -369,7 +351,7 @@ module TypeScript.IncrementalParser {
         }
 
         function peekToken(n: number): ISyntaxToken {
-            if (canReadFromOldSourceUnit()) {
+            if (trySynchronizeCursorToPosition()) {
                 var token = tryPeekTokenFromOldSourceUnit(n);
                 if (token) {
                     return token;
