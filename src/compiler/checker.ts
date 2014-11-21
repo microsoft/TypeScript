@@ -5063,6 +5063,20 @@ module ts {
             return mapper && mapper !== identityMapper;
         }
 
+        function isAssignmentTarget(node: Node): boolean {
+            var parent = node.parent;
+            if (parent.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>parent).operator === SyntaxKind.EqualsToken && (<BinaryExpression>parent).left === node) {
+                return true;
+            }
+            if (parent.kind === SyntaxKind.PropertyAssignment) {
+                return isAssignmentTarget(parent.parent);
+            }
+            if (parent.kind === SyntaxKind.ArrayLiteral) {
+                return isAssignmentTarget(parent);
+            }
+            return false;
+        }
+
         function checkArrayLiteral(node: ArrayLiteral, contextualMapper?: TypeMapper): Type {
             var elements = node.elements;
             if (!elements.length) {
@@ -5070,7 +5084,7 @@ module ts {
             }
             var elementTypes = map(elements, e => checkExpression(e, contextualMapper));
             var contextualType = getContextualType(node);
-            if (contextualType && contextualTypeIsTupleType(contextualType)) {
+            if ((contextualType && contextualTypeIsTupleType(contextualType)) || isAssignmentTarget(node)) {
                 return createTupleType(elementTypes);
             }
             return createArrayType(getUnionType(elementTypes));
@@ -6340,8 +6354,76 @@ module ts {
             return booleanType;
         }
 
+        function checkObjectLiteralAssignment(node: ObjectLiteral, sourceType: Type, contextualMapper?: TypeMapper): Type {
+            var properties = node.properties;
+            for (var i = 0; i < properties.length; i++) {
+                var p = properties[i];
+                if (p.kind === SyntaxKind.PropertyAssignment || p.kind === SyntaxKind.ShorthandPropertyAssignment) {
+                    // TODO(andersh): Computed property support
+                    var name = <Identifier>((<PropertyDeclaration>p).name);
+                    var type = getTypeOfPropertyOfType(sourceType, name.text) ||
+                        isNumericName(name.text) && getIndexTypeOfType(sourceType, IndexKind.Number) ||
+                        getIndexTypeOfType(sourceType, IndexKind.String);
+                    if (type) {
+                        checkDestructuringAssignment((<PropertyDeclaration>p).initializer || name, type);
+                    }
+                    else {
+                        error(name, Diagnostics.Type_0_has_no_property_1_and_no_string_index_signature, typeToString(sourceType), declarationNameToString(name));
+                    }
+                }
+                else {
+                    error(p, Diagnostics.Property_assignment_expected);
+                }
+            }
+            return sourceType;
+        }
+
+        function checkArrayLiteralAssignment(node: ArrayLiteral, sourceType: Type, contextualMapper?: TypeMapper): Type {
+            var isTupleType = getPropertyOfType(sourceType, "0");
+            var elements = node.elements;
+            for (var i = 0; i < elements.length; i++) {
+                var e = elements[i];
+                if (e.kind !== SyntaxKind.OmittedExpression) {
+                    if (isTupleType) {
+                        var propName = "" + i;
+                        var type = getTypeOfPropertyOfType(sourceType, propName);
+                        if (!type) {
+                            error(e, Diagnostics.Type_0_has_no_property_1, typeToString(sourceType), propName);
+                        }
+                    }
+                    else {
+                        var type = getIndexTypeOfType(sourceType, IndexKind.Number);
+                        if (!type) {
+                            error(e, Diagnostics.Type_0_has_no_numeric_index_signature, typeToString(sourceType));
+                        }
+                    }
+                }
+                if (type) {
+                    checkDestructuringAssignment(e, type, contextualMapper);
+                }
+            }
+            return sourceType;
+        }
+
+        function checkDestructuringAssignment(target: Expression, sourceType: Type, contextualMapper?: TypeMapper): Type {
+            if (target.kind === SyntaxKind.ObjectLiteral) {
+                return checkObjectLiteralAssignment(<ObjectLiteral>target, sourceType, contextualMapper);
+            }
+            if (target.kind === SyntaxKind.ArrayLiteral) {
+                return checkArrayLiteralAssignment(<ArrayLiteral>target, sourceType, contextualMapper);
+            }
+            var targetType = checkExpression(target, contextualMapper);
+            if (checkReferenceExpression(target, Diagnostics.Invalid_left_hand_side_of_assignment_expression, Diagnostics.Left_hand_side_of_assignment_expression_cannot_be_a_constant)) {
+                checkTypeAssignableTo(sourceType, targetType, target, /*headMessage*/ undefined);
+            }
+            return sourceType;
+        }
+
         function checkBinaryExpression(node: BinaryExpression, contextualMapper?: TypeMapper) {
             var operator = node.operator;
+            if (operator === SyntaxKind.EqualsToken && (node.left.kind === SyntaxKind.ObjectLiteral || node.left.kind === SyntaxKind.ArrayLiteral)) {
+                return checkDestructuringAssignment(node.left, checkExpression(node.right, contextualMapper), contextualMapper);
+            }
             var leftType = checkExpression(node.left, contextualMapper);
             var rightType = checkExpression(node.right, contextualMapper);
             switch (operator) {
