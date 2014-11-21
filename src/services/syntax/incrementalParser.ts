@@ -75,7 +75,7 @@ module TypeScript.IncrementalParser {
         // Also, mark any syntax elements that intersect the changed span.  We know, up front,
         // that we cannot reuse these elements.
         updateTokenPositionsAndMarkElements(<ISyntaxElementInternal><ISyntaxElement>oldSourceUnit,
-            _changeRange.span().start(), _changeRange.span().end(), delta);
+            _changeRange.span().start(), _changeRange.span().end(), delta, /*fullStart:*/ 0);
 
         function release() {
             _scannerParserSource.release();
@@ -718,31 +718,34 @@ module TypeScript.IncrementalParser {
     }
 
     var tokenCollectorWalker = new TokenCollectorWalker();
-    function updateTokenPositionsAndMarkElements(element: ISyntaxElementInternal, changeStart: number, changeRangeOldEnd: number, delta: number): void {
-        if (element) {
+    function updateTokenPositionsAndMarkElements(element: ISyntaxElementInternal, changeStart: number, changeRangeOldEnd: number, delta: number, fullStart: number): void {
             // First, try to skip past any elements that we dont' need to move.  We don't need to 
             // move any elements that don't start after the end of the change range.  
-            if (fullStart(element) > changeRangeOldEnd) {
-                // Note, we only move elements that are truly after the end of the change range.
-                // We consider elements that are touching the end of the change range to be unusable.
-                forceUpdateTokenPositionsForElement(element, delta);
-            }
-            else {
-                // Check if the element intersects the change range.  If it does, then it is not
-                // reusable.  Also, we'll need to recurse to see what constituent portions we may
-                // be able to use.
-                if (fullEnd(element) >= changeStart) {
-                    element.intersectsChange = true;
+        if (fullStart > changeRangeOldEnd) {
+            // Note, we only move elements that are truly after the end of the change range.
+            // We consider elements that are touching the end of the change range to be unusable.
+            forceUpdateTokenPositionsForElement(element, delta);
+        }
+        else {
+            // Check if the element intersects the change range.  If it does, then it is not
+            // reusable.  Also, we'll need to recurse to see what constituent portions we may
+            // be able to use.
+            var fullEnd = fullStart + fullWidth(element);
+            if (fullEnd >= changeStart) {
+                element.intersectsChange = true;
 
-                    for (var i = 0, n = childCount(element); i < n; i++) {
-                        updateTokenPositionsAndMarkElements(<ISyntaxElementInternal>childAt(element, i), changeStart, changeRangeOldEnd, delta);
+                for (var i = 0, n = childCount(element); i < n; i++) {
+                    var child = <ISyntaxElementInternal>childAt(element, i);
+                    if (child) {
+                        updateTokenPositionsAndMarkElements(child, changeStart, changeRangeOldEnd, delta, fullStart);
+                        fullStart += fullWidth(child);
                     }
                 }
-                // else {
-                // This element ended strictly before the edited range.  We don't need to do anything 
-                // with it.
-                // }
             }
+            // else {
+            // This element ended strictly before the edited range.  We don't need to do anything 
+            // with it.
+            // }
         }
     }
 
