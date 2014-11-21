@@ -6,7 +6,7 @@ module TypeScript.IncrementalParser {
         oldSourceUnitCursor: SyntaxCursor;
     }
 
-    interface ISyntaxElementInternal extends ISyntaxToken {
+    interface ISyntaxElementInternal extends ISyntaxElement {
         intersectsChange: boolean;
     }
 
