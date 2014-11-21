@@ -70,8 +70,7 @@ module TypeScript.Parser {
 
         // Called to move the source to the next node or token once the parser has consumed the 
         // current one.
-        consumeNode(node: ISyntaxNode): void;
-        consumeToken(token: ISyntaxToken): void;
+        consumeNodeOrToken(node: ISyntaxNodeOrToken): void;
 
         // Gets a rewind point that the parser can use to move back to after it speculatively 
         // parses something.  The source guarantees that if the parser calls 'rewind' with that 
@@ -320,14 +319,14 @@ module TypeScript.Parser {
             // call 'consumeToken'.  Doing so would attempt to add any previous skipped tokens
             // to this token we're skipping.  We don't want to do that.  Instead, we want to add
             // all the skipped tokens when we finally eat the next good token.
-            source.consumeToken(token)
+            source.consumeNodeOrToken(token)
         }
 
         function consumeToken(token: ISyntaxToken): ISyntaxToken {
             // Debug.assert(token.fullWidth() > 0 || token.kind === SyntaxKind.EndOfFileToken);
 
             // First, tell our source that the token has been consumed.
-            source.consumeToken(token);
+            source.consumeNodeOrToken(token);
 
             // Now, if we had any skipped tokens, we want to add them to the start of this token
             // we're consuming.
@@ -385,7 +384,7 @@ module TypeScript.Parser {
 
         function consumeNode(node: ISyntaxNode): void {
             Debug.assert(_skippedTokens === undefined);
-            source.consumeNode(node);
+            source.consumeNodeOrToken(node);
         }
 
         //this method is called very frequently

@@ -4,8 +4,10 @@ module TypeScript.IncrementalParser {
     interface IParserRewindPoint {
         // Information used by the incremental parser source.
         oldSourceUnitCursor: SyntaxCursor;
-        changeDelta: number;
-        changeRange: TextChangeRange;
+    }
+
+    interface ISyntaxElementInternal extends ISyntaxToken {
+        intersectsChange: boolean;
     }
 
     // Parser source used in incremental scenarios. This parser source wraps an old tree, text 
@@ -31,40 +33,15 @@ module TypeScript.IncrementalParser {
         //
         // This parser source also keeps track of the absolute position in the text that we're in,
         // and any token diagnostics produced.  That way we dont' have to track that ourselves.
-        var _scannerParserSource: Scanner.IScannerParserSource;
-
-        // The range of text in the *original* text that was changed, and the new length of it after
-        // the change.
-        var _changeRange: TextChangeRange;
-
-        // Cached value of _changeRange.newSpan().  Cached for performance.
-        var _changeRangeNewSpan: TextSpan;
-
-        // This number represents how our position in the old tree relates to the position we're 
-        // pointing at in the new text.  If it is 0 then our positions are in sync and we can read
-        // nodes or tokens from the old tree.  If it is non-zero, then our positions are not in 
-        // sync and we cannot use nodes or tokens from the old tree.
-        //
-        // Now, changeDelta could be negative or positive.  Negative means 'the position we're at
-        // in the original tree is behind the position we're at in the text'.  In this case we 
-        // keep throwing out old nodes or tokens (and thus move forward in the original tree) until
-        // changeDelta becomes 0 again or positive.  If it becomes 0 then we are resynched and can
-        // read nodes or tokesn from the tree.
-        //
-        // If changeDelta is positive, that means the current node or token we're pointing at in 
-        // the old tree is at a further ahead position than the position we're pointing at in the
-        // new text.  In this case we have no choice but to scan tokens from teh new text.  We will
-        // continue to do so until, again, changeDelta becomes 0 and we've resynced, or change delta
-        // becomes negative and we need to skip nodes or tokes in the original tree.
-        var _changeDelta: number = 0;
+        var _scannerParserSource = Scanner.createParserSource(oldSyntaxTree.fileName(), text, oldSyntaxTree.languageVersion());
 
         // The cursor we use to navigate through and retrieve nodes and tokens from the old tree.
-        var _oldSourceUnitCursor = getSyntaxCursor();
         var oldSourceUnit = oldSyntaxTree.sourceUnit();
 
         var _outstandingRewindPointCount = 0;
 
         // Start the cursor pointing at the first element in the source unit (if it exists).
+        var _oldSourceUnitCursor = getSyntaxCursor();
         if (oldSourceUnit.moduleElements.length > 0) {
             _oldSourceUnitCursor.pushElement(childAt(oldSourceUnit.moduleElements, 0), /*indexInParent:*/ 0);
         }
@@ -74,8 +51,10 @@ module TypeScript.IncrementalParser {
         // time this could be problematic would be if the user made a ton of discontinuous edits.
         // For example, doing a column select on a *large* section of a code.  If this is a 
         // problem, we can always update this code to handle multiple changes.
-        _changeRange = extendToAffectedRange(textChangeRange, oldSourceUnit);
-        _changeRangeNewSpan = _changeRange.newSpan();
+        var _changeRange = extendToAffectedRange(textChangeRange, oldSourceUnit);
+
+        // Cached value of _changeRange.newSpan().  Cached for performance.
+        var _changeRangeNewSpan = _changeRange.newSpan();
 
         // The old tree's length, plus whatever length change was caused by the edit
         // Had better equal the new text's length!
@@ -83,8 +62,25 @@ module TypeScript.IncrementalParser {
             Debug.assert((fullWidth(oldSourceUnit) - _changeRange.span().length() + _changeRange.newLength()) === text.length());
         }
 
-        // Set up a scanner so that we can scan tokens out of the new text.
-        _scannerParserSource = Scanner.createParserSource(oldSyntaxTree.fileName(), text, oldSyntaxTree.languageVersion());
+        var delta = _changeRange.newSpan().length() - _changeRange.span().length();
+        if (delta !== 0) {
+            // If we added or removed characters during the edit, then we need to go and adjust all
+            // the nodes after the edit.  Those nodes may move forward down (if we inserted chars)
+            // or they may move backward (if we deleted chars).
+            //
+            // Doing this helps us out in two ways.  First, it means that any nodes/tokens we want
+            // to reuse are already at the appropriate position in the new text.  That way when we
+            // reuse them, we don't have to figure out if they need to be adjusted.  Second, it makes
+            // it very easy to determine if we can reuse a node.  If the node's position is at where
+            // we are in the text, then we can reuse it.  Otherwise we can't.  If hte node's position
+            // is ahead of us, then we'll need to rescan tokens.  If the node's position is behind
+            // us, then we'll need to skip it or crumble it as appropriate
+            //
+            // Also, mark any syntax elements that intersect the changed span.  We know, up front,
+            // that we cannot reuse these elements.
+            updateTokenPositionsAndMarkElements(<ISyntaxElementInternal><ISyntaxElement>oldSourceUnit,
+                _changeRange.span().start(), _changeRange.span().end(),delta);
+        }
 
         function release() {
             _scannerParserSource.release();
@@ -93,8 +89,7 @@ module TypeScript.IncrementalParser {
             _outstandingRewindPointCount = 0;
         }
 
-        function extendToAffectedRange(changeRange: TextChangeRange,
-            sourceUnit: SourceUnitSyntax): TextChangeRange {
+        function extendToAffectedRange(changeRange: TextChangeRange, sourceUnit: SourceUnitSyntax): TextChangeRange {
             // Consider the following code:
             //      void foo() { /; }
             //
@@ -105,14 +100,6 @@ module TypeScript.IncrementalParser {
             // (as it does not intersect the actual original change range).  Because an edit may
             // change the token touching it, we actually need to look back *at least* one token so
             // that the prior token sees that change.  
-            //
-            // Note: i believe (outside of regex tokens) max lookahead is just one token for 
-            // TypeScript.  However, if this turns out to be wrong, we may have to increase how much
-            // futher we look back. 
-            //
-            // Note: lookahead handling for regex characters is handled specially in during 
-            // incremental parsing, and does not need to be handled here.
-
             var maxLookahead = 1;
 
             var start = changeRange.span().start();
@@ -149,17 +136,13 @@ module TypeScript.IncrementalParser {
             // Get a rewind point for our new text reader and for our old source unit cursor.
             var rewindPoint = <IParserRewindPoint>_scannerParserSource.getRewindPoint();
 
-            // Clone our cursor.  That way we can restore to that point if hte parser needs to rewind.
+            // Clone our cursor.  That way we can restore to that point if the parser needs to rewind.
             var oldSourceUnitCursorClone = cloneSyntaxCursor(_oldSourceUnitCursor);
 
             // Store where we were when the rewind point was created.
-            rewindPoint.changeDelta = _changeDelta;
-            rewindPoint.changeRange = _changeRange;
             rewindPoint.oldSourceUnitCursor = _oldSourceUnitCursor;
 
             _oldSourceUnitCursor = oldSourceUnitCursorClone;
-
-            // Debug.assert(rewindPoint.pinCount === _oldSourceUnitCursor.pinCount());
 
             _outstandingRewindPointCount++;
             return rewindPoint;
@@ -167,15 +150,13 @@ module TypeScript.IncrementalParser {
 
         function rewind(rewindPoint: IParserRewindPoint): void {
             // Restore our state to the values when the rewind point was created.
-            _changeRange = rewindPoint.changeRange;
-            _changeDelta = rewindPoint.changeDelta;
 
             // Reset the cursor to what it was when we got the rewind point.  Make sure to return 
             // our existing cursor to the pool so it can be reused.
             returnSyntaxCursor(_oldSourceUnitCursor);
             _oldSourceUnitCursor = rewindPoint.oldSourceUnitCursor;
 
-            // Null out the cursor that the rewind point points to.  This way we don't try
+            // Clear the cursor that the rewind point points to.  This way we don't try
             // to return it in 'releaseRewindPoint'.
             rewindPoint.oldSourceUnitCursor = undefined;
 
@@ -220,69 +201,23 @@ module TypeScript.IncrementalParser {
 
             // If our current absolute position is in the middle of the changed range in the new text
             // then we definitely can't read from the old source unit right now.
-            if (_changeRange && _changeRangeNewSpan.intersectsWithPosition(absolutePosition())) {
+            var absolutePos = absolutePosition();
+            if (_changeRangeNewSpan.intersectsWithPosition(absolutePos)) {
                 return false;
             }
 
             // First, try to sync up with the new text if we're behind.
             syncCursorToNewTextIfBehind();
 
-            // Now, if we're synced up *and* we're not currently pinned in the new text scanner,
-            // then we can read a node from the cursor.  If we're pinned in the scanner then we
-            // can't read a node from the cursor because we will mess up the pinned scanner when
-            // we try to move it forward past this node.
-            return _changeDelta === 0 &&
-                !_oldSourceUnitCursor.isFinished();
-        }
+            // Now see what the position is of the node we're considering reusing.  If it's at our
+            // current position then we can *potentialy* reuse it.  We'll still need to do more 
+            // viability checks later on.  This will happen in tryGetNodeFromOldSourceUnit or
+            // tryGetTokenFromOldSourceUnit.
+            var currentNodeOrToken = _oldSourceUnitCursor.currentNodeOrToken();
 
-        function updateTokenPosition(token: ISyntaxToken): void {
-            // If we got a node or token, and we're past the range of edited text, then walk its
-            // constituent tokens, making sure all their positions are correct.  We don't need to
-            // do this for the tokens before the edited range (since their positions couldn't have 
-            // been affected by the edit), and we don't need to do this for the tokens in the 
-            // edited range, as their positions will be correct when the underlying parser source 
-            // creates them.
-
-            if (isPastChangeRange()) {
-                token.setFullStart(absolutePosition());
-            }
-        }
-
-        function updateNodePosition(node: ISyntaxNode): void {
-            // If we got a node or token, and we're past the range of edited text, then walk its
-            // constituent tokens, making sure all their positions are correct.  We don't need to
-            // do this for the tokens before the edited range (since their positions couldn't have 
-            // been affected by the edit), and we don't need to do this for the tokens in the 
-            // edited range, as their positions will be correct when the underlying parser source 
-            // creates them.
-
-            if (isPastChangeRange()) {
-                var position = absolutePosition();
-
-                var tokens = getTokens(node);
-
-                for (var i = 0, n = tokens.length; i < n; i++) {
-                    var token = tokens[i];
-                    token.setFullStart(position);
-
-                    position += token.fullWidth();
-                }
-            }
-        }
-
-        function getTokens(node: ISyntaxNode): ISyntaxToken[] {
-            var tokens = node.__cachedTokens;
-            if (!tokens) {
-                tokens = [];
-                tokenCollectorWalker.tokens = tokens;
-
-                visitNodeOrToken(tokenCollectorWalker, node);
-
-                node.__cachedTokens = tokens;
-                tokenCollectorWalker.tokens = undefined;
-            }
-
-            return tokens;
+            // we should never return a node or token that intersects the change range.
+            Debug.assert(currentNodeOrToken === undefined || !(<ISyntaxElementInternal><ISyntaxElement>currentNodeOrToken).intersectsChange);
+            return currentNodeOrToken && fullStart(currentNodeOrToken) === absolutePos;
         }
 
         function currentNode(): ISyntaxNode {
@@ -291,8 +226,6 @@ module TypeScript.IncrementalParser {
                 // to get a token.
                 var node = tryGetNodeFromOldSourceUnit();
                 if (node) {
-                    // Make sure the positions for the tokens in this node are correct.
-                    updateNodePosition(node);
                     return node;
                 }
             }
@@ -305,8 +238,6 @@ module TypeScript.IncrementalParser {
             if (canReadFromOldSourceUnit()) {
                 var token = tryGetTokenFromOldSourceUnit();
                 if (token) {
-                    // Make sure the token's position/text is correct.
-                    updateTokenPosition(token);
                     return token;
                 }
             }
@@ -325,53 +256,58 @@ module TypeScript.IncrementalParser {
             while (true) {
                 if (_oldSourceUnitCursor.isFinished()) {
                     // Can't sync up if the cursor is finished.
-                    break;
+                    return;
                 }
 
-                if (_changeDelta >= 0) {
-                    // Nothing to do if we're synced up or ahead of the text.
-                    break;
-                }
-
-                // We're behind in the original tree.  Throw out a node or token in an attempt to 
-                // catch up to the position we're at in the new text.
-
+                // Start with the current node or token the cursor is pointing at.
                 var currentNodeOrToken = _oldSourceUnitCursor.currentNodeOrToken();
 
-                // If we're pointing at a node, and that node's width is less than our delta,
-                // then we can just skip that node.  Otherwise, if we're pointing at a node
-                // whose width is greater than the delta, then crumble it and try again.
-                // Otherwise, we must be pointing at a token.  Just skip it and try again.
+                // Node, move the cursor past any nodes or tokens that intersect the change range
+                // 1) they are never reusable.
+                // 2) their positions are wacky as they refer to the original text.
+                //
+                // We consider these nodes and tokens essentially invisible to all further parts
+                // of the incremental algorithm.
+                if ((<ISyntaxElementInternal><ISyntaxElement>currentNodeOrToken).intersectsChange) {
+                    if (isNode(currentNodeOrToken)) {
+                        _oldSourceUnitCursor.moveToFirstChild();
+                    }
+                    else {
+                        _oldSourceUnitCursor.moveToNextSibling();
+                    }
+                    continue;
+                }
 
-                if (isNode(currentNodeOrToken) && (fullWidth(currentNodeOrToken) > Math.abs(_changeDelta))) {
-                    // We were pointing at a node whose width was more than changeDelta.  Crumble the 
-                    // node and try again.  Note: we haven't changed changeDelta.  So the callers loop
-                    // will just repeat this until we get to a node or token that we can skip over.
-                    _oldSourceUnitCursor.moveToFirstChild();
+                var absolutePos = absolutePosition();
+
+                var currentNodeOrTokenFullStart = fullStart(currentNodeOrToken);
+                if (currentNodeOrTokenFullStart >= absolutePos) {
+                    // The node or token is either where we're at, or ahead of where we're at. If 
+                    // it's where we're at, there's no work to be done.  If it's ahead of where 
+                    // we're at, we need to rescan tokens until we catch up.  in either case,
+                    // we don't need to sync the cursor.
+                    return;
+                }
+
+                // The node or is behind the current position we're at in the text.
+
+                var currentNodeOrTokenFullWidth = fullWidth(currentNodeOrToken);
+                var currentNodeOrTokenFullEnd = currentNodeOrTokenFullStart + currentNodeOrTokenFullWidth;
+
+                // If we're pointing at a node, and that node ends before our current position, we
+                // can just skip the node entirely.  Or, if we're pointing at a token, we won't be
+                // able to break up that token any further and we should just move to the next 
+                // token.  
+                if (currentNodeOrTokenFullEnd <= absolutePos || isToken(currentNodeOrToken)) {
+                    _oldSourceUnitCursor.moveToNextSibling();
                 }
                 else {
-                    _oldSourceUnitCursor.moveToNextSibling();
-
-                    // Get our change delta closer to 0 as we skip past this item.
-                    _changeDelta += fullWidth(currentNodeOrToken);
-
-                    // If this was a node, then our changeDelta is 0 or negative.  If this was a 
-                    // token, then we could still be negative (and we have to read another token),
-                    // we could be zero (we're done), or we could be positive (we've moved ahead
-                    // of the new text).  Only if we're negative will we continue looping.
+                    // We have a node, and it started before our absolute pos, and ended after our 
+                    // pos. Try to crumble this node to see if we'll be able to skip the first node 
+                    // or token contained within.
+                    _oldSourceUnitCursor.moveToFirstChild();
                 }
             }
-
-            // At this point, we must be either:
-            //   a) done with the cursor
-            //   b) (ideally) caught up to the new text position.
-            //   c) ahead of the new text position.
-            // In case 'b' we can try to reuse a node from teh old tree.
-            // Debug.assert(_oldSourceUnitCursor.isFinished() || _changeDelta >= 0);
-        }
-
-        function intersectsWithChangeRangeSpanInOriginalText(start: number, length: number) {
-            return !isPastChangeRange() && _changeRange.span().intersectsWith(start, length);
         }
 
         function tryGetNodeFromOldSourceUnit(): ISyntaxNode {
@@ -379,11 +315,10 @@ module TypeScript.IncrementalParser {
 
             // Keep moving the cursor down to the first node that is safe to return.  A node is 
             // safe to return if:
-            //  a) it does not intersect the changed text.
-            //  b) it does not contain skipped text.
-            //  c) it does not have any zero width tokens in it.
-            //  d) it does not have a regex token in it.
-            //  e) we are still in the same strict or non-strict state that the node was originally parsed in.
+            //  a) it does not contain skipped text.
+            //  b) it does not have any zero width tokens in it.
+            //  c) it does not have a regex token in it.
+            //  d) we are still in the same strict or non-strict state that the node was originally parsed in.
             while (true) {
                 var node = _oldSourceUnitCursor.currentNode();
                 if (node === undefined) {
@@ -391,15 +326,12 @@ module TypeScript.IncrementalParser {
                     return undefined;
                 }
 
-                if (!intersectsWithChangeRangeSpanInOriginalText(absolutePosition(), fullWidth(node))) {
-                    // Didn't intersect with the change range.
-                    var isIncrementallyUnusuable = TypeScript.isIncrementallyUnusable(node);
-                    if (!isIncrementallyUnusuable) {
+                var isIncrementallyUnusuable = TypeScript.isIncrementallyUnusable(node);
+                if (!isIncrementallyUnusuable) {
 
-                        // Didn't contain anything that would make it unusable.  Awesome.  This is
-                        // a node we can reuse.
-                        return node;
-                    }
+                    // Didn't contain anything that would make it unusable.  Awesome.  This is
+                    // a node we can reuse.
+                    return node;
                 }
 
                 // We couldn't use currentNode. Try to move to its first child (in case that's a 
@@ -411,10 +343,9 @@ module TypeScript.IncrementalParser {
 
         function canReuseTokenFromOldSourceUnit(position: number, token: ISyntaxToken): boolean {
             // A token is safe to return if:
-            //  a) it does not intersect the changed text.
-            //  b) it does not contain skipped text.
-            //  c) it is not zero width.
-            //  d) it is not a contextual parser token.
+            //  a) it does not contain skipped text.
+            //  b) it is not zero width.
+            //  c) it is not a contextual parser token.
             //
             // NOTE: It is safe to get a token regardless of what our strict context was/is.  That's 
             // because the strict context doesn't change what tokens are scanned, only how the 
@@ -428,14 +359,12 @@ module TypeScript.IncrementalParser {
             // Converted identifiers can't ever be created by the scanner, and as such, should not 
             // be returned by this source.
             if (token) {
-                if (!intersectsWithChangeRangeSpanInOriginalText(position, token.fullWidth())) {
-                    // Didn't intersect with the change range.
-                    if (!token.isIncrementallyUnusable() && !Scanner.isContextualToken(token)) {
+                // Didn't intersect with the change range.
+                if (!token.isIncrementallyUnusable() && !Scanner.isContextualToken(token)) {
 
-                        // Didn't contain anything that would make it unusable.  Awesome.  This is
-                        // a token we can reuse.
-                        return true;
-                    }
+                    // Didn't contain anything that would make it unusable.  Awesome.  This is
+                    // a token we can reuse.
+                    return true;
                 }
             }
 
@@ -506,86 +435,8 @@ module TypeScript.IncrementalParser {
                 ? token : undefined;
         }
 
-        function consumeNode(node: ISyntaxNode): void {
-            // A node could have only come from the old source unit cursor.  Update it and our 
-            // current state.
-            // Debug.assert(_changeDelta === 0);
-            // Debug.assert(currentNode() === node);
-
-            _oldSourceUnitCursor.moveToNextSibling();
-
-            // Update the underlying source with where it should now be currently pointin.
-            var _absolutePosition = absolutePosition() + fullWidth(node);
-            _scannerParserSource.resetToPosition(_absolutePosition);
-
-            // Debug.assert(previousToken !== undefined);
-            // Debug.assert(previousToken.width() > 0);
-
-            //if (!isPastChangeRange()) {
-            //    // If we still have a change range, then this node must have ended before the 
-            //    // change range starts.  Thus, we don't need to call 'skipPastChanges'.
-            //    Debug.assert(absolutePosition() < _changeRange.span().start());
-            //}
-        }
-
-        function consumeToken(currentToken: ISyntaxToken): void {
-            // Debug.assert(currentToken.fullWidth() > 0 || currentToken.kind === SyntaxKind.EndOfFileToken);
-
-            // This token may have come from the old source unit, or from the new text.  Handle
-            // both accordingly.
-
-            if (_oldSourceUnitCursor.currentToken() === currentToken) {
-                // The token came from the old source unit.  So our tree and text must be in sync.
-                // Debug.assert(_changeDelta === 0);
-
-                // Move the cursor past this token.
-                _oldSourceUnitCursor.moveToNextSibling();
-
-                // Debug.assert(!_normalParserSource.isPinned());
-
-                // Update the underlying source with where it should now be currently pointing. We 
-                // don't need to do this when the token came from the new text as the source will
-                // automatically be placed in the right position.
-                var _absolutePosition = absolutePosition() + currentToken.fullWidth();
-                _scannerParserSource.resetToPosition(_absolutePosition);
-
-                // Debug.assert(previousToken !== undefined);
-                // Debug.assert(previousToken.width() > 0);
-
-                //if (!isPastChangeRange()) {
-                //    // If we still have a change range, then this token must have ended before the 
-                //    // change range starts.  Thus, we don't need to call 'skipPastChanges'.
-                //    Debug.assert(absolutePosition() < _changeRange.span().start());
-                //}
-            }
-            else {
-                // the token came from the new text.  That means the normal source moved forward,
-                // while the syntax cursor stayed in the same place.  Thus our delta moves even 
-                // further back.
-                _changeDelta -= currentToken.fullWidth();
-
-                // Move our underlying source forward.
-                _scannerParserSource.consumeToken(currentToken);
-
-                // Because we read a token from the new text, we may have moved ourselves past the
-                // change range.  If we did, then we may also have to update our change delta to
-                // compensate for the length change between the old and new text.
-                if (!isPastChangeRange()) {
-                    // var changeEndInNewText = _changeRange.span().start() + _changeRange.newLength();
-                    if (absolutePosition() >= _changeRangeNewSpan.end()) {
-                        _changeDelta += _changeRange.newLength() - _changeRange.span().length();
-
-                        // Once we're past the change range, we no longer need it.  Null it out.
-                        // From now on we can check if we're past the change range just by seeing
-                        // if this is undefined.
-                        _changeRange = undefined;
-                    }
-                }
-            }
-        }
-
-        function isPastChangeRange(): boolean {
-            return _changeRange === undefined;
+        function consumeNodeOrToken(nodeOrToken: ISyntaxNodeOrToken): void {
+            _scannerParserSource.consumeNodeOrToken(nodeOrToken);
         }
 
         return {
@@ -597,8 +448,7 @@ module TypeScript.IncrementalParser {
             currentToken: currentToken,
             currentContextualToken: currentContextualToken,
             peekToken: peekToken,
-            consumeNode: consumeNode,
-            consumeToken: consumeToken,
+            consumeNodeOrToken: consumeNodeOrToken,
             getRewindPoint: getRewindPoint,
             rewind: rewind,
             releaseRewindPoint: releaseRewindPoint,
@@ -888,6 +738,76 @@ module TypeScript.IncrementalParser {
     }
 
     var tokenCollectorWalker = new TokenCollectorWalker();
+    function updateTokenPositionsAndMarkElements(element: ISyntaxElementInternal, changeStart: number, changeRangeOldEnd: number, delta: number): void {
+        if (element) {
+            // First, try to skip past any elements that we dont' need to move.  We don't need to 
+            // move any elements that don't start on or after the end of the change range.  
+            if (fullStart(element) >= changeRangeOldEnd) {
+                // This element started on or after the end of the edit.  We need to move it.
+                forceUpdateTokenPositionsForElement(element, delta);
+            }
+            else {
+                // Check if the element intersects the change range.  If it does, then it is not
+                // reusable.  Also, we'll need to recurse to see what constituent portions we may
+                // be able to use.
+                if (fullEnd(element) >= changeStart) {
+                    element.intersectsChange = true;
+
+                    for (var i = 0, n = childCount(element); i < n; i++) {
+                        updateTokenPositionsAndMarkElements(<ISyntaxElementInternal>childAt(element, i), changeStart, changeRangeOldEnd, delta);
+                    }
+                }
+                // else {
+                // This element was totally before the edited range.  We don't need to do anything 
+                // with it.
+                // }
+            }
+        }
+    }
+
+    function forceUpdateTokenPositionsForElement(element: ISyntaxElement, delta: number) {
+        if (isList(element)) {
+            var list = <ISyntaxNodeOrToken[]>element;
+            for (var i = 0, n = list.length; i < n; i++) {
+                forceUpdateTokenPositionForNodeOrToken(list[i], delta);
+            }
+        }
+        else {
+            forceUpdateTokenPositionForNodeOrToken(<ISyntaxNodeOrToken>element, delta);
+        }
+    }
+
+    function forceUpdateTokenPosition(token: ISyntaxToken, delta: number) {
+        token.setFullStart(token.fullStart() + delta);
+    }
+
+    function forceUpdateTokenPositionForNodeOrToken(nodeOrToken: ISyntaxNodeOrToken, delta: number) {
+        if (isToken(nodeOrToken)) {
+            forceUpdateTokenPosition(<ISyntaxToken>nodeOrToken, delta);
+        }
+        else {
+            var node = <ISyntaxNode>nodeOrToken;
+            var tokens = getTokens(node);
+            for (var i = 0, n = tokens.length; i < n; i++) {
+                forceUpdateTokenPosition(tokens[i], delta);
+            }
+        }
+    }
+
+    function getTokens(node: ISyntaxNode): ISyntaxToken[] {
+        var tokens = node.__cachedTokens;
+        if (!tokens) {
+            tokens = [];
+            tokenCollectorWalker.tokens = tokens;
+
+            visitNodeOrToken(tokenCollectorWalker, node);
+
+            node.__cachedTokens = tokens;
+            tokenCollectorWalker.tokens = undefined;
+        }
+
+        return tokens;
+    }
 
     export function parse(oldSyntaxTree: SyntaxTree, textChangeRange: TextChangeRange, newText: ISimpleText): SyntaxTree {
         if (textChangeRange.isUnchanged()) {
