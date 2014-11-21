@@ -11,10 +11,10 @@ tests/cases/compiler/indexTypeCheck.ts(51,1): error TS2342: An index expression 
 ==== tests/cases/compiler/indexTypeCheck.ts (8 errors) ====
     interface Red {
     	[n:number]; // ok
-    	~~~~~~~~~~
+    	~~~~~~~~~~~
 !!! error TS1021: An index signature must have a type annotation.
     	[s:string]; // ok
-    	~~~~~~~~~~
+    	~~~~~~~~~~~
 !!! error TS1021: An index signature must have a type annotation.
     }
     

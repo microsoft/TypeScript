@@ -60,21 +60,6 @@ else {
 >str : string
 >strOrNum : string
 }
-if (typeof strOrBool === "number") {
->typeof strOrBool === "number" : boolean
->typeof strOrBool : string
->strOrBool : string | boolean
-
-    num = strOrBool; // number
->num = strOrBool : number
->num : number
->strOrBool : number
-}
-else {
-    var y: string | boolean = strOrBool; // string | boolean
->y : string | boolean
->strOrBool : string | boolean
-}
 if (typeof numOrBool === "number") {
 >typeof numOrBool === "number" : boolean
 >typeof numOrBool : string
@@ -123,6 +108,22 @@ else {
 >numOrC : C
 }
 
+// Narrowing occurs only if target type is a subtype of variable type
+if (typeof strOrBool === "number") {
+>typeof strOrBool === "number" : boolean
+>typeof strOrBool : string
+>strOrBool : string | boolean
+
+    var y1: string | boolean = strOrBool; // string | boolean
+>y1 : string | boolean
+>strOrBool : string | boolean
+}
+else {
+    var y2: string | boolean = strOrBool; // string | boolean
+>y2 : string | boolean
+>strOrBool : string | boolean
+}
+
 // A type guard of the form typeof x !== s, where s is a string literal,
 //  - when true, narrows the type of x by typeof x === s when false, or
 //  - when false, narrows the type of x by typeof x === s when true.
@@ -141,21 +142,6 @@ else {
 >num = strOrNum : number
 >num : number
 >strOrNum : number
-}
-if (typeof strOrBool !== "number") {
->typeof strOrBool !== "number" : boolean
->typeof strOrBool : string
->strOrBool : string | boolean
-
-    var y: string | boolean = strOrBool; // string | boolean
->y : string | boolean
->strOrBool : string | boolean
-}
-else {
-    num = strOrBool; // number
->num = strOrBool : number
->num : number
->strOrBool : number
 }
 if (typeof numOrBool !== "number") {
 >typeof numOrBool !== "number" : boolean
@@ -204,3 +190,20 @@ else {
 >num : number
 >numOrC : number
 }
+
+// Narrowing occurs only if target type is a subtype of variable type
+if (typeof strOrBool !== "number") {
+>typeof strOrBool !== "number" : boolean
+>typeof strOrBool : string
+>strOrBool : string | boolean
+
+    var y1: string | boolean = strOrBool; // string | boolean
+>y1 : string | boolean
+>strOrBool : string | boolean
+}
+else {
+    var y2: string | boolean = strOrBool; // string | boolean
+>y2 : string | boolean
+>strOrBool : string | boolean
+}
+

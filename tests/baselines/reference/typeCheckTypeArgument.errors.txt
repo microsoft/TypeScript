@@ -6,7 +6,6 @@ error TS2318: Cannot find global type 'Number'.
 error TS2318: Cannot find global type 'Object'.
 error TS2318: Cannot find global type 'RegExp'.
 error TS2318: Cannot find global type 'String'.
-error TS2318: Cannot find global type 'TemplateStringsArray'.
 tests/cases/compiler/typeCheckTypeArgument.ts(3,19): error TS2304: Cannot find name 'UNKNOWN'.
 tests/cases/compiler/typeCheckTypeArgument.ts(5,26): error TS2304: Cannot find name 'UNKNOWN'.
 tests/cases/compiler/typeCheckTypeArgument.ts(7,21): error TS2304: Cannot find name 'UNKNOWN'.
@@ -23,7 +22,6 @@ tests/cases/compiler/typeCheckTypeArgument.ts(15,13): error TS2304: Cannot find 
 !!! error TS2318: Cannot find global type 'Object'.
 !!! error TS2318: Cannot find global type 'RegExp'.
 !!! error TS2318: Cannot find global type 'String'.
-!!! error TS2318: Cannot find global type 'TemplateStringsArray'.
 ==== tests/cases/compiler/typeCheckTypeArgument.ts (6 errors) ====
     /// <reference no-default-lib="true"/>
     

@@ -1,0 +1,19 @@
+=== tests/cases/compiler/amdModuleName1.ts ===
+///<amd-module name='NamedModule'/>
+class Foo {
+>Foo : Foo
+
+    x: number;
+>x : number
+
+    constructor() {
+        this.x = 5;
+>this.x = 5 : number
+>this.x : number
+>this : Foo
+>x : number
+    }
+}
+export = Foo;
+>Foo : Foo
+

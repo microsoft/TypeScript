@@ -15,8 +15,6 @@
 
 /// <reference path='services.ts' />
 
-/// <reference path='compiler\pathUtils.ts' />
-
 var debugObjectHost = (<any>this);
 
 module ts {
@@ -134,12 +132,6 @@ module ts {
 
         /**
          * Returns a JSON-encoded value of the type:
-         * { fileName: string; textSpan: { start: number; length: number}; isWriteAccess: boolean }[]
-         */
-        getImplementorsAtPosition(fileName: string, position: number): string;
-        
-        /**
-         * Returns a JSON-encoded value of the type:
          * { name: string; kind: string; kindModifiers: string; containerName: string; containerKind: string; matchKind: string; fileName: string; textSpan: { start: number; length: number}; } [] = [];
          */
         getNavigateToItems(searchValue: string): string;
@@ -173,7 +165,7 @@ module ts {
     }
 
     export interface CoreServicesShim extends Shim {
-        getPreProcessedFileInfo(fileName: string, sourceText: TypeScript.IScriptSnapshot): string;
+        getPreProcessedFileInfo(fileName: string, sourceText: IScriptSnapshot): string;
         getDefaultCompilationSettings(): string;
     }
 
@@ -306,7 +298,7 @@ module ts {
         logger.log("*INTERNAL ERROR* - Exception in typescript services: " + err.message);
     }
 
-    class ScriptSnapshotShimAdapter implements TypeScript.IScriptSnapshot {
+    class ScriptSnapshotShimAdapter implements IScriptSnapshot {
         private lineStartPositions: number[] = null;
 
         constructor(private scriptSnapshotShim: ScriptSnapshotShim) {
@@ -328,7 +320,7 @@ module ts {
             return this.lineStartPositions;
         }
 
-        public getChangeRange(oldSnapshot: TypeScript.IScriptSnapshot): TypeScript.TextChangeRange {
+        public getChangeRange(oldSnapshot: IScriptSnapshot): TextChangeRange {
             var oldSnapshotShim = <ScriptSnapshotShimAdapter>oldSnapshot;
             var encoded = this.scriptSnapshotShim.getChangeRange(oldSnapshotShim.scriptSnapshotShim);
             if (encoded == null) {
@@ -336,8 +328,8 @@ module ts {
             }
 
             var decoded: { span: { start: number; length: number; }; newLength: number; } = JSON.parse(encoded);
-            return new TypeScript.TextChangeRange(
-                new TypeScript.TextSpan(decoded.span.start, decoded.span.length), decoded.newLength);
+            return new TextChangeRange(
+                new TextSpan(decoded.span.start, decoded.span.length), decoded.newLength);
         }
     }
 
@@ -365,7 +357,7 @@ module ts {
             return JSON.parse(encoded);
         }
 
-        public getScriptSnapshot(fileName: string): TypeScript.IScriptSnapshot {
+        public getScriptSnapshot(fileName: string): IScriptSnapshot {
             return new ScriptSnapshotShimAdapter(this.shimHost.getScriptSnapshot(fileName));
         }
 
@@ -518,7 +510,7 @@ module ts {
             return this.forwardJSONCall(
                 "getSyntacticClassifications('" + fileName + "', " + start + ", " + length + ")",
                 () => {
-                    var classifications = this.languageService.getSyntacticClassifications(fileName, new TypeScript.TextSpan(start, length));
+                    var classifications = this.languageService.getSyntacticClassifications(fileName, new TextSpan(start, length));
                     return classifications;
                 });
         }
@@ -527,7 +519,7 @@ module ts {
             return this.forwardJSONCall(
                 "getSemanticClassifications('" + fileName + "', " + start + ", " + length + ")",
                 () => {
-                    var classifications = this.languageService.getSemanticClassifications(fileName, new TypeScript.TextSpan(start, length));
+                    var classifications = this.languageService.getSemanticClassifications(fileName, new TextSpan(start, length));
                     return classifications;
                 });
         }
@@ -687,16 +679,6 @@ module ts {
                 });
         }
 
-        /// GET IMPLEMENTORS
-        public getImplementorsAtPosition(fileName: string, position: number): string {
-            return this.forwardJSONCall(
-                "getImplementorsAtPosition('" + fileName + "', " + position + ")",
-                () => {
-                    return this.languageService.getImplementorsAtPosition(fileName, position);
-                });
-        }
-
-
         /// COMPLETION LISTS
 
         /**
@@ -834,7 +816,7 @@ module ts {
             return forwardJSONCall(this.logger, actionDescription, action);
         }
 
-        public getPreProcessedFileInfo(fileName: string, sourceTextSnapshot: TypeScript.IScriptSnapshot): string {
+        public getPreProcessedFileInfo(fileName: string, sourceTextSnapshot: IScriptSnapshot): string {
             return this.forwardJSONCall(
                 "getPreProcessedFileInfo('" + fileName + "')",
                 () => {
@@ -927,7 +909,7 @@ module ts {
                 }
             }
 
-            throw TypeScript.Errors.invalidOperation();
+            throw new Error("Invalid operation");
         }
     }
 }
