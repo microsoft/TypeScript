@@ -10,9 +10,7 @@
 
 goTo.marker('1');
 verify.completionListContains('I');
-
-// bug #837 
-verify.completionListContains('foo');
+verify.not.completionListContains('foo');
 edit.insert('I;');
 
 goTo.marker('2');

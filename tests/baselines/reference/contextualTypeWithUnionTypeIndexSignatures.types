@@ -1,0 +1,166 @@
+=== tests/cases/conformance/types/union/contextualTypeWithUnionTypeIndexSignatures.ts ===
+//When used as a contextual type, a union type U has those members that are present in any of 
+// its constituent types, with types that are unions of the respective members in the constituent types. 
+interface SomeType {
+>SomeType : SomeType
+
+    (a: number): number;
+>a : number
+}
+interface SomeType2 {
+>SomeType2 : SomeType2
+
+    (a: number): string;
+>a : number
+}
+
+interface IWithNoStringIndexSignature {
+>IWithNoStringIndexSignature : IWithNoStringIndexSignature
+
+    foo: string;
+>foo : string
+}
+interface IWithNoNumberIndexSignature {
+>IWithNoNumberIndexSignature : IWithNoNumberIndexSignature
+
+    0: string;
+}
+interface IWithStringIndexSignature1 {
+>IWithStringIndexSignature1 : IWithStringIndexSignature1
+
+    [a: string]: SomeType;
+>a : string
+>SomeType : SomeType
+}
+interface IWithStringIndexSignature2 {
+>IWithStringIndexSignature2 : IWithStringIndexSignature2
+
+    [a: string]: SomeType2;
+>a : string
+>SomeType2 : SomeType2
+}
+interface IWithNumberIndexSignature1 {
+>IWithNumberIndexSignature1 : IWithNumberIndexSignature1
+
+    [a: number]: SomeType;
+>a : number
+>SomeType : SomeType
+}
+interface IWithNumberIndexSignature2 {
+>IWithNumberIndexSignature2 : IWithNumberIndexSignature2
+
+    [a: number]: SomeType2;
+>a : number
+>SomeType2 : SomeType2
+}
+
+// When an object literal is contextually typed by a type that includes a string index signature, 
+// the resulting type of the object literal includes a string index signature with the union type of 
+// the types of the properties declared in the object literal, or the Undefined type if the object literal 
+// is empty.Likewise, when an object literal is contextually typed by a type that includes a numeric index 
+// signature, the resulting type of the object literal includes a numeric index signature with the union type
+// of the types of the numerically named properties(section 3.7.4) declared in the object literal, 
+// or the Undefined type if the object literal declares no numerically named properties.
+
+// Let S be the set of types in U that has a string index signature.
+// If S is not empty, U has a string index signature of a union type of 
+// the types of the string index signatures from each type in S.
+var x: IWithNoStringIndexSignature | IWithStringIndexSignature1 = { z: a => a }; // a should be number
+>x : IWithNoStringIndexSignature | IWithStringIndexSignature1
+>IWithNoStringIndexSignature : IWithNoStringIndexSignature
+>IWithStringIndexSignature1 : IWithStringIndexSignature1
+>{ z: a => a } : { [x: string]: (a: number) => number; z: (a: number) => number; }
+>z : (a: number) => number
+>a => a : (a: number) => number
+>a : number
+>a : number
+
+var x: IWithNoStringIndexSignature | IWithStringIndexSignature1 = { foo: a => a }; // a should be any
+>x : IWithNoStringIndexSignature | IWithStringIndexSignature1
+>IWithNoStringIndexSignature : IWithNoStringIndexSignature
+>IWithStringIndexSignature1 : IWithStringIndexSignature1
+>{ foo: a => a } : { [x: string]: (a: any) => any; foo: (a: any) => any; }
+>foo : (a: any) => any
+>a => a : (a: any) => any
+>a : any
+>a : any
+
+var x: IWithNoStringIndexSignature | IWithStringIndexSignature1 = { foo: "hello" }; 
+>x : IWithNoStringIndexSignature | IWithStringIndexSignature1
+>IWithNoStringIndexSignature : IWithNoStringIndexSignature
+>IWithStringIndexSignature1 : IWithStringIndexSignature1
+>{ foo: "hello" } : { [x: string]: string; foo: string; }
+>foo : string
+
+var x2: IWithStringIndexSignature1 | IWithStringIndexSignature2 = { z: a => a.toString() }; // a should be number
+>x2 : IWithStringIndexSignature1 | IWithStringIndexSignature2
+>IWithStringIndexSignature1 : IWithStringIndexSignature1
+>IWithStringIndexSignature2 : IWithStringIndexSignature2
+>{ z: a => a.toString() } : { [x: string]: (a: number) => string; z: (a: number) => string; }
+>z : (a: number) => string
+>a => a.toString() : (a: number) => string
+>a : number
+>a.toString() : string
+>a.toString : (radix?: number) => string
+>a : number
+>toString : (radix?: number) => string
+
+var x2: IWithStringIndexSignature1 | IWithStringIndexSignature2 = { z: a => a }; // a should be number
+>x2 : IWithStringIndexSignature1 | IWithStringIndexSignature2
+>IWithStringIndexSignature1 : IWithStringIndexSignature1
+>IWithStringIndexSignature2 : IWithStringIndexSignature2
+>{ z: a => a } : { [x: string]: (a: number) => number; z: (a: number) => number; }
+>z : (a: number) => number
+>a => a : (a: number) => number
+>a : number
+>a : number
+
+
+// Let S be the set of types in U that has a numeric index signature.
+// If S is not empty, U has a numeric index signature of a union type of 
+// the types of the numeric index signatures from each type in S.
+var x3: IWithNoNumberIndexSignature | IWithNumberIndexSignature1 = { 1: a => a }; // a should be number
+>x3 : IWithNoNumberIndexSignature | IWithNumberIndexSignature1
+>IWithNoNumberIndexSignature : IWithNoNumberIndexSignature
+>IWithNumberIndexSignature1 : IWithNumberIndexSignature1
+>{ 1: a => a } : { [x: number]: (a: number) => number; 1: (a: number) => number; }
+>a => a : (a: number) => number
+>a : number
+>a : number
+
+var x3: IWithNoNumberIndexSignature | IWithNumberIndexSignature1 = { 0: a => a }; // a should be any
+>x3 : IWithNoNumberIndexSignature | IWithNumberIndexSignature1
+>IWithNoNumberIndexSignature : IWithNoNumberIndexSignature
+>IWithNumberIndexSignature1 : IWithNumberIndexSignature1
+>{ 0: a => a } : { [x: number]: (a: any) => any; 0: (a: any) => any; }
+>a => a : (a: any) => any
+>a : any
+>a : any
+
+var x3: IWithNoNumberIndexSignature | IWithNumberIndexSignature1 = { 0: "hello" };
+>x3 : IWithNoNumberIndexSignature | IWithNumberIndexSignature1
+>IWithNoNumberIndexSignature : IWithNoNumberIndexSignature
+>IWithNumberIndexSignature1 : IWithNumberIndexSignature1
+>{ 0: "hello" } : { [x: number]: string; 0: string; }
+
+var x4: IWithNumberIndexSignature1 | IWithNumberIndexSignature2 = { 1: a => a.toString() }; // a should be number
+>x4 : IWithNumberIndexSignature1 | IWithNumberIndexSignature2
+>IWithNumberIndexSignature1 : IWithNumberIndexSignature1
+>IWithNumberIndexSignature2 : IWithNumberIndexSignature2
+>{ 1: a => a.toString() } : { [x: number]: (a: number) => string; 1: (a: number) => string; }
+>a => a.toString() : (a: number) => string
+>a : number
+>a.toString() : string
+>a.toString : (radix?: number) => string
+>a : number
+>toString : (radix?: number) => string
+
+var x4: IWithNumberIndexSignature1 | IWithNumberIndexSignature2 = { 1: a => a }; // a should be number
+>x4 : IWithNumberIndexSignature1 | IWithNumberIndexSignature2
+>IWithNumberIndexSignature1 : IWithNumberIndexSignature1
+>IWithNumberIndexSignature2 : IWithNumberIndexSignature2
+>{ 1: a => a } : { [x: number]: (a: number) => number; 1: (a: number) => number; }
+>a => a : (a: number) => number
+>a : number
+>a : number
+

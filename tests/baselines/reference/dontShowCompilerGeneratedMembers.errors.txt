@@ -1,22 +1,16 @@
-tests/cases/compiler/dontShowCompilerGeneratedMembers.ts(3,5): error TS1098: Type parameter list cannot be empty.
-tests/cases/compiler/dontShowCompilerGeneratedMembers.ts(3,6): error TS1005: '(' expected.
 tests/cases/compiler/dontShowCompilerGeneratedMembers.ts(3,6): error TS1139: Type parameter declaration expected.
 tests/cases/compiler/dontShowCompilerGeneratedMembers.ts(4,1): error TS1109: Expression expected.
-tests/cases/compiler/dontShowCompilerGeneratedMembers.ts(1,5): error TS2323: Type 'number' is not assignable to type '{ (): any; x: number; }'.
+tests/cases/compiler/dontShowCompilerGeneratedMembers.ts(1,5): error TS2322: Type 'number' is not assignable to type '{ (): any; x: number; }'.
   Property 'x' is missing in type 'Number'.
 
 
-==== tests/cases/compiler/dontShowCompilerGeneratedMembers.ts (5 errors) ====
+==== tests/cases/compiler/dontShowCompilerGeneratedMembers.ts (3 errors) ====
     var f: {
         ~
-!!! error TS2323: Type 'number' is not assignable to type '{ (): any; x: number; }'.
-!!! error TS2323:   Property 'x' is missing in type 'Number'.
+!!! error TS2322: Type 'number' is not assignable to type '{ (): any; x: number; }'.
+!!! error TS2322:   Property 'x' is missing in type 'Number'.
         x: number;
         <-
-        ~
-!!! error TS1098: Type parameter list cannot be empty.
-         ~
-!!! error TS1005: '(' expected.
          ~
 !!! error TS1139: Type parameter declaration expected.
     };

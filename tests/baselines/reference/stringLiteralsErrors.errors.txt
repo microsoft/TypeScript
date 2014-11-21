@@ -14,7 +14,7 @@ tests/cases/compiler/stringLiteralsErrors.ts(22,16): error TS1125: Hexadecimal d
 tests/cases/compiler/stringLiteralsErrors.ts(23,17): error TS1125: Hexadecimal digit expected.
 tests/cases/compiler/stringLiteralsErrors.ts(24,16): error TS1125: Hexadecimal digit expected.
 tests/cases/compiler/stringLiteralsErrors.ts(25,15): error TS1125: Hexadecimal digit expected.
-tests/cases/compiler/stringLiteralsErrors.ts(28,14): error TS1126: Unexpected end of text.
+tests/cases/compiler/stringLiteralsErrors.ts(28,14): error TS1002: Unterminated string literal.
 
 
 ==== tests/cases/compiler/stringLiteralsErrors.ts (17 errors) ====
@@ -79,4 +79,4 @@ tests/cases/compiler/stringLiteralsErrors.ts(28,14): error TS1126: Unexpected en
     // End of file
     var es13 = " 
                  
-!!! error TS1126: Unexpected end of text.
+!!! error TS1002: Unterminated string literal.

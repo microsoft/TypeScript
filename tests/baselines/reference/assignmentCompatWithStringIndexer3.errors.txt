@@ -1,8 +1,8 @@
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithStringIndexer3.ts(7,8): error TS2304: Cannot find name 'A'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithStringIndexer3.ts(20,9): error TS2323: Type '{ [x: string]: string; }' is not assignable to type 'A<T>'.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithStringIndexer3.ts(20,9): error TS2322: Type '{ [x: string]: string; }' is not assignable to type 'A<T>'.
   Index signatures are incompatible.
     Type 'string' is not assignable to type 'T'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithStringIndexer3.ts(21,9): error TS2323: Type 'A<T>' is not assignable to type '{ [x: string]: string; }'.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithStringIndexer3.ts(21,9): error TS2322: Type 'A<T>' is not assignable to type '{ [x: string]: string; }'.
   Index signatures are incompatible.
     Type 'T' is not assignable to type 'string'.
 
@@ -31,13 +31,13 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
             var b: { [x: string]: string; }
             a = b; // error
             ~
-!!! error TS2323: Type '{ [x: string]: string; }' is not assignable to type 'A<T>'.
-!!! error TS2323:   Index signatures are incompatible.
-!!! error TS2323:     Type 'string' is not assignable to type 'T'.
+!!! error TS2322: Type '{ [x: string]: string; }' is not assignable to type 'A<T>'.
+!!! error TS2322:   Index signatures are incompatible.
+!!! error TS2322:     Type 'string' is not assignable to type 'T'.
             b = a; // error
             ~
-!!! error TS2323: Type 'A<T>' is not assignable to type '{ [x: string]: string; }'.
-!!! error TS2323:   Index signatures are incompatible.
-!!! error TS2323:     Type 'T' is not assignable to type 'string'.
+!!! error TS2322: Type 'A<T>' is not assignable to type '{ [x: string]: string; }'.
+!!! error TS2322:   Index signatures are incompatible.
+!!! error TS2322:     Type 'T' is not assignable to type 'string'.
         }
     }

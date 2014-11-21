@@ -234,6 +234,7 @@ module TypeScript {
         OmittedExpression,
         TemplateExpression,
         TemplateAccessExpression,
+        YieldExpression,
 
         // Variable declarations
         VariableDeclaration,
@@ -261,14 +262,13 @@ module TypeScript {
 
         // Property Assignment
         SimplePropertyAssignment,
-        // GetAccessorPropertyAssignment,
-        // SetAccessorPropertyAssignment,
         FunctionPropertyAssignment,
 
         // Misc.
         Parameter,
         EnumElement,
         TypeAnnotation,
+        ComputedPropertyName,
         ExternalModuleReference,
         ModuleNameModuleReference,
 

@@ -32,10 +32,12 @@ build.json
 tests/webhost/*.d.ts
 tests/webhost/webtsc.js
 tests/*.js
+tests/*.js.map
 tests/*.d.ts
 *.config
 scripts/debug.bat
 scripts/run.bat
 scripts/word2md.js
 scripts/ior.js
+scripts/*.js.map
 coverage/

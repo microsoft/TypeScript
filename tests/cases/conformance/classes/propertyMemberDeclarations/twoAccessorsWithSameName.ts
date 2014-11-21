@@ -1,3 +1,4 @@
+// @target: ES5
 class C {
     get x() { return 1; }
     get x() { return 1; } // error

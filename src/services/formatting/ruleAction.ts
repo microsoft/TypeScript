@@ -13,13 +13,13 @@
 // limitations under the License.
 //
 
-///<reference path='formatting.ts' />
+///<reference path='references.ts' />
 
-module TypeScript.Services.Formatting {
-    export enum RuleAction {
-        Ignore,
-        Space,
-        NewLine,
-        Delete
+module ts.formatting {
+    export const enum RuleAction {
+        Ignore      = 0x00000001,
+        Space       = 0x00000002,
+        NewLine     = 0x00000004,
+        Delete      = 0x00000008
     }
 }

@@ -1,10 +1,7 @@
-tests/cases/conformance/parser/ecmascript5/MissingTokens/parserMissingToken2.ts(1,1): error TS1109: Expression expected.
-tests/cases/conformance/parser/ecmascript5/MissingTokens/parserMissingToken2.ts(1,3): error TS2304: Cannot find name 'b'.
+tests/cases/conformance/parser/ecmascript5/MissingTokens/parserMissingToken2.ts(1,2): error TS1161: Unterminated regular expression literal.
 
 
-==== tests/cases/conformance/parser/ecmascript5/MissingTokens/parserMissingToken2.ts (2 errors) ====
+==== tests/cases/conformance/parser/ecmascript5/MissingTokens/parserMissingToken2.ts (1 errors) ====
     / b;
-    ~
-!!! error TS1109: Expression expected.
-      ~
-!!! error TS2304: Cannot find name 'b'.
+     
+!!! error TS1161: Unterminated regular expression literal.

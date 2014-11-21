@@ -122,6 +122,17 @@ module ts {
         return result;
     }
 
+    /**
+     * Returns the last element of an array if non-empty, undefined otherwise.
+     */
+    export function lastOrUndefined<T>(array: T[]): T {
+        if (array.length === 0) {
+            return undefined;
+        }
+
+        return array[array.length - 1];
+    }
+
     export function binarySearch(array: number[], value: number): number {
         var low = 0;
         var high = array.length - 1;
@@ -247,9 +258,9 @@ module ts {
         }
 
         return {
-            file: file,
-            start: start,
-            length: length,
+            file,
+            start,
+            length,
 
             messageText: text,
             category: message.category,
@@ -324,12 +335,12 @@ module ts {
         }
 
         return {
-            file: file,
-            start: start,
-            length: length,
-            code: code,
-            category: category,
-            messageText: messageText
+            file,
+            start,
+            length,
+            code,
+            category,
+            messageText
         };
     }
 
@@ -446,6 +457,10 @@ module ts {
         }
 
         return normalizedPathComponents(path, rootLength);
+    }
+
+    export function getNormalizedAbsolutePath(filename: string, currentDirectory: string) {
+        return getNormalizedPathFromPathComponents(getNormalizedPathComponents(filename, currentDirectory));
     }
 
     export function getNormalizedPathFromPathComponents(pathComponents: string[]) {

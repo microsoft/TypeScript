@@ -17,13 +17,40 @@ module TypeScript {
         return undefined;
     }
 
-    export function parsedInStrictMode(node: ISyntaxNode): boolean {
+    export function parsedInStrictModeContext(node: ISyntaxNode): boolean {
         var info = node.__data;
         if (info === undefined) {
             return false;
         }
 
-        return (info & SyntaxConstants.NodeParsedInStrictModeMask) !== 0;
+        return (info & SyntaxNodeConstants.ParsedInStrictModeContext) !== 0;
+    }
+
+    export function parsedInDisallowInContext(node: ISyntaxNode): boolean {
+        var info = node.__data;
+        if (info === undefined) {
+            return false;
+        }
+
+        return (info & SyntaxNodeConstants.ParsedInDisallowInContext) !== 0;
+    }
+
+    export function parsedInYieldContext(node: ISyntaxNode): boolean {
+        var info = node.__data;
+        if (info === undefined) {
+            return false;
+        }
+
+        return (info & SyntaxNodeConstants.ParsedInYieldContext) !== 0;
+    }
+
+    export function parsedInGeneratorParameterContext(node: ISyntaxNode): boolean {
+        var info = node.__data;
+        if (info === undefined) {
+            return false;
+        }
+
+        return (info & SyntaxNodeConstants.ParsedInGeneratorParameterContext) !== 0;
     }
 
     export function previousToken(token: ISyntaxToken): ISyntaxToken {
@@ -70,48 +97,6 @@ module TypeScript {
         throw Errors.invalidOperation();
     }
 
-    export function findSkippedTokenInPositionedToken(positionedToken: ISyntaxToken, position: number): ISyntaxToken {
-        var positionInLeadingTriviaList = (position < start(positionedToken));
-        return findSkippedTokenInTriviaList(positionedToken, position, /*lookInLeadingTriviaList*/ positionInLeadingTriviaList);
-    }
-
-    export function findSkippedTokenInLeadingTriviaList(positionedToken: ISyntaxToken, position: number): ISyntaxToken {
-        return findSkippedTokenInTriviaList(positionedToken, position, /*lookInLeadingTriviaList*/ true);
-    }
-
-    export function findSkippedTokenInTrailingTriviaList(positionedToken: ISyntaxToken, position: number): ISyntaxToken {
-        return findSkippedTokenInTriviaList(positionedToken, position, /*lookInLeadingTriviaList*/ false);
-    }
-
-    function findSkippedTokenInTriviaList(positionedToken: ISyntaxToken, position: number, lookInLeadingTriviaList: boolean): ISyntaxToken {
-        var triviaList: TypeScript.ISyntaxTriviaList = undefined;
-        var fullStart: number;
-
-        if (lookInLeadingTriviaList) {
-            triviaList = positionedToken.leadingTrivia();
-            fullStart = positionedToken.fullStart();
-        }
-        else {
-            triviaList = positionedToken.trailingTrivia();
-            fullStart = end(positionedToken);
-        }
-
-        if (triviaList && triviaList.hasSkippedToken()) {
-            for (var i = 0, n = triviaList.count(); i < n; i++) {
-                var trivia = triviaList.syntaxTriviaAt(i);
-                var triviaWidth = trivia.fullWidth();
-
-                if (trivia.isSkippedToken() && position >= fullStart && position <= fullStart + triviaWidth) {
-                    return trivia.skippedToken();
-                }
-
-                fullStart += triviaWidth;
-            }
-        }
-
-        return undefined;
-    }
-
     function findTokenWorker(element: ISyntaxElement, elementPosition: number, position: number): ISyntaxToken {
         if (isList(element)) {
             return findTokenInList(<ISyntaxNodeOrToken[]>element, elementPosition, position);
@@ -144,9 +129,8 @@ module TypeScript {
             return <ISyntaxToken>nodeOrToken;
         }
 
-        var childAtFunction = getChildAtFunction(nodeOrToken);
         for (var i = 0, n = childCount(nodeOrToken); i < n; i++) {
-            var child = childAtFunction(nodeOrToken, i);
+            var child = nodeOrToken.childAt(i);
 
             if (child) {
                 var childFullWidth = fullWidth(child);
@@ -247,11 +231,6 @@ module TypeScript {
         return token ? token.leadingTriviaWidth(text) : 0;
     }
 
-    export function trailingTriviaWidth(element: ISyntaxElement, text?: ISimpleText): number {
-        var token = lastToken(element);
-        return token ? token.trailingTriviaWidth(text) : 0;
-    }
-
     export function firstToken(element: ISyntaxElement): ISyntaxToken {
         if (element) {
             var kind = element.kind;
@@ -305,7 +284,7 @@ module TypeScript {
         }
 
         var info = data(element);
-        return info >>> SyntaxConstants.NodeFullWidthShift;
+        return (info / SyntaxNodeConstants.FullWidthShift) | 0;
     }
 
     export function isIncrementallyUnusable(element: ISyntaxElement): boolean {
@@ -313,7 +292,7 @@ module TypeScript {
             return (<ISyntaxToken>element).isIncrementallyUnusable();
         }
 
-        return (data(element) & SyntaxConstants.NodeIncrementallyUnusableMask) !== 0;
+        return (data(element) & SyntaxNodeConstants.IncrementallyUnusableMask) !== 0;
     }
 
     function data(element: ISyntaxElement): number {
@@ -327,7 +306,7 @@ module TypeScript {
             info = 0;
         }
 
-        if ((info & SyntaxConstants.NodeDataComputed) === 0) {
+        if ((info & SyntaxNodeConstants.DataComputed) === 0) {
             info |= computeData(element);
             dataElement.__data = info;
         }
@@ -335,27 +314,52 @@ module TypeScript {
         return info;
     }
 
-    function computeData(element: ISyntaxElement): number {
-        var slotCount = childCount(element);
+    function combineData(fullWidth: number, isIncrementallyUnusable: boolean) {
+        return (fullWidth * SyntaxNodeConstants.FullWidthShift) +
+               (isIncrementallyUnusable ? SyntaxNodeConstants.IncrementallyUnusableMask : 0) +
+               SyntaxNodeConstants.DataComputed;
+    }
 
+    function listComputeData(list: ISyntaxNodeOrToken[]): number {
         var fullWidth = 0;
+        var isIncrementallyUnusable = false;
+
+        for (var i = 0, n = list.length; i < n; i++) {
+            var child: ISyntaxElement = list[i];
+
+            fullWidth += TypeScript.fullWidth(child);
+            isIncrementallyUnusable = isIncrementallyUnusable || TypeScript.isIncrementallyUnusable(child);
+        }
+
+        return combineData(fullWidth, isIncrementallyUnusable);
+    }
+
+    function computeData(element: ISyntaxElement): number {
+        if (isList(element)) {
+            return listComputeData(<ISyntaxNodeOrToken[]>element);
+        }
+        else {
+            return nodeOrTokenComputeData(<ISyntaxNodeOrToken>element);
+        }
+    }
+
+    function nodeOrTokenComputeData(nodeOrToken: ISyntaxNodeOrToken) {
+        var fullWidth = 0;
+        var slotCount = nodeOrToken.childCount;
 
         // If we have no children (like an OmmittedExpressionSyntax), we're automatically not reusable.
-        var isIncrementallyUnusable = slotCount === 0 && !isList(element);
+        var isIncrementallyUnusable = slotCount === 0;
 
         for (var i = 0, n = slotCount; i < n; i++) {
-            var child = childAt(element, i);
+            var child = nodeOrToken.childAt(i);
 
             if (child) {
                 fullWidth += TypeScript.fullWidth(child);
-
                 isIncrementallyUnusable = isIncrementallyUnusable || TypeScript.isIncrementallyUnusable(child);
             }
         }
 
-        return (fullWidth << SyntaxConstants.NodeFullWidthShift)
-            | (isIncrementallyUnusable ? SyntaxConstants.NodeIncrementallyUnusableMask : 0)
-            | SyntaxConstants.NodeDataComputed;
+        return combineData(fullWidth, isIncrementallyUnusable);
     }
 
     export function start(element: ISyntaxElement, text?: ISimpleText): number {
@@ -363,16 +367,11 @@ module TypeScript {
         return token ? token.fullStart() + token.leadingTriviaWidth(text) : -1;
     }
 
-    export function end(element: ISyntaxElement, text?: ISimpleText): number {
-        var token = isToken(element) ? <ISyntaxToken>element : lastToken(element);
-        return token ? fullEnd(token) - token.trailingTriviaWidth(text) : -1;
-    }
-
     export function width(element: ISyntaxElement, text?: ISimpleText): number {
         if (isToken(element)) {
             return (<ISyntaxToken>element).text().length;
         }
-        return fullWidth(element) - leadingTriviaWidth(element, text) - trailingTriviaWidth(element, text);
+        return fullWidth(element) - leadingTriviaWidth(element, text);
     }
 
     export function fullEnd(element: ISyntaxElement): number {
@@ -389,7 +388,7 @@ module TypeScript {
         }
 
         var lineMap = text.lineMap();
-        return lineMap.getLineNumberFromPosition(end(token1, text)) !== lineMap.getLineNumberFromPosition(start(token2, text));
+        return lineMap.getLineNumberFromPosition(fullEnd(token1)) !== lineMap.getLineNumberFromPosition(start(token2, text));
     }
 
     export interface ISyntaxElement {
@@ -407,6 +406,7 @@ module TypeScript {
     }
 
     export interface IModuleElementSyntax extends ISyntaxNode {
+        _moduleElementBrand: any;
     }
 
     export interface IStatementSyntax extends IModuleElementSyntax {
@@ -414,15 +414,28 @@ module TypeScript {
     }
 
     export interface ITypeMemberSyntax extends ISyntaxNode {
+        _typeMemberBrand: any;
     }
 
     export interface IClassElementSyntax extends ISyntaxNode {
+        _classElementBrand: any;
     }
 
     export interface IMemberDeclarationSyntax extends IClassElementSyntax {
+        _memberDeclarationBrand: any;
     }
 
-    export interface IPropertyAssignmentSyntax extends IClassElementSyntax {
+    export interface IPropertyAssignmentSyntax extends ISyntaxNodeOrToken {
+        _propertyAssignmentBrand: any;
+    }
+
+    export interface IAccessorSyntax extends IPropertyAssignmentSyntax, IMemberDeclarationSyntax {
+        _accessorBrand: any;
+
+        modifiers: ISyntaxToken[];
+        propertyName: IPropertyNameSyntax;
+        callSignature: CallSignatureSyntax;
+        block: BlockSyntax;
     }
 
     export interface ISwitchClauseSyntax extends ISyntaxNode {
@@ -464,5 +477,10 @@ module TypeScript {
     }
 
     export interface INameSyntax extends ITypeSyntax {
+        _nameBrand: any;
+    }
+
+    export interface IPropertyNameSyntax extends ISyntaxNodeOrToken {
+        _propertyNameBrand: any;
     }
 }

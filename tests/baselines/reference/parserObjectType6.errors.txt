@@ -8,6 +8,6 @@ tests/cases/conformance/parser/ecmascript5/ObjectTypes/parserObjectType6.ts(2,7)
           ~
 !!! error TS2304: Cannot find name 'B'.
        [];
-       ~~
+       ~~~
 !!! error TS1096: An index signature must have exactly one parameter.
     };

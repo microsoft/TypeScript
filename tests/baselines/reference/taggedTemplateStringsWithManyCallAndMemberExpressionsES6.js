@@ -1,6 +1,6 @@
 //// [taggedTemplateStringsWithManyCallAndMemberExpressionsES6.ts]
 interface I {
-    (strs: string[], subs: number[]): I;
+    (strs: string[], ...subs: number[]): I;
     member: {
         new (s: string): {
             new (n: number): {

@@ -13,10 +13,9 @@
 // limitations under the License.
 //
 
-///<reference path='formatting.ts' />
+///<reference path='references.ts' />
 
-
-module TypeScript.Services.Formatting {
+module ts.formatting {
     export class TokenSpan extends TextSpan {
         constructor(public kind: SyntaxKind, start: number, length: number) {
             super(start, length);

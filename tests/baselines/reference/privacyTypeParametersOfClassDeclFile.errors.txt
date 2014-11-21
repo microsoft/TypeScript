@@ -1,7 +1,7 @@
-tests/cases/compiler/privacyTypeParametersOfClassDeclFile.ts(7,51): error TS4002: Type parameter 'T' of exported class has or is using private name 'privateClass'.
-tests/cases/compiler/privacyTypeParametersOfClassDeclFile.ts(43,61): error TS4001: Type parameter 'T' of exported class has or is using name 'privateModule.publicClassInPrivateModule' from private module 'privateModule'.
-tests/cases/compiler/privacyTypeParametersOfClassDeclFile.ts(62,55): error TS4002: Type parameter 'T' of exported class has or is using private name 'privateClassInPublicModule'.
-tests/cases/compiler/privacyTypeParametersOfClassDeclFile.ts(98,65): error TS4001: Type parameter 'T' of exported class has or is using name 'privateModule.publicClassInPrivateModule' from private module 'privateModule'.
+tests/cases/compiler/privacyTypeParametersOfClassDeclFile.ts(7,61): error TS4002: Type parameter 'T' of exported class has or is using private name 'privateClass'.
+tests/cases/compiler/privacyTypeParametersOfClassDeclFile.ts(43,71): error TS4002: Type parameter 'T' of exported class has or is using private name 'privateModule'.
+tests/cases/compiler/privacyTypeParametersOfClassDeclFile.ts(62,65): error TS4002: Type parameter 'T' of exported class has or is using private name 'privateClassInPublicModule'.
+tests/cases/compiler/privacyTypeParametersOfClassDeclFile.ts(98,75): error TS4002: Type parameter 'T' of exported class has or is using private name 'privateModule'.
 
 
 ==== tests/cases/compiler/privacyTypeParametersOfClassDeclFile.ts (4 errors) ====
@@ -12,7 +12,7 @@ tests/cases/compiler/privacyTypeParametersOfClassDeclFile.ts(98,65): error TS400
     }
     
     export class publicClassWithPrivateTypeParameters<T extends privateClass> { // Error
-                                                      ~~~~~~~~~~~~~~~~~~~~~~
+                                                                ~~~~~~~~~~~~
 !!! error TS4002: Type parameter 'T' of exported class has or is using private name 'privateClass'.
         myMethod(val: T): T {
             return val;
@@ -50,8 +50,8 @@ tests/cases/compiler/privacyTypeParametersOfClassDeclFile.ts(98,65): error TS400
     }
     
     export class publicClassWithTypeParametersFromPrivateModule<T extends privateModule.publicClassInPrivateModule> { // Error
-                                                                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS4001: Type parameter 'T' of exported class has or is using name 'privateModule.publicClassInPrivateModule' from private module 'privateModule'.
+                                                                          ~~~~~~~~~~~~~
+!!! error TS4002: Type parameter 'T' of exported class has or is using private name 'privateModule'.
         myMethod(val: T): T {
             return val;
         }
@@ -71,7 +71,7 @@ tests/cases/compiler/privacyTypeParametersOfClassDeclFile.ts(98,65): error TS400
         }
     
         export class publicClassWithPrivateTypeParameters<T extends privateClassInPublicModule> { // Error
-                                                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                                                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS4002: Type parameter 'T' of exported class has or is using private name 'privateClassInPublicModule'.
             myMethod(val: T): T {
                 return val;
@@ -109,8 +109,8 @@ tests/cases/compiler/privacyTypeParametersOfClassDeclFile.ts(98,65): error TS400
         }
     
         export class publicClassWithTypeParametersFromPrivateModule<T extends privateModule.publicClassInPrivateModule> { // Error
-                                                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS4001: Type parameter 'T' of exported class has or is using name 'privateModule.publicClassInPrivateModule' from private module 'privateModule'.
+                                                                              ~~~~~~~~~~~~~
+!!! error TS4002: Type parameter 'T' of exported class has or is using private name 'privateModule'.
             myMethod(val: T): T {
                 return val;
             }

@@ -4,7 +4,7 @@ tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassWit
 tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassWithAny.ts(27,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassWithAny.ts(38,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassWithAny.ts(44,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassWithAny.ts(57,1): error TS2323: Type 'E' is not assignable to type 'C'.
+tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassWithAny.ts(57,1): error TS2322: Type 'E' is not assignable to type 'C'.
   Types of property 'x' are incompatible.
     Type 'string' is not assignable to type 'number'.
 
@@ -80,8 +80,8 @@ tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassWit
     c = d;
     c = e;
     ~
-!!! error TS2323: Type 'E' is not assignable to type 'C'.
-!!! error TS2323:   Types of property 'x' are incompatible.
-!!! error TS2323:     Type 'string' is not assignable to type 'number'.
+!!! error TS2322: Type 'E' is not assignable to type 'C'.
+!!! error TS2322:   Types of property 'x' are incompatible.
+!!! error TS2322:     Type 'string' is not assignable to type 'number'.
     var r = c.foo(); // e.foo would return string
     
