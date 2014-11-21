@@ -1,5 +1,5 @@
 tests/cases/conformance/parser/ecmascript5/parserRealSource4.ts(4,1): error TS6053: File 'tests/cases/conformance/parser/ecmascript5/typescript.ts' not found.
-tests/cases/conformance/parser/ecmascript5/parserRealSource4.ts(195,37): error TS1150: 'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.
+tests/cases/conformance/parser/ecmascript5/parserRealSource4.ts(195,24): error TS1150: 'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.
 
 
 ==== tests/cases/conformance/parser/ecmascript5/parserRealSource4.ts (2 errors) ====
@@ -200,7 +200,7 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource4.ts(195,37): error T
         export class HashTable {
             public itemCount: number = 0;
             public table = new HashEntry[];
-                                        ~~
+                           ~~~~~~~~~~~~~~~
 !!! error TS1150: 'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.
     
             constructor (public size: number, public hashFn: (key) =>number,

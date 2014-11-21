@@ -13,9 +13,9 @@
 // limitations under the License.
 //
 
-///<reference path='formatting.ts' />
+///<reference path='references.ts' />
 
-module TypeScript.Services.Formatting {
+module ts.formatting {
     export class RuleDescriptor {
         constructor(public LeftTokenRange: Shared.TokenRange, public RightTokenRange: Shared.TokenRange) {
         }
@@ -34,7 +34,6 @@ module TypeScript.Services.Formatting {
         }
 
         static create3(left: SyntaxKind, right: Shared.TokenRange): RuleDescriptor
-            //: this(TokenRange.FromToken(left), right)
         {
             return RuleDescriptor.create4(Shared.TokenRange.FromToken(left), right);
         }

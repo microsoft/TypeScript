@@ -1,5 +1,5 @@
-tests/cases/conformance/expressions/commaOperator/commaOperatorOtherInvalidOperation.ts(6,5): error TS2323: Type 'string' is not assignable to type 'number'.
-tests/cases/conformance/expressions/commaOperator/commaOperatorOtherInvalidOperation.ts(12,9): error TS2323: Type 'T2' is not assignable to type 'T1'.
+tests/cases/conformance/expressions/commaOperator/commaOperatorOtherInvalidOperation.ts(6,5): error TS2322: Type 'string' is not assignable to type 'number'.
+tests/cases/conformance/expressions/commaOperator/commaOperatorOtherInvalidOperation.ts(12,9): error TS2322: Type 'T2' is not assignable to type 'T1'.
 
 
 ==== tests/cases/conformance/expressions/commaOperator/commaOperatorOtherInvalidOperation.ts (2 errors) ====
@@ -10,7 +10,7 @@ tests/cases/conformance/expressions/commaOperator/commaOperatorOtherInvalidOpera
     }
     var resultIsString: number = foo(1, "123"); //error here
         ~~~~~~~~~~~~~~
-!!! error TS2323: Type 'string' is not assignable to type 'number'.
+!!! error TS2322: Type 'string' is not assignable to type 'number'.
     
     //TypeParameters
     function foo1<T1, T2>() {
@@ -18,5 +18,5 @@ tests/cases/conformance/expressions/commaOperator/commaOperatorOtherInvalidOpera
         var y: T2;
         var result: T1 = (x, y); //error here
             ~~~~~~
-!!! error TS2323: Type 'T2' is not assignable to type 'T1'.
+!!! error TS2322: Type 'T2' is not assignable to type 'T1'.
     }

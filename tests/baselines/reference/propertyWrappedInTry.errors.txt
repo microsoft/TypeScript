@@ -2,14 +2,13 @@ tests/cases/compiler/propertyWrappedInTry.ts(3,5): error TS1068: Unexpected toke
 tests/cases/compiler/propertyWrappedInTry.ts(5,9): error TS1129: Statement expected.
 tests/cases/compiler/propertyWrappedInTry.ts(11,5): error TS1128: Declaration or statement expected.
 tests/cases/compiler/propertyWrappedInTry.ts(11,18): error TS1005: ';' expected.
-tests/cases/compiler/propertyWrappedInTry.ts(13,9): error TS1108: A 'return' statement can only be used within a function body.
 tests/cases/compiler/propertyWrappedInTry.ts(17,1): error TS1128: Declaration or statement expected.
 tests/cases/compiler/propertyWrappedInTry.ts(5,16): error TS2304: Cannot find name 'bar'.
 tests/cases/compiler/propertyWrappedInTry.ts(5,22): error TS2304: Cannot find name 'someInitThatMightFail'.
 tests/cases/compiler/propertyWrappedInTry.ts(11,12): error TS2304: Cannot find name 'baz'.
 
 
-==== tests/cases/compiler/propertyWrappedInTry.ts (9 errors) ====
+==== tests/cases/compiler/propertyWrappedInTry.ts (8 errors) ====
     class Foo {
     
         try {
@@ -37,8 +36,6 @@ tests/cases/compiler/propertyWrappedInTry.ts(11,12): error TS2304: Cannot find n
 !!! error TS2304: Cannot find name 'baz'.
     
             return this.bar; // doesn't get rewritten to Foo.bar.
-            ~~~~~~
-!!! error TS1108: A 'return' statement can only be used within a function body.
     
         }
     

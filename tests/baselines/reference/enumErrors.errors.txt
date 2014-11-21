@@ -2,13 +2,13 @@ tests/cases/conformance/enums/enumErrors.ts(2,6): error TS2431: Enum name cannot
 tests/cases/conformance/enums/enumErrors.ts(3,6): error TS2431: Enum name cannot be 'number'
 tests/cases/conformance/enums/enumErrors.ts(4,6): error TS2431: Enum name cannot be 'string'
 tests/cases/conformance/enums/enumErrors.ts(5,6): error TS2431: Enum name cannot be 'boolean'
-tests/cases/conformance/enums/enumErrors.ts(9,9): error TS2323: Type 'Number' is not assignable to type 'E5'.
-tests/cases/conformance/enums/enumErrors.ts(20,9): error TS2323: Type 'E9' is not assignable to type 'E10'.
-tests/cases/conformance/enums/enumErrors.ts(21,9): error TS2323: Type 'E9' is not assignable to type 'E10'.
-tests/cases/conformance/enums/enumErrors.ts(26,9): error TS2323: Type 'string' is not assignable to type 'E11'.
-tests/cases/conformance/enums/enumErrors.ts(27,9): error TS2323: Type 'Date' is not assignable to type 'E11'.
+tests/cases/conformance/enums/enumErrors.ts(9,9): error TS2322: Type 'Number' is not assignable to type 'E5'.
+tests/cases/conformance/enums/enumErrors.ts(20,9): error TS2322: Type 'E9' is not assignable to type 'E10'.
+tests/cases/conformance/enums/enumErrors.ts(21,9): error TS2322: Type 'E9' is not assignable to type 'E10'.
+tests/cases/conformance/enums/enumErrors.ts(26,9): error TS2322: Type 'string' is not assignable to type 'E11'.
+tests/cases/conformance/enums/enumErrors.ts(27,9): error TS2322: Type 'Date' is not assignable to type 'E11'.
 tests/cases/conformance/enums/enumErrors.ts(28,9): error TS2304: Cannot find name 'window'.
-tests/cases/conformance/enums/enumErrors.ts(29,9): error TS2323: Type '{}' is not assignable to type 'E11'.
+tests/cases/conformance/enums/enumErrors.ts(29,9): error TS2322: Type '{}' is not assignable to type 'E11'.
 
 
 ==== tests/cases/conformance/enums/enumErrors.ts (11 errors) ====
@@ -30,7 +30,7 @@ tests/cases/conformance/enums/enumErrors.ts(29,9): error TS2323: Type '{}' is no
     enum E5 {
         C = new Number(30)
             ~~~~~~~~~~~~~~
-!!! error TS2323: Type 'Number' is not assignable to type 'E5'.
+!!! error TS2322: Type 'Number' is not assignable to type 'E5'.
     }
     
     enum E9 {
@@ -43,25 +43,25 @@ tests/cases/conformance/enums/enumErrors.ts(29,9): error TS2323: Type '{}' is no
     enum E10 {
         A = E9.A,
             ~~~~
-!!! error TS2323: Type 'E9' is not assignable to type 'E10'.
+!!! error TS2322: Type 'E9' is not assignable to type 'E10'.
         B = E9.B
             ~~~~
-!!! error TS2323: Type 'E9' is not assignable to type 'E10'.
+!!! error TS2322: Type 'E9' is not assignable to type 'E10'.
     }
     
     // Enum with computed member intializer of other types
     enum E11 {
         A = '',
             ~~
-!!! error TS2323: Type 'string' is not assignable to type 'E11'.
+!!! error TS2322: Type 'string' is not assignable to type 'E11'.
         B = new Date(),
             ~~~~~~~~~~
-!!! error TS2323: Type 'Date' is not assignable to type 'E11'.
+!!! error TS2322: Type 'Date' is not assignable to type 'E11'.
         C = window,
             ~~~~~~
 !!! error TS2304: Cannot find name 'window'.
         D = {}
             ~~
-!!! error TS2323: Type '{}' is not assignable to type 'E11'.
+!!! error TS2322: Type '{}' is not assignable to type 'E11'.
     }
     

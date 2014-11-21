@@ -1,14 +1,14 @@
-tests/cases/conformance/types/primitives/boolean/invalidBooleanAssignments.ts(3,5): error TS2323: Type 'boolean' is not assignable to type 'number'.
-tests/cases/conformance/types/primitives/boolean/invalidBooleanAssignments.ts(4,5): error TS2323: Type 'boolean' is not assignable to type 'string'.
-tests/cases/conformance/types/primitives/boolean/invalidBooleanAssignments.ts(5,5): error TS2323: Type 'boolean' is not assignable to type 'void'.
-tests/cases/conformance/types/primitives/boolean/invalidBooleanAssignments.ts(9,5): error TS2323: Type 'boolean' is not assignable to type 'E'.
-tests/cases/conformance/types/primitives/boolean/invalidBooleanAssignments.ts(12,5): error TS2323: Type 'boolean' is not assignable to type 'C'.
+tests/cases/conformance/types/primitives/boolean/invalidBooleanAssignments.ts(3,5): error TS2322: Type 'boolean' is not assignable to type 'number'.
+tests/cases/conformance/types/primitives/boolean/invalidBooleanAssignments.ts(4,5): error TS2322: Type 'boolean' is not assignable to type 'string'.
+tests/cases/conformance/types/primitives/boolean/invalidBooleanAssignments.ts(5,5): error TS2322: Type 'boolean' is not assignable to type 'void'.
+tests/cases/conformance/types/primitives/boolean/invalidBooleanAssignments.ts(9,5): error TS2322: Type 'boolean' is not assignable to type 'E'.
+tests/cases/conformance/types/primitives/boolean/invalidBooleanAssignments.ts(12,5): error TS2322: Type 'boolean' is not assignable to type 'C'.
   Property 'foo' is missing in type 'Boolean'.
-tests/cases/conformance/types/primitives/boolean/invalidBooleanAssignments.ts(15,5): error TS2323: Type 'boolean' is not assignable to type 'I'.
+tests/cases/conformance/types/primitives/boolean/invalidBooleanAssignments.ts(15,5): error TS2322: Type 'boolean' is not assignable to type 'I'.
   Property 'bar' is missing in type 'Boolean'.
-tests/cases/conformance/types/primitives/boolean/invalidBooleanAssignments.ts(17,5): error TS2323: Type 'boolean' is not assignable to type '() => string'.
+tests/cases/conformance/types/primitives/boolean/invalidBooleanAssignments.ts(17,5): error TS2322: Type 'boolean' is not assignable to type '() => string'.
 tests/cases/conformance/types/primitives/boolean/invalidBooleanAssignments.ts(21,1): error TS2364: Invalid left-hand side of assignment expression.
-tests/cases/conformance/types/primitives/boolean/invalidBooleanAssignments.ts(24,5): error TS2323: Type 'boolean' is not assignable to type 'T'.
+tests/cases/conformance/types/primitives/boolean/invalidBooleanAssignments.ts(24,5): error TS2322: Type 'boolean' is not assignable to type 'T'.
 tests/cases/conformance/types/primitives/boolean/invalidBooleanAssignments.ts(26,1): error TS2364: Invalid left-hand side of assignment expression.
 
 
@@ -17,35 +17,35 @@ tests/cases/conformance/types/primitives/boolean/invalidBooleanAssignments.ts(26
     
     var a: number = x;
         ~
-!!! error TS2323: Type 'boolean' is not assignable to type 'number'.
+!!! error TS2322: Type 'boolean' is not assignable to type 'number'.
     var b: string = x;
         ~
-!!! error TS2323: Type 'boolean' is not assignable to type 'string'.
+!!! error TS2322: Type 'boolean' is not assignable to type 'string'.
     var c: void = x;
         ~
-!!! error TS2323: Type 'boolean' is not assignable to type 'void'.
+!!! error TS2322: Type 'boolean' is not assignable to type 'void'.
     var d: typeof undefined = x;
     
     enum E { A }
     var e: E = x;
         ~
-!!! error TS2323: Type 'boolean' is not assignable to type 'E'.
+!!! error TS2322: Type 'boolean' is not assignable to type 'E'.
     
     class C { foo: string }
     var f: C = x;
         ~
-!!! error TS2323: Type 'boolean' is not assignable to type 'C'.
-!!! error TS2323:   Property 'foo' is missing in type 'Boolean'.
+!!! error TS2322: Type 'boolean' is not assignable to type 'C'.
+!!! error TS2322:   Property 'foo' is missing in type 'Boolean'.
     
     interface I { bar: string }
     var g: I = x;
         ~
-!!! error TS2323: Type 'boolean' is not assignable to type 'I'.
-!!! error TS2323:   Property 'bar' is missing in type 'Boolean'.
+!!! error TS2322: Type 'boolean' is not assignable to type 'I'.
+!!! error TS2322:   Property 'bar' is missing in type 'Boolean'.
     
     var h: { (): string } = x;
         ~
-!!! error TS2323: Type 'boolean' is not assignable to type '() => string'.
+!!! error TS2322: Type 'boolean' is not assignable to type '() => string'.
     var h2: { toString(): string } = x; // no error
     
     module M { export var a = 1; }
@@ -56,7 +56,7 @@ tests/cases/conformance/types/primitives/boolean/invalidBooleanAssignments.ts(26
     function i<T>(a: T) {
         a = x;
         ~
-!!! error TS2323: Type 'boolean' is not assignable to type 'T'.
+!!! error TS2322: Type 'boolean' is not assignable to type 'T'.
     }
     i = x;
     ~

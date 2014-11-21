@@ -1,9 +1,9 @@
-tests/cases/conformance/expressions/assignmentOperator/compoundAdditionAssignmentLHSCannotBeAssigned.ts(5,1): error TS2323: Type 'string' is not assignable to type 'boolean'.
-tests/cases/conformance/expressions/assignmentOperator/compoundAdditionAssignmentLHSCannotBeAssigned.ts(8,1): error TS2323: Type 'string' is not assignable to type 'number'.
-tests/cases/conformance/expressions/assignmentOperator/compoundAdditionAssignmentLHSCannotBeAssigned.ts(11,1): error TS2323: Type 'string' is not assignable to type 'E'.
-tests/cases/conformance/expressions/assignmentOperator/compoundAdditionAssignmentLHSCannotBeAssigned.ts(14,1): error TS2323: Type 'string' is not assignable to type '{ a: string; }'.
+tests/cases/conformance/expressions/assignmentOperator/compoundAdditionAssignmentLHSCannotBeAssigned.ts(5,1): error TS2322: Type 'string' is not assignable to type 'boolean'.
+tests/cases/conformance/expressions/assignmentOperator/compoundAdditionAssignmentLHSCannotBeAssigned.ts(8,1): error TS2322: Type 'string' is not assignable to type 'number'.
+tests/cases/conformance/expressions/assignmentOperator/compoundAdditionAssignmentLHSCannotBeAssigned.ts(11,1): error TS2322: Type 'string' is not assignable to type 'E'.
+tests/cases/conformance/expressions/assignmentOperator/compoundAdditionAssignmentLHSCannotBeAssigned.ts(14,1): error TS2322: Type 'string' is not assignable to type '{ a: string; }'.
   Property 'a' is missing in type 'String'.
-tests/cases/conformance/expressions/assignmentOperator/compoundAdditionAssignmentLHSCannotBeAssigned.ts(17,1): error TS2323: Type 'string' is not assignable to type 'void'.
+tests/cases/conformance/expressions/assignmentOperator/compoundAdditionAssignmentLHSCannotBeAssigned.ts(17,1): error TS2322: Type 'string' is not assignable to type 'void'.
 
 
 ==== tests/cases/conformance/expressions/assignmentOperator/compoundAdditionAssignmentLHSCannotBeAssigned.ts (5 errors) ====
@@ -13,25 +13,25 @@ tests/cases/conformance/expressions/assignmentOperator/compoundAdditionAssignmen
     var x1: boolean;
     x1 += '';
     ~~
-!!! error TS2323: Type 'string' is not assignable to type 'boolean'.
+!!! error TS2322: Type 'string' is not assignable to type 'boolean'.
     
     var x2: number;
     x2 += '';
     ~~
-!!! error TS2323: Type 'string' is not assignable to type 'number'.
+!!! error TS2322: Type 'string' is not assignable to type 'number'.
     
     var x3: E;
     x3 += '';
     ~~
-!!! error TS2323: Type 'string' is not assignable to type 'E'.
+!!! error TS2322: Type 'string' is not assignable to type 'E'.
     
     var x4: {a: string};
     x4 += '';
     ~~
-!!! error TS2323: Type 'string' is not assignable to type '{ a: string; }'.
-!!! error TS2323:   Property 'a' is missing in type 'String'.
+!!! error TS2322: Type 'string' is not assignable to type '{ a: string; }'.
+!!! error TS2322:   Property 'a' is missing in type 'String'.
     
     var x5: void;
     x5 += '';
     ~~
-!!! error TS2323: Type 'string' is not assignable to type 'void'.
+!!! error TS2322: Type 'string' is not assignable to type 'void'.

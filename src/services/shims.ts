@@ -15,9 +15,6 @@
 
 /// <reference path='services.ts' />
 
-/// <reference path='compiler\pathUtils.ts' />
-/// <reference path='compiler\precompile.ts' />
-
 var debugObjectHost = (<any>this);
 
 module ts {
@@ -55,6 +52,17 @@ module ts {
         getDefaultLibFilename(): string;
     }
 
+    ///
+    /// Pre-processing
+    ///
+    // Note: This is being using by the host (VS) and is marshaled back and forth.
+    // When changing this make sure the changes are reflected in the managed side as well
+    export interface IFileReference {
+        path: string;
+        position: number;
+        length: number;
+    }
+
     /** Public interface of a language service instance shim. */
     export interface ShimFactory {
         registerShim(shim: Shim): void;
@@ -90,9 +98,6 @@ module ts {
 
         getSignatureHelpItems(fileName: string, position: number): string;
 
-        // Obsolete.  Use getSignatureHelpItems instead.
-        getSignatureAtPosition(fileName: string, position: number): string;
-
         /**
          * Returns a JSON-encoded value of the type:
          * { canRename: boolean, localizedErrorMessage: string, displayName: string, fullDisplayName: string, kind: string, kindModifiers: string, triggerSpan: { start; length } }
@@ -127,12 +132,6 @@ module ts {
 
         /**
          * Returns a JSON-encoded value of the type:
-         * { fileName: string; textSpan: { start: number; length: number}; isWriteAccess: boolean }[]
-         */
-        getImplementorsAtPosition(fileName: string, position: number): string;
-        
-        /**
-         * Returns a JSON-encoded value of the type:
          * { name: string; kind: string; kindModifiers: string; containerName: string; containerKind: string; matchKind: string; fileName: string; textSpan: { start: number; length: number}; } [] = [];
          */
         getNavigateToItems(searchValue: string): string;
@@ -162,11 +161,11 @@ module ts {
     }
 
     export interface ClassifierShim extends Shim {
-        getClassificationsForLine(text: string, lexState: EndOfLineState): string;
+        getClassificationsForLine(text: string, lexState: EndOfLineState, classifyKeywordsInGenerics?: boolean): string;
     }
 
     export interface CoreServicesShim extends Shim {
-        getPreProcessedFileInfo(fileName: string, sourceText: TypeScript.IScriptSnapshot): string;
+        getPreProcessedFileInfo(fileName: string, sourceText: IScriptSnapshot): string;
         getDefaultCompilationSettings(): string;
     }
 
@@ -299,7 +298,7 @@ module ts {
         logger.log("*INTERNAL ERROR* - Exception in typescript services: " + err.message);
     }
 
-    class ScriptSnapshotShimAdapter implements TypeScript.IScriptSnapshot {
+    class ScriptSnapshotShimAdapter implements IScriptSnapshot {
         private lineStartPositions: number[] = null;
 
         constructor(private scriptSnapshotShim: ScriptSnapshotShim) {
@@ -321,7 +320,7 @@ module ts {
             return this.lineStartPositions;
         }
 
-        public getChangeRange(oldSnapshot: TypeScript.IScriptSnapshot): TypeScript.TextChangeRange {
+        public getChangeRange(oldSnapshot: IScriptSnapshot): TextChangeRange {
             var oldSnapshotShim = <ScriptSnapshotShimAdapter>oldSnapshot;
             var encoded = this.scriptSnapshotShim.getChangeRange(oldSnapshotShim.scriptSnapshotShim);
             if (encoded == null) {
@@ -329,8 +328,8 @@ module ts {
             }
 
             var decoded: { span: { start: number; length: number; }; newLength: number; } = JSON.parse(encoded);
-            return new TypeScript.TextChangeRange(
-                new TypeScript.TextSpan(decoded.span.start, decoded.span.length), decoded.newLength);
+            return new TextChangeRange(
+                new TextSpan(decoded.span.start, decoded.span.length), decoded.newLength);
         }
     }
 
@@ -358,7 +357,7 @@ module ts {
             return JSON.parse(encoded);
         }
 
-        public getScriptSnapshot(fileName: string): TypeScript.IScriptSnapshot {
+        public getScriptSnapshot(fileName: string): IScriptSnapshot {
             return new ScriptSnapshotShimAdapter(this.shimHost.getScriptSnapshot(fileName));
         }
 
@@ -507,22 +506,11 @@ module ts {
             };
         }
 
-        private realizeDiagnosticWithFileName(diagnostic: Diagnostic): { fileName: string; message: string; start: number; length: number; category: string; } {
-            return {
-                fileName: diagnostic.file.filename,
-                message: diagnostic.messageText,
-                start: diagnostic.start,
-                length: diagnostic.length,
-                /// TODO: no need for the tolowerCase call
-                category: DiagnosticCategory[diagnostic.category].toLowerCase()
-            };
-        }
-
         public getSyntacticClassifications(fileName: string, start: number, length: number): string {
             return this.forwardJSONCall(
                 "getSyntacticClassifications('" + fileName + "', " + start + ", " + length + ")",
                 () => {
-                    var classifications = this.languageService.getSyntacticClassifications(fileName, new TypeScript.TextSpan(start, length));
+                    var classifications = this.languageService.getSyntacticClassifications(fileName, new TextSpan(start, length));
                     return classifications;
                 });
         }
@@ -531,7 +519,7 @@ module ts {
             return this.forwardJSONCall(
                 "getSemanticClassifications('" + fileName + "', " + start + ", " + length + ")",
                 () => {
-                    var classifications = this.languageService.getSemanticClassifications(fileName, new TypeScript.TextSpan(start, length));
+                    var classifications = this.languageService.getSemanticClassifications(fileName, new TextSpan(start, length));
                     return classifications;
                 });
         }
@@ -559,7 +547,7 @@ module ts {
                 "getCompilerOptionsDiagnostics()",
                 () => {
                     var errors = this.languageService.getCompilerOptionsDiagnostics();
-                    return errors.map(d => this.realizeDiagnosticWithFileName(d))
+                    return errors.map(LanguageServiceShimObject.realizeDiagnostic)
                 });
         }
 
@@ -615,14 +603,6 @@ module ts {
                 () => {
                     var signatureInfo = this.languageService.getSignatureHelpItems(fileName, position);
                     return signatureInfo;
-                });
-        }
-
-        public getSignatureAtPosition(fileName: string, position: number): string {
-            return this.forwardJSONCall(
-                "getSignatureAtPosition('" + fileName + "', " + position + ")",
-                () => {
-                    return this.languageService.getSignatureAtPosition(fileName, position);
                 });
         }
 
@@ -698,16 +678,6 @@ module ts {
                     return this.languageService.getOccurrencesAtPosition(fileName, position);
                 });
         }
-
-        /// GET IMPLEMENTORS
-        public getImplementorsAtPosition(fileName: string, position: number): string {
-            return this.forwardJSONCall(
-                "getImplementorsAtPosition('" + fileName + "', " + position + ")",
-                () => {
-                    return this.languageService.getImplementorsAtPosition(fileName, position);
-                });
-        }
-
 
         /// COMPLETION LISTS
 
@@ -824,8 +794,8 @@ module ts {
         }
 
         /// COLORIZATION
-        public getClassificationsForLine(text: string, lexState: EndOfLineState): string {
-            var classification = this.classifier.getClassificationsForLine(text, lexState);
+        public getClassificationsForLine(text: string, lexState: EndOfLineState, classifyKeywordsInGenerics?: boolean): string {
+            var classification = this.classifier.getClassificationsForLine(text, lexState, classifyKeywordsInGenerics);
             var items = classification.entries;
             var result = "";
             for (var i = 0; i < items.length; i++) {
@@ -846,12 +816,33 @@ module ts {
             return forwardJSONCall(this.logger, actionDescription, action);
         }
 
-        public getPreProcessedFileInfo(fileName: string, sourceText: TypeScript.IScriptSnapshot): string {
+        public getPreProcessedFileInfo(fileName: string, sourceTextSnapshot: IScriptSnapshot): string {
             return this.forwardJSONCall(
                 "getPreProcessedFileInfo('" + fileName + "')",
                 () => {
-                    var result = TypeScript.preProcessFile(fileName, sourceText);
-                    return result;
+                    var result = preProcessFile(sourceTextSnapshot.getText(0, sourceTextSnapshot.getLength()));
+                    var convertResult = {
+                        referencedFiles: <IFileReference[]>[],
+                        importedFiles: <IFileReference[]>[],
+                        isLibFile: result.isLibFile
+                    };
+
+                    forEach(result.referencedFiles, refFile => {
+                        convertResult.referencedFiles.push({
+                            path: normalizePath(refFile.filename),
+                            position: refFile.pos,
+                            length: refFile.end - refFile.pos
+                        });
+                    });
+
+                    forEach(result.importedFiles, importedFile => {
+                        convertResult.importedFiles.push({
+                            path: normalizeSlashes(importedFile.filename),
+                            position: importedFile.pos,
+                            length: importedFile.end - importedFile.pos
+                        });
+                    });
+                    return convertResult;
                 });
         }
 
@@ -918,7 +909,7 @@ module ts {
                 }
             }
 
-            throw TypeScript.Errors.invalidOperation();
+            throw new Error("Invalid operation");
         }
     }
 }

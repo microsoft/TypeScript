@@ -1,5 +1,5 @@
 tests/cases/conformance/scanner/ecmascript5/scannerStringLiterals.ts(10,34): error TS1002: Unterminated string literal.
-tests/cases/conformance/scanner/ecmascript5/scannerStringLiterals.ts(11,38): error TS1126: Unexpected end of text.
+tests/cases/conformance/scanner/ecmascript5/scannerStringLiterals.ts(11,38): error TS1002: Unterminated string literal.
 
 
 ==== tests/cases/conformance/scanner/ecmascript5/scannerStringLiterals.ts (2 errors) ====
@@ -17,4 +17,4 @@ tests/cases/conformance/scanner/ecmascript5/scannerStringLiterals.ts(11,38): err
 !!! error TS1002: Unterminated string literal.
     "Should error because of end of file.
                                          
-!!! error TS1126: Unexpected end of text.
+!!! error TS1002: Unterminated string literal.

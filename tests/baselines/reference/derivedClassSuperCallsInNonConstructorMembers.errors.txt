@@ -1,9 +1,5 @@
 tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperCallsInNonConstructorMembers.ts(8,8): error TS1110: Type expected.
-tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperCallsInNonConstructorMembers.ts(12,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperCallsInNonConstructorMembers.ts(16,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperCallsInNonConstructorMembers.ts(20,15): error TS1110: Type expected.
-tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperCallsInNonConstructorMembers.ts(24,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperCallsInNonConstructorMembers.ts(28,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperCallsInNonConstructorMembers.ts(8,8): error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors
 tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperCallsInNonConstructorMembers.ts(10,9): error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors
 tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperCallsInNonConstructorMembers.ts(13,9): error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors
@@ -14,7 +10,7 @@ tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassS
 tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperCallsInNonConstructorMembers.ts(29,9): error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors
 
 
-==== tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperCallsInNonConstructorMembers.ts (14 errors) ====
+==== tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperCallsInNonConstructorMembers.ts (10 errors) ====
     // error to use super calls outside a constructor
     
     class Base {
@@ -33,16 +29,12 @@ tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassS
 !!! error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors
         }
         get C() {
-            ~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             super();
             ~~~~~
 !!! error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors
             return 1;
         }
         set C(v) {
-            ~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             super();
             ~~~~~
 !!! error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors
@@ -59,16 +51,12 @@ tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassS
 !!! error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors
         }
         static get C() {
-                   ~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             super();
             ~~~~~
 !!! error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors
             return 1;
         }
         static set C(v) {
-                   ~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             super();
             ~~~~~
 !!! error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors
