@@ -23,9 +23,6 @@ module TypeScript.IncrementalParser {
     // prevent this level of reuse include substantially destructive operations like introducing
     // "/*" without a "*/" nearby to terminate the comment.
     function createParserSource(oldSyntaxTree: SyntaxTree, textChangeRange: TextChangeRange, text: ISimpleText): Parser.IParserSource {
-        var fileName = oldSyntaxTree.fileName();
-        var languageVersion = oldSyntaxTree.languageVersion();
-
         // The underlying source that we will use to scan tokens from any new text, or any tokens 
         // from the old tree that we decide we can't use for any reason.  We will also continue 
         // scanning tokens from this source until we've decided that we're resynchronized and can
@@ -441,8 +438,8 @@ module TypeScript.IncrementalParser {
 
         return {
             text: text,
-            fileName: fileName,
-            languageVersion: languageVersion,
+            fileName: oldSyntaxTree.fileName(),
+            languageVersion: oldSyntaxTree.languageVersion(),
             absolutePosition: absolutePosition,
             currentNode: currentNode,
             currentToken: currentToken,
