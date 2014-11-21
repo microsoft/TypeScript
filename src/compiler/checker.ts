@@ -82,6 +82,7 @@ module ts {
             isUndefinedSymbol: symbol => symbol === undefinedSymbol,
             isArgumentsSymbol: symbol => symbol === argumentsSymbol,
             getDiagnostics,
+            getDeclarationDiagnostics,
             getGlobalDiagnostics,
             checkProgram,
             invokeEmitter,
@@ -999,6 +1000,7 @@ module ts {
                 // Type Reference or TypeAlias entity = Identifier
                 meaning = SymbolFlags.Type;
             }
+
             var firstIdentifier = getFirstIdentifier(entityName);
             var symbol = resolveName(enclosingDeclaration, (<Identifier>firstIdentifier).text, meaning, /*nodeNotFoundErrorMessage*/ undefined, /*nameArg*/ undefined);
 
@@ -8544,6 +8546,12 @@ module ts {
             return getSortedDiagnostics();
         }
 
+        function getDeclarationDiagnostics(targetSourceFile: SourceFile): Diagnostic[] {
+            var resolver = createResolver();
+            checkSourceFile(targetSourceFile);
+            return ts.getDeclarationDiagnostics(program, resolver, targetSourceFile);
+        }
+
         function getGlobalDiagnostics(): Diagnostic[] {
             return filter(getSortedDiagnostics(), d => !d.file);
         }
@@ -9137,8 +9145,8 @@ module ts {
             getSymbolDisplayBuilder().buildTypeDisplay(getReturnTypeOfSignature(signature), writer, enclosingDeclaration, flags);
         }
 
-        function invokeEmitter(targetSourceFile?: SourceFile) {
-            var resolver: EmitResolver = {
+        function createResolver(): EmitResolver {
+            return {
                 getProgram: () => program,
                 getLocalNameOfContainer,
                 getExpressionNamePrefix,
@@ -9157,6 +9165,10 @@ module ts {
                 isEntityNameVisible,
                 getConstantValue,
             };
+        }
+
+        function invokeEmitter(targetSourceFile?: SourceFile) {
+            var resolver = createResolver();
             checkProgram();
             return emitFiles(resolver, targetSourceFile);
         }

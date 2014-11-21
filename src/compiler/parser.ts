@@ -48,13 +48,17 @@ module ts {
         return skipTrivia((sourceFile || getSourceFileOfNode(node)).text, node.pos);
     }
 
+    export function getSourceTextOfNodeFromSourceFile(sourceFile: SourceFile, node: Node): string {
+        var text = sourceFile.text;
+        return text.substring(skipTrivia(text, node.pos), node.end);
+    }
+
     export function getTextOfNodeFromSourceText(sourceText: string, node: Node): string {
         return sourceText.substring(skipTrivia(sourceText, node.pos), node.end);
     }
 
     export function getTextOfNode(node: Node): string {
-        var text = getSourceFileOfNode(node).text;
-        return text.substring(skipTrivia(text, node.pos), node.end);
+        return getSourceTextOfNodeFromSourceFile(getSourceFileOfNode(node), node);
     }
 
     // Add an extra underscore to identifiers that start with two underscores to avoid issues with magic names like '__proto__'
