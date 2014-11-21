@@ -1464,6 +1464,9 @@ module ts {
             else if (flags & SymbolFlags.Module) { return SymbolDisplayPartKind.moduleName; }
             else if (flags & SymbolFlags.Method) { return SymbolDisplayPartKind.methodName; }
             else if (flags & SymbolFlags.TypeParameter) { return SymbolDisplayPartKind.typeParameterName; }
+            else if (flags & SymbolFlags.TypeAlias) { return SymbolDisplayPartKind.aliasName; }
+            else if (flags & SymbolFlags.Import) { return SymbolDisplayPartKind.aliasName; }
+
 
             return SymbolDisplayPartKind.text;
         }
@@ -3012,7 +3015,7 @@ module ts {
                 displayParts.push(spacePart());
                 addFullSymbolName(symbol);
                 displayParts.push(spacePart());
-                displayParts.push(punctuationPart(SyntaxKind.EqualsToken));
+                displayParts.push(operatorPart(SyntaxKind.EqualsToken));
                 displayParts.push(spacePart());
                 displayParts.push.apply(displayParts, typeToDisplayParts(typeResolver, typeResolver.getDeclaredTypeOfSymbol(symbol), enclosingDeclaration));
             }
@@ -3084,7 +3087,7 @@ module ts {
                         var importDeclaration = <ImportDeclaration>declaration;
                         if (importDeclaration.externalModuleName) {
                             displayParts.push(spacePart());
-                            displayParts.push(punctuationPart(SyntaxKind.EqualsToken));
+                            displayParts.push(operatorPart(SyntaxKind.EqualsToken));
                             displayParts.push(spacePart());
                             displayParts.push(keywordPart(SyntaxKind.RequireKeyword));
                             displayParts.push(punctuationPart(SyntaxKind.OpenParenToken));
@@ -3095,7 +3098,7 @@ module ts {
                             var internalAliasSymbol = typeResolver.getSymbolInfo(importDeclaration.entityName);
                             if (internalAliasSymbol) {
                                 displayParts.push(spacePart());
-                                displayParts.push(punctuationPart(SyntaxKind.EqualsToken));
+                                displayParts.push(operatorPart(SyntaxKind.EqualsToken));
                                 displayParts.push(spacePart());
                                 addFullSymbolName(internalAliasSymbol, enclosingDeclaration);
                             }
