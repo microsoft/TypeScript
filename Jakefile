@@ -276,8 +276,9 @@ task("clean", function() {
     jake.rmRf(builtDirectory);
 });
 
-var analyzerFile = path.join(builtLocalDirectory, "analyzer.js")
-compileFile(analyzerFile, ["src/services/analyzer.ts"], [builtLocalDirectory].concat(servicesSources), [], true, false, true);
+var analyzerFile = path.join(builtLocalDirectory, "analyzer.js");
+var analyserSourceFile = "src/services/analyzer.ts";
+compileFile(analyzerFile, [analyserSourceFile], [builtLocalDirectory, analyserSourceFile].concat(servicesSources), [], true, false, true);
 
 desc("Builds analyzer");
 task("analyzer", [analyzerFile]);
