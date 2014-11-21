@@ -231,7 +231,7 @@ module FourSlashInterface {
         }
 
         public quickInfoIs(expectedText?: string, expectedDocumentation?: string) {
-            FourSlash.currentTestState.quickInfoIs(this.negative, expectedText, expectedDocumentation);
+            FourSlash.currentTestState.verifyQuickInfoString(this.negative, expectedText, expectedDocumentation);
         }
 
         public quickInfoExists() {
@@ -435,10 +435,10 @@ module FourSlashInterface {
             FourSlash.currentTestState.verifyRenameLocations(findInStrings, findInComments);
         }
 
-        public verifyQuickInfo(kind: string, kindModifiers: string, textSpan: { start: number; length: number; },
+        public verifyQuickInfoDisplayParts(kind: string, kindModifiers: string, textSpan: { start: number; length: number; },
             displayParts: { text: string; kind: string; }[],
             documentation: { text: string; kind: string; }[]) {
-            FourSlash.currentTestState.verifyQuickInfo(kind, kindModifiers, textSpan, displayParts, documentation);
+            FourSlash.currentTestState.verifyQuickInfoDisplayParts(kind, kindModifiers, textSpan, displayParts, documentation);
         }
     }
 

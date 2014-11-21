@@ -769,7 +769,7 @@ module FourSlash {
             return "\nActual " + name + ":\n\t" + actualValue + "\nExpected value:\n\t" + expectedValue;
         }
 
-        public quickInfoIs(negative: boolean, expectedText?: string, expectedDocumentation?: string) {
+        public verifyQuickInfoString(negative: boolean, expectedText?: string, expectedDocumentation?: string) {
         [expectedText, expectedDocumentation].forEach(str => {
                 if (str) {
                     this.scenarioActions.push('<ShowQuickInfo />');
@@ -799,7 +799,7 @@ module FourSlash {
         }
 
 
-        public verifyQuickInfo(kind: string, kindModifiers: string, textSpan: { start: number; length: number; },
+        public verifyQuickInfoDisplayParts(kind: string, kindModifiers: string, textSpan: { start: number; length: number; },
             displayParts: { text: string; kind: string; }[],
             documentation: { text: string; kind: string; }[]) {
             this.scenarioActions.push('<ShowQuickInfo />');

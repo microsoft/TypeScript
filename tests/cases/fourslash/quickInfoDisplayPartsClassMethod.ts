@@ -22,7 +22,7 @@
 
 function verifyClassMethod(markerName: string, kindModifiers: string, methodName: string) {
     goTo.marker(markerName);
-    verify.verifyQuickInfo("method", kindModifiers, { start: test.markerByName(markerName).position, length: methodName.length },
+    verify.verifyQuickInfoDisplayParts("method", kindModifiers, { start: test.markerByName(markerName).position, length: methodName.length },
         [{ text: "(", kind: "punctuation" }, { text: "method", kind: "text" }, { text: ")", kind: "punctuation" },
             { text: " ", kind: "space" },
             { text: "c", kind: "className" }, { text: ".", kind: "punctuation" }, { text: methodName, kind: "methodName" },
@@ -70,7 +70,7 @@ verifyPrivateStaticMethod('8');
 verifyProtectedStaticMethod('81');
 
 goTo.marker('9');
-verify.verifyQuickInfo("var", "", { start: test.markerByName("9").position, length: "cInstance".length },
+verify.verifyQuickInfoDisplayParts("var", "", { start: test.markerByName("9").position, length: "cInstance".length },
     [{ text: "(", kind: "punctuation" }, { text: "var", kind: "text" }, { text: ")", kind: "punctuation" },
         { text: " ", kind: "space" }, { text: "cInstance", kind: "localName" }, { text: ":", kind: "punctuation" },
         { text: " ", kind: "space" }, { text: "c", kind: "className" }],
@@ -79,7 +79,7 @@ verify.verifyQuickInfo("var", "", { start: test.markerByName("9").position, leng
 verifyPublicMethod('10');
 
 goTo.marker('11');
-verify.verifyQuickInfo("class", "", { start: test.markerByName("11").position, length: "c".length },
+verify.verifyQuickInfoDisplayParts("class", "", { start: test.markerByName("11").position, length: "c".length },
     [{ text: "class", kind: "keyword" }, { text: " ", kind: "space" }, { text: "c", kind: "className" }],
     []);
 

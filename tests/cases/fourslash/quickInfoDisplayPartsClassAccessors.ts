@@ -38,7 +38,7 @@
 
 function verifyClassProperty(markerName: string, kindModifiers: string, propertyName: string) {
     goTo.marker(markerName);
-    verify.verifyQuickInfo("property", kindModifiers, { start: test.markerByName(markerName).position, length: propertyName.length },
+    verify.verifyQuickInfoDisplayParts("property", kindModifiers, { start: test.markerByName(markerName).position, length: propertyName.length },
         [{ text: "(", kind: "punctuation" }, { text: "property", kind: "text" }, { text: ")", kind: "punctuation" },
             { text: " ", kind: "space" },
             { text: "c", kind: "className" }, { text: ".", kind: "punctuation" }, { text: propertyName, kind: "propertyName" },
@@ -97,7 +97,7 @@ verifyProtectedStaticProperty('81');
 verifyProtectedStaticProperty('81s');
 
 goTo.marker('9');
-verify.verifyQuickInfo("var", "", { start: test.markerByName("9").position, length: "cInstance".length },
+verify.verifyQuickInfoDisplayParts("var", "", { start: test.markerByName("9").position, length: "cInstance".length },
     [{ text: "(", kind: "punctuation" }, { text: "var", kind: "text" }, { text: ")", kind: "punctuation" },
         { text: " ", kind: "space" }, { text: "cInstance", kind: "localName" }, { text: ":", kind: "punctuation" },
         { text: " ", kind: "space" }, { text: "c", kind: "className" }],
@@ -106,14 +106,14 @@ verify.verifyQuickInfo("var", "", { start: test.markerByName("9").position, leng
 verifyPublicProperty('10');
 
 goTo.marker('11');
-verify.verifyQuickInfo("class", "", { start: test.markerByName("11").position, length: "c".length },
+verify.verifyQuickInfoDisplayParts("class", "", { start: test.markerByName("11").position, length: "c".length },
     [{ text: "class", kind: "keyword" }, { text: " ", kind: "space" }, { text: "c", kind: "className" }],
     []);
 
 verifyStaticProperty('12');
 
 goTo.marker('9s');
-verify.verifyQuickInfo("var", "", { start: test.markerByName("9s").position, length: "cInstance".length },
+verify.verifyQuickInfoDisplayParts("var", "", { start: test.markerByName("9s").position, length: "cInstance".length },
     [{ text: "(", kind: "punctuation" }, { text: "var", kind: "text" }, { text: ")", kind: "punctuation" },
         { text: " ", kind: "space" }, { text: "cInstance", kind: "localName" }, { text: ":", kind: "punctuation" },
         { text: " ", kind: "space" }, { text: "c", kind: "className" }],
@@ -122,7 +122,7 @@ verify.verifyQuickInfo("var", "", { start: test.markerByName("9s").position, len
 verifyPublicProperty('10s');
 
 goTo.marker('11s');
-verify.verifyQuickInfo("class", "", { start: test.markerByName("11s").position, length: "c".length },
+verify.verifyQuickInfoDisplayParts("class", "", { start: test.markerByName("11s").position, length: "c".length },
     [{ text: "class", kind: "keyword" }, { text: " ", kind: "space" }, { text: "c", kind: "className" }],
     []);
 

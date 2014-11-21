@@ -29,7 +29,7 @@
 
 function verifyNonOverloadSignature(marker: string, textSpanLength: number) {
     goTo.marker(marker);
-    verify.verifyQuickInfo("constructor", "", { start: test.markerByName(marker).position, length: textSpanLength },
+    verify.verifyQuickInfoDisplayParts("constructor", "", { start: test.markerByName(marker).position, length: textSpanLength },
         [{ text: "(", kind: "punctuation" }, { text: "constructor", kind: "text" }, { text: ")", kind: "punctuation" },
             { text: " ", kind: "space" }, { text: "c", kind: "className" },
             { text: "(", kind: "punctuation" }, { text: ")", kind: "punctuation" }, { text: ":", kind: "punctuation" },
@@ -39,7 +39,7 @@ function verifyNonOverloadSignature(marker: string, textSpanLength: number) {
 
 function verifyClassInstance(markerName: string, instanceName: string, className: string) {
     goTo.marker(markerName);
-    verify.verifyQuickInfo("var", "", { start: test.markerByName(markerName).position, length: instanceName.length },
+    verify.verifyQuickInfoDisplayParts("var", "", { start: test.markerByName(markerName).position, length: instanceName.length },
         [{ text: "(", kind: "punctuation" }, { text: "var", kind: "text" }, { text: ")", kind: "punctuation" },
             { text: " ", kind: "space" }, { text: instanceName, kind: "localName" }, { text: ":", kind: "punctuation" },
             { text: " ", kind: "space" }, { text: className, kind: "className" }],
@@ -48,14 +48,14 @@ function verifyClassInstance(markerName: string, instanceName: string, className
 
 function verifyClass(markerName: string, className: string) {
     goTo.marker(markerName);
-    verify.verifyQuickInfo("class", "", { start: test.markerByName(markerName).position, length: className.length },
+    verify.verifyQuickInfoDisplayParts("class", "", { start: test.markerByName(markerName).position, length: className.length },
         [{ text: "class", kind: "keyword" }, { text: " ", kind: "space" }, { text: className, kind: "className" }],
         []);
 }
 
 function verifyTypeOfClass(markerName: string, typeOfVarName: string, className: string) {
     goTo.marker(markerName);
-    verify.verifyQuickInfo("var", "", { start: test.markerByName(markerName).position, length: typeOfVarName.length },
+    verify.verifyQuickInfoDisplayParts("var", "", { start: test.markerByName(markerName).position, length: typeOfVarName.length },
         [{ text: "(", kind: "punctuation" }, { text: "var", kind: "text" }, { text: ")", kind: "punctuation" },
             { text: " ", kind: "space" }, { text: typeOfVarName, kind: "localName" }, { text: ":", kind: "punctuation" },
             { text: " ", kind: "space" },
@@ -65,7 +65,7 @@ function verifyTypeOfClass(markerName: string, typeOfVarName: string, className:
 
 function verifySingleOverloadSignature(marker: string, textSpanLength: number, parameterType: string) {
     goTo.marker(marker);
-    verify.verifyQuickInfo("constructor", "", { start: test.markerByName(marker).position, length: textSpanLength },
+    verify.verifyQuickInfoDisplayParts("constructor", "", { start: test.markerByName(marker).position, length: textSpanLength },
         [{ text: "(", kind: "punctuation" }, { text: "constructor", kind: "text" }, { text: ")", kind: "punctuation" },
             { text: " ", kind: "space" }, { text: "cWithOverloads", kind: "className" }, { text: "(", kind: "punctuation" },
             { text: "x", kind: "parameterName" }, { text: ":", kind: "punctuation" },
@@ -81,7 +81,7 @@ function verifySingleOverloadSignature(marker: string, textSpanLength: number, p
 
 function verifyMultipleOverloadSignature(marker: string, textSpanLength: number, parameterType: string) {
     goTo.marker(marker);
-    verify.verifyQuickInfo("constructor", "", { start: test.markerByName(marker).position, length: textSpanLength },
+    verify.verifyQuickInfoDisplayParts("constructor", "", { start: test.markerByName(marker).position, length: textSpanLength },
         [{ text: "(", kind: "punctuation" }, { text: "constructor", kind: "text" }, { text: ")", kind: "punctuation" },
             { text: " ", kind: "space" }, { text: "cWithMultipleOverloads", kind: "className" }, { text: "(", kind: "punctuation" },
             { text: "x", kind: "parameterName" }, { text: ":", kind: "punctuation" },

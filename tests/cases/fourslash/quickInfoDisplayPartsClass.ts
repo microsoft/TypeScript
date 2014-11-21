@@ -6,19 +6,19 @@
 ////var /*4*/cVal = /*5*/c;
 
 goTo.marker('1');
-verify.verifyQuickInfo("class", "", { start: test.markerByName("1").position, length: "c".length },
+verify.verifyQuickInfoDisplayParts("class", "", { start: test.markerByName("1").position, length: "c".length },
     [{ text: "class", kind: "keyword" }, { text: " ", kind: "space" }, { text: "c", kind: "className" }],
     []);
 
 goTo.marker('2');
-verify.verifyQuickInfo("var", "", { start: test.markerByName("2").position, length: "cInstance".length },
+verify.verifyQuickInfoDisplayParts("var", "", { start: test.markerByName("2").position, length: "cInstance".length },
     [{ text: "(", kind: "punctuation" }, { text: "var", kind: "text" }, { text: ")", kind: "punctuation" },
         { text: " ", kind: "space" }, { text: "cInstance", kind: "localName" }, { text: ":", kind: "punctuation" },
         { text: " ", kind: "space" }, { text: "c", kind: "className" }],
     []);
 
 goTo.marker('3');
-verify.verifyQuickInfo("constructor", "", { start: test.markerByName("3").position, length: "c".length },
+verify.verifyQuickInfoDisplayParts("constructor", "", { start: test.markerByName("3").position, length: "c".length },
     [{ text: "(", kind: "punctuation" }, { text: "constructor", kind: "text" }, { text: ")", kind: "punctuation" },
         { text: " ", kind: "space" }, { text: "c", kind: "className" },
         { text: "(", kind: "punctuation" }, { text: ")", kind: "punctuation" }, { text: ":", kind: "punctuation" },
@@ -26,7 +26,7 @@ verify.verifyQuickInfo("constructor", "", { start: test.markerByName("3").positi
     []);
 
 goTo.marker('4');
-verify.verifyQuickInfo("var", "", { start: test.markerByName("4").position, length: "cVal".length },
+verify.verifyQuickInfoDisplayParts("var", "", { start: test.markerByName("4").position, length: "cVal".length },
     [{ text: "(", kind: "punctuation" }, { text: "var", kind: "text" }, { text: ")", kind: "punctuation" },
         { text: " ", kind: "space" }, { text: "cVal", kind: "localName" }, { text: ":", kind: "punctuation" },
         { text: " ", kind: "space" },
@@ -34,6 +34,6 @@ verify.verifyQuickInfo("var", "", { start: test.markerByName("4").position, leng
     []);
 
 goTo.marker('5');
-verify.verifyQuickInfo("class", "", { start: test.markerByName("5").position, length: "c".length },
+verify.verifyQuickInfoDisplayParts("class", "", { start: test.markerByName("5").position, length: "c".length },
     [{ text: "class", kind: "keyword" }, { text: " ", kind: "space" }, { text: "c", kind: "className" }],
     []);
