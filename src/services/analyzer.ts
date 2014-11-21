@@ -33,7 +33,12 @@ interface AnalyzedFile {
     fileSymbolId: string;
 }
 
-function analyze(libFileName: string, files: string[], outputFolder: string): string[] {
+interface ProcessedFile {
+    index: number;
+    fileName: string;
+}
+
+function analyze(libFileName: string, files: string[], outputFolder: string): ProcessedFile[] {
     var program = createProgram(files);
     var fileNames = ts.map(program.getSourceFiles(), f => f.filename);
     var scriptSnapshots: ts.Map<ts.IScriptSnapshot> = {};
@@ -58,18 +63,14 @@ function analyze(libFileName: string, files: string[], outputFolder: string): st
     };
 
     var documentRegistry: ts.DocumentRegistry = {
-        acquireDocument: (name, settings, snapshot, version, isOpen) => {
-            var sourceFile = program.getSourceFile(name);
-            var isDeclaration = ts.isDeclarationFile(sourceFile);
-            return sourceFile;
-        },
+        acquireDocument: (name, settings, snapshot, version, isOpen) => program.getSourceFile(name),
         releaseDocument: (name, settings) => { },
         updateDocument: (file, name, settings, snapshot, version, isOpen, changeRange) => file
     };
     var ls = ts.createLanguageService(host, documentRegistry);
 
     var sourceFiles = program.getSourceFiles();
-    var processedFiles: string[] = [];
+    var processedFiles: ProcessedFile[] = [];
     for (var i = 0, len = sourceFiles.length; i < len; ++i) {
         var f = sourceFiles[i];
         var fileSpan = new ts.TextSpan(0, f.text.length);
@@ -90,7 +91,7 @@ function analyze(libFileName: string, files: string[], outputFolder: string): st
         var json = JSON.stringify(result);
         var path = ts.combinePaths(outputFolder, i + ".json");
         sys.writeFile(path, json, /*writeByteOrderMark*/ false);
-        processedFiles.push(f.filename);
+        processedFiles.push({ fileName: f.filename, index: i });
     }
     return processedFiles;
 
@@ -201,6 +202,24 @@ function analyze(libFileName: string, files: string[], outputFolder: string): st
 
     function convertClassifications(classifications: ts.ClassifiedSpan[], f: ts.SourceFile, addHyperlinks: boolean): ClassifiedRange[]{
         var ranges: ClassifiedRange[] = [];
+
+        if (addHyperlinks) {
+            ts.forEach(f.referencedFiles, r => {
+                var hyperlinks = addHyperlinksForDefinition(r.pos, /*hyperlinks*/ undefined);
+                // push hyperlinks for tripleslash refs
+                if (hyperlinks) {
+                    var range: ClassifiedRange = {
+                        start: r.pos,
+                        length: r.end - r.pos,
+                        hyperlinks: hyperlinks,
+                        classification: ts.ClassificationTypeNames.stringLiteral,
+                        definitionSymbolId: makeSymbolId(f.filename, f.pos),
+                    }
+                    ranges.push(range);
+                }
+            });
+        }
+
         ts.forEach(classifications, c => {
             if (skipClassification(c.classificationType)) {
                 return;
@@ -225,6 +244,7 @@ function analyze(libFileName: string, files: string[], outputFolder: string): st
                         break;
                     default:
                         var token = ts.getTokenAtPosition(f, start);
+                        // yield definition info only for constructors
                         if (c.classificationType === ts.ClassificationTypeNames.keyword && token && token.kind !== ts.SyntaxKind.ConstructorKeyword) {
                             break;
                         }
@@ -247,36 +267,7 @@ function analyze(libFileName: string, files: string[], outputFolder: string): st
                             definitionSymbolId = makeSymbolId(f.filename, token.getStart());
                         }
                         else  {
-                            var defs = ls.getDefinitionAtPosition(f.filename, start);
-                            if (defs) {
-                                ts.forEach(defs, d => {
-                                    if (!hyperlinks) {
-                                        hyperlinks = [];
-                                    }
-
-                                    var defStart = d.textSpan.start();
-                                    var defFile = program.getSourceFile(d.fileName);
-
-                                    var token = ts.getTokenAtPosition(defFile, defStart);
-                                    if (token) {
-                                        // point definition to name if possible
-                                        var target =
-                                            ts.isDeclaration(token)
-                                            ? (<ts.Declaration>token).name
-                                            : token.parent && ts.isDeclaration(token.parent)
-                                            ? (<ts.Declaration>token.parent).name
-                                            : token;
-                                        var symbol = checker.getSymbolInfo(target);
-                                        defStart = target.getStart();
-                                    }
-                                    var link: Hyperlink = {
-                                        sourceFile: d.fileName,
-                                        start: d.textSpan.start(),
-                                        symbolId: makeSymbolId(d.fileName, defStart)
-                                    };
-                                    hyperlinks.push(link);
-                                });
-                            }
+                            hyperlinks = addHyperlinksForDefinition(start, hyperlinks);
                         }
                 }
             }
@@ -295,6 +286,41 @@ function analyze(libFileName: string, files: string[], outputFolder: string): st
 
         });
         return ranges;
+    }
+
+    function addHyperlinksForDefinition(start: number, hyperlinks: Hyperlink[]): Hyperlink[] {
+        var defs = ls.getDefinitionAtPosition(f.filename, start);
+        if (defs) {
+            ts.forEach(defs, d => {
+                if (!hyperlinks) {
+                    hyperlinks = [];
+                }
+
+                var defStart = d.textSpan.start();
+                var defFile = program.getSourceFile(d.fileName);
+
+                var token = ts.getTokenAtPosition(defFile, defStart);
+                if (token) {
+                    // point definition to name if possible
+                    var target =
+                        ts.isDeclaration(token)
+                        ? (<ts.Declaration>token).name
+                        : token.parent && ts.isDeclaration(token.parent)
+                        ? (<ts.Declaration>token.parent).name
+                        : token;
+                    var symbol = checker.getSymbolInfo(target);
+                    defStart = target.getStart();
+                }
+                var link: Hyperlink = {
+                    sourceFile: d.fileName,
+                    start: d.textSpan.start(),
+                    symbolId: makeSymbolId(d.fileName, defStart)
+                };
+                hyperlinks.push(link);
+            });
+        }
+
+        return hyperlinks;
     }
 
     function makeSymbolId(fileName: string, start: number): string {
@@ -320,7 +346,7 @@ function analyze(libFileName: string, files: string[], outputFolder: string): st
                 throw new Error("NYI");
             },
             getCurrentDirectory: (): string => {
-                return host.getCurrentDirectory();
+                return sys.getCurrentDirectory();
             }
         };
         return ts.createProgram(files, { target: ts.ScriptTarget.ES5 }, host)
@@ -342,6 +368,10 @@ function analyzeShim(json: string): boolean {
         sys.writeFile(ts.combinePaths(outputFolder, "error.json"), JSON.stringify({ message: e.message, stack: e.stack }));
         return false;
     }
+}
+
+if (typeof module !== "undefined" && module.exports && process.argv.length === 3) {
+    analyzeShim(sys.readFile(process.argv[2]));
 }
 
 analyzeShim
