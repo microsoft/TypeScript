@@ -18,7 +18,7 @@ module ts {
             return ModuleInstanceState.NonInstantiated;
         }
         // 2. const enum declarations don't make module instantiated
-        else if (node.kind === SyntaxKind.EnumDeclaration && isConstEnumDeclaration(<EnumDeclaration>node)) {
+        else if (isConstEnumDeclaration(node)) {
             return ModuleInstanceState.ConstEnumOnly;
         }
         // 3. non - exported import declarations
@@ -439,7 +439,7 @@ module ts {
                     bindDeclaration(<Declaration>node, SymbolFlags.TypeAlias, SymbolFlags.TypeAliasExcludes, /*isBlockScopeContainer*/ false);
                     break;
                 case SyntaxKind.EnumDeclaration:
-                    if (isConstEnumDeclaration(<EnumDeclaration>node)) {
+                    if (isConst(node)) {
                         bindDeclaration(<Declaration>node, SymbolFlags.ConstEnum, SymbolFlags.ConstEnumExcludes, /*isBlockScopeContainer*/ false);
                     }
                     else {

@@ -1242,7 +1242,9 @@ module ts {
 
         static alias = "alias";
 
-        static constantElement = "constant";
+        static constElement = "const";
+
+        static letElement = "let";
     }
 
     export class ScriptElementKindModifier {
@@ -2770,8 +2772,11 @@ module ts {
                 if (isFirstDeclarationOfSymbolParameter(symbol)) {
                     return ScriptElementKind.parameterElement;
                 }
-                else if(symbol.valueDeclaration && symbol.valueDeclaration.flags & NodeFlags.Const) {
-                    return ScriptElementKind.constantElement;
+                else if (symbol.valueDeclaration && isConst(symbol.valueDeclaration)) {
+                    return ScriptElementKind.constElement;
+                }
+                else if (forEach(symbol.declarations, declaration => isLet(declaration))) {
+                    return ScriptElementKind.letElement;
                 }
                 return isLocalVariableOrFunction(symbol) ? ScriptElementKind.localVariableElement : ScriptElementKind.variableElement;
             }
@@ -2828,7 +2833,11 @@ module ts {
                 case SyntaxKind.InterfaceDeclaration: return ScriptElementKind.interfaceElement;
                 case SyntaxKind.TypeAliasDeclaration: return ScriptElementKind.typeElement;
                 case SyntaxKind.EnumDeclaration: return ScriptElementKind.enumElement;
-                case SyntaxKind.VariableDeclaration: return node.flags & NodeFlags.Const ? ScriptElementKind.constantElement: ScriptElementKind.variableElement;
+                case SyntaxKind.VariableDeclaration: return isConst(node)
+                    ? ScriptElementKind.constElement
+                    : node.flags & NodeFlags.Let
+                        ? ScriptElementKind.letElement
+                        : ScriptElementKind.variableElement;
                 case SyntaxKind.FunctionDeclaration: return ScriptElementKind.functionElement;
                 case SyntaxKind.GetAccessor: return ScriptElementKind.memberGetAccessorElement;
                 case SyntaxKind.SetAccessor: return ScriptElementKind.memberSetAccessorElement;
@@ -2927,7 +2936,7 @@ module ts {
                             switch (symbolKind) {
                                 case ScriptElementKind.memberVariableElement:
                                 case ScriptElementKind.variableElement:
-                                case ScriptElementKind.constantElement:
+                                case ScriptElementKind.constElement:
                                 case ScriptElementKind.parameterElement:
                                 case ScriptElementKind.localVariableElement:
                                     // If it is call or construct signature of lambda's write type name
@@ -3003,6 +3012,10 @@ module ts {
             }
             if (symbolFlags & SymbolFlags.Enum) {
                 addNewLineIfDisplayPartsExist();
+                if (forEach(symbol.declarations, declaration => isConstEnumDeclaration(declaration))) {
+                    displayParts.push(keywordPart(SyntaxKind.ConstKeyword));
+                    displayParts.push(spacePart());
+                }
                 displayParts.push(keywordPart(SyntaxKind.EnumKeyword));
                 displayParts.push(spacePart());
                 addFullSymbolName(symbol);

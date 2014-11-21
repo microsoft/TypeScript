@@ -234,8 +234,11 @@ module ts.NavigationBar {
                     return createItem(node, getTextOfNode((<FunctionLikeDeclaration>node).name), ts.ScriptElementKind.functionElement);
 
                 case SyntaxKind.VariableDeclaration:
-                    if (node.flags & NodeFlags.Const) {
-                        return createItem(node, getTextOfNode((<VariableDeclaration>node).name), ts.ScriptElementKind.constantElement);
+                    if (isConst(node)) {
+                        return createItem(node, getTextOfNode((<VariableDeclaration>node).name), ts.ScriptElementKind.constElement);
+                    }
+                    else if (isLet(node)) {
+                        return createItem(node, getTextOfNode((<VariableDeclaration>node).name), ts.ScriptElementKind.letElement);
                     }
                     else {
                         return createItem(node, getTextOfNode((<VariableDeclaration>node).name), ts.ScriptElementKind.variableElement);

@@ -720,7 +720,7 @@ module ts {
             if (resolver.isDeclarationVisible(node)) {
                 emitJsDocComments(node);
                 emitModuleElementDeclarationFlags(node);
-                if (isConstEnumDeclaration(node)) {
+                if (isConst(node)) {
                     write("const ")
                 }
                 write("enum ");
@@ -997,10 +997,10 @@ module ts {
             if (hasDeclarationWithEmit) {
                 emitJsDocComments(node);
                 emitModuleElementDeclarationFlags(node);
-                if (node.flags & NodeFlags.Let) {
+                if (isLet(node)) {
                     write("let ");
                 }
-                else if (node.flags & NodeFlags.Const) {
+                else if (isConst(node)) {
                     write("const ");
                 }
                 else {
@@ -2465,10 +2465,10 @@ module ts {
                 write(" ");
                 endPos = emitToken(SyntaxKind.OpenParenToken, endPos);
                 if (node.declarations) {
-                    if (node.declarations[0] && node.declarations[0].flags & NodeFlags.Let) {
+                    if (node.declarations[0] && isLet(node.declarations[0])) {
                         emitToken(SyntaxKind.LetKeyword, endPos);
                     }
-                    else if (node.declarations[0] && node.declarations[0].flags & NodeFlags.Const) {
+                    else if (node.declarations[0] && isConst(node.declarations[0])) {
                         emitToken(SyntaxKind.ConstKeyword, endPos);
                     }
                     else {
@@ -2495,7 +2495,7 @@ module ts {
                 if (node.declarations) {
                     if (node.declarations.length >= 1) {
                         var decl = node.declarations[0];
-                        if (decl.flags & NodeFlags.Let) {
+                        if (isLet(decl)) {
                             emitToken(SyntaxKind.LetKeyword, endPos);
                         }
                         else {
@@ -2642,10 +2642,10 @@ module ts {
             function emitVariableStatement(node: VariableStatement) {
                 emitLeadingComments(node);
                 if (!(node.flags & NodeFlags.Export)) {
-                    if (node.flags & NodeFlags.Let) {
+                    if (isLet(node)) {
                         write("let ");
                     }
-                    else if (node.flags & NodeFlags.Const) {
+                    else if (isConst(node)) {
                         write("const ");
                     }
                     else {
@@ -3098,7 +3098,7 @@ module ts {
 
             function emitEnumDeclaration(node: EnumDeclaration) {
                 // const enums are completely erased during compilation.
-                var isConstEnum = isConstEnumDeclaration(node);
+                var isConstEnum = isConst(node);
                 if (isConstEnum && !compilerOptions.preserveConstEnums) {
                     return;
                 }

@@ -1,6 +1,6 @@
 /// <reference path="fourslash.ts" />
 
-//// {| "itemName": "c", "kind": "const", "parentName": "" |}const c = 0;
+//// {| "itemName": "c", "kind": "let", "parentName": "" |}let c = 0;
 
 test.markers().forEach(marker => {
     verify.getScriptLexicalStructureListContains(

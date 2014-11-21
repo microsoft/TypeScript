@@ -8007,7 +8007,7 @@ module ts {
                 var enumType = getDeclaredTypeOfSymbol(enumSymbol);
                 var autoValue = 0;
                 var ambient = isInAmbientContext(node);
-                var enumIsConst = isConstEnumDeclaration(node);
+                var enumIsConst = isConst(node);
 
                 forEach(node.members, member => {
                     // TODO(jfreeman): Check that it is not a computed name
@@ -8178,10 +8178,10 @@ module ts {
             var firstDeclaration = getDeclarationOfKind(enumSymbol, node.kind);
             if (node === firstDeclaration) {
                 if (enumSymbol.declarations.length > 1) {
-                    var enumIsConst = isConstEnumDeclaration(node);
+                    var enumIsConst = isConst(node);
                     // check that const is placed\omitted on all enum declarations
                     forEach(enumSymbol.declarations, decl => {
-                        if (isConstEnumDeclaration(<EnumDeclaration>decl) !== enumIsConst) {
+                        if (isConstEnumDeclaration(decl) !== enumIsConst) {
                             error(decl.name, Diagnostics.Enum_declarations_must_all_be_const_or_non_const);
                         }
                     });

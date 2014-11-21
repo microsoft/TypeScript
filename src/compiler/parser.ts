@@ -125,8 +125,16 @@ module ts {
         return (file.flags & NodeFlags.DeclarationFile) !== 0;
     }
 
-    export function isConstEnumDeclaration(node: EnumDeclaration): boolean {
-        return (node.flags & NodeFlags.Const) !== 0;
+    export function isConstEnumDeclaration(node: Declaration): boolean {
+        return node.kind === SyntaxKind.EnumDeclaration && isConst(node);
+    }
+
+    export function isConst(node: Declaration): boolean {
+        return !!(node.flags & NodeFlags.Const);
+    }
+
+    export function isLet(node: Declaration): boolean {
+        return !!(node.flags & NodeFlags.Let);
     }
 
     export function isPrologueDirective(node: Node): boolean {
@@ -4548,7 +4556,7 @@ module ts {
                 var equalsPos = node.type ? skipTrivia(sourceText, node.type.end) : skipTrivia(sourceText, node.name.end);
                 return grammarErrorAtPos(equalsPos, "=".length, Diagnostics.Initializers_are_not_allowed_in_ambient_contexts);
             }
-            if (!inAmbientContext && !node.initializer && node.flags & NodeFlags.Const) {
+            if (!inAmbientContext && !node.initializer && isConst(node)) {
                 return grammarErrorOnNode(node, Diagnostics.const_declarations_must_be_initialized);
             }
             if (node.flags & NodeFlags.ParsedInStrictMode && isEvalOrArgumentsIdentifier(node.name)) {
@@ -4570,10 +4578,10 @@ module ts {
 
                 var decl = declarations[0];
                 if (languageVersion < ScriptTarget.ES6) {
-                    if (decl.flags & NodeFlags.Let) {
+                    if (isLet(decl)) {
                         return grammarErrorOnFirstToken(decl, Diagnostics.let_declarations_are_only_available_when_targeting_ECMAScript_6_and_higher);
                     }
-                    else if (decl.flags & NodeFlags.Const) {
+                    else if (isConst(decl)) {
                         return grammarErrorOnFirstToken(decl, Diagnostics.const_declarations_are_only_available_when_targeting_ECMAScript_6_and_higher);
                     }
                 }
@@ -4587,10 +4595,10 @@ module ts {
 
         function checkForDisallowedLetOrConstStatement(node: VariableStatement) {
             if (!allowLetAndConstDeclarations(node.parent)) {
-                if (node.flags & NodeFlags.Let) {
+                if (isLet(node)) {
                     return grammarErrorOnNode(node, Diagnostics.let_declarations_can_only_be_declared_inside_a_block);
                 }
-                else if (node.flags & NodeFlags.Const) {
+                else if (isConst(node)) {
                     return grammarErrorOnNode(node, Diagnostics.const_declarations_can_only_be_declared_inside_a_block);
                 }
             }
