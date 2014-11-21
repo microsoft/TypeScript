@@ -210,12 +210,10 @@ module ts.SignatureHelp {
         return createSignatureHelpItems(candidates, resolvedSignature, argumentInfo);
 
         /**
-         * If node is an argument, returns its index in the argument list.
-         * If not, returns -1.
+         * Returns relevant information for the argument list and the current argument if we are
+         * in the argument of an invocation; returns undefined otherwise.
          */
         function getImmediatelyContainingArgumentInfo(node: Node, position: number): ArgumentListInfo {
-            var callLikeExpr: CallLikeExpression;
-
             if (node.parent.kind === SyntaxKind.CallExpression || node.parent.kind === SyntaxKind.NewExpression) {
                 var callExpression = <CallExpression>node.parent;
                 // There are 3 cases to handle:
@@ -329,14 +327,13 @@ module ts.SignatureHelp {
         // spanIndex is either the index for a given template span, or Constants.HeadSpanIndex for a template head.
         // This does not give appropriate results for a NoSubstitutionTemplateLiteral
         function getArgumentIndexForTemplatePiece(spanIndex: number, node: Node, position: number): number {
-            // TemplateSpans are expression-template pairs, and ordered as such.
-            // Because of the TemplateStringsArray arg, we have to offset ourselves by 1 for substitution expressions.
+            // Because the TemplateStringsArray is the first argument, we have to offset each substitution expression by 1.
             // There are three cases we can encounter:
-            //      1. We are precisely in the template literal (argIndex = 0)
-            //      2. We are in or to the right of the substitution expression (argIndex = spanIndex + 1)
-            //      3. We are directly to the right of the template literal, but not
-            //          enough to put us in the substitution expression; we should consider ourselves part of
-            //          the *next* span's expression (argIndex = (spanIndex + 1) + 1).
+            //      1. We are precisely in the template literal (argIndex = 0).
+            //      2. We are in or to the right of the substitution expression (argIndex = spanIndex + 1).
+            //      3. We are directly to the right of the template literal, but because we look for the token on the left,
+            //          not enough to put us in the substitution expression; we should consider ourselves part of
+            //          the *next* span's expression by offsetting the index (argIndex = (spanIndex + 1) + 1).
             //
             // Example: f  `# abcd $#{#  1 + 1#  }# efghi ${ #"#hello"#  }  #  `
             //              ^       ^ ^       ^   ^          ^ ^      ^     ^
@@ -352,6 +349,7 @@ module ts.SignatureHelp {
         }
 
         function getArgumentListInfoForTemplate(tagExpression: TaggedTemplateExpression, argumentIndex: number): ArgumentListInfo {
+            // argumentCount is either 1 or (numSpans + 1) to account for the template strings array argument.
             var argumentCount = tagExpression.template.kind === SyntaxKind.NoSubstitutionTemplateLiteral
                 ? 1
                 : (<TemplateExpression>tagExpression.template).templateSpans.length + 1;
