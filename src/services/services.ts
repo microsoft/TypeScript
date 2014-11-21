@@ -715,12 +715,12 @@ module ts {
         public filename: string;
         public text: string;
 
-        // These methods will have their implementation overridden with the implementation the 
+        // These methods will have their implementation provided by the implementation the 
         // compiler actually exports off of SourceFile.
-        public getLineAndCharacterFromPosition(position: number): { line: number; character: number } { return null; }
-        public getPositionFromLineAndCharacter(line: number, character: number): number { return -1; }
-        public getLineStarts(): number[] { return undefined; }
-        public getSyntacticDiagnostics(): Diagnostic[] { return undefined; }
+        public getLineAndCharacterFromPosition: (position: number) => LineAndCharacter;
+        public getPositionFromLineAndCharacter: (line: number, character: number) => number;
+        public getLineStarts: () => number[];
+        public getSyntacticDiagnostics: () => Diagnostic[];
 
         public amdDependencies: string[];
         public amdModuleName: string;
