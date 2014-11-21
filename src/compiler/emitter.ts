@@ -2735,6 +2735,9 @@ module ts {
                         return emitUnionType(<UnionTypeNode>type);
                     case SyntaxKind.ParenType:
                         return emitParenType(<ParenTypeNode>type);
+                    case SyntaxKind.FunctionType:
+                    case SyntaxKind.ConstructorType:
+                        return emitSignatureDeclarationWithJsDocComments(<SignatureDeclaration>type);
                     case SyntaxKind.TypeLiteral:
                         return emitTypeLiteral(<TypeLiteralNode>type);
                     case SyntaxKind.Identifier:
@@ -2802,27 +2805,15 @@ module ts {
                 }
 
                 function emitTypeLiteral(type: TypeLiteralNode) {
-                    if (getTokenPosOfNode(type, currentSourceFile) !== skipTrivia(currentSourceFile.text, type.members.pos)) {
-                        write("{");
-                        if (type.members.length) {
-                            writeLine();
-                            increaseIndent();
-                            // write members
-                            emitLines(type.members);
-                            decreaseIndent();
-                        }
-                        write("}");
+                    write("{");
+                    if (type.members.length) {
+                        writeLine();
+                        increaseIndent();
+                        // write members
+                        emitLines(type.members);
+                        decreaseIndent();
                     }
-                    else {
-                        // Write call/construct signature as arrow style
-                        var signature = <SignatureDeclaration>type.members[0];
-                        if (signature.kind === SyntaxKind.CallSignature) {
-                            emitSignatureDeclaration(signature, /*arrowStyle*/true);
-                        }
-                        else {
-                            emitConstructSignatureDeclaration(signature, /*arrowStyle*/ true);
-                        }
-                    }
+                    write("}");
                 }
             }
 
@@ -2993,8 +2984,12 @@ module ts {
                     // If there is constraint present and this is not a type parameter of the private method emit the constraint
                     if (node.constraint && (node.parent.kind !== SyntaxKind.Method || !(node.parent.flags & NodeFlags.Private))) {
                         write(" extends ");
-                        if (node.parent.parent && node.parent.parent.kind === SyntaxKind.TypeLiteral) {
+                        if (node.parent.kind === SyntaxKind.FunctionType ||
+                            node.parent.kind === SyntaxKind.ConstructorType ||
+                            (node.parent.parent && node.parent.parent.kind === SyntaxKind.TypeLiteral)) {
                             Debug.assert(node.parent.kind === SyntaxKind.Method ||
+                                node.parent.kind === SyntaxKind.FunctionType ||
+                                node.parent.kind === SyntaxKind.ConstructorType ||
                                 node.parent.kind === SyntaxKind.CallSignature ||
                                 node.parent.kind === SyntaxKind.ConstructSignature);
                             emitType(node.constraint);
@@ -3351,16 +3346,15 @@ module ts {
                 }
             }
 
-            function emitConstructSignatureDeclaration(node: SignatureDeclaration, arrowStyle?: boolean) {
+            function emitSignatureDeclarationWithJsDocComments(node: SignatureDeclaration) {
                 emitJsDocComments(node);
-                write("new ");
-                emitSignatureDeclaration(node, arrowStyle);
+                emitSignatureDeclaration(node);
             }
 
-            function emitSignatureDeclaration(node: SignatureDeclaration, arrowStyle?: boolean) {
-                if (node.kind === SyntaxKind.CallSignature || node.kind === SyntaxKind.IndexSignature) {
-                    // Only index and call signatures are emitted directly, so emit their js doc comments, rest will do that in their own functions
-                    emitJsDocComments(node);
+            function emitSignatureDeclaration(node: SignatureDeclaration) {
+                // Construct signature or constructor type write new Signature
+                if (node.kind === SyntaxKind.ConstructSignature || node.kind === SyntaxKind.ConstructorType) {
+                    write("new ");
                 }
                 emitTypeParameters(node.typeParameters);
                 if (node.kind === SyntaxKind.IndexSignature) {
@@ -3384,10 +3378,11 @@ module ts {
                 }
 
                 // If this is not a constructor and is not private, emit the return type
-                if (node.parent.kind === SyntaxKind.TypeLiteral) {
+                var isFunctionTypeOrConstructorType = node.kind === SyntaxKind.FunctionType || node.kind === SyntaxKind.ConstructorType;
+                if (isFunctionTypeOrConstructorType || node.parent.kind === SyntaxKind.TypeLiteral) {
                     // Emit type literal signature return type only if specified
                     if (node.type) {
-                        write(arrowStyle ? " => " : ": ");
+                        write(isFunctionTypeOrConstructorType ? " => " : ": ");
                         emitType(node.type);
                     }
                 }
@@ -3397,7 +3392,7 @@ module ts {
 
                 enclosingDeclaration = prevEnclosingDeclaration;
 
-                if (!arrowStyle) {
+                if (!isFunctionTypeOrConstructorType) {
                     write(";");
                     writeLine();
                 }
@@ -3480,7 +3475,9 @@ module ts {
                 }
                 decreaseIndent();
 
-                if (node.parent.parent.kind === SyntaxKind.TypeLiteral) {
+                if (node.parent.kind === SyntaxKind.FunctionType ||
+                    node.parent.kind === SyntaxKind.ConstructorType ||
+                    node.parent.parent.kind === SyntaxKind.TypeLiteral) {
                     emitTypeOfVariableDeclarationFromTypeLiteral(node);
                 }
                 else if (!(node.parent.flags & NodeFlags.Private)) {
@@ -3562,10 +3559,9 @@ module ts {
                     case SyntaxKind.Method:
                         return emitFunctionDeclaration(<FunctionLikeDeclaration>node);
                     case SyntaxKind.ConstructSignature:
-                        return emitConstructSignatureDeclaration(<SignatureDeclaration>node);
                     case SyntaxKind.CallSignature:
                     case SyntaxKind.IndexSignature:
-                        return emitSignatureDeclaration(<SignatureDeclaration>node);
+                        return emitSignatureDeclarationWithJsDocComments(<SignatureDeclaration>node);
                     case SyntaxKind.GetAccessor:
                     case SyntaxKind.SetAccessor:
                         return emitAccessorDeclaration(<AccessorDeclaration>node);
