@@ -2397,6 +2397,7 @@ module ts {
 
         function getPropertyOfUnionType(type: UnionType, name: string): Symbol {
             var properties = type.resolvedProperties || (type.resolvedProperties = {});
+            
             if (hasProperty(properties, name)) {
                 return properties[name];
             }
@@ -4253,6 +4254,14 @@ module ts {
             Debug.fail("should not get here");
         }
 
+        // Remove all types from a union type which don't have the given property name
+        function subtractUnionTypesWithoutProperty(type: Type, name: string) {
+            return filter((<UnionType>type).types, ty => {
+                var apparentType = ty.symbol ? ty : getApparentType(ty);
+                return filter(getPropertiesOfType(ty), prop => prop.name === name).length > 0
+            });
+        }
+
         // Remove one or more primitive types from a union type
         function subtractPrimitiveTypes(type: Type, subtractMask: TypeFlags): Type {
             if (type.flags & TypeFlags.Union) {
@@ -4469,6 +4478,18 @@ module ts {
                 return isTypeSubtypeOf(prototypeType, type) ? prototypeType : type;
             }
 
+            function narrowTypeByPropertyAccess(type: Type, expr: PropertyAccess, assumeTrue: boolean): Type {
+                // Check that assumed result is true and we have variable symbol on the left
+                if (!assumeTrue || expr.left.kind !== SyntaxKind.Identifier || getResolvedSymbol(<Identifier>expr.left) !== symbol) {
+                    return type;
+                } else if (type.flags & TypeFlags.Union) {
+                    var unionParts = subtractUnionTypesWithoutProperty(type, expr.right.text);
+                    return getUnionType(unionParts, true);
+                } else {
+                    return type;
+                }
+            }
+
             // Narrow the given type based on the given expression having the assumed boolean value
             function narrowType(type: Type, expr: Expression, assumeTrue: boolean): Type {
                 switch (expr.kind) {
@@ -4493,6 +4514,9 @@ module ts {
                         if ((<UnaryExpression>expr).operator === SyntaxKind.ExclamationToken) {
                             return narrowType(type, (<UnaryExpression>expr).operand, !assumeTrue);
                         }
+                        break;
+                    case SyntaxKind.PropertyAccess:
+                        return narrowTypeByPropertyAccess(type, <PropertyAccess>expr, assumeTrue);
                         break;
                 }
                 return type;
@@ -5129,6 +5153,24 @@ module ts {
             }
         }
 
+        function isInTypeGuard(node: Node) {
+            loop: while (true) {
+                var child = node;
+                node = node.parent;
+                switch (node.kind) {
+                    case SyntaxKind.IfStatement:
+                    case SyntaxKind.ConditionalExpression:
+                    case SyntaxKind.BinaryExpression:
+                        return true;
+                        break;
+                    default:
+                        // Stop at the first containing function or module declaration
+                        return false;
+                }
+            }
+            return false;
+        }
+
         function checkPropertyAccess(node: PropertyAccess) {
             var type = checkExpression(node.left);
             if (type === unknownType) return type;
@@ -5140,7 +5182,12 @@ module ts {
                 }
                 var prop = getPropertyOfType(apparentType, node.right.text);
                 if (!prop) {
-                    if (node.right.text) {
+                    var propertyExistsInSomeUnionPart = false;
+                    if (type.flags & TypeFlags.Union) {
+                        var unionParts = subtractUnionTypesWithoutProperty(type, node.right.text);
+                        propertyExistsInSomeUnionPart = unionParts.length > 0;
+                    }
+                    if (node.right.text && !(isInTypeGuard(node) && propertyExistsInSomeUnionPart)) {
                         error(node.right, Diagnostics.Property_0_does_not_exist_on_type_1, declarationNameToString(node.right), typeToString(type));
                     }
                     return unknownType;
