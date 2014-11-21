@@ -822,7 +822,7 @@ module ts {
             return false;
         }
 
-        // We can only be unclosed if we have a tail or a no-sub template.
+        // The literal can only be unterminated if it is a template tail or a no-sub template.
         if (node.kind !== SyntaxKind.TemplateTail && node.kind !== SyntaxKind.NoSubstitutionTemplateLiteral) {
             return false;
         }
