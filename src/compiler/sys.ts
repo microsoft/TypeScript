@@ -99,14 +99,14 @@ var sys: System = (function () {
         }
 
         return {
-            args: args,
+            args,
             newLine: "\r\n",
             useCaseSensitiveFileNames: false,
             write(s: string): void {
                 WScript.StdOut.Write(s);
             },
-            readFile: readFile,
-            writeFile: writeFile,
+            readFile,
+            writeFile,
             resolvePath(path: string): string {
                 return fso.GetAbsolutePathName(path);
             },
@@ -191,8 +191,8 @@ var sys: System = (function () {
                // 1 is a standard descriptor for stdout
                _fs.writeSync(1, s);
             },
-            readFile: readFile,
-            writeFile: writeFile,
+            readFile,
+            writeFile,
             watchFile: (fileName, callback) => {
                 // watchFile polls a file every 250ms, picking up file notifications.
                 _fs.watchFile(fileName, { persistent: true, interval: 250 }, fileChanged);

@@ -13,10 +13,10 @@
 // limitations under the License.
 //
 
-///<reference path='formatting.ts' />
+///<reference path='references.ts' />
 
-module TypeScript.Services.Formatting {
-    export enum RuleFlags {
+module ts.formatting {
+    export const enum RuleFlags {
         None,
         CanDeleteNewLines
     }

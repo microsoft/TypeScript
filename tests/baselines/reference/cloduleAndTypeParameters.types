@@ -2,7 +2,7 @@
 class Foo<T extends Foo.Bar> {
 >Foo : Foo<T>
 >T : T
->Foo : Foo<T>
+>Foo : unknown
 >Bar : Foo.Bar
 
   constructor() {

@@ -13,9 +13,9 @@
 // limitations under the License.
 //
 
-///<reference path='formatting.ts' />
+///<reference path='references.ts' />
 
-module TypeScript.Services.Formatting {
+module ts.formatting {
     export module Shared {
         export interface ITokenAccess {
             GetTokens(): SyntaxKind[];
@@ -40,12 +40,6 @@ module TypeScript.Services.Formatting {
 
             public Contains(token: SyntaxKind): boolean {
                 return this.tokens.indexOf(token) >= 0;
-            }
-
-
-            public toString(): string {
-                return "[tokenRangeStart=" + SyntaxKind[this.tokens[0]] + "," +
-                 "tokenRangeEnd=" + SyntaxKind[this.tokens[this.tokens.length - 1]] + "]";
             }
         }
 
@@ -75,10 +69,6 @@ module TypeScript.Services.Formatting {
 
             public Contains(tokenValue: SyntaxKind): boolean {
                 return tokenValue == this.token;
-            }
-
-            public toString(): string {
-                return "[singleTokenKind=" + SyntaxKind[this.token] + "]";
             }
         }
 
@@ -135,18 +125,18 @@ module TypeScript.Services.Formatting {
             static Any: TokenRange = TokenRange.AllTokens();
             static AnyIncludingMultilineComments = TokenRange.FromTokens(TokenRange.Any.GetTokens().concat([SyntaxKind.MultiLineCommentTrivia]));
             static Keywords = TokenRange.FromRange(SyntaxKind.FirstKeyword, SyntaxKind.LastKeyword);
-            static Operators = TokenRange.FromRange(SyntaxKind.SemicolonToken, SyntaxKind.SlashEqualsToken);
-            static BinaryOperators = TokenRange.FromRange(SyntaxKind.LessThanToken, SyntaxKind.SlashEqualsToken);
+            static Operators = TokenRange.FromRange(SyntaxKind.FirstOperator, SyntaxKind.LastOperator);
+            static BinaryOperators = TokenRange.FromRange(SyntaxKind.FirstBinaryOperator, SyntaxKind.LastBinaryOperator);
             static BinaryKeywordOperators = TokenRange.FromTokens([SyntaxKind.InKeyword, SyntaxKind.InstanceOfKeyword]);
-            static ReservedKeywords = TokenRange.FromRange(SyntaxKind.FirstFutureReservedStrictKeyword, SyntaxKind.LastFutureReservedStrictKeyword);
+            static ReservedKeywords = TokenRange.FromRange(SyntaxKind.FirstFutureReservedWord, SyntaxKind.LastFutureReservedWord);
             static UnaryPrefixOperators = TokenRange.FromTokens([SyntaxKind.PlusPlusToken, SyntaxKind.MinusMinusToken, SyntaxKind.TildeToken, SyntaxKind.ExclamationToken]);
-            static UnaryPrefixExpressions = TokenRange.FromTokens([SyntaxKind.NumericLiteral, SyntaxKind.IdentifierName, SyntaxKind.OpenParenToken, SyntaxKind.OpenBracketToken, SyntaxKind.OpenBraceToken, SyntaxKind.ThisKeyword, SyntaxKind.NewKeyword]);
-            static UnaryPreincrementExpressions = TokenRange.FromTokens([SyntaxKind.IdentifierName, SyntaxKind.OpenParenToken, SyntaxKind.ThisKeyword, SyntaxKind.NewKeyword]);
-            static UnaryPostincrementExpressions = TokenRange.FromTokens([SyntaxKind.IdentifierName, SyntaxKind.CloseParenToken, SyntaxKind.CloseBracketToken, SyntaxKind.NewKeyword]);
-            static UnaryPredecrementExpressions = TokenRange.FromTokens([SyntaxKind.IdentifierName, SyntaxKind.OpenParenToken, SyntaxKind.ThisKeyword, SyntaxKind.NewKeyword]);
-            static UnaryPostdecrementExpressions = TokenRange.FromTokens([SyntaxKind.IdentifierName, SyntaxKind.CloseParenToken, SyntaxKind.CloseBracketToken, SyntaxKind.NewKeyword]);
+            static UnaryPrefixExpressions = TokenRange.FromTokens([SyntaxKind.NumericLiteral, SyntaxKind.Identifier, SyntaxKind.OpenParenToken, SyntaxKind.OpenBracketToken, SyntaxKind.OpenBraceToken, SyntaxKind.ThisKeyword, SyntaxKind.NewKeyword]);
+            static UnaryPreincrementExpressions = TokenRange.FromTokens([SyntaxKind.Identifier, SyntaxKind.OpenParenToken, SyntaxKind.ThisKeyword, SyntaxKind.NewKeyword]);
+            static UnaryPostincrementExpressions = TokenRange.FromTokens([SyntaxKind.Identifier, SyntaxKind.CloseParenToken, SyntaxKind.CloseBracketToken, SyntaxKind.NewKeyword]);
+            static UnaryPredecrementExpressions = TokenRange.FromTokens([SyntaxKind.Identifier, SyntaxKind.OpenParenToken, SyntaxKind.ThisKeyword, SyntaxKind.NewKeyword]);
+            static UnaryPostdecrementExpressions = TokenRange.FromTokens([SyntaxKind.Identifier, SyntaxKind.CloseParenToken, SyntaxKind.CloseBracketToken, SyntaxKind.NewKeyword]);
             static Comments = TokenRange.FromTokens([SyntaxKind.SingleLineCommentTrivia, SyntaxKind.MultiLineCommentTrivia]);
-            static TypeNames = TokenRange.FromTokens([SyntaxKind.IdentifierName, SyntaxKind.NumberKeyword, SyntaxKind.StringKeyword, SyntaxKind.BooleanKeyword, SyntaxKind.VoidKeyword, SyntaxKind.AnyKeyword]);
+            static TypeNames = TokenRange.FromTokens([SyntaxKind.Identifier, SyntaxKind.NumberKeyword, SyntaxKind.StringKeyword, SyntaxKind.BooleanKeyword, SyntaxKind.VoidKeyword, SyntaxKind.AnyKeyword]);
         }
     }
 }

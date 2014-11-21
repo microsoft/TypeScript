@@ -1,0 +1,78 @@
+=== tests/cases/conformance/expressions/typeGuards/typeGuardOfFormTypeOfNotEqualHasNoEffect.ts ===
+class C { private p: string };
+>C : C
+>p : string
+
+var strOrNum: string | number;
+>strOrNum : string | number
+
+var strOrBool: string | boolean;
+>strOrBool : string | boolean
+
+var numOrBool: number | boolean
+>numOrBool : number | boolean
+
+var strOrC: string | C;
+>strOrC : string | C
+>C : C
+
+// typeof x != s has not effect on typeguard
+if (typeof strOrNum != "string") {
+>typeof strOrNum != "string" : boolean
+>typeof strOrNum : string
+>strOrNum : string | number
+
+    var r1 = strOrNum; // string | number
+>r1 : string | number
+>strOrNum : string | number
+}
+else {
+    var r1 = strOrNum; // string | number
+>r1 : string | number
+>strOrNum : string | number
+}
+
+if (typeof strOrBool != "boolean") {
+>typeof strOrBool != "boolean" : boolean
+>typeof strOrBool : string
+>strOrBool : string | boolean
+
+    var r2 = strOrBool; // string | boolean
+>r2 : string | boolean
+>strOrBool : string | boolean
+}
+else {
+    var r2 = strOrBool; // string | boolean
+>r2 : string | boolean
+>strOrBool : string | boolean
+}
+
+if (typeof numOrBool != "number") {
+>typeof numOrBool != "number" : boolean
+>typeof numOrBool : string
+>numOrBool : number | boolean
+
+    var r3 = numOrBool; // number | boolean
+>r3 : number | boolean
+>numOrBool : number | boolean
+}
+else {
+    var r3 = numOrBool; // number | boolean
+>r3 : number | boolean
+>numOrBool : number | boolean
+}
+
+if (typeof strOrC != "Object") {
+>typeof strOrC != "Object" : boolean
+>typeof strOrC : string
+>strOrC : string | C
+
+    var r4 = strOrC; // string | C
+>r4 : string | C
+>strOrC : string | C
+}
+else {
+    var r4 = strOrC; // string | C
+>r4 : string | C
+>strOrC : string | C
+}

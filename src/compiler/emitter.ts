@@ -113,9 +113,9 @@ module ts {
                 }
             });
             return {
-                firstAccessor: firstAccessor,
-                getAccessor: getAccessor,
-                setAccessor: setAccessor
+                firstAccessor,
+                getAccessor,
+                setAccessor
             };
         }
 
@@ -148,7 +148,7 @@ module ts {
             function writeLiteral(s: string) {
                 if (s && s.length) {
                     write(s);
-                    var lineStartsOfS = getLineStarts(s);
+                    var lineStartsOfS = computeLineStarts(s);
                     if (lineStartsOfS.length > 1) {
                         lineCount = lineCount + lineStartsOfS.length - 1;
                         linePos = output.length - s.length + lineStartsOfS[lineStartsOfS.length - 1];
@@ -836,11 +836,10 @@ module ts {
 
                 Debug.assert(node.parent.kind !== SyntaxKind.TaggedTemplateExpression);
 
-                var templateNeedsParens = isExpression(node.parent)
-                    && node.parent.kind !== SyntaxKind.ParenExpression
-                    && comparePrecedenceToBinaryPlus(node.parent) !== Comparison.LessThan;
+                var emitOuterParens = isExpression(node.parent)
+                    && templateNeedsParens(node, <Expression>node.parent);
 
-                if (templateNeedsParens) {
+                if (emitOuterParens) {
                     write("(");
                 }
 
@@ -849,7 +848,7 @@ module ts {
                 forEach(node.templateSpans, templateSpan => {
                     // Check if the expression has operands and binds its operands less closely than binary '+'.
                     // If it does, we need to wrap the expression in parentheses. Otherwise, something like
-                    //    `abc${ 1 << 2}`
+                    //    `abc${ 1 << 2 }`
                     // becomes
                     //    "abc" + 1 << 2 + ""
                     // which is really
@@ -870,16 +869,31 @@ module ts {
                     }
 
                     // Only emit if the literal is non-empty.
-                    // The binary '+' operator is left-associative, so the first string concatenation will force
-                    // the result up to this point to be a string. Emitting a '+ ""' has no semantic effect.
+                    // The binary '+' operator is left-associative, so the first string concatenation
+                    // with the head will force the result up to this point to be a string.
+                    // Emitting a '+ ""' has no semantic effect for middles and tails.
                     if (templateSpan.literal.text.length !== 0) {
                         write(" + ")
                         emitLiteral(templateSpan.literal);
                     }
                 });
                 
-                if (templateNeedsParens) {
+                if (emitOuterParens) {
                     write(")");
+                }
+
+                function templateNeedsParens(template: TemplateExpression, parent: Expression) {
+                    switch (parent.kind) {
+                        case SyntaxKind.CallExpression:
+                        case SyntaxKind.NewExpression:
+                            return (<CallExpression>parent).func === template;
+                        case SyntaxKind.ParenExpression:
+                            return false;
+                        case SyntaxKind.TaggedTemplateExpression:
+                            Debug.fail("Path should be unreachable; tagged templates not supported pre-ES6.");
+                        default:
+                            return comparePrecedenceToBinaryPlus(parent) !== Comparison.LessThan;
+                    }
                 }
 
                 /**
@@ -914,7 +928,6 @@ module ts {
                             return Comparison.GreaterThan;
                     }
                 }
-
             }
 
             function emitTemplateSpan(span: TemplateSpan) {
@@ -942,13 +955,14 @@ module ts {
                 }
             }
 
-            function isNonExpressionIdentifier(node: Identifier) {
+            function isNotExpressionIdentifier(node: Identifier) {
                 var parent = node.parent;
                 switch (parent.kind) {
                     case SyntaxKind.Parameter:
                     case SyntaxKind.VariableDeclaration:
                     case SyntaxKind.Property:
                     case SyntaxKind.PropertyAssignment:
+                    case SyntaxKind.ShorthandPropertyAssignment:
                     case SyntaxKind.EnumMember:
                     case SyntaxKind.Method:
                     case SyntaxKind.FunctionDeclaration:
@@ -972,15 +986,22 @@ module ts {
                 }
             }
 
-            function emitIdentifier(node: Identifier) {
-                if (!isNonExpressionIdentifier(node)) {
-                    var prefix = resolver.getExpressionNamePrefix(node);
-                    if (prefix) {
-                        write(prefix);
-                        write(".");
-                    }
+            function emitExpressionIdentifier(node: Identifier) {
+                var prefix = resolver.getExpressionNamePrefix(node);
+                if (prefix) {
+                    write(prefix);
+                    write(".");
                 }
                 writeTextOfNode(node);
+            }
+
+            function emitIdentifier(node: Identifier) {
+                if (!isNotExpressionIdentifier(node)) {
+                    emitExpressionIdentifier(node);
+                }
+                else {
+                    write(getSourceTextOfLocalNode(node));
+                }
             }
 
             function emitThis(node: Node) {
@@ -1046,6 +1067,36 @@ module ts {
                 write(": ");
                 emit(node.initializer);
                 emitTrailingComments(node);
+            }
+
+            function emitShortHandPropertyAssignment(node: ShortHandPropertyDeclaration) {
+                function emitAsNormalPropertyAssignment() {
+                    emitLeadingComments(node);
+                    // Emit identifier as an identifier
+                    emit(node.name);
+                    write(": ");
+                    // Even though this is stored as identified because it is in short-hand property assignment,
+                    // treated it as expression 
+                    emitExpressionIdentifier(node.name);
+                    emitTrailingComments(node);
+                }
+
+                if (compilerOptions.target < ScriptTarget.ES6) {
+                    emitAsNormalPropertyAssignment();
+                }
+                else if (compilerOptions.target >= ScriptTarget.ES6) {
+                    // If short-hand property has a prefix, then regardless of the target version, we will emit it as normal property assignment
+                    var prefix = resolver.getExpressionNamePrefix(node.name);
+                    if (prefix) {
+                        emitAsNormalPropertyAssignment();
+                    }
+                    // If short-hand property has no prefix, emit it as short-hand.
+                    else {
+                        emitLeadingComments(node);
+                        emit(node.name);
+                        emitTrailingComments(node);
+                    }
+                }
             }
 
             function tryEmitConstantValue(node: PropertyAccess | IndexedAccess): boolean {
@@ -1313,15 +1364,18 @@ module ts {
                 var endPos = emitToken(SyntaxKind.ForKeyword, node.pos);
                 write(" ");
                 endPos = emitToken(SyntaxKind.OpenParenToken, endPos);
-                if (node.declaration) {
-                    if (node.declaration.flags & NodeFlags.Let) {
-                        emitToken(SyntaxKind.LetKeyword, endPos);
+                if (node.declarations) {
+                    if (node.declarations.length >= 1) {
+                        var decl = node.declarations[0];
+                        if (decl.flags & NodeFlags.Let) {
+                            emitToken(SyntaxKind.LetKeyword, endPos);
+                        }
+                        else {
+                            emitToken(SyntaxKind.VarKeyword, endPos);
+                        }
+                        write(" ");
+                        emit(decl);
                     }
-                    else {
-                        emitToken(SyntaxKind.VarKeyword, endPos);
-                    }
-                    write(" ");
-                    emit(node.declaration);
                 }
                 else {
                     emit(node.variable);
@@ -2111,7 +2165,11 @@ module ts {
             function emitAMDModule(node: SourceFile, startIndex: number) {
                 var imports = getExternalImportDeclarations(node);
                 writeLine();
-                write("define([\"require\", \"exports\"");
+                write("define(");
+                if(node.amdModuleName) {
+                    write("\"" + node.amdModuleName + "\", ");
+                }
+                write("[\"require\", \"exports\"");
                 forEach(imports, imp => {
                     write(", ");
                     emitLiteral(imp.externalModuleName);
@@ -2265,6 +2323,8 @@ module ts {
                         return emitObjectLiteral(<ObjectLiteral>node);
                     case SyntaxKind.PropertyAssignment:
                         return emitPropertyAssignment(<PropertyDeclaration>node);
+                    case SyntaxKind.ShorthandPropertyAssignment:
+                        return emitShortHandPropertyAssignment(<ShortHandPropertyDeclaration>node);
                     case SyntaxKind.PropertyAccess:
                         return emitPropertyAccess(<PropertyAccess>node);
                     case SyntaxKind.IndexedAccess:
@@ -2985,7 +3045,7 @@ module ts {
                         }
 
                         return {
-                            diagnosticMessage: diagnosticMessage,
+                            diagnosticMessage,
                             errorNode: node,
                             typeName: node.name
                         };
@@ -3023,7 +3083,7 @@ module ts {
                         }
 
                         return {
-                            diagnosticMessage: diagnosticMessage,
+                            diagnosticMessage,
                             errorNode: node,
                             typeName: (<Declaration>node.parent).name
                         };
@@ -3148,7 +3208,7 @@ module ts {
                     }
 
                     return diagnosticMessage !== undefined ? {
-                        diagnosticMessage: diagnosticMessage,
+                        diagnosticMessage,
                         errorNode: node,
                         typeName: node.name
                     } : undefined;
@@ -3232,7 +3292,7 @@ module ts {
                             Diagnostics.Parameter_0_of_public_property_setter_from_exported_class_has_or_is_using_private_name_1;
                         }
                         return {
-                            diagnosticMessage: diagnosticMessage,
+                            diagnosticMessage,
                             errorNode: <Node>accessorWithTypeAnnotation.parameters[0],
                             // TODO(jfreeman): Investigate why we are passing node.name instead of node.parameters[0].name
                             typeName: accessorWithTypeAnnotation.name
@@ -3254,7 +3314,7 @@ module ts {
                             Diagnostics.Return_type_of_public_property_getter_from_exported_class_has_or_is_using_private_name_0;
                         }
                         return {
-                            diagnosticMessage: diagnosticMessage,
+                            diagnosticMessage,
                             errorNode: <Node>accessorWithTypeAnnotation.name,
                             typeName: undefined
                         };
@@ -3402,7 +3462,7 @@ module ts {
                     }
 
                     return {
-                        diagnosticMessage: diagnosticMessage,
+                        diagnosticMessage,
                         errorNode: <Node>node.name || node,
                     };
                 }
@@ -3488,7 +3548,7 @@ module ts {
                     }
 
                     return {
-                        diagnosticMessage: diagnosticMessage,
+                        diagnosticMessage,
                         errorNode: node,
                         typeName: node.name
                     };
@@ -3627,10 +3687,10 @@ module ts {
         }
 
         var hasSemanticErrors = resolver.hasSemanticErrors();
-        var hasEarlyErrors = resolver.hasEarlyErrors(targetSourceFile);
+        var isEmitBlocked = resolver.isEmitBlocked(targetSourceFile);
 
         function emitFile(jsFilePath: string, sourceFile?: SourceFile) {
-            if (!hasEarlyErrors) {
+            if (!isEmitBlocked) {
                 emitJavaScript(jsFilePath, sourceFile);
                 if (!hasSemanticErrors && compilerOptions.declaration) {
                     emitDeclarations(jsFilePath, sourceFile);
@@ -3673,22 +3733,22 @@ module ts {
         var hasEmitterError = forEach(diagnostics, diagnostic => diagnostic.category === DiagnosticCategory.Error);
 
         // Check and update returnCode for syntactic and semantic
-        var returnCode: EmitReturnStatus;
-        if (hasEarlyErrors) {
-            returnCode = EmitReturnStatus.AllOutputGenerationSkipped;
+        var emitResultStatus: EmitReturnStatus;
+        if (isEmitBlocked) {
+            emitResultStatus = EmitReturnStatus.AllOutputGenerationSkipped;
         } else if (hasEmitterError) {
-            returnCode = EmitReturnStatus.EmitErrorsEncountered;
+            emitResultStatus = EmitReturnStatus.EmitErrorsEncountered;
         } else if (hasSemanticErrors && compilerOptions.declaration) {
-            returnCode = EmitReturnStatus.DeclarationGenerationSkipped;
+            emitResultStatus = EmitReturnStatus.DeclarationGenerationSkipped;
         } else if (hasSemanticErrors && !compilerOptions.declaration) {
-            returnCode = EmitReturnStatus.JSGeneratedWithSemanticErrors;
+            emitResultStatus = EmitReturnStatus.JSGeneratedWithSemanticErrors;
         } else {
-            returnCode = EmitReturnStatus.Succeeded;
+            emitResultStatus = EmitReturnStatus.Succeeded;
         }
 
         return {
-            emitResultStatus: returnCode,
-            errors: diagnostics,
+            emitResultStatus,
+            diagnostics,
             sourceMaps: sourceMapDataList
         };
     }
