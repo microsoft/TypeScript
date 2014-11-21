@@ -911,6 +911,8 @@ module ts {
 
         getEmitOutput(fileName: string): EmitOutput;
 
+        getSourceFile(filename: string): SourceFile;
+
         dispose(): void;
     }
 
@@ -1143,7 +1145,7 @@ module ts {
     }
 
     export interface Classifier {
-        getClassificationsForLine(text: string, lexState: EndOfLineState): ClassificationResult;
+        getClassificationsForLine(text: string, lexState: EndOfLineState, classifyKeywordsInGenerics?: boolean): ClassificationResult;
     }
 
     export interface DocumentRegistry {
@@ -2063,8 +2065,12 @@ module ts {
             localizedDiagnosticMessages = host.getLocalizedDiagnosticMessages();
         }
 
+        function getCanonicalFileName(filename: string) {
+            return useCaseSensitivefilenames ? filename : filename.toLowerCase();
+        }
+
         function getSourceFile(filename: string): SourceFile {
-            return lookUp(sourceFilesByName, filename);
+            return lookUp(sourceFilesByName, getCanonicalFileName(filename));
         }
 
         function getFullTypeCheckChecker() {
@@ -2160,7 +2166,7 @@ module ts {
                     var filename = oldSourceFiles[i].filename;
                     if (!hostCache.contains(filename) || changesInCompilationSettingsAffectSyntax) {
                         documentRegistry.releaseDocument(filename, oldSettings);
-                        delete sourceFilesByName[filename];
+                        delete sourceFilesByName[getCanonicalFileName(filename)];
                     }
                 }
             }
@@ -2203,7 +2209,7 @@ module ts {
                 }
 
                 // Remember the new sourceFile
-                sourceFilesByName[filename] = sourceFile;
+                sourceFilesByName[getCanonicalFileName(filename)] = sourceFile;
             }
 
             // Now create a new compiler
@@ -2258,11 +2264,7 @@ module ts {
             var allDiagnostics = checker.getDiagnostics(targetSourceFile);
             if (compilerOptions.declaration) {
                 // If '-d' is enabled, check for emitter error. One example of emitter error is export class implements non-export interface
-                // Get emitter-diagnostics requires calling TypeChecker.emitFiles so we have to define CompilerHost.writer which does nothing because emitFiles function has side effects defined by CompilerHost.writer
-                var savedWriter = writer;
-                writer = (filename: string, data: string, writeByteOrderMark: boolean) => { };
-                allDiagnostics = allDiagnostics.concat(checker.invokeEmitter(targetSourceFile).diagnostics);
-                writer = savedWriter;
+                allDiagnostics = allDiagnostics.concat(checker.getDeclarationDiagnostics(targetSourceFile));
             }
             return allDiagnostics
         }
@@ -5383,6 +5385,7 @@ module ts {
             getFormattingEditsForDocument,
             getFormattingEditsAfterKeystroke,
             getEmitOutput,
+            getSourceFile: getCurrentSourceFile,
         };
     }
 
@@ -5442,7 +5445,8 @@ module ts {
             return true;
         }
 
-        function getClassificationsForLine(text: string, lexState: EndOfLineState): ClassificationResult {
+        // 'classifyKeywordsInGenerics' should be 'true' when a syntactic classifier is not present.
+        function getClassificationsForLine(text: string, lexState: EndOfLineState, classifyKeywordsInGenerics?: boolean): ClassificationResult {
             var offset = 0;
             var token = SyntaxKind.Unknown;
             var lastNonTriviaToken = SyntaxKind.Unknown;
@@ -5529,7 +5533,7 @@ module ts {
                              token === SyntaxKind.StringKeyword ||
                              token === SyntaxKind.NumberKeyword ||
                              token === SyntaxKind.BooleanKeyword) {
-                        if (angleBracketStack > 0) {
+                        if (angleBracketStack > 0 && !classifyKeywordsInGenerics) {
                             // If it looks like we're could be in something generic, don't classify this 
                             // as a keyword.  We may just get overwritten by the syntactic classifier,
                             // causing a noisy experience for the user.
