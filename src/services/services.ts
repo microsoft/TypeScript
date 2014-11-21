@@ -2061,8 +2061,12 @@ module ts {
             localizedDiagnosticMessages = host.getLocalizedDiagnosticMessages();
         }
 
+        function getCanonicalFileName(filename: string) {
+            return useCaseSensitivefilenames ? filename : filename.toLowerCase();
+        }
+
         function getSourceFile(filename: string): SourceFile {
-            return lookUp(sourceFilesByName, filename);
+            return lookUp(sourceFilesByName, getCanonicalFileName(filename));
         }
 
         function getFullTypeCheckChecker() {
@@ -2158,7 +2162,7 @@ module ts {
                     var filename = oldSourceFiles[i].filename;
                     if (!hostCache.contains(filename) || changesInCompilationSettingsAffectSyntax) {
                         documentRegistry.releaseDocument(filename, oldSettings);
-                        delete sourceFilesByName[filename];
+                        delete sourceFilesByName[getCanonicalFileName(filename)];
                     }
                 }
             }
@@ -2201,7 +2205,7 @@ module ts {
                 }
 
                 // Remember the new sourceFile
-                sourceFilesByName[filename] = sourceFile;
+                sourceFilesByName[getCanonicalFileName(filename)] = sourceFile;
             }
 
             // Now create a new compiler
