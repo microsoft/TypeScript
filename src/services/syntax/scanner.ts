@@ -281,7 +281,7 @@ module TypeScript.Scanner {
     LargeScannerToken.prototype.childCount = 0;
 
     export interface DiagnosticCallback {
-        (position: number, width: number, key: string, arguments: any[]): void;
+        (position: number, width: number, key: string, arguments?: any[]): void;
     }
 
     interface TokenInfo {
@@ -1008,7 +1008,7 @@ module TypeScript.Scanner {
             while (true) {
                 if (index === end) {
                     // Hit the end of the file.  
-                    reportDiagnostic(end, 0, DiagnosticCode._0_expected, ["`"]);
+                    reportDiagnostic(end, 0, DiagnosticCode.Unterminated_template_literal);
                     break;
                 }
 
@@ -1144,10 +1144,7 @@ module TypeScript.Scanner {
             // term, and it sees one of these then it may restart us asking specifically if we could 
             // scan out a regex.
             if (allowContextualToken) {
-                var result = tryScanRegularExpressionToken();
-                if (result !== SyntaxKind.None) {
-                    return result;
-                }
+                return scanRegularExpressionToken();
             }
 
             if (str.charCodeAt(index) === CharacterCodes.equals) {
@@ -1159,7 +1156,7 @@ module TypeScript.Scanner {
             }
         }
 
-        function tryScanRegularExpressionToken(): SyntaxKind {
+        function scanRegularExpressionToken(): SyntaxKind {
             var startIndex = index;
 
             var inEscape = false;
@@ -1168,8 +1165,9 @@ module TypeScript.Scanner {
                 var ch = str.charCodeAt(index);
 
                 if (isNaN(ch) || isNewLineCharacter(ch)) {
-                    index = startIndex;
-                    return SyntaxKind.None;
+                    // Hit the end of line, or end of the file.  This is not a legal regex.
+                    reportDiagnostic(index, 0, DiagnosticCode.Unterminated_regular_expression_literal);
+                    break;
                 }
 
                 index++;
@@ -1193,7 +1191,7 @@ module TypeScript.Scanner {
                         continue;
 
                     case CharacterCodes.closeBracket:
-                        // If we ever hit a cloe bracket then we're now no longer in a character 
+                        // If we ever hit a close bracket then we're now no longer in a character 
                         // class.  If we weren't in a character class to begin with, then this has 
                         // no effect.
                         inCharacterClass = false;
@@ -1219,7 +1217,7 @@ module TypeScript.Scanner {
 
             // TODO: The grammar says any identifier part is allowed here.  Do we need to support
             // \u identifiers here?  The existing typescript parser does not.  
-            while (isIdentifierPartCharacter[str.charCodeAt(index)]) {
+            while (index < end && isIdentifierPartCharacter[str.charCodeAt(index)]) {
                 index++;
             }
 
@@ -1322,7 +1320,7 @@ module TypeScript.Scanner {
                     break;
                 }
                 else if (isNaN(ch) || isNewLineCharacter(ch)) {
-                    reportDiagnostic(Math.min(index, end), 1, DiagnosticCode.Missing_close_quote_character, undefined);
+                    reportDiagnostic(index, 0, DiagnosticCode.Unterminated_string_literal);
                     break;
                 }
                 else {

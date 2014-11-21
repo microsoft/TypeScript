@@ -13,16 +13,16 @@
 // limitations under the License.
 //
 
-/// <reference path="formatting.ts"/>
+/// <reference path="references.ts"/>
 
-module TypeScript.Services.Formatting {
+module ts.formatting {
     export class RulesProvider {
         private globalRules: Rules;
         private options: ts.FormatCodeOptions;
         private activeRules: Rule[];
         private rulesMap: RulesMap;
 
-        constructor(private logger: TypeScript.Logger) {
+        constructor(private logger: Logger) {
             this.globalRules = new Rules();
         }
 

@@ -4,8 +4,8 @@
 module Harness.LanguageService {
     export class ScriptInfo {
         public version: number = 1;
-        public editRanges: { length: number; textChangeRange: TypeScript.TextChangeRange; }[] = [];
-        public lineMap: TypeScript.LineMap = null;
+        public editRanges: { length: number; textChangeRange: ts.TextChangeRange; }[] = [];
+        public lineMap: number[] = null;
 
         constructor(public fileName: string, public content: string, public isOpen = true) {
             this.setContent(content);
@@ -13,7 +13,7 @@ module Harness.LanguageService {
 
         private setContent(content: string): void {
             this.content = content;
-            this.lineMap = TypeScript.LineMap1.fromString(content);
+            this.lineMap = ts.computeLineStarts(content);
         }
 
         public updateContent(content: string): void {
@@ -32,30 +32,30 @@ module Harness.LanguageService {
             // Store edit range + new length of script
             this.editRanges.push({
                 length: this.content.length,
-                textChangeRange: new TypeScript.TextChangeRange(
-                    TypeScript.TextSpan.fromBounds(minChar, limChar), newText.length)
+                textChangeRange: new ts.TextChangeRange(
+                    ts.TextSpan.fromBounds(minChar, limChar), newText.length)
             });
 
             // Update version #
             this.version++;
         }
 
-        public getTextChangeRangeBetweenVersions(startVersion: number, endVersion: number): TypeScript.TextChangeRange {
+        public getTextChangeRangeBetweenVersions(startVersion: number, endVersion: number): ts.TextChangeRange {
             if (startVersion === endVersion) {
                 // No edits!
-                return TypeScript.TextChangeRange.unchanged;
+                return ts.TextChangeRange.unchanged;
             }
 
             var initialEditRangeIndex = this.editRanges.length - (this.version - startVersion);
             var lastEditRangeIndex = this.editRanges.length - (this.version - endVersion);
 
             var entries = this.editRanges.slice(initialEditRangeIndex, lastEditRangeIndex);
-            return TypeScript.TextChangeRange.collapseChangesAcrossMultipleVersions(entries.map(e => e.textChangeRange));
+            return ts.TextChangeRange.collapseChangesAcrossMultipleVersions(entries.map(e => e.textChangeRange));
         }
     }
 
     class ScriptSnapshotShim implements ts.ScriptSnapshotShim {
-        private lineMap: TypeScript.LineMap = null;
+        private lineMap: number[] = null;
         private textSnapshot: string;
         private version: number;
 
@@ -74,10 +74,10 @@ module Harness.LanguageService {
 
         public getLineStartPositions(): string {
             if (this.lineMap === null) {
-                this.lineMap = TypeScript.LineMap1.fromString(this.textSnapshot);
+                this.lineMap = ts.computeLineStarts(this.textSnapshot);
             }
 
-            return JSON.stringify(this.lineMap.lineStarts());
+            return JSON.stringify(this.lineMap);
         }
 
         public getChangeRange(oldScript: ts.ScriptSnapshotShim): string {
@@ -108,7 +108,7 @@ module Harness.LanguageService {
         public acquireDocument(
             fileName: string,
             compilationSettings: ts.CompilerOptions,
-            scriptSnapshot: TypeScript.IScriptSnapshot,
+            scriptSnapshot: ts.IScriptSnapshot,
             version: string,
             isOpen: boolean): ts.SourceFile {
             return ts.createSourceFile(fileName, scriptSnapshot.getText(0, scriptSnapshot.getLength()), compilationSettings.target, version, isOpen);
@@ -118,10 +118,10 @@ module Harness.LanguageService {
             document: ts.SourceFile,
             fileName: string,
             compilationSettings: ts.CompilerOptions,
-            scriptSnapshot: TypeScript.IScriptSnapshot,
+            scriptSnapshot: ts.IScriptSnapshot,
             version: string,
             isOpen: boolean,
-            textChangeRange: TypeScript.TextChangeRange
+            textChangeRange: ts.TextChangeRange
             ): ts.SourceFile {
             return document.update(scriptSnapshot, version, isOpen, textChangeRange);
         }
@@ -263,13 +263,13 @@ module Harness.LanguageService {
         }
 
         /** Parse file given its source text */
-        public parseSourceText(fileName: string, sourceText: TypeScript.IScriptSnapshot): TypeScript.SourceUnitSyntax {
-            return TypeScript.Parser.parse(fileName, TypeScript.SimpleText.fromScriptSnapshot(sourceText), ts.ScriptTarget.Latest, TypeScript.isDTSFile(fileName)).sourceUnit();
+        public parseSourceText(fileName: string, sourceText: ts.IScriptSnapshot): ts.SourceFile {
+            return ts.createSourceFile(fileName, sourceText.getText(0, sourceText.getLength()), ts.ScriptTarget.Latest, "1", true);
         }
 
         /** Parse a file on disk given its fileName */
         public parseFile(fileName: string) {
-            var sourceText = TypeScript.ScriptSnapshot.fromString(Harness.IO.readFile(fileName));
+            var sourceText = ts.ScriptSnapshot.fromString(Harness.IO.readFile(fileName));
             return this.parseSourceText(fileName, sourceText);
         }
 
@@ -283,22 +283,22 @@ module Harness.LanguageService {
             assert.isTrue(line >= 1);
             assert.isTrue(col >= 1);
 
-            return script.lineMap.getPosition(line - 1, col - 1);
+            return ts.getPositionFromLineAndCharacter(script.lineMap, line, col);
         }
 
         /**
          * @param line 0 based index
          * @param col 0 based index
         */
-        public positionToZeroBasedLineCol(fileName: string, position: number): TypeScript.ILineAndCharacter {
+        public positionToZeroBasedLineCol(fileName: string, position: number): ts.LineAndCharacter {
             var script: ScriptInfo = this.fileNameToScript[fileName];
             assert.isNotNull(script);
 
-            var result = script.lineMap.getLineAndCharacterFromPosition(position);
+            var result = ts.getLineAndCharacterOfPosition(script.lineMap, position);
 
-            assert.isTrue(result.line() >= 0);
-            assert.isTrue(result.character() >= 0);
-            return { line: result.line(), character: result.character() };
+            assert.isTrue(result.line >= 1);
+            assert.isTrue(result.character >= 1);
+            return { line: result.line - 1, character: result.character - 1 };
         }
 
         /** Verify that applying edits to sourceFileName result in the content of the file baselineFileName */

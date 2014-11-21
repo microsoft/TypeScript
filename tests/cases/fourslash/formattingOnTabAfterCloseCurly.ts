@@ -4,7 +4,7 @@
 ////    export enum NodeType {/*2*/
 ////        Error,/*3*/
 ////        Comment,/*4*/
-////    }	/*5*/
+////    }   /*5*/
 ////    export enum foob/*6*/
 ////    {
 ////        Blah=1, Bleah=2/*7*/
@@ -25,7 +25,7 @@ verify.currentLineContentIs("    }");
 goTo.marker("6");
 verify.currentLineContentIs("    export enum foob {");
 goTo.marker("7");
-verify.currentLineContentIs("        Blah= 1, Bleah= 2");
+verify.currentLineContentIs("        Blah = 1, Bleah = 2");
 goTo.marker("8");
 verify.currentLineContentIs("    }");
 goTo.marker("9");

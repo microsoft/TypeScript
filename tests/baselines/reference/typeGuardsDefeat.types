@@ -47,21 +47,24 @@ function foo2(x: number | string) {
 >length : number
     }
     else {
-        (function f() {
->(function f() {            x = 10;        })() : void
->(function f() {            x = 10;        }) : () => void
->function f() {            x = 10;        } : () => void
->f : () => void
+        var f = function () {
+>f : () => number
+>function () {            return x * x;        } : () => number
 
-            x = 10;
->x = 10 : number
+            return x * x;
+>x * x : number
+>x : number
+>x : number
+
+        };
+    }
+    x = "hello";
+>x = "hello" : string
 >x : string | number
 
-        })();
-        return x++; // number
->x++ : number
->x : number
-    }
+    f();
+>f() : number
+>f : () => number
 }
 function foo3(x: number | string) {
 >foo3 : (x: string | number) => number
@@ -78,18 +81,19 @@ function foo3(x: number | string) {
 >length : number
     }
     else {
-        (() => {
->(() => {            x = 10;        })() : void
->(() => {            x = 10;        }) : () => void
->() => {            x = 10;        } : () => void
-
-            x = 10;
->x = 10 : number
->x : string | number
-
-        })();
-        return x++; // number
->x++ : number
+        var f = () => x * x;
+>f : () => number
+>() => x * x : () => number
+>x * x : number
+>x : number
 >x : number
     }
+    x = "hello";
+>x = "hello" : string
+>x : string | number
+
+    f();
+>f() : number
+>f : () => number
 }
+

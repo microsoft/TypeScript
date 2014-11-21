@@ -1,0 +1,13 @@
+tests/cases/compiler/methodInAmbientClass1.ts(2,20): error TS1037: A function implementation cannot be declared in an ambient context.
+tests/cases/compiler/methodInAmbientClass1.ts(2,12): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value or consist of a single 'throw' statement.
+
+
+==== tests/cases/compiler/methodInAmbientClass1.ts (2 errors) ====
+        declare class Foo {
+        	fn(): boolean {
+        	              ~
+!!! error TS1037: A function implementation cannot be declared in an ambient context.
+        	      ~~~~~~~
+!!! error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value or consist of a single 'throw' statement.
+        	}
+        }

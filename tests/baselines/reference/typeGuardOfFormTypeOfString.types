@@ -76,21 +76,6 @@ else {
 >bool : boolean
 >strOrBool : boolean
 }
-if (typeof numOrBool === "string") {
->typeof numOrBool === "string" : boolean
->typeof numOrBool : string
->numOrBool : number | boolean
-
-    str = numOrBool; // string
->str = numOrBool : string
->str : string
->numOrBool : string
-}
-else {
-    var x : number | boolean =  numOrBool; // number | boolean
->x : number | boolean
->numOrBool : number | boolean
-}
 if (typeof strOrNumOrBool === "string") {
 >typeof strOrNumOrBool === "string" : boolean
 >typeof strOrNumOrBool : string
@@ -122,6 +107,22 @@ else {
 >c = strOrC : C
 >c : C
 >strOrC : C
+}
+
+// Narrowing occurs only if target type is a subtype of variable type
+if (typeof numOrBool === "string") {
+>typeof numOrBool === "string" : boolean
+>typeof numOrBool : string
+>numOrBool : number | boolean
+
+    var x1: number | boolean = numOrBool; // number | boolean
+>x1 : number | boolean
+>numOrBool : number | boolean
+}
+else {
+    var x2: number | boolean = numOrBool; // number | boolean
+>x2 : number | boolean
+>numOrBool : number | boolean
 }
 
 // A type guard of the form typeof x !== s, where s is a string literal,
@@ -159,21 +160,6 @@ else {
 >str : string
 >strOrBool : string
 }
-if (typeof numOrBool !== "string") {
->typeof numOrBool !== "string" : boolean
->typeof numOrBool : string
->numOrBool : number | boolean
-
-    var x: number | boolean = numOrBool; // number | boolean
->x : number | boolean
->numOrBool : number | boolean
-}
-else {
-    str = numOrBool; // string
->str = numOrBool : string
->str : string
->numOrBool : string
-}
 if (typeof strOrNumOrBool !== "string") {
 >typeof strOrNumOrBool !== "string" : boolean
 >typeof strOrNumOrBool : string
@@ -206,3 +192,20 @@ else {
 >str : string
 >strOrC : string
 }
+
+// Narrowing occurs only if target type is a subtype of variable type
+if (typeof numOrBool !== "string") {
+>typeof numOrBool !== "string" : boolean
+>typeof numOrBool : string
+>numOrBool : number | boolean
+
+    var x1: number | boolean = numOrBool; // number | boolean
+>x1 : number | boolean
+>numOrBool : number | boolean
+}
+else {
+    var x2: number | boolean = numOrBool; // number | boolean
+>x2 : number | boolean
+>numOrBool : number | boolean
+}
+
