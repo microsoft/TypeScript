@@ -805,16 +805,30 @@ module FourSlash {
             this.scenarioActions.push('<ShowQuickInfo />');
             this.scenarioActions.push('<Verify return values of quickInfo="' + JSON.stringify(displayParts) + '"/>');
 
-            function getJsonString(object: any) {
-                return (JSON.stringify(object, /*replacer*/undefined, "    "));
+            function getDisplayPartsJson(displayParts: ts.SymbolDisplayPart[]) {
+                var result = "";
+                ts.forEach(displayParts, part => {
+                    if (result) {
+                        result += ",\n    ";
+                    }
+                    else {
+                        result = "[\n    ";
+                    }
+                    result += JSON.stringify(part);
+                }); 
+                if (result) {
+                    result += "\n]";
+                }
+
+                return result;
             }
 
             var actualQuickInfo = this.languageService.getQuickInfoAtPosition(this.activeFile.fileName, this.currentCaretPosition);
             assert.equal(actualQuickInfo.kind, kind, this.messageAtLastKnownMarker("QuickInfo kind"));
             assert.equal(actualQuickInfo.kindModifiers, kindModifiers, this.messageAtLastKnownMarker("QuickInfo kindModifiers"));
-            assert.equal(getJsonString(actualQuickInfo.textSpan), getJsonString(textSpan), this.messageAtLastKnownMarker("QuickInfo textSpan"));
-            assert.equal(getJsonString(actualQuickInfo.displayParts), getJsonString(displayParts), this.messageAtLastKnownMarker("QuickInfo displayParts"));
-            assert.equal(getJsonString(actualQuickInfo.documentation), getJsonString(documentation), this.messageAtLastKnownMarker("QuickInfo documentation"));
+            assert.equal(JSON.stringify(actualQuickInfo.textSpan), JSON.stringify(textSpan), this.messageAtLastKnownMarker("QuickInfo textSpan"));
+            assert.equal(getDisplayPartsJson(actualQuickInfo.displayParts), getDisplayPartsJson(displayParts), this.messageAtLastKnownMarker("QuickInfo displayParts"));
+            assert.equal(getDisplayPartsJson(actualQuickInfo.documentation), getDisplayPartsJson(documentation), this.messageAtLastKnownMarker("QuickInfo documentation"));
         }
 
         public verifyRenameLocations(findInStrings: boolean, findInComments: boolean) {
