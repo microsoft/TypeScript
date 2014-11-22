@@ -2664,8 +2664,6 @@ module ts {
 
         function parseReturnStatement(): ReturnStatement {
             var node = <ReturnStatement>createNode(SyntaxKind.ReturnStatement);
-            var returnTokenStart = scanner.getTokenPos();
-            var returnTokenLength = scanner.getTextPos() - returnTokenStart;
 
             parseExpected(SyntaxKind.ReturnKeyword);
             if (!canParseSemicolon()) {
@@ -2935,8 +2933,6 @@ module ts {
             node.type = parseTypeAnnotation();
 
             // Issue any initializer-related errors on the equals token
-            var initializerStart = scanner.getTokenPos();
-            var initializerFirstTokenLength = scanner.getTextPos() - initializerStart;
             node.initializer = parseInitializer(/*inParameter*/ false, noIn);
 
             return finishNode(node);
@@ -2998,7 +2994,6 @@ module ts {
         function parsePropertyMemberDeclaration(pos: number, modifiers: ModifiersArray): Declaration {
             var name = parsePropertyName();
             var flags = modifiers ? modifiers.flags : 0;
-            var questionStart = scanner.getTokenPos();
             if (parseOptional(SyntaxKind.QuestionToken)) {
                 // Note: this is not legal as per the grammar.  But we allow it in the parser and
                 // report an error in the grammar checker.
@@ -3031,8 +3026,6 @@ module ts {
                 property.name = name;
                 property.type = parseTypeAnnotation();
 
-                var initializerStart = scanner.getTokenPos();
-                var initializerFirstTokenLength = scanner.getTextPos() - initializerStart;
                 property.initializer = parseInitializer(/*inParameter*/ false);
                 parseSemicolon();
 
@@ -3324,7 +3317,6 @@ module ts {
             var pos = getNodePos();
             var modifiers = parseModifiers(modifierContext);
             if (token === SyntaxKind.ExportKeyword) {
-                var modifiersEnd = scanner.getStartPos();
                 nextToken();
                 if (parseOptional(SyntaxKind.EqualsToken)) {
                     return parseExportAssignmentTail(pos, modifiers);
