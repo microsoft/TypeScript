@@ -1534,11 +1534,22 @@ module ts {
 
             function emitParameter(node: ParameterDeclaration) {
                 emitLeadingComments(node);
-                if (node.propertyName) {
-                    emit(node.propertyName);
-                    write(": ");
+                if (compilerOptions.target < ScriptTarget.ES6) {
+                    if (isBindingPattern(node.name)) {
+                        write("__" + indexOf((<FunctionLikeDeclaration>node.parent).parameters, node));
+                    }
+                    else {
+                        emit(node.name);
+                    }
                 }
-                emit(node.name);
+                else {
+                    if (node.propertyName) {
+                        emit(node.propertyName);
+                        write(": ");
+                    }
+                    emit(node.name);
+                    //emitOptional(" = ", node.initializer);
+                }
                 emitTrailingComments(node);
             }
 

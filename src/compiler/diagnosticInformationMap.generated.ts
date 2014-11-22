@@ -281,6 +281,7 @@ module ts {
         Type_0_has_no_property_1_and_no_string_index_signature: { code: 2459, category: DiagnosticCategory.Error, key: "Type '{0}' has no property '{1}' and no string index signature." },
         Type_0_has_no_property_1: { code: 2460, category: DiagnosticCategory.Error, key: "Type '{0}' has no property '{1}'." },
         Type_0_has_no_numeric_index_signature: { code: 2461, category: DiagnosticCategory.Error, key: "Type '{0}' has no numeric index signature." },
+        Type_0_is_not_an_array_type: { code: 2462, category: DiagnosticCategory.Error, key: "Type '{0}' is not an array type." },
         Import_declaration_0_is_using_private_name_1: { code: 4000, category: DiagnosticCategory.Error, key: "Import declaration '{0}' is using private name '{1}'." },
         Type_parameter_0_of_exported_class_has_or_is_using_name_1_from_private_module_2: { code: 4001, category: DiagnosticCategory.Error, key: "Type parameter '{0}' of exported class has or is using name '{1}' from private module '{2}'." },
         Type_parameter_0_of_exported_class_has_or_is_using_private_name_1: { code: 4002, category: DiagnosticCategory.Error, key: "Type parameter '{0}' of exported class has or is using private name '{1}'." },

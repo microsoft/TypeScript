@@ -1250,11 +1250,11 @@ module ts {
                     return lookAhead(isClassMemberStart);
                 case ParsingContext.EnumMembers:
                 case ParsingContext.ObjectLiteralMembers:
+                case ParsingContext.ObjectBindingElements:
                     return isPropertyName();
                 case ParsingContext.BaseTypeReferences:
                     return isIdentifier() && ((token !== SyntaxKind.ExtendsKeyword && token !== SyntaxKind.ImplementsKeyword) || !lookAhead(() => (nextToken(), isIdentifier())));
                 case ParsingContext.VariableDeclarations:
-                case ParsingContext.ObjectBindingElements:
                     return isIdentifierOrPattern();
                 case ParsingContext.ArrayBindingElements:
                     return token === SyntaxKind.CommaToken || isIdentifierOrPattern();
@@ -3477,13 +3477,14 @@ module ts {
             var node = <BindingElement>createNode(kind);
             node.flags = flags;
             if (context === ParsingContext.ObjectBindingElements) {
-                var id = parseIdentifier();
-                if (parseOptional(SyntaxKind.ColonToken)) {
-                    node.propertyName = id;
-                    node.name = parseIdentifierOrPattern(kind, flags);
+                var id = parsePropertyName();
+                if (id.kind === SyntaxKind.Identifier && token !== SyntaxKind.ColonToken) {
+                    node.name = id;
                 }
                 else {
-                    node.name = id;
+                    parseExpected(SyntaxKind.ColonToken);
+                    node.propertyName = id;
+                    node.name = parseIdentifierOrPattern(kind, flags);
                 }
             }
             else {

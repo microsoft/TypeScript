@@ -150,6 +150,8 @@ module ts {
         var globalRegExpType: ObjectType;
         var globalTemplateStringsArrayType: ObjectType;
 
+        var anyArrayType: Type;
+
         var tupleTypes: Map<TupleType> = {};
         var unionTypes: Map<UnionType> = {};
         var stringLiteralTypes: Map<StringLiteralType> = {};
@@ -1643,24 +1645,24 @@ module ts {
                     getIndexTypeOfType(parentType, IndexKind.String);
                 if (!type) {
                     error(name, Diagnostics.Type_0_has_no_property_1_and_no_string_index_signature, typeToString(parentType), declarationNameToString(name));
+                    return unknownType;
                 }
+                return type;
             }
-            else {
-                if (getPropertyOfType(parentType, "0")) {
-                    var propName = "" + indexOf(pattern.elements, declaration);
-                    var type = getTypeOfPropertyOfType(parentType, propName);
-                    if (!type) {
-                        error(declaration, Diagnostics.Type_0_has_no_property_1, typeToString(parentType), propName);
-                    }
-                }
-                else {
-                    var type = getIndexTypeOfType(parentType, IndexKind.Number);
-                    if (!type) {
-                        error(declaration, Diagnostics.Type_0_has_no_numeric_index_signature, typeToString(parentType));
-                    }
-                }
+            if (!isTypeAssignableTo(parentType, anyArrayType)) {
+                error(pattern, Diagnostics.Type_0_is_not_an_array_type, typeToString(parentType));
+                return unknownType;
             }
-            return type || unknownType;
+            if (isTupleType(parentType)) {
+                var propName = "" + indexOf(pattern.elements, declaration);
+                var type = getTypeOfPropertyOfType(parentType, propName);
+                if (!type) {
+                    error(declaration, Diagnostics.Type_0_has_no_property_1, typeToString(parentType), propName);
+                    return unknownType;
+                }
+                return type;
+            }
+            return getIndexTypeOfType(parentType, IndexKind.Number);
         }
 
         function getTypeForVariableDeclaration(declaration: VariableDeclaration | PropertyDeclaration): Type {
@@ -1739,7 +1741,8 @@ module ts {
             if (isBindingPattern(declaration.name)) {
                 return getTypeFromBindingPattern(<BindingPattern>declaration.name);
             }
-            // Rest parameters default to type any[], other parameters default to type any            type = declaration.flags & NodeFlags.Rest ? createArrayType(anyType) : anyType;
+            // Rest parameters default to type any[], other parameters default to type any
+            type = declaration.flags & NodeFlags.Rest ? anyArrayType : anyType;
              // Report implicit any errors unless this is a private property within an ambient declaration
             if (reportErrors && compilerOptions.noImplicitAny && !isPrivateWithinAmbient(declaration) && !(declaration.kind === SyntaxKind.Parameter && isPrivateWithinAmbient(declaration.parent))) {
                 reportImplicitAnyError(declaration, type);
@@ -3976,6 +3979,10 @@ module ts {
             return type.flags & TypeFlags.Reference && (<TypeReference>type).target === globalArrayType;
         }
 
+        function isTupleType(type: Type): boolean {
+            return (type.flags & TypeFlags.Tuple) !== 0;
+        }
+
         function getWidenedTypeOfObjectLiteral(type: Type): Type {
             var properties = getPropertiesOfObjectType(type);
             var members: SymbolTable = {};
@@ -4914,7 +4921,7 @@ module ts {
 
         // Return true if the given contextual type is a tuple-like type
         function contextualTypeIsTupleType(type: Type): boolean {
-            return !!(type.flags & TypeFlags.Union ? forEach((<UnionType>type).types, t => getPropertyOfObjectType(t, "0")) : getPropertyOfObjectType(type, "0"));
+            return !!(type.flags & TypeFlags.Union ? forEach((<UnionType>type).types, t => isTupleType(t)) : isTupleType(type));
         }
 
         // Return true if the given contextual type provides an index signature of the given kind
@@ -6379,12 +6386,11 @@ module ts {
         }
 
         function checkArrayLiteralAssignment(node: ArrayLiteral, sourceType: Type, contextualMapper?: TypeMapper): Type {
-            var isTupleType = getPropertyOfType(sourceType, "0");
             var elements = node.elements;
             for (var i = 0; i < elements.length; i++) {
                 var e = elements[i];
                 if (e.kind !== SyntaxKind.OmittedExpression) {
-                    if (isTupleType) {
+                    if (isTupleType(sourceType)) {
                         var propName = "" + i;
                         var type = getTypeOfPropertyOfType(sourceType, propName);
                         if (!type) {
@@ -9290,12 +9296,12 @@ module ts {
             globalNumberType = getGlobalType("Number");
             globalBooleanType = getGlobalType("Boolean");
             globalRegExpType = getGlobalType("RegExp");
-
             // If we're in ES6 mode, load the TemplateStringsArray.
             // Otherwise, default to 'unknown' for the purposes of type checking in LS scenarios.
             globalTemplateStringsArrayType = compilerOptions.target >= ScriptTarget.ES6
                 ? getGlobalType("TemplateStringsArray")
                 : unknownType;
+            anyArrayType = createArrayType(anyType);
         }
 
         initializeTypeChecker();
