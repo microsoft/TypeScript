@@ -9,9 +9,12 @@ tests/cases/compiler/typeGuardsOnPropertyAccess2.ts(9,24): error TS2339: Propert
 tests/cases/compiler/typeGuardsOnPropertyAccess2.ts(10,12): error TS2339: Property 'len' does not exist on type 'string | number'.
 tests/cases/compiler/typeGuardsOnPropertyAccess2.ts(10,20): error TS2339: Property 'len' does not exist on type 'string | number'.
 tests/cases/compiler/typeGuardsOnPropertyAccess2.ts(10,28): error TS2339: Property 'len' does not exist on type 'string | number'.
+tests/cases/compiler/typeGuardsOnPropertyAccess2.ts(11,13): error TS2339: Property 'length' does not exist on type 'string | number'.
+tests/cases/compiler/typeGuardsOnPropertyAccess2.ts(12,25): error TS2339: Property 'substr' does not exist on type 'number'.
+tests/cases/compiler/typeGuardsOnPropertyAccess2.ts(13,25): error TS2339: Property 'toFixed' does not exist on type 'string'.
 
 
-==== tests/cases/compiler/typeGuardsOnPropertyAccess2.ts (11 errors) ====
+==== tests/cases/compiler/typeGuardsOnPropertyAccess2.ts (14 errors) ====
     var x: string|number;
     x.length; // error
       ~~~~~~
@@ -44,3 +47,12 @@ tests/cases/compiler/typeGuardsOnPropertyAccess2.ts(10,28): error TS2339: Proper
 !!! error TS2339: Property 'len' does not exist on type 'string | number'.
                                ~~~
 !!! error TS2339: Property 'len' does not exist on type 'string | number'.
+    var r6 = !x.length; // error;
+                ~~~~~~
+!!! error TS2339: Property 'length' does not exist on type 'string | number'.
+    var r7 = !x.length && x.substr; // error
+                            ~~~~~~
+!!! error TS2339: Property 'substr' does not exist on type 'number'.
+    var r8 = !x.length || x.toFixed; // error
+                            ~~~~~~~
+!!! error TS2339: Property 'toFixed' does not exist on type 'string'.

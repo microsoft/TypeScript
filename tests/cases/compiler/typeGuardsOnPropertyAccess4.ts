@@ -37,3 +37,5 @@ if (y.filter) {
 } else {
     var r11 = y.push; // error
 }
+
+var r12 = !x.baz && !x.with; // errors

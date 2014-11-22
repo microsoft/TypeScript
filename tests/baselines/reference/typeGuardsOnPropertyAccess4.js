@@ -39,6 +39,8 @@ if (y.filter) {
     var r11 = y.push; // error
 }
 
+var r12 = !x.baz && !x.with; // errors
+
 //// [typeGuardsOnPropertyAccess4.js]
 var x;
 if (x.width && x.ba) {
@@ -63,3 +65,4 @@ if (y.filter) {
 else {
     var r11 = y.push; // error
 }
+var r12 = !x.baz && !x.with; // errors

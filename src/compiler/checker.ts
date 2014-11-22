@@ -4512,7 +4512,6 @@ module ts {
                         }
                         break;
                     case SyntaxKind.PrefixOperator:
-                        // TODO: need to check for property access?
                         if ((<UnaryExpression>expr).operator === SyntaxKind.ExclamationToken) {
                             return narrowType(type, (<UnaryExpression>expr).operand, !assumeTrue);
                         }
@@ -5181,6 +5180,8 @@ module ts {
                             } else {
                                 break loop;
                             }
+                        case SyntaxKind.PrefixOperator:
+                            continue;
                         default:
                             break loop;
                     }

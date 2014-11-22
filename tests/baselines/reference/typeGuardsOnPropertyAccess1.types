@@ -54,3 +54,27 @@ var r5 = y.length || y.getDate(); // no error, 'any'?
 >y : Date
 >getDate : () => number
 
+var r6 = !x.length && x.toFixed();
+>r6 : string
+>!x.length && x.toFixed() : string
+>!x.length : boolean
+>x.length : number
+>x : string | number
+>length : number
+>x.toFixed() : string
+>x.toFixed : (fractionDigits?: number) => string
+>x : number
+>toFixed : (fractionDigits?: number) => string
+
+var r7 = !x.length || x.substr(2);
+>r7 : string | boolean
+>!x.length || x.substr(2) : string | boolean
+>!x.length : boolean
+>x.length : number
+>x : string | number
+>length : number
+>x.substr(2) : string
+>x.substr : (from: number, length?: number) => string
+>x : string
+>substr : (from: number, length?: number) => string
+

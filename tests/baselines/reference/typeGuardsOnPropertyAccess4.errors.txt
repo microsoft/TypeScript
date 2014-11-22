@@ -9,9 +9,11 @@ tests/cases/compiler/typeGuardsOnPropertyAccess4.ts(27,23): error TS2339: Proper
 tests/cases/compiler/typeGuardsOnPropertyAccess4.ts(27,34): error TS2339: Property 'push' does not exist on type 'string'.
 tests/cases/compiler/typeGuardsOnPropertyAccess4.ts(36,17): error TS2339: Property 'substr' does not exist on type 'A[]'.
 tests/cases/compiler/typeGuardsOnPropertyAccess4.ts(38,17): error TS2339: Property 'push' does not exist on type 'string'.
+tests/cases/compiler/typeGuardsOnPropertyAccess4.ts(41,14): error TS2339: Property 'baz' does not exist on type 'A | B | C'.
+tests/cases/compiler/typeGuardsOnPropertyAccess4.ts(41,24): error TS2339: Property 'with' does not exist on type 'A | B | C'.
 
 
-==== tests/cases/compiler/typeGuardsOnPropertyAccess4.ts (11 errors) ====
+==== tests/cases/compiler/typeGuardsOnPropertyAccess4.ts (13 errors) ====
     interface A {
         length: number;
     }
@@ -73,3 +75,9 @@ tests/cases/compiler/typeGuardsOnPropertyAccess4.ts(38,17): error TS2339: Proper
                     ~~~~
 !!! error TS2339: Property 'push' does not exist on type 'string'.
     }
+    
+    var r12 = !x.baz && !x.with; // errors
+                 ~~~
+!!! error TS2339: Property 'baz' does not exist on type 'A | B | C'.
+                           ~~~~
+!!! error TS2339: Property 'with' does not exist on type 'A | B | C'.
