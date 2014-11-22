@@ -1530,28 +1530,25 @@ module ts {
         }
 
         function parseSignature(kind: SyntaxKind, returnToken: SyntaxKind, returnTokenRequired: boolean): ParsedSignature {
+            var signature = <ParsedSignature>{};
+            fillSignature(kind, returnToken, returnTokenRequired, signature);
+            return signature;
+        }
+
+        function fillSignature(kind: SyntaxKind, returnToken: SyntaxKind, returnTokenRequired: boolean, signature: ParsedSignature): void {
             if (kind === SyntaxKind.ConstructSignature) {
                 parseExpected(SyntaxKind.NewKeyword);
             }
-            var typeParameters = parseTypeParameters();
-            var parameters = parseParameterList(SyntaxKind.OpenParenToken, SyntaxKind.CloseParenToken);
-
-            var type: TypeNode;
+            signature.typeParameters = parseTypeParameters();
+            signature.parameters = parseParameterList(SyntaxKind.OpenParenToken, SyntaxKind.CloseParenToken);
 
             if (returnTokenRequired) {
                 parseExpected(returnToken);
-                type = parseType();
+                signature.type = parseType();
             }
-            else if (parseOptional(returnToken)) 
-            {
-                type = parseType();
+            else if (parseOptional(returnToken)) {
+                signature.type = parseType();
             }
-
-            return {
-                typeParameters,
-                parameters,
-                type: type
-            };
         }
 
         // Because we use this for index signatures as well, we sometimes use
@@ -2966,13 +2963,12 @@ module ts {
 
         function parseFunctionDeclaration(pos?: number, flags?: NodeFlags): FunctionLikeDeclaration {
             var node = <FunctionLikeDeclaration>createNode(SyntaxKind.FunctionDeclaration, pos);
-            if (flags) node.flags = flags;
+            if (flags) {
+                node.flags = flags;
+            }
             parseExpected(SyntaxKind.FunctionKeyword);
             node.name = parseIdentifier();
-            var sig = parseSignature(SyntaxKind.CallSignature, SyntaxKind.ColonToken, /* returnTokenRequired */ false);
-            node.typeParameters = sig.typeParameters;
-            node.parameters = sig.parameters;
-            node.type = sig.type;
+            fillSignature(SyntaxKind.CallSignature, SyntaxKind.ColonToken, /* returnTokenRequired */ false, node);
             node.body = parseFunctionBlockOrSemicolon();
             return finishNode(node);
         }
@@ -2980,18 +2976,13 @@ module ts {
         function parseConstructorDeclaration(pos: number, modifiers: ModifiersArray): ConstructorDeclaration {
             var node = <ConstructorDeclaration>createNode(SyntaxKind.Constructor, pos);
             setModifiers(node, modifiers);
-
             parseExpected(SyntaxKind.ConstructorKeyword);
-            var sig = parseSignature(SyntaxKind.CallSignature, SyntaxKind.ColonToken, /* returnTokenRequired */ false);
-            node.typeParameters = sig.typeParameters;
-            node.parameters = sig.parameters;
-            node.type = sig.type;
+            fillSignature(SyntaxKind.CallSignature, SyntaxKind.ColonToken, /* returnTokenRequired */ false, node);
             node.body = parseFunctionBlockOrSemicolon();
-
             return finishNode(node);
         }
 
-        function parsePropertyMemberDeclaration(pos: number, modifiers: ModifiersArray): Declaration {
+        function parsePropertyMemberDeclaration(fullStart: number, modifiers: ModifiersArray): Declaration {
             var name = parsePropertyName();
             var flags = modifiers ? modifiers.flags : 0;
             if (parseOptional(SyntaxKind.QuestionToken)) {
@@ -3001,47 +2992,35 @@ module ts {
             }
 
             if (token === SyntaxKind.OpenParenToken || token === SyntaxKind.LessThanToken) {
-                var method = <MethodDeclaration>createNode(SyntaxKind.Method, pos);
+                var method = <MethodDeclaration>createNode(SyntaxKind.Method, fullStart);
                 setModifiers(method, modifiers);
-
                 if (flags) {
                     method.flags = flags;
                 }
                 method.name = name;
-                var sig = parseSignature(SyntaxKind.CallSignature, SyntaxKind.ColonToken, /* returnTokenRequired */ false);
-                method.typeParameters = sig.typeParameters;
-                method.parameters = sig.parameters;
-                method.type = sig.type;
+                fillSignature(SyntaxKind.CallSignature, SyntaxKind.ColonToken, /* returnTokenRequired */ false, method);
                 method.body = parseFunctionBlockOrSemicolon();
-
                 return finishNode(method);
             }
             else {
-                var property = <PropertyDeclaration>createNode(SyntaxKind.Property, pos);
+                var property = <PropertyDeclaration>createNode(SyntaxKind.Property, fullStart);
                 setModifiers(property, modifiers);
-
                 if (flags) {
                     property.flags = flags;
                 }
                 property.name = name;
                 property.type = parseTypeAnnotation();
-
                 property.initializer = parseInitializer(/*inParameter*/ false);
                 parseSemicolon();
-
                 return finishNode(property);
             }
         }
 
-        function parseMemberAccessorDeclaration(kind: SyntaxKind, pos: number, modifiers: ModifiersArray): MethodDeclaration {
-            var node = <MethodDeclaration>createNode(kind, pos);
+        function parseMemberAccessorDeclaration(kind: SyntaxKind, fullStart: number, modifiers: ModifiersArray): MethodDeclaration {
+            var node = <MethodDeclaration>createNode(kind, fullStart);
             setModifiers(node, modifiers);
-
             node.name = parsePropertyName();
-            var sig = parseSignature(SyntaxKind.CallSignature, SyntaxKind.ColonToken, /* returnTokenRequired */ false);
-            node.typeParameters = sig.typeParameters;
-            node.parameters = sig.parameters;
-            node.type = sig.type;
+            fillSignature(SyntaxKind.CallSignature, SyntaxKind.ColonToken, /* returnTokenRequired */ false, node);
             node.body = parseFunctionBlockOrSemicolon();
             return finishNode(node);
         }
@@ -3101,15 +3080,17 @@ module ts {
             var modifiers: ModifiersArray;
             while (true) {
                 var modifierStart = scanner.getTokenPos();
-                var modifierToken = token;
+                var modifierKind = token;
 
-                if (!parseAnyContextualModifier()) break;
+                if (!parseAnyContextualModifier()) {
+                    break;
+                }
 
                 if (!modifiers) {
                     modifiers = <ModifiersArray>[];
                 }
-                flags |= modifierToFlag(modifierToken);
-                modifiers.push(finishNode(createNode(modifierToken, modifierStart))); 
+                flags |= modifierToFlag(modifierKind);
+                modifiers.push(finishNode(createNode(modifierKind, modifierStart))); 
             }
             if (modifiers) {
                 modifiers.flags = flags;
@@ -3118,22 +3099,22 @@ module ts {
         }
 
         function parseClassMemberDeclaration(): Declaration {
-            var pos = getNodePos();
+            var fullStart = getNodePos();
             var modifiers = parseModifiers(ModifierContext.ClassMembers);
             if (parseContextualModifier(SyntaxKind.GetKeyword)) {
-                return parseMemberAccessorDeclaration(SyntaxKind.GetAccessor, pos, modifiers);
+                return parseMemberAccessorDeclaration(SyntaxKind.GetAccessor, fullStart, modifiers);
             }
             if (parseContextualModifier(SyntaxKind.SetKeyword)) {
-                return parseMemberAccessorDeclaration(SyntaxKind.SetAccessor, pos, modifiers);
+                return parseMemberAccessorDeclaration(SyntaxKind.SetAccessor, fullStart, modifiers);
             }
             if (token === SyntaxKind.ConstructorKeyword) {
-                return parseConstructorDeclaration(pos, modifiers);
+                return parseConstructorDeclaration(fullStart, modifiers);
             }
             if (token >= SyntaxKind.Identifier || token === SyntaxKind.StringLiteral || token === SyntaxKind.NumericLiteral) {
-                return parsePropertyMemberDeclaration(pos, modifiers);
+                return parsePropertyMemberDeclaration(fullStart, modifiers);
             }
             if (token === SyntaxKind.OpenBracketToken) {
-                return parseIndexSignatureMember(modifiers, pos);
+                return parseIndexSignatureMember(modifiers, fullStart);
             }
 
             // 'isClassMemberStart' should have hinted not to attempt parsing.
