@@ -4254,11 +4254,13 @@ module ts {
             Debug.fail("should not get here");
         }
 
-        // Remove all types from a union type which don't have the given property name
-        function subtractUnionTypesWithoutProperty(type: Type, name: string) {
+        // Remove all types from a union type which do or do not have the given property name
+        // subtractWhenPropertyMissing = true means remove all types from the union which *do not* have the given property
+        // subtractWhenPropertyMissing = false means remove all types from the union which *do* have the given property
+        function subtractUnionTypesByPropertyName(type: Type, name: string, subtractWhenPropertyMissing: boolean) {
             return filter((<UnionType>type).types, ty => {
-                var apparentType = ty.symbol ? ty : getApparentType(ty);
-                return filter(getPropertiesOfType(ty), prop => prop.name === name).length > 0
+                var filteredProperties = filter(getPropertiesOfType(ty), prop => prop.name === name)
+                return subtractWhenPropertyMissing ? filteredProperties.length > 0 : filteredProperties.length === 0;
             });
         }
 
@@ -4479,11 +4481,10 @@ module ts {
             }
 
             function narrowTypeByPropertyAccess(type: Type, expr: PropertyAccess, assumeTrue: boolean): Type {
-                // Check that assumed result is true and we have variable symbol on the left
-                if (!assumeTrue || expr.left.kind !== SyntaxKind.Identifier || getResolvedSymbol(<Identifier>expr.left) !== symbol) {
+                if (expr.left.kind !== SyntaxKind.Identifier || getResolvedSymbol(<Identifier>expr.left) !== symbol && !(type.flags & TypeFlags.Union)) {
                     return type;
                 } else if (type.flags & TypeFlags.Union) {
-                    var unionParts = subtractUnionTypesWithoutProperty(type, expr.right.text);
+                    var unionParts = subtractUnionTypesByPropertyName(type, expr.right.text, assumeTrue);
                     return getUnionType(unionParts, true);
                 } else {
                     return type;
@@ -4511,6 +4512,7 @@ module ts {
                         }
                         break;
                     case SyntaxKind.PrefixOperator:
+                        // TODO: need to check for property access?
                         if ((<UnaryExpression>expr).operator === SyntaxKind.ExclamationToken) {
                             return narrowType(type, (<UnaryExpression>expr).operand, !assumeTrue);
                         }
@@ -5154,21 +5156,39 @@ module ts {
         }
 
         function isInTypeGuard(node: Node) {
+            // To determine whether a property access in invalid we need to check:
+            // a) If it's the last condition in an if statement or conditional - no error, cause narrowing
+            // b) If it's the last condition in a binary expression type guard - potential error, don't narrow further
+            var isInvalidPropertyAccessOk = false;
             loop: while (true) {
                 var child = node;
-                node = node.parent;
-                switch (node.kind) {
-                    case SyntaxKind.IfStatement:
-                    case SyntaxKind.ConditionalExpression:
-                    case SyntaxKind.BinaryExpression:
-                        return true;
-                        break;
-                    default:
-                        // Stop at the first containing function or module declaration
-                        return false;
+                if (node.parent) {
+                    node = node.parent;
+                    switch (node.kind) {
+                        case SyntaxKind.IfStatement:
+                            isInvalidPropertyAccessOk = true;
+                            break loop;
+                        case SyntaxKind.ConditionalExpression:
+                            if ((<ConditionalExpression>node).condition === child) {
+                                isInvalidPropertyAccessOk = true;
+                            }
+                            break loop;
+                        case SyntaxKind.BinaryExpression:
+                            var op = (<BinaryExpression>node).operator;
+                            if (op === SyntaxKind.AmpersandAmpersandToken || op === SyntaxKind.BarBarToken) {
+                                isInvalidPropertyAccessOk = true;
+                                continue;
+                            } else {
+                                break loop;
+                            }
+                        default:
+                            break loop;
+                    }
+                } else {
+                    break;
                 }
             }
-            return false;
+            return isInvalidPropertyAccessOk;
         }
 
         function checkPropertyAccess(node: PropertyAccess) {
@@ -5182,15 +5202,23 @@ module ts {
                 }
                 var prop = getPropertyOfType(apparentType, node.right.text);
                 if (!prop) {
+                    // suppress the error if we're using property access in a type guard for a union type
                     var propertyExistsInSomeUnionPart = false;
+                    var unionParts: Type[] = [];
                     if (type.flags & TypeFlags.Union) {
-                        var unionParts = subtractUnionTypesWithoutProperty(type, node.right.text);
-                        propertyExistsInSomeUnionPart = unionParts.length > 0;
+                        unionParts = subtractUnionTypesByPropertyName(type, node.right.text, true);
+                        propertyExistsInSomeUnionPart = unionParts.length > 0;                        
                     }
                     if (node.right.text && !(isInTypeGuard(node) && propertyExistsInSomeUnionPart)) {
                         error(node.right, Diagnostics.Property_0_does_not_exist_on_type_1, declarationNameToString(node.right), typeToString(type));
                     }
-                    return unknownType;
+                    // if the property access has narrowed the union sufficiently return the appropriate type rather than unknown
+                    // so the result of all binary expressions and conditionals isn't 'any' after BCTing the branches
+                    if (unionParts.length === 1) {
+                        return getTypeOfSymbol(getPropertyOfType(unionParts[0], node.right.text));
+                    } else {
+                        return unknownType;
+                    }
                 }
                 getNodeLinks(node).resolvedSymbol = prop;
                 if (prop.parent && prop.parent.flags & SymbolFlags.Class) {

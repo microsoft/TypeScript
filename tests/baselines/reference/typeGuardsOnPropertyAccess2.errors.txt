@@ -1,0 +1,46 @@
+tests/cases/compiler/typeGuardsOnPropertyAccess2.ts(2,3): error TS2339: Property 'length' does not exist on type 'string | number'.
+tests/cases/compiler/typeGuardsOnPropertyAccess2.ts(3,11): error TS2339: Property 'length' does not exist on type 'string | number'.
+tests/cases/compiler/typeGuardsOnPropertyAccess2.ts(4,3): error TS2339: Property 'len' does not exist on type 'string | number'.
+tests/cases/compiler/typeGuardsOnPropertyAccess2.ts(5,7): error TS2339: Property 'len' does not exist on type 'string | number'.
+tests/cases/compiler/typeGuardsOnPropertyAccess2.ts(6,12): error TS2339: Property 'len' does not exist on type 'string | number'.
+tests/cases/compiler/typeGuardsOnPropertyAccess2.ts(7,12): error TS2339: Property 'len' does not exist on type 'string | number'.
+tests/cases/compiler/typeGuardsOnPropertyAccess2.ts(8,24): error TS2339: Property 'len' does not exist on type 'string'.
+tests/cases/compiler/typeGuardsOnPropertyAccess2.ts(9,24): error TS2339: Property 'len' does not exist on type 'string'.
+tests/cases/compiler/typeGuardsOnPropertyAccess2.ts(10,12): error TS2339: Property 'len' does not exist on type 'string | number'.
+tests/cases/compiler/typeGuardsOnPropertyAccess2.ts(10,20): error TS2339: Property 'len' does not exist on type 'string | number'.
+tests/cases/compiler/typeGuardsOnPropertyAccess2.ts(10,28): error TS2339: Property 'len' does not exist on type 'string | number'.
+
+
+==== tests/cases/compiler/typeGuardsOnPropertyAccess2.ts (11 errors) ====
+    var x: string|number;
+    x.length; // error
+      ~~~~~~
+!!! error TS2339: Property 'length' does not exist on type 'string | number'.
+    var y = x.length; // error
+              ~~~~~~
+!!! error TS2339: Property 'length' does not exist on type 'string | number'.
+    x.len; // error
+      ~~~
+!!! error TS2339: Property 'len' does not exist on type 'string | number'.
+    if (x.len) { } // error
+          ~~~
+!!! error TS2339: Property 'len' does not exist on type 'string | number'.
+    var r1 = x.len && x; // error
+               ~~~
+!!! error TS2339: Property 'len' does not exist on type 'string | number'.
+    var r2 = x.len || x; // error
+               ~~~
+!!! error TS2339: Property 'len' does not exist on type 'string | number'.
+    var r3 = x.length && x.len; // error
+                           ~~~
+!!! error TS2339: Property 'len' does not exist on type 'string'.
+    var r4 = x.length && x.len && x.length; // error
+                           ~~~
+!!! error TS2339: Property 'len' does not exist on type 'string'.
+    var r5 = x.len ? x.len : x.len; // error
+               ~~~
+!!! error TS2339: Property 'len' does not exist on type 'string | number'.
+                       ~~~
+!!! error TS2339: Property 'len' does not exist on type 'string | number'.
+                               ~~~
+!!! error TS2339: Property 'len' does not exist on type 'string | number'.

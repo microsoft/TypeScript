@@ -1,0 +1,121 @@
+=== tests/cases/compiler/typeGuardsOnPropertyAccess3.ts ===
+// no errors 
+
+interface A {
+>A : A
+
+    length: number;
+>length : number
+}
+
+interface B extends A {
+>B : B
+>A : A
+
+    width: number;
+>width : number
+}
+
+interface C extends B {
+>C : C
+>B : B
+
+    radius: number;
+>radius : number
+
+    bar: string;
+>bar : string
+}
+
+var x: A|B|C;
+>x : A | B | C
+>A : A
+>B : B
+>C : C
+
+if (x.length && x.width) {
+>x.length && x.width : unknown
+>x.length : number
+>x : A | B | C
+>length : number
+>x.width : unknown
+>x : A | B | C
+>width : unknown
+
+    var r = x.width; // x is B|C
+>r : number
+>x.width : number
+>x : B | C
+>width : number
+
+    if (x.radius) {
+>x.radius : number
+>x : B | C
+>radius : number
+
+        var r2 = x.bar; // x is C
+>r2 : string
+>x.bar : string
+>x : C
+>bar : string
+    }
+}
+
+if (x.length && x.width && x.bar) {
+>x.length && x.width && x.bar : string
+>x.length && x.width : unknown
+>x.length : number
+>x : A | B | C
+>length : number
+>x.width : unknown
+>x : A | B | C
+>width : unknown
+>x.bar : string
+>x : B | C
+>bar : string
+
+    var r3 = x.radius;
+>r3 : number
+>x.radius : number
+>x : C
+>radius : number
+}
+
+var r4 = x.radius ? x.bar : x.length;
+>r4 : string | number
+>x.radius ? x.bar : x.length : string | number
+>x.radius : number
+>x : A | B | C
+>radius : number
+>x.bar : string
+>x : C
+>bar : string
+>x.length : number
+>x : A | B
+>length : number
+
+var r5 = x.length && x.width ? (x.radius ? x.bar : x.length) : x.length;
+>r5 : string | number
+>x.length && x.width ? (x.radius ? x.bar : x.length) : x.length : string | number
+>x.length && x.width : unknown
+>x.length : number
+>x : A | B | C
+>length : number
+>x.width : unknown
+>x : A | B | C
+>width : unknown
+>(x.radius ? x.bar : x.length) : string | number
+>x.radius ? x.bar : x.length : string | number
+>x.radius : number
+>x : B | C
+>radius : number
+>x.bar : string
+>x : C
+>bar : string
+>x.length : number
+>x : B
+>length : number
+>x.length : number
+>x : A | B | C
+>length : number
+

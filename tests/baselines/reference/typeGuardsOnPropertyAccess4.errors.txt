@@ -1,0 +1,75 @@
+tests/cases/compiler/typeGuardsOnPropertyAccess4.ts(16,18): error TS2339: Property 'ba' does not exist on type 'B | C'.
+tests/cases/compiler/typeGuardsOnPropertyAccess4.ts(17,15): error TS2339: Property 'width' does not exist on type 'A | B | C'.
+tests/cases/compiler/typeGuardsOnPropertyAccess4.ts(20,12): error TS2339: Property 'width' does not exist on type 'A | B | C'.
+tests/cases/compiler/typeGuardsOnPropertyAccess4.ts(21,23): error TS2339: Property 'width' does not exist on type 'A | B | C'.
+tests/cases/compiler/typeGuardsOnPropertyAccess4.ts(21,33): error TS2339: Property 'radius' does not exist on type 'A | B | C'.
+tests/cases/compiler/typeGuardsOnPropertyAccess4.ts(22,33): error TS2339: Property 'radius' does not exist on type 'A'.
+tests/cases/compiler/typeGuardsOnPropertyAccess4.ts(25,39): error TS2339: Property 'filter' does not exist on type 'string | A[]'.
+tests/cases/compiler/typeGuardsOnPropertyAccess4.ts(27,23): error TS2339: Property 'substr' does not exist on type 'A[]'.
+tests/cases/compiler/typeGuardsOnPropertyAccess4.ts(27,34): error TS2339: Property 'push' does not exist on type 'string'.
+tests/cases/compiler/typeGuardsOnPropertyAccess4.ts(36,17): error TS2339: Property 'substr' does not exist on type 'A[]'.
+tests/cases/compiler/typeGuardsOnPropertyAccess4.ts(38,17): error TS2339: Property 'push' does not exist on type 'string'.
+
+
+==== tests/cases/compiler/typeGuardsOnPropertyAccess4.ts (11 errors) ====
+    interface A {
+        length: number;
+    }
+    
+    interface B extends A {
+        width: number;
+    }
+    
+    interface C extends B {
+        radius: number;
+        bar: string;
+    }
+    
+    var x: A|B|C;
+    
+    if (x.width && x.ba) { // error
+                     ~~
+!!! error TS2339: Property 'ba' does not exist on type 'B | C'.
+        var r = x.width; // x is A|B|C
+                  ~~~~~
+!!! error TS2339: Property 'width' does not exist on type 'A | B | C'.
+    }
+    
+    var r2 = x.width; // error
+               ~~~~~
+!!! error TS2339: Property 'width' does not exist on type 'A | B | C'.
+    var r3 = x.length ? x.width : x.radius; // errors
+                          ~~~~~
+!!! error TS2339: Property 'width' does not exist on type 'A | B | C'.
+                                    ~~~~~~
+!!! error TS2339: Property 'radius' does not exist on type 'A | B | C'.
+    var r4 = x.width ? x.length : x.radius; // error
+                                    ~~~~~~
+!!! error TS2339: Property 'radius' does not exist on type 'A'.
+    
+    var y: Array<A> | string;
+    var r5 = y.length ? y.lastIndexOf : y.filter; // error on filter
+                                          ~~~~~~
+!!! error TS2339: Property 'filter' does not exist on type 'string | A[]'.
+    var r6 = y.filter ? y.push : y.substr;
+    var r7 = y.filter ? y.substr : y.push; // errors
+                          ~~~~~~
+!!! error TS2339: Property 'substr' does not exist on type 'A[]'.
+                                     ~~~~
+!!! error TS2339: Property 'push' does not exist on type 'string'.
+    
+    if (y.filter) {
+        var r8 = y.push; 
+    } else {
+        var r9 = y.substr;
+    }
+    
+    if (y.filter) {
+        var r10 = y.substr; // error
+                    ~~~~~~
+!!! error TS2339: Property 'substr' does not exist on type 'A[]'.
+    } else {
+        var r11 = y.push; // error
+                    ~~~~
+!!! error TS2339: Property 'push' does not exist on type 'string'.
+    }

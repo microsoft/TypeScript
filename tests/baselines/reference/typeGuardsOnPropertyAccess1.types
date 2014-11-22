@@ -1,0 +1,56 @@
+=== tests/cases/compiler/typeGuardsOnPropertyAccess1.ts ===
+var x: string|number;
+>x : string | number
+
+var r = x.length && x.charAt; // no error
+>r : (pos: number) => string
+>x.length && x.charAt : (pos: number) => string
+>x.length : number
+>x : string | number
+>length : number
+>x.charAt : (pos: number) => string
+>x : string
+>charAt : (pos: number) => string
+
+var y: Array<string>|Array<number>|Date = [''];
+>y : string[] | number[] | Date
+>Array : T[]
+>Array : T[]
+>Date : Date
+>[''] : string[]
+
+var r2 = y.length ? y[0] : ""; // no error, string|number
+>r2 : string | number
+>y.length ? y[0] : "" : string | number
+>y.length : unknown
+>y : string[] | number[] | Date
+>length : unknown
+>y[0] : string | number
+>y : string[] | number[]
+
+if (y.length) { var r3 = y; } // no error, string[]|number[]
+>y.length : unknown
+>y : string[] | number[] | Date
+>length : unknown
+>r3 : string[] | number[]
+>y : string[] | number[]
+
+var r4 = x.length || x; // no error, number
+>r4 : number
+>x.length || x : number
+>x.length : number
+>x : string | number
+>length : number
+>x : number
+
+var r5 = y.length || y.getDate(); // no error, 'any'?
+>r5 : unknown
+>y.length || y.getDate() : unknown
+>y.length : unknown
+>y : string[] | number[] | Date
+>length : unknown
+>y.getDate() : number
+>y.getDate : () => number
+>y : Date
+>getDate : () => number
+
