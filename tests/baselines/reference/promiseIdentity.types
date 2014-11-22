@@ -1,41 +1,41 @@
 === tests/cases/compiler/promiseIdentity.ts ===
-interface IPromise<T> {
->IPromise : IPromise<T>
+interface IPromise1<T> {
+>IPromise1 : IPromise1<T>
 >T : T
 
-    then<U>(callback: (x: T) => IPromise<U>): IPromise<U>;
->then : <U>(callback: (x: T) => IPromise<U>) => IPromise<U>
+    then<U>(callback: (x: T) => IPromise1<U>): IPromise1<U>;
+>then : <U>(callback: (x: T) => IPromise1<U>) => IPromise1<U>
 >U : U
->callback : (x: T) => IPromise<U>
+>callback : (x: T) => IPromise1<U>
 >x : T
 >T : T
->IPromise : IPromise<T>
+>IPromise1 : IPromise1<T>
 >U : U
->IPromise : IPromise<T>
+>IPromise1 : IPromise1<T>
 >U : U
 }
-interface Promise<T> {
->Promise : Promise<T>
+interface Promise1<T> {
+>Promise1 : Promise1<T>
 >T : T
 
-    then<U>(callback: (x: T) => Promise<U>): Promise<U>;
->then : <U>(callback: (x: T) => Promise<U>) => Promise<U>
+    then<U>(callback: (x: T) => Promise1<U>): Promise1<U>;
+>then : <U>(callback: (x: T) => Promise1<U>) => Promise1<U>
 >U : U
->callback : (x: T) => Promise<U>
+>callback : (x: T) => Promise1<U>
 >x : T
 >T : T
->Promise : Promise<T>
+>Promise1 : Promise1<T>
 >U : U
->Promise : Promise<T>
+>Promise1 : Promise1<T>
 >U : U
 }
-var x: IPromise<string>;
->x : IPromise<string>
->IPromise : IPromise<T>
+var x: IPromise1<string>;
+>x : IPromise1<string>
+>IPromise1 : IPromise1<T>
 
-var x: Promise<string>;
->x : IPromise<string>
->Promise : Promise<T>
+var x: Promise1<string>;
+>x : IPromise1<string>
+>Promise1 : Promise1<T>
 
 
 interface IPromise2<T, V> {

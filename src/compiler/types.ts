@@ -137,6 +137,8 @@ module ts {
         SetKeyword,
         StringKeyword,
         TypeKeyword,
+        AsyncKeyword,
+        AwaitKeyword,
         // Parse tree nodes
         Missing,
         // Names
@@ -184,6 +186,7 @@ module ts {
         TemplateExpression,
         TemplateSpan,
         OmittedExpression,
+        GeneratedLabel,
         // Element
         Block,
         VariableStatement,
@@ -226,6 +229,8 @@ module ts {
         Program,
         // Synthesized list
         SyntaxList,
+        // Generated nodes
+        GeneratedNode,
         // Enum value count
         Count,
         // Markers
@@ -234,7 +239,7 @@ module ts {
         FirstReservedWord = BreakKeyword,
         LastReservedWord = WithKeyword,
         FirstKeyword = BreakKeyword,
-        LastKeyword = TypeKeyword,
+        LastKeyword = AwaitKeyword,
         FirstFutureReservedWord = ImplementsKeyword,
         LastFutureReservedWord = YieldKeyword,
         FirstTypeNode = TypeReference,
@@ -242,7 +247,7 @@ module ts {
         FirstPunctuation = OpenBraceToken,
         LastPunctuation = CaretEqualsToken,
         FirstToken = EndOfFileToken,
-        LastToken = TypeKeyword,
+        LastToken = AwaitKeyword,
         FirstTriviaToken = SingleLineCommentTrivia,
         LastTriviaToken = WhitespaceTrivia,
         FirstLiteralToken = NumericLiteral,
@@ -269,8 +274,9 @@ module ts {
         DeclarationFile  = 0x00000400,  // Node is a .d.ts file
         Let              = 0x00000800,  // Variable declaration
         Const            = 0x00001000,  // Variable declaration
+        Async            = 0x00002000,  // Method/Function
 
-        Modifier = Export | Ambient | Public | Private | Protected | Static,
+        Modifier = Export | Ambient | Public | Private | Protected | Static | Async,
         AccessibilityModifier = Public | Private | Protected,
         BlockScoped = Let | Const
     }
@@ -627,6 +633,15 @@ module ts {
         exportName: Identifier;
     }
 
+    export interface GeneratedNode extends Node {
+        text: string;
+        content?: Map<Node | Node[]>;
+    }
+
+    export interface GeneratedLabel extends Expression {
+        label: number;
+    }
+
     export interface FileReference extends TextRange {
         filename: string;
     }
@@ -937,6 +952,8 @@ module ts {
         referenced?: boolean;          // True if alias symbol has been referenced as a value
         exportAssignSymbol?: Symbol;   // Symbol exported from external module
         unionType?: UnionType;         // Containing union type for union property
+        awaitedType?: Type;            // Awaited type of symbol
+        promiseType?: boolean;         // True if the type represents a creatable promise
     }
 
     export interface TransientSymbol extends Symbol, SymbolLinks { }
@@ -956,6 +973,8 @@ module ts {
 
         // Values for enum members have been computed, and any errors have been reported for them.
         EnumValuesComputed = 0x00000080,
+
+        EmitAwaiter        = 0x00000100,  // Emit __awaiter
     }
 
     export interface NodeLinks {
