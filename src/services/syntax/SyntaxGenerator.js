@@ -1289,7 +1289,7 @@ var definitions = [
         children: [
             { name: 'expression', type: 'ILeftHandSideExpressionSyntax' },
             { name: 'openBracketToken', isToken: true, excludeFromAST: true },
-            { name: 'argumentExpression', type: 'IExpressionSyntax' },
+            { name: 'argumentExpression', type: 'IExpressionSyntax', isOptional: true },
             { name: 'closeBracketToken', isToken: true, excludeFromAST: true }
         ]
     },
@@ -1558,7 +1558,7 @@ var definitions = [
         interfaces: ['IStatementSyntax'],
         children: [
             { name: 'throwKeyword', isToken: true, excludeFromAST: true },
-            { name: 'expression', type: 'IExpressionSyntax' },
+            { name: 'expression', type: 'IExpressionSyntax', isOptional: true },
             { name: 'semicolonToken', isToken: true, isOptional: true, excludeFromAST: true }
         ]
     },

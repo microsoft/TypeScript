@@ -893,7 +893,7 @@ module TypeScript {
         this.expression = expression,
         this.semicolonToken = semicolonToken,
         throwKeyword.parent = this,
-        expression.parent = this,
+        expression && (expression.parent = this),
         semicolonToken && (semicolonToken.parent = this);
     };
     ThrowStatementSyntax.prototype.kind = SyntaxKind.ThrowStatement;
@@ -1347,7 +1347,7 @@ module TypeScript {
         this.closeBracketToken = closeBracketToken,
         expression.parent = this,
         openBracketToken.parent = this,
-        argumentExpression.parent = this,
+        argumentExpression && (argumentExpression.parent = this),
         closeBracketToken.parent = this;
     };
     ElementAccessExpressionSyntax.prototype.kind = SyntaxKind.ElementAccessExpression;
