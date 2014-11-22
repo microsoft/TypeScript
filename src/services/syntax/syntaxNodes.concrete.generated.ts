@@ -893,7 +893,7 @@ module TypeScript {
         this.expression = expression,
         this.semicolonToken = semicolonToken,
         throwKeyword.parent = this,
-        expression.parent = this,
+        expression && (expression.parent = this),
         semicolonToken && (semicolonToken.parent = this);
     };
     ThrowStatementSyntax.prototype.kind = SyntaxKind.ThrowStatement;

@@ -705,7 +705,7 @@ var definitions:ITypeDefinition[] = [
         interfaces: ['IStatementSyntax'],
         children: [
             <any>{ name: 'throwKeyword', isToken: true, excludeFromAST: true },
-            <any>{ name: 'expression', type: 'IExpressionSyntax' },
+            <any>{ name: 'expression', type: 'IExpressionSyntax', isOptional: true },
             <any>{ name: 'semicolonToken', isToken: true, isOptional: true, excludeFromAST: true }
         ]
     },

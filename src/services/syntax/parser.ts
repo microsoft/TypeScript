@@ -2098,33 +2098,33 @@ module TypeScript.Parser {
                 parseSyntaxList<IStatementSyntax>(ListParsingState.SwitchClause_Statements));
         }
 
-        function parseThrowStatementExpression(): IExpressionSyntax {
+        function parseThrowStatement(throwKeyword: ISyntaxToken): ThrowStatementSyntax {
+            return new ThrowStatementSyntax(parseNodeData,
+                consumeToken(throwKeyword), tryParseThrowStatementExpression(), eatExplicitOrAutomaticSemicolon(/*allowWithoutNewline:*/ false));
+        }
+
+        function tryParseThrowStatementExpression(): IExpressionSyntax {
             // ThrowStatement[Yield] :
             //      throw [no LineTerminator here]Expression[In, ?Yield];
 
             // Because of automatic semicolon insertion, we need to report error if this 
             // throw could be terminated with a semicolon.  Note: we can't call 'parseExpression'
             // directly as that might consume an expression on the following line.  
-            return canEatExplicitOrAutomaticSemicolon(/*allowWithoutNewline:*/ false)
-                ? createMissingToken(SyntaxKind.IdentifierName, undefined)
-                : allowInAnd(parseExpression);
+            // We just return 'undefined' in that case.  The actual error will be reported in the
+            // grammar walker.
+            return canEatExplicitOrAutomaticSemicolon(/*allowWithoutNewline:*/ false) ? undefined : allowInAnd(parseExpression);
         }
 
-        function parseThrowStatement(throwKeyword: ISyntaxToken): ThrowStatementSyntax {
-            return new ThrowStatementSyntax(parseNodeData,
-                consumeToken(throwKeyword), parseThrowStatementExpression(), eatExplicitOrAutomaticSemicolon(/*allowWithoutNewline:*/ false));
+        function parseReturnStatement(returnKeyword: ISyntaxToken): ReturnStatementSyntax {
+            return new ReturnStatementSyntax(parseNodeData,
+                consumeToken(returnKeyword), tryParseReturnStatementExpression(), eatExplicitOrAutomaticSemicolon(/*allowWithoutNewline:*/ false));
         }
 
         function tryParseReturnStatementExpression(): IExpressionSyntax {
             // ReturnStatement[Yield] :
             //      return [no LineTerminator here]Expression[In, ?Yield];
 
-            return !canEatExplicitOrAutomaticSemicolon(/*allowWithoutNewline:*/ false) ? allowInAnd(parseExpression) : undefined;
-        }
-
-        function parseReturnStatement(returnKeyword: ISyntaxToken): ReturnStatementSyntax {
-            return new ReturnStatementSyntax(parseNodeData,
-                consumeToken(returnKeyword), tryParseReturnStatementExpression(), eatExplicitOrAutomaticSemicolon(/*allowWithoutNewline:*/ false));
+            return canEatExplicitOrAutomaticSemicolon(/*allowWithoutNewline:*/ false) ? undefined : allowInAnd(parseExpression);
         }
 
         function isExpressionStatement(currentToken: ISyntaxToken): boolean {

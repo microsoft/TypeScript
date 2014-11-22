@@ -1558,7 +1558,7 @@ var definitions = [
         interfaces: ['IStatementSyntax'],
         children: [
             { name: 'throwKeyword', isToken: true, excludeFromAST: true },
-            { name: 'expression', type: 'IExpressionSyntax' },
+            { name: 'expression', type: 'IExpressionSyntax', isOptional: true },
             { name: 'semicolonToken', isToken: true, isOptional: true, excludeFromAST: true }
         ]
     },

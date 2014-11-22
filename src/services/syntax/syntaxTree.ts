@@ -1264,11 +1264,22 @@ module TypeScript {
         }
 
         public visitThrowStatement(node: ThrowStatementSyntax): void {
-            if (this.checkForStatementInAmbientContxt(node)) {
+            if (this.checkForStatementInAmbientContxt(node) ||
+                this.checkForMissingThrowStatementExpression(node)) {
                 return;
             }
 
             super.visitThrowStatement(node);
+        }
+
+        public checkForMissingThrowStatementExpression(node: ThrowStatementSyntax): boolean {
+            if (node.expression === undefined) {
+                this.diagnostics.push(new Diagnostic(
+                    this.syntaxTree.fileName(), this.syntaxTree.lineMap(), fullEnd(node.throwKeyword), 0, DiagnosticCode.Expression_expected));
+                return true;
+            }
+
+            return false;
         }
 
         public visitTryStatement(node: TryStatementSyntax): void {
