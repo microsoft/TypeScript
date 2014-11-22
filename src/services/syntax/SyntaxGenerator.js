@@ -1289,7 +1289,7 @@ var definitions = [
         children: [
             { name: 'expression', type: 'ILeftHandSideExpressionSyntax' },
             { name: 'openBracketToken', isToken: true, excludeFromAST: true },
-            { name: 'argumentExpression', type: 'IExpressionSyntax' },
+            { name: 'argumentExpression', type: 'IExpressionSyntax', isOptional: true },
             { name: 'closeBracketToken', isToken: true, excludeFromAST: true }
         ]
     },

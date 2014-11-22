@@ -138,8 +138,12 @@ module TypeScript {
         }
 
         private pushDiagnostic(element: ISyntaxElement, diagnosticKey: string, args?: any[]): void {
+            this.pushDiagnosticAt(start(element, this.text), width(element), diagnosticKey, args);
+        }
+
+        private pushDiagnosticAt(start: number, length: number, diagnosticKey: string, args?: any[]): void {
             this.diagnostics.push(new Diagnostic(
-                this.syntaxTree.fileName(), this.syntaxTree.lineMap(), start(element, this.text), width(element), diagnosticKey, args));
+                this.syntaxTree.fileName(), this.syntaxTree.lineMap(), start, length, diagnosticKey, args));
         }
 
         public visitCatchClause(node: CatchClauseSyntax): void {
@@ -715,6 +719,33 @@ module TypeScript {
             super.visitSetAccessor(node);
         }
 
+        public visitElementAccessExpression(node: ElementAccessExpressionSyntax): void {
+            if (this.checkForMissingArgumentExpression(node)) {
+                return;
+            }
+
+            super.visitElementAccessExpression(node);
+        }
+
+        public checkForMissingArgumentExpression(node: ElementAccessExpressionSyntax): boolean {
+            if (node.argumentExpression === undefined) {
+                if (node.parent.kind === SyntaxKind.ObjectCreationExpression && (<ObjectCreationExpressionSyntax>node.parent).expression === node) {
+                    // Provide a specialized message for the very common case where someone writes:
+                    //      new Foo[]
+                    var start = TypeScript.start(node.openBracketToken);
+                    var end = TypeScript.fullEnd(node.closeBracketToken);
+                    this.pushDiagnosticAt(start, end - start, DiagnosticCode.new_T_cannot_be_used_to_create_an_array_Use_new_Array_T_instead);                    
+                }
+                else {
+                    this.pushDiagnostic(node.closeBracketToken, DiagnosticCode.Expression_expected);
+                }
+
+                return true;
+            }
+
+            return false;
+        }
+
         public visitEnumDeclaration(node: EnumDeclarationSyntax): void {
             if (this.checkForDisallowedDeclareModifier(node.modifiers) ||
                 this.checkForRequiredDeclareModifier(node, node.identifier, node.modifiers) ||
@@ -1274,8 +1305,7 @@ module TypeScript {
 
         public checkForMissingThrowStatementExpression(node: ThrowStatementSyntax): boolean {
             if (node.expression === undefined) {
-                this.diagnostics.push(new Diagnostic(
-                    this.syntaxTree.fileName(), this.syntaxTree.lineMap(), fullEnd(node.throwKeyword), 0, DiagnosticCode.Expression_expected));
+                this.pushDiagnosticAt(fullEnd(node.throwKeyword), 0, DiagnosticCode.Expression_expected);
                 return true;
             }
 

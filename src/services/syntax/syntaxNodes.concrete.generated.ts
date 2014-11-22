@@ -1347,7 +1347,7 @@ module TypeScript {
         this.closeBracketToken = closeBracketToken,
         expression.parent = this,
         openBracketToken.parent = this,
-        argumentExpression.parent = this,
+        argumentExpression && (argumentExpression.parent = this),
         closeBracketToken.parent = this;
     };
     ElementAccessExpressionSyntax.prototype.kind = SyntaxKind.ElementAccessExpression;

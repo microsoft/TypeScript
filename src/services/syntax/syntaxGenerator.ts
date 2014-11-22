@@ -435,7 +435,7 @@ var definitions:ITypeDefinition[] = [
         children: [
             <any>{ name: 'expression', type: 'ILeftHandSideExpressionSyntax' },
             <any>{ name: 'openBracketToken', isToken: true, excludeFromAST: true },
-            <any>{ name: 'argumentExpression', type: 'IExpressionSyntax' },
+            <any>{ name: 'argumentExpression', type: 'IExpressionSyntax', isOptional: true },
             <any>{ name: 'closeBracketToken', isToken: true, excludeFromAST: true }
         ]
     },

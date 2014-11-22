@@ -2650,7 +2650,7 @@ module TypeScript.Parser {
             return token0;
         }
 
-        function tryParseMemberExpressionOrHigher(_currentToken: ISyntaxToken, force: boolean, inObjectCreation: boolean): IMemberExpressionSyntax {
+        function tryParseMemberExpressionOrHigher(_currentToken: ISyntaxToken, force: boolean): IMemberExpressionSyntax {
             // Note: to make our lives simpler, we decompose the the NewExpression productions and
             // place ObjectCreationExpression and FunctionExpression into PrimaryExpression.
             // like so:
@@ -2703,7 +2703,7 @@ module TypeScript.Parser {
                 return undefined;
             }
 
-            return parseMemberExpressionRest(expression, inObjectCreation); 
+            return parseMemberExpressionRest(expression); 
         }
 
         function parseCallExpressionRest(expression: ILeftHandSideExpressionSyntax): ILeftHandSideExpressionSyntax {
@@ -2730,7 +2730,7 @@ module TypeScript.Parser {
                         continue;
 
                     case SyntaxKind.OpenBracketToken:
-                        expression = parseElementAccessExpression(expression, _currentToken, /*inObjectCreation:*/ false);
+                        expression = parseElementAccessExpression(expression, _currentToken);
                         continue;
 
                     case SyntaxKind.DotToken:
@@ -2747,14 +2747,14 @@ module TypeScript.Parser {
             }
         }
 
-        function parseMemberExpressionRest(expression: IMemberExpressionSyntax, inObjectCreation: boolean): IMemberExpressionSyntax {
+        function parseMemberExpressionRest(expression: IMemberExpressionSyntax): IMemberExpressionSyntax {
             while (true) {
                 var _currentToken = currentToken();
                 var currentTokenKind = _currentToken.kind;
 
                 switch (currentTokenKind) {
                     case SyntaxKind.OpenBracketToken:
-                        expression = parseElementAccessExpression(expression, _currentToken, inObjectCreation);
+                        expression = parseElementAccessExpression(expression, _currentToken);
                         continue;
 
                     case SyntaxKind.DotToken:
@@ -2808,7 +2808,7 @@ module TypeScript.Parser {
                 expression = parseSuperExpression(_currentToken);
             }
             else {
-                expression = tryParseMemberExpressionOrHigher(_currentToken, force, /*inObjectCreation:*/ false);
+                expression = tryParseMemberExpressionOrHigher(_currentToken, force);
                 if (expression === undefined) {
                     return undefined;
                 }
@@ -2941,29 +2941,18 @@ module TypeScript.Parser {
             return allowInAnd(force ? parseAssignmentExpressionOrHigher : tryParseAssignmentExpressionOrHigher);
         }
 
-        function parseElementAccessArgumentExpression(openBracketToken: ISyntaxToken, inObjectCreation: boolean) {
+        function parseElementAccessArgumentExpression(openBracketToken: ISyntaxToken) {
             // MemberExpression[?Yield] [ Expression[In, ?Yield] ]
 
-            // It's not uncommon for a user to write: "new Type[]".  Check for that common pattern
-            // and report a better error message.
-            if (inObjectCreation && currentToken().kind === SyntaxKind.CloseBracketToken) {
-                var errorStart = start(openBracketToken, source.text);
-                var errorEnd = fullEnd(currentToken());
-                var diagnostic = new Diagnostic(fileName, source.text.lineMap(), errorStart, errorEnd - errorStart,
-                    DiagnosticCode.new_T_cannot_be_used_to_create_an_array_Use_new_Array_T_instead, undefined);
-                addDiagnostic(diagnostic);
-
-                return createEmptyToken(SyntaxKind.IdentifierName);
-            }
-            else {
-                return allowInAnd(parseExpression);
-            }
+            // For error recovery purposes.  Allow a missing expression here.  We'll report the
+            // appropriate message in the grammar checker.
+            return currentToken().kind === SyntaxKind.CloseBracketToken ? undefined : allowInAnd(parseExpression);
         }
 
-        function parseElementAccessExpression(expression: ILeftHandSideExpressionSyntax, openBracketToken: ISyntaxToken, inObjectCreation: boolean): ElementAccessExpressionSyntax {
+        function parseElementAccessExpression(expression: ILeftHandSideExpressionSyntax, openBracketToken: ISyntaxToken): ElementAccessExpressionSyntax {
             // Debug.assert(currentToken().kind === SyntaxKind.OpenBracketToken);
             return new ElementAccessExpressionSyntax(parseNodeData, expression, consumeToken(openBracketToken),
-                parseElementAccessArgumentExpression(openBracketToken, inObjectCreation), eatToken(SyntaxKind.CloseBracketToken));
+                parseElementAccessArgumentExpression(openBracketToken), eatToken(SyntaxKind.CloseBracketToken));
         }
 
         function tryParsePrimaryExpression(_currentToken: ISyntaxToken, force: boolean): IPrimaryExpressionSyntax {
@@ -3069,7 +3058,7 @@ module TypeScript.Parser {
             // this decision.
 
             return new ObjectCreationExpressionSyntax(parseNodeData,
-                consumeToken(newKeyword), tryParseMemberExpressionOrHigher(currentToken(), /*force:*/ true, /*inObjectCreation:*/ true), tryParseArgumentList());
+                consumeToken(newKeyword), tryParseMemberExpressionOrHigher(currentToken(), /*force:*/ true), tryParseArgumentList());
         }
 
         function parseTemplateExpression(startToken: ISyntaxToken): IPrimaryExpressionSyntax {
