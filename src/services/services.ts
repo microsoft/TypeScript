@@ -3887,39 +3887,54 @@ module ts {
             var searchMeaning = getIntersectingMeaningFromDeclarations(getMeaningFromLocation(node), declarations);
 
             // Get the text to search for, we need to normalize it as external module names will have quote
-            var symbolName = getNormalizedSymbolName(symbol.name, declarations);
+            var declaredName = getDeclaredName(symbol);
 
-            // Get syntactic diagnostics
+            // Try to get the smallest valid scope that we can limit our search to;
+            // otherwise we'll need to search globally (i.e. include each file).
             var scope = getSymbolScope(symbol);
 
             if (scope) {
                 result = [];
-                getReferencesInNode(scope, symbol, symbolName, node, searchMeaning, findInStrings, findInComments, result);
+                getReferencesInNode(scope, symbol, declaredName, node, searchMeaning, findInStrings, findInComments, result);
             }
             else {
+                var internedName = getInternedName(symbol, declarations)
                 forEach(sourceFiles, sourceFile => {
                     cancellationToken.throwIfCancellationRequested();
 
-                    if (lookUp(sourceFile.identifiers, symbolName)) {
+                    if (lookUp(sourceFile.identifiers, internedName)) {
                         result = result || [];
-                        getReferencesInNode(sourceFile, symbol, symbolName, node, searchMeaning, findInStrings, findInComments, result);
+                        getReferencesInNode(sourceFile, symbol, declaredName, node, searchMeaning, findInStrings, findInComments, result);
                     }
                 });
             }
 
             return result;
 
-            function getNormalizedSymbolName(symbolName: string, declarations: Declaration[]): string {
+            function getDeclaredName(symbol: Symbol) {
+                var name = typeInfoResolver.symbolToString(symbol);
+
+                return stripQuotes(name);
+            }
+
+            function getInternedName(symbol: Symbol, declarations: Declaration[]): string {
                 // Special case for function expressions, whose names are solely local to their bodies.
                 var functionExpression = forEach(declarations, d => d.kind === SyntaxKind.FunctionExpression ? <FunctionExpression>d : undefined);
 
+                // When a name gets interned into a SourceFile's 'identifiers' Map,
+                // its name is escaped and stored in the same way its symbol name/identifier
+                // name should be stored.
                 if (functionExpression && functionExpression.name) {
                     var name = functionExpression.name.text;
                 }
                 else {
-                    var name = symbolName;
+                    var name = symbol.name;
                 }
 
+                return stripQuotes(name);
+            }
+
+            function stripQuotes(name: string) {
                 var length = name.length;
                 if (length >= 2 && name.charCodeAt(0) === CharacterCodes.doubleQuote && name.charCodeAt(length - 1) === CharacterCodes.doubleQuote) {
                     return name.substring(1, length - 1);
