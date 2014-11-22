@@ -1319,13 +1319,6 @@ module ts {
             return result;
         }
 
-        function createNodeArray<T extends Node>(node: T): NodeArray<T> {
-            var result = <NodeArray<T>>[node];
-            result.pos = node.pos;
-            result.end = node.end;
-            return result;
-        }
-
         function parseBracketedList<T extends Node>(kind: ParsingContext, parseElement: () => T, startToken: SyntaxKind, endToken: SyntaxKind): NodeArray<T> {
             if (parseExpected(startToken)) {
                 var result = parseDelimitedList(kind, parseElement);
@@ -1478,7 +1471,11 @@ module ts {
         }
 
         function parseParameterType(): TypeNode {
-            return parseOptional(SyntaxKind.ColonToken) ? token === SyntaxKind.StringLiteral ? parseStringLiteral() : parseType() : undefined;
+            return parseOptional(SyntaxKind.ColonToken)
+                ? token === SyntaxKind.StringLiteral
+                    ? parseStringLiteral()
+                    : parseType()
+                : undefined;
         }
 
         function isStartOfParameter(): boolean {
@@ -1492,7 +1489,7 @@ module ts {
             }
         }
 
-        function parseParameter(flags: NodeFlags = 0): ParameterDeclaration {
+        function parseParameter(): ParameterDeclaration {
             var node = <ParameterDeclaration>createNode(SyntaxKind.Parameter);
             var modifiers = parseModifiers(ModifierContext.Parameters);
             setModifiers(node, modifiers);
@@ -1564,10 +1561,9 @@ module ts {
             return finishNode(node);
         }
 
-        function parseIndexSignatureMember(modifiers: ModifiersArray, pos?: number): SignatureDeclaration {
-            var node = <SignatureDeclaration>createNode(SyntaxKind.IndexSignature, pos);
+        function parseIndexSignatureMember(fullStart: number, modifiers: ModifiersArray): SignatureDeclaration {
+            var node = <SignatureDeclaration>createNode(SyntaxKind.IndexSignature, fullStart);
             setModifiers(node, modifiers);
-
             node.parameters = parseParameterList(SyntaxKind.OpenBracketToken, SyntaxKind.CloseBracketToken);
             node.type = parseTypeAnnotation();
             parseSemicolon();
@@ -1618,7 +1614,7 @@ module ts {
                 case SyntaxKind.LessThanToken:
                     return parseSignatureMember(SyntaxKind.CallSignature, SyntaxKind.ColonToken);
                 case SyntaxKind.OpenBracketToken:
-                    return parseIndexSignatureMember(/*modifiers:*/ undefined);
+                    return parseIndexSignatureMember(scanner.getStartPos(), /*modifiers:*/ undefined);
                 case SyntaxKind.NewKeyword:
                     if (lookAhead(() => nextToken() === SyntaxKind.OpenParenToken || token === SyntaxKind.LessThanToken)) {
                         return parseSignatureMember(SyntaxKind.ConstructSignature, SyntaxKind.ColonToken);
@@ -3106,7 +3102,7 @@ module ts {
                 return parsePropertyMemberDeclaration(fullStart, modifiers);
             }
             if (token === SyntaxKind.OpenBracketToken) {
-                return parseIndexSignatureMember(modifiers, fullStart);
+                return parseIndexSignatureMember(fullStart, modifiers);
             }
 
             // 'isClassMemberStart' should have hinted not to attempt parsing.
