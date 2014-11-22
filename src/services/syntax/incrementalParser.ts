@@ -128,12 +128,7 @@ module TypeScript.IncrementalParser {
             var rewindPoint = <IParserRewindPoint>_scannerParserSource.getRewindPoint();
 
             // Clone our cursor.  That way we can restore to that point if the parser needs to rewind.
-            var oldSourceUnitCursorClone = cloneSyntaxCursor(_oldSourceUnitCursor);
-
-            // Store where we were when the rewind point was created.
-            rewindPoint.oldSourceUnitCursor = _oldSourceUnitCursor;
-
-            _oldSourceUnitCursor = oldSourceUnitCursorClone;
+            rewindPoint.oldSourceUnitCursor = cloneSyntaxCursor(_oldSourceUnitCursor);
 
             _outstandingRewindPointCount++;
             return rewindPoint;
