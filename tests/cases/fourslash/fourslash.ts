@@ -436,8 +436,7 @@ module FourSlashInterface {
         }
 
         public verifyQuickInfoDisplayParts(kind: string, kindModifiers: string, textSpan: { start: number; length: number; },
-            displayParts: { text: string; kind: string; }[],
-            documentation: { text: string; kind: string; }[]) {
+            displayParts: ts.SymbolDisplayPart[], documentation: ts.SymbolDisplayPart[]) {
             FourSlash.currentTestState.verifyQuickInfoDisplayParts(kind, kindModifiers, textSpan, displayParts, documentation);
         }
     }
@@ -659,6 +658,12 @@ module fs {
     export var format = new FourSlashInterface.format();
     export var diagnostics = new FourSlashInterface.diagnostics();
     export var cancellation = new FourSlashInterface.cancellation();
+}
+module ts {
+    export interface SymbolDisplayPart {
+        text: string;
+        kind: string;
+    }
 }
 function verifyOperationIsCancelled(f) {
     FourSlash.verifyOperationIsCancelled(f);

@@ -800,17 +800,21 @@ module FourSlash {
 
 
         public verifyQuickInfoDisplayParts(kind: string, kindModifiers: string, textSpan: { start: number; length: number; },
-            displayParts: { text: string; kind: string; }[],
-            documentation: { text: string; kind: string; }[]) {
+            displayParts: ts.SymbolDisplayPart[],
+            documentation: ts.SymbolDisplayPart[]) {
             this.scenarioActions.push('<ShowQuickInfo />');
             this.scenarioActions.push('<Verify return values of quickInfo="' + JSON.stringify(displayParts) + '"/>');
+
+            function getJsonString(object: any) {
+                return (JSON.stringify(object, /*replacer*/undefined, "    "));
+            }
 
             var actualQuickInfo = this.languageService.getQuickInfoAtPosition(this.activeFile.fileName, this.currentCaretPosition);
             assert.equal(actualQuickInfo.kind, kind, this.messageAtLastKnownMarker("QuickInfo kind"));
             assert.equal(actualQuickInfo.kindModifiers, kindModifiers, this.messageAtLastKnownMarker("QuickInfo kindModifiers"));
-            assert.equal(JSON.stringify(actualQuickInfo.textSpan), JSON.stringify(textSpan), this.messageAtLastKnownMarker("QuickInfo textSpan"));
-            assert.equal(JSON.stringify(actualQuickInfo.displayParts), JSON.stringify(displayParts), this.messageAtLastKnownMarker("QuickInfo displayParts"));
-            assert.equal(JSON.stringify(actualQuickInfo.documentation), JSON.stringify(documentation), this.messageAtLastKnownMarker("QuickInfo documentation"));
+            assert.equal(getJsonString(actualQuickInfo.textSpan), getJsonString(textSpan), this.messageAtLastKnownMarker("QuickInfo textSpan"));
+            assert.equal(getJsonString(actualQuickInfo.displayParts), getJsonString(displayParts), this.messageAtLastKnownMarker("QuickInfo displayParts"));
+            assert.equal(getJsonString(actualQuickInfo.documentation), getJsonString(documentation), this.messageAtLastKnownMarker("QuickInfo documentation"));
         }
 
         public verifyRenameLocations(findInStrings: boolean, findInComments: boolean) {
