@@ -198,15 +198,14 @@ module ts {
                 return child((<TypeParameterDeclaration>node).name) ||
                     child((<TypeParameterDeclaration>node).constraint);
             case SyntaxKind.Parameter:
-                return child((<ParameterDeclaration>node).name) ||
-                    child((<ParameterDeclaration>node).type) ||
-                    child((<ParameterDeclaration>node).initializer);
             case SyntaxKind.Property:
             case SyntaxKind.PropertyAssignment:
             case SyntaxKind.ShorthandPropertyAssignment:
-                return child((<PropertyDeclaration>node).name) ||
-                    child((<PropertyDeclaration>node).type) ||
-                    child((<PropertyDeclaration>node).initializer);
+            case SyntaxKind.VariableDeclaration:
+                return child((<VariableDeclaration>node).propertyName) ||
+                    child((<VariableDeclaration>node).name) ||
+                    child((<VariableDeclaration>node).type) ||
+                    child((<VariableDeclaration>node).initializer);
             case SyntaxKind.FunctionType:
             case SyntaxKind.ConstructorType:
             case SyntaxKind.CallSignature:
@@ -337,11 +336,6 @@ module ts {
             case SyntaxKind.CatchBlock:
                 return child((<CatchBlock>node).variable) ||
                     children((<CatchBlock>node).statements);
-            case SyntaxKind.VariableDeclaration:
-                return child((<VariableDeclaration>node).propertyName) ||
-                    child((<VariableDeclaration>node).name) ||
-                    child((<VariableDeclaration>node).type) ||
-                    child((<VariableDeclaration>node).initializer);
             case SyntaxKind.ClassDeclaration:
                 return child((<ClassDeclaration>node).name) ||
                     children((<ClassDeclaration>node).typeParameters) ||
@@ -1649,7 +1643,7 @@ module ts {
                 node.name = parseIdentifier();
             }
             else {
-                node.name = parseIdentifierOrPattern(node.flags);
+                node.name = parseIdentifierOrPattern(SyntaxKind.Parameter, node.flags);
             }
             if (node.name.kind === SyntaxKind.Missing && node.flags === 0 && isModifier(token)) {
                 // in cases like
@@ -3486,37 +3480,37 @@ module ts {
                 var id = parseIdentifier();
                 if (parseOptional(SyntaxKind.ColonToken)) {
                     node.propertyName = id;
-                    node.name = parseIdentifierOrPattern(flags);
+                    node.name = parseIdentifierOrPattern(kind, flags);
                 }
                 else {
                     node.name = id;
                 }
             }
             else {
-                node.name = parseIdentifierOrPattern(flags);
+                node.name = parseIdentifierOrPattern(kind, flags);
             }
             node.initializer = parseInitializer(/*inParameter*/ false);
             return finishNode(node);
         }
 
-        function parseBindingList(flags: NodeFlags, context: ParsingContext): NodeArray<BindingElement> {
-            return parseDelimitedList(context, () => parseBindingElement(SyntaxKind.VariableDeclaration, flags, context), /*allowTrailingComma*/ true);
+        function parseBindingList(kind: SyntaxKind, flags: NodeFlags, context: ParsingContext): NodeArray<BindingElement> {
+            return parseDelimitedList(context, () => parseBindingElement(kind, flags, context), /*allowTrailingComma*/ true);
         }
 
-        function parseObjectBindingPattern(flags: NodeFlags): BindingPattern {
+        function parseObjectBindingPattern(kind: SyntaxKind, flags: NodeFlags): BindingPattern {
             var node = <BindingPattern>createNode(SyntaxKind.ObjectBindingPattern);
             node.flags = flags;
             parseExpected(SyntaxKind.OpenBraceToken);
-            node.elements = parseBindingList(flags, ParsingContext.ObjectBindingElements);
+            node.elements = parseBindingList(kind, flags, ParsingContext.ObjectBindingElements);
             parseExpected(SyntaxKind.CloseBraceToken);
             return finishNode(node);
         }
 
-        function parseArrayBindingPattern(flags: NodeFlags): BindingPattern {
+        function parseArrayBindingPattern(kind: SyntaxKind, flags: NodeFlags): BindingPattern {
             var node = <BindingPattern>createNode(SyntaxKind.ArrayBindingPattern);
             node.flags = flags;
             parseExpected(SyntaxKind.OpenBracketToken);
-            node.elements = parseBindingList(flags, ParsingContext.ArrayBindingElements);
+            node.elements = parseBindingList(kind, flags, ParsingContext.ArrayBindingElements);
             parseExpected(SyntaxKind.CloseBracketToken);
             return finishNode(node);
         }
@@ -3525,12 +3519,12 @@ module ts {
             return token === SyntaxKind.OpenBraceToken || token === SyntaxKind.OpenBracketToken || isIdentifier();
         }
 
-        function parseIdentifierOrPattern(flags: NodeFlags): Identifier | BindingPattern {
+        function parseIdentifierOrPattern(kind: SyntaxKind, flags: NodeFlags): Identifier | BindingPattern {
             if (token === SyntaxKind.OpenBracketToken) {
-                return parseArrayBindingPattern(flags);
+                return parseArrayBindingPattern(kind, flags);
             }
             if (token === SyntaxKind.OpenBraceToken) {
-                return parseObjectBindingPattern(flags);
+                return parseObjectBindingPattern(kind, flags);
             }
             var id = parseIdentifier();
             if (isInStrictMode && isEvalOrArgumentsIdentifier(id)) {
@@ -3545,7 +3539,7 @@ module ts {
             var node = <VariableDeclaration>createNode(SyntaxKind.VariableDeclaration);
             node.flags = flags;
             var errorCountBeforeVariableDeclaration = file.syntacticErrors.length;
-            node.name = parseIdentifierOrPattern(flags);
+            node.name = parseIdentifierOrPattern(SyntaxKind.VariableDeclaration, flags);
             node.type = parseTypeAnnotation();
 
             // Issue any initializer-related errors on the equals token

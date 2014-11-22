@@ -1534,6 +1534,10 @@ module ts {
 
             function emitParameter(node: ParameterDeclaration) {
                 emitLeadingComments(node);
+                if (node.propertyName) {
+                    emit(node.propertyName);
+                    write(": ");
+                }
                 emit(node.name);
                 emitTrailingComments(node);
             }
