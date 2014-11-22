@@ -223,7 +223,7 @@ module TypeScript.IncrementalParser {
                     return true;
                 }
 
-                if (currentNodeOrTokenFullStart >= absolutePos) {
+                if (currentNodeOrTokenFullStart > absolutePos) {
                     // The node or token is ahead of the current position. We'll need to rescan 
                     // tokens until we catch up.
                     return false;
