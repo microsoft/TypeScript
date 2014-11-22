@@ -1,3 +1,4 @@
+/// <reference path="sys.ts"/>
 /// <reference path="types.ts"/>
 /// <reference path="core.ts"/>
 /// <reference path="scanner.ts"/>
@@ -118,6 +119,7 @@ module ts {
         var argumentsSymbol = createSymbol(SymbolFlags.Property | SymbolFlags.Transient, "arguments");
         var unknownSymbol = createSymbol(SymbolFlags.Property | SymbolFlags.Transient, "unknown");
         var resolvingSymbol = createSymbol(SymbolFlags.Transient, "__resolving__");
+        var awaitableSymbol = createSymbol(SymbolFlags.Transient, "__awaitable__");
 
         var anyType = createIntrinsicType(TypeFlags.Any, "any");
         var stringType = createIntrinsicType(TypeFlags.String, "string");
@@ -128,6 +130,7 @@ module ts {
         var nullType = createIntrinsicType(TypeFlags.Null, "null");
         var unknownType = createIntrinsicType(TypeFlags.Any, "unknown");
         var resolvingType = createIntrinsicType(TypeFlags.Any, "__resolving__");
+        var awaitedType = createIntrinsicType(TypeFlags.Any, "__awaitable__");
 
         var emptyObjectType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
         var anyFunctionType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
@@ -149,11 +152,14 @@ module ts {
         var globalBooleanType: ObjectType;
         var globalRegExpType: ObjectType;
         var globalTemplateStringsArrayType: ObjectType;
+        var globalPromiseType: ObjectType;
+        var globalPromiseConstructorType: ObjectType;
 
         var tupleTypes: Map<TupleType> = {};
         var unionTypes: Map<UnionType> = {};
         var stringLiteralTypes: Map<StringLiteralType> = {};
         var emitExtends = false;
+        var emitAwaiter = false;
 
         var mergedSymbols: Symbol[] = [];
         var symbolLinks: SymbolLinks[] = [];
@@ -3274,7 +3280,8 @@ module ts {
             relation: Map<boolean>,
             errorNode: Node,
             headMessage?: DiagnosticMessage,
-            containingMessageChain?: DiagnosticMessageChain): boolean {
+            containingMessageChain?: DiagnosticMessageChain,
+            awaitedTypes?: Type[]): boolean {
 
             var errorInfo: DiagnosticMessageChain;
             var sourceStack: ObjectType[];
@@ -3314,6 +3321,9 @@ module ts {
                 }
                 else {
                     if (source === target) return Ternary.True;
+                    if (target === awaitedType && awaitedTypes) {
+                        awaitedTypes.push(source);
+                    }
                     if (target.flags & TypeFlags.Any) return Ternary.True;
                     if (source === undefinedType) return Ternary.True;
                     if (source === nullType && target !== undefinedType) return Ternary.True;
@@ -3438,7 +3448,9 @@ module ts {
                 var id = source.id + "," + target.id;
                 var related = relation[id];
                 if (related !== undefined) {
-                    return related ? Ternary.True : Ternary.False;
+                    if (!awaitedTypes || (target !== globalPromiseType && target !== globalPromiseConstructorType)) {
+                        return related ? Ternary.True : Ternary.False;
+                    }
                 }
                 if (depth > 0) {
                     for (var i = 0; i < depth; i++) {
@@ -4535,6 +4547,8 @@ module ts {
             // Now skip arrow functions to get the "real" owner of 'this'.
             if (container.kind === SyntaxKind.ArrowFunction) {
                 container = getThisContainer(container, /* includeArrowFunctions */ false);
+                needToCaptureLexicalThis = true;
+            } else if (container.flags & NodeFlags.Async) {
                 needToCaptureLexicalThis = true;
             }
 
@@ -6059,6 +6073,9 @@ module ts {
             if (contextualMapper === identityMapper) {
                 return anyFunctionType;
             }
+            if (node.flags & NodeFlags.Async) {
+                emitAwaiter = true;
+            }
             var links = getNodeLinks(node);
             var type = getTypeOfSymbol(node.symbol);
             // Check if function expression is contextually typed and assign parameter types if so
@@ -6089,16 +6106,26 @@ module ts {
         }
 
         function checkFunctionExpressionBody(node: FunctionExpression) {
-            if (node.type) {
-                checkIfNonVoidFunctionHasReturnExpressionsOrSingleThrowStatment(node, getTypeFromTypeNode(node.type));
+            var returnType = node.type ? getTypeFromTypeNode(node.type) : undefined;
+            if (node.flags & NodeFlags.Async) {
+                var awaitableReturnType = checkAwaitableReturnType(node, returnType);
+                if (awaitableReturnType) {
+                    returnType = awaitableReturnType;
+                }
+            }
+            if (returnType) {
+                checkIfNonVoidFunctionHasReturnExpressionsOrSingleThrowStatment(node, returnType);
             }
             if (node.body.kind === SyntaxKind.FunctionBlock) {
                 checkSourceElement(node.body);
             }
             else {
                 var exprType = checkExpression(node.body);
-                if (node.type) {
-                    checkTypeAssignableTo(exprType, getTypeFromTypeNode(node.type), node.body, /*headMessage*/ undefined);
+                if (returnType) {
+                    if (node.flags & NodeFlags.Async) {
+                        exprType = getAwaitedType(exprType, /*fallbackType*/ exprType);
+                    }
+                    checkTypeAssignableTo(exprType, returnType, node.body);
                 }
                 checkFunctionExpressionBodies(node.body);
             }
@@ -6198,6 +6225,8 @@ module ts {
                     return stringType;
                 case SyntaxKind.VoidKeyword:
                     return undefinedType;
+                case SyntaxKind.AwaitKeyword:
+                    return getAwaitedType(operandType, /*fallbackType*/ operandType);
                 case SyntaxKind.PlusPlusToken:
                 case SyntaxKind.MinusMinusToken:
                     var ok = checkArithmeticOperandType(node.operand, operandType, Diagnostics.An_arithmetic_operand_must_be_of_type_any_number_or_an_enum_type);
@@ -7183,6 +7212,87 @@ module ts {
             }
         }
 
+        /**
+         * Gets the result type when awaiting a value
+         * @param type The type to await
+         * @param candidatesOnly A value indicating whether to return `undefined` if an awaited type could not be found
+         * @returns The awaited type
+         */
+        function getAwaitedType(type: Type, fallbackType?: Type): Type {
+            var seen: boolean[] = [];
+
+            function getAwaitedTypeRecursive(type: Type, fallbackType: Type): Type {
+                // NOTE: This function needs an overhaul. We could introduce a `Thenable<T>` into lib.d.ts for 
+                // the minimum supported interface for a thenable, which would likely be cleaner.
+                // NOTE: Currently missing is a test that the return type of the then call signature is itself thenable. 
+                // This would be easier if we switch to adding `Thenable<T>` (above).
+                if (!(type.flags & TypeFlags.ObjectType)) {
+                    return fallbackType;
+                }
+
+                var links: SymbolLinks;
+                if (type.symbol && !(type.flags & TypeFlags.Reference)) {
+                    links = getSymbolLinks(type.symbol);
+                    if (links.awaitedType) {
+                        return links.awaitedType;
+                    }
+                }
+
+                seen[type.id] = true;
+                var awaitedType: Type;
+                var awaitedTypes: Type[] = [];
+                if (checkTypeRelatedTo(type, globalPromiseType, assignableRelation, undefined, undefined, undefined, awaitedTypes)) {
+                    awaitedTypes = deduplicate(awaitedTypes);
+                    awaitedTypes = filter(awaitedTypes, awaitedType => !seen[awaitedType.id]);
+                    awaitedTypes = map(awaitedTypes, awaitedType => getAwaitedTypeRecursive(awaitedType, /*fallbackType*/ awaitedType));
+                    awaitedType = getUnionType(awaitedTypes);
+                    if (links) {
+                        links.awaitedType = awaitedType;
+                    }
+                    return awaitedType;
+                } else {
+                    //if (isTypeAssignableTo(type, globalThenableType) && !fallbackType) {
+                    //    error(null, ts.Diagnostics.Type_for_await_does_not_have_a_valid_callable_then_member);
+                    //}
+                    return fallbackType;
+                }
+            }
+
+            return getAwaitedTypeRecursive(type, fallbackType);
+        }
+
+        /**
+         * Gets and checks whether the supplied type is a valid awaitable return type for an async method or function
+         * @param node The node used when reporting errors
+         * @param returnType The return type of the method or function
+         * @returns The awaited type for the return type
+         */
+        function checkAwaitableReturnType(node: SignatureDeclaration, returnType: Type): Type {
+            // NOTE: This function needs an overhaul. We could introduce an interface into lib.d.ts that 
+            // represents a compatible Promise Construct signature, and rely on that and `Thenable<T>` instead.
+
+            // an async function has a valid return type if the type has a construct signature that takes
+            // in an `initializer` function that in turn supplies a `resolve` function as one of its arguments
+            // and results in an object with a callable `then` signature.
+
+            var links = getSymbolLinks(returnType.symbol);
+            if (links.promiseType) {
+                if (!links.awaitedType) {
+                    return getAwaitedType(returnType);
+                }
+
+                return links.awaitedType;
+            }
+
+            var type = getTypeOfSymbol(returnType.symbol);
+            if (isTypeAssignableTo(type, globalPromiseConstructorType)) {
+                links.promiseType = true;
+                return getAwaitedType(returnType);
+            }
+
+            error(node, ts.Diagnostics.An_async_function_or_method_must_have_a_valid_awaitable_return_type);
+        }
+
         function checkFunctionDeclaration(node: FunctionLikeDeclaration): void {
             checkSignatureDeclaration(node);
 
@@ -7586,7 +7696,13 @@ module ts {
                             func.type ||
                             (func.kind === SyntaxKind.GetAccessor && getSetAccessorTypeAnnotationNode(<AccessorDeclaration>getDeclarationOfKind(func.symbol, SyntaxKind.SetAccessor)));
                         if (checkAssignability) {
-                            checkTypeAssignableTo(checkExpression(node.expression), returnType, node.expression, /*headMessage*/ undefined);
+                            var expressionType = checkExpression(node.expression);
+                            if (func.flags & NodeFlags.Async) {
+                                expressionType = getAwaitedType(expressionType, /*fallbackType*/ expressionType);
+                                returnType = getAwaitedType(returnType, /*fallbackType*/ returnType);
+                            }
+
+                            checkTypeAssignableTo(expressionType, returnType, node.expression, /*headMessage*/ undefined);
                         }
                         else if (func.kind == SyntaxKind.Constructor) {
                             // constructor doesn't have explicit return type annotation and yet its return type is known - declaring type
@@ -8493,6 +8609,7 @@ module ts {
                     potentialThisCollisions.length = 0;
                 }
                 if (emitExtends) links.flags |= NodeCheckFlags.EmitExtends;
+                if (emitAwaiter) links.flags |= NodeCheckFlags.EmitAwaiter;
                 links.flags |= NodeCheckFlags.TypeChecked;
             }
         }
@@ -9171,6 +9288,20 @@ module ts {
             globalTemplateStringsArrayType = compilerOptions.target >= ScriptTarget.ES6
                 ? getGlobalType("TemplateStringsArray")
                 : unknownType;
+
+            var promiseType = <TypeReference>getTypeOfGlobalSymbol(getGlobalSymbol("IPromise"), 1);
+            if (promiseType.typeArguments) {
+                globalPromiseType = instantiateType(promiseType, createTypeMapper(promiseType.typeArguments, [awaitedType]));
+            } else {
+                globalPromiseType = promiseType;
+            }
+
+            var promiseConstructorType = <TypeReference>getTypeOfGlobalSymbol(getGlobalSymbol("IPromiseConstructor"), 1);
+            if (promiseConstructorType.typeArguments) {
+                globalPromiseConstructorType = instantiateType(promiseConstructorType, createTypeMapper(promiseConstructorType.typeArguments, [awaitedType]));
+            } else {
+                globalPromiseConstructorType = promiseConstructorType;
+            }
         }
 
         initializeTypeChecker();

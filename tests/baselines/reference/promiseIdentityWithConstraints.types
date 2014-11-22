@@ -1,53 +1,53 @@
 === tests/cases/compiler/promiseIdentityWithConstraints.ts ===
-interface IPromise<T, V> {
->IPromise : IPromise<T, V>
+interface IPromise1<T, V> {
+>IPromise1 : IPromise1<T, V>
 >T : T
 >V : V
 
-    then<U extends T, W extends V>(callback: (x: T) => IPromise<U, W>): IPromise<U, W>;
->then : <U extends T, W extends V>(callback: (x: T) => IPromise<U, W>) => IPromise<U, W>
+    then<U extends T, W extends V>(callback: (x: T) => IPromise1<U, W>): IPromise1<U, W>;
+>then : <U extends T, W extends V>(callback: (x: T) => IPromise1<U, W>) => IPromise1<U, W>
 >U : U
 >T : T
 >W : W
 >V : V
->callback : (x: T) => IPromise<U, W>
+>callback : (x: T) => IPromise1<U, W>
 >x : T
 >T : T
->IPromise : IPromise<T, V>
+>IPromise1 : IPromise1<T, V>
 >U : U
 >W : W
->IPromise : IPromise<T, V>
+>IPromise1 : IPromise1<T, V>
 >U : U
 >W : W
 }
-interface Promise<T, V> {
->Promise : Promise<T, V>
+interface Promise1<T, V> {
+>Promise1 : Promise1<T, V>
 >T : T
 >V : V
 
-    then<U extends T, W extends V>(callback: (x: T) => Promise<U, W>): Promise<U, W>;
->then : <U extends T, W extends V>(callback: (x: T) => Promise<U, W>) => Promise<U, W>
+    then<U extends T, W extends V>(callback: (x: T) => Promise1<U, W>): Promise1<U, W>;
+>then : <U extends T, W extends V>(callback: (x: T) => Promise1<U, W>) => Promise1<U, W>
 >U : U
 >T : T
 >W : W
 >V : V
->callback : (x: T) => Promise<U, W>
+>callback : (x: T) => Promise1<U, W>
 >x : T
 >T : T
->Promise : Promise<T, V>
+>Promise1 : Promise1<T, V>
 >U : U
 >W : W
->Promise : Promise<T, V>
+>Promise1 : Promise1<T, V>
 >U : U
 >W : W
 }
 
 // Error because constraint V doesn't match
-var x: IPromise<string, number>;
->x : IPromise<string, number>
->IPromise : IPromise<T, V>
+var x: IPromise1<string, number>;
+>x : IPromise1<string, number>
+>IPromise1 : IPromise1<T, V>
 
-var x: Promise<string, boolean>;
->x : IPromise<string, number>
->Promise : Promise<T, V>
+var x: Promise1<string, boolean>;
+>x : IPromise1<string, number>
+>Promise1 : Promise1<T, V>
 

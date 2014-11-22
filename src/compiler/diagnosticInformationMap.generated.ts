@@ -50,6 +50,8 @@ module ts {
         A_set_accessor_cannot_have_rest_parameter: { code: 1053, category: DiagnosticCategory.Error, key: "A 'set' accessor cannot have rest parameter." },
         A_get_accessor_cannot_have_parameters: { code: 1054, category: DiagnosticCategory.Error, key: "A 'get' accessor cannot have parameters." },
         Accessors_are_only_available_when_targeting_ECMAScript_5_and_higher: { code: 1056, category: DiagnosticCategory.Error, key: "Accessors are only available when targeting ECMAScript 5 and higher." },
+        An_async_function_or_method_must_have_a_valid_awaitable_return_type: { code: 1057, category: DiagnosticCategory.Error, key: "An async function or method must have a valid awaitable return type." },
+        Type_for_await_does_not_have_a_valid_callable_then_member: { code: 1058, category: DiagnosticCategory.Error, key: "Type for `await` does not have a valid callable `then` member." },
         Enum_member_must_have_initializer: { code: 1061, category: DiagnosticCategory.Error, key: "Enum member must have initializer." },
         An_export_assignment_cannot_be_used_in_an_internal_module: { code: 1063, category: DiagnosticCategory.Error, key: "An export assignment cannot be used in an internal module." },
         Ambient_enum_elements_can_only_have_integer_literal_initializers: { code: 1066, category: DiagnosticCategory.Error, key: "Ambient enum elements can only have integer literal initializers." },

@@ -191,6 +191,14 @@
         "category": "Error",
         "code": 1056
     },
+    "An async function or method must have a valid awaitable return type.": {
+        "category": "Error",
+        "code": 1057
+    },
+    "Type for `await` does not have a valid callable `then` member.": {
+        "category": "Error",
+        "code": 1058
+    },
     "Enum member must have initializer.": {
         "category": "Error",
         "code": 1061

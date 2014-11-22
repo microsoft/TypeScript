@@ -2,6 +2,8 @@ error TS2318: Cannot find global type 'Array'.
 error TS2318: Cannot find global type 'Boolean'.
 error TS2318: Cannot find global type 'Function'.
 error TS2318: Cannot find global type 'IArguments'.
+error TS2318: Cannot find global type 'IPromise'.
+error TS2318: Cannot find global type 'IPromiseConstructor'.
 error TS2318: Cannot find global type 'Number'.
 error TS2318: Cannot find global type 'Object'.
 error TS2318: Cannot find global type 'RegExp'.
@@ -18,6 +20,8 @@ tests/cases/compiler/typeCheckTypeArgument.ts(15,13): error TS2304: Cannot find 
 !!! error TS2318: Cannot find global type 'Boolean'.
 !!! error TS2318: Cannot find global type 'Function'.
 !!! error TS2318: Cannot find global type 'IArguments'.
+!!! error TS2318: Cannot find global type 'IPromise'.
+!!! error TS2318: Cannot find global type 'IPromiseConstructor'.
 !!! error TS2318: Cannot find global type 'Number'.
 !!! error TS2318: Cannot find global type 'Object'.
 !!! error TS2318: Cannot find global type 'RegExp'.
