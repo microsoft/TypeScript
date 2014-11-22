@@ -2775,10 +2775,6 @@ module ts {
             return finishNode(node);
         }
 
-        function isIterationStatementStart(): boolean {
-            return token === SyntaxKind.WhileKeyword || token === SyntaxKind.DoKeyword || token === SyntaxKind.ForKeyword;
-        }
-
         function isLabel(): boolean {
             return isIdentifier() && lookAhead(() => nextToken() === SyntaxKind.ColonToken);
         }
@@ -2787,8 +2783,7 @@ module ts {
             var node = <LabeledStatement>createNode(SyntaxKind.LabeledStatement);
             node.label = parseIdentifier();
             parseExpected(SyntaxKind.ColonToken);
-
-            node.statement = isLabel() ? parseLabeledStatement() : parseStatement();
+            node.statement = parseStatement();
             return finishNode(node);
         }
 
@@ -2869,9 +2864,9 @@ module ts {
                 case SyntaxKind.LetKeyword:
                 case SyntaxKind.ConstKeyword:
                     // const here should always be parsed as const declaration because of check in 'isStatement' 
-                    return parseVariableStatement();
+                    return parseVariableStatement(scanner.getStartPos(), /*modifiers:*/ undefined);
                 case SyntaxKind.FunctionKeyword:
-                    return parseFunctionDeclaration();
+                    return parseFunctionDeclaration(scanner.getStartPos(), /*modifiers:*/ undefined);
                 case SyntaxKind.SemicolonToken:
                     return parseEmptyStatement();
                 case SyntaxKind.IfKeyword:
@@ -2928,10 +2923,7 @@ module ts {
             node.flags = flags;
             node.name = parseIdentifier();
             node.type = parseTypeAnnotation();
-
-            // Issue any initializer-related errors on the equals token
             node.initializer = parseInitializer(/*inParameter*/ false, noIn);
-
             return finishNode(node);
         }
 
@@ -2939,11 +2931,9 @@ module ts {
             return parseDelimitedList(ParsingContext.VariableDeclarations, () => parseVariableDeclaration(flags, noIn));
         }
 
-        function parseVariableStatement(pos?: number, flags?: NodeFlags): VariableStatement {
-            var node = <VariableStatement>createNode(SyntaxKind.VariableStatement, pos);
-            if (flags) {
-                node.flags = flags;
-            }
+        function parseVariableStatement(fullStart: number, modifiers: ModifiersArray): VariableStatement {
+            var node = <VariableStatement>createNode(SyntaxKind.VariableStatement, fullStart);
+            setModifiers(node, modifiers);
 
             if (token === SyntaxKind.LetKeyword) {
                 node.flags |= NodeFlags.Let;
@@ -2961,11 +2951,9 @@ module ts {
             return finishNode(node);
         }
 
-        function parseFunctionDeclaration(pos?: number, flags?: NodeFlags): FunctionLikeDeclaration {
-            var node = <FunctionLikeDeclaration>createNode(SyntaxKind.FunctionDeclaration, pos);
-            if (flags) {
-                node.flags = flags;
-            }
+        function parseFunctionDeclaration(fullStart: number, modifiers: ModifiersArray): FunctionLikeDeclaration {
+            var node = <FunctionLikeDeclaration>createNode(SyntaxKind.FunctionDeclaration, fullStart);
+            setModifiers(node, modifiers);
             parseExpected(SyntaxKind.FunctionKeyword);
             node.name = parseIdentifier();
             fillSignature(SyntaxKind.CallSignature, SyntaxKind.ColonToken, /* returnTokenRequired */ false, node);
@@ -3305,7 +3293,7 @@ module ts {
             switch (token) {
                 case SyntaxKind.VarKeyword:
                 case SyntaxKind.LetKeyword:
-                    result = parseVariableStatement(fullStart, flags);
+                    result = parseVariableStatement(fullStart, modifiers);
                     break;
                 case SyntaxKind.ConstKeyword:
                     var isConstEnum = lookAhead(() => nextToken() === SyntaxKind.EnumKeyword);
@@ -3313,11 +3301,11 @@ module ts {
                         result = parseAndCheckEnumDeclaration(fullStart, flags | NodeFlags.Const);
                     }
                     else {
-                        result = parseVariableStatement(fullStart, flags);
+                        result = parseVariableStatement(fullStart, modifiers);
                     }
                     break;
                 case SyntaxKind.FunctionKeyword:
-                    result = parseFunctionDeclaration(fullStart, flags);
+                    result = parseFunctionDeclaration(fullStart, modifiers);
                     break;
                 case SyntaxKind.ClassKeyword:
                     result = parseClassDeclaration(fullStart, modifiers);
