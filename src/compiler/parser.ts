@@ -752,13 +752,6 @@ module ts {
         Error
     }
 
-    const enum ModifierContext {
-        SourceElements,          // Top level elements in a source file
-        ModuleElements,          // Elements in module declaration
-        ClassMembers,            // Members in class declaration
-        Parameters,              // Parameters in parameter list
-    }
-
     export interface ReferencePathMatchResult {
         fileReference?: FileReference
         diagnostic?: DiagnosticMessage
@@ -1491,7 +1484,7 @@ module ts {
 
         function parseParameter(): ParameterDeclaration {
             var node = <ParameterDeclaration>createNode(SyntaxKind.Parameter);
-            var modifiers = parseModifiers(ModifierContext.Parameters);
+            var modifiers = parseModifiers();
             setModifiers(node, modifiers);
             if (parseOptional(SyntaxKind.DotDotDotToken)) {
                 node.flags |= NodeFlags.Rest;
@@ -3063,7 +3056,7 @@ module ts {
             return false;
         }
 
-        function parseModifiers(context: ModifierContext): ModifiersArray {
+        function parseModifiers(): ModifiersArray {
             var flags = 0;
             var modifiers: ModifiersArray;
             while (true) {
@@ -3088,7 +3081,7 @@ module ts {
 
         function parseClassMemberDeclaration(): Declaration {
             var fullStart = getNodePos();
-            var modifiers = parseModifiers(ModifierContext.ClassMembers);
+            var modifiers = parseModifiers();
             if (parseContextualModifier(SyntaxKind.GetKeyword)) {
                 return parseMemberAccessorDeclaration(SyntaxKind.GetAccessor, fullStart, modifiers);
             }
@@ -3278,9 +3271,9 @@ module ts {
             }
         }
 
-        function parseDeclaration(modifierContext: ModifierContext): Statement {
+        function parseDeclaration(): Statement {
             var fullStart = getNodePos();
-            var modifiers = parseModifiers(modifierContext);
+            var modifiers = parseModifiers();
             if (token === SyntaxKind.ExportKeyword) {
                 nextToken();
                 if (parseOptional(SyntaxKind.EqualsToken)) {
@@ -3341,16 +3334,16 @@ module ts {
         }
 
         function parseSourceElement() {
-            return parseSourceElementOrModuleElement(ModifierContext.SourceElements);
+            return parseSourceElementOrModuleElement();
         }
 
         function parseModuleElement() {
-            return parseSourceElementOrModuleElement(ModifierContext.ModuleElements);
+            return parseSourceElementOrModuleElement();
         }
 
-        function parseSourceElementOrModuleElement(modifierContext: ModifierContext): Statement {
+        function parseSourceElementOrModuleElement(): Statement {
             return isDeclarationStart()
-                ? parseDeclaration(modifierContext)
+                ? parseDeclaration()
                 : parseStatement();
         }
 
