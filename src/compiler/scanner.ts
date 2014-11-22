@@ -520,6 +520,27 @@ module ts {
             return +(text.substring(start, pos));
         }
 
+        function scanBinaryOrOctalDigits(base: number): number {
+            if (base !== 2 && base !== 8) {
+                return -1;
+            }
+            var value = 0;
+            while (true) {
+                var ch = text.charCodeAt(pos);
+                var valueOfCh = ch - CharacterCodes._0;
+                if (!isDigit(ch)) {
+                    break;
+                }
+                // We know at this point that ch must be digit
+                if (valueOfCh >= base) {
+                    return -1;
+                }
+                value = value * base + valueOfCh;
+                pos++;
+            }
+            return value;
+        }
+
         function scanHexDigits(count: number, mustMatchCount?: boolean): number {
             var digits = 0;
             var value = 0;
@@ -928,6 +949,26 @@ module ts {
                             var value = scanHexDigits(1, /*mustMatchCount*/ false);
                             if (value < 0) {
                                 error(Diagnostics.Hexadecimal_digit_expected);
+                                value = 0;
+                            }
+                            tokenValue = "" + value;
+                            return SyntaxKind.NumericLiteral;
+                        }
+                        else if (pos + 2 < len && (text.charCodeAt(pos + 1) === CharacterCodes.B || text.charCodeAt(pos + 1) === CharacterCodes.b)) {
+                            pos += 2;
+                            var value = scanBinaryOrOctalDigits(/* binary */2);
+                            if (value < 0) {
+                                error(Diagnostics.Binary_digits_expected);
+                                value = 0;
+                            }
+                            tokenValue = "" + value;
+                            return SyntaxKind.NumericLiteral;
+                        }
+                        else if (pos + 2 < len && (text.charCodeAt(pos + 1) === CharacterCodes.O || text.charCodeAt(pos + 1) === CharacterCodes.o)) {
+                            pos += 2;
+                            var value = scanBinaryOrOctalDigits(/* octal */8);
+                            if (value < 0) {
+                                error(Diagnostics.Octal_digits_expected);
                                 value = 0;
                             }
                             tokenValue = "" + value;

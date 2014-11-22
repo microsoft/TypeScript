@@ -794,6 +794,11 @@ module ts {
                 if (compilerOptions.sourceMap && (node.kind === SyntaxKind.StringLiteral || isTemplateLiteralKind(node.kind))) {
                     writer.writeLiteral(text);
                 }
+                else if (node.kind === SyntaxKind.NumericLiteral && compilerOptions.target < ScriptTarget.ES6 &&
+                         ((text.charCodeAt(1) === CharacterCodes.B || text.charCodeAt(1) === CharacterCodes.b ||
+                           text.charCodeAt(1) === CharacterCodes.O || text.charCodeAt(1) === CharacterCodes.o))) {
+                        write(node.text);
+                }
                 else {
                     write(text);
                 }
@@ -802,7 +807,6 @@ module ts {
                     if (compilerOptions.target < ScriptTarget.ES6 && isTemplateLiteralKind(node.kind)) {
                         return getTemplateLiteralAsStringLiteral(node)
                     }
-
                     return getSourceTextOfLocalNode(node);
                 }
             }
