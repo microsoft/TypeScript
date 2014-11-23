@@ -635,11 +635,25 @@ module TypeScript {
                 this.checkClassElementModifiers(node.modifiers) ||
                 this.checkForDisallowedAccessorTypeParameters(node.callSignature) ||
                 this.checkGetAccessorParameter(node) ||
-                this.checkForDisallowedTemplatePropertyName(node.propertyName)) {
+                this.checkForDisallowedTemplatePropertyName(node.propertyName) ||
+                this.checkForSemicolonInsteadOfBlock(node, node.body)) {
                 return;
             }
 
             super.visitGetAccessor(node);
+        }
+
+        private checkForSemicolonInsteadOfBlock(parent: ISyntaxNode, node: BlockSyntax | ExpressionBody | ISyntaxToken): boolean {
+            if (node === undefined) {
+                this.pushDiagnosticAt(fullEnd(parent), 0, DiagnosticCode._0_expected, ["{"]);
+                return true;
+            }
+            else if (node.kind === SyntaxKind.SemicolonToken) {
+                this.pushDiagnostic(node, DiagnosticCode._0_expected, ["{"]);
+                return true;
+            }
+
+            return false;
         }
 
         private checkForDisallowedSetAccessorTypeAnnotation(accessor: SetAccessorSyntax): boolean {
@@ -712,7 +726,8 @@ module TypeScript {
                 this.checkForDisallowedAccessorTypeParameters(node.callSignature) ||
                 this.checkForDisallowedSetAccessorTypeAnnotation(node) ||
                 this.checkSetAccessorParameter(node) ||
-                this.checkForDisallowedTemplatePropertyName(node.propertyName)) {
+                this.checkForDisallowedTemplatePropertyName(node.propertyName) ||
+                this.checkForSemicolonInsteadOfBlock(node, node.body)) {
                 return;
             }
 
@@ -918,7 +933,8 @@ module TypeScript {
         }
 
         public visitBlock(node: BlockSyntax): void {
-            if (this.checkForBlockInAmbientContext(node)) {
+            if (this.checkForBlockInAmbientContext(node) ||
+                this.checkForMalformedBlock(node)) {
                 return;
             }
 
@@ -926,6 +942,15 @@ module TypeScript {
             this.inBlock = true;
             super.visitBlock(node);
             this.inBlock = savedInBlock;
+        }
+
+        public checkForMalformedBlock(node: BlockSyntax): boolean {
+            if (node.equalsGreaterThanToken || node.openBraceToken === undefined) {
+                this.pushDiagnostic(firstToken(node), DiagnosticCode._0_expected, ["{"]);
+                return true;
+            }
+
+            return false;
         }
 
         private checkForBlockInAmbientContext(node: BlockSyntax): boolean {
@@ -952,6 +977,11 @@ module TypeScript {
             }
 
             return false;
+        }
+
+        public visitExpressionBody(node: ExpressionBody): void {
+            // These are always errors.  So no need to ever recurse on them.
+            this.pushDiagnostic(node.equalsGreaterThanToken, DiagnosticCode._0_expected, ["{"]);
         }
 
         public visitBreakStatement(node: BreakStatementSyntax): void {
@@ -1374,7 +1404,8 @@ module TypeScript {
         }
 
         public visitFunctionExpression(node: FunctionExpressionSyntax): void {
-            if (this.checkForDisallowedEvalOrArguments(node, node.identifier)) {
+            if (this.checkForDisallowedEvalOrArguments(node, node.identifier) ||
+                this.checkForSemicolonInsteadOfBlock(node, node.body)) {
                 return;
             }
 
@@ -1382,7 +1413,8 @@ module TypeScript {
         }
 
         public visitFunctionPropertyAssignment(node: FunctionPropertyAssignmentSyntax): void {
-            if (this.checkForDisallowedTemplatePropertyName(node.propertyName)) {
+            if (this.checkForDisallowedTemplatePropertyName(node.propertyName) ||
+                this.checkForSemicolonInsteadOfBlock(node, node.body)) {
                 return;
             }
 

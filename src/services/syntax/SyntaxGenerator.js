@@ -621,9 +621,10 @@ var TypeScript;
         SyntaxKind[SyntaxKind["Parameter"] = 209] = "Parameter";
         SyntaxKind[SyntaxKind["EnumElement"] = 210] = "EnumElement";
         SyntaxKind[SyntaxKind["TypeAnnotation"] = 211] = "TypeAnnotation";
-        SyntaxKind[SyntaxKind["ComputedPropertyName"] = 212] = "ComputedPropertyName";
-        SyntaxKind[SyntaxKind["ExternalModuleReference"] = 213] = "ExternalModuleReference";
-        SyntaxKind[SyntaxKind["ModuleNameModuleReference"] = 214] = "ModuleNameModuleReference";
+        SyntaxKind[SyntaxKind["ExpressionBody"] = 212] = "ExpressionBody";
+        SyntaxKind[SyntaxKind["ComputedPropertyName"] = 213] = "ComputedPropertyName";
+        SyntaxKind[SyntaxKind["ExternalModuleReference"] = 214] = "ExternalModuleReference";
+        SyntaxKind[SyntaxKind["ModuleNameModuleReference"] = 215] = "ModuleNameModuleReference";
         SyntaxKind[SyntaxKind["FirstStandardKeyword"] = SyntaxKind.BreakKeyword] = "FirstStandardKeyword";
         SyntaxKind[SyntaxKind["LastStandardKeyword"] = SyntaxKind.WithKeyword] = "LastStandardKeyword";
         SyntaxKind[SyntaxKind["FirstFutureReservedKeyword"] = SyntaxKind.ClassKeyword] = "FirstFutureReservedKeyword";
@@ -1016,7 +1017,15 @@ var definitions = [
             { name: 'asterixToken', isToken: true, isOptional: true },
             { name: 'identifier', isToken: true },
             { name: 'callSignature', type: 'CallSignatureSyntax' },
-            { name: 'body', type: 'BlockSyntax | ISyntaxToken', isOptional: true }
+            { name: 'body', type: 'BlockSyntax | ExpressionBody | ISyntaxToken', isOptional: true }
+        ]
+    },
+    {
+        name: 'ExpressionBody',
+        baseType: 'ISyntaxNode',
+        children: [
+            { name: 'equalsGreaterThanToken', isToken: true },
+            { name: 'expression', type: 'IExpressionSyntax' }
         ]
     },
     {
@@ -1246,6 +1255,7 @@ var definitions = [
         baseType: 'ISyntaxNode',
         interfaces: ['IStatementSyntax'],
         children: [
+            { name: 'equalsGreaterThanToken', isToken: true, isOptional: 'true' },
             { name: 'openBraceToken', isToken: true },
             { name: 'statements', isList: true, elementType: 'IStatementSyntax' },
             { name: 'closeBraceToken', isToken: true, excludeFromAST: true }
@@ -1488,7 +1498,7 @@ var definitions = [
             { name: 'modifiers', isList: true, elementType: 'ISyntaxToken' },
             { name: 'constructorKeyword', isToken: true },
             { name: 'callSignature', type: 'CallSignatureSyntax' },
-            { name: 'body', type: 'BlockSyntax | ISyntaxToken', isOptional: true }
+            { name: 'body', type: 'BlockSyntax | ExpressionBody | ISyntaxToken', isOptional: true }
         ],
         isTypeScriptSpecific: true
     },
@@ -1501,7 +1511,7 @@ var definitions = [
             { name: 'asterixToken', isToken: true, isOptional: true },
             { name: 'propertyName', type: 'IPropertyNameSyntax' },
             { name: 'callSignature', type: 'CallSignatureSyntax' },
-            { name: 'body', type: 'BlockSyntax | ISyntaxToken', isOptional: true }
+            { name: 'body', type: 'BlockSyntax | ExpressionBody | ISyntaxToken', isOptional: true }
         ],
         isTypeScriptSpecific: true
     },
@@ -1514,7 +1524,7 @@ var definitions = [
             { name: 'getKeyword', isToken: true, excludeFromAST: true },
             { name: 'propertyName', type: 'IPropertyNameSyntax' },
             { name: 'callSignature', type: 'CallSignatureSyntax' },
-            { name: 'block', type: 'BlockSyntax' }
+            { name: 'body', type: 'BlockSyntax | ExpressionBody | ISyntaxToken', isOptional: true }
         ]
     },
     {
@@ -1526,7 +1536,7 @@ var definitions = [
             { name: 'setKeyword', isToken: true, excludeFromAST: true },
             { name: 'propertyName', type: 'IPropertyNameSyntax' },
             { name: 'callSignature', type: 'CallSignatureSyntax' },
-            { name: 'block', type: 'BlockSyntax' }
+            { name: 'body', type: 'BlockSyntax | ExpressionBody | ISyntaxToken', isOptional: true }
         ],
         isTypeScriptSpecific: true
     },
@@ -1763,7 +1773,7 @@ var definitions = [
             { name: 'asterixToken', isToken: true, isOptional: true },
             { name: 'propertyName', type: 'IPropertyNameSyntax' },
             { name: 'callSignature', type: 'CallSignatureSyntax' },
-            { name: 'block', type: 'BlockSyntax' }
+            { name: 'body', type: 'BlockSyntax | ExpressionBody | ISyntaxToken', isOptional: true }
         ]
     },
     {
@@ -1775,7 +1785,7 @@ var definitions = [
             { name: 'asterixToken', isToken: true, isOptional: true },
             { name: 'identifier', isToken: true, isOptional: true },
             { name: 'callSignature', type: 'CallSignatureSyntax' },
-            { name: 'block', type: 'BlockSyntax' }
+            { name: 'body', type: 'BlockSyntax | ExpressionBody | ISyntaxToken', isOptional: true }
         ]
     },
     {
