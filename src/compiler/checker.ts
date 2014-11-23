@@ -242,7 +242,7 @@ module ts {
             }
             else {
                 var message = target.flags & SymbolFlags.BlockScopedVariable || source.flags & SymbolFlags.BlockScopedVariable
-                     ? Diagnostics.Cannot_redeclare_block_scoped_variable_0 : Diagnostics.Duplicate_identifier_0;
+                    ? Diagnostics.Cannot_redeclare_block_scoped_variable_0 : Diagnostics.Duplicate_identifier_0;
                 forEach(source.declarations, node => {
                     error(node.name ? node.name : node, message, symbolToString(source));
                 });
@@ -1257,8 +1257,8 @@ module ts {
                                 ts.forEach(type.symbol.declarations, declaration => declaration.flags & NodeFlags.Static));
                             var isNonLocalFunctionSymbol = !!(type.symbol.flags & SymbolFlags.Function) &&
                                 (type.symbol.parent || // is exported function symbol
-                                ts.forEach(type.symbol.declarations, declaration =>
-                                    declaration.parent.kind === SyntaxKind.SourceFile || declaration.parent.kind === SyntaxKind.ModuleBlock));
+                                    ts.forEach(type.symbol.declarations, declaration =>
+                                        declaration.parent.kind === SyntaxKind.SourceFile || declaration.parent.kind === SyntaxKind.ModuleBlock));
 
                             if (isStaticMethodSymbol || isNonLocalFunctionSymbol) {
                                 // typeof is allowed only for static/non local functions
@@ -1288,7 +1288,7 @@ module ts {
                             if (flags & TypeFormatFlags.InElementType) {
                                 writePunctuation(writer, SyntaxKind.OpenParenToken);
                             }
-                            buildSignatureDisplay(resolved.callSignatures[0], writer, enclosingDeclaration, globalFlagsToPass | TypeFormatFlags.WriteArrowStyleSignature , typeStack);
+                            buildSignatureDisplay(resolved.callSignatures[0], writer, enclosingDeclaration, globalFlagsToPass | TypeFormatFlags.WriteArrowStyleSignature, typeStack);
                             if (flags & TypeFormatFlags.InElementType) {
                                 writePunctuation(writer, SyntaxKind.CloseParenToken);
                             }
@@ -1467,7 +1467,7 @@ module ts {
                 writeSpace(writer);
                 buildTypeDisplay(getReturnTypeOfSignature(signature), writer, enclosingDeclaration, flags, typeStack);
             }
-            
+
             function buildSignatureDisplay(signature: Signature, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags, typeStack?: Type[]) {
                 if (signature.target && (flags & TypeFormatFlags.WriteTypeArgumentsOfSignature)) {
                     // Instantiated signature, write type arguments instead
@@ -1653,16 +1653,13 @@ module ts {
                 error(pattern, Diagnostics.Type_0_is_not_an_array_type, typeToString(parentType));
                 return unknownType;
             }
-            if (isTupleType(parentType)) {
-                var propName = "" + indexOf(pattern.elements, declaration);
-                var type = getTypeOfPropertyOfType(parentType, propName);
-                if (!type) {
-                    error(declaration, Diagnostics.Type_0_has_no_property_1, typeToString(parentType), propName);
-                    return unknownType;
-                }
-                return type;
+            var propName = "" + indexOf(pattern.elements, declaration);
+            var type = isTupleType(parentType) ? getTypeOfPropertyOfType(parentType, propName) : getIndexTypeOfType(parentType, IndexKind.Number);
+            if (!type) {
+                error(declaration, Diagnostics.Type_0_has_no_property_1, typeToString(parentType), propName);
+                return unknownType;
             }
-            return getIndexTypeOfType(parentType, IndexKind.Number);
+            return type;
         }
 
         function getTypeForVariableDeclaration(declaration: VariableDeclaration | PropertyDeclaration): Type {
@@ -3980,7 +3977,7 @@ module ts {
         }
 
         function isTupleType(type: Type): boolean {
-            return (type.flags & TypeFlags.Tuple) !== 0;
+            return !!getPropertyOfType(type, "0");
         }
 
         function getWidenedTypeOfObjectLiteral(type: Type): Type {
@@ -6368,7 +6365,8 @@ module ts {
                 if (p.kind === SyntaxKind.PropertyAssignment || p.kind === SyntaxKind.ShorthandPropertyAssignment) {
                     // TODO(andersh): Computed property support
                     var name = <Identifier>((<PropertyDeclaration>p).name);
-                    var type = getTypeOfPropertyOfType(sourceType, name.text) ||
+                    var type = sourceType.flags & TypeFlags.Any ? sourceType :
+                        getTypeOfPropertyOfType(sourceType, name.text) ||
                         isNumericName(name.text) && getIndexTypeOfType(sourceType, IndexKind.Number) ||
                         getIndexTypeOfType(sourceType, IndexKind.String);
                     if (type) {
@@ -6386,26 +6384,25 @@ module ts {
         }
 
         function checkArrayLiteralAssignment(node: ArrayLiteral, sourceType: Type, contextualMapper?: TypeMapper): Type {
+            // TODOO(andersh): Allow iterable source type in ES6
+            if (!isTypeAssignableTo(sourceType, anyArrayType)) {
+                error(node, Diagnostics.Type_0_is_not_an_array_type, typeToString(sourceType));
+                return sourceType;
+            }
             var elements = node.elements;
             for (var i = 0; i < elements.length; i++) {
                 var e = elements[i];
                 if (e.kind !== SyntaxKind.OmittedExpression) {
-                    if (isTupleType(sourceType)) {
-                        var propName = "" + i;
-                        var type = getTypeOfPropertyOfType(sourceType, propName);
-                        if (!type) {
-                            error(e, Diagnostics.Type_0_has_no_property_1, typeToString(sourceType), propName);
-                        }
+                    var propName = "" + i;
+                    var type = sourceType.flags & TypeFlags.Any ? sourceType :
+                        isTupleType(sourceType) ? getTypeOfPropertyOfType(sourceType, propName) :
+                        getIndexTypeOfType(sourceType, IndexKind.Number);
+                    if (type) {
+                        checkDestructuringAssignment(e, type, contextualMapper);
                     }
                     else {
-                        var type = getIndexTypeOfType(sourceType, IndexKind.Number);
-                        if (!type) {
-                            error(e, Diagnostics.Type_0_has_no_numeric_index_signature, typeToString(sourceType));
-                        }
+                        error(e, Diagnostics.Type_0_has_no_property_1, typeToString(sourceType), propName);
                     }
-                }
-                if (type) {
-                    checkDestructuringAssignment(e, type, contextualMapper);
                 }
             }
             return sourceType;
