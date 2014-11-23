@@ -3923,7 +3923,9 @@ module ts {
 
                 // When a name gets interned into a SourceFile's 'identifiers' Map,
                 // its name is escaped and stored in the same way its symbol name/identifier
-                // name should be stored.
+                // name should be stored. Function expressions, however, are a special case,
+                // because despite sometimes having a name, the binder unconditionally binds them
+                // to a symbol with the name "__function".
                 if (functionExpression && functionExpression.name) {
                     var name = functionExpression.name.text;
                 }
