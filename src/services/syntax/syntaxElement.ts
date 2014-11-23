@@ -435,7 +435,7 @@ module TypeScript {
         modifiers: ISyntaxToken[];
         propertyName: IPropertyNameSyntax;
         callSignature: CallSignatureSyntax;
-        block: BlockSyntax;
+        block: BlockSyntax | ExpressionBody | ISyntaxToken;
     }
 
     export interface ISwitchClauseSyntax extends ISyntaxNode {

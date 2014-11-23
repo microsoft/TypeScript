@@ -222,6 +222,7 @@ module TypeScript {
         }
 
         public visitBlock(node: BlockSyntax): void {
+            this.visitOptionalToken(node.equalsGreaterThanToken);
             this.visitToken(node.openBraceToken);
             this.visitList(node.statements);
             this.visitToken(node.closeBraceToken);
@@ -601,6 +602,11 @@ module TypeScript {
         public visitTypeAnnotation(node: TypeAnnotationSyntax): void {
             this.visitToken(node.colonToken);
             visitNodeOrToken(this, node.type);
+        }
+
+        public visitExpressionBody(node: ExpressionBody): void {
+            this.visitToken(node.equalsGreaterThanToken);
+            visitNodeOrToken(this, node.expression);
         }
 
         public visitComputedPropertyName(node: ComputedPropertyNameSyntax): void {

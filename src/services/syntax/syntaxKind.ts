@@ -268,6 +268,7 @@ module TypeScript {
         Parameter,
         EnumElement,
         TypeAnnotation,
+        ExpressionBody,
         ComputedPropertyName,
         ExternalModuleReference,
         ModuleNameModuleReference,
