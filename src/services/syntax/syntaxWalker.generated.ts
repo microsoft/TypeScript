@@ -180,7 +180,7 @@ module TypeScript {
             this.visitToken(node.getKeyword);
             visitNodeOrToken(this, node.propertyName);
             visitNodeOrToken(this, node.callSignature);
-            visitNodeOrToken(this, node.block);
+            visitNodeOrToken(this, node.body);
         }
 
         public visitSetAccessor(node: SetAccessorSyntax): void {
@@ -188,7 +188,7 @@ module TypeScript {
             this.visitToken(node.setKeyword);
             visitNodeOrToken(this, node.propertyName);
             visitNodeOrToken(this, node.callSignature);
-            visitNodeOrToken(this, node.block);
+            visitNodeOrToken(this, node.body);
         }
 
         public visitPropertySignature(node: PropertySignatureSyntax): void {
@@ -457,7 +457,7 @@ module TypeScript {
             this.visitOptionalToken(node.asterixToken);
             this.visitOptionalToken(node.identifier);
             visitNodeOrToken(this, node.callSignature);
-            visitNodeOrToken(this, node.block);
+            visitNodeOrToken(this, node.body);
         }
 
         public visitOmittedExpression(node: OmittedExpressionSyntax): void {
@@ -582,7 +582,7 @@ module TypeScript {
             this.visitOptionalToken(node.asterixToken);
             visitNodeOrToken(this, node.propertyName);
             visitNodeOrToken(this, node.callSignature);
-            visitNodeOrToken(this, node.block);
+            visitNodeOrToken(this, node.body);
         }
 
         public visitParameter(node: ParameterSyntax): void {

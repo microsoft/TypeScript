@@ -185,18 +185,18 @@ module TypeScript {
         getKeyword: ISyntaxToken;
         propertyName: IPropertyNameSyntax;
         callSignature: CallSignatureSyntax;
-        block: BlockSyntax | ExpressionBody | ISyntaxToken;
+        body: BlockSyntax | ExpressionBody | ISyntaxToken;
     }
-    export interface GetAccessorConstructor { new (data: number, modifiers: ISyntaxToken[], getKeyword: ISyntaxToken, propertyName: IPropertyNameSyntax, callSignature: CallSignatureSyntax, block: BlockSyntax | ExpressionBody | ISyntaxToken): GetAccessorSyntax }
+    export interface GetAccessorConstructor { new (data: number, modifiers: ISyntaxToken[], getKeyword: ISyntaxToken, propertyName: IPropertyNameSyntax, callSignature: CallSignatureSyntax, body: BlockSyntax | ExpressionBody | ISyntaxToken): GetAccessorSyntax }
 
     export interface SetAccessorSyntax extends ISyntaxNode, IAccessorSyntax {
         modifiers: ISyntaxToken[];
         setKeyword: ISyntaxToken;
         propertyName: IPropertyNameSyntax;
         callSignature: CallSignatureSyntax;
-        block: BlockSyntax | ExpressionBody | ISyntaxToken;
+        body: BlockSyntax | ExpressionBody | ISyntaxToken;
     }
-    export interface SetAccessorConstructor { new (data: number, modifiers: ISyntaxToken[], setKeyword: ISyntaxToken, propertyName: IPropertyNameSyntax, callSignature: CallSignatureSyntax, block: BlockSyntax | ExpressionBody | ISyntaxToken): SetAccessorSyntax }
+    export interface SetAccessorConstructor { new (data: number, modifiers: ISyntaxToken[], setKeyword: ISyntaxToken, propertyName: IPropertyNameSyntax, callSignature: CallSignatureSyntax, body: BlockSyntax | ExpressionBody | ISyntaxToken): SetAccessorSyntax }
 
     export interface PropertySignatureSyntax extends ISyntaxNode, ITypeMemberSyntax {
         propertyName: IPropertyNameSyntax;
@@ -504,9 +504,9 @@ module TypeScript {
         asterixToken: ISyntaxToken;
         identifier: ISyntaxToken;
         callSignature: CallSignatureSyntax;
-        block: BlockSyntax | ExpressionBody | ISyntaxToken;
+        body: BlockSyntax | ExpressionBody | ISyntaxToken;
     }
-    export interface FunctionExpressionConstructor { new (data: number, functionKeyword: ISyntaxToken, asterixToken: ISyntaxToken, identifier: ISyntaxToken, callSignature: CallSignatureSyntax, block: BlockSyntax | ExpressionBody | ISyntaxToken): FunctionExpressionSyntax }
+    export interface FunctionExpressionConstructor { new (data: number, functionKeyword: ISyntaxToken, asterixToken: ISyntaxToken, identifier: ISyntaxToken, callSignature: CallSignatureSyntax, body: BlockSyntax | ExpressionBody | ISyntaxToken): FunctionExpressionSyntax }
 
     export interface OmittedExpressionSyntax extends ISyntaxNode, IExpressionSyntax {
     }
@@ -651,9 +651,9 @@ module TypeScript {
         asterixToken: ISyntaxToken;
         propertyName: IPropertyNameSyntax;
         callSignature: CallSignatureSyntax;
-        block: BlockSyntax | ExpressionBody | ISyntaxToken;
+        body: BlockSyntax | ExpressionBody | ISyntaxToken;
     }
-    export interface FunctionPropertyAssignmentConstructor { new (data: number, asterixToken: ISyntaxToken, propertyName: IPropertyNameSyntax, callSignature: CallSignatureSyntax, block: BlockSyntax | ExpressionBody | ISyntaxToken): FunctionPropertyAssignmentSyntax }
+    export interface FunctionPropertyAssignmentConstructor { new (data: number, asterixToken: ISyntaxToken, propertyName: IPropertyNameSyntax, callSignature: CallSignatureSyntax, body: BlockSyntax | ExpressionBody | ISyntaxToken): FunctionPropertyAssignmentSyntax }
 
     export interface ParameterSyntax extends ISyntaxNode {
         dotDotDotToken: ISyntaxToken;

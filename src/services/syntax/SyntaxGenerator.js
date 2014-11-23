@@ -1524,7 +1524,7 @@ var definitions = [
             { name: 'getKeyword', isToken: true, excludeFromAST: true },
             { name: 'propertyName', type: 'IPropertyNameSyntax' },
             { name: 'callSignature', type: 'CallSignatureSyntax' },
-            { name: 'block', type: 'BlockSyntax | ExpressionBody | ISyntaxToken', isOptional: true }
+            { name: 'body', type: 'BlockSyntax | ExpressionBody | ISyntaxToken', isOptional: true }
         ]
     },
     {
@@ -1536,7 +1536,7 @@ var definitions = [
             { name: 'setKeyword', isToken: true, excludeFromAST: true },
             { name: 'propertyName', type: 'IPropertyNameSyntax' },
             { name: 'callSignature', type: 'CallSignatureSyntax' },
-            { name: 'block', type: 'BlockSyntax | ExpressionBody | ISyntaxToken', isOptional: true }
+            { name: 'body', type: 'BlockSyntax | ExpressionBody | ISyntaxToken', isOptional: true }
         ],
         isTypeScriptSpecific: true
     },
@@ -1773,7 +1773,7 @@ var definitions = [
             { name: 'asterixToken', isToken: true, isOptional: true },
             { name: 'propertyName', type: 'IPropertyNameSyntax' },
             { name: 'callSignature', type: 'CallSignatureSyntax' },
-            { name: 'block', type: 'BlockSyntax | ExpressionBody | ISyntaxToken', isOptional: true }
+            { name: 'body', type: 'BlockSyntax | ExpressionBody | ISyntaxToken', isOptional: true }
         ]
     },
     {
@@ -1785,7 +1785,7 @@ var definitions = [
             { name: 'asterixToken', isToken: true, isOptional: true },
             { name: 'identifier', isToken: true, isOptional: true },
             { name: 'callSignature', type: 'CallSignatureSyntax' },
-            { name: 'block', type: 'BlockSyntax | ExpressionBody | ISyntaxToken', isOptional: true }
+            { name: 'body', type: 'BlockSyntax | ExpressionBody | ISyntaxToken', isOptional: true }
         ]
     },
     {

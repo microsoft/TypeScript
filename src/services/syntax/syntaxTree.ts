@@ -636,15 +636,19 @@ module TypeScript {
                 this.checkForDisallowedAccessorTypeParameters(node.callSignature) ||
                 this.checkGetAccessorParameter(node) ||
                 this.checkForDisallowedTemplatePropertyName(node.propertyName) ||
-                this.checkForSemicolonInsteadOfBlock(node.block)) {
+                this.checkForSemicolonInsteadOfBlock(node, node.body)) {
                 return;
             }
 
             super.visitGetAccessor(node);
         }
 
-        private checkForSemicolonInsteadOfBlock(node: BlockSyntax | ExpressionBody | ISyntaxToken): boolean {
-            if (node.kind === SyntaxKind.SemicolonToken) {
+        private checkForSemicolonInsteadOfBlock(parent: ISyntaxNode, node: BlockSyntax | ExpressionBody | ISyntaxToken): boolean {
+            if (node === undefined) {
+                this.pushDiagnosticAt(fullEnd(parent), 0, DiagnosticCode._0_expected, ["{"]);
+                return true;
+            }
+            else if (node.kind === SyntaxKind.SemicolonToken) {
                 this.pushDiagnostic(node, DiagnosticCode._0_expected, ["{"]);
                 return true;
             }
@@ -723,7 +727,7 @@ module TypeScript {
                 this.checkForDisallowedSetAccessorTypeAnnotation(node) ||
                 this.checkSetAccessorParameter(node) ||
                 this.checkForDisallowedTemplatePropertyName(node.propertyName) ||
-                this.checkForSemicolonInsteadOfBlock(node.block)) {
+                this.checkForSemicolonInsteadOfBlock(node, node.body)) {
                 return;
             }
 
@@ -1401,7 +1405,7 @@ module TypeScript {
 
         public visitFunctionExpression(node: FunctionExpressionSyntax): void {
             if (this.checkForDisallowedEvalOrArguments(node, node.identifier) ||
-                this.checkForSemicolonInsteadOfBlock(node.block)) {
+                this.checkForSemicolonInsteadOfBlock(node, node.body)) {
                 return;
             }
 
@@ -1410,7 +1414,7 @@ module TypeScript {
 
         public visitFunctionPropertyAssignment(node: FunctionPropertyAssignmentSyntax): void {
             if (this.checkForDisallowedTemplatePropertyName(node.propertyName) ||
-                this.checkForSemicolonInsteadOfBlock(node.block)) {
+                this.checkForSemicolonInsteadOfBlock(node, node.body)) {
                 return;
             }
 

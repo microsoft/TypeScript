@@ -670,7 +670,7 @@ var definitions:ITypeDefinition[] = [
             <any>{ name: 'getKeyword', isToken: true, excludeFromAST: true },
             <any>{ name: 'propertyName', type: 'IPropertyNameSyntax' },
             <any>{ name: 'callSignature', type: 'CallSignatureSyntax' },
-            <any>{ name: 'block', type: 'BlockSyntax | ExpressionBody | ISyntaxToken', isOptional: true  }
+            <any>{ name: 'body', type: 'BlockSyntax | ExpressionBody | ISyntaxToken', isOptional: true  }
         ]
     },
     <any>{
@@ -682,7 +682,7 @@ var definitions:ITypeDefinition[] = [
             <any>{ name: 'setKeyword', isToken: true, excludeFromAST: true },
             <any>{ name: 'propertyName', type: 'IPropertyNameSyntax' },
             <any>{ name: 'callSignature', type: 'CallSignatureSyntax' },
-            <any>{ name: 'block', type: 'BlockSyntax | ExpressionBody | ISyntaxToken', isOptional: true  }
+            <any>{ name: 'body', type: 'BlockSyntax | ExpressionBody | ISyntaxToken', isOptional: true  }
         ],
         isTypeScriptSpecific: true
     },
@@ -919,7 +919,7 @@ var definitions:ITypeDefinition[] = [
             <any>{ name: 'asterixToken', isToken: true, isOptional: true },
             <any>{ name: 'propertyName', type: 'IPropertyNameSyntax' },
             <any>{ name: 'callSignature', type: 'CallSignatureSyntax' },
-            <any>{ name: 'block', type: 'BlockSyntax | ExpressionBody | ISyntaxToken', isOptional: true  }
+            <any>{ name: 'body', type: 'BlockSyntax | ExpressionBody | ISyntaxToken', isOptional: true  }
         ]
     },
     <any>{
@@ -931,7 +931,7 @@ var definitions:ITypeDefinition[] = [
             <any>{ name: 'asterixToken', isToken: true, isOptional: true },
             <any>{ name: 'identifier', isToken: true, isOptional: true },
             <any>{ name: 'callSignature', type: 'CallSignatureSyntax' },
-            <any>{ name: 'block', type: 'BlockSyntax | ExpressionBody | ISyntaxToken', isOptional: true  }]
+            <any>{ name: 'body', type: 'BlockSyntax | ExpressionBody | ISyntaxToken', isOptional: true  }]
     },
     <any>{
         name: 'EmptyStatementSyntax',

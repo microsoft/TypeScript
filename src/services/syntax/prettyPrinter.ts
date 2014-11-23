@@ -698,7 +698,7 @@ module TypeScript.PrettyPrinter {
             visitNodeOrToken(this, node.propertyName);
             visitNodeOrToken(this, node.callSignature);
             this.ensureSpace();
-            visitNodeOrToken(this, node.block);
+            visitNodeOrToken(this, node.body);
         }
 
         public visitSetAccessor(node: SetAccessorSyntax): void {
@@ -709,7 +709,7 @@ module TypeScript.PrettyPrinter {
             visitNodeOrToken(this, node.propertyName);
             visitNodeOrToken(this, node.callSignature)
             this.ensureSpace();
-            visitNodeOrToken(this, node.block);
+            visitNodeOrToken(this, node.body);
         }
 
         public visitMemberVariableDeclaration(node: MemberVariableDeclarationSyntax): void {
@@ -942,7 +942,7 @@ module TypeScript.PrettyPrinter {
             visitNodeOrToken(this, node.propertyName);
             visitNodeOrToken(this, node.callSignature);
             this.ensureSpace();
-            visitNodeOrToken(this, node.block);
+            visitNodeOrToken(this, node.body);
         }
 
         public visitFunctionExpression(node: FunctionExpressionSyntax): void {
@@ -955,7 +955,7 @@ module TypeScript.PrettyPrinter {
 
             visitNodeOrToken(this, node.callSignature);
             this.ensureSpace();
-            visitNodeOrToken(this, node.block);
+            visitNodeOrToken(this, node.body);
         }
 
         public visitEmptyStatement(node: EmptyStatementSyntax): void {
