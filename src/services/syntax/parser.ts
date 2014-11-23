@@ -2889,13 +2889,10 @@ module TypeScript.Parser {
                 // we'll bail out here and give a poor error message when we try to parse this
                 // as an arithmetic expression.
                 if (isDot) {
-                    // A parameter list must follow a generic type argument list.
-                    var diagnostic = new Diagnostic(fileName, source.text.lineMap(), start(token0, source.text), width(token0),
-                        DiagnosticCode.A_parameter_list_must_follow_a_generic_type_argument_list_expected, undefined);
-                    addDiagnostic(diagnostic);
-
                     return new ArgumentListSyntax(parseNodeData, typeArgumentList,
-                        createEmptyToken(SyntaxKind.OpenParenToken), <any>[], createEmptyToken(SyntaxKind.CloseParenToken));
+                        createMissingToken(SyntaxKind.OpenParenToken, undefined, DiagnosticCode.A_parameter_list_must_follow_a_generic_type_argument_list_expected), 
+                        <any>[],
+                        eatToken(SyntaxKind.CloseParenToken));
                 }
                 else {
                     Debug.assert(token0.kind === SyntaxKind.OpenParenToken);
