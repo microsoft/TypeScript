@@ -563,8 +563,8 @@ module TypeScript.Parser {
             return Syntax.emptyToken(kind, fullStart);
         }
 
-        function createMissingToken(expectedKind: SyntaxKind, actual: ISyntaxToken, diagnosticCode?: string): ISyntaxToken {
-            var diagnostic = getExpectedTokenDiagnostic(expectedKind, actual, diagnosticCode);
+        function createMissingToken(expectedKind: SyntaxKind, actual: ISyntaxToken, diagnosticCode?: string, args?: any[]): ISyntaxToken {
+            var diagnostic = getExpectedTokenDiagnostic(expectedKind, actual, diagnosticCode, args);
             addDiagnostic(diagnostic);
 
             // The missing token will be at the full start of the current token.  That way empty tokens
@@ -572,10 +572,9 @@ module TypeScript.Parser {
             return createEmptyToken(expectedKind);
         }
 
-        function getExpectedTokenDiagnostic(expectedKind: SyntaxKind, actual?: ISyntaxToken, diagnosticCode?: string): Diagnostic {
+        function getExpectedTokenDiagnostic(expectedKind: SyntaxKind, actual?: ISyntaxToken, diagnosticCode?: string, args?: any[]): Diagnostic {
             var token = currentToken();
 
-            var args: any[] = undefined;
             // If a specialized diagnostic message was provided, just use that.
             if (!diagnosticCode) {
                 // They wanted something specific, just report that that token was missing.
@@ -3094,9 +3093,7 @@ module TypeScript.Parser {
                 token = consumeToken(token);
             }
             else {
-                var diagnostic = getExpectedTokenDiagnostic(SyntaxKind.CloseBraceToken);
-                addDiagnostic(diagnostic);
-                token = createEmptyToken(SyntaxKind.TemplateEndToken);
+                token = createMissingToken(SyntaxKind.TemplateEndToken, undefined, DiagnosticCode._0_expected, ["{"]);
             }
 
             return new TemplateClauseSyntax(parseNodeData, expression, token);
