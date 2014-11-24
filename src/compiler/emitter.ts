@@ -788,6 +788,18 @@ module ts {
                 }
             }
 
+            function isBinaryOrOctalIntegerLiteral(text: string): boolean {
+                if (text.length <= 0) {
+                    return false;
+                }
+
+                if (text.charCodeAt(1) === CharacterCodes.B || text.charCodeAt(1) === CharacterCodes.b ||
+                    text.charCodeAt(1) === CharacterCodes.O || text.charCodeAt(1) === CharacterCodes.o) {
+                    return true;
+                }
+                return false;
+            }
+
             function emitLiteral(node: LiteralExpression): void {
                 var text = getLiteralText();
 
@@ -795,9 +807,7 @@ module ts {
                     writer.writeLiteral(text);
                 }
                 // For version below ES6, emit binary integer literal and octal integer literal as decimal value
-                else if (compilerOptions.target < ScriptTarget.ES6 && node.kind === SyntaxKind.NumericLiteral &&
-                         ((text.charCodeAt(1) === CharacterCodes.B || text.charCodeAt(1) === CharacterCodes.b ||
-                           text.charCodeAt(1) === CharacterCodes.O || text.charCodeAt(1) === CharacterCodes.o))) {
+                else if (compilerOptions.target < ScriptTarget.ES6 && node.kind === SyntaxKind.NumericLiteral && isBinaryOrOctalIntegerLiteral(text)) {
                         write(node.text);
                 }
                 else {

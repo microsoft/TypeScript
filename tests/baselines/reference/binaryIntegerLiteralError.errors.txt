@@ -1,5 +1,5 @@
-tests/cases/conformance/es6/binaryAndOctalIntegerLiteral/binaryIntegerLiteralError.ts(2,17): error TS1163: Binary digits expected.
-tests/cases/conformance/es6/binaryAndOctalIntegerLiteral/binaryIntegerLiteralError.ts(3,17): error TS1163: Binary digits expected.
+tests/cases/conformance/es6/binaryAndOctalIntegerLiteral/binaryIntegerLiteralError.ts(2,17): error TS1005: ',' expected.
+tests/cases/conformance/es6/binaryAndOctalIntegerLiteral/binaryIntegerLiteralError.ts(3,17): error TS1005: ',' expected.
 tests/cases/conformance/es6/binaryAndOctalIntegerLiteral/binaryIntegerLiteralError.ts(6,5): error TS2300: Duplicate identifier '0b11010'.
 tests/cases/conformance/es6/binaryAndOctalIntegerLiteral/binaryIntegerLiteralError.ts(7,5): error TS2300: Duplicate identifier '26'.
 tests/cases/conformance/es6/binaryAndOctalIntegerLiteral/binaryIntegerLiteralError.ts(8,5): error TS2300: Duplicate identifier '"26"'.
@@ -8,11 +8,11 @@ tests/cases/conformance/es6/binaryAndOctalIntegerLiteral/binaryIntegerLiteralErr
 ==== tests/cases/conformance/es6/binaryAndOctalIntegerLiteral/binaryIntegerLiteralError.ts (5 errors) ====
     // error
     var bin1 = 0B1102110;
-                    
-!!! error TS1163: Binary digits expected.
+                    ~~~~
+!!! error TS1005: ',' expected.
     var bin1 = 0b11023410;
-                    
-!!! error TS1163: Binary digits expected.
+                    ~~~~~
+!!! error TS1005: ',' expected.
     
     var obj1 = {
         0b11010: "hi",

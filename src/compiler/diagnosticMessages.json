@@ -491,11 +491,11 @@
         "category": "Error",
         "code": 1162
     },
-    "Binary digits expected.": {
+    "Binary digit expected.": {
         "category": "Error",
         "code": 1163
     },
-    "Octal digits expected.": {
+    "Octal digit expected.": {
         "category": "Error",
         "code": 1164
     },
