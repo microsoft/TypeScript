@@ -3352,12 +3352,9 @@ module ts {
             // Ternary.False if they are not related.
             function isRelatedTo(source: Type, target: Type, reportErrors?: boolean, headMessage?: DiagnosticMessage): Ternary {
                 var result: Ternary;
-                if (relation === identityRelation) {
-                    // both types are the same - covers 'they are the same primitive type or both are Any' or the same type parameter cases
-                    if (source === target) return Ternary.True;
-                }
-                else {
-                    if (source === target) return Ternary.True;
+                // both types are the same - covers 'they are the same primitive type or both are Any' or the same type parameter cases
+                if (source === target) return Ternary.True;
+                if (relation !== identityRelation) {
                     if (target.flags & TypeFlags.Any) return Ternary.True;
                     if (source === undefinedType) return Ternary.True;
                     if (source === nullType && target !== undefinedType) return Ternary.True;
@@ -3368,14 +3365,37 @@ module ts {
                         if (source === numberType && target.flags & TypeFlags.Enum) return Ternary.True;
                     }
                 }
-                if (source.flags & TypeFlags.Union) {
-                    if (result = unionTypeRelatedToType(<UnionType>source, target, reportErrors)) {
-                        return result;
+                if (source.flags & TypeFlags.Union || target.flags & TypeFlags.Union) {
+                    if (relation === identityRelation) {
+                        if (source.flags & TypeFlags.Union && target.flags & TypeFlags.Union) {
+                            if (result = unionTypeRelatedToUnionType(<UnionType>source, <UnionType>target)) {
+                                if (result &= unionTypeRelatedToUnionType(<UnionType>target, <UnionType>source)) {
+                                    return result;
+                                }
+                            }
+                        }
+                        else if (source.flags & TypeFlags.Union) {
+                            if (result = unionTypeRelatedToType(<UnionType>source, target, reportErrors)) {
+                                return result;
+                            }
+                        }
+                        else {
+                            if (result = unionTypeRelatedToType(<UnionType>target, source, reportErrors)) {
+                                return result;
+                            }
+                        }
                     }
-                }
-                else if (target.flags & TypeFlags.Union) {
-                    if (result = typeRelatedToUnionType(source, <UnionType>target, reportErrors)) {
-                        return result;
+                    else {
+                        if (source.flags & TypeFlags.Union) {
+                            if (result = unionTypeRelatedToType(<UnionType>source, target, reportErrors)) {
+                                return result;
+                            }
+                        }
+                        else {
+                            if (result = typeRelatedToUnionType(source, <UnionType>target, reportErrors)) {
+                                return result;
+                            }
+                        }
                     }
                 }
                 else if (source.flags & TypeFlags.TypeParameter && target.flags & TypeFlags.TypeParameter) {
@@ -3407,6 +3427,19 @@ module ts {
                     reportError(headMessage, typeToString(source), typeToString(target));
                 }
                 return Ternary.False;
+            }
+
+            function unionTypeRelatedToUnionType(source: UnionType, target: UnionType): Ternary {
+                var result = Ternary.True;
+                var sourceTypes = source.types;
+                for (var i = 0, len = sourceTypes.length; i < len; i++) {
+                    var related = typeRelatedToUnionType(sourceTypes[i], target, false);
+                    if (!related) {
+                        return Ternary.False;
+                    }
+                    result &= related;
+                }
+                return result;
             }
 
             function typeRelatedToUnionType(source: Type, target: UnionType, reportErrors: boolean): Ternary {
@@ -3479,7 +3512,7 @@ module ts {
                 if (overflow) {
                     return Ternary.False;
                 }
-                var id = source.id + "," + target.id;
+                var id = relation !== identityRelation || source.id < target.id ? source.id + "," + target.id : target.id + "," + source.id;
                 var related = relation[id];
                 if (related !== undefined) {
                     return related ? Ternary.True : Ternary.False;
