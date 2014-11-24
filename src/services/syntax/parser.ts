@@ -563,8 +563,8 @@ module TypeScript.Parser {
             return Syntax.emptyToken(kind, fullStart);
         }
 
-        function createMissingToken(expectedKind: SyntaxKind, actual: ISyntaxToken, diagnosticCode?: string): ISyntaxToken {
-            var diagnostic = getExpectedTokenDiagnostic(expectedKind, actual, diagnosticCode);
+        function createMissingToken(expectedKind: SyntaxKind, actual: ISyntaxToken, diagnosticCode?: string, args?: any[]): ISyntaxToken {
+            var diagnostic = getExpectedTokenDiagnostic(expectedKind, actual, diagnosticCode, args);
             addDiagnostic(diagnostic);
 
             // The missing token will be at the full start of the current token.  That way empty tokens
@@ -572,10 +572,9 @@ module TypeScript.Parser {
             return createEmptyToken(expectedKind);
         }
 
-        function getExpectedTokenDiagnostic(expectedKind: SyntaxKind, actual?: ISyntaxToken, diagnosticCode?: string): Diagnostic {
+        function getExpectedTokenDiagnostic(expectedKind: SyntaxKind, actual?: ISyntaxToken, diagnosticCode?: string, args?: any[]): Diagnostic {
             var token = currentToken();
 
-            var args: any[] = undefined;
             // If a specialized diagnostic message was provided, just use that.
             if (!diagnosticCode) {
                 // They wanted something specific, just report that that token was missing.
@@ -2889,13 +2888,10 @@ module TypeScript.Parser {
                 // we'll bail out here and give a poor error message when we try to parse this
                 // as an arithmetic expression.
                 if (isDot) {
-                    // A parameter list must follow a generic type argument list.
-                    var diagnostic = new Diagnostic(fileName, source.text.lineMap(), start(token0, source.text), width(token0),
-                        DiagnosticCode.A_parameter_list_must_follow_a_generic_type_argument_list_expected, undefined);
-                    addDiagnostic(diagnostic);
-
                     return new ArgumentListSyntax(parseNodeData, typeArgumentList,
-                        createEmptyToken(SyntaxKind.OpenParenToken), <any>[], createEmptyToken(SyntaxKind.CloseParenToken));
+                        createMissingToken(SyntaxKind.OpenParenToken, undefined, DiagnosticCode.A_parameter_list_must_follow_a_generic_type_argument_list_expected), 
+                        <any>[],
+                        eatToken(SyntaxKind.CloseParenToken));
                 }
                 else {
                     Debug.assert(token0.kind === SyntaxKind.OpenParenToken);
@@ -3097,9 +3093,7 @@ module TypeScript.Parser {
                 token = consumeToken(token);
             }
             else {
-                var diagnostic = getExpectedTokenDiagnostic(SyntaxKind.CloseBraceToken);
-                addDiagnostic(diagnostic);
-                token = createEmptyToken(SyntaxKind.TemplateEndToken);
+                token = createMissingToken(SyntaxKind.TemplateEndToken, undefined, DiagnosticCode._0_expected, ["{"]);
             }
 
             return new TemplateClauseSyntax(parseNodeData, expression, token);
