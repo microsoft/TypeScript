@@ -2672,13 +2672,13 @@ module ts {
             parseExpected(SyntaxKind.OpenParenToken);
             if (token !== SyntaxKind.SemicolonToken) {
                 if (parseOptional(SyntaxKind.VarKeyword)) {
-                    var declarations = disallowInAnd(() => parseVariableDeclarationList(0));
+                    var declarations = disallowInAnd(parseVariableDeclarationList);
                 }
                 else if (parseOptional(SyntaxKind.LetKeyword)) {
-                    var declarations = disallowInAnd(() => parseVariableDeclarationList(NodeFlags.Let));
+                    var declarations = setFlag(disallowInAnd(parseVariableDeclarationList), NodeFlags.Let);
                 }
                 else if (parseOptional(SyntaxKind.ConstKeyword)) {
-                    var declarations = disallowInAnd(() => parseVariableDeclarationList(NodeFlags.Const));
+                    var declarations = setFlag(disallowInAnd(parseVariableDeclarationList), NodeFlags.Const);
                 }
                 else {
                     var varOrInit = disallowInAnd(parseExpression);
@@ -2994,17 +2994,24 @@ module ts {
 
         // DECLARATIONS
 
-        function parseVariableDeclaration(flags: NodeFlags): VariableDeclaration {
+        function parseVariableDeclaration(): VariableDeclaration {
             var node = <VariableDeclaration>createNode(SyntaxKind.VariableDeclaration);
-            node.flags = flags;
             node.name = parseIdentifier();
             node.type = parseTypeAnnotation();
             node.initializer = parseInitializer(/*inParameter*/ false);
             return finishNode(node);
         }
 
-        function parseVariableDeclarationList(flags: NodeFlags): NodeArray<VariableDeclaration> {
-            return parseDelimitedList(ParsingContext.VariableDeclarations, () => parseVariableDeclaration(flags));
+        function setFlag(array: NodeArray<VariableDeclaration>, flag: NodeFlags): NodeArray<VariableDeclaration> {
+            for (var i = 0, n = array.length; i < n; i++) {
+                array[i].flags |= flag;
+            }
+
+            return array;
+        }
+
+        function parseVariableDeclarationList(): NodeArray<VariableDeclaration> {
+            return parseDelimitedList(ParsingContext.VariableDeclarations, parseVariableDeclaration);
         }
 
         function parseVariableStatement(fullStart: number, modifiers: ModifiersArray): VariableStatement {
@@ -3022,7 +3029,9 @@ module ts {
             }
 
             nextToken();
-            node.declarations = allowInAnd(() => parseVariableDeclarationList(node.flags));
+            node.declarations = allowInAnd(parseVariableDeclarationList);
+            setFlag(node.declarations, node.flags);
+
             parseSemicolon();
             return finishNode(node);
         }
