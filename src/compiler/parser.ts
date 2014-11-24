@@ -850,7 +850,7 @@ module ts {
         var nodeCount = 0;
         var lineStarts: number[];
 
-        var isInStrictMode = false;
+        var strictModeContext = false;
         var lookAheadMode = LookAheadMode.NotLookingAhead;
 
         function getLineStarts(): number[] {
@@ -978,7 +978,7 @@ module ts {
         }
 
         function isIdentifier(): boolean {
-            return token === SyntaxKind.Identifier || (isInStrictMode ? token > SyntaxKind.LastFutureReservedWord : token > SyntaxKind.LastReservedWord);
+            return token === SyntaxKind.Identifier || (strictModeContext ? token > SyntaxKind.LastFutureReservedWord : token > SyntaxKind.LastReservedWord);
         }
 
         function parseExpected(t: SyntaxKind): boolean {
@@ -1035,7 +1035,7 @@ module ts {
         function finishNode<T extends Node>(node: T): T {
             node.end = scanner.getStartPos();
 
-            if (isInStrictMode) {
+            if (strictModeContext) {
                 node.flags |= NodeFlags.ParsedInStrictMode;
             }
 
@@ -1224,16 +1224,16 @@ module ts {
             parsingContext |= 1 << kind;
             var result = <NodeArray<T>>[];
             result.pos = getNodePos();
-            var saveIsInStrictMode = isInStrictMode;
+            var savedStrictModeContext = strictModeContext;
             while (!isListTerminator(kind)) {
                 if (isListElement(kind, /* inErrorRecovery */ false)) {
                     var element = parseElement();
                     result.push(element);
                     // test elements only if we are not already in strict mode
-                    if (!isInStrictMode && checkForStrictMode) {
+                    if (!strictModeContext && checkForStrictMode) {
                         if (isPrologueDirective(element)) {
                             if (isUseStrictPrologueDirective(element)) {
-                                isInStrictMode = true;
+                                strictModeContext = true;
                                 checkForStrictMode = false;
                             }
                         }
@@ -1250,7 +1250,7 @@ module ts {
                     nextToken();
                 }
             }
-            isInStrictMode = saveIsInStrictMode;
+            strictModeContext = savedStrictModeContext;
             result.end = getNodeEnd();
             parsingContext = saveParsingContext;
             return result;
