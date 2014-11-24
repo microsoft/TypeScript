@@ -1,5 +1,5 @@
-tests/cases/conformance/es6/binaryAndOctalIntegerLiteral/octalIntegerLiteralError.ts(2,19): error TS1164: Octal digits expected.
-tests/cases/conformance/es6/binaryAndOctalIntegerLiteral/octalIntegerLiteralError.ts(3,18): error TS1164: Octal digits expected.
+tests/cases/conformance/es6/binaryAndOctalIntegerLiteral/octalIntegerLiteralError.ts(2,19): error TS1005: ',' expected.
+tests/cases/conformance/es6/binaryAndOctalIntegerLiteral/octalIntegerLiteralError.ts(3,18): error TS1005: ',' expected.
 tests/cases/conformance/es6/binaryAndOctalIntegerLiteral/octalIntegerLiteralError.ts(6,5): error TS2300: Duplicate identifier '0O45436'.
 tests/cases/conformance/es6/binaryAndOctalIntegerLiteral/octalIntegerLiteralError.ts(7,5): error TS2300: Duplicate identifier '19230'.
 tests/cases/conformance/es6/binaryAndOctalIntegerLiteral/octalIntegerLiteralError.ts(8,5): error TS2300: Duplicate identifier '"19230"'.
@@ -8,11 +8,11 @@ tests/cases/conformance/es6/binaryAndOctalIntegerLiteral/octalIntegerLiteralErro
 ==== tests/cases/conformance/es6/binaryAndOctalIntegerLiteral/octalIntegerLiteralError.ts (5 errors) ====
     // error
     var oct1 = 0O13334823;
-                      
-!!! error TS1164: Octal digits expected.
+                      ~~~
+!!! error TS1005: ',' expected.
     var oct2 = 0o34318592;
-                     
-!!! error TS1164: Octal digits expected.
+                     ~~~~
+!!! error TS1005: ',' expected.
     
     var obj1 = {
         0O45436: "hi",
