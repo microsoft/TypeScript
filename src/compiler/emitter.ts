@@ -794,7 +794,8 @@ module ts {
                 if (compilerOptions.sourceMap && (node.kind === SyntaxKind.StringLiteral || isTemplateLiteralKind(node.kind))) {
                     writer.writeLiteral(text);
                 }
-                else if (node.kind === SyntaxKind.NumericLiteral && compilerOptions.target < ScriptTarget.ES6 &&
+                // For version below ES6, emit binary integer literal and octal integer literal as decimal value
+                else if (compilerOptions.target < ScriptTarget.ES6 && node.kind === SyntaxKind.NumericLiteral &&
                          ((text.charCodeAt(1) === CharacterCodes.B || text.charCodeAt(1) === CharacterCodes.b ||
                            text.charCodeAt(1) === CharacterCodes.O || text.charCodeAt(1) === CharacterCodes.o))) {
                         write(node.text);
