@@ -1,0 +1,95 @@
+=== tests/cases/conformance/es6/binaryAndOctalIntegerLiteral/binaryIntegerLiteralES6.ts ===
+var bin1 = 0b11010;
+>bin1 : number
+
+var bin2 = 0B11010;
+>bin2 : number
+
+var obj1 = {
+>obj1 : { 0b11010: string; a: number; bin1: number; b: number; }
+>{    0b11010: "Hello",    a: bin1,    bin1,    b: 0b11010,} : { 0b11010: string; a: number; bin1: number; b: number; }
+
+    0b11010: "Hello",
+    a: bin1,
+>a : number
+>bin1 : number
+
+    bin1,
+>bin1 : number
+
+    b: 0b11010,
+>b : number
+}
+
+var obj2 = {
+>obj2 : { 0B11010: string; a: number; bin2: number; b: number; }
+>{    0B11010: "World",    a: bin2,    bin2,    b: 0B11010,} : { 0B11010: string; a: number; bin2: number; b: number; }
+
+    0B11010: "World",
+    a: bin2,
+>a : number
+>bin2 : number
+
+    bin2,
+>bin2 : number
+
+    b: 0B11010,
+>b : number
+}
+
+obj1[0b11010];    // string
+>obj1[0b11010] : string
+>obj1 : { 0b11010: string; a: number; bin1: number; b: number; }
+
+obj1[26];         // string
+>obj1[26] : string
+>obj1 : { 0b11010: string; a: number; bin1: number; b: number; }
+
+obj1["26"];       // string
+>obj1["26"] : string
+>obj1 : { 0b11010: string; a: number; bin1: number; b: number; }
+
+obj1["0b11010"];  // any
+>obj1["0b11010"] : any
+>obj1 : { 0b11010: string; a: number; bin1: number; b: number; }
+
+obj1["a"];        // number
+>obj1["a"] : number
+>obj1 : { 0b11010: string; a: number; bin1: number; b: number; }
+
+obj1["b"];        // number
+>obj1["b"] : number
+>obj1 : { 0b11010: string; a: number; bin1: number; b: number; }
+
+obj1["bin1"];     // number
+>obj1["bin1"] : number
+>obj1 : { 0b11010: string; a: number; bin1: number; b: number; }
+
+obj2[0B11010];    // string
+>obj2[0B11010] : string
+>obj2 : { 0B11010: string; a: number; bin2: number; b: number; }
+
+obj2[26];         // string
+>obj2[26] : string
+>obj2 : { 0B11010: string; a: number; bin2: number; b: number; }
+
+obj2["26"];       // string
+>obj2["26"] : string
+>obj2 : { 0B11010: string; a: number; bin2: number; b: number; }
+
+obj2["0B11010"];  // any
+>obj2["0B11010"] : any
+>obj2 : { 0B11010: string; a: number; bin2: number; b: number; }
+
+obj2["a"];        // number
+>obj2["a"] : number
+>obj2 : { 0B11010: string; a: number; bin2: number; b: number; }
+
+obj2["b"];        // number
+>obj2["b"] : number
+>obj2 : { 0B11010: string; a: number; bin2: number; b: number; }
+
+obj2["bin2"];     // number
+>obj2["bin2"] : number
+>obj2 : { 0B11010: string; a: number; bin2: number; b: number; }
+
