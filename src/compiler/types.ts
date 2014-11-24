@@ -272,8 +272,10 @@ module ts {
 
         // Set if this node was parsed in strict mode.  Used for grammar error checks, as well as
         // checking if the node can be reused in incremental settings.
-        ParsedInStrictMode  = 0x00002000, 
-        OctalLiteral        = 0x00004000,
+        ParsedInStrictModeContext = 0x00002000,
+        ParsedInDisallowInContext = 0x00004000, 
+
+        OctalLiteral        = 0x00008000,
 
         Modifier = Export | Ambient | Public | Private | Protected | Static,
         AccessibilityModifier = Public | Private | Protected,
