@@ -367,7 +367,7 @@ module ts {
             }
             else {
                 var emitStart = new Date().getTime();
-                var emitOutput = checker.invokeEmitter();
+                var emitOutput = checker.emitFiles();
                 var emitErrors = emitOutput.diagnostics;
                 exitStatus = emitOutput.emitResultStatus;
                 var reportStart = new Date().getTime();

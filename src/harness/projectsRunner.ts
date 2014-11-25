@@ -132,7 +132,7 @@ class ProjectRunner extends RunnerBase {
             if (!errors.length) {
                 var checker = program.getTypeChecker(/*fullTypeCheck*/ true);
                 errors = checker.getDiagnostics();
-                var emitResult = checker.invokeEmitter();
+                var emitResult = checker.emitFiles();
                 errors = ts.concatenate(errors, emitResult.diagnostics);
                 sourceMapData = emitResult.sourceMaps;
 
