@@ -11,13 +11,12 @@ tests/cases/conformance/classes/propertyMemberDeclarations/accessibilityModifier
 tests/cases/conformance/classes/propertyMemberDeclarations/accessibilityModifiers.ts(34,12): error TS1029: 'public' modifier must precede 'static' modifier.
 tests/cases/conformance/classes/propertyMemberDeclarations/accessibilityModifiers.ts(35,12): error TS1029: 'public' modifier must precede 'static' modifier.
 tests/cases/conformance/classes/propertyMemberDeclarations/accessibilityModifiers.ts(40,13): error TS1028: Accessibility modifier already seen.
-tests/cases/conformance/classes/propertyMemberDeclarations/accessibilityModifiers.ts(40,20): error TS1028: Accessibility modifier already seen.
 tests/cases/conformance/classes/propertyMemberDeclarations/accessibilityModifiers.ts(41,12): error TS1028: Accessibility modifier already seen.
 tests/cases/conformance/classes/propertyMemberDeclarations/accessibilityModifiers.ts(42,13): error TS1028: Accessibility modifier already seen.
 tests/cases/conformance/classes/propertyMemberDeclarations/accessibilityModifiers.ts(43,12): error TS1028: Accessibility modifier already seen.
 
 
-==== tests/cases/conformance/classes/propertyMemberDeclarations/accessibilityModifiers.ts (17 errors) ====
+==== tests/cases/conformance/classes/propertyMemberDeclarations/accessibilityModifiers.ts (16 errors) ====
     
     // No errors
     class C {
@@ -83,8 +82,6 @@ tests/cases/conformance/classes/propertyMemberDeclarations/accessibilityModifier
     class E {
         private public protected property;
                 ~~~~~~
-!!! error TS1028: Accessibility modifier already seen.
-                       ~~~~~~~~~
 !!! error TS1028: Accessibility modifier already seen.
         public protected method() { }
                ~~~~~~~~~

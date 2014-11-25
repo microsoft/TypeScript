@@ -75,43 +75,44 @@ module ts {
 
         var checker: TypeChecker = {
             getProgram: () => program,
-            getDiagnostics: getDiagnostics,
-            getGlobalDiagnostics: getGlobalDiagnostics,
             getNodeCount: () => sum(program.getSourceFiles(), "nodeCount"),
             getIdentifierCount: () => sum(program.getSourceFiles(), "identifierCount"),
             getSymbolCount: () => sum(program.getSourceFiles(), "symbolCount"),
             getTypeCount: () => typeCount,
-            checkProgram: checkProgram,
-            emitFiles: invokeEmitter,
-            getParentOfSymbol: getParentOfSymbol,
-            getNarrowedTypeOfSymbol: getNarrowedTypeOfSymbol,
-            getDeclaredTypeOfSymbol: getDeclaredTypeOfSymbol,
-            getPropertiesOfType: getPropertiesOfType,
-            getPropertyOfType: getPropertyOfType,
-            getSignaturesOfType: getSignaturesOfType,
-            getIndexTypeOfType: getIndexTypeOfType,
-            getReturnTypeOfSignature: getReturnTypeOfSignature,
-            getSymbolsInScope: getSymbolsInScope,
-            getSymbolInfo: getSymbolInfo,
-            getShorthandAssignmentValueSymbol: getShorthandAssignmentValueSymbol,
-            getTypeOfNode: getTypeOfNode,
-            typeToString: typeToString,
-            getSymbolDisplayBuilder: getSymbolDisplayBuilder,
-            symbolToString: symbolToString,
-            getAugmentedPropertiesOfType: getAugmentedPropertiesOfType,
-            getRootSymbols: getRootSymbols,
-            getContextualType: getContextualType,
-            getFullyQualifiedName: getFullyQualifiedName,
-            getResolvedSignature: getResolvedSignature,
-            getEnumMemberValue: getEnumMemberValue,
-            isValidPropertyAccess: isValidPropertyAccess,
-            getSignatureFromDeclaration: getSignatureFromDeclaration,
-            isImplementationOfOverload: isImplementationOfOverload,
-            getAliasedSymbol: resolveImport,
             isUndefinedSymbol: symbol => symbol === undefinedSymbol,
             isArgumentsSymbol: symbol => symbol === argumentsSymbol,
-            hasEarlyErrors: hasEarlyErrors,
-            isEmitBlocked: isEmitBlocked
+            getDiagnostics,
+            getDeclarationDiagnostics,
+            getGlobalDiagnostics,
+            checkProgram,
+            invokeEmitter,
+            getParentOfSymbol,
+            getNarrowedTypeOfSymbol,
+            getDeclaredTypeOfSymbol,
+            getPropertiesOfType,
+            getPropertyOfType,
+            getSignaturesOfType,
+            getIndexTypeOfType,
+            getReturnTypeOfSignature,
+            getSymbolsInScope,
+            getSymbolInfo,
+            getShorthandAssignmentValueSymbol,
+            getTypeOfNode,
+            typeToString,
+            getSymbolDisplayBuilder,
+            symbolToString,
+            getAugmentedPropertiesOfType,
+            getRootSymbols,
+            getContextualType,
+            getFullyQualifiedName,
+            getResolvedSignature,
+            getEnumMemberValue,
+            isValidPropertyAccess,
+            getSignatureFromDeclaration,
+            isImplementationOfOverload,
+            getAliasedSymbol: resolveImport,
+            hasEarlyErrors,
+            isEmitBlocked,
         };
 
         var undefinedSymbol = createSymbol(SymbolFlags.Property | SymbolFlags.Transient, "undefined");
@@ -885,13 +886,13 @@ module ts {
                     if (accessibleSymbolChain) {
                         var hasAccessibleDeclarations = hasVisibleDeclarations(accessibleSymbolChain[0]);
                         if (!hasAccessibleDeclarations) {
-                            return {
+                            return <SymbolAccessiblityResult>{
                                 accessibility: SymbolAccessibility.NotAccessible,
                                 errorSymbolName: symbolToString(initialSymbol, enclosingDeclaration, meaning),
                                 errorModuleName: symbol !== initialSymbol ? symbolToString(symbol, enclosingDeclaration, SymbolFlags.Namespace) : undefined,
                             };
                         }
-                        return { accessibility: SymbolAccessibility.Accessible, aliasesToMakeVisible: hasAccessibleDeclarations.aliasesToMakeVisible };
+                        return hasAccessibleDeclarations;
                     }
 
                     // If we haven't got the accessible symbol, it doesn't mean the symbol is actually inaccessible.
@@ -948,12 +949,12 @@ module ts {
                 (declaration.kind === SyntaxKind.SourceFile && isExternalModule(<SourceFile>declaration));
         }
 
-        function hasVisibleDeclarations(symbol: Symbol): { aliasesToMakeVisible?: ImportDeclaration[]; } {
+        function hasVisibleDeclarations(symbol: Symbol): SymbolVisibilityResult {
             var aliasesToMakeVisible: ImportDeclaration[];
             if (forEach(symbol.declarations, declaration => !getIsDeclarationVisible(declaration))) {
                 return undefined;
             }
-            return { aliasesToMakeVisible: aliasesToMakeVisible };
+            return { accessibility: SymbolAccessibility.Accessible, aliasesToMakeVisible };
 
             function getIsDeclarationVisible(declaration: Declaration) {
                 if (!isDeclarationVisible(declaration)) {
@@ -982,14 +983,33 @@ module ts {
             }
         }
 
-        function isImportDeclarationEntityNameReferenceDeclarationVisibile(entityName: EntityName): SymbolAccessiblityResult {
+        function isEntityNameVisible(entityName: EntityName, enclosingDeclaration: Node): SymbolVisibilityResult {
+            // get symbol of the first identifier of the entityName
+            var meaning: SymbolFlags;
+            if (entityName.parent.kind === SyntaxKind.TypeQuery) {
+                // Typeof value
+                meaning = SymbolFlags.Value | SymbolFlags.ExportValue;
+            }
+            else if (entityName.kind === SyntaxKind.QualifiedName ||
+                entityName.parent.kind === SyntaxKind.ImportDeclaration) {
+                // Left identifier from type reference or TypeAlias
+                // Entity name of the import declaration 
+                meaning = SymbolFlags.Namespace;
+            }
+            else {
+                // Type Reference or TypeAlias entity = Identifier
+                meaning = SymbolFlags.Type;
+            }
+
             var firstIdentifier = getFirstIdentifier(entityName);
-            var symbolOfNameSpace = resolveName(entityName.parent, (<Identifier>firstIdentifier).text, SymbolFlags.Namespace, Diagnostics.Cannot_find_name_0, firstIdentifier);
+            var symbol = resolveName(enclosingDeclaration, (<Identifier>firstIdentifier).text, meaning, /*nodeNotFoundErrorMessage*/ undefined, /*nameArg*/ undefined);
+
             // Verify if the symbol is accessible
-            var hasNamespaceDeclarationsVisibile = hasVisibleDeclarations(symbolOfNameSpace);
-            return hasNamespaceDeclarationsVisibile ?
-                { accessibility: SymbolAccessibility.Accessible, aliasesToMakeVisible: hasNamespaceDeclarationsVisibile.aliasesToMakeVisible } :
-                { accessibility: SymbolAccessibility.NotAccessible, errorSymbolName: declarationNameToString(<Identifier>firstIdentifier) };
+            return hasVisibleDeclarations(symbol) || <SymbolVisibilityResult>{
+                accessibility: SymbolAccessibility.NotAccessible,
+                errorSymbolName: getTextOfNode(firstIdentifier),
+                errorNode: firstIdentifier
+            };
         }
 
         function releaseStringWriter(writer: StringSymbolWriter) {
@@ -1601,6 +1621,7 @@ module ts {
                     case SyntaxKind.IndexSignature:
                     case SyntaxKind.Parameter:
                     case SyntaxKind.ModuleBlock:
+                    case SyntaxKind.TypeParameter:
                         return isDeclarationVisible(node.parent);
 
                     // Source file is always visible
@@ -1784,7 +1805,7 @@ module ts {
                     }
                     else {
                         // If there are no specified types, try to infer it from the body of the get accessor if it exists.
-                        if (getter) {
+                        if (getter && getter.body) {
                             type = getReturnTypeFromBody(getter);
                         }
                         // Otherwise, fall back to 'any'.
@@ -7531,10 +7552,13 @@ module ts {
             // for (var VarDecl in Expr) Statement
             //   VarDecl must be a variable declaration without a type annotation that declares a variable of type Any,
             //   and Expr must be an expression of type Any, an object type, or a type parameter type.                        
-            if (node.declaration) {
-                checkVariableDeclaration(node.declaration);
-                if (node.declaration.type) {
-                    error(node.declaration, Diagnostics.The_left_hand_side_of_a_for_in_statement_cannot_use_a_type_annotation);
+            if (node.declarations) {
+                if (node.declarations.length >= 1) {
+                    var decl = node.declarations[0];
+                    checkVariableDeclaration(decl);
+                    if (decl.type) {
+                        error(decl, Diagnostics.The_left_hand_side_of_a_for_in_statement_cannot_use_a_type_annotation);
+                    }
                 }
             }
 
@@ -7983,7 +8007,7 @@ module ts {
                 var enumType = getDeclaredTypeOfSymbol(enumSymbol);
                 var autoValue = 0;
                 var ambient = isInAmbientContext(node);
-                var enumIsConst = isConstEnumDeclaration(node);
+                var enumIsConst = isConst(node);
 
                 forEach(node.members, member => {
                     // TODO(jfreeman): Check that it is not a computed name
@@ -8154,10 +8178,10 @@ module ts {
             var firstDeclaration = getDeclarationOfKind(enumSymbol, node.kind);
             if (node === firstDeclaration) {
                 if (enumSymbol.declarations.length > 1) {
-                    var enumIsConst = isConstEnumDeclaration(node);
+                    var enumIsConst = isConst(node);
                     // check that const is placed\omitted on all enum declarations
                     forEach(enumSymbol.declarations, decl => {
-                        if (isConstEnumDeclaration(<EnumDeclaration>decl) !== enumIsConst) {
+                        if (isConstEnumDeclaration(decl) !== enumIsConst) {
                             error(decl.name, Diagnostics.Enum_declarations_must_all_be_const_or_non_const);
                         }
                     });
@@ -8520,6 +8544,12 @@ module ts {
             }
             checkProgram();
             return getSortedDiagnostics();
+        }
+
+        function getDeclarationDiagnostics(targetSourceFile: SourceFile): Diagnostic[] {
+            var resolver = createResolver();
+            checkSourceFile(targetSourceFile);
+            return ts.getDeclarationDiagnostics(program, resolver, targetSourceFile);
         }
 
         function getGlobalDiagnostics(): Diagnostic[] {
@@ -9115,26 +9145,30 @@ module ts {
             getSymbolDisplayBuilder().buildTypeDisplay(getReturnTypeOfSignature(signature), writer, enclosingDeclaration, flags);
         }
 
-        function invokeEmitter(targetSourceFile?: SourceFile) {
-            var resolver: EmitResolver = {
+        function createResolver(): EmitResolver {
+            return {
                 getProgram: () => program,
-                getLocalNameOfContainer: getLocalNameOfContainer,
-                getExpressionNamePrefix: getExpressionNamePrefix,
-                getExportAssignmentName: getExportAssignmentName,
-                isReferencedImportDeclaration: isReferencedImportDeclaration,
-                getNodeCheckFlags: getNodeCheckFlags,
-                getEnumMemberValue: getEnumMemberValue,
-                isTopLevelValueImportWithEntityName: isTopLevelValueImportWithEntityName,
-                hasSemanticErrors: hasSemanticErrors,
-                isEmitBlocked: isEmitBlocked,
-                isDeclarationVisible: isDeclarationVisible,
-                isImplementationOfOverload: isImplementationOfOverload,
-                writeTypeAtLocation: writeTypeAtLocation,
-                writeReturnTypeOfSignatureDeclaration: writeReturnTypeOfSignatureDeclaration,
-                isSymbolAccessible: isSymbolAccessible,
-                isImportDeclarationEntityNameReferenceDeclarationVisibile: isImportDeclarationEntityNameReferenceDeclarationVisibile,
-                getConstantValue: getConstantValue,
+                getLocalNameOfContainer,
+                getExpressionNamePrefix,
+                getExportAssignmentName,
+                isReferencedImportDeclaration,
+                getNodeCheckFlags,
+                getEnumMemberValue,
+                isTopLevelValueImportWithEntityName,
+                hasSemanticErrors,
+                isEmitBlocked,
+                isDeclarationVisible,
+                isImplementationOfOverload,
+                writeTypeAtLocation,
+                writeReturnTypeOfSignatureDeclaration,
+                isSymbolAccessible,
+                isEntityNameVisible,
+                getConstantValue,
             };
+        }
+
+        function invokeEmitter(targetSourceFile?: SourceFile) {
+            var resolver = createResolver();
             checkProgram();
             return emitFiles(resolver, targetSourceFile);
         }
@@ -9143,7 +9177,7 @@ module ts {
             // Bind all source files and propagate errors
             forEach(program.getSourceFiles(), file => {
                 bindSourceFile(file);
-                forEach(file.semanticErrors, addDiagnostic);
+                forEach(file.semanticDiagnostics, addDiagnostic);
             });
             // Initialize global symbol table
             forEach(program.getSourceFiles(), file => {

@@ -66,22 +66,22 @@ module ts {
     }
 
     export function findListItemInfo(node: Node): ListItemInfo {
-        var syntaxList = findContainingList(node);
+        var list = findContainingList(node);
 
         // It is possible at this point for syntaxList to be undefined, either if
         // node.parent had no list child, or if none of its list children contained
         // the span of node. If this happens, return undefined. The caller should
         // handle this case.
-        if (!syntaxList) {
+        if (!list) {
             return undefined;
         }
 
-        var children = syntaxList.getChildren();
-        var index = indexOf(children, node);
+        var children = list.getChildren();
+        var listItemIndex = indexOf(children, node);
 
         return {
-            listItemIndex: index,
-            list: syntaxList
+            listItemIndex,
+            list
         };
     }
 
