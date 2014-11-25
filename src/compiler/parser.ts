@@ -919,6 +919,16 @@ module ts {
             updateContextFlags();
         }
 
+        function setYieldContext(val: boolean) {
+            yieldContext = val;
+            updateContextFlags();
+        }
+
+        function setGeneratorParameterContext(val: boolean) {
+            generatorParameterContext = val;
+            updateContextFlags();
+        }
+
         function allowInAnd<T>(func: () => T): T {
             if (disallowInContext) {
                 setDisallowInContext(false);
@@ -941,6 +951,54 @@ module ts {
             var result = func();
             setDisallowInContext(false);
             return result;
+        }
+
+        function enterYieldContextAnd<T>(func: () => T): T {
+            if (yieldContext) {
+                // no need to do anything special if we're already in the [Yield] context.
+                return func();
+            }
+
+            setYieldContext(true);
+            var result = func();
+            setYieldContext(false);
+            return result;
+        }
+
+        function exitYieldContextAnd<T>(func: () => T): T {
+            if (yieldContext) {
+                setYieldContext(false);
+                var result = func();
+                setYieldContext(true);
+                return result;
+            }
+
+            // no need to do anything special if we're not in the [Yield] context.
+            return func();
+        }
+
+        function enterGeneratorParameterContextAnd<T>(func: () => T): T {
+            if (generatorParameterContext) {
+                // no need to do anything special if we're already in the [GeneratorParameter] context
+                return func();
+            }
+
+            setGeneratorParameterContext(true);
+            var result = func();
+            setGeneratorParameterContext(false);
+            return result;
+        }
+
+        function exitGeneratorParameterContextAnd<T>(func: () => T): T {
+            if (generatorParameterContext) {
+                setGeneratorParameterContext(false);
+                var result = func();
+                setGeneratorParameterContext(true);
+                return result;
+            }
+
+            // no need to do anything special if we're not in the [GeneratorParameter] context
+            return func();
         }
 
         function getLineStarts(): number[] {
