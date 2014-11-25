@@ -2186,7 +2186,9 @@ module ts {
 
             if (!scanner.hasPrecedingLineBreak() &&
                 (token === SyntaxKind.AsteriskToken || isStartOfExpression())) {
-                parseOptional(SyntaxKind.AsteriskToken);
+                if (parseOptional(SyntaxKind.AsteriskToken)) {
+                    node.flags = NodeFlags.YieldStar;
+                }
 
                 node.expression = parseAssignmentExpression();
                 return finishNode(node);

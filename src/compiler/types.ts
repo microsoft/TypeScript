@@ -272,6 +272,7 @@ module ts {
         Const               = 0x00001000,  // Variable declaration
         OctalLiteral        = 0x00002000,
         Generator           = 0x00004000,
+        YieldStar           = 0x00008000,
 
         Modifier = Export | Ambient | Public | Private | Protected | Static,
         AccessibilityModifier = Public | Private | Protected,
