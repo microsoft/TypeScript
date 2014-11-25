@@ -183,6 +183,7 @@ module ts {
         ConditionalExpression,
         TemplateExpression,
         TemplateSpan,
+        YieldExpression,
         OmittedExpression,
         // Element
         Block,
@@ -291,7 +292,7 @@ module ts {
         flags: NodeFlags;
         // Specific context the parser was in when this node was created.  Normally undefined. 
         // Only set when the parser was in some interesting context (like async/yield).
-        parserContextFlags?: NodeFlags;
+        parserContextFlags?: ParserContextFlags;
         id?: number;                  // Unique id (used to look up NodeLinks)
         parent?: Node;                // Parent node (initialized by binding)
         symbol?: Symbol;              // Symbol declared by node (initialized by binding)
@@ -437,6 +438,10 @@ module ts {
     export interface UnaryExpression extends Expression {
         operator: SyntaxKind;
         operand: Expression;
+    }
+    
+    export interface YieldExpression extends Expression {
+        expression: Expression;
     }
 
     export interface BinaryExpression extends Expression {
