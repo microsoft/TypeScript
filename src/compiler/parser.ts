@@ -2721,6 +2721,9 @@ module ts {
             if (isGenerator || token === SyntaxKind.OpenParenToken || token === SyntaxKind.LessThanToken) {
                 node = <PropertyDeclaration>createNode(SyntaxKind.PropertyAssignment, nodePos);
                 node.name = propertyName;
+                if (isGenerator) {
+                    node.flags |= NodeFlags.Generator;
+                }
                 var sig = parseSignature(SyntaxKind.CallSignature, SyntaxKind.ColonToken, /* returnTokenRequired */ false, /*isGenerator:*/ isGenerator);
 
                 var body = parseFunctionBlock(isGenerator, /* ignoreMissingOpenBrace */ false);
@@ -2792,15 +2795,19 @@ module ts {
             var sig = parseSignature(SyntaxKind.CallSignature, SyntaxKind.ColonToken, /* returnTokenRequired */ false, /*isGenerator:*/ isGenerator);
 
             var body = parseFunctionBlock(/*allowYield:*/ isGenerator, /* ignoreMissingOpenBrace */ false);
-            return makeFunctionExpression(SyntaxKind.FunctionExpression, pos, name, sig, body);
+            return makeFunctionExpression(SyntaxKind.FunctionExpression, pos, name, sig, body, isGenerator ? NodeFlags.Generator : undefined);
         }
 
         function parseOptionalIdentifier() {
             return isIdentifier() ? parseIdentifier() : undefined;
         }
 
-        function makeFunctionExpression(kind: SyntaxKind, pos: number, name: Identifier, sig: ParsedSignature, body: Node): FunctionExpression {
+        function makeFunctionExpression(kind: SyntaxKind, pos: number, name: Identifier, sig: ParsedSignature, body: Node, flags?: NodeFlags): FunctionExpression {
             var node = <FunctionExpression>createNode(kind, pos);
+            if (flags) {
+                node.flags = flags;
+            }
+
             node.name = name;
             node.typeParameters = sig.typeParameters;
             node.parameters = sig.parameters;
@@ -3268,6 +3275,10 @@ module ts {
             setModifiers(node, modifiers);
             parseExpected(SyntaxKind.FunctionKeyword);
             var isGenerator = parseOptional(SyntaxKind.AsteriskToken);
+            if (isGenerator) {
+                node.flags |= NodeFlags.Generator;
+            }
+
             node.name = parseIdentifier();
             fillSignature(SyntaxKind.CallSignature, SyntaxKind.ColonToken, /* returnTokenRequired */ false, /*isGenerator:*/ isGenerator, node);
             node.body = parseFunctionBlockOrSemicolon(isGenerator);
@@ -3284,9 +3295,13 @@ module ts {
         }
 
         function parsePropertyMemberDeclaration(fullStart: number, modifiers: ModifiersArray): Declaration {
-            var isGenerator = parseOptional(SyntaxKind.AsteriskToken);
-            var name = parsePropertyName();
             var flags = modifiers ? modifiers.flags : 0;
+            var isGenerator = parseOptional(SyntaxKind.AsteriskToken);
+            if (isGenerator) {
+                flags |= NodeFlags.Generator;
+            }
+
+            var name = parsePropertyName();
             if (parseOptional(SyntaxKind.QuestionToken)) {
                 // Note: this is not legal as per the grammar.  But we allow it in the parser and
                 // report an error in the grammar checker.

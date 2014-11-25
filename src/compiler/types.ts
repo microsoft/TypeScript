@@ -270,8 +270,8 @@ module ts {
         DeclarationFile     = 0x00000400,  // Node is a .d.ts file
         Let                 = 0x00000800,  // Variable declaration
         Const               = 0x00001000,  // Variable declaration
-
         OctalLiteral        = 0x00002000,
+        Generator           = 0x00004000,
 
         Modifier = Export | Ambient | Public | Private | Protected | Static,
         AccessibilityModifier = Public | Private | Protected,
