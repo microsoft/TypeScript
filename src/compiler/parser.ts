@@ -1272,15 +1272,19 @@ module ts {
         function parseContextualModifier(t: SyntaxKind): boolean {
             return token === t && tryParse(() => {
                 nextToken();
-                return token === SyntaxKind.OpenBracketToken || isLiteralPropertyName();
+                return canFollowModifier();
             });
         }
 
         function parseAnyContextualModifier(): boolean {
             return isModifier(token) && tryParse(() => {
                 nextToken();
-                return token === SyntaxKind.OpenBracketToken || isLiteralPropertyName();
+                return canFollowModifier();
             });
+        }
+
+        function canFollowModifier(): boolean {
+            return token === SyntaxKind.OpenBracketToken || token === SyntaxKind.AsteriskToken || isLiteralPropertyName();
         }
 
         // True if positioned at the start of a list element
