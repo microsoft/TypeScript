@@ -823,9 +823,10 @@ module ts {
             return false;
         }
 
-        // If we didn't end in a backtick, we must still be in the middle of a template.
-        // If we did, make sure that it's not the *initial* backtick.
-        return sourceText.charCodeAt(node.end - 1) !== CharacterCodes.backtick || node.text.length === 0;
+        // If we didn't end in a backtick, we must still be in the middle of a template literal,
+        // but if it's the *initial* backtick (whereby the token is 1 char long), then it's unclosed.
+        var width = node.end - getTokenPosOfNode(node);
+        return width < 2 || sourceText.charCodeAt(node.end - 1) !== CharacterCodes.backtick;
     }
 
     export function isModifier(token: SyntaxKind): boolean {
