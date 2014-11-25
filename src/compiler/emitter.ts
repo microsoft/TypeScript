@@ -3536,14 +3536,14 @@ module ts {
 
                 // Emit node which needs to be emitted differently depended on ScriptTarget
                 if (compilerOptions.target < ScriptTarget.ES6) {
-                    // Emit node down-leveling
+                    // Emit node down-level
                     switch (node.kind) {
                         case SyntaxKind.ShorthandPropertyAssignment:
                             return emitShorthandPropertyAssignmentAsNormalPropertyAssignment(<ShorthandPropertyDeclaration>node);
                     }
                 }
                 else if (compilerOptions.target >= ScriptTarget.ES6) {
-                    // Emit node natively in EcmaScript6
+                    // Emit node natively
                     switch (node.kind) {
                         case SyntaxKind.ShorthandPropertyAssignment:
                             return emitShorthandPropertyAssignment(<ShorthandPropertyDeclaration>node);
