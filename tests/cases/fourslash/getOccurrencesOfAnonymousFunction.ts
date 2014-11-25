@@ -1,9 +1,16 @@
 /// <reference path='fourslash.ts' />
 
-////(function f/**/oo(): number {
+////(function [|foo|](): number {
+////    var x = [|foo|];
 ////    return 0;
 ////})
 
 
-goTo.marker();
-verify.occurrencesAtPositionCount(1);
+test.ranges().forEach(r => {
+    goTo.position(r.start);
+    verify.occurrencesAtPositionCount(2);
+
+    test.ranges().forEach(range => {
+        verify.occurrencesAtPositionContains(range);
+    });
+});

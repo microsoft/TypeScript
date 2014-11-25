@@ -511,10 +511,18 @@
         "category": "Error",
         "code": 1161
     },
-
     "An object member cannot be declared optional.": {
         "category": "Error",
-        "code":  1160
+        "code": 1162
+    },
+    "'yield' expression must be contained_within a generator declaration.": {
+        "category": "Error",
+        "code": 1163
+    },
+
+    "'{0}' modifier cannot be used with a generator.": {
+        "category": "Error",
+        "code": 1170
     },
 
     "Duplicate identifier '{0}'.": {
@@ -1122,77 +1130,37 @@
         "category": "Error",
         "code": 4000
     },
-    "Type parameter '{0}' of exported class has or is using name '{1}' from private module '{2}'.": {
-        "category": "Error",
-        "code": 4001
-    },
     "Type parameter '{0}' of exported class has or is using private name '{1}'.": {
         "category": "Error",
         "code": 4002
-    },
-    "Type parameter '{0}' of exported interface has or is using name '{1}' from private module '{2}'.": {
-        "category": "Error",
-        "code": 4003
     },
     "Type parameter '{0}' of exported interface has or is using private name '{1}'.": {
         "category": "Error",
         "code": 4004
     },
-    "Type parameter '{0}' of constructor signature from exported interface has or is using name '{1}' from private module '{2}'.": {
-        "category": "Error",
-        "code": 4005
-    },
     "Type parameter '{0}' of constructor signature from exported interface has or is using private name '{1}'.": {
         "category": "Error",
         "code": 4006
-    },
-    "Type parameter '{0}' of call signature from exported interface has or is using name '{1}' from private module '{2}'.": {
-        "category": "Error",
-        "code": 4007
     },
     "Type parameter '{0}' of call signature from exported interface has or is using private name '{1}'.": {
         "category": "Error",
         "code": 4008
     },
-    "Type parameter '{0}' of public static method from exported class has or is using name '{1}' from private module '{2}'.": {
-        "category": "Error",
-        "code": 4009
-    },
     "Type parameter '{0}' of public static method from exported class has or is using private name '{1}'.": {
         "category": "Error",
         "code": 4010
-    },
-    "Type parameter '{0}' of public method from exported class has or is using name '{1}' from private module '{2}'.": {
-        "category": "Error",
-        "code": 4011
     },
     "Type parameter '{0}' of public method from exported class has or is using private name '{1}'.": {
         "category": "Error",
         "code": 4012
     },
-    "Type parameter '{0}' of method from exported interface has or is using name '{1}' from private module '{2}'.": {
-        "category": "Error",
-        "code": 4013
-    },
     "Type parameter '{0}' of method from exported interface has or is using private name '{1}'.": {
         "category": "Error",
         "code": 4014
     },
-    "Type parameter '{0}' of exported function has or is using name '{1}' from private module '{2}'.": {
-        "category": "Error",
-        "code": 4015
-    },
     "Type parameter '{0}' of exported function has or is using private name '{1}'.": {
         "category": "Error",
         "code": 4016
-    },
-    "Implements clause of exported class '{0}' has or is using name '{1}' from private module '{2}'.": {
-        "category": "Error",
-        "code": 4017
-    },
-    "Extends clause of exported class '{0}' has or is using name '{1}' from private module '{2}'.": {
-        "category": "Error",
-        "code": 4018
     },
     "Implements clause of exported class '{0}' has or is using private name '{1}'.": {
         "category": "Error",
@@ -1201,10 +1169,6 @@
     "Extends clause of exported class '{0}' has or is using private name '{1}'.": {
         "category": "Error",
         "code": 4020
-    },
-    "Extends clause of exported interface '{0}' has or is using name '{1}' from private module '{2}'.": {
-        "category": "Error",
-        "code": 4021
     },
     "Extends clause of exported interface '{0}' has or is using private name '{1}'.": {
         "category": "Error",
@@ -1433,14 +1397,6 @@
     "Parameter '{0}' of exported function has or is using private name '{1}'.": {
         "category": "Error",
         "code": 4078
-    },
-    "Exported type alias '{0}' has or is using name '{1}' from external module {2} but cannot be named.": {
-        "category": "Error",
-        "code": 4079
-    },
-    "Exported type alias '{0}' has or is using name '{1}' from private module '{2}'.": {
-        "category": "Error",
-        "code": 4080
     },
     "Exported type alias '{0}' has or is using private name '{1}'.": {
         "category": "Error",

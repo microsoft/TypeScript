@@ -320,4 +320,9 @@ module ts {
     export function isPunctuation(kind: SyntaxKind): boolean {
         return SyntaxKind.FirstPunctuation <= kind && kind <= SyntaxKind.LastPunctuation;
     }
+
+    export function isInsideTemplateLiteral(node: LiteralExpression, position: number) {
+        return (node.getStart() < position && position < node.getEnd())
+            || (isUnterminatedTemplateEnd(node) && position === node.getEnd());
+    }
 }

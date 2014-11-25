@@ -933,12 +933,12 @@ module ts {
                                 value = 0;
                             }
                             tokenValue = "" + value;
-                            return SyntaxKind.NumericLiteral;
+                            return token = SyntaxKind.NumericLiteral;
                         }
                         // Try to parse as an octal
                         if (pos + 1 < len && isOctalDigit(text.charCodeAt(pos + 1))) {
                             tokenValue = "" + scanOctalDigits();
-                            return SyntaxKind.NumericLiteral;
+                            return token = SyntaxKind.NumericLiteral;
                         }
                         // This fall-through is a deviation from the EcmaScript grammar. The grammar says that a leading zero
                         // can only be followed by an octal digit, a dot, or the end of the number literal. However, we are being

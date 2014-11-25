@@ -10,7 +10,7 @@ tests/cases/compiler/indexSignatureMustHaveTypeAnnotation.ts(12,5): error TS1021
          ~
 !!! error TS1022: An index signature parameter must have a type annotation.
         [x: string];
-        ~~~~~~~~~~~
+        ~~~~~~~~~~~~
 !!! error TS1021: An index signature must have a type annotation.
     }
     

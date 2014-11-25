@@ -730,57 +730,58 @@ module ts {
 
         function visitForInStatement(node: ForInStatement): Node {
             if (compilerOptions.target <= ScriptTarget.ES5) {
-                if (isAwaited(node.statement)) {
-                    var keysLocal = builder.declareLocal();
-                    var tempLocal = builder.declareLocal();
-                    var conditionLabel = builder.defineLabel();
-                    var iteratorLabel = builder.defineLabel();
-                    var endLabel = builder.beginLoopBlock(iteratorLabel, getTarget(node));
-                    var declarationOrVariable = visitVariableDeclarationOrVariable(node.declaration, node.variable);
-                    builder.setLocation(declarationOrVariable.assignment);
-                    builder.emit(OpCode.Statement, declarationOrVariable.assignment);
-                    builder.setLocation(node.expression);
-                    builder.emit(OpCode.Statement, `
-                    \${keysLocal} = [];
-                    for (\${tempLocal} in ${expression}) {
-                        \${keysLocal}[\${keysLocal}.length] = \${tempLocal};
-                    }
-                    \${tempLocal} = 0;`, {
-                            keysLocal,
-                            tempLocal,
-                            expression: visit(node.expression)
-                        });
-                    builder.markLabel(conditionLabel);
-                    builder.setLocation(declarationOrVariable.identifier);
-                    builder.emit(OpCode.BrTrue, endLabel, `\${tempLocal} >= \${keysLocal}.length`, {
-                        keysLocal,
-                        tempLocal
-                    });
-                    builder.emit(OpCode.Statement, `\${variable} = \${keysLocal}[\${tempLocal}];`, {
-                        variable: declarationOrVariable.variable,
-                        keysLocal,
-                        tempLocal
-                    });
-                    builder.setLocation(node.statement);
-                    visit(node.statement, builder.emitNode);
-                    builder.markLabel(iteratorLabel);
-                    builder.setLocation(node.expression);
-                    builder.emit(OpCode.Statement, `{tempLocal}++;`, { tempLocal });
-                    builder.emit(OpCode.Break, conditionLabel);
-                    builder.endLoopBlock();
-                    return;
-                } else {
-                    builder.beginScriptLoopBlock(getTarget(node));
-                    var variable = visitVariableDeclarationOrVariable(node.declaration, node.variable).variable;
-                    var expression = visit(node.expression);
-                    var statement = visit(node.statement);
-                    builder.endScriptLoopBlock();
-                    return factory.updateForInStatement(node, /*declaration*/ undefined, variable, expression, statement);
-                }
+                //if (isAwaited(node.statement)) {
+                //    var keysLocal = builder.declareLocal();
+                //    var tempLocal = builder.declareLocal();
+                //    var conditionLabel = builder.defineLabel();
+                //    var iteratorLabel = builder.defineLabel();
+                //    var endLabel = builder.beginLoopBlock(iteratorLabel, getTarget(node));
+                //    var declarationOrVariable = visitVariableDeclarationListOrInitializer(node.declarations, node.variable);
+                //    builder.setLocation(declarationOrVariable.assignment);
+                //    builder.emit(OpCode.Statement, declarationOrVariable.assignment);
+                //    builder.setLocation(node.expression);
+                //    builder.emit(OpCode.Statement, `
+                //    \${keysLocal} = [];
+                //    for (\${tempLocal} in ${expression}) {
+                //        \${keysLocal}[\${keysLocal}.length] = \${tempLocal};
+                //    }
+                //    \${tempLocal} = 0;`, {
+                //            keysLocal,
+                //            tempLocal,
+                //            expression: visit(node.expression)
+                //        });
+                //    builder.markLabel(conditionLabel);
+                //    builder.setLocation(declarationOrVariable.identifier);
+                //    builder.emit(OpCode.BrTrue, endLabel, `\${tempLocal} >= \${keysLocal}.length`, {
+                //        keysLocal,
+                //        tempLocal
+                //    });
+                //    builder.emit(OpCode.Statement, `\${variable} = \${keysLocal}[\${tempLocal}];`, {
+                //        variable: declarationOrVariable.variable,
+                //        keysLocal,
+                //        tempLocal
+                //    });
+                //    builder.setLocation(node.statement);
+                //    visit(node.statement, builder.emitNode);
+                //    builder.markLabel(iteratorLabel);
+                //    builder.setLocation(node.expression);
+                //    builder.emit(OpCode.Statement, `{tempLocal}++;`, { tempLocal });
+                //    builder.emit(OpCode.Break, conditionLabel);
+                //    builder.endLoopBlock();
+                //    return;
+                //} else {
+                //    builder.beginScriptLoopBlock(getTarget(node));
+                //    var variable = visitVariableDeclarationOrVariable(node.declaration, node.variable).variable;
+                //    var expression = visit(node.expression);
+                //    var statement = visit(node.statement);
+                //    builder.endScriptLoopBlock();
+                //    return factory.updateForInStatement(node, /*declaration*/ undefined, variable, expression, statement);
+                //}
+                throw TypeError("E_NOTIMPL");
             } else {
                 return factory.updateForInStatement(
                     node,
-                    <VariableDeclaration>visit(node.declaration),
+                    visitNodes(node.declarations),
                     visit(node.variable),
                     visit(node.expression),
                     visit(node.statement));

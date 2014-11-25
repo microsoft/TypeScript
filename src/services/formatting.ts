@@ -252,7 +252,7 @@ module ts.formatting {
         rulesProvider: RulesProvider,
         requestKind: FormattingRequestKind): TextChange[] {
 
-        var rangeContainsError = prepareRangeContainsErrorFunction(sourceFile.syntacticErrors, originalRange);
+        var rangeContainsError = prepareRangeContainsErrorFunction(sourceFile.getSyntacticDiagnostics(), originalRange);
 
         // formatting context is used by rules provider
         var formattingContext = new FormattingContext(sourceFile, requestKind);

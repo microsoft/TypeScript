@@ -1,0 +1,5 @@
+=== tests/cases/conformance/es6/functionDeclarations/FunctionDeclaration2_es6.ts ===
+function f(yield) {
+>f : (yield: any) => void
+>yield : any
+}

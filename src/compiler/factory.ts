@@ -63,61 +63,61 @@ module ts {
             if (node.name !== name || node.body !== body || node.parameters !== parameters) {
                 switch (node.kind) {
                     case SyntaxKind.FunctionDeclaration:
-                        return createFunctionDeclaration(<Identifier>name, <Block>body, parameters, node, node.flags);
+                        return createFunctionDeclaration(<Identifier>name, <Block>body, parameters, node, node.flags, node.modifiers);
                     case SyntaxKind.Method:
-                        return createMethodDeclaration(name, <Block>body, parameters, node, node.flags);
+                        return createMethodDeclaration(name, <Block>body, parameters, node, node.flags, node.modifiers);
                     case SyntaxKind.GetAccessor:
-                        return createGetAccessor(name, <Block>body, parameters, node, node.flags);
+                        return createGetAccessor(name, <Block>body, parameters, node, node.flags, node.modifiers);
                     case SyntaxKind.FunctionExpression:
-                        return createFunctionExpression(<Identifier>name, body, parameters, node, node.flags);
+                        return createFunctionExpression(<Identifier>name, body, parameters, node, node.flags, node.modifiers);
                     case SyntaxKind.ArrowFunction:
-                        return createArrowFunction(body, parameters, node, node.flags);
+                        return createArrowFunction(body, parameters, node, node.flags, node.modifiers);
                 }
             }
             return node;
         }
 
-        export function createFunctionDeclaration(name: Identifier, body: Block, parameters: ParameterDeclaration[], location: TextRange, flags?: NodeFlags): FunctionDeclaration {
+        export function createFunctionDeclaration(name: Identifier, body: Block, parameters: ParameterDeclaration[], location: TextRange, flags?: NodeFlags, modifiers?: Node[]): FunctionDeclaration {
             var node = beginNode<FunctionDeclaration>(SyntaxKind.FunctionDeclaration);
             node.name = name;
             node.body = body;
             node.parameters = createNodeArray(parameters);
-            return finishNode(node, location, flags);
+            return finishNode(node, location, flags, modifiers);
         }
 
         export function updateFunctionDeclaration(node: FunctionDeclaration, name: Identifier, body: Block, parameters: ParameterDeclaration[]): FunctionDeclaration {
             if (node.name !== name || node.body !== body || node.parameters !== parameters) {
-                return createFunctionDeclaration(name, body, parameters, node, node.flags);
+                return createFunctionDeclaration(name, body, parameters, node, node.flags, node.modifiers);
             }
             return node;
         }
 
-        export function createMethodDeclaration(name: DeclarationName, body: Block, parameters: ParameterDeclaration[], location: TextRange, flags?: NodeFlags): MethodDeclaration {
+        export function createMethodDeclaration(name: DeclarationName, body: Block, parameters: ParameterDeclaration[], location: TextRange, flags?: NodeFlags, modifiers?: Node[]): MethodDeclaration {
             var node = beginNode<MethodDeclaration>(SyntaxKind.Method);
             node.name = name;
             node.body = body;
             node.parameters = createNodeArray(parameters);
-            return finishNode(node, location, flags);
+            return finishNode(node, location, flags, modifiers);
         }
 
         export function updateMethodDeclaration(node: MethodDeclaration, name: DeclarationName, body: Block, parameters: ParameterDeclaration[]): MethodDeclaration {
             if (node.name !== name || node.body !== body || node.parameters !== parameters) {
-                return createMethodDeclaration(name, body, parameters, node, node.flags);
+                return createMethodDeclaration(name, body, parameters, node, node.flags, node.modifiers);
             }
             return node;
         }
 
-        export function createGetAccessor(name: DeclarationName, body: Block, parameters: ParameterDeclaration[], location: TextRange, flags?: NodeFlags): AccessorDeclaration {
+        export function createGetAccessor(name: DeclarationName, body: Block, parameters: ParameterDeclaration[], location: TextRange, flags?: NodeFlags, modifiers?: Node[]): AccessorDeclaration {
             var node = beginNode<AccessorDeclaration>(SyntaxKind.GetAccessor);
             node.name = name;
             node.body = body;
             node.parameters = createNodeArray(parameters);
-            return finishNode(node, location, flags);
+            return finishNode(node, location, flags, modifiers);
         }
 
         export function updateGetAccessor(node: AccessorDeclaration, name: DeclarationName, body: Block, parameters: ParameterDeclaration[]): AccessorDeclaration {
             if (node.name !== name || node.body !== body || node.parameters !== parameters) {
-                return createGetAccessor(name, body, parameters, node, node.flags);
+                return createGetAccessor(name, body, parameters, node, node.flags, node.modifiers);
             }
             return node;
         }
@@ -183,26 +183,26 @@ module ts {
             return node;
         }
 
-        export function createFunctionExpression(name: Identifier, body: Expression | Block, parameters: ParameterDeclaration[], location: TextRange, flags?: NodeFlags): FunctionExpression {
+        export function createFunctionExpression(name: Identifier, body: Expression | Block, parameters: ParameterDeclaration[], location: TextRange, flags?: NodeFlags, modifiers?: Node[]): FunctionExpression {
             var node = beginNode<FunctionExpression>(SyntaxKind.FunctionExpression);
             node.name = name;
             node.body = body;
             node.parameters = createNodeArray(parameters);
-            return finishNode(node, location, flags);
+            return finishNode(node, location, flags, modifiers);
         }
 
         export function updateFunctionExpression(node: FunctionExpression, name: Identifier, body: Expression | Block, parameters: ParameterDeclaration[]): FunctionExpression {
             if (node.name !== name || node.body !== body || node.parameters !== parameters) {
-                return createFunctionExpression(name, body, parameters, node, node.flags);
+                return createFunctionExpression(name, body, parameters, node, node.flags, node.modifiers);
             }
             return node;
         }
 
-        export function createArrowFunction(body: Expression | Block, parameters: ParameterDeclaration[], location: TextRange, flags?: NodeFlags): FunctionExpression {
+        export function createArrowFunction(body: Expression | Block, parameters: ParameterDeclaration[], location: TextRange, flags?: NodeFlags, modifiers?: Node[]): FunctionExpression {
             var node = beginNode<FunctionExpression>(SyntaxKind.ArrowFunction);
             node.body = body;
             node.parameters = createNodeArray(parameters);
-            return finishNode(node, location, flags);
+            return finishNode(node, location, flags, modifiers);
         }
 
         export function updateArrowExpression(node: FunctionExpression, body: Expression | Block, parameters: ParameterDeclaration[]): FunctionExpression {
@@ -508,18 +508,18 @@ module ts {
             return node;
         }
 
-        export function createForInStatement(declaration: VariableDeclaration, variable: Expression, expression: Expression, statement: Statement, location: TextRange, flags?: NodeFlags): ForInStatement {
+        export function createForInStatement(declarations: VariableDeclaration[], variable: Expression, expression: Expression, statement: Statement, location: TextRange, flags?: NodeFlags): ForInStatement {
             var node = beginNode<ForInStatement>(SyntaxKind.ForInStatement);
-            node.declaration = declaration;
+            node.declarations = createNodeArray(declarations);
             node.variable = variable;
             node.expression = expression;
             node.statement = statement;
             return finishNode(node, location, flags);
         }
 
-        export function updateForInStatement(node: ForInStatement, declaration: VariableDeclaration, variable: Expression, expression: Expression, statement: Statement): ForInStatement {
-            if (node.declaration !== declaration || node.variable !== variable || node.expression !== expression || node.statement !== statement) {
-                return createForInStatement(declaration, variable, expression, statement, node, node.flags);
+        export function updateForInStatement(node: ForInStatement, declarations: VariableDeclaration[], variable: Expression, expression: Expression, statement: Statement): ForInStatement {
+            if (node.declarations !== declarations || node.variable !== variable || node.expression !== expression || node.statement !== statement) {
+                return createForInStatement(declarations, variable, expression, statement, node, node.flags);
             }
             return node;
         }
@@ -725,7 +725,7 @@ module ts {
             return node;
         }
 
-        function finishNode<TNode extends Node>(node: TNode, location: TextRange, flags?: NodeFlags): TNode {
+        function finishNode<TNode extends Node>(node: TNode, location: TextRange, flags?: NodeFlags, modifiers?: Node[]): TNode {
             if (location) {
                 node.pos = location.pos;
                 node.end = location.end;
@@ -733,6 +733,11 @@ module ts {
 
             if (flags) {
                 node.flags = flags;
+            }
+
+            if (modifiers) {
+                node.modifiers = <ModifiersArray>modifiers;
+                node.flags |= node.modifiers.flags;
             }
 
             forEachChild(node, child => childAdded(node, child));
