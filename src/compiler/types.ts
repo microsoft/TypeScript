@@ -697,7 +697,7 @@ module ts {
 
     export type Label = number;
 
-    export interface BodyGenerator {
+    export interface CodeGenerator {
         declareLocal(name?: string): Identifier;
         defineLabel(): Label;
         markLabel(label: Label): void;

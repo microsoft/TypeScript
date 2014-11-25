@@ -34,7 +34,7 @@ module ts {
 
     /** rewrites an async function or method declaration */
     export function rewriteAsyncFunction(node: FunctionLikeDeclaration, compilerOptions: CompilerOptions): FunctionLikeDeclaration {
-        var builder: BodyGenerator;
+        var builder: CodeGenerator;
         var renames: Map<Identifier>;
 
         return rewriteWorker();
@@ -1110,7 +1110,7 @@ module ts {
 
         function rewriteDownlevelWorker(): FunctionLikeDeclaration {
             renames = {};
-            builder = createBodyGenerator();
+            builder = createCodeGenerator();
             builder.setLocation(node.body);
             visit(node.body, builder.emitNode);
 

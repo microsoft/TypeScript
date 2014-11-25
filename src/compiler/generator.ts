@@ -5,7 +5,7 @@ module ts {
     enum BlockAction {
         Open,
         Close,
-        }
+    }
 
     enum BlockKind {
         Exception,
@@ -30,15 +30,11 @@ module ts {
 
     interface ExceptionBlock extends BlockScope {
         state: ExceptionBlockState;
-        startOffset: number;
         startLabel: Label;
         catchVariable?: Identifier;
         catchLabel?: Label;
-        catchOffset?: number;
         finallyLabel?: Label;
-        finallyOffset?: number;
         endLabel: Label;
-        endOffset?: number;
     }
 
     interface ContinueBreakBlock extends BlockScope {
@@ -51,7 +47,7 @@ module ts {
         expression: Expression;
     }
 
-    export function createBodyGenerator(): BodyGenerator {
+    export function createCodeGenerator(): CodeGenerator {
         // locations
         var initialLocation: TextRange;
         var relatedLocation: TextRange;
@@ -154,10 +150,7 @@ module ts {
                 kind: BlockKind.Exception,
                 state: ExceptionBlockState.Try,
                 startLabel,
-                startOffset: operations.length,
                 endLabel,
-                catchOffset: -1,
-                finallyOffset: -1
             });
             hasProtectedRegions = true;
             return endLabel;
@@ -173,7 +166,6 @@ module ts {
             markLabel(catchLabel);
             exception.state = ExceptionBlockState.Catch;
             exception.catchVariable = variable;
-            exception.catchOffset = operations.length;
             exception.catchLabel = catchLabel;
         }
 
@@ -187,7 +179,6 @@ module ts {
             var finallyLabel = defineLabel();
             markLabel(finallyLabel);
             exception.state = ExceptionBlockState.Finally;
-            exception.finallyOffset = operations.length;
             exception.finallyLabel = finallyLabel;
         }
 
@@ -359,7 +350,7 @@ module ts {
                 args = [createGenerated(args[0], args[1])];
             } else if (typeof args[1] === "string") {
                 args = [args[0], createGenerated(args[1], args[2])];
-            } 
+            }
 
             if (code === OpCode.Statement) {
                 var node = args[0];
@@ -493,7 +484,7 @@ module ts {
                 if (createCase) {
                     var labelNumber = clauses.length;
                     labelNumbers[label] = labelNumber;
-                    
+
                     var clause = factory.createCaseClause(createLabel(label), [], relatedLocation);
                     clauses.push(clause);
                     statements = clause.statements;
@@ -515,7 +506,7 @@ module ts {
                             finallyLabel: createLabel(exception.finallyLabel),
                             endLabel: createLabel(exception.endLabel)
                         }));
-                    } 
+                    }
                 }
 
                 switch (code) {
