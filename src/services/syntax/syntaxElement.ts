@@ -17,40 +17,29 @@ module TypeScript {
         return undefined;
     }
 
-    export function parsedInStrictModeContext(node: ISyntaxNode): boolean {
+    export function parserContextFlags(node: ISyntaxNode): ParserContextFlags {
         var info = node.__data;
         if (info === undefined) {
-            return false;
+            return 0;
         }
 
-        return (info & SyntaxNodeConstants.ParsedInStrictModeContext) !== 0;
+        return info & ParserContextFlags.Mask;
+    }
+
+    export function parsedInStrictModeContext(node: ISyntaxNode): boolean {
+        return (parserContextFlags(node) & ParserContextFlags.StrictMode) !== 0;
     }
 
     export function parsedInDisallowInContext(node: ISyntaxNode): boolean {
-        var info = node.__data;
-        if (info === undefined) {
-            return false;
-        }
-
-        return (info & SyntaxNodeConstants.ParsedInDisallowInContext) !== 0;
+        return (parserContextFlags(node) & ParserContextFlags.DisallowIn) !== 0;
     }
 
     export function parsedInYieldContext(node: ISyntaxNode): boolean {
-        var info = node.__data;
-        if (info === undefined) {
-            return false;
-        }
-
-        return (info & SyntaxNodeConstants.ParsedInYieldContext) !== 0;
+        return (parserContextFlags(node) & ParserContextFlags.Yield) !== 0;
     }
 
     export function parsedInGeneratorParameterContext(node: ISyntaxNode): boolean {
-        var info = node.__data;
-        if (info === undefined) {
-            return false;
-        }
-
-        return (info & SyntaxNodeConstants.ParsedInGeneratorParameterContext) !== 0;
+        return (parserContextFlags(node) & ParserContextFlags.GeneratorParameter) !== 0;
     }
 
     export function previousToken(token: ISyntaxToken): ISyntaxToken {

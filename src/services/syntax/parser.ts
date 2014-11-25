@@ -195,11 +195,7 @@ module TypeScript.Parser {
         //
         // Getting this all correct is tricky and requires careful reading of the grammar to 
         // understand when these values should be changed versus when they should be inherited.
-        var strictModeContext: boolean = false;
-        var disallowInContext: boolean = false;
-        var yieldContext: boolean = false;
-        var generatorParameterContext: boolean = false;
-        var contextFlags: number = 0;
+        var contextFlags: ParserContextFlags = 0;
 
         // Current state of the parser.  If we need to rewind we will store and reset these values as
         // appropriate.
@@ -223,7 +219,7 @@ module TypeScript.Parser {
 
             // Now, clear out our state so that our singleton parser doesn't keep things alive.
             diagnostics = [];
-            contextFlags = SyntaxNodeConstants.None;
+            contextFlags = 0;
             fileName = undefined;
             source.release();
             source = undefined;
@@ -284,10 +280,7 @@ module TypeScript.Parser {
                 // are unaffected by strict mode.  It's just the parser will decide what to do with it
                 // differently depending on what mode it is in.
                 if (node &&
-                    parsedInStrictModeContext(node) === strictModeContext &&
-                    parsedInDisallowInContext(node) === disallowInContext &&
-                    parsedInYieldContext(node) === yieldContext &&
-                    parsedInGeneratorParameterContext(node) === generatorParameterContext) {
+                    parserContextFlags(node) === contextFlags) {
 
                     return node;
                 }
@@ -421,7 +414,7 @@ module TypeScript.Parser {
 
             // If we have a 'yield' keyword, and we're in the [yield] context, then 'yield' is 
             // considered a keyword and is not an identifier.
-            if (tokenKind === SyntaxKind.YieldKeyword && yieldContext) {
+            if (tokenKind === SyntaxKind.YieldKeyword && inYieldContext()) {
                 return false;
             }
 
@@ -431,7 +424,7 @@ module TypeScript.Parser {
                 if (tokenKind <= SyntaxKind.LastFutureReservedStrictKeyword) {
                     // Could be a keyword or identifier.  It's an identifier if we're not in strict
                     // mode.
-                    return !strictModeContext;
+                    return !inStrictModeContext();
                 }
 
                 // If it's typescript keyword, then it's actually a javascript identifier.
@@ -633,39 +626,52 @@ module TypeScript.Parser {
             throw Errors.invalidOperation();
         }
 
-        function updateContextFlags() {
-            contextFlags =
-                (strictModeContext ? SyntaxNodeConstants.ParsedInStrictModeContext : 0) |
-                (disallowInContext ? SyntaxNodeConstants.ParsedInDisallowInContext : 0) |
-                (yieldContext ? SyntaxNodeConstants.ParsedInYieldContext : 0) |
-                (generatorParameterContext ? SyntaxNodeConstants.ParsedInGeneratorParameterContext : 0);
+        function setContextFlag(val: boolean, flag: ParserContextFlags) {
+            if (val) {
+                contextFlags |= flag;
+            }
+            else {
+                contextFlags &= ~flag;
+            }
         }
 
         function setStrictModeContext(val: boolean) {
-            strictModeContext = val;
-            updateContextFlags();
+            setContextFlag(val, ParserContextFlags.StrictMode);
         }
 
         function setDisallowInContext(val: boolean) {
-            disallowInContext = val;
-            updateContextFlags();
+            setContextFlag(val, ParserContextFlags.DisallowIn);
         }
 
         function setYieldContext(val: boolean) {
-            yieldContext = val;
-            updateContextFlags();
+            setContextFlag(val, ParserContextFlags.Yield);
         }
 
         function setGeneratorParameterContext(val: boolean) {
-            generatorParameterContext = val;
-            updateContextFlags();
+            setContextFlag(val, ParserContextFlags.GeneratorParameter);
+        }
+
+        function inStrictModeContext() {
+            return (contextFlags & ParserContextFlags.StrictMode) !== 0;
+        }
+
+        function inDisallowInContext() {
+            return (contextFlags & ParserContextFlags.DisallowIn) !== 0;
+        }
+
+        function inYieldContext() {
+            return (contextFlags & ParserContextFlags.Yield) !== 0;
+        }
+
+        function inGeneratorParameterContext() {
+            return (contextFlags & ParserContextFlags.GeneratorParameter) !== 0;
         }
 
         function parseSourceUnit(): SourceUnitSyntax {
             // Note: saving and restoring the 'isInStrictMode' state is not really necessary here
             // (as it will never be read afterwards).  However, for symmetry with the rest of the
             // parsing code, we do the same here.
-            var savedIsInStrictMode = strictModeContext
+            var savedIsInStrictMode = inStrictModeContext()
 
             // Note: any skipped tokens produced after the end of all the module elements will be
             // added as skipped trivia to the start of the EOF token.
@@ -692,7 +698,7 @@ module TypeScript.Parser {
         }
 
         function updateStrictModeState(items: any[]): void {
-            if (!strictModeContext) {
+            if (!inStrictModeContext()) {
                 // Check if all the items are directive prologue elements.
                 for (var i = 0, n = items.length; i < n; i++) {
                     if (!isDirectivePrologueElement(items[i])) {
@@ -972,7 +978,7 @@ module TypeScript.Parser {
         }
 
         function allowInAnd<T>(func: () => T): T {
-            if (disallowInContext) {
+            if (inDisallowInContext()) {
                 setDisallowInContext(false);
                 var result = func();
                 setDisallowInContext(true);
@@ -984,7 +990,7 @@ module TypeScript.Parser {
         }
 
         function disallowInAnd<T>(func: () => T): T {
-            if (disallowInContext) {
+            if (inDisallowInContext()) {
                 // no need to do anything special if 'in' is already disallowed.
                 return func();
             }
@@ -996,7 +1002,7 @@ module TypeScript.Parser {
         }
 
         function enterYieldContextAnd<T>(func: () => T): T {
-            if (yieldContext) {
+            if (inYieldContext()) {
                 // no need to do anything special if we're already in the [Yield] context.
                 return func();
             }
@@ -1008,7 +1014,7 @@ module TypeScript.Parser {
         }
 
         function exitYieldContextAnd<T>(func: () => T): T {
-            if (yieldContext) {
+            if (inYieldContext()) {
                 setYieldContext(false);
                 var result = func();
                 setYieldContext(true);
@@ -1108,7 +1114,7 @@ module TypeScript.Parser {
             //      [+GeneratorParameter] ClassHeritageopt { ClassBodyopt }
 
             if (isHeritageClause()) {
-                return isClassHeritageClause && generatorParameterContext
+                return isClassHeritageClause && inGeneratorParameterContext()
                     ? exitYieldContextAnd(parseHeritageClausesWorker)
                     : parseHeritageClausesWorker();
             }
@@ -1143,7 +1149,7 @@ module TypeScript.Parser {
             //      [+GeneratorParameter] ClassHeritageopt { ClassBodyopt }
 
             if (openBraceToken.fullWidth() > 0) {
-                return generatorParameterContext
+                return inGeneratorParameterContext()
                     ? exitYieldContextAnd(parseClassElements)
                     : parseClassElements();
             }
@@ -2446,11 +2452,11 @@ module TypeScript.Parser {
             if (_currentToken.kind === SyntaxKind.YieldKeyword) {
                 // If we have a 'yield' keyword, and htis is a context where yield expressions are 
                 // allowed, then definitely parse out a yield expression.
-                if (yieldContext) {
+                if (inYieldContext()) {
                     return true;
                 }
 
-                if (strictModeContext) {
+                if (inStrictModeContext()) {
                     // If we're in strict mode, then 'yield' is a keyword, could only ever start
                     // a yield expression.
                     return true;
@@ -2583,7 +2589,7 @@ module TypeScript.Parser {
                 }
 
                 // also, if it's the 'in' operator, only allow if our caller allows it.
-                if (tokenKind === SyntaxKind.InKeyword && disallowInContext) {
+                if (tokenKind === SyntaxKind.InKeyword && inDisallowInContext()) {
                     break;
                 }
 
@@ -3140,7 +3146,7 @@ module TypeScript.Parser {
             //
             // [Yield], on the other hand, is available, and is passed through.
 
-            var callSignature = parseCallSignature(/*requireCompleteTypeParameterList:*/ true, /*yield:*/ yieldContext, /*generatorParameter:*/ false);
+            var callSignature = parseCallSignature(/*requireCompleteTypeParameterList:*/ true, /*yield:*/ inYieldContext(), /*generatorParameter:*/ false);
 
             if (requireArrow && currentToken().kind !== SyntaxKind.EqualsGreaterThanToken) {
                 return undefined;
@@ -3502,7 +3508,7 @@ module TypeScript.Parser {
 
             var _currentToken = currentToken();
             if (_currentToken.kind === SyntaxKind.OpenBracketToken) {
-                return generatorParameterContext
+                return inGeneratorParameterContext()
                     ? exitYieldContextAnd(parseComputedPropertyName)
                     : parseComputedPropertyName();
             }
@@ -3585,17 +3591,17 @@ module TypeScript.Parser {
         }
 
         function parseFunctionBlockStatements() {
-            var savedIsInStrictMode = strictModeContext;
+            var savedIsInStrictMode = inStrictModeContext();
             var statements = parseSyntaxList<IStatementSyntax>(ListParsingState.Block_Statements, updateStrictModeState);
             setStrictModeContext(savedIsInStrictMode);
 
             return statements;
         }
 
-        function parseCallSignature(requireCompleteTypeParameterList: boolean, _yieldContext: boolean, _generatorParameterContext: boolean): CallSignatureSyntax {
+        function parseCallSignature(requireCompleteTypeParameterList: boolean, yieldContext: boolean, generatorParameterContext: boolean): CallSignatureSyntax {
             return new CallSignatureSyntax(contextFlags,
                 tryParseTypeParameterList(requireCompleteTypeParameterList),
-                parseParameterList(_yieldContext, _generatorParameterContext),
+                parseParameterList(yieldContext, generatorParameterContext),
                 parseOptionalTypeAnnotation(/*allowStringLiteral:*/ false));
         }
 
@@ -3645,7 +3651,7 @@ module TypeScript.Parser {
             return new ConstraintSyntax(contextFlags, eatToken(SyntaxKind.ExtendsKeyword), parseTypeOrExpression());
         }
 
-        function parseParameterList(_yieldContext: boolean, _generatorParameterContext: boolean): ParameterListSyntax {
+        function parseParameterList(yieldContext: boolean, generatorParameterContext: boolean): ParameterListSyntax {
             // FormalParameters[Yield,GeneratorParameter] :
             //      ...
             //
@@ -3661,11 +3667,11 @@ module TypeScript.Parser {
             //      [+GeneratorParameter]BindingIdentifier[Yield]Initializer[In]opt
             //      [~GeneratorParameter]BindingIdentifier[?Yield]Initializer[In, ?Yield]opt
 
-            var savedYieldContext = yieldContext;
-            var savedGeneratorParameterContext = generatorParameterContext;
+            var savedYieldContext = inYieldContext();
+            var savedGeneratorParameterContext = inGeneratorParameterContext();
 
-            setYieldContext(_yieldContext);
-            setGeneratorParameterContext(_generatorParameterContext);
+            setYieldContext(yieldContext);
+            setGeneratorParameterContext(generatorParameterContext);
 
             var openParenToken: ISyntaxToken;
             var result = new ParameterListSyntax(contextFlags,
@@ -3747,8 +3753,8 @@ module TypeScript.Parser {
         function tryParseType(): ITypeSyntax {
             // The rules about 'yield' only apply to actual code/expression contexts.  They don't
             // apply to 'type' contexts.  So we disable these parameters here before moving on.
-            var savedYieldContext = yieldContext;
-            var savedGeneratorParameterContext = generatorParameterContext;
+            var savedYieldContext = inYieldContext();
+            var savedGeneratorParameterContext = inGeneratorParameterContext();
 
             setYieldContext(false);
             setGeneratorParameterContext(false);
@@ -3997,7 +4003,7 @@ module TypeScript.Parser {
             //      [+GeneratorParameter]BindingIdentifier[Yield]Initializer[In]opt
             //      [~GeneratorParameter]BindingIdentifier[?Yield]Initializer[In, ?Yield]opt
 
-            var identifier = generatorParameterContext
+            var identifier = inGeneratorParameterContext()
                 ? enterYieldContextAnd(eatIdentifierToken)
                 : eatIdentifierToken();
 
@@ -4006,7 +4012,7 @@ module TypeScript.Parser {
 
             var equalsValueClause: EqualsValueClauseSyntax = undefined;
             if (isEqualsValueClause(/*inParameter*/ true)) {
-                equalsValueClause = generatorParameterContext
+                equalsValueClause = inGeneratorParameterContext()
                     ? exitYieldContextAnd(parseEqualsValueClause)
                     : parseEqualsValueClause();
             }
@@ -4388,7 +4394,7 @@ module TypeScript.Parser {
         }
 
         function isExpectedVariableDeclaration_VariableDeclaratorsTerminator(): boolean {
-            if (disallowInContext) {
+            if (inDisallowInContext()) {
                 // This is the case when we're parsing variable declarations in a for/for-in statement.
                 var tokenKind = currentToken().kind;
 
