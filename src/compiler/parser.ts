@@ -4302,12 +4302,20 @@ module ts {
         function checkFunctionDeclaration(node: FunctionLikeDeclaration) {
             return checkAnyParsedSignature(node) ||
                 checkFunctionName(node.name) ||
-                checkForBodyInAmbientContext(node.body, /*isConstructor:*/ false);
+                checkForBodyInAmbientContext(node.body, /*isConstructor:*/ false) ||
+                checkForGenerator(node);
+        }
+
+        function checkForGenerator(node: Node) {
+            if (node.flags & NodeFlags.Generator) {
+                return grammarErrorOnFirstToken(node, Diagnostics.generators_are_not_currently_supported);
+            }
         }
 
         function checkFunctionExpression(node: FunctionExpression) {
             return checkAnyParsedSignature(node) ||
-                checkFunctionName(node.name);
+                checkFunctionName(node.name) ||
+                checkForGenerator(node);
         }
 
         function checkFunctionName(name: Node) {
@@ -4386,7 +4394,8 @@ module ts {
         function checkMethod(node: MethodDeclaration) {
             return checkAnyParsedSignature(node) ||
                 checkForBodyInAmbientContext(node.body, /*isConstructor:*/ false) ||
-                (node.parent.kind === SyntaxKind.ClassDeclaration && checkForInvalidQuestionMark(node, Diagnostics.A_class_member_cannot_be_declared_optional));
+                (node.parent.kind === SyntaxKind.ClassDeclaration && checkForInvalidQuestionMark(node, Diagnostics.A_class_member_cannot_be_declared_optional)) ||
+                checkForGenerator(node);
         }
 
         function checkForBodyInAmbientContext(body: Block | Expression, isConstructor: boolean): boolean {
@@ -4732,7 +4741,8 @@ module ts {
         }
 
         function checkPropertyAssignment(node: PropertyDeclaration) {
-            return checkForInvalidQuestionMark(node, Diagnostics.An_object_member_cannot_be_declared_optional);
+            return checkForInvalidQuestionMark(node, Diagnostics.An_object_member_cannot_be_declared_optional) ||
+                checkForGenerator(node);
         }
 
         function checkForInvalidQuestionMark(node: Declaration, message: DiagnosticMessage) {
@@ -4963,6 +4973,7 @@ module ts {
             if (!(node.parserContextFlags & ParserContextFlags.Yield)) {
                 return grammarErrorOnFirstToken(node, Diagnostics.yield_expression_must_be_contained_within_a_generator_declaration);
             }
+            return grammarErrorOnFirstToken(node, Diagnostics.yield_expressions_are_not_currently_supported);
         }
     }
 

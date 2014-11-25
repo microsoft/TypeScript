@@ -1,8 +1,0 @@
-=== tests/cases/conformance/es6/functionDeclarations/FunctionDeclaration10_es6.ts ===
-function * foo(a = yield => yield) {
->foo : (a?: (yield: any) => any) => void
->a : (yield: any) => any
->yield => yield : (yield: any) => any
->yield : any
->yield : any
-}

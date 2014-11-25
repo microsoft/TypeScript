@@ -1,0 +1,8 @@
+tests/cases/conformance/es6/functionDeclarations/FunctionDeclaration1_es6.ts(1,1): error TS9001: 'generators' are not currently supported.
+
+
+==== tests/cases/conformance/es6/functionDeclarations/FunctionDeclaration1_es6.ts (1 errors) ====
+    function * foo() {
+    ~~~~~~~~
+!!! error TS9001: 'generators' are not currently supported.
+    }
