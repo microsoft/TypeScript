@@ -760,11 +760,7 @@ module ts {
             while (true) {
                 var ch = text.charCodeAt(pos);
                 var valueOfCh = ch - CharacterCodes._0;
-                if (!isDigit(ch)) {
-                    break;
-                }
-                // We know at this point that ch must be digit
-                if (valueOfCh >= base) {
+                if (!isDigit(ch) || valueOfCh >= base) {
                     break;
                 }
                 value = value * base + valueOfCh;
