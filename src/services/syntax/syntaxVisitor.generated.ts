@@ -94,6 +94,7 @@ module TypeScript {
             case SyntaxKind.Parameter: return visitor.visitParameter(<ParameterSyntax>element);
             case SyntaxKind.EnumElement: return visitor.visitEnumElement(<EnumElementSyntax>element);
             case SyntaxKind.TypeAnnotation: return visitor.visitTypeAnnotation(<TypeAnnotationSyntax>element);
+            case SyntaxKind.ExpressionBody: return visitor.visitExpressionBody(<ExpressionBody>element);
             case SyntaxKind.ComputedPropertyName: return visitor.visitComputedPropertyName(<ComputedPropertyNameSyntax>element);
             case SyntaxKind.ExternalModuleReference: return visitor.visitExternalModuleReference(<ExternalModuleReferenceSyntax>element);
             case SyntaxKind.ModuleNameModuleReference: return visitor.visitModuleNameModuleReference(<ModuleNameModuleReferenceSyntax>element);
@@ -193,6 +194,7 @@ module TypeScript {
         visitParameter(node: ParameterSyntax): any;
         visitEnumElement(node: EnumElementSyntax): any;
         visitTypeAnnotation(node: TypeAnnotationSyntax): any;
+        visitExpressionBody(node: ExpressionBody): any;
         visitComputedPropertyName(node: ComputedPropertyNameSyntax): any;
         visitExternalModuleReference(node: ExternalModuleReferenceSyntax): any;
         visitModuleNameModuleReference(node: ModuleNameModuleReferenceSyntax): any;

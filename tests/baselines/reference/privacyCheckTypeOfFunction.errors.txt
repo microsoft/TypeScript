@@ -1,4 +1,4 @@
-tests/cases/compiler/privacyCheckTypeOfFunction.ts(3,12): error TS4025: Exported variable 'x' has or is using private name 'foo'.
+tests/cases/compiler/privacyCheckTypeOfFunction.ts(3,22): error TS4025: Exported variable 'x' has or is using private name 'foo'.
 tests/cases/compiler/privacyCheckTypeOfFunction.ts(4,12): error TS4025: Exported variable 'b' has or is using private name 'foo'.
 
 
@@ -6,7 +6,7 @@ tests/cases/compiler/privacyCheckTypeOfFunction.ts(4,12): error TS4025: Exported
     function foo() {
     }
     export var x: typeof foo;
-               ~
+                         ~~~
 !!! error TS4025: Exported variable 'x' has or is using private name 'foo'.
     export var b = foo;
                ~

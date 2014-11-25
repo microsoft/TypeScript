@@ -184,7 +184,7 @@ export declare module M.Q {
         interface I {
         }
     }
-    interface b extends M.C {
+    interface b extends M.b {
     }
     interface I extends M.c.I {
     }

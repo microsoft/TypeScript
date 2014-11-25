@@ -5,7 +5,7 @@
 
 goTo.marker('1');
 verify.signatureHelpCountIs(1);
-verify.currentSignatureParamterCountIs(2);
+verify.currentSignatureParameterCountIs(2);
 verify.currentSignatureHelpIs('fnTest(str: string, num: number): void');
 
 verify.currentParameterHelpArgumentNameIs('str');

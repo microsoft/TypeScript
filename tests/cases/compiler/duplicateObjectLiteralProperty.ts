@@ -1,3 +1,4 @@
+// @target: ES5
 var x = {
     a: 1,
     b: true, // OK

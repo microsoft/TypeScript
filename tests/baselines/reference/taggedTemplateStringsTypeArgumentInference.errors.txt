@@ -1,31 +1,31 @@
-tests/cases/conformance/es6/templates/taggedTemplateStringsTypeArgumentInference.ts(5,1): error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
-tests/cases/conformance/es6/templates/taggedTemplateStringsTypeArgumentInference.ts(9,1): error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
-tests/cases/conformance/es6/templates/taggedTemplateStringsTypeArgumentInference.ts(13,1): error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
-tests/cases/conformance/es6/templates/taggedTemplateStringsTypeArgumentInference.ts(16,1): error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
-tests/cases/conformance/es6/templates/taggedTemplateStringsTypeArgumentInference.ts(20,1): error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
-tests/cases/conformance/es6/templates/taggedTemplateStringsTypeArgumentInference.ts(23,1): error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
-tests/cases/conformance/es6/templates/taggedTemplateStringsTypeArgumentInference.ts(27,1): error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
-tests/cases/conformance/es6/templates/taggedTemplateStringsTypeArgumentInference.ts(28,1): error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
-tests/cases/conformance/es6/templates/taggedTemplateStringsTypeArgumentInference.ts(29,1): error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
-tests/cases/conformance/es6/templates/taggedTemplateStringsTypeArgumentInference.ts(33,1): error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
-tests/cases/conformance/es6/templates/taggedTemplateStringsTypeArgumentInference.ts(34,1): error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
-tests/cases/conformance/es6/templates/taggedTemplateStringsTypeArgumentInference.ts(35,1): error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
-tests/cases/conformance/es6/templates/taggedTemplateStringsTypeArgumentInference.ts(39,1): error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
-tests/cases/conformance/es6/templates/taggedTemplateStringsTypeArgumentInference.ts(40,1): error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
-tests/cases/conformance/es6/templates/taggedTemplateStringsTypeArgumentInference.ts(41,1): error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
-tests/cases/conformance/es6/templates/taggedTemplateStringsTypeArgumentInference.ts(45,1): error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
-tests/cases/conformance/es6/templates/taggedTemplateStringsTypeArgumentInference.ts(46,1): error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
-tests/cases/conformance/es6/templates/taggedTemplateStringsTypeArgumentInference.ts(47,1): error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
-tests/cases/conformance/es6/templates/taggedTemplateStringsTypeArgumentInference.ts(51,1): error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
-tests/cases/conformance/es6/templates/taggedTemplateStringsTypeArgumentInference.ts(52,1): error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
-tests/cases/conformance/es6/templates/taggedTemplateStringsTypeArgumentInference.ts(53,1): error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
-tests/cases/conformance/es6/templates/taggedTemplateStringsTypeArgumentInference.ts(57,9): error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
-tests/cases/conformance/es6/templates/taggedTemplateStringsTypeArgumentInference.ts(58,1): error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
-tests/cases/conformance/es6/templates/taggedTemplateStringsTypeArgumentInference.ts(64,11): error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
-tests/cases/conformance/es6/templates/taggedTemplateStringsTypeArgumentInference.ts(77,11): error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
-tests/cases/conformance/es6/templates/taggedTemplateStringsTypeArgumentInference.ts(81,11): error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
-tests/cases/conformance/es6/templates/taggedTemplateStringsTypeArgumentInference.ts(86,9): error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
-tests/cases/conformance/es6/templates/taggedTemplateStringsTypeArgumentInference.ts(90,11): error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
+tests/cases/conformance/es6/templates/taggedTemplateStringsTypeArgumentInference.ts(5,10): error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
+tests/cases/conformance/es6/templates/taggedTemplateStringsTypeArgumentInference.ts(9,17): error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
+tests/cases/conformance/es6/templates/taggedTemplateStringsTypeArgumentInference.ts(13,16): error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
+tests/cases/conformance/es6/templates/taggedTemplateStringsTypeArgumentInference.ts(16,16): error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
+tests/cases/conformance/es6/templates/taggedTemplateStringsTypeArgumentInference.ts(20,16): error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
+tests/cases/conformance/es6/templates/taggedTemplateStringsTypeArgumentInference.ts(23,16): error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
+tests/cases/conformance/es6/templates/taggedTemplateStringsTypeArgumentInference.ts(27,15): error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
+tests/cases/conformance/es6/templates/taggedTemplateStringsTypeArgumentInference.ts(28,15): error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
+tests/cases/conformance/es6/templates/taggedTemplateStringsTypeArgumentInference.ts(29,15): error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
+tests/cases/conformance/es6/templates/taggedTemplateStringsTypeArgumentInference.ts(33,15): error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
+tests/cases/conformance/es6/templates/taggedTemplateStringsTypeArgumentInference.ts(34,15): error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
+tests/cases/conformance/es6/templates/taggedTemplateStringsTypeArgumentInference.ts(35,15): error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
+tests/cases/conformance/es6/templates/taggedTemplateStringsTypeArgumentInference.ts(39,15): error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
+tests/cases/conformance/es6/templates/taggedTemplateStringsTypeArgumentInference.ts(40,15): error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
+tests/cases/conformance/es6/templates/taggedTemplateStringsTypeArgumentInference.ts(41,15): error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
+tests/cases/conformance/es6/templates/taggedTemplateStringsTypeArgumentInference.ts(45,15): error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
+tests/cases/conformance/es6/templates/taggedTemplateStringsTypeArgumentInference.ts(46,15): error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
+tests/cases/conformance/es6/templates/taggedTemplateStringsTypeArgumentInference.ts(47,15): error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
+tests/cases/conformance/es6/templates/taggedTemplateStringsTypeArgumentInference.ts(51,15): error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
+tests/cases/conformance/es6/templates/taggedTemplateStringsTypeArgumentInference.ts(52,15): error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
+tests/cases/conformance/es6/templates/taggedTemplateStringsTypeArgumentInference.ts(53,15): error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
+tests/cases/conformance/es6/templates/taggedTemplateStringsTypeArgumentInference.ts(57,23): error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
+tests/cases/conformance/es6/templates/taggedTemplateStringsTypeArgumentInference.ts(58,3): error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
+tests/cases/conformance/es6/templates/taggedTemplateStringsTypeArgumentInference.ts(64,25): error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
+tests/cases/conformance/es6/templates/taggedTemplateStringsTypeArgumentInference.ts(77,25): error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
+tests/cases/conformance/es6/templates/taggedTemplateStringsTypeArgumentInference.ts(81,25): error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
+tests/cases/conformance/es6/templates/taggedTemplateStringsTypeArgumentInference.ts(86,23): error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
+tests/cases/conformance/es6/templates/taggedTemplateStringsTypeArgumentInference.ts(90,25): error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
 tests/cases/conformance/es6/templates/taggedTemplateStringsTypeArgumentInference.ts(64,11): error TS2453: The type argument for type parameter 'T' cannot be inferred from the usage. Consider specifying the type arguments explicitly.
   Type argument candidate 'string' is not a valid type argument because it is not a supertype of candidate 'number'.
 tests/cases/conformance/es6/templates/taggedTemplateStringsTypeArgumentInference.ts(77,11): error TS2453: The type argument for type parameter 'T' cannot be inferred from the usage. Consider specifying the type arguments explicitly.
@@ -38,104 +38,104 @@ tests/cases/conformance/es6/templates/taggedTemplateStringsTypeArgumentInference
     // Generic tag with one parameter
     function noParams<T>(n: T) { }
     noParams ``;
-    ~~~~~~~~~~~
+             ~~
 !!! error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
     
     // Generic tag with parameter which does not use type parameter
     function noGenericParams<T>(n: string[]) { }
     noGenericParams ``;
-    ~~~~~~~~~~~~~~~~~~
+                    ~~
 !!! error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
     
     // Generic tag with multiple type parameters and only one used in parameter type annotation
     function someGenerics1a<T, U>(n: T, m: number) { }
     someGenerics1a `${3}`;
-    ~~~~~~~~~~~~~~~~~~~~~
+                   ~~~
 !!! error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
     
     function someGenerics1b<T, U>(n: string[], m: U) { }
     someGenerics1b `${3}`;
-    ~~~~~~~~~~~~~~~~~~~~~
+                   ~~~
 !!! error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
     
     // Generic tag with argument of function type whose parameter is of type parameter type
     function someGenerics2a<T>(strs: string[], n: (x: T) => void) { }
     someGenerics2a `${(n: string) => n}`;
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                   ~~~
 !!! error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
     
     function someGenerics2b<T, U>(strs: string[], n: (x: T, y: U) => void) { }
     someGenerics2b `${ (n: string, x: number) => n }`;
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                   ~~~
 !!! error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
     
     // Generic tag with argument of function type whose parameter is not of type parameter type but body/return type uses type parameter
     function someGenerics3<T>(strs: string[], producer: () => T) { }
     someGenerics3 `${() => ''}`;
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                  ~~~
 !!! error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
     someGenerics3 `${() => undefined}`;
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                  ~~~
 !!! error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
     someGenerics3 `${() => 3}`;
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~
+                  ~~~
 !!! error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
     
     // 2 parameter generic tag with argument 1 of type parameter type and argument 2 of function type whose parameter is of type parameter type
     function someGenerics4<T, U>(strs: string[], n: T, f: (x: U) => void) { }
     someGenerics4 `${4}${ () => null }`;
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                  ~~~
 !!! error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
     someGenerics4 `${''}${ () => 3 }`;
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                  ~~~
 !!! error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
     someGenerics4 `${ null }${ null }`;
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                  ~~~
 !!! error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
     
     // 2 parameter generic tag with argument 2 of type parameter type and argument 1 of function type whose parameter is of type parameter type
     function someGenerics5<U, T>(strs: string[], n: T, f: (x: U) => void) { }
     someGenerics5 `${ 4 } ${ () => null }`;
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                  ~~~
 !!! error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
     someGenerics5 `${ '' }${ () => 3 }`;
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                  ~~~
 !!! error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
     someGenerics5 `${null}${null}`;
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                  ~~~
 !!! error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
     
     // Generic tag with multiple arguments of function types that each have parameters of the same generic type
     function someGenerics6<A>(strs: string[], a: (a: A) => A, b: (b: A) => A, c: (c: A) => A) { }
     someGenerics6 `${ n => n }${ n => n}${ n => n}`;
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                  ~~~
 !!! error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
     someGenerics6 `${ n => n }${ n => n}${ n => n}`;
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                  ~~~
 !!! error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
     someGenerics6 `${ (n: number) => n }${ (n: number) => n }${ (n: number) => n }`;
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                  ~~~
 !!! error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
     
     // Generic tag with multiple arguments of function types that each have parameters of different generic type
     function someGenerics7<A, B, C>(strs: string[], a: (a: A) => A, b: (b: B) => B, c: (c: C) => C) { }
     someGenerics7 `${ n => n }${ n => n }${ n => n }`;
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                  ~~~
 !!! error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
     someGenerics7 `${ n => n }${ n => n }${ n => n }`;
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                  ~~~
 !!! error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
     someGenerics7 `${(n: number) => n}${ (n: string) => n}${ (n: number) => n}`;
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                  ~~~
 !!! error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
     
     // Generic tag with argument of generic function type
     function someGenerics8<T>(strs: string[], n: T): T { return n; }
     var x = someGenerics8 `${ someGenerics7 }`;
-            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                          ~~~
 !!! error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
     x `${null}${null}${null}`;
-    ~~~~~~~~~~~~~~~~~~~~~~~~~
+      ~~~
 !!! error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
     
     // Generic tag with multiple parameters of generic type passed arguments with no best common type
@@ -143,7 +143,7 @@ tests/cases/conformance/es6/templates/taggedTemplateStringsTypeArgumentInference
         return null;
     }
     var a9a = someGenerics9 `${ '' }${ 0 }${ [] }`;
-              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                            ~~~
 !!! error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
               ~~~~~~~~~~~~~
 !!! error TS2453: The type argument for type parameter 'T' cannot be inferred from the usage. Consider specifying the type arguments explicitly.
@@ -161,7 +161,7 @@ tests/cases/conformance/es6/templates/taggedTemplateStringsTypeArgumentInference
     }
     
     var a9e = someGenerics9 `${ undefined }${ { x: 6, z: new Date() } }${ { x: 6, y: '' } }`;
-              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                            ~~~
 !!! error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
               ~~~~~~~~~~~~~
 !!! error TS2453: The type argument for type parameter 'T' cannot be inferred from the usage. Consider specifying the type arguments explicitly.
@@ -170,20 +170,20 @@ tests/cases/conformance/es6/templates/taggedTemplateStringsTypeArgumentInference
     
     // Generic tag with multiple parameters of generic type passed arguments with a single best common type
     var a9d = someGenerics9 `${ { x: 3 }}${ { x: 6 }}${ { x: 6 } }`;
-              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                            ~~~
 !!! error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
     var a9d: { x: number; };
     
     // Generic tag with multiple parameters of generic type where one argument is of type 'any'
     var anyVar: any;
     var a = someGenerics9 `${ 7 }${ anyVar }${ 4 }`;
-            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                          ~~~
 !!! error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
     var a: any;
     
     // Generic tag with multiple parameters of generic type where one argument is [] and the other is not 'any'
     var arr = someGenerics9 `${ [] }${ null }${ undefined }`;
-              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                            ~~~
 !!! error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
     var arr: any[];
     

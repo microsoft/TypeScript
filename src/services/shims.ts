@@ -98,9 +98,6 @@ module ts {
 
         getSignatureHelpItems(fileName: string, position: number): string;
 
-        // Obsolete.  Use getSignatureHelpItems instead.
-        getSignatureAtPosition(fileName: string, position: number): string;
-
         /**
          * Returns a JSON-encoded value of the type:
          * { canRename: boolean, localizedErrorMessage: string, displayName: string, fullDisplayName: string, kind: string, kindModifiers: string, triggerSpan: { start; length } }
@@ -164,7 +161,7 @@ module ts {
     }
 
     export interface ClassifierShim extends Shim {
-        getClassificationsForLine(text: string, lexState: EndOfLineState): string;
+        getClassificationsForLine(text: string, lexState: EndOfLineState, classifyKeywordsInGenerics?: boolean): string;
     }
 
     export interface CoreServicesShim extends Shim {
@@ -609,14 +606,6 @@ module ts {
                 });
         }
 
-        public getSignatureAtPosition(fileName: string, position: number): string {
-            return this.forwardJSONCall(
-                "getSignatureAtPosition('" + fileName + "', " + position + ")",
-                () => {
-                    return this.languageService.getSignatureAtPosition(fileName, position);
-                });
-        }
-
         /// GOTO DEFINITION
 
         /**
@@ -805,8 +794,8 @@ module ts {
         }
 
         /// COLORIZATION
-        public getClassificationsForLine(text: string, lexState: EndOfLineState): string {
-            var classification = this.classifier.getClassificationsForLine(text, lexState);
+        public getClassificationsForLine(text: string, lexState: EndOfLineState, classifyKeywordsInGenerics?: boolean): string {
+            var classification = this.classifier.getClassificationsForLine(text, lexState, classifyKeywordsInGenerics);
             var items = classification.entries;
             var result = "";
             for (var i = 0; i < items.length; i++) {

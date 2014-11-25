@@ -8,11 +8,11 @@
 
 goTo.marker('functionOverload1');
 verify.signatureHelpCountIs(2);
-verify.currentSignatureParamterCountIs(0);
+verify.currentSignatureParameterCountIs(0);
 verify.currentSignatureHelpIs('functionOverload(): any');
 
 goTo.marker('functionOverload2');
-verify.currentSignatureParamterCountIs(1);
+verify.currentSignatureParameterCountIs(1);
 verify.currentSignatureHelpIs('functionOverload(test: string): any');
 verify.currentParameterHelpArgumentNameIs("test");
 verify.currentParameterSpanIs("test: string");

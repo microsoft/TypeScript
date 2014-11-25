@@ -78,7 +78,7 @@ declare module X.Y.base {
     }
 }
 declare module X.Y.base.Z {
-    class W<TValue> extends base.W {
+    class W<TValue> extends X.Y.base.W {
         value: boolean;
     }
 }

@@ -1,0 +1,9 @@
+tests/cases/conformance/es6/computedPropertyNames/ComputedPropertyName8_es6.ts(2,12): error TS1022: An index signature parameter must have a type annotation.
+
+
+==== tests/cases/conformance/es6/computedPropertyNames/ComputedPropertyName8_es6.ts (1 errors) ====
+    class C {
+       public [e]
+               ~
+!!! error TS1022: An index signature parameter must have a type annotation.
+    }

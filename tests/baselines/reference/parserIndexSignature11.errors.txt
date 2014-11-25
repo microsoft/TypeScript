@@ -9,7 +9,7 @@ tests/cases/conformance/parser/ecmascript5/IndexSignatures/parserIndexSignature1
              ~
 !!! error TS1022: An index signature parameter must have a type annotation.
             [p1: string];
-            ~~~~~~~~~~~~
+            ~~~~~~~~~~~~~
 !!! error TS1021: An index signature must have a type annotation.
             [p2: string, p3: number];
              ~~

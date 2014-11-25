@@ -3,4 +3,4 @@
 ////const /**/c = 0 ;
 
 goTo.marker();
-verify.quickInfoIs("(constant) c: number");
+verify.quickInfoIs("(const) c: number");

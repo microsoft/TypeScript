@@ -290,8 +290,8 @@ module TypeScript.Syntax {
         return new RealizedToken(token.fullStart(), token.kind, token.isKeywordConvertedToIdentifier(), leadingTrivia, token.text());
     }
 
-    export function emptyToken(kind: SyntaxKind): ISyntaxToken {
-        return new EmptyToken(kind);
+    export function emptyToken(kind: SyntaxKind, fullStart: number): ISyntaxToken {
+        return new EmptyToken(kind, fullStart);
     }
 
     class EmptyToken implements ISyntaxToken {
@@ -300,17 +300,17 @@ module TypeScript.Syntax {
         public parent: ISyntaxElement;
         public childCount: number;
 
-        constructor(public kind: SyntaxKind) {
+        constructor(public kind: SyntaxKind, private _fullStart: number) {
         }
 
         public setFullStart(fullStart: number): void {
-            // An empty token is always at the -1 position.
+            this._fullStart = fullStart;
         }
 
         public childAt(index: number): ISyntaxElement { throw Errors.invalidOperation() }
 
         public clone(): ISyntaxToken {
-            return new EmptyToken(this.kind);
+            return new EmptyToken(this.kind, this._fullStart);
         }
 
         // Empty tokens are never incrementally reusable.
@@ -321,75 +321,7 @@ module TypeScript.Syntax {
         }
 
         public fullWidth() { return 0; }
-
-        private position(): number {
-            // It's hard for us to tell the position of an empty token at the eact time we create 
-            // it.  For example, we may have:
-            //
-            //      a / finally
-            //
-            // There will be a missing token detected after the forward slash, so it would be 
-            // tempting to set its position as the full-end of hte slash token. However, 
-            // immediately after that, the 'finally' token will be skipped and will be attached
-            // as skipped text to the forward slash.  This means the 'full-end' of the forward
-            // slash will change, and thus the empty token will now appear to be embedded inside
-            // another token.  This violates are rule that all tokens must only touch at the end,
-            // and makes enforcing invariants much harder.
-            //
-            // To address this we create the empty token with no known position, and then we 
-            // determine what it's position should be based on where it lies in the tree.  
-            // Specifically, we find the previous non-zero-width syntax element, and we consider
-            // the full-start of this token to be at the full-end of that element.
-
-            var previousElement = this.previousNonZeroWidthElement();
-            return !previousElement ? 0 : fullStart(previousElement) + fullWidth(previousElement);
-        }
-
-        private previousNonZeroWidthElement(): ISyntaxElement {
-            var current: ISyntaxElement = this;
-            while (true) {
-                var parent = current.parent;
-                if (parent === undefined) {
-                    Debug.assert(current.kind === SyntaxKind.SourceUnit, "We had a node without a parent that was not the root node!");
-
-                    // We walked all the way to the top, and never found a previous element.  This 
-                    // can happen with code like:
-                    //
-                    //      / b;
-                    //
-                    // We will have an empty identifier token as the first token in the tree.  In
-                    // this case, return undefined so that the position of the empty token will be 
-                    // considered to be 0.
-                    return undefined;
-                }
-
-                // Ok.  We have a parent.  First, find out which slot we're at in the parent.
-                for (var i = 0, n = childCount(parent); i < n; i++) {
-                    if (childAt(parent, i) === current) {
-                        break;
-                    }
-                }
-
-                Debug.assert(i !== n, "Could not find current element in parent's child list!");
-
-                // Walk backward from this element, looking for a non-zero-width sibling.
-                for (var j = i - 1; j >= 0; j--) {
-                    var sibling = childAt(parent, j);
-                    if (sibling && fullWidth(sibling) > 0) {
-                        return sibling;
-                    }
-                }
-
-                // We couldn't find a non-zero-width sibling.  We were either the first element, or
-                // all preceding elements are empty.  So, move up to our parent so we we can find
-                // its preceding sibling.
-                current = current.parent;
-            }
-        }
-
-        public fullStart(): number {
-            return this.position();
-        }
+        public fullStart(): number { return this._fullStart; }
 
         public text() { return ""; }
         public fullText(): string { return ""; }
