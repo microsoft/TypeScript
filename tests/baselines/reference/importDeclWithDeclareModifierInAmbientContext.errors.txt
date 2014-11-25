@@ -1,4 +1,7 @@
-==== tests/cases/compiler/importDeclWithDeclareModifierInAmbientContext.ts (3 errors) ====
+tests/cases/compiler/importDeclWithDeclareModifierInAmbientContext.ts(6,5): error TS1038: A 'declare' modifier cannot be used in an already ambient context.
+
+
+==== tests/cases/compiler/importDeclWithDeclareModifierInAmbientContext.ts (1 errors) ====
     declare module "m" {
         module x {
             interface c {
@@ -6,11 +9,7 @@
         }
         declare export import a = x.c;
         ~~~~~~~
-!!! A 'declare' modifier cannot be used in an already ambient context.
-        ~~~~~~~
-!!! A 'declare' modifier cannot be used with an import declaration.
-                ~~~~~~
-!!! 'export' modifier must precede 'declare' modifier.
+!!! error TS1038: A 'declare' modifier cannot be used in an already ambient context.
         var b: a;
     }
     

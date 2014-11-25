@@ -1,16 +1,19 @@
-==== tests/cases/compiler/importDeclWithDeclareModifier.ts (4 errors) ====
+tests/cases/compiler/importDeclWithDeclareModifier.ts(5,1): error TS1148: Cannot compile external modules unless the '--module' flag is provided.
+tests/cases/compiler/importDeclWithDeclareModifier.ts(5,9): error TS1029: 'export' modifier must precede 'declare' modifier.
+tests/cases/compiler/importDeclWithDeclareModifier.ts(5,1): error TS2305: Module 'x' has no exported member 'c'.
+
+
+==== tests/cases/compiler/importDeclWithDeclareModifier.ts (3 errors) ====
     module x {
         interface c {
         }
     }
     declare export import a = x.c;
-    ~~~~~~~
-!!! A 'declare' modifier cannot be used with an import declaration.
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Cannot compile external modules unless the '--module' flag is provided.
+!!! error TS1148: Cannot compile external modules unless the '--module' flag is provided.
             ~~~~~~
-!!! 'export' modifier must precede 'declare' modifier.
+!!! error TS1029: 'export' modifier must precede 'declare' modifier.
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Module 'x' has no exported member 'c'.
+!!! error TS2305: Module 'x' has no exported member 'c'.
     var b: a;
     

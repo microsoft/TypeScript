@@ -134,7 +134,7 @@ module TypeScript.SyntaxFacts {
 
     export function getText(kind: SyntaxKind): string {
         var result = kindToText[kind];
-        return result !== undefined ? result : null;
+        return result;//  !== undefined ? result : undefined;
     }
 
     export function isAnyKeyword(kind: SyntaxKind): boolean {
@@ -146,114 +146,60 @@ module TypeScript.SyntaxFacts {
     }
 
     export function isPrefixUnaryExpressionOperatorToken(tokenKind: SyntaxKind): boolean {
-        return getPrefixUnaryExpressionFromOperatorToken(tokenKind) !== SyntaxKind.None;
+        switch (tokenKind) {
+            case SyntaxKind.PlusToken: 
+            case SyntaxKind.MinusToken: 
+            case SyntaxKind.TildeToken: 
+            case SyntaxKind.ExclamationToken: 
+            case SyntaxKind.PlusPlusToken: 
+            case SyntaxKind.MinusMinusToken: 
+                return true;
+            default: 
+                return false;
+        }
     }
 
     export function isBinaryExpressionOperatorToken(tokenKind: SyntaxKind): boolean {
-        return getBinaryExpressionFromOperatorToken(tokenKind) !== SyntaxKind.None;
-    }
-
-    export function getPrefixUnaryExpressionFromOperatorToken(tokenKind: SyntaxKind): SyntaxKind {
         switch (tokenKind) {
-            case SyntaxKind.PlusToken: return SyntaxKind.PlusExpression;
-            case SyntaxKind.MinusToken: return SyntaxKind.NegateExpression;
-            case SyntaxKind.TildeToken: return SyntaxKind.BitwiseNotExpression;
-            case SyntaxKind.ExclamationToken: return SyntaxKind.LogicalNotExpression;
-            case SyntaxKind.PlusPlusToken: return SyntaxKind.PreIncrementExpression;
-            case SyntaxKind.MinusMinusToken: return SyntaxKind.PreDecrementExpression;
-            default: return SyntaxKind.None;
-        }
-    }
-
-    export function getPostfixUnaryExpressionFromOperatorToken(tokenKind: SyntaxKind): SyntaxKind {
-        switch (tokenKind) {
-            case SyntaxKind.PlusPlusToken: return SyntaxKind.PostIncrementExpression;
-            case SyntaxKind.MinusMinusToken: return SyntaxKind.PostDecrementExpression;
-            default: return SyntaxKind.None;
-        }
-    }
-
-    export function getBinaryExpressionFromOperatorToken(tokenKind: SyntaxKind): SyntaxKind {
-        switch (tokenKind) {
-            case SyntaxKind.AsteriskToken:                                  return SyntaxKind.MultiplyExpression;
-            case SyntaxKind.SlashToken:                                     return SyntaxKind.DivideExpression;
-            case SyntaxKind.PercentToken:                                   return SyntaxKind.ModuloExpression;
-            case SyntaxKind.PlusToken:                                      return SyntaxKind.AddExpression;
-            case SyntaxKind.MinusToken:                                     return SyntaxKind.SubtractExpression;
-            case SyntaxKind.LessThanLessThanToken:                          return SyntaxKind.LeftShiftExpression;
-            case SyntaxKind.GreaterThanGreaterThanToken:                    return SyntaxKind.SignedRightShiftExpression;
-            case SyntaxKind.GreaterThanGreaterThanGreaterThanToken:         return SyntaxKind.UnsignedRightShiftExpression;
-            case SyntaxKind.LessThanToken:                                  return SyntaxKind.LessThanExpression;
-            case SyntaxKind.GreaterThanToken:                               return SyntaxKind.GreaterThanExpression;
-            case SyntaxKind.LessThanEqualsToken:                            return SyntaxKind.LessThanOrEqualExpression;
-            case SyntaxKind.GreaterThanEqualsToken:                         return SyntaxKind.GreaterThanOrEqualExpression;
-            case SyntaxKind.InstanceOfKeyword:                              return SyntaxKind.InstanceOfExpression;
-            case SyntaxKind.InKeyword:                                      return SyntaxKind.InExpression;
-            case SyntaxKind.EqualsEqualsToken:                              return SyntaxKind.EqualsWithTypeConversionExpression;
-            case SyntaxKind.ExclamationEqualsToken:                         return SyntaxKind.NotEqualsWithTypeConversionExpression;
-            case SyntaxKind.EqualsEqualsEqualsToken:                        return SyntaxKind.EqualsExpression;
-            case SyntaxKind.ExclamationEqualsEqualsToken:                   return SyntaxKind.NotEqualsExpression;
-            case SyntaxKind.AmpersandToken:                                 return SyntaxKind.BitwiseAndExpression;
-            case SyntaxKind.CaretToken:                                     return SyntaxKind.BitwiseExclusiveOrExpression;
-            case SyntaxKind.BarToken:                                       return SyntaxKind.BitwiseOrExpression;
-            case SyntaxKind.AmpersandAmpersandToken:                        return SyntaxKind.LogicalAndExpression;
-            case SyntaxKind.BarBarToken:                                    return SyntaxKind.LogicalOrExpression;
-            case SyntaxKind.BarEqualsToken:                                 return SyntaxKind.OrAssignmentExpression;
-            case SyntaxKind.AmpersandEqualsToken:                           return SyntaxKind.AndAssignmentExpression;
-            case SyntaxKind.CaretEqualsToken:                               return SyntaxKind.ExclusiveOrAssignmentExpression;
-            case SyntaxKind.LessThanLessThanEqualsToken:                    return SyntaxKind.LeftShiftAssignmentExpression;
-            case SyntaxKind.GreaterThanGreaterThanEqualsToken:              return SyntaxKind.SignedRightShiftAssignmentExpression;
-            case SyntaxKind.GreaterThanGreaterThanGreaterThanEqualsToken:   return SyntaxKind.UnsignedRightShiftAssignmentExpression;
-            case SyntaxKind.PlusEqualsToken:                                return SyntaxKind.AddAssignmentExpression;
-            case SyntaxKind.MinusEqualsToken:                               return SyntaxKind.SubtractAssignmentExpression;
-            case SyntaxKind.AsteriskEqualsToken:                            return SyntaxKind.MultiplyAssignmentExpression;
-            case SyntaxKind.SlashEqualsToken:                               return SyntaxKind.DivideAssignmentExpression;
-            case SyntaxKind.PercentEqualsToken:                             return SyntaxKind.ModuloAssignmentExpression;
-            case SyntaxKind.EqualsToken:                                    return SyntaxKind.AssignmentExpression;
-            case SyntaxKind.CommaToken:                                     return SyntaxKind.CommaExpression;
-            default:                                                        return SyntaxKind.None;
-        }
-    }
-
-    export function getOperatorTokenFromBinaryExpression(tokenKind: SyntaxKind): SyntaxKind {
-        switch (tokenKind) {
-            case SyntaxKind.MultiplyExpression:                     return SyntaxKind.AsteriskToken;
-            case SyntaxKind.DivideExpression:                       return SyntaxKind.SlashToken;
-            case SyntaxKind.ModuloExpression:                       return SyntaxKind.PercentToken;
-            case SyntaxKind.AddExpression:                          return SyntaxKind.PlusToken;
-            case SyntaxKind.SubtractExpression:                     return SyntaxKind.MinusToken;
-            case SyntaxKind.LeftShiftExpression:                    return SyntaxKind.LessThanLessThanToken;
-            case SyntaxKind.SignedRightShiftExpression:             return SyntaxKind.GreaterThanGreaterThanToken;
-            case SyntaxKind.UnsignedRightShiftExpression:           return SyntaxKind.GreaterThanGreaterThanGreaterThanToken;
-            case SyntaxKind.LessThanExpression:                     return SyntaxKind.LessThanToken;
-            case SyntaxKind.GreaterThanExpression:                  return SyntaxKind.GreaterThanToken;
-            case SyntaxKind.LessThanOrEqualExpression:              return SyntaxKind.LessThanEqualsToken;
-            case SyntaxKind.GreaterThanOrEqualExpression:           return SyntaxKind.GreaterThanEqualsToken;
-            case SyntaxKind.InstanceOfExpression:                   return SyntaxKind.InstanceOfKeyword;
-            case SyntaxKind.InExpression:                           return SyntaxKind.InKeyword;
-            case SyntaxKind.EqualsWithTypeConversionExpression:     return SyntaxKind.EqualsEqualsToken;
-            case SyntaxKind.NotEqualsWithTypeConversionExpression:  return SyntaxKind.ExclamationEqualsToken;
-            case SyntaxKind.EqualsExpression:                       return SyntaxKind.EqualsEqualsEqualsToken;
-            case SyntaxKind.NotEqualsExpression:                    return SyntaxKind.ExclamationEqualsEqualsToken;
-            case SyntaxKind.BitwiseAndExpression:                   return SyntaxKind.AmpersandToken;
-            case SyntaxKind.BitwiseExclusiveOrExpression:           return SyntaxKind.CaretToken;
-            case SyntaxKind.BitwiseOrExpression:                    return SyntaxKind.BarToken;
-            case SyntaxKind.LogicalAndExpression:                   return SyntaxKind.AmpersandAmpersandToken;
-            case SyntaxKind.LogicalOrExpression:                    return SyntaxKind.BarBarToken;
-            case SyntaxKind.OrAssignmentExpression:                 return SyntaxKind.BarEqualsToken;
-            case SyntaxKind.AndAssignmentExpression:                return SyntaxKind.AmpersandEqualsToken;
-            case SyntaxKind.ExclusiveOrAssignmentExpression:        return SyntaxKind.CaretEqualsToken;
-            case SyntaxKind.LeftShiftAssignmentExpression:          return SyntaxKind.LessThanLessThanEqualsToken;
-            case SyntaxKind.SignedRightShiftAssignmentExpression:   return SyntaxKind.GreaterThanGreaterThanEqualsToken;
-            case SyntaxKind.UnsignedRightShiftAssignmentExpression: return SyntaxKind.GreaterThanGreaterThanGreaterThanEqualsToken;
-            case SyntaxKind.AddAssignmentExpression:                return SyntaxKind.PlusEqualsToken;
-            case SyntaxKind.SubtractAssignmentExpression:           return SyntaxKind.MinusEqualsToken;
-            case SyntaxKind.MultiplyAssignmentExpression:           return SyntaxKind.AsteriskEqualsToken;
-            case SyntaxKind.DivideAssignmentExpression:             return SyntaxKind.SlashEqualsToken;
-            case SyntaxKind.ModuloAssignmentExpression:             return SyntaxKind.PercentEqualsToken;
-            case SyntaxKind.AssignmentExpression:                   return SyntaxKind.EqualsToken;
-            case SyntaxKind.CommaExpression:                        return SyntaxKind.CommaToken;
-            default:                                                return SyntaxKind.None;
+            case SyntaxKind.AsteriskToken:
+            case SyntaxKind.SlashToken:
+            case SyntaxKind.PercentToken:
+            case SyntaxKind.PlusToken:
+            case SyntaxKind.MinusToken:
+            case SyntaxKind.LessThanLessThanToken:
+            case SyntaxKind.GreaterThanGreaterThanToken:
+            case SyntaxKind.GreaterThanGreaterThanGreaterThanToken:
+            case SyntaxKind.LessThanToken:
+            case SyntaxKind.GreaterThanToken:
+            case SyntaxKind.LessThanEqualsToken:
+            case SyntaxKind.GreaterThanEqualsToken:
+            case SyntaxKind.InstanceOfKeyword:
+            case SyntaxKind.InKeyword:
+            case SyntaxKind.EqualsEqualsToken:
+            case SyntaxKind.ExclamationEqualsToken:
+            case SyntaxKind.EqualsEqualsEqualsToken:
+            case SyntaxKind.ExclamationEqualsEqualsToken:
+            case SyntaxKind.AmpersandToken:
+            case SyntaxKind.CaretToken:
+            case SyntaxKind.BarToken:
+            case SyntaxKind.AmpersandAmpersandToken:
+            case SyntaxKind.BarBarToken:
+            case SyntaxKind.BarEqualsToken:
+            case SyntaxKind.AmpersandEqualsToken:
+            case SyntaxKind.CaretEqualsToken:
+            case SyntaxKind.LessThanLessThanEqualsToken:
+            case SyntaxKind.GreaterThanGreaterThanEqualsToken:
+            case SyntaxKind.GreaterThanGreaterThanGreaterThanEqualsToken:
+            case SyntaxKind.PlusEqualsToken:
+            case SyntaxKind.MinusEqualsToken:
+            case SyntaxKind.AsteriskEqualsToken:
+            case SyntaxKind.SlashEqualsToken:
+            case SyntaxKind.PercentEqualsToken:
+            case SyntaxKind.EqualsToken:
+            case SyntaxKind.CommaToken:
+                return true;
+            default:
+                return false;
         }
     }
 

@@ -1,3 +1,14 @@
+tests/cases/compiler/interfaceDeclaration3.ts(6,11): error TS2420: Class 'C1' incorrectly implements interface 'I1'.
+  Types of property 'item' are incompatible.
+    Type 'number' is not assignable to type 'string'.
+tests/cases/compiler/interfaceDeclaration3.ts(31,11): error TS2420: Class 'C1' incorrectly implements interface 'I1'.
+  Types of property 'item' are incompatible.
+    Type 'number' is not assignable to type 'string'.
+tests/cases/compiler/interfaceDeclaration3.ts(54,11): error TS2430: Interface 'I2' incorrectly extends interface 'I1'.
+  Types of property 'item' are incompatible.
+    Type 'string' is not assignable to type 'number'.
+
+
 ==== tests/cases/compiler/interfaceDeclaration3.ts (3 errors) ====
     interface I1 { item:number; }
     
@@ -6,9 +17,9 @@
         interface I2 { item:number; }   
         class C1 implements I1 {
               ~~
-!!! Class 'C1' incorrectly implements interface 'I1':
-!!!   Types of property 'item' are incompatible:
-!!!     Type 'number' is not assignable to type 'string'.
+!!! error TS2420: Class 'C1' incorrectly implements interface 'I1'.
+!!! error TS2420:   Types of property 'item' are incompatible.
+!!! error TS2420:     Type 'number' is not assignable to type 'string'.
             public item:number;
         }
         class C2 implements I1 {
@@ -35,9 +46,9 @@
         }
         class C1 implements I1 {
               ~~
-!!! Class 'C1' incorrectly implements interface 'I1':
-!!!   Types of property 'item' are incompatible:
-!!!     Type 'number' is not assignable to type 'string'.
+!!! error TS2420: Class 'C1' incorrectly implements interface 'I1'.
+!!! error TS2420:   Types of property 'item' are incompatible.
+!!! error TS2420:     Type 'number' is not assignable to type 'string'.
             public item:number;    
         }
         class C2 implements I1 {
@@ -62,7 +73,7 @@
     
     interface I2 extends I1 { item:string; }
               ~~
-!!! Interface 'I2' incorrectly extends interface 'I1':
-!!!   Types of property 'item' are incompatible:
-!!!     Type 'string' is not assignable to type 'number'.
+!!! error TS2430: Interface 'I2' incorrectly extends interface 'I1'.
+!!! error TS2430:   Types of property 'item' are incompatible.
+!!! error TS2430:     Type 'string' is not assignable to type 'number'.
     

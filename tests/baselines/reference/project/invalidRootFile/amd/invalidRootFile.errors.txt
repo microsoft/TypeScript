@@ -1,0 +1,8 @@
+error TS6053: File 'a.ts' not found.
+error TS6053: File 'a.ts' not found.
+error TS6054: File 'a.t' must have extension '.ts' or '.d.ts'.
+
+
+!!! error TS6053: File 'a.ts' not found.
+!!! error TS6053: File 'a.ts' not found.
+!!! error TS6054: File 'a.t' must have extension '.ts' or '.d.ts'.

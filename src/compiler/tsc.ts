@@ -9,7 +9,7 @@
 /// <reference path="commandLineParser.ts"/>
 
 module ts {
-    var version = "1.1.0.0";
+    var version = "1.3.0.0";
 
     /**
      * Checks to see if the locale is in the appropriate format,
@@ -142,14 +142,19 @@ module ts {
             // otherwise use toLowerCase as a canonical form.
             return sys.useCaseSensitiveFileNames ? fileName : fileName.toLowerCase();
         }
-
+        
+        // returned by CScript sys environment
+        var unsupportedFileEncodingErrorCode = -2147024809;
+        
         function getSourceFile(filename: string, languageVersion: ScriptTarget, onError?: (message: string) => void): SourceFile {
             try {
                 var text = sys.readFile(filename, options.charset);
             }
             catch (e) {
                 if (onError) {
-                    onError(e.message);
+                    onError(e.number === unsupportedFileEncodingErrorCode ? 
+                                getDiagnosticText(Diagnostics.Unsupported_file_encoding) :
+                                e.message);
                 }
                 text = "";
             }
@@ -187,20 +192,26 @@ module ts {
         }
 
         return {
-            getSourceFile: getSourceFile,
+            getSourceFile,
             getDefaultLibFilename: () => combinePaths(getDirectoryPath(normalizePath(sys.getExecutingFilePath())), "lib.d.ts"),
-            writeFile: writeFile,
+            writeFile,
             getCurrentDirectory: () => currentDirectory || (currentDirectory = sys.getCurrentDirectory()),
             useCaseSensitiveFileNames: () => sys.useCaseSensitiveFileNames,
-            getCanonicalFileName: getCanonicalFileName,
+            getCanonicalFileName,
             getNewLine: () => sys.newLine
         };
     }
 
     export function executeCommandLine(args: string[]): void {
         var commandLine = parseCommandLine(args);
+        var compilerOptions = commandLine.options;
 
-        if (commandLine.options.locale) {
+        if (compilerOptions.locale) {
+            if (typeof JSON === "undefined") {
+                reportDiagnostic(createCompilerDiagnostic(Diagnostics.The_current_host_does_not_support_the_0_option, "--locale"));
+                return sys.exit(1);
+            }
+
             validateLocaleAndSetLanguage(commandLine.options.locale, commandLine.errors);
         }
 
@@ -208,32 +219,38 @@ module ts {
         // setting up localization, report them and quit.
         if (commandLine.errors.length > 0) {
             reportDiagnostics(commandLine.errors);
-            return sys.exit(1);
+            return sys.exit(EmitReturnStatus.CompilerOptionsErrors);
         }
 
-        if (commandLine.options.version) {
+        if (compilerOptions.version) {
             reportDiagnostic(createCompilerDiagnostic(Diagnostics.Version_0, version));
-            return sys.exit(0);
+            return sys.exit(EmitReturnStatus.Succeeded);
         }
 
-        if (commandLine.options.help || commandLine.filenames.length === 0) {
+        if (compilerOptions.help) {
             printVersion();
             printHelp();
-            return sys.exit(0);
+            return sys.exit(EmitReturnStatus.Succeeded);
         }
 
-        var defaultCompilerHost = createCompilerHost(commandLine.options);
+        if (commandLine.filenames.length === 0) {
+            printVersion();
+            printHelp();
+            return sys.exit(EmitReturnStatus.CompilerOptionsErrors);
+        }
+
+        var defaultCompilerHost = createCompilerHost(compilerOptions);
         
-        if (commandLine.options.watch) {
+        if (compilerOptions.watch) {
             if (!sys.watchFile) {
                 reportDiagnostic(createCompilerDiagnostic(Diagnostics.The_current_host_does_not_support_the_0_option, "--watch"));
-                return sys.exit(1);
+                return sys.exit(EmitReturnStatus.CompilerOptionsErrors);
             }
 
             watchProgram(commandLine, defaultCompilerHost);
         }
         else {
-            var result = compile(commandLine, defaultCompilerHost).errors.length > 0 ? 1 : 0;
+            var result = compile(commandLine, defaultCompilerHost).exitStatus
             return sys.exit(result);
         }
     }
@@ -328,23 +345,34 @@ module ts {
 
     function compile(commandLine: ParsedCommandLine, compilerHost: CompilerHost) {
         var parseStart = new Date().getTime();
-        var program = createProgram(commandLine.filenames, commandLine.options, compilerHost);
+        var compilerOptions = commandLine.options;
+        var program = createProgram(commandLine.filenames, compilerOptions, compilerHost);
 
         var bindStart = new Date().getTime();
-        var errors = program.getDiagnostics();
+        var errors: Diagnostic[] = program.getDiagnostics();
+        var exitStatus: EmitReturnStatus;
+
         if (errors.length) {
             var checkStart = bindStart;
             var emitStart = bindStart;
             var reportStart = bindStart;
+            exitStatus = EmitReturnStatus.AllOutputGenerationSkipped;
         }
         else {
             var checker = program.getTypeChecker(/*fullTypeCheckMode*/ true);
             var checkStart = new Date().getTime();
-            var semanticErrors = checker.getDiagnostics();
-            var emitStart = new Date().getTime();
-            var emitErrors = checker.emitFiles().errors;
-            var reportStart = new Date().getTime();
-            errors = concatenate(semanticErrors, emitErrors);
+            errors = checker.getDiagnostics();
+            if (checker.isEmitBlocked()) {
+                exitStatus = EmitReturnStatus.AllOutputGenerationSkipped;
+            }
+            else {
+                var emitStart = new Date().getTime();
+                var emitOutput = checker.emitFiles();
+                var emitErrors = emitOutput.diagnostics;
+                exitStatus = emitOutput.emitResultStatus;
+                var reportStart = new Date().getTime();
+                errors = concatenate(errors, emitErrors);
+            }
         }
 
         reportDiagnostics(errors);
@@ -366,8 +394,7 @@ module ts {
             reportTimeStatistic("Total time", reportStart - parseStart);
         }
 
-        return { program: program, errors: errors };
-
+        return { program, exitStatus };
     }
 
     function printVersion() {
@@ -392,7 +419,7 @@ module ts {
         // Build up the list of examples.
         var padding = makePadding(marginLength);
         output += getDiagnosticText(Diagnostics.Examples_Colon_0, makePadding(marginLength - examplesLength) + "tsc hello.ts") + sys.newLine;
-        output += padding + "tsc --out foo.js foo.ts" + sys.newLine;
+        output += padding + "tsc --out file.js file.ts" + sys.newLine;
         output += padding + "tsc @args.txt" + sys.newLine;
         output += sys.newLine;
 

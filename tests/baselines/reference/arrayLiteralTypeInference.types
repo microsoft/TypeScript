@@ -25,7 +25,7 @@ class ActionB extends Action {
 var x1: Action[] = [
 >x1 : Action[]
 >Action : Action
->[    { id: 2, trueness: false },    { id: 3, name: "three" }] : Action[]
+>[    { id: 2, trueness: false },    { id: 3, name: "three" }] : ({ id: number; trueness: boolean; } | { id: number; name: string; })[]
 
     { id: 2, trueness: false },
 >{ id: 2, trueness: false } : { id: number; trueness: boolean; }
@@ -42,7 +42,7 @@ var x1: Action[] = [
 var x2: Action[] = [
 >x2 : Action[]
 >Action : Action
->[    new ActionA(),    new ActionB()] : Action[]
+>[    new ActionA(),    new ActionB()] : (ActionA | ActionB)[]
 
     new ActionA(),
 >new ActionA() : ActionA
@@ -78,7 +78,7 @@ var z1: { id: number }[] =
 >id : number
 
     [
->[        { id: 2, trueness: false },        { id: 3, name: "three" }    ] : { id: number; }[]
+>[        { id: 2, trueness: false },        { id: 3, name: "three" }    ] : ({ id: number; trueness: boolean; } | { id: number; name: string; })[]
 
         { id: 2, trueness: false },
 >{ id: 2, trueness: false } : { id: number; trueness: boolean; }
@@ -97,7 +97,7 @@ var z2: { id: number }[] =
 >id : number
 
     [
->[        new ActionA(),        new ActionB()    ] : { id: number; }[]
+>[        new ActionA(),        new ActionB()    ] : (ActionA | ActionB)[]
 
         new ActionA(),
 >new ActionA() : ActionA
@@ -114,7 +114,7 @@ var z3: { id: number }[] =
 >id : number
 
     [
->[        new Action(),        new ActionA(),        new ActionB()    ] : { id: number; }[]
+>[        new Action(),        new ActionA(),        new ActionB()    ] : Action[]
 
         new Action(),
 >new Action() : Action

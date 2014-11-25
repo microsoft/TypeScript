@@ -1,3 +1,7 @@
+tests/cases/compiler/typeAssertionToGenericFunctionType.ts(5,13): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
+tests/cases/compiler/typeAssertionToGenericFunctionType.ts(6,1): error TS2346: Supplied parameters do not match any signature of call target.
+
+
 ==== tests/cases/compiler/typeAssertionToGenericFunctionType.ts (2 errors) ====
     var x = {
         a: < <T>(x: T) => T > ((x: any) => 1),
@@ -5,7 +9,7 @@
     }
     x.a<string>(1); // bug was that this caused 'Could not find symbol T' on return type T in the type assertion on x.a's definition
                 ~
-!!! Argument of type 'number' is not assignable to parameter of type 'string'.
+!!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
     x.b<string>(); // error
     ~~~~~~~~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+!!! error TS2346: Supplied parameters do not match any signature of call target.

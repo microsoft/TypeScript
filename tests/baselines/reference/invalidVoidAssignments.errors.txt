@@ -1,58 +1,75 @@
+tests/cases/conformance/types/primitives/void/invalidVoidAssignments.ts(3,5): error TS2322: Type 'void' is not assignable to type 'boolean'.
+tests/cases/conformance/types/primitives/void/invalidVoidAssignments.ts(4,5): error TS2322: Type 'void' is not assignable to type 'string'.
+tests/cases/conformance/types/primitives/void/invalidVoidAssignments.ts(5,5): error TS2322: Type 'void' is not assignable to type 'number'.
+tests/cases/conformance/types/primitives/void/invalidVoidAssignments.ts(9,5): error TS2322: Type 'void' is not assignable to type 'C'.
+tests/cases/conformance/types/primitives/void/invalidVoidAssignments.ts(12,5): error TS2322: Type 'void' is not assignable to type 'I'.
+tests/cases/conformance/types/primitives/void/invalidVoidAssignments.ts(14,5): error TS2322: Type 'number' is not assignable to type '{ baz: string; }'.
+  Property 'baz' is missing in type 'Number'.
+tests/cases/conformance/types/primitives/void/invalidVoidAssignments.ts(15,5): error TS2322: Type 'number' is not assignable to type '{ 0: number; }'.
+  Property '0' is missing in type 'Number'.
+tests/cases/conformance/types/primitives/void/invalidVoidAssignments.ts(18,1): error TS2364: Invalid left-hand side of assignment expression.
+tests/cases/conformance/types/primitives/void/invalidVoidAssignments.ts(21,5): error TS2322: Type 'void' is not assignable to type 'T'.
+tests/cases/conformance/types/primitives/void/invalidVoidAssignments.ts(23,1): error TS2364: Invalid left-hand side of assignment expression.
+tests/cases/conformance/types/primitives/void/invalidVoidAssignments.ts(26,1): error TS2322: Type 'typeof E' is not assignable to type 'void'.
+tests/cases/conformance/types/primitives/void/invalidVoidAssignments.ts(27,1): error TS2322: Type 'E' is not assignable to type 'void'.
+tests/cases/conformance/types/primitives/void/invalidVoidAssignments.ts(29,1): error TS2322: Type '{ f: () => void; }' is not assignable to type 'void'.
+
+
 ==== tests/cases/conformance/types/primitives/void/invalidVoidAssignments.ts (13 errors) ====
     var x: void;
     
     var a: boolean = x;
         ~
-!!! Type 'void' is not assignable to type 'boolean'.
+!!! error TS2322: Type 'void' is not assignable to type 'boolean'.
     var b: string = x;
         ~
-!!! Type 'void' is not assignable to type 'string'.
+!!! error TS2322: Type 'void' is not assignable to type 'string'.
     var c: number = x;
         ~
-!!! Type 'void' is not assignable to type 'number'.
+!!! error TS2322: Type 'void' is not assignable to type 'number'.
     var d: typeof undefined = x;
     
     class C { foo: string; }
     var e: C = x;
         ~
-!!! Type 'void' is not assignable to type 'C'.
+!!! error TS2322: Type 'void' is not assignable to type 'C'.
     
     interface I { bar: string; }
     var f: I = x;
         ~
-!!! Type 'void' is not assignable to type 'I'.
+!!! error TS2322: Type 'void' is not assignable to type 'I'.
     
     var g: { baz: string } = 1;
         ~
-!!! Type 'number' is not assignable to type '{ baz: string; }':
-!!!   Property 'baz' is missing in type 'Number'.
+!!! error TS2322: Type 'number' is not assignable to type '{ baz: string; }'.
+!!! error TS2322:   Property 'baz' is missing in type 'Number'.
     var g2: { 0: number } = 1;
         ~~
-!!! Type 'number' is not assignable to type '{ 0: number; }':
-!!!   Property '0' is missing in type 'Number'.
+!!! error TS2322: Type 'number' is not assignable to type '{ 0: number; }'.
+!!! error TS2322:   Property '0' is missing in type 'Number'.
     
     module M { export var x = 1; }
     M = x;
     ~
-!!! Invalid left-hand side of assignment expression.
+!!! error TS2364: Invalid left-hand side of assignment expression.
     
     function i<T>(a: T) {
         a = x;
         ~
-!!! Type 'void' is not assignable to type 'T'.
+!!! error TS2322: Type 'void' is not assignable to type 'T'.
     }
     i = x;
     ~
-!!! Invalid left-hand side of assignment expression.
+!!! error TS2364: Invalid left-hand side of assignment expression.
     
     enum E { A }
     x = E;
     ~
-!!! Type 'typeof E' is not assignable to type 'void'.
+!!! error TS2322: Type 'typeof E' is not assignable to type 'void'.
     x = E.A;
     ~
-!!! Type 'E' is not assignable to type 'void'.
+!!! error TS2322: Type 'E' is not assignable to type 'void'.
     
     x = { f() { } }
     ~
-!!! Type '{ f: () => void; }' is not assignable to type 'void'.
+!!! error TS2322: Type '{ f: () => void; }' is not assignable to type 'void'.

@@ -1,7 +1,11 @@
+tests/cases/compiler/emptyTypeArgumentListWithNew.ts(2,8): error TS1099: Type argument list cannot be empty.
+tests/cases/compiler/emptyTypeArgumentListWithNew.ts(2,1): error TS2346: Supplied parameters do not match any signature of call target.
+
+
 ==== tests/cases/compiler/emptyTypeArgumentListWithNew.ts (2 errors) ====
     class foo<T> { }
     new foo<>();
            ~~
-!!! Type argument list cannot be empty.
+!!! error TS1099: Type argument list cannot be empty.
     ~~~~~~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+!!! error TS2346: Supplied parameters do not match any signature of call target.

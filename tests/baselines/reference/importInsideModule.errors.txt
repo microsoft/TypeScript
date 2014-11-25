@@ -1,10 +1,14 @@
+tests/cases/compiler/importInsideModule_file2.ts(2,26): error TS1147: Import declarations in an internal module cannot reference an external module.
+tests/cases/compiler/importInsideModule_file2.ts(2,26): error TS2307: Cannot find external module 'importInsideModule_file1'.
+
+
 ==== tests/cases/compiler/importInsideModule_file2.ts (2 errors) ====
     export module myModule {
         import foo = require("importInsideModule_file1");
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Import declarations in an internal module cannot reference an external module.
                              ~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Cannot find external module 'importInsideModule_file1'.
+!!! error TS1147: Import declarations in an internal module cannot reference an external module.
+                             ~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find external module 'importInsideModule_file1'.
         var a = foo.x;
     }
 ==== tests/cases/compiler/importInsideModule_file1.ts (0 errors) ====

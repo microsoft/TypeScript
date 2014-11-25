@@ -2,6 +2,7 @@
 
 var fs = require("fs");
 var path = require("path");
+var child_process = require("child_process");
 
 // Variables
 var compilerDirectory = "src/compiler/";
@@ -9,6 +10,8 @@ var servicesDirectory = "src/services/";
 var harnessDirectory = "src/harness/";
 var libraryDirectory = "src/lib/";
 var scriptsDirectory = "scripts/";
+var unittestsDirectory = "tests/cases/unittests/";
+var docDirectory = "doc/";
 
 var builtDirectory = "built/";
 var builtLocalDirectory = "built/local/";
@@ -52,8 +55,13 @@ var servicesSources = [
 ].map(function (f) {
     return path.join(compilerDirectory, f);
 }).concat([
+    "breakpoints.ts",
     "services.ts",
     "shims.ts",
+    "signatureHelp.ts",
+    "utilities.ts",
+    "navigationBar.ts",
+    "outliningElementsCollector.ts"
 ].map(function (f) {
     return path.join(servicesDirectory, f);
 }));
@@ -63,19 +71,23 @@ var harnessSources = [
     "sourceMapRecorder.ts",
     "harnessLanguageService.ts",
     "fourslash.ts",
-    "external/json2.ts",
     "runnerbase.ts",
     "compilerRunner.ts",
     "typeWriter.ts",
     "fourslashRunner.ts",
     "projectsRunner.ts",
-    "unittestrunner.ts",
     "loggedIO.ts",
     "rwcRunner.ts",
     "runner.ts"
 ].map(function (f) {
     return path.join(harnessDirectory, f);
-});
+}).concat([
+    "services/colorization.ts",
+    "services/documentRegistry.ts",
+    "services/preProcessFile.ts"
+].map(function (f) {
+    return path.join(unittestsDirectory, f);
+}));
 
 var librarySourceMap = [
         { target: "lib.core.d.ts", sources: ["core.d.ts"] },
@@ -122,7 +134,8 @@ function concatenateFiles(destinationFile, sourceFiles) {
     fs.renameSync(temp, destinationFile);
 }
 
-var useDebugMode = false;
+var useDebugMode = true;
+var generateDeclarations = false;
 var host = (process.env.host || process.env.TYPESCRIPT_HOST || "node");
 var compilerFilename = "tsc.js";
 /* Compiles a file from a list of sources
@@ -136,12 +149,16 @@ var compilerFilename = "tsc.js";
 function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, noOutFile) {
     file(outFile, prereqs, function() {
         var dir = useBuiltCompiler ? builtLocalDirectory : LKGDirectory;
-        var options = "-removeComments --module commonjs -noImplicitAny "; //" -propagateEnumConstants "
+        var options = "-removeComments --module commonjs -noImplicitAny ";
+        if (generateDeclarations) {
+            options += "--declaration ";
+        }
+
+        if (useDebugMode) {
+            options += "--preserveConstEnums ";
+        }
         
         var cmd = host + " " + dir + compilerFilename + " " + options + " ";
-        if (useDebugMode) {
-            cmd = cmd + " " + path.join(harnessDirectory, "external/es5compat.ts") + " " + path.join(harnessDirectory, "external/json2.ts") + " ";
-        }
         cmd = cmd + sources.join(" ") + (!noOutFile ? " -out " + outFile : "");
         if (useDebugMode) {
             cmd = cmd + " -sourcemap -mapRoot file:///" + path.resolve(path.dirname(outFile));
@@ -243,11 +260,10 @@ task("local", ["generate-diagnostics", "lib", tscFile, servicesFile]);
 
 
 // Local target to build the compiler and services
-desc("Emit debug mode files with sourcemaps");
-task("debug", function() {
-        useDebugMode = true;
+desc("Sets release mode flag");
+task("release", function() {
+    useDebugMode = false;
 });
-
 
 // Set the default task to "local"
 task("default", ["local"]);
@@ -259,9 +275,45 @@ task("clean", function() {
     jake.rmRf(builtDirectory);
 });
 
+// generate declarations for compiler and services
+desc("Generate declarations for compiler and services");
+task("declaration", function() {
+    generateDeclarations = true;
+});
+
+// Generate Markdown spec
+var word2mdJs = path.join(scriptsDirectory, "word2md.js");
+var word2mdTs = path.join(scriptsDirectory, "word2md.ts");
+var specWord = path.join(docDirectory, "TypeScript Language Specification.docx");
+var specMd = path.join(docDirectory, "spec.md");
+
+file(word2mdTs);
+
+// word2md script
+compileFile(word2mdJs,
+            [word2mdTs],
+            [word2mdTs],
+            [],
+            false);
+
+// The generated spec.md; built for the 'generate-spec' task
+file(specMd, [word2mdJs, specWord], function () {
+    var specWordFullPath = path.resolve(specWord);
+    var cmd = "cscript //nologo " + word2mdJs + ' "' + specWordFullPath + '" ' + specMd;
+    console.log(cmd);
+    child_process.exec(cmd, function () {
+        complete();
+    });
+}, {async: true})
+
+
+desc("Generates a Markdown version of the Language Specification");
+task("generate-spec", [specMd])
+
+
 // Makes a new LKG. This target does not build anything, but errors if not all the outputs are present in the built/local directory
 desc("Makes a new LKG out of the built js files");
-task("LKG", libraryTargets, function() {
+task("LKG", ["clean", "release", "local"].concat(libraryTargets), function() {
     var expectedFiles = [tscFile, servicesFile].concat(libraryTargets);
     var missingFiles = expectedFiles.filter(function (f) {
         return !fs.existsSync(f);
@@ -318,7 +370,7 @@ function exec(cmd, completeHandler) {
         complete();
     })
     try{
-        ex.run();	
+        ex.run();
     } catch(e) {
         console.log('Exception: ' + e)
     }
@@ -342,7 +394,7 @@ function cleanTestDirs() {
 function writeTestConfigFile(tests, testConfigFile) {
     console.log('Running test(s): ' + tests);
     var testConfigContents = '{\n' + '\ttest: [\'' + tests + '\']\n}';
-    fs.writeFileSync('test.config', testConfigContents);    
+    fs.writeFileSync('test.config', testConfigContents);
 }
 
 function deleteTemporaryProjectOutput() {
@@ -385,7 +437,7 @@ desc("Generates code coverage data via instanbul")
 task("generate-code-coverage", ["tests", builtLocalDirectory], function () {
     var cmd = 'istanbul cover node_modules/mocha/bin/_mocha -- -R min -t ' + testTimeout + ' ' + run;
     console.log(cmd);
-    exec(cmd);	
+    exec(cmd);
 }, { async: true });
 
 // Browser tests

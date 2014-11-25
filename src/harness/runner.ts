@@ -18,7 +18,6 @@
 // ///<reference path='fourslashRunner.ts' />
 /// <reference path='projectsRunner.ts' />
 /// <reference path='rwcRunner.ts' />
-/// <reference path='unittestrunner.ts' />
 
 function runTests(runners: RunnerBase[]) {
     if (reverse) {
@@ -67,9 +66,6 @@ if (testConfigFile !== '') {
             case 'fourslash-generated':
                  runners.push(new GeneratedFourslashRunner());
                 break;
-            case 'unittests':
-                runners.push(new UnitTestRunner());
-                break;
             case 'rwc':
                 runners.push(new RWCRunner());
                 break;
@@ -93,9 +89,6 @@ if (runners.length === 0) {
     // language services
     runners.push(new FourslashRunner());
     //runners.push(new GeneratedFourslashRunner());
-
-    // unittests
-    runners.push(new UnitTestRunner());
 }
 
 sys.newLine = '\r\n';

@@ -1,4 +1,27 @@
-==== tests/cases/conformance/expressions/binaryOperators/inOperator/inOperatorWithInvalidOperands.ts (20 errors) ====
+tests/cases/conformance/expressions/binaryOperators/inOperator/inOperatorWithInvalidOperands.ts(12,11): error TS2360: The left-hand side of an 'in' expression must be of types 'any', 'string' or 'number'.
+tests/cases/conformance/expressions/binaryOperators/inOperator/inOperatorWithInvalidOperands.ts(13,11): error TS2360: The left-hand side of an 'in' expression must be of types 'any', 'string' or 'number'.
+tests/cases/conformance/expressions/binaryOperators/inOperator/inOperatorWithInvalidOperands.ts(14,11): error TS2360: The left-hand side of an 'in' expression must be of types 'any', 'string' or 'number'.
+tests/cases/conformance/expressions/binaryOperators/inOperator/inOperatorWithInvalidOperands.ts(15,11): error TS2360: The left-hand side of an 'in' expression must be of types 'any', 'string' or 'number'.
+tests/cases/conformance/expressions/binaryOperators/inOperator/inOperatorWithInvalidOperands.ts(16,11): error TS2360: The left-hand side of an 'in' expression must be of types 'any', 'string' or 'number'.
+tests/cases/conformance/expressions/binaryOperators/inOperator/inOperatorWithInvalidOperands.ts(17,11): error TS2360: The left-hand side of an 'in' expression must be of types 'any', 'string' or 'number'.
+tests/cases/conformance/expressions/binaryOperators/inOperator/inOperatorWithInvalidOperands.ts(18,11): error TS2360: The left-hand side of an 'in' expression must be of types 'any', 'string' or 'number'.
+tests/cases/conformance/expressions/binaryOperators/inOperator/inOperatorWithInvalidOperands.ts(19,11): error TS2360: The left-hand side of an 'in' expression must be of types 'any', 'string' or 'number'.
+tests/cases/conformance/expressions/binaryOperators/inOperator/inOperatorWithInvalidOperands.ts(20,11): error TS2360: The left-hand side of an 'in' expression must be of types 'any', 'string' or 'number'.
+tests/cases/conformance/expressions/binaryOperators/inOperator/inOperatorWithInvalidOperands.ts(30,16): error TS2361: The right-hand side of an 'in' expression must be of type 'any', an object type or a type parameter
+tests/cases/conformance/expressions/binaryOperators/inOperator/inOperatorWithInvalidOperands.ts(31,16): error TS2361: The right-hand side of an 'in' expression must be of type 'any', an object type or a type parameter
+tests/cases/conformance/expressions/binaryOperators/inOperator/inOperatorWithInvalidOperands.ts(32,16): error TS2361: The right-hand side of an 'in' expression must be of type 'any', an object type or a type parameter
+tests/cases/conformance/expressions/binaryOperators/inOperator/inOperatorWithInvalidOperands.ts(33,16): error TS2361: The right-hand side of an 'in' expression must be of type 'any', an object type or a type parameter
+tests/cases/conformance/expressions/binaryOperators/inOperator/inOperatorWithInvalidOperands.ts(34,16): error TS2361: The right-hand side of an 'in' expression must be of type 'any', an object type or a type parameter
+tests/cases/conformance/expressions/binaryOperators/inOperator/inOperatorWithInvalidOperands.ts(35,16): error TS2361: The right-hand side of an 'in' expression must be of type 'any', an object type or a type parameter
+tests/cases/conformance/expressions/binaryOperators/inOperator/inOperatorWithInvalidOperands.ts(36,16): error TS2361: The right-hand side of an 'in' expression must be of type 'any', an object type or a type parameter
+tests/cases/conformance/expressions/binaryOperators/inOperator/inOperatorWithInvalidOperands.ts(37,16): error TS2361: The right-hand side of an 'in' expression must be of type 'any', an object type or a type parameter
+tests/cases/conformance/expressions/binaryOperators/inOperator/inOperatorWithInvalidOperands.ts(38,16): error TS2361: The right-hand side of an 'in' expression must be of type 'any', an object type or a type parameter
+tests/cases/conformance/expressions/binaryOperators/inOperator/inOperatorWithInvalidOperands.ts(39,17): error TS2361: The right-hand side of an 'in' expression must be of type 'any', an object type or a type parameter
+tests/cases/conformance/expressions/binaryOperators/inOperator/inOperatorWithInvalidOperands.ts(43,11): error TS2360: The left-hand side of an 'in' expression must be of types 'any', 'string' or 'number'.
+tests/cases/conformance/expressions/binaryOperators/inOperator/inOperatorWithInvalidOperands.ts(43,17): error TS2361: The right-hand side of an 'in' expression must be of type 'any', an object type or a type parameter
+
+
+==== tests/cases/conformance/expressions/binaryOperators/inOperator/inOperatorWithInvalidOperands.ts (21 errors) ====
     enum E { a }
     
     var x: any;
@@ -12,31 +35,31 @@
     
     var ra1 = a1 in x;
               ~~
-!!! The left-hand side of an 'in' expression must be of types 'any', 'string' or 'number'.
+!!! error TS2360: The left-hand side of an 'in' expression must be of types 'any', 'string' or 'number'.
     var ra2 = a2 in x;
               ~~
-!!! The left-hand side of an 'in' expression must be of types 'any', 'string' or 'number'.
+!!! error TS2360: The left-hand side of an 'in' expression must be of types 'any', 'string' or 'number'.
     var ra3 = a3 in x;
               ~~
-!!! The left-hand side of an 'in' expression must be of types 'any', 'string' or 'number'.
+!!! error TS2360: The left-hand side of an 'in' expression must be of types 'any', 'string' or 'number'.
     var ra4 = a4 in x;
               ~~
-!!! The left-hand side of an 'in' expression must be of types 'any', 'string' or 'number'.
+!!! error TS2360: The left-hand side of an 'in' expression must be of types 'any', 'string' or 'number'.
     var ra5 = null in x;
               ~~~~
-!!! The left-hand side of an 'in' expression must be of types 'any', 'string' or 'number'.
+!!! error TS2360: The left-hand side of an 'in' expression must be of types 'any', 'string' or 'number'.
     var ra6 = undefined in x;
               ~~~~~~~~~
-!!! The left-hand side of an 'in' expression must be of types 'any', 'string' or 'number'.
+!!! error TS2360: The left-hand side of an 'in' expression must be of types 'any', 'string' or 'number'.
     var ra7 = E.a in x;
               ~~~
-!!! The left-hand side of an 'in' expression must be of types 'any', 'string' or 'number'.
+!!! error TS2360: The left-hand side of an 'in' expression must be of types 'any', 'string' or 'number'.
     var ra8 = false in x;
               ~~~~~
-!!! The left-hand side of an 'in' expression must be of types 'any', 'string' or 'number'.
+!!! error TS2360: The left-hand side of an 'in' expression must be of types 'any', 'string' or 'number'.
     var ra9 = {} in x;
               ~~
-!!! The left-hand side of an 'in' expression must be of types 'any', 'string' or 'number'.
+!!! error TS2360: The left-hand side of an 'in' expression must be of types 'any', 'string' or 'number'.
     
     // invalid right operands
     // the right operand is required to be of type Any, an object type, or a type parameter type
@@ -44,38 +67,43 @@
     var b2: boolean;
     var b3: string;
     var b4: void;
+    var b5: string | number;
     
     var rb1 = x in b1;
                    ~~
-!!! The right-hand side of an 'in' expression must be of type 'any', an object type or a type parameter
+!!! error TS2361: The right-hand side of an 'in' expression must be of type 'any', an object type or a type parameter
     var rb2 = x in b2;
                    ~~
-!!! The right-hand side of an 'in' expression must be of type 'any', an object type or a type parameter
+!!! error TS2361: The right-hand side of an 'in' expression must be of type 'any', an object type or a type parameter
     var rb3 = x in b3;
                    ~~
-!!! The right-hand side of an 'in' expression must be of type 'any', an object type or a type parameter
+!!! error TS2361: The right-hand side of an 'in' expression must be of type 'any', an object type or a type parameter
     var rb4 = x in b4;
                    ~~
-!!! The right-hand side of an 'in' expression must be of type 'any', an object type or a type parameter
-    var rb5 = x in 0;
-                   ~
-!!! The right-hand side of an 'in' expression must be of type 'any', an object type or a type parameter
-    var rb6 = x in false;
-                   ~~~~~
-!!! The right-hand side of an 'in' expression must be of type 'any', an object type or a type parameter
-    var rb7 = x in '';
+!!! error TS2361: The right-hand side of an 'in' expression must be of type 'any', an object type or a type parameter
+    var rb5 = x in b5;
                    ~~
-!!! The right-hand side of an 'in' expression must be of type 'any', an object type or a type parameter
-    var rb8 = x in null;
+!!! error TS2361: The right-hand side of an 'in' expression must be of type 'any', an object type or a type parameter
+    var rb6 = x in 0;
+                   ~
+!!! error TS2361: The right-hand side of an 'in' expression must be of type 'any', an object type or a type parameter
+    var rb7 = x in false;
+                   ~~~~~
+!!! error TS2361: The right-hand side of an 'in' expression must be of type 'any', an object type or a type parameter
+    var rb8 = x in '';
+                   ~~
+!!! error TS2361: The right-hand side of an 'in' expression must be of type 'any', an object type or a type parameter
+    var rb9 = x in null;
                    ~~~~
-!!! The right-hand side of an 'in' expression must be of type 'any', an object type or a type parameter
-    var rb9 = x in undefined;
-                   ~~~~~~~~~
-!!! The right-hand side of an 'in' expression must be of type 'any', an object type or a type parameter
+!!! error TS2361: The right-hand side of an 'in' expression must be of type 'any', an object type or a type parameter
+    var rb10 = x in undefined;
+                    ~~~~~~~~~
+!!! error TS2361: The right-hand side of an 'in' expression must be of type 'any', an object type or a type parameter
+    
     
     // both operands are invalid
     var rc1 = {} in '';
               ~~
-!!! The left-hand side of an 'in' expression must be of types 'any', 'string' or 'number'.
+!!! error TS2360: The left-hand side of an 'in' expression must be of types 'any', 'string' or 'number'.
                     ~~
-!!! The right-hand side of an 'in' expression must be of type 'any', an object type or a type parameter
+!!! error TS2361: The right-hand side of an 'in' expression must be of type 'any', an object type or a type parameter

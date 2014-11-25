@@ -12,10 +12,19 @@ class C {
     public static foo(x: number, y: string); // error
     private static foo(x: any, y?: any) { }
 
+    protected baz(x: string); // error
+    protected baz(x: number, y: string); // error
+    private baz(x: any, y?: any) { }
+
     private static bar(x: 'hi');
     public static bar(x: string); // error
     private static bar(x: number, y: string);
     private static bar(x: any, y?: any) { }
+
+    protected static baz(x: 'hi');
+    public static baz(x: string); // error
+    protected static baz(x: number, y: string);
+    protected static baz(x: any, y?: any) { }
 }
 
 class D<T> {
@@ -28,6 +37,10 @@ class D<T> {
     private bar(x: T, y: T);
     private bar(x: any, y?: any) { }
 
+    private baz(x: string); 
+    protected baz(x: number, y: string); // error
+    private baz(x: any, y?: any) { }
+
     private static foo(x: number);
     public static foo(x: number, y: string); // error
     private static foo(x: any, y?: any) { }
@@ -36,6 +49,10 @@ class D<T> {
     public static bar(x: string); // error
     private static bar(x: number, y: string);
     private static bar(x: any, y?: any) { }
+
+    public static baz(x: string); // error
+    protected static baz(x: number, y: string);
+    protected static baz(x: any, y?: any) { }
 }
 
 var c: C;

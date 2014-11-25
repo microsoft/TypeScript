@@ -2,16 +2,8 @@
 
 module TypeScript.SyntaxFacts {
     export function isDirectivePrologueElement(node: ISyntaxNodeOrToken): boolean {
-        if (node.kind() === SyntaxKind.ExpressionStatement) {
-            var expressionStatement = <ExpressionStatementSyntax>node;
-            var expression = expressionStatement.expression;
-
-            if (expression.kind() === SyntaxKind.StringLiteral) {
-                return true;
-            }
-        }
-
-        return false;
+        return node.kind === SyntaxKind.ExpressionStatement &&
+            (<ExpressionStatementSyntax>node).expression.kind === SyntaxKind.StringLiteral;
     }
 
     export function isUseStrictDirective(node: ISyntaxNodeOrToken): boolean {
@@ -23,7 +15,18 @@ module TypeScript.SyntaxFacts {
     }
 
     export function isIdentifierNameOrAnyKeyword(token: ISyntaxToken): boolean {
-        var tokenKind = token.kind();
+        var tokenKind = token.kind;
         return tokenKind === SyntaxKind.IdentifierName || SyntaxFacts.isAnyKeyword(tokenKind);
+    }
+
+    export function isAccessibilityModifier(kind: SyntaxKind): boolean {
+        switch (kind) {
+            case SyntaxKind.PublicKeyword:
+            case SyntaxKind.PrivateKeyword:
+            case SyntaxKind.ProtectedKeyword:
+                return true;
+        }
+
+        return false;
     }
 }

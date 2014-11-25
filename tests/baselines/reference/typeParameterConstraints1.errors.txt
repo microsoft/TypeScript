@@ -1,3 +1,11 @@
+tests/cases/compiler/typeParameterConstraints1.ts(8,25): error TS1110: Type expected.
+tests/cases/compiler/typeParameterConstraints1.ts(9,25): error TS1110: Type expected.
+tests/cases/compiler/typeParameterConstraints1.ts(10,26): error TS1110: Type expected.
+tests/cases/compiler/typeParameterConstraints1.ts(11,26): error TS1110: Type expected.
+tests/cases/compiler/typeParameterConstraints1.ts(6,25): error TS2304: Cannot find name 'hm'.
+tests/cases/compiler/typeParameterConstraints1.ts(12,26): error TS2304: Cannot find name 'undefined'.
+
+
 ==== tests/cases/compiler/typeParameterConstraints1.ts (6 errors) ====
     function foo1<T extends any>(test: T) { }
     function foo2<T extends number>(test: T) { }
@@ -6,21 +14,21 @@
     function foo5<T extends RegExp>(test: T) { } // valid
     function foo6<T extends hm>(test: T) { }
                             ~~
-!!! Cannot find name 'hm'.
+!!! error TS2304: Cannot find name 'hm'.
     function foo7<T extends Object>(test: T) { } // valid
     function foo8<T extends "">(test: T) { }
                             ~~
-!!! Type expected.
+!!! error TS1110: Type expected.
     function foo9<T extends 1 > (test: T) { }
                             ~
-!!! Type expected.
+!!! error TS1110: Type expected.
     function foo10<T extends (1)> (test: T) { }
-                             ~~~
-!!! Type expected.
+                             ~
+!!! error TS1110: Type expected.
     function foo11<T extends null> (test: T) { }
                              ~~~~
-!!! Type expected.
+!!! error TS1110: Type expected.
     function foo12<T extends undefined>(test: T) { }
                              ~~~~~~~~~
-!!! Cannot find name 'undefined'.
+!!! error TS2304: Cannot find name 'undefined'.
     function foo13<T extends void>(test: T) { }

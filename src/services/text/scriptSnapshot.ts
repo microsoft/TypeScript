@@ -1,32 +1,38 @@
 ///<reference path='references.ts' />
 
 module TypeScript {
-    // Represents an immutable snapshot of a script at a specified time.  Once acquired, the 
-    // snapshot is observably immutable.  i.e. the same calls with the same parameters will return
-    // the same values.
+    /**
+     * Represents an immutable snapshot of a script at a specified time.Once acquired, the 
+     * snapshot is observably immutable. i.e. the same calls with the same parameters will return
+     * the same values.
+     */
     export interface IScriptSnapshot {
-        // Get's a portion of the script snapshot specified by [start, end).  
+        /** Gets a portion of the script snapshot specified by [start, end). */
         getText(start: number, end: number): string;
 
-        // Get's the length of this script snapshot.
+        /** Gets the length of this script snapshot. */
         getLength(): number;
 
-        // This call returns the array containing the start position of every line.  
-        // i.e."[0, 10, 55]".  TODO: consider making this optional.  The language service could
-        // always determine this (albeit in a more expensive manner).
+        /**
+         * This call returns the array containing the start position of every line.  
+         * i.e."[0, 10, 55]".  TODO: consider making this optional.  The language service could
+         * always determine this (albeit in a more expensive manner).
+         */
         getLineStartPositions(): number[];
 
-        // Gets the TextChangeRange that describe how the text changed between this text and 
-        // an older version.  This informatoin is used by the incremental parser to determine
-        // what sections of the script need to be reparsed.  'null' can be returned if the 
-        // change range cannot be determined.  However, in that case, incremental parsing will
-        // not happen and the entire document will be reparsed.
+        /**
+         * Gets the TextChangeRange that describe how the text changed between this text and 
+         * an older version.  This information is used by the incremental parser to determine
+         * what sections of the script need to be re-parsed.  'undefined' can be returned if the 
+         * change range cannot be determined.  However, in that case, incremental parsing will
+         * not happen and the entire document will be re - parsed.
+         */
         getChangeRange(oldSnapshot: IScriptSnapshot): TextChangeRange;
     }
 
     export module ScriptSnapshot {
         class StringScriptSnapshot implements IScriptSnapshot {
-            private _lineStartPositions: number[] = null;
+            private _lineStartPositions: number[] = undefined;
 
             constructor(private text: string) {
             }

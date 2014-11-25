@@ -1,3 +1,25 @@
+tests/cases/compiler/privacyTypeParametersOfInterfaceDeclFile.ts(13,69): error TS4004: Type parameter 'T' of exported interface has or is using private name 'privateClass'.
+tests/cases/compiler/privacyTypeParametersOfInterfaceDeclFile.ts(16,18): error TS4057: Return type of method from exported interface has or is using private name 'privateClassT'.
+tests/cases/compiler/privacyTypeParametersOfInterfaceDeclFile.ts(16,32): error TS4057: Return type of method from exported interface has or is using private name 'privateClass'.
+tests/cases/compiler/privacyTypeParametersOfInterfaceDeclFile.ts(17,18): error TS4057: Return type of method from exported interface has or is using private name 'privateClassT'.
+tests/cases/compiler/privacyTypeParametersOfInterfaceDeclFile.ts(18,31): error TS4057: Return type of method from exported interface has or is using private name 'privateClass'.
+tests/cases/compiler/privacyTypeParametersOfInterfaceDeclFile.ts(25,18): error TS4057: Return type of method from exported interface has or is using private name 'privateClassT'.
+tests/cases/compiler/privacyTypeParametersOfInterfaceDeclFile.ts(25,32): error TS4057: Return type of method from exported interface has or is using private name 'privateClass'.
+tests/cases/compiler/privacyTypeParametersOfInterfaceDeclFile.ts(26,18): error TS4057: Return type of method from exported interface has or is using private name 'privateClassT'.
+tests/cases/compiler/privacyTypeParametersOfInterfaceDeclFile.ts(27,31): error TS4057: Return type of method from exported interface has or is using private name 'privateClass'.
+tests/cases/compiler/privacyTypeParametersOfInterfaceDeclFile.ts(60,85): error TS4004: Type parameter 'T' of exported interface has or is using private name 'privateModule'.
+tests/cases/compiler/privacyTypeParametersOfInterfaceDeclFile.ts(79,73): error TS4004: Type parameter 'T' of exported interface has or is using private name 'privateClassInPublicModule'.
+tests/cases/compiler/privacyTypeParametersOfInterfaceDeclFile.ts(82,22): error TS4057: Return type of method from exported interface has or is using private name 'privateClassInPublicModuleT'.
+tests/cases/compiler/privacyTypeParametersOfInterfaceDeclFile.ts(82,50): error TS4057: Return type of method from exported interface has or is using private name 'privateClassInPublicModule'.
+tests/cases/compiler/privacyTypeParametersOfInterfaceDeclFile.ts(83,22): error TS4057: Return type of method from exported interface has or is using private name 'privateClassInPublicModuleT'.
+tests/cases/compiler/privacyTypeParametersOfInterfaceDeclFile.ts(84,49): error TS4057: Return type of method from exported interface has or is using private name 'privateClassInPublicModule'.
+tests/cases/compiler/privacyTypeParametersOfInterfaceDeclFile.ts(91,22): error TS4057: Return type of method from exported interface has or is using private name 'privateClassInPublicModuleT'.
+tests/cases/compiler/privacyTypeParametersOfInterfaceDeclFile.ts(91,50): error TS4057: Return type of method from exported interface has or is using private name 'privateClassInPublicModule'.
+tests/cases/compiler/privacyTypeParametersOfInterfaceDeclFile.ts(92,22): error TS4057: Return type of method from exported interface has or is using private name 'privateClassInPublicModuleT'.
+tests/cases/compiler/privacyTypeParametersOfInterfaceDeclFile.ts(93,49): error TS4057: Return type of method from exported interface has or is using private name 'privateClassInPublicModule'.
+tests/cases/compiler/privacyTypeParametersOfInterfaceDeclFile.ts(125,89): error TS4004: Type parameter 'T' of exported interface has or is using private name 'privateModule'.
+
+
 ==== tests/cases/compiler/privacyTypeParametersOfInterfaceDeclFile.ts (20 errors) ====
     class privateClass {
     }
@@ -12,21 +34,21 @@
     }
     
     export interface publicInterfaceWithPrivateTypeParameters<T extends privateClass> { // Error
-                                                              ~~~~~~~~~~~~~~~~~~~~~~
-!!! Type parameter 'T' of exported interface has or is using private name 'privateClass'.
+                                                                        ~~~~~~~~~~~~
+!!! error TS4004: Type parameter 'T' of exported interface has or is using private name 'privateClass'.
         myMethod(val: T): T;
         myMethod0(): publicClassT<T>;
         myMethod1(): privateClassT<privateClass>; 
-        ~~~~~~~~~
-!!! Return type of method from exported interface has or is using private name 'privateClass'.
-        ~~~~~~~~~
-!!! Return type of method from exported interface has or is using private name 'privateClassT'.
+                     ~~~~~~~~~~~~~
+!!! error TS4057: Return type of method from exported interface has or is using private name 'privateClassT'.
+                                   ~~~~~~~~~~~~
+!!! error TS4057: Return type of method from exported interface has or is using private name 'privateClass'.
         myMethod2(): privateClassT<publicClass>;
-        ~~~~~~~~~
-!!! Return type of method from exported interface has or is using private name 'privateClassT'.
+                     ~~~~~~~~~~~~~
+!!! error TS4057: Return type of method from exported interface has or is using private name 'privateClassT'.
         myMethod3(): publicClassT<privateClass>;
-        ~~~~~~~~~
-!!! Return type of method from exported interface has or is using private name 'privateClass'.
+                                  ~~~~~~~~~~~~
+!!! error TS4057: Return type of method from exported interface has or is using private name 'privateClass'.
         myMethod4(): publicClassT<publicClass>; 
     }
     
@@ -34,16 +56,16 @@
         myMethod(val: T): T;
         myMethod0(): publicClassT<T>
         myMethod1(): privateClassT<privateClass>;
-        ~~~~~~~~~
-!!! Return type of method from exported interface has or is using private name 'privateClass'.
-        ~~~~~~~~~
-!!! Return type of method from exported interface has or is using private name 'privateClassT'.
+                     ~~~~~~~~~~~~~
+!!! error TS4057: Return type of method from exported interface has or is using private name 'privateClassT'.
+                                   ~~~~~~~~~~~~
+!!! error TS4057: Return type of method from exported interface has or is using private name 'privateClass'.
         myMethod2(): privateClassT<publicClass>;
-        ~~~~~~~~~
-!!! Return type of method from exported interface has or is using private name 'privateClassT'.
+                     ~~~~~~~~~~~~~
+!!! error TS4057: Return type of method from exported interface has or is using private name 'privateClassT'.
         myMethod3(): publicClassT<privateClass>;
-        ~~~~~~~~~
-!!! Return type of method from exported interface has or is using private name 'privateClass'.
+                                  ~~~~~~~~~~~~
+!!! error TS4057: Return type of method from exported interface has or is using private name 'privateClass'.
         myMethod4(): publicClassT<publicClass>;
     }
     
@@ -77,8 +99,8 @@
     
     
     export interface publicInterfaceWithPrivateModuleTypeParameterConstraints<T extends privateModule.publicClassInPrivateModule> { // Error
-                                                                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Type parameter 'T' of exported interface has or is using name 'privateModule.publicClassInPrivateModule' from private module 'privateModule'.
+                                                                                        ~~~~~~~~~~~~~
+!!! error TS4004: Type parameter 'T' of exported interface has or is using private name 'privateModule'.
     }
     
     interface privateInterfaceWithPrivateModuleTypeParameterConstraints<T extends privateModule.publicClassInPrivateModule> { // Error
@@ -98,21 +120,21 @@
         }
     
         export interface publicInterfaceWithPrivateTypeParameters<T extends privateClassInPublicModule> { // Error
-                                                                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Type parameter 'T' of exported interface has or is using private name 'privateClassInPublicModule'.
+                                                                            ~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS4004: Type parameter 'T' of exported interface has or is using private name 'privateClassInPublicModule'.
             myMethod(val: T): T;
             myMethod0(): publicClassInPublicModuleT<T>;
             myMethod1(): privateClassInPublicModuleT<privateClassInPublicModule>;
-            ~~~~~~~~~
-!!! Return type of method from exported interface has or is using private name 'privateClassInPublicModule'.
-            ~~~~~~~~~
-!!! Return type of method from exported interface has or is using private name 'privateClassInPublicModuleT'.
+                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS4057: Return type of method from exported interface has or is using private name 'privateClassInPublicModuleT'.
+                                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS4057: Return type of method from exported interface has or is using private name 'privateClassInPublicModule'.
             myMethod2(): privateClassInPublicModuleT<publicClassInPublicModule>;
-            ~~~~~~~~~
-!!! Return type of method from exported interface has or is using private name 'privateClassInPublicModuleT'.
+                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS4057: Return type of method from exported interface has or is using private name 'privateClassInPublicModuleT'.
             myMethod3(): publicClassInPublicModuleT<privateClassInPublicModule>;
-            ~~~~~~~~~
-!!! Return type of method from exported interface has or is using private name 'privateClassInPublicModule'.
+                                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS4057: Return type of method from exported interface has or is using private name 'privateClassInPublicModule'.
             myMethod4(): publicClassInPublicModuleT<publicClassInPublicModule>;
         }
     
@@ -120,16 +142,16 @@
             myMethod(val: T): T;
             myMethod0(): publicClassInPublicModuleT<T>
             myMethod1(): privateClassInPublicModuleT<privateClassInPublicModule>;
-            ~~~~~~~~~
-!!! Return type of method from exported interface has or is using private name 'privateClassInPublicModule'.
-            ~~~~~~~~~
-!!! Return type of method from exported interface has or is using private name 'privateClassInPublicModuleT'.
+                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS4057: Return type of method from exported interface has or is using private name 'privateClassInPublicModuleT'.
+                                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS4057: Return type of method from exported interface has or is using private name 'privateClassInPublicModule'.
             myMethod2(): privateClassInPublicModuleT<publicClassInPublicModule>;
-            ~~~~~~~~~
-!!! Return type of method from exported interface has or is using private name 'privateClassInPublicModuleT'.
+                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS4057: Return type of method from exported interface has or is using private name 'privateClassInPublicModuleT'.
             myMethod3(): publicClassInPublicModuleT<privateClassInPublicModule>;
-            ~~~~~~~~~
-!!! Return type of method from exported interface has or is using private name 'privateClassInPublicModule'.
+                                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS4057: Return type of method from exported interface has or is using private name 'privateClassInPublicModule'.
             myMethod4(): publicClassInPublicModuleT<publicClassInPublicModule>;
         }
     
@@ -162,8 +184,8 @@
         }
     
         export interface publicInterfaceWithPrivateModuleTypeParameterConstraints<T extends privateModule.publicClassInPrivateModule> { // Error
-                                                                                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Type parameter 'T' of exported interface has or is using name 'privateModule.publicClassInPrivateModule' from private module 'privateModule'.
+                                                                                            ~~~~~~~~~~~~~
+!!! error TS4004: Type parameter 'T' of exported interface has or is using private name 'privateModule'.
         }
     
         interface privateInterfaceWithPrivateModuleTypeParameterConstraints<T extends privateModule.publicClassInPrivateModule> { // Error

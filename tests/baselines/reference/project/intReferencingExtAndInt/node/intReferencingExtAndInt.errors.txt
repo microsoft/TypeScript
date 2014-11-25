@@ -1,11 +1,11 @@
-internal2.ts(2,2): error TS1147: Import declarations in an internal module cannot reference an external module.
+internal2.ts(2,21): error TS1147: Import declarations in an internal module cannot reference an external module.
 
 
 ==== internal2.ts (1 errors) ====
     module outer {
     	import g = require("external2")
-    	~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Import declarations in an internal module cannot reference an external module.
+    	                   ~~~~~~~~~~~
+!!! error TS1147: Import declarations in an internal module cannot reference an external module.
     	export var a = g.square(5);
     	export var b = "foo";
     }

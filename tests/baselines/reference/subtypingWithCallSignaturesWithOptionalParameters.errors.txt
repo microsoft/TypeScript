@@ -1,3 +1,11 @@
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithCallSignaturesWithOptionalParameters.ts(19,11): error TS2430: Interface 'I3' incorrectly extends interface 'Base'.
+  Types of property 'a' are incompatible.
+    Type '(x: number) => number' is not assignable to type '() => number'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithCallSignaturesWithOptionalParameters.ts(49,11): error TS2430: Interface 'I10' incorrectly extends interface 'Base'.
+  Types of property 'a3' are incompatible.
+    Type '(x: number, y: number) => number' is not assignable to type '(x: number) => number'.
+
+
 ==== tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithCallSignaturesWithOptionalParameters.ts (2 errors) ====
     // call signatures in derived types must have the same or fewer optional parameters as the base type
     
@@ -19,9 +27,9 @@
     
     interface I3 extends Base {
               ~~
-!!! Interface 'I3' incorrectly extends interface 'Base':
-!!!   Types of property 'a' are incompatible:
-!!!     Type '(x: number) => number' is not assignable to type '() => number'.
+!!! error TS2430: Interface 'I3' incorrectly extends interface 'Base'.
+!!! error TS2430:   Types of property 'a' are incompatible.
+!!! error TS2430:     Type '(x: number) => number' is not assignable to type '() => number'.
         a: (x: number) => number; // error, too many required params
     }
     
@@ -53,9 +61,9 @@
     
     interface I10 extends Base {
               ~~~
-!!! Interface 'I10' incorrectly extends interface 'Base':
-!!!   Types of property 'a3' are incompatible:
-!!!     Type '(x: number, y: number) => number' is not assignable to type '(x: number) => number'.
+!!! error TS2430: Interface 'I10' incorrectly extends interface 'Base'.
+!!! error TS2430:   Types of property 'a3' are incompatible.
+!!! error TS2430:     Type '(x: number, y: number) => number' is not assignable to type '(x: number) => number'.
         a3: (x: number, y: number) => number;  // error, too many required params
     }
     

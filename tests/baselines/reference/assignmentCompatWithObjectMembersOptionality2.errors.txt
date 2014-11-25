@@ -1,3 +1,23 @@
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersOptionality2.ts(74,5): error TS2322: Type 'D' is not assignable to type 'C'.
+  Property 'opt' is missing in type 'D'.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersOptionality2.ts(75,5): error TS2322: Type 'E' is not assignable to type 'C'.
+  Property 'opt' is missing in type 'E'.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersOptionality2.ts(76,5): error TS2322: Type 'F' is not assignable to type 'C'.
+  Property 'opt' is missing in type 'F'.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersOptionality2.ts(79,5): error TS2322: Type 'D' is not assignable to type '{ opt: Base; }'.
+  Property 'opt' is missing in type 'D'.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersOptionality2.ts(80,5): error TS2322: Type 'E' is not assignable to type '{ opt: Base; }'.
+  Property 'opt' is missing in type 'E'.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersOptionality2.ts(81,5): error TS2322: Type 'F' is not assignable to type '{ opt: Base; }'.
+  Property 'opt' is missing in type 'F'.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersOptionality2.ts(84,5): error TS2322: Type 'D' is not assignable to type '{ opt: Base; }'.
+  Property 'opt' is missing in type 'D'.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersOptionality2.ts(85,5): error TS2322: Type 'E' is not assignable to type '{ opt: Base; }'.
+  Property 'opt' is missing in type 'E'.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersOptionality2.ts(86,5): error TS2322: Type 'F' is not assignable to type '{ opt: Base; }'.
+  Property 'opt' is missing in type 'F'.
+
+
 ==== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersOptionality2.ts (9 errors) ====
     // M is optional and S contains no property with the same name as M
     // N is optional and T contains no property with the same name as N
@@ -74,44 +94,44 @@
     
         c = d; // error
         ~
-!!! Type 'D' is not assignable to type 'C':
-!!!   Property 'opt' is missing in type 'D'.
+!!! error TS2322: Type 'D' is not assignable to type 'C'.
+!!! error TS2322:   Property 'opt' is missing in type 'D'.
         c = e; // error
         ~
-!!! Type 'E' is not assignable to type 'C':
-!!!   Property 'opt' is missing in type 'E'.
+!!! error TS2322: Type 'E' is not assignable to type 'C'.
+!!! error TS2322:   Property 'opt' is missing in type 'E'.
         c = f; // error
         ~
-!!! Type 'F' is not assignable to type 'C':
-!!!   Property 'opt' is missing in type 'F'.
+!!! error TS2322: Type 'F' is not assignable to type 'C'.
+!!! error TS2322:   Property 'opt' is missing in type 'F'.
         c = a; // ok
     
         a = d; // error
         ~
-!!! Type 'D' is not assignable to type '{ opt: Base; }':
-!!!   Property 'opt' is missing in type 'D'.
+!!! error TS2322: Type 'D' is not assignable to type '{ opt: Base; }'.
+!!! error TS2322:   Property 'opt' is missing in type 'D'.
         a = e; // error
         ~
-!!! Type 'E' is not assignable to type '{ opt: Base; }':
-!!!   Property 'opt' is missing in type 'E'.
+!!! error TS2322: Type 'E' is not assignable to type '{ opt: Base; }'.
+!!! error TS2322:   Property 'opt' is missing in type 'E'.
         a = f; // error
         ~
-!!! Type 'F' is not assignable to type '{ opt: Base; }':
-!!!   Property 'opt' is missing in type 'F'.
+!!! error TS2322: Type 'F' is not assignable to type '{ opt: Base; }'.
+!!! error TS2322:   Property 'opt' is missing in type 'F'.
         a = c; // ok
     
         b = d; // error
         ~
-!!! Type 'D' is not assignable to type '{ opt: Base; }':
-!!!   Property 'opt' is missing in type 'D'.
+!!! error TS2322: Type 'D' is not assignable to type '{ opt: Base; }'.
+!!! error TS2322:   Property 'opt' is missing in type 'D'.
         b = e; // error
         ~
-!!! Type 'E' is not assignable to type '{ opt: Base; }':
-!!!   Property 'opt' is missing in type 'E'.
+!!! error TS2322: Type 'E' is not assignable to type '{ opt: Base; }'.
+!!! error TS2322:   Property 'opt' is missing in type 'E'.
         b = f; // error
         ~
-!!! Type 'F' is not assignable to type '{ opt: Base; }':
-!!!   Property 'opt' is missing in type 'F'.
+!!! error TS2322: Type 'F' is not assignable to type '{ opt: Base; }'.
+!!! error TS2322:   Property 'opt' is missing in type 'F'.
         b = a; // ok
         b = c; // ok
     }

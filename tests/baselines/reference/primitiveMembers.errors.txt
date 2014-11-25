@@ -1,3 +1,9 @@
+tests/cases/compiler/primitiveMembers.ts(24,35): error TS1068: Unexpected token. A constructor, method, accessor, or property was expected.
+tests/cases/compiler/primitiveMembers.ts(25,56): error TS1068: Unexpected token. A constructor, method, accessor, or property was expected.
+tests/cases/compiler/primitiveMembers.ts(5,3): error TS2339: Property 'toBAZ' does not exist on type 'number'.
+tests/cases/compiler/primitiveMembers.ts(11,1): error TS2322: Type 'Number' is not assignable to type 'number'.
+
+
 ==== tests/cases/compiler/primitiveMembers.ts (4 errors) ====
     var x = 5;
     var r = /yo/;
@@ -5,7 +11,7 @@
     
     x.toBAZ();
       ~~~~~
-!!! Property 'toBAZ' does not exist on type 'number'.
+!!! error TS2339: Property 'toBAZ' does not exist on type 'number'.
     x.toString();
     
     var n = 0;
@@ -13,7 +19,7 @@
     
     n = N;  // should not work, as 'number' has a different brand
     ~
-!!! Type 'Number' is not assignable to type 'number'.
+!!! error TS2322: Type 'Number' is not assignable to type 'number'.
     N = n; // should work
     
     var o: Object = {}
@@ -28,10 +34,10 @@
     
     class baz { public bar(): void { }; }
                                       ~
-!!! Unexpected token. A constructor, method, accessor, or property was expected.
+!!! error TS1068: Unexpected token. A constructor, method, accessor, or property was expected.
     class foo extends baz { public bar(){ return undefined}; }
                                                            ~
-!!! Unexpected token. A constructor, method, accessor, or property was expected.
+!!! error TS1068: Unexpected token. A constructor, method, accessor, or property was expected.
     
     
     

@@ -12,10 +12,10 @@ edit.disableFormatting();
 diagnostics.setEditValidation(IncrementalEditValidation.SyntacticOnly);
 
 goTo.marker('check');
-verify.quickInfoSymbolNameIs('Mod');
+verify.quickInfoIs('module Mod');
 
 goTo.marker('insert');
 edit.insert("x: number;\n");
 
 goTo.marker('check');
-verify.quickInfoSymbolNameIs('Mod');
+verify.quickInfoIs('module Mod');

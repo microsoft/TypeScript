@@ -1,10 +1,16 @@
+tests/cases/compiler/implementClausePrecedingExtends.ts(2,22): error TS1005: '{' expected.
+tests/cases/compiler/implementClausePrecedingExtends.ts(2,32): error TS1005: ';' expected.
+tests/cases/compiler/implementClausePrecedingExtends.ts(2,7): error TS2420: Class 'D' incorrectly implements interface 'C'.
+  Property 'foo' is missing in type 'D'.
+
+
 ==== tests/cases/compiler/implementClausePrecedingExtends.ts (3 errors) ====
     class C { foo: number }
     class D implements C extends C { }
                          ~~~~~~~
-!!! '{' expected.
+!!! error TS1005: '{' expected.
                                    ~
-!!! ';' expected.
+!!! error TS1005: ';' expected.
           ~
-!!! Class 'D' incorrectly implements interface 'C':
-!!!   Property 'foo' is missing in type 'D'.
+!!! error TS2420: Class 'D' incorrectly implements interface 'C'.
+!!! error TS2420:   Property 'foo' is missing in type 'D'.

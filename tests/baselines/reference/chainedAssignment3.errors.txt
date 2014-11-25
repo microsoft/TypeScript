@@ -1,3 +1,8 @@
+tests/cases/compiler/chainedAssignment3.ts(18,1): error TS2322: Type 'A' is not assignable to type 'B'.
+  Property 'value' is missing in type 'A'.
+tests/cases/compiler/chainedAssignment3.ts(19,5): error TS2322: Type 'A' is not assignable to type 'B'.
+
+
 ==== tests/cases/compiler/chainedAssignment3.ts (2 errors) ====
     class A {
         id: number;
@@ -18,11 +23,11 @@
     // error cases
     b = a = new A();
     ~
-!!! Type 'A' is not assignable to type 'B':
-!!!   Property 'value' is missing in type 'A'.
+!!! error TS2322: Type 'A' is not assignable to type 'B'.
+!!! error TS2322:   Property 'value' is missing in type 'A'.
     a = b = new A();
         ~
-!!! Type 'A' is not assignable to type 'B'.
+!!! error TS2322: Type 'A' is not assignable to type 'B'.
     
     
     

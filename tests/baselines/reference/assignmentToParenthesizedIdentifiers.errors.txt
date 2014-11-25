@@ -1,13 +1,45 @@
+tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(4,1): error TS2322: Type 'string' is not assignable to type 'number'.
+tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(5,1): error TS2322: Type 'string' is not assignable to type 'number'.
+tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(13,1): error TS2322: Type 'string' is not assignable to type 'number'.
+tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(14,1): error TS2322: Type 'string' is not assignable to type 'number'.
+tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(15,1): error TS2322: Type 'string' is not assignable to type 'number'.
+tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(17,1): error TS2364: Invalid left-hand side of assignment expression.
+tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(18,1): error TS2364: Invalid left-hand side of assignment expression.
+tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(25,5): error TS2364: Invalid left-hand side of assignment expression.
+tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(31,1): error TS2322: Type '{ x: string; }' is not assignable to type 'typeof M3'.
+  Types of property 'x' are incompatible.
+    Type 'string' is not assignable to type 'number'.
+tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(32,1): error TS2322: Type '{ x: string; }' is not assignable to type 'typeof M3'.
+  Types of property 'x' are incompatible.
+    Type 'string' is not assignable to type 'number'.
+tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(33,1): error TS2322: Type '{ x: string; }' is not assignable to type 'typeof M3'.
+  Types of property 'x' are incompatible.
+    Type 'string' is not assignable to type 'number'.
+tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(37,1): error TS2364: Invalid left-hand side of assignment expression.
+tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(38,1): error TS2364: Invalid left-hand side of assignment expression.
+tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(43,5): error TS2322: Type 'string' is not assignable to type 'number'.
+tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(44,5): error TS2322: Type 'string' is not assignable to type 'number'.
+tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(48,5): error TS2322: Type 'string' is not assignable to type 'number'.
+tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(49,5): error TS2322: Type 'string' is not assignable to type 'number'.
+tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(54,5): error TS2322: Type 'string' is not assignable to type 'number'.
+tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(55,5): error TS2322: Type 'string' is not assignable to type 'number'.
+tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(56,5): error TS2322: Type 'string' is not assignable to type 'number'.
+tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(62,1): error TS2364: Invalid left-hand side of assignment expression.
+tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(63,1): error TS2364: Invalid left-hand side of assignment expression.
+tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(69,1): error TS2364: Invalid left-hand side of assignment expression.
+tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(70,1): error TS2364: Invalid left-hand side of assignment expression.
+
+
 ==== tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts (24 errors) ====
     var x: number;
     x = 3; // OK
     (x) = 3; // OK
     x = ''; // Error
     ~
-!!! Type 'string' is not assignable to type 'number'.
+!!! error TS2322: Type 'string' is not assignable to type 'number'.
     (x) = ''; // Error
     ~~~
-!!! Type 'string' is not assignable to type 'number'.
+!!! error TS2322: Type 'string' is not assignable to type 'number'.
     
     module M {
         export var y: number;
@@ -17,20 +49,20 @@
     (M.y) = 3; // OK
     M.y = ''; // Error
     ~~~
-!!! Type 'string' is not assignable to type 'number'.
+!!! error TS2322: Type 'string' is not assignable to type 'number'.
     (M).y = ''; // Error
     ~~~~~
-!!! Type 'string' is not assignable to type 'number'.
+!!! error TS2322: Type 'string' is not assignable to type 'number'.
     (M.y) = ''; // Error
     ~~~~~
-!!! Type 'string' is not assignable to type 'number'.
+!!! error TS2322: Type 'string' is not assignable to type 'number'.
     
     M = { y: 3 }; // Error
     ~
-!!! Invalid left-hand side of assignment expression.
+!!! error TS2364: Invalid left-hand side of assignment expression.
     (M) = { y: 3 }; // Error
     ~~~
-!!! Invalid left-hand side of assignment expression.
+!!! error TS2364: Invalid left-hand side of assignment expression.
     
     module M2 {
         export module M3 {
@@ -39,7 +71,7 @@
     
         M3 = { x: 3 }; // Error
         ~~
-!!! Invalid left-hand side of assignment expression.
+!!! error TS2364: Invalid left-hand side of assignment expression.
     }
     M2.M3 = { x: 3 }; // OK
     (M2).M3 = { x: 3 }; // OK
@@ -47,60 +79,60 @@
     
     M2.M3 = { x: '' }; // Error
     ~~~~~
-!!! Type '{ x: string; }' is not assignable to type 'typeof M3':
-!!!   Types of property 'x' are incompatible:
-!!!     Type 'string' is not assignable to type 'number'.
+!!! error TS2322: Type '{ x: string; }' is not assignable to type 'typeof M3'.
+!!! error TS2322:   Types of property 'x' are incompatible.
+!!! error TS2322:     Type 'string' is not assignable to type 'number'.
     (M2).M3 = { x: '' }; // Error
     ~~~~~~~
-!!! Type '{ x: string; }' is not assignable to type 'typeof M3':
-!!!   Types of property 'x' are incompatible:
-!!!     Type 'string' is not assignable to type 'number'.
+!!! error TS2322: Type '{ x: string; }' is not assignable to type 'typeof M3'.
+!!! error TS2322:   Types of property 'x' are incompatible.
+!!! error TS2322:     Type 'string' is not assignable to type 'number'.
     (M2.M3) = { x: '' }; // Error
     ~~~~~~~
-!!! Type '{ x: string; }' is not assignable to type 'typeof M3':
-!!!   Types of property 'x' are incompatible:
-!!!     Type 'string' is not assignable to type 'number'.
+!!! error TS2322: Type '{ x: string; }' is not assignable to type 'typeof M3'.
+!!! error TS2322:   Types of property 'x' are incompatible.
+!!! error TS2322:     Type 'string' is not assignable to type 'number'.
     
     
     function fn() { }
     fn = () => 3; // Bug 823548: Should be error (fn is not a reference)
     ~~
-!!! Invalid left-hand side of assignment expression.
+!!! error TS2364: Invalid left-hand side of assignment expression.
     (fn) = () => 3; // Should be error
     ~~~~
-!!! Invalid left-hand side of assignment expression.
+!!! error TS2364: Invalid left-hand side of assignment expression.
     
     function fn2(x: number, y: { t: number }) {
         x = 3;
         (x) = 3; // OK
         x = ''; // Error
         ~
-!!! Type 'string' is not assignable to type 'number'.
+!!! error TS2322: Type 'string' is not assignable to type 'number'.
         (x) = ''; // Error
         ~~~
-!!! Type 'string' is not assignable to type 'number'.
+!!! error TS2322: Type 'string' is not assignable to type 'number'.
     
         (y).t = 3; // OK
         (y.t) = 3; // OK
         (y).t = ''; // Error
         ~~~~~
-!!! Type 'string' is not assignable to type 'number'.
+!!! error TS2322: Type 'string' is not assignable to type 'number'.
         (y.t) = ''; // Error
         ~~~~~
-!!! Type 'string' is not assignable to type 'number'.
+!!! error TS2322: Type 'string' is not assignable to type 'number'.
     
         y['t'] = 3; // OK
         (y)['t'] = 3; // OK
         (y['t']) = 3; // OK
         y['t'] = ''; // Error
         ~~~~~~
-!!! Type 'string' is not assignable to type 'number'.
+!!! error TS2322: Type 'string' is not assignable to type 'number'.
         (y)['t'] = ''; // Error
         ~~~~~~~~
-!!! Type 'string' is not assignable to type 'number'.
+!!! error TS2322: Type 'string' is not assignable to type 'number'.
         (y['t']) = ''; // Error
         ~~~~~~~~
-!!! Type 'string' is not assignable to type 'number'.
+!!! error TS2322: Type 'string' is not assignable to type 'number'.
     }
     
     enum E {
@@ -108,10 +140,10 @@
     }
     E = undefined; // Error
     ~
-!!! Invalid left-hand side of assignment expression.
+!!! error TS2364: Invalid left-hand side of assignment expression.
     (E) = undefined; // Error
     ~~~
-!!! Invalid left-hand side of assignment expression.
+!!! error TS2364: Invalid left-hand side of assignment expression.
     
     class C {
     
@@ -119,8 +151,8 @@
     
     C = undefined; // Error
     ~
-!!! Invalid left-hand side of assignment expression.
+!!! error TS2364: Invalid left-hand side of assignment expression.
     (C) = undefined; // Error
     ~~~
-!!! Invalid left-hand side of assignment expression.
+!!! error TS2364: Invalid left-hand side of assignment expression.
     

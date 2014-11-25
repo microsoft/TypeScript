@@ -1,23 +1,35 @@
-==== tests/cases/conformance/interfaces/declarationMerging/mergedInterfacesWithConflictingPropertyNames2.ts (3 errors) ====
+tests/cases/conformance/interfaces/declarationMerging/mergedInterfacesWithConflictingPropertyNames2.ts(2,5): error TS2300: Duplicate identifier 'x'.
+tests/cases/conformance/interfaces/declarationMerging/mergedInterfacesWithConflictingPropertyNames2.ts(6,5): error TS2300: Duplicate identifier 'x'.
+tests/cases/conformance/interfaces/declarationMerging/mergedInterfacesWithConflictingPropertyNames2.ts(11,9): error TS2300: Duplicate identifier 'x'.
+tests/cases/conformance/interfaces/declarationMerging/mergedInterfacesWithConflictingPropertyNames2.ts(15,9): error TS2300: Duplicate identifier 'x'.
+tests/cases/conformance/interfaces/declarationMerging/mergedInterfacesWithConflictingPropertyNames2.ts(33,9): error TS2300: Duplicate identifier 'x'.
+tests/cases/conformance/interfaces/declarationMerging/mergedInterfacesWithConflictingPropertyNames2.ts(39,9): error TS2300: Duplicate identifier 'x'.
+
+
+==== tests/cases/conformance/interfaces/declarationMerging/mergedInterfacesWithConflictingPropertyNames2.ts (6 errors) ====
     interface A {
         x: string; // error
+        ~
+!!! error TS2300: Duplicate identifier 'x'.
     }
     
     interface A {
         x: string; // error
         ~
-!!! Duplicate identifier 'x'.
+!!! error TS2300: Duplicate identifier 'x'.
     }
     
     module M {
         interface A<T> {
             x: T;
+            ~
+!!! error TS2300: Duplicate identifier 'x'.
         }
     
         interface A<T> {
             x: T;  // error
             ~
-!!! Duplicate identifier 'x'.
+!!! error TS2300: Duplicate identifier 'x'.
         }
     }
     
@@ -36,6 +48,8 @@
     module M3 {
         export interface A<T> {
             x: T;
+            ~
+!!! error TS2300: Duplicate identifier 'x'.
         }
     }
     
@@ -43,6 +57,6 @@
         export interface A<T> {
             x: T;  // error
             ~
-!!! Duplicate identifier 'x'.
+!!! error TS2300: Duplicate identifier 'x'.
         }
     }

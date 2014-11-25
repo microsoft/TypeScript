@@ -1,7 +1,8 @@
-==== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ParameterLists/parserErrorRecovery_ParameterList2.ts (2 errors) ====
+tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ParameterLists/parserErrorRecovery_ParameterList2.ts(1,15): error TS1005: ')' expected.
+
+
+==== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ParameterLists/parserErrorRecovery_ParameterList2.ts (1 errors) ====
     function f(a, {
-                ~
-!!! Trailing comma not allowed.
                   ~
-!!! ')' expected.
+!!! error TS1005: ')' expected.
     }

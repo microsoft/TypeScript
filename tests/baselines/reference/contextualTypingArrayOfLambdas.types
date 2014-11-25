@@ -23,8 +23,8 @@ class C extends A {
 }
 
 var xs = [(x: A) => { }, (x: B) => { }, (x: C) => { }];
->xs : { (x: A): void; }[]
->[(x: A) => { }, (x: B) => { }, (x: C) => { }] : { (x: A): void; }[]
+>xs : ((x: A) => void)[]
+>[(x: A) => { }, (x: B) => { }, (x: C) => { }] : ((x: A) => void)[]
 >(x: A) => { } : (x: A) => void
 >x : A
 >A : A

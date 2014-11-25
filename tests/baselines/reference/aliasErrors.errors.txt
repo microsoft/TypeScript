@@ -1,3 +1,12 @@
+tests/cases/compiler/aliasErrors.ts(13,12): error TS1003: Identifier expected.
+tests/cases/compiler/aliasErrors.ts(14,12): error TS1003: Identifier expected.
+tests/cases/compiler/aliasErrors.ts(15,12): error TS1003: Identifier expected.
+tests/cases/compiler/aliasErrors.ts(11,1): error TS2304: Cannot find name 'no'.
+tests/cases/compiler/aliasErrors.ts(12,1): error TS2304: Cannot find name 'no'.
+tests/cases/compiler/aliasErrors.ts(16,1): error TS2304: Cannot find name 'undefined'.
+tests/cases/compiler/aliasErrors.ts(26,10): error TS2305: Module 'foo.bar.baz' has no exported member 'bar'.
+
+
 ==== tests/cases/compiler/aliasErrors.ts (7 errors) ====
     module foo {    
         export class Provide {
@@ -11,22 +20,22 @@
     
     import m = no;
     ~~~~~~~~~~~~~~
-!!! Cannot find name 'no'.
+!!! error TS2304: Cannot find name 'no'.
     import m2 = no.mod;
     ~~~~~~~~~~~~~~~~~~~
-!!! Cannot find name 'no'.
+!!! error TS2304: Cannot find name 'no'.
     import n = 5;
                ~
-!!! Identifier expected.
+!!! error TS1003: Identifier expected.
     import o = "s";
                ~~~
-!!! Identifier expected.
+!!! error TS1003: Identifier expected.
     import q = null;
                ~~~~
-!!! Identifier expected.
+!!! error TS1003: Identifier expected.
     import r = undefined;
     ~~~~~~~~~~~~~~~~~~~~~
-!!! Cannot find name 'undefined'.
+!!! error TS2304: Cannot find name 'undefined'.
     
     
     var p = new provide.Provide();
@@ -38,7 +47,7 @@
       var p2: foo.Provide;
       var p3:booz.bar;
              ~~~~~~~~
-!!! Module 'foo.bar.baz' has no exported member 'bar'.
+!!! error TS2305: Module 'foo.bar.baz' has no exported member 'bar'.
       var p22 = new provide.Provide();
     }
     

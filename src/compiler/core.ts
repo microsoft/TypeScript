@@ -1,8 +1,28 @@
 /// <reference path="types.ts"/>
 
 module ts {
+
+    // Ternary values are defined such that
+    // x & y is False if either x or y is False.
+    // x & y is Maybe if either x or y is Maybe, but neither x or y is False.
+    // x & y is True if both x and y are True.
+    // x | y is False if both x and y are False.
+    // x | y is Maybe if either x or y is Maybe, but neither x or y is True.
+    // x | y is True if either x or y is True.
+    export const enum Ternary {
+        False = 0,
+        Maybe = 1,
+        True  = -1
+    }
+
     export interface Map<T> {
         [index: string]: T;
+    }
+
+    export const enum Comparison {
+        LessThan    = -1,
+        EqualTo     = 0,
+        GreaterThan = 1
     }
 
     export interface StringSet extends Map<any> { }
@@ -11,7 +31,9 @@ module ts {
         var result: U;
         if (array) {
             for (var i = 0, len = array.length; i < len; i++) {
-                if (result = callback(array[i])) break;
+                if (result = callback(array[i])) {
+                    break;
+                }
             }
         }
         return result;
@@ -19,8 +41,7 @@ module ts {
 
     export function contains<T>(array: T[], value: T): boolean {
         if (array) {
-            var len = array.length;
-            for (var i = 0; i < len; i++) {
+            for (var i = 0, len = array.length; i < len; i++) {
                 if (array[i] === value) {
                     return true;
                 }
@@ -31,8 +52,7 @@ module ts {
 
     export function indexOf<T>(array: T[], value: T): number {
         if (array) {
-            var len = array.length;
-            for (var i = 0; i < len; i++) {
+            for (var i = 0, len = array.length; i < len; i++) {
                 if (array[i] === value) {
                     return i;
                 }
@@ -41,10 +61,21 @@ module ts {
         return -1;
     }
 
-    export function filter<T>(array: T[], f: (x: T) => boolean): T[] {
-        var result: T[];
+    export function countWhere<T>(array: T[], predicate: (x: T) => boolean): number {
+        var count = 0;
         if (array) {
-            result = [];
+            for (var i = 0, len = array.length; i < len; i++) {
+                if (predicate(array[i])) {
+                    count++;
+                }
+            }
+        }
+        return count;
+    }
+
+    export function filter<T>(array: T[], f: (x: T) => boolean): T[] {
+        if (array) {
+            var result: T[] = [];
             for (var i = 0, len = array.length; i < len; i++) {
                 var item = array[i];
                 if (f(item)) {
@@ -56,11 +87,9 @@ module ts {
     }
 
     export function map<T, U>(array: T[], f: (x: T) => U): U[] {
-        var result: U[];
         if (array) {
-            result = [];
-            var len = array.length;
-            for (var i = 0; i < len; i++) {
+            var result: U[] = [];
+            for (var i = 0, len = array.length; i < len; i++) {
                 result.push(f(array[i]));
             }
         }
@@ -70,7 +99,19 @@ module ts {
     export function concatenate<T>(array1: T[], array2: T[]): T[] {
         if (!array2 || !array2.length) return array1;
         if (!array1 || !array1.length) return array2;
+
         return array1.concat(array2);
+    }
+
+    export function deduplicate<T>(array: T[]): T[] {
+        if (array) {
+            var result: T[] = [];
+            for (var i = 0, len = array.length; i < len; i++) {
+                var item = array[i];
+                if (!contains(result, item)) result.push(item);
+            }
+        }
+        return result;
     }
 
     export function sum(array: any[], prop: string): number {
@@ -79,6 +120,17 @@ module ts {
             result += array[i][prop];
         }
         return result;
+    }
+
+    /**
+     * Returns the last element of an array if non-empty, undefined otherwise.
+     */
+    export function lastOrUndefined<T>(array: T[]): T {
+        if (array.length === 0) {
+            return undefined;
+        }
+
+        return array[array.length - 1];
     }
 
     export function binarySearch(array: number[], value: number): number {
@@ -189,15 +241,16 @@ module ts {
     export var localizedDiagnosticMessages: Map<string> = undefined;
 
     export function getLocaleSpecificMessage(message: string) {
-        if (ts.localizedDiagnosticMessages) {
-            message = localizedDiagnosticMessages[message];
-        }
-
-        return message;
+        return localizedDiagnosticMessages && localizedDiagnosticMessages[message]
+            ? localizedDiagnosticMessages[message]
+            : message;
     }
 
     export function createFileDiagnostic(file: SourceFile, start: number, length: number, message: DiagnosticMessage, ...args: any[]): Diagnostic;
     export function createFileDiagnostic(file: SourceFile, start: number, length: number, message: DiagnosticMessage): Diagnostic {
+        Debug.assert(start >= 0, "start must be non-negative, is " + start);
+        Debug.assert(length >= 0, "length must be non-negative, is " + length);
+
         var text = getLocaleSpecificMessage(message.key);
         
         if (arguments.length > 4) {
@@ -205,13 +258,14 @@ module ts {
         }
 
         return {
-            file: file,
-            start: start,
-            length: length,
+            file,
+            start,
+            length,
 
             messageText: text,
             category: message.category,
-            code: message.code
+            code: message.code,
+            isEarly: message.isEarly
         };
     }
 
@@ -230,7 +284,8 @@ module ts {
 
             messageText: text,
             category: message.category,
-            code: message.code
+            code: message.code,
+            isEarly: message.isEarly
         };
     }
 
@@ -251,7 +306,16 @@ module ts {
         };
     }
 
+    export function concatenateDiagnosticMessageChains(headChain: DiagnosticMessageChain, tailChain: DiagnosticMessageChain): DiagnosticMessageChain {
+        Debug.assert(!headChain.next);
+        headChain.next = tailChain;
+        return headChain;
+    }
+
     export function flattenDiagnosticChain(file: SourceFile, start: number, length: number, diagnosticChain: DiagnosticMessageChain, newLine: string): Diagnostic {
+        Debug.assert(start >= 0, "start must be non-negative, is " + start);
+        Debug.assert(length >= 0, "length must be non-negative, is " + length);
+
         var code = diagnosticChain.code;
         var category = diagnosticChain.category;
         var messageText = "";
@@ -271,20 +335,20 @@ module ts {
         }
 
         return {
-            file: file,
-            start: start,
-            length: length,
-            code: code,
-            category: category,
-            messageText: messageText
+            file,
+            start,
+            length,
+            code,
+            category,
+            messageText
         };
     }
 
-    export function compareValues<T>(a: T, b: T): number {
-        if (a === b) return 0;
-        if (a === undefined) return -1;
-        if (b === undefined) return 1;
-        return a < b ? -1 : 1;
+    export function compareValues<T>(a: T, b: T): Comparison {
+        if (a === b) return Comparison.EqualTo;
+        if (a === undefined) return Comparison.LessThan;
+        if (b === undefined) return Comparison.GreaterThan;
+        return a < b ? Comparison.LessThan : Comparison.GreaterThan;
     }
 
     function getDiagnosticFilename(diagnostic: Diagnostic): string {
@@ -309,7 +373,7 @@ module ts {
         var previousDiagnostic = diagnostics[0];
         for (var i = 1; i < diagnostics.length; i++) {
             var currentDiagnostic = diagnostics[i];
-            var isDupe = compareDiagnostics(currentDiagnostic, previousDiagnostic) === 0;
+            var isDupe = compareDiagnostics(currentDiagnostic, previousDiagnostic) === Comparison.EqualTo;
             if (!isDupe) {
                 newDiagnostics.push(currentDiagnostic);
                 previousDiagnostic = currentDiagnostic;
@@ -395,7 +459,11 @@ module ts {
         return normalizedPathComponents(path, rootLength);
     }
 
-    export function getNormalizedPathFromPathCompoments(pathComponents: string[]) {
+    export function getNormalizedAbsolutePath(filename: string, currentDirectory: string) {
+        return getNormalizedPathFromPathComponents(getNormalizedPathComponents(filename, currentDirectory));
+    }
+
+    export function getNormalizedPathFromPathComponents(pathComponents: string[]) {
         if (pathComponents && pathComponents.length) {
             return pathComponents[0] + pathComponents.slice(1).join(directorySeparator);
         }
@@ -452,18 +520,18 @@ module ts {
         }
     }
 
-    export function getRelativePathToDirectoryOrUrl(directoryPathOrUrl: string, relativeOrAbsolutePath: string, currentDirectory: string, isAbsolutePathAnUrl: boolean) {
+    export function getRelativePathToDirectoryOrUrl(directoryPathOrUrl: string, relativeOrAbsolutePath: string, currentDirectory: string, getCanonicalFileName: (fileName: string) => string, isAbsolutePathAnUrl: boolean) {
         var pathComponents = getNormalizedPathOrUrlComponents(relativeOrAbsolutePath, currentDirectory);
         var directoryComponents = getNormalizedPathOrUrlComponents(directoryPathOrUrl, currentDirectory);
         if (directoryComponents.length > 1 && directoryComponents[directoryComponents.length - 1] === "") {
-            // If the directory path given was of type test/cases/ then we really need components of directry to be only till its name 
+            // If the directory path given was of type test/cases/ then we really need components of directory to be only till its name
             // that is  ["test", "cases", ""] needs to be actually ["test", "cases"]
             directoryComponents.length--;
         }
 
         // Find the component that differs
         for (var joinStartIndex = 0; joinStartIndex < pathComponents.length && joinStartIndex < directoryComponents.length; joinStartIndex++) {
-            if (directoryComponents[joinStartIndex] !== pathComponents[joinStartIndex]) {
+            if (getCanonicalFileName(directoryComponents[joinStartIndex]) !== getCanonicalFileName(pathComponents[joinStartIndex])) {
                 break;
             }
         }
@@ -482,7 +550,7 @@ module ts {
         }
 
         // Cant find the relative path, get the absolute path
-        var absolutePath = getNormalizedPathFromPathCompoments(pathComponents);
+        var absolutePath = getNormalizedPathFromPathComponents(pathComponents);
         if (isAbsolutePathAnUrl && isRootedDiskPath(absolutePath)) {
             absolutePath = "file:///" + absolutePath;
         }
@@ -507,6 +575,43 @@ module ts {
         var pathLen = path.length;
         var extLen = extension.length;
         return pathLen > extLen && path.substr(pathLen - extLen, extLen) === extension;
+    }
+
+    var supportedExtensions = [".d.ts", ".ts", ".js"];
+
+    export function removeFileExtension(path: string): string {
+        for (var i = 0; i < supportedExtensions.length; i++) {
+            var ext = supportedExtensions[i];
+
+            if (fileExtensionIs(path, ext)) {
+                return path.substr(0, path.length - ext.length);
+            }
+        }
+
+        return path;
+    }
+
+    var escapedCharsRegExp = /[\t\v\f\b\0\r\n\"\\\u2028\u2029\u0085]/g;
+    var escapedCharsMap: Map<string> = {
+        "\t": "\\t",
+        "\v": "\\v",
+        "\f": "\\f",
+        "\b": "\\b",
+        "\0": "\\0",
+        "\r": "\\r",
+        "\n": "\\n",
+        "\"": "\\\"",
+        "\u2028": "\\u2028", // lineSeparator
+        "\u2029": "\\u2029", // paragraphSeparator
+        "\u0085": "\\u0085"  // nextLine
+    };
+
+    /** NOTE: This *does not* support the full escape characters, it only supports the subset that can be used in file names
+      * or string literals. If the information encoded in the map changes, this needs to be revisited. */
+    export function escapeString(s: string): string {
+        return escapedCharsRegExp.test(s) ? s.replace(escapedCharsRegExp, c => {
+            return escapedCharsMap[c] || c;
+        }) : s;
     }
 
     export interface ObjectAllocator {
@@ -547,7 +652,7 @@ module ts {
         getSignatureConstructor: () => <any>Signature
     }
 
-    export enum AssertionLevel {
+    export const enum AssertionLevel {
         None = 0,
         Normal = 1,
         Aggressive = 2,
@@ -561,7 +666,7 @@ module ts {
             return currentAssertionLevel >= level;
         }
 
-        export function assert(expression: any, message?: string, verboseDebugInfo?: () => string): void {
+        export function assert(expression: boolean, message?: string, verboseDebugInfo?: () => string): void {
             if (!expression) {
                 var verboseDebugString = "";
                 if (verboseDebugInfo) {

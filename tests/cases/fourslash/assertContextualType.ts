@@ -6,4 +6,4 @@
 edit.insert('');
 
 goTo.marker();
-verify.quickInfoIs('any');
+verify.quickInfoIs('(parameter) bb: any');

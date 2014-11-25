@@ -1,7 +1,8 @@
-==== tests/cases/conformance/parser/ecmascript5/FunctionDeclarations/parserFunctionDeclaration2.d.ts (2 errors) ====
+tests/cases/conformance/parser/ecmascript5/FunctionDeclarations/parserFunctionDeclaration2.d.ts(1,1): error TS1046: A 'declare' modifier is required for a top level declaration in a .d.ts file.
+
+
+==== tests/cases/conformance/parser/ecmascript5/FunctionDeclarations/parserFunctionDeclaration2.d.ts (1 errors) ====
     function F() {
     ~~~~~~~~
-!!! A 'declare' modifier is required for a top level declaration in a .d.ts file.
-                 ~
-!!! A function implementation cannot be declared in an ambient context.
+!!! error TS1046: A 'declare' modifier is required for a top level declaration in a .d.ts file.
     }

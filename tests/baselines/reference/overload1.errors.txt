@@ -1,3 +1,11 @@
+tests/cases/compiler/overload1.ts(27,5): error TS2322: Type 'C' is not assignable to type 'string'.
+tests/cases/compiler/overload1.ts(29,1): error TS2322: Type 'number' is not assignable to type 'string'.
+tests/cases/compiler/overload1.ts(31,3): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/compiler/overload1.ts(32,3): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/compiler/overload1.ts(33,1): error TS2322: Type 'C' is not assignable to type 'string'.
+tests/cases/compiler/overload1.ts(34,9): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
+
+
 ==== tests/cases/compiler/overload1.ts (6 errors) ====
     module O {
         export class A {
@@ -27,24 +35,24 @@
     
     var e:string=x.g(new O.A()); // matches overload but bad assignment
         ~
-!!! Type 'C' is not assignable to type 'string'.
+!!! error TS2322: Type 'C' is not assignable to type 'string'.
     var y:string=x.f(3); // good
     y=x.f("nope"); // can't assign number to string
     ~
-!!! Type 'number' is not assignable to type 'string'.
+!!! error TS2322: Type 'number' is not assignable to type 'string'.
     var z:string=x.g(x.g(3,3)); // good
     z=x.g(2,2,2); // no match
       ~~~~~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+!!! error TS2346: Supplied parameters do not match any signature of call target.
     z=x.g(); // no match
       ~~~~~
-!!! Supplied parameters do not match any signature of call target.
+!!! error TS2346: Supplied parameters do not match any signature of call target.
     z=x.g(new O.B()); // ambiguous (up and down conversion)
     ~
-!!! Type 'C' is not assignable to type 'string'.
+!!! error TS2322: Type 'C' is not assignable to type 'string'.
     z=x.h(2,2); // no match
             ~
-!!! Argument of type 'number' is not assignable to parameter of type 'string'.
+!!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
     z=x.h("hello",0); // good
     
     var v=x.g;

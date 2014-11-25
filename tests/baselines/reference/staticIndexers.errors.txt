@@ -1,20 +1,28 @@
-==== tests/cases/conformance/classes/indexMemberDeclarations/staticIndexers.ts (3 errors) ====
+tests/cases/conformance/classes/indexMemberDeclarations/staticIndexers.ts(4,5): error TS1145: Modifiers not permitted on index signature members.
+tests/cases/conformance/classes/indexMemberDeclarations/staticIndexers.ts(8,5): error TS1145: Modifiers not permitted on index signature members.
+tests/cases/conformance/classes/indexMemberDeclarations/staticIndexers.ts(12,5): error TS1145: Modifiers not permitted on index signature members.
+tests/cases/conformance/classes/indexMemberDeclarations/staticIndexers.ts(12,25): error TS2302: Static members cannot reference class type parameters.
+
+
+==== tests/cases/conformance/classes/indexMemberDeclarations/staticIndexers.ts (4 errors) ====
     // static indexers not allowed
     
     class C {
         static [x: string]: string;
         ~~~~~~
-!!! Modifiers not permitted on index signature members.
+!!! error TS1145: Modifiers not permitted on index signature members.
     }
     
     class D {
         static [x: number]: string;
         ~~~~~~
-!!! Modifiers not permitted on index signature members.
+!!! error TS1145: Modifiers not permitted on index signature members.
     }
     
     class E<T> {
         static [x: string]: T;
         ~~~~~~
-!!! Modifiers not permitted on index signature members.
+!!! error TS1145: Modifiers not permitted on index signature members.
+                            ~
+!!! error TS2302: Static members cannot reference class type parameters.
     }

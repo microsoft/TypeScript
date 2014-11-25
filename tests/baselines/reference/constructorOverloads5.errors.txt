@@ -1,12 +1,21 @@
-==== tests/cases/compiler/constructorOverloads5.ts (1 errors) ====
+tests/cases/compiler/constructorOverloads5.ts(4,21): error TS2300: Duplicate identifier 'RegExp'.
+tests/cases/compiler/constructorOverloads5.ts(5,21): error TS2300: Duplicate identifier 'RegExp'.
+tests/cases/compiler/constructorOverloads5.ts(6,18): error TS2300: Duplicate identifier 'RegExp'.
+
+
+==== tests/cases/compiler/constructorOverloads5.ts (3 errors) ====
      interface IArguments {}
     
      declare module M {
         export function RegExp(pattern: string): RegExp;
+                        ~~~~~~
+!!! error TS2300: Duplicate identifier 'RegExp'.
         export function RegExp(pattern: string, flags: string): RegExp;
+                        ~~~~~~
+!!! error TS2300: Duplicate identifier 'RegExp'.
         export class RegExp {
                      ~~~~~~
-!!! Duplicate identifier 'RegExp'.
+!!! error TS2300: Duplicate identifier 'RegExp'.
             constructor(pattern: string);
             constructor(pattern: string, flags: string);
             exec(string: string): string[];

@@ -1,3 +1,7 @@
+tests/cases/conformance/types/specifyingTypes/typeLiterals/arrayTypeOfFunctionTypes.ts(11,11): error TS2350: Only a void function can be called with the 'new' keyword.
+tests/cases/conformance/types/specifyingTypes/typeLiterals/arrayTypeOfFunctionTypes.ts(16,11): error TS2350: Only a void function can be called with the 'new' keyword.
+
+
 ==== tests/cases/conformance/types/specifyingTypes/typeLiterals/arrayTypeOfFunctionTypes.ts (2 errors) ====
     // valid uses of arrays of function types
     
@@ -11,11 +15,11 @@
     var r4 = r3();
     var r4b = new r3(); // error
               ~~~~~~~~
-!!! Only a void function can be called with the 'new' keyword.
+!!! error TS2350: Only a void function can be called with the 'new' keyword.
     
     var x3: Array<() => string>;
     var r5 = x2[1];
     var r6 = r5();
     var r6b = new r5(); // error
               ~~~~~~~~
-!!! Only a void function can be called with the 'new' keyword.
+!!! error TS2350: Only a void function can be called with the 'new' keyword.

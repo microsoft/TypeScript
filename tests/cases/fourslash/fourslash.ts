@@ -44,6 +44,16 @@ enum TypingFidelity {
     High = FourSlash.TypingFidelity.High
 }
 
+// Return code used by getEmitOutput function to indicate status of the function
+// It is a duplicate of the one in types.ts to expose it to testcases in fourslash
+enum EmitReturnStatus {
+    Succeeded = 0,                      // All outputs generated as requested (.js, .map, .d.ts), no errors reported
+    AllOutputGenerationSkipped = 1,     // No .js generated because of syntax errors, or compiler options errors, nothing generated
+    JSGeneratedWithSemanticErrors = 2,  // .js and .map generated with semantic errors
+    DeclarationGenerationSkipped = 3,   // .d.ts generation skipped because of semantic errors or declaration emitter specific errors; Output .js with semantic errors
+    EmitErrorsEncountered = 4           // Emitter errors occurred during emitting process
+}
+
 module FourSlashInterface {
     declare var FourSlash;
 
@@ -68,6 +78,10 @@ module FourSlashInterface {
     export class test_ {
         public markers(): Marker[] {
             return FourSlash.currentTestState.getMarkers();
+        }
+
+        public marker(name?: string): Marker {
+            return FourSlash.currentTestState.getMarkerByName(name);
         }
 
         public ranges(): Range[] {
@@ -143,11 +157,11 @@ module FourSlashInterface {
 
         // Verifies the member list contains the specified symbol. The
         // member list is brought up if necessary
-        public memberListContains(symbol: string, type?: string, docComment?: string, fullSymbolName?: string, kind?: string) {
+        public memberListContains(symbol: string, text?: string, documenation?: string, kind?: string) {
             if (this.negative) {
                 FourSlash.currentTestState.verifyMemberListDoesNotContain(symbol);
             } else {
-                FourSlash.currentTestState.verifyMemberListContains(symbol, type, docComment, fullSymbolName, kind);
+                FourSlash.currentTestState.verifyMemberListContains(symbol, text, documenation, kind);
             }
         }
 
@@ -157,11 +171,11 @@ module FourSlashInterface {
 
         // Verifies the completion list contains the specified symbol. The
         // completion list is brought up if necessary
-        public completionListContains(symbol: string, type?: string, docComment?: string, fullSymbolName?: string, kind?: string) {
+        public completionListContains(symbol: string, text?: string, documentation?: string, kind?: string) {
             if (this.negative) {
                 FourSlash.currentTestState.verifyCompletionListDoesNotContain(symbol);
             } else {
-                FourSlash.currentTestState.verifyCompletionListContains(symbol, type, docComment, fullSymbolName, kind);
+                FourSlash.currentTestState.verifyCompletionListContains(symbol, text, documentation, kind);
             }
         }
 
@@ -191,6 +205,7 @@ module FourSlashInterface {
             FourSlash.currentTestState.verifyImplementorsCountIs(count);
         }
 
+        // Add tests for this.
         public currentParameterIsVariable() {
             FourSlash.currentTestState.verifyCurrentParameterIsVariable(!this.negative);
         }
@@ -211,12 +226,8 @@ module FourSlashInterface {
             FourSlash.currentTestState.verifyErrorExistsAfterMarker(markerName, !this.negative, false);
         }
 
-        public quickInfoIs(typeName?: string, docComment?: string, symbolName?: string, kind?: string) {
-            FourSlash.currentTestState.verifyQuickInfo(this.negative, typeName, docComment, symbolName, kind);
-        }
-
-        public quickInfoSymbolNameIs(symbolName) {
-            FourSlash.currentTestState.verifyQuickInfo(this.negative, undefined, undefined, symbolName, undefined);
+        public quickInfoIs(expectedText?: string, expectedDocumentation?: string) {
+            FourSlash.currentTestState.verifyQuickInfo(this.negative, expectedText, expectedDocumentation);
         }
 
         public quickInfoExists() {
@@ -226,10 +237,13 @@ module FourSlashInterface {
         public definitionLocationExists() {
             FourSlash.currentTestState.verifyDefinitionLocationExists(this.negative);
         }
+
+        public verifyDefinitionsName(name: string, containerName: string) {
+            FourSlash.currentTestState.verifyDefinitionsName(this.negative, name, containerName);
+        }
     }
 
     export class verify extends verifyNegatable {
-
         public caretAtMarker(markerName?: string) {
             FourSlash.currentTestState.verifyCaretAtMarker(markerName);
         }
@@ -283,11 +297,15 @@ module FourSlashInterface {
             FourSlash.currentTestState.verifySignatureHelpCount(expected);
         }
 
-        public currentSignatureParamterCountIs(expected: number) {
+        public signatureHelpArgumentCountIs(expected: number) {
+            FourSlash.currentTestState.verifySignatureHelpArgumentCount(expected);
+        }
+
+        public currentSignatureParameterCountIs(expected: number) {
             FourSlash.currentTestState.verifyCurrentSignatureHelpParameterCount(expected);
         }
 
-        public currentSignatureTypeParamterCountIs(expected: number) {
+        public currentSignatureTypeParameterCountIs(expected: number) {
             FourSlash.currentTestState.verifyCurrentSignatureHelpTypeParameterCount(expected);
         }
 
@@ -305,6 +323,10 @@ module FourSlashInterface {
 
         public baselineCurrentFileNameOrDottedNameSpans() {
             FourSlash.currentTestState.baselineCurrentFileNameOrDottedNameSpans();
+        }
+
+        public baselineGetEmitOutput() {
+            FourSlash.currentTestState.baselineGetEmitOutput();
         }
 
         public nameOrDottedNameSpanTextIs(text: string) {
@@ -379,8 +401,34 @@ module FourSlashInterface {
             FourSlash.currentTestState.verifyOccurrencesAtPositionListCount(expectedCount);
         }
 
-        public completionEntryDetailIs(entryName: string, type: string, docComment?: string, fullSymbolName?: string, kind?: string) {
-            FourSlash.currentTestState.verifyCompletionEntryDetails(entryName, type, docComment, fullSymbolName, kind);
+        public completionEntryDetailIs(entryName: string, text: string, documentation?: string, kind?: string) {
+            FourSlash.currentTestState.verifyCompletionEntryDetails(entryName, text, documentation, kind);
+        }
+
+        /**
+         * This method *requires* a contiguous, complete, and ordered stream of classifications for a file.
+         */
+        public syntacticClassificationsAre(...classifications: { classificationType: string; text: string }[]) {
+            FourSlash.currentTestState.verifySyntacticClassifications(classifications);
+        }
+
+        /**
+         * This method *requires* an ordered stream of classifications for a file, and spans are highly recommended.
+         */
+        public semanticClassificationsAre(...classifications: { classificationType: string; text: string; textSpan?: TextSpan }[]) {
+            FourSlash.currentTestState.verifySemanticClassifications(classifications);
+        }
+
+        public renameInfoSucceeded(displayName?: string, fullDisplayName?: string, kind?: string, kindModifiers?: string) {
+            FourSlash.currentTestState.verifyRenameInfoSucceeded(displayName, fullDisplayName, kind, kindModifiers)
+        }
+
+        public renameInfoFailed(message?: string) {
+            FourSlash.currentTestState.verifyRenameInfoFailed(message)
+        }
+
+        public renameLocations(findInStrings: boolean, findInComments: boolean) {
+            FourSlash.currentTestState.verifyRenameLocations(findInStrings, findInComments);
         }
     }
 
@@ -524,6 +572,72 @@ module FourSlashInterface {
             FourSlash.currentTestState.cancellationToken.setCancelled(numberOfCalls);
         }
     }
+
+    export module classification {
+        export function comment(text: string, position?: number): { classificationType: string; text: string; textSpan?: TextSpan } {
+            return getClassification("comment", text, position);
+        }
+
+        export function identifier(text: string, position?: number): { classificationType: string; text: string; textSpan?: TextSpan } {
+            return getClassification("identifier", text, position);
+        }
+
+        export function keyword(text: string, position?: number): { classificationType: string; text: string; textSpan?: TextSpan } {
+            return getClassification("keyword", text, position);
+        }
+
+        export function numericLiteral(text: string, position?: number): { classificationType: string; text: string; textSpan?: TextSpan } {
+            return getClassification("numericLiteral", text, position);
+        }
+
+        export function operator(text: string, position?: number): { classificationType: string; text: string; textSpan?: TextSpan } {
+            return getClassification("operator", text, position);
+        }
+
+        export function stringLiteral(text: string, position?: number): { classificationType: string; text: string; textSpan?: TextSpan } {
+            return getClassification("stringLiteral", text, position);
+        }
+
+        export function whiteSpace(text: string, position?: number): { classificationType: string; text: string; textSpan?: TextSpan } {
+            return getClassification("whiteSpace", text, position);
+        }
+
+        export function text(text: string, position?: number): { classificationType: string; text: string; textSpan?: TextSpan } {
+            return getClassification("text", text, position);
+        }
+
+        export function punctuation(text: string, position?: number): { classificationType: string; text: string; textSpan?: TextSpan } {
+            return getClassification("punctuation", text, position);
+        }
+
+        export function className(text: string, position?: number): { classificationType: string; text: string; textSpan?: TextSpan } {
+            return getClassification("className", text, position);
+        }
+
+        export function enumName(text: string, position?: number): { classificationType: string; text: string; textSpan?: TextSpan } {
+            return getClassification("enumName", text, position);
+        }
+
+        export function interfaceName(text: string, position?: number): { classificationType: string; text: string; textSpan?: TextSpan } {
+            return getClassification("interfaceName", text, position);
+        }
+
+        export function moduleName(text: string, position?: number): { classificationType: string; text: string; textSpan?: TextSpan } {
+            return getClassification("moduleName", text, position);
+        }
+
+        export function typeParameterName(text: string, position?: number): { classificationType: string; text: string; textSpan?: TextSpan } {
+            return getClassification("typeParameterName", text, position);
+        }
+
+        function getClassification(type: string, text: string, position?: number) {
+            return {
+                classificationType: type,
+                text: text,
+                textSpan: position === undefined ? undefined : { start: position, end: position + text.length }
+            };
+        }
+    }
 }
 
 module fs {
@@ -539,6 +653,7 @@ module fs {
 function verifyOperationIsCancelled(f) {
     FourSlash.verifyOperationIsCancelled(f);
 }
+
 var test = new FourSlashInterface.test_();
 var goTo = new FourSlashInterface.goTo();
 var verify = new FourSlashInterface.verify();
@@ -547,3 +662,4 @@ var debug = new FourSlashInterface.debug();
 var format = new FourSlashInterface.format();
 var diagnostics = new FourSlashInterface.diagnostics();
 var cancellation = new FourSlashInterface.cancellation();
+var classification = FourSlashInterface.classification;

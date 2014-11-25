@@ -1,8 +1,10 @@
-==== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ArgumentLists/parserErrorRecovery_ArgumentList6.ts (3 errors) ====
+tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ArgumentLists/parserErrorRecovery_ArgumentList6.ts(1,6): error TS1005: ')' expected.
+tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ArgumentLists/parserErrorRecovery_ArgumentList6.ts(1,1): error TS2304: Cannot find name 'Foo'.
+
+
+==== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ArgumentLists/parserErrorRecovery_ArgumentList6.ts (2 errors) ====
     Foo(,
-        ~
-!!! Argument expression expected.
          
-!!! ')' expected.
+!!! error TS1005: ')' expected.
     ~~~
-!!! Cannot find name 'Foo'.
+!!! error TS2304: Cannot find name 'Foo'.

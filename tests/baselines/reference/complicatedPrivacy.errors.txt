@@ -1,4 +1,8 @@
-==== tests/cases/compiler/complicatedPrivacy.ts (4 errors) ====
+tests/cases/compiler/complicatedPrivacy.ts(24,38): error TS1005: ';' expected.
+tests/cases/compiler/complicatedPrivacy.ts(73,49): error TS2305: Module 'mglo5' has no exported member 'i6'.
+
+
+==== tests/cases/compiler/complicatedPrivacy.ts (2 errors) ====
     module m1 {
         export module m2 {
     
@@ -10,8 +14,6 @@
     
             export class C2 implements m3.i3 {
                 public get p1(arg) {
-                           ~~
-!!! A 'get' accessor cannot have parameters.
                     return new C1();
                 }
     
@@ -26,7 +28,7 @@
     
         export function f2(arg1: { x?: C1, y: number }) {
                                          ~
-!!! ';' expected.
+!!! error TS1005: ';' expected.
         }
     
         export function f3(): {
@@ -38,8 +40,6 @@
         export function f4(arg1: 
         {
         [number]: C1;
-         ~~~~~~
-!!! An index signature parameter must have a type annotation.
         }) {
         }
     
@@ -79,7 +79,7 @@
     
             export class c_pr  implements mglo5.i5, mglo5.i6 {
                                                     ~~~~~~~~
-!!! Module 'mglo5' has no exported member 'i6'.
+!!! error TS2305: Module 'mglo5' has no exported member 'i6'.
                 f1() {
                     return "Hello";
                 }

@@ -1,0 +1,549 @@
+tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(11,19): error TS1005: ';' expected.
+tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(22,35): error TS1005: ')' expected.
+tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(24,28): error TS1005: ':' expected.
+tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(24,29): error TS1005: ',' expected.
+tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(27,18): error TS1129: Statement expected.
+tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(28,30): error TS1005: ',' expected.
+tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(28,33): error TS1138: Parameter declaration expected.
+tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(28,34): error TS1005: ';' expected.
+tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(28,36): error TS1068: Unexpected token. A constructor, method, accessor, or property was expected.
+tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(31,18): error TS1129: Statement expected.
+tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(38,17): error TS1109: Expression expected.
+tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(40,41): error TS1005: ';' expected.
+tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(40,45): error TS1002: Unterminated string literal.
+tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(46,13): error TS1005: 'try' expected.
+tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(58,5): error TS1128: Declaration or statement expected.
+tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(69,13): error TS1109: Expression expected.
+tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(72,37): error TS1127: Invalid character.
+tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(81,13): error TS1109: Expression expected.
+tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(90,13): error TS1109: Expression expected.
+tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(105,29): error TS1109: Expression expected.
+tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(106,13): error TS1109: Expression expected.
+tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(138,13): error TS1109: Expression expected.
+tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(141,32): error TS1005: '{' expected.
+tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(143,13): error TS1005: 'try' expected.
+tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(159,24): error TS1109: Expression expected.
+tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(159,30): error TS1005: '(' expected.
+tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(205,28): error TS1109: Expression expected.
+tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(218,10): error TS1068: Unexpected token. A constructor, method, accessor, or property was expected.
+tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(218,36): error TS1005: ';' expected.
+tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(227,13): error TS1109: Expression expected.
+tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(234,14): error TS1005: '{' expected.
+tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(235,9): error TS1128: Declaration or statement expected.
+tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(235,27): error TS1005: ',' expected.
+tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(235,36): error TS1005: ';' expected.
+tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(238,9): error TS1128: Declaration or statement expected.
+tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(238,26): error TS1005: ';' expected.
+tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(241,5): error TS1128: Declaration or statement expected.
+tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(254,69): error TS1110: Type expected.
+tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(256,9): error TS1128: Declaration or statement expected.
+tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(256,31): error TS1005: ',' expected.
+tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(257,9): error TS1128: Declaration or statement expected.
+tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(257,27): error TS1135: Argument expression expected.
+tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(257,33): error TS1005: '(' expected.
+tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(257,43): error TS1109: Expression expected.
+tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(257,59): error TS1109: Expression expected.
+tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(257,60): error TS1005: ';' expected.
+tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(257,65): error TS1129: Statement expected.
+tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(259,9): error TS1129: Statement expected.
+tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(259,35): error TS1109: Expression expected.
+tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(259,55): error TS1005: ';' expected.
+tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(261,1): error TS1128: Declaration or statement expected.
+tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(11,1): error TS2304: Cannot find name 'module'.
+tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(22,39): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(27,26): error TS2304: Cannot find name 'bfs'.
+tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(28,17): error TS2391: Function implementation is missing or not immediately following the declaration.
+tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(34,17): error TS2304: Cannot find name 'retValue'.
+tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(34,28): error TS2304: Cannot find name 'bfs'.
+tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(35,21): error TS2304: Cannot find name 'retValue'.
+tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(40,17): error TS2304: Cannot find name 'retValue'.
+tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(40,28): error TS2304: Cannot find name 'bfs'.
+tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(41,21): error TS2304: Cannot find name 'retValue'.
+tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(47,17): error TS2304: Cannot find name 'console'.
+tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(53,13): error TS2304: Cannot find name 'console'.
+tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(89,23): error TS2364: Invalid left-hand side of assignment expression.
+tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(108,24): error TS2365: Operator '+' cannot be applied to types 'number' and 'boolean'.
+tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(159,31): error TS2304: Cannot find name 'Property'.
+tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(166,13): error TS2365: Operator '+=' cannot be applied to types 'number' and 'void'.
+tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(180,40): error TS2447: The '^' operator is not allowed for boolean types. Consider using '!==' instead.
+tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(213,16): error TS2304: Cannot find name 'bool'.
+tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(218,29): error TS2304: Cannot find name 'yield'.
+tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(223,23): error TS2304: Cannot find name 'bool'.
+tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(235,16): error TS2304: Cannot find name 'method1'.
+tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(235,24): error TS2304: Cannot find name 'val'.
+tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(235,28): error TS2304: Cannot find name 'number'.
+tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(238,16): error TS2304: Cannot find name 'method2'.
+tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(246,25): error TS2339: Property 'method1' does not exist on type 'B'.
+tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(254,9): error TS2390: Constructor implementation is missing.
+tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(254,21): error TS2369: A parameter property is only allowed in a constructor implementation.
+tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(254,44): error TS2369: A parameter property is only allowed in a constructor implementation.
+tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(256,16): error TS2304: Cannot find name 'Overloads'.
+tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(256,26): error TS2304: Cannot find name 'value'.
+tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(256,33): error TS2304: Cannot find name 'string'.
+tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(257,16): error TS2304: Cannot find name 'Overloads'.
+tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(257,35): error TS2304: Cannot find name 'string'.
+tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(257,52): error TS2304: Cannot find name 'string'.
+tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(259,16): error TS2304: Cannot find name 'DefaultValue'.
+tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(259,29): error TS2304: Cannot find name 'value'.
+tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(259,37): error TS2304: Cannot find name 'string'.
+
+
+==== tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts (88 errors) ====
+    declare module "fs" {
+        export class File {
+            constructor(filename: string);
+            public ReadAllText(): string;
+        }
+        export interface IFile {
+            [index: number]: string;
+        }
+    }
+    
+    import fs = module("fs");
+                      ~
+!!! error TS1005: ';' expected.
+    ~~~~~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'module'.
+    
+    
+    module TypeScriptAllInOne {
+        export class Program {
+            static Main(...args: string[]) {
+                try {
+                    var bfs = new BasicFeatures();
+                    var retValue: number = 0;
+    
+                    retValue = bfs.VARIABLES();
+                    if (retValue != 0 ^=  {
+                                      ~~
+!!! error TS1005: ')' expected.
+                                          ~
+    
+    
+                        return 1;
+                               ~
+!!! error TS1005: ':' expected.
+                                ~
+!!! error TS1005: ',' expected.
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                    }
+    ~~~~~~~~~~~~~~~~~
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+    
+                     case  = bfs.STATEMENTS(4);
+                     ~~~~
+!!! error TS1129: Statement expected.
+                             ~~~
+!!! error TS2304: Cannot find name 'bfs'.
+                    if (retValue != 0) {
+                                 ~~
+!!! error TS1005: ',' expected.
+                                    ~
+!!! error TS1138: Parameter declaration expected.
+                                     ~
+!!! error TS1005: ';' expected.
+                                       ~
+!!! error TS1068: Unexpected token. A constructor, method, accessor, or property was expected.
+                    ~~
+!!! error TS2391: Function implementation is missing or not immediately following the declaration.
+    
+                        return 1;
+                     ^ 
+                     ~
+!!! error TS1129: Statement expected.
+    
+    
+                    retValue = bfs.TYPES();
+                    ~~~~~~~~
+!!! error TS2304: Cannot find name 'retValue'.
+                               ~~~
+!!! error TS2304: Cannot find name 'bfs'.
+                    if (retValue != 0) {
+                        ~~~~~~~~
+!!! error TS2304: Cannot find name 'retValue'.
+    
+                        return 1 && 
+                    }
+                    ~
+!!! error TS1109: Expression expected.
+    
+                    retValue = bfs.OPERATOR ' );
+                                            ~~~~
+!!! error TS1005: ';' expected.
+                                                
+!!! error TS1002: Unterminated string literal.
+                    ~~~~~~~~
+!!! error TS2304: Cannot find name 'retValue'.
+                               ~~~
+!!! error TS2304: Cannot find name 'bfs'.
+                    if (retValue != 0) {
+                        ~~~~~~~~
+!!! error TS2304: Cannot find name 'retValue'.
+    
+                        return 1;
+                    }
+                }
+                catch (e) {
+                ~~~~~
+!!! error TS1005: 'try' expected.
+                    console.log(e);
+                    ~~~~~~~
+!!! error TS2304: Cannot find name 'console'.
+                }
+                finally {
+    
+                }
+    
+                console.log('Done');
+                ~~~~~~~
+!!! error TS2304: Cannot find name 'console'.
+    
+                return 0;
+    
+            }
+        }
+        ~
+!!! error TS1128: Declaration or statement expected.
+    
+        class BasicFeatures {
+            /// <summary>
+            /// Test various of variables. Including nullable,key world as variable,special format
+            /// </summary>
+            /// <returns></returns>
+            public VARIABLES(): number {
+                var local = Number.MAX_VALUE;
+                var min = Number.MIN_VALUE;
+                var inf = Number.NEGATIVE_INFINITY - 
+                var nan = Number.NaN;
+                ~~~
+!!! error TS1109: Expression expected.
+                var undef = undefined;
+    
+                var  _\uD4A5\u7204\uC316\uE59F  = local;
+                                        
+!!! error TS1127: Invalid character.
+                var мир = local;
+    
+                var local5 = <fs.File>null;
+                var local6 = local5 instanceof fs.File;
+    
+                var hex = 0xBADC0DE, Hex = 0XDEADBEEF;
+                var float = 6.02e23, float2 = 6.02E-23
+                var char = 'c', \u0066 = '\u0066', hexchar = '\x42' != 
+                var quoted = '"', quoted2 = "'";
+                ~~~
+!!! error TS1109: Expression expected.
+                var reg = /\w*/;
+                var objLit = { "var": number = 42, equals: function (x) { return x["var"] === 42; },  instanceof : () => 'objLit{42}' };
+                var weekday = Weekdays.Monday;
+    
+                var con = char + f + hexchar + float.toString() + float2.toString() + reg.toString() + objLit + weekday;
+    
+                //
+                var any = 0 ^= 
+                          ~
+!!! error TS2364: Invalid left-hand side of assignment expression.
+                var bool = 0;
+                ~~~
+!!! error TS1109: Expression expected.
+                var declare = 0;
+                var constructor = 0;
+                var get = 0;
+                var implements = 0;
+                var interface = 0;
+                var let = 0;
+                var module = 0;
+                var number = 0;
+                var package = 0;
+                var private = 0;
+                var protected = 0;
+                var public = 0;
+                var set = 0;
+                var static = 0;
+                var string = 0 /> 
+                                ~
+!!! error TS1109: Expression expected.
+                var yield = 0;
+                ~~~
+!!! error TS1109: Expression expected.
+    
+                var sum3 = any + bool + declare + constructor + get + implements + interface + let + module + number + package + private + protected + public + set + static + string + yield;
+                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2365: Operator '+' cannot be applied to types 'number' and 'boolean'.
+    
+                return 0;
+            }
+    
+            /// <summary>
+            /// Test different statements. Including if-else,swith,foreach,(un)checked,lock,using,try-catch-finally
+            /// </summary>
+            /// <param name="i"></param>
+            /// <returns></returns>
+            STATEMENTS(i: number): number {
+                var retVal = 0;
+                if (i == 1)
+                    retVal = 1;
+                else
+                    retVal = 0;
+                switch (i) {
+                    case 2:
+                        retVal = 1;
+                        break;
+                    case 3:
+                        retVal = 1;
+                        break;
+                    default:
+                        break;
+                }
+    
+                for (var x in { x: 0, y: 1 }) {
+                 ! 
+    
+                try {
+                ~~~
+!!! error TS1109: Expression expected.
+                    throw null;
+                }
+                catch (Exception)  ? 
+                                   ~
+!!! error TS1005: '{' expected.
+                }
+                finally {
+                ~~~~~~~
+!!! error TS1005: 'try' expected.
+                    try { }
+                    catch (Exception) { }
+                }
+    
+                return retVal;
+            }
+    
+            /// <summary>
+            /// Test types in ts language. Including class,struct,interface,delegate,anonymous type
+            /// </summary>
+            /// <returns></returns>
+            public TYPES(): number {
+                var retVal = 0;
+                var c = new CLASS();
+                var xx: IF = c;
+                retVal +=  catch .Property;
+                           ~~~~~
+!!! error TS1109: Expression expected.
+                                 ~
+!!! error TS1005: '(' expected.
+                                  ~~~~~~~~
+!!! error TS2304: Cannot find name 'Property'.
+                retVal += c.Member();
+                retVal += xx.Foo() ? 0 : 1;
+    
+                //anonymous type
+                var anony = { a: new CLASS() };
+    
+                retVal += anony.a.d();
+                ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2365: Operator '+=' cannot be applied to types 'number' and 'void'.
+    
+                return retVal;
+            }
+    
+    
+            ///// <summary>
+            ///// Test different operators
+            ///// </summary>
+            ///// <returns></returns>
+            public OPERATOR(): number {
+                var a: number[] = [1, 2, 3, 4, 5, ];/*[] bug*/ // YES []
+                var i = a[1];/*[]*/
+                i = i + i - i * i / i % i & i | i ^ i;/*+ - * / % & | ^*/
+                var b  =  true && false || true ^ false;/*& | ^*/
+                                           ~~~~~~~~~~~~
+!!! error TS2447: The '^' operator is not allowed for boolean types. Consider using '!==' instead.
+                b = !b;/*!*/
+                i = ~i;/*~i*/
+                b = i < (i - 1) && (i + 1) > i;/*< && >*/
+                var f = true ? 1 : 0;/*? :*/   // YES :
+                i++;/*++*/
+                i--;/*--*/
+                b = true && false || true;/*&& ||*/
+                i = i << 5;/*<<*/
+                i = i >> 5;/*>>*/
+                var j = i;
+                b = i == j && i != j && i <= j && i >= j;/*= == && != <= >=*/
+                i += <number>5.0;/*+=*/
+                i -= i;/*-=*/
+                i *= i;/**=*/
+                if (i == 0)
+                    i++;
+                i /= i;/*/=*/
+                i %= i;/*%=*/
+                i &= i;/*&=*/
+                i |= i;/*|=*/
+                i ^= i;/*^=*/
+                i <<= i;/*<<=*/
+                i >>= i;/*>>=*/
+    
+                if (i == 0 &&  != b && f == 1)
+                               ~~
+!!! error TS1109: Expression expected.
+                    return 0;
+                else return 1;
+            }
+    
+        }
+    
+        interface IF {
+            Foo(): bool;
+                   ~~~~
+!!! error TS2304: Cannot find name 'bool'.
+        }
+    
+        class CLASS implements IF {
+    
+             case  d = () => {  yield  0; };
+             ~~~~
+!!! error TS1068: Unexpected token. A constructor, method, accessor, or property was expected.
+                                       ~
+!!! error TS1005: ';' expected.
+                                ~~~~~
+!!! error TS2304: Cannot find name 'yield'.
+            public get Property() { return 0; }
+            public Member() {
+                return 0;
+            }
+            public Foo(): bool {
+                          ~~~~
+!!! error TS2304: Cannot find name 'bool'.
+                var myEvent = () => { return 1; };
+                if (myEvent() == 1)
+                    return true ? 
+                else
+                ~~~~
+!!! error TS1109: Expression expected.
+                    return false;
+            }
+        }
+    
+    
+        // todo: use these
+        class A  . 
+                 ~
+!!! error TS1005: '{' expected.
+            public method1(val:number) {
+            ~~~~~~
+!!! error TS1128: Declaration or statement expected.
+                              ~
+!!! error TS1005: ',' expected.
+                                       ~
+!!! error TS1005: ';' expected.
+                   ~~~~~~~
+!!! error TS2304: Cannot find name 'method1'.
+                           ~~~
+!!! error TS2304: Cannot find name 'val'.
+                               ~~~~~~
+!!! error TS2304: Cannot find name 'number'.
+                return val;
+            }
+            public method2() {
+            ~~~~~~
+!!! error TS1128: Declaration or statement expected.
+                             ~
+!!! error TS1005: ';' expected.
+                   ~~~~~~~
+!!! error TS2304: Cannot find name 'method2'.
+                return 2 * this.method1(2);
+            }
+        }
+        ~
+!!! error TS1128: Declaration or statement expected.
+    
+        class B extends A {
+    
+            public method2() {
+                return this.method1(2);
+                            ~~~~~~~
+!!! error TS2339: Property 'method1' does not exist on type 'B'.
+            }
+        }
+    
+        class Overloading {
+    
+            private otherValue = 42;
+    
+            constructor(private value: number, public name: string)  :  }
+                                                                        ~
+!!! error TS1110: Type expected.
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2390: Constructor implementation is missing.
+                        ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2369: A parameter property is only allowed in a constructor implementation.
+                                               ~~~~~~~~~~~~~~~~~~~
+!!! error TS2369: A parameter property is only allowed in a constructor implementation.
+           
+            public Overloads(value: string);
+            ~~~~~~
+!!! error TS1128: Declaration or statement expected.
+                                  ~
+!!! error TS1005: ',' expected.
+                   ~~~~~~~~~
+!!! error TS2304: Cannot find name 'Overloads'.
+                             ~~~~~
+!!! error TS2304: Cannot find name 'value'.
+                                    ~~~~~~
+!!! error TS2304: Cannot find name 'string'.
+            public Overloads( while : string, ...rest: string[]) {  & 
+            ~~~~~~
+!!! error TS1128: Declaration or statement expected.
+                              ~~~~~
+!!! error TS1135: Argument expression expected.
+                                    ~
+!!! error TS1005: '(' expected.
+                                              ~~~
+!!! error TS1109: Expression expected.
+                                                              ~
+!!! error TS1109: Expression expected.
+                                                               ~
+!!! error TS1005: ';' expected.
+                                                                    ~
+!!! error TS1129: Statement expected.
+                   ~~~~~~~~~
+!!! error TS2304: Cannot find name 'Overloads'.
+                                      ~~~~~~
+!!! error TS2304: Cannot find name 'string'.
+                                                       ~~~~~~
+!!! error TS2304: Cannot find name 'string'.
+    
+            public DefaultValue(value?: string = "Hello") { }
+            ~~~~~~
+!!! error TS1129: Statement expected.
+                                      ~
+!!! error TS1109: Expression expected.
+                                                          ~
+!!! error TS1005: ';' expected.
+                   ~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'DefaultValue'.
+                                ~~~~~
+!!! error TS2304: Cannot find name 'value'.
+                                        ~~~~~~
+!!! error TS2304: Cannot find name 'string'.
+        }
+    }
+    ~
+!!! error TS1128: Declaration or statement expected.
+    
+    enum Weekdays {
+        Monday,
+        Tuesday,
+        Weekend,
+    }
+    
+    enum Fruit {
+        Apple,
+        Pear
+    }
+    
+    interface IDisposable {
+        Dispose(): void;
+    }
+    
+    TypeScriptAllInOne.Program.Main();
+    

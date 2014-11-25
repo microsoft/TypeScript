@@ -1,9 +1,12 @@
+tests/cases/compiler/switchAssignmentCompat.ts(4,10): error TS2322: Type 'typeof Foo' is not assignable to type 'number'.
+
+
 ==== tests/cases/compiler/switchAssignmentCompat.ts (1 errors) ====
     class Foo { }
     
     switch (0) {
         case Foo: break; // Error expected
              ~~~
-!!! Type 'typeof Foo' is not assignable to type 'number'.
+!!! error TS2322: Type 'typeof Foo' is not assignable to type 'number'.
     }
     

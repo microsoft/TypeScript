@@ -1,3 +1,6 @@
+tests/cases/compiler/callSignaturesShouldBeResolvedBeforeSpecialization.ts(9,10): error TS2345: Argument of type 'boolean' is not assignable to parameter of type 'string'.
+
+
 ==== tests/cases/compiler/callSignaturesShouldBeResolvedBeforeSpecialization.ts (1 errors) ====
     interface I1<T> {
         (value: T): void;
@@ -9,5 +12,5 @@
         test("expects boolean instead of string"); // should not error - "test" should not expect a boolean
         test(true); // should error - string expected
              ~~~~
-!!! Argument of type 'boolean' is not assignable to parameter of type 'string'.
+!!! error TS2345: Argument of type 'boolean' is not assignable to parameter of type 'string'.
     }

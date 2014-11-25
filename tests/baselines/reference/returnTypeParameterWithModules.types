@@ -21,7 +21,7 @@ module M1 {
 >reduce : { (callbackfn: (previousValue: any, currentValue: any, currentIndex: number, array: any[]) => any, initialValue?: any): any; <U>(callbackfn: (previousValue: U, currentValue: any, currentIndex: number, array: any[]) => U, initialValue: U): U; }
 >apply : (thisArg: any, argArray?: any) => any
 >ar : any
->e ? [f, e] : [f] : any
+>e ? [f, e] : [f] : any[]
 >e : any
 >[f, e] : any[]
 >f : any

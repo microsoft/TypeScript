@@ -1,3 +1,9 @@
+tests/cases/compiler/assignmentCompatability23.ts(9,1): error TS2322: Type 'interfaceWithPublicAndOptional<number, string>' is not assignable to type '{ two: boolean[]; }'.
+  Types of property 'two' are incompatible.
+    Type 'string' is not assignable to type 'boolean[]'.
+      Property 'push' is missing in type 'String'.
+
+
 ==== tests/cases/compiler/assignmentCompatability23.ts (1 errors) ====
     module __test1__ {
         export interface interfaceWithPublicAndOptional<T,U> { one: T; two?: U; };  var obj4: interfaceWithPublicAndOptional<number,string> = { one: 1 };;
@@ -9,7 +15,7 @@
     }
     __test2__.__val__obj = __test1__.__val__obj4
     ~~~~~~~~~~~~~~~~~~~~
-!!! Type 'interfaceWithPublicAndOptional<number, string>' is not assignable to type '{ two: boolean[]; }':
-!!!   Types of property 'two' are incompatible:
-!!!     Type 'string' is not assignable to type 'boolean[]':
-!!!       Property 'push' is missing in type 'String'.
+!!! error TS2322: Type 'interfaceWithPublicAndOptional<number, string>' is not assignable to type '{ two: boolean[]; }'.
+!!! error TS2322:   Types of property 'two' are incompatible.
+!!! error TS2322:     Type 'string' is not assignable to type 'boolean[]'.
+!!! error TS2322:       Property 'push' is missing in type 'String'.

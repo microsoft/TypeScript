@@ -9,13 +9,13 @@ var ANY1;
 
 var ANY2: any[] = ["", ""];
 >ANY2 : any[]
->["", ""] : any[]
+>["", ""] : string[]
 
 var obj = {x:1,y:null};
 >obj : { x: number; y: any; }
 >{x:1,y:null} : { x: number; y: null; }
 >x : number
->y : any
+>y : null
 
 class A {
 >A : A

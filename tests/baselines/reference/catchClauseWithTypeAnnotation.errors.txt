@@ -1,6 +1,9 @@
+tests/cases/compiler/catchClauseWithTypeAnnotation.ts(2,11): error TS1013: Catch clause parameter cannot have a type annotation.
+
+
 ==== tests/cases/compiler/catchClauseWithTypeAnnotation.ts (1 errors) ====
     try {
     } catch (e: any) {
               ~
-!!! Catch clause parameter cannot have a type annotation.
+!!! error TS1013: Catch clause parameter cannot have a type annotation.
     }

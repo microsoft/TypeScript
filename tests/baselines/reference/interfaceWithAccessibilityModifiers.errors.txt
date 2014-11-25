@@ -1,0 +1,18 @@
+tests/cases/conformance/interfaces/interfaceDeclarations/interfaceWithAccessibilityModifiers.ts(3,5): error TS1131: Property or signature expected.
+tests/cases/conformance/interfaces/interfaceDeclarations/interfaceWithAccessibilityModifiers.ts(4,5): error TS1131: Property or signature expected.
+tests/cases/conformance/interfaces/interfaceDeclarations/interfaceWithAccessibilityModifiers.ts(5,5): error TS1131: Property or signature expected.
+
+
+==== tests/cases/conformance/interfaces/interfaceDeclarations/interfaceWithAccessibilityModifiers.ts (3 errors) ====
+    // Errors
+    interface Foo {
+        public a: any;
+        ~~~~~~
+!!! error TS1131: Property or signature expected.
+        private b: any;
+        ~~~~~~~
+!!! error TS1131: Property or signature expected.
+        protected c: any;
+        ~~~~~~~~~
+!!! error TS1131: Property or signature expected.
+    }

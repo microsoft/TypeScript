@@ -26,7 +26,7 @@ function foo2<T, U>(x: T, cb: new(a: T) => U) {
     return new cb(x);
 }
 
-var r4 = foo2(1, i2); // string, instantiated generic
+var r4 = foo2(1, i2); // error
 var r4b = foo2(1, a); // any
 var r5 = foo2(1, i); // any
 var r6 = foo2<string, string>('', i2); // string
@@ -37,5 +37,5 @@ function foo3<T, U>(x: T, cb: new(a: T) => U, y: U) {
 
 var r7 = foo3(null, i, ''); // any
 var r7b = foo3(null, a, ''); // any
-var r8 = foo3(1, i2, 1); // {}
+var r8 = foo3(1, i2, 1); // error
 var r9 = foo3<string, string>('', i2, ''); // string

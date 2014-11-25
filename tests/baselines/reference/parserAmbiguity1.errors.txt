@@ -1,6 +1,10 @@
+tests/cases/conformance/parser/ecmascript5/Generics/parserAmbiguity1.ts(1,1): error TS2304: Cannot find name 'f'.
+tests/cases/conformance/parser/ecmascript5/Generics/parserAmbiguity1.ts(1,3): error TS2304: Cannot find name 'g'.
+
+
 ==== tests/cases/conformance/parser/ecmascript5/Generics/parserAmbiguity1.ts (2 errors) ====
     f(g<A, B>(7));
     ~
-!!! Cannot find name 'f'.
+!!! error TS2304: Cannot find name 'f'.
       ~
-!!! Cannot find name 'g'.
+!!! error TS2304: Cannot find name 'g'.

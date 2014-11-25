@@ -1,6 +1,6 @@
 //// [augmentedTypesClass4.ts]
 //// class then class
-class c3 { public foo() { } }
+class c3 { public foo() { } } // error
 class c3 { public bar() { } } // error
 
 
@@ -12,7 +12,7 @@ var c3 = (function () {
     c3.prototype.foo = function () {
     };
     return c3;
-})();
+})(); // error
 var c3 = (function () {
     function c3() {
     }

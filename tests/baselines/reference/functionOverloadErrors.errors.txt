@@ -1,8 +1,24 @@
+tests/cases/conformance/functions/functionOverloadErrors.ts(2,14): error TS2371: A parameter initializer is only allowed in a function or constructor implementation.
+tests/cases/conformance/functions/functionOverloadErrors.ts(44,25): error TS2304: Cannot find name 'Window'.
+tests/cases/conformance/functions/functionOverloadErrors.ts(50,25): error TS2304: Cannot find name 'Window'.
+tests/cases/conformance/functions/functionOverloadErrors.ts(51,32): error TS2304: Cannot find name 'window'.
+tests/cases/conformance/functions/functionOverloadErrors.ts(65,13): error TS2385: Overload signatures must all be public, private or protected.
+tests/cases/conformance/functions/functionOverloadErrors.ts(68,13): error TS2385: Overload signatures must all be public, private or protected.
+tests/cases/conformance/functions/functionOverloadErrors.ts(75,21): error TS2383: Overload signatures must all be exported or not exported.
+tests/cases/conformance/functions/functionOverloadErrors.ts(79,14): error TS2383: Overload signatures must all be exported or not exported.
+tests/cases/conformance/functions/functionOverloadErrors.ts(85,18): error TS2384: Overload signatures must all be ambient or non-ambient.
+tests/cases/conformance/functions/functionOverloadErrors.ts(90,18): error TS2384: Overload signatures must all be ambient or non-ambient.
+tests/cases/conformance/functions/functionOverloadErrors.ts(94,1): error TS2394: Overload signature is not compatible with function implementation.
+tests/cases/conformance/functions/functionOverloadErrors.ts(99,1): error TS2394: Overload signature is not compatible with function implementation.
+tests/cases/conformance/functions/functionOverloadErrors.ts(103,1): error TS2394: Overload signature is not compatible with function implementation.
+tests/cases/conformance/functions/functionOverloadErrors.ts(116,19): error TS2371: A parameter initializer is only allowed in a function or constructor implementation.
+
+
 ==== tests/cases/conformance/functions/functionOverloadErrors.ts (14 errors) ====
     //Function overload signature with initializer
     function fn1(x = 3);
                  ~~~~~
-!!! A parameter initializer is only allowed in a function or constructor implementation.
+!!! error TS2371: A parameter initializer is only allowed in a function or constructor implementation.
     function fn1() { }
     
     //Multiple function overload signatures that are identical
@@ -46,7 +62,7 @@
     //Function overloads that differ only by type parameter constraints
     function fn10<T extends Window>();
                             ~~~~~~
-!!! Cannot find name 'Window'.
+!!! error TS2304: Cannot find name 'Window'.
     function fn10<S extends Date>();
     function fn10() { }
     // (actually OK)
@@ -54,10 +70,10 @@
     //Function overloads that differ only by type parameter constraints where constraints are structually identical
     function fn11<T extends Window>();
                             ~~~~~~
-!!! Cannot find name 'Window'.
+!!! error TS2304: Cannot find name 'Window'.
     function fn11<S extends typeof window>();
                                    ~~~~~~
-!!! Cannot find name 'window'.
+!!! error TS2304: Cannot find name 'window'.
     function fn11() { }
     
     //Function overloads that differ only by type parameter constraints where constraints include infinitely recursive type reference
@@ -73,12 +89,12 @@
         public f();
         private f(s: string);
                 ~
-!!! Overload signatures must all be public or private.
+!!! error TS2385: Overload signatures must all be public, private or protected.
         f() { }
     
         private g(s: string);
                 ~
-!!! Overload signatures must all be public or private.
+!!! error TS2385: Overload signatures must all be public, private or protected.
         public g();
         g() { }
     }
@@ -87,13 +103,13 @@
     module M {
         export function fn1();
                         ~~~
-!!! Overload signatures must all be exported or not exported.
+!!! error TS2383: Overload signatures must all be exported or not exported.
         function fn1(n: string);
         function fn1() { } 
     
         function fn2(n: string);
                  ~~~
-!!! Overload signatures must all be exported or not exported.
+!!! error TS2383: Overload signatures must all be exported or not exported.
         export function fn2();
         export function fn2() { } 
     }
@@ -101,33 +117,33 @@
     //Function overloads with differing ambience
     declare function dfn1();
                      ~~~~
-!!! Overload signatures must all be ambient or non-ambient.
+!!! error TS2384: Overload signatures must all be ambient or non-ambient.
     function dfn1(s: string);
     function dfn1() { }
     
     function dfn2();
     declare function dfn2(s: string);
                      ~~~~
-!!! Overload signatures must all be ambient or non-ambient.
+!!! error TS2384: Overload signatures must all be ambient or non-ambient.
     function dfn2() { }
     
     //Function overloads with fewer params than implementation signature
     function fewerParams();
     ~~~~~~~~~~~~~~~~~~~~~~~
-!!! Overload signature is not compatible with function implementation.
+!!! error TS2394: Overload signature is not compatible with function implementation.
     function fewerParams(n: string) {
     }
     
     //Function implementation whose parameter types are not assignable to all corresponding overload signature parameters
     function fn13(n: string);
     ~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Overload signature is not compatible with function implementation.
+!!! error TS2394: Overload signature is not compatible with function implementation.
     function fn13(n: number) { }
     
     //Function overloads where return types are not all subtype of implementation return type
     function fn14(n: string): string;
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Overload signature is not compatible with function implementation.
+!!! error TS2394: Overload signature is not compatible with function implementation.
     function fn14() {
         return 3;
     }
@@ -142,6 +158,6 @@
     //Function overloads which use initializer expressions
     function initExpr(n = 13);
                       ~~~~~~
-!!! A parameter initializer is only allowed in a function or constructor implementation.
+!!! error TS2371: A parameter initializer is only allowed in a function or constructor implementation.
     function initExpr() { }
     

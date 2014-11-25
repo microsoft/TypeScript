@@ -1,19 +1,36 @@
+tests/cases/compiler/typeMatch2.ts(3,2): error TS2322: Type '{}' is not assignable to type '{ x: number; y: number; }'.
+  Property 'x' is missing in type '{}'.
+tests/cases/compiler/typeMatch2.ts(4,5): error TS2322: Type '{ x: number; }' is not assignable to type '{ x: number; y: number; }'.
+  Property 'y' is missing in type '{ x: number; }'.
+tests/cases/compiler/typeMatch2.ts(6,5): error TS2322: Type '{ x: number; z: number; }' is not assignable to type '{ x: number; y: number; }'.
+  Property 'y' is missing in type '{ x: number; z: number; }'.
+tests/cases/compiler/typeMatch2.ts(18,5): error TS2322: Type 'Animal[]' is not assignable to type 'Giraffe[]'.
+  Type 'Animal' is not assignable to type 'Giraffe'.
+    Property 'g' is missing in type 'Animal'.
+tests/cases/compiler/typeMatch2.ts(22,5): error TS2322: Type '{ f1: number; f2: Animal[]; }' is not assignable to type '{ f1: number; f2: Giraffe[]; }'.
+  Types of property 'f2' are incompatible.
+    Type 'Animal[]' is not assignable to type 'Giraffe[]'.
+      Type 'Animal' is not assignable to type 'Giraffe'.
+tests/cases/compiler/typeMatch2.ts(35,5): error TS2322: Type '{ x: number; }' is not assignable to type '{ x: number; y: number; }'.
+  Property 'y' is missing in type '{ x: number; }'.
+
+
 ==== tests/cases/compiler/typeMatch2.ts (6 errors) ====
     function f1() {
     	var a = { x: 1, y: 2 };
     	a = {}; // error
     	~
-!!! Type '{}' is not assignable to type '{ x: number; y: number; }':
-!!!   Property 'x' is missing in type '{}'.
+!!! error TS2322: Type '{}' is not assignable to type '{ x: number; y: number; }'.
+!!! error TS2322:   Property 'x' is missing in type '{}'.
         a = { x: 1 }; // error
         ~
-!!! Type '{ x: number; }' is not assignable to type '{ x: number; y: number; }':
-!!!   Property 'y' is missing in type '{ x: number; }'.
+!!! error TS2322: Type '{ x: number; }' is not assignable to type '{ x: number; y: number; }'.
+!!! error TS2322:   Property 'y' is missing in type '{ x: number; }'.
     	a = { x: 1, y: 2, z: 3 };
         a = { x: 1, z: 3 };  // error
         ~
-!!! Type '{ x: number; z: number; }' is not assignable to type '{ x: number; y: number; }':
-!!!   Property 'y' is missing in type '{ x: number; z: number; }'.
+!!! error TS2322: Type '{ x: number; z: number; }' is not assignable to type '{ x: number; y: number; }'.
+!!! error TS2322:   Property 'y' is missing in type '{ x: number; z: number; }'.
     }
     
     class Animal { private a; }
@@ -27,18 +44,18 @@
         aa = gg;
         gg = aa; // error
         ~~
-!!! Type 'Animal[]' is not assignable to type 'Giraffe[]':
-!!!   Type 'Animal' is not assignable to type 'Giraffe':
-!!!     Property 'g' is missing in type 'Animal'.
+!!! error TS2322: Type 'Animal[]' is not assignable to type 'Giraffe[]'.
+!!! error TS2322:   Type 'Animal' is not assignable to type 'Giraffe'.
+!!! error TS2322:     Property 'g' is missing in type 'Animal'.
         var xa = { f1: 5, f2: aa };
         var xb = { f1: 5, f2: gg };
         xa = xb; // Should be ok
         xb = xa; // Not ok
         ~~
-!!! Type '{ f1: number; f2: Animal[]; }' is not assignable to type '{ f1: number; f2: Giraffe[]; }':
-!!!   Types of property 'f2' are incompatible:
-!!!     Type 'Animal[]' is not assignable to type 'Giraffe[]':
-!!!       Type 'Animal' is not assignable to type 'Giraffe'.
+!!! error TS2322: Type '{ f1: number; f2: Animal[]; }' is not assignable to type '{ f1: number; f2: Giraffe[]; }'.
+!!! error TS2322:   Types of property 'f2' are incompatible.
+!!! error TS2322:     Type 'Animal[]' is not assignable to type 'Giraffe[]'.
+!!! error TS2322:       Type 'Animal' is not assignable to type 'Giraffe'.
     }
     
     function f4() {
@@ -53,8 +70,8 @@
         a = { x: 1, y: _any, z:1 }; 
         a = { x: 1 }; // error
         ~
-!!! Type '{ x: number; }' is not assignable to type '{ x: number; y: number; }':
-!!!   Property 'y' is missing in type '{ x: number; }'.
+!!! error TS2322: Type '{ x: number; }' is not assignable to type '{ x: number; y: number; }'.
+!!! error TS2322:   Property 'y' is missing in type '{ x: number; }'.
         var mf = function m(n) { return false; };
         var zf = function z(n: number) { return true; };
         mf=zf;

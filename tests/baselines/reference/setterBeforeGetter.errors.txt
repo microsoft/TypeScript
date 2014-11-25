@@ -1,3 +1,7 @@
+tests/cases/compiler/setterBeforeGetter.ts(5,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/setterBeforeGetter.ts(8,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+
+
 ==== tests/cases/compiler/setterBeforeGetter.ts (2 errors) ====
     class Foo {
     
@@ -5,12 +9,12 @@
         // should not be an error to order them this way
         set bar(thing: { a: string; }) {
             ~~~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             this._bar = thing;
         }
         get bar(): { a: string; } {
             ~~~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             return this._bar;
         }
     }

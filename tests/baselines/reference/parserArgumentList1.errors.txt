@@ -1,16 +1,21 @@
+tests/cases/conformance/parser/ecmascript5/parserArgumentList1.ts(1,1): error TS1148: Cannot compile external modules unless the '--module' flag is provided.
+tests/cases/conformance/parser/ecmascript5/parserArgumentList1.ts(1,35): error TS2304: Cannot find name 'HTMLElement'.
+tests/cases/conformance/parser/ecmascript5/parserArgumentList1.ts(2,42): error TS2304: Cannot find name '_classNameRegexp'.
+
+
 ==== tests/cases/conformance/parser/ecmascript5/parserArgumentList1.ts (3 errors) ====
     export function removeClass (node:HTMLElement, className:string) {
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                                       ~~~~~~~~~~~
-!!! Cannot find name 'HTMLElement'.
+!!! error TS2304: Cannot find name 'HTMLElement'.
     	node.className = node.className.replace(_classNameRegexp(className), function (everything, leftDelimiter, name, rightDelimiter) {
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     	                                        ~~~~~~~~~~~~~~~~
-!!! Cannot find name '_classNameRegexp'.
+!!! error TS2304: Cannot find name '_classNameRegexp'.
     		return leftDelimiter.length + rightDelimiter.length === 2 ? ' ' : '';
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     	});
     ~~~~
     }
     ~
-!!! Cannot compile external modules unless the '--module' flag is provided.
+!!! error TS1148: Cannot compile external modules unless the '--module' flag is provided.

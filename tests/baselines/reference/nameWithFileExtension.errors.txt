@@ -1,7 +1,10 @@
+tests/cases/conformance/externalModules/foo_1.ts(1,22): error TS2307: Cannot find external module './foo_0.js'.
+
+
 ==== tests/cases/conformance/externalModules/foo_1.ts (1 errors) ====
     import foo = require('./foo_0.js');
                          ~~~~~~~~~~~~
-!!! Cannot find external module './foo_0.js'.
+!!! error TS2307: Cannot find external module './foo_0.js'.
     var x = foo.foo + 42;
     
 ==== tests/cases/conformance/externalModules/foo_0.ts (0 errors) ====

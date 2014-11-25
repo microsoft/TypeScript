@@ -1,3 +1,4 @@
+in1.d.ts(1,8): error TS2300: Duplicate identifier 'a'.
 in2.d.ts(1,8): error TS2300: Duplicate identifier 'a'.
 
 
@@ -14,9 +15,11 @@ in2.d.ts(1,8): error TS2300: Duplicate identifier 'a'.
             class MyClass{ }
         }
     }
-==== in1.d.ts (0 errors) ====
+==== in1.d.ts (1 errors) ====
     import a = A;
+           ~
+!!! error TS2300: Duplicate identifier 'a'.
 ==== in2.d.ts (1 errors) ====
     import a = A;
            ~
-!!! Duplicate identifier 'a'.
+!!! error TS2300: Duplicate identifier 'a'.

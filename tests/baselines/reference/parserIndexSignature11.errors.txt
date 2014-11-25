@@ -1,12 +1,17 @@
+tests/cases/conformance/parser/ecmascript5/IndexSignatures/parserIndexSignature11.ts(2,10): error TS1022: An index signature parameter must have a type annotation.
+tests/cases/conformance/parser/ecmascript5/IndexSignatures/parserIndexSignature11.ts(3,9): error TS1021: An index signature must have a type annotation.
+tests/cases/conformance/parser/ecmascript5/IndexSignatures/parserIndexSignature11.ts(4,10): error TS1096: An index signature must have exactly one parameter.
+
+
 ==== tests/cases/conformance/parser/ecmascript5/IndexSignatures/parserIndexSignature11.ts (3 errors) ====
     interface I {
             [p];
              ~
-!!! An index signature parameter must have a type annotation.
+!!! error TS1022: An index signature parameter must have a type annotation.
             [p1: string];
-            ~~~~~~~~~~~~
-!!! An index signature must have a type annotation.
+            ~~~~~~~~~~~~~
+!!! error TS1021: An index signature must have a type annotation.
             [p2: string, p3: number];
              ~~
-!!! An index signature must have exactly one parameter.
+!!! error TS1096: An index signature must have exactly one parameter.
     }

@@ -7,12 +7,11 @@ var x: X;
 var a: A;
 var b: B;
 
-//Expect to have compiler errors
-//Be not contextually typed
+// No errors anymore, uses union types
 true ? a : b;
 var result1 = true ? a : b;
 
-//Be contextually typed and and bct is not identical
+//Be contextually typed and and bct is not identical, results in errors that union type is not assignable to target
 var result2: A = true ? a : b;
 var result3: B = true ? a : b;
 

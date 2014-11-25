@@ -1,9 +1,13 @@
+tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserModifierOnStatementInBlock2.ts(2,12): error TS1005: ';' expected.
+tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserModifierOnStatementInBlock2.ts(2,4): error TS2304: Cannot find name 'declare'.
+
+
 ==== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserModifierOnStatementInBlock2.ts (2 errors) ====
     {
        declare var x = this;
                ~~~
-!!! ';' expected.
+!!! error TS1005: ';' expected.
        ~~~~~~~
-!!! Cannot find name 'declare'.
+!!! error TS2304: Cannot find name 'declare'.
     }
     

@@ -1,4 +1,9 @@
-==== tests/cases/conformance/types/objectTypeLiteral/methodSignatures/objectTypesWithOptionalProperties.ts (4 errors) ====
+tests/cases/conformance/types/objectTypeLiteral/methodSignatures/objectTypesWithOptionalProperties.ts(12,6): error TS1112: A class member cannot be declared optional.
+tests/cases/conformance/types/objectTypeLiteral/methodSignatures/objectTypesWithOptionalProperties.ts(20,6): error TS1112: A class member cannot be declared optional.
+tests/cases/conformance/types/objectTypeLiteral/methodSignatures/objectTypesWithOptionalProperties.ts(24,6): error TS1162: An object member cannot be declared optional.
+
+
+==== tests/cases/conformance/types/objectTypeLiteral/methodSignatures/objectTypesWithOptionalProperties.ts (3 errors) ====
     // Basic uses of optional properties
     
     var a: {
@@ -12,7 +17,7 @@
     class C {
         x?: number; // error
          ~
-!!! A class member cannot be declared optional.
+!!! error TS1112: A class member cannot be declared optional.
     }
     
     interface I2<T> {
@@ -22,13 +27,11 @@
     class C2<T> {
         x?: T; // error
          ~
-!!! A class member cannot be declared optional.
+!!! error TS1112: A class member cannot be declared optional.
     }
     
     var b = {
         x?: 1 // error
          ~
-!!! ':' expected.
-          ~
-!!! Expression expected.
+!!! error TS1162: An object member cannot be declared optional.
     }

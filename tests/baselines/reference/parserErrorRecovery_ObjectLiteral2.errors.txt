@@ -1,7 +1,11 @@
+tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ObjectLiterals/parserErrorRecovery_ObjectLiteral2.ts(2,1): error TS1005: ':' expected.
+tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ObjectLiterals/parserErrorRecovery_ObjectLiteral2.ts(2,7): error TS1005: ':' expected.
+
+
 ==== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ObjectLiterals/parserErrorRecovery_ObjectLiteral2.ts (2 errors) ====
     var v = { a
     return;
     ~~~~~~
-!!! ':' expected.
+!!! error TS1005: ':' expected.
           ~
-!!! ':' expected.
+!!! error TS1005: ':' expected.

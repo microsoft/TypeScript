@@ -1,67 +1,93 @@
-==== tests/cases/conformance/types/objectTypeLiteral/callSignatures/constructSignatureWithAccessibilityModifiersOnParameters2.ts (15 errors) ====
+tests/cases/conformance/types/objectTypeLiteral/callSignatures/constructSignatureWithAccessibilityModifiersOnParameters2.ts(4,17): error TS2369: A parameter property is only allowed in a constructor implementation.
+tests/cases/conformance/types/objectTypeLiteral/callSignatures/constructSignatureWithAccessibilityModifiersOnParameters2.ts(4,24): error TS2300: Duplicate identifier 'x'.
+tests/cases/conformance/types/objectTypeLiteral/callSignatures/constructSignatureWithAccessibilityModifiersOnParameters2.ts(4,27): error TS2369: A parameter property is only allowed in a constructor implementation.
+tests/cases/conformance/types/objectTypeLiteral/callSignatures/constructSignatureWithAccessibilityModifiersOnParameters2.ts(4,35): error TS2300: Duplicate identifier 'y'.
+tests/cases/conformance/types/objectTypeLiteral/callSignatures/constructSignatureWithAccessibilityModifiersOnParameters2.ts(5,24): error TS2300: Duplicate identifier 'x'.
+tests/cases/conformance/types/objectTypeLiteral/callSignatures/constructSignatureWithAccessibilityModifiersOnParameters2.ts(5,35): error TS2300: Duplicate identifier 'y'.
+tests/cases/conformance/types/objectTypeLiteral/callSignatures/constructSignatureWithAccessibilityModifiersOnParameters2.ts(9,17): error TS2369: A parameter property is only allowed in a constructor implementation.
+tests/cases/conformance/types/objectTypeLiteral/callSignatures/constructSignatureWithAccessibilityModifiersOnParameters2.ts(9,25): error TS2300: Duplicate identifier 'x'.
+tests/cases/conformance/types/objectTypeLiteral/callSignatures/constructSignatureWithAccessibilityModifiersOnParameters2.ts(10,24): error TS2300: Duplicate identifier 'x'.
+tests/cases/conformance/types/objectTypeLiteral/callSignatures/constructSignatureWithAccessibilityModifiersOnParameters2.ts(14,17): error TS2369: A parameter property is only allowed in a constructor implementation.
+tests/cases/conformance/types/objectTypeLiteral/callSignatures/constructSignatureWithAccessibilityModifiersOnParameters2.ts(19,10): error TS2369: A parameter property is only allowed in a constructor implementation.
+tests/cases/conformance/types/objectTypeLiteral/callSignatures/constructSignatureWithAccessibilityModifiersOnParameters2.ts(20,10): error TS2369: A parameter property is only allowed in a constructor implementation.
+tests/cases/conformance/types/objectTypeLiteral/callSignatures/constructSignatureWithAccessibilityModifiersOnParameters2.ts(24,10): error TS2369: A parameter property is only allowed in a constructor implementation.
+tests/cases/conformance/types/objectTypeLiteral/callSignatures/constructSignatureWithAccessibilityModifiersOnParameters2.ts(25,10): error TS2369: A parameter property is only allowed in a constructor implementation.
+tests/cases/conformance/types/objectTypeLiteral/callSignatures/constructSignatureWithAccessibilityModifiersOnParameters2.ts(29,10): error TS2369: A parameter property is only allowed in a constructor implementation.
+tests/cases/conformance/types/objectTypeLiteral/callSignatures/constructSignatureWithAccessibilityModifiersOnParameters2.ts(30,10): error TS2369: A parameter property is only allowed in a constructor implementation.
+tests/cases/conformance/types/objectTypeLiteral/callSignatures/constructSignatureWithAccessibilityModifiersOnParameters2.ts(34,10): error TS2369: A parameter property is only allowed in a constructor implementation.
+tests/cases/conformance/types/objectTypeLiteral/callSignatures/constructSignatureWithAccessibilityModifiersOnParameters2.ts(35,10): error TS2369: A parameter property is only allowed in a constructor implementation.
+
+
+==== tests/cases/conformance/types/objectTypeLiteral/callSignatures/constructSignatureWithAccessibilityModifiersOnParameters2.ts (18 errors) ====
     // Parameter properties are not valid in overloads of constructors
     
     class C {
         constructor(public x, private y);
                     ~~~~~~~~
-!!! A parameter property is only allowed in a constructor implementation.
+!!! error TS2369: A parameter property is only allowed in a constructor implementation.
+                           ~
+!!! error TS2300: Duplicate identifier 'x'.
                               ~~~~~~~~~
-!!! A parameter property is only allowed in a constructor implementation.
+!!! error TS2369: A parameter property is only allowed in a constructor implementation.
+                                      ~
+!!! error TS2300: Duplicate identifier 'y'.
         constructor(public x, private y) { }
                            ~
-!!! Duplicate identifier 'x'.
+!!! error TS2300: Duplicate identifier 'x'.
                                       ~
-!!! Duplicate identifier 'y'.
+!!! error TS2300: Duplicate identifier 'y'.
     }
     
     class C2 {
         constructor(private x);
                     ~~~~~~~~~
-!!! A parameter property is only allowed in a constructor implementation.
+!!! error TS2369: A parameter property is only allowed in a constructor implementation.
+                            ~
+!!! error TS2300: Duplicate identifier 'x'.
         constructor(public x) { }
                            ~
-!!! Duplicate identifier 'x'.
+!!! error TS2300: Duplicate identifier 'x'.
     }
     
     class C3 {
         constructor(private x);
                     ~~~~~~~~~
-!!! A parameter property is only allowed in a constructor implementation.
+!!! error TS2369: A parameter property is only allowed in a constructor implementation.
         constructor(private y) { }
     }
     
     interface I {
         new (public x);
              ~~~~~~~~
-!!! A parameter property is only allowed in a constructor implementation.
+!!! error TS2369: A parameter property is only allowed in a constructor implementation.
         new (public x);
              ~~~~~~~~
-!!! A parameter property is only allowed in a constructor implementation.
+!!! error TS2369: A parameter property is only allowed in a constructor implementation.
     }
     
     interface I2 {
         new (private x);
              ~~~~~~~~~
-!!! A parameter property is only allowed in a constructor implementation.
+!!! error TS2369: A parameter property is only allowed in a constructor implementation.
         new (private x);
              ~~~~~~~~~
-!!! A parameter property is only allowed in a constructor implementation.
+!!! error TS2369: A parameter property is only allowed in a constructor implementation.
     }
     
     var a: {
         new (public x);
              ~~~~~~~~
-!!! A parameter property is only allowed in a constructor implementation.
+!!! error TS2369: A parameter property is only allowed in a constructor implementation.
         new (public y);
              ~~~~~~~~
-!!! A parameter property is only allowed in a constructor implementation.
+!!! error TS2369: A parameter property is only allowed in a constructor implementation.
     }
     
     var b: {
         new (private x);
              ~~~~~~~~~
-!!! A parameter property is only allowed in a constructor implementation.
+!!! error TS2369: A parameter property is only allowed in a constructor implementation.
         new (private y);
              ~~~~~~~~~
-!!! A parameter property is only allowed in a constructor implementation.
+!!! error TS2369: A parameter property is only allowed in a constructor implementation.
     }

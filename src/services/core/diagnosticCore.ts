@@ -1,8 +1,6 @@
 ///<reference path='references.ts' />
 
 module TypeScript {
-    export var LocalizedDiagnosticMessages: ts.Map<any> = null;
-
     export class Location {
         private _fileName: string;
         private _lineMap: LineMap;
@@ -52,11 +50,11 @@ module TypeScript {
         private _arguments: any[];
         private _additionalLocations: Location[];
 
-        constructor(fileName: string, lineMap: LineMap, start: number, length: number, diagnosticKey: string, _arguments: any[]= null, additionalLocations: Location[] = null) {
+        constructor(fileName: string, lineMap: LineMap, start: number, length: number, diagnosticKey: string, _arguments?: any[], additionalLocations?: Location[]) {
             super(fileName, lineMap, start, length);
             this._diagnosticKey = diagnosticKey;
-            this._arguments = (_arguments && _arguments.length > 0) ? _arguments : null;
-            this._additionalLocations = (additionalLocations && additionalLocations.length > 0) ? additionalLocations : null;
+            this._arguments = (_arguments && _arguments.length > 0) ? _arguments : undefined;
+            this._additionalLocations = (additionalLocations && additionalLocations.length > 0) ? additionalLocations : undefined;
         }
 
         public toJSON(key: any): any {

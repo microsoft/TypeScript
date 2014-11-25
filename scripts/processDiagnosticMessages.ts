@@ -3,6 +3,7 @@
 interface DiagnosticDetails {
     category: string;
     code: number;
+    isEarly?: boolean;
 }
 
 interface InputDiagnosticMessageTable {
@@ -63,8 +64,9 @@ function buildInfoFileOutput(messageTable: InputDiagnosticMessageTable, nameMap:
         '        ' + convertPropertyName(nameMap[name]) +
         ': { code: ' + diagnosticDetails.code +
         ', category: DiagnosticCategory.' + diagnosticDetails.category +
-        ', key: "' + name.replace('"', '\\"') +
-        '" },\r\n';
+        ', key: "' + name.replace('"', '\\"') + '"' +
+        (diagnosticDetails.isEarly ? ', isEarly: true' : '') +
+        ' },\r\n';
     }
 
     result += '    };\r\n}';

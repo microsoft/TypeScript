@@ -1,3 +1,10 @@
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignaturesWithOptionalParameters.ts(16,5): error TS2322: Type 'new (x: number) => number' is not assignable to type 'new () => number'.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignaturesWithOptionalParameters.ts(17,5): error TS2322: Type 'new (x: number, y?: number) => number' is not assignable to type 'new () => number'.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignaturesWithOptionalParameters.ts(19,5): error TS2322: Type 'new (x: number, y: number) => number' is not assignable to type 'new () => number'.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignaturesWithOptionalParameters.ts(27,5): error TS2322: Type 'new (x: number, y: number) => number' is not assignable to type 'new (x?: number) => number'.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignaturesWithOptionalParameters.ts(35,5): error TS2322: Type 'new (x: number, y: number) => number' is not assignable to type 'new (x: number) => number'.
+
+
 ==== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignaturesWithOptionalParameters.ts (5 errors) ====
     // call signatures in derived types must have the same or fewer optional parameters as the base type
     
@@ -16,14 +23,14 @@
         a = b.a2; // ok
         a = b.a3; // error
         ~
-!!! Type 'new (x: number) => number' is not assignable to type 'new () => number'.
+!!! error TS2322: Type 'new (x: number) => number' is not assignable to type 'new () => number'.
         a = b.a4; // error
         ~
-!!! Type 'new (x: number, y?: number) => number' is not assignable to type 'new () => number'.
+!!! error TS2322: Type 'new (x: number, y?: number) => number' is not assignable to type 'new () => number'.
         a = b.a5; // ok
         a = b.a6; // error
         ~
-!!! Type 'new (x: number, y: number) => number' is not assignable to type 'new () => number'.
+!!! error TS2322: Type 'new (x: number, y: number) => number' is not assignable to type 'new () => number'.
     
     var a2: new (x?: number) => number; 
         a2 = b.a; // ok
@@ -33,7 +40,7 @@
         a2 = b.a5; // ok
         a2 = b.a6; // error
         ~~
-!!! Type 'new (x: number, y: number) => number' is not assignable to type 'new (x?: number) => number'.
+!!! error TS2322: Type 'new (x: number, y: number) => number' is not assignable to type 'new (x?: number) => number'.
     
     var a3: new (x: number) => number; 
         a3 = b.a; // ok
@@ -43,7 +50,7 @@
         a3 = b.a5; // ok
         a3 = b.a6; // error
         ~~
-!!! Type 'new (x: number, y: number) => number' is not assignable to type 'new (x: number) => number'.
+!!! error TS2322: Type 'new (x: number, y: number) => number' is not assignable to type 'new (x: number) => number'.
     
     var a4: new (x: number, y?: number) => number;
         a4 = b.a; // ok

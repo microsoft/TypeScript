@@ -1,9 +1,22 @@
+tests/cases/compiler/newOperator.ts(18,10): error TS1150: 'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.
+tests/cases/compiler/newOperator.ts(20,1): error TS1150: 'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.
+tests/cases/compiler/newOperator.ts(44,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/newOperator.ts(3,13): error TS2304: Cannot find name 'ifc'.
+tests/cases/compiler/newOperator.ts(10,10): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
+tests/cases/compiler/newOperator.ts(11,10): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
+tests/cases/compiler/newOperator.ts(12,5): error TS2304: Cannot find name 'string'.
+tests/cases/compiler/newOperator.ts(18,14): error TS2304: Cannot find name 'string'.
+tests/cases/compiler/newOperator.ts(21,1): error TS2304: Cannot find name 'string'.
+tests/cases/compiler/newOperator.ts(28,13): error TS2304: Cannot find name 'q'.
+tests/cases/compiler/newOperator.ts(31,10): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
+
+
 ==== tests/cases/compiler/newOperator.ts (11 errors) ====
     interface ifc { }
     // Attempting to 'new' an interface yields poor error
     var i = new ifc();
                 ~~~
-!!! Cannot find name 'ifc'.
+!!! error TS2304: Cannot find name 'ifc'.
     
     // Parens are optional
     var x = new Date;
@@ -12,45 +25,47 @@
     // Target is not a class or var, good error
     var t1 = new 53();
              ~~~~~~~~
-!!! Cannot use 'new' with an expression whose type lacks a call or construct signature.
+!!! error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
     var t2 = new ''();
              ~~~~~~~~
-!!! Cannot use 'new' with an expression whose type lacks a call or construct signature.
+!!! error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
     new string;
         ~~~~~~
-!!! Cannot find name 'string'.
+!!! error TS2304: Cannot find name 'string'.
     
     // Use in LHS of expression?
     (new Date()).toString();
     
     // Various spacing
     var t3 = new string[]( );
-                       ~~
-!!! 'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.
+             ~~~~~~~~~~~~
+!!! error TS1150: 'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.
                  ~~~~~~
-!!! Cannot find name 'string'.
+!!! error TS2304: Cannot find name 'string'.
     var t4 =
     new
+    ~~~
     string
     ~~~~~~
-!!! Cannot find name 'string'.
+    ~~~~~~
+!!! error TS2304: Cannot find name 'string'.
     [
     ~
         ]
     ~~~~~
-!!! 'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.
+!!! error TS1150: 'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.
         (
             );
     
     // Unresolved symbol
     var f = new q();
                 ~
-!!! Cannot find name 'q'.
+!!! error TS2304: Cannot find name 'q'.
     
     // not legal
     var t5 = new new Date;
              ~~~~~~~~~~~~
-!!! Cannot use 'new' with an expression whose type lacks a call or construct signature.
+!!! error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
     
     // Can be an expression
     new String;
@@ -64,9 +79,9 @@
     
     class S {
         public get xs(): M.T[] {
+                   ~~
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             return new M.T[];
-                          ~~
-!!! 'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.
         }
     }
     

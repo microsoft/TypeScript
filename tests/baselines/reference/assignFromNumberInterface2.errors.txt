@@ -1,3 +1,7 @@
+tests/cases/conformance/types/primitives/number/assignFromNumberInterface2.ts(23,1): error TS2322: Type 'Number' is not assignable to type 'number'.
+tests/cases/conformance/types/primitives/number/assignFromNumberInterface2.ts(24,1): error TS2322: Type 'NotNumber' is not assignable to type 'number'.
+
+
 ==== tests/cases/conformance/types/primitives/number/assignFromNumberInterface2.ts (2 errors) ====
     interface Number {
         doStuff(): string;
@@ -23,9 +27,9 @@
     
     x = a; // expected error
     ~
-!!! Type 'Number' is not assignable to type 'number'.
+!!! error TS2322: Type 'Number' is not assignable to type 'number'.
     x = b; // expected error
     ~
-!!! Type 'NotNumber' is not assignable to type 'number'.
+!!! error TS2322: Type 'NotNumber' is not assignable to type 'number'.
     
     

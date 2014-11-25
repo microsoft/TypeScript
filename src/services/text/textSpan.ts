@@ -1,6 +1,7 @@
 ///<reference path='references.ts' />
 
 module TypeScript {
+
     export interface ISpan {
         start(): number;
         end(): number;
@@ -78,7 +79,7 @@ module TypeScript {
         }
 
         /**
-         * Returns the overlap with the given span, or null if there is no overlap.
+         * Returns the overlap with the given span, or undefined if there is no overlap.
          * @param span The span to check.
          */
         public overlap(span: TextSpan): TextSpan {
@@ -89,7 +90,7 @@ module TypeScript {
                 return TextSpan.fromBounds(overlapStart, overlapEnd);
             }
 
-            return null;
+            return undefined;
         }
 
         /**
@@ -118,7 +119,7 @@ module TypeScript {
         }
 
         /**
-         * Returns the intersection with the given span, or null if there is no intersection.
+         * Returns the intersection with the given span, or undefined if there is no intersection.
          * @param span The span to check.
          */
         public intersection(span: TextSpan): TextSpan {
@@ -129,7 +130,7 @@ module TypeScript {
                 return TextSpan.fromBounds(intersectStart, intersectEnd);
             }
 
-            return null;
+            return undefined;
         }
 
         /**

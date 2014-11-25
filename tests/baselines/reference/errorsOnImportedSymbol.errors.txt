@@ -1,11 +1,15 @@
+tests/cases/compiler/errorsOnImportedSymbol_1.ts(2,13): error TS2304: Cannot find name 'Sammy'.
+tests/cases/compiler/errorsOnImportedSymbol_1.ts(3,9): error TS2304: Cannot find name 'Sammy'.
+
+
 ==== tests/cases/compiler/errorsOnImportedSymbol_1.ts (2 errors) ====
     import Sammy = require("errorsOnImportedSymbol_0");
     var x = new Sammy.Sammy();
                 ~~~~~
-!!! Cannot find name 'Sammy'.
+!!! error TS2304: Cannot find name 'Sammy'.
     var y = Sammy.Sammy(); 
             ~~~~~
-!!! Cannot find name 'Sammy'.
+!!! error TS2304: Cannot find name 'Sammy'.
     
     
 ==== tests/cases/compiler/errorsOnImportedSymbol_0.ts (0 errors) ====

@@ -1,6 +1,7 @@
-==== tests/cases/conformance/scanner/ecmascript5/scannerNumericLiteral9.ts (2 errors) ====
+tests/cases/conformance/scanner/ecmascript5/scannerNumericLiteral9.ts(1,3): error TS1005: ';' expected.
+
+
+==== tests/cases/conformance/scanner/ecmascript5/scannerNumericLiteral9.ts (1 errors) ====
     009
-    ~~
-!!! Octal literals are not available when targeting ECMAScript 5 and higher.
       ~
-!!! ';' expected.
+!!! error TS1005: ';' expected.

@@ -1,3 +1,8 @@
+tests/cases/compiler/staticMemberExportAccess.ts(14,35): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
+tests/cases/compiler/staticMemberExportAccess.ts(17,18): error TS2339: Property 'bar' does not exist on type 'Sammy'.
+tests/cases/compiler/staticMemberExportAccess.ts(18,18): error TS2339: Property 'x' does not exist on type 'Sammy'.
+
+
 ==== tests/cases/compiler/staticMemberExportAccess.ts (3 errors) ====
     class Sammy {
        foo() { return "hi"; }
@@ -14,14 +19,14 @@
     var $: JQueryStatic;
     var instanceOfClassSammy: Sammy = new $.sammy(); // should be error
                                       ~~~~~~~~~~~~~
-!!! Cannot use 'new' with an expression whose type lacks a call or construct signature.
+!!! error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
     var r1 = instanceOfClassSammy.foo(); // r1 is string
     var r2 = $.sammy.foo();
     var r3 = $.sammy.bar(); // error
                      ~~~
-!!! Property 'bar' does not exist on type 'Sammy'.
+!!! error TS2339: Property 'bar' does not exist on type 'Sammy'.
     var r4 = $.sammy.x; // error
                      ~
-!!! Property 'x' does not exist on type 'Sammy'.
+!!! error TS2339: Property 'x' does not exist on type 'Sammy'.
     
     Sammy.bar();

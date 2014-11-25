@@ -1,3 +1,13 @@
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures.ts(28,1): error TS2322: Type 'S2' is not assignable to type 'T'.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures.ts(29,1): error TS2322: Type '(x: string) => void' is not assignable to type 'T'.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures.ts(30,1): error TS2322: Type '(x: string) => number' is not assignable to type 'T'.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures.ts(31,1): error TS2322: Type '(x: string) => string' is not assignable to type 'T'.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures.ts(32,1): error TS2322: Type 'S2' is not assignable to type 'new (x: number) => void'.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures.ts(33,1): error TS2322: Type '(x: string) => void' is not assignable to type 'new (x: number) => void'.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures.ts(34,1): error TS2322: Type '(x: string) => number' is not assignable to type 'new (x: number) => void'.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures.ts(35,1): error TS2322: Type '(x: string) => string' is not assignable to type 'new (x: number) => void'.
+
+
 ==== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures.ts (8 errors) ====
     // void returning call signatures can be assigned a non-void returning call signature that otherwise matches
     
@@ -28,26 +38,26 @@
     // these are errors
     t = s2;
     ~
-!!! Type 'S2' is not assignable to type 'T'.
+!!! error TS2322: Type 'S2' is not assignable to type 'T'.
     t = a3;
     ~
-!!! Type '(x: string) => void' is not assignable to type 'T'.
+!!! error TS2322: Type '(x: string) => void' is not assignable to type 'T'.
     t = (x: string) => 1;
     ~
-!!! Type '(x: string) => number' is not assignable to type 'T'.
+!!! error TS2322: Type '(x: string) => number' is not assignable to type 'T'.
     t = function (x: string) { return ''; }
     ~
-!!! Type '(x: string) => string' is not assignable to type 'T'.
+!!! error TS2322: Type '(x: string) => string' is not assignable to type 'T'.
     a = s2;
     ~
-!!! Type 'S2' is not assignable to type 'new (x: number) => void'.
+!!! error TS2322: Type 'S2' is not assignable to type 'new (x: number) => void'.
     a = a3;
     ~
-!!! Type '(x: string) => void' is not assignable to type 'new (x: number) => void'.
+!!! error TS2322: Type '(x: string) => void' is not assignable to type 'new (x: number) => void'.
     a = (x: string) => 1;
     ~
-!!! Type '(x: string) => number' is not assignable to type 'new (x: number) => void'.
+!!! error TS2322: Type '(x: string) => number' is not assignable to type 'new (x: number) => void'.
     a = function (x: string) { return ''; }
     ~
-!!! Type '(x: string) => string' is not assignable to type 'new (x: number) => void'.
+!!! error TS2322: Type '(x: string) => string' is not assignable to type 'new (x: number) => void'.
     

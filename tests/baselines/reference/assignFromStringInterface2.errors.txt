@@ -1,3 +1,7 @@
+tests/cases/conformance/types/primitives/string/assignFromStringInterface2.ts(46,1): error TS2322: Type 'String' is not assignable to type 'string'.
+tests/cases/conformance/types/primitives/string/assignFromStringInterface2.ts(47,1): error TS2322: Type 'NotString' is not assignable to type 'string'.
+
+
 ==== tests/cases/conformance/types/primitives/string/assignFromStringInterface2.ts (2 errors) ====
     interface String {
         doStuff(): string;
@@ -46,9 +50,9 @@
     
     x = a; // expected error
     ~
-!!! Type 'String' is not assignable to type 'string'.
+!!! error TS2322: Type 'String' is not assignable to type 'string'.
     x = b; // expected error
     ~
-!!! Type 'NotString' is not assignable to type 'string'.
+!!! error TS2322: Type 'NotString' is not assignable to type 'string'.
     
     

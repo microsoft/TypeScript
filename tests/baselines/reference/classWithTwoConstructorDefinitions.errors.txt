@@ -1,14 +1,24 @@
-==== tests/cases/conformance/classes/constructorDeclarations/classWithTwoConstructorDefinitions.ts (2 errors) ====
+tests/cases/conformance/classes/constructorDeclarations/classWithTwoConstructorDefinitions.ts(2,5): error TS2392: Multiple constructor implementations are not allowed.
+tests/cases/conformance/classes/constructorDeclarations/classWithTwoConstructorDefinitions.ts(3,5): error TS2392: Multiple constructor implementations are not allowed.
+tests/cases/conformance/classes/constructorDeclarations/classWithTwoConstructorDefinitions.ts(7,5): error TS2392: Multiple constructor implementations are not allowed.
+tests/cases/conformance/classes/constructorDeclarations/classWithTwoConstructorDefinitions.ts(8,5): error TS2392: Multiple constructor implementations are not allowed.
+
+
+==== tests/cases/conformance/classes/constructorDeclarations/classWithTwoConstructorDefinitions.ts (4 errors) ====
     class C {
-        constructor() { }
+        constructor() { } // error
+        ~~~~~~~~~~~~~~~~~
+!!! error TS2392: Multiple constructor implementations are not allowed.
         constructor(x) { } // error
         ~~~~~~~~~~~~~~~~~~
-!!! Multiple constructor implementations are not allowed.
+!!! error TS2392: Multiple constructor implementations are not allowed.
     }
     
     class D<T> {
-        constructor(x: T) { }
+        constructor(x: T) { } // error
+        ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2392: Multiple constructor implementations are not allowed.
         constructor(x: T, y: T) { } // error
         ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Multiple constructor implementations are not allowed.
+!!! error TS2392: Multiple constructor implementations are not allowed.
     }

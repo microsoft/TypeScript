@@ -1,3 +1,13 @@
+tests/cases/conformance/types/objectTypeLiteral/indexSignatures/multipleNumericIndexers.ts(5,5): error TS2375: Duplicate number index signature.
+tests/cases/conformance/types/objectTypeLiteral/indexSignatures/multipleNumericIndexers.ts(10,5): error TS2375: Duplicate number index signature.
+tests/cases/conformance/types/objectTypeLiteral/indexSignatures/multipleNumericIndexers.ts(15,5): error TS2375: Duplicate number index signature.
+tests/cases/conformance/types/objectTypeLiteral/indexSignatures/multipleNumericIndexers.ts(20,5): error TS2375: Duplicate number index signature.
+tests/cases/conformance/types/objectTypeLiteral/indexSignatures/multipleNumericIndexers.ts(25,5): error TS2375: Duplicate number index signature.
+tests/cases/conformance/types/objectTypeLiteral/indexSignatures/multipleNumericIndexers.ts(28,11): error TS2428: All declarations of an interface must have identical type parameters.
+tests/cases/conformance/types/objectTypeLiteral/indexSignatures/multipleNumericIndexers.ts(29,5): error TS2375: Duplicate number index signature.
+tests/cases/conformance/types/objectTypeLiteral/indexSignatures/multipleNumericIndexers.ts(30,5): error TS2375: Duplicate number index signature.
+
+
 ==== tests/cases/conformance/types/objectTypeLiteral/indexSignatures/multipleNumericIndexers.ts (8 errors) ====
     // Multiple indexers of the same type are an error
     
@@ -5,45 +15,45 @@
         [x: number]: string;
         [x: number]: string;
         ~~~~~~~~~~~~~~~~~~~~
-!!! Duplicate number index signature.
+!!! error TS2375: Duplicate number index signature.
     }
     
     interface I {
         [x: number]: string;
         [x: number]: string;
         ~~~~~~~~~~~~~~~~~~~~
-!!! Duplicate number index signature.
+!!! error TS2375: Duplicate number index signature.
     }
     
     var a: {
         [x: number]: string;
         [x: number]: string;
         ~~~~~~~~~~~~~~~~~~~~
-!!! Duplicate number index signature.
+!!! error TS2375: Duplicate number index signature.
     }
     
     var b: {
         [x: number]: string;
         [x: number]: string
         ~~~~~~~~~~~~~~~~~~~
-!!! Duplicate number index signature.
+!!! error TS2375: Duplicate number index signature.
     } = { 1: '', "2": '' }
     
     class C2<T> {
         [x: number]: string;
         [x: number]: string;
         ~~~~~~~~~~~~~~~~~~~~
-!!! Duplicate number index signature.
+!!! error TS2375: Duplicate number index signature.
     }
     
     interface I<T> {
               ~
-!!! All declarations of an interface must have identical type parameters.
+!!! error TS2428: All declarations of an interface must have identical type parameters.
         [x: number]: string;
         ~~~~~~~~~~~~~~~~~~~~
-!!! Duplicate number index signature.
+!!! error TS2375: Duplicate number index signature.
         [x: number]: string;
         ~~~~~~~~~~~~~~~~~~~~
-!!! Duplicate number index signature.
+!!! error TS2375: Duplicate number index signature.
     }
     

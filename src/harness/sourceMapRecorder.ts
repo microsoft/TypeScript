@@ -223,7 +223,7 @@ module Harness.SourceMapRecoder {
             sourceMapNames = sourceMapData.sourceMapNames;
 
             jsFile = currentJsFile;
-            jsLineMap = ts.getLineStarts(jsFile.code);
+            jsLineMap = ts.computeLineStarts(jsFile.code);
 
             spansOnSingleLine = [];
             prevWrittenSourcePos = 0;
@@ -294,7 +294,7 @@ module Harness.SourceMapRecoder {
             sourceMapRecoder.WriteLine("sourceFile:" + sourceMapSources[spansOnSingleLine[0].sourceMapSpan.sourceIndex]);
             sourceMapRecoder.WriteLine("-------------------------------------------------------------------");
 
-            tsLineMap = ts.getLineStarts(newSourceFileCode);
+            tsLineMap = ts.computeLineStarts(newSourceFileCode);
             tsCode = newSourceFileCode;
             prevWrittenSourcePos = 0;
         }
@@ -390,7 +390,7 @@ module Harness.SourceMapRecoder {
                     }
                 }
 
-                var tsCodeLineMap = ts.getLineStarts(sourceText);
+                var tsCodeLineMap = ts.computeLineStarts(sourceText);
                 for (var i = 0; i < tsCodeLineMap.length; i++) {
                     writeSourceMapIndent(prevEmittedCol, i == 0 ? markerIds[index] : "  >");
                     sourceMapRecoder.Write(getTextOfLine(i, tsCodeLineMap, sourceText));

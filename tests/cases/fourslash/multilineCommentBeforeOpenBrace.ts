@@ -8,7 +8,7 @@
 ////}
 ////function a() {
 ////    /* %^ */ }/*3*/
-
+debugger;
 format.document();
 goTo.marker('1');
 verify.currentLineContentIs('function test() /* %^ */ {');

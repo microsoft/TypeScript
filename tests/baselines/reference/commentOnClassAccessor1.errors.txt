@@ -1,3 +1,6 @@
+tests/cases/compiler/commentOnClassAccessor1.ts(5,7): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+
+
 ==== tests/cases/compiler/commentOnClassAccessor1.ts (1 errors) ====
     class C {
       /**
@@ -5,5 +8,5 @@
        */
       get bar(): number { return 1;}
           ~~~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
     }

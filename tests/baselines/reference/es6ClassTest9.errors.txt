@@ -1,10 +1,18 @@
-==== tests/cases/compiler/es6ClassTest9.ts (3 errors) ====
+tests/cases/compiler/es6ClassTest9.ts(1,18): error TS1005: '{' expected.
+tests/cases/compiler/es6ClassTest9.ts(1,19): error TS1109: Expression expected.
+tests/cases/compiler/es6ClassTest9.ts(1,15): error TS2300: Duplicate identifier 'foo'.
+tests/cases/compiler/es6ClassTest9.ts(2,10): error TS2300: Duplicate identifier 'foo'.
+
+
+==== tests/cases/compiler/es6ClassTest9.ts (4 errors) ====
     declare class foo();
                      ~
-!!! '{' expected.
+!!! error TS1005: '{' expected.
                       ~
-!!! Expression expected.
+!!! error TS1109: Expression expected.
+                  ~~~
+!!! error TS2300: Duplicate identifier 'foo'.
     function foo() {}
              ~~~
-!!! Duplicate identifier 'foo'.
+!!! error TS2300: Duplicate identifier 'foo'.
     

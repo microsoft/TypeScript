@@ -1,3 +1,7 @@
+tests/cases/compiler/derivedClassOverridesPrivateFunction1.ts(8,7): error TS2415: Class 'DerivedClass' incorrectly extends base class 'BaseClass'.
+  Types have separate declarations of a private property '_init'.
+
+
 ==== tests/cases/compiler/derivedClassOverridesPrivateFunction1.ts (1 errors) ====
     class BaseClass {
         constructor() {
@@ -8,8 +12,8 @@
     }
     class DerivedClass extends BaseClass {
           ~~~~~~~~~~~~
-!!! Class 'DerivedClass' incorrectly extends base class 'BaseClass':
-!!!   Private property '_init' cannot be reimplemented.
+!!! error TS2415: Class 'DerivedClass' incorrectly extends base class 'BaseClass'.
+!!! error TS2415:   Types have separate declarations of a private property '_init'.
         constructor() {
             super();
         }

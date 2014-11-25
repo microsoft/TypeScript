@@ -1,7 +1,7 @@
 === tests/cases/compiler/arrayConcat2.ts ===
 var a: string[] = [];
 >a : string[]
->[] : string[]
+>[] : undefined[]
 
 a.concat("hello", 'world');
 >a.concat("hello", 'world') : string[]

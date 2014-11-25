@@ -1,4 +1,7 @@
+tests/cases/compiler/propertyAccess4.ts(1,6): error TS2339: Property 'toBAZ' does not exist on type 'null'.
+
+
 ==== tests/cases/compiler/propertyAccess4.ts (1 errors) ====
     null.toBAZ();
          ~~~~~
-!!! Property 'toBAZ' does not exist on type 'null'.
+!!! error TS2339: Property 'toBAZ' does not exist on type 'null'.

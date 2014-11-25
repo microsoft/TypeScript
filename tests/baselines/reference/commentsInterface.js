@@ -116,7 +116,7 @@ interface i2 {
     /** this is x*/
     x: number;
     /** this is foo*/
-    foo: (b: number) => string;
+    foo: (/**param help*/ b: number) => string;
     /** this is indexer*/
     [/**string param*/ i: string]: any;
     /**new method*/
@@ -152,7 +152,7 @@ interface i3 {
     /** Function i3 f*/
     f(/**number parameter*/ a: number): string;
     /** i3 l*/
-    l: (b: number) => string;
+    l: (/**comment i3 l b*/ b: number) => string;
     nc_x: number;
     nc_f(a: number): string;
     nc_l: (b: number) => string;

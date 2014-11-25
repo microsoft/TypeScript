@@ -1,4 +1,11 @@
-==== tests/cases/compiler/contextualTypingOfConditionalExpression2.ts (2 errors) ====
+tests/cases/compiler/contextualTypingOfConditionalExpression2.ts(11,5): error TS2322: Type '((a: C) => number) | ((b: number) => void)' is not assignable to type '(a: A) => void'.
+  Type '(b: number) => void' is not assignable to type '(a: A) => void'.
+    Types of parameters 'b' and 'a' are incompatible.
+      Type 'number' is not assignable to type 'A'.
+        Property 'foo' is missing in type 'Number'.
+
+
+==== tests/cases/compiler/contextualTypingOfConditionalExpression2.ts (1 errors) ====
     class A {
         foo: number;
     }
@@ -11,7 +18,9 @@
     
     var x2: (a: A) => void = true ? (a: C) => a.foo : (b: number) => { };
         ~~
-!!! Type '{}' is not assignable to type '(a: A) => void'.
-                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! No best common type exists between '(a: A) => void', '(a: C) => number', and '(b: number) => void'.
+!!! error TS2322: Type '((a: C) => number) | ((b: number) => void)' is not assignable to type '(a: A) => void'.
+!!! error TS2322:   Type '(b: number) => void' is not assignable to type '(a: A) => void'.
+!!! error TS2322:     Types of parameters 'b' and 'a' are incompatible.
+!!! error TS2322:       Type 'number' is not assignable to type 'A'.
+!!! error TS2322:         Property 'foo' is missing in type 'Number'.
     

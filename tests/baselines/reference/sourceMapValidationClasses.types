@@ -56,7 +56,7 @@ module Foo.Bar {
         var greeters: Greeter[] = []; /* inline block comment */
 >greeters : Greeter[]
 >Greeter : Greeter
->[] : Greeter[]
+>[] : undefined[]
 
         greeters[0] = new Greeter(greeting);
 >greeters[0] = new Greeter(greeting) : Greeter

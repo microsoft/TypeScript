@@ -1,3 +1,7 @@
+tests/cases/compiler/baseTypePrivateMemberClash.ts(8,11): error TS2320: Interface 'Z' cannot simultaneously extend types 'X' and 'Y'.
+  Named properties 'm' of types 'X' and 'Y' are not identical.
+
+
 ==== tests/cases/compiler/baseTypePrivateMemberClash.ts (1 errors) ====
     class X {
         private m: number;
@@ -8,5 +12,5 @@
     
     interface Z extends X, Y { }
               ~
-!!! Interface 'Z' cannot simultaneously extend types 'X' and 'Y':
-!!!   Named properties 'm' of types 'X' and 'Y' are not identical.
+!!! error TS2320: Interface 'Z' cannot simultaneously extend types 'X' and 'Y'.
+!!! error TS2320:   Named properties 'm' of types 'X' and 'Y' are not identical.

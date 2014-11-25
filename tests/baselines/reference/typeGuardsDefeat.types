@@ -1,0 +1,99 @@
+=== tests/cases/conformance/expressions/typeGuards/typeGuardsDefeat.ts ===
+// Also note that it is possible to defeat a type guard by calling a function that changes the 
+// type of the guarded variable.
+function foo(x: number | string) {
+>foo : (x: string | number) => number
+>x : string | number
+
+    function f() {
+>f : () => void
+
+        x = 10;
+>x = 10 : number
+>x : string | number
+    }
+    if (typeof x === "string") {
+>typeof x === "string" : boolean
+>typeof x : string
+>x : string | number
+
+        f();
+>f() : void
+>f : () => void
+
+        return x.length; // string
+>x.length : number
+>x : string
+>length : number
+    }
+    else {
+        return x++; // number
+>x++ : number
+>x : number
+    }
+}
+function foo2(x: number | string) {
+>foo2 : (x: string | number) => number
+>x : string | number
+
+    if (typeof x === "string") {
+>typeof x === "string" : boolean
+>typeof x : string
+>x : string | number
+
+        return x.length; // string
+>x.length : number
+>x : string
+>length : number
+    }
+    else {
+        var f = function () {
+>f : () => number
+>function () {            return x * x;        } : () => number
+
+            return x * x;
+>x * x : number
+>x : number
+>x : number
+
+        };
+    }
+    x = "hello";
+>x = "hello" : string
+>x : string | number
+
+    f();
+>f() : number
+>f : () => number
+}
+function foo3(x: number | string) {
+>foo3 : (x: string | number) => number
+>x : string | number
+
+    if (typeof x === "string") {
+>typeof x === "string" : boolean
+>typeof x : string
+>x : string | number
+
+        return x.length; // string
+>x.length : number
+>x : string
+>length : number
+    }
+    else {
+        var f = () => x * x;
+>f : () => number
+>() => x * x : () => number
+>x * x : number
+>x : number
+>x : number
+    }
+    x = "hello";
+>x = "hello" : string
+>x : string | number
+
+    f();
+>f() : number
+>f : () => number
+}
+

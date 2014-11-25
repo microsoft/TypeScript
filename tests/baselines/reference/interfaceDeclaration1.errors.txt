@@ -1,16 +1,32 @@
-==== tests/cases/compiler/interfaceDeclaration1.ts (6 errors) ====
+tests/cases/compiler/interfaceDeclaration1.ts(2,5): error TS2300: Duplicate identifier 'item'.
+tests/cases/compiler/interfaceDeclaration1.ts(3,5): error TS2300: Duplicate identifier 'item'.
+tests/cases/compiler/interfaceDeclaration1.ts(7,5): error TS2300: Duplicate identifier 'item'.
+tests/cases/compiler/interfaceDeclaration1.ts(8,5): error TS2300: Duplicate identifier 'item'.
+tests/cases/compiler/interfaceDeclaration1.ts(22,11): error TS2310: Type 'I5' recursively references itself as a base type.
+tests/cases/compiler/interfaceDeclaration1.ts(35,7): error TS2420: Class 'C1' incorrectly implements interface 'I3'.
+  Property 'prototype' is missing in type 'C1'.
+tests/cases/compiler/interfaceDeclaration1.ts(41,11): error TS2310: Type 'i8' recursively references itself as a base type.
+tests/cases/compiler/interfaceDeclaration1.ts(52,11): error TS2320: Interface 'i12' cannot simultaneously extend types 'i10' and 'i11'.
+  Named properties 'foo' of types 'i10' and 'i11' are not identical.
+
+
+==== tests/cases/compiler/interfaceDeclaration1.ts (8 errors) ====
     interface I1 {
         item:number;
+        ~~~~
+!!! error TS2300: Duplicate identifier 'item'.
         item:number;
         ~~~~
-!!! Duplicate identifier 'item'.
+!!! error TS2300: Duplicate identifier 'item'.
     }
     
     interface I2 {
         item:any;
+        ~~~~
+!!! error TS2300: Duplicate identifier 'item'.
         item:number;
         ~~~~
-!!! Duplicate identifier 'item'.
+!!! error TS2300: Duplicate identifier 'item'.
     }
     
     interface I3 {
@@ -26,7 +42,7 @@
     
     interface I5 extends I5 { 
               ~~
-!!! Type 'I5' recursively references itself as a base type.
+!!! error TS2310: Type 'I5' recursively references itself as a base type.
         foo():void;
     }
     
@@ -41,8 +57,8 @@
     
     class C1 implements I3 {
           ~~
-!!! Class 'C1' incorrectly implements interface 'I3':
-!!!   Property 'prototype' is missing in type 'C1'.
+!!! error TS2420: Class 'C1' incorrectly implements interface 'I3'.
+!!! error TS2420:   Property 'prototype' is missing in type 'C1'.
         constructor() {
             var prototype: number = 3;
         }
@@ -50,7 +66,7 @@
     
     interface i8 extends i9 { }
               ~~
-!!! Type 'i8' recursively references itself as a base type.
+!!! error TS2310: Type 'i8' recursively references itself as a base type.
     interface i9 extends i8 { }
     
     interface i10 {
@@ -63,6 +79,6 @@
     
     interface i12 extends i10, i11 { }
               ~~~
-!!! Interface 'i12' cannot simultaneously extend types 'i10' and 'i11':
-!!!   Named properties 'foo' of types 'i10' and 'i11' are not identical.
+!!! error TS2320: Interface 'i12' cannot simultaneously extend types 'i10' and 'i11'.
+!!! error TS2320:   Named properties 'foo' of types 'i10' and 'i11' are not identical.
     
