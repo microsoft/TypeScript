@@ -487,6 +487,15 @@ module ts {
         }
     }
 
+    export function getInvokedExpression(node: CallLikeExpression): Expression {
+        if (node.kind === SyntaxKind.TaggedTemplateExpression) {
+            return (<TaggedTemplateExpression>node).tag;
+        }
+        
+        // Will either be a CallExpression or NewExpression.
+        return (<CallExpression>node).func;
+    }
+
     export function isExpression(node: Node): boolean {
         switch (node.kind) {
             case SyntaxKind.ThisKeyword:
@@ -801,11 +810,16 @@ module ts {
     }
 
     export function isUnterminatedTemplateEnd(node: LiteralExpression) {
-        Debug.assert(node.kind === SyntaxKind.NoSubstitutionTemplateLiteral || node.kind === SyntaxKind.TemplateTail);
+        Debug.assert(isTemplateLiteralKind(node.kind));
         var sourceText = getSourceFileOfNode(node).text;
 
         // If we're not at the EOF, we know we must be terminated.
         if (node.end !== sourceText.length) {
+            return false;
+        }
+
+        // The literal can only be unterminated if it is a template tail or a no-sub template.
+        if (node.kind !== SyntaxKind.TemplateTail && node.kind !== SyntaxKind.NoSubstitutionTemplateLiteral) {
             return false;
         }
 

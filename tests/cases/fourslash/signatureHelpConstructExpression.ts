@@ -6,7 +6,7 @@
 goTo.marker('1');
 verify.signatureHelpCountIs(1);
 
-verify.currentSignatureParamterCountIs(2);
+verify.currentSignatureParameterCountIs(2);
 verify.currentSignatureHelpIs('sampleCls(str: string, num: number): sampleCls');
 
 verify.currentParameterHelpArgumentNameIs('str');
