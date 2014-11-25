@@ -479,9 +479,9 @@ module ts {
         if (node.kind === SyntaxKind.TaggedTemplateExpression) {
             return (<TaggedTemplateExpression>node).tag;
         }
-        else {
-            return (<CallExpression>node).func;
-        }
+        
+        // Will either be a CallExpression or NewExpression.
+        return (<CallExpression>node).func;
     }
 
     export function isExpression(node: Node): boolean {

@@ -164,10 +164,6 @@ module ts.SignatureHelp {
     //}
     var emptyArray: any[] = [];
 
-    const enum Constants {
-        HeadSpanIndex = -1
-    }
-
     const enum ArgumentListKind {
         TypeArguments,
         CallArguments,
@@ -190,7 +186,7 @@ module ts.SignatureHelp {
             return undefined;
         }
 
-        var argumentInfo = getContainingArgumentInfo(startingToken, position);
+        var argumentInfo = getContainingArgumentInfo(startingToken);
         cancellationToken.throwIfCancellationRequested();
 
         // Semantic filtering of signature help
@@ -213,7 +209,7 @@ module ts.SignatureHelp {
          * Returns relevant information for the argument list and the current argument if we are
          * in the argument of an invocation; returns undefined otherwise.
          */
-        function getImmediatelyContainingArgumentInfo(node: Node, position: number): ArgumentListInfo {
+        function getImmediatelyContainingArgumentInfo(node: Node): ArgumentListInfo {
             if (node.parent.kind === SyntaxKind.CallExpression || node.parent.kind === SyntaxKind.NewExpression) {
                 var callExpression = <CallExpression>node.parent;
                 // There are 3 cases to handle:
@@ -287,7 +283,9 @@ module ts.SignatureHelp {
             else if (node.kind === SyntaxKind.TemplateHead && node.parent.parent.kind === SyntaxKind.TaggedTemplateExpression) {
                 var templateExpression = <TemplateExpression>node.parent;
                 var tagExpression = <TaggedTemplateExpression>templateExpression.parent;
-                var argumentIndex = getArgumentIndexForTemplatePiece(Constants.HeadSpanIndex, node, position);
+                Debug.assert(templateExpression.kind === SyntaxKind.TemplateExpression);
+
+                var argumentIndex = isInsideTemplateLiteral(<LiteralExpression>node, position) ? 0 : 1;
 
                 return getArgumentListInfoForTemplate(tagExpression, argumentIndex);
             }
@@ -302,13 +300,8 @@ module ts.SignatureHelp {
                     return undefined;
                 }
 
-                // The cursor can either be in or after the template literal.
-                // If inside, we want to highlight the first argument.
-                // If after, we'll want to highlight the next parameter.
-                // We actually shouldn't be able to show up before because you should be at the left-most token.
-                
                 var spanIndex = templateExpression.templateSpans.indexOf(templateSpan);
-                var argumentIndex = getArgumentIndexForTemplatePiece(spanIndex, node, position);
+                var argumentIndex = getArgumentIndexForTemplatePiece(spanIndex, node);
 
                 return getArgumentListInfoForTemplate(tagExpression, argumentIndex);
             }
@@ -324,9 +317,9 @@ module ts.SignatureHelp {
                 : 1 + countWhere(argumentsList.getChildren(), arg => arg.kind === SyntaxKind.CommaToken);
         }
 
-        // spanIndex is either the index for a given template span, or Constants.HeadSpanIndex for a template head.
+        // spanIndex is either the index for a given template span.
         // This does not give appropriate results for a NoSubstitutionTemplateLiteral
-        function getArgumentIndexForTemplatePiece(spanIndex: number, node: Node, position: number): number {
+        function getArgumentIndexForTemplatePiece(spanIndex: number, node: Node): number {
             // Because the TemplateStringsArray is the first argument, we have to offset each substitution expression by 1.
             // There are three cases we can encounter:
             //      1. We are precisely in the template literal (argIndex = 0).
@@ -357,7 +350,7 @@ module ts.SignatureHelp {
             return {
                 kind: ArgumentListKind.TaggedTemplateArguments,
                 invocation: tagExpression,
-                argumentsSpan: getApplicableSpanForTaggedTemplate(tagExpression.template),
+                argumentsSpan: getApplicableSpanForTaggedTemplate(tagExpression),
                 argumentIndex: argumentIndex,
                 argumentCount: argumentCount
             };
@@ -377,22 +370,31 @@ module ts.SignatureHelp {
             return new TextSpan(applicableSpanStart, applicableSpanEnd - applicableSpanStart);
         }
 
-        function getApplicableSpanForTaggedTemplate(template: TemplateExpression | LiteralExpression): TextSpan {
+        function getApplicableSpanForTaggedTemplate(taggedTemplate: TaggedTemplateExpression): TextSpan {
+            var template = taggedTemplate.template;
             var applicableSpanStart = template.getStart();
             var applicableSpanEnd = template.getEnd();
 
-            // Adjust the span end in case the template is unclosed - 
+            // We need to adjust the end position for the case where the template does not have a tail.
+            // Otherwise, we will not show signature help past the expression.
+            // For example,
+            //
+            //      `  ${ 1 + 1        foo(10)
+            //       |        |
+            //
+            // This is because a Missing node has no width. However, what we actually want is to include trivia
+            // leading up to the next token in case the user is about to type in a TemplateMiddle or TemplateTail.
             if (template.kind === SyntaxKind.TemplateExpression) {
                 var lastSpan = lastOrUndefined((<TemplateExpression>template).templateSpans);
                 if (lastSpan.literal.kind === SyntaxKind.Missing) {
-                    applicableSpanEnd = skipTrivia(sourceFile.text, template.end, /*stopAfterLineBreak*/ false);
+                    applicableSpanEnd = skipTrivia(sourceFile.text, applicableSpanEnd, /*stopAfterLineBreak*/ false);
                 }
             }
 
             return new TextSpan(applicableSpanStart, applicableSpanEnd - applicableSpanStart);
         }
 
-        function getContainingArgumentInfo(node: Node, position: number): ArgumentListInfo {
+        function getContainingArgumentInfo(node: Node): ArgumentListInfo {
             for (var n = node; n.kind !== SyntaxKind.SourceFile; n = n.parent) {
                 if (n.kind === SyntaxKind.FunctionBlock) {
                     return undefined;
@@ -404,7 +406,7 @@ module ts.SignatureHelp {
                     Debug.fail("Node of kind " + n.kind + " is not a subspan of its parent of kind " + n.parent.kind);
                 }
 
-                var argumentInfo = getImmediatelyContainingArgumentInfo(n, position);
+                var argumentInfo = getImmediatelyContainingArgumentInfo(n);
                 if (argumentInfo) {
                     return argumentInfo;
                 }
@@ -454,16 +456,16 @@ module ts.SignatureHelp {
             var isTypeParameterList = argumentListInfo.kind === ArgumentListKind.TypeArguments;
 
             var invocation = argumentListInfo.invocation;
-            var invokerNode = getInvokedExpression(invocation)
-            var invokerSymbol = typeInfoResolver.getSymbolInfo(invokerNode);
-            var invokerDisplayParts = invokerSymbol && symbolToDisplayParts(typeInfoResolver, invokerSymbol, /*enclosingDeclaration*/ undefined, /*meaning*/ undefined);
+            var callTarget = getInvokedExpression(invocation)
+            var callTargetSymbol = typeInfoResolver.getSymbolInfo(callTarget);
+            var callTargetDisplayParts = callTargetSymbol && symbolToDisplayParts(typeInfoResolver, callTargetSymbol, /*enclosingDeclaration*/ undefined, /*meaning*/ undefined);
             var items: SignatureHelpItem[] = map(candidates, candidateSignature => {
                 var signatureHelpParameters: SignatureHelpParameter[];
                 var prefixParts: SymbolDisplayPart[] = [];
                 var suffixParts: SymbolDisplayPart[] = [];
 
-                if (invokerDisplayParts) {
-                    prefixParts.push.apply(prefixParts, invokerDisplayParts);
+                if (callTargetDisplayParts) {
+                    prefixParts.push.apply(prefixParts, callTargetDisplayParts);
                 }
 
                 if (isTypeParameterList) {
