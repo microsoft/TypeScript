@@ -1,0 +1,7 @@
+=== tests/cases/conformance/es6/yieldExpressions/YieldExpression9.ts ===
+var v = function*() {
+>v : () => void
+>function*() {  yield(foo);} : () => void
+
+  yield(foo);
+}

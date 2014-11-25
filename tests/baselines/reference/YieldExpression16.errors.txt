@@ -1,0 +1,11 @@
+tests/cases/conformance/es6/yieldExpressions/YieldExpression16.ts(3,5): error TS1163: 'yield' expression must be contained_within a generator declaration.
+
+
+==== tests/cases/conformance/es6/yieldExpressions/YieldExpression16.ts (1 errors) ====
+    function* foo() {
+      function bar() {
+        yield foo;
+        ~~~~~
+!!! error TS1163: 'yield' expression must be contained_within a generator declaration.
+      }
+    }

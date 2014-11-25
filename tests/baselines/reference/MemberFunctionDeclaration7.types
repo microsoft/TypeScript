@@ -1,0 +1,8 @@
+=== tests/cases/conformance/es6/fmmberFunctionDeclarations/MemberFunctionDeclaration7.ts ===
+class C {
+>C : C
+
+   *foo<T>() { }
+>foo : <T>() => void
+>T : T
+}

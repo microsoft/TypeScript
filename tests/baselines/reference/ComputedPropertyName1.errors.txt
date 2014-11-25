@@ -1,0 +1,13 @@
+tests/cases/conformance/es6/computedPropertyNames/ComputedPropertyName1.ts(1,11): error TS1136: Property assignment expected.
+tests/cases/conformance/es6/computedPropertyNames/ComputedPropertyName1.ts(1,15): error TS1128: Declaration or statement expected.
+tests/cases/conformance/es6/computedPropertyNames/ComputedPropertyName1.ts(1,12): error TS2304: Cannot find name 'e'.
+
+
+==== tests/cases/conformance/es6/computedPropertyNames/ComputedPropertyName1.ts (3 errors) ====
+    var v = { [e] };
+              ~
+!!! error TS1136: Property assignment expected.
+                  ~
+!!! error TS1128: Declaration or statement expected.
+               ~
+!!! error TS2304: Cannot find name 'e'.

@@ -1,0 +1,18 @@
+tests/cases/conformance/es6/computedPropertyNames/ComputedPropertyName16.ts(2,3): error TS1132: Enum member expected.
+tests/cases/conformance/es6/computedPropertyNames/ComputedPropertyName16.ts(3,1): error TS1128: Declaration or statement expected.
+tests/cases/conformance/es6/computedPropertyNames/ComputedPropertyName16.ts(2,3): error TS2364: Invalid left-hand side of assignment expression.
+tests/cases/conformance/es6/computedPropertyNames/ComputedPropertyName16.ts(2,4): error TS2304: Cannot find name 'e'.
+
+
+==== tests/cases/conformance/es6/computedPropertyNames/ComputedPropertyName16.ts (4 errors) ====
+    enum E {
+      [e] = 1
+      ~
+!!! error TS1132: Enum member expected.
+      ~~~
+!!! error TS2364: Invalid left-hand side of assignment expression.
+       ~
+!!! error TS2304: Cannot find name 'e'.
+    }
+    ~
+!!! error TS1128: Declaration or statement expected.

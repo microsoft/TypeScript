@@ -1,0 +1,28 @@
+tests/cases/conformance/es6/computedPropertyNames/ComputedPropertyName6.ts(1,11): error TS1136: Property assignment expected.
+tests/cases/conformance/es6/computedPropertyNames/ComputedPropertyName6.ts(1,14): error TS1005: ',' expected.
+tests/cases/conformance/es6/computedPropertyNames/ComputedPropertyName6.ts(1,16): error TS1134: Variable declaration expected.
+tests/cases/conformance/es6/computedPropertyNames/ComputedPropertyName6.ts(1,26): error TS1005: ';' expected.
+tests/cases/conformance/es6/computedPropertyNames/ComputedPropertyName6.ts(1,30): error TS1128: Declaration or statement expected.
+tests/cases/conformance/es6/computedPropertyNames/ComputedPropertyName6.ts(1,12): error TS2304: Cannot find name 'e'.
+tests/cases/conformance/es6/computedPropertyNames/ComputedPropertyName6.ts(1,20): error TS2304: Cannot find name 'e'.
+tests/cases/conformance/es6/computedPropertyNames/ComputedPropertyName6.ts(1,24): error TS2304: Cannot find name 'e'.
+
+
+==== tests/cases/conformance/es6/computedPropertyNames/ComputedPropertyName6.ts (8 errors) ====
+    var v = { [e]: 1, [e + e]: 2 };
+              ~
+!!! error TS1136: Property assignment expected.
+                 ~
+!!! error TS1005: ',' expected.
+                   ~
+!!! error TS1134: Variable declaration expected.
+                             ~
+!!! error TS1005: ';' expected.
+                                 ~
+!!! error TS1128: Declaration or statement expected.
+               ~
+!!! error TS2304: Cannot find name 'e'.
+                       ~
+!!! error TS2304: Cannot find name 'e'.
+                           ~
+!!! error TS2304: Cannot find name 'e'.

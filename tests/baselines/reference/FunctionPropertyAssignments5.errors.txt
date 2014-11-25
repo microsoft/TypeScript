@@ -1,0 +1,16 @@
+tests/cases/conformance/es6/functionPropertyAssignments/FunctionPropertyAssignments5.ts(1,12): error TS1003: Identifier expected.
+tests/cases/conformance/es6/functionPropertyAssignments/FunctionPropertyAssignments5.ts(1,22): error TS1005: ',' expected.
+tests/cases/conformance/es6/functionPropertyAssignments/FunctionPropertyAssignments5.ts(1,26): error TS1128: Declaration or statement expected.
+tests/cases/conformance/es6/functionPropertyAssignments/FunctionPropertyAssignments5.ts(1,13): error TS2304: Cannot find name 'foo'.
+
+
+==== tests/cases/conformance/es6/functionPropertyAssignments/FunctionPropertyAssignments5.ts (4 errors) ====
+    var v = { *[foo()]() { } }
+               ~
+!!! error TS1003: Identifier expected.
+                         ~
+!!! error TS1005: ',' expected.
+                             ~
+!!! error TS1128: Declaration or statement expected.
+                ~~~
+!!! error TS2304: Cannot find name 'foo'.

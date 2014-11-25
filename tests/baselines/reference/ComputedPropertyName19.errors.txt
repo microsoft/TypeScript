@@ -1,0 +1,7 @@
+tests/cases/conformance/es6/computedPropertyNames/ComputedPropertyName19.ts(1,13): error TS1005: ';' expected.
+
+
+==== tests/cases/conformance/es6/computedPropertyNames/ComputedPropertyName19.ts (1 errors) ====
+    var v: { [e]? };
+                ~
+!!! error TS1005: ';' expected.
