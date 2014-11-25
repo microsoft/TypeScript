@@ -491,6 +491,10 @@
         "category": "Error",
         "code": 1162
     },
+    "'yield' expression must be contained_within a generator declaration.": {
+        "category": "Error",
+        "code": 1163
+    },
 
     "Duplicate identifier '{0}'.": {
         "category": "Error",

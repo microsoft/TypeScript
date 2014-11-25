@@ -183,6 +183,7 @@ module ts {
         ConditionalExpression,
         TemplateExpression,
         TemplateSpan,
+        YieldExpression,
         OmittedExpression,
         // Element
         Block,
@@ -269,20 +270,30 @@ module ts {
         DeclarationFile     = 0x00000400,  // Node is a .d.ts file
         Let                 = 0x00000800,  // Variable declaration
         Const               = 0x00001000,  // Variable declaration
-
-        // Set if this node was parsed in strict mode.  Used for grammar error checks, as well as
-        // checking if the node can be reused in incremental settings.
-        ParsedInStrictMode  = 0x00002000, 
-        OctalLiteral        = 0x00004000,
+        OctalLiteral        = 0x00002000,
+        Generator           = 0x00004000,
+        YieldStar           = 0x00008000,
 
         Modifier = Export | Ambient | Public | Private | Protected | Static,
         AccessibilityModifier = Public | Private | Protected,
         BlockScoped = Let | Const
     }
 
+    export const enum ParserContextFlags {
+        // Set if this node was parsed in strict mode.  Used for grammar error checks, as well as
+        // checking if the node can be reused in incremental settings.
+        StrictMode          = 1 << 0,
+        DisallowIn          = 1 << 1,
+        Yield               = 1 << 2,
+        GeneratorParameter  = 1 << 3,
+    }
+
     export interface Node extends TextRange {
         kind: SyntaxKind;
         flags: NodeFlags;
+        // Specific context the parser was in when this node was created.  Normally undefined. 
+        // Only set when the parser was in some interesting context (like async/yield).
+        parserContextFlags?: ParserContextFlags;
         id?: number;                  // Unique id (used to look up NodeLinks)
         parent?: Node;                // Parent node (initialized by binding)
         symbol?: Symbol;              // Symbol declared by node (initialized by binding)
@@ -428,6 +439,10 @@ module ts {
     export interface UnaryExpression extends Expression {
         operator: SyntaxKind;
         operand: Expression;
+    }
+    
+    export interface YieldExpression extends Expression {
+        expression: Expression;
     }
 
     export interface BinaryExpression extends Expression {
@@ -758,7 +773,7 @@ module ts {
         getAugmentedPropertiesOfType(type: Type): Symbol[];
         getRootSymbols(symbol: Symbol): Symbol[];
         getContextualType(node: Node): Type;
-        getResolvedSignature(node: CallExpression, candidatesOutArray?: Signature[]): Signature;
+        getResolvedSignature(node: CallLikeExpression, candidatesOutArray?: Signature[]): Signature;
         getSignatureFromDeclaration(declaration: SignatureDeclaration): Signature;
         isImplementationOfOverload(node: FunctionLikeDeclaration): boolean;
         isUndefinedSymbol(symbol: Symbol): boolean;

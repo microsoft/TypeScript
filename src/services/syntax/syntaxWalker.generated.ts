@@ -180,7 +180,7 @@ module TypeScript {
             this.visitToken(node.getKeyword);
             visitNodeOrToken(this, node.propertyName);
             visitNodeOrToken(this, node.callSignature);
-            visitNodeOrToken(this, node.block);
+            visitNodeOrToken(this, node.body);
         }
 
         public visitSetAccessor(node: SetAccessorSyntax): void {
@@ -188,7 +188,7 @@ module TypeScript {
             this.visitToken(node.setKeyword);
             visitNodeOrToken(this, node.propertyName);
             visitNodeOrToken(this, node.callSignature);
-            visitNodeOrToken(this, node.block);
+            visitNodeOrToken(this, node.body);
         }
 
         public visitPropertySignature(node: PropertySignatureSyntax): void {
@@ -222,6 +222,7 @@ module TypeScript {
         }
 
         public visitBlock(node: BlockSyntax): void {
+            this.visitOptionalToken(node.equalsGreaterThanToken);
             this.visitToken(node.openBraceToken);
             this.visitList(node.statements);
             this.visitToken(node.closeBraceToken);
@@ -456,7 +457,7 @@ module TypeScript {
             this.visitOptionalToken(node.asterixToken);
             this.visitOptionalToken(node.identifier);
             visitNodeOrToken(this, node.callSignature);
-            visitNodeOrToken(this, node.block);
+            visitNodeOrToken(this, node.body);
         }
 
         public visitOmittedExpression(node: OmittedExpressionSyntax): void {
@@ -581,7 +582,7 @@ module TypeScript {
             this.visitOptionalToken(node.asterixToken);
             visitNodeOrToken(this, node.propertyName);
             visitNodeOrToken(this, node.callSignature);
-            visitNodeOrToken(this, node.block);
+            visitNodeOrToken(this, node.body);
         }
 
         public visitParameter(node: ParameterSyntax): void {
@@ -601,6 +602,11 @@ module TypeScript {
         public visitTypeAnnotation(node: TypeAnnotationSyntax): void {
             this.visitToken(node.colonToken);
             visitNodeOrToken(this, node.type);
+        }
+
+        public visitExpressionBody(node: ExpressionBody): void {
+            this.visitToken(node.equalsGreaterThanToken);
+            visitNodeOrToken(this, node.expression);
         }
 
         public visitComputedPropertyName(node: ComputedPropertyNameSyntax): void {

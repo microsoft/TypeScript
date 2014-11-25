@@ -1430,16 +1430,6 @@ module TypeScript.Scanner {
         return !hadError && SyntaxFacts.isIdentifierNameOrAnyKeyword(token) && width(token) === text.length();
     }
 
-    // A parser source that gets its data from an underlying scanner.
-    export interface IScannerParserSource extends Parser.IParserSource {
-        // The position that the scanner is currently at.
-        absolutePosition(): number;
-
-        // Resets the source to this position. Any diagnostics produced after this point will be
-        // removed.
-        resetToPosition(absolutePosition: number): void;
-    }
-
     interface IScannerRewindPoint extends Parser.IRewindPoint {
         // Information used by normal parser source.
         absolutePosition: number;
@@ -1449,7 +1439,7 @@ module TypeScript.Scanner {
     // Parser source used in batch scenarios.  Directly calls into an underlying text scanner and
     // supports none of the functionality to reuse nodes.  Good for when you just want want to do
     // a single parse of a file.
-    export function createParserSource(fileName: string, text: ISimpleText, languageVersion: ts.ScriptTarget): IScannerParserSource {
+    export function createParserSource(fileName: string, text: ISimpleText, languageVersion: ts.ScriptTarget): Parser.IParserSource {
         // The absolute position we're at in the text we're reading from.
         var _absolutePosition: number = 0;
 
@@ -1487,11 +1477,6 @@ module TypeScript.Scanner {
             // The normal parser source never returns nodes.  They're only returned by the 
             // incremental parser source.
             return undefined;
-        }
-
-        function consumeNode(node: ISyntaxNode): void {
-            // Should never get called.
-            throw Errors.invalidOperation();
         }
 
         function absolutePosition() {
@@ -1561,13 +1546,20 @@ module TypeScript.Scanner {
             return slidingWindow.peekItemN(n);
         }
 
-        function consumeToken(token: ISyntaxToken): void {
-            // Debug.assert(token.fullWidth() > 0 || token.kind === SyntaxKind.EndOfFileToken);
-
-            // Debug.assert(currentToken() === token);
-            _absolutePosition += token.fullWidth();
-
-            slidingWindow.moveToNextItem();
+        function consumeNodeOrToken(nodeOrToken: ISyntaxNodeOrToken): void {
+            if (nodeOrToken === slidingWindow.currentItemWithoutFetching()) {
+                // We're consuming the token that was just fetched from us by the parser.  We just
+                // need to move ourselves forward and ditch this token from the sliding window.
+                _absolutePosition += (<ISyntaxToken>nodeOrToken).fullWidth();
+                slidingWindow.moveToNextItem();
+            }
+            else {
+                // We're either consuming a node, or we're consuming a token that wasn't from our
+                // sliding window.  Both cases happen in incremental scenarios when the incremental
+                // parser uses a node or token from an older tree.  In that case, we simply want to
+                // point ourselves at the end of the element that the parser just consumed.
+                resetToPosition(fullEnd(nodeOrToken));
+            }
         }
 
         function currentToken(): ISyntaxToken {
@@ -1644,15 +1636,13 @@ module TypeScript.Scanner {
             currentToken: currentToken,
             currentContextualToken: currentContextualToken,
             peekToken: peekToken,
-            consumeNode: consumeNode,
-            consumeToken: consumeToken,
+            consumeNodeOrToken: consumeNodeOrToken,
             getRewindPoint: getRewindPoint,
             rewind: rewind,
             releaseRewindPoint: releaseRewindPoint,
             tokenDiagnostics: tokenDiagnostics,
             release: release,
             absolutePosition: absolutePosition,
-            resetToPosition: resetToPosition,
         };
     }
 
