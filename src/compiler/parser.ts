@@ -946,7 +946,7 @@ module ts {
             return result;
         }
 
-        function enterYieldContextAnd<T>(func: () => T): T {
+        function doInYieldContext<T>(func: () => T): T {
             if (contextFlags & ParserContextFlags.ParsedInYieldContext) {
                 // no need to do anything special if we're already in the [Yield] context.
                 return func();
@@ -958,7 +958,7 @@ module ts {
             return result;
         }
 
-        function exitYieldContextAnd<T>(func: () => T): T {
+        function doOutsideOfYieldContext<T>(func: () => T): T {
             if (contextFlags & ParserContextFlags.ParsedInYieldContext) {
                 setYieldContext(false);
                 var result = func();
@@ -1639,7 +1639,7 @@ module ts {
             //      [~GeneratorParameter]BindingIdentifier[?Yield]Initializer[In, ?Yield]opt
 
             node.name = inGeneratorParameterContext()
-                ? enterYieldContextAnd(parseIdentifier)
+                ? doInYieldContext(parseIdentifier)
                 : parseIdentifier();
 
             if (node.name.kind === SyntaxKind.Missing && node.flags === 0 && isModifier(token)) {
@@ -1659,7 +1659,7 @@ module ts {
             }
             node.type = parseParameterType();
             node.initializer = inGeneratorParameterContext()
-                ? exitYieldContextAnd(parseParameterInitializer)
+                ? doOutsideOfYieldContext(parseParameterInitializer)
                 : parseParameterInitializer();
 
             // Do not check for initializers in an ambient context for parameters. This is not
@@ -2787,7 +2787,7 @@ module ts {
             var pos = getNodePos();
             parseExpected(SyntaxKind.FunctionKeyword);
             var isGenerator = parseOptional(SyntaxKind.AsteriskToken);
-            var name = isGenerator ? enterYieldContextAnd(parseOptionalIdentifier) : parseOptionalIdentifier();
+            var name = isGenerator ? doInYieldContext(parseOptionalIdentifier) : parseOptionalIdentifier();
             var sig = parseSignature(SyntaxKind.CallSignature, SyntaxKind.ColonToken, /* returnTokenRequired */ false, /*isGenerator:*/ isGenerator);
 
             var body = parseFunctionBlock(/*allowYield:*/ isGenerator, /* ignoreMissingOpenBrace */ false);
@@ -3440,7 +3440,7 @@ module ts {
             //      [+GeneratorParameter] ClassHeritageopt { ClassBodyopt }
             
             node.baseType = inGeneratorParameterContext()
-                ? exitYieldContextAnd(parseClassBaseType)
+                ? doOutsideOfYieldContext(parseClassBaseType)
                 : parseClassBaseType();
 
             if (parseOptional(SyntaxKind.ImplementsKeyword)) {
@@ -3452,7 +3452,7 @@ module ts {
                 //      [+GeneratorParameter] ClassHeritageopt { ClassBodyopt }
 
                 node.members = inGeneratorParameterContext()
-                    ? exitYieldContextAnd(parseClassMembers)
+                    ? doOutsideOfYieldContext(parseClassMembers)
                     : parseClassMembers();
                 parseExpected(SyntaxKind.CloseBraceToken);
             }
