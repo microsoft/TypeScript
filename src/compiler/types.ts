@@ -285,6 +285,9 @@ module ts {
     export interface Node extends TextRange {
         kind: SyntaxKind;
         flags: NodeFlags;
+        // Specific context the parser was in when this node was created.  Normally undefined. 
+        // Only set when the parser was in some interesting context (like async/yield).
+        parserContextFlags?: NodeFlags;
         id?: number;                  // Unique id (used to look up NodeLinks)
         parent?: Node;                // Parent node (initialized by binding)
         symbol?: Symbol;              // Symbol declared by node (initialized by binding)
