@@ -213,7 +213,6 @@ function analyze(libFileName: string, files: string[], outputFolder: string): Pr
                         length: r.end - r.pos,
                         hyperlinks: hyperlinks,
                         classification: ts.ClassificationTypeNames.stringLiteral,
-                        definitionSymbolId: makeSymbolId(f.filename, f.pos),
                     }
                     ranges.push(range);
                 }
@@ -299,8 +298,8 @@ function analyze(libFileName: string, files: string[], outputFolder: string): Pr
                 var defStart = d.textSpan.start();
                 var defFile = program.getSourceFile(d.fileName);
 
-                var token = ts.getTokenAtPosition(defFile, defStart);
-                if (token) {
+                var token = ts.getTouchingToken(defFile, defStart, /*includeItemAtEndPosition*/ undefined);
+                if (token && token.kind !== ts.SyntaxKind.SourceFile) {
                     // point definition to name if possible
                     var target =
                         ts.isDeclaration(token)
