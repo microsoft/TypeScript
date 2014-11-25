@@ -1708,7 +1708,7 @@ module ts {
 
         // Because we use this for index signatures as well, we sometimes use
         // parentheses, and sometimes use brackets.
-        function parseParameterList(_yieldContext: boolean, _generatorParameterContext: boolean) {
+        function parseParameterList(yieldContext: boolean, generatorParameterContext: boolean) {
             // FormalParameters[Yield,GeneratorParameter] :
             //      ...
             //
@@ -1727,8 +1727,8 @@ module ts {
                 var savedYieldContext = inYieldContext();
                 var savedGeneratorParameterContext = inGeneratorParameterContext();
 
-                setYieldContext(_yieldContext);
-                setGeneratorParameterContext(_generatorParameterContext);
+                setYieldContext(yieldContext);
+                setGeneratorParameterContext(generatorParameterContext);
 
                 var result = parseDelimitedList(ParsingContext.Parameters, parseParameter);
                 parseExpected(SyntaxKind.CloseParenToken);
