@@ -1371,6 +1371,7 @@ module TypeScript.Parser {
         }
 
         function parseFunctionDeclarationWorker(modifiers: ISyntaxToken[], functionKeyword: ISyntaxToken, asteriskToken: ISyntaxToken): FunctionDeclarationSyntax {
+            // FunctionDeclaration[Yield, Default] :            //      function BindingIdentifier[?Yield] ( FormalParameters ) { FunctionBody }
             // GeneratorDeclaration[Yield, Default] :
             //      function * BindingIdentifier[?Yield](FormalParameters[Yield, GeneratorParameter]) { GeneratorBody[Yield] }
 
@@ -3136,17 +3137,14 @@ module TypeScript.Parser {
             var _currentToken = currentToken();
             // Debug.assert(currentToken.kind === SyntaxKind.OpenParenToken || currentToken.kind === SyntaxKind.LessThanToken);
 
-            // Note: ES6 specifies the formal parametes of an arrow function like this:
-            //
-            // ArrowFormalParameters[Yield, GeneratorParameter] :
-            //      (StrictFormalParameters[?Yield, ?GeneratorParameter])
-            //
-            // However, the 'GeneratorParameter' portion appears to be a spec bug.  There does not 
-            // appear to be any way for that value to be passed in through any grammar constructs.
-            //
-            // [Yield], on the other hand, is available, and is passed through.
-
-            var callSignature = parseCallSignature(/*requireCompleteTypeParameterList:*/ true, /*yield:*/ inYieldContext(), /*generatorParameter:*/ false);
+            // From the static semantic section:
+            // 1.If the [Yield] grammar parameter is present for CoverParenthesizedExpressionAndArrowParameterList[Yield]
+            //  return the result of parsing the lexical token stream matched by CoverParenthesizedExpressionAndArrowParameterList[Yield] 
+            //  using ArrowFormalParameters[Yield, GeneratorParameter] as the goal symbol.
+            // 2.If the [Yield] grammar parameter is not present for CoverParenthesizedExpressionAndArrowParameterList[Yield]
+            //  return the result of parsing the lexical token stream matched by CoverParenthesizedExpressionAndArrowParameterList
+            //  using ArrowFormalParameters as the goal symbol.
+            var callSignature = parseCallSignature(/*requireCompleteTypeParameterList:*/ true, /*yield:*/ inYieldContext(), /*generatorParameter:*/ inYieldContext());
 
             if (requireArrow && currentToken().kind !== SyntaxKind.EqualsGreaterThanToken) {
                 return undefined;
