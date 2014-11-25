@@ -1018,30 +1018,6 @@ module TypeScript.Parser {
             // no need to do anything special if we're not in the [Yield] context.
             return func();
         }
-
-        function enterGeneratorParameterContextAnd<T>(func: () => T): T {
-            if (generatorParameterContext) {
-                // no need to do anything special if we're already in the [GeneratorParameter] context
-                return func();
-            }
-
-            setGeneratorParameterContext(true);
-            var result = func();
-            setGeneratorParameterContext(false);
-            return result;
-        }
-
-        function exitGeneratorParameterContextAnd<T>(func: () => T): T {
-            if (generatorParameterContext) {
-                setGeneratorParameterContext(false);
-                var result = func();
-                setGeneratorParameterContext(true);
-                return result;
-            }
-
-            // no need to do anything special if we're not in the [GeneratorParameter] context
-            return func();
-        }
         
         function tryParseEnumElementEqualsValueClause(): EqualsValueClauseSyntax {
             return isEqualsValueClause(/*inParameter*/ false) ? allowInAnd(parseEqualsValueClause) : undefined;
@@ -2410,8 +2386,6 @@ module TypeScript.Parser {
         // precedence than 'comma'.  Otherwise we'll get: "var a = (1, (b = 2))", instead of
         // "var a = (1), b = (2)");
         function tryParseAssignmentExpressionOrHigherWorker(force: boolean): IExpressionSyntax {
-            // Augmented by TypeScript:
-            //
             //  AssignmentExpression[in,yield]:
             //      1) ConditionalExpression[?in,?yield]
             //      2) LeftHandSideExpression = AssignmentExpression[?in,?yield]
@@ -3033,12 +3007,14 @@ module TypeScript.Parser {
         function parseFunctionExpressionWorker(functionKeyword: ISyntaxToken, asteriskToken: ISyntaxToken) {
             // GeneratorExpression :
             //      function * BindingIdentifier[Yield]opt (FormalParameters[Yield, GeneratorParameter]) { GeneratorBody[Yield] }
+            // FunctionExpression:
+            //      function BindingIdentifieropt(FormalParameters) { FunctionBody }
 
             var isGenerator = asteriskToken !== undefined;
             return new FunctionExpressionSyntax(contextFlags,
                 functionKeyword,
                 asteriskToken,
-                enterYieldContextAnd(eatOptionalIdentifierToken),
+                asteriskToken ? enterYieldContextAnd(eatOptionalIdentifierToken) : eatOptionalIdentifierToken(),
                 parseCallSignature(/*requireCompleteTypeParameterList:*/ false, /*yield:*/ isGenerator, /*generatorParameter:*/ isGenerator),
                 parseFunctionBody(isGenerator));
         }
