@@ -895,42 +895,35 @@ module ts {
         //
         // Getting this all correct is tricky and requires careful reading of the grammar to 
         // understand when these values should be changed versus when they should be inherited.
-        var strictModeContext = false;
-        var disallowInContext = false;
-        var yieldContext: boolean = false;
-        var generatorParameterContext: boolean = false;
-        var contextFlags: number = 0;
+        var contextFlags: ParserContextFlags = 0;
 
-        function updateContextFlags() {
-            contextFlags =
-                (strictModeContext ? ParserContextFlags.ParsedInStrictModeContext : 0) |
-                (disallowInContext ? ParserContextFlags.ParsedInDisallowInContext : 0) |
-                (yieldContext ? ParserContextFlags.ParsedInYieldContext : 0) |
-                (generatorParameterContext ? ParserContextFlags.ParsedInGeneratorParameterContext : 0);
+        function setContextFlag(val: Boolean, flag: ParserContextFlags) {
+            if (val) {
+                contextFlags |= flag;
+            }
+            else {
+                contextFlags &= ~flag;
+            }
         }
 
         function setStrictModeContext(val: boolean) {
-            strictModeContext = val;
-            updateContextFlags();
+            setContextFlag(val, ParserContextFlags.ParsedInStrictModeContext);
         }
 
         function setDisallowInContext(val: boolean) {
-            disallowInContext = val;
-            updateContextFlags();
+            setContextFlag(val, ParserContextFlags.ParsedInDisallowInContext);
         }
 
         function setYieldContext(val: boolean) {
-            yieldContext = val;
-            updateContextFlags();
+            setContextFlag(val, ParserContextFlags.ParsedInYieldContext);
         }
 
         function setGeneratorParameterContext(val: boolean) {
-            generatorParameterContext = val;
-            updateContextFlags();
+            setContextFlag(val, ParserContextFlags.ParsedInGeneratorParameterContext);
         }
 
         function allowInAnd<T>(func: () => T): T {
-            if (disallowInContext) {
+            if (contextFlags & ParserContextFlags.ParsedInDisallowInContext) {
                 setDisallowInContext(false);
                 var result = func();
                 setDisallowInContext(true);
@@ -942,7 +935,7 @@ module ts {
         }
 
         function disallowInAnd<T>(func: () => T): T {
-            if (disallowInContext) {
+            if (contextFlags & ParserContextFlags.ParsedInDisallowInContext) {
                 // no need to do anything special if 'in' is already disallowed.
                 return func();
             }
@@ -954,7 +947,7 @@ module ts {
         }
 
         function enterYieldContextAnd<T>(func: () => T): T {
-            if (yieldContext) {
+            if (contextFlags & ParserContextFlags.ParsedInYieldContext) {
                 // no need to do anything special if we're already in the [Yield] context.
                 return func();
             }
@@ -966,7 +959,7 @@ module ts {
         }
 
         function exitYieldContextAnd<T>(func: () => T): T {
-            if (yieldContext) {
+            if (contextFlags & ParserContextFlags.ParsedInYieldContext) {
                 setYieldContext(false);
                 var result = func();
                 setYieldContext(true);
@@ -975,6 +968,22 @@ module ts {
 
             // no need to do anything special if we're not in the [Yield] context.
             return func();
+        }
+
+        function inYieldContext() {
+            return (contextFlags & ParserContextFlags.ParsedInYieldContext) !== 0;
+        }
+
+        function inStrictModeContext() {
+            return (contextFlags & ParserContextFlags.ParsedInStrictModeContext) !== 0;
+        }
+
+        function inGeneratorParameterContext() {
+            return (contextFlags & ParserContextFlags.ParsedInGeneratorParameterContext) !== 0;
+        }
+
+        function inDisallowInContext() {
+            return (contextFlags & ParserContextFlags.ParsedInDisallowInContext) !== 0;
         }
 
         function getLineStarts(): number[] {
@@ -1108,11 +1117,11 @@ module ts {
             
             // If we have a 'yield' keyword, and we're in the [yield] context, then 'yield' is 
             // considered a keyword and is not an identifier.
-            if (token === SyntaxKind.YieldKeyword && yieldContext) {
+            if (token === SyntaxKind.YieldKeyword && inYieldContext()) {
                 return false;
             }
             
-            return strictModeContext ? token > SyntaxKind.LastFutureReservedWord : token > SyntaxKind.LastReservedWord;
+            return inStrictModeContext() ? token > SyntaxKind.LastFutureReservedWord : token > SyntaxKind.LastReservedWord;
         }
 
         function parseExpected(t: SyntaxKind): boolean {
@@ -1358,13 +1367,13 @@ module ts {
             parsingContext |= 1 << kind;
             var result = <NodeArray<T>>[];
             result.pos = getNodePos();
-            var savedStrictModeContext = strictModeContext;
+            var savedStrictModeContext = inStrictModeContext();
             while (!isListTerminator(kind)) {
                 if (isListElement(kind, /* inErrorRecovery */ false)) {
                     var element = parseElement();
                     result.push(element);
                     // test elements only if we are not already in strict mode
-                    if (!strictModeContext && checkForStrictMode) {
+                    if (!inStrictModeContext() && checkForStrictMode) {
                         if (isPrologueDirective(element)) {
                             if (isUseStrictPrologueDirective(element)) {
                                 setStrictModeContext(true);
@@ -1629,7 +1638,7 @@ module ts {
             //      [+GeneratorParameter]BindingIdentifier[Yield]Initializer[In]opt
             //      [~GeneratorParameter]BindingIdentifier[?Yield]Initializer[In, ?Yield]opt
 
-            node.name = generatorParameterContext
+            node.name = inGeneratorParameterContext()
                 ? enterYieldContextAnd(parseIdentifier)
                 : parseIdentifier();
 
@@ -1649,7 +1658,7 @@ module ts {
                 node.flags |= NodeFlags.QuestionMark;
             }
             node.type = parseParameterType();
-            node.initializer = generatorParameterContext
+            node.initializer = inGeneratorParameterContext()
                 ? exitYieldContextAnd(parseParameterInitializer)
                 : parseParameterInitializer();
 
@@ -1714,8 +1723,8 @@ module ts {
             //      [+GeneratorParameter]BindingIdentifier[Yield]Initializer[In]opt
             //      [~GeneratorParameter]BindingIdentifier[?Yield]Initializer[In, ?Yield]opt
             if (parseExpected(SyntaxKind.OpenParenToken)) {
-                var savedYieldContext = yieldContext;
-                var savedGeneratorParameterContext = generatorParameterContext;
+                var savedYieldContext = inYieldContext();
+                var savedGeneratorParameterContext = inGeneratorParameterContext();
 
                 setYieldContext(_yieldContext);
                 setGeneratorParameterContext(_generatorParameterContext);
@@ -1969,8 +1978,8 @@ module ts {
         function parseType(): TypeNode {
             // The rules about 'yield' only apply to actual code/expression contexts.  They don't
             // apply to 'type' contexts.  So we disable these parameters here before moving on.
-            var savedYieldContext = yieldContext;
-            var savedGeneratorParameterContext = generatorParameterContext;
+            var savedYieldContext = inYieldContext();
+            var savedGeneratorParameterContext = inGeneratorParameterContext();
 
             setYieldContext(false);
             setGeneratorParameterContext(false);
@@ -2132,11 +2141,11 @@ module ts {
             if (token === SyntaxKind.YieldKeyword) {
                 // If we have a 'yield' keyword, and htis is a context where yield expressions are 
                 // allowed, then definitely parse out a yield expression.
-                if (yieldContext) {
+                if (inYieldContext()) {
                     return true;
                 }
 
-                if (strictModeContext) {
+                if (inStrictModeContext()) {
                     // If we're in strict mode, then 'yield' is a keyword, could only ever start
                     // a yield expression.
                     return true;
@@ -2390,7 +2399,7 @@ module ts {
             while (true) {
                 reScanGreaterToken();
                 var precedence = getOperatorPrecedence();
-                if (precedence && precedence > minPrecedence && (!disallowInContext || token !== SyntaxKind.InKeyword)) {
+                if (precedence && precedence > minPrecedence && (!inDisallowInContext() || token !== SyntaxKind.InKeyword)) {
                     var operator = token;
                     nextToken();
                     expr = makeBinaryExpression(expr, operator, parseBinaryOperators(parseUnaryExpression(), precedence));
@@ -2824,7 +2833,7 @@ module ts {
         }
 
         function parseFunctionBlock(allowYield: boolean, ignoreMissingOpenBrace: boolean): Block {
-            var savedYieldContext = yieldContext;
+            var savedYieldContext = inYieldContext();
             setYieldContext(allowYield);
 
             var block = parseBlock(ignoreMissingOpenBrace, /*checkForStrictMode*/ true);
@@ -3430,7 +3439,7 @@ module ts {
             //      [~GeneratorParameter]ClassHeritage[?Yield]opt { ClassBody[?Yield]opt }
             //      [+GeneratorParameter] ClassHeritageopt { ClassBodyopt }
             
-            node.baseType = generatorParameterContext
+            node.baseType = inGeneratorParameterContext()
                 ? exitYieldContextAnd(parseClassBaseType)
                 : parseClassBaseType();
 
@@ -3442,7 +3451,7 @@ module ts {
                 //      [~GeneratorParameter]ClassHeritage[?Yield]opt { ClassBody[?Yield]opt }
                 //      [+GeneratorParameter] ClassHeritageopt { ClassBodyopt }
 
-                node.members = generatorParameterContext
+                node.members = inGeneratorParameterContext()
                     ? exitYieldContextAnd(parseClassMembers)
                     : parseClassMembers();
                 parseExpected(SyntaxKind.CloseBraceToken);
