@@ -850,8 +850,81 @@ module ts {
         var nodeCount = 0;
         var lineStarts: number[];
 
-        var isInStrictMode = false;
         var lookAheadMode = LookAheadMode.NotLookingAhead;
+
+        // Flags that dictate what parsing context we're in.  For example:
+        // Whether or not we are in strict parsing mode.  All that changes in strict parsing mode is
+        // that some tokens that would be considered identifiers may be considered keywords.  When 
+        // rewinding, we need to store and restore this as the mode may have changed.
+        //
+        // When adding more parser context flags, consider which is the more common case that the 
+        // flag will be in.  This should be hte 'false' state for that flag.  The reason for this is
+        // that we don't store data in our nodes unless the value is in the *non-default* state.  So,
+        // for example, more often than code 'allows-in' (or doesn't 'disallow-in').  We opt for 
+        // 'disallow-in' set to 'false'.  Otherwise, if we had 'allowsIn' set to 'true', then almost
+        // all nodes would need extra state on them to store this info.
+        //
+        // Note:  'allowIn' and 'allowYield' track 1:1 with the [in] and [yield] concepts in the ES6
+        // grammar specification.
+        //
+        // An important thing about these context concepts.  By default they are effectively inherited
+        // while parsing through every grammar production.  i.e. if you don't change them, then when
+        // you parse a sub-production, it will have the same context values as hte parent production.
+        // This is great most of the time.  After all, consider all the 'expression' grammar productions
+        // and how nearly all of them pass along the 'in' and 'yield' context values:
+        //
+        // EqualityExpression[In, Yield] :
+        //      RelationalExpression[?In, ?Yield]
+        //      EqualityExpression[?In, ?Yield] == RelationalExpression[?In, ?Yield]
+        //      EqualityExpression[?In, ?Yield] != RelationalExpression[?In, ?Yield]
+        //      EqualityExpression[?In, ?Yield] === RelationalExpression[?In, ?Yield]
+        //      EqualityExpression[?In, ?Yield] !== RelationalExpression[?In, ?Yield]
+        //
+        // Where you have to be careful is then understanding what the points are in the grammar 
+        // where the values are *not* passed along.  For example:
+        //
+        // SingleNameBinding[Yield,GeneratorParameter]
+        //      [+GeneratorParameter]BindingIdentifier[Yield] Initializer[In]opt
+        //      [~GeneratorParameter]BindingIdentifier[?Yield]Initializer[In, ?Yield]opt
+        //
+        // Here this is saying that if the GeneratorParameter context flag is set, that we should 
+        // explicitly set the 'yield' context flag to false before calling into the BindingIdentifier
+        // and we should explicitly unset the 'yield' context flag before calling into the Initializer.
+        // production.  Conversely, if the GeneratorParameter context flag is not set, then we 
+        // should leave the 'yield' context flag alone.
+        //
+        // Getting this all correct is tricky and requires careful reading of the grammar to 
+        // understand when these values should be changed versus when they should be inherited.
+        var strictModeContext = false;
+        var disallowInContext = false;
+
+        function allowInAnd<T>(func: () => T): T {
+            if (disallowInContext) {
+                setDisallowInContext(false);
+                var result = func();
+                setDisallowInContext(true);
+                return result;
+            }
+            
+            // no need to do anything special if 'in' is already allowed.
+            return func();
+        }
+
+        function disallowInAnd<T>(func: () => T): T {
+            if (disallowInContext) {
+                // no need to do anything special if 'in' is already disallowed.
+                return func();
+            }
+
+            setDisallowInContext(true);
+            var result = func();
+            setDisallowInContext(false);
+            return result;
+        }
+
+        function setDisallowInContext(val: boolean) {
+            disallowInContext = val;
+        }
 
         function getLineStarts(): number[] {
             return lineStarts || (lineStarts = computeLineStarts(sourceText));
@@ -978,7 +1051,7 @@ module ts {
         }
 
         function isIdentifier(): boolean {
-            return token === SyntaxKind.Identifier || (isInStrictMode ? token > SyntaxKind.LastFutureReservedWord : token > SyntaxKind.LastReservedWord);
+            return token === SyntaxKind.Identifier || (strictModeContext ? token > SyntaxKind.LastFutureReservedWord : token > SyntaxKind.LastReservedWord);
         }
 
         function parseExpected(t: SyntaxKind): boolean {
@@ -1035,8 +1108,12 @@ module ts {
         function finishNode<T extends Node>(node: T): T {
             node.end = scanner.getStartPos();
 
-            if (isInStrictMode) {
-                node.flags |= NodeFlags.ParsedInStrictMode;
+            if (strictModeContext) {
+                node.flags |= NodeFlags.ParsedInStrictModeContext;
+            }
+
+            if (disallowInContext) {
+                node.flags |= NodeFlags.ParsedInDisallowInContext
             }
 
             return node;
@@ -1224,16 +1301,16 @@ module ts {
             parsingContext |= 1 << kind;
             var result = <NodeArray<T>>[];
             result.pos = getNodePos();
-            var saveIsInStrictMode = isInStrictMode;
+            var savedStrictModeContext = strictModeContext;
             while (!isListTerminator(kind)) {
                 if (isListElement(kind, /* inErrorRecovery */ false)) {
                     var element = parseElement();
                     result.push(element);
                     // test elements only if we are not already in strict mode
-                    if (!isInStrictMode && checkForStrictMode) {
+                    if (!strictModeContext && checkForStrictMode) {
                         if (isPrologueDirective(element)) {
                             if (isUseStrictPrologueDirective(element)) {
-                                isInStrictMode = true;
+                                strictModeContext = true;
                                 checkForStrictMode = false;
                             }
                         }
@@ -1250,7 +1327,7 @@ module ts {
                     nextToken();
                 }
             }
-            isInStrictMode = saveIsInStrictMode;
+            strictModeContext = savedStrictModeContext;
             result.end = getNodeEnd();
             parsingContext = saveParsingContext;
             return result;
@@ -1361,7 +1438,7 @@ module ts {
 
         function parseTemplateSpan(): TemplateSpan {
             var span = <TemplateSpan>createNode(SyntaxKind.TemplateSpan);
-            span.expression = parseExpression(/*noIn*/ false);
+            span.expression = allowInAnd(parseExpression);
 
             var literal: LiteralExpression;
 
@@ -1833,15 +1910,19 @@ module ts {
             return token !== SyntaxKind.OpenBraceToken && token !== SyntaxKind.FunctionKeyword && isStartOfExpression();
         }
 
-        function parseExpression(noIn?: boolean): Expression {
-            var expr = parseAssignmentExpression(noIn);
+        function parseExpression(): Expression {
+            // Expression[in]:
+            //      AssignmentExpression[in] 
+            //      Expression[in] , AssignmentExpression[in]
+
+            var expr = parseAssignmentExpression();
             while (parseOptional(SyntaxKind.CommaToken)) {
-                expr = makeBinaryExpression(expr, SyntaxKind.CommaToken, parseAssignmentExpression(noIn));
+                expr = makeBinaryExpression(expr, SyntaxKind.CommaToken, parseAssignmentExpression());
             }
             return expr;
         }
 
-        function parseInitializer(inParameter: boolean, noIn?: boolean): Expression {
+        function parseInitializer(inParameter: boolean): Expression {
             if (token !== SyntaxKind.EqualsToken) {
                 // It's not uncommon during typing for the user to miss writing the '=' token.  Check if
                 // there is no newline after the last token and if we're on an expression.  If so, parse
@@ -1858,11 +1939,14 @@ module ts {
                 }
             }
 
+            // Initializer[In, Yield] :
+            //     = AssignmentExpression[?In, ?Yield]
+
             parseExpected(SyntaxKind.EqualsToken);
-            return parseAssignmentExpression(noIn);
+            return parseAssignmentExpression();
         }
 
-        function parseAssignmentExpression(noIn?: boolean): Expression {
+        function parseAssignmentExpression(): Expression {
             // Augmented by TypeScript:
             //
             //  AssignmentExpression[in]:
@@ -1885,7 +1969,7 @@ module ts {
 
             // Now try to handle the rest of the cases.  First, see if we can parse out up to and
             // including a conditional expression.
-            var expr = parseConditionalExpression(noIn);
+            var expr = parseConditionalExpression();
 
             // To avoid a look-ahead, we did not handle the case of an arrow function with a single un-parenthesized
             // parameter ('x => ...') above. We handle it here by checking if the parsed expression was a single
@@ -1900,7 +1984,7 @@ module ts {
             if (isLeftHandSideExpression(expr) && isAssignmentOperator(token)) {
                 var operator = token;
                 nextToken();
-                return makeBinaryExpression(expr, operator, parseAssignmentExpression(noIn));
+                return makeBinaryExpression(expr, operator, parseAssignmentExpression());
             }
 
             // otherwise this was production '1'.  Return whatever we parsed so far.
@@ -1922,7 +2006,7 @@ module ts {
 
             var signature = <ParsedSignature> { parameters: parameters };
 
-            return parseArrowExpressionTail(identifier.pos, signature, /*noIn:*/ false);
+            return parseArrowExpressionTail(identifier.pos, signature);
         }
 
         function tryParseParenthesizedArrowFunctionExpression(): Expression {
@@ -1941,7 +2025,7 @@ module ts {
                 // If we have an arrow, then try to parse the body.
                 // Even if not, try to parse if we have an opening brace, just in case we're in an error state.
                 if (parseExpected(SyntaxKind.EqualsGreaterThanToken) || token === SyntaxKind.OpenBraceToken) {
-                    return parseArrowExpressionTail(pos, sig, /* noIn: */ false);
+                    return parseArrowExpressionTail(pos, sig);
                 }
                 else {
                     // If not, we're probably better off bailing out and returning a bogus function expression.
@@ -1954,7 +2038,7 @@ module ts {
             var sig = tryParseSignatureIfArrowOrBraceFollows();
             if (sig) {
                 parseExpected(SyntaxKind.EqualsGreaterThanToken);
-                return parseArrowExpressionTail(pos, sig, /*noIn:*/ false);
+                return parseArrowExpressionTail(pos, sig);
             }
             else {
                 return undefined;
@@ -2057,7 +2141,7 @@ module ts {
             });
         }
 
-        function parseArrowExpressionTail(pos: number, sig: ParsedSignature, noIn: boolean): FunctionExpression {
+        function parseArrowExpressionTail(pos: number, sig: ParsedSignature): FunctionExpression {
             var body: Node;
 
             if (token === SyntaxKind.OpenBraceToken) {
@@ -2081,37 +2165,36 @@ module ts {
                 body = parseFunctionBlock(/* ignoreMissingOpenBrace */ true);
             }
             else {
-                body = parseAssignmentExpression(noIn);
+                body = parseAssignmentExpression();
             }
 
             return makeFunctionExpression(SyntaxKind.ArrowFunction, pos, /* name */ undefined, sig, body);
         }
 
-        function parseConditionalExpression(noIn?: boolean): Expression {
-            var expr = parseBinaryExpression(noIn);
+        function parseConditionalExpression(): Expression {
+            // Note: we explicitly 'allowIn' in the whenTrue part of the condition expression, and 
+            // we do not that for the 'whenFalse' part.  
+
+            var expr = parseBinaryOperators(parseUnaryExpression(), /*minPrecedence:*/ 0);
             while (parseOptional(SyntaxKind.QuestionToken)) {
                 var node = <ConditionalExpression>createNode(SyntaxKind.ConditionalExpression, expr.pos);
                 node.condition = expr;
-                node.whenTrue = parseAssignmentExpression(false);
+                node.whenTrue = allowInAnd(parseAssignmentExpression);
                 parseExpected(SyntaxKind.ColonToken);
-                node.whenFalse = parseAssignmentExpression(noIn);
+                node.whenFalse = parseAssignmentExpression();
                 expr = finishNode(node);
             }
             return expr;
         }
 
-        function parseBinaryExpression(noIn?: boolean): Expression {
-            return parseBinaryOperators(parseUnaryExpression(), 0, noIn);
-        }
-
-        function parseBinaryOperators(expr: Expression, minPrecedence: number, noIn?: boolean): Expression {
+        function parseBinaryOperators(expr: Expression, minPrecedence: number): Expression {
             while (true) {
                 reScanGreaterToken();
                 var precedence = getOperatorPrecedence();
-                if (precedence && precedence > minPrecedence && (!noIn || token !== SyntaxKind.InKeyword)) {
+                if (precedence && precedence > minPrecedence && (!disallowInContext || token !== SyntaxKind.InKeyword)) {
                     var operator = token;
                     nextToken();
-                    expr = makeBinaryExpression(expr, operator, parseBinaryOperators(parseUnaryExpression(), precedence, noIn));
+                    expr = makeBinaryExpression(expr, operator, parseBinaryOperators(parseUnaryExpression(), precedence));
                     continue;
                 }
                 return expr;
@@ -2277,7 +2360,7 @@ module ts {
                         indexedAccess.index = createMissingNode();
                     }
                     else {
-                        indexedAccess.index = parseExpression();
+                        indexedAccess.index = allowInAnd(parseExpression);
                         if (indexedAccess.index.kind === SyntaxKind.StringLiteral || indexedAccess.index.kind === SyntaxKind.NumericLiteral) {
                             var literal = <LiteralExpression>indexedAccess.index;
                             literal.text = internIdentifier(literal.text);
@@ -2391,7 +2474,7 @@ module ts {
         function parseParenExpression(): ParenExpression {
             var node = <ParenExpression>createNode(SyntaxKind.ParenExpression);
             parseExpected(SyntaxKind.OpenParenToken);
-            node.expression = parseExpression();
+            node.expression = allowInAnd(parseExpression);
             parseExpected(SyntaxKind.CloseParenToken);
             return finishNode(node);
         }
@@ -2407,7 +2490,7 @@ module ts {
         }
 
         function parseArgumentExpression(): Expression {
-            return parseAssignmentExpressionOrOmittedExpression();
+            return allowInAnd(parseAssignmentExpressionOrOmittedExpression);
         }
 
         function parseArrayLiteral(): ArrayLiteral {
@@ -2456,7 +2539,7 @@ module ts {
                 node = <PropertyDeclaration>createNode(SyntaxKind.PropertyAssignment, nodePos);
                 node.name = propertyName;
                 parseExpected(SyntaxKind.ColonToken);
-                (<PropertyDeclaration>node).initializer = parseAssignmentExpression(false);
+                (<PropertyDeclaration>node).initializer = allowInAnd(parseAssignmentExpression);
             }
 
             node.flags = flags;
@@ -2545,7 +2628,7 @@ module ts {
             var node = <IfStatement>createNode(SyntaxKind.IfStatement);
             parseExpected(SyntaxKind.IfKeyword);
             parseExpected(SyntaxKind.OpenParenToken);
-            node.expression = parseExpression();
+            node.expression = allowInAnd(parseExpression);
             parseExpected(SyntaxKind.CloseParenToken);
             node.thenStatement = parseStatement();
             node.elseStatement = parseOptional(SyntaxKind.ElseKeyword) ? parseStatement() : undefined;
@@ -2560,7 +2643,7 @@ module ts {
 
             parseExpected(SyntaxKind.WhileKeyword);
             parseExpected(SyntaxKind.OpenParenToken);
-            node.expression = parseExpression();
+            node.expression = allowInAnd(parseExpression);
             parseExpected(SyntaxKind.CloseParenToken);
 
             // From: https://mail.mozilla.org/pipermail/es-discuss/2011-August/016188.html
@@ -2575,7 +2658,7 @@ module ts {
             var node = <WhileStatement>createNode(SyntaxKind.WhileStatement);
             parseExpected(SyntaxKind.WhileKeyword);
             parseExpected(SyntaxKind.OpenParenToken);
-            node.expression = parseExpression();
+            node.expression = allowInAnd(parseExpression);
             parseExpected(SyntaxKind.CloseParenToken);
 
             node.statement = parseStatement();
@@ -2589,16 +2672,16 @@ module ts {
             parseExpected(SyntaxKind.OpenParenToken);
             if (token !== SyntaxKind.SemicolonToken) {
                 if (parseOptional(SyntaxKind.VarKeyword)) {
-                    var declarations = parseVariableDeclarationList(0, /*noIn*/ true);
+                    var declarations = disallowInAnd(parseVariableDeclarationList);
                 }
                 else if (parseOptional(SyntaxKind.LetKeyword)) {
-                    var declarations = parseVariableDeclarationList(NodeFlags.Let, /*noIn*/ true);
+                    var declarations = setFlag(disallowInAnd(parseVariableDeclarationList), NodeFlags.Let);
                 }
                 else if (parseOptional(SyntaxKind.ConstKeyword)) {
-                    var declarations = parseVariableDeclarationList(NodeFlags.Const, /*noIn*/ true);
+                    var declarations = setFlag(disallowInAnd(parseVariableDeclarationList), NodeFlags.Const);
                 }
                 else {
-                    var varOrInit = parseExpression(true);
+                    var varOrInit = disallowInAnd(parseExpression);
                 }
             }
             var forOrForInStatement: IterationStatement;
@@ -2610,7 +2693,7 @@ module ts {
                 else {
                     forInStatement.variable = varOrInit;
                 }
-                forInStatement.expression = parseExpression();
+                forInStatement.expression = allowInAnd(parseExpression);
                 parseExpected(SyntaxKind.CloseParenToken);
                 forOrForInStatement = forInStatement;
             }
@@ -2625,11 +2708,11 @@ module ts {
 
                 parseExpected(SyntaxKind.SemicolonToken);
                 if (token !== SyntaxKind.SemicolonToken && token !== SyntaxKind.CloseParenToken) {
-                    forStatement.condition = parseExpression();
+                    forStatement.condition = allowInAnd(parseExpression);
                 }
                 parseExpected(SyntaxKind.SemicolonToken);
                 if (token !== SyntaxKind.CloseParenToken) {
-                    forStatement.iterator = parseExpression();
+                    forStatement.iterator = allowInAnd(parseExpression);
                 }
                 parseExpected(SyntaxKind.CloseParenToken);
                 forOrForInStatement = forStatement;
@@ -2657,7 +2740,7 @@ module ts {
 
             parseExpected(SyntaxKind.ReturnKeyword);
             if (!canParseSemicolon()) {
-                node.expression = parseExpression();
+                node.expression = allowInAnd(parseExpression);
             }
 
             parseSemicolon();
@@ -2668,7 +2751,7 @@ module ts {
             var node = <WithStatement>createNode(SyntaxKind.WithStatement);
             parseExpected(SyntaxKind.WithKeyword);
             parseExpected(SyntaxKind.OpenParenToken);
-            node.expression = parseExpression();
+            node.expression = allowInAnd(parseExpression);
             parseExpected(SyntaxKind.CloseParenToken);
             node.statement = parseStatement();
             return finishNode(node);
@@ -2677,7 +2760,7 @@ module ts {
         function parseCaseClause(): CaseOrDefaultClause {
             var node = <CaseOrDefaultClause>createNode(SyntaxKind.CaseClause);
             parseExpected(SyntaxKind.CaseKeyword);
-            node.expression = parseExpression();
+            node.expression = allowInAnd(parseExpression);
             parseExpected(SyntaxKind.ColonToken);
             node.statements = parseList(ParsingContext.SwitchClauseStatements, /*checkForStrictMode*/ false, parseStatement);
             return finishNode(node);
@@ -2699,7 +2782,7 @@ module ts {
             var node = <SwitchStatement>createNode(SyntaxKind.SwitchStatement);
             parseExpected(SyntaxKind.SwitchKeyword);
             parseExpected(SyntaxKind.OpenParenToken);
-            node.expression = parseExpression();
+            node.expression = allowInAnd(parseExpression);
             parseExpected(SyntaxKind.CloseParenToken);
             parseExpected(SyntaxKind.OpenBraceToken);
 
@@ -2715,7 +2798,7 @@ module ts {
             if (scanner.hasPrecedingLineBreak()) {
                 error(Diagnostics.Line_break_not_permitted_here);
             }
-            node.expression = parseExpression();
+            node.expression = allowInAnd(parseExpression);
             parseSemicolon();
             return finishNode(node);
         }
@@ -2782,7 +2865,7 @@ module ts {
 
         function parseExpressionStatement(): ExpressionStatement {
             var node = <ExpressionStatement>createNode(SyntaxKind.ExpressionStatement);
-            node.expression = parseExpression();
+            node.expression = allowInAnd(parseExpression);
             parseSemicolon();
             return finishNode(node);
         }
@@ -2911,17 +2994,24 @@ module ts {
 
         // DECLARATIONS
 
-        function parseVariableDeclaration(flags: NodeFlags, noIn?: boolean): VariableDeclaration {
+        function parseVariableDeclaration(): VariableDeclaration {
             var node = <VariableDeclaration>createNode(SyntaxKind.VariableDeclaration);
-            node.flags = flags;
             node.name = parseIdentifier();
             node.type = parseTypeAnnotation();
-            node.initializer = parseInitializer(/*inParameter*/ false, noIn);
+            node.initializer = parseInitializer(/*inParameter*/ false);
             return finishNode(node);
         }
 
-        function parseVariableDeclarationList(flags: NodeFlags, noIn?: boolean): NodeArray<VariableDeclaration> {
-            return parseDelimitedList(ParsingContext.VariableDeclarations, () => parseVariableDeclaration(flags, noIn));
+        function setFlag(array: NodeArray<VariableDeclaration>, flag: NodeFlags): NodeArray<VariableDeclaration> {
+            for (var i = 0, n = array.length; i < n; i++) {
+                array[i].flags |= flag;
+            }
+
+            return array;
+        }
+
+        function parseVariableDeclarationList(): NodeArray<VariableDeclaration> {
+            return parseDelimitedList(ParsingContext.VariableDeclarations, parseVariableDeclaration);
         }
 
         function parseVariableStatement(fullStart: number, modifiers: ModifiersArray): VariableStatement {
@@ -2939,7 +3029,9 @@ module ts {
             }
 
             nextToken();
-            node.declarations = parseVariableDeclarationList(node.flags, /*noIn*/false);
+            node.declarations = allowInAnd(parseVariableDeclarationList);
+            setFlag(node.declarations, node.flags);
+
             parseSemicolon();
             return finishNode(node);
         }
@@ -2991,7 +3083,7 @@ module ts {
                 }
                 property.name = name;
                 property.type = parseTypeAnnotation();
-                property.initializer = parseInitializer(/*inParameter*/ false);
+                property.initializer = allowInAnd(() => parseInitializer(/*inParameter*/ false));
                 parseSemicolon();
                 return finishNode(property);
             }
@@ -3156,7 +3248,7 @@ module ts {
         function parseEnumMember(): EnumMember {
             var node = <EnumMember>createNode(SyntaxKind.EnumMember, scanner.getStartPos());
             node.name = parsePropertyName();
-            node.initializer = parseInitializer(/*inParameter*/ false);
+            node.initializer = allowInAnd(() => parseInitializer(/*inParameter*/ false));
             return finishNode(node);
         }
 
@@ -3658,7 +3750,7 @@ module ts {
         }
 
         function checkBinaryExpression(node: BinaryExpression) {
-            if (node.flags & NodeFlags.ParsedInStrictMode) {
+            if (node.flags & NodeFlags.ParsedInStrictModeContext) {
                 if (isLeftHandSideExpression(node.left) && isAssignmentOperator(node.operator)) {
                     if (isEvalOrArgumentsIdentifier(node.left)) {
                         // ECMA 262 (Annex C) The identifier eval or arguments may not appear as the LeftHandSideExpression of an 
@@ -3810,7 +3902,7 @@ module ts {
                 var colonStart = skipTrivia(sourceText, node.variable.end);
                 return grammarErrorAtPos(colonStart, ":".length, Diagnostics.Catch_clause_parameter_cannot_have_a_type_annotation);
             }
-            if (node.flags & NodeFlags.ParsedInStrictMode && isEvalOrArgumentsIdentifier(node.variable)) {
+            if (node.flags & NodeFlags.ParsedInStrictModeContext && isEvalOrArgumentsIdentifier(node.variable)) {
                 // It is a SyntaxError if a TryStatement with a Catch occurs within strict code and the Identifier of the 
                 // Catch production is eval or arguments
                 return reportInvalidUseInStrictMode(node.variable);
@@ -3930,7 +4022,7 @@ module ts {
         }
 
         function checkFunctionName(name: Node) {
-            if (name && name.flags & NodeFlags.ParsedInStrictMode && isEvalOrArgumentsIdentifier(name)) {
+            if (name && name.flags & NodeFlags.ParsedInStrictModeContext && isEvalOrArgumentsIdentifier(name)) {
                 // It is a SyntaxError to use within strict mode code the identifiers eval or arguments as the 
                 // Identifier of a FunctionLikeDeclaration or FunctionExpression or as a formal parameter name(13.1)
                 return reportInvalidUseInStrictMode(<Identifier>name);
@@ -4051,7 +4143,7 @@ module ts {
             var GetAccessor = 2;
             var SetAccesor = 4;
             var GetOrSetAccessor = GetAccessor | SetAccesor;
-            var inStrictMode = (node.flags & NodeFlags.ParsedInStrictMode) !== 0;
+            var inStrictMode = (node.flags & NodeFlags.ParsedInStrictModeContext) !== 0;
 
             for (var i = 0, n = node.properties.length; i < n; i++) {
                 var prop = node.properties[i];
@@ -4115,7 +4207,7 @@ module ts {
 
         function checkNumericLiteral(node: LiteralExpression): boolean {
             if (node.flags & NodeFlags.OctalLiteral) {
-                if (node.flags & NodeFlags.ParsedInStrictMode) {
+                if (node.flags & NodeFlags.ParsedInStrictModeContext) {
                     return grammarErrorOnNode(node, Diagnostics.Octal_literals_are_not_allowed_in_strict_mode);
                 }
                 else if (languageVersion >= ScriptTarget.ES5) {
@@ -4259,7 +4351,7 @@ module ts {
             // or if its FunctionBody is strict code(11.1.5).
             // It is a SyntaxError if the identifier eval or arguments appears within a FormalParameterList of a 
             // strict mode FunctionLikeDeclaration or FunctionExpression(13.1) 
-            if (node.flags & NodeFlags.ParsedInStrictMode && isEvalOrArgumentsIdentifier(node.name)) {
+            if (node.flags & NodeFlags.ParsedInStrictModeContext && isEvalOrArgumentsIdentifier(node.name)) {
                 return reportInvalidUseInStrictMode(node.name);
             }
         }
@@ -4318,13 +4410,13 @@ module ts {
             // The identifier eval or arguments may not appear as the LeftHandSideExpression of an 
             // Assignment operator(11.13) or of a PostfixExpression(11.3) or as the UnaryExpression 
             // operated upon by a Prefix Increment(11.4.4) or a Prefix Decrement(11.4.5) operator. 
-            if (node.flags & NodeFlags.ParsedInStrictMode && isEvalOrArgumentsIdentifier(node.operand)) {
+            if (node.flags & NodeFlags.ParsedInStrictModeContext && isEvalOrArgumentsIdentifier(node.operand)) {
                 return reportInvalidUseInStrictMode(<Identifier>node.operand);
             }
         }
 
         function checkPrefixOperator(node: UnaryExpression) {
-            if (node.flags & NodeFlags.ParsedInStrictMode) {
+            if (node.flags & NodeFlags.ParsedInStrictModeContext) {
                 // The identifier eval or arguments may not appear as the LeftHandSideExpression of an 
                 // Assignment operator(11.13) or of a PostfixExpression(11.3) or as the UnaryExpression 
                 // operated upon by a Prefix Increment(11.4.4) or a Prefix Decrement(11.4.5) operator
@@ -4509,7 +4601,7 @@ module ts {
             if (!inAmbientContext && !node.initializer && isConst(node)) {
                 return grammarErrorOnNode(node, Diagnostics.const_declarations_must_be_initialized);
             }
-            if (node.flags & NodeFlags.ParsedInStrictMode && isEvalOrArgumentsIdentifier(node.name)) {
+            if (node.flags & NodeFlags.ParsedInStrictModeContext && isEvalOrArgumentsIdentifier(node.name)) {
                 // It is a SyntaxError if a VariableDeclaration or VariableDeclarationNoIn occurs within strict code 
                 // and its Identifier is eval or arguments 
                 return reportInvalidUseInStrictMode(node.name);
@@ -4571,7 +4663,7 @@ module ts {
         }
 
         function checkWithStatement(node: WithStatement): boolean {
-            if (node.flags & NodeFlags.ParsedInStrictMode) {
+            if (node.flags & NodeFlags.ParsedInStrictModeContext) {
                 // Strict mode code may not include a WithStatement. The occurrence of a WithStatement in such 
                 // a context is an 
                 return grammarErrorOnFirstToken(node, Diagnostics.with_statements_are_not_allowed_in_strict_mode);
