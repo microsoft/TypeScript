@@ -270,16 +270,20 @@ module ts {
         Let                 = 0x00000800,  // Variable declaration
         Const               = 0x00001000,  // Variable declaration
 
-        // Set if this node was parsed in strict mode.  Used for grammar error checks, as well as
-        // checking if the node can be reused in incremental settings.
-        ParsedInStrictModeContext = 0x00002000,
-        ParsedInDisallowInContext = 0x00004000, 
-
-        OctalLiteral        = 0x00008000,
+        OctalLiteral        = 0x00002000,
 
         Modifier = Export | Ambient | Public | Private | Protected | Static,
         AccessibilityModifier = Public | Private | Protected,
         BlockScoped = Let | Const
+    }
+
+    export const enum ParserContextFlags {
+        // Set if this node was parsed in strict mode.  Used for grammar error checks, as well as
+        // checking if the node can be reused in incremental settings.
+        ParsedInStrictModeContext           = 0x1,
+        ParsedInDisallowInContext           = 0x2,
+        ParsedInYieldContext                = 0x4,
+        ParsedInGeneratorParameterContext   = 0x8,
     }
 
     export interface Node extends TextRange {

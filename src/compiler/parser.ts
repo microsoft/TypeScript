@@ -897,12 +897,16 @@ module ts {
         // understand when these values should be changed versus when they should be inherited.
         var strictModeContext = false;
         var disallowInContext = false;
+        var yieldContext: boolean = false;
+        var generatorParameterContext: boolean = false;
         var contextFlags: number = 0;
 
         function updateContextFlags() {
             contextFlags =
-                (strictModeContext ? NodeFlags.ParsedInStrictModeContext : 0) |
-                (disallowInContext ? NodeFlags.ParsedInDisallowInContext : 0);
+                (strictModeContext ? ParserContextFlags.ParsedInStrictModeContext : 0) |
+                (disallowInContext ? ParserContextFlags.ParsedInDisallowInContext : 0) |
+                (yieldContext ? ParserContextFlags.ParsedInYieldContext : 0) |
+                (generatorParameterContext ? ParserContextFlags.ParsedInGeneratorParameterContext : 0);
         }
 
         function setStrictModeContext(val: boolean) {
@@ -3759,7 +3763,7 @@ module ts {
         }
 
         function checkBinaryExpression(node: BinaryExpression) {
-            if (node.parserContextFlags & NodeFlags.ParsedInStrictModeContext) {
+            if (node.parserContextFlags & ParserContextFlags.ParsedInStrictModeContext) {
                 if (isLeftHandSideExpression(node.left) && isAssignmentOperator(node.operator)) {
                     if (isEvalOrArgumentsIdentifier(node.left)) {
                         // ECMA 262 (Annex C) The identifier eval or arguments may not appear as the LeftHandSideExpression of an 
@@ -3911,7 +3915,7 @@ module ts {
                 var colonStart = skipTrivia(sourceText, node.variable.end);
                 return grammarErrorAtPos(colonStart, ":".length, Diagnostics.Catch_clause_parameter_cannot_have_a_type_annotation);
             }
-            if (node.parserContextFlags & NodeFlags.ParsedInStrictModeContext && isEvalOrArgumentsIdentifier(node.variable)) {
+            if (node.parserContextFlags & ParserContextFlags.ParsedInStrictModeContext && isEvalOrArgumentsIdentifier(node.variable)) {
                 // It is a SyntaxError if a TryStatement with a Catch occurs within strict code and the Identifier of the 
                 // Catch production is eval or arguments
                 return reportInvalidUseInStrictMode(node.variable);
@@ -4031,7 +4035,7 @@ module ts {
         }
 
         function checkFunctionName(name: Node) {
-            if (name && name.parserContextFlags & NodeFlags.ParsedInStrictModeContext && isEvalOrArgumentsIdentifier(name)) {
+            if (name && name.parserContextFlags & ParserContextFlags.ParsedInStrictModeContext && isEvalOrArgumentsIdentifier(name)) {
                 // It is a SyntaxError to use within strict mode code the identifiers eval or arguments as the 
                 // Identifier of a FunctionLikeDeclaration or FunctionExpression or as a formal parameter name(13.1)
                 return reportInvalidUseInStrictMode(<Identifier>name);
@@ -4152,7 +4156,7 @@ module ts {
             var GetAccessor = 2;
             var SetAccesor = 4;
             var GetOrSetAccessor = GetAccessor | SetAccesor;
-            var inStrictMode = (node.parserContextFlags & NodeFlags.ParsedInStrictModeContext) !== 0;
+            var inStrictMode = (node.parserContextFlags & ParserContextFlags.ParsedInStrictModeContext) !== 0;
 
             for (var i = 0, n = node.properties.length; i < n; i++) {
                 var prop = node.properties[i];
@@ -4216,7 +4220,7 @@ module ts {
 
         function checkNumericLiteral(node: LiteralExpression): boolean {
             if (node.flags & NodeFlags.OctalLiteral) {
-                if (node.parserContextFlags & NodeFlags.ParsedInStrictModeContext) {
+                if (node.parserContextFlags & ParserContextFlags.ParsedInStrictModeContext) {
                     return grammarErrorOnNode(node, Diagnostics.Octal_literals_are_not_allowed_in_strict_mode);
                 }
                 else if (languageVersion >= ScriptTarget.ES5) {
@@ -4360,7 +4364,7 @@ module ts {
             // or if its FunctionBody is strict code(11.1.5).
             // It is a SyntaxError if the identifier eval or arguments appears within a FormalParameterList of a 
             // strict mode FunctionLikeDeclaration or FunctionExpression(13.1) 
-            if (node.parserContextFlags & NodeFlags.ParsedInStrictModeContext && isEvalOrArgumentsIdentifier(node.name)) {
+            if (node.parserContextFlags & ParserContextFlags.ParsedInStrictModeContext && isEvalOrArgumentsIdentifier(node.name)) {
                 return reportInvalidUseInStrictMode(node.name);
             }
         }
@@ -4419,13 +4423,13 @@ module ts {
             // The identifier eval or arguments may not appear as the LeftHandSideExpression of an 
             // Assignment operator(11.13) or of a PostfixExpression(11.3) or as the UnaryExpression 
             // operated upon by a Prefix Increment(11.4.4) or a Prefix Decrement(11.4.5) operator. 
-            if (node.parserContextFlags & NodeFlags.ParsedInStrictModeContext && isEvalOrArgumentsIdentifier(node.operand)) {
+            if (node.parserContextFlags & ParserContextFlags.ParsedInStrictModeContext && isEvalOrArgumentsIdentifier(node.operand)) {
                 return reportInvalidUseInStrictMode(<Identifier>node.operand);
             }
         }
 
         function checkPrefixOperator(node: UnaryExpression) {
-            if (node.parserContextFlags & NodeFlags.ParsedInStrictModeContext) {
+            if (node.parserContextFlags & ParserContextFlags.ParsedInStrictModeContext) {
                 // The identifier eval or arguments may not appear as the LeftHandSideExpression of an 
                 // Assignment operator(11.13) or of a PostfixExpression(11.3) or as the UnaryExpression 
                 // operated upon by a Prefix Increment(11.4.4) or a Prefix Decrement(11.4.5) operator
@@ -4610,7 +4614,7 @@ module ts {
             if (!inAmbientContext && !node.initializer && isConst(node)) {
                 return grammarErrorOnNode(node, Diagnostics.const_declarations_must_be_initialized);
             }
-            if (node.parserContextFlags & NodeFlags.ParsedInStrictModeContext && isEvalOrArgumentsIdentifier(node.name)) {
+            if (node.parserContextFlags & ParserContextFlags.ParsedInStrictModeContext && isEvalOrArgumentsIdentifier(node.name)) {
                 // It is a SyntaxError if a VariableDeclaration or VariableDeclarationNoIn occurs within strict code 
                 // and its Identifier is eval or arguments 
                 return reportInvalidUseInStrictMode(node.name);
@@ -4672,7 +4676,7 @@ module ts {
         }
 
         function checkWithStatement(node: WithStatement): boolean {
-            if (node.parserContextFlags & NodeFlags.ParsedInStrictModeContext) {
+            if (node.parserContextFlags & ParserContextFlags.ParsedInStrictModeContext) {
                 // Strict mode code may not include a WithStatement. The occurrence of a WithStatement in such 
                 // a context is an 
                 return grammarErrorOnFirstToken(node, Diagnostics.with_statements_are_not_allowed_in_strict_mode);
