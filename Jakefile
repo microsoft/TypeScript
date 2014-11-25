@@ -36,6 +36,9 @@ var compilerSources = [
     "parser.ts",
     "binder.ts",
     "checker.ts",
+	"factory.ts",
+	"generator.ts",
+	"rewriter.ts",
     "emitter.ts",
     "commandLineParser.ts",
     "tsc.ts",
@@ -51,6 +54,9 @@ var servicesSources = [
     "parser.ts",
     "binder.ts",
     "checker.ts",
+	"factory.ts",
+	"generator.ts",
+	"rewriter.ts",
     "emitter.ts"
 ].map(function (f) {
     return path.join(compilerDirectory, f);

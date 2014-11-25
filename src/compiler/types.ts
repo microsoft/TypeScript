@@ -639,7 +639,8 @@ module ts {
     }
 
     export interface GeneratedLabel extends Expression {
-        label: number;
+        label: Label;
+        labelNumbers?: number[];
     }
 
     export interface FileReference extends TextRange {
@@ -681,6 +682,74 @@ module ts {
         getGlobalDiagnostics(): Diagnostic[];
         getTypeChecker(fullTypeCheckMode: boolean): TypeChecker;
         getCommonSourceDirectory(): string;
+    }   
+
+    export enum OpCode {
+        Statement,              // A regular javascript statement
+        Assign,                 // An assignment
+        Break,                  // A break instruction used to jump to a label
+        BrTrue,                 // A break instruction used to jump to a label if a condition evaluates to true
+        BrFalse,                // A break instruction used to jump to a label if a condition evaluates to false
+        Yield,                  // A completion operation for the `yield` keyword
+        Return,                 // A completion operation for the `return` keyword
+        Endfinally              // Marks the end of a `finally` block
+    }
+
+    export type Label = number;
+
+    export interface BodyGenerator {
+        declareLocal(name?: string): Identifier;
+        defineLabel(): Label;
+        markLabel(label: Label): void;
+
+        beginExceptionBlock(): Label;
+        beginCatchBlock(variable: Identifier): void;
+        beginFinallyBlock(): void;
+        endExceptionBlock(): void;
+
+        findBreakTarget(labelSymbol?: Symbol): Label;
+        findContinueTarget(labelSymbol?: Symbol): Label;
+
+        beginScriptLoopBlock(labelSymbol: Symbol): void;
+        endScriptLoopBlock(): void;
+
+        beginScriptBreakBlock(labelSymbol: Symbol): void;
+        endScriptBreakBlock(): void;
+
+        beginLoopBlock(continueLabel: Label, labelSymbol: Symbol): Label;
+        endLoopBlock(): void;
+
+        beginBreakBlock(labelSymbol: Symbol): Label;
+        endBreakBlock(): void;
+
+        beginWithBlock(expression: Expression): void;
+        endWithBlock(): void;
+
+        emit(code: OpCode): void;
+        emit(code: OpCode, label: Label): void;
+        emit(code: OpCode, label: Label, condition: Expression): void;
+        emit(code: OpCode, node: Node): void;
+        emit(code: OpCode, left: Expression, right: Expression): void;
+        emit(code: OpCode, text: string, content?: Map<Node|Node[]>): void;
+        emit(code: OpCode, label: Label, text: string, content?: Map<Node|Node[]>): void;
+
+        emitNode(node: Node): void;
+
+        pushLocation(location: TextRange): void;
+        popLocation(): void;
+        setLocation(location: TextRange): void;
+
+        copy(expression: Expression): Expression;
+
+        createBreak(label: Label): Statement;
+        createReturn(expression: Expression): Statement;
+        createGenerated(text: string, content?: Map<Node|Node[]>): GeneratedNode;
+
+        addFunction(func: FunctionDeclaration): void;
+
+        getLocals(): VariableStatement;
+        getFunctions(): FunctionDeclaration[];
+        getBody(): CaseOrDefaultClause[];
     }
 
     export interface SourceMapSpan {
@@ -975,6 +1044,7 @@ module ts {
         EnumValuesComputed = 0x00000080,
 
         EmitAwaiter        = 0x00000100,  // Emit __awaiter
+        EmitGenerator      = 0x00000200,  // Emit __generator
     }
 
     export interface NodeLinks {

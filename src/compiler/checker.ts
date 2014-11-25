@@ -1,4 +1,3 @@
-/// <reference path="sys.ts"/>
 /// <reference path="types.ts"/>
 /// <reference path="core.ts"/>
 /// <reference path="scanner.ts"/>
@@ -131,6 +130,7 @@ module ts {
         var unknownType = createIntrinsicType(TypeFlags.Any, "unknown");
         var resolvingType = createIntrinsicType(TypeFlags.Any, "__resolving__");
         var awaitedType = createIntrinsicType(TypeFlags.Any, "__awaitable__");
+        var thenableType: ResolvedType;
 
         var emptyObjectType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
         var anyFunctionType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
@@ -151,7 +151,7 @@ module ts {
         var globalNumberType: ObjectType;
         var globalBooleanType: ObjectType;
         var globalRegExpType: ObjectType;
-        var globalTemplateStringsArrayType: ObjectType;
+        var globalTemplateStringsArrayType: ObjectType;        
         var globalPromiseType: ObjectType;
         var globalPromiseConstructorType: ObjectType;
 
@@ -160,6 +160,7 @@ module ts {
         var stringLiteralTypes: Map<StringLiteralType> = {};
         var emitExtends = false;
         var emitAwaiter = false;
+        var emitGenerator = false;
 
         var mergedSymbols: Symbol[] = [];
         var symbolLinks: SymbolLinks[] = [];
@@ -7251,9 +7252,10 @@ module ts {
                     }
                     return awaitedType;
                 } else {
-                    //if (isTypeAssignableTo(type, globalThenableType) && !fallbackType) {
-                    //    error(null, ts.Diagnostics.Type_for_await_does_not_have_a_valid_callable_then_member);
-                    //}
+                    if (isTypeAssignableTo(type, thenableType)) {
+                        error(null, ts.Diagnostics.Type_for_await_does_not_have_a_valid_callable_then_member);
+                    }
+
                     return fallbackType;
                 }
             }
@@ -8609,7 +8611,13 @@ module ts {
                     potentialThisCollisions.length = 0;
                 }
                 if (emitExtends) links.flags |= NodeCheckFlags.EmitExtends;
-                if (emitAwaiter) links.flags |= NodeCheckFlags.EmitAwaiter;
+                if (emitAwaiter) {
+                    links.flags |= NodeCheckFlags.EmitAwaiter;
+                    if (compilerOptions.target < ScriptTarget.ES6) {
+                        emitGenerator = true;
+                    }
+                }
+                if (emitGenerator) links.flags |= NodeCheckFlags.EmitGenerator;
                 links.flags |= NodeCheckFlags.TypeChecked;
             }
         }
@@ -9302,6 +9310,13 @@ module ts {
             } else {
                 globalPromiseConstructorType = promiseConstructorType;
             }
+
+            // thenable type used to verify against a non-promise "thenable" operand to `await`.
+            var thenPropertySymbol = createSymbol(SymbolFlags.Transient | SymbolFlags.Property, "then");
+            getSymbolLinks(thenPropertySymbol).type = globalFunctionType;
+            thenableType = <ResolvedType>createObjectType(TypeFlags.ObjectType);
+            thenableType.properties = [thenPropertySymbol];
+            thenableType.members = createSymbolTable(thenableType.properties);
         }
 
         initializeTypeChecker();

@@ -2,7 +2,7 @@
 /// <reference path="core.ts"/>
 /// <reference path="scanner.ts"/>
 /// <reference path="parser.ts"/>
-
+/// <reference path="rewriter.ts"/>
 module ts {
     interface EmitTextWriter {
         write(s: string): void;
@@ -322,6 +322,8 @@ module ts {
             var decreaseIndent = writer.decreaseIndent;
 
             var extendsEmitted = false;
+            var awaiterEmitted = false;
+            var generatorEmitted = false;
 
             /** write emitted output to disk*/
             var writeEmittedFiles = writeJavaScriptFile;
@@ -1236,6 +1238,91 @@ module ts {
                 emit(node.whenFalse);
             }
 
+            function emitGeneratedLabel(node: GeneratedLabel) {
+                write(String(node.labelNumbers[node.label]));
+            }
+
+            function emitGeneratedNode(node: GeneratedNode) {
+                writeGeneratedContent(node.text, node.content);
+            }
+
+            function writeGeneratedContent(text: string, content?: Map<Node|Node[]>) {
+                var tokenizer = /([$@]){([a-z_$][a-z0-9_$]*)}/ig;
+                var newlineRequested = false;
+                var lines = text.split(/\r\n|\r|\n/g);
+                var lastIndent = 0;
+                for (var i = 0; i < lines.length; i++) {
+                    var line = lines[i];
+                    if (i === 0 && line.length === 0) {
+                        writeLine();
+                        continue;
+                    }
+
+                    var match = line.match(/^\s+/);
+                    var currentIndent = match ? match[0].length : 0;
+                    if (newlineRequested) {
+                        if (currentIndent > lastIndent) {
+                            increaseIndent();
+                        } else if (currentIndent < lastIndent) {
+                            decreaseIndent();
+                        }
+                    }
+
+                    lastIndent = currentIndent;
+                    line = line.substr(currentIndent);
+
+                    var pos = 0;
+                    while (match = tokenizer.exec(line)) {
+                        if (pos < match.index) {
+                            if (newlineRequested) {
+                                newlineRequested = false;
+                                writeLine();
+                            }
+
+                            write(line.substring(pos, match.index));
+                        }
+
+                        if (match[1] === "@") {
+                            newlineRequested = false;
+                        }
+
+                        if (newlineRequested) {
+                            newlineRequested = false;
+                            writeLine();
+                        }
+
+                        var key = match[2];
+                        if (content && content[key]) {
+                            var value = content[key];
+                            if ("kind" in value) {
+                                emit(<Node>value);
+                            } else if ("length" in value) {
+                                if (match[1] === "@") {
+                                    emitLines(<Node[]>value);
+                                    newlineRequested = true;
+                                } else {
+                                    emitCommaList(<NodeArray<Node>>value, false);
+                                    newlineRequested = false;
+                                }
+                            }
+                        }
+
+                        pos = match.index + match[0].length;
+                    }
+
+                    if (pos < text.length) {
+                        if (newlineRequested) {
+                            newlineRequested = false;
+                            writeLine();
+                        }
+
+                        write(line.substring(pos, text.length));
+                    }
+
+                    newlineRequested = true;
+                }
+            }
+
             function emitBlock(node: Block) {
                 emitToken(SyntaxKind.OpenBraceToken, node.pos);
                 increaseIndent();
@@ -1592,6 +1679,11 @@ module ts {
                     // Methods will emit the comments as part of emitting method declaration
                     emitLeadingComments(node);
                 }
+
+                if (node.flags & NodeFlags.Async) {
+                    node = rewriteAsyncFunction(node, compilerOptions);
+                }
+
                 write("function ");
                 if (node.kind === SyntaxKind.FunctionDeclaration || (node.kind === SyntaxKind.FunctionExpression && node.name)) {
                     emit(node.name);
@@ -2244,6 +2336,66 @@ module ts {
                     write("};");
                     extendsEmitted = true;
                 }
+                if (!awaiterEmitted && resolver.getNodeCheckFlags(node) & NodeCheckFlags.EmitAwaiter) {
+                    writeGeneratedContent(`
+                    var __awaiter = __awaiter || function (g) {
+	                    function n(r, t) {
+		                    while (1) {
+			                    if (r.done) return r.value;
+			                    if (r.value && typeof (t = r.value.then) === "function")
+				                    return t.call(r.value, function(v) { return n(g.next(v)) }, function(v) { return n(g["throw"](v)) });
+			                    r = g.next(r.value);
+		                    }
+	                    }
+	                    return n(g.next());
+                    };`);
+                    awaiterEmitted = true;
+                }
+                if (!generatorEmitted && resolver.getNodeCheckFlags(node) & NodeCheckFlags.EmitGenerator) {
+                    writeGeneratedContent(`
+                    var __generator = __generator || function (m, r) {
+                        var d, i = [], f, g, s = { label: 0 }, u;
+                        function n(c) {
+                            if (f) throw new TypeError("Generator is already executing.");
+                            switch (d && c[0]) {
+                                case "next": return { value: u, done: true };
+                                case "return": return { value: c[1], done: true };
+                                case "throw": throw c[1];
+                            }
+                            i.push(c);
+                            while (1) {
+                                switch ((c = i.pop())[0]) {
+                                case "next": s.sent = c[1]; break;
+                                case "endfinally": continue;
+                                case "yield": s.label++; return { value: c[1], done: false };
+                                default:
+                                    switch (!(g = s.trys && s.trys[s.trys.length - 1]) && c[0]) {
+                                        case "throw": i.length = 0; d = 1; throw c[1];
+                                        case "return": i.length = 0; d = 1; return { value: c[1], done: !0 };
+                                    }
+                                    if (c[0] === "break" && (!g || (c[1] >= g[0] && c[1] < g[3]))) { s.label = c[1]; break; }
+                                    if (c[0] === "throw" && s.label < g[1]) { s.error = c[1]; s.label = g[1]; break; }
+                                    s.trys.pop(), i.push(c);
+                                    if (s.label < g[2]) { s.label = g[2]; break; }
+                                    continue;
+                                }
+                                f = true;
+                                try {
+                                    i.push(m(s));
+                                } catch (e) {
+                                    i.push(["throw", e]);
+                                } 
+                                f = false;
+                            }
+                        }
+                        return { 
+                            next: function(v) { return n(["next", v]); },
+                            "throw": function(v) { return n(["throw", v]); },
+                            "return": function(v) { return n(["return", v]); }
+                        };
+                    };`);
+                    generatorEmitted = true;
+                }
                 if (isExternalModule(node)) {
                     if (compilerOptions.module === ModuleKind.AMD) {
                         emitAMDModule(node, startIndex);
@@ -2332,8 +2484,12 @@ module ts {
                         return emitBinaryExpression(<BinaryExpression>node);
                     case SyntaxKind.ConditionalExpression:
                         return emitConditionalExpression(<ConditionalExpression>node);
+                    case SyntaxKind.GeneratedLabel:
+                        return emitGeneratedLabel(<GeneratedLabel>node);
                     case SyntaxKind.OmittedExpression:
                         return;
+                    case SyntaxKind.GeneratedNode:
+                        return emitGeneratedNode(<GeneratedNode>node);
                     case SyntaxKind.Block:
                     case SyntaxKind.TryBlock:
                     case SyntaxKind.FinallyBlock:
