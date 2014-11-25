@@ -1,10 +1,10 @@
-tests/cases/conformance/es6/functionDeclarations/FunctionDeclaration6_es6.ts(1,1): error TS9001: 'generators' are not currently supported.
+tests/cases/conformance/es6/functionDeclarations/FunctionDeclaration6_es6.ts(1,9): error TS9001: 'generators' are not currently supported.
 tests/cases/conformance/es6/functionDeclarations/FunctionDeclaration6_es6.ts(1,18): error TS2304: Cannot find name 'yield'.
 
 
 ==== tests/cases/conformance/es6/functionDeclarations/FunctionDeclaration6_es6.ts (2 errors) ====
     function*foo(a = yield) {
-    ~~~~~~~~
+            ~
 !!! error TS9001: 'generators' are not currently supported.
                      ~~~~~
 !!! error TS2304: Cannot find name 'yield'.

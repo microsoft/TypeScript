@@ -1155,6 +1155,15 @@ module ts {
             return false;
         }
 
+        function parseOptionalToken(t: SyntaxKind): Node {
+            if (token === t) {
+                var node = createNode(t);
+                nextToken();
+                return finishNode(node);
+            }
+            return undefined;
+        }
+
         function canParseSemicolon() {
             // If there's a real semicolon, then we can always parse it out.
             if (token === SyntaxKind.SemicolonToken) {
@@ -2202,10 +2211,7 @@ module ts {
 
             if (!scanner.hasPrecedingLineBreak() &&
                 (token === SyntaxKind.AsteriskToken || isStartOfExpression())) {
-                if (parseOptional(SyntaxKind.AsteriskToken)) {
-                    node.flags = NodeFlags.YieldStar;
-                }
-
+                node.asteriskToken = parseOptionalToken(SyntaxKind.AsteriskToken);
                 node.expression = parseAssignmentExpression();
                 return finishNode(node);
             }
@@ -2255,7 +2261,7 @@ module ts {
                 }
                 else {
                     // If not, we're probably better off bailing out and returning a bogus function expression.
-                    return makeFunctionExpression(SyntaxKind.ArrowFunction, pos, /* name */ undefined, sig, createMissingNode());
+                    return makeFunctionExpression(SyntaxKind.ArrowFunction, pos, /*asteriskToken:*/ undefined, /*name:*/ undefined, sig, createMissingNode());
                 }
             }
             
@@ -2395,7 +2401,7 @@ module ts {
                 body = parseAssignmentExpression();
             }
 
-            return makeFunctionExpression(SyntaxKind.ArrowFunction, pos, /* name */ undefined, sig, body);
+            return makeFunctionExpression(SyntaxKind.ArrowFunction, pos, /*asteriskToken:*/ undefined, /*name:*/ undefined, sig, body);
         }
 
         function parseConditionalExpression(): Expression {
@@ -2731,26 +2737,23 @@ module ts {
 
         function parsePropertyAssignment(): Declaration {
             var nodePos = scanner.getStartPos();
-            var isGenerator = parseOptional(SyntaxKind.AsteriskToken);
+            var asteriskToken = parseOptionalToken(SyntaxKind.AsteriskToken);
             var tokenIsIdentifier = isIdentifier();
             var nameToken = token;
             var propertyName = parsePropertyName();
             var node: Declaration;
-            if (isGenerator || token === SyntaxKind.OpenParenToken || token === SyntaxKind.LessThanToken) {
+            if (asteriskToken || token === SyntaxKind.OpenParenToken || token === SyntaxKind.LessThanToken) {
                 node = <PropertyDeclaration>createNode(SyntaxKind.PropertyAssignment, nodePos);
                 node.name = propertyName;
-                if (isGenerator) {
-                    node.flags |= NodeFlags.Generator;
-                }
-                var sig = parseSignature(SyntaxKind.CallSignature, SyntaxKind.ColonToken, /* returnTokenRequired */ false, /*yieldAndGeneratorParameterContext:*/ isGenerator);
+                var sig = parseSignature(SyntaxKind.CallSignature, SyntaxKind.ColonToken, /* returnTokenRequired */ false, /*yieldAndGeneratorParameterContext:*/ !!asteriskToken);
 
-                var body = parseFunctionBlock(isGenerator, /* ignoreMissingOpenBrace */ false);
+                var body = parseFunctionBlock(!!asteriskToken, /* ignoreMissingOpenBrace */ false);
                 // do not propagate property name as name for function expression
                 // for scenarios like 
                 // var x = 1;
                 // var y = { x() { } } 
                 // otherwise this will bring y.x into the scope of x which is incorrect
-                (<PropertyDeclaration>node).initializer = makeFunctionExpression(SyntaxKind.FunctionExpression, node.pos, undefined, sig, body);
+                (<PropertyDeclaration>node).initializer = makeFunctionExpression(SyntaxKind.FunctionExpression, node.pos, asteriskToken, undefined, sig, body);
                 return finishNode(node);
             }
 
@@ -2808,24 +2811,21 @@ module ts {
 
             var pos = getNodePos();
             parseExpected(SyntaxKind.FunctionKeyword);
-            var isGenerator = parseOptional(SyntaxKind.AsteriskToken);
-            var name = isGenerator ? doInYieldContext(parseOptionalIdentifier) : parseOptionalIdentifier();
-            var sig = parseSignature(SyntaxKind.CallSignature, SyntaxKind.ColonToken, /* returnTokenRequired */ false, /*yieldAndGeneratorParameterContext:*/ isGenerator);
+            var asteriskToken = parseOptionalToken(SyntaxKind.AsteriskToken);
+            var name = asteriskToken ? doInYieldContext(parseOptionalIdentifier) : parseOptionalIdentifier();
+            var sig = parseSignature(SyntaxKind.CallSignature, SyntaxKind.ColonToken, /* returnTokenRequired */ false, /*yieldAndGeneratorParameterContext:*/ !!asteriskToken);
 
-            var body = parseFunctionBlock(/*allowYield:*/ isGenerator, /* ignoreMissingOpenBrace */ false);
-            return makeFunctionExpression(SyntaxKind.FunctionExpression, pos, name, sig, body, isGenerator ? NodeFlags.Generator : undefined);
+            var body = parseFunctionBlock(/*allowYield:*/ !!asteriskToken, /* ignoreMissingOpenBrace */ false);
+            return makeFunctionExpression(SyntaxKind.FunctionExpression, pos, asteriskToken, name, sig, body);
         }
 
         function parseOptionalIdentifier() {
             return isIdentifier() ? parseIdentifier() : undefined;
         }
 
-        function makeFunctionExpression(kind: SyntaxKind, pos: number, name: Identifier, sig: ParsedSignature, body: Node, flags?: NodeFlags): FunctionExpression {
+        function makeFunctionExpression(kind: SyntaxKind, pos: number, asteriskToken: Node, name: Identifier, sig: ParsedSignature, body: Node): FunctionExpression {
             var node = <FunctionExpression>createNode(kind, pos);
-            if (flags) {
-                node.flags = flags;
-            }
-
+            node.asteriskToken = asteriskToken;
             node.name = name;
             node.typeParameters = sig.typeParameters;
             node.parameters = sig.parameters;
@@ -3292,14 +3292,10 @@ module ts {
             var node = <FunctionLikeDeclaration>createNode(SyntaxKind.FunctionDeclaration, fullStart);
             setModifiers(node, modifiers);
             parseExpected(SyntaxKind.FunctionKeyword);
-            var isGenerator = parseOptional(SyntaxKind.AsteriskToken);
-            if (isGenerator) {
-                node.flags |= NodeFlags.Generator;
-            }
-
+            node.asteriskToken = parseOptionalToken(SyntaxKind.AsteriskToken);
             node.name = parseIdentifier();
-            fillSignature(SyntaxKind.CallSignature, SyntaxKind.ColonToken, /* returnTokenRequired */ false, /*yieldAndGeneratorParameterContext:*/ isGenerator, node);
-            node.body = parseFunctionBlockOrSemicolon(isGenerator);
+            fillSignature(SyntaxKind.CallSignature, SyntaxKind.ColonToken, /* returnTokenRequired */ false, /*yieldAndGeneratorParameterContext:*/ !!node.asteriskToken, node);
+            node.body = parseFunctionBlockOrSemicolon(!!node.asteriskToken);
             return finishNode(node);
         }
 
@@ -3314,11 +3310,7 @@ module ts {
 
         function parsePropertyMemberDeclaration(fullStart: number, modifiers: ModifiersArray): Declaration {
             var flags = modifiers ? modifiers.flags : 0;
-            var isGenerator = parseOptional(SyntaxKind.AsteriskToken);
-            if (isGenerator) {
-                flags |= NodeFlags.Generator;
-            }
-
+            var asteriskToken = parseOptionalToken(SyntaxKind.AsteriskToken);
             var name = parsePropertyName();
             if (parseOptional(SyntaxKind.QuestionToken)) {
                 // Note: this is not legal as per the grammar.  But we allow it in the parser and
@@ -3326,15 +3318,16 @@ module ts {
                 flags |= NodeFlags.QuestionMark;
             }
 
-            if (isGenerator || token === SyntaxKind.OpenParenToken || token === SyntaxKind.LessThanToken) {
+            if (asteriskToken || token === SyntaxKind.OpenParenToken || token === SyntaxKind.LessThanToken) {
                 var method = <MethodDeclaration>createNode(SyntaxKind.Method, fullStart);
                 setModifiers(method, modifiers);
                 if (flags) {
                     method.flags = flags;
                 }
+                method.asteriskToken = asteriskToken;
                 method.name = name;
-                fillSignature(SyntaxKind.CallSignature, SyntaxKind.ColonToken, /* returnTokenRequired */ false, /*yieldAndGeneratorParameterContext:*/ isGenerator, method);
-                method.body = parseFunctionBlockOrSemicolon(isGenerator);
+                fillSignature(SyntaxKind.CallSignature, SyntaxKind.ColonToken, /* returnTokenRequired */ false, /*yieldAndGeneratorParameterContext:*/ !!asteriskToken, method);
+                method.body = parseFunctionBlockOrSemicolon(!!asteriskToken);
                 return finishNode(method);
             }
             else {
@@ -4306,9 +4299,9 @@ module ts {
                 checkForGenerator(node);
         }
 
-        function checkForGenerator(node: Node) {
-            if (node.flags & NodeFlags.Generator) {
-                return grammarErrorOnFirstToken(node, Diagnostics.generators_are_not_currently_supported);
+        function checkForGenerator(node: FunctionLikeDeclaration) {
+            if (node.asteriskToken) {
+                return grammarErrorOnNode(node.asteriskToken, Diagnostics.generators_are_not_currently_supported);
             }
         }
 
@@ -4741,8 +4734,7 @@ module ts {
         }
 
         function checkPropertyAssignment(node: PropertyDeclaration) {
-            return checkForInvalidQuestionMark(node, Diagnostics.An_object_member_cannot_be_declared_optional) ||
-                checkForGenerator(node);
+            return checkForInvalidQuestionMark(node, Diagnostics.An_object_member_cannot_be_declared_optional);
         }
 
         function checkForInvalidQuestionMark(node: Declaration, message: DiagnosticMessage) {
