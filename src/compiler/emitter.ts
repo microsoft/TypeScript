@@ -2197,33 +2197,28 @@ module ts {
                 emitTrailingComments(node);
             }
 
-            function emitShortHandPropertyAssignment(node: ShortHandPropertyDeclaration) {
-                function emitAsNormalPropertyAssignment() {
-                    emitLeadingComments(node);
-                    // Emit identifier as an identifier
-                    emit(node.name);
-                    write(": ");
-                    // Even though this is stored as identified because it is in short-hand property assignment,
-                    // treated it as expression 
-                    emitExpressionIdentifier(node.name);
-                    emitTrailingComments(node);
-                }
+            function emitShorthandPropertyAssignmentAsNormalPropertyAssignment(node: ShorthandPropertyDeclaration) {
+                emitLeadingComments(node);
+                // Emit identifier as an identifier
+                emit(node.name);
+                write(": ");
+                // Even though this is stored as identified because it is in short-hand property assignment,
+                // treated it as expression 
+                emitExpressionIdentifier(node.name);
+                emitTrailingComments(node);
+            }
 
-                if (compilerOptions.target < ScriptTarget.ES6) {
-                    emitAsNormalPropertyAssignment();
+            function emitShorthandPropertyAssignment(node: ShorthandPropertyDeclaration) {
+                // If short-hand property has a prefix, then regardless of the target version, we will emit it as normal property assignment
+                var prefix = resolver.getExpressionNamePrefix(node.name);
+                if (prefix) {
+                    emitShorthandPropertyAssignmentAsNormalPropertyAssignment(node);
                 }
-                else if (compilerOptions.target >= ScriptTarget.ES6) {
-                    // If short-hand property has a prefix, then regardless of the target version, we will emit it as normal property assignment
-                    var prefix = resolver.getExpressionNamePrefix(node.name);
-                    if (prefix) {
-                        emitAsNormalPropertyAssignment();
-                    }
-                    // If short-hand property has no prefix, emit it as short-hand.
-                    else {
-                        emitLeadingComments(node);
-                        emit(node.name);
-                        emitTrailingComments(node);
-                    }
+                // If short-hand property has no prefix, emit it as short-hand.
+                else {
+                    emitLeadingComments(node);
+                    emit(node.name);
+                    emitTrailingComments(node);
                 }
             }
 
@@ -3413,6 +3408,7 @@ module ts {
                     return emitPinnedOrTripleSlashComments(node);
                 }
 
+                // Check if node has SyntaxKind which can be emitted the same in both version of ES5 and ES6
                 switch (node.kind) {
                     case SyntaxKind.Identifier:
                         return emitIdentifier(<Identifier>node);
@@ -3451,8 +3447,6 @@ module ts {
                         return emitObjectLiteral(<ObjectLiteral>node);
                     case SyntaxKind.PropertyAssignment:
                         return emitPropertyAssignment(<PropertyDeclaration>node);
-                    case SyntaxKind.ShorthandPropertyAssignment:
-                        return emitShortHandPropertyAssignment(<ShortHandPropertyDeclaration>node);
                     case SyntaxKind.PropertyAccess:
                         return emitPropertyAccess(<PropertyAccess>node);
                     case SyntaxKind.IndexedAccess:
@@ -3538,6 +3532,22 @@ module ts {
                         return emitImportDeclaration(<ImportDeclaration>node);
                     case SyntaxKind.SourceFile:
                         return emitSourceFile(<SourceFile>node);
+                }
+
+                // Emit node which needs to be emitted differently between ES5 and ES6
+                if (compilerOptions.target < ScriptTarget.ES6) {
+                    // Emit node down-leveling
+                    switch (node.kind) {
+                        case SyntaxKind.ShorthandPropertyAssignment:
+                            return emitShorthandPropertyAssignmentAsNormalPropertyAssignment(<ShorthandPropertyDeclaration>node);
+                    }
+                }
+                else if (compilerOptions.target >= ScriptTarget.ES6) {
+                    // Emit node natively in EcmaScript6
+                    switch (node.kind) {
+                        case SyntaxKind.ShorthandPropertyAssignment:
+                            return emitShorthandPropertyAssignment(<ShorthandPropertyDeclaration>node);
+                    }
                 }
             }
 

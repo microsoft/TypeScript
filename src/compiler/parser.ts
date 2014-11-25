@@ -2764,7 +2764,7 @@ module ts {
 
             // Parse to check if it is short-hand property assignment or normal property assignment
             if ((token === SyntaxKind.CommaToken || token === SyntaxKind.CloseBraceToken) && tokenIsIdentifier) {
-                node = <ShortHandPropertyDeclaration>createNode(SyntaxKind.ShorthandPropertyAssignment, nodePos);
+                node = <ShorthandPropertyDeclaration>createNode(SyntaxKind.ShorthandPropertyAssignment, nodePos);
                 node.name = propertyName;
             }
             else {
@@ -3968,7 +3968,7 @@ module ts {
                 case SyntaxKind.ReturnStatement:                return checkReturnStatement(<ReturnStatement>node);
                 case SyntaxKind.SetAccessor:                    return checkSetAccessor(<MethodDeclaration>node);
                 case SyntaxKind.SourceFile:                     return checkSourceFile(<SourceFile>node);
-                case SyntaxKind.ShorthandPropertyAssignment:    return checkShorthandPropertyAssignment(<ShortHandPropertyDeclaration>node);
+                case SyntaxKind.ShorthandPropertyAssignment:    return checkShorthandPropertyAssignment(<ShorthandPropertyDeclaration>node);
                 case SyntaxKind.SwitchStatement:                return checkSwitchStatement(<SwitchStatement>node);
                 case SyntaxKind.TaggedTemplateExpression:       return checkTaggedTemplateExpression(<TaggedTemplateExpression>node);
                 case SyntaxKind.TupleType:                      return checkTupleType(<TupleTypeNode>node);
@@ -4832,7 +4832,7 @@ module ts {
             return grammarErrorOnFirstToken(node, Diagnostics.A_declare_modifier_is_required_for_a_top_level_declaration_in_a_d_ts_file);
         }
 
-        function checkShorthandPropertyAssignment(node: ShortHandPropertyDeclaration): boolean {
+        function checkShorthandPropertyAssignment(node: ShorthandPropertyDeclaration): boolean {
             return checkForInvalidQuestionMark(node, Diagnostics.An_object_member_cannot_be_declared_optional);
         }
 

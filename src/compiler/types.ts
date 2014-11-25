@@ -360,7 +360,7 @@ module ts {
         initializer?: Expression;
     }
 
-    export interface ShortHandPropertyDeclaration extends Declaration {
+    export interface ShorthandPropertyDeclaration extends Declaration {
         name: Identifier;
     }
 
