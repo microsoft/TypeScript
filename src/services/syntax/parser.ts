@@ -1190,14 +1190,14 @@ module TypeScript.Parser {
         function parseGetAccessor(modifiers: ISyntaxToken[], getKeyword: ISyntaxToken): GetAccessorSyntax {
             return new GetAccessorSyntax(contextFlags,
                 modifiers, consumeToken(getKeyword), parsePropertyName(),
-                parseCallSignature(/*requireCompleteTypeParameterList:*/ false, /*yieldContext:*/ false, /*generatorParameter:*/ false),
+                parseCallSignature(/*requireCompleteTypeParameterList:*/ false, /*yieldAndGeneratorParameterContext:*/ false),
                 parseFunctionBody(/*isGenerator:*/ false));
         }
 
         function parseSetAccessor(modifiers: ISyntaxToken[], setKeyword: ISyntaxToken): SetAccessorSyntax {
             return new SetAccessorSyntax(contextFlags,
                 modifiers, consumeToken(setKeyword), parsePropertyName(),
-                parseCallSignature(/*requireCompleteTypeParameterList:*/ false, /*yieldContext:*/ false, /*generatorParameterContext:*/ false),
+                parseCallSignature(/*requireCompleteTypeParameterList:*/ false, /*yieldAndGeneratorParameterContext:*/ false),
                 parseFunctionBody(/*isGenerator:*/ false));
         }
 
@@ -1326,7 +1326,7 @@ module TypeScript.Parser {
             return new ConstructorDeclarationSyntax(contextFlags, 
                 parseModifiers(), 
                 eatToken(SyntaxKind.ConstructorKeyword), 
-                parseCallSignature(/*requireCompleteTypeParameterList:*/ false, /*yieldContext:*/ false, /*generatorParameterContext:*/ false),
+                parseCallSignature(/*requireCompleteTypeParameterList:*/ false, /*yieldAndGeneratorParameterContext:*/ false),
                 parseFunctionBody(/*isGenerator:*/ false));
         }
 
@@ -1339,7 +1339,7 @@ module TypeScript.Parser {
                 modifiers,
                 asteriskToken,
                 propertyName,
-                parseCallSignature(/*requireCompleteTypeParameterList:*/ false, /*yieldContext:*/ isGenerator, /*generatorParameterContext:*/ isGenerator),
+                parseCallSignature(/*requireCompleteTypeParameterList:*/ false, /*yieldAndGeneratorParameterContext:*/ isGenerator),
                 parseFunctionBody(isGenerator));
         }
         
@@ -1381,7 +1381,7 @@ module TypeScript.Parser {
                 functionKeyword,
                 asteriskToken,
                 eatIdentifierToken(),
-                parseCallSignature(/*requireCompleteTypeParameterList:*/ false, /*yieldContext:*/ isGenerator, /*generatorParameterContext:*/ isGenerator),
+                parseCallSignature(/*requireCompleteTypeParameterList:*/ false, /*yieldAndGeneratorParameterContext:*/ isGenerator),
                 parseFunctionBody(isGenerator));
         }
 
@@ -1485,7 +1485,7 @@ module TypeScript.Parser {
                 // A call signature for a type member can both use 'yield' as a parameter name, and 
                 // does not have parameter initializers.  So we can pass 'false' for both [Yield]
                 // and [GeneratorParameter].
-                return parseCallSignature(/*requireCompleteTypeParameterList:*/ false, /*yieldContext:*/ false, /*generatorParameterContext:*/ false);
+                return parseCallSignature(/*requireCompleteTypeParameterList:*/ false, /*yieldAndGeneratorParameterContext:*/ false);
             }
             else if (isConstructSignature()) {
                 return parseConstructSignature();
@@ -1513,7 +1513,7 @@ module TypeScript.Parser {
             // Construct signatures have no [Yield] or [GeneratorParameter] restrictions.
             return new ConstructSignatureSyntax(contextFlags,
                 eatToken(SyntaxKind.NewKeyword),
-                parseCallSignature(/*requireCompleteTypeParameterList:*/ false, /*yieldContext:*/ false, /*generatorParameterContext:*/ false));
+                parseCallSignature(/*requireCompleteTypeParameterList:*/ false, /*yieldAndGeneratorParameterContext:*/ false));
         }
 
         function parseIndexSignature(): IndexSignatureSyntax {
@@ -1529,7 +1529,7 @@ module TypeScript.Parser {
             return new MethodSignatureSyntax(contextFlags,
                 propertyName,
                 questionToken,
-                parseCallSignature(/*requireCompleteTypeParameterList:*/ false, /*yieldContext:*/ false, /*generatorParameterContext:*/ false));
+                parseCallSignature(/*requireCompleteTypeParameterList:*/ false, /*yieldAndGeneratorParameterContext:*/ false));
         }
 
         function parsePropertySignature(propertyName: IPropertyNameSyntax, questionToken: ISyntaxToken): PropertySignatureSyntax {
@@ -3022,7 +3022,7 @@ module TypeScript.Parser {
                 functionKeyword,
                 asteriskToken,
                 asteriskToken ? enterYieldContextAnd(eatOptionalIdentifierToken) : eatOptionalIdentifierToken(),
-                parseCallSignature(/*requireCompleteTypeParameterList:*/ false, /*yield:*/ isGenerator, /*generatorParameter:*/ isGenerator),
+                parseCallSignature(/*requireCompleteTypeParameterList:*/ false, /*yieldAndGeneratorParameterContext:*/ isGenerator),
                 parseFunctionBody(isGenerator));
         }
 
@@ -3144,7 +3144,7 @@ module TypeScript.Parser {
             // 2.If the [Yield] grammar parameter is not present for CoverParenthesizedExpressionAndArrowParameterList[Yield]
             //  return the result of parsing the lexical token stream matched by CoverParenthesizedExpressionAndArrowParameterList
             //  using ArrowFormalParameters as the goal symbol.
-            var callSignature = parseCallSignature(/*requireCompleteTypeParameterList:*/ true, /*yield:*/ inYieldContext(), /*generatorParameter:*/ inYieldContext());
+            var callSignature = parseCallSignature(/*requireCompleteTypeParameterList:*/ true, /*yieldAndGeneratorParameterContext:*/ inYieldContext());
 
             if (requireArrow && currentToken().kind !== SyntaxKind.EqualsGreaterThanToken) {
                 return undefined;
@@ -3538,7 +3538,7 @@ module TypeScript.Parser {
             return new FunctionPropertyAssignmentSyntax(contextFlags,
                 asteriskToken,
                 propertyName,
-                parseCallSignature(/*requireCompleteTypeParameterList:*/ false, /*yield:*/ isGenerator, /*generatorParameter:*/ isGenerator),
+                parseCallSignature(/*requireCompleteTypeParameterList:*/ false, /*yieldAndGeneratorParameterContext:*/ isGenerator),
                 parseFunctionBody(isGenerator));
         }
 
@@ -3596,10 +3596,10 @@ module TypeScript.Parser {
             return statements;
         }
 
-        function parseCallSignature(requireCompleteTypeParameterList: boolean, yieldContext: boolean, generatorParameterContext: boolean): CallSignatureSyntax {
+        function parseCallSignature(requireCompleteTypeParameterList: boolean, yieldAndGeneratorParameterContext: boolean): CallSignatureSyntax {
             return new CallSignatureSyntax(contextFlags,
                 tryParseTypeParameterList(requireCompleteTypeParameterList),
-                parseParameterList(yieldContext, generatorParameterContext),
+                parseParameterList(yieldAndGeneratorParameterContext),
                 parseOptionalTypeAnnotation(/*allowStringLiteral:*/ false));
         }
 
@@ -3649,7 +3649,11 @@ module TypeScript.Parser {
             return new ConstraintSyntax(contextFlags, eatToken(SyntaxKind.ExtendsKeyword), parseTypeOrExpression());
         }
 
-        function parseParameterList(yieldContext: boolean, generatorParameterContext: boolean): ParameterListSyntax {
+        // Note: after careful analysis of the grammar, it does not appear to be possible to 
+        // have 'Yield' And 'GeneratorParameter' not in sync.  i.e. any production calling
+        // this FormalParameters production either always sets both to true, or always sets
+        // both to false.  As such we only have a single parameter to represent both.
+        function parseParameterList(yieldAndGeneratorParameterContext: boolean): ParameterListSyntax {
             // FormalParameters[Yield,GeneratorParameter] :
             //      ...
             //
@@ -3665,11 +3669,12 @@ module TypeScript.Parser {
             //      [+GeneratorParameter]BindingIdentifier[Yield]Initializer[In]opt
             //      [~GeneratorParameter]BindingIdentifier[?Yield]Initializer[In, ?Yield]opt
 
+
             var savedYieldContext = inYieldContext();
             var savedGeneratorParameterContext = inGeneratorParameterContext();
 
-            setYieldContext(yieldContext);
-            setGeneratorParameterContext(generatorParameterContext);
+            setYieldContext(yieldAndGeneratorParameterContext);
+            setGeneratorParameterContext(yieldAndGeneratorParameterContext);
 
             var openParenToken: ISyntaxToken;
             var result = new ParameterListSyntax(contextFlags,
@@ -3936,7 +3941,7 @@ module TypeScript.Parser {
             // aren't in the [Yield] or [GeneratorParameter] context.
             return new FunctionTypeSyntax(contextFlags,
                 tryParseTypeParameterList(/*requireCompleteTypeParameterList:*/ false), 
-                parseParameterList(/*yield:*/ false, /*generatorParameter:*/ false),
+                parseParameterList(/*yieldAndGeneratorParameterContext:*/ false),
                 eatToken(SyntaxKind.EqualsGreaterThanToken), parseType());
         }
 
@@ -3946,7 +3951,7 @@ module TypeScript.Parser {
             return new ConstructorTypeSyntax(contextFlags,
                 eatToken(SyntaxKind.NewKeyword),
                 tryParseTypeParameterList(/*requireCompleteTypeParameterList:*/ false),
-                parseParameterList(/*yield:*/ false, /*generatorParameter:*/ false),
+                parseParameterList(/*yieldAndGeneratorParameterContext:*/ false),
                 eatToken(SyntaxKind.EqualsGreaterThanToken), parseType());
         }
 

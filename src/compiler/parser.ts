@@ -1678,9 +1678,9 @@ module ts {
             return parseInitializer(/*inParameter*/ true);
         }
 
-        function parseSignature(kind: SyntaxKind, returnToken: SyntaxKind, returnTokenRequired: boolean, isGenerator: boolean): ParsedSignature {
+        function parseSignature(kind: SyntaxKind, returnToken: SyntaxKind, returnTokenRequired: boolean, yieldAndGeneratorParameterContext: boolean): ParsedSignature {
             var signature = <ParsedSignature>{};
-            fillSignature(kind, returnToken, returnTokenRequired, isGenerator, signature);
+            fillSignature(kind, returnToken, returnTokenRequired, yieldAndGeneratorParameterContext, signature);
             return signature;
         }
 
@@ -1688,14 +1688,14 @@ module ts {
                 kind: SyntaxKind,
                 returnToken: SyntaxKind,
                 returnTokenRequired: boolean,
-                isGenerator: boolean,
+                yieldAndGeneratorParameterContext: boolean,
                 signature: ParsedSignature): void {
 
             if (kind === SyntaxKind.ConstructSignature) {
                 parseExpected(SyntaxKind.NewKeyword);
             }
             signature.typeParameters = parseTypeParameters();
-            signature.parameters = parseParameterList(/*yieldContext:*/ isGenerator, /*generatorParameterContext:*/ isGenerator);
+            signature.parameters = parseParameterList(yieldAndGeneratorParameterContext);
 
             if (returnTokenRequired) {
                 parseExpected(returnToken);
@@ -1706,9 +1706,11 @@ module ts {
             }
         }
 
-        // Because we use this for index signatures as well, we sometimes use
-        // parentheses, and sometimes use brackets.
-        function parseParameterList(yieldContext: boolean, generatorParameterContext: boolean) {
+        // Note: after careful analysis of the grammar, it does not appear to be possible to 
+        // have 'Yield' And 'GeneratorParameter' not in sync.  i.e. any production calling
+        // this FormalParameters production either always sets both to true, or always sets
+        // both to false.  As such we only have a single parameter to represent both.
+        function parseParameterList(yieldAndGeneratorParameterContext: boolean) {
             // FormalParameters[Yield,GeneratorParameter] :
             //      ...
             //
@@ -1727,8 +1729,8 @@ module ts {
                 var savedYieldContext = inYieldContext();
                 var savedGeneratorParameterContext = inGeneratorParameterContext();
 
-                setYieldContext(yieldContext);
-                setGeneratorParameterContext(generatorParameterContext);
+                setYieldContext(yieldAndGeneratorParameterContext);
+                setGeneratorParameterContext(yieldAndGeneratorParameterContext);
 
                 var result = parseDelimitedList(ParsingContext.Parameters, parseParameter);
                 parseExpected(SyntaxKind.CloseParenToken);
@@ -1744,7 +1746,7 @@ module ts {
 
         function parseSignatureMember(kind: SyntaxKind, returnToken: SyntaxKind): SignatureDeclaration {
             var node = <SignatureDeclaration>createNode(kind);
-            fillSignature(kind, returnToken, /* returnTokenRequired */ false, /*isGenerator:*/ false, node);
+            fillSignature(kind, returnToken, /* returnTokenRequired */ false, /*yieldAndGeneratorParameterContext:*/ false, node);
             parseSemicolon();
             return finishNode(node);
         }
@@ -1773,7 +1775,7 @@ module ts {
 
                 // Method signatues don't exist in expression contexts.  So they have neither
                 // [Yield] nor [GeneratorParameter]
-                fillSignature(SyntaxKind.CallSignature, SyntaxKind.ColonToken, /* returnTokenRequired */ false, /*isGenerator:*/ false, method);
+                fillSignature(SyntaxKind.CallSignature, SyntaxKind.ColonToken, /* returnTokenRequired */ false, /*yieldAndGeneratorParameterContext:*/ false, method);
 
                 parseSemicolon();
                 return finishNode(method);
@@ -1857,7 +1859,7 @@ module ts {
         function parseFunctionType(typeKind: SyntaxKind): SignatureDeclaration {
             var node = <SignatureDeclaration>createNode(typeKind);
             fillSignature(typeKind === SyntaxKind.FunctionType ? SyntaxKind.CallSignature : SyntaxKind.ConstructSignature,
-                SyntaxKind.EqualsGreaterThanToken, /* returnTokenRequired */ true, /*isGenerator:*/ false, node);
+                SyntaxKind.EqualsGreaterThanToken, /* returnTokenRequired */ true, /*yieldAndGeneratorParameterContext:*/ false, node);
             return finishNode(node);
         }
 
@@ -2230,7 +2232,7 @@ module ts {
 
             if (triState === Tristate.True) {
                 // Arrow function are never generators.
-                var sig = parseSignature(SyntaxKind.CallSignature, SyntaxKind.ColonToken, /* returnTokenRequired */ false, /*isGenerator:*/ false);
+                var sig = parseSignature(SyntaxKind.CallSignature, SyntaxKind.ColonToken, /* returnTokenRequired */ false, /*yieldAndGeneratorParameterContext:*/ false);
 
                 // If we have an arrow, then try to parse the body.
                 // Even if not, try to parse if we have an opening brace, just in case we're in an error state.
@@ -2334,7 +2336,7 @@ module ts {
         function tryParseSignatureIfArrowOrBraceFollows(): ParsedSignature {
             return tryParse(() => {
                 // Arrow functions are never generators.
-                var sig = parseSignature(SyntaxKind.CallSignature, SyntaxKind.ColonToken, /* returnTokenRequired */ false, /*isGenerator:*/ false);
+                var sig = parseSignature(SyntaxKind.CallSignature, SyntaxKind.ColonToken, /* returnTokenRequired */ false, /*yieldAndGeneratorParameterContext:*/ false);
 
                 // Parsing a signature isn't enough.
                 // Parenthesized arrow signatures often look like other valid expressions.
@@ -2726,7 +2728,7 @@ module ts {
                 if (isGenerator) {
                     node.flags |= NodeFlags.Generator;
                 }
-                var sig = parseSignature(SyntaxKind.CallSignature, SyntaxKind.ColonToken, /* returnTokenRequired */ false, /*isGenerator:*/ isGenerator);
+                var sig = parseSignature(SyntaxKind.CallSignature, SyntaxKind.ColonToken, /* returnTokenRequired */ false, /*yieldAndGeneratorParameterContext:*/ isGenerator);
 
                 var body = parseFunctionBlock(isGenerator, /* ignoreMissingOpenBrace */ false);
                 // do not propagate property name as name for function expression
@@ -2794,7 +2796,7 @@ module ts {
             parseExpected(SyntaxKind.FunctionKeyword);
             var isGenerator = parseOptional(SyntaxKind.AsteriskToken);
             var name = isGenerator ? doInYieldContext(parseOptionalIdentifier) : parseOptionalIdentifier();
-            var sig = parseSignature(SyntaxKind.CallSignature, SyntaxKind.ColonToken, /* returnTokenRequired */ false, /*isGenerator:*/ isGenerator);
+            var sig = parseSignature(SyntaxKind.CallSignature, SyntaxKind.ColonToken, /* returnTokenRequired */ false, /*yieldAndGeneratorParameterContext:*/ isGenerator);
 
             var body = parseFunctionBlock(/*allowYield:*/ isGenerator, /* ignoreMissingOpenBrace */ false);
             return makeFunctionExpression(SyntaxKind.FunctionExpression, pos, name, sig, body, isGenerator ? NodeFlags.Generator : undefined);
@@ -3282,7 +3284,7 @@ module ts {
             }
 
             node.name = parseIdentifier();
-            fillSignature(SyntaxKind.CallSignature, SyntaxKind.ColonToken, /* returnTokenRequired */ false, /*isGenerator:*/ isGenerator, node);
+            fillSignature(SyntaxKind.CallSignature, SyntaxKind.ColonToken, /* returnTokenRequired */ false, /*yieldAndGeneratorParameterContext:*/ isGenerator, node);
             node.body = parseFunctionBlockOrSemicolon(isGenerator);
             return finishNode(node);
         }
@@ -3291,7 +3293,7 @@ module ts {
             var node = <ConstructorDeclaration>createNode(SyntaxKind.Constructor, pos);
             setModifiers(node, modifiers);
             parseExpected(SyntaxKind.ConstructorKeyword);
-            fillSignature(SyntaxKind.CallSignature, SyntaxKind.ColonToken, /* returnTokenRequired */ false, /*isGenerator:*/ false, node);
+            fillSignature(SyntaxKind.CallSignature, SyntaxKind.ColonToken, /* returnTokenRequired */ false, /*yieldAndGeneratorParameterContext:*/ false, node);
             node.body = parseFunctionBlockOrSemicolon(/*isGenerator:*/ false);
             return finishNode(node);
         }
@@ -3317,7 +3319,7 @@ module ts {
                     method.flags = flags;
                 }
                 method.name = name;
-                fillSignature(SyntaxKind.CallSignature, SyntaxKind.ColonToken, /* returnTokenRequired */ false, /*isGenerator:*/ isGenerator, method);
+                fillSignature(SyntaxKind.CallSignature, SyntaxKind.ColonToken, /* returnTokenRequired */ false, /*yieldAndGeneratorParameterContext:*/ isGenerator, method);
                 method.body = parseFunctionBlockOrSemicolon(isGenerator);
                 return finishNode(method);
             }
@@ -3339,7 +3341,7 @@ module ts {
             var node = <MethodDeclaration>createNode(kind, fullStart);
             setModifiers(node, modifiers);
             node.name = parsePropertyName();
-            fillSignature(SyntaxKind.CallSignature, SyntaxKind.ColonToken, /* returnTokenRequired */ false, /*isGenerator:*/ false, node);
+            fillSignature(SyntaxKind.CallSignature, SyntaxKind.ColonToken, /* returnTokenRequired */ false, /*yieldAndGeneratorParameterContext:*/ false, node);
             node.body = parseFunctionBlockOrSemicolon(/*isGenerator:*/ false);
             return finishNode(node);
         }
