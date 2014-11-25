@@ -281,10 +281,10 @@ module ts {
     export const enum ParserContextFlags {
         // Set if this node was parsed in strict mode.  Used for grammar error checks, as well as
         // checking if the node can be reused in incremental settings.
-        ParsedInStrictModeContext           = 1 << 0,
-        ParsedInDisallowInContext           = 1 << 1,
-        ParsedInYieldContext                = 1 << 2,
-        ParsedInGeneratorParameterContext   = 1 << 3,
+        StrictMode          = 1 << 0,
+        DisallowIn          = 1 << 1,
+        Yield               = 1 << 2,
+        GeneratorParameter  = 1 << 3,
     }
 
     export interface Node extends TextRange {
