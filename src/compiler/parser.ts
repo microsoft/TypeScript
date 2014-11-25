@@ -1262,6 +1262,7 @@ module ts {
                 case ParsingContext.ClassMembers:
                     return lookAhead(isClassMemberStart);
                 case ParsingContext.EnumMembers:
+                    return isPropertyName();
                 case ParsingContext.ObjectLiteralMembers:
                     return token === SyntaxKind.AsteriskToken || isPropertyName();
                 case ParsingContext.BaseTypeReferences:
