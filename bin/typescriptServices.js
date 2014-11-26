@@ -33748,8 +33748,8 @@ var ts;
                     return ScriptElementKind.variableElement;
                 case 118 /* Parameter */:
                     return (node.flags & ts.NodeFlags.AccessibilityModifier) ? ScriptElementKind.memberVariableElement : ScriptElementKind.parameterElement;
-                    return ScriptElementKind.unknown;
             }
+            return ScriptElementKind.unknown;
         }
         function getSymbolModifiers(symbol) {
             return symbol && symbol.declarations && symbol.declarations.length > 0 ? getNodeModifiers(symbol.declarations[0]) : ScriptElementKindModifier.none;
