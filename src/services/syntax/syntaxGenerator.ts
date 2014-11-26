@@ -90,6 +90,7 @@ var definitions:ITypeDefinition[] = [
         baseType: 'ISyntaxNode',
         interfaces: ['IModuleElementSyntax'],
         children: [
+            <any>{ name: 'modifiers', isList: true, elementType: 'ISyntaxToken' },
             <any>{ name: 'exportKeyword', isToken: true, excludeFromAST: true },
             <any>{ name: 'equalsToken', isToken: true, excludeFromAST: true },
             <any>{ name: 'identifier', isToken: true },

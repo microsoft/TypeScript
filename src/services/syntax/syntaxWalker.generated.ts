@@ -142,6 +142,7 @@ module TypeScript {
         }
 
         public visitExportAssignment(node: ExportAssignmentSyntax): void {
+            this.visitList(node.modifiers);
             this.visitToken(node.exportKeyword);
             this.visitToken(node.equalsToken);
             this.visitToken(node.identifier);

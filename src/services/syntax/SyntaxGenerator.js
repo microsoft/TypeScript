@@ -951,6 +951,7 @@ var definitions = [
         baseType: 'ISyntaxNode',
         interfaces: ['IModuleElementSyntax'],
         children: [
+            { name: 'modifiers', isList: true, elementType: 'ISyntaxToken' },
             { name: 'exportKeyword', isToken: true, excludeFromAST: true },
             { name: 'equalsToken', isToken: true, excludeFromAST: true },
             { name: 'identifier', isToken: true },

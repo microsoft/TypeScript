@@ -142,12 +142,13 @@ module TypeScript {
     export interface ImportDeclarationConstructor { new (data: number, modifiers: ISyntaxToken[], importKeyword: ISyntaxToken, identifier: ISyntaxToken, equalsToken: ISyntaxToken, moduleReference: IModuleReferenceSyntax, semicolonToken: ISyntaxToken): ImportDeclarationSyntax }
 
     export interface ExportAssignmentSyntax extends ISyntaxNode, IModuleElementSyntax {
+        modifiers: ISyntaxToken[];
         exportKeyword: ISyntaxToken;
         equalsToken: ISyntaxToken;
         identifier: ISyntaxToken;
         semicolonToken: ISyntaxToken;
     }
-    export interface ExportAssignmentConstructor { new (data: number, exportKeyword: ISyntaxToken, equalsToken: ISyntaxToken, identifier: ISyntaxToken, semicolonToken: ISyntaxToken): ExportAssignmentSyntax }
+    export interface ExportAssignmentConstructor { new (data: number, modifiers: ISyntaxToken[], exportKeyword: ISyntaxToken, equalsToken: ISyntaxToken, identifier: ISyntaxToken, semicolonToken: ISyntaxToken): ExportAssignmentSyntax }
 
     export interface MemberFunctionDeclarationSyntax extends ISyntaxNode, IMemberDeclarationSyntax, IPropertyAssignmentSyntax {
         modifiers: ISyntaxToken[];

@@ -821,6 +821,7 @@ module TypeScript.Parser {
                     case SyntaxKind.InterfaceKeyword: return parseInterfaceDeclaration();
                     case SyntaxKind.ClassKeyword: return parseClassDeclaration();
                     case SyntaxKind.EnumKeyword: return parseEnumDeclaration();
+                    case SyntaxKind.ExportKeyword: return parseExportAssignment();
                 }
             }
 
@@ -882,7 +883,11 @@ module TypeScript.Parser {
 
         function parseExportAssignment(): ExportAssignmentSyntax {
             return new ExportAssignmentSyntax(contextFlags,
-                eatToken(SyntaxKind.ExportKeyword), eatToken(SyntaxKind.EqualsToken), eatIdentifierToken(), eatExplicitOrAutomaticSemicolon(/*allowWithoutNewline:*/ false));
+                parseModifiers(),
+                eatToken(SyntaxKind.ExportKeyword),
+                eatToken(SyntaxKind.EqualsToken),
+                eatIdentifierToken(),
+                eatExplicitOrAutomaticSemicolon(/*allowWithoutNewline:*/ false));
         }
 
         function parseModuleReference(): IModuleReferenceSyntax {

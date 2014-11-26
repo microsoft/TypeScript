@@ -1054,6 +1054,15 @@ module TypeScript {
             return false;
         }
 
+        public visitExportAssignment(node: ExportAssignmentSyntax): void {
+            if (node.modifiers.length > 0) {
+                this.pushDiagnostic(node.modifiers[0], DiagnosticCode.Modifiers_cannot_appear_here);
+                return;
+            }
+
+            super.visitExportAssignment(node);
+        }
+
         public visitExpressionBody(node: ExpressionBody): void {
             // These are always errors.  So no need to ever recurse on them.
             this.pushDiagnostic(node.equalsGreaterThanToken, DiagnosticCode._0_expected, ["{"]);

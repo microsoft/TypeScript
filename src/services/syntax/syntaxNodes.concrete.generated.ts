@@ -384,25 +384,28 @@ module TypeScript {
         }
     }
 
-    export var ExportAssignmentSyntax: ExportAssignmentConstructor = <any>function(data: number, exportKeyword: ISyntaxToken, equalsToken: ISyntaxToken, identifier: ISyntaxToken, semicolonToken: ISyntaxToken) {
+    export var ExportAssignmentSyntax: ExportAssignmentConstructor = <any>function(data: number, modifiers: ISyntaxToken[], exportKeyword: ISyntaxToken, equalsToken: ISyntaxToken, identifier: ISyntaxToken, semicolonToken: ISyntaxToken) {
         if (data) { this.__data = data; }
+        this.modifiers = modifiers,
         this.exportKeyword = exportKeyword,
         this.equalsToken = equalsToken,
         this.identifier = identifier,
         this.semicolonToken = semicolonToken,
+        modifiers.parent = this,
         exportKeyword.parent = this,
         equalsToken.parent = this,
         identifier.parent = this,
         semicolonToken && (semicolonToken.parent = this);
     };
     ExportAssignmentSyntax.prototype.kind = SyntaxKind.ExportAssignment;
-    ExportAssignmentSyntax.prototype.childCount = 4;
+    ExportAssignmentSyntax.prototype.childCount = 5;
     ExportAssignmentSyntax.prototype.childAt = function(index: number): ISyntaxElement {
         switch (index) {
-            case 0: return this.exportKeyword;
-            case 1: return this.equalsToken;
-            case 2: return this.identifier;
-            case 3: return this.semicolonToken;
+            case 0: return this.modifiers;
+            case 1: return this.exportKeyword;
+            case 2: return this.equalsToken;
+            case 3: return this.identifier;
+            case 4: return this.semicolonToken;
         }
     }
 
