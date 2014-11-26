@@ -39,7 +39,7 @@ var ObjectLiteral = {
 //// [async.js]
 var __awaiter = __awaiter || function (g) {
     function n(r, t) {
-        while (1) {
+        while (true) {
             if (r.done) return r.value;
             if (r.value && typeof (t = r.value.then) === "function")
                 return t.call(r.value, function(v) { return n(g.next(v)) }, function(v) { return n(g["throw"](v)) });
@@ -49,11 +49,11 @@ var __awaiter = __awaiter || function (g) {
     return n(g.next());
 };
 var __generator = __generator || function (m, r) {
-    var d, i = [], f, g, s = { label: 0 }, u;
+    var d, i = [], f, g, s = { label: 0 };
     function n(c) {
         if (f) throw new TypeError("Generator is already executing.");
         switch (d && c[0]) {
-            case "next": return { value: u, done: true };
+            case "next": return { value: undefined, done: true };
             case "return": return { value: c[1], done: true };
             case "throw": throw c[1];
         }
@@ -90,37 +90,41 @@ var __generator = __generator || function (m, r) {
     };
 };
 function asyncFunc() {
-    return new Promise(function(__resolve) {
-        __resolve(__awaiter(__generator(function(__state) {
-            switch(__state.label) {
-                case 0: return ["return"];
+    return new Promise(function (__resolve) {
+        __resolve(__awaiter(__generator(function (__state) {
+            switch (__state.label) {
+                case 0:
+                    return ["return"];
             }
         })));
     });
 }
 var asyncFuncExpr = function () {
-    return new Promise(function(__resolve) {
-        __resolve(__awaiter(__generator(function(__state) {
-            switch(__state.label) {
-                case 0: return ["return"];
+    return new Promise(function (__resolve) {
+        __resolve(__awaiter(__generator(function (__state) {
+            switch (__state.label) {
+                case 0:
+                    return ["return"];
             }
         })));
     });
 };
 var asyncLambdaBody = function () {
-    return new Promise(function(__resolve) {
-        __resolve(__awaiter(__generator(function(__state) {
-            switch(__state.label) {
-                case 0: return ["return"];
+    return new Promise(function (__resolve) {
+        __resolve(__awaiter(__generator(function (__state) {
+            switch (__state.label) {
+                case 0:
+                    return ["return"];
             }
         })));
     });
 };
 var asyncLambdaExpr = function () {
-    return new Promise(function(__resolve) {
-        __resolve(__awaiter(__generator(function(__state) {
-            switch(__state.label) {
-                case 0: return ["return", null];
+    return new Promise(function (__resolve) {
+        __resolve(__awaiter(__generator(function (__state) {
+            switch (__state.label) {
+                case 0:
+                    return ["return", null];
             }
         })));
     });
@@ -129,19 +133,21 @@ var Class = (function () {
     function Class() {
     }
     Class.asyncStaticMethod = function () {
-        return new Promise(function(__resolve) {
-            __resolve(__awaiter(__generator(function(__state) {
-                switch(__state.label) {
-                    case 0: return ["return"];
+        return new Promise(function (__resolve) {
+            __resolve(__awaiter(__generator(function (__state) {
+                switch (__state.label) {
+                    case 0:
+                        return ["return"];
                 }
             })));
         });
     };
     Class.prototype.asyncMethod = function () {
-        return new Promise(function(__resolve) {
-            __resolve(__awaiter(__generator(function(__state) {
-                switch(__state.label) {
-                    case 0: return ["return"];
+        return new Promise(function (__resolve) {
+            __resolve(__awaiter(__generator(function (__state) {
+                switch (__state.label) {
+                    case 0:
+                        return ["return"];
                 }
             })));
         });
@@ -150,19 +156,21 @@ var Class = (function () {
 })();
 var ObjectLiteral = {
     asyncProperty: function () {
-        return new Promise(function(__resolve) {
-            __resolve(__awaiter(__generator(function(__state) {
-                switch(__state.label) {
-                    case 0: return ["return"];
+        return new Promise(function (__resolve) {
+            __resolve(__awaiter(__generator(function (__state) {
+                switch (__state.label) {
+                    case 0:
+                        return ["return"];
                 }
             })));
         });
     },
     asyncMethod: function () {
-        return new Promise(function(__resolve) {
-            __resolve(__awaiter(__generator(function(__state) {
-                switch(__state.label) {
-                    case 0: return ["return"];
+        return new Promise(function (__resolve) {
+            __resolve(__awaiter(__generator(function (__state) {
+                switch (__state.label) {
+                    case 0:
+                        return ["return"];
                 }
             })));
         });

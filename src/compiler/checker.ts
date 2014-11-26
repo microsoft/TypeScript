@@ -4570,7 +4570,7 @@ module ts {
             if (container.kind === SyntaxKind.ArrowFunction) {
                 container = getThisContainer(container, /* includeArrowFunctions */ false);
                 needToCaptureLexicalThis = true;
-            } else if (container.flags & NodeFlags.Async) {
+            } else if (container.parserContextFlags & ParserContextFlags.Await) {
                 needToCaptureLexicalThis = true;
             }
 
@@ -7340,12 +7340,22 @@ module ts {
             }
 
             checkSourceElement(node.body);
-            if (node.type && !isAccessor(node.kind)) {
-                checkIfNonVoidFunctionHasReturnExpressionsOrSingleThrowStatment(node, getTypeFromTypeNode(node.type));
+
+            var returnType = node.type ? getTypeFromTypeNode(node.type) : undefined;
+            if (node.flags & NodeFlags.Async) {
+                emitAwaiter = true;
+                var awaitableReturnType = checkAwaitableReturnType(node, returnType);
+                if (awaitableReturnType) {
+                    returnType = awaitableReturnType;
+                }
+            }
+
+            if (returnType && !isAccessor(node.kind)) {
+                checkIfNonVoidFunctionHasReturnExpressionsOrSingleThrowStatment(node, returnType);
             }
 
             // If there is no body and no explicit return type, then report an error.
-            if (fullTypeCheck && compilerOptions.noImplicitAny && !node.body && !node.type) {
+            if (fullTypeCheck && compilerOptions.noImplicitAny && !node.body && !returnType) {
                 // Ignore privates within ambient contexts; they exist purely for documentative purposes to avoid name clashing.
                 // (e.g. privates within .d.ts files do not expose type information)
                 if (!isPrivateWithinAmbient(node)) {

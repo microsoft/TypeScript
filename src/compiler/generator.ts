@@ -38,7 +38,7 @@ module ts {
 
     interface BreakBlock extends BlockScope {
         breakLabel: Label;
-        labelSymbol?: Symbol;
+        labelText?: string;
     }
 
     interface ContinueBlock extends BreakBlock {
@@ -54,8 +54,8 @@ module ts {
         // locals/hoisted variables/hoisted functions
         var nextLocalId: number = 0;
         var parameters: ParameterDeclaration[] = [];
-        var locals: VariableDeclaration[] = [];
-        var namedLocals: VariableDeclaration[] = [];
+        var locals: GeneratedNode[] = [];
+        var namedLocals: GeneratedNode[] = [];
         var functions: FunctionDeclaration[] = [];
 
         // blocks
@@ -119,7 +119,7 @@ module ts {
             functions[functions.length] = func;
         }
 
-        function declareLocal(name?: string): Identifier {
+        function declareLocal(name?: string): GeneratedNode {
             if (name) {
                 var list = namedLocals;
             } else {
@@ -127,10 +127,9 @@ module ts {
                 var list = locals;
             }
 
-            var localDeclarationName = factory.createIdentifier(name, initialLocation);
-            var localDeclaration = factory.createVariableDeclaration(localDeclarationName, undefined, initialLocation);
-            list.push(localDeclaration);
-            return factory.createIdentifier(name, relatedLocation);
+            var localDeclarationName = createGeneratedNode(name);
+            list.push(localDeclarationName);
+            return localDeclarationName;
         }
 
         function defineLabel(): Label {
@@ -171,6 +170,8 @@ module ts {
             exception.state = ExceptionBlockState.Catch;
             exception.catchVariable = variable;
             exception.catchLabel = catchLabel;
+
+            emit(OpCode.Statement, `\${variable} = __state.error;`, { variable });
         }
 
         function beginFinallyBlock(): void {
@@ -193,7 +194,10 @@ module ts {
             Debug.assert(peekBlockKind() === BlockKind.Exception);
             var exception = endBlock<ExceptionBlock>();
             var state = exception.state;
-            if (state === ExceptionBlockState.Finally) {
+            if (state < ExceptionBlockState.Finally) {
+                emit(OpCode.Break, exception.endLabel);
+            }
+            else {
                 emit(OpCode.Endfinally);
             }
 
@@ -201,10 +205,10 @@ module ts {
             exception.state = ExceptionBlockState.Done;
         }
 
-        function beginScriptContinueBlock(labelSymbol: Symbol): void {
+        function beginScriptContinueBlock(labelText: string): void {
             beginBlock<ContinueBlock>({
                 kind: BlockKind.ScriptContinue,
-                labelSymbol: labelSymbol,
+                labelText: labelText,
                 breakLabel: -1,
                 continueLabel: -1
             });
@@ -215,10 +219,10 @@ module ts {
             endBlock<ContinueBlock>();
         }
 
-        function beginScriptBreakBlock(labelSymbol: Symbol): void {
+        function beginScriptBreakBlock(labelText: string): void {
             beginBlock<BreakBlock>({
                 kind: BlockKind.ScriptBreak,
-                labelSymbol: labelSymbol,
+                labelSymbol: labelText,
                 breakLabel: -1
             });
         }
@@ -228,11 +232,11 @@ module ts {
             endBlock<BreakBlock>();
         }
 
-        function beginContinueBlock(continueLabel: Label, labelSymbol: Symbol): Label {
+        function beginContinueBlock(continueLabel: Label, labelText: string): Label {
             var breakLabel = defineLabel();
             beginBlock<ContinueBlock>({
                 kind: BlockKind.Continue,
-                labelSymbol: labelSymbol,
+                labelText: labelText,
                 breakLabel: breakLabel,
                 continueLabel: continueLabel
             });
@@ -248,11 +252,11 @@ module ts {
             }
         }
 
-        function beginBreakBlock(labelSymbol: Symbol): Label {
+        function beginBreakBlock(labelText: string): Label {
             var breakLabel = defineLabel();
             beginBlock<BreakBlock>({
                 kind: BlockKind.Break,
-                labelSymbol: labelSymbol,
+                labelText: labelText,
                 breakLabel: breakLabel
             });
             return breakLabel;
@@ -294,13 +298,13 @@ module ts {
             return block && block.kind;
         }
 
-        function findBreakTarget(labelSymbol?: Symbol): Label {
+        function findBreakTarget(labelText?: string): Label {
             for (var i = blockStack.length - 1; i >= 0; i--) {
                 var block = blockStack[i];
                 if (supportsBreak(block)) {
-                    var continueBreakBlock = <BreakBlock>block;
-                    if (!labelSymbol || continueBreakBlock.labelSymbol === labelSymbol) {
-                        return continueBreakBlock.breakLabel;
+                    var breakBlock = <BreakBlock>block;
+                    if (!labelText || breakBlock.labelText === labelText) {
+                        return breakBlock.breakLabel;
                     }
                 }
             }
@@ -308,12 +312,12 @@ module ts {
             return 0;
         }
 
-        function findContinueTarget(labelSymbol?: Symbol): Label {
+        function findContinueTarget(labelText?: string): Label {
             for (var i = blockStack.length - 1; i >= 0; i--) {
                 var block = blockStack[i];
                 if (supportsContinue(block)) {
                     var continueBreakBlock = <ContinueBlock>block;
-                    if (continueBreakBlock.continueLabel && (!labelSymbol || continueBreakBlock.labelSymbol === labelSymbol)) {
+                    if (!labelText || continueBreakBlock.labelText === labelText) {
                         return continueBreakBlock.continueLabel;
                     }
                 }
@@ -434,8 +438,8 @@ module ts {
             var body = createGeneratedNode(`
                 \${locals}
                 @{functions}
-                return __generator(function(__state) {
-                    switch(__state.label) {
+                return __generator(function (__state) {
+                    switch (__state.label) {
                         @{body}
                     }
                 });`, { locals: buildLocals(), functions, body: buildFunctionBody() });
@@ -449,9 +453,9 @@ module ts {
             var body = createGeneratedNode(`
                 \${locals}
                 @{functions}
-                return new \${promise}(function(__resolve) {
-                    __resolve(__awaiter(__generator(function(__state) {
-                        switch(__state.label) {
+                return new \${promise}(function (__resolve) {
+                    __resolve(__awaiter(__generator(function (__state) {
+                        switch (__state.label) {
                             @{body}
                         }
                     })));
@@ -488,20 +492,22 @@ module ts {
             return node;
         }
 
-        function buildLocals(): VariableStatement {
-            if (locals.length) {
-                return factory.createVariableStatement(factory.createNodeArray(namedLocals.concat(locals), initialLocation), initialLocation);
+        function buildLocals(): GeneratedNode {
+            if (namedLocals.length || locals.length) {
+                return createGeneratedNode(`var \${locals};`, {
+                    locals: namedLocals.concat(locals)
+                });
             }
         }
 
-        function buildFunctionBody(): NodeArray<CaseOrDefaultClause> {
+        function buildFunctionBody(): GeneratedNode[] {
             var exceptionStack: ExceptionBlock[] = [];
-            var clauses = factory.createNodeArray<CaseOrDefaultClause>([], initialLocation);
-            var statements = <NodeArray<Statement>>[];
+            var clauses: GeneratedNode[] = [];
+            var statements: Statement[] = [];
             var statementsStack: NodeArray<Statement>[] = [];
             var blockIndex: number = 0;
-            var lastInstructionWasAbrupt = false;
-            var lastInstructionWasCompletion = false;
+            var instructionWasAbrupt = false;
+            var instructionWasCompletion = false;
 
             for (var operationIndex = 0; operationIndex < operations.length; operationIndex++) {
                 var code = operations[operationIndex];
@@ -512,7 +518,7 @@ module ts {
             }
 
             ensureLabels();
-            if (!lastInstructionWasCompletion) {
+            if (!instructionWasCompletion) {
                 writeReturn();
             }
 
@@ -522,25 +528,33 @@ module ts {
                 var createCase = false;
                 for (var label = 0; label < labels.length; label++) {
                     if (labels[label] === operationIndex) {
+                        labelNumbers[label] = clauses.length;
                         createCase = true;
                     }
                 }
 
                 if (createCase) {
                     var labelNumber = clauses.length;
-                    labelNumbers[label] = labelNumber;
+                    var labelExpression = createGeneratedNode(String(labelNumber));
 
-                    var clause = factory.createCaseClause(createLabel(label), [], relatedLocation);
-                    clauses.push(clause);
-                    statements = clause.statements;
+                    // handle implicit fall-through
+                    if (!instructionWasAbrupt && !instructionWasCompletion && operationIndex > 0) {
+                        writeStatement(createGeneratedNode(`__state.label = \${label};`, { label: createGeneratedNode(String(labelNumber)) }));
+                    }
+
+                    statements = [];
+                    instructionWasAbrupt = false;
+                    instructionWasCompletion = false;
+
+                    clauses.push(createGeneratedNode(`
+                        case \${label}:
+                            @{statements}`, { 
+                            label: labelExpression,
+                            statements
+                    }));
 
                     if (labelNumber === 0 && hasProtectedRegions) {
                         writeStatement(createGeneratedNode(`__state.trys = [];`));
-                    }
-
-                    // handle implicit fall-through
-                    if (!lastInstructionWasAbrupt && !lastInstructionWasCompletion && operationIndex > 0) {
-                        writeStatement(createGeneratedNode(`__state.label = \${label};`, { label: createLabel(label) }));
                     }
                 }
             }
@@ -559,8 +573,13 @@ module ts {
                     }
                 }
 
-                lastInstructionWasAbrupt = false;
-                lastInstructionWasCompletion = false;
+                // early termination, nothing else to process in this label
+                if (instructionWasAbrupt || instructionWasCompletion) {
+                    return;
+                }
+
+                instructionWasAbrupt = false;
+                instructionWasCompletion = false;
                 switch (code) {
                     case OpCode.Statement: return writeStatement(<Node>args[0]);
                     case OpCode.Assign: return writeAssign(<Expression>args[0], <Expression>args[1]);
@@ -584,7 +603,6 @@ module ts {
                 }
 
                 statements.push(<Statement>node);
-                statements.end = Math.max(statements.end, node.end);
             }
 
             function writeAssign(left: Expression, right: Expression): void {
@@ -592,7 +610,7 @@ module ts {
             }
 
             function writeBreak(label: Label): void {
-                lastInstructionWasAbrupt = true;
+                instructionWasAbrupt = true;
                 writeStatement(createInlineBreak(label));
             }
 
@@ -607,22 +625,22 @@ module ts {
             }
 
             function writeYield(expression: Expression): void {
-                lastInstructionWasAbrupt = true;
+                instructionWasAbrupt = true;
                 writeStatement(createYield(expression));
             }
 
             function writeReturn(expression?: Expression): void {
-                lastInstructionWasCompletion = true;
+                instructionWasCompletion = true;
                 writeStatement(createInlineReturn(expression));
             }
 
             function writeThrow(expression: Expression): void {
-                lastInstructionWasCompletion = true;
+                instructionWasCompletion = true;
                 writeStatement(createGeneratedNode(`throw \${expression};`, { expression }));
             }
 
             function writeEndfinally(): void {
-                lastInstructionWasAbrupt = true;
+                instructionWasAbrupt = true;
                 writeStatement(createGeneratedNode(`return ["endfinally"];`));
             }
         }

@@ -747,19 +747,19 @@ module ts {
         beginFinallyBlock(): void;
         endExceptionBlock(): void;
 
-        findBreakTarget(labelSymbol?: Symbol): Label;
-        findContinueTarget(labelSymbol?: Symbol): Label;
+        findBreakTarget(labelText?: string): Label;
+        findContinueTarget(labelText?: string): Label;
 
-        beginScriptContinueBlock(labelSymbol: Symbol): void;
+        beginScriptContinueBlock(labelText: string): void;
         endScriptContinueBlock(): void;
 
-        beginScriptBreakBlock(labelSymbol: Symbol): void;
+        beginScriptBreakBlock(labelText: string): void;
         endScriptBreakBlock(): void;
 
-        beginContinueBlock(continueLabel: Label, labelSymbol: Symbol): Label;
+        beginContinueBlock(continueLabel: Label, labelText: string): Label;
         endContinueBlock(): void;
 
-        beginBreakBlock(labelSymbol: Symbol): Label;
+        beginBreakBlock(labelText: string): Label;
         endBreakBlock(): void;
 
         emit(code: OpCode): void;

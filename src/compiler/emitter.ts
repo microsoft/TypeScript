@@ -2469,6 +2469,10 @@ module ts {
 
                     newlineRequested = true;
                 }
+
+                while (indentDepth-- > 0) {
+                    decreaseIndent();
+                }
             }
 
             function emitBlock(node: Block) {
@@ -2831,7 +2835,7 @@ module ts {
                     emitLeadingComments(node);
                 }
 
-                if (node.flags & NodeFlags.Async) {
+                if (node.flags & NodeFlags.Async || (node.asteriskToken && compilerOptions.target <= ScriptTarget.ES5)) {
                     // NOTE: rewriteFunction supports downlevel generators, but is not currently enabled.
                     node = rewriteFunction(node, compilerOptions);
                 }
@@ -3492,7 +3496,7 @@ module ts {
                     writeGeneratedContent(`
                     var __awaiter = __awaiter || function (g) {
 	                    function n(r, t) {
-		                    while (1) {
+		                    while (true) {
 			                    if (r.done) return r.value;
 			                    if (r.value && typeof (t = r.value.then) === "function")
 				                    return t.call(r.value, function(v) { return n(g.next(v)) }, function(v) { return n(g["throw"](v)) });
@@ -3506,11 +3510,11 @@ module ts {
                 if (!generatorEmitted && resolver.getNodeCheckFlags(node) & NodeCheckFlags.EmitGenerator) {
                     writeGeneratedContent(`
                     var __generator = __generator || function (m, r) {
-                        var d, i = [], f, g, s = { label: 0 }, u;
+                        var d, i = [], f, g, s = { label: 0 };
                         function n(c) {
                             if (f) throw new TypeError("Generator is already executing.");
                             switch (d && c[0]) {
-                                case "next": return { value: u, done: true };
+                                case "next": return { value: undefined, done: true };
                                 case "return": return { value: c[1], done: true };
                                 case "throw": throw c[1];
                             }
