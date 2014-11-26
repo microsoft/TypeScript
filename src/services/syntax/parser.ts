@@ -1705,6 +1705,7 @@ module TypeScript.Parser {
                     case SyntaxKind.InterfaceKeyword: 
                     case SyntaxKind.ClassKeyword: 
                     case SyntaxKind.EnumKeyword: 
+                    case SyntaxKind.ExportKeyword:
                         return true;
                 }
             }
