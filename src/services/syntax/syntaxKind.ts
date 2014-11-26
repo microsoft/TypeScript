@@ -269,7 +269,7 @@ module TypeScript {
         TypeAnnotation,
         ExpressionBody,
         ComputedPropertyName,
-        SimplePropertyAssignment,
+        PropertyAssignment,
         ExternalModuleReference,
         ModuleNameModuleReference,
 

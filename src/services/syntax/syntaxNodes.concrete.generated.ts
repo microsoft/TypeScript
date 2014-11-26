@@ -1864,7 +1864,7 @@ module TypeScript {
         }
     }
 
-    export var SimplePropertyAssignmentSyntax: SimplePropertyAssignmentConstructor = <any>function(data: number, propertyName: IPropertyNameSyntax, colonToken: ISyntaxToken, expression: IExpressionSyntax) {
+    export var PropertyAssignmentSyntax: PropertyAssignmentConstructor = <any>function(data: number, propertyName: IPropertyNameSyntax, colonToken: ISyntaxToken, expression: IExpressionSyntax) {
         if (data) { this.__data = data; }
         this.propertyName = propertyName,
         this.colonToken = colonToken,
@@ -1873,9 +1873,9 @@ module TypeScript {
         colonToken.parent = this,
         expression.parent = this;
     };
-    SimplePropertyAssignmentSyntax.prototype.kind = SyntaxKind.SimplePropertyAssignment;
-    SimplePropertyAssignmentSyntax.prototype.childCount = 3;
-    SimplePropertyAssignmentSyntax.prototype.childAt = function(index: number): ISyntaxElement {
+    PropertyAssignmentSyntax.prototype.kind = SyntaxKind.PropertyAssignment;
+    PropertyAssignmentSyntax.prototype.childCount = 3;
+    PropertyAssignmentSyntax.prototype.childAt = function(index: number): ISyntaxElement {
         switch (index) {
             case 0: return this.propertyName;
             case 1: return this.colonToken;

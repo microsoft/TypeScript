@@ -931,7 +931,7 @@ module TypeScript.PrettyPrinter {
             this.appendToken(node.closeBracketToken);
         }
 
-        public visitSimplePropertyAssignment(node: SimplePropertyAssignmentSyntax): void {
+        public visitPropertyAssignment(node: PropertyAssignmentSyntax): void {
             visitNodeOrToken(this, node.propertyName);
             this.appendToken(node.colonToken);
             this.ensureSpace();

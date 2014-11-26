@@ -610,7 +610,7 @@ module TypeScript {
             this.visitToken(node.closeBracketToken);
         }
 
-        public visitSimplePropertyAssignment(node: SimplePropertyAssignmentSyntax): void {
+        public visitPropertyAssignment(node: PropertyAssignmentSyntax): void {
             visitNodeOrToken(this, node.propertyName);
             this.visitToken(node.colonToken);
             visitNodeOrToken(this, node.expression);

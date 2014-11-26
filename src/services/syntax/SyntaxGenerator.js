@@ -624,7 +624,7 @@ var TypeScript;
         SyntaxKind[SyntaxKind["TypeAnnotation"] = 212] = "TypeAnnotation";
         SyntaxKind[SyntaxKind["ExpressionBody"] = 213] = "ExpressionBody";
         SyntaxKind[SyntaxKind["ComputedPropertyName"] = 214] = "ComputedPropertyName";
-        SyntaxKind[SyntaxKind["SimplePropertyAssignment"] = 215] = "SimplePropertyAssignment";
+        SyntaxKind[SyntaxKind["PropertyAssignment"] = 215] = "PropertyAssignment";
         SyntaxKind[SyntaxKind["ExternalModuleReference"] = 216] = "ExternalModuleReference";
         SyntaxKind[SyntaxKind["ModuleNameModuleReference"] = 217] = "ModuleNameModuleReference";
         SyntaxKind[SyntaxKind["FirstStandardKeyword"] = SyntaxKind.BreakKeyword] = "FirstStandardKeyword";
@@ -1762,7 +1762,7 @@ var definitions = [
         ]
     },
     {
-        name: 'SimplePropertyAssignmentSyntax',
+        name: 'PropertyAssignmentSyntax',
         baseType: 'ISyntaxNode',
         interfaces: ['IPropertyAssignmentSyntax'],
         children: [

@@ -904,7 +904,7 @@ var definitions:ITypeDefinition[] = [
         ]
     },
     <any>{
-        name: 'SimplePropertyAssignmentSyntax',
+        name: 'PropertyAssignmentSyntax',
         baseType: 'ISyntaxNode',
         interfaces: ['IPropertyAssignmentSyntax'],
         children: [

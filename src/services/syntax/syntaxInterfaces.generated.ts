@@ -684,12 +684,12 @@ module TypeScript {
     }
     export interface ComputedPropertyNameConstructor { new (data: number, openBracketToken: ISyntaxToken, expression: IExpressionSyntax, closeBracketToken: ISyntaxToken): ComputedPropertyNameSyntax }
 
-    export interface SimplePropertyAssignmentSyntax extends ISyntaxNode, IPropertyAssignmentSyntax {
+    export interface PropertyAssignmentSyntax extends ISyntaxNode, IPropertyAssignmentSyntax {
         propertyName: IPropertyNameSyntax;
         colonToken: ISyntaxToken;
         expression: IExpressionSyntax;
     }
-    export interface SimplePropertyAssignmentConstructor { new (data: number, propertyName: IPropertyNameSyntax, colonToken: ISyntaxToken, expression: IExpressionSyntax): SimplePropertyAssignmentSyntax }
+    export interface PropertyAssignmentConstructor { new (data: number, propertyName: IPropertyNameSyntax, colonToken: ISyntaxToken, expression: IExpressionSyntax): PropertyAssignmentSyntax }
 
     export interface ExternalModuleReferenceSyntax extends ISyntaxNode, IModuleReferenceSyntax {
         requireKeyword: ISyntaxToken;

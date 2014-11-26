@@ -95,7 +95,7 @@ module TypeScript {
             case SyntaxKind.TypeAnnotation: return visitor.visitTypeAnnotation(<TypeAnnotationSyntax>element);
             case SyntaxKind.ExpressionBody: return visitor.visitExpressionBody(<ExpressionBody>element);
             case SyntaxKind.ComputedPropertyName: return visitor.visitComputedPropertyName(<ComputedPropertyNameSyntax>element);
-            case SyntaxKind.SimplePropertyAssignment: return visitor.visitSimplePropertyAssignment(<SimplePropertyAssignmentSyntax>element);
+            case SyntaxKind.PropertyAssignment: return visitor.visitPropertyAssignment(<PropertyAssignmentSyntax>element);
             case SyntaxKind.ExternalModuleReference: return visitor.visitExternalModuleReference(<ExternalModuleReferenceSyntax>element);
             case SyntaxKind.ModuleNameModuleReference: return visitor.visitModuleNameModuleReference(<ModuleNameModuleReferenceSyntax>element);
             default: return visitor.visitToken(<ISyntaxToken>element);
@@ -195,7 +195,7 @@ module TypeScript {
         visitTypeAnnotation(node: TypeAnnotationSyntax): any;
         visitExpressionBody(node: ExpressionBody): any;
         visitComputedPropertyName(node: ComputedPropertyNameSyntax): any;
-        visitSimplePropertyAssignment(node: SimplePropertyAssignmentSyntax): any;
+        visitPropertyAssignment(node: PropertyAssignmentSyntax): any;
         visitExternalModuleReference(node: ExternalModuleReferenceSyntax): any;
         visitModuleNameModuleReference(node: ModuleNameModuleReferenceSyntax): any;
     }

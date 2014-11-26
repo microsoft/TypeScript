@@ -751,12 +751,12 @@ module TypeScript {
             super.visitSimpleArrowFunctionExpression(node);
         }
 
-        public visitSimplePropertyAssignment(node: SimplePropertyAssignmentSyntax): void {
+        public visitPropertyAssignment(node: PropertyAssignmentSyntax): void {
             if (this.checkForDisallowedTemplatePropertyName(node.propertyName)) {
                 return;
             }
 
-            super.visitSimplePropertyAssignment(node);
+            super.visitPropertyAssignment(node);
         }
 
         public visitSetAccessor(node: SetAccessorSyntax): void {
