@@ -90,13 +90,12 @@ module TypeScript {
             case SyntaxKind.TemplateClause: return visitor.visitTemplateClause(<TemplateClauseSyntax>element);
             case SyntaxKind.TypeParameter: return visitor.visitTypeParameter(<TypeParameterSyntax>element);
             case SyntaxKind.Constraint: return visitor.visitConstraint(<ConstraintSyntax>element);
-            case SyntaxKind.SimplePropertyAssignment: return visitor.visitSimplePropertyAssignment(<SimplePropertyAssignmentSyntax>element);
-            case SyntaxKind.FunctionPropertyAssignment: return visitor.visitFunctionPropertyAssignment(<FunctionPropertyAssignmentSyntax>element);
             case SyntaxKind.Parameter: return visitor.visitParameter(<ParameterSyntax>element);
             case SyntaxKind.EnumElement: return visitor.visitEnumElement(<EnumElementSyntax>element);
             case SyntaxKind.TypeAnnotation: return visitor.visitTypeAnnotation(<TypeAnnotationSyntax>element);
             case SyntaxKind.ExpressionBody: return visitor.visitExpressionBody(<ExpressionBody>element);
             case SyntaxKind.ComputedPropertyName: return visitor.visitComputedPropertyName(<ComputedPropertyNameSyntax>element);
+            case SyntaxKind.SimplePropertyAssignment: return visitor.visitSimplePropertyAssignment(<SimplePropertyAssignmentSyntax>element);
             case SyntaxKind.ExternalModuleReference: return visitor.visitExternalModuleReference(<ExternalModuleReferenceSyntax>element);
             case SyntaxKind.ModuleNameModuleReference: return visitor.visitModuleNameModuleReference(<ModuleNameModuleReferenceSyntax>element);
             default: return visitor.visitToken(<ISyntaxToken>element);
@@ -191,13 +190,12 @@ module TypeScript {
         visitTemplateClause(node: TemplateClauseSyntax): any;
         visitTypeParameter(node: TypeParameterSyntax): any;
         visitConstraint(node: ConstraintSyntax): any;
-        visitSimplePropertyAssignment(node: SimplePropertyAssignmentSyntax): any;
-        visitFunctionPropertyAssignment(node: FunctionPropertyAssignmentSyntax): any;
         visitParameter(node: ParameterSyntax): any;
         visitEnumElement(node: EnumElementSyntax): any;
         visitTypeAnnotation(node: TypeAnnotationSyntax): any;
         visitExpressionBody(node: ExpressionBody): any;
         visitComputedPropertyName(node: ComputedPropertyNameSyntax): any;
+        visitSimplePropertyAssignment(node: SimplePropertyAssignmentSyntax): any;
         visitExternalModuleReference(node: ExternalModuleReferenceSyntax): any;
         visitModuleNameModuleReference(node: ModuleNameModuleReferenceSyntax): any;
     }

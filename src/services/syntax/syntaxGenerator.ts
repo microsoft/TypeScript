@@ -653,7 +653,7 @@ var definitions:ITypeDefinition[] = [
     <any>{
         name: 'MemberFunctionDeclarationSyntax',
         baseType: 'ISyntaxNode',
-        interfaces: ['IMemberDeclarationSyntax'],
+        interfaces: ['IMemberDeclarationSyntax', 'IPropertyAssignmentSyntax'],
         children: [
             <any>{ name: 'modifiers', isList: true, elementType: 'ISyntaxToken' },
             <any>{ name: 'asterixToken', isToken: true, isOptional: true },
@@ -911,18 +911,6 @@ var definitions:ITypeDefinition[] = [
             <any>{ name: 'propertyName', type: 'IPropertyNameSyntax' },
             <any>{ name: 'colonToken', isToken: true, excludeFromAST: true },
             <any>{ name: 'expression', type: 'IExpressionSyntax' }
-        ]
-    },
-    <any> {
-        name: 'FunctionPropertyAssignmentSyntax',
-        baseType: 'ISyntaxNode',
-        interfaces: ['IPropertyAssignmentSyntax'],
-        children: [
-            <any>{ name: 'asyncKeyword', isToken: true, isOptional: true },
-            <any>{ name: 'asterixToken', isToken: true, isOptional: true },
-            <any>{ name: 'propertyName', type: 'IPropertyNameSyntax' },
-            <any>{ name: 'callSignature', type: 'CallSignatureSyntax' },
-            <any>{ name: 'body', type: 'BlockSyntax | ExpressionBody | ISyntaxToken', isOptional: true  }
         ]
     },
     <any>{

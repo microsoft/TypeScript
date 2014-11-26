@@ -619,15 +619,14 @@ var TypeScript;
         SyntaxKind[SyntaxKind["TemplateClause"] = 207] = "TemplateClause";
         SyntaxKind[SyntaxKind["TypeParameter"] = 208] = "TypeParameter";
         SyntaxKind[SyntaxKind["Constraint"] = 209] = "Constraint";
-        SyntaxKind[SyntaxKind["SimplePropertyAssignment"] = 210] = "SimplePropertyAssignment";
-        SyntaxKind[SyntaxKind["FunctionPropertyAssignment"] = 211] = "FunctionPropertyAssignment";
-        SyntaxKind[SyntaxKind["Parameter"] = 212] = "Parameter";
-        SyntaxKind[SyntaxKind["EnumElement"] = 213] = "EnumElement";
-        SyntaxKind[SyntaxKind["TypeAnnotation"] = 214] = "TypeAnnotation";
-        SyntaxKind[SyntaxKind["ExpressionBody"] = 215] = "ExpressionBody";
-        SyntaxKind[SyntaxKind["ComputedPropertyName"] = 216] = "ComputedPropertyName";
-        SyntaxKind[SyntaxKind["ExternalModuleReference"] = 217] = "ExternalModuleReference";
-        SyntaxKind[SyntaxKind["ModuleNameModuleReference"] = 218] = "ModuleNameModuleReference";
+        SyntaxKind[SyntaxKind["Parameter"] = 210] = "Parameter";
+        SyntaxKind[SyntaxKind["EnumElement"] = 211] = "EnumElement";
+        SyntaxKind[SyntaxKind["TypeAnnotation"] = 212] = "TypeAnnotation";
+        SyntaxKind[SyntaxKind["ExpressionBody"] = 213] = "ExpressionBody";
+        SyntaxKind[SyntaxKind["ComputedPropertyName"] = 214] = "ComputedPropertyName";
+        SyntaxKind[SyntaxKind["SimplePropertyAssignment"] = 215] = "SimplePropertyAssignment";
+        SyntaxKind[SyntaxKind["ExternalModuleReference"] = 216] = "ExternalModuleReference";
+        SyntaxKind[SyntaxKind["ModuleNameModuleReference"] = 217] = "ModuleNameModuleReference";
         SyntaxKind[SyntaxKind["FirstStandardKeyword"] = SyntaxKind.BreakKeyword] = "FirstStandardKeyword";
         SyntaxKind[SyntaxKind["LastStandardKeyword"] = SyntaxKind.WithKeyword] = "LastStandardKeyword";
         SyntaxKind[SyntaxKind["FirstFutureReservedKeyword"] = SyntaxKind.ClassKeyword] = "FirstFutureReservedKeyword";
@@ -1512,7 +1511,7 @@ var definitions = [
     {
         name: 'MemberFunctionDeclarationSyntax',
         baseType: 'ISyntaxNode',
-        interfaces: ['IMemberDeclarationSyntax'],
+        interfaces: ['IMemberDeclarationSyntax', 'IPropertyAssignmentSyntax'],
         children: [
             { name: 'modifiers', isList: true, elementType: 'ISyntaxToken' },
             { name: 'asterixToken', isToken: true, isOptional: true },
@@ -1770,18 +1769,6 @@ var definitions = [
             { name: 'propertyName', type: 'IPropertyNameSyntax' },
             { name: 'colonToken', isToken: true, excludeFromAST: true },
             { name: 'expression', type: 'IExpressionSyntax' }
-        ]
-    },
-    {
-        name: 'FunctionPropertyAssignmentSyntax',
-        baseType: 'ISyntaxNode',
-        interfaces: ['IPropertyAssignmentSyntax'],
-        children: [
-            { name: 'asyncKeyword', isToken: true, isOptional: true },
-            { name: 'asterixToken', isToken: true, isOptional: true },
-            { name: 'propertyName', type: 'IPropertyNameSyntax' },
-            { name: 'callSignature', type: 'CallSignatureSyntax' },
-            { name: 'body', type: 'BlockSyntax | ExpressionBody | ISyntaxToken', isOptional: true }
         ]
     },
     {

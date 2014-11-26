@@ -938,13 +938,6 @@ module TypeScript.PrettyPrinter {
             visitNodeOrToken(this, node.expression);
         }
 
-        public visitFunctionPropertyAssignment(node: FunctionPropertyAssignmentSyntax): void {
-            visitNodeOrToken(this, node.propertyName);
-            visitNodeOrToken(this, node.callSignature);
-            this.ensureSpace();
-            visitNodeOrToken(this, node.body);
-        }
-
         public visitFunctionExpression(node: FunctionExpressionSyntax): void {
             this.appendToken(node.functionKeyword);
             

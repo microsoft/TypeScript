@@ -149,7 +149,7 @@ module TypeScript {
     }
     export interface ExportAssignmentConstructor { new (data: number, exportKeyword: ISyntaxToken, equalsToken: ISyntaxToken, identifier: ISyntaxToken, semicolonToken: ISyntaxToken): ExportAssignmentSyntax }
 
-    export interface MemberFunctionDeclarationSyntax extends ISyntaxNode, IMemberDeclarationSyntax {
+    export interface MemberFunctionDeclarationSyntax extends ISyntaxNode, IMemberDeclarationSyntax, IPropertyAssignmentSyntax {
         modifiers: ISyntaxToken[];
         asterixToken: ISyntaxToken;
         propertyName: IPropertyNameSyntax;
@@ -649,22 +649,6 @@ module TypeScript {
     }
     export interface ConstraintConstructor { new (data: number, extendsKeyword: ISyntaxToken, typeOrExpression: ISyntaxNodeOrToken): ConstraintSyntax }
 
-    export interface SimplePropertyAssignmentSyntax extends ISyntaxNode, IPropertyAssignmentSyntax {
-        propertyName: IPropertyNameSyntax;
-        colonToken: ISyntaxToken;
-        expression: IExpressionSyntax;
-    }
-    export interface SimplePropertyAssignmentConstructor { new (data: number, propertyName: IPropertyNameSyntax, colonToken: ISyntaxToken, expression: IExpressionSyntax): SimplePropertyAssignmentSyntax }
-
-    export interface FunctionPropertyAssignmentSyntax extends ISyntaxNode, IPropertyAssignmentSyntax {
-        asyncKeyword: ISyntaxToken;
-        asterixToken: ISyntaxToken;
-        propertyName: IPropertyNameSyntax;
-        callSignature: CallSignatureSyntax;
-        body: BlockSyntax | ExpressionBody | ISyntaxToken;
-    }
-    export interface FunctionPropertyAssignmentConstructor { new (data: number, asyncKeyword: ISyntaxToken, asterixToken: ISyntaxToken, propertyName: IPropertyNameSyntax, callSignature: CallSignatureSyntax, body: BlockSyntax | ExpressionBody | ISyntaxToken): FunctionPropertyAssignmentSyntax }
-
     export interface ParameterSyntax extends ISyntaxNode {
         dotDotDotToken: ISyntaxToken;
         modifiers: ISyntaxToken[];
@@ -699,6 +683,13 @@ module TypeScript {
         closeBracketToken: ISyntaxToken;
     }
     export interface ComputedPropertyNameConstructor { new (data: number, openBracketToken: ISyntaxToken, expression: IExpressionSyntax, closeBracketToken: ISyntaxToken): ComputedPropertyNameSyntax }
+
+    export interface SimplePropertyAssignmentSyntax extends ISyntaxNode, IPropertyAssignmentSyntax {
+        propertyName: IPropertyNameSyntax;
+        colonToken: ISyntaxToken;
+        expression: IExpressionSyntax;
+    }
+    export interface SimplePropertyAssignmentConstructor { new (data: number, propertyName: IPropertyNameSyntax, colonToken: ISyntaxToken, expression: IExpressionSyntax): SimplePropertyAssignmentSyntax }
 
     export interface ExternalModuleReferenceSyntax extends ISyntaxNode, IModuleReferenceSyntax {
         requireKeyword: ISyntaxToken;

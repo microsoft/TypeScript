@@ -580,20 +580,6 @@ module TypeScript {
             visitNodeOrToken(this, node.typeOrExpression);
         }
 
-        public visitSimplePropertyAssignment(node: SimplePropertyAssignmentSyntax): void {
-            visitNodeOrToken(this, node.propertyName);
-            this.visitToken(node.colonToken);
-            visitNodeOrToken(this, node.expression);
-        }
-
-        public visitFunctionPropertyAssignment(node: FunctionPropertyAssignmentSyntax): void {
-            this.visitOptionalToken(node.asyncKeyword);
-            this.visitOptionalToken(node.asterixToken);
-            visitNodeOrToken(this, node.propertyName);
-            visitNodeOrToken(this, node.callSignature);
-            visitNodeOrToken(this, node.body);
-        }
-
         public visitParameter(node: ParameterSyntax): void {
             this.visitOptionalToken(node.dotDotDotToken);
             this.visitList(node.modifiers);
@@ -622,6 +608,12 @@ module TypeScript {
             this.visitToken(node.openBracketToken);
             visitNodeOrToken(this, node.expression);
             this.visitToken(node.closeBracketToken);
+        }
+
+        public visitSimplePropertyAssignment(node: SimplePropertyAssignmentSyntax): void {
+            visitNodeOrToken(this, node.propertyName);
+            this.visitToken(node.colonToken);
+            visitNodeOrToken(this, node.expression);
         }
 
         public visitExternalModuleReference(node: ExternalModuleReferenceSyntax): void {

@@ -19,7 +19,6 @@ module TypeScript {
                 case SyntaxKind.FunctionExpression:
                 case SyntaxKind.FunctionDeclaration:
                 case SyntaxKind.MemberFunctionDeclaration:
-                case SyntaxKind.FunctionPropertyAssignment:
                 case SyntaxKind.ConstructorDeclaration:
                 case SyntaxKind.GetAccessor:
                 case SyntaxKind.SetAccessor:

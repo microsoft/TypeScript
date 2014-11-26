@@ -580,13 +580,41 @@ module TypeScript {
         }
 
         public visitMemberFunctionDeclaration(node: MemberFunctionDeclarationSyntax): void {
-            if (this.checkClassElementModifiers(node.modifiers) ||
-                this.checkForDisallowedTemplatePropertyName(node.propertyName) ||
+            if (node.parent && node.parent.parent &&
+                node.parent.kind === SyntaxKind.List && node.parent.parent.kind === SyntaxKind.ObjectLiteralExpression) {
+
+                // Method in an object literal.
+                if (this.checkForSemicolonInsteadOfBlock(node, node.body) ||
+                    this.checkForDisallowedObjectLiteralMethod(node.modifiers)) {
+                    return;
+                }
+            }
+            else {
+                // Method in a class literal.
+                if (this.checkClassElementModifiers(node.modifiers)) {
+                    return;
+                }
+            }
+
+            // Object literal or class method.
+            if (this.checkForDisallowedTemplatePropertyName(node.propertyName) ||
                 this.checkForAsyncGenerator(this.getAsyncModifier(node.modifiers), node.asterixToken)) {
+
                 return;
             }
 
             super.visitMemberFunctionDeclaration(node);
+        }
+
+        private checkForDisallowedObjectLiteralMethod(modifiers: ISyntaxToken[]): boolean {
+            for (var i = 0, n = modifiers.length; i < n; i++) {
+                var modifier = modifiers[i];
+                if (modifier.kind !== SyntaxKind.AsyncKeyword) {
+                    return this.pushDiagnostic(modifier, DiagnosticCode.Modifiers_cannot_appear_here);
+                }
+            }
+
+            return false;
         }
 
         private checkGetAccessorParameter(node: GetAccessorSyntax): boolean {
@@ -1488,16 +1516,6 @@ module TypeScript {
             }
 
             super.visitFunctionExpression(node);
-        }
-
-        public visitFunctionPropertyAssignment(node: FunctionPropertyAssignmentSyntax): void {
-            if (this.checkForDisallowedTemplatePropertyName(node.propertyName) ||
-                this.checkForSemicolonInsteadOfBlock(node, node.body) ||
-                this.checkForAsyncGenerator(node.asyncKeyword, node.asterixToken)) {
-                return;
-            }
-
-            super.visitFunctionPropertyAssignment(node);
         }
 
         public visitVariableStatement(node: VariableStatementSyntax): void {

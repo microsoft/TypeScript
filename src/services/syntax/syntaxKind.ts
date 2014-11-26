@@ -263,16 +263,13 @@ module TypeScript {
         TypeParameter,
         Constraint,
 
-        // Property Assignment
-        SimplePropertyAssignment,
-        FunctionPropertyAssignment,
-
         // Misc.
         Parameter,
         EnumElement,
         TypeAnnotation,
         ExpressionBody,
         ComputedPropertyName,
+        SimplePropertyAssignment,
         ExternalModuleReference,
         ModuleNameModuleReference,
 
