@@ -1101,8 +1101,15 @@ module TypeScript.Parser {
                 // Because modifiers are also identifiers, we only want to consider something to
                 // be truly a modifier if the thing following it is something that can be modified.
                 var nextToken = peekToken(index + 1);
-                var nextTokenKind = nextToken.kind;
 
+                if (token.kind === SyntaxKind.AsyncKeyword) {
+                    // In order for async to be modifier, the next token must be on the same line.
+                    if (nextToken.hasLeadingNewLine()) {
+                        return false;
+                    }
+                }
+
+                var nextTokenKind = nextToken.kind;
                 switch (nextTokenKind) {
                     // public foo'
                     // 'public' is a modifier.
@@ -3095,8 +3102,11 @@ module TypeScript.Parser {
         function tryParsePrimaryExpression(_currentToken: ISyntaxToken, force: boolean): IPrimaryExpressionSyntax {
             // Have to check for 'async function' first as 'async' is an identifier and will be 
             // consumed immediately below this.
-            if (_currentToken.kind === SyntaxKind.AsyncKeyword && peekToken(1).kind === SyntaxKind.FunctionKeyword) {
-                return parseFunctionExpression();
+            if (_currentToken.kind === SyntaxKind.AsyncKeyword) {
+                var token1 = peekToken(1);
+                if (!token1.hasLeadingNewLine() && token1.kind === SyntaxKind.FunctionKeyword) {
+                    return parseFunctionExpression();
+                }
             }
 
             if (isIdentifier(_currentToken)) {
@@ -3382,8 +3392,11 @@ module TypeScript.Parser {
             }
 
             // 'async a' is always the start of an async arrow function.   
-            if (_currentToken.kind === SyntaxKind.AsyncKeyword && isIdentifier(peekToken(1))) {
-                return true;
+            if (_currentToken.kind === SyntaxKind.AsyncKeyword) {
+                var token1 = peekToken(1);
+                if (!token1.hasLeadingNewLine() && isIdentifier(peekToken(1))) {
+                    return true;
+                }
             }
 
             return isIdentifier(_currentToken) &&
@@ -3412,6 +3425,10 @@ module TypeScript.Parser {
         function isDefinitelyArrowFunctionExpression(): boolean {
             var peekIndex = 0;
             if (currentToken().kind === SyntaxKind.AsyncKeyword) {
+                if (peekToken(1).hasLeadingNewLine()) {
+                    return false;
+                }
+
                 // skip past any 'async' keyword we see.
                 peekIndex++;
             }
@@ -3523,6 +3540,10 @@ module TypeScript.Parser {
         function isPossiblyArrowFunctionExpression(): boolean {
             var peekIndex = 0;
             if (currentToken().kind === SyntaxKind.AsyncKeyword) {
+                if (peekToken(1).hasLeadingNewLine()) {
+                    return false;
+                }
+
                 peekIndex++;
             }
 
