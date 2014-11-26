@@ -1,9 +1,0 @@
-=== tests/cases/conformance/es6/templates/templateStringInYieldKeyword.ts ===
-function* gen() {
->gen : () => void
-
-    // Once this is supported, the inner expression does not need to be parenthesized.
-    var x = yield `abc${ x }def`;
->x : unknown
-}
-

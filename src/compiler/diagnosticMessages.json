@@ -1715,5 +1715,13 @@
     "You cannot rename this element.": {
         "category": "Error",
         "code": 8000
+    },
+    "'yield' expressions are not currently supported.": {
+        "category": "Error",
+        "code": 9000
+    },
+    "'generators' are not currently supported.": {
+        "category": "Error",
+        "code": 9001
     }
 }
