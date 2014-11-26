@@ -271,8 +271,6 @@ module ts {
         Let                 = 0x00000800,  // Variable declaration
         Const               = 0x00001000,  // Variable declaration
         OctalLiteral        = 0x00002000,
-        Generator           = 0x00004000,
-        YieldStar           = 0x00008000,
 
         Modifier = Export | Ambient | Public | Private | Protected | Static,
         AccessibilityModifier = Public | Private | Protected,
@@ -377,6 +375,7 @@ module ts {
      *  FunctionExpression
      */
     export interface FunctionLikeDeclaration extends Declaration, ParsedSignature {
+        asteriskToken?: Node;
         body?: Block | Expression;
     }
 
@@ -442,6 +441,7 @@ module ts {
     }
     
     export interface YieldExpression extends Expression {
+        asteriskToken?: Node;
         expression: Expression;
     }
 
@@ -753,7 +753,7 @@ module ts {
         getSymbolCount(): number;
         getTypeCount(): number;
         checkProgram(): void;
-        invokeEmitter(targetSourceFile?: SourceFile): EmitResult;
+        emitFiles(targetSourceFile?: SourceFile): EmitResult;
         getParentOfSymbol(symbol: Symbol): Symbol;
         getNarrowedTypeOfSymbol(symbol: Symbol, node: Node): Type;
         getDeclaredTypeOfSymbol(symbol: Symbol): Type;

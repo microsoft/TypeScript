@@ -806,7 +806,7 @@ module Harness {
                 // only emit if there weren't parse errors
                 var emitResult: ts.EmitResult;
                 if (!isEmitBlocked) {
-                    emitResult = checker.invokeEmitter();
+                    emitResult = checker.emitFiles();
                 }
 
                 var errors: HarnessDiagnostic[] = [];
