@@ -5,6 +5,7 @@
 /// <reference path="factory.ts"/>
 /// <reference path="generator.ts"/>
 module ts {
+    // TODO: do we need to capture/rename `arguments` or disallow `arguments` in async/generator?
     var awaitOrYieldNodes: boolean[] = [];
     var nextNodeId = -1;
 
@@ -22,7 +23,7 @@ module ts {
         return typeName;
     }
 
-    /** rewrites an async function or method declaration */
+    /** rewrites an async or generator function or method declaration */
     export function rewriteFunction(node: FunctionLikeDeclaration, compilerOptions: CompilerOptions): FunctionLikeDeclaration {
         var builder: CodeGenerator;
         var renames: Map<Identifier>;
@@ -1217,7 +1218,7 @@ module ts {
             return getProperty(renames, node.text) || node;
         }
 
-        function rewriteAsGeneratorWorker(): FunctionLikeDeclaration {
+        function rewriteAsyncAsGeneratorWorker(): FunctionLikeDeclaration {
             var promise = getPromiseConstructor(node);
 
             var statements: Statement[] = [];
@@ -1244,8 +1245,18 @@ module ts {
             renames = {};
 
             builder = createCodeGenerator();
-            builder.setLocation(node.body);
+            if (node.parameters) {
+                for (var i = 0; i < node.parameters.length; i++) {
+                    var parameter = node.parameters[i];
+                    builder.setLocation(parameter);
+                    builder.addParameter(parameter.name, parameter.flags);
+                    if (parameter.initializer) {
+                        builder.emit(OpCode.Assign, builder.createGeneratedNode(parameter.name.text), visit(parameter.initializer));
+                    }
+                }
+            }
 
+            builder.setLocation(node.body);
             if (node.body.kind !== SyntaxKind.FunctionBlock) {
                 builder.emit(OpCode.Return, visit(node.body));
             } else {
@@ -1277,7 +1288,7 @@ module ts {
             if (isDownlevel) {
                 return rewriteDownlevelWorker();
             } else {
-                return rewriteAsGeneratorWorker();
+                return rewriteAsyncAsGeneratorWorker();
             }
         }
     }

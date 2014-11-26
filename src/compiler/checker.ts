@@ -4570,7 +4570,7 @@ module ts {
             if (container.kind === SyntaxKind.ArrowFunction) {
                 container = getThisContainer(container, /* includeArrowFunctions */ false);
                 needToCaptureLexicalThis = true;
-            } else if (container.parserContextFlags & ParserContextFlags.Await) {
+            } else if (node.parserContextFlags & ParserContextFlags.Await) {
                 needToCaptureLexicalThis = true;
             }
 

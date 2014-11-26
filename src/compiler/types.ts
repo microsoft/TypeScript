@@ -783,7 +783,7 @@ module ts {
         createGeneratedNode(text: string, content?: Map<Node|Node[]>): GeneratedNode;
 
         addFunction(func: FunctionDeclaration): void;
-        addParameter(name: Identifier): void;
+        addParameter(name: Identifier, flags?: NodeFlags): void;
 
         buildGeneratorFunction(kind: SyntaxKind, name: DeclarationName, location: TextRange): FunctionLikeDeclaration;
         buildAsyncFunction(kind: SyntaxKind, name: DeclarationName, promiseType: EntityName, location: TextRange): FunctionLikeDeclaration;

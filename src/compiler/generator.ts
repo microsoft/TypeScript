@@ -22,7 +22,6 @@ module ts {
         Done
     }
 
-
     interface BlockScope {
         kind: BlockKind;
     }
@@ -47,7 +46,6 @@ module ts {
 
     export function createCodeGenerator(): CodeGenerator {
         // locations
-        var initialLocation: TextRange;
         var relatedLocation: TextRange;
         var locationStack: TextRange[] = [];
 
@@ -111,8 +109,8 @@ module ts {
             buildAsyncFunction
         };
 
-        function addParameter(name: Identifier): void {
-            parameters.push(factory.createParameterDeclaration(name, undefined, relatedLocation));
+        function addParameter(name: Identifier, flags?: NodeFlags): void {
+            parameters.push(factory.createParameterDeclaration(name, undefined, relatedLocation, flags));
         }
 
         function addFunction(func: FunctionDeclaration): void {
@@ -393,9 +391,6 @@ module ts {
         function setLocation(location: TextRange): void {
             if (location) {
                 relatedLocation = location;
-                if (!initialLocation) {
-                    initialLocation = location;
-                }
             }
         }
 
@@ -448,7 +443,7 @@ module ts {
             return node;
         }
 
-        function buildAsyncFunction(kind: SyntaxKind, name: DeclarationName, promiseType: EntityName, location: TextRange) {
+        function buildAsyncFunction(kind: SyntaxKind, name: DeclarationName, promiseConstructor: EntityName, location: TextRange) {
             pushLocation(location);
             var body = createGeneratedNode(`
                 \${locals}
@@ -459,7 +454,7 @@ module ts {
                             @{body}
                         }
                     })));
-                });`, { locals: buildLocals(), functions, promise: promiseType, body: buildFunctionBody() });
+                });`, { locals: buildLocals(), functions, promise: promiseConstructor, body: buildFunctionBody() });
             var node = buildFunction(kind, name, body, location);
             popLocation();
             return node;
