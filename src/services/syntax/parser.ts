@@ -602,10 +602,6 @@ module TypeScript.Parser {
             return createMissingToken(SyntaxKind.IdentifierName, token, diagnosticCode);
         }
 
-        function isOnDifferentLineThanPreviousToken(token: ISyntaxToken): boolean {
-            return token.hasLeadingNewLine();
-        }
-
         function canEatAutomaticSemicolon(allowWithoutNewLine: boolean): boolean {
             var token = currentToken();
 
@@ -625,7 +621,7 @@ module TypeScript.Parser {
             }
 
             // It is also allowed if there is a newline between the last token seen and the next one.
-            if (isOnDifferentLineThanPreviousToken(token)) {
+            if (token.hasLeadingNewLine()) {
                 return true;
             }
 
@@ -1008,7 +1004,7 @@ module TypeScript.Parser {
             // In the first case though, ASI will not take effect because there is not a
             // line terminator after the keyword.
             if (SyntaxFacts.isAnyKeyword(_currentToken.kind) &&
-                isOnDifferentLineThanPreviousToken(_currentToken)) {
+                _currentToken.hasLeadingNewLine()) {
 
                 var token1 = peekToken(1);
                 if (!existsNewLineBetweenTokens(_currentToken, token1, source.text) &&
@@ -1329,7 +1325,7 @@ module TypeScript.Parser {
                 case SyntaxKind.EndOfFileToken:
                     return true;
                 default:
-                    return isOnDifferentLineThanPreviousToken(nextToken);
+                    return nextToken.hasLeadingNewLine();
             }
         }
 
@@ -2409,7 +2405,7 @@ module TypeScript.Parser {
             // It's not uncommon during typing for the user to miss writing the '=' token.  Check if
             // there is no newline after the last token and if we're on an expression.  If so, parse
             // this as an equals-value clause with a missing equals.
-            if (!isOnDifferentLineThanPreviousToken(token0)) {
+            if (!token0.hasLeadingNewLine()) {
                 var tokenKind = token0.kind;
 
                 // The 'isExpression' call below returns true for "=>".  That's because it smartly
@@ -2601,7 +2597,7 @@ module TypeScript.Parser {
             // definitely recognize this as a yield expression.
             var token1 = peekToken(1);
 
-            if (isOnDifferentLineThanPreviousToken(token1)) {
+            if (token1.hasLeadingNewLine()) {
                 // Next token is on the next line.  Thanks to ASI, this might start some other 
                 // construct.  Can't assume this is a yield or await expr.
                 return false;
@@ -2656,7 +2652,7 @@ module TypeScript.Parser {
             yieldKeyword = consumeToken(yieldKeyword);
             var _currentToken = currentToken();
 
-            if (!isOnDifferentLineThanPreviousToken(_currentToken) &&
+            if (!_currentToken.hasLeadingNewLine() &&
                 (_currentToken.kind === SyntaxKind.AsteriskToken || isExpression(_currentToken))) {
 
                 return new YieldExpressionSyntax(contextFlags, yieldKeyword, tryEatToken(SyntaxKind.AsteriskToken), parseAssignmentExpressionOrHigher());
@@ -2991,7 +2987,7 @@ module TypeScript.Parser {
                 case SyntaxKind.MinusMinusToken:
                     // Because of automatic semicolon insertion, we should only consume the ++ or -- 
                     // if it is on the same line as the previous token.
-                    if (isOnDifferentLineThanPreviousToken(_currentToken)) {
+                    if (_currentToken.hasLeadingNewLine()) {
                         break;
                     }
 
@@ -4051,7 +4047,7 @@ module TypeScript.Parser {
             while (type) {
                 var _currentToken = currentToken();
 
-                if (isOnDifferentLineThanPreviousToken(_currentToken) ||
+                if (_currentToken.hasLeadingNewLine() ||
                     _currentToken.kind !== SyntaxKind.OpenBracketToken) {
                     break;
                 }
@@ -4104,7 +4100,7 @@ module TypeScript.Parser {
             //      TypeName   [no LineTerminator here]   TypeArgumentsopt
             //
             // Only consume type arguments if they appear on the same line.
-            if (isOnDifferentLineThanPreviousToken(currentToken())) {
+            if (currentToken().hasLeadingNewLine()) {
                 return name;
             }
 
