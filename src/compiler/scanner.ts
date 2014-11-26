@@ -471,7 +471,7 @@ module ts {
         var token: SyntaxKind;
         var tokenValue: string;
         var precedingLineBreak: boolean;
-        var tokenUnterminated: boolean;
+        var tokenIsUnterminated: boolean;
 
         function error(message: DiagnosticMessage): void {
             if (onError) {
@@ -555,7 +555,7 @@ module ts {
             while (true) {
                 if (pos >= len) {
                     result += text.substring(start, pos);
-                    tokenUnterminated = true;
+                    tokenIsUnterminated = true;
                     error(Diagnostics.Unterminated_string_literal);
                     break;
                 }
@@ -573,7 +573,7 @@ module ts {
                 }
                 if (isLineBreak(ch)) {
                     result += text.substring(start, pos);
-                    tokenUnterminated = true;
+                    tokenIsUnterminated = true;
                     error(Diagnostics.Unterminated_string_literal);
                     break;
                 }
@@ -597,7 +597,7 @@ module ts {
             while (true) {
                 if (pos >= len) {
                     contents += text.substring(start, pos);
-                    tokenUnterminated = true;
+                    tokenIsUnterminated = true;
                     error(Diagnostics.Unterminated_template_literal);
                     resultingToken = startedWithBacktick ? SyntaxKind.NoSubstitutionTemplateLiteral : SyntaxKind.TemplateTail;
                     break;
@@ -761,7 +761,7 @@ module ts {
         function scan(): SyntaxKind {
             startPos = pos;
             precedingLineBreak = false;
-            tokenUnterminated = false;
+            tokenIsUnterminated = false;
             while (true) {
                 tokenPos = pos;
                 if (pos >= len) {
@@ -918,7 +918,7 @@ module ts {
                                 continue;
                             }
                             else {
-                                tokenUnterminated = !commentClosed;
+                                tokenIsUnterminated = !commentClosed;
                                 return token = SyntaxKind.MultiLineCommentTrivia;
                             }
                         }
@@ -1076,14 +1076,14 @@ module ts {
                     // If we reach the end of a file, or hit a newline, then this is an unterminated
                     // regex.  Report error and return what we have so far.
                     if (p >= len) {
-                        tokenUnterminated = true;
+                        tokenIsUnterminated = true;
                         error(Diagnostics.Unterminated_regular_expression_literal)
                         break;
                     }
 
                     var ch = text.charCodeAt(p);
                     if (isLineBreak(ch)) {
-                        tokenUnterminated = true;
+                        tokenIsUnterminated = true;
                         error(Diagnostics.Unterminated_regular_expression_literal)
                         break;
                     }
@@ -1176,7 +1176,7 @@ module ts {
             hasPrecedingLineBreak: () => precedingLineBreak,
             isIdentifier: () => token === SyntaxKind.Identifier || token > SyntaxKind.LastReservedWord,
             isReservedWord: () => token >= SyntaxKind.FirstReservedWord && token <= SyntaxKind.LastReservedWord,
-            isUnterminated: () => tokenUnterminated,
+            isUnterminated: () => tokenIsUnterminated,
             reScanGreaterToken,
             reScanSlashToken,
             reScanTemplateToken,
