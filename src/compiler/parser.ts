@@ -2484,7 +2484,7 @@ module ts {
                     doOutsideOfAwaitContext(parseAssignmentExpression);
             }
 
-            return makeFunctionExpression(SyntaxKind.ArrowFunction, pos, /*asteriskToken:*/ undefined, /*name:*/ undefined, sig, body, isAsync ? NodeFlags.Async : undefined);
+            return makeFunctionExpression(SyntaxKind.ArrowFunction, pos, /*asteriskToken:*/ undefined, /*name:*/ undefined, sig, body, isAsync);
         }
 
         function parseConditionalExpression(): Expression {
@@ -2850,7 +2850,7 @@ module ts {
                 // var x = 1;
                 // var y = { x() { } } 
                 // otherwise this will bring y.x into the scope of x which is incorrect
-                (<PropertyDeclaration>node).initializer = makeFunctionExpression(SyntaxKind.FunctionExpression, node.pos, asteriskToken, undefined, sig, body, isAsync ? NodeFlags.Async : undefined);
+                (<PropertyDeclaration>node).initializer = makeFunctionExpression(SyntaxKind.FunctionExpression, node.pos, asteriskToken, undefined, sig, body, isAsync);
                 return finishNode(node);
             }
 
@@ -2913,7 +2913,7 @@ module ts {
             var sig = parseSignature(SyntaxKind.CallSignature, SyntaxKind.ColonToken, /* returnTokenRequired */ false, /*yieldAndGeneratorParameterContext:*/ !!asteriskToken);
 
             var body = parseFunctionBlock(/*allowYield:*/ !!asteriskToken, /* ignoreMissingOpenBrace */ false, isAsync);
-            return makeFunctionExpression(SyntaxKind.FunctionExpression, pos, asteriskToken, name, sig, body, isAsync ? NodeFlags.Async : undefined);
+            return makeFunctionExpression(SyntaxKind.FunctionExpression, pos, asteriskToken, name, sig, body, isAsync);
         }
 
         function parseOptionalIdentifier() {

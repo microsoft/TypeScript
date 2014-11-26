@@ -28,7 +28,7 @@ module ts {
         var renames: Map<Identifier>;
         var isDownlevel = compilerOptions.target <= ScriptTarget.ES5;
         var isAsync = (node.flags & NodeFlags.Async) !== 0;
-        var isGenerator = (node.flags & NodeFlags.Generator) !== 0;
+        var isGenerator = !!node.asteriskToken;
         var isDownlevelGenerator = isDownlevel && isGenerator;
         var isDownlevelAsync = isDownlevel && isAsync;
         var isUplevelAsync = !isDownlevel && isAsync;
