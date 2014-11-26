@@ -1282,41 +1282,47 @@ module TypeScript {
         }
     }
 
-    export var ParenthesizedArrowFunctionExpressionSyntax: ParenthesizedArrowFunctionExpressionConstructor = <any>function(data: number, callSignature: CallSignatureSyntax, equalsGreaterThanToken: ISyntaxToken, body: BlockSyntax | IExpressionSyntax) {
+    export var ParenthesizedArrowFunctionExpressionSyntax: ParenthesizedArrowFunctionExpressionConstructor = <any>function(data: number, asyncKeyword: ISyntaxToken, callSignature: CallSignatureSyntax, equalsGreaterThanToken: ISyntaxToken, body: BlockSyntax | IExpressionSyntax) {
         if (data) { this.__data = data; }
+        this.asyncKeyword = asyncKeyword,
         this.callSignature = callSignature,
         this.equalsGreaterThanToken = equalsGreaterThanToken,
         this.body = body,
+        asyncKeyword && (asyncKeyword.parent = this),
         callSignature.parent = this,
         equalsGreaterThanToken.parent = this,
         body.parent = this;
     };
     ParenthesizedArrowFunctionExpressionSyntax.prototype.kind = SyntaxKind.ParenthesizedArrowFunctionExpression;
-    ParenthesizedArrowFunctionExpressionSyntax.prototype.childCount = 3;
+    ParenthesizedArrowFunctionExpressionSyntax.prototype.childCount = 4;
     ParenthesizedArrowFunctionExpressionSyntax.prototype.childAt = function(index: number): ISyntaxElement {
         switch (index) {
-            case 0: return this.callSignature;
-            case 1: return this.equalsGreaterThanToken;
-            case 2: return this.body;
+            case 0: return this.asyncKeyword;
+            case 1: return this.callSignature;
+            case 2: return this.equalsGreaterThanToken;
+            case 3: return this.body;
         }
     }
 
-    export var SimpleArrowFunctionExpressionSyntax: SimpleArrowFunctionExpressionConstructor = <any>function(data: number, parameter: ParameterSyntax, equalsGreaterThanToken: ISyntaxToken, body: BlockSyntax | IExpressionSyntax) {
+    export var SimpleArrowFunctionExpressionSyntax: SimpleArrowFunctionExpressionConstructor = <any>function(data: number, asyncKeyword: ISyntaxToken, parameter: ParameterSyntax, equalsGreaterThanToken: ISyntaxToken, body: BlockSyntax | IExpressionSyntax) {
         if (data) { this.__data = data; }
+        this.asyncKeyword = asyncKeyword,
         this.parameter = parameter,
         this.equalsGreaterThanToken = equalsGreaterThanToken,
         this.body = body,
+        asyncKeyword && (asyncKeyword.parent = this),
         parameter.parent = this,
         equalsGreaterThanToken.parent = this,
         body.parent = this;
     };
     SimpleArrowFunctionExpressionSyntax.prototype.kind = SyntaxKind.SimpleArrowFunctionExpression;
-    SimpleArrowFunctionExpressionSyntax.prototype.childCount = 3;
+    SimpleArrowFunctionExpressionSyntax.prototype.childCount = 4;
     SimpleArrowFunctionExpressionSyntax.prototype.childAt = function(index: number): ISyntaxElement {
         switch (index) {
-            case 0: return this.parameter;
-            case 1: return this.equalsGreaterThanToken;
-            case 2: return this.body;
+            case 0: return this.asyncKeyword;
+            case 1: return this.parameter;
+            case 2: return this.equalsGreaterThanToken;
+            case 3: return this.body;
         }
     }
 
@@ -1364,13 +1370,15 @@ module TypeScript {
         }
     }
 
-    export var FunctionExpressionSyntax: FunctionExpressionConstructor = <any>function(data: number, functionKeyword: ISyntaxToken, asterixToken: ISyntaxToken, identifier: ISyntaxToken, callSignature: CallSignatureSyntax, body: BlockSyntax | ExpressionBody | ISyntaxToken) {
+    export var FunctionExpressionSyntax: FunctionExpressionConstructor = <any>function(data: number, asyncKeyword: ISyntaxToken, functionKeyword: ISyntaxToken, asterixToken: ISyntaxToken, identifier: ISyntaxToken, callSignature: CallSignatureSyntax, body: BlockSyntax | ExpressionBody | ISyntaxToken) {
         if (data) { this.__data = data; }
+        this.asyncKeyword = asyncKeyword,
         this.functionKeyword = functionKeyword,
         this.asterixToken = asterixToken,
         this.identifier = identifier,
         this.callSignature = callSignature,
         this.body = body,
+        asyncKeyword && (asyncKeyword.parent = this),
         functionKeyword.parent = this,
         asterixToken && (asterixToken.parent = this),
         identifier && (identifier.parent = this),
@@ -1378,14 +1386,15 @@ module TypeScript {
         body && (body.parent = this);
     };
     FunctionExpressionSyntax.prototype.kind = SyntaxKind.FunctionExpression;
-    FunctionExpressionSyntax.prototype.childCount = 5;
+    FunctionExpressionSyntax.prototype.childCount = 6;
     FunctionExpressionSyntax.prototype.childAt = function(index: number): ISyntaxElement {
         switch (index) {
-            case 0: return this.functionKeyword;
-            case 1: return this.asterixToken;
-            case 2: return this.identifier;
-            case 3: return this.callSignature;
-            case 4: return this.body;
+            case 0: return this.asyncKeyword;
+            case 1: return this.functionKeyword;
+            case 2: return this.asterixToken;
+            case 3: return this.identifier;
+            case 4: return this.callSignature;
+            case 5: return this.body;
         }
     }
 
@@ -1446,6 +1455,22 @@ module TypeScript {
             case 0: return this.yieldKeyword;
             case 1: return this.asterixToken;
             case 2: return this.expression;
+        }
+    }
+
+    export var AwaitExpressionSyntax: AwaitExpressionConstructor = <any>function(data: number, awaitKeyword: ISyntaxToken, expression: IExpressionSyntax) {
+        if (data) { this.__data = data; }
+        this.awaitKeyword = awaitKeyword,
+        this.expression = expression,
+        awaitKeyword.parent = this,
+        expression && (expression.parent = this);
+    };
+    AwaitExpressionSyntax.prototype.kind = SyntaxKind.AwaitExpression;
+    AwaitExpressionSyntax.prototype.childCount = 2;
+    AwaitExpressionSyntax.prototype.childAt = function(index: number): ISyntaxElement {
+        switch (index) {
+            case 0: return this.awaitKeyword;
+            case 1: return this.expression;
         }
     }
 
@@ -1763,25 +1788,28 @@ module TypeScript {
         }
     }
 
-    export var FunctionPropertyAssignmentSyntax: FunctionPropertyAssignmentConstructor = <any>function(data: number, asterixToken: ISyntaxToken, propertyName: IPropertyNameSyntax, callSignature: CallSignatureSyntax, body: BlockSyntax | ExpressionBody | ISyntaxToken) {
+    export var FunctionPropertyAssignmentSyntax: FunctionPropertyAssignmentConstructor = <any>function(data: number, asyncKeyword: ISyntaxToken, asterixToken: ISyntaxToken, propertyName: IPropertyNameSyntax, callSignature: CallSignatureSyntax, body: BlockSyntax | ExpressionBody | ISyntaxToken) {
         if (data) { this.__data = data; }
+        this.asyncKeyword = asyncKeyword,
         this.asterixToken = asterixToken,
         this.propertyName = propertyName,
         this.callSignature = callSignature,
         this.body = body,
+        asyncKeyword && (asyncKeyword.parent = this),
         asterixToken && (asterixToken.parent = this),
         propertyName.parent = this,
         callSignature.parent = this,
         body && (body.parent = this);
     };
     FunctionPropertyAssignmentSyntax.prototype.kind = SyntaxKind.FunctionPropertyAssignment;
-    FunctionPropertyAssignmentSyntax.prototype.childCount = 4;
+    FunctionPropertyAssignmentSyntax.prototype.childCount = 5;
     FunctionPropertyAssignmentSyntax.prototype.childAt = function(index: number): ISyntaxElement {
         switch (index) {
-            case 0: return this.asterixToken;
-            case 1: return this.propertyName;
-            case 2: return this.callSignature;
-            case 3: return this.body;
+            case 0: return this.asyncKeyword;
+            case 1: return this.asterixToken;
+            case 2: return this.propertyName;
+            case 3: return this.callSignature;
+            case 4: return this.body;
         }
     }
 

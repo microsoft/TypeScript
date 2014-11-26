@@ -87,6 +87,8 @@ module TypeScript {
 
         // TypeScript keywords.
         AnyKeyword,
+        AsyncKeyword,
+        AwaitKeyword,
         BooleanKeyword,
         ConstructorKeyword,
         DeclareKeyword,
@@ -235,6 +237,7 @@ module TypeScript {
         TemplateExpression,
         TemplateAccessExpression,
         YieldExpression,
+        AwaitExpression,
 
         // Variable declarations
         VariableDeclaration,

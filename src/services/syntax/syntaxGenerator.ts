@@ -246,6 +246,7 @@ var definitions:ITypeDefinition[] = [
         baseType: 'ISyntaxNode',
         interfaces: ['IUnaryExpressionSyntax'],
         children: [
+            <any>{ name: 'asyncKeyword', isToken: true, isOptional: true },
             <any>{ name: 'parameter', type: 'ParameterSyntax' },
             <any>{ name: 'equalsGreaterThanToken', isToken: true, excludeFromAST: true },
             <any>{ name: 'body', type: 'BlockSyntax | IExpressionSyntax' }
@@ -257,6 +258,7 @@ var definitions:ITypeDefinition[] = [
         baseType: 'ISyntaxNode',
         interfaces: ['IUnaryExpressionSyntax'],
         children: [
+            <any>{ name: 'asyncKeyword', isToken: true, isOptional: true },
             <any>{ name: 'callSignature', type: 'CallSignatureSyntax' },
             <any>{ name: 'equalsGreaterThanToken', isToken: true, excludeFromAST: true },
             <any>{ name: 'body', type: 'BlockSyntax | IExpressionSyntax' }
@@ -916,6 +918,7 @@ var definitions:ITypeDefinition[] = [
         baseType: 'ISyntaxNode',
         interfaces: ['IPropertyAssignmentSyntax'],
         children: [
+            <any>{ name: 'asyncKeyword', isToken: true, isOptional: true },
             <any>{ name: 'asterixToken', isToken: true, isOptional: true },
             <any>{ name: 'propertyName', type: 'IPropertyNameSyntax' },
             <any>{ name: 'callSignature', type: 'CallSignatureSyntax' },
@@ -927,6 +930,7 @@ var definitions:ITypeDefinition[] = [
         baseType: 'ISyntaxNode',
         interfaces: ['IPrimaryExpressionSyntax'],
         children: [
+            <any>{ name: 'asyncKeyword', isToken: true, isOptional: true },
             <any>{ name: 'functionKeyword', isToken: true, excludeFromAST: true },
             <any>{ name: 'asterixToken', isToken: true, isOptional: true },
             <any>{ name: 'identifier', isToken: true, isOptional: true },
@@ -1021,6 +1025,14 @@ var definitions:ITypeDefinition[] = [
         children: [
             <any>{ name: 'yieldKeyword', isToken: true },
             <any>{ name: 'asterixToken', isToken: true, isOptional: true },
+            <any>{ name: 'expression', type: 'IExpressionSyntax', isOptional: true }]
+    },
+    <any>{
+        name: 'AwaitExpressionSyntax',
+        baseType: 'ISyntaxNode',
+        interfaces: ['IUnaryExpressionSyntax'],
+        children: [
+            <any>{ name: 'awaitKeyword', isToken: true },
             <any>{ name: 'expression', type: 'IExpressionSyntax', isOptional: true }]
     },
     <any>{
@@ -1392,8 +1404,29 @@ function max<T>(array: T[], func: (v: T) => number): number {
 }
 
 function generateUtilities(): string {
-    var result = "";
-    result += "        var fixedWidthArray = [";
+    var result = ""; //"module TypeScript.Scanner {";
+    //result += "        function fixedWidthTokenLength(kind: SyntaxKind) {\r\n";
+    //result += "            return fixedWidthArray[kind];\r\n";
+
+    //result += "            switch (kind) {\r\n";
+
+    //for (var k = TypeScript.SyntaxKind.FirstFixedWidth; k <= TypeScript.SyntaxKind.LastFixedWidth; k++) {
+    //    result += "                case SyntaxKind." + syntaxKindName(k) + ": return " + TypeScript.SyntaxFacts.getText(k).length + ";\r\n";
+    //}
+    //result += "                default: throw new Error();\r\n";
+    //result += "            }\r\n";
+    // result += "        }\r\n";
+
+    return result;
+}
+
+function generateScannerUtilities(): string {
+    var result = "///<reference path='references.ts' />\r\n" +
+        "\r\n" +
+        "module TypeScript {\r\n" +
+        "    export module ScannerUtilities {\r\n";
+
+    result += "        export var fixedWidthArray = [";
     for (var i = 0; i <= TypeScript.SyntaxKind.LastFixedWidth; i++) {
         if (i) {
             result += ", ";
@@ -1408,26 +1441,6 @@ function generateUtilities(): string {
     }
     result += "];\r\n";
 
-    result += "        function fixedWidthTokenLength(kind: SyntaxKind) {\r\n";
-    result += "            return fixedWidthArray[kind];\r\n";
-
-    //result += "            switch (kind) {\r\n";
-
-    //for (var k = TypeScript.SyntaxKind.FirstFixedWidth; k <= TypeScript.SyntaxKind.LastFixedWidth; k++) {
-    //    result += "                case SyntaxKind." + syntaxKindName(k) + ": return " + TypeScript.SyntaxFacts.getText(k).length + ";\r\n";
-    //}
-    //result += "                default: throw new Error();\r\n";
-    //result += "            }\r\n";
-    result += "        }\r\n";
-
-    return result;
-}
-
-function generateScannerUtilities(): string {
-    var result = "///<reference path='references.ts' />\r\n" +
-        "\r\n" +
-        "module TypeScript {\r\n" +
-        "    export module ScannerUtilities {\r\n";
 
     var i: number;
     var keywords: { text: string; kind: TypeScript.SyntaxKind; }[] = [];

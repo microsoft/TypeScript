@@ -1027,6 +1027,14 @@ module TypeScript.PrettyPrinter {
         public visitYieldExpression(node: YieldExpressionSyntax): void {
             this.appendToken(node.yieldKeyword);
             this.ensureSpace();
+            this.appendToken(node.asterixToken);
+            this.ensureSpace();
+            visitNodeOrToken(this, node.expression);
+        }
+
+        public visitAwaitExpression(node: AwaitExpressionSyntax): void {
+            this.appendToken(node.awaitKeyword);
+            this.ensureSpace();
             visitNodeOrToken(this, node.expression);
         }
 

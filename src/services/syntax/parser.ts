@@ -208,6 +208,127 @@ module TypeScript.Parser {
 
         var _skippedTokens: ISyntaxToken[] = undefined;
 
+        function setContextFlag(val: boolean, flag: ParserContextFlags) {
+            if (val) {
+                contextFlags |= flag;
+            }
+            else {
+                contextFlags &= ~flag;
+            }
+        }
+
+        function setStrictModeContext(val: boolean) {
+            setContextFlag(val, ParserContextFlags.StrictMode);
+        }
+
+        function setDisallowInContext(val: boolean) {
+            setContextFlag(val, ParserContextFlags.DisallowIn);
+        }
+
+        function setYieldContext(val: boolean) {
+            setContextFlag(val, ParserContextFlags.Yield);
+        }
+
+        function setGeneratorParameterContext(val: boolean) {
+            setContextFlag(val, ParserContextFlags.GeneratorParameter);
+        }
+
+        function setAsyncContext(val: boolean) {
+            setContextFlag(val, ParserContextFlags.Async);
+        }
+
+        function inStrictModeContext() {
+            return (contextFlags & ParserContextFlags.StrictMode) !== 0;
+        }
+
+        function inDisallowInContext() {
+            return (contextFlags & ParserContextFlags.DisallowIn) !== 0;
+        }
+
+        function inYieldContext() {
+            return (contextFlags & ParserContextFlags.Yield) !== 0;
+        }
+
+        function inGeneratorParameterContext() {
+            return (contextFlags & ParserContextFlags.GeneratorParameter) !== 0;
+        }
+
+        function inAsyncContext() {
+            return (contextFlags & ParserContextFlags.Async) !== 0;
+        }
+        
+        function allowInAnd<T>(func: () => T): T {
+            if (inDisallowInContext()) {
+                setDisallowInContext(false);
+                var result = func();
+                setDisallowInContext(true);
+                return result;
+            }
+            
+            // no need to do anything special if 'in' is already allowed.
+            return func();
+        }
+
+        function disallowInAnd<T>(func: () => T): T {
+            if (inDisallowInContext()) {
+                // no need to do anything special if 'in' is already disallowed.
+                return func();
+            }
+
+            setDisallowInContext(true);
+            var result = func();
+            setDisallowInContext(false);
+            return result;
+        }
+
+        function enterYieldContextAnd<T>(func: () => T): T {
+            if (inYieldContext()) {
+                // no need to do anything special if we're already in the [Yield] context.
+                return func();
+            }
+
+            setYieldContext(true);
+            var result = func();
+            setYieldContext(false);
+            return result;
+        }
+
+        function exitYieldContextAnd<T>(func: () => T): T {
+            if (inYieldContext()) {
+                setYieldContext(false);
+                var result = func();
+                setYieldContext(true);
+                return result;
+            }
+
+            // no need to do anything special if we're not in the [Yield] context.
+            return func();
+        }
+
+        function enterAsyncContextAnd<T>(func: () => T): T {
+            if (inAsyncContext()) {
+                // no need to do anything special if we're already in the [Async] context.
+                return func();
+            }
+
+            setAsyncContext(true);
+            var result = func();
+            setAsyncContext(false);
+            return result;
+        }
+
+        function exitAsyncContextAnd<T>(func: () => T): T {
+            if (inAsyncContext()) {
+                setAsyncContext(false);
+                var result = func();
+                setAsyncContext(true);
+                return result;
+            }
+
+            // no need to do anything special if we're not in the [Async] context.
+            return func();
+        }
+
         function parseSyntaxTree(_source: IParserSource, isDeclaration: boolean): SyntaxTree {
             // First, set up our state.
             fileName = _source.fileName;
@@ -418,6 +539,12 @@ module TypeScript.Parser {
                 return false;
             }
 
+            // If we have an 'await' keyword, and we're in the [async] context, then 'await' is
+            // considered a keyword and is not an identifier.
+            if (tokenKind === SyntaxKind.AwaitKeyword && inAsyncContext()) {
+                return false;
+            }
+
             // Keywords are only identifiers if they're FutureReservedStrictWords and we're in 
             // strict mode.  *Or* if it's a typescript 'keyword'. 
             if (tokenKind >= SyntaxKind.FirstFutureReservedStrictKeyword) {
@@ -624,47 +751,6 @@ module TypeScript.Parser {
             }
 
             throw Errors.invalidOperation();
-        }
-
-        function setContextFlag(val: boolean, flag: ParserContextFlags) {
-            if (val) {
-                contextFlags |= flag;
-            }
-            else {
-                contextFlags &= ~flag;
-            }
-        }
-
-        function setStrictModeContext(val: boolean) {
-            setContextFlag(val, ParserContextFlags.StrictMode);
-        }
-
-        function setDisallowInContext(val: boolean) {
-            setContextFlag(val, ParserContextFlags.DisallowIn);
-        }
-
-        function setYieldContext(val: boolean) {
-            setContextFlag(val, ParserContextFlags.Yield);
-        }
-
-        function setGeneratorParameterContext(val: boolean) {
-            setContextFlag(val, ParserContextFlags.GeneratorParameter);
-        }
-
-        function inStrictModeContext() {
-            return (contextFlags & ParserContextFlags.StrictMode) !== 0;
-        }
-
-        function inDisallowInContext() {
-            return (contextFlags & ParserContextFlags.DisallowIn) !== 0;
-        }
-
-        function inYieldContext() {
-            return (contextFlags & ParserContextFlags.Yield) !== 0;
-        }
-
-        function inGeneratorParameterContext() {
-            return (contextFlags & ParserContextFlags.GeneratorParameter) !== 0;
         }
 
         function parseSourceUnit(): SourceUnitSyntax {
@@ -976,54 +1062,6 @@ module TypeScript.Parser {
 
             return isPropertyName(/*peekToken:*/ 0, inErrorRecovery);
         }
-
-        function allowInAnd<T>(func: () => T): T {
-            if (inDisallowInContext()) {
-                setDisallowInContext(false);
-                var result = func();
-                setDisallowInContext(true);
-                return result;
-            }
-            
-            // no need to do anything special if 'in' is already allowed.
-            return func();
-        }
-
-        function disallowInAnd<T>(func: () => T): T {
-            if (inDisallowInContext()) {
-                // no need to do anything special if 'in' is already disallowed.
-                return func();
-            }
-
-            setDisallowInContext(true);
-            var result = func();
-            setDisallowInContext(false);
-            return result;
-        }
-
-        function enterYieldContextAnd<T>(func: () => T): T {
-            if (inYieldContext()) {
-                // no need to do anything special if we're already in the [Yield] context.
-                return func();
-            }
-
-            setYieldContext(true);
-            var result = func();
-            setYieldContext(false);
-            return result;
-        }
-
-        function exitYieldContextAnd<T>(func: () => T): T {
-            if (inYieldContext()) {
-                setYieldContext(false);
-                var result = func();
-                setYieldContext(true);
-                return result;
-            }
-
-            // no need to do anything special if we're not in the [Yield] context.
-            return func();
-        }
         
         function tryParseEnumElementEqualsValueClause(): EqualsValueClauseSyntax {
             return isEqualsValueClause(/*inParameter*/ false) ? allowInAnd(parseEqualsValueClause) : undefined;
@@ -1051,6 +1089,7 @@ module TypeScript.Parser {
                 case SyntaxKind.ProtectedKeyword:
                 case SyntaxKind.StaticKeyword:
                 case SyntaxKind.DeclareKeyword:
+                case SyntaxKind.AsyncKeyword:
                     return true;
             }
 
@@ -1059,23 +1098,39 @@ module TypeScript.Parser {
 
         function isModifier(token: ISyntaxToken, index: number): boolean {
             if (isModifierKind(token.kind)) {
-                // These are modifiers only if we see an actual keyword, identifier, string literal
-                // or number following.
-                // 
-                // [   is for:     static [a: number]  ...
-                // [   is for:     static [computedProp()]  ...
+                // Because modifiers are also identifiers, we only want to consider something to
+                // be truly a modifier if the thing following it is something that can be modified.
                 var nextToken = peekToken(index + 1);
                 var nextTokenKind = nextToken.kind;
 
                 switch (nextTokenKind) {
+                    // public foo'
+                    // 'public' is a modifier.
                     case SyntaxKind.IdentifierName:
+
+                    // public [a: number]: string
+                    // 'public' is a modifier here.
                     case SyntaxKind.OpenBracketToken:
+
+                    // public 0
+                    // 'public' is def a modifier here.
                     case SyntaxKind.NumericLiteral:
+
+                    // public "0"
+                    // 'public' is def a modifier here.
                     case SyntaxKind.StringLiteral:
+
+                    // public `0`
+                    // 'public' is def a modifier here.
                     case SyntaxKind.NoSubstitutionTemplateToken:
+                    
+                    // public * foo
+                    // 'public' is def a modifier here.
                     case SyntaxKind.AsteriskToken:
                         return true;
                     default:
+                        // public static   or   public class
+                        // 'public' is def a modifier here.
                         return SyntaxFacts.isAnyKeyword(nextTokenKind);
                 }
             }
@@ -1190,15 +1245,15 @@ module TypeScript.Parser {
         function parseGetAccessor(modifiers: ISyntaxToken[], getKeyword: ISyntaxToken): GetAccessorSyntax {
             return new GetAccessorSyntax(contextFlags,
                 modifiers, consumeToken(getKeyword), parsePropertyName(),
-                parseCallSignature(/*requireCompleteTypeParameterList:*/ false, /*yieldAndGeneratorParameterContext:*/ false),
-                parseFunctionBody(/*isGenerator:*/ false));
+                parseCallSignature(/*requireCompleteTypeParameterList:*/ false, /*yieldAndGeneratorParameterContext:*/ false, /*asyncContext:*/ false),
+                parseFunctionBody(/*isGenerator:*/ false, /*asyncContext:*/ false));
         }
 
         function parseSetAccessor(modifiers: ISyntaxToken[], setKeyword: ISyntaxToken): SetAccessorSyntax {
             return new SetAccessorSyntax(contextFlags,
                 modifiers, consumeToken(setKeyword), parsePropertyName(),
-                parseCallSignature(/*requireCompleteTypeParameterList:*/ false, /*yieldAndGeneratorParameterContext:*/ false),
-                parseFunctionBody(/*isGenerator:*/ false));
+                parseCallSignature(/*requireCompleteTypeParameterList:*/ false, /*yieldAndGeneratorParameterContext:*/ false, /*asyncContext:*/ false),
+                parseFunctionBody(/*isGenerator:*/ false, /*asyncContext:*/ false));
         }
 
         function isClassElement(inErrorRecovery: boolean): boolean {
@@ -1326,21 +1381,32 @@ module TypeScript.Parser {
             return new ConstructorDeclarationSyntax(contextFlags, 
                 parseModifiers(), 
                 eatToken(SyntaxKind.ConstructorKeyword), 
-                parseCallSignature(/*requireCompleteTypeParameterList:*/ false, /*yieldAndGeneratorParameterContext:*/ false),
-                parseFunctionBody(/*isGenerator:*/ false));
+                parseCallSignature(/*requireCompleteTypeParameterList:*/ false, /*yieldAndGeneratorParameterContext:*/ false, /*asyncContext:*/ false),
+                parseFunctionBody(/*isGenerator:*/ false, /*asyncContext:*/ false));
         }
 
         function parseMemberFunctionDeclaration(modifiers: ISyntaxToken[], asteriskToken: ISyntaxToken, propertyName: IPropertyNameSyntax): MemberFunctionDeclarationSyntax {
             // Note: if we see an arrow after the close paren, then try to parse out a function 
             // block anyways.  It's likely the user just though '=> expr' was legal anywhere a 
             // block was legal.
+            var asyncContext = containsAsync(modifiers);
             var isGenerator = asteriskToken !== undefined;
             return new MemberFunctionDeclarationSyntax(contextFlags,
                 modifiers,
                 asteriskToken,
                 propertyName,
-                parseCallSignature(/*requireCompleteTypeParameterList:*/ false, /*yieldAndGeneratorParameterContext:*/ isGenerator),
-                parseFunctionBody(isGenerator));
+                parseCallSignature(/*requireCompleteTypeParameterList:*/ false, /*yieldAndGeneratorParameterContext:*/ isGenerator, /*asyncContext:*/ asyncContext),
+                parseFunctionBody(isGenerator, asyncContext));
+        }
+
+        function containsAsync(modifiers: ISyntaxToken[]): boolean {
+            for (var i = 0, n = modifiers.length; i < n; i++) {
+                if (modifiers[i].kind === SyntaxKind.AsyncKeyword) {
+                    return true;
+                }
+            }
+
+            return false;
         }
         
         function parseMemberVariableDeclaration(modifiers: ISyntaxToken[], propertyName: IPropertyNameSyntax): MemberVariableDeclarationSyntax {
@@ -1371,23 +1437,25 @@ module TypeScript.Parser {
         }
 
         function parseFunctionDeclarationWorker(modifiers: ISyntaxToken[], functionKeyword: ISyntaxToken, asteriskToken: ISyntaxToken): FunctionDeclarationSyntax {
-            // FunctionDeclaration[Yield, Default] :            //      function BindingIdentifier[?Yield] ( FormalParameters ) { FunctionBody }
+            // FunctionDeclaration[Yield, Default] :
+            //      function BindingIdentifier[?Yield] ( FormalParameters ) { FunctionBody }
+
             // GeneratorDeclaration[Yield, Default] :
             //      function * BindingIdentifier[?Yield](FormalParameters[Yield, GeneratorParameter]) { GeneratorBody[Yield] }
-
+            var asyncContext = containsAsync(modifiers);
             var isGenerator = asteriskToken !== undefined;
             return new FunctionDeclarationSyntax(contextFlags,
                 modifiers,
                 functionKeyword,
                 asteriskToken,
                 eatIdentifierToken(),
-                parseCallSignature(/*requireCompleteTypeParameterList:*/ false, /*yieldAndGeneratorParameterContext:*/ isGenerator),
-                parseFunctionBody(isGenerator));
+                parseCallSignature(/*requireCompleteTypeParameterList:*/ false, /*yieldAndGeneratorParameterContext:*/ isGenerator, /*asyncContext:*/ asyncContext),
+                parseFunctionBody(isGenerator, asyncContext));
         }
 
-        function parseFunctionBody(isGenerator: boolean): BlockSyntax | ExpressionBody | ISyntaxToken {
+        function parseFunctionBody(isGenerator: boolean, asyncContext: boolean): BlockSyntax | ExpressionBody | ISyntaxToken {
             return isBlockOrArrow()
-                ? parseFunctionBlockOrExpressionBody(/*yieldContext:*/ isGenerator)
+                ? parseFunctionBlockOrExpressionBody(/*yieldContext:*/ isGenerator, /*asyncContext:*/ asyncContext)
                 : eatExplicitOrAutomaticSemicolon(/*allowWithoutNewline:*/ false);
         }
 
@@ -1485,7 +1553,7 @@ module TypeScript.Parser {
                 // A call signature for a type member can both use 'yield' as a parameter name, and 
                 // does not have parameter initializers.  So we can pass 'false' for both [Yield]
                 // and [GeneratorParameter].
-                return parseCallSignature(/*requireCompleteTypeParameterList:*/ false, /*yieldAndGeneratorParameterContext:*/ false);
+                return parseCallSignature(/*requireCompleteTypeParameterList:*/ false, /*yieldAndGeneratorParameterContext:*/ false, /*asyncContext:*/ false);
             }
             else if (isConstructSignature()) {
                 return parseConstructSignature();
@@ -1513,7 +1581,7 @@ module TypeScript.Parser {
             // Construct signatures have no [Yield] or [GeneratorParameter] restrictions.
             return new ConstructSignatureSyntax(contextFlags,
                 eatToken(SyntaxKind.NewKeyword),
-                parseCallSignature(/*requireCompleteTypeParameterList:*/ false, /*yieldAndGeneratorParameterContext:*/ false));
+                parseCallSignature(/*requireCompleteTypeParameterList:*/ false, /*yieldAndGeneratorParameterContext:*/ false, /*asyncContext:*/ false));
         }
 
         function parseIndexSignature(): IndexSignatureSyntax {
@@ -1529,7 +1597,7 @@ module TypeScript.Parser {
             return new MethodSignatureSyntax(contextFlags,
                 propertyName,
                 questionToken,
-                parseCallSignature(/*requireCompleteTypeParameterList:*/ false, /*yieldAndGeneratorParameterContext:*/ false));
+                parseCallSignature(/*requireCompleteTypeParameterList:*/ false, /*yieldAndGeneratorParameterContext:*/ false, /*asyncContext:*/ false));
         }
 
         function parsePropertySignature(propertyName: IPropertyNameSyntax, questionToken: ISyntaxToken): PropertySignatureSyntax {
@@ -2196,9 +2264,21 @@ module TypeScript.Parser {
                     return true;
 
                 case SyntaxKind.YieldKeyword:
-                    // Yield always starts an expression.  Either it is an identifier (in which case
+                    // 'yield' always starts an expression.  Either it is an identifier (in which case
                     // it is definitely an expression).  Or it's a keyword (either because we're in
                     // a generator, or in strict mode (or both)) and it started a yield expression.
+                    return true;
+
+                case SyntaxKind.AwaitKeyword:
+                    // 'await' always starts an expression.  Either it is an identifier (in which case
+                    // it is definitely an expression).  Or it's a keyword and it started an await 
+                    // expression.
+                    return true;
+
+                case SyntaxKind.AsyncKeyword:
+                    // 'async' always starts an expression.  Either it is an identifier (in which case
+                    // it is definitely an expression).  Or it's a keyword and it started an async
+                    // function/arrow expression.
                     return true;
             }
 
@@ -2449,6 +2529,40 @@ module TypeScript.Parser {
             return parseConditionalExpressionRest(leftOperand);
         }
 
+        function parsePossibleAwaitExpression(awaitKeyword: ISyntaxToken): IUnaryExpressionSyntax {
+            if (inAsyncContext()) {
+                // If we're in an async context, then 'await' definitely starts an await expression.
+                return parseAwaitExpression(awaitKeyword);
+            }
+
+            // We're in a context where 'await expr' is not allowed.  However, if we can
+            // definitely tell that the user was trying to parse a 'await expr' and not
+            // just a normal expr that start with a 'await' identifier, then parse out
+            // an 'await expr'.  We can then report an error later that they are only 
+            // allowed in async contexts.
+            // 
+            // for example, if we see 'await(foo)', then we'll have to treat that as an
+            // invocation expression of something called 'await'.  However, if we have
+            // 'await foo' then that is not legal as a normal expression, so we can 
+            // definitely recognize this as a await expression.
+            //
+            // for now we just check if the next token is an identifier.  More heuristics
+            // can be added here later as necessary.  We just need to make sure that we
+            // don't accidently consume something legal.
+            if (isUnambiguouslyYieldOrAwaitExpression()) {
+                return parseAwaitExpression(awaitKeyword);
+            }
+
+            // Not an 'await' expression.  Parse this with our normal postfix parsing rules.
+            return tryParsePostfixExpressionOrHigher(awaitKeyword, /*force:*/ true);
+        }
+
+        function parseAwaitExpression(awaitKeyword: ISyntaxToken): AwaitExpressionSyntax {
+            return new AwaitExpressionSyntax(contextFlags,
+                consumeToken(awaitKeyword),
+                parseAssignmentExpressionOrHigher());
+        }
+
         function isYieldExpression(_currentToken: ISyntaxToken): boolean {
             if (_currentToken.kind === SyntaxKind.YieldKeyword) {
                 // If we have a 'yield' keyword, and htis is a context where yield expressions are 
@@ -2463,27 +2577,67 @@ module TypeScript.Parser {
                     return true;
                 }
 
-                // We're in a context where 'yield expr' is not allowed.  However, if we can
-                // definitely tell that the user was trying to parse a 'yield expr' and not
-                // just a normal expr that start with a 'yield' identifier, then parse out
-                // a 'yield expr'.  We can then report an error later that they are only 
-                // allowed in generator expressions.
-                // 
-                // for example, if we see 'yield(foo)', then we'll have to treat that as an
-                // invocation expression of something called 'yield'.  However, if we have
-                // 'yield foo' then that is not legal as a normal expression, so we can 
-                // definitely recognize this as a yield expression.
-                //
-                // for now we just check if the next token is an identifier.  More heuristics
-                // can be added here later as necessary.  We just need to make sure that we
-                // don't accidently consume something legal.
-                var token1 = peekToken(1);
-                if (!isOnDifferentLineThanPreviousToken(token1) && isIdentifier(token1)) {
-                    return true;
-                }
+                return isUnambiguouslyYieldOrAwaitExpression();
             }
 
             return false;
+        }
+
+        function isUnambiguouslyYieldOrAwaitExpression() {
+            // We're in a context where 'yield expr' or 'await expr' is not allowed.  However, if 
+            // we can definitely tell that the user was trying to parse one of these then parse it
+            // out and report an error later in the grammar checker.
+            // 
+            // for example, if we see 'yield(foo)', then we'll have to treat that as an
+            // invocation expression of something called 'yield'.  However, if we have
+            // 'yield foo' then that is not legal as a normal expression, so we can 
+            // definitely recognize this as a yield expression.
+            var token1 = peekToken(1);
+
+            if (isOnDifferentLineThanPreviousToken(token1)) {
+                // Next token is on the next line.  Thanks to ASI, this might start some other 
+                // construct.  Can't assume this is a yield or await expr.
+                return false;
+            }
+
+            // 'await a' or 'yield a'.  Definitely a yield/await expression.  C
+            if (isIdentifier(token1)) {
+                return true;
+            }
+
+            var currentTokenKind = token1.kind;
+            switch (currentTokenKind) {
+                case SyntaxKind.ThisKeyword:
+                case SyntaxKind.TrueKeyword:
+                case SyntaxKind.FalseKeyword:
+                case SyntaxKind.NullKeyword:
+                case SyntaxKind.NumericLiteral:
+                case SyntaxKind.StringLiteral:
+                case SyntaxKind.FunctionKeyword:
+                case SyntaxKind.OpenBraceToken:
+                case SyntaxKind.NewKeyword:
+                    return true
+                case SyntaxKind.NoSubstitutionTemplateToken:
+                case SyntaxKind.TemplateStartToken:
+                    // yield `foo`
+                    // This is a tagged template expressoin.
+                    return false;
+                case SyntaxKind.SlashToken:
+                case SyntaxKind.SlashEqualsToken:
+                    // yield / foo
+                    // This is a divide expression.
+                    return false;
+                case SyntaxKind.OpenBracketToken:
+                    // yield[foo]
+                    // This is a indexed access expression.
+                    return false;
+                case SyntaxKind.OpenParenToken:
+                    // yield(foo)
+                    // This is an invocation expression.
+                    return false;
+                default:
+                    return false;
+            }
         }
 
         function parseYieldExpression(yieldKeyword: ISyntaxToken): YieldExpressionSyntax {
@@ -2524,10 +2678,16 @@ module TypeScript.Parser {
                 case SyntaxKind.PlusPlusToken:
                 case SyntaxKind.MinusMinusToken:
                     return new PrefixUnaryExpressionSyntax(contextFlags, consumeToken(_currentToken), tryParseUnaryExpressionOrHigher(currentToken(), /*force:*/ true));
-                case SyntaxKind.TypeOfKeyword: return parseTypeOfExpression(_currentToken);
-                case SyntaxKind.VoidKeyword:   return parseVoidExpression(_currentToken);
-                case SyntaxKind.DeleteKeyword: return parseDeleteExpression(_currentToken);
-                case SyntaxKind.LessThanToken: return parseCastExpression(_currentToken);
+                case SyntaxKind.TypeOfKeyword:
+                    return parseTypeOfExpression(_currentToken);
+                case SyntaxKind.VoidKeyword:
+                    return parseVoidExpression(_currentToken);
+                case SyntaxKind.DeleteKeyword:
+                    return parseDeleteExpression(_currentToken);
+                case SyntaxKind.LessThanToken:
+                    return parseCastExpression(_currentToken);
+                case SyntaxKind.AwaitKeyword:
+                    return parsePossibleAwaitExpression(_currentToken);
                 default:
                     return tryParsePostfixExpressionOrHigher(_currentToken, force);
             }
@@ -2933,6 +3093,12 @@ module TypeScript.Parser {
         }
 
         function tryParsePrimaryExpression(_currentToken: ISyntaxToken, force: boolean): IPrimaryExpressionSyntax {
+            // Have to check for 'async function' first as 'async' is an identifier and will be 
+            // consumed immediately below this.
+            if (_currentToken.kind === SyntaxKind.AsyncKeyword && peekToken(1).kind === SyntaxKind.FunctionKeyword) {
+                return parseFunctionExpression();
+            }
+
             if (isIdentifier(_currentToken)) {
                 return eatIdentifierToken();
             }
@@ -2947,17 +3113,19 @@ module TypeScript.Parser {
                 case SyntaxKind.RegularExpressionLiteral:
                 case SyntaxKind.StringLiteral:
                     return consumeToken(_currentToken);
-
-                case SyntaxKind.FunctionKeyword:    return parseFunctionExpression(_currentToken);
-                case SyntaxKind.OpenBracketToken:   return parseArrayLiteralExpression(_currentToken);
-                case SyntaxKind.OpenBraceToken:     return parseObjectLiteralExpression(_currentToken);
-                case SyntaxKind.OpenParenToken:     return parseParenthesizedExpression(_currentToken);
-                case SyntaxKind.NewKeyword:         return parseObjectCreationExpression(_currentToken);
-
+                case SyntaxKind.FunctionKeyword:
+                    return parseFunctionExpression();
+                case SyntaxKind.OpenBracketToken:
+                    return parseArrayLiteralExpression(_currentToken);
+                case SyntaxKind.OpenBraceToken:
+                    return parseObjectLiteralExpression(_currentToken);
+                case SyntaxKind.OpenParenToken:
+                    return parseParenthesizedExpression(_currentToken);
+                case SyntaxKind.NewKeyword:
+                    return parseObjectCreationExpression(_currentToken);
                 case SyntaxKind.NoSubstitutionTemplateToken:
                 case SyntaxKind.TemplateStartToken:
                     return parseTemplateExpression(_currentToken);
-
                 case SyntaxKind.SlashToken:
                 case SyntaxKind.SlashEqualsToken:
                     // If we see a standalone / or /= and we're expecting an expression, then reparse
@@ -3007,23 +3175,36 @@ module TypeScript.Parser {
             return new VoidExpressionSyntax(contextFlags, consumeToken(voidKeyword), tryParseUnaryExpressionOrHigher(currentToken(), /*force:*/ true));
         }
 
-        function parseFunctionExpression(functionKeyword: ISyntaxToken): FunctionExpressionSyntax {
-            return parseFunctionExpressionWorker(consumeToken(functionKeyword), tryEatToken(SyntaxKind.AsteriskToken));
-        }
-
-        function parseFunctionExpressionWorker(functionKeyword: ISyntaxToken, asteriskToken: ISyntaxToken) {
+        function parseFunctionExpression(): FunctionExpressionSyntax {
             // GeneratorExpression :
             //      function * BindingIdentifier[Yield]opt (FormalParameters[Yield, GeneratorParameter]) { GeneratorBody[Yield] }
             // FunctionExpression:
             //      function BindingIdentifieropt(FormalParameters) { FunctionBody }
 
-            var isGenerator = asteriskToken !== undefined;
+            var asyncKeyword: ISyntaxToken;
+            var asteriskToken: ISyntaxToken;
             return new FunctionExpressionSyntax(contextFlags,
-                functionKeyword,
-                asteriskToken,
-                asteriskToken ? enterYieldContextAnd(eatOptionalIdentifierToken) : eatOptionalIdentifierToken(),
-                parseCallSignature(/*requireCompleteTypeParameterList:*/ false, /*yieldAndGeneratorParameterContext:*/ isGenerator),
-                parseFunctionBody(isGenerator));
+                asyncKeyword = tryEatToken(SyntaxKind.AsyncKeyword),
+                eatToken(SyntaxKind.FunctionKeyword),
+                asteriskToken = tryEatToken(SyntaxKind.AsteriskToken),
+                tryEatFunctionExpressionIdentifier(!!asteriskToken, !!asyncKeyword),
+                parseCallSignature(/*requireCompleteTypeParameterList:*/ false, /*yieldAndGeneratorParameterContext:*/ !!asteriskToken, /*asyncContext:*/ !!asyncKeyword),
+                parseFunctionBody(!!asteriskToken, !!asyncKeyword));
+        }
+
+        function tryEatFunctionExpressionIdentifier(yieldContext: boolean, asyncContext: boolean) {
+            var savedYieldContext = inYieldContext();
+            var savedAsyncContext = inAsyncContext();
+
+            setYieldContext(yieldContext);
+            setAsyncContext(asyncContext);
+
+            var result = eatOptionalIdentifierToken();
+
+            setYieldContext(savedYieldContext);
+            setAsyncContext(savedAsyncContext);
+
+            return result;
         }
 
         function parseObjectCreationExpression(newKeyword: ISyntaxToken): ObjectCreationExpressionSyntax {
@@ -3096,7 +3277,7 @@ module TypeScript.Parser {
 
         function tryParseParenthesizedArrowFunctionExpression(): ParenthesizedArrowFunctionExpressionSyntax {
             var tokenKind = currentToken().kind;
-            if (tokenKind !== SyntaxKind.OpenParenToken && tokenKind !== SyntaxKind.LessThanToken) {
+            if (tokenKind !== SyntaxKind.AsyncKeyword && tokenKind !== SyntaxKind.OpenParenToken && tokenKind !== SyntaxKind.LessThanToken) {
                 return undefined;
             }
 
@@ -3134,8 +3315,7 @@ module TypeScript.Parser {
         }
 
         function tryParseParenthesizedArrowFunctionExpressionWorker(requireArrow: boolean): ParenthesizedArrowFunctionExpressionSyntax {
-            var _currentToken = currentToken();
-            // Debug.assert(currentToken.kind === SyntaxKind.OpenParenToken || currentToken.kind === SyntaxKind.LessThanToken);
+            var asyncKeyword = tryEatToken(SyntaxKind.AsyncKeyword);
 
             // From the static semantic section:
             // 1.If the [Yield] grammar parameter is present for CoverParenthesizedExpressionAndArrowParameterList[Yield]
@@ -3144,25 +3324,27 @@ module TypeScript.Parser {
             // 2.If the [Yield] grammar parameter is not present for CoverParenthesizedExpressionAndArrowParameterList[Yield]
             //  return the result of parsing the lexical token stream matched by CoverParenthesizedExpressionAndArrowParameterList
             //  using ArrowFormalParameters as the goal symbol.
-            var callSignature = parseCallSignature(/*requireCompleteTypeParameterList:*/ true, /*yieldAndGeneratorParameterContext:*/ inYieldContext());
+            var callSignature = parseCallSignature(/*requireCompleteTypeParameterList:*/ true, /*yieldAndGeneratorParameterContext:*/ inYieldContext(), /*asyncContext:*/ !!asyncKeyword);
 
             if (requireArrow && currentToken().kind !== SyntaxKind.EqualsGreaterThanToken) {
                 return undefined;
             }
 
             return new ParenthesizedArrowFunctionExpressionSyntax(contextFlags,
+                asyncKeyword,
                 callSignature,
                 eatToken(SyntaxKind.EqualsGreaterThanToken),
-                parseArrowFunctionBody());
+                parseArrowFunctionBody(!!asyncKeyword));
         }
 
-        function parseArrowFunctionBody(): BlockSyntax | IExpressionSyntax {
+        function parseArrowFunctionBody(asyncContext: boolean): BlockSyntax | IExpressionSyntax {
             // ConciseBody[In] :
             //      [lookahead not in {] AssignmentExpression[?In]
             //      { FunctionBody }
 
             if (currentToken().kind === SyntaxKind.OpenBraceToken) {
-                return parseFunctionBlock(/*allowYield:*/ false, /*equalsGreaterThanToken:*/ undefined);
+                // arrow functions are never generators, so their bodies are never in the yield context.
+                return parseFunctionBlock(/*yieldContext:*/ false, /*asyncContext:*/ asyncContext, /*equalsGreaterThanToken:*/ undefined);
             }
 
             // We didn't have a block.  However, we may be in an error situation.  For example,
@@ -3184,11 +3366,11 @@ module TypeScript.Parser {
                 return new BlockSyntax(contextFlags, 
                     /*equalsGreaterThanToken*/ undefined,
                     eatToken(SyntaxKind.OpenBraceToken),
-                    parseFunctionBlockStatements(),
+                    parseFunctionBlockStatements(/*yieldContext:*/ false, asyncContext),
                     eatToken(SyntaxKind.CloseBraceToken));
             }
 
-            return parseAssignmentExpressionOrHigher();
+            return asyncContext ? enterAsyncContextAnd(parseAssignmentExpressionOrHigher) : exitAsyncContextAnd(parseAssignmentExpressionOrHigher);
         }
 
         function isSimpleArrowFunctionExpression(_currentToken: ISyntaxToken): boolean {
@@ -3199,16 +3381,22 @@ module TypeScript.Parser {
                 return true;
             }
 
+            // 'async a' is always the start of an async arrow function.   
+            if (_currentToken.kind === SyntaxKind.AsyncKeyword && isIdentifier(peekToken(1))) {
+                return true;
+            }
+
             return isIdentifier(_currentToken) &&
                    peekToken(1).kind === SyntaxKind.EqualsGreaterThanToken;
         }
 
         function parseSimpleArrowFunctionExpression(): SimpleArrowFunctionExpressionSyntax {
-            // Debug.assert(isSimpleArrowFunctionExpression());
-            return new SimpleArrowFunctionExpressionSyntax(contextFlags, 
-                eatSimpleParameter(), 
+            var asyncKeyword: ISyntaxToken;
+            return new SimpleArrowFunctionExpressionSyntax(contextFlags,
+                asyncKeyword = tryEatToken(SyntaxKind.AsyncKeyword),
+                asyncKeyword ? enterAsyncContextAnd(eatSimpleParameter) : exitAsyncContextAnd(eatSimpleParameter), 
                 eatToken(SyntaxKind.EqualsGreaterThanToken),
-                parseArrowFunctionBody());
+                parseArrowFunctionBody(/*asyncContext:*/ !!asyncKeyword));
         }
 
         function isFunctionBlock(): boolean {
@@ -3222,14 +3410,20 @@ module TypeScript.Parser {
         }
 
         function isDefinitelyArrowFunctionExpression(): boolean {
-            var token0 = currentToken();
+            var peekIndex = 0;
+            if (currentToken().kind === SyntaxKind.AsyncKeyword) {
+                // skip past any 'async' keyword we see.
+                peekIndex++;
+            }
+
+            var token0 = peekToken(peekIndex);
             if (token0.kind !== SyntaxKind.OpenParenToken) {
                 // If it didn't start with an (, then it could be generic.  That's too complicated 
                 // and we can't say it's 'definitely' an arrow function.             
                 return false;
             }
 
-            var token1 = peekToken(1);
+            var token1 = peekToken(peekIndex + 1);
             var token1Kind = token1.kind;
 
             var token2: ISyntaxToken;
@@ -3242,7 +3436,7 @@ module TypeScript.Parser {
                 // To prevent this, we are a little stricter, and we require that we at least see:
                 //      "():"  or  "() =>"  or "() {}".  Note: the last one is illegal.  However it
                 // most likely is a missing => and not a parenthesized expression.
-                token2 = peekToken(2);
+                token2 = peekToken(peekIndex + 2);
                 var token2Kind = token2.kind;
                 return token2Kind === SyntaxKind.ColonToken ||
                        token2Kind === SyntaxKind.EqualsGreaterThanToken ||
@@ -3255,7 +3449,7 @@ module TypeScript.Parser {
                 return true;
             }
 
-            token2 = peekToken(2); 
+            token2 = peekToken(peekIndex + 2); 
             token2Kind = token2.kind;
 
             if (SyntaxFacts.isAccessibilityModifier(token1Kind)) {
@@ -3284,7 +3478,7 @@ module TypeScript.Parser {
                 return true;
             }
 
-            var token3 = peekToken(3);
+            var token3 = peekToken(peekIndex + 3);
             var token3Kind = token3.kind;
             if (token2Kind === SyntaxKind.QuestionToken) {
                 // (id?
@@ -3327,14 +3521,19 @@ module TypeScript.Parser {
         }
 
         function isPossiblyArrowFunctionExpression(): boolean {
-            var token0 = currentToken();
+            var peekIndex = 0;
+            if (currentToken().kind === SyntaxKind.AsyncKeyword) {
+                peekIndex++;
+            }
+
+            var token0 = peekToken(peekIndex);
             if (token0.kind !== SyntaxKind.OpenParenToken) {
                 // If it didn't start with an (, then it could be generic.  That's too complicated 
                 // and we have to say it's possibly an arrow function.
                 return true;
             }
 
-            var token1 = peekToken(1);
+            var token1 = peekToken(peekIndex + 1);
 
             if (!isIdentifier(token1)) {
                 // All other arrow functions must start with (id
@@ -3342,7 +3541,7 @@ module TypeScript.Parser {
                 return false;
             }
 
-            var token2 = peekToken(2);
+            var token2 = peekToken(peekIndex + 2);
             var token2Kind = token2.kind;
             if (token2Kind === SyntaxKind.EqualsToken) {
                 // (id =
@@ -3365,7 +3564,7 @@ module TypeScript.Parser {
             if (token2Kind === SyntaxKind.CloseParenToken) {
                 // (id)
 
-                var token3 = peekToken(3);
+                var token3 = peekToken(peekIndex + 3);
                 if (token3.kind === SyntaxKind.ColonToken) {
                     // (id):
                     //
@@ -3400,6 +3599,14 @@ module TypeScript.Parser {
             // shorthand property assignment.
 
             var _currentToken = currentToken();
+            if (_currentToken.kind === SyntaxKind.AsyncKeyword) {
+                // 'async' might start an asynchronous property, or it might just be the name 
+                // of a property.
+                if (peekToken(1).kind === SyntaxKind.AsteriskToken || isPropertyName(/*peekIndex:*/ 1, inErrorRecovery)) {
+                    return parseFunctionPropertyAssignment(eatToken(SyntaxKind.AsyncKeyword), tryEatToken(SyntaxKind.AsteriskToken), parsePropertyName());
+                }
+            }
+
             if (isIdentifier(_currentToken)) {
                 var token1 = peekToken(1);
                 if (token1.kind !== SyntaxKind.ColonToken &&
@@ -3414,11 +3621,11 @@ module TypeScript.Parser {
                     //
                     // then this is a shorthand property assignment.  Just return the identifier 
                     // token as is.
-                    return consumeToken(_currentToken);
+                    return eatIdentifierToken();
                 }
             }
 
-            // All the rest of the property assignments start with property names or an asterix.  
+            // All the rest of the property assignments start with property names, an asterix.  
             // They are:
             //      id: e
             //      [e1]: e2
@@ -3426,12 +3633,14 @@ module TypeScript.Parser {
             //      [e]() { } 
             //      *id() { }
             //      *[e]() { } 
+            //      async id() { }
+            //      async [e]() { } 
             if (_currentToken.kind === SyntaxKind.AsteriskToken || isPropertyName(/*peekIndex:*/ 0, inErrorRecovery)) {
                 var asterixToken = tryEatToken(SyntaxKind.AsteriskToken);
                 var propertyName = parsePropertyName();
 
                 if (asterixToken !== undefined || isCallSignature(/*peekIndex:*/ 0)) {
-                    return parseFunctionPropertyAssignment(asterixToken, propertyName);
+                    return parseFunctionPropertyAssignment(undefined, asterixToken, propertyName);
                 }
                 else {
                     // PropertyName[?Yield] : AssignmentExpression[In, ?Yield]
@@ -3533,13 +3742,13 @@ module TypeScript.Parser {
                 eatToken(SyntaxKind.CloseBracketToken));
         }
 
-        function parseFunctionPropertyAssignment(asteriskToken: ISyntaxToken, propertyName: IPropertyNameSyntax): FunctionPropertyAssignmentSyntax {
-            var isGenerator = asteriskToken !== undefined;
+        function parseFunctionPropertyAssignment(asyncKeyword: ISyntaxToken, asteriskToken: ISyntaxToken, propertyName: IPropertyNameSyntax): FunctionPropertyAssignmentSyntax {
             return new FunctionPropertyAssignmentSyntax(contextFlags,
+                asyncKeyword,
                 asteriskToken,
                 propertyName,
-                parseCallSignature(/*requireCompleteTypeParameterList:*/ false, /*yieldAndGeneratorParameterContext:*/ isGenerator),
-                parseFunctionBody(isGenerator));
+                parseCallSignature(/*requireCompleteTypeParameterList:*/ false, /*yieldAndGeneratorParameterContext:*/ !!asteriskToken, !!asyncKeyword),
+                parseFunctionBody(!!asteriskToken, !!asyncKeyword));
         }
 
         function parseArrayLiteralExpression(openBracketToken: ISyntaxToken): ArrayLiteralExpressionSyntax {
@@ -3561,7 +3770,7 @@ module TypeScript.Parser {
                 eatToken(SyntaxKind.CloseBraceToken));
         }
 
-        function parseFunctionBlockOrExpressionBody(_allowYield: boolean): BlockSyntax | ExpressionBody {
+        function parseFunctionBlockOrExpressionBody(yieldContext: boolean, asyncContext: boolean): BlockSyntax | ExpressionBody {
             // If we got an errant => then we want to parse what's coming up without requiring an
             // open brace.  We do this because it's not uncommon for people to get confused as to
             // where/when they can use an => and we want to have good error recovery here.
@@ -3574,32 +3783,39 @@ module TypeScript.Parser {
                 }
             }
 
-            return parseFunctionBlock(_allowYield, equalsGreaterThanToken);
+            return parseFunctionBlock(yieldContext, asyncContext, equalsGreaterThanToken);
         }
 
-        function parseFunctionBlock(_allowYield: boolean, equalsGreaterThanToken: ISyntaxToken): BlockSyntax {
+        function parseFunctionBlock(yieldContext: boolean, asyncContext: boolean, equalsGreaterThanToken: ISyntaxToken): BlockSyntax {
             var openBraceToken: ISyntaxToken;
             return new BlockSyntax(contextFlags,
                 equalsGreaterThanToken,
                 openBraceToken = eatToken(SyntaxKind.OpenBraceToken),
-                equalsGreaterThanToken || openBraceToken.fullWidth() > 0
-                    ? _allowYield ? enterYieldContextAnd(parseFunctionBlockStatements) : exitYieldContextAnd(parseFunctionBlockStatements)
-                    : [],
+                equalsGreaterThanToken || openBraceToken.fullWidth() > 0 ? parseFunctionBlockStatements(yieldContext, asyncContext) : [],
                 eatToken(SyntaxKind.CloseBraceToken));
         }
 
-        function parseFunctionBlockStatements() {
-            var savedIsInStrictMode = inStrictModeContext();
+        function parseFunctionBlockStatements(yieldContext: boolean, asyncContext: boolean) {
+            var savedStrictModeContext = inStrictModeContext();
+            var savedYieldContext = inYieldContext();
+            var savedAsyncContext = inAsyncContext();
+
+            setYieldContext(yieldContext);
+            setAsyncContext(asyncContext);
+
             var statements = parseSyntaxList<IStatementSyntax>(ListParsingState.Block_Statements, updateStrictModeState);
-            setStrictModeContext(savedIsInStrictMode);
+
+            setStrictModeContext(savedStrictModeContext);
+            setYieldContext(savedYieldContext);
+            setAsyncContext(savedAsyncContext);
 
             return statements;
         }
 
-        function parseCallSignature(requireCompleteTypeParameterList: boolean, yieldAndGeneratorParameterContext: boolean): CallSignatureSyntax {
+        function parseCallSignature(requireCompleteTypeParameterList: boolean, yieldAndGeneratorParameterContext: boolean, asyncContext: boolean): CallSignatureSyntax {
             return new CallSignatureSyntax(contextFlags,
                 tryParseTypeParameterList(requireCompleteTypeParameterList),
-                parseParameterList(yieldAndGeneratorParameterContext),
+                parseParameterList(yieldAndGeneratorParameterContext, asyncContext),
                 parseOptionalTypeAnnotation(/*allowStringLiteral:*/ false));
         }
 
@@ -3653,7 +3869,7 @@ module TypeScript.Parser {
         // have 'Yield' And 'GeneratorParameter' not in sync.  i.e. any production calling
         // this FormalParameters production either always sets both to true, or always sets
         // both to false.  As such we only have a single parameter to represent both.
-        function parseParameterList(yieldAndGeneratorParameterContext: boolean): ParameterListSyntax {
+        function parseParameterList(yieldAndGeneratorParameterContext: boolean, asyncContext: boolean): ParameterListSyntax {
             // FormalParameters[Yield,GeneratorParameter] :
             //      ...
             //
@@ -3672,9 +3888,11 @@ module TypeScript.Parser {
 
             var savedYieldContext = inYieldContext();
             var savedGeneratorParameterContext = inGeneratorParameterContext();
+            var savedAsyncContext = inAsyncContext();
 
             setYieldContext(yieldAndGeneratorParameterContext);
             setGeneratorParameterContext(yieldAndGeneratorParameterContext);
+            setAsyncContext(asyncContext);
 
             var openParenToken: ISyntaxToken;
             var result = new ParameterListSyntax(contextFlags,
@@ -3684,6 +3902,7 @@ module TypeScript.Parser {
 
             setYieldContext(savedYieldContext);
             setGeneratorParameterContext(savedGeneratorParameterContext);
+            setAsyncContext(savedAsyncContext);
 
             return result;
         }
@@ -3941,7 +4160,7 @@ module TypeScript.Parser {
             // aren't in the [Yield] or [GeneratorParameter] context.
             return new FunctionTypeSyntax(contextFlags,
                 tryParseTypeParameterList(/*requireCompleteTypeParameterList:*/ false), 
-                parseParameterList(/*yieldAndGeneratorParameterContext:*/ false),
+                parseParameterList(/*yieldAndGeneratorParameterContext:*/ false, /*asyncContext:*/ false),
                 eatToken(SyntaxKind.EqualsGreaterThanToken), parseType());
         }
 
@@ -3951,7 +4170,7 @@ module TypeScript.Parser {
             return new ConstructorTypeSyntax(contextFlags,
                 eatToken(SyntaxKind.NewKeyword),
                 tryParseTypeParameterList(/*requireCompleteTypeParameterList:*/ false),
-                parseParameterList(/*yieldAndGeneratorParameterContext:*/ false),
+                parseParameterList(/*yieldAndGeneratorParameterContext:*/ false, /*asyncContext:*/ false),
                 eatToken(SyntaxKind.EqualsGreaterThanToken), parseType());
         }
 

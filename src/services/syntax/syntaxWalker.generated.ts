@@ -427,12 +427,14 @@ module TypeScript {
         }
 
         public visitParenthesizedArrowFunctionExpression(node: ParenthesizedArrowFunctionExpressionSyntax): void {
+            this.visitOptionalToken(node.asyncKeyword);
             visitNodeOrToken(this, node.callSignature);
             this.visitToken(node.equalsGreaterThanToken);
             visitNodeOrToken(this, node.body);
         }
 
         public visitSimpleArrowFunctionExpression(node: SimpleArrowFunctionExpressionSyntax): void {
+            this.visitOptionalToken(node.asyncKeyword);
             visitNodeOrToken(this, node.parameter);
             this.visitToken(node.equalsGreaterThanToken);
             visitNodeOrToken(this, node.body);
@@ -453,6 +455,7 @@ module TypeScript {
         }
 
         public visitFunctionExpression(node: FunctionExpressionSyntax): void {
+            this.visitOptionalToken(node.asyncKeyword);
             this.visitToken(node.functionKeyword);
             this.visitOptionalToken(node.asterixToken);
             this.visitOptionalToken(node.identifier);
@@ -476,6 +479,11 @@ module TypeScript {
         public visitYieldExpression(node: YieldExpressionSyntax): void {
             this.visitToken(node.yieldKeyword);
             this.visitOptionalToken(node.asterixToken);
+            visitNodeOrToken(this, node.expression);
+        }
+
+        public visitAwaitExpression(node: AwaitExpressionSyntax): void {
+            this.visitToken(node.awaitKeyword);
             visitNodeOrToken(this, node.expression);
         }
 
@@ -579,6 +587,7 @@ module TypeScript {
         }
 
         public visitFunctionPropertyAssignment(node: FunctionPropertyAssignmentSyntax): void {
+            this.visitOptionalToken(node.asyncKeyword);
             this.visitOptionalToken(node.asterixToken);
             visitNodeOrToken(this, node.propertyName);
             visitNodeOrToken(this, node.callSignature);

@@ -73,6 +73,7 @@ module TypeScript {
             case SyntaxKind.TemplateExpression: return visitor.visitTemplateExpression(<TemplateExpressionSyntax>element);
             case SyntaxKind.TemplateAccessExpression: return visitor.visitTemplateAccessExpression(<TemplateAccessExpressionSyntax>element);
             case SyntaxKind.YieldExpression: return visitor.visitYieldExpression(<YieldExpressionSyntax>element);
+            case SyntaxKind.AwaitExpression: return visitor.visitAwaitExpression(<AwaitExpressionSyntax>element);
             case SyntaxKind.VariableDeclaration: return visitor.visitVariableDeclaration(<VariableDeclarationSyntax>element);
             case SyntaxKind.VariableDeclarator: return visitor.visitVariableDeclarator(<VariableDeclaratorSyntax>element);
             case SyntaxKind.ArgumentList: return visitor.visitArgumentList(<ArgumentListSyntax>element);
@@ -173,6 +174,7 @@ module TypeScript {
         visitTemplateExpression(node: TemplateExpressionSyntax): any;
         visitTemplateAccessExpression(node: TemplateAccessExpressionSyntax): any;
         visitYieldExpression(node: YieldExpressionSyntax): any;
+        visitAwaitExpression(node: AwaitExpressionSyntax): any;
         visitVariableDeclaration(node: VariableDeclarationSyntax): any;
         visitVariableDeclarator(node: VariableDeclaratorSyntax): any;
         visitArgumentList(node: ArgumentListSyntax): any;

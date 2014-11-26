@@ -42,6 +42,10 @@ module TypeScript {
         return (parserContextFlags(node) & ParserContextFlags.GeneratorParameter) !== 0;
     }
 
+    export function parsedInAsyncContext(node: ISyntaxNode): boolean {
+        return (parserContextFlags(node) & ParserContextFlags.Async) !== 0;
+    }
+
     export function previousToken(token: ISyntaxToken): ISyntaxToken {
         var start = token.fullStart();
         if (start === 0) {

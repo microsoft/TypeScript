@@ -3,6 +3,8 @@
 module TypeScript.SyntaxFacts {
     var textToKeywordKind: any = {
         "any": SyntaxKind.AnyKeyword,
+        "async": SyntaxKind.AsyncKeyword,
+        "await": SyntaxKind.AwaitKeyword,
         "boolean": SyntaxKind.BooleanKeyword,
         "break": SyntaxKind.BreakKeyword,
         "case": SyntaxKind.CaseKeyword,
