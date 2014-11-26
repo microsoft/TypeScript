@@ -1307,9 +1307,13 @@ module ts {
             return parseIdentifierName();
         }
 
-        function parseContextualModifier(t: SyntaxKind): boolean {
+        function parseContextualModifier(t: SyntaxKind, disallowLineTerminator?: boolean): boolean {
             return token === t && tryParse(() => {
                 nextToken();
+                if (disallowLineTerminator && scanner.hasPrecedingLineBreak()) {
+                    return false;
+                }
+
                 return token === SyntaxKind.OpenBracketToken || isPropertyName();
             });
         }
@@ -2303,6 +2307,9 @@ module ts {
                 isAsync = token === SyntaxKind.AsyncKeyword;
                 if (isAsync) {
                     nextToken();
+                    if (scanner.hasPrecedingLineBreak()) {
+                        return Tristate.False;
+                    }
                 }
 
                 return isParenthesizedArrowFunctionExpression();
@@ -2772,7 +2779,7 @@ module ts {
                     return parseTemplateExpression();
                     
                 case SyntaxKind.AsyncKeyword:
-                    if (lookAhead(() => nextToken() === SyntaxKind.FunctionKeyword)) {
+                    if (lookAhead(() => nextToken() === SyntaxKind.FunctionKeyword && !scanner.hasPrecedingLineBreak())) {
                         nextToken();
                         var func = parseFunctionExpression(/* isAsync */ true);
                         return func;
@@ -2820,7 +2827,7 @@ module ts {
 
         function parsePropertyAssignment(): Declaration {
             var nodePos = scanner.getStartPos();
-            var isAsync = parseContextualModifier(SyntaxKind.AsyncKeyword);
+            var isAsync = parseContextualModifier(SyntaxKind.AsyncKeyword, /*disallowLineTerminator*/ true);
             var isGenerator = parseOptional(SyntaxKind.AsteriskToken);
             var tokenIsIdentifier = isIdentifier();
             var nameToken = token;
@@ -3744,9 +3751,12 @@ module ts {
                 case SyntaxKind.PrivateKeyword:
                 case SyntaxKind.ProtectedKeyword:
                 case SyntaxKind.StaticKeyword:
-                case SyntaxKind.AsyncKeyword:
                     // Check for modifier on source element
                     return lookAhead(() => { nextToken(); return isDeclarationStart(); });
+
+                case SyntaxKind.AsyncKeyword:
+                    // Check for modifier on source element
+                    return lookAhead(() => { nextToken(); return !scanner.hasPrecedingLineBreak() && isDeclarationStart(); });
             }
         }
 
@@ -4754,30 +4764,47 @@ module ts {
                     return grammarErrorOnNode(lastPrivate, Diagnostics._0_modifier_cannot_appear_on_a_constructor_declaration, "async");
                 }
             }
-            else if (node.kind === SyntaxKind.ImportDeclaration) {
-                if (flags & NodeFlags.Ambient) {
-                    return grammarErrorOnNode(lastDeclare, Diagnostics._0_modifier_cannot_be_used_with_an_import_declaration, "declare");
-                }
-                else if (flags & NodeFlags.Async) {
-                    return grammarErrorOnNode(lastAsync, Diagnostics._0_modifier_cannot_be_used_with_an_import_declaration, "async");
-                }
+            else if (node.kind === SyntaxKind.ImportDeclaration && flags & NodeFlags.Ambient) {
+                return grammarErrorOnNode(lastDeclare, Diagnostics._0_modifier_cannot_be_used_with_an_import_declaration, "declare");
             }
-            else if (node.kind === SyntaxKind.InterfaceDeclaration) {
-                if (flags & NodeFlags.Ambient) {
-                    return grammarErrorOnNode(lastDeclare, Diagnostics._0_modifier_cannot_be_used_with_an_interface_declaration, "declare");
-                }
-                else if (flags & NodeFlags.Async) {
-                    return grammarErrorOnNode(lastAsync, Diagnostics._0_modifier_cannot_be_used_with_an_interface_declaration, "async");
-                }
+            else if (node.kind === SyntaxKind.InterfaceDeclaration && flags & NodeFlags.Ambient) {
+                return grammarErrorOnNode(lastDeclare, Diagnostics._0_modifier_cannot_be_used_with_an_interface_declaration, "declare");
             }
-            else if (node.kind === SyntaxKind.ClassDeclaration && flags & NodeFlags.Async) {
-                return grammarErrorOnNode(lastAsync, Diagnostics._0_modifier_cannot_be_used_with_a_class_declaration, "async");
+            else if (flags & NodeFlags.Async) {
+                return checkAsyncModifier(node, lastAsync);
             }
-            else if (node.kind === SyntaxKind.GetAccessor && flags & NodeFlags.Async) {
-                return grammarErrorOnNode(lastAsync, Diagnostics._0_modifier_cannot_be_used_on_a_1_accessor, "async", "set");
-            }
-            else if (node.flags & NodeFlags.Generator && flags & NodeFlags.Async) {
-                return grammarErrorOnNode(lastAsync, Diagnostics._0_modifier_cannot_be_used_with_a_generator, "async");
+        }
+
+        function checkAsyncModifier(node: Node, asyncModifier: Node): boolean {
+            switch (node.kind) {
+                case SyntaxKind.SetAccessor:
+                    return grammarErrorOnNode(asyncModifier, Diagnostics._0_modifier_cannot_be_used_on_a_1_accessor, "async", "set");
+                case SyntaxKind.Constructor:
+                    return grammarErrorOnNode(asyncModifier, Diagnostics._0_modifier_cannot_appear_on_a_constructor_declaration, "async");
+                case SyntaxKind.Property:
+                    return grammarErrorOnNode(asyncModifier, Diagnostics._0_modifier_cannot_appear_on_a_data_property, "async");
+                case SyntaxKind.IndexSignature:
+                    return grammarErrorOnNode(asyncModifier, Diagnostics._0_modifier_cannot_be_used_in_an_ambient_context, "async");
+                case SyntaxKind.ClassDeclaration:
+                    return grammarErrorOnNode(asyncModifier, Diagnostics._0_modifier_cannot_be_used_with_a_class_declaration, "async");
+                case SyntaxKind.InterfaceDeclaration:
+                    return grammarErrorOnNode(asyncModifier, Diagnostics._0_modifier_cannot_be_used_with_an_interface_declaration, "async");
+                case SyntaxKind.ModuleDeclaration:
+                    return grammarErrorOnNode(asyncModifier, Diagnostics._0_modifier_cannot_be_used_with_a_module_declaration, "async");
+                case SyntaxKind.EnumDeclaration:
+                    return grammarErrorOnNode(asyncModifier, Diagnostics._0_modifier_cannot_be_used_with_an_enum_declaration, "async");
+                case SyntaxKind.ExportAssignment:
+                    return grammarErrorOnNode(asyncModifier, Diagnostics._0_modifier_cannot_be_used_with_an_export_assignment_declaration, "async");
+                case SyntaxKind.VariableStatement:
+                    return grammarErrorOnNode(asyncModifier, Diagnostics._0_modifier_cannot_be_used_on_a_variable_statement, "async");
+                case SyntaxKind.TypeAliasDeclaration:
+                    return grammarErrorOnNode(asyncModifier, Diagnostics._0_modifier_cannot_be_used_with_a_type_declaration, "async");
+                case SyntaxKind.ImportDeclaration:
+                    return grammarErrorOnNode(asyncModifier, Diagnostics._0_modifier_cannot_be_used_with_an_import_declaration, "async");
+                case SyntaxKind.Parameter:
+                    return grammarErrorOnNode(asyncModifier, Diagnostics._0_modifier_cannot_be_used_with_a_parameter_declaration, "async");
+                default:
+                    return false;
             }
         }
 
@@ -5104,13 +5131,17 @@ module ts {
                 // a context is an 
                 return grammarErrorOnFirstToken(node, Diagnostics.with_statements_are_not_allowed_in_strict_mode);
             }
+            else if (node.parserContextFlags & ParserContextFlags.Await) {
+                // Async mode code may not include a WithStatement.
+                return grammarErrorOnFirstToken(node, Diagnostics.with_statements_are_not_allowed_in_an_async_function_block);
+            }
         }
 
         function checkYieldExpression(node: YieldExpression): boolean {
             if (!(node.parserContextFlags & ParserContextFlags.Yield)) {
                 return grammarErrorOnFirstToken(node, Diagnostics.yield_expression_must_be_contained_within_a_generator_declaration);
             }
-        }
+        }        
     }
 
     export function createProgram(rootNames: string[], options: CompilerOptions, host: CompilerHost): Program {

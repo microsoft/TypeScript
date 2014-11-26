@@ -91,42 +91,38 @@ var __generator = __generator || function (m, r) {
 };
 function asyncFunc() {
     return new Promise(function(__resolve) {
-        __resolve(__awaiter(function(__state) {
+        __resolve(__awaiter(__generator(function(__state) {
             switch(__state.label) {
-                case 0:
+                case 0: return ["return"];
             }
-            return ["return"];
-        }))
+        })));
     });
 }
 var asyncFuncExpr = function () {
     return new Promise(function(__resolve) {
-        __resolve(__awaiter(function(__state) {
+        __resolve(__awaiter(__generator(function(__state) {
             switch(__state.label) {
-                case 0:
+                case 0: return ["return"];
             }
-            return ["return"];
-        }))
+        })));
     });
 };
 var asyncLambdaBody = function () {
     return new Promise(function(__resolve) {
-        __resolve(__awaiter(function(__state) {
+        __resolve(__awaiter(__generator(function(__state) {
             switch(__state.label) {
-                case 0:
+                case 0: return ["return"];
             }
-            return ["return"];
-        }))
+        })));
     });
 };
 var asyncLambdaExpr = function () {
     return new Promise(function(__resolve) {
-        __resolve(__awaiter(function(__state) {
+        __resolve(__awaiter(__generator(function(__state) {
             switch(__state.label) {
-                case 0:
+                case 0: return ["return", null];
             }
-            return ["return"];
-        }))
+        })));
     });
 };
 var Class = (function () {
@@ -134,22 +130,20 @@ var Class = (function () {
     }
     Class.asyncStaticMethod = function () {
         return new Promise(function(__resolve) {
-            __resolve(__awaiter(function(__state) {
+            __resolve(__awaiter(__generator(function(__state) {
                 switch(__state.label) {
-                    case 0:
+                    case 0: return ["return"];
                 }
-                return ["return"];
-            }))
+            })));
         });
     };
     Class.prototype.asyncMethod = function () {
         return new Promise(function(__resolve) {
-            __resolve(__awaiter(function(__state) {
+            __resolve(__awaiter(__generator(function(__state) {
                 switch(__state.label) {
-                    case 0:
+                    case 0: return ["return"];
                 }
-                return ["return"];
-            }))
+            })));
         });
     };
     return Class;
@@ -157,22 +151,20 @@ var Class = (function () {
 var ObjectLiteral = {
     asyncProperty: function () {
         return new Promise(function(__resolve) {
-            __resolve(__awaiter(function(__state) {
+            __resolve(__awaiter(__generator(function(__state) {
                 switch(__state.label) {
-                    case 0:
+                    case 0: return ["return"];
                 }
-                return ["return"];
-            }))
+            })));
         });
     },
     asyncMethod: function () {
         return new Promise(function(__resolve) {
-            __resolve(__awaiter(function(__state) {
+            __resolve(__awaiter(__generator(function(__state) {
                 switch(__state.label) {
-                    case 0:
+                    case 0: return ["return"];
                 }
-                return ["return"];
-            }))
+            })));
         });
     }
 };

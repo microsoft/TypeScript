@@ -520,9 +520,41 @@
         "code": 1163
     },
 
-    "'{0}' modifier cannot be used with a generator.": {
+    "'with' statements are not allowed in an async function block.": {
         "category": "Error",
         "code": 1170
+    },
+    "'{0}' modifier cannot be used with a generator.": {
+        "category": "Error",
+        "code": 1171
+    },
+    "'{0}' modifier cannot be used with a module declaration.": {
+        "category": "Error",
+        "code": 1172
+    },
+    "'{0}' modifier cannot be used with an enum declaration.": {
+        "category": "Error",
+        "code": 1173
+    },
+    "'{0}' modifier cannot be used with an export assignment declaration.": {
+        "category": "Error",
+        "code": 1174
+    },
+    "'{0}' modifier cannot be used on a variable statement.": {
+        "category": "Error",
+        "code": 1175
+    },
+    "'{0}' modifier cannot be used with a type declaration.": {
+        "category": "Error",
+        "code": 1176
+    },
+    "'{0}' modifier cannot be used with an import declaration.": {
+        "category": "Error",
+        "code": 1177
+    },
+    "'{0}' modifier cannot be used with a parameter declaration.": {
+        "category": "Error",
+        "code": 1178
     },
 
     "Duplicate identifier '{0}'.": {

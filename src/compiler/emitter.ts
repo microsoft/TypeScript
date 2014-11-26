@@ -2394,6 +2394,7 @@ module ts {
                 var newlineRequested = false;
                 var lines = text.split(/\r\n|\r|\n/g);
                 var lastIndent = 0;
+                var indentDepth = 0;
                 for (var i = 0; i < lines.length; i++) {
                     var line = lines[i];
                     if (i === 0 && line.length === 0) {
@@ -2406,8 +2407,12 @@ module ts {
                     if (newlineRequested) {
                         if (currentIndent > lastIndent) {
                             increaseIndent();
+                            indentDepth++;
                         } else if (currentIndent < lastIndent) {
-                            decreaseIndent();
+                            if (indentDepth > 0) {
+                                decreaseIndent();
+                                indentDepth--;
+                            }
                         }
                     }
 
@@ -2827,7 +2832,8 @@ module ts {
                 }
 
                 if (node.flags & NodeFlags.Async) {
-                    node = rewriteAsyncFunction(node, compilerOptions);
+                    // NOTE: rewriteFunction supports downlevel generators, but is not currently enabled.
+                    node = rewriteFunction(node, compilerOptions);
                 }
 
                 write("function ");

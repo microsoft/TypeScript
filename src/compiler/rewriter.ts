@@ -5,18 +5,8 @@
 /// <reference path="factory.ts"/>
 /// <reference path="generator.ts"/>
 module ts {
-    interface RewriterAnnotations {
-        containsAwait?: boolean;
-    }
-
-    var annotations: RewriterAnnotations[] = [];
+    var awaitOrYieldNodes: boolean[] = [];
     var nextNodeId = -1;
-
-    function getAnnotations(node: Node): RewriterAnnotations {
-        // rewrite happens after emit, so ensure we have unique node ids for generated nodes.
-        if (!node.id) node.id = nextNodeId--;
-        return annotations[node.id] || (annotations[node.id] = {});
-    }
 
     function getPromiseConstructor(node: FunctionLikeDeclaration): EntityName {
         var typeName: EntityName;
@@ -33,21 +23,33 @@ module ts {
     }
 
     /** rewrites an async function or method declaration */
-    export function rewriteAsyncFunction(node: FunctionLikeDeclaration, compilerOptions: CompilerOptions): FunctionLikeDeclaration {
+    export function rewriteFunction(node: FunctionLikeDeclaration, compilerOptions: CompilerOptions): FunctionLikeDeclaration {
         var builder: CodeGenerator;
         var renames: Map<Identifier>;
+        var isDownlevel = compilerOptions.target <= ScriptTarget.ES5;
+        var isAsync = (node.flags & NodeFlags.Async) !== 0;
+        var isGenerator = (node.flags & NodeFlags.Generator) !== 0;
+        var isDownlevelGenerator = isDownlevel && isGenerator;
+        var isDownlevelAsync = isDownlevel && isAsync;
+        var isUplevelAsync = !isDownlevel && isAsync;
+
+        if (!isAsync && !isDownlevelGenerator) {
+            return node;
+        }
 
         return rewriteWorker();
 
+        function visit<TNode extends Node>(node: TNode, emitNode?: (node: Node) => void): TNode;
+        function visit(node: Node, emitNode?: (node: Node) => void): Node;
         function visit(node: Node, emitNode?: (node: Node) => void): Node {
-            // we need to recursively visit statements that could contain an `await` expression, a function declaration, or a variable declaration.
-            // we only need to recursively visit expressions that contain an `await` expression.
-            // skip undefined nodes or expressions with no `await`.
             if (!node) {
                 return node;
             }
 
-            builder.pushLocation(node);
+            if (isDownlevel) {
+                builder.pushLocation(node);
+            }
+
             try {
                 switch (node.kind) {
                     case SyntaxKind.VariableDeclaration:
@@ -106,6 +108,14 @@ module ts {
                         node = visitNewExpression(<NewExpression>node);
                         break;
 
+                    case SyntaxKind.YieldExpression:
+                        if (!isDownlevelGenerator) {
+                            Debug.fail("YieldExpression is not allowed in an async function");
+                        } else {
+                            node = visitYieldExpression(<YieldExpression>node);
+                        }
+                        break;
+
                     case SyntaxKind.VariableStatement:
                         node = visitVariableStatement(<VariableStatement>node);
                         break;
@@ -159,11 +169,15 @@ module ts {
                         break;
 
                     case SyntaxKind.ReturnStatement:
-                        node = visitReturnStatement(<ReturnStatement>node);
+                        node = visitReturnStatement(<ReturnStatement>node, !!emitNode);
                         break;
 
                     case SyntaxKind.WithStatement:
-                        node = visitWithStatement(<WithStatement>node);
+                        if (isAsync) {
+                            Debug.fail("WithStatement is not allowed in an async function");
+                        } else if (isGenerator) {
+                            Debug.fail("WithStatement is not allowed in a generator function");
+                        }
                         break;
 
                     case SyntaxKind.SwitchStatement:
@@ -181,7 +195,7 @@ module ts {
                         break;
 
                     case SyntaxKind.ThrowStatement:
-                        node = visitThrowStatement(<ThrowStatement>node);
+                        node = visitThrowStatement(<ThrowStatement>node, !!emitNode);
                         break;
 
                     case SyntaxKind.TryStatement:
@@ -207,8 +221,15 @@ module ts {
                         node = visitIdentifier(<Identifier>node);
                         break;
                 }
+
+                if (node && emitNode) {
+                    emitNode(node);
+                }
+
             } finally {
-                builder.popLocation();
+                if (isDownlevel) {
+                    builder.popLocation();
+                }
             }
 
             return node;
@@ -247,33 +268,33 @@ module ts {
             return updatedNodes || nodes;
         }
 
-        function visitList(elements: Node[], copy: (node: Node) => Node): Node[] {
-            var result: Node[];
-            var lastAwaitedElement = -1;
+        function visitList<TNode extends Node>(elements: TNode[], copy: (node: TNode) => TNode): TNode[] {
+            var result: TNode[];
+            var lastRewrittenElement = -1;
 
             for (var i = 0; i < elements.length; i++) {
                 var element = elements[i];
-                if (isAwaited(element)) {
+                if (hasAwaitOrYield(element)) {
                     if (!result) {
                         result = [];
                     }
 
-                    if (lastAwaitedElement > -1) {
-                        result[lastAwaitedElement] = copy(result[lastAwaitedElement]);
+                    if (lastRewrittenElement > -1) {
+                        result[lastRewrittenElement] = copy(result[lastRewrittenElement]);
                     }
 
-                    for (var j = lastAwaitedElement + 1; j < i; j++) {
+                    for (var j = lastRewrittenElement + 1; j < i; j++) {
                         result[j] = copy(visit(elements[j]));
                     }
 
                     result[i] = visit(element);
-                    lastAwaitedElement = i;
+                    lastRewrittenElement = i;
                 }
             }
 
-            if (lastAwaitedElement > -1) {
-                if (lastAwaitedElement < elements.length) {
-                    for (var i = lastAwaitedElement + 1; i < elements.length; i++) {
+            if (lastRewrittenElement > -1) {
+                if (lastRewrittenElement < elements.length) {
+                    for (var i = lastRewrittenElement + 1; i < elements.length; i++) {
                         result[i] = elements[i];
                     }
                 }
@@ -287,19 +308,15 @@ module ts {
         // declarations
 
         function visitVariableDeclaration(node: VariableDeclaration): Node {
-            if (compilerOptions.target <= ScriptTarget.ES5) {
-                var local = builder.declareLocal(node.name.text);
-                var initializer = visit(node.initializer);
-                if (initializer) {
-                    return factory.createBinaryExpression(SyntaxKind.EqualsToken, local, initializer, node);
-                }
+            if (isDownlevel) {
+                return rewriteVariableDeclaration(node);
             } else {
                 return factory.updateVariableDeclaration(node, node.name, visit(node.initializer));
             }
         }
 
         function visitFunctionDeclaration(node: FunctionDeclaration): Node {
-            if (compilerOptions.target <= ScriptTarget.ES5) {
+            if (isDownlevel) {
                 builder.addFunction(node);
                 return;
             } else {
@@ -314,8 +331,8 @@ module ts {
         // expressions
 
         function visitIdentifier(node: Identifier): Identifier {
-            if (compilerOptions.target <= ScriptTarget.ES5) {
-                // TODO: may need to rename identifier if the renamed identifier is captured by a closure.
+            if (isDownlevel) {
+                // TODO: may need to support renaming an identifier in the emitter, if the renamed identifier is captured by a closure.
                 return getRenamedIdentifier(node);
             } else {
                 return node;
@@ -323,17 +340,11 @@ module ts {
         }
 
         function visitPrefixOperator(node: UnaryExpression): Node {
-            if (node.operator === SyntaxKind.AwaitKeyword) {
-                if (compilerOptions.target <= ScriptTarget.ES5) {
-                    var operand = visit(node.operand);
-                    var resumeLabel = builder.defineLabel();
-                    builder.setLocation(node.operand);
-                    builder.emit(OpCode.Yield, operand);
-                    builder.markLabel(resumeLabel);
-                    builder.setLocation(node);
-                    return factory.createGeneratedNode(`__state.sent`, undefined, node);
+            if (isAsync && node.operator === SyntaxKind.AwaitKeyword) {
+                if (isDownlevel) {
+                    return rewriteAwaitExpressionDownlevel(node);
                 } else {
-                    return factory.createGeneratedNode(`(yield \${operand})`, { operand: node.operand }, node);
+                    return rewriteAwaitExpressionUplevel(node);
                 }
             } else {
                 return factory.updatePrefixOperator(node, visit(node.operand));
@@ -375,23 +386,13 @@ module ts {
         }
 
         function visitBinaryExpression(node: BinaryExpression): Node {
-            if (compilerOptions.target <= ScriptTarget.ES5 && isAwaited(node.right)) {
+            if (isDownlevel && hasAwaitOrYield(node.right)) {
                 if (isLogicalBinary(node)) {
-                    var resumeLabel = builder.defineLabel();
-                    var resultLocal = builder.declareLocal();
-                    var code = node.operator === SyntaxKind.AmpersandAmpersandToken ? OpCode.BrFalse : OpCode.BrTrue;
-                    builder.setLocation(node.left);
-                    builder.emit(OpCode.Assign, resultLocal, visit(node.left));
-                    builder.emit(code, resumeLabel, resultLocal);
-                    builder.setLocation(node.right);
-                    builder.emit(OpCode.Statement, resultLocal, visit(node.right));
-                    builder.setLocation(node);
-                    builder.markLabel(resumeLabel);
-                    return resultLocal;
+                    return rewriteLogicalBinaryExpression(node);
                 } else if (isAssignment(node)) {
                     return factory.updateBinaryExpression(node, visitAndCacheLeftHandOfAssignment(node.left), visit(node.right));
                 } else {
-                    return factory.updateBinaryExpression(node, builder.copy(visit(node.left)), visit(node.right));
+                    return factory.updateBinaryExpression(node, builder.cacheExpression(visit(node.left)), visit(node.right));
                 }
             } else {
                 return factory.updateBinaryExpression(node, visit(node.left), visit(node.right));
@@ -407,39 +408,27 @@ module ts {
                     return visitAndCachePropertyAccess(<PropertyAccess>node);
 
                 default:
-                    return builder.copy(visit(node));
+                    return builder.cacheExpression(visit(node));
             }
         }
 
         function visitAndCacheIndexedAccess(node: IndexedAccess): Node {
             return factory.updateIndexedAccess(
                 node,
-                builder.copy(visit(node.object)),
-                builder.copy(visit(node.index)));
+                builder.cacheExpression(visit(node.object)),
+                builder.cacheExpression(visit(node.index)));
         }
 
         function visitAndCachePropertyAccess(node: PropertyAccess): Node {
             return factory.updatePropertyAccess(
                 node,
-                builder.copy(visit(node.left)),
+                builder.cacheExpression(visit(node.left)),
                 node.right);
         }
 
         function visitConditionalExpression(node: ConditionalExpression): Node {
-            if (compilerOptions.target <= ScriptTarget.ES5 && (isAwaited(node.whenTrue) || isAwaited(node.whenFalse))) {
-                var whenFalseLabel = builder.defineLabel();
-                var resumeLabel = builder.defineLabel();
-                var resultLocal = builder.declareLocal();
-                builder.setLocation(node.condition);
-                builder.emit(OpCode.BrFalse, whenFalseLabel, visit(node.condition));
-                builder.setLocation(node.whenTrue);
-                builder.emit(OpCode.Assign, resultLocal, visit(node.whenTrue));
-                builder.emit(OpCode.Break, resumeLabel);
-                builder.markLabel(whenFalseLabel);
-                builder.setLocation(node.whenFalse);
-                builder.emit(OpCode.Assign, resultLocal, visit(node.whenFalse));
-                builder.markLabel(resumeLabel);
-                return resultLocal;
+            if (isDownlevel && (hasAwaitOrYield(node.whenTrue) || hasAwaitOrYield(node.whenFalse))) {
+                return rewriteConditionalExpression(node);
             } else {
                 return factory.updateConditionalExpression(node, visit(node.condition), visit(node.whenTrue), visit(node.whenFalse));
             }
@@ -450,8 +439,8 @@ module ts {
         }
 
         function visitArrayLiteral(node: ArrayLiteral): Node {
-            if (compilerOptions.target <= ScriptTarget.ES5 && isAwaited(node)) {
-                return factory.updateArrayLiteral(node, visitList(node.elements, builder.copy));
+            if (isDownlevel && hasAwaitOrYield(node)) {
+                return factory.updateArrayLiteral(node, visitList(node.elements, builder.cacheExpression));
             } else {
                 return factory.updateArrayLiteral(node, visitNodes(node.elements));
             }
@@ -461,14 +450,14 @@ module ts {
             switch (node.kind) {
                 case SyntaxKind.PropertyAssignment:
                     var property = <PropertyDeclaration>node;
-                    return factory.updatePropertyAssignment(property, property.name, builder.copy(property.initializer));
+                    return factory.updatePropertyAssignment(property, property.name, builder.cacheExpression(property.initializer));
             }
 
             return node;
         }
 
         function visitObjectLiteral(node: ObjectLiteral): Node {
-            if (compilerOptions.target <= ScriptTarget.ES5 && isAwaited(node)) {
+            if (isDownlevel && hasAwaitOrYield(node)) {
                 return factory.updateObjectLiteral(node, visitList(node.properties, copyProperty));
             } else {
                 return factory.updateObjectLiteral(node, visitNodes(node.properties));
@@ -480,8 +469,8 @@ module ts {
         }
 
         function visitIndexedAccess(node: IndexedAccess): IndexedAccess {
-            if (compilerOptions.target <= ScriptTarget.ES5 && isAwaited(node.index)) {
-                var object = builder.copy(visit(node.object));
+            if (isDownlevel && hasAwaitOrYield(node.index)) {
+                var object = builder.cacheExpression(visit(node.object));
                 return factory.updateIndexedAccess(node, object, visit(node.index));
             } else {
                 return factory.updateIndexedAccess(node, visit(node.object), visit(node.index));
@@ -489,19 +478,34 @@ module ts {
         }
 
         function visitCallExpression(node: CallExpression): Node {
-            if (compilerOptions.target <= ScriptTarget.ES5) {
-                return factory.updateCallExpression(node, visit(node.func), visitList(node.arguments, builder.copy));
+            if (isDownlevel) {
+                return factory.updateCallExpression(node, visit(node.func), visitList(node.arguments, builder.cacheExpression));
             } else {
                 return factory.updateCallExpression(node, visit(node.func), visitNodes(node.arguments));
             }
         }
 
         function visitNewExpression(node: NewExpression): Node {
-            if (compilerOptions.target <= ScriptTarget.ES5) {
-                return factory.updateNewExpression(node, visit(node.func), visitList(node.arguments, builder.copy));
+            if (isDownlevel) {
+                return factory.updateNewExpression(node, visit(node.func), visitList(node.arguments, builder.cacheExpression));
             } else {
                 return factory.updateNewExpression(node, visit(node.func), visitNodes(node.arguments));
             }
+        }
+
+        function visitYieldExpression(node: YieldExpression): Node {
+            if (isDownlevelGenerator) {
+                // only visited in an ES5 downlevel generator
+                var operand = visit(node.expression);
+                var resumeLabel = builder.defineLabel();
+                builder.setLocation(node.expression);
+                builder.emit(OpCode.Yield, operand);
+                builder.markLabel(resumeLabel);
+                builder.setLocation(node);
+                return factory.createGeneratedNode(`__state.sent`, undefined, node);
+            }
+
+            return node;
         }
 
         function visitTypeAssertion(node: TypeAssertion): Node {
@@ -509,20 +513,20 @@ module ts {
         }
 
         function visitTaggedTemplateExpression(node: TaggedTemplateExpression): Node {
-            if (compilerOptions.target <= ScriptTarget.ES5 && isAwaited(node.template)) {
-                return factory.updateTaggedTemplateExpression(node, builder.copy(visit(node.tag)), <TemplateExpression>visit(node.template));
+            if (isDownlevel && hasAwaitOrYield(node.template)) {
+                return factory.updateTaggedTemplateExpression(node, builder.cacheExpression(visit(node.tag)), <TemplateExpression>visit(node.template));
             } else {
                 return factory.updateTaggedTemplateExpression(node, visit(node.tag), <LiteralExpression | TemplateExpression>visit(node.template));
             }
         }
 
         function copySpan(node: TemplateSpan): TemplateSpan {
-            return factory.updateTemplateSpan(node, builder.copy(node.expression), node.literal);
+            return factory.updateTemplateSpan(node, builder.cacheExpression(node.expression), node.literal);
         }
 
         function visitTemplateExpression(node: TemplateExpression): Node {
-            if (compilerOptions.target <= ScriptTarget.ES5 && isAwaited(node)) {
-                return factory.updateTemplateExpression(node, node.head, <TemplateSpan[]>visitList(node.templateSpans, copySpan));
+            if (isDownlevel && hasAwaitOrYield(node)) {
+                return factory.updateTemplateExpression(node, node.head, visitList(node.templateSpans, copySpan));
             } else {
                 return factory.updateTemplateExpression(node, node.head, visitNodes(node.templateSpans));
             }
@@ -535,9 +539,9 @@ module ts {
         // statements
 
         function visitVariableStatement(node: VariableStatement): Node {
-            if (compilerOptions.target <= ScriptTarget.ES5) {
+            if (isDownlevel) {
                 // visiting declarations will result in assignment expressions
-                var assignment = visitVariableDeclarationListOrInitializer(node.declarations);
+                var assignment = visitVariableDeclarationListOrInitializer(node.declarations).initializer;
                 if (assignment) {
                     return factory.createExpressionStatement(assignment, /*location*/ node);
                 }
@@ -550,389 +554,163 @@ module ts {
             return factory.updateExpressionStatement(node, visit(node.expression));
         }
 
-        function visitVariableDeclarationListOrInitializer(declarations: NodeArray<VariableDeclaration>, initializer?: Expression): Expression {
-            // visiting declarations will result in assignment expressions
-            var assignments = visitNodes<Node>(declarations);
-            if (assignments && assignments.length) {
-                var assignment = assignments[0];
-                for (var i = 1; i < assignments.length; i++) {
-                    assignment = factory.createBinaryExpression(SyntaxKind.CommaToken, assignment, assignments[i], { pos: assignment.pos, end: assignments[i].end });
-                }
-
-                if (assignments.length > 1) {
-                    return factory.createParenExpression(assignment, assignment);
-                }
-
-                return assignment;
-            } else {
-                return visit(initializer);
-            }
-        }
-
-        function visitVariableDeclarationOrVariable(declaration: VariableDeclaration, variable: Expression): { assignment?: Expression; identifier?: Identifier; variable: Expression } {
-            var assignment: Expression;
-            var identifier: Identifier;
-            if (declaration) {
-                assignment = visit(declaration);
-                identifier = declaration.name;
-            } else if (variable) {
-                assignment = visit(variable);
-                if (assignment.kind === SyntaxKind.Identifier) {
-                    identifier = <Identifier>assignment;
-                    assignment = undefined;
-                } else if (assignment.kind === SyntaxKind.BinaryExpression) {
-                    var left = assignment;
-                    while (left && left.kind === SyntaxKind.BinaryExpression) {
-                        left = (<BinaryExpression>left).left;
-                    }
-
-                    if (left && left.kind === SyntaxKind.Identifier) {
-                        identifier = <Identifier>left;
-                    }
+        function visitVariableDeclarationListOrInitializer(declarations: NodeArray<VariableDeclaration>, initializer?: Expression): { declarations?: NodeArray<VariableDeclaration>; initializer?: Expression; } {
+            if (isDownlevel) {
+                // visiting declarations will result in assignment expressions
+                var assignments = visitNodes<Node>(declarations);
+                if (assignments && assignments.length) {
+                    builder.setLocation(declarations);
+                    var assignment = builder.createGeneratedNode(`\${assignments}`, { assignments });
+                    return {
+                        initializer: assignment
+                    };
                 } else {
-                    assignment = undefined;
-                    identifier = undefined;
+                    return { initializer: visit(initializer) };
                 }
+            } else {
+                return {
+                    declarations: visitNodes(declarations),
+                    initializer: <Expression>visit(initializer)
+                };
             }
-
-            return {
-                assignment: assignment,
-                identifier: identifier,
-                variable: assignment || identifier
-            };
         }
 
         function visitIfStatement(node: IfStatement): Node {
-            if (compilerOptions.target <= ScriptTarget.ES5 && (isAwaited(node.thenStatement) || isAwaited(node.elseStatement))) {
-                var resumeLabel = builder.defineLabel();
-                if (node.elseStatement) {
-                    var elseLabel = builder.defineLabel();
-                }
-
-                builder.setLocation(node.expression);
-                builder.emit(OpCode.BrFalse, elseLabel || resumeLabel, node.expression);
-                builder.setLocation(node.thenStatement);
-                visit(node.thenStatement, builder.emitNode);
-                if (node.elseStatement) {
-                    builder.emit(OpCode.Break, resumeLabel);
-                    builder.setLocation(node.elseStatement);
-                    builder.markLabel(elseLabel);
-                    visit(node.elseStatement, builder.emitNode);
-                }
-                builder.markLabel(resumeLabel);
+            if (isDownlevel && (hasAwaitOrYield(node.thenStatement) || hasAwaitOrYield(node.elseStatement))) {
+                rewriteIfStatement(node);
                 return;
             } else {
-                return factory.updateIfStatement(
-                    node,
-                    visit(node.expression),
-                    visit(node.thenStatement),
-                    visit(node.elseStatement));
+                return factory.updateIfStatement(node, visit(node.expression), visit(node.thenStatement), visit(node.elseStatement));
             }
         }
 
         function visitDoStatement(node: DoStatement): Node {
-            if (compilerOptions.target <= ScriptTarget.ES5) {
-                if (isAwaited(node)) {
-                    var bodyLabel = builder.defineLabel();
-                    var conditionLabel = builder.defineLabel();
-                    var endLabel = builder.beginLoopBlock(conditionLabel, getTarget(node));
-                    builder.markLabel(bodyLabel);
-                    builder.setLocation(node.statement);
-                    visit(node.statement, builder.emitNode);
-                    builder.markLabel(conditionLabel);
-                    builder.setLocation(node.expression);
-                    builder.emit(OpCode.BrTrue, bodyLabel, visit(node.expression));
-                    builder.endLoopBlock();
-                    return;
-                } else {
-                    builder.beginScriptLoopBlock(getTarget(node));
-                    var statement = visit(node.statement);
-                    var expression = visit(node.expression);
-                    builder.endScriptLoopBlock();
-                    return factory.updateDoStatement(node, statement, expression);
-                }
+            if (isDownlevel && hasAwaitOrYield(node)) {
+                rewriteDoStatement(node);
+                return;
             } else {
-                return factory.updateDoStatement(
-                    node,
-                    visit(node.statement),
-                    visit(node.expression));
+                if (isDownlevel) {
+                    builder.beginScriptContinueBlock(getTarget(node));
+                }
+
+                var statement = visit(node.statement);
+                var expression = visit(node.expression);
+                if (isDownlevel) {
+                    builder.endScriptContinueBlock();
+                }
+
+                return factory.updateDoStatement(node, statement, expression);
             }
         }
 
         function visitWhileStatement(node: WhileStatement): Node {
-            if (compilerOptions.target <= ScriptTarget.ES5) {
-                if (isAwaited(node)) {
-                    var conditionLabel = builder.defineLabel();
-                    var bodyLabel = builder.defineLabel();
-                    var endLabel = builder.beginLoopBlock(conditionLabel, getTarget(node));
-                    builder.setLocation(node.expression);
-                    builder.markLabel(conditionLabel);
-                    builder.emit(OpCode.BrFalse, endLabel, visit(node.expression));
-                    builder.setLocation(node.statement);
-                    visit(node.statement, builder.emitNode);
-                    builder.emit(OpCode.Break, conditionLabel);
-                    builder.endLoopBlock();
-                    return;
-                } else {
-                    builder.beginScriptLoopBlock(getTarget(node));
-                    var expression = visit(node.expression);
-                    var statement = visit(node.statement);
-                    builder.endScriptLoopBlock();
-                    return factory.updateWhileStatement(node, expression, statement);
-                }
+            if (isDownlevel && hasAwaitOrYield(node)) {
+                rewriteWhileStatement(node);
+                return;
             } else {
-                return factory.updateWhileStatement(
-                    node,
-                    visit(node.expression),
-                    visit(node.statement));
+                pushScriptLoopBlock(node);
+                node = factory.updateWhileStatement(node, visit(node.expression), visit(node.statement));
+                popScriptLoopBlock();
+                return node;
             }
         }
 
-        function visitForStatement(node: ForStatement): Node {
-            if (compilerOptions.target <= ScriptTarget.ES5) {
-                if (isAwaited(node.condition) || isAwaited(node.iterator) || isAwaited(node.statement)) {
-                    var conditionLabel = builder.defineLabel();
-                    var iteratorLabel = builder.defineLabel();
-                    var endLabel = builder.beginLoopBlock(iteratorLabel, getTarget(node));
-                    var initializer = visitVariableDeclarationListOrInitializer(node.declarations, node.initializer);
-                    builder.setLocation(initializer);
-                    builder.emit(OpCode.Statement, initializer);
-                    builder.markLabel(conditionLabel);
-                    builder.setLocation(node.condition);
-                    builder.emit(OpCode.BrFalse, endLabel, visit(node.condition));
-                    builder.setLocation(node.statement);
-                    visit(node.statement, builder.emitNode);
-                    builder.markLabel(iteratorLabel);
-                    builder.setLocation(node.iterator);
-                    visit(node.iterator, builder.emitNode);
-                    builder.emit(OpCode.Break, conditionLabel);
-                    builder.endLoopBlock();
-                    return;
-                } else {
-                    builder.beginScriptLoopBlock(getTarget(node));
-                    var variable = visitVariableDeclarationListOrInitializer(node.declarations, node.initializer);
-                    var condition = visit(node.condition);
-                    var iterator = visit(node.iterator);
-                    var statement = visit(node.statement);
-                    builder.endScriptLoopBlock();
-                    return factory.updateForStatement(node, undefined, variable, condition, iterator, statement);
+        function visitForOrForInStatementHead(declarations: NodeArray<VariableDeclaration>, initializer: Expression) {
+            var variable = initializer;
+            if (isDownlevel) {
+                if (declarations) {
+                    for (var i = 0; i < declarations.length; i++) {
+                        var declaration = declarations[i];
+                        var generated = rewriteVariableDeclaration(declaration);
+                        if (generated) {
+                            builder.setLocation(declaration);
+                            builder.emit(OpCode.Statement, `${generated};`, { generated });
+                        }
+
+                        variable = declaration.name;
+                    }
+
+                    declarations = undefined;
+                } else if (initializer) {
+                    initializer = visit(initializer);
+                    variable = initializer;
+                    while (variable.kind === SyntaxKind.BinaryExpression) {
+                        variable = (<BinaryExpression>variable).left;
+                    }
                 }
+            }
+
+            return { declarations, initializer, variable };
+        }
+
+        function visitForStatement(node: ForStatement): Node {
+            if (isDownlevel && (hasAwaitOrYield(node.condition) || hasAwaitOrYield(node.iterator) || hasAwaitOrYield(node.statement))) {
+                rewriteForStatement(node);
+                return;
             } else {
-                return factory.updateForStatement(
-                    node,
-                    visitNodes(node.declarations),
-                    visit(node.initializer),
-                    visit(node.condition),
-                    visit(node.iterator),
-                    visit(node.statement));
+                pushScriptLoopBlock(node);
+                var head = visitForOrForInStatementHead(node.declarations, node.initializer);
+                node = factory.updateForStatement(node, head.declarations, head.initializer, visit(node.condition), visit(node.iterator), visit(node.statement));
+                popScriptLoopBlock();
+                return node;
             }
         }
 
         function visitForInStatement(node: ForInStatement): Node {
-            if (compilerOptions.target <= ScriptTarget.ES5) {
-                //if (isAwaited(node.statement)) {
-                //    var keysLocal = builder.declareLocal();
-                //    var tempLocal = builder.declareLocal();
-                //    var conditionLabel = builder.defineLabel();
-                //    var iteratorLabel = builder.defineLabel();
-                //    var endLabel = builder.beginLoopBlock(iteratorLabel, getTarget(node));
-                //    var declarationOrVariable = visitVariableDeclarationListOrInitializer(node.declarations, node.variable);
-                //    builder.setLocation(declarationOrVariable.assignment);
-                //    builder.emit(OpCode.Statement, declarationOrVariable.assignment);
-                //    builder.setLocation(node.expression);
-                //    builder.emit(OpCode.Statement, `
-                //    \${keysLocal} = [];
-                //    for (\${tempLocal} in ${expression}) {
-                //        \${keysLocal}[\${keysLocal}.length] = \${tempLocal};
-                //    }
-                //    \${tempLocal} = 0;`, {
-                //            keysLocal,
-                //            tempLocal,
-                //            expression: visit(node.expression)
-                //        });
-                //    builder.markLabel(conditionLabel);
-                //    builder.setLocation(declarationOrVariable.identifier);
-                //    builder.emit(OpCode.BrTrue, endLabel, `\${tempLocal} >= \${keysLocal}.length`, {
-                //        keysLocal,
-                //        tempLocal
-                //    });
-                //    builder.emit(OpCode.Statement, `\${variable} = \${keysLocal}[\${tempLocal}];`, {
-                //        variable: declarationOrVariable.variable,
-                //        keysLocal,
-                //        tempLocal
-                //    });
-                //    builder.setLocation(node.statement);
-                //    visit(node.statement, builder.emitNode);
-                //    builder.markLabel(iteratorLabel);
-                //    builder.setLocation(node.expression);
-                //    builder.emit(OpCode.Statement, `{tempLocal}++;`, { tempLocal });
-                //    builder.emit(OpCode.Break, conditionLabel);
-                //    builder.endLoopBlock();
-                //    return;
-                //} else {
-                //    builder.beginScriptLoopBlock(getTarget(node));
-                //    var variable = visitVariableDeclarationOrVariable(node.declaration, node.variable).variable;
-                //    var expression = visit(node.expression);
-                //    var statement = visit(node.statement);
-                //    builder.endScriptLoopBlock();
-                //    return factory.updateForInStatement(node, /*declaration*/ undefined, variable, expression, statement);
-                //}
-                throw TypeError("E_NOTIMPL");
+            if (isDownlevel && hasAwaitOrYield(node.statement)) {
+                rewriteForInStatement(node);
+                return;
             } else {
-                return factory.updateForInStatement(
-                    node,
-                    visitNodes(node.declarations),
-                    visit(node.variable),
-                    visit(node.expression),
-                    visit(node.statement));
+                pushScriptLoopBlock(node);
+                var head = visitForOrForInStatementHead(node.declarations, node.variable);
+                node = factory.updateForInStatement(node, head.declarations, head.variable, visit(node.expression), visit(node.statement));
+                popScriptLoopBlock();
+                return node;
             }
         }
 
         function visitBreakStatement(node: BreakOrContinueStatement): Node {
-            if (compilerOptions.target <= ScriptTarget.ES5) {
+            if (isDownlevel) {
                 var label = builder.findBreakTarget(getTarget(node));
+                if (label > 0) {
+                    return builder.createInlineBreak(label);
+                }
             }
-            if (label > 0) {
-                return builder.createBreak(label);
-            } else {
-                return node;
-            }
+            return node;
         }
 
         function visitContinueStatement(node: BreakOrContinueStatement): Node {
-            if (compilerOptions.target <= ScriptTarget.ES5) {
+            if (isDownlevel) {
                 var label = builder.findBreakTarget(getTarget(node));
+                if (label > 0) {
+                    return builder.createInlineBreak(label);
+                }
             }
-            if (label > 0) {
-                return builder.createBreak(label);
-            } else {
-                return node;
-            }
+            return node;
         }
 
-        function visitReturnStatement(node: ReturnStatement): Node {
-            if (compilerOptions.target <= ScriptTarget.ES5) {
-                return builder.createReturn(visit(node.expression));
+        function visitReturnStatement(node: ReturnStatement, emitNode?: boolean): Node {
+            if (isDownlevel) {
+                if (emitNode) {
+                    builder.emit(OpCode.Return, visit(node.expression));
+                    return;
+                } else {
+                    return builder.createInlineReturn(visit(node.expression));
+                }
             } else {
                 return factory.updateReturnStatement(node, visit(node.expression));
             }
         }
 
-        function visitWithStatement(node: WithStatement): Node {
-            if (compilerOptions.target <= ScriptTarget.ES5 && isAwaited(node.statement)) {
-                var expression = builder.copy(visit(node.expression));
-                builder.beginWithBlock(expression);
-                visit(node.statement, builder.emitNode);
-                builder.endWithBlock();
+        function visitSwitchStatement(node: SwitchStatement): Node {
+            if (isDownlevel && forEach(node.clauses, hasAwaitOrYield)) {
+                rewriteSwitchStatement(node);
                 return;
             } else {
-                return factory.updateWithStatement(node, visit(node.expression), visit(node.statement));
-            }
-        }
-
-        function visitSwitchStatement(node: SwitchStatement): Node {
-            if (compilerOptions.target <= ScriptTarget.ES5) {
-                if (forEach(node.clauses, isAwaited)) {
-                    var defaultClauseIndex: number = -1;
-                    var endLabel = builder.beginBreakBlock(getTarget(node));
-
-                    // map clauses to labels
-                    var clauseHasStatements: boolean[] = [];
-                    var clauseLabelMap: number[] = [];
-                    var clauseLabels: Label[] = [endLabel];
-                    for (var i = node.clauses.length - 1; i >= 0; i--) {
-                        var clause = node.clauses[i];
-                        if (clause.kind === SyntaxKind.DefaultClause) {
-                            defaultClauseIndex = i;
-                        }
-
-                        clauseHasStatements[i] = !!(clause.statements && clause.statements.length);
-
-                        if (clauseHasStatements[i]) {
-                            clauseLabelMap[i] = clauseLabels.length;
-                            clauseLabels.push(builder.defineLabel());
-                        } else {
-                            clauseLabelMap[i] = clauseLabels.length - 1;
-                        }
-                    }
-
-                    var expression = builder.copy(visit(node.expression));
-
-                    // emit switch cases (but not statements)                
-                    var lastAwaitedClause = -1;
-                    for (var i = 0; i < node.clauses.length; i++) {
-                        var clause = node.clauses[i];
-                        if (isAwaited(clause.expression)) {
-                            emitPartialSwitchStatement(lastAwaitedClause + 1, i - 1);
-
-                            builder.setLocation(clause.expression);
-                            var clauseLabel = clauseLabels[clauseLabelMap[i]];
-                            builder.emit(OpCode.BrTrue, clauseLabel, "${expression} == ${test}", {
-                                expression: expression,
-                                test: visit(clause.expression)
-                            });
-
-                            lastAwaitedClause = i;
-                        }
-                    }
-
-                    emitPartialSwitchStatement(lastAwaitedClause + 1, node.clauses.length - 1);
-
-                    // emit default case (if any, but not statements)
-                    if (defaultClauseIndex > -1) {
-                        var defaultClauseLabel = clauseLabels[clauseLabelMap[defaultClauseIndex]];
-                        builder.setLocation(node.clauses[defaultClauseIndex]);
-                        builder.emit(OpCode.Break, defaultClauseLabel);
-                    } else {
-                        builder.emit(OpCode.Break, endLabel);
-                    }
-
-                    // emit switch states and statements
-                    for (var i = 0; i < node.clauses.length; i++) {
-                        if (!clauseHasStatements[i]) {
-                            continue;
-                        }
-
-                        var clauseLabel = clauseLabels[clauseLabelMap[i]];
-                        builder.markLabel(clauseLabel);
-                        builder.setLocation(node.clauses[i].expression);
-                        visit(node.clauses[i], builder.emitNode);
-                    }
-
-                    builder.endBreakBlock();
-                    return;
-                } else {
-                    var expression = <Expression>visit(node.expression);
-                    builder.beginScriptBreakBlock(getTarget(node));
-                    var clauses = visitNodes(node.clauses);
-                    builder.endScriptBreakBlock();
-                    return factory.updateSwitchStatement(node, expression, clauses);
-                }
-            } else {
-                return factory.updateSwitchStatement(node, visit(node.expression), visitNodes(node.clauses));
-            }
-
-            function emitPartialSwitchStatement(start: number, end: number): void {
-                var clauses: CaseOrDefaultClause[] = [];
-                for (var i = start; i <= end; i++) {
-                    if (i === defaultClauseIndex) {
-                        continue;
-                    }
-
-                    var clause = node.clauses[i];
-                    var clauseLabel = clauseLabels[clauseLabelMap[i]];
-                    builder.setLocation(clause.expression);
-                    var caseClause = factory.createCaseClause(visit(clause.expression), [
-                        builder.createBreak(clauseLabel)
-                    ], clause.expression);
-                    clauses.push(caseClause);
-                }
-
-                if (clauses.length) {
-                    var switchStatement = factory.createSwitchStatement(expression, clauses, node);
-                    builder.setLocation(node);
-                    builder.emit(OpCode.Statement, switchStatement);
-                }
+                pushScriptBreakBlock(node);
+                node = factory.updateSwitchStatement(node, <Expression>visit(node.expression), visitNodes(node.clauses));
+                popScriptBreakBlock();
+                return node;
             }
         }
 
@@ -945,66 +723,37 @@ module ts {
         }
 
         function visitLabeledStatement(node: LabeledStatement): Node {
-            if (compilerOptions.target <= ScriptTarget.ES5) {
-                if (isAwaited(node.statement)) {
-                    switch (node.statement.kind) {
-                        case SyntaxKind.DoStatement:
-                        case SyntaxKind.WhileStatement:
-                        case SyntaxKind.ForStatement:
-                        case SyntaxKind.ForInStatement:
-                        case SyntaxKind.SwitchStatement:
-                            visit(node.statement, builder.emitNode);
-                            return;
-                    }
-
-                    builder.beginBreakBlock(getTarget(node));
-                    visit(node.statement, builder.emitNode);
-                    builder.endBreakBlock();
-                    return;
-                } else {
-                    builder.beginScriptBreakBlock(getTarget(node));
-                    var statement = visit(node.statement);
-                    builder.endScriptBreakBlock();
-                    return factory.updateLabeledStatement(node, node.label, statement);
-                }
+            if (isDownlevel && hasAwaitOrYield(node.statement)) {
+                rewriteLabeledStatement(node);
+                return;
             } else {
-                return factory.updateLabeledStatement(node, node.label, visit(node.statement));
+                pushScriptBreakBlock(node);
+                node = factory.updateLabeledStatement(node, node.label, visit(node.statement));
+                popScriptBreakBlock();
+                return node;
             }
         }
 
-        function visitThrowStatement(node: ThrowStatement): Node {
-            return factory.updateThrowStatement(node, visit(node.expression));
+        function visitThrowStatement(node: ThrowStatement, emitNode?: boolean): Node {
+            if (isDownlevel && emitNode) {
+                builder.emit(OpCode.Throw, visit(node.expression));
+                return;
+            } else {
+                return factory.updateThrowStatement(node, visit(node.expression));
+            }
         }
 
         function visitTryStatement(node: TryStatement): Node {
-            if (compilerOptions.target <= ScriptTarget.ES5 && isAwaited(node)) {
-                var endLabel = builder.beginExceptionBlock();
-                visit(node.tryBlock, builder.emitNode);
-                if (node.catchBlock) {
-                    builder.setLocation(node.catchBlock.variable);
-                    var variable = builder.declareLocal();
-                    var previousName = renameIdentifier(node.catchBlock.variable, variable);
-                    builder.beginCatchBlock(variable);
-                    visit(node.catchBlock, builder.emitNode);
-                    renameIdentifier(node.catchBlock.variable, previousName);
-                }
-                if (node.finallyBlock) {
-                    builder.beginFinallyBlock();
-                    visit(node.finallyBlock, builder.emitNode);
-                }
-                builder.endExceptionBlock();
+            if (isDownlevel && hasAwaitOrYield(node)) {
+                rewriteTryStatement(node);
                 return;
             } else {
-                return factory.updateTryStatement(
-                    node,
-                    <Block>visit(node.tryBlock),
-                    <CatchBlock>visit(node.catchBlock),
-                    <Block>visit(node.finallyBlock));
+                return factory.updateTryStatement(node, visit(node.tryBlock), visit(node.catchBlock), visit(node.finallyBlock));
             }
         }
 
         function visitBlock(node: Block, emitNode?: (node: Node) => void): Node {
-            if (compilerOptions.target <= ScriptTarget.ES5 && isAwaited(node) && !emitNode) {
+            if (isDownlevel && hasAwaitOrYield(node) && !emitNode) {
                 visitNodes(node.statements, builder.emitNode);
                 return;
             } else {
@@ -1021,14 +770,321 @@ module ts {
         }
 
         function visitCatchBlock(node: CatchBlock, emitNode?: (node: Node) => void): CatchBlock {
-            return factory.updateCatchBlock(node, <Identifier>visit(node.variable), visitNodes(node.statements, emitNode));
+            return factory.updateCatchBlock(node, node.variable, visitNodes(node.statements, emitNode));
         }
 
         function visitFinallyBlock(node: Block, emitNode?: (node: Node) => void): Block {
             return factory.updateFinallyBlock(node, visitNodes(node.statements, emitNode));
         }
 
-        function isAwaited(node: Node): boolean {
+        function rewriteVariableDeclaration(node: VariableDeclaration): GeneratedNode {
+            builder.setLocation(node);
+            var local = builder.declareLocal(node.name.text);
+            var initializer = visit(node.initializer);
+            if (initializer) {
+                return builder.createGeneratedNode(`\${left} = \${right}`, { left: local, right: initializer });
+            }
+        }
+
+        function rewriteAwaitExpressionDownlevel(node: UnaryExpression): Expression {
+            var operand = visit(node.operand);
+            var resumeLabel = builder.defineLabel();
+            builder.setLocation(node.operand);
+            builder.emit(OpCode.Yield, operand);
+            builder.markLabel(resumeLabel);
+            builder.setLocation(node);
+            return builder.createGeneratedNode(`__state.sent`);
+        }
+
+        function rewriteAwaitExpressionUplevel(node: UnaryExpression): Expression {
+            return builder.createGeneratedNode(`(yield \${operand})`, { operand: node.operand });
+        }
+
+        function rewriteLogicalBinaryExpression(node: BinaryExpression): Expression {
+            var resumeLabel = builder.defineLabel();
+            var resultLocal = builder.declareLocal();
+            var code = node.operator === SyntaxKind.AmpersandAmpersandToken ? OpCode.BrFalse : OpCode.BrTrue;
+            builder.setLocation(node.left);
+            builder.emit(OpCode.Assign, resultLocal, visit(node.left));
+            builder.emit(code, resumeLabel, resultLocal);
+            builder.setLocation(node.right);
+            builder.emit(OpCode.Statement, resultLocal, visit(node.right));
+            builder.setLocation(node);
+            builder.markLabel(resumeLabel);
+            return resultLocal;
+        }
+
+        function rewriteConditionalExpression(node: ConditionalExpression): Expression {
+            var whenFalseLabel = builder.defineLabel();
+            var resumeLabel = builder.defineLabel();
+            var resultLocal = builder.declareLocal();
+            builder.setLocation(node.condition);
+            builder.emit(OpCode.BrFalse, whenFalseLabel, visit(node.condition));
+            builder.setLocation(node.whenTrue);
+            builder.emit(OpCode.Assign, resultLocal, visit(node.whenTrue));
+            builder.emit(OpCode.Break, resumeLabel);
+            builder.markLabel(whenFalseLabel);
+            builder.setLocation(node.whenFalse);
+            builder.emit(OpCode.Assign, resultLocal, visit(node.whenFalse));
+            builder.markLabel(resumeLabel);
+            return resultLocal;
+        }
+
+        function rewriteIfStatement(node: IfStatement): void {
+            var resumeLabel = builder.defineLabel();
+            if (node.elseStatement) {
+                var elseLabel = builder.defineLabel();
+            }
+
+            builder.setLocation(node.expression);
+            builder.emit(OpCode.BrFalse, elseLabel || resumeLabel, node.expression);
+            builder.setLocation(node.thenStatement);
+            visit(node.thenStatement, builder.emitNode);
+            if (node.elseStatement) {
+                builder.emit(OpCode.Break, resumeLabel);
+                builder.setLocation(node.elseStatement);
+                builder.markLabel(elseLabel);
+                visit(node.elseStatement, builder.emitNode);
+            }
+            builder.markLabel(resumeLabel);
+        }
+
+        function rewriteDoStatement(node: DoStatement): void {
+            var bodyLabel = builder.defineLabel();
+            var conditionLabel = builder.defineLabel();
+            var endLabel = builder.beginContinueBlock(conditionLabel, getTarget(node));
+            builder.markLabel(bodyLabel);
+            builder.setLocation(node.statement);
+            visit(node.statement, builder.emitNode);
+            builder.markLabel(conditionLabel);
+            builder.setLocation(node.expression);
+            builder.emit(OpCode.BrTrue, bodyLabel, visit(node.expression));
+            builder.endContinueBlock();
+        }
+
+        function rewriteWhileStatement(node: WhileStatement): void {
+            var conditionLabel = builder.defineLabel();
+            var bodyLabel = builder.defineLabel();
+            var endLabel = builder.beginContinueBlock(conditionLabel, getTarget(node));
+            builder.setLocation(node.expression);
+            builder.markLabel(conditionLabel);
+            builder.emit(OpCode.BrFalse, endLabel, visit(node.expression));
+            builder.setLocation(node.statement);
+            visit(node.statement, builder.emitNode);
+            builder.emit(OpCode.Break, conditionLabel);
+            builder.endContinueBlock();
+        }
+
+        function rewriteForStatement(node: ForStatement): void {
+            var conditionLabel = builder.defineLabel();
+            var iteratorLabel = builder.defineLabel();
+            var endLabel = builder.beginContinueBlock(iteratorLabel, getTarget(node));
+            var head = visitForOrForInStatementHead(node.declarations, node.initializer);
+            builder.setLocation(node.declarations || node.initializer);
+            builder.markLabel(conditionLabel);
+            builder.setLocation(node.condition);
+            builder.emit(OpCode.BrFalse, endLabel, visit(node.condition));
+            builder.setLocation(node.statement);
+            visit(node.statement, builder.emitNode);
+            builder.markLabel(iteratorLabel);
+            builder.setLocation(node.iterator);
+            visit(node.iterator, builder.emitNode);
+            builder.emit(OpCode.Break, conditionLabel);
+            builder.endContinueBlock();
+        }
+
+        function rewriteForInStatement(node: ForInStatement): void {
+            var head = visitForOrForInStatementHead(node.declarations, node.variable);
+            var keysLocal = builder.declareLocal();
+            var tempLocal = builder.declareLocal();
+            var conditionLabel = builder.defineLabel();
+            var iteratorLabel = builder.defineLabel();
+            var endLabel = builder.beginContinueBlock(iteratorLabel, getTarget(node));
+
+            builder.setLocation(node.declarations || node.variable);
+            builder.setLocation(node.expression);
+            builder.emit(OpCode.Statement, `
+                \${keysLocal} = [];
+                for (\${tempLocal} in \${expression}) {
+                    \${keysLocal}[\${keysLocal}.length] = \${tempLocal};
+                }
+                \${tempLocal} = 0;`, {
+                    keysLocal,
+                    tempLocal,
+                    expression: visit(node.expression)
+                });
+            builder.markLabel(conditionLabel);
+            builder.setLocation(head.variable);
+            builder.emit(OpCode.BrTrue, endLabel, `\${tempLocal} >= \${keysLocal}.length`, {
+                keysLocal,
+                tempLocal
+            });
+            builder.emit(OpCode.Statement, `\${variable} = \${keysLocal}[\${tempLocal}];`, {
+                variable: head.variable,
+                keysLocal,
+                tempLocal
+            });
+            builder.setLocation(node.statement);
+            visit(node.statement, builder.emitNode);
+            builder.markLabel(iteratorLabel);
+            builder.setLocation(node.expression);
+            builder.emit(OpCode.Statement, `{tempLocal}++;`, { tempLocal });
+            builder.emit(OpCode.Break, conditionLabel);
+            builder.endContinueBlock();
+        }
+
+        function rewriteSwitchStatement(node: SwitchStatement): void {
+            var defaultClauseIndex: number = -1;
+            var endLabel = builder.beginBreakBlock(getTarget(node));
+
+            // map clauses to labels
+            var clauseHasStatements: boolean[] = [];
+            var clauseLabelMap: number[] = [];
+            var clauseLabels: Label[] = [endLabel];
+            for (var i = node.clauses.length - 1; i >= 0; i--) {
+                var clause = node.clauses[i];
+                if (clause.kind === SyntaxKind.DefaultClause) {
+                    defaultClauseIndex = i;
+                }
+
+                clauseHasStatements[i] = !!(clause.statements && clause.statements.length);
+
+                if (clauseHasStatements[i]) {
+                    clauseLabelMap[i] = clauseLabels.length;
+                    clauseLabels.push(builder.defineLabel());
+                } else {
+                    clauseLabelMap[i] = clauseLabels.length - 1;
+                }
+            }
+
+            var expression = builder.cacheExpression(visit(node.expression));
+
+            // emit switch cases (but not statements)                
+            var lastAwaitedClause = -1;
+            for (var i = 0; i < node.clauses.length; i++) {
+                var clause = node.clauses[i];
+                if (hasAwaitOrYield(clause.expression)) {
+                    emitPartialSwitchStatement(lastAwaitedClause + 1, i - 1);
+
+                    builder.setLocation(clause.expression);
+                    var clauseLabel = clauseLabels[clauseLabelMap[i]];
+                    builder.emit(OpCode.BrTrue, clauseLabel, "${expression} == ${test}", {
+                        expression: expression,
+                        test: visit(clause.expression)
+                    });
+
+                    lastAwaitedClause = i;
+                }
+            }
+
+            emitPartialSwitchStatement(lastAwaitedClause + 1, node.clauses.length - 1);
+
+            // emit default case (if any, but not statements)
+            if (defaultClauseIndex > -1) {
+                var defaultClauseLabel = clauseLabels[clauseLabelMap[defaultClauseIndex]];
+                builder.setLocation(node.clauses[defaultClauseIndex]);
+                builder.emit(OpCode.Break, defaultClauseLabel);
+            } else {
+                builder.emit(OpCode.Break, endLabel);
+            }
+
+            // emit switch states and statements
+            for (var i = 0; i < node.clauses.length; i++) {
+                if (!clauseHasStatements[i]) {
+                    continue;
+                }
+
+                var clauseLabel = clauseLabels[clauseLabelMap[i]];
+                builder.markLabel(clauseLabel);
+                builder.setLocation(node.clauses[i].expression);
+                visit(node.clauses[i], builder.emitNode);
+            }
+
+            builder.endBreakBlock();
+
+            function emitPartialSwitchStatement(start: number, end: number): void {
+                var clauses: CaseOrDefaultClause[] = [];
+                for (var i = start; i <= end; i++) {
+                    if (i === defaultClauseIndex) {
+                        continue;
+                    }
+
+                    var clause = node.clauses[i];
+                    var clauseLabel = clauseLabels[clauseLabelMap[i]];
+                    builder.setLocation(clause.expression);
+                    var caseClause = factory.createCaseClause(visit(clause.expression), [
+                        builder.createInlineBreak(clauseLabel)
+                    ], clause.expression);
+                    clauses.push(caseClause);
+                }
+
+                if (clauses.length) {
+                    var switchStatement = factory.createSwitchStatement(expression, clauses, node);
+                    builder.setLocation(node);
+                    builder.emit(OpCode.Statement, switchStatement);
+                }
+            }
+        }
+
+        function rewriteLabeledStatement(node: LabeledStatement): void {
+            switch (node.statement.kind) {
+                case SyntaxKind.DoStatement:
+                case SyntaxKind.WhileStatement:
+                case SyntaxKind.ForStatement:
+                case SyntaxKind.ForInStatement:
+                case SyntaxKind.SwitchStatement:
+                    visit(node.statement, builder.emitNode);
+                    return;
+            }
+
+            builder.beginBreakBlock(getTarget(node));
+            visit(node.statement, builder.emitNode);
+            builder.endBreakBlock();
+        }
+
+        function rewriteTryStatement(node: TryStatement): void {
+            var endLabel = builder.beginExceptionBlock();
+            visit(node.tryBlock, builder.emitNode);
+            if (node.catchBlock) {
+                builder.setLocation(node.catchBlock.variable);
+                var variable = builder.declareLocal();
+                var previousName = renameIdentifier(node.catchBlock.variable, variable);
+                builder.beginCatchBlock(variable);
+                visit(node.catchBlock, builder.emitNode);
+                renameIdentifier(node.catchBlock.variable, previousName);
+            }
+            if (node.finallyBlock) {
+                builder.beginFinallyBlock();
+                visit(node.finallyBlock, builder.emitNode);
+            }
+            builder.endExceptionBlock();
+        }
+
+        function pushScriptLoopBlock(node: IterationStatement): void {
+            if (isDownlevel) {
+                builder.beginScriptContinueBlock(getTarget(node));
+            }
+        }
+
+        function popScriptLoopBlock(): void {
+            if (isDownlevel) {
+                builder.endScriptContinueBlock();
+            }
+        }
+
+        function pushScriptBreakBlock(node: Statement): void {
+            if (isDownlevel) {
+                builder.beginScriptBreakBlock(getTarget(node));
+            }
+        }
+
+        function popScriptBreakBlock(): void {
+            if (isDownlevel) {
+                builder.endScriptBreakBlock();
+            }
+        }
+
+        function hasAwaitOrYield(node: Node): boolean {
             if (!node) {
                 return false;
             }
@@ -1037,15 +1093,13 @@ module ts {
                 if ((<UnaryExpression>node).operator === SyntaxKind.AwaitKeyword) {
                     return true;
                 }
+            } else if (node.kind === SyntaxKind.YieldExpression) {
+                return true;
             } else if (isAnyFunction(node)) {
                 return false;
             } else {
-                var annotations = getAnnotations(node);
-                if ("containsAwait" in annotations) {
-                    return annotations.containsAwait;
-                } else {
-                    return annotations.containsAwait = forEachChild(node, isAwaited);
-                }
+                if (!node.id) node.id = nextNodeId--;
+                return awaitOrYieldNodes[node.id] || (awaitOrYieldNodes[node.id] = forEachChild(node, hasAwaitOrYield));
             }
         }
 
@@ -1096,9 +1150,9 @@ module ts {
                 return new \${promise}(__resolve => {
                     __resolve(__awaiter(function *() {
                         @{statements}
-                    }()));
+                    }.call(this)));
                 });
-            `, { promise: promise, statements: statements }, node.body);
+            `, { promise, statements }, node.body);
 
             var block = factory.createFunctionBlock([body], node.body);
             body.parent = block;
@@ -1111,49 +1165,39 @@ module ts {
 
         function rewriteDownlevelWorker(): FunctionLikeDeclaration {
             renames = {};
+
             builder = createCodeGenerator();
             builder.setLocation(node.body);
-            visit(node.body, builder.emitNode);
 
-            // TODO: verify this is the best way to do this.
-            var typeName: EntityName;
-            if (node.type.kind === SyntaxKind.TypeReference) {
-                var typeReference = <TypeReferenceNode>node.type;
-                typeName = typeReference.typeName;
-            }
-            else if (node.type.kind === SyntaxKind.TypeQuery) {
-                var typeQuery = <TypeQueryNode>node.type;
-                typeName = typeQuery.exprName;
+            if (node.body.kind !== SyntaxKind.FunctionBlock) {
+                builder.emit(OpCode.Return, visit(node.body));
+            } else {
+                visit(node.body, builder.emitNode);
             }
 
-            var body = factory.createGeneratedNode(`
-                return new \${promise}(function(__resolve) {
-                    \${locals}
-                    @{functions}
-                    __resolve(__awaiter(function(__state) {
-                        switch(__state.label) {
-                            @{body}
-                        }
-                        return ["return"];
-                    }))
-                });`, {
-                    promise: typeName,
-                    locals: builder.getLocals(),
-                    functions: builder.getFunctions(),
-                    body: builder.getBody()
-                }, node.body);
+            if (node.flags & NodeFlags.Async) {
+                var promise = getPromiseConstructor(node);
+                var func = builder.buildAsyncFunction(
+                    node.kind,
+                    node.name,
+                    promise,
+                    node);
+            } else {
+                var func = builder.buildGeneratorFunction(
+                    node.kind,
+                    node.name,
+                    node);
+            }
 
-            var block = factory.createFunctionBlock([body], node.body);
-            body.parent = body;
-
-            var func = factory.updateFunctionLikeDeclaration(node, node.name, block, node.parameters);
+            func.flags = node.flags;
+            func.modifiers = node.modifiers;
             func.id = node.id;
             func.parent = node.parent;
             return func;
         }
 
         function rewriteWorker(): FunctionLikeDeclaration {
-            if (compilerOptions.target <= ScriptTarget.ES5) {
+            if (isDownlevel) {
                 return rewriteDownlevelWorker();
             } else {
                 return rewriteAsGeneratorWorker();

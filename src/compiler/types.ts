@@ -186,8 +186,8 @@ module ts {
         TemplateExpression,
         TemplateSpan,
         YieldExpression,
-        OmittedExpression,
         GeneratedLabel,
+        OmittedExpression,
         // Element
         Block,
         VariableStatement,
@@ -729,8 +729,9 @@ module ts {
         Break,                  // A break instruction used to jump to a label
         BrTrue,                 // A break instruction used to jump to a label if a condition evaluates to true
         BrFalse,                // A break instruction used to jump to a label if a condition evaluates to false
-        Yield,                  // A completion operation for the `yield` keyword
-        Return,                 // A completion operation for the `return` keyword
+        Yield,                  // A completion instruction for the `yield` keyword
+        Return,                 // A completion instruction for the `return` keyword
+        Throw,                  // A completion instruction for the `throw` keyword
         Endfinally              // Marks the end of a `finally` block
     }
 
@@ -749,20 +750,17 @@ module ts {
         findBreakTarget(labelSymbol?: Symbol): Label;
         findContinueTarget(labelSymbol?: Symbol): Label;
 
-        beginScriptLoopBlock(labelSymbol: Symbol): void;
-        endScriptLoopBlock(): void;
+        beginScriptContinueBlock(labelSymbol: Symbol): void;
+        endScriptContinueBlock(): void;
 
         beginScriptBreakBlock(labelSymbol: Symbol): void;
         endScriptBreakBlock(): void;
 
-        beginLoopBlock(continueLabel: Label, labelSymbol: Symbol): Label;
-        endLoopBlock(): void;
+        beginContinueBlock(continueLabel: Label, labelSymbol: Symbol): Label;
+        endContinueBlock(): void;
 
         beginBreakBlock(labelSymbol: Symbol): Label;
         endBreakBlock(): void;
-
-        beginWithBlock(expression: Expression): void;
-        endWithBlock(): void;
 
         emit(code: OpCode): void;
         emit(code: OpCode, label: Label): void;
@@ -778,17 +776,17 @@ module ts {
         popLocation(): void;
         setLocation(location: TextRange): void;
 
-        copy(expression: Expression): Expression;
+        cacheExpression(expression: Expression): Expression;
 
-        createBreak(label: Label): Statement;
-        createReturn(expression: Expression): Statement;
-        createGenerated(text: string, content?: Map<Node|Node[]>): GeneratedNode;
+        createInlineBreak(label: Label): Statement;
+        createInlineReturn(expression: Expression): Statement;
+        createGeneratedNode(text: string, content?: Map<Node|Node[]>): GeneratedNode;
 
         addFunction(func: FunctionDeclaration): void;
+        addParameter(name: Identifier): void;
 
-        getLocals(): VariableStatement;
-        getFunctions(): FunctionDeclaration[];
-        getBody(): CaseOrDefaultClause[];
+        buildGeneratorFunction(kind: SyntaxKind, name: DeclarationName, location: TextRange): FunctionLikeDeclaration;
+        buildAsyncFunction(kind: SyntaxKind, name: DeclarationName, promiseType: EntityName, location: TextRange): FunctionLikeDeclaration;
     }
 
     export interface SourceMapSpan {
