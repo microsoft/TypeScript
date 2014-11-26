@@ -71,6 +71,13 @@ module A {
 >s : string
 >id : number
 >isvalid : boolean
+
+    declare class DC {
+>DC : DC
+
+        static x: number;
+>x : number
+    }
 }
 
 module Y {
@@ -145,5 +152,12 @@ module Y {
 >s : string
 >id : number
 >isvalid : boolean
+
+    export declare class DC {
+>DC : DC
+
+        static x: number;
+>x : number
+    }
 }
 

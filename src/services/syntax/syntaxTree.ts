@@ -138,8 +138,12 @@ module TypeScript {
         }
 
         private pushDiagnostic(element: ISyntaxElement, diagnosticKey: string, args?: any[]): void {
+            this.pushDiagnosticAt(start(element, this.text), width(element), diagnosticKey, args);
+        }
+
+        private pushDiagnosticAt(start: number, length: number, diagnosticKey: string, args?: any[]): void {
             this.diagnostics.push(new Diagnostic(
-                this.syntaxTree.fileName(), this.syntaxTree.lineMap(), start(element, this.text), width(element), diagnosticKey, args));
+                this.syntaxTree.fileName(), this.syntaxTree.lineMap(), start, length, diagnosticKey, args));
         }
 
         public visitCatchClause(node: CatchClauseSyntax): void {
@@ -631,11 +635,25 @@ module TypeScript {
                 this.checkClassElementModifiers(node.modifiers) ||
                 this.checkForDisallowedAccessorTypeParameters(node.callSignature) ||
                 this.checkGetAccessorParameter(node) ||
-                this.checkForDisallowedTemplatePropertyName(node.propertyName)) {
+                this.checkForDisallowedTemplatePropertyName(node.propertyName) ||
+                this.checkForSemicolonInsteadOfBlock(node, node.body)) {
                 return;
             }
 
             super.visitGetAccessor(node);
+        }
+
+        private checkForSemicolonInsteadOfBlock(parent: ISyntaxNode, node: BlockSyntax | ExpressionBody | ISyntaxToken): boolean {
+            if (node === undefined) {
+                this.pushDiagnosticAt(fullEnd(parent), 0, DiagnosticCode._0_expected, ["{"]);
+                return true;
+            }
+            else if (node.kind === SyntaxKind.SemicolonToken) {
+                this.pushDiagnostic(node, DiagnosticCode._0_expected, ["{"]);
+                return true;
+            }
+
+            return false;
         }
 
         private checkForDisallowedSetAccessorTypeAnnotation(accessor: SetAccessorSyntax): boolean {
@@ -708,11 +726,39 @@ module TypeScript {
                 this.checkForDisallowedAccessorTypeParameters(node.callSignature) ||
                 this.checkForDisallowedSetAccessorTypeAnnotation(node) ||
                 this.checkSetAccessorParameter(node) ||
-                this.checkForDisallowedTemplatePropertyName(node.propertyName)) {
+                this.checkForDisallowedTemplatePropertyName(node.propertyName) ||
+                this.checkForSemicolonInsteadOfBlock(node, node.body)) {
                 return;
             }
 
             super.visitSetAccessor(node);
+        }
+
+        public visitElementAccessExpression(node: ElementAccessExpressionSyntax): void {
+            if (this.checkForMissingArgumentExpression(node)) {
+                return;
+            }
+
+            super.visitElementAccessExpression(node);
+        }
+
+        public checkForMissingArgumentExpression(node: ElementAccessExpressionSyntax): boolean {
+            if (node.argumentExpression === undefined) {
+                if (node.parent.kind === SyntaxKind.ObjectCreationExpression && (<ObjectCreationExpressionSyntax>node.parent).expression === node) {
+                    // Provide a specialized message for the very common case where someone writes:
+                    //      new Foo[]
+                    var start = TypeScript.start(node.openBracketToken);
+                    var end = TypeScript.fullEnd(node.closeBracketToken);
+                    this.pushDiagnosticAt(start, end - start, DiagnosticCode.new_T_cannot_be_used_to_create_an_array_Use_new_Array_T_instead);                    
+                }
+                else {
+                    this.pushDiagnostic(node.closeBracketToken, DiagnosticCode.Expression_expected);
+                }
+
+                return true;
+            }
+
+            return false;
         }
 
         public visitEnumDeclaration(node: EnumDeclarationSyntax): void {
@@ -814,7 +860,7 @@ module TypeScript {
         }
 
         private checkForDisallowedImportDeclaration(node: ModuleDeclarationSyntax): boolean {
-            if (!node.stringLiteral) {
+            if (node.name.kind !== SyntaxKind.StringLiteral) {
                 for (var i = 0, n = node.moduleElements.length; i < n; i++) {
                     var child = node.moduleElements[i];
                     if (child.kind === SyntaxKind.ImportDeclaration) {
@@ -849,21 +895,21 @@ module TypeScript {
 
         public visitModuleDeclaration(node: ModuleDeclarationSyntax): void {
             if (this.checkForDisallowedDeclareModifier(node.modifiers) ||
-                this.checkForRequiredDeclareModifier(node, node.stringLiteral ? node.stringLiteral : firstToken(node.name), node.modifiers) ||
+                this.checkForRequiredDeclareModifier(node, firstToken(node.name), node.modifiers) ||
                 this.checkModuleElementModifiers(node.modifiers) ||
                 this.checkForDisallowedImportDeclaration(node)) {
 
                 return;
             }
 
-            if (node.stringLiteral) {
+            if (node.name.kind === SyntaxKind.StringLiteral) {
                 if (!this.inAmbientDeclaration && !SyntaxUtilities.containsToken(node.modifiers, SyntaxKind.DeclareKeyword)) {
-                    this.pushDiagnostic(node.stringLiteral, DiagnosticCode.Only_ambient_modules_can_use_quoted_names);
+                    this.pushDiagnostic(node.name, DiagnosticCode.Only_ambient_modules_can_use_quoted_names);
                     return;
                 }
             }
 
-            if (!node.stringLiteral && this.checkForDisallowedExportAssignment(node)) {
+            if (node.name.kind !== SyntaxKind.StringLiteral && this.checkForDisallowedExportAssignment(node)) {
                 return;
             }
 
@@ -887,7 +933,8 @@ module TypeScript {
         }
 
         public visitBlock(node: BlockSyntax): void {
-            if (this.checkForBlockInAmbientContext(node)) {
+            if (this.checkForBlockInAmbientContext(node) ||
+                this.checkForMalformedBlock(node)) {
                 return;
             }
 
@@ -895,6 +942,15 @@ module TypeScript {
             this.inBlock = true;
             super.visitBlock(node);
             this.inBlock = savedInBlock;
+        }
+
+        public checkForMalformedBlock(node: BlockSyntax): boolean {
+            if (node.equalsGreaterThanToken || node.openBraceToken === undefined) {
+                this.pushDiagnostic(firstToken(node), DiagnosticCode._0_expected, ["{"]);
+                return true;
+            }
+
+            return false;
         }
 
         private checkForBlockInAmbientContext(node: BlockSyntax): boolean {
@@ -921,6 +977,11 @@ module TypeScript {
             }
 
             return false;
+        }
+
+        public visitExpressionBody(node: ExpressionBody): void {
+            // These are always errors.  So no need to ever recurse on them.
+            this.pushDiagnostic(node.equalsGreaterThanToken, DiagnosticCode._0_expected, ["{"]);
         }
 
         public visitBreakStatement(node: BreakStatementSyntax): void {
@@ -1158,7 +1219,7 @@ module TypeScript {
         }
 
         private checkForInLeftHandSideExpression(node: ForInStatementSyntax): boolean {
-            if (node.left && !SyntaxUtilities.isLeftHandSizeExpression(node.left)) {
+            if (node.left.kind !== SyntaxKind.VariableDeclaration && !SyntaxUtilities.isLeftHandSizeExpression(node.left)) {
                 this.pushDiagnostic(node.left, DiagnosticCode.Invalid_left_hand_side_in_for_in_statement);
                 return true;
             }
@@ -1170,8 +1231,8 @@ module TypeScript {
             // The parser accepts a Variable Declaration in a ForInStatement, but the grammar only
             // allows a very restricted form.  Specifically, there must be only a single Variable
             // Declarator in the Declaration.
-            if (node.variableDeclaration && node.variableDeclaration.variableDeclarators.length > 1) {
-                this.pushDiagnostic(node.variableDeclaration, DiagnosticCode.Only_a_single_variable_declaration_is_allowed_in_a_for_in_statement);
+            if (node.left.kind === SyntaxKind.VariableDeclaration && (<VariableDeclarationSyntax>node.left).variableDeclarators.length > 1) {
+                this.pushDiagnostic(node.left, DiagnosticCode.Only_a_single_variable_declaration_is_allowed_in_a_for_in_statement);
                 return true;
             }
 
@@ -1264,11 +1325,21 @@ module TypeScript {
         }
 
         public visitThrowStatement(node: ThrowStatementSyntax): void {
-            if (this.checkForStatementInAmbientContxt(node)) {
+            if (this.checkForStatementInAmbientContxt(node) ||
+                this.checkForMissingThrowStatementExpression(node)) {
                 return;
             }
 
             super.visitThrowStatement(node);
+        }
+
+        public checkForMissingThrowStatementExpression(node: ThrowStatementSyntax): boolean {
+            if (node.expression === undefined) {
+                this.pushDiagnosticAt(fullEnd(node.throwKeyword), 0, DiagnosticCode.Expression_expected);
+                return true;
+            }
+
+            return false;
         }
 
         public visitTryStatement(node: TryStatementSyntax): void {
@@ -1297,7 +1368,7 @@ module TypeScript {
         }
 
         private checkForWithInStrictMode(node: WithStatementSyntax): boolean {
-            if (parsedInStrictMode(node)) {
+            if (parsedInStrictModeContext(node)) {
                 this.pushDiagnostic(firstToken(node), DiagnosticCode.with_statements_are_not_allowed_in_strict_mode);
                 return true;
             }
@@ -1333,7 +1404,8 @@ module TypeScript {
         }
 
         public visitFunctionExpression(node: FunctionExpressionSyntax): void {
-            if (this.checkForDisallowedEvalOrArguments(node, node.identifier)) {
+            if (this.checkForDisallowedEvalOrArguments(node, node.identifier) ||
+                this.checkForSemicolonInsteadOfBlock(node, node.body)) {
                 return;
             }
 
@@ -1341,7 +1413,8 @@ module TypeScript {
         }
 
         public visitFunctionPropertyAssignment(node: FunctionPropertyAssignmentSyntax): void {
-            if (this.checkForDisallowedTemplatePropertyName(node.propertyName)) {
+            if (this.checkForDisallowedTemplatePropertyName(node.propertyName) ||
+                this.checkForSemicolonInsteadOfBlock(node, node.body)) {
                 return;
             }
 
@@ -1509,7 +1582,7 @@ module TypeScript {
         }
 
         public visitPrefixUnaryExpression(node: PrefixUnaryExpressionSyntax): void {
-            if (parsedInStrictMode(node) && this.isPreIncrementOrDecrementExpression(node) && this.isEvalOrArguments(node.operand)) {
+            if (parsedInStrictModeContext(node) && this.isPreIncrementOrDecrementExpression(node) && this.isEvalOrArguments(node.operand)) {
                 this.pushDiagnostic(node.operatorToken, DiagnosticCode.Invalid_use_of_0_in_strict_mode, [this.getEvalOrArguments(node.operand)]);
             }
 
@@ -1517,7 +1590,7 @@ module TypeScript {
         }
 
         public visitPostfixUnaryExpression(node: PostfixUnaryExpressionSyntax): void {
-            if (parsedInStrictMode(node) && this.isEvalOrArguments(node.operand)) {
+            if (parsedInStrictModeContext(node) && this.isEvalOrArguments(node.operand)) {
                 this.pushDiagnostic(node.operatorToken, DiagnosticCode.Invalid_use_of_0_in_strict_mode, [this.getEvalOrArguments(node.operand)]);
             }
 
@@ -1534,7 +1607,7 @@ module TypeScript {
 
         private checkForDisallowedEvalOrArguments(node: ISyntaxNode, token: ISyntaxToken): boolean {
             if (token) {
-                if (parsedInStrictMode(node) && this.isEvalOrArguments(token)) {
+                if (parsedInStrictModeContext(node) && this.isEvalOrArguments(token)) {
                     this.pushDiagnostic(token, DiagnosticCode.Invalid_use_of_0_in_strict_mode, [this.getEvalOrArguments(token)]);
                     return true;
                 }
@@ -1554,16 +1627,25 @@ module TypeScript {
         }
 
         public visitDeleteExpression(node: DeleteExpressionSyntax): void {
-            if (parsedInStrictMode(node) && node.expression.kind === SyntaxKind.IdentifierName) {
-                this.pushDiagnostic(firstToken(node), DiagnosticCode.delete_cannot_be_called_on_an_identifier_in_strict_mode);
+            if (parsedInStrictModeContext(node) && node.expression.kind === SyntaxKind.IdentifierName) {
+                this.pushDiagnostic(node.deleteKeyword, DiagnosticCode.delete_cannot_be_called_on_an_identifier_in_strict_mode);
                 return;
             }
 
             super.visitDeleteExpression(node);
         }
 
+        public visitYieldExpression(node: YieldExpressionSyntax): void {
+            if (!parsedInYieldContext(node)) {
+                this.pushDiagnostic(node.yieldKeyword, DiagnosticCode.yield_expression_must_be_contained_within_a_generator_declaration);
+                return;
+            }
+
+            super.visitYieldExpression(node);
+        }
+
         private checkIllegalAssignment(node: BinaryExpressionSyntax): boolean {
-            if (parsedInStrictMode(node) && SyntaxFacts.isAssignmentOperatorToken(node.operatorToken.kind) && this.isEvalOrArguments(node.left)) {
+            if (parsedInStrictModeContext(node) && SyntaxFacts.isAssignmentOperatorToken(node.operatorToken.kind) && this.isEvalOrArguments(node.left)) {
                 this.pushDiagnostic(node.operatorToken, DiagnosticCode.Invalid_use_of_0_in_strict_mode, [this.getEvalOrArguments(node.left)]);
                 return true;
             }

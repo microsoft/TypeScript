@@ -1,5 +1,4 @@
 /// <reference path='services.ts' />
-/// <reference path="text/textSpan.ts" />
 
 module ts.NavigationBar {
     export function getNavigationBarItems(sourceFile: SourceFile): ts.NavigationBarItem[]  {
@@ -235,8 +234,11 @@ module ts.NavigationBar {
                     return createItem(node, getTextOfNode((<FunctionLikeDeclaration>node).name), ts.ScriptElementKind.functionElement);
 
                 case SyntaxKind.VariableDeclaration:
-                    if (node.flags & NodeFlags.Const) {
-                        return createItem(node, getTextOfNode((<VariableDeclaration>node).name), ts.ScriptElementKind.constantElement);
+                    if (isConst(node)) {
+                        return createItem(node, getTextOfNode((<VariableDeclaration>node).name), ts.ScriptElementKind.constElement);
+                    }
+                    else if (isLet(node)) {
+                        return createItem(node, getTextOfNode((<VariableDeclaration>node).name), ts.ScriptElementKind.letElement);
                     }
                     else {
                         return createItem(node, getTextOfNode((<VariableDeclaration>node).name), ts.ScriptElementKind.variableElement);
@@ -257,18 +259,18 @@ module ts.NavigationBar {
             return !text || text.trim() === "";
         }
 
-        function getNavigationBarItem(text: string, kind: string, kindModifiers: string, spans: TypeScript.TextSpan[], childItems: ts.NavigationBarItem[] = [], indent: number = 0): ts.NavigationBarItem {
+        function getNavigationBarItem(text: string, kind: string, kindModifiers: string, spans: TextSpan[], childItems: NavigationBarItem[] = [], indent: number = 0): NavigationBarItem {
             if (isEmpty(text)) {
                 return undefined;
             }
 
             return {
-                text: text,
-                kind: kind,
-                kindModifiers: kindModifiers,
-                spans: spans,
-                childItems: childItems,
-                indent: indent,
+                text,
+                kind,
+                kindModifiers,
+                spans,
+                childItems,
+                indent,
                 bolded: false,
                 grayed: false
             };
@@ -424,8 +426,8 @@ module ts.NavigationBar {
 
         function getNodeSpan(node: Node) {
             return node.kind === SyntaxKind.SourceFile
-                ? TypeScript.TextSpan.fromBounds(node.getFullStart(), node.getEnd())
-                : TypeScript.TextSpan.fromBounds(node.getStart(), node.getEnd());
+                ? TextSpan.fromBounds(node.getFullStart(), node.getEnd())
+                : TextSpan.fromBounds(node.getStart(), node.getEnd());
         }
 
         function getTextOfNode(node: Node): string {

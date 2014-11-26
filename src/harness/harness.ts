@@ -15,6 +15,7 @@
 
 /// <reference path='..\services\services.ts' />
 /// <reference path='..\services\shims.ts' />
+/// <reference path='..\compiler\core.ts' />
 /// <reference path='..\compiler\sys.ts' />
 /// <reference path='external\mocha.d.ts'/>
 /// <reference path='external\chai.d.ts'/>
@@ -117,14 +118,10 @@ module Harness.Path {
     }
 
     export function filePath(fullPath: string) {
-        fullPath = switchToForwardSlashes(fullPath);
+        fullPath = ts.normalizeSlashes(fullPath);
         var components = fullPath.split("/");
         var path: string[] = components.slice(0, components.length - 1);
         return path.join("/") + "/";
-    }
-
-    export function switchToForwardSlashes(path: string) {
-        return path.replace(/\\/g, "/").replace(/\/\//g, '/');
     }
 }
 
@@ -564,7 +561,7 @@ module Harness {
             // Register input files
             function register(file: { unitName: string; content: string; }) {
                 if (file.content !== undefined) {
-                    var filename = Path.switchToForwardSlashes(file.unitName);
+                    var filename = ts.normalizeSlashes(file.unitName);
                     filemap[getCanonicalFileName(filename)] = ts.createSourceFile(filename, file.content, scriptTarget, /*version:*/ "0");
                 }
             };
@@ -588,12 +585,12 @@ module Harness {
                             return defaultLibSourceFile;
                         }
                         // Don't throw here -- the compiler might be looking for a test that actually doesn't exist as part of the TC
-                        return null;
+                        return undefined;
                     }
                 },
                 getDefaultLibFilename: () => defaultLibFileName,
-                writeFile: writeFile,
-                getCanonicalFileName: getCanonicalFileName,
+                writeFile,
+                getCanonicalFileName,
                 useCaseSensitiveFileNames: () => useCaseSensitiveFileNames,
                 getNewLine: ()=> sys.newLine
             };
@@ -703,6 +700,10 @@ module Harness {
                             }
                             break;
 
+                        case 'noemitonerror':
+                            options.noEmitOnError = !!setting.value;
+                            break;
+
                         case 'noresolve':
                             options.noResolve = !!setting.value;
                             break;
@@ -782,7 +783,7 @@ module Harness {
                 var filemap: { [name: string]: ts.SourceFile; } = {};
                 var register = (file: { unitName: string; content: string; }) => {
                     if (file.content !== undefined) {
-                        var filename = Path.switchToForwardSlashes(file.unitName);
+                        var filename = ts.normalizeSlashes(file.unitName);
                         filemap[getCanonicalFileName(filename)] = ts.createSourceFile(filename, file.content, options.target, /*version:*/ "0");
                     }
                 };
@@ -797,21 +798,19 @@ module Harness {
                     options.target,
                     useCaseSensitiveFileNames));
 
-                var hadParseErrors = program.getDiagnostics().length > 0;
-
                 var checker = program.getTypeChecker(/*fullTypeCheckMode*/ true);
                 checker.checkProgram();
 
-                var hasEarlyErrors = checker.hasEarlyErrors();
+                var isEmitBlocked = checker.isEmitBlocked();
 
                 // only emit if there weren't parse errors
                 var emitResult: ts.EmitResult;
-                if (!hadParseErrors && !hasEarlyErrors) {
+                if (!isEmitBlocked) {
                     emitResult = checker.emitFiles();
                 }
 
                 var errors: HarnessDiagnostic[] = [];
-                program.getDiagnostics().concat(checker.getDiagnostics()).concat(emitResult ? emitResult.errors : []).forEach(err => {
+                program.getDiagnostics().concat(checker.getDiagnostics()).concat(emitResult ? emitResult.diagnostics : []).forEach(err => {
                     // TODO: new compiler formats errors after this point to add . and newlines so we'll just do it manually for now
                     errors.push(getMinimalDiagnostic(err));
                 });
@@ -846,7 +845,7 @@ module Harness {
                         declResult = compileResult;
                     }, settingsCallback, options);
 
-                    return { declInputFiles: declInputFiles, declOtherFiles: declOtherFiles, declResult: declResult };
+                    return { declInputFiles, declOtherFiles, declResult };
                 }
 
                 function addDtsFile(file: { unitName: string; content: string }, dtsFiles: { unitName: string; content: string }[]) {
@@ -867,7 +866,7 @@ module Harness {
                                 var sourceFileName: string;
                                 if (ts.isExternalModule(sourceFile) || !options.out) {
                                     if (options.outDir) {
-                                        var sourceFilePath = ts.getNormalizedPathFromPathComponents(ts.getNormalizedPathComponents(sourceFile.filename, result.currentDirectoryForProgram));
+                                        var sourceFilePath = ts.getNormalizedAbsolutePath(sourceFile.filename, result.currentDirectoryForProgram);
                                         sourceFilePath = sourceFilePath.replace(result.program.getCommonSourceDirectory(), "");
                                         sourceFileName = ts.combinePaths(options.outDir, sourceFilePath);
                                     }
@@ -961,7 +960,7 @@ module Harness {
                 // Note: IE JS engine incorrectly handles consecutive delimiters here when using RegExp split, so
                 // we have to string-based splitting instead and try to figure out the delimiting chars
 
-                var lineStarts = ts.getLineStarts(inputFile.content);
+                var lineStarts = ts.computeLineStarts(inputFile.content);
                 var lines = inputFile.content.split('\n');
                 lines.forEach((line, lineIndex) => {
                     if (line.length > 0 && line.charAt(line.length - 1) === '\r') {
@@ -1006,8 +1005,12 @@ module Harness {
                 assert.equal(markedErrorCount, fileErrors.length, 'count of errors in ' + inputFile.unitName);
             });
 
+            var numLibraryDiagnostics = ts.countWhere(diagnostics, diagnostic => {
+                return diagnostic.filename && isLibraryFile(diagnostic.filename);
+            });
+
             // Verify we didn't miss any errors in total
-            assert.equal(totalErrorsReported, diagnostics.length, 'total number of errors');
+            assert.equal(totalErrorsReported + numLibraryDiagnostics, diagnostics.length, 'total number of errors');
 
             return minimalDiagnosticsToString(diagnostics) +
                 sys.newLine + sys.newLine + outputLines.join('\r\n');
@@ -1092,7 +1095,6 @@ module Harness {
             /** @param fileResults an array of strings for the fileName and an ITextWriter with its code */
             constructor(fileResults: GeneratedFile[], errors: HarnessDiagnostic[], public program: ts.Program,
                 public currentDirectoryForProgram: string, private sourceMapData: ts.SourceMapData[]) {
-                var lines: string[] = [];
 
                 fileResults.forEach(emittedFile => {
                     if (isDTS(emittedFile.fileName)) {
@@ -1148,7 +1150,7 @@ module Harness {
         var optionRegex = /^[\/]{2}\s*@(\w+)\s*:\s*(\S*)/gm;  // multiple matches on multiple lines
 
         // List of allowed metadata names
-        var fileMetadataNames = ["filename", "comments", "declaration", "module", "nolib", "sourcemap", "target", "out", "outdir", "noimplicitany", "noresolve", "newline", "newlines", "emitbom", "errortruncation", "usecasesensitivefilenames", "preserveconstenums"];
+        var fileMetadataNames = ["filename", "comments", "declaration", "module", "nolib", "sourcemap", "target", "out", "outdir", "noemitonerror","noimplicitany", "noresolve", "newline", "newlines", "emitbom", "errortruncation", "usecasesensitivefilenames", "preserveconstenums"];
 
         function extractCompilerSettings(content: string): CompilerSetting[] {
 
@@ -1167,7 +1169,7 @@ module Harness {
             var settings = extractCompilerSettings(code);
 
             // List of all the subfiles we've parsed out
-            var files: TestUnitData[] = [];
+            var testUnitData: TestUnitData[] = [];
 
             var lines = Utils.splitContentByNewlines(code);
 
@@ -1203,7 +1205,7 @@ module Harness {
                                 originalFilePath: fileName,
                                 references: refs
                             };
-                        files.push(newTestFile);
+                        testUnitData.push(newTestFile);
 
                         // Reset local data
                         currentFileContent = null;
@@ -1228,7 +1230,7 @@ module Harness {
             }
 
             // normalize the fileName for the single file case
-            currentFileName = files.length > 0 ? currentFileName : Path.getFileName(fileName);
+            currentFileName = testUnitData.length > 0 ? currentFileName : Path.getFileName(fileName);
 
             // EOF, push whatever remains
             var newTestFile2 = {
@@ -1238,15 +1240,14 @@ module Harness {
                 originalFilePath: fileName,
                 references: refs
             };
-            files.push(newTestFile2);
+            testUnitData.push(newTestFile2);
 
-            return { settings: settings, testUnitData: files };
+            return { settings, testUnitData };
         }
     }
 
     /** Support class for baseline files */
     export module Baseline {
-        var firstRun = true;
 
         export interface BaselineOptions {
             LineEndingSensitive?: boolean;
@@ -1287,8 +1288,7 @@ module Harness {
                 IO.createDirectory(dirName);
                 fileCache[dirName] = true;
             }
-            var parentDir = IO.directoryName(actualFilename); // .../tests/baselines/local
-            var parentParentDir = IO.directoryName(IO.directoryName(actualFilename)) // .../tests/baselines
+
             // Create folders if needed
             createDirectoryStructure(Harness.IO.directoryName(actualFilename));
 
@@ -1338,7 +1338,7 @@ module Harness {
                 actual = actual.replace(/\r\n?/g, '\n');
             }
 
-            return { expected: expected, actual: actual };
+            return { expected, actual };
         }
 
         function writeComparison(expected: string, actual: string, relativeFilename: string, actualFilename: string, descriptionForDescribe: string) {

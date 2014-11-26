@@ -17,13 +17,29 @@ module TypeScript {
         return undefined;
     }
 
-    export function parsedInStrictMode(node: ISyntaxNode): boolean {
+    export function parserContextFlags(node: ISyntaxNode): ParserContextFlags {
         var info = node.__data;
         if (info === undefined) {
-            return false;
+            return 0;
         }
 
-        return (info & SyntaxConstants.NodeParsedInStrictModeMask) !== 0;
+        return info & ParserContextFlags.Mask;
+    }
+
+    export function parsedInStrictModeContext(node: ISyntaxNode): boolean {
+        return (parserContextFlags(node) & ParserContextFlags.StrictMode) !== 0;
+    }
+
+    export function parsedInDisallowInContext(node: ISyntaxNode): boolean {
+        return (parserContextFlags(node) & ParserContextFlags.DisallowIn) !== 0;
+    }
+
+    export function parsedInYieldContext(node: ISyntaxNode): boolean {
+        return (parserContextFlags(node) & ParserContextFlags.Yield) !== 0;
+    }
+
+    export function parsedInGeneratorParameterContext(node: ISyntaxNode): boolean {
+        return (parserContextFlags(node) & ParserContextFlags.GeneratorParameter) !== 0;
     }
 
     export function previousToken(token: ISyntaxToken): ISyntaxToken {
@@ -68,48 +84,6 @@ module TypeScript {
         }
 
         throw Errors.invalidOperation();
-    }
-
-    export function findSkippedTokenInPositionedToken(positionedToken: ISyntaxToken, position: number): ISyntaxToken {
-        var positionInLeadingTriviaList = (position < start(positionedToken));
-        return findSkippedTokenInTriviaList(positionedToken, position, /*lookInLeadingTriviaList*/ positionInLeadingTriviaList);
-    }
-
-    export function findSkippedTokenInLeadingTriviaList(positionedToken: ISyntaxToken, position: number): ISyntaxToken {
-        return findSkippedTokenInTriviaList(positionedToken, position, /*lookInLeadingTriviaList*/ true);
-    }
-
-    export function findSkippedTokenInTrailingTriviaList(positionedToken: ISyntaxToken, position: number): ISyntaxToken {
-        return findSkippedTokenInTriviaList(positionedToken, position, /*lookInLeadingTriviaList*/ false);
-    }
-
-    function findSkippedTokenInTriviaList(positionedToken: ISyntaxToken, position: number, lookInLeadingTriviaList: boolean): ISyntaxToken {
-        var triviaList: TypeScript.ISyntaxTriviaList = undefined;
-        var fullStart: number;
-
-        if (lookInLeadingTriviaList) {
-            triviaList = positionedToken.leadingTrivia();
-            fullStart = positionedToken.fullStart();
-        }
-        else {
-            triviaList = positionedToken.trailingTrivia();
-            fullStart = end(positionedToken);
-        }
-
-        if (triviaList && triviaList.hasSkippedToken()) {
-            for (var i = 0, n = triviaList.count(); i < n; i++) {
-                var trivia = triviaList.syntaxTriviaAt(i);
-                var triviaWidth = trivia.fullWidth();
-
-                if (trivia.isSkippedToken() && position >= fullStart && position <= fullStart + triviaWidth) {
-                    return trivia.skippedToken();
-                }
-
-                fullStart += triviaWidth;
-            }
-        }
-
-        return undefined;
     }
 
     function findTokenWorker(element: ISyntaxElement, elementPosition: number, position: number): ISyntaxToken {
@@ -246,11 +220,6 @@ module TypeScript {
         return token ? token.leadingTriviaWidth(text) : 0;
     }
 
-    export function trailingTriviaWidth(element: ISyntaxElement, text?: ISimpleText): number {
-        var token = lastToken(element);
-        return token ? token.trailingTriviaWidth(text) : 0;
-    }
-
     export function firstToken(element: ISyntaxElement): ISyntaxToken {
         if (element) {
             var kind = element.kind;
@@ -304,7 +273,7 @@ module TypeScript {
         }
 
         var info = data(element);
-        return info >>> SyntaxConstants.NodeFullWidthShift;
+        return (info / SyntaxNodeConstants.FullWidthShift) | 0;
     }
 
     export function isIncrementallyUnusable(element: ISyntaxElement): boolean {
@@ -312,7 +281,7 @@ module TypeScript {
             return (<ISyntaxToken>element).isIncrementallyUnusable();
         }
 
-        return (data(element) & SyntaxConstants.NodeIncrementallyUnusableMask) !== 0;
+        return (data(element) & SyntaxNodeConstants.IncrementallyUnusableMask) !== 0;
     }
 
     function data(element: ISyntaxElement): number {
@@ -326,7 +295,7 @@ module TypeScript {
             info = 0;
         }
 
-        if ((info & SyntaxConstants.NodeDataComputed) === 0) {
+        if ((info & SyntaxNodeConstants.DataComputed) === 0) {
             info |= computeData(element);
             dataElement.__data = info;
         }
@@ -335,9 +304,9 @@ module TypeScript {
     }
 
     function combineData(fullWidth: number, isIncrementallyUnusable: boolean) {
-        return (fullWidth << SyntaxConstants.NodeFullWidthShift)
-            | (isIncrementallyUnusable ? SyntaxConstants.NodeIncrementallyUnusableMask : 0)
-            | SyntaxConstants.NodeDataComputed;
+        return (fullWidth * SyntaxNodeConstants.FullWidthShift) +
+               (isIncrementallyUnusable ? SyntaxNodeConstants.IncrementallyUnusableMask : 0) +
+               SyntaxNodeConstants.DataComputed;
     }
 
     function listComputeData(list: ISyntaxNodeOrToken[]): number {
@@ -387,16 +356,11 @@ module TypeScript {
         return token ? token.fullStart() + token.leadingTriviaWidth(text) : -1;
     }
 
-    export function end(element: ISyntaxElement, text?: ISimpleText): number {
-        var token = isToken(element) ? <ISyntaxToken>element : lastToken(element);
-        return token ? fullEnd(token) - token.trailingTriviaWidth(text) : -1;
-    }
-
     export function width(element: ISyntaxElement, text?: ISimpleText): number {
         if (isToken(element)) {
             return (<ISyntaxToken>element).text().length;
         }
-        return fullWidth(element) - leadingTriviaWidth(element, text) - trailingTriviaWidth(element, text);
+        return fullWidth(element) - leadingTriviaWidth(element, text);
     }
 
     export function fullEnd(element: ISyntaxElement): number {
@@ -413,7 +377,7 @@ module TypeScript {
         }
 
         var lineMap = text.lineMap();
-        return lineMap.getLineNumberFromPosition(end(token1, text)) !== lineMap.getLineNumberFromPosition(start(token2, text));
+        return lineMap.getLineNumberFromPosition(fullEnd(token1)) !== lineMap.getLineNumberFromPosition(start(token2, text));
     }
 
     export interface ISyntaxElement {
@@ -460,7 +424,7 @@ module TypeScript {
         modifiers: ISyntaxToken[];
         propertyName: IPropertyNameSyntax;
         callSignature: CallSignatureSyntax;
-        block: BlockSyntax;
+        body: BlockSyntax | ExpressionBody | ISyntaxToken;
     }
 
     export interface ISwitchClauseSyntax extends ISyntaxNode {

@@ -1,0 +1,160 @@
+=== tests/cases/conformance/expressions/typeGuards/typeGuardOfFormNotExpr.ts ===
+var str: string;
+>str : string
+
+var bool: boolean;
+>bool : boolean
+
+var num: number;
+>num : number
+
+var strOrNum: string | number;
+>strOrNum : string | number
+
+var strOrNumOrBool: string | number | boolean;
+>strOrNumOrBool : string | number | boolean
+
+var numOrBool: number | boolean;
+>numOrBool : number | boolean
+
+// A type guard of the form !expr
+// - when true, narrows the type of x by expr when false, or
+// - when false, narrows the type of x by expr when true.
+
+// !typeguard1
+if (!(typeof strOrNum === "string")) {
+>!(typeof strOrNum === "string") : boolean
+>(typeof strOrNum === "string") : boolean
+>typeof strOrNum === "string" : boolean
+>typeof strOrNum : string
+>strOrNum : string | number
+
+    num === strOrNum; // number
+>num === strOrNum : boolean
+>num : number
+>strOrNum : number
+}
+else {
+    str = strOrNum; // string
+>str = strOrNum : string
+>str : string
+>strOrNum : string
+}
+// !(typeguard1 || typeguard2)
+if (!(typeof strOrNumOrBool === "string" || typeof strOrNumOrBool === "number")) {
+>!(typeof strOrNumOrBool === "string" || typeof strOrNumOrBool === "number") : boolean
+>(typeof strOrNumOrBool === "string" || typeof strOrNumOrBool === "number") : boolean
+>typeof strOrNumOrBool === "string" || typeof strOrNumOrBool === "number" : boolean
+>typeof strOrNumOrBool === "string" : boolean
+>typeof strOrNumOrBool : string
+>strOrNumOrBool : string | number | boolean
+>typeof strOrNumOrBool === "number" : boolean
+>typeof strOrNumOrBool : string
+>strOrNumOrBool : number | boolean
+
+    bool = strOrNumOrBool; // boolean
+>bool = strOrNumOrBool : boolean
+>bool : boolean
+>strOrNumOrBool : boolean
+}
+else {
+    strOrNum = strOrNumOrBool; // string | number
+>strOrNum = strOrNumOrBool : string | number
+>strOrNum : string | number
+>strOrNumOrBool : string | number
+}
+// !(typeguard1) || !(typeguard2)
+if (!(typeof strOrNumOrBool !== "string") || !(typeof strOrNumOrBool !== "number")) {
+>!(typeof strOrNumOrBool !== "string") || !(typeof strOrNumOrBool !== "number") : boolean
+>!(typeof strOrNumOrBool !== "string") : boolean
+>(typeof strOrNumOrBool !== "string") : boolean
+>typeof strOrNumOrBool !== "string" : boolean
+>typeof strOrNumOrBool : string
+>strOrNumOrBool : string | number | boolean
+>!(typeof strOrNumOrBool !== "number") : boolean
+>(typeof strOrNumOrBool !== "number") : boolean
+>typeof strOrNumOrBool !== "number" : boolean
+>typeof strOrNumOrBool : string
+>strOrNumOrBool : number | boolean
+
+    strOrNum = strOrNumOrBool; // string | number
+>strOrNum = strOrNumOrBool : string | number
+>strOrNum : string | number
+>strOrNumOrBool : string | number
+}
+else {
+    bool = strOrNumOrBool; // boolean
+>bool = strOrNumOrBool : boolean
+>bool : boolean
+>strOrNumOrBool : boolean
+}
+// !(typeguard1 && typeguard2)
+if (!(typeof strOrNumOrBool !== "string" && typeof strOrNumOrBool !== "number")) {
+>!(typeof strOrNumOrBool !== "string" && typeof strOrNumOrBool !== "number") : boolean
+>(typeof strOrNumOrBool !== "string" && typeof strOrNumOrBool !== "number") : boolean
+>typeof strOrNumOrBool !== "string" && typeof strOrNumOrBool !== "number" : boolean
+>typeof strOrNumOrBool !== "string" : boolean
+>typeof strOrNumOrBool : string
+>strOrNumOrBool : string | number | boolean
+>typeof strOrNumOrBool !== "number" : boolean
+>typeof strOrNumOrBool : string
+>strOrNumOrBool : number | boolean
+
+    strOrNum = strOrNumOrBool; // string | number
+>strOrNum = strOrNumOrBool : string | number
+>strOrNum : string | number
+>strOrNumOrBool : string | number
+}
+else {
+    bool = strOrNumOrBool; // boolean
+>bool = strOrNumOrBool : boolean
+>bool : boolean
+>strOrNumOrBool : boolean
+}
+// !(typeguard1) && !(typeguard2)
+if (!(typeof strOrNumOrBool === "string") && !(typeof strOrNumOrBool === "number")) {
+>!(typeof strOrNumOrBool === "string") && !(typeof strOrNumOrBool === "number") : boolean
+>!(typeof strOrNumOrBool === "string") : boolean
+>(typeof strOrNumOrBool === "string") : boolean
+>typeof strOrNumOrBool === "string" : boolean
+>typeof strOrNumOrBool : string
+>strOrNumOrBool : string | number | boolean
+>!(typeof strOrNumOrBool === "number") : boolean
+>(typeof strOrNumOrBool === "number") : boolean
+>typeof strOrNumOrBool === "number" : boolean
+>typeof strOrNumOrBool : string
+>strOrNumOrBool : number | boolean
+
+    bool = strOrNumOrBool; // boolean
+>bool = strOrNumOrBool : boolean
+>bool : boolean
+>strOrNumOrBool : boolean
+}
+else {
+    strOrNum = strOrNumOrBool; // string | number
+>strOrNum = strOrNumOrBool : string | number
+>strOrNum : string | number
+>strOrNumOrBool : string | number
+}
+// !(typeguard1) && simpleExpr
+if (!(typeof strOrNumOrBool === "string") && numOrBool !== strOrNumOrBool) {
+>!(typeof strOrNumOrBool === "string") && numOrBool !== strOrNumOrBool : boolean
+>!(typeof strOrNumOrBool === "string") : boolean
+>(typeof strOrNumOrBool === "string") : boolean
+>typeof strOrNumOrBool === "string" : boolean
+>typeof strOrNumOrBool : string
+>strOrNumOrBool : string | number | boolean
+>numOrBool !== strOrNumOrBool : boolean
+>numOrBool : number | boolean
+>strOrNumOrBool : number | boolean
+
+    numOrBool = strOrNumOrBool; // number | boolean
+>numOrBool = strOrNumOrBool : number | boolean
+>numOrBool : number | boolean
+>strOrNumOrBool : number | boolean
+}
+else {
+    var r1: string | number | boolean = strOrNumOrBool; // string | number | boolean
+>r1 : string | number | boolean
+>strOrNumOrBool : string | number | boolean
+}

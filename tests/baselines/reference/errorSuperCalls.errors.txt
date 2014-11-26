@@ -1,10 +1,4 @@
-tests/cases/conformance/expressions/superCalls/errorSuperCalls.ts(13,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-tests/cases/conformance/expressions/superCalls/errorSuperCalls.ts(17,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-tests/cases/conformance/expressions/superCalls/errorSuperCalls.ts(33,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-tests/cases/conformance/expressions/superCalls/errorSuperCalls.ts(37,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/conformance/expressions/superCalls/errorSuperCalls.ts(46,14): error TS1034: 'super' must be followed by an argument list or member access.
-tests/cases/conformance/expressions/superCalls/errorSuperCalls.ts(66,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-tests/cases/conformance/expressions/superCalls/errorSuperCalls.ts(70,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/conformance/expressions/superCalls/errorSuperCalls.ts(4,9): error TS2335: 'super' can only be referenced in a derived class.
 tests/cases/conformance/expressions/superCalls/errorSuperCalls.ts(9,9): error TS2335: 'super' can only be referenced in a derived class.
 tests/cases/conformance/expressions/superCalls/errorSuperCalls.ts(14,9): error TS2335: 'super' can only be referenced in a derived class.
@@ -20,7 +14,7 @@ tests/cases/conformance/expressions/superCalls/errorSuperCalls.ts(67,9): error T
 tests/cases/conformance/expressions/superCalls/errorSuperCalls.ts(71,9): error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors
 
 
-==== tests/cases/conformance/expressions/superCalls/errorSuperCalls.ts (20 errors) ====
+==== tests/cases/conformance/expressions/superCalls/errorSuperCalls.ts (14 errors) ====
     //super call in class constructor with no base type
     class NoBase {
         constructor() {
@@ -38,16 +32,12 @@ tests/cases/conformance/expressions/superCalls/errorSuperCalls.ts(71,9): error T
     
         //super call in class accessor (get and set) with no base type
         get foo() {
-            ~~~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             super();
             ~~~~~
 !!! error TS2335: 'super' can only be referenced in a derived class.
             return null;
         }
         set foo(v) {
-            ~~~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             super();
             ~~~~~
 !!! error TS2335: 'super' can only be referenced in a derived class.
@@ -72,16 +62,12 @@ tests/cases/conformance/expressions/superCalls/errorSuperCalls.ts(71,9): error T
     
         //super call in static class accessor (get and set) with no base type
         static get q() {
-                   ~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             super();
             ~~~~~
 !!! error TS2335: 'super' can only be referenced in a derived class.
             return null;
         }
         static set q(n) {
-                   ~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             super();
             ~~~~~
 !!! error TS2335: 'super' can only be referenced in a derived class.
@@ -119,16 +105,12 @@ tests/cases/conformance/expressions/superCalls/errorSuperCalls.ts(71,9): error T
     
         //super call in class accessor (get and set) of derived type
         get foo() {
-            ~~~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             super();
             ~~~~~
 !!! error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors
             return null;
         }
         set foo(n) {
-            ~~~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             super();
             ~~~~~
 !!! error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors

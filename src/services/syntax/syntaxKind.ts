@@ -234,6 +234,7 @@ module TypeScript {
         OmittedExpression,
         TemplateExpression,
         TemplateAccessExpression,
+        YieldExpression,
 
         // Variable declarations
         VariableDeclaration,
@@ -267,6 +268,7 @@ module TypeScript {
         Parameter,
         EnumElement,
         TypeAnnotation,
+        ExpressionBody,
         ComputedPropertyName,
         ExternalModuleReference,
         ModuleNameModuleReference,

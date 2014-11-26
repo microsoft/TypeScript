@@ -1,15 +1,8 @@
-tests/cases/compiler/fatarrowfunctionsOptionalArgs.ts(60,10): error TS1015: Parameter cannot have question mark and initializer.
-tests/cases/compiler/fatarrowfunctionsOptionalArgs.ts(70,11): error TS1015: Parameter cannot have question mark and initializer.
-tests/cases/compiler/fatarrowfunctionsOptionalArgs.ts(80,17): error TS1015: Parameter cannot have question mark and initializer.
 tests/cases/compiler/fatarrowfunctionsOptionalArgs.ts(88,23): error TS1005: ';' expected.
 tests/cases/compiler/fatarrowfunctionsOptionalArgs.ts(88,38): error TS1005: ';' expected.
-tests/cases/compiler/fatarrowfunctionsOptionalArgs.ts(106,3): error TS1015: Parameter cannot have question mark and initializer.
-tests/cases/compiler/fatarrowfunctionsOptionalArgs.ts(106,35): error TS1015: Parameter cannot have question mark and initializer.
-tests/cases/compiler/fatarrowfunctionsOptionalArgs.ts(126,6): error TS1015: Parameter cannot have question mark and initializer.
-tests/cases/compiler/fatarrowfunctionsOptionalArgs.ts(128,9): error TS1015: Parameter cannot have question mark and initializer.
 
 
-==== tests/cases/compiler/fatarrowfunctionsOptionalArgs.ts (9 errors) ====
+==== tests/cases/compiler/fatarrowfunctionsOptionalArgs.ts (2 errors) ====
     // valid
     
     // no params
@@ -70,8 +63,6 @@ tests/cases/compiler/fatarrowfunctionsOptionalArgs.ts(128,9): error TS1015: Para
     false ? (arg: number) => 45 : null;
     false ? (arg?: number) => 46 : null;
     false ? (arg?: number = 0) => 47 : null;
-             ~~~
-!!! error TS1015: Parameter cannot have question mark and initializer.
     false ? (...arg: number[]) => 48 : null;
     
     // in ternary exression within paren
@@ -82,8 +73,6 @@ tests/cases/compiler/fatarrowfunctionsOptionalArgs.ts(128,9): error TS1015: Para
     false ? ((arg: number) => 55) : null;
     false ? ((arg?: number) => 56) : null;
     false ? ((arg?: number = 0) => 57) : null;
-              ~~~
-!!! error TS1015: Parameter cannot have question mark and initializer.
     false ? ((...arg: number[]) => 58) : null;
     
     // ternary exression's else clause
@@ -94,8 +83,6 @@ tests/cases/compiler/fatarrowfunctionsOptionalArgs.ts(128,9): error TS1015: Para
     false ? null : (arg: number) => 65;
     false ? null : (arg?: number) => 66;
     false ? null : (arg?: number = 0) => 67;
-                    ~~~
-!!! error TS1015: Parameter cannot have question mark and initializer.
     false ? null : (...arg: number[]) => 68;
     
     
@@ -126,10 +113,6 @@ tests/cases/compiler/fatarrowfunctionsOptionalArgs.ts(128,9): error TS1015: Para
     ((arg:number) => 0) + '' + ((arg:number) => 104);
     ((arg:number = 1) => 0) + '' + ((arg:number = 2) => 105);
     ((arg?:number = 1) => 0) + '' + ((arg?:number = 2) => 106);
-      ~~~
-!!! error TS1015: Parameter cannot have question mark and initializer.
-                                      ~~~
-!!! error TS1015: Parameter cannot have question mark and initializer.
     ((...arg:number[]) => 0) + '' + ((...arg:number[]) => 107);
     ((arg1, arg2?) => 0) + '' + ((arg1,arg2?) => 108);
     ((arg1, ...arg2:number[]) => 0) + '' + ((arg1, ...arg2:number[]) => 108);
@@ -150,12 +133,8 @@ tests/cases/compiler/fatarrowfunctionsOptionalArgs.ts(128,9): error TS1015: Para
         (a: number = 0) => 116, 
         (a = 0) => 117, 
         (a?: number = 0) => 118, 
-         ~
-!!! error TS1015: Parameter cannot have question mark and initializer.
         (...a: number[]) => 119, 
         (a, b? = 0, ...c: number[]) => 120,
-            ~
-!!! error TS1015: Parameter cannot have question mark and initializer.
         (a) => (b) => (c) => 121,
         false? (a) => 0 : (b) => 122
     );

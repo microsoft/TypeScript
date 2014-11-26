@@ -155,6 +155,8 @@ module ts {
         IndexSignature,
         // Type
         TypeReference,
+        FunctionType,
+        ConstructorType,
         TypeQuery,
         TypeLiteral,
         ArrayType,
@@ -165,6 +167,7 @@ module ts {
         ArrayLiteral,
         ObjectLiteral,
         PropertyAssignment,
+        ShorthandPropertyAssignment,
         PropertyAccess,
         IndexedAccess,
         CallExpression,
@@ -180,6 +183,7 @@ module ts {
         ConditionalExpression,
         TemplateExpression,
         TemplateSpan,
+        YieldExpression,
         OmittedExpression,
         // Element
         Block,
@@ -245,42 +249,64 @@ module ts {
         FirstLiteralToken = NumericLiteral,
         LastLiteralToken = NoSubstitutionTemplateLiteral,
         FirstTemplateToken = NoSubstitutionTemplateLiteral,
-        LastTemplateToken = TemplateTail
+        LastTemplateToken = TemplateTail,
+        FirstOperator = SemicolonToken,
+        LastOperator = CaretEqualsToken,
+        FirstBinaryOperator = LessThanToken,
+        LastBinaryOperator = CaretEqualsToken
     }
 
     export const enum NodeFlags {
-        Export           = 0x00000001,  // Declarations
-        Ambient          = 0x00000002,  // Declarations
-        QuestionMark     = 0x00000004,  // Parameter/Property/Method
-        Rest             = 0x00000008,  // Parameter
-        Public           = 0x00000010,  // Property/Method
-        Private          = 0x00000020,  // Property/Method
-        Protected        = 0x00000040,  // Property/Method
-        Static           = 0x00000080,  // Property/Method
-        MultiLine        = 0x00000100,  // Multi-line array or object literal
-        Synthetic        = 0x00000200,  // Synthetic node (for full fidelity)
-        DeclarationFile  = 0x00000400,  // Node is a .d.ts file
-        Let              = 0x00000800,  // Variable declaration
-        Const            = 0x00001000,  // Variable declaration
+        Export              = 0x00000001,  // Declarations
+        Ambient             = 0x00000002,  // Declarations
+        QuestionMark        = 0x00000004,  // Parameter/Property/Method
+        Rest                = 0x00000008,  // Parameter
+        Public              = 0x00000010,  // Property/Method
+        Private             = 0x00000020,  // Property/Method
+        Protected           = 0x00000040,  // Property/Method
+        Static              = 0x00000080,  // Property/Method
+        MultiLine           = 0x00000100,  // Multi-line array or object literal
+        Synthetic           = 0x00000200,  // Synthetic node (for full fidelity)
+        DeclarationFile     = 0x00000400,  // Node is a .d.ts file
+        Let                 = 0x00000800,  // Variable declaration
+        Const               = 0x00001000,  // Variable declaration
+        OctalLiteral        = 0x00002000,
 
         Modifier = Export | Ambient | Public | Private | Protected | Static,
         AccessibilityModifier = Public | Private | Protected,
         BlockScoped = Let | Const
     }
 
+    export const enum ParserContextFlags {
+        // Set if this node was parsed in strict mode.  Used for grammar error checks, as well as
+        // checking if the node can be reused in incremental settings.
+        StrictMode          = 1 << 0,
+        DisallowIn          = 1 << 1,
+        Yield               = 1 << 2,
+        GeneratorParameter  = 1 << 3,
+    }
+
     export interface Node extends TextRange {
         kind: SyntaxKind;
         flags: NodeFlags;
+        // Specific context the parser was in when this node was created.  Normally undefined. 
+        // Only set when the parser was in some interesting context (like async/yield).
+        parserContextFlags?: ParserContextFlags;
         id?: number;                  // Unique id (used to look up NodeLinks)
         parent?: Node;                // Parent node (initialized by binding)
         symbol?: Symbol;              // Symbol declared by node (initialized by binding)
         locals?: SymbolTable;         // Locals associated with node (initialized by binding)
         nextContainer?: Node;         // Next container in declaration order (initialized by binding)
         localSymbol?: Symbol;         // Local symbol declared by node (initialized by binding only for exported nodes)
+        modifiers?: ModifiersArray;           // Array of modifiers
     }
 
     export interface NodeArray<T> extends Array<T>, TextRange {
         hasTrailingComma?: boolean;
+    }
+
+    export interface ModifiersArray extends Array<Node> {
+        flags: number;
     }
 
     export interface Identifier extends Node {
@@ -314,6 +340,9 @@ module ts {
     export interface TypeParameterDeclaration extends Declaration {
         name: Identifier;
         constraint?: TypeNode;
+
+        // For error recovery purposes.
+        expression?: Expression;
     }
 
     export interface SignatureDeclaration extends Declaration, ParsedSignature { }
@@ -329,6 +358,10 @@ module ts {
         initializer?: Expression;
     }
 
+    export interface ShortHandPropertyDeclaration extends Declaration {
+        name: Identifier;
+    }
+
     export interface ParameterDeclaration extends VariableDeclaration { }
 
     /**
@@ -342,6 +375,7 @@ module ts {
      *  FunctionExpression
      */
     export interface FunctionLikeDeclaration extends Declaration, ParsedSignature {
+        asteriskToken?: Node;
         body?: Block | Expression;
     }
 
@@ -404,6 +438,11 @@ module ts {
     export interface UnaryExpression extends Expression {
         operator: SyntaxKind;
         operand: Expression;
+    }
+    
+    export interface YieldExpression extends Expression {
+        asteriskToken?: Node;
+        expression: Expression;
     }
 
     export interface BinaryExpression extends Expression {
@@ -477,6 +516,8 @@ module ts {
         template: LiteralExpression | TemplateExpression;
     }
 
+    export type CallLikeExpression = CallExpression | NewExpression | TaggedTemplateExpression;
+
     export interface TypeAssertion extends Expression {
         type: TypeNode;
         operand: Expression;
@@ -522,7 +563,7 @@ module ts {
     }
 
     export interface ForInStatement extends IterationStatement {
-        declaration?: VariableDeclaration;
+        declarations?: NodeArray<VariableDeclaration>;
         variable?: Expression;
         expression: Expression;
     }
@@ -567,6 +608,7 @@ module ts {
 
     export interface CatchBlock extends Block {
         variable: Identifier;
+        type?: TypeNode;
     }
 
     export interface ClassDeclaration extends Declaration {
@@ -625,12 +667,23 @@ module ts {
     export interface SourceFile extends Block {
         filename: string;
         text: string;
-        getLineAndCharacterFromPosition(position: number): { line: number; character: number };
+        getLineAndCharacterFromPosition(position: number): LineAndCharacter;
         getPositionFromLineAndCharacter(line: number, character: number): number;
+        getLineStarts(): number[];
         amdDependencies: string[];
+        amdModuleName: string;
         referencedFiles: FileReference[];
-        syntacticErrors: Diagnostic[];
-        semanticErrors: Diagnostic[];
+        semanticDiagnostics: Diagnostic[];
+
+        // Parse errors refer specifically to things the parser could not understand at all (like 
+        // missing tokens, or tokens it didn't know how to deal with). Grammar errors are for 
+        // things the parser understood, but either the ES6 or TS grammars do not allow (like 
+        // putting an 'public' modifier on a 'class declaration').
+        parseDiagnostics: Diagnostic[];
+        grammarDiagnostics: Diagnostic[];
+
+        // Returns all 
+        getSyntacticDiagnostics(): Diagnostic[];
         hasNoDefaultLib: boolean;
         externalModuleIndicator: Node; // The first node that causes this file to be an external module
         nodeCount: number;
@@ -686,13 +739,14 @@ module ts {
 
     export interface EmitResult {
         emitResultStatus: EmitReturnStatus;
-        errors: Diagnostic[];
+        diagnostics: Diagnostic[];
         sourceMaps: SourceMapData[];  // Array of sourceMapData if compiler emitted sourcemaps
     }
 
     export interface TypeChecker {
         getProgram(): Program;
         getDiagnostics(sourceFile?: SourceFile): Diagnostic[];
+        getDeclarationDiagnostics(sourceFile: SourceFile): Diagnostic[];
         getGlobalDiagnostics(): Diagnostic[];
         getNodeCount(): number;
         getIdentifierCount(): number;
@@ -710,6 +764,7 @@ module ts {
         getReturnTypeOfSignature(signature: Signature): Type;
         getSymbolsInScope(location: Node, meaning: SymbolFlags): Symbol[];
         getSymbolInfo(node: Node): Symbol;
+        getShorthandAssignmentValueSymbol(location: Node): Symbol;
         getTypeOfNode(node: Node): Type;
         typeToString(type: Type, enclosingDeclaration?: Node, flags?: TypeFormatFlags): string;
         symbolToString(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags): string;
@@ -718,12 +773,12 @@ module ts {
         getAugmentedPropertiesOfType(type: Type): Symbol[];
         getRootSymbols(symbol: Symbol): Symbol[];
         getContextualType(node: Node): Type;
-        getResolvedSignature(node: CallExpression, candidatesOutArray?: Signature[]): Signature;
+        getResolvedSignature(node: CallLikeExpression, candidatesOutArray?: Signature[]): Signature;
         getSignatureFromDeclaration(declaration: SignatureDeclaration): Signature;
         isImplementationOfOverload(node: FunctionLikeDeclaration): boolean;
         isUndefinedSymbol(symbol: Symbol): boolean;
         isArgumentsSymbol(symbol: Symbol): boolean;
-        hasEarlyErrors(sourceFile?: SourceFile): boolean;
+        isEmitBlocked(sourceFile?: SourceFile): boolean;
         // Returns the constant value of this enum member, or 'undefined' if the enum member has a computed value.
         getEnumMemberValue(node: EnumMember): number;
         isValidPropertyAccess(node: PropertyAccess, propertyName: string): boolean;
@@ -789,11 +844,15 @@ module ts {
         CannotBeNamed
     }
 
-    export interface SymbolAccessiblityResult {
+    export interface SymbolVisibilityResult {
         accessibility: SymbolAccessibility;
-        errorSymbolName?: string // Optional symbol name that results in error
-        errorModuleName?: string // If the symbol is not visible from module, module's name
         aliasesToMakeVisible?: ImportDeclaration[]; // aliases that need to have this symbol visible
+        errorSymbolName?: string; // Optional symbol name that results in error
+        errorNode?: Node; // optional node that results in error
+    }
+
+    export interface SymbolAccessiblityResult extends SymbolVisibilityResult {
+        errorModuleName?: string // If the symbol is not visible from module, module's name
     }
 
     export interface EmitResolver {
@@ -811,10 +870,10 @@ module ts {
         writeTypeAtLocation(location: Node, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter): void;
         writeReturnTypeOfSignatureDeclaration(signatureDeclaration: SignatureDeclaration, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter): void;
         isSymbolAccessible(symbol: Symbol, enclosingDeclaration: Node, meaning: SymbolFlags): SymbolAccessiblityResult;
-        isImportDeclarationEntityNameReferenceDeclarationVisibile(entityName: EntityName): SymbolAccessiblityResult;
+        isEntityNameVisible(entityName: EntityName, enclosingDeclaration: Node): SymbolVisibilityResult;
         // Returns the constant value this property access resolves to, or 'undefined' for a non-constant
         getConstantValue(node: PropertyAccess | IndexedAccess): number;
-        hasEarlyErrors(sourceFile?: SourceFile): boolean;
+        isEmitBlocked(sourceFile?: SourceFile): boolean;
     }
 
     export const enum SymbolFlags {
@@ -1119,7 +1178,16 @@ module ts {
         messageText: string;
         category: DiagnosticCategory;
         code: number;
+        /**
+          * Early error - any error (can be produced at parsing\binding\typechecking step) that blocks emit
+          */
         isEarly?: boolean;
+        /**
+          * Parse error - error produced by parser when it scanner returns a token 
+          * that parser does not understand in its current state 
+          * (as opposed to grammar error when parser can interpret the token but interpretation is not legal from the grammar perespective)
+          */
+        isParseError?: boolean;
     }
 
     export enum DiagnosticCategory {
@@ -1138,6 +1206,7 @@ module ts {
         locale?: string;
         mapRoot?: string;
         module?: ModuleKind;
+        noEmitOnError?: boolean;
         noErrorTruncation?: boolean;
         noImplicitAny?: boolean;
         noLib?: boolean;

@@ -50,6 +50,7 @@ var VisualizationModel = (function (_super) {
 })(Backbone.Model);
 exports.VisualizationModel = VisualizationModel;
 //// [aliasUsageInIndexerOfClass_main.js]
+var moduleA = require("aliasUsageInIndexerOfClass_moduleA");
 var N = (function () {
     function N() {
         this.x = moduleA;

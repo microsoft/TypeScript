@@ -19,11 +19,11 @@ module TypeScript {
 
 module TypeScript {
     export function separatorCount(list: ISeparatedSyntaxList<ISyntaxNodeOrToken>) {
-        return list.length >> 1;
+        return list === undefined ? 0 : list.length >> 1;
     }
 
     export function nonSeparatorCount(list: ISeparatedSyntaxList<ISyntaxNodeOrToken>) {
-        return (list.length + 1) >> 1;
+        return list === undefined ? 0 : (list.length + 1) >> 1;
     }
 
     export function separatorAt(list: ISeparatedSyntaxList<ISyntaxNodeOrToken>, index: number): ISyntaxToken {
@@ -38,7 +38,7 @@ module TypeScript {
 module TypeScript.Syntax {
     function addArrayPrototypeValue(name: string, val: any) {
         if (Object.defineProperty && (<any>Array.prototype)[name] === undefined) {
-            Object.defineProperty(Array.prototype, name, { value: val, writable: false });
+            Object.defineProperty(Array.prototype, name, { value: val, writable: false, enumerable: false });
         }
         else {
             (<any>Array.prototype)[name] = val;
@@ -48,16 +48,20 @@ module TypeScript.Syntax {
     addArrayPrototypeValue("kind", SyntaxKind.List);
 
     export function list<T extends ISyntaxNodeOrToken>(nodes: T[]): T[] {
-        for (var i = 0, n = nodes.length; i < n; i++) {
-            nodes[i].parent = nodes;
+        if (nodes !== undefined) {
+            for (var i = 0, n = nodes.length; i < n; i++) {
+                nodes[i].parent = nodes;
+            }
         }
 
         return nodes;
     }
 
     export function separatedList<T extends ISyntaxNodeOrToken>(nodesAndTokens: ISyntaxNodeOrToken[]): ISeparatedSyntaxList<T> {
-        for (var i = 0, n = nodesAndTokens.length; i < n; i++) {
-            nodesAndTokens[i].parent = nodesAndTokens;
+        if (nodesAndTokens !== undefined) {
+            for (var i = 0, n = nodesAndTokens.length; i < n; i++) {
+                nodesAndTokens[i].parent = nodesAndTokens;
+            }
         }
 
         return <ISeparatedSyntaxList<T>>nodesAndTokens;

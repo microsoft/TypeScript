@@ -4,8 +4,8 @@ tests/cases/conformance/ambient/ambientErrors.ts(24,5): error TS1066: Ambient en
 tests/cases/conformance/ambient/ambientErrors.ts(29,5): error TS1066: Ambient enum elements can only have integer literal initializers.
 tests/cases/conformance/ambient/ambientErrors.ts(34,11): error TS1039: Initializers are not allowed in ambient contexts.
 tests/cases/conformance/ambient/ambientErrors.ts(35,19): error TS1037: A function implementation cannot be declared in an ambient context.
-tests/cases/conformance/ambient/ambientErrors.ts(37,18): error TS1039: Initializers are not allowed in ambient contexts.
-tests/cases/conformance/ambient/ambientErrors.ts(38,11): error TS1039: Initializers are not allowed in ambient contexts.
+tests/cases/conformance/ambient/ambientErrors.ts(37,20): error TS1039: Initializers are not allowed in ambient contexts.
+tests/cases/conformance/ambient/ambientErrors.ts(38,13): error TS1039: Initializers are not allowed in ambient contexts.
 tests/cases/conformance/ambient/ambientErrors.ts(39,23): error TS1111: A constructor implementation cannot be declared in an ambient context.
 tests/cases/conformance/ambient/ambientErrors.ts(40,14): error TS1037: A function implementation cannot be declared in an ambient context.
 tests/cases/conformance/ambient/ambientErrors.ts(41,22): error TS1037: A function implementation cannot be declared in an ambient context.
@@ -70,10 +70,10 @@ tests/cases/conformance/ambient/ambientErrors.ts(57,5): error TS2309: An export 
 !!! error TS1037: A function implementation cannot be declared in an ambient context.
         class C {
             static x = 3;
-                     ~
+                       ~
 !!! error TS1039: Initializers are not allowed in ambient contexts.
             y = 4;
-              ~
+                ~
 !!! error TS1039: Initializers are not allowed in ambient contexts.
             constructor() { }
                           ~

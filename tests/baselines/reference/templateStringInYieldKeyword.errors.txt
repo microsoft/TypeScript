@@ -1,23 +1,11 @@
-tests/cases/conformance/es6/templates/templateStringInYieldKeyword.ts(1,9): error TS1003: Identifier expected.
-tests/cases/conformance/es6/templates/templateStringInYieldKeyword.ts(1,15): error TS1005: ';' expected.
-tests/cases/conformance/es6/templates/templateStringInYieldKeyword.ts(3,13): error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
-tests/cases/conformance/es6/templates/templateStringInYieldKeyword.ts(1,11): error TS2304: Cannot find name 'gen'.
-tests/cases/conformance/es6/templates/templateStringInYieldKeyword.ts(3,13): error TS2304: Cannot find name 'yield'.
+tests/cases/conformance/es6/templates/templateStringInYieldKeyword.ts(1,9): error TS9001: 'generators' are not currently supported.
 
 
-==== tests/cases/conformance/es6/templates/templateStringInYieldKeyword.ts (5 errors) ====
-    function* gen {
+==== tests/cases/conformance/es6/templates/templateStringInYieldKeyword.ts (1 errors) ====
+    function* gen() {
             ~
-!!! error TS1003: Identifier expected.
-                  ~
-!!! error TS1005: ';' expected.
-              ~~~
-!!! error TS2304: Cannot find name 'gen'.
+!!! error TS9001: 'generators' are not currently supported.
         // Once this is supported, the inner expression does not need to be parenthesized.
         var x = yield `abc${ x }def`;
-                ~~~~~~~~~~~~~~~~~~~~
-!!! error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
-                ~~~~~
-!!! error TS2304: Cannot find name 'yield'.
     }
     

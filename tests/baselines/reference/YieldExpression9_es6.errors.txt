@@ -1,0 +1,9 @@
+tests/cases/conformance/es6/yieldExpressions/YieldExpression9_es6.ts(1,17): error TS9001: 'generators' are not currently supported.
+
+
+==== tests/cases/conformance/es6/yieldExpressions/YieldExpression9_es6.ts (1 errors) ====
+    var v = function*() {
+                    ~
+!!! error TS9001: 'generators' are not currently supported.
+      yield(foo);
+    }
