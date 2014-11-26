@@ -505,7 +505,7 @@ module ts.formatting {
 
                 if (isToken(child)) {
                     // if child node is a token, it does not impact indentation, proceed it using parent indentation scope rules
-                    var tokenInfo = formattingScanner.readTokenInfo(node);
+                    var tokenInfo = formattingScanner.readTokenInfo(child);
                     Debug.assert(tokenInfo.token.end === child.end);
                     consumeTokenAndAdvanceScanner(tokenInfo, node, parentDynamicIndentation);
                     return inheritedIndentation;
