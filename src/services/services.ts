@@ -2730,8 +2730,8 @@ module ts {
                 case SyntaxKind.TypeParameter: return ScriptElementKind.typeParameterElement;
                 case SyntaxKind.EnumMember: return ScriptElementKind.variableElement;
                 case SyntaxKind.Parameter: return (node.flags & NodeFlags.AccessibilityModifier) ? ScriptElementKind.memberVariableElement : ScriptElementKind.parameterElement;
-                    return ScriptElementKind.unknown;
             }
+            return ScriptElementKind.unknown;
         }
 
         function getSymbolModifiers(symbol: Symbol): string {
