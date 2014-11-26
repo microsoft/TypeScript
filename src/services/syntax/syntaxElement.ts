@@ -300,7 +300,7 @@ module TypeScript {
         }
 
         if ((info & SyntaxNodeConstants.DataComputed) === 0) {
-            info |= computeData(element);
+            info += computeData(element);
             dataElement.__data = info;
         }
 
