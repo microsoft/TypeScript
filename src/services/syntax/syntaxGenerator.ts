@@ -4,7 +4,7 @@
 ///<reference path='syntaxFacts.ts' />
 ///<reference path='syntaxKind.ts' />
 // ///<reference path='..\..\..\tests\fidelity\es5compat.ts' />
-
+ 
 var forPrettyPrinter = false;
 
 interface ITypeDefinition {
@@ -1033,9 +1033,14 @@ var definitions:ITypeDefinition[] = [
             <any>{ name: 'semicolonToken', isToken: true, isOptional: true, excludeFromAST: true }]
     }];
 
+function getSyntaxKindEnum() {
+    var name = "SyntaxKind";
+    return (<any>TypeScript)[name];
+}
+
 function firstKind(definition: ITypeDefinition): TypeScript.SyntaxKind {
     var kindName = getNameWithoutSuffix(definition);
-    return (<any>TypeScript.SyntaxKind)[kindName];
+    return getSyntaxKindEnum()[kindName];
 }
 
 definitions.sort((d1, d2) => firstKind(d1) - firstKind(d2));
@@ -1328,7 +1333,7 @@ function generateKeywordCondition(keywords: { text: string; kind: TypeScript.Syn
         var keyword = keywords[0];
         
         if (currentCharacter === length) {
-            return " return SyntaxKind." + firstEnumName(TypeScript.SyntaxKind, keyword.kind) + ";\r\n";
+            return " return SyntaxKind." + firstEnumName(getSyntaxKindEnum(), keyword.kind) + ";\r\n";
         }
 
         var keywordText = keywords[0].text;
@@ -1343,7 +1348,7 @@ function generateKeywordCondition(keywords: { text: string; kind: TypeScript.Syn
             result += "str.charCodeAt(" + index + ") === CharacterCodes." + keywordText.substr(i, 1);
         }
 
-        result += ") ? SyntaxKind." + firstEnumName(TypeScript.SyntaxKind, keyword.kind) + " : SyntaxKind.IdentifierName;\r\n";
+        result += ") ? SyntaxKind." + firstEnumName(getSyntaxKindEnum(), keyword.kind) + " : SyntaxKind.IdentifierName;\r\n";
     }
     else {
         result += " // " + TypeScript.ArrayUtilities.select(keywords, k => k.text).join(", ") + "\r\n"
@@ -1466,8 +1471,8 @@ function generateScannerUtilities(): string {
 }
 
 function syntaxKindName(kind: TypeScript.SyntaxKind): string {
-    for (var name in TypeScript.SyntaxKind) {
-        if (<any>TypeScript.SyntaxKind[name] === kind) {
+    for (var name in getSyntaxKindEnum()) {
+        if (getSyntaxKindEnum()[name] === kind) {
             return name;
         }
     }

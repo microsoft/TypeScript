@@ -627,26 +627,26 @@ var TypeScript;
         SyntaxKind[SyntaxKind["PropertyAssignment"] = 215] = "PropertyAssignment";
         SyntaxKind[SyntaxKind["ExternalModuleReference"] = 216] = "ExternalModuleReference";
         SyntaxKind[SyntaxKind["ModuleNameModuleReference"] = 217] = "ModuleNameModuleReference";
-        SyntaxKind[SyntaxKind["FirstStandardKeyword"] = SyntaxKind.BreakKeyword] = "FirstStandardKeyword";
-        SyntaxKind[SyntaxKind["LastStandardKeyword"] = SyntaxKind.WithKeyword] = "LastStandardKeyword";
-        SyntaxKind[SyntaxKind["FirstFutureReservedKeyword"] = SyntaxKind.ClassKeyword] = "FirstFutureReservedKeyword";
-        SyntaxKind[SyntaxKind["LastFutureReservedKeyword"] = SyntaxKind.SuperKeyword] = "LastFutureReservedKeyword";
-        SyntaxKind[SyntaxKind["FirstFutureReservedStrictKeyword"] = SyntaxKind.ImplementsKeyword] = "FirstFutureReservedStrictKeyword";
-        SyntaxKind[SyntaxKind["LastFutureReservedStrictKeyword"] = SyntaxKind.YieldKeyword] = "LastFutureReservedStrictKeyword";
-        SyntaxKind[SyntaxKind["FirstTypeScriptKeyword"] = SyntaxKind.AnyKeyword] = "FirstTypeScriptKeyword";
-        SyntaxKind[SyntaxKind["LastTypeScriptKeyword"] = SyntaxKind.StringKeyword] = "LastTypeScriptKeyword";
-        SyntaxKind[SyntaxKind["FirstKeyword"] = SyntaxKind.FirstStandardKeyword] = "FirstKeyword";
-        SyntaxKind[SyntaxKind["LastKeyword"] = SyntaxKind.LastTypeScriptKeyword] = "LastKeyword";
-        SyntaxKind[SyntaxKind["FirstToken"] = SyntaxKind.ErrorToken] = "FirstToken";
-        SyntaxKind[SyntaxKind["LastToken"] = SyntaxKind.SlashEqualsToken] = "LastToken";
-        SyntaxKind[SyntaxKind["FirstPunctuation"] = SyntaxKind.OpenBraceToken] = "FirstPunctuation";
-        SyntaxKind[SyntaxKind["LastPunctuation"] = SyntaxKind.SlashEqualsToken] = "LastPunctuation";
-        SyntaxKind[SyntaxKind["FirstFixedWidth"] = SyntaxKind.FirstKeyword] = "FirstFixedWidth";
-        SyntaxKind[SyntaxKind["LastFixedWidth"] = SyntaxKind.LastPunctuation] = "LastFixedWidth";
-        SyntaxKind[SyntaxKind["FirstTrivia"] = SyntaxKind.WhitespaceTrivia] = "FirstTrivia";
-        SyntaxKind[SyntaxKind["LastTrivia"] = SyntaxKind.SkippedTokenTrivia] = "LastTrivia";
-        SyntaxKind[SyntaxKind["FirstNode"] = SyntaxKind.SourceUnit] = "FirstNode";
-        SyntaxKind[SyntaxKind["LastNode"] = SyntaxKind.ModuleNameModuleReference] = "LastNode";
+        SyntaxKind[SyntaxKind["FirstStandardKeyword"] = 17] = "FirstStandardKeyword";
+        SyntaxKind[SyntaxKind["LastStandardKeyword"] = 45] = "LastStandardKeyword";
+        SyntaxKind[SyntaxKind["FirstFutureReservedKeyword"] = 46] = "FirstFutureReservedKeyword";
+        SyntaxKind[SyntaxKind["LastFutureReservedKeyword"] = 52] = "LastFutureReservedKeyword";
+        SyntaxKind[SyntaxKind["FirstFutureReservedStrictKeyword"] = 53] = "FirstFutureReservedStrictKeyword";
+        SyntaxKind[SyntaxKind["LastFutureReservedStrictKeyword"] = 61] = "LastFutureReservedStrictKeyword";
+        SyntaxKind[SyntaxKind["FirstTypeScriptKeyword"] = 62] = "FirstTypeScriptKeyword";
+        SyntaxKind[SyntaxKind["LastTypeScriptKeyword"] = 73] = "LastTypeScriptKeyword";
+        SyntaxKind[SyntaxKind["FirstKeyword"] = 17] = "FirstKeyword";
+        SyntaxKind[SyntaxKind["LastKeyword"] = 73] = "LastKeyword";
+        SyntaxKind[SyntaxKind["FirstToken"] = 7] = "FirstToken";
+        SyntaxKind[SyntaxKind["LastToken"] = 123] = "LastToken";
+        SyntaxKind[SyntaxKind["FirstPunctuation"] = 74] = "FirstPunctuation";
+        SyntaxKind[SyntaxKind["LastPunctuation"] = 123] = "LastPunctuation";
+        SyntaxKind[SyntaxKind["FirstFixedWidth"] = 17] = "FirstFixedWidth";
+        SyntaxKind[SyntaxKind["LastFixedWidth"] = 123] = "LastFixedWidth";
+        SyntaxKind[SyntaxKind["FirstTrivia"] = 2] = "FirstTrivia";
+        SyntaxKind[SyntaxKind["LastTrivia"] = 6] = "LastTrivia";
+        SyntaxKind[SyntaxKind["FirstNode"] = 124] = "FirstNode";
+        SyntaxKind[SyntaxKind["LastNode"] = 217] = "LastNode";
     })(TypeScript.SyntaxKind || (TypeScript.SyntaxKind = {}));
     var SyntaxKind = TypeScript.SyntaxKind;
 })(TypeScript || (TypeScript = {}));
@@ -783,11 +783,11 @@ var TypeScript;
         }
         SyntaxFacts.getText = getText;
         function isAnyKeyword(kind) {
-            return kind >= TypeScript.SyntaxKind.FirstKeyword && kind <= TypeScript.SyntaxKind.LastKeyword;
+            return kind >= 17 /* FirstKeyword */ && kind <= 73 /* LastKeyword */;
         }
         SyntaxFacts.isAnyKeyword = isAnyKeyword;
         function isAnyPunctuation(kind) {
-            return kind >= TypeScript.SyntaxKind.FirstPunctuation && kind <= TypeScript.SyntaxKind.LastPunctuation;
+            return kind >= 74 /* FirstPunctuation */ && kind <= 123 /* LastPunctuation */;
         }
         SyntaxFacts.isAnyPunctuation = isAnyPunctuation;
         function isPrefixUnaryExpressionOperatorToken(tokenKind) {
@@ -1904,9 +1904,13 @@ var definitions = [
         ]
     }
 ];
+function getSyntaxKindEnum() {
+    var name = "SyntaxKind";
+    return TypeScript[name];
+}
 function firstKind(definition) {
     var kindName = getNameWithoutSuffix(definition);
-    return TypeScript.SyntaxKind[kindName];
+    return getSyntaxKindEnum()[kindName];
 }
 definitions.sort(function (d1, d2) { return firstKind(d1) - firstKind(d2); });
 function getStringWithoutSuffix(definition) {
@@ -2115,7 +2119,7 @@ function generateKeywordCondition(keywords, currentCharacter, indent) {
     if (keywords.length === 1) {
         var keyword = keywords[0];
         if (currentCharacter === length) {
-            return " return SyntaxKind." + firstEnumName(TypeScript.SyntaxKind, keyword.kind) + ";\r\n";
+            return " return SyntaxKind." + firstEnumName(getSyntaxKindEnum(), keyword.kind) + ";\r\n";
         }
         var keywordText = keywords[0].text;
         result = " return (";
@@ -2126,7 +2130,7 @@ function generateKeywordCondition(keywords, currentCharacter, indent) {
             index = i === 0 ? "start" : ("start + " + i);
             result += "str.charCodeAt(" + index + ") === CharacterCodes." + keywordText.substr(i, 1);
         }
-        result += ") ? SyntaxKind." + firstEnumName(TypeScript.SyntaxKind, keyword.kind) + " : SyntaxKind.IdentifierName;\r\n";
+        result += ") ? SyntaxKind." + firstEnumName(getSyntaxKindEnum(), keyword.kind) + " : SyntaxKind.IdentifierName;\r\n";
     }
     else {
         result += " // " + TypeScript.ArrayUtilities.select(keywords, function (k) { return k.text; }).join(", ") + "\r\n";
@@ -2171,11 +2175,11 @@ function generateUtilities() {
 function generateScannerUtilities() {
     var result = "///<reference path='references.ts' />\r\n" + "\r\n" + "module TypeScript {\r\n" + "    export module ScannerUtilities {\r\n";
     result += "        export var fixedWidthArray = [";
-    for (var i = 0; i <= TypeScript.SyntaxKind.LastFixedWidth; i++) {
+    for (var i = 0; i <= 123 /* LastFixedWidth */; i++) {
         if (i) {
             result += ", ";
         }
-        if (i < TypeScript.SyntaxKind.FirstFixedWidth) {
+        if (i < 17 /* FirstFixedWidth */) {
             result += "0";
         }
         else {
@@ -2185,7 +2189,7 @@ function generateScannerUtilities() {
     result += "];\r\n";
     var i;
     var keywords = [];
-    for (i = TypeScript.SyntaxKind.FirstKeyword; i <= TypeScript.SyntaxKind.LastKeyword; i++) {
+    for (i = 17 /* FirstKeyword */; i <= 73 /* LastKeyword */; i++) {
         keywords.push({ kind: i, text: TypeScript.SyntaxFacts.getText(i) });
     }
     keywords.sort(function (a, b) { return a.text.localeCompare(b.text); });
@@ -2208,8 +2212,8 @@ function generateScannerUtilities() {
     return result;
 }
 function syntaxKindName(kind) {
-    for (var name in TypeScript.SyntaxKind) {
-        if (TypeScript.SyntaxKind[name] === kind) {
+    for (var name in getSyntaxKindEnum()) {
+        if (getSyntaxKindEnum()[name] === kind) {
             return name;
         }
     }
