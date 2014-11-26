@@ -1092,11 +1092,11 @@ module TypeScript.Parser {
             return false;
         }
 
-        function isModifier(token: ISyntaxToken, index: number): boolean {
+        function isModifier(token: ISyntaxToken, peekIndex: number): boolean {
             if (isModifierKind(token.kind)) {
                 // Because modifiers are also identifiers, we only want to consider something to
                 // be truly a modifier if the thing following it is something that can be modified.
-                var nextToken = peekToken(index + 1);
+                var nextToken = peekToken(peekIndex + 1);
 
                 if (token.kind === SyntaxKind.AsyncKeyword) {
                     // In order for async to be modifier, the next token must be on the same line.
@@ -1139,6 +1139,10 @@ module TypeScript.Parser {
             }
 
             return false;
+        }
+
+        function isAtModifier(): boolean {
+            return isModifier(currentToken(), /*peekIndex:*/ 0);
         }
 
         function modifierCount(): number {
@@ -1263,10 +1267,7 @@ module TypeScript.Parser {
                 return true;
             }
 
-            // Note: the order of these calls is important.  Specifically, isMemberVariableDeclaration
-            // checks for a subset of the conditions of the previous two calls.
-            var _modifierCount = modifierCount();
-            return _modifierCount > 0 ||
+            return isAtModifier() ||
                    isConstructorDeclaration() ||
                    isAccessor(inErrorRecovery) ||
                    isIndexMemberDeclaration() ||
@@ -3674,8 +3675,7 @@ module TypeScript.Parser {
         }
 
         function isPropertyAssignment(inErrorRecovery: boolean): boolean {
-            var _modifierCount = modifierCount();
-            return _modifierCount > 0 ||
+            return isAtModifier() ||
                    isAccessor(inErrorRecovery) ||
                    currentToken().kind === SyntaxKind.AsteriskToken ||
                    isPropertyName(/*peekIndex:*/ 0, inErrorRecovery);
