@@ -103,6 +103,7 @@ module TypeScript {
         async_arrow_function_parameters_must_be_parenthesized: "'async' arrow function parameters must be parenthesized.",
         A_generator_declaration_cannot_have_the_async_modifier: "A generator declaration cannot have the 'async' modifier.",
         async_modifier_cannot_appear_here: "'async' modifier cannot appear here.",
+        comma_expression_cannot_appear_in_a_computed_property_name: "'comma' expression cannot appear in a computed property name.",
         Duplicate_identifier_0: "Duplicate identifier '{0}'.",
         The_name_0_does_not_exist_in_the_current_scope: "The name '{0}' does not exist in the current scope.",
         The_name_0_does_not_refer_to_a_value: "The name '{0}' does not refer to a value.",

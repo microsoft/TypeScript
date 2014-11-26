@@ -3753,9 +3753,11 @@ module TypeScript.Parser {
             // ComputedPropertyName[Yield] :
             //      [AssignmentExpression[In, ?Yield]]
 
+            // Note: we allow any expression inside the computed property name.  We'll report any 
+            // issues later in the grammar checker if an invalid expression is provided.
             return new ComputedPropertyNameSyntax(contextFlags,
                 eatToken(SyntaxKind.OpenBracketToken),
-                allowInAnd(parseAssignmentExpressionOrHigher),
+                allowInAnd(parseExpression),
                 eatToken(SyntaxKind.CloseBracketToken));
         }
 

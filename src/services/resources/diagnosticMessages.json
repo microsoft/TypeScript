@@ -407,6 +407,10 @@
         "category": "Error",
         "code": 1119
     },
+    "'comma' expression cannot appear in a computed property name.": {
+        "category": "Error",
+        "code": 1120
+    },
     "Duplicate identifier '{0}'.": {
         "category": "Error",
         "code": 2000

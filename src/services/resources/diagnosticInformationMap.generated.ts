@@ -105,6 +105,7 @@ module TypeScript {
     "'async' arrow function parameters must be parenthesized.": { "code": 1117, "category": DiagnosticCategory.Error },
     "A generator declaration cannot have the 'async' modifier.": { "code": 1118, "category": DiagnosticCategory.Error },
     "'async' modifier cannot appear here.": { "code": 1119, "category": DiagnosticCategory.Error },
+    "'comma' expression cannot appear in a computed property name.": { "code": 1120, "category": DiagnosticCategory.Error },
     "Duplicate identifier '{0}'.": { "code": 2000, "category": DiagnosticCategory.Error },
     "The name '{0}' does not exist in the current scope.": { "code": 2001, "category": DiagnosticCategory.Error },
     "The name '{0}' does not refer to a value.": { "code": 2002, "category": DiagnosticCategory.Error },

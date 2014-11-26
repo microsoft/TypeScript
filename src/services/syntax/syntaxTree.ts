@@ -1040,6 +1040,15 @@ module TypeScript {
             super.visitBreakStatement(node);
         }
 
+        public visitComputedPropertyName(node: ComputedPropertyNameSyntax): void {
+            if (node.expression.kind === SyntaxKind.BinaryExpression && (<BinaryExpressionSyntax>node.expression).operatorToken.kind === SyntaxKind.CommaToken) {
+                this.pushDiagnostic((<BinaryExpressionSyntax>node.expression).operatorToken, DiagnosticCode.comma_expression_cannot_appear_in_a_computed_property_name);
+                return;
+            }
+
+            super.visitComputedPropertyName(node);
+        }
+
         public visitContinueStatement(node: ContinueStatementSyntax): void {
             if (this.checkForStatementInAmbientContxt(node) ||
                 this.checkContinueStatementTarget(node)) {
