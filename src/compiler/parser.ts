@@ -809,25 +809,6 @@ module ts {
         return SyntaxKind.FirstTriviaToken <= token && token <= SyntaxKind.LastTriviaToken;
     }
 
-    export function isUnterminatedTemplateEnd(node: LiteralExpression) {
-        Debug.assert(isTemplateLiteralKind(node.kind));
-        var sourceText = getSourceFileOfNode(node).text;
-
-        // If we're not at the EOF, we know we must be terminated.
-        if (node.end !== sourceText.length) {
-            return false;
-        }
-
-        // The literal can only be unterminated if it is a template tail or a no-sub template.
-        if (node.kind !== SyntaxKind.TemplateTail && node.kind !== SyntaxKind.NoSubstitutionTemplateLiteral) {
-            return false;
-        }
-
-        // If we didn't end in a backtick, we must still be in the middle of a template.
-        // If we did, make sure that it's not the *initial* backtick.
-        return sourceText.charCodeAt(node.end - 1) !== CharacterCodes.backtick || node.text.length === 0;
-    }
-
     export function isModifier(token: SyntaxKind): boolean {
         switch (token) {
             case SyntaxKind.PublicKeyword:
@@ -1543,6 +1524,10 @@ module ts {
             var node = <LiteralExpression>createNode(token);
             var text = scanner.getTokenValue();
             node.text = internName ? internIdentifier(text) : text;
+
+            if (scanner.isUnterminated()) {
+                node.isUnterminated = true;
+            }
 
             var tokenPos = scanner.getTokenPos();
             nextToken();
