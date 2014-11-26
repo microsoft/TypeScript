@@ -8909,7 +8909,8 @@ var ts;
                 }
             }
             function emitModuleDeclaration(node) {
-                if (ts.getModuleInstanceState(node) !== 1 /* Instantiated */) {
+                var shouldEmit = ts.getModuleInstanceState(node) === 1 /* Instantiated */ || (ts.getModuleInstanceState(node) === 2 /* ConstEnumOnly */ && compilerOptions.preserveConstEnums);
+                if (!shouldEmit) {
                     return emitPinnedOrTripleSlashComments(node);
                 }
                 emitLeadingComments(node);
