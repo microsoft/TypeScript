@@ -1219,18 +1219,17 @@ module TypeScript.Parser {
             return parseSyntaxList<IClassElementSyntax>(ListParsingState.ClassDeclaration_ClassElements)
         }
 
-        function isAccessor(modifierCount: number, inErrorRecovery: boolean): boolean {
-            var tokenKind = peekToken(modifierCount).kind;
+        function isAccessor(inErrorRecovery: boolean): boolean {
+            var tokenKind = currentToken().kind;
             if (tokenKind !== SyntaxKind.GetKeyword &&
                 tokenKind !== SyntaxKind.SetKeyword) {
                 return false;
             }
 
-            return isPropertyName(/*peekIndex:*/ modifierCount + 1, inErrorRecovery);
+            return isPropertyName(/*peekIndex:*/ 1, inErrorRecovery);
         }
 
-        function parseAccessor(): IAccessorSyntax {
-            var modifiers = parseModifiers();
+        function parseAccessor(modifiers: ISyntaxToken[]): IAccessorSyntax {
             var _currentToken = currentToken();
             var tokenKind = _currentToken.kind;
 
@@ -1267,36 +1266,36 @@ module TypeScript.Parser {
             // Note: the order of these calls is important.  Specifically, isMemberVariableDeclaration
             // checks for a subset of the conditions of the previous two calls.
             var _modifierCount = modifierCount();
-            return isConstructorDeclaration(_modifierCount) ||
-                   isAccessor(_modifierCount, inErrorRecovery) ||
-                   isIndexMemberDeclaration(_modifierCount) ||
-                   isMemberVariableOrFunctionDeclaration(_modifierCount, inErrorRecovery);
+            return _modifierCount > 0 ||
+                   isConstructorDeclaration() ||
+                   isAccessor(inErrorRecovery) ||
+                   isIndexMemberDeclaration() ||
+                   isMemberVariableOrFunctionDeclaration(inErrorRecovery);
         }
 
-        function isMemberVariableOrFunctionDeclaration(peekIndex: number, inErrorRecovery: boolean) {
-            var tokenN = peekToken(peekIndex);
-            var tokenNKind = tokenN.kind;
+        function isMemberVariableOrFunctionDeclaration(inErrorRecovery: boolean) {
+            var token0 = currentToken();
+            var token0Kind = token0.kind;
 
             // If we have a '*', then this is a generator function.
-            if (tokenNKind === SyntaxKind.AsteriskToken) {
+            if (token0Kind === SyntaxKind.AsteriskToken) {
                 if (inErrorRecovery) {
                     // If we're in error recovery, we might see a random * that is part of some
                     // expression.  Really, in order to view this as a generator function, we want
                     // to see at least '*id<' or '*id('.  Otherwise, we won't think of this as the
                     // start of a member variable/function.
-                    return peekToken(peekIndex + 1).kind === SyntaxKind.IdentifierName &&
-                        (peekToken(peekIndex + 2).kind === SyntaxKind.LessThanToken || peekToken(peekIndex + 2).kind === SyntaxKind.OpenParenToken);
+                    return peekToken(1).kind === SyntaxKind.IdentifierName && isCallSignature(/*peekIndex:*/ 2);
                 }
 
                 return true;
             }
 
             // Check if its the start of a property or method.  Both must start with a property name.
-            if (!isPropertyName(peekIndex, inErrorRecovery)) {
+            if (!isPropertyName(0, inErrorRecovery)) {
                 return false;
             }
 
-            if (!SyntaxFacts.isAnyKeyword(tokenNKind)) {
+            if (!SyntaxFacts.isAnyKeyword(token0Kind)) {
                 // It wasn't a keyword.  So this is definitely a member variable or function.
                 return true;
             }
@@ -1314,7 +1313,7 @@ module TypeScript.Parser {
             //      public<
             //      public <eof>
             //      public <newline>
-            var nextToken = peekToken(peekIndex + 1);
+            var nextToken = peekToken(1);
             switch (nextToken.kind) {
                 case SyntaxKind.SemicolonToken:
                 case SyntaxKind.EqualsToken:
@@ -1338,18 +1337,17 @@ module TypeScript.Parser {
 
             // Have to check for indexers before anything else.  That way if we see "[foo:" we 
             // parse it out as an indexer and not a member function or variable.
-            var _modifierCount = modifierCount();
-            if (isConstructorDeclaration(_modifierCount)) {
-                return parseConstructorDeclaration();
+            var modifiers = parseModifiers();
+            if (isConstructorDeclaration()) {
+                return parseConstructorDeclaration(modifiers);
             }
-            else if (isIndexMemberDeclaration(_modifierCount)) {
-                return parseIndexMemberDeclaration();
+            else if (isIndexMemberDeclaration()) {
+                return parseIndexMemberDeclaration(modifiers);
             }
-            else if (isAccessor(_modifierCount, inErrorRecovery)) {
-                return parseAccessor();
+            else if (isAccessor(inErrorRecovery)) {
+                return parseAccessor(modifiers);
             }
-            else if (isMemberVariableOrFunctionDeclaration(/*peekIndex:*/ _modifierCount, inErrorRecovery)) {
-                var modifiers = parseModifiers();
+            else if (modifiers.length > 0 || isMemberVariableOrFunctionDeclaration(inErrorRecovery)) {
                 var asterixToken = tryEatToken(SyntaxKind.AsteriskToken);
                 var propertyName = parsePropertyName();
 
@@ -1369,20 +1367,20 @@ module TypeScript.Parser {
             }
         }
 
-        function isConstructorDeclaration(modifierCount: number): boolean {
+        function isConstructorDeclaration(): boolean {
             // Note: we deviate slightly from the spec here.  If we see 'constructor' then we 
             // assume this is a constructor.  That means, if a user writes "public constructor;"
             // it won't be viewed as a member.  As a workaround, they can simply write:
             //      public 'constructor';
-            return peekToken(modifierCount).kind === SyntaxKind.ConstructorKeyword;
+            return currentToken().kind === SyntaxKind.ConstructorKeyword;
         }
 
-        function parseConstructorDeclaration(): ConstructorDeclarationSyntax {
+        function parseConstructorDeclaration(modifiers: ISyntaxToken[]): ConstructorDeclarationSyntax {
             // Note: if we see an arrow after the close paren, then try to parse out a function 
             // block anyways.  It's likely the user just though '=> expr' was legal anywhere a 
             // block was legal.
             return new ConstructorDeclarationSyntax(contextFlags, 
-                parseModifiers(), 
+                modifiers, 
                 eatToken(SyntaxKind.ConstructorKeyword), 
                 parseCallSignature(/*requireCompleteTypeParameterList:*/ false, /*yieldAndGeneratorParameterContext:*/ false, /*asyncContext:*/ false),
                 parseFunctionBody(/*isGenerator:*/ false, /*asyncContext:*/ false));
@@ -1421,13 +1419,15 @@ module TypeScript.Parser {
                 eatExplicitOrAutomaticSemicolon(/*allowWithoutNewline:*/ false));
         }
 
-        function isIndexMemberDeclaration(modifierCount: number): boolean {
-            return isIndexSignature(modifierCount);
+        function isIndexMemberDeclaration(): boolean {
+            return isIndexSignature(/*peekIndex:*/ 0);
         }
 
-        function parseIndexMemberDeclaration(): IndexMemberDeclarationSyntax {
+        function parseIndexMemberDeclaration(modifiers: ISyntaxToken[]): IndexMemberDeclarationSyntax {
             return new IndexMemberDeclarationSyntax(contextFlags,
-                parseModifiers(), parseIndexSignature(), eatExplicitOrAutomaticSemicolon(/*allowWithoutNewLine:*/ false));
+                modifiers,
+                parseIndexSignature(),
+                eatExplicitOrAutomaticSemicolon(/*allowWithoutNewLine:*/ false));
         }
 
         function isFunctionDeclaration(modifierCount: number): boolean {
@@ -3607,8 +3607,9 @@ module TypeScript.Parser {
         function tryParsePropertyAssignment(inErrorRecovery: boolean): IPropertyAssignmentSyntax {
             // Debug.assert(isPropertyAssignment(/*inErrorRecovery:*/ false));
 
-            if (isAccessor(modifierCount(), inErrorRecovery)) {
-                return parseAccessor();
+            var modifiers = parseModifiers();
+            if (isAccessor(inErrorRecovery)) {
+                return parseAccessor(modifiers);
             }
 
             // Note: we don't want to call parsePropertyName here yet as it will convert a keyword
@@ -3616,33 +3617,23 @@ module TypeScript.Parser {
             // shorthand property assignment.
 
             var _currentToken = currentToken();
-            if (_currentToken.kind === SyntaxKind.AsyncKeyword) {
-                // 'async' might start an asynchronous property, or it might just be the name 
-                // of a property.
-                var token1 = peekToken(1);
-                if (!token1.hasLeadingNewLine()) {
-                    if (token1.kind === SyntaxKind.AsteriskToken || isPropertyName(/*peekIndex:*/ 1, inErrorRecovery)) {
-                        return parseMemberFunctionDeclaration(
-                            Syntax.list([eatToken(SyntaxKind.AsyncKeyword)]), tryEatToken(SyntaxKind.AsteriskToken), parsePropertyName());
+            if (modifiers.length === 0) {
+                if (isIdentifier(_currentToken)) {
+                    var token1 = peekToken(1);
+                    if (token1.kind !== SyntaxKind.ColonToken &&
+                        token1.kind !== SyntaxKind.OpenParenToken &&
+                        token1.kind !== SyntaxKind.LessThanToken) {
+
+                        // If we don't have one of:
+                        //
+                        // id:
+                        // id(
+                        // id<
+                        //
+                        // then this is a shorthand property assignment.  Just return the identifier 
+                        // token as is.
+                        return eatIdentifierToken();
                     }
-                }
-            }
-
-            if (isIdentifier(_currentToken)) {
-                var token1 = peekToken(1);
-                if (token1.kind !== SyntaxKind.ColonToken &&
-                    token1.kind !== SyntaxKind.OpenParenToken &&
-                    token1.kind !== SyntaxKind.LessThanToken) {
-
-                    // If we don't have one of:
-                    //
-                    // id:
-                    // id(
-                    // id<
-                    //
-                    // then this is a shorthand property assignment.  Just return the identifier 
-                    // token as is.
-                    return eatIdentifierToken();
                 }
             }
 
@@ -3656,12 +3647,12 @@ module TypeScript.Parser {
             //      *[e]() { } 
             //      async id() { }
             //      async [e]() { } 
-            if (_currentToken.kind === SyntaxKind.AsteriskToken || isPropertyName(/*peekIndex:*/ 0, inErrorRecovery)) {
+            if (modifiers.length > 0 || _currentToken.kind === SyntaxKind.AsteriskToken || isPropertyName(/*peekIndex:*/ 0, inErrorRecovery)) {
                 var asterixToken = tryEatToken(SyntaxKind.AsteriskToken);
                 var propertyName = parsePropertyName();
 
-                if (asterixToken !== undefined || isCallSignature(/*peekIndex:*/ 0)) {
-                    return parseMemberFunctionDeclaration([], asterixToken, propertyName);
+                if (modifiers.length > 0 || asterixToken !== undefined || isCallSignature(/*peekIndex:*/ 0)) {
+                    return parseMemberFunctionDeclaration(modifiers, asterixToken, propertyName);
                 }
                 else {
                     // PropertyName[?Yield] : AssignmentExpression[In, ?Yield]
@@ -3683,7 +3674,9 @@ module TypeScript.Parser {
         }
 
         function isPropertyAssignment(inErrorRecovery: boolean): boolean {
-            return isAccessor(modifierCount(), inErrorRecovery) ||
+            var _modifierCount = modifierCount();
+            return _modifierCount > 0 ||
+                   isAccessor(inErrorRecovery) ||
                    currentToken().kind === SyntaxKind.AsteriskToken ||
                    isPropertyName(/*peekIndex:*/ 0, inErrorRecovery);
         }
