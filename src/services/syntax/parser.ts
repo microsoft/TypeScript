@@ -281,7 +281,7 @@ module TypeScript.Parser {
             return result;
         }
 
-        function enterYieldContextAnd<T>(func: () => T): T {
+        function doInsideYieldContext<T>(func: () => T): T {
             if (inYieldContext()) {
                 // no need to do anything special if we're already in the [Yield] context.
                 return func();
@@ -293,7 +293,7 @@ module TypeScript.Parser {
             return result;
         }
 
-        function exitYieldContextAnd<T>(func: () => T): T {
+        function doOutsideYieldContext<T>(func: () => T): T {
             if (inYieldContext()) {
                 setYieldContext(false);
                 var result = func();
@@ -305,7 +305,7 @@ module TypeScript.Parser {
             return func();
         }
 
-        function enterAsyncContextAnd<T>(func: () => T): T {
+        function doInsideAsyncContext<T>(func: () => T): T {
             if (inAsyncContext()) {
                 // no need to do anything special if we're already in the [Async] context.
                 return func();
@@ -317,7 +317,7 @@ module TypeScript.Parser {
             return result;
         }
 
-        function exitAsyncContextAnd<T>(func: () => T): T {
+        function doOutsideAsyncContext<T>(func: () => T): T {
             if (inAsyncContext()) {
                 setAsyncContext(false);
                 var result = func();
@@ -1177,7 +1177,7 @@ module TypeScript.Parser {
 
             if (isHeritageClause()) {
                 return isClassHeritageClause && inGeneratorParameterContext()
-                    ? exitYieldContextAnd(parseHeritageClausesWorker)
+                    ? doOutsideYieldContext(parseHeritageClausesWorker)
                     : parseHeritageClausesWorker();
             }
 
@@ -1212,7 +1212,7 @@ module TypeScript.Parser {
 
             if (openBraceToken.fullWidth() > 0) {
                 return inGeneratorParameterContext()
-                    ? exitYieldContextAnd(parseClassElements)
+                    ? doOutsideYieldContext(parseClassElements)
                     : parseClassElements();
             }
 
@@ -3380,7 +3380,7 @@ module TypeScript.Parser {
                     eatToken(SyntaxKind.CloseBraceToken));
             }
 
-            return asyncContext ? enterAsyncContextAnd(parseAssignmentExpressionOrHigher) : exitAsyncContextAnd(parseAssignmentExpressionOrHigher);
+            return asyncContext ? doInsideAsyncContext(parseAssignmentExpressionOrHigher) : doOutsideAsyncContext(parseAssignmentExpressionOrHigher);
         }
 
         function isSimpleArrowFunctionExpression(_currentToken: ISyntaxToken): boolean {
@@ -3407,7 +3407,7 @@ module TypeScript.Parser {
             var asyncKeyword: ISyntaxToken;
             return new SimpleArrowFunctionExpressionSyntax(contextFlags,
                 asyncKeyword = tryEatToken(SyntaxKind.AsyncKeyword),
-                asyncKeyword ? enterAsyncContextAnd(eatSimpleParameter) : exitAsyncContextAnd(eatSimpleParameter), 
+                asyncKeyword ? doInsideAsyncContext(eatSimpleParameter) : doOutsideAsyncContext(eatSimpleParameter), 
                 eatToken(SyntaxKind.EqualsGreaterThanToken),
                 parseArrowFunctionBody(/*asyncContext:*/ !!asyncKeyword));
         }
@@ -3737,7 +3737,7 @@ module TypeScript.Parser {
             var _currentToken = currentToken();
             if (_currentToken.kind === SyntaxKind.OpenBracketToken) {
                 return inGeneratorParameterContext()
-                    ? exitYieldContextAnd(parseComputedPropertyName)
+                    ? doOutsideYieldContext(parseComputedPropertyName)
                     : parseComputedPropertyName();
             }
             else if (SyntaxFacts.isIdentifierNameOrAnyKeyword(_currentToken)) {
@@ -4247,7 +4247,7 @@ module TypeScript.Parser {
             //      [~GeneratorParameter]BindingIdentifier[?Yield]Initializer[In, ?Yield]opt
 
             var identifier = inGeneratorParameterContext()
-                ? enterYieldContextAnd(eatIdentifierToken)
+                ? doInsideYieldContext(eatIdentifierToken)
                 : eatIdentifierToken();
 
             var questionToken = tryEatToken(SyntaxKind.QuestionToken);
@@ -4256,7 +4256,7 @@ module TypeScript.Parser {
             var equalsValueClause: EqualsValueClauseSyntax = undefined;
             if (isEqualsValueClause(/*inParameter*/ true)) {
                 equalsValueClause = inGeneratorParameterContext()
-                    ? exitYieldContextAnd(parseEqualsValueClause)
+                    ? doOutsideYieldContext(parseEqualsValueClause)
                     : parseEqualsValueClause();
             }
 
