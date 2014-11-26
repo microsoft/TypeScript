@@ -3446,6 +3446,11 @@ module ts {
                     if (hasKind(node.parent, SyntaxKind.GetAccessor) || hasKind(node.parent, SyntaxKind.SetAccessor)) {
                         return getGetAndSetOccurrences(<AccessorDeclaration>node.parent);
                     }
+                default:
+                    if (isModifier(node.kind) && node.parent &&
+                        (isDeclaration(node.parent) || node.parent.kind === SyntaxKind.VariableStatement)) {
+                        return getModifierOccurrences(node.kind, node.parent);
+                    }
             }
 
             return undefined;
@@ -3786,6 +3791,87 @@ module ts {
 
                     if (accessor) {
                         forEach(accessor.getChildren(), child => pushKeywordIf(keywords, child, SyntaxKind.GetKeyword, SyntaxKind.SetKeyword));
+                    }
+                }
+            }
+
+            function getModifierOccurrences(modifier: SyntaxKind, declaration: Declaration) {
+                var container = declaration.parent;
+
+                // Make sure we only highlight the keyword when it makes sense to do so.
+                if (declaration.flags & NodeFlags.AccessibilityModifier) {
+                    if (!(container.kind === SyntaxKind.ClassDeclaration ||
+                        (declaration.kind === SyntaxKind.Parameter && hasKind(container, SyntaxKind.Constructor)))) {
+                        return undefined;
+                    }
+                }
+                else if (declaration.flags & NodeFlags.Static) {
+                    if (container.kind !== SyntaxKind.ClassDeclaration) {
+                        return undefined;
+                    }
+                }
+                else if (declaration.flags & (NodeFlags.Export | NodeFlags.Ambient)) {
+                    if (!(container.kind === SyntaxKind.ModuleBlock || container.kind === SyntaxKind.SourceFile)) {
+                        return undefined;
+                    }
+                }
+
+                var keywords: Node[] = [];
+                var modifierFlag: NodeFlags = getFlagFromModifier(modifier);
+
+                var nodes: Node[];
+                switch (container.kind) {
+                    case SyntaxKind.ModuleBlock:
+                    case SyntaxKind.SourceFile:
+                        nodes = (<Block>container).statements;
+                        break;
+                    case SyntaxKind.Constructor:
+                        nodes = (<Node[]>(<ConstructorDeclaration>container).parameters).concat(
+                            (<ClassDeclaration>container.parent).members);
+                        break;
+                    case SyntaxKind.ClassDeclaration:
+                        nodes = (<ClassDeclaration>container).members;
+
+                        // If we're an accessibility modifier, we're in an instance member and should search
+                        // the constructor's parameter list for instance members as well.
+                        if (modifierFlag & NodeFlags.AccessibilityModifier) {
+                            var constructor = forEach((<ClassDeclaration>container).members, member => {
+                                return member.kind === SyntaxKind.Constructor && <ConstructorDeclaration>member;
+                            });
+
+                            if (constructor) {
+                                nodes = nodes.concat(constructor.parameters);
+                            }
+                        }
+                        break;
+                    default:
+                        Debug.fail("Invalid container kind.")
+                }
+
+                forEach(nodes, node => {
+                    if (node.flags & modifierFlag) {
+                        forEach(node.getChildren(), child => pushKeywordIf(keywords, child, modifier));
+                    }
+                });
+
+                return map(keywords, getReferenceEntryFromNode);
+
+                function getFlagFromModifier(modifier: SyntaxKind) {
+                    switch (modifier) {
+                        case SyntaxKind.PublicKeyword:
+                            return NodeFlags.Public;
+                        case SyntaxKind.PrivateKeyword:
+                            return NodeFlags.Private;
+                        case SyntaxKind.ProtectedKeyword:
+                            return NodeFlags.Protected;
+                        case SyntaxKind.StaticKeyword:
+                            return NodeFlags.Static;
+                        case SyntaxKind.ExportKeyword:
+                            return NodeFlags.Export;
+                        case SyntaxKind.DeclareKeyword:
+                            return NodeFlags.Ambient;
+                        default:
+                            Debug.fail();
                     }
                 }
             }
