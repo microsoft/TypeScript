@@ -17,6 +17,44 @@ class Test262BaselineRunner extends RunnerBase {
     };
     private static baselineOptions: Harness.Baseline.BaselineOptions = { Subfolder: 'test262' };
 
+    private static getTestFilePath(filename: string): string {
+        return Test262BaselineRunner.basePath + "/" + filename;
+    }
+
+    private static serializeSourceFile(file: ts.SourceFile): string {
+        function getKindName(k: number): string {
+            return (<any>ts).SyntaxKind[k]
+        }
+
+        function serializeNode(n: ts.Node): any {
+            var o = { kind: getKindName(n.kind) };
+            ts.forEach(Object.getOwnPropertyNames(n), i => {
+                switch (i) {
+                    case "parent":
+                    case "symbol":
+                    case "locals":
+                    case "localSymbol":
+                        return undefined;
+                    case "nextContainer":
+                        if (n.nextContainer) {
+                            (<any>o)[i] = { kind: getKindName(n.nextContainer.kind), pos: n.nextContainer.pos, end: n.nextContainer.end };
+                            return undefined;
+                        }
+                    case "text":
+                        if (n.kind === ts.SyntaxKind.SourceFile) return undefined;
+                    default:
+                        (<any>o)[i] = ((<any>n)[i]);
+                }
+                return undefined;
+            });
+            return o;
+        }
+
+        return JSON.stringify(file,(k, v) => {
+            return (v && typeof v.pos === "number") ? serializeNode(v) : v;
+        }, "    ");
+    }
+
     private runTest(filePath: string) {
         describe('test262 test for ' + filePath, () => {
             // Mocha holds onto the closure environment of the describe callback even after the test is done.
@@ -25,6 +63,7 @@ class Test262BaselineRunner extends RunnerBase {
                 filename: string;
                 compilerResult: Harness.Compiler.CompilerResult;
                 inputFiles: { unitName: string; content: string }[];
+                checker: ts.TypeChecker;
             };
 
             before(() => {
@@ -33,7 +72,7 @@ class Test262BaselineRunner extends RunnerBase {
                 var testCaseContent = Harness.TestCaseParser.makeUnitsFromTest(content, testFilename);
 
                 var inputFiles = testCaseContent.testUnitData.map(unit => {
-                    return { unitName: Test262BaselineRunner.basePath + "/" + unit.name, content: unit.content };
+                    return { unitName: Test262BaselineRunner.getTestFilePath(unit.name), content: unit.content };
                 });
 
                 // Emit the results
@@ -41,10 +80,12 @@ class Test262BaselineRunner extends RunnerBase {
                     filename: testFilename,
                     inputFiles: inputFiles,
                     compilerResult: undefined,
+                    checker: undefined,
                 };
 
-                Harness.Compiler.getCompiler().compileFiles([Test262BaselineRunner.helperFile].concat(inputFiles), /*otherFiles*/ [], compilerResult => {
+                Harness.Compiler.getCompiler().compileFiles([Test262BaselineRunner.helperFile].concat(inputFiles), /*otherFiles*/ [], (compilerResult, checker) => {
                     testState.compilerResult = compilerResult;
+                    testState.checker = checker;
                 }, /*settingsCallback*/ undefined, Test262BaselineRunner.options);
             });
 
@@ -67,6 +108,13 @@ class Test262BaselineRunner extends RunnerBase {
                     }
 
                     return Harness.Compiler.getErrorBaseline(testState.inputFiles, errors);
+                }, false, Test262BaselineRunner.baselineOptions);
+            });
+
+            it('has the expected AST',() => {
+                Harness.Baseline.runBaseline('has the expected AST', testState.filename + '.AST.txt',() => {
+                    var sourceFile = testState.checker.getProgram().getSourceFile(Test262BaselineRunner.getTestFilePath(testState.filename));
+                    return Test262BaselineRunner.serializeSourceFile(sourceFile);
                 }, false, Test262BaselineRunner.baselineOptions);
             });
         });
