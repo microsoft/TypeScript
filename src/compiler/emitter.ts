@@ -2126,10 +2126,13 @@ module ts {
             }
 
             function emitIdentifier(node: Identifier) {
-                if (!isNotExpressionIdentifier(node)) {
+                var generatedName = resolver.getRenamedIdentifier(node);
+                if (generatedName) {
+                    write(generatedName);
+                } else if (!isNotExpressionIdentifier(node)) {
                     emitExpressionIdentifier(node);
                 }
-                else {
+                else {                    
                     writeTextOfNode(currentSourceFile, node);
                 }
             }
@@ -2837,7 +2840,7 @@ module ts {
 
                 if (node.flags & NodeFlags.Async || (node.asteriskToken && compilerOptions.target <= ScriptTarget.ES5)) {
                     // NOTE: rewriteFunction supports downlevel generators, but is not currently enabled.
-                    node = rewriteFunction(node, compilerOptions);
+                    node = rewriteFunction(node, compilerOptions, resolver);                    
                 }
 
                 write("function ");

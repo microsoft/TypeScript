@@ -4533,6 +4533,17 @@ module ts {
             }
         }
 
+        function renameSymbol(symbol: Symbol, generatedName: string): void {
+            symbol.generatedName = generatedName;
+        }
+
+        function getRenamedIdentifier(name: Identifier): string {
+            var links = getNodeLinks(name);
+            if (links.resolvedSymbol) {
+                return links.resolvedSymbol.generatedName;
+            }
+        }
+
         function checkIdentifier(node: Identifier): Type {
             var symbol = getResolvedSymbol(node);
 
@@ -4545,6 +4556,8 @@ module ts {
             checkCollisionWithCapturedSuperVariable(node, node);
             checkCollisionWithCapturedThisVariable(node, node);
             checkCollisionWithIndexVariableInGeneratedCode(node, node);
+            checkCollisionWithAwaiterVariablesInGeneratedCode(node, node);
+            checkCollisionWithGeneratorVariablesInGeneratedCode(node, node);
 
             return getNarrowedTypeOfSymbol(getExportSymbolOfValueSymbolIfExported(symbol), node);
         }
@@ -6488,6 +6501,7 @@ module ts {
             // in tagged templates.
             forEach((<TemplateExpression>node).templateSpans, templateSpan => {
                 checkExpression(templateSpan.expression);
+                checkAwait(templateSpan);
             });
 
             return stringType;
@@ -6516,6 +6530,8 @@ module ts {
         // contextually typed function and arrow expressions in the initial phase.
         function checkExpression(node: Expression, contextualMapper?: TypeMapper): Type {
             var type = checkExpressionNode(node, contextualMapper);
+            checkAwait(node);
+
             if (contextualMapper && contextualMapper !== identityMapper) {
                 var signature = getSingleCallSignature(type);
                 if (signature && signature.typeParameters) {
@@ -6681,6 +6697,8 @@ module ts {
                 checkCollisionWithCapturedSuperVariable(node, node.name);
                 checkCollisionWithCapturedThisVariable(node, node.name);
                 checkCollisionWithRequireExportsInGeneratedCode(node, node.name);
+                checkCollisionWithAwaiterVariablesInGeneratedCode(node, node.name);
+                checkCollisionWithGeneratorVariablesInGeneratedCode(node, node.name);
                 checkCollisionWithArgumentsInGeneratedCode(node);
                 if (compilerOptions.noImplicitAny && !node.type) {
                     switch (node.kind) {
@@ -7373,6 +7391,7 @@ module ts {
 
         function checkBlock(node: Block) {
             forEach(node.statements, checkSourceElement);
+            checkAwait(node);
         }
 
         function checkCollisionWithArgumentsInGeneratedCode(node: SignatureDeclaration) {
@@ -7594,6 +7613,45 @@ module ts {
             }
         }
 
+        function checkCollisionWithAwaiterVariablesInGeneratedCode(node: Node, name: DeclarationName): void {
+            if (!name || name.kind !== SyntaxKind.Identifier) {
+                return;
+
+            }
+
+            var identifier = <Identifier>name;
+            if (identifier.text !== "__awaiter" && identifier.text !== "__resolve") {
+                return;
+            }
+
+            // TODO(rbuckton): Need to be more specific for these checks. Currently defaulting to reporting errors
+            var isDeclaration = node.kind !== SyntaxKind.Identifier;
+            if (isDeclaration) {
+                error(node, Diagnostics.Duplicate_identifier_0_Compiler_uses_variable_declaration_0_to_support_async_functions, identifier.text);
+            } else {
+                error(node, Diagnostics.Expression_resolves_to_variable_declaration_0_that_compiler_uses_to_support_async_functions, identifier.text);
+            }
+        }
+
+        function checkCollisionWithGeneratorVariablesInGeneratedCode(node: Node, name: DeclarationName): void {
+            if (!name || name.kind !== SyntaxKind.Identifier || compilerOptions.target > ScriptTarget.ES5) {
+                return;
+            }
+
+            var identifier = <Identifier>name;
+            if (identifier.text !== "__generator" && identifier.text !== "__state" && identifier.text.indexOf("__l") !== 0) {
+                return;
+            }
+
+            // TODO(rbuckton): Need to be more specific for these checks. Currently defaulting to reporting errors
+            var isDeclaration = node.kind !== SyntaxKind.Identifier;
+            if (isDeclaration) {
+                error(node, Diagnostics.Duplicate_identifier_0_Compiler_uses_variable_declaration_0_to_support_async_functions, identifier.text);
+            } else {
+                error(node, Diagnostics.Expression_resolves_to_variable_declaration_0_that_compiler_uses_to_support_async_functions, identifier.text);
+            }
+        }
+
         function checkVariableDeclaration(node: VariableDeclaration | PropertyDeclaration) {
             checkSourceElement(node.type);
             checkExportsOnMergedDeclarations(node);
@@ -7624,6 +7682,8 @@ module ts {
                 checkCollisionWithCapturedSuperVariable(node, node.name);
                 checkCollisionWithCapturedThisVariable(node, node.name);
                 checkCollisionWithRequireExportsInGeneratedCode(node, node.name);
+                checkCollisionWithAwaiterVariablesInGeneratedCode(node, node.name);
+                checkCollisionWithGeneratorVariablesInGeneratedCode(node, node.name);
                 if (!useTypeFromValueDeclaration) {
                     // TypeScript 1.0 spec (April 2014): 5.1
                     // Multiple declarations for the same variable name in the same declaration space are permitted,
@@ -7633,30 +7693,37 @@ module ts {
                     }
                 }
             }
+
+            checkAwait(node);
         }
 
         function checkVariableStatement(node: VariableStatement) {
             forEach(node.declarations, checkVariableDeclaration);
+            checkAwait(node);
         }
 
         function checkExpressionStatement(node: ExpressionStatement) {
             checkExpression(node.expression);
+            checkAwait(node);
         }
 
         function checkIfStatement(node: IfStatement) {
             checkExpression(node.expression);
             checkSourceElement(node.thenStatement);
             checkSourceElement(node.elseStatement);
+            checkAwait(node);
         }
 
         function checkDoStatement(node: DoStatement) {
             checkSourceElement(node.statement);
             checkExpression(node.expression);
+            checkAwait(node);
         }
 
         function checkWhileStatement(node: WhileStatement) {
             checkExpression(node.expression);
             checkSourceElement(node.statement);
+            checkAwait(node);
         }
 
         function checkForStatement(node: ForStatement) {
@@ -7665,6 +7732,7 @@ module ts {
             if (node.condition) checkExpression(node.condition);
             if (node.iterator) checkExpression(node.iterator);
             checkSourceElement(node.statement);
+            checkAwait(node);
         }
 
         function checkForInStatement(node: ForInStatement) {
@@ -7707,6 +7775,7 @@ module ts {
             }
 
             checkSourceElement(node.statement);
+            checkAwait(node);
         }
 
         function checkBreakOrContinueStatement(node: BreakOrContinueStatement) {
@@ -7750,6 +7819,7 @@ module ts {
                     }
                 }
             }
+            checkAwait(node);
         }
 
         function checkWithStatement(node: WithStatement) {
@@ -7771,20 +7841,24 @@ module ts {
                 }
                 checkBlock(clause);
             });
+            checkAwait(node);
         }
 
         function checkLabeledStatement(node: LabeledStatement) {
             checkSourceElement(node.statement);
+            checkAwait(node);
         }
 
         function checkThrowStatement(node: ThrowStatement) {
             checkExpression(node.expression);
+            checkAwait(node);
         }
 
         function checkTryStatement(node: TryStatement) {
             checkBlock(node.tryBlock);
             if (node.catchBlock) checkBlock(node.catchBlock);
             if (node.finallyBlock) checkBlock(node.finallyBlock);
+            checkAwait(node);
         }
 
         function checkIndexConstraints(type: Type) { 
@@ -7893,6 +7967,8 @@ module ts {
             checkTypeParameters(node.typeParameters);
             checkCollisionWithCapturedThisVariable(node, node.name);
             checkCollisionWithRequireExportsInGeneratedCode(node, node.name);
+            checkCollisionWithAwaiterVariablesInGeneratedCode(node, node.name);
+            checkCollisionWithGeneratorVariablesInGeneratedCode(node, node.name);
             checkExportsOnMergedDeclarations(node);
             var symbol = getSymbolOfNode(node);
             var type = <InterfaceType>getDeclaredTypeOfSymbol(symbol);
@@ -8292,6 +8368,8 @@ module ts {
             checkTypeNameIsReserved(node.name, Diagnostics.Enum_name_cannot_be_0);
             checkCollisionWithCapturedThisVariable(node, node.name);
             checkCollisionWithRequireExportsInGeneratedCode(node, node.name);
+            checkCollisionWithAwaiterVariablesInGeneratedCode(node, node.name);
+            checkCollisionWithGeneratorVariablesInGeneratedCode(node, node.name);
             checkExportsOnMergedDeclarations(node);
 
             computeEnumMemberValues(node);
@@ -8355,6 +8433,8 @@ module ts {
             if (fullTypeCheck) {
                 checkCollisionWithCapturedThisVariable(node, node.name);
                 checkCollisionWithRequireExportsInGeneratedCode(node, node.name);
+                checkCollisionWithAwaiterVariablesInGeneratedCode(node, node.name);
+                checkCollisionWithGeneratorVariablesInGeneratedCode(node, node.name);
                 checkExportsOnMergedDeclarations(node);
                 var symbol = getSymbolOfNode(node);
                 if (symbol.flags & SymbolFlags.ValueModule && symbol.declarations.length > 1 && !isInAmbientContext(node)) {
@@ -8390,6 +8470,8 @@ module ts {
         function checkImportDeclaration(node: ImportDeclaration) {
             checkCollisionWithCapturedThisVariable(node, node.name);
             checkCollisionWithRequireExportsInGeneratedCode(node, node.name);
+            checkCollisionWithAwaiterVariablesInGeneratedCode(node, node.name);
+            checkCollisionWithGeneratorVariablesInGeneratedCode(node, node.name);
             var symbol = getSymbolOfNode(node);
             var target: Symbol;
             
@@ -8658,6 +8740,22 @@ module ts {
 
         function checkProgram() {
             forEach(program.getSourceFiles(), checkSourceFile);
+        }
+
+        function checkAwait(node: Node): void {            
+            if (!isAnyFunction(node) && (isAwaitOrYield(node) || forEachChild(node, hasAwaitOrYield))) {
+                getNodeLinks(node).flags |= NodeCheckFlags.HasAwaitOrYield;
+            }
+        }
+
+        function isAwaitOrYield(node: Node) {
+            return (node.kind === SyntaxKind.PrefixOperator && (<UnaryExpression>node).operator === SyntaxKind.AwaitKeyword)
+                || (node.kind === SyntaxKind.YieldExpression);
+        }
+
+        function hasAwaitOrYield(node: Node) {
+            return isAwaitOrYield(node)
+                || (getNodeLinks(node).flags & NodeCheckFlags.HasAwaitOrYield)
         }
 
         function getSortedDiagnostics(): Diagnostic[]{
@@ -9299,6 +9397,8 @@ module ts {
                 isSymbolAccessible,
                 isEntityNameVisible,
                 getConstantValue,
+                renameSymbol,
+                getRenamedIdentifier
             };
         }
 

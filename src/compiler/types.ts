@@ -738,7 +738,7 @@ module ts {
     export type Label = number;
 
     export interface CodeGenerator {
-        declareLocal(name?: string): Identifier;
+        declareLocal(name?: string): GeneratedNode;
         defineLabel(): Label;
         markLabel(label: Label): void;
 
@@ -957,6 +957,8 @@ module ts {
         // Returns the constant value this property access resolves to, or 'undefined' for a non-constant
         getConstantValue(node: PropertyAccess | IndexedAccess): number;
         isEmitBlocked(sourceFile?: SourceFile): boolean;
+        renameSymbol(symbol: Symbol, generatedName: string): void;
+        getRenamedIdentifier(name: Identifier): string;
     }
 
     export const enum SymbolFlags {
@@ -1051,8 +1053,9 @@ module ts {
         members?: SymbolTable;         // Class, interface or literal instance members
         exports?: SymbolTable;         // Module exports
         exportSymbol?: Symbol;         // Exported symbol associated with this symbol
-        valueDeclaration?: Declaration // First value declaration of the symbol,
-        constEnumOnlyModule?: boolean // For modules - if true - module contains only const enums or other modules with only const enums.
+        valueDeclaration?: Declaration;// First value declaration of the symbol,
+        constEnumOnlyModule?: boolean; // For modules - if true - module contains only const enums or other modules with only const enums.
+        generatedName?: string;        // A generated name for a renamed symbol
     }
 
     export interface SymbolLinks {
@@ -1087,6 +1090,7 @@ module ts {
 
         EmitAwaiter        = 0x00000100,  // Emit __awaiter
         EmitGenerator      = 0x00000200,  // Emit __generator
+        HasAwaitOrYield    = 0x00000400,  // This node has an 'await' or 'yield' in its descendants.
     }
 
     export interface NodeLinks {

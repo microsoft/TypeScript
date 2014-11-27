@@ -1158,6 +1158,15 @@
         "code": 2458
     },
 
+    "Duplicate identifier '{0}'. Compiler uses variable declaration '{0}' to support async functions.": {
+        "category": "Error",
+        "code": 2459
+    },
+    "Expression resolves to variable declaration '{0}' that compiler uses to support async functions.": {
+        "category": "Error",
+        "code": 2460
+    },
+
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
         "code": 4000

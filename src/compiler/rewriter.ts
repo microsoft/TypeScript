@@ -4,11 +4,9 @@
 /// <reference path="parser.ts"/>
 /// <reference path="factory.ts"/>
 /// <reference path="generator.ts"/>
-module ts {
-    // TODO: do we need to capture/rename `arguments` or disallow `arguments` in async/generator?
-    var awaitOrYieldNodes: boolean[] = [];
-    var nextNodeId = -1;
 
+// TODO(rbuckton): do we need to capture/rename `arguments` or disallow `arguments` in async/generator?
+module ts {
     function getPromiseConstructor(node: FunctionLikeDeclaration): EntityName {
         var typeName: EntityName;
         if (node.type.kind === SyntaxKind.TypeReference) {
@@ -24,7 +22,7 @@ module ts {
     }
 
     /** rewrites an async or generator function or method declaration */
-    export function rewriteFunction(node: FunctionLikeDeclaration, compilerOptions: CompilerOptions): FunctionLikeDeclaration {
+    export function rewriteFunction(node: FunctionLikeDeclaration, compilerOptions: CompilerOptions, resolver: EmitResolver): FunctionLikeDeclaration {
         var builder: CodeGenerator;
         var renames: Map<Identifier>;
         var isDownlevel = compilerOptions.target <= ScriptTarget.ES5;
@@ -215,10 +213,6 @@ module ts {
 
                     case SyntaxKind.FinallyBlock:
                         return visitFinallyBlock(<Block>node, emitNode);
-
-                    case SyntaxKind.Identifier:
-                        node = visitIdentifier(<Identifier>node);
-                        break;
                 }
 
                 if (node && emitNode) {
@@ -328,15 +322,6 @@ module ts {
         }
 
         // expressions
-
-        function visitIdentifier(node: Identifier): Identifier {
-            if (isDownlevel) {
-                // TODO: may need to support renaming an identifier in the emitter, if the renamed identifier is captured by a closure.
-                return getRenamedIdentifier(node);
-            } else {
-                return node;
-            }
-        }
 
         function visitPrefixOperator(node: UnaryExpression): Node {
             if (isAsync && node.operator === SyntaxKind.AwaitKeyword) {
@@ -1117,10 +1102,9 @@ module ts {
             if (node.catchBlock) {
                 builder.setLocation(node.catchBlock.variable);
                 var variable = builder.declareLocal();
-                var previousName = renameIdentifier(node.catchBlock.variable, variable);
+                resolver.renameSymbol(node.catchBlock.symbol, variable.text);
                 builder.beginCatchBlock(variable);
                 visit(node.catchBlock, builder.emitNode);
-                renameIdentifier(node.catchBlock.variable, previousName);
             }
             if (node.finallyBlock) {
                 builder.beginFinallyBlock();
@@ -1171,14 +1155,7 @@ module ts {
                 return false;
             }
 
-            if (isAwaitOrYield(node)) {
-                return true;
-            } else if (isAnyFunction(node)) {
-                return false;
-            } else {
-                if (!node.id) node.id = nextNodeId--;
-                return awaitOrYieldNodes[node.id] || (awaitOrYieldNodes[node.id] = forEachChild(node, hasAwaitOrYield));
-            }
+            return (resolver.getNodeCheckFlags(node) & NodeCheckFlags.HasAwaitOrYield) !== 0;
         }
 
         function getTarget(node: Node): string {
