@@ -1736,32 +1736,64 @@ module TypeScript.Parser {
             return false;
         }
 
+        function isDefinitelyNotStatement() {
+            var _currentToken = currentToken();
+            var currentTokenKind = _currentToken.kind;
+
+            // 'async' is a modifier, but can start a statement.  So we skip further checks if we 
+            // see it.
+            if (currentTokenKind !== SyntaxKind.AsyncKeyword) {
+                switch (currentTokenKind) {
+                    case SyntaxKind.PublicKeyword:
+                    case SyntaxKind.PrivateKeyword:
+                    case SyntaxKind.ProtectedKeyword:
+                    case SyntaxKind.StaticKeyword:
+
+                //if (isModifierKind(currentTokenKind)) {
+                    // ERROR RECOVERY
+                    // None of the modifiers are actually keywords.  And they might show up in a real
+                    // statement (i.e. "public();").  However, if we see 'public <identifier>' then 
+                    // that can't possibly be a statement (and instead will be a class element), 
+                    // and we should not parse it out here.  Note: if there is a newline between the
+                    // elements, then we should not do this.  That's because asi might take effect. i.e.:
+                    //
+                    //      public
+                    //      foo
+                    //
+                    // Are two legal statements in JS.
+                    //
+                    // Also: 'async a' can start an statement, so we want to check for that as well.
+                    var token1 = peekToken(1);
+                    if (!token1.hasLeadingNewLine() && SyntaxFacts.isIdentifierNameOrAnyKeyword(token1)) {
+                        return true;
+                    }
+                }
+                
+                // Check for common things that might appear where we expect a statement, but which we 
+                // do not want to consume.  This can happen when the user does not terminate their 
+                // existing block properly.  We don't want to accidently consume these as expression 
+                // below.
+                if (isInterfaceEnumClassModuleImportOrExport(modifierCount(), _currentToken)) {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         function isStatement(modifierCount: number, inErrorRecovery: boolean): boolean {
             if (SyntaxUtilities.isStatement(currentNode())) {
                 return true;
             }
 
+            if (isDefinitelyNotStatement()) {
+                return false;
+            }
+
             var _currentToken = currentToken();
             var currentTokenKind = _currentToken.kind;
+
             switch (currentTokenKind) {
-                // ERROR RECOVERY
-                case SyntaxKind.PublicKeyword:
-                case SyntaxKind.PrivateKeyword:
-                case SyntaxKind.ProtectedKeyword:
-                case SyntaxKind.StaticKeyword:
-                    // None of the above are actually keywords.  And they might show up in a real
-                    // statement (i.e. "public();").  However, if we see 'public <identifier>' then 
-                    // that can't possibly be a statement (and instead will be a class element), 
-                    // and we should not parse it out here.
-                    var token1 = peekToken(1);
-                    if (SyntaxFacts.isIdentifierNameOrAnyKeyword(token1)) {
-                        // Definitely not a statement.
-                        return false;
-                    }
-
-                    // Handle this below in 'isExpressionStatement()'
-                    break;
-
                 // Common cases that we can immediately assume are statements.
                 case SyntaxKind.IfKeyword:
                 case SyntaxKind.OpenBraceToken:
@@ -1777,14 +1809,6 @@ module TypeScript.Parser {
                 case SyntaxKind.TryKeyword:
                 case SyntaxKind.DebuggerKeyword:
                     return true;
-            }
-
-            // Check for common things that might appear where we expect a statement, but which we 
-            // do not want to consume.  This can happen when the user does not terminate their 
-            // existing block properly.  We don't want to accidently consume these as expression 
-            // below.
-            if (isInterfaceEnumClassModuleImportOrExport(modifierCount, _currentToken)) {
-                return false;
             }
 
             // More complicated cases.
@@ -1812,24 +1836,11 @@ module TypeScript.Parser {
         }
 
         function tryParseStatementWorker(_currentToken: ISyntaxToken, currentTokenKind: SyntaxKind, modifierCount: number, inErrorRecovery: boolean): IStatementSyntax {
-            switch (currentTokenKind) {
-                // ERROR RECOVERY
-                case SyntaxKind.PublicKeyword:
-                case SyntaxKind.PrivateKeyword:
-                case SyntaxKind.ProtectedKeyword:
-                case SyntaxKind.StaticKeyword:
-                    // None of the above are actually keywords.  And they might show up in a real
-                    // statement (i.e. "public();").  However, if we see 'public <identifier>' then 
-                    // that can't possibly be a statement (and instead will be a class element), 
-                    // and we should not parse it out here.
-                    if (SyntaxFacts.isIdentifierNameOrAnyKeyword(peekToken(1))) {
-                        // Definitely not a statement.
-                        return undefined;
-                    }
-                    else {
-                        break;
-                    }
+            if (isDefinitelyNotStatement()) {
+                return undefined;
+            }
 
+            switch (currentTokenKind) {
                 case SyntaxKind.IfKeyword: return parseIfStatement(_currentToken);
                 case SyntaxKind.OpenBraceToken: return parseStatementBlock();
                 case SyntaxKind.ReturnKeyword: return parseReturnStatement(_currentToken);
@@ -1845,14 +1856,7 @@ module TypeScript.Parser {
                 case SyntaxKind.DebuggerKeyword: return parseDebuggerStatement(_currentToken);
             }
             
-            // Check for common things that might appear where we expect a statement, but which we 
-            // do not want to consume.  This can happen when the user does not terminate their 
-            // existing block properly.  We don't want to accidently consume these as expression 
-            // below.
-            if (isInterfaceEnumClassModuleImportOrExport(modifierCount, _currentToken)) {
-                return undefined;
-            }
-            else if (isVariableStatement(modifierCount)) {
+            if (isVariableStatement(modifierCount)) {
                 return parseVariableStatement();
             }
             else if (isLabeledStatement(_currentToken)) {
