@@ -53,7 +53,13 @@ module ts {
         }
     }
 
-    export function hasUnknownComputedName(declaration: Declaration): boolean {
+    /**
+     * Returns false if any of the following are true:
+     *   1. declaration has no name
+     *   2. declaration has a literal name (not computed)
+     *   3. declaration has a computed property name that is a known symbol
+     */
+    export function hasComputedNameButNotSymbol(declaration: Declaration): boolean {
         return declaration.name && declaration.name.kind === SyntaxKind.ComputedPropertyName;
     }
 
@@ -94,7 +100,7 @@ module ts {
                 if (node.kind === SyntaxKind.ModuleDeclaration && node.name.kind === SyntaxKind.StringLiteral) {
                     return '"' + (<LiteralExpression>node.name).text + '"';
                 }
-                Debug.assert(node.name.kind !== SyntaxKind.ComputedPropertyName);
+                Debug.assert(!hasComputedNameButNotSymbol(node));
                 return (<Identifier | LiteralExpression>node.name).text;
             }
             switch (node.kind) {
@@ -118,7 +124,7 @@ module ts {
         function declareSymbol(symbols: SymbolTable, parent: Symbol, node: Declaration, includes: SymbolFlags, excludes: SymbolFlags): Symbol {
             // Nodes with computed property names will not get symbols, because the type checker
             // does not make properties for them.
-            if (node.name && node.name.kind === SyntaxKind.ComputedPropertyName) {
+            if (hasComputedNameButNotSymbol(node)) {
                 return undefined;
             }
 

@@ -515,9 +515,17 @@
         "category": "Error",
         "code": 1168
     },
-    "Computed property names are not allowed in interfaces or type literals.": {
+    "Computed property names are not allowed in interfaces.": {
         "category": "Error",
         "code": 1169
+    },
+    "Computed property names are not allowed in type literals.": {
+        "category": "Error",
+        "code": 1170
+    },
+    "A comma expression is not allowed in a computed property name.": {
+        "category": "Error",
+        "code": 1171
     },
 
     "Duplicate identifier '{0}'.": {

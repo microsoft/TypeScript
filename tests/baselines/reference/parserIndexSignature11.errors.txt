@@ -1,4 +1,4 @@
-tests/cases/conformance/parser/ecmascript5/IndexSignatures/parserIndexSignature11.ts(2,9): error TS1169: Computed property names are not allowed in interfaces or type literals.
+tests/cases/conformance/parser/ecmascript5/IndexSignatures/parserIndexSignature11.ts(2,9): error TS1169: Computed property names are not allowed in interfaces.
 tests/cases/conformance/parser/ecmascript5/IndexSignatures/parserIndexSignature11.ts(3,9): error TS1021: An index signature must have a type annotation.
 tests/cases/conformance/parser/ecmascript5/IndexSignatures/parserIndexSignature11.ts(4,10): error TS1096: An index signature must have exactly one parameter.
 
@@ -7,7 +7,7 @@ tests/cases/conformance/parser/ecmascript5/IndexSignatures/parserIndexSignature1
     interface I {
             [p];
             ~~~
-!!! error TS1169: Computed property names are not allowed in interfaces or type literals.
+!!! error TS1169: Computed property names are not allowed in interfaces.
             [p1: string];
             ~~~~~~~~~~~~~
 !!! error TS1021: An index signature must have a type annotation.

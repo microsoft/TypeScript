@@ -1262,9 +1262,29 @@ module ts {
         }
 
         function parseComputedPropertyName(): ComputedPropertyName {
+            // PropertyName[Yield,GeneratorParameter] :
+            //     LiteralPropertyName
+            //     [+GeneratorParameter] ComputedPropertyName
+            //     [~GeneratorParameter] ComputedPropertyName[?Yield]
+            // 
+            // ComputedPropertyName[Yield] :
+            //     [ AssignmentExpression[In, ?Yield] ]
+            //
             var node = <ComputedPropertyName>createNode(SyntaxKind.ComputedPropertyName);
             parseExpected(SyntaxKind.OpenBracketToken);
-            node.expression = allowInAnd(parseAssignmentExpression);
+
+            // We parse any expression (including a comma expression). But the grammar
+            // says that only an assignment expression is allowed, so the grammar checker
+            // will error if it sees a comma expression.
+            var yieldContext = inYieldContext();
+            if (inGeneratorParameterContext()) {
+                setYieldContext(false);
+            }
+            node.expression = allowInAnd(parseExpression);
+            if (inGeneratorParameterContext()) {
+                setYieldContext(yieldContext);
+            }
+
             parseExpected(SyntaxKind.CloseBracketToken);
             return finishNode(node);
         }
@@ -1816,23 +1836,28 @@ module ts {
                 //   [protected id
                 //   []
                 //
-                if (nextToken() === SyntaxKind.DotDotDotToken
-                    || token === SyntaxKind.CloseBracketToken
-                    || token === SyntaxKind.PublicKeyword
-                    || token === SyntaxKind.PrivateKeyword
-                    || token === SyntaxKind.ProtectedKeyword) {
-
+                if (nextToken() === SyntaxKind.DotDotDotToken || token === SyntaxKind.CloseBracketToken) {
                     return true;
                 }
 
-                if (!isIdentifier()) {
+                if (isModifier(token)) {
+                    nextToken();
+                    if (isIdentifier()) {
+                        return true;
+                    }
+                }
+                else if (!isIdentifier()) {
                     return false;
+                }
+                else {
+                    // Skip the identifier
+                    nextToken();
                 }
 
                 // A colon signifies a well formed indexer
                 // A comma should be a badly formed indexer because comma expressions are not allowed
                 // in computed properties.
-                if (nextToken() === SyntaxKind.ColonToken || token === SyntaxKind.CommaToken) {
+                if (token === SyntaxKind.ColonToken || token === SyntaxKind.CommaToken) {
                     return true;
                 }
 
@@ -4489,8 +4514,11 @@ module ts {
                     return checkForDisallowedComputedProperty(node.name, Diagnostics.Computed_property_names_are_not_allowed_in_method_overloads);
                 }
             }
-            else if (node.parent.kind === SyntaxKind.InterfaceDeclaration || node.parent.kind === SyntaxKind.TypeLiteral) {
-                return checkForDisallowedComputedProperty(node.name, Diagnostics.Computed_property_names_are_not_allowed_in_interfaces_or_type_literals);
+            else if (node.parent.kind === SyntaxKind.InterfaceDeclaration) {
+                return checkForDisallowedComputedProperty(node.name, Diagnostics.Computed_property_names_are_not_allowed_in_interfaces);
+            }
+            else if (node.parent.kind === SyntaxKind.TypeLiteral) {
+                return checkForDisallowedComputedProperty(node.name, Diagnostics.Computed_property_names_are_not_allowed_in_type_literals);
             }
         }
 
@@ -4829,18 +4857,26 @@ module ts {
                     return true;
                 }
             }
-            else if (node.parent.kind === SyntaxKind.InterfaceDeclaration || node.parent.kind === SyntaxKind.TypeLiteral) {
-                if (checkForDisallowedComputedProperty(node.name, Diagnostics.Computed_property_names_are_not_allowed_in_interfaces_or_type_literals)) {
+            else if (node.parent.kind === SyntaxKind.InterfaceDeclaration) {
+                if (checkForDisallowedComputedProperty(node.name, Diagnostics.Computed_property_names_are_not_allowed_in_interfaces)) {
+                    return true;
+                }
+            }
+            else if (node.parent.kind === SyntaxKind.TypeLiteral) {
+                if (checkForDisallowedComputedProperty(node.name, Diagnostics.Computed_property_names_are_not_allowed_in_type_literals)) {
                     return true;
                 }
             }
 
-            checkForInitializerInAmbientContext(node);
+            return checkForInitializerInAmbientContext(node);
         }
 
         function checkComputedPropertyName(node: ComputedPropertyName) {
             if (languageVersion < ScriptTarget.ES6) {
                 return grammarErrorOnNode(node, Diagnostics.Computed_property_names_are_only_available_when_targeting_ECMAScript_6_and_higher);
+            }
+            else if (node.expression.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>node.expression).operator === SyntaxKind.CommaToken) {
+                return grammarErrorOnNode(node.expression, Diagnostics.A_comma_expression_is_not_allowed_in_a_computed_property_name);
             }
         }
 

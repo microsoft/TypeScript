@@ -1663,7 +1663,7 @@ module ts {
             if (declaration.kind === SyntaxKind.Parameter) {
                 var func = <FunctionLikeDeclaration>declaration.parent;
                 // For a parameter of a set accessor, use the type of the get accessor if one is present
-                if (func.kind === SyntaxKind.SetAccessor && !hasUnknownComputedName(func)) {
+                if (func.kind === SyntaxKind.SetAccessor && !hasComputedNameButNotSymbol(func)) {
                     var getter = <AccessorDeclaration>getDeclarationOfKind(declaration.parent.symbol, SyntaxKind.GetAccessor);
                     if (getter) {
                         return getReturnTypeOfSignature(getSignatureFromDeclaration(getter));
@@ -2531,7 +2531,7 @@ module ts {
                 else {
                     // TypeScript 1.0 spec (April 2014):
                     // If only one accessor includes a type annotation, the other behaves as if it had the same type annotation.
-                    if (declaration.kind === SyntaxKind.GetAccessor && !hasUnknownComputedName(declaration)) {
+                    if (declaration.kind === SyntaxKind.GetAccessor && !hasComputedNameButNotSymbol(declaration)) {
                         var setter = <AccessorDeclaration>getDeclarationOfKind(declaration.symbol, SyntaxKind.SetAccessor);
                         returnType = getAnnotatedAccessorType(setter);
                     }
@@ -6106,6 +6106,12 @@ module ts {
                     checkSignatureDeclaration(node);
                 }
             }
+
+            if (fullTypeCheck) {
+                checkCollisionWithCapturedSuperVariable(node, node.name);
+                checkCollisionWithCapturedThisVariable(node, node.name);
+            }
+
             return type;
         }
 
@@ -6708,7 +6714,9 @@ module ts {
         }
 
         function checkPropertyDeclaration(node: PropertyDeclaration) {
-            checkVariableOrPropertyCommon(node);
+            if (fullTypeCheck) {
+                checkVariableOrPropertyInFullTypeCheck(node);
+            }
         }
 
         function checkMethodDeclaration(node: MethodDeclaration) {
@@ -6806,7 +6814,7 @@ module ts {
                     }
                 }
 
-                if (!hasUnknownComputedName(node)) {
+                if (!hasComputedNameButNotSymbol(node)) {
                     // TypeScript 1.0 spec (April 2014): 8.4.3
                     // Accessors for the same member name must specify the same accessibility.
                     var otherKind = node.kind === SyntaxKind.GetAccessor ? SyntaxKind.SetAccessor : SyntaxKind.GetAccessor;
@@ -6816,12 +6824,12 @@ module ts {
                             error(node.name, Diagnostics.Getter_and_setter_accessors_do_not_agree_in_visibility);
                         }
 
-                        var thisType = getAnnotatedAccessorType(node);
-                        var otherType = getAnnotatedAccessorType(otherAccessor);
+                        var currentAccessorType = getAnnotatedAccessorType(node);
+                        var otherAccessorType = getAnnotatedAccessorType(otherAccessor);
                         // TypeScript 1.0 spec (April 2014): 4.5
                         // If both accessors include type annotations, the specified types must be identical.
-                        if (thisType && otherType) {
-                            if (!isTypeIdenticalTo(thisType, otherType)) {
+                        if (currentAccessorType && otherAccessorType) {
+                            if (!isTypeIdenticalTo(currentAccessorType, otherAccessorType)) {
                                 error(node, Diagnostics.get_and_set_accessor_must_have_the_same_type);
                             }
                         }
@@ -7213,7 +7221,7 @@ module ts {
         function checkFunctionLikeDeclaration(node: FunctionLikeDeclaration): void {
             checkSignatureDeclaration(node);
 
-            if (!hasUnknownComputedName(node)) {
+            if (!hasComputedNameButNotSymbol(node)) {
                 // first we want to check the local symbol that contain this declaration
                 // - if node.localSymbol !== undefined - this is current declaration is exported and localSymbol points to the local symbol
                 // - if node.localSymbol === undefined - this node is non-exported so we can just pick the result of getSymbolOfNode
@@ -7353,7 +7361,7 @@ module ts {
         }
 
         function needCollisionCheckForIdentifier(node: Node, identifier: Identifier, name: string): boolean {
-            if (!(identifier && identifier.text === name)) {
+            if (!identifier || identifier.text !== name) {
                 return false;
             }
 
@@ -7379,10 +7387,9 @@ module ts {
         }
         
         function checkCollisionWithCapturedThisVariable(node: Node, name: Identifier): void {
-            if (!needCollisionCheckForIdentifier(node, name, "_this")) {
-                return;
+            if (needCollisionCheckForIdentifier(node, name, "_this")) {
+                potentialThisCollisions.push(node);
             }
-            potentialThisCollisions.push(node);
         }
 
         // this function will run after checking the source file so 'CaptureThis' is correct for all nodes
@@ -7477,35 +7484,35 @@ module ts {
             }
         }
 
-        function checkVariableOrPropertyCommon(node: VariableDeclaration | PropertyDeclaration) {
+        function checkVariableOrPropertyInFullTypeCheck(node: VariableDeclaration | PropertyDeclaration) {
+            Debug.assert(fullTypeCheck);
             checkSourceElement(node.type);
 
-            if (fullTypeCheck) {
-                var symbol = getSymbolOfNode(node);
-                var type: Type;
-                if (hasUnknownComputedName(node) || symbol.valueDeclaration !== node) {
-                    type = getTypeOfVariableOrPropertyDeclaration(node);
-                }
-                else {
-                    type = getTypeOfVariableOrParameterOrProperty(symbol);
-                }
-
-                if (node.initializer && !(getNodeLinks(node.initializer).flags & NodeCheckFlags.TypeChecked)) {
-                    // Use default messages
-                    checkTypeAssignableTo(checkAndMarkExpression(node.initializer), type, node, /*headMessage*/ undefined);
-                }
-
-                return type;
+            if (hasComputedNameButNotSymbol(node)) {
+                // Just check the initializer, since this property won't contribute to the enclosing type
+                return node.initializer ? checkAndMarkExpression(node.initializer) : anyType;
             }
 
-            // All callers who expect a value to be returned are in fullTypeCheck mode.
-            // If we are not in type check mode, no need to get the type.
-            return undefined;
+            var symbol = getSymbolOfNode(node);
+            var type: Type;
+            if (symbol.valueDeclaration !== node) {
+                type = getTypeOfVariableOrPropertyDeclaration(node);
+            }
+            else {
+                type = getTypeOfVariableOrParameterOrProperty(symbol);
+            }
+
+            if (node.initializer && !(getNodeLinks(node.initializer).flags & NodeCheckFlags.TypeChecked)) {
+                // Use default messages
+                checkTypeAssignableTo(checkAndMarkExpression(node.initializer), type, node, /*headMessage*/ undefined);
+            }
+
+            return type;
         }
 
         function checkVariableDeclaration(node: VariableDeclaration) {
-            var type = checkVariableOrPropertyCommon(node);
             if (fullTypeCheck) {
+                var type = checkVariableOrPropertyInFullTypeCheck(node);
                 checkExportsOnMergedDeclarations(node);
                 if (node.initializer) {
                     checkCollisionWithConstDeclarations(node);

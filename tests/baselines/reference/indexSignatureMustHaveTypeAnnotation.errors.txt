@@ -1,4 +1,4 @@
-tests/cases/compiler/indexSignatureMustHaveTypeAnnotation.ts(2,5): error TS1169: Computed property names are not allowed in interfaces or type literals.
+tests/cases/compiler/indexSignatureMustHaveTypeAnnotation.ts(2,5): error TS1169: Computed property names are not allowed in interfaces.
 tests/cases/compiler/indexSignatureMustHaveTypeAnnotation.ts(3,5): error TS1021: An index signature must have a type annotation.
 tests/cases/compiler/indexSignatureMustHaveTypeAnnotation.ts(7,5): error TS1166: Computed property names are not allowed in class property declarations.
 tests/cases/compiler/indexSignatureMustHaveTypeAnnotation.ts(12,5): error TS1021: An index signature must have a type annotation.
@@ -8,7 +8,7 @@ tests/cases/compiler/indexSignatureMustHaveTypeAnnotation.ts(12,5): error TS1021
     interface I {
         [x]: string;
         ~~~
-!!! error TS1169: Computed property names are not allowed in interfaces or type literals.
+!!! error TS1169: Computed property names are not allowed in interfaces.
         [x: string];
         ~~~~~~~~~~~~
 !!! error TS1021: An index signature must have a type annotation.

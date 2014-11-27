@@ -456,7 +456,7 @@ module ts {
         whenFalse: Expression;
     }
 
-    export interface FunctionExpression extends Expression, SignatureDeclaration {
+    export interface FunctionExpression extends Expression, FunctionLikeDeclaration {
         name?: Identifier;
         body: Block | Expression;  // Required, whereas the member inherited from FunctionDeclaration is optional
     }

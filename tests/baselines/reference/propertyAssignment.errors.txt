@@ -1,4 +1,4 @@
-tests/cases/compiler/propertyAssignment.ts(6,13): error TS1169: Computed property names are not allowed in interfaces or type literals.
+tests/cases/compiler/propertyAssignment.ts(6,13): error TS1170: Computed property names are not allowed in type literals.
 tests/cases/compiler/propertyAssignment.ts(14,1): error TS2322: Type '{ x: number; }' is not assignable to type 'new () => any'.
 tests/cases/compiler/propertyAssignment.ts(16,1): error TS2322: Type '{ x: number; }' is not assignable to type '() => void'.
 
@@ -11,7 +11,7 @@ tests/cases/compiler/propertyAssignment.ts(16,1): error TS2322: Type '{ x: numbe
     
     var foo2: { [index]; } // should be an error
                 ~~~~~~~
-!!! error TS1169: Computed property names are not allowed in interfaces or type literals.
+!!! error TS1170: Computed property names are not allowed in type literals.
     var bar2: { x : number; }
     
     var foo3: { ():void; }

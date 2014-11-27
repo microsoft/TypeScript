@@ -1,4 +1,4 @@
-tests/cases/compiler/indexSignatureWithInitializer.ts(2,5): error TS1169: Computed property names are not allowed in interfaces or type literals.
+tests/cases/compiler/indexSignatureWithInitializer.ts(2,5): error TS1169: Computed property names are not allowed in interfaces.
 tests/cases/compiler/indexSignatureWithInitializer.ts(6,5): error TS1166: Computed property names are not allowed in class property declarations.
 
 
@@ -6,7 +6,7 @@ tests/cases/compiler/indexSignatureWithInitializer.ts(6,5): error TS1166: Comput
     interface I {
         [x = '']: string;
         ~~~~~~~~
-!!! error TS1169: Computed property names are not allowed in interfaces or type literals.
+!!! error TS1169: Computed property names are not allowed in interfaces.
     }
     
     class C {
