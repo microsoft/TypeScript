@@ -1098,6 +1098,7 @@ module TypeScript.Parser {
                 case SyntaxKind.StaticKeyword:
                 case SyntaxKind.DeclareKeyword:
                 case SyntaxKind.AsyncKeyword:
+                case SyntaxKind.ConstKeyword:
                     return true;
             }
 
@@ -1115,6 +1116,11 @@ module TypeScript.Parser {
                     if (nextToken.hasLeadingNewLine()) {
                         return false;
                     }
+                }
+
+                if (token.kind === SyntaxKind.ConstKeyword) {
+                    // In order for 'const' to be a modifier, the next token must be 'enum'.
+                    return nextToken.kind === SyntaxKind.EnumKeyword;
                 }
 
                 var nextTokenKind = nextToken.kind;
