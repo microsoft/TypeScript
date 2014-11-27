@@ -587,12 +587,12 @@ module Harness {
                             return languageVersion === ts.ScriptTarget.ES6 ? defaultES6LibSourceFile : defaultLibSourceFile;
                         }
                         // Don't throw here -- the compiler might be looking for a test that actually doesn't exist as part of the TC
-                        return null;
+                        return undefined;
                     }
                 },
-                getDefaultLibFilename: (options) => defaultLibFileName,
-                writeFile: writeFile,
-                getCanonicalFileName: getCanonicalFileName,
+                getDefaultLibFilename: options => defaultLibFileName,
+                writeFile,
+                getCanonicalFileName,
                 useCaseSensitiveFileNames: () => useCaseSensitiveFileNames,
                 getNewLine: ()=> sys.newLine
             };
@@ -812,7 +812,7 @@ module Harness {
                 }
 
                 var errors: HarnessDiagnostic[] = [];
-                program.getDiagnostics().concat(checker.getDiagnostics()).concat(emitResult ? emitResult.errors : []).forEach(err => {
+                program.getDiagnostics().concat(checker.getDiagnostics()).concat(emitResult ? emitResult.diagnostics : []).forEach(err => {
                     // TODO: new compiler formats errors after this point to add . and newlines so we'll just do it manually for now
                     errors.push(getMinimalDiagnostic(err));
                 });
@@ -847,7 +847,7 @@ module Harness {
                         declResult = compileResult;
                     }, settingsCallback, options);
 
-                    return { declInputFiles: declInputFiles, declOtherFiles: declOtherFiles, declResult: declResult };
+                    return { declInputFiles, declOtherFiles, declResult };
                 }
 
                 function addDtsFile(file: { unitName: string; content: string }, dtsFiles: { unitName: string; content: string }[]) {
@@ -868,7 +868,7 @@ module Harness {
                                 var sourceFileName: string;
                                 if (ts.isExternalModule(sourceFile) || !options.out) {
                                     if (options.outDir) {
-                                        var sourceFilePath = ts.getNormalizedPathFromPathComponents(ts.getNormalizedPathComponents(sourceFile.filename, result.currentDirectoryForProgram));
+                                        var sourceFilePath = ts.getNormalizedAbsolutePath(sourceFile.filename, result.currentDirectoryForProgram);
                                         sourceFilePath = sourceFilePath.replace(result.program.getCommonSourceDirectory(), "");
                                         sourceFileName = ts.combinePaths(options.outDir, sourceFilePath);
                                     }
@@ -1157,7 +1157,7 @@ module Harness {
             var settings = extractCompilerSettings(code);
 
             // List of all the subfiles we've parsed out
-            var files: TestUnitData[] = [];
+            var testUnitData: TestUnitData[] = [];
 
             var lines = Utils.splitContentByNewlines(code);
 
@@ -1193,7 +1193,7 @@ module Harness {
                                 originalFilePath: fileName,
                                 references: refs
                             };
-                        files.push(newTestFile);
+                        testUnitData.push(newTestFile);
 
                         // Reset local data
                         currentFileContent = null;
@@ -1218,7 +1218,7 @@ module Harness {
             }
 
             // normalize the fileName for the single file case
-            currentFileName = files.length > 0 ? currentFileName : Path.getFileName(fileName);
+            currentFileName = testUnitData.length > 0 ? currentFileName : Path.getFileName(fileName);
 
             // EOF, push whatever remains
             var newTestFile2 = {
@@ -1228,9 +1228,9 @@ module Harness {
                 originalFilePath: fileName,
                 references: refs
             };
-            files.push(newTestFile2);
+            testUnitData.push(newTestFile2);
 
-            return { settings: settings, testUnitData: files };
+            return { settings, testUnitData };
         }
     }
 
@@ -1326,7 +1326,7 @@ module Harness {
                 actual = actual.replace(/\r\n?/g, '\n');
             }
 
-            return { expected: expected, actual: actual };
+            return { expected, actual };
         }
 
         function writeComparison(expected: string, actual: string, relativeFilename: string, actualFilename: string, descriptionForDescribe: string) {

@@ -281,7 +281,7 @@ module TypeScript.Scanner {
     LargeScannerToken.prototype.childCount = 0;
 
     export interface DiagnosticCallback {
-        (position: number, width: number, key: string, arguments: any[]): void;
+        (position: number, width: number, key: string, arguments?: any[]): void;
     }
 
     interface TokenInfo {
@@ -1008,7 +1008,7 @@ module TypeScript.Scanner {
             while (true) {
                 if (index === end) {
                     // Hit the end of the file.  
-                    reportDiagnostic(end, 0, DiagnosticCode._0_expected, ["`"]);
+                    reportDiagnostic(end, 0, DiagnosticCode.Unterminated_template_literal);
                     break;
                 }
 
@@ -1144,10 +1144,7 @@ module TypeScript.Scanner {
             // term, and it sees one of these then it may restart us asking specifically if we could 
             // scan out a regex.
             if (allowContextualToken) {
-                var result = tryScanRegularExpressionToken();
-                if (result !== SyntaxKind.None) {
-                    return result;
-                }
+                return scanRegularExpressionToken();
             }
 
             if (str.charCodeAt(index) === CharacterCodes.equals) {
@@ -1159,7 +1156,7 @@ module TypeScript.Scanner {
             }
         }
 
-        function tryScanRegularExpressionToken(): SyntaxKind {
+        function scanRegularExpressionToken(): SyntaxKind {
             var startIndex = index;
 
             var inEscape = false;
@@ -1168,8 +1165,9 @@ module TypeScript.Scanner {
                 var ch = str.charCodeAt(index);
 
                 if (isNaN(ch) || isNewLineCharacter(ch)) {
-                    index = startIndex;
-                    return SyntaxKind.None;
+                    // Hit the end of line, or end of the file.  This is not a legal regex.
+                    reportDiagnostic(index, 0, DiagnosticCode.Unterminated_regular_expression_literal);
+                    break;
                 }
 
                 index++;
@@ -1193,7 +1191,7 @@ module TypeScript.Scanner {
                         continue;
 
                     case CharacterCodes.closeBracket:
-                        // If we ever hit a cloe bracket then we're now no longer in a character 
+                        // If we ever hit a close bracket then we're now no longer in a character 
                         // class.  If we weren't in a character class to begin with, then this has 
                         // no effect.
                         inCharacterClass = false;
@@ -1219,7 +1217,7 @@ module TypeScript.Scanner {
 
             // TODO: The grammar says any identifier part is allowed here.  Do we need to support
             // \u identifiers here?  The existing typescript parser does not.  
-            while (isIdentifierPartCharacter[str.charCodeAt(index)]) {
+            while (index < end && isIdentifierPartCharacter[str.charCodeAt(index)]) {
                 index++;
             }
 
@@ -1322,7 +1320,7 @@ module TypeScript.Scanner {
                     break;
                 }
                 else if (isNaN(ch) || isNewLineCharacter(ch)) {
-                    reportDiagnostic(Math.min(index, end), 1, DiagnosticCode.Missing_close_quote_character, undefined);
+                    reportDiagnostic(index, 0, DiagnosticCode.Unterminated_string_literal);
                     break;
                 }
                 else {
@@ -1432,16 +1430,6 @@ module TypeScript.Scanner {
         return !hadError && SyntaxFacts.isIdentifierNameOrAnyKeyword(token) && width(token) === text.length();
     }
 
-    // A parser source that gets its data from an underlying scanner.
-    export interface IScannerParserSource extends Parser.IParserSource {
-        // The position that the scanner is currently at.
-        absolutePosition(): number;
-
-        // Resets the source to this position. Any diagnostics produced after this point will be
-        // removed.
-        resetToPosition(absolutePosition: number): void;
-    }
-
     interface IScannerRewindPoint extends Parser.IRewindPoint {
         // Information used by normal parser source.
         absolutePosition: number;
@@ -1451,7 +1439,7 @@ module TypeScript.Scanner {
     // Parser source used in batch scenarios.  Directly calls into an underlying text scanner and
     // supports none of the functionality to reuse nodes.  Good for when you just want want to do
     // a single parse of a file.
-    export function createParserSource(fileName: string, text: ISimpleText, languageVersion: ts.ScriptTarget): IScannerParserSource {
+    export function createParserSource(fileName: string, text: ISimpleText, languageVersion: ts.ScriptTarget): Parser.IParserSource {
         // The absolute position we're at in the text we're reading from.
         var _absolutePosition: number = 0;
 
@@ -1489,11 +1477,6 @@ module TypeScript.Scanner {
             // The normal parser source never returns nodes.  They're only returned by the 
             // incremental parser source.
             return undefined;
-        }
-
-        function consumeNode(node: ISyntaxNode): void {
-            // Should never get called.
-            throw Errors.invalidOperation();
         }
 
         function absolutePosition() {
@@ -1563,13 +1546,20 @@ module TypeScript.Scanner {
             return slidingWindow.peekItemN(n);
         }
 
-        function consumeToken(token: ISyntaxToken): void {
-            // Debug.assert(token.fullWidth() > 0 || token.kind === SyntaxKind.EndOfFileToken);
-
-            // Debug.assert(currentToken() === token);
-            _absolutePosition += token.fullWidth();
-
-            slidingWindow.moveToNextItem();
+        function consumeNodeOrToken(nodeOrToken: ISyntaxNodeOrToken): void {
+            if (nodeOrToken === slidingWindow.currentItemWithoutFetching()) {
+                // We're consuming the token that was just fetched from us by the parser.  We just
+                // need to move ourselves forward and ditch this token from the sliding window.
+                _absolutePosition += (<ISyntaxToken>nodeOrToken).fullWidth();
+                slidingWindow.moveToNextItem();
+            }
+            else {
+                // We're either consuming a node, or we're consuming a token that wasn't from our
+                // sliding window.  Both cases happen in incremental scenarios when the incremental
+                // parser uses a node or token from an older tree.  In that case, we simply want to
+                // point ourselves at the end of the element that the parser just consumed.
+                resetToPosition(fullEnd(nodeOrToken));
+            }
         }
 
         function currentToken(): ISyntaxToken {
@@ -1646,15 +1636,13 @@ module TypeScript.Scanner {
             currentToken: currentToken,
             currentContextualToken: currentContextualToken,
             peekToken: peekToken,
-            consumeNode: consumeNode,
-            consumeToken: consumeToken,
+            consumeNodeOrToken: consumeNodeOrToken,
             getRewindPoint: getRewindPoint,
             rewind: rewind,
             releaseRewindPoint: releaseRewindPoint,
             tokenDiagnostics: tokenDiagnostics,
             release: release,
             absolutePosition: absolutePosition,
-            resetToPosition: resetToPosition,
         };
     }
 

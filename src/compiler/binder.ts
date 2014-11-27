@@ -18,7 +18,7 @@ module ts {
             return ModuleInstanceState.NonInstantiated;
         }
         // 2. const enum declarations don't make module instantiated
-        else if (node.kind === SyntaxKind.EnumDeclaration && isConstEnumDeclaration(<EnumDeclaration>node)) {
+        else if (isConstEnumDeclaration(node)) {
             return ModuleInstanceState.ConstEnumOnly;
         }
         // 3. non - exported import declarations
@@ -125,9 +125,9 @@ module ts {
                         : Diagnostics.Duplicate_identifier_0;
 
                     forEach(symbol.declarations, declaration => {
-                        file.semanticErrors.push(createDiagnosticForNode(declaration.name, message, getDisplayName(declaration)));
+                        file.semanticDiagnostics.push(createDiagnosticForNode(declaration.name, message, getDisplayName(declaration)));
                     });
-                    file.semanticErrors.push(createDiagnosticForNode(node.name, message, getDisplayName(node)));
+                    file.semanticDiagnostics.push(createDiagnosticForNode(node.name, message, getDisplayName(node)));
 
                     symbol = createSymbol(0, name);
                 }
@@ -148,7 +148,7 @@ module ts {
                     if (node.name) {
                         node.name.parent = node;
                     }
-                    file.semanticErrors.push(createDiagnosticForNode(symbol.exports[prototypeSymbol.name].declarations[0],
+                    file.semanticDiagnostics.push(createDiagnosticForNode(symbol.exports[prototypeSymbol.name].declarations[0],
                         Diagnostics.Duplicate_identifier_0, prototypeSymbol.name));
                 }
                 symbol.exports[prototypeSymbol.name] = prototypeSymbol;
@@ -380,6 +380,7 @@ module ts {
                     break;
                 case SyntaxKind.Property:
                 case SyntaxKind.PropertyAssignment:
+                case SyntaxKind.ShorthandPropertyAssignment:
                     bindDeclaration(<Declaration>node, SymbolFlags.Property, SymbolFlags.PropertyExcludes, /*isBlockScopeContainer*/ false);
                     break;
                 case SyntaxKind.EnumMember:
@@ -438,7 +439,7 @@ module ts {
                     bindDeclaration(<Declaration>node, SymbolFlags.TypeAlias, SymbolFlags.TypeAliasExcludes, /*isBlockScopeContainer*/ false);
                     break;
                 case SyntaxKind.EnumDeclaration:
-                    if (isConstEnumDeclaration(<EnumDeclaration>node)) {
+                    if (isConst(node)) {
                         bindDeclaration(<Declaration>node, SymbolFlags.ConstEnum, SymbolFlags.ConstEnumExcludes, /*isBlockScopeContainer*/ false);
                     }
                     else {

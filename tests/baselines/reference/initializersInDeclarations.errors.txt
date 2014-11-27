@@ -1,5 +1,5 @@
-tests/cases/conformance/externalModules/initializersInDeclarations.ts(5,7): error TS1039: Initializers are not allowed in ambient contexts.
-tests/cases/conformance/externalModules/initializersInDeclarations.ts(6,14): error TS1039: Initializers are not allowed in ambient contexts.
+tests/cases/conformance/externalModules/initializersInDeclarations.ts(5,9): error TS1039: Initializers are not allowed in ambient contexts.
+tests/cases/conformance/externalModules/initializersInDeclarations.ts(6,16): error TS1039: Initializers are not allowed in ambient contexts.
 tests/cases/conformance/externalModules/initializersInDeclarations.ts(7,16): error TS1037: A function implementation cannot be declared in an ambient context.
 tests/cases/conformance/externalModules/initializersInDeclarations.ts(12,15): error TS1039: Initializers are not allowed in ambient contexts.
 tests/cases/conformance/externalModules/initializersInDeclarations.ts(13,15): error TS1039: Initializers are not allowed in ambient contexts.
@@ -13,10 +13,10 @@ tests/cases/conformance/externalModules/initializersInDeclarations.ts(18,16): er
     
     declare class Foo {
     	name = "test";
-    	     ~
+    	       ~~~~~~
 !!! error TS1039: Initializers are not allowed in ambient contexts.
     	"some prop" = 42;
-    	            ~
+    	              ~~
 !!! error TS1039: Initializers are not allowed in ambient contexts.
     	fn(): boolean {
     	              ~

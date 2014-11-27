@@ -6,11 +6,11 @@
 
 goTo.marker('1');
 verify.signatureHelpCountIs(2);
-verify.currentSignatureParamterCountIs(0);
+verify.currentSignatureParameterCountIs(0);
 verify.currentSignatureHelpIs('clsOverload(): clsOverload');
 
 goTo.marker('2');
-verify.currentSignatureParamterCountIs(1);
+verify.currentSignatureParameterCountIs(1);
 verify.currentSignatureHelpIs('clsOverload(test: string): clsOverload');
 verify.currentParameterHelpArgumentNameIs('test');
 verify.currentParameterSpanIs("test: string");

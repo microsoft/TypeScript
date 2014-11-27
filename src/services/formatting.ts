@@ -252,7 +252,7 @@ module ts.formatting {
         rulesProvider: RulesProvider,
         requestKind: FormattingRequestKind): TextChange[] {
 
-        var rangeContainsError = prepareRangeContainsErrorFunction(sourceFile.syntacticErrors, originalRange);
+        var rangeContainsError = prepareRangeContainsErrorFunction(sourceFile.getSyntacticDiagnostics(), originalRange);
 
         // formatting context is used by rules provider
         var formattingContext = new FormattingContext(sourceFile, requestKind);
@@ -361,8 +361,8 @@ module ts.formatting {
                 delta = Math.min(options.IndentSize, parentDynamicIndentation.getDelta() + delta);
             }
             return {
-                indentation: indentation,
-                delta: delta
+                indentation,
+                delta
             }
         }
 
@@ -834,7 +834,7 @@ module ts.formatting {
         }
 
         function newTextChange(start: number, len: number, newText: string): TextChange {
-            return { span: new TypeScript.TextSpan(start, len), newText: newText }
+            return { span: new TextSpan(start, len), newText }
         }
 
         function recordDelete(start: number, len: number) {

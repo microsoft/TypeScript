@@ -117,14 +117,14 @@ module RWC {
                 });
 
                 function getHarnessCompilerInputUnit(fileName: string) {
-                    var resolvedPath = ts.normalizeSlashes(sys.resolvePath(fileName));
+                    var unitName = ts.normalizeSlashes(sys.resolvePath(fileName));
                     try {
-                        var content = sys.readFile(resolvedPath);
+                        var content = sys.readFile(unitName);
                     }
                     catch (e) {
                         // Leave content undefined.
                     }
-                    return { unitName: resolvedPath, content: content };
+                    return { unitName, content };
                 }
             });
 

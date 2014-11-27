@@ -24,7 +24,7 @@ module ts.formatting {
                     return name;
                 }
             }
-            throw new Error(TypeScript.getDiagnosticMessage(TypeScript.DiagnosticCode.Unknown_rule, null));
+            throw new Error("Unknown rule");
         }
 
         [name: string]: any;

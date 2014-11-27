@@ -1,8 +1,8 @@
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(4,1): error TS6053: File 'tests/cases/conformance/parser/ecmascript5/typescript.ts' not found.
-tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(193,40): error TS1150: 'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.
+tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(193,33): error TS1150: 'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(867,29): error TS1015: Parameter cannot have question mark and initializer.
-tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1009,45): error TS1150: 'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.
-tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1024,47): error TS1150: 'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.
+tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1009,31): error TS1150: 'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.
+tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1024,33): error TS1150: 'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(13,22): error TS2304: Cannot find name 'Type'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(14,24): error TS2304: Cannot find name 'ASTFlags'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(17,38): error TS2304: Cannot find name 'CompilerDiagnostics'.
@@ -793,7 +793,7 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2356,48): error
                                    ~~~~~~~~~~~
 !!! error TS2304: Cannot find name 'SymbolScope'.
             public members: AST[] = new AST[];
-                                           ~~
+                                    ~~~~~~~~~
 !!! error TS1150: 'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.
     
             constructor () {
@@ -2029,7 +2029,7 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2356,48): error
 !!! error TS2304: Cannot find name 'Symbol'.
                 if (this.envids == null) {
                     this.envids = new Identifier[];
-                                                ~~
+                                  ~~~~~~~~~~~~~~~~
 !!! error TS1150: 'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.
                 }
                 this.envids[this.envids.length] = id;
@@ -2048,7 +2048,7 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2356,48): error
 !!! error TS2304: Cannot find name 'Symbol'.
                 if (this.jumpRefs == null) {
                     this.jumpRefs = new Identifier[];
-                                                  ~~
+                                    ~~~~~~~~~~~~~~~~
 !!! error TS1150: 'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.
                 }
                 var id = new Identifier(sym.name);

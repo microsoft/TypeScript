@@ -192,12 +192,12 @@ module ts {
         }
 
         return {
-            getSourceFile: getSourceFile,
+            getSourceFile,
             getDefaultLibFilename: options => combinePaths(getDirectoryPath(normalizePath(sys.getExecutingFilePath())), options.target === ScriptTarget.ES6 ? "lib.es6.d.ts" : "lib.d.ts"),
-            writeFile: writeFile,
+            writeFile,
             getCurrentDirectory: () => currentDirectory || (currentDirectory = sys.getCurrentDirectory()),
             useCaseSensitiveFileNames: () => sys.useCaseSensitiveFileNames,
-            getCanonicalFileName: getCanonicalFileName,
+            getCanonicalFileName,
             getNewLine: () => sys.newLine
         };
     }
@@ -368,7 +368,7 @@ module ts {
             else {
                 var emitStart = new Date().getTime();
                 var emitOutput = checker.emitFiles();
-                var emitErrors = emitOutput.errors;
+                var emitErrors = emitOutput.diagnostics;
                 exitStatus = emitOutput.emitResultStatus;
                 var reportStart = new Date().getTime();
                 errors = concatenate(errors, emitErrors);
@@ -394,7 +394,7 @@ module ts {
             reportTimeStatistic("Total time", reportStart - parseStart);
         }
 
-        return { program: program, exitStatus: exitStatus }
+        return { program, exitStatus };
     }
 
     function printVersion() {
