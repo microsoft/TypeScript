@@ -3200,7 +3200,10 @@ module ts {
             }
 
             function emitModuleDeclaration(node: ModuleDeclaration) {
-                if (getModuleInstanceState(node) !== ModuleInstanceState.Instantiated) {
+                var shouldEmit = getModuleInstanceState(node) === ModuleInstanceState.Instantiated ||
+                    (getModuleInstanceState(node) === ModuleInstanceState.ConstEnumOnly && compilerOptions.preserveConstEnums);
+
+                if (!shouldEmit) {
                     return emitPinnedOrTripleSlashComments(node);
                 }
                 emitLeadingComments(node);
