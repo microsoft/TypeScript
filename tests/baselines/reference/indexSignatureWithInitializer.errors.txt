@@ -1,22 +1,16 @@
-tests/cases/compiler/indexSignatureWithInitializer.ts(2,6): error TS1020: An index signature parameter cannot have an initializer.
-tests/cases/compiler/indexSignatureWithInitializer.ts(6,6): error TS1020: An index signature parameter cannot have an initializer.
-tests/cases/compiler/indexSignatureWithInitializer.ts(2,6): error TS2371: A parameter initializer is only allowed in a function or constructor implementation.
-tests/cases/compiler/indexSignatureWithInitializer.ts(6,6): error TS2371: A parameter initializer is only allowed in a function or constructor implementation.
+tests/cases/compiler/indexSignatureWithInitializer.ts(2,5): error TS1169: Computed property names are not allowed in interfaces.
+tests/cases/compiler/indexSignatureWithInitializer.ts(6,5): error TS1166: Computed property names are not allowed in class property declarations.
 
 
-==== tests/cases/compiler/indexSignatureWithInitializer.ts (4 errors) ====
+==== tests/cases/compiler/indexSignatureWithInitializer.ts (2 errors) ====
     interface I {
         [x = '']: string;
-         ~
-!!! error TS1020: An index signature parameter cannot have an initializer.
-         ~~~~~~
-!!! error TS2371: A parameter initializer is only allowed in a function or constructor implementation.
+        ~~~~~~~~
+!!! error TS1169: Computed property names are not allowed in interfaces.
     }
     
     class C {
         [x = 0]: string
-         ~
-!!! error TS1020: An index signature parameter cannot have an initializer.
-         ~~~~~
-!!! error TS2371: A parameter initializer is only allowed in a function or constructor implementation.
+        ~~~~~~~
+!!! error TS1166: Computed property names are not allowed in class property declarations.
     }
