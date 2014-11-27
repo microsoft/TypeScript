@@ -495,6 +495,38 @@
         "category": "Error",
         "code": 1163
     },
+    "Computed property names are not allowed in enums.": {
+        "category": "Error",
+        "code": 1164
+    },
+    "Computed property names are not allowed in an ambient context.": {
+        "category": "Error",
+        "code": 1165
+    },
+    "Computed property names are not allowed in class property declarations.": {
+        "category": "Error",
+        "code": 1166
+    },
+    "Computed property names are only available when targeting ECMAScript 6 and higher.": {
+        "category": "Error",
+        "code": 1167
+    },
+    "Computed property names are not allowed in method overloads.": {
+        "category": "Error",
+        "code": 1168
+    },
+    "Computed property names are not allowed in interfaces.": {
+        "category": "Error",
+        "code": 1169
+    },
+    "Computed property names are not allowed in type literals.": {
+        "category": "Error",
+        "code": 1170
+    },
+    "A comma expression is not allowed in a computed property name.": {
+        "category": "Error",
+        "code": 1171
+    },
 
     "Duplicate identifier '{0}'.": {
         "category": "Error",
@@ -1654,5 +1686,13 @@
     "You cannot rename this element.": {
         "category": "Error",
         "code": 8000
+    },
+    "'yield' expressions are not currently supported.": {
+        "category": "Error",
+        "code": 9000
+    },
+    "'generators' are not currently supported.": {
+        "category": "Error",
+        "code": 9001
     }
 }

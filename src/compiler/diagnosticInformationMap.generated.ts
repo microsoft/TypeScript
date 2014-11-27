@@ -126,6 +126,14 @@ module ts {
         Unterminated_regular_expression_literal: { code: 1161, category: DiagnosticCategory.Error, key: "Unterminated regular expression literal." },
         An_object_member_cannot_be_declared_optional: { code: 1162, category: DiagnosticCategory.Error, key: "An object member cannot be declared optional." },
         yield_expression_must_be_contained_within_a_generator_declaration: { code: 1163, category: DiagnosticCategory.Error, key: "'yield' expression must be contained_within a generator declaration." },
+        Computed_property_names_are_not_allowed_in_enums: { code: 1164, category: DiagnosticCategory.Error, key: "Computed property names are not allowed in enums." },
+        Computed_property_names_are_not_allowed_in_an_ambient_context: { code: 1165, category: DiagnosticCategory.Error, key: "Computed property names are not allowed in an ambient context." },
+        Computed_property_names_are_not_allowed_in_class_property_declarations: { code: 1166, category: DiagnosticCategory.Error, key: "Computed property names are not allowed in class property declarations." },
+        Computed_property_names_are_only_available_when_targeting_ECMAScript_6_and_higher: { code: 1167, category: DiagnosticCategory.Error, key: "Computed property names are only available when targeting ECMAScript 6 and higher." },
+        Computed_property_names_are_not_allowed_in_method_overloads: { code: 1168, category: DiagnosticCategory.Error, key: "Computed property names are not allowed in method overloads." },
+        Computed_property_names_are_not_allowed_in_interfaces: { code: 1169, category: DiagnosticCategory.Error, key: "Computed property names are not allowed in interfaces." },
+        Computed_property_names_are_not_allowed_in_type_literals: { code: 1170, category: DiagnosticCategory.Error, key: "Computed property names are not allowed in type literals." },
+        A_comma_expression_is_not_allowed_in_a_computed_property_name: { code: 1171, category: DiagnosticCategory.Error, key: "A comma expression is not allowed in a computed property name." },
         Duplicate_identifier_0: { code: 2300, category: DiagnosticCategory.Error, key: "Duplicate identifier '{0}'." },
         Initializer_of_instance_member_variable_0_cannot_reference_identifier_1_declared_in_the_constructor: { code: 2301, category: DiagnosticCategory.Error, key: "Initializer of instance member variable '{0}' cannot reference identifier '{1}' declared in the constructor." },
         Static_members_cannot_reference_class_type_parameters: { code: 2302, category: DiagnosticCategory.Error, key: "Static members cannot reference class type parameters." },
@@ -414,5 +422,7 @@ module ts {
         _0_implicitly_has_return_type_any_because_it_does_not_have_a_return_type_annotation_and_is_referenced_directly_or_indirectly_in_one_of_its_return_expressions: { code: 7023, category: DiagnosticCategory.Error, key: "'{0}' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions." },
         Function_implicitly_has_return_type_any_because_it_does_not_have_a_return_type_annotation_and_is_referenced_directly_or_indirectly_in_one_of_its_return_expressions: { code: 7024, category: DiagnosticCategory.Error, key: "Function implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions." },
         You_cannot_rename_this_element: { code: 8000, category: DiagnosticCategory.Error, key: "You cannot rename this element." },
+        yield_expressions_are_not_currently_supported: { code: 9000, category: DiagnosticCategory.Error, key: "'yield' expressions are not currently supported." },
+        generators_are_not_currently_supported: { code: 9001, category: DiagnosticCategory.Error, key: "'generators' are not currently supported." },
     };
 }
