@@ -12,7 +12,7 @@ test.markers().forEach(m => {
     goTo.position(m.position);
 
     verify.signatureHelpCountIs(1);
-    verify.signatureHelpArgumentCountIs(1);
+    verify.signatureHelpArgumentCountIs(3);
 
     verify.currentSignatureParameterCountIs(4);
     verify.currentSignatureHelpIs('f(templateStrings: any, x: any, y: any, z: any): number');
