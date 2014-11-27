@@ -152,6 +152,20 @@ var definitions:ITypeDefinition[] = [
         isTypeScriptSpecific: true
     },
     <any>{
+        name: 'TypeAliasSyntax',
+        baseType: 'ISyntaxNode',
+        interfaces: ['IModuleElementSyntax'],
+        children: [
+            <any>{ name: 'modifiers', isList: true, elementType: 'ISyntaxToken' },
+            <any>{ name: 'typeKeyword', isToken: true },
+            <any>{ name: 'identifier', isToken: true },
+            <any>{ name: 'equalsToken', isToken: true },
+            <any>{ name: 'type', type: 'ITypeSyntax' },
+            <any>{ name: 'semicolonToken', isToken: true, isOptional: true }
+        ],
+        isTypeScriptSpecific: true
+    },
+    <any>{
         name: 'FunctionDeclarationSyntax',
         baseType: 'ISyntaxNode',
         interfaces: ['IStatementSyntax'],

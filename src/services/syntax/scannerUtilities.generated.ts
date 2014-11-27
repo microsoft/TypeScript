@@ -2,7 +2,7 @@
 
 module TypeScript {
     export module ScannerUtilities {
-        export var fixedWidthArray = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 4, 5, 8, 8, 7, 6, 2, 4, 5, 7, 3, 8, 2, 2, 10, 3, 4, 6, 6, 4, 5, 4, 3, 6, 3, 4, 5, 4, 5, 5, 4, 6, 7, 6, 5, 10, 9, 3, 7, 7, 9, 6, 6, 5, 3, 5, 5, 7, 11, 7, 3, 6, 7, 6, 3, 6, 1, 1, 1, 1, 1, 1, 1, 3, 1, 1, 1, 1, 2, 2, 2, 2, 2, 3, 3, 1, 1, 1, 1, 2, 2, 2, 2, 3, 1, 1, 1, 1, 1, 2, 2, 1, 1, 1, 2, 2, 2, 2, 3, 3, 4, 2, 2, 2, 1, 2];
+        export var fixedWidthArray = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 4, 5, 8, 8, 7, 6, 2, 4, 5, 7, 3, 8, 2, 2, 10, 3, 4, 6, 6, 4, 5, 4, 3, 6, 3, 4, 5, 4, 5, 5, 4, 6, 7, 6, 5, 10, 9, 3, 7, 7, 9, 6, 6, 5, 3, 5, 5, 7, 11, 7, 3, 6, 7, 6, 3, 4, 6, 1, 1, 1, 1, 1, 1, 1, 3, 1, 1, 1, 1, 2, 2, 2, 2, 2, 3, 3, 1, 1, 1, 1, 2, 2, 2, 2, 3, 1, 1, 1, 1, 1, 2, 2, 1, 1, 1, 2, 2, 2, 2, 3, 3, 4, 2, 2, 2, 1, 2];
         export function identifierKind(str: string, start: number, length: number): SyntaxKind {
             switch (length) {
               case 2: // do, if, in
@@ -28,7 +28,7 @@ module TypeScript {
                   case CharacterCodes.v: return (str.charCodeAt(start + 1) === CharacterCodes.a && str.charCodeAt(start + 2) === CharacterCodes.r) ? SyntaxKind.VarKeyword : SyntaxKind.IdentifierName;
                   default: return SyntaxKind.IdentifierName;
                 }
-              case 4: // case, else, enum, null, this, true, void, with
+              case 4: // case, else, enum, null, this, true, type, void, with
                 switch(str.charCodeAt(start)) {
                   case CharacterCodes.c: return (str.charCodeAt(start + 1) === CharacterCodes.a && str.charCodeAt(start + 2) === CharacterCodes.s && str.charCodeAt(start + 3) === CharacterCodes.e) ? SyntaxKind.CaseKeyword : SyntaxKind.IdentifierName;
                   case CharacterCodes.e: // else, enum
@@ -38,10 +38,11 @@ module TypeScript {
                       default: return SyntaxKind.IdentifierName;
                     }
                   case CharacterCodes.n: return (str.charCodeAt(start + 1) === CharacterCodes.u && str.charCodeAt(start + 2) === CharacterCodes.l && str.charCodeAt(start + 3) === CharacterCodes.l) ? SyntaxKind.NullKeyword : SyntaxKind.IdentifierName;
-                  case CharacterCodes.t: // this, true
+                  case CharacterCodes.t: // this, true, type
                     switch(str.charCodeAt(start + 1)) {
                       case CharacterCodes.h: return (str.charCodeAt(start + 2) === CharacterCodes.i && str.charCodeAt(start + 3) === CharacterCodes.s) ? SyntaxKind.ThisKeyword : SyntaxKind.IdentifierName;
                       case CharacterCodes.r: return (str.charCodeAt(start + 2) === CharacterCodes.u && str.charCodeAt(start + 3) === CharacterCodes.e) ? SyntaxKind.TrueKeyword : SyntaxKind.IdentifierName;
+                      case CharacterCodes.y: return (str.charCodeAt(start + 2) === CharacterCodes.p && str.charCodeAt(start + 3) === CharacterCodes.e) ? SyntaxKind.TypeKeyword : SyntaxKind.IdentifierName;
                       default: return SyntaxKind.IdentifierName;
                     }
                   case CharacterCodes.v: return (str.charCodeAt(start + 1) === CharacterCodes.o && str.charCodeAt(start + 2) === CharacterCodes.i && str.charCodeAt(start + 3) === CharacterCodes.d) ? SyntaxKind.VoidKeyword : SyntaxKind.IdentifierName;

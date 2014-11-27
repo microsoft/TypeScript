@@ -617,6 +617,15 @@ module TypeScript {
             visitNodeOrToken(this, node.expression);
         }
 
+        public visitTypeAlias(node: TypeAliasSyntax): void {
+            this.visitList(node.modifiers);
+            this.visitToken(node.typeKeyword);
+            this.visitToken(node.identifier);
+            this.visitToken(node.equalsToken);
+            visitNodeOrToken(this, node.type);
+            this.visitOptionalToken(node.semicolonToken);
+        }
+
         public visitExternalModuleReference(node: ExternalModuleReferenceSyntax): void {
             this.visitToken(node.requireKeyword);
             this.visitToken(node.openParenToken);

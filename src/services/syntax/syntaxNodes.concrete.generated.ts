@@ -1886,6 +1886,34 @@ module TypeScript {
         }
     }
 
+    export var TypeAliasSyntax: TypeAliasConstructor = <any>function(data: number, modifiers: ISyntaxToken[], typeKeyword: ISyntaxToken, identifier: ISyntaxToken, equalsToken: ISyntaxToken, type: ITypeSyntax, semicolonToken: ISyntaxToken) {
+        if (data) { this.__data = data; }
+        this.modifiers = modifiers,
+        this.typeKeyword = typeKeyword,
+        this.identifier = identifier,
+        this.equalsToken = equalsToken,
+        this.type = type,
+        this.semicolonToken = semicolonToken,
+        modifiers.parent = this,
+        typeKeyword.parent = this,
+        identifier.parent = this,
+        equalsToken.parent = this,
+        type.parent = this,
+        semicolonToken && (semicolonToken.parent = this);
+    };
+    TypeAliasSyntax.prototype.kind = SyntaxKind.TypeAlias;
+    TypeAliasSyntax.prototype.childCount = 6;
+    TypeAliasSyntax.prototype.childAt = function(index: number): ISyntaxElement {
+        switch (index) {
+            case 0: return this.modifiers;
+            case 1: return this.typeKeyword;
+            case 2: return this.identifier;
+            case 3: return this.equalsToken;
+            case 4: return this.type;
+            case 5: return this.semicolonToken;
+        }
+    }
+
     export var ExternalModuleReferenceSyntax: ExternalModuleReferenceConstructor = <any>function(data: number, requireKeyword: ISyntaxToken, openParenToken: ISyntaxToken, stringLiteral: ISyntaxToken, closeParenToken: ISyntaxToken) {
         if (data) { this.__data = data; }
         this.requireKeyword = requireKeyword,

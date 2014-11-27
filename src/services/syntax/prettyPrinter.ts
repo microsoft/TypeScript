@@ -266,6 +266,20 @@ module TypeScript.PrettyPrinter {
             this.appendObjectType(node.body, /*appendNewLines:*/ true);
         }
 
+        public visitTypeAlias(node: TypeAliasSyntax): void {
+            this.appendSpaceList(node.modifiers);
+            this.ensureSpace();
+            this.appendToken(node.typeKeyword);
+            this.ensureSpace();
+            this.appendToken(node.identifier);
+            this.ensureSpace();
+            this.appendToken(node.equalsToken);
+            this.ensureSpace();
+            visitNodeOrToken(this, node.type);
+            this.appendToken(node.semicolonToken);
+
+        }
+
         private appendObjectType(node: ObjectTypeSyntax, appendNewLines: boolean): void {
             this.appendToken(node.openBraceToken);
 

@@ -96,6 +96,7 @@ module TypeScript {
             case SyntaxKind.ExpressionBody: return visitor.visitExpressionBody(<ExpressionBody>element);
             case SyntaxKind.ComputedPropertyName: return visitor.visitComputedPropertyName(<ComputedPropertyNameSyntax>element);
             case SyntaxKind.PropertyAssignment: return visitor.visitPropertyAssignment(<PropertyAssignmentSyntax>element);
+            case SyntaxKind.TypeAlias: return visitor.visitTypeAlias(<TypeAliasSyntax>element);
             case SyntaxKind.ExternalModuleReference: return visitor.visitExternalModuleReference(<ExternalModuleReferenceSyntax>element);
             case SyntaxKind.ModuleNameModuleReference: return visitor.visitModuleNameModuleReference(<ModuleNameModuleReferenceSyntax>element);
             default: return visitor.visitToken(<ISyntaxToken>element);
@@ -196,6 +197,7 @@ module TypeScript {
         visitExpressionBody(node: ExpressionBody): any;
         visitComputedPropertyName(node: ComputedPropertyNameSyntax): any;
         visitPropertyAssignment(node: PropertyAssignmentSyntax): any;
+        visitTypeAlias(node: TypeAliasSyntax): any;
         visitExternalModuleReference(node: ExternalModuleReferenceSyntax): any;
         visitModuleNameModuleReference(node: ModuleNameModuleReferenceSyntax): any;
     }

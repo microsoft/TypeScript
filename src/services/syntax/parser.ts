@@ -798,7 +798,7 @@ module TypeScript.Parser {
             }
 
             var _modifierCount = modifierCount();
-            return isInterfaceEnumClassModuleImportOrExport(_modifierCount) ||
+            return isInterfaceEnumClassModuleImportExportOrTypeAlias(_modifierCount) ||
                    isStatement(_modifierCount, inErrorRecovery);
         }
 
@@ -822,6 +822,7 @@ module TypeScript.Parser {
                     case SyntaxKind.ClassKeyword: return parseClassDeclaration();
                     case SyntaxKind.EnumKeyword: return parseEnumDeclaration();
                     case SyntaxKind.ExportKeyword: return parseExportAssignment();
+                    case SyntaxKind.TypeKeyword: return parseTypeAlias();
                 }
             }
 
@@ -861,6 +862,12 @@ module TypeScript.Parser {
                 case SyntaxKind.InterfaceKeyword:
                     if (isIdentifier(nextToken)) {
                         return parseInterfaceDeclaration();
+                    }
+                    break;
+
+                case SyntaxKind.TypeKeyword:
+                    if (isIdentifier(nextToken)) {
+                        return parseTypeAlias();
                     }
                     break;
 
@@ -1495,6 +1502,16 @@ module TypeScript.Parser {
                 parseObjectType());
         }
 
+        function parseTypeAlias(): TypeAliasSyntax {
+            return new TypeAliasSyntax(contextFlags,
+                parseModifiers(),
+                eatToken(SyntaxKind.TypeKeyword),
+                eatIdentifierToken(),
+                eatToken(SyntaxKind.EqualsToken),
+                parseType(),
+                eatExplicitOrAutomaticSemicolon(/*allowWithoutNewLine:*/ false));
+        }
+
         function parseObjectType(): ObjectTypeSyntax {
             var openBraceToken: ISyntaxToken;
             
@@ -1696,7 +1713,7 @@ module TypeScript.Parser {
                 parseSeparatedSyntaxList<INameSyntax>(ListParsingState.HeritageClause_TypeNameList));
         }
 
-        function isInterfaceEnumClassModuleImportOrExport(modifierCount: number, _currentToken?: ISyntaxToken): boolean {
+        function isInterfaceEnumClassModuleImportExportOrTypeAlias(modifierCount: number, _currentToken?: ISyntaxToken): boolean {
             if (modifierCount) {
                 // Any of these keywords following a modifier is definitely a TS construct.
                 switch (peekToken(modifierCount).kind) {
@@ -1706,6 +1723,7 @@ module TypeScript.Parser {
                     case SyntaxKind.ClassKeyword: 
                     case SyntaxKind.EnumKeyword: 
                     case SyntaxKind.ExportKeyword:
+                    case SyntaxKind.TypeKeyword:
                         return true;
                 }
             }
@@ -1717,20 +1735,20 @@ module TypeScript.Parser {
             // want to consider them the start of the module element construct.  For example, they
             // might be hte name in an object literal.  Because of that, we check the next token to
             // make sure it really is the start of a module element.
-            var nextToken = peekToken(1);
-
             switch (_currentToken.kind) {
                 case SyntaxKind.ModuleKeyword:
+                    var nextToken = peekToken(1);
                     return isIdentifier(nextToken) || nextToken.kind === SyntaxKind.StringLiteral;
 
                 case SyntaxKind.ImportKeyword:
                 case SyntaxKind.ClassKeyword:
                 case SyntaxKind.EnumKeyword:
                 case SyntaxKind.InterfaceKeyword:
-                    return isIdentifier(nextToken);
+                case SyntaxKind.TypeKeyword:
+                    return isIdentifier(peekToken(1));
 
                 case SyntaxKind.ExportKeyword:
-                    return nextToken.kind === SyntaxKind.EqualsToken;
+                    return peekToken(1).kind === SyntaxKind.EqualsToken;
             }
 
             return false;
@@ -1773,7 +1791,7 @@ module TypeScript.Parser {
                 // do not want to consume.  This can happen when the user does not terminate their 
                 // existing block properly.  We don't want to accidently consume these as expression 
                 // below.
-                if (isInterfaceEnumClassModuleImportOrExport(modifierCount(), _currentToken)) {
+                if (isInterfaceEnumClassModuleImportExportOrTypeAlias(modifierCount(), _currentToken)) {
                     return true;
                 }
             }

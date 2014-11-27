@@ -97,6 +97,7 @@ module TypeScript {
         RequireKeyword,
         NumberKeyword,
         SetKeyword,
+        TypeKeyword,
         StringKeyword,
 
         // Punctuators
@@ -270,6 +271,7 @@ module TypeScript {
         ExpressionBody,
         ComputedPropertyName,
         PropertyAssignment,
+        TypeAlias,
         ExternalModuleReference,
         ModuleNameModuleReference,
 

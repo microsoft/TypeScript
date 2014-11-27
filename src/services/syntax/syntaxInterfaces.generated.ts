@@ -692,6 +692,16 @@ module TypeScript {
     }
     export interface PropertyAssignmentConstructor { new (data: number, propertyName: IPropertyNameSyntax, colonToken: ISyntaxToken, expression: IExpressionSyntax): PropertyAssignmentSyntax }
 
+    export interface TypeAliasSyntax extends ISyntaxNode, IModuleElementSyntax {
+        modifiers: ISyntaxToken[];
+        typeKeyword: ISyntaxToken;
+        identifier: ISyntaxToken;
+        equalsToken: ISyntaxToken;
+        type: ITypeSyntax;
+        semicolonToken: ISyntaxToken;
+    }
+    export interface TypeAliasConstructor { new (data: number, modifiers: ISyntaxToken[], typeKeyword: ISyntaxToken, identifier: ISyntaxToken, equalsToken: ISyntaxToken, type: ITypeSyntax, semicolonToken: ISyntaxToken): TypeAliasSyntax }
+
     export interface ExternalModuleReferenceSyntax extends ISyntaxNode, IModuleReferenceSyntax {
         requireKeyword: ISyntaxToken;
         openParenToken: ISyntaxToken;
