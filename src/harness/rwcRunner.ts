@@ -20,31 +20,6 @@ module RWC {
         }
     }
 
-    export function collateOutputs(outputFiles: Harness.Compiler.GeneratedFile[], clean?: (s: string) => string) {
-        // Collect, test, and sort the filenames
-        function cleanName(fn: string) {
-            var lastSlash = ts.normalizeSlashes(fn).lastIndexOf('/');
-            return fn.substr(lastSlash + 1).toLowerCase();
-        }
-        outputFiles.sort((a, b) => cleanName(a.fileName).localeCompare(cleanName(b.fileName)));
-
-        // Emit them
-        var result = '';
-        ts.forEach(outputFiles, outputFile => {
-            // Some extra spacing if this isn't the first file
-            if (result.length) result = result + '\r\n\r\n';
-
-            // Filename header + content
-            result = result + '/*====== ' + outputFile.fileName + ' ======*/\r\n';
-            if (clean) {
-                result = result + clean(outputFile.code);
-            } else {
-                result = result + outputFile.code;
-            }
-        });
-        return result;
-    }
-
     export function runRWCTest(jsonPath: string) {
         describe("Testing a RWC project: " + jsonPath, () => {
             var inputFiles: { unitName: string; content: string; }[] = [];
@@ -136,7 +111,7 @@ module RWC {
 
             it('has the expected emitted code', () => {
                 Harness.Baseline.runBaseline('has the expected emitted code', baseName + '.output.js', () => {
-                    return collateOutputs(compilerResult.files, s => SyntacticCleaner.clean(s));
+                    return Harness.Compiler.collateOutputs(compilerResult.files, s => SyntacticCleaner.clean(s));
                 }, false, baselineOpts);
             });
 
@@ -145,7 +120,7 @@ module RWC {
                     if (compilerResult.errors.length || !compilerResult.declFilesCode.length) {
                         return null;
                     }
-                    return collateOutputs(compilerResult.declFilesCode);
+                    return Harness.Compiler.collateOutputs(compilerResult.declFilesCode);
                 }, false, baselineOpts);
             });
 
@@ -155,7 +130,7 @@ module RWC {
                         return null;
                     }
 
-                    return collateOutputs(compilerResult.sourceMaps);
+                    return Harness.Compiler.collateOutputs(compilerResult.sourceMaps);
                 }, false, baselineOpts);
             });
 
