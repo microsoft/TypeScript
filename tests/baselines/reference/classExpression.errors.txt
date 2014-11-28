@@ -2,12 +2,13 @@ tests/cases/conformance/classes/classExpression.ts(1,9): error TS1109: Expressio
 tests/cases/conformance/classes/classExpression.ts(5,10): error TS1109: Expression expected.
 tests/cases/conformance/classes/classExpression.ts(5,16): error TS1005: ':' expected.
 tests/cases/conformance/classes/classExpression.ts(5,19): error TS1005: ',' expected.
+tests/cases/conformance/classes/classExpression.ts(5,19): error TS1165: A destructuring declaration must have an initializer.
 tests/cases/conformance/classes/classExpression.ts(7,1): error TS1128: Declaration or statement expected.
 tests/cases/conformance/classes/classExpression.ts(10,13): error TS1109: Expression expected.
 tests/cases/conformance/classes/classExpression.ts(5,16): error TS2304: Cannot find name 'C2'.
 
 
-==== tests/cases/conformance/classes/classExpression.ts (7 errors) ====
+==== tests/cases/conformance/classes/classExpression.ts (8 errors) ====
     var x = class C {
             ~~~~~
 !!! error TS1109: Expression expected.
@@ -21,9 +22,12 @@ tests/cases/conformance/classes/classExpression.ts(5,16): error TS2304: Cannot f
 !!! error TS1005: ':' expected.
                       ~
 !!! error TS1005: ',' expected.
+                      ~
                    ~~
 !!! error TS2304: Cannot find name 'C2'.
         }
+    ~~~~~
+!!! error TS1165: A destructuring declaration must have an initializer.
     }
     ~
 !!! error TS1128: Declaration or statement expected.
