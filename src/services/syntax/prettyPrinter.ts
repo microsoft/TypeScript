@@ -364,7 +364,7 @@ module TypeScript.PrettyPrinter {
         }
 
         public visitVariableDeclaration(node: VariableDeclarationSyntax): void {
-            this.appendToken(node.varKeyword);
+            this.appendToken(node.varConstOrLetKeyword);
             this.ensureSpace();
             this.appendSeparatorSpaceList(node.variableDeclarators);
         }

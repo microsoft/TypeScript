@@ -1064,7 +1064,7 @@ var definitions = [
         name: 'VariableDeclarationSyntax',
         baseType: 'ISyntaxNode',
         children: [
-            { name: 'varKeyword', isToken: true },
+            { name: 'varConstOrLetKeyword', isToken: true },
             { name: 'variableDeclarators', isSeparatedList: true, requiresAtLeastOneItem: true, elementType: 'VariableDeclaratorSyntax' }
         ]
     },

@@ -277,7 +277,7 @@ module TypeScript {
         }
 
         public visitVariableDeclaration(node: VariableDeclarationSyntax): void {
-            if (this.checkForAtLeastOneElement(node.variableDeclarators, node.varKeyword, getLocalizedText(DiagnosticCode.variable_declaration, undefined)) ||
+            if (this.checkForAtLeastOneElement(node.variableDeclarators, node.varConstOrLetKeyword, getLocalizedText(DiagnosticCode.variable_declaration, undefined)) ||
                 this.checkForTrailingComma(node.variableDeclarators)) {
                 return;
             }
@@ -1473,7 +1473,7 @@ module TypeScript {
         public visitVariableStatement(node: VariableStatementSyntax): void {
             if (this.checkForDisallowedDeclareModifier(node.modifiers) ||
                 this.checkForDisallowedModifiers(node.modifiers) ||
-                this.checkForRequiredDeclareModifier(node, node.variableDeclaration.varKeyword, node.modifiers) ||
+                this.checkForRequiredDeclareModifier(node, node.variableDeclaration.varConstOrLetKeyword, node.modifiers) ||
                 this.checkModuleElementModifiers(node.modifiers) ||
                 this.checkForDisallowedAsyncModifier(node.modifiers)) {
 

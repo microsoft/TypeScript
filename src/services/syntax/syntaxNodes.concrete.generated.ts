@@ -1477,18 +1477,18 @@ module TypeScript {
         }
     }
 
-    export var VariableDeclarationSyntax: VariableDeclarationConstructor = <any>function(data: number, varKeyword: ISyntaxToken, variableDeclarators: ISeparatedSyntaxList<VariableDeclaratorSyntax>) {
+    export var VariableDeclarationSyntax: VariableDeclarationConstructor = <any>function(data: number, varConstOrLetKeyword: ISyntaxToken, variableDeclarators: ISeparatedSyntaxList<VariableDeclaratorSyntax>) {
         if (data) { this.__data = data; }
-        this.varKeyword = varKeyword,
+        this.varConstOrLetKeyword = varConstOrLetKeyword,
         this.variableDeclarators = variableDeclarators,
-        varKeyword.parent = this,
+        varConstOrLetKeyword.parent = this,
         variableDeclarators.parent = this;
     };
     VariableDeclarationSyntax.prototype.kind = SyntaxKind.VariableDeclaration;
     VariableDeclarationSyntax.prototype.childCount = 2;
     VariableDeclarationSyntax.prototype.childAt = function(index: number): ISyntaxElement {
         switch (index) {
-            case 0: return this.varKeyword;
+            case 0: return this.varConstOrLetKeyword;
             case 1: return this.variableDeclarators;
         }
     }

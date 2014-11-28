@@ -489,7 +489,7 @@ module TypeScript {
         }
 
         public visitVariableDeclaration(node: VariableDeclarationSyntax): void {
-            this.visitToken(node.varKeyword);
+            this.visitToken(node.varConstOrLetKeyword);
             this.visitList(node.variableDeclarators);
         }
 

@@ -542,10 +542,10 @@ module TypeScript {
     export interface AwaitExpressionConstructor { new (data: number, awaitKeyword: ISyntaxToken, expression: IExpressionSyntax): AwaitExpressionSyntax }
 
     export interface VariableDeclarationSyntax extends ISyntaxNode {
-        varKeyword: ISyntaxToken;
+        varConstOrLetKeyword: ISyntaxToken;
         variableDeclarators: ISeparatedSyntaxList<VariableDeclaratorSyntax>;
     }
-    export interface VariableDeclarationConstructor { new (data: number, varKeyword: ISyntaxToken, variableDeclarators: ISeparatedSyntaxList<VariableDeclaratorSyntax>): VariableDeclarationSyntax }
+    export interface VariableDeclarationConstructor { new (data: number, varConstOrLetKeyword: ISyntaxToken, variableDeclarators: ISeparatedSyntaxList<VariableDeclaratorSyntax>): VariableDeclarationSyntax }
 
     export interface VariableDeclaratorSyntax extends ISyntaxNode {
         propertyName: IPropertyNameSyntax;
