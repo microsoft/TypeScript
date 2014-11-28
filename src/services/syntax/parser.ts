@@ -1360,8 +1360,8 @@ module TypeScript.Parser {
             if (isConstructorDeclaration()) {
                 return parseConstructorDeclaration(modifiers);
             }
-            else if (isIndexMemberDeclaration()) {
-                return parseIndexMemberDeclaration(modifiers);
+            else if (isIndexSignature(/*peekIndex:*/ 0)) {
+                return parseIndexSignature(modifiers);
             }
             else if (isAccessor(inErrorRecovery)) {
                 return parseAccessor(modifiers);
@@ -1440,12 +1440,6 @@ module TypeScript.Parser {
 
         function isIndexMemberDeclaration(): boolean {
             return isIndexSignature(/*peekIndex:*/ 0);
-        }
-
-        function parseIndexMemberDeclaration(modifiers: ISyntaxToken[]): IndexMemberDeclarationSyntax {
-            return new IndexMemberDeclarationSyntax(contextFlags,
-                modifiers,
-                parseIndexSignature());
         }
 
         function isFunctionDeclaration(modifierCount: number): boolean {
@@ -1593,7 +1587,7 @@ module TypeScript.Parser {
                 return parseConstructSignature();
             }
             else if (isIndexSignature(/*tokenIndex:*/ 0)) {
-                return parseIndexSignature();
+                return parseIndexSignature(/*modifiers:*/ []);
             }
             else if (isMethodOrPropertySignature(inErrorRecovery)) {
                 var propertyName = parsePropertyName();
@@ -1618,8 +1612,9 @@ module TypeScript.Parser {
                 parseCallSignatureWithSemicolonOrComma(/*requireCompleteTypeParameterList:*/ false, /*yieldAndGeneratorParameterContext:*/ false, /*asyncContext:*/ false));
         }
 
-        function parseIndexSignature(): IndexSignatureSyntax {
+        function parseIndexSignature(modifiers: ISyntaxToken[]): IndexSignatureSyntax {
             return new IndexSignatureSyntax(contextFlags,
+                modifiers,
                 eatToken(SyntaxKind.OpenBracketToken),
                 parseSeparatedSyntaxList<ParameterSyntax>(ListParsingState.IndexSignature_Parameters),
                 eatToken(SyntaxKind.CloseBracketToken),

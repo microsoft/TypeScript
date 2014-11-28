@@ -100,7 +100,7 @@ module TypeScript {
             if (element) {
                 switch (element.kind) {
                     case SyntaxKind.ConstructorDeclaration:
-                    case SyntaxKind.IndexMemberDeclaration:
+                    case SyntaxKind.IndexSignature:
                     case SyntaxKind.MemberFunctionDeclaration:
                     case SyntaxKind.GetAccessor:
                     case SyntaxKind.SetAccessor:

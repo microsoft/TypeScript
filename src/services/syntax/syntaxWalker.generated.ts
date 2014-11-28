@@ -170,11 +170,6 @@ module TypeScript {
             visitNodeOrToken(this, node.body);
         }
 
-        public visitIndexMemberDeclaration(node: IndexMemberDeclarationSyntax): void {
-            this.visitList(node.modifiers);
-            visitNodeOrToken(this, node.indexSignature);
-        }
-
         public visitGetAccessor(node: GetAccessorSyntax): void {
             this.visitList(node.modifiers);
             this.visitToken(node.getKeyword);
@@ -211,6 +206,7 @@ module TypeScript {
         }
 
         public visitIndexSignature(node: IndexSignatureSyntax): void {
+            this.visitList(node.modifiers);
             this.visitToken(node.openBracketToken);
             this.visitList(node.parameters);
             this.visitToken(node.closeBracketToken);

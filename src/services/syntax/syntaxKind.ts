@@ -182,7 +182,6 @@ module TypeScript {
         MemberFunctionDeclaration,
         MemberVariableDeclaration,
         ConstructorDeclaration,
-        IndexMemberDeclaration,
 
         // ClassElement and PropertyAssignment
         GetAccessor,

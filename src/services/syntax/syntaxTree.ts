@@ -369,7 +369,8 @@ module TypeScript {
 
         public visitIndexSignature(node: IndexSignatureSyntax): void {
             if (this.checkIndexSignatureParameter(node) ||
-                this.checkForCommaInsteadOfSemicolon(node.semicolonOrCommaToken)) {
+                this.checkForCommaInsteadOfSemicolon(node.semicolonOrCommaToken) ||
+                this.checkIndexSignatureModifiers(node)) {
                 return;
             }
 
@@ -624,15 +625,7 @@ module TypeScript {
             return false;
         }
 
-        public visitIndexMemberDeclaration(node: IndexMemberDeclarationSyntax): void {
-            if (this.checkIndexMemberModifiers(node)) {
-                return;
-            }
-
-            super.visitIndexMemberDeclaration(node);
-        }
-
-        private checkIndexMemberModifiers(node: IndexMemberDeclarationSyntax): boolean {
+        private checkIndexSignatureModifiers(node: IndexSignatureSyntax): boolean {
             if (node.modifiers.length > 0) {
                 return this.pushDiagnostic(node.modifiers[0], DiagnosticCode.Modifiers_cannot_appear_here);
             }
@@ -658,7 +651,7 @@ module TypeScript {
         public visitGetAccessor(node: GetAccessorSyntax): void {
             if (this.checkForAccessorDeclarationInAmbientContext(node) ||
                 this.checkEcmaScriptVersionIsAtLeast(node.getKeyword, ts.ScriptTarget.ES5, DiagnosticCode.Accessors_are_only_available_when_targeting_ECMAScript_5_and_higher) ||
-                this.checkForDisallowedModifiers(node.modifiers) ||
+                this.checkForDisallowedModifiersInBlockOrObjectLitera(node.modifiers) ||
                 this.checkClassElementModifiers(node.modifiers) ||
                 this.checkForDisallowedAccessorTypeParameters(node.callSignature) ||
                 this.checkGetAccessorParameter(node) ||
@@ -749,7 +742,7 @@ module TypeScript {
         public visitSetAccessor(node: SetAccessorSyntax): void {
             if (this.checkForAccessorDeclarationInAmbientContext(node) ||
                 this.checkEcmaScriptVersionIsAtLeast(node.setKeyword, ts.ScriptTarget.ES5, DiagnosticCode.Accessors_are_only_available_when_targeting_ECMAScript_5_and_higher) ||
-                this.checkForDisallowedModifiers(node.modifiers) ||
+                this.checkForDisallowedModifiersInBlockOrObjectLitera(node.modifiers) ||
                 this.checkClassElementModifiers(node.modifiers) ||
                 this.checkForDisallowedAccessorTypeParameters(node.callSignature) ||
                 this.checkForDisallowedSetAccessorTypeAnnotation(node) ||
@@ -1432,7 +1425,7 @@ module TypeScript {
             return false;
         }
 
-        private checkForDisallowedModifiers(modifiers: ISyntaxToken[]): boolean {
+        private checkForDisallowedModifiersInBlockOrObjectLitera(modifiers: ISyntaxToken[]): boolean {
             if (this.inBlock || this.inObjectLiteralExpression) {
                 if (modifiers.length > 0) {
                     return this.pushDiagnostic(modifiers[0], DiagnosticCode.Modifiers_cannot_appear_here);
@@ -1444,7 +1437,7 @@ module TypeScript {
 
         public visitFunctionDeclaration(node: FunctionDeclarationSyntax): void {
             if (this.checkForDisallowedDeclareModifier(node.modifiers) ||
-                this.checkForDisallowedModifiers(node.modifiers) ||
+                this.checkForDisallowedModifiersInBlockOrObjectLitera(node.modifiers) ||
                 this.checkForRequiredDeclareModifier(node, node.identifier, node.modifiers) ||
                 this.checkModuleElementModifiers(node.modifiers) ||
                 this.checkForDisallowedEvalOrArguments(node, node.identifier) ||
@@ -1490,7 +1483,7 @@ module TypeScript {
 
         public visitVariableStatement(node: VariableStatementSyntax): void {
             if (this.checkForDisallowedDeclareModifier(node.modifiers) ||
-                this.checkForDisallowedModifiers(node.modifiers) ||
+                this.checkForDisallowedModifiersInBlockOrObjectLitera(node.modifiers) ||
                 this.checkForRequiredDeclareModifier(node, node.variableDeclaration.varConstOrLetKeyword, node.modifiers) ||
                 this.checkModuleElementModifiers(node.modifiers) ||
                 this.checkForDisallowedAsyncModifier(node.modifiers)) {

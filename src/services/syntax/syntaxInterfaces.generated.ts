@@ -174,12 +174,6 @@ module TypeScript {
     }
     export interface ConstructorDeclarationConstructor { new (data: number, modifiers: ISyntaxToken[], constructorKeyword: ISyntaxToken, callSignature: CallSignatureSyntax, body: BlockSyntax | ExpressionBody | ISyntaxToken): ConstructorDeclarationSyntax }
 
-    export interface IndexMemberDeclarationSyntax extends ISyntaxNode, IClassElementSyntax {
-        modifiers: ISyntaxToken[];
-        indexSignature: IndexSignatureSyntax;
-    }
-    export interface IndexMemberDeclarationConstructor { new (data: number, modifiers: ISyntaxToken[], indexSignature: IndexSignatureSyntax): IndexMemberDeclarationSyntax }
-
     export interface GetAccessorSyntax extends ISyntaxNode, IAccessorSyntax {
         modifiers: ISyntaxToken[];
         getKeyword: ISyntaxToken;
@@ -220,14 +214,15 @@ module TypeScript {
     }
     export interface ConstructSignatureConstructor { new (data: number, newKeyword: ISyntaxToken, callSignature: CallSignatureSyntax): ConstructSignatureSyntax }
 
-    export interface IndexSignatureSyntax extends ISyntaxNode, ITypeMemberSyntax {
+    export interface IndexSignatureSyntax extends ISyntaxNode, ITypeMemberSyntax, IClassElementSyntax {
+        modifiers: ISyntaxToken[];
         openBracketToken: ISyntaxToken;
         parameters: ISeparatedSyntaxList<ParameterSyntax>;
         closeBracketToken: ISyntaxToken;
         typeAnnotation: TypeAnnotationSyntax;
         semicolonOrCommaToken: ISyntaxToken;
     }
-    export interface IndexSignatureConstructor { new (data: number, openBracketToken: ISyntaxToken, parameters: ISeparatedSyntaxList<ParameterSyntax>, closeBracketToken: ISyntaxToken, typeAnnotation: TypeAnnotationSyntax, semicolonOrCommaToken: ISyntaxToken): IndexSignatureSyntax }
+    export interface IndexSignatureConstructor { new (data: number, modifiers: ISyntaxToken[], openBracketToken: ISyntaxToken, parameters: ISeparatedSyntaxList<ParameterSyntax>, closeBracketToken: ISyntaxToken, typeAnnotation: TypeAnnotationSyntax, semicolonOrCommaToken: ISyntaxToken): IndexSignatureSyntax }
 
     export interface MethodSignatureSyntax extends ISyntaxNode, ITypeMemberSyntax {
         propertyName: IPropertyNameSyntax;

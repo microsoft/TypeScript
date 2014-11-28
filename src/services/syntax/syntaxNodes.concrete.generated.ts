@@ -475,22 +475,6 @@ module TypeScript {
         }
     }
 
-    export var IndexMemberDeclarationSyntax: IndexMemberDeclarationConstructor = <any>function(data: number, modifiers: ISyntaxToken[], indexSignature: IndexSignatureSyntax) {
-        if (data) { this.__data = data; }
-        this.modifiers = modifiers,
-        this.indexSignature = indexSignature,
-        modifiers.parent = this,
-        indexSignature.parent = this;
-    };
-    IndexMemberDeclarationSyntax.prototype.kind = SyntaxKind.IndexMemberDeclaration;
-    IndexMemberDeclarationSyntax.prototype.childCount = 2;
-    IndexMemberDeclarationSyntax.prototype.childAt = function(index: number): ISyntaxElement {
-        switch (index) {
-            case 0: return this.modifiers;
-            case 1: return this.indexSignature;
-        }
-    }
-
     export var GetAccessorSyntax: GetAccessorConstructor = <any>function(data: number, modifiers: ISyntaxToken[], getKeyword: ISyntaxToken, propertyName: IPropertyNameSyntax, callSignature: CallSignatureSyntax, body: BlockSyntax | ExpressionBody | ISyntaxToken) {
         if (data) { this.__data = data; }
         this.modifiers = modifiers,
@@ -601,13 +585,15 @@ module TypeScript {
         }
     }
 
-    export var IndexSignatureSyntax: IndexSignatureConstructor = <any>function(data: number, openBracketToken: ISyntaxToken, parameters: ISeparatedSyntaxList<ParameterSyntax>, closeBracketToken: ISyntaxToken, typeAnnotation: TypeAnnotationSyntax, semicolonOrCommaToken: ISyntaxToken) {
+    export var IndexSignatureSyntax: IndexSignatureConstructor = <any>function(data: number, modifiers: ISyntaxToken[], openBracketToken: ISyntaxToken, parameters: ISeparatedSyntaxList<ParameterSyntax>, closeBracketToken: ISyntaxToken, typeAnnotation: TypeAnnotationSyntax, semicolonOrCommaToken: ISyntaxToken) {
         if (data) { this.__data = data; }
+        this.modifiers = modifiers,
         this.openBracketToken = openBracketToken,
         this.parameters = parameters,
         this.closeBracketToken = closeBracketToken,
         this.typeAnnotation = typeAnnotation,
         this.semicolonOrCommaToken = semicolonOrCommaToken,
+        modifiers.parent = this,
         openBracketToken.parent = this,
         parameters.parent = this,
         closeBracketToken.parent = this,
@@ -615,14 +601,15 @@ module TypeScript {
         semicolonOrCommaToken && (semicolonOrCommaToken.parent = this);
     };
     IndexSignatureSyntax.prototype.kind = SyntaxKind.IndexSignature;
-    IndexSignatureSyntax.prototype.childCount = 5;
+    IndexSignatureSyntax.prototype.childCount = 6;
     IndexSignatureSyntax.prototype.childAt = function(index: number): ISyntaxElement {
         switch (index) {
-            case 0: return this.openBracketToken;
-            case 1: return this.parameters;
-            case 2: return this.closeBracketToken;
-            case 3: return this.typeAnnotation;
-            case 4: return this.semicolonOrCommaToken;
+            case 0: return this.modifiers;
+            case 1: return this.openBracketToken;
+            case 2: return this.parameters;
+            case 3: return this.closeBracketToken;
+            case 4: return this.typeAnnotation;
+            case 5: return this.semicolonOrCommaToken;
         }
     }
 

@@ -1417,8 +1417,9 @@ var definitions = [
     {
         name: 'IndexSignatureSyntax',
         baseType: 'ISyntaxNode',
-        interfaces: ['ITypeMemberSyntax'],
+        interfaces: ['ITypeMemberSyntax', 'IClassElementSyntax'],
         children: [
+            { name: 'modifiers', isList: true, elementType: 'ISyntaxToken' },
             { name: 'openBracketToken', isToken: true },
             { name: 'parameters', isSeparatedList: true, elementType: 'ParameterSyntax' },
             { name: 'closeBracketToken', isToken: true },
@@ -1575,16 +1576,6 @@ var definitions = [
             { name: 'modifiers', isList: true, elementType: 'ISyntaxToken' },
             { name: 'variableDeclarator', type: 'VariableDeclaratorSyntax' },
             { name: 'semicolonToken', isToken: true, isOptional: true, excludeFromAST: true }
-        ],
-        isTypeScriptSpecific: true
-    },
-    {
-        name: 'IndexMemberDeclarationSyntax',
-        baseType: 'ISyntaxNode',
-        interfaces: ['IClassElementSyntax'],
-        children: [
-            { name: 'modifiers', isList: true, elementType: 'ISyntaxToken' },
-            { name: 'indexSignature', type: 'IndexSignatureSyntax' }
         ],
         isTypeScriptSpecific: true
     },

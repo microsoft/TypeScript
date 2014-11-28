@@ -600,6 +600,7 @@ module TypeScript.PrettyPrinter {
         }
 
         public visitIndexSignature(node: IndexSignatureSyntax): void {
+            this.appendSpaceList(node.modifiers);
             this.appendToken(node.openBracketToken);
             this.appendSeparatorSpaceList(node.parameters)
             this.appendToken(node.closeBracketToken);
@@ -690,12 +691,6 @@ module TypeScript.PrettyPrinter {
             this.appendToken(node.constructorKeyword);
             visitNodeOrToken(this, node.callSignature);
             this.appendBody(node.body);
-        }
-
-        public visitIndexMemberDeclaration(node: IndexMemberDeclarationSyntax): void {
-            this.appendSpaceList(node.modifiers);
-            this.ensureSpace();
-            visitNodeOrToken(this, node.indexSignature);
         }
 
         public visitMemberFunctionDeclaration(node: MemberFunctionDeclarationSyntax): void {

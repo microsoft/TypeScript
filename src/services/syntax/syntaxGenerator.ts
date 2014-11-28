@@ -555,8 +555,9 @@ var definitions:ITypeDefinition[] = [
     <any>{
         name: 'IndexSignatureSyntax',
         baseType: 'ISyntaxNode',
-        interfaces: ['ITypeMemberSyntax'],
+        interfaces: ['ITypeMemberSyntax', 'IClassElementSyntax'],
         children: [
+            <any>{ name: 'modifiers', isList: true, elementType: 'ISyntaxToken' },
             <any>{ name: 'openBracketToken', isToken: true },
             <any>{ name: 'parameters', isSeparatedList: true, elementType: 'ParameterSyntax' },
             <any>{ name: 'closeBracketToken', isToken: true },
@@ -714,16 +715,6 @@ var definitions:ITypeDefinition[] = [
             <any>{ name: 'modifiers', isList: true, elementType: 'ISyntaxToken' },
             <any>{ name: 'variableDeclarator', type: 'VariableDeclaratorSyntax' },
             <any>{ name: 'semicolonToken', isToken: true, isOptional: true, excludeFromAST: true }
-        ],
-        isTypeScriptSpecific: true
-    },
-    <any>{
-        name: 'IndexMemberDeclarationSyntax',
-        baseType: 'ISyntaxNode',
-        interfaces: ['IClassElementSyntax'],
-        children: [
-            <any>{ name: 'modifiers', isList: true, elementType: 'ISyntaxToken' },
-            <any>{ name: 'indexSignature', type: 'IndexSignatureSyntax' }
         ],
         isTypeScriptSpecific: true
     },

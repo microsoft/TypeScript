@@ -25,7 +25,6 @@ module TypeScript {
             case SyntaxKind.MemberFunctionDeclaration: return visitor.visitMemberFunctionDeclaration(<MemberFunctionDeclarationSyntax>element);
             case SyntaxKind.MemberVariableDeclaration: return visitor.visitMemberVariableDeclaration(<MemberVariableDeclarationSyntax>element);
             case SyntaxKind.ConstructorDeclaration: return visitor.visitConstructorDeclaration(<ConstructorDeclarationSyntax>element);
-            case SyntaxKind.IndexMemberDeclaration: return visitor.visitIndexMemberDeclaration(<IndexMemberDeclarationSyntax>element);
             case SyntaxKind.GetAccessor: return visitor.visitGetAccessor(<GetAccessorSyntax>element);
             case SyntaxKind.SetAccessor: return visitor.visitSetAccessor(<SetAccessorSyntax>element);
             case SyntaxKind.PropertySignature: return visitor.visitPropertySignature(<PropertySignatureSyntax>element);
@@ -126,7 +125,6 @@ module TypeScript {
         visitMemberFunctionDeclaration(node: MemberFunctionDeclarationSyntax): any;
         visitMemberVariableDeclaration(node: MemberVariableDeclarationSyntax): any;
         visitConstructorDeclaration(node: ConstructorDeclarationSyntax): any;
-        visitIndexMemberDeclaration(node: IndexMemberDeclarationSyntax): any;
         visitGetAccessor(node: GetAccessorSyntax): any;
         visitSetAccessor(node: SetAccessorSyntax): any;
         visitPropertySignature(node: PropertySignatureSyntax): any;
