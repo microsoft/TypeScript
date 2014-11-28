@@ -841,6 +841,7 @@ module ts {
         // Returns the constant value this property access resolves to, or 'undefined' for a non-constant
         getConstantValue(node: PropertyAccess | IndexedAccess): number;
         isEmitBlocked(sourceFile?: SourceFile): boolean;
+        isUnknownIdentifier(location: Node, name: string): boolean;
     }
 
     export const enum SymbolFlags {

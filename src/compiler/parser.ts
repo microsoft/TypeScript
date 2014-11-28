@@ -9,12 +9,8 @@ module ts {
         return nodeConstructors[kind] || (nodeConstructors[kind] = objectAllocator.getNodeConstructor(kind));
     }
  
-    function createRootNode(kind: SyntaxKind, pos: number, end: number, flags: NodeFlags): Node {
-        var node = new (getNodeConstructor(kind))();
-        node.pos = pos;
-        node.end = end;
-        node.flags = flags;
-        return node;
+    export function createNode(kind: SyntaxKind): Node {
+        return new (getNodeConstructor(kind))();
     }
 
     interface ReferenceComments {
@@ -4389,12 +4385,12 @@ module ts {
         }
 
         scanner = createScanner(languageVersion, /*skipTrivia*/ true, sourceText, scanError, onComment);
-        var rootNodeFlags: NodeFlags = 0;
+        file = <SourceFile>createNode(SyntaxKind.SourceFile);
         if (fileExtensionIs(filename, ".d.ts")) {
-            rootNodeFlags = NodeFlags.DeclarationFile;
+            file.flags = NodeFlags.DeclarationFile;
             inAmbientContext = true;
         }
-        file = <SourceFile>createRootNode(SyntaxKind.SourceFile, 0, sourceText.length, rootNodeFlags);
+        file.end = sourceText.length;
         file.filename = normalizePath(filename);
         file.text = sourceText;
         file.getLineAndCharacterFromPosition = getLineAndCharacterFromSourcePosition;

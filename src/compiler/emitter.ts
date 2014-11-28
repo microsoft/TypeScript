@@ -322,6 +322,7 @@ module ts {
             var decreaseIndent = writer.decreaseIndent;
 
             var extendsEmitted = false;
+            var tempCount = 0;
 
             /** write emitted output to disk*/
             var writeEmittedFiles = writeJavaScriptFile;
@@ -716,6 +717,14 @@ module ts {
                 writeFile(jsFilePath, emitOutput, writeByteOrderMark);
             }
 
+            function getTempVariableName(location: Node) {
+                do {
+                    var name = "_" + tempCount++;
+                }
+                while (!resolver.isUnknownIdentifier(location, name));
+                return name;
+            }
+
             function emitTokenText(tokenKind: SyntaxKind, startPos: number, emitFn?: () => void) {
                 var tokenString = tokenToString(tokenKind);
                 if (emitFn) {
@@ -789,21 +798,14 @@ module ts {
             }
 
             function emitLiteral(node: LiteralExpression): void {
-                var text = getLiteralText();
-
+                var text = compilerOptions.target < ScriptTarget.ES6 && isTemplateLiteralKind(node.kind) ? getTemplateLiteralAsStringLiteral(node) :
+                    node.parent ? getSourceTextOfLocalNode(node) :
+                    node.text;
                 if (compilerOptions.sourceMap && (node.kind === SyntaxKind.StringLiteral || isTemplateLiteralKind(node.kind))) {
                     writer.writeLiteral(text);
                 }
                 else {
                     write(text);
-                }
-
-                function getLiteralText() {
-                    if (compilerOptions.target < ScriptTarget.ES6 && isTemplateLiteralKind(node.kind)) {
-                        return getTemplateLiteralAsStringLiteral(node)
-                    }
-
-                    return getSourceTextOfLocalNode(node);
                 }
             }
 
@@ -981,7 +983,10 @@ module ts {
             }
 
             function emitIdentifier(node: Identifier) {
-                if (!isNotExpressionIdentifier(node)) {
+                if (!node.parent) {
+                    write(node.text);
+                }
+                else if (!isNotExpressionIdentifier(node)) {
                     emitExpressionIdentifier(node);
                 }
                 else {
@@ -1498,20 +1503,128 @@ module ts {
                 emitEnd(node.name);
             }
 
-            function emitVariableDeclaration(node: VariableDeclaration) {
-                emitLeadingComments(node);
-                if (node.propertyName) {
-                    emit(node.propertyName);
-                    write(": ");
+            function rewriteDestructuringDeclaration(node: VariableDeclaration): NodeArray<VariableDeclaration> {
+                var declarations = <NodeArray<VariableDeclaration>>[];
+                rewriteDeclaration(node, undefined);
+                return declarations;
+
+                function addVariableDeclaration(name: Identifier, initializer: Expression) {
+                    var node = <VariableDeclaration>createNode(SyntaxKind.VariableDeclaration);
+                    node.name = name;
+                    node.initializer = initializer;
+                    declarations.push(node);
                 }
-                if (node.name.kind === SyntaxKind.Identifier) {
-                    emitModuleMemberName(node);
+
+                function createTemporaryVariable(expr: Expression): Expression {
+                    var tempName = getTempVariableName(node);
+                    var identifier = <Identifier>createNode(SyntaxKind.Identifier);
+                    identifier.text = tempName;
+                    addVariableDeclaration(identifier, expr);
+                    return identifier;
+                }
+
+                function createVoidZero(): Expression {
+                    var zero = <LiteralExpression>createNode(SyntaxKind.NumericLiteral);
+                    zero.text = "0";
+                    var result = <UnaryExpression>createNode(SyntaxKind.PrefixOperator);
+                    result.operator = SyntaxKind.VoidKeyword;
+                    result.operand = zero;
+                    return result;
+                }
+
+                function createDefaultValueCheck(value: Expression, defaultValue: Expression): Expression {
+                    if (value.kind !== SyntaxKind.Identifier) {
+                        value = createTemporaryVariable(value);
+                    }
+                    var equals = <BinaryExpression>createNode(SyntaxKind.BinaryExpression);
+                    equals.left = value;
+                    equals.operator = SyntaxKind.EqualsEqualsEqualsToken;
+                    equals.right = createVoidZero();
+                    var cond = <ConditionalExpression>createNode(SyntaxKind.ConditionalExpression);
+                    cond.condition = equals;
+                    cond.whenTrue = defaultValue;
+                    cond.whenFalse = value;
+                    return cond;
+                }
+
+                function createNumericLiteral(value: number) {
+                    var node = <LiteralExpression>createNode(SyntaxKind.NumericLiteral);
+                    node.text = "" + value;
+                    return node;
+                }
+
+                function parenthesizeForAccess(expr: Expression): Expression {
+                    if (expr.kind === SyntaxKind.Identifier || expr.kind === SyntaxKind.PropertyAccess || expr.kind === SyntaxKind.IndexedAccess) {
+                        return expr;
+                    }
+                    var node = <ParenExpression>createNode(SyntaxKind.ParenExpression);
+                    node.expression = expr;
+                    return node;
+                }
+
+                function createPropertyAccess(object: Expression, propName: Identifier): Expression {
+                    if (propName.kind !== SyntaxKind.Identifier) {
+                        return createIndexedAccess(object, propName);
+                    }
+                    var node = <PropertyAccess>createNode(SyntaxKind.PropertyAccess);
+                    node.left = parenthesizeForAccess(object);
+                    node.right = propName;
+                    return node;
+                }
+
+                function createIndexedAccess(object: Expression, index: Expression): Expression {
+                    var node = <IndexedAccess>createNode(SyntaxKind.IndexedAccess);
+                    node.object = parenthesizeForAccess(object);
+                    node.index = index;
+                    return node;
+                }
+
+                function rewriteDeclaration(target: BindingElement, value: Expression) {
+                    if (target.initializer) {
+                        value = value ? createDefaultValueCheck(value, target.initializer) : target.initializer;
+                    }
+                    else if (!value) {
+                        value = createVoidZero();
+                    }
+                    if (isBindingPattern(target.name)) {
+                        var pattern = <BindingPattern>target.name;
+                        var elements = pattern.elements;
+                        if (elements.length !== 1) {
+                            value = createTemporaryVariable(value);
+                        }
+                        for (var i = 0; i < elements.length; i++) {
+                            var element = elements[i];
+                            if (pattern.kind === SyntaxKind.ObjectBindingPattern) {
+                                var propName = element.propertyName || <Identifier>element.name;
+                                rewriteDeclaration(element, createPropertyAccess(value, propName));
+                            }
+                            else {
+                                rewriteDeclaration(element, createIndexedAccess(value, createNumericLiteral(i)));
+                            }
+                        }
+                    }
+                    else {
+                        addVariableDeclaration(<Identifier>target.name, value);
+                    }
+                }
+            }
+
+            function emitVariableDeclaration(node: VariableDeclaration) {
+                if (node.parent) {
+                    emitLeadingComments(node);
+                    if (isBindingPattern(node.name)) {
+                        emitCommaList(rewriteDestructuringDeclaration(node), /*includeTrailingComma*/ false);
+                    }
+                    else {
+                        emitModuleMemberName(node);
+                        emitOptional(" = ", node.initializer);
+                    }
+                    emitTrailingComments(node);
                 }
                 else {
                     emit(node.name);
+                    emitOptional(" = ", node.initializer);
                 }
-                emitOptional(" = ", node.initializer);
-                emitTrailingComments(node);
             }
 
             function emitVariableStatement(node: VariableStatement) {
@@ -1577,6 +1690,7 @@ module ts {
                 if (hasRestParameters(node)) {
                     var restIndex = node.parameters.length - 1;
                     var restParam = node.parameters[restIndex];
+                    var tempName = "_i";
                     writeLine();
                     emitLeadingComments(restParam);
                     emitStart(restParam);
@@ -1588,22 +1702,22 @@ module ts {
                     writeLine();
                     write("for (");
                     emitStart(restParam);
-                    write("var _i = " + restIndex + ";");
+                    write("var " + tempName + " = " + restIndex + ";");
                     emitEnd(restParam);
                     write(" ");
                     emitStart(restParam);
-                    write("_i < arguments.length;");
+                    write(tempName + " < arguments.length;");
                     emitEnd(restParam);
                     write(" ");
                     emitStart(restParam);
-                    write("_i++");
+                    write(tempName + "++");
                     emitEnd(restParam);
                     write(") {");
                     increaseIndent();
                     writeLine();
                     emitStart(restParam);
                     emitNode(restParam.name);
-                    write("[_i - " + restIndex + "] = arguments[_i];");
+                    write("[" + tempName + " - " + restIndex + "] = arguments[" + tempName + "];");
                     emitEnd(restParam);
                     decreaseIndent();
                     writeLine();
@@ -1660,6 +1774,7 @@ module ts {
             function emitSignatureAndBody(node: FunctionLikeDeclaration) {
                 emitSignatureParameters(node);
                 write(" {");
+                var saveTempCount = tempCount;
                 scopeEmitStart(node);
                 increaseIndent();
 
@@ -1711,6 +1826,7 @@ module ts {
                     }
                 }
                 scopeEmitEnd();
+                tempCount = saveTempCount;
                 if (node.flags & NodeFlags.Export) {
                     writeLine();
                     emitStart(node);
@@ -1936,6 +2052,7 @@ module ts {
                     emit(node.name);
                     emitSignatureParameters(ctor);
                     write(" {");
+                    var saveTempCount = tempCount;
                     scopeEmitStart(node, "constructor");
                     increaseIndent();
                     if (ctor) {
@@ -1975,6 +2092,7 @@ module ts {
                     decreaseIndent();
                     emitToken(SyntaxKind.CloseBraceToken, ctor ? (<Block>ctor.body).statements.end : node.members.end);
                     scopeEmitEnd();
+                    tempCount = saveTempCount;
                     emitEnd(<Node>ctor || node);
                     if (ctor) {
                         emitTrailingComments(ctor);
@@ -2082,6 +2200,7 @@ module ts {
                 write(resolver.getLocalNameOfContainer(node));
                 emitEnd(node.name);
                 write(") ");
+                var saveTempCount = tempCount;
                 if (node.body.kind === SyntaxKind.ModuleBlock) {
                     emit(node.body);
                 }
@@ -2098,6 +2217,7 @@ module ts {
                     emitToken(SyntaxKind.CloseBraceToken, moduleBlock.statements.end);
                     scopeEmitEnd();
                 }
+                tempCount = saveTempCount;
                 write(")(");
                 if (node.flags & NodeFlags.Export) {
                     emit(node.name);

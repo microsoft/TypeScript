@@ -9276,6 +9276,10 @@ module ts {
             getSymbolDisplayBuilder().buildTypeDisplay(getReturnTypeOfSignature(signature), writer, enclosingDeclaration, flags);
         }
 
+        function isUnknownIdentifier(location: Node, name: string): boolean {
+            return !resolveName(location, name, SymbolFlags.Value, /*nodeNotFoundMessage*/ undefined, /*nameArg*/ undefined);
+        }
+
         function invokeEmitter(targetSourceFile?: SourceFile) {
             var resolver: EmitResolver = {
                 getProgram: () => program,
@@ -9295,6 +9299,7 @@ module ts {
                 isSymbolAccessible,
                 isImportDeclarationEntityNameReferenceDeclarationVisibile,
                 getConstantValue,
+                isUnknownIdentifier,
             };
             checkProgram();
             return emitFiles(resolver, targetSourceFile);
