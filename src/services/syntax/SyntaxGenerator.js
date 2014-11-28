@@ -1196,7 +1196,7 @@ var definitions = [
         interfaces: ['ITypeSyntax'],
         children: [
             { name: 'openBraceToken', isToken: true, excludeFromAST: true },
-            { name: 'typeMembers', isSeparatedList: true, elementType: 'ITypeMemberSyntax' },
+            { name: 'typeMembers', isList: true, elementType: 'ITypeMemberSyntax' },
             { name: 'closeBraceToken', isToken: true, excludeFromAST: true }
         ],
         isTypeScriptSpecific: true
@@ -1422,7 +1422,8 @@ var definitions = [
             { name: 'openBracketToken', isToken: true },
             { name: 'parameters', isSeparatedList: true, elementType: 'ParameterSyntax' },
             { name: 'closeBracketToken', isToken: true },
-            { name: 'typeAnnotation', type: 'TypeAnnotationSyntax', isOptional: true }
+            { name: 'typeAnnotation', type: 'TypeAnnotationSyntax', isOptional: true },
+            { name: 'semicolonOrCommaToken', isToken: true, isOptional: true }
         ],
         isTypeScriptSpecific: true
     },
@@ -1433,7 +1434,8 @@ var definitions = [
         children: [
             { name: 'propertyName', type: 'IPropertyNameSyntax' },
             { name: 'questionToken', isToken: true, isOptional: true },
-            { name: 'typeAnnotation', type: 'TypeAnnotationSyntax', isOptional: true }
+            { name: 'typeAnnotation', type: 'TypeAnnotationSyntax', isOptional: true },
+            { name: 'semicolonOrCommaToken', isToken: true, isOptional: true }
         ],
         isTypeScriptSpecific: true
     },
@@ -1444,7 +1446,8 @@ var definitions = [
         children: [
             { name: 'typeParameterList', type: 'TypeParameterListSyntax', isOptional: true, isTypeScriptSpecific: true },
             { name: 'parameterList', type: 'ParameterListSyntax' },
-            { name: 'typeAnnotation', type: 'TypeAnnotationSyntax', isOptional: true, isTypeScriptSpecific: true }
+            { name: 'typeAnnotation', type: 'TypeAnnotationSyntax', isOptional: true, isTypeScriptSpecific: true },
+            { name: 'semicolonOrCommaToken', isToken: true, isOptional: true }
         ]
     },
     {
@@ -1581,8 +1584,7 @@ var definitions = [
         interfaces: ['IClassElementSyntax'],
         children: [
             { name: 'modifiers', isList: true, elementType: 'ISyntaxToken' },
-            { name: 'indexSignature', type: 'IndexSignatureSyntax' },
-            { name: 'semicolonToken', isToken: true, isOptional: true, excludeFromAST: true }
+            { name: 'indexSignature', type: 'IndexSignatureSyntax' }
         ],
         isTypeScriptSpecific: true
     },

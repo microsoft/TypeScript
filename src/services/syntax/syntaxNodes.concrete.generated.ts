@@ -36,7 +36,7 @@ module TypeScript {
         }
     }
 
-    export var ObjectTypeSyntax: ObjectTypeConstructor = <any>function(data: number, openBraceToken: ISyntaxToken, typeMembers: ISeparatedSyntaxList<ITypeMemberSyntax>, closeBraceToken: ISyntaxToken) {
+    export var ObjectTypeSyntax: ObjectTypeConstructor = <any>function(data: number, openBraceToken: ISyntaxToken, typeMembers: ITypeMemberSyntax[], closeBraceToken: ISyntaxToken) {
         if (data) { this.__data = data; }
         this.openBraceToken = openBraceToken,
         this.typeMembers = typeMembers,
@@ -475,22 +475,19 @@ module TypeScript {
         }
     }
 
-    export var IndexMemberDeclarationSyntax: IndexMemberDeclarationConstructor = <any>function(data: number, modifiers: ISyntaxToken[], indexSignature: IndexSignatureSyntax, semicolonToken: ISyntaxToken) {
+    export var IndexMemberDeclarationSyntax: IndexMemberDeclarationConstructor = <any>function(data: number, modifiers: ISyntaxToken[], indexSignature: IndexSignatureSyntax) {
         if (data) { this.__data = data; }
         this.modifiers = modifiers,
         this.indexSignature = indexSignature,
-        this.semicolonToken = semicolonToken,
         modifiers.parent = this,
-        indexSignature.parent = this,
-        semicolonToken && (semicolonToken.parent = this);
+        indexSignature.parent = this;
     };
     IndexMemberDeclarationSyntax.prototype.kind = SyntaxKind.IndexMemberDeclaration;
-    IndexMemberDeclarationSyntax.prototype.childCount = 3;
+    IndexMemberDeclarationSyntax.prototype.childCount = 2;
     IndexMemberDeclarationSyntax.prototype.childAt = function(index: number): ISyntaxElement {
         switch (index) {
             case 0: return this.modifiers;
             case 1: return this.indexSignature;
-            case 2: return this.semicolonToken;
         }
     }
 
@@ -544,41 +541,47 @@ module TypeScript {
         }
     }
 
-    export var PropertySignatureSyntax: PropertySignatureConstructor = <any>function(data: number, propertyName: IPropertyNameSyntax, questionToken: ISyntaxToken, typeAnnotation: TypeAnnotationSyntax) {
+    export var PropertySignatureSyntax: PropertySignatureConstructor = <any>function(data: number, propertyName: IPropertyNameSyntax, questionToken: ISyntaxToken, typeAnnotation: TypeAnnotationSyntax, semicolonOrCommaToken: ISyntaxToken) {
         if (data) { this.__data = data; }
         this.propertyName = propertyName,
         this.questionToken = questionToken,
         this.typeAnnotation = typeAnnotation,
+        this.semicolonOrCommaToken = semicolonOrCommaToken,
         propertyName.parent = this,
         questionToken && (questionToken.parent = this),
-        typeAnnotation && (typeAnnotation.parent = this);
+        typeAnnotation && (typeAnnotation.parent = this),
+        semicolonOrCommaToken && (semicolonOrCommaToken.parent = this);
     };
     PropertySignatureSyntax.prototype.kind = SyntaxKind.PropertySignature;
-    PropertySignatureSyntax.prototype.childCount = 3;
+    PropertySignatureSyntax.prototype.childCount = 4;
     PropertySignatureSyntax.prototype.childAt = function(index: number): ISyntaxElement {
         switch (index) {
             case 0: return this.propertyName;
             case 1: return this.questionToken;
             case 2: return this.typeAnnotation;
+            case 3: return this.semicolonOrCommaToken;
         }
     }
 
-    export var CallSignatureSyntax: CallSignatureConstructor = <any>function(data: number, typeParameterList: TypeParameterListSyntax, parameterList: ParameterListSyntax, typeAnnotation: TypeAnnotationSyntax) {
+    export var CallSignatureSyntax: CallSignatureConstructor = <any>function(data: number, typeParameterList: TypeParameterListSyntax, parameterList: ParameterListSyntax, typeAnnotation: TypeAnnotationSyntax, semicolonOrCommaToken: ISyntaxToken) {
         if (data) { this.__data = data; }
         this.typeParameterList = typeParameterList,
         this.parameterList = parameterList,
         this.typeAnnotation = typeAnnotation,
+        this.semicolonOrCommaToken = semicolonOrCommaToken,
         typeParameterList && (typeParameterList.parent = this),
         parameterList.parent = this,
-        typeAnnotation && (typeAnnotation.parent = this);
+        typeAnnotation && (typeAnnotation.parent = this),
+        semicolonOrCommaToken && (semicolonOrCommaToken.parent = this);
     };
     CallSignatureSyntax.prototype.kind = SyntaxKind.CallSignature;
-    CallSignatureSyntax.prototype.childCount = 3;
+    CallSignatureSyntax.prototype.childCount = 4;
     CallSignatureSyntax.prototype.childAt = function(index: number): ISyntaxElement {
         switch (index) {
             case 0: return this.typeParameterList;
             case 1: return this.parameterList;
             case 2: return this.typeAnnotation;
+            case 3: return this.semicolonOrCommaToken;
         }
     }
 
@@ -598,25 +601,28 @@ module TypeScript {
         }
     }
 
-    export var IndexSignatureSyntax: IndexSignatureConstructor = <any>function(data: number, openBracketToken: ISyntaxToken, parameters: ISeparatedSyntaxList<ParameterSyntax>, closeBracketToken: ISyntaxToken, typeAnnotation: TypeAnnotationSyntax) {
+    export var IndexSignatureSyntax: IndexSignatureConstructor = <any>function(data: number, openBracketToken: ISyntaxToken, parameters: ISeparatedSyntaxList<ParameterSyntax>, closeBracketToken: ISyntaxToken, typeAnnotation: TypeAnnotationSyntax, semicolonOrCommaToken: ISyntaxToken) {
         if (data) { this.__data = data; }
         this.openBracketToken = openBracketToken,
         this.parameters = parameters,
         this.closeBracketToken = closeBracketToken,
         this.typeAnnotation = typeAnnotation,
+        this.semicolonOrCommaToken = semicolonOrCommaToken,
         openBracketToken.parent = this,
         parameters.parent = this,
         closeBracketToken.parent = this,
-        typeAnnotation && (typeAnnotation.parent = this);
+        typeAnnotation && (typeAnnotation.parent = this),
+        semicolonOrCommaToken && (semicolonOrCommaToken.parent = this);
     };
     IndexSignatureSyntax.prototype.kind = SyntaxKind.IndexSignature;
-    IndexSignatureSyntax.prototype.childCount = 4;
+    IndexSignatureSyntax.prototype.childCount = 5;
     IndexSignatureSyntax.prototype.childAt = function(index: number): ISyntaxElement {
         switch (index) {
             case 0: return this.openBracketToken;
             case 1: return this.parameters;
             case 2: return this.closeBracketToken;
             case 3: return this.typeAnnotation;
+            case 4: return this.semicolonOrCommaToken;
         }
     }
 

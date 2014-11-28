@@ -1269,14 +1269,14 @@ module TypeScript.Parser {
         function parseGetAccessor(modifiers: ISyntaxToken[], getKeyword: ISyntaxToken): GetAccessorSyntax {
             return new GetAccessorSyntax(contextFlags,
                 modifiers, consumeToken(getKeyword), parsePropertyName(),
-                parseCallSignature(/*requireCompleteTypeParameterList:*/ false, /*yieldAndGeneratorParameterContext:*/ false, /*asyncContext:*/ false),
+                parseCallSignatureWithoutSemicolonOrComma(/*requireCompleteTypeParameterList:*/ false, /*yieldAndGeneratorParameterContext:*/ false, /*asyncContext:*/ false),
                 parseFunctionBody(/*isGenerator:*/ false, /*asyncContext:*/ false));
         }
 
         function parseSetAccessor(modifiers: ISyntaxToken[], setKeyword: ISyntaxToken): SetAccessorSyntax {
             return new SetAccessorSyntax(contextFlags,
                 modifiers, consumeToken(setKeyword), parsePropertyName(),
-                parseCallSignature(/*requireCompleteTypeParameterList:*/ false, /*yieldAndGeneratorParameterContext:*/ false, /*asyncContext:*/ false),
+                parseCallSignatureWithoutSemicolonOrComma(/*requireCompleteTypeParameterList:*/ false, /*yieldAndGeneratorParameterContext:*/ false, /*asyncContext:*/ false),
                 parseFunctionBody(/*isGenerator:*/ false, /*asyncContext:*/ false));
         }
 
@@ -1401,7 +1401,7 @@ module TypeScript.Parser {
             return new ConstructorDeclarationSyntax(contextFlags, 
                 modifiers, 
                 eatToken(SyntaxKind.ConstructorKeyword), 
-                parseCallSignature(/*requireCompleteTypeParameterList:*/ false, /*yieldAndGeneratorParameterContext:*/ false, /*asyncContext:*/ false),
+                parseCallSignatureWithoutSemicolonOrComma(/*requireCompleteTypeParameterList:*/ false, /*yieldAndGeneratorParameterContext:*/ false, /*asyncContext:*/ false),
                 parseFunctionBody(/*isGenerator:*/ false, /*asyncContext:*/ false));
         }
 
@@ -1415,7 +1415,7 @@ module TypeScript.Parser {
                 modifiers,
                 asteriskToken,
                 propertyName,
-                parseCallSignature(/*requireCompleteTypeParameterList:*/ false, /*yieldAndGeneratorParameterContext:*/ isGenerator, /*asyncContext:*/ asyncContext),
+                parseCallSignatureWithoutSemicolonOrComma(/*requireCompleteTypeParameterList:*/ false, /*yieldAndGeneratorParameterContext:*/ isGenerator, /*asyncContext:*/ asyncContext),
                 parseFunctionBody(isGenerator, asyncContext));
         }
 
@@ -1445,8 +1445,7 @@ module TypeScript.Parser {
         function parseIndexMemberDeclaration(modifiers: ISyntaxToken[]): IndexMemberDeclarationSyntax {
             return new IndexMemberDeclarationSyntax(contextFlags,
                 modifiers,
-                parseIndexSignature(),
-                eatExplicitOrAutomaticSemicolon(/*allowWithoutNewLine:*/ false));
+                parseIndexSignature());
         }
 
         function isFunctionDeclaration(modifierCount: number): boolean {
@@ -1471,7 +1470,7 @@ module TypeScript.Parser {
                 functionKeyword,
                 asteriskToken,
                 eatIdentifierToken(),
-                parseCallSignature(/*requireCompleteTypeParameterList:*/ false, /*yieldAndGeneratorParameterContext:*/ isGenerator, /*asyncContext:*/ asyncContext),
+                parseCallSignatureWithoutSemicolonOrComma(/*requireCompleteTypeParameterList:*/ false, /*yieldAndGeneratorParameterContext:*/ isGenerator, /*asyncContext:*/ asyncContext),
                 parseFunctionBody(isGenerator, asyncContext));
         }
 
@@ -1523,7 +1522,7 @@ module TypeScript.Parser {
             
             return new ObjectTypeSyntax(contextFlags,
                 openBraceToken = eatToken(SyntaxKind.OpenBraceToken),
-                openBraceToken.fullWidth() > 0 ? parseSeparatedSyntaxList<ITypeMemberSyntax>(ListParsingState.ObjectType_TypeMembers) : [],
+                openBraceToken.fullWidth() > 0 ? parseSyntaxList<ITypeMemberSyntax>(ListParsingState.ObjectType_TypeMembers) : [],
                 eatToken(SyntaxKind.CloseBraceToken));
         }
 
@@ -1585,7 +1584,10 @@ module TypeScript.Parser {
                 // A call signature for a type member can both use 'yield' as a parameter name, and 
                 // does not have parameter initializers.  So we can pass 'false' for both [Yield]
                 // and [GeneratorParameter].
-                return parseCallSignature(/*requireCompleteTypeParameterList:*/ false, /*yieldAndGeneratorParameterContext:*/ false, /*asyncContext:*/ false);
+                //
+                // Also, when this is a call signature used as a type member, then a semicolon is 
+                // required.
+                return parseCallSignatureWithSemicolonOrComma(/*requireCompleteTypeParameterList:*/ false, /*yieldAndGeneratorParameterContext:*/ false, /*asyncContext:*/ false);
             }
             else if (isConstructSignature()) {
                 return parseConstructSignature();
@@ -1613,14 +1615,16 @@ module TypeScript.Parser {
             // Construct signatures have no [Yield] or [GeneratorParameter] restrictions.
             return new ConstructSignatureSyntax(contextFlags,
                 eatToken(SyntaxKind.NewKeyword),
-                parseCallSignature(/*requireCompleteTypeParameterList:*/ false, /*yieldAndGeneratorParameterContext:*/ false, /*asyncContext:*/ false));
+                parseCallSignatureWithSemicolonOrComma(/*requireCompleteTypeParameterList:*/ false, /*yieldAndGeneratorParameterContext:*/ false, /*asyncContext:*/ false));
         }
 
         function parseIndexSignature(): IndexSignatureSyntax {
             return new IndexSignatureSyntax(contextFlags,
                 eatToken(SyntaxKind.OpenBracketToken),
                 parseSeparatedSyntaxList<ParameterSyntax>(ListParsingState.IndexSignature_Parameters),
-                eatToken(SyntaxKind.CloseBracketToken), parseOptionalTypeAnnotation(/*allowStringLiteral:*/ false));
+                eatToken(SyntaxKind.CloseBracketToken),
+                parseOptionalTypeAnnotation(/*allowStringLiteral:*/ false),
+                eatExplicitOrAutomaticSemicolonOrComma());
         }
 
         function parseMethodSignature(propertyName: IPropertyNameSyntax, questionToken: ISyntaxToken): MethodSignatureSyntax {
@@ -1629,12 +1633,15 @@ module TypeScript.Parser {
             return new MethodSignatureSyntax(contextFlags,
                 propertyName,
                 questionToken,
-                parseCallSignature(/*requireCompleteTypeParameterList:*/ false, /*yieldAndGeneratorParameterContext:*/ false, /*asyncContext:*/ false));
+                parseCallSignatureWithSemicolonOrComma(/*requireCompleteTypeParameterList:*/ false, /*yieldAndGeneratorParameterContext:*/ false, /*asyncContext:*/ false));
         }
 
         function parsePropertySignature(propertyName: IPropertyNameSyntax, questionToken: ISyntaxToken): PropertySignatureSyntax {
             return new PropertySignatureSyntax(contextFlags,
-                propertyName, questionToken, parseOptionalTypeAnnotation(/*allowStringLiteral:*/ false));
+                propertyName,
+                questionToken,
+                parseOptionalTypeAnnotation(/*allowStringLiteral:*/ false),
+                eatExplicitOrAutomaticSemicolonOrComma());
         }
 
         function isCallSignature(peekIndex: number): boolean {
@@ -3250,7 +3257,7 @@ module TypeScript.Parser {
                 eatToken(SyntaxKind.FunctionKeyword),
                 asteriskToken = tryEatToken(SyntaxKind.AsteriskToken),
                 tryEatFunctionExpressionIdentifier(!!asteriskToken, !!asyncKeyword),
-                parseCallSignature(/*requireCompleteTypeParameterList:*/ false, /*yieldAndGeneratorParameterContext:*/ !!asteriskToken, /*asyncContext:*/ !!asyncKeyword),
+                parseCallSignatureWithoutSemicolonOrComma(/*requireCompleteTypeParameterList:*/ false, /*yieldAndGeneratorParameterContext:*/ !!asteriskToken, /*asyncContext:*/ !!asyncKeyword),
                 parseFunctionBody(!!asteriskToken, !!asyncKeyword));
         }
 
@@ -3386,7 +3393,7 @@ module TypeScript.Parser {
             // 2.If the [Yield] grammar parameter is not present for CoverParenthesizedExpressionAndArrowParameterList[Yield]
             //  return the result of parsing the lexical token stream matched by CoverParenthesizedExpressionAndArrowParameterList
             //  using ArrowFormalParameters as the goal symbol.
-            var callSignature = parseCallSignature(/*requireCompleteTypeParameterList:*/ true, /*yieldAndGeneratorParameterContext:*/ inYieldContext(), /*asyncContext:*/ !!asyncKeyword);
+            var callSignature = parseCallSignatureWithoutSemicolonOrComma(/*requireCompleteTypeParameterList:*/ true, /*yieldAndGeneratorParameterContext:*/ inYieldContext(), /*asyncContext:*/ !!asyncKeyword);
 
             if (requireArrow && currentToken().kind !== SyntaxKind.EqualsGreaterThanToken) {
                 return undefined;
@@ -3874,11 +3881,29 @@ module TypeScript.Parser {
             return statements;
         }
 
-        function parseCallSignature(requireCompleteTypeParameterList: boolean, yieldAndGeneratorParameterContext: boolean, asyncContext: boolean): CallSignatureSyntax {
+        function parseCallSignatureWithoutSemicolonOrComma(requireCompleteTypeParameterList: boolean, yieldAndGeneratorParameterContext: boolean, asyncContext: boolean): CallSignatureSyntax {
+            return parseCallSignatureWorker(requireCompleteTypeParameterList, yieldAndGeneratorParameterContext, asyncContext, /*withSemicolon:*/ false);
+        }
+
+        function parseCallSignatureWithSemicolonOrComma(requireCompleteTypeParameterList: boolean, yieldAndGeneratorParameterContext: boolean, asyncContext: boolean): CallSignatureSyntax {
+            return parseCallSignatureWorker(requireCompleteTypeParameterList, yieldAndGeneratorParameterContext, asyncContext, /*withSemicolon:*/ true);
+        }
+
+        function parseCallSignatureWorker(requireCompleteTypeParameterList: boolean, yieldAndGeneratorParameterContext: boolean, asyncContext: boolean, withSemicolonOrComma: boolean): CallSignatureSyntax {
             return new CallSignatureSyntax(contextFlags,
                 tryParseTypeParameterList(requireCompleteTypeParameterList),
                 parseParameterList(yieldAndGeneratorParameterContext, asyncContext),
-                parseOptionalTypeAnnotation(/*allowStringLiteral:*/ false));
+                parseOptionalTypeAnnotation(/*allowStringLiteral:*/ false),
+                withSemicolonOrComma ? eatExplicitOrAutomaticSemicolonOrComma() : undefined);
+        }
+
+        function eatExplicitOrAutomaticSemicolonOrComma() {
+            var _currentToken = currentToken();
+            if (_currentToken.kind === SyntaxKind.CommaToken) {
+                return consumeToken(_currentToken);
+            }
+
+            return eatExplicitOrAutomaticSemicolon(/*allowWithoutNewline:*/ false);
         }
 
         function tryParseTypeParameterList(requireCompleteTypeParameterList: boolean): TypeParameterListSyntax {
@@ -4411,17 +4436,6 @@ module TypeScript.Parser {
 
         function parseSeparatedSyntaxListWorker<T extends ISyntaxNodeOrToken>(currentListType: ListParsingState): ISeparatedSyntaxList<T> {
             var nodesAndSeparators: ISyntaxNodeOrToken[] = [];
-
-            // Debug.assert(nodes.length === 0);
-            // Debug.assert(separators.length === 0);
-            // Debug.assert(skippedTokens.length === 0);
-            // Debug.assert(<any>skippedTokens !== nodes);
-            // Debug.assert(skippedTokens !== separators);
-            // Debug.assert(<any>nodes !== separators);
-
-            var _separatorKind = currentListType === ListParsingState.ObjectType_TypeMembers ? SyntaxKind.SemicolonToken : SyntaxKind.CommaToken;
-            var allowAutomaticSemicolonInsertion = _separatorKind === SyntaxKind.SemicolonToken;
-
             var inErrorRecovery = false;
             while (true) {
                 // Try to parse an item of the list.  If we fail then decide if we need to abort or 
@@ -4465,8 +4479,7 @@ module TypeScript.Parser {
                 // allow 'comma' as a separator (for error tolerance).  We will later do a post pass
                 // to report when a comma was used improperly in a list that needed semicolons.
                 var _currentToken = currentToken();
-                var tokenKind = _currentToken.kind;
-                if (tokenKind === _separatorKind || tokenKind === SyntaxKind.CommaToken) {
+                if (_currentToken.kind === SyntaxKind.CommaToken) {
                     // Consume the last separator and continue parsing list elements.
                     nodesAndSeparators.push(consumeToken(_currentToken));
                     continue;
@@ -4479,34 +4492,12 @@ module TypeScript.Parser {
                     break;
                 }
 
-                // Otherwise, it might be a case where we can parse out an implicit semicolon.
-
-                // Note: it's important that we check this *after* the check above for
-                // 'listIsTerminated'.  Consider the following case:
-                //
-                //      {
-                //          a       // <-- just finished parsing 'a'
-                //      }
-                //
-                // Automatic semicolon insertion rules state: "When, as the program is parsed from
-                // left to right, a token (called the offending token) is encountered that is not 
-                // allowed by any production of the grammar".  So we should only ever insert a 
-                // semicolon if we couldn't consume something normally.  in the above case, we can
-                // consume the '}' just fine.  So ASI doesn't apply.
-
-                if (allowAutomaticSemicolonInsertion && canEatAutomaticSemicolon(/*allowWithoutNewline:*/ false)) {
-                    var semicolonToken = eatExplicitOrAutomaticSemicolon(/*allowWithoutNewline:*/ false) || createEmptyToken(SyntaxKind.SemicolonToken);
-                    nodesAndSeparators.push(semicolonToken);
-                    // Debug.assert(items.length % 2 === 0);
-                    continue;
-                }
-
                 // We weren't at the end of the list.  And thre was no separator we could parse out.
                 // Try parse the separator we expected, and continue parsing more list elements.
                 // This time mark that we're in error recovery mode though.
                 //
                 // Note: trying to eat this token will emit the appropriate diagnostic.
-                nodesAndSeparators.push(eatToken(_separatorKind));
+                nodesAndSeparators.push(eatToken(SyntaxKind.CommaToken));
 
                 // Now that we're in 'error recovery' mode we cantweak some parsing rules as 
                 // appropriate.  For example, if we have:

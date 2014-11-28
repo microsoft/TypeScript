@@ -604,12 +604,14 @@ module TypeScript.PrettyPrinter {
             this.appendSeparatorSpaceList(node.parameters)
             this.appendToken(node.closeBracketToken);
             this.appendNode(node.typeAnnotation);
+            this.appendToken(node.semicolonOrCommaToken);
         }
 
         public visitPropertySignature(node: PropertySignatureSyntax): void {
             visitNodeOrToken(this, node.propertyName);
             this.appendToken(node.questionToken);
             this.appendNode(node.typeAnnotation);
+            this.appendToken(node.semicolonOrCommaToken);
         }
 
         public visitParameterList(node: ParameterListSyntax): void {
@@ -622,6 +624,7 @@ module TypeScript.PrettyPrinter {
             this.appendNode(node.typeParameterList);
             visitNodeOrToken(this, node.parameterList);
             this.appendNode(node.typeAnnotation);
+            this.appendToken(node.semicolonOrCommaToken);
         }
 
         public visitTypeParameterList(node: TypeParameterListSyntax): void {
@@ -693,7 +696,6 @@ module TypeScript.PrettyPrinter {
             this.appendSpaceList(node.modifiers);
             this.ensureSpace();
             visitNodeOrToken(this, node.indexSignature);
-            this.appendToken(node.semicolonToken);
         }
 
         public visitMemberFunctionDeclaration(node: MemberFunctionDeclarationSyntax): void {

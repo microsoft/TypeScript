@@ -173,7 +173,6 @@ module TypeScript {
         public visitIndexMemberDeclaration(node: IndexMemberDeclarationSyntax): void {
             this.visitList(node.modifiers);
             visitNodeOrToken(this, node.indexSignature);
-            this.visitOptionalToken(node.semicolonToken);
         }
 
         public visitGetAccessor(node: GetAccessorSyntax): void {
@@ -196,12 +195,14 @@ module TypeScript {
             visitNodeOrToken(this, node.propertyName);
             this.visitOptionalToken(node.questionToken);
             visitNodeOrToken(this, node.typeAnnotation);
+            this.visitOptionalToken(node.semicolonOrCommaToken);
         }
 
         public visitCallSignature(node: CallSignatureSyntax): void {
             visitNodeOrToken(this, node.typeParameterList);
             visitNodeOrToken(this, node.parameterList);
             visitNodeOrToken(this, node.typeAnnotation);
+            this.visitOptionalToken(node.semicolonOrCommaToken);
         }
 
         public visitConstructSignature(node: ConstructSignatureSyntax): void {
@@ -214,6 +215,7 @@ module TypeScript {
             this.visitList(node.parameters);
             this.visitToken(node.closeBracketToken);
             visitNodeOrToken(this, node.typeAnnotation);
+            this.visitOptionalToken(node.semicolonOrCommaToken);
         }
 
         public visitMethodSignature(node: MethodSignatureSyntax): void {

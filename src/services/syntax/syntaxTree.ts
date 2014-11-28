@@ -147,6 +147,14 @@ module TypeScript {
             return true;
         }
 
+        public visitCallSignature(node: CallSignatureSyntax): void {
+            if (this.checkForCommaInsteadOfSemicolon(node.semicolonOrCommaToken)) {
+                return;
+            }
+
+            super.visitCallSignature(node);
+        }
+
         public visitCatchClause(node: CatchClauseSyntax): void {
             if (this.checkForCatchClauseTypeAnnotation(node) ||
                 this.checkForDisallowedEvalOrArguments(node, node.identifier)) {
@@ -351,8 +359,17 @@ module TypeScript {
             return false;
         }
 
+        private checkForCommaInsteadOfSemicolon(commaOrSemicolon: ISyntaxToken) {
+            if (commaOrSemicolon && commaOrSemicolon.kind === SyntaxKind.CommaToken) {
+                return this.pushDiagnostic(commaOrSemicolon, DiagnosticCode._0_expected, [SyntaxFacts.getText(SyntaxKind.SemicolonToken)]);
+            }
+
+            return false;
+        }
+
         public visitIndexSignature(node: IndexSignatureSyntax): void {
-            if (this.checkIndexSignatureParameter(node)) {
+            if (this.checkIndexSignatureParameter(node) ||
+                this.checkForCommaInsteadOfSemicolon(node.semicolonOrCommaToken)) {
                 return;
             }
 
@@ -553,7 +570,8 @@ module TypeScript {
 
         public visitPropertySignature(node: PropertySignatureSyntax): void {
             if (this.checkForDisallowedTemplatePropertyName(node.propertyName) ||
-                this.checkForDisallowedComputedPropertyName(node.propertyName)) {
+                this.checkForDisallowedComputedPropertyName(node.propertyName) ||
+                this.checkForCommaInsteadOfSemicolon(node.semicolonOrCommaToken)) {
                 return;
             }
 
@@ -1486,22 +1504,7 @@ module TypeScript {
             this.inAmbientDeclaration = savedInAmbientDeclaration;
         }
 
-        private checkListSeparators<T extends ISyntaxNodeOrToken>(list: ISeparatedSyntaxList<T>, kind: SyntaxKind): boolean {
-            for (var i = 0, n = separatorCount(list); i < n; i++) {
-                var child = separatorAt(list, i);
-                if (child.kind !== kind) {
-                    this.pushDiagnostic(child, DiagnosticCode._0_expected, [SyntaxFacts.getText(kind)]);
-                }
-            }
-
-            return false;
-        }
-
         public visitObjectType(node: ObjectTypeSyntax): void {
-            if (this.checkListSeparators(node.typeMembers, SyntaxKind.SemicolonToken)) {
-                return;
-            }
-
             // All code in an object type is implicitly ambient. (i.e. parameters can't have initializer, etc.)
             var savedInAmbientDeclaration = this.inAmbientDeclaration;
             this.inAmbientDeclaration = true;

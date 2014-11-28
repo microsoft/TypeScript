@@ -334,7 +334,7 @@ var definitions:ITypeDefinition[] = [
         interfaces: ['ITypeSyntax'],
         children: [
             <any>{ name: 'openBraceToken', isToken: true, excludeFromAST: true },
-            <any>{ name: 'typeMembers', isSeparatedList: true, elementType: 'ITypeMemberSyntax' },
+            <any>{ name: 'typeMembers', isList: true, elementType: 'ITypeMemberSyntax' },
             <any>{ name: 'closeBraceToken', isToken: true, excludeFromAST: true }
         ],
         isTypeScriptSpecific: true
@@ -560,7 +560,8 @@ var definitions:ITypeDefinition[] = [
             <any>{ name: 'openBracketToken', isToken: true },
             <any>{ name: 'parameters', isSeparatedList: true, elementType: 'ParameterSyntax' },
             <any>{ name: 'closeBracketToken', isToken: true },
-            <any>{ name: 'typeAnnotation', type: 'TypeAnnotationSyntax', isOptional: true }
+            <any>{ name: 'typeAnnotation', type: 'TypeAnnotationSyntax', isOptional: true },
+            <any>{ name: 'semicolonOrCommaToken', isToken: true, isOptional: true }
         ],
         isTypeScriptSpecific: true
     },
@@ -571,7 +572,8 @@ var definitions:ITypeDefinition[] = [
         children: [
             <any>{ name: 'propertyName', type: 'IPropertyNameSyntax' },
             <any>{ name: 'questionToken', isToken: true, isOptional: true },
-            <any>{ name: 'typeAnnotation', type: 'TypeAnnotationSyntax', isOptional: true }
+            <any>{ name: 'typeAnnotation', type: 'TypeAnnotationSyntax', isOptional: true },
+            <any>{ name: 'semicolonOrCommaToken', isToken: true, isOptional: true }
         ],
         isTypeScriptSpecific: true
     },
@@ -582,7 +584,8 @@ var definitions:ITypeDefinition[] = [
         children: [
             <any>{ name: 'typeParameterList', type: 'TypeParameterListSyntax', isOptional: true, isTypeScriptSpecific: true },
             <any>{ name: 'parameterList', type: 'ParameterListSyntax' },
-            <any>{ name: 'typeAnnotation', type: 'TypeAnnotationSyntax', isOptional: true, isTypeScriptSpecific: true }
+            <any>{ name: 'typeAnnotation', type: 'TypeAnnotationSyntax', isOptional: true, isTypeScriptSpecific: true },
+            <any>{ name: 'semicolonOrCommaToken', isToken: true, isOptional: true }
         ]
     },
     <any>{
@@ -720,8 +723,7 @@ var definitions:ITypeDefinition[] = [
         interfaces: ['IClassElementSyntax'],
         children: [
             <any>{ name: 'modifiers', isList: true, elementType: 'ISyntaxToken' },
-            <any>{ name: 'indexSignature', type: 'IndexSignatureSyntax' },
-            <any>{ name: 'semicolonToken', isToken: true, isOptional: true, excludeFromAST: true }
+            <any>{ name: 'indexSignature', type: 'IndexSignatureSyntax' }
         ],
         isTypeScriptSpecific: true
     },
