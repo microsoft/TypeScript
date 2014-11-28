@@ -200,7 +200,7 @@ var definitions:ITypeDefinition[] = [
         name: 'VariableDeclarationSyntax',
         baseType: 'ISyntaxNode',
         children: [
-            <any>{ name: 'varKeyword', isToken: true },
+            <any>{ name: 'varConstOrLetKeyword', isToken: true },
             <any>{ name: 'variableDeclarators', isSeparatedList: true, requiresAtLeastOneItem: true, elementType: 'VariableDeclaratorSyntax' }
         ]
     },

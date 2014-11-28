@@ -2034,7 +2034,7 @@ module TypeScript.Parser {
             // grammar walker.
             var initializer = tokenKind === SyntaxKind.SemicolonToken
                 ? undefined
-                : tokenKind === SyntaxKind.VarKeyword
+                : isVariableDeclaration(tokenKind)
                     ? disallowInAnd(parseVariableDeclaration)
                     : disallowInAnd(parseExpression)
 
@@ -2354,7 +2354,26 @@ module TypeScript.Parser {
         }
 
         function isVariableStatement(modifierCount: number): boolean {
-            return peekToken(modifierCount).kind === SyntaxKind.VarKeyword;
+            return isVariableDeclaration(peekToken(modifierCount).kind);
+        }
+
+        function isVariableDeclaration(tokenKind: SyntaxKind) {
+            // 'var' and 'const' are keywords.  So we always know they start a variable declaration.
+            if (tokenKind === SyntaxKind.VarKeyword || tokenKind === SyntaxKind.ConstKeyword) {
+                return true;
+            }
+
+            // 'let' is future reserved strict keyword.  So it's only a keyword if we're in strict 
+            // mode, or if we see an identifier following.
+            if (tokenKind === SyntaxKind.LetKeyword) {
+                if (inStrictModeContext()) {
+                    return true;
+                }
+
+                return isIdentifier(peekToken(1));
+            }
+
+            return false;
         }
 
         function parseVariableStatement(): VariableStatementSyntax {
@@ -2362,14 +2381,16 @@ module TypeScript.Parser {
             //      var VariableDeclarationList[In, ?Yield];
 
             return new VariableStatementSyntax(contextFlags,
-                parseModifiers(), allowInAnd(parseVariableDeclaration), eatExplicitOrAutomaticSemicolon(/*allowWithoutNewline:*/ false));
+                parseModifiers(),
+                allowInAnd(parseVariableDeclaration),
+                eatExplicitOrAutomaticSemicolon(/*allowWithoutNewline:*/ false));
         }
 
         function parseVariableDeclaration(): VariableDeclarationSyntax {
             // Debug.assert(currentToken().kind === SyntaxKind.VarKeyword);
 
             return new VariableDeclarationSyntax(contextFlags,
-                eatToken(SyntaxKind.VarKeyword),
+                consumeToken(currentToken()),
                 parseSeparatedSyntaxList<VariableDeclaratorSyntax>(ListParsingState.VariableDeclaration_VariableDeclarators));
         }
 
