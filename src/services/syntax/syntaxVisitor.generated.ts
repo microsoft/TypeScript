@@ -65,7 +65,7 @@ module TypeScript {
             case SyntaxKind.ParenthesizedExpression: return visitor.visitParenthesizedExpression(<ParenthesizedExpressionSyntax>element);
             case SyntaxKind.ParenthesizedArrowFunctionExpression: return visitor.visitParenthesizedArrowFunctionExpression(<ParenthesizedArrowFunctionExpressionSyntax>element);
             case SyntaxKind.SimpleArrowFunctionExpression: return visitor.visitSimpleArrowFunctionExpression(<SimpleArrowFunctionExpressionSyntax>element);
-            case SyntaxKind.CastExpression: return visitor.visitCastExpression(<CastExpressionSyntax>element);
+            case SyntaxKind.TypeAssertionExpression: return visitor.visitTypeAssertionExpression(<TypeAssertionExpressionSyntax>element);
             case SyntaxKind.ElementAccessExpression: return visitor.visitElementAccessExpression(<ElementAccessExpressionSyntax>element);
             case SyntaxKind.FunctionExpression: return visitor.visitFunctionExpression(<FunctionExpressionSyntax>element);
             case SyntaxKind.OmittedExpression: return visitor.visitOmittedExpression(<OmittedExpressionSyntax>element);
@@ -165,7 +165,7 @@ module TypeScript {
         visitParenthesizedExpression(node: ParenthesizedExpressionSyntax): any;
         visitParenthesizedArrowFunctionExpression(node: ParenthesizedArrowFunctionExpressionSyntax): any;
         visitSimpleArrowFunctionExpression(node: SimpleArrowFunctionExpressionSyntax): any;
-        visitCastExpression(node: CastExpressionSyntax): any;
+        visitTypeAssertionExpression(node: TypeAssertionExpressionSyntax): any;
         visitElementAccessExpression(node: ElementAccessExpressionSyntax): any;
         visitFunctionExpression(node: FunctionExpressionSyntax): any;
         visitOmittedExpression(node: OmittedExpressionSyntax): any;

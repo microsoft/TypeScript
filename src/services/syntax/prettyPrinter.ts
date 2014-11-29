@@ -910,7 +910,7 @@ module TypeScript.PrettyPrinter {
             this.appendNode(node.equalsValueClause);
         }
 
-        public visitCastExpression(node: CastExpressionSyntax): void {
+        public visitTypeAssertionExpression(node: TypeAssertionExpressionSyntax): void {
             this.appendToken(node.lessThanToken);
             visitNodeOrToken(this, node.type);
             this.appendToken(node.greaterThanToken);

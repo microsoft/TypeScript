@@ -483,13 +483,13 @@ module TypeScript {
     }
     export interface SimpleArrowFunctionExpressionConstructor { new (data: number, asyncKeyword: ISyntaxToken, parameter: ParameterSyntax, equalsGreaterThanToken: ISyntaxToken, body: BlockSyntax | IExpressionSyntax): SimpleArrowFunctionExpressionSyntax }
 
-    export interface CastExpressionSyntax extends ISyntaxNode, IUnaryExpressionSyntax {
+    export interface TypeAssertionExpressionSyntax extends ISyntaxNode, IUnaryExpressionSyntax {
         lessThanToken: ISyntaxToken;
         type: ITypeSyntax;
         greaterThanToken: ISyntaxToken;
         expression: IUnaryExpressionSyntax;
     }
-    export interface CastExpressionConstructor { new (data: number, lessThanToken: ISyntaxToken, type: ITypeSyntax, greaterThanToken: ISyntaxToken, expression: IUnaryExpressionSyntax): CastExpressionSyntax }
+    export interface TypeAssertionExpressionConstructor { new (data: number, lessThanToken: ISyntaxToken, type: ITypeSyntax, greaterThanToken: ISyntaxToken, expression: IUnaryExpressionSyntax): TypeAssertionExpressionSyntax }
 
     export interface ElementAccessExpressionSyntax extends ISyntaxNode, IMemberExpressionSyntax, ICallExpressionSyntax {
         expression: ILeftHandSideExpressionSyntax;

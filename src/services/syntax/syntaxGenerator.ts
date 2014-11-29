@@ -880,7 +880,7 @@ var definitions:ITypeDefinition[] = [
         ]
     },
     <any>{
-        name: 'CastExpressionSyntax',
+        name: 'TypeAssertionExpressionSyntax',
         baseType: 'ISyntaxNode',
         interfaces: ['IUnaryExpressionSyntax'],
         children: [

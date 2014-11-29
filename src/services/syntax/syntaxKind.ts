@@ -230,7 +230,7 @@ module TypeScript {
         ParenthesizedExpression,
         ParenthesizedArrowFunctionExpression,
         SimpleArrowFunctionExpression,
-        CastExpression,
+        TypeAssertionExpression,
         ElementAccessExpression,
         FunctionExpression,
         OmittedExpression,

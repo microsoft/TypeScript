@@ -439,7 +439,7 @@ module TypeScript {
             visitNodeOrToken(this, node.body);
         }
 
-        public visitCastExpression(node: CastExpressionSyntax): void {
+        public visitTypeAssertionExpression(node: TypeAssertionExpressionSyntax): void {
             this.visitToken(node.lessThanToken);
             visitNodeOrToken(this, node.type);
             this.visitToken(node.greaterThanToken);

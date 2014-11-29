@@ -186,7 +186,7 @@ module TypeScript {
                 switch (parent.kind) {
                     case SyntaxKind.TypeArgumentList:
                     case SyntaxKind.TypeParameterList:
-                    case SyntaxKind.CastExpression:
+                    case SyntaxKind.TypeAssertionExpression:
                         return true;
                 }
             }

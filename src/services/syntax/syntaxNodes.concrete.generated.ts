@@ -1322,7 +1322,7 @@ module TypeScript {
         }
     }
 
-    export var CastExpressionSyntax: CastExpressionConstructor = <any>function(data: number, lessThanToken: ISyntaxToken, type: ITypeSyntax, greaterThanToken: ISyntaxToken, expression: IUnaryExpressionSyntax) {
+    export var TypeAssertionExpressionSyntax: TypeAssertionExpressionConstructor = <any>function(data: number, lessThanToken: ISyntaxToken, type: ITypeSyntax, greaterThanToken: ISyntaxToken, expression: IUnaryExpressionSyntax) {
         if (data) { this.__data = data; }
         this.lessThanToken = lessThanToken,
         this.type = type,
@@ -1333,9 +1333,9 @@ module TypeScript {
         greaterThanToken.parent = this,
         expression.parent = this;
     };
-    CastExpressionSyntax.prototype.kind = SyntaxKind.CastExpression;
-    CastExpressionSyntax.prototype.childCount = 4;
-    CastExpressionSyntax.prototype.childAt = function(index: number): ISyntaxElement {
+    TypeAssertionExpressionSyntax.prototype.kind = SyntaxKind.TypeAssertionExpression;
+    TypeAssertionExpressionSyntax.prototype.childCount = 4;
+    TypeAssertionExpressionSyntax.prototype.childAt = function(index: number): ISyntaxElement {
         switch (index) {
             case 0: return this.lessThanToken;
             case 1: return this.type;

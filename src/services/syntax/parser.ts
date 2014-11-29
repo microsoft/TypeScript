@@ -2733,7 +2733,7 @@ module TypeScript.Parser {
                 case SyntaxKind.DeleteKeyword:
                     return parseDeleteExpression(_currentToken);
                 case SyntaxKind.LessThanToken:
-                    return parseCastExpression(_currentToken);
+                    return parseTypeAssertionExpression(_currentToken);
                 case SyntaxKind.AwaitKeyword:
                     return parsePossibleAwaitExpression(_currentToken);
                 default:
@@ -3276,8 +3276,8 @@ module TypeScript.Parser {
             return new TemplateClauseSyntax(contextFlags, expression, token);
         }
 
-        function parseCastExpression(lessThanToken: ISyntaxToken): CastExpressionSyntax {
-            return new CastExpressionSyntax(contextFlags,
+        function parseTypeAssertionExpression(lessThanToken: ISyntaxToken): TypeAssertionExpressionSyntax {
+            return new TypeAssertionExpressionSyntax(contextFlags,
                 consumeToken(lessThanToken),
                 parseType(),
                 eatToken(SyntaxKind.GreaterThanToken),
