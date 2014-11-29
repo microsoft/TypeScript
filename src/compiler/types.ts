@@ -514,7 +514,9 @@ module ts {
 
     export interface IndexedAccess extends Expression {
         object: Expression;
+        openBracketToken: Node;
         index: Expression;
+        closeBracketToken: Node;
     }
 
     export interface CallExpression extends Expression {

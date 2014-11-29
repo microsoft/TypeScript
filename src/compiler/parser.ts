@@ -1151,12 +1151,18 @@ module ts {
             return inStrictModeContext() ? token > SyntaxKind.LastFutureReservedWord : token > SyntaxKind.LastReservedWord;
         }
 
-        function parseExpected(t: SyntaxKind): boolean {
+        function parseExpected(t: SyntaxKind, diagnosticMessage?: DiagnosticMessage): boolean {
             if (token === t) {
                 nextToken();
                 return true;
             }
-            error(Diagnostics._0_expected, tokenToString(t));
+
+            if (diagnosticMessage) {
+                error(diagnosticMessage);
+            }
+            else {
+                error(Diagnostics._0_expected, tokenToString(t));
+            }
             return false;
         }
 
@@ -1551,10 +1557,19 @@ module ts {
             return entity;
         }
 
-        function parseTokenNode(): Node {
+        function parseAnyTokenNode(): Node {
             var node = createNode(token);
             nextToken();
             return finishNode(node);
+        }
+
+        function parseTokenNode(kind: SyntaxKind): Node {
+            if (token === kind) {
+                return parseAnyTokenNode();
+            }
+
+            parseExpected(kind);
+            return createMissingNode();
         }
 
         function parseTemplateExpression() {
@@ -1997,7 +2012,7 @@ module ts {
         }
 
         function parseKeywordAndNoDot(): Node {
-            var node = parseTokenNode();
+            var node = parseAnyTokenNode();
             return token === SyntaxKind.DotToken ? undefined : node;
         }
 
@@ -2649,30 +2664,133 @@ module ts {
                     return finishNode(node);
                 case SyntaxKind.LessThanToken:
                     return parseTypeAssertion();
+                default:
+                    return parsePostfixExpressionOrHigher();
             }
+        }
 
-            var primaryExpression = parsePrimaryExpression();
-            // TS 1.0 spec (2014): 4.8
-            // CallExpression:  ( Modified )
-            //  super   (   ArgumentListopt   )
-            //  super   .   IdentifierName
-            var illegalUsageOfSuperKeyword =
-                primaryExpression.kind === SyntaxKind.SuperKeyword && token !== SyntaxKind.OpenParenToken && token !== SyntaxKind.DotToken;
+        function parsePostfixExpressionOrHigher(): Expression {
+            var expression = parseLeftHandSideExpressionOrHigher();
 
-            if (illegalUsageOfSuperKeyword) {
-                error(Diagnostics.super_must_be_followed_by_an_argument_list_or_member_access);
-            }
-
-            var expr = parseCallAndAccess(primaryExpression, /* inNewExpression */ false);
-
-            Debug.assert(isLeftHandSideExpression(expr));
+            Debug.assert(isLeftHandSideExpression(expression));
             if ((token === SyntaxKind.PlusPlusToken || token === SyntaxKind.MinusMinusToken) && !scanner.hasPrecedingLineBreak()) {
                 var operator = token;
                 nextToken();
-                expr = makeUnaryExpression(SyntaxKind.PostfixOperator, expr.pos, operator, expr);
+                return makeUnaryExpression(SyntaxKind.PostfixOperator, expression.pos, operator, expression);
             }
 
-            return expr;
+            return expression;
+        }
+
+        function parseLeftHandSideExpressionOrHigher(): Expression {
+            // Original Ecma:
+            // LeftHandSideExpression: See 11.2 
+            //      NewExpression
+            //      CallExpression 
+            //
+            // Our simplification:
+            //
+            // LeftHandSideExpression: See 11.2 
+            //      MemberExpression  
+            //      CallExpression 
+            //
+            // See comment in parseMemberExpressionOrHigher on how we replaced NewExpression with
+            // MemberExpression to make our lives easier.
+            //
+            // to best understand the below code, it's important to see how CallExpression expands
+            // out into its own productions:
+            //
+            // CallExpression:
+            //      MemberExpression Arguments 
+            //      CallExpression Arguments
+            //      CallExpression[Expression]
+            //      CallExpression.IdentifierName
+            //      super   (   ArgumentListopt   )
+            //      super.IdentifierName
+            //
+            // Because of the recursion in these calls, we need to bottom out first.  There are two 
+            // bottom out states we can run into.  Either we see 'super' which must start either of
+            // the last two CallExpression productions.  Or we have a MemberExpression which either
+            // completes the LeftHandSideExpression, or starts the beginning of the first four
+            // CallExpression productions.
+            var expression: Expression;
+            if (token === SyntaxKind.SuperKeyword) {
+                expression = parseSuperExpression();
+            }
+            else {
+                expression = parseMemberExpressionOrHigher();
+            }
+
+            // Now, we *may* be complete.  However, we might have consumed the start of a 
+            // CallExpression.  As such, we need to consume the rest of it here to be complete.
+            return parseCallExpressionRest(expression);
+        }
+
+        function parseMemberExpressionOrHigher(): Expression {
+            // Note: to make our lives simpler, we decompose the the NewExpression productions and
+            // place ObjectCreationExpression and FunctionExpression into PrimaryExpression.
+            // like so:
+            //
+            //   PrimaryExpression : See 11.1 
+            //      this
+            //      Identifier
+            //      Literal
+            //      ArrayLiteral
+            //      ObjectLiteral
+            //      (Expression) 
+            //      FunctionExpression
+            //      new MemberExpression Arguments?
+            //
+            //   MemberExpression : See 11.2 
+            //      PrimaryExpression 
+            //      MemberExpression[Expression]
+            //      MemberExpression.IdentifierName
+            //
+            //   CallExpression : See 11.2 
+            //      MemberExpression 
+            //      CallExpression Arguments
+            //      CallExpression[Expression]
+            //      CallExpression.IdentifierName 
+            //
+            // Technically this is ambiguous.  i.e. CallExpression defines:
+            //
+            //   CallExpression:
+            //      CallExpression Arguments
+            // 
+            // If you see: "new Foo()"
+            //
+            // Then that could be treated as a single ObjectCreationExpression, or it could be 
+            // treated as the invocation of "new Foo".  We disambiguate that in code (to match
+            // the original grammar) by making sure that if we see an ObjectCreationExpression
+            // we always consume arguments if they are there. So we treat "new Foo()" as an
+            // object creation only, and not at all as an invocation)  Another way to think 
+            // about this is that for every "new" that we see, we will consume an argument list if
+            // it is there as part of the *associated* object creation node.  Any additional
+            // argument lists we see, will become invocation expressions.
+            //
+            // Because there are no other places in the grammar now that refer to FunctionExpression
+            // or ObjectCreationExpression, it is safe to push down into the PrimaryExpression
+            // production.
+            //
+            // Because CallExpression and MemberExpression are left recursive, we need to bottom out
+            // of the recursion immediately.  So we parse out a primary expression to start with.
+            var expression = parsePrimaryExpression();
+            return parseMemberExpressionRest(expression); 
+        }
+
+        function parseSuperExpression(): Expression {
+            var expression = parseAnyTokenNode();
+            if (token === SyntaxKind.OpenParenToken || token === SyntaxKind.DotToken) {
+                return expression;
+            }
+
+            // If we have seen "super" it must be followed by '(' or '.'.
+            // If it wasn't then just try to parse out a '.' and report an error.
+            var node = <PropertyAccess>createNode(SyntaxKind.PropertyAccess, expression.pos);
+            node.left = expression;
+            parseExpected(SyntaxKind.DotToken, Diagnostics.super_must_be_followed_by_an_argument_list_or_member_access);
+            node.right = parseIdentifierName();
+            return finishNode(node);
         }
 
         function parseTypeAssertion(): TypeAssertion {
@@ -2691,11 +2809,11 @@ module ts {
             return finishNode(node);
         }
 
-        function parseCallAndAccess(expr: Expression, inNewExpression: boolean): Expression {
+        function parseMemberExpressionRest(expression: Expression): Expression {
             while (true) {
                 var dotOrBracketStart = scanner.getTokenPos();
                 if (parseOptional(SyntaxKind.DotToken)) {
-                    var propertyAccess = <PropertyAccess>createNode(SyntaxKind.PropertyAccess, expr.pos);
+                    var propertyAccess = <PropertyAccess>createNode(SyntaxKind.PropertyAccess, expression.pos);
                     // Technically a keyword is valid here as all keywords are identifier names.
                     // However, often we'll encounter this in error situations when the keyword
                     // is actually starting another valid construct.
@@ -2728,63 +2846,80 @@ module ts {
                         }
                     }
 
-                    propertyAccess.left = expr;
+                    propertyAccess.left = expression;
                     propertyAccess.right = id || parseIdentifierName();
-                    expr = finishNode(propertyAccess);
+                    expression = finishNode(propertyAccess);
                     continue;
                 }
 
-                if (parseOptional(SyntaxKind.OpenBracketToken)) {
-                    var indexedAccess = <IndexedAccess>createNode(SyntaxKind.IndexedAccess, expr.pos);
-                    indexedAccess.object = expr;
+                if (token === SyntaxKind.OpenBracketToken) {
+                    var indexedAccess = <IndexedAccess>createNode(SyntaxKind.IndexedAccess, expression.pos);
+                    indexedAccess.object = expression;
+                    indexedAccess.openBracketToken = parseTokenNode(SyntaxKind.OpenBracketToken);
 
                     // It's not uncommon for a user to write: "new Type[]".
                     // Check for that common pattern and report a better error message.
-                    if (inNewExpression && parseOptional(SyntaxKind.CloseBracketToken)) {
-                        indexedAccess.index = createMissingNode();
-                    }
-                    else {
+                    if (token !== SyntaxKind.CloseBracketToken) {
                         indexedAccess.index = allowInAnd(parseExpression);
                         if (indexedAccess.index.kind === SyntaxKind.StringLiteral || indexedAccess.index.kind === SyntaxKind.NumericLiteral) {
                             var literal = <LiteralExpression>indexedAccess.index;
                             literal.text = internIdentifier(literal.text);
                         }
-                        parseExpected(SyntaxKind.CloseBracketToken);
-                    }
-
-                    expr = finishNode(indexedAccess);
-                    continue;
-                }
-
-                // Try to parse a Call Expression unless we are in a New Expression.
-                // If we are parsing a New Expression, then parentheses are optional, 
-                // and is taken care of by the 'parseNewExpression' caller.
-                if ((token === SyntaxKind.OpenParenToken || token === SyntaxKind.LessThanToken) && !inNewExpression) {
-                    var callExpr = <CallExpression>createNode(SyntaxKind.CallExpression, expr.pos);
-                    callExpr.func = expr;
-                    if (token === SyntaxKind.LessThanToken) {
-                        if (!(callExpr.typeArguments = tryParse(parseTypeArgumentsAndOpenParen))) return expr;
                     }
                     else {
-                        parseExpected(SyntaxKind.OpenParenToken);
+                        indexedAccess.index = createMissingNode();
                     }
-                    callExpr.arguments = parseDelimitedList(ParsingContext.ArgumentExpressions, parseArgumentExpression);
-                    parseExpected(SyntaxKind.CloseParenToken);
-                    expr = finishNode(callExpr);
+
+                    indexedAccess.closeBracketToken = parseTokenNode(SyntaxKind.CloseBracketToken);
+                    expression = finishNode(indexedAccess);
                     continue;
                 }
 
                 if (token === SyntaxKind.NoSubstitutionTemplateLiteral || token === SyntaxKind.TemplateHead) {
-                    var tagExpression = <TaggedTemplateExpression>createNode(SyntaxKind.TaggedTemplateExpression, expr.pos);
-                    tagExpression.tag = expr;
+                    var tagExpression = <TaggedTemplateExpression>createNode(SyntaxKind.TaggedTemplateExpression, expression.pos);
+                    tagExpression.tag = expression;
                     tagExpression.template = token === SyntaxKind.NoSubstitutionTemplateLiteral
-                        ? parseLiteralNode()
-                        : parseTemplateExpression();
-                    expr = finishNode(tagExpression);
+                    ? parseLiteralNode()
+                    : parseTemplateExpression();
+                    expression = finishNode(tagExpression);
                     continue;
                 }
 
-                return expr;
+                return expression;
+            }
+        }
+
+        function parseCallExpressionRest(expression: Expression): Expression {
+            while (true) {
+                expression = parseMemberExpressionRest(expression);
+
+                if (token === SyntaxKind.LessThanToken) {
+                    // Might be arithmetic, or it might be a type argument list.
+                    var typeArguments = tryParse(parseTypeArgumentsAndOpenParen);
+                    if (!typeArguments) {
+                        return expression;
+                    }
+
+                    var callExpr = <CallExpression>createNode(SyntaxKind.CallExpression, expression.pos);
+                    callExpr.func = expression;
+                    callExpr.typeArguments = typeArguments;
+                    callExpr.arguments = parseDelimitedList(ParsingContext.ArgumentExpressions, parseArgumentExpression);
+                    parseExpected(SyntaxKind.CloseParenToken);
+                    expression = finishNode(callExpr);
+                    continue;
+                }
+
+                if (token === SyntaxKind.OpenParenToken) {
+                    var callExpr = <CallExpression>createNode(SyntaxKind.CallExpression, expression.pos);
+                    callExpr.func = expression;
+                    parseExpected(SyntaxKind.OpenParenToken);
+                    callExpr.arguments = parseDelimitedList(ParsingContext.ArgumentExpressions, parseArgumentExpression);
+                    parseExpected(SyntaxKind.CloseParenToken);
+                    expression = finishNode(callExpr);
+                    continue;
+                }
+
+                return expression;
             }
         }
 
@@ -2822,7 +2957,7 @@ module ts {
                 case SyntaxKind.NullKeyword:
                 case SyntaxKind.TrueKeyword:
                 case SyntaxKind.FalseKeyword:
-                    return parseTokenNode();
+                    return parseAnyTokenNode();
                 case SyntaxKind.NumericLiteral:
                 case SyntaxKind.StringLiteral:
                 case SyntaxKind.NoSubstitutionTemplateLiteral:
@@ -2988,8 +3123,8 @@ module ts {
         function parseNewExpression(): NewExpression {
             var node = <NewExpression>createNode(SyntaxKind.NewExpression);
             parseExpected(SyntaxKind.NewKeyword);
-            node.func = parseCallAndAccess(parsePrimaryExpression(), /* inNewExpression */ true);
-            if (parseOptional(SyntaxKind.OpenParenToken) || token === SyntaxKind.LessThanToken && (node.typeArguments = tryParse(parseTypeArgumentsAndOpenParen))) {
+            node.func = parseMemberExpressionOrHigher();
+            if (parseOptional(SyntaxKind.OpenParenToken) || (token === SyntaxKind.LessThanToken && (node.typeArguments = tryParse(parseTypeArgumentsAndOpenParen)))) {
                 node.arguments = parseDelimitedList(ParsingContext.ArgumentExpressions, parseArgumentExpression);
                 parseExpected(SyntaxKind.CloseParenToken);
             }
@@ -4498,13 +4633,17 @@ module ts {
         }
 
         function checkIndexedAccess(node: IndexedAccess) {
-            if (node.index.kind === SyntaxKind.Missing &&
-                node.parent.kind === SyntaxKind.NewExpression &&
-                (<NewExpression>node.parent).func === node) {
+            if (node.index.kind === SyntaxKind.Missing) {
+                if (node.parent.kind === SyntaxKind.NewExpression &&
+                    (<NewExpression>node.parent).func === node) {
 
-                var start = skipTrivia(sourceText, node.parent.pos);
-                var end = node.end;
-                return grammarErrorAtPos(start, end - start, Diagnostics.new_T_cannot_be_used_to_create_an_array_Use_new_Array_T_instead);
+                    var start = skipTrivia(sourceText, node.openBracketToken.pos);
+                    var end = node.closeBracketToken.end;
+                    return grammarErrorAtPos(start, end - start, Diagnostics.new_T_cannot_be_used_to_create_an_array_Use_new_Array_T_instead);
+                }
+                else {
+                    return grammarErrorOnNode(node.closeBracketToken, Diagnostics.Expression_expected);
+                }
             }
         }
 
