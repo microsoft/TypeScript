@@ -1714,7 +1714,7 @@ module ts {
 
         function getTypeFromBindingPattern(pattern: BindingPattern): Type {
             if (pattern.kind === SyntaxKind.ArrayBindingPattern) {
-                return createTupleType(map(pattern.elements, getTypeFromBindingElement));
+                return createTupleType(map(pattern.elements, e => e.kind === SyntaxKind.OmittedExpression ? anyType : getTypeFromBindingElement(e)));
             }
             var members: SymbolTable = {};
             forEach(pattern.elements, e => {
@@ -4628,7 +4628,6 @@ module ts {
 
             checkCollisionWithCapturedSuperVariable(node, node);
             checkCollisionWithCapturedThisVariable(node, node);
-            checkCollisionWithIndexVariableInGeneratedCode(node, node);
 
             return getNarrowedTypeOfSymbol(getExportSymbolOfValueSymbolIfExported(symbol), node);
         }
@@ -6759,7 +6758,6 @@ module ts {
             if (isBindingPattern(node.name)) {
                 return;
             }
-            checkCollisionWithIndexVariableInGeneratedCode(node, <Identifier>node.name);
             var func = getContainingFunction(node);
             if (node.flags & (NodeFlags.Public | NodeFlags.Private | NodeFlags.Protected) &&
                 !(func.kind === SyntaxKind.Constructor && func.body)) {
@@ -7416,85 +7414,6 @@ module ts {
                     error(p, Diagnostics.Duplicate_identifier_arguments_Compiler_uses_arguments_to_initialize_rest_parameters);
                 }
             });
-        }
-
-        function checkCollisionWithIndexVariableInGeneratedCode(node: Node, name: Identifier) {
-            if (!(name && name.text === "_i")) {
-                return;
-            }
-
-            if (node.kind === SyntaxKind.Parameter) {
-                // report error if parameter has name '_i' when:
-                // - function has implementation (not a signature)
-                // - function has rest parameters
-                // - context is not ambient (otherwise no codegen impact)
-                var func = getContainingFunction(node);
-                if (func.body && hasRestParameters(func) && !isInAmbientContext(node)) {
-                    error(node, Diagnostics.Duplicate_identifier_i_Compiler_uses_i_to_initialize_rest_parameter);                    
-                }
-                return;
-            }
-
-            var symbol = getNodeLinks(node).resolvedSymbol;
-            if (symbol === unknownSymbol) {
-                return;
-            }
-
-            // we would like to discover cases like one below:
-            //
-            // var _i = "!";
-            // function foo(...a) {
-            //    function bar() {
-            //        var x = { get baz() { return _i; } }
-            //    }
-            // }
-            // 
-            // at runtime '_i' referenced in getter will be resolved to the generated index variable '_i' used to initialize rest parameters.
-            // legitimate case: when '_i' is defined inside the function declaration with rest parameters.
-            // 
-            // function foo(...a) {
-            //    var _i = "!";
-            //    function bar() {
-            //        var x = { get baz() { return _i; } }
-            //    }
-            // }
-
-            ////  if resolved symbol for node has more than one declaration - this is definitely an error
-            ////  (there is nothing value-like in the language that can be nested in function and consists of multiple declarations)
-            //if (symbol.declarations.length > 1) {
-            //    error(node, Diagnostics.Expression_resolves_to_variable_declaration_i_that_compiler_uses_to_initialize_rest_parameter);
-            //    return;
-            //}
-
-            // short gist of the check:
-            // - otherwise
-            // - walk to the top of the tree starting from the 'node'
-            // - at every step check if 'current' node contains any declaration of original node
-            //   yes - return
-            //   no - check if current declaration is function with rest parameters
-            //        yes - report error since '_i' from this function will shadow '_i' defined in the outer scope
-            //        no - go up to the next level
-            var current = node;
-            while (current) {
-                var definedOnCurrentLevel = forEach(symbol.declarations, d => getContainingFunction(d) === current);
-                if (definedOnCurrentLevel) {
-                    return;
-                }
-                switch (current.kind) {
-                    // all kinds that might have rest parameters
-                    case SyntaxKind.FunctionDeclaration:
-                    case SyntaxKind.FunctionExpression:
-                    case SyntaxKind.Method:
-                    case SyntaxKind.ArrowFunction:
-                    case SyntaxKind.Constructor:
-                        if (hasRestParameters(<FunctionLikeDeclaration>current)) {
-                            error(node, Diagnostics.Expression_resolves_to_variable_declaration_i_that_compiler_uses_to_initialize_rest_parameter);
-                            return;
-                        }
-                        break;
-                }
-                current = current.parent;
-            }
         }
 
         // TODO(jfreeman): Decide what to do for computed properties
