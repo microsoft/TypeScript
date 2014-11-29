@@ -266,6 +266,20 @@ module TypeScript.PrettyPrinter {
             this.appendObjectType(node.body, /*appendNewLines:*/ true);
         }
 
+        public visitTypeAlias(node: TypeAliasSyntax): void {
+            this.appendSpaceList(node.modifiers);
+            this.ensureSpace();
+            this.appendToken(node.typeKeyword);
+            this.ensureSpace();
+            this.appendToken(node.identifier);
+            this.ensureSpace();
+            this.appendToken(node.equalsToken);
+            this.ensureSpace();
+            visitNodeOrToken(this, node.type);
+            this.appendToken(node.semicolonToken);
+
+        }
+
         private appendObjectType(node: ObjectTypeSyntax, appendNewLines: boolean): void {
             this.appendToken(node.openBraceToken);
 
@@ -350,7 +364,7 @@ module TypeScript.PrettyPrinter {
         }
 
         public visitVariableDeclaration(node: VariableDeclarationSyntax): void {
-            this.appendToken(node.varKeyword);
+            this.appendToken(node.varConstOrLetKeyword);
             this.ensureSpace();
             this.appendSeparatorSpaceList(node.variableDeclarators);
         }
@@ -586,16 +600,19 @@ module TypeScript.PrettyPrinter {
         }
 
         public visitIndexSignature(node: IndexSignatureSyntax): void {
+            this.appendSpaceList(node.modifiers);
             this.appendToken(node.openBracketToken);
             this.appendSeparatorSpaceList(node.parameters)
             this.appendToken(node.closeBracketToken);
             this.appendNode(node.typeAnnotation);
+            this.appendToken(node.semicolonOrCommaToken);
         }
 
         public visitPropertySignature(node: PropertySignatureSyntax): void {
             visitNodeOrToken(this, node.propertyName);
             this.appendToken(node.questionToken);
             this.appendNode(node.typeAnnotation);
+            this.appendToken(node.semicolonOrCommaToken);
         }
 
         public visitParameterList(node: ParameterListSyntax): void {
@@ -608,6 +625,7 @@ module TypeScript.PrettyPrinter {
             this.appendNode(node.typeParameterList);
             visitNodeOrToken(this, node.parameterList);
             this.appendNode(node.typeAnnotation);
+            this.appendToken(node.semicolonOrCommaToken);
         }
 
         public visitTypeParameterList(node: TypeParameterListSyntax): void {
@@ -673,13 +691,6 @@ module TypeScript.PrettyPrinter {
             this.appendToken(node.constructorKeyword);
             visitNodeOrToken(this, node.callSignature);
             this.appendBody(node.body);
-        }
-
-        public visitIndexMemberDeclaration(node: IndexMemberDeclarationSyntax): void {
-            this.appendSpaceList(node.modifiers);
-            this.ensureSpace();
-            visitNodeOrToken(this, node.indexSignature);
-            this.appendToken(node.semicolonToken);
         }
 
         public visitMemberFunctionDeclaration(node: MemberFunctionDeclarationSyntax): void {
@@ -931,18 +942,11 @@ module TypeScript.PrettyPrinter {
             this.appendToken(node.closeBracketToken);
         }
 
-        public visitSimplePropertyAssignment(node: SimplePropertyAssignmentSyntax): void {
+        public visitPropertyAssignment(node: PropertyAssignmentSyntax): void {
             visitNodeOrToken(this, node.propertyName);
             this.appendToken(node.colonToken);
             this.ensureSpace();
             visitNodeOrToken(this, node.expression);
-        }
-
-        public visitFunctionPropertyAssignment(node: FunctionPropertyAssignmentSyntax): void {
-            visitNodeOrToken(this, node.propertyName);
-            visitNodeOrToken(this, node.callSignature);
-            this.ensureSpace();
-            visitNodeOrToken(this, node.body);
         }
 
         public visitFunctionExpression(node: FunctionExpressionSyntax): void {
@@ -1026,6 +1030,14 @@ module TypeScript.PrettyPrinter {
 
         public visitYieldExpression(node: YieldExpressionSyntax): void {
             this.appendToken(node.yieldKeyword);
+            this.ensureSpace();
+            this.appendToken(node.asterixToken);
+            this.ensureSpace();
+            visitNodeOrToken(this, node.expression);
+        }
+
+        public visitAwaitExpression(node: AwaitExpressionSyntax): void {
+            this.appendToken(node.awaitKeyword);
             this.ensureSpace();
             visitNodeOrToken(this, node.expression);
         }

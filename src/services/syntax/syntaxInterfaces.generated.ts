@@ -17,10 +17,10 @@ module TypeScript {
 
     export interface ObjectTypeSyntax extends ISyntaxNode, ITypeSyntax {
         openBraceToken: ISyntaxToken;
-        typeMembers: ISeparatedSyntaxList<ITypeMemberSyntax>;
+        typeMembers: ITypeMemberSyntax[];
         closeBraceToken: ISyntaxToken;
     }
-    export interface ObjectTypeConstructor { new (data: number, openBraceToken: ISyntaxToken, typeMembers: ISeparatedSyntaxList<ITypeMemberSyntax>, closeBraceToken: ISyntaxToken): ObjectTypeSyntax }
+    export interface ObjectTypeConstructor { new (data: number, openBraceToken: ISyntaxToken, typeMembers: ITypeMemberSyntax[], closeBraceToken: ISyntaxToken): ObjectTypeSyntax }
 
     export interface FunctionTypeSyntax extends ISyntaxNode, ITypeSyntax {
         typeParameterList: TypeParameterListSyntax;
@@ -142,14 +142,15 @@ module TypeScript {
     export interface ImportDeclarationConstructor { new (data: number, modifiers: ISyntaxToken[], importKeyword: ISyntaxToken, identifier: ISyntaxToken, equalsToken: ISyntaxToken, moduleReference: IModuleReferenceSyntax, semicolonToken: ISyntaxToken): ImportDeclarationSyntax }
 
     export interface ExportAssignmentSyntax extends ISyntaxNode, IModuleElementSyntax {
+        modifiers: ISyntaxToken[];
         exportKeyword: ISyntaxToken;
         equalsToken: ISyntaxToken;
         identifier: ISyntaxToken;
         semicolonToken: ISyntaxToken;
     }
-    export interface ExportAssignmentConstructor { new (data: number, exportKeyword: ISyntaxToken, equalsToken: ISyntaxToken, identifier: ISyntaxToken, semicolonToken: ISyntaxToken): ExportAssignmentSyntax }
+    export interface ExportAssignmentConstructor { new (data: number, modifiers: ISyntaxToken[], exportKeyword: ISyntaxToken, equalsToken: ISyntaxToken, identifier: ISyntaxToken, semicolonToken: ISyntaxToken): ExportAssignmentSyntax }
 
-    export interface MemberFunctionDeclarationSyntax extends ISyntaxNode, IMemberDeclarationSyntax {
+    export interface MemberFunctionDeclarationSyntax extends ISyntaxNode, IMemberDeclarationSyntax, IPropertyAssignmentSyntax {
         modifiers: ISyntaxToken[];
         asterixToken: ISyntaxToken;
         propertyName: IPropertyNameSyntax;
@@ -173,13 +174,6 @@ module TypeScript {
     }
     export interface ConstructorDeclarationConstructor { new (data: number, modifiers: ISyntaxToken[], constructorKeyword: ISyntaxToken, callSignature: CallSignatureSyntax, body: BlockSyntax | ExpressionBody | ISyntaxToken): ConstructorDeclarationSyntax }
 
-    export interface IndexMemberDeclarationSyntax extends ISyntaxNode, IClassElementSyntax {
-        modifiers: ISyntaxToken[];
-        indexSignature: IndexSignatureSyntax;
-        semicolonToken: ISyntaxToken;
-    }
-    export interface IndexMemberDeclarationConstructor { new (data: number, modifiers: ISyntaxToken[], indexSignature: IndexSignatureSyntax, semicolonToken: ISyntaxToken): IndexMemberDeclarationSyntax }
-
     export interface GetAccessorSyntax extends ISyntaxNode, IAccessorSyntax {
         modifiers: ISyntaxToken[];
         getKeyword: ISyntaxToken;
@@ -202,15 +196,17 @@ module TypeScript {
         propertyName: IPropertyNameSyntax;
         questionToken: ISyntaxToken;
         typeAnnotation: TypeAnnotationSyntax;
+        semicolonOrCommaToken: ISyntaxToken;
     }
-    export interface PropertySignatureConstructor { new (data: number, propertyName: IPropertyNameSyntax, questionToken: ISyntaxToken, typeAnnotation: TypeAnnotationSyntax): PropertySignatureSyntax }
+    export interface PropertySignatureConstructor { new (data: number, propertyName: IPropertyNameSyntax, questionToken: ISyntaxToken, typeAnnotation: TypeAnnotationSyntax, semicolonOrCommaToken: ISyntaxToken): PropertySignatureSyntax }
 
     export interface CallSignatureSyntax extends ISyntaxNode, ITypeMemberSyntax {
         typeParameterList: TypeParameterListSyntax;
         parameterList: ParameterListSyntax;
         typeAnnotation: TypeAnnotationSyntax;
+        semicolonOrCommaToken: ISyntaxToken;
     }
-    export interface CallSignatureConstructor { new (data: number, typeParameterList: TypeParameterListSyntax, parameterList: ParameterListSyntax, typeAnnotation: TypeAnnotationSyntax): CallSignatureSyntax }
+    export interface CallSignatureConstructor { new (data: number, typeParameterList: TypeParameterListSyntax, parameterList: ParameterListSyntax, typeAnnotation: TypeAnnotationSyntax, semicolonOrCommaToken: ISyntaxToken): CallSignatureSyntax }
 
     export interface ConstructSignatureSyntax extends ISyntaxNode, ITypeMemberSyntax {
         newKeyword: ISyntaxToken;
@@ -218,13 +214,15 @@ module TypeScript {
     }
     export interface ConstructSignatureConstructor { new (data: number, newKeyword: ISyntaxToken, callSignature: CallSignatureSyntax): ConstructSignatureSyntax }
 
-    export interface IndexSignatureSyntax extends ISyntaxNode, ITypeMemberSyntax {
+    export interface IndexSignatureSyntax extends ISyntaxNode, ITypeMemberSyntax, IClassElementSyntax {
+        modifiers: ISyntaxToken[];
         openBracketToken: ISyntaxToken;
         parameters: ISeparatedSyntaxList<ParameterSyntax>;
         closeBracketToken: ISyntaxToken;
         typeAnnotation: TypeAnnotationSyntax;
+        semicolonOrCommaToken: ISyntaxToken;
     }
-    export interface IndexSignatureConstructor { new (data: number, openBracketToken: ISyntaxToken, parameters: ISeparatedSyntaxList<ParameterSyntax>, closeBracketToken: ISyntaxToken, typeAnnotation: TypeAnnotationSyntax): IndexSignatureSyntax }
+    export interface IndexSignatureConstructor { new (data: number, modifiers: ISyntaxToken[], openBracketToken: ISyntaxToken, parameters: ISeparatedSyntaxList<ParameterSyntax>, closeBracketToken: ISyntaxToken, typeAnnotation: TypeAnnotationSyntax, semicolonOrCommaToken: ISyntaxToken): IndexSignatureSyntax }
 
     export interface MethodSignatureSyntax extends ISyntaxNode, ITypeMemberSyntax {
         propertyName: IPropertyNameSyntax;
@@ -470,18 +468,20 @@ module TypeScript {
     export interface ParenthesizedExpressionConstructor { new (data: number, openParenToken: ISyntaxToken, expression: IExpressionSyntax, closeParenToken: ISyntaxToken): ParenthesizedExpressionSyntax }
 
     export interface ParenthesizedArrowFunctionExpressionSyntax extends ISyntaxNode, IUnaryExpressionSyntax {
+        asyncKeyword: ISyntaxToken;
         callSignature: CallSignatureSyntax;
         equalsGreaterThanToken: ISyntaxToken;
         body: BlockSyntax | IExpressionSyntax;
     }
-    export interface ParenthesizedArrowFunctionExpressionConstructor { new (data: number, callSignature: CallSignatureSyntax, equalsGreaterThanToken: ISyntaxToken, body: BlockSyntax | IExpressionSyntax): ParenthesizedArrowFunctionExpressionSyntax }
+    export interface ParenthesizedArrowFunctionExpressionConstructor { new (data: number, asyncKeyword: ISyntaxToken, callSignature: CallSignatureSyntax, equalsGreaterThanToken: ISyntaxToken, body: BlockSyntax | IExpressionSyntax): ParenthesizedArrowFunctionExpressionSyntax }
 
     export interface SimpleArrowFunctionExpressionSyntax extends ISyntaxNode, IUnaryExpressionSyntax {
+        asyncKeyword: ISyntaxToken;
         parameter: ParameterSyntax;
         equalsGreaterThanToken: ISyntaxToken;
         body: BlockSyntax | IExpressionSyntax;
     }
-    export interface SimpleArrowFunctionExpressionConstructor { new (data: number, parameter: ParameterSyntax, equalsGreaterThanToken: ISyntaxToken, body: BlockSyntax | IExpressionSyntax): SimpleArrowFunctionExpressionSyntax }
+    export interface SimpleArrowFunctionExpressionConstructor { new (data: number, asyncKeyword: ISyntaxToken, parameter: ParameterSyntax, equalsGreaterThanToken: ISyntaxToken, body: BlockSyntax | IExpressionSyntax): SimpleArrowFunctionExpressionSyntax }
 
     export interface CastExpressionSyntax extends ISyntaxNode, IUnaryExpressionSyntax {
         lessThanToken: ISyntaxToken;
@@ -500,13 +500,14 @@ module TypeScript {
     export interface ElementAccessExpressionConstructor { new (data: number, expression: ILeftHandSideExpressionSyntax, openBracketToken: ISyntaxToken, argumentExpression: IExpressionSyntax, closeBracketToken: ISyntaxToken): ElementAccessExpressionSyntax }
 
     export interface FunctionExpressionSyntax extends ISyntaxNode, IPrimaryExpressionSyntax {
+        asyncKeyword: ISyntaxToken;
         functionKeyword: ISyntaxToken;
         asterixToken: ISyntaxToken;
         identifier: ISyntaxToken;
         callSignature: CallSignatureSyntax;
         body: BlockSyntax | ExpressionBody | ISyntaxToken;
     }
-    export interface FunctionExpressionConstructor { new (data: number, functionKeyword: ISyntaxToken, asterixToken: ISyntaxToken, identifier: ISyntaxToken, callSignature: CallSignatureSyntax, body: BlockSyntax | ExpressionBody | ISyntaxToken): FunctionExpressionSyntax }
+    export interface FunctionExpressionConstructor { new (data: number, asyncKeyword: ISyntaxToken, functionKeyword: ISyntaxToken, asterixToken: ISyntaxToken, identifier: ISyntaxToken, callSignature: CallSignatureSyntax, body: BlockSyntax | ExpressionBody | ISyntaxToken): FunctionExpressionSyntax }
 
     export interface OmittedExpressionSyntax extends ISyntaxNode, IExpressionSyntax {
     }
@@ -531,11 +532,17 @@ module TypeScript {
     }
     export interface YieldExpressionConstructor { new (data: number, yieldKeyword: ISyntaxToken, asterixToken: ISyntaxToken, expression: IExpressionSyntax): YieldExpressionSyntax }
 
+    export interface AwaitExpressionSyntax extends ISyntaxNode, IUnaryExpressionSyntax {
+        awaitKeyword: ISyntaxToken;
+        expression: IExpressionSyntax;
+    }
+    export interface AwaitExpressionConstructor { new (data: number, awaitKeyword: ISyntaxToken, expression: IExpressionSyntax): AwaitExpressionSyntax }
+
     export interface VariableDeclarationSyntax extends ISyntaxNode {
-        varKeyword: ISyntaxToken;
+        varConstOrLetKeyword: ISyntaxToken;
         variableDeclarators: ISeparatedSyntaxList<VariableDeclaratorSyntax>;
     }
-    export interface VariableDeclarationConstructor { new (data: number, varKeyword: ISyntaxToken, variableDeclarators: ISeparatedSyntaxList<VariableDeclaratorSyntax>): VariableDeclarationSyntax }
+    export interface VariableDeclarationConstructor { new (data: number, varConstOrLetKeyword: ISyntaxToken, variableDeclarators: ISeparatedSyntaxList<VariableDeclaratorSyntax>): VariableDeclarationSyntax }
 
     export interface VariableDeclaratorSyntax extends ISyntaxNode {
         propertyName: IPropertyNameSyntax;
@@ -640,21 +647,6 @@ module TypeScript {
     }
     export interface ConstraintConstructor { new (data: number, extendsKeyword: ISyntaxToken, typeOrExpression: ISyntaxNodeOrToken): ConstraintSyntax }
 
-    export interface SimplePropertyAssignmentSyntax extends ISyntaxNode, IPropertyAssignmentSyntax {
-        propertyName: IPropertyNameSyntax;
-        colonToken: ISyntaxToken;
-        expression: IExpressionSyntax;
-    }
-    export interface SimplePropertyAssignmentConstructor { new (data: number, propertyName: IPropertyNameSyntax, colonToken: ISyntaxToken, expression: IExpressionSyntax): SimplePropertyAssignmentSyntax }
-
-    export interface FunctionPropertyAssignmentSyntax extends ISyntaxNode, IPropertyAssignmentSyntax {
-        asterixToken: ISyntaxToken;
-        propertyName: IPropertyNameSyntax;
-        callSignature: CallSignatureSyntax;
-        body: BlockSyntax | ExpressionBody | ISyntaxToken;
-    }
-    export interface FunctionPropertyAssignmentConstructor { new (data: number, asterixToken: ISyntaxToken, propertyName: IPropertyNameSyntax, callSignature: CallSignatureSyntax, body: BlockSyntax | ExpressionBody | ISyntaxToken): FunctionPropertyAssignmentSyntax }
-
     export interface ParameterSyntax extends ISyntaxNode {
         dotDotDotToken: ISyntaxToken;
         modifiers: ISyntaxToken[];
@@ -689,6 +681,23 @@ module TypeScript {
         closeBracketToken: ISyntaxToken;
     }
     export interface ComputedPropertyNameConstructor { new (data: number, openBracketToken: ISyntaxToken, expression: IExpressionSyntax, closeBracketToken: ISyntaxToken): ComputedPropertyNameSyntax }
+
+    export interface PropertyAssignmentSyntax extends ISyntaxNode, IPropertyAssignmentSyntax {
+        propertyName: IPropertyNameSyntax;
+        colonToken: ISyntaxToken;
+        expression: IExpressionSyntax;
+    }
+    export interface PropertyAssignmentConstructor { new (data: number, propertyName: IPropertyNameSyntax, colonToken: ISyntaxToken, expression: IExpressionSyntax): PropertyAssignmentSyntax }
+
+    export interface TypeAliasSyntax extends ISyntaxNode, IModuleElementSyntax {
+        modifiers: ISyntaxToken[];
+        typeKeyword: ISyntaxToken;
+        identifier: ISyntaxToken;
+        equalsToken: ISyntaxToken;
+        type: ITypeSyntax;
+        semicolonToken: ISyntaxToken;
+    }
+    export interface TypeAliasConstructor { new (data: number, modifiers: ISyntaxToken[], typeKeyword: ISyntaxToken, identifier: ISyntaxToken, equalsToken: ISyntaxToken, type: ITypeSyntax, semicolonToken: ISyntaxToken): TypeAliasSyntax }
 
     export interface ExternalModuleReferenceSyntax extends ISyntaxNode, IModuleReferenceSyntax {
         requireKeyword: ISyntaxToken;

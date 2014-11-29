@@ -4,7 +4,7 @@
 ///<reference path='syntaxFacts.ts' />
 ///<reference path='syntaxKind.ts' />
 // ///<reference path='..\..\..\tests\fidelity\es5compat.ts' />
-
+ 
 var forPrettyPrinter = false;
 
 interface ITypeDefinition {
@@ -90,6 +90,7 @@ var definitions:ITypeDefinition[] = [
         baseType: 'ISyntaxNode',
         interfaces: ['IModuleElementSyntax'],
         children: [
+            <any>{ name: 'modifiers', isList: true, elementType: 'ISyntaxToken' },
             <any>{ name: 'exportKeyword', isToken: true, excludeFromAST: true },
             <any>{ name: 'equalsToken', isToken: true, excludeFromAST: true },
             <any>{ name: 'identifier', isToken: true },
@@ -151,6 +152,20 @@ var definitions:ITypeDefinition[] = [
         isTypeScriptSpecific: true
     },
     <any>{
+        name: 'TypeAliasSyntax',
+        baseType: 'ISyntaxNode',
+        interfaces: ['IModuleElementSyntax'],
+        children: [
+            <any>{ name: 'modifiers', isList: true, elementType: 'ISyntaxToken' },
+            <any>{ name: 'typeKeyword', isToken: true },
+            <any>{ name: 'identifier', isToken: true },
+            <any>{ name: 'equalsToken', isToken: true },
+            <any>{ name: 'type', type: 'ITypeSyntax' },
+            <any>{ name: 'semicolonToken', isToken: true, isOptional: true }
+        ],
+        isTypeScriptSpecific: true
+    },
+    <any>{
         name: 'FunctionDeclarationSyntax',
         baseType: 'ISyntaxNode',
         interfaces: ['IStatementSyntax'],
@@ -185,7 +200,7 @@ var definitions:ITypeDefinition[] = [
         name: 'VariableDeclarationSyntax',
         baseType: 'ISyntaxNode',
         children: [
-            <any>{ name: 'varKeyword', isToken: true },
+            <any>{ name: 'varConstOrLetKeyword', isToken: true },
             <any>{ name: 'variableDeclarators', isSeparatedList: true, requiresAtLeastOneItem: true, elementType: 'VariableDeclaratorSyntax' }
         ]
     },
@@ -246,6 +261,7 @@ var definitions:ITypeDefinition[] = [
         baseType: 'ISyntaxNode',
         interfaces: ['IUnaryExpressionSyntax'],
         children: [
+            <any>{ name: 'asyncKeyword', isToken: true, isOptional: true },
             <any>{ name: 'parameter', type: 'ParameterSyntax' },
             <any>{ name: 'equalsGreaterThanToken', isToken: true, excludeFromAST: true },
             <any>{ name: 'body', type: 'BlockSyntax | IExpressionSyntax' }
@@ -257,6 +273,7 @@ var definitions:ITypeDefinition[] = [
         baseType: 'ISyntaxNode',
         interfaces: ['IUnaryExpressionSyntax'],
         children: [
+            <any>{ name: 'asyncKeyword', isToken: true, isOptional: true },
             <any>{ name: 'callSignature', type: 'CallSignatureSyntax' },
             <any>{ name: 'equalsGreaterThanToken', isToken: true, excludeFromAST: true },
             <any>{ name: 'body', type: 'BlockSyntax | IExpressionSyntax' }
@@ -317,7 +334,7 @@ var definitions:ITypeDefinition[] = [
         interfaces: ['ITypeSyntax'],
         children: [
             <any>{ name: 'openBraceToken', isToken: true, excludeFromAST: true },
-            <any>{ name: 'typeMembers', isSeparatedList: true, elementType: 'ITypeMemberSyntax' },
+            <any>{ name: 'typeMembers', isList: true, elementType: 'ITypeMemberSyntax' },
             <any>{ name: 'closeBraceToken', isToken: true, excludeFromAST: true }
         ],
         isTypeScriptSpecific: true
@@ -538,12 +555,14 @@ var definitions:ITypeDefinition[] = [
     <any>{
         name: 'IndexSignatureSyntax',
         baseType: 'ISyntaxNode',
-        interfaces: ['ITypeMemberSyntax'],
+        interfaces: ['ITypeMemberSyntax', 'IClassElementSyntax'],
         children: [
+            <any>{ name: 'modifiers', isList: true, elementType: 'ISyntaxToken' },
             <any>{ name: 'openBracketToken', isToken: true },
             <any>{ name: 'parameters', isSeparatedList: true, elementType: 'ParameterSyntax' },
             <any>{ name: 'closeBracketToken', isToken: true },
-            <any>{ name: 'typeAnnotation', type: 'TypeAnnotationSyntax', isOptional: true }
+            <any>{ name: 'typeAnnotation', type: 'TypeAnnotationSyntax', isOptional: true },
+            <any>{ name: 'semicolonOrCommaToken', isToken: true, isOptional: true }
         ],
         isTypeScriptSpecific: true
     },
@@ -554,7 +573,8 @@ var definitions:ITypeDefinition[] = [
         children: [
             <any>{ name: 'propertyName', type: 'IPropertyNameSyntax' },
             <any>{ name: 'questionToken', isToken: true, isOptional: true },
-            <any>{ name: 'typeAnnotation', type: 'TypeAnnotationSyntax', isOptional: true }
+            <any>{ name: 'typeAnnotation', type: 'TypeAnnotationSyntax', isOptional: true },
+            <any>{ name: 'semicolonOrCommaToken', isToken: true, isOptional: true }
         ],
         isTypeScriptSpecific: true
     },
@@ -565,7 +585,8 @@ var definitions:ITypeDefinition[] = [
         children: [
             <any>{ name: 'typeParameterList', type: 'TypeParameterListSyntax', isOptional: true, isTypeScriptSpecific: true },
             <any>{ name: 'parameterList', type: 'ParameterListSyntax' },
-            <any>{ name: 'typeAnnotation', type: 'TypeAnnotationSyntax', isOptional: true, isTypeScriptSpecific: true }
+            <any>{ name: 'typeAnnotation', type: 'TypeAnnotationSyntax', isOptional: true, isTypeScriptSpecific: true },
+            <any>{ name: 'semicolonOrCommaToken', isToken: true, isOptional: true }
         ]
     },
     <any>{
@@ -651,7 +672,7 @@ var definitions:ITypeDefinition[] = [
     <any>{
         name: 'MemberFunctionDeclarationSyntax',
         baseType: 'ISyntaxNode',
-        interfaces: ['IMemberDeclarationSyntax'],
+        interfaces: ['IMemberDeclarationSyntax', 'IPropertyAssignmentSyntax'],
         children: [
             <any>{ name: 'modifiers', isList: true, elementType: 'ISyntaxToken' },
             <any>{ name: 'asterixToken', isToken: true, isOptional: true },
@@ -693,17 +714,6 @@ var definitions:ITypeDefinition[] = [
         children: [
             <any>{ name: 'modifiers', isList: true, elementType: 'ISyntaxToken' },
             <any>{ name: 'variableDeclarator', type: 'VariableDeclaratorSyntax' },
-            <any>{ name: 'semicolonToken', isToken: true, isOptional: true, excludeFromAST: true }
-        ],
-        isTypeScriptSpecific: true
-    },
-    <any>{
-        name: 'IndexMemberDeclarationSyntax',
-        baseType: 'ISyntaxNode',
-        interfaces: ['IClassElementSyntax'],
-        children: [
-            <any>{ name: 'modifiers', isList: true, elementType: 'ISyntaxToken' },
-            <any>{ name: 'indexSignature', type: 'IndexSignatureSyntax' },
             <any>{ name: 'semicolonToken', isToken: true, isOptional: true, excludeFromAST: true }
         ],
         isTypeScriptSpecific: true
@@ -902,7 +912,7 @@ var definitions:ITypeDefinition[] = [
         ]
     },
     <any>{
-        name: 'SimplePropertyAssignmentSyntax',
+        name: 'PropertyAssignmentSyntax',
         baseType: 'ISyntaxNode',
         interfaces: ['IPropertyAssignmentSyntax'],
         children: [
@@ -911,22 +921,12 @@ var definitions:ITypeDefinition[] = [
             <any>{ name: 'expression', type: 'IExpressionSyntax' }
         ]
     },
-    <any> {
-        name: 'FunctionPropertyAssignmentSyntax',
-        baseType: 'ISyntaxNode',
-        interfaces: ['IPropertyAssignmentSyntax'],
-        children: [
-            <any>{ name: 'asterixToken', isToken: true, isOptional: true },
-            <any>{ name: 'propertyName', type: 'IPropertyNameSyntax' },
-            <any>{ name: 'callSignature', type: 'CallSignatureSyntax' },
-            <any>{ name: 'body', type: 'BlockSyntax | ExpressionBody | ISyntaxToken', isOptional: true  }
-        ]
-    },
     <any>{
         name: 'FunctionExpressionSyntax',
         baseType: 'ISyntaxNode',
         interfaces: ['IPrimaryExpressionSyntax'],
         children: [
+            <any>{ name: 'asyncKeyword', isToken: true, isOptional: true },
             <any>{ name: 'functionKeyword', isToken: true, excludeFromAST: true },
             <any>{ name: 'asterixToken', isToken: true, isOptional: true },
             <any>{ name: 'identifier', isToken: true, isOptional: true },
@@ -1024,6 +1024,14 @@ var definitions:ITypeDefinition[] = [
             <any>{ name: 'expression', type: 'IExpressionSyntax', isOptional: true }]
     },
     <any>{
+        name: 'AwaitExpressionSyntax',
+        baseType: 'ISyntaxNode',
+        interfaces: ['IUnaryExpressionSyntax'],
+        children: [
+            <any>{ name: 'awaitKeyword', isToken: true },
+            <any>{ name: 'expression', type: 'IExpressionSyntax', isOptional: true }]
+    },
+    <any>{
         name: 'DebuggerStatementSyntax',
         baseType: 'ISyntaxNode',
         interfaces: ['IStatementSyntax'],
@@ -1032,9 +1040,14 @@ var definitions:ITypeDefinition[] = [
             <any>{ name: 'semicolonToken', isToken: true, isOptional: true, excludeFromAST: true }]
     }];
 
+function getSyntaxKindEnum() {
+    var name = "SyntaxKind";
+    return (<any>TypeScript)[name];
+}
+
 function firstKind(definition: ITypeDefinition): TypeScript.SyntaxKind {
     var kindName = getNameWithoutSuffix(definition);
-    return (<any>TypeScript.SyntaxKind)[kindName];
+    return getSyntaxKindEnum()[kindName];
 }
 
 definitions.sort((d1, d2) => firstKind(d1) - firstKind(d2));
@@ -1327,7 +1340,7 @@ function generateKeywordCondition(keywords: { text: string; kind: TypeScript.Syn
         var keyword = keywords[0];
         
         if (currentCharacter === length) {
-            return " return SyntaxKind." + firstEnumName(TypeScript.SyntaxKind, keyword.kind) + ";\r\n";
+            return " return SyntaxKind." + firstEnumName(getSyntaxKindEnum(), keyword.kind) + ";\r\n";
         }
 
         var keywordText = keywords[0].text;
@@ -1342,7 +1355,7 @@ function generateKeywordCondition(keywords: { text: string; kind: TypeScript.Syn
             result += "str.charCodeAt(" + index + ") === CharacterCodes." + keywordText.substr(i, 1);
         }
 
-        result += ") ? SyntaxKind." + firstEnumName(TypeScript.SyntaxKind, keyword.kind) + " : SyntaxKind.IdentifierName;\r\n";
+        result += ") ? SyntaxKind." + firstEnumName(getSyntaxKindEnum(), keyword.kind) + " : SyntaxKind.IdentifierName;\r\n";
     }
     else {
         result += " // " + TypeScript.ArrayUtilities.select(keywords, k => k.text).join(", ") + "\r\n"
@@ -1392,8 +1405,29 @@ function max<T>(array: T[], func: (v: T) => number): number {
 }
 
 function generateUtilities(): string {
-    var result = "";
-    result += "        var fixedWidthArray = [";
+    var result = ""; //"module TypeScript.Scanner {";
+    //result += "        function fixedWidthTokenLength(kind: SyntaxKind) {\r\n";
+    //result += "            return fixedWidthArray[kind];\r\n";
+
+    //result += "            switch (kind) {\r\n";
+
+    //for (var k = TypeScript.SyntaxKind.FirstFixedWidth; k <= TypeScript.SyntaxKind.LastFixedWidth; k++) {
+    //    result += "                case SyntaxKind." + syntaxKindName(k) + ": return " + TypeScript.SyntaxFacts.getText(k).length + ";\r\n";
+    //}
+    //result += "                default: throw new Error();\r\n";
+    //result += "            }\r\n";
+    // result += "        }\r\n";
+
+    return result;
+}
+
+function generateScannerUtilities(): string {
+    var result = "///<reference path='references.ts' />\r\n" +
+        "\r\n" +
+        "module TypeScript {\r\n" +
+        "    export module ScannerUtilities {\r\n";
+
+    result += "        export var fixedWidthArray = [";
     for (var i = 0; i <= TypeScript.SyntaxKind.LastFixedWidth; i++) {
         if (i) {
             result += ", ";
@@ -1408,26 +1442,6 @@ function generateUtilities(): string {
     }
     result += "];\r\n";
 
-    result += "        function fixedWidthTokenLength(kind: SyntaxKind) {\r\n";
-    result += "            return fixedWidthArray[kind];\r\n";
-
-    //result += "            switch (kind) {\r\n";
-
-    //for (var k = TypeScript.SyntaxKind.FirstFixedWidth; k <= TypeScript.SyntaxKind.LastFixedWidth; k++) {
-    //    result += "                case SyntaxKind." + syntaxKindName(k) + ": return " + TypeScript.SyntaxFacts.getText(k).length + ";\r\n";
-    //}
-    //result += "                default: throw new Error();\r\n";
-    //result += "            }\r\n";
-    result += "        }\r\n";
-
-    return result;
-}
-
-function generateScannerUtilities(): string {
-    var result = "///<reference path='references.ts' />\r\n" +
-        "\r\n" +
-        "module TypeScript {\r\n" +
-        "    export module ScannerUtilities {\r\n";
 
     var i: number;
     var keywords: { text: string; kind: TypeScript.SyntaxKind; }[] = [];
@@ -1464,8 +1478,8 @@ function generateScannerUtilities(): string {
 }
 
 function syntaxKindName(kind: TypeScript.SyntaxKind): string {
-    for (var name in TypeScript.SyntaxKind) {
-        if (<any>TypeScript.SyntaxKind[name] === kind) {
+    for (var name in getSyntaxKindEnum()) {
+        if (getSyntaxKindEnum()[name] === kind) {
             return name;
         }
     }

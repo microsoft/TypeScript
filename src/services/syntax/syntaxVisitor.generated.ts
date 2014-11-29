@@ -25,7 +25,6 @@ module TypeScript {
             case SyntaxKind.MemberFunctionDeclaration: return visitor.visitMemberFunctionDeclaration(<MemberFunctionDeclarationSyntax>element);
             case SyntaxKind.MemberVariableDeclaration: return visitor.visitMemberVariableDeclaration(<MemberVariableDeclarationSyntax>element);
             case SyntaxKind.ConstructorDeclaration: return visitor.visitConstructorDeclaration(<ConstructorDeclarationSyntax>element);
-            case SyntaxKind.IndexMemberDeclaration: return visitor.visitIndexMemberDeclaration(<IndexMemberDeclarationSyntax>element);
             case SyntaxKind.GetAccessor: return visitor.visitGetAccessor(<GetAccessorSyntax>element);
             case SyntaxKind.SetAccessor: return visitor.visitSetAccessor(<SetAccessorSyntax>element);
             case SyntaxKind.PropertySignature: return visitor.visitPropertySignature(<PropertySignatureSyntax>element);
@@ -73,6 +72,7 @@ module TypeScript {
             case SyntaxKind.TemplateExpression: return visitor.visitTemplateExpression(<TemplateExpressionSyntax>element);
             case SyntaxKind.TemplateAccessExpression: return visitor.visitTemplateAccessExpression(<TemplateAccessExpressionSyntax>element);
             case SyntaxKind.YieldExpression: return visitor.visitYieldExpression(<YieldExpressionSyntax>element);
+            case SyntaxKind.AwaitExpression: return visitor.visitAwaitExpression(<AwaitExpressionSyntax>element);
             case SyntaxKind.VariableDeclaration: return visitor.visitVariableDeclaration(<VariableDeclarationSyntax>element);
             case SyntaxKind.VariableDeclarator: return visitor.visitVariableDeclarator(<VariableDeclaratorSyntax>element);
             case SyntaxKind.ArgumentList: return visitor.visitArgumentList(<ArgumentListSyntax>element);
@@ -89,13 +89,13 @@ module TypeScript {
             case SyntaxKind.TemplateClause: return visitor.visitTemplateClause(<TemplateClauseSyntax>element);
             case SyntaxKind.TypeParameter: return visitor.visitTypeParameter(<TypeParameterSyntax>element);
             case SyntaxKind.Constraint: return visitor.visitConstraint(<ConstraintSyntax>element);
-            case SyntaxKind.SimplePropertyAssignment: return visitor.visitSimplePropertyAssignment(<SimplePropertyAssignmentSyntax>element);
-            case SyntaxKind.FunctionPropertyAssignment: return visitor.visitFunctionPropertyAssignment(<FunctionPropertyAssignmentSyntax>element);
             case SyntaxKind.Parameter: return visitor.visitParameter(<ParameterSyntax>element);
             case SyntaxKind.EnumElement: return visitor.visitEnumElement(<EnumElementSyntax>element);
             case SyntaxKind.TypeAnnotation: return visitor.visitTypeAnnotation(<TypeAnnotationSyntax>element);
             case SyntaxKind.ExpressionBody: return visitor.visitExpressionBody(<ExpressionBody>element);
             case SyntaxKind.ComputedPropertyName: return visitor.visitComputedPropertyName(<ComputedPropertyNameSyntax>element);
+            case SyntaxKind.PropertyAssignment: return visitor.visitPropertyAssignment(<PropertyAssignmentSyntax>element);
+            case SyntaxKind.TypeAlias: return visitor.visitTypeAlias(<TypeAliasSyntax>element);
             case SyntaxKind.ExternalModuleReference: return visitor.visitExternalModuleReference(<ExternalModuleReferenceSyntax>element);
             case SyntaxKind.ModuleNameModuleReference: return visitor.visitModuleNameModuleReference(<ModuleNameModuleReferenceSyntax>element);
             default: return visitor.visitToken(<ISyntaxToken>element);
@@ -125,7 +125,6 @@ module TypeScript {
         visitMemberFunctionDeclaration(node: MemberFunctionDeclarationSyntax): any;
         visitMemberVariableDeclaration(node: MemberVariableDeclarationSyntax): any;
         visitConstructorDeclaration(node: ConstructorDeclarationSyntax): any;
-        visitIndexMemberDeclaration(node: IndexMemberDeclarationSyntax): any;
         visitGetAccessor(node: GetAccessorSyntax): any;
         visitSetAccessor(node: SetAccessorSyntax): any;
         visitPropertySignature(node: PropertySignatureSyntax): any;
@@ -173,6 +172,7 @@ module TypeScript {
         visitTemplateExpression(node: TemplateExpressionSyntax): any;
         visitTemplateAccessExpression(node: TemplateAccessExpressionSyntax): any;
         visitYieldExpression(node: YieldExpressionSyntax): any;
+        visitAwaitExpression(node: AwaitExpressionSyntax): any;
         visitVariableDeclaration(node: VariableDeclarationSyntax): any;
         visitVariableDeclarator(node: VariableDeclaratorSyntax): any;
         visitArgumentList(node: ArgumentListSyntax): any;
@@ -189,13 +189,13 @@ module TypeScript {
         visitTemplateClause(node: TemplateClauseSyntax): any;
         visitTypeParameter(node: TypeParameterSyntax): any;
         visitConstraint(node: ConstraintSyntax): any;
-        visitSimplePropertyAssignment(node: SimplePropertyAssignmentSyntax): any;
-        visitFunctionPropertyAssignment(node: FunctionPropertyAssignmentSyntax): any;
         visitParameter(node: ParameterSyntax): any;
         visitEnumElement(node: EnumElementSyntax): any;
         visitTypeAnnotation(node: TypeAnnotationSyntax): any;
         visitExpressionBody(node: ExpressionBody): any;
         visitComputedPropertyName(node: ComputedPropertyNameSyntax): any;
+        visitPropertyAssignment(node: PropertyAssignmentSyntax): any;
+        visitTypeAlias(node: TypeAliasSyntax): any;
         visitExternalModuleReference(node: ExternalModuleReferenceSyntax): any;
         visitModuleNameModuleReference(node: ModuleNameModuleReferenceSyntax): any;
     }
