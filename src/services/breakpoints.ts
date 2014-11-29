@@ -243,7 +243,7 @@ module ts.BreakpointResolver {
 
                         // Breakpoint in type assertion goes to its operand
                         if (node.parent.kind === SyntaxKind.TypeAssertion && (<TypeAssertion>node.parent).type === node) {
-                            return spanInNode((<TypeAssertion>node.parent).operand);
+                            return spanInNode((<TypeAssertion>node.parent).expression);
                         }
 
                         // return type of function go to previous token
@@ -484,7 +484,7 @@ module ts.BreakpointResolver {
 
             function spanInGreaterThanOrLessThanToken(node: Node): TextSpan {
                 if (node.parent.kind === SyntaxKind.TypeAssertion) {
-                    return spanInNode((<TypeAssertion>node.parent).operand);
+                    return spanInNode((<TypeAssertion>node.parent).expression);
                 }
 
                 return spanInNode(node.parent);

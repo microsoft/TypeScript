@@ -170,7 +170,7 @@ module ts {
         PropertyAssignment,
         ShorthandPropertyAssignment,
         PropertyAccess,
-        IndexedAccess,
+        ElementAccessExpression,
         CallExpression,
         NewExpression,
         TaggedTemplateExpression,
@@ -512,15 +512,15 @@ module ts {
         right: Identifier;
     }
 
-    export interface IndexedAccess extends Expression {
-        object: Expression;
+    export interface ElementAccessExpression extends Expression {
+        expression: Expression;
         openBracketToken: Node;
-        index: Expression;
+        argumentExpression: Expression;
         closeBracketToken: Node;
     }
 
     export interface CallExpression extends Expression {
-        func: Expression;
+        expression: Expression;
         typeArguments?: NodeArray<TypeNode>;
         arguments: NodeArray<Expression>;
     }
@@ -536,7 +536,7 @@ module ts {
 
     export interface TypeAssertion extends Expression {
         type: TypeNode;
-        operand: Expression;
+        expression: Expression;
     }
 
     export interface Statement extends Node { }
@@ -890,7 +890,7 @@ module ts {
         isSymbolAccessible(symbol: Symbol, enclosingDeclaration: Node, meaning: SymbolFlags): SymbolAccessiblityResult;
         isEntityNameVisible(entityName: EntityName, enclosingDeclaration: Node): SymbolVisibilityResult;
         // Returns the constant value this property access resolves to, or 'undefined' for a non-constant
-        getConstantValue(node: PropertyAccess | IndexedAccess): number;
+        getConstantValue(node: PropertyAccess | ElementAccessExpression): number;
         isEmitBlocked(sourceFile?: SourceFile): boolean;
     }
 

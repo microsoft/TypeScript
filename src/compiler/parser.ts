@@ -262,12 +262,12 @@ module ts {
             case SyntaxKind.PropertyAccess:
                 return child((<PropertyAccess>node).left) ||
                     child((<PropertyAccess>node).right);
-            case SyntaxKind.IndexedAccess:
-                return child((<IndexedAccess>node).object) ||
-                    child((<IndexedAccess>node).index);
+            case SyntaxKind.ElementAccessExpression:
+                return child((<ElementAccessExpression>node).expression) ||
+                    child((<ElementAccessExpression>node).argumentExpression);
             case SyntaxKind.CallExpression:
             case SyntaxKind.NewExpression:
-                return child((<CallExpression>node).func) ||
+                return child((<CallExpression>node).expression) ||
                     children((<CallExpression>node).typeArguments) ||
                     children((<CallExpression>node).arguments);
             case SyntaxKind.TaggedTemplateExpression:
@@ -275,7 +275,7 @@ module ts {
                     child((<TaggedTemplateExpression>node).template);
             case SyntaxKind.TypeAssertion:
                 return child((<TypeAssertion>node).type) ||
-                    child((<TypeAssertion>node).operand);
+                    child((<TypeAssertion>node).expression);
             case SyntaxKind.ParenExpression:
                 return child((<ParenExpression>node).expression);
             case SyntaxKind.DeleteExpression:
@@ -502,7 +502,7 @@ module ts {
         }
         
         // Will either be a CallExpression or NewExpression.
-        return (<CallExpression>node).func;
+        return (<CallExpression>node).expression;
     }
 
     export function isExpression(node: Node): boolean {
@@ -516,7 +516,7 @@ module ts {
             case SyntaxKind.ArrayLiteral:
             case SyntaxKind.ObjectLiteral:
             case SyntaxKind.PropertyAccess:
-            case SyntaxKind.IndexedAccess:
+            case SyntaxKind.ElementAccessExpression:
             case SyntaxKind.CallExpression:
             case SyntaxKind.NewExpression:
             case SyntaxKind.TaggedTemplateExpression:
@@ -572,7 +572,7 @@ module ts {
                         return (<ForInStatement>parent).variable === node ||
                             (<ForInStatement>parent).expression === node;
                     case SyntaxKind.TypeAssertion:
-                        return node === (<TypeAssertion>parent).operand;
+                        return node === (<TypeAssertion>parent).expression;
                     case SyntaxKind.TemplateSpan:
                         return node === (<TemplateSpan>parent).expression;
                     default:
@@ -2798,7 +2798,7 @@ module ts {
             parseExpected(SyntaxKind.LessThanToken);
             node.type = parseType();
             parseExpected(SyntaxKind.GreaterThanToken);
-            node.operand = parseUnaryExpressionOrHigher();
+            node.expression = parseUnaryExpressionOrHigher();
             return finishNode(node);
         }
 
@@ -2853,21 +2853,21 @@ module ts {
                 }
 
                 if (token === SyntaxKind.OpenBracketToken) {
-                    var indexedAccess = <IndexedAccess>createNode(SyntaxKind.IndexedAccess, expression.pos);
-                    indexedAccess.object = expression;
+                    var indexedAccess = <ElementAccessExpression>createNode(SyntaxKind.ElementAccessExpression, expression.pos);
+                    indexedAccess.expression = expression;
                     indexedAccess.openBracketToken = parseTokenNode(SyntaxKind.OpenBracketToken);
 
                     // It's not uncommon for a user to write: "new Type[]".
                     // Check for that common pattern and report a better error message.
                     if (token !== SyntaxKind.CloseBracketToken) {
-                        indexedAccess.index = allowInAnd(parseExpression);
-                        if (indexedAccess.index.kind === SyntaxKind.StringLiteral || indexedAccess.index.kind === SyntaxKind.NumericLiteral) {
-                            var literal = <LiteralExpression>indexedAccess.index;
+                        indexedAccess.argumentExpression = allowInAnd(parseExpression);
+                        if (indexedAccess.argumentExpression.kind === SyntaxKind.StringLiteral || indexedAccess.argumentExpression.kind === SyntaxKind.NumericLiteral) {
+                            var literal = <LiteralExpression>indexedAccess.argumentExpression;
                             literal.text = internIdentifier(literal.text);
                         }
                     }
                     else {
-                        indexedAccess.index = createMissingNode();
+                        indexedAccess.argumentExpression = createMissingNode();
                     }
 
                     indexedAccess.closeBracketToken = parseTokenNode(SyntaxKind.CloseBracketToken);
@@ -2901,7 +2901,7 @@ module ts {
                     }
 
                     var callExpr = <CallExpression>createNode(SyntaxKind.CallExpression, expression.pos);
-                    callExpr.func = expression;
+                    callExpr.expression = expression;
                     callExpr.typeArguments = typeArguments;
                     callExpr.arguments = parseDelimitedList(ParsingContext.ArgumentExpressions, parseArgumentExpression);
                     parseExpected(SyntaxKind.CloseParenToken);
@@ -2911,7 +2911,7 @@ module ts {
 
                 if (token === SyntaxKind.OpenParenToken) {
                     var callExpr = <CallExpression>createNode(SyntaxKind.CallExpression, expression.pos);
-                    callExpr.func = expression;
+                    callExpr.expression = expression;
                     parseExpected(SyntaxKind.OpenParenToken);
                     callExpr.arguments = parseDelimitedList(ParsingContext.ArgumentExpressions, parseArgumentExpression);
                     parseExpected(SyntaxKind.CloseParenToken);
@@ -3123,7 +3123,7 @@ module ts {
         function parseNewExpression(): NewExpression {
             var node = <NewExpression>createNode(SyntaxKind.NewExpression);
             parseExpected(SyntaxKind.NewKeyword);
-            node.func = parseMemberExpressionOrHigher();
+            node.expression = parseMemberExpressionOrHigher();
             if (parseOptional(SyntaxKind.OpenParenToken) || (token === SyntaxKind.LessThanToken && (node.typeArguments = tryParse(parseTypeArgumentsAndOpenParen)))) {
                 node.arguments = parseDelimitedList(ParsingContext.ArgumentExpressions, parseArgumentExpression);
                 parseExpected(SyntaxKind.CloseParenToken);
@@ -4120,7 +4120,7 @@ module ts {
         if (expr) {
             switch (expr.kind) {
                 case SyntaxKind.PropertyAccess:
-                case SyntaxKind.IndexedAccess:
+                case SyntaxKind.ElementAccessExpression:
                 case SyntaxKind.NewExpression:
                 case SyntaxKind.CallExpression:
                 case SyntaxKind.TaggedTemplateExpression:
@@ -4236,7 +4236,7 @@ module ts {
                 case SyntaxKind.FunctionDeclaration:            return checkFunctionDeclaration(<FunctionLikeDeclaration>node);
                 case SyntaxKind.FunctionExpression:             return checkFunctionExpression(<FunctionExpression>node);
                 case SyntaxKind.GetAccessor:                    return checkGetAccessor(<MethodDeclaration>node);
-                case SyntaxKind.IndexedAccess:                  return checkIndexedAccess(<IndexedAccess>node);
+                case SyntaxKind.ElementAccessExpression:                  return checkIndexedAccess(<ElementAccessExpression>node);
                 case SyntaxKind.IndexSignature:                 return checkIndexSignature(<SignatureDeclaration>node);
                 case SyntaxKind.InterfaceDeclaration:           return checkInterfaceDeclaration(<InterfaceDeclaration>node);
                 case SyntaxKind.LabeledStatement:               return checkLabeledStatement(<LabeledStatement>node);
@@ -4632,10 +4632,10 @@ module ts {
                 checkAccessor(node);
         }
 
-        function checkIndexedAccess(node: IndexedAccess) {
-            if (node.index.kind === SyntaxKind.Missing) {
+        function checkIndexedAccess(node: ElementAccessExpression) {
+            if (node.argumentExpression.kind === SyntaxKind.Missing) {
                 if (node.parent.kind === SyntaxKind.NewExpression &&
-                    (<NewExpression>node.parent).func === node) {
+                    (<NewExpression>node.parent).expression === node) {
 
                     var start = skipTrivia(sourceText, node.openBracketToken.pos);
                     var end = node.closeBracketToken.end;

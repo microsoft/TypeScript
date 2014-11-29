@@ -4328,7 +4328,7 @@ module ts {
                     case SyntaxKind.ArrayLiteral:
                     case SyntaxKind.ObjectLiteral:
                     case SyntaxKind.PropertyAccess:
-                    case SyntaxKind.IndexedAccess:
+                    case SyntaxKind.ElementAccessExpression:
                     case SyntaxKind.CallExpression:
                     case SyntaxKind.NewExpression:
                     case SyntaxKind.TypeAssertion:
@@ -4625,7 +4625,7 @@ module ts {
         }
 
         function checkSuperExpression(node: Node): Type {
-            var isCallExpression = node.parent.kind === SyntaxKind.CallExpression && (<CallExpression>node.parent).func === node;
+            var isCallExpression = node.parent.kind === SyntaxKind.CallExpression && (<CallExpression>node.parent).expression === node;
             var enclosingClass = <ClassDeclaration>getAncestor(node, SyntaxKind.ClassDeclaration);
             var baseClass: Type;
             if (enclosingClass && enclosingClass.baseType) {
@@ -5208,15 +5208,15 @@ module ts {
             return true;
         }
 
-        function checkIndexedAccess(node: IndexedAccess): Type {
+        function checkIndexedAccess(node: ElementAccessExpression): Type {
             // Obtain base constraint such that we can bail out if the constraint is an unknown type
-            var objectType = getApparentType(checkExpression(node.object));
-            var indexType = checkExpression(node.index);
+            var objectType = getApparentType(checkExpression(node.expression));
+            var indexType = checkExpression(node.argumentExpression);
 
             if (objectType === unknownType) return unknownType;
 
-            if (isConstEnumObjectType(objectType) && node.index.kind !== SyntaxKind.StringLiteral) {
-                error(node.index, Diagnostics.Index_expression_arguments_in_const_enums_must_be_of_type_string);
+            if (isConstEnumObjectType(objectType) && node.argumentExpression.kind !== SyntaxKind.StringLiteral) {
+                error(node.argumentExpression, Diagnostics.Index_expression_arguments_in_const_enums_must_be_of_type_string);
             }
 
             // TypeScript 1.0 spec (April 2014): 4.10 Property Access
@@ -5229,8 +5229,8 @@ module ts {
             // - Otherwise, if IndexExpr is of type Any, the String or Number primitive type, or an enum type, the property access is of type Any.
 
             // See if we can index as a property.
-            if (node.index.kind === SyntaxKind.StringLiteral || node.index.kind === SyntaxKind.NumericLiteral) {
-                var name = (<LiteralExpression>node.index).text;
+            if (node.argumentExpression.kind === SyntaxKind.StringLiteral || node.argumentExpression.kind === SyntaxKind.NumericLiteral) {
+                var name = (<LiteralExpression>node.argumentExpression).text;
                 var prop = getPropertyOfType(objectType, name);
                 if (prop) {
                     getNodeLinks(node).resolvedSymbol = prop;
@@ -5629,7 +5629,7 @@ module ts {
                         Diagnostics.The_type_argument_for_type_parameter_0_cannot_be_inferred_from_the_usage_Consider_specifying_the_type_arguments_explicitly,
                         typeToString(failedTypeParameter));
 
-                    reportNoCommonSupertypeError(inferenceCandidates, (<CallExpression>node).func || (<TaggedTemplateExpression>node).tag, diagnosticChainHead);
+                    reportNoCommonSupertypeError(inferenceCandidates, (<CallExpression>node).expression || (<TaggedTemplateExpression>node).tag, diagnosticChainHead);
                 }
             }
             else {
@@ -5759,15 +5759,15 @@ module ts {
         }
 
         function resolveCallExpression(node: CallExpression, candidatesOutArray: Signature[]): Signature {
-            if (node.func.kind === SyntaxKind.SuperKeyword) {
-                var superType = checkSuperExpression(node.func);
+            if (node.expression.kind === SyntaxKind.SuperKeyword) {
+                var superType = checkSuperExpression(node.expression);
                 if (superType !== unknownType) {
                     return resolveCall(node, getSignaturesOfType(superType, SignatureKind.Construct), candidatesOutArray);
                 }
                 return resolveUntypedCall(node);
             }
 
-            var funcType = checkExpression(node.func);
+            var funcType = checkExpression(node.expression);
             var apparentType = getApparentType(funcType);
 
             if (apparentType === unknownType) {
@@ -5811,7 +5811,7 @@ module ts {
         }
 
         function resolveNewExpression(node: NewExpression, candidatesOutArray: Signature[]): Signature {
-            var expressionType = checkExpression(node.func);
+            var expressionType = checkExpression(node.expression);
             // TS 1.0 spec: 4.11
             // If ConstructExpr is of type Any, Args can be any argument
             // list and the result of the operation is of type Any.
@@ -5911,7 +5911,7 @@ module ts {
 
         function checkCallExpression(node: CallExpression): Type {
             var signature = getResolvedSignature(node);
-            if (node.func.kind === SyntaxKind.SuperKeyword) {
+            if (node.expression.kind === SyntaxKind.SuperKeyword) {
                 return voidType;
             }
             if (node.kind === SyntaxKind.NewExpression) {
@@ -5936,7 +5936,7 @@ module ts {
         }
 
         function checkTypeAssertion(node: TypeAssertion): Type {
-            var exprType = checkExpression(node.operand);
+            var exprType = checkExpression(node.expression);
             var targetType = getTypeFromTypeNode(node.type);
             if (fullTypeCheck && targetType !== unknownType) {
                 var widenedType = getWidenedType(exprType, /*supressNoImplicitAnyErrors*/ true);
@@ -6171,7 +6171,7 @@ module ts {
                         // A property access expression is always classified as a reference.
                         // NOTE (not in spec): assignment to enum members should not be allowed
                         return !symbol || symbol === unknownSymbol || (symbol.flags & ~SymbolFlags.EnumMember) !== 0;
-                    case SyntaxKind.IndexedAccess:
+                    case SyntaxKind.ElementAccessExpression:
                         //  old compiler doesn't check indexed assess
                         return true;
                     case SyntaxKind.ParenExpression:
@@ -6187,9 +6187,9 @@ module ts {
                     case SyntaxKind.PropertyAccess:
                         var symbol = findSymbol(n);
                         return symbol && (symbol.flags & SymbolFlags.Variable) !== 0 && (getDeclarationFlagsFromSymbol(symbol) & NodeFlags.Const) !== 0;
-                    case SyntaxKind.IndexedAccess:
-                        var index = (<IndexedAccess>n).index;
-                        var symbol = findSymbol((<IndexedAccess>n).object);
+                    case SyntaxKind.ElementAccessExpression:
+                        var index = (<ElementAccessExpression>n).argumentExpression;
+                        var symbol = findSymbol((<ElementAccessExpression>n).expression);
                         if (symbol && index.kind === SyntaxKind.StringLiteral) {
                             var name = (<LiteralExpression>index).text;
                             var prop = getPropertyOfType(getTypeOfSymbol(symbol), name);
@@ -6525,7 +6525,7 @@ module ts {
                 // - target in rhs of import statement
                 var ok =
                     (node.parent.kind === SyntaxKind.PropertyAccess && (<PropertyAccess>node.parent).left === node) ||
-                    (node.parent.kind === SyntaxKind.IndexedAccess && (<IndexedAccess>node.parent).object === node) ||
+                    (node.parent.kind === SyntaxKind.ElementAccessExpression && (<ElementAccessExpression>node.parent).expression === node) ||
                     ((node.kind === SyntaxKind.Identifier || node.kind === SyntaxKind.QualifiedName) && isInRightSideOfImportOrExportAssignment(<EntityName>node));
 
                 if (!ok) {
@@ -6565,8 +6565,8 @@ module ts {
                     return checkObjectLiteral(<ObjectLiteral>node, contextualMapper);
                 case SyntaxKind.PropertyAccess:
                     return checkPropertyAccess(<PropertyAccess>node);
-                case SyntaxKind.IndexedAccess:
-                    return checkIndexedAccess(<IndexedAccess>node);
+                case SyntaxKind.ElementAccessExpression:
+                    return checkIndexedAccess(<ElementAccessExpression>node);
                 case SyntaxKind.CallExpression:
                 case SyntaxKind.NewExpression:
                     return checkCallExpression(<CallExpression>node);
@@ -6763,7 +6763,7 @@ module ts {
             }
 
             function isSuperCallExpression(n: Node): boolean {
-                return n.kind === SyntaxKind.CallExpression && (<CallExpression>n).func.kind === SyntaxKind.SuperKeyword;
+                return n.kind === SyntaxKind.CallExpression && (<CallExpression>n).expression.kind === SyntaxKind.SuperKeyword;
             }
 
             function containsSuperCall(n: Node): boolean {
@@ -8139,7 +8139,7 @@ module ts {
                         case SyntaxKind.ParenExpression:
                             return enumIsConst ? evalConstant((<ParenExpression>e).expression) : undefined;
                         case SyntaxKind.Identifier:
-                        case SyntaxKind.IndexedAccess:
+                        case SyntaxKind.ElementAccessExpression:
                         case SyntaxKind.PropertyAccess:
                             if (!enumIsConst) {
                                 return undefined;
@@ -8157,12 +8157,12 @@ module ts {
                                 propertyName = (<Identifier>e).text;
                             }
                             else {
-                                if (e.kind === SyntaxKind.IndexedAccess) {
-                                    if ((<IndexedAccess>e).index.kind !== SyntaxKind.StringLiteral) {
+                                if (e.kind === SyntaxKind.ElementAccessExpression) {
+                                    if ((<ElementAccessExpression>e).argumentExpression.kind !== SyntaxKind.StringLiteral) {
                                         return undefined;
                                     }
-                                    var enumType = getTypeOfNode((<IndexedAccess>e).object);
-                                    propertyName = (<LiteralExpression>(<IndexedAccess>e).index).text;
+                                    var enumType = getTypeOfNode((<ElementAccessExpression>e).expression);
+                                    propertyName = (<LiteralExpression>(<ElementAccessExpression>e).argumentExpression).text;
                                 }
                                 else {
                                     var enumType = getTypeOfNode((<PropertyAccess>e).left);
@@ -8491,7 +8491,7 @@ module ts {
                 case SyntaxKind.ObjectLiteral:
                 case SyntaxKind.PropertyAssignment:
                 case SyntaxKind.PropertyAccess:
-                case SyntaxKind.IndexedAccess:
+                case SyntaxKind.ElementAccessExpression:
                 case SyntaxKind.CallExpression:
                 case SyntaxKind.NewExpression:
                 case SyntaxKind.TaggedTemplateExpression:
@@ -8907,8 +8907,8 @@ module ts {
                 // Intentional fall-through
                 case SyntaxKind.NumericLiteral:
                     // index access
-                    if (node.parent.kind == SyntaxKind.IndexedAccess && (<IndexedAccess>node.parent).index === node) {
-                        var objectType = checkExpression((<IndexedAccess>node.parent).object);
+                    if (node.parent.kind == SyntaxKind.ElementAccessExpression && (<ElementAccessExpression>node.parent).argumentExpression === node) {
+                        var objectType = checkExpression((<ElementAccessExpression>node.parent).expression);
                         if (objectType === unknownType) return undefined;
                         var apparentType = getApparentType(objectType);
                         if (apparentType === unknownType) return undefined;
@@ -9160,7 +9160,7 @@ module ts {
             return getNodeLinks(node).enumMemberValue;
         }
 
-        function getConstantValue(node: PropertyAccess | IndexedAccess): number {
+        function getConstantValue(node: PropertyAccess | ElementAccessExpression): number {
             var symbol = getNodeLinks(node).resolvedSymbol;
             if (symbol && (symbol.flags & SymbolFlags.EnumMember)) {
                 var declaration = symbol.valueDeclaration;

@@ -1934,14 +1934,14 @@ module ts {
         if (isRightSideOfPropertyAccess(node)) {
             node = node.parent;
         }
-        return node && node.parent && node.parent.kind === SyntaxKind.CallExpression && (<CallExpression>node.parent).func === node;
+        return node && node.parent && node.parent.kind === SyntaxKind.CallExpression && (<CallExpression>node.parent).expression === node;
     }
 
     function isNewExpressionTarget(node: Node): boolean {
         if (isRightSideOfPropertyAccess(node)) {
             node = node.parent;
         }
-        return node && node.parent && node.parent.kind === SyntaxKind.NewExpression && (<CallExpression>node.parent).func === node;
+        return node && node.parent && node.parent.kind === SyntaxKind.NewExpression && (<CallExpression>node.parent).expression === node;
     }
 
     function isNameOfModuleDeclaration(node: Node) {
@@ -1970,8 +1970,8 @@ module ts {
                 case SyntaxKind.SetAccessor:
                 case SyntaxKind.ModuleDeclaration:
                     return (<Declaration>node.parent).name === node;
-                case SyntaxKind.IndexedAccess:
-                    return (<IndexedAccess>node.parent).index === node;
+                case SyntaxKind.ElementAccessExpression:
+                    return (<ElementAccessExpression>node.parent).argumentExpression === node;
             }
         }
 
@@ -2903,7 +2903,7 @@ module ts {
                             signature = candidateSignatures[0];
                         }
 
-                        var useConstructSignatures = callExpression.kind === SyntaxKind.NewExpression || callExpression.func.kind === SyntaxKind.SuperKeyword;
+                        var useConstructSignatures = callExpression.kind === SyntaxKind.NewExpression || callExpression.expression.kind === SyntaxKind.SuperKeyword;
                         var allSignatures = useConstructSignatures ? type.getConstructSignatures() : type.getCallSignatures();
 
                         if (!contains(allSignatures, signature.target || signature)) {

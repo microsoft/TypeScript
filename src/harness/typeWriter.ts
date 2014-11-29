@@ -32,7 +32,7 @@ class TypeWriterWalker {
             case ts.SyntaxKind.ArrayLiteral:
             case ts.SyntaxKind.ObjectLiteral:
             case ts.SyntaxKind.PropertyAccess:
-            case ts.SyntaxKind.IndexedAccess:
+            case ts.SyntaxKind.ElementAccessExpression:
             case ts.SyntaxKind.CallExpression:
             case ts.SyntaxKind.NewExpression:
             case ts.SyntaxKind.TypeAssertion:

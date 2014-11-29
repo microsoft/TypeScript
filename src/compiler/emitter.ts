@@ -2027,7 +2027,7 @@ module ts {
                     switch (parent.kind) {
                         case SyntaxKind.CallExpression:
                         case SyntaxKind.NewExpression:
-                            return (<CallExpression>parent).func === template;
+                            return (<CallExpression>parent).expression === template;
                         case SyntaxKind.ParenExpression:
                             return false;
                         case SyntaxKind.TaggedTemplateExpression:
@@ -2249,10 +2249,10 @@ module ts {
                 }
             }
 
-            function tryEmitConstantValue(node: PropertyAccess | IndexedAccess): boolean {
+            function tryEmitConstantValue(node: PropertyAccess | ElementAccessExpression): boolean {
                 var constantValue = resolver.getConstantValue(node);
                 if (constantValue !== undefined) {
-                    var propertyName = node.kind === SyntaxKind.PropertyAccess ? declarationNameToString((<PropertyAccess>node).right) : getTextOfNode((<IndexedAccess>node).index);
+                    var propertyName = node.kind === SyntaxKind.PropertyAccess ? declarationNameToString((<PropertyAccess>node).right) : getTextOfNode((<ElementAccessExpression>node).argumentExpression);
                     write(constantValue.toString() + " /* " + propertyName + " */");
                     return true;
                 }
@@ -2268,29 +2268,29 @@ module ts {
                 emit(node.right);
             }
 
-            function emitIndexedAccess(node: IndexedAccess) {
+            function emitIndexedAccess(node: ElementAccessExpression) {
                 if (tryEmitConstantValue(node)) {
                     return;
                 }
-                emit(node.object);
+                emit(node.expression);
                 write("[");
-                emit(node.index);
+                emit(node.argumentExpression);
                 write("]");
             }
 
             function emitCallExpression(node: CallExpression) {
                 var superCall = false;
-                if (node.func.kind === SyntaxKind.SuperKeyword) {
+                if (node.expression.kind === SyntaxKind.SuperKeyword) {
                     write("_super");
                     superCall = true;
                 }
                 else {
-                    emit(node.func);
-                    superCall = node.func.kind === SyntaxKind.PropertyAccess && (<PropertyAccess>node.func).left.kind === SyntaxKind.SuperKeyword;
+                    emit(node.expression);
+                    superCall = node.expression.kind === SyntaxKind.PropertyAccess && (<PropertyAccess>node.expression).left.kind === SyntaxKind.SuperKeyword;
                 }
                 if (superCall) {
                     write(".call(");
-                    emitThis(node.func);
+                    emitThis(node.expression);
                     if (node.arguments.length) {
                         write(", ");
                         emitCommaList(node.arguments, /*includeTrailingComma*/ false);
@@ -2306,7 +2306,7 @@ module ts {
 
             function emitNewExpression(node: NewExpression) {
                 write("new ");
-                emit(node.func);
+                emit(node.expression);
                 if (node.arguments) {
                     write("(");
                     emitCommaList(node.arguments, /*includeTrailingComma*/ false);
@@ -2323,12 +2323,12 @@ module ts {
 
             function emitParenExpression(node: ParenExpression) {
                 if (node.expression.kind === SyntaxKind.TypeAssertion) {
-                    var operand = (<TypeAssertion>node.expression).operand;
+                    var operand = (<TypeAssertion>node.expression).expression;
 
                     // Make sure we consider all nested cast expressions, e.g.:
                     // (<any><number><any>-A).x; 
                     while (operand.kind == SyntaxKind.TypeAssertion) {
-                        operand = (<TypeAssertion>operand).operand;
+                        operand = (<TypeAssertion>operand).expression;
                     }
 
                     // We have an expression of the form: (<Type>SubExpr)
@@ -2883,7 +2883,7 @@ module ts {
                     if (statement && statement.kind === SyntaxKind.ExpressionStatement) {
                         var expr = (<ExpressionStatement>statement).expression;
                         if (expr && expr.kind === SyntaxKind.CallExpression) {
-                            var func = (<CallExpression>expr).func;
+                            var func = (<CallExpression>expr).expression;
                             if (func && func.kind === SyntaxKind.SuperKeyword) {
                                 return <ExpressionStatement>statement;
                             }
@@ -3507,8 +3507,8 @@ module ts {
                         return emitComputedPropertyName(<ComputedPropertyName>node);
                     case SyntaxKind.PropertyAccess:
                         return emitPropertyAccess(<PropertyAccess>node);
-                    case SyntaxKind.IndexedAccess:
-                        return emitIndexedAccess(<IndexedAccess>node);
+                    case SyntaxKind.ElementAccessExpression:
+                        return emitIndexedAccess(<ElementAccessExpression>node);
                     case SyntaxKind.CallExpression:
                         return emitCallExpression(<CallExpression>node);
                     case SyntaxKind.NewExpression:
@@ -3516,7 +3516,7 @@ module ts {
                     case SyntaxKind.TaggedTemplateExpression:
                         return emitTaggedTemplateExpression(<TaggedTemplateExpression>node);
                     case SyntaxKind.TypeAssertion:
-                        return emit((<TypeAssertion>node).operand);
+                        return emit((<TypeAssertion>node).expression);
                     case SyntaxKind.ParenExpression:
                         return emitParenExpression(<ParenExpression>node);
                     case SyntaxKind.FunctionDeclaration:
