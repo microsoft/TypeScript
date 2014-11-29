@@ -518,8 +518,8 @@ module ts {
                     return emitTupleType(<TupleTypeNode>type);
                 case SyntaxKind.UnionType:
                     return emitUnionType(<UnionTypeNode>type);
-                case SyntaxKind.ParenType:
-                    return emitParenType(<ParenTypeNode>type);
+                case SyntaxKind.ParenthesizedType:
+                    return emitParenType(<ParenthesizedTypeNode>type);
                 case SyntaxKind.FunctionType:
                 case SyntaxKind.ConstructorType:
                     return emitSignatureDeclarationWithJsDocComments(<SignatureDeclaration>type);
@@ -583,7 +583,7 @@ module ts {
                 emitSeparatedList(type.types, " | ", emitType);
             }
 
-            function emitParenType(type: ParenTypeNode) {
+            function emitParenType(type: ParenthesizedTypeNode) {
                 write("(");
                 emitType(type.type);
                 write(")");

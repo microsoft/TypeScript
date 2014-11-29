@@ -253,8 +253,8 @@ module ts {
                 return children((<TupleTypeNode>node).elementTypes);
             case SyntaxKind.UnionType:
                 return children((<UnionTypeNode>node).types);
-            case SyntaxKind.ParenType:
-                return child((<ParenTypeNode>node).type);
+            case SyntaxKind.ParenthesizedType:
+                return child((<ParenthesizedTypeNode>node).type);
             case SyntaxKind.ArrayLiteral:
                 return children((<ArrayLiteral>node).elements);
             case SyntaxKind.ObjectLiteral:
@@ -1996,8 +1996,8 @@ module ts {
             return finishNode(node);
         }
 
-        function parseParenType(): ParenTypeNode {
-            var node = <ParenTypeNode>createNode(SyntaxKind.ParenType);
+        function parseParenType(): ParenthesizedTypeNode {
+            var node = <ParenthesizedTypeNode>createNode(SyntaxKind.ParenthesizedType);
             parseExpected(SyntaxKind.OpenParenToken);
             node.type = parseType();
             parseExpected(SyntaxKind.CloseParenToken);

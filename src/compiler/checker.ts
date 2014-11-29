@@ -1061,7 +1061,7 @@ module ts {
         function getTypeAliasForTypeLiteral(type: Type): Symbol {
             if (type.symbol && type.symbol.flags & SymbolFlags.TypeLiteral) {
                 var node = type.symbol.declarations[0].parent;
-                while (node.kind === SyntaxKind.ParenType) {
+                while (node.kind === SyntaxKind.ParenthesizedType) {
                     node = node.parent;
                 }
                 if (node.kind === SyntaxKind.TypeAliasDeclaration) {
@@ -3041,8 +3041,8 @@ module ts {
                     return getTypeFromTupleTypeNode(<TupleTypeNode>node);
                 case SyntaxKind.UnionType:
                     return getTypeFromUnionTypeNode(<UnionTypeNode>node);
-                case SyntaxKind.ParenType:
-                    return getTypeFromTypeNode((<ParenTypeNode>node).type);
+                case SyntaxKind.ParenthesizedType:
+                    return getTypeFromTypeNode((<ParenthesizedTypeNode>node).type);
                 case SyntaxKind.FunctionType:
                 case SyntaxKind.ConstructorType:
                 case SyntaxKind.TypeLiteral:
@@ -8402,8 +8402,8 @@ module ts {
                     return checkTupleType(<TupleTypeNode>node);
                 case SyntaxKind.UnionType:
                     return checkUnionType(<UnionTypeNode>node);
-                case SyntaxKind.ParenType:
-                    return checkSourceElement((<ParenTypeNode>node).type);
+                case SyntaxKind.ParenthesizedType:
+                    return checkSourceElement((<ParenthesizedTypeNode>node).type);
                 case SyntaxKind.FunctionDeclaration:
                     return checkFunctionDeclaration(<FunctionDeclaration>node);
                 case SyntaxKind.Block:
