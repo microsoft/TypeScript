@@ -4333,7 +4333,10 @@ module ts {
                     case SyntaxKind.NewExpression:
                     case SyntaxKind.TypeAssertion:
                     case SyntaxKind.ParenExpression:
-                    case SyntaxKind.PrefixOperator:
+                    case SyntaxKind.PrefixUnaryExpression:
+                    case SyntaxKind.DeleteExpression:
+                    case SyntaxKind.TypeOfExpression:
+                    case SyntaxKind.VoidExpression:
                     case SyntaxKind.PostfixOperator:
                     case SyntaxKind.ConditionalExpression:
                     case SyntaxKind.Block:
@@ -4416,12 +4419,12 @@ module ts {
             return type;
 
             function narrowTypeByEquality(type: Type, expr: BinaryExpression, assumeTrue: boolean): Type {
-                var left = <UnaryExpression>expr.left;
+                var left = <TypeOfExpression>expr.left;
                 var right = <LiteralExpression>expr.right;
                 // Check that we have 'typeof <symbol>' on the left and string literal on the right
-                if (left.kind !== SyntaxKind.PrefixOperator || left.operator !== SyntaxKind.TypeOfKeyword ||
-                    left.operand.kind !== SyntaxKind.Identifier || right.kind !== SyntaxKind.StringLiteral ||
-                    getResolvedSymbol(<Identifier>left.operand) !== symbol) {
+                if (left.kind !== SyntaxKind.TypeOfExpression ||
+                    left.expression.kind !== SyntaxKind.Identifier || right.kind !== SyntaxKind.StringLiteral ||
+                    getResolvedSymbol(<Identifier>left.expression) !== symbol) {
                     return type;
                 }
                 var t = right.text;
@@ -4510,7 +4513,7 @@ module ts {
                             return narrowTypeByInstanceof(type, <BinaryExpression>expr, assumeTrue);
                         }
                         break;
-                    case SyntaxKind.PrefixOperator:
+                    case SyntaxKind.PrefixUnaryExpression:
                         if ((<UnaryExpression>expr).operator === SyntaxKind.ExclamationToken) {
                             return narrowType(type, (<UnaryExpression>expr).operand, !assumeTrue);
                         }
@@ -6211,6 +6214,21 @@ module ts {
             return true;
         }
 
+        function checkDeleteExpression(node: DeleteExpression): Type {
+            var operandType = checkExpression(node.expression);
+            return booleanType;
+        }
+
+        function checkTypeOfExpression(node: TypeOfExpression): Type {
+            var operandType = checkExpression(node.expression);
+            return stringType;
+        }
+
+        function checkVoidExpression(node: VoidExpression): Type {
+            var operandType = checkExpression(node.expression);
+            return undefinedType;
+        }
+
         function checkPrefixExpression(node: UnaryExpression): Type {
             var operandType = checkExpression(node.operand);
             switch (node.operator) {
@@ -6219,12 +6237,7 @@ module ts {
                 case SyntaxKind.TildeToken:
                     return numberType;
                 case SyntaxKind.ExclamationToken:
-                case SyntaxKind.DeleteKeyword:
                     return booleanType;
-                case SyntaxKind.TypeOfKeyword:
-                    return stringType;
-                case SyntaxKind.VoidKeyword:
-                    return undefinedType;
                 case SyntaxKind.PlusPlusToken:
                 case SyntaxKind.MinusMinusToken:
                     var ok = checkArithmeticOperandType(node.operand, operandType, Diagnostics.An_arithmetic_operand_must_be_of_type_any_number_or_an_enum_type);
@@ -6566,7 +6579,13 @@ module ts {
                 case SyntaxKind.FunctionExpression:
                 case SyntaxKind.ArrowFunction:
                     return checkFunctionExpression(<FunctionExpression>node, contextualMapper);
-                case SyntaxKind.PrefixOperator:
+                case SyntaxKind.TypeOfExpression:
+                    return checkTypeOfExpression(<TypeOfExpression>node);
+                case SyntaxKind.DeleteExpression:
+                    return checkDeleteExpression(<DeleteExpression>node);
+                case SyntaxKind.VoidExpression:
+                    return checkVoidExpression(<VoidExpression>node);
+                case SyntaxKind.PrefixUnaryExpression:
                     return checkPrefixExpression(<UnaryExpression>node);
                 case SyntaxKind.PostfixOperator:
                     return checkPostfixExpression(<UnaryExpression>node);
@@ -8077,7 +8096,7 @@ module ts {
 
                 function evalConstant(e: Node): number {
                     switch (e.kind) {
-                        case SyntaxKind.PrefixOperator:
+                        case SyntaxKind.PrefixUnaryExpression:
                             var value = evalConstant((<UnaryExpression>e).operand);
                             if (value === undefined) {
                                 return undefined;
@@ -8478,7 +8497,10 @@ module ts {
                 case SyntaxKind.TaggedTemplateExpression:
                 case SyntaxKind.TypeAssertion:
                 case SyntaxKind.ParenExpression:
-                case SyntaxKind.PrefixOperator:
+                case SyntaxKind.TypeOfExpression:
+                case SyntaxKind.VoidExpression:
+                case SyntaxKind.DeleteExpression:
+                case SyntaxKind.PrefixUnaryExpression:
                 case SyntaxKind.PostfixOperator:
                 case SyntaxKind.BinaryExpression:
                 case SyntaxKind.ConditionalExpression:
@@ -8705,7 +8727,7 @@ module ts {
                 case SyntaxKind.BooleanKeyword:
                     return true;
                 case SyntaxKind.VoidKeyword:
-                    return node.parent.kind !== SyntaxKind.PrefixOperator;
+                    return node.parent.kind !== SyntaxKind.VoidExpression;
                 case SyntaxKind.StringLiteral:
                     // Specialized signatures can have string literals as their parameters' type names
                     return node.parent.kind === SyntaxKind.Parameter;

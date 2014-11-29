@@ -673,7 +673,7 @@ module ts.formatting {
         }
 
         static IsVoidOpContext(context: FormattingContext): boolean {
-            return context.currentTokenSpan.kind === SyntaxKind.VoidKeyword && context.currentTokenParent.kind === SyntaxKind.PrefixOperator;
+            return context.currentTokenSpan.kind === SyntaxKind.VoidKeyword && context.currentTokenParent.kind === SyntaxKind.VoidExpression;
         }
     }
 }

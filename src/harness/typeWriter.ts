@@ -39,7 +39,10 @@ class TypeWriterWalker {
             case ts.SyntaxKind.ParenExpression:
             case ts.SyntaxKind.FunctionExpression:
             case ts.SyntaxKind.ArrowFunction:
-            case ts.SyntaxKind.PrefixOperator:
+            case ts.SyntaxKind.TypeOfExpression:
+            case ts.SyntaxKind.VoidExpression:
+            case ts.SyntaxKind.DeleteExpression:
+            case ts.SyntaxKind.PrefixUnaryExpression:
             case ts.SyntaxKind.PostfixOperator:
             case ts.SyntaxKind.BinaryExpression:
             case ts.SyntaxKind.ConditionalExpression:

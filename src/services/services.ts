@@ -4574,7 +4574,7 @@ module ts {
 
             var parent = node.parent;
             if (parent) {
-                if (parent.kind === SyntaxKind.PostfixOperator || parent.kind === SyntaxKind.PrefixOperator) {
+                if (parent.kind === SyntaxKind.PostfixOperator || parent.kind === SyntaxKind.PrefixUnaryExpression) {
                     return true;
                 }
                 else if (parent.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>parent).left === node) {
@@ -5063,7 +5063,7 @@ module ts {
                     // the '=' in a variable declaration is special cased here.
                     if (token.parent.kind === SyntaxKind.BinaryExpression ||
                         token.parent.kind === SyntaxKind.VariableDeclaration ||
-                        token.parent.kind === SyntaxKind.PrefixOperator ||
+                        token.parent.kind === SyntaxKind.PrefixUnaryExpression ||
                         token.parent.kind === SyntaxKind.PostfixOperator ||
                         token.parent.kind === SyntaxKind.ConditionalExpression) {
                         return ClassificationTypeNames.operator;

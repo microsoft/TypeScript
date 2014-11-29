@@ -278,7 +278,13 @@ module ts {
                     child((<TypeAssertion>node).operand);
             case SyntaxKind.ParenExpression:
                 return child((<ParenExpression>node).expression);
-            case SyntaxKind.PrefixOperator:
+            case SyntaxKind.DeleteExpression:
+                return child((<DeleteExpression>node).expression);
+            case SyntaxKind.TypeOfExpression:
+                return child((<TypeOfExpression>node).expression);
+            case SyntaxKind.VoidExpression:
+                return child((<VoidExpression>node).expression);
+            case SyntaxKind.PrefixUnaryExpression:
             case SyntaxKind.PostfixOperator:
                 return child((<UnaryExpression>node).operand);
             case SyntaxKind.BinaryExpression:
@@ -518,7 +524,10 @@ module ts {
             case SyntaxKind.ParenExpression:
             case SyntaxKind.FunctionExpression:
             case SyntaxKind.ArrowFunction:
-            case SyntaxKind.PrefixOperator:
+            case SyntaxKind.VoidExpression:
+            case SyntaxKind.DeleteExpression:
+            case SyntaxKind.TypeOfExpression:
+            case SyntaxKind.PrefixUnaryExpression:
             case SyntaxKind.PostfixOperator:
             case SyntaxKind.BinaryExpression:
             case SyntaxKind.ConditionalExpression:
@@ -1659,7 +1668,7 @@ module ts {
                     //      <T extends "">
                     //
                     // We do *not* want to consume the  >  as we're consuming the expression for "".
-                    node.expression = parseUnaryExpression();
+                    node.expression = parseUnaryExpressionOrHigher();
                 }
             }
 
@@ -2532,7 +2541,7 @@ module ts {
         }
 
         function parseBinaryExpressionOrHigher(precedence: number): Expression {
-            var leftOperand = parseUnaryExpression();
+            var leftOperand = parseUnaryExpressionOrHigher();
             return parseBinaryExpressionRest(precedence, leftOperand);
         }
 
@@ -2611,21 +2620,33 @@ module ts {
             return finishNode(node);
         }
 
-        function parseUnaryExpression(): Expression {
+        function parseUnaryExpressionOrHigher(): Expression {
             var pos = getNodePos();
             switch (token) {
                 case SyntaxKind.PlusToken:
                 case SyntaxKind.MinusToken:
                 case SyntaxKind.TildeToken:
                 case SyntaxKind.ExclamationToken:
-                case SyntaxKind.DeleteKeyword:
-                case SyntaxKind.TypeOfKeyword:
-                case SyntaxKind.VoidKeyword:
                 case SyntaxKind.PlusPlusToken:
                 case SyntaxKind.MinusMinusToken:
                     var operator = token;
                     nextToken();
-                    return makeUnaryExpression(SyntaxKind.PrefixOperator, pos, operator, parseUnaryExpression());
+                    return makeUnaryExpression(SyntaxKind.PrefixUnaryExpression, pos, operator, parseUnaryExpressionOrHigher());
+                case SyntaxKind.DeleteKeyword:
+                    var node = <DeleteExpression>createNode(SyntaxKind.DeleteExpression);
+                    nextToken();
+                    node.expression = parseUnaryExpressionOrHigher();
+                    return finishNode(node);
+                case SyntaxKind.TypeOfKeyword:
+                    var node = <TypeOfExpression>createNode(SyntaxKind.TypeOfExpression);
+                    nextToken();
+                    node.expression = parseUnaryExpressionOrHigher();
+                    return finishNode(node);
+                case SyntaxKind.VoidKeyword:
+                    var node = <VoidExpression>createNode(SyntaxKind.VoidExpression);
+                    nextToken();
+                    node.expression = parseUnaryExpressionOrHigher();
+                    return finishNode(node);
                 case SyntaxKind.LessThanToken:
                     return parseTypeAssertion();
             }
@@ -2659,7 +2680,7 @@ module ts {
             parseExpected(SyntaxKind.LessThanToken);
             node.type = parseType();
             parseExpected(SyntaxKind.GreaterThanToken);
-            node.operand = parseUnaryExpression();
+            node.operand = parseUnaryExpressionOrHigher();
             return finishNode(node);
         }
 
@@ -4073,6 +4094,7 @@ module ts {
                 case SyntaxKind.ClassDeclaration:               return checkClassDeclaration(<ClassDeclaration>node);
                 case SyntaxKind.ComputedPropertyName:           return checkComputedPropertyName(<ComputedPropertyName>node);
                 case SyntaxKind.Constructor:                    return checkConstructor(<ConstructorDeclaration>node);
+                case SyntaxKind.DeleteExpression:               return checkDeleteExpression(<DeleteExpression> node);
                 case SyntaxKind.ExportAssignment:               return checkExportAssignment(<ExportAssignment>node);
                 case SyntaxKind.ForInStatement:                 return checkForInStatement(<ForInStatement>node);
                 case SyntaxKind.ForStatement:                   return checkForStatement(<ForStatement>node);
@@ -4089,7 +4111,7 @@ module ts {
                 case SyntaxKind.NumericLiteral:                 return checkNumericLiteral(<LiteralExpression>node);
                 case SyntaxKind.Parameter:                      return checkParameter(<ParameterDeclaration>node);
                 case SyntaxKind.PostfixOperator:                return checkPostfixOperator(<UnaryExpression>node);
-                case SyntaxKind.PrefixOperator:                 return checkPrefixOperator(<UnaryExpression>node);
+                case SyntaxKind.PrefixUnaryExpression:          return checkPrefixOperator(<UnaryExpression>node);
                 case SyntaxKind.Property:                       return checkProperty(<PropertyDeclaration>node);
                 case SyntaxKind.PropertyAssignment:             return checkPropertyAssignment(<PropertyDeclaration>node);
                 case SyntaxKind.ReturnStatement:                return checkReturnStatement(<ReturnStatement>node);
@@ -4355,6 +4377,19 @@ module ts {
             }
         }
 
+        function checkDeleteExpression(node: DeleteExpression) {
+            if (node.parserContextFlags & ParserContextFlags.StrictMode) {
+                // The identifier eval or arguments may not appear as the LeftHandSideExpression of an 
+                // Assignment operator(11.13) or of a PostfixExpression(11.3) or as the UnaryExpression 
+                // operated upon by a Prefix Increment(11.4.4) or a Prefix Decrement(11.4.5) operator
+                if (node.expression.kind === SyntaxKind.Identifier) {
+                    // When a delete operator occurs within strict mode code, a SyntaxError is thrown if its 
+                    // UnaryExpression is a direct reference to a variable, function argument, or function name
+                    return grammarErrorOnNode(node.expression, Diagnostics.delete_cannot_be_called_on_an_identifier_in_strict_mode);
+                }
+            }
+        }
+
         function checkEnumDeclaration(enumDecl: EnumDeclaration): boolean {
             var enumIsConst = (enumDecl.flags & NodeFlags.Const) !== 0;
 
@@ -4396,7 +4431,7 @@ module ts {
                 return /^[0-9]+([eE]\+?[0-9]+)?$/.test(literalExpression.text);
             }
 
-            if (expression.kind === SyntaxKind.PrefixOperator) {
+            if (expression.kind === SyntaxKind.PrefixUnaryExpression) {
                 var unaryExpression = <UnaryExpression>expression;
                 if (unaryExpression.operator === SyntaxKind.PlusToken || unaryExpression.operator === SyntaxKind.MinusToken) {
                     expression = unaryExpression.operand;
@@ -4871,11 +4906,6 @@ module ts {
                 // operated upon by a Prefix Increment(11.4.4) or a Prefix Decrement(11.4.5) operator
                 if ((node.operator === SyntaxKind.PlusPlusToken || node.operator === SyntaxKind.MinusMinusToken) && isEvalOrArgumentsIdentifier(node.operand)) {
                     return reportInvalidUseInStrictMode(<Identifier>node.operand);
-                }
-                else if (node.operator === SyntaxKind.DeleteKeyword && node.operand.kind === SyntaxKind.Identifier) {
-                    // When a delete operator occurs within strict mode code, a SyntaxError is thrown if its 
-                    // UnaryExpression is a direct reference to a variable, function argument, or function name
-                    return grammarErrorOnNode(node.operand, Diagnostics.delete_cannot_be_called_on_an_identifier_in_strict_mode);
                 }
             }
         }

@@ -178,7 +178,10 @@ module ts {
         ParenExpression,
         FunctionExpression,
         ArrowFunction,
-        PrefixOperator,
+        DeleteExpression,
+        TypeOfExpression,
+        VoidExpression,
+        PrefixUnaryExpression,
         PostfixOperator,
         BinaryExpression,
         ConditionalExpression,
@@ -437,6 +440,18 @@ module ts {
     export interface UnaryExpression extends Expression {
         operator: SyntaxKind;
         operand: Expression;
+    }
+
+    export interface DeleteExpression extends Expression {
+        expression: Expression;
+    }
+
+    export interface TypeOfExpression extends Expression {
+        expression: Expression;
+    }
+
+    export interface VoidExpression extends Expression {
+        expression: Expression;
     }
     
     export interface YieldExpression extends Expression {

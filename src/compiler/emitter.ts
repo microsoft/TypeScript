@@ -2339,7 +2339,12 @@ module ts {
                     //      (<any>typeof A).toString() should be emitted as (typeof A).toString() and not typeof A.toString()
                     //      new (<any>A()) should be emitted as new (A()) and not new A()
                     //      (<any>function foo() { })() should be emitted as an IIF (function foo(){})() and not declaration function foo(){} ()
-                    if (operand.kind !== SyntaxKind.PrefixOperator && operand.kind !== SyntaxKind.PostfixOperator && operand.kind !== SyntaxKind.NewExpression &&
+                    if (operand.kind !== SyntaxKind.PrefixUnaryExpression &&
+                        operand.kind !== SyntaxKind.VoidExpression &&
+                        operand.kind !== SyntaxKind.TypeOfExpression &&
+                        operand.kind !== SyntaxKind.DeleteExpression &&
+                        operand.kind !== SyntaxKind.PostfixOperator &&
+                        operand.kind !== SyntaxKind.NewExpression &&
                         !(operand.kind === SyntaxKind.CallExpression && node.parent.kind === SyntaxKind.NewExpression) &&
                         !(operand.kind === SyntaxKind.FunctionExpression && node.parent.kind === SyntaxKind.CallExpression)) {
                         emit(operand);
@@ -2351,8 +2356,26 @@ module ts {
                 write(")");
             }
 
+            function emitDeleteExpression(node: DeleteExpression) {
+                write(tokenToString(SyntaxKind.DeleteKeyword));
+                write(" ");
+                emit(node.expression);
+            }
+
+            function emitVoidExpression(node: VoidExpression) {
+                write(tokenToString(SyntaxKind.VoidKeyword));
+                write(" ");
+                emit(node.expression);
+            }
+
+            function emitTypeOfExpression(node: TypeOfExpression) {
+                write(tokenToString(SyntaxKind.TypeOfKeyword));
+                write(" ");
+                emit(node.expression);
+            }
+
             function emitUnaryExpression(node: UnaryExpression) {
-                if (node.kind === SyntaxKind.PrefixOperator) {
+                if (node.kind === SyntaxKind.PrefixUnaryExpression) {
                     write(tokenToString(node.operator));
                 }
                 // In some cases, we need to emit a space between the operator and the operand. One obvious case
@@ -2370,7 +2393,7 @@ module ts {
                 if (node.operator >= SyntaxKind.Identifier) {
                     write(" ");
                 }
-                else if (node.kind === SyntaxKind.PrefixOperator && node.operand.kind === SyntaxKind.PrefixOperator) {
+                else if (node.kind === SyntaxKind.PrefixUnaryExpression && node.operand.kind === SyntaxKind.PrefixUnaryExpression) {
                     var operand = <UnaryExpression>node.operand;
                     if (node.operator === SyntaxKind.PlusToken && (operand.operator === SyntaxKind.PlusToken || operand.operator === SyntaxKind.PlusPlusToken)) {
                         write(" ");
@@ -3500,7 +3523,13 @@ module ts {
                     case SyntaxKind.FunctionExpression:
                     case SyntaxKind.ArrowFunction:
                         return emitFunctionDeclaration(<FunctionLikeDeclaration>node);
-                    case SyntaxKind.PrefixOperator:
+                    case SyntaxKind.DeleteExpression:
+                        return emitDeleteExpression(<DeleteExpression>node);
+                    case SyntaxKind.TypeOfExpression:
+                        return emitTypeOfExpression(<TypeOfExpression>node);
+                    case SyntaxKind.VoidExpression:
+                        return emitVoidExpression(<VoidExpression>node);
+                    case SyntaxKind.PrefixUnaryExpression:
                     case SyntaxKind.PostfixOperator:
                         return emitUnaryExpression(<UnaryExpression>node);
                     case SyntaxKind.BinaryExpression:
