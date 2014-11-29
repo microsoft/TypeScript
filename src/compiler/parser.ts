@@ -2184,9 +2184,9 @@ module ts {
             //      AssignmentExpression[in] 
             //      Expression[in] , AssignmentExpression[in]
 
-            var expr = parseAssignmentExpression();
+            var expr = parseAssignmentExpressionOrHigher();
             while (parseOptional(SyntaxKind.CommaToken)) {
-                expr = makeBinaryExpression(expr, SyntaxKind.CommaToken, parseAssignmentExpression());
+                expr = makeBinaryExpression(expr, SyntaxKind.CommaToken, parseAssignmentExpressionOrHigher());
             }
             return expr;
         }
@@ -2212,10 +2212,10 @@ module ts {
             //     = AssignmentExpression[?In, ?Yield]
 
             parseExpected(SyntaxKind.EqualsToken);
-            return parseAssignmentExpression();
+            return parseAssignmentExpressionOrHigher();
         }
 
-        function parseAssignmentExpression(): Expression {
+        function parseAssignmentExpressionOrHigher(): Expression {
             //  AssignmentExpression[in,yield]:
             //      1) ConditionalExpression[?in,?yield]
             //      2) LeftHandSideExpression = AssignmentExpression[?in,?yield]
@@ -2257,7 +2257,7 @@ module ts {
             if (isLeftHandSideExpression(expr) && isAssignmentOperator(token)) {
                 var operator = token;
                 nextToken();
-                return makeBinaryExpression(expr, operator, parseAssignmentExpression());
+                return makeBinaryExpression(expr, operator, parseAssignmentExpressionOrHigher());
             }
 
             // otherwise this was production '1'.  Return whatever we parsed so far.
@@ -2313,7 +2313,7 @@ module ts {
             if (!scanner.hasPrecedingLineBreak() &&
                 (token === SyntaxKind.AsteriskToken || isStartOfExpression())) {
                 node.asteriskToken = parseOptionalToken(SyntaxKind.AsteriskToken);
-                node.expression = parseAssignmentExpression();
+                node.expression = parseAssignmentExpressionOrHigher();
                 return finishNode(node);
             }
             else {
@@ -2499,7 +2499,7 @@ module ts {
                 body = parseFunctionBlock(/*allowYield:*/ false, /* ignoreMissingOpenBrace */ true);
             }
             else {
-                body = parseAssignmentExpression();
+                body = parseAssignmentExpressionOrHigher();
             }
 
             return makeFunctionExpression(SyntaxKind.ArrowFunction, pos, /*asteriskToken:*/ undefined, /*name:*/ undefined, sig, body);
@@ -2510,15 +2510,16 @@ module ts {
             // we do not that for the 'whenFalse' part.  
 
             var expr = parseBinaryOperators(parseUnaryExpression(), /*minPrecedence:*/ 0);
-            while (parseOptional(SyntaxKind.QuestionToken)) {
-                var node = <ConditionalExpression>createNode(SyntaxKind.ConditionalExpression, expr.pos);
-                node.condition = expr;
-                node.whenTrue = allowInAnd(parseAssignmentExpression);
-                parseExpected(SyntaxKind.ColonToken);
-                node.whenFalse = parseAssignmentExpression();
-                expr = finishNode(node);
+            if (!parseOptional(SyntaxKind.QuestionToken)) {
+                return expr;
             }
-            return expr;
+
+            var node = <ConditionalExpression>createNode(SyntaxKind.ConditionalExpression, expr.pos);
+            node.condition = expr;
+            node.whenTrue = allowInAnd(parseAssignmentExpressionOrHigher);
+            parseExpected(SyntaxKind.ColonToken);
+            node.whenFalse = parseAssignmentExpressionOrHigher();
+            return finishNode(node);
         }
 
         function parseBinaryOperators(expr: Expression, minPrecedence: number): Expression {
@@ -2816,7 +2817,7 @@ module ts {
         function parseAssignmentExpressionOrOmittedExpression(): Expression {
             return token === SyntaxKind.CommaToken
                 ? createNode(SyntaxKind.OmittedExpression)
-                : parseAssignmentExpression();
+                : parseAssignmentExpressionOrHigher();
         }
 
         function parseArrayLiteralElement(): Expression {
@@ -2875,7 +2876,7 @@ module ts {
                 node = <PropertyDeclaration>createNode(SyntaxKind.PropertyAssignment, nodePos);
                 node.name = propertyName;
                 parseExpected(SyntaxKind.ColonToken);
-                (<PropertyDeclaration>node).initializer = allowInAnd(parseAssignmentExpression);
+                (<PropertyDeclaration>node).initializer = allowInAnd(parseAssignmentExpressionOrHigher);
             }
 
             node.flags = flags;
