@@ -876,14 +876,6 @@
         "category": "Error",
         "code": 2396
     },
-    "Duplicate identifier '_i'. Compiler uses '_i' to initialize rest parameter.": {
-        "category": "Error",
-        "code": 2397
-    },
-    "Expression resolves to variable declaration '_i' that compiler uses to initialize rest parameter.": {
-        "category": "Error",
-        "code": 2398
-    },
     "Duplicate identifier '_this'. Compiler uses variable declaration '_this' to capture 'this' reference.": {
         "category": "Error",
         "code": 2399
