@@ -523,7 +523,7 @@ module ts.formatting {
             switch (node.kind) {
                 case SyntaxKind.Block:
                 case SyntaxKind.SwitchStatement:
-                case SyntaxKind.ObjectLiteral:
+                case SyntaxKind.ObjectLiteralExpression:
                 case SyntaxKind.TryBlock:
                 case SyntaxKind.CatchBlock:
                 case SyntaxKind.FinallyBlock:
@@ -613,7 +613,7 @@ module ts.formatting {
         }
 
         static IsObjectContext(context: FormattingContext): boolean {
-            return context.contextNode.kind === SyntaxKind.ObjectLiteral;
+            return context.contextNode.kind === SyntaxKind.ObjectLiteralExpression;
         }
 
         static IsFunctionCallContext(context: FormattingContext): boolean {

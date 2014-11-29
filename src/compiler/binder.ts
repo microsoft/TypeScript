@@ -279,7 +279,7 @@ module ts {
                         break;
                     }
                 case SyntaxKind.TypeLiteral:
-                case SyntaxKind.ObjectLiteral:
+                case SyntaxKind.ObjectLiteralExpression:
                 case SyntaxKind.InterfaceDeclaration:
                     declareSymbol(container.symbol.members, container.symbol, node, symbolKind, symbolExcludes);
                     break;
@@ -436,7 +436,7 @@ module ts {
                 case SyntaxKind.TypeLiteral:
                     bindAnonymousDeclaration(node, SymbolFlags.TypeLiteral, "__type", /*isBlockScopeContainer*/ false);
                     break;
-                case SyntaxKind.ObjectLiteral:
+                case SyntaxKind.ObjectLiteralExpression:
                     bindAnonymousDeclaration(node, SymbolFlags.ObjectLiteral, "__object", /*isBlockScopeContainer*/ false);
                     break;
                 case SyntaxKind.FunctionExpression:

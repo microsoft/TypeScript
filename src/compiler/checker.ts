@@ -3223,11 +3223,11 @@ module ts {
                 case SyntaxKind.FunctionExpression:
                 case SyntaxKind.ArrowFunction:
                     return !(<FunctionExpression>node).typeParameters && !forEach((<FunctionExpression>node).parameters, p => p.type);
-                case SyntaxKind.ObjectLiteral:
-                    return forEach((<ObjectLiteral>node).properties, p =>
+                case SyntaxKind.ObjectLiteralExpression:
+                    return forEach((<ObjectLiteralExpression>node).properties, p =>
                         p.kind === SyntaxKind.PropertyAssignment && isContextSensitiveExpression((<PropertyDeclaration>p).initializer));
-                case SyntaxKind.ArrayLiteral:
-                    return forEach((<ArrayLiteral>node).elements, e => isContextSensitiveExpression(e));
+                case SyntaxKind.ArrayLiteralExpression:
+                    return forEach((<ArrayLiteralExpression>node).elements, e => isContextSensitiveExpression(e));
                 case SyntaxKind.ConditionalExpression:
                     return isContextSensitiveExpression((<ConditionalExpression>node).whenTrue) ||
                         isContextSensitiveExpression((<ConditionalExpression>node).whenFalse);
@@ -4302,8 +4302,8 @@ module ts {
             function isAssignedInBinaryExpression(node: BinaryExpression) {
                 if (node.operator >= SyntaxKind.FirstAssignment && node.operator <= SyntaxKind.LastAssignment) {
                     var n = node.left;
-                    while (n.kind === SyntaxKind.ParenExpression) {
-                        n = (<ParenExpression>n).expression;
+                    while (n.kind === SyntaxKind.ParenthesizedExpression) {
+                        n = (<ParenthesizedExpression>n).expression;
                     }
                     if (n.kind === SyntaxKind.Identifier && getResolvedSymbol(<Identifier>n) === symbol) {
                         return true;
@@ -4325,19 +4325,19 @@ module ts {
                         return isAssignedInBinaryExpression(<BinaryExpression>node);
                     case SyntaxKind.VariableDeclaration:
                         return isAssignedInVariableDeclaration(<VariableDeclaration>node);
-                    case SyntaxKind.ArrayLiteral:
-                    case SyntaxKind.ObjectLiteral:
-                    case SyntaxKind.PropertyAccess:
+                    case SyntaxKind.ArrayLiteralExpression:
+                    case SyntaxKind.ObjectLiteralExpression:
+                    case SyntaxKind.PropertyAccessExpression:
                     case SyntaxKind.ElementAccessExpression:
                     case SyntaxKind.CallExpression:
                     case SyntaxKind.NewExpression:
-                    case SyntaxKind.TypeAssertion:
-                    case SyntaxKind.ParenExpression:
+                    case SyntaxKind.TypeAssertionExpression:
+                    case SyntaxKind.ParenthesizedExpression:
                     case SyntaxKind.PrefixUnaryExpression:
                     case SyntaxKind.DeleteExpression:
                     case SyntaxKind.TypeOfExpression:
                     case SyntaxKind.VoidExpression:
-                    case SyntaxKind.PostfixOperator:
+                    case SyntaxKind.PostfixUnaryExpression:
                     case SyntaxKind.ConditionalExpression:
                     case SyntaxKind.Block:
                     case SyntaxKind.VariableStatement:
@@ -4496,8 +4496,8 @@ module ts {
             // Narrow the given type based on the given expression having the assumed boolean value
             function narrowType(type: Type, expr: Expression, assumeTrue: boolean): Type {
                 switch (expr.kind) {
-                    case SyntaxKind.ParenExpression:
-                        return narrowType(type, (<ParenExpression>expr).expression, assumeTrue);
+                    case SyntaxKind.ParenthesizedExpression:
+                        return narrowType(type, (<ParenthesizedExpression>expr).expression, assumeTrue);
                     case SyntaxKind.BinaryExpression:
                         var operator = (<BinaryExpression>expr).operator;
                         if (operator === SyntaxKind.EqualsEqualsEqualsToken || operator === SyntaxKind.ExclamationEqualsEqualsToken) {
@@ -4864,7 +4864,7 @@ module ts {
         // exists. Otherwise, it is the type of the string index signature in T, if one exists.
         function getContextualTypeForPropertyExpression(node: Expression): Type {
             var declaration = <PropertyDeclaration>node.parent;
-            var objectLiteral = <ObjectLiteral>declaration.parent;
+            var objectLiteral = <ObjectLiteralExpression>declaration.parent;
             var type = getContextualType(objectLiteral);
             // TODO(jfreeman): Handle this case for computed names and symbols
             var name = (<Identifier>declaration.name).text;
@@ -4880,7 +4880,7 @@ module ts {
         // the type of the property with the numeric name N in T, if one exists. Otherwise, it is the type of the numeric
         // index signature in T, if one exists.
         function getContextualTypeForElementExpression(node: Expression): Type {
-            var arrayLiteral = <ArrayLiteral>node.parent;
+            var arrayLiteral = <ArrayLiteralExpression>node.parent;
             var type = getContextualType(arrayLiteral);
             if (type) {
                 var index = indexOf(arrayLiteral.elements, node);
@@ -4917,13 +4917,13 @@ module ts {
                 case SyntaxKind.CallExpression:
                 case SyntaxKind.NewExpression:
                     return getContextualTypeForArgument(node);
-                case SyntaxKind.TypeAssertion:
+                case SyntaxKind.TypeAssertionExpression:
                     return getTypeFromTypeNode((<TypeAssertion>parent).type);
                 case SyntaxKind.BinaryExpression:
                     return getContextualTypeForBinaryOperand(node);
                 case SyntaxKind.PropertyAssignment:
                     return getContextualTypeForPropertyExpression(node);
-                case SyntaxKind.ArrayLiteral:
+                case SyntaxKind.ArrayLiteralExpression:
                     return getContextualTypeForElementExpression(node);
                 case SyntaxKind.ConditionalExpression:
                     return getContextualTypeForConditionalOperand(node);
@@ -5000,7 +5000,7 @@ module ts {
             return mapper && mapper !== identityMapper;
         }
 
-        function checkArrayLiteral(node: ArrayLiteral, contextualMapper?: TypeMapper): Type {
+        function checkArrayLiteral(node: ArrayLiteralExpression, contextualMapper?: TypeMapper): Type {
             var elements = node.elements;
             if (!elements.length) {
                 return createArrayType(undefinedType);
@@ -5038,7 +5038,7 @@ module ts {
             return (+name).toString() === name;
         }
         
-        function checkObjectLiteral(node: ObjectLiteral, contextualMapper?: TypeMapper): Type {
+        function checkObjectLiteral(node: ObjectLiteralExpression, contextualMapper?: TypeMapper): Type {
             var members = node.symbol.members;
             var properties: SymbolTable = {};
             var contextualType = getContextualType(node);
@@ -5115,7 +5115,7 @@ module ts {
             return s.valueDeclaration ? s.valueDeclaration.flags : s.flags & SymbolFlags.Prototype ? NodeFlags.Public | NodeFlags.Static : 0;
         }
 
-        function checkClassPropertyAccess(node: PropertyAccess, type: Type, prop: Symbol) {
+        function checkClassPropertyAccess(node: PropertyAccessExpression, type: Type, prop: Symbol) {
             var flags = getDeclarationFlagsFromSymbol(prop);
             // Public properties are always accessible
             if (!(flags & (NodeFlags.Private | NodeFlags.Protected))) {
@@ -5153,7 +5153,7 @@ module ts {
             }
         }
 
-        function checkPropertyAccess(node: PropertyAccess) {
+        function checkPropertyAccess(node: PropertyAccessExpression) {
             var type = checkExpression(node.left);
             if (type === unknownType) return type;
             if (type !== anyType) {
@@ -5190,7 +5190,7 @@ module ts {
             return anyType;
         }
 
-        function isValidPropertyAccess(node: PropertyAccess, propertyName: string): boolean {
+        function isValidPropertyAccess(node: PropertyAccessExpression, propertyName: string): boolean {
             var type = checkExpression(node.left);
             if (type !== unknownType && type !== anyType) {
                 var prop = getPropertyOfType(getWidenedType(type), propertyName);
@@ -6165,7 +6165,7 @@ module ts {
                         // An identifier expression that references a variable or parameter is classified as a reference. 
                         // An identifier expression that references any other kind of entity is classified as a value(and therefore cannot be the target of an assignment).
                         return !symbol || symbol === unknownSymbol || symbol === argumentsSymbol || (symbol.flags & SymbolFlags.Variable) !== 0;
-                    case SyntaxKind.PropertyAccess:
+                    case SyntaxKind.PropertyAccessExpression:
                         var symbol = findSymbol(n);
                         // TypeScript 1.0 spec (April 2014): 4.10
                         // A property access expression is always classified as a reference.
@@ -6174,8 +6174,8 @@ module ts {
                     case SyntaxKind.ElementAccessExpression:
                         //  old compiler doesn't check indexed assess
                         return true;
-                    case SyntaxKind.ParenExpression:
-                        return isReferenceOrErrorExpression((<ParenExpression>n).expression);
+                    case SyntaxKind.ParenthesizedExpression:
+                        return isReferenceOrErrorExpression((<ParenthesizedExpression>n).expression);
                     default:
                         return false;
                 }
@@ -6184,7 +6184,7 @@ module ts {
             function isConstVariableReference(n: Node): boolean {
                 switch (n.kind) {
                     case SyntaxKind.Identifier:
-                    case SyntaxKind.PropertyAccess:
+                    case SyntaxKind.PropertyAccessExpression:
                         var symbol = findSymbol(n);
                         return symbol && (symbol.flags & SymbolFlags.Variable) !== 0 && (getDeclarationFlagsFromSymbol(symbol) & NodeFlags.Const) !== 0;
                     case SyntaxKind.ElementAccessExpression:
@@ -6196,8 +6196,8 @@ module ts {
                             return prop && (prop.flags & SymbolFlags.Variable) !== 0 && (getDeclarationFlagsFromSymbol(prop) & NodeFlags.Const) !== 0;
                         }
                         return false;
-                    case SyntaxKind.ParenExpression:
-                        return isConstVariableReference((<ParenExpression>n).expression);
+                    case SyntaxKind.ParenthesizedExpression:
+                        return isConstVariableReference((<ParenthesizedExpression>n).expression);
                     default:
                         return false;
                 }
@@ -6524,7 +6524,7 @@ module ts {
                 // - 'object' in indexed access
                 // - target in rhs of import statement
                 var ok =
-                    (node.parent.kind === SyntaxKind.PropertyAccess && (<PropertyAccess>node.parent).left === node) ||
+                    (node.parent.kind === SyntaxKind.PropertyAccessExpression && (<PropertyAccessExpression>node.parent).left === node) ||
                     (node.parent.kind === SyntaxKind.ElementAccessExpression && (<ElementAccessExpression>node.parent).expression === node) ||
                     ((node.kind === SyntaxKind.Identifier || node.kind === SyntaxKind.QualifiedName) && isInRightSideOfImportOrExportAssignment(<EntityName>node));
 
@@ -6559,12 +6559,12 @@ module ts {
                     return globalRegExpType;
                 case SyntaxKind.QualifiedName:
                     return checkPropertyAccess(<QualifiedName>node);
-                case SyntaxKind.ArrayLiteral:
-                    return checkArrayLiteral(<ArrayLiteral>node, contextualMapper);
-                case SyntaxKind.ObjectLiteral:
-                    return checkObjectLiteral(<ObjectLiteral>node, contextualMapper);
-                case SyntaxKind.PropertyAccess:
-                    return checkPropertyAccess(<PropertyAccess>node);
+                case SyntaxKind.ArrayLiteralExpression:
+                    return checkArrayLiteral(<ArrayLiteralExpression>node, contextualMapper);
+                case SyntaxKind.ObjectLiteralExpression:
+                    return checkObjectLiteral(<ObjectLiteralExpression>node, contextualMapper);
+                case SyntaxKind.PropertyAccessExpression:
+                    return checkPropertyAccess(<PropertyAccessExpression>node);
                 case SyntaxKind.ElementAccessExpression:
                     return checkIndexedAccess(<ElementAccessExpression>node);
                 case SyntaxKind.CallExpression:
@@ -6572,10 +6572,10 @@ module ts {
                     return checkCallExpression(<CallExpression>node);
                 case SyntaxKind.TaggedTemplateExpression:
                     return checkTaggedTemplateExpression(<TaggedTemplateExpression>node);
-                case SyntaxKind.TypeAssertion:
+                case SyntaxKind.TypeAssertionExpression:
                     return checkTypeAssertion(<TypeAssertion>node);
-                case SyntaxKind.ParenExpression:
-                    return checkExpression((<ParenExpression>node).expression);
+                case SyntaxKind.ParenthesizedExpression:
+                    return checkExpression((<ParenthesizedExpression>node).expression);
                 case SyntaxKind.FunctionExpression:
                 case SyntaxKind.ArrowFunction:
                     return checkFunctionExpression(<FunctionExpression>node, contextualMapper);
@@ -6587,7 +6587,7 @@ module ts {
                     return checkVoidExpression(<VoidExpression>node);
                 case SyntaxKind.PrefixUnaryExpression:
                     return checkPrefixExpression(<UnaryExpression>node);
-                case SyntaxKind.PostfixOperator:
+                case SyntaxKind.PostfixUnaryExpression:
                     return checkPostfixExpression(<UnaryExpression>node);
                 case SyntaxKind.BinaryExpression:
                     return checkBinaryExpression(<BinaryExpression>node, contextualMapper);
@@ -6774,7 +6774,7 @@ module ts {
                     case SyntaxKind.FunctionExpression:
                     case SyntaxKind.FunctionDeclaration:
                     case SyntaxKind.ArrowFunction:
-                    case SyntaxKind.ObjectLiteral: return false;
+                    case SyntaxKind.ObjectLiteralExpression: return false;
                     default: return forEachChild(n, containsSuperCall);
                 }
             }
@@ -8136,11 +8136,11 @@ module ts {
                             return undefined;
                         case SyntaxKind.NumericLiteral:
                             return +(<LiteralExpression>e).text;
-                        case SyntaxKind.ParenExpression:
-                            return enumIsConst ? evalConstant((<ParenExpression>e).expression) : undefined;
+                        case SyntaxKind.ParenthesizedExpression:
+                            return enumIsConst ? evalConstant((<ParenthesizedExpression>e).expression) : undefined;
                         case SyntaxKind.Identifier:
                         case SyntaxKind.ElementAccessExpression:
-                        case SyntaxKind.PropertyAccess:
+                        case SyntaxKind.PropertyAccessExpression:
                             if (!enumIsConst) {
                                 return undefined;
                             }
@@ -8165,8 +8165,8 @@ module ts {
                                     propertyName = (<LiteralExpression>(<ElementAccessExpression>e).argumentExpression).text;
                                 }
                                 else {
-                                    var enumType = getTypeOfNode((<PropertyAccess>e).left);
-                                    propertyName = (<PropertyAccess>e).right.text;
+                                    var enumType = getTypeOfNode((<PropertyAccessExpression>e).left);
+                                    propertyName = (<PropertyAccessExpression>e).right.text;
                                 }
                                 if (enumType !== currentType) {
                                     return undefined;
@@ -8487,21 +8487,21 @@ module ts {
                     break;
                 case SyntaxKind.Parameter:
                 case SyntaxKind.Property:
-                case SyntaxKind.ArrayLiteral:
-                case SyntaxKind.ObjectLiteral:
+                case SyntaxKind.ArrayLiteralExpression:
+                case SyntaxKind.ObjectLiteralExpression:
                 case SyntaxKind.PropertyAssignment:
-                case SyntaxKind.PropertyAccess:
+                case SyntaxKind.PropertyAccessExpression:
                 case SyntaxKind.ElementAccessExpression:
                 case SyntaxKind.CallExpression:
                 case SyntaxKind.NewExpression:
                 case SyntaxKind.TaggedTemplateExpression:
-                case SyntaxKind.TypeAssertion:
-                case SyntaxKind.ParenExpression:
+                case SyntaxKind.TypeAssertionExpression:
+                case SyntaxKind.ParenthesizedExpression:
                 case SyntaxKind.TypeOfExpression:
                 case SyntaxKind.VoidExpression:
                 case SyntaxKind.DeleteExpression:
                 case SyntaxKind.PrefixUnaryExpression:
-                case SyntaxKind.PostfixOperator:
+                case SyntaxKind.PostfixUnaryExpression:
                 case SyntaxKind.BinaryExpression:
                 case SyntaxKind.ConditionalExpression:
                 case SyntaxKind.Block:
@@ -8776,7 +8776,7 @@ module ts {
                         case SyntaxKind.ConstructSignature:
                         case SyntaxKind.IndexSignature:
                             return node === (<SignatureDeclaration>parent).type;
-                        case SyntaxKind.TypeAssertion:
+                        case SyntaxKind.TypeAssertionExpression:
                             return node === (<TypeAssertion>parent).type;
                         case SyntaxKind.CallExpression:
                         case SyntaxKind.NewExpression:
@@ -8806,7 +8806,7 @@ module ts {
         }
 
         function isRightSideOfQualifiedNameOrPropertyAccess(node: Node) {
-            return (node.parent.kind === SyntaxKind.QualifiedName || node.parent.kind === SyntaxKind.PropertyAccess) &&
+            return (node.parent.kind === SyntaxKind.QualifiedName || node.parent.kind === SyntaxKind.PropertyAccessExpression) &&
                 (<QualifiedName>node.parent).right === node;
         }
 
@@ -8836,7 +8836,7 @@ module ts {
                     var meaning: SymbolFlags = SymbolFlags.Value | SymbolFlags.Import;
                     return resolveEntityName(entityName, entityName, meaning);
                 }
-                else if (entityName.kind === SyntaxKind.QualifiedName || entityName.kind === SyntaxKind.PropertyAccess) {
+                else if (entityName.kind === SyntaxKind.QualifiedName || entityName.kind === SyntaxKind.PropertyAccessExpression) {
                     var symbol = getNodeLinks(entityName).resolvedSymbol;
                     if (!symbol) {
                         checkPropertyAccess(<QualifiedName>entityName);
@@ -8879,7 +8879,7 @@ module ts {
 
             switch (node.kind) {
                 case SyntaxKind.Identifier:
-                case SyntaxKind.PropertyAccess:
+                case SyntaxKind.PropertyAccessExpression:
                 case SyntaxKind.QualifiedName:
                     return getSymbolOfEntityName(<Identifier>node);
 
@@ -9160,7 +9160,7 @@ module ts {
             return getNodeLinks(node).enumMemberValue;
         }
 
-        function getConstantValue(node: PropertyAccess | ElementAccessExpression): number {
+        function getConstantValue(node: PropertyAccessExpression | ElementAccessExpression): number {
             var symbol = getNodeLinks(node).resolvedSymbol;
             if (symbol && (symbol.flags & SymbolFlags.EnumMember)) {
                 var declaration = symbol.valueDeclaration;

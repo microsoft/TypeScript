@@ -1996,7 +1996,7 @@ module ts {
                     //    ("abc" + 1) << (2 + "")
                     // rather than
                     //    "abc" + (1 << 2) + ""
-                    var needsParens = templateSpan.expression.kind !== SyntaxKind.ParenExpression
+                    var needsParens = templateSpan.expression.kind !== SyntaxKind.ParenthesizedExpression
                         && comparePrecedenceToBinaryPlus(templateSpan.expression) !== Comparison.GreaterThan;
 
                     write(" + ");
@@ -2028,7 +2028,7 @@ module ts {
                         case SyntaxKind.CallExpression:
                         case SyntaxKind.NewExpression:
                             return (<CallExpression>parent).expression === template;
-                        case SyntaxKind.ParenExpression:
+                        case SyntaxKind.ParenthesizedExpression:
                             return false;
                         case SyntaxKind.TaggedTemplateExpression:
                             Debug.fail("Path should be unreachable; tagged templates not supported pre-ES6.");
@@ -2170,7 +2170,7 @@ module ts {
                 }
             }
 
-            function emitArrayLiteral(node: ArrayLiteral) {
+            function emitArrayLiteral(node: ArrayLiteralExpression) {
                 if (node.flags & NodeFlags.MultiLine) {
                     write("[");
                     increaseIndent();
@@ -2186,7 +2186,7 @@ module ts {
                 }
             }
 
-            function emitObjectLiteral(node: ObjectLiteral) {
+            function emitObjectLiteral(node: ObjectLiteralExpression) {
                 if (!node.properties.length) {
                     write("{}");
                 }
@@ -2249,17 +2249,17 @@ module ts {
                 }
             }
 
-            function tryEmitConstantValue(node: PropertyAccess | ElementAccessExpression): boolean {
+            function tryEmitConstantValue(node: PropertyAccessExpression | ElementAccessExpression): boolean {
                 var constantValue = resolver.getConstantValue(node);
                 if (constantValue !== undefined) {
-                    var propertyName = node.kind === SyntaxKind.PropertyAccess ? declarationNameToString((<PropertyAccess>node).right) : getTextOfNode((<ElementAccessExpression>node).argumentExpression);
+                    var propertyName = node.kind === SyntaxKind.PropertyAccessExpression ? declarationNameToString((<PropertyAccessExpression>node).right) : getTextOfNode((<ElementAccessExpression>node).argumentExpression);
                     write(constantValue.toString() + " /* " + propertyName + " */");
                     return true;
                 }
                 return false;
             }
 
-            function emitPropertyAccess(node: PropertyAccess) {
+            function emitPropertyAccess(node: PropertyAccessExpression) {
                 if (tryEmitConstantValue(node)) {
                     return;
                 }
@@ -2286,7 +2286,7 @@ module ts {
                 }
                 else {
                     emit(node.expression);
-                    superCall = node.expression.kind === SyntaxKind.PropertyAccess && (<PropertyAccess>node.expression).left.kind === SyntaxKind.SuperKeyword;
+                    superCall = node.expression.kind === SyntaxKind.PropertyAccessExpression && (<PropertyAccessExpression>node.expression).left.kind === SyntaxKind.SuperKeyword;
                 }
                 if (superCall) {
                     write(".call(");
@@ -2321,13 +2321,13 @@ module ts {
                 emit(node.template);
             }
 
-            function emitParenExpression(node: ParenExpression) {
-                if (node.expression.kind === SyntaxKind.TypeAssertion) {
+            function emitParenExpression(node: ParenthesizedExpression) {
+                if (node.expression.kind === SyntaxKind.TypeAssertionExpression) {
                     var operand = (<TypeAssertion>node.expression).expression;
 
                     // Make sure we consider all nested cast expressions, e.g.:
                     // (<any><number><any>-A).x; 
-                    while (operand.kind == SyntaxKind.TypeAssertion) {
+                    while (operand.kind == SyntaxKind.TypeAssertionExpression) {
                         operand = (<TypeAssertion>operand).expression;
                     }
 
@@ -2343,7 +2343,7 @@ module ts {
                         operand.kind !== SyntaxKind.VoidExpression &&
                         operand.kind !== SyntaxKind.TypeOfExpression &&
                         operand.kind !== SyntaxKind.DeleteExpression &&
-                        operand.kind !== SyntaxKind.PostfixOperator &&
+                        operand.kind !== SyntaxKind.PostfixUnaryExpression &&
                         operand.kind !== SyntaxKind.NewExpression &&
                         !(operand.kind === SyntaxKind.CallExpression && node.parent.kind === SyntaxKind.NewExpression) &&
                         !(operand.kind === SyntaxKind.FunctionExpression && node.parent.kind === SyntaxKind.CallExpression)) {
@@ -2403,7 +2403,7 @@ module ts {
                     }
                 }
                 emit(node.operand);
-                if (node.kind === SyntaxKind.PostfixOperator) {
+                if (node.kind === SyntaxKind.PostfixUnaryExpression) {
                     write(tokenToString(node.operator));
                 }
             }
@@ -3495,18 +3495,18 @@ module ts {
                         return emitTemplateSpan(<TemplateSpan>node);
                     case SyntaxKind.QualifiedName:
                         return emitPropertyAccess(<QualifiedName>node);
-                    case SyntaxKind.ArrayLiteral:
-                        return emitArrayLiteral(<ArrayLiteral>node);
-                    case SyntaxKind.ObjectLiteral:
-                        return emitObjectLiteral(<ObjectLiteral>node);
+                    case SyntaxKind.ArrayLiteralExpression:
+                        return emitArrayLiteral(<ArrayLiteralExpression>node);
+                    case SyntaxKind.ObjectLiteralExpression:
+                        return emitObjectLiteral(<ObjectLiteralExpression>node);
                     case SyntaxKind.PropertyAssignment:
                         return emitPropertyAssignment(<PropertyDeclaration>node);
                     case SyntaxKind.ShorthandPropertyAssignment:
                         return emitShortHandPropertyAssignment(<ShortHandPropertyDeclaration>node);
                     case SyntaxKind.ComputedPropertyName:
                         return emitComputedPropertyName(<ComputedPropertyName>node);
-                    case SyntaxKind.PropertyAccess:
-                        return emitPropertyAccess(<PropertyAccess>node);
+                    case SyntaxKind.PropertyAccessExpression:
+                        return emitPropertyAccess(<PropertyAccessExpression>node);
                     case SyntaxKind.ElementAccessExpression:
                         return emitIndexedAccess(<ElementAccessExpression>node);
                     case SyntaxKind.CallExpression:
@@ -3515,10 +3515,10 @@ module ts {
                         return emitNewExpression(<NewExpression>node);
                     case SyntaxKind.TaggedTemplateExpression:
                         return emitTaggedTemplateExpression(<TaggedTemplateExpression>node);
-                    case SyntaxKind.TypeAssertion:
+                    case SyntaxKind.TypeAssertionExpression:
                         return emit((<TypeAssertion>node).expression);
-                    case SyntaxKind.ParenExpression:
-                        return emitParenExpression(<ParenExpression>node);
+                    case SyntaxKind.ParenthesizedExpression:
+                        return emitParenExpression(<ParenthesizedExpression>node);
                     case SyntaxKind.FunctionDeclaration:
                     case SyntaxKind.FunctionExpression:
                     case SyntaxKind.ArrowFunction:
@@ -3530,7 +3530,7 @@ module ts {
                     case SyntaxKind.VoidExpression:
                         return emitVoidExpression(<VoidExpression>node);
                     case SyntaxKind.PrefixUnaryExpression:
-                    case SyntaxKind.PostfixOperator:
+                    case SyntaxKind.PostfixUnaryExpression:
                         return emitUnaryExpression(<UnaryExpression>node);
                     case SyntaxKind.BinaryExpression:
                         return emitBinaryExpression(<BinaryExpression>node);

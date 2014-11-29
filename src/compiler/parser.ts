@@ -255,13 +255,13 @@ module ts {
                 return children((<UnionTypeNode>node).types);
             case SyntaxKind.ParenthesizedType:
                 return child((<ParenthesizedTypeNode>node).type);
-            case SyntaxKind.ArrayLiteral:
-                return children((<ArrayLiteral>node).elements);
-            case SyntaxKind.ObjectLiteral:
-                return children((<ObjectLiteral>node).properties);
-            case SyntaxKind.PropertyAccess:
-                return child((<PropertyAccess>node).left) ||
-                    child((<PropertyAccess>node).right);
+            case SyntaxKind.ArrayLiteralExpression:
+                return children((<ArrayLiteralExpression>node).elements);
+            case SyntaxKind.ObjectLiteralExpression:
+                return children((<ObjectLiteralExpression>node).properties);
+            case SyntaxKind.PropertyAccessExpression:
+                return child((<PropertyAccessExpression>node).left) ||
+                    child((<PropertyAccessExpression>node).right);
             case SyntaxKind.ElementAccessExpression:
                 return child((<ElementAccessExpression>node).expression) ||
                     child((<ElementAccessExpression>node).argumentExpression);
@@ -273,11 +273,11 @@ module ts {
             case SyntaxKind.TaggedTemplateExpression:
                 return child((<TaggedTemplateExpression>node).tag) ||
                     child((<TaggedTemplateExpression>node).template);
-            case SyntaxKind.TypeAssertion:
+            case SyntaxKind.TypeAssertionExpression:
                 return child((<TypeAssertion>node).type) ||
                     child((<TypeAssertion>node).expression);
-            case SyntaxKind.ParenExpression:
-                return child((<ParenExpression>node).expression);
+            case SyntaxKind.ParenthesizedExpression:
+                return child((<ParenthesizedExpression>node).expression);
             case SyntaxKind.DeleteExpression:
                 return child((<DeleteExpression>node).expression);
             case SyntaxKind.TypeOfExpression:
@@ -285,7 +285,7 @@ module ts {
             case SyntaxKind.VoidExpression:
                 return child((<VoidExpression>node).expression);
             case SyntaxKind.PrefixUnaryExpression:
-            case SyntaxKind.PostfixOperator:
+            case SyntaxKind.PostfixUnaryExpression:
                 return child((<UnaryExpression>node).operand);
             case SyntaxKind.BinaryExpression:
                 return child((<BinaryExpression>node).left) ||
@@ -513,22 +513,22 @@ module ts {
             case SyntaxKind.TrueKeyword:
             case SyntaxKind.FalseKeyword:
             case SyntaxKind.RegularExpressionLiteral:
-            case SyntaxKind.ArrayLiteral:
-            case SyntaxKind.ObjectLiteral:
-            case SyntaxKind.PropertyAccess:
+            case SyntaxKind.ArrayLiteralExpression:
+            case SyntaxKind.ObjectLiteralExpression:
+            case SyntaxKind.PropertyAccessExpression:
             case SyntaxKind.ElementAccessExpression:
             case SyntaxKind.CallExpression:
             case SyntaxKind.NewExpression:
             case SyntaxKind.TaggedTemplateExpression:
-            case SyntaxKind.TypeAssertion:
-            case SyntaxKind.ParenExpression:
+            case SyntaxKind.TypeAssertionExpression:
+            case SyntaxKind.ParenthesizedExpression:
             case SyntaxKind.FunctionExpression:
             case SyntaxKind.ArrowFunction:
             case SyntaxKind.VoidExpression:
             case SyntaxKind.DeleteExpression:
             case SyntaxKind.TypeOfExpression:
             case SyntaxKind.PrefixUnaryExpression:
-            case SyntaxKind.PostfixOperator:
+            case SyntaxKind.PostfixUnaryExpression:
             case SyntaxKind.BinaryExpression:
             case SyntaxKind.ConditionalExpression:
             case SyntaxKind.TemplateExpression:
@@ -571,7 +571,7 @@ module ts {
                     case SyntaxKind.ForInStatement:
                         return (<ForInStatement>parent).variable === node ||
                             (<ForInStatement>parent).expression === node;
-                    case SyntaxKind.TypeAssertion:
+                    case SyntaxKind.TypeAssertionExpression:
                         return node === (<TypeAssertion>parent).expression;
                     case SyntaxKind.TemplateSpan:
                         return node === (<TemplateSpan>parent).expression;
@@ -2676,7 +2676,7 @@ module ts {
             if ((token === SyntaxKind.PlusPlusToken || token === SyntaxKind.MinusMinusToken) && !scanner.hasPrecedingLineBreak()) {
                 var operator = token;
                 nextToken();
-                return makeUnaryExpression(SyntaxKind.PostfixOperator, expression.pos, operator, expression);
+                return makeUnaryExpression(SyntaxKind.PostfixUnaryExpression, expression.pos, operator, expression);
             }
 
             return expression;
@@ -2786,7 +2786,7 @@ module ts {
 
             // If we have seen "super" it must be followed by '(' or '.'.
             // If it wasn't then just try to parse out a '.' and report an error.
-            var node = <PropertyAccess>createNode(SyntaxKind.PropertyAccess, expression.pos);
+            var node = <PropertyAccessExpression>createNode(SyntaxKind.PropertyAccessExpression, expression.pos);
             node.left = expression;
             parseExpected(SyntaxKind.DotToken, Diagnostics.super_must_be_followed_by_an_argument_list_or_member_access);
             node.right = parseIdentifierName();
@@ -2794,7 +2794,7 @@ module ts {
         }
 
         function parseTypeAssertion(): TypeAssertion {
-            var node = <TypeAssertion>createNode(SyntaxKind.TypeAssertion);
+            var node = <TypeAssertion>createNode(SyntaxKind.TypeAssertionExpression);
             parseExpected(SyntaxKind.LessThanToken);
             node.type = parseType();
             parseExpected(SyntaxKind.GreaterThanToken);
@@ -2813,7 +2813,7 @@ module ts {
             while (true) {
                 var dotOrBracketStart = scanner.getTokenPos();
                 if (parseOptional(SyntaxKind.DotToken)) {
-                    var propertyAccess = <PropertyAccess>createNode(SyntaxKind.PropertyAccess, expression.pos);
+                    var propertyAccess = <PropertyAccessExpression>createNode(SyntaxKind.PropertyAccessExpression, expression.pos);
                     // Technically a keyword is valid here as all keywords are identifier names.
                     // However, often we'll encounter this in error situations when the keyword
                     // is actually starting another valid construct.
@@ -2990,8 +2990,8 @@ module ts {
             return <Expression>createMissingNode();
         }
 
-        function parseParenExpression(): ParenExpression {
-            var node = <ParenExpression>createNode(SyntaxKind.ParenExpression);
+        function parseParenExpression(): ParenthesizedExpression {
+            var node = <ParenthesizedExpression>createNode(SyntaxKind.ParenthesizedExpression);
             parseExpected(SyntaxKind.OpenParenToken);
             node.expression = allowInAnd(parseExpression);
             parseExpected(SyntaxKind.CloseParenToken);
@@ -3012,8 +3012,8 @@ module ts {
             return allowInAnd(parseAssignmentExpressionOrOmittedExpression);
         }
 
-        function parseArrayLiteral(): ArrayLiteral {
-            var node = <ArrayLiteral>createNode(SyntaxKind.ArrayLiteral);
+        function parseArrayLiteral(): ArrayLiteralExpression {
+            var node = <ArrayLiteralExpression>createNode(SyntaxKind.ArrayLiteralExpression);
             parseExpected(SyntaxKind.OpenBracketToken);
             if (scanner.hasPrecedingLineBreak()) node.flags |= NodeFlags.MultiLine;
             node.elements = parseDelimitedList(ParsingContext.ArrayLiteralMembers, parseArrayLiteralElement);
@@ -3077,8 +3077,8 @@ module ts {
             return parsePropertyAssignment();
         }
 
-        function parseObjectLiteral(): ObjectLiteral {
-            var node = <ObjectLiteral>createNode(SyntaxKind.ObjectLiteral);
+        function parseObjectLiteral(): ObjectLiteralExpression {
+            var node = <ObjectLiteralExpression>createNode(SyntaxKind.ObjectLiteralExpression);
             parseExpected(SyntaxKind.OpenBraceToken);
             if (scanner.hasPrecedingLineBreak()) {
                 node.flags |= NodeFlags.MultiLine;
@@ -4119,14 +4119,14 @@ module ts {
     function isLeftHandSideExpression(expr: Expression): boolean {
         if (expr) {
             switch (expr.kind) {
-                case SyntaxKind.PropertyAccess:
+                case SyntaxKind.PropertyAccessExpression:
                 case SyntaxKind.ElementAccessExpression:
                 case SyntaxKind.NewExpression:
                 case SyntaxKind.CallExpression:
                 case SyntaxKind.TaggedTemplateExpression:
-                case SyntaxKind.ArrayLiteral:
-                case SyntaxKind.ParenExpression:
-                case SyntaxKind.ObjectLiteral:
+                case SyntaxKind.ArrayLiteralExpression:
+                case SyntaxKind.ParenthesizedExpression:
+                case SyntaxKind.ObjectLiteralExpression:
                 case SyntaxKind.FunctionExpression:
                 case SyntaxKind.Identifier:
                 case SyntaxKind.Missing:
@@ -4242,10 +4242,10 @@ module ts {
                 case SyntaxKind.LabeledStatement:               return checkLabeledStatement(<LabeledStatement>node);
                 case SyntaxKind.Method:                         return checkMethod(<MethodDeclaration>node);
                 case SyntaxKind.ModuleDeclaration:              return checkModuleDeclaration(<ModuleDeclaration>node);
-                case SyntaxKind.ObjectLiteral:                  return checkObjectLiteral(<ObjectLiteral>node);
+                case SyntaxKind.ObjectLiteralExpression:                  return checkObjectLiteral(<ObjectLiteralExpression>node);
                 case SyntaxKind.NumericLiteral:                 return checkNumericLiteral(<LiteralExpression>node);
                 case SyntaxKind.Parameter:                      return checkParameter(<ParameterDeclaration>node);
-                case SyntaxKind.PostfixOperator:                return checkPostfixOperator(<UnaryExpression>node);
+                case SyntaxKind.PostfixUnaryExpression:                return checkPostfixOperator(<UnaryExpression>node);
                 case SyntaxKind.PrefixUnaryExpression:          return checkPrefixOperator(<UnaryExpression>node);
                 case SyntaxKind.Property:                       return checkProperty(<PropertyDeclaration>node);
                 case SyntaxKind.PropertyAssignment:             return checkPropertyAssignment(<PropertyDeclaration>node);
@@ -4763,7 +4763,7 @@ module ts {
             }
         }
 
-        function checkObjectLiteral(node: ObjectLiteral): boolean {
+        function checkObjectLiteral(node: ObjectLiteralExpression): boolean {
             var seen: Map<SymbolFlags> = {};
             var Property = 1;
             var GetAccessor = 2;

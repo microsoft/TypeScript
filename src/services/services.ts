@@ -1927,7 +1927,7 @@ module ts {
     }
 
     function isRightSideOfPropertyAccess(node: Node) {
-        return node && node.parent && node.parent.kind === SyntaxKind.PropertyAccess && (<PropertyAccess>node.parent).right === node;
+        return node && node.parent && node.parent.kind === SyntaxKind.PropertyAccessExpression && (<PropertyAccessExpression>node.parent).right === node;
     }
 
     function isCallExpressionTarget(node: Node): boolean {
@@ -2374,8 +2374,8 @@ module ts {
             var node: Node;
             var isRightOfDot: boolean;
             if (previousToken && previousToken.kind === SyntaxKind.DotToken &&
-                (previousToken.parent.kind === SyntaxKind.PropertyAccess || previousToken.parent.kind === SyntaxKind.QualifiedName)) {
-                node = (<PropertyAccess>previousToken.parent).left;
+                (previousToken.parent.kind === SyntaxKind.PropertyAccessExpression || previousToken.parent.kind === SyntaxKind.QualifiedName)) {
+                node = (<PropertyAccessExpression>previousToken.parent).left;
                 isRightOfDot = true;
             }
             else {
@@ -2401,7 +2401,7 @@ module ts {
                 var symbols: Symbol[] = [];
                 isMemberCompletion = true;
 
-                if (node.kind === SyntaxKind.Identifier || node.kind === SyntaxKind.QualifiedName || node.kind === SyntaxKind.PropertyAccess) {
+                if (node.kind === SyntaxKind.Identifier || node.kind === SyntaxKind.QualifiedName || node.kind === SyntaxKind.PropertyAccessExpression) {
                     var symbol = typeInfoResolver.getSymbolInfo(node);
 
                     // This is an alias, follow what it aliases
@@ -2412,7 +2412,7 @@ module ts {
                     if (symbol && symbol.flags & SymbolFlags.HasExports) {
                         // Extract module or enum members
                         forEachValue(symbol.exports, symbol => {
-                            if (typeInfoResolver.isValidPropertyAccess(<PropertyAccess>(node.parent), symbol.name)) {
+                            if (typeInfoResolver.isValidPropertyAccess(<PropertyAccessExpression>(node.parent), symbol.name)) {
                                 symbols.push(symbol);
                             }
                         });
@@ -2423,7 +2423,7 @@ module ts {
                 if (type) {
                     // Filter private properties
                     forEach(type.getApparentProperties(), symbol => {
-                        if (typeInfoResolver.isValidPropertyAccess(<PropertyAccess>(node.parent), symbol.name)) {
+                        if (typeInfoResolver.isValidPropertyAccess(<PropertyAccessExpression>(node.parent), symbol.name)) {
                             symbols.push(symbol);
                         }
                     });
@@ -2542,7 +2542,7 @@ module ts {
                 return false;
             }
 
-            function getContainingObjectLiteralApplicableForCompletion(previousToken: Node): ObjectLiteral {
+            function getContainingObjectLiteralApplicableForCompletion(previousToken: Node): ObjectLiteralExpression {
                 // The locations in an object literal expression that are applicable for completion are property name definition locations.
 
                 if (previousToken) {
@@ -2551,8 +2551,8 @@ module ts {
                     switch (previousToken.kind) {
                         case SyntaxKind.OpenBraceToken:  // var x = { |
                         case SyntaxKind.CommaToken:      // var x = { a: 0, |
-                            if (parent && parent.kind === SyntaxKind.ObjectLiteral) {
-                                return <ObjectLiteral>parent;
+                            if (parent && parent.kind === SyntaxKind.ObjectLiteralExpression) {
+                                return <ObjectLiteralExpression>parent;
                             }
                             break;
                     }
@@ -2878,8 +2878,8 @@ module ts {
 
                 var type = typeResolver.getNarrowedTypeOfSymbol(symbol, location);
                 if (type) {
-                    if (location.parent && location.parent.kind === SyntaxKind.PropertyAccess) {
-                        var right = (<PropertyAccess>location.parent).right;
+                    if (location.parent && location.parent.kind === SyntaxKind.PropertyAccessExpression) {
+                        var right = (<PropertyAccessExpression>location.parent).right;
                         // Either the location is on the right of a property access, or on the left and the right is missing
                         if (right === location || (right && right.kind === SyntaxKind.Missing)){
                             location = location.parent;
@@ -3201,7 +3201,7 @@ module ts {
                 // Try getting just type at this position and show
                 switch (node.kind) {
                     case SyntaxKind.Identifier:
-                    case SyntaxKind.PropertyAccess:
+                    case SyntaxKind.PropertyAccessExpression:
                     case SyntaxKind.QualifiedName:
                     case SyntaxKind.ThisKeyword:
                     case SyntaxKind.SuperKeyword:
@@ -4574,7 +4574,7 @@ module ts {
 
             var parent = node.parent;
             if (parent) {
-                if (parent.kind === SyntaxKind.PostfixOperator || parent.kind === SyntaxKind.PrefixUnaryExpression) {
+                if (parent.kind === SyntaxKind.PostfixUnaryExpression || parent.kind === SyntaxKind.PrefixUnaryExpression) {
                     return true;
                 }
                 else if (parent.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>parent).left === node) {
@@ -4879,7 +4879,7 @@ module ts {
             }
 
             switch (node.kind) {
-                case SyntaxKind.PropertyAccess:
+                case SyntaxKind.PropertyAccessExpression:
                 case SyntaxKind.QualifiedName:
                 case SyntaxKind.StringLiteral:
                 case SyntaxKind.FalseKeyword:
@@ -5064,7 +5064,7 @@ module ts {
                     if (token.parent.kind === SyntaxKind.BinaryExpression ||
                         token.parent.kind === SyntaxKind.VariableDeclaration ||
                         token.parent.kind === SyntaxKind.PrefixUnaryExpression ||
-                        token.parent.kind === SyntaxKind.PostfixOperator ||
+                        token.parent.kind === SyntaxKind.PostfixUnaryExpression ||
                         token.parent.kind === SyntaxKind.ConditionalExpression) {
                         return ClassificationTypeNames.operator;
                     }

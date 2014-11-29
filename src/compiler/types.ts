@@ -165,30 +165,29 @@ module ts {
         UnionType,
         ParenthesizedType,
         // Expression
-        ArrayLiteral,
-        ObjectLiteral,
-        PropertyAssignment,
-        ShorthandPropertyAssignment,
-        PropertyAccess,
+        ArrayLiteralExpression,
+        ObjectLiteralExpression,
+        PropertyAccessExpression,
         ElementAccessExpression,
         CallExpression,
         NewExpression,
         TaggedTemplateExpression,
-        TypeAssertion,
-        ParenExpression,
+        TypeAssertionExpression,
+        ParenthesizedExpression,
         FunctionExpression,
         ArrowFunction,
         DeleteExpression,
         TypeOfExpression,
         VoidExpression,
         PrefixUnaryExpression,
-        PostfixOperator,
+        PostfixUnaryExpression,
         BinaryExpression,
         ConditionalExpression,
         TemplateExpression,
-        TemplateSpan,
         YieldExpression,
         OmittedExpression,
+        // Misc
+        TemplateSpan,
         // Element
         Block,
         VariableStatement,
@@ -224,6 +223,9 @@ module ts {
         ModuleBlock,
         ImportDeclaration,
         ExportAssignment,
+        // Property assignments
+        PropertyAssignment,
+        ShorthandPropertyAssignment,
         // Enum
         EnumMember,
         // Top-level nodes
@@ -495,19 +497,19 @@ module ts {
         literal: LiteralExpression;
     }
 
-    export interface ParenExpression extends Expression {
+    export interface ParenthesizedExpression extends Expression {
         expression: Expression;
     }
 
-    export interface ArrayLiteral extends Expression {
+    export interface ArrayLiteralExpression extends Expression {
         elements: NodeArray<Expression>;
     }
 
-    export interface ObjectLiteral extends Expression {
+    export interface ObjectLiteralExpression extends Expression {
         properties: NodeArray<Node>;
     }
 
-    export interface PropertyAccess extends Expression {
+    export interface PropertyAccessExpression extends Expression {
         left: Expression;
         right: Identifier;
     }
@@ -799,7 +801,7 @@ module ts {
         isEmitBlocked(sourceFile?: SourceFile): boolean;
         // Returns the constant value of this enum member, or 'undefined' if the enum member has a computed value.
         getEnumMemberValue(node: EnumMember): number;
-        isValidPropertyAccess(node: PropertyAccess, propertyName: string): boolean;
+        isValidPropertyAccess(node: PropertyAccessExpression, propertyName: string): boolean;
         getAliasedSymbol(symbol: Symbol): Symbol;
     }
 
@@ -890,7 +892,7 @@ module ts {
         isSymbolAccessible(symbol: Symbol, enclosingDeclaration: Node, meaning: SymbolFlags): SymbolAccessiblityResult;
         isEntityNameVisible(entityName: EntityName, enclosingDeclaration: Node): SymbolVisibilityResult;
         // Returns the constant value this property access resolves to, or 'undefined' for a non-constant
-        getConstantValue(node: PropertyAccess | ElementAccessExpression): number;
+        getConstantValue(node: PropertyAccessExpression | ElementAccessExpression): number;
         isEmitBlocked(sourceFile?: SourceFile): boolean;
     }
 

@@ -29,21 +29,21 @@ class TypeWriterWalker {
             // old typeWriter baselines, suppress tokens
             case ts.SyntaxKind.ThisKeyword:
             case ts.SyntaxKind.SuperKeyword:
-            case ts.SyntaxKind.ArrayLiteral:
-            case ts.SyntaxKind.ObjectLiteral:
-            case ts.SyntaxKind.PropertyAccess:
+            case ts.SyntaxKind.ArrayLiteralExpression:
+            case ts.SyntaxKind.ObjectLiteralExpression:
+            case ts.SyntaxKind.PropertyAccessExpression:
             case ts.SyntaxKind.ElementAccessExpression:
             case ts.SyntaxKind.CallExpression:
             case ts.SyntaxKind.NewExpression:
-            case ts.SyntaxKind.TypeAssertion:
-            case ts.SyntaxKind.ParenExpression:
+            case ts.SyntaxKind.TypeAssertionExpression:
+            case ts.SyntaxKind.ParenthesizedExpression:
             case ts.SyntaxKind.FunctionExpression:
             case ts.SyntaxKind.ArrowFunction:
             case ts.SyntaxKind.TypeOfExpression:
             case ts.SyntaxKind.VoidExpression:
             case ts.SyntaxKind.DeleteExpression:
             case ts.SyntaxKind.PrefixUnaryExpression:
-            case ts.SyntaxKind.PostfixOperator:
+            case ts.SyntaxKind.PostfixUnaryExpression:
             case ts.SyntaxKind.BinaryExpression:
             case ts.SyntaxKind.ConditionalExpression:
                 this.log(node, this.getTypeOfNode(node));
