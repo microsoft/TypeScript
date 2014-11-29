@@ -13,8 +13,8 @@ var _i = "This is what I'd expect to see";
 var Foo = (function () {
     function Foo() {
         var args = [];
-        for (var _i = 0; _i < arguments.length; _i++) {
-            args[_i - 0] = arguments[_i];
+        for (var _0 = 0; _0 < arguments.length; _0++) {
+            args[_0 - 0] = arguments[_0];
         }
         console.log(_i); // This should result in error
     }

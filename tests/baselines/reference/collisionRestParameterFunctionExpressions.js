@@ -28,8 +28,8 @@ function foo() {
 function foo() {
     function f1(_i) {
         var restParameters = [];
-        for (var _i = 1; _i < arguments.length; _i++) {
-            restParameters[_i - 1] = arguments[_i];
+        for (var _0 = 1; _0 < arguments.length; _0++) {
+            restParameters[_0 - 1] = arguments[_0];
         }
         var _i = 10; // no error
     }
@@ -38,8 +38,8 @@ function foo() {
     }
     function f3() {
         var restParameters = [];
-        for (var _i = 0; _i < arguments.length; _i++) {
-            restParameters[_i - 0] = arguments[_i];
+        for (var _0 = 0; _0 < arguments.length; _0++) {
+            restParameters[_0 - 0] = arguments[_0];
         }
         var _i = 10; // no error
     }
@@ -48,8 +48,8 @@ function foo() {
     }
     function f4(_i) {
         var rest = [];
-        for (var _i = 1; _i < arguments.length; _i++) {
-            rest[_i - 1] = arguments[_i];
+        for (var _0 = 1; _0 < arguments.length; _0++) {
+            rest[_0 - 1] = arguments[_0];
         }
     }
     function f4NoError(_i) {
