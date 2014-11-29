@@ -2240,9 +2240,16 @@ module ts {
                 return arrowExpression;
             }
 
-            // Now try to handle the rest of the cases.  First, see if we can parse out up to and
-            // including a conditional expression.
-            var expr = parseConditionalExpression();
+            // Now try to see if we're in production '1', '2' or '3'.  A conditional expression can
+            // start with a LogicalOrExpression, while the assignment productions can only start with
+            // LeftHandSideExpressions.
+            //
+            // So, first, we try to just parse out a BinaryExpression.  If we get something that is a 
+            // LeftHandSide or higher, then we can try to parse out the assignment expression part.  
+            // Otherwise, we try to parse out the conditional expression bit.  We want to allow any 
+            // binary expression here, so we pass in the 'lowest' precedence here so that it matches
+            // and consumes anything.
+            var expr = parseBinaryExpressionOrHigher(/*precedence:*/ 0);
 
             // To avoid a look-ahead, we did not handle the case of an arrow function with a single un-parenthesized
             // parameter ('x => ...') above. We handle it here by checking if the parsed expression was a single
@@ -2254,14 +2261,17 @@ module ts {
             // Now see if we might be in cases '2' or '3'.
             // If the expression was a LHS expression, and we have an assignment operator, then 
             // we're in '2' or '3'. Consume the assignment and return.
-            if (isLeftHandSideExpression(expr) && isAssignmentOperator(token)) {
+            //
+            // Note: we call reScanGreaterToken so that we get an appropriately merged token
+            // for cases like > > =  becoming >>=
+            if (isLeftHandSideExpression(expr) && isAssignmentOperator(reScanGreaterToken())) {
                 var operator = token;
                 nextToken();
                 return makeBinaryExpression(expr, operator, parseAssignmentExpressionOrHigher());
             }
 
-            // otherwise this was production '1'.  Return whatever we parsed so far.
-            return expr;
+            // It wasn't an assignment or a lambda.  This is a conditional expression:
+            return parseConditionalExpressionRest(expr);
         }
 
         function isYieldExpression(): boolean {
@@ -2505,35 +2515,50 @@ module ts {
             return makeFunctionExpression(SyntaxKind.ArrowFunction, pos, /*asteriskToken:*/ undefined, /*name:*/ undefined, sig, body);
         }
 
-        function parseConditionalExpression(): Expression {
-            // Note: we explicitly 'allowIn' in the whenTrue part of the condition expression, and 
-            // we do not that for the 'whenFalse' part.  
-
-            var expr = parseBinaryOperators(parseUnaryExpression(), /*minPrecedence:*/ 0);
+        function parseConditionalExpressionRest(leftOperand: Expression): Expression {
+            // Note: we are passed in an expression which was produced from parseBinaryExpressionOrHigher.
             if (!parseOptional(SyntaxKind.QuestionToken)) {
-                return expr;
+                return leftOperand;
             }
 
-            var node = <ConditionalExpression>createNode(SyntaxKind.ConditionalExpression, expr.pos);
-            node.condition = expr;
+            // Note: we explicitly 'allowIn' in the whenTrue part of the condition expression, and 
+            // we do not that for the 'whenFalse' part.  
+            var node = <ConditionalExpression>createNode(SyntaxKind.ConditionalExpression, leftOperand.pos);
+            node.condition = leftOperand;
             node.whenTrue = allowInAnd(parseAssignmentExpressionOrHigher);
             parseExpected(SyntaxKind.ColonToken);
             node.whenFalse = parseAssignmentExpressionOrHigher();
             return finishNode(node);
         }
 
-        function parseBinaryOperators(expr: Expression, minPrecedence: number): Expression {
+        function parseBinaryExpressionOrHigher(precedence: number): Expression {
+            var leftOperand = parseUnaryExpression();
+            return parseBinaryExpressionRest(precedence, leftOperand);
+        }
+
+        function parseBinaryExpressionRest(precedence: number, leftOperand: Expression): Expression {
             while (true) {
+                // We either have a binary operator here, or we're finished.  We call 
+                // reScanGreaterToken so that we merge token sequences like > and = into >=
+
                 reScanGreaterToken();
-                var precedence = getOperatorPrecedence();
-                if (precedence && precedence > minPrecedence && (!inDisallowInContext() || token !== SyntaxKind.InKeyword)) {
-                    var operator = token;
-                    nextToken();
-                    expr = makeBinaryExpression(expr, operator, parseBinaryOperators(parseUnaryExpression(), precedence));
-                    continue;
+                var newPrecedence = getOperatorPrecedence();
+
+                // Check the precedence to see if we should "take" this operator
+                if (newPrecedence <= precedence) {
+                    break;
                 }
-                return expr;
+                
+                if (token === SyntaxKind.InKeyword && inDisallowInContext()) {
+                    break;
+                }
+
+                var operator = token;
+                nextToken();
+                leftOperand = makeBinaryExpression(leftOperand, operator, parseBinaryExpressionOrHigher(newPrecedence));
             }
+
+            return leftOperand;
         }
 
         function getOperatorPrecedence(): number {
@@ -2572,7 +2597,10 @@ module ts {
                 case SyntaxKind.PercentToken:
                     return 10;
             }
-            return undefined;
+
+            // -1 is lower than all other precedences.  Returning it will cause binary expression
+            // parsing to stop.
+            return -1;
         }
 
         function makeBinaryExpression(left: Expression, operator: SyntaxKind, right: Expression): BinaryExpression {
