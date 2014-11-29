@@ -2237,7 +2237,7 @@ module TypeScript.Parser {
                 return new OmittedExpressionSyntax(contextFlags);
             }
 
-            return allowInAnd(tryParseAssignmentExpressionOrHigher);
+            return isExpression(currentToken()) ? allowInAnd(parseAssignmentExpressionOrHigher) : undefined;
         }
 
         function isExpression(currentToken: ISyntaxToken): boolean {
@@ -2520,19 +2520,11 @@ module TypeScript.Parser {
             return leftOperand;
         }
 
-        function tryParseAssignmentExpressionOrHigher(): IExpressionSyntax {
-            return tryParseAssignmentExpressionOrHigherWorker(/*force:*/ false);
-        }
-
-        function parseAssignmentExpressionOrHigher(): IExpressionSyntax {
-            return tryParseAssignmentExpressionOrHigherWorker(/*force:*/ true);
-        }
-
         // Called when you need to parse an expression, but you do not want to allow 'CommaExpressions'.
         // i.e. if you have "var a = 1, b = 2" then when we parse '1' we want to parse with higher 
         // precedence than 'comma'.  Otherwise we'll get: "var a = (1, (b = 2))", instead of
         // "var a = (1), b = (2)");
-        function tryParseAssignmentExpressionOrHigherWorker(force: boolean): IExpressionSyntax {
+        function parseAssignmentExpressionOrHigher(): IExpressionSyntax {
             //  AssignmentExpression[in,yield]:
             //      1) ConditionalExpression[?in,?yield]
             //      2) LeftHandSideExpression = AssignmentExpression[?in,?yield]
@@ -2566,11 +2558,7 @@ module TypeScript.Parser {
             // Otherwise, we try to parse out the conditional expression bit.  We want to allow any 
             // binary expression here, so we pass in the 'lowest' precedence here so that it matches
             // and consumes anything.
-            var leftOperand = tryParseBinaryExpressionOrHigher(_currentToken, force, BinaryExpressionPrecedence.Lowest);
-            if (leftOperand === undefined) {
-                return undefined;
-            }
-
+            var leftOperand = parseBinaryExpressionOrHigher(_currentToken, BinaryExpressionPrecedence.Lowest);
             if (SyntaxUtilities.isLeftHandSizeExpression(leftOperand)) {
                 // Note: we call currentOperatorToken so that we get an appropriately merged token
                 // for cases like > > =  becoming >>=
@@ -2614,7 +2602,7 @@ module TypeScript.Parser {
             }
 
             // Not an 'await' expression.  Parse this with our normal postfix parsing rules.
-            return tryParsePostfixExpressionOrHigher(awaitKeyword, /*force:*/ true);
+            return parsePostfixExpressionOrHigher(awaitKeyword);
         }
 
         function parseAwaitExpression(awaitKeyword: ISyntaxToken): AwaitExpressionSyntax {
@@ -2727,7 +2715,7 @@ module TypeScript.Parser {
                 : tryParseParenthesizedArrowFunctionExpression();
         }
 
-        function tryParseUnaryExpressionOrHigher(_currentToken: ISyntaxToken, force: boolean): IUnaryExpressionSyntax {
+        function parseUnaryExpressionOrHigher(_currentToken: ISyntaxToken): IUnaryExpressionSyntax {
             var currentTokenKind = _currentToken.kind;
 
             switch (currentTokenKind) {
@@ -2737,7 +2725,7 @@ module TypeScript.Parser {
                 case SyntaxKind.ExclamationToken:
                 case SyntaxKind.PlusPlusToken:
                 case SyntaxKind.MinusMinusToken:
-                    return new PrefixUnaryExpressionSyntax(contextFlags, consumeToken(_currentToken), tryParseUnaryExpressionOrHigher(currentToken(), /*force:*/ true));
+                    return new PrefixUnaryExpressionSyntax(contextFlags, consumeToken(_currentToken), parseUnaryExpressionOrHigher(currentToken()));
                 case SyntaxKind.TypeOfKeyword:
                     return parseTypeOfExpression(_currentToken);
                 case SyntaxKind.VoidKeyword:
@@ -2749,11 +2737,11 @@ module TypeScript.Parser {
                 case SyntaxKind.AwaitKeyword:
                     return parsePossibleAwaitExpression(_currentToken);
                 default:
-                    return tryParsePostfixExpressionOrHigher(_currentToken, force);
+                    return parsePostfixExpressionOrHigher(_currentToken);
             }
         }
 
-        function tryParseBinaryExpressionOrHigher(_currentToken: ISyntaxToken, force: boolean, precedence: BinaryExpressionPrecedence): IExpressionSyntax {
+        function parseBinaryExpressionOrHigher(_currentToken: ISyntaxToken, precedence: BinaryExpressionPrecedence): IExpressionSyntax {
             // The binary expressions are incredibly left recursive in their definitions. We 
             // clearly can't implement that through recursion.  So, instead, we first bottom out 
             // of all the recursion by jumping to this production and consuming a UnaryExpression 
@@ -2761,10 +2749,7 @@ module TypeScript.Parser {
             //
             // MultiplicativeExpression: See 11.5 
             //      UnaryExpression 
-            var leftOperand = tryParseUnaryExpressionOrHigher(_currentToken, force);
-            if (leftOperand === undefined) {
-                return undefined;
-            }
+            var leftOperand = parseUnaryExpressionOrHigher(_currentToken);
 
             // We then pop up the stack consuming the other side of the binary exprssion if it exists.
             return parseBinaryExpressionRest(precedence, leftOperand);
@@ -2828,7 +2813,7 @@ module TypeScript.Parser {
                 // Now skip the operator token we're on.
 
                 leftOperand = new BinaryExpressionSyntax(contextFlags, leftOperand, consumeToken(operatorToken), 
-                    tryParseBinaryExpressionOrHigher(currentToken(), /*force:*/ true, newPrecedence));
+                    parseBinaryExpressionOrHigher(currentToken(), newPrecedence));
             }
 
             return leftOperand;
@@ -2850,7 +2835,7 @@ module TypeScript.Parser {
             return token0;
         }
 
-        function tryParseMemberExpressionOrHigher(_currentToken: ISyntaxToken, force: boolean): IMemberExpressionSyntax {
+        function parseMemberExpressionOrHigher(_currentToken: ISyntaxToken): IMemberExpressionSyntax {
             // Note: to make our lives simpler, we decompose the the NewExpression productions and
             // place ObjectCreationExpression and FunctionExpression into PrimaryExpression.
             // like so:
@@ -2898,11 +2883,7 @@ module TypeScript.Parser {
             //
             // Because CallExpression and MemberExpression are left recursive, we need to bottom out
             // of the recursion immediately.  So we parse out a primary expression to start with.
-            var expression: IMemberExpressionSyntax = tryParsePrimaryExpression(_currentToken, force);
-            if (expression === undefined) {
-                return undefined;
-            }
-
+            var expression = parsePrimaryExpression(_currentToken);
             return <IMemberExpressionSyntax>parseMemberExpressionRest(expression); 
         }
 
@@ -2960,7 +2941,7 @@ module TypeScript.Parser {
             }
         }
 
-        function tryParseLeftHandSideExpressionOrHigher(_currentToken: ISyntaxToken, force: boolean): ILeftHandSideExpressionSyntax {
+        function parseLeftHandSideExpressionOrHigher(_currentToken: ISyntaxToken): ILeftHandSideExpressionSyntax {
             // Original Ecma:
             // LeftHandSideExpression: See 11.2 
             //      NewExpression
@@ -2992,16 +2973,9 @@ module TypeScript.Parser {
             // completes the LeftHandSideExpression, or starts the beginning of the first four
             // CallExpression productions.
 
-            var expression: ILeftHandSideExpressionSyntax = undefined;
-            if (_currentToken.kind === SyntaxKind.SuperKeyword) {
-                expression = parseSuperExpression(_currentToken);
-            }
-            else {
-                expression = tryParseMemberExpressionOrHigher(_currentToken, force);
-                if (expression === undefined) {
-                    return undefined;
-                }
-            }
+            var expression: ILeftHandSideExpressionSyntax = _currentToken.kind === SyntaxKind.SuperKeyword
+                ? parseSuperExpression(_currentToken)
+                : parseMemberExpressionOrHigher(_currentToken);
 
             // Now, we *may* be complete.  However, we might have consumed the start of a 
             // CallExpression.  As such, we need to consume the rest of it here to be complete.
@@ -3019,11 +2993,8 @@ module TypeScript.Parser {
                 : new MemberAccessExpressionSyntax(contextFlags, expression, eatToken(SyntaxKind.DotToken), eatIdentifierNameToken());
         }
 
-        function tryParsePostfixExpressionOrHigher(_currentToken: ISyntaxToken, force: boolean): IPostfixExpressionSyntax {
-            var expression = tryParseLeftHandSideExpressionOrHigher(_currentToken, force);
-            if (expression === undefined) {
-                return undefined;
-            }
+        function parsePostfixExpressionOrHigher(_currentToken: ISyntaxToken): IPostfixExpressionSyntax {
+            var expression = parseLeftHandSideExpressionOrHigher(_currentToken);
 
             var _currentToken = currentToken();
             var currentTokenKind = _currentToken.kind;
@@ -3124,7 +3095,7 @@ module TypeScript.Parser {
             // cause a missing identiifer to be created), so that we will then consume the
             // comma and the following list items).
             var force = currentToken().kind === SyntaxKind.CommaToken;
-            return allowInAnd(force ? parseAssignmentExpressionOrHigher : tryParseAssignmentExpressionOrHigher);
+            return (force || isExpression(currentToken())) ? allowInAnd(parseAssignmentExpressionOrHigher)  : undefined;
         }
 
         function parseElementAccessArgumentExpression(openBracketToken: ISyntaxToken) {
@@ -3141,20 +3112,7 @@ module TypeScript.Parser {
                 parseElementAccessArgumentExpression(openBracketToken), eatToken(SyntaxKind.CloseBracketToken));
         }
 
-        function tryParsePrimaryExpression(_currentToken: ISyntaxToken, force: boolean): IPrimaryExpressionSyntax {
-            // Have to check for 'async function' first as 'async' is an identifier and will be 
-            // consumed immediately below this.
-            if (_currentToken.kind === SyntaxKind.AsyncKeyword) {
-                var token1 = peekToken(1);
-                if (!token1.hasLeadingNewLine() && token1.kind === SyntaxKind.FunctionKeyword) {
-                    return parseFunctionExpression();
-                }
-            }
-
-            if (isIdentifier(_currentToken)) {
-                return eatIdentifierToken();
-            }
-
+        function parsePrimaryExpression(_currentToken: ISyntaxToken): IPrimaryExpressionSyntax {
             var currentTokenKind = _currentToken.kind;
             switch (currentTokenKind) {
                 case SyntaxKind.ThisKeyword:
@@ -3183,13 +3141,16 @@ module TypeScript.Parser {
                     // If we see a standalone / or /= and we're expecting an expression, then reparse
                     // it as a regular expression.
                     return reparseDivideAsRegularExpression();
+                case SyntaxKind.AsyncKeyword:
+                    var token1 = peekToken(1);
+                    if (!token1.hasLeadingNewLine() && token1.kind === SyntaxKind.FunctionKeyword) {
+                        return parseFunctionExpression();
+                    }
+                    break;
             }
 
-            if (!force) {
-                return undefined;
-            }
-
-            // Nothing else worked, report an error and produce a missing token.
+            // Nothing else worked.  try to eat an identifier.  If we can't, we'll report an 
+            // appropriate error.
             return eatIdentifierToken(DiagnosticCode.Expression_expected);
         }
 
@@ -3216,15 +3177,15 @@ module TypeScript.Parser {
         }
 
         function parseTypeOfExpression(typeOfKeyword: ISyntaxToken): TypeOfExpressionSyntax {
-            return new TypeOfExpressionSyntax(contextFlags, consumeToken(typeOfKeyword), tryParseUnaryExpressionOrHigher(currentToken(), /*force:*/ true));
+            return new TypeOfExpressionSyntax(contextFlags, consumeToken(typeOfKeyword), parseUnaryExpressionOrHigher(currentToken()));
         }
 
         function parseDeleteExpression(deleteKeyword: ISyntaxToken): DeleteExpressionSyntax {
-            return new DeleteExpressionSyntax(contextFlags, consumeToken(deleteKeyword), tryParseUnaryExpressionOrHigher(currentToken(), /*force:*/ true));
+            return new DeleteExpressionSyntax(contextFlags, consumeToken(deleteKeyword), parseUnaryExpressionOrHigher(currentToken()));
         }
 
         function parseVoidExpression(voidKeyword: ISyntaxToken): VoidExpressionSyntax {
-            return new VoidExpressionSyntax(contextFlags, consumeToken(voidKeyword), tryParseUnaryExpressionOrHigher(currentToken(), /*force:*/ true));
+            return new VoidExpressionSyntax(contextFlags, consumeToken(voidKeyword), parseUnaryExpressionOrHigher(currentToken()));
         }
 
         function parseFunctionExpression(): FunctionExpressionSyntax {
@@ -3271,7 +3232,7 @@ module TypeScript.Parser {
 
             return new ObjectCreationExpressionSyntax(contextFlags,
                 consumeToken(newKeyword),
-                tryParseMemberExpressionOrHigher(currentToken(), /*force:*/ true),
+                parseMemberExpressionOrHigher(currentToken()),
                 tryParseArgumentList());
         }
 
@@ -3317,7 +3278,10 @@ module TypeScript.Parser {
 
         function parseCastExpression(lessThanToken: ISyntaxToken): CastExpressionSyntax {
             return new CastExpressionSyntax(contextFlags,
-                consumeToken(lessThanToken), parseType(), eatToken(SyntaxKind.GreaterThanToken), tryParseUnaryExpressionOrHigher(currentToken(), /*force:*/ true));
+                consumeToken(lessThanToken),
+                parseType(),
+                eatToken(SyntaxKind.GreaterThanToken),
+                parseUnaryExpressionOrHigher(currentToken()));
         }
 
         function parseParenthesizedExpression(openParenToken: ISyntaxToken): ParenthesizedExpressionSyntax {
@@ -4034,7 +3998,7 @@ module TypeScript.Parser {
                 // We do not want the  >  to be consumed as part of the "" expression.  By starting
                 // at 'unary' expression and not 'binary' expression, we ensure that we don't accidently
                 // consume the >.
-                return tryParseUnaryExpressionOrHigher(_currentToken, /*force:*/ true);
+                return parseUnaryExpressionOrHigher(_currentToken);
             }
 
             return eatIdentifierToken(DiagnosticCode.Type_expected);
