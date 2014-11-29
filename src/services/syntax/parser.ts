@@ -1019,7 +1019,7 @@ module TypeScript.Parser {
                 _currentToken.hasLeadingNewLine()) {
 
                 var token1 = peekToken(1);
-                if (!existsNewLineBetweenTokens(_currentToken, token1, source.text) &&
+                if (!token1.hasLeadingNewLine() &&
                     SyntaxFacts.isIdentifierNameOrAnyKeyword(token1)) {
 
                     return createMissingToken(SyntaxKind.IdentifierName, _currentToken);
@@ -1555,8 +1555,7 @@ module TypeScript.Parser {
             // Then we *should* parse it as a property name, as ASI takes effect here.
             if (isModifier(_currentToken, /*index:*/ 0)) {
                 var token1 = peekToken(1);
-                if (!existsNewLineBetweenTokens(_currentToken, token1, source.text) &&
-                    isPropertyNameToken(token1, inErrorRecovery)) {
+                if (!token1.hasLeadingNewLine() && isPropertyNameToken(token1, inErrorRecovery)) {
 
                     return false;
                 }
@@ -2904,11 +2903,37 @@ module TypeScript.Parser {
                 return undefined;
             }
 
-            return parseMemberExpressionRest(expression); 
+            return <IMemberExpressionSyntax>parseMemberExpressionRest(expression); 
+        }
+
+        function parseMemberExpressionRest(expression: ILeftHandSideExpressionSyntax): ILeftHandSideExpressionSyntax {
+            while (true) {
+                var _currentToken = currentToken();
+                var currentTokenKind = _currentToken.kind;
+
+                switch (currentTokenKind) {
+                    case SyntaxKind.OpenBracketToken:
+                        expression = parseElementAccessExpression(expression, _currentToken);
+                        continue;
+
+                    case SyntaxKind.DotToken:
+                        expression = new MemberAccessExpressionSyntax(contextFlags, expression, consumeToken(_currentToken), eatIdentifierNameToken());
+                        continue;
+
+                    case SyntaxKind.NoSubstitutionTemplateToken:
+                    case SyntaxKind.TemplateStartToken:
+                        expression = new TemplateAccessExpressionSyntax(contextFlags, expression, parseTemplateExpression(_currentToken));
+                        continue;
+                }
+
+                return expression;
+            }
         }
 
         function parseCallExpressionRest(expression: ILeftHandSideExpressionSyntax): ILeftHandSideExpressionSyntax {
             while (true) {
+                expression = parseMemberExpressionRest(expression);
+
                 var _currentToken = currentToken();
                 var currentTokenKind = _currentToken.kind;
 
@@ -2928,43 +2953,6 @@ module TypeScript.Parser {
                         }
 
                         expression = new InvocationExpressionSyntax(contextFlags, expression, argumentList);
-                        continue;
-
-                    case SyntaxKind.OpenBracketToken:
-                        expression = parseElementAccessExpression(expression, _currentToken);
-                        continue;
-
-                    case SyntaxKind.DotToken:
-                        expression = new MemberAccessExpressionSyntax(contextFlags, expression, consumeToken(_currentToken), eatIdentifierNameToken());
-                        continue;
-
-                    case SyntaxKind.NoSubstitutionTemplateToken:
-                    case SyntaxKind.TemplateStartToken:
-                        expression = new TemplateAccessExpressionSyntax(contextFlags, expression, parseTemplateExpression(_currentToken));
-                        continue;
-                }
-
-                return expression;
-            }
-        }
-
-        function parseMemberExpressionRest(expression: IMemberExpressionSyntax): IMemberExpressionSyntax {
-            while (true) {
-                var _currentToken = currentToken();
-                var currentTokenKind = _currentToken.kind;
-
-                switch (currentTokenKind) {
-                    case SyntaxKind.OpenBracketToken:
-                        expression = parseElementAccessExpression(expression, _currentToken);
-                        continue;
-
-                    case SyntaxKind.DotToken:
-                        expression = new MemberAccessExpressionSyntax(contextFlags, expression, consumeToken(_currentToken), eatIdentifierNameToken());
-                        continue;
-
-                    case SyntaxKind.NoSubstitutionTemplateToken:
-                    case SyntaxKind.TemplateStartToken:
-                        expression = new TemplateAccessExpressionSyntax(contextFlags, expression, parseTemplateExpression(_currentToken));
                         continue;
                 }
 
@@ -3282,7 +3270,9 @@ module TypeScript.Parser {
             // this decision.
 
             return new ObjectCreationExpressionSyntax(contextFlags,
-                consumeToken(newKeyword), tryParseMemberExpressionOrHigher(currentToken(), /*force:*/ true), tryParseArgumentList());
+                consumeToken(newKeyword),
+                tryParseMemberExpressionOrHigher(currentToken(), /*force:*/ true),
+                tryParseArgumentList());
         }
 
         function parseTemplateExpression(startToken: ISyntaxToken): IPrimaryExpressionSyntax {
