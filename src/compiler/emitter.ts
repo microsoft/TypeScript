@@ -701,7 +701,7 @@ module ts {
                 write(" {");
                 writeLine();
                 increaseIndent();
-                emitLines((<Block>node.body).statements);
+                emitLines((<ModuleBlock>node.body).statements);
                 decreaseIndent();
                 write("}");
                 writeLine();
@@ -3264,7 +3264,7 @@ module ts {
                     emit(node.body);
                     decreaseIndent();
                     writeLine();
-                    var moduleBlock = <Block>getInnerMostModuleDeclarationFromDottedModule(node).body;
+                    var moduleBlock = <ModuleBlock>getInnerMostModuleDeclarationFromDottedModule(node).body;
                     emitToken(SyntaxKind.CloseBraceToken, moduleBlock.statements.end);
                     scopeEmitEnd();
                 }
@@ -3410,7 +3410,7 @@ module ts {
                 }
             }
 
-            function emitDirectivePrologues(statements: Statement[], startWithNewLine: boolean): number {
+            function emitDirectivePrologues(statements: Node[], startWithNewLine: boolean): number {
                 for (var i = 0; i < statements.length; ++i) {
                     if (isPrologueDirective(statements[i])) {
                         if (startWithNewLine || i > 0) {

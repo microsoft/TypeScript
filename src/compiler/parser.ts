@@ -405,7 +405,7 @@ module ts {
         function traverse(node: Node): T {
             switch (node.kind) {
                 case SyntaxKind.ReturnStatement:
-                    return visitor(node);
+                    return visitor(<ReturnStatement>node);
                 case SyntaxKind.Block:
                 case SyntaxKind.FunctionBlock:
                 case SyntaxKind.IfStatement:
@@ -3591,8 +3591,8 @@ module ts {
             return finishNode(node);
         }
 
-        function parseFunctionDeclaration(fullStart: number, modifiers: ModifiersArray): FunctionLikeDeclaration {
-            var node = <FunctionLikeDeclaration>createNode(SyntaxKind.FunctionDeclaration, fullStart);
+        function parseFunctionDeclaration(fullStart: number, modifiers: ModifiersArray): FunctionDeclaration {
+            var node = <FunctionDeclaration>createNode(SyntaxKind.FunctionDeclaration, fullStart);
             setModifiers(node, modifiers);
             parseExpected(SyntaxKind.FunctionKeyword);
             node.asteriskToken = parseOptionalToken(SyntaxKind.AsteriskToken);
@@ -3857,8 +3857,8 @@ module ts {
             return finishNode(node);
         }
 
-        function parseModuleBody(): Block {
-            var node = <Block>createNode(SyntaxKind.ModuleBlock, scanner.getStartPos());
+        function parseModuleBlock(): ModuleBlock {
+            var node = <ModuleBlock>createNode(SyntaxKind.ModuleBlock, scanner.getStartPos());
             if (parseExpected(SyntaxKind.OpenBraceToken)) {
                 node.statements = parseList(ParsingContext.ModuleElements, /*checkForStrictMode*/ false, parseModuleElement);
                 parseExpected(SyntaxKind.CloseBraceToken);
@@ -3875,7 +3875,7 @@ module ts {
             node.name = parseIdentifier();
             node.body = parseOptional(SyntaxKind.DotToken)
                 ? parseInternalModuleTail(getNodePos(), NodeFlags.Export)
-                : parseModuleBody();
+                : parseModuleBlock();
             return finishNode(node);
         }
 
@@ -3883,7 +3883,7 @@ module ts {
             var node = <ModuleDeclaration>createNode(SyntaxKind.ModuleDeclaration, fullStart);
             node.flags = flags;
             node.name = parseStringLiteral();
-            node.body = parseModuleBody();
+            node.body = parseModuleBlock();
             return finishNode(node);
         }
 
@@ -3950,7 +3950,7 @@ module ts {
             }
         }
 
-        function parseDeclaration(): Statement {
+        function parseDeclaration(): ModuleElement {
             var fullStart = getNodePos();
             var modifiers = parseModifiers();
             if (token === SyntaxKind.ExportKeyword) {
@@ -3961,7 +3961,7 @@ module ts {
             }
 
             var flags = modifiers ? modifiers.flags : 0;
-            var result: Declaration;
+            var result: ModuleElement;
             switch (token) {
                 case SyntaxKind.VarKeyword:
                 case SyntaxKind.LetKeyword:
@@ -4020,7 +4020,7 @@ module ts {
             return parseSourceElementOrModuleElement();
         }
 
-        function parseSourceElementOrModuleElement(): Statement {
+        function parseSourceElementOrModuleElement(): ModuleElement {
             return isDeclarationStart()
                 ? parseDeclaration()
                 : parseStatement();
@@ -4380,7 +4380,7 @@ module ts {
         }
 
         function checkBreakOrContinueStatement(node: BreakOrContinueStatement): boolean {
-            var current = node;
+            var current: Node = node;
             while (current) {
                 if (isAnyFunction(current)) {
                     return grammarErrorOnNode(node, Diagnostics.Jump_target_cannot_cross_function_boundary);
@@ -4765,7 +4765,7 @@ module ts {
 
         function checkModuleDeclarationStatements(node: ModuleDeclaration): boolean {
             if (node.name.kind === SyntaxKind.Identifier && node.body.kind === SyntaxKind.ModuleBlock) {
-                var statements = (<Block>node.body).statements;
+                var statements = (<ModuleBlock>node.body).statements;
                 for (var i = 0, n = statements.length; i < n; i++) {
                     var statement = statements[i];
 

@@ -383,7 +383,7 @@ module ts {
         body?: Block | Expression;
     }
 
-    export interface FunctionDeclaration extends FunctionLikeDeclaration {
+    export interface FunctionDeclaration extends FunctionLikeDeclaration, Statement {
         name: Identifier;
         body?: Block;
     }
@@ -574,7 +574,9 @@ module ts {
         expression: Expression;
     }
 
-    export interface Statement extends Node { }
+    export interface Statement extends Node, ModuleElement {
+        _statementBrand: any;
+    }
 
     export interface Block extends Statement {
         statements: NodeArray<Statement>;
@@ -662,7 +664,11 @@ module ts {
         type?: TypeNode;
     }
 
-    export interface ClassDeclaration extends Declaration {
+    export interface ModuleElement extends Node {
+        _moduleElementBrand: any;
+    }
+
+    export interface ClassDeclaration extends Declaration, ModuleElement {
         name: Identifier;
         typeParameters?: NodeArray<TypeParameterDeclaration>;
         baseType?: TypeReferenceNode;
@@ -670,14 +676,14 @@ module ts {
         members: NodeArray<Node>;
     }
 
-    export interface InterfaceDeclaration extends Declaration {
+    export interface InterfaceDeclaration extends Declaration, ModuleElement {
         name: Identifier;
         typeParameters?: NodeArray<TypeParameterDeclaration>;
         baseTypes?: NodeArray<TypeReferenceNode>;
         members: NodeArray<Node>;
     }
 
-    export interface TypeAliasDeclaration extends Declaration {
+    export interface TypeAliasDeclaration extends Declaration, ModuleElement {
         name: Identifier;
         type: TypeNode;
     }
@@ -689,23 +695,27 @@ module ts {
         initializer?: Expression;
     }
 
-    export interface EnumDeclaration extends Declaration {
+    export interface EnumDeclaration extends Declaration, ModuleElement {
         name: Identifier;
         members: NodeArray<EnumMember>;
     }
 
-    export interface ModuleDeclaration extends Declaration {
+    export interface ModuleDeclaration extends Declaration, ModuleElement {
         name: Identifier | LiteralExpression;
-        body: Block | ModuleDeclaration;
+        body: ModuleBlock | ModuleDeclaration;
     }
 
-    export interface ImportDeclaration extends Declaration {
+    export interface ModuleBlock extends Node, ModuleElement {
+        statements: NodeArray<ModuleElement>
+    }
+
+    export interface ImportDeclaration extends Declaration, ModuleElement {
         name: Identifier;
         entityName?: EntityName;
         externalModuleName?: LiteralExpression;
     }
 
-    export interface ExportAssignment extends Statement {
+    export interface ExportAssignment extends Statement, ModuleElement {
         exportName: Identifier;
     }
 
@@ -717,7 +727,9 @@ module ts {
         hasTrailingNewLine?: boolean;
     }
 
-    export interface SourceFile extends Block {
+    export interface SourceFile extends Node {
+        statements: NodeArray<ModuleElement>;
+
         filename: string;
         text: string;
         getLineAndCharacterFromPosition(position: number): LineAndCharacter;

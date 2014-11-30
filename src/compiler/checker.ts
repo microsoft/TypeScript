@@ -7696,7 +7696,7 @@ module ts {
                         checkTypeAssignableTo(caseType, expressionType, clause.expression, /*headMessage*/ undefined);
                     }
                 }
-                checkBlock(clause);
+                forEach(clause.statements, checkSourceElement);
             });
         }
 
@@ -8562,7 +8562,10 @@ module ts {
             if (!(links.flags & NodeCheckFlags.TypeChecked)) {
                 emitExtends = false;
                 potentialThisCollisions.length = 0;
-                checkBody(node);
+
+                forEach(node.statements, checkSourceElement);
+                checkFunctionExpressionBodies(node);
+
                 if (isExternalModule(node)) {
                     var symbol = getExportAssignmentSymbol(node.symbol);
                     if (symbol && symbol.flags & SymbolFlags.Import) {
@@ -8570,11 +8573,16 @@ module ts {
                         getSymbolLinks(symbol).referenced = true;
                     }
                 }
+
                 if (potentialThisCollisions.length) {
                     forEach(potentialThisCollisions, checkIfThisIsCapturedInEnclosingScope);
                     potentialThisCollisions.length = 0;
                 }
-                if (emitExtends) links.flags |= NodeCheckFlags.EmitExtends;
+
+                if (emitExtends) {
+                    links.flags |= NodeCheckFlags.EmitExtends;
+                }
+
                 links.flags |= NodeCheckFlags.TypeChecked;
             }
         }
