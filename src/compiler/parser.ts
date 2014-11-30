@@ -2903,10 +2903,9 @@ module ts {
                     continue;
                 }
 
-                if (token === SyntaxKind.OpenBracketToken) {
+                if (parseOptional(SyntaxKind.OpenBracketToken)) {
                     var indexedAccess = <ElementAccessExpression>createNode(SyntaxKind.ElementAccessExpression, expression.pos);
                     indexedAccess.expression = expression;
-                    indexedAccess.openBracketToken = parseTokenNode(SyntaxKind.OpenBracketToken);
 
                     // It's not uncommon for a user to write: "new Type[]".
                     // Check for that common pattern and report a better error message.
@@ -2921,7 +2920,7 @@ module ts {
                         indexedAccess.argumentExpression = <Expression>createMissingNode();
                     }
 
-                    indexedAccess.closeBracketToken = parseTokenNode(SyntaxKind.CloseBracketToken);
+                    parseExpected(SyntaxKind.CloseBracketToken);
                     expression = finishNode(indexedAccess);
                     continue;
                 }
@@ -4742,15 +4741,15 @@ module ts {
 
         function checkElementAccessExpression(node: ElementAccessExpression) {
             if (node.argumentExpression.kind === SyntaxKind.Missing) {
-                if (node.parent.kind === SyntaxKind.NewExpression &&
-                    (<NewExpression>node.parent).expression === node) {
-
-                    var start = skipTrivia(sourceText, node.openBracketToken.pos);
-                    var end = node.closeBracketToken.end;
+                if (node.parent.kind === SyntaxKind.NewExpression && (<NewExpression>node.parent).expression === node) {
+                    var start = skipTrivia(sourceText, node.expression.end);
+                    var end = node.end;
                     return grammarErrorAtPos(start, end - start, Diagnostics.new_T_cannot_be_used_to_create_an_array_Use_new_Array_T_instead);
                 }
                 else {
-                    return grammarErrorOnNode(node.closeBracketToken, Diagnostics.Expression_expected);
+                    var start = node.end - "]".length;
+                    var end = node.end;
+                    return grammarErrorAtPos(start, end - start, Diagnostics.Expression_expected);
                 }
             }
         }

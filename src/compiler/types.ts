@@ -553,9 +553,7 @@ module ts {
 
     export interface ElementAccessExpression extends MemberExpression {
         expression: LeftHandSideExpression;
-        openBracketToken: Node;
         argumentExpression: Expression;
-        closeBracketToken: Node;
     }
 
     export interface CallExpression extends LeftHandSideExpression {
