@@ -527,6 +527,26 @@
         "category": "Error",
         "code": 1171
     },
+    "'extends' clause already seen.": {
+        "category": "Error",
+        "code": 1172
+    },
+    "'extends' clause must precede 'implements' clause.": {
+        "category": "Error",
+        "code": 1173
+    },
+    "Classes can only extend a single class.": {
+        "category": "Error",
+        "code": 1174
+    },
+    "'implements' clause already seen.": {
+        "category": "Error",
+        "code": 1175
+    },
+    "Interface declaration cannot have 'implements' clause.": {
+        "category": "Error",
+        "code": 1176
+    },
 
     "Duplicate identifier '{0}'.": {
         "category": "Error",

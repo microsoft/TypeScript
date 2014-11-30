@@ -203,8 +203,6 @@ module ts {
         ReturnStatement,
         WithStatement,
         SwitchStatement,
-        CaseClause,
-        DefaultClause,
         LabeledStatement,
         ThrowStatement,
         TryStatement,
@@ -223,6 +221,10 @@ module ts {
         ModuleBlock,
         ImportDeclaration,
         ExportAssignment,
+        // Clauses
+        CaseClause,
+        DefaultClause,
+        HeritageClause,
         // Property assignments
         PropertyAssignment,
         ShorthandPropertyAssignment,
@@ -673,8 +675,7 @@ module ts {
     export interface ClassDeclaration extends Declaration, ModuleElement {
         name: Identifier;
         typeParameters?: NodeArray<TypeParameterDeclaration>;
-        baseType?: TypeReferenceNode;
-        implementedTypes?: NodeArray<TypeReferenceNode>;
+        heritageClauses?: NodeArray<HeritageClause>;
         members: NodeArray<ClassElement>;
     }
 
@@ -685,8 +686,13 @@ module ts {
     export interface InterfaceDeclaration extends Declaration, ModuleElement {
         name: Identifier;
         typeParameters?: NodeArray<TypeParameterDeclaration>;
-        baseTypes?: NodeArray<TypeReferenceNode>;
+        heritageClauses?: NodeArray<HeritageClause>;
         members: NodeArray<Declaration>;
+    }
+
+    export interface HeritageClause extends Node {
+        token: SyntaxKind;
+        types?: NodeArray<TypeReferenceNode>;
     }
 
     export interface TypeAliasDeclaration extends Declaration, ModuleElement {

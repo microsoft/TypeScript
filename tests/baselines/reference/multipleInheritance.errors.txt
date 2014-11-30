@@ -1,14 +1,12 @@
-tests/cases/compiler/multipleInheritance.ts(9,19): error TS1005: '{' expected.
-tests/cases/compiler/multipleInheritance.ts(9,24): error TS1005: ';' expected.
-tests/cases/compiler/multipleInheritance.ts(18,19): error TS1005: '{' expected.
-tests/cases/compiler/multipleInheritance.ts(18,24): error TS1005: ';' expected.
+tests/cases/compiler/multipleInheritance.ts(9,21): error TS1174: Classes can only extend a single class.
+tests/cases/compiler/multipleInheritance.ts(18,21): error TS1174: Classes can only extend a single class.
 tests/cases/compiler/multipleInheritance.ts(34,7): error TS2415: Class 'Baad' incorrectly extends base class 'Good'.
   Types of property 'g' are incompatible.
     Type '(n: number) => number' is not assignable to type '() => number'.
 tests/cases/compiler/multipleInheritance.ts(35,12): error TS2425: Class 'Good' defines instance member property 'f', but extended class 'Baad' defines it as instance member function.
 
 
-==== tests/cases/compiler/multipleInheritance.ts (6 errors) ====
+==== tests/cases/compiler/multipleInheritance.ts (4 errors) ====
     class B1 {
         public x;
     }
@@ -18,10 +16,8 @@ tests/cases/compiler/multipleInheritance.ts(35,12): error TS2425: Class 'Good' d
     }
     
     class C extends B1, B2 { // duplicate member
-                      ~
-!!! error TS1005: '{' expected.
-                           ~
-!!! error TS1005: ';' expected.
+                        ~~
+!!! error TS1174: Classes can only extend a single class.
     }
     
     class D1 extends B1 {
@@ -31,10 +27,8 @@ tests/cases/compiler/multipleInheritance.ts(35,12): error TS2425: Class 'Good' d
     }
     
     class E extends D1, D2 { // nope, duplicate member
-                      ~
-!!! error TS1005: '{' expected.
-                           ~
-!!! error TS1005: ';' expected.
+                        ~~
+!!! error TS1174: Classes can only extend a single class.
     }
     
     class N {

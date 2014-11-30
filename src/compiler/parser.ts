@@ -361,13 +361,12 @@ module ts {
             case SyntaxKind.ClassDeclaration:
                 return child((<ClassDeclaration>node).name) ||
                     children((<ClassDeclaration>node).typeParameters) ||
-                    child((<ClassDeclaration>node).baseType) ||
-                    children((<ClassDeclaration>node).implementedTypes) ||
+                    children((<ClassDeclaration>node).heritageClauses) ||
                     children((<ClassDeclaration>node).members);
             case SyntaxKind.InterfaceDeclaration:
                 return child((<InterfaceDeclaration>node).name) ||
-                    children((<InterfaceDeclaration>node).typeParameters) ||
-                    children((<InterfaceDeclaration>node).baseTypes) ||
+                children((<InterfaceDeclaration>node).typeParameters) ||
+                children((<ClassDeclaration>node).heritageClauses) ||
                     children((<InterfaceDeclaration>node).members);
             case SyntaxKind.TypeAliasDeclaration:
                 return child((<TypeAliasDeclaration>node).name) ||
@@ -393,6 +392,8 @@ module ts {
                 return child((<TemplateSpan>node).expression) || child((<TemplateSpan>node).literal);
             case SyntaxKind.ComputedPropertyName:
                 return child((<ComputedPropertyName>node).expression);
+            case SyntaxKind.HeritageClause:
+                return children((<HeritageClause>node).types);
         }
     }
 
@@ -681,6 +682,33 @@ module ts {
         return false;
     }
 
+    export function getClassBaseTypeNode(node: ClassDeclaration) {
+        var heritageClause = getHeritageClause(node.heritageClauses, SyntaxKind.ExtendsKeyword);
+        return heritageClause && heritageClause.types.length > 0 ? heritageClause.types[0] : undefined;
+    }
+
+    export function getClassImplementedTypeNodes(node: ClassDeclaration) {
+        var heritageClause = getHeritageClause(node.heritageClauses, SyntaxKind.ImplementsKeyword);
+        return heritageClause ? heritageClause.types : undefined;
+    }
+
+    export function getInterfaceBaseTypeNodes(node: InterfaceDeclaration) {
+        var heritageClause = getHeritageClause(node.heritageClauses, SyntaxKind.ExtendsKeyword);
+        return heritageClause ? heritageClause.types : undefined;
+    }
+
+    export function getHeritageClause(clauses: NodeArray<HeritageClause>, kind: SyntaxKind) {
+        if (clauses) {
+            for (var i = 0, n = clauses.length; i < n; i++) {
+                if (clauses[i].token === kind) {
+                    return clauses[i];
+                }
+            }
+        }
+
+        return undefined;
+    }
+
     export function tryResolveScriptReference(program: Program, sourceFile: SourceFile, reference: FileReference) {
         if (!program.getCompilerOptions().noResolve) {
             var referenceFileName = isRootedDiskPath(reference.filename) ? reference.filename : combinePaths(getDirectoryPath(sourceFile.filename), reference.filename);
@@ -741,6 +769,7 @@ module ts {
         TypeParameters,          // Type parameters in type parameter list
         TypeArguments,           // Type arguments in type argument list
         TupleElementTypes,       // Element types in tuple element type list
+        HeritageClauses,         // Heritage clauses for a class or interface declaration.
         Count                    // Number of parsing contexts
     }
 
@@ -1362,6 +1391,8 @@ module ts {
                 case ParsingContext.TypeArguments:
                 case ParsingContext.TupleElementTypes:
                     return token === SyntaxKind.CommaToken || isStartOfType();
+                case ParsingContext.HeritageClauses:
+                    return isHeritageClause();
             }
 
             Debug.fail("Non-exhaustive case in 'isListElement'.");
@@ -1404,6 +1435,9 @@ module ts {
                 case ParsingContext.TypeArguments:
                     // Tokens other than '>' are here for better error recovery
                     return token === SyntaxKind.GreaterThanToken || token === SyntaxKind.OpenParenToken;
+                case ParsingContext.HeritageClauses:
+                    return token === SyntaxKind.OpenBraceToken || token === SyntaxKind.CloseBraceToken;
+
             }
         }
 
@@ -3765,20 +3799,8 @@ module ts {
             parseExpected(SyntaxKind.ClassKeyword);
             node.name = parseIdentifier();
             node.typeParameters = parseTypeParameters();
+            node.heritageClauses = parseHeritageClauses(/*isClassHeritageClause:*/ true);
 
-            // TODO(jfreeman): Parse arbitrary sequence of heritage clauses and error for order and duplicates
-
-            // ClassTail[Yield,GeneratorParameter] : See 14.5
-            //      [~GeneratorParameter]ClassHeritage[?Yield]opt { ClassBody[?Yield]opt }
-            //      [+GeneratorParameter] ClassHeritageopt { ClassBodyopt }
-            
-            node.baseType = inGeneratorParameterContext()
-                ? doOutsideOfYieldContext(parseClassBaseType)
-                : parseClassBaseType();
-
-            if (parseOptional(SyntaxKind.ImplementsKeyword)) {
-                node.implementedTypes = parseDelimitedList(ParsingContext.BaseTypeReferences, parseTypeReference);
-            }
             if (parseExpected(SyntaxKind.OpenBraceToken)) {
                 // ClassTail[Yield,GeneratorParameter] : See 14.5
                 //      [~GeneratorParameter]ClassHeritage[?Yield]opt { ClassBody[?Yield]opt }
@@ -3795,6 +3817,40 @@ module ts {
             return finishNode(node);
         }
 
+        function parseHeritageClauses(isClassHeritageClause: boolean): NodeArray<HeritageClause> {
+            // ClassTail[Yield,GeneratorParameter] : See 14.5
+            //      [~GeneratorParameter]ClassHeritage[?Yield]opt { ClassBody[?Yield]opt }
+            //      [+GeneratorParameter] ClassHeritageopt { ClassBodyopt }
+
+            if (isHeritageClause()) {
+                return isClassHeritageClause && inGeneratorParameterContext()
+                    ? doOutsideOfYieldContext(parseHeritageClausesWorker)
+                    : parseHeritageClausesWorker();
+            }
+
+            return undefined;
+        }
+
+        function parseHeritageClausesWorker() {
+            return parseList(ParsingContext.HeritageClauses, /*checkForStrictMode:*/ false, parseHeritageClause);
+        }
+
+        function parseHeritageClause() {
+            if (token === SyntaxKind.ExtendsKeyword || token === SyntaxKind.ImplementsKeyword) {
+                var node = <HeritageClause>createNode(SyntaxKind.HeritageClause);
+                node.token = token;
+                nextToken();
+                node.types = parseDelimitedList(ParsingContext.BaseTypeReferences, parseTypeReference);
+                return finishNode(node);
+            }
+
+            return undefined;
+        }
+
+        function isHeritageClause(): boolean {
+            return token === SyntaxKind.ExtendsKeyword || token === SyntaxKind.ImplementsKeyword;
+        }
+
         function parseClassMembers() {
             return parseList(ParsingContext.ClassMembers, /*checkForStrictMode*/ false, parseClassElement);
         }
@@ -3809,10 +3865,7 @@ module ts {
             parseExpected(SyntaxKind.InterfaceKeyword);
             node.name = parseIdentifier();
             node.typeParameters = parseTypeParameters();
-            // TODO(jfreeman): Parse arbitrary sequence of heritage clauses and error for order and duplicates
-            if (parseOptional(SyntaxKind.ExtendsKeyword)) {
-                node.baseTypes = parseDelimitedList(ParsingContext.BaseTypeReferences, parseTypeReference);
-            }
+            node.heritageClauses = parseHeritageClauses(/*isClassHeritageClause:*/ false);
             node.members = parseObjectType();
             return finishNode(node);
         }
@@ -4247,13 +4300,14 @@ module ts {
                 case SyntaxKind.ComputedPropertyName:           return checkComputedPropertyName(<ComputedPropertyName>node);
                 case SyntaxKind.Constructor:                    return checkConstructor(<ConstructorDeclaration>node);
                 case SyntaxKind.DeleteExpression:               return checkDeleteExpression(<DeleteExpression> node);
+                case SyntaxKind.ElementAccessExpression:        return checkElementAccessExpression(<ElementAccessExpression>node);
                 case SyntaxKind.ExportAssignment:               return checkExportAssignment(<ExportAssignment>node);
                 case SyntaxKind.ForInStatement:                 return checkForInStatement(<ForInStatement>node);
                 case SyntaxKind.ForStatement:                   return checkForStatement(<ForStatement>node);
                 case SyntaxKind.FunctionDeclaration:            return checkFunctionDeclaration(<FunctionLikeDeclaration>node);
                 case SyntaxKind.FunctionExpression:             return checkFunctionExpression(<FunctionExpression>node);
                 case SyntaxKind.GetAccessor:                    return checkGetAccessor(<MethodDeclaration>node);
-                case SyntaxKind.ElementAccessExpression:        return checkElementAccessExpression(<ElementAccessExpression>node);
+                case SyntaxKind.HeritageClause:                 return checkHeritageClause(<HeritageClause>node);
                 case SyntaxKind.IndexSignature:                 return checkIndexSignature(<SignatureDeclaration>node);
                 case SyntaxKind.InterfaceDeclaration:           return checkInterfaceDeclaration(<InterfaceDeclaration>node);
                 case SyntaxKind.LabeledStatement:               return checkLabeledStatement(<LabeledStatement>node);
@@ -4500,8 +4554,45 @@ module ts {
         }
 
         function checkClassDeclaration(node: ClassDeclaration) {
-            return checkForDisallowedTrailingComma(node.implementedTypes) ||
-                checkForAtLeastOneHeritageClause(node.implementedTypes, "implements");
+            return checkClassDeclarationHeritageClauses(node);
+        }
+
+        function checkClassDeclarationHeritageClauses(node: ClassDeclaration): boolean {
+            var seenExtendsClause = false;
+            var seenImplementsClause = false;
+
+            if (node.heritageClauses) {
+                for (var i = 0, n = node.heritageClauses.length; i < n; i++) {
+                    Debug.assert(i <= 2);
+                    var heritageClause = node.heritageClauses[i];
+
+                    if (heritageClause.token === SyntaxKind.ExtendsKeyword) {
+                        if (seenExtendsClause) {
+                            return grammarErrorOnFirstToken(heritageClause, Diagnostics.extends_clause_already_seen);
+                        }
+
+                        if (seenImplementsClause) {
+                            return grammarErrorOnFirstToken(heritageClause, Diagnostics.extends_clause_must_precede_implements_clause);
+                        }
+
+                        if (heritageClause.types.length > 1) {
+                            return grammarErrorOnFirstToken(heritageClause.types[1], Diagnostics.Classes_can_only_extend_a_single_class);
+                        }
+
+                        seenExtendsClause = true;
+                    }
+                    else {
+                        Debug.assert(heritageClause.token === SyntaxKind.ImplementsKeyword);
+                        if (seenImplementsClause) {
+                            return grammarErrorOnFirstToken(heritageClause, Diagnostics.implements_clause_already_seen);
+                        }
+
+                        seenImplementsClause = true;
+                    }
+                }
+            }
+
+            return false;
         }
 
         function checkForAtLeastOneHeritageClause(types: NodeArray<TypeNode>, listType: string): boolean {
@@ -4664,6 +4755,11 @@ module ts {
             }
         }
 
+        function checkHeritageClause(node: HeritageClause): boolean {
+            return checkForDisallowedTrailingComma(node.types) ||
+                checkForAtLeastOneHeritageClause(node.types, tokenToString(node.token));
+        }
+
         function checkIndexSignature(node: SignatureDeclaration): boolean {
             return checkIndexSignatureParameters(node) ||
                 checkForIndexSignatureModifiers(node);
@@ -4709,8 +4805,32 @@ module ts {
         }
 
         function checkInterfaceDeclaration(node: InterfaceDeclaration) {
-            return checkForDisallowedTrailingComma(node.baseTypes) ||
-                checkForAtLeastOneHeritageClause(node.baseTypes, "extends");
+            return checkInterfaceDeclarationHeritageClauses(node);
+        }
+
+        function checkInterfaceDeclarationHeritageClauses(node: InterfaceDeclaration): boolean {
+            var seenExtendsClause = false;
+
+            if (node.heritageClauses) {
+                for (var i = 0, n = node.heritageClauses.length; i < n; i++) {
+                    Debug.assert(i <= 1);
+                    var heritageClause = node.heritageClauses[i];
+
+                    if (heritageClause.token === SyntaxKind.ExtendsKeyword) {
+                        if (seenExtendsClause) {
+                            return grammarErrorOnFirstToken(heritageClause, Diagnostics.extends_clause_already_seen);
+                        }
+
+                        seenExtendsClause = true;
+                    }
+                    else {
+                        Debug.assert(heritageClause.token === SyntaxKind.ImplementsKeyword);
+                        return grammarErrorOnFirstToken(heritageClause, Diagnostics.Interface_declaration_cannot_have_implements_clause);
+                    }
+                }
+            }
+
+            return false;
         }
 
         function checkMethod(node: MethodDeclaration) {

@@ -1937,8 +1937,9 @@ module ts {
                 }
                 type.baseTypes = [];
                 var declaration = <ClassDeclaration>getDeclarationOfKind(symbol, SyntaxKind.ClassDeclaration);
-                if (declaration.baseType) {
-                    var baseType = getTypeFromTypeReferenceNode(declaration.baseType);
+                var baseTypeNode = getClassBaseTypeNode(declaration);
+                if (baseTypeNode) {
+                    var baseType = getTypeFromTypeReferenceNode(baseTypeNode);
                     if (baseType !== unknownType) {
                         if (getTargetType(baseType).flags & TypeFlags.Class) {
                             if (type !== baseType && !hasBaseType(<InterfaceType>baseType, type)) {
@@ -1949,7 +1950,7 @@ module ts {
                             }
                         }
                         else {
-                            error(declaration.baseType, Diagnostics.A_class_may_only_extend_another_class);
+                            error(baseTypeNode, Diagnostics.A_class_may_only_extend_another_class);
                         }
                     }
                 }
@@ -1977,8 +1978,8 @@ module ts {
                 }
                 type.baseTypes = [];
                 forEach(symbol.declarations, declaration => {
-                    if (declaration.kind === SyntaxKind.InterfaceDeclaration && (<InterfaceDeclaration>declaration).baseTypes) {
-                        forEach((<InterfaceDeclaration>declaration).baseTypes, node => {
+                    if (declaration.kind === SyntaxKind.InterfaceDeclaration && getInterfaceBaseTypeNodes(<InterfaceDeclaration>declaration)) {
+                        forEach(getInterfaceBaseTypeNodes(<InterfaceDeclaration>declaration), node => {
                             var baseType = getTypeFromTypeReferenceNode(node);
                             if (baseType !== unknownType) {
                                 if (getTargetType(baseType).flags & (TypeFlags.Class | TypeFlags.Interface)) {
@@ -4628,7 +4629,7 @@ module ts {
             var isCallExpression = node.parent.kind === SyntaxKind.CallExpression && (<CallExpression>node.parent).expression === node;
             var enclosingClass = <ClassDeclaration>getAncestor(node, SyntaxKind.ClassDeclaration);
             var baseClass: Type;
-            if (enclosingClass && enclosingClass.baseType) {
+            if (enclosingClass && getClassBaseTypeNode(enclosingClass)) {
                 var classType = <InterfaceType>getDeclaredTypeOfSymbol(getSymbolOfNode(enclosingClass));
                 baseClass = classType.baseTypes.length && classType.baseTypes[0];
             }
@@ -6812,7 +6813,7 @@ module ts {
             // TS 1.0 spec (April 2014): 8.3.2
             // Constructors of classes with no extends clause may not contain super calls, whereas 
             // constructors of derived classes must contain at least one super call somewhere in their function body.
-            if ((<ClassDeclaration>node.parent).baseType) {
+            if (getClassBaseTypeNode(<ClassDeclaration>node.parent)) {
                 
                 if (containsSuperCall(node.body)) {
                     // The first statement in the body of a constructor must be a super call if both of the following are true:
@@ -7456,7 +7457,7 @@ module ts {
                 return;
             }
 
-            if (enclosingClass.baseType) {
+            if (getClassBaseTypeNode(enclosingClass)) {
                 var isDeclaration = node.kind !== SyntaxKind.Identifier;
                 if (isDeclaration) {
                     error(node, Diagnostics.Duplicate_identifier_super_Compiler_uses_super_to_capture_base_class_reference);
@@ -7824,9 +7825,10 @@ module ts {
             var symbol = getSymbolOfNode(node);
             var type = <InterfaceType>getDeclaredTypeOfSymbol(symbol);
             var staticType = <ObjectType>getTypeOfSymbol(symbol);
-            if (node.baseType) {
+            var baseTypeNode = getClassBaseTypeNode(node);
+            if (baseTypeNode) {
                 emitExtends = emitExtends || !isInAmbientContext(node);
-                checkTypeReference(node.baseType);
+                checkTypeReference(baseTypeNode);
             }
             if (type.baseTypes.length) {
                 if (fullTypeCheck) {
@@ -7835,18 +7837,20 @@ module ts {
                     var staticBaseType = getTypeOfSymbol(baseType.symbol);
                     checkTypeAssignableTo(staticType, getTypeWithoutConstructors(staticBaseType), node.name,
                         Diagnostics.Class_static_side_0_incorrectly_extends_base_class_static_side_1);
-                    if (baseType.symbol !== resolveEntityName(node, node.baseType.typeName, SymbolFlags.Value)) {
-                        error(node.baseType, Diagnostics.Type_name_0_in_extends_clause_does_not_reference_constructor_function_for_0, typeToString(baseType));
+                    if (baseType.symbol !== resolveEntityName(node, baseTypeNode.typeName, SymbolFlags.Value)) {
+                        error(baseTypeNode, Diagnostics.Type_name_0_in_extends_clause_does_not_reference_constructor_function_for_0, typeToString(baseType));
                     }
 
                     checkKindsOfPropertyMemberOverrides(type, baseType);
                 }
                 
                 // Check that base type can be evaluated as expression
-                checkExpression(node.baseType.typeName);
+                checkExpression(baseTypeNode.typeName);
             }
-            if (node.implementedTypes) {
-                forEach(node.implementedTypes, typeRefNode => {
+
+            var implementedTypeNodes = getClassImplementedTypeNodes(node);
+            if (implementedTypeNodes) {
+                forEach(implementedTypeNodes, typeRefNode => {
                     checkTypeReference(typeRefNode);
                     if (fullTypeCheck) {
                         var t = getTypeFromTypeReferenceNode(typeRefNode);
@@ -8041,7 +8045,7 @@ module ts {
                     }
                 }
             }
-            forEach(node.baseTypes, checkTypeReference);
+            forEach(getInterfaceBaseTypeNodes(node), checkTypeReference);
             forEach(node.members, checkSourceElement);
 
             if (fullTypeCheck) {

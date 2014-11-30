@@ -851,11 +851,11 @@ module ts {
                 function getHeritageClauseVisibilityError(symbolAccesibilityResult: SymbolAccessiblityResult): SymbolAccessibilityDiagnostic {
                     var diagnosticMessage: DiagnosticMessage;
                     // Heritage clause is written by user so it can always be named
-                    if (node.parent.kind === SyntaxKind.ClassDeclaration) {
+                    if (node.parent.parent.kind === SyntaxKind.ClassDeclaration) {
                         // Class or Interface implemented/extended is inaccessible
                         diagnosticMessage = isImplementsList ?
-                        Diagnostics.Implements_clause_of_exported_class_0_has_or_is_using_private_name_1 :
-                        Diagnostics.Extends_clause_of_exported_class_0_has_or_is_using_private_name_1;
+                            Diagnostics.Implements_clause_of_exported_class_0_has_or_is_using_private_name_1 :
+                            Diagnostics.Extends_clause_of_exported_class_0_has_or_is_using_private_name_1;
                     }
                     else {
                         // interface is inaccessible
@@ -865,7 +865,7 @@ module ts {
                     return {
                         diagnosticMessage,
                         errorNode: node,
-                        typeName: (<Declaration>node.parent).name
+                        typeName: (<Declaration>node.parent.parent).name
                     };
                 }
             }
@@ -890,10 +890,11 @@ module ts {
                 var prevEnclosingDeclaration = enclosingDeclaration;
                 enclosingDeclaration = node;
                 emitTypeParameters(node.typeParameters);
-                if (node.baseType) {
-                    emitHeritageClause([node.baseType], /*isImplementsList*/ false);
+                var baseTypeNode = getClassBaseTypeNode(node);
+                if (baseTypeNode) {
+                    emitHeritageClause([baseTypeNode], /*isImplementsList*/ false);
                 }
-                emitHeritageClause(node.implementedTypes, /*isImplementsList*/ true);
+                emitHeritageClause(getClassImplementedTypeNodes(node), /*isImplementsList*/ true);
                 write(" {");
                 writeLine();
                 increaseIndent();
@@ -915,7 +916,7 @@ module ts {
                 var prevEnclosingDeclaration = enclosingDeclaration;
                 enclosingDeclaration = node;
                 emitTypeParameters(node.typeParameters);
-                emitHeritageClause(node.baseTypes, /*isImplementsList*/ false);
+                emitHeritageClause(getInterfaceBaseTypeNodes(node), /*isImplementsList*/ false);
                 write(" {");
                 writeLine();
                 increaseIndent();
@@ -3039,19 +3040,20 @@ module ts {
                 write("var ");
                 emit(node.name);
                 write(" = (function (");
-                if (node.baseType) {
+                var baseTypeNode = getClassBaseTypeNode(node);
+                if (baseTypeNode) {
                     write("_super");
                 }
                 write(") {");
                 increaseIndent();
                 scopeEmitStart(node);
-                if (node.baseType) {
+                if (baseTypeNode) {
                     writeLine();
-                    emitStart(node.baseType);
+                    emitStart(baseTypeNode);
                     write("__extends(");
                     emit(node.name);
                     write(", _super);");
-                    emitEnd(node.baseType);
+                    emitEnd(baseTypeNode);
                 }
                 writeLine();
                 emitConstructorOfClass();
@@ -3070,8 +3072,8 @@ module ts {
                 scopeEmitEnd();
                 emitStart(node);
                 write(")(");
-                if (node.baseType) {
-                    emit(node.baseType.typeName);
+                if (baseTypeNode) {
+                    emit(baseTypeNode.typeName);
                 }
                 write(");");
                 emitEnd(node);
@@ -3112,7 +3114,7 @@ module ts {
                     if (ctor) {
                         emitDefaultValueAssignments(ctor);
                         emitRestParameter(ctor);
-                        if (node.baseType) {
+                        if (baseTypeNode) {
                             var superCall = findInitialSuperCall(ctor);
                             if (superCall) {
                                 writeLine();
@@ -3122,11 +3124,11 @@ module ts {
                         emitParameterPropertyAssignments(ctor);
                     }
                     else {
-                        if (node.baseType) {
+                        if (baseTypeNode) {
                             writeLine();
-                            emitStart(node.baseType);
+                            emitStart(baseTypeNode);
                             write("_super.apply(this, arguments);");
-                            emitEnd(node.baseType);
+                            emitEnd(baseTypeNode);
                         }
                     }
                     emitMemberAssignments(node, /*nonstatic*/0);
