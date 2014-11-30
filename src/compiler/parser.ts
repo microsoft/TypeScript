@@ -537,7 +537,10 @@ module ts {
             case SyntaxKind.OmittedExpression:
                 return true;
             case SyntaxKind.QualifiedName:
-                while (node.parent.kind === SyntaxKind.QualifiedName) node = node.parent;
+                while (node.parent.kind === SyntaxKind.QualifiedName) {
+                    node = node.parent;
+                }
+
                 return node.parent.kind === SyntaxKind.TypeQuery;
             case SyntaxKind.Identifier:
                 if (node.parent.kind === SyntaxKind.TypeQuery) {

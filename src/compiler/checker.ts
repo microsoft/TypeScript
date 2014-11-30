@@ -5156,15 +5156,15 @@ module ts {
             }
         }
 
-        function checkPropertyAccess(node: PropertyAccessExpression) {
-            return checkPropertyAccessCore(node, node.left, node.right);
+        function checkPropertyAccessExpression(node: PropertyAccessExpression) {
+            return checkPropertyAccessExpressionOrQualifiedName(node, node.left, node.right);
         }
 
         function checkQualifiedName(node: QualifiedName) {
-            return checkPropertyAccessCore(node, node.left, node.right);
+            return checkPropertyAccessExpressionOrQualifiedName(node, node.left, node.right);
         }
 
-        function checkPropertyAccessCore(node: PropertyAccessExpression | QualifiedName, left: Expression | QualifiedName, right: Identifier) {
+        function checkPropertyAccessExpressionOrQualifiedName(node: PropertyAccessExpression | QualifiedName, left: Expression | QualifiedName, right: Identifier) {
             var type = checkExpression(left);
             if (type === unknownType) return type;
             if (type !== anyType) {
@@ -6575,7 +6575,7 @@ module ts {
                 case SyntaxKind.ObjectLiteralExpression:
                     return checkObjectLiteral(<ObjectLiteralExpression>node, contextualMapper);
                 case SyntaxKind.PropertyAccessExpression:
-                    return checkPropertyAccess(<PropertyAccessExpression>node);
+                    return checkPropertyAccessExpression(<PropertyAccessExpression>node);
                 case SyntaxKind.ElementAccessExpression:
                     return checkIndexedAccess(<ElementAccessExpression>node);
                 case SyntaxKind.CallExpression:
@@ -8817,27 +8817,29 @@ module ts {
         }
 
         function isRightSideOfQualifiedNameOrPropertyAccess(node: Node) {
-            return (node.parent.kind === SyntaxKind.QualifiedName || node.parent.kind === SyntaxKind.PropertyAccessExpression) &&
-                (<QualifiedName>node.parent).right === node;
+            return (node.parent.kind === SyntaxKind.QualifiedName && (<QualifiedName>node.parent).right === node) ||
+                (node.parent.kind === SyntaxKind.PropertyAccessExpression && (<PropertyAccessExpression>node.parent).right === node);
         }
 
-        function getSymbolOfEntityName(entityName: EntityName): Symbol {
+        function getSymbolOfEntityNameOrPropertyAccessExpression(entityName: EntityName | PropertyAccessExpression): Symbol {
             if (isDeclarationOrFunctionExpressionOrCatchVariableName(entityName)) {
                 return getSymbolOfNode(entityName.parent);
             }
 
             if (entityName.parent.kind === SyntaxKind.ExportAssignment) {
-                return resolveEntityName(/*location*/ entityName.parent.parent, entityName,
+                return resolveEntityName(/*location*/ entityName.parent.parent, <Identifier>entityName,
                     /*all meanings*/ SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace | SymbolFlags.Import);
             }
 
-            if (isInRightSideOfImportOrExportAssignment(entityName)) {
-                // Since we already checked for ExportAssignment, this really could only be an Import
-                return getSymbolOfPartOfRightHandSideOfImport(entityName);
+            if (entityName.kind !== SyntaxKind.PropertyAccessExpression) {
+                if (isInRightSideOfImportOrExportAssignment(<EntityName>entityName)) {
+                    // Since we already checked for ExportAssignment, this really could only be an Import
+                    return getSymbolOfPartOfRightHandSideOfImport(<EntityName>entityName);
+                }
             }
 
             if (isRightSideOfQualifiedNameOrPropertyAccess(entityName)) {
-                entityName = <QualifiedName>entityName.parent;
+                entityName = <QualifiedName | PropertyAccessExpression>entityName.parent;
             }
 
             if (isExpression(entityName)) {
@@ -8845,9 +8847,16 @@ module ts {
                     // Include Import in the meaning, this ensures that we do not follow aliases to where they point and instead
                     // return the alias symbol.
                     var meaning: SymbolFlags = SymbolFlags.Value | SymbolFlags.Import;
-                    return resolveEntityName(entityName, entityName, meaning);
+                    return resolveEntityName(entityName, <Identifier>entityName, meaning);
                 }
-                else if (entityName.kind === SyntaxKind.QualifiedName || entityName.kind === SyntaxKind.PropertyAccessExpression) {
+                else if (entityName.kind === SyntaxKind.PropertyAccessExpression) {
+                    var symbol = getNodeLinks(entityName).resolvedSymbol;
+                    if (!symbol) {
+                        checkPropertyAccessExpression(<PropertyAccessExpression>entityName);
+                    }
+                    return getNodeLinks(entityName).resolvedSymbol;
+                }
+                else if (entityName.kind === SyntaxKind.QualifiedName) {
                     var symbol = getNodeLinks(entityName).resolvedSymbol;
                     if (!symbol) {
                         checkQualifiedName(<QualifiedName>entityName);
@@ -8859,12 +8868,12 @@ module ts {
                     return;
                 }
             }
-            else if (isTypeReferenceIdentifier(entityName)) {
+            else if (isTypeReferenceIdentifier(<EntityName>entityName)) {
                 var meaning = entityName.parent.kind === SyntaxKind.TypeReference ? SymbolFlags.Type : SymbolFlags.Namespace;
                 // Include Import in the meaning, this ensures that we do not follow aliases to where they point and instead
                 // return the alias symbol.
                 meaning |= SymbolFlags.Import;
-                return resolveEntityName(entityName, entityName, meaning);
+                return resolveEntityName(entityName, <EntityName>entityName, meaning);
             }
 
             // Do we want to return undefined here?
@@ -8884,7 +8893,7 @@ module ts {
 
             if (node.kind === SyntaxKind.Identifier && isInRightSideOfImportOrExportAssignment(<Identifier>node)) {
                 return node.parent.kind === SyntaxKind.ExportAssignment
-                    ? getSymbolOfEntityName(<Identifier>node)
+                    ? getSymbolOfEntityNameOrPropertyAccessExpression(<Identifier>node)
                     : getSymbolOfPartOfRightHandSideOfImport(<Identifier>node);
             }
 
@@ -8892,7 +8901,7 @@ module ts {
                 case SyntaxKind.Identifier:
                 case SyntaxKind.PropertyAccessExpression:
                 case SyntaxKind.QualifiedName:
-                    return getSymbolOfEntityName(<Identifier>node);
+                    return getSymbolOfEntityNameOrPropertyAccessExpression(<EntityName | PropertyAccessExpression>node);
 
                 case SyntaxKind.ThisKeyword:
                 case SyntaxKind.SuperKeyword:
