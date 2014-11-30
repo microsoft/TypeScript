@@ -927,7 +927,7 @@ module ts {
             }
         }
 
-        function emitPropertyDeclaration(node: PropertyDeclaration) {
+        function emitPropertyDeclaration(node: Declaration) {
             emitJsDocComments(node);
             emitClassMemberDeclarationFlags(node);
             emitVariableDeclaration(<VariableDeclaration>node);

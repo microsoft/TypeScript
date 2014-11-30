@@ -3611,7 +3611,7 @@ module ts {
             return finishNode(node);
         }
 
-        function parsePropertyMemberDeclaration(fullStart: number, modifiers: ModifiersArray): Declaration {
+        function parsePropertyMemberDeclaration(fullStart: number, modifiers: ModifiersArray): ClassElement {
             var flags = modifiers ? modifiers.flags : 0;
             var asteriskToken = parseOptionalToken(SyntaxKind.AsteriskToken);
             var name = parsePropertyName();
@@ -3733,7 +3733,7 @@ module ts {
             return modifiers;
         }
 
-        function parseClassMemberDeclaration(): Declaration {
+        function parseClassElement(): ClassElement {
             var fullStart = getNodePos();
             var modifiers = parseModifiers();
             if (parseContextualModifier(SyntaxKind.GetKeyword)) {
@@ -3790,13 +3790,13 @@ module ts {
                 parseExpected(SyntaxKind.CloseBraceToken);
             }
             else {
-                node.members = createMissingList<Declaration>();
+                node.members = createMissingList<ClassElement>();
             }
             return finishNode(node);
         }
 
         function parseClassMembers() {
-            return parseList(ParsingContext.ClassMembers, /*checkForStrictMode*/ false, parseClassMemberDeclaration);
+            return parseList(ParsingContext.ClassMembers, /*checkForStrictMode*/ false, parseClassElement);
         }
 
         function parseClassBaseType(): TypeReferenceNode {

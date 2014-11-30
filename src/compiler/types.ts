@@ -352,7 +352,8 @@ module ts {
         expression?: Expression;
     }
 
-    export interface SignatureDeclaration extends Declaration, ParsedSignature { }
+    export interface SignatureDeclaration extends Declaration, ParsedSignature, ClassElement {
+    }
 
     export interface VariableDeclaration extends Declaration {
         name: Identifier;
@@ -360,7 +361,7 @@ module ts {
         initializer?: Expression;
     }
 
-    export interface PropertyDeclaration extends Declaration {
+    export interface PropertyDeclaration extends Declaration, ClassElement {
         type?: TypeNode;
         initializer?: Expression;
     }
@@ -389,11 +390,11 @@ module ts {
         body?: Block;
     }
 
-    export interface MethodDeclaration extends FunctionLikeDeclaration {
+    export interface MethodDeclaration extends FunctionLikeDeclaration, ClassElement {
         body?: Block;
     }
 
-    export interface ConstructorDeclaration extends Declaration, ParsedSignature {
+    export interface ConstructorDeclaration extends Declaration, ParsedSignature, ClassElement {
         body?: Block;
     }
 
@@ -674,7 +675,11 @@ module ts {
         typeParameters?: NodeArray<TypeParameterDeclaration>;
         baseType?: TypeReferenceNode;
         implementedTypes?: NodeArray<TypeReferenceNode>;
-        members: NodeArray<Declaration>;
+        members: NodeArray<ClassElement>;
+    }
+
+    export interface ClassElement extends Declaration {
+        _classElementBrand: any;
     }
 
     export interface InterfaceDeclaration extends Declaration, ModuleElement {
