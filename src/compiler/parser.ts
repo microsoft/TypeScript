@@ -285,8 +285,9 @@ module ts {
             case SyntaxKind.VoidExpression:
                 return child((<VoidExpression>node).expression);
             case SyntaxKind.PrefixUnaryExpression:
+                return child((<PrefixUnaryExpression>node).operand);
             case SyntaxKind.PostfixUnaryExpression:
-                return child((<UnaryExpression>node).operand);
+                return child((<PostfixUnaryExpression>node).operand);
             case SyntaxKind.BinaryExpression:
                 return child((<BinaryExpression>node).left) ||
                     child((<BinaryExpression>node).right);
@@ -1557,8 +1558,8 @@ module ts {
             return entity;
         }
 
-        function parseAnyTokenNode(): Node {
-            var node = createNode(token);
+        function parseAnyTokenNode(): PrimaryExpression {
+            var node = <PrimaryExpression>createNode(token);
             nextToken();
             return finishNode(node);
         }
@@ -1572,7 +1573,7 @@ module ts {
             return createMissingNode();
         }
 
-        function parseTemplateExpression() {
+        function parseTemplateExpression(): TemplateExpression {
             var template = <TemplateExpression>createNode(SyntaxKind.TemplateExpression);
 
             template.head = parseLiteralNode();
@@ -2396,7 +2397,7 @@ module ts {
                 }
                 else {
                     // If not, we're probably better off bailing out and returning a bogus function expression.
-                    return makeFunctionExpression(SyntaxKind.ArrowFunction, pos, /*asteriskToken:*/ undefined, /*name:*/ undefined, sig, createMissingNode());
+                    return makeFunctionExpression(SyntaxKind.ArrowFunction, pos, /*asteriskToken:*/ undefined, /*name:*/ undefined, sig, <Expression>createMissingNode());
                 }
             }
             
@@ -2510,7 +2511,7 @@ module ts {
         }
 
         function parseArrowExpressionTail(pos: number, sig: ParsedSignature): FunctionExpression {
-            var body: Node;
+            var body: Block | Expression;
 
             if (token === SyntaxKind.OpenBraceToken) {
                 body = parseFunctionBlock(/*allowYield:*/ false, /* ignoreMissingOpenBrace */ false);
@@ -2635,8 +2636,37 @@ module ts {
             return finishNode(node);
         }
 
-        function parseUnaryExpressionOrHigher(): Expression {
-            var pos = getNodePos();
+        function parsePrefixUnaryExpression() {
+            var node = <PrefixUnaryExpression>createNode(SyntaxKind.PrefixUnaryExpression);
+            var operator = token;
+            nextToken();
+            node.operator = operator;
+            node.operand = parseUnaryExpressionOrHigher();
+            return finishNode(node);
+        }
+
+        function parseDeleteExpression() {
+            var node = <DeleteExpression>createNode(SyntaxKind.DeleteExpression);
+            nextToken();
+            node.expression = parseUnaryExpressionOrHigher();
+            return finishNode(node);
+        }
+
+        function parseTypeOfExpression() {
+            var node = <TypeOfExpression>createNode(SyntaxKind.TypeOfExpression);
+            nextToken();
+            node.expression = parseUnaryExpressionOrHigher();
+            return finishNode(node);
+        }
+
+        function parseVoidExpression() {
+            var node = <VoidExpression>createNode(SyntaxKind.VoidExpression);
+            nextToken();
+            node.expression = parseUnaryExpressionOrHigher();
+            return finishNode(node);
+        }
+
+        function parseUnaryExpressionOrHigher(): UnaryExpression {
             switch (token) {
                 case SyntaxKind.PlusToken:
                 case SyntaxKind.MinusToken:
@@ -2644,24 +2674,13 @@ module ts {
                 case SyntaxKind.ExclamationToken:
                 case SyntaxKind.PlusPlusToken:
                 case SyntaxKind.MinusMinusToken:
-                    var operator = token;
-                    nextToken();
-                    return makeUnaryExpression(SyntaxKind.PrefixUnaryExpression, pos, operator, parseUnaryExpressionOrHigher());
+                    return parsePrefixUnaryExpression();
                 case SyntaxKind.DeleteKeyword:
-                    var node = <DeleteExpression>createNode(SyntaxKind.DeleteExpression);
-                    nextToken();
-                    node.expression = parseUnaryExpressionOrHigher();
-                    return finishNode(node);
+                    return parseDeleteExpression();
                 case SyntaxKind.TypeOfKeyword:
-                    var node = <TypeOfExpression>createNode(SyntaxKind.TypeOfExpression);
-                    nextToken();
-                    node.expression = parseUnaryExpressionOrHigher();
-                    return finishNode(node);
+                    return parseTypeOfExpression();
                 case SyntaxKind.VoidKeyword:
-                    var node = <VoidExpression>createNode(SyntaxKind.VoidExpression);
-                    nextToken();
-                    node.expression = parseUnaryExpressionOrHigher();
-                    return finishNode(node);
+                    return parseVoidExpression();
                 case SyntaxKind.LessThanToken:
                     return parseTypeAssertion();
                 default:
@@ -2669,20 +2688,22 @@ module ts {
             }
         }
 
-        function parsePostfixExpressionOrHigher(): Expression {
+        function parsePostfixExpressionOrHigher(): PostfixExpression {
             var expression = parseLeftHandSideExpressionOrHigher();
 
             Debug.assert(isLeftHandSideExpression(expression));
             if ((token === SyntaxKind.PlusPlusToken || token === SyntaxKind.MinusMinusToken) && !scanner.hasPrecedingLineBreak()) {
-                var operator = token;
+                var node = <PostfixUnaryExpression>createNode(SyntaxKind.PostfixUnaryExpression, expression.pos);
+                node.operand = expression;
+                node.operator = token;
                 nextToken();
-                return makeUnaryExpression(SyntaxKind.PostfixUnaryExpression, expression.pos, operator, expression);
+                return finishNode(node);
             }
 
             return expression;
         }
 
-        function parseLeftHandSideExpressionOrHigher(): Expression {
+        function parseLeftHandSideExpressionOrHigher(): LeftHandSideExpression {
             // Original Ecma:
             // LeftHandSideExpression: See 11.2 
             //      NewExpression
@@ -2713,7 +2734,7 @@ module ts {
             // the last two CallExpression productions.  Or we have a MemberExpression which either
             // completes the LeftHandSideExpression, or starts the beginning of the first four
             // CallExpression productions.
-            var expression: Expression;
+            var expression: MemberExpression;
             if (token === SyntaxKind.SuperKeyword) {
                 expression = parseSuperExpression();
             }
@@ -2726,7 +2747,7 @@ module ts {
             return parseCallExpressionRest(expression);
         }
 
-        function parseMemberExpressionOrHigher(): Expression {
+        function parseMemberExpressionOrHigher(): MemberExpression {
             // Note: to make our lives simpler, we decompose the the NewExpression productions and
             // place ObjectCreationExpression and FunctionExpression into PrimaryExpression.
             // like so:
@@ -2778,7 +2799,7 @@ module ts {
             return parseMemberExpressionRest(expression); 
         }
 
-        function parseSuperExpression(): Expression {
+        function parseSuperExpression(): MemberExpression {
             var expression = parseAnyTokenNode();
             if (token === SyntaxKind.OpenParenToken || token === SyntaxKind.DotToken) {
                 return expression;
@@ -2802,14 +2823,7 @@ module ts {
             return finishNode(node);
         }
 
-        function makeUnaryExpression(kind: SyntaxKind, pos: number, operator: SyntaxKind, operand: Expression): UnaryExpression {
-            var node = <UnaryExpression>createNode(kind, pos);
-            node.operator = operator;
-            node.operand = operand;
-            return finishNode(node);
-        }
-
-        function parseMemberExpressionRest(expression: Expression): Expression {
+        function parseMemberExpressionRest(expression: LeftHandSideExpression): MemberExpression {
             while (true) {
                 var dotOrBracketStart = scanner.getTokenPos();
                 if (parseOptional(SyntaxKind.DotToken)) {
@@ -2867,7 +2881,7 @@ module ts {
                         }
                     }
                     else {
-                        indexedAccess.argumentExpression = createMissingNode();
+                        indexedAccess.argumentExpression = <Expression>createMissingNode();
                     }
 
                     indexedAccess.closeBracketToken = parseTokenNode(SyntaxKind.CloseBracketToken);
@@ -2885,11 +2899,11 @@ module ts {
                     continue;
                 }
 
-                return expression;
+                return <MemberExpression>expression;
             }
         }
 
-        function parseCallExpressionRest(expression: Expression): Expression {
+        function parseCallExpressionRest(expression: LeftHandSideExpression): LeftHandSideExpression {
             while (true) {
                 expression = parseMemberExpressionRest(expression);
 
@@ -2950,7 +2964,7 @@ module ts {
             return parseType();
         }
 
-        function parsePrimaryExpression(): Expression {
+        function parsePrimaryExpression(): PrimaryExpression {
             switch (token) {
                 case SyntaxKind.ThisKeyword:
                 case SyntaxKind.SuperKeyword:
@@ -2963,11 +2977,11 @@ module ts {
                 case SyntaxKind.NoSubstitutionTemplateLiteral:
                     return parseLiteralNode();
                 case SyntaxKind.OpenParenToken:
-                    return parseParenExpression();
+                    return parseParenthesizedExpression();
                 case SyntaxKind.OpenBracketToken:
-                    return parseArrayLiteral();
+                    return parseArrayLiteralExpression();
                 case SyntaxKind.OpenBraceToken:
-                    return parseObjectLiteral();
+                    return parseObjectLiteralExpression();
                 case SyntaxKind.FunctionKeyword:
                     return parseFunctionExpression();
                 case SyntaxKind.NewKeyword:
@@ -2987,10 +3001,10 @@ module ts {
                     }
             }
             error(Diagnostics.Expression_expected);
-            return <Expression>createMissingNode();
+            return <PrimaryExpression>createMissingNode();
         }
 
-        function parseParenExpression(): ParenthesizedExpression {
+        function parseParenthesizedExpression(): ParenthesizedExpression {
             var node = <ParenthesizedExpression>createNode(SyntaxKind.ParenthesizedExpression);
             parseExpected(SyntaxKind.OpenParenToken);
             node.expression = allowInAnd(parseExpression);
@@ -3000,7 +3014,7 @@ module ts {
 
         function parseAssignmentExpressionOrOmittedExpression(): Expression {
             return token === SyntaxKind.CommaToken
-                ? createNode(SyntaxKind.OmittedExpression)
+                ? <Expression>createNode(SyntaxKind.OmittedExpression)
                 : parseAssignmentExpressionOrHigher();
         }
 
@@ -3012,7 +3026,7 @@ module ts {
             return allowInAnd(parseAssignmentExpressionOrOmittedExpression);
         }
 
-        function parseArrayLiteral(): ArrayLiteralExpression {
+        function parseArrayLiteralExpression(): ArrayLiteralExpression {
             var node = <ArrayLiteralExpression>createNode(SyntaxKind.ArrayLiteralExpression);
             parseExpected(SyntaxKind.OpenBracketToken);
             if (scanner.hasPrecedingLineBreak()) node.flags |= NodeFlags.MultiLine;
@@ -3077,7 +3091,7 @@ module ts {
             return parsePropertyAssignment();
         }
 
-        function parseObjectLiteral(): ObjectLiteralExpression {
+        function parseObjectLiteralExpression(): ObjectLiteralExpression {
             var node = <ObjectLiteralExpression>createNode(SyntaxKind.ObjectLiteralExpression);
             parseExpected(SyntaxKind.OpenBraceToken);
             if (scanner.hasPrecedingLineBreak()) {
@@ -3109,7 +3123,7 @@ module ts {
             return isIdentifier() ? parseIdentifier() : undefined;
         }
 
-        function makeFunctionExpression(kind: SyntaxKind, pos: number, asteriskToken: Node, name: Identifier, sig: ParsedSignature, body: Node): FunctionExpression {
+        function makeFunctionExpression(kind: SyntaxKind, pos: number, asteriskToken: Node, name: Identifier, sig: ParsedSignature, body: Block | Expression): FunctionExpression {
             var node = <FunctionExpression>createNode(kind, pos);
             node.asteriskToken = asteriskToken;
             node.name = name;
@@ -4236,17 +4250,17 @@ module ts {
                 case SyntaxKind.FunctionDeclaration:            return checkFunctionDeclaration(<FunctionLikeDeclaration>node);
                 case SyntaxKind.FunctionExpression:             return checkFunctionExpression(<FunctionExpression>node);
                 case SyntaxKind.GetAccessor:                    return checkGetAccessor(<MethodDeclaration>node);
-                case SyntaxKind.ElementAccessExpression:                  return checkIndexedAccess(<ElementAccessExpression>node);
+                case SyntaxKind.ElementAccessExpression:        return checkElementAccessExpression(<ElementAccessExpression>node);
                 case SyntaxKind.IndexSignature:                 return checkIndexSignature(<SignatureDeclaration>node);
                 case SyntaxKind.InterfaceDeclaration:           return checkInterfaceDeclaration(<InterfaceDeclaration>node);
                 case SyntaxKind.LabeledStatement:               return checkLabeledStatement(<LabeledStatement>node);
                 case SyntaxKind.Method:                         return checkMethod(<MethodDeclaration>node);
                 case SyntaxKind.ModuleDeclaration:              return checkModuleDeclaration(<ModuleDeclaration>node);
-                case SyntaxKind.ObjectLiteralExpression:                  return checkObjectLiteral(<ObjectLiteralExpression>node);
+                case SyntaxKind.ObjectLiteralExpression:        return checkObjectLiteralExpression(<ObjectLiteralExpression>node);
                 case SyntaxKind.NumericLiteral:                 return checkNumericLiteral(<LiteralExpression>node);
                 case SyntaxKind.Parameter:                      return checkParameter(<ParameterDeclaration>node);
-                case SyntaxKind.PostfixUnaryExpression:                return checkPostfixOperator(<UnaryExpression>node);
-                case SyntaxKind.PrefixUnaryExpression:          return checkPrefixOperator(<UnaryExpression>node);
+                case SyntaxKind.PostfixUnaryExpression:         return checkPostfixUnaryExpression(<PostfixUnaryExpression>node);
+                case SyntaxKind.PrefixUnaryExpression:          return checkPrefixUnaryExpression(<PrefixUnaryExpression>node);
                 case SyntaxKind.Property:                       return checkProperty(<PropertyDeclaration>node);
                 case SyntaxKind.PropertyAssignment:             return checkPropertyAssignment(<PropertyDeclaration>node);
                 case SyntaxKind.ReturnStatement:                return checkReturnStatement(<ReturnStatement>node);
@@ -4567,7 +4581,7 @@ module ts {
             }
 
             if (expression.kind === SyntaxKind.PrefixUnaryExpression) {
-                var unaryExpression = <UnaryExpression>expression;
+                var unaryExpression = <PrefixUnaryExpression>expression;
                 if (unaryExpression.operator === SyntaxKind.PlusToken || unaryExpression.operator === SyntaxKind.MinusToken) {
                     expression = unaryExpression.operand;
                 }
@@ -4632,7 +4646,7 @@ module ts {
                 checkAccessor(node);
         }
 
-        function checkIndexedAccess(node: ElementAccessExpression) {
+        function checkElementAccessExpression(node: ElementAccessExpression) {
             if (node.argumentExpression.kind === SyntaxKind.Missing) {
                 if (node.parent.kind === SyntaxKind.NewExpression &&
                     (<NewExpression>node.parent).expression === node) {
@@ -4763,7 +4777,7 @@ module ts {
             }
         }
 
-        function checkObjectLiteral(node: ObjectLiteralExpression): boolean {
+        function checkObjectLiteralExpression(node: ObjectLiteralExpression): boolean {
             var seen: Map<SymbolFlags> = {};
             var Property = 1;
             var GetAccessor = 2;
@@ -5029,7 +5043,7 @@ module ts {
             }
         }
 
-        function checkPostfixOperator(node: UnaryExpression) {
+        function checkPostfixUnaryExpression(node: PostfixUnaryExpression) {
             // The identifier eval or arguments may not appear as the LeftHandSideExpression of an 
             // Assignment operator(11.13) or of a PostfixExpression(11.3) or as the UnaryExpression 
             // operated upon by a Prefix Increment(11.4.4) or a Prefix Decrement(11.4.5) operator. 
@@ -5038,7 +5052,7 @@ module ts {
             }
         }
 
-        function checkPrefixOperator(node: UnaryExpression) {
+        function checkPrefixUnaryExpression(node: PrefixUnaryExpression) {
             if (node.parserContextFlags & ParserContextFlags.StrictMode) {
                 // The identifier eval or arguments may not appear as the LeftHandSideExpression of an 
                 // Assignment operator(11.13) or of a PostfixExpression(11.3) or as the UnaryExpression 

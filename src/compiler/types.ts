@@ -315,7 +315,7 @@ module ts {
         flags: number;
     }
 
-    export interface Identifier extends Node {
+    export interface Identifier extends PrimaryExpression {
         text: string;                 // Text of identifier (with escapes converted to characters)
     }
 
@@ -436,23 +436,49 @@ module ts {
     }
 
     export interface Expression extends Node {
+        _expressionBrand: any;
         contextualType?: Type;  // Used to temporarily assign a contextual type during overload resolution
     }
 
     export interface UnaryExpression extends Expression {
+        _unaryExpressionBrand: any;
+    }
+
+    export interface PrefixUnaryExpression extends UnaryExpression {
         operator: SyntaxKind;
         operand: Expression;
     }
 
-    export interface DeleteExpression extends Expression {
+    export interface PostfixUnaryExpression extends PostfixExpression {
+        operand: LeftHandSideExpression;
+        operator: SyntaxKind;
+    }
+
+    export interface PostfixExpression extends UnaryExpression {
+        _postfixExpressionBrand: any;
+    }
+
+    export interface LeftHandSideExpression extends PostfixExpression {
+        _leftHandSideExpressionBrand: any;
+    }
+
+    export interface MemberExpression extends LeftHandSideExpression {
+        _memberExpressionBrand: any;
+    }
+
+    export interface PrimaryExpression extends MemberExpression {
+        _primaryExpressionBrand: any;
+    }
+
+    export interface DeleteExpression extends UnaryExpression {
         expression: Expression;
     }
 
-    export interface TypeOfExpression extends Expression {
+    export interface TypeOfExpression extends UnaryExpression {
         expression: Expression;
     }
 
-    export interface VoidExpression extends Expression {
+    export interface VoidExpression extends UnaryExpression {
         expression: Expression;
     }
     
@@ -473,7 +499,7 @@ module ts {
         whenFalse: Expression;
     }
 
-    export interface FunctionExpression extends Expression, FunctionLikeDeclaration {
+    export interface FunctionExpression extends PrimaryExpression, FunctionLikeDeclaration {
         name?: Identifier;
         body: Block | Expression;  // Required, whereas the member inherited from FunctionDeclaration is optional
     }
@@ -481,11 +507,11 @@ module ts {
     // The text property of a LiteralExpression stores the interpreted value of the literal in text form. For a StringLiteral,
     // or any literal of a template, this means quotes have been removed and escapes have been converted to actual characters.
     // For a NumericLiteral, the stored value is the toString() representation of the number. For example 1, 1.00, and 1e0 are all stored as just "1".
-    export interface LiteralExpression extends Expression {
+    export interface LiteralExpression extends PrimaryExpression {
         text: string;
     }
 
-    export interface TemplateExpression extends Expression {
+    export interface TemplateExpression extends PrimaryExpression {
         head: LiteralExpression;
         templateSpans: NodeArray<TemplateSpan>;
     }
@@ -497,46 +523,46 @@ module ts {
         literal: LiteralExpression;
     }
 
-    export interface ParenthesizedExpression extends Expression {
+    export interface ParenthesizedExpression extends PrimaryExpression {
         expression: Expression;
     }
 
-    export interface ArrayLiteralExpression extends Expression {
+    export interface ArrayLiteralExpression extends PrimaryExpression {
         elements: NodeArray<Expression>;
     }
 
-    export interface ObjectLiteralExpression extends Expression {
+    export interface ObjectLiteralExpression extends PrimaryExpression {
         properties: NodeArray<Node>;
     }
 
-    export interface PropertyAccessExpression extends Expression {
-        left: Expression;
+    export interface PropertyAccessExpression extends MemberExpression {
+        left: LeftHandSideExpression;
         right: Identifier;
     }
 
-    export interface ElementAccessExpression extends Expression {
-        expression: Expression;
+    export interface ElementAccessExpression extends MemberExpression {
+        expression: LeftHandSideExpression;
         openBracketToken: Node;
         argumentExpression: Expression;
         closeBracketToken: Node;
     }
 
-    export interface CallExpression extends Expression {
+    export interface CallExpression extends LeftHandSideExpression {
         expression: Expression;
         typeArguments?: NodeArray<TypeNode>;
         arguments: NodeArray<Expression>;
     }
 
-    export interface NewExpression extends CallExpression { }
+    export interface NewExpression extends CallExpression, PrimaryExpression { }
 
-    export interface TaggedTemplateExpression extends Expression {
-        tag: Expression;
+    export interface TaggedTemplateExpression extends MemberExpression {
+        tag: LeftHandSideExpression;
         template: LiteralExpression | TemplateExpression;
     }
 
     export type CallLikeExpression = CallExpression | NewExpression | TaggedTemplateExpression;
 
-    export interface TypeAssertion extends Expression {
+    export interface TypeAssertion extends UnaryExpression {
         type: TypeNode;
         expression: Expression;
     }

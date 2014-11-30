@@ -4514,8 +4514,8 @@ module ts {
                         }
                         break;
                     case SyntaxKind.PrefixUnaryExpression:
-                        if ((<UnaryExpression>expr).operator === SyntaxKind.ExclamationToken) {
-                            return narrowType(type, (<UnaryExpression>expr).operand, !assumeTrue);
+                        if ((<PrefixUnaryExpression>expr).operator === SyntaxKind.ExclamationToken) {
+                            return narrowType(type,(<PrefixUnaryExpression>expr).operand, !assumeTrue);
                         }
                         break;
                 }
@@ -4722,8 +4722,9 @@ module ts {
         function getContextuallyTypedParameterType(parameter: ParameterDeclaration): Type {
             var func = <FunctionLikeDeclaration>parameter.parent;
             if (func.kind === SyntaxKind.FunctionExpression || func.kind === SyntaxKind.ArrowFunction) {
-                if (isContextSensitiveExpression(func)) {
-                    var contextualSignature = getContextualSignature(func);
+                var funcExpr = <Expression>parameter.parent;
+                if (isContextSensitiveExpression(funcExpr)) {
+                    var contextualSignature = getContextualSignature(funcExpr);
                     if (contextualSignature) {
 
                         var funcHasRestParameters = hasRestParameters(func);
@@ -4771,7 +4772,7 @@ module ts {
                 }
                 // Otherwise, if the containing function is contextually typed by a function type with exactly one call signature
                 // and that call signature is non-generic, return statements are contextually typed by the return type of the signature
-                var signature = getContextualSignature(func);
+                var signature = getContextualSignature(<Expression><Node>func);
                 if (signature) {
                     return getReturnTypeOfSignature(signature);
                 }
@@ -5053,7 +5054,9 @@ module ts {
                         }
                         else {
                             Debug.assert(memberDecl.kind === SyntaxKind.ShorthandPropertyAssignment);
-                            type = checkExpression(memberDecl.name, contextualMapper);
+                            type = memberDecl.name.kind === SyntaxKind.ComputedPropertyName
+                                ? unknownType
+                                : checkExpression(<Expression><Node>memberDecl.name, contextualMapper);
                         }
                         var prop = <TransientSymbol>createSymbol(SymbolFlags.Property | SymbolFlags.Transient | member.flags, member.name);
                         prop.declarations = member.declarations;
@@ -5115,7 +5118,7 @@ module ts {
             return s.valueDeclaration ? s.valueDeclaration.flags : s.flags & SymbolFlags.Prototype ? NodeFlags.Public | NodeFlags.Static : 0;
         }
 
-        function checkClassPropertyAccess(node: PropertyAccessExpression, type: Type, prop: Symbol) {
+        function checkClassPropertyAccess(node: PropertyAccessExpression | QualifiedName, type: Type, prop: Symbol) {
             var flags = getDeclarationFlagsFromSymbol(prop);
             // Public properties are always accessible
             if (!(flags & (NodeFlags.Private | NodeFlags.Protected))) {
@@ -5154,7 +5157,15 @@ module ts {
         }
 
         function checkPropertyAccess(node: PropertyAccessExpression) {
-            var type = checkExpression(node.left);
+            return checkPropertyAccessCore(node, node.left, node.right);
+        }
+
+        function checkQualifiedName(node: QualifiedName) {
+            return checkPropertyAccessCore(node, node.left, node.right);
+        }
+
+        function checkPropertyAccessCore(node: PropertyAccessExpression | QualifiedName, left: Expression | QualifiedName, right: Identifier) {
+            var type = checkExpression(left);
             if (type === unknownType) return type;
             if (type !== anyType) {
                 var apparentType = getApparentType(getWidenedType(type));
@@ -5162,10 +5173,10 @@ module ts {
                     // handle cases when type is Type parameter with invalid constraint
                     return unknownType;
                 }
-                var prop = getPropertyOfType(apparentType, node.right.text);
+                var prop = getPropertyOfType(apparentType, right.text);
                 if (!prop) {
-                    if (node.right.text) {
-                        error(node.right, Diagnostics.Property_0_does_not_exist_on_type_1, declarationNameToString(node.right), typeToString(type));
+                    if (right.text) {
+                        error(right, Diagnostics.Property_0_does_not_exist_on_type_1, declarationNameToString(right), typeToString(type));
                     }
                     return unknownType;
                 }
@@ -5178,8 +5189,8 @@ module ts {
                     // - In a static member function or static member accessor 
                     //   where this references the constructor function object of a derived class, 
                     //   a super property access is permitted and must specify a public static member function of the base class.
-                    if (node.left.kind === SyntaxKind.SuperKeyword && getDeclarationKindFromSymbol(prop) !== SyntaxKind.Method) {
-                        error(node.right, Diagnostics.Only_public_and_protected_methods_of_the_base_class_are_accessible_via_the_super_keyword);
+                    if (left.kind === SyntaxKind.SuperKeyword && getDeclarationKindFromSymbol(prop) !== SyntaxKind.Method) {
+                        error(right, Diagnostics.Only_public_and_protected_methods_of_the_base_class_are_accessible_via_the_super_keyword);
                     }
                     else {
                         checkClassPropertyAccess(node, type, prop);
@@ -5477,7 +5488,7 @@ module ts {
                     // String literals get string literal types unless we're reporting errors
                     argType = arg.kind === SyntaxKind.StringLiteral && !reportErrors
                         ? getStringLiteralType(<LiteralExpression>arg)
-                        : checkExpressionWithContextualType(arg, paramType, excludeArgument && excludeArgument[i] ? identityMapper : undefined);
+                        : checkExpressionWithContextualType(<LiteralExpression>arg, paramType, excludeArgument && excludeArgument[i] ? identityMapper : undefined);
                 }
 
                 // Use argument expression as error location when reporting errors
@@ -5968,9 +5979,9 @@ module ts {
         }
 
         function getReturnTypeFromBody(func: FunctionLikeDeclaration, contextualMapper?: TypeMapper): Type {
-            var contextualSignature = getContextualSignature(func);
+            var contextualSignature = getContextualSignature(<Expression><Node>func);
             if (func.body.kind !== SyntaxKind.FunctionBlock) {
-                var unwidenedType = checkAndMarkExpression(func.body, contextualMapper);
+                var unwidenedType = checkAndMarkExpression(<Expression>func.body, contextualMapper);
                 var widenedType = getWidenedType(unwidenedType);
 
                 if (fullTypeCheck && compilerOptions.noImplicitAny && !contextualSignature && widenedType !== unwidenedType && getInnermostTypeOfNestedArrayTypes(widenedType) === anyType) {
@@ -6126,7 +6137,7 @@ module ts {
                 checkSourceElement(node.body);
             }
             else {
-                var exprType = checkExpression(node.body);
+                var exprType = checkExpression(<Expression>node.body);
                 if (node.type) {
                     checkTypeAssignableTo(exprType, getTypeFromTypeNode(node.type), node.body, /*headMessage*/ undefined);
                 }
@@ -6229,7 +6240,7 @@ module ts {
             return undefinedType;
         }
 
-        function checkPrefixExpression(node: UnaryExpression): Type {
+        function checkPrefixUnaryExpression(node: PrefixUnaryExpression): Type {
             var operandType = checkExpression(node.operand);
             switch (node.operator) {
                 case SyntaxKind.PlusToken:
@@ -6252,7 +6263,7 @@ module ts {
             return unknownType;
         }
 
-        function checkPostfixExpression(node: UnaryExpression): Type {
+        function checkPostfixUnaryExpression(node: PostfixUnaryExpression): Type {
             var operandType = checkExpression(node.operand);
             var ok = checkArithmeticOperandType(node.operand, operandType, Diagnostics.An_arithmetic_operand_must_be_of_type_any_number_or_an_enum_type);
             if (ok) {
@@ -6503,12 +6514,12 @@ module ts {
         // object, it serves as an indicator that all contained function and arrow expressions should be considered to
         // have the wildcard function type; this form of type check is used during overload resolution to exclude
         // contextually typed function and arrow expressions in the initial phase.
-        function checkExpression(node: Expression, contextualMapper?: TypeMapper): Type {
+        function checkExpression(node: Expression | QualifiedName, contextualMapper?: TypeMapper): Type {
             var type = checkExpressionNode(node, contextualMapper);
-            if (contextualMapper && contextualMapper !== identityMapper) {
+            if (contextualMapper && contextualMapper !== identityMapper && node.kind !== SyntaxKind.QualifiedName) {
                 var signature = getSingleCallSignature(type);
                 if (signature && signature.typeParameters) {
-                    var contextualType = getContextualType(node);
+                    var contextualType = getContextualType(<Expression>node);
                     if (contextualType) {
                         var contextualSignature = getSingleCallSignature(contextualType);
                         if (contextualSignature && !contextualSignature.typeParameters) {
@@ -6526,7 +6537,7 @@ module ts {
                 var ok =
                     (node.parent.kind === SyntaxKind.PropertyAccessExpression && (<PropertyAccessExpression>node.parent).left === node) ||
                     (node.parent.kind === SyntaxKind.ElementAccessExpression && (<ElementAccessExpression>node.parent).expression === node) ||
-                    ((node.kind === SyntaxKind.Identifier || node.kind === SyntaxKind.QualifiedName) && isInRightSideOfImportOrExportAssignment(<EntityName>node));
+                    ((node.kind === SyntaxKind.Identifier || node.kind === SyntaxKind.QualifiedName) && isInRightSideOfImportOrExportAssignment(<Identifier>node));
 
                 if (!ok) {
                     error(node, Diagnostics.const_enums_can_only_be_used_in_property_or_index_access_expressions_or_the_right_hand_side_of_an_import_declaration_or_export_assignment);
@@ -6535,7 +6546,7 @@ module ts {
             return type;
         }
 
-        function checkExpressionNode(node: Expression, contextualMapper: TypeMapper): Type {
+        function checkExpressionNode(node: Expression | QualifiedName, contextualMapper: TypeMapper): Type {
             switch (node.kind) {
                 case SyntaxKind.Identifier:
                     return checkIdentifier(<Identifier>node);
@@ -6558,7 +6569,7 @@ module ts {
                 case SyntaxKind.RegularExpressionLiteral:
                     return globalRegExpType;
                 case SyntaxKind.QualifiedName:
-                    return checkPropertyAccess(<QualifiedName>node);
+                    return checkQualifiedName(<QualifiedName>node);
                 case SyntaxKind.ArrayLiteralExpression:
                     return checkArrayLiteral(<ArrayLiteralExpression>node, contextualMapper);
                 case SyntaxKind.ObjectLiteralExpression:
@@ -6586,9 +6597,9 @@ module ts {
                 case SyntaxKind.VoidExpression:
                     return checkVoidExpression(<VoidExpression>node);
                 case SyntaxKind.PrefixUnaryExpression:
-                    return checkPrefixExpression(<UnaryExpression>node);
+                    return checkPrefixUnaryExpression(<PrefixUnaryExpression>node);
                 case SyntaxKind.PostfixUnaryExpression:
-                    return checkPostfixExpression(<UnaryExpression>node);
+                    return checkPostfixUnaryExpression(<PostfixUnaryExpression>node);
                 case SyntaxKind.BinaryExpression:
                     return checkBinaryExpression(<BinaryExpression>node, contextualMapper);
                 case SyntaxKind.ConditionalExpression:
@@ -8097,11 +8108,11 @@ module ts {
                 function evalConstant(e: Node): number {
                     switch (e.kind) {
                         case SyntaxKind.PrefixUnaryExpression:
-                            var value = evalConstant((<UnaryExpression>e).operand);
+                            var value = evalConstant((<PrefixUnaryExpression>e).operand);
                             if (value === undefined) {
                                 return undefined;
                             }
-                            switch ((<UnaryExpression>e).operator) {
+                            switch ((<PrefixUnaryExpression>e).operator) {
                                 case SyntaxKind.PlusToken: return value;
                                 case SyntaxKind.MinusToken: return -value;
                                 case SyntaxKind.TildeToken: return enumIsConst ? ~value : undefined;
@@ -8839,7 +8850,7 @@ module ts {
                 else if (entityName.kind === SyntaxKind.QualifiedName || entityName.kind === SyntaxKind.PropertyAccessExpression) {
                     var symbol = getNodeLinks(entityName).resolvedSymbol;
                     if (!symbol) {
-                        checkPropertyAccess(<QualifiedName>entityName);
+                        checkQualifiedName(<QualifiedName>entityName);
                     }
                     return getNodeLinks(entityName).resolvedSymbol;
                 }
@@ -8885,7 +8896,7 @@ module ts {
 
                 case SyntaxKind.ThisKeyword:
                 case SyntaxKind.SuperKeyword:
-                    var type = checkExpression(node);
+                    var type = checkExpression(<Expression>node);
                     return type.symbol;
 
                 case SyntaxKind.ConstructorKeyword:
@@ -8976,7 +8987,7 @@ module ts {
 
         function getTypeOfExpression(expr: Expression): Type {
             if (isRightSideOfQualifiedNameOrPropertyAccess(expr)) {
-                expr = expr.parent;
+                expr = <Expression>expr.parent;
             }
             return checkExpression(expr);
         }

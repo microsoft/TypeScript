@@ -2268,6 +2268,12 @@ module ts {
                 emit(node.right);
             }
 
+            function emitQualifiedName(node: QualifiedName) {
+                emit(node.left);
+                write(".");
+                emit(node.right);
+            }
+
             function emitIndexedAccess(node: ElementAccessExpression) {
                 if (tryEmitConstantValue(node)) {
                     return;
@@ -2374,10 +2380,8 @@ module ts {
                 emit(node.expression);
             }
 
-            function emitUnaryExpression(node: UnaryExpression) {
-                if (node.kind === SyntaxKind.PrefixUnaryExpression) {
-                    write(tokenToString(node.operator));
-                }
+            function emitPrefixUnaryExpression(node: PrefixUnaryExpression) {
+                write(tokenToString(node.operator));
                 // In some cases, we need to emit a space between the operator and the operand. One obvious case
                 // is when the operator is an identifier, like delete or typeof. We also need to do this for plus
                 // and minus expressions in certain cases. Specifically, consider the following two cases (parens
@@ -2394,7 +2398,7 @@ module ts {
                     write(" ");
                 }
                 else if (node.kind === SyntaxKind.PrefixUnaryExpression && node.operand.kind === SyntaxKind.PrefixUnaryExpression) {
-                    var operand = <UnaryExpression>node.operand;
+                    var operand = <PrefixUnaryExpression>node.operand;
                     if (node.operator === SyntaxKind.PlusToken && (operand.operator === SyntaxKind.PlusToken || operand.operator === SyntaxKind.PlusPlusToken)) {
                         write(" ");
                     }
@@ -2403,10 +2407,16 @@ module ts {
                     }
                 }
                 emit(node.operand);
-                if (node.kind === SyntaxKind.PostfixUnaryExpression) {
-                    write(tokenToString(node.operator));
-                }
             }
+
+            function emitPostfixUnaryExpression(node: PostfixUnaryExpression) {
+                if (node.operator >= SyntaxKind.Identifier) {
+                    write(" ");
+                }
+                emit(node.operand);
+                write(tokenToString(node.operator));
+            }
+
 
             function emitBinaryExpression(node: BinaryExpression) {
                 emit(node.left);
@@ -3494,7 +3504,7 @@ module ts {
                     case SyntaxKind.TemplateSpan:
                         return emitTemplateSpan(<TemplateSpan>node);
                     case SyntaxKind.QualifiedName:
-                        return emitPropertyAccess(<QualifiedName>node);
+                        return emitQualifiedName(<QualifiedName>node);
                     case SyntaxKind.ArrayLiteralExpression:
                         return emitArrayLiteral(<ArrayLiteralExpression>node);
                     case SyntaxKind.ObjectLiteralExpression:
@@ -3530,8 +3540,9 @@ module ts {
                     case SyntaxKind.VoidExpression:
                         return emitVoidExpression(<VoidExpression>node);
                     case SyntaxKind.PrefixUnaryExpression:
+                        return emitPrefixUnaryExpression(<PrefixUnaryExpression>node);
                     case SyntaxKind.PostfixUnaryExpression:
-                        return emitUnaryExpression(<UnaryExpression>node);
+                        return emitPostfixUnaryExpression(<PostfixUnaryExpression>node);
                     case SyntaxKind.BinaryExpression:
                         return emitBinaryExpression(<BinaryExpression>node);
                     case SyntaxKind.ConditionalExpression:
