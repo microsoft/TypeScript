@@ -1167,7 +1167,7 @@ module TypeScript {
         }
     }
 
-    export var MemberAccessExpressionSyntax: MemberAccessExpressionConstructor = <any>function(data: number, expression: ILeftHandSideExpressionSyntax, dotToken: ISyntaxToken, name: ISyntaxToken) {
+    export var PropertyAccessExpressionSyntax: PropertyAccessExpressionConstructor = <any>function(data: number, expression: ILeftHandSideExpressionSyntax, dotToken: ISyntaxToken, name: ISyntaxToken) {
         if (data) { this.__data = data; }
         this.expression = expression,
         this.dotToken = dotToken,
@@ -1176,9 +1176,9 @@ module TypeScript {
         dotToken.parent = this,
         name.parent = this;
     };
-    MemberAccessExpressionSyntax.prototype.kind = SyntaxKind.MemberAccessExpression;
-    MemberAccessExpressionSyntax.prototype.childCount = 3;
-    MemberAccessExpressionSyntax.prototype.childAt = function(index: number): ISyntaxElement {
+    PropertyAccessExpressionSyntax.prototype.kind = SyntaxKind.PropertyAccessExpression;
+    PropertyAccessExpressionSyntax.prototype.childCount = 3;
+    PropertyAccessExpressionSyntax.prototype.childAt = function(index: number): ISyntaxElement {
         switch (index) {
             case 0: return this.expression;
             case 1: return this.dotToken;

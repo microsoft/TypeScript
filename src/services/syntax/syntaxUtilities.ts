@@ -44,7 +44,7 @@ module TypeScript {
         export function isLeftHandSizeExpression(element: ISyntaxElement) {
             if (element) {
                 switch (element.kind) {
-                    case SyntaxKind.MemberAccessExpression:
+                    case SyntaxKind.PropertyAccessExpression:
                     case SyntaxKind.ElementAccessExpression:
                     case SyntaxKind.TemplateAccessExpression:
                     case SyntaxKind.ObjectCreationExpression:

@@ -436,7 +436,7 @@ var definitions:ITypeDefinition[] = [
         ]
     },
     <any>{
-        name: 'MemberAccessExpressionSyntax',
+        name: 'PropertyAccessExpressionSyntax',
         baseType: 'ISyntaxNode',
         interfaces: ['IMemberExpressionSyntax', 'ICallExpressionSyntax'],
         children: [

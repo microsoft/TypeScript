@@ -222,7 +222,7 @@ module TypeScript {
         ConditionalExpression,
         BinaryExpression,
         PostfixUnaryExpression,
-        MemberAccessExpression,
+        PropertyAccessExpression,
         InvocationExpression,
         ArrayLiteralExpression,
         ObjectLiteralExpression,

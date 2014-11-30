@@ -535,7 +535,7 @@ module TypeScript.PrettyPrinter {
             this.appendNode(node.equalsValueClause);
         }
 
-        public visitMemberAccessExpression(node: MemberAccessExpressionSyntax): void {
+        public visitPropertyAccessExpression(node: PropertyAccessExpressionSyntax): void {
             visitNodeOrToken(this, node.expression);
             this.appendToken(node.dotToken);
             this.appendToken(node.name);

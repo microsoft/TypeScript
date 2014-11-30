@@ -426,12 +426,12 @@ module TypeScript {
     }
     export interface PostfixUnaryExpressionConstructor { new (data: number, operand: ILeftHandSideExpressionSyntax, operatorToken: ISyntaxToken): PostfixUnaryExpressionSyntax }
 
-    export interface MemberAccessExpressionSyntax extends ISyntaxNode, IMemberExpressionSyntax, ICallExpressionSyntax {
+    export interface PropertyAccessExpressionSyntax extends ISyntaxNode, IMemberExpressionSyntax, ICallExpressionSyntax {
         expression: ILeftHandSideExpressionSyntax;
         dotToken: ISyntaxToken;
         name: ISyntaxToken;
     }
-    export interface MemberAccessExpressionConstructor { new (data: number, expression: ILeftHandSideExpressionSyntax, dotToken: ISyntaxToken, name: ISyntaxToken): MemberAccessExpressionSyntax }
+    export interface PropertyAccessExpressionConstructor { new (data: number, expression: ILeftHandSideExpressionSyntax, dotToken: ISyntaxToken, name: ISyntaxToken): PropertyAccessExpressionSyntax }
 
     export interface InvocationExpressionSyntax extends ISyntaxNode, ICallExpressionSyntax {
         expression: ILeftHandSideExpressionSyntax;

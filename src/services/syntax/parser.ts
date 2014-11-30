@@ -2898,7 +2898,7 @@ module TypeScript.Parser {
                         continue;
 
                     case SyntaxKind.DotToken:
-                        expression = new MemberAccessExpressionSyntax(contextFlags, expression, consumeToken(_currentToken), eatIdentifierNameToken());
+                        expression = new PropertyAccessExpressionSyntax(contextFlags, expression, consumeToken(_currentToken), eatIdentifierNameToken());
                         continue;
 
                     case SyntaxKind.NoSubstitutionTemplateToken:
@@ -2990,7 +2990,7 @@ module TypeScript.Parser {
             var currentTokenKind = currentToken().kind;
             return currentTokenKind === SyntaxKind.OpenParenToken || currentTokenKind === SyntaxKind.DotToken
                 ? expression
-                : new MemberAccessExpressionSyntax(contextFlags, expression, eatToken(SyntaxKind.DotToken), eatIdentifierNameToken());
+                : new PropertyAccessExpressionSyntax(contextFlags, expression, eatToken(SyntaxKind.DotToken), eatIdentifierNameToken());
         }
 
         function parsePostfixExpressionOrHigher(_currentToken: ISyntaxToken): IPostfixExpressionSyntax {

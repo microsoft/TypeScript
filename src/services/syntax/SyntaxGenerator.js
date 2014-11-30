@@ -587,7 +587,7 @@ var TypeScript;
         SyntaxKind[SyntaxKind["ConditionalExpression"] = 175] = "ConditionalExpression";
         SyntaxKind[SyntaxKind["BinaryExpression"] = 176] = "BinaryExpression";
         SyntaxKind[SyntaxKind["PostfixUnaryExpression"] = 177] = "PostfixUnaryExpression";
-        SyntaxKind[SyntaxKind["MemberAccessExpression"] = 178] = "MemberAccessExpression";
+        SyntaxKind[SyntaxKind["PropertyAccessExpression"] = 178] = "PropertyAccessExpression";
         SyntaxKind[SyntaxKind["InvocationExpression"] = 179] = "InvocationExpression";
         SyntaxKind[SyntaxKind["ArrayLiteralExpression"] = 180] = "ArrayLiteralExpression";
         SyntaxKind[SyntaxKind["ObjectLiteralExpression"] = 181] = "ObjectLiteralExpression";
@@ -1297,7 +1297,7 @@ var definitions = [
         ]
     },
     {
-        name: 'MemberAccessExpressionSyntax',
+        name: 'PropertyAccessExpressionSyntax',
         baseType: 'ISyntaxNode',
         interfaces: ['IMemberExpressionSyntax', 'ICallExpressionSyntax'],
         children: [

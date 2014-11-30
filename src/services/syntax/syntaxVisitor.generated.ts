@@ -57,7 +57,7 @@ module TypeScript {
             case SyntaxKind.ConditionalExpression: return visitor.visitConditionalExpression(<ConditionalExpressionSyntax>element);
             case SyntaxKind.BinaryExpression: return visitor.visitBinaryExpression(<BinaryExpressionSyntax>element);
             case SyntaxKind.PostfixUnaryExpression: return visitor.visitPostfixUnaryExpression(<PostfixUnaryExpressionSyntax>element);
-            case SyntaxKind.MemberAccessExpression: return visitor.visitMemberAccessExpression(<MemberAccessExpressionSyntax>element);
+            case SyntaxKind.PropertyAccessExpression: return visitor.visitPropertyAccessExpression(<PropertyAccessExpressionSyntax>element);
             case SyntaxKind.InvocationExpression: return visitor.visitInvocationExpression(<InvocationExpressionSyntax>element);
             case SyntaxKind.ArrayLiteralExpression: return visitor.visitArrayLiteralExpression(<ArrayLiteralExpressionSyntax>element);
             case SyntaxKind.ObjectLiteralExpression: return visitor.visitObjectLiteralExpression(<ObjectLiteralExpressionSyntax>element);
@@ -157,7 +157,7 @@ module TypeScript {
         visitConditionalExpression(node: ConditionalExpressionSyntax): any;
         visitBinaryExpression(node: BinaryExpressionSyntax): any;
         visitPostfixUnaryExpression(node: PostfixUnaryExpressionSyntax): any;
-        visitMemberAccessExpression(node: MemberAccessExpressionSyntax): any;
+        visitPropertyAccessExpression(node: PropertyAccessExpressionSyntax): any;
         visitInvocationExpression(node: InvocationExpressionSyntax): any;
         visitArrayLiteralExpression(node: ArrayLiteralExpressionSyntax): any;
         visitObjectLiteralExpression(node: ObjectLiteralExpressionSyntax): any;
