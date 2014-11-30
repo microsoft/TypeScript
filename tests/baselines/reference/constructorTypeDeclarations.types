@@ -1,0 +1,17 @@
+=== tests/cases/compiler/constructorTypeDeclarations.ts ===
+
+module schema {
+>schema : typeof schema
+
+    export function createValidator(schema: any): new <T>(data: T) => T {
+>createValidator : (schema: any) => new <T>(data: T) => T
+>schema : any
+>T : T
+>data : T
+>T : T
+>T : T
+
+        return undefined;
+>undefined : undefined
+    }
+}

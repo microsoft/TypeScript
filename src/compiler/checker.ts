@@ -1617,7 +1617,9 @@ module ts {
 
                     case SyntaxKind.Constructor:
                     case SyntaxKind.ConstructSignature:
+                    case SyntaxKind.ConstructorType:
                     case SyntaxKind.CallSignature:
+                    case SyntaxKind.FunctionType:
                     case SyntaxKind.IndexSignature:
                     case SyntaxKind.Parameter:
                     case SyntaxKind.ModuleBlock:
