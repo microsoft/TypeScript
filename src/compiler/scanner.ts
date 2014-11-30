@@ -757,6 +757,9 @@ module ts {
             Debug.assert(base !== 2 || base !== 8, "Expected either base 2 or base 8");
 
             var value = 0;
+            // For counting number of digits; Valid binaryIntegerLiteral must have at least one binary digit following B or b.
+            // Similarly valid octalIntegerLiteral must have at least one octal digit following o or O.
+            var numberOfDigits = 0;  
             while (true) {
                 var ch = text.charCodeAt(pos);
                 var valueOfCh = ch - CharacterCodes._0;
@@ -765,6 +768,11 @@ module ts {
                 }
                 value = value * base + valueOfCh;
                 pos++;
+                numberOfDigits++;
+            }
+            // Invalid binaryIntegerLiteral or octalIntegerLiteral
+            if (numberOfDigits === 0) {
+                return -1;
             }
             return value;
         }
