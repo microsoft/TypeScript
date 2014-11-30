@@ -357,7 +357,7 @@ module ts {
         var currentSourceFile: SourceFile;
         var reportedDeclarationError = false;
 
-        var emitJsDocComments = compilerOptions.removeComments ? function (declaration: Declaration) { } : writeJsDocComments;
+        var emitJsDocComments = compilerOptions.removeComments ? function (declaration: Node) { } : writeJsDocComments;
 
         var aliasDeclarationEmitInfo: AliasDeclarationEmitInfo[] = [];
 
@@ -485,7 +485,7 @@ module ts {
             emitSeparatedList(nodes, ", ", eachNodeEmitFn);
         }
 
-        function writeJsDocComments(declaration: Declaration) {
+        function writeJsDocComments(declaration: Node) {
             if (declaration) {
                 var jsDocComments = getJsDocComments(declaration, currentSourceFile);
                 emitNewLineBeforeLeadingComments(currentSourceFile, writer, declaration, jsDocComments);
@@ -615,7 +615,7 @@ module ts {
             writeLine();
         }
 
-        function emitModuleElementDeclarationFlags(node: Declaration) {
+        function emitModuleElementDeclarationFlags(node: Node) {
             // If the node is parented in the current source file we need to emit export declare or just export
             if (node.parent === currentSourceFile) {
                 // If the node is exported 

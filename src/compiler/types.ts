@@ -336,6 +336,7 @@ module ts {
     export type DeclarationName = Identifier | LiteralExpression | ComputedPropertyName;
 
     export interface Declaration extends Node {
+        _declarationBrand: any;
         name?: DeclarationName;
     }
 
@@ -392,7 +393,7 @@ module ts {
         body?: Block;
     }
 
-    export interface ConstructorDeclaration extends Node, ParsedSignature {
+    export interface ConstructorDeclaration extends Declaration, ParsedSignature {
         body?: Block;
     }
 
@@ -411,7 +412,7 @@ module ts {
         exprName: EntityName;
     }
 
-    export interface TypeLiteralNode extends TypeNode {
+    export interface TypeLiteralNode extends TypeNode, Declaration {
         members: NodeArray<Node>;
     }
 
@@ -538,8 +539,8 @@ module ts {
         elements: NodeArray<Expression>;
     }
 
-    export interface ObjectLiteralExpression extends PrimaryExpression {
-        properties: NodeArray<Node>;
+    export interface ObjectLiteralExpression extends PrimaryExpression, Declaration {
+        properties: NodeArray<Declaration>;
     }
 
     export interface PropertyAccessExpression extends MemberExpression {
@@ -659,7 +660,7 @@ module ts {
         finallyBlock?: Block;
     }
 
-    export interface CatchBlock extends Block {
+    export interface CatchBlock extends Block, Declaration {
         variable: Identifier;
         type?: TypeNode;
     }
@@ -673,14 +674,14 @@ module ts {
         typeParameters?: NodeArray<TypeParameterDeclaration>;
         baseType?: TypeReferenceNode;
         implementedTypes?: NodeArray<TypeReferenceNode>;
-        members: NodeArray<Node>;
+        members: NodeArray<Declaration>;
     }
 
     export interface InterfaceDeclaration extends Declaration, ModuleElement {
         name: Identifier;
         typeParameters?: NodeArray<TypeParameterDeclaration>;
         baseTypes?: NodeArray<TypeReferenceNode>;
-        members: NodeArray<Node>;
+        members: NodeArray<Declaration>;
     }
 
     export interface TypeAliasDeclaration extends Declaration, ModuleElement {
@@ -727,7 +728,8 @@ module ts {
         hasTrailingNewLine?: boolean;
     }
 
-    export interface SourceFile extends Node {
+    // Source files are declarations when they are external modules.
+    export interface SourceFile extends Declaration {
         statements: NodeArray<ModuleElement>;
 
         filename: string;

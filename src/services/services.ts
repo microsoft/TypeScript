@@ -349,7 +349,7 @@ module ts {
 
                 // If this is dotted module name, get the doc comments from the parent
                 while (declaration.kind === SyntaxKind.ModuleDeclaration && declaration.parent.kind === SyntaxKind.ModuleDeclaration) {
-                    declaration = declaration.parent;
+                    declaration = <ModuleDeclaration>declaration.parent;
                 } 
 
                 // Get the cleaned js doc comment text from the declaration
@@ -712,6 +712,7 @@ module ts {
     }
 
     class SourceFileObject extends NodeObject implements SourceFile {
+        public _declarationBrand: any;
         public filename: string;
         public text: string;
 
@@ -771,7 +772,7 @@ module ts {
                                     }
                                 }
                                 else {
-                                    namedDeclarations.push(node);
+                                    namedDeclarations.push(functionDeclaration);
                                 }
 
                                 forEachChild(node, visit);
@@ -3798,7 +3799,7 @@ module ts {
                 }
             }
 
-            function getModifierOccurrences(modifier: SyntaxKind, declaration: Declaration) {
+            function getModifierOccurrences(modifier: SyntaxKind, declaration: Node) {
                 var container = declaration.parent;
 
                 // Make sure we only highlight the keyword when it makes sense to do so.
@@ -4739,7 +4740,7 @@ module ts {
             return emitOutput;
         }
 
-        function getMeaningFromDeclaration(node: Declaration): SemanticMeaning {
+        function getMeaningFromDeclaration(node: Node): SemanticMeaning {
             switch (node.kind) {
                 case SyntaxKind.Parameter:
                 case SyntaxKind.VariableDeclaration:

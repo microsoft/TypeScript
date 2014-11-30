@@ -126,15 +126,15 @@ module ts {
         return (file.flags & NodeFlags.DeclarationFile) !== 0;
     }
 
-    export function isConstEnumDeclaration(node: Declaration): boolean {
+    export function isConstEnumDeclaration(node: Node): boolean {
         return node.kind === SyntaxKind.EnumDeclaration && isConst(node);
     }
 
-    export function isConst(node: Declaration): boolean {
+    export function isConst(node: Node): boolean {
         return !!(node.flags & NodeFlags.Const);
     }
 
-    export function isLet(node: Declaration): boolean {
+    export function isLet(node: Node): boolean {
         return !!(node.flags & NodeFlags.Let);
     }
 
@@ -171,8 +171,8 @@ module ts {
         }
     }
 
-    export function getJsDocComments(node: Declaration, sourceFileOfNode: SourceFile) {
-        return filter(getLeadingCommentRangesOfNode(node, sourceFileOfNode), comment => isJsDocComment(comment));
+    export function getJsDocComments(node: Node, sourceFileOfNode: SourceFile) {
+        return filter(getLeadingCommentRangesOfNode(node, sourceFileOfNode), isJsDocComment);
 
         function isJsDocComment(comment: CommentRange) {
             // True if the comment starts with '/**' but not if it is '/**/'
@@ -1988,7 +1988,7 @@ module ts {
                 parseExpected(SyntaxKind.CloseBraceToken);
             }
             else {
-                members = createMissingList<Node>();
+                members = createMissingList<Declaration>();
             }
 
             return members;
@@ -3084,7 +3084,7 @@ module ts {
             return finishNode(node);
         }
 
-        function parseObjectLiteralMember(): Node {
+        function parseObjectLiteralMember(): Declaration {
             var initialPos = getNodePos();
             var initialToken = token;
             if (parseContextualModifier(SyntaxKind.GetKeyword) || parseContextualModifier(SyntaxKind.SetKeyword)) {

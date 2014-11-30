@@ -935,7 +935,7 @@ module ts {
 
             return { accessibility: SymbolAccessibility.Accessible };
 
-            function getExternalModuleContainer(declaration: Declaration) {
+            function getExternalModuleContainer(declaration: Node) {
                 for (; declaration; declaration = declaration.parent) {
                     if (hasExternalModuleSymbol(declaration)) {
                         return getSymbolOfNode(declaration);
@@ -944,8 +944,8 @@ module ts {
             }
         }
 
-        function hasExternalModuleSymbol(declaration: Declaration) {
-            return (declaration.kind === SyntaxKind.ModuleDeclaration && declaration.name.kind === SyntaxKind.StringLiteral) ||
+        function hasExternalModuleSymbol(declaration: Node) {
+            return (declaration.kind === SyntaxKind.ModuleDeclaration && (<ModuleDeclaration>declaration).name.kind === SyntaxKind.StringLiteral) ||
                 (declaration.kind === SyntaxKind.SourceFile && isExternalModule(<SourceFile>declaration));
         }
 
@@ -962,7 +962,7 @@ module ts {
                     // because these kind of aliases can be used to name types in declaration file
                     if (declaration.kind === SyntaxKind.ImportDeclaration &&
                         !(declaration.flags & NodeFlags.Export) &&
-                        isDeclarationVisible(declaration.parent)) {
+                        isDeclarationVisible(<Declaration>declaration.parent)) {
                         getNodeLinks(declaration).isVisible = true;
                         if (aliasesToMakeVisible) {
                             if (!contains(aliasesToMakeVisible, declaration)) {
@@ -1575,7 +1575,7 @@ module ts {
                         }
 
                         // Container of resolvedExportSymbol is visible
-                        return forEach(resolvedExportSymbol.declarations, declaration => {
+                        return forEach(resolvedExportSymbol.declarations, (declaration: Node) => {
                             while (declaration) {
                                 if (declaration === node) {
                                     return true;
@@ -1605,7 +1605,7 @@ module ts {
                             return isGlobalSourceFile(parent) || isUsedInExportAssignment(node);
                         }
                         // Exported members/ambient module elements (exception import declaration) are visible if parent is visible
-                        return isDeclarationVisible(parent);
+                        return isDeclarationVisible(<Declaration>parent);
 
                     case SyntaxKind.Property:
                     case SyntaxKind.Method:
@@ -1622,7 +1622,7 @@ module ts {
                     case SyntaxKind.Parameter:
                     case SyntaxKind.ModuleBlock:
                     case SyntaxKind.TypeParameter:
-                        return isDeclarationVisible(node.parent);
+                        return isDeclarationVisible(<Declaration>node.parent);
 
                     // Source file is always visible
                     case SyntaxKind.SourceFile:
