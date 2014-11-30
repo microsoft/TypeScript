@@ -5118,7 +5118,7 @@ module ts {
             return s.valueDeclaration ? s.valueDeclaration.flags : s.flags & SymbolFlags.Prototype ? NodeFlags.Public | NodeFlags.Static : 0;
         }
 
-        function checkClassPropertyAccess(node: PropertyAccessExpression | QualifiedName, type: Type, prop: Symbol) {
+        function checkClassPropertyAccess(node: PropertyAccessExpression | QualifiedName, left: Expression | QualifiedName, type: Type, prop: Symbol) {
             var flags = getDeclarationFlagsFromSymbol(prop);
             // Public properties are always accessible
             if (!(flags & (NodeFlags.Private | NodeFlags.Protected))) {
@@ -5138,7 +5138,7 @@ module ts {
             }
             // Property is known to be protected at this point
             // All protected properties of a supertype are accessible in a super access
-            if (node.left.kind === SyntaxKind.SuperKeyword) {
+            if (left.kind === SyntaxKind.SuperKeyword) {
                 return;
             }
             // A protected property is accessible in the declaring class and classes derived from it
@@ -5157,7 +5157,7 @@ module ts {
         }
 
         function checkPropertyAccessExpression(node: PropertyAccessExpression) {
-            return checkPropertyAccessExpressionOrQualifiedName(node, node.left, node.right);
+            return checkPropertyAccessExpressionOrQualifiedName(node, node.expression, node.name);
         }
 
         function checkQualifiedName(node: QualifiedName) {
@@ -5193,7 +5193,7 @@ module ts {
                         error(right, Diagnostics.Only_public_and_protected_methods_of_the_base_class_are_accessible_via_the_super_keyword);
                     }
                     else {
-                        checkClassPropertyAccess(node, type, prop);
+                        checkClassPropertyAccess(node, left, type, prop);
                     }
                 }
                 return getTypeOfSymbol(prop);
@@ -5201,17 +5201,21 @@ module ts {
             return anyType;
         }
 
-        function isValidPropertyAccess(node: PropertyAccessExpression, propertyName: string): boolean {
-            var type = checkExpression(node.left);
+        function isValidPropertyAccess(node: PropertyAccessExpression | QualifiedName, propertyName: string): boolean {
+            var left = node.kind === SyntaxKind.PropertyAccessExpression
+                ? (<PropertyAccessExpression>node).expression
+                : (<QualifiedName>node).left;
+
+            var type = checkExpression(left);
             if (type !== unknownType && type !== anyType) {
                 var prop = getPropertyOfType(getWidenedType(type), propertyName);
                 if (prop && prop.parent && prop.parent.flags & SymbolFlags.Class) {
-                    if (node.left.kind === SyntaxKind.SuperKeyword && getDeclarationKindFromSymbol(prop) !== SyntaxKind.Method) {
+                    if (left.kind === SyntaxKind.SuperKeyword && getDeclarationKindFromSymbol(prop) !== SyntaxKind.Method) {
                         return false;
                     }
                     else {
                         var diagnosticsCount = diagnostics.length;
-                        checkClassPropertyAccess(node, type, prop);
+                        checkClassPropertyAccess(node, left, type, prop);
                         return diagnostics.length === diagnosticsCount
                     }
                 }
@@ -6535,7 +6539,7 @@ module ts {
                 // - 'object' in indexed access
                 // - target in rhs of import statement
                 var ok =
-                    (node.parent.kind === SyntaxKind.PropertyAccessExpression && (<PropertyAccessExpression>node.parent).left === node) ||
+                    (node.parent.kind === SyntaxKind.PropertyAccessExpression && (<PropertyAccessExpression>node.parent).expression === node) ||
                     (node.parent.kind === SyntaxKind.ElementAccessExpression && (<ElementAccessExpression>node.parent).expression === node) ||
                     ((node.kind === SyntaxKind.Identifier || node.kind === SyntaxKind.QualifiedName) && isInRightSideOfImportOrExportAssignment(<Identifier>node));
 
@@ -8176,8 +8180,8 @@ module ts {
                                     propertyName = (<LiteralExpression>(<ElementAccessExpression>e).argumentExpression).text;
                                 }
                                 else {
-                                    var enumType = getTypeOfNode((<PropertyAccessExpression>e).left);
-                                    propertyName = (<PropertyAccessExpression>e).right.text;
+                                    var enumType = getTypeOfNode((<PropertyAccessExpression>e).expression);
+                                    propertyName = (<PropertyAccessExpression>e).name.text;
                                 }
                                 if (enumType !== currentType) {
                                     return undefined;
@@ -8818,7 +8822,7 @@ module ts {
 
         function isRightSideOfQualifiedNameOrPropertyAccess(node: Node) {
             return (node.parent.kind === SyntaxKind.QualifiedName && (<QualifiedName>node.parent).right === node) ||
-                (node.parent.kind === SyntaxKind.PropertyAccessExpression && (<PropertyAccessExpression>node.parent).right === node);
+                (node.parent.kind === SyntaxKind.PropertyAccessExpression && (<PropertyAccessExpression>node.parent).name === node);
         }
 
         function getSymbolOfEntityNameOrPropertyAccessExpression(entityName: EntityName | PropertyAccessExpression): Symbol {

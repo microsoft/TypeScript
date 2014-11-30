@@ -543,8 +543,8 @@ module ts {
     }
 
     export interface PropertyAccessExpression extends MemberExpression {
-        left: LeftHandSideExpression;
-        right: Identifier;
+        expression: LeftHandSideExpression;
+        name: Identifier;
     }
 
     export interface ElementAccessExpression extends MemberExpression {
@@ -834,7 +834,7 @@ module ts {
         isEmitBlocked(sourceFile?: SourceFile): boolean;
         // Returns the constant value of this enum member, or 'undefined' if the enum member has a computed value.
         getEnumMemberValue(node: EnumMember): number;
-        isValidPropertyAccess(node: PropertyAccessExpression, propertyName: string): boolean;
+        isValidPropertyAccess(node: PropertyAccessExpression | QualifiedName, propertyName: string): boolean;
         getAliasedSymbol(symbol: Symbol): Symbol;
     }
 

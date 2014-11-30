@@ -1927,7 +1927,7 @@ module ts {
     }
 
     function isRightSideOfPropertyAccess(node: Node) {
-        return node && node.parent && node.parent.kind === SyntaxKind.PropertyAccessExpression && (<PropertyAccessExpression>node.parent).right === node;
+        return node && node.parent && node.parent.kind === SyntaxKind.PropertyAccessExpression && (<PropertyAccessExpression>node.parent).name === node;
     }
 
     function isCallExpressionTarget(node: Node): boolean {
@@ -2373,9 +2373,12 @@ module ts {
             // other wise, it is a request for all visible symbols in the scope, and the node is the current location
             var node: Node;
             var isRightOfDot: boolean;
-            if (previousToken && previousToken.kind === SyntaxKind.DotToken &&
-                (previousToken.parent.kind === SyntaxKind.PropertyAccessExpression || previousToken.parent.kind === SyntaxKind.QualifiedName)) {
-                node = (<PropertyAccessExpression>previousToken.parent).left;
+            if (previousToken && previousToken.kind === SyntaxKind.DotToken && previousToken.parent.kind === SyntaxKind.PropertyAccessExpression) {
+                node = (<PropertyAccessExpression>previousToken.parent).expression;
+                isRightOfDot = true;
+            }
+            else if (previousToken && previousToken.kind === SyntaxKind.DotToken && previousToken.parent.kind === SyntaxKind.QualifiedName) {
+                node = (<QualifiedName>previousToken.parent).left;
                 isRightOfDot = true;
             }
             else {
@@ -2879,7 +2882,7 @@ module ts {
                 var type = typeResolver.getNarrowedTypeOfSymbol(symbol, location);
                 if (type) {
                     if (location.parent && location.parent.kind === SyntaxKind.PropertyAccessExpression) {
-                        var right = (<PropertyAccessExpression>location.parent).right;
+                        var right = (<PropertyAccessExpression>location.parent).name;
                         // Either the location is on the right of a property access, or on the left and the right is missing
                         if (right === location || (right && right.kind === SyntaxKind.Missing)){
                             location = location.parent;

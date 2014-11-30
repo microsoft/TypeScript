@@ -2252,7 +2252,7 @@ module ts {
             function tryEmitConstantValue(node: PropertyAccessExpression | ElementAccessExpression): boolean {
                 var constantValue = resolver.getConstantValue(node);
                 if (constantValue !== undefined) {
-                    var propertyName = node.kind === SyntaxKind.PropertyAccessExpression ? declarationNameToString((<PropertyAccessExpression>node).right) : getTextOfNode((<ElementAccessExpression>node).argumentExpression);
+                    var propertyName = node.kind === SyntaxKind.PropertyAccessExpression ? declarationNameToString((<PropertyAccessExpression>node).name) : getTextOfNode((<ElementAccessExpression>node).argumentExpression);
                     write(constantValue.toString() + " /* " + propertyName + " */");
                     return true;
                 }
@@ -2263,9 +2263,9 @@ module ts {
                 if (tryEmitConstantValue(node)) {
                     return;
                 }
-                emit(node.left);
+                emit(node.expression);
                 write(".");
-                emit(node.right);
+                emit(node.name);
             }
 
             function emitQualifiedName(node: QualifiedName) {
@@ -2292,7 +2292,7 @@ module ts {
                 }
                 else {
                     emit(node.expression);
-                    superCall = node.expression.kind === SyntaxKind.PropertyAccessExpression && (<PropertyAccessExpression>node.expression).left.kind === SyntaxKind.SuperKeyword;
+                    superCall = node.expression.kind === SyntaxKind.PropertyAccessExpression && (<PropertyAccessExpression>node.expression).expression.kind === SyntaxKind.SuperKeyword;
                 }
                 if (superCall) {
                     write(".call(");

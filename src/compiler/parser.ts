@@ -260,8 +260,8 @@ module ts {
             case SyntaxKind.ObjectLiteralExpression:
                 return children((<ObjectLiteralExpression>node).properties);
             case SyntaxKind.PropertyAccessExpression:
-                return child((<PropertyAccessExpression>node).left) ||
-                    child((<PropertyAccessExpression>node).right);
+                return child((<PropertyAccessExpression>node).expression) ||
+                    child((<PropertyAccessExpression>node).name);
             case SyntaxKind.ElementAccessExpression:
                 return child((<ElementAccessExpression>node).expression) ||
                     child((<ElementAccessExpression>node).argumentExpression);
@@ -2811,9 +2811,9 @@ module ts {
             // If we have seen "super" it must be followed by '(' or '.'.
             // If it wasn't then just try to parse out a '.' and report an error.
             var node = <PropertyAccessExpression>createNode(SyntaxKind.PropertyAccessExpression, expression.pos);
-            node.left = expression;
+            node.expression = expression;
             parseExpected(SyntaxKind.DotToken, Diagnostics.super_must_be_followed_by_an_argument_list_or_member_access);
-            node.right = parseIdentifierName();
+            node.name = parseIdentifierName();
             return finishNode(node);
         }
 
@@ -2863,8 +2863,8 @@ module ts {
                         }
                     }
 
-                    propertyAccess.left = expression;
-                    propertyAccess.right = id || parseIdentifierName();
+                    propertyAccess.expression = expression;
+                    propertyAccess.name = id || parseIdentifierName();
                     expression = finishNode(propertyAccess);
                     continue;
                 }
