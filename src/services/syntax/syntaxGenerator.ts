@@ -670,7 +670,7 @@ var definitions:ITypeDefinition[] = [
         isTypeScriptSpecific: true
     },
     <any>{
-        name: 'MemberFunctionDeclarationSyntax',
+        name: 'MethodDeclarationSyntax',
         baseType: 'ISyntaxNode',
         interfaces: ['IMemberDeclarationSyntax', 'IPropertyAssignmentSyntax'],
         children: [
@@ -708,7 +708,7 @@ var definitions:ITypeDefinition[] = [
         isTypeScriptSpecific: true
     },
     <any>{
-        name: 'MemberVariableDeclarationSyntax',
+        name: 'PropertyDeclarationSyntax',
         baseType: 'ISyntaxNode',
         interfaces: ['IMemberDeclarationSyntax'],
         children: [

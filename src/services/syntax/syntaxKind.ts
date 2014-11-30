@@ -179,8 +179,8 @@ module TypeScript {
         ExportAssignment,
 
         // ClassElements
-        MemberFunctionDeclaration,
-        MemberVariableDeclaration,
+        MethodDeclaration,
+        PropertyDeclaration,
         ConstructorDeclaration,
 
         // ClassElement and PropertyAssignment

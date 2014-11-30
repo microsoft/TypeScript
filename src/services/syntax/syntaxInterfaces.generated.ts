@@ -150,21 +150,21 @@ module TypeScript {
     }
     export interface ExportAssignmentConstructor { new (data: number, modifiers: ISyntaxToken[], exportKeyword: ISyntaxToken, equalsToken: ISyntaxToken, identifier: ISyntaxToken, semicolonToken: ISyntaxToken): ExportAssignmentSyntax }
 
-    export interface MemberFunctionDeclarationSyntax extends ISyntaxNode, IMemberDeclarationSyntax, IPropertyAssignmentSyntax {
+    export interface MethodDeclarationSyntax extends ISyntaxNode, IMemberDeclarationSyntax, IPropertyAssignmentSyntax {
         modifiers: ISyntaxToken[];
         asterixToken: ISyntaxToken;
         propertyName: IPropertyNameSyntax;
         callSignature: CallSignatureSyntax;
         body: BlockSyntax | ExpressionBody | ISyntaxToken;
     }
-    export interface MemberFunctionDeclarationConstructor { new (data: number, modifiers: ISyntaxToken[], asterixToken: ISyntaxToken, propertyName: IPropertyNameSyntax, callSignature: CallSignatureSyntax, body: BlockSyntax | ExpressionBody | ISyntaxToken): MemberFunctionDeclarationSyntax }
+    export interface MethodDeclarationConstructor { new (data: number, modifiers: ISyntaxToken[], asterixToken: ISyntaxToken, propertyName: IPropertyNameSyntax, callSignature: CallSignatureSyntax, body: BlockSyntax | ExpressionBody | ISyntaxToken): MethodDeclarationSyntax }
 
-    export interface MemberVariableDeclarationSyntax extends ISyntaxNode, IMemberDeclarationSyntax {
+    export interface PropertyDeclarationSyntax extends ISyntaxNode, IMemberDeclarationSyntax {
         modifiers: ISyntaxToken[];
         variableDeclarator: VariableDeclaratorSyntax;
         semicolonToken: ISyntaxToken;
     }
-    export interface MemberVariableDeclarationConstructor { new (data: number, modifiers: ISyntaxToken[], variableDeclarator: VariableDeclaratorSyntax, semicolonToken: ISyntaxToken): MemberVariableDeclarationSyntax }
+    export interface PropertyDeclarationConstructor { new (data: number, modifiers: ISyntaxToken[], variableDeclarator: VariableDeclaratorSyntax, semicolonToken: ISyntaxToken): PropertyDeclarationSyntax }
 
     export interface ConstructorDeclarationSyntax extends ISyntaxNode, IClassElementSyntax {
         modifiers: ISyntaxToken[];

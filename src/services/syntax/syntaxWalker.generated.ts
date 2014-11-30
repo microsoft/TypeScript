@@ -149,7 +149,7 @@ module TypeScript {
             this.visitOptionalToken(node.semicolonToken);
         }
 
-        public visitMemberFunctionDeclaration(node: MemberFunctionDeclarationSyntax): void {
+        public visitMethodDeclaration(node: MethodDeclarationSyntax): void {
             this.visitList(node.modifiers);
             this.visitOptionalToken(node.asterixToken);
             visitNodeOrToken(this, node.propertyName);
@@ -157,7 +157,7 @@ module TypeScript {
             visitNodeOrToken(this, node.body);
         }
 
-        public visitMemberVariableDeclaration(node: MemberVariableDeclarationSyntax): void {
+        public visitPropertyDeclaration(node: PropertyDeclarationSyntax): void {
             this.visitList(node.modifiers);
             visitNodeOrToken(this, node.variableDeclarator);
             this.visitOptionalToken(node.semicolonToken);

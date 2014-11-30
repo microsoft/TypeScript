@@ -1375,10 +1375,10 @@ module TypeScript.Parser {
                 // if we have a call signature.  If so, then this is a member function, otherwise
                 // it's a member variable.
                 if (asterixToken || isCallSignature(/*peekIndex:*/ 0)) {
-                    return parseMemberFunctionDeclaration(modifiers, asterixToken, propertyName);
+                    return parseMethodDeclaration(modifiers, asterixToken, propertyName);
                 }
                 else {
-                    return parseMemberVariableDeclaration(modifiers, propertyName);
+                    return parsePropertyDeclaration(modifiers, propertyName);
                 }
             }
             else {
@@ -1405,13 +1405,13 @@ module TypeScript.Parser {
                 parseFunctionBody(/*isGenerator:*/ false, /*asyncContext:*/ false));
         }
 
-        function parseMemberFunctionDeclaration(modifiers: ISyntaxToken[], asteriskToken: ISyntaxToken, propertyName: IPropertyNameSyntax): MemberFunctionDeclarationSyntax {
+        function parseMethodDeclaration(modifiers: ISyntaxToken[], asteriskToken: ISyntaxToken, propertyName: IPropertyNameSyntax): MethodDeclarationSyntax {
             // Note: if we see an arrow after the close paren, then try to parse out a function 
             // block anyways.  It's likely the user just though '=> expr' was legal anywhere a 
             // block was legal.
             var asyncContext = containsAsync(modifiers);
             var isGenerator = asteriskToken !== undefined;
-            return new MemberFunctionDeclarationSyntax(contextFlags,
+            return new MethodDeclarationSyntax(contextFlags,
                 modifiers,
                 asteriskToken,
                 propertyName,
@@ -1429,8 +1429,8 @@ module TypeScript.Parser {
             return false;
         }
         
-        function parseMemberVariableDeclaration(modifiers: ISyntaxToken[], propertyName: IPropertyNameSyntax): MemberVariableDeclarationSyntax {
-            return new MemberVariableDeclarationSyntax(contextFlags,
+        function parsePropertyDeclaration(modifiers: ISyntaxToken[], propertyName: IPropertyNameSyntax): PropertyDeclarationSyntax {
+            return new PropertyDeclarationSyntax(contextFlags,
                 modifiers,
                 new VariableDeclaratorSyntax(contextFlags, propertyName,
                     parseOptionalTypeAnnotation(/*allowStringLiteral:*/ false), 
@@ -3664,7 +3664,7 @@ module TypeScript.Parser {
                 var propertyName = parsePropertyName();
 
                 if (modifiers.length > 0 || asterixToken !== undefined || isCallSignature(/*peekIndex:*/ 0)) {
-                    return parseMemberFunctionDeclaration(modifiers, asterixToken, propertyName);
+                    return parseMethodDeclaration(modifiers, asterixToken, propertyName);
                 }
                 else {
                     // PropertyName[?Yield] : AssignmentExpression[In, ?Yield]

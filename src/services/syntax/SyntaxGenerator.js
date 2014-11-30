@@ -552,8 +552,8 @@ var TypeScript;
         SyntaxKind[SyntaxKind["EnumDeclaration"] = 140] = "EnumDeclaration";
         SyntaxKind[SyntaxKind["ImportDeclaration"] = 141] = "ImportDeclaration";
         SyntaxKind[SyntaxKind["ExportAssignment"] = 142] = "ExportAssignment";
-        SyntaxKind[SyntaxKind["MemberFunctionDeclaration"] = 143] = "MemberFunctionDeclaration";
-        SyntaxKind[SyntaxKind["MemberVariableDeclaration"] = 144] = "MemberVariableDeclaration";
+        SyntaxKind[SyntaxKind["MethodDeclaration"] = 143] = "MethodDeclaration";
+        SyntaxKind[SyntaxKind["PropertyDeclaration"] = 144] = "PropertyDeclaration";
         SyntaxKind[SyntaxKind["ConstructorDeclaration"] = 145] = "ConstructorDeclaration";
         SyntaxKind[SyntaxKind["GetAccessor"] = 146] = "GetAccessor";
         SyntaxKind[SyntaxKind["SetAccessor"] = 147] = "SetAccessor";
@@ -1530,7 +1530,7 @@ var definitions = [
         isTypeScriptSpecific: true
     },
     {
-        name: 'MemberFunctionDeclarationSyntax',
+        name: 'MethodDeclarationSyntax',
         baseType: 'ISyntaxNode',
         interfaces: ['IMemberDeclarationSyntax', 'IPropertyAssignmentSyntax'],
         children: [
@@ -1568,7 +1568,7 @@ var definitions = [
         isTypeScriptSpecific: true
     },
     {
-        name: 'MemberVariableDeclarationSyntax',
+        name: 'PropertyDeclarationSyntax',
         baseType: 'ISyntaxNode',
         interfaces: ['IMemberDeclarationSyntax'],
         children: [

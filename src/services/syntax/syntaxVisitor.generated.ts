@@ -22,8 +22,8 @@ module TypeScript {
             case SyntaxKind.EnumDeclaration: return visitor.visitEnumDeclaration(<EnumDeclarationSyntax>element);
             case SyntaxKind.ImportDeclaration: return visitor.visitImportDeclaration(<ImportDeclarationSyntax>element);
             case SyntaxKind.ExportAssignment: return visitor.visitExportAssignment(<ExportAssignmentSyntax>element);
-            case SyntaxKind.MemberFunctionDeclaration: return visitor.visitMemberFunctionDeclaration(<MemberFunctionDeclarationSyntax>element);
-            case SyntaxKind.MemberVariableDeclaration: return visitor.visitMemberVariableDeclaration(<MemberVariableDeclarationSyntax>element);
+            case SyntaxKind.MethodDeclaration: return visitor.visitMethodDeclaration(<MethodDeclarationSyntax>element);
+            case SyntaxKind.PropertyDeclaration: return visitor.visitPropertyDeclaration(<PropertyDeclarationSyntax>element);
             case SyntaxKind.ConstructorDeclaration: return visitor.visitConstructorDeclaration(<ConstructorDeclarationSyntax>element);
             case SyntaxKind.GetAccessor: return visitor.visitGetAccessor(<GetAccessorSyntax>element);
             case SyntaxKind.SetAccessor: return visitor.visitSetAccessor(<SetAccessorSyntax>element);
@@ -122,8 +122,8 @@ module TypeScript {
         visitEnumDeclaration(node: EnumDeclarationSyntax): any;
         visitImportDeclaration(node: ImportDeclarationSyntax): any;
         visitExportAssignment(node: ExportAssignmentSyntax): any;
-        visitMemberFunctionDeclaration(node: MemberFunctionDeclarationSyntax): any;
-        visitMemberVariableDeclaration(node: MemberVariableDeclarationSyntax): any;
+        visitMethodDeclaration(node: MethodDeclarationSyntax): any;
+        visitPropertyDeclaration(node: PropertyDeclarationSyntax): any;
         visitConstructorDeclaration(node: ConstructorDeclarationSyntax): any;
         visitGetAccessor(node: GetAccessorSyntax): any;
         visitSetAccessor(node: SetAccessorSyntax): any;

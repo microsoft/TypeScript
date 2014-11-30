@@ -18,7 +18,7 @@ module TypeScript {
                 case SyntaxKind.ParenthesizedArrowFunctionExpression:
                 case SyntaxKind.FunctionExpression:
                 case SyntaxKind.FunctionDeclaration:
-                case SyntaxKind.MemberFunctionDeclaration:
+                case SyntaxKind.MethodDeclaration:
                 case SyntaxKind.ConstructorDeclaration:
                 case SyntaxKind.GetAccessor:
                 case SyntaxKind.SetAccessor:
@@ -101,11 +101,10 @@ module TypeScript {
                 switch (element.kind) {
                     case SyntaxKind.ConstructorDeclaration:
                     case SyntaxKind.IndexSignature:
-                    case SyntaxKind.MemberFunctionDeclaration:
+                    case SyntaxKind.MethodDeclaration:
                     case SyntaxKind.GetAccessor:
                     case SyntaxKind.SetAccessor:
-                    case SyntaxKind.MemberFunctionDeclaration:
-                    case SyntaxKind.MemberVariableDeclaration:
+                    case SyntaxKind.PropertyDeclaration:
                         return true;
                 }
             }
@@ -225,41 +224,6 @@ module TypeScript {
                     return SyntaxUtilities.getToken((<any>moduleElement).modifiers, SyntaxKind.ExportKeyword);
                 default: 
                     return undefined;
-            }
-        }
-
-        export function isAmbientDeclarationSyntax(positionNode: ISyntaxNode): boolean {
-            if (!positionNode) {
-                return false;
-            }
-
-            var node = positionNode;
-            switch (node.kind) {
-                case SyntaxKind.ModuleDeclaration:
-                case SyntaxKind.ClassDeclaration:
-                case SyntaxKind.FunctionDeclaration:
-                case SyntaxKind.VariableStatement:
-                case SyntaxKind.EnumDeclaration:
-                    if (SyntaxUtilities.containsToken(<ISyntaxToken[]>(<any>node).modifiers, SyntaxKind.DeclareKeyword)) {
-                        return true;
-                    }
-                    // Fall through to check if syntax container is ambient
-
-                case SyntaxKind.ImportDeclaration:
-                case SyntaxKind.ConstructorDeclaration:
-                case SyntaxKind.MemberFunctionDeclaration:
-                case SyntaxKind.GetAccessor:
-                case SyntaxKind.SetAccessor:
-                case SyntaxKind.MemberVariableDeclaration:
-                    if (SyntaxUtilities.isClassElement(node) || SyntaxUtilities.isModuleElement(node)) {
-                        return SyntaxUtilities.isAmbientDeclarationSyntax(Syntax.containingNode(positionNode));
-                    }
-
-                case SyntaxKind.EnumElement:
-                    return SyntaxUtilities.isAmbientDeclarationSyntax(Syntax.containingNode(Syntax.containingNode(positionNode)));
-
-                default: 
-                    return SyntaxUtilities.isAmbientDeclarationSyntax(Syntax.containingNode(positionNode));
             }
         }
     }
