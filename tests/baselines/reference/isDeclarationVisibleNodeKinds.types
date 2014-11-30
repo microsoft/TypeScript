@@ -1,0 +1,121 @@
+=== tests/cases/compiler/isDeclarationVisibleNodeKinds.ts ===
+
+// Function types
+module schema {
+>schema : typeof schema
+
+    export function createValidator1(schema: any): <T>(data: T) => T {
+>createValidator1 : (schema: any) => <T>(data: T) => T
+>schema : any
+>T : T
+>data : T
+>T : T
+>T : T
+
+        return undefined;
+>undefined : undefined
+    }
+}
+
+// Constructor types
+module schema {
+>schema : typeof schema
+
+    export function createValidator2(schema: any): new <T>(data: T) => T {
+>createValidator2 : (schema: any) => new <T>(data: T) => T
+>schema : any
+>T : T
+>data : T
+>T : T
+>T : T
+
+        return undefined;
+>undefined : undefined
+    }
+}
+
+// union types
+module schema {
+>schema : typeof schema
+
+     export function createValidator3(schema: any): number | { new <T>(data: T): T; }  {
+>createValidator3 : (schema: any) => number | (new <T>(data: T) => T)
+>schema : any
+>T : T
+>data : T
+>T : T
+>T : T
+
+        return undefined;
+>undefined : undefined
+    }
+}
+
+// Array types
+module schema {
+>schema : typeof schema
+
+     export function createValidator4(schema: any): { new <T>(data: T): T; }[] {
+>createValidator4 : (schema: any) => (new <T>(data: T) => T)[]
+>schema : any
+>T : T
+>data : T
+>T : T
+>T : T
+
+        return undefined;
+>undefined : undefined
+    }
+}
+
+
+// TypeLiterals
+module schema {
+>schema : typeof schema
+
+    export function createValidator5(schema: any): { new <T>(data: T): T } {
+>createValidator5 : (schema: any) => new <T>(data: T) => T
+>schema : any
+>T : T
+>data : T
+>T : T
+>T : T
+
+        return undefined;
+>undefined : undefined
+    }
+}
+
+// Tuple types
+module schema {
+>schema : typeof schema
+
+    export function createValidator6(schema: any): [ new <T>(data: T) => T, number] {
+>createValidator6 : (schema: any) => [new <T>(data: T) => T, number]
+>schema : any
+>T : T
+>data : T
+>T : T
+>T : T
+
+        return undefined;
+>undefined : undefined
+    }
+}
+
+// Paren Types
+module schema {
+>schema : typeof schema
+
+    export function createValidator7(schema: any): (new <T>(data: T)=>T )[] {
+>createValidator7 : (schema: any) => (new <T>(data: T) => T)[]
+>schema : any
+>T : T
+>data : T
+>T : T
+>T : T
+
+        return undefined;
+>undefined : undefined
+    }
+}

@@ -1617,13 +1617,18 @@ module ts {
 
                     case SyntaxKind.Constructor:
                     case SyntaxKind.ConstructSignature:
-                    case SyntaxKind.ConstructorType:
                     case SyntaxKind.CallSignature:
-                    case SyntaxKind.FunctionType:
                     case SyntaxKind.IndexSignature:
                     case SyntaxKind.Parameter:
                     case SyntaxKind.ModuleBlock:
                     case SyntaxKind.TypeParameter:
+                    case SyntaxKind.FunctionType:
+                    case SyntaxKind.ConstructorType:
+                    case SyntaxKind.TypeLiteral:
+                    case SyntaxKind.ArrayType:
+                    case SyntaxKind.TupleType:
+                    case SyntaxKind.UnionType:
+                    case SyntaxKind.ParenType:
                         return isDeclarationVisible(node.parent);
 
                     // Source file is always visible
