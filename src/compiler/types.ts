@@ -435,6 +435,13 @@ module ts {
         text: string;
     }
 
+    // Note: 'brands' in our syntax nodes serve to give us a small amount of nominal typing.  
+    // Consider 'Expression'.  Without the brand, 'Expression' is actually no different
+    // (structurally) than 'Node'.  Because of this you can pass any Node to a function that
+    // takes an Expression without any error.  By using the 'brands' we ensure that the type
+    // checker actually thinks you have something of the right type.  Note: the brands are 
+    // never actually given values.  At runtime they have zero cost. 
+
     export interface Expression extends Node {
         _expressionBrand: any;
         contextualType?: Type;  // Used to temporarily assign a contextual type during overload resolution
