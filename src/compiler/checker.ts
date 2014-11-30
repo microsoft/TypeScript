@@ -6441,6 +6441,10 @@ module ts {
         }
 
         function checkDestructuringAssignment(target: Expression, sourceType: Type, contextualMapper?: TypeMapper): Type {
+            if (target.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>target).operator === SyntaxKind.EqualsToken) {
+                checkBinaryExpression(<BinaryExpression>target, contextualMapper);
+                target = (<BinaryExpression>target).left;
+            }
             if (target.kind === SyntaxKind.ObjectLiteral) {
                 return checkObjectLiteralAssignment(<ObjectLiteral>target, sourceType, contextualMapper);
             }
