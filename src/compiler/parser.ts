@@ -1272,7 +1272,7 @@ module ts {
         // An identifier that starts with two underscores has an extra underscore character prepended to it to avoid issues
         // with magic property names like '__proto__'. The 'identifiers' object is used to share a single string instance for
         // each identifier in order to reduce memory consumption.
-        function createIdentifier(isIdentifier: boolean): Identifier {
+        function createIdentifier(isIdentifier: boolean, diagnosticMessage?: DiagnosticMessage): Identifier {
             identifierCount++;
             if (isIdentifier) {
                 var node = <Identifier>createNode(SyntaxKind.Identifier);
@@ -1280,14 +1280,18 @@ module ts {
                 nextToken();
                 return finishNode(node);
             }
-            error(Diagnostics.Identifier_expected);
+            error(diagnosticMessage || Diagnostics.Identifier_expected);
+            return createMissingIdentifier();
+        }
+
+        function createMissingIdentifier() {
             var node = <Identifier>createMissingNode();
             node.text = "";
             return node;
         }
 
-        function parseIdentifier(): Identifier {
-            return createIdentifier(isIdentifier());
+        function parseIdentifier(diagnosticMessage?: DiagnosticMessage): Identifier {
+            return createIdentifier(isIdentifier(), diagnosticMessage);
         }
 
         function parseIdentifierName(): Identifier {
@@ -1677,8 +1681,7 @@ module ts {
             }
             else {
                 parseExpected(SyntaxKind.CloseBraceToken);
-                literal = <LiteralExpression>createMissingNode();
-                literal.text = "";
+                literal = createMissingIdentifier();
             }
 
             span.literal = literal;
@@ -3032,14 +3035,9 @@ module ts {
                     break;
                 case SyntaxKind.TemplateHead:
                     return parseTemplateExpression();
-                    
-                default:
-                    if (isIdentifier()) {
-                        return parseIdentifier();
-                    }
             }
-            error(Diagnostics.Expression_expected);
-            return <PrimaryExpression>createMissingNode();
+
+            return parseIdentifier(Diagnostics.Expression_expected);
         }
 
         function parseParenthesizedExpression(): ParenthesizedExpression {
