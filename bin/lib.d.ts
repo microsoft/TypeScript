@@ -1489,7 +1489,7 @@ interface Uint32Array extends ArrayBufferView {
     set(array: number[], offset?: number): void;
 
     /**
-      * Gets a new Int8Array view of the ArrayBuffer Object store for this array, specifying the first and last members of the subarray. 
+      * Gets a new Uint32Array view of the ArrayBuffer Object store for this array, specifying the first and last members of the subarray. 
       * @param begin The index of the beginning of the array.
       * @param end The index of the end of the array.
       */

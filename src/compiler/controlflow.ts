@@ -307,7 +307,7 @@ module ts {
                     checkWhileStatement(<WhileStatement>n);
                     break;
                 case SyntaxKind.SourceFile:
-                    checkBlock(<SourceFile>n);
+                    forEach((<SourceFile>n).statements, check);
                     break;
                 case SyntaxKind.Block:
                 case SyntaxKind.TryBlock:

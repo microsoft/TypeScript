@@ -42,6 +42,10 @@ module TypeScript {
         return (parserContextFlags(node) & ParserContextFlags.GeneratorParameter) !== 0;
     }
 
+    export function parsedInAsyncContext(node: ISyntaxNode): boolean {
+        return (parserContextFlags(node) & ParserContextFlags.Async) !== 0;
+    }
+
     export function previousToken(token: ISyntaxToken): ISyntaxToken {
         var start = token.fullStart();
         if (start === 0) {
@@ -296,7 +300,7 @@ module TypeScript {
         }
 
         if ((info & SyntaxNodeConstants.DataComputed) === 0) {
-            info |= computeData(element);
+            info += computeData(element);
             dataElement.__data = info;
         }
 
@@ -365,19 +369,6 @@ module TypeScript {
 
     export function fullEnd(element: ISyntaxElement): number {
         return fullStart(element) + fullWidth(element);
-    }
-
-    export function existsNewLineBetweenTokens(token1: ISyntaxToken, token2: ISyntaxToken, text: ISimpleText) {
-        if (token1 === token2) {
-            return false;
-        }
-
-        if (!token1 || !token2) {
-            return true;
-        }
-
-        var lineMap = text.lineMap();
-        return lineMap.getLineNumberFromPosition(fullEnd(token1)) !== lineMap.getLineNumberFromPosition(start(token2, text));
     }
 
     export interface ISyntaxElement {

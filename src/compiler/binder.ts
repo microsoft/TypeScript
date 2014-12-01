@@ -53,12 +53,22 @@ module ts {
         }
     }
 
+    /**
+     * Returns false if any of the following are true:
+     *   1. declaration has no name
+     *   2. declaration has a literal name (not computed)
+     *   3. declaration has a computed property name that is a known symbol
+     */
+    export function hasComputedNameButNotSymbol(declaration: Declaration): boolean {
+        return declaration.name && declaration.name.kind === SyntaxKind.ComputedPropertyName;
+    }
+
     export function bindSourceFile(file: SourceFile) {
 
         var parent: Node;
-        var container: Declaration;
+        var container: Node;
         var blockScopeContainer: Node;
-        var lastContainer: Declaration;
+        var lastContainer: Node;
         var symbolCount = 0;
         var Symbol = objectAllocator.getSymbolConstructor();
 
@@ -84,13 +94,14 @@ module ts {
             if (symbolKind & SymbolFlags.Value && !symbol.valueDeclaration) symbol.valueDeclaration = node;
         }
 
-        // TODO(jfreeman): Implement getDeclarationName for property name
+        // Should not be called on a declaration with a computed property name.
         function getDeclarationName(node: Declaration): string {
             if (node.name) {
                 if (node.kind === SyntaxKind.ModuleDeclaration && node.name.kind === SyntaxKind.StringLiteral) {
                     return '"' + (<LiteralExpression>node.name).text + '"';
                 }
-                return (<Identifier>node.name).text;
+                Debug.assert(!hasComputedNameButNotSymbol(node));
+                return (<Identifier | LiteralExpression>node.name).text;
             }
             switch (node.kind) {
                 case SyntaxKind.ConstructorType:
@@ -111,6 +122,12 @@ module ts {
         }
 
         function declareSymbol(symbols: SymbolTable, parent: Symbol, node: Declaration, includes: SymbolFlags, excludes: SymbolFlags): Symbol {
+            // Nodes with computed property names will not get symbols, because the type checker
+            // does not make properties for them.
+            if (hasComputedNameButNotSymbol(node)) {
+                return undefined;
+            }
+
             var name = getDeclarationName(node);
             if (name !== undefined) {
                 var symbol = hasProperty(symbols, name) ? symbols[name] : (symbols[name] = createSymbol(0, name));
@@ -205,7 +222,7 @@ module ts {
 
         // All container nodes are kept on a linked list in declaration order. This list is used by the getLocalNameOfContainer function
         // in the type checker to validate that the local name used for a container is unique.
-        function bindChildren(node: Declaration, symbolKind: SymbolFlags, isBlockScopeContainer: boolean) {
+        function bindChildren(node: Node, symbolKind: SymbolFlags, isBlockScopeContainer: boolean) {
             if (symbolKind & SymbolFlags.HasLocals) {
                 node.locals = {};
             }
@@ -262,7 +279,7 @@ module ts {
                         break;
                     }
                 case SyntaxKind.TypeLiteral:
-                case SyntaxKind.ObjectLiteral:
+                case SyntaxKind.ObjectLiteralExpression:
                 case SyntaxKind.InterfaceDeclaration:
                     declareSymbol(container.symbol.members, container.symbol, node, symbolKind, symbolExcludes);
                     break;
@@ -324,7 +341,7 @@ module ts {
             typeLiteralSymbol.members[node.kind === SyntaxKind.FunctionType ? "__call" : "__new"] = symbol
         }
 
-        function bindAnonymousDeclaration(node: Node, symbolKind: SymbolFlags, name: string, isBlockScopeContainer: boolean) {
+        function bindAnonymousDeclaration(node: Declaration, symbolKind: SymbolFlags, name: string, isBlockScopeContainer: boolean) {
             var symbol = createSymbol(symbolKind, name);
             addDeclarationToSymbol(symbol, node, symbolKind);
             bindChildren(node, symbolKind, isBlockScopeContainer);
@@ -417,14 +434,14 @@ module ts {
                     break;
 
                 case SyntaxKind.TypeLiteral:
-                    bindAnonymousDeclaration(node, SymbolFlags.TypeLiteral, "__type", /*isBlockScopeContainer*/ false);
+                    bindAnonymousDeclaration(<TypeLiteralNode>node, SymbolFlags.TypeLiteral, "__type", /*isBlockScopeContainer*/ false);
                     break;
-                case SyntaxKind.ObjectLiteral:
-                    bindAnonymousDeclaration(node, SymbolFlags.ObjectLiteral, "__object", /*isBlockScopeContainer*/ false);
+                case SyntaxKind.ObjectLiteralExpression:
+                    bindAnonymousDeclaration(<ObjectLiteralExpression>node, SymbolFlags.ObjectLiteral, "__object", /*isBlockScopeContainer*/ false);
                     break;
                 case SyntaxKind.FunctionExpression:
                 case SyntaxKind.ArrowFunction:
-                    bindAnonymousDeclaration(node, SymbolFlags.Function, "__function", /*isBlockScopeContainer*/ true);
+                    bindAnonymousDeclaration(<FunctionExpression>node, SymbolFlags.Function, "__function", /*isBlockScopeContainer*/ true);
                     break;
                 case SyntaxKind.CatchBlock:
                     bindCatchVariableDeclaration(<CatchBlock>node);
@@ -454,7 +471,7 @@ module ts {
                     break;
                 case SyntaxKind.SourceFile:
                     if (isExternalModule(<SourceFile>node)) {
-                        bindAnonymousDeclaration(node, SymbolFlags.ValueModule, '"' + removeFileExtension((<SourceFile>node).filename) + '"', /*isBlockScopeContainer*/ true);
+                        bindAnonymousDeclaration(<SourceFile>node, SymbolFlags.ValueModule, '"' + removeFileExtension((<SourceFile>node).filename) + '"', /*isBlockScopeContainer*/ true);
                         break;
                     }
 
