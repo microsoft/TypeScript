@@ -1603,8 +1603,8 @@ module ts {
         }
 
         // The allowReservedWords parameter controls whether reserved words are permitted after the first dot
-        function parseEntityName(allowReservedWords: boolean): EntityName {
-            var entity: EntityName = parseIdentifier();
+        function parseEntityName(allowReservedWords: boolean, diagnosticMessage?: DiagnosticMessage): EntityName {
+            var entity: EntityName = parseIdentifier(diagnosticMessage);
             while (parseOptional(SyntaxKind.DotToken)) {
                 var node = <QualifiedName>createNode(SyntaxKind.QualifiedName, entity.pos);
                 node.left = entity;
@@ -1732,7 +1732,7 @@ module ts {
 
         function parseTypeReference(): TypeReferenceNode {
             var node = <TypeReferenceNode>createNode(SyntaxKind.TypeReference);
-            node.typeName = parseEntityName(/*allowReservedWords*/ false);
+            node.typeName = parseEntityName(/*allowReservedWords*/ false, Diagnostics.Type_expected);
             if (!scanner.hasPrecedingLineBreak() && token === SyntaxKind.LessThanToken) {
                 node.typeArguments = parseTypeArguments();
             }
@@ -2102,9 +2102,11 @@ module ts {
                 case SyntaxKind.StringKeyword:
                 case SyntaxKind.NumberKeyword:
                 case SyntaxKind.BooleanKeyword:
-                case SyntaxKind.VoidKeyword:
+                    // If these are followed by a dot, then parse these out as a dotted type reference instead.
                     var node = tryParse(parseKeywordAndNoDot);
                     return node || parseTypeReference();
+                case SyntaxKind.VoidKeyword:
+                    return parseTokenNode();
                 case SyntaxKind.TypeOfKeyword:
                     return parseTypeQuery();
                 case SyntaxKind.OpenBraceToken:
@@ -2114,12 +2116,8 @@ module ts {
                 case SyntaxKind.OpenParenToken:
                     return parseParenType();
                 default:
-                    if (isIdentifier()) {
-                        return parseTypeReference();
-                    }
+                    return parseTypeReference();
             }
-            error(Diagnostics.Type_expected);
-            return <TypeNode>createMissingNode();
         }
 
         function isStartOfType(): boolean {
@@ -3850,10 +3848,6 @@ module ts {
 
         function parseClassMembers() {
             return parseList(ParsingContext.ClassMembers, /*checkForStrictMode*/ false, parseClassElement);
-        }
-
-        function parseClassBaseType(): TypeReferenceNode {
-            return parseOptional(SyntaxKind.ExtendsKeyword) ? parseTypeReference() : undefined;
         }
 
         function parseInterfaceDeclaration(fullStart: number, modifiers: ModifiersArray): InterfaceDeclaration {
