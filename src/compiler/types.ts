@@ -457,7 +457,7 @@ module ts {
 
     export interface PrefixUnaryExpression extends UnaryExpression {
         operator: SyntaxKind;
-        operand: Expression;
+        operand: UnaryExpression;
     }
 
     export interface PostfixUnaryExpression extends PostfixExpression {
@@ -482,15 +482,15 @@ module ts {
     }
 
     export interface DeleteExpression extends UnaryExpression {
-        expression: Expression;
+        expression: UnaryExpression;
     }
 
     export interface TypeOfExpression extends UnaryExpression {
-        expression: Expression;
+        expression: UnaryExpression;
     }
 
     export interface VoidExpression extends UnaryExpression {
-        expression: Expression;
+        expression: UnaryExpression;
     }
     
     export interface YieldExpression extends Expression {
@@ -557,7 +557,7 @@ module ts {
     }
 
     export interface CallExpression extends LeftHandSideExpression {
-        expression: Expression;
+        expression: LeftHandSideExpression;
         typeArguments?: NodeArray<TypeNode>;
         arguments: NodeArray<Expression>;
     }
@@ -573,7 +573,7 @@ module ts {
 
     export interface TypeAssertion extends UnaryExpression {
         type: TypeNode;
-        expression: Expression;
+        expression: UnaryExpression;
     }
 
     export interface Statement extends Node, ModuleElement {
