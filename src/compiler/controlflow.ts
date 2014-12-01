@@ -34,10 +34,16 @@ module ts {
             return ControlFlowState.Unreachable;
         }
 
-        function verifyReachable(n: Node): void {
-            if (currentState === ControlFlowState.Unreachable) {
-                error(n, Diagnostics.Unreachable_code_detected);
-                currentState = ControlFlowState.ReportedUnreachable;
+        function reportIfNotReachable(n: Node): boolean {
+            switch (currentState) {
+                case ControlFlowState.Unreachable:
+                    error(n, Diagnostics.Unreachable_code_detected);
+                    currentState = ControlFlowState.ReportedUnreachable;
+                    return true;
+                case ControlFlowState.ReportedUnreachable:
+                    return true;
+                default:
+                    return false;
             }
         }
 
@@ -114,10 +120,16 @@ module ts {
         }
 
         function checkWhileStatement(n: WhileStatement): void {
-            verifyReachable(n);
+            if (reportIfNotReachable(n)) {
+                // current state is unreachable.
+                // since nothing downstream can change it - no need to continue
+                return;
+            }
 
-            var preWhileState: ControlFlowState = n.expression.kind === SyntaxKind.FalseKeyword ? ControlFlowState.Unreachable : currentState;
-            var postWhileState: ControlFlowState = n.expression.kind === SyntaxKind.TrueKeyword ? ControlFlowState.Unreachable : currentState;
+            var preWhileState = 
+                n.expression.kind === SyntaxKind.FalseKeyword ? ControlFlowState.Unreachable : currentState;
+            var postWhileState = 
+                n.expression.kind === SyntaxKind.TrueKeyword ? ControlFlowState.Unreachable : currentState;
 
             setState(preWhileState);
 
@@ -127,7 +139,12 @@ module ts {
         }
 
         function checkDoStatement(n: DoStatement): void {
-            verifyReachable(n);
+            if (reportIfNotReachable(n)) {
+                // current state is unreachable.
+                // since nothing downstream can change it - no need to continue
+                return;
+            }
+
             var preDoState = currentState;
 
             var index = pushImplicitLabel();
@@ -138,17 +155,32 @@ module ts {
         }
 
         function checkForStatement(n: ForStatement): void {
-            verifyReachable(n);
+            if (reportIfNotReachable(n)) {
+                // current state is unreachable.
+                // since nothing downstream can change it - no need to continue
+                return;
+            }
 
             var preForState = currentState;
             var index = pushImplicitLabel();
             check(n.statement);
-            var postForState = n.declarations || n.initializer || n.condition || n.iterator ? preForState : ControlFlowState.Unreachable;
+            
+            // for statement is considered infinite when it condition is either omitted or is true keyword
+            // - for(..;;..)
+            // - for(..;true;..)
+            var isInfiniteLoop = (!n.condition || n.condition.kind === SyntaxKind.TrueKeyword);
+
+            var postForState = isInfiniteLoop ? ControlFlowState.Unreachable : preForState;
             popImplicitLabel(index, postForState);
         }
 
         function checkForInStatement(n: ForInStatement): void {
-            verifyReachable(n);
+            if (reportIfNotReachable(n)) {
+                // current state is unreachable.
+                // since nothing downstream can change it - no need to continue
+                return;
+            }
+
             var preForInState = currentState;
             var index = pushImplicitLabel();
             check(n.statement);
@@ -174,12 +206,16 @@ module ts {
         }
 
         function checkReturnOrThrow(n: Node): void {
-            verifyReachable(n);
+            reportIfNotReachable(n);
             setState(ControlFlowState.Unreachable);
         }
 
         function checkBreakOrContinueStatement(n: BreakOrContinueStatement): void {
-            verifyReachable(n);
+            if (reportIfNotReachable(n)) {
+                // current state is unreachable.
+                // since nothing downstream can change it - no need to continue
+                return;
+            }
             if (n.kind === SyntaxKind.BreakStatement) {
                 gotoLabel(n.label, currentState);
             }
@@ -190,7 +226,11 @@ module ts {
         }
 
         function checkTryStatement(n: TryStatement): void {
-            verifyReachable(n);
+            if (reportIfNotReachable(n)) {
+                // current state is unreachable.
+                // since nothing downstream can change it - no need to continue
+                return;
+            }
 
             // catch\finally blocks has the same reachability as try block
             var startState = currentState;
@@ -207,7 +247,12 @@ module ts {
         }
 
         function checkSwitchStatement(n: SwitchStatement): void {
-            verifyReachable(n);
+            if (reportIfNotReachable(n)) {
+                // current state is unreachable.
+                // since nothing downstream can change it - no need to continue
+                return;
+            }
+
             var startState = currentState;
             var hasDefault = false;
 
@@ -229,7 +274,12 @@ module ts {
         }
 
         function checkLabelledStatement(n: LabeledStatement): void {
-            verifyReachable(n);
+            if (reportIfNotReachable(n)) {
+                // current state is unreachable.
+                // since nothing downstream can change it - no need to continue
+                return;
+            }
+
             var ok = pushNamedLabel(n.label);
             check(n.statement);
             if (ok) {
@@ -238,7 +288,12 @@ module ts {
         }
 
         function checkWithStatement(n: WithStatement): void {
-            verifyReachable(n);
+            if (reportIfNotReachable(n)) {
+                // current state is unreachable.
+                // since nothing downstream can change it - no need to continue
+                return;
+            }
+
             check(n.statement);
         }
 
@@ -277,7 +332,7 @@ module ts {
                 case SyntaxKind.EmptyStatement:
                 case SyntaxKind.ExpressionStatement:
                 case SyntaxKind.DebuggerStatement:
-                    verifyReachable(n);
+                    reportIfNotReachable(n);
                     break;
                 case SyntaxKind.DoStatement:
                     checkDoStatement(<DoStatement>n);
