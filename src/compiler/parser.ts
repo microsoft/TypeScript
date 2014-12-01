@@ -1676,13 +1676,12 @@ module ts {
                 literal = parseLiteralNode();
             }
             else {
-                error(Diagnostics.Invalid_template_literal_expected);
+                parseExpected(SyntaxKind.CloseBraceToken);
                 literal = <LiteralExpression>createMissingNode();
                 literal.text = "";
             }
 
             span.literal = literal;
-
             return finishNode(span);
         }
 

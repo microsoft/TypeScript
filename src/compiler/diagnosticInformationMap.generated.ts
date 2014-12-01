@@ -119,7 +119,6 @@ module ts {
         const_declarations_must_be_initialized: { code: 1155, category: DiagnosticCategory.Error, key: "'const' declarations must be initialized" },
         const_declarations_can_only_be_declared_inside_a_block: { code: 1156, category: DiagnosticCategory.Error, key: "'const' declarations can only be declared inside a block." },
         let_declarations_can_only_be_declared_inside_a_block: { code: 1157, category: DiagnosticCategory.Error, key: "'let' declarations can only be declared inside a block." },
-        Invalid_template_literal_expected: { code: 1158, category: DiagnosticCategory.Error, key: "Invalid template literal; expected '}'" },
         Tagged_templates_are_only_available_when_targeting_ECMAScript_6_and_higher: { code: 1159, category: DiagnosticCategory.Error, key: "Tagged templates are only available when targeting ECMAScript 6 and higher." },
         Unterminated_template_literal: { code: 1160, category: DiagnosticCategory.Error, key: "Unterminated template literal." },
         Unterminated_regular_expression_literal: { code: 1161, category: DiagnosticCategory.Error, key: "Unterminated regular expression literal." },
