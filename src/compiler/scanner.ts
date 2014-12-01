@@ -753,6 +753,30 @@ module ts {
             return token = SyntaxKind.Identifier;
         }
 
+        function scanBinaryOrOctalDigits(base: number): number {
+            Debug.assert(base !== 2 || base !== 8, "Expected either base 2 or base 8");
+
+            var value = 0;
+            // For counting number of digits; Valid binaryIntegerLiteral must have at least one binary digit following B or b.
+            // Similarly valid octalIntegerLiteral must have at least one octal digit following o or O.
+            var numberOfDigits = 0;  
+            while (true) {
+                var ch = text.charCodeAt(pos);
+                var valueOfCh = ch - CharacterCodes._0;
+                if (!isDigit(ch) || valueOfCh >= base) {
+                    break;
+                }
+                value = value * base + valueOfCh;
+                pos++;
+                numberOfDigits++;
+            }
+            // Invalid binaryIntegerLiteral or octalIntegerLiteral
+            if (numberOfDigits === 0) {
+                return -1;
+            }
+            return value;
+        }
+
         function scan(): SyntaxKind {
             startPos = pos;
             precedingLineBreak = false;
@@ -932,6 +956,26 @@ module ts {
                             }
                             tokenValue = "" + value;
                             return token = SyntaxKind.NumericLiteral;
+                        }
+                        else if (pos + 2 < len && (text.charCodeAt(pos + 1) === CharacterCodes.B || text.charCodeAt(pos + 1) === CharacterCodes.b)) {
+                            pos += 2;
+                            var value = scanBinaryOrOctalDigits(/* base */ 2);
+                            if (value < 0) {
+                                error(Diagnostics.Binary_digit_expected);
+                                value = 0;
+                            }
+                            tokenValue = "" + value;
+                            return SyntaxKind.NumericLiteral;
+                        }
+                        else if (pos + 2 < len && (text.charCodeAt(pos + 1) === CharacterCodes.O || text.charCodeAt(pos + 1) === CharacterCodes.o)) {
+                            pos += 2;
+                            var value = scanBinaryOrOctalDigits(/* base */ 8);
+                            if (value < 0) {
+                                error(Diagnostics.Octal_digit_expected);
+                                value = 0;
+                            }
+                            tokenValue = "" + value;
+                            return SyntaxKind.NumericLiteral;
                         }
                         // Try to parse as an octal
                         if (pos + 1 < len && isOctalDigit(text.charCodeAt(pos + 1))) {

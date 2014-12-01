@@ -301,6 +301,7 @@ module TypeScript.Syntax {
         public childCount: number;
 
         constructor(public kind: SyntaxKind, private _fullStart: number) {
+            Debug.assert(!isNaN(_fullStart));
         }
 
         public setFullStart(fullStart: number): void {
@@ -339,7 +340,6 @@ module TypeScript.Syntax {
     class RealizedToken implements ISyntaxToken {
         public _primaryExpressionBrand: any; public _memberExpressionBrand: any; public _leftHandSideExpressionBrand: any; public _postfixExpressionBrand: any; public _unaryExpressionBrand: any; public _expressionBrand: any; public _typeBrand: any; public _nameBrand: any; public _propertyAssignmentBrand: any; public _propertyNameBrand: any;
 
-        private _fullStart: number;
         private _isKeywordConvertedToIdentifier: boolean;
         private _leadingTrivia: ISyntaxTriviaList;
         private _text: string;
@@ -347,12 +347,12 @@ module TypeScript.Syntax {
         public parent: ISyntaxElement;
         public childCount: number;
 
-        constructor(fullStart: number,
+        constructor(private _fullStart: number,
                     public kind: SyntaxKind,
                     isKeywordConvertedToIdentifier: boolean,
                     leadingTrivia: ISyntaxTriviaList,
                     text: string) {
-            this._fullStart = fullStart;
+            Debug.assert(!isNaN(_fullStart));
             this._isKeywordConvertedToIdentifier = isKeywordConvertedToIdentifier;
             this._text = text;
 

@@ -202,6 +202,7 @@ module TypeScript.Scanner {
         public childCount: number;
 
         constructor(private _fullStart: number, public kind: SyntaxKind) {
+            Debug.assert(!isNaN(_fullStart));
         }
 
         public setFullStart(fullStart: number): void {
@@ -236,6 +237,7 @@ module TypeScript.Scanner {
         private cachedText: string;
 
         constructor(private _fullStart: number, public kind: SyntaxKind, private _packedFullWidthAndInfo: number, cachedText: string) {
+            Debug.assert(!isNaN(_fullStart));
             if (cachedText !== undefined) {
                 this.cachedText = cachedText;
             }
@@ -1480,6 +1482,7 @@ module TypeScript.Scanner {
         }
 
         function absolutePosition() {
+            Debug.assert(!isNaN(_absolutePosition));
             return _absolutePosition;
         }
 
@@ -1551,6 +1554,7 @@ module TypeScript.Scanner {
                 // We're consuming the token that was just fetched from us by the parser.  We just
                 // need to move ourselves forward and ditch this token from the sliding window.
                 _absolutePosition += (<ISyntaxToken>nodeOrToken).fullWidth();
+                Debug.assert(!isNaN(_absolutePosition));
                 slidingWindow.moveToNextItem();
             }
             else {
@@ -1646,7 +1650,7 @@ module TypeScript.Scanner {
         };
     }
 
-    var fixedWidthArray = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 4, 5, 8, 8, 7, 6, 2, 4, 5, 7, 3, 8, 2, 2, 10, 3, 4, 6, 6, 4, 5, 4, 3, 6, 3, 4, 5, 4, 5, 5, 4, 6, 7, 6, 5, 10, 9, 3, 7, 7, 9, 6, 6, 5, 3, 7, 11, 7, 3, 6, 7, 6, 3, 6, 1, 1, 1, 1, 1, 1, 1, 3, 1, 1, 1, 1, 2, 2, 2, 2, 2, 3, 3, 1, 1, 1, 1, 2, 2, 2, 2, 3, 1, 1, 1, 1, 1, 2, 2, 1, 1, 1, 2, 2, 2, 2, 3, 3, 4, 2, 2, 2, 1, 2];
+    var fixedWidthArray = ScannerUtilities.fixedWidthArray;
     function fixedWidthTokenLength(kind: SyntaxKind) {
         return fixedWidthArray[kind];
     }

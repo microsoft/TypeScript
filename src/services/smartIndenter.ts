@@ -227,10 +227,10 @@ module ts.formatting {
                             return (<TypeReferenceNode>node.parent).typeArguments;
                         }
                         break;
-                    case SyntaxKind.ObjectLiteral:
-                        return (<ObjectLiteral>node.parent).properties;
-                    case SyntaxKind.ArrayLiteral:
-                        return (<ArrayLiteral>node.parent).elements;
+                    case SyntaxKind.ObjectLiteralExpression:
+                        return (<ObjectLiteralExpression>node.parent).properties;
+                    case SyntaxKind.ArrayLiteralExpression:
+                        return (<ArrayLiteralExpression>node.parent).elements;
                     case SyntaxKind.FunctionDeclaration:
                     case SyntaxKind.FunctionExpression:
                     case SyntaxKind.ArrowFunction:
@@ -323,19 +323,19 @@ module ts.formatting {
                 case SyntaxKind.ClassDeclaration:
                 case SyntaxKind.InterfaceDeclaration:
                 case SyntaxKind.EnumDeclaration:
-                case SyntaxKind.ArrayLiteral:
+                case SyntaxKind.ArrayLiteralExpression:
                 case SyntaxKind.Block:
                 case SyntaxKind.FunctionBlock:
                 case SyntaxKind.TryBlock:
                 case SyntaxKind.CatchBlock:
                 case SyntaxKind.FinallyBlock:
                 case SyntaxKind.ModuleBlock:
-                case SyntaxKind.ObjectLiteral:
+                case SyntaxKind.ObjectLiteralExpression:
                 case SyntaxKind.TypeLiteral:
                 case SyntaxKind.SwitchStatement:
                 case SyntaxKind.DefaultClause:
                 case SyntaxKind.CaseClause:
-                case SyntaxKind.ParenExpression:
+                case SyntaxKind.ParenthesizedExpression:
                 case SyntaxKind.CallExpression:
                 case SyntaxKind.NewExpression:
                 case SyntaxKind.VariableStatement:
@@ -397,7 +397,7 @@ module ts.formatting {
                 case SyntaxKind.ClassDeclaration:
                 case SyntaxKind.InterfaceDeclaration:
                 case SyntaxKind.EnumDeclaration:
-                case SyntaxKind.ObjectLiteral:
+                case SyntaxKind.ObjectLiteralExpression:
                 case SyntaxKind.Block:
                 case SyntaxKind.CatchBlock:
                 case SyntaxKind.FinallyBlock:
@@ -405,7 +405,7 @@ module ts.formatting {
                 case SyntaxKind.ModuleBlock:
                 case SyntaxKind.SwitchStatement:
                     return nodeEndsWith(n, SyntaxKind.CloseBraceToken, sourceFile);
-                case SyntaxKind.ParenExpression:
+                case SyntaxKind.ParenthesizedExpression:
                 case SyntaxKind.CallSignature:
                 case SyntaxKind.CallExpression:
                 case SyntaxKind.ConstructSignature:
@@ -424,7 +424,7 @@ module ts.formatting {
                     return isCompletedNode((<IfStatement>n).thenStatement, sourceFile);
                 case SyntaxKind.ExpressionStatement:
                     return isCompletedNode((<ExpressionStatement>n).expression, sourceFile);
-                case SyntaxKind.ArrayLiteral:
+                case SyntaxKind.ArrayLiteralExpression:
                     return nodeEndsWith(n, SyntaxKind.CloseBracketToken, sourceFile);
                 case SyntaxKind.Missing:
                     return false;
