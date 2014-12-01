@@ -1,12 +1,9 @@
 tests/cases/conformance/externalModules/importNonStringLiteral.ts(2,22): error TS1141: String literal expected.
-tests/cases/conformance/externalModules/importNonStringLiteral.ts(2,23): error TS1005: ';' expected.
 
 
-==== tests/cases/conformance/externalModules/importNonStringLiteral.ts (2 errors) ====
+==== tests/cases/conformance/externalModules/importNonStringLiteral.ts (1 errors) ====
     var x = "filename";
     import foo = require(x); // invalid
                          ~
 !!! error TS1141: String literal expected.
-                          ~
-!!! error TS1005: ';' expected.
     

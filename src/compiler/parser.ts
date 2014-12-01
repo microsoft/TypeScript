@@ -394,6 +394,8 @@ module ts {
                 return child((<ComputedPropertyName>node).expression);
             case SyntaxKind.HeritageClause:
                 return children((<HeritageClause>node).types);
+            case SyntaxKind.ExternalModuleReference:
+                return child((<ExternalModuleReference>node).expression);
         }
     }
 
@@ -1726,14 +1728,6 @@ module ts {
             return node;
         }
 
-        function parseStringLiteral(): LiteralExpression {
-            if (token === SyntaxKind.StringLiteral) {
-                return parseLiteralNode(/*internName:*/ true);
-            }
-            error(Diagnostics.String_literal_expected);
-            return <LiteralExpression>createMissingNode();
-        }
-
         // TYPES
 
         function parseTypeReference(): TypeReferenceNode {
@@ -1786,9 +1780,7 @@ module ts {
 
         function parseParameterType(): TypeNode {
             return parseOptional(SyntaxKind.ColonToken)
-                ? token === SyntaxKind.StringLiteral
-                    ? parseStringLiteral()
-                    : parseType()
+                ? token === SyntaxKind.StringLiteral ? parseLiteralNode(/*internName:*/ true) : parseType()
                 : undefined;
         }
 
@@ -3940,7 +3932,7 @@ module ts {
         function parseAmbientExternalModuleDeclaration(fullStart: number, flags: NodeFlags): ModuleDeclaration {
             var node = <ModuleDeclaration>createNode(SyntaxKind.ModuleDeclaration, fullStart);
             node.flags = flags;
-            node.name = parseStringLiteral();
+            node.name = parseLiteralNode(/*internName:*/ true);
             node.body = parseModuleBlock();
             return finishNode(node);
         }
@@ -3952,21 +3944,42 @@ module ts {
                 : parseInternalModuleTail(fullStart, flags);
         }
 
+        function isExternalModuleReference() {
+            if (token === SyntaxKind.RequireKeyword) {
+                return lookAhead(() => {
+                    nextToken();
+                    return token === SyntaxKind.OpenParenToken;
+                });
+            }
+
+            return false;
+        }
+
         function parseImportDeclaration(fullStart: number, modifiers: ModifiersArray): ImportDeclaration {
             var node = <ImportDeclaration>createNode(SyntaxKind.ImportDeclaration, fullStart);
             setModifiers(node, modifiers);
             parseExpected(SyntaxKind.ImportKeyword);
             node.name = parseIdentifier();
             parseExpected(SyntaxKind.EqualsToken);
-            var entityName = parseEntityName(/*allowReservedWords*/ false);
-            if (entityName.kind === SyntaxKind.Identifier && (<Identifier>entityName).text === "require" && parseOptional(SyntaxKind.OpenParenToken)) {
-                node.externalModuleName = parseStringLiteral();
-                parseExpected(SyntaxKind.CloseParenToken);
+            if (isExternalModuleReference()) {
+                node.externalModuleName = parseExternalModuleReference();
             }
             else {
-                node.entityName = entityName;
+                node.entityName = parseEntityName(/*allowReservedWords*/ false);
             }
             parseSemicolon();
+            return finishNode(node);
+        }
+
+        function parseExternalModuleReference() {
+            var node = <ExternalModuleReference>createNode(SyntaxKind.ExternalModuleReference);
+            parseExpected(SyntaxKind.RequireKeyword);
+            parseExpected(SyntaxKind.OpenParenToken);
+            node.expression = parseExpression();
+            if (node.expression.kind === SyntaxKind.StringLiteral) {
+                internIdentifier((<LiteralExpression>node.expression).text);
+            }
+            parseExpected(SyntaxKind.CloseParenToken);
             return finishNode(node);
         }
 
@@ -4307,6 +4320,7 @@ module ts {
                 case SyntaxKind.DeleteExpression:               return checkDeleteExpression(<DeleteExpression> node);
                 case SyntaxKind.ElementAccessExpression:        return checkElementAccessExpression(<ElementAccessExpression>node);
                 case SyntaxKind.ExportAssignment:               return checkExportAssignment(<ExportAssignment>node);
+                case SyntaxKind.ExternalModuleReference:        return checkExternalModuleReference(<ExternalModuleReference>node);
                 case SyntaxKind.ForInStatement:                 return checkForInStatement(<ForInStatement>node);
                 case SyntaxKind.ForStatement:                   return checkForStatement(<ForStatement>node);
                 case SyntaxKind.FunctionDeclaration:            return checkFunctionDeclaration(<FunctionLikeDeclaration>node);
@@ -4704,6 +4718,12 @@ module ts {
             }
         }
 
+        function checkExternalModuleReference(node: ExternalModuleReference) {
+            if (node.expression.kind !== SyntaxKind.StringLiteral) {
+                return grammarErrorOnNode(node.expression, Diagnostics.String_literal_expected);
+            }
+        }
+
         function checkForInStatement(node: ForInStatement) {
             return checkVariableDeclarations(node.declarations) ||
                 checkForMoreThanOneDeclaration(node.declarations);
@@ -4905,7 +4925,7 @@ module ts {
                         return grammarErrorOnNode(statement, Diagnostics.An_export_assignment_cannot_be_used_in_an_internal_module);
                     }
                     else if (statement.kind === SyntaxKind.ImportDeclaration && (<ImportDeclaration>statement).externalModuleName) {
-                        return grammarErrorOnNode((<ImportDeclaration>statement).externalModuleName, Diagnostics.Import_declarations_in_an_internal_module_cannot_reference_an_external_module);
+                        return grammarErrorOnNode((<ImportDeclaration>statement).externalModuleName.expression, Diagnostics.Import_declarations_in_an_internal_module_cannot_reference_an_external_module);
                     }
                 }
             }
@@ -5627,8 +5647,11 @@ module ts {
 
         function processImportedModules(file: SourceFile, basePath: string) {
             forEach(file.statements, node => {
-                if (node.kind === SyntaxKind.ImportDeclaration && (<ImportDeclaration>node).externalModuleName) {
-                    var nameLiteral = (<ImportDeclaration>node).externalModuleName;
+                if (node.kind === SyntaxKind.ImportDeclaration &&
+                    (<ImportDeclaration>node).externalModuleName &&
+                    (<ImportDeclaration>node).externalModuleName.expression.kind === SyntaxKind.StringLiteral) {
+
+                    var nameLiteral = <LiteralExpression>(<ImportDeclaration>node).externalModuleName.expression;
                     var moduleName = nameLiteral.text;
                     if (moduleName) {
                         var searchPath = basePath;
@@ -5653,8 +5676,11 @@ module ts {
                     // The StringLiteral must specify a top - level external module name.
                     // Relative external module names are not permitted
                     forEachChild((<ModuleDeclaration>node).body, node => {
-                        if (node.kind === SyntaxKind.ImportDeclaration && (<ImportDeclaration>node).externalModuleName) {
-                            var nameLiteral = (<ImportDeclaration>node).externalModuleName; 
+                        if (node.kind === SyntaxKind.ImportDeclaration &&
+                            (<ImportDeclaration>node).externalModuleName &&
+                            (<ImportDeclaration>node).externalModuleName.expression.kind === SyntaxKind.StringLiteral) {
+
+                            var nameLiteral = <LiteralExpression>(<ImportDeclaration>node).externalModuleName.expression; 
                             var moduleName = nameLiteral.text;
                             if (moduleName) {
                                 // TypeScript 1.0 spec (April 2014): 12.1.6

@@ -1982,7 +1982,7 @@ module ts {
     function isNameOfExternalModuleImportOrDeclaration(node: Node): boolean {
         return node.kind === SyntaxKind.StringLiteral &&
             (isNameOfModuleDeclaration(node) ||
-            (node.parent.kind === SyntaxKind.ImportDeclaration && (<ImportDeclaration>node.parent).externalModuleName === node));
+            (node.parent.parent.kind === SyntaxKind.ImportDeclaration && (<ImportDeclaration>node.parent.parent).externalModuleName.expression === node));
     }
 
     /** Returns true if the position is within a comment */
@@ -3086,7 +3086,7 @@ module ts {
                             displayParts.push(spacePart());
                             displayParts.push(keywordPart(SyntaxKind.RequireKeyword));
                             displayParts.push(punctuationPart(SyntaxKind.OpenParenToken));
-                            displayParts.push(displayPart(getTextOfNode(importDeclaration.externalModuleName), SymbolDisplayPartKind.stringLiteral));
+                            displayParts.push(displayPart(getTextOfNode(importDeclaration.externalModuleName.expression), SymbolDisplayPartKind.stringLiteral));
                             displayParts.push(punctuationPart(SyntaxKind.CloseParenToken));
                         }
                         else {

@@ -221,6 +221,8 @@ module ts {
         ModuleBlock,
         ImportDeclaration,
         ExportAssignment,
+        // Module references
+        ExternalModuleReference,
         // Clauses
         CaseClause,
         DefaultClause,
@@ -730,7 +732,11 @@ module ts {
     export interface ImportDeclaration extends Declaration, ModuleElement {
         name: Identifier;
         entityName?: EntityName;
-        externalModuleName?: LiteralExpression;
+        externalModuleName?: ExternalModuleReference;
+    }
+
+    export interface ExternalModuleReference extends Node {
+        expression?: Expression;
     }
 
     export interface ExportAssignment extends Statement, ModuleElement {

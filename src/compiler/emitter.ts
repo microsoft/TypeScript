@@ -671,7 +671,7 @@ module ts {
             }
             else {
                 write("require(");
-                writeTextOfNode(currentSourceFile, node.externalModuleName);
+                writeTextOfNode(currentSourceFile, node.externalModuleName.expression);
                 write(");");
             }
             writer.writeLine();
@@ -3312,11 +3312,12 @@ module ts {
                             emit(node.entityName);
                         }
                         else {
+                            var literal = <LiteralExpression>node.externalModuleName.expression;
                             write("require(");
-                            emitStart(node.externalModuleName);
-                            emitLiteral(node.externalModuleName);
-                            emitEnd(node.externalModuleName);
-                            emitToken(SyntaxKind.CloseParenToken, node.externalModuleName.end);
+                            emitStart(literal);
+                            emitLiteral(literal);
+                            emitEnd(literal);
+                            emitToken(SyntaxKind.CloseParenToken, literal.end);
                         }
                         write(";");
                         emitEnd(node);
@@ -3356,7 +3357,7 @@ module ts {
                 write("[\"require\", \"exports\"");
                 forEach(imports, imp => {
                     write(", ");
-                    emitLiteral(imp.externalModuleName);
+                    emitLiteral(<LiteralExpression>imp.externalModuleName.expression);
                 });
                 forEach(node.amdDependencies, amdDependency => {
                     var text = "\"" + amdDependency + "\"";

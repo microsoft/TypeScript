@@ -467,9 +467,9 @@ module ts {
             if (!links.target) {
                 links.target = resolvingSymbol;
                 var node = <ImportDeclaration>getDeclarationOfKind(symbol, SyntaxKind.ImportDeclaration);
-                var target = node.externalModuleName ?
-                    resolveExternalModuleName(node, node.externalModuleName) :
-                    getSymbolOfPartOfRightHandSideOfImport(node.entityName, node);
+                var target = node.externalModuleName
+                    ? resolveExternalModuleName(node, node.externalModuleName.expression)
+                    : getSymbolOfPartOfRightHandSideOfImport(node.entityName, node);
                 if (links.target === resolvingSymbol) {
                     links.target = target || unknownSymbol;
                 }
@@ -546,7 +546,12 @@ module ts {
             return moduleName.substr(0, 2) === "./" || moduleName.substr(0, 3) === "../" || moduleName.substr(0, 2) === ".\\" || moduleName.substr(0, 3) === "..\\";
         }
 
-        function resolveExternalModuleName(location: Node, moduleLiteral: LiteralExpression): Symbol {
+        function resolveExternalModuleName(location: Node, moduleExpression: Expression): Symbol {
+            if (moduleExpression.kind !== SyntaxKind.StringLiteral) {
+                return;
+            }
+
+            var moduleLiteral = <LiteralExpression>moduleExpression;
             var searchPath = getDirectoryPath(getSourceFile(location).filename);
             var moduleName = moduleLiteral.text;
             if (!moduleName) return;
@@ -8368,12 +8373,17 @@ module ts {
                     // An ExternalImportDeclaration in an AmbientExternalModuleDeclaration may reference 
                     // other external modules only through top - level external module names.
                     // Relative external module names are not permitted.
-                    if (isExternalModuleNameRelative(node.externalModuleName.text)) {
-                        error(node, Diagnostics.Import_declaration_in_an_ambient_external_module_declaration_cannot_reference_external_module_through_relative_external_module_name);
-                        target = unknownSymbol;
+                    if (node.externalModuleName.expression.kind === SyntaxKind.StringLiteral) {
+                        if (isExternalModuleNameRelative((<LiteralExpression>node.externalModuleName.expression).text)) {
+                            error(node, Diagnostics.Import_declaration_in_an_ambient_external_module_declaration_cannot_reference_external_module_through_relative_external_module_name);
+                            target = unknownSymbol;
+                        }
+                        else {
+                            target = resolveImport(symbol);
+                        }
                     }
                     else {
-                        target = resolveImport(symbol);
+                        target = unknownSymbol;
                     }
                 }
                 else {
@@ -8948,8 +8958,8 @@ module ts {
 
                 case SyntaxKind.StringLiteral:
                     // External module name in an import declaration
-                    if (node.parent.kind === SyntaxKind.ImportDeclaration && (<ImportDeclaration>node.parent).externalModuleName === node) {
-                        var importSymbol = getSymbolOfNode(node.parent);
+                    if (node.parent.parent.kind === SyntaxKind.ImportDeclaration && (<ImportDeclaration>node.parent.parent).externalModuleName.expression === node) {
+                        var importSymbol = getSymbolOfNode(node.parent.parent);
                         var moduleType = getTypeOfSymbol(importSymbol);
                         return moduleType ? moduleType.symbol : undefined;
                     }
