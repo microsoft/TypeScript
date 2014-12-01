@@ -912,17 +912,15 @@ module ts {
             throw new Error("Invalid operation");
         }
     }
+
+    declare var module: any;
+    if (typeof module !== "undefined" && module.exports) {
+        module.exports = ts;
+    }
 }
 
 
 /// TODO: this is used by VS, clean this up on both sides of the interface
 module TypeScript.Services {
     export var TypeScriptServicesFactory = ts.TypeScriptServicesFactory;
-}
-
-module ts {
-    declare var module: any;
-    if (typeof module !== "undefined" && module.exports) {
-        module.exports = ts;
-    }
 }
