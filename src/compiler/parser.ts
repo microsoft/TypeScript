@@ -1595,15 +1595,15 @@ module ts {
             return entity;
         }
 
-        function parseAnyTokenNode(): PrimaryExpression {
+        function parseTokenNode(): PrimaryExpression {
             var node = <PrimaryExpression>createNode(token);
             nextToken();
             return finishNode(node);
         }
 
-        function parseTokenNode(kind: SyntaxKind): Node {
+        function parseExpectedTokenNode(kind: SyntaxKind): Node {
             if (token === kind) {
-                return parseAnyTokenNode();
+                return parseTokenNode();
             }
 
             parseExpected(kind);
@@ -2050,7 +2050,7 @@ module ts {
         }
 
         function parseKeywordAndNoDot(): Node {
-            var node = parseAnyTokenNode();
+            var node = parseTokenNode();
             return token === SyntaxKind.DotToken ? undefined : node;
         }
 
@@ -2837,7 +2837,7 @@ module ts {
         }
 
         function parseSuperExpression(): MemberExpression {
-            var expression = parseAnyTokenNode();
+            var expression = parseTokenNode();
             if (token === SyntaxKind.OpenParenToken || token === SyntaxKind.DotToken) {
                 return expression;
             }
@@ -2929,8 +2929,8 @@ module ts {
                     var tagExpression = <TaggedTemplateExpression>createNode(SyntaxKind.TaggedTemplateExpression, expression.pos);
                     tagExpression.tag = expression;
                     tagExpression.template = token === SyntaxKind.NoSubstitutionTemplateLiteral
-                    ? parseLiteralNode()
-                    : parseTemplateExpression();
+                        ? parseLiteralNode()
+                        : parseTemplateExpression();
                     expression = finishNode(tagExpression);
                     continue;
                 }
@@ -3007,7 +3007,7 @@ module ts {
                 case SyntaxKind.NullKeyword:
                 case SyntaxKind.TrueKeyword:
                 case SyntaxKind.FalseKeyword:
-                    return parseAnyTokenNode();
+                    return parseTokenNode();
                 case SyntaxKind.NumericLiteral:
                 case SyntaxKind.StringLiteral:
                 case SyntaxKind.NoSubstitutionTemplateLiteral:
