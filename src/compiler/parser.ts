@@ -896,6 +896,7 @@ module ts {
             case SyntaxKind.StaticKeyword:
             case SyntaxKind.ExportKeyword:
             case SyntaxKind.DeclareKeyword:
+            case SyntaxKind.ConstKeyword:
                 return true;
         }
         return false;
@@ -909,6 +910,7 @@ module ts {
             case SyntaxKind.PrivateKeyword: return NodeFlags.Private;
             case SyntaxKind.ExportKeyword: return NodeFlags.Export;
             case SyntaxKind.DeclareKeyword: return NodeFlags.Ambient;
+            case SyntaxKind.ConstKeyword: return NodeFlags.Const;
         }
         return 0;
     }
@@ -1366,6 +1368,11 @@ module ts {
 
         function parseAnyContextualModifier(): boolean {
             return isModifier(token) && tryParse(() => {
+                if (token === SyntaxKind.ConstKeyword) {
+                    // 'const' is only a modifier if followed by 'enum'.
+                    return nextToken() === SyntaxKind.EnumKeyword;
+                }
+
                 nextToken();
                 return canFollowModifier();
             });
@@ -3900,11 +3907,6 @@ module ts {
         function parseAndCheckEnumDeclaration(fullStart: number, modifiers: ModifiersArray, flags: NodeFlags): EnumDeclaration {
             var node = <EnumDeclaration>createNode(SyntaxKind.EnumDeclaration, fullStart);
             setModifiers(node, modifiers);
-
-            node.flags |= flags;
-            if (flags & NodeFlags.Const) {
-                parseExpected(SyntaxKind.ConstKeyword);
-            }
             parseExpected(SyntaxKind.EnumKeyword);
             node.name = parseIdentifier();
             if (parseExpected(SyntaxKind.OpenBraceToken)) {
@@ -4054,13 +4056,7 @@ module ts {
                 case SyntaxKind.LetKeyword:
                     return parseVariableStatement(fullStart, modifiers);
                 case SyntaxKind.ConstKeyword:
-                    var isConstEnum = lookAhead(() => nextToken() === SyntaxKind.EnumKeyword);
-                    if (isConstEnum) {
-                        return parseAndCheckEnumDeclaration(fullStart, modifiers, flags | NodeFlags.Const);
-                    }
-                    else {
-                        return parseVariableStatement(fullStart, modifiers);
-                    }
+                    return parseVariableStatement(fullStart, modifiers);
                 case SyntaxKind.FunctionKeyword:
                     return parseFunctionDeclaration(fullStart, modifiers);
                 case SyntaxKind.ClassKeyword:
