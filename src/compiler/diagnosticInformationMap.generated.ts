@@ -139,6 +139,8 @@ module ts {
         Classes_can_only_extend_a_single_class: { code: 1174, category: DiagnosticCategory.Error, key: "Classes can only extend a single class." },
         implements_clause_already_seen: { code: 1175, category: DiagnosticCategory.Error, key: "'implements' clause already seen." },
         Interface_declaration_cannot_have_implements_clause: { code: 1176, category: DiagnosticCategory.Error, key: "Interface declaration cannot have 'implements' clause." },
+        Binary_digit_expected: { code: 1177, category: DiagnosticCategory.Error, key: "Binary digit expected." },
+        Octal_digit_expected: { code: 1178, category: DiagnosticCategory.Error, key: "Octal digit expected." },
         Duplicate_identifier_0: { code: 2300, category: DiagnosticCategory.Error, key: "Duplicate identifier '{0}'." },
         Initializer_of_instance_member_variable_0_cannot_reference_identifier_1_declared_in_the_constructor: { code: 2301, category: DiagnosticCategory.Error, key: "Initializer of instance member variable '{0}' cannot reference identifier '{1}' declared in the constructor." },
         Static_members_cannot_reference_class_type_parameters: { code: 2302, category: DiagnosticCategory.Error, key: "Static members cannot reference class type parameters." },

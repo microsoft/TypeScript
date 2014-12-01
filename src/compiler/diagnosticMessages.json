@@ -491,7 +491,8 @@
         "category": "Error",
         "code": 1162
     },
-    "'yield' expression must be contained_within a generator declaration.": {
+    "'yield' expression must be contained_within a generator declaration."
+    : {
         "category": "Error",
         "code": 1163
     },
@@ -547,7 +548,14 @@
         "category": "Error",
         "code": 1176
     },
-
+    "Binary digit expected.": {
+        "category": "Error",
+        "code": 1177
+    },
+    "Octal digit expected.": {
+        "category": "Error",
+        "code": 1178
+    },
     "Duplicate identifier '{0}'.": {
         "category": "Error",
         "code": 2300
