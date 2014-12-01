@@ -551,13 +551,13 @@ module TypeScript {
             return false;
         }
 
-        public visitMemberVariableDeclaration(node: MemberVariableDeclarationSyntax): void {
+        public visitPropertyDeclaration(node: PropertyDeclarationSyntax): void {
             if (this.checkClassElementModifiers(node.modifiers) ||
                 this.checkForDisallowedAsyncModifier(node.modifiers)) {
                 return;
             }
 
-            super.visitMemberVariableDeclaration(node);
+            super.visitPropertyDeclaration(node);
         }
 
         public visitMethodSignature(node: MethodSignatureSyntax): void {
@@ -579,7 +579,7 @@ module TypeScript {
             super.visitPropertySignature(node);
         }
 
-        public visitMemberFunctionDeclaration(node: MemberFunctionDeclarationSyntax): void {
+        public visitMethodDeclaration(node: MethodDeclarationSyntax): void {
             if (node.parent && node.parent.parent &&
                 node.parent.kind === SyntaxKind.List && node.parent.parent.kind === SyntaxKind.ObjectLiteralExpression) {
 
@@ -603,7 +603,7 @@ module TypeScript {
                 return;
             }
 
-            super.visitMemberFunctionDeclaration(node);
+            super.visitMethodDeclaration(node);
         }
 
         private checkForDisallowedObjectLiteralMethod(modifiers: ISyntaxToken[]): boolean {
@@ -1556,7 +1556,7 @@ module TypeScript {
         }
 
         private checkVariableDeclaratorIdentifier(node: VariableDeclaratorSyntax): boolean {
-            if (node.parent.kind !== SyntaxKind.MemberVariableDeclaration) {
+            if (node.parent.kind !== SyntaxKind.PropertyDeclaration) {
                 Debug.assert(isToken(node.propertyName), "A normal variable declarator must always have a token for a name.");
                 if (this.checkForDisallowedEvalOrArguments(node, <ISyntaxToken>node.propertyName)) {
                     return true;

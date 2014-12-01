@@ -1,4 +1,4 @@
-tests/cases/conformance/expressions/thisKeyword/thisInInvalidContexts.ts(38,25): error TS1003: Identifier expected.
+tests/cases/conformance/expressions/thisKeyword/thisInInvalidContexts.ts(38,25): error TS1133: Type reference expected.
 tests/cases/conformance/expressions/thisKeyword/thisInInvalidContexts.ts(38,30): error TS1005: ';' expected.
 tests/cases/conformance/expressions/thisKeyword/thisInInvalidContexts.ts(3,16): error TS2334: 'this' cannot be referenced in a static property initializer.
 tests/cases/conformance/expressions/thisKeyword/thisInInvalidContexts.ts(22,15): error TS2332: 'this' cannot be referenced in current location.
@@ -53,7 +53,7 @@ tests/cases/conformance/expressions/thisKeyword/thisInInvalidContexts.ts(45,9): 
     
     class ErrClass3 extends this {
                             ~~~~
-!!! error TS1003: Identifier expected.
+!!! error TS1133: Type reference expected.
                                  ~
 !!! error TS1005: ';' expected.
     

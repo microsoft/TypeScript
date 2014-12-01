@@ -602,7 +602,7 @@ module TypeScript.Parser {
             return createMissingToken(SyntaxKind.IdentifierName, token, diagnosticCode);
         }
 
-        function canEatAutomaticSemicolon(allowWithoutNewLine: boolean): boolean {
+        function canEatAutomaticSemicolon(): boolean {
             var token = currentToken();
 
             // An automatic semicolon is always allowed if we're at the end of the file.
@@ -616,10 +616,6 @@ module TypeScript.Parser {
                 return true;
             }
 
-            if (allowWithoutNewLine) {
-                return true;
-            }
-
             // It is also allowed if there is a newline between the last token seen and the next one.
             if (token.hasLeadingNewLine()) {
                 return true;
@@ -628,17 +624,17 @@ module TypeScript.Parser {
             return false;
         }
 
-        function canEatExplicitOrAutomaticSemicolon(allowWithoutNewline: boolean): boolean {
+        function canEatExplicitOrAutomaticSemicolon(): boolean {
             var token = currentToken();
 
             if (token.kind === SyntaxKind.SemicolonToken) {
                 return true;
             }
 
-            return canEatAutomaticSemicolon(allowWithoutNewline);
+            return canEatAutomaticSemicolon();
         }
 
-        function eatExplicitOrAutomaticSemicolon(allowWithoutNewline: boolean): ISyntaxToken {
+        function eatExplicitOrAutomaticSemicolon(): ISyntaxToken {
             var token = currentToken();
 
             // If we see a semicolon, then we can definitely eat it.
@@ -649,7 +645,7 @@ module TypeScript.Parser {
             // Check if an automatic semicolon could go here.  If so, then there's no problem and
             // we can proceed without error.  Return 'undefined' as there's no actual token for this 
             // position. 
-            if (canEatAutomaticSemicolon(allowWithoutNewline)) {
+            if (canEatAutomaticSemicolon()) {
                 return undefined;
             }
 
@@ -885,7 +881,12 @@ module TypeScript.Parser {
 
         function parseImportDeclaration(): ImportDeclarationSyntax {
             return new ImportDeclarationSyntax(contextFlags,
-                parseModifiers(), eatToken(SyntaxKind.ImportKeyword), eatIdentifierToken(), eatToken(SyntaxKind.EqualsToken), parseModuleReference(), eatExplicitOrAutomaticSemicolon(/*allowWithoutNewline:*/ false));
+                parseModifiers(),
+                eatToken(SyntaxKind.ImportKeyword),
+                eatIdentifierToken(),
+                eatToken(SyntaxKind.EqualsToken),
+                parseModuleReference(),
+                eatExplicitOrAutomaticSemicolon());
         }
 
         function parseExportAssignment(): ExportAssignmentSyntax {
@@ -894,7 +895,7 @@ module TypeScript.Parser {
                 eatToken(SyntaxKind.ExportKeyword),
                 eatToken(SyntaxKind.EqualsToken),
                 eatIdentifierToken(),
-                eatExplicitOrAutomaticSemicolon(/*allowWithoutNewline:*/ false));
+                eatExplicitOrAutomaticSemicolon());
         }
 
         function parseModuleReference(): IModuleReferenceSyntax {
@@ -993,24 +994,24 @@ module TypeScript.Parser {
             return tryParseName(allowIdentifierName) || eatIdentifierToken();
         }
 
-        function eatRightSideOfName(allowIdentifierNames: boolean): ISyntaxToken {
+        function eatRightSideOfDot(allowIdentifierNames: boolean): ISyntaxToken {
             var _currentToken = currentToken();
 
             // Technically a keyword is valid here as all keywords are identifier names.
             // However, often we'll encounter this in error situations when the keyword
             // is actually starting another valid construct.
-
+            //
             // So, we check for the following specific case:
-
+            //
             //      name.
             //      keyword identifierNameOrKeyword
-
+            //
             // Note: the newlines are important here.  For example, if that above code 
             // were rewritten into:
-
+            //
             //      name.keyword
             //      identifierNameOrKeyword
-
+            //
             // Then we would consider it valid.  That's because ASI would take effect and
             // the code would be implicitly: "name.keyword; identifierNameOrKeyword".  
             // In the first case though, ASI will not take effect because there is not a
@@ -1041,7 +1042,7 @@ module TypeScript.Parser {
 
             while (shouldContinue && currentToken().kind === SyntaxKind.DotToken) {
                 var dotToken = consumeToken(currentToken());
-                var identifierName = eatRightSideOfName(allowIdentifierNames);
+                var identifierName = eatRightSideOfDot(allowIdentifierNames);
 
                 current = new QualifiedNameSyntax(contextFlags, current, dotToken, identifierName);
                 shouldContinue = identifierName.fullWidth() > 0;
@@ -1375,10 +1376,10 @@ module TypeScript.Parser {
                 // if we have a call signature.  If so, then this is a member function, otherwise
                 // it's a member variable.
                 if (asterixToken || isCallSignature(/*peekIndex:*/ 0)) {
-                    return parseMemberFunctionDeclaration(modifiers, asterixToken, propertyName);
+                    return parseMethodDeclaration(modifiers, asterixToken, propertyName);
                 }
                 else {
-                    return parseMemberVariableDeclaration(modifiers, propertyName);
+                    return parsePropertyDeclaration(modifiers, propertyName);
                 }
             }
             else {
@@ -1405,13 +1406,13 @@ module TypeScript.Parser {
                 parseFunctionBody(/*isGenerator:*/ false, /*asyncContext:*/ false));
         }
 
-        function parseMemberFunctionDeclaration(modifiers: ISyntaxToken[], asteriskToken: ISyntaxToken, propertyName: IPropertyNameSyntax): MemberFunctionDeclarationSyntax {
+        function parseMethodDeclaration(modifiers: ISyntaxToken[], asteriskToken: ISyntaxToken, propertyName: IPropertyNameSyntax): MethodDeclarationSyntax {
             // Note: if we see an arrow after the close paren, then try to parse out a function 
             // block anyways.  It's likely the user just though '=> expr' was legal anywhere a 
             // block was legal.
             var asyncContext = containsAsync(modifiers);
             var isGenerator = asteriskToken !== undefined;
-            return new MemberFunctionDeclarationSyntax(contextFlags,
+            return new MethodDeclarationSyntax(contextFlags,
                 modifiers,
                 asteriskToken,
                 propertyName,
@@ -1429,13 +1430,13 @@ module TypeScript.Parser {
             return false;
         }
         
-        function parseMemberVariableDeclaration(modifiers: ISyntaxToken[], propertyName: IPropertyNameSyntax): MemberVariableDeclarationSyntax {
-            return new MemberVariableDeclarationSyntax(contextFlags,
+        function parsePropertyDeclaration(modifiers: ISyntaxToken[], propertyName: IPropertyNameSyntax): PropertyDeclarationSyntax {
+            return new PropertyDeclarationSyntax(contextFlags,
                 modifiers,
                 new VariableDeclaratorSyntax(contextFlags, propertyName,
                     parseOptionalTypeAnnotation(/*allowStringLiteral:*/ false), 
                     isEqualsValueClause(/*inParameter*/ false) ? allowInAnd(parseEqualsValueClause) : undefined),
-                eatExplicitOrAutomaticSemicolon(/*allowWithoutNewline:*/ false));
+                eatExplicitOrAutomaticSemicolon());
         }
 
         function isIndexMemberDeclaration(): boolean {
@@ -1471,7 +1472,7 @@ module TypeScript.Parser {
         function parseFunctionBody(isGenerator: boolean, asyncContext: boolean): BlockSyntax | ExpressionBody | ISyntaxToken {
             return isBlockOrArrow()
                 ? parseFunctionBlockOrExpressionBody(/*yieldContext:*/ isGenerator, /*asyncContext:*/ asyncContext)
-                : eatExplicitOrAutomaticSemicolon(/*allowWithoutNewline:*/ false);
+                : eatExplicitOrAutomaticSemicolon();
         }
 
         function parseModuleName(): INameSyntax {
@@ -1508,7 +1509,7 @@ module TypeScript.Parser {
                 eatIdentifierToken(),
                 eatToken(SyntaxKind.EqualsToken),
                 parseType(),
-                eatExplicitOrAutomaticSemicolon(/*allowWithoutNewLine:*/ false));
+                eatExplicitOrAutomaticSemicolon());
         }
 
         function parseObjectType(): ObjectTypeSyntax {
@@ -1902,7 +1903,9 @@ module TypeScript.Parser {
         }
 
         function parseDebuggerStatement(debuggerKeyword: ISyntaxToken): DebuggerStatementSyntax {
-            return new DebuggerStatementSyntax(contextFlags, consumeToken(debuggerKeyword), eatExplicitOrAutomaticSemicolon(/*allowWithoutNewline:*/ false));
+            return new DebuggerStatementSyntax(contextFlags,
+                consumeToken(debuggerKeyword),
+                eatExplicitOrAutomaticSemicolon());
         }
 
         function parseDoStatement(doKeyword: ISyntaxToken): DoStatementSyntax {
@@ -1914,8 +1917,13 @@ module TypeScript.Parser {
             // spec but allowed in consensus reality. Approved -- this is the de-facto standard whereby
             //  do;while(0)x will have a semicolon inserted before x.
             return new DoStatementSyntax(contextFlags,
-                consumeToken(doKeyword), parseStatement(/*inErrorRecovery:*/ false), eatToken(SyntaxKind.WhileKeyword), eatToken(SyntaxKind.OpenParenToken),
-                allowInAnd(parseExpression), eatToken(SyntaxKind.CloseParenToken), eatExplicitOrAutomaticSemicolon(/*allowWithoutNewline:*/ true));
+                consumeToken(doKeyword),
+                parseStatement(/*inErrorRecovery:*/ false),
+                eatToken(SyntaxKind.WhileKeyword),
+                eatToken(SyntaxKind.OpenParenToken),
+                allowInAnd(parseExpression),
+                eatToken(SyntaxKind.CloseParenToken),
+                tryEatToken(SyntaxKind.SemicolonToken));
         }
 
         function isLabeledStatement(currentToken: ISyntaxToken): boolean {
@@ -2093,7 +2101,7 @@ module TypeScript.Parser {
             // If there is no newline after the break keyword, then we can consume an optional 
             // identifier.
             var identifier: ISyntaxToken = undefined;
-            if (!canEatExplicitOrAutomaticSemicolon(/*allowWithoutNewline:*/ false)) {
+            if (!canEatExplicitOrAutomaticSemicolon()) {
                 if (isIdentifier(currentToken())) {
                     return eatIdentifierToken();
                 }
@@ -2104,12 +2112,16 @@ module TypeScript.Parser {
 
         function parseBreakStatement(breakKeyword: ISyntaxToken): BreakStatementSyntax {
             return new BreakStatementSyntax(contextFlags,
-                consumeToken(breakKeyword), tryEatBreakOrContinueLabel(), eatExplicitOrAutomaticSemicolon(/*allowWithoutNewline:*/ false));
+                consumeToken(breakKeyword),
+                tryEatBreakOrContinueLabel(),
+                eatExplicitOrAutomaticSemicolon());
         }
 
         function parseContinueStatement(continueKeyword: ISyntaxToken): ContinueStatementSyntax {
             return new ContinueStatementSyntax(contextFlags,
-                consumeToken(continueKeyword), tryEatBreakOrContinueLabel(), eatExplicitOrAutomaticSemicolon(/*allowWithoutNewline:*/ false));
+                consumeToken(continueKeyword),
+                tryEatBreakOrContinueLabel(),
+                eatExplicitOrAutomaticSemicolon());
         }
 
         function parseSwitchExpression(openParenToken: ISyntaxToken) {
@@ -2189,7 +2201,9 @@ module TypeScript.Parser {
 
         function parseThrowStatement(throwKeyword: ISyntaxToken): ThrowStatementSyntax {
             return new ThrowStatementSyntax(contextFlags,
-                consumeToken(throwKeyword), tryParseThrowStatementExpression(), eatExplicitOrAutomaticSemicolon(/*allowWithoutNewline:*/ false));
+                consumeToken(throwKeyword),
+                tryParseThrowStatementExpression(),
+                eatExplicitOrAutomaticSemicolon());
         }
 
         function tryParseThrowStatementExpression(): IExpressionSyntax {
@@ -2201,19 +2215,21 @@ module TypeScript.Parser {
             // directly as that might consume an expression on the following line.  
             // We just return 'undefined' in that case.  The actual error will be reported in the
             // grammar walker.
-            return canEatExplicitOrAutomaticSemicolon(/*allowWithoutNewline:*/ false) ? undefined : allowInAnd(parseExpression);
+            return canEatExplicitOrAutomaticSemicolon() ? undefined : allowInAnd(parseExpression);
         }
 
         function parseReturnStatement(returnKeyword: ISyntaxToken): ReturnStatementSyntax {
             return new ReturnStatementSyntax(contextFlags,
-                consumeToken(returnKeyword), tryParseReturnStatementExpression(), eatExplicitOrAutomaticSemicolon(/*allowWithoutNewline:*/ false));
+                consumeToken(returnKeyword),
+                tryParseReturnStatementExpression(),
+                eatExplicitOrAutomaticSemicolon());
         }
 
         function tryParseReturnStatementExpression(): IExpressionSyntax {
             // ReturnStatement[Yield] :
             //      return [no LineTerminator here]Expression[In, ?Yield];
 
-            return canEatExplicitOrAutomaticSemicolon(/*allowWithoutNewline:*/ false) ? undefined : allowInAnd(parseExpression);
+            return canEatExplicitOrAutomaticSemicolon() ? undefined : allowInAnd(parseExpression);
         }
 
         function isExpressionStatement(currentToken: ISyntaxToken): boolean {
@@ -2330,7 +2346,7 @@ module TypeScript.Parser {
 
             return new ExpressionStatementSyntax(contextFlags,
                 allowInAnd(parseExpression),
-                eatExplicitOrAutomaticSemicolon(/*allowWithoutNewline:*/ false));
+                eatExplicitOrAutomaticSemicolon());
         }
 
         function parseIfStatement(ifKeyword: ISyntaxToken): IfStatementSyntax {
@@ -2384,7 +2400,7 @@ module TypeScript.Parser {
             return new VariableStatementSyntax(contextFlags,
                 parseModifiers(),
                 allowInAnd(parseVariableDeclaration),
-                eatExplicitOrAutomaticSemicolon(/*allowWithoutNewline:*/ false));
+                eatExplicitOrAutomaticSemicolon());
         }
 
         function parseVariableDeclaration(): VariableDeclarationSyntax {
@@ -2608,7 +2624,7 @@ module TypeScript.Parser {
         function parseAwaitExpression(awaitKeyword: ISyntaxToken): AwaitExpressionSyntax {
             return new AwaitExpressionSyntax(contextFlags,
                 consumeToken(awaitKeyword),
-                parseAssignmentExpressionOrHigher());
+                parseUnaryExpressionOrHigher(currentToken()));
         }
 
         function isYieldExpression(_currentToken: ISyntaxToken): boolean {
@@ -2898,7 +2914,10 @@ module TypeScript.Parser {
                         continue;
 
                     case SyntaxKind.DotToken:
-                        expression = new MemberAccessExpressionSyntax(contextFlags, expression, consumeToken(_currentToken), eatIdentifierNameToken());
+                        expression = new PropertyAccessExpressionSyntax(contextFlags,
+                            expression,
+                            consumeToken(_currentToken),
+                            eatRightSideOfDot(/*allowIdentifierNames:*/ true));
                         continue;
 
                     case SyntaxKind.NoSubstitutionTemplateToken:
@@ -2988,9 +3007,14 @@ module TypeScript.Parser {
             // If we have seen "super" it must be followed by '(' or '.'.
             // If it wasn't then just try to parse out a '.' and report an error.
             var currentTokenKind = currentToken().kind;
-            return currentTokenKind === SyntaxKind.OpenParenToken || currentTokenKind === SyntaxKind.DotToken
-                ? expression
-                : new MemberAccessExpressionSyntax(contextFlags, expression, eatToken(SyntaxKind.DotToken), eatIdentifierNameToken());
+            if (currentTokenKind === SyntaxKind.OpenParenToken || currentTokenKind === SyntaxKind.DotToken) {
+                return expression;
+            }
+
+            return new PropertyAccessExpressionSyntax(contextFlags,
+                expression,
+                eatToken(SyntaxKind.DotToken),
+                eatRightSideOfDot(/*allowIdentifierNames:*/ true));
         }
 
         function parsePostfixExpressionOrHigher(_currentToken: ISyntaxToken): IPostfixExpressionSyntax {
@@ -3664,7 +3688,7 @@ module TypeScript.Parser {
                 var propertyName = parsePropertyName();
 
                 if (modifiers.length > 0 || asterixToken !== undefined || isCallSignature(/*peekIndex:*/ 0)) {
-                    return parseMemberFunctionDeclaration(modifiers, asterixToken, propertyName);
+                    return parseMethodDeclaration(modifiers, asterixToken, propertyName);
                 }
                 else {
                     // PropertyName[?Yield] : AssignmentExpression[In, ?Yield]
@@ -3852,7 +3876,7 @@ module TypeScript.Parser {
                 return consumeToken(_currentToken);
             }
 
-            return eatExplicitOrAutomaticSemicolon(/*allowWithoutNewline:*/ false);
+            return eatExplicitOrAutomaticSemicolon();
         }
 
         function tryParseTypeParameterList(requireCompleteTypeParameterList: boolean): TypeParameterListSyntax {
@@ -4645,7 +4669,7 @@ module TypeScript.Parser {
                 }
 
                 // We're done when we can eat a semicolon.
-                return canEatExplicitOrAutomaticSemicolon(/*allowWithoutNewline:*/ false);
+                return canEatExplicitOrAutomaticSemicolon();
             }
         }
 

@@ -535,7 +535,7 @@ module TypeScript.PrettyPrinter {
             this.appendNode(node.equalsValueClause);
         }
 
-        public visitMemberAccessExpression(node: MemberAccessExpressionSyntax): void {
+        public visitPropertyAccessExpression(node: PropertyAccessExpressionSyntax): void {
             visitNodeOrToken(this, node.expression);
             this.appendToken(node.dotToken);
             this.appendToken(node.name);
@@ -693,7 +693,7 @@ module TypeScript.PrettyPrinter {
             this.appendBody(node.body);
         }
 
-        public visitMemberFunctionDeclaration(node: MemberFunctionDeclarationSyntax): void {
+        public visitMethodDeclaration(node: MethodDeclarationSyntax): void {
             this.appendSpaceList(node.modifiers);
             this.ensureSpace();
             visitNodeOrToken(this, node.propertyName);
@@ -723,7 +723,7 @@ module TypeScript.PrettyPrinter {
             visitNodeOrToken(this, node.body);
         }
 
-        public visitMemberVariableDeclaration(node: MemberVariableDeclarationSyntax): void {
+        public visitPropertyDeclaration(node: PropertyDeclarationSyntax): void {
             this.appendSpaceList(node.modifiers);
             this.ensureSpace();
             visitNodeOrToken(this, node.variableDeclarator);

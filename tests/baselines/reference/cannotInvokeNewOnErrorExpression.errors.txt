@@ -1,4 +1,4 @@
-tests/cases/compiler/cannotInvokeNewOnErrorExpression.ts(5,9): error TS1150: 'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.
+tests/cases/compiler/cannotInvokeNewOnErrorExpression.ts(5,21): error TS1150: 'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.
 tests/cases/compiler/cannotInvokeNewOnErrorExpression.ts(5,15): error TS2339: Property 'ClassA' does not exist on type 'typeof M'.
 
 
@@ -8,7 +8,7 @@ tests/cases/compiler/cannotInvokeNewOnErrorExpression.ts(5,15): error TS2339: Pr
         class ClassA {}
     }
     var t = new M.ClassA[];
-            ~~~~~~~~~~~~~~
+                        ~~
 !!! error TS1150: 'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.
                   ~~~~~~
 !!! error TS2339: Property 'ClassA' does not exist on type 'typeof M'.
