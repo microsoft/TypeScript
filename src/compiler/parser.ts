@@ -2943,9 +2943,6 @@ module ts {
                             literal.text = internIdentifier(literal.text);
                         }
                     }
-                    else {
-                        indexedAccess.argumentExpression = <Expression>createMissingNode();
-                    }
 
                     parseExpected(SyntaxKind.CloseBracketToken);
                     expression = finishNode(indexedAccess);
@@ -4769,7 +4766,7 @@ module ts {
         }
 
         function checkElementAccessExpression(node: ElementAccessExpression) {
-            if (node.argumentExpression.kind === SyntaxKind.Missing) {
+            if (!node.argumentExpression) {
                 if (node.parent.kind === SyntaxKind.NewExpression && (<NewExpression>node.parent).expression === node) {
                     var start = skipTrivia(sourceText, node.expression.end);
                     var end = node.end;

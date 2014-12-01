@@ -5246,11 +5246,13 @@ module ts {
         function checkIndexedAccess(node: ElementAccessExpression): Type {
             // Obtain base constraint such that we can bail out if the constraint is an unknown type
             var objectType = getApparentType(checkExpression(node.expression));
-            var indexType = checkExpression(node.argumentExpression);
+            var indexType = node.argumentExpression ? checkExpression(node.argumentExpression) : unknownType;
 
-            if (objectType === unknownType) return unknownType;
+            if (objectType === unknownType) {
+                return unknownType;
+            }
 
-            if (isConstEnumObjectType(objectType) && node.argumentExpression.kind !== SyntaxKind.StringLiteral) {
+            if (isConstEnumObjectType(objectType) && node.argumentExpression && node.argumentExpression.kind !== SyntaxKind.StringLiteral) {
                 error(node.argumentExpression, Diagnostics.Index_expression_arguments_in_const_enums_must_be_of_type_string);
             }
 
@@ -5264,12 +5266,14 @@ module ts {
             // - Otherwise, if IndexExpr is of type Any, the String or Number primitive type, or an enum type, the property access is of type Any.
 
             // See if we can index as a property.
-            if (node.argumentExpression.kind === SyntaxKind.StringLiteral || node.argumentExpression.kind === SyntaxKind.NumericLiteral) {
-                var name = (<LiteralExpression>node.argumentExpression).text;
-                var prop = getPropertyOfType(objectType, name);
-                if (prop) {
-                    getNodeLinks(node).resolvedSymbol = prop;
-                    return getTypeOfSymbol(prop);
+            if (node.argumentExpression) {
+                if (node.argumentExpression.kind === SyntaxKind.StringLiteral || node.argumentExpression.kind === SyntaxKind.NumericLiteral) {
+                    var name = (<LiteralExpression>node.argumentExpression).text;
+                    var prop = getPropertyOfType(objectType, name);
+                    if (prop) {
+                        getNodeLinks(node).resolvedSymbol = prop;
+                        return getTypeOfSymbol(prop);
+                    }
                 }
             }
 
@@ -6225,7 +6229,8 @@ module ts {
                     case SyntaxKind.ElementAccessExpression:
                         var index = (<ElementAccessExpression>n).argumentExpression;
                         var symbol = findSymbol((<ElementAccessExpression>n).expression);
-                        if (symbol && index.kind === SyntaxKind.StringLiteral) {
+
+                        if (symbol && index && index.kind === SyntaxKind.StringLiteral) {
                             var name = (<LiteralExpression>index).text;
                             var prop = getPropertyOfType(getTypeOfSymbol(symbol), name);
                             return prop && (prop.flags & SymbolFlags.Variable) !== 0 && (getDeclarationFlagsFromSymbol(prop) & NodeFlags.Const) !== 0;
@@ -8196,7 +8201,8 @@ module ts {
                             }
                             else {
                                 if (e.kind === SyntaxKind.ElementAccessExpression) {
-                                    if ((<ElementAccessExpression>e).argumentExpression.kind !== SyntaxKind.StringLiteral) {
+                                    if ((<ElementAccessExpression>e).argumentExpression === undefined ||
+                                        (<ElementAccessExpression>e).argumentExpression.kind !== SyntaxKind.StringLiteral) {
                                         return undefined;
                                     }
                                     var enumType = getTypeOfNode((<ElementAccessExpression>e).expression);

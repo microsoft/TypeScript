@@ -563,7 +563,7 @@ module ts {
 
     export interface ElementAccessExpression extends MemberExpression {
         expression: LeftHandSideExpression;
-        argumentExpression: Expression;
+        argumentExpression?: Expression;
     }
 
     export interface CallExpression extends LeftHandSideExpression {
