@@ -2945,6 +2945,7 @@ module ts {
                                 case ScriptElementKind.memberVariableElement:
                                 case ScriptElementKind.variableElement:
                                 case ScriptElementKind.constElement:
+                                case ScriptElementKind.letElement:
                                 case ScriptElementKind.parameterElement:
                                 case ScriptElementKind.localVariableElement:
                                     // If it is call or construct signature of lambda's write type name
