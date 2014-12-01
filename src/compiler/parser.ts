@@ -3883,9 +3883,11 @@ module ts {
             return finishNode(node);
         }
 
-        function parseAndCheckEnumDeclaration(fullStart: number, flags: NodeFlags): EnumDeclaration {
+        function parseAndCheckEnumDeclaration(fullStart: number, modifiers: ModifiersArray, flags: NodeFlags): EnumDeclaration {
             var node = <EnumDeclaration>createNode(SyntaxKind.EnumDeclaration, fullStart);
-            node.flags = flags;
+            setModifiers(node, modifiers);
+
+            node.flags |= flags;
             if (flags & NodeFlags.Const) {
                 parseExpected(SyntaxKind.ConstKeyword);
             }
@@ -3913,29 +3915,31 @@ module ts {
             return finishNode(node);
         }
 
-        function parseInternalModuleTail(fullStart: number, flags: NodeFlags): ModuleDeclaration {
+        function parseInternalModuleTail(fullStart: number, modifiers: ModifiersArray, flags: NodeFlags): ModuleDeclaration {
             var node = <ModuleDeclaration>createNode(SyntaxKind.ModuleDeclaration, fullStart);
-            node.flags = flags;
+            setModifiers(node, modifiers);
+            node.flags |= flags;
             node.name = parseIdentifier();
             node.body = parseOptional(SyntaxKind.DotToken)
-                ? parseInternalModuleTail(getNodePos(), NodeFlags.Export)
+                ? parseInternalModuleTail(getNodePos(), /*modifiers:*/undefined, NodeFlags.Export)
                 : parseModuleBlock();
             return finishNode(node);
         }
 
-        function parseAmbientExternalModuleDeclaration(fullStart: number, flags: NodeFlags): ModuleDeclaration {
+        function parseAmbientExternalModuleDeclaration(fullStart: number, modifiers: ModifiersArray, flags: NodeFlags): ModuleDeclaration {
             var node = <ModuleDeclaration>createNode(SyntaxKind.ModuleDeclaration, fullStart);
-            node.flags = flags;
+            setModifiers(node, modifiers);
+            node.flags |= flags;
             node.name = parseLiteralNode(/*internName:*/ true);
             node.body = parseModuleBlock();
             return finishNode(node);
         }
 
-        function parseModuleDeclaration(fullStart: number, flags: NodeFlags): ModuleDeclaration {
+        function parseModuleDeclaration(fullStart: number, modifiers: ModifiersArray, flags: NodeFlags): ModuleDeclaration {
             parseExpected(SyntaxKind.ModuleKeyword);
             return token === SyntaxKind.StringLiteral 
-                ? parseAmbientExternalModuleDeclaration(fullStart, flags)
-                : parseInternalModuleTail(fullStart, flags);
+                ? parseAmbientExternalModuleDeclaration(fullStart, modifiers, flags)
+                : parseInternalModuleTail(fullStart, modifiers, flags);
         }
 
         function isExternalModuleReference() {
@@ -4026,51 +4030,35 @@ module ts {
             }
 
             var flags = modifiers ? modifiers.flags : 0;
-            var result: ModuleElement;
             switch (token) {
                 case SyntaxKind.VarKeyword:
                 case SyntaxKind.LetKeyword:
-                    result = parseVariableStatement(fullStart, modifiers);
-                    break;
+                    return parseVariableStatement(fullStart, modifiers);
                 case SyntaxKind.ConstKeyword:
                     var isConstEnum = lookAhead(() => nextToken() === SyntaxKind.EnumKeyword);
                     if (isConstEnum) {
-                        result = parseAndCheckEnumDeclaration(fullStart, flags | NodeFlags.Const);
+                        return parseAndCheckEnumDeclaration(fullStart, modifiers, flags | NodeFlags.Const);
                     }
                     else {
-                        result = parseVariableStatement(fullStart, modifiers);
+                        return parseVariableStatement(fullStart, modifiers);
                     }
-                    break;
                 case SyntaxKind.FunctionKeyword:
-                    result = parseFunctionDeclaration(fullStart, modifiers);
-                    break;
+                    return parseFunctionDeclaration(fullStart, modifiers);
                 case SyntaxKind.ClassKeyword:
-                    result = parseClassDeclaration(fullStart, modifiers);
-                    break;
+                    return parseClassDeclaration(fullStart, modifiers);
                 case SyntaxKind.InterfaceKeyword:
-                    result = parseInterfaceDeclaration(fullStart, modifiers);
-                    break;
+                    return parseInterfaceDeclaration(fullStart, modifiers);
                 case SyntaxKind.TypeKeyword:
-                    result = parseTypeAliasDeclaration(fullStart, modifiers);
-                    break;
+                    return parseTypeAliasDeclaration(fullStart, modifiers);
                 case SyntaxKind.EnumKeyword:
-                    result = parseAndCheckEnumDeclaration(fullStart, flags);
-                    break;
+                    return parseAndCheckEnumDeclaration(fullStart, modifiers, flags);
                 case SyntaxKind.ModuleKeyword:
-                    result = parseModuleDeclaration(fullStart, flags);
-                    break;
+                    return parseModuleDeclaration(fullStart, modifiers, flags);
                 case SyntaxKind.ImportKeyword:
-                    result = parseImportDeclaration(fullStart, modifiers);
-                    break;
+                    return parseImportDeclaration(fullStart, modifiers);
                 default:
                     error(Diagnostics.Declaration_expected);
             }
-
-            if (modifiers) {
-                result.modifiers = modifiers;
-            }
-
-            return result;
         }
 
         function isSourceElement(inErrorRecovery: boolean): boolean {
