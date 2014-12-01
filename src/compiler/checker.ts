@@ -1575,12 +1575,12 @@ module ts {
                         }
 
                         // Container of resolvedExportSymbol is visible
-                        return forEach(resolvedExportSymbol.declarations, (declaration: Node) => {
-                            while (declaration) {
-                                if (declaration === node) {
+                        return forEach(resolvedExportSymbol.declarations, (current: Node) => {
+                            while (current) {
+                                if (current === node) {
                                     return true;
                                 }
-                                declaration = declaration.parent;
+                                current = current.parent;
                             }
                         });
                     }

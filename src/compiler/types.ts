@@ -421,6 +421,7 @@ module ts {
         exprName: EntityName;
     }
 
+    // A TypeLiteral is the declaration node for an anonymous symbol.
     export interface TypeLiteralNode extends TypeNode, Declaration {
         members: NodeArray<Node>;
     }
@@ -547,7 +548,8 @@ module ts {
     export interface ArrayLiteralExpression extends PrimaryExpression {
         elements: NodeArray<Expression>;
     }
-
+    
+    // An ObjectLiteralExpression is the declaration node for an anonymous symbol.
     export interface ObjectLiteralExpression extends PrimaryExpression, Declaration {
         properties: NodeArray<Declaration>;
     }
