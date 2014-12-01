@@ -1454,7 +1454,7 @@ module TypeScript {
         }
     }
 
-    export var AwaitExpressionSyntax: AwaitExpressionConstructor = <any>function(data: number, awaitKeyword: ISyntaxToken, expression: IExpressionSyntax) {
+    export var AwaitExpressionSyntax: AwaitExpressionConstructor = <any>function(data: number, awaitKeyword: ISyntaxToken, expression: IUnaryExpressionSyntax) {
         if (data) { this.__data = data; }
         this.awaitKeyword = awaitKeyword,
         this.expression = expression,

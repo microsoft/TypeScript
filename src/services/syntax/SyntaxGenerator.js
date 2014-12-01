@@ -1900,7 +1900,7 @@ var definitions = [
         interfaces: ['IUnaryExpressionSyntax'],
         children: [
             { name: 'awaitKeyword', isToken: true },
-            { name: 'expression', type: 'IExpressionSyntax', isOptional: true }
+            { name: 'expression', type: 'IUnaryExpressionSyntax', isOptional: true }
         ]
     },
     {

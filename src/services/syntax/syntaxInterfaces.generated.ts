@@ -534,9 +534,9 @@ module TypeScript {
 
     export interface AwaitExpressionSyntax extends ISyntaxNode, IUnaryExpressionSyntax {
         awaitKeyword: ISyntaxToken;
-        expression: IExpressionSyntax;
+        expression: IUnaryExpressionSyntax;
     }
-    export interface AwaitExpressionConstructor { new (data: number, awaitKeyword: ISyntaxToken, expression: IExpressionSyntax): AwaitExpressionSyntax }
+    export interface AwaitExpressionConstructor { new (data: number, awaitKeyword: ISyntaxToken, expression: IUnaryExpressionSyntax): AwaitExpressionSyntax }
 
     export interface VariableDeclarationSyntax extends ISyntaxNode {
         varConstOrLetKeyword: ISyntaxToken;

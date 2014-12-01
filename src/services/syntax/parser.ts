@@ -993,24 +993,24 @@ module TypeScript.Parser {
             return tryParseName(allowIdentifierName) || eatIdentifierToken();
         }
 
-        function eatRightSideOfName(allowIdentifierNames: boolean): ISyntaxToken {
+        function eatRightSideOfDot(allowIdentifierNames: boolean): ISyntaxToken {
             var _currentToken = currentToken();
 
             // Technically a keyword is valid here as all keywords are identifier names.
             // However, often we'll encounter this in error situations when the keyword
             // is actually starting another valid construct.
-
+            //
             // So, we check for the following specific case:
-
+            //
             //      name.
             //      keyword identifierNameOrKeyword
-
+            //
             // Note: the newlines are important here.  For example, if that above code 
             // were rewritten into:
-
+            //
             //      name.keyword
             //      identifierNameOrKeyword
-
+            //
             // Then we would consider it valid.  That's because ASI would take effect and
             // the code would be implicitly: "name.keyword; identifierNameOrKeyword".  
             // In the first case though, ASI will not take effect because there is not a
@@ -1041,7 +1041,7 @@ module TypeScript.Parser {
 
             while (shouldContinue && currentToken().kind === SyntaxKind.DotToken) {
                 var dotToken = consumeToken(currentToken());
-                var identifierName = eatRightSideOfName(allowIdentifierNames);
+                var identifierName = eatRightSideOfDot(allowIdentifierNames);
 
                 current = new QualifiedNameSyntax(contextFlags, current, dotToken, identifierName);
                 shouldContinue = identifierName.fullWidth() > 0;
@@ -2608,7 +2608,7 @@ module TypeScript.Parser {
         function parseAwaitExpression(awaitKeyword: ISyntaxToken): AwaitExpressionSyntax {
             return new AwaitExpressionSyntax(contextFlags,
                 consumeToken(awaitKeyword),
-                parseAssignmentExpressionOrHigher());
+                parseUnaryExpressionOrHigher(currentToken()));
         }
 
         function isYieldExpression(_currentToken: ISyntaxToken): boolean {
@@ -2898,7 +2898,10 @@ module TypeScript.Parser {
                         continue;
 
                     case SyntaxKind.DotToken:
-                        expression = new PropertyAccessExpressionSyntax(contextFlags, expression, consumeToken(_currentToken), eatIdentifierNameToken());
+                        expression = new PropertyAccessExpressionSyntax(contextFlags,
+                            expression,
+                            consumeToken(_currentToken),
+                            eatRightSideOfDot(/*allowIdentifierNames:*/ true));
                         continue;
 
                     case SyntaxKind.NoSubstitutionTemplateToken:
@@ -2988,9 +2991,14 @@ module TypeScript.Parser {
             // If we have seen "super" it must be followed by '(' or '.'.
             // If it wasn't then just try to parse out a '.' and report an error.
             var currentTokenKind = currentToken().kind;
-            return currentTokenKind === SyntaxKind.OpenParenToken || currentTokenKind === SyntaxKind.DotToken
-                ? expression
-                : new PropertyAccessExpressionSyntax(contextFlags, expression, eatToken(SyntaxKind.DotToken), eatIdentifierNameToken());
+            if (currentTokenKind === SyntaxKind.OpenParenToken || currentTokenKind === SyntaxKind.DotToken) {
+                return expression;
+            }
+
+            return new PropertyAccessExpressionSyntax(contextFlags,
+                expression,
+                eatToken(SyntaxKind.DotToken),
+                eatRightSideOfDot(/*allowIdentifierNames:*/ true));
         }
 
         function parsePostfixExpressionOrHigher(_currentToken: ISyntaxToken): IPostfixExpressionSyntax {

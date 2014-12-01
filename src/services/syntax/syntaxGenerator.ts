@@ -1029,7 +1029,7 @@ var definitions:ITypeDefinition[] = [
         interfaces: ['IUnaryExpressionSyntax'],
         children: [
             <any>{ name: 'awaitKeyword', isToken: true },
-            <any>{ name: 'expression', type: 'IExpressionSyntax', isOptional: true }]
+            <any>{ name: 'expression', type: 'IUnaryExpressionSyntax', isOptional: true }]
     },
     <any>{
         name: 'DebuggerStatementSyntax',
