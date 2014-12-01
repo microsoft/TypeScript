@@ -409,7 +409,7 @@ module TypeScript {
         }
     }
 
-    export var MemberFunctionDeclarationSyntax: MemberFunctionDeclarationConstructor = <any>function(data: number, modifiers: ISyntaxToken[], asterixToken: ISyntaxToken, propertyName: IPropertyNameSyntax, callSignature: CallSignatureSyntax, body: BlockSyntax | ExpressionBody | ISyntaxToken) {
+    export var MethodDeclarationSyntax: MethodDeclarationConstructor = <any>function(data: number, modifiers: ISyntaxToken[], asterixToken: ISyntaxToken, propertyName: IPropertyNameSyntax, callSignature: CallSignatureSyntax, body: BlockSyntax | ExpressionBody | ISyntaxToken) {
         if (data) { this.__data = data; }
         this.modifiers = modifiers,
         this.asterixToken = asterixToken,
@@ -422,9 +422,9 @@ module TypeScript {
         callSignature.parent = this,
         body && (body.parent = this);
     };
-    MemberFunctionDeclarationSyntax.prototype.kind = SyntaxKind.MemberFunctionDeclaration;
-    MemberFunctionDeclarationSyntax.prototype.childCount = 5;
-    MemberFunctionDeclarationSyntax.prototype.childAt = function(index: number): ISyntaxElement {
+    MethodDeclarationSyntax.prototype.kind = SyntaxKind.MethodDeclaration;
+    MethodDeclarationSyntax.prototype.childCount = 5;
+    MethodDeclarationSyntax.prototype.childAt = function(index: number): ISyntaxElement {
         switch (index) {
             case 0: return this.modifiers;
             case 1: return this.asterixToken;
@@ -434,7 +434,7 @@ module TypeScript {
         }
     }
 
-    export var MemberVariableDeclarationSyntax: MemberVariableDeclarationConstructor = <any>function(data: number, modifiers: ISyntaxToken[], variableDeclarator: VariableDeclaratorSyntax, semicolonToken: ISyntaxToken) {
+    export var PropertyDeclarationSyntax: PropertyDeclarationConstructor = <any>function(data: number, modifiers: ISyntaxToken[], variableDeclarator: VariableDeclaratorSyntax, semicolonToken: ISyntaxToken) {
         if (data) { this.__data = data; }
         this.modifiers = modifiers,
         this.variableDeclarator = variableDeclarator,
@@ -443,9 +443,9 @@ module TypeScript {
         variableDeclarator.parent = this,
         semicolonToken && (semicolonToken.parent = this);
     };
-    MemberVariableDeclarationSyntax.prototype.kind = SyntaxKind.MemberVariableDeclaration;
-    MemberVariableDeclarationSyntax.prototype.childCount = 3;
-    MemberVariableDeclarationSyntax.prototype.childAt = function(index: number): ISyntaxElement {
+    PropertyDeclarationSyntax.prototype.kind = SyntaxKind.PropertyDeclaration;
+    PropertyDeclarationSyntax.prototype.childCount = 3;
+    PropertyDeclarationSyntax.prototype.childAt = function(index: number): ISyntaxElement {
         switch (index) {
             case 0: return this.modifiers;
             case 1: return this.variableDeclarator;
@@ -1167,7 +1167,7 @@ module TypeScript {
         }
     }
 
-    export var MemberAccessExpressionSyntax: MemberAccessExpressionConstructor = <any>function(data: number, expression: ILeftHandSideExpressionSyntax, dotToken: ISyntaxToken, name: ISyntaxToken) {
+    export var PropertyAccessExpressionSyntax: PropertyAccessExpressionConstructor = <any>function(data: number, expression: ILeftHandSideExpressionSyntax, dotToken: ISyntaxToken, name: ISyntaxToken) {
         if (data) { this.__data = data; }
         this.expression = expression,
         this.dotToken = dotToken,
@@ -1176,9 +1176,9 @@ module TypeScript {
         dotToken.parent = this,
         name.parent = this;
     };
-    MemberAccessExpressionSyntax.prototype.kind = SyntaxKind.MemberAccessExpression;
-    MemberAccessExpressionSyntax.prototype.childCount = 3;
-    MemberAccessExpressionSyntax.prototype.childAt = function(index: number): ISyntaxElement {
+    PropertyAccessExpressionSyntax.prototype.kind = SyntaxKind.PropertyAccessExpression;
+    PropertyAccessExpressionSyntax.prototype.childCount = 3;
+    PropertyAccessExpressionSyntax.prototype.childAt = function(index: number): ISyntaxElement {
         switch (index) {
             case 0: return this.expression;
             case 1: return this.dotToken;
@@ -1454,7 +1454,7 @@ module TypeScript {
         }
     }
 
-    export var AwaitExpressionSyntax: AwaitExpressionConstructor = <any>function(data: number, awaitKeyword: ISyntaxToken, expression: IExpressionSyntax) {
+    export var AwaitExpressionSyntax: AwaitExpressionConstructor = <any>function(data: number, awaitKeyword: ISyntaxToken, expression: IUnaryExpressionSyntax) {
         if (data) { this.__data = data; }
         this.awaitKeyword = awaitKeyword,
         this.expression = expression,

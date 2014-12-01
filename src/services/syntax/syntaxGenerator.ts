@@ -436,7 +436,7 @@ var definitions:ITypeDefinition[] = [
         ]
     },
     <any>{
-        name: 'MemberAccessExpressionSyntax',
+        name: 'PropertyAccessExpressionSyntax',
         baseType: 'ISyntaxNode',
         interfaces: ['IMemberExpressionSyntax', 'ICallExpressionSyntax'],
         children: [
@@ -670,7 +670,7 @@ var definitions:ITypeDefinition[] = [
         isTypeScriptSpecific: true
     },
     <any>{
-        name: 'MemberFunctionDeclarationSyntax',
+        name: 'MethodDeclarationSyntax',
         baseType: 'ISyntaxNode',
         interfaces: ['IMemberDeclarationSyntax', 'IPropertyAssignmentSyntax'],
         children: [
@@ -708,7 +708,7 @@ var definitions:ITypeDefinition[] = [
         isTypeScriptSpecific: true
     },
     <any>{
-        name: 'MemberVariableDeclarationSyntax',
+        name: 'PropertyDeclarationSyntax',
         baseType: 'ISyntaxNode',
         interfaces: ['IMemberDeclarationSyntax'],
         children: [
@@ -1029,7 +1029,7 @@ var definitions:ITypeDefinition[] = [
         interfaces: ['IUnaryExpressionSyntax'],
         children: [
             <any>{ name: 'awaitKeyword', isToken: true },
-            <any>{ name: 'expression', type: 'IExpressionSyntax', isOptional: true }]
+            <any>{ name: 'expression', type: 'IUnaryExpressionSyntax', isOptional: true }]
     },
     <any>{
         name: 'DebuggerStatementSyntax',
