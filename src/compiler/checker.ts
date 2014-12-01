@@ -1608,6 +1608,8 @@ module ts {
                         return isDeclarationVisible(<Declaration>parent);
 
                     case SyntaxKind.Property:
+                    case SyntaxKind.GetAccessor:
+                    case SyntaxKind.SetAccessor:
                     case SyntaxKind.Method:
                         if (node.flags & (NodeFlags.Private | NodeFlags.Protected)) {
                             // Private/protected properties/methods are not visible
@@ -1622,6 +1624,14 @@ module ts {
                     case SyntaxKind.Parameter:
                     case SyntaxKind.ModuleBlock:
                     case SyntaxKind.TypeParameter:
+                    case SyntaxKind.FunctionType:
+                    case SyntaxKind.ConstructorType:
+                    case SyntaxKind.TypeLiteral:
+                    case SyntaxKind.TypeReference:
+                    case SyntaxKind.ArrayType:
+                    case SyntaxKind.TupleType:
+                    case SyntaxKind.UnionType:
+                    case SyntaxKind.ParenthesizedType:
                         return isDeclarationVisible(<Declaration>node.parent);
 
                     // Source file is always visible
