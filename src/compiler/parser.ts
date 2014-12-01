@@ -1226,7 +1226,7 @@ module ts {
             return token === SyntaxKind.CloseBraceToken || token === SyntaxKind.EndOfFileToken || scanner.hasPrecedingLineBreak();
         }
 
-        function parseSemicolon(): void {
+        function parseSemicolon(diagnosticMessage?: DiagnosticMessage): void {
             if (canParseSemicolon()) {
                 if (token === SyntaxKind.SemicolonToken) {
                     // consume the semicolon if it was explicitly provided.
@@ -1234,7 +1234,7 @@ module ts {
                 }
             }
             else {
-                parseExpected(SyntaxKind.SemicolonToken);
+                parseExpected(SyntaxKind.SemicolonToken, diagnosticMessage);
             }
         }
 
@@ -3572,12 +3572,8 @@ module ts {
                 return parseFunctionBlock(isGenerator, /* ignoreMissingOpenBrace */ false);
             }
 
-            if (canParseSemicolon()) {
-                parseSemicolon();
-                return undefined;
-            }
-
-            error(Diagnostics.Block_or_expected); // block or ';' expected
+            parseSemicolon(Diagnostics.or_expected);
+            return undefined;
         }
 
         // DECLARATIONS

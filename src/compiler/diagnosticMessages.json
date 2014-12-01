@@ -415,7 +415,7 @@
         "category": "Error",
         "code": 1142
     },
-    "Block or ';' expected.": {
+    "'{' or ';' expected.": {
         "category": "Error",
         "code": 1144
     },

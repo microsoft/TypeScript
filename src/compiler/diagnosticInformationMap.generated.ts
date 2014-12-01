@@ -106,7 +106,7 @@ module ts {
         Type_argument_expected: { code: 1140, category: DiagnosticCategory.Error, key: "Type argument expected." },
         String_literal_expected: { code: 1141, category: DiagnosticCategory.Error, key: "String literal expected." },
         Line_break_not_permitted_here: { code: 1142, category: DiagnosticCategory.Error, key: "Line break not permitted here." },
-        Block_or_expected: { code: 1144, category: DiagnosticCategory.Error, key: "Block or ';' expected." },
+        or_expected: { code: 1144, category: DiagnosticCategory.Error, key: "'{' or ';' expected." },
         Modifiers_not_permitted_on_index_signature_members: { code: 1145, category: DiagnosticCategory.Error, key: "Modifiers not permitted on index signature members." },
         Declaration_expected: { code: 1146, category: DiagnosticCategory.Error, key: "Declaration expected." },
         Import_declarations_in_an_internal_module_cannot_reference_an_external_module: { code: 1147, category: DiagnosticCategory.Error, key: "Import declarations in an internal module cannot reference an external module." },
