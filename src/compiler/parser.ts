@@ -1280,6 +1280,7 @@ module ts {
                 nextToken();
                 return finishNode(node);
             }
+
             error(diagnosticMessage || Diagnostics.Identifier_expected);
             return createMissingIdentifier();
         }
@@ -1490,12 +1491,14 @@ module ts {
             var result = <NodeArray<T>>[];
             result.pos = getNodePos();
             var savedStrictModeContext = inStrictModeContext();
+
             while (!isListTerminator(kind)) {
                 if (isListElement(kind, /* inErrorRecovery */ false)) {
                     var element = parseElement();
                     result.push(element);
+
                     // test elements only if we are not already in strict mode
-                    if (!inStrictModeContext() && checkForStrictMode) {
+                    if (checkForStrictMode && !inStrictModeContext()) {
                         if (isPrologueDirective(element)) {
                             if (isUseStrictPrologueDirective(element)) {
                                 setStrictModeContext(true);
@@ -1506,19 +1509,30 @@ module ts {
                             checkForStrictMode = false;
                         }
                     }
+
+                    continue;
                 }
-                else {
-                    error(parsingContextErrors(kind));
-                    if (isInSomeParsingContext()) {
-                        break;
-                    }
-                    nextToken();
+
+                if (abortParsingListOrMoveToNextToken(kind)) {
+                    break;
                 }
             }
+
             setStrictModeContext(savedStrictModeContext);
             result.end = getNodeEnd();
             parsingContext = saveParsingContext;
             return result;
+        }
+
+        // Returns true if we should abort parsing.
+        function abortParsingListOrMoveToNextToken(kind: ParsingContext) {
+            error(parsingContextErrors(kind));
+            if (isInSomeParsingContext()) {
+                return true;
+            }
+
+            nextToken();
+            return false;
         }
 
         // Parses a comma-delimited list of elements
@@ -1541,16 +1555,15 @@ module ts {
                         break;
                     }
                     parseExpected(SyntaxKind.CommaToken);
+                    continue;
                 }
-                else if (isListTerminator(kind)) {
+
+                if (isListTerminator(kind)) {
                     break;
                 }
-                else {
-                    error(parsingContextErrors(kind));
-                    if (isInSomeParsingContext()) {
-                        break;
-                    }
-                    nextToken();
+
+                if (abortParsingListOrMoveToNextToken(kind)) {
+                    break;
                 }
             }
 
