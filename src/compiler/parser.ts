@@ -4072,7 +4072,7 @@ module ts {
                 case SyntaxKind.ImportKeyword:
                     return parseImportDeclaration(fullStart, modifiers);
                 default:
-                    error(Diagnostics.Declaration_expected);
+                    Debug.fail("Mismatch between isDeclarationStart and parseDeclaration");
             }
         }
 
