@@ -1674,15 +1674,6 @@ module ts {
             return finishNode(node);
         }
 
-        function parseExpectedTokenNode(kind: SyntaxKind): Node {
-            if (token === kind) {
-                return parseTokenNode();
-            }
-
-            parseExpected(kind);
-            return createMissingNode();
-        }
-
         function parseTemplateExpression(): TemplateExpression {
             var template = <TemplateExpression>createNode(SyntaxKind.TemplateExpression);
 
