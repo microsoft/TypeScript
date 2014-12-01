@@ -197,12 +197,13 @@ module ts {
 
             setState(ifTrueState);
             check(n.thenStatement);
-            ifTrueState = currentState;
 
-            setState(ifFalseState);
-            check(n.elseStatement);
-
-            currentState = or(currentState, ifTrueState);
+            if (n.elseStatement) {
+                ifTrueState = currentState;
+                setState(ifFalseState);
+                check(n.elseStatement);
+                currentState = or(currentState, ifTrueState);
+            }
         }
 
         function checkReturnOrThrow(n: Node): void {
