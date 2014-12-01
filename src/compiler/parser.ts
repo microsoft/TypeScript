@@ -3380,12 +3380,17 @@ module ts {
         }
 
         function parseThrowStatement(): ThrowStatement {
+            // ThrowStatement[Yield] :
+            //      throw [no LineTerminator here]Expression[In, ?Yield];
+
+            // Because of automatic semicolon insertion, we need to report error if this 
+            // throw could be terminated with a semicolon.  Note: we can't call 'parseExpression'
+            // directly as that might consume an expression on the following line.  
+            // We just return 'undefined' in that case.  The actual error will be reported in the
+            // grammar walker.
             var node = <ThrowStatement>createNode(SyntaxKind.ThrowStatement);
             parseExpected(SyntaxKind.ThrowKeyword);
-            if (scanner.hasPrecedingLineBreak()) {
-                error(Diagnostics.Line_break_not_permitted_here);
-            }
-            node.expression = allowInAnd(parseExpression);
+            node.expression = scanner.hasPrecedingLineBreak() ? undefined : allowInAnd(parseExpression);
             parseSemicolon();
             return finishNode(node);
         }
@@ -3393,25 +3398,20 @@ module ts {
         // TODO: Review for error recovery
         function parseTryStatement(): TryStatement {
             var node = <TryStatement>createNode(SyntaxKind.TryStatement);
-            node.tryBlock = parseTokenAndBlock(SyntaxKind.TryKeyword, SyntaxKind.TryBlock);
-            if (token === SyntaxKind.CatchKeyword) {
-                node.catchBlock = parseCatchBlock();
-            }
+            node.tryBlock = parseTokenAndBlock(SyntaxKind.TryKeyword);
+            node.catchBlock = token === SyntaxKind.CatchKeyword ? parseCatchBlock() : undefined;
 
             // If we don't have a catch clause, then we must have a finally clause.  Try to parse
             // one out no matter what.
-            if (!node.catchBlock || token === SyntaxKind.FinallyKeyword) {
-                node.finallyBlock = parseTokenAndBlock(SyntaxKind.FinallyKeyword, SyntaxKind.FinallyBlock);
-            }
-
+            node.finallyBlock = !node.catchBlock || token === SyntaxKind.FinallyKeyword ? parseTokenAndBlock(SyntaxKind.FinallyKeyword) : undefined;
             return finishNode(node);
         }
 
-        function parseTokenAndBlock(token: SyntaxKind, kind: SyntaxKind): Block {
+        function parseTokenAndBlock(token: SyntaxKind): Block {
             var pos = getNodePos();
             parseExpected(token);
             var result = parseBlock(/* ignoreMissingOpenBrace */ false, /*checkForStrictMode*/ false);
-            result.kind = kind;
+            result.kind = token === SyntaxKind.TryKeyword ? SyntaxKind.TryBlock : SyntaxKind.FinallyBlock;
             result.pos = pos;
             return result;
         }
@@ -4321,6 +4321,7 @@ module ts {
                 case SyntaxKind.ShorthandPropertyAssignment:    return checkShorthandPropertyAssignment(<ShortHandPropertyDeclaration>node);
                 case SyntaxKind.SwitchStatement:                return checkSwitchStatement(<SwitchStatement>node);
                 case SyntaxKind.TaggedTemplateExpression:       return checkTaggedTemplateExpression(<TaggedTemplateExpression>node);
+                case SyntaxKind.ThrowStatement:                 return checkThrowStatement(<ThrowStatement>node);
                 case SyntaxKind.TupleType:                      return checkTupleType(<TupleTypeNode>node);
                 case SyntaxKind.TypeParameter:                  return checkTypeParameter(<TypeParameterDeclaration>node);
                 case SyntaxKind.TypeReference:                  return checkTypeReference(<TypeReferenceNode>node);
@@ -4331,12 +4332,22 @@ module ts {
             }
         }
 
-        function grammarErrorOnFirstToken(node: Node, message: DiagnosticMessage, arg0?: any, arg1?: any, arg2?: any): boolean {
-            var start = skipTrivia(sourceText, node.pos);
+        function scanToken(pos: number) {
+            var start = skipTrivia(sourceText, pos);
             scanner.setTextPos(start);
             scanner.scan();
-            var end = scanner.getTextPos();
-            grammarDiagnostics.push(createFileDiagnostic(file, start, end - start, message, arg0, arg1, arg2));
+            return start;
+        }
+
+        function grammarErrorOnFirstToken(node: Node, message: DiagnosticMessage, arg0?: any, arg1?: any, arg2?: any): boolean {
+            var start = scanToken(node.pos);
+            grammarDiagnostics.push(createFileDiagnostic(file, start, scanner.getTextPos() - start, message, arg0, arg1, arg2));
+            return true;
+        }
+
+        function grammarErrorAfterFirstToken(node: Node, message: DiagnosticMessage, arg0?: any, arg1?: any, arg2?: any): boolean {
+            scanToken(node.pos);
+            grammarDiagnostics.push(createFileDiagnostic(file, scanner.getTextPos(), 0, message, arg0, arg1, arg2));
             return true;
         }
 
@@ -5345,6 +5356,12 @@ module ts {
         function checkTaggedTemplateExpression(node: TaggedTemplateExpression) {
             if (languageVersion < ScriptTarget.ES6) {
                 return grammarErrorOnFirstToken(node.template, Diagnostics.Tagged_templates_are_only_available_when_targeting_ECMAScript_6_and_higher);
+            }
+        }
+
+        function checkThrowStatement(node: ThrowStatement) {
+            if (node.expression === undefined) {
+                return grammarErrorAfterFirstToken(node, Diagnostics.Line_break_not_permitted_here);
             }
         }
 
