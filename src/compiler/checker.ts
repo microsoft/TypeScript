@@ -4727,11 +4727,10 @@ module ts {
 
         // Return contextual type of parameter or undefined if no contextual type is available
         function getContextuallyTypedParameterType(parameter: ParameterDeclaration): Type {
-            var func = <FunctionLikeDeclaration>parameter.parent;
-            if (func.kind === SyntaxKind.FunctionExpression || func.kind === SyntaxKind.ArrowFunction) {
-                var funcExpr = <Expression>parameter.parent;
-                if (isContextSensitiveExpression(funcExpr)) {
-                    var contextualSignature = getContextualSignature(funcExpr);
+            if (isFunctionExpressionOrArrowFunction(parameter.parent)) {
+                var func = <FunctionExpression>parameter.parent;
+                if (isContextSensitiveExpression(func)) {
+                    var contextualSignature = getContextualSignature(func);
                     if (contextualSignature) {
 
                         var funcHasRestParameters = hasRestParameters(func);
@@ -4779,7 +4778,7 @@ module ts {
                 }
                 // Otherwise, if the containing function is contextually typed by a function type with exactly one call signature
                 // and that call signature is non-generic, return statements are contextually typed by the return type of the signature
-                var signature = getContextualSignature(<Expression><Node>func);
+                var signature = getContextualSignatureForFunctionLikeDeclaration(<FunctionExpression>func);
                 if (signature) {
                     return getReturnTypeOfSignature(signature);
                 }
@@ -4951,12 +4950,21 @@ module ts {
             }
         }
 
+        function isFunctionExpressionOrArrowFunction(node: Node): boolean {
+            return node.kind === SyntaxKind.FunctionExpression || node.kind === SyntaxKind.ArrowFunction;
+        }
+
+        function getContextualSignatureForFunctionLikeDeclaration(node: FunctionLikeDeclaration): Signature {
+            // Only function expressions and arrow functions are contextually typed.
+            return isFunctionExpressionOrArrowFunction(node) ? getContextualSignature(<FunctionExpression>node) : undefined;
+        }
+
         // Return the contextual signature for a given expression node. A contextual type provides a
         // contextual signature if it has a single call signature and if that call signature is non-generic.
         // If the contextual type is a union type, get the signature from each type possible and if they are 
         // all identical ignoring their return type, the result is same signature but with return type as 
         // union type of return types from these signatures
-        function getContextualSignature(node: Expression): Signature {
+        function getContextualSignature(node: FunctionExpression): Signature {
             var type = getContextualType(node);
             if (!type) {
                 return undefined;
@@ -5990,7 +5998,7 @@ module ts {
         }
 
         function getReturnTypeFromBody(func: FunctionLikeDeclaration, contextualMapper?: TypeMapper): Type {
-            var contextualSignature = getContextualSignature(<Expression><Node>func);
+            var contextualSignature = getContextualSignatureForFunctionLikeDeclaration(func);
             if (func.body.kind !== SyntaxKind.FunctionBlock) {
                 var unwidenedType = checkAndMarkExpression(<Expression>func.body, contextualMapper);
                 var widenedType = getWidenedType(unwidenedType);

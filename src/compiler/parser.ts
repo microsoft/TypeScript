@@ -445,11 +445,11 @@ module ts {
         return false;
     }
 
-    export function getContainingFunction(node: Node): SignatureDeclaration {
+    export function getContainingFunction(node: Node): FunctionLikeDeclaration {
         while (true) {
             node = node.parent;
             if (!node || isAnyFunction(node)) {
-                return <SignatureDeclaration>node;
+                return <FunctionLikeDeclaration>node;
             }
         }
     }
@@ -1936,8 +1936,8 @@ module ts {
             });
         }
 
-        function parseIndexSignatureMember(fullStart: number, modifiers: ModifiersArray): SignatureDeclaration {
-            var node = <SignatureDeclaration>createNode(SyntaxKind.IndexSignature, fullStart);
+        function parseIndexSignatureDeclaration(fullStart: number, modifiers: ModifiersArray): IndexSignatureDeclaration {
+            var node = <IndexSignatureDeclaration>createNode(SyntaxKind.IndexSignature, fullStart);
             setModifiers(node, modifiers);
             node.parameters = parseBracketedList(ParsingContext.Parameters, parseParameter, SyntaxKind.OpenBracketToken, SyntaxKind.CloseBracketToken);
             node.type = parseTypeAnnotation();
@@ -1994,7 +1994,7 @@ module ts {
                     return parseSignatureMember(SyntaxKind.CallSignature, SyntaxKind.ColonToken);
                 case SyntaxKind.OpenBracketToken:
                     // Indexer or computed property
-                    return isIndexSignature() ? parseIndexSignatureMember(scanner.getStartPos(), /*modifiers:*/ undefined) : parsePropertyOrMethod();
+                    return isIndexSignature() ? parseIndexSignatureDeclaration(scanner.getStartPos(), /*modifiers:*/ undefined) : parsePropertyOrMethod();
                 case SyntaxKind.NewKeyword:
                     if (lookAhead(() => nextToken() === SyntaxKind.OpenParenToken || token === SyntaxKind.LessThanToken)) {
                         return parseSignatureMember(SyntaxKind.ConstructSignature, SyntaxKind.ColonToken);
@@ -3779,7 +3779,7 @@ module ts {
                 return parseConstructorDeclaration(fullStart, modifiers);
             }
             if (isIndexSignature()) {
-                return parseIndexSignatureMember(fullStart, modifiers);
+                return parseIndexSignatureDeclaration(fullStart, modifiers);
             }
             // It is very important that we check this *after* checking indexers because
             // the [ token can start an index signature or a computed property name

@@ -354,7 +354,7 @@ module ts {
         expression?: Expression;
     }
 
-    export interface SignatureDeclaration extends Declaration, ParsedSignature, ClassElement {
+    export interface SignatureDeclaration extends Declaration, ParsedSignature {
     }
 
     export interface VariableDeclaration extends Declaration {
@@ -383,6 +383,8 @@ module ts {
      *  AccessorDeclaration
      */
     export interface FunctionLikeDeclaration extends SignatureDeclaration {
+        _functionLikeDeclarationBrand: any;
+
         asteriskToken?: Node;
         body?: Block | Expression;
     }
@@ -396,12 +398,16 @@ module ts {
         body?: Block;
     }
 
-    export interface ConstructorDeclaration extends Declaration, ParsedSignature, ClassElement {
+    export interface ConstructorDeclaration extends FunctionLikeDeclaration, ClassElement {
         body?: Block;
     }
 
-    export interface AccessorDeclaration extends FunctionLikeDeclaration {
+    export interface AccessorDeclaration extends FunctionLikeDeclaration, ClassElement  {
         body?: Block;
+    }
+
+    export interface IndexSignatureDeclaration extends SignatureDeclaration, ClassElement {
+        _indexSignatureDeclarationBrand: any;
     }
 
     export interface TypeNode extends Node { }
