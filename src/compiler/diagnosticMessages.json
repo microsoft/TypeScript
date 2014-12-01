@@ -415,10 +415,6 @@
         "category": "Error",
         "code": 1142
     },
-    "'catch' or 'finally' expected.": {
-        "category": "Error",
-        "code": 1143
-    },
     "Block or ';' expected.": {
         "category": "Error",
         "code": 1144

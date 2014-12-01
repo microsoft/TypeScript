@@ -3397,12 +3397,13 @@ module ts {
             if (token === SyntaxKind.CatchKeyword) {
                 node.catchBlock = parseCatchBlock();
             }
-            if (token === SyntaxKind.FinallyKeyword) {
+
+            // If we don't have a catch clause, then we must have a finally clause.  Try to parse
+            // one out no matter what.
+            if (!node.catchBlock || token === SyntaxKind.FinallyKeyword) {
                 node.finallyBlock = parseTokenAndBlock(SyntaxKind.FinallyKeyword, SyntaxKind.FinallyBlock);
             }
-            if (!(node.catchBlock || node.finallyBlock)) {
-                error(Diagnostics.catch_or_finally_expected);
-            }
+
             return finishNode(node);
         }
 
