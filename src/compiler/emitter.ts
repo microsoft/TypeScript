@@ -2395,10 +2395,7 @@ module ts {
                 // the resulting expression a prefix increment operation. And in the second, it will make the resulting
                 // expression a prefix increment whose operand is a plus expression - (++(+x))
                 // The same is true of minus of course.
-                if (node.operator >= SyntaxKind.Identifier) {
-                    write(" ");
-                }
-                else if (node.kind === SyntaxKind.PrefixUnaryExpression && node.operand.kind === SyntaxKind.PrefixUnaryExpression) {
+                if (node.operand.kind === SyntaxKind.PrefixUnaryExpression) {
                     var operand = <PrefixUnaryExpression>node.operand;
                     if (node.operator === SyntaxKind.PlusToken && (operand.operator === SyntaxKind.PlusToken || operand.operator === SyntaxKind.PlusPlusToken)) {
                         write(" ");
