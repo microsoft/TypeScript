@@ -163,29 +163,31 @@ module ts {
         ArrayType,
         TupleType,
         UnionType,
-        ParenType,
+        ParenthesizedType,
         // Expression
-        ArrayLiteral,
-        ObjectLiteral,
-        PropertyAssignment,
-        ShorthandPropertyAssignment,
-        PropertyAccess,
-        IndexedAccess,
+        ArrayLiteralExpression,
+        ObjectLiteralExpression,
+        PropertyAccessExpression,
+        ElementAccessExpression,
         CallExpression,
         NewExpression,
         TaggedTemplateExpression,
-        TypeAssertion,
-        ParenExpression,
+        TypeAssertionExpression,
+        ParenthesizedExpression,
         FunctionExpression,
         ArrowFunction,
-        PrefixOperator,
-        PostfixOperator,
+        DeleteExpression,
+        TypeOfExpression,
+        VoidExpression,
+        PrefixUnaryExpression,
+        PostfixUnaryExpression,
         BinaryExpression,
         ConditionalExpression,
         TemplateExpression,
-        TemplateSpan,
         YieldExpression,
         OmittedExpression,
+        // Misc
+        TemplateSpan,
         // Element
         Block,
         VariableStatement,
@@ -201,8 +203,6 @@ module ts {
         ReturnStatement,
         WithStatement,
         SwitchStatement,
-        CaseClause,
-        DefaultClause,
         LabeledStatement,
         ThrowStatement,
         TryStatement,
@@ -221,6 +221,13 @@ module ts {
         ModuleBlock,
         ImportDeclaration,
         ExportAssignment,
+        // Clauses
+        CaseClause,
+        DefaultClause,
+        HeritageClause,
+        // Property assignments
+        PropertyAssignment,
+        ShorthandPropertyAssignment,
         // Enum
         EnumMember,
         // Top-level nodes
@@ -240,7 +247,7 @@ module ts {
         FirstFutureReservedWord = ImplementsKeyword,
         LastFutureReservedWord = YieldKeyword,
         FirstTypeNode = TypeReference,
-        LastTypeNode = ParenType,
+        LastTypeNode = ParenthesizedType,
         FirstPunctuation = OpenBraceToken,
         LastPunctuation = CaretEqualsToken,
         FirstToken = EndOfFileToken,
@@ -310,7 +317,7 @@ module ts {
         flags: number;
     }
 
-    export interface Identifier extends Node {
+    export interface Identifier extends PrimaryExpression {
         text: string;                 // Text of identifier (with escapes converted to characters)
     }
 
@@ -331,6 +338,7 @@ module ts {
     export type DeclarationName = Identifier | LiteralExpression | ComputedPropertyName;
 
     export interface Declaration extends Node {
+        _declarationBrand: any;
         name?: DeclarationName;
     }
 
@@ -346,7 +354,8 @@ module ts {
         expression?: Expression;
     }
 
-    export interface SignatureDeclaration extends Declaration, ParsedSignature { }
+    export interface SignatureDeclaration extends Declaration, ParsedSignature {
+    }
 
     export interface VariableDeclaration extends Declaration {
         name: Identifier;
@@ -354,7 +363,7 @@ module ts {
         initializer?: Expression;
     }
 
-    export interface PropertyDeclaration extends Declaration {
+    export interface PropertyDeclaration extends Declaration, ClassElement {
         type?: TypeNode;
         initializer?: Expression;
     }
@@ -374,25 +383,31 @@ module ts {
      *  AccessorDeclaration
      */
     export interface FunctionLikeDeclaration extends SignatureDeclaration {
+        _functionLikeDeclarationBrand: any;
+
         asteriskToken?: Node;
         body?: Block | Expression;
     }
 
-    export interface FunctionDeclaration extends FunctionLikeDeclaration {
+    export interface FunctionDeclaration extends FunctionLikeDeclaration, Statement {
         name: Identifier;
         body?: Block;
     }
 
-    export interface MethodDeclaration extends FunctionLikeDeclaration {
+    export interface MethodDeclaration extends FunctionLikeDeclaration, ClassElement {
         body?: Block;
     }
 
-    export interface ConstructorDeclaration extends Node, ParsedSignature {
+    export interface ConstructorDeclaration extends FunctionLikeDeclaration, ClassElement {
         body?: Block;
     }
 
-    export interface AccessorDeclaration extends FunctionLikeDeclaration {
+    export interface AccessorDeclaration extends FunctionLikeDeclaration, ClassElement  {
         body?: Block;
+    }
+
+    export interface IndexSignatureDeclaration extends SignatureDeclaration, ClassElement {
+        _indexSignatureDeclarationBrand: any;
     }
 
     export interface TypeNode extends Node { }
@@ -406,7 +421,7 @@ module ts {
         exprName: EntityName;
     }
 
-    export interface TypeLiteralNode extends TypeNode {
+    export interface TypeLiteralNode extends TypeNode, Declaration {
         members: NodeArray<Node>;
     }
 
@@ -422,7 +437,7 @@ module ts {
         types: NodeArray<TypeNode>;
     }
 
-    export interface ParenTypeNode extends TypeNode {
+    export interface ParenthesizedTypeNode extends TypeNode {
         type: TypeNode;
     }
 
@@ -430,13 +445,58 @@ module ts {
         text: string;
     }
 
+    // Note: 'brands' in our syntax nodes serve to give us a small amount of nominal typing.  
+    // Consider 'Expression'.  Without the brand, 'Expression' is actually no different
+    // (structurally) than 'Node'.  Because of this you can pass any Node to a function that
+    // takes an Expression without any error.  By using the 'brands' we ensure that the type
+    // checker actually thinks you have something of the right type.  Note: the brands are 
+    // never actually given values.  At runtime they have zero cost. 
+
     export interface Expression extends Node {
+        _expressionBrand: any;
         contextualType?: Type;  // Used to temporarily assign a contextual type during overload resolution
     }
 
     export interface UnaryExpression extends Expression {
+        _unaryExpressionBrand: any;
+    }
+
+    export interface PrefixUnaryExpression extends UnaryExpression {
         operator: SyntaxKind;
-        operand: Expression;
+        operand: UnaryExpression;
+    }
+
+    export interface PostfixUnaryExpression extends PostfixExpression {
+        operand: LeftHandSideExpression;
+        operator: SyntaxKind;
+    }
+
+    export interface PostfixExpression extends UnaryExpression {
+        _postfixExpressionBrand: any;
+    }
+
+    export interface LeftHandSideExpression extends PostfixExpression {
+        _leftHandSideExpressionBrand: any;
+    }
+
+    export interface MemberExpression extends LeftHandSideExpression {
+        _memberExpressionBrand: any;
+    }
+
+    export interface PrimaryExpression extends MemberExpression {
+        _primaryExpressionBrand: any;
+    }
+
+    export interface DeleteExpression extends UnaryExpression {
+        expression: UnaryExpression;
+    }
+
+    export interface TypeOfExpression extends UnaryExpression {
+        expression: UnaryExpression;
+    }
+
+    export interface VoidExpression extends UnaryExpression {
+        expression: UnaryExpression;
     }
     
     export interface YieldExpression extends Expression {
@@ -456,7 +516,7 @@ module ts {
         whenFalse: Expression;
     }
 
-    export interface FunctionExpression extends Expression, FunctionLikeDeclaration {
+    export interface FunctionExpression extends PrimaryExpression, FunctionLikeDeclaration {
         name?: Identifier;
         body: Block | Expression;  // Required, whereas the member inherited from FunctionDeclaration is optional
     }
@@ -464,11 +524,11 @@ module ts {
     // The text property of a LiteralExpression stores the interpreted value of the literal in text form. For a StringLiteral,
     // or any literal of a template, this means quotes have been removed and escapes have been converted to actual characters.
     // For a NumericLiteral, the stored value is the toString() representation of the number. For example 1, 1.00, and 1e0 are all stored as just "1".
-    export interface LiteralExpression extends Expression {
+    export interface LiteralExpression extends PrimaryExpression {
         text: string;
     }
 
-    export interface TemplateExpression extends Expression {
+    export interface TemplateExpression extends PrimaryExpression {
         head: LiteralExpression;
         templateSpans: NodeArray<TemplateSpan>;
     }
@@ -480,49 +540,51 @@ module ts {
         literal: LiteralExpression;
     }
 
-    export interface ParenExpression extends Expression {
+    export interface ParenthesizedExpression extends PrimaryExpression {
         expression: Expression;
     }
 
-    export interface ArrayLiteral extends Expression {
+    export interface ArrayLiteralExpression extends PrimaryExpression {
         elements: NodeArray<Expression>;
     }
 
-    export interface ObjectLiteral extends Expression {
-        properties: NodeArray<Node>;
+    export interface ObjectLiteralExpression extends PrimaryExpression, Declaration {
+        properties: NodeArray<Declaration>;
     }
 
-    export interface PropertyAccess extends Expression {
-        left: Expression;
-        right: Identifier;
+    export interface PropertyAccessExpression extends MemberExpression {
+        expression: LeftHandSideExpression;
+        name: Identifier;
     }
 
-    export interface IndexedAccess extends Expression {
-        object: Expression;
-        index: Expression;
+    export interface ElementAccessExpression extends MemberExpression {
+        expression: LeftHandSideExpression;
+        argumentExpression: Expression;
     }
 
-    export interface CallExpression extends Expression {
-        func: Expression;
+    export interface CallExpression extends LeftHandSideExpression {
+        expression: LeftHandSideExpression;
         typeArguments?: NodeArray<TypeNode>;
         arguments: NodeArray<Expression>;
     }
 
-    export interface NewExpression extends CallExpression { }
+    export interface NewExpression extends CallExpression, PrimaryExpression { }
 
-    export interface TaggedTemplateExpression extends Expression {
-        tag: Expression;
+    export interface TaggedTemplateExpression extends MemberExpression {
+        tag: LeftHandSideExpression;
         template: LiteralExpression | TemplateExpression;
     }
 
     export type CallLikeExpression = CallExpression | NewExpression | TaggedTemplateExpression;
 
-    export interface TypeAssertion extends Expression {
+    export interface TypeAssertion extends UnaryExpression {
         type: TypeNode;
-        operand: Expression;
+        expression: UnaryExpression;
     }
 
-    export interface Statement extends Node { }
+    export interface Statement extends Node, ModuleElement {
+        _statementBrand: any;
+    }
 
     export interface Block extends Statement {
         statements: NodeArray<Statement>;
@@ -605,27 +667,39 @@ module ts {
         finallyBlock?: Block;
     }
 
-    export interface CatchBlock extends Block {
+    export interface CatchBlock extends Block, Declaration {
         variable: Identifier;
         type?: TypeNode;
     }
 
-    export interface ClassDeclaration extends Declaration {
-        name: Identifier;
-        typeParameters?: NodeArray<TypeParameterDeclaration>;
-        baseType?: TypeReferenceNode;
-        implementedTypes?: NodeArray<TypeReferenceNode>;
-        members: NodeArray<Node>;
+    export interface ModuleElement extends Node {
+        _moduleElementBrand: any;
     }
 
-    export interface InterfaceDeclaration extends Declaration {
+    export interface ClassDeclaration extends Declaration, ModuleElement {
         name: Identifier;
         typeParameters?: NodeArray<TypeParameterDeclaration>;
-        baseTypes?: NodeArray<TypeReferenceNode>;
-        members: NodeArray<Node>;
+        heritageClauses?: NodeArray<HeritageClause>;
+        members: NodeArray<ClassElement>;
     }
 
-    export interface TypeAliasDeclaration extends Declaration {
+    export interface ClassElement extends Declaration {
+        _classElementBrand: any;
+    }
+
+    export interface InterfaceDeclaration extends Declaration, ModuleElement {
+        name: Identifier;
+        typeParameters?: NodeArray<TypeParameterDeclaration>;
+        heritageClauses?: NodeArray<HeritageClause>;
+        members: NodeArray<Declaration>;
+    }
+
+    export interface HeritageClause extends Node {
+        token: SyntaxKind;
+        types?: NodeArray<TypeReferenceNode>;
+    }
+
+    export interface TypeAliasDeclaration extends Declaration, ModuleElement {
         name: Identifier;
         type: TypeNode;
     }
@@ -637,23 +711,27 @@ module ts {
         initializer?: Expression;
     }
 
-    export interface EnumDeclaration extends Declaration {
+    export interface EnumDeclaration extends Declaration, ModuleElement {
         name: Identifier;
         members: NodeArray<EnumMember>;
     }
 
-    export interface ModuleDeclaration extends Declaration {
+    export interface ModuleDeclaration extends Declaration, ModuleElement {
         name: Identifier | LiteralExpression;
-        body: Block | ModuleDeclaration;
+        body: ModuleBlock | ModuleDeclaration;
     }
 
-    export interface ImportDeclaration extends Declaration {
+    export interface ModuleBlock extends Node, ModuleElement {
+        statements: NodeArray<ModuleElement>
+    }
+
+    export interface ImportDeclaration extends Declaration, ModuleElement {
         name: Identifier;
         entityName?: EntityName;
         externalModuleName?: LiteralExpression;
     }
 
-    export interface ExportAssignment extends Statement {
+    export interface ExportAssignment extends Statement, ModuleElement {
         exportName: Identifier;
     }
 
@@ -665,7 +743,10 @@ module ts {
         hasTrailingNewLine?: boolean;
     }
 
-    export interface SourceFile extends Block {
+    // Source files are declarations when they are external modules.
+    export interface SourceFile extends Declaration {
+        statements: NodeArray<ModuleElement>;
+
         filename: string;
         text: string;
         getLineAndCharacterFromPosition(position: number): LineAndCharacter;
@@ -782,7 +863,7 @@ module ts {
         isEmitBlocked(sourceFile?: SourceFile): boolean;
         // Returns the constant value of this enum member, or 'undefined' if the enum member has a computed value.
         getEnumMemberValue(node: EnumMember): number;
-        isValidPropertyAccess(node: PropertyAccess, propertyName: string): boolean;
+        isValidPropertyAccess(node: PropertyAccessExpression | QualifiedName, propertyName: string): boolean;
         getAliasedSymbol(symbol: Symbol): Symbol;
     }
 
@@ -873,7 +954,7 @@ module ts {
         isSymbolAccessible(symbol: Symbol, enclosingDeclaration: Node, meaning: SymbolFlags): SymbolAccessiblityResult;
         isEntityNameVisible(entityName: EntityName, enclosingDeclaration: Node): SymbolVisibilityResult;
         // Returns the constant value this property access resolves to, or 'undefined' for a non-constant
-        getConstantValue(node: PropertyAccess | IndexedAccess): number;
+        getConstantValue(node: PropertyAccessExpression | ElementAccessExpression): number;
         isEmitBlocked(sourceFile?: SourceFile): boolean;
     }
 

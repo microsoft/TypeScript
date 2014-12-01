@@ -1,4 +1,4 @@
-tests/cases/compiler/libMembers.ts(9,11): error TS1150: 'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.
+tests/cases/compiler/libMembers.ts(9,16): error TS1150: 'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.
 tests/cases/compiler/libMembers.ts(4,3): error TS2339: Property 'subby' does not exist on type 'string'.
 tests/cases/compiler/libMembers.ts(12,15): error TS2339: Property 'prototype' does not exist on type 'C'.
 
@@ -15,7 +15,7 @@ tests/cases/compiler/libMembers.ts(12,15): error TS2339: Property 'prototype' do
         export class C {
         }
         var a=new C[];
-              ~~~~~~~
+                   ~~
 !!! error TS1150: 'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.
         a.length;
         a.push(new C());
