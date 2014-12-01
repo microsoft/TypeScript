@@ -6152,7 +6152,6 @@ module ts {
         function checkFunctionExpressionBody(node: FunctionExpression) {
             if (node.type) {
                 checkControlFlowOfFunction(node, getTypeFromTypeNode(node.type) !== voidType, error);
-                // checkIfNonVoidFunctionHasReturnExpressionsOrSingleThrowStatment(node, getTypeFromTypeNode(node.type));
             }
             if (node.body.kind === SyntaxKind.FunctionBlock) {
                 checkSourceElement(node.body);
@@ -7297,7 +7296,6 @@ module ts {
             checkSourceElement(node.body);
             if (node.type && !isAccessor(node.kind)) {
                 checkControlFlowOfFunction(node, getTypeFromTypeNode(node.type) !== voidType, error);
-                // checkIfNonVoidFunctionHasReturnExpressionsOrSingleThrowStatment(node, getTypeFromTypeNode(node.type));
             }
 
             // If there is no body and no explicit return type, then report an error.
