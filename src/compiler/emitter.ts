@@ -2411,9 +2411,6 @@ module ts {
             }
 
             function emitPostfixUnaryExpression(node: PostfixUnaryExpression) {
-                if (node.operator >= SyntaxKind.Identifier) {
-                    write(" ");
-                }
                 emit(node.operand);
                 write(tokenToString(node.operator));
             }
