@@ -2475,7 +2475,7 @@ module ts {
 
             if (triState === Tristate.True) {
                 // Arrow function are never generators.
-                var sig = parseSignature(SyntaxKind.CallSignature, SyntaxKind.ColonToken, /* returnTokenRequired */ false, /*yieldAndGeneratorParameterContext:*/ false);
+                var sig = parseSignature(SyntaxKind.CallSignature, SyntaxKind.ColonToken, /*returnTokenRequired:*/ false, /*yieldAndGeneratorParameterContext:*/ false);
 
                 // If we have an arrow, then try to parse the body.
                 // Even if not, try to parse if we have an opening brace, just in case we're in an error state.
@@ -2484,7 +2484,7 @@ module ts {
                 }
                 else {
                     // If not, we're probably better off bailing out and returning a bogus function expression.
-                    return makeFunctionExpression(SyntaxKind.ArrowFunction, pos, /*asteriskToken:*/ undefined, /*name:*/ undefined, sig, <Expression>createMissingNode());
+                    return makeFunctionExpression(SyntaxKind.ArrowFunction, pos, /*asteriskToken:*/ undefined, /*name:*/ undefined, sig, parseIdentifier(Diagnostics.Expression_expected));
                 }
             }
             
