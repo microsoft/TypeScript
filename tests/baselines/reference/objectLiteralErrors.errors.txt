@@ -13,7 +13,6 @@ tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(33,25)
 tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(34,23): error TS1119: An object literal cannot have property and accessor with the same name.
 tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(35,23): error TS1119: An object literal cannot have property and accessor with the same name.
 tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(36,23): error TS1119: An object literal cannot have property and accessor with the same name.
-tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(37,23): error TS1085: Octal literals are not available when targeting ECMAScript 5 and higher.
 tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(37,23): error TS1119: An object literal cannot have property and accessor with the same name.
 tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(38,27): error TS1119: An object literal cannot have property and accessor with the same name.
 tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(39,26): error TS1119: An object literal cannot have property and accessor with the same name.
@@ -97,7 +96,7 @@ tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(45,12)
 tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(45,51): error TS2380: 'get' and 'set' accessor must have the same type.
 
 
-==== tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts (97 errors) ====
+==== tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts (96 errors) ====
     
     // Multiple properties with the same name
     var e1 = { a: 0, a: 0 };
@@ -293,8 +292,6 @@ tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(45,51)
                           ~~~
 !!! error TS2300: Duplicate identifier '0x0'.
     var f14 = { 0: 0, get 000() { return 0; } };
-                          ~~~
-!!! error TS1085: Octal literals are not available when targeting ECMAScript 5 and higher.
                           ~~~
 !!! error TS1119: An object literal cannot have property and accessor with the same name.
                 ~

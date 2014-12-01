@@ -114,7 +114,8 @@ module ts.formatting {
         }
 
         function shouldRescanTemplateToken(container: Node): boolean {
-            return container.kind === SyntaxKind.TemplateSpan;
+            return container.kind === SyntaxKind.TemplateMiddle || 
+                container.kind === SyntaxKind.TemplateTail;
         }
 
         function startsWithSlashToken(t: SyntaxKind): boolean {

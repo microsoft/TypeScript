@@ -16,7 +16,7 @@
 
 goTo.marker('indirectSuperCall');
 verify.signatureHelpCountIs(2);
-verify.currentSignatureParamterCountIs(1);
+verify.currentSignatureParameterCountIs(1);
 verify.currentSignatureHelpIs('B2(n: number): B2');
 verify.currentParameterHelpArgumentNameIs("n");
 verify.currentParameterSpanIs("n: number");

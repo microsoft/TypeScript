@@ -252,7 +252,7 @@ module ts.formatting {
         rulesProvider: RulesProvider,
         requestKind: FormattingRequestKind): TextChange[] {
 
-        var rangeContainsError = prepareRangeContainsErrorFunction(sourceFile.syntacticErrors, originalRange);
+        var rangeContainsError = prepareRangeContainsErrorFunction(sourceFile.getSyntacticDiagnostics(), originalRange);
 
         // formatting context is used by rules provider
         var formattingContext = new FormattingContext(sourceFile, requestKind);
@@ -505,7 +505,7 @@ module ts.formatting {
 
                 if (isToken(child)) {
                     // if child node is a token, it does not impact indentation, proceed it using parent indentation scope rules
-                    var tokenInfo = formattingScanner.readTokenInfo(node);
+                    var tokenInfo = formattingScanner.readTokenInfo(child);
                     Debug.assert(tokenInfo.token.end === child.end);
                     consumeTokenAndAdvanceScanner(tokenInfo, node, parentDynamicIndentation);
                     return inheritedIndentation;
@@ -701,23 +701,21 @@ module ts.formatting {
                 applyRuleEdits(rule, previousItem, previousStartLine, currentItem, currentStartLine);
 
                 if (rule.Operation.Action & (RuleAction.Space | RuleAction.Delete) && currentStartLine !== previousStartLine) {
+                    lineAdded = false;
                     // Handle the case where the next line is moved to be the end of this line. 
                     // In this case we don't indent the next line in the next pass.
                     if (currentParent.getStart(sourceFile) === currentItem.pos) {
-                        lineAdded = false;
+                        dynamicIndentation.recomputeIndentation(/*lineAdded*/ false);
                     }
                 }
                 else if (rule.Operation.Action & RuleAction.NewLine && currentStartLine === previousStartLine) {
+                    lineAdded = true;
                     // Handle the case where token2 is moved to the new line. 
                     // In this case we indent token2 in the next pass but we set
                     // sameLineIndent flag to notify the indenter that the indentation is within the line.
                     if (currentParent.getStart(sourceFile) === currentItem.pos) {
-                        lineAdded = true;
+                        dynamicIndentation.recomputeIndentation(/*lineAdded*/ true);
                     }
-                }
-
-                if (lineAdded !== undefined) {
-                    dynamicIndentation.recomputeIndentation(lineAdded);
                 }
 
                 // We need to trim trailing whitespace between the tokens if they were on different lines, and no rule was applied to put them on the same line

@@ -301,11 +301,11 @@ module FourSlashInterface {
             FourSlash.currentTestState.verifySignatureHelpArgumentCount(expected);
         }
 
-        public currentSignatureParamterCountIs(expected: number) {
+        public currentSignatureParameterCountIs(expected: number) {
             FourSlash.currentTestState.verifyCurrentSignatureHelpParameterCount(expected);
         }
 
-        public currentSignatureTypeParamterCountIs(expected: number) {
+        public currentSignatureTypeParameterCountIs(expected: number) {
             FourSlash.currentTestState.verifyCurrentSignatureHelpTypeParameterCount(expected);
         }
 

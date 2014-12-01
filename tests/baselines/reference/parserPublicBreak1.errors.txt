@@ -1,11 +1,8 @@
 tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserPublicBreak1.ts(1,1): error TS1128: Declaration or statement expected.
-tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserPublicBreak1.ts(1,8): error TS1105: A 'break' statement can only be used within an enclosing iteration or switch statement.
 
 
-==== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserPublicBreak1.ts (2 errors) ====
+==== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserPublicBreak1.ts (1 errors) ====
     public break;
     ~~~~~~
 !!! error TS1128: Declaration or statement expected.
-           ~~~~~~
-!!! error TS1105: A 'break' statement can only be used within an enclosing iteration or switch statement.
     

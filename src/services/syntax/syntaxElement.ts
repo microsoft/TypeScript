@@ -17,40 +17,33 @@ module TypeScript {
         return undefined;
     }
 
-    export function parsedInStrictModeContext(node: ISyntaxNode): boolean {
+    export function parserContextFlags(node: ISyntaxNode): ParserContextFlags {
         var info = node.__data;
         if (info === undefined) {
-            return false;
+            return 0;
         }
 
-        return (info & SyntaxNodeConstants.ParsedInStrictModeContext) !== 0;
+        return info & ParserContextFlags.Mask;
+    }
+
+    export function parsedInStrictModeContext(node: ISyntaxNode): boolean {
+        return (parserContextFlags(node) & ParserContextFlags.StrictMode) !== 0;
     }
 
     export function parsedInDisallowInContext(node: ISyntaxNode): boolean {
-        var info = node.__data;
-        if (info === undefined) {
-            return false;
-        }
-
-        return (info & SyntaxNodeConstants.ParsedInDisallowInContext) !== 0;
+        return (parserContextFlags(node) & ParserContextFlags.DisallowIn) !== 0;
     }
 
     export function parsedInYieldContext(node: ISyntaxNode): boolean {
-        var info = node.__data;
-        if (info === undefined) {
-            return false;
-        }
-
-        return (info & SyntaxNodeConstants.ParsedInYieldContext) !== 0;
+        return (parserContextFlags(node) & ParserContextFlags.Yield) !== 0;
     }
 
     export function parsedInGeneratorParameterContext(node: ISyntaxNode): boolean {
-        var info = node.__data;
-        if (info === undefined) {
-            return false;
-        }
+        return (parserContextFlags(node) & ParserContextFlags.GeneratorParameter) !== 0;
+    }
 
-        return (info & SyntaxNodeConstants.ParsedInGeneratorParameterContext) !== 0;
+    export function parsedInAsyncContext(node: ISyntaxNode): boolean {
+        return (parserContextFlags(node) & ParserContextFlags.Async) !== 0;
     }
 
     export function previousToken(token: ISyntaxToken): ISyntaxToken {
@@ -307,7 +300,7 @@ module TypeScript {
         }
 
         if ((info & SyntaxNodeConstants.DataComputed) === 0) {
-            info |= computeData(element);
+            info += computeData(element);
             dataElement.__data = info;
         }
 
@@ -378,19 +371,6 @@ module TypeScript {
         return fullStart(element) + fullWidth(element);
     }
 
-    export function existsNewLineBetweenTokens(token1: ISyntaxToken, token2: ISyntaxToken, text: ISimpleText) {
-        if (token1 === token2) {
-            return false;
-        }
-
-        if (!token1 || !token2) {
-            return true;
-        }
-
-        var lineMap = text.lineMap();
-        return lineMap.getLineNumberFromPosition(fullEnd(token1)) !== lineMap.getLineNumberFromPosition(start(token2, text));
-    }
-
     export interface ISyntaxElement {
         kind: SyntaxKind;
         parent: ISyntaxElement;
@@ -435,7 +415,7 @@ module TypeScript {
         modifiers: ISyntaxToken[];
         propertyName: IPropertyNameSyntax;
         callSignature: CallSignatureSyntax;
-        block: BlockSyntax;
+        body: BlockSyntax | ExpressionBody | ISyntaxToken;
     }
 
     export interface ISwitchClauseSyntax extends ISyntaxNode {
