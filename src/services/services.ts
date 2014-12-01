@@ -1980,9 +1980,12 @@ module ts {
     }
 
     function isNameOfExternalModuleImportOrDeclaration(node: Node): boolean {
-        return node.kind === SyntaxKind.StringLiteral &&
-            (isNameOfModuleDeclaration(node) ||
-            (node.parent.parent.kind === SyntaxKind.ImportDeclaration && (<ImportDeclaration>node.parent.parent).externalModuleName.expression === node));
+        if (node.kind === SyntaxKind.StringLiteral) {
+            return isNameOfModuleDeclaration(node) ||
+                (isExternalModuleImportDeclaration(node.parent.parent) && getExternalModuleImportDeclarationExpression(node.parent.parent) === node);
+        }
+
+        return false;
     }
 
     /** Returns true if the position is within a comment */
@@ -3080,17 +3083,17 @@ module ts {
                 ts.forEach(symbol.declarations, declaration => {
                     if (declaration.kind === SyntaxKind.ImportDeclaration) {
                         var importDeclaration = <ImportDeclaration>declaration;
-                        if (importDeclaration.externalModuleName) {
+                        if (isExternalModuleImportDeclaration(importDeclaration)) {
                             displayParts.push(spacePart());
                             displayParts.push(punctuationPart(SyntaxKind.EqualsToken));
                             displayParts.push(spacePart());
                             displayParts.push(keywordPart(SyntaxKind.RequireKeyword));
                             displayParts.push(punctuationPart(SyntaxKind.OpenParenToken));
-                            displayParts.push(displayPart(getTextOfNode(importDeclaration.externalModuleName.expression), SymbolDisplayPartKind.stringLiteral));
+                            displayParts.push(displayPart(getTextOfNode(getExternalModuleImportDeclarationExpression(importDeclaration)), SymbolDisplayPartKind.stringLiteral));
                             displayParts.push(punctuationPart(SyntaxKind.CloseParenToken));
                         }
                         else {
-                            var internalAliasSymbol = typeResolver.getSymbolInfo(importDeclaration.entityName);
+                            var internalAliasSymbol = typeResolver.getSymbolInfo(importDeclaration.moduleReference);
                             if (internalAliasSymbol) {
                                 displayParts.push(spacePart());
                                 displayParts.push(punctuationPart(SyntaxKind.EqualsToken));
@@ -4814,7 +4817,7 @@ module ts {
             while (node.parent.kind === SyntaxKind.QualifiedName) {
                 node = node.parent;
             }
-            return node.parent.kind === SyntaxKind.ImportDeclaration && (<ImportDeclaration>node.parent).entityName === node;
+            return isInternalModuleImportDeclaration(node.parent) && (<ImportDeclaration>node.parent).moduleReference === node;
         }
 
         function getMeaningFromRightHandSideOfImport(node: Node) {

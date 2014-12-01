@@ -382,8 +382,7 @@ module ts {
                     child((<ModuleDeclaration>node).body);
             case SyntaxKind.ImportDeclaration:
                 return child((<ImportDeclaration>node).name) ||
-                    child((<ImportDeclaration>node).entityName) ||
-                    child((<ImportDeclaration>node).externalModuleName);
+                    child((<ImportDeclaration>node).moduleReference);
             case SyntaxKind.ExportAssignment:
                 return child((<ExportAssignment>node).exportName);
             case SyntaxKind.TemplateExpression:
@@ -589,6 +588,19 @@ module ts {
                 }
         }
         return false;
+    }
+
+    export function isExternalModuleImportDeclaration(node: Node) {
+        return node.kind === SyntaxKind.ImportDeclaration && (<ImportDeclaration>node).moduleReference.kind === SyntaxKind.ExternalModuleReference;
+    }
+
+    export function getExternalModuleImportDeclarationExpression(node: Node) {
+        Debug.assert(isExternalModuleImportDeclaration(node));
+        return (<ExternalModuleReference>(<ImportDeclaration>node).moduleReference).expression;
+    }
+
+    export function isInternalModuleImportDeclaration(node: Node) {
+        return node.kind === SyntaxKind.ImportDeclaration && (<ImportDeclaration>node).moduleReference.kind !== SyntaxKind.ExternalModuleReference;
     }
 
     export function hasRestParameters(s: SignatureDeclaration): boolean {
@@ -3403,7 +3415,9 @@ module ts {
 
             // If we don't have a catch clause, then we must have a finally clause.  Try to parse
             // one out no matter what.
-            node.finallyBlock = !node.catchBlock || token === SyntaxKind.FinallyKeyword ? parseTokenAndBlock(SyntaxKind.FinallyKeyword) : undefined;
+            node.finallyBlock = !node.catchBlock || token === SyntaxKind.FinallyKeyword
+                ? parseTokenAndBlock(SyntaxKind.FinallyKeyword)
+                : undefined;
             return finishNode(node);
         }
 
@@ -3959,20 +3973,25 @@ module ts {
             parseExpected(SyntaxKind.ImportKeyword);
             node.name = parseIdentifier();
             parseExpected(SyntaxKind.EqualsToken);
-            if (isExternalModuleReference()) {
-                node.externalModuleName = parseExternalModuleReference();
-            }
-            else {
-                node.entityName = parseEntityName(/*allowReservedWords*/ false);
-            }
+            node.moduleReference = parseModuleReference();
             parseSemicolon();
             return finishNode(node);
+        }
+
+        function parseModuleReference() {
+            return isExternalModuleReference()
+                ? parseExternalModuleReference()
+                : parseEntityName(/*allowReservedWords*/ false);
         }
 
         function parseExternalModuleReference() {
             var node = <ExternalModuleReference>createNode(SyntaxKind.ExternalModuleReference);
             parseExpected(SyntaxKind.RequireKeyword);
             parseExpected(SyntaxKind.OpenParenToken);
+
+            // We allow arbitrary expressions here, even though the grammar only allows string 
+            // literals.  We check to ensure that it is only a string literal later in the grammar
+            // walker.
             node.expression = parseExpression();
             if (node.expression.kind === SyntaxKind.StringLiteral) {
                 internIdentifier((<LiteralExpression>node.expression).text);
@@ -4129,7 +4148,7 @@ module ts {
         function getExternalModuleIndicator() {
             return forEach(file.statements, node =>
                 node.flags & NodeFlags.Export
-                || node.kind === SyntaxKind.ImportDeclaration && (<ImportDeclaration>node).externalModuleName
+                || node.kind === SyntaxKind.ImportDeclaration && (<ImportDeclaration>node).moduleReference.kind === SyntaxKind.ExternalModuleReference
                 || node.kind === SyntaxKind.ExportAssignment
                 ? node
                 : undefined);
@@ -4906,8 +4925,8 @@ module ts {
                         // Export assignments are not allowed in an internal module
                         return grammarErrorOnNode(statement, Diagnostics.An_export_assignment_cannot_be_used_in_an_internal_module);
                     }
-                    else if (statement.kind === SyntaxKind.ImportDeclaration && (<ImportDeclaration>statement).externalModuleName) {
-                        return grammarErrorOnNode((<ImportDeclaration>statement).externalModuleName.expression, Diagnostics.Import_declarations_in_an_internal_module_cannot_reference_an_external_module);
+                    else if (isExternalModuleImportDeclaration(statement)) {
+                        return grammarErrorOnNode(getExternalModuleImportDeclarationExpression(statement), Diagnostics.Import_declarations_in_an_internal_module_cannot_reference_an_external_module);
                     }
                 }
             }
@@ -5629,11 +5648,10 @@ module ts {
 
         function processImportedModules(file: SourceFile, basePath: string) {
             forEach(file.statements, node => {
-                if (node.kind === SyntaxKind.ImportDeclaration &&
-                    (<ImportDeclaration>node).externalModuleName &&
-                    (<ImportDeclaration>node).externalModuleName.expression.kind === SyntaxKind.StringLiteral) {
+                if (isExternalModuleImportDeclaration(node) &&
+                    getExternalModuleImportDeclarationExpression(node).kind === SyntaxKind.StringLiteral) {
 
-                    var nameLiteral = <LiteralExpression>(<ImportDeclaration>node).externalModuleName.expression;
+                    var nameLiteral = <LiteralExpression>getExternalModuleImportDeclarationExpression(node);
                     var moduleName = nameLiteral.text;
                     if (moduleName) {
                         var searchPath = basePath;
@@ -5658,11 +5676,10 @@ module ts {
                     // The StringLiteral must specify a top - level external module name.
                     // Relative external module names are not permitted
                     forEachChild((<ModuleDeclaration>node).body, node => {
-                        if (node.kind === SyntaxKind.ImportDeclaration &&
-                            (<ImportDeclaration>node).externalModuleName &&
-                            (<ImportDeclaration>node).externalModuleName.expression.kind === SyntaxKind.StringLiteral) {
+                        if (isExternalModuleImportDeclaration(node) &&
+                            getExternalModuleImportDeclarationExpression(node).kind === SyntaxKind.StringLiteral) {
 
-                            var nameLiteral = <LiteralExpression>(<ImportDeclaration>node).externalModuleName.expression; 
+                            var nameLiteral = <LiteralExpression>getExternalModuleImportDeclarationExpression(node); 
                             var moduleName = nameLiteral.text;
                             if (moduleName) {
                                 // TypeScript 1.0 spec (April 2014): 12.1.6

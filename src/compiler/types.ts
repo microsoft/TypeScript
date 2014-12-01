@@ -731,8 +731,10 @@ module ts {
 
     export interface ImportDeclaration extends Declaration, ModuleElement {
         name: Identifier;
-        entityName?: EntityName;
-        externalModuleName?: ExternalModuleReference;
+
+        // 'EntityName' for an internal module reference, 'ExternalModuleReference' for an external
+        // module reference.
+        moduleReference: EntityName | ExternalModuleReference;
     }
 
     export interface ExternalModuleReference extends Node {

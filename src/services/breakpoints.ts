@@ -174,7 +174,7 @@ module ts.BreakpointResolver {
 
                     case SyntaxKind.ImportDeclaration:
                         // import statement without including semicolon
-                        return textSpan(node, (<ImportDeclaration>node).entityName || (<ImportDeclaration>node).externalModuleName);
+                        return textSpan(node,(<ImportDeclaration>node).moduleReference);
 
                     case SyntaxKind.ModuleDeclaration:
                         // span on complete module if it is instantiated

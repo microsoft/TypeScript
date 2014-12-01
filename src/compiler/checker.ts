@@ -467,9 +467,9 @@ module ts {
             if (!links.target) {
                 links.target = resolvingSymbol;
                 var node = <ImportDeclaration>getDeclarationOfKind(symbol, SyntaxKind.ImportDeclaration);
-                var target = node.externalModuleName
-                    ? resolveExternalModuleName(node, node.externalModuleName.expression)
-                    : getSymbolOfPartOfRightHandSideOfImport(node.entityName, node);
+                var target = node.moduleReference.kind === SyntaxKind.ExternalModuleReference
+                    ? resolveExternalModuleName(node, getExternalModuleImportDeclarationExpression(node))
+                    : getSymbolOfPartOfRightHandSideOfImport(<EntityName>node.moduleReference, node);
                 if (links.target === resolvingSymbol) {
                     links.target = target || unknownSymbol;
                 }
@@ -829,8 +829,8 @@ module ts {
                     if (symbolFromSymbolTable.flags & SymbolFlags.Import) {
                         if (!useOnlyExternalAliasing || // We can use any type of alias to get the name
                             // Is this external alias, then use it to name
-                            ts.forEach(symbolFromSymbolTable.declarations, declaration =>
-                                declaration.kind === SyntaxKind.ImportDeclaration && (<ImportDeclaration>declaration).externalModuleName)) {
+                            ts.forEach(symbolFromSymbolTable.declarations, isExternalModuleImportDeclaration)) {
+
                             var resolvedImportedSymbol = resolveImport(symbolFromSymbolTable);
                             if (isAccessible(symbolFromSymbolTable, resolveImport(symbolFromSymbolTable))) {
                                 return [symbolFromSymbolTable];
@@ -8343,16 +8343,16 @@ module ts {
             var symbol = getSymbolOfNode(node);
             var target: Symbol;
             
-            if (node.entityName) {
+            if (isInternalModuleImportDeclaration(node)) {
                 target = resolveImport(symbol);
                 // Import declaration for an internal module
                 if (target !== unknownSymbol) {
                     if (target.flags & SymbolFlags.Value) {
                         // Target is a value symbol, check that it is not hidden by a local declaration with the same name and
                         // ensure it can be evaluated as an expression
-                        var moduleName = getFirstIdentifier(node.entityName);
+                        var moduleName = getFirstIdentifier(<EntityName>node.moduleReference);
                         if (resolveEntityName(node, moduleName, SymbolFlags.Value | SymbolFlags.Namespace).flags & SymbolFlags.Namespace) {
-                            checkExpression(node.entityName);
+                            checkExpression(<EntityName>node.moduleReference);
                         }
                         else {
                             error(moduleName, Diagnostics.Module_0_is_hidden_by_a_local_declaration_with_the_same_name, declarationNameToString(moduleName));
@@ -8373,8 +8373,8 @@ module ts {
                     // An ExternalImportDeclaration in an AmbientExternalModuleDeclaration may reference 
                     // other external modules only through top - level external module names.
                     // Relative external module names are not permitted.
-                    if (node.externalModuleName.expression.kind === SyntaxKind.StringLiteral) {
-                        if (isExternalModuleNameRelative((<LiteralExpression>node.externalModuleName.expression).text)) {
+                    if (getExternalModuleImportDeclarationExpression(node).kind === SyntaxKind.StringLiteral) {
+                        if (isExternalModuleNameRelative((<LiteralExpression>getExternalModuleImportDeclarationExpression(node)).text)) {
                             error(node, Diagnostics.Import_declaration_in_an_ambient_external_module_declaration_cannot_reference_external_module_through_relative_external_module_name);
                             target = unknownSymbol;
                         }
@@ -8847,7 +8847,7 @@ module ts {
             }
 
             if (node.parent.kind === SyntaxKind.ImportDeclaration) {
-                return (<ImportDeclaration>node.parent).entityName === node;
+                return (<ImportDeclaration>node.parent).moduleReference === node;
             }
             if (node.parent.kind === SyntaxKind.ExportAssignment) {
                 return (<ExportAssignment>node.parent).exportName === node;
@@ -8958,7 +8958,8 @@ module ts {
 
                 case SyntaxKind.StringLiteral:
                     // External module name in an import declaration
-                    if (node.parent.parent.kind === SyntaxKind.ImportDeclaration && (<ImportDeclaration>node.parent.parent).externalModuleName.expression === node) {
+                    if (isExternalModuleImportDeclaration(node.parent.parent) &&
+                        getExternalModuleImportDeclarationExpression(node.parent.parent) === node) {
                         var importSymbol = getSymbolOfNode(node.parent.parent);
                         var moduleType = getTypeOfSymbol(importSymbol);
                         return moduleType ? moduleType.symbol : undefined;
@@ -9145,7 +9146,7 @@ module ts {
         }
 
         function isTopLevelValueImportWithEntityName(node: ImportDeclaration): boolean {
-            if (node.parent.kind !== SyntaxKind.SourceFile || !node.entityName) {
+            if (node.parent.kind !== SyntaxKind.SourceFile || !isInternalModuleImportDeclaration(node)) {
                 // parent is not source file or it is not reference to internal module
                 return false;
             }
