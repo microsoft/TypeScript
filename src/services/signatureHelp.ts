@@ -296,7 +296,7 @@ module ts.SignatureHelp {
                 Debug.assert(templateExpression.kind === SyntaxKind.TemplateExpression);
 
                 // If we're just after a template tail, don't show signature help.
-                if (node.kind === SyntaxKind.TemplateTail && position >= node.getEnd() && !isUnterminatedTemplateEnd(<LiteralExpression>node)) {
+                if (node.kind === SyntaxKind.TemplateTail && position >= node.getEnd() && !(<LiteralExpression>node).isUnterminated) {
                     return undefined;
                 }
 
