@@ -241,9 +241,17 @@ module ts {
             check(n.catchBlock);
             var postCatchState = currentState;
 
-            setState(startState);
-            check(n.finallyBlock);
-            setState(or(postTryState, postCatchState));
+            if (n.finallyBlock) {
+                setState(startState);
+                check(n.finallyBlock);
+                // post-finally state become current state
+            }
+            else {
+                // post catch state is reachable if
+                // - post try state is reachable - control flow can fall out of try block
+                // - post catch state is reachable - control flow can fall out of catch block
+                setState(or(postTryState, postCatchState))
+            }
         }
 
         function checkSwitchStatement(n: SwitchStatement): void {
