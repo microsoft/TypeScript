@@ -119,3 +119,22 @@ module schema {
 >undefined : undefined
     }
 }
+
+// Type reference
+module schema {
+>schema : typeof schema
+
+    export function createValidator8(schema: any): Array<{ <T>(data: T) : T}> {
+>createValidator8 : (schema: any) => (<T>(data: T) => T)[]
+>schema : any
+>Array : T[]
+>T : T
+>data : T
+>T : T
+>T : T
+
+        return undefined;
+>undefined : undefined
+    }
+}
+

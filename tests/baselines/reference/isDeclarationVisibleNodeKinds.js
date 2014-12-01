@@ -50,6 +50,14 @@ module schema {
     }
 }
 
+// Type reference
+module schema {
+    export function createValidator8(schema: any): Array<{ <T>(data: T) : T}> {
+        return undefined;
+    }
+}
+
+
 //// [isDeclarationVisibleNodeKinds.js]
 // Function types
 var schema;
@@ -107,6 +115,14 @@ var schema;
     }
     _schema.createValidator7 = createValidator7;
 })(schema || (schema = {}));
+// Type reference
+var schema;
+(function (_schema) {
+    function createValidator8(schema) {
+        return undefined;
+    }
+    _schema.createValidator8 = createValidator8;
+})(schema || (schema = {}));
 
 
 //// [isDeclarationVisibleNodeKinds.d.ts]
@@ -136,4 +152,9 @@ declare module schema {
 }
 declare module schema {
     function createValidator7(schema: any): (new <T>(data: T) => T)[];
+}
+declare module schema {
+    function createValidator8(schema: any): Array<{
+        <T>(data: T): T;
+    }>;
 }

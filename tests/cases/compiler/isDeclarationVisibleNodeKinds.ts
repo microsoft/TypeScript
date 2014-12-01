@@ -49,3 +49,10 @@ module schema {
         return undefined;
     }
 }
+
+// Type reference
+module schema {
+    export function createValidator8(schema: any): Array<{ <T>(data: T) : T}> {
+        return undefined;
+    }
+}
