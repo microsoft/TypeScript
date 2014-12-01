@@ -138,3 +138,31 @@ module schema {
     }
 }
 
+
+module schema {
+>schema : typeof schema
+
+    export class T {
+>T : T
+
+        get createValidator9(): <T>(data: T) => T {
+>createValidator9 : <T>(data: T) => T
+>T : T
+>data : T
+>T : T
+>T : T
+
+            return undefined;
+>undefined : undefined
+        }
+        
+        set createValidator10(v: <T>(data: T) => T) {
+>createValidator10 : <T>(data: T) => T
+>v : <T>(data: T) => T
+>T : T
+>data : T
+>T : T
+>T : T
+        }
+    }
+}

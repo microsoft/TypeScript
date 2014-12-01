@@ -58,6 +58,17 @@ module schema {
 }
 
 
+module schema {
+    export class T {
+        get createValidator9(): <T>(data: T) => T {
+            return undefined;
+        }
+        
+        set createValidator10(v: <T>(data: T) => T) {
+        }
+    }
+}
+
 //// [isDeclarationVisibleNodeKinds.js]
 // Function types
 var schema;
@@ -123,6 +134,28 @@ var schema;
     }
     _schema.createValidator8 = createValidator8;
 })(schema || (schema = {}));
+var schema;
+(function (schema) {
+    var T = (function () {
+        function T() {
+        }
+        Object.defineProperty(T.prototype, "createValidator9", {
+            get: function () {
+                return undefined;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(T.prototype, "createValidator10", {
+            set: function (v) {
+            },
+            enumerable: true,
+            configurable: true
+        });
+        return T;
+    })();
+    schema.T = T;
+})(schema || (schema = {}));
 
 
 //// [isDeclarationVisibleNodeKinds.d.ts]
@@ -157,4 +190,10 @@ declare module schema {
     function createValidator8(schema: any): Array<{
         <T>(data: T): T;
     }>;
+}
+declare module schema {
+    class T {
+        createValidator9: <T>(data: T) => T;
+        createValidator10: <T>(data: T) => T;
+    }
 }

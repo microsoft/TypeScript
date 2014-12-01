@@ -1,4 +1,5 @@
 // @declaration: true
+// @target: es5
 
 // Function types
 module schema {
@@ -54,5 +55,17 @@ module schema {
 module schema {
     export function createValidator8(schema: any): Array<{ <T>(data: T) : T}> {
         return undefined;
+    }
+}
+
+
+module schema {
+    export class T {
+        get createValidator9(): <T>(data: T) => T {
+            return undefined;
+        }
+        
+        set createValidator10(v: <T>(data: T) => T) {
+        }
     }
 }
