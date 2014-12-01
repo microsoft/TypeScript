@@ -4420,19 +4420,25 @@ module ts {
             return type;
 
             function narrowTypeByEquality(type: Type, expr: BinaryExpression, assumeTrue: boolean): Type {
-                var left = <TypeOfExpression>expr.left;
-                var right = <LiteralExpression>expr.right;
                 // Check that we have 'typeof <symbol>' on the left and string literal on the right
-                if (left.kind !== SyntaxKind.TypeOfExpression ||
-                    left.expression.kind !== SyntaxKind.Identifier || right.kind !== SyntaxKind.StringLiteral ||
-                    getResolvedSymbol(<Identifier>left.expression) !== symbol) {
+                if (expr.left.kind !== SyntaxKind.TypeOfExpression || expr.right.kind !== SyntaxKind.StringLiteral) {
                     return type;
                 }
+
+                var left = <TypeOfExpression>expr.left;
+                var right = <LiteralExpression>expr.right;
+                if (left.expression.kind !== SyntaxKind.Identifier ||
+                    getResolvedSymbol(<Identifier>left.expression) !== symbol) {
+
+                    return type;
+                }
+
                 var t = right.text;
                 var checkType: Type = t === "string" ? stringType : t === "number" ? numberType : t === "boolean" ? booleanType : emptyObjectType;
                 if (expr.operator === SyntaxKind.ExclamationEqualsEqualsToken) {
                     assumeTrue = !assumeTrue;
                 }
+
                 if (assumeTrue) {
                     // The assumed result is true. If check was for a primitive type, that type is the narrowed type. Otherwise we can
                     // remove the primitive types from the narrowed type.
