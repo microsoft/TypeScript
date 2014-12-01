@@ -552,83 +552,82 @@ var TypeScript;
         SyntaxKind[SyntaxKind["EnumDeclaration"] = 140] = "EnumDeclaration";
         SyntaxKind[SyntaxKind["ImportDeclaration"] = 141] = "ImportDeclaration";
         SyntaxKind[SyntaxKind["ExportAssignment"] = 142] = "ExportAssignment";
-        SyntaxKind[SyntaxKind["MemberFunctionDeclaration"] = 143] = "MemberFunctionDeclaration";
-        SyntaxKind[SyntaxKind["MemberVariableDeclaration"] = 144] = "MemberVariableDeclaration";
+        SyntaxKind[SyntaxKind["MethodDeclaration"] = 143] = "MethodDeclaration";
+        SyntaxKind[SyntaxKind["PropertyDeclaration"] = 144] = "PropertyDeclaration";
         SyntaxKind[SyntaxKind["ConstructorDeclaration"] = 145] = "ConstructorDeclaration";
-        SyntaxKind[SyntaxKind["IndexMemberDeclaration"] = 146] = "IndexMemberDeclaration";
-        SyntaxKind[SyntaxKind["GetAccessor"] = 147] = "GetAccessor";
-        SyntaxKind[SyntaxKind["SetAccessor"] = 148] = "SetAccessor";
-        SyntaxKind[SyntaxKind["PropertySignature"] = 149] = "PropertySignature";
-        SyntaxKind[SyntaxKind["CallSignature"] = 150] = "CallSignature";
-        SyntaxKind[SyntaxKind["ConstructSignature"] = 151] = "ConstructSignature";
-        SyntaxKind[SyntaxKind["IndexSignature"] = 152] = "IndexSignature";
-        SyntaxKind[SyntaxKind["MethodSignature"] = 153] = "MethodSignature";
-        SyntaxKind[SyntaxKind["Block"] = 154] = "Block";
-        SyntaxKind[SyntaxKind["IfStatement"] = 155] = "IfStatement";
-        SyntaxKind[SyntaxKind["VariableStatement"] = 156] = "VariableStatement";
-        SyntaxKind[SyntaxKind["ExpressionStatement"] = 157] = "ExpressionStatement";
-        SyntaxKind[SyntaxKind["ReturnStatement"] = 158] = "ReturnStatement";
-        SyntaxKind[SyntaxKind["SwitchStatement"] = 159] = "SwitchStatement";
-        SyntaxKind[SyntaxKind["BreakStatement"] = 160] = "BreakStatement";
-        SyntaxKind[SyntaxKind["ContinueStatement"] = 161] = "ContinueStatement";
-        SyntaxKind[SyntaxKind["ForStatement"] = 162] = "ForStatement";
-        SyntaxKind[SyntaxKind["ForInStatement"] = 163] = "ForInStatement";
-        SyntaxKind[SyntaxKind["EmptyStatement"] = 164] = "EmptyStatement";
-        SyntaxKind[SyntaxKind["ThrowStatement"] = 165] = "ThrowStatement";
-        SyntaxKind[SyntaxKind["WhileStatement"] = 166] = "WhileStatement";
-        SyntaxKind[SyntaxKind["TryStatement"] = 167] = "TryStatement";
-        SyntaxKind[SyntaxKind["LabeledStatement"] = 168] = "LabeledStatement";
-        SyntaxKind[SyntaxKind["DoStatement"] = 169] = "DoStatement";
-        SyntaxKind[SyntaxKind["DebuggerStatement"] = 170] = "DebuggerStatement";
-        SyntaxKind[SyntaxKind["WithStatement"] = 171] = "WithStatement";
-        SyntaxKind[SyntaxKind["PrefixUnaryExpression"] = 172] = "PrefixUnaryExpression";
-        SyntaxKind[SyntaxKind["DeleteExpression"] = 173] = "DeleteExpression";
-        SyntaxKind[SyntaxKind["TypeOfExpression"] = 174] = "TypeOfExpression";
-        SyntaxKind[SyntaxKind["VoidExpression"] = 175] = "VoidExpression";
-        SyntaxKind[SyntaxKind["ConditionalExpression"] = 176] = "ConditionalExpression";
-        SyntaxKind[SyntaxKind["BinaryExpression"] = 177] = "BinaryExpression";
-        SyntaxKind[SyntaxKind["PostfixUnaryExpression"] = 178] = "PostfixUnaryExpression";
-        SyntaxKind[SyntaxKind["MemberAccessExpression"] = 179] = "MemberAccessExpression";
-        SyntaxKind[SyntaxKind["InvocationExpression"] = 180] = "InvocationExpression";
-        SyntaxKind[SyntaxKind["ArrayLiteralExpression"] = 181] = "ArrayLiteralExpression";
-        SyntaxKind[SyntaxKind["ObjectLiteralExpression"] = 182] = "ObjectLiteralExpression";
-        SyntaxKind[SyntaxKind["ObjectCreationExpression"] = 183] = "ObjectCreationExpression";
-        SyntaxKind[SyntaxKind["ParenthesizedExpression"] = 184] = "ParenthesizedExpression";
-        SyntaxKind[SyntaxKind["ParenthesizedArrowFunctionExpression"] = 185] = "ParenthesizedArrowFunctionExpression";
-        SyntaxKind[SyntaxKind["SimpleArrowFunctionExpression"] = 186] = "SimpleArrowFunctionExpression";
-        SyntaxKind[SyntaxKind["CastExpression"] = 187] = "CastExpression";
-        SyntaxKind[SyntaxKind["ElementAccessExpression"] = 188] = "ElementAccessExpression";
-        SyntaxKind[SyntaxKind["FunctionExpression"] = 189] = "FunctionExpression";
-        SyntaxKind[SyntaxKind["OmittedExpression"] = 190] = "OmittedExpression";
-        SyntaxKind[SyntaxKind["TemplateExpression"] = 191] = "TemplateExpression";
-        SyntaxKind[SyntaxKind["TemplateAccessExpression"] = 192] = "TemplateAccessExpression";
-        SyntaxKind[SyntaxKind["YieldExpression"] = 193] = "YieldExpression";
-        SyntaxKind[SyntaxKind["AwaitExpression"] = 194] = "AwaitExpression";
-        SyntaxKind[SyntaxKind["VariableDeclaration"] = 195] = "VariableDeclaration";
-        SyntaxKind[SyntaxKind["VariableDeclarator"] = 196] = "VariableDeclarator";
-        SyntaxKind[SyntaxKind["ArgumentList"] = 197] = "ArgumentList";
-        SyntaxKind[SyntaxKind["ParameterList"] = 198] = "ParameterList";
-        SyntaxKind[SyntaxKind["TypeArgumentList"] = 199] = "TypeArgumentList";
-        SyntaxKind[SyntaxKind["TypeParameterList"] = 200] = "TypeParameterList";
-        SyntaxKind[SyntaxKind["HeritageClause"] = 201] = "HeritageClause";
-        SyntaxKind[SyntaxKind["EqualsValueClause"] = 202] = "EqualsValueClause";
-        SyntaxKind[SyntaxKind["CaseSwitchClause"] = 203] = "CaseSwitchClause";
-        SyntaxKind[SyntaxKind["DefaultSwitchClause"] = 204] = "DefaultSwitchClause";
-        SyntaxKind[SyntaxKind["ElseClause"] = 205] = "ElseClause";
-        SyntaxKind[SyntaxKind["CatchClause"] = 206] = "CatchClause";
-        SyntaxKind[SyntaxKind["FinallyClause"] = 207] = "FinallyClause";
-        SyntaxKind[SyntaxKind["TemplateClause"] = 208] = "TemplateClause";
-        SyntaxKind[SyntaxKind["TypeParameter"] = 209] = "TypeParameter";
-        SyntaxKind[SyntaxKind["Constraint"] = 210] = "Constraint";
-        SyntaxKind[SyntaxKind["Parameter"] = 211] = "Parameter";
-        SyntaxKind[SyntaxKind["EnumElement"] = 212] = "EnumElement";
-        SyntaxKind[SyntaxKind["TypeAnnotation"] = 213] = "TypeAnnotation";
-        SyntaxKind[SyntaxKind["ExpressionBody"] = 214] = "ExpressionBody";
-        SyntaxKind[SyntaxKind["ComputedPropertyName"] = 215] = "ComputedPropertyName";
-        SyntaxKind[SyntaxKind["PropertyAssignment"] = 216] = "PropertyAssignment";
-        SyntaxKind[SyntaxKind["TypeAlias"] = 217] = "TypeAlias";
-        SyntaxKind[SyntaxKind["ExternalModuleReference"] = 218] = "ExternalModuleReference";
-        SyntaxKind[SyntaxKind["ModuleNameModuleReference"] = 219] = "ModuleNameModuleReference";
+        SyntaxKind[SyntaxKind["GetAccessor"] = 146] = "GetAccessor";
+        SyntaxKind[SyntaxKind["SetAccessor"] = 147] = "SetAccessor";
+        SyntaxKind[SyntaxKind["PropertySignature"] = 148] = "PropertySignature";
+        SyntaxKind[SyntaxKind["CallSignature"] = 149] = "CallSignature";
+        SyntaxKind[SyntaxKind["ConstructSignature"] = 150] = "ConstructSignature";
+        SyntaxKind[SyntaxKind["IndexSignature"] = 151] = "IndexSignature";
+        SyntaxKind[SyntaxKind["MethodSignature"] = 152] = "MethodSignature";
+        SyntaxKind[SyntaxKind["Block"] = 153] = "Block";
+        SyntaxKind[SyntaxKind["IfStatement"] = 154] = "IfStatement";
+        SyntaxKind[SyntaxKind["VariableStatement"] = 155] = "VariableStatement";
+        SyntaxKind[SyntaxKind["ExpressionStatement"] = 156] = "ExpressionStatement";
+        SyntaxKind[SyntaxKind["ReturnStatement"] = 157] = "ReturnStatement";
+        SyntaxKind[SyntaxKind["SwitchStatement"] = 158] = "SwitchStatement";
+        SyntaxKind[SyntaxKind["BreakStatement"] = 159] = "BreakStatement";
+        SyntaxKind[SyntaxKind["ContinueStatement"] = 160] = "ContinueStatement";
+        SyntaxKind[SyntaxKind["ForStatement"] = 161] = "ForStatement";
+        SyntaxKind[SyntaxKind["ForInStatement"] = 162] = "ForInStatement";
+        SyntaxKind[SyntaxKind["EmptyStatement"] = 163] = "EmptyStatement";
+        SyntaxKind[SyntaxKind["ThrowStatement"] = 164] = "ThrowStatement";
+        SyntaxKind[SyntaxKind["WhileStatement"] = 165] = "WhileStatement";
+        SyntaxKind[SyntaxKind["TryStatement"] = 166] = "TryStatement";
+        SyntaxKind[SyntaxKind["LabeledStatement"] = 167] = "LabeledStatement";
+        SyntaxKind[SyntaxKind["DoStatement"] = 168] = "DoStatement";
+        SyntaxKind[SyntaxKind["DebuggerStatement"] = 169] = "DebuggerStatement";
+        SyntaxKind[SyntaxKind["WithStatement"] = 170] = "WithStatement";
+        SyntaxKind[SyntaxKind["PrefixUnaryExpression"] = 171] = "PrefixUnaryExpression";
+        SyntaxKind[SyntaxKind["DeleteExpression"] = 172] = "DeleteExpression";
+        SyntaxKind[SyntaxKind["TypeOfExpression"] = 173] = "TypeOfExpression";
+        SyntaxKind[SyntaxKind["VoidExpression"] = 174] = "VoidExpression";
+        SyntaxKind[SyntaxKind["ConditionalExpression"] = 175] = "ConditionalExpression";
+        SyntaxKind[SyntaxKind["BinaryExpression"] = 176] = "BinaryExpression";
+        SyntaxKind[SyntaxKind["PostfixUnaryExpression"] = 177] = "PostfixUnaryExpression";
+        SyntaxKind[SyntaxKind["PropertyAccessExpression"] = 178] = "PropertyAccessExpression";
+        SyntaxKind[SyntaxKind["InvocationExpression"] = 179] = "InvocationExpression";
+        SyntaxKind[SyntaxKind["ArrayLiteralExpression"] = 180] = "ArrayLiteralExpression";
+        SyntaxKind[SyntaxKind["ObjectLiteralExpression"] = 181] = "ObjectLiteralExpression";
+        SyntaxKind[SyntaxKind["ObjectCreationExpression"] = 182] = "ObjectCreationExpression";
+        SyntaxKind[SyntaxKind["ParenthesizedExpression"] = 183] = "ParenthesizedExpression";
+        SyntaxKind[SyntaxKind["ParenthesizedArrowFunctionExpression"] = 184] = "ParenthesizedArrowFunctionExpression";
+        SyntaxKind[SyntaxKind["SimpleArrowFunctionExpression"] = 185] = "SimpleArrowFunctionExpression";
+        SyntaxKind[SyntaxKind["TypeAssertionExpression"] = 186] = "TypeAssertionExpression";
+        SyntaxKind[SyntaxKind["ElementAccessExpression"] = 187] = "ElementAccessExpression";
+        SyntaxKind[SyntaxKind["FunctionExpression"] = 188] = "FunctionExpression";
+        SyntaxKind[SyntaxKind["OmittedExpression"] = 189] = "OmittedExpression";
+        SyntaxKind[SyntaxKind["TemplateExpression"] = 190] = "TemplateExpression";
+        SyntaxKind[SyntaxKind["TemplateAccessExpression"] = 191] = "TemplateAccessExpression";
+        SyntaxKind[SyntaxKind["YieldExpression"] = 192] = "YieldExpression";
+        SyntaxKind[SyntaxKind["AwaitExpression"] = 193] = "AwaitExpression";
+        SyntaxKind[SyntaxKind["VariableDeclaration"] = 194] = "VariableDeclaration";
+        SyntaxKind[SyntaxKind["VariableDeclarator"] = 195] = "VariableDeclarator";
+        SyntaxKind[SyntaxKind["ArgumentList"] = 196] = "ArgumentList";
+        SyntaxKind[SyntaxKind["ParameterList"] = 197] = "ParameterList";
+        SyntaxKind[SyntaxKind["TypeArgumentList"] = 198] = "TypeArgumentList";
+        SyntaxKind[SyntaxKind["TypeParameterList"] = 199] = "TypeParameterList";
+        SyntaxKind[SyntaxKind["HeritageClause"] = 200] = "HeritageClause";
+        SyntaxKind[SyntaxKind["EqualsValueClause"] = 201] = "EqualsValueClause";
+        SyntaxKind[SyntaxKind["CaseSwitchClause"] = 202] = "CaseSwitchClause";
+        SyntaxKind[SyntaxKind["DefaultSwitchClause"] = 203] = "DefaultSwitchClause";
+        SyntaxKind[SyntaxKind["ElseClause"] = 204] = "ElseClause";
+        SyntaxKind[SyntaxKind["CatchClause"] = 205] = "CatchClause";
+        SyntaxKind[SyntaxKind["FinallyClause"] = 206] = "FinallyClause";
+        SyntaxKind[SyntaxKind["TemplateClause"] = 207] = "TemplateClause";
+        SyntaxKind[SyntaxKind["TypeParameter"] = 208] = "TypeParameter";
+        SyntaxKind[SyntaxKind["Constraint"] = 209] = "Constraint";
+        SyntaxKind[SyntaxKind["Parameter"] = 210] = "Parameter";
+        SyntaxKind[SyntaxKind["EnumElement"] = 211] = "EnumElement";
+        SyntaxKind[SyntaxKind["TypeAnnotation"] = 212] = "TypeAnnotation";
+        SyntaxKind[SyntaxKind["ExpressionBody"] = 213] = "ExpressionBody";
+        SyntaxKind[SyntaxKind["ComputedPropertyName"] = 214] = "ComputedPropertyName";
+        SyntaxKind[SyntaxKind["PropertyAssignment"] = 215] = "PropertyAssignment";
+        SyntaxKind[SyntaxKind["TypeAlias"] = 216] = "TypeAlias";
+        SyntaxKind[SyntaxKind["ExternalModuleReference"] = 217] = "ExternalModuleReference";
+        SyntaxKind[SyntaxKind["ModuleNameModuleReference"] = 218] = "ModuleNameModuleReference";
         SyntaxKind[SyntaxKind["FirstStandardKeyword"] = 17] = "FirstStandardKeyword";
         SyntaxKind[SyntaxKind["LastStandardKeyword"] = 45] = "LastStandardKeyword";
         SyntaxKind[SyntaxKind["FirstFutureReservedKeyword"] = 46] = "FirstFutureReservedKeyword";
@@ -648,7 +647,7 @@ var TypeScript;
         SyntaxKind[SyntaxKind["FirstTrivia"] = 2] = "FirstTrivia";
         SyntaxKind[SyntaxKind["LastTrivia"] = 6] = "LastTrivia";
         SyntaxKind[SyntaxKind["FirstNode"] = 125] = "FirstNode";
-        SyntaxKind[SyntaxKind["LastNode"] = 219] = "LastNode";
+        SyntaxKind[SyntaxKind["LastNode"] = 218] = "LastNode";
     })(TypeScript.SyntaxKind || (TypeScript.SyntaxKind = {}));
     var SyntaxKind = TypeScript.SyntaxKind;
 })(TypeScript || (TypeScript = {}));
@@ -1298,7 +1297,7 @@ var definitions = [
         ]
     },
     {
-        name: 'MemberAccessExpressionSyntax',
+        name: 'PropertyAccessExpressionSyntax',
         baseType: 'ISyntaxNode',
         interfaces: ['IMemberExpressionSyntax', 'ICallExpressionSyntax'],
         children: [
@@ -1531,7 +1530,7 @@ var definitions = [
         isTypeScriptSpecific: true
     },
     {
-        name: 'MemberFunctionDeclarationSyntax',
+        name: 'MethodDeclarationSyntax',
         baseType: 'ISyntaxNode',
         interfaces: ['IMemberDeclarationSyntax', 'IPropertyAssignmentSyntax'],
         children: [
@@ -1569,7 +1568,7 @@ var definitions = [
         isTypeScriptSpecific: true
     },
     {
-        name: 'MemberVariableDeclarationSyntax',
+        name: 'PropertyDeclarationSyntax',
         baseType: 'ISyntaxNode',
         interfaces: ['IMemberDeclarationSyntax'],
         children: [
@@ -1741,7 +1740,7 @@ var definitions = [
         ]
     },
     {
-        name: 'CastExpressionSyntax',
+        name: 'TypeAssertionExpressionSyntax',
         baseType: 'ISyntaxNode',
         interfaces: ['IUnaryExpressionSyntax'],
         children: [
@@ -1901,7 +1900,7 @@ var definitions = [
         interfaces: ['IUnaryExpressionSyntax'],
         children: [
             { name: 'awaitKeyword', isToken: true },
-            { name: 'expression', type: 'IExpressionSyntax', isOptional: true }
+            { name: 'expression', type: 'IUnaryExpressionSyntax', isOptional: true }
         ]
     },
     {

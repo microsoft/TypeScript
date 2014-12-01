@@ -22,8 +22,8 @@ module TypeScript {
             case SyntaxKind.EnumDeclaration: return visitor.visitEnumDeclaration(<EnumDeclarationSyntax>element);
             case SyntaxKind.ImportDeclaration: return visitor.visitImportDeclaration(<ImportDeclarationSyntax>element);
             case SyntaxKind.ExportAssignment: return visitor.visitExportAssignment(<ExportAssignmentSyntax>element);
-            case SyntaxKind.MemberFunctionDeclaration: return visitor.visitMemberFunctionDeclaration(<MemberFunctionDeclarationSyntax>element);
-            case SyntaxKind.MemberVariableDeclaration: return visitor.visitMemberVariableDeclaration(<MemberVariableDeclarationSyntax>element);
+            case SyntaxKind.MethodDeclaration: return visitor.visitMethodDeclaration(<MethodDeclarationSyntax>element);
+            case SyntaxKind.PropertyDeclaration: return visitor.visitPropertyDeclaration(<PropertyDeclarationSyntax>element);
             case SyntaxKind.ConstructorDeclaration: return visitor.visitConstructorDeclaration(<ConstructorDeclarationSyntax>element);
             case SyntaxKind.GetAccessor: return visitor.visitGetAccessor(<GetAccessorSyntax>element);
             case SyntaxKind.SetAccessor: return visitor.visitSetAccessor(<SetAccessorSyntax>element);
@@ -57,7 +57,7 @@ module TypeScript {
             case SyntaxKind.ConditionalExpression: return visitor.visitConditionalExpression(<ConditionalExpressionSyntax>element);
             case SyntaxKind.BinaryExpression: return visitor.visitBinaryExpression(<BinaryExpressionSyntax>element);
             case SyntaxKind.PostfixUnaryExpression: return visitor.visitPostfixUnaryExpression(<PostfixUnaryExpressionSyntax>element);
-            case SyntaxKind.MemberAccessExpression: return visitor.visitMemberAccessExpression(<MemberAccessExpressionSyntax>element);
+            case SyntaxKind.PropertyAccessExpression: return visitor.visitPropertyAccessExpression(<PropertyAccessExpressionSyntax>element);
             case SyntaxKind.InvocationExpression: return visitor.visitInvocationExpression(<InvocationExpressionSyntax>element);
             case SyntaxKind.ArrayLiteralExpression: return visitor.visitArrayLiteralExpression(<ArrayLiteralExpressionSyntax>element);
             case SyntaxKind.ObjectLiteralExpression: return visitor.visitObjectLiteralExpression(<ObjectLiteralExpressionSyntax>element);
@@ -65,7 +65,7 @@ module TypeScript {
             case SyntaxKind.ParenthesizedExpression: return visitor.visitParenthesizedExpression(<ParenthesizedExpressionSyntax>element);
             case SyntaxKind.ParenthesizedArrowFunctionExpression: return visitor.visitParenthesizedArrowFunctionExpression(<ParenthesizedArrowFunctionExpressionSyntax>element);
             case SyntaxKind.SimpleArrowFunctionExpression: return visitor.visitSimpleArrowFunctionExpression(<SimpleArrowFunctionExpressionSyntax>element);
-            case SyntaxKind.CastExpression: return visitor.visitCastExpression(<CastExpressionSyntax>element);
+            case SyntaxKind.TypeAssertionExpression: return visitor.visitTypeAssertionExpression(<TypeAssertionExpressionSyntax>element);
             case SyntaxKind.ElementAccessExpression: return visitor.visitElementAccessExpression(<ElementAccessExpressionSyntax>element);
             case SyntaxKind.FunctionExpression: return visitor.visitFunctionExpression(<FunctionExpressionSyntax>element);
             case SyntaxKind.OmittedExpression: return visitor.visitOmittedExpression(<OmittedExpressionSyntax>element);
@@ -122,8 +122,8 @@ module TypeScript {
         visitEnumDeclaration(node: EnumDeclarationSyntax): any;
         visitImportDeclaration(node: ImportDeclarationSyntax): any;
         visitExportAssignment(node: ExportAssignmentSyntax): any;
-        visitMemberFunctionDeclaration(node: MemberFunctionDeclarationSyntax): any;
-        visitMemberVariableDeclaration(node: MemberVariableDeclarationSyntax): any;
+        visitMethodDeclaration(node: MethodDeclarationSyntax): any;
+        visitPropertyDeclaration(node: PropertyDeclarationSyntax): any;
         visitConstructorDeclaration(node: ConstructorDeclarationSyntax): any;
         visitGetAccessor(node: GetAccessorSyntax): any;
         visitSetAccessor(node: SetAccessorSyntax): any;
@@ -157,7 +157,7 @@ module TypeScript {
         visitConditionalExpression(node: ConditionalExpressionSyntax): any;
         visitBinaryExpression(node: BinaryExpressionSyntax): any;
         visitPostfixUnaryExpression(node: PostfixUnaryExpressionSyntax): any;
-        visitMemberAccessExpression(node: MemberAccessExpressionSyntax): any;
+        visitPropertyAccessExpression(node: PropertyAccessExpressionSyntax): any;
         visitInvocationExpression(node: InvocationExpressionSyntax): any;
         visitArrayLiteralExpression(node: ArrayLiteralExpressionSyntax): any;
         visitObjectLiteralExpression(node: ObjectLiteralExpressionSyntax): any;
@@ -165,7 +165,7 @@ module TypeScript {
         visitParenthesizedExpression(node: ParenthesizedExpressionSyntax): any;
         visitParenthesizedArrowFunctionExpression(node: ParenthesizedArrowFunctionExpressionSyntax): any;
         visitSimpleArrowFunctionExpression(node: SimpleArrowFunctionExpressionSyntax): any;
-        visitCastExpression(node: CastExpressionSyntax): any;
+        visitTypeAssertionExpression(node: TypeAssertionExpressionSyntax): any;
         visitElementAccessExpression(node: ElementAccessExpressionSyntax): any;
         visitFunctionExpression(node: FunctionExpressionSyntax): any;
         visitOmittedExpression(node: OmittedExpressionSyntax): any;

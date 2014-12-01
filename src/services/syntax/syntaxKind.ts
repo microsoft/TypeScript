@@ -179,8 +179,8 @@ module TypeScript {
         ExportAssignment,
 
         // ClassElements
-        MemberFunctionDeclaration,
-        MemberVariableDeclaration,
+        MethodDeclaration,
+        PropertyDeclaration,
         ConstructorDeclaration,
 
         // ClassElement and PropertyAssignment
@@ -222,7 +222,7 @@ module TypeScript {
         ConditionalExpression,
         BinaryExpression,
         PostfixUnaryExpression,
-        MemberAccessExpression,
+        PropertyAccessExpression,
         InvocationExpression,
         ArrayLiteralExpression,
         ObjectLiteralExpression,
@@ -230,7 +230,7 @@ module TypeScript {
         ParenthesizedExpression,
         ParenthesizedArrowFunctionExpression,
         SimpleArrowFunctionExpression,
-        CastExpression,
+        TypeAssertionExpression,
         ElementAccessExpression,
         FunctionExpression,
         OmittedExpression,

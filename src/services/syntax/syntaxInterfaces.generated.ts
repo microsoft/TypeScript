@@ -150,21 +150,21 @@ module TypeScript {
     }
     export interface ExportAssignmentConstructor { new (data: number, modifiers: ISyntaxToken[], exportKeyword: ISyntaxToken, equalsToken: ISyntaxToken, identifier: ISyntaxToken, semicolonToken: ISyntaxToken): ExportAssignmentSyntax }
 
-    export interface MemberFunctionDeclarationSyntax extends ISyntaxNode, IMemberDeclarationSyntax, IPropertyAssignmentSyntax {
+    export interface MethodDeclarationSyntax extends ISyntaxNode, IMemberDeclarationSyntax, IPropertyAssignmentSyntax {
         modifiers: ISyntaxToken[];
         asterixToken: ISyntaxToken;
         propertyName: IPropertyNameSyntax;
         callSignature: CallSignatureSyntax;
         body: BlockSyntax | ExpressionBody | ISyntaxToken;
     }
-    export interface MemberFunctionDeclarationConstructor { new (data: number, modifiers: ISyntaxToken[], asterixToken: ISyntaxToken, propertyName: IPropertyNameSyntax, callSignature: CallSignatureSyntax, body: BlockSyntax | ExpressionBody | ISyntaxToken): MemberFunctionDeclarationSyntax }
+    export interface MethodDeclarationConstructor { new (data: number, modifiers: ISyntaxToken[], asterixToken: ISyntaxToken, propertyName: IPropertyNameSyntax, callSignature: CallSignatureSyntax, body: BlockSyntax | ExpressionBody | ISyntaxToken): MethodDeclarationSyntax }
 
-    export interface MemberVariableDeclarationSyntax extends ISyntaxNode, IMemberDeclarationSyntax {
+    export interface PropertyDeclarationSyntax extends ISyntaxNode, IMemberDeclarationSyntax {
         modifiers: ISyntaxToken[];
         variableDeclarator: VariableDeclaratorSyntax;
         semicolonToken: ISyntaxToken;
     }
-    export interface MemberVariableDeclarationConstructor { new (data: number, modifiers: ISyntaxToken[], variableDeclarator: VariableDeclaratorSyntax, semicolonToken: ISyntaxToken): MemberVariableDeclarationSyntax }
+    export interface PropertyDeclarationConstructor { new (data: number, modifiers: ISyntaxToken[], variableDeclarator: VariableDeclaratorSyntax, semicolonToken: ISyntaxToken): PropertyDeclarationSyntax }
 
     export interface ConstructorDeclarationSyntax extends ISyntaxNode, IClassElementSyntax {
         modifiers: ISyntaxToken[];
@@ -426,12 +426,12 @@ module TypeScript {
     }
     export interface PostfixUnaryExpressionConstructor { new (data: number, operand: ILeftHandSideExpressionSyntax, operatorToken: ISyntaxToken): PostfixUnaryExpressionSyntax }
 
-    export interface MemberAccessExpressionSyntax extends ISyntaxNode, IMemberExpressionSyntax, ICallExpressionSyntax {
+    export interface PropertyAccessExpressionSyntax extends ISyntaxNode, IMemberExpressionSyntax, ICallExpressionSyntax {
         expression: ILeftHandSideExpressionSyntax;
         dotToken: ISyntaxToken;
         name: ISyntaxToken;
     }
-    export interface MemberAccessExpressionConstructor { new (data: number, expression: ILeftHandSideExpressionSyntax, dotToken: ISyntaxToken, name: ISyntaxToken): MemberAccessExpressionSyntax }
+    export interface PropertyAccessExpressionConstructor { new (data: number, expression: ILeftHandSideExpressionSyntax, dotToken: ISyntaxToken, name: ISyntaxToken): PropertyAccessExpressionSyntax }
 
     export interface InvocationExpressionSyntax extends ISyntaxNode, ICallExpressionSyntax {
         expression: ILeftHandSideExpressionSyntax;
@@ -483,13 +483,13 @@ module TypeScript {
     }
     export interface SimpleArrowFunctionExpressionConstructor { new (data: number, asyncKeyword: ISyntaxToken, parameter: ParameterSyntax, equalsGreaterThanToken: ISyntaxToken, body: BlockSyntax | IExpressionSyntax): SimpleArrowFunctionExpressionSyntax }
 
-    export interface CastExpressionSyntax extends ISyntaxNode, IUnaryExpressionSyntax {
+    export interface TypeAssertionExpressionSyntax extends ISyntaxNode, IUnaryExpressionSyntax {
         lessThanToken: ISyntaxToken;
         type: ITypeSyntax;
         greaterThanToken: ISyntaxToken;
         expression: IUnaryExpressionSyntax;
     }
-    export interface CastExpressionConstructor { new (data: number, lessThanToken: ISyntaxToken, type: ITypeSyntax, greaterThanToken: ISyntaxToken, expression: IUnaryExpressionSyntax): CastExpressionSyntax }
+    export interface TypeAssertionExpressionConstructor { new (data: number, lessThanToken: ISyntaxToken, type: ITypeSyntax, greaterThanToken: ISyntaxToken, expression: IUnaryExpressionSyntax): TypeAssertionExpressionSyntax }
 
     export interface ElementAccessExpressionSyntax extends ISyntaxNode, IMemberExpressionSyntax, ICallExpressionSyntax {
         expression: ILeftHandSideExpressionSyntax;
@@ -534,9 +534,9 @@ module TypeScript {
 
     export interface AwaitExpressionSyntax extends ISyntaxNode, IUnaryExpressionSyntax {
         awaitKeyword: ISyntaxToken;
-        expression: IExpressionSyntax;
+        expression: IUnaryExpressionSyntax;
     }
-    export interface AwaitExpressionConstructor { new (data: number, awaitKeyword: ISyntaxToken, expression: IExpressionSyntax): AwaitExpressionSyntax }
+    export interface AwaitExpressionConstructor { new (data: number, awaitKeyword: ISyntaxToken, expression: IUnaryExpressionSyntax): AwaitExpressionSyntax }
 
     export interface VariableDeclarationSyntax extends ISyntaxNode {
         varConstOrLetKeyword: ISyntaxToken;
