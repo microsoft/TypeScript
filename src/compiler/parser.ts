@@ -1234,7 +1234,7 @@ module ts {
                 }
             }
             else {
-                error(Diagnostics._0_expected, ";");
+                parseExpected(SyntaxKind.SemicolonToken);
             }
         }
 
@@ -1536,7 +1536,7 @@ module ts {
                     if (isListTerminator(kind)) {
                         break;
                     }
-                    error(Diagnostics._0_expected, ",");
+                    parseExpected(SyntaxKind.CommaToken);
                 }
                 else if (isListTerminator(kind)) {
                     break;
