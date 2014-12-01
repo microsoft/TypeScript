@@ -920,3 +920,9 @@ module TypeScript.Services {
     export var TypeScriptServicesFactory = ts.TypeScriptServicesFactory;
 }
 
+module ts {
+    declare var module: any;
+    if (typeof module !== "undefined" && module.exports) {
+        module.exports = ts;
+    }
+}
