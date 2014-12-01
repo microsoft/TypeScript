@@ -1589,10 +1589,45 @@ module ts {
             while (parseOptional(SyntaxKind.DotToken)) {
                 var node = <QualifiedName>createNode(SyntaxKind.QualifiedName, entity.pos);
                 node.left = entity;
-                node.right = allowReservedWords ? parseIdentifierName() : parseIdentifier();
+                node.right = parseRightSideOfDot(allowReservedWords);
                 entity = finishNode(node);
             }
             return entity;
+        }
+
+        function parseRightSideOfDot(allowIdentifierNames: boolean): Identifier {
+            // Technically a keyword is valid here as all keywords are identifier names.
+            // However, often we'll encounter this in error situations when the keyword
+            // is actually starting another valid construct.
+            //
+            // So, we check for the following specific case:
+            //
+            //      name.
+            //      keyword identifierNameOrKeyword
+            //
+            // Note: the newlines are important here.  For example, if that above code 
+            // were rewritten into:
+            //
+            //      name.keyword
+            //      identifierNameOrKeyword
+            //
+            // Then we would consider it valid.  That's because ASI would take effect and
+            // the code would be implicitly: "name.keyword; identifierNameOrKeyword".  
+            // In the first case though, ASI will not take effect because there is not a
+            // line terminator after the keyword.
+            if (scanner.hasPrecedingLineBreak() && scanner.isReservedWord()) {
+                var matchesPattern = lookAhead(() => {
+                    nextToken();
+                    return !scanner.hasPrecedingLineBreak() && (scanner.isIdentifier() || scanner.isReservedWord());
+                });
+
+                if (matchesPattern) {
+                    errorAtPos(scanner.getTokenPos(), 0, Diagnostics.Identifier_expected);
+                    return <Identifier>createMissingNode();
+                }
+            }
+
+            return allowIdentifierNames ? parseIdentifierName() : parseIdentifier();
         }
 
         function parseTokenNode(): PrimaryExpression {
@@ -2847,7 +2882,7 @@ module ts {
             var node = <PropertyAccessExpression>createNode(SyntaxKind.PropertyAccessExpression, expression.pos);
             node.expression = expression;
             parseExpected(SyntaxKind.DotToken, Diagnostics.super_must_be_followed_by_an_argument_list_or_member_access);
-            node.name = parseIdentifierName();
+            node.name = parseRightSideOfDot(/*allowIdentifierNames:*/ true);
             return finishNode(node);
         }
 
@@ -2865,40 +2900,8 @@ module ts {
                 var dotOrBracketStart = scanner.getTokenPos();
                 if (parseOptional(SyntaxKind.DotToken)) {
                     var propertyAccess = <PropertyAccessExpression>createNode(SyntaxKind.PropertyAccessExpression, expression.pos);
-                    // Technically a keyword is valid here as all keywords are identifier names.
-                    // However, often we'll encounter this in error situations when the keyword
-                    // is actually starting another valid construct.
-                    //
-                    // So, we check for the following specific case:
-                    //
-                    //      name.
-                    //      keyword identifierNameOrKeyword
-                    //
-                    // Note: the newlines are important here.  For example, if that above code 
-                    // were rewritten into:
-                    //
-                    //      name.keyword
-                    //      identifierNameOrKeyword
-                    //
-                    // Then we would consider it valid.  That's because ASI would take effect and
-                    // the code would be implicitly: "name.keyword; identifierNameOrKeyword".  
-                    // In the first case though, ASI will not take effect because there is not a
-                    // line terminator after the keyword.
-                    var id: Identifier;
-                    if (scanner.hasPrecedingLineBreak() && scanner.isReservedWord()) {
-                        var matchesPattern = lookAhead(() => {
-                            nextToken();
-                            return !scanner.hasPrecedingLineBreak() && (scanner.isIdentifier() || scanner.isReservedWord);
-                        });
-
-                        if (matchesPattern) {
-                            errorAtPos(dotOrBracketStart + 1, 0, Diagnostics.Identifier_expected);
-                            id = <Identifier>createMissingNode();
-                        }
-                    }
-
                     propertyAccess.expression = expression;
-                    propertyAccess.name = id || parseIdentifierName();
+                    propertyAccess.name = parseRightSideOfDot(/*allowIdentifierNames:*/ true);
                     expression = finishNode(propertyAccess);
                     continue;
                 }
@@ -3226,9 +3229,7 @@ module ts {
         function parseDoStatement(): DoStatement {
             var node = <DoStatement>createNode(SyntaxKind.DoStatement);
             parseExpected(SyntaxKind.DoKeyword);
-
             node.statement = parseStatement();
-
             parseExpected(SyntaxKind.WhileKeyword);
             parseExpected(SyntaxKind.OpenParenToken);
             node.expression = allowInAnd(parseExpression);
@@ -3248,9 +3249,7 @@ module ts {
             parseExpected(SyntaxKind.OpenParenToken);
             node.expression = allowInAnd(parseExpression);
             parseExpected(SyntaxKind.CloseParenToken);
-
             node.statement = parseStatement();
-
             return finishNode(node);
         }
 
