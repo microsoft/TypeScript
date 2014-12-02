@@ -3551,7 +3551,7 @@ module ts {
                 case SyntaxKind.StaticKeyword:
                     // When followed by an identifier or keyword, these do not start a statement but
                     // might instead be following type members
-                    if (lookAhead(() => nextToken() >= SyntaxKind.Identifier)) {
+                    if (lookAhead(() => nextToken() >= SyntaxKind.Identifier && !scanner.hasPrecedingLineBreak())) {
                         return false;
                     }
                 default:
@@ -3702,10 +3702,14 @@ module ts {
                 property.name = name;
                 property.questionToken = questionToken;
                 property.type = parseTypeAnnotation();
-                property.initializer = allowInAnd(() => parseInitializer(/*inParameter*/ false));
+                property.initializer = allowInAnd(parseNonParameterInitializer);
                 parseSemicolon();
                 return finishNode(property);
             }
+        }
+
+        function parseNonParameterInitializer() {
+            return parseInitializer(/*inParameter*/ false);
         }
 
         function parseMemberAccessorDeclaration(kind: SyntaxKind, fullStart: number, modifiers: ModifiersArray): MethodDeclaration {
@@ -3913,11 +3917,11 @@ module ts {
         function parseEnumMember(): EnumMember {
             var node = <EnumMember>createNode(SyntaxKind.EnumMember, scanner.getStartPos());
             node.name = parsePropertyName();
-            node.initializer = allowInAnd(() => parseInitializer(/*inParameter*/ false));
+            node.initializer = allowInAnd(parseNonParameterInitializer);
             return finishNode(node);
         }
 
-        function parseAndCheckEnumDeclaration(fullStart: number, modifiers: ModifiersArray, flags: NodeFlags): EnumDeclaration {
+        function parseEnumDeclaration(fullStart: number, modifiers: ModifiersArray): EnumDeclaration {
             var node = <EnumDeclaration>createNode(SyntaxKind.EnumDeclaration, fullStart);
             setModifiers(node, modifiers);
             parseExpected(SyntaxKind.EnumKeyword);
@@ -3935,7 +3939,7 @@ module ts {
         function parseModuleBlock(): ModuleBlock {
             var node = <ModuleBlock>createNode(SyntaxKind.ModuleBlock, scanner.getStartPos());
             if (parseExpected(SyntaxKind.OpenBraceToken)) {
-                node.statements = parseList(ParsingContext.ModuleElements, /*checkForStrictMode*/ false, parseModuleElement);
+                node.statements = parseList(ParsingContext.ModuleElements, /*checkForStrictMode*/false, parseModuleElement);
                 parseExpected(SyntaxKind.CloseBraceToken);
             }
             else {
@@ -3955,20 +3959,19 @@ module ts {
             return finishNode(node);
         }
 
-        function parseAmbientExternalModuleDeclaration(fullStart: number, modifiers: ModifiersArray, flags: NodeFlags): ModuleDeclaration {
+        function parseAmbientExternalModuleDeclaration(fullStart: number, modifiers: ModifiersArray): ModuleDeclaration {
             var node = <ModuleDeclaration>createNode(SyntaxKind.ModuleDeclaration, fullStart);
             setModifiers(node, modifiers);
-            node.flags |= flags;
             node.name = parseLiteralNode(/*internName:*/ true);
             node.body = parseModuleBlock();
             return finishNode(node);
         }
 
-        function parseModuleDeclaration(fullStart: number, modifiers: ModifiersArray, flags: NodeFlags): ModuleDeclaration {
+        function parseModuleDeclaration(fullStart: number, modifiers: ModifiersArray): ModuleDeclaration {
             parseExpected(SyntaxKind.ModuleKeyword);
             return token === SyntaxKind.StringLiteral 
-                ? parseAmbientExternalModuleDeclaration(fullStart, modifiers, flags)
-                : parseInternalModuleTail(fullStart, modifiers, flags);
+                ? parseAmbientExternalModuleDeclaration(fullStart, modifiers)
+                : parseInternalModuleTail(fullStart, modifiers, modifiers? modifiers.flags : 0);
         }
 
         function isExternalModuleReference() {
@@ -4063,7 +4066,6 @@ module ts {
                 }
             }
 
-            var flags = modifiers ? modifiers.flags : 0;
             switch (token) {
                 case SyntaxKind.VarKeyword:
                 case SyntaxKind.LetKeyword:
@@ -4078,9 +4080,9 @@ module ts {
                 case SyntaxKind.TypeKeyword:
                     return parseTypeAliasDeclaration(fullStart, modifiers);
                 case SyntaxKind.EnumKeyword:
-                    return parseAndCheckEnumDeclaration(fullStart, modifiers, flags);
+                    return parseEnumDeclaration(fullStart, modifiers);
                 case SyntaxKind.ModuleKeyword:
-                    return parseModuleDeclaration(fullStart, modifiers, flags);
+                    return parseModuleDeclaration(fullStart, modifiers);
                 case SyntaxKind.ImportKeyword:
                     return parseImportDeclaration(fullStart, modifiers);
                 default:
