@@ -1,0 +1,22 @@
+tests/cases/compiler/externalModuleReferenceDoubleUnderscore1.ts(2,29): error TS2307: Cannot find external module '__timezonecomplete/basics'.
+
+
+==== tests/cases/compiler/externalModuleReferenceDoubleUnderscore1.ts (1 errors) ====
+    declare module 'timezonecomplete' {
+        import basics = require("__timezonecomplete/basics");
+                                ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find external module '__timezonecomplete/basics'.
+        export import TimeUnit = basics.TimeUnit;
+    }
+    
+    declare module '__timezonecomplete/basics' {
+        export enum TimeUnit {
+            Second = 0,
+            Minute = 1,
+            Hour = 2,
+            Day = 3,
+            Week = 4,
+            Month = 5,
+            Year = 6,
+        }
+    }
