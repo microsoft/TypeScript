@@ -272,7 +272,6 @@ module ts {
     export const enum NodeFlags {
         Export              = 0x00000001,  // Declarations
         Ambient             = 0x00000002,  // Declarations
-        QuestionMark        = 0x00000004,  // Parameter/Property/Method
         Public              = 0x00000010,  // Property/Method
         Private             = 0x00000020,  // Property/Method
         Protected           = 0x00000040,  // Property/Method
@@ -370,11 +369,13 @@ module ts {
     export interface ParameterDeclaration extends Declaration {
         dotDotDotToken?: Node;
         name: Identifier;
+        questionToken?: Node;
         type?: TypeNode | StringLiteralExpression;
         initializer?: Expression;
     }
 
     export interface PropertyDeclaration extends Declaration, ClassElement {
+        questionToken?: Node;
         type?: TypeNode;
         initializer?: Expression;
     }
@@ -384,6 +385,7 @@ module ts {
 
     export interface ShortHandPropertyDeclaration extends Declaration {
         name: Identifier;
+        questionToken?: Node;
     }
 
     /**
@@ -398,6 +400,7 @@ module ts {
         _functionLikeDeclarationBrand: any;
 
         asteriskToken?: Node;
+        questionToken?: Node;
         body?: Block | Expression;
     }
 

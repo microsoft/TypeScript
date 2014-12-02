@@ -219,6 +219,7 @@ module ts {
                 return children(node.modifiers) ||
                     child((<ParameterDeclaration>node).dotDotDotToken) ||
                     child((<ParameterDeclaration>node).name) ||
+                    child((<ParameterDeclaration>node).questionToken) ||
                     child((<ParameterDeclaration>node).type) ||
                     child((<ParameterDeclaration>node).initializer);
             case SyntaxKind.Property:
@@ -226,6 +227,7 @@ module ts {
             case SyntaxKind.ShorthandPropertyAssignment:
                 return children(node.modifiers) ||
                     child((<PropertyDeclaration>node).name) ||
+                    child((<PropertyDeclaration>node).questionToken) ||
                     child((<PropertyDeclaration>node).type) ||
                     child((<PropertyDeclaration>node).initializer);
             case SyntaxKind.FunctionType:
@@ -246,6 +248,7 @@ module ts {
             case SyntaxKind.ArrowFunction:
                 return children(node.modifiers) ||
                     child((<FunctionLikeDeclaration>node).name) ||
+                    child((<FunctionLikeDeclaration>node).questionToken) ||
                     children((<FunctionLikeDeclaration>node).typeParameters) ||
                     children((<FunctionLikeDeclaration>node).parameters) ||
                     child((<FunctionLikeDeclaration>node).type) ||
@@ -624,6 +627,23 @@ module ts {
 
     export function hasDotDotDotToken(node: Node) {
         return node && node.kind === SyntaxKind.Parameter && (<ParameterDeclaration>node).dotDotDotToken !== undefined;
+    }
+
+    export function hasQuestionToken(node: Node) {
+        if (node) {
+            switch (node.kind) {
+                case SyntaxKind.Parameter:
+                    return (<ParameterDeclaration>node).questionToken !== undefined;
+                case SyntaxKind.Method:
+                    return (<MethodDeclaration>node).questionToken !== undefined;
+                case SyntaxKind.ShorthandPropertyAssignment:
+                case SyntaxKind.PropertyAssignment:
+                case SyntaxKind.Property:
+                    return (<PropertyDeclaration>node).questionToken !== undefined;
+            }
+        }
+
+        return false;
     }
 
     export function hasRestParameters(s: SignatureDeclaration): boolean {
@@ -1853,9 +1873,7 @@ module ts {
                 nextToken();
             }
 
-            if (parseOptional(SyntaxKind.QuestionToken)) {
-                node.flags |= NodeFlags.QuestionMark;
-            }
+            node.questionToken = token === SyntaxKind.QuestionToken ? parseTokenNode() : undefined;
             node.type = parseParameterType();
             node.initializer = inGeneratorParameterContext()
                 ? doOutsideOfYieldContext(parseParameterInitializer)
@@ -2020,15 +2038,12 @@ module ts {
         function parsePropertyOrMethod(): Declaration {
             var fullStart = scanner.getStartPos();
             var name = parsePropertyName();
-            var flags = 0;
-            if (parseOptional(SyntaxKind.QuestionToken)) {
-                flags = NodeFlags.QuestionMark;
-            }
+            var questionToken = token === SyntaxKind.QuestionToken ? parseTokenNode() : undefined;
 
             if (token === SyntaxKind.OpenParenToken || token === SyntaxKind.LessThanToken) {
                 var method = <MethodDeclaration>createNode(SyntaxKind.Method, fullStart);
                 method.name = name;
-                method.flags = flags;
+                method.questionToken = questionToken;
 
                 // Method signatues don't exist in expression contexts.  So they have neither
                 // [Yield] nor [GeneratorParameter]
@@ -2040,7 +2055,7 @@ module ts {
             else {
                 var property = <PropertyDeclaration>createNode(SyntaxKind.Property, fullStart);
                 property.name = name;
-                property.flags = flags;
+                property.questionToken = questionToken;
                 property.type = parseTypeAnnotation();
                 parseSemicolon();
                 return finishNode(property);
@@ -3125,28 +3140,24 @@ module ts {
                 return finishNode(node);
             }
 
-            var flags: NodeFlags = 0;
-
             // Disallowing of optional property assignments happens in the grammar checker.
-            if (token === SyntaxKind.QuestionToken) {
-                flags |= NodeFlags.QuestionMark;
-                nextToken();
-            }
+            var questionToken = token === SyntaxKind.QuestionToken ? parseTokenNode() : undefined;
 
             // Parse to check if it is short-hand property assignment or normal property assignment
             if ((token === SyntaxKind.CommaToken || token === SyntaxKind.CloseBraceToken) && tokenIsIdentifier) {
-                node = <ShortHandPropertyDeclaration>createNode(SyntaxKind.ShorthandPropertyAssignment, nodePos);
-                node.name = propertyName;
+                var shorthandDeclaration = <ShortHandPropertyDeclaration>createNode(SyntaxKind.ShorthandPropertyAssignment, nodePos);
+                shorthandDeclaration.name = <Identifier>propertyName;
+                shorthandDeclaration.questionToken = questionToken;
+                return finishNode(shorthandDeclaration);
             }
             else {
-                node = <PropertyDeclaration>createNode(SyntaxKind.PropertyAssignment, nodePos);
-                node.name = propertyName;
+                var propertyDeclaration = <PropertyDeclaration>createNode(SyntaxKind.PropertyAssignment, nodePos);
+                propertyDeclaration.name = propertyName;
+                propertyDeclaration.questionToken = questionToken;
                 parseExpected(SyntaxKind.ColonToken);
-                (<PropertyDeclaration>node).initializer = allowInAnd(parseAssignmentExpressionOrHigher);
+                propertyDeclaration.initializer = allowInAnd(parseAssignmentExpressionOrHigher);
+                return finishNode(propertyDeclaration);
             }
-
-            node.flags = flags;
-            return finishNode(node);
         }
 
         function parseObjectLiteralMember(): Declaration {
@@ -3671,23 +3682,18 @@ module ts {
         }
 
         function parsePropertyMemberDeclaration(fullStart: number, modifiers: ModifiersArray): ClassElement {
-            var flags = modifiers ? modifiers.flags : 0;
             var asteriskToken = parseOptionalToken(SyntaxKind.AsteriskToken);
             var name = parsePropertyName();
-            if (parseOptional(SyntaxKind.QuestionToken)) {
-                // Note: this is not legal as per the grammar.  But we allow it in the parser and
-                // report an error in the grammar checker.
-                flags |= NodeFlags.QuestionMark;
-            }
 
+            // Note: this is not legal as per the grammar.  But we allow it in the parser and
+            // report an error in the grammar checker.
+            var questionToken = token === SyntaxKind.QuestionToken ? parseTokenNode() : undefined;
             if (asteriskToken || token === SyntaxKind.OpenParenToken || token === SyntaxKind.LessThanToken) {
                 var method = <MethodDeclaration>createNode(SyntaxKind.Method, fullStart);
                 setModifiers(method, modifiers);
-                if (flags) {
-                    method.flags = flags;
-                }
                 method.asteriskToken = asteriskToken;
                 method.name = name;
+                method.questionToken = questionToken;
                 fillSignature(SyntaxKind.CallSignature, SyntaxKind.ColonToken, /* returnTokenRequired */ false, /*yieldAndGeneratorParameterContext:*/ !!asteriskToken, method);
                 method.body = parseFunctionBlockOrSemicolon(!!asteriskToken);
                 return finishNode(method);
@@ -3695,10 +3701,8 @@ module ts {
             else {
                 var property = <PropertyDeclaration>createNode(SyntaxKind.Property, fullStart);
                 setModifiers(property, modifiers);
-                if (flags) {
-                    property.flags = flags;
-                }
                 property.name = name;
+                property.questionToken = questionToken;
                 property.type = parseTypeAnnotation();
                 property.initializer = allowInAnd(() => parseInitializer(/*inParameter*/ false));
                 parseSemicolon();
@@ -4820,13 +4824,13 @@ module ts {
                 }
             }
             else if (parameter.dotDotDotToken) {
-                return grammarErrorOnNode(parameter.name, Diagnostics.An_index_signature_cannot_have_a_rest_parameter);
+                return grammarErrorOnNode(parameter.dotDotDotToken, Diagnostics.An_index_signature_cannot_have_a_rest_parameter);
             }
             else if (parameter.flags & NodeFlags.Modifier) {
                 return grammarErrorOnNode(parameter.name, Diagnostics.An_index_signature_parameter_cannot_have_an_accessibility_modifier);
             }
-            else if (parameter.flags & NodeFlags.QuestionMark) {
-                return grammarErrorOnNode(parameter.name, Diagnostics.An_index_signature_parameter_cannot_have_a_question_mark);
+            else if (parameter.questionToken) {
+                return grammarErrorOnNode(parameter.questionToken, Diagnostics.An_index_signature_parameter_cannot_have_a_question_mark);
             }
             else if (parameter.initializer) {
                 return grammarErrorOnNode(parameter.name, Diagnostics.An_index_signature_parameter_cannot_have_an_initializer);
@@ -4878,7 +4882,7 @@ module ts {
                 return true;
             }
             if (node.parent.kind === SyntaxKind.ClassDeclaration) {
-                if (checkForInvalidQuestionMark(node, Diagnostics.A_class_member_cannot_be_declared_optional)) {
+                if (checkForInvalidQuestionMark(node, node.questionToken, Diagnostics.A_class_member_cannot_be_declared_optional)) {
                     return true;
                 }
                 // Technically, computed properties in ambient contexts is disallowed 
@@ -5178,21 +5182,21 @@ module ts {
                 var parameter = parameters[i];
                 if (parameter.dotDotDotToken) {
                     if (i !== (parameterCount - 1)) {
-                        return grammarErrorOnNode(parameter.name, Diagnostics.A_rest_parameter_must_be_last_in_a_parameter_list);
+                        return grammarErrorOnNode(parameter.dotDotDotToken, Diagnostics.A_rest_parameter_must_be_last_in_a_parameter_list);
                     }
 
-                    if (parameter.flags & NodeFlags.QuestionMark) {
-                        return grammarErrorOnNode(parameter.name, Diagnostics.A_rest_parameter_cannot_be_optional);
+                    if (parameter.questionToken) {
+                        return grammarErrorOnNode(parameter.questionToken, Diagnostics.A_rest_parameter_cannot_be_optional);
                     }
 
                     if (parameter.initializer) {
                         return grammarErrorOnNode(parameter.name, Diagnostics.A_rest_parameter_cannot_have_an_initializer);
                     }
                 }
-                else if (parameter.flags & NodeFlags.QuestionMark || parameter.initializer) {
+                else if (parameter.questionToken || parameter.initializer) {
                     seenOptionalParameter = true;
 
-                    if (parameter.flags & NodeFlags.QuestionMark && parameter.initializer) {
+                    if (parameter.questionToken && parameter.initializer) {
                         return grammarErrorOnNode(parameter.name, Diagnostics.Parameter_cannot_have_question_mark_and_initializer);
                     }
                 }
@@ -5226,7 +5230,7 @@ module ts {
 
         function checkProperty(node: PropertyDeclaration) {
             if (node.parent.kind === SyntaxKind.ClassDeclaration) {
-                if (checkForInvalidQuestionMark(node, Diagnostics.A_class_member_cannot_be_declared_optional) ||
+                if (checkForInvalidQuestionMark(node, node.questionToken, Diagnostics.A_class_member_cannot_be_declared_optional) ||
                     checkForDisallowedComputedProperty(node.name, Diagnostics.Computed_property_names_are_not_allowed_in_class_property_declarations)) {
                     return true;
                 }
@@ -5267,13 +5271,12 @@ module ts {
         }
 
         function checkPropertyAssignment(node: PropertyDeclaration) {
-            return checkForInvalidQuestionMark(node, Diagnostics.An_object_member_cannot_be_declared_optional);
+            return checkForInvalidQuestionMark(node, node.questionToken, Diagnostics.An_object_member_cannot_be_declared_optional);
         }
 
-        function checkForInvalidQuestionMark(node: Declaration, message: DiagnosticMessage) {
-            if (node.flags & NodeFlags.QuestionMark) {
-                var pos = skipTrivia(sourceText, node.name.end);
-                return grammarErrorAtPos(pos, "?".length, message);
+        function checkForInvalidQuestionMark(node: Declaration, questionToken: Node, message: DiagnosticMessage) {
+            if (questionToken) {
+                return grammarErrorOnNode(questionToken, message);
             }
         }
 
@@ -5315,13 +5318,13 @@ module ts {
                 else {
                     var parameter = accessor.parameters[0];
                     if (parameter.dotDotDotToken) {
-                        return grammarErrorOnNode(accessor.name, Diagnostics.A_set_accessor_cannot_have_rest_parameter);
+                        return grammarErrorOnNode(parameter.dotDotDotToken, Diagnostics.A_set_accessor_cannot_have_rest_parameter);
                     }
                     else if (parameter.flags & NodeFlags.Modifier) {
                         return grammarErrorOnNode(accessor.name, Diagnostics.A_parameter_property_is_only_allowed_in_a_constructor_implementation);
                     }
-                    else if (parameter.flags & NodeFlags.QuestionMark) {
-                        return grammarErrorOnNode(accessor.name, Diagnostics.A_set_accessor_cannot_have_an_optional_parameter);
+                    else if (parameter.questionToken) {
+                        return grammarErrorOnNode(parameter.questionToken, Diagnostics.A_set_accessor_cannot_have_an_optional_parameter);
                     }
                     else if (parameter.initializer) {
                         return grammarErrorOnNode(accessor.name, Diagnostics.A_set_accessor_parameter_cannot_have_an_initializer);
@@ -5368,7 +5371,7 @@ module ts {
         }
 
         function checkShorthandPropertyAssignment(node: ShortHandPropertyDeclaration): boolean {
-            return checkForInvalidQuestionMark(node, Diagnostics.An_object_member_cannot_be_declared_optional);
+            return checkForInvalidQuestionMark(node, node.questionToken, Diagnostics.An_object_member_cannot_be_declared_optional);
         }
 
         function checkSwitchStatement(node: SwitchStatement) {

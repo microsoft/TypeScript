@@ -943,7 +943,7 @@ module ts {
             if (node.kind !== SyntaxKind.VariableDeclaration || resolver.isDeclarationVisible(node)) {
                 writeTextOfNode(currentSourceFile, node.name);
                 // If optional property emit ?
-                if (node.kind === SyntaxKind.Property && (node.flags & NodeFlags.QuestionMark)) {
+                if (node.kind === SyntaxKind.Property && hasQuestionToken(node)) {
                     write("?");
                 }
                 if (node.kind === SyntaxKind.Property && node.parent.kind === SyntaxKind.TypeLiteral) {
@@ -1124,7 +1124,7 @@ module ts {
                 }
                 else {
                     writeTextOfNode(currentSourceFile, node.name);
-                    if (node.flags & NodeFlags.QuestionMark) {
+                    if (hasQuestionToken(node)) {
                         write("?");
                     }
                 }
@@ -1256,7 +1256,7 @@ module ts {
                 write("...");
             }
             writeTextOfNode(currentSourceFile, node.name);
-            if (node.initializer || (node.flags & NodeFlags.QuestionMark)) {
+            if (node.initializer || hasQuestionToken(node)) {
                 write("?");
             }
             decreaseIndent();
