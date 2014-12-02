@@ -1,6 +1,7 @@
 // This file contains the build logic for the public repo
 
 var fs = require("fs");
+var os = require("os");
 var path = require("path");
 var child_process = require("child_process");
 
@@ -148,7 +149,7 @@ var compilerFilename = "tsc.js";
     * @param useBuiltCompiler: true to use the built compiler, false to use the LKG
     * @param noOutFile: true to compile without using --out
     */
-function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, noOutFile, generateDeclarations) {
+function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, noOutFile, generateDeclarations, callback) {
     file(outFile, prereqs, function() {
         var dir = useBuiltCompiler ? builtLocalDirectory : LKGDirectory;
         var options = "-removeComments --module commonjs -noImplicitAny ";
@@ -180,6 +181,11 @@ function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, noOu
                     prependFile(prefixes[i], outFile);
                 }
             }
+
+            if (callback) {
+                callback();
+            }
+
             complete();
         });
         ex.addListener("error", function() {
@@ -224,7 +230,7 @@ compileFile(processDiagnosticMessagesJs,
             [processDiagnosticMessagesTs],
             [processDiagnosticMessagesTs],
             [],
-            false);
+            /*useBuiltCompiler*/ false);
 
 // The generated diagnostics map; built for the compiler and for the 'generate-diagnostics' task
 file(diagnosticInfoMapTs, [processDiagnosticMessagesJs, diagnosticMessagesJson], function () {
@@ -244,7 +250,6 @@ file(diagnosticInfoMapTs, [processDiagnosticMessagesJs, diagnosticMessagesJson],
     ex.run();
 }, {async: true})
 
-
 desc("Generates a diagnostic file in TypeScript based on an input JSON file");
 task("generate-diagnostics", [diagnosticInfoMapTs])
 
@@ -255,12 +260,23 @@ compileFile(tscFile, compilerSources, [builtLocalDirectory, copyright].concat(co
 
 var servicesFile = path.join(builtLocalDirectory, "typescriptServices.js");
 var servicesDefinitionsFile = path.join(builtLocalDirectory, "typescriptServices.d.ts");
-compileFile(servicesFile, servicesSources, [builtLocalDirectory, copyright].concat(servicesSources), [copyright], /*useBuiltCompiler:*/ true, /*noOutFile:*/ false, /*generateDeclarations:*/ true);
+
+compileFile(servicesFile,
+            servicesSources,
+            [builtLocalDirectory, copyright].concat(servicesSources),
+            [copyright],
+            /*useBuiltCompiler*/ true,
+            /*noOutFile*/ false,
+            /*generateDeclarations*/ true,
+            /*callback*/ fixDeclarationFile);
+
+function fixDeclarationFile() {
+    fs.appendFileSync(servicesDefinitionsFile, os.EOL + "export = ts;")
+}
 
 // Local target to build the compiler and services
 desc("Builds the full compiler and services");
 task("local", ["generate-diagnostics", "lib", tscFile, servicesFile]);
-
 
 // Local target to build the compiler and services
 desc("Sets release mode flag");
@@ -278,7 +294,6 @@ task("clean", function() {
     jake.rmRf(builtDirectory);
 });
 
-
 // Generate Markdown spec
 var word2mdJs = path.join(scriptsDirectory, "word2md.js");
 var word2mdTs = path.join(scriptsDirectory, "word2md.ts");
@@ -292,7 +307,7 @@ compileFile(word2mdJs,
             [word2mdTs],
             [word2mdTs],
             [],
-            false);
+            /*useBuiltCompiler*/ false);
 
 // The generated spec.md; built for the 'generate-spec' task
 file(specMd, [word2mdJs, specWord], function () {
@@ -444,7 +459,7 @@ task("generate-code-coverage", ["tests", builtLocalDirectory], function () {
 // Browser tests
 var nodeServerOutFile = 'tests/webTestServer.js'
 var nodeServerInFile = 'tests/webTestServer.ts'
-compileFile(nodeServerOutFile, [nodeServerInFile], [builtLocalDirectory, tscFile], [], true, true);
+compileFile(nodeServerOutFile, [nodeServerInFile], [builtLocalDirectory, tscFile], [], /*useBuiltCompiler:*/ true, /*noOutFile*/ true);
 
 desc("Runs browserify on run.js to produce a file suitable for running tests in the browser");
 task("browserify", ["tests", builtLocalDirectory, nodeServerOutFile], function() {
@@ -525,7 +540,7 @@ task("baseline-accept-test262", function() {
 // Webhost
 var webhostPath = "tests/webhost/webtsc.ts";
 var webhostJsPath = "tests/webhost/webtsc.js";
-compileFile(webhostJsPath, [webhostPath], [tscFile, webhostPath].concat(libraryTargets), [], true);
+compileFile(webhostJsPath, [webhostPath], [tscFile, webhostPath].concat(libraryTargets), [], /*useBuiltCompiler*/true);
 
 desc("Builds the tsc web host");
 task("webhost", [webhostJsPath], function() {
@@ -535,7 +550,7 @@ task("webhost", [webhostJsPath], function() {
 // Perf compiler
 var perftscPath = "tests/perftsc.ts";
 var perftscJsPath = "built/local/perftsc.js";
-compileFile(perftscJsPath, [perftscPath], [tscFile, perftscPath, "tests/perfsys.ts"].concat(libraryTargets), [], true);
+compileFile(perftscJsPath, [perftscPath], [tscFile, perftscPath, "tests/perfsys.ts"].concat(libraryTargets), [], /*useBuiltCompiler*/ true);
 desc("Builds augmented version of the compiler for perf tests");
 task("perftsc", [perftscJsPath]);
 
@@ -559,7 +574,7 @@ file(loggedIOJsPath, [builtLocalDirectory, loggedIOpath], function() {
 
 var instrumenterPath = harnessDirectory + 'instrumenter.ts';
 var instrumenterJsPath = builtLocalDirectory + 'instrumenter.js';
-compileFile(instrumenterJsPath, [instrumenterPath], [tscFile, instrumenterPath], [], true);
+compileFile(instrumenterJsPath, [instrumenterPath], [tscFile, instrumenterPath], [], /*useBuiltCompiler*/ true);
 
 desc("Builds an instrumented tsc.js");
 task('tsc-instrumented', [loggedIOJsPath, instrumenterJsPath, tscFile], function() {
