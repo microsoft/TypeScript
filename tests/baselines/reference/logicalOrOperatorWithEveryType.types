@@ -107,37 +107,37 @@ var rb2 = a2 || a2;         // boolean   || boolean is boolean
 >a2 : boolean
 >a2 : boolean
 
-var rb3 = a3 || a2;         // number    || boolean is {}
+var rb3 = a3 || a2;         // number    || boolean is number | boolean
 >rb3 : number | boolean
 >a3 || a2 : number | boolean
 >a3 : number
 >a2 : boolean
 
-var rb4 = a4 || a2;         // string    || boolean is {}
+var rb4 = a4 || a2;         // string    || boolean is string | boolean
 >rb4 : string | boolean
 >a4 || a2 : string | boolean
 >a4 : string
 >a2 : boolean
 
-var rb5 = a5 || a2;         // void      || boolean is {}
+var rb5 = a5 || a2;         // void      || boolean is void | boolean
 >rb5 : boolean | void
 >a5 || a2 : boolean | void
 >a5 : void
 >a2 : boolean
 
-var rb6 = a6 || a2;         // enum      || boolean is {}
+var rb6 = a6 || a2;         // enum      || boolean is E | boolean
 >rb6 : boolean | E
 >a6 || a2 : boolean | E
 >a6 : E
 >a2 : boolean
 
-var rb7 = a7 || a2;         // object    || boolean is {}
+var rb7 = a7 || a2;         // object    || boolean is object | boolean
 >rb7 : boolean | { a: string; }
 >a7 || a2 : boolean | { a: string; }
 >a7 : { a: string; }
 >a2 : boolean
 
-var rb8 = a8 || a2;         // array     || boolean is {}
+var rb8 = a8 || a2;         // array     || boolean is array | boolean
 >rb8 : boolean | string[]
 >a8 || a2 : boolean | string[]
 >a8 : string[]
@@ -160,7 +160,7 @@ var rc1 = a1 || a3;         // any       || number is any
 >a1 : any
 >a3 : number
 
-var rc2 = a2 || a3;         // boolean   || number is {}
+var rc2 = a2 || a3;         // boolean   || number is boolean | number
 >rc2 : number | boolean
 >a2 || a3 : number | boolean
 >a2 : boolean
@@ -172,13 +172,13 @@ var rc3 = a3 || a3;         // number    || number is number
 >a3 : number
 >a3 : number
 
-var rc4 = a4 || a3;         // string    || number is {}
+var rc4 = a4 || a3;         // string    || number is string | number
 >rc4 : string | number
 >a4 || a3 : string | number
 >a4 : string
 >a3 : number
 
-var rc5 = a5 || a3;         // void      || number is {}
+var rc5 = a5 || a3;         // void      || number is void | number
 >rc5 : number | void
 >a5 || a3 : number | void
 >a5 : void
@@ -190,13 +190,13 @@ var rc6 = a6 || a3;         // enum      || number is number
 >a6 : E
 >a3 : number
 
-var rc7 = a7 || a3;         // object    || number is {}
+var rc7 = a7 || a3;         // object    || number is object | number
 >rc7 : number | { a: string; }
 >a7 || a3 : number | { a: string; }
 >a7 : { a: string; }
 >a3 : number
 
-var rc8 = a8 || a3;         // array     || number is {}
+var rc8 = a8 || a3;         // array     || number is array | number
 >rc8 : number | string[]
 >a8 || a3 : number | string[]
 >a8 : string[]
@@ -219,13 +219,13 @@ var rd1 = a1 || a4;         // any       || string is any
 >a1 : any
 >a4 : string
 
-var rd2 = a2 || a4;         // boolean   || string is {}
+var rd2 = a2 || a4;         // boolean   || string is boolean | string
 >rd2 : string | boolean
 >a2 || a4 : string | boolean
 >a2 : boolean
 >a4 : string
 
-var rd3 = a3 || a4;         // number    || string is {}
+var rd3 = a3 || a4;         // number    || string is number | string
 >rd3 : string | number
 >a3 || a4 : string | number
 >a3 : number
@@ -237,25 +237,25 @@ var rd4 = a4 || a4;         // string    || string is string
 >a4 : string
 >a4 : string
 
-var rd5 = a5 || a4;         // void      || string is {}
+var rd5 = a5 || a4;         // void      || string is void | string
 >rd5 : string | void
 >a5 || a4 : string | void
 >a5 : void
 >a4 : string
 
-var rd6 = a6 || a4;         // enum      || string is {}
+var rd6 = a6 || a4;         // enum      || string is enum | string
 >rd6 : string | E
 >a6 || a4 : string | E
 >a6 : E
 >a4 : string
 
-var rd7 = a7 || a4;         // object    || string is {}
+var rd7 = a7 || a4;         // object    || string is object | string
 >rd7 : string | { a: string; }
 >a7 || a4 : string | { a: string; }
 >a7 : { a: string; }
 >a4 : string
 
-var rd8 = a8 || a4;         // array     || string is {}
+var rd8 = a8 || a4;         // array     || string is array | string
 >rd8 : string | string[]
 >a8 || a4 : string | string[]
 >a8 : string[]
@@ -278,19 +278,19 @@ var re1 = a1 || a5;         // any       || void is any
 >a1 : any
 >a5 : void
 
-var re2 = a2 || a5;         // boolean   || void is {}
+var re2 = a2 || a5;         // boolean   || void is boolean | void
 >re2 : boolean | void
 >a2 || a5 : boolean | void
 >a2 : boolean
 >a5 : void
 
-var re3 = a3 || a5;         // number    || void is {}
+var re3 = a3 || a5;         // number    || void is number | void
 >re3 : number | void
 >a3 || a5 : number | void
 >a3 : number
 >a5 : void
 
-var re4 = a4 || a5;         // string    || void is {}
+var re4 = a4 || a5;         // string    || void is string | void
 >re4 : string | void
 >a4 || a5 : string | void
 >a4 : string
@@ -302,19 +302,19 @@ var re5 = a5 || a5;         // void      || void is void
 >a5 : void
 >a5 : void
 
-var re6 = a6 || a5;         // enum      || void is {}
+var re6 = a6 || a5;         // enum      || void is enum | void
 >re6 : void | E
 >a6 || a5 : void | E
 >a6 : E
 >a5 : void
 
-var re7 = a7 || a5;         // object    || void is {}
+var re7 = a7 || a5;         // object    || void is object | void
 >re7 : void | { a: string; }
 >a7 || a5 : void | { a: string; }
 >a7 : { a: string; }
 >a5 : void
 
-var re8 = a8 || a5;         // array     || void is {}
+var re8 = a8 || a5;         // array     || void is array | void
 >re8 : void | string[]
 >a8 || a5 : void | string[]
 >a8 : string[]
@@ -337,7 +337,7 @@ var rg1 = a1 || a6;         // any       || enum is any
 >a1 : any
 >a6 : E
 
-var rg2 = a2 || a6;         // boolean   || enum is {}
+var rg2 = a2 || a6;         // boolean   || enum is boolean | enum
 >rg2 : boolean | E
 >a2 || a6 : boolean | E
 >a2 : boolean
@@ -349,13 +349,13 @@ var rg3 = a3 || a6;         // number    || enum is number
 >a3 : number
 >a6 : E
 
-var rg4 = a4 || a6;         // string    || enum is {}
+var rg4 = a4 || a6;         // string    || enum is string | enum
 >rg4 : string | E
 >a4 || a6 : string | E
 >a4 : string
 >a6 : E
 
-var rg5 = a5 || a6;         // void      || enum is {}
+var rg5 = a5 || a6;         // void      || enum is void | enum
 >rg5 : void | E
 >a5 || a6 : void | E
 >a5 : void
@@ -367,13 +367,13 @@ var rg6 = a6 || a6;         // enum      || enum is E
 >a6 : E
 >a6 : E
 
-var rg7 = a7 || a6;         // object    || enum is {}
+var rg7 = a7 || a6;         // object    || enum is object | enum
 >rg7 : E | { a: string; }
 >a7 || a6 : E | { a: string; }
 >a7 : { a: string; }
 >a6 : E
 
-var rg8 = a8 || a6;         // array     || enum is {}
+var rg8 = a8 || a6;         // array     || enum is array | enum
 >rg8 : string[] | E
 >a8 || a6 : string[] | E
 >a8 : string[]
@@ -396,31 +396,31 @@ var rh1 = a1 || a7;         // any       || object is any
 >a1 : any
 >a7 : { a: string; }
 
-var rh2 = a2 || a7;         // boolean   || object is {}
+var rh2 = a2 || a7;         // boolean   || object is boolean | object
 >rh2 : boolean | { a: string; }
 >a2 || a7 : boolean | { a: string; }
 >a2 : boolean
 >a7 : { a: string; }
 
-var rh3 = a3 || a7;         // number    || object is {}
+var rh3 = a3 || a7;         // number    || object is number | object
 >rh3 : number | { a: string; }
 >a3 || a7 : number | { a: string; }
 >a3 : number
 >a7 : { a: string; }
 
-var rh4 = a4 || a7;         // string    || object is {}
+var rh4 = a4 || a7;         // string    || object is string | object
 >rh4 : string | { a: string; }
 >a4 || a7 : string | { a: string; }
 >a4 : string
 >a7 : { a: string; }
 
-var rh5 = a5 || a7;         // void      || object is {}
+var rh5 = a5 || a7;         // void      || object is void | object
 >rh5 : void | { a: string; }
 >a5 || a7 : void | { a: string; }
 >a5 : void
 >a7 : { a: string; }
 
-var rh6 = a6 || a7;         // enum      || object is {}
+var rh6 = a6 || a7;         // enum      || object is enum | object
 >rh6 : E | { a: string; }
 >a6 || a7 : E | { a: string; }
 >a6 : E
@@ -432,7 +432,7 @@ var rh7 = a7 || a7;         // object    || object is object
 >a7 : { a: string; }
 >a7 : { a: string; }
 
-var rh8 = a8 || a7;         // array     || object is {}
+var rh8 = a8 || a7;         // array     || object is array | object
 >rh8 : string[] | { a: string; }
 >a8 || a7 : string[] | { a: string; }
 >a8 : string[]
@@ -455,37 +455,37 @@ var ri1 = a1 || a8;         // any       || array is any
 >a1 : any
 >a8 : string[]
 
-var ri2 = a2 || a8;         // boolean   || array is {}
+var ri2 = a2 || a8;         // boolean   || array is boolean | array
 >ri2 : boolean | string[]
 >a2 || a8 : boolean | string[]
 >a2 : boolean
 >a8 : string[]
 
-var ri3 = a3 || a8;         // number    || array is {}
+var ri3 = a3 || a8;         // number    || array is number | array
 >ri3 : number | string[]
 >a3 || a8 : number | string[]
 >a3 : number
 >a8 : string[]
 
-var ri4 = a4 || a8;         // string    || array is {}
+var ri4 = a4 || a8;         // string    || array is string | array
 >ri4 : string | string[]
 >a4 || a8 : string | string[]
 >a4 : string
 >a8 : string[]
 
-var ri5 = a5 || a8;         // void      || array is {}
+var ri5 = a5 || a8;         // void      || array is void | array
 >ri5 : void | string[]
 >a5 || a8 : void | string[]
 >a5 : void
 >a8 : string[]
 
-var ri6 = a6 || a8;         // enum      || array is {}
+var ri6 = a6 || a8;         // enum      || array is enum | array
 >ri6 : string[] | E
 >a6 || a8 : string[] | E
 >a6 : E
 >a8 : string[]
 
-var ri7 = a7 || a8;         // object    || array is {}
+var ri7 = a7 || a8;         // object    || array is object | array
 >ri7 : string[] | { a: string; }
 >a7 || a8 : string[] | { a: string; }
 >a7 : { a: string; }
