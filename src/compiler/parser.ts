@@ -1347,11 +1347,11 @@ module ts {
         }
 
         function parseIdentifierName(): Identifier {
-            return createIdentifier(token >= SyntaxKind.Identifier);
+            return createIdentifier(isIdentifierOrKeyword());
         }
 
         function isLiteralPropertyName(): boolean {
-            return token >= SyntaxKind.Identifier ||
+            return isIdentifierOrKeyword() ||
                 token === SyntaxKind.StringLiteral ||
                 token === SyntaxKind.NumericLiteral;
         }
@@ -1439,7 +1439,9 @@ module ts {
                 case ParsingContext.ObjectLiteralMembers:
                     return token === SyntaxKind.OpenBracketToken || token === SyntaxKind.AsteriskToken || isLiteralPropertyName();
                 case ParsingContext.TypeReferences:
-                    return isIdentifier() && ((token !== SyntaxKind.ExtendsKeyword && token !== SyntaxKind.ImplementsKeyword) || !lookAhead(() => (nextToken(), isIdentifier())));
+                    // We want to make sure that the "extends" in "extends foo" or the "implements" in
+                    // "implements foo" is not considered a type name.
+                    return isIdentifier() && !isNotHeritageClauseTypeName();
                 case ParsingContext.VariableDeclarations:
                 case ParsingContext.TypeParameters:
                     return isIdentifier();
@@ -1457,6 +1459,21 @@ module ts {
             }
 
             Debug.fail("Non-exhaustive case in 'isListElement'.");
+        }
+
+        function nextTokenIsIdentifier() {
+            nextToken();
+            return isIdentifier();
+        }
+        
+        function isNotHeritageClauseTypeName(): boolean {
+            if (token === SyntaxKind.ImplementsKeyword ||
+                token === SyntaxKind.ExtendsKeyword) {
+
+                return lookAhead(nextTokenIsIdentifier);
+            }
+
+            return false;
         }
 
         // True if positioned at a list terminator
@@ -1689,10 +1706,7 @@ module ts {
             // In the first case though, ASI will not take effect because there is not a
             // line terminator after the keyword.
             if (scanner.hasPrecedingLineBreak() && scanner.isReservedWord()) {
-                var matchesPattern = lookAhead(() => {
-                    nextToken();
-                    return !scanner.hasPrecedingLineBreak() && (scanner.isIdentifier() || scanner.isReservedWord());
-                });
+                var matchesPattern = lookAhead(nextTokenIsIdentifierOrKeywordOnSameLine);
 
                 if (matchesPattern) {
                     // Report that we need an identifier.  However, report it right after the dot, 
@@ -1704,6 +1718,8 @@ module ts {
 
             return allowIdentifierNames ? parseIdentifierName() : parseIdentifier();
         }
+
+
 
         function parseTokenNode<T extends Node>(): T {
             var node = <T>createNode(token);
@@ -1972,58 +1988,62 @@ module ts {
                 return false;
             }
 
-            return lookAhead(() => {
-                // The only allowed sequence is:
-                //
-                //   [id:
-                //
-                // However, for error recovery, we also check the following cases:
-                //
-                //   [...
-                //   [id,
-                //   [id?,
-                //   [id?:
-                //   [id?]
-                //   [public id
-                //   [private id
-                //   [protected id
-                //   []
-                //
-                if (nextToken() === SyntaxKind.DotDotDotToken || token === SyntaxKind.CloseBracketToken) {
+            return lookAhead(isUnambiguouslyIndexSignature);
+        }
+
+        function isUnambiguouslyIndexSignature() {
+            // The only allowed sequence is:
+            //
+            //   [id:
+            //
+            // However, for error recovery, we also check the following cases:
+            //
+            //   [...
+            //   [id,
+            //   [id?,
+            //   [id?:
+            //   [id?]
+            //   [public id
+            //   [private id
+            //   [protected id
+            //   []
+            //
+            nextToken();
+            if (token === SyntaxKind.DotDotDotToken || token === SyntaxKind.CloseBracketToken) {
+                return true;
+            }
+
+            if (isModifier(token)) {
+                nextToken();
+                if (isIdentifier()) {
                     return true;
                 }
+            }
+            else if (!isIdentifier()) {
+                return false;
+            }
+            else {
+                // Skip the identifier
+                nextToken();
+            }
 
-                if (isModifier(token)) {
-                    nextToken();
-                    if (isIdentifier()) {
-                        return true;
-                    }
-                }
-                else if (!isIdentifier()) {
-                    return false;
-                }
-                else {
-                    // Skip the identifier
-                    nextToken();
-                }
+            // A colon signifies a well formed indexer
+            // A comma should be a badly formed indexer because comma expressions are not allowed
+            // in computed properties.
+            if (token === SyntaxKind.ColonToken || token === SyntaxKind.CommaToken) {
+                return true;
+            }
 
-                // A colon signifies a well formed indexer
-                // A comma should be a badly formed indexer because comma expressions are not allowed
-                // in computed properties.
-                if (token === SyntaxKind.ColonToken || token === SyntaxKind.CommaToken) {
-                    return true;
-                }
+            // Question mark could be an indexer with an optional property,
+            // or it could be a conditional expression in a computed property.
+            if (token !== SyntaxKind.QuestionToken) {
+                return false;
+            }
 
-                // Question mark could be an indexer with an optional property,
-                // or it could be a conditional expression in a computed property.
-                if (token !== SyntaxKind.QuestionToken) {
-                    return false;
-                }
-
-                // If any of the following tokens are after the question mark, it cannot
-                // be a conditional expression, so treat it as an indexer.
-                return nextToken() === SyntaxKind.ColonToken || token === SyntaxKind.CommaToken || token === SyntaxKind.CloseBracketToken;
-            });
+            // If any of the following tokens are after the question mark, it cannot
+            // be a conditional expression, so treat it as an indexer.
+            nextToken();
+            return token === SyntaxKind.ColonToken || token === SyntaxKind.CommaToken || token === SyntaxKind.CloseBracketToken;
         }
 
         function parseIndexSignatureDeclaration(fullStart: number, modifiers: ModifiersArray): IndexSignatureDeclaration {
@@ -2069,13 +2089,17 @@ module ts {
                 case SyntaxKind.OpenBracketToken: // Both for indexers and computed properties
                     return true;
                 default:
-                    return isLiteralPropertyName() && lookAhead(() => 
-                        nextToken() === SyntaxKind.OpenParenToken ||
-                        token === SyntaxKind.LessThanToken ||
-                        token === SyntaxKind.QuestionToken ||
-                        token === SyntaxKind.ColonToken ||
-                        canParseSemicolon());
+                    return isLiteralPropertyName() && lookAhead(isTypeMemberWithLiteralPropertyName);
             }
+        }
+
+        function isTypeMemberWithLiteralPropertyName() {
+            nextToken();
+            return token === SyntaxKind.OpenParenToken ||
+                token === SyntaxKind.LessThanToken ||
+                token === SyntaxKind.QuestionToken ||
+                token === SyntaxKind.ColonToken ||
+                canParseSemicolon();
         }
 
         function parseTypeMember(): Declaration {
@@ -2087,17 +2111,23 @@ module ts {
                     // Indexer or computed property
                     return isIndexSignature() ? parseIndexSignatureDeclaration(scanner.getStartPos(), /*modifiers:*/ undefined) : parsePropertyOrMethod();
                 case SyntaxKind.NewKeyword:
-                    if (lookAhead(() => nextToken() === SyntaxKind.OpenParenToken || token === SyntaxKind.LessThanToken)) {
+                    if (lookAhead(isStartOfConstructSignature)) {
                         return parseSignatureMember(SyntaxKind.ConstructSignature);
                     }
+                    // fall through.
                 case SyntaxKind.StringLiteral:
                 case SyntaxKind.NumericLiteral:
                     return parsePropertyOrMethod();
                 default:
-                    if (token >= SyntaxKind.Identifier) {
+                    if (isIdentifierOrKeyword()) {
                         return parsePropertyOrMethod();
                     }
             }
+        }
+
+        function isStartOfConstructSignature() {
+            nextToken();
+            return token === SyntaxKind.OpenParenToken || token === SyntaxKind.LessThanToken;
         }
 
         function parseTypeLiteral(): TypeLiteralNode {
@@ -2187,13 +2217,15 @@ module ts {
                 case SyntaxKind.OpenParenToken:
                     // Only consider '(' the start of a type if followed by ')', '...', an identifier, a modifier,
                     // or something that starts a type. We don't want to consider things like '(1)' a type.
-                    return lookAhead(() => {
-                        nextToken();
-                        return token === SyntaxKind.CloseParenToken || isStartOfParameter() || isStartOfType();
-                    });
+                    return lookAhead(isStartOfParenthesizedOrFunctionType);
                 default:
                     return isIdentifier();
             }
+        }
+
+        function isStartOfParenthesizedOrFunctionType() {
+            nextToken();
+            return token === SyntaxKind.CloseParenToken || isStartOfParameter() || isStartOfType();
         }
 
         function parseArrayTypeOrHigher(): TypeNode {
@@ -2224,35 +2256,41 @@ module ts {
         }
 
         function isStartOfFunctionType(): boolean {
-            return token === SyntaxKind.LessThanToken || token === SyntaxKind.OpenParenToken && lookAhead(() => {
+            if (token === SyntaxKind.LessThanToken) {
+                return true;
+            }
+
+            return token === SyntaxKind.OpenParenToken && lookAhead(isUnambiguouslyStartOfFunctionType);
+        }
+
+        function isUnambiguouslyStartOfFunctionType() {
+            nextToken();
+            if (token === SyntaxKind.CloseParenToken || token === SyntaxKind.DotDotDotToken) {
+                // ( )
+                // ( ...
+                return true;
+            }
+            if (isIdentifier() || isModifier(token)) {
                 nextToken();
-                if (token === SyntaxKind.CloseParenToken || token === SyntaxKind.DotDotDotToken) {
-                    // ( )
-                    // ( ...
+                if (token === SyntaxKind.ColonToken || token === SyntaxKind.CommaToken ||
+                    token === SyntaxKind.QuestionToken || token === SyntaxKind.EqualsToken ||
+                    isIdentifier() || isModifier(token)) {
+                    // ( id :
+                    // ( id ,
+                    // ( id ?
+                    // ( id =
+                    // ( modifier id
                     return true;
                 }
-                if (isIdentifier() || isModifier(token)) {
+                if (token === SyntaxKind.CloseParenToken) {
                     nextToken();
-                    if (token === SyntaxKind.ColonToken || token === SyntaxKind.CommaToken ||
-                        token === SyntaxKind.QuestionToken || token === SyntaxKind.EqualsToken ||
-                        isIdentifier() || isModifier(token)) {
-                        // ( id :
-                        // ( id ,
-                        // ( id ?
-                        // ( id =
-                        // ( modifier id
+                    if (token === SyntaxKind.EqualsGreaterThanToken) {
+                        // ( id ) =>
                         return true;
                     }
-                    if (token === SyntaxKind.CloseParenToken) {
-                        nextToken();
-                        if (token === SyntaxKind.EqualsGreaterThanToken) {
-                            // ( id ) =>
-                            return true;
-                        }
-                    }
                 }
-                return false;
-            });
+            }
+            return false;
         }
 
         function parseType(): TypeNode {
@@ -2455,13 +2493,15 @@ module ts {
                 // for now we just check if the next token is an identifier.  More heuristics
                 // can be added here later as necessary.  We just need to make sure that we
                 // don't accidently consume something legal.
-                return lookAhead(() => {
-                    nextToken();
-                    return !scanner.hasPrecedingLineBreak() && isIdentifier();
-                });
+                return lookAhead(nextTokenIsIdentifierOnSameLine);
             }
 
             return false;
+        }
+
+        function nextTokenIsIdentifierOnSameLine() {
+            nextToken();
+            return !scanner.hasPrecedingLineBreak() && isIdentifier()
         }
 
         function parseYieldExpression(): YieldExpression {
@@ -2546,66 +2586,9 @@ module ts {
         //                 Speculatively look ahead to be sure, and rollback if not.
         function isParenthesizedArrowFunctionExpression(): Tristate {
             if (token === SyntaxKind.OpenParenToken || token === SyntaxKind.LessThanToken) {
-                return lookAhead(() => {
-                    var first = token;
-                    var second = nextToken();
-
-                    if (first === SyntaxKind.OpenParenToken) {
-                        if (second === SyntaxKind.CloseParenToken) {
-                            // Simple cases: "() =>", "(): ", and  "() {".
-                            // This is an arrow function with no parameters.
-                            // The last one is not actually an arrow function,
-                            // but this is probably what the user intended.
-                            var third = nextToken();
-                            switch (third) {
-                                case SyntaxKind.EqualsGreaterThanToken:
-                                case SyntaxKind.ColonToken:
-                                case SyntaxKind.OpenBraceToken:
-                                    return Tristate.True;
-                                default:
-                                    return Tristate.False;
-                            }
-                        }
-
-                        // Simple case: "(..."
-                        // This is an arrow function with a rest parameter.
-                        if (second === SyntaxKind.DotDotDotToken) {
-                            return Tristate.True;
-                        }
-
-                        // If we had "(" followed by something that's not an identifier,
-                        // then this definitely doesn't look like a lambda.
-                        // Note: we could be a little more lenient and allow
-                        // "(public" or "(private". These would not ever actually be allowed,
-                        // but we could provide a good error message instead of bailing out.
-                        if (!isIdentifier()) {
-                            return Tristate.False;
-                        }
-
-                        // If we have something like "(a:", then we must have a
-                        // type-annotated parameter in an arrow function expression.
-                        if (nextToken() === SyntaxKind.ColonToken) {
-                            return Tristate.True;
-                        }
-
-                        // This *could* be a parenthesized arrow function.
-                        // Return Unknown to let the caller know.
-                        return Tristate.Unknown;
-                    }
-                    else {
-                        Debug.assert(first === SyntaxKind.LessThanToken);
-
-                        // If we have "<" not followed by an identifier,
-                        // then this definitely is not an arrow function.
-                        if (!isIdentifier()) {
-                            return Tristate.False;
-                        }
-
-                        // This *could* be a parenthesized arrow function.
-                        return Tristate.Unknown;
-                    }
-                });
+                return lookAhead(isParenthesizedArrowFunctionExpressionWorker);
             }
+
             if (token === SyntaxKind.EqualsGreaterThanToken) {
                 // ERROR RECOVERY TWEAK:
                 // If we see a standalone => try to parse it as an arrow function expression as that's
@@ -2614,6 +2597,66 @@ module ts {
             }
             // Definitely not a parenthesized arrow function.
             return Tristate.False;
+        }
+
+        function isParenthesizedArrowFunctionExpressionWorker() {
+            var first = token;
+            var second = nextToken();
+
+            if (first === SyntaxKind.OpenParenToken) {
+                if (second === SyntaxKind.CloseParenToken) {
+                    // Simple cases: "() =>", "(): ", and  "() {".
+                    // This is an arrow function with no parameters.
+                    // The last one is not actually an arrow function,
+                    // but this is probably what the user intended.
+                    var third = nextToken();
+                    switch (third) {
+                        case SyntaxKind.EqualsGreaterThanToken:
+                        case SyntaxKind.ColonToken:
+                        case SyntaxKind.OpenBraceToken:
+                            return Tristate.True;
+                        default:
+                            return Tristate.False;
+                    }
+                }
+
+                // Simple case: "(..."
+                // This is an arrow function with a rest parameter.
+                if (second === SyntaxKind.DotDotDotToken) {
+                    return Tristate.True;
+                }
+
+                // If we had "(" followed by something that's not an identifier,
+                // then this definitely doesn't look like a lambda.
+                // Note: we could be a little more lenient and allow
+                // "(public" or "(private". These would not ever actually be allowed,
+                // but we could provide a good error message instead of bailing out.
+                if (!isIdentifier()) {
+                    return Tristate.False;
+                }
+
+                // If we have something like "(a:", then we must have a
+                // type-annotated parameter in an arrow function expression.
+                if (nextToken() === SyntaxKind.ColonToken) {
+                    return Tristate.True;
+                }
+
+                // This *could* be a parenthesized arrow function.
+                // Return Unknown to let the caller know.
+                return Tristate.Unknown;
+            }
+            else {
+                Debug.assert(first === SyntaxKind.LessThanToken);
+
+                // If we have "<" not followed by an identifier,
+                // then this definitely is not an arrow function.
+                if (!isIdentifier()) {
+                    return Tristate.False;
+                }
+
+                // This *could* be a parenthesized arrow function.
+                return Tristate.Unknown;
+            }
         }
 
         function tryParseSignatureIfArrowOrBraceFollows(): ParsedSignature {
@@ -3479,7 +3522,11 @@ module ts {
         }
 
         function isLabel(): boolean {
-            return isIdentifier() && lookAhead(() => nextToken() === SyntaxKind.ColonToken);
+            return isIdentifier() && lookAhead(nextTokenIsColonToken);
+        }
+
+        function nextTokenIsColonToken() {
+            return nextToken() === SyntaxKind.ColonToken;
         }
 
         function parseLabeledStatement(): LabeledStatement {
@@ -3532,7 +3579,7 @@ module ts {
                     // const keyword can precede enum keyword when defining constant enums
                     // 'const enum' do not start statement.
                     // In ES 6 'enum' is a future reserved keyword, so it should not be used as identifier
-                    var isConstEnum = lookAhead(() => nextToken() === SyntaxKind.EnumKeyword);
+                    var isConstEnum = lookAhead(nextTokenIsEnumKeyword);
                     return !isConstEnum;
                 case SyntaxKind.InterfaceKeyword:
                 case SyntaxKind.ClassKeyword:
@@ -3551,12 +3598,22 @@ module ts {
                 case SyntaxKind.StaticKeyword:
                     // When followed by an identifier or keyword, these do not start a statement but
                     // might instead be following type members
-                    if (lookAhead(() => nextToken() >= SyntaxKind.Identifier && !scanner.hasPrecedingLineBreak())) {
+                    if (lookAhead(nextTokenIsIdentifierOrKeywordOnSameLine)) {
                         return false;
                     }
                 default:
                     return isStartOfExpression();
             }
+        }
+
+        function nextTokenIsEnumKeyword() {
+            nextToken();
+            return token === SyntaxKind.EnumKeyword
+        }
+
+        function nextTokenIsIdentifierOrKeywordOnSameLine() {
+            nextToken();
+            return isIdentifierOrKeyword() && !scanner.hasPrecedingLineBreak();
         }
 
         function parseStatement(): Statement {
@@ -3817,7 +3874,7 @@ module ts {
             }
             // It is very important that we check this *after* checking indexers because
             // the [ token can start an index signature or a computed property name
-            if (token >= SyntaxKind.Identifier || token === SyntaxKind.StringLiteral || token === SyntaxKind.NumericLiteral ||
+            if (isIdentifierOrKeyword() || token === SyntaxKind.StringLiteral || token === SyntaxKind.NumericLiteral ||
                 token === SyntaxKind.AsteriskToken || token === SyntaxKind.OpenBracketToken) {
                 return parsePropertyMemberDeclaration(fullStart, modifiers);
             }
@@ -3975,14 +4032,12 @@ module ts {
         }
 
         function isExternalModuleReference() {
-            if (token === SyntaxKind.RequireKeyword) {
-                return lookAhead(() => {
-                    nextToken();
-                    return token === SyntaxKind.OpenParenToken;
-                });
-            }
+            return token === SyntaxKind.RequireKeyword &&
+                lookAhead(nextTokenIsOpenParen);
+        }
 
-            return false;
+        function nextTokenIsOpenParen() {
+            return nextToken() === SyntaxKind.OpenParenToken;
         }
 
         function parseImportDeclaration(fullStart: number, modifiers: ModifiersArray): ImportDeclaration {
@@ -4039,21 +4094,45 @@ module ts {
                 case SyntaxKind.ImportKeyword:
                 case SyntaxKind.TypeKeyword:
                     // Not true keywords so ensure an identifier follows
-                    return lookAhead(() => nextToken() >= SyntaxKind.Identifier);
+                    return lookAhead(nextTokenIsIdentifierOrKeyword);
                 case SyntaxKind.ModuleKeyword:
                     // Not a true keyword so ensure an identifier or string literal follows
-                    return lookAhead(() => nextToken() >= SyntaxKind.Identifier || token === SyntaxKind.StringLiteral);
+                    return lookAhead(nextTokenIsIdentifierOrKeywordOrStringLiteral);
                 case SyntaxKind.ExportKeyword:
                     // Check for export assignment or modifier on source element
-                    return lookAhead(() => nextToken() === SyntaxKind.EqualsToken || isDeclarationStart());
+                    return lookAhead(nextTokenIsEqualsTokenOrDeclarationStart);
                 case SyntaxKind.DeclareKeyword:
                 case SyntaxKind.PublicKeyword:
                 case SyntaxKind.PrivateKeyword:
                 case SyntaxKind.ProtectedKeyword:
                 case SyntaxKind.StaticKeyword:
                     // Check for modifier on source element
-                    return lookAhead(() => { nextToken(); return isDeclarationStart(); });
+                    return lookAhead(nextTokenIsDeclarationStart);
             }
+        }
+
+        function isIdentifierOrKeyword() {
+            return token >= SyntaxKind.Identifier;
+        }
+
+        function nextTokenIsIdentifierOrKeyword() {
+            nextToken();
+            return isIdentifierOrKeyword();
+        }
+
+        function nextTokenIsIdentifierOrKeywordOrStringLiteral() {
+            nextToken();
+            return isIdentifierOrKeyword() || token === SyntaxKind.StringLiteral;
+        }
+
+        function nextTokenIsEqualsTokenOrDeclarationStart() {
+            nextToken();
+            return token === SyntaxKind.EqualsToken || isDeclarationStart();
+        }
+
+        function nextTokenIsDeclarationStart() {
+            nextToken();
+            return isDeclarationStart();
         }
 
         function parseDeclaration(): ModuleElement {
