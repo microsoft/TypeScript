@@ -106,10 +106,12 @@ module ts.BreakpointResolver {
 
                     case SyntaxKind.Block:
                     case SyntaxKind.TryBlock:
-                    case SyntaxKind.CatchBlock:
                     case SyntaxKind.FinallyBlock:
                     case SyntaxKind.ModuleBlock:
                         return spanInBlock(<Block>node);
+
+                    case SyntaxKind.CatchClause:
+                        return spanInBlock((<CatchClause>node).block);
 
                     case SyntaxKind.ExpressionStatement:
                         // span on the expression
@@ -420,7 +422,7 @@ module ts.BreakpointResolver {
 
                     case SyntaxKind.Block:
                     case SyntaxKind.TryBlock:
-                    case SyntaxKind.CatchBlock:
+                    case SyntaxKind.CatchClause:
                     case SyntaxKind.FinallyBlock:
                         return spanInNode((<Block>node.parent).statements[(<Block>node.parent).statements.length - 1]);;
 

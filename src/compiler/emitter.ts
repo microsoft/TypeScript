@@ -2142,8 +2142,8 @@ module ts {
                         return false;
                     case SyntaxKind.LabeledStatement:
                         return (<LabeledStatement>node.parent).label === node;
-                    case SyntaxKind.CatchBlock:
-                        return (<CatchBlock>node.parent).variable === node;
+                    case SyntaxKind.CatchClause:
+                        return (<CatchClause>node.parent).name === node;
                 }
             }
 
@@ -2650,7 +2650,7 @@ module ts {
             function emitTryStatement(node: TryStatement) {
                 write("try ");
                 emit(node.tryBlock);
-                emit(node.catchBlock);
+                emit(node.catchClause);
                 if (node.finallyBlock) {
                     writeLine();
                     write("finally ");
@@ -2658,15 +2658,15 @@ module ts {
                 }
             }
 
-            function emitCatchBlock(node: CatchBlock) {
+            function emitCatchClause(node: CatchClause) {
                 writeLine();
                 var endPos = emitToken(SyntaxKind.CatchKeyword, node.pos);
                 write(" ");
                 emitToken(SyntaxKind.OpenParenToken, endPos);
-                emit(node.variable);
-                emitToken(SyntaxKind.CloseParenToken, node.variable.end);
+                emit(node.name);
+                emitToken(SyntaxKind.CloseParenToken, node.name.end);
                 write(" ");
-                emitBlock(node);
+                emitBlock(node.block);
             }
 
             function emitDebuggerStatement(node: Node) {
@@ -3599,8 +3599,8 @@ module ts {
                         return emitThrowStatement(<ThrowStatement>node);
                     case SyntaxKind.TryStatement:
                         return emitTryStatement(<TryStatement>node);
-                    case SyntaxKind.CatchBlock:
-                        return emitCatchBlock(<CatchBlock>node);
+                    case SyntaxKind.CatchClause:
+                        return emitCatchClause(<CatchClause>node);
                     case SyntaxKind.DebuggerStatement:
                         return emitDebuggerStatement(node);
                     case SyntaxKind.VariableDeclaration:

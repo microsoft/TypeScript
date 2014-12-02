@@ -415,8 +415,8 @@ module ts {
                             break loop;
                         }
                         break;
-                    case SyntaxKind.CatchBlock:
-                        var id = (<CatchBlock>location).variable;
+                    case SyntaxKind.CatchClause:
+                        var id = (<CatchClause>location).name;
                         if (name === id.text) {
                             result = location.symbol;
                             break loop;
@@ -1753,7 +1753,7 @@ module ts {
                 }
                 // Handle catch clause variables
                 var declaration = symbol.valueDeclaration;
-                if (declaration.kind === SyntaxKind.CatchBlock) {
+                if (declaration.kind === SyntaxKind.CatchClause) {
                     return links.type = anyType;
                 }
                 // Handle variable, parameter or property
@@ -4375,7 +4375,7 @@ module ts {
                     case SyntaxKind.ThrowStatement:
                     case SyntaxKind.TryStatement:
                     case SyntaxKind.TryBlock:
-                    case SyntaxKind.CatchBlock:
+                    case SyntaxKind.CatchClause:
                     case SyntaxKind.FinallyBlock:
                         return forEachChild(node, isAssignedIn);
                 }
@@ -7767,7 +7767,7 @@ module ts {
 
         function checkTryStatement(node: TryStatement) {
             checkBlock(node.tryBlock);
-            if (node.catchBlock) checkBlock(node.catchBlock);
+            if (node.catchClause) checkBlock(node.catchClause.block);
             if (node.finallyBlock) checkBlock(node.finallyBlock);
         }
 
@@ -8605,7 +8605,7 @@ module ts {
                 case SyntaxKind.ThrowStatement:
                 case SyntaxKind.TryStatement:
                 case SyntaxKind.TryBlock:
-                case SyntaxKind.CatchBlock:
+                case SyntaxKind.CatchClause:
                 case SyntaxKind.FinallyBlock:
                 case SyntaxKind.VariableDeclaration:
                 case SyntaxKind.ClassDeclaration:
@@ -8767,8 +8767,8 @@ module ts {
                             copySymbol(location.symbol, meaning);
                         }
                         break;
-                    case SyntaxKind.CatchBlock:
-                        if ((<CatchBlock>location).variable.text) {
+                    case SyntaxKind.CatchClause:
+                        if ((<CatchClause>location).name.text) {
                             copySymbol(location.symbol, meaning);
                         }
                         break;

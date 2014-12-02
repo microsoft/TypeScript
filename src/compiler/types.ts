@@ -208,7 +208,6 @@ module ts {
         ThrowStatement,
         TryStatement,
         TryBlock,
-        CatchBlock,
         FinallyBlock,
         DebuggerStatement,
         VariableDeclaration,
@@ -222,12 +221,16 @@ module ts {
         ModuleBlock,
         ImportDeclaration,
         ExportAssignment,
+
         // Module references
         ExternalModuleReference,
+
         // Clauses
         CaseClause,
         DefaultClause,
         HeritageClause,
+        CatchClause,
+
         // Property assignments
         PropertyAssignment,
         ShorthandPropertyAssignment,
@@ -693,13 +696,14 @@ module ts {
 
     export interface TryStatement extends Statement {
         tryBlock: Block;
-        catchBlock?: CatchBlock;
+        catchClause?: CatchClause;
         finallyBlock?: Block;
     }
 
-    export interface CatchBlock extends Block, Declaration {
-        variable: Identifier;
+    export interface CatchClause extends Declaration {
+        name: Identifier;
         type?: TypeNode;
+        block: Block;
     }
 
     export interface ModuleElement extends Node {

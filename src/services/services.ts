@@ -2576,7 +2576,7 @@ module ts {
                                 isFunction(containingNodeKind);
 
                         case SyntaxKind.OpenParenToken:
-                            return containingNodeKind === SyntaxKind.CatchBlock ||
+                            return containingNodeKind === SyntaxKind.CatchClause ||
                                 isFunction(containingNodeKind);
 
                         case SyntaxKind.OpenBraceToken:
@@ -3567,8 +3567,8 @@ module ts {
                     else if (node.kind === SyntaxKind.TryStatement) {
                         var tryStatement = <TryStatement>node;
 
-                        if (tryStatement.catchBlock) {
-                            aggregate(tryStatement.catchBlock);
+                        if (tryStatement.catchClause) {
+                            aggregate(tryStatement.catchClause);
                         }
                         else {
                             // Exceptions thrown within a try block lacking a catch clause
@@ -3607,7 +3607,7 @@ module ts {
                     if (parent.kind === SyntaxKind.TryStatement) {
                         var tryStatement = <TryStatement>parent;
 
-                        if (tryStatement.tryBlock === child && tryStatement.catchBlock) {
+                        if (tryStatement.tryBlock === child && tryStatement.catchClause) {
                             return child;
                         }
                     }
@@ -3623,8 +3623,8 @@ module ts {
 
                 pushKeywordIf(keywords, tryStatement.getFirstToken(), SyntaxKind.TryKeyword);
 
-                if (tryStatement.catchBlock) {
-                    pushKeywordIf(keywords, tryStatement.catchBlock.getFirstToken(), SyntaxKind.CatchKeyword);
+                if (tryStatement.catchClause) {
+                    pushKeywordIf(keywords, tryStatement.catchClause.getFirstToken(), SyntaxKind.CatchKeyword);
                 }
 
                 if (tryStatement.finallyBlock) {
@@ -4738,7 +4738,7 @@ module ts {
                 case SyntaxKind.FunctionDeclaration:
                 case SyntaxKind.FunctionExpression:
                 case SyntaxKind.ArrowFunction:
-                case SyntaxKind.CatchBlock:
+                case SyntaxKind.CatchClause:
                     return SemanticMeaning.Value;
 
                 case SyntaxKind.TypeParameter:

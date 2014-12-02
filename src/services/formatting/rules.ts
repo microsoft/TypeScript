@@ -525,7 +525,6 @@ module ts.formatting {
                 case SyntaxKind.SwitchStatement:
                 case SyntaxKind.ObjectLiteralExpression:
                 case SyntaxKind.TryBlock:
-                case SyntaxKind.CatchBlock:
                 case SyntaxKind.FinallyBlock:
                 case SyntaxKind.FunctionBlock:
                 case SyntaxKind.ModuleBlock:
@@ -581,7 +580,7 @@ module ts.formatting {
                 case SyntaxKind.EnumDeclaration:
                 case SyntaxKind.Block:
                 case SyntaxKind.TryBlock:
-                case SyntaxKind.CatchBlock:
+                case SyntaxKind.CatchClause:
                 case SyntaxKind.FinallyBlock:
                 case SyntaxKind.FunctionBlock:
                 case SyntaxKind.ModuleBlock:
@@ -603,7 +602,7 @@ module ts.formatting {
                 case SyntaxKind.WithStatement:
                 // TODO
                 // case SyntaxKind.ElseClause:
-                case SyntaxKind.CatchBlock:
+                case SyntaxKind.CatchClause:
                 case SyntaxKind.FinallyBlock:
                     return true;
 

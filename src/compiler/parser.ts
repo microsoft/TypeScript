@@ -364,11 +364,12 @@ module ts {
                 return child((<ThrowStatement>node).expression);
             case SyntaxKind.TryStatement:
                 return child((<TryStatement>node).tryBlock) ||
-                    child((<TryStatement>node).catchBlock) ||
+                    child((<TryStatement>node).catchClause) ||
                     child((<TryStatement>node).finallyBlock);
-            case SyntaxKind.CatchBlock:
-                return child((<CatchBlock>node).variable) ||
-                    children((<CatchBlock>node).statements);
+            case SyntaxKind.CatchClause:
+                return child((<CatchClause>node).name) ||
+                    child((<CatchClause>node).type) ||
+                    child((<CatchClause>node).block);
             case SyntaxKind.VariableDeclaration:
                 return children(node.modifiers) ||
                     child((<VariableDeclaration>node).name) ||
@@ -445,7 +446,7 @@ module ts {
                 case SyntaxKind.LabeledStatement:
                 case SyntaxKind.TryStatement:
                 case SyntaxKind.TryBlock:
-                case SyntaxKind.CatchBlock:
+                case SyntaxKind.CatchClause:
                 case SyntaxKind.FinallyBlock:
                     return forEachChild(node, traverse);
             }
@@ -733,8 +734,8 @@ module ts {
             return (<Declaration>parent).name === name;
         }
 
-        if (parent.kind === SyntaxKind.CatchBlock) {
-            return (<CatchBlock>parent).variable === name;
+        if (parent.kind === SyntaxKind.CatchClause) {
+            return (<CatchClause>parent).name === name;
         }
 
         return false;
@@ -3439,11 +3440,11 @@ module ts {
         function parseTryStatement(): TryStatement {
             var node = <TryStatement>createNode(SyntaxKind.TryStatement);
             node.tryBlock = parseTokenAndBlock(SyntaxKind.TryKeyword);
-            node.catchBlock = token === SyntaxKind.CatchKeyword ? parseCatchBlock() : undefined;
+            node.catchClause = token === SyntaxKind.CatchKeyword ? parseCatchClause() : undefined;
 
             // If we don't have a catch clause, then we must have a finally clause.  Try to parse
             // one out no matter what.
-            node.finallyBlock = !node.catchBlock || token === SyntaxKind.FinallyKeyword
+            node.finallyBlock = !node.catchClause || token === SyntaxKind.FinallyKeyword
                 ? parseTokenAndBlock(SyntaxKind.FinallyKeyword)
                 : undefined;
             return finishNode(node);
@@ -3459,19 +3460,15 @@ module ts {
             return result;
         }
 
-        function parseCatchBlock(): CatchBlock {
-            var pos = getNodePos();
+        function parseCatchClause(): CatchClause {
+            var result = <CatchClause>createNode(SyntaxKind.CatchClause);
             parseExpected(SyntaxKind.CatchKeyword);
             parseExpected(SyntaxKind.OpenParenToken);
-            var variable = parseIdentifier();
-            var typeAnnotation = parseTypeAnnotation();
+            result.name = parseIdentifier();
+            result.type = parseTypeAnnotation();
             parseExpected(SyntaxKind.CloseParenToken);
-            var result = <CatchBlock>parseBlock(SyntaxKind.CatchBlock, /* ignoreMissingOpenBrace */ false, /*checkForStrictMode*/ false);
-            result.pos = pos;
-            result.variable = variable;
-            result.type = typeAnnotation;
-
-            return result;
+            result.block = parseBlock(SyntaxKind.Block, /* ignoreMissingOpenBrace */ false, /*checkForStrictMode*/ false);
+            return finishNode(result);
         }
 
         function parseDebuggerStatement(): Statement {
@@ -4325,7 +4322,7 @@ module ts {
 
                 case SyntaxKind.EnumDeclaration:                return checkEnumDeclaration(<EnumDeclaration>node);
                 case SyntaxKind.BinaryExpression:               return checkBinaryExpression(<BinaryExpression>node);
-                case SyntaxKind.CatchBlock:                     return checkCatchBlock(<CatchBlock>node);
+                case SyntaxKind.CatchClause:                    return checkCatchClause(<CatchClause>node);
                 case SyntaxKind.ClassDeclaration:               return checkClassDeclaration(<ClassDeclaration>node);
                 case SyntaxKind.ComputedPropertyName:           return checkComputedPropertyName(<ComputedPropertyName>node);
                 case SyntaxKind.Constructor:                    return checkConstructor(<ConstructorDeclaration>node);
@@ -4583,15 +4580,15 @@ module ts {
             }
         }
 
-        function checkCatchBlock(node: CatchBlock) {
+        function checkCatchClause(node: CatchClause) {
             if (node.type) {
-                var colonStart = skipTrivia(sourceText, node.variable.end);
+                var colonStart = skipTrivia(sourceText, node.name.end);
                 return grammarErrorAtPos(colonStart, ":".length, Diagnostics.Catch_clause_parameter_cannot_have_a_type_annotation);
             }
-            if (node.parserContextFlags & ParserContextFlags.StrictMode && isEvalOrArgumentsIdentifier(node.variable)) {
+            if (node.parserContextFlags & ParserContextFlags.StrictMode && isEvalOrArgumentsIdentifier(node.name)) {
                 // It is a SyntaxError if a TryStatement with a Catch occurs within strict code and the Identifier of the 
                 // Catch production is eval or arguments
-                return reportInvalidUseInStrictMode(node.variable);
+                return reportInvalidUseInStrictMode(node.name);
             }
         }
 
