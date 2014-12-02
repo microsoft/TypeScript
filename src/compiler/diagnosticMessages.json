@@ -1149,19 +1149,19 @@
         "code": 2458
     },    
     "Not all code paths return a value": {
-        "category": "Error",
+        "category": "Warning",
         "code": 2459
     },
     "Unreachable code detected": {
-        "category": "Error",
+        "category": "Warning",
         "code": 2460
     },
     "Unused label": {
-        "category": "Error",
+        "category": "Warning",
         "code": 2461
     },
     "Fallthrough case in switch": {
-        "category": "Error",
+        "category": "Warning",
         "code": 2462
     },
     "Import declaration '{0}' is using private name '{1}'.": {
