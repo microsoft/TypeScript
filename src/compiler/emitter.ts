@@ -323,7 +323,8 @@ module ts {
 
             var extendsEmitted = false;
             var tempCount = 0;
-            var tempNames: Identifier[];
+            var tempVariables: Identifier[];
+            var tempParameters: Identifier[];
 
             /** write emitted output to disk*/
             var writeEmittedFiles = writeJavaScriptFile;
@@ -718,25 +719,27 @@ module ts {
                 writeFile(jsFilePath, emitOutput, writeByteOrderMark);
             }
 
-            function getTempVariableName(location: Node) {
+            function createTempVariable(location: Node): Identifier {
                 do {
                     // First _a..._z, then _0, _1, ...
                     var name = "_" + (tempCount < 26 ? String.fromCharCode(tempCount + 0x61) : tempCount - 26);
                     tempCount++;
                 }
                 while (!resolver.isUnknownIdentifier(location, name));
-                return name;
+                var result = <Identifier>createNode(SyntaxKind.Identifier);
+                result.text = name;
+                return result;
             }
 
             function recordTempDeclaration(name: Identifier) {
-                if (!tempNames) {
-                    tempNames = [];
+                if (!tempVariables) {
+                    tempVariables = [];
                 }
-                tempNames.push(name);
+                tempVariables.push(name);
             }
 
             function emitTempDeclarations(newLine: boolean) {
-                if (tempNames) {
+                if (tempVariables) {
                     if (newLine) {
                         writeLine();
                     }
@@ -744,7 +747,7 @@ module ts {
                         write(" ");
                     }
                     write("var ");
-                    emitCommaList(tempNames);
+                    emitCommaList(tempVariables);
                     write(";");
                 }
             }
@@ -1534,13 +1537,13 @@ module ts {
                 emitEnd(node.name);
             }
 
-            function emitDestructuring(root: BinaryExpression | BindingElement) {
+            function emitDestructuring(root: BinaryExpression | BindingElement, value?: Expression) {
                 var emitCount = 0;
                 if (root.kind === SyntaxKind.BinaryExpression) {
                     emitAssignmentExpression(<BinaryExpression>root);
                 }
                 else {
-                    emitBindingElement(<BindingElement>root, undefined);
+                    emitBindingElement(<BindingElement>root, value);
                 }
 
                 function emitAssignment(name: Identifier, value: Expression) {
@@ -1552,15 +1555,13 @@ module ts {
                     emit(value);
                 }
 
-                function createTemporaryVariable(expr: Expression): Expression {
+                function ensureIdentifier(expr: Expression): Expression {
                     if (expr.kind !== SyntaxKind.Identifier) {
-                        var tempName = getTempVariableName(root);
-                        var identifier = <Identifier>createNode(SyntaxKind.Identifier);
-                        identifier.text = tempName;
-                        emitAssignment(identifier, expr);
+                        var identifier = createTempVariable(root);
                         if (root.kind === SyntaxKind.BinaryExpression) {
                             recordTempDeclaration(identifier);
                         }
+                        emitAssignment(identifier, expr);
                         expr = identifier;
                     }
                     return expr;
@@ -1578,7 +1579,7 @@ module ts {
                 function createDefaultValueCheck(value: Expression, defaultValue: Expression): Expression {
                     // The value expression will be evaluated twice, so for anything but a simple identifier
                     // we need to generate a temporary variable
-                    value = createTemporaryVariable(value);
+                    value = ensureIdentifier(value);
                     // Return the expression 'value === void 0 ? defaultValue : value'
                     var equals = <BinaryExpression>createNode(SyntaxKind.BinaryExpression);
                     equals.left = value;
@@ -1628,7 +1629,7 @@ module ts {
                     if (properties.length !== 1) {
                         // For anything but a single element destructuring we need to generate a temporary
                         // to ensure value is evaluated exactly once.
-                        value = createTemporaryVariable(value);
+                        value = ensureIdentifier(value);
                     }
                     for (var i = 0; i < properties.length; i++) {
                         var p = properties[i];
@@ -1645,7 +1646,7 @@ module ts {
                     if (elements.length !== 1) {
                         // For anything but a single element destructuring we need to generate a temporary
                         // to ensure value is evaluated exactly once.
-                        value = createTemporaryVariable(value);
+                        value = ensureIdentifier(value);
                     }
                     for (var i = 0; i < elements.length; i++) {
                         var e = elements[i];
@@ -1681,7 +1682,7 @@ module ts {
                         if (root.parent.kind !== SyntaxKind.ParenExpression) {
                             write("(");
                         }
-                        value = createTemporaryVariable(value);
+                        value = ensureIdentifier(value);
                         emitDestructuringAssignment(target, value);
                         write(", ");
                         emit(value);
@@ -1706,7 +1707,7 @@ module ts {
                         if (elements.length !== 1) {
                             // For anything but a single element destructuring we need to generate a temporary
                             // to ensure value is evaluated exactly once.
-                            value = createTemporaryVariable(value);
+                            value = ensureIdentifier(value);
                         }
                         for (var i = 0; i < elements.length; i++) {
                             var element = elements[i];
@@ -1759,40 +1760,50 @@ module ts {
 
             function emitParameter(node: ParameterDeclaration) {
                 emitLeadingComments(node);
-                if (compilerOptions.target < ScriptTarget.ES6) {
-                    if (isBindingPattern(node.name)) {
-                        write("__" + indexOf((<FunctionLikeDeclaration>node.parent).parameters, node));
+                if (isBindingPattern(node.name)) {
+                    var name = createTempVariable(node);
+                    if (!tempParameters) {
+                        tempParameters = [];
                     }
-                    else {
-                        emit(node.name);
-                    }
+                    tempParameters.push(name);
+                    emit(name);
                 }
                 else {
-                    if (node.propertyName) {
-                        emit(node.propertyName);
-                        write(": ");
-                    }
                     emit(node.name);
-                    //emitOptional(" = ", node.initializer);
                 }
+                // TODO(andersh): Enable ES6 code generation below
+                //if (node.propertyName) {
+                //    emit(node.propertyName);
+                //    write(": ");
+                //}
+                //emit(node.name);
+                //emitOptional(" = ", node.initializer);
                 emitTrailingComments(node);
             }
 
             function emitDefaultValueAssignments(node: FunctionLikeDeclaration) {
-                forEach(node.parameters, param => {
-                    if (param.initializer) {
+                var tempIndex = 0;
+                forEach(node.parameters, p => {
+                    if (isBindingPattern(p.name)) {
                         writeLine();
-                        emitStart(param);
+                        write("var ");
+                        emitDestructuring(p, tempParameters[tempIndex]);
+                        write(";");
+                        tempIndex++;
+                    }
+                    else if (p.initializer) {
+                        writeLine();
+                        emitStart(p);
                         write("if (");
-                        emitNode(param.name);
+                        emitNode(p.name);
                         write(" === void 0)");
-                        emitEnd(param);
+                        emitEnd(p);
                         write(" { ");
-                        emitStart(param);
-                        emitNode(param.name);
+                        emitStart(p);
+                        emitNode(p.name);
                         write(" = ");
-                        emitNode(param.initializer);
-                        emitEnd(param);
+                        emitNode(p.initializer);
+                        emitEnd(p);
                         write("; }");
                     }
                 });
@@ -1802,7 +1813,7 @@ module ts {
                 if (hasRestParameters(node)) {
                     var restIndex = node.parameters.length - 1;
                     var restParam = node.parameters[restIndex];
-                    var tempName = getTempVariableName(node);
+                    var tempName = createTempVariable(node).text;
                     writeLine();
                     emitLeadingComments(restParam);
                     emitStart(restParam);
@@ -1884,12 +1895,14 @@ module ts {
             }
 
             function emitSignatureAndBody(node: FunctionLikeDeclaration) {
+                var saveTempCount = tempCount;
+                var saveTempVariables = tempVariables;
+                var saveTempParameters = tempParameters;
+                tempCount = 0;
+                tempVariables = undefined;
+                tempParameters = undefined;
                 emitSignatureParameters(node);
                 write(" {");
-                var saveTempCount = tempCount;
-                var saveTempNames = tempNames;
-                tempCount = 0;
-                tempNames = undefined;
                 scopeEmitStart(node);
                 increaseIndent();
 
@@ -1944,8 +1957,6 @@ module ts {
                     }
                 }
                 scopeEmitEnd();
-                tempCount = saveTempCount;
-                tempNames = saveTempNames;
                 if (node.flags & NodeFlags.Export) {
                     writeLine();
                     emitStart(node);
@@ -1955,6 +1966,9 @@ module ts {
                     emitEnd(node);
                     write(";");
                 }
+                tempCount = saveTempCount;
+                tempVariables = saveTempVariables;
+                tempParameters = saveTempParameters;
             }
 
             function findInitialSuperCall(ctor: ConstructorDeclaration): ExpressionStatement {
@@ -2155,6 +2169,12 @@ module ts {
                 emitTrailingComments(node);
 
                 function emitConstructorOfClass() {
+                    var saveTempCount = tempCount;
+                    var saveTempVariables = tempVariables;
+                    var saveTempParameters = tempParameters;
+                    tempCount = 0;
+                    tempVariables = undefined;
+                    tempParameters = undefined;
                     // Emit the constructor overload pinned comments
                     forEach(node.members, member => {
                         if (member.kind === SyntaxKind.Constructor && !(<ConstructorDeclaration>member).body) {
@@ -2171,10 +2191,6 @@ module ts {
                     emit(node.name);
                     emitSignatureParameters(ctor);
                     write(" {");
-                    var saveTempCount = tempCount;
-                    var saveTempNames = tempNames;
-                    tempCount = 0;
-                    tempNames = undefined;
                     scopeEmitStart(node, "constructor");
                     increaseIndent();
                     if (ctor) {
@@ -2215,12 +2231,13 @@ module ts {
                     decreaseIndent();
                     emitToken(SyntaxKind.CloseBraceToken, ctor ? (<Block>ctor.body).statements.end : node.members.end);
                     scopeEmitEnd();
-                    tempCount = saveTempCount;
-                    tempNames = saveTempNames;
                     emitEnd(<Node>ctor || node);
                     if (ctor) {
                         emitTrailingComments(ctor);
                     }
+                    tempCount = saveTempCount;
+                    tempVariables = saveTempVariables;
+                    tempParameters = saveTempParameters;
                 }
             }
 
@@ -2326,12 +2343,12 @@ module ts {
                 write(") ");
                 if (node.body.kind === SyntaxKind.ModuleBlock) {
                     var saveTempCount = tempCount;
-                    var saveTempNames = tempNames;
+                    var saveTempVariables = tempVariables;
                     tempCount = 0;
-                    tempNames = undefined;
+                    tempVariables = undefined;
                     emit(node.body);
                     tempCount = saveTempCount;
-                    tempNames = saveTempNames;
+                    tempVariables = saveTempVariables;
                 }
                 else {
                     write("{");
