@@ -943,7 +943,7 @@ module ts {
             if (node.kind !== SyntaxKind.VariableDeclaration || resolver.isDeclarationVisible(node)) {
                 writeTextOfNode(currentSourceFile, node.name);
                 // If optional property emit ?
-                if (node.kind === SyntaxKind.Property && (node.flags & NodeFlags.QuestionMark)) {
+                if (node.kind === SyntaxKind.Property && hasQuestionToken(node)) {
                     write("?");
                 }
                 if (node.kind === SyntaxKind.Property && node.parent.kind === SyntaxKind.TypeLiteral) {
@@ -1124,7 +1124,7 @@ module ts {
                 }
                 else {
                     writeTextOfNode(currentSourceFile, node.name);
-                    if (node.flags & NodeFlags.QuestionMark) {
+                    if (hasQuestionToken(node)) {
                         write("?");
                     }
                 }
@@ -1252,11 +1252,11 @@ module ts {
         function emitParameterDeclaration(node: ParameterDeclaration) {
             increaseIndent();
             emitJsDocComments(node);
-            if (node.flags & NodeFlags.Rest) {
+            if (node.dotDotDotToken) {
                 write("...");
             }
             writeTextOfNode(currentSourceFile, node.name);
-            if (node.initializer || (node.flags & NodeFlags.QuestionMark)) {
+            if (node.initializer || hasQuestionToken(node)) {
                 write("?");
             }
             decreaseIndent();
@@ -2142,8 +2142,8 @@ module ts {
                         return false;
                     case SyntaxKind.LabeledStatement:
                         return (<LabeledStatement>node.parent).label === node;
-                    case SyntaxKind.CatchBlock:
-                        return (<CatchBlock>node.parent).variable === node;
+                    case SyntaxKind.CatchClause:
+                        return (<CatchClause>node.parent).name === node;
                 }
             }
 
@@ -2624,7 +2624,7 @@ module ts {
             function emitCaseOrDefaultClause(node: CaseOrDefaultClause) {
                 if (node.kind === SyntaxKind.CaseClause) {
                     write("case ");
-                    emit(node.expression);
+                    emit((<CaseClause>node).expression);
                     write(":");
                 }
                 else {
@@ -2650,7 +2650,7 @@ module ts {
             function emitTryStatement(node: TryStatement) {
                 write("try ");
                 emit(node.tryBlock);
-                emit(node.catchBlock);
+                emit(node.catchClause);
                 if (node.finallyBlock) {
                     writeLine();
                     write("finally ");
@@ -2658,15 +2658,15 @@ module ts {
                 }
             }
 
-            function emitCatchBlock(node: CatchBlock) {
+            function emitCatchClause(node: CatchClause) {
                 writeLine();
                 var endPos = emitToken(SyntaxKind.CatchKeyword, node.pos);
                 write(" ");
                 emitToken(SyntaxKind.OpenParenToken, endPos);
-                emit(node.variable);
-                emitToken(SyntaxKind.CloseParenToken, node.variable.end);
+                emit(node.name);
+                emitToken(SyntaxKind.CloseParenToken, node.name.end);
                 write(" ");
-                emitBlock(node);
+                emitBlock(node.block);
             }
 
             function emitDebuggerStatement(node: Node) {
@@ -3599,8 +3599,8 @@ module ts {
                         return emitThrowStatement(<ThrowStatement>node);
                     case SyntaxKind.TryStatement:
                         return emitTryStatement(<TryStatement>node);
-                    case SyntaxKind.CatchBlock:
-                        return emitCatchBlock(<CatchBlock>node);
+                    case SyntaxKind.CatchClause:
+                        return emitCatchClause(<CatchClause>node);
                     case SyntaxKind.DebuggerStatement:
                         return emitDebuggerStatement(node);
                     case SyntaxKind.VariableDeclaration:

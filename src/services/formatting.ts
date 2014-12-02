@@ -155,10 +155,11 @@ module ts.formatting {
             case SyntaxKind.SourceFile:
             case SyntaxKind.Block:
             case SyntaxKind.TryBlock:
-            case SyntaxKind.CatchBlock:
             case SyntaxKind.FinallyBlock:
             case SyntaxKind.ModuleBlock:
-                return rangeContainsRange((<Block>parent).statements, node)
+                return rangeContainsRange((<Block>parent).statements, node);
+            case SyntaxKind.CatchClause:
+                return rangeContainsRange((<CatchClause>parent).block.statements, node);
         }
 
         return false;
@@ -898,7 +899,6 @@ module ts.formatting {
             case SyntaxKind.Block:
             case SyntaxKind.FunctionBlock:
             case SyntaxKind.TryBlock:
-            case SyntaxKind.CatchBlock:
             case SyntaxKind.FinallyBlock:
             case SyntaxKind.ModuleBlock:
                 return true;

@@ -79,7 +79,8 @@ module ts {
                             parent.kind === SyntaxKind.ForStatement ||
                             parent.kind === SyntaxKind.IfStatement ||
                             parent.kind === SyntaxKind.WhileStatement ||
-                            parent.kind === SyntaxKind.WithStatement) {
+                            parent.kind === SyntaxKind.WithStatement ||
+                            parent.kind === SyntaxKind.CatchClause) {
                             
                             addOutliningSpan(parent, openBrace, closeBrace, autoCollapse(n));
                         }
@@ -100,7 +101,6 @@ module ts {
                     case SyntaxKind.FunctionBlock:
                     case SyntaxKind.ModuleBlock:
                     case SyntaxKind.TryBlock:
-                    case SyntaxKind.CatchBlock:
                     case SyntaxKind.FinallyBlock:
                         var openBrace = findChildOfKind(n, SyntaxKind.OpenBraceToken, sourceFile);
                         var closeBrace = findChildOfKind(n, SyntaxKind.CloseBraceToken, sourceFile);
