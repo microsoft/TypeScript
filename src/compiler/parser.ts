@@ -1665,8 +1665,8 @@ module ts {
             return allowIdentifierNames ? parseIdentifierName() : parseIdentifier();
         }
 
-        function parseTokenNode(): PrimaryExpression {
-            var node = <PrimaryExpression>createNode(token);
+        function parseTokenNode<T extends Node>(): T {
+            var node = <T>createNode(token);
             nextToken();
             return finishNode(node);
         }
@@ -1789,10 +1789,14 @@ module ts {
             }
         }
 
-        function parseParameterType(): TypeNode {
-            return parseOptional(SyntaxKind.ColonToken)
-                ? token === SyntaxKind.StringLiteral ? parseLiteralNode(/*internName:*/ true) : parseType()
-                : undefined;
+        function parseParameterType(): TypeNode | StringLiteralExpression {
+            if (parseOptional(SyntaxKind.ColonToken)) {
+                return token === SyntaxKind.StringLiteral
+                    ? <StringLiteralExpression>parseLiteralNode(/*internName:*/ true)
+                    : parseType();
+            }
+
+            return undefined;
         }
 
         function isStartOfParameter(): boolean {
@@ -2095,15 +2099,15 @@ module ts {
             return finishNode(node);
         }
 
-        function parseFunctionType(typeKind: SyntaxKind): SignatureDeclaration {
-            var node = <SignatureDeclaration>createNode(typeKind);
+        function parseFunctionType(typeKind: SyntaxKind): FunctionOrConstructorTypeNode {
+            var node = <FunctionOrConstructorTypeNode>createNode(typeKind);
             fillSignature(typeKind === SyntaxKind.FunctionType ? SyntaxKind.CallSignature : SyntaxKind.ConstructSignature,
                 SyntaxKind.EqualsGreaterThanToken, /* returnTokenRequired */ true, /*yieldAndGeneratorParameterContext:*/ false, node);
             return finishNode(node);
         }
 
-        function parseKeywordAndNoDot(): Node {
-            var node = parseTokenNode();
+        function parseKeywordAndNoDot(): TypeNode {
+            var node = parseTokenNode<TypeNode>();
             return token === SyntaxKind.DotToken ? undefined : node;
         }
 
@@ -2117,7 +2121,7 @@ module ts {
                     var node = tryParse(parseKeywordAndNoDot);
                     return node || parseTypeReference();
                 case SyntaxKind.VoidKeyword:
-                    return parseTokenNode();
+                    return parseTokenNode<TypeNode>();
                 case SyntaxKind.TypeOfKeyword:
                     return parseTypeQuery();
                 case SyntaxKind.OpenBraceToken:
@@ -2888,7 +2892,7 @@ module ts {
         }
 
         function parseSuperExpression(): MemberExpression {
-            var expression = parseTokenNode();
+            var expression = parseTokenNode<PrimaryExpression>();
             if (token === SyntaxKind.OpenParenToken || token === SyntaxKind.DotToken) {
                 return expression;
             }
@@ -3025,7 +3029,7 @@ module ts {
                 case SyntaxKind.NullKeyword:
                 case SyntaxKind.TrueKeyword:
                 case SyntaxKind.FalseKeyword:
-                    return parseTokenNode();
+                    return parseTokenNode<PrimaryExpression>();
                 case SyntaxKind.NumericLiteral:
                 case SyntaxKind.StringLiteral:
                 case SyntaxKind.NoSubstitutionTemplateLiteral:
