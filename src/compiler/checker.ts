@@ -338,7 +338,6 @@ module ts {
         // the nameNotFoundMessage argument is not undefined. Returns the resolved symbol, or undefined if no symbol with
         // the given name can be found.
         function resolveName(location: Node, name: string, meaning: SymbolFlags, nameNotFoundMessage: DiagnosticMessage, nameArg: string | Identifier): Symbol {
-
             var result: Symbol;
             var lastLocation: Node;
             var propertyWithInvalidInitializer: Node;
@@ -516,26 +515,27 @@ module ts {
 
         // Resolves a qualified name and any involved import aliases
         function resolveEntityName(location: Node, name: EntityName, meaning: SymbolFlags): Symbol {
+            if (getFullWidth(name) === 0) {
+                return undefined;
+            }
+
             if (name.kind === SyntaxKind.Identifier) {
-                var symbol = resolveName(location, (<Identifier>name).text, meaning, Diagnostics.Cannot_find_name_0, <Identifier>name);
+                var symbol = resolveName(location,(<Identifier>name).text, meaning, Diagnostics.Cannot_find_name_0, <Identifier>name);
                 if (!symbol) {
                     return;
                 }
             }
             else if (name.kind === SyntaxKind.QualifiedName) {
-                var namespace = resolveEntityName(location, (<QualifiedName>name).left, SymbolFlags.Namespace);
-                if (!namespace || namespace === unknownSymbol || (<QualifiedName>name).right.kind === SyntaxKind.Missing) return;
-                var symbol = getSymbol(namespace.exports, (<QualifiedName>name).right.text, meaning);
+                var namespace = resolveEntityName(location,(<QualifiedName>name).left, SymbolFlags.Namespace);
+                if (!namespace || namespace === unknownSymbol || getFullWidth((<QualifiedName>name).right) === 0) return;
+                var symbol = getSymbol(namespace.exports,(<QualifiedName>name).right.text, meaning);
                 if (!symbol) {
                     error(location, Diagnostics.Module_0_has_no_exported_member_1, getFullyQualifiedName(namespace),
                         declarationNameToString((<QualifiedName>name).right));
                     return;
                 }
             }
-            else {
-                // Missing identifier
-                return;
-            }
+
             Debug.assert((symbol.flags & SymbolFlags.Instantiated) === 0, "Should never get an instantiated symbol here.");
             return symbol.flags & meaning ? symbol : resolveImport(symbol);
         }
@@ -4256,7 +4256,7 @@ module ts {
         function getResolvedSymbol(node: Identifier): Symbol {
             var links = getNodeLinks(node);
             if (!links.resolvedSymbol) {
-                links.resolvedSymbol = resolveName(node, node.text, SymbolFlags.Value | SymbolFlags.ExportValue, Diagnostics.Cannot_find_name_0, node) || unknownSymbol;
+                links.resolvedSymbol = (getFullWidth(node) > 0 && resolveName(node, node.text, SymbolFlags.Value | SymbolFlags.ExportValue, Diagnostics.Cannot_find_name_0, node)) || unknownSymbol;
             }
             return links.resolvedSymbol;
         }
@@ -5344,7 +5344,7 @@ module ts {
                     var templateExpression = <TemplateExpression>tagExpression.template;
                     var lastSpan = lastOrUndefined(templateExpression.templateSpans);
                     Debug.assert(lastSpan !== undefined); // we should always have at least one span.
-                    callIsIncomplete = lastSpan.literal.kind === SyntaxKind.Missing || isUnterminatedTemplateEnd(lastSpan.literal);
+                    callIsIncomplete = getFullWidth(lastSpan.literal) === 0 || isUnterminatedTemplateEnd(lastSpan.literal);
                 }
                 else {
                     // If the template didn't end in a backtick, or its beginning occurred right prior to EOF,
@@ -7051,7 +7051,7 @@ module ts {
             var isConstructor = (symbol.flags & SymbolFlags.Constructor) !== 0;
 
             function reportImplementationExpectedError(node: FunctionLikeDeclaration): void {
-                if (node.name && node.name.kind === SyntaxKind.Missing) {
+                if (node.name && getFullWidth(node.name) === 0) {
                     return;
                 }
 
@@ -8889,6 +8889,11 @@ module ts {
             }
 
             if (isExpression(entityName)) {
+                if (getFullWidth(entityName) === 0) {
+                    // Missing entity name.
+                    return undefined;
+                }
+
                 if (entityName.kind === SyntaxKind.Identifier) {
                     // Include Import in the meaning, this ensures that we do not follow aliases to where they point and instead
                     // return the alias symbol.
@@ -8908,10 +8913,6 @@ module ts {
                         checkQualifiedName(<QualifiedName>entityName);
                     }
                     return getNodeLinks(entityName).resolvedSymbol;
-                }
-                else {
-                    // Missing identifier
-                    return;
                 }
             }
             else if (isTypeReferenceIdentifier(<EntityName>entityName)) {

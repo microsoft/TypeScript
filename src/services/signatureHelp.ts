@@ -386,7 +386,7 @@ module ts.SignatureHelp {
             // leading up to the next token in case the user is about to type in a TemplateMiddle or TemplateTail.
             if (template.kind === SyntaxKind.TemplateExpression) {
                 var lastSpan = lastOrUndefined((<TemplateExpression>template).templateSpans);
-                if (lastSpan.literal.kind === SyntaxKind.Missing) {
+                if (lastSpan.literal.getFullWidth() === 0) {
                     applicableSpanEnd = skipTrivia(sourceFile.text, applicableSpanEnd, /*stopAfterLineBreak*/ false);
                 }
             }

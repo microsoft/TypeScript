@@ -137,8 +137,9 @@ module ts {
         SetKeyword,
         StringKeyword,
         TypeKeyword,
+
         // Parse tree nodes
-        Missing,
+
         // Names
         QualifiedName,
         ComputedPropertyName,
@@ -235,6 +236,7 @@ module ts {
         // Top-level nodes
         SourceFile,
         Program,
+
         // Synthesized list
         SyntaxList,
         // Enum value count
@@ -263,7 +265,8 @@ module ts {
         FirstOperator = SemicolonToken,
         LastOperator = CaretEqualsToken,
         FirstBinaryOperator = LessThanToken,
-        LastBinaryOperator = CaretEqualsToken
+        LastBinaryOperator = CaretEqualsToken,
+        FirstNode = QualifiedName,
     }
 
     export const enum NodeFlags {

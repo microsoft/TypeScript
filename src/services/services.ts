@@ -218,7 +218,7 @@ module ts {
         }
 
         private createChildren(sourceFile?: SourceFile) {
-            if (this.kind > SyntaxKind.Missing) {
+            if (this.kind >= SyntaxKind.FirstNode) {
                 scanner.setText((sourceFile || this.getSourceFile()).text);
                 var children: Node[] = [];
                 var pos = this.pos;
@@ -264,8 +264,11 @@ module ts {
             var children = this.getChildren();
             for (var i = 0; i < children.length; i++) {
                 var child = children[i];
-                if (child.kind < SyntaxKind.Missing) return child;
-                if (child.kind > SyntaxKind.Missing) return child.getFirstToken(sourceFile);
+                if (child.kind < SyntaxKind.FirstNode) {
+                    return child;
+                }
+
+                return child.getFirstToken(sourceFile);
             }
         }
 
@@ -273,8 +276,11 @@ module ts {
             var children = this.getChildren(sourceFile);
             for (var i = children.length - 1; i >= 0; i--) {
                 var child = children[i];
-                if (child.kind < SyntaxKind.Missing) return child;
-                if (child.kind > SyntaxKind.Missing) return child.getLastToken(sourceFile);
+                if (child.kind < SyntaxKind.FirstNode) {
+                    return child;
+                }
+
+                return child.getLastToken(sourceFile);
             }
         }
     }
@@ -758,7 +764,7 @@ module ts {
                         case SyntaxKind.Method:
                             var functionDeclaration = <FunctionLikeDeclaration>node;
 
-                            if (functionDeclaration.name && functionDeclaration.name.kind !== SyntaxKind.Missing) {
+                            if (functionDeclaration.name && functionDeclaration.name.getFullWidth() > 0) {
                                 var lastDeclaration = namedDeclarations.length > 0 ?
                                     namedDeclarations[namedDeclarations.length - 1] :
                                     undefined;
@@ -2888,7 +2894,7 @@ module ts {
                     if (location.parent && location.parent.kind === SyntaxKind.PropertyAccessExpression) {
                         var right = (<PropertyAccessExpression>location.parent).name;
                         // Either the location is on the right of a property access, or on the left and the right is missing
-                        if (right === location || (right && right.kind === SyntaxKind.Missing)){
+                        if (right === location || (right && right.getFullWidth() === 0)){
                             location = location.parent;
                         }
                     }

@@ -5,6 +5,10 @@
 module ts {
     var nodeConstructors = new Array<new () => Node>(SyntaxKind.Count);
 
+    export function getFullWidth(node: Node) {
+        return node.end - node.pos;
+    }
+
     export function getNodeConstructor(kind: SyntaxKind): new () => Node {
         return nodeConstructors[kind] || (nodeConstructors[kind] = objectAllocator.getNodeConstructor(kind));
     }
@@ -75,13 +79,14 @@ module ts {
     // Computed property names will just be emitted as "[<expr>]", where <expr> is the source
     // text of the expression in the computed property.
     export function declarationNameToString(name: DeclarationName) {
-        return name.kind === SyntaxKind.Missing ? "(Missing)" : getTextOfNode(name);
+        return getFullWidth(name) === 0 ? "(Missing)" : getTextOfNode(name);
     }
 
     export function createDiagnosticForNode(node: Node, message: DiagnosticMessage, arg0?: any, arg1?: any, arg2?: any): Diagnostic {
         node = getErrorSpanForNode(node);
         var file = getSourceFileOfNode(node);
-        var start = node.kind === SyntaxKind.Missing ? node.pos : skipTrivia(file.text, node.pos);
+
+        var start = getFullWidth(node) === 0 ? node.pos : skipTrivia(file.text, node.pos);
         var length = node.end - start;
 
         return createFileDiagnostic(file, start, length, message, arg0, arg1, arg2);
@@ -1200,14 +1205,14 @@ module ts {
             return inStrictModeContext() ? token > SyntaxKind.LastFutureReservedWord : token > SyntaxKind.LastReservedWord;
         }
 
-        function parseExpected(t: SyntaxKind, diagnosticMessage?: DiagnosticMessage): boolean {
+        function parseExpected(t: SyntaxKind, diagnosticMessage?: DiagnosticMessage, arg0?: any): boolean {
             if (token === t) {
                 nextToken();
                 return true;
             }
 
             if (diagnosticMessage) {
-                error(diagnosticMessage);
+                error(diagnosticMessage, arg0);
             }
             else {
                 error(Diagnostics._0_expected, tokenToString(t));
@@ -1276,8 +1281,24 @@ module ts {
             return node;
         }
 
-        function createMissingNode(pos?: number): Node {
-            return createNode(SyntaxKind.Missing, pos);
+        function createMissingNode(kind: SyntaxKind, reportAtCurrentPosition: boolean, diagnosticMessage: DiagnosticMessage, arg0?: any): Node {
+            if (diagnosticMessage) {
+                if (reportAtCurrentPosition) {
+                    errorAtPos(scanner.getStartPos(), 0, diagnosticMessage, arg0);
+                }
+                else {
+                    var start = scanner.getTokenPos();
+                    errorAtPos(start, scanner.getTextPos() - start, diagnosticMessage, arg0);
+                }
+            }
+       
+            return createMissingNodeWithoutError(kind);
+        }
+
+        function createMissingNodeWithoutError(kind: SyntaxKind) {
+            var result = createNode(kind, scanner.getStartPos());
+            (<Identifier>result).text = "";
+            return finishNode(result);
         }
 
         function internIdentifier(text: string): string {
@@ -1297,14 +1318,7 @@ module ts {
                 return finishNode(node);
             }
 
-            error(diagnosticMessage || Diagnostics.Identifier_expected);
-            return createMissingIdentifier();
-        }
-
-        function createMissingIdentifier() {
-            var node = <Identifier>createMissingNode();
-            node.text = "";
-            return node;
+            return <Identifier>createMissingNode(SyntaxKind.Identifier, /*reportAtCurrentPosition:*/ false, diagnosticMessage || Diagnostics.Identifier_expected);
         }
 
         function parseIdentifier(diagnosticMessage?: DiagnosticMessage): Identifier {
@@ -1660,8 +1674,10 @@ module ts {
                 });
 
                 if (matchesPattern) {
-                    errorAtPos(scanner.getTokenPos(), 0, Diagnostics.Identifier_expected);
-                    return <Identifier>createMissingNode();
+                    // Report that we need an identifier.  However, report it right after the dot, 
+                    // and not on the next token.  This is because the next token might actually 
+                    // be an identifier and the error woudl be quite confusing.
+                    return <Identifier>createMissingNode(SyntaxKind.Identifier, /*reportAtCurrentToken:*/ true, Diagnostics.Identifier_expected);
                 }
             }
 
@@ -1705,8 +1721,8 @@ module ts {
                 literal = parseLiteralNode();
             }
             else {
-                parseExpected(SyntaxKind.CloseBraceToken);
-                literal = createMissingIdentifier();
+                literal = <LiteralExpression>createMissingNode(
+                    SyntaxKind.TemplateTail, /*reportAtCurrentPosition:*/ false, Diagnostics._0_expected, tokenToString(SyntaxKind.CloseBraceToken));
             }
 
             span.literal = literal;
@@ -1821,7 +1837,7 @@ module ts {
                 ? doInYieldContext(parseIdentifier)
                 : parseIdentifier();
 
-            if (node.name.kind === SyntaxKind.Missing && node.flags === 0 && isModifier(token)) {
+            if (getFullWidth(node.name) === 0 && node.flags === 0 && isModifier(token)) {
                 // in cases like
                 // 'use strict' 
                 // function foo(static)
@@ -3009,7 +3025,9 @@ module ts {
             // don't want to rollback just because we were missing a type arg.  The grammar checker
             // will report the actual error later on.
             if (token === SyntaxKind.CommaToken) {
-                return createNode(SyntaxKind.Missing);
+                var result = <TypeReferenceNode>createNode(SyntaxKind.TypeReference);
+                result.typeName = <Identifier>createMissingNodeWithoutError(SyntaxKind.Identifier);
+                return finishNode(result);
             }
 
             return parseType();
@@ -4202,7 +4220,6 @@ module ts {
                 case SyntaxKind.ObjectLiteralExpression:
                 case SyntaxKind.FunctionExpression:
                 case SyntaxKind.Identifier:
-                case SyntaxKind.Missing:
                 case SyntaxKind.RegularExpressionLiteral:
                 case SyntaxKind.NumericLiteral:
                 case SyntaxKind.StringLiteral:
@@ -4533,7 +4550,7 @@ module ts {
             if (typeArguments) {
                 for (var i = 0, n = typeArguments.length; i < n; i++) {
                     var arg = typeArguments[i];
-                    if (arg.kind === SyntaxKind.Missing) {
+                    if (arg.kind === SyntaxKind.TypeReference && getFullWidth((<TypeReferenceNode>arg).typeName) === 0) {
                         return grammarErrorAtPos(arg.pos, 0, Diagnostics.Type_expected);
                     }
                 }

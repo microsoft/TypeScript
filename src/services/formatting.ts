@@ -483,8 +483,8 @@ module ts.formatting {
                 if (!rangeOverlapsWithStartEnd(originalRange, child.pos, child.end)) {
                     return inheritedIndentation;
                 }
-
-                if (child.kind === SyntaxKind.Missing) {
+                
+                if (child.getFullWidth() === 0) {
                     return inheritedIndentation;
                 }
 
