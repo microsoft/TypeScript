@@ -415,11 +415,7 @@
         "category": "Error",
         "code": 1142
     },
-    "'catch' or 'finally' expected.": {
-        "category": "Error",
-        "code": 1143
-    },
-    "Block or ';' expected.": {
+    "'{' or ';' expected.": {
         "category": "Error",
         "code": 1144
     },
@@ -471,10 +467,6 @@
         "category": "Error",
         "code": 1157
     },
-    "Invalid template literal; expected '}'": {
-        "category": "Error",
-        "code": 1158
-    },
     "Tagged templates are only available when targeting ECMAScript 6 and higher.": {
         "category": "Error",
         "code": 1159
@@ -491,9 +483,74 @@
         "category": "Error",
         "code": 1162
     },
-    "'yield' expression must be contained_within a generator declaration.": {
+    "'yield' expression must be contained_within a generator declaration."
+    : {
         "category": "Error",
         "code": 1163
+    },
+    "Computed property names are not allowed in enums.": {
+        "category": "Error",
+        "code": 1164
+    },
+    "Computed property names are not allowed in an ambient context.": {
+        "category": "Error",
+        "code": 1165
+    },
+    "Computed property names are not allowed in class property declarations.": {
+        "category": "Error",
+        "code": 1166
+    },
+    "Computed property names are only available when targeting ECMAScript 6 and higher.": {
+        "category": "Error",
+        "code": 1167
+    },
+    "Computed property names are not allowed in method overloads.": {
+        "category": "Error",
+        "code": 1168
+    },
+    "Computed property names are not allowed in interfaces.": {
+        "category": "Error",
+        "code": 1169
+    },
+    "Computed property names are not allowed in type literals.": {
+        "category": "Error",
+        "code": 1170
+    },
+    "A comma expression is not allowed in a computed property name.": {
+        "category": "Error",
+        "code": 1171
+    },
+    "'extends' clause already seen.": {
+        "category": "Error",
+        "code": 1172
+    },
+    "'extends' clause must precede 'implements' clause.": {
+        "category": "Error",
+        "code": 1173
+    },
+    "Classes can only extend a single class.": {
+        "category": "Error",
+        "code": 1174
+    },
+    "'implements' clause already seen.": {
+        "category": "Error",
+        "code": 1175
+    },
+    "Interface declaration cannot have 'implements' clause.": {
+        "category": "Error",
+        "code": 1176
+    },
+    "Binary digit expected.": {
+        "category": "Error",
+        "code": 1177
+    },
+    "Octal digit expected.": {
+        "category": "Error",
+        "code": 1178
+    },
+    "Unexpected token. '{' expected.": {
+        "category": "Error",
+        "code": 1179
     },
 
     "Duplicate identifier '{0}'.": {
@@ -1654,5 +1711,13 @@
     "You cannot rename this element.": {
         "category": "Error",
         "code": 8000
+    },
+    "'yield' expressions are not currently supported.": {
+        "category": "Error",
+        "code": 9000
+    },
+    "'generators' are not currently supported.": {
+        "category": "Error",
+        "code": 9001
     }
 }

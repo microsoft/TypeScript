@@ -1,9 +1,9 @@
 tests/cases/conformance/parser/ecmascript5/parserRealSource10.ts(4,1): error TS6053: File 'tests/cases/conformance/parser/ecmascript5/typescript.ts' not found.
-tests/cases/conformance/parser/ecmascript5/parserRealSource10.ts(127,29): error TS1150: 'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.
-tests/cases/conformance/parser/ecmascript5/parserRealSource10.ts(128,32): error TS1150: 'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.
-tests/cases/conformance/parser/ecmascript5/parserRealSource10.ts(129,37): error TS1150: 'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.
-tests/cases/conformance/parser/ecmascript5/parserRealSource10.ts(130,31): error TS1150: 'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.
-tests/cases/conformance/parser/ecmascript5/parserRealSource10.ts(449,31): error TS1150: 'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.
+tests/cases/conformance/parser/ecmascript5/parserRealSource10.ts(127,42): error TS1150: 'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.
+tests/cases/conformance/parser/ecmascript5/parserRealSource10.ts(128,42): error TS1150: 'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.
+tests/cases/conformance/parser/ecmascript5/parserRealSource10.ts(129,47): error TS1150: 'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.
+tests/cases/conformance/parser/ecmascript5/parserRealSource10.ts(130,42): error TS1150: 'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.
+tests/cases/conformance/parser/ecmascript5/parserRealSource10.ts(449,40): error TS1150: 'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.
 tests/cases/conformance/parser/ecmascript5/parserRealSource10.ts(128,36): error TS2304: Cannot find name 'string'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource10.ts(129,41): error TS2304: Cannot find name 'number'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource10.ts(130,35): error TS2304: Cannot find name 'boolean'.
@@ -472,20 +472,20 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource10.ts(356,53): error 
         }
     
         export var tokenTable = new TokenInfo[];
-                                ~~~~~~~~~~~~~~~
+                                             ~~
 !!! error TS1150: 'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.
         export var nodeTypeTable = new string[];
-                                   ~~~~~~~~~~~~
+                                             ~~
 !!! error TS1150: 'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.
                                        ~~~~~~
 !!! error TS2304: Cannot find name 'string'.
         export var nodeTypeToTokTable = new number[];
-                                        ~~~~~~~~~~~~
+                                                  ~~
 !!! error TS1150: 'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.
                                             ~~~~~~
 !!! error TS2304: Cannot find name 'number'.
         export var noRegexTable = new boolean[];
-                                  ~~~~~~~~~~~~~
+                                             ~~
 !!! error TS1150: 'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.
                                       ~~~~~~~
 !!! error TS2304: Cannot find name 'boolean'.
@@ -1474,7 +1474,7 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource10.ts(356,53): error 
     
         // TODO: new with length TokenID.LimFixed
         export var staticTokens = new Token[];
-                                  ~~~~~~~~~~~
+                                           ~~
 !!! error TS1150: 'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.
         export function initializeStaticTokens() {
             for (var i = 0; i <= TokenID.LimFixed; i++) {

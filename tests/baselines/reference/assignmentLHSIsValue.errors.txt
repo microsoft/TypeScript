@@ -20,9 +20,6 @@ tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(3
 tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(31,1): error TS2364: Invalid left-hand side of assignment expression.
 tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(32,1): error TS2364: Invalid left-hand side of assignment expression.
 tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(38,1): error TS2364: Invalid left-hand side of assignment expression.
-tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(42,30): error TS2364: Invalid left-hand side of assignment expression.
-tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(44,13): error TS2364: Invalid left-hand side of assignment expression.
-tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(46,21): error TS2364: Invalid left-hand side of assignment expression.
 tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(54,1): error TS2364: Invalid left-hand side of assignment expression.
 tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(57,1): error TS2364: Invalid left-hand side of assignment expression.
 tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(58,1): error TS2364: Invalid left-hand side of assignment expression.
@@ -40,7 +37,7 @@ tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(6
 tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(70,1): error TS2364: Invalid left-hand side of assignment expression.
 
 
-==== tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts (40 errors) ====
+==== tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts (37 errors) ====
     // expected error for all the LHS of assignments
     var value;
     
@@ -119,20 +116,14 @@ tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(7
         constructor() { super(); super = value; }
                                        ~
 !!! error TS1034: 'super' must be followed by an argument list or member access.
-                                 ~~~~~
-!!! error TS2364: Invalid left-hand side of assignment expression.
     
         foo() { super = value }
                       ~
 !!! error TS1034: 'super' must be followed by an argument list or member access.
-                ~~~~~
-!!! error TS2364: Invalid left-hand side of assignment expression.
     
         static sfoo() { super = value; }
                               ~
 !!! error TS1034: 'super' must be followed by an argument list or member access.
-                        ~~~~~
-!!! error TS2364: Invalid left-hand side of assignment expression.
     }
     
     // function expression

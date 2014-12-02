@@ -1,0 +1,81 @@
+=== tests/cases/conformance/types/union/unionTypeIndexSignature.ts ===
+var numOrDate: number | Date;
+>numOrDate : number | Date
+>Date : Date
+
+var anyVar: number;
+>anyVar : number
+
+// If each type in U has a string index signature, 
+// U has a string index signature of a union type of the types of the string index signatures from each type in U.
+
+var unionOfDifferentReturnType: { [a: string]: number; } | { [a: string]: Date; };
+>unionOfDifferentReturnType : { [x: string]: number; } | { [x: string]: Date; }
+>a : string
+>a : string
+>Date : Date
+
+numOrDate = unionOfDifferentReturnType["hello"]; // number | Date
+>numOrDate = unionOfDifferentReturnType["hello"] : number | Date
+>numOrDate : number | Date
+>unionOfDifferentReturnType["hello"] : number | Date
+>unionOfDifferentReturnType : { [x: string]: number; } | { [x: string]: Date; }
+
+numOrDate = unionOfDifferentReturnType[10]; // number | Date
+>numOrDate = unionOfDifferentReturnType[10] : number | Date
+>numOrDate : number | Date
+>unionOfDifferentReturnType[10] : number | Date
+>unionOfDifferentReturnType : { [x: string]: number; } | { [x: string]: Date; }
+
+var unionOfTypesWithAndWithoutStringSignature: { [a: string]: number; } | boolean;
+>unionOfTypesWithAndWithoutStringSignature : boolean | { [x: string]: number; }
+>a : string
+
+anyVar = unionOfTypesWithAndWithoutStringSignature["hello"]; // any
+>anyVar = unionOfTypesWithAndWithoutStringSignature["hello"] : any
+>anyVar : number
+>unionOfTypesWithAndWithoutStringSignature["hello"] : any
+>unionOfTypesWithAndWithoutStringSignature : boolean | { [x: string]: number; }
+
+anyVar = unionOfTypesWithAndWithoutStringSignature[10]; // any
+>anyVar = unionOfTypesWithAndWithoutStringSignature[10] : any
+>anyVar : number
+>unionOfTypesWithAndWithoutStringSignature[10] : any
+>unionOfTypesWithAndWithoutStringSignature : boolean | { [x: string]: number; }
+
+// If each type in U has a numeric index signature, 
+// U has a numeric index signature of a union type of the types of the numeric index signatures from each type in U.
+var unionOfDifferentReturnType1: { [a: number]: number; } | { [a: number]: Date; };
+>unionOfDifferentReturnType1 : { [x: number]: number; } | { [x: number]: Date; }
+>a : number
+>a : number
+>Date : Date
+
+numOrDate = unionOfDifferentReturnType1["hello"]; // any
+>numOrDate = unionOfDifferentReturnType1["hello"] : any
+>numOrDate : number | Date
+>unionOfDifferentReturnType1["hello"] : any
+>unionOfDifferentReturnType1 : { [x: number]: number; } | { [x: number]: Date; }
+
+numOrDate = unionOfDifferentReturnType1[10]; // number | Date
+>numOrDate = unionOfDifferentReturnType1[10] : number | Date
+>numOrDate : number | Date
+>unionOfDifferentReturnType1[10] : number | Date
+>unionOfDifferentReturnType1 : { [x: number]: number; } | { [x: number]: Date; }
+
+var unionOfTypesWithAndWithoutStringSignature1: { [a: number]: number; } | boolean;
+>unionOfTypesWithAndWithoutStringSignature1 : boolean | { [x: number]: number; }
+>a : number
+
+anyVar = unionOfTypesWithAndWithoutStringSignature1["hello"]; // any
+>anyVar = unionOfTypesWithAndWithoutStringSignature1["hello"] : any
+>anyVar : number
+>unionOfTypesWithAndWithoutStringSignature1["hello"] : any
+>unionOfTypesWithAndWithoutStringSignature1 : boolean | { [x: number]: number; }
+
+anyVar = unionOfTypesWithAndWithoutStringSignature1[10]; // any
+>anyVar = unionOfTypesWithAndWithoutStringSignature1[10] : any
+>anyVar : number
+>unionOfTypesWithAndWithoutStringSignature1[10] : any
+>unionOfTypesWithAndWithoutStringSignature1 : boolean | { [x: number]: number; }
+

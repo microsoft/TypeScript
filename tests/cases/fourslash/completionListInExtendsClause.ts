@@ -27,6 +27,5 @@ verify.completionListIsEmpty();
 goTo.marker("3");
 verify.completionListIsEmpty();
 
-// This needs comletion list filtering based on location to work
 goTo.marker("4");
-verify.not.completionListIsEmpty();
+verify.completionListIsEmpty();

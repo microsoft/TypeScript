@@ -14,7 +14,9 @@ var result1 = true ? a : b;
 //Be contextually typed and and bct is not identical, results in errors that union type is not assignable to target
 var result2: A = true ? a : b;
 var result3: B = true ? a : b;
+var result31: A | B = true ? a : b;
 
 var result4: (t: X) => number = true ? (m) => m.propertyX1 : (n) => n.propertyX2;
 var result5: (t: X) => string = true ? (m) => m.propertyX1 : (n) => n.propertyX2;
 var result6: (t: X) => boolean = true ? (m) => m.propertyX1 : (n) => n.propertyX2;
+var result61: (t: X) => number| string = true ? (m) => m.propertyX1 : (n) => n.propertyX2;

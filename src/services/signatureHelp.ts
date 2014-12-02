@@ -296,7 +296,7 @@ module ts.SignatureHelp {
                 Debug.assert(templateExpression.kind === SyntaxKind.TemplateExpression);
 
                 // If we're just after a template tail, don't show signature help.
-                if (node.kind === SyntaxKind.TemplateTail && position >= node.getEnd() && !isUnterminatedTemplateEnd(<LiteralExpression>node)) {
+                if (node.kind === SyntaxKind.TemplateTail && position >= node.getEnd() && !(<LiteralExpression>node).isUnterminated) {
                     return undefined;
                 }
 
@@ -386,7 +386,7 @@ module ts.SignatureHelp {
             // leading up to the next token in case the user is about to type in a TemplateMiddle or TemplateTail.
             if (template.kind === SyntaxKind.TemplateExpression) {
                 var lastSpan = lastOrUndefined((<TemplateExpression>template).templateSpans);
-                if (lastSpan.literal.kind === SyntaxKind.Missing) {
+                if (lastSpan.literal.getFullWidth() === 0) {
                     applicableSpanEnd = skipTrivia(sourceFile.text, applicableSpanEnd, /*stopAfterLineBreak*/ false);
                 }
             }
@@ -524,7 +524,7 @@ module ts.SignatureHelp {
                 var displayParts = mapToDisplayParts(writer =>
                     typeInfoResolver.getSymbolDisplayBuilder().buildParameterDisplay(parameter, writer, invocation));
 
-                var isOptional = !!(parameter.valueDeclaration.flags & NodeFlags.QuestionMark);
+                var isOptional = hasQuestionToken(parameter.valueDeclaration);
 
                 return {
                     name: parameter.name,

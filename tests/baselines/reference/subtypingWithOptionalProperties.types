@@ -24,7 +24,7 @@ var r = f({ s: new Object() }); // ok
 >{ s: new Object() } : { s: Object; }
 >s : Object
 >new Object() : Object
->Object : { (): any; (value: any): any; new (value?: any): Object; prototype: Object; getPrototypeOf(o: any): any; getOwnPropertyDescriptor(o: any, p: string): PropertyDescriptor; getOwnPropertyNames(o: any): string[]; create(o: any, properties?: PropertyDescriptorMap): any; defineProperty(o: any, p: string, attributes: PropertyDescriptor): any; defineProperties(o: any, properties: PropertyDescriptorMap): any; seal(o: any): any; freeze(o: any): any; preventExtensions(o: any): any; isSealed(o: any): boolean; isFrozen(o: any): boolean; isExtensible(o: any): boolean; keys(o: any): string[]; }
+>Object : ObjectConstructor
 
 r.s && r.s.toFixed(); // would blow up at runtime
 >r.s && r.s.toFixed() : string

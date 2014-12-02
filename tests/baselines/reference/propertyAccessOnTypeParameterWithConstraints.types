@@ -130,5 +130,5 @@ var r4 = b.foo(new Date());
 >b : { foo: <T extends Date>(x: T) => number; }
 >foo : <T extends Date>(x: T) => number
 >new Date() : Date
->Date : { (): string; new (): Date; new (value: number): Date; new (value: string): Date; new (year: number, month: number, date?: number, hours?: number, minutes?: number, seconds?: number, ms?: number): Date; prototype: Date; parse(s: string): number; UTC(year: number, month: number, date?: number, hours?: number, minutes?: number, seconds?: number, ms?: number): number; now(): number; }
+>Date : DateConstructor
 

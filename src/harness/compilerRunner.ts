@@ -113,10 +113,7 @@ class CompilerBaselineRunner extends RunnerBase {
                 for (var i = 0; i < tcSettings.length; ++i) {
                     // noImplicitAny is passed to getCompiler, but target is just passed in the settings blob to setCompilerSettings
                     if (!createNewInstance && (tcSettings[i].flag == "noimplicitany" || tcSettings[i].flag === 'target')) {
-                        harnessCompiler = Harness.Compiler.getCompiler({
-                            useExistingInstance: false,
-                            optionsForFreshInstance: { useMinimalDefaultLib: true, noImplicitAny: tcSettings[i].flag === "noimplicitany" }
-                        });
+                        harnessCompiler = Harness.Compiler.getCompiler();
                         harnessCompiler.setCompilerSettings(tcSettings);
                         createNewInstance = true;
                     }
@@ -125,10 +122,7 @@ class CompilerBaselineRunner extends RunnerBase {
 
             afterEach(() => {
                 if (createNewInstance) {
-                    harnessCompiler = Harness.Compiler.getCompiler({
-                        useExistingInstance: false,
-                        optionsForFreshInstance: { useMinimalDefaultLib: true, noImplicitAny: false }
-                    });
+                    harnessCompiler = Harness.Compiler.getCompiler();
                     createNewInstance = false;
                 }
             });
@@ -323,10 +317,7 @@ class CompilerBaselineRunner extends RunnerBase {
 
     public initializeTests() {
         describe("Setup compiler for compiler baselines", () => {
-            var harnessCompiler = Harness.Compiler.getCompiler({
-                useExistingInstance: false,
-                optionsForFreshInstance: { useMinimalDefaultLib: true, noImplicitAny: false }
-            });
+            var harnessCompiler = Harness.Compiler.getCompiler();
             this.parseOptions();
         });
 
@@ -343,10 +334,7 @@ class CompilerBaselineRunner extends RunnerBase {
         }
 
         describe("Cleanup after compiler baselines", () => {
-            var harnessCompiler = Harness.Compiler.getCompiler({
-                useExistingInstance: false,
-                optionsForFreshInstance: { useMinimalDefaultLib: true, noImplicitAny: false }
-            });
+            var harnessCompiler = Harness.Compiler.getCompiler();
         });
     }
 
