@@ -34,6 +34,10 @@ class Test262BaselineRunner extends RunnerBase {
                     case "symbol":
                     case "locals":
                     case "localSymbol":
+                    case "kind":
+                    case "semanticDiagnostics":
+                    case "parseDiagnostics":
+                    case "grammarDiagnostics":
                         return undefined;
                     case "nextContainer":
                         if (n.nextContainer) {
