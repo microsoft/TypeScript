@@ -4665,18 +4665,14 @@ module ts {
 
         function getEmitOutput(filename: string): EmitOutput {
             synchronizeHostData();
+
             filename = normalizeSlashes(filename);
-            var compilerOptions = program.getCompilerOptions();
-            var targetSourceFile = program.getSourceFile(filename);  // Current selected file to be output
-            // If --out flag is not specified, shouldEmitToOwnFile is true. Otherwise shouldEmitToOwnFile is false.
-            var shouldEmitToOwnFile = ts.shouldEmitToOwnFile(targetSourceFile, compilerOptions);
-            var emitOutput: EmitOutput = {
-                outputFiles: [],
-                emitOutputStatus: undefined,
-            };
+            var sourceFile = getSourceFile(filename);
+
+            var outputFiles: OutputFile[] = [];
 
             function getEmitOutputWriter(filename: string, data: string, writeByteOrderMark: boolean) {
-                emitOutput.outputFiles.push({
+                outputFiles.push({
                     name: filename,
                     writeByteOrderMark: writeByteOrderMark,
                     text: data
@@ -4686,41 +4682,15 @@ module ts {
             // Initialize writer for CompilerHost.writeFile
             writer = getEmitOutputWriter;
 
-            var containSyntacticErrors = false;
-
-            if (shouldEmitToOwnFile) {
-                // Check only the file we want to emit
-                containSyntacticErrors = containErrors(program.getDiagnostics(targetSourceFile));
-            } else {
-                // Check the syntactic of only sourceFiles that will get emitted into single output
-                // Terminate the process immediately if we encounter a syntax error from one of the sourceFiles
-                containSyntacticErrors = forEach(program.getSourceFiles(), sourceFile => {
-                    if (!isExternalModuleOrDeclarationFile(sourceFile)) {
-                        // If emit to a single file then we will check all files that do not have external module
-                        return containErrors(program.getDiagnostics(sourceFile));
-                    }
-                    return false;
-                });
-            }
-
-            if (containSyntacticErrors) {
-                // If there is a syntax error, terminate the process and report outputStatus
-                emitOutput.emitOutputStatus = EmitReturnStatus.AllOutputGenerationSkipped;
-                // Reset writer back to undefined to make sure that we produce an error message
-                // if CompilerHost.writeFile is called when we are not in getEmitOutput
-                writer = undefined;
-                return emitOutput;
-            }
-
-            // Perform semantic and force a type check before emit to ensure that all symbols are updated
-            // EmitFiles will report if there is an error from TypeChecker and Emitter
-            // Depend whether we will have to emit into a single file or not either emit only selected file in the project, emit all files into a single file
-            var emitFilesResult = getFullTypeCheckChecker().emitFiles(targetSourceFile);
-            emitOutput.emitOutputStatus = emitFilesResult.emitResultStatus;
+            var emitOutput = getFullTypeCheckChecker().emitFiles(sourceFile);
 
             // Reset writer back to undefined to make sure that we produce an error message if CompilerHost.writeFile method is called when we are not in getEmitOutput
             writer = undefined;
-            return emitOutput;
+
+            return {
+                outputFiles,
+                emitOutputStatus: emitOutput.emitResultStatus
+            };
         }
 
         function getMeaningFromDeclaration(node: Node): SemanticMeaning {

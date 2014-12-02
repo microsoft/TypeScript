@@ -85,7 +85,6 @@ module ts {
             getDiagnostics,
             getDeclarationDiagnostics,
             getGlobalDiagnostics,
-            checkProgram,
             getParentOfSymbol,
             getNarrowedTypeOfSymbol,
             getDeclaredTypeOfSymbol,
@@ -8634,10 +8633,6 @@ module ts {
             }
         }
 
-        function checkProgram() {
-            forEach(program.getSourceFiles(), checkSourceFile);
-        }
-
         function getSortedDiagnostics(): Diagnostic[]{
             Debug.assert(fullTypeCheck, "diagnostics are available only in the full typecheck mode");
 
@@ -8650,12 +8645,11 @@ module ts {
         }
 
         function getDiagnostics(sourceFile?: SourceFile): Diagnostic[]{
-
             if (sourceFile) {
                 checkSourceFile(sourceFile);
                 return filter(getSortedDiagnostics(), d => d.file === sourceFile);
             }
-            checkProgram();
+            forEach(program.getSourceFiles(), checkSourceFile);
             return getSortedDiagnostics();
         }
 
@@ -9173,9 +9167,9 @@ module ts {
             return isImportResolvedToValue(getSymbolOfNode(node));
         }
 
-        function hasSemanticErrors() {
+        function hasSemanticErrors(sourceFile?: SourceFile) {
             // Return true if there is any semantic error in a file or globally
-            return getDiagnostics().length > 0 || getGlobalDiagnostics().length > 0;
+            return getDiagnostics(sourceFile).length > 0 || getGlobalDiagnostics().length > 0;
         }
 
         function isEmitBlocked(sourceFile?: SourceFile): boolean {
@@ -9293,7 +9287,6 @@ module ts {
 
         function invokeEmitter(targetSourceFile?: SourceFile) {
             var resolver = createResolver();
-            checkProgram();
             return emitFiles(resolver, targetSourceFile);
         }
 
