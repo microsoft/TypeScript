@@ -3802,6 +3802,9 @@ module ts {
                         return undefined;
                     }
                 }
+                else if (declaration.flags & NodeFlags.Const) { 
+                    return undefined;
+                }
 
                 var keywords: Node[] = [];
                 var modifierFlag: NodeFlags = getFlagFromModifier(modifier);
@@ -3857,6 +3860,8 @@ module ts {
                             return NodeFlags.Export;
                         case SyntaxKind.DeclareKeyword:
                             return NodeFlags.Ambient;
+                        case SyntaxKind.ConstKeyword:
+                            return NodeFlags.Const;
                         default:
                             Debug.fail();
                     }
