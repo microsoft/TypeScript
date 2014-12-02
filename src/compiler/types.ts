@@ -671,10 +671,16 @@ module ts {
         clauses: NodeArray<CaseOrDefaultClause>;
     }
 
-    export interface CaseOrDefaultClause extends Node {
+    export interface CaseClause extends Node {
         expression?: Expression;
         statements: NodeArray<Statement>;
     }
+
+    export interface DefaultClause extends Node {
+        statements: NodeArray<Statement>;
+    }
+
+    export type CaseOrDefaultClause = CaseClause | DefaultClause;
 
     export interface LabeledStatement extends Statement {
         label: Identifier;

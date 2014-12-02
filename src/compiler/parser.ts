@@ -353,9 +353,10 @@ module ts {
                 return child((<SwitchStatement>node).expression) ||
                     children((<SwitchStatement>node).clauses);
             case SyntaxKind.CaseClause:
+                return child((<CaseClause>node).expression) ||
+                    children((<CaseClause>node).statements);
             case SyntaxKind.DefaultClause:
-                return child((<CaseOrDefaultClause>node).expression) ||
-                    children((<CaseOrDefaultClause>node).statements);
+                return children((<DefaultClause>node).statements);
             case SyntaxKind.LabeledStatement:
                 return child((<LabeledStatement>node).label) ||
                     child((<LabeledStatement>node).statement);
@@ -3215,7 +3216,11 @@ module ts {
             var node = <NewExpression>createNode(SyntaxKind.NewExpression);
             parseExpected(SyntaxKind.NewKeyword);
             node.expression = parseMemberExpressionOrHigher();
-            if (parseOptional(SyntaxKind.OpenParenToken) || (token === SyntaxKind.LessThanToken && (node.typeArguments = tryParse(parseTypeArgumentsAndOpenParen)))) {
+            if (token === SyntaxKind.LessThanToken) {
+                node.typeArguments = tryParse(parseTypeArgumentsAndOpenParen);
+            }
+
+            if (node.typeArguments || parseOptional(SyntaxKind.OpenParenToken)) {
                 node.arguments = parseDelimitedList(ParsingContext.ArgumentExpressions, parseArgumentExpression);
                 parseExpected(SyntaxKind.CloseParenToken);
             }
@@ -3381,8 +3386,8 @@ module ts {
             return finishNode(node);
         }
 
-        function parseCaseClause(): CaseOrDefaultClause {
-            var node = <CaseOrDefaultClause>createNode(SyntaxKind.CaseClause);
+        function parseCaseClause(): CaseClause {
+            var node = <CaseClause>createNode(SyntaxKind.CaseClause);
             parseExpected(SyntaxKind.CaseKeyword);
             node.expression = allowInAnd(parseExpression);
             parseExpected(SyntaxKind.ColonToken);
@@ -3390,8 +3395,8 @@ module ts {
             return finishNode(node);
         }
 
-        function parseDefaultClause(): CaseOrDefaultClause {
-            var node = <CaseOrDefaultClause>createNode(SyntaxKind.DefaultClause);
+        function parseDefaultClause(): DefaultClause {
+            var node = <DefaultClause>createNode(SyntaxKind.DefaultClause);
             parseExpected(SyntaxKind.DefaultKeyword);
             parseExpected(SyntaxKind.ColonToken);
             node.statements = parseList(ParsingContext.SwitchClauseStatements, /*checkForStrictMode*/ false, parseStatement);
@@ -3409,9 +3414,7 @@ module ts {
             node.expression = allowInAnd(parseExpression);
             parseExpected(SyntaxKind.CloseParenToken);
             parseExpected(SyntaxKind.OpenBraceToken);
-
             node.clauses = parseList(ParsingContext.SwitchClauses, /*checkForStrictMode*/ false, parseCaseOrDefaultClause);
-
             parseExpected(SyntaxKind.CloseBraceToken);
             return finishNode(node);
         }

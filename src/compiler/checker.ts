@@ -7743,13 +7743,14 @@ module ts {
         function checkSwitchStatement(node: SwitchStatement) {
             var expressionType = checkExpression(node.expression);
             forEach(node.clauses, clause => {
-                if (fullTypeCheck && clause.expression) {
+                if (fullTypeCheck && clause.kind === SyntaxKind.CaseClause) {
+                    var caseClause = <CaseClause>clause;
                     // TypeScript 1.0 spec (April 2014):5.9
                     // In a 'switch' statement, each 'case' expression must be of a type that is assignable to or from the type of the 'switch' expression.
-                    var caseType = checkExpression(clause.expression);
+                    var caseType = checkExpression(caseClause.expression);
                     if (!isTypeAssignableTo(expressionType, caseType)) {
                         // check 'expressionType isAssignableTo caseType' failed, try the reversed check and report errors if it fails
-                        checkTypeAssignableTo(caseType, expressionType, clause.expression, /*headMessage*/ undefined);
+                        checkTypeAssignableTo(caseType, expressionType, caseClause.expression, /*headMessage*/ undefined);
                     }
                 }
                 forEach(clause.statements, checkSourceElement);

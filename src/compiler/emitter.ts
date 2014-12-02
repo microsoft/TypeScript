@@ -2624,7 +2624,7 @@ module ts {
             function emitCaseOrDefaultClause(node: CaseOrDefaultClause) {
                 if (node.kind === SyntaxKind.CaseClause) {
                     write("case ");
-                    emit(node.expression);
+                    emit((<CaseClause>node).expression);
                     write(":");
                 }
                 else {
