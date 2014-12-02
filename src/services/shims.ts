@@ -913,6 +913,8 @@ module ts {
         }
     }
 
+    // Here we expose the TypeScript services as an external module
+    // so that it may be consumed easily like a node module.
     declare var module: any;
     if (typeof module !== "undefined" && module.exports) {
         module.exports = ts;
