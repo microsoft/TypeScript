@@ -197,12 +197,14 @@ module ts {
 
             setState(ifTrueState);
             check(n.thenStatement);
-
             if (n.elseStatement) {
                 ifTrueState = currentState;
                 setState(ifFalseState);
                 check(n.elseStatement);
-                currentState = or(currentState, ifTrueState);
+                setState(or(currentState, ifTrueState));
+            }
+            else {
+                setState(or(currentState, ifFalseState))
             }
         }
 
