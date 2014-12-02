@@ -912,6 +912,13 @@ module ts {
             throw new Error("Invalid operation");
         }
     }
+
+    // Here we expose the TypeScript services as an external module
+    // so that it may be consumed easily like a node module.
+    declare var module: any;
+    if (typeof module !== "undefined" && module.exports) {
+        module.exports = ts;
+    }
 }
 
 
@@ -919,4 +926,3 @@ module ts {
 module TypeScript.Services {
     export var TypeScriptServicesFactory = ts.TypeScriptServicesFactory;
 }
-
