@@ -146,7 +146,11 @@ module ts.formatting {
             if (lastTokenInfo && expectedScanAction === lastScanAction) {
                 // readTokenInfo was called before with the same expected scan action.
                 // No need to re-scan text, return existing 'lastTokenInfo'
-                return lastTokenInfo;
+                // it is ok to call fixTokenKind here since it does not affect
+                // what portion of text is consumed. In opposize rescanning can change it,
+                // i.e. for '>=' when originally scanner eats just one character
+                // and rescanning forces it to consume more.
+                return fixTokenKind(lastTokenInfo, n);
             }
 
             if (scanner.getStartPos() !== savedPos) {
@@ -207,17 +211,30 @@ module ts.formatting {
                 }
             }
 
-            return lastTokenInfo = {
+            lastTokenInfo = {
                 leadingTrivia: leadingTrivia,
                 trailingTrivia: trailingTrivia,
                 token: token
             }
+
+            return fixTokenKind(lastTokenInfo, n);
         }
 
         function isOnToken(): boolean {
             var current = (lastTokenInfo && lastTokenInfo.token.kind) ||  scanner.getToken();
             var startPos = (lastTokenInfo && lastTokenInfo.token.pos) || scanner.getStartPos();
             return startPos < endPos && current !== SyntaxKind.EndOfFileToken && !isTrivia(current);
+        }
+
+        // when containing node in the tree is token 
+        // but its kind differs from the kind that was returned by the scanner,
+        // then kind needs to be fixed. This might happen in cases 
+        // when parser interprets token differently, i.e keyword treated as identifier
+        function fixTokenKind(tokenInfo: TokenInfo, container: Node): TokenInfo {
+            if (isToken(container) && tokenInfo.token.kind !== container.kind) {
+                tokenInfo.token.kind = container.kind;
+            }
+            return tokenInfo;
         }
     }
 }

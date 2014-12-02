@@ -1608,6 +1608,8 @@ module ts {
                         return isDeclarationVisible(<Declaration>parent);
 
                     case SyntaxKind.Property:
+                    case SyntaxKind.GetAccessor:
+                    case SyntaxKind.SetAccessor:
                     case SyntaxKind.Method:
                         if (node.flags & (NodeFlags.Private | NodeFlags.Protected)) {
                             // Private/protected properties/methods are not visible
@@ -1622,6 +1624,14 @@ module ts {
                     case SyntaxKind.Parameter:
                     case SyntaxKind.ModuleBlock:
                     case SyntaxKind.TypeParameter:
+                    case SyntaxKind.FunctionType:
+                    case SyntaxKind.ConstructorType:
+                    case SyntaxKind.TypeLiteral:
+                    case SyntaxKind.TypeReference:
+                    case SyntaxKind.ArrayType:
+                    case SyntaxKind.TupleType:
+                    case SyntaxKind.UnionType:
+                    case SyntaxKind.ParenthesizedType:
                         return isDeclarationVisible(<Declaration>node.parent);
 
                     // Source file is always visible
@@ -5335,7 +5345,7 @@ module ts {
                     var templateExpression = <TemplateExpression>tagExpression.template;
                     var lastSpan = lastOrUndefined(templateExpression.templateSpans);
                     Debug.assert(lastSpan !== undefined); // we should always have at least one span.
-                    callIsIncomplete = lastSpan.literal.kind === SyntaxKind.Missing || isUnterminatedTemplateEnd(lastSpan.literal);
+                    callIsIncomplete = lastSpan.literal.kind === SyntaxKind.Missing || !!lastSpan.literal.isUnterminated;
                 }
                 else {
                     // If the template didn't end in a backtick, or its beginning occurred right prior to EOF,
@@ -5343,7 +5353,7 @@ module ts {
                     // so we consider the call to be incomplete.
                     var templateLiteral = <LiteralExpression>tagExpression.template;
                     Debug.assert(templateLiteral.kind === SyntaxKind.NoSubstitutionTemplateLiteral);
-                    callIsIncomplete = isUnterminatedTemplateEnd(templateLiteral);
+                    callIsIncomplete = !!templateLiteral.isUnterminated;
                 }
             }
             else {
