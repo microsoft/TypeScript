@@ -608,8 +608,12 @@ module ts {
         return node.kind === SyntaxKind.ImportDeclaration && (<ImportDeclaration>node).moduleReference.kind !== SyntaxKind.ExternalModuleReference;
     }
 
+    export function hasDotDotDotToken(node: Node) {
+        return node && node.kind === SyntaxKind.Parameter && (<ParameterDeclaration>node).dotDotDotToken !== undefined;
+    }
+
     export function hasRestParameters(s: SignatureDeclaration): boolean {
-        return s.parameters.length > 0 && (s.parameters[s.parameters.length - 1].flags & NodeFlags.Rest) !== 0;
+        return s.parameters.length > 0 && s.parameters[s.parameters.length - 1].dotDotDotToken !== undefined;
     }
 
     export function isLiteralKind(kind: SyntaxKind): boolean {
@@ -1812,11 +1816,8 @@ module ts {
 
         function parseParameter(): ParameterDeclaration {
             var node = <ParameterDeclaration>createNode(SyntaxKind.Parameter);
-            var modifiers = parseModifiers();
-            setModifiers(node, modifiers);
-            if (parseOptional(SyntaxKind.DotDotDotToken)) {
-                node.flags |= NodeFlags.Rest;
-            }
+            setModifiers(node, parseModifiers());
+            node.dotDotDotToken = token === SyntaxKind.DotDotDotToken ? parseTokenNode() : undefined;
 
             // SingleNameBinding[Yield,GeneratorParameter] : See 13.2.3
             //      [+GeneratorParameter]BindingIdentifier[Yield]Initializer[In]opt
@@ -4803,7 +4804,7 @@ module ts {
                     return grammarErrorOnNode(node, Diagnostics.An_index_signature_must_have_exactly_one_parameter);
                 }
             }
-            else if (parameter.flags & NodeFlags.Rest) {
+            else if (parameter.dotDotDotToken) {
                 return grammarErrorOnNode(parameter.name, Diagnostics.An_index_signature_cannot_have_a_rest_parameter);
             }
             else if (parameter.flags & NodeFlags.Modifier) {
@@ -5160,7 +5161,7 @@ module ts {
 
             for (var i = 0; i < parameterCount; i++) {
                 var parameter = parameters[i];
-                if (parameter.flags & NodeFlags.Rest) {
+                if (parameter.dotDotDotToken) {
                     if (i !== (parameterCount - 1)) {
                         return grammarErrorOnNode(parameter.name, Diagnostics.A_rest_parameter_must_be_last_in_a_parameter_list);
                     }
@@ -5298,7 +5299,7 @@ module ts {
                 }
                 else {
                     var parameter = accessor.parameters[0];
-                    if (parameter.flags & NodeFlags.Rest) {
+                    if (parameter.dotDotDotToken) {
                         return grammarErrorOnNode(accessor.name, Diagnostics.A_set_accessor_cannot_have_rest_parameter);
                     }
                     else if (parameter.flags & NodeFlags.Modifier) {

@@ -273,7 +273,6 @@ module ts {
         Export              = 0x00000001,  // Declarations
         Ambient             = 0x00000002,  // Declarations
         QuestionMark        = 0x00000004,  // Parameter/Property/Method
-        Rest                = 0x00000008,  // Parameter
         Public              = 0x00000010,  // Property/Method
         Private             = 0x00000020,  // Property/Method
         Protected           = 0x00000040,  // Property/Method
@@ -369,6 +368,7 @@ module ts {
     }
 
     export interface ParameterDeclaration extends Declaration {
+        dotDotDotToken?: Node;
         name: Identifier;
         type?: TypeNode | StringLiteralExpression;
         initializer?: Expression;

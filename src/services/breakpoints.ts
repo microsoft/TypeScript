@@ -297,7 +297,7 @@ module ts.BreakpointResolver {
 
             function canHaveSpanInParameterDeclaration(parameter: ParameterDeclaration): boolean {
                 // Breakpoint is possible on parameter only if it has initializer, is a rest parameter, or has public or private modifier
-                return !!parameter.initializer || !!(parameter.flags & NodeFlags.Rest) ||
+                return !!parameter.initializer || parameter.dotDotDotToken !== undefined ||
                     !!(parameter.flags & NodeFlags.Public) || !!(parameter.flags & NodeFlags.Private);
             }
 

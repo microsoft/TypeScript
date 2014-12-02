@@ -1437,7 +1437,7 @@ module ts {
             }
 
             function buildParameterDisplay(p: Symbol, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags, typeStack?: Type[]) {
-                if (getDeclarationFlagsFromSymbol(p) & NodeFlags.Rest) {
+                if (hasDotDotDotToken(p.valueDeclaration)) {
                     writePunctuation(writer, SyntaxKind.DotDotDotToken);
                 }
                 appendSymbolNameOnly(p, writer);
@@ -1711,7 +1711,7 @@ module ts {
             }
 
             // Rest parameters default to type any[], other parameters default to type any
-            var type = declaration.flags & NodeFlags.Rest ? createArrayType(anyType) : anyType;
+            var type = hasDotDotDotToken(declaration) ? createArrayType(anyType) : anyType;
             checkImplicitAny(type);
             return type;
 
@@ -1733,9 +1733,9 @@ module ts {
                         var diagnostic = Diagnostics.Member_0_implicitly_has_an_1_type;
                         break;
                     case SyntaxKind.Parameter:
-                        var diagnostic = declaration.flags & NodeFlags.Rest ?
-                            Diagnostics.Rest_parameter_0_implicitly_has_an_any_type :
-                            Diagnostics.Parameter_0_implicitly_has_an_1_type;
+                        var diagnostic = hasDotDotDotToken(declaration)
+                            ? Diagnostics.Rest_parameter_0_implicitly_has_an_any_type
+                            : Diagnostics.Parameter_0_implicitly_has_an_1_type;
                         break;
                     default:
                         var diagnostic = Diagnostics.Variable_0_implicitly_has_an_1_type;
@@ -2527,7 +2527,7 @@ module ts {
                         hasStringLiterals = true;
                     }
                     if (minArgumentCount < 0) {
-                        if (param.initializer || param.flags & (NodeFlags.QuestionMark | NodeFlags.Rest)) {
+                        if (param.initializer || param.flags & NodeFlags.QuestionMark || param.dotDotDotToken) {
                             minArgumentCount = i;
                         }
                     }
@@ -6673,7 +6673,7 @@ module ts {
                     !(parameterDeclaration.parent.kind === SyntaxKind.Constructor && (<ConstructorDeclaration>parameterDeclaration.parent).body)) {
                     error(parameterDeclaration, Diagnostics.A_parameter_property_is_only_allowed_in_a_constructor_implementation);
                 }
-                if (parameterDeclaration.flags & NodeFlags.Rest) {
+                if (parameterDeclaration.dotDotDotToken) {
                     if (!isArrayType(getTypeOfSymbol(parameterDeclaration.symbol))) {
                         error(parameterDeclaration, Diagnostics.A_rest_parameter_must_be_of_an_array_type);
                     }

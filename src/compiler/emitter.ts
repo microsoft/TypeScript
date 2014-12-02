@@ -1252,7 +1252,7 @@ module ts {
         function emitParameterDeclaration(node: ParameterDeclaration) {
             increaseIndent();
             emitJsDocComments(node);
-            if (node.flags & NodeFlags.Rest) {
+            if (node.dotDotDotToken) {
                 write("...");
             }
             writeTextOfNode(currentSourceFile, node.name);
