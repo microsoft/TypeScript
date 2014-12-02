@@ -1152,8 +1152,23 @@
     "An AMD module cannot have multiple name assignments.": {
         "category": "Error",
         "code": 2458
+    },    
+    "Not all code paths return a value": {
+        "category": "Warning",
+        "code": 2459
     },
-
+    "Unreachable code detected": {
+        "category": "Warning",
+        "code": 2460
+    },
+    "Unused label": {
+        "category": "Warning",
+        "code": 2461
+    },
+    "Fallthrough case in switch": {
+        "category": "Warning",
+        "code": 2462
+    },
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
         "code": 4000

@@ -4,6 +4,7 @@
 /// <reference path="parser.ts"/>
 /// <reference path="binder.ts"/>
 /// <reference path="emitter.ts"/>
+/// <reference path="controlflow.ts"/>
 
 module ts {
     var nextSymbolId = 1;
@@ -6175,7 +6176,7 @@ module ts {
 
         function checkFunctionExpressionBody(node: FunctionExpression) {
             if (node.type) {
-                checkIfNonVoidFunctionHasReturnExpressionsOrSingleThrowStatment(node, getTypeFromTypeNode(node.type));
+                checkControlFlowOfFunction(node, getTypeFromTypeNode(node.type) !== voidType, error);
             }
             if (node.body.kind === SyntaxKind.FunctionBlock) {
                 checkSourceElement(node.body);
@@ -7338,7 +7339,7 @@ module ts {
 
             checkSourceElement(node.body);
             if (node.type && !isAccessor(node.kind)) {
-                checkIfNonVoidFunctionHasReturnExpressionsOrSingleThrowStatment(node, getTypeFromTypeNode(node.type));
+                checkControlFlowOfFunction(node, getTypeFromTypeNode(node.type) !== voidType, error);
             }
 
             // If there is no body and no explicit return type, then report an error.
