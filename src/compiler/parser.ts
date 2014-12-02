@@ -1851,7 +1851,7 @@ module ts {
         function parseParameter(): ParameterDeclaration {
             var node = <ParameterDeclaration>createNode(SyntaxKind.Parameter);
             setModifiers(node, parseModifiers());
-            node.dotDotDotToken = token === SyntaxKind.DotDotDotToken ? parseTokenNode() : undefined;
+            node.dotDotDotToken = parseOptionalToken(SyntaxKind.DotDotDotToken);
 
             // SingleNameBinding[Yield,GeneratorParameter] : See 13.2.3
             //      [+GeneratorParameter]BindingIdentifier[Yield]Initializer[In]opt
@@ -1873,7 +1873,7 @@ module ts {
                 nextToken();
             }
 
-            node.questionToken = token === SyntaxKind.QuestionToken ? parseTokenNode() : undefined;
+            node.questionToken = parseOptionalToken(SyntaxKind.QuestionToken);
             node.type = parseParameterType();
             node.initializer = inGeneratorParameterContext()
                 ? doOutsideOfYieldContext(parseParameterInitializer)
@@ -2036,7 +2036,7 @@ module ts {
         function parsePropertyOrMethod(): Declaration {
             var fullStart = scanner.getStartPos();
             var name = parsePropertyName();
-            var questionToken = token === SyntaxKind.QuestionToken ? parseTokenNode() : undefined;
+            var questionToken = parseOptionalToken(SyntaxKind.QuestionToken);
 
             if (token === SyntaxKind.OpenParenToken || token === SyntaxKind.LessThanToken) {
                 var method = <MethodDeclaration>createNode(SyntaxKind.Method, fullStart);
@@ -2123,7 +2123,7 @@ module ts {
             return finishNode(node);
         }
 
-        function parseParenType(): ParenthesizedTypeNode {
+        function parseParenthesizedType(): ParenthesizedTypeNode {
             var node = <ParenthesizedTypeNode>createNode(SyntaxKind.ParenthesizedType);
             parseExpected(SyntaxKind.OpenParenToken);
             node.type = parseType();
@@ -2131,7 +2131,7 @@ module ts {
             return finishNode(node);
         }
 
-        function parseFunctionType(kind: SyntaxKind): FunctionOrConstructorTypeNode {
+        function parseFunctionOrConstructorType(kind: SyntaxKind): FunctionOrConstructorTypeNode {
             var node = <FunctionOrConstructorTypeNode>createNode(kind);
             if (kind === SyntaxKind.ConstructorType) {
                 parseExpected(SyntaxKind.NewKeyword);
@@ -2163,7 +2163,7 @@ module ts {
                 case SyntaxKind.OpenBracketToken:
                     return parseTupleType();
                 case SyntaxKind.OpenParenToken:
-                    return parseParenType();
+                    return parseParenthesizedType();
                 default:
                     return parseTypeReference();
             }
@@ -2194,7 +2194,7 @@ module ts {
             }
         }
 
-        function parsePrimaryType(): TypeNode {
+        function parseArrayTypeOrHigher(): TypeNode {
             var type = parseNonArrayType();
             while (!scanner.hasPrecedingLineBreak() && parseOptional(SyntaxKind.OpenBracketToken)) {
                 parseExpected(SyntaxKind.CloseBracketToken);
@@ -2205,13 +2205,13 @@ module ts {
             return type;
         }
 
-        function parseUnionType(): TypeNode {
-            var type = parsePrimaryType();
+        function parseUnionTypeOrHigher(): TypeNode {
+            var type = parseArrayTypeOrHigher();
             if (token === SyntaxKind.BarToken) {
                 var types = <NodeArray<TypeNode>>[type];
                 types.pos = type.pos;
                 while (parseOptional(SyntaxKind.BarToken)) {
-                    types.push(parsePrimaryType());
+                    types.push(parseArrayTypeOrHigher());
                 }
                 types.end = getNodeEnd();
                 var node = <UnionTypeNode>createNode(SyntaxKind.UnionType, type.pos);
@@ -2272,12 +2272,12 @@ module ts {
 
         function parseTypeWorker(): TypeNode {
             if (isStartOfFunctionType()) {
-                return parseFunctionType(SyntaxKind.FunctionType);
+                return parseFunctionOrConstructorType(SyntaxKind.FunctionType);
             }
             if (token === SyntaxKind.NewKeyword) {
-                return parseFunctionType(SyntaxKind.ConstructorType);
+                return parseFunctionOrConstructorType(SyntaxKind.ConstructorType);
             }
-            return parseUnionType();
+            return parseUnionTypeOrHigher();
         }
 
         function parseTypeAnnotation(): TypeNode {
@@ -2486,9 +2486,8 @@ module ts {
 
         function parseSimpleArrowFunctionExpression(identifier: Identifier): Expression {
             Debug.assert(token === SyntaxKind.EqualsGreaterThanToken, "parseSimpleArrowFunctionExpression should only have been called if we had a =>");
-            parseExpected(SyntaxKind.EqualsGreaterThanToken);
-
             var parameter = <ParameterDeclaration>createNode(SyntaxKind.Parameter, identifier.pos);
+            parseExpected(SyntaxKind.EqualsGreaterThanToken);
             parameter.name = identifier;
             finishNode(parameter);
 
@@ -2497,7 +2496,7 @@ module ts {
             parameters.pos = parameter.pos;
             parameters.end = parameter.end;
 
-            var signature = <ParsedSignature> { parameters: parameters };
+            var signature = <ParsedSignature>{ parameters: parameters };
 
             return parseArrowExpressionTail(identifier.pos, signature);
         }
@@ -3145,7 +3144,7 @@ module ts {
             }
 
             // Disallowing of optional property assignments happens in the grammar checker.
-            var questionToken = token === SyntaxKind.QuestionToken ? parseTokenNode() : undefined;
+            var questionToken = parseOptionalToken(SyntaxKind.QuestionToken);
 
             // Parse to check if it is short-hand property assignment or normal property assignment
             if ((token === SyntaxKind.CommaToken || token === SyntaxKind.CloseBraceToken) && tokenIsIdentifier) {
@@ -3691,7 +3690,7 @@ module ts {
 
             // Note: this is not legal as per the grammar.  But we allow it in the parser and
             // report an error in the grammar checker.
-            var questionToken = token === SyntaxKind.QuestionToken ? parseTokenNode() : undefined;
+            var questionToken = parseOptionalToken(SyntaxKind.QuestionToken);
             if (asteriskToken || token === SyntaxKind.OpenParenToken || token === SyntaxKind.LessThanToken) {
                 var method = <MethodDeclaration>createNode(SyntaxKind.Method, fullStart);
                 setModifiers(method, modifiers);
