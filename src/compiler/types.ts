@@ -257,7 +257,7 @@ module ts {
         LastTypeNode = ParenthesizedType,
         FirstPunctuation = OpenBraceToken,
         LastPunctuation = CaretEqualsToken,
-        FirstToken = EndOfFileToken,
+        FirstToken = Unknown,
         LastToken = TypeKeyword,
         FirstTriviaToken = SingleLineCommentTrivia,
         LastTriviaToken = WhitespaceTrivia,
