@@ -216,13 +216,16 @@ module ts {
                 return child((<TypeParameterDeclaration>node).name) ||
                     child((<TypeParameterDeclaration>node).constraint);
             case SyntaxKind.Parameter:
-                return child((<ParameterDeclaration>node).name) ||
+                return children(node.modifiers) ||
+                    child((<ParameterDeclaration>node).dotDotDotToken) ||
+                    child((<ParameterDeclaration>node).name) ||
                     child((<ParameterDeclaration>node).type) ||
                     child((<ParameterDeclaration>node).initializer);
             case SyntaxKind.Property:
             case SyntaxKind.PropertyAssignment:
             case SyntaxKind.ShorthandPropertyAssignment:
-                return child((<PropertyDeclaration>node).name) ||
+                return children(node.modifiers) ||
+                    child((<PropertyDeclaration>node).name) ||
                     child((<PropertyDeclaration>node).type) ||
                     child((<PropertyDeclaration>node).initializer);
             case SyntaxKind.FunctionType:
@@ -230,7 +233,8 @@ module ts {
             case SyntaxKind.CallSignature:
             case SyntaxKind.ConstructSignature:
             case SyntaxKind.IndexSignature:
-                return children((<SignatureDeclaration>node).typeParameters) ||
+                return children(node.modifiers) ||
+                    children((<SignatureDeclaration>node).typeParameters) ||
                     children((<SignatureDeclaration>node).parameters) ||
                     child((<SignatureDeclaration>node).type);
             case SyntaxKind.Method:
@@ -240,7 +244,8 @@ module ts {
             case SyntaxKind.FunctionExpression:
             case SyntaxKind.FunctionDeclaration:
             case SyntaxKind.ArrowFunction:
-                return child((<FunctionLikeDeclaration>node).name) ||
+                return children(node.modifiers) ||
+                    child((<FunctionLikeDeclaration>node).name) ||
                     children((<FunctionLikeDeclaration>node).typeParameters) ||
                     children((<FunctionLikeDeclaration>node).parameters) ||
                     child((<FunctionLikeDeclaration>node).type) ||
@@ -308,7 +313,8 @@ module ts {
             case SyntaxKind.SourceFile:
                 return children((<Block>node).statements);
             case SyntaxKind.VariableStatement:
-                return children((<VariableStatement>node).declarations);
+                return children(node.modifiers) ||
+                    children((<VariableStatement>node).declarations);
             case SyntaxKind.ExpressionStatement:
                 return child((<ExpressionStatement>node).expression);
             case SyntaxKind.IfStatement:
@@ -360,36 +366,44 @@ module ts {
                 return child((<CatchBlock>node).variable) ||
                     children((<CatchBlock>node).statements);
             case SyntaxKind.VariableDeclaration:
-                return child((<VariableDeclaration>node).name) ||
+                return children(node.modifiers) ||
+                    child((<VariableDeclaration>node).name) ||
                     child((<VariableDeclaration>node).type) ||
                     child((<VariableDeclaration>node).initializer);
             case SyntaxKind.ClassDeclaration:
-                return child((<ClassDeclaration>node).name) ||
+                return children(node.modifiers) ||
+                    child((<ClassDeclaration>node).name) ||
                     children((<ClassDeclaration>node).typeParameters) ||
                     children((<ClassDeclaration>node).heritageClauses) ||
                     children((<ClassDeclaration>node).members);
             case SyntaxKind.InterfaceDeclaration:
-                return child((<InterfaceDeclaration>node).name) ||
-                children((<InterfaceDeclaration>node).typeParameters) ||
-                children((<ClassDeclaration>node).heritageClauses) ||
+                return children(node.modifiers) ||
+                    child((<InterfaceDeclaration>node).name) ||
+                    children((<InterfaceDeclaration>node).typeParameters) ||
+                    children((<ClassDeclaration>node).heritageClauses) ||
                     children((<InterfaceDeclaration>node).members);
             case SyntaxKind.TypeAliasDeclaration:
-                return child((<TypeAliasDeclaration>node).name) ||
+                return children(node.modifiers) ||
+                    child((<TypeAliasDeclaration>node).name) ||
                     child((<TypeAliasDeclaration>node).type);
             case SyntaxKind.EnumDeclaration:
-                return child((<EnumDeclaration>node).name) ||
+                return children(node.modifiers) ||
+                    child((<EnumDeclaration>node).name) ||
                     children((<EnumDeclaration>node).members);
             case SyntaxKind.EnumMember:
                 return child((<EnumMember>node).name) ||
                     child((<EnumMember>node).initializer);
             case SyntaxKind.ModuleDeclaration:
-                return child((<ModuleDeclaration>node).name) ||
+                return children(node.modifiers) ||
+                    child((<ModuleDeclaration>node).name) ||
                     child((<ModuleDeclaration>node).body);
             case SyntaxKind.ImportDeclaration:
-                return child((<ImportDeclaration>node).name) ||
+                return children(node.modifiers) ||
+                    child((<ImportDeclaration>node).name) ||
                     child((<ImportDeclaration>node).moduleReference);
             case SyntaxKind.ExportAssignment:
-                return child((<ExportAssignment>node).exportName);
+                return children(node.modifiers) ||
+                    child((<ExportAssignment>node).exportName);
             case SyntaxKind.TemplateExpression:
                 return child((<TemplateExpression>node).head) || children((<TemplateExpression>node).templateSpans);
             case SyntaxKind.TemplateSpan:
@@ -3759,7 +3773,7 @@ module ts {
             var flags = 0;
             var modifiers: ModifiersArray;
             while (true) {
-                var modifierStart = scanner.getTokenPos();
+                var modifierStart = scanner.getStartPos();
                 var modifierKind = token;
 
                 if (!parseAnyContextualModifier()) {
@@ -3768,12 +3782,14 @@ module ts {
 
                 if (!modifiers) {
                     modifiers = <ModifiersArray>[];
+                    modifiers.pos = modifierStart;
                 }
                 flags |= modifierToFlag(modifierKind);
                 modifiers.push(finishNode(createNode(modifierKind, modifierStart))); 
             }
             if (modifiers) {
                 modifiers.flags = flags;
+                modifiers.end = scanner.getStartPos();
             }
             return modifiers;
         }
@@ -4049,7 +4065,6 @@ module ts {
             switch (token) {
                 case SyntaxKind.VarKeyword:
                 case SyntaxKind.LetKeyword:
-                    return parseVariableStatement(fullStart, modifiers);
                 case SyntaxKind.ConstKeyword:
                     return parseVariableStatement(fullStart, modifiers);
                 case SyntaxKind.FunctionKeyword:

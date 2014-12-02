@@ -317,7 +317,7 @@ module ts {
         hasTrailingComma?: boolean;
     }
 
-    export interface ModifiersArray extends Array<Node> {
+    export interface ModifiersArray extends NodeArray<Node> {
         flags: number;
     }
 

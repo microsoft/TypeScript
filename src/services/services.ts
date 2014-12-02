@@ -3836,8 +3836,8 @@ module ts {
                 }
 
                 forEach(nodes, node => {
-                    if (node.flags & modifierFlag) {
-                        forEach(node.getChildren(), child => pushKeywordIf(keywords, child, modifier));
+                    if (node.modifiers && node.flags & modifierFlag) {
+                        forEach(node.modifiers, child => pushKeywordIf(keywords, child, modifier));
                     }
                 });
 
