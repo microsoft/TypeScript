@@ -5452,7 +5452,7 @@ module ts {
 
         forEach(rootNames, name => processRootFile(name, false));
         if (!seenNoDefaultLib) {
-            processRootFile(host.getDefaultLibFilename(), true);
+            processRootFile(host.getDefaultLibFilename(options), true);
         }
         verifyCompilerOptions();
         errors.sort(compareDiagnostics);
@@ -5496,7 +5496,7 @@ module ts {
             }
             var diagnostic: DiagnosticMessage;
             if (hasExtension(filename)) {
-                if (!fileExtensionIs(filename, ".ts")) {
+                if (!options.allowNonTsExtensions && !fileExtensionIs(filename, ".ts")) {
                     diagnostic = Diagnostics.File_0_must_have_extension_ts_or_d_ts;
                 }
                 else if (!findSourceFile(filename, isDefaultLib, refFile, refPos, refEnd)) {

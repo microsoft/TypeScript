@@ -8,7 +8,7 @@ var x = [];
 var x = new Array(1);
 >x : any[]
 >new Array(1) : any[]
->Array : { (arrayLength?: number): any[]; <T>(arrayLength: number): T[]; <T>(...items: T[]): T[]; new (arrayLength?: number): any[]; new <T>(arrayLength: number): T[]; new <T>(...items: T[]): T[]; isArray(arg: any): boolean; prototype: any[]; }
+>Array : ArrayConstructor
 
 var y = [1];
 >y : number[]
@@ -21,7 +21,7 @@ var y = [1, 2];
 var y = new Array<number>();
 >y : number[]
 >new Array<number>() : number[]
->Array : { (arrayLength?: number): any[]; <T>(arrayLength: number): T[]; <T>(...items: T[]): T[]; new (arrayLength?: number): any[]; new <T>(arrayLength: number): T[]; new <T>(...items: T[]): T[]; isArray(arg: any): boolean; prototype: any[]; }
+>Array : ArrayConstructor
 
 var x2: number[] = [];
 >x2 : number[]
@@ -30,7 +30,7 @@ var x2: number[] = [];
 var x2: number[] = new Array(1);
 >x2 : number[]
 >new Array(1) : any[]
->Array : { (arrayLength?: number): any[]; <T>(arrayLength: number): T[]; <T>(...items: T[]): T[]; new (arrayLength?: number): any[]; new <T>(arrayLength: number): T[]; new <T>(...items: T[]): T[]; isArray(arg: any): boolean; prototype: any[]; }
+>Array : ArrayConstructor
 
 var y2: number[] = [1];
 >y2 : number[]
@@ -43,5 +43,5 @@ var y2: number[] = [1, 2];
 var y2: number[] = new Array<number>();
 >y2 : number[]
 >new Array<number>() : number[]
->Array : { (arrayLength?: number): any[]; <T>(arrayLength: number): T[]; <T>(...items: T[]): T[]; new (arrayLength?: number): any[]; new <T>(arrayLength: number): T[]; new <T>(...items: T[]): T[]; isArray(arg: any): boolean; prototype: any[]; }
+>Array : ArrayConstructor
 

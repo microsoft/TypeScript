@@ -1,6 +1,6 @@
 === tests/cases/compiler/implementArrayInterface.ts ===
-declare class ArrayConstructor<T> implements Array<T> {
->ArrayConstructor : ArrayConstructor<T>
+declare class MyArray<T> implements Array<T> {
+>MyArray : MyArray<T>
 >T : T
 >Array : T[]
 >T : T

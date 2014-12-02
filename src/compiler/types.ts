@@ -1306,6 +1306,7 @@ module ts {
         version?: boolean;
         watch?: boolean;
         preserveConstEnums?: boolean;
+        allowNonTsExtensions?: boolean;
         [option: string]: string | number | boolean;
     }
 
@@ -1487,7 +1488,7 @@ module ts {
 
     export interface CompilerHost {
         getSourceFile(filename: string, languageVersion: ScriptTarget, onError?: (message: string) => void): SourceFile;
-        getDefaultLibFilename(): string;
+        getDefaultLibFilename(options: CompilerOptions): string;
         getCancellationToken? (): CancellationToken;
         writeFile(filename: string, data: string, writeByteOrderMark: boolean, onError?: (message: string) => void): void;
         getCurrentDirectory(): string;
