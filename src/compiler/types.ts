@@ -137,8 +137,9 @@ module ts {
         SetKeyword,
         StringKeyword,
         TypeKeyword,
+
         // Parse tree nodes
-        Missing,
+
         // Names
         QualifiedName,
         ComputedPropertyName,
@@ -221,6 +222,8 @@ module ts {
         ModuleBlock,
         ImportDeclaration,
         ExportAssignment,
+        // Module references
+        ExternalModuleReference,
         // Clauses
         CaseClause,
         DefaultClause,
@@ -233,6 +236,7 @@ module ts {
         // Top-level nodes
         SourceFile,
         Program,
+
         // Synthesized list
         SyntaxList,
         // Enum value count
@@ -261,7 +265,8 @@ module ts {
         FirstOperator = SemicolonToken,
         LastOperator = CaretEqualsToken,
         FirstBinaryOperator = LessThanToken,
-        LastBinaryOperator = CaretEqualsToken
+        LastBinaryOperator = CaretEqualsToken,
+        FirstNode = QualifiedName,
     }
 
     export const enum NodeFlags {
@@ -562,7 +567,7 @@ module ts {
 
     export interface ElementAccessExpression extends MemberExpression {
         expression: LeftHandSideExpression;
-        argumentExpression: Expression;
+        argumentExpression?: Expression;
     }
 
     export interface CallExpression extends LeftHandSideExpression {
@@ -730,8 +735,14 @@ module ts {
 
     export interface ImportDeclaration extends Declaration, ModuleElement {
         name: Identifier;
-        entityName?: EntityName;
-        externalModuleName?: LiteralExpression;
+
+        // 'EntityName' for an internal module reference, 'ExternalModuleReference' for an external
+        // module reference.
+        moduleReference: EntityName | ExternalModuleReference;
+    }
+
+    export interface ExternalModuleReference extends Node {
+        expression?: Expression;
     }
 
     export interface ExportAssignment extends Statement, ModuleElement {
@@ -1267,12 +1278,6 @@ module ts {
           * Early error - any error (can be produced at parsing\binding\typechecking step) that blocks emit
           */
         isEarly?: boolean;
-        /**
-          * Parse error - error produced by parser when it scanner returns a token 
-          * that parser does not understand in its current state 
-          * (as opposed to grammar error when parser can interpret the token but interpretation is not legal from the grammar perespective)
-          */
-        isParseError?: boolean;
     }
 
     export enum DiagnosticCategory {

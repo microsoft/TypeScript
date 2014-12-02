@@ -415,11 +415,7 @@
         "category": "Error",
         "code": 1142
     },
-    "'catch' or 'finally' expected.": {
-        "category": "Error",
-        "code": 1143
-    },
-    "Block or ';' expected.": {
+    "'{' or ';' expected.": {
         "category": "Error",
         "code": 1144
     },
@@ -470,10 +466,6 @@
     "'let' declarations can only be declared inside a block.": {
         "category": "Error",
         "code": 1157
-    },
-    "Invalid template literal; expected '}'": {
-        "category": "Error",
-        "code": 1158
     },
     "Tagged templates are only available when targeting ECMAScript 6 and higher.": {
         "category": "Error",
@@ -556,6 +548,11 @@
         "category": "Error",
         "code": 1178
     },
+    "Unexpected token. '{' expected.": {
+        "category": "Error",
+        "code": 1179
+    },
+
     "Duplicate identifier '{0}'.": {
         "category": "Error",
         "code": 2300

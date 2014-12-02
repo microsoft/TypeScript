@@ -665,13 +665,13 @@ module ts {
             write("import ");
             writeTextOfNode(currentSourceFile, node.name);
             write(" = ");
-            if (node.entityName) {
-                emitTypeWithNewGetSymbolAccessibilityDiangostic(node.entityName, getImportEntityNameVisibilityError);
+            if (isInternalModuleImportDeclaration(node)) {
+                emitTypeWithNewGetSymbolAccessibilityDiangostic(node.moduleReference, getImportEntityNameVisibilityError);
                 write(";");
             }
             else {
                 write("require(");
-                writeTextOfNode(currentSourceFile, node.externalModuleName);
+                writeTextOfNode(currentSourceFile, getExternalModuleImportDeclarationExpression(node));
                 write(");");
             }
             writer.writeLine();
@@ -3304,7 +3304,7 @@ module ts {
                 }
 
                 if (emitImportDeclaration) {
-                    if (node.externalModuleName && node.parent.kind === SyntaxKind.SourceFile && compilerOptions.module === ModuleKind.AMD) {
+                    if (isExternalModuleImportDeclaration(node) && node.parent.kind === SyntaxKind.SourceFile && compilerOptions.module === ModuleKind.AMD) {
                         if (node.flags & NodeFlags.Export) {
                             writeLine();
                             emitLeadingComments(node);
@@ -3324,15 +3324,16 @@ module ts {
                         if (!(node.flags & NodeFlags.Export)) write("var ");
                         emitModuleMemberName(node);
                         write(" = ");
-                        if (node.entityName) {
-                            emit(node.entityName);
+                        if (isInternalModuleImportDeclaration(node)) {
+                            emit(node.moduleReference);
                         }
                         else {
+                            var literal = <LiteralExpression>getExternalModuleImportDeclarationExpression(node);
                             write("require(");
-                            emitStart(node.externalModuleName);
-                            emitLiteral(node.externalModuleName);
-                            emitEnd(node.externalModuleName);
-                            emitToken(SyntaxKind.CloseParenToken, node.externalModuleName.end);
+                            emitStart(literal);
+                            emitLiteral(literal);
+                            emitEnd(literal);
+                            emitToken(SyntaxKind.CloseParenToken, literal.end);
                         }
                         write(";");
                         emitEnd(node);
@@ -3343,12 +3344,9 @@ module ts {
 
             function getExternalImportDeclarations(node: SourceFile): ImportDeclaration[] {
                 var result: ImportDeclaration[] = [];
-                forEach(node.statements, stat => {
-                    if (stat.kind === SyntaxKind.ImportDeclaration
-                        && (<ImportDeclaration>stat).externalModuleName
-                        && resolver.isReferencedImportDeclaration(<ImportDeclaration>stat)) {
-
-                        result.push(<ImportDeclaration>stat);
+                forEach(node.statements, statement => {
+                    if (isExternalModuleImportDeclaration(statement) && resolver.isReferencedImportDeclaration(<ImportDeclaration>statement)) {
+                        result.push(<ImportDeclaration>statement);
                     }
                 });
                 return result;
@@ -3372,7 +3370,7 @@ module ts {
                 write("[\"require\", \"exports\"");
                 forEach(imports, imp => {
                     write(", ");
-                    emitLiteral(imp.externalModuleName);
+                    emitLiteral(<LiteralExpression>getExternalModuleImportDeclarationExpression(imp));
                 });
                 forEach(node.amdDependencies, amdDependency => {
                     var text = "\"" + amdDependency + "\"";

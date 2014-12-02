@@ -338,7 +338,6 @@ module ts {
         // the nameNotFoundMessage argument is not undefined. Returns the resolved symbol, or undefined if no symbol with
         // the given name can be found.
         function resolveName(location: Node, name: string, meaning: SymbolFlags, nameNotFoundMessage: DiagnosticMessage, nameArg: string | Identifier): Symbol {
-
             var result: Symbol;
             var lastLocation: Node;
             var propertyWithInvalidInitializer: Node;
@@ -467,9 +466,9 @@ module ts {
             if (!links.target) {
                 links.target = resolvingSymbol;
                 var node = <ImportDeclaration>getDeclarationOfKind(symbol, SyntaxKind.ImportDeclaration);
-                var target = node.externalModuleName ?
-                    resolveExternalModuleName(node, node.externalModuleName) :
-                    getSymbolOfPartOfRightHandSideOfImport(node.entityName, node);
+                var target = node.moduleReference.kind === SyntaxKind.ExternalModuleReference
+                    ? resolveExternalModuleName(node, getExternalModuleImportDeclarationExpression(node))
+                    : getSymbolOfPartOfRightHandSideOfImport(<EntityName>node.moduleReference, node);
                 if (links.target === resolvingSymbol) {
                     links.target = target || unknownSymbol;
                 }
@@ -516,26 +515,27 @@ module ts {
 
         // Resolves a qualified name and any involved import aliases
         function resolveEntityName(location: Node, name: EntityName, meaning: SymbolFlags): Symbol {
+            if (getFullWidth(name) === 0) {
+                return undefined;
+            }
+
             if (name.kind === SyntaxKind.Identifier) {
-                var symbol = resolveName(location, (<Identifier>name).text, meaning, Diagnostics.Cannot_find_name_0, <Identifier>name);
+                var symbol = resolveName(location,(<Identifier>name).text, meaning, Diagnostics.Cannot_find_name_0, <Identifier>name);
                 if (!symbol) {
                     return;
                 }
             }
             else if (name.kind === SyntaxKind.QualifiedName) {
-                var namespace = resolveEntityName(location, (<QualifiedName>name).left, SymbolFlags.Namespace);
-                if (!namespace || namespace === unknownSymbol || (<QualifiedName>name).right.kind === SyntaxKind.Missing) return;
-                var symbol = getSymbol(namespace.exports, (<QualifiedName>name).right.text, meaning);
+                var namespace = resolveEntityName(location,(<QualifiedName>name).left, SymbolFlags.Namespace);
+                if (!namespace || namespace === unknownSymbol || getFullWidth((<QualifiedName>name).right) === 0) return;
+                var symbol = getSymbol(namespace.exports,(<QualifiedName>name).right.text, meaning);
                 if (!symbol) {
                     error(location, Diagnostics.Module_0_has_no_exported_member_1, getFullyQualifiedName(namespace),
                         declarationNameToString((<QualifiedName>name).right));
                     return;
                 }
             }
-            else {
-                // Missing identifier
-                return;
-            }
+
             Debug.assert((symbol.flags & SymbolFlags.Instantiated) === 0, "Should never get an instantiated symbol here.");
             return symbol.flags & meaning ? symbol : resolveImport(symbol);
         }
@@ -546,7 +546,12 @@ module ts {
             return moduleName.substr(0, 2) === "./" || moduleName.substr(0, 3) === "../" || moduleName.substr(0, 2) === ".\\" || moduleName.substr(0, 3) === "..\\";
         }
 
-        function resolveExternalModuleName(location: Node, moduleLiteral: LiteralExpression): Symbol {
+        function resolveExternalModuleName(location: Node, moduleExpression: Expression): Symbol {
+            if (moduleExpression.kind !== SyntaxKind.StringLiteral) {
+                return;
+            }
+
+            var moduleLiteral = <LiteralExpression>moduleExpression;
             var searchPath = getDirectoryPath(getSourceFile(location).filename);
             var moduleName = moduleLiteral.text;
             if (!moduleName) return;
@@ -824,8 +829,8 @@ module ts {
                     if (symbolFromSymbolTable.flags & SymbolFlags.Import) {
                         if (!useOnlyExternalAliasing || // We can use any type of alias to get the name
                             // Is this external alias, then use it to name
-                            ts.forEach(symbolFromSymbolTable.declarations, declaration =>
-                                declaration.kind === SyntaxKind.ImportDeclaration && (<ImportDeclaration>declaration).externalModuleName)) {
+                            ts.forEach(symbolFromSymbolTable.declarations, isExternalModuleImportDeclaration)) {
+
                             var resolvedImportedSymbol = resolveImport(symbolFromSymbolTable);
                             if (isAccessible(symbolFromSymbolTable, resolveImport(symbolFromSymbolTable))) {
                                 return [symbolFromSymbolTable];
@@ -4261,7 +4266,7 @@ module ts {
         function getResolvedSymbol(node: Identifier): Symbol {
             var links = getNodeLinks(node);
             if (!links.resolvedSymbol) {
-                links.resolvedSymbol = resolveName(node, node.text, SymbolFlags.Value | SymbolFlags.ExportValue, Diagnostics.Cannot_find_name_0, node) || unknownSymbol;
+                links.resolvedSymbol = (getFullWidth(node) > 0 && resolveName(node, node.text, SymbolFlags.Value | SymbolFlags.ExportValue, Diagnostics.Cannot_find_name_0, node)) || unknownSymbol;
             }
             return links.resolvedSymbol;
         }
@@ -5251,11 +5256,13 @@ module ts {
         function checkIndexedAccess(node: ElementAccessExpression): Type {
             // Obtain base constraint such that we can bail out if the constraint is an unknown type
             var objectType = getApparentType(checkExpression(node.expression));
-            var indexType = checkExpression(node.argumentExpression);
+            var indexType = node.argumentExpression ? checkExpression(node.argumentExpression) : unknownType;
 
-            if (objectType === unknownType) return unknownType;
+            if (objectType === unknownType) {
+                return unknownType;
+            }
 
-            if (isConstEnumObjectType(objectType) && node.argumentExpression.kind !== SyntaxKind.StringLiteral) {
+            if (isConstEnumObjectType(objectType) && node.argumentExpression && node.argumentExpression.kind !== SyntaxKind.StringLiteral) {
                 error(node.argumentExpression, Diagnostics.Index_expression_arguments_in_const_enums_must_be_of_type_string);
             }
 
@@ -5269,12 +5276,14 @@ module ts {
             // - Otherwise, if IndexExpr is of type Any, the String or Number primitive type, or an enum type, the property access is of type Any.
 
             // See if we can index as a property.
-            if (node.argumentExpression.kind === SyntaxKind.StringLiteral || node.argumentExpression.kind === SyntaxKind.NumericLiteral) {
-                var name = (<LiteralExpression>node.argumentExpression).text;
-                var prop = getPropertyOfType(objectType, name);
-                if (prop) {
-                    getNodeLinks(node).resolvedSymbol = prop;
-                    return getTypeOfSymbol(prop);
+            if (node.argumentExpression) {
+                if (node.argumentExpression.kind === SyntaxKind.StringLiteral || node.argumentExpression.kind === SyntaxKind.NumericLiteral) {
+                    var name = (<LiteralExpression>node.argumentExpression).text;
+                    var prop = getPropertyOfType(objectType, name);
+                    if (prop) {
+                        getNodeLinks(node).resolvedSymbol = prop;
+                        return getTypeOfSymbol(prop);
+                    }
                 }
             }
 
@@ -5345,7 +5354,7 @@ module ts {
                     var templateExpression = <TemplateExpression>tagExpression.template;
                     var lastSpan = lastOrUndefined(templateExpression.templateSpans);
                     Debug.assert(lastSpan !== undefined); // we should always have at least one span.
-                    callIsIncomplete = lastSpan.literal.kind === SyntaxKind.Missing || !!lastSpan.literal.isUnterminated;
+                    callIsIncomplete = getFullWidth(lastSpan.literal) === 0 || !!lastSpan.literal.isUnterminated;
                 }
                 else {
                     // If the template didn't end in a backtick, or its beginning occurred right prior to EOF,
@@ -6230,7 +6239,8 @@ module ts {
                     case SyntaxKind.ElementAccessExpression:
                         var index = (<ElementAccessExpression>n).argumentExpression;
                         var symbol = findSymbol((<ElementAccessExpression>n).expression);
-                        if (symbol && index.kind === SyntaxKind.StringLiteral) {
+
+                        if (symbol && index && index.kind === SyntaxKind.StringLiteral) {
                             var name = (<LiteralExpression>index).text;
                             var prop = getPropertyOfType(getTypeOfSymbol(symbol), name);
                             return prop && (prop.flags & SymbolFlags.Variable) !== 0 && (getDeclarationFlagsFromSymbol(prop) & NodeFlags.Const) !== 0;
@@ -7051,7 +7061,7 @@ module ts {
             var isConstructor = (symbol.flags & SymbolFlags.Constructor) !== 0;
 
             function reportImplementationExpectedError(node: FunctionLikeDeclaration): void {
-                if (node.name && node.name.kind === SyntaxKind.Missing) {
+                if (node.name && getFullWidth(node.name) === 0) {
                     return;
                 }
 
@@ -8201,7 +8211,8 @@ module ts {
                             }
                             else {
                                 if (e.kind === SyntaxKind.ElementAccessExpression) {
-                                    if ((<ElementAccessExpression>e).argumentExpression.kind !== SyntaxKind.StringLiteral) {
+                                    if ((<ElementAccessExpression>e).argumentExpression === undefined ||
+                                        (<ElementAccessExpression>e).argumentExpression.kind !== SyntaxKind.StringLiteral) {
                                         return undefined;
                                     }
                                     var enumType = getTypeOfNode((<ElementAccessExpression>e).expression);
@@ -8348,16 +8359,16 @@ module ts {
             var symbol = getSymbolOfNode(node);
             var target: Symbol;
             
-            if (node.entityName) {
+            if (isInternalModuleImportDeclaration(node)) {
                 target = resolveImport(symbol);
                 // Import declaration for an internal module
                 if (target !== unknownSymbol) {
                     if (target.flags & SymbolFlags.Value) {
                         // Target is a value symbol, check that it is not hidden by a local declaration with the same name and
                         // ensure it can be evaluated as an expression
-                        var moduleName = getFirstIdentifier(node.entityName);
+                        var moduleName = getFirstIdentifier(<EntityName>node.moduleReference);
                         if (resolveEntityName(node, moduleName, SymbolFlags.Value | SymbolFlags.Namespace).flags & SymbolFlags.Namespace) {
-                            checkExpression(node.entityName);
+                            checkExpression(<EntityName>node.moduleReference);
                         }
                         else {
                             error(moduleName, Diagnostics.Module_0_is_hidden_by_a_local_declaration_with_the_same_name, declarationNameToString(moduleName));
@@ -8378,12 +8389,17 @@ module ts {
                     // An ExternalImportDeclaration in an AmbientExternalModuleDeclaration may reference 
                     // other external modules only through top - level external module names.
                     // Relative external module names are not permitted.
-                    if (isExternalModuleNameRelative(node.externalModuleName.text)) {
-                        error(node, Diagnostics.Import_declaration_in_an_ambient_external_module_declaration_cannot_reference_external_module_through_relative_external_module_name);
-                        target = unknownSymbol;
+                    if (getExternalModuleImportDeclarationExpression(node).kind === SyntaxKind.StringLiteral) {
+                        if (isExternalModuleNameRelative((<LiteralExpression>getExternalModuleImportDeclarationExpression(node)).text)) {
+                            error(node, Diagnostics.Import_declaration_in_an_ambient_external_module_declaration_cannot_reference_external_module_through_relative_external_module_name);
+                            target = unknownSymbol;
+                        }
+                        else {
+                            target = resolveImport(symbol);
+                        }
                     }
                     else {
-                        target = resolveImport(symbol);
+                        target = unknownSymbol;
                     }
                 }
                 else {
@@ -8847,7 +8863,7 @@ module ts {
             }
 
             if (node.parent.kind === SyntaxKind.ImportDeclaration) {
-                return (<ImportDeclaration>node.parent).entityName === node;
+                return (<ImportDeclaration>node.parent).moduleReference === node;
             }
             if (node.parent.kind === SyntaxKind.ExportAssignment) {
                 return (<ExportAssignment>node.parent).exportName === node;
@@ -8883,6 +8899,11 @@ module ts {
             }
 
             if (isExpression(entityName)) {
+                if (getFullWidth(entityName) === 0) {
+                    // Missing entity name.
+                    return undefined;
+                }
+
                 if (entityName.kind === SyntaxKind.Identifier) {
                     // Include Import in the meaning, this ensures that we do not follow aliases to where they point and instead
                     // return the alias symbol.
@@ -8902,10 +8923,6 @@ module ts {
                         checkQualifiedName(<QualifiedName>entityName);
                     }
                     return getNodeLinks(entityName).resolvedSymbol;
-                }
-                else {
-                    // Missing identifier
-                    return;
                 }
             }
             else if (isTypeReferenceIdentifier(<EntityName>entityName)) {
@@ -8958,8 +8975,9 @@ module ts {
 
                 case SyntaxKind.StringLiteral:
                     // External module name in an import declaration
-                    if (node.parent.kind === SyntaxKind.ImportDeclaration && (<ImportDeclaration>node.parent).externalModuleName === node) {
-                        var importSymbol = getSymbolOfNode(node.parent);
+                    if (isExternalModuleImportDeclaration(node.parent.parent) &&
+                        getExternalModuleImportDeclarationExpression(node.parent.parent) === node) {
+                        var importSymbol = getSymbolOfNode(node.parent.parent);
                         var moduleType = getTypeOfSymbol(importSymbol);
                         return moduleType ? moduleType.symbol : undefined;
                     }
@@ -9145,7 +9163,7 @@ module ts {
         }
 
         function isTopLevelValueImportWithEntityName(node: ImportDeclaration): boolean {
-            if (node.parent.kind !== SyntaxKind.SourceFile || !node.entityName) {
+            if (node.parent.kind !== SyntaxKind.SourceFile || !isInternalModuleImportDeclaration(node)) {
                 // parent is not source file or it is not reference to internal module
                 return false;
             }
