@@ -2763,9 +2763,8 @@ module ts {
 
         function parsePrefixUnaryExpression() {
             var node = <PrefixUnaryExpression>createNode(SyntaxKind.PrefixUnaryExpression);
-            var operator = token;
+            node.operator = token;
             nextToken();
-            node.operator = operator;
             node.operand = parseUnaryExpressionOrHigher();
             return finishNode(node);
         }
@@ -2859,13 +2858,9 @@ module ts {
             // the last two CallExpression productions.  Or we have a MemberExpression which either
             // completes the LeftHandSideExpression, or starts the beginning of the first four
             // CallExpression productions.
-            var expression: MemberExpression;
-            if (token === SyntaxKind.SuperKeyword) {
-                expression = parseSuperExpression();
-            }
-            else {
-                expression = parseMemberExpressionOrHigher();
-            }
+            var expression = token === SyntaxKind.SuperKeyword
+                ? parseSuperExpression()
+                : parseMemberExpressionOrHigher();
 
             // Now, we *may* be complete.  However, we might have consumed the start of a 
             // CallExpression.  As such, we need to consume the rest of it here to be complete.
