@@ -253,7 +253,8 @@ module ts.formatting {
                             rangeContainsStartEnd((<CallExpression>node.parent).typeArguments, start, node.getEnd())) {
                             return (<CallExpression>node.parent).typeArguments;
                         }
-                        if (rangeContainsStartEnd((<CallExpression>node.parent).arguments, start, node.getEnd())) {
+                        if ((<CallExpression>node.parent).arguments &&
+                            rangeContainsStartEnd((<CallExpression>node.parent).arguments, start, node.getEnd())) {
                             return (<CallExpression>node.parent).arguments;
                         }
                         break;
