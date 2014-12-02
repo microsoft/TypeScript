@@ -323,6 +323,7 @@ module ts {
 
             var extendsEmitted = false;
             var tempCount = 0;
+            var tempNames: Identifier[];
 
             /** write emitted output to disk*/
             var writeEmittedFiles = writeJavaScriptFile;
@@ -719,10 +720,33 @@ module ts {
 
             function getTempVariableName(location: Node) {
                 do {
-                    var name = "_" + tempCount++;
+                    // First _a..._z, then _0, _1, ...
+                    var name = "_" + (tempCount < 26 ? String.fromCharCode(tempCount + 0x61) : tempCount - 26);
+                    tempCount++;
                 }
                 while (!resolver.isUnknownIdentifier(location, name));
                 return name;
+            }
+
+            function recordTempDeclaration(name: Identifier) {
+                if (!tempNames) {
+                    tempNames = [];
+                }
+                tempNames.push(name);
+            }
+
+            function emitTempDeclarations(newLine: boolean) {
+                if (tempNames) {
+                    if (newLine) {
+                        writeLine();
+                    }
+                    else {
+                        write(" ");
+                    }
+                    write("var ");
+                    emitCommaList(tempNames);
+                    write(";");
+                }
             }
 
             function emitTokenText(tokenKind: SyntaxKind, startPos: number, emitFn?: () => void) {
@@ -743,16 +767,13 @@ module ts {
                 }
             }
 
-            function emitTrailingCommaIfPresent(nodeList: NodeArray<Node>, isMultiline: boolean): void {
+            function emitTrailingCommaIfPresent(nodeList: NodeArray<Node>): void {
                 if (nodeList.hasTrailingComma) {
                     write(",");
-                    if (isMultiline) {
-                        writeLine();
-                    }
                 }
             }
 
-            function emitCommaList(nodes: NodeArray<Node>, includeTrailingComma: boolean, count?: number) {
+            function emitCommaList(nodes: Node[], count?: number) {
                 if (!(count >= 0)) {
                     count = nodes.length;
                 }
@@ -763,14 +784,10 @@ module ts {
                         }
                         emit(nodes[i]);
                     }
-
-                    if (includeTrailingComma) {
-                        emitTrailingCommaIfPresent(nodes, /*isMultiline*/ false);
-                    }
                 }
             }
 
-            function emitMultiLineList(nodes: NodeArray<Node>, includeTrailingComma: boolean) {
+            function emitMultiLineList(nodes: Node[]) {
                 if (nodes) {
                     for (var i = 0; i < nodes.length; i++) {
                         if (i) {
@@ -778,10 +795,6 @@ module ts {
                         }
                         writeLine();
                         emit(nodes[i]);
-                    }
-
-                    if (includeTrailingComma) {
-                        emitTrailingCommaIfPresent(nodes, /*isMultiline*/ true);
                     }
                 }
             }
@@ -1018,13 +1031,15 @@ module ts {
 
             function emitObjectBindingPattern(node: BindingPattern) {
                 write("{ ");
-                emitCommaList(node.elements, /*includeTrailingComma*/ true);
+                emitCommaList(node.elements);
+                emitTrailingCommaIfPresent(node.elements);
                 write(" }");
             }
 
             function emitArrayBindingPattern(node: BindingPattern) {
                 write("[");
-                emitCommaList(node.elements, /*includeTrailingComma*/ true);
+                emitCommaList(node.elements);
+                emitTrailingCommaIfPresent(node.elements);
                 write("]");
             }
 
@@ -1032,14 +1047,16 @@ module ts {
                 if (node.flags & NodeFlags.MultiLine) {
                     write("[");
                     increaseIndent();
-                    emitMultiLineList(node.elements, /*includeTrailingComma*/ true);
+                    emitMultiLineList(node.elements);
+                    emitTrailingCommaIfPresent(node.elements);
                     decreaseIndent();
                     writeLine();
                     write("]");
                 }
                 else {
                     write("[");
-                    emitCommaList(node.elements, /*includeTrailingComma*/ true);
+                    emitCommaList(node.elements);
+                    emitTrailingCommaIfPresent(node.elements);
                     write("]");
                 }
             }
@@ -1051,14 +1068,20 @@ module ts {
                 else if (node.flags & NodeFlags.MultiLine) {
                     write("{");
                     increaseIndent();
-                    emitMultiLineList(node.properties, /*includeTrailingComma*/ compilerOptions.target >= ScriptTarget.ES5);
+                    emitMultiLineList(node.properties);
+                    if (compilerOptions.target >= ScriptTarget.ES5) {
+                        emitTrailingCommaIfPresent(node.properties);
+                    }
                     decreaseIndent();
                     writeLine();
                     write("}");
                 }
                 else {
                     write("{ ");
-                    emitCommaList(node.properties, /*includeTrailingComma*/ compilerOptions.target >= ScriptTarget.ES5);
+                    emitCommaList(node.properties);
+                    if (compilerOptions.target >= ScriptTarget.ES5) {
+                        emitTrailingCommaIfPresent(node.properties);
+                    }
                     write(" }");
                 }
             }
@@ -1145,13 +1168,13 @@ module ts {
                     emitThis(node.func);
                     if (node.arguments.length) {
                         write(", ");
-                        emitCommaList(node.arguments, /*includeTrailingComma*/ false);
+                        emitCommaList(node.arguments);
                     }
                     write(")");
                 }
                 else {
                     write("(");
-                    emitCommaList(node.arguments, /*includeTrailingComma*/ false);
+                    emitCommaList(node.arguments);
                     write(")");
                 }
             }
@@ -1161,7 +1184,7 @@ module ts {
                 emit(node.func);
                 if (node.arguments) {
                     write("(");
-                    emitCommaList(node.arguments, /*includeTrailingComma*/ false);
+                    emitCommaList(node.arguments);
                     write(")");
                 }
             }
@@ -1238,11 +1261,16 @@ module ts {
             }
 
             function emitBinaryExpression(node: BinaryExpression) {
-                emit(node.left);
-                if (node.operator !== SyntaxKind.CommaToken) write(" ");
-                write(tokenToString(node.operator));
-                write(" ");
-                emit(node.right);
+                if (node.operator === SyntaxKind.EqualsToken && (node.left.kind === SyntaxKind.ObjectLiteral || node.left.kind === SyntaxKind.ArrayLiteral)) {
+                    emitDestructuring(node);
+                }
+                else {
+                    emit(node.left);
+                    if (node.operator !== SyntaxKind.CommaToken) write(" ");
+                    write(tokenToString(node.operator));
+                    write(" ");
+                    emit(node.right);
+                }
             }
 
             function emitConditionalExpression(node: ConditionalExpression) {
@@ -1262,6 +1290,9 @@ module ts {
                     emitCaptureThisForNodeIfNecessary(node.parent);
                 }
                 emitLines(node.statements);
+                if (node.kind === SyntaxKind.ModuleBlock) {
+                    emitTempDeclarations(/*newLine*/ true);
+                }
                 decreaseIndent();
                 writeLine();
                 emitToken(SyntaxKind.CloseBraceToken, node.statements.end);
@@ -1349,7 +1380,7 @@ module ts {
                         emitToken(SyntaxKind.VarKeyword, endPos);
                     }
                     write(" ");
-                    emitCommaList(node.declarations, /*includeTrailingComma*/ false);
+                    emitCommaList(node.declarations);
                 }
                 if (node.initializer) {
                     emit(node.initializer);
@@ -1503,26 +1534,36 @@ module ts {
                 emitEnd(node.name);
             }
 
-            // Rewrites a destructuring variable declaration into a sequence of regular variable declarations.
-            // Nodes generated by the syntactic rewrite have no parent references.
-            function rewriteDestructuringDeclaration(node: VariableDeclaration): NodeArray<VariableDeclaration> {
-                var declarations = <NodeArray<VariableDeclaration>>[];
-                rewriteDeclaration(node, undefined);
-                return declarations;
+            function emitDestructuring(root: BinaryExpression | BindingElement) {
+                var emitCount = 0;
+                if (root.kind === SyntaxKind.BinaryExpression) {
+                    emitAssignmentExpression(<BinaryExpression>root);
+                }
+                else {
+                    emitBindingElement(<BindingElement>root, undefined);
+                }
 
-                function addVariableDeclaration(name: Identifier, initializer: Expression) {
-                    var node = <VariableDeclaration>createNode(SyntaxKind.VariableDeclaration);
-                    node.name = name;
-                    node.initializer = initializer;
-                    declarations.push(node);
+                function emitAssignment(name: Identifier, value: Expression) {
+                    if (emitCount++) {
+                        write(", ");
+                    }
+                    emit(name);
+                    write(" = ");
+                    emit(value);
                 }
 
                 function createTemporaryVariable(expr: Expression): Expression {
-                    var tempName = getTempVariableName(node);
-                    var identifier = <Identifier>createNode(SyntaxKind.Identifier);
-                    identifier.text = tempName;
-                    addVariableDeclaration(identifier, expr);
-                    return identifier;
+                    if (expr.kind !== SyntaxKind.Identifier) {
+                        var tempName = getTempVariableName(root);
+                        var identifier = <Identifier>createNode(SyntaxKind.Identifier);
+                        identifier.text = tempName;
+                        emitAssignment(identifier, expr);
+                        if (root.kind === SyntaxKind.BinaryExpression) {
+                            recordTempDeclaration(identifier);
+                        }
+                        expr = identifier;
+                    }
+                    return expr;
                 }
 
                 function createVoidZero(): Expression {
@@ -1537,9 +1578,7 @@ module ts {
                 function createDefaultValueCheck(value: Expression, defaultValue: Expression): Expression {
                     // The value expression will be evaluated twice, so for anything but a simple identifier
                     // we need to generate a temporary variable
-                    if (value.kind !== SyntaxKind.Identifier) {
-                        value = createTemporaryVariable(value);
-                    }
+                    value = createTemporaryVariable(value);
                     // Return the expression 'value === void 0 ? defaultValue : value'
                     var equals = <BinaryExpression>createNode(SyntaxKind.BinaryExpression);
                     equals.left = value;
@@ -1584,7 +1623,75 @@ module ts {
                     return node;
                 }
 
-                function rewriteDeclaration(target: BindingElement, value: Expression) {
+                function emitObjectLiteralAssignment(target: ObjectLiteral, value: Expression) {
+                    var properties = target.properties;
+                    if (properties.length !== 1) {
+                        // For anything but a single element destructuring we need to generate a temporary
+                        // to ensure value is evaluated exactly once.
+                        value = createTemporaryVariable(value);
+                    }
+                    for (var i = 0; i < properties.length; i++) {
+                        var p = properties[i];
+                        if (p.kind === SyntaxKind.PropertyAssignment || p.kind === SyntaxKind.ShorthandPropertyAssignment) {
+                            // TODO(andersh): Computed property support
+                            var propName = <Identifier>((<PropertyDeclaration>p).name);
+                            emitDestructuringAssignment((<PropertyDeclaration>p).initializer || propName, createPropertyAccess(value, propName));
+                        }
+                    }
+                }
+
+                function emitArrayLiteralAssignment(target: ArrayLiteral, value: Expression) {
+                    var elements = target.elements;
+                    if (elements.length !== 1) {
+                        // For anything but a single element destructuring we need to generate a temporary
+                        // to ensure value is evaluated exactly once.
+                        value = createTemporaryVariable(value);
+                    }
+                    for (var i = 0; i < elements.length; i++) {
+                        var e = elements[i];
+                        if (e.kind !== SyntaxKind.OmittedExpression) {
+                            emitDestructuringAssignment(e, createIndexedAccess(value, createNumericLiteral(i)));
+                        }
+                    }
+                }
+
+                function emitDestructuringAssignment(target: Expression, value: Expression) {
+                    if (target.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>target).operator === SyntaxKind.EqualsToken) {
+                        value = createDefaultValueCheck(value, (<BinaryExpression>target).right);
+                        target = (<BinaryExpression>target).left;
+                    }
+                    if (target.kind === SyntaxKind.ObjectLiteral) {
+                        emitObjectLiteralAssignment(<ObjectLiteral>target, value);
+                    }
+                    else if (target.kind === SyntaxKind.ArrayLiteral) {
+                        emitArrayLiteralAssignment(<ArrayLiteral>target, value);
+                    }
+                    else {
+                        emitAssignment(<Identifier>target, value);
+                    }
+                }
+
+                function emitAssignmentExpression(root: BinaryExpression) {
+                    var target = root.left;
+                    var value = root.right;
+                    if (root.parent.kind === SyntaxKind.ExpressionStatement) {
+                        emitDestructuringAssignment(target, value);
+                    }
+                    else {
+                        if (root.parent.kind !== SyntaxKind.ParenExpression) {
+                            write("(");
+                        }
+                        value = createTemporaryVariable(value);
+                        emitDestructuringAssignment(target, value);
+                        write(", ");
+                        emit(value);
+                        if (root.parent.kind !== SyntaxKind.ParenExpression) {
+                            write(")");
+                        }
+                    }
+                }
+
+                function emitBindingElement(target: BindingElement, value: Expression) {
                     if (target.initializer) {
                         // Combine value and initializer
                         value = value ? createDefaultValueCheck(value, target.initializer) : target.initializer;
@@ -1606,36 +1713,30 @@ module ts {
                             if (pattern.kind === SyntaxKind.ObjectBindingPattern) {
                                 // Rewrite element to a declaration with an initializer that fetches property
                                 var propName = element.propertyName || <Identifier>element.name;
-                                rewriteDeclaration(element, createPropertyAccess(value, propName));
+                                emitBindingElement(element, createPropertyAccess(value, propName));
                             }
                             else if (element.kind !== SyntaxKind.OmittedExpression) {
                                 // Rewrite element to a declaration that accesses array element at index i
-                                rewriteDeclaration(element, createIndexedAccess(value, createNumericLiteral(i)));
+                                emitBindingElement(element, createIndexedAccess(value, createNumericLiteral(i)));
                             }
                         }
                     }
                     else {
-                        addVariableDeclaration(<Identifier>target.name, value);
+                        emitAssignment(<Identifier>target.name, value);
                     }
                 }
             }
 
             function emitVariableDeclaration(node: VariableDeclaration) {
-                if (node.parent) {
-                    emitLeadingComments(node);
-                    if (isBindingPattern(node.name)) {
-                        emitCommaList(rewriteDestructuringDeclaration(node), /*includeTrailingComma*/ false);
-                    }
-                    else {
-                        emitModuleMemberName(node);
-                        emitOptional(" = ", node.initializer);
-                    }
-                    emitTrailingComments(node);
+                emitLeadingComments(node);
+                if (isBindingPattern(node.name)) {
+                    emitDestructuring(node);
                 }
                 else {
-                    emit(node.name);
+                    emitModuleMemberName(node);
                     emitOptional(" = ", node.initializer);
                 }
+                emitTrailingComments(node);
             }
 
             function emitVariableStatement(node: VariableStatement) {
@@ -1651,7 +1752,7 @@ module ts {
                         write("var ");
                     }
                 }
-                emitCommaList(node.declarations, /*includeTrailingComma*/ false);
+                emitCommaList(node.declarations);
                 write(";");
                 emitTrailingComments(node);
             }
@@ -1701,7 +1802,7 @@ module ts {
                 if (hasRestParameters(node)) {
                     var restIndex = node.parameters.length - 1;
                     var restParam = node.parameters[restIndex];
-                    var tempName = resolver.isUnknownIdentifier(node, "_i") ? "_i" : getTempVariableName(node);
+                    var tempName = getTempVariableName(node);
                     writeLine();
                     emitLeadingComments(restParam);
                     emitStart(restParam);
@@ -1776,7 +1877,7 @@ module ts {
                 increaseIndent();
                 write("(");
                 if (node) {
-                    emitCommaList(node.parameters, /*includeTrailingComma*/ false, node.parameters.length - (hasRestParameters(node) ? 1 : 0));
+                    emitCommaList(node.parameters, node.parameters.length - (hasRestParameters(node) ? 1 : 0));
                 }
                 write(")");
                 decreaseIndent();
@@ -1786,6 +1887,9 @@ module ts {
                 emitSignatureParameters(node);
                 write(" {");
                 var saveTempCount = tempCount;
+                var saveTempNames = tempNames;
+                tempCount = 0;
+                tempNames = undefined;
                 scopeEmitStart(node);
                 increaseIndent();
 
@@ -1806,7 +1910,9 @@ module ts {
                     write("return ");
                     emitNode(node.body);
                     emitEnd(node.body);
-                    write("; ");
+                    write(";");
+                    emitTempDeclarations(/*newLine*/ false);
+                    write(" ");
                     emitStart(node.body);
                     write("}");
                     emitEnd(node.body);
@@ -1823,6 +1929,7 @@ module ts {
                         write(";");
                         emitTrailingComments(node.body);
                     }
+                    emitTempDeclarations(/*newLine*/ true);
                     writeLine();
                     if (node.body.kind === SyntaxKind.FunctionBlock) {
                         emitLeadingCommentsOfPosition((<Block>node.body).statements.end);
@@ -1838,6 +1945,7 @@ module ts {
                 }
                 scopeEmitEnd();
                 tempCount = saveTempCount;
+                tempNames = saveTempNames;
                 if (node.flags & NodeFlags.Export) {
                     writeLine();
                     emitStart(node);
@@ -2064,6 +2172,9 @@ module ts {
                     emitSignatureParameters(ctor);
                     write(" {");
                     var saveTempCount = tempCount;
+                    var saveTempNames = tempNames;
+                    tempCount = 0;
+                    tempNames = undefined;
                     scopeEmitStart(node, "constructor");
                     increaseIndent();
                     if (ctor) {
@@ -2096,6 +2207,7 @@ module ts {
                         if (superCall) statements = statements.slice(1);
                         emitLines(statements);
                     }
+                    emitTempDeclarations(/*newLine*/ true);
                     writeLine();
                     if (ctor) {
                         emitLeadingCommentsOfPosition((<Block>ctor.body).statements.end);
@@ -2104,6 +2216,7 @@ module ts {
                     emitToken(SyntaxKind.CloseBraceToken, ctor ? (<Block>ctor.body).statements.end : node.members.end);
                     scopeEmitEnd();
                     tempCount = saveTempCount;
+                    tempNames = saveTempNames;
                     emitEnd(<Node>ctor || node);
                     if (ctor) {
                         emitTrailingComments(ctor);
@@ -2211,9 +2324,14 @@ module ts {
                 write(resolver.getLocalNameOfContainer(node));
                 emitEnd(node.name);
                 write(") ");
-                var saveTempCount = tempCount;
                 if (node.body.kind === SyntaxKind.ModuleBlock) {
+                    var saveTempCount = tempCount;
+                    var saveTempNames = tempNames;
+                    tempCount = 0;
+                    tempNames = undefined;
                     emit(node.body);
+                    tempCount = saveTempCount;
+                    tempNames = saveTempNames;
                 }
                 else {
                     write("{");
@@ -2228,7 +2346,6 @@ module ts {
                     emitToken(SyntaxKind.CloseBraceToken, moduleBlock.statements.end);
                     scopeEmitEnd();
                 }
-                tempCount = saveTempCount;
                 write(")(");
                 if (node.flags & NodeFlags.Export) {
                     emit(node.name);
