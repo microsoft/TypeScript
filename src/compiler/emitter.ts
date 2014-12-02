@@ -1539,6 +1539,7 @@ module ts {
 
             function emitDestructuring(root: BinaryExpression | BindingElement, value?: Expression) {
                 var emitCount = 0;
+                var isDeclaration = (root.kind === SyntaxKind.VariableDeclaration && !(root.flags & NodeFlags.Export)) || root.kind === SyntaxKind.Parameter;
                 if (root.kind === SyntaxKind.BinaryExpression) {
                     emitAssignmentExpression(<BinaryExpression>root);
                 }
@@ -1550,7 +1551,12 @@ module ts {
                     if (emitCount++) {
                         write(", ");
                     }
-                    emit(name);
+                    if (name.parent && name.parent.kind === SyntaxKind.VariableDeclaration) {
+                        emitModuleMemberName(<VariableDeclaration>name.parent);
+                    }
+                    else {
+                        emit(name);
+                    }
                     write(" = ");
                     emit(value);
                 }
@@ -1558,7 +1564,7 @@ module ts {
                 function ensureIdentifier(expr: Expression): Expression {
                     if (expr.kind !== SyntaxKind.Identifier) {
                         var identifier = createTempVariable(root);
-                        if (root.kind === SyntaxKind.BinaryExpression) {
+                        if (!isDeclaration) {
                             recordTempDeclaration(identifier);
                         }
                         emitAssignment(identifier, expr);
@@ -3611,7 +3617,12 @@ module ts {
                 if (node.flags & NodeFlags.Rest) {
                     write("...");
                 }
-                emitSourceTextOfNode(node.name);
+                if (isBindingPattern(node.name)) {
+                    write("_" + indexOf((<FunctionLikeDeclaration>node.parent).parameters, node));
+                }
+                else {
+                    emitSourceTextOfNode(node.name);
+                }
                 if (node.initializer || (node.flags & NodeFlags.QuestionMark)) {
                     write("?");
                 }
