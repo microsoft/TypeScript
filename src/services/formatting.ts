@@ -192,7 +192,7 @@ module ts.formatting {
         
         // pick only errors that fall in range
         var sorted = errors
-            .filter(d => d.isParseError && rangeOverlapsWithStartEnd(originalRange, d.start, d.start + d.length))
+            .filter(d => rangeOverlapsWithStartEnd(originalRange, d.start, d.start + d.length))
             .sort((e1, e2) => e1.start - e2.start);
 
         if (!sorted.length) {
@@ -252,7 +252,7 @@ module ts.formatting {
         rulesProvider: RulesProvider,
         requestKind: FormattingRequestKind): TextChange[] {
 
-        var rangeContainsError = prepareRangeContainsErrorFunction(sourceFile.getSyntacticDiagnostics(), originalRange);
+        var rangeContainsError = prepareRangeContainsErrorFunction(sourceFile.parseDiagnostics, originalRange);
 
         // formatting context is used by rules provider
         var formattingContext = new FormattingContext(sourceFile, requestKind);

@@ -1092,7 +1092,6 @@ module ts {
                 : -1;
             if (start !== lastErrorPos) {
                 var diagnostic = createFileDiagnostic(file, start, length, message, arg0, arg1, arg2);
-                diagnostic.isParseError = true;
                 file.parseDiagnostics.push(diagnostic);
             }
 
@@ -4190,6 +4189,7 @@ module ts {
         file.parseDiagnostics = [];
         file.grammarDiagnostics = [];
         file.semanticDiagnostics = [];
+
         var referenceComments = processReferenceComments(); 
         file.referencedFiles = referenceComments.referencedFiles;
         file.amdDependencies = referenceComments.amdDependencies;

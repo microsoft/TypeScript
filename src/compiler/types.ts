@@ -1277,12 +1277,6 @@ module ts {
           * Early error - any error (can be produced at parsing\binding\typechecking step) that blocks emit
           */
         isEarly?: boolean;
-        /**
-          * Parse error - error produced by parser when it scanner returns a token 
-          * that parser does not understand in its current state 
-          * (as opposed to grammar error when parser can interpret the token but interpretation is not legal from the grammar perespective)
-          */
-        isParseError?: boolean;
     }
 
     export enum DiagnosticCategory {
