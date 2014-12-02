@@ -2217,11 +2217,10 @@ module FourSlash {
         // TODO (drosen): We need to enforce checking on these tests.
         var program = ts.createProgram([Harness.Compiler.fourslashFilename, fileName], { out: "fourslashTestOutput.js", noResolve: true }, host);
         var checker = ts.createTypeChecker(program, /*fullTypeCheckMode*/ true);
-        checker.checkProgram();
 
-        var errs = program.getDiagnostics().concat(checker.getDiagnostics());
-        if (errs.length > 0) {
-            throw new Error('Error compiling ' + fileName + ': ' + errs.map(e => e.messageText).join('\r\n'));
+        var errors = program.getDiagnostics().concat(checker.getDiagnostics());
+        if (errors.length > 0) {
+            throw new Error('Error compiling ' + fileName + ': ' + errors.map(e => e.messageText).join('\r\n'));
         }
         checker.emitFiles();
         result = result || ''; // Might have an empty fourslash file
