@@ -1395,10 +1395,12 @@ module ts {
         }
         
         function parseContextualModifier(t: SyntaxKind): boolean {
-            return token === t && tryParse(() => {
-                nextToken();
-                return canFollowModifier();
-            });
+            return token === t && tryParse(nextTokenCanFollowModifier);
+        }
+
+        function nextTokenCanFollowModifier() {
+            nextToken();
+            return canFollowModifier();
         }
 
         function parseAnyContextualModifier(): boolean {
@@ -4066,9 +4068,13 @@ module ts {
             // literals.  We check to ensure that it is only a string literal later in the grammar
             // walker.
             node.expression = parseExpression();
+
+            // Ensure the string being required is in our 'identifier' table.  This will ensure 
+            // that features like 'find refs' will look inside this file when search for its name.
             if (node.expression.kind === SyntaxKind.StringLiteral) {
                 internIdentifier((<LiteralExpression>node.expression).text);
             }
+
             parseExpected(SyntaxKind.CloseParenToken);
             return finishNode(node);
         }
