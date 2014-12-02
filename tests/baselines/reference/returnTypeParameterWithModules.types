@@ -16,7 +16,7 @@ module M1 {
 >Array.prototype.reduce.apply : (thisArg: any, argArray?: any) => any
 >Array.prototype.reduce : { (callbackfn: (previousValue: any, currentValue: any, currentIndex: number, array: any[]) => any, initialValue?: any): any; <U>(callbackfn: (previousValue: U, currentValue: any, currentIndex: number, array: any[]) => U, initialValue: U): U; }
 >Array.prototype : any[]
->Array : { (arrayLength?: number): any[]; <T>(arrayLength: number): T[]; <T>(...items: T[]): T[]; new (arrayLength?: number): any[]; new <T>(arrayLength: number): T[]; new <T>(...items: T[]): T[]; isArray(arg: any): boolean; prototype: any[]; }
+>Array : ArrayConstructor
 >prototype : any[]
 >reduce : { (callbackfn: (previousValue: any, currentValue: any, currentIndex: number, array: any[]) => any, initialValue?: any): any; <U>(callbackfn: (previousValue: U, currentValue: any, currentIndex: number, array: any[]) => U, initialValue: U): U; }
 >apply : (thisArg: any, argArray?: any) => any

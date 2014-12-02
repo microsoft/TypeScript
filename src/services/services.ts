@@ -869,7 +869,7 @@ module ts {
         getLocalizedDiagnosticMessages(): any;
         getCancellationToken(): CancellationToken;
         getCurrentDirectory(): string;
-        getDefaultLibFilename(): string;
+        getDefaultLibFilename(options: CompilerOptions): string;
     }
 
     //
@@ -2107,8 +2107,8 @@ module ts {
                 getCanonicalFileName: (filename) => useCaseSensitivefilenames ? filename : filename.toLowerCase(),
                 useCaseSensitiveFileNames: () => useCaseSensitivefilenames,
                 getNewLine: () => "\r\n",
-                getDefaultLibFilename: (): string => {
-                    return host.getDefaultLibFilename();
+                getDefaultLibFilename: (options): string => {
+                    return host.getDefaultLibFilename(options);
                 },
                 writeFile: (filename, data, writeByteOrderMark) => {
                     writer(filename, data, writeByteOrderMark);
@@ -2253,7 +2253,7 @@ module ts {
 
             filename = normalizeSlashes(filename);
 
-            return program.getDiagnostics(getSourceFile(filename).getSourceFile());
+            return program.getDiagnostics(getSourceFile(filename));
         }
 
         /**
@@ -2510,10 +2510,11 @@ module ts {
             }
 
             function isInStringOrRegularExpressionOrTemplateLiteral(previousToken: Node): boolean {
-                if (previousToken.kind === SyntaxKind.StringLiteral || isTemplateLiteralKind(previousToken.kind)) {
+                if (previousToken.kind === SyntaxKind.StringLiteral
+                    || previousToken.kind === SyntaxKind.RegularExpressionLiteral
+                    || isTemplateLiteralKind(previousToken.kind)) {
                     // The position has to be either: 1. entirely within the token text, or 
-                    // 2. at the end position, and the string literal is not terminated
-                    
+                    // 2. at the end position of an unterminated token.
                     var start = previousToken.getStart();
                     var end = previousToken.getEnd();
 
@@ -2521,35 +2522,8 @@ module ts {
                         return true;
                     }
                     else if (position === end) {
-                        var width = end - start;
-                        var text = previousToken.getSourceFile().text;
-
-                        // If the token is a single character, or its second-to-last charcter indicates an escape code,
-                        // then we can immediately say that we are in the middle of an unclosed string.
-                        if (width <= 1 || text.charCodeAt(end - 2) === CharacterCodes.backslash) {
-                            return true;
-                        }
-
-                        // Now check if the last character is a closing character for the token.
-                        switch (previousToken.kind) {
-                            case SyntaxKind.StringLiteral:
-                            case SyntaxKind.NoSubstitutionTemplateLiteral:
-                                return text.charCodeAt(start) !== text.charCodeAt(end - 1);
-
-                            case SyntaxKind.TemplateHead:
-                            case SyntaxKind.TemplateMiddle:
-                                return text.charCodeAt(end - 1) !== CharacterCodes.openBrace
-                                    || text.charCodeAt(end - 2) !== CharacterCodes.$;
-
-                            case SyntaxKind.TemplateTail:
-                                return text.charCodeAt(end - 1) !== CharacterCodes.backtick;
-                        }
-
-                        return false;
+                        return !!(<LiteralExpression>previousToken).isUnterminated;
                     }
-                }
-                else if (previousToken.kind === SyntaxKind.RegularExpressionLiteral) {
-                    return previousToken.getStart() < position && position < previousToken.getEnd();
                 }
 
                 return false;
@@ -5674,23 +5648,29 @@ module ts {
                 addResult(end - start, classFromKind(token));
 
                 if (end >= text.length) {
-                    // We're at the end.
                     if (token === SyntaxKind.StringLiteral) {
                         // Check to see if we finished up on a multiline string literal.
                         var tokenText = scanner.getTokenText();
-                        if (tokenText.length > 0 && tokenText.charCodeAt(tokenText.length - 1) === CharacterCodes.backslash) {
-                            var quoteChar = tokenText.charCodeAt(0);
-                            result.finalLexState = quoteChar === CharacterCodes.doubleQuote
-                                ? EndOfLineState.InDoubleQuoteStringLiteral
-                                : EndOfLineState.InSingleQuoteStringLiteral;
+                        if (scanner.isUnterminated()) {
+                            var lastCharIndex = tokenText.length - 1;
+
+                            var numBackslashes = 0;
+                            while (tokenText.charCodeAt(lastCharIndex - numBackslashes) === CharacterCodes.backslash) {
+                                numBackslashes++;
+                            }
+
+                            // If we have an odd number of backslashes, then the multiline string is unclosed
+                            if (numBackslashes & 1) {
+                                var quoteChar = tokenText.charCodeAt(0);
+                                result.finalLexState = quoteChar === CharacterCodes.doubleQuote
+                                    ? EndOfLineState.InDoubleQuoteStringLiteral
+                                    : EndOfLineState.InSingleQuoteStringLiteral;
+                            }
                         }
                     }
                     else if (token === SyntaxKind.MultiLineCommentTrivia) {
                         // Check to see if the multiline comment was unclosed.
-                        var tokenText = scanner.getTokenText()
-                        if (!(tokenText.length > 3 && // need to avoid catching '/*/'
-                            tokenText.charCodeAt(tokenText.length - 2) === CharacterCodes.asterisk &&
-                            tokenText.charCodeAt(tokenText.length - 1) === CharacterCodes.slash)) {
+                        if (scanner.isUnterminated()) {
                             result.finalLexState = EndOfLineState.InMultiLineCommentTrivia;
                         }
                     }

@@ -135,6 +135,7 @@ module ts {
                     if (node.name) {
                         node.name.parent = node;
                     }
+
                     // Report errors every position with duplicate declaration
                     // Report errors on previous encountered declarations
                     var message = symbol.flags & SymbolFlags.BlockScopedVariable

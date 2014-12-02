@@ -7,7 +7,7 @@ class Rule {
 >regex : RegExp
 >RegExp : RegExp
 >new RegExp('') : RegExp
->RegExp : { (pattern: string, flags?: string): RegExp; new (pattern: string, flags?: string): RegExp; $1: string; $2: string; $3: string; $4: string; $5: string; $6: string; $7: string; $8: string; $9: string; lastMatch: string; }
+>RegExp : RegExpConstructor
 
     public name: string = '';
 >name : string

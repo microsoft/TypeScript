@@ -133,7 +133,7 @@ foo() ? exprAny1 : exprAny2;
 new Date() ? exprBoolean1 : exprBoolean2;
 >new Date() ? exprBoolean1 : exprBoolean2 : boolean
 >new Date() : Date
->Date : { (): string; new (): Date; new (value: number): Date; new (value: string): Date; new (year: number, month: number, date?: number, hours?: number, minutes?: number, seconds?: number, ms?: number): Date; prototype: Date; parse(s: string): number; UTC(year: number, month: number, date?: number, hours?: number, minutes?: number, seconds?: number, ms?: number): number; now(): number; }
+>Date : DateConstructor
 >exprBoolean1 : boolean
 >exprBoolean2 : boolean
 
@@ -262,7 +262,7 @@ var resultIsBoolean3 = new Date() ? exprBoolean1 : exprBoolean2;
 >resultIsBoolean3 : boolean
 >new Date() ? exprBoolean1 : exprBoolean2 : boolean
 >new Date() : Date
->Date : { (): string; new (): Date; new (value: number): Date; new (value: string): Date; new (year: number, month: number, date?: number, hours?: number, minutes?: number, seconds?: number, ms?: number): Date; prototype: Date; parse(s: string): number; UTC(year: number, month: number, date?: number, hours?: number, minutes?: number, seconds?: number, ms?: number): number; now(): number; }
+>Date : DateConstructor
 >exprBoolean1 : boolean
 >exprBoolean2 : boolean
 

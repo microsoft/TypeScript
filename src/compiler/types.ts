@@ -532,6 +532,7 @@ module ts {
     // For a NumericLiteral, the stored value is the toString() representation of the number. For example 1, 1.00, and 1e0 are all stored as just "1".
     export interface LiteralExpression extends PrimaryExpression {
         text: string;
+        isUnterminated?: boolean;
     }
 
     export interface TemplateExpression extends PrimaryExpression {
@@ -1310,6 +1311,7 @@ module ts {
         version?: boolean;
         watch?: boolean;
         preserveConstEnums?: boolean;
+        allowNonTsExtensions?: boolean;
         [option: string]: string | number | boolean;
     }
 
@@ -1491,7 +1493,7 @@ module ts {
 
     export interface CompilerHost {
         getSourceFile(filename: string, languageVersion: ScriptTarget, onError?: (message: string) => void): SourceFile;
-        getDefaultLibFilename(): string;
+        getDefaultLibFilename(options: CompilerOptions): string;
         getCancellationToken? (): CancellationToken;
         writeFile(filename: string, data: string, writeByteOrderMark: boolean, onError?: (message: string) => void): void;
         getCurrentDirectory(): string;

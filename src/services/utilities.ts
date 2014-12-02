@@ -322,7 +322,7 @@ module ts {
     }
 
     export function isInsideTemplateLiteral(node: LiteralExpression, position: number) {
-        return (node.getStart() < position && position < node.getEnd())
-            || (isUnterminatedTemplateEnd(node) && position === node.getEnd());
+        return isTemplateLiteralKind(node.kind)
+            && (node.getStart() < position && position < node.getEnd()) || (!!node.isUnterminated && position === node.getEnd());
     }
 }

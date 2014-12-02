@@ -130,18 +130,74 @@ describe('Colorization', function () {
                 operator(","));
         });
 
-        it("correctly classifies an unterminated multi-line string", function () {
+        it("correctly classifies a multi-line string with one backslash", function () {
             test("'line1\\",
                 ts.EndOfLineState.Start,
                 stringLiteral("'line1\\"),
                 finalEndOfLineState(ts.EndOfLineState.InSingleQuoteStringLiteral));
         });
 
-        it("correctly classifies the second line of an unterminated multi-line string", function () {
+        it("correctly classifies a multi-line string with three backslashes", function () {
+            test("'line1\\\\\\",
+                ts.EndOfLineState.Start,
+                stringLiteral("'line1\\\\\\"),
+                finalEndOfLineState(ts.EndOfLineState.InSingleQuoteStringLiteral));
+        });
+
+        it("correctly classifies an unterminated single-line string with no backslashes", function () {
+            test("'line1",
+                ts.EndOfLineState.Start,
+                stringLiteral("'line1"),
+                finalEndOfLineState(ts.EndOfLineState.Start));
+        });
+
+        it("correctly classifies an unterminated single-line string with two backslashes", function () {
+            test("'line1\\\\",
+                ts.EndOfLineState.Start,
+                stringLiteral("'line1\\\\"),
+                finalEndOfLineState(ts.EndOfLineState.Start));
+        });
+
+        it("correctly classifies an unterminated single-line string with four backslashes", function () {
+            test("'line1\\\\\\\\",
+                ts.EndOfLineState.Start,
+                stringLiteral("'line1\\\\\\\\"),
+                finalEndOfLineState(ts.EndOfLineState.Start));
+        });
+
+        it("correctly classifies the continuing line of a multi-line string ending in one backslash", function () {
             test("\\",
                 ts.EndOfLineState.InDoubleQuoteStringLiteral,
                 stringLiteral("\\"),
                 finalEndOfLineState(ts.EndOfLineState.InDoubleQuoteStringLiteral));
+        });
+
+        it("correctly classifies the continuing line of a multi-line string ending in three backslashes", function () {
+            test("\\",
+                ts.EndOfLineState.InDoubleQuoteStringLiteral,
+                stringLiteral("\\"),
+                finalEndOfLineState(ts.EndOfLineState.InDoubleQuoteStringLiteral));
+        });
+
+        it("correctly classifies the last line of an unterminated multi-line string ending in no backslashes", function () {
+            test("  ",
+                ts.EndOfLineState.InDoubleQuoteStringLiteral,
+                stringLiteral("  "),
+                finalEndOfLineState(ts.EndOfLineState.Start));
+        });
+
+        it("correctly classifies the last line of an unterminated multi-line string ending in two backslashes", function () {
+            test("\\\\",
+                ts.EndOfLineState.InDoubleQuoteStringLiteral,
+                stringLiteral("\\\\"),
+                finalEndOfLineState(ts.EndOfLineState.Start));
+        });
+
+        it("correctly classifies the last line of an unterminated multi-line string ending in four backslashes", function () {
+            test("\\\\\\\\",
+                ts.EndOfLineState.InDoubleQuoteStringLiteral,
+                stringLiteral("\\\\\\\\"),
+                finalEndOfLineState(ts.EndOfLineState.Start));
         });
 
         it("correctly classifies the last line of a multi-line string", function () {

@@ -90,7 +90,7 @@ ANY = new Date(), STRING;
 >ANY = new Date() : Date
 >ANY : any
 >new Date() : Date
->Date : { (): string; new (): Date; new (value: number): Date; new (value: string): Date; new (year: number, month: number, date?: number, hours?: number, minutes?: number, seconds?: number, ms?: number): Date; prototype: Date; parse(s: string): number; UTC(year: number, month: number, date?: number, hours?: number, minutes?: number, seconds?: number, ms?: number): number; now(): number; }
+>Date : DateConstructor
 >STRING : string
 
 true, "";
@@ -115,7 +115,7 @@ OBJECT = new Object, STRING + "string";
 >OBJECT = new Object : Object
 >OBJECT : Object
 >new Object : Object
->Object : { (): any; (value: any): any; new (value?: any): Object; prototype: Object; getPrototypeOf(o: any): any; getOwnPropertyDescriptor(o: any, p: string): PropertyDescriptor; getOwnPropertyNames(o: any): string[]; create(o: any, properties?: PropertyDescriptorMap): any; defineProperty(o: any, p: string, attributes: PropertyDescriptor): any; defineProperties(o: any, properties: PropertyDescriptorMap): any; seal(o: any): any; freeze(o: any): any; preventExtensions(o: any): any; isSealed(o: any): boolean; isFrozen(o: any): boolean; isExtensible(o: any): boolean; keys(o: any): string[]; }
+>Object : ObjectConstructor
 >STRING + "string" : string
 >STRING : string
 
@@ -132,7 +132,7 @@ var resultIsString7 = (ANY = new Date(), STRING);
 >ANY = new Date() : Date
 >ANY : any
 >new Date() : Date
->Date : { (): string; new (): Date; new (value: number): Date; new (value: string): Date; new (year: number, month: number, date?: number, hours?: number, minutes?: number, seconds?: number, ms?: number): Date; prototype: Date; parse(s: string): number; UTC(year: number, month: number, date?: number, hours?: number, minutes?: number, seconds?: number, ms?: number): number; now(): number; }
+>Date : DateConstructor
 >STRING : string
 
 var resultIsString8 = (true, "");
@@ -163,7 +163,7 @@ var resultIsString11 = (new Object, STRING + "string");
 >(new Object, STRING + "string") : string
 >new Object, STRING + "string" : string
 >new Object : Object
->Object : { (): any; (value: any): any; new (value?: any): Object; prototype: Object; getPrototypeOf(o: any): any; getOwnPropertyDescriptor(o: any, p: string): PropertyDescriptor; getOwnPropertyNames(o: any): string[]; create(o: any, properties?: PropertyDescriptorMap): any; defineProperty(o: any, p: string, attributes: PropertyDescriptor): any; defineProperties(o: any, properties: PropertyDescriptorMap): any; seal(o: any): any; freeze(o: any): any; preventExtensions(o: any): any; isSealed(o: any): boolean; isFrozen(o: any): boolean; isExtensible(o: any): boolean; keys(o: any): string[]; }
+>Object : ObjectConstructor
 >STRING + "string" : string
 >STRING : string
 

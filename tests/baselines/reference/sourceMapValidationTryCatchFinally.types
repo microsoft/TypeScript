@@ -35,7 +35,7 @@ try
 
     throw new Error();
 >new Error() : Error
->Error : { (message?: string): Error; new (message?: string): Error; prototype: Error; }
+>Error : ErrorConstructor
 }
 catch (e)
 >e : any
