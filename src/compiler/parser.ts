@@ -828,7 +828,7 @@ module ts {
 
     export interface ReferencePathMatchResult {
         fileReference?: FileReference
-        diagnostic?: DiagnosticMessage
+        diagnosticMessage?: DiagnosticMessage
         isNoDefaultLib?: boolean
     }
 
@@ -857,7 +857,7 @@ module ts {
                 }
                 else {
                     return {
-                        diagnostic: Diagnostics.Invalid_reference_directive_syntax,
+                        diagnosticMessage: Diagnostics.Invalid_reference_directive_syntax,
                         isNoDefaultLib: false
                     };
                 }
@@ -1083,14 +1083,16 @@ module ts {
             var start = scanner.getTokenPos();
             var length = scanner.getTextPos() - start;
 
-            errorAtPos(start, length, message, arg0, arg1, arg2);
+            errorAtPosition(start, length, message, arg0, arg1, arg2);
         }
 
-        function errorAtPos(start: number, length: number, message: DiagnosticMessage, arg0?: any, arg1?: any, arg2?: any): void {
-            var lastErrorPos = file.parseDiagnostics.length
+        function errorAtPosition(start: number, length: number, message: DiagnosticMessage, arg0?: any, arg1?: any, arg2?: any): void {
+            var lastErrorPosition = file.parseDiagnostics.length
                 ? file.parseDiagnostics[file.parseDiagnostics.length - 1].start
                 : -1;
-            if (start !== lastErrorPos) {
+
+            // Don't report another error if it would just be at the same position as the last error.
+            if (start !== lastErrorPosition) {
                 var diagnostic = createFileDiagnostic(file, start, length, message, arg0, arg1, arg2);
                 file.parseDiagnostics.push(diagnostic);
             }
@@ -1102,7 +1104,7 @@ module ts {
 
         function scanError(message: DiagnosticMessage) {
             var pos = scanner.getTextPos();
-            errorAtPos(pos, 0, message);
+            errorAtPosition(pos, 0, message);
         }
 
         function onComment(pos: number, end: number) {
@@ -1204,17 +1206,18 @@ module ts {
             return inStrictModeContext() ? token > SyntaxKind.LastFutureReservedWord : token > SyntaxKind.LastReservedWord;
         }
 
-        function parseExpected(t: SyntaxKind, diagnosticMessage?: DiagnosticMessage, arg0?: any): boolean {
-            if (token === t) {
+        function parseExpected(kind: SyntaxKind, diagnosticMessage?: DiagnosticMessage, arg0?: any): boolean {
+            if (token === kind) {
                 nextToken();
                 return true;
             }
 
+            // Report specific message if provided with one.  Otherwise, report generic fallback message.
             if (diagnosticMessage) {
                 error(diagnosticMessage, arg0);
             }
             else {
-                error(Diagnostics._0_expected, tokenToString(t));
+                error(Diagnostics._0_expected, tokenToString(kind));
             }
             return false;
         }
@@ -1281,16 +1284,13 @@ module ts {
         }
 
         function createMissingNode(kind: SyntaxKind, reportAtCurrentPosition: boolean, diagnosticMessage: DiagnosticMessage, arg0?: any): Node {
-            if (diagnosticMessage) {
-                if (reportAtCurrentPosition) {
-                    errorAtPos(scanner.getStartPos(), 0, diagnosticMessage, arg0);
-                }
-                else {
-                    var start = scanner.getTokenPos();
-                    errorAtPos(start, scanner.getTextPos() - start, diagnosticMessage, arg0);
-                }
+            if (reportAtCurrentPosition) {
+                errorAtPosition(scanner.getStartPos(), 0, diagnosticMessage, arg0);
             }
-       
+            else {
+                error(diagnosticMessage, arg0);
+            }
+
             return createMissingNodeWithoutError(kind);
         }
 
@@ -4113,12 +4113,12 @@ module ts {
                 if (referencePathMatchResult) {
                     var fileReference = referencePathMatchResult.fileReference;
                     file.hasNoDefaultLib = referencePathMatchResult.isNoDefaultLib;
-                    var diagnostic = referencePathMatchResult.diagnostic;
+                    var diagnosticMessage = referencePathMatchResult.diagnosticMessage;
                     if (fileReference) {
                         referencedFiles.push(fileReference);
                     }
-                    if (diagnostic) {
-                        errorAtPos(range.pos, range.end - range.pos, diagnostic);
+                    if (diagnosticMessage) {
+                        file.parseDiagnostics.push(createFileDiagnostic(file, range.pos, range.end - range.pos, diagnosticMessage));
                     }
                 }
                 else {
@@ -4126,7 +4126,7 @@ module ts {
                     var amdModuleNameMatchResult = amdModuleNameRegEx.exec(comment);
                     if(amdModuleNameMatchResult) {
                         if(amdModuleName) {
-                            errorAtPos(range.pos, range.end - range.pos, Diagnostics.An_AMD_module_cannot_have_multiple_name_assignments);
+                            file.parseDiagnostics.push(createFileDiagnostic(file, range.pos, range.end - range.pos, Diagnostics.An_AMD_module_cannot_have_multiple_name_assignments));
                         }
                         amdModuleName = amdModuleNameMatchResult[2];
                     }
