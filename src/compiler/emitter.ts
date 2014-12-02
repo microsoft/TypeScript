@@ -440,7 +440,7 @@ module ts {
             handleSymbolAccessibilityError(resolver.isSymbolAccessible(symbol, enclosingDeclaration, meaning));
         }
 
-        function writeTypeAtLocation(location: Node, type: TypeNode, getSymbolAccessibilityDiagnostic: GetSymbolAccessibilityDiagnostic) {
+        function writeTypeOfDeclaration(declaration: AccessorDeclaration | VariableOrParameterDeclaration, type: TypeNode | StringLiteralExpression, getSymbolAccessibilityDiagnostic: GetSymbolAccessibilityDiagnostic) {
             writer.getSymbolAccessibilityDiagnostic = getSymbolAccessibilityDiagnostic;
             write(": ");
             if (type) {
@@ -448,7 +448,7 @@ module ts {
                 emitType(type);
             }
             else {
-                resolver.writeTypeAtLocation(location, enclosingDeclaration, TypeFormatFlags.UseTypeOfFunction, writer);
+                resolver.writeTypeOfDeclaration(declaration, enclosingDeclaration, TypeFormatFlags.UseTypeOfFunction, writer);
             }
         }
 
@@ -494,12 +494,12 @@ module ts {
             }
         }
 
-        function emitTypeWithNewGetSymbolAccessibilityDiangostic(type: TypeNode, getSymbolAccessibilityDiagnostic: GetSymbolAccessibilityDiagnostic) {
+        function emitTypeWithNewGetSymbolAccessibilityDiagnostic(type: TypeNode | EntityName, getSymbolAccessibilityDiagnostic: GetSymbolAccessibilityDiagnostic) {
             writer.getSymbolAccessibilityDiagnostic = getSymbolAccessibilityDiagnostic;
             emitType(type);
         }
 
-        function emitType(type: TypeNode) {
+        function emitType(type: TypeNode | StringLiteralExpression | Identifier | QualifiedName) {
             switch (type.kind) {
                 case SyntaxKind.AnyKeyword:
                 case SyntaxKind.StringKeyword:
@@ -522,7 +522,7 @@ module ts {
                     return emitParenType(<ParenthesizedTypeNode>type);
                 case SyntaxKind.FunctionType:
                 case SyntaxKind.ConstructorType:
-                    return emitSignatureDeclarationWithJsDocComments(<SignatureDeclaration>type);
+                    return emitSignatureDeclarationWithJsDocComments(<FunctionOrConstructorTypeNode>type);
                 case SyntaxKind.TypeLiteral:
                     return emitTypeLiteral(<TypeLiteralNode>type);
                 case SyntaxKind.Identifier:
@@ -666,7 +666,7 @@ module ts {
             writeTextOfNode(currentSourceFile, node.name);
             write(" = ");
             if (isInternalModuleImportDeclaration(node)) {
-                emitTypeWithNewGetSymbolAccessibilityDiangostic(node.moduleReference, getImportEntityNameVisibilityError);
+                emitTypeWithNewGetSymbolAccessibilityDiagnostic(<EntityName>node.moduleReference, getImportEntityNameVisibilityError);
                 write(";");
             }
             else {
@@ -716,7 +716,7 @@ module ts {
                 write("type ");
                 writeTextOfNode(currentSourceFile, node.name);
                 write(" = ");
-                emitTypeWithNewGetSymbolAccessibilityDiangostic(node.type, getTypeAliasDeclarationVisibilityError);
+                emitTypeWithNewGetSymbolAccessibilityDiagnostic(node.type, getTypeAliasDeclarationVisibilityError);
                 write(";");
                 writeLine();
             }
@@ -780,7 +780,7 @@ module ts {
                         emitType(node.constraint);
                     }
                     else {
-                        emitTypeWithNewGetSymbolAccessibilityDiangostic(node.constraint, getTypeParameterConstraintVisibilityError);
+                        emitTypeWithNewGetSymbolAccessibilityDiagnostic(node.constraint, getTypeParameterConstraintVisibilityError);
                     }
                 }
 
@@ -845,8 +845,8 @@ module ts {
                 emitCommaList(typeReferences, emitTypeOfTypeReference);
             }
 
-            function emitTypeOfTypeReference(node: Node) {
-                emitTypeWithNewGetSymbolAccessibilityDiangostic(node, getHeritageClauseVisibilityError);
+            function emitTypeOfTypeReference(node: TypeReferenceNode) {
+                emitTypeWithNewGetSymbolAccessibilityDiagnostic(node, getHeritageClauseVisibilityError);
 
                 function getHeritageClauseVisibilityError(symbolAccesibilityResult: SymbolAccessiblityResult): SymbolAccessibilityDiagnostic {
                     var diagnosticMessage: DiagnosticMessage;
@@ -950,7 +950,7 @@ module ts {
                     emitTypeOfVariableDeclarationFromTypeLiteral(node);
                 }
                 else if (!(node.flags & NodeFlags.Private)) {
-                    writeTypeAtLocation(node, node.type, getVariableDeclarationTypeVisibilityError);
+                    writeTypeOfDeclaration(node, node.type, getVariableDeclarationTypeVisibilityError);
                 }
             }
 
@@ -996,7 +996,7 @@ module ts {
             }
         }
 
-        function emitTypeOfVariableDeclarationFromTypeLiteral(node: VariableDeclaration) {
+        function emitTypeOfVariableDeclarationFromTypeLiteral(node: VariableOrParameterDeclaration) {
             // if this is property of type literal, 
             // or is parameter of method/call/construct/index signature of type literal
             // emit only if type is specified
@@ -1044,17 +1044,17 @@ module ts {
                             accessorWithTypeAnnotation = anotherAccessor;
                         }
                     }
-                    writeTypeAtLocation(node, type, getAccessorDeclarationTypeVisibilityError);
+                    writeTypeOfDeclaration(node, type, getAccessorDeclarationTypeVisibilityError);
                 }
                 write(";");
                 writeLine();
             }
 
-            function getTypeAnnotationFromAccessor(accessor: AccessorDeclaration): TypeNode {
+            function getTypeAnnotationFromAccessor(accessor: AccessorDeclaration): TypeNode | StringLiteralExpression {
                 if (accessor) {
-                    return accessor.kind === SyntaxKind.GetAccessor ?
-                        accessor.type : // Getter - return type
-                        accessor.parameters[0].type; // Setter parameter type
+                    return accessor.kind === SyntaxKind.GetAccessor
+                        ? accessor.type // Getter - return type
+                        : accessor.parameters[0].type; // Setter parameter type
                 }
             }
 
@@ -1267,7 +1267,7 @@ module ts {
                 emitTypeOfVariableDeclarationFromTypeLiteral(node);
             }
             else if (!(node.parent.flags & NodeFlags.Private)) {
-                writeTypeAtLocation(node, node.type, getParameterDeclarationTypeVisibilityError);
+                writeTypeOfDeclaration(node, node.type, getParameterDeclarationTypeVisibilityError);
             }
 
             function getParameterDeclarationTypeVisibilityError(symbolAccesibilityResult: SymbolAccessiblityResult): SymbolAccessibilityDiagnostic {

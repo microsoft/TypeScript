@@ -1666,7 +1666,7 @@ module ts {
             return classType.typeParameters ? createTypeReference(<GenericType>classType, map(classType.typeParameters, _ => anyType)) : classType;
         }
 
-        function getTypeOfVariableOrPropertyDeclaration(declaration: VariableDeclaration | PropertyDeclaration): Type {
+        function getTypeOfVariableOrParameterOrPropertyDeclaration(declaration: VariableOrParameterOrPropertyDeclaration): Type {
             // A variable declared in a for..in statement is always of type any
             if (declaration.parent.kind === SyntaxKind.ForInStatement) {
                 return anyType;
@@ -1758,7 +1758,7 @@ module ts {
                 }
                 // Handle variable, parameter or property
                 links.type = resolvingType;
-                var type = getTypeOfVariableOrPropertyDeclaration(<VariableDeclaration>declaration);
+                var type = getTypeOfVariableOrParameterOrPropertyDeclaration(<VariableDeclaration>declaration);
                 if (links.type === resolvingType) {
                     links.type = type;
                 }
@@ -1775,7 +1775,7 @@ module ts {
             return links.type;
         }
 
-        function getSetAccessorTypeAnnotationNode(accessor: AccessorDeclaration): TypeNode {
+        function getSetAccessorTypeAnnotationNode(accessor: AccessorDeclaration): TypeNode | LiteralExpression {
             return accessor && accessor.parameters.length > 0 && accessor.parameters[0].type;
         }
 
@@ -3018,14 +3018,17 @@ module ts {
             return links.resolvedType;
         }
 
-        function getStringLiteralType(node: StringLiteralTypeNode): StringLiteralType {
-            if (hasProperty(stringLiteralTypes, node.text)) return stringLiteralTypes[node.text];
+        function getStringLiteralType(node: LiteralExpression): StringLiteralType {
+            if (hasProperty(stringLiteralTypes, node.text)) {
+                return stringLiteralTypes[node.text];
+            }
+
             var type = stringLiteralTypes[node.text] = <StringLiteralType>createType(TypeFlags.StringLiteral);
             type.text = getTextOfNode(node);
             return type;
         }
 
-        function getTypeFromStringLiteral(node: StringLiteralTypeNode): Type {
+        function getTypeFromStringLiteral(node: LiteralExpression): Type {
             var links = getNodeLinks(node);
             if (!links.resolvedType) {
                 links.resolvedType = getStringLiteralType(node);
@@ -3033,7 +3036,7 @@ module ts {
             return links.resolvedType;
         }
 
-        function getTypeFromTypeNode(node: TypeNode): Type {
+        function getTypeFromTypeNode(node: TypeNode | LiteralExpression): Type {
             switch (node.kind) {
                 case SyntaxKind.AnyKeyword:
                     return anyType;
@@ -3046,7 +3049,7 @@ module ts {
                 case SyntaxKind.VoidKeyword:
                     return voidType;
                 case SyntaxKind.StringLiteral:
-                    return getTypeFromStringLiteral(<StringLiteralTypeNode>node);
+                    return getTypeFromStringLiteral(<LiteralExpression>node);
                 case SyntaxKind.TypeReference:
                     return getTypeFromTypeReferenceNode(<TypeReferenceNode>node);
                 case SyntaxKind.TypeQuery:
@@ -4771,13 +4774,13 @@ module ts {
         // typed function expression, the contextual type of an initializer expression is the contextual type of the
         // parameter.
         function getContextualTypeForInitializerExpression(node: Expression): Type {
-            var declaration = <VariableDeclaration>node.parent;
+            var declaration = <VariableOrParameterDeclaration>node.parent;
             if (node === declaration.initializer) {
                 if (declaration.type) {
                     return getTypeFromTypeNode(declaration.type);
                 }
                 if (declaration.kind === SyntaxKind.Parameter) {
-                    return getContextuallyTypedParameterType(declaration);
+                    return getContextuallyTypedParameterType(<ParameterDeclaration>declaration);
                 }
             }
             return undefined;
@@ -6661,7 +6664,7 @@ module ts {
         }
 
         function checkParameter(parameterDeclaration: ParameterDeclaration) {
-            checkVariableDeclaration(parameterDeclaration);
+            checkVariableOrParameterDeclaration(parameterDeclaration);
 
             if (fullTypeCheck) {
                 checkCollisionWithIndexVariableInGeneratedCode(parameterDeclaration, parameterDeclaration.name);
@@ -6784,7 +6787,7 @@ module ts {
 
         function checkPropertyDeclaration(node: PropertyDeclaration) {
             if (fullTypeCheck) {
-                checkVariableOrPropertyInFullTypeCheck(node);
+                checkVariableOrParameterOrPropertyInFullTypeCheck(node);
             }
         }
 
@@ -7521,7 +7524,7 @@ module ts {
             }
         }
 
-        function checkCollisionWithConstDeclarations(node: VariableDeclaration) {
+        function checkCollisionWithConstDeclarations(node: VariableOrParameterDeclaration) {
             // Variable declarations are hoisted to the top of their function scope. They can shadow
             // block scoped declarations, which bind tighter. this will not be flagged as duplicate definition
             // by the binder as the declaration scope is different.
@@ -7553,7 +7556,7 @@ module ts {
             }
         }
 
-        function checkVariableOrPropertyInFullTypeCheck(node: VariableDeclaration | PropertyDeclaration) {
+        function checkVariableOrParameterOrPropertyInFullTypeCheck(node: VariableOrParameterOrPropertyDeclaration) {
             Debug.assert(fullTypeCheck);
             checkSourceElement(node.type);
 
@@ -7565,7 +7568,7 @@ module ts {
             var symbol = getSymbolOfNode(node);
             var type: Type;
             if (symbol.valueDeclaration !== node) {
-                type = getTypeOfVariableOrPropertyDeclaration(node);
+                type = getTypeOfVariableOrParameterOrPropertyDeclaration(node);
             }
             else {
                 type = getTypeOfVariableOrParameterOrProperty(symbol);
@@ -7579,9 +7582,9 @@ module ts {
             return type;
         }
 
-        function checkVariableDeclaration(node: VariableDeclaration) {
+        function checkVariableOrParameterDeclaration(node: VariableOrParameterDeclaration) {
             if (fullTypeCheck) {
-                var type = checkVariableOrPropertyInFullTypeCheck(node);
+                var type = checkVariableOrParameterOrPropertyInFullTypeCheck(node);
                 checkExportsOnMergedDeclarations(node);
                 if (node.initializer) {
                     checkCollisionWithConstDeclarations(node);
@@ -7604,7 +7607,7 @@ module ts {
         }
 
         function checkVariableStatement(node: VariableStatement) {
-            forEach(node.declarations, checkVariableDeclaration);
+            forEach(node.declarations, checkVariableOrParameterDeclaration);
         }
 
         function checkExpressionStatement(node: ExpressionStatement) {
@@ -7628,7 +7631,7 @@ module ts {
         }
 
         function checkForStatement(node: ForStatement) {
-            if (node.declarations) forEach(node.declarations, checkVariableDeclaration);
+            if (node.declarations) forEach(node.declarations, checkVariableOrParameterDeclaration);
             if (node.initializer) checkExpression(node.initializer);
             if (node.condition) checkExpression(node.condition);
             if (node.iterator) checkExpression(node.iterator);
@@ -7645,7 +7648,7 @@ module ts {
             if (node.declarations) {
                 if (node.declarations.length >= 1) {
                     var decl = node.declarations[0];
-                    checkVariableDeclaration(decl);
+                    checkVariableOrParameterDeclaration(decl);
                     if (decl.type) {
                         error(decl, Diagnostics.The_left_hand_side_of_a_for_in_statement_cannot_use_a_type_annotation);
                     }
@@ -8847,7 +8850,7 @@ module ts {
                             return node === (<TypeAssertion>parent).type;
                         case SyntaxKind.CallExpression:
                         case SyntaxKind.NewExpression:
-                            return (<CallExpression>parent).typeArguments && (<CallExpression>parent).typeArguments.indexOf(node) >= 0;
+                            return (<CallExpression>parent).typeArguments && indexOf((<CallExpression>parent).typeArguments, node) >= 0;
                         case SyntaxKind.TaggedTemplateExpression:
                             // TODO (drosen): TaggedTemplateExpressions may eventually support type arguments.
                             return false;
@@ -9251,12 +9254,12 @@ module ts {
             return undefined;
         }
 
-        function writeTypeAtLocation(location: Node, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter) {
+        function writeTypeOfDeclaration(declaration: AccessorDeclaration | VariableOrParameterDeclaration, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter) {
             // Get type of the symbol if this is the valid symbol otherwise get type at location
-            var symbol = getSymbolOfNode(location);
+            var symbol = getSymbolOfNode(declaration);
             var type = symbol && !(symbol.flags & (SymbolFlags.TypeLiteral | SymbolFlags.CallSignature | SymbolFlags.ConstructSignature))
                 ? getTypeOfSymbol(symbol)
-                : getTypeFromTypeNode(location);
+                : unknownType;
 
             getSymbolDisplayBuilder().buildTypeDisplay(type, writer, enclosingDeclaration, flags);
         }
@@ -9280,7 +9283,7 @@ module ts {
                 isEmitBlocked,
                 isDeclarationVisible,
                 isImplementationOfOverload,
-                writeTypeAtLocation,
+                writeTypeOfDeclaration,
                 writeReturnTypeOfSignatureDeclaration,
                 isSymbolAccessible,
                 isEntityNameVisible,

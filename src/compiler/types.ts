@@ -368,16 +368,23 @@ module ts {
         initializer?: Expression;
     }
 
+    export interface ParameterDeclaration extends Declaration {
+        name: Identifier;
+        type?: TypeNode | StringLiteralExpression;
+        initializer?: Expression;
+    }
+
     export interface PropertyDeclaration extends Declaration, ClassElement {
         type?: TypeNode;
         initializer?: Expression;
     }
 
+    export type VariableOrParameterDeclaration = VariableDeclaration | ParameterDeclaration;
+    export type VariableOrParameterOrPropertyDeclaration = VariableOrParameterDeclaration | PropertyDeclaration;
+
     export interface ShortHandPropertyDeclaration extends Declaration {
         name: Identifier;
     }
-
-    export interface ParameterDeclaration extends VariableDeclaration { }
 
     /**
      * Several node kinds share function-like features such as a signature,
@@ -415,7 +422,13 @@ module ts {
         _indexSignatureDeclarationBrand: any;
     }
 
-    export interface TypeNode extends Node { }
+    export interface TypeNode extends Node {
+        _typeNodeBrand: any;
+    }
+
+    export interface FunctionOrConstructorTypeNode extends TypeNode, SignatureDeclaration {
+        _functionOrConstructorTypeNodeBrand: any;
+    }
 
     export interface TypeReferenceNode extends TypeNode {
         typeName: EntityName;
@@ -445,10 +458,6 @@ module ts {
 
     export interface ParenthesizedTypeNode extends TypeNode {
         type: TypeNode;
-    }
-
-    export interface StringLiteralTypeNode extends TypeNode {
-        text: string;
     }
 
     // Note: 'brands' in our syntax nodes serve to give us a small amount of nominal typing.  
@@ -533,6 +542,10 @@ module ts {
     export interface LiteralExpression extends PrimaryExpression {
         text: string;
         isUnterminated?: boolean;
+    }
+
+    export interface StringLiteralExpression extends LiteralExpression {
+        _stringLiteralExpressionBrand: any;
     }
 
     export interface TemplateExpression extends PrimaryExpression {
@@ -963,7 +976,7 @@ module ts {
         hasSemanticErrors(): boolean;
         isDeclarationVisible(node: Declaration): boolean;
         isImplementationOfOverload(node: FunctionLikeDeclaration): boolean;
-        writeTypeAtLocation(location: Node, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter): void;
+        writeTypeOfDeclaration(declaration: AccessorDeclaration | VariableOrParameterDeclaration, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter): void;
         writeReturnTypeOfSignatureDeclaration(signatureDeclaration: SignatureDeclaration, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter): void;
         isSymbolAccessible(symbol: Symbol, enclosingDeclaration: Node, meaning: SymbolFlags): SymbolAccessiblityResult;
         isEntityNameVisible(entityName: EntityName, enclosingDeclaration: Node): SymbolVisibilityResult;
