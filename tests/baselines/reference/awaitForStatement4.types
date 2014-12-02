@@ -1,0 +1,54 @@
+=== tests/cases/conformance/async/downlevel/awaitForStatement/awaitForStatement4.ts ===
+declare class Promise<T> {
+>Promise : Promise<T>
+>T : T
+
+    constructor(init: (resolve: (value?: T | IPromise<T>) => void, reject: (reason?: any) => void) => void);
+>init : (resolve: (value?: T | IPromise<T>) => void, reject: (reason?: any) => void) => void
+>resolve : (value?: T | IPromise<T>) => void
+>value : T | IPromise<T>
+>T : T
+>IPromise : IPromise<T>
+>T : T
+>reject : (reason?: any) => void
+>reason : any
+
+    then<TResult>(onfulfilled?: (value: T) => TResult | IPromise<TResult>, onrejected?: (reason: any) => TResult | IPromise<TResult>): Promise<TResult>;
+>then : <TResult>(onfulfilled?: (value: T) => TResult | IPromise<TResult>, onrejected?: (reason: any) => TResult | IPromise<TResult>) => Promise<TResult>
+>TResult : TResult
+>onfulfilled : (value: T) => TResult | IPromise<TResult>
+>value : T
+>T : T
+>TResult : TResult
+>IPromise : IPromise<T>
+>TResult : TResult
+>onrejected : (reason: any) => TResult | IPromise<TResult>
+>reason : any
+>TResult : TResult
+>IPromise : IPromise<T>
+>TResult : TResult
+>Promise : Promise<T>
+>TResult : TResult
+}
+declare var p: Promise<number>;
+>p : Promise<number>
+>Promise : Promise<T>
+
+async function func(): Promise<void> {
+>func : () => Promise<void>
+>Promise : Promise<T>
+
+    "before";
+    for (var i = 0; i < await p; i++) {
+>i : number
+>i < await p : boolean
+>i : number
+>await p : number
+>p : Promise<number>
+>i++ : number
+>i : number
+
+        "body";
+    }
+    "after";
+}

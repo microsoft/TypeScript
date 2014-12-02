@@ -1,0 +1,84 @@
+=== tests/cases/conformance/async/downlevel/awaitNewExpression/awaitNewExpression4.ts ===
+declare class Promise<T> {
+>Promise : Promise<T>
+>T : T
+
+    constructor(init: (resolve: (value?: T | IPromise<T>) => void, reject: (reason?: any) => void) => void);
+>init : (resolve: (value?: T | IPromise<T>) => void, reject: (reason?: any) => void) => void
+>resolve : (value?: T | IPromise<T>) => void
+>value : T | IPromise<T>
+>T : T
+>IPromise : IPromise<T>
+>T : T
+>reject : (reason?: any) => void
+>reason : any
+
+    then<TResult>(onfulfilled?: (value: T) => TResult | IPromise<TResult>, onrejected?: (reason: any) => TResult | IPromise<TResult>): Promise<TResult>;
+>then : <TResult>(onfulfilled?: (value: T) => TResult | IPromise<TResult>, onrejected?: (reason: any) => TResult | IPromise<TResult>) => Promise<TResult>
+>TResult : TResult
+>onfulfilled : (value: T) => TResult | IPromise<TResult>
+>value : T
+>T : T
+>TResult : TResult
+>IPromise : IPromise<T>
+>TResult : TResult
+>onrejected : (reason: any) => TResult | IPromise<TResult>
+>reason : any
+>TResult : TResult
+>IPromise : IPromise<T>
+>TResult : TResult
+>Promise : Promise<T>
+>TResult : TResult
+}
+declare var a: boolean;
+>a : boolean
+
+declare var p: Promise<boolean>;
+>p : Promise<boolean>
+>Promise : Promise<T>
+
+declare var fn: { new(arg0: boolean, arg1: boolean, arg2: boolean): void; };
+>fn : new (arg0: boolean, arg1: boolean, arg2: boolean) => void
+>arg0 : boolean
+>arg1 : boolean
+>arg2 : boolean
+
+declare var o: { fn: { new (arg0: boolean, arg1: boolean, arg2: boolean): void; }; };
+>o : { fn: new (arg0: boolean, arg1: boolean, arg2: boolean) => void; }
+>fn : new (arg0: boolean, arg1: boolean, arg2: boolean) => void
+>arg0 : boolean
+>arg1 : boolean
+>arg2 : boolean
+
+declare var pfn: Promise<{ new(arg0: boolean, arg1: boolean, arg2: boolean): void; }>;
+>pfn : Promise<new (arg0: boolean, arg1: boolean, arg2: boolean) => void>
+>Promise : Promise<T>
+>arg0 : boolean
+>arg1 : boolean
+>arg2 : boolean
+
+declare var po: Promise<{ fn: { new (arg0: boolean, arg1: boolean, arg2: boolean): void; }; }>;
+>po : Promise<{ fn: new (arg0: boolean, arg1: boolean, arg2: boolean) => void; }>
+>Promise : Promise<T>
+>fn : new (arg0: boolean, arg1: boolean, arg2: boolean) => void
+>arg0 : boolean
+>arg1 : boolean
+>arg2 : boolean
+
+async function func(): Promise<void> {
+>func : () => Promise<void>
+>Promise : Promise<T>
+
+    "before";
+    var b = new (await pfn)(a, a, a);
+>b : void
+>new (await pfn)(a, a, a) : void
+>(await pfn) : new (arg0: boolean, arg1: boolean, arg2: boolean) => void
+>await pfn : new (arg0: boolean, arg1: boolean, arg2: boolean) => void
+>pfn : Promise<new (arg0: boolean, arg1: boolean, arg2: boolean) => void>
+>a : boolean
+>a : boolean
+>a : boolean
+
+    "after";
+}
