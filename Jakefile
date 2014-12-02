@@ -572,6 +572,9 @@ task('tsc-instrumented', [loggedIOJsPath, instrumenterJsPath, tscFile], function
     ex.run();
 }, { async: true });
 
+desc("** use at your own risk, not supported ** Tasks & extensions by the community.");
+task('---------- community ----------', function() {
+});
 
 var tscPath = path.join(__dirname, tscFile)
 var libPath = path.join(path.dirname(tscPath), 'lib.d.ts')
