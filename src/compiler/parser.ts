@@ -3209,8 +3209,8 @@ module ts {
         }
 
         // STATEMENTS
-        function parseBlock(ignoreMissingOpenBrace: boolean, checkForStrictMode: boolean): Block {
-            var node = <Block>createNode(SyntaxKind.Block);
+        function parseBlock(kind: SyntaxKind, ignoreMissingOpenBrace: boolean, checkForStrictMode: boolean): Block {
+            var node = <Block>createNode(kind);
             if (parseExpected(SyntaxKind.OpenBraceToken) || ignoreMissingOpenBrace) {
                 node.statements = parseList(ParsingContext.BlockStatements, checkForStrictMode, parseStatement);
                 parseExpected(SyntaxKind.CloseBraceToken);
@@ -3225,8 +3225,7 @@ module ts {
             var savedYieldContext = inYieldContext();
             setYieldContext(allowYield);
 
-            var block = parseBlock(ignoreMissingOpenBrace, /*checkForStrictMode*/ true);
-            block.kind = SyntaxKind.FunctionBlock;
+            var block = parseBlock(SyntaxKind.FunctionBlock, ignoreMissingOpenBrace, /*checkForStrictMode*/ true);
 
             setYieldContext(savedYieldContext);
 
@@ -3436,8 +3435,9 @@ module ts {
         function parseTokenAndBlock(token: SyntaxKind): Block {
             var pos = getNodePos();
             parseExpected(token);
-            var result = parseBlock(/* ignoreMissingOpenBrace */ false, /*checkForStrictMode*/ false);
-            result.kind = token === SyntaxKind.TryKeyword ? SyntaxKind.TryBlock : SyntaxKind.FinallyBlock;
+            var result = parseBlock(
+                token === SyntaxKind.TryKeyword ? SyntaxKind.TryBlock : SyntaxKind.FinallyBlock,
+                /* ignoreMissingOpenBrace */ false, /*checkForStrictMode*/ false);
             result.pos = pos;
             return result;
         }
@@ -3449,8 +3449,7 @@ module ts {
             var variable = parseIdentifier();
             var typeAnnotation = parseTypeAnnotation();
             parseExpected(SyntaxKind.CloseParenToken);
-            var result = <CatchBlock>parseBlock(/* ignoreMissingOpenBrace */ false, /*checkForStrictMode*/ false);
-            result.kind = SyntaxKind.CatchBlock;
+            var result = <CatchBlock>parseBlock(SyntaxKind.CatchBlock, /* ignoreMissingOpenBrace */ false, /*checkForStrictMode*/ false);
             result.pos = pos;
             result.variable = variable;
             result.type = typeAnnotation;
@@ -3549,7 +3548,7 @@ module ts {
         function parseStatement(): Statement {
             switch (token) {
                 case SyntaxKind.OpenBraceToken:
-                    return parseBlock(/* ignoreMissingOpenBrace */ false, /*checkForStrictMode*/ false);
+                    return parseBlock(SyntaxKind.Block, /* ignoreMissingOpenBrace */ false, /*checkForStrictMode*/ false);
                 case SyntaxKind.VarKeyword:
                 case SyntaxKind.LetKeyword:
                 case SyntaxKind.ConstKeyword:
