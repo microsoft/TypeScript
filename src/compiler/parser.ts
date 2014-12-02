@@ -779,7 +779,7 @@ module ts {
         TypeMembers,             // Members in interface or type literal
         ClassMembers,            // Members in class declaration
         EnumMembers,             // Members in enum declaration
-        BaseTypeReferences,      // Type references in extends or implements clause
+        TypeReferences,          // Type references in extends or implements clause
         VariableDeclarations,    // Variable declarations in variable statement
         ArgumentExpressions,     // Expressions in argument list
         ObjectLiteralMembers,    // Members in object literal
@@ -808,7 +808,7 @@ module ts {
             case ParsingContext.TypeMembers:            return Diagnostics.Property_or_signature_expected;
             case ParsingContext.ClassMembers:           return Diagnostics.Unexpected_token_A_constructor_method_accessor_or_property_was_expected;
             case ParsingContext.EnumMembers:            return Diagnostics.Enum_member_expected;
-            case ParsingContext.BaseTypeReferences:     return Diagnostics.Type_reference_expected;
+            case ParsingContext.TypeReferences:     return Diagnostics.Type_reference_expected;
             case ParsingContext.VariableDeclarations:   return Diagnostics.Variable_declaration_expected;
             case ParsingContext.ArgumentExpressions:    return Diagnostics.Argument_expression_expected;
             case ParsingContext.ObjectLiteralMembers:   return Diagnostics.Property_assignment_expected;
@@ -817,6 +817,7 @@ module ts {
             case ParsingContext.TypeParameters:         return Diagnostics.Type_parameter_declaration_expected;
             case ParsingContext.TypeArguments:          return Diagnostics.Type_argument_expected;
             case ParsingContext.TupleElementTypes:      return Diagnostics.Type_expected;
+            case ParsingContext.HeritageClauses:        return Diagnostics.Unexpected_token_expected;
         }
     };
 
@@ -1416,7 +1417,7 @@ module ts {
                     return token === SyntaxKind.OpenBracketToken || isLiteralPropertyName();
                 case ParsingContext.ObjectLiteralMembers:
                     return token === SyntaxKind.OpenBracketToken || token === SyntaxKind.AsteriskToken || isLiteralPropertyName();
-                case ParsingContext.BaseTypeReferences:
+                case ParsingContext.TypeReferences:
                     return isIdentifier() && ((token !== SyntaxKind.ExtendsKeyword && token !== SyntaxKind.ImplementsKeyword) || !lookAhead(() => (nextToken(), isIdentifier())));
                 case ParsingContext.VariableDeclarations:
                 case ParsingContext.TypeParameters:
@@ -1455,7 +1456,7 @@ module ts {
                     return token === SyntaxKind.CloseBraceToken;
                 case ParsingContext.SwitchClauseStatements:
                     return token === SyntaxKind.CloseBraceToken || token === SyntaxKind.CaseKeyword || token === SyntaxKind.DefaultKeyword;
-                case ParsingContext.BaseTypeReferences:
+                case ParsingContext.TypeReferences:
                     return token === SyntaxKind.OpenBraceToken || token === SyntaxKind.ExtendsKeyword || token === SyntaxKind.ImplementsKeyword;
                 case ParsingContext.VariableDeclarations:
                     return isVariableDeclaratorListTerminator();
@@ -3860,7 +3861,7 @@ module ts {
                 var node = <HeritageClause>createNode(SyntaxKind.HeritageClause);
                 node.token = token;
                 nextToken();
-                node.types = parseDelimitedList(ParsingContext.BaseTypeReferences, parseTypeReference);
+                node.types = parseDelimitedList(ParsingContext.TypeReferences, parseTypeReference);
                 return finishNode(node);
             }
 

@@ -539,6 +539,10 @@
         "category": "Error",
         "code": 1176
     },
+    "Unexpected token. '{' expected.": {
+        "category": "Error",
+        "code": 1177
+    },
 
     "Duplicate identifier '{0}'.": {
         "category": "Error",
