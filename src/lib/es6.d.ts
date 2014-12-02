@@ -656,6 +656,7 @@ interface Map<K, V> {
 interface MapConstructor {
     new <K, V>(): Map<K, V>;
     new <K, V>(iterable: Iterable<[K, V]>): Map<K, V>;
+    prototype: Map<any, any>;
 }
 declare var Map: MapConstructor;
 
@@ -671,6 +672,7 @@ interface WeakMap<K, V> {
 interface WeakMapConstructor {
     new <K, V>(): WeakMap<K, V>;
     new <K, V>(iterable: Iterable<[K, V]>): WeakMap<K, V>;
+    prototype: WeakMap<any, any>;
 }
 declare var WeakMap: WeakMapConstructor;
 
@@ -691,6 +693,7 @@ interface Set<T> {
 interface SetConstructor {
     new <T>(): Set<T>;
     new <T>(iterable: Iterable<T>): Set<T>;
+    prototype: Set<any>;
 }
 declare var Set: SetConstructor;
 
@@ -705,6 +708,7 @@ interface WeakSet<T> {
 interface WeakSetConstructor {
     new <T>(): WeakSet<T>;
     new <T>(iterable: Iterable<T>): WeakSet<T>;
+    prototype: WeakSet<any>;
 }
 declare var WeakSet: WeakSetConstructor;
 
