@@ -776,7 +776,7 @@ module ts {
         popLocation(): void;
         setLocation(location: TextRange): void;
 
-        cacheExpression(expression: Expression): Expression;
+        cacheExpression(expression: Expression): GeneratedNode;
 
         createInlineBreak(label: Label): Statement;
         createInlineReturn(expression: Expression): Statement;
@@ -1303,6 +1303,7 @@ module ts {
         noImplicitAny?: boolean;
         noLib?: boolean;
         noLibCheck?: boolean;
+        noHelpers?: boolean;
         noResolve?: boolean;
         out?: string;
         outDir?: string;

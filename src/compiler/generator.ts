@@ -394,7 +394,7 @@ module ts {
             }
         }
 
-        function cacheExpression(node: Expression): Expression {
+        function cacheExpression(node: Expression): GeneratedNode {
             var local = declareLocal();
             emit(OpCode.Statement, createGeneratedNode(`\${local} = \${node};`, { local, node }));
             return local;

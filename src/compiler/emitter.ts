@@ -2838,11 +2838,6 @@ module ts {
                     emitLeadingComments(node);
                 }
 
-                if (node.flags & NodeFlags.Async || (node.asteriskToken && compilerOptions.target <= ScriptTarget.ES5)) {
-                    // NOTE: rewriteFunction supports downlevel generators, but is not currently enabled.
-                    node = rewriteFunction(node, compilerOptions, resolver);                    
-                }
-
                 write("function ");
                 if (node.kind === SyntaxKind.FunctionDeclaration || (node.kind === SyntaxKind.FunctionExpression && node.name)) {
                     emit(node.name);
@@ -2873,6 +2868,11 @@ module ts {
             }
 
             function emitSignatureAndBody(node: FunctionLikeDeclaration) {
+                if (node.flags & NodeFlags.Async || (node.asteriskToken && compilerOptions.target <= ScriptTarget.ES5)) {
+                    // NOTE: rewriteFunction supports downlevel generators, but is not currently enabled.
+                    node = rewriteFunction(node, compilerOptions, resolver);
+                }
+
                 emitSignatureParameters(node);
                 write(" {");
                 scopeEmitStart(node);
@@ -3481,82 +3481,83 @@ module ts {
                 emitDetachedComments(node);
                 // emit prologue directives prior to __extends
                 var startIndex = emitDirectivePrologues(node.statements, /*startWithNewLine*/ false);
-                if (!extendsEmitted && resolver.getNodeCheckFlags(node) & NodeCheckFlags.EmitExtends) {
-                    writeLine();
-                    write("var __extends = this.__extends || function (d, b) {");
-                    increaseIndent();
-                    writeLine();
-                    write("for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];");
-                    writeLine();
-                    write("function __() { this.constructor = d; }");
-                    writeLine();
-                    write("__.prototype = b.prototype;");
-                    writeLine();
-                    write("d.prototype = new __();");
-                    decreaseIndent();
-                    writeLine();
-                    write("};");
-                    extendsEmitted = true;
-                }
-                if (!awaiterEmitted && resolver.getNodeCheckFlags(node) & NodeCheckFlags.EmitAwaiter) {
-                    writeGeneratedContent(`
-                    var __awaiter = __awaiter || function (g) {
-	                    function n(r, t) {
-		                    while (true) {
-			                    if (r.done) return r.value;
-			                    if (r.value && typeof (t = r.value.then) === "function")
-				                    return t.call(r.value, function(v) { return n(g.next(v)) }, function(v) { return n(g["throw"](v)) });
-			                    r = g.next(r.value);
-		                    }
-	                    }
-	                    return n(g.next());
-                    };`);
-                    awaiterEmitted = true;
-                }
-                if (!generatorEmitted && resolver.getNodeCheckFlags(node) & NodeCheckFlags.EmitGenerator) {
-                    writeGeneratedContent(`
-                    var __generator = __generator || function (m, r) {
-                        var d, i = [], f, g, s = { label: 0 };
-                        function n(c) {
-                            if (f) throw new TypeError("Generator is already executing.");
-                            switch (d && c[0]) {
-                                case "next": return { value: undefined, done: true };
-                                case "return": return { value: c[1], done: true };
-                                case "throw": throw c[1];
-                            }
-                            i.push(c);
-                            while (1) {
-                                switch ((c = i.pop())[0]) {
-                                case "next": s.sent = c[1]; break;
-                                case "endfinally": continue;
-                                case "yield": s.label++; return { value: c[1], done: false };
-                                default:
-                                    switch (!(g = s.trys && s.trys[s.trys.length - 1]) && c[0]) {
-                                        case "throw": i.length = 0; d = 1; throw c[1];
-                                        case "return": i.length = 0; d = 1; return { value: c[1], done: !0 };
+                if (!compilerOptions.noHelpers) {
+                    if (!extendsEmitted && resolver.getNodeCheckFlags(node) & NodeCheckFlags.EmitExtends) {
+                        writeLine();
+                        write("var __extends = this.__extends || function (d, b) {");
+                        increaseIndent();
+                        writeLine();
+                        write("for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];");
+                        writeLine();
+                        write("function __() { this.constructor = d; }");
+                        writeLine();
+                        write("__.prototype = b.prototype;");
+                        writeLine();
+                        write("d.prototype = new __();");
+                        decreaseIndent();
+                        writeLine();
+                        write("};");
+                        extendsEmitted = true;
+                    }
+                    if (!awaiterEmitted && resolver.getNodeCheckFlags(node) & NodeCheckFlags.EmitAwaiter) {
+                        writeGeneratedContent(`
+                        var __awaiter = __awaiter || function (g) {
+	                        function n(r, t) {
+		                        while (true) {
+			                        if (r.done) return r.value;
+			                        if (r.value && typeof (t = r.value.then) === "function")
+				                        return t.call(r.value, function(v) { return n(g.next(v)) }, function(v) { return n(g["throw"](v)) });
+			                        r = g.next(r.value);
+		                        }
+	                        }
+	                        return n(g.next());
+                        };`);
+                        awaiterEmitted = true;
+                    }
+                    if (!generatorEmitted && resolver.getNodeCheckFlags(node) & NodeCheckFlags.EmitGenerator) {
+                        writeGeneratedContent(`
+                            var __generator = __generator || function (m) {
+                                var d, i = [], f, g, s = { label: 0 };
+                                function n(c) {
+                                    if (f) throw new TypeError("Generator is already executing.");
+                                    switch (d && c[0]) {
+                                        case "next": return { value: undefined, done: true };
+                                        case "return": return { value: c[1], done: true };
+                                        case "throw": throw c[1];
                                     }
-                                    if (c[0] === "break" && (!g || (c[1] >= g[0] && c[1] < g[3]))) { s.label = c[1]; break; }
-                                    if (c[0] === "throw" && s.label < g[1]) { s.error = c[1]; s.label = g[1]; break; }
-                                    s.trys.pop(), i.push(c);
-                                    if (s.label < g[2]) { s.label = g[2]; break; }
-                                    continue;
+                                    while (true) {
+                                        f = false;
+                                        switch (!(g = s.trys && s.trys[s.trys.length - 1]) && c[0]) {
+                                            case "throw": i.length = 0; d = true; throw c[1];
+                                            case "return": i.length = 0; d = true; return { value: c[1], done: true };
+                                        }
+                                        switch (c[0]) {
+                                            case "yield": s.label++; return { value: c[1], done: false };
+                                            case "next": s.sent = c[1]; break;
+                                            case "endfinally": c = i.pop(); continue;
+                                            default:
+                                                if (c[0] === "break" && (!g || (c[1] >= g[0] && c[1] < g[3]))) { s.label = c[1]; break; }
+                                                if (c[0] === "throw" && s.label < g[1]) { s.error = c[1]; s.label = g[1]; break; }
+                                                s.trys.pop(), i.push(c);
+                                                if (s.label < g[2]) { s.label = g[2]; break; }
+                                                continue;
+                                        }
+                                        f = true;
+                                        try {
+                                            c = m(s);
+                                        } catch (e) {
+                                            c = ["throw", e];
+                                        }
+                                    }
                                 }
-                                f = true;
-                                try {
-                                    i.push(m(s));
-                                } catch (e) {
-                                    i.push(["throw", e]);
-                                } 
-                                f = false;
-                            }
-                        }
-                        return { 
-                            next: function(v) { return n(["next", v]); },
-                            "throw": function(v) { return n(["throw", v]); },
-                            "return": function(v) { return n(["return", v]); }
-                        };
-                    };`);
-                    generatorEmitted = true;
+                                return {
+                                    next: function (v) { return n(["next", v]); },
+                                    "throw": function (v) { return n(["throw", v]); },
+                                    "return": function (v) { return n(["return", v]); },
+                                };
+                            };`);
+                        generatorEmitted = true;
+                    }
                 }
                 if (isExternalModule(node)) {
                     if (compilerOptions.module === ModuleKind.AMD) {

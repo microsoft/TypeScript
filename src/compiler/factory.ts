@@ -510,7 +510,7 @@ module ts {
 
         export function createForInStatement(declarations: VariableDeclaration[], variable: Expression, expression: Expression, statement: Statement, location: TextRange, flags?: NodeFlags): ForInStatement {
             var node = beginNode<ForInStatement>(SyntaxKind.ForInStatement);
-            node.declarations = createNodeArray(declarations);
+            node.declarations = declarations && createNodeArray(declarations);
             node.variable = variable;
             node.expression = expression;
             node.statement = statement;

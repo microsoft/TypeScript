@@ -154,6 +154,8 @@ module ts {
         var globalRegExpType: ObjectType;
         var globalTemplateStringsArrayType: ObjectType;        
         var globalPromiseType: ObjectType;
+        var globalPromiseThenPropertyType: Type;
+        var globalPromiseOnFulfilledParameterType: Type;
         var globalPromiseConstructorType: ObjectType;
 
         var tupleTypes: Map<TupleType> = {};
@@ -3302,8 +3304,7 @@ module ts {
             relation: Map<boolean>,
             errorNode: Node,
             headMessage?: DiagnosticMessage,
-            containingMessageChain?: DiagnosticMessageChain,
-            awaitedTypes?: Type[]): boolean {
+            containingMessageChain?: DiagnosticMessageChain): boolean {
 
             var errorInfo: DiagnosticMessageChain;
             var sourceStack: ObjectType[];
@@ -3343,9 +3344,6 @@ module ts {
                 }
                 else {
                     if (source === target) return Ternary.True;
-                    if (target === awaitedType && awaitedTypes) {
-                        awaitedTypes.push(source);
-                    }
                     if (target.flags & TypeFlags.Any) return Ternary.True;
                     if (source === undefinedType) return Ternary.True;
                     if (source === nullType && target !== undefinedType) return Ternary.True;
@@ -3470,9 +3468,7 @@ module ts {
                 var id = source.id + "," + target.id;
                 var related = relation[id];
                 if (related !== undefined) {
-                    if (!awaitedTypes || (target !== globalPromiseType && target !== globalPromiseConstructorType)) {
-                        return related ? Ternary.True : Ternary.False;
-                    }
+                    return related ? Ternary.True : Ternary.False;
                 }
                 if (depth > 0) {
                     for (var i = 0; i < depth; i++) {
@@ -5087,6 +5083,7 @@ module ts {
                         prop.type = type;
                         prop.target = member;
                         member = prop;
+                        checkAwait(memberDecl);
                     }
                     else {
                         // TypeScript 1.0 spec (April 2014)
@@ -7259,7 +7256,7 @@ module ts {
          * @returns The awaited type
          */
         function getAwaitedType(type: Type, fallbackType?: Type): Type {
-            var seen: boolean[] = [];
+            var seen: boolean[] = [];            
 
             function getAwaitedTypeRecursive(type: Type, fallbackType: Type): Type {
                 // NOTE: This function needs an overhaul. We could introduce a `Thenable<T>` into lib.d.ts for 
@@ -7279,17 +7276,18 @@ module ts {
                 }
 
                 seen[type.id] = true;
-                var awaitedType: Type;
-                var awaitedTypes: Type[] = [];
-                if (checkTypeRelatedTo(type, globalPromiseType, assignableRelation, undefined, undefined, undefined, awaitedTypes)) {
-                    awaitedTypes = deduplicate(awaitedTypes);
-                    awaitedTypes = filter(awaitedTypes, awaitedType => !seen[awaitedType.id]);
-                    awaitedTypes = map(awaitedTypes, awaitedType => getAwaitedTypeRecursive(awaitedType, /*fallbackType*/ awaitedType));
-                    awaitedType = getUnionType(awaitedTypes);
+                if (checkTypeRelatedTo(type, globalPromiseType, assignableRelation, undefined)) {
+                    var thenProp = getPropertyOfType(type, "then");
+                    var thenType = getTypeOfSymbol(thenProp);
+                    var thenSignatures = getSignaturesOfType(thenType, SignatureKind.Call);
+                    var onFulfilledParameterType = getUnionType(map(thenSignatures, signature => getTypeAtPosition(getErasedSignature(signature), 0)));
+                    var onFulfilledParameterSignatures = getSignaturesOfType(onFulfilledParameterType, SignatureKind.Call);
+                    var awaitedType = getUnionType(map(onFulfilledParameterSignatures, signature => getTypeAtPosition(getErasedSignature(signature), 0)));
+                    if (seen[awaitedType.id]) return fallbackType;
                     if (links) {
                         links.awaitedType = awaitedType;
                     }
-                    return awaitedType;
+                    return getAwaitedTypeRecursive(awaitedType, /*fallbackType*/ awaitedType);
                 } else {
                     if (isTypeAssignableTo(type, thenableType)) {
                         error(null, ts.Diagnostics.Type_for_await_does_not_have_a_valid_callable_then_member);

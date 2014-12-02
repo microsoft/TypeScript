@@ -24,7 +24,6 @@ module ts {
     /** rewrites an async or generator function or method declaration */
     export function rewriteFunction(node: FunctionLikeDeclaration, compilerOptions: CompilerOptions, resolver: EmitResolver): FunctionLikeDeclaration {
         var builder: CodeGenerator;
-        var renames: Map<Identifier>;
         var isDownlevel = compilerOptions.target <= ScriptTarget.ES5;
         var isAsync = (node.flags & NodeFlags.Async) !== 0;
         var isGenerator = !!node.asteriskToken;
@@ -374,40 +373,13 @@ module ts {
                 if (isLogicalBinary(node)) {
                     return rewriteLogicalBinaryExpression(node);
                 } else if (isAssignment(node)) {
-                    return factory.updateBinaryExpression(node, visitAndCacheLeftHandOfAssignment(node.left), visit(node.right));
+                    return factory.updateBinaryExpression(node, visitOperandForAssignment(node.left), visit(node.right));
                 } else {
                     return factory.updateBinaryExpression(node, builder.cacheExpression(visit(node.left)), visit(node.right));
                 }
             } else {
                 return factory.updateBinaryExpression(node, visit(node.left), visit(node.right));
             }
-        }
-
-        function visitAndCacheLeftHandOfAssignment(node: Node): Node {
-            switch (node.kind) {
-                case SyntaxKind.IndexedAccess:
-                    return visitAndCacheIndexedAccess(<IndexedAccess>node);
-
-                case SyntaxKind.PropertyAccess:
-                    return visitAndCachePropertyAccess(<PropertyAccess>node);
-
-                default:
-                    return builder.cacheExpression(visit(node));
-            }
-        }
-
-        function visitAndCacheIndexedAccess(node: IndexedAccess): Node {
-            return factory.updateIndexedAccess(
-                node,
-                builder.cacheExpression(visit(node.object)),
-                builder.cacheExpression(visit(node.index)));
-        }
-
-        function visitAndCachePropertyAccess(node: PropertyAccess): Node {
-            return factory.updatePropertyAccess(
-                node,
-                builder.cacheExpression(visit(node.left)),
-                node.right);
         }
 
         function visitConditionalExpression(node: ConditionalExpression): Node {
@@ -424,7 +396,7 @@ module ts {
 
         function visitArrayLiteral(node: ArrayLiteral): Node {
             if (isDownlevel && hasAwaitOrYield(node)) {
-                return factory.updateArrayLiteral(node, visitList(node.elements, builder.cacheExpression));
+                return factory.updateArrayLiteral(node, visitList<Node>(node.elements, builder.cacheExpression));
             } else {
                 return factory.updateArrayLiteral(node, visitNodes(node.elements));
             }
@@ -462,16 +434,25 @@ module ts {
         }
 
         function visitCallExpression(node: CallExpression): Node {
-            if (isDownlevel) {
-                return factory.updateCallExpression(node, visit(node.func), visitList(node.arguments, builder.cacheExpression));
+            if (isDownlevel && hasAwaitOrYield(node)) {
+                var result = visitOperandForCall(node.func);
+                var arguments = visitList<Node>(node.arguments, builder.cacheExpression);
+                var target = result.target;
+                var thisArg = result.thisArg;
+                if (thisArg) {
+                    builder.setLocation(node);
+                    return builder.createGeneratedNode(`\${target}.call(\${thisArg}, \${arguments})`, { target, thisArg, arguments });
+                } else {
+                    return builder.createGeneratedNode(`\${target}(\${arguments})`, { target, arguments });
+                }
             } else {
                 return factory.updateCallExpression(node, visit(node.func), visitNodes(node.arguments));
             }
         }
 
         function visitNewExpression(node: NewExpression): Node {
-            if (isDownlevel) {
-                return factory.updateNewExpression(node, visit(node.func), visitList(node.arguments, builder.cacheExpression));
+            if (isDownlevel && hasAwaitOrYield(node)) {
+                return factory.updateNewExpression(node, builder.cacheExpression(visit(node.func)), visitList<Node>(node.arguments, builder.cacheExpression));
             } else {
                 return factory.updateNewExpression(node, visit(node.func), visitNodes(node.arguments));
             }
@@ -597,19 +578,31 @@ module ts {
             }
         }
 
-        function visitForOrForInStatementHead(declarations: NodeArray<VariableDeclaration>, initializer: Expression) {
+        function visitForOrForInStatementHead(declarations: NodeArray<VariableDeclaration>, initializer: Expression, kind: SyntaxKind) {
             var variable = initializer;
             if (isDownlevel) {
                 if (declarations) {
+                    initializer = undefined;
                     for (var i = 0; i < declarations.length; i++) {
                         var declaration = declarations[i];
                         var generated = rewriteVariableDeclaration(declaration);
                         if (generated) {
-                            builder.setLocation(declaration);
-                            builder.emit(OpCode.Statement, `\${generated};`, { generated });
+                            if (kind === SyntaxKind.ForStatement) {
+                                if (initializer) {
+                                    initializer = builder.createGeneratedNode(`\${initializer}, \${generated}`, { initializer, generated });
+                                } else {
+                                    initializer = generated;
+                                }
+                            } else {
+                                builder.setLocation(declaration);
+                                builder.emit(OpCode.Statement, `\${generated};`, { generated });
+                            }
                         }
 
-                        variable = declaration.name;
+                        if (kind === SyntaxKind.ForInStatement && !variable) {
+                            builder.setLocation(declaration);
+                            variable = builder.createGeneratedNode(declaration.name.text);
+                        }
                     }
 
                     declarations = undefined;
@@ -631,7 +624,7 @@ module ts {
                 return;
             } else {
                 pushScriptLoopBlock(node);
-                var head = visitForOrForInStatementHead(node.declarations, node.initializer);
+                var head = visitForOrForInStatementHead(node.declarations, node.initializer, node.kind);
                 node = factory.updateForStatement(node, head.declarations, head.initializer, visit(node.condition), visit(node.iterator), visit(node.statement));
                 popScriptLoopBlock();
                 return node;
@@ -644,7 +637,7 @@ module ts {
                 return;
             } else {
                 pushScriptLoopBlock(node);
-                var head = visitForOrForInStatementHead(node.declarations, node.variable);
+                var head = visitForOrForInStatementHead(node.declarations, node.variable, node.kind);
                 node = factory.updateForInStatement(node, head.declarations, head.variable, visit(node.expression), visit(node.statement));
                 popScriptLoopBlock();
                 return node;
@@ -779,6 +772,72 @@ module ts {
             return factory.updateFinallyBlock(node, visitNodes(node.statements, emitNode));
         }
 
+        function visitOperandForAssignment(node: Node): Node {
+            switch (node.kind) {
+                case SyntaxKind.IndexedAccess:
+                    return visitIndexedAccessForAssignment(<IndexedAccess>node);
+
+                case SyntaxKind.PropertyAccess:
+                    return visitPropertyAccessForAssignment(<PropertyAccess>node);
+
+                default:
+                    return visit(node);
+            }
+        }
+
+        function visitIndexedAccessForAssignment(node: IndexedAccess): Node {
+            return factory.updateIndexedAccess(
+                node,
+                builder.cacheExpression(visit(node.object)),
+                builder.cacheExpression(visit(node.index)));
+        }
+
+        function visitPropertyAccessForAssignment(node: PropertyAccess): Node {
+            return factory.updatePropertyAccess(
+                node,
+                builder.cacheExpression(visit(node.left)),
+                node.right);
+        }
+
+        function visitOperandForCall(node: Node): { target: GeneratedNode; thisArg?: GeneratedNode; } {
+            switch (node.kind) {
+                case SyntaxKind.IndexedAccess:
+                    return visitIndexedAccessForCall(<IndexedAccess>node);
+
+                case SyntaxKind.PropertyAccess:
+                    return visitPropertyAccessForCall(<PropertyAccess>node);
+
+                default:
+                    return { target: builder.cacheExpression(visit(node)) };
+            }
+        }
+
+        function visitIndexedAccessForCall(node: IndexedAccess): { target: GeneratedNode; thisArg?: GeneratedNode; } {
+            builder.setLocation(node.object);
+            var thisArg = builder.cacheExpression(visit(node.object));
+
+            builder.setLocation(node.index);
+            var target = builder.declareLocal();
+            var index = visit(node.index);
+
+            builder.setLocation(node);
+            builder.emit(OpCode.Statement, `\${target} = \${thisArg}[\${index}];`, { target, thisArg, index });
+            return { target, thisArg };
+        }
+
+        function visitPropertyAccessForCall(node: PropertyAccess): { target: GeneratedNode; thisArg?: GeneratedNode; } {
+            builder.setLocation(node.left);
+            var thisArg = builder.cacheExpression(visit(node.left));
+
+            builder.setLocation(node.right);
+            var target = builder.declareLocal();
+            var property = builder.createGeneratedNode(node.right.text);
+
+            builder.setLocation(node);
+            builder.emit(OpCode.Statement, `\${target} = \${thisArg}.\${property};`, { target, thisArg, property });
+            return { target, thisArg };
+        }
+
         function rewriteVariableDeclaration(node: VariableDeclaration): GeneratedNode {
             builder.setLocation(node);
             var local = builder.declareLocal(node.name.text);
@@ -799,7 +858,7 @@ module ts {
         }
 
         function rewriteAwaitExpressionUplevel(node: UnaryExpression): Expression {
-            return builder.createGeneratedNode(`(yield \${operand})`, { operand: node.operand });
+            return factory.createGeneratedNode(`(yield \${operand})`, { operand: node.operand }, node);
         }
 
         function rewriteLogicalBinaryExpression(node: BinaryExpression): Expression {
@@ -810,7 +869,7 @@ module ts {
             builder.emit(OpCode.Assign, resultLocal, visit(node.left));
             builder.emit(code, resumeLabel, resultLocal);
             builder.setLocation(node.right);
-            builder.emit(OpCode.Statement, resultLocal, visit(node.right));
+            builder.emit(OpCode.Assign, resultLocal, visit(node.right));
             builder.setLocation(node);
             builder.markLabel(resumeLabel);
             return resultLocal;
@@ -916,8 +975,12 @@ module ts {
             var conditionLabel = builder.defineLabel();
             var iteratorLabel = builder.defineLabel();
             var endLabel = builder.beginContinueBlock(iteratorLabel, getTarget(node));
-            var head = visitForOrForInStatementHead(node.declarations, node.initializer);
+            var head = visitForOrForInStatementHead(node.declarations, node.initializer, node.kind);
             builder.setLocation(node.declarations || node.initializer);
+            if (head.initializer) {
+                builder.emit(OpCode.Statement, `\${initializer};`, { initializer: head.initializer });
+            }
+
             builder.markLabel(conditionLabel);
             builder.setLocation(node.condition);
             builder.emit(OpCode.BrFalse, endLabel, visit(node.condition));
@@ -948,7 +1011,7 @@ module ts {
         ////}
 
         function rewriteForInStatement(node: ForInStatement): void {
-            var head = visitForOrForInStatementHead(node.declarations, node.variable);
+            var head = visitForOrForInStatementHead(node.declarations, node.variable, node.kind);
             var keysLocal = builder.declareLocal();
             var tempLocal = builder.declareLocal();
             var conditionLabel = builder.defineLabel();
@@ -1022,7 +1085,7 @@ module ts {
 
                     builder.setLocation(clause.expression);
                     var clauseLabel = clauseLabels[clauseLabelMap[i]];
-                    builder.emit(OpCode.BrTrue, clauseLabel, "${expression} == ${test}", {
+                    builder.emit(OpCode.BrTrue, clauseLabel, "${expression} === ${test}", {
                         expression: expression,
                         test: visit(clause.expression)
                     });
@@ -1185,27 +1248,17 @@ module ts {
             }
         }
 
-        function renameIdentifier(from: Identifier, to: Identifier): Identifier {
-            var previous = getProperty(renames, from.text);
-            renames[from.text] = to;
-            return previous;
-        }
-
-        function getRenamedIdentifier(node: Identifier): Identifier {
-            return getProperty(renames, node.text) || node;
-        }
-
         function rewriteAsyncAsGeneratorWorker(): FunctionLikeDeclaration {
             var promise = getPromiseConstructor(node);
 
             var statements: Statement[] = [];
-            visit(func.body, node => statements.push(node));
+            visit(node.body, node => statements.push(node));
 
             var body = factory.createGeneratedNode(`
                 return new \${promise}(__resolve => {
-                    __resolve(__awaiter(function *() {
+                    __resolve(__awaiter(function* () {
                         @{statements}
-                    }.call(this)));
+                    }()));
                 });
             `, { promise, statements }, node.body);
 
@@ -1219,8 +1272,6 @@ module ts {
         }
 
         function rewriteDownlevelWorker(): FunctionLikeDeclaration {
-            renames = {};
-
             builder = createCodeGenerator();
             if (node.parameters) {
                 for (var i = 0; i < node.parameters.length; i++) {
