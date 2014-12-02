@@ -822,6 +822,7 @@ interface RegExp {
 declare var RegExp: {
     new (pattern: string, flags?: string): RegExp;
     (pattern: string, flags?: string): RegExp;
+    prototype: RegExp;
 
     // Non-standard extensions
     $1: string;
