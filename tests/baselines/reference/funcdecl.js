@@ -105,8 +105,8 @@ function withOptionalInitializedParams(a, c) {
 var withOptionalInitializedParamsVar = withOptionalInitializedParams;
 function withRestParams(a) {
     var myRestParameter = [];
-    for (var _i = 1; _i < arguments.length; _i++) {
-        myRestParameter[_i - 1] = arguments[_i];
+    for (var _a = 1; _a < arguments.length; _a++) {
+        myRestParameter[_a - 1] = arguments[_a];
     }
     return myRestParameter;
 }

@@ -22,8 +22,8 @@ function greet(greeting) {
 function greet2(greeting, n, x) {
     if (n === void 0) { n = 10; }
     var restParams = [];
-    for (var _i = 3; _i < arguments.length; _i++) {
-        restParams[_i - 3] = arguments[_i];
+    for (var _a = 3; _a < arguments.length; _a++) {
+        restParams[_a - 3] = arguments[_a];
     }
     greetings++;
     return greetings;
@@ -31,8 +31,8 @@ function greet2(greeting, n, x) {
 function foo(greeting, n, x) {
     if (n === void 0) { n = 10; }
     var restParams = [];
-    for (var _i = 3; _i < arguments.length; _i++) {
-        restParams[_i - 3] = arguments[_i];
+    for (var _a = 3; _a < arguments.length; _a++) {
+        restParams[_a - 3] = arguments[_a];
     }
     return;
 }

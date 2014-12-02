@@ -205,8 +205,8 @@ var c1 = (function () {
     };
     c1.prototype.fooWithRestParameters = function (a) {
         var rests = [];
-        for (var _i = 1; _i < arguments.length; _i++) {
-            rests[_i - 1] = arguments[_i];
+        for (var _a = 1; _a < arguments.length; _a++) {
+            rests[_a - 1] = arguments[_a];
         }
         return a + rests.join("");
     };
@@ -224,8 +224,8 @@ var c1 = (function () {
     };
     c1.prototype.privateFooWithRestParameters = function (a) {
         var rests = [];
-        for (var _i = 1; _i < arguments.length; _i++) {
-            rests[_i - 1] = arguments[_i];
+        for (var _a = 1; _a < arguments.length; _a++) {
+            rests[_a - 1] = arguments[_a];
         }
         return a + rests.join("");
     };
@@ -243,8 +243,8 @@ var c1 = (function () {
     };
     c1.staticFooWithRestParameters = function (a) {
         var rests = [];
-        for (var _i = 1; _i < arguments.length; _i++) {
-            rests[_i - 1] = arguments[_i];
+        for (var _a = 1; _a < arguments.length; _a++) {
+            rests[_a - 1] = arguments[_a];
         }
         return a + rests.join("");
     };
@@ -262,8 +262,8 @@ var c1 = (function () {
     };
     c1.privateStaticFooWithRestParameters = function (a) {
         var rests = [];
-        for (var _i = 1; _i < arguments.length; _i++) {
-            rests[_i - 1] = arguments[_i];
+        for (var _a = 1; _a < arguments.length; _a++) {
+            rests[_a - 1] = arguments[_a];
         }
         return a + rests.join("");
     };
@@ -288,8 +288,8 @@ var c2 = (function () {
     };
     c2.prototype.fooWithRestParameters = function (a) {
         var rests = [];
-        for (var _i = 1; _i < arguments.length; _i++) {
-            rests[_i - 1] = arguments[_i];
+        for (var _a = 1; _a < arguments.length; _a++) {
+            rests[_a - 1] = arguments[_a];
         }
         return a + rests.join("");
     };
@@ -307,8 +307,8 @@ var c2 = (function () {
     };
     c2.prototype.privateFooWithRestParameters = function (a) {
         var rests = [];
-        for (var _i = 1; _i < arguments.length; _i++) {
-            rests[_i - 1] = arguments[_i];
+        for (var _a = 1; _a < arguments.length; _a++) {
+            rests[_a - 1] = arguments[_a];
         }
         return a + rests.join("");
     };
@@ -326,8 +326,8 @@ var c2 = (function () {
     };
     c2.staticFooWithRestParameters = function (a) {
         var rests = [];
-        for (var _i = 1; _i < arguments.length; _i++) {
-            rests[_i - 1] = arguments[_i];
+        for (var _a = 1; _a < arguments.length; _a++) {
+            rests[_a - 1] = arguments[_a];
         }
         return a + rests.join("");
     };
@@ -345,8 +345,8 @@ var c2 = (function () {
     };
     c2.privateStaticFooWithRestParameters = function (a) {
         var rests = [];
-        for (var _i = 1; _i < arguments.length; _i++) {
-            rests[_i - 1] = arguments[_i];
+        for (var _a = 1; _a < arguments.length; _a++) {
+            rests[_a - 1] = arguments[_a];
         }
         return a + rests.join("");
     };

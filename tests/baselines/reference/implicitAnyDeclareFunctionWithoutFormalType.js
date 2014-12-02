@@ -24,8 +24,8 @@ function func2(a, b, c) {
 ;
 function func3() {
     var args = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        args[_i - 0] = arguments[_i];
+    for (var _a = 0; _a < arguments.length; _a++) {
+        args[_a - 0] = arguments[_a];
     }
 }
 ;

@@ -15,8 +15,8 @@ var a2Gc = makeArrayG<any[]>(1, ""); // error
 //// [genericRestArgs.js]
 function makeArrayG() {
     var items = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        items[_i - 0] = arguments[_i];
+    for (var _a = 0; _a < arguments.length; _a++) {
+        items[_a - 0] = arguments[_a];
     }
     return items;
 }

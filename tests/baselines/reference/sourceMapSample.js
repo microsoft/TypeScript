@@ -57,8 +57,8 @@ var Foo;
         var str = greeter.greet();
         function foo2(greeting) {
             var restGreetings = [];
-            for (var _i = 1; _i < arguments.length; _i++) {
-                restGreetings[_i - 1] = arguments[_i];
+            for (var _a = 1; _a < arguments.length; _a++) {
+                restGreetings[_a - 1] = arguments[_a];
             }
             var greeters = [];
             greeters[0] = new Greeter(greeting);

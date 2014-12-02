@@ -145,7 +145,7 @@ sourceFile:sourceMapValidationFunctions.ts
 1 >Emitted(8, 5) Source(6, 55) + SourceIndex(0) name (greet2)
 2 >Emitted(8, 25) Source(6, 78) + SourceIndex(0) name (greet2)
 ---
->>>    for (var _i = 3; _i < arguments.length; _i++) {
+>>>    for (var _a = 3; _a < arguments.length; _a++) {
 1->^^^^^^^^^
 2 >         ^^^^^^^^^^^
 3 >                    ^
@@ -165,7 +165,7 @@ sourceFile:sourceMapValidationFunctions.ts
 5 >Emitted(9, 45) Source(6, 55) + SourceIndex(0) name (greet2)
 6 >Emitted(9, 49) Source(6, 78) + SourceIndex(0) name (greet2)
 ---
->>>        restParams[_i - 3] = arguments[_i];
+>>>        restParams[_a - 3] = arguments[_a];
 1 >^^^^^^^^
 2 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 1 >
@@ -272,7 +272,7 @@ sourceFile:sourceMapValidationFunctions.ts
 1 >Emitted(17, 5) Source(10, 52) + SourceIndex(0) name (foo)
 2 >Emitted(17, 25) Source(10, 75) + SourceIndex(0) name (foo)
 ---
->>>    for (var _i = 3; _i < arguments.length; _i++) {
+>>>    for (var _a = 3; _a < arguments.length; _a++) {
 1->^^^^^^^^^
 2 >         ^^^^^^^^^^^
 3 >                    ^
@@ -292,7 +292,7 @@ sourceFile:sourceMapValidationFunctions.ts
 5 >Emitted(18, 45) Source(10, 52) + SourceIndex(0) name (foo)
 6 >Emitted(18, 49) Source(10, 75) + SourceIndex(0) name (foo)
 ---
->>>        restParams[_i - 3] = arguments[_i];
+>>>        restParams[_a - 3] = arguments[_a];
 1 >^^^^^^^^
 2 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 1 >

@@ -12,8 +12,8 @@ n([4], 'foo');
 //// [restArgAssignmentCompat.js]
 function f() {
     var x = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        x[_i - 0] = arguments[_i];
+    for (var _a = 0; _a < arguments.length; _a++) {
+        x[_a - 0] = arguments[_a];
     }
     x.forEach(function (n, i) { return void ('item ' + i + ' = ' + n); });
 }

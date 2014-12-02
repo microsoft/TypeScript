@@ -24,8 +24,8 @@ sequence(
 //// [varArgParamTypeCheck.js]
 function sequence() {
     var sequences = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        sequences[_i - 0] = arguments[_i];
+    for (var _a = 0; _a < arguments.length; _a++) {
+        sequences[_a - 0] = arguments[_a];
     }
 }
 function callback(clb) {

@@ -14,20 +14,20 @@ i(a); // OK
 //// [inferTypeArgumentsInSignatureWithRestParameters.js]
 function f(array) {
     var args = [];
-    for (var _i = 1; _i < arguments.length; _i++) {
-        args[_i - 1] = arguments[_i];
+    for (var _a = 1; _a < arguments.length; _a++) {
+        args[_a - 1] = arguments[_a];
     }
 }
 function g(array) {
     var args = [];
-    for (var _i = 1; _i < arguments.length; _i++) {
-        args[_i - 1] = arguments[_i];
+    for (var _a = 1; _a < arguments.length; _a++) {
+        args[_a - 1] = arguments[_a];
     }
 }
 function h(nonarray) {
     var args = [];
-    for (var _i = 1; _i < arguments.length; _i++) {
-        args[_i - 1] = arguments[_i];
+    for (var _a = 1; _a < arguments.length; _a++) {
+        args[_a - 1] = arguments[_a];
     }
 }
 function i(array, opt) {

@@ -22,8 +22,8 @@ class Greeter {
 var Greeter = (function () {
     function Greeter(greeting) {
         var b = [];
-        for (var _i = 1; _i < arguments.length; _i++) {
-            b[_i - 1] = arguments[_i];
+        for (var _a = 1; _a < arguments.length; _a++) {
+            b[_a - 1] = arguments[_a];
         }
         this.greeting = greeting;
         this.x1 = 10;

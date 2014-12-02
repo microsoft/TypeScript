@@ -78,8 +78,8 @@ function fooWithParameters(/** this is comment about a*/ a,
 exports.fooWithParameters = fooWithParameters;
 function fooWithRestParameters(a) {
     var rests = [];
-    for (var _i = 1; _i < arguments.length; _i++) {
-        rests[_i - 1] = arguments[_i];
+    for (var _a = 1; _a < arguments.length; _a++) {
+        rests[_a - 1] = arguments[_a];
     }
     return a + rests.join("");
 }
@@ -103,8 +103,8 @@ function nonExportedFooWithParameters(/** this is comment about a*/ a,
 }
 function nonExportedFooWithRestParameters(a) {
     var rests = [];
-    for (var _i = 1; _i < arguments.length; _i++) {
-        rests[_i - 1] = arguments[_i];
+    for (var _a = 1; _a < arguments.length; _a++) {
+        rests[_a - 1] = arguments[_a];
     }
     return a + rests.join("");
 }
@@ -123,8 +123,8 @@ function globalfooWithParameters(/** this is comment about a*/ a,
 }
 function globalfooWithRestParameters(a) {
     var rests = [];
-    for (var _i = 1; _i < arguments.length; _i++) {
-        rests[_i - 1] = arguments[_i];
+    for (var _a = 1; _a < arguments.length; _a++) {
+        rests[_a - 1] = arguments[_a];
     }
     return a + rests.join("");
 }

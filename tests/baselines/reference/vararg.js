@@ -46,8 +46,8 @@ var M;
         }
         C.prototype.f = function (x) {
             var rest = [];
-            for (var _i = 1; _i < arguments.length; _i++) {
-                rest[_i - 1] = arguments[_i];
+            for (var _a = 1; _a < arguments.length; _a++) {
+                rest[_a - 1] = arguments[_a];
             }
             var sum = 0;
             for (var i = 0; i < rest.length; i++) {
@@ -58,14 +58,14 @@ var M;
         };
         C.prototype.fnope = function (x) {
             var rest = [];
-            for (var _i = 1; _i < arguments.length; _i++) {
-                rest[_i - 1] = arguments[_i];
+            for (var _a = 1; _a < arguments.length; _a++) {
+                rest[_a - 1] = arguments[_a];
             }
         };
         C.prototype.fonly = function () {
             var rest = [];
-            for (var _i = 0; _i < arguments.length; _i++) {
-                rest[_i - 0] = arguments[_i];
+            for (var _a = 0; _a < arguments.length; _a++) {
+                rest[_a - 0] = arguments[_a];
             }
             builder = "";
             for (var i = 0; i < rest.length; i++) {

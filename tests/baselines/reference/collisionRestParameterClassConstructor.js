@@ -71,8 +71,8 @@ declare class c6NoError {
 var c1 = (function () {
     function c1(_i) {
         var restParameters = [];
-        for (var _0 = 1; _0 < arguments.length; _0++) {
-            restParameters[_0 - 1] = arguments[_0];
+        for (var _a = 1; _a < arguments.length; _a++) {
+            restParameters[_a - 1] = arguments[_a];
         }
         var _i = 10; // no error
     }
@@ -87,8 +87,8 @@ var c1NoError = (function () {
 var c2 = (function () {
     function c2() {
         var restParameters = [];
-        for (var _0 = 0; _0 < arguments.length; _0++) {
-            restParameters[_0 - 0] = arguments[_0];
+        for (var _a = 0; _a < arguments.length; _a++) {
+            restParameters[_a - 0] = arguments[_a];
         }
         var _i = 10; // no error
     }
@@ -103,8 +103,8 @@ var c2NoError = (function () {
 var c3 = (function () {
     function c3(_i) {
         var restParameters = [];
-        for (var _0 = 1; _0 < arguments.length; _0++) {
-            restParameters[_0 - 1] = arguments[_0];
+        for (var _a = 1; _a < arguments.length; _a++) {
+            restParameters[_a - 1] = arguments[_a];
         }
         this._i = _i;
         var _i = 10; // no error
@@ -121,8 +121,8 @@ var c3NoError = (function () {
 var c5 = (function () {
     function c5(_i) {
         var rest = [];
-        for (var _0 = 1; _0 < arguments.length; _0++) {
-            rest[_0 - 1] = arguments[_0];
+        for (var _a = 1; _a < arguments.length; _a++) {
+            rest[_a - 1] = arguments[_a];
         }
         var _i; // no error
     }

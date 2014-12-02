@@ -170,15 +170,15 @@ var Errors;
     var r3b = [r3arg, r3arg2];
     var r4arg = function () {
         var x = [];
-        for (var _i = 0; _i < arguments.length; _i++) {
-            x[_i - 0] = arguments[_i];
+        for (var _a = 0; _a < arguments.length; _a++) {
+            x[_a - 0] = arguments[_a];
         }
         return null;
     };
     var r4arg2 = function () {
         var x = [];
-        for (var _i = 0; _i < arguments.length; _i++) {
-            x[_i - 0] = arguments[_i];
+        for (var _a = 0; _a < arguments.length; _a++) {
+            x[_a - 0] = arguments[_a];
         }
         return null;
     };

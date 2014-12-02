@@ -38,15 +38,15 @@ function foo() {
 function foo() {
     function f1(arguments) {
         var restParameters = [];
-        for (var _i = 1; _i < arguments.length; _i++) {
-            restParameters[_i - 1] = arguments[_i];
+        for (var _a = 1; _a < arguments.length; _a++) {
+            restParameters[_a - 1] = arguments[_a];
         }
         var arguments = 10; // no error
     }
     function f12(i) {
         var arguments = [];
-        for (var _i = 1; _i < arguments.length; _i++) {
-            arguments[_i - 1] = arguments[_i];
+        for (var _a = 1; _a < arguments.length; _a++) {
+            arguments[_a - 1] = arguments[_a];
         }
         var arguments; // no error
     }
@@ -55,8 +55,8 @@ function foo() {
     }
     function f3() {
         var restParameters = [];
-        for (var _i = 0; _i < arguments.length; _i++) {
-            restParameters[_i - 0] = arguments[_i];
+        for (var _a = 0; _a < arguments.length; _a++) {
+            restParameters[_a - 0] = arguments[_a];
         }
         var arguments = 10; // no error
     }
@@ -65,15 +65,15 @@ function foo() {
     }
     function f4(arguments) {
         var rest = [];
-        for (var _i = 1; _i < arguments.length; _i++) {
-            rest[_i - 1] = arguments[_i];
+        for (var _a = 1; _a < arguments.length; _a++) {
+            rest[_a - 1] = arguments[_a];
         }
         var arguments; // No error
     }
     function f42(i) {
         var arguments = [];
-        for (var _i = 1; _i < arguments.length; _i++) {
-            arguments[_i - 1] = arguments[_i];
+        for (var _a = 1; _a < arguments.length; _a++) {
+            arguments[_a - 1] = arguments[_a];
         }
         var arguments; // No error
     }

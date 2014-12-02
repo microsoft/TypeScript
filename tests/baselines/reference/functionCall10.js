@@ -9,8 +9,8 @@ foo(1, 'bar');
 //// [functionCall10.js]
 function foo() {
     var a = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        a[_i - 0] = arguments[_i];
+    for (var _a = 0; _a < arguments.length; _a++) {
+        a[_a - 0] = arguments[_a];
     }
 }
 ;

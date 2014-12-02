@@ -91,8 +91,8 @@ declare class c6NoError {
 var c1 = (function () {
     function c1(i) {
         var arguments = [];
-        for (var _i = 1; _i < arguments.length; _i++) {
-            arguments[_i - 1] = arguments[_i];
+        for (var _a = 1; _a < arguments.length; _a++) {
+            arguments[_a - 1] = arguments[_a];
         }
         var arguments; // no error
     }
@@ -101,8 +101,8 @@ var c1 = (function () {
 var c12 = (function () {
     function c12(arguments) {
         var rest = [];
-        for (var _i = 1; _i < arguments.length; _i++) {
-            rest[_i - 1] = arguments[_i];
+        for (var _a = 1; _a < arguments.length; _a++) {
+            rest[_a - 1] = arguments[_a];
         }
         var arguments = 10; // no error
     }
@@ -117,8 +117,8 @@ var c1NoError = (function () {
 var c2 = (function () {
     function c2() {
         var restParameters = [];
-        for (var _i = 0; _i < arguments.length; _i++) {
-            restParameters[_i - 0] = arguments[_i];
+        for (var _a = 0; _a < arguments.length; _a++) {
+            restParameters[_a - 0] = arguments[_a];
         }
         var arguments = 10; // no error
     }
@@ -133,8 +133,8 @@ var c2NoError = (function () {
 var c3 = (function () {
     function c3(arguments) {
         var restParameters = [];
-        for (var _i = 1; _i < arguments.length; _i++) {
-            restParameters[_i - 1] = arguments[_i];
+        for (var _a = 1; _a < arguments.length; _a++) {
+            restParameters[_a - 1] = arguments[_a];
         }
         this.arguments = arguments;
         var arguments = 10; // no error
@@ -151,8 +151,8 @@ var c3NoError = (function () {
 var c5 = (function () {
     function c5(i) {
         var arguments = [];
-        for (var _i = 1; _i < arguments.length; _i++) {
-            arguments[_i - 1] = arguments[_i];
+        for (var _a = 1; _a < arguments.length; _a++) {
+            arguments[_a - 1] = arguments[_a];
         }
         var arguments; // no error
     }
@@ -161,8 +161,8 @@ var c5 = (function () {
 var c52 = (function () {
     function c52(arguments) {
         var rest = [];
-        for (var _i = 1; _i < arguments.length; _i++) {
-            rest[_i - 1] = arguments[_i];
+        for (var _a = 1; _a < arguments.length; _a++) {
+            rest[_a - 1] = arguments[_a];
         }
         var arguments; // no error
     }
