@@ -377,9 +377,10 @@ module ts.NavigationBar {
                     // Add the constructor parameters in as children of the class (for property parameters).
                     // Note that *all* parameters will be added to the nodes array, but parameters that
                     // are not properties will be filtered out later by createChildItem.
-                    var nodes: Node[] = constructor
-                        ? node.members.concat(constructor.parameters)
-                        : node.members;
+                    var nodes: Node[] = removeComputedProperties(node);
+                    if (constructor) {
+                        nodes.push.apply(nodes, constructor.parameters);
+                    }
 
                     var childItems = getItemsWorker(sortNodes(nodes), createChildItem);
                 }
@@ -394,7 +395,7 @@ module ts.NavigationBar {
             }
 
             function createEnumItem(node: EnumDeclaration): ts.NavigationBarItem {
-                var childItems = getItemsWorker(sortNodes(node.members), createChildItem);
+                var childItems = getItemsWorker(sortNodes(removeComputedProperties(node)), createChildItem);
                 return getNavigationBarItem(
                     node.name.text,
                     ts.ScriptElementKind.enumElement,
@@ -405,7 +406,7 @@ module ts.NavigationBar {
             }
 
             function createIterfaceItem(node: InterfaceDeclaration): ts.NavigationBarItem {
-                var childItems = getItemsWorker(sortNodes(node.members), createChildItem);
+                var childItems = getItemsWorker(sortNodes(removeComputedProperties(node)), createChildItem);
                 return getNavigationBarItem(
                     node.name.text,
                     ts.ScriptElementKind.interfaceElement,
@@ -414,6 +415,10 @@ module ts.NavigationBar {
                     childItems,
                     getIndent(node));
             }
+        }
+
+        function removeComputedProperties(node: ClassDeclaration | InterfaceDeclaration | EnumDeclaration): Declaration[] {
+            return filter<Declaration>(node.members, member => member.name === undefined || member.name.kind !== SyntaxKind.ComputedPropertyName);
         }
 
         function getInnermostModule(node: ModuleDeclaration): ModuleDeclaration {

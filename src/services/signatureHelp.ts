@@ -164,6 +164,20 @@ module ts.SignatureHelp {
     //}
     var emptyArray: any[] = [];
 
+    const enum ArgumentListKind {
+        TypeArguments,
+        CallArguments,
+        TaggedTemplateArguments
+    }
+
+    interface ArgumentListInfo {
+        kind: ArgumentListKind;
+        invocation: CallLikeExpression;
+        argumentsSpan: TextSpan;
+        argumentIndex?: number;
+        argumentCount: number;
+    }
+
     export function getSignatureHelpItems(sourceFile: SourceFile, position: number, typeInfoResolver: TypeChecker, cancellationToken: CancellationTokenObject): SignatureHelpItems {
         // Decide whether to show signature help
         var startingToken = findTokenOnLeftOfPosition(sourceFile, position);
@@ -180,7 +194,7 @@ module ts.SignatureHelp {
             return undefined;
         }
 
-        var call = <CallExpression>argumentInfo.list.parent;
+        var call = argumentInfo.invocation;
         var candidates = <Signature[]>[];
         var resolvedSignature = typeInfoResolver.getResolvedSignature(call, candidates);
         cancellationToken.throwIfCancellationRequested();
@@ -192,50 +206,195 @@ module ts.SignatureHelp {
         return createSignatureHelpItems(candidates, resolvedSignature, argumentInfo);
 
         /**
-         * If node is an argument, returns its index in the argument list.
-         * If not, returns -1.
+         * Returns relevant information for the argument list and the current argument if we are
+         * in the argument of an invocation; returns undefined otherwise.
          */
-        function getImmediatelyContainingArgumentInfo(node: Node): ListItemInfo {
-            if (node.parent.kind !== SyntaxKind.CallExpression && node.parent.kind !== SyntaxKind.NewExpression) {
-                return undefined;
-            }
+        function getImmediatelyContainingArgumentInfo(node: Node): ArgumentListInfo {
+            if (node.parent.kind === SyntaxKind.CallExpression || node.parent.kind === SyntaxKind.NewExpression) {
+                var callExpression = <CallExpression>node.parent;
+                // There are 3 cases to handle:
+                //   1. The token introduces a list, and should begin a sig help session
+                //   2. The token is either not associated with a list, or ends a list, so the session should end
+                //   3. The token is buried inside a list, and should give sig help
+                //
+                // The following are examples of each:
+                //
+                //    Case 1:
+                //          foo<#T, U>(#a, b)    -> The token introduces a list, and should begin a sig help session
+                //    Case 2:
+                //          fo#o<T, U>#(a, b)#   -> The token is either not associated with a list, or ends a list, so the session should end
+                //    Case 3:
+                //          foo<T#, U#>(a#, #b#) -> The token is buried inside a list, and should give sig help
+                // Find out if 'node' is an argument, a type argument, or neither
+                if (node.kind === SyntaxKind.LessThanToken ||
+                    node.kind === SyntaxKind.OpenParenToken) {
+                    // Find the list that starts right *after* the < or ( token.
+                    // If the user has just opened a list, consider this item 0.
+                    var list = getChildListThatStartsWithOpenerToken(callExpression, node, sourceFile);
+                    var isTypeArgList = callExpression.typeArguments && callExpression.typeArguments.pos === list.pos;
+                    Debug.assert(list !== undefined);
+                    return {
+                        kind: isTypeArgList ? ArgumentListKind.TypeArguments : ArgumentListKind.CallArguments,
+                        invocation: callExpression,
+                        argumentsSpan: getApplicableSpanForArguments(list),
+                        argumentIndex: 0,
+                        argumentCount: getCommaBasedArgCount(list)
+                    };
+                }
 
-            // There are 3 cases to handle:
-            //   1. The token introduces a list, and should begin a sig help session
-            //   2. The token is either not associated with a list, or ends a list, so the session should end
-            //   3. The token is buried inside a list, and should give sig help
-            //
-            // The following are examples of each:
-            //
-            //    Case 1:
-            //          foo<$T, U>($a, b)    -> The token introduces a list, and should begin a sig help session
-            //    Case 2:
-            //          fo$o<T, U>$(a, b)$   -> The token is either not associated with a list, or ends a list, so the session should end
-            //    Case 3:
-            //          foo<T$, U$>(a$, $b$) -> The token is buried inside a list, and should give sig help
-            var parent = <CallExpression>node.parent;
-            // Find out if 'node' is an argument, a type argument, or neither
-            if (node.kind === SyntaxKind.LessThanToken || node.kind === SyntaxKind.OpenParenToken) {
-                // Find the list that starts right *after* the < or ( token.
-                // If the user has just opened a list, consider this item 0.
-                var list = getChildListThatStartsWithOpenerToken(parent, node, sourceFile);
-                Debug.assert(list !== undefined);
-                return {
-                    list,
-                    listItemIndex: 0
-                };
-            }
+                // findListItemInfo can return undefined if we are not in parent's argument list
+                // or type argument list. This includes cases where the cursor is:
+                //   - To the right of the closing paren, non-substitution template, or template tail.
+                //   - Between the type arguments and the arguments (greater than token)
+                //   - On the target of the call (parent.func)
+                //   - On the 'new' keyword in a 'new' expression
+                var listItemInfo = findListItemInfo(node);
+                if (listItemInfo) {
+                    var list = listItemInfo.list;
+                    var isTypeArgList = callExpression.typeArguments && callExpression.typeArguments.pos === list.pos;
 
-            // findListItemInfo can return undefined if we are not in parent's argument list
-            // or type argument list. This includes cases where the cursor is:
-            //   - To the right of the closing paren
-            //   - Between the type arguments and the arguments (greater than token)
-            //   - On the target of the call (parent.func)
-            //   - On the 'new' keyword in a 'new' expression
-            return findListItemInfo(node);
+                    // The listItemIndex we got back includes commas. Our goal is to return the index of the proper
+                    // item (not including commas). Here are some examples:
+                    //    1. foo(a, b, c #) -> the listItemIndex is 4, we want to return 2
+                    //    2. foo(a, b, # c) -> listItemIndex is 3, we want to return 2
+                    //    3. foo(#a) -> listItemIndex is 0, we want to return 0
+                    //
+                    // In general, we want to subtract the number of commas before the current index.
+                    // But if we are on a comma, we also want to pretend we are on the argument *following*
+                    // the comma. That amounts to taking the ceiling of half the index.
+                    var argumentIndex = (listItemInfo.listItemIndex + 1) >> 1;
+
+                    return {
+                        kind: isTypeArgList ? ArgumentListKind.TypeArguments : ArgumentListKind.CallArguments,
+                        invocation: callExpression,
+                        argumentsSpan: getApplicableSpanForArguments(list),
+                        argumentIndex: argumentIndex,
+                        argumentCount: getCommaBasedArgCount(list)
+                    };
+                }
+            }
+            else if (node.kind === SyntaxKind.NoSubstitutionTemplateLiteral && node.parent.kind === SyntaxKind.TaggedTemplateExpression) {
+                // Check if we're actually inside the template;
+                // otherwise we'll fall out and return undefined.
+                if (isInsideTemplateLiteral(<LiteralExpression>node, position)) {
+                    return getArgumentListInfoForTemplate(<TaggedTemplateExpression>node.parent, /*argumentIndex*/ 0);
+                }
+            }
+            else if (node.kind === SyntaxKind.TemplateHead && node.parent.parent.kind === SyntaxKind.TaggedTemplateExpression) {
+                var templateExpression = <TemplateExpression>node.parent;
+                var tagExpression = <TaggedTemplateExpression>templateExpression.parent;
+                Debug.assert(templateExpression.kind === SyntaxKind.TemplateExpression);
+
+                var argumentIndex = isInsideTemplateLiteral(<LiteralExpression>node, position) ? 0 : 1;
+
+                return getArgumentListInfoForTemplate(tagExpression, argumentIndex);
+            }
+            else if (node.parent.kind === SyntaxKind.TemplateSpan && node.parent.parent.parent.kind === SyntaxKind.TaggedTemplateExpression) {
+                var templateSpan = <TemplateSpan>node.parent;
+                var templateExpression = <TemplateExpression>templateSpan.parent;
+                var tagExpression = <TaggedTemplateExpression>templateExpression.parent;
+                Debug.assert(templateExpression.kind === SyntaxKind.TemplateExpression);
+
+                // If we're just after a template tail, don't show signature help.
+                if (node.kind === SyntaxKind.TemplateTail && position >= node.getEnd() && !(<LiteralExpression>node).isUnterminated) {
+                    return undefined;
+                }
+
+                var spanIndex = templateExpression.templateSpans.indexOf(templateSpan);
+                var argumentIndex = getArgumentIndexForTemplatePiece(spanIndex, node);
+
+                return getArgumentListInfoForTemplate(tagExpression, argumentIndex);
+            }
+            
+            return undefined;
         }
 
-        function getContainingArgumentInfo(node: Node): ListItemInfo {
+        function getCommaBasedArgCount(argumentsList: Node) {
+            // The number of arguments is the number of commas plus one, unless the list
+            // is completely empty, in which case there are 0 arguments.
+            return argumentsList.getChildCount() === 0
+                ? 0
+                : 1 + countWhere(argumentsList.getChildren(), arg => arg.kind === SyntaxKind.CommaToken);
+        }
+
+        // spanIndex is either the index for a given template span.
+        // This does not give appropriate results for a NoSubstitutionTemplateLiteral
+        function getArgumentIndexForTemplatePiece(spanIndex: number, node: Node): number {
+            // Because the TemplateStringsArray is the first argument, we have to offset each substitution expression by 1.
+            // There are three cases we can encounter:
+            //      1. We are precisely in the template literal (argIndex = 0).
+            //      2. We are in or to the right of the substitution expression (argIndex = spanIndex + 1).
+            //      3. We are directly to the right of the template literal, but because we look for the token on the left,
+            //          not enough to put us in the substitution expression; we should consider ourselves part of
+            //          the *next* span's expression by offsetting the index (argIndex = (spanIndex + 1) + 1).
+            //
+            // Example: f  `# abcd $#{#  1 + 1#  }# efghi ${ #"#hello"#  }  #  `
+            //              ^       ^ ^       ^   ^          ^ ^      ^     ^
+            // Case:        1       1 3       2   1          3 2      2     1
+            Debug.assert(position >= node.getStart(), "Assumed 'position' could not occur before node.");
+            if (isTemplateLiteralKind(node.kind)) {
+                if (isInsideTemplateLiteral(<LiteralExpression>node, position)) {
+                    return 0;
+                }
+                return spanIndex + 2;
+            }
+            return spanIndex + 1;
+        }
+
+        function getArgumentListInfoForTemplate(tagExpression: TaggedTemplateExpression, argumentIndex: number): ArgumentListInfo {
+            // argumentCount is either 1 or (numSpans + 1) to account for the template strings array argument.
+            var argumentCount = tagExpression.template.kind === SyntaxKind.NoSubstitutionTemplateLiteral
+                ? 1
+                : (<TemplateExpression>tagExpression.template).templateSpans.length + 1;
+
+            return {
+                kind: ArgumentListKind.TaggedTemplateArguments,
+                invocation: tagExpression,
+                argumentsSpan: getApplicableSpanForTaggedTemplate(tagExpression),
+                argumentIndex: argumentIndex,
+                argumentCount: argumentCount
+            };
+        }
+
+        function getApplicableSpanForArguments(argumentsList: Node): TextSpan {
+            // We use full start and skip trivia on the end because we want to include trivia on
+            // both sides. For example,
+            //
+            //    foo(   /*comment */     a, b, c      /*comment*/     )
+            //        |                                               |
+            //
+            // The applicable span is from the first bar to the second bar (inclusive,
+            // but not including parentheses)
+            var applicableSpanStart = argumentsList.getFullStart();
+            var applicableSpanEnd = skipTrivia(sourceFile.text, argumentsList.getEnd(), /*stopAfterLineBreak*/ false);
+            return new TextSpan(applicableSpanStart, applicableSpanEnd - applicableSpanStart);
+        }
+
+        function getApplicableSpanForTaggedTemplate(taggedTemplate: TaggedTemplateExpression): TextSpan {
+            var template = taggedTemplate.template;
+            var applicableSpanStart = template.getStart();
+            var applicableSpanEnd = template.getEnd();
+
+            // We need to adjust the end position for the case where the template does not have a tail.
+            // Otherwise, we will not show signature help past the expression.
+            // For example,
+            //
+            //      `  ${ 1 + 1        foo(10)
+            //       |        |
+            //
+            // This is because a Missing node has no width. However, what we actually want is to include trivia
+            // leading up to the next token in case the user is about to type in a TemplateMiddle or TemplateTail.
+            if (template.kind === SyntaxKind.TemplateExpression) {
+                var lastSpan = lastOrUndefined((<TemplateExpression>template).templateSpans);
+                if (lastSpan.literal.getFullWidth() === 0) {
+                    applicableSpanEnd = skipTrivia(sourceFile.text, applicableSpanEnd, /*stopAfterLineBreak*/ false);
+                }
+            }
+
+            return new TextSpan(applicableSpanStart, applicableSpanEnd - applicableSpanStart);
+        }
+
+        function getContainingArgumentInfo(node: Node): ArgumentListInfo {
             for (var n = node; n.kind !== SyntaxKind.SourceFile; n = n.parent) {
                 if (n.kind === SyntaxKind.FunctionBlock) {
                     return undefined;
@@ -292,14 +451,13 @@ module ts.SignatureHelp {
             return maxParamsSignatureIndex;
         }
 
-        function createSignatureHelpItems(candidates: Signature[], bestSignature: Signature, argumentInfoOrTypeArgumentInfo: ListItemInfo): SignatureHelpItems {
-            var argumentListOrTypeArgumentList = argumentInfoOrTypeArgumentInfo.list;
-            var parent = <CallExpression>argumentListOrTypeArgumentList.parent;
-            var isTypeParameterHelp = parent.typeArguments && parent.typeArguments.pos === argumentListOrTypeArgumentList.pos;
-            Debug.assert(isTypeParameterHelp || parent.arguments.pos === argumentListOrTypeArgumentList.pos);
+        function createSignatureHelpItems(candidates: Signature[], bestSignature: Signature, argumentListInfo: ArgumentListInfo): SignatureHelpItems {
+            var applicableSpan = argumentListInfo.argumentsSpan;
+            var isTypeParameterList = argumentListInfo.kind === ArgumentListKind.TypeArguments;
 
-            var callTargetNode = (<CallExpression>argumentListOrTypeArgumentList.parent).func;
-            var callTargetSymbol = typeInfoResolver.getSymbolInfo(callTargetNode);
+            var invocation = argumentListInfo.invocation;
+            var callTarget = getInvokedExpression(invocation)
+            var callTargetSymbol = typeInfoResolver.getSymbolInfo(callTarget);
             var callTargetDisplayParts = callTargetSymbol && symbolToDisplayParts(typeInfoResolver, callTargetSymbol, /*enclosingDeclaration*/ undefined, /*meaning*/ undefined);
             var items: SignatureHelpItem[] = map(candidates, candidateSignature => {
                 var signatureHelpParameters: SignatureHelpParameter[];
@@ -310,27 +468,28 @@ module ts.SignatureHelp {
                     prefixDisplayParts.push.apply(prefixDisplayParts, callTargetDisplayParts);
                 }
 
-                if (isTypeParameterHelp) {
+                if (isTypeParameterList) {
                     prefixDisplayParts.push(punctuationPart(SyntaxKind.LessThanToken));
                     var typeParameters = candidateSignature.typeParameters;
                     signatureHelpParameters = typeParameters && typeParameters.length > 0 ? map(typeParameters, createSignatureHelpParameterForTypeParameter) : emptyArray;
                     suffixDisplayParts.push(punctuationPart(SyntaxKind.GreaterThanToken));
                     var parameterParts = mapToDisplayParts(writer =>
-                        typeInfoResolver.getSymbolDisplayBuilder().buildDisplayForParametersAndDelimiters(candidateSignature.parameters, writer, argumentListOrTypeArgumentList));
+                        typeInfoResolver.getSymbolDisplayBuilder().buildDisplayForParametersAndDelimiters(candidateSignature.parameters, writer, invocation));
                     suffixDisplayParts.push.apply(suffixDisplayParts, parameterParts);
                 }
                 else {
                     var typeParameterParts = mapToDisplayParts(writer =>
-                        typeInfoResolver.getSymbolDisplayBuilder().buildDisplayForTypeParametersAndDelimiters(candidateSignature.typeParameters, writer, argumentListOrTypeArgumentList));
+                        typeInfoResolver.getSymbolDisplayBuilder().buildDisplayForTypeParametersAndDelimiters(candidateSignature.typeParameters, writer, invocation));
                     prefixDisplayParts.push.apply(prefixDisplayParts, typeParameterParts);
                     prefixDisplayParts.push(punctuationPart(SyntaxKind.OpenParenToken));
+
                     var parameters = candidateSignature.parameters;
                     signatureHelpParameters = parameters.length > 0 ? map(parameters, createSignatureHelpParameterForParameter) : emptyArray;
                     suffixDisplayParts.push(punctuationPart(SyntaxKind.CloseParenToken));
                 }
 
                 var returnTypeParts = mapToDisplayParts(writer =>
-                    typeInfoResolver.getSymbolDisplayBuilder().buildReturnTypeDisplay(candidateSignature, writer, argumentListOrTypeArgumentList));
+                    typeInfoResolver.getSymbolDisplayBuilder().buildReturnTypeDisplay(candidateSignature, writer, invocation));
                 suffixDisplayParts.push.apply(suffixDisplayParts, returnTypeParts);
                 
                 return {
@@ -343,34 +502,10 @@ module ts.SignatureHelp {
                 };
             });
 
-            // We use full start and skip trivia on the end because we want to include trivia on
-            // both sides. For example,
-            //
-            //    foo(   /*comment */     a, b, c      /*comment*/     )
-            //        |                                               |
-            //
-            // The applicable span is from the first bar to the second bar (inclusive,
-            // but not including parentheses)
-            var applicableSpanStart = argumentListOrTypeArgumentList.getFullStart();
-            var applicableSpanEnd = skipTrivia(sourceFile.text, argumentListOrTypeArgumentList.end, /*stopAfterLineBreak*/ false);
-            var applicableSpan = new TextSpan(applicableSpanStart, applicableSpanEnd - applicableSpanStart);
+            var argumentIndex = argumentListInfo.argumentIndex;
 
-            // The listItemIndex we got back includes commas. Our goal is to return the index of the proper
-            // item (not including commas). Here are some examples:
-            //    1. foo(a, b, c $) -> the listItemIndex is 4, we want to return 2
-            //    2. foo(a, b, $ c) -> listItemIndex is 3, we want to return 2
-            //    3. foo($a) -> listItemIndex is 0, we want to return 0
-            //
-            // In general, we want to subtract the number of commas before the current index.
-            // But if we are on a comma, we also want to pretend we are on the argument *following*
-            // the comma. That amounts to taking the ceiling of half the index.
-            var argumentIndex = (argumentInfoOrTypeArgumentInfo.listItemIndex + 1) >> 1;
-
-            // argumentCount is the number of commas plus one, unless the list is completely empty,
-            // in which case there are 0.
-            var argumentCount = argumentListOrTypeArgumentList.getChildCount() === 0
-                ? 0
-                : 1 + countWhere(argumentListOrTypeArgumentList.getChildren(), arg => arg.kind === SyntaxKind.CommaToken);
+            // argumentCount is the *apparent* number of arguments.
+            var argumentCount = argumentListInfo.argumentCount;
 
             var selectedItemIndex = candidates.indexOf(bestSignature);
             if (selectedItemIndex < 0) {
@@ -387,9 +522,9 @@ module ts.SignatureHelp {
 
             function createSignatureHelpParameterForParameter(parameter: Symbol): SignatureHelpParameter {
                 var displayParts = mapToDisplayParts(writer =>
-                    typeInfoResolver.getSymbolDisplayBuilder().buildParameterDisplay(parameter, writer, argumentListOrTypeArgumentList));
+                    typeInfoResolver.getSymbolDisplayBuilder().buildParameterDisplay(parameter, writer, invocation));
 
-                var isOptional = !!(parameter.valueDeclaration.flags & NodeFlags.QuestionMark);
+                var isOptional = hasQuestionToken(parameter.valueDeclaration);
 
                 return {
                     name: parameter.name,
@@ -401,7 +536,7 @@ module ts.SignatureHelp {
 
             function createSignatureHelpParameterForTypeParameter(typeParameter: TypeParameter): SignatureHelpParameter {
                 var displayParts = mapToDisplayParts(writer =>
-                    typeInfoResolver.getSymbolDisplayBuilder().buildTypeParameterDisplay(typeParameter, writer, argumentListOrTypeArgumentList));
+                    typeInfoResolver.getSymbolDisplayBuilder().buildTypeParameterDisplay(typeParameter, writer, invocation));
 
                 return {
                     name: typeParameter.symbol.name,

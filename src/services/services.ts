@@ -218,7 +218,7 @@ module ts {
         }
 
         private createChildren(sourceFile?: SourceFile) {
-            if (this.kind > SyntaxKind.Missing) {
+            if (this.kind >= SyntaxKind.FirstNode) {
                 scanner.setText((sourceFile || this.getSourceFile()).text);
                 var children: Node[] = [];
                 var pos = this.pos;
@@ -264,8 +264,11 @@ module ts {
             var children = this.getChildren();
             for (var i = 0; i < children.length; i++) {
                 var child = children[i];
-                if (child.kind < SyntaxKind.Missing) return child;
-                if (child.kind > SyntaxKind.Missing) return child.getFirstToken(sourceFile);
+                if (child.kind < SyntaxKind.FirstNode) {
+                    return child;
+                }
+
+                return child.getFirstToken(sourceFile);
             }
         }
 
@@ -273,8 +276,11 @@ module ts {
             var children = this.getChildren(sourceFile);
             for (var i = children.length - 1; i >= 0; i--) {
                 var child = children[i];
-                if (child.kind < SyntaxKind.Missing) return child;
-                if (child.kind > SyntaxKind.Missing) return child.getLastToken(sourceFile);
+                if (child.kind < SyntaxKind.FirstNode) {
+                    return child;
+                }
+
+                return child.getLastToken(sourceFile);
             }
         }
     }
@@ -349,7 +355,7 @@ module ts {
 
                 // If this is dotted module name, get the doc comments from the parent
                 while (declaration.kind === SyntaxKind.ModuleDeclaration && declaration.parent.kind === SyntaxKind.ModuleDeclaration) {
-                    declaration = declaration.parent;
+                    declaration = <ModuleDeclaration>declaration.parent;
                 } 
 
                 // Get the cleaned js doc comment text from the declaration
@@ -712,6 +718,7 @@ module ts {
     }
 
     class SourceFileObject extends NodeObject implements SourceFile {
+        public _declarationBrand: any;
         public filename: string;
         public text: string;
 
@@ -757,7 +764,7 @@ module ts {
                         case SyntaxKind.Method:
                             var functionDeclaration = <FunctionLikeDeclaration>node;
 
-                            if (functionDeclaration.name && functionDeclaration.name.kind !== SyntaxKind.Missing) {
+                            if (functionDeclaration.name && functionDeclaration.name.getFullWidth() > 0) {
                                 var lastDeclaration = namedDeclarations.length > 0 ?
                                     namedDeclarations[namedDeclarations.length - 1] :
                                     undefined;
@@ -771,7 +778,7 @@ module ts {
                                     }
                                 }
                                 else {
-                                    namedDeclarations.push(node);
+                                    namedDeclarations.push(functionDeclaration);
                                 }
 
                                 forEachChild(node, visit);
@@ -862,7 +869,7 @@ module ts {
         getLocalizedDiagnosticMessages(): any;
         getCancellationToken(): CancellationToken;
         getCurrentDirectory(): string;
-        getDefaultLibFilename(): string;
+        getDefaultLibFilename(options: CompilerOptions): string;
     }
 
     //
@@ -1935,21 +1942,21 @@ module ts {
     }
 
     function isRightSideOfPropertyAccess(node: Node) {
-        return node && node.parent && node.parent.kind === SyntaxKind.PropertyAccess && (<PropertyAccess>node.parent).right === node;
+        return node && node.parent && node.parent.kind === SyntaxKind.PropertyAccessExpression && (<PropertyAccessExpression>node.parent).name === node;
     }
 
     function isCallExpressionTarget(node: Node): boolean {
         if (isRightSideOfPropertyAccess(node)) {
             node = node.parent;
         }
-        return node && node.parent && node.parent.kind === SyntaxKind.CallExpression && (<CallExpression>node.parent).func === node;
+        return node && node.parent && node.parent.kind === SyntaxKind.CallExpression && (<CallExpression>node.parent).expression === node;
     }
 
     function isNewExpressionTarget(node: Node): boolean {
         if (isRightSideOfPropertyAccess(node)) {
             node = node.parent;
         }
-        return node && node.parent && node.parent.kind === SyntaxKind.NewExpression && (<CallExpression>node.parent).func === node;
+        return node && node.parent && node.parent.kind === SyntaxKind.NewExpression && (<CallExpression>node.parent).expression === node;
     }
 
     function isNameOfModuleDeclaration(node: Node) {
@@ -1978,8 +1985,8 @@ module ts {
                 case SyntaxKind.SetAccessor:
                 case SyntaxKind.ModuleDeclaration:
                     return (<Declaration>node.parent).name === node;
-                case SyntaxKind.IndexedAccess:
-                    return (<IndexedAccess>node.parent).index === node;
+                case SyntaxKind.ElementAccessExpression:
+                    return (<ElementAccessExpression>node.parent).argumentExpression === node;
             }
         }
 
@@ -1987,9 +1994,12 @@ module ts {
     }
 
     function isNameOfExternalModuleImportOrDeclaration(node: Node): boolean {
-        return node.kind === SyntaxKind.StringLiteral &&
-            (isNameOfModuleDeclaration(node) ||
-            (node.parent.kind === SyntaxKind.ImportDeclaration && (<ImportDeclaration>node.parent).externalModuleName === node));
+        if (node.kind === SyntaxKind.StringLiteral) {
+            return isNameOfModuleDeclaration(node) ||
+                (isExternalModuleImportDeclaration(node.parent.parent) && getExternalModuleImportDeclarationExpression(node.parent.parent) === node);
+        }
+
+        return false;
     }
 
     /** Returns true if the position is within a comment */
@@ -2105,8 +2115,8 @@ module ts {
                 getCanonicalFileName: (filename) => useCaseSensitivefilenames ? filename : filename.toLowerCase(),
                 useCaseSensitiveFileNames: () => useCaseSensitivefilenames,
                 getNewLine: () => "\r\n",
-                getDefaultLibFilename: (): string => {
-                    return host.getDefaultLibFilename();
+                getDefaultLibFilename: (options): string => {
+                    return host.getDefaultLibFilename(options);
                 },
                 writeFile: (filename, data, writeByteOrderMark) => {
                     writer(filename, data, writeByteOrderMark);
@@ -2251,7 +2261,7 @@ module ts {
 
             filename = normalizeSlashes(filename);
 
-            return program.getDiagnostics(getSourceFile(filename).getSourceFile());
+            return program.getDiagnostics(getSourceFile(filename));
         }
 
         /**
@@ -2381,9 +2391,12 @@ module ts {
             // other wise, it is a request for all visible symbols in the scope, and the node is the current location
             var node: Node;
             var isRightOfDot: boolean;
-            if (previousToken && previousToken.kind === SyntaxKind.DotToken &&
-                (previousToken.parent.kind === SyntaxKind.PropertyAccess || previousToken.parent.kind === SyntaxKind.QualifiedName)) {
-                node = (<PropertyAccess>previousToken.parent).left;
+            if (previousToken && previousToken.kind === SyntaxKind.DotToken && previousToken.parent.kind === SyntaxKind.PropertyAccessExpression) {
+                node = (<PropertyAccessExpression>previousToken.parent).expression;
+                isRightOfDot = true;
+            }
+            else if (previousToken && previousToken.kind === SyntaxKind.DotToken && previousToken.parent.kind === SyntaxKind.QualifiedName) {
+                node = (<QualifiedName>previousToken.parent).left;
                 isRightOfDot = true;
             }
             else {
@@ -2409,7 +2422,7 @@ module ts {
                 var symbols: Symbol[] = [];
                 isMemberCompletion = true;
 
-                if (node.kind === SyntaxKind.Identifier || node.kind === SyntaxKind.QualifiedName || node.kind === SyntaxKind.PropertyAccess) {
+                if (node.kind === SyntaxKind.Identifier || node.kind === SyntaxKind.QualifiedName || node.kind === SyntaxKind.PropertyAccessExpression) {
                     var symbol = typeInfoResolver.getSymbolInfo(node);
 
                     // This is an alias, follow what it aliases
@@ -2420,7 +2433,7 @@ module ts {
                     if (symbol && symbol.flags & SymbolFlags.HasExports) {
                         // Extract module or enum members
                         forEachValue(symbol.exports, symbol => {
-                            if (typeInfoResolver.isValidPropertyAccess(<PropertyAccess>(node.parent), symbol.name)) {
+                            if (typeInfoResolver.isValidPropertyAccess(<PropertyAccessExpression>(node.parent), symbol.name)) {
                                 symbols.push(symbol);
                             }
                         });
@@ -2431,7 +2444,7 @@ module ts {
                 if (type) {
                     // Filter private properties
                     forEach(type.getApparentProperties(), symbol => {
-                        if (typeInfoResolver.isValidPropertyAccess(<PropertyAccess>(node.parent), symbol.name)) {
+                        if (typeInfoResolver.isValidPropertyAccess(<PropertyAccessExpression>(node.parent), symbol.name)) {
                             symbols.push(symbol);
                         }
                     });
@@ -2505,10 +2518,11 @@ module ts {
             }
 
             function isInStringOrRegularExpressionOrTemplateLiteral(previousToken: Node): boolean {
-                if (previousToken.kind === SyntaxKind.StringLiteral || isTemplateLiteralKind(previousToken.kind)) {
+                if (previousToken.kind === SyntaxKind.StringLiteral
+                    || previousToken.kind === SyntaxKind.RegularExpressionLiteral
+                    || isTemplateLiteralKind(previousToken.kind)) {
                     // The position has to be either: 1. entirely within the token text, or 
-                    // 2. at the end position, and the string literal is not terminated
-                    
+                    // 2. at the end position of an unterminated token.
                     var start = previousToken.getStart();
                     var end = previousToken.getEnd();
 
@@ -2516,41 +2530,14 @@ module ts {
                         return true;
                     }
                     else if (position === end) {
-                        var width = end - start;
-                        var text = previousToken.getSourceFile().text;
-
-                        // If the token is a single character, or its second-to-last charcter indicates an escape code,
-                        // then we can immediately say that we are in the middle of an unclosed string.
-                        if (width <= 1 || text.charCodeAt(end - 2) === CharacterCodes.backslash) {
-                            return true;
-                        }
-
-                        // Now check if the last character is a closing character for the token.
-                        switch (previousToken.kind) {
-                            case SyntaxKind.StringLiteral:
-                            case SyntaxKind.NoSubstitutionTemplateLiteral:
-                                return text.charCodeAt(start) !== text.charCodeAt(end - 1);
-
-                            case SyntaxKind.TemplateHead:
-                            case SyntaxKind.TemplateMiddle:
-                                return text.charCodeAt(end - 1) !== CharacterCodes.openBrace
-                                    || text.charCodeAt(end - 2) !== CharacterCodes.$;
-
-                            case SyntaxKind.TemplateTail:
-                                return text.charCodeAt(end - 1) !== CharacterCodes.backtick;
-                        }
-
-                        return false;
+                        return !!(<LiteralExpression>previousToken).isUnterminated;
                     }
-                }
-                else if (previousToken.kind === SyntaxKind.RegularExpressionLiteral) {
-                    return previousToken.getStart() < position && position < previousToken.getEnd();
                 }
 
                 return false;
             }
 
-            function getContainingObjectLiteralApplicableForCompletion(previousToken: Node): ObjectLiteral {
+            function getContainingObjectLiteralApplicableForCompletion(previousToken: Node): ObjectLiteralExpression {
                 // The locations in an object literal expression that are applicable for completion are property name definition locations.
 
                 if (previousToken) {
@@ -2559,8 +2546,8 @@ module ts {
                     switch (previousToken.kind) {
                         case SyntaxKind.OpenBraceToken:  // var x = { |
                         case SyntaxKind.CommaToken:      // var x = { a: 0, |
-                            if (parent && parent.kind === SyntaxKind.ObjectLiteral) {
-                                return <ObjectLiteral>parent;
+                            if (parent && parent.kind === SyntaxKind.ObjectLiteralExpression) {
+                                return <ObjectLiteralExpression>parent;
                             }
                             break;
                     }
@@ -2597,7 +2584,7 @@ module ts {
                                 isFunction(containingNodeKind);
 
                         case SyntaxKind.OpenParenToken:
-                            return containingNodeKind === SyntaxKind.CatchBlock ||
+                            return containingNodeKind === SyntaxKind.CatchClause ||
                                 isFunction(containingNodeKind);
 
                         case SyntaxKind.OpenBraceToken:
@@ -2887,10 +2874,10 @@ module ts {
 
                 var type = typeResolver.getNarrowedTypeOfSymbol(symbol, location);
                 if (type) {
-                    if (location.parent && location.parent.kind === SyntaxKind.PropertyAccess) {
-                        var right = (<PropertyAccess>location.parent).right;
+                    if (location.parent && location.parent.kind === SyntaxKind.PropertyAccessExpression) {
+                        var right = (<PropertyAccessExpression>location.parent).name;
                         // Either the location is on the right of a property access, or on the left and the right is missing
-                        if (right === location || (right && right.kind === SyntaxKind.Missing)){
+                        if (right === location || (right && right.getFullWidth() === 0)){
                             location = location.parent;
                         }
                     }
@@ -2912,7 +2899,7 @@ module ts {
                             signature = candidateSignatures[0];
                         }
 
-                        var useConstructSignatures = callExpression.kind === SyntaxKind.NewExpression || callExpression.func.kind === SyntaxKind.SuperKeyword;
+                        var useConstructSignatures = callExpression.kind === SyntaxKind.NewExpression || callExpression.expression.kind === SyntaxKind.SuperKeyword;
                         var allSignatures = useConstructSignatures ? type.getConstructSignatures() : type.getCallSignatures();
 
                         if (!contains(allSignatures, signature.target || signature)) {
@@ -3087,17 +3074,17 @@ module ts {
                 ts.forEach(symbol.declarations, declaration => {
                     if (declaration.kind === SyntaxKind.ImportDeclaration) {
                         var importDeclaration = <ImportDeclaration>declaration;
-                        if (importDeclaration.externalModuleName) {
+                        if (isExternalModuleImportDeclaration(importDeclaration)) {
                             displayParts.push(spacePart());
                             displayParts.push(operatorPart(SyntaxKind.EqualsToken));
                             displayParts.push(spacePart());
                             displayParts.push(keywordPart(SyntaxKind.RequireKeyword));
                             displayParts.push(punctuationPart(SyntaxKind.OpenParenToken));
-                            displayParts.push(displayPart(getTextOfNode(importDeclaration.externalModuleName), SymbolDisplayPartKind.stringLiteral));
+                            displayParts.push(displayPart(getTextOfNode(getExternalModuleImportDeclarationExpression(importDeclaration)), SymbolDisplayPartKind.stringLiteral));
                             displayParts.push(punctuationPart(SyntaxKind.CloseParenToken));
                         }
                         else {
-                            var internalAliasSymbol = typeResolver.getSymbolInfo(importDeclaration.entityName);
+                            var internalAliasSymbol = typeResolver.getSymbolInfo(importDeclaration.moduleReference);
                             if (internalAliasSymbol) {
                                 displayParts.push(spacePart());
                                 displayParts.push(operatorPart(SyntaxKind.EqualsToken));
@@ -3212,7 +3199,7 @@ module ts {
                 // Try getting just type at this position and show
                 switch (node.kind) {
                     case SyntaxKind.Identifier:
-                    case SyntaxKind.PropertyAccess:
+                    case SyntaxKind.PropertyAccessExpression:
                     case SyntaxKind.QualifiedName:
                     case SyntaxKind.ThisKeyword:
                     case SyntaxKind.SuperKeyword:
@@ -3457,6 +3444,11 @@ module ts {
                     if (hasKind(node.parent, SyntaxKind.GetAccessor) || hasKind(node.parent, SyntaxKind.SetAccessor)) {
                         return getGetAndSetOccurrences(<AccessorDeclaration>node.parent);
                     }
+                default:
+                    if (isModifier(node.kind) && node.parent &&
+                        (isDeclaration(node.parent) || node.parent.kind === SyntaxKind.VariableStatement)) {
+                        return getModifierOccurrences(node.kind, node.parent);
+                    }
             }
 
             return undefined;
@@ -3586,8 +3578,8 @@ module ts {
                     else if (node.kind === SyntaxKind.TryStatement) {
                         var tryStatement = <TryStatement>node;
 
-                        if (tryStatement.catchBlock) {
-                            aggregate(tryStatement.catchBlock);
+                        if (tryStatement.catchClause) {
+                            aggregate(tryStatement.catchClause);
                         }
                         else {
                             // Exceptions thrown within a try block lacking a catch clause
@@ -3626,7 +3618,7 @@ module ts {
                     if (parent.kind === SyntaxKind.TryStatement) {
                         var tryStatement = <TryStatement>parent;
 
-                        if (tryStatement.tryBlock === child && tryStatement.catchBlock) {
+                        if (tryStatement.tryBlock === child && tryStatement.catchClause) {
                             return child;
                         }
                     }
@@ -3642,8 +3634,8 @@ module ts {
 
                 pushKeywordIf(keywords, tryStatement.getFirstToken(), SyntaxKind.TryKeyword);
 
-                if (tryStatement.catchBlock) {
-                    pushKeywordIf(keywords, tryStatement.catchBlock.getFirstToken(), SyntaxKind.CatchKeyword);
+                if (tryStatement.catchClause) {
+                    pushKeywordIf(keywords, tryStatement.catchClause.getFirstToken(), SyntaxKind.CatchKeyword);
                 }
 
                 if (tryStatement.finallyBlock) {
@@ -3727,7 +3719,7 @@ module ts {
 
                 function aggregate(node: Node): void {
                     if (node.kind === SyntaxKind.BreakStatement || node.kind === SyntaxKind.ContinueStatement) {
-                        statementAccumulator.push(node);
+                        statementAccumulator.push(<BreakOrContinueStatement>node);
                     }
                     // Do not cross function boundaries.
                     else if (!isAnyFunction(node)) {
@@ -3797,6 +3789,87 @@ module ts {
 
                     if (accessor) {
                         forEach(accessor.getChildren(), child => pushKeywordIf(keywords, child, SyntaxKind.GetKeyword, SyntaxKind.SetKeyword));
+                    }
+                }
+            }
+
+            function getModifierOccurrences(modifier: SyntaxKind, declaration: Node) {
+                var container = declaration.parent;
+
+                // Make sure we only highlight the keyword when it makes sense to do so.
+                if (declaration.flags & NodeFlags.AccessibilityModifier) {
+                    if (!(container.kind === SyntaxKind.ClassDeclaration ||
+                        (declaration.kind === SyntaxKind.Parameter && hasKind(container, SyntaxKind.Constructor)))) {
+                        return undefined;
+                    }
+                }
+                else if (declaration.flags & NodeFlags.Static) {
+                    if (container.kind !== SyntaxKind.ClassDeclaration) {
+                        return undefined;
+                    }
+                }
+                else if (declaration.flags & (NodeFlags.Export | NodeFlags.Ambient)) {
+                    if (!(container.kind === SyntaxKind.ModuleBlock || container.kind === SyntaxKind.SourceFile)) {
+                        return undefined;
+                    }
+                }
+
+                var keywords: Node[] = [];
+                var modifierFlag: NodeFlags = getFlagFromModifier(modifier);
+
+                var nodes: Node[];
+                switch (container.kind) {
+                    case SyntaxKind.ModuleBlock:
+                    case SyntaxKind.SourceFile:
+                        nodes = (<Block>container).statements;
+                        break;
+                    case SyntaxKind.Constructor:
+                        nodes = (<Node[]>(<ConstructorDeclaration>container).parameters).concat(
+                            (<ClassDeclaration>container.parent).members);
+                        break;
+                    case SyntaxKind.ClassDeclaration:
+                        nodes = (<ClassDeclaration>container).members;
+
+                        // If we're an accessibility modifier, we're in an instance member and should search
+                        // the constructor's parameter list for instance members as well.
+                        if (modifierFlag & NodeFlags.AccessibilityModifier) {
+                            var constructor = forEach((<ClassDeclaration>container).members, member => {
+                                return member.kind === SyntaxKind.Constructor && <ConstructorDeclaration>member;
+                            });
+
+                            if (constructor) {
+                                nodes = nodes.concat(constructor.parameters);
+                            }
+                        }
+                        break;
+                    default:
+                        Debug.fail("Invalid container kind.")
+                }
+
+                forEach(nodes, node => {
+                    if (node.modifiers && node.flags & modifierFlag) {
+                        forEach(node.modifiers, child => pushKeywordIf(keywords, child, modifier));
+                    }
+                });
+
+                return map(keywords, getReferenceEntryFromNode);
+
+                function getFlagFromModifier(modifier: SyntaxKind) {
+                    switch (modifier) {
+                        case SyntaxKind.PublicKeyword:
+                            return NodeFlags.Public;
+                        case SyntaxKind.PrivateKeyword:
+                            return NodeFlags.Private;
+                        case SyntaxKind.ProtectedKeyword:
+                            return NodeFlags.Protected;
+                        case SyntaxKind.StaticKeyword:
+                            return NodeFlags.Static;
+                        case SyntaxKind.ExportKeyword:
+                            return NodeFlags.Export;
+                        case SyntaxKind.DeclareKeyword:
+                            return NodeFlags.Ambient;
+                        default:
+                            Debug.fail();
                     }
                 }
             }
@@ -3898,39 +3971,56 @@ module ts {
             var searchMeaning = getIntersectingMeaningFromDeclarations(getMeaningFromLocation(node), declarations);
 
             // Get the text to search for, we need to normalize it as external module names will have quote
-            var symbolName = getNormalizedSymbolName(symbol.name, declarations);
+            var declaredName = getDeclaredName(symbol);
 
-            // Get syntactic diagnostics
+            // Try to get the smallest valid scope that we can limit our search to;
+            // otherwise we'll need to search globally (i.e. include each file).
             var scope = getSymbolScope(symbol);
 
             if (scope) {
                 result = [];
-                getReferencesInNode(scope, symbol, symbolName, node, searchMeaning, findInStrings, findInComments, result);
+                getReferencesInNode(scope, symbol, declaredName, node, searchMeaning, findInStrings, findInComments, result);
             }
             else {
+                var internedName = getInternedName(symbol, declarations)
                 forEach(sourceFiles, sourceFile => {
                     cancellationToken.throwIfCancellationRequested();
 
-                    if (lookUp(sourceFile.identifiers, symbolName)) {
+                    if (lookUp(sourceFile.identifiers, internedName)) {
                         result = result || [];
-                        getReferencesInNode(sourceFile, symbol, symbolName, node, searchMeaning, findInStrings, findInComments, result);
+                        getReferencesInNode(sourceFile, symbol, declaredName, node, searchMeaning, findInStrings, findInComments, result);
                     }
                 });
             }
 
             return result;
 
-            function getNormalizedSymbolName(symbolName: string, declarations: Declaration[]): string {
+            function getDeclaredName(symbol: Symbol) {
+                var name = typeInfoResolver.symbolToString(symbol);
+
+                return stripQuotes(name);
+            }
+
+            function getInternedName(symbol: Symbol, declarations: Declaration[]): string {
                 // Special case for function expressions, whose names are solely local to their bodies.
                 var functionExpression = forEach(declarations, d => d.kind === SyntaxKind.FunctionExpression ? <FunctionExpression>d : undefined);
 
+                // When a name gets interned into a SourceFile's 'identifiers' Map,
+                // its name is escaped and stored in the same way its symbol name/identifier
+                // name should be stored. Function expressions, however, are a special case,
+                // because despite sometimes having a name, the binder unconditionally binds them
+                // to a symbol with the name "__function".
                 if (functionExpression && functionExpression.name) {
                     var name = functionExpression.name.text;
                 }
                 else {
-                    var name = symbolName;
+                    var name = symbol.name;
                 }
 
+                return stripQuotes(name);
+            }
+
+            function stripQuotes(name: string) {
                 var length = name.length;
                 if (length >= 2 && name.charCodeAt(0) === CharacterCodes.doubleQuote && name.charCodeAt(length - 1) === CharacterCodes.doubleQuote) {
                     return name.substring(1, length - 1);
@@ -4332,11 +4422,11 @@ module ts {
                 if (symbol && symbol.flags & (SymbolFlags.Class | SymbolFlags.Interface)) {
                     forEach(symbol.getDeclarations(), declaration => {
                         if (declaration.kind === SyntaxKind.ClassDeclaration) {
-                            getPropertySymbolFromTypeReference((<ClassDeclaration>declaration).baseType);
-                            forEach((<ClassDeclaration>declaration).implementedTypes, getPropertySymbolFromTypeReference);
+                            getPropertySymbolFromTypeReference(getClassBaseTypeNode(<ClassDeclaration>declaration));
+                            forEach(getClassImplementedTypeNodes(<ClassDeclaration>declaration), getPropertySymbolFromTypeReference);
                         }
                         else if (declaration.kind === SyntaxKind.InterfaceDeclaration) {
-                            forEach((<InterfaceDeclaration>declaration).baseTypes, getPropertySymbolFromTypeReference);
+                            forEach(getInterfaceBaseTypeNodes(<InterfaceDeclaration>declaration), getPropertySymbolFromTypeReference);
                         }
                     });
                 }
@@ -4482,7 +4572,7 @@ module ts {
 
             var parent = node.parent;
             if (parent) {
-                if (parent.kind === SyntaxKind.PostfixOperator || parent.kind === SyntaxKind.PrefixOperator) {
+                if (parent.kind === SyntaxKind.PostfixUnaryExpression || parent.kind === SyntaxKind.PrefixUnaryExpression) {
                     return true;
                 }
                 else if (parent.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>parent).left === node) {
@@ -4636,7 +4726,7 @@ module ts {
             // Perform semantic and force a type check before emit to ensure that all symbols are updated
             // EmitFiles will report if there is an error from TypeChecker and Emitter
             // Depend whether we will have to emit into a single file or not either emit only selected file in the project, emit all files into a single file
-            var emitFilesResult = getFullTypeCheckChecker().invokeEmitter(targetSourceFile);
+            var emitFilesResult = getFullTypeCheckChecker().emitFiles(targetSourceFile);
             emitOutput.emitOutputStatus = emitFilesResult.emitResultStatus;
 
             // Reset writer back to undefined to make sure that we produce an error message if CompilerHost.writeFile method is called when we are not in getEmitOutput
@@ -4644,7 +4734,7 @@ module ts {
             return emitOutput;
         }
 
-        function getMeaningFromDeclaration(node: Declaration): SemanticMeaning {
+        function getMeaningFromDeclaration(node: Node): SemanticMeaning {
             switch (node.kind) {
                 case SyntaxKind.Parameter:
                 case SyntaxKind.VariableDeclaration:
@@ -4659,7 +4749,7 @@ module ts {
                 case SyntaxKind.FunctionDeclaration:
                 case SyntaxKind.FunctionExpression:
                 case SyntaxKind.ArrowFunction:
-                case SyntaxKind.CatchBlock:
+                case SyntaxKind.CatchClause:
                     return SemanticMeaning.Value;
 
                 case SyntaxKind.TypeParameter:
@@ -4718,7 +4808,7 @@ module ts {
             while (node.parent.kind === SyntaxKind.QualifiedName) {
                 node = node.parent;
             }
-            return node.parent.kind === SyntaxKind.ImportDeclaration && (<ImportDeclaration>node.parent).entityName === node;
+            return isInternalModuleImportDeclaration(node.parent) && (<ImportDeclaration>node.parent).moduleReference === node;
         }
 
         function getMeaningFromRightHandSideOfImport(node: Node) {
@@ -4787,7 +4877,7 @@ module ts {
             }
 
             switch (node.kind) {
-                case SyntaxKind.PropertyAccess:
+                case SyntaxKind.PropertyAccessExpression:
                 case SyntaxKind.QualifiedName:
                 case SyntaxKind.StringLiteral:
                 case SyntaxKind.FalseKeyword:
@@ -4971,8 +5061,8 @@ module ts {
                     // the '=' in a variable declaration is special cased here.
                     if (token.parent.kind === SyntaxKind.BinaryExpression ||
                         token.parent.kind === SyntaxKind.VariableDeclaration ||
-                        token.parent.kind === SyntaxKind.PrefixOperator ||
-                        token.parent.kind === SyntaxKind.PostfixOperator ||
+                        token.parent.kind === SyntaxKind.PrefixUnaryExpression ||
+                        token.parent.kind === SyntaxKind.PostfixUnaryExpression ||
                         token.parent.kind === SyntaxKind.ConditionalExpression) {
                         return ClassificationTypeNames.operator;
                     }
@@ -5569,23 +5659,29 @@ module ts {
                 addResult(end - start, classFromKind(token));
 
                 if (end >= text.length) {
-                    // We're at the end.
                     if (token === SyntaxKind.StringLiteral) {
                         // Check to see if we finished up on a multiline string literal.
                         var tokenText = scanner.getTokenText();
-                        if (tokenText.length > 0 && tokenText.charCodeAt(tokenText.length - 1) === CharacterCodes.backslash) {
-                            var quoteChar = tokenText.charCodeAt(0);
-                            result.finalLexState = quoteChar === CharacterCodes.doubleQuote
-                                ? EndOfLineState.InDoubleQuoteStringLiteral
-                                : EndOfLineState.InSingleQuoteStringLiteral;
+                        if (scanner.isUnterminated()) {
+                            var lastCharIndex = tokenText.length - 1;
+
+                            var numBackslashes = 0;
+                            while (tokenText.charCodeAt(lastCharIndex - numBackslashes) === CharacterCodes.backslash) {
+                                numBackslashes++;
+                            }
+
+                            // If we have an odd number of backslashes, then the multiline string is unclosed
+                            if (numBackslashes & 1) {
+                                var quoteChar = tokenText.charCodeAt(0);
+                                result.finalLexState = quoteChar === CharacterCodes.doubleQuote
+                                    ? EndOfLineState.InDoubleQuoteStringLiteral
+                                    : EndOfLineState.InSingleQuoteStringLiteral;
+                            }
                         }
                     }
                     else if (token === SyntaxKind.MultiLineCommentTrivia) {
                         // Check to see if the multiline comment was unclosed.
-                        var tokenText = scanner.getTokenText()
-                        if (!(tokenText.length > 3 && // need to avoid catching '/*/'
-                            tokenText.charCodeAt(tokenText.length - 2) === CharacterCodes.asterisk &&
-                            tokenText.charCodeAt(tokenText.length - 1) === CharacterCodes.slash)) {
+                        if (scanner.isUnterminated()) {
                             result.finalLexState = EndOfLineState.InMultiLineCommentTrivia;
                         }
                     }

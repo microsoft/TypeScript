@@ -78,6 +78,7 @@ var harnessSources = [
     "projectsRunner.ts",
     "loggedIO.ts",
     "rwcRunner.ts",
+    "test262Runner.ts",
     "runner.ts"
 ].map(function (f) {
     return path.join(harnessDirectory, f);
@@ -91,10 +92,12 @@ var harnessSources = [
 
 var librarySourceMap = [
         { target: "lib.core.d.ts", sources: ["core.d.ts"] },
-        { target: "lib.dom.d.ts", sources: ["importcore.d.ts", "extensions.d.ts", "dom.generated.d.ts"], },
-        { target: "lib.webworker.d.ts", sources: ["importcore.d.ts", "extensions.d.ts", "webworker.generated.d.ts"], },
+        { target: "lib.dom.d.ts", sources: ["importcore.d.ts", "extensions.d.ts", "intl.d.ts", "dom.generated.d.ts"], },
+        { target: "lib.webworker.d.ts", sources: ["importcore.d.ts", "extensions.d.ts", "intl.d.ts", "webworker.generated.d.ts"], },
         { target: "lib.scriptHost.d.ts", sources: ["importcore.d.ts", "scriptHost.d.ts"], },
-        { target: "lib.d.ts", sources: ["core.d.ts", "extensions.d.ts", "dom.generated.d.ts", "webworker.importscripts.d.ts", "scriptHost.d.ts"], },
+        { target: "lib.d.ts", sources: ["core.d.ts", "extensions.d.ts", "intl.d.ts", "dom.generated.d.ts", "webworker.importscripts.d.ts", "scriptHost.d.ts"], },
+        { target: "lib.core.es6.d.ts", sources: ["core.d.ts", "es6.d.ts"]},
+        { target: "lib.es6.d.ts", sources: ["core.d.ts", "es6.d.ts", "intl.d.ts", "dom.generated.d.ts", "webworker.importscripts.d.ts", "scriptHost.d.ts"]},
 ];
 
 var libraryTargets = librarySourceMap.map(function (f) {
@@ -135,7 +138,6 @@ function concatenateFiles(destinationFile, sourceFiles) {
 }
 
 var useDebugMode = true;
-var generateDeclarations = false;
 var host = (process.env.host || process.env.TYPESCRIPT_HOST || "node");
 var compilerFilename = "tsc.js";
 /* Compiles a file from a list of sources
@@ -146,7 +148,7 @@ var compilerFilename = "tsc.js";
     * @param useBuiltCompiler: true to use the built compiler, false to use the LKG
     * @param noOutFile: true to compile without using --out
     */
-function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, noOutFile) {
+function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, noOutFile, generateDeclarations) {
     file(outFile, prereqs, function() {
         var dir = useBuiltCompiler ? builtLocalDirectory : LKGDirectory;
         var options = "-removeComments --module commonjs -noImplicitAny ";
@@ -157,7 +159,7 @@ function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, noOu
         if (useDebugMode) {
             options += "--preserveConstEnums ";
         }
-        
+
         var cmd = host + " " + dir + compilerFilename + " " + options + " ";
         cmd = cmd + sources.join(" ") + (!noOutFile ? " -out " + outFile : "");
         if (useDebugMode) {
@@ -184,7 +186,7 @@ function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, noOu
             fs.unlinkSync(outFile);
             console.log("Compilation of " + outFile + " unsuccessful");
         });
-        ex.run();    
+        ex.run();
     }, {async: true});
 }
 
@@ -239,7 +241,7 @@ file(diagnosticInfoMapTs, [processDiagnosticMessagesJs, diagnosticMessagesJson],
     ex.addListener("cmdEnd", function() {
         complete();
     });
-    ex.run();    
+    ex.run();
 }, {async: true})
 
 
@@ -252,7 +254,8 @@ var tscFile = path.join(builtLocalDirectory, compilerFilename);
 compileFile(tscFile, compilerSources, [builtLocalDirectory, copyright].concat(compilerSources), [copyright], /*useBuiltCompiler:*/ false);
 
 var servicesFile = path.join(builtLocalDirectory, "typescriptServices.js");
-compileFile(servicesFile, servicesSources, [builtLocalDirectory, copyright].concat(servicesSources), [copyright], /*useBuiltCompiler:*/ true);
+var servicesDefinitionsFile = path.join(builtLocalDirectory, "typescriptServices.d.ts");
+compileFile(servicesFile, servicesSources, [builtLocalDirectory, copyright].concat(servicesSources), [copyright], /*useBuiltCompiler:*/ true, /*noOutFile:*/ false, /*generateDeclarations:*/ true);
 
 // Local target to build the compiler and services
 desc("Builds the full compiler and services");
@@ -275,11 +278,6 @@ task("clean", function() {
     jake.rmRf(builtDirectory);
 });
 
-// generate declarations for compiler and services
-desc("Generate declarations for compiler and services");
-task("declaration", function() {
-    generateDeclarations = true;
-});
 
 // Generate Markdown spec
 var word2mdJs = path.join(scriptsDirectory, "word2md.js");
@@ -314,7 +312,7 @@ task("generate-spec", [specMd])
 // Makes a new LKG. This target does not build anything, but errors if not all the outputs are present in the built/local directory
 desc("Makes a new LKG out of the built js files");
 task("LKG", ["clean", "release", "local"].concat(libraryTargets), function() {
-    var expectedFiles = [tscFile, servicesFile].concat(libraryTargets);
+    var expectedFiles = [tscFile, servicesFile, servicesDefinitionsFile].concat(libraryTargets);
     var missingFiles = expectedFiles.filter(function (f) {
         return !fs.existsSync(f);
     });
@@ -345,6 +343,9 @@ var refBaseline = "tests/baselines/reference/";
 
 var localRwcBaseline = "tests/baselines/rwc/local/";
 var refRwcBaseline = "tests/baselines/rwc/reference/";
+
+var localTest262Baseline = "tests/baselines/test262/local/";
+var refTest262Baseline = "tests/baselines/test262/reference/";
 
 desc("Builds the test infrastructure using the built compiler");
 task("tests", ["local", run].concat(libraryTargets));
@@ -514,6 +515,12 @@ task("baseline-accept-rwc", function() {
     fs.renameSync(localRwcBaseline, refRwcBaseline);
 });
 
+desc("Makes the most recent test262 test results the new baseline, overwriting the old baseline");
+task("baseline-accept-test262", function() {
+    jake.rmRf(refTest262Baseline);
+    fs.renameSync(localTest262Baseline, refTest262Baseline);
+});
+
 
 // Webhost
 var webhostPath = "tests/webhost/webtsc.ts";
@@ -547,7 +554,7 @@ file(loggedIOJsPath, [builtLocalDirectory, loggedIOpath], function() {
         jake.rmRf(temp);
         complete();
     });
-    ex.run();    
+    ex.run();
 }, {async: true});
 
 var instrumenterPath = harnessDirectory + 'instrumenter.ts';

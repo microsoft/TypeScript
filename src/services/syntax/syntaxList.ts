@@ -38,7 +38,7 @@ module TypeScript {
 module TypeScript.Syntax {
     function addArrayPrototypeValue(name: string, val: any) {
         if (Object.defineProperty && (<any>Array.prototype)[name] === undefined) {
-            Object.defineProperty(Array.prototype, name, { value: val, writable: false });
+            Object.defineProperty(Array.prototype, name, { value: val, writable: false, enumerable: false });
         }
         else {
             (<any>Array.prototype)[name] = val;

@@ -109,10 +109,7 @@ interface Object {
     propertyIsEnumerable(v: string): boolean;
 }
 
-/**
-  * Provides functionality common to all JavaScript objects.
-  */
-declare var Object: {
+interface ObjectConstructor {
     new (value?: any): Object;
     (): any;
     (value: any): any;
@@ -207,6 +204,11 @@ declare var Object: {
 }
 
 /**
+  * Provides functionality common to all JavaScript objects.
+  */
+declare var Object: ObjectConstructor;
+
+/**
   * Creates a new function.
   */
 interface Function {
@@ -240,8 +242,8 @@ interface Function {
     caller: Function;
 }
 
-declare var Function: {
-    /** 
+interface FunctionConstructor {
+    /**
       * Creates a new function.
       * @param args A list of arguments the function accepts.
       */
@@ -249,6 +251,8 @@ declare var Function: {
     (...args: string[]): Function;
     prototype: Function;
 }
+
+declare var Function: FunctionConstructor;
 
 interface IArguments {
     [index: number]: any;
@@ -409,23 +413,28 @@ interface String {
     [index: number]: string;
 }
 
-/** 
-  * Allows manipulation and formatting of text strings and determination and location of substrings within strings. 
-  */
-declare var String: {
+interface StringConstructor {
     new (value?: any): String;
     (value?: any): string;
     prototype: String;
     fromCharCode(...codes: number[]): string;
 }
 
+/** 
+  * Allows manipulation and formatting of text strings and determination and location of substrings within strings. 
+  */
+declare var String: StringConstructor;
+
 interface Boolean {
 }
-declare var Boolean: {
+
+interface BooleanConstructor {
     new (value?: any): Boolean;
     (value?: any): boolean;
     prototype: Boolean;
 }
+
+declare var Boolean: BooleanConstructor;
 
 interface Number {
     /**
@@ -453,8 +462,7 @@ interface Number {
     toPrecision(precision?: number): string;
 }
 
-/** An object that represents a number of any kind. All JavaScript numbers are 64-bit floating-point numbers. */
-declare var Number: {
+interface NumberConstructor {
     new (value?: any): Number;
     (value?: any): number;
     prototype: Number;
@@ -483,6 +491,9 @@ declare var Number: {
       */
     POSITIVE_INFINITY: number;
 }
+
+/** An object that represents a number of any kind. All JavaScript numbers are 64-bit floating-point numbers. */
+declare var Number: NumberConstructor;
 
 interface TemplateStringsArray extends Array<string> {
     raw: string[];
@@ -753,7 +764,7 @@ interface Date {
     toJSON(key?: any): string;
 }
 
-declare var Date: {
+interface DateConstructor {
     new (): Date;
     new (value: number): Date;
     new (value: string): Date;
@@ -778,6 +789,8 @@ declare var Date: {
     UTC(year: number, month: number, date?: number, hours?: number, minutes?: number, seconds?: number, ms?: number): number;
     now(): number;
 }
+
+declare var Date: DateConstructor;
 
 interface RegExpMatchArray extends Array<string> {
     index?: number;
@@ -819,9 +832,11 @@ interface RegExp {
     // Non-standard extensions
     compile(): RegExp;
 }
-declare var RegExp: {
+
+interface RegExpConstructor {
     new (pattern: string, flags?: string): RegExp;
     (pattern: string, flags?: string): RegExp;
+    prototype: RegExp;
 
     // Non-standard extensions
     $1: string;
@@ -836,63 +851,86 @@ declare var RegExp: {
     lastMatch: string;
 }
 
+declare var RegExp: RegExpConstructor;
+
 interface Error {
     name: string;
     message: string;
 }
-declare var Error: {
+
+interface ErrorConstructor {
     new (message?: string): Error;
     (message?: string): Error;
     prototype: Error;
 }
 
+declare var Error: ErrorConstructor;
+
 interface EvalError extends Error {
 }
-declare var EvalError: {
+
+interface EvalErrorConstructor {
     new (message?: string): EvalError;
     (message?: string): EvalError;
     prototype: EvalError;
 }
 
+declare var EvalError: EvalErrorConstructor;
+
 interface RangeError extends Error {
 }
-declare var RangeError: {
+
+interface RangeErrorConstructor {
     new (message?: string): RangeError;
     (message?: string): RangeError;
     prototype: RangeError;
 }
 
+declare var RangeError: RangeErrorConstructor;
+
 interface ReferenceError extends Error {
 }
-declare var ReferenceError: {
+
+interface ReferenceErrorConstructor {
     new (message?: string): ReferenceError;
     (message?: string): ReferenceError;
     prototype: ReferenceError;
 }
 
+declare var ReferenceError: ReferenceErrorConstructor;
+
 interface SyntaxError extends Error {
 }
-declare var SyntaxError: {
+
+interface SyntaxErrorConstructor {
     new (message?: string): SyntaxError;
     (message?: string): SyntaxError;
     prototype: SyntaxError;
 }
 
+declare var SyntaxError: SyntaxErrorConstructor;
+
 interface TypeError extends Error {
 }
-declare var TypeError: {
+
+interface TypeErrorConstructor {
     new (message?: string): TypeError;
     (message?: string): TypeError;
     prototype: TypeError;
 }
 
+declare var TypeError: TypeErrorConstructor;
+
 interface URIError extends Error {
 }
-declare var URIError: {
+
+interface URIErrorConstructor {
     new (message?: string): URIError;
     (message?: string): URIError;
     prototype: URIError;
 }
+
+declare var URIError: URIErrorConstructor;
 
 interface JSON {
     /**
@@ -1096,7 +1134,8 @@ interface Array<T> {
 
     [n: number]: T;
 }
-declare var Array: {
+
+interface ArrayConstructor {
     new (arrayLength?: number): any[];
     new <T>(arrayLength: number): T[];
     new <T>(...items: T[]): T[];
@@ -1106,3 +1145,5 @@ declare var Array: {
     isArray(arg: any): boolean;
     prototype: Array<any>;
 }
+
+declare var Array: ArrayConstructor;

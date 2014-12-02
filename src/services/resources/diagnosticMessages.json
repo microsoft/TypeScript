@@ -75,7 +75,7 @@
         "category": "Error",
         "code": 1017
     },
-    "Index signature parameter cannot have accessibility modifiers.": {
+    "Index signature parameter cannot have modifiers.": {
         "category": "Error",
         "code": 1018
     },
@@ -390,6 +390,26 @@
     "Unterminated template literal.": {
         "category": "Error",
         "code": 1115
+    },
+    "'await' expression must be contained within an 'async' declaration.": {
+        "category": "Error",
+        "code": 1116
+    },
+    "'async' arrow function parameters must be parenthesized.": {
+        "category": "Error",
+        "code": 1117
+    },
+    "A generator declaration cannot have the 'async' modifier.": {
+        "category": "Error",
+        "code": 1118
+    },
+    "'async' modifier cannot appear here.": {
+        "category": "Error",
+        "code": 1119
+    },
+    "'comma' expression cannot appear in a computed property name.": {
+        "category": "Error",
+        "code": 1120
     },
     "Duplicate identifier '{0}'.": {
         "category": "Error",

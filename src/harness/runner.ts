@@ -13,9 +13,9 @@
 // limitations under the License.
 //
 
+/// <reference path='test262Runner.ts' />
 /// <reference path='compilerRunner.ts' />
-// TODO: re-enable
-// ///<reference path='fourslashRunner.ts' />
+/// <reference path='fourslashRunner.ts' />
 /// <reference path='projectsRunner.ts' />
 /// <reference path='rwcRunner.ts' />
 
@@ -68,6 +68,9 @@ if (testConfigFile !== '') {
                 break;
             case 'rwc':
                 runners.push(new RWCRunner());
+                break;
+            case 'test262':
+                runners.push(new Test262BaselineRunner());
                 break;
             case 'reverse':
                 reverse = true;

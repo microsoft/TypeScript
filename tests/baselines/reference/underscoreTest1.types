@@ -635,7 +635,7 @@ var log = _.bind((message?: string, ...rest: string[]) => { }, Date);
 >(message?: string, ...rest: string[]) => { } : (message?: string, ...rest: string[]) => void
 >message : string
 >rest : string[]
->Date : { (): string; new (): Date; new (value: number): Date; new (value: string): Date; new (year: number, month: number, date?: number, hours?: number, minutes?: number, seconds?: number, ms?: number): Date; prototype: Date; parse(s: string): number; UTC(year: number, month: number, date?: number, hours?: number, minutes?: number, seconds?: number, ms?: number): number; now(): number; }
+>Date : DateConstructor
 
 _.delay(log, 1000, 'logged later');
 >_.delay(log, 1000, 'logged later') : number
@@ -1097,7 +1097,7 @@ _.isDate(new Date());
 >_ : Underscore.Static
 >isDate : (object: any) => boolean
 >new Date() : Date
->Date : { (): string; new (): Date; new (value: number): Date; new (value: string): Date; new (year: number, month: number, date?: number, hours?: number, minutes?: number, seconds?: number, ms?: number): Date; prototype: Date; parse(s: string): number; UTC(year: number, month: number, date?: number, hours?: number, minutes?: number, seconds?: number, ms?: number): number; now(): number; }
+>Date : DateConstructor
 
 _.isRegExp(/moe/);
 >_.isRegExp(/moe/) : boolean

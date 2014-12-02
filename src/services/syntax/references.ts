@@ -9,9 +9,9 @@
 // Scanner depends on SyntaxKind and SyntaxFacts
 ///<reference path='syntaxKind.ts' />
 ///<reference path='syntaxFacts.ts' />
+///<reference path='scannerUtilities.generated.ts' />
 ///<reference path='scanner.ts' />
 
-///<reference path='scannerUtilities.generated.ts' />
 ///<reference path='slidingWindow.ts' />
 ///<reference path='syntax.ts' />
 ///<reference path='syntaxElement.ts' />
@@ -34,8 +34,6 @@
 // SyntaxInformationMap depends on SyntaxWalker
 // ///<reference path='syntaxNodeInvariantsChecker.ts' />
 
-// DepthLimitedWalker depends on PositionTrackingWalker
-///<reference path='depthLimitedWalker.ts' />
 ///<reference path='parser.ts' />
 
 // Concrete nodes depend on the parser.

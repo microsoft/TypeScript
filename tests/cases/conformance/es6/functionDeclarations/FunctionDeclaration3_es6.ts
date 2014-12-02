@@ -1,0 +1,2 @@
+function f(yield = yield) {
+}

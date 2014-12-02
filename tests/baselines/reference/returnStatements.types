@@ -20,7 +20,7 @@ function fn6(): Date { return new Date(12); }
 >fn6 : () => Date
 >Date : Date
 >new Date(12) : Date
->Date : { (): string; new (): Date; new (value: number): Date; new (value: string): Date; new (year: number, month: number, date?: number, hours?: number, minutes?: number, seconds?: number, ms?: number): Date; prototype: Date; parse(s: string): number; UTC(year: number, month: number, date?: number, hours?: number, minutes?: number, seconds?: number, ms?: number): number; now(): number; }
+>Date : DateConstructor
 
 function fn7(): any { return null; }
 >fn7 : () => any
