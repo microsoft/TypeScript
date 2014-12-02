@@ -545,14 +545,18 @@ module ts {
             return moduleName.substr(0, 2) === "./" || moduleName.substr(0, 3) === "../" || moduleName.substr(0, 2) === ".\\" || moduleName.substr(0, 3) === "..\\";
         }
 
-        function resolveExternalModuleName(location: Node, moduleExpression: Expression): Symbol {
-            if (moduleExpression.kind !== SyntaxKind.StringLiteral) {
+        function resolveExternalModuleName(location: Node, moduleReferenceExpression: Expression): Symbol {
+            if (moduleReferenceExpression.kind !== SyntaxKind.StringLiteral) {
                 return;
             }
 
-            var moduleLiteral = <LiteralExpression>moduleExpression;
+            var moduleReferenceLiteral = <LiteralExpression>moduleReferenceExpression;
             var searchPath = getDirectoryPath(getSourceFile(location).filename);
-            var moduleName = moduleLiteral.text;
+
+            // Module names are escaped in our symbol table.  However, string literal values aren't.
+            // Escape the name in the "require(...)" clause to ensure we find the right symbol.
+            var moduleName = escapeIdentifier(moduleReferenceLiteral.text);
+
             if (!moduleName) return;
             var isRelative = isExternalModuleNameRelative(moduleName);
             if (!isRelative) {
@@ -573,10 +577,10 @@ module ts {
                 if (sourceFile.symbol) {
                     return getResolvedExportSymbol(sourceFile.symbol);
                 }
-                error(moduleLiteral, Diagnostics.File_0_is_not_an_external_module, sourceFile.filename);
+                error(moduleReferenceLiteral, Diagnostics.File_0_is_not_an_external_module, sourceFile.filename);
                 return;
             }
-            error(moduleLiteral, Diagnostics.Cannot_find_external_module_0, moduleName);
+            error(moduleReferenceLiteral, Diagnostics.Cannot_find_external_module_0, moduleName);
         }
 
         function getResolvedExportSymbol(moduleSymbol: Symbol): Symbol {
