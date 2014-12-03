@@ -66,3 +66,13 @@ var C2 = (function () {
     };
     return C2;
 })();
+//class C2<T extends Date, U extends T> {
+//    g<T extends Number, U extends T>() {
+//        var x: U;
+//        x.toFixed();
+//    }
+//    h() {
+//        var x: U;
+//        x.getDate();
+//    }
+//} 

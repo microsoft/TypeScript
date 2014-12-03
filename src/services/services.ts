@@ -722,6 +722,9 @@ module ts {
         public filename: string;
         public text: string;
 
+        public statements: NodeArray<Statement>;
+        public endOfFileToken: Node;
+
         // These methods will have their implementation provided by the implementation the 
         // compiler actually exports off of SourceFile.
         public getLineAndCharacterFromPosition: (position: number) => LineAndCharacter;
@@ -743,7 +746,6 @@ module ts {
         public nodeCount: number;
         public identifierCount: number;
         public symbolCount: number;
-        public statements: NodeArray<Statement>;
         public version: string;
         public isOpen: boolean;
         public languageVersion: ScriptTarget;
