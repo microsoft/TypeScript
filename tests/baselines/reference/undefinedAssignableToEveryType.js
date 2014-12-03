@@ -79,3 +79,8 @@ function foo(x, y, z) {
     y = undefined;
     z = undefined;
 }
+//function foo<T, U extends T, V extends Date>(x: T, y: U, z: V) {
+//    x = undefined;
+//    y = undefined;
+//    z = undefined;
+//} 

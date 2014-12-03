@@ -257,7 +257,7 @@ module ts {
         LastTypeNode = ParenthesizedType,
         FirstPunctuation = OpenBraceToken,
         LastPunctuation = CaretEqualsToken,
-        FirstToken = EndOfFileToken,
+        FirstToken = Unknown,
         LastToken = TypeKeyword,
         FirstTriviaToken = SingleLineCommentTrivia,
         LastTriviaToken = WhitespaceTrivia,
@@ -386,7 +386,7 @@ module ts {
     export type VariableOrParameterDeclaration = VariableDeclaration | ParameterDeclaration;
     export type VariableOrParameterOrPropertyDeclaration = VariableOrParameterDeclaration | PropertyDeclaration;
 
-    export interface ShortHandPropertyDeclaration extends Declaration {
+    export interface ShorthandPropertyDeclaration extends Declaration {
         name: Identifier;
         questionToken?: Node;
     }
@@ -786,6 +786,7 @@ module ts {
     // Source files are declarations when they are external modules.
     export interface SourceFile extends Declaration {
         statements: NodeArray<ModuleElement>;
+        endOfFileToken: Node;
 
         filename: string;
         text: string;
@@ -795,17 +796,24 @@ module ts {
         amdDependencies: string[];
         amdModuleName: string;
         referencedFiles: FileReference[];
-        semanticDiagnostics: Diagnostic[];
+
+        // Diagnostics reported about the "///<reference" comments in the file.
+        referenceDiagnostics: Diagnostic[];
 
         // Parse errors refer specifically to things the parser could not understand at all (like 
-        // missing tokens, or tokens it didn't know how to deal with). Grammar errors are for 
-        // things the parser understood, but either the ES6 or TS grammars do not allow (like 
-        // putting an 'public' modifier on a 'class declaration').
+        // missing tokens, or tokens it didn't know how to deal with).
         parseDiagnostics: Diagnostic[];
+
+        // Grammar errors are for  things the parser understood, but either the ES6 or TS grammars
+        // do not allow (like putting an 'public' modifier on a 'class declaration').
         grammarDiagnostics: Diagnostic[];
 
-        // Returns all 
+        // Returns all syntactic diagnostics (i.e. the reference, parser and grammar diagnostics).
         getSyntacticDiagnostics(): Diagnostic[];
+
+        // File level diagnostics reported by the binder.
+        semanticDiagnostics: Diagnostic[];
+
         hasNoDefaultLib: boolean;
         externalModuleIndicator: Node; // The first node that causes this file to be an external module
         nodeCount: number;
@@ -874,7 +882,6 @@ module ts {
         getIdentifierCount(): number;
         getSymbolCount(): number;
         getTypeCount(): number;
-        checkProgram(): void;
         emitFiles(targetSourceFile?: SourceFile): EmitResult;
         getParentOfSymbol(symbol: Symbol): Symbol;
         getNarrowedTypeOfSymbol(symbol: Symbol, node: Node): Type;
@@ -986,7 +993,7 @@ module ts {
         isTopLevelValueImportWithEntityName(node: ImportDeclaration): boolean;
         getNodeCheckFlags(node: Node): NodeCheckFlags;
         getEnumMemberValue(node: EnumMember): number;
-        hasSemanticErrors(): boolean;
+        hasSemanticErrors(sourceFile?: SourceFile): boolean;
         isDeclarationVisible(node: Declaration): boolean;
         isImplementationOfOverload(node: FunctionLikeDeclaration): boolean;
         writeTypeOfDeclaration(declaration: AccessorDeclaration | VariableOrParameterDeclaration, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter): void;

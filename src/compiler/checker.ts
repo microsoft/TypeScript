@@ -85,7 +85,6 @@ module ts {
             getDiagnostics,
             getDeclarationDiagnostics,
             getGlobalDiagnostics,
-            checkProgram,
             getParentOfSymbol,
             getNarrowedTypeOfSymbol,
             getDeclaredTypeOfSymbol,
@@ -546,14 +545,18 @@ module ts {
             return moduleName.substr(0, 2) === "./" || moduleName.substr(0, 3) === "../" || moduleName.substr(0, 2) === ".\\" || moduleName.substr(0, 3) === "..\\";
         }
 
-        function resolveExternalModuleName(location: Node, moduleExpression: Expression): Symbol {
-            if (moduleExpression.kind !== SyntaxKind.StringLiteral) {
+        function resolveExternalModuleName(location: Node, moduleReferenceExpression: Expression): Symbol {
+            if (moduleReferenceExpression.kind !== SyntaxKind.StringLiteral) {
                 return;
             }
 
-            var moduleLiteral = <LiteralExpression>moduleExpression;
+            var moduleReferenceLiteral = <LiteralExpression>moduleReferenceExpression;
             var searchPath = getDirectoryPath(getSourceFile(location).filename);
-            var moduleName = moduleLiteral.text;
+
+            // Module names are escaped in our symbol table.  However, string literal values aren't.
+            // Escape the name in the "require(...)" clause to ensure we find the right symbol.
+            var moduleName = escapeIdentifier(moduleReferenceLiteral.text);
+
             if (!moduleName) return;
             var isRelative = isExternalModuleNameRelative(moduleName);
             if (!isRelative) {
@@ -574,10 +577,10 @@ module ts {
                 if (sourceFile.symbol) {
                     return getResolvedExportSymbol(sourceFile.symbol);
                 }
-                error(moduleLiteral, Diagnostics.File_0_is_not_an_external_module, sourceFile.filename);
+                error(moduleReferenceLiteral, Diagnostics.File_0_is_not_an_external_module, sourceFile.filename);
                 return;
             }
-            error(moduleLiteral, Diagnostics.Cannot_find_external_module_0, moduleName);
+            error(moduleReferenceLiteral, Diagnostics.Cannot_find_external_module_0, moduleName);
         }
 
         function getResolvedExportSymbol(moduleSymbol: Symbol): Symbol {
@@ -8653,10 +8656,6 @@ module ts {
             }
         }
 
-        function checkProgram() {
-            forEach(program.getSourceFiles(), checkSourceFile);
-        }
-
         function getSortedDiagnostics(): Diagnostic[]{
             Debug.assert(fullTypeCheck, "diagnostics are available only in the full typecheck mode");
 
@@ -8669,12 +8668,11 @@ module ts {
         }
 
         function getDiagnostics(sourceFile?: SourceFile): Diagnostic[]{
-
             if (sourceFile) {
                 checkSourceFile(sourceFile);
                 return filter(getSortedDiagnostics(), d => d.file === sourceFile);
             }
-            checkProgram();
+            forEach(program.getSourceFiles(), checkSourceFile);
             return getSortedDiagnostics();
         }
 
@@ -9024,7 +9022,7 @@ module ts {
             // This is necessary as an identifier in short-hand property assignment can contains two meaning:
             // property name and property value.
             if (location && location.kind === SyntaxKind.ShorthandPropertyAssignment) {
-                return resolveEntityName(location, (<ShortHandPropertyDeclaration>location).name, SymbolFlags.Value);
+                return resolveEntityName(location, (<ShorthandPropertyDeclaration>location).name, SymbolFlags.Value);
             }
             return undefined;
         }
@@ -9192,9 +9190,9 @@ module ts {
             return isImportResolvedToValue(getSymbolOfNode(node));
         }
 
-        function hasSemanticErrors() {
+        function hasSemanticErrors(sourceFile?: SourceFile) {
             // Return true if there is any semantic error in a file or globally
-            return getDiagnostics().length > 0 || getGlobalDiagnostics().length > 0;
+            return getDiagnostics(sourceFile).length > 0 || getGlobalDiagnostics().length > 0;
         }
 
         function isEmitBlocked(sourceFile?: SourceFile): boolean {
@@ -9312,7 +9310,6 @@ module ts {
 
         function invokeEmitter(targetSourceFile?: SourceFile) {
             var resolver = createResolver();
-            checkProgram();
             return emitFiles(resolver, targetSourceFile);
         }
 

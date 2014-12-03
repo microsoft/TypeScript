@@ -801,7 +801,6 @@ module Harness {
                     useCaseSensitiveFileNames));
 
                 var checker = program.getTypeChecker(/*fullTypeCheckMode*/ true);
-                checker.checkProgram();
 
                 var isEmitBlocked = checker.isEmitBlocked();
 

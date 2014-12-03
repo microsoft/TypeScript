@@ -313,8 +313,10 @@ module ts {
             case SyntaxKind.FinallyBlock:
             case SyntaxKind.FunctionBlock:
             case SyntaxKind.ModuleBlock:
-            case SyntaxKind.SourceFile:
                 return children((<Block>node).statements);
+            case SyntaxKind.SourceFile:
+                return children((<SourceFile>node).statements) ||
+                    child((<SourceFile>node).endOfFileToken);
             case SyntaxKind.VariableStatement:
                 return children(node.modifiers) ||
                     children((<VariableStatement>node).declarations);
@@ -943,7 +945,6 @@ module ts {
     }
 
     export function createSourceFile(filename: string, sourceText: string, languageVersion: ScriptTarget, version: string, isOpen: boolean = false): SourceFile {
-        var file: SourceFile;
         var scanner: Scanner;
         var token: SyntaxKind;
         var parsingContext: ParsingContext;
@@ -1101,22 +1102,22 @@ module ts {
             return getPositionFromLineAndCharacter(getLineStarts(), line, character);
         }
 
-        function error(message: DiagnosticMessage, arg0?: any, arg1?: any, arg2?: any): void {
+        function parseErrorAtCurrentToken(message: DiagnosticMessage, arg0?: any, arg1?: any, arg2?: any): void {
             var start = scanner.getTokenPos();
             var length = scanner.getTextPos() - start;
 
-            errorAtPosition(start, length, message, arg0, arg1, arg2);
+            parseErrorAtPosition(start, length, message, arg0, arg1, arg2);
         }
 
-        function errorAtPosition(start: number, length: number, message: DiagnosticMessage, arg0?: any, arg1?: any, arg2?: any): void {
-            var lastErrorPosition = file.parseDiagnostics.length
-                ? file.parseDiagnostics[file.parseDiagnostics.length - 1].start
+        function parseErrorAtPosition(start: number, length: number, message: DiagnosticMessage, arg0?: any, arg1?: any, arg2?: any): void {
+            var lastErrorPosition = sourceFile.parseDiagnostics.length
+                ? sourceFile.parseDiagnostics[sourceFile.parseDiagnostics.length - 1].start
                 : -1;
 
             // Don't report another error if it would just be at the same position as the last error.
             if (start !== lastErrorPosition) {
-                var diagnostic = createFileDiagnostic(file, start, length, message, arg0, arg1, arg2);
-                file.parseDiagnostics.push(diagnostic);
+                var diagnostic = createFileDiagnostic(sourceFile, start, length, message, arg0, arg1, arg2);
+                sourceFile.parseDiagnostics.push(diagnostic);
             }
 
             if (lookAheadMode === LookAheadMode.NoErrorYet) {
@@ -1126,7 +1127,7 @@ module ts {
 
         function scanError(message: DiagnosticMessage) {
             var pos = scanner.getTextPos();
-            errorAtPosition(pos, 0, message);
+            parseErrorAtPosition(pos, 0, message);
         }
 
         function onComment(pos: number, end: number) {
@@ -1165,7 +1166,7 @@ module ts {
             // Keep track of the state we'll need to rollback to if lookahead fails (or if the 
             // caller asked us to always reset our state).
             var saveToken = token;
-            var saveSyntacticErrorsLength = file.parseDiagnostics.length;
+            var saveSyntacticErrorsLength = sourceFile.parseDiagnostics.length;
 
             // Keep track of the current look ahead mode (this matters if we have nested 
             // speculative parsing).
@@ -1187,7 +1188,7 @@ module ts {
             lookAheadMode = saveLookAheadMode;
             if (!result || alwaysResetState) {
                 token = saveToken;
-                file.parseDiagnostics.length = saveSyntacticErrorsLength;
+                sourceFile.parseDiagnostics.length = saveSyntacticErrorsLength;
             }
 
             return result;
@@ -1236,10 +1237,10 @@ module ts {
 
             // Report specific message if provided with one.  Otherwise, report generic fallback message.
             if (diagnosticMessage) {
-                error(diagnosticMessage, arg0);
+                parseErrorAtCurrentToken(diagnosticMessage, arg0);
             }
             else {
-                error(Diagnostics._0_expected, tokenToString(kind));
+                parseErrorAtCurrentToken(Diagnostics._0_expected, tokenToString(kind));
             }
             return false;
         }
@@ -1307,10 +1308,10 @@ module ts {
 
         function createMissingNode(kind: SyntaxKind, reportAtCurrentPosition: boolean, diagnosticMessage: DiagnosticMessage, arg0?: any): Node {
             if (reportAtCurrentPosition) {
-                errorAtPosition(scanner.getStartPos(), 0, diagnosticMessage, arg0);
+                parseErrorAtPosition(scanner.getStartPos(), 0, diagnosticMessage, arg0);
             }
             else {
-                error(diagnosticMessage, arg0);
+                parseErrorAtCurrentToken(diagnosticMessage, arg0);
             }
 
             return createMissingNodeWithoutError(kind);
@@ -1395,10 +1396,12 @@ module ts {
         }
         
         function parseContextualModifier(t: SyntaxKind): boolean {
-            return token === t && tryParse(() => {
-                nextToken();
-                return canFollowModifier();
-            });
+            return token === t && tryParse(nextTokenCanFollowModifier);
+        }
+
+        function nextTokenCanFollowModifier() {
+            nextToken();
+            return canFollowModifier();
         }
 
         function parseAnyContextualModifier(): boolean {
@@ -1599,7 +1602,7 @@ module ts {
 
         // Returns true if we should abort parsing.
         function abortParsingListOrMoveToNextToken(kind: ParsingContext) {
-            error(parsingContextErrors(kind));
+            parseErrorAtCurrentToken(parsingContextErrors(kind));
             if (isInSomeParsingContext()) {
                 return true;
             }
@@ -3188,7 +3191,7 @@ module ts {
 
             // Parse to check if it is short-hand property assignment or normal property assignment
             if ((token === SyntaxKind.CommaToken || token === SyntaxKind.CloseBraceToken) && tokenIsIdentifier) {
-                var shorthandDeclaration = <ShortHandPropertyDeclaration>createNode(SyntaxKind.ShorthandPropertyAssignment, nodePos);
+                var shorthandDeclaration = <ShorthandPropertyDeclaration>createNode(SyntaxKind.ShorthandPropertyAssignment, nodePos);
                 shorthandDeclaration.name = <Identifier>propertyName;
                 shorthandDeclaration.questionToken = questionToken;
                 return finishNode(shorthandDeclaration);
@@ -4066,9 +4069,13 @@ module ts {
             // literals.  We check to ensure that it is only a string literal later in the grammar
             // walker.
             node.expression = parseExpression();
+
+            // Ensure the string being required is in our 'identifier' table.  This will ensure 
+            // that features like 'find refs' will look inside this file when search for its name.
             if (node.expression.kind === SyntaxKind.StringLiteral) {
                 internIdentifier((<LiteralExpression>node.expression).text);
             }
+
             parseExpected(SyntaxKind.CloseParenToken);
             return finishNode(node);
         }
@@ -4200,13 +4207,13 @@ module ts {
                 var referencePathMatchResult = getFileReferenceFromReferencePath(comment, range);
                 if (referencePathMatchResult) {
                     var fileReference = referencePathMatchResult.fileReference;
-                    file.hasNoDefaultLib = referencePathMatchResult.isNoDefaultLib;
+                    sourceFile.hasNoDefaultLib = referencePathMatchResult.isNoDefaultLib;
                     var diagnosticMessage = referencePathMatchResult.diagnosticMessage;
                     if (fileReference) {
                         referencedFiles.push(fileReference);
                     }
                     if (diagnosticMessage) {
-                        file.parseDiagnostics.push(createFileDiagnostic(file, range.pos, range.end - range.pos, diagnosticMessage));
+                        sourceFile.referenceDiagnostics.push(createFileDiagnostic(sourceFile, range.pos, range.end - range.pos, diagnosticMessage));
                     }
                 }
                 else {
@@ -4214,7 +4221,7 @@ module ts {
                     var amdModuleNameMatchResult = amdModuleNameRegEx.exec(comment);
                     if(amdModuleNameMatchResult) {
                         if(amdModuleName) {
-                            file.parseDiagnostics.push(createFileDiagnostic(file, range.pos, range.end - range.pos, Diagnostics.An_AMD_module_cannot_have_multiple_name_assignments));
+                            sourceFile.referenceDiagnostics.push(createFileDiagnostic(sourceFile, range.pos, range.end - range.pos, Diagnostics.An_AMD_module_cannot_have_multiple_name_assignments));
                         }
                         amdModuleName = amdModuleNameMatchResult[2];
                     }
@@ -4235,7 +4242,7 @@ module ts {
         }
 
         function getExternalModuleIndicator() {
-            return forEach(file.statements, node =>
+            return forEach(sourceFile.statements, node =>
                 node.flags & NodeFlags.Export
                 || node.kind === SyntaxKind.ImportDeclaration && (<ImportDeclaration>node).moduleReference.kind === SyntaxKind.ExternalModuleReference
                 || node.kind === SyntaxKind.ExportAssignment
@@ -4246,15 +4253,15 @@ module ts {
         var syntacticDiagnostics: Diagnostic[];
         function getSyntacticDiagnostics() {
             if (syntacticDiagnostics === undefined) {
-                if (file.parseDiagnostics.length > 0) {
+                if (sourceFile.parseDiagnostics.length > 0) {
                     // Don't bother doing any grammar checks if there are already parser errors.  
                     // Otherwise we may end up with too many cascading errors.
-                    syntacticDiagnostics = file.parseDiagnostics;
+                    syntacticDiagnostics = sourceFile.referenceDiagnostics.concat(sourceFile.parseDiagnostics);
                 }
                 else {
                     // No parser errors were reported.  Perform our stricter grammar checks.
-                    syntacticDiagnostics = file.grammarDiagnostics;
-                    checkGrammar(sourceText, languageVersion, file);
+                    checkGrammar(sourceText, languageVersion, sourceFile);
+                    syntacticDiagnostics = sourceFile.referenceDiagnostics.concat(sourceFile.grammarDiagnostics);
                 }
             }
 
@@ -4267,32 +4274,40 @@ module ts {
         if (fileExtensionIs(filename, ".d.ts")) {
             rootNodeFlags = NodeFlags.DeclarationFile;
         }
-        file = <SourceFile>createRootNode(SyntaxKind.SourceFile, 0, sourceText.length, rootNodeFlags);
-        file.filename = normalizePath(filename);
-        file.text = sourceText;
-        file.getLineAndCharacterFromPosition = getLineAndCharacterFromSourcePosition;
-        file.getPositionFromLineAndCharacter = getPositionFromSourceLineAndCharacter;
-        file.getLineStarts = getLineStarts;
-        file.getSyntacticDiagnostics = getSyntacticDiagnostics;
-        file.parseDiagnostics = [];
-        file.grammarDiagnostics = [];
-        file.semanticDiagnostics = [];
+
+        var sourceFile = <SourceFile>createRootNode(SyntaxKind.SourceFile, 0, sourceText.length, rootNodeFlags);
+
+        sourceFile.getLineAndCharacterFromPosition = getLineAndCharacterFromSourcePosition;
+        sourceFile.getPositionFromLineAndCharacter = getPositionFromSourceLineAndCharacter;
+        sourceFile.getLineStarts = getLineStarts;
+        sourceFile.getSyntacticDiagnostics = getSyntacticDiagnostics;
+
+        sourceFile.filename = normalizePath(filename);
+        sourceFile.text = sourceText;
+
+        sourceFile.referenceDiagnostics = [];
+        sourceFile.parseDiagnostics = [];
+        sourceFile.grammarDiagnostics = [];
+        sourceFile.semanticDiagnostics = [];
 
         var referenceComments = processReferenceComments(); 
-        file.referencedFiles = referenceComments.referencedFiles;
-        file.amdDependencies = referenceComments.amdDependencies;
-        file.amdModuleName = referenceComments.amdModuleName;
+        sourceFile.referencedFiles = referenceComments.referencedFiles;
+        sourceFile.amdDependencies = referenceComments.amdDependencies;
+        sourceFile.amdModuleName = referenceComments.amdModuleName;
 
-        file.statements = parseList(ParsingContext.SourceElements, /*checkForStrictMode*/ true, parseSourceElement);
-        file.externalModuleIndicator = getExternalModuleIndicator();
+        sourceFile.statements = parseList(ParsingContext.SourceElements, /*checkForStrictMode*/ true, parseSourceElement);
+        Debug.assert(token === SyntaxKind.EndOfFileToken);
+        sourceFile.endOfFileToken = parseTokenNode();
 
-        file.nodeCount = nodeCount;
-        file.identifierCount = identifierCount;
-        file.version = version;
-        file.isOpen = isOpen;
-        file.languageVersion = languageVersion;
-        file.identifiers = identifiers;
-        return file;
+        sourceFile.externalModuleIndicator = getExternalModuleIndicator();
+
+        sourceFile.nodeCount = nodeCount;
+        sourceFile.identifierCount = identifierCount;
+        sourceFile.version = version;
+        sourceFile.isOpen = isOpen;
+        sourceFile.languageVersion = languageVersion;
+        sourceFile.identifiers = identifiers;
+        return sourceFile;
     }
 
     function isLeftHandSideExpression(expr: Expression): boolean {
@@ -4432,7 +4447,7 @@ module ts {
                 case SyntaxKind.ReturnStatement:                return checkReturnStatement(<ReturnStatement>node);
                 case SyntaxKind.SetAccessor:                    return checkSetAccessor(<MethodDeclaration>node);
                 case SyntaxKind.SourceFile:                     return checkSourceFile(<SourceFile>node);
-                case SyntaxKind.ShorthandPropertyAssignment:    return checkShorthandPropertyAssignment(<ShortHandPropertyDeclaration>node);
+                case SyntaxKind.ShorthandPropertyAssignment:    return checkShorthandPropertyAssignment(<ShorthandPropertyDeclaration>node);
                 case SyntaxKind.SwitchStatement:                return checkSwitchStatement(<SwitchStatement>node);
                 case SyntaxKind.TaggedTemplateExpression:       return checkTaggedTemplateExpression(<TaggedTemplateExpression>node);
                 case SyntaxKind.ThrowStatement:                 return checkThrowStatement(<ThrowStatement>node);
@@ -5449,7 +5464,7 @@ module ts {
             return grammarErrorOnFirstToken(node, Diagnostics.A_declare_modifier_is_required_for_a_top_level_declaration_in_a_d_ts_file);
         }
 
-        function checkShorthandPropertyAssignment(node: ShortHandPropertyDeclaration): boolean {
+        function checkShorthandPropertyAssignment(node: ShorthandPropertyDeclaration): boolean {
             return checkForInvalidQuestionMark(node, node.questionToken, Diagnostics.An_object_member_cannot_be_declared_optional);
         }
 
