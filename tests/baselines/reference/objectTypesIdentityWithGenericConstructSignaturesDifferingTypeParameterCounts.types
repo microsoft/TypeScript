@@ -71,7 +71,6 @@ var b = { new<A, B, C, D, E, F>(x: A) { return x; } };
 >b : { new: <A, B, C, D, E, F>(x: A) => A; }
 >{ new<A, B, C, D, E, F>(x: A) { return x; } } : { new: <A, B, C, D, E, F>(x: A) => A; }
 >new : <A, B, C, D, E, F>(x: A) => A
->new<A, B, C, D, E, F>(x: A) { return x; } : <A, B, C, D, E, F>(x: A) => A
 >A : A
 >B : B
 >C : C

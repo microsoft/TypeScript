@@ -67,7 +67,6 @@ var b = { foo<T>(x: T) { return null; } };
 >b : { foo: <T>(x: T) => any; }
 >{ foo<T>(x: T) { return null; } } : { foo: <T>(x: T) => any; }
 >foo : <T>(x: T) => any
->foo<T>(x: T) { return null; } : <T>(x: T) => any
 >T : T
 >x : T
 >T : T

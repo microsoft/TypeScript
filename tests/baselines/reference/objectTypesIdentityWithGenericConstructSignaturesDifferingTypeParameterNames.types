@@ -53,7 +53,6 @@ var b = { new<A>(x: A) { return new C<A>(x); } };
 >b : { new: <A>(x: A) => C<A>; }
 >{ new<A>(x: A) { return new C<A>(x); } } : { new: <A>(x: A) => C<A>; }
 >new : <A>(x: A) => C<A>
->new<A>(x: A) { return new C<A>(x); } : <A>(x: A) => C<A>
 >A : A
 >x : A
 >A : A

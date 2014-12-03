@@ -91,7 +91,6 @@ var aa = {
 
     biz() {
 >biz : () => void
->biz() {        throw this;    } : () => void
 
         throw this;
 >this : any

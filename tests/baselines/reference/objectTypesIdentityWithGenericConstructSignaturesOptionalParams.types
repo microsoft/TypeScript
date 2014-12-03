@@ -65,7 +65,6 @@ var b = { new<T>(x: T, y?: T) { return new C<T>(x, y); } }; // not a construct s
 >b : { new: <T>(x: T, y?: T) => C<T>; }
 >{ new<T>(x: T, y?: T) { return new C<T>(x, y); } } : { new: <T>(x: T, y?: T) => C<T>; }
 >new : <T>(x: T, y?: T) => C<T>
->new<T>(x: T, y?: T) { return new C<T>(x, y); } : <T>(x: T, y?: T) => C<T>
 >T : T
 >x : T
 >T : T

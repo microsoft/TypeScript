@@ -54,7 +54,6 @@ var b = { new<T extends RegExp>(x: T) { return ''; } }; // not a construct signa
 >b : { new: <T extends RegExp>(x: T) => string; }
 >{ new<T extends RegExp>(x: T) { return ''; } } : { new: <T extends RegExp>(x: T) => string; }
 >new : <T extends RegExp>(x: T) => string
->new<T extends RegExp>(x: T) { return ''; } : <T extends RegExp>(x: T) => string
 >T : T
 >RegExp : RegExp
 >x : T

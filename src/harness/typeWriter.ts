@@ -49,31 +49,10 @@ class TypeWriterWalker {
                 this.log(node, this.getTypeOfNode(node));
                 break;
 
-            case ts.SyntaxKind.Method:
-                if (ts.isObjectLiteralMethod(node)) {
-                    // this is a just a temporary workaround so we emit typewriter baselines in the 
-                    // same order as before.
-                    var name = (<ts.MethodDeclaration>node).name;
-                    if (name.kind === ts.SyntaxKind.Identifier) {
-                        this.log(name, this.getTypeOfNode(name));
-                    }
-
-                    if (node.symbol) {
-                        this.log(node, this.getTypeOfNode(node));
-                    }
-                }
-                break;
-
             // Should not change expression status (maybe expressions)
             // TODO: Again, ideally should log number and string literals too,
             // but to be consistent with the old typeWriter, just log identifiers
             case ts.SyntaxKind.Identifier:
-                    // this is a just a temporary workaround so we emit typewriter baselines in the 
-                    // same order as before.
-                if (ts.isObjectLiteralMethod(node.parent) && (<ts.MethodDeclaration>node.parent).name == node) {
-                    break;
-                }
-
                 var identifier = <ts.Identifier>node;
                 if (!this.isLabel(identifier)) {
                     var type = this.getTypeOfNode(identifier);

@@ -81,7 +81,6 @@ var b = { foo<A, B, C, D, E, F>(x: A) { return x; } };
 >b : { foo: <A, B, C, D, E, F>(x: A) => A; }
 >{ foo<A, B, C, D, E, F>(x: A) { return x; } } : { foo: <A, B, C, D, E, F>(x: A) => A; }
 >foo : <A, B, C, D, E, F>(x: A) => A
->foo<A, B, C, D, E, F>(x: A) { return x; } : <A, B, C, D, E, F>(x: A) => A
 >A : A
 >B : B
 >C : C

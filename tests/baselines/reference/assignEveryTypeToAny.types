@@ -136,14 +136,12 @@ x = { f() { return 1; } }
 >x : any
 >{ f() { return 1; } } : { f: () => number; }
 >f : () => number
->f() { return 1; } : () => number
 
 x = { f<T>(x: T) { return x; } }
 >x = { f<T>(x: T) { return x; } } : { f: <T>(x: T) => T; }
 >x : any
 >{ f<T>(x: T) { return x; } } : { f: <T>(x: T) => T; }
 >f : <T>(x: T) => T
->f<T>(x: T) { return x; } : <T>(x: T) => T
 >T : T
 >x : T
 >T : T

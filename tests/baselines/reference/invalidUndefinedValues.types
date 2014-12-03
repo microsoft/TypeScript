@@ -72,7 +72,6 @@ x = { f() { } }
 >x : any
 >{ f() { } } : { f: () => void; }
 >f : () => void
->f() { } : () => void
 
 function f<T>(a: T) {
 >f : <T>(a: T) => void

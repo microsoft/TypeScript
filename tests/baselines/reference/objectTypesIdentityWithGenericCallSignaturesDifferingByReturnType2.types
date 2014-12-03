@@ -73,7 +73,6 @@ var b = { foo<T extends Date>(x: T) { return null; } };
 >b : { foo: <T extends Date>(x: T) => any; }
 >{ foo<T extends Date>(x: T) { return null; } } : { foo: <T extends Date>(x: T) => any; }
 >foo : <T extends Date>(x: T) => any
->foo<T extends Date>(x: T) { return null; } : <T extends Date>(x: T) => any
 >T : T
 >Date : Date
 >x : T

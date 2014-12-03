@@ -17,7 +17,6 @@ var v = {
  //PropertyName + CallSignature
  func1() { },
 >func1 : () => void
->func1() { } : () => void
 
  //getter
  get a() {

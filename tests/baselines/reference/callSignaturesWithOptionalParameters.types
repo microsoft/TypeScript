@@ -138,7 +138,6 @@ var b = {
 
     foo(x?: number) { },
 >foo : (x?: number) => void
->foo(x?: number) { } : (x?: number) => void
 >x : number
 
     a: function foo(x: number, y?: number) { },

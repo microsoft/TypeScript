@@ -3,5 +3,4 @@ var v = { foo() { } };
 >v : { foo: () => void; }
 >{ foo() { } } : { foo: () => void; }
 >foo : () => void
->foo() { } : () => void
 

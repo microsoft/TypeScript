@@ -43,7 +43,6 @@ var b = { new(x: RegExp) { return ''; } }; // not a construct signature, functio
 >b : { new: (x: RegExp) => string; }
 >{ new(x: RegExp) { return ''; } } : { new: (x: RegExp) => string; }
 >new : (x: RegExp) => string
->new(x: RegExp) { return ''; } : (x: RegExp) => string
 >x : RegExp
 >RegExp : RegExp
 

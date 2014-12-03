@@ -52,7 +52,6 @@ var b = { new<T>(x: T): T { return null; } }; // not a construct signature, func
 >b : { new: <T>(x: T) => T; }
 >{ new<T>(x: T): T { return null; } } : { new: <T>(x: T) => T; }
 >new : <T>(x: T) => T
->new<T>(x: T): T { return null; } : <T>(x: T) => T
 >T : T
 >x : T
 >T : T

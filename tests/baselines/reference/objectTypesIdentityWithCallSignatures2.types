@@ -57,7 +57,6 @@ var b = { foo(x: RegExp) { return ''; } };
 >b : { foo: (x: RegExp) => string; }
 >{ foo(x: RegExp) { return ''; } } : { foo: (x: RegExp) => string; }
 >foo : (x: RegExp) => string
->foo(x: RegExp) { return ''; } : (x: RegExp) => string
 >x : RegExp
 >RegExp : RegExp
 

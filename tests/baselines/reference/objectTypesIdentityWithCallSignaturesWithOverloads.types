@@ -105,7 +105,6 @@ var b = {
 
     foo(x: any) { return <any>''; }
 >foo : (x: any) => any
->foo(x: any) { return <any>''; } : (x: any) => any
 >x : any
 ><any>'' : any
 

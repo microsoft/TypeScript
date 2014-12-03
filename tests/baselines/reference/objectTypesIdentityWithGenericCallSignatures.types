@@ -68,7 +68,6 @@ var b = { foo<T>(x: T) { return x; } };
 >b : { foo: <T>(x: T) => T; }
 >{ foo<T>(x: T) { return x; } } : { foo: <T>(x: T) => T; }
 >foo : <T>(x: T) => T
->foo<T>(x: T) { return x; } : <T>(x: T) => T
 >T : T
 >x : T
 >T : T

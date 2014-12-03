@@ -34,7 +34,6 @@ var obj = {
 
     f() {
 >f : () => any
->f() {        return this.spaaace;    } : () => any
 
         return this.spaaace;
 >this.spaaace : any

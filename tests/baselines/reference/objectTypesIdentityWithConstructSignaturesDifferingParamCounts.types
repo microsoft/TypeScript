@@ -46,7 +46,6 @@ var b = { new(x: string) { return ''; } }; // not a construct signature, functio
 >b : { new: (x: string) => string; }
 >{ new(x: string) { return ''; } } : { new: (x: string) => string; }
 >new : (x: string) => string
->new(x: string) { return ''; } : (x: string) => string
 >x : string
 
 function foo1b(x: B);

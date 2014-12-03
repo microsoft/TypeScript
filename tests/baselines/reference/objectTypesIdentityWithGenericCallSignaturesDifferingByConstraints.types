@@ -70,7 +70,6 @@ var b = { foo<T extends RegExp>(x: T) { return ''; } };
 >b : { foo: <T extends RegExp>(x: T) => string; }
 >{ foo<T extends RegExp>(x: T) { return ''; } } : { foo: <T extends RegExp>(x: T) => string; }
 >foo : <T extends RegExp>(x: T) => string
->foo<T extends RegExp>(x: T) { return ''; } : <T extends RegExp>(x: T) => string
 >T : T
 >RegExp : RegExp
 >x : T

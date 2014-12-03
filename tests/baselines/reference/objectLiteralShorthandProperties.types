@@ -36,7 +36,6 @@ var x3 = {
 
     d() { },
 >d : () => void
->d() { } : () => void
 
     x3,
 >x3 : any

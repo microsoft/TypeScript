@@ -6,7 +6,6 @@ var y = { x() { x++; } };
 >y : { x: () => void; }
 >{ x() { x++; } } : { x: () => void; }
 >x : () => void
->x() { x++; } : () => void
 >x++ : number
 >x : number
 

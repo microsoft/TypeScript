@@ -73,7 +73,6 @@ var b = { new<T, U>(x: T, y: U) { return new C<T, U>(x, y); } }; // not a constr
 >b : { new: <T, U>(x: T, y: U) => C<T, U>; }
 >{ new<T, U>(x: T, y: U) { return new C<T, U>(x, y); } } : { new: <T, U>(x: T, y: U) => C<T, U>; }
 >new : <T, U>(x: T, y: U) => C<T, U>
->new<T, U>(x: T, y: U) { return new C<T, U>(x, y); } : <T, U>(x: T, y: U) => C<T, U>
 >T : T
 >U : U
 >x : T

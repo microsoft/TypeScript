@@ -56,7 +56,6 @@ var b = { foo(x: string) { return ''; } };
 >b : { foo: (x: string) => string; }
 >{ foo(x: string) { return ''; } } : { foo: (x: string) => string; }
 >foo : (x: string) => string
->foo(x: string) { return ''; } : (x: string) => string
 >x : string
 
 function foo1(x: A);
