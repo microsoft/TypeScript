@@ -10,8 +10,8 @@ async function foo(a = yield => yield): Promise<void> {
 //// [asyncFunctionDeclaration10_es6.js]
 function foo(a) {
     if (a === void 0) { a = function (yield) { return yield; }; }
-    return new Promise(__resolve => {
-        __resolve(__awaiter(function* () {
+    return new Promise(function (_resolve) {
+        _resolve(__awaiter(function* () {
         }()));
     });
 }

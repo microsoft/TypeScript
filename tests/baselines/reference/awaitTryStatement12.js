@@ -29,43 +29,45 @@ async function func(): Promise<void> {
 
 //// [awaitTryStatement12.js]
 function func() {
-    var __l0, __l1;
-    return new Promise(function (__resolve) {
-        __resolve(__awaiter(__generator(function (__state) {
-            switch (__state.label) {
+    var e_a, e_b;
+    return new Promise(function (_resolve) {
+        _resolve(__awaiter(__generator(function (_state) {
+            switch (_state.label) {
                 case 0:
-                    __state.trys = [];
-                    "before";
-                    __state.label = 1;
+                    _state.trys = [];
+                    _state.label = 1;
                 case 1:
-                    __state.trys.push([1,7,8,9])
-                    "try0.0";
-                    __state.label = 2;
+                    "before";
+                    _state.label = 2;
                 case 2:
-                    __state.trys.push([2,4,5,6])
+                    _state.trys.push([2,8,9,10])
+                    "try0.0";
+                    _state.label = 3;
+                case 3:
+                    _state.trys.push([3,5,6,7])
                     "try1.0";
                     return ["yield", p];
-                case 3:
-                    "try1.1";
-                    return ["break", 6];
                 case 4:
-                    __l0 = __state.error;
-                    "catch1";
-                    return ["break", 6];
+                    "try1.1";
+                    return ["break", 7];
                 case 5:
+                    e_a = _state.error;
+                    "catch1";
+                    return ["break", 7];
+                case 6:
                     "finally1";
                     return ["endfinally"];
-                case 6:
-                    "try0.1";
-                    return ["break", 9];
                 case 7:
-                    __l1 = __state.error;
-                    "catch0";
-                    return ["break", 9];
+                    "try0.1";
+                    return ["break", 10];
                 case 8:
+                    e_b = _state.error;
+                    "catch0";
+                    return ["break", 10];
+                case 9:
                     "finally0";
                     return ["endfinally"];
-                case 9:
+                case 10:
                     "after";
                     return ["return"];
             }

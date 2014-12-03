@@ -7314,19 +7314,21 @@ module ts {
             // in an `initializer` function that in turn supplies a `resolve` function as one of its arguments
             // and results in an object with a callable `then` signature.
 
-            var links = getSymbolLinks(returnType.symbol);
-            if (links.promiseType) {
-                if (!links.awaitedType) {
-                    return getAwaitedType(returnType);
+            if (returnType) {
+                var links = getSymbolLinks(returnType.symbol);
+                if (links.promiseType) {
+                    if (!links.awaitedType) {
+                        return getAwaitedType(returnType);
+                    }
+
+                    return links.awaitedType;
                 }
 
-                return links.awaitedType;
-            }
-
-            var type = getTypeOfSymbol(returnType.symbol);
-            if (isTypeAssignableTo(type, globalPromiseConstructorType)) {
-                links.promiseType = true;
-                return getAwaitedType(returnType);
+                var type = getTypeOfSymbol(returnType.symbol);
+                if (isTypeAssignableTo(type, globalPromiseConstructorType)) {
+                    links.promiseType = true;
+                    return getAwaitedType(returnType);
+                }
             }
 
             error(node, ts.Diagnostics.An_async_function_or_method_must_have_a_valid_awaitable_return_type);
@@ -7618,7 +7620,7 @@ module ts {
             }
 
             var identifier = <Identifier>name;
-            if (identifier.text !== "__awaiter" && identifier.text !== "__resolve") {
+            if (identifier.text !== "__awaiter") {
                 return;
             }
 
@@ -7637,7 +7639,7 @@ module ts {
             }
 
             var identifier = <Identifier>name;
-            if (identifier.text !== "__generator" && identifier.text !== "__state" && identifier.text.indexOf("__l") !== 0) {
+            if (identifier.text !== "__generator") {
                 return;
             }
 
@@ -9395,9 +9397,14 @@ module ts {
                 isSymbolAccessible,
                 isEntityNameVisible,
                 getConstantValue,
+                isUnknownIdentifier,
                 renameSymbol,
                 getRenamedIdentifier
             };
+        }
+
+        function isUnknownIdentifier(location: Node, name: string): boolean {
+            return !resolveName(location, name, SymbolFlags.Value, /*nodeNotFoundMessage*/ undefined, /*nameArg*/ undefined);
         }
 
         function invokeEmitter(targetSourceFile?: SourceFile) {

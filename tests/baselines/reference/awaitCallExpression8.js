@@ -17,17 +17,17 @@ async function func(): Promise<void> {
 
 //// [awaitCallExpression8.js]
 function func() {
-    var b, __l0, __l1;
-    return new Promise(function (__resolve) {
-        __resolve(__awaiter(__generator(function (__state) {
-            switch (__state.label) {
+    var b, _a, _b;
+    return new Promise(function (_resolve) {
+        _resolve(__awaiter(__generator(function (_state) {
+            switch (_state.label) {
                 case 0:
                     "before";
                     return ["yield", po];
                 case 1:
-                    __l0 = (__state.sent);
-                    __l1 = __l0.fn;
-                    b = __l1.call(__l0, a, a, a);
+                    _a = (_state.sent);
+                    _b = _a.fn;
+                    b = _b.call(_a, a, a, a);
                     "after";
                     return ["return"];
             }

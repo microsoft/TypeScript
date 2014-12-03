@@ -15,20 +15,20 @@ async function func(): Promise<void> {
 
 //// [awaitDoStatement3.js]
 function func() {
-    return new Promise(function (__resolve) {
-        __resolve(__awaiter(__generator(function (__state) {
-            switch (__state.label) {
+    return new Promise(function (_resolve) {
+        _resolve(__awaiter(__generator(function (_state) {
+            switch (_state.label) {
                 case 0:
                     "before";
-                    __state.label = 1;
+                    _state.label = 1;
                 case 1:
                     "body";
-                    __state.label = 2;
+                    _state.label = 2;
                 case 2:
                     return ["yield", p];
                 case 3:
-                    if (__state.sent) { return ["break", 1]; }
-                    __state.label = 4;
+                    if (_state.sent) { return ["break", 1]; }
+                    _state.label = 4;
                 case 4:
                     "after";
                     return ["return"];

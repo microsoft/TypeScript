@@ -1,0 +1,9 @@
+=== tests/cases/conformance/async/downlevel/asyncMethod/asyncMethod2.ts ===
+class C {
+>C : C
+
+  f(await) {
+>f : (await: any) => void
+>await : any
+  }
+}

@@ -16,16 +16,16 @@ async function func(): Promise<void> {
 
 //// [awaitWhileStatement3.js]
 function func() {
-    return new Promise(function (__resolve) {
-        __resolve(__awaiter(__generator(function (__state) {
-            switch (__state.label) {
+    return new Promise(function (_resolve) {
+        _resolve(__awaiter(__generator(function (_state) {
+            switch (_state.label) {
                 case 0:
                     "before";
-                    __state.label = 1;
+                    _state.label = 1;
                 case 1:
                     return ["yield", p];
                 case 2:
-                    if (!(__state.sent)) { return ["break", 3]; }
+                    if (!(_state.sent)) { return ["break", 3]; }
                     "body";
                     return ["break", 1];
                 case 3:

@@ -22,9 +22,9 @@ async function func(): Promise<void> {
 var a;
 var p;
 function func() {
-    return new Promise(function (__resolve) {
-        __resolve(__awaiter(__generator(function (__state) {
-            switch (__state.label) {
+    return new Promise(function (_resolve) {
+        _resolve(__awaiter(__generator(function (_state) {
+            switch (_state.label) {
                 case 0:
                     "before";
                     if (!(a)) { return ["break", 1]; }
@@ -35,7 +35,7 @@ function func() {
                     return ["yield", p];
                 case 2:
                     "else2";
-                    __state.label = 3;
+                    _state.label = 3;
                 case 3:
                     "after";
                     return ["return"];

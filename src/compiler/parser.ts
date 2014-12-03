@@ -4765,7 +4765,7 @@ module ts {
                     return grammarErrorOnNode(lastPrivate, Diagnostics._0_modifier_cannot_appear_on_a_constructor_declaration, "private");
                 }
                 else if (flags & NodeFlags.Async) {
-                    return grammarErrorOnNode(lastPrivate, Diagnostics._0_modifier_cannot_appear_on_a_constructor_declaration, "async");
+                    return grammarErrorOnNode(lastAsync, Diagnostics._0_modifier_cannot_appear_on_a_constructor_declaration, "async");
                 }
             }
             else if (node.kind === SyntaxKind.ImportDeclaration && flags & NodeFlags.Ambient) {

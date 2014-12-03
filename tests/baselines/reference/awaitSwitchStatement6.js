@@ -23,14 +23,14 @@ async function func(): Promise<void> {
 
 //// [awaitSwitchStatement6.js]
 function func() {
-    var __l0;
-    return new Promise(function (__resolve) {
-        __resolve(__awaiter(__generator(function (__state) {
-            switch (__state.label) {
+    var _a;
+    return new Promise(function (_resolve) {
+        _resolve(__awaiter(__generator(function (_state) {
+            switch (_state.label) {
                 case 0:
                     "before";
-                    __l0 = a;
-                    switch (__l0) {
+                    _a = a;
+                    switch (_a) {
                         case b: return ["break", 1];
                         case 1: return ["break", 2];
                     }
@@ -43,7 +43,7 @@ function func() {
                     return ["yield", p];
                 case 3:
                     "body1.1";
-                    __state.label = 4;
+                    _state.label = 4;
                 case 4:
                     "after";
                     return ["return"];

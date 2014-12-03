@@ -11,15 +11,15 @@ async function func(): Promise<void> {
 
 //// [awaitArrayLiteral3.js]
 function func() {
-    var b, __l0;
-    return new Promise(function (__resolve) {
-        __resolve(__awaiter(__generator(function (__state) {
-            switch (__state.label) {
+    var b, _a;
+    return new Promise(function (_resolve) {
+        _resolve(__awaiter(__generator(function (_state) {
+            switch (_state.label) {
                 case 0:
-                    __l0 = a;
+                    _a = a;
                     return ["yield", p];
                 case 1:
-                    b = [__l0, __state.sent, a];
+                    b = [_a, _state.sent, a];
                     return ["return"];
             }
         })));

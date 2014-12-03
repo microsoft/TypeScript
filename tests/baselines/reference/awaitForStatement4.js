@@ -14,21 +14,21 @@ async function func(): Promise<void> {
 
 //// [awaitForStatement4.js]
 function func() {
-    var i, __l0;
-    return new Promise(function (__resolve) {
-        __resolve(__awaiter(__generator(function (__state) {
-            switch (__state.label) {
+    var i, _a;
+    return new Promise(function (_resolve) {
+        _resolve(__awaiter(__generator(function (_state) {
+            switch (_state.label) {
                 case 0:
                     "before";
                     i = 0;
-                    __state.label = 1;
+                    _state.label = 1;
                 case 1:
-                    __l0 = i;
+                    _a = i;
                     return ["yield", p];
                 case 2:
-                    if (!(__l0 < __state.sent)) { return ["break", 4]; }
+                    if (!(_a < _state.sent)) { return ["break", 4]; }
                     "body";
-                    __state.label = 3;
+                    _state.label = 3;
                 case 3:
                     i++;
                     return ["break", 1];

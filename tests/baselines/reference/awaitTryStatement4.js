@@ -19,26 +19,28 @@ async function func(): Promise<void> {
 
 //// [awaitTryStatement4.js]
 function func() {
-    var __l0;
-    return new Promise(function (__resolve) {
-        __resolve(__awaiter(__generator(function (__state) {
-            switch (__state.label) {
+    var e_a;
+    return new Promise(function (_resolve) {
+        _resolve(__awaiter(__generator(function (_state) {
+            switch (_state.label) {
                 case 0:
-                    __state.trys = [];
-                    "before";
-                    __state.label = 1;
+                    _state.trys = [];
+                    _state.label = 1;
                 case 1:
-                    __state.trys.push([1,3,,4])
+                    "before";
+                    _state.label = 2;
+                case 2:
+                    _state.trys.push([2,4,,5])
                     "try0";
                     return ["yield", p];
-                case 2:
-                    "try1";
-                    return ["break", 4];
                 case 3:
-                    __l0 = __state.error;
-                    "catch";
-                    return ["break", 4];
+                    "try1";
+                    return ["break", 5];
                 case 4:
+                    e_a = _state.error;
+                    "catch";
+                    return ["break", 5];
+                case 5:
                     "after";
                     return ["return"];
             }

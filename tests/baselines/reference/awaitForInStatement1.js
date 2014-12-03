@@ -17,9 +17,9 @@ async function func(): Promise<void> {
 //// [awaitForInStatement1.js]
 function func() {
     var i;
-    return new Promise(function (__resolve) {
-        __resolve(__awaiter(__generator(function (__state) {
-            switch (__state.label) {
+    return new Promise(function (_resolve) {
+        _resolve(__awaiter(__generator(function (_state) {
+            switch (_state.label) {
                 case 0:
                     "before";
                     for (i in a) {

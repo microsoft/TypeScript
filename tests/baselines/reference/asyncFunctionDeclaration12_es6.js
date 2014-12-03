@@ -8,8 +8,8 @@ var v = async function await(): Promise<void> { }
 
 //// [asyncFunctionDeclaration12_es6.js]
 var v = function await() {
-    return new Promise(__resolve => {
-        __resolve(__awaiter(function* () {
+    return new Promise(function (_resolve) {
+        _resolve(__awaiter(function* () {
         }()));
     });
 };

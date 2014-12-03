@@ -18,28 +18,28 @@ async function func(): Promise<void> {
 
 //// [awaitForInStatement8.js]
 function func() {
-    var __l0, __l1;
-    return new Promise(function (__resolve) {
-        __resolve(__awaiter(__generator(function (__state) {
-            switch (__state.label) {
+    var _a, _b;
+    return new Promise(function (_resolve) {
+        _resolve(__awaiter(__generator(function (_state) {
+            switch (_state.label) {
                 case 0:
                     "before";
-                    __l0 = [];
-                    for (__l1 in a) {
-                        __l0[__l0.length] = __l1;
+                    _a = [];
+                    for (_b in a) {
+                        _a[_a.length] = _b;
                     }
-                    __l1 = 0;
-                    __state.label = 1;
+                    _b = 0;
+                    _state.label = 1;
                 case 1:
-                    if (__l1 >= __l0.length) { return ["break", 4]; }
-                    o.i = __l0[__l1];
+                    if (_b >= _a.length) { return ["break", 4]; }
+                    o.i = _a[_b];
                     "body1";
                     return ["yield", p];
                 case 2:
                     "body2";
-                    __state.label = 3;
+                    _state.label = 3;
                 case 3:
-                    __l1++;
+                    _b++;
                     return ["break", 1];
                 case 4:
                     "after";

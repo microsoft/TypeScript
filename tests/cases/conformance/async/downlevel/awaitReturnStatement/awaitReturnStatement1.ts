@@ -6,6 +6,6 @@ declare class Promise<T> {
 }
 declare var a: number;
 declare var p: Promise<number>;
-async function f(): Promise<void> {
+async function f(): Promise<number> {
   return a;
 }

@@ -738,7 +738,16 @@ module ts {
     export type Label = number;
 
     export interface CodeGenerator {
+        setLocation(location: Node): void;
+        pushLocation(location: Node): void;
+        popLocation(): void;
+
+        addParameter(name: Identifier, flags?: NodeFlags): void;
+        addVariable(name: Identifier, flags?: NodeFlags): void
+        addFunction(func: FunctionDeclaration): void;
+
         declareLocal(name?: string): GeneratedNode;
+
         defineLabel(): Label;
         markLabel(label: Label): void;
 
@@ -752,13 +761,10 @@ module ts {
 
         beginScriptContinueBlock(labelText: string): void;
         endScriptContinueBlock(): void;
-
         beginScriptBreakBlock(labelText: string): void;
         endScriptBreakBlock(): void;
-
         beginContinueBlock(continueLabel: Label, labelText: string): Label;
         endContinueBlock(): void;
-
         beginBreakBlock(labelText: string): Label;
         endBreakBlock(): void;
 
@@ -770,23 +776,16 @@ module ts {
         emit(code: OpCode, text: string, content?: Map<Node|Node[]>): void;
         emit(code: OpCode, label: Label, text: string, content?: Map<Node|Node[]>): void;
 
-        emitNode(node: Node): void;
-
-        pushLocation(location: TextRange): void;
-        popLocation(): void;
-        setLocation(location: TextRange): void;
-
         cacheExpression(expression: Expression): GeneratedNode;
 
-        createInlineBreak(label: Label): Statement;
-        createInlineReturn(expression: Expression): Statement;
+        createUniqueIdentifier(name?: string): GeneratedNode;
+        createInlineBreak(label: Label): GeneratedNode;
+        createInlineReturn(expression: Expression): GeneratedNode;
         createGeneratedNode(text: string, content?: Map<Node|Node[]>): GeneratedNode;
+        createResume(): GeneratedNode;
 
-        addFunction(func: FunctionDeclaration): void;
-        addParameter(name: Identifier, flags?: NodeFlags): void;
-
-        buildGeneratorFunction(kind: SyntaxKind, name: DeclarationName, location: TextRange): FunctionLikeDeclaration;
-        buildAsyncFunction(kind: SyntaxKind, name: DeclarationName, promiseType: EntityName, location: TextRange): FunctionLikeDeclaration;
+        buildGeneratorFunction(kind: SyntaxKind, name: DeclarationName, location: Node): FunctionLikeDeclaration;
+        buildAsyncFunction(kind: SyntaxKind, name: DeclarationName, promiseType: EntityName, location: Node): FunctionLikeDeclaration;
     }
 
     export interface SourceMapSpan {
@@ -957,6 +956,7 @@ module ts {
         // Returns the constant value this property access resolves to, or 'undefined' for a non-constant
         getConstantValue(node: PropertyAccess | IndexedAccess): number;
         isEmitBlocked(sourceFile?: SourceFile): boolean;
+        isUnknownIdentifier(location: Node, name: string): boolean;
         renameSymbol(symbol: Symbol, generatedName: string): void;
         getRenamedIdentifier(name: Identifier): string;
     }

@@ -1,0 +1,16 @@
+tests/cases/conformance/async/downlevel/asyncFunctionDeclaration/asyncFunctionDeclaration14.ts(6,1): error TS1148: Cannot compile external modules unless the '--module' flag is provided.
+
+
+==== tests/cases/conformance/async/downlevel/asyncFunctionDeclaration/asyncFunctionDeclaration14.ts (1 errors) ====
+    declare class Promise<T> {
+        constructor(init: (resolve: (value?: T | IPromise<T>) => void, reject: (reason?: any) => void) => void);
+        then<TResult>(onfulfilled?: (value: T) => TResult | IPromise<TResult>, onrejected?: (reason: any) => TResult | IPromise<TResult>): Promise<TResult>;
+    }
+    
+    export async function foo(): Promise<void> {
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      return;
+    ~~~~~~~~~
+    }
+    ~
+!!! error TS1148: Cannot compile external modules unless the '--module' flag is provided.

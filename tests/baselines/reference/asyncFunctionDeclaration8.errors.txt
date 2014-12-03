@@ -1,0 +1,16 @@
+tests/cases/conformance/async/downlevel/asyncFunctionDeclaration/asyncFunctionDeclaration8.ts(1,11): error TS1136: Property assignment expected.
+tests/cases/conformance/async/downlevel/asyncFunctionDeclaration/asyncFunctionDeclaration8.ts(1,18): error TS1005: ',' expected.
+tests/cases/conformance/async/downlevel/asyncFunctionDeclaration/asyncFunctionDeclaration8.ts(1,24): error TS1128: Declaration or statement expected.
+tests/cases/conformance/async/downlevel/asyncFunctionDeclaration/asyncFunctionDeclaration8.ts(1,12): error TS2304: Cannot find name 'await'.
+
+
+==== tests/cases/conformance/async/downlevel/asyncFunctionDeclaration/asyncFunctionDeclaration8.ts (4 errors) ====
+    var v = { [await]: foo }
+              ~
+!!! error TS1136: Property assignment expected.
+                     ~
+!!! error TS1005: ',' expected.
+                           ~
+!!! error TS1128: Declaration or statement expected.
+               ~~~~~
+!!! error TS2304: Cannot find name 'await'.

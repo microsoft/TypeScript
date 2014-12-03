@@ -15,14 +15,14 @@ async function func(): Promise<void> {
 //// [awaitUnaryExpression2.js]
 function func() {
     var b;
-    return new Promise(function (__resolve) {
-        __resolve(__awaiter(__generator(function (__state) {
-            switch (__state.label) {
+    return new Promise(function (_resolve) {
+        _resolve(__awaiter(__generator(function (_state) {
+            switch (_state.label) {
                 case 0:
                     "before";
                     return ["yield", p];
                 case 1:
-                    b = typeof __state.sent;
+                    b = typeof _state.sent;
                     "after";
                     return ["return"];
             }

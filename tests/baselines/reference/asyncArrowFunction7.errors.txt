@@ -1,0 +1,34 @@
+tests/cases/conformance/async/downlevel/asyncArrowFunction/asyncArrowFunction7.ts(8,29): error TS1109: Expression expected.
+tests/cases/conformance/async/downlevel/asyncArrowFunction/asyncArrowFunction7.ts(8,30): error TS1005: ',' expected.
+tests/cases/conformance/async/downlevel/asyncArrowFunction/asyncArrowFunction7.ts(8,39): error TS1005: '=' expected.
+tests/cases/conformance/async/downlevel/asyncArrowFunction/asyncArrowFunction7.ts(8,46): error TS1109: Expression expected.
+tests/cases/conformance/async/downlevel/asyncArrowFunction/asyncArrowFunction7.ts(10,1): error TS1128: Declaration or statement expected.
+tests/cases/conformance/async/downlevel/asyncArrowFunction/asyncArrowFunction7.ts(8,13): error TS2304: Cannot find name 'async'.
+tests/cases/conformance/async/downlevel/asyncArrowFunction/asyncArrowFunction7.ts(8,20): error TS2304: Cannot find name 'a'.
+
+
+==== tests/cases/conformance/async/downlevel/asyncArrowFunction/asyncArrowFunction7.ts (7 errors) ====
+    declare class Promise<T> {
+        constructor(init: (resolve: (value?: T | IPromise<T>) => void, reject: (reason?: any) => void) => void);
+        then<TResult>(onfulfilled?: (value: T) => TResult | IPromise<TResult>, onrejected?: (reason: any) => TResult | IPromise<TResult>): Promise<TResult>;
+    }
+    
+    var bar = async (): Promise<void> => {
+      // 'await' here is an identifier, and not an await expression.
+      var foo = async (a = await): Promise<void> => {
+                                ~
+!!! error TS1109: Expression expected.
+                                 ~
+!!! error TS1005: ',' expected.
+                                          ~
+!!! error TS1005: '=' expected.
+                                                 ~~
+!!! error TS1109: Expression expected.
+                ~~~~~
+!!! error TS2304: Cannot find name 'async'.
+                       ~
+!!! error TS2304: Cannot find name 'a'.
+      }
+    }
+    ~
+!!! error TS1128: Declaration or statement expected.

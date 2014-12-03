@@ -14,16 +14,16 @@ async function func(): Promise<void> {
 
 //// [awaitBinaryExpression11.js]
 function func() {
-    var __l0;
-    return new Promise(function (__resolve) {
-        __resolve(__awaiter(__generator(function (__state) {
-            switch (__state.label) {
+    var _a;
+    return new Promise(function (_resolve) {
+        _resolve(__awaiter(__generator(function (_state) {
+            switch (_state.label) {
                 case 0:
                     "before";
-                    __l0 = o;
+                    _a = o;
                     return ["yield", p];
                 case 1:
-                    __l0.b = __state.sent;
+                    _a.b = _state.sent;
                     "after";
                     return ["return"];
             }

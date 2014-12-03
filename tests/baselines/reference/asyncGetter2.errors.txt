@@ -1,0 +1,10 @@
+tests/cases/conformance/async/downlevel/asyncGetter/asyncGetter2.ts(2,7): error TS2378: A 'get' accessor must return a value or consist of a single 'throw' statement.
+
+
+==== tests/cases/conformance/async/downlevel/asyncGetter/asyncGetter2.ts (1 errors) ====
+    class C {
+      get await() {
+          ~~~~~
+!!! error TS2378: A 'get' accessor must return a value or consist of a single 'throw' statement.
+      }
+    }

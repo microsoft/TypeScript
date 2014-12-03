@@ -17,16 +17,16 @@ async function func(): Promise<void> {
 
 //// [awaitNewExpression6.js]
 function func() {
-    var b, __l0;
-    return new Promise(function (__resolve) {
-        __resolve(__awaiter(__generator(function (__state) {
-            switch (__state.label) {
+    var b, _a;
+    return new Promise(function (_resolve) {
+        _resolve(__awaiter(__generator(function (_state) {
+            switch (_state.label) {
                 case 0:
                     "before";
-                    __l0 = o.fn;
+                    _a = o.fn;
                     return ["yield", p];
                 case 1:
-                    b = new __l0(__state.sent, a, a);
+                    b = new _a(_state.sent, a, a);
                     "after";
                     return ["return"];
             }

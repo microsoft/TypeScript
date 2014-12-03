@@ -16,17 +16,17 @@ async function func(): Promise<void> {
 
 //// [awaitObjectLiteral4.js]
 function func() {
-    var o, __l0;
-    return new Promise(function (__resolve) {
-        __resolve(__awaiter(__generator(function (__state) {
-            switch (__state.label) {
+    var o, _a;
+    return new Promise(function (_resolve) {
+        _resolve(__awaiter(__generator(function (_state) {
+            switch (_state.label) {
                 case 0:
-                    __l0 = 1;
+                    _a = 1;
                     return ["yield", p];
                 case 1:
                     o = {
-                        a: __l0,
-                        b: __state.sent,
+                        a: _a,
+                        b: _state.sent,
                         c: a
                     };
                     return ["return"];

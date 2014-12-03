@@ -44,41 +44,44 @@ module ts {
         continueLabel: Label;
     }
 
-    export function createCodeGenerator(): CodeGenerator {
+    export function createCodeGenerator(resolver: EmitResolver): CodeGenerator {
         // locations
-        var relatedLocation: TextRange;
-        var locationStack: TextRange[] = [];
+        var relatedLocation: Node;
+        var locationStack: Node[];
 
         // locals/hoisted variables/hoisted functions
-        var nextLocalId: number = 0;
-        var parameters: ParameterDeclaration[] = [];
-        var locals: GeneratedNode[] = [];
-        var namedLocals: GeneratedNode[] = [];
-        var functions: FunctionDeclaration[] = [];
+        var localIds: Map<number>;
+        var parameters: ParameterDeclaration[];
+        var variables: GeneratedNode[];
+        var generatedLocals: GeneratedNode[];
+        var functions: FunctionDeclaration[];
 
         // blocks
-        var blocks: BlockScope[] = [];
-        var blockStack: BlockScope[] = [];
-        var blockActions: BlockAction[] = [];
-        var blockOffsets: number[] = [];
-        var hasProtectedRegions: boolean = false;
+        var blocks: BlockScope[];
+        var blockStack: BlockScope[];
+        var blockActions: BlockAction[];
+        var blockOffsets: number[];
+        var hasProtectedRegions: boolean;
 
         // labels
         var nextLabelId: number = 1;
-        var labelNumbers: number[] = [];
-        var labels: number[] = [];
+        var labelNumbers: number[];
+        var labels: number[];
 
         // operations
-        var operations: OpCode[] = [];
-        var operationArguments: any[][] = [];
-        var operationLocations: TextRange[] = [];
+        var operations: OpCode[];
+        var operationArguments: any[][];
+        var operationLocations: Node[];
 
-        // mark the entry point
-        markLabel(defineLabel());
+        var state: GeneratedNode;
 
         return {
-            addFunction,
+            pushLocation,
+            popLocation,
+            setLocation,
             addParameter,
+            addVariable,
+            addFunction,
             declareLocal,
             defineLabel,
             markLabel,
@@ -97,47 +100,65 @@ module ts {
             beginBreakBlock,
             endBreakBlock,
             emit,
-            emitNode,
-            pushLocation,
-            popLocation,
-            setLocation,
             cacheExpression,
+            createUniqueIdentifier,
             createInlineBreak,
             createInlineReturn,
             createGeneratedNode,
+            createResume,
             buildGeneratorFunction,
             buildAsyncFunction
         };
 
         function addParameter(name: Identifier, flags?: NodeFlags): void {
+            if (!parameters) parameters = [];
             parameters.push(factory.createParameterDeclaration(name, undefined, relatedLocation, flags));
         }
 
-        function addFunction(func: FunctionDeclaration): void {
-            functions[functions.length] = func;
+        function addVariable(name: Identifier, flags?: NodeFlags): void {
+            if (!variables) variables = [];
+            var declarationName = createGeneratedNode(name.text);
+            variables.push(declarationName);
         }
 
-        function declareLocal(name?: string): GeneratedNode {
-            if (name) {
-                var list = namedLocals;
-            } else {
-                name = "__l" + (nextLocalId++)
-                var list = locals;
-            }
+        function addFunction(func: FunctionDeclaration): void {
+            if (!functions) functions = [];
+            functions.push(func);
+        }
 
-            var localDeclarationName = createGeneratedNode(name);
-            list.push(localDeclarationName);
+        function declareLocal(name: string = ""): GeneratedNode {
+            if (!generatedLocals) generatedLocals = [];
+            var localDeclarationName = createUniqueIdentifier(name);
+            generatedLocals.push(localDeclarationName);
             return localDeclarationName;
         }
 
+        function createUniqueIdentifier(name: string = ""): GeneratedNode {
+            if (!name || !resolver.isUnknownIdentifier(relatedLocation, name)) {
+                if (!localIds) localIds = {};
+                var nextLocalId = localIds[name] || 0;
+                do {
+                    var tempName = name + "_" + (nextLocalId < 26 ? String.fromCharCode(nextLocalId + 0x61) : nextLocalId - 26);
+                    nextLocalId++;
+                }
+                while (!resolver.isUnknownIdentifier(relatedLocation, tempName));
+                localIds[name] = nextLocalId;
+                name = tempName;
+            }
+
+            return createGeneratedNode(name);
+        }
+
         function defineLabel(): Label {
+            if (!labels) labels = [];
             var label = nextLabelId++;
             labels[label] = -1;
             return <Label>label;
         }
 
         function markLabel(label: Label): void {
-            labels[<number>label] = operations.length;
+            Debug.assert(!!labels, "No labels were defined.");
+            labels[<number>label] = operations ? operations.length : 0;
         }
 
         function beginExceptionBlock(): Label {
@@ -169,7 +190,8 @@ module ts {
             exception.catchVariable = variable;
             exception.catchLabel = catchLabel;
 
-            emit(OpCode.Statement, `\${variable} = __state.error;`, { variable });
+            var state = getState();
+            emit(OpCode.Statement, `\${variable} = \${state}.error;`, { variable, state });
         }
 
         function beginFinallyBlock(): void {
@@ -270,25 +292,35 @@ module ts {
         }
 
         function beginBlock<TBlock extends BlockScope>(block: TBlock): number {
+            if (!blocks) {
+                blocks = [];
+                blockActions = [];
+                blockOffsets = [];
+                blockStack = [];
+            }
+
             var index = blockActions.length;
             blockActions[index] = BlockAction.Open;
-            blockOffsets[index] = operations.length;
+            blockOffsets[index] = operations ? operations.length : 0;
             blocks[index] = block;
             blockStack.push(block);
             return index;
         }
 
         function endBlock<TBlock extends BlockScope>(): TBlock {
+            Debug.assert(!!blocks, "beginBlock was never called.");
             var block = blockStack.pop();
             var index = blockActions.length;
             blockActions[index] = BlockAction.Close;
-            blockOffsets[index] = operations.length;
+            blockOffsets[index] = operations ? operations.length : 0;
             blocks[index] = block;
             return <TBlock>block;
         }
 
         function peekBlock(back: number = 0): BlockScope {
-            return blockStack[blockStack.length - (1 + back)];
+            if (blocks) {
+                return blockStack[blockStack.length - (1 + back)];
+            }
         }
 
         function peekBlockKind(back: number = 0): BlockKind {
@@ -297,12 +329,14 @@ module ts {
         }
 
         function findBreakTarget(labelText?: string): Label {
-            for (var i = blockStack.length - 1; i >= 0; i--) {
-                var block = blockStack[i];
-                if (supportsBreak(block)) {
-                    var breakBlock = <BreakBlock>block;
-                    if (!labelText || breakBlock.labelText === labelText) {
-                        return breakBlock.breakLabel;
+            if (blocks) {
+                for (var i = blockStack.length - 1; i >= 0; i--) {
+                    var block = blockStack[i];
+                    if (supportsBreak(block)) {
+                        var breakBlock = <BreakBlock>block;
+                        if (!labelText || breakBlock.labelText === labelText) {
+                            return breakBlock.breakLabel;
+                        }
                     }
                 }
             }
@@ -311,12 +345,14 @@ module ts {
         }
 
         function findContinueTarget(labelText?: string): Label {
-            for (var i = blockStack.length - 1; i >= 0; i--) {
-                var block = blockStack[i];
-                if (supportsContinue(block)) {
-                    var continueBreakBlock = <ContinueBlock>block;
-                    if (!labelText || continueBreakBlock.labelText === labelText) {
-                        return continueBreakBlock.continueLabel;
+            if (blocks) {
+                for (var i = blockStack.length - 1; i >= 0; i--) {
+                    var block = blockStack[i];
+                    if (supportsContinue(block)) {
+                        var continueBreakBlock = <ContinueBlock>block;
+                        if (!labelText || continueBreakBlock.labelText === labelText) {
+                            return continueBreakBlock.continueLabel;
+                        }
                     }
                 }
             }
@@ -356,39 +392,35 @@ module ts {
                 }
             }
 
+            if (!operations) {
+                operations = [];
+                operationArguments = [];
+                operationLocations = [];
+            }
+
+            if (!labels) {
+                // mark entry point
+                markLabel(defineLabel());
+            }
+
             var operationIndex = operations.length;
             operations[operationIndex] = code;
             operationArguments[operationIndex] = args;
             operationLocations[operationIndex] = relatedLocation;
         }
 
-        function emitNode(node: Node): void {
-            switch (node.kind) {
-                case SyntaxKind.Block:
-                case SyntaxKind.FunctionBlock:
-                case SyntaxKind.TryBlock:
-                case SyntaxKind.CatchBlock:
-                case SyntaxKind.FinallyBlock:
-                    return forEach((<Block>node).statements, emitNode);
-
-                case SyntaxKind.CaseClause:
-                case SyntaxKind.DefaultClause:
-                    return forEach((<CaseOrDefaultClause>node).statements, emitNode);
-            }
-
-            emit(OpCode.Statement, node);
-        }
-
-        function pushLocation(location: TextRange): void {
+        function pushLocation(location: Node): void {
+            if (!locationStack) locationStack = [];
             locationStack.push(relatedLocation);
             setLocation(location);
         }
 
         function popLocation(): void {
+            if (!locationStack) return;
             setLocation(locationStack.pop());
         }
 
-        function setLocation(location: TextRange): void {
+        function setLocation(location: Node): void {
             if (location) {
                 relatedLocation = location;
             }
@@ -401,6 +433,7 @@ module ts {
         }
 
         function createLabel(label: Label): GeneratedLabel {
+            if (!labelNumbers) labelNumbers = [];
             return factory.createGeneratedLabel(label, labelNumbers, relatedLocation);
         }
 
@@ -408,11 +441,11 @@ module ts {
             return factory.createGeneratedNode(text, content, relatedLocation);
         }
 
-        function createInlineBreak(label: Label): Statement {
+        function createInlineBreak(label: Label): GeneratedNode {
             return createGeneratedNode(`return ["break", \${label}];`, { label: createLabel(label) });
         }
 
-        function createInlineReturn(expression: Expression): Statement {
+        function createInlineReturn(expression: Expression): GeneratedNode {
             if (expression) {
                 return createGeneratedNode(`return ["return", \${expression}];`, { expression });
             } else {
@@ -428,33 +461,50 @@ module ts {
             }
         }
 
-        function buildGeneratorFunction(kind: SyntaxKind, name: DeclarationName, location: TextRange) {
+        function createResume(): GeneratedNode {
+            var state = getState();
+            return createGeneratedNode(`\${state}.sent`, { state });
+        }
+
+        function getState(): GeneratedNode {
+            if (!state) state = createUniqueIdentifier("_state");
+            return state;
+        }
+
+        function buildGeneratorFunction(kind: SyntaxKind, name: DeclarationName, location: Node) {
             pushLocation(location);
+            var locals = buildLocals();
+            var cases = buildFunctionBody();
+            var state = getState();
             var body = createGeneratedNode(`
                 \${locals}
                 @{functions}
-                return __generator(function (__state) {
-                    switch (__state.label) {
-                        @{body}
+                return __generator(function (\${state}) {
+                    switch (\${state}.label) {
+                        @{cases}
                     }
-                });`, { locals: buildLocals(), functions, body: buildFunctionBody() });
+                });`, { locals, functions, cases, state });
             var node = buildFunction(kind, name, body, location);
             popLocation();
             return node;
         }
 
-        function buildAsyncFunction(kind: SyntaxKind, name: DeclarationName, promiseConstructor: EntityName, location: TextRange) {
+        function buildAsyncFunction(kind: SyntaxKind, name: DeclarationName, promiseConstructor: EntityName, location: Node) {
             pushLocation(location);
+            var resolve = createUniqueIdentifier("_resolve");
+            var locals = buildLocals();
+            var cases = buildFunctionBody();
+            var state = getState();
             var body = createGeneratedNode(`
                 \${locals}
                 @{functions}
-                return new \${promise}(function (__resolve) {
-                    __resolve(__awaiter(__generator(function (__state) {
-                        switch (__state.label) {
-                            @{body}
+                return new \${promiseConstructor}(function (\${resolve}) {
+                    \${resolve}(__awaiter(__generator(function (\${state}) {
+                        switch (\${state}.label) {
+                            @{cases}
                         }
                     })));
-                });`, { locals: buildLocals(), functions, promise: promiseConstructor, body: buildFunctionBody() });
+                });`, { locals, functions, promiseConstructor, cases, resolve, state });
             var node = buildFunction(kind, name, body, location);
             popLocation();
             return node;
@@ -488,14 +538,16 @@ module ts {
         }
 
         function buildLocals(): GeneratedNode {
-            if (namedLocals.length || locals.length) {
-                return createGeneratedNode(`var \${locals};`, {
-                    locals: namedLocals.concat(locals)
-                });
+            var locals: GeneratedNode[];
+            if (variables) locals = variables;
+            if (generatedLocals) locals = locals ? locals.concat(generatedLocals) : generatedLocals;
+            if (locals) {
+                return createGeneratedNode(`var \${locals};`, { locals });
             }
         }
 
         function buildFunctionBody(): GeneratedNode[] {
+            Debug.assert(!!labels, "No labels were defined.");
             var exceptionStack: ExceptionBlock[] = [];
             var clauses: GeneratedNode[] = [];
             var statements: Statement[] = [];
@@ -503,13 +555,21 @@ module ts {
             var blockIndex: number = 0;
             var instructionWasAbrupt = false;
             var instructionWasCompletion = false;
+            var state = getState();
 
-            for (var operationIndex = 0; operationIndex < operations.length; operationIndex++) {
-                var code = operations[operationIndex];
-                var args = operationArguments[operationIndex];
-                relatedLocation = operationLocations[operationIndex];
-                ensureLabels();
-                writeOperation(code, args);
+            if (hasProtectedRegions) {
+                newCase();
+                writeStatement(createGeneratedNode(`\${state}.trys = [];`, { state }));
+            }
+
+            if (operations) {
+                for (var operationIndex = 0; operationIndex < operations.length; operationIndex++) {
+                    var code = operations[operationIndex];
+                    var args = operationArguments[operationIndex];
+                    relatedLocation = operationLocations[operationIndex];
+                    ensureLabels();
+                    writeOperation(code, args);
+                }
             }
 
             ensureLabels();
@@ -520,6 +580,7 @@ module ts {
             return clauses;
 
             function ensureLabels(): void {
+                if (!labelNumbers) labelNumbers = [];
                 var createCase = false;
                 for (var label = 0; label < labels.length; label++) {
                     if (labels[label] === operationIndex) {
@@ -529,42 +590,51 @@ module ts {
                 }
 
                 if (createCase) {
-                    var labelNumber = clauses.length;
-                    var labelExpression = createGeneratedNode(String(labelNumber));
-
-                    // handle implicit fall-through
-                    if (!instructionWasAbrupt && !instructionWasCompletion && operationIndex > 0) {
-                        writeStatement(createGeneratedNode(`__state.label = \${label};`, { label: createGeneratedNode(String(labelNumber)) }));
-                    }
-
-                    statements = [];
-                    instructionWasAbrupt = false;
-                    instructionWasCompletion = false;
-
-                    clauses.push(createGeneratedNode(`
-                        case \${label}:
-                            @{statements}`, { 
-                            label: labelExpression,
-                            statements
-                    }));
-
-                    if (labelNumber === 0 && hasProtectedRegions) {
-                        writeStatement(createGeneratedNode(`__state.trys = [];`));
-                    }
+                    newCase();
                 }
             }
 
+            function newCase() {
+                var labelNumber = clauses.length;
+                var labelExpression = createGeneratedNode(String(labelNumber));
+
+                // handle implicit fall-through
+                if (!instructionWasAbrupt && !instructionWasCompletion && labelNumber > 0) {
+                    var labelExpression = createGeneratedNode(String(labelNumber));
+                    writeStatement(createGeneratedNode(`\${state}.label = \${labelExpression};`, { state, labelExpression }));
+                }
+
+                statements = [];
+                instructionWasAbrupt = false;
+                instructionWasCompletion = false;
+
+                clauses.push(createGeneratedNode(`
+                    case \${labelExpression}:
+                        @{statements}`, { labelExpression, statements }));
+            }
+
             function writeOperation(code: OpCode, args: any[]): void {
-                for (; blockIndex < blockActions.length && blockOffsets[blockIndex] <= operationIndex; blockIndex++) {
-                    var block = blocks[blockIndex];
-                    if (blockActions[blockIndex] === BlockAction.Open && block.kind === BlockKind.Exception) {
-                        var exception = <ExceptionBlock>block;
-                        writeStatement(createGeneratedNode(`__state.trys.push([\${startLabel},\${catchLabel},\${finallyLabel},\${endLabel}])`, {
-                            startLabel: createLabel(exception.startLabel),
-                            catchLabel: exception.catchLabel > 0 && createLabel(exception.catchLabel),
-                            finallyLabel: exception.finallyLabel > 0 && createLabel(exception.finallyLabel),
-                            endLabel: createLabel(exception.endLabel)
-                        }));
+                if (blocks) {
+                    for (; blockIndex < blockActions.length && blockOffsets[blockIndex] <= operationIndex; blockIndex++) {
+                        var block = blocks[blockIndex];
+                        if (blockActions[blockIndex] === BlockAction.Open && block.kind === BlockKind.Exception) {
+                            var exception = <ExceptionBlock>block;
+                            var startLabel = createLabel(exception.startLabel);
+                            var endLabel = createLabel(exception.endLabel);
+                            if (exception.catchLabel > 0) {
+                                var catchLabel = createLabel(exception.catchLabel);
+                            }
+                            if (exception.finallyLabel > 0) {
+                                var finallyLabel = createLabel(exception.finallyLabel);
+                            }
+                            writeStatement(createGeneratedNode(`\${state}.trys.push([\${startLabel},\${catchLabel},\${finallyLabel},\${endLabel}])`, {
+                                state,
+                                startLabel,
+                                catchLabel,
+                                finallyLabel,
+                                endLabel
+                            }));
+                        }
                     }
                 }
 
@@ -589,7 +659,7 @@ module ts {
             }
 
             function writeStatement(node: Node): void {
-                if (!isStatement(node) && node.kind !== SyntaxKind.GeneratedNode) {
+                if (!isStatement(node) && node.kind !== SyntaxKind.GeneratedNode && node.kind !== SyntaxKind.Block) {
                     node = factory.createExpressionStatement(node, relatedLocation);
                 }
 

@@ -1,0 +1,25 @@
+tests/cases/conformance/async/downlevel/asyncMethod/asyncMethod9.ts(8,15): error TS1136: Property assignment expected.
+tests/cases/conformance/async/downlevel/asyncMethod/asyncMethod9.ts(8,21): error TS1109: Expression expected.
+tests/cases/conformance/async/downlevel/asyncMethod/asyncMethod9.ts(8,22): error TS1005: ',' expected.
+tests/cases/conformance/async/downlevel/asyncMethod/asyncMethod9.ts(10,1): error TS1128: Declaration or statement expected.
+
+
+==== tests/cases/conformance/async/downlevel/asyncMethod/asyncMethod9.ts (4 errors) ====
+    declare class Promise<T> {
+        constructor(init: (resolve: (value?: T | IPromise<T>) => void, reject: (reason?: any) => void) => void);
+        then<TResult>(onfulfilled?: (value: T) => TResult | IPromise<TResult>, onrejected?: (reason: any) => TResult | IPromise<TResult>): Promise<TResult>;
+    }
+    
+    class C {
+      async foo(): Promise<void> {
+        var v = { [await]: foo }
+                  ~
+!!! error TS1136: Property assignment expected.
+                        ~
+!!! error TS1109: Expression expected.
+                         ~
+!!! error TS1005: ',' expected.
+      }
+    }
+    ~
+!!! error TS1128: Declaration or statement expected.
