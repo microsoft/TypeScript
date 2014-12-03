@@ -7,9 +7,9 @@
 ////}
 
 // @Filename: quickInfoDisplayPartsExternalModuleAlias_file1.ts
-////import /*1*/a1 = require("quickInfoDisplayPartsExternalModuleAlias_file0");
+////import /*1*/a1 = require(/*mod1*/"quickInfoDisplayPartsExternalModuleAlias_file0");
 ////new /*2*/a1.m1.c();
-////export import /*3*/a2 = require("quickInfoDisplayPartsExternalModuleAlias_file0");
+////export import /*3*/a2 = require(/*mod2*/"quickInfoDisplayPartsExternalModuleAlias_file0");
 ////new /*4*/a2.m1.c();
 
 var marker = 0;
@@ -32,3 +32,13 @@ verifyImport("a1", /*isExported*/false);
 verifyImport("a1", /*isExported*/false);
 verifyImport("a2", /*isExported*/true);
 verifyImport("a2", /*isExported*/true);
+
+function verifyExternalModuleStringLiteral(marker: string) {
+    goTo.marker(marker);
+    verify.verifyQuickInfoDisplayParts("module", "", { start: test.markerByName(marker).position, length: "\"quickInfoDisplayPartsExternalModuleAlias_file0\"".length },
+        [{ text: "module", kind: "keyword" }, { text: " ", kind: "space" }, { text: "a1", kind: "aliasName" }],
+        []);
+}
+
+verifyExternalModuleStringLiteral("mod1");
+verifyExternalModuleStringLiteral("mod2");
