@@ -1973,14 +1973,14 @@ module ts {
     /** Returns true if node is a name of an object literal property, e.g. "a" in x = { "a": 1 } */
     function isNameOfPropertyAssignment(node: Node): boolean {
         return (node.kind === SyntaxKind.Identifier || node.kind === SyntaxKind.StringLiteral || node.kind === SyntaxKind.NumericLiteral) &&
-            (node.parent.kind === SyntaxKind.LonghandPropertyAssignment || node.parent.kind === SyntaxKind.ShorthandPropertyAssignment) && (<PropertyDeclaration>node.parent).name === node;
+            (node.parent.kind === SyntaxKind.PropertyAssignment || node.parent.kind === SyntaxKind.ShorthandPropertyAssignment) && (<PropertyDeclaration>node.parent).name === node;
     }
 
     function isLiteralNameOfPropertyDeclarationOrIndexAccess(node: Node): boolean {
         if (node.kind === SyntaxKind.StringLiteral || node.kind === SyntaxKind.NumericLiteral) {
             switch (node.parent.kind) {
                 case SyntaxKind.Property:
-                case SyntaxKind.LonghandPropertyAssignment:
+                case SyntaxKind.PropertyAssignment:
                 case SyntaxKind.EnumMember:
                 case SyntaxKind.Method:
                 case SyntaxKind.GetAccessor:
@@ -2647,7 +2647,7 @@ module ts {
 
                 var existingMemberNames: Map<boolean> = {};
                 forEach(existingMembers, m => {
-                    if (m.kind !== SyntaxKind.LonghandPropertyAssignment && m.kind !== SyntaxKind.ShorthandPropertyAssignment) {
+                    if (m.kind !== SyntaxKind.PropertyAssignment && m.kind !== SyntaxKind.ShorthandPropertyAssignment) {
                         // Ignore omitted expressions for missing members in the object literal
                         return;
                     }
@@ -4717,7 +4717,7 @@ module ts {
                 case SyntaxKind.Parameter:
                 case SyntaxKind.VariableDeclaration:
                 case SyntaxKind.Property:
-                case SyntaxKind.LonghandPropertyAssignment:
+                case SyntaxKind.PropertyAssignment:
                 case SyntaxKind.ShorthandPropertyAssignment:
                 case SyntaxKind.EnumMember:
                 case SyntaxKind.Method:

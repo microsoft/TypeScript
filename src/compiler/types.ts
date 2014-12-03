@@ -231,7 +231,7 @@ module ts {
         CatchClause,
 
         // Property assignments
-        LonghandPropertyAssignment,
+        PropertyAssignment,
         ShorthandPropertyAssignment,
 
         // Enum
@@ -383,17 +383,17 @@ module ts {
     export type VariableOrParameterDeclaration = VariableDeclaration | ParameterDeclaration;
     export type VariableOrParameterOrPropertyDeclaration = VariableOrParameterDeclaration | PropertyDeclaration;
 
-    export interface PropertyAssignment extends Declaration {
-        _propertyAssignmentBrand: any;
+    export interface ObjectLiteralElement extends Declaration {
+        _objectLiteralBrandBrand: any;
     }
 
-    export interface ShorthandPropertyAssignment extends PropertyAssignment {
+    export interface ShorthandPropertyAssignment extends ObjectLiteralElement {
         name: Identifier;
         questionToken?: Node;
     }
 
-    export interface LonghandPropertyAssignment extends PropertyAssignment {
-        _longhandPropertyAssignmentBrand: any;
+    export interface PropertyAssignment extends ObjectLiteralElement {
+        _propertyAssignmentBrand: any;
         name: DeclarationName;
         questionToken?: Node;
         initializer: Expression;
@@ -420,7 +420,16 @@ module ts {
         body?: Block;
     }
 
-    export interface MethodDeclaration extends FunctionLikeDeclaration, ClassElement, PropertyAssignment {
+    // Note that a MethodDeclaration is considered both a ClassElement and an ObjectLiteralElement.
+    // Both the grammars for ClassDeclaration and ObjectLiteralExpression allow for MethodDeclarations
+    // as child elements, and so a MethodDeclaration satisfies both interfaces.  This avoids the
+    // alternative where we would need separate kinds/types for ClassMethodDeclaration and
+    // ObjectLiteralMethodDeclaration, which would look identical.
+    //
+    // Because of this, it may be necessary to determine what sort of MethodDeclaration you have
+    // at later stages of the compiler pipeline.  In that case, you can either check the parent kind
+    // of the method, or use helpers like isObjectLiteralMethodDeclaration
+    export interface MethodDeclaration extends FunctionLikeDeclaration, ClassElement, ObjectLiteralElement {
         contextualType?: Type;  // Used to temporarily assign a contextual type during overload resolution
 
         body?: Block;
@@ -430,7 +439,9 @@ module ts {
         body?: Block;
     }
 
-    export interface AccessorDeclaration extends FunctionLikeDeclaration, ClassElement, PropertyAssignment {
+    // See the comment on MethodDeclaration for the intuition behind AccessorDeclaration being a 
+    // ClassElement and an ObjectLiteralElement.
+    export interface AccessorDeclaration extends FunctionLikeDeclaration, ClassElement, ObjectLiteralElement {
         _accessorDeclarationBrand: any;
         body: Block;
     }
@@ -587,7 +598,7 @@ module ts {
     
     // An ObjectLiteralExpression is the declaration node for an anonymous symbol.
     export interface ObjectLiteralExpression extends PrimaryExpression, Declaration {
-        properties: NodeArray<PropertyAssignment>;
+        properties: NodeArray<ObjectLiteralElement>;
     }
 
     export interface PropertyAccessExpression extends MemberExpression {

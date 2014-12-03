@@ -1697,7 +1697,7 @@ module ts {
             if (declaration.initializer) {
                 var type = checkAndMarkExpression(declaration.initializer);
                 // Widening of property assignments is handled by checkObjectLiteral, exclude them here
-                if (declaration.kind !== SyntaxKind.LonghandPropertyAssignment) {
+                if (declaration.kind !== SyntaxKind.PropertyAssignment) {
                     var unwidenedType = type;
                     type = getWidenedType(type);
                     if (type !== unwidenedType) {
@@ -3244,7 +3244,7 @@ module ts {
 
         // Returns true if the given expression contains (at any level of nesting) a function or arrow expression
         // that is subject to contextual typing.
-        function isContextSensitiveCore(node: Expression | MethodDeclaration | PropertyAssignment): boolean {
+        function isContextSensitiveCore(node: Expression | MethodDeclaration | ObjectLiteralElement): boolean {
             Debug.assert(node.kind !== SyntaxKind.Method || isObjectLiteralMethod(node));
             switch (node.kind) {
                 case SyntaxKind.FunctionExpression:
@@ -3260,8 +3260,8 @@ module ts {
                 case SyntaxKind.BinaryExpression:
                     return (<BinaryExpression>node).operator === SyntaxKind.BarBarToken &&
                     (isContextSensitiveCore((<BinaryExpression>node).left) || isContextSensitiveCore((<BinaryExpression>node).right));
-                case SyntaxKind.LonghandPropertyAssignment:
-                    return isContextSensitiveCore((<LonghandPropertyAssignment>node).initializer);
+                case SyntaxKind.PropertyAssignment:
+                    return isContextSensitiveCore((<PropertyAssignment>node).initializer);
                 case SyntaxKind.Method:
                     return isContextSensitiveFunctionLikeDeclaration(<MethodDeclaration>node);
             }
@@ -4913,14 +4913,14 @@ module ts {
                 return node.contextualType;
             }
 
-            return getContextualTypeForPropertyAssignment(node);
+            return getContextualTypeForObjectLiteralElement(node);
         }
 
-        function getContextualTypeForPropertyAssignment(propertyAssignment: PropertyAssignment) {
-            var objectLiteral = <ObjectLiteralExpression>propertyAssignment.parent;
+        function getContextualTypeForObjectLiteralElement(element: ObjectLiteralElement) {
+            var objectLiteral = <ObjectLiteralExpression>element.parent;
             var type = getContextualType(objectLiteral);
             // TODO(jfreeman): Handle this case for computed names and symbols
-            var name = (<Identifier>propertyAssignment.name).text;
+            var name = (<Identifier>element.name).text;
             if (type && name) {
                 return getTypeOfPropertyOfContextualType(type, name) ||
                     isNumericName(name) && getIndexTypeOfContextualType(type, IndexKind.Number) ||
@@ -4974,8 +4974,8 @@ module ts {
                     return getTypeFromTypeNode((<TypeAssertion>parent).type);
                 case SyntaxKind.BinaryExpression:
                     return getContextualTypeForBinaryOperand(node);
-                case SyntaxKind.LonghandPropertyAssignment:
-                    return getContextualTypeForPropertyAssignment(<PropertyAssignment>parent);
+                case SyntaxKind.PropertyAssignment:
+                    return getContextualTypeForObjectLiteralElement(<ObjectLiteralElement>parent);
                 case SyntaxKind.ArrayLiteralExpression:
                     return getContextualTypeForElementExpression(node);
                 case SyntaxKind.ConditionalExpression:
@@ -5111,10 +5111,10 @@ module ts {
                 if (hasProperty(members, id)) {
                     var member = members[id];
                     if (member.flags & SymbolFlags.Property || isObjectLiteralMethod(member.declarations[0])) {
-                        var memberDecl = <PropertyAssignment>member.declarations[0];
+                        var memberDecl = <ObjectLiteralElement>member.declarations[0];
                         var type: Type;
-                        if (memberDecl.kind === SyntaxKind.LonghandPropertyAssignment) {
-                            type = checkExpression((<LonghandPropertyAssignment>memberDecl).initializer, contextualMapper);
+                        if (memberDecl.kind === SyntaxKind.PropertyAssignment) {
+                            type = checkExpression((<PropertyAssignment>memberDecl).initializer, contextualMapper);
                         }
                         else if (memberDecl.kind === SyntaxKind.Method) {
                             type = checkObjectLiteralMethod(<MethodDeclaration>memberDecl, contextualMapper);
@@ -8633,7 +8633,7 @@ module ts {
                 case SyntaxKind.Property:
                 case SyntaxKind.ArrayLiteralExpression:
                 case SyntaxKind.ObjectLiteralExpression:
-                case SyntaxKind.LonghandPropertyAssignment:
+                case SyntaxKind.PropertyAssignment:
                 case SyntaxKind.PropertyAccessExpression:
                 case SyntaxKind.ElementAccessExpression:
                 case SyntaxKind.CallExpression:

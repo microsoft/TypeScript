@@ -223,7 +223,7 @@ module ts {
                     child((<ParameterDeclaration>node).type) ||
                     child((<ParameterDeclaration>node).initializer);
             case SyntaxKind.Property:
-            case SyntaxKind.LonghandPropertyAssignment:
+            case SyntaxKind.PropertyAssignment:
             case SyntaxKind.ShorthandPropertyAssignment:
                 return children(node.modifiers) ||
                     child((<PropertyDeclaration>node).name) ||
@@ -589,7 +589,7 @@ module ts {
                     case SyntaxKind.Parameter:
                     case SyntaxKind.Property:
                     case SyntaxKind.EnumMember:
-                    case SyntaxKind.LonghandPropertyAssignment:
+                    case SyntaxKind.PropertyAssignment:
                         return (<VariableDeclaration>parent).initializer === node;
                     case SyntaxKind.ExpressionStatement:
                     case SyntaxKind.IfStatement:
@@ -647,7 +647,7 @@ module ts {
                 case SyntaxKind.Method:
                     return (<MethodDeclaration>node).questionToken !== undefined;
                 case SyntaxKind.ShorthandPropertyAssignment:
-                case SyntaxKind.LonghandPropertyAssignment:
+                case SyntaxKind.PropertyAssignment:
                 case SyntaxKind.Property:
                     return (<PropertyDeclaration>node).questionToken !== undefined;
             }
@@ -686,7 +686,7 @@ module ts {
             case SyntaxKind.Parameter:
             case SyntaxKind.VariableDeclaration:
             case SyntaxKind.Property:
-            case SyntaxKind.LonghandPropertyAssignment:
+            case SyntaxKind.PropertyAssignment:
             case SyntaxKind.ShorthandPropertyAssignment:
             case SyntaxKind.EnumMember:
             case SyntaxKind.Method:
@@ -3166,7 +3166,7 @@ module ts {
             return finishNode(node);
         }
 
-        function parsePropertyAssignment(): PropertyAssignment {
+        function parseObjectLiteralElement(): ObjectLiteralElement {
             var fullStart = scanner.getStartPos();
             var initialToken = token;
 
@@ -3194,12 +3194,12 @@ module ts {
                 return finishNode(shorthandDeclaration);
             }
             else {
-                var longhandDeclaration = <LonghandPropertyAssignment>createNode(SyntaxKind.LonghandPropertyAssignment, fullStart);
-                longhandDeclaration.name = propertyName;
-                longhandDeclaration.questionToken = questionToken;
+                var propertyAssignment = <PropertyAssignment>createNode(SyntaxKind.PropertyAssignment, fullStart);
+                propertyAssignment.name = propertyName;
+                propertyAssignment.questionToken = questionToken;
                 parseExpected(SyntaxKind.ColonToken);
-                longhandDeclaration.initializer = allowInAnd(parseAssignmentExpressionOrHigher);
-                return finishNode(longhandDeclaration);
+                propertyAssignment.initializer = allowInAnd(parseAssignmentExpressionOrHigher);
+                return finishNode(propertyAssignment);
             }
         }
 
@@ -3210,7 +3210,7 @@ module ts {
                 node.flags |= NodeFlags.MultiLine;
             }
 
-            node.properties = parseDelimitedList(ParsingContext.ObjectLiteralMembers, parsePropertyAssignment);
+            node.properties = parseDelimitedList(ParsingContext.ObjectLiteralMembers, parseObjectLiteralElement);
             parseExpected(SyntaxKind.CloseBraceToken);
             return finishNode(node);
         }
@@ -4413,7 +4413,7 @@ module ts {
                 case SyntaxKind.IndexSignature:                 return checkIndexSignature(<SignatureDeclaration>node);
                 case SyntaxKind.InterfaceDeclaration:           return checkInterfaceDeclaration(<InterfaceDeclaration>node);
                 case SyntaxKind.LabeledStatement:               return checkLabeledStatement(<LabeledStatement>node);
-                case SyntaxKind.LonghandPropertyAssignment:     return checkLonghandPropertyAssignment(<LonghandPropertyAssignment>node);
+                case SyntaxKind.PropertyAssignment:             return checkPropertyAssignment(<PropertyAssignment>node);
                 case SyntaxKind.Method:                         return checkMethod(<MethodDeclaration>node);
                 case SyntaxKind.ModuleDeclaration:              return checkModuleDeclaration(<ModuleDeclaration>node);
                 case SyntaxKind.ObjectLiteralExpression:        return checkObjectLiteralExpression(<ObjectLiteralExpression>node);
@@ -5039,7 +5039,7 @@ module ts {
                 //    d.IsAccessorDescriptor(previous) is true and IsAccessorDescriptor(propId.descriptor) is true 
                 // and either both previous and propId.descriptor have[[Get]] fields or both previous and propId.descriptor have[[Set]] fields 
                 var currentKind: number;
-                if (prop.kind === SyntaxKind.LonghandPropertyAssignment ||
+                if (prop.kind === SyntaxKind.PropertyAssignment ||
                     prop.kind === SyntaxKind.ShorthandPropertyAssignment ||
                     prop.kind === SyntaxKind.Method) {
                     currentKind = Property;
@@ -5342,7 +5342,7 @@ module ts {
             }
         }
 
-        function checkLonghandPropertyAssignment(node: LonghandPropertyAssignment) {
+        function checkPropertyAssignment(node: PropertyAssignment) {
             return checkForInvalidQuestionMark(node, node.questionToken, Diagnostics.An_object_member_cannot_be_declared_optional);
         }
 

@@ -2122,7 +2122,7 @@ module ts {
                     case SyntaxKind.Parameter:
                     case SyntaxKind.VariableDeclaration:
                     case SyntaxKind.Property:
-                    case SyntaxKind.LonghandPropertyAssignment:
+                    case SyntaxKind.PropertyAssignment:
                     case SyntaxKind.ShorthandPropertyAssignment:
                     case SyntaxKind.EnumMember:
                     case SyntaxKind.Method:
@@ -3549,7 +3549,7 @@ module ts {
                         return emitArrayLiteral(<ArrayLiteralExpression>node);
                     case SyntaxKind.ObjectLiteralExpression:
                         return emitObjectLiteral(<ObjectLiteralExpression>node);
-                    case SyntaxKind.LonghandPropertyAssignment:
+                    case SyntaxKind.PropertyAssignment:
                         return emitPropertyAssignment(<PropertyDeclaration>node);
                     case SyntaxKind.ComputedPropertyName:
                         return emitComputedPropertyName(<ComputedPropertyName>node);
@@ -3590,7 +3590,6 @@ module ts {
                     case SyntaxKind.Block:
                     case SyntaxKind.TryBlock:
                     case SyntaxKind.FinallyBlock:
-                    case SyntaxKind.Block:
                     case SyntaxKind.ModuleBlock:
                         return emitBlock(<Block>node);
                     case SyntaxKind.VariableStatement:
