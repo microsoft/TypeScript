@@ -397,7 +397,7 @@ module ts {
                     }
                     break;
                 case SyntaxKind.Property:
-                case SyntaxKind.PropertyAssignment:
+                case SyntaxKind.LonghandPropertyAssignment:
                 case SyntaxKind.ShorthandPropertyAssignment:
                     bindDeclaration(<Declaration>node, SymbolFlags.Property, SymbolFlags.PropertyExcludes, /*isBlockScopeContainer*/ false);
                     break;

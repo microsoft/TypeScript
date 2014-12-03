@@ -239,7 +239,7 @@ module ts.BreakpointResolver {
 
                     default:
                         // If this is name of property assignment, set breakpoint in the initializer
-                        if (node.parent.kind === SyntaxKind.PropertyAssignment && (<PropertyDeclaration>node.parent).name === node) {
+                        if (node.parent.kind === SyntaxKind.LonghandPropertyAssignment && (<PropertyDeclaration>node.parent).name === node) {
                             return spanInNode((<PropertyDeclaration>node.parent).initializer);
                         }
 
@@ -477,7 +477,7 @@ module ts.BreakpointResolver {
 
             function spanInColonToken(node: Node): TextSpan {
                 // Is this : specifying return annotation of the function declaration
-                if (isAnyFunction(node.parent) || node.parent.kind === SyntaxKind.PropertyAssignment) {
+                if (isAnyFunction(node.parent) || node.parent.kind === SyntaxKind.LonghandPropertyAssignment) {
                     return spanInPreviousNode(node);
                 }
 

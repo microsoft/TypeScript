@@ -2122,7 +2122,7 @@ module ts {
                     case SyntaxKind.Parameter:
                     case SyntaxKind.VariableDeclaration:
                     case SyntaxKind.Property:
-                    case SyntaxKind.PropertyAssignment:
+                    case SyntaxKind.LonghandPropertyAssignment:
                     case SyntaxKind.ShorthandPropertyAssignment:
                     case SyntaxKind.EnumMember:
                     case SyntaxKind.Method:
@@ -2236,7 +2236,7 @@ module ts {
                 emitTrailingComments(node);
             }
 
-            function emitDownlevelShorthandPropertyAssignment(node: ShorthandPropertyDeclaration) {
+            function emitDownlevelShorthandPropertyAssignment(node: ShorthandPropertyAssignment) {
                 emitLeadingComments(node);
                 // Emit identifier as an identifier
                 emit(node.name);
@@ -2247,7 +2247,7 @@ module ts {
                 emitTrailingComments(node);
             }
 
-            function emitShorthandPropertyAssignment(node: ShorthandPropertyDeclaration) {
+            function emitShorthandPropertyAssignment(node: ShorthandPropertyAssignment) {
                 // If short-hand property has a prefix, then regardless of the target version, we will emit it as normal property assignment. For example:
                 //  module m {
                 //      export var y;
@@ -3525,7 +3525,7 @@ module ts {
                         return emitArrayLiteral(<ArrayLiteralExpression>node);
                     case SyntaxKind.ObjectLiteralExpression:
                         return emitObjectLiteral(<ObjectLiteralExpression>node);
-                    case SyntaxKind.PropertyAssignment:
+                    case SyntaxKind.LonghandPropertyAssignment:
                         return emitPropertyAssignment(<PropertyDeclaration>node);
                     case SyntaxKind.ComputedPropertyName:
                         return emitComputedPropertyName(<ComputedPropertyName>node);
@@ -3628,7 +3628,7 @@ module ts {
                     // Emit node down-level
                     switch (node.kind) {
                         case SyntaxKind.ShorthandPropertyAssignment:
-                            return emitDownlevelShorthandPropertyAssignment(<ShorthandPropertyDeclaration>node);
+                            return emitDownlevelShorthandPropertyAssignment(<ShorthandPropertyAssignment>node);
                     }
                 }
                 else {
@@ -3636,7 +3636,7 @@ module ts {
                     Debug.assert(compilerOptions.target >= ScriptTarget.ES6, "Invalid ScriptTarget. We should emit as ES6 or above");
                     switch (node.kind) {
                         case SyntaxKind.ShorthandPropertyAssignment:
-                            return emitShorthandPropertyAssignment(<ShorthandPropertyDeclaration>node);
+                            return emitShorthandPropertyAssignment(<ShorthandPropertyAssignment>node);
                     }
                 }
             }

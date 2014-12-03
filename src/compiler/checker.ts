@@ -1697,7 +1697,7 @@ module ts {
             if (declaration.initializer) {
                 var type = checkAndMarkExpression(declaration.initializer);
                 // Widening of property assignments is handled by checkObjectLiteral, exclude them here
-                if (declaration.kind !== SyntaxKind.PropertyAssignment) {
+                if (declaration.kind !== SyntaxKind.LonghandPropertyAssignment) {
                     var unwidenedType = type;
                     type = getWidenedType(type);
                     if (type !== unwidenedType) {
@@ -3247,7 +3247,7 @@ module ts {
                     return !(<FunctionExpression>node).typeParameters && !forEach((<FunctionExpression>node).parameters, p => p.type);
                 case SyntaxKind.ObjectLiteralExpression:
                     return forEach((<ObjectLiteralExpression>node).properties, p =>
-                        p.kind === SyntaxKind.PropertyAssignment && isContextSensitiveExpression((<PropertyDeclaration>p).initializer));
+                        p.kind === SyntaxKind.LonghandPropertyAssignment && isContextSensitiveExpression((<LonghandPropertyAssignment>p).initializer));
                 case SyntaxKind.ArrayLiteralExpression:
                     return forEach((<ArrayLiteralExpression>node).elements, e => isContextSensitiveExpression(e));
                 case SyntaxKind.ConditionalExpression:
@@ -4949,7 +4949,7 @@ module ts {
                     return getTypeFromTypeNode((<TypeAssertion>parent).type);
                 case SyntaxKind.BinaryExpression:
                     return getContextualTypeForBinaryOperand(node);
-                case SyntaxKind.PropertyAssignment:
+                case SyntaxKind.LonghandPropertyAssignment:
                     return getContextualTypeForPropertyExpression(node);
                 case SyntaxKind.ArrayLiteralExpression:
                     return getContextualTypeForElementExpression(node);
@@ -5085,7 +5085,7 @@ module ts {
                     if (member.flags & SymbolFlags.Property) {
                         var memberDecl = <PropertyDeclaration>member.declarations[0];
                         var type: Type;
-                        if (memberDecl.kind === SyntaxKind.PropertyAssignment) {
+                        if (memberDecl.kind === SyntaxKind.LonghandPropertyAssignment) {
                             type = checkExpression(memberDecl.initializer, contextualMapper);
                         }
                         else {
@@ -8573,7 +8573,7 @@ module ts {
                 case SyntaxKind.Property:
                 case SyntaxKind.ArrayLiteralExpression:
                 case SyntaxKind.ObjectLiteralExpression:
-                case SyntaxKind.PropertyAssignment:
+                case SyntaxKind.LonghandPropertyAssignment:
                 case SyntaxKind.PropertyAccessExpression:
                 case SyntaxKind.ElementAccessExpression:
                 case SyntaxKind.CallExpression:
@@ -9022,7 +9022,7 @@ module ts {
             // This is necessary as an identifier in short-hand property assignment can contains two meaning:
             // property name and property value.
             if (location && location.kind === SyntaxKind.ShorthandPropertyAssignment) {
-                return resolveEntityName(location, (<ShorthandPropertyDeclaration>location).name, SymbolFlags.Value);
+                return resolveEntityName(location, (<ShorthandPropertyAssignment>location).name, SymbolFlags.Value);
             }
             return undefined;
         }

@@ -232,8 +232,9 @@ module ts {
         CatchClause,
 
         // Property assignments
-        PropertyAssignment,
+        LonghandPropertyAssignment,
         ShorthandPropertyAssignment,
+
         // Enum
         EnumMember,
         // Top-level nodes
@@ -378,6 +379,7 @@ module ts {
     }
 
     export interface PropertyDeclaration extends Declaration, ClassElement {
+        _propertyDeclarationBrand: any;
         questionToken?: Node;
         type?: TypeNode;
         initializer?: Expression;
@@ -386,9 +388,20 @@ module ts {
     export type VariableOrParameterDeclaration = VariableDeclaration | ParameterDeclaration;
     export type VariableOrParameterOrPropertyDeclaration = VariableOrParameterDeclaration | PropertyDeclaration;
 
-    export interface ShorthandPropertyDeclaration extends Declaration {
+    export interface PropertyAssignment extends Declaration {
+        _propertyAssignmentBrand: any;
+    }
+
+    export interface ShorthandPropertyAssignment extends PropertyAssignment {
         name: Identifier;
         questionToken?: Node;
+    }
+
+    export interface LonghandPropertyAssignment extends PropertyAssignment {
+        _longhandPropertyAssignmentBrand: any;
+        name: DeclarationName;
+        questionToken?: Node;
+        initializer: Expression;
     }
 
     /**
@@ -420,8 +433,9 @@ module ts {
         body?: Block;
     }
 
-    export interface AccessorDeclaration extends FunctionLikeDeclaration, ClassElement  {
-        body?: Block;
+    export interface AccessorDeclaration extends FunctionLikeDeclaration, ClassElement, PropertyAssignment {
+        _accessorDeclarationBrand: any;
+        body: Block;
     }
 
     export interface IndexSignatureDeclaration extends SignatureDeclaration, ClassElement {
@@ -576,7 +590,7 @@ module ts {
     
     // An ObjectLiteralExpression is the declaration node for an anonymous symbol.
     export interface ObjectLiteralExpression extends PrimaryExpression, Declaration {
-        properties: NodeArray<Declaration>;
+        properties: NodeArray<PropertyAssignment>;
     }
 
     export interface PropertyAccessExpression extends MemberExpression {
