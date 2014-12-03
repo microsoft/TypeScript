@@ -383,14 +383,14 @@ module FourSlashInterface {
             searchValue: string,
             matchKind: string,
             fileName?: string,
-            parenetName?: string) {
+            parentName?: string) {
             FourSlash.currentTestState.verifyNavigationItemsListContains(
                 name,
                 kind,
                 searchValue,
                 matchKind,
                 fileName,
-                parenetName);
+                parentName);
         }
 
         public occurrencesAtPositionContains(range: Range, isWriteAccess?: boolean) {
