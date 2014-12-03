@@ -3238,30 +3238,26 @@ module ts {
             return type;
         }
 
-        function isContextSensitiveExpression(node: Expression): boolean {
-            return isContextSensitiveCore(node);
-        }
-
         // Returns true if the given expression contains (at any level of nesting) a function or arrow expression
         // that is subject to contextual typing.
-        function isContextSensitiveCore(node: Expression | MethodDeclaration | ObjectLiteralElement): boolean {
+        function isContextSensitive(node: Expression | MethodDeclaration | ObjectLiteralElement): boolean {
             Debug.assert(node.kind !== SyntaxKind.Method || isObjectLiteralMethod(node));
             switch (node.kind) {
                 case SyntaxKind.FunctionExpression:
                 case SyntaxKind.ArrowFunction:
                     return isContextSensitiveFunctionLikeDeclaration(<FunctionExpression>node);
                 case SyntaxKind.ObjectLiteralExpression:
-                    return forEach((<ObjectLiteralExpression>node).properties, isContextSensitiveCore);
+                    return forEach((<ObjectLiteralExpression>node).properties, isContextSensitive);
                 case SyntaxKind.ArrayLiteralExpression:
-                    return forEach((<ArrayLiteralExpression>node).elements, isContextSensitiveCore);
+                    return forEach((<ArrayLiteralExpression>node).elements, isContextSensitive);
                 case SyntaxKind.ConditionalExpression:
-                    return isContextSensitiveCore((<ConditionalExpression>node).whenTrue) ||
-                        isContextSensitiveCore((<ConditionalExpression>node).whenFalse);
+                    return isContextSensitive((<ConditionalExpression>node).whenTrue) ||
+                        isContextSensitive((<ConditionalExpression>node).whenFalse);
                 case SyntaxKind.BinaryExpression:
                     return (<BinaryExpression>node).operator === SyntaxKind.BarBarToken &&
-                    (isContextSensitiveCore((<BinaryExpression>node).left) || isContextSensitiveCore((<BinaryExpression>node).right));
+                    (isContextSensitive((<BinaryExpression>node).left) || isContextSensitive((<BinaryExpression>node).right));
                 case SyntaxKind.PropertyAssignment:
-                    return isContextSensitiveCore((<PropertyAssignment>node).initializer);
+                    return isContextSensitive((<PropertyAssignment>node).initializer);
                 case SyntaxKind.Method:
                     return isContextSensitiveFunctionLikeDeclaration(<MethodDeclaration>node);
             }
@@ -3270,7 +3266,7 @@ module ts {
         }
 
         function isContextSensitiveFunctionLikeDeclaration(node: FunctionLikeDeclaration) {
-            return !(<MethodDeclaration>node).typeParameters && !forEach((<MethodDeclaration>node).parameters, p => p.type);
+            return !node.typeParameters && !forEach(node.parameters, p => p.type);
         }
 
         function getTypeWithoutConstructors(type: Type): Type {
@@ -4763,7 +4759,7 @@ module ts {
         function getContextuallyTypedParameterType(parameter: ParameterDeclaration): Type {
             if (isFunctionExpressionOrArrowFunction(parameter.parent)) {
                 var func = <FunctionExpression>parameter.parent;
-                if (isContextSensitiveExpression(func)) {
+                if (isContextSensitive(func)) {
                     var contextualSignature = getContextualSignature(func);
                     if (contextualSignature) {
 
@@ -5632,7 +5628,7 @@ module ts {
             // because it represents a TemplateStringsArray.
             var excludeArgument: boolean[];
             for (var i = isTaggedTemplate ? 1 : 0; i < args.length; i++) {
-                if (isContextSensitiveExpression(args[i])) {
+                if (isContextSensitive(args[i])) {
                     if (!excludeArgument) {
                         excludeArgument = new Array(args.length);
                     }
@@ -6183,7 +6179,7 @@ module ts {
                     links.flags |= NodeCheckFlags.ContextChecked;
                     if (contextualSignature) {
                         var signature = getSignaturesOfType(type, SignatureKind.Call)[0];
-                        if (isContextSensitiveCore(node)) {
+                        if (isContextSensitive(node)) {
                             assignContextualParameterTypes(signature, contextualSignature, contextualMapper || identityMapper);
                         }
                         if (!node.type) {
@@ -6589,16 +6585,30 @@ module ts {
             return result;
         }
 
-        function checkExpressionOrQualifiedName(node: Expression | QualifiedName, contextualMapper?: TypeMapper): Type {
-            return checkExpressionCore(node, contextualMapper);
+        function checkObjectLiteralMethod(node: MethodDeclaration, contextualMapper?: TypeMapper): Type {
+            var type = checkFunctionExpressionOrObjectLiteralMethod(node, contextualMapper);
+            return mapSingleCallSignatureToType(node, type, contextualMapper);
+        }
+
+        function mapSingleCallSignatureToType(node: Expression | QualifiedName | MethodDeclaration, type: Type, contextualMapper?: TypeMapper) {
+            if (contextualMapper && contextualMapper !== identityMapper && node.kind !== SyntaxKind.QualifiedName) {
+                var signature = getSingleCallSignature(type);
+                if (signature && signature.typeParameters) {
+                    var contextualType = getContextualType(<Expression>node);
+                    if (contextualType) {
+                        var contextualSignature = getSingleCallSignature(contextualType);
+                        if (contextualSignature && !contextualSignature.typeParameters) {
+                            return getOrCreateTypeFromSignature(instantiateSignatureInContextOf(signature, contextualSignature, contextualMapper));
+                        }
+                    }
+                }
+            }
+
+            return type;
         }
 
         function checkExpression(node: Expression, contextualMapper?: TypeMapper): Type {
-            return checkExpressionCore(node, contextualMapper);
-        }
-
-        function checkObjectLiteralMethod(node: MethodDeclaration, contextualMapper?: TypeMapper): Type {
-            return checkExpressionCore(node, contextualMapper);
+            return checkExpressionOrQualifiedName(node, contextualMapper);
         }
 
         // Checks an expression and returns its type. The contextualMapper parameter serves two purposes: When
@@ -6608,20 +6618,11 @@ module ts {
         // object, it serves as an indicator that all contained function and arrow expressions should be considered to
         // have the wildcard function type; this form of type check is used during overload resolution to exclude
         // contextually typed function and arrow expressions in the initial phase.
-        function checkExpressionCore(node: Expression | QualifiedName | MethodDeclaration, contextualMapper?: TypeMapper): Type {
-            var type = checkExpressionOrQualifiedNameOrObjectLiteralMethodNode(node, contextualMapper);
-            if (contextualMapper && contextualMapper !== identityMapper && node.kind !== SyntaxKind.QualifiedName) {
-                var signature = getSingleCallSignature(type);
-                if (signature && signature.typeParameters) {
-                    var contextualType = getContextualType(<Expression>node);
-                    if (contextualType) {
-                        var contextualSignature = getSingleCallSignature(contextualType);
-                        if (contextualSignature && !contextualSignature.typeParameters) {
-                            type = getOrCreateTypeFromSignature(instantiateSignatureInContextOf(signature, contextualSignature, contextualMapper));
-                        }
-                    }
-                }
-            }
+        function checkExpressionOrQualifiedName(node: Expression | QualifiedName, contextualMapper?: TypeMapper): Type {
+            var type = node.kind == SyntaxKind.QualifiedName
+                ? checkQualifiedName(<QualifiedName>node)
+                : checkExpressionWorker(<Expression>node, contextualMapper);
+            type = mapSingleCallSignatureToType(node, type, contextualMapper);
 
             if (isConstEnumObjectType(type)) {
                 // enum object type for const enums are only permitted in:
@@ -6640,7 +6641,7 @@ module ts {
             return type;
         }
 
-        function checkExpressionOrQualifiedNameOrObjectLiteralMethodNode(node: Expression | QualifiedName | MethodDeclaration, contextualMapper: TypeMapper): Type {
+        function checkExpressionWorker(node: Expression, contextualMapper: TypeMapper): Type {
             switch (node.kind) {
                 case SyntaxKind.Identifier:
                     return checkIdentifier(<Identifier>node);
@@ -6662,8 +6663,6 @@ module ts {
                     return stringType;
                 case SyntaxKind.RegularExpressionLiteral:
                     return globalRegExpType;
-                case SyntaxKind.QualifiedName:
-                    return checkQualifiedName(<QualifiedName>node);
                 case SyntaxKind.ArrayLiteralExpression:
                     return checkArrayLiteral(<ArrayLiteralExpression>node, contextualMapper);
                 case SyntaxKind.ObjectLiteralExpression:
@@ -6681,8 +6680,6 @@ module ts {
                     return checkTypeAssertion(<TypeAssertion>node);
                 case SyntaxKind.ParenthesizedExpression:
                     return checkExpression((<ParenthesizedExpression>node).expression);
-                case SyntaxKind.Method:
-                    return checkFunctionExpressionOrObjectLiteralMethod(<MethodDeclaration>node, contextualMapper);
                 case SyntaxKind.FunctionExpression:
                 case SyntaxKind.ArrowFunction:
                     return checkFunctionExpressionOrObjectLiteralMethod(<FunctionExpression>node, contextualMapper);
