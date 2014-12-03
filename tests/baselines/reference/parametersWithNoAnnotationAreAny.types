@@ -58,8 +58,8 @@ var a: {
 }
 
 var b = {
->b : { foo: (x: any) => any; a: (x: any) => any; b: (x: any) => any; }
->{    foo(x) {        return x;    },    a: function foo(x) {        return x;    },    b: (x) => x} : { foo: (x: any) => any; a: (x: any) => any; b: (x: any) => any; }
+>b : { foo(x: any): any; a: (x: any) => any; b: (x: any) => any; }
+>{    foo(x) {        return x;    },    a: function foo(x) {        return x;    },    b: (x) => x} : { foo(x: any): any; a: (x: any) => any; b: (x: any) => any; }
 
     foo(x) {
 >foo : (x: any) => any

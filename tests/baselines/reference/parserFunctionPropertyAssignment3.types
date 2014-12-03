@@ -1,5 +1,5 @@
 === tests/cases/conformance/parser/ecmascript5/PropertyAssignments/parserFunctionPropertyAssignment3.ts ===
 var v = { "foo"() { } };
->v : { "foo": () => void; }
->{ "foo"() { } } : { "foo": () => void; }
+>v : { "foo"(): void; }
+>{ "foo"() { } } : { "foo"(): void; }
 

@@ -29,8 +29,8 @@ class MyClass {
 
 //type of 'this' in an object literal property of a function type is Any
 var obj = {
->obj : { f: () => any; }
->{    f() {        return this.spaaace;    }} : { f: () => any; }
+>obj : { f(): any; }
+>{    f() {        return this.spaaace;    }} : { f(): any; }
 
     f() {
 >f : () => any
@@ -42,6 +42,6 @@ var obj = {
     }
 };
 var obj: { f: () => any; };
->obj : { f: () => any; }
+>obj : { f(): any; }
 >f : () => any
 

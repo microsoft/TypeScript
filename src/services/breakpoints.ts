@@ -102,12 +102,9 @@ module ts.BreakpointResolver {
                         return spanInFunctionDeclaration(<FunctionLikeDeclaration>node);
 
                     case SyntaxKind.Block:
-                        if (isFunctionBlock(node)) {
-                            return spanInFunctionBlock(<Block>node);
-                        }
-                        else {
-                            return spanInBlock(<Block>node);
-                        }
+                        return isFunctionBlock(node)
+                            ? spanInFunctionBlock(<Block>node)
+                            : spanInBlock(<Block>node);
 
                     case SyntaxKind.TryBlock:
                     case SyntaxKind.FinallyBlock:

@@ -14,8 +14,8 @@ var var1: string | number;
 >var1 : string | number
 
 var obj1 = {
->obj1 : { method: (param: string | number) => string | number; prop: string | number; }
->{    // Inside method    method(param: string | number) {        // global vars in function declaration        num = typeof var1 === "string" && var1.length; // string        // variables in function declaration        var var2: string | number;        num = typeof var2 === "string" && var2.length; // string        // parameters in function declaration        num = typeof param === "string" && param.length; // string        return strOrNum;    },    get prop() {        // global vars in function declaration        num = typeof var1 === "string" && var1.length; // string        // variables in function declaration        var var2: string | number;        num = typeof var2 === "string" && var2.length; // string        return strOrNum;    },    set prop(param: string | number) {        // global vars in function declaration        num = typeof var1 === "string" && var1.length; // string        // variables in function declaration        var var2: string | number;        num = typeof var2 === "string" && var2.length; // string        // parameters in function declaration        num = typeof param === "string" && param.length; // string    }} : { method: (param: string | number) => string | number; prop: string | number; }
+>obj1 : { method(param: string | number): string | number; prop: string | number; }
+>{    // Inside method    method(param: string | number) {        // global vars in function declaration        num = typeof var1 === "string" && var1.length; // string        // variables in function declaration        var var2: string | number;        num = typeof var2 === "string" && var2.length; // string        // parameters in function declaration        num = typeof param === "string" && param.length; // string        return strOrNum;    },    get prop() {        // global vars in function declaration        num = typeof var1 === "string" && var1.length; // string        // variables in function declaration        var var2: string | number;        num = typeof var2 === "string" && var2.length; // string        return strOrNum;    },    set prop(param: string | number) {        // global vars in function declaration        num = typeof var1 === "string" && var1.length; // string        // variables in function declaration        var var2: string | number;        num = typeof var2 === "string" && var2.length; // string        // parameters in function declaration        num = typeof param === "string" && param.length; // string    }} : { method(param: string | number): string | number; prop: string | number; }
 
     // Inside method
     method(param: string | number) {
@@ -152,12 +152,12 @@ strOrNum = typeof obj1.method(strOrNum) === "string" && obj1.method(strOrNum);
 >typeof obj1.method(strOrNum) : string
 >obj1.method(strOrNum) : string | number
 >obj1.method : (param: string | number) => string | number
->obj1 : { method: (param: string | number) => string | number; prop: string | number; }
+>obj1 : { method(param: string | number): string | number; prop: string | number; }
 >method : (param: string | number) => string | number
 >strOrNum : string | number
 >obj1.method(strOrNum) : string | number
 >obj1.method : (param: string | number) => string | number
->obj1 : { method: (param: string | number) => string | number; prop: string | number; }
+>obj1 : { method(param: string | number): string | number; prop: string | number; }
 >method : (param: string | number) => string | number
 >strOrNum : string | number
 
@@ -169,9 +169,9 @@ strOrNum = typeof obj1.prop === "string" && obj1.prop;
 >typeof obj1.prop === "string" : boolean
 >typeof obj1.prop : string
 >obj1.prop : string | number
->obj1 : { method: (param: string | number) => string | number; prop: string | number; }
+>obj1 : { method(param: string | number): string | number; prop: string | number; }
 >prop : string | number
 >obj1.prop : string | number
->obj1 : { method: (param: string | number) => string | number; prop: string | number; }
+>obj1 : { method(param: string | number): string | number; prop: string | number; }
 >prop : string | number
 
