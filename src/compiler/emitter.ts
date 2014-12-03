@@ -2228,11 +2228,26 @@ module ts {
                 write("]");
             }
 
-            function emitObjectLiteralMethod(node: MethodDeclaration) {
+            function emitDownlevelMethod(node: MethodDeclaration) {
+                if (!isObjectLiteralMethod(node)) {
+                    return;
+                }
+
                 emitLeadingComments(node);
                 emit(node.name);
                 write(": ");
                 write("function ");
+                emitSignatureAndBody(node);
+                emitTrailingComments(node);
+            }
+
+            function emitMethod(node: MethodDeclaration) {
+                if (!isObjectLiteralMethod(node)) {
+                    return;
+                }
+
+                emitLeadingComments(node);
+                emit(node.name);
                 emitSignatureAndBody(node);
                 emitTrailingComments(node);
             }
@@ -3536,11 +3551,6 @@ module ts {
                         return emitObjectLiteral(<ObjectLiteralExpression>node);
                     case SyntaxKind.LonghandPropertyAssignment:
                         return emitPropertyAssignment(<PropertyDeclaration>node);
-                    case SyntaxKind.Method:
-                        if (isObjectLiteralMethod(node)) {
-                            return emitObjectLiteralMethod(<MethodDeclaration>node);
-                        }
-                        break;
                     case SyntaxKind.ComputedPropertyName:
                         return emitComputedPropertyName(<ComputedPropertyName>node);
                     case SyntaxKind.PropertyAccessExpression:
@@ -3643,6 +3653,8 @@ module ts {
                     switch (node.kind) {
                         case SyntaxKind.ShorthandPropertyAssignment:
                             return emitDownlevelShorthandPropertyAssignment(<ShorthandPropertyAssignment>node);
+                        case SyntaxKind.Method:
+                            return emitDownlevelMethod(<MethodDeclaration>node);
                     }
                 }
                 else {
@@ -3651,6 +3663,8 @@ module ts {
                     switch (node.kind) {
                         case SyntaxKind.ShorthandPropertyAssignment:
                             return emitShorthandPropertyAssignment(<ShorthandPropertyAssignment>node);
+                        case SyntaxKind.Method:
+                            return emitMethod(<MethodDeclaration>node);
                     }
                 }
             }

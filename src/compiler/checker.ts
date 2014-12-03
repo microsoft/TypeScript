@@ -3244,7 +3244,7 @@ module ts {
             switch (node.kind) {
                 case SyntaxKind.FunctionExpression:
                 case SyntaxKind.ArrowFunction:
-                    return !(<FunctionExpression>node).typeParameters && !forEach((<FunctionExpression>node).parameters, p => p.type);
+                    return isContextSensitiveFunctionLikeDeclaration(<FunctionExpression>node);
                 case SyntaxKind.ObjectLiteralExpression:
                     return forEach((<ObjectLiteralExpression>node).properties, isContextSensitiveExpression);
                 case SyntaxKind.ArrayLiteralExpression:
@@ -3259,12 +3259,16 @@ module ts {
                     return isContextSensitiveExpression((<LonghandPropertyAssignment>node).initializer);
                 case SyntaxKind.Method:
                     if (isObjectLiteralMethod(node)) {
-                        return !(<MethodDeclaration>node).typeParameters && !forEach((<MethodDeclaration>node).parameters, p => p.type);
+                        return isContextSensitiveFunctionLikeDeclaration(<MethodDeclaration>node);
                     }
                     return false;
             }
 
             return false;
+        }
+
+        function isContextSensitiveFunctionLikeDeclaration(node: FunctionLikeDeclaration) {
+            return !(<MethodDeclaration>node).typeParameters && !forEach((<MethodDeclaration>node).parameters, p => p.type);
         }
 
         function getTypeWithoutConstructors(type: Type): Type {
