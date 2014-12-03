@@ -3807,7 +3807,8 @@ module ts {
                         return undefined;
                     }
                 }
-                else if (declaration.flags & NodeFlags.Const) { 
+                else { 
+                    // unsuported modifier
                     return undefined;
                 }
 
@@ -3865,8 +3866,6 @@ module ts {
                             return NodeFlags.Export;
                         case SyntaxKind.DeclareKeyword:
                             return NodeFlags.Ambient;
-                        case SyntaxKind.ConstKeyword:
-                            return NodeFlags.Const;
                         default:
                             Debug.fail();
                     }
