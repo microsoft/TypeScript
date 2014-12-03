@@ -348,8 +348,8 @@ module ts {
             bindChildren(node, symbolKind, isBlockScopeContainer);
         }
 
-        function bindCatchVariableDeclaration(node: CatchBlock) {
-            var symbol = createSymbol(SymbolFlags.FunctionScopedVariable, node.variable.text || "__missing");
+        function bindCatchVariableDeclaration(node: CatchClause) {
+            var symbol = createSymbol(SymbolFlags.FunctionScopedVariable, node.name.text || "__missing");
             addDeclarationToSymbol(symbol, node, SymbolFlags.FunctionScopedVariable);
             var saveParent = parent;
             var savedBlockScopeContainer = blockScopeContainer;
@@ -444,8 +444,8 @@ module ts {
                 case SyntaxKind.ArrowFunction:
                     bindAnonymousDeclaration(<FunctionExpression>node, SymbolFlags.Function, "__function", /*isBlockScopeContainer*/ true);
                     break;
-                case SyntaxKind.CatchBlock:
-                    bindCatchVariableDeclaration(<CatchBlock>node);
+                case SyntaxKind.CatchClause:
+                    bindCatchVariableDeclaration(<CatchClause>node);
                     break;
                 case SyntaxKind.ClassDeclaration:
                     bindDeclaration(<Declaration>node, SymbolFlags.Class, SymbolFlags.ClassExcludes, /*isBlockScopeContainer*/ false);
@@ -478,7 +478,7 @@ module ts {
 
                 case SyntaxKind.Block:
                 case SyntaxKind.TryBlock:
-                case SyntaxKind.CatchBlock:
+                case SyntaxKind.CatchClause:
                 case SyntaxKind.FinallyBlock:
                 case SyntaxKind.ForStatement:
                 case SyntaxKind.ForInStatement:

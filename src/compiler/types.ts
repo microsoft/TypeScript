@@ -208,7 +208,6 @@ module ts {
         ThrowStatement,
         TryStatement,
         TryBlock,
-        CatchBlock,
         FinallyBlock,
         DebuggerStatement,
         VariableDeclaration,
@@ -222,12 +221,16 @@ module ts {
         ModuleBlock,
         ImportDeclaration,
         ExportAssignment,
+
         // Module references
         ExternalModuleReference,
+
         // Clauses
         CaseClause,
         DefaultClause,
         HeritageClause,
+        CatchClause,
+
         // Property assignments
         PropertyAssignment,
         ShorthandPropertyAssignment,
@@ -254,7 +257,7 @@ module ts {
         LastTypeNode = ParenthesizedType,
         FirstPunctuation = OpenBraceToken,
         LastPunctuation = CaretEqualsToken,
-        FirstToken = EndOfFileToken,
+        FirstToken = Unknown,
         LastToken = TypeKeyword,
         FirstTriviaToken = SingleLineCommentTrivia,
         LastTriviaToken = WhitespaceTrivia,
@@ -272,8 +275,6 @@ module ts {
     export const enum NodeFlags {
         Export              = 0x00000001,  // Declarations
         Ambient             = 0x00000002,  // Declarations
-        QuestionMark        = 0x00000004,  // Parameter/Property/Method
-        Rest                = 0x00000008,  // Parameter
         Public              = 0x00000010,  // Property/Method
         Private             = 0x00000020,  // Property/Method
         Protected           = 0x00000040,  // Property/Method
@@ -318,7 +319,7 @@ module ts {
         hasTrailingComma?: boolean;
     }
 
-    export interface ModifiersArray extends Array<Node> {
+    export interface ModifiersArray extends NodeArray<Node> {
         flags: number;
     }
 
@@ -369,12 +370,15 @@ module ts {
     }
 
     export interface ParameterDeclaration extends Declaration {
+        dotDotDotToken?: Node;
         name: Identifier;
+        questionToken?: Node;
         type?: TypeNode | StringLiteralExpression;
         initializer?: Expression;
     }
 
     export interface PropertyDeclaration extends Declaration, ClassElement {
+        questionToken?: Node;
         type?: TypeNode;
         initializer?: Expression;
     }
@@ -382,8 +386,9 @@ module ts {
     export type VariableOrParameterDeclaration = VariableDeclaration | ParameterDeclaration;
     export type VariableOrParameterOrPropertyDeclaration = VariableOrParameterDeclaration | PropertyDeclaration;
 
-    export interface ShortHandPropertyDeclaration extends Declaration {
+    export interface ShorthandPropertyDeclaration extends Declaration {
         name: Identifier;
+        questionToken?: Node;
     }
 
     /**
@@ -398,6 +403,7 @@ module ts {
         _functionLikeDeclarationBrand: any;
 
         asteriskToken?: Node;
+        questionToken?: Node;
         body?: Block | Expression;
     }
 
@@ -668,10 +674,16 @@ module ts {
         clauses: NodeArray<CaseOrDefaultClause>;
     }
 
-    export interface CaseOrDefaultClause extends Node {
+    export interface CaseClause extends Node {
         expression?: Expression;
         statements: NodeArray<Statement>;
     }
+
+    export interface DefaultClause extends Node {
+        statements: NodeArray<Statement>;
+    }
+
+    export type CaseOrDefaultClause = CaseClause | DefaultClause;
 
     export interface LabeledStatement extends Statement {
         label: Identifier;
@@ -684,13 +696,14 @@ module ts {
 
     export interface TryStatement extends Statement {
         tryBlock: Block;
-        catchBlock?: CatchBlock;
+        catchClause?: CatchClause;
         finallyBlock?: Block;
     }
 
-    export interface CatchBlock extends Block, Declaration {
-        variable: Identifier;
+    export interface CatchClause extends Declaration {
+        name: Identifier;
         type?: TypeNode;
+        block: Block;
     }
 
     export interface ModuleElement extends Node {
@@ -773,6 +786,7 @@ module ts {
     // Source files are declarations when they are external modules.
     export interface SourceFile extends Declaration {
         statements: NodeArray<ModuleElement>;
+        endOfFileToken: Node;
 
         filename: string;
         text: string;
@@ -782,17 +796,24 @@ module ts {
         amdDependencies: string[];
         amdModuleName: string;
         referencedFiles: FileReference[];
-        semanticDiagnostics: Diagnostic[];
+
+        // Diagnostics reported about the "///<reference" comments in the file.
+        referenceDiagnostics: Diagnostic[];
 
         // Parse errors refer specifically to things the parser could not understand at all (like 
-        // missing tokens, or tokens it didn't know how to deal with). Grammar errors are for 
-        // things the parser understood, but either the ES6 or TS grammars do not allow (like 
-        // putting an 'public' modifier on a 'class declaration').
+        // missing tokens, or tokens it didn't know how to deal with).
         parseDiagnostics: Diagnostic[];
+
+        // Grammar errors are for  things the parser understood, but either the ES6 or TS grammars
+        // do not allow (like putting an 'public' modifier on a 'class declaration').
         grammarDiagnostics: Diagnostic[];
 
-        // Returns all 
+        // Returns all syntactic diagnostics (i.e. the reference, parser and grammar diagnostics).
         getSyntacticDiagnostics(): Diagnostic[];
+
+        // File level diagnostics reported by the binder.
+        semanticDiagnostics: Diagnostic[];
+
         hasNoDefaultLib: boolean;
         externalModuleIndicator: Node; // The first node that causes this file to be an external module
         nodeCount: number;
@@ -861,7 +882,6 @@ module ts {
         getIdentifierCount(): number;
         getSymbolCount(): number;
         getTypeCount(): number;
-        checkProgram(): void;
         emitFiles(targetSourceFile?: SourceFile): EmitResult;
         getParentOfSymbol(symbol: Symbol): Symbol;
         getNarrowedTypeOfSymbol(symbol: Symbol, node: Node): Type;
@@ -973,7 +993,7 @@ module ts {
         isTopLevelValueImportWithEntityName(node: ImportDeclaration): boolean;
         getNodeCheckFlags(node: Node): NodeCheckFlags;
         getEnumMemberValue(node: EnumMember): number;
-        hasSemanticErrors(): boolean;
+        hasSemanticErrors(sourceFile?: SourceFile): boolean;
         isDeclarationVisible(node: Declaration): boolean;
         isImplementationOfOverload(node: FunctionLikeDeclaration): boolean;
         writeTypeOfDeclaration(declaration: AccessorDeclaration | VariableOrParameterDeclaration, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter): void;

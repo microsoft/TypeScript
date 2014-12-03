@@ -85,7 +85,6 @@ module ts {
             getDiagnostics,
             getDeclarationDiagnostics,
             getGlobalDiagnostics,
-            checkProgram,
             getParentOfSymbol,
             getNarrowedTypeOfSymbol,
             getDeclaredTypeOfSymbol,
@@ -415,8 +414,8 @@ module ts {
                             break loop;
                         }
                         break;
-                    case SyntaxKind.CatchBlock:
-                        var id = (<CatchBlock>location).variable;
+                    case SyntaxKind.CatchClause:
+                        var id = (<CatchClause>location).name;
                         if (name === id.text) {
                             result = location.symbol;
                             break loop;
@@ -546,14 +545,18 @@ module ts {
             return moduleName.substr(0, 2) === "./" || moduleName.substr(0, 3) === "../" || moduleName.substr(0, 2) === ".\\" || moduleName.substr(0, 3) === "..\\";
         }
 
-        function resolveExternalModuleName(location: Node, moduleExpression: Expression): Symbol {
-            if (moduleExpression.kind !== SyntaxKind.StringLiteral) {
+        function resolveExternalModuleName(location: Node, moduleReferenceExpression: Expression): Symbol {
+            if (moduleReferenceExpression.kind !== SyntaxKind.StringLiteral) {
                 return;
             }
 
-            var moduleLiteral = <LiteralExpression>moduleExpression;
+            var moduleReferenceLiteral = <LiteralExpression>moduleReferenceExpression;
             var searchPath = getDirectoryPath(getSourceFile(location).filename);
-            var moduleName = moduleLiteral.text;
+
+            // Module names are escaped in our symbol table.  However, string literal values aren't.
+            // Escape the name in the "require(...)" clause to ensure we find the right symbol.
+            var moduleName = escapeIdentifier(moduleReferenceLiteral.text);
+
             if (!moduleName) return;
             var isRelative = isExternalModuleNameRelative(moduleName);
             if (!isRelative) {
@@ -574,10 +577,10 @@ module ts {
                 if (sourceFile.symbol) {
                     return getResolvedExportSymbol(sourceFile.symbol);
                 }
-                error(moduleLiteral, Diagnostics.File_0_is_not_an_external_module, sourceFile.filename);
+                error(moduleReferenceLiteral, Diagnostics.File_0_is_not_an_external_module, sourceFile.filename);
                 return;
             }
-            error(moduleLiteral, Diagnostics.Cannot_find_external_module_0, moduleName);
+            error(moduleReferenceLiteral, Diagnostics.Cannot_find_external_module_0, moduleName);
         }
 
         function getResolvedExportSymbol(moduleSymbol: Symbol): Symbol {
@@ -756,7 +759,7 @@ module ts {
             //
             // x is an optional parameter, but it is a required property.
             return propertySymbol.valueDeclaration &&
-                propertySymbol.valueDeclaration.flags & NodeFlags.QuestionMark &&
+                hasQuestionToken(propertySymbol.valueDeclaration) &&
                 propertySymbol.valueDeclaration.kind !== SyntaxKind.Parameter;
         }
 
@@ -1437,11 +1440,11 @@ module ts {
             }
 
             function buildParameterDisplay(p: Symbol, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags, typeStack?: Type[]) {
-                if (getDeclarationFlagsFromSymbol(p) & NodeFlags.Rest) {
+                if (hasDotDotDotToken(p.valueDeclaration)) {
                     writePunctuation(writer, SyntaxKind.DotDotDotToken);
                 }
                 appendSymbolNameOnly(p, writer);
-                if (p.valueDeclaration.flags & NodeFlags.QuestionMark || (<VariableDeclaration>p.valueDeclaration).initializer) {
+                if (hasQuestionToken(p.valueDeclaration) || (<VariableDeclaration>p.valueDeclaration).initializer) {
                     writePunctuation(writer, SyntaxKind.QuestionToken);
                 }
                 writePunctuation(writer, SyntaxKind.ColonToken);
@@ -1711,7 +1714,7 @@ module ts {
             }
 
             // Rest parameters default to type any[], other parameters default to type any
-            var type = declaration.flags & NodeFlags.Rest ? createArrayType(anyType) : anyType;
+            var type = hasDotDotDotToken(declaration) ? createArrayType(anyType) : anyType;
             checkImplicitAny(type);
             return type;
 
@@ -1733,9 +1736,9 @@ module ts {
                         var diagnostic = Diagnostics.Member_0_implicitly_has_an_1_type;
                         break;
                     case SyntaxKind.Parameter:
-                        var diagnostic = declaration.flags & NodeFlags.Rest ?
-                            Diagnostics.Rest_parameter_0_implicitly_has_an_any_type :
-                            Diagnostics.Parameter_0_implicitly_has_an_1_type;
+                        var diagnostic = hasDotDotDotToken(declaration)
+                            ? Diagnostics.Rest_parameter_0_implicitly_has_an_any_type
+                            : Diagnostics.Parameter_0_implicitly_has_an_1_type;
                         break;
                     default:
                         var diagnostic = Diagnostics.Variable_0_implicitly_has_an_1_type;
@@ -1753,7 +1756,7 @@ module ts {
                 }
                 // Handle catch clause variables
                 var declaration = symbol.valueDeclaration;
-                if (declaration.kind === SyntaxKind.CatchBlock) {
+                if (declaration.kind === SyntaxKind.CatchClause) {
                     return links.type = anyType;
                 }
                 // Handle variable, parameter or property
@@ -2527,7 +2530,7 @@ module ts {
                         hasStringLiterals = true;
                     }
                     if (minArgumentCount < 0) {
-                        if (param.initializer || param.flags & (NodeFlags.QuestionMark | NodeFlags.Rest)) {
+                        if (param.initializer || param.questionToken || param.dotDotDotToken) {
                             minArgumentCount = i;
                         }
                     }
@@ -4375,7 +4378,7 @@ module ts {
                     case SyntaxKind.ThrowStatement:
                     case SyntaxKind.TryStatement:
                     case SyntaxKind.TryBlock:
-                    case SyntaxKind.CatchBlock:
+                    case SyntaxKind.CatchClause:
                     case SyntaxKind.FinallyBlock:
                         return forEachChild(node, isAssignedIn);
                 }
@@ -6673,7 +6676,7 @@ module ts {
                     !(parameterDeclaration.parent.kind === SyntaxKind.Constructor && (<ConstructorDeclaration>parameterDeclaration.parent).body)) {
                     error(parameterDeclaration, Diagnostics.A_parameter_property_is_only_allowed_in_a_constructor_implementation);
                 }
-                if (parameterDeclaration.flags & NodeFlags.Rest) {
+                if (parameterDeclaration.dotDotDotToken) {
                     if (!isArrayType(getTypeOfSymbol(parameterDeclaration.symbol))) {
                         error(parameterDeclaration, Diagnostics.A_rest_parameter_must_be_of_an_array_type);
                     }
@@ -7020,20 +7023,23 @@ module ts {
                 return;
             }
 
+            function getCanonicalOverload(overloads: Declaration[], implementation: FunctionLikeDeclaration) {
+                // Consider the canonical set of flags to be the flags of the bodyDeclaration or the first declaration
+                // Error on all deviations from this canonical set of flags
+                // The caveat is that if some overloads are defined in lib.d.ts, we don't want to
+                // report the errors on those. To achieve this, we will say that the implementation is
+                // the canonical signature only if it is in the same container as the first overload
+                var implementationSharesContainerWithFirstOverload = implementation !== undefined && implementation.parent === overloads[0].parent;
+                return implementationSharesContainerWithFirstOverload ? implementation : overloads[0];
+            }
+
             function checkFlagAgreementBetweenOverloads(overloads: Declaration[], implementation: FunctionLikeDeclaration, flagsToCheck: NodeFlags, someOverloadFlags: NodeFlags, allOverloadFlags: NodeFlags): void {
                 // Error if some overloads have a flag that is not shared by all overloads. To find the
                 // deviations, we XOR someOverloadFlags with allOverloadFlags
                 var someButNotAllOverloadFlags = someOverloadFlags ^ allOverloadFlags;
                 if (someButNotAllOverloadFlags !== 0) {
-                    // Consider the canonical set of flags to be the flags of the bodyDeclaration or the first declaration
-                    // Error on all deviations from this canonical set of flags
-                    // The caveat is that if some overloads are defined in lib.d.ts, we don't want to
-                    // report the errors on those. To achieve this, we will say that the implementation is
-                    // the canonical signature only if it is in the same container as the first overload
-                    var implementationSharesContainerWithFirstOverload = implementation !== undefined && implementation.parent === overloads[0].parent;
-                    var canonicalFlags = implementationSharesContainerWithFirstOverload
-                        ? getEffectiveDeclarationFlags(implementation, flagsToCheck)
-                        : getEffectiveDeclarationFlags(overloads[0], flagsToCheck);
+                    var canonicalFlags = getEffectiveDeclarationFlags(getCanonicalOverload(overloads, implementation), flagsToCheck);
+
                     forEach(overloads, o => {
                         var deviation = getEffectiveDeclarationFlags(o, flagsToCheck) ^ canonicalFlags;
                         if (deviation & NodeFlags.Export) {
@@ -7045,16 +7051,27 @@ module ts {
                         else if (deviation & (NodeFlags.Private | NodeFlags.Protected)) {
                             error(o.name, Diagnostics.Overload_signatures_must_all_be_public_private_or_protected);
                         }
-                        else if (deviation & NodeFlags.QuestionMark) {
+                    });
+                }
+            }
+
+            function checkQuestionTokenAgreementBetweenOverloads(overloads: Declaration[], implementation: FunctionLikeDeclaration, someHaveQuestionToken: boolean, allHaveQuestionToken: boolean): void {
+                if (someHaveQuestionToken !== allHaveQuestionToken) {
+                    var canonicalHasQuestionToken = hasQuestionToken(getCanonicalOverload(overloads, implementation));
+                    forEach(overloads, o => {
+                        var deviation = hasQuestionToken(o) !== canonicalHasQuestionToken;
+                        if (deviation) {
                             error(o.name, Diagnostics.Overload_signatures_must_all_be_optional_or_required);
                         }
                     });
                 }
             }
 
-            var flagsToCheck: NodeFlags = NodeFlags.Export | NodeFlags.Ambient | NodeFlags.Private | NodeFlags.Protected | NodeFlags.QuestionMark;
+            var flagsToCheck: NodeFlags = NodeFlags.Export | NodeFlags.Ambient | NodeFlags.Private | NodeFlags.Protected;
             var someNodeFlags: NodeFlags = 0;
             var allNodeFlags = flagsToCheck;
+            var someHaveQuestionToken = false;
+            var allHaveQuestionToken = true;
             var hasOverloads = false;
             var bodyDeclaration: FunctionLikeDeclaration;
             var lastSeenNonAmbientDeclaration: FunctionLikeDeclaration;
@@ -7128,6 +7145,8 @@ module ts {
                     var currentNodeFlags = getEffectiveDeclarationFlags(node, flagsToCheck);
                     someNodeFlags |= currentNodeFlags;
                     allNodeFlags &= currentNodeFlags;
+                    someHaveQuestionToken = someHaveQuestionToken || hasQuestionToken(node);
+                    allHaveQuestionToken = allHaveQuestionToken && hasQuestionToken(node);
 
                     if (node.body && bodyDeclaration) {
                         if (isConstructor) {
@@ -7176,6 +7195,8 @@ module ts {
 
             if (hasOverloads) {
                 checkFlagAgreementBetweenOverloads(declarations, bodyDeclaration, flagsToCheck, someNodeFlags, allNodeFlags);
+                checkQuestionTokenAgreementBetweenOverloads(declarations, bodyDeclaration, someHaveQuestionToken, allHaveQuestionToken);
+
                 if (bodyDeclaration) {
                     var signatures = getSignaturesOfSymbol(symbol);
                     var bodySignature = getSignatureFromDeclaration(bodyDeclaration);
@@ -7725,13 +7746,14 @@ module ts {
         function checkSwitchStatement(node: SwitchStatement) {
             var expressionType = checkExpression(node.expression);
             forEach(node.clauses, clause => {
-                if (fullTypeCheck && clause.expression) {
+                if (fullTypeCheck && clause.kind === SyntaxKind.CaseClause) {
+                    var caseClause = <CaseClause>clause;
                     // TypeScript 1.0 spec (April 2014):5.9
                     // In a 'switch' statement, each 'case' expression must be of a type that is assignable to or from the type of the 'switch' expression.
-                    var caseType = checkExpression(clause.expression);
+                    var caseType = checkExpression(caseClause.expression);
                     if (!isTypeAssignableTo(expressionType, caseType)) {
                         // check 'expressionType isAssignableTo caseType' failed, try the reversed check and report errors if it fails
-                        checkTypeAssignableTo(caseType, expressionType, clause.expression, /*headMessage*/ undefined);
+                        checkTypeAssignableTo(caseType, expressionType, caseClause.expression, /*headMessage*/ undefined);
                     }
                 }
                 forEach(clause.statements, checkSourceElement);
@@ -7748,7 +7770,7 @@ module ts {
 
         function checkTryStatement(node: TryStatement) {
             checkBlock(node.tryBlock);
-            if (node.catchBlock) checkBlock(node.catchBlock);
+            if (node.catchClause) checkBlock(node.catchClause.block);
             if (node.finallyBlock) checkBlock(node.finallyBlock);
         }
 
@@ -8586,7 +8608,7 @@ module ts {
                 case SyntaxKind.ThrowStatement:
                 case SyntaxKind.TryStatement:
                 case SyntaxKind.TryBlock:
-                case SyntaxKind.CatchBlock:
+                case SyntaxKind.CatchClause:
                 case SyntaxKind.FinallyBlock:
                 case SyntaxKind.VariableDeclaration:
                 case SyntaxKind.ClassDeclaration:
@@ -8634,10 +8656,6 @@ module ts {
             }
         }
 
-        function checkProgram() {
-            forEach(program.getSourceFiles(), checkSourceFile);
-        }
-
         function getSortedDiagnostics(): Diagnostic[]{
             Debug.assert(fullTypeCheck, "diagnostics are available only in the full typecheck mode");
 
@@ -8650,12 +8668,11 @@ module ts {
         }
 
         function getDiagnostics(sourceFile?: SourceFile): Diagnostic[]{
-
             if (sourceFile) {
                 checkSourceFile(sourceFile);
                 return filter(getSortedDiagnostics(), d => d.file === sourceFile);
             }
-            checkProgram();
+            forEach(program.getSourceFiles(), checkSourceFile);
             return getSortedDiagnostics();
         }
 
@@ -8748,8 +8765,8 @@ module ts {
                             copySymbol(location.symbol, meaning);
                         }
                         break;
-                    case SyntaxKind.CatchBlock:
-                        if ((<CatchBlock>location).variable.text) {
+                    case SyntaxKind.CatchClause:
+                        if ((<CatchClause>location).name.text) {
                             copySymbol(location.symbol, meaning);
                         }
                         break;
@@ -9005,7 +9022,7 @@ module ts {
             // This is necessary as an identifier in short-hand property assignment can contains two meaning:
             // property name and property value.
             if (location && location.kind === SyntaxKind.ShorthandPropertyAssignment) {
-                return resolveEntityName(location, (<ShortHandPropertyDeclaration>location).name, SymbolFlags.Value);
+                return resolveEntityName(location, (<ShorthandPropertyDeclaration>location).name, SymbolFlags.Value);
             }
             return undefined;
         }
@@ -9173,9 +9190,9 @@ module ts {
             return isImportResolvedToValue(getSymbolOfNode(node));
         }
 
-        function hasSemanticErrors() {
+        function hasSemanticErrors(sourceFile?: SourceFile) {
             // Return true if there is any semantic error in a file or globally
-            return getDiagnostics().length > 0 || getGlobalDiagnostics().length > 0;
+            return getDiagnostics(sourceFile).length > 0 || getGlobalDiagnostics().length > 0;
         }
 
         function isEmitBlocked(sourceFile?: SourceFile): boolean {
@@ -9293,7 +9310,6 @@ module ts {
 
         function invokeEmitter(targetSourceFile?: SourceFile) {
             var resolver = createResolver();
-            checkProgram();
             return emitFiles(resolver, targetSourceFile);
         }
 

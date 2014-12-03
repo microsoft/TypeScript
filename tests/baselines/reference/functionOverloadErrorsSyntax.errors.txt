@@ -1,6 +1,6 @@
 tests/cases/conformance/functions/functionOverloadErrorsSyntax.ts(2,27): error TS1016: A required parameter cannot follow an optional parameter.
 tests/cases/conformance/functions/functionOverloadErrorsSyntax.ts(5,38): error TS1016: A required parameter cannot follow an optional parameter.
-tests/cases/conformance/functions/functionOverloadErrorsSyntax.ts(9,28): error TS1014: A rest parameter must be last in a parameter list.
+tests/cases/conformance/functions/functionOverloadErrorsSyntax.ts(9,25): error TS1014: A rest parameter must be last in a parameter list.
 
 
 ==== tests/cases/conformance/functions/functionOverloadErrorsSyntax.ts (3 errors) ====
@@ -17,7 +17,7 @@ tests/cases/conformance/functions/functionOverloadErrorsSyntax.ts(9,28): error T
     
     //Function overload signature with rest param followed by non-optional parameter
     function fn5(x: string, ...y: any[], z: string);
-                               ~
+                            ~~~
 !!! error TS1014: A rest parameter must be last in a parameter list.
     function fn5() { }
     

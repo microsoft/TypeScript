@@ -328,7 +328,6 @@ module ts.formatting {
                 case SyntaxKind.Block:
                 case SyntaxKind.FunctionBlock:
                 case SyntaxKind.TryBlock:
-                case SyntaxKind.CatchBlock:
                 case SyntaxKind.FinallyBlock:
                 case SyntaxKind.ModuleBlock:
                 case SyntaxKind.ObjectLiteralExpression:
@@ -404,12 +403,13 @@ module ts.formatting {
                 case SyntaxKind.EnumDeclaration:
                 case SyntaxKind.ObjectLiteralExpression:
                 case SyntaxKind.Block:
-                case SyntaxKind.CatchBlock:
                 case SyntaxKind.FinallyBlock:
                 case SyntaxKind.FunctionBlock:
                 case SyntaxKind.ModuleBlock:
                 case SyntaxKind.SwitchStatement:
                     return nodeEndsWith(n, SyntaxKind.CloseBraceToken, sourceFile);
+                case SyntaxKind.CatchClause:
+                    return isCompletedNode((<CatchClause>n).block, sourceFile);
                 case SyntaxKind.ParenthesizedExpression:
                 case SyntaxKind.CallSignature:
                 case SyntaxKind.CallExpression:

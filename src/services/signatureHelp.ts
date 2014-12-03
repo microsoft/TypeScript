@@ -524,7 +524,7 @@ module ts.SignatureHelp {
                 var displayParts = mapToDisplayParts(writer =>
                     typeInfoResolver.getSymbolDisplayBuilder().buildParameterDisplay(parameter, writer, invocation));
 
-                var isOptional = !!(parameter.valueDeclaration.flags & NodeFlags.QuestionMark);
+                var isOptional = hasQuestionToken(parameter.valueDeclaration);
 
                 return {
                     name: parameter.name,

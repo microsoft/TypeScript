@@ -43,8 +43,43 @@ undefined === function (): number {
     var x = 4;
 };
 
+class Base { private x; }
+class AnotherClass { private y; }
+class Derived1 extends Base { private m; }
+class Derived2 extends Base { private n; }
+function f8() {
+    return new Derived1();
+    return new Derived2();    
+}
+var f9 = function () {
+    return new Derived1();
+    return new Derived2();
+};
+var f10 = () => {
+    return new Derived1();
+    return new Derived2();
+};
+function f11() {
+    return new Base();
+    return new AnotherClass();
+}
+var f12 = function () {
+    return new Base();
+    return new AnotherClass();
+};
+var f13 = () => {
+    return new Base();
+    return new AnotherClass();
+};
+
 
 //// [functionImplementationErrors.js]
+var __extends = this.__extends || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    __.prototype = b.prototype;
+    d.prototype = new __();
+};
 // FunctionExpression with no return type annotation with multiple return statements with unrelated types
 var f1 = function () {
     return '';
@@ -85,4 +120,52 @@ function f7(n, m) {
 undefined === function () {
     throw undefined;
     var x = 4;
+};
+var Base = (function () {
+    function Base() {
+    }
+    return Base;
+})();
+var AnotherClass = (function () {
+    function AnotherClass() {
+    }
+    return AnotherClass;
+})();
+var Derived1 = (function (_super) {
+    __extends(Derived1, _super);
+    function Derived1() {
+        _super.apply(this, arguments);
+    }
+    return Derived1;
+})(Base);
+var Derived2 = (function (_super) {
+    __extends(Derived2, _super);
+    function Derived2() {
+        _super.apply(this, arguments);
+    }
+    return Derived2;
+})(Base);
+function f8() {
+    return new Derived1();
+    return new Derived2();
+}
+var f9 = function () {
+    return new Derived1();
+    return new Derived2();
+};
+var f10 = function () {
+    return new Derived1();
+    return new Derived2();
+};
+function f11() {
+    return new Base();
+    return new AnotherClass();
+}
+var f12 = function () {
+    return new Base();
+    return new AnotherClass();
+};
+var f13 = function () {
+    return new Base();
+    return new AnotherClass();
 };

@@ -6,3 +6,4 @@ Input:
 
 //// [commentsAtEndOfFile1.js]
 Input: ;
+//Testing two

@@ -241,3 +241,28 @@ function foo4(t, u) {
     var j = [u, derived]; // Derived[]
     var k = [t, u];
 }
+//function foo3<T extends U, U extends Derived>(t: T, u: U) {
+//    var a = [t, t]; // T[]
+//    var b = [t, null]; // T[]
+//    var c = [t, u]; // {}[]
+//    var d = [t, 1]; // {}[]
+//    var e = [() => t, () => u]; // {}[]
+//    var f = [() => t, () => u, () => null]; // { (): any }[]
+//    var g = [t, base]; // Base[]
+//    var h = [t, derived]; // Derived[]
+//    var i = [u, base]; // Base[]
+//    var j = [u, derived]; // Derived[]
+//}
+//function foo4<T extends U, U extends Base>(t: T, u: U) {
+//    var a = [t, t]; // T[]
+//    var b = [t, null]; // T[]
+//    var c = [t, u]; // BUG 821629
+//    var d = [t, 1]; // {}[]
+//    var e = [() => t, () => u]; // {}[]
+//    var f = [() => t, () => u, () => null]; // { (): any }[]
+//    var g = [t, base]; // Base[]
+//    var h = [t, derived]; // Derived[]
+//    var i = [u, base]; // Base[]
+//    var j = [u, derived]; // Derived[]
+//    var k: Base[] = [t, u];
+//} 
