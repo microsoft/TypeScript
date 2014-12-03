@@ -1386,6 +1386,7 @@ module ts {
             if (inGeneratorParameterContext()) {
                 setYieldContext(false);
             }
+
             node.expression = allowInAnd(parseExpression);
             if (inGeneratorParameterContext()) {
                 setYieldContext(yieldContext);
@@ -1405,15 +1406,17 @@ module ts {
         }
 
         function parseAnyContextualModifier(): boolean {
-            return isModifier(token) && tryParse(() => {
-                if (token === SyntaxKind.ConstKeyword) {
-                    // 'const' is only a modifier if followed by 'enum'.
-                    return nextToken() === SyntaxKind.EnumKeyword;
-                }
+            return isModifier(token) && tryParse(nextTokenCanFollowContextualModifier);
+        }
 
-                nextToken();
-                return canFollowModifier();
-            });
+        function nextTokenCanFollowContextualModifier() {
+            if (token === SyntaxKind.ConstKeyword) {
+                // 'const' is only a modifier if followed by 'enum'.
+                return nextToken() === SyntaxKind.EnumKeyword;
+            }
+
+            nextToken();
+            return canFollowModifier();
         }
 
         function canFollowModifier(): boolean {
@@ -2531,56 +2534,55 @@ module ts {
 
         function parseSimpleArrowFunctionExpression(identifier: Identifier): Expression {
             Debug.assert(token === SyntaxKind.EqualsGreaterThanToken, "parseSimpleArrowFunctionExpression should only have been called if we had a =>");
+
+            var node = <FunctionExpression>createNode(SyntaxKind.ArrowFunction, identifier.pos);
+
             var parameter = <ParameterDeclaration>createNode(SyntaxKind.Parameter, identifier.pos);
-            parseExpected(SyntaxKind.EqualsGreaterThanToken);
             parameter.name = identifier;
             finishNode(parameter);
 
-            var parameters = <NodeArray<ParameterDeclaration>>[];
-            parameters.push(parameter);
-            parameters.pos = parameter.pos;
-            parameters.end = parameter.end;
+            node.parameters = <NodeArray<ParameterDeclaration>>[parameter];
+            node.parameters.pos = parameter.pos;
+            node.parameters.end = parameter.end;
 
-            var signature = <ParsedSignature>{ parameters: parameters };
+            parseExpected(SyntaxKind.EqualsGreaterThanToken);
+            node.body = parseArrowFunctionExpressionBody();
 
-            return parseArrowExpressionTail(identifier.pos, signature);
+            return finishNode(node);
         }
 
         function tryParseParenthesizedArrowFunctionExpression(): Expression {
-            // Indicates whether we are certain that we should parse an arrow expression.
             var triState = isParenthesizedArrowFunctionExpression();
 
             if (triState === Tristate.False) {
+                // It's definitely not a parenthesized arrow function expression.
                 return undefined;
             }
 
-            var pos = getNodePos();
+            // If we definitely have an arrow function, then we can just parse one, not requiring a
+            // following => or { token. Otherwise, we *might* have an arrow function.  Try to parse
+            // it out, but don't allow any ambiguity, and return 'undefined' if this could be an
+            // expression instead.
+            var arrowFunction = triState === Tristate.True
+                ? parseParenthesizedArrowFunctionExpressionHead(/*allowAmbiguity:*/ true)
+                : tryParse(parsePossibleParenthesizedArrowFunctionExpressionHead);
 
-            if (triState === Tristate.True) {
-                // Arrow function are never generators.
-                var sig = parseSignature(/*yieldAndGeneratorParameterContext:*/ false);
-
-                // If we have an arrow, then try to parse the body.
-                // Even if not, try to parse if we have an opening brace, just in case we're in an error state.
-                if (parseExpected(SyntaxKind.EqualsGreaterThanToken) || token === SyntaxKind.OpenBraceToken) {
-                    return parseArrowExpressionTail(pos, sig);
-                }
-                else {
-                    // If not, we're probably better off bailing out and returning a bogus function expression.
-                    return makeFunctionExpression(SyntaxKind.ArrowFunction, pos, /*asteriskToken:*/ undefined, /*name:*/ undefined, sig, parseIdentifier(Diagnostics.Expression_expected));
-                }
+            if (!arrowFunction) {
+                // Didn't appear to actually be a parenthesized arrow function.  Just bail out.
+                return undefined;
             }
-            
-            // *Maybe* we had an arrow function and we need to try to parse it out,
-            // rolling back and trying other parses if we fail.
-            var sig = tryParseSignatureIfArrowOrBraceFollows();
-            if (sig) {
-                parseExpected(SyntaxKind.EqualsGreaterThanToken);
-                return parseArrowExpressionTail(pos, sig);
+
+            // If we have an arrow, then try to parse the body. Even if not, try to parse if we 
+            // have an opening brace, just in case we're in an error state.
+            if (parseExpected(SyntaxKind.EqualsGreaterThanToken) || token === SyntaxKind.OpenBraceToken) {
+                arrowFunction.body = parseArrowFunctionExpressionBody();
             }
             else {
-                return undefined;
+                // If not, we're probably better off bailing out and returning a bogus function expression.
+                arrowFunction.body = parseIdentifier();
             }
+
+            return finishNode(arrowFunction);
         }
 
         //  True        -> We definitely expect a parenthesized arrow function here.
@@ -2662,34 +2664,37 @@ module ts {
             }
         }
 
-        function tryParseSignatureIfArrowOrBraceFollows(): ParsedSignature {
-            return tryParse(() => {
-                // Arrow functions are never generators.
-                var sig = parseSignature(/*yieldAndGeneratorParameterContext:*/ false);
-
-                // Parsing a signature isn't enough.
-                // Parenthesized arrow signatures often look like other valid expressions.
-                // For instance:
-                //  - "(x = 10)" is an assignment expression parsed as a signature with a default parameter value.
-                //  - "(x,y)" is a comma expression parsed as a signature with two parameters.
-                //  - "a ? (b): c" will have "(b):" parsed as a signature with a return type annotation.
-                //
-                // So we need just a bit of lookahead to ensure that it can only be a signature.
-                if (token === SyntaxKind.EqualsGreaterThanToken || token === SyntaxKind.OpenBraceToken) {
-                    return sig;
-                }
-
-                return undefined;
-            });
+        function parsePossibleParenthesizedArrowFunctionExpressionHead() {
+            return parseParenthesizedArrowFunctionExpressionHead(/*allowAmbiguity:*/ false);
         }
 
-        function parseArrowExpressionTail(pos: number, sig: ParsedSignature): FunctionExpression {
-            var body: Block | Expression;
+        function parseParenthesizedArrowFunctionExpressionHead(allowAmbiguity: boolean): FunctionExpression {
+            var node = <FunctionExpression>createNode(SyntaxKind.ArrowFunction);
+            // Arrow functions are never generators.
+            fillSignature(SyntaxKind.ColonToken, /*yieldAndGeneratorParameterContext:*/ false, node);
 
-            if (token === SyntaxKind.OpenBraceToken) {
-                body = parseFunctionBlock(/*allowYield:*/ false, /* ignoreMissingOpenBrace */ false);
+            // Parsing a signature isn't enough.
+            // Parenthesized arrow signatures often look like other valid expressions.
+            // For instance:
+            //  - "(x = 10)" is an assignment expression parsed as a signature with a default parameter value.
+            //  - "(x,y)" is a comma expression parsed as a signature with two parameters.
+            //  - "a ? (b): c" will have "(b):" parsed as a signature with a return type annotation.
+            //
+            // So we need just a bit of lookahead to ensure that it can only be a signature.
+            if (!allowAmbiguity && token !== SyntaxKind.EqualsGreaterThanToken && token !== SyntaxKind.OpenBraceToken) {
+                // Returning undefined here will cause our caller to rewind to where we started from.
+                return undefined;
             }
-            else if (isStatement(/* inErrorRecovery */ true) && !isStartOfExpressionStatement() && token !== SyntaxKind.FunctionKeyword) {
+
+            return node;
+        }
+
+        function parseArrowFunctionExpressionBody(): Block | Expression {
+            if (token === SyntaxKind.OpenBraceToken) {
+                return parseFunctionBlock(/*allowYield:*/ false, /* ignoreMissingOpenBrace */ false);
+            }
+
+            if (isStatement(/* inErrorRecovery */ true) && !isStartOfExpressionStatement() && token !== SyntaxKind.FunctionKeyword) {
                 // Check if we got a plain statement (i.e. no expression-statements, no functions expressions/declarations)
                 //
                 // Here we try to recover from a potential error situation in the case where the 
@@ -2704,13 +2709,10 @@ module ts {
                 // up preemptively closing the containing construct.
                 //
                 // Note: even when 'ignoreMissingOpenBrace' is passed as true, parseBody will still error.
-                body = parseFunctionBlock(/*allowYield:*/ false, /* ignoreMissingOpenBrace */ true);
-            }
-            else {
-                body = parseAssignmentExpressionOrHigher();
+                return parseFunctionBlock(/*allowYield:*/ false, /* ignoreMissingOpenBrace */ true);
             }
 
-            return makeFunctionExpression(SyntaxKind.ArrowFunction, pos, /*asteriskToken:*/ undefined, /*name:*/ undefined, sig, body);
+            return parseAssignmentExpressionOrHigher();
         }
 
         function parseConditionalExpressionRest(leftOperand: Expression): Expression {
@@ -3233,15 +3235,13 @@ module ts {
             //      function * BindingIdentifier[Yield]opt (FormalParameters[Yield, GeneratorParameter]) { GeneratorBody[Yield] }
             // FunctionExpression:
             //      function BindingIdentifieropt(FormalParameters) { FunctionBody }
-
-            var pos = getNodePos();
+            var node = <FunctionExpression>createNode(SyntaxKind.FunctionExpression);
             parseExpected(SyntaxKind.FunctionKeyword);
-            var asteriskToken = parseOptionalToken(SyntaxKind.AsteriskToken);
-            var name = asteriskToken ? doInYieldContext(parseOptionalIdentifier) : parseOptionalIdentifier();
-            var sig = parseSignature(/*yieldAndGeneratorParameterContext:*/ !!asteriskToken);
-
-            var body = parseFunctionBlock(/*allowYield:*/ !!asteriskToken, /* ignoreMissingOpenBrace */ false);
-            return makeFunctionExpression(SyntaxKind.FunctionExpression, pos, asteriskToken, name, sig, body);
+            node.asteriskToken = parseOptionalToken(SyntaxKind.AsteriskToken);
+            node.name = node.asteriskToken ? doInYieldContext(parseOptionalIdentifier) : parseOptionalIdentifier();
+            fillSignature(SyntaxKind.ColonToken, /*yieldAndGeneratorParameterContext:*/ !!node.asteriskToken, node);
+            node.body = parseFunctionBlock(/*allowYield:*/ !!node.asteriskToken, /* ignoreMissingOpenBrace */ false);
+            return finishNode(node);
         }
 
         function parseOptionalIdentifier() {

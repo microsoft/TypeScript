@@ -3807,6 +3807,10 @@ module ts {
                         return undefined;
                     }
                 }
+                else { 
+                    // unsupported modifier
+                    return undefined;
+                }
 
                 var keywords: Node[] = [];
                 var modifierFlag: NodeFlags = getFlagFromModifier(modifier);
