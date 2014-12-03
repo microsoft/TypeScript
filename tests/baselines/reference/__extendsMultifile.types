@@ -1,0 +1,13 @@
+=== tests/cases/compiler/foo.ts ===
+
+declare var __extends;
+>__extends : any
+
+=== tests/cases/compiler/bar.ts ===
+class A { }
+>A : A
+
+class B extends A { }
+>B : B
+>A : A
+
