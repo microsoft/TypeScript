@@ -3190,7 +3190,7 @@ module ts {
 
             // Parse to check if it is short-hand property assignment or normal property assignment
             if ((token === SyntaxKind.CommaToken || token === SyntaxKind.CloseBraceToken) && tokenIsIdentifier) {
-                var shorthandDeclaration = <ShortHandPropertyDeclaration>createNode(SyntaxKind.ShorthandPropertyAssignment, nodePos);
+                var shorthandDeclaration = <ShorthandPropertyDeclaration>createNode(SyntaxKind.ShorthandPropertyAssignment, nodePos);
                 shorthandDeclaration.name = <Identifier>propertyName;
                 shorthandDeclaration.questionToken = questionToken;
                 return finishNode(shorthandDeclaration);
@@ -4438,7 +4438,7 @@ module ts {
                 case SyntaxKind.ReturnStatement:                return checkReturnStatement(<ReturnStatement>node);
                 case SyntaxKind.SetAccessor:                    return checkSetAccessor(<MethodDeclaration>node);
                 case SyntaxKind.SourceFile:                     return checkSourceFile(<SourceFile>node);
-                case SyntaxKind.ShorthandPropertyAssignment:    return checkShorthandPropertyAssignment(<ShortHandPropertyDeclaration>node);
+                case SyntaxKind.ShorthandPropertyAssignment:    return checkShorthandPropertyAssignment(<ShorthandPropertyDeclaration>node);
                 case SyntaxKind.SwitchStatement:                return checkSwitchStatement(<SwitchStatement>node);
                 case SyntaxKind.TaggedTemplateExpression:       return checkTaggedTemplateExpression(<TaggedTemplateExpression>node);
                 case SyntaxKind.ThrowStatement:                 return checkThrowStatement(<ThrowStatement>node);
@@ -5455,7 +5455,7 @@ module ts {
             return grammarErrorOnFirstToken(node, Diagnostics.A_declare_modifier_is_required_for_a_top_level_declaration_in_a_d_ts_file);
         }
 
-        function checkShorthandPropertyAssignment(node: ShortHandPropertyDeclaration): boolean {
+        function checkShorthandPropertyAssignment(node: ShorthandPropertyDeclaration): boolean {
             return checkForInvalidQuestionMark(node, node.questionToken, Diagnostics.An_object_member_cannot_be_declared_optional);
         }
 

@@ -9022,7 +9022,7 @@ module ts {
             // This is necessary as an identifier in short-hand property assignment can contains two meaning:
             // property name and property value.
             if (location && location.kind === SyntaxKind.ShorthandPropertyAssignment) {
-                return resolveEntityName(location, (<ShortHandPropertyDeclaration>location).name, SymbolFlags.Value);
+                return resolveEntityName(location, (<ShorthandPropertyDeclaration>location).name, SymbolFlags.Value);
             }
             return undefined;
         }

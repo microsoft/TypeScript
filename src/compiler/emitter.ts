@@ -2236,33 +2236,35 @@ module ts {
                 emitTrailingComments(node);
             }
 
-            function emitShortHandPropertyAssignment(node: ShortHandPropertyDeclaration) {
-                function emitAsNormalPropertyAssignment() {
-                    emitLeadingComments(node);
-                    // Emit identifier as an identifier
-                    emit(node.name);
-                    write(": ");
-                    // Even though this is stored as identified because it is in short-hand property assignment,
-                    // treated it as expression 
-                    emitExpressionIdentifier(node.name);
-                    emitTrailingComments(node);
-                }
+            function emitDownlevelShorthandPropertyAssignment(node: ShorthandPropertyDeclaration) {
+                emitLeadingComments(node);
+                // Emit identifier as an identifier
+                emit(node.name);
+                write(": ");
+                // Even though this is stored as identifier treat it as an expression
+                // Short-hand, { x }, is equivalent of normal form { x: x }
+                emitExpressionIdentifier(node.name);
+                emitTrailingComments(node);
+            }
 
-                if (compilerOptions.target < ScriptTarget.ES6) {
-                    emitAsNormalPropertyAssignment();
+            function emitShorthandPropertyAssignment(node: ShorthandPropertyDeclaration) {
+                // If short-hand property has a prefix, then regardless of the target version, we will emit it as normal property assignment. For example:
+                //  module m {
+                //      export var y;
+                //  }
+                //  module m {
+                //      export var obj = { y };
+                //  }
+                //  The short-hand property in obj need to emit as such ... = { y : m.y } regardless of the TargetScript version
+                var prefix = resolver.getExpressionNamePrefix(node.name);
+                if (prefix) {
+                    emitDownlevelShorthandPropertyAssignment(node);
                 }
-                else if (compilerOptions.target >= ScriptTarget.ES6) {
-                    // If short-hand property has a prefix, then regardless of the target version, we will emit it as normal property assignment
-                    var prefix = resolver.getExpressionNamePrefix(node.name);
-                    if (prefix) {
-                        emitAsNormalPropertyAssignment();
-                    }
-                    // If short-hand property has no prefix, emit it as short-hand.
-                    else {
-                        emitLeadingComments(node);
-                        emit(node.name);
-                        emitTrailingComments(node);
-                    }
+                // If short-hand property has no prefix, emit it as short-hand.
+                else {
+                    emitLeadingComments(node);
+                    emit(node.name);
+                    emitTrailingComments(node);
                 }
             }
 
@@ -3483,6 +3485,7 @@ module ts {
                     return emitPinnedOrTripleSlashComments(node);
                 }
 
+                // Check if the node can be emitted regardless of the ScriptTarget
                 switch (node.kind) {
                     case SyntaxKind.Identifier:
                         return emitIdentifier(<Identifier>node);
@@ -3521,8 +3524,6 @@ module ts {
                         return emitObjectLiteral(<ObjectLiteralExpression>node);
                     case SyntaxKind.PropertyAssignment:
                         return emitPropertyAssignment(<PropertyDeclaration>node);
-                    case SyntaxKind.ShorthandPropertyAssignment:
-                        return emitShortHandPropertyAssignment(<ShortHandPropertyDeclaration>node);
                     case SyntaxKind.ComputedPropertyName:
                         return emitComputedPropertyName(<ComputedPropertyName>node);
                     case SyntaxKind.PropertyAccessExpression:
@@ -3617,6 +3618,23 @@ module ts {
                         return emitImportDeclaration(<ImportDeclaration>node);
                     case SyntaxKind.SourceFile:
                         return emitSourceFile(<SourceFile>node);
+                }
+
+                // Emit node which needs to be emitted differently depended on ScriptTarget
+                if (compilerOptions.target < ScriptTarget.ES6) {
+                    // Emit node down-level
+                    switch (node.kind) {
+                        case SyntaxKind.ShorthandPropertyAssignment:
+                            return emitDownlevelShorthandPropertyAssignment(<ShorthandPropertyDeclaration>node);
+                    }
+                }
+                else {
+                    // Emit node natively
+                    Debug.assert(compilerOptions.target >= ScriptTarget.ES6, "Invalid ScriptTarget. We should emit as ES6 or above");
+                    switch (node.kind) {
+                        case SyntaxKind.ShorthandPropertyAssignment:
+                            return emitShorthandPropertyAssignment(<ShorthandPropertyDeclaration>node);
+                    }
                 }
             }
 

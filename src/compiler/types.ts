@@ -386,7 +386,7 @@ module ts {
     export type VariableOrParameterDeclaration = VariableDeclaration | ParameterDeclaration;
     export type VariableOrParameterOrPropertyDeclaration = VariableOrParameterDeclaration | PropertyDeclaration;
 
-    export interface ShortHandPropertyDeclaration extends Declaration {
+    export interface ShorthandPropertyDeclaration extends Declaration {
         name: Identifier;
         questionToken?: Node;
     }
