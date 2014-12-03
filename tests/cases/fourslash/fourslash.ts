@@ -87,6 +87,10 @@ module FourSlashInterface {
         public ranges(): Range[] {
             return FourSlash.currentTestState.getRanges();
         }
+
+        public markerByName(s: string): Marker {
+            return FourSlash.currentTestState.getMarkerByName(s);
+        }
     }
 
     export class diagnostics {
@@ -227,7 +231,7 @@ module FourSlashInterface {
         }
 
         public quickInfoIs(expectedText?: string, expectedDocumentation?: string) {
-            FourSlash.currentTestState.verifyQuickInfo(this.negative, expectedText, expectedDocumentation);
+            FourSlash.currentTestState.verifyQuickInfoString(this.negative, expectedText, expectedDocumentation);
         }
 
         public quickInfoExists() {
@@ -429,6 +433,11 @@ module FourSlashInterface {
 
         public renameLocations(findInStrings: boolean, findInComments: boolean) {
             FourSlash.currentTestState.verifyRenameLocations(findInStrings, findInComments);
+        }
+
+        public verifyQuickInfoDisplayParts(kind: string, kindModifiers: string, textSpan: { start: number; length: number; },
+            displayParts: ts.SymbolDisplayPart[], documentation: ts.SymbolDisplayPart[]) {
+            FourSlash.currentTestState.verifyQuickInfoDisplayParts(kind, kindModifiers, textSpan, displayParts, documentation);
         }
     }
 
@@ -649,6 +658,12 @@ module fs {
     export var format = new FourSlashInterface.format();
     export var diagnostics = new FourSlashInterface.diagnostics();
     export var cancellation = new FourSlashInterface.cancellation();
+}
+module ts {
+    export interface SymbolDisplayPart {
+        text: string;
+        kind: string;
+    }
 }
 function verifyOperationIsCancelled(f) {
     FourSlash.verifyOperationIsCancelled(f);

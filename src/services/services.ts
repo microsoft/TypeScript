@@ -1363,7 +1363,10 @@ module ts {
 
         function writeIndent() {
             if (lineStart) {
-                displayParts.push(displayPart(getIndentString(indent), SymbolDisplayPartKind.space));
+                var indentString = getIndentString(indent);
+                if (indentString) {
+                    displayParts.push(displayPart(indentString, SymbolDisplayPartKind.space));
+                }
                 lineStart = false;
             }
         }
@@ -1463,6 +1466,8 @@ module ts {
                 return isFirstDeclarationOfSymbolParameter(symbol) ? SymbolDisplayPartKind.parameterName : SymbolDisplayPartKind.localName;
             }
             else if (flags & SymbolFlags.Property) { return SymbolDisplayPartKind.propertyName; }
+            else if (flags & SymbolFlags.GetAccessor) { return SymbolDisplayPartKind.propertyName; }
+            else if (flags & SymbolFlags.SetAccessor) { return SymbolDisplayPartKind.propertyName; }
             else if (flags & SymbolFlags.EnumMember) { return SymbolDisplayPartKind.enumMemberName; }
             else if (flags & SymbolFlags.Function) { return SymbolDisplayPartKind.functionName; }
             else if (flags & SymbolFlags.Class) { return SymbolDisplayPartKind.className; }
@@ -1471,6 +1476,9 @@ module ts {
             else if (flags & SymbolFlags.Module) { return SymbolDisplayPartKind.moduleName; }
             else if (flags & SymbolFlags.Method) { return SymbolDisplayPartKind.methodName; }
             else if (flags & SymbolFlags.TypeParameter) { return SymbolDisplayPartKind.typeParameterName; }
+            else if (flags & SymbolFlags.TypeAlias) { return SymbolDisplayPartKind.aliasName; }
+            else if (flags & SymbolFlags.Import) { return SymbolDisplayPartKind.aliasName; }
+
 
             return SymbolDisplayPartKind.text;
         }
@@ -2748,6 +2756,7 @@ module ts {
                 if (flags & SymbolFlags.TypeParameter) return ScriptElementKind.typeParameterElement;
                 if (flags & SymbolFlags.EnumMember) return ScriptElementKind.variableElement;
                 if (flags & SymbolFlags.Import) return ScriptElementKind.alias;
+                if (flags & SymbolFlags.Module) return ScriptElementKind.moduleElement;
             }
 
             return result;
@@ -2929,6 +2938,7 @@ module ts {
                                 case ScriptElementKind.memberVariableElement:
                                 case ScriptElementKind.variableElement:
                                 case ScriptElementKind.constElement:
+                                case ScriptElementKind.letElement:
                                 case ScriptElementKind.parameterElement:
                                 case ScriptElementKind.localVariableElement:
                                     // If it is call or construct signature of lambda's write type name
@@ -2966,7 +2976,8 @@ module ts {
 
                         if (functionDeclaration.kind === SyntaxKind.Constructor) {
                             // show (constructor) Type(...) signature
-                            addPrefixForAnyFunctionOrVar(type.symbol, ScriptElementKind.constructorImplementationElement);
+                            symbolKind = ScriptElementKind.constructorImplementationElement;
+                            addPrefixForAnyFunctionOrVar(type.symbol, symbolKind);
                         }
                         else {
                             // (function/method) symbol(..signature)
@@ -2998,7 +3009,7 @@ module ts {
                 displayParts.push(spacePart());
                 addFullSymbolName(symbol);
                 displayParts.push(spacePart());
-                displayParts.push(punctuationPart(SyntaxKind.EqualsToken));
+                displayParts.push(operatorPart(SyntaxKind.EqualsToken));
                 displayParts.push(spacePart());
                 displayParts.push.apply(displayParts, typeToDisplayParts(typeResolver, typeResolver.getDeclaredTypeOfSymbol(symbol), enclosingDeclaration));
             }
@@ -3070,7 +3081,7 @@ module ts {
                         var importDeclaration = <ImportDeclaration>declaration;
                         if (isExternalModuleImportDeclaration(importDeclaration)) {
                             displayParts.push(spacePart());
-                            displayParts.push(punctuationPart(SyntaxKind.EqualsToken));
+                            displayParts.push(operatorPart(SyntaxKind.EqualsToken));
                             displayParts.push(spacePart());
                             displayParts.push(keywordPart(SyntaxKind.RequireKeyword));
                             displayParts.push(punctuationPart(SyntaxKind.OpenParenToken));
@@ -3081,7 +3092,7 @@ module ts {
                             var internalAliasSymbol = typeResolver.getSymbolInfo(importDeclaration.moduleReference);
                             if (internalAliasSymbol) {
                                 displayParts.push(spacePart());
-                                displayParts.push(punctuationPart(SyntaxKind.EqualsToken));
+                                displayParts.push(operatorPart(SyntaxKind.EqualsToken));
                                 displayParts.push(spacePart());
                                 addFullSymbolName(internalAliasSymbol, enclosingDeclaration);
                             }
