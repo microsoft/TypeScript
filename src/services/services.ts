@@ -3808,7 +3808,7 @@ module ts {
                     }
                 }
                 else { 
-                    // unsuported modifier
+                    // unsupported modifier
                     return undefined;
                 }
 
