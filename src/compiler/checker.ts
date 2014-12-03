@@ -6024,7 +6024,7 @@ module ts {
 
         function getReturnTypeFromBody(func: FunctionLikeDeclaration, contextualMapper?: TypeMapper): Type {
             var contextualSignature = getContextualSignatureForFunctionLikeDeclaration(func);
-            if (func.body.kind !== SyntaxKind.FunctionBlock) {
+            if (func.body.kind !== SyntaxKind.Block) {
                 var unwidenedType = checkAndMarkExpression(<Expression>func.body, contextualMapper);
                 var widenedType = getWidenedType(unwidenedType);
 
@@ -6111,7 +6111,7 @@ module ts {
             }
 
             // If all we have is a function signature, or an arrow function with an expression body, then there is nothing to check.
-            if (!func.body || func.body.kind !== SyntaxKind.FunctionBlock) {
+            if (!func.body || func.body.kind !== SyntaxKind.Block) {
                 return;
             }
 
@@ -6177,7 +6177,7 @@ module ts {
             if (node.type) {
                 checkIfNonVoidFunctionHasReturnExpressionsOrSingleThrowStatment(node, getTypeFromTypeNode(node.type));
             }
-            if (node.body.kind === SyntaxKind.FunctionBlock) {
+            if (node.body.kind === SyntaxKind.Block) {
                 checkSourceElement(node.body);
             }
             else {
@@ -7360,6 +7360,9 @@ module ts {
 
         function checkBlock(node: Block) {
             forEach(node.statements, checkSourceElement);
+            if (isFunctionBlock(node) || node.kind === SyntaxKind.ModuleBlock) {
+                checkFunctionExpressionBodies(node);
+            }
         }
 
         function checkCollisionWithArgumentsInGeneratedCode(node: SignatureDeclaration) {
@@ -8491,10 +8494,8 @@ module ts {
                 case SyntaxKind.FunctionDeclaration:
                     return checkFunctionDeclaration(<FunctionDeclaration>node);
                 case SyntaxKind.Block:
-                    return checkBlock(<Block>node);
-                case SyntaxKind.FunctionBlock:
                 case SyntaxKind.ModuleBlock:
-                    return checkBody(<Block>node);
+                    return checkBlock(<Block>node);
                 case SyntaxKind.VariableStatement:
                     return checkVariableStatement(<VariableStatement>node);
                 case SyntaxKind.ExpressionStatement:
@@ -8589,7 +8590,6 @@ module ts {
                 case SyntaxKind.BinaryExpression:
                 case SyntaxKind.ConditionalExpression:
                 case SyntaxKind.Block:
-                case SyntaxKind.FunctionBlock:
                 case SyntaxKind.ModuleBlock:
                 case SyntaxKind.VariableStatement:
                 case SyntaxKind.ExpressionStatement:
@@ -8618,11 +8618,6 @@ module ts {
                     forEachChild(node, checkFunctionExpressionBodies);
                     break;
             }
-        }
-
-        function checkBody(node: Block) {
-            checkBlock(node);
-            checkFunctionExpressionBodies(node);
         }
 
         // Fully type check a source file and collect the relevant diagnostics.

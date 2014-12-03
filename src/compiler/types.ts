@@ -212,7 +212,6 @@ module ts {
         DebuggerStatement,
         VariableDeclaration,
         FunctionDeclaration,
-        FunctionBlock,
         ClassDeclaration,
         InterfaceDeclaration,
         TypeAliasDeclaration,

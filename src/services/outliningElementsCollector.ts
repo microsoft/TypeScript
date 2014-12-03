@@ -67,38 +67,39 @@ module ts {
                 }
                 switch (n.kind) {
                     case SyntaxKind.Block:
-                        var parent = n.parent;
-                        var openBrace = findChildOfKind(n, SyntaxKind.OpenBraceToken, sourceFile);
-                        var closeBrace = findChildOfKind(n, SyntaxKind.CloseBraceToken, sourceFile);
+                        if (!isFunctionBlock(n)) {
+                            var parent = n.parent;
+                            var openBrace = findChildOfKind(n, SyntaxKind.OpenBraceToken, sourceFile);
+                            var closeBrace = findChildOfKind(n, SyntaxKind.CloseBraceToken, sourceFile);
 
-                        // Check if the block is standalone, or 'attached' to some parent statement.
-                        // If the latter, we want to collaps the block, but consider its hint span
-                        // to be the entire span of the parent.
-                        if (parent.kind === SyntaxKind.DoStatement ||
-                            parent.kind === SyntaxKind.ForInStatement ||
-                            parent.kind === SyntaxKind.ForStatement ||
-                            parent.kind === SyntaxKind.IfStatement ||
-                            parent.kind === SyntaxKind.WhileStatement ||
-                            parent.kind === SyntaxKind.WithStatement ||
-                            parent.kind === SyntaxKind.CatchClause) {
-                            
-                            addOutliningSpan(parent, openBrace, closeBrace, autoCollapse(n));
+                            // Check if the block is standalone, or 'attached' to some parent statement.
+                            // If the latter, we want to collaps the block, but consider its hint span
+                            // to be the entire span of the parent.
+                            if (parent.kind === SyntaxKind.DoStatement ||
+                                parent.kind === SyntaxKind.ForInStatement ||
+                                parent.kind === SyntaxKind.ForStatement ||
+                                parent.kind === SyntaxKind.IfStatement ||
+                                parent.kind === SyntaxKind.WhileStatement ||
+                                parent.kind === SyntaxKind.WithStatement ||
+                                parent.kind === SyntaxKind.CatchClause) {
+
+                                addOutliningSpan(parent, openBrace, closeBrace, autoCollapse(n));
+                            }
+                            else {
+                                // Block was a standalone block.  In this case we want to only collapse
+                                // the span of the block, independent of any parent span.
+                                var span = TextSpan.fromBounds(n.getStart(), n.end);
+                                elements.push({
+                                    textSpan: span,
+                                    hintSpan: span,
+                                    bannerText: collapseText,
+                                    autoCollapse: autoCollapse(n)
+                                });
+                            }
+                            break;
                         }
-                        else {
-                            // Block was a standalone block.  In this case we want to only collapse
-                            // the span of the block, independent of any parent span.
-                            var span = TextSpan.fromBounds(n.getStart(), n.end);
-                            elements.push({
-                                textSpan: span,
-                                hintSpan: span,
-                                bannerText: collapseText,
-                                autoCollapse: autoCollapse(n)
-                            });
-                        }
-                        break;
+                        // Fallthrough.
 
-
-                    case SyntaxKind.FunctionBlock:
                     case SyntaxKind.ModuleBlock:
                     case SyntaxKind.TryBlock:
                     case SyntaxKind.FinallyBlock:

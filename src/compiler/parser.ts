@@ -311,7 +311,6 @@ module ts {
             case SyntaxKind.Block:
             case SyntaxKind.TryBlock:
             case SyntaxKind.FinallyBlock:
-            case SyntaxKind.FunctionBlock:
             case SyntaxKind.ModuleBlock:
                 return children((<Block>node).statements);
             case SyntaxKind.SourceFile:
@@ -435,7 +434,6 @@ module ts {
                 case SyntaxKind.ReturnStatement:
                     return visitor(<ReturnStatement>node);
                 case SyntaxKind.Block:
-                case SyntaxKind.FunctionBlock:
                 case SyntaxKind.IfStatement:
                 case SyntaxKind.DoStatement:
                 case SyntaxKind.WhileStatement:
@@ -470,6 +468,10 @@ module ts {
         }
 
         return false;
+    }
+
+    export function isFunctionBlock(node: Node) {
+        return node && node.kind === SyntaxKind.Block && isAnyFunction(node.parent);
     }
 
     export function getContainingFunction(node: Node): FunctionLikeDeclaration {
@@ -3287,7 +3289,7 @@ module ts {
             var savedYieldContext = inYieldContext();
             setYieldContext(allowYield);
 
-            var block = parseBlock(SyntaxKind.FunctionBlock, ignoreMissingOpenBrace, /*checkForStrictMode*/ true);
+            var block = parseBlock(SyntaxKind.Block, ignoreMissingOpenBrace, /*checkForStrictMode*/ true);
 
             setYieldContext(savedYieldContext);
 
@@ -4360,7 +4362,7 @@ module ts {
 
             if (!checkModifiers(node)) {
                 var savedInFunctionBlock = inFunctionBlock;
-                if (node.kind === SyntaxKind.FunctionBlock) {
+                if (isFunctionBlock(node)) {
                     inFunctionBlock = true;
                 }
 
@@ -4996,7 +4998,7 @@ module ts {
         }
 
         function checkForBodyInAmbientContext(body: Block | Expression, isConstructor: boolean): boolean {
-            if (inAmbientContext && body && body.kind === SyntaxKind.FunctionBlock) {
+            if (inAmbientContext && body && body.kind === SyntaxKind.Block) {
                 var diagnostic = isConstructor
                     ? Diagnostics.A_constructor_implementation_cannot_be_declared_in_an_ambient_context
                     : Diagnostics.A_function_implementation_cannot_be_declared_in_an_ambient_context;
