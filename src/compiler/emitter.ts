@@ -1957,10 +1957,30 @@ module ts {
                 return false;
             }
 
-            function emitLiteral(node: LiteralExpression) {
-                var text = getLiteralText();
+            function emitDownlevelTemplateLiteral(node: LiteralExpression) {
+                var text = getTemplateLiteralAsStringLiteral(node); 
+                if (compilerOptions.sourceMap) {
+                    writer.writeLiteral(text);
+                }
+                else {
+                    write(text);
+                }
+            }
 
-                if (compilerOptions.sourceMap && (node.kind === SyntaxKind.StringLiteral || isTemplateLiteralKind(node.kind))) {
+            function emitTemplateLiteral(node: LiteralExpression) {
+                var text = getSourceTextOfNodeFromSourceFile(currentSourceFile, node);
+                if (compilerOptions.sourceMap) {
+                    writer.writeLiteral(text);
+                }
+                else {
+                    write(text);
+                }
+            }
+
+            function emitLiteral(node: LiteralExpression) {
+                var text = getSourceTextOfNodeFromSourceFile(currentSourceFile, node);
+
+                if (compilerOptions.sourceMap && node.kind === SyntaxKind.StringLiteral) {
                     writer.writeLiteral(text);
                 }
                 // For version below ES6, emit binary integer literal and octal integer literal in canonical form
@@ -1970,14 +1990,6 @@ module ts {
                 else {
                     write(text);
                 }
-
-                function getLiteralText() {
-                    if (compilerOptions.target < ScriptTarget.ES6 && isTemplateLiteralKind(node.kind)) {
-                        return getTemplateLiteralAsStringLiteral(node)
-                    }
-
-                    return getSourceTextOfNodeFromSourceFile(currentSourceFile, node);
-                }
             }
 
             function getTemplateLiteralAsStringLiteral(node: LiteralExpression): string {
@@ -1986,12 +1998,11 @@ module ts {
 
             function emitTemplateExpression(node: TemplateExpression): void {
                 // In ES6 mode and above, we can simply emit each portion of a template in order, but in
-                // ES3 & ES5 we must convert the template expression into a series of string concatenations.
-                if (compilerOptions.target >= ScriptTarget.ES6) {
-                    forEachChild(node, emit);
-                    return;
-                }
+                forEachChild(node, emit);
+            }
 
+            function emitDownlevelTemplateExpression(node: TemplateExpression): void {
+                // ES3 & ES5 we must convert the template expression into a series of string concatenations.
                 Debug.assert(node.parent.kind !== SyntaxKind.TaggedTemplateExpression);
 
                 var emitOuterParens = isExpression(node.parent)
@@ -2001,7 +2012,7 @@ module ts {
                     write("(");
                 }
 
-                emitLiteral(node.head);
+                emit(node.head);
 
                 forEach(node.templateSpans, templateSpan => {
                     // Check if the expression has operands and binds its operands less closely than binary '+'.
@@ -2032,7 +2043,7 @@ module ts {
                     // Emitting a '+ ""' has no semantic effect for middles and tails.
                     if (templateSpan.literal.text.length !== 0) {
                         write(" + ")
-                        emitLiteral(templateSpan.literal);
+                        emit(templateSpan.literal);
                     }
                 });
 
@@ -3510,13 +3521,7 @@ module ts {
                     case SyntaxKind.NumericLiteral:
                     case SyntaxKind.StringLiteral:
                     case SyntaxKind.RegularExpressionLiteral:
-                    case SyntaxKind.NoSubstitutionTemplateLiteral:
-                    case SyntaxKind.TemplateHead:
-                    case SyntaxKind.TemplateMiddle:
-                    case SyntaxKind.TemplateTail:
                         return emitLiteral(<LiteralExpression>node);
-                    case SyntaxKind.TemplateExpression:
-                        return emitTemplateExpression(<TemplateExpression>node);
                     case SyntaxKind.TemplateSpan:
                         return emitTemplateSpan(<TemplateSpan>node);
                     case SyntaxKind.QualifiedName:
@@ -3629,6 +3634,13 @@ module ts {
                     switch (node.kind) {
                         case SyntaxKind.ShorthandPropertyAssignment:
                             return emitDownlevelShorthandPropertyAssignment(<ShorthandPropertyDeclaration>node);
+                        case SyntaxKind.TemplateExpression:
+                            return emitDownlevelTemplateExpression(<TemplateExpression>node);
+                        case SyntaxKind.TemplateHead:
+                        case SyntaxKind.TemplateMiddle:
+                        case SyntaxKind.TemplateTail:
+                        case SyntaxKind.NoSubstitutionTemplateLiteral:
+                            return emitDownlevelTemplateLiteral(<LiteralExpression>node);
                     }
                 }
                 else {
@@ -3637,6 +3649,13 @@ module ts {
                     switch (node.kind) {
                         case SyntaxKind.ShorthandPropertyAssignment:
                             return emitShorthandPropertyAssignment(<ShorthandPropertyDeclaration>node);
+                        case SyntaxKind.TemplateExpression:
+                            return emitTemplateExpression(<TemplateExpression>node);
+                        case SyntaxKind.TemplateHead:
+                        case SyntaxKind.TemplateMiddle:
+                        case SyntaxKind.TemplateTail:
+                        case SyntaxKind.NoSubstitutionTemplateLiteral:
+                            return emitTemplateLiteral(<LiteralExpression>node);
                     }
                 }
             }
