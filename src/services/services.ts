@@ -2697,7 +2697,7 @@ module ts {
                 //               which is permissible given that it is backwards compatible; but really we should consider
                 //               passing the meaning for the node so that we don't report that a suggestion for a value is an interface.
                 //               We COULD also just do what 'getSymbolModifiers' does, which is to use the first declaration.
-                Debug.assert(session.typeChecker.getNarrowedTypeOfSymbol(symbol, location) !== undefined, "Could not find type for symbol");
+                Debug.assert(session.typeChecker.getTypeOfSymbolAtLocation(symbol, location) !== undefined, "Could not find type for symbol");
                 var displayPartsDocumentationsAndSymbolKind = getSymbolDisplayPartsDocumentationAndSymbolKind(symbol, getSourceFile(filename), location, session.typeChecker, location, SemanticMeaning.All);
                 return {
                     name: entryName,
@@ -2800,7 +2800,7 @@ module ts {
                     if (!unionPropertyKind) {
                         // If this was union of all methods, 
                         //make sure it has call signatures before we can label it as method
-                        var typeOfUnionProperty = typeInfoResolver.getNarrowedTypeOfSymbol(symbol, location);
+                        var typeOfUnionProperty = typeInfoResolver.getTypeOfSymbolAtLocation(symbol, location);
                         if (typeOfUnionProperty.getCallSignatures().length) {
                             return ScriptElementKind.memberFunctionElement;
                         }
@@ -2877,7 +2877,7 @@ module ts {
                     symbolKind = ScriptElementKind.memberVariableElement;
                 }
 
-                var type = typeResolver.getNarrowedTypeOfSymbol(symbol, location);
+                var type = typeResolver.getTypeOfSymbolAtLocation(symbol, location);
                 if (type) {
                     if (location.parent && location.parent.kind === SyntaxKind.PropertyAccessExpression) {
                         var right = (<PropertyAccessExpression>location.parent).name;

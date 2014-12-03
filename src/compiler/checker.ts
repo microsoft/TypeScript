@@ -85,8 +85,7 @@ module ts {
             getDiagnostics,
             getDeclarationDiagnostics,
             getGlobalDiagnostics,
-            getParentOfSymbol,
-            getNarrowedTypeOfSymbol,
+            getTypeOfSymbolAtLocation,
             getDeclaredTypeOfSymbol,
             getPropertiesOfType,
             getPropertyOfType,
@@ -4385,6 +4384,19 @@ module ts {
                 return false;
             }
         }
+
+        function getTypeOfSymbolAtLocation(symbol: Symbol, node: Node): Type {
+            var containerNodes: Node[] = [];
+            for (var parent = node.parent; parent; parent = parent.parent) {
+                if (isExpression(parent) &&  isContextSensitiveExpression(<Expression>parent)) {
+                    containerNodes.unshift(parent)
+                };
+            }
+
+            ts.forEach(containerNodes, node => { getTypeOfNode(node); });
+
+            return getNarrowedTypeOfSymbol(symbol, node);
+       }
 
         // Get the narrowed type of a given symbol at a given location
         function getNarrowedTypeOfSymbol(symbol: Symbol, node: Node) {
