@@ -457,7 +457,7 @@ module ts.SignatureHelp {
 
             var invocation = argumentListInfo.invocation;
             var callTarget = getInvokedExpression(invocation)
-            var callTargetSymbol = typeInfoResolver.getSymbolInfo(callTarget);
+            var callTargetSymbol = typeInfoResolver.getSymbolInfoOfLocation(callTarget);
             var callTargetDisplayParts = callTargetSymbol && symbolToDisplayParts(typeInfoResolver, callTargetSymbol, /*enclosingDeclaration*/ undefined, /*meaning*/ undefined);
             var items: SignatureHelpItem[] = map(candidates, candidateSignature => {
                 var signatureHelpParameters: SignatureHelpParameter[];

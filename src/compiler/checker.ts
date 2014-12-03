@@ -93,9 +93,9 @@ module ts {
             getIndexTypeOfType,
             getReturnTypeOfSignature,
             getSymbolsInScope,
-            getSymbolInfo,
+            getSymbolInfoOfLocation,
             getShorthandAssignmentValueSymbol,
-            getTypeOfNode,
+            getTypeOfLocation,
             typeToString,
             getSymbolDisplayBuilder,
             symbolToString,
@@ -4385,18 +4385,33 @@ module ts {
             }
         }
 
-        function getTypeOfSymbolAtLocation(symbol: Symbol, node: Node): Type {
+        function resolveLocation(node: Node) {
+            // Resolve location from top down towards node if it is a context sensitive expression
+            // That helps in making sure not assigning types as any when resolved out of order
             var containerNodes: Node[] = [];
             for (var parent = node.parent; parent; parent = parent.parent) {
-                if (isExpression(parent) &&  isContextSensitiveExpression(<Expression>parent)) {
-                    containerNodes.unshift(parent)
-                };
+                if (isExpression(parent) && isContextSensitiveExpression(<Expression>parent)) {
+                    containerNodes.unshift(parent);
+                }
             }
 
             ts.forEach(containerNodes, node => { getTypeOfNode(node); });
+        }
 
+        function getSymbolInfoOfLocation(node: Node): Symbol {
+            resolveLocation(node);
+            return getSymbolInfo(node);
+        }
+
+        function getTypeOfLocation(node: Node): Type {
+            resolveLocation(node);
+            return getTypeOfNode(node);
+        }
+
+        function getTypeOfSymbolAtLocation(symbol: Symbol, node: Node): Type {
+            resolveLocation(node);
             return getNarrowedTypeOfSymbol(symbol, node);
-       }
+        }
 
         // Get the narrowed type of a given symbol at a given location
         function getNarrowedTypeOfSymbol(symbol: Symbol, node: Node) {
