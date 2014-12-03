@@ -732,9 +732,12 @@ module ts {
         public amdDependencies: string[];
         public amdModuleName: string;
         public referencedFiles: FileReference[];
+
+        public referenceDiagnostics: Diagnostic[];
         public parseDiagnostics: Diagnostic[];
         public grammarDiagnostics: Diagnostic[];
         public semanticDiagnostics: Diagnostic[];
+
         public hasNoDefaultLib: boolean;
         public externalModuleIndicator: Node; // The first node that causes this file to be an external module
         public nodeCount: number;

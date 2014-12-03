@@ -795,17 +795,24 @@ module ts {
         amdDependencies: string[];
         amdModuleName: string;
         referencedFiles: FileReference[];
-        semanticDiagnostics: Diagnostic[];
+
+        // Diagnostics reported about the "///<reference" comments in the file.
+        referenceDiagnostics: Diagnostic[];
 
         // Parse errors refer specifically to things the parser could not understand at all (like 
-        // missing tokens, or tokens it didn't know how to deal with). Grammar errors are for 
-        // things the parser understood, but either the ES6 or TS grammars do not allow (like 
-        // putting an 'public' modifier on a 'class declaration').
+        // missing tokens, or tokens it didn't know how to deal with).
         parseDiagnostics: Diagnostic[];
+
+        // Grammar errors are for  things the parser understood, but either the ES6 or TS grammars
+        // do not allow (like putting an 'public' modifier on a 'class declaration').
         grammarDiagnostics: Diagnostic[];
 
-        // Returns all 
+        // Returns all syntactic diagnostics (i.e. the reference, parser and grammar diagnostics).
         getSyntacticDiagnostics(): Diagnostic[];
+
+        // File level diagnostics reported by the binder.
+        semanticDiagnostics: Diagnostic[];
+
         hasNoDefaultLib: boolean;
         externalModuleIndicator: Node; // The first node that causes this file to be an external module
         nodeCount: number;
