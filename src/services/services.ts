@@ -4301,8 +4301,12 @@ module ts {
                 var staticFlag = NodeFlags.Static;
 
                 switch (searchSpaceNode.kind) {
-                    case SyntaxKind.Property:
                     case SyntaxKind.Method:
+                        if (isObjectLiteralMethod(searchSpaceNode)) {
+                            break;
+                        }
+                        // fall through
+                    case SyntaxKind.Property:
                     case SyntaxKind.Constructor:
                     case SyntaxKind.GetAccessor:
                     case SyntaxKind.SetAccessor:
@@ -4352,6 +4356,11 @@ module ts {
                             case SyntaxKind.FunctionExpression:
                             case SyntaxKind.FunctionDeclaration:
                                 if (searchSpaceNode.symbol === container.symbol) {
+                                    result.push(getReferenceEntryFromNode(node));
+                                }
+                                break;
+                            case SyntaxKind.Method:
+                                if (isObjectLiteralMethod(searchSpaceNode) && searchSpaceNode.symbol === container.symbol) {
                                     result.push(getReferenceEntryFromNode(node));
                                 }
                                 break;
@@ -4483,7 +4492,7 @@ module ts {
 
             function getPropertySymbolsFromContextualType(node: Node): Symbol[] {
                 if (isNameOfPropertyAssignment(node)) {
-                    var objectLiteral = node.parent.parent;
+                    var objectLiteral = <ObjectLiteralExpression>node.parent.parent;
                     var contextualType = typeInfoResolver.getContextualType(objectLiteral);
                     var name = (<Identifier>node).text;
                     if (contextualType) {

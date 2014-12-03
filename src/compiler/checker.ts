@@ -1392,7 +1392,7 @@ module ts {
                     for (var i = 0; i < resolved.properties.length; i++) {
                         var p = resolved.properties[i];
                         var t = getTypeOfSymbol(p);
-                        if (p.flags & (SymbolFlags.Function | SymbolFlags.Method) && !getPropertiesOfObjectType(t).length) {
+                        if (p.flags & (SymbolFlags.Function | SymbolFlags.Method) && !isObjectLiteralMethod(p.valueDeclaration) && !getPropertiesOfObjectType(t).length) {
                             var signatures = getSignaturesOfType(t, SignatureKind.Call);
                             for (var j = 0; j < signatures.length; j++) {
                                 buildSymbolDisplay(p, writer);
@@ -3240,14 +3240,13 @@ module ts {
 
         // Returns true if the given expression contains (at any level of nesting) a function or arrow expression
         // that is subject to contextual typing.
-        function isContextSensitiveExpression(node: Expression): boolean {
+        function isContextSensitiveExpression(node: Node): boolean {
             switch (node.kind) {
                 case SyntaxKind.FunctionExpression:
                 case SyntaxKind.ArrowFunction:
                     return !(<FunctionExpression>node).typeParameters && !forEach((<FunctionExpression>node).parameters, p => p.type);
                 case SyntaxKind.ObjectLiteralExpression:
-                    return forEach((<ObjectLiteralExpression>node).properties, p =>
-                        p.kind === SyntaxKind.LonghandPropertyAssignment && isContextSensitiveExpression((<LonghandPropertyAssignment>p).initializer));
+                    return forEach((<ObjectLiteralExpression>node).properties, isContextSensitiveExpression);
                 case SyntaxKind.ArrayLiteralExpression:
                     return forEach((<ArrayLiteralExpression>node).elements, e => isContextSensitiveExpression(e));
                 case SyntaxKind.ConditionalExpression:
@@ -3256,7 +3255,15 @@ module ts {
                 case SyntaxKind.BinaryExpression:
                     return (<BinaryExpression>node).operator === SyntaxKind.BarBarToken &&
                         (isContextSensitiveExpression((<BinaryExpression>node).left) || isContextSensitiveExpression((<BinaryExpression>node).right));
+                case SyntaxKind.LonghandPropertyAssignment:
+                    return isContextSensitiveExpression((<LonghandPropertyAssignment>node).initializer);
+                case SyntaxKind.Method:
+                    if (isObjectLiteralMethod(node)) {
+                        return !(<MethodDeclaration>node).typeParameters && !forEach((<MethodDeclaration>node).parameters, p => p.type);
+                    }
+                    return false;
             }
+
             return false;
         }
 
@@ -4890,12 +4897,24 @@ module ts {
         // In an object literal contextually typed by a type T, the contextual type of a property assignment is the type of
         // the matching property in T, if one exists. Otherwise, it is the type of the numeric index signature in T, if one
         // exists. Otherwise, it is the type of the string index signature in T, if one exists.
-        function getContextualTypeForPropertyExpression(node: Expression): Type {
-            var declaration = <PropertyDeclaration>node.parent;
-            var objectLiteral = <ObjectLiteralExpression>declaration.parent;
+        function getContextualTypeForObjectLiteralMethod(node: MethodDeclaration): Type {
+            Debug.assert(isObjectLiteralMethod(node));
+            if (isInsideWithStatementBody(node)) {
+                // We cannot answer semantic questions within a with block, do not proceed any further
+                return undefined;
+            }
+            if (node.contextualType) {
+                return node.contextualType;
+            }
+
+            return getContextualTypeForPropertyAssignment(node);
+        }
+
+        function getContextualTypeForPropertyAssignment(propertyAssignment: PropertyAssignment) {
+            var objectLiteral = <ObjectLiteralExpression>propertyAssignment.parent;
             var type = getContextualType(objectLiteral);
             // TODO(jfreeman): Handle this case for computed names and symbols
-            var name = (<Identifier>declaration.name).text;
+            var name = (<Identifier>propertyAssignment.name).text;
             if (type && name) {
                 return getTypeOfPropertyOfContextualType(type, name) ||
                     isNumericName(name) && getIndexTypeOfContextualType(type, IndexKind.Number) ||
@@ -4950,7 +4969,7 @@ module ts {
                 case SyntaxKind.BinaryExpression:
                     return getContextualTypeForBinaryOperand(node);
                 case SyntaxKind.LonghandPropertyAssignment:
-                    return getContextualTypeForPropertyExpression(node);
+                    return getContextualTypeForPropertyAssignment(<PropertyAssignment>parent);
                 case SyntaxKind.ArrayLiteralExpression:
                     return getContextualTypeForElementExpression(node);
                 case SyntaxKind.ConditionalExpression:
@@ -4985,8 +5004,11 @@ module ts {
         // If the contextual type is a union type, get the signature from each type possible and if they are 
         // all identical ignoring their return type, the result is same signature but with return type as 
         // union type of return types from these signatures
-        function getContextualSignature(node: FunctionExpression): Signature {
-            var type = getContextualType(node);
+        function getContextualSignature(node: FunctionExpression | MethodDeclaration): Signature {
+            Debug.assert(node.kind !== SyntaxKind.Method || isObjectLiteralMethod(node));
+            var type = isObjectLiteralMethod(node)
+                ? getContextualTypeForObjectLiteralMethod(<MethodDeclaration>node)
+                : getContextualType(<FunctionExpression>node);
             if (!type) {
                 return undefined;
             }
@@ -5082,11 +5104,14 @@ module ts {
             for (var id in members) {
                 if (hasProperty(members, id)) {
                     var member = members[id];
-                    if (member.flags & SymbolFlags.Property) {
-                        var memberDecl = <PropertyDeclaration>member.declarations[0];
+                    if (member.flags & SymbolFlags.Property || isObjectLiteralMethod(member.declarations[0])) {
+                        var memberDecl = <PropertyAssignment>member.declarations[0];
                         var type: Type;
                         if (memberDecl.kind === SyntaxKind.LonghandPropertyAssignment) {
-                            type = checkExpression(memberDecl.initializer, contextualMapper);
+                            type = checkExpression((<LonghandPropertyAssignment>memberDecl).initializer, contextualMapper);
+                        }
+                        else if (memberDecl.kind === SyntaxKind.Method) {
+                            type = checkExpression(<MethodDeclaration>memberDecl, contextualMapper);
                         }
                         else {
                             Debug.assert(memberDecl.kind === SyntaxKind.ShorthandPropertyAssignment);
@@ -5097,7 +5122,10 @@ module ts {
                         var prop = <TransientSymbol>createSymbol(SymbolFlags.Property | SymbolFlags.Transient | member.flags, member.name);
                         prop.declarations = member.declarations;
                         prop.parent = member.parent;
-                        if (member.valueDeclaration) prop.valueDeclaration = member.valueDeclaration;
+                        if (member.valueDeclaration) {
+                            prop.valueDeclaration = member.valueDeclaration;
+                        }
+
                         prop.type = type;
                         prop.target = member;
                         member = prop;
@@ -6133,7 +6161,9 @@ module ts {
             error(func.type, Diagnostics.A_function_whose_declared_type_is_neither_void_nor_any_must_return_a_value_or_consist_of_a_single_throw_statement);
         }
 
-        function checkFunctionExpression(node: FunctionExpression, contextualMapper?: TypeMapper): Type {
+        function checkFunctionExpressionOrObjectLiteralMethod(node: FunctionExpression | MethodDeclaration, contextualMapper?: TypeMapper): Type {
+            Debug.assert(node.kind !== SyntaxKind.Method || isObjectLiteralMethod(node));
+
             // The identityMapper object is used to indicate that function expressions are wildcards
             if (contextualMapper === identityMapper) {
                 return anyFunctionType;
@@ -6165,27 +6195,31 @@ module ts {
                 }
             }
 
-            if (fullTypeCheck) {
-                checkCollisionWithCapturedSuperVariable(node, node.name);
-                checkCollisionWithCapturedThisVariable(node, node.name);
+            if (fullTypeCheck && node.kind !== SyntaxKind.Method) {
+                checkCollisionWithCapturedSuperVariable(node, (<FunctionExpression>node).name);
+                checkCollisionWithCapturedThisVariable(node,(<FunctionExpression>node).name);
             }
 
             return type;
         }
 
-        function checkFunctionExpressionBody(node: FunctionExpression) {
+        function checkFunctionExpressionOrObjectLiteralMethodBody(node: FunctionExpression | MethodDeclaration) {
+            Debug.assert(node.kind !== SyntaxKind.Method || isObjectLiteralMethod(node));
             if (node.type) {
                 checkIfNonVoidFunctionHasReturnExpressionsOrSingleThrowStatment(node, getTypeFromTypeNode(node.type));
             }
-            if (node.body.kind === SyntaxKind.Block) {
-                checkSourceElement(node.body);
-            }
-            else {
-                var exprType = checkExpression(<Expression>node.body);
-                if (node.type) {
-                    checkTypeAssignableTo(exprType, getTypeFromTypeNode(node.type), node.body, /*headMessage*/ undefined);
+
+            if (node.body) {
+                if (node.body.kind === SyntaxKind.Block) {
+                    checkSourceElement(node.body);
                 }
-                checkFunctionExpressionBodies(node.body);
+                else {
+                    var exprType = checkExpression(<Expression>node.body);
+                    if (node.type) {
+                        checkTypeAssignableTo(exprType, getTypeFromTypeNode(node.type), node.body, /*headMessage*/ undefined);
+                    }
+                    checkFunctionExpressionBodies(node.body);
+                }
             }
         }
 
@@ -6559,8 +6593,8 @@ module ts {
         // object, it serves as an indicator that all contained function and arrow expressions should be considered to
         // have the wildcard function type; this form of type check is used during overload resolution to exclude
         // contextually typed function and arrow expressions in the initial phase.
-        function checkExpression(node: Expression | QualifiedName, contextualMapper?: TypeMapper): Type {
-            var type = checkExpressionNode(node, contextualMapper);
+        function checkExpression(node: Expression | QualifiedName | MethodDeclaration, contextualMapper?: TypeMapper): Type {
+            var type = checkExpressionOrQualifiedNameOrObjectLiteralMethodNode(node, contextualMapper);
             if (contextualMapper && contextualMapper !== identityMapper && node.kind !== SyntaxKind.QualifiedName) {
                 var signature = getSingleCallSignature(type);
                 if (signature && signature.typeParameters) {
@@ -6591,7 +6625,7 @@ module ts {
             return type;
         }
 
-        function checkExpressionNode(node: Expression | QualifiedName, contextualMapper: TypeMapper): Type {
+        function checkExpressionOrQualifiedNameOrObjectLiteralMethodNode(node: Expression | QualifiedName | MethodDeclaration, contextualMapper: TypeMapper): Type {
             switch (node.kind) {
                 case SyntaxKind.Identifier:
                     return checkIdentifier(<Identifier>node);
@@ -6632,9 +6666,11 @@ module ts {
                     return checkTypeAssertion(<TypeAssertion>node);
                 case SyntaxKind.ParenthesizedExpression:
                     return checkExpression((<ParenthesizedExpression>node).expression);
+                case SyntaxKind.Method:
+                    return checkFunctionExpressionOrObjectLiteralMethod(<MethodDeclaration>node, contextualMapper);
                 case SyntaxKind.FunctionExpression:
                 case SyntaxKind.ArrowFunction:
-                    return checkFunctionExpression(<FunctionExpression>node, contextualMapper);
+                    return checkFunctionExpressionOrObjectLiteralMethod(<FunctionExpression>node, contextualMapper);
                 case SyntaxKind.TypeOfExpression:
                     return checkTypeOfExpression(<TypeOfExpression>node);
                 case SyntaxKind.DeleteExpression:
@@ -8558,9 +8594,14 @@ module ts {
                 case SyntaxKind.FunctionExpression:
                 case SyntaxKind.ArrowFunction:
                     forEach((<FunctionLikeDeclaration>node).parameters, checkFunctionExpressionBodies);
-                    checkFunctionExpressionBody(<FunctionExpression>node);
+                    checkFunctionExpressionOrObjectLiteralMethodBody(<FunctionExpression>node);
                     break;
                 case SyntaxKind.Method:
+                    forEach((<MethodDeclaration>node).parameters, checkFunctionExpressionBodies);
+                    if (isObjectLiteralMethod(node)) {
+                        checkFunctionExpressionOrObjectLiteralMethodBody(<MethodDeclaration>node);
+                    }
+                    break;
                 case SyntaxKind.Constructor:
                 case SyntaxKind.GetAccessor:
                 case SyntaxKind.SetAccessor:

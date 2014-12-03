@@ -334,13 +334,6 @@ module ts {
     }
 
     export type EntityName = Identifier | QualifiedName;
-
-    export interface ParsedSignature {
-        typeParameters?: NodeArray<TypeParameterDeclaration>;
-        parameters: NodeArray<ParameterDeclaration>;
-        type?: TypeNode;
-    }
-
     export type DeclarationName = Identifier | LiteralExpression | ComputedPropertyName;
 
     export interface Declaration extends Node {
@@ -360,7 +353,10 @@ module ts {
         expression?: Expression;
     }
 
-    export interface SignatureDeclaration extends Declaration, ParsedSignature {
+    export interface SignatureDeclaration extends Declaration {
+        typeParameters?: NodeArray<TypeParameterDeclaration>;
+        parameters: NodeArray<ParameterDeclaration>;
+        type?: TypeNode;
     }
 
     export interface VariableDeclaration extends Declaration {
@@ -424,7 +420,9 @@ module ts {
         body?: Block;
     }
 
-    export interface MethodDeclaration extends FunctionLikeDeclaration, ClassElement {
+    export interface MethodDeclaration extends FunctionLikeDeclaration, ClassElement, PropertyAssignment {
+        contextualType?: Type;  // Used to temporarily assign a contextual type during overload resolution
+
         body?: Block;
     }
 
@@ -914,7 +912,7 @@ module ts {
         getFullyQualifiedName(symbol: Symbol): string;
         getAugmentedPropertiesOfType(type: Type): Symbol[];
         getRootSymbols(symbol: Symbol): Symbol[];
-        getContextualType(node: Node): Type;
+        getContextualType(node: Expression): Type;
         getResolvedSignature(node: CallLikeExpression, candidatesOutArray?: Signature[]): Signature;
         getSignatureFromDeclaration(declaration: SignatureDeclaration): Signature;
         isImplementationOfOverload(node: FunctionLikeDeclaration): boolean;

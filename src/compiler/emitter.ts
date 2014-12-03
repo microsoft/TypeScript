@@ -2227,6 +2227,15 @@ module ts {
                 emit(node.expression);
                 write("]");
             }
+
+            function emitObjectLiteralMethod(node: MethodDeclaration) {
+                emitLeadingComments(node);
+                emit(node.name);
+                write(": ");
+                write("function ");
+                emitSignatureAndBody(node);
+                emitTrailingComments(node);
+            }
     
             function emitPropertyAssignment(node: PropertyDeclaration) {
                 emitLeadingComments(node);
@@ -3527,6 +3536,11 @@ module ts {
                         return emitObjectLiteral(<ObjectLiteralExpression>node);
                     case SyntaxKind.LonghandPropertyAssignment:
                         return emitPropertyAssignment(<PropertyDeclaration>node);
+                    case SyntaxKind.Method:
+                        if (isObjectLiteralMethod(node)) {
+                            return emitObjectLiteralMethod(<MethodDeclaration>node);
+                        }
+                        break;
                     case SyntaxKind.ComputedPropertyName:
                         return emitComputedPropertyName(<ComputedPropertyName>node);
                     case SyntaxKind.PropertyAccessExpression:
