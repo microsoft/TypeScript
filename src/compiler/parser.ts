@@ -3166,8 +3166,14 @@ module ts {
             return finishNode(node);
         }
 
-        function parseShortOrLonghandPropertyAssignment(): PropertyAssignment {
+        function parsePropertyAssignment(): PropertyAssignment {
             var nodePos = scanner.getStartPos();
+            var initialToken = token;
+
+            if (parseContextualModifier(SyntaxKind.GetKeyword) || parseContextualModifier(SyntaxKind.SetKeyword)) {
+                var kind = initialToken === SyntaxKind.GetKeyword ? SyntaxKind.GetAccessor : SyntaxKind.SetAccessor;
+                return parseAccessorDeclaration(kind, nodePos, /*modifiers*/undefined);
+            }
 
             var asteriskToken = parseOptionalToken(SyntaxKind.AsteriskToken);
             var tokenIsIdentifier = isIdentifier();
@@ -3206,16 +3212,6 @@ module ts {
                 longhandDeclaration.initializer = allowInAnd(parseAssignmentExpressionOrHigher);
                 return finishNode(longhandDeclaration);
             }
-        }
-
-        function parsePropertyAssignment(): PropertyAssignment {
-            var initialPos = getNodePos();
-            var initialToken = token;
-            if (parseContextualModifier(SyntaxKind.GetKeyword) || parseContextualModifier(SyntaxKind.SetKeyword)) {
-                var kind = initialToken === SyntaxKind.GetKeyword ? SyntaxKind.GetAccessor : SyntaxKind.SetAccessor;
-                return parseAccessorDeclaration(kind, initialPos, /*modifiers*/ undefined);
-            }
-            return parseShortOrLonghandPropertyAssignment();
         }
 
         function parseObjectLiteralExpression(): ObjectLiteralExpression {
