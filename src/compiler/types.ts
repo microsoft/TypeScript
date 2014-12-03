@@ -430,8 +430,6 @@ module ts {
     // at later stages of the compiler pipeline.  In that case, you can either check the parent kind
     // of the method, or use helpers like isObjectLiteralMethodDeclaration
     export interface MethodDeclaration extends FunctionLikeDeclaration, ClassElement, ObjectLiteralElement {
-        contextualType?: Type;  // Used to temporarily assign a contextual type during overload resolution
-
         body?: Block;
     }
 

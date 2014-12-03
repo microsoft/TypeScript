@@ -4909,9 +4909,6 @@ module ts {
                 // We cannot answer semantic questions within a with block, do not proceed any further
                 return undefined;
             }
-            if (node.contextualType) {
-                return node.contextualType;
-            }
 
             return getContextualTypeForObjectLiteralElement(node);
         }

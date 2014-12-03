@@ -471,11 +471,11 @@ module ts {
     }
 
     export function isFunctionBlock(node: Node) {
-        return node && node.kind === SyntaxKind.Block && isAnyFunction(node.parent);
+        return node !== undefined && node.kind === SyntaxKind.Block && isAnyFunction(node.parent);
     }
 
     export function isObjectLiteralMethod(node: Node) {
-        return node && node.kind === SyntaxKind.Method && node.parent.kind === SyntaxKind.ObjectLiteralExpression;
+        return node !== undefined && node.kind === SyntaxKind.Method && node.parent.kind === SyntaxKind.ObjectLiteralExpression;
     }
 
     export function getContainingFunction(node: Node): FunctionLikeDeclaration {
