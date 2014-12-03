@@ -93,3 +93,6 @@ var y5b;
 })(y5b || (y5b = {})); // should be an error
 function y5c() {
 }
+// function then import, messes with other errors
+//function y6() { }
+//import y6 = require(''); 

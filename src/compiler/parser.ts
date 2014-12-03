@@ -313,8 +313,10 @@ module ts {
             case SyntaxKind.FinallyBlock:
             case SyntaxKind.FunctionBlock:
             case SyntaxKind.ModuleBlock:
-            case SyntaxKind.SourceFile:
                 return children((<Block>node).statements);
+            case SyntaxKind.SourceFile:
+                return children((<SourceFile>node).statements) ||
+                    child((<SourceFile>node).endOfFileToken);
             case SyntaxKind.VariableStatement:
                 return children(node.modifiers) ||
                     children((<VariableStatement>node).declarations);
@@ -4294,6 +4296,9 @@ module ts {
         sourceFile.amdModuleName = referenceComments.amdModuleName;
 
         sourceFile.statements = parseList(ParsingContext.SourceElements, /*checkForStrictMode*/ true, parseSourceElement);
+        Debug.assert(token === SyntaxKind.EndOfFileToken);
+        sourceFile.endOfFileToken = parseTokenNode();
+
         sourceFile.externalModuleIndicator = getExternalModuleIndicator();
 
         sourceFile.nodeCount = nodeCount;

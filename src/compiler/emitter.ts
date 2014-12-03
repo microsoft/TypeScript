@@ -3443,6 +3443,7 @@ module ts {
                 // Start new file on new line
                 writeLine();
                 emitDetachedComments(node);
+
                 // emit prologue directives prior to __extends
                 var startIndex = emitDirectivePrologues(node.statements, /*startWithNewLine*/ false);
                 if (!extendsEmitted && resolver.getNodeCheckFlags(node) & NodeCheckFlags.EmitExtends) {
@@ -3474,6 +3475,8 @@ module ts {
                     emitCaptureThisForNodeIfNecessary(node);
                     emitLinesStartingAt(node.statements, startIndex);
                 }
+
+                emitLeadingComments(node.endOfFileToken);
             }
 
             function emitNode(node: Node): void {

@@ -786,6 +786,7 @@ module ts {
     // Source files are declarations when they are external modules.
     export interface SourceFile extends Declaration {
         statements: NodeArray<ModuleElement>;
+        endOfFileToken: Node;
 
         filename: string;
         text: string;
