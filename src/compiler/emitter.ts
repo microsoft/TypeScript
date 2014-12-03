@@ -1997,12 +1997,12 @@ module ts {
             }
 
             function emitTemplateExpression(node: TemplateExpression): void {
-                // In ES6 mode and above, we can simply emit each portion of a template in order, but in
+                // In ES6 mode and above, we can simply emit each portion of a template in order
                 forEachChild(node, emit);
             }
 
             function emitDownlevelTemplateExpression(node: TemplateExpression): void {
-                // ES3 & ES5 we must convert the template expression into a series of string concatenations.
+                // In ES3 & ES5 we must convert the template expression into a series of string concatenations.
                 Debug.assert(node.parent.kind !== SyntaxKind.TaggedTemplateExpression);
 
                 var emitOuterParens = isExpression(node.parent)
