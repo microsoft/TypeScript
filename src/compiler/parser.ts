@@ -3093,10 +3093,10 @@ module ts {
         function canFollowTypeArgumentsInExpression(): boolean {
             switch (token) {
                 case SyntaxKind.OpenParenToken:                 // foo<x>(   
-                case SyntaxKind.DotToken:                       // foo<x>.
-                // These two cases are the only cases where this token can legally follow a
-                // type argument list.  So we definitely want to treat this as a type arg list.
+                // this case are the only case where this token can legally follow a type argument 
+                // list.  So we definitely want to treat this as a type arg list.
 
+                case SyntaxKind.DotToken:                       // foo<x>.
                 case SyntaxKind.CloseParenToken:                // foo<x>)
                 case SyntaxKind.CloseBracketToken:              // foo<x>]
                 case SyntaxKind.ColonToken:                     // foo<x>:
