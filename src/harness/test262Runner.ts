@@ -26,6 +26,30 @@ class Test262BaselineRunner extends RunnerBase {
             return (<any>ts).SyntaxKind[k]
         }
 
+        function getFlagName(flags: any, f: number): any {
+            if (f === 0) return 0;
+            var result = "";
+            ts.forEach(Object.getOwnPropertyNames(flags),(v: any) => {
+                if (isFinite(v)) {
+                    v = +v;
+                    if (f === +v) {
+                        result = flags[v];
+                        return true;
+                    }
+                    else if ((f & v) > 0) {
+                        if (result.length)
+                            result += " | ";
+                        result += flags[v];
+                        return false;
+                    }
+                }
+            });
+            return result;
+        }
+
+        function getNodeFlagName(f: number) { return getFlagName((<any>ts).NodeFlags, f); }
+        function getParserContextFlagName(f: number) { return getFlagName((<any>ts).ParserContextFlags, f); }
+
         function serializeNode(n: ts.Node): any {
             var o = { kind: getKindName(n.kind) };
             ts.forEach(Object.getOwnPropertyNames(n), i => {
@@ -39,13 +63,24 @@ class Test262BaselineRunner extends RunnerBase {
                     case "parseDiagnostics":
                     case "grammarDiagnostics":
                         return undefined;
+
+                    case "flags":
+                        (<any>o)[i] = getNodeFlagName(n.flags);
+                        return undefined;
+
+                    case "parserContextFlags":
+                        (<any>o)[i] = getParserContextFlagName(n.parserContextFlags);
+                        return undefined;
+
                     case "nextContainer":
                         if (n.nextContainer) {
-                            (<any>o)[i] = { kind: getKindName(n.nextContainer.kind), pos: n.nextContainer.pos, end: n.nextContainer.end };
+                            (<any>o)[i] = { kind: n.nextContainer.kind, pos: n.nextContainer.pos, end: n.nextContainer.end };
                             return undefined;
                         }
+
                     case "text":
                         if (n.kind === ts.SyntaxKind.SourceFile) return undefined;
+
                     default:
                         (<any>o)[i] = ((<any>n)[i]);
                 }
