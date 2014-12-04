@@ -2829,7 +2829,19 @@ module ts {
                 increaseIndent();
                 write("(");
                 if (node) {
-                    emitCommaList(node.parameters, /*includeTrailingComma*/ false, node.parameters.length - (hasRestParameters(node) ? 1 : 0));
+                    var hasRestParam = hasRestParameters(node);
+                    var numberOfParameters = node.parameters.length
+                    emitCommaList(node.parameters, /*includeTrailingComma*/ false, numberOfParameters - (hasRestParam ? 1 : 0));
+                    // Emit rest parameters natively in ES6 or above
+                    if (hasRestParam && compilerOptions.target >= ScriptTarget.ES6) {
+                        var restParamIdex = numberOfParameters - 1;
+                        // There are other parameters
+                        if (restParamIdex > 0) {
+                            write(", ");
+                        }
+                        write("...");
+                        emit(node.parameters[node.parameters.length - 1]);
+                    }
                 }
                 write(")");
                 decreaseIndent();
@@ -2850,7 +2862,9 @@ module ts {
                 var outPos = writer.getTextPos();
                 emitCaptureThisForNodeIfNecessary(node);
                 emitDefaultValueAssignments(node);
-                emitRestParameter(node);
+                if (compilerOptions.target < ScriptTarget.ES6) {
+                    emitRestParameter(node);
+                }
                 if (node.body.kind !== SyntaxKind.FunctionBlock && outPos === writer.getTextPos()) {
                     decreaseIndent();
                     write(" ");
@@ -3125,7 +3139,9 @@ module ts {
                     emitCaptureThisForNodeIfNecessary(node);
                     if (ctor) {
                         emitDefaultValueAssignments(ctor);
-                        emitRestParameter(ctor);
+                        if (compilerOptions.target < ScriptTarget.ES6) {
+                            emitRestParameter(ctor);
+                        }
                         if (baseTypeNode) {
                             var superCall = findInitialSuperCall(ctor);
                             if (superCall) {

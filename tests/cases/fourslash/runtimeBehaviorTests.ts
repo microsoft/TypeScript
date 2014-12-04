@@ -1,5 +1,6 @@
 /// <reference path='fourslash.ts'/>
 
+// @target: es5
 ////interface RT_JQueryElement {
 ////    id: string;
 ////}

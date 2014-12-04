@@ -137,13 +137,14 @@ module FourSlash {
        sourceMap: 'sourceMap',
        sourceRoot: 'sourceRoot',
        resolveReference: 'ResolveReference',  // This flag is used to specify entry file for resolve file references. The flag is only allow once per test file
+       target: 'target',
     };
 
     // List of allowed metadata names
     var fileMetadataNames = [testOptMetadataNames.filename, testOptMetadataNames.emitThisFile, testOptMetadataNames.resolveReference];
-    var globalMetadataNames = [testOptMetadataNames.baselineFile,  testOptMetadataNames.declaration,
-        testOptMetadataNames.mapRoot, testOptMetadataNames.module, testOptMetadataNames.out,
-        testOptMetadataNames.outDir, testOptMetadataNames.sourceMap, testOptMetadataNames.sourceRoot]
+    var globalMetadataNames = [testOptMetadataNames.baselineFile, testOptMetadataNames.declaration,
+        testOptMetadataNames.mapRoot, testOptMetadataNames.module , testOptMetadataNames.out,
+        testOptMetadataNames.outDir, testOptMetadataNames.sourceMap, testOptMetadataNames.sourceRoot, testOptMetadataNames.target];
 
     function convertGlobalOptionsToCompilationSettings(globalOptions: { [idx: string]: string }): ts.CompilationSettings {
         var settings: ts.CompilationSettings = {};
@@ -182,6 +183,22 @@ module FourSlash {
                         break;
                     case testOptMetadataNames.sourceRoot:
                         settings.sourceRoot = globalOptions[prop];
+                        break;
+                    case testOptMetadataNames.target:
+                        switch (globalOptions[prop]) {
+                            case "es3":
+                                settings.codeGenTarget = ts.LanguageVersion.EcmaScript3;
+                                break;
+                            case "es5":
+                                settings.codeGenTarget = ts.LanguageVersion.EcmaScript5;
+                                break;
+                            case "es6":
+                                settings.codeGenTarget = ts.LanguageVersion.EcmaScript6;
+                                break;
+                            default:
+                                settings.moduleGenTarget = ts.ModuleGenTarget.Unspecified;
+                                break;
+                        }
                         break;
                 }
             }
@@ -2236,6 +2253,7 @@ module FourSlash {
     }
 
     export function runFourSlashTestContent(content: string, fileName: string): TestXmlData {
+        debugger;
         // Parse out the files and their metadata
         var testData = parseTestData(content, fileName);
 
@@ -2248,7 +2266,7 @@ module FourSlash {
             ts.ScriptTarget.Latest,
             sys.useCaseSensitiveFileNames);
         // TODO (drosen): We need to enforce checking on these tests.
-        var program = ts.createProgram([Harness.Compiler.fourslashFilename, fileName], { out: "fourslashTestOutput.js", noResolve: true }, host);
+        var program = ts.createProgram([Harness.Compiler.fourslashFilename, fileName], { out: "fourslashTestOutput.js", noResolve: true, target: ts.ScriptTarget.ES5 }, host);
         var checker = ts.createTypeChecker(program, /*fullTypeCheckMode*/ true);
 
         var errors = program.getDiagnostics().concat(checker.getDiagnostics());
