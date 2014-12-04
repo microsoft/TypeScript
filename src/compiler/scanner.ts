@@ -472,7 +472,7 @@ module ts {
             ch > CharacterCodes.maxAsciiCharacter && isUnicodeIdentifierPart(ch, languageVersion);
     }
 
-    export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean, text?: string, onError?: ErrorCallback, onComment?: CommentCallback): Scanner {
+    export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean, text?: string, onError?: ErrorCallback): Scanner {
         var pos: number;       // Current position (end position of text of current token)
         var len: number;       // Length of text
         var startPos: number;  // Start position of whitespace before current token
@@ -908,9 +908,6 @@ module ts {
                                 pos++;
 
                             }
-                            if (onComment) {
-                                onComment(tokenPos, pos);
-                            }
 
                             if (skipTrivia) {
                                 continue;
@@ -941,10 +938,6 @@ module ts {
 
                             if (!commentClosed) {
                                 error(Diagnostics.Asterisk_Slash_expected);
-                            }
-
-                            if (onComment) {
-                                onComment(tokenPos, pos);
                             }
 
                             if (skipTrivia) {
