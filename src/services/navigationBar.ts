@@ -120,7 +120,7 @@ module ts.NavigationBar {
             if (functionDeclaration.kind === SyntaxKind.FunctionDeclaration) {
                 // A function declaration is 'top level' if it contains any function declarations 
                 // within it. 
-                if (functionDeclaration.body && functionDeclaration.body.kind === SyntaxKind.FunctionBlock) {
+                if (functionDeclaration.body && functionDeclaration.body.kind === SyntaxKind.Block) {
                     // Proper function declarations can only have identifier names
                     if (forEach((<Block>functionDeclaration.body).statements,
                         s => s.kind === SyntaxKind.FunctionDeclaration && !isEmpty((<FunctionDeclaration>s).name.text))) {
@@ -130,7 +130,7 @@ module ts.NavigationBar {
 
                     // Or if it is not parented by another function.  i.e all functions
                     // at module scope are 'top level'.
-                    if (functionDeclaration.parent.kind !== SyntaxKind.FunctionBlock) {
+                    if (!isFunctionBlock(functionDeclaration.parent)) {
                         return true;
                     }
                 }
@@ -333,7 +333,7 @@ module ts.NavigationBar {
             }
 
             function createFunctionItem(node: FunctionDeclaration) {
-                if (node.name && node.body && node.body.kind === SyntaxKind.FunctionBlock) {
+                if (node.name && node.body && node.body.kind === SyntaxKind.Block) {
                     var childItems = getItemsWorker(sortNodes((<Block>node.body).statements), createChildItem);
 
                     return getNavigationBarItem(node.name.text,

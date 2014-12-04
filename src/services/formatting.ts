@@ -897,7 +897,7 @@ module ts.formatting {
     function isSomeBlock(kind: SyntaxKind): boolean {
         switch (kind) {
             case SyntaxKind.Block:
-            case SyntaxKind.FunctionBlock:
+            case SyntaxKind.Block:
             case SyntaxKind.TryBlock:
             case SyntaxKind.FinallyBlock:
             case SyntaxKind.ModuleBlock:

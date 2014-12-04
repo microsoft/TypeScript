@@ -396,7 +396,7 @@ module ts.SignatureHelp {
 
         function getContainingArgumentInfo(node: Node): ArgumentListInfo {
             for (var n = node; n.kind !== SyntaxKind.SourceFile; n = n.parent) {
-                if (n.kind === SyntaxKind.FunctionBlock) {
+                if (isFunctionBlock(n)) {
                     return undefined;
                 }
 
