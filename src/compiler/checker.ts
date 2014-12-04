@@ -4395,7 +4395,8 @@ module ts {
             // That helps in making sure not assigning types as any when resolved out of order
             var containerNodes: Node[] = [];
             for (var parent = node.parent; parent; parent = parent.parent) {
-                if (isExpression(parent) && isContextSensitiveExpression(<Expression>parent)) {
+                if ((isExpression(parent) || isObjectLiteralMethod(node)) &&
+                    isContextSensitive(<Expression>parent)) {
                     containerNodes.unshift(parent);
                 }
             }

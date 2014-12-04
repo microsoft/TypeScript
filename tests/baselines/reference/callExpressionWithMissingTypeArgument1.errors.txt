@@ -4,7 +4,7 @@ tests/cases/compiler/callExpressionWithMissingTypeArgument1.ts(1,1): error TS230
 
 ==== tests/cases/compiler/callExpressionWithMissingTypeArgument1.ts (2 errors) ====
     Foo<a,,b>();
-          
+          ~
 !!! error TS1110: Type expected.
     ~~~
 !!! error TS2304: Cannot find name 'Foo'.
