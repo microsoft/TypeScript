@@ -196,7 +196,7 @@ module FourSlash {
                                 settings.codeGenTarget = ts.LanguageVersion.EcmaScript6;
                                 break;
                             default:
-                                settings.moduleGenTarget = ts.ModuleGenTarget.Unspecified;
+                                throw new Error("Unrecognized language version, Please provide correct language version: es3, es5, es6.");
                                 break;
                         }
                         break;
