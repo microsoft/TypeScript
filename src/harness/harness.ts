@@ -27,7 +27,6 @@ var _chai: typeof chai = require('chai');
 var assert: typeof _chai.assert = _chai.assert;
 declare var __dirname: any; // Node-specific
 var global = <any>Function("return this").call(null);
-var typescript = require('./typescriptServices');
 
 module Utils {
     var global = <any>Function("return this").call(null);
@@ -1391,3 +1390,6 @@ module Harness {
 
     if (Error) (<any>Error).stackTraceLimit = 1;
 }
+
+// TODO: not sure why Utils.evalFile isn't working with this, eventually will concat it like old compiler instead of eval
+eval(Harness.tcServicesFile);

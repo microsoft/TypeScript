@@ -8738,20 +8738,6 @@ module ts {
 
         // Language service support
 
-        function getNodeAtPosition(sourceFile: SourceFile, position: number): Node {
-            function findChildAtPosition(parent: Node): Node {
-                var child = forEachChild(parent, node => {
-                    if (position >= node.pos && position <= node.end && position >= getTokenPosOfNode(node)) {
-                        return findChildAtPosition(node);
-                    }
-                });
-                return child || parent;
-            }
-            if (position < sourceFile.pos) position = sourceFile.pos;
-            if (position > sourceFile.end) position = sourceFile.end;
-            return findChildAtPosition(sourceFile);
-        }
-
         function isInsideWithStatementBody(node: Node): boolean {
             if (node) {
                 while (node.parent) {
