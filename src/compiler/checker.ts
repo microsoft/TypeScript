@@ -1033,10 +1033,6 @@ module ts {
             writer.writePunctuation(tokenToString(kind));
         }
 
-        function writeOperator(writer: SymbolWriter, kind: SyntaxKind) {
-            writer.writeOperator(tokenToString(kind));
-        }
-
         function writeSpace(writer: SymbolWriter) {
             writer.writeSpace(" ");
         }
@@ -7820,8 +7816,10 @@ module ts {
         }
 
         function checkThrowStatement(node: ThrowStatement) {
-            checkExpression(node.expression);
-        }
+            if (node.expression) {
+                checkExpression(node.expression);
+            }
+}
 
         function checkTryStatement(node: TryStatement) {
             checkBlock(node.tryBlock);
