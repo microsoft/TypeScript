@@ -1649,7 +1649,6 @@ module ts {
         private currentSourceFile: SourceFile = null;
 
         constructor(private host: LanguageServiceHost) {
-            this.hostCache = new HostCache(host);
         }
 
         private initialize(filename: string) {
