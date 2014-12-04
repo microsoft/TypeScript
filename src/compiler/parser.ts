@@ -1173,7 +1173,8 @@ module ts {
             var saveContextFlags = contextFlags;
 
             // If we're only looking ahead, then tell the scanner to only lookahead as well.
-            // If we're actually speculatively parsing, then tell the scanner to do the same. 
+            // Otherwise, if we're actually speculatively parsing, then tell the scanner to do the 
+            // same. 
             var result = isLookAhead
                 ? scanner.lookAhead(callback)
                 : scanner.tryScan(callback);
@@ -3054,9 +3055,7 @@ module ts {
                     var callExpr = <CallExpression>createNode(SyntaxKind.CallExpression, expression.pos);
                     callExpr.expression = expression;
                     callExpr.typeArguments = typeArguments;
-                    if (callExpr.typeArguments || token === SyntaxKind.OpenParenToken) {
-                        callExpr.arguments = parseArgumentList();
-                    }
+                    callExpr.arguments = parseArgumentList();
                     expression = finishNode(callExpr);
                     continue;
                 }
