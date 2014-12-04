@@ -6586,12 +6586,12 @@ module ts {
         }
 
         function checkObjectLiteralMethod(node: MethodDeclaration, contextualMapper?: TypeMapper): Type {
-            var type = checkFunctionExpressionOrObjectLiteralMethod(node, contextualMapper);
-            return mapSingleCallSignatureToType(node, type, contextualMapper);
+            var uninstantiatedType = checkFunctionExpressionOrObjectLiteralMethod(node, contextualMapper);
+            return instantiateTypeWithSingleGenericCallSignature(node, uninstantiatedType, contextualMapper);
         }
 
-        function mapSingleCallSignatureToType(node: Expression | QualifiedName | MethodDeclaration, type: Type, contextualMapper?: TypeMapper) {
-            if (contextualMapper && contextualMapper !== identityMapper && node.kind !== SyntaxKind.QualifiedName) {
+        function instantiateTypeWithSingleGenericCallSignature(node: Expression | MethodDeclaration, type: Type, contextualMapper?: TypeMapper) {
+            if (contextualMapper && contextualMapper !== identityMapper) {
                 var signature = getSingleCallSignature(type);
                 if (signature && signature.typeParameters) {
                     var contextualType = getContextualType(<Expression>node);
@@ -6619,10 +6619,14 @@ module ts {
         // have the wildcard function type; this form of type check is used during overload resolution to exclude
         // contextually typed function and arrow expressions in the initial phase.
         function checkExpressionOrQualifiedName(node: Expression | QualifiedName, contextualMapper?: TypeMapper): Type {
-            var type = node.kind == SyntaxKind.QualifiedName
-                ? checkQualifiedName(<QualifiedName>node)
-                : checkExpressionWorker(<Expression>node, contextualMapper);
-            type = mapSingleCallSignatureToType(node, type, contextualMapper);
+            var type: Type;
+            if (node.kind == SyntaxKind.QualifiedName) {
+                type = checkQualifiedName(<QualifiedName>node);
+            }
+            else {
+                var uninstantiatedType = checkExpressionWorker(<Expression>node, contextualMapper);
+                type = instantiateTypeWithSingleGenericCallSignature(<Expression>node, uninstantiatedType, contextualMapper);
+            }
 
             if (isConstEnumObjectType(type)) {
                 // enum object type for const enums are only permitted in:
