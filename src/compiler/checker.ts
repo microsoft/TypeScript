@@ -7819,7 +7819,7 @@ module ts {
             if (node.expression) {
                 checkExpression(node.expression);
             }
-}
+        }
 
         function checkTryStatement(node: TryStatement) {
             checkBlock(node.tryBlock);
