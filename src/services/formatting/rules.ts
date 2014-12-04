@@ -523,9 +523,8 @@ module ts.formatting {
             switch (node.kind) {
                 case SyntaxKind.Block:
                 case SyntaxKind.SwitchStatement:
-                case SyntaxKind.ObjectLiteral:
+                case SyntaxKind.ObjectLiteralExpression:
                 case SyntaxKind.TryBlock:
-                case SyntaxKind.CatchBlock:
                 case SyntaxKind.FinallyBlock:
                 case SyntaxKind.FunctionBlock:
                 case SyntaxKind.ModuleBlock:
@@ -581,7 +580,7 @@ module ts.formatting {
                 case SyntaxKind.EnumDeclaration:
                 case SyntaxKind.Block:
                 case SyntaxKind.TryBlock:
-                case SyntaxKind.CatchBlock:
+                case SyntaxKind.CatchClause:
                 case SyntaxKind.FinallyBlock:
                 case SyntaxKind.FunctionBlock:
                 case SyntaxKind.ModuleBlock:
@@ -603,7 +602,7 @@ module ts.formatting {
                 case SyntaxKind.WithStatement:
                 // TODO
                 // case SyntaxKind.ElseClause:
-                case SyntaxKind.CatchBlock:
+                case SyntaxKind.CatchClause:
                 case SyntaxKind.FinallyBlock:
                     return true;
 
@@ -613,7 +612,7 @@ module ts.formatting {
         }
 
         static IsObjectContext(context: FormattingContext): boolean {
-            return context.contextNode.kind === SyntaxKind.ObjectLiteral;
+            return context.contextNode.kind === SyntaxKind.ObjectLiteralExpression;
         }
 
         static IsFunctionCallContext(context: FormattingContext): boolean {
@@ -673,7 +672,7 @@ module ts.formatting {
         }
 
         static IsVoidOpContext(context: FormattingContext): boolean {
-            return context.currentTokenSpan.kind === SyntaxKind.VoidKeyword && context.currentTokenParent.kind === SyntaxKind.PrefixOperator;
+            return context.currentTokenSpan.kind === SyntaxKind.VoidKeyword && context.currentTokenParent.kind === SyntaxKind.VoidExpression;
         }
     }
 }

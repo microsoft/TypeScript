@@ -49,7 +49,7 @@ module ts {
         getLocalizedDiagnosticMessages(): string;
         getCancellationToken(): CancellationToken;
         getCurrentDirectory(): string;
-        getDefaultLibFilename(): string;
+        getDefaultLibFilename(options: string): string;
     }
 
     ///
@@ -97,9 +97,6 @@ module ts {
         getBreakpointStatementAtPosition(fileName: string, position: number): string;
 
         getSignatureHelpItems(fileName: string, position: number): string;
-
-        // Obsolete.  Use getSignatureHelpItems instead.
-        getSignatureAtPosition(fileName: string, position: number): string;
 
         /**
          * Returns a JSON-encoded value of the type:
@@ -164,7 +161,7 @@ module ts {
     }
 
     export interface ClassifierShim extends Shim {
-        getClassificationsForLine(text: string, lexState: EndOfLineState): string;
+        getClassificationsForLine(text: string, lexState: EndOfLineState, classifyKeywordsInGenerics?: boolean): string;
     }
 
     export interface CoreServicesShim extends Shim {
@@ -391,8 +388,8 @@ module ts {
             return this.shimHost.getCancellationToken();
         }
 
-        public getDefaultLibFilename(): string {
-            return this.shimHost.getDefaultLibFilename();
+        public getDefaultLibFilename(options: CompilerOptions): string {
+            return this.shimHost.getDefaultLibFilename(JSON.stringify(options));
         }
 
         public getCurrentDirectory(): string {
@@ -609,14 +606,6 @@ module ts {
                 });
         }
 
-        public getSignatureAtPosition(fileName: string, position: number): string {
-            return this.forwardJSONCall(
-                "getSignatureAtPosition('" + fileName + "', " + position + ")",
-                () => {
-                    return this.languageService.getSignatureAtPosition(fileName, position);
-                });
-        }
-
         /// GOTO DEFINITION
 
         /**
@@ -805,8 +794,8 @@ module ts {
         }
 
         /// COLORIZATION
-        public getClassificationsForLine(text: string, lexState: EndOfLineState): string {
-            var classification = this.classifier.getClassificationsForLine(text, lexState);
+        public getClassificationsForLine(text: string, lexState: EndOfLineState, classifyKeywordsInGenerics?: boolean): string {
+            var classification = this.classifier.getClassificationsForLine(text, lexState, classifyKeywordsInGenerics);
             var items = classification.entries;
             var result = "";
             for (var i = 0; i < items.length; i++) {
@@ -923,6 +912,13 @@ module ts {
             throw new Error("Invalid operation");
         }
     }
+
+    // Here we expose the TypeScript services as an external module
+    // so that it may be consumed easily like a node module.
+    declare var module: any;
+    if (typeof module !== "undefined" && module.exports) {
+        module.exports = ts;
+    }
 }
 
 
@@ -930,4 +926,3 @@ module ts {
 module TypeScript.Services {
     export var TypeScriptServicesFactory = ts.TypeScriptServicesFactory;
 }
-

@@ -42,12 +42,6 @@ tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsVa
 tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(55,1): error TS2364: Invalid left-hand side of assignment expression.
 tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(62,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
 tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(63,1): error TS2364: Invalid left-hand side of assignment expression.
-tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(69,9): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
-tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(70,9): error TS2364: Invalid left-hand side of assignment expression.
-tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(74,9): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
-tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(75,9): error TS2364: Invalid left-hand side of assignment expression.
-tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(79,9): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
-tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(80,9): error TS2364: Invalid left-hand side of assignment expression.
 tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(91,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
 tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(92,1): error TS2364: Invalid left-hand side of assignment expression.
 tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(95,1): error TS2364: Invalid left-hand side of assignment expression.
@@ -80,7 +74,7 @@ tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsVa
 tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(122,1): error TS2364: Invalid left-hand side of assignment expression.
 
 
-==== tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts (80 errors) ====
+==== tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts (74 errors) ====
     // expected error for all the LHS of compound assignments (arithmetic and addition)
     var value;
     
@@ -220,39 +214,27 @@ tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsVa
             super *= value;
                   ~~
 !!! error TS1034: 'super' must be followed by an argument list or member access.
-            ~~~~~
-!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
             super += value;
                   ~~
 !!! error TS1034: 'super' must be followed by an argument list or member access.
-            ~~~~~
-!!! error TS2364: Invalid left-hand side of assignment expression.
         }
     
         foo() {
             super *= value;
                   ~~
 !!! error TS1034: 'super' must be followed by an argument list or member access.
-            ~~~~~
-!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
             super += value;
                   ~~
 !!! error TS1034: 'super' must be followed by an argument list or member access.
-            ~~~~~
-!!! error TS2364: Invalid left-hand side of assignment expression.
         }
     
         static sfoo() {
             super *= value;
                   ~~
 !!! error TS1034: 'super' must be followed by an argument list or member access.
-            ~~~~~
-!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
             super += value;
                   ~~
 !!! error TS1034: 'super' must be followed by an argument list or member access.
-            ~~~~~
-!!! error TS2364: Invalid left-hand side of assignment expression.
         }
     }
     

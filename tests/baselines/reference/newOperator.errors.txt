@@ -1,6 +1,6 @@
 tests/cases/compiler/newOperator.ts(18,20): error TS1150: 'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.
 tests/cases/compiler/newOperator.ts(22,1): error TS1150: 'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.
-tests/cases/compiler/newOperator.ts(45,23): error TS1150: 'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.
+tests/cases/compiler/newOperator.ts(44,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/newOperator.ts(3,13): error TS2304: Cannot find name 'ifc'.
 tests/cases/compiler/newOperator.ts(10,10): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
 tests/cases/compiler/newOperator.ts(11,10): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
@@ -77,9 +77,9 @@ tests/cases/compiler/newOperator.ts(31,10): error TS2351: Cannot use 'new' with 
     
     class S {
         public get xs(): M.T[] {
+                   ~~
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             return new M.T[];
-                          ~~
-!!! error TS1150: 'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.
         }
     }
     

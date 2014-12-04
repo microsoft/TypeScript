@@ -21,6 +21,10 @@ module A {
         return 'hello ' + s;
     }
     var ol = { s: 'hello', id: 2, isvalid: true };
+
+    declare class DC {
+        static x: number;
+    }
 }
 
 module Y {
@@ -46,4 +50,8 @@ module Y {
         return 'hello ' + s;
     }
     export var ol = { s: 'hello', id: 2, isvalid: true };
+
+    export declare class DC {
+        static x: number;
+    }
 }

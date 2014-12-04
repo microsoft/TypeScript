@@ -1,0 +1,18 @@
+tests/cases/conformance/es6/computedProperties/computedPropertyNames3.ts(5,9): error TS2378: A 'get' accessor must return a value or consist of a single 'throw' statement.
+tests/cases/conformance/es6/computedProperties/computedPropertyNames3.ts(7,16): error TS2378: A 'get' accessor must return a value or consist of a single 'throw' statement.
+
+
+==== tests/cases/conformance/es6/computedProperties/computedPropertyNames3.ts (2 errors) ====
+    var id;
+    class C {
+        [0 + 1]() { }
+        static [() => { }]() { }
+        get [delete id]() { }
+            ~~~~~~~~~~~
+!!! error TS2378: A 'get' accessor must return a value or consist of a single 'throw' statement.
+        set [[0, 1]](v) { }
+        static get [<String>""]() { }
+                   ~~~~~~~~~~~~
+!!! error TS2378: A 'get' accessor must return a value or consist of a single 'throw' statement.
+        static set [id.toString()](v) { }
+    }

@@ -13,7 +13,7 @@ salt.apply("hello", []);
 >(new Function("return 5"))() : any
 >(new Function("return 5")) : Function
 >new Function("return 5") : Function
->Function : { (...args: string[]): Function; new (...args: string[]): Function; prototype: Function; }
+>Function : FunctionConstructor
  
  
 

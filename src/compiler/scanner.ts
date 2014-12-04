@@ -22,6 +22,7 @@ module ts {
         hasPrecedingLineBreak(): boolean;
         isIdentifier(): boolean;
         isReservedWord(): boolean;
+        isUnterminated(): boolean;
         reScanGreaterToken(): SyntaxKind;
         reScanSlashToken(): SyntaxKind;
         reScanTemplateToken(): SyntaxKind;
@@ -470,6 +471,7 @@ module ts {
         var token: SyntaxKind;
         var tokenValue: string;
         var precedingLineBreak: boolean;
+        var tokenIsUnterminated: boolean;
 
         function error(message: DiagnosticMessage): void {
             if (onError) {
@@ -553,6 +555,7 @@ module ts {
             while (true) {
                 if (pos >= len) {
                     result += text.substring(start, pos);
+                    tokenIsUnterminated = true;
                     error(Diagnostics.Unterminated_string_literal);
                     break;
                 }
@@ -570,6 +573,7 @@ module ts {
                 }
                 if (isLineBreak(ch)) {
                     result += text.substring(start, pos);
+                    tokenIsUnterminated = true;
                     error(Diagnostics.Unterminated_string_literal);
                     break;
                 }
@@ -593,6 +597,7 @@ module ts {
             while (true) {
                 if (pos >= len) {
                     contents += text.substring(start, pos);
+                    tokenIsUnterminated = true;
                     error(Diagnostics.Unterminated_template_literal);
                     resultingToken = startedWithBacktick ? SyntaxKind.NoSubstitutionTemplateLiteral : SyntaxKind.TemplateTail;
                     break;
@@ -753,9 +758,34 @@ module ts {
             return token = SyntaxKind.Identifier;
         }
 
+        function scanBinaryOrOctalDigits(base: number): number {
+            Debug.assert(base !== 2 || base !== 8, "Expected either base 2 or base 8");
+
+            var value = 0;
+            // For counting number of digits; Valid binaryIntegerLiteral must have at least one binary digit following B or b.
+            // Similarly valid octalIntegerLiteral must have at least one octal digit following o or O.
+            var numberOfDigits = 0;  
+            while (true) {
+                var ch = text.charCodeAt(pos);
+                var valueOfCh = ch - CharacterCodes._0;
+                if (!isDigit(ch) || valueOfCh >= base) {
+                    break;
+                }
+                value = value * base + valueOfCh;
+                pos++;
+                numberOfDigits++;
+            }
+            // Invalid binaryIntegerLiteral or octalIntegerLiteral
+            if (numberOfDigits === 0) {
+                return -1;
+            }
+            return value;
+        }
+
         function scan(): SyntaxKind {
             startPos = pos;
             precedingLineBreak = false;
+            tokenIsUnterminated = false;
             while (true) {
                 tokenPos = pos;
                 if (pos >= len) {
@@ -912,6 +942,7 @@ module ts {
                                 continue;
                             }
                             else {
+                                tokenIsUnterminated = !commentClosed;
                                 return token = SyntaxKind.MultiLineCommentTrivia;
                             }
                         }
@@ -931,12 +962,32 @@ module ts {
                                 value = 0;
                             }
                             tokenValue = "" + value;
+                            return token = SyntaxKind.NumericLiteral;
+                        }
+                        else if (pos + 2 < len && (text.charCodeAt(pos + 1) === CharacterCodes.B || text.charCodeAt(pos + 1) === CharacterCodes.b)) {
+                            pos += 2;
+                            var value = scanBinaryOrOctalDigits(/* base */ 2);
+                            if (value < 0) {
+                                error(Diagnostics.Binary_digit_expected);
+                                value = 0;
+                            }
+                            tokenValue = "" + value;
+                            return SyntaxKind.NumericLiteral;
+                        }
+                        else if (pos + 2 < len && (text.charCodeAt(pos + 1) === CharacterCodes.O || text.charCodeAt(pos + 1) === CharacterCodes.o)) {
+                            pos += 2;
+                            var value = scanBinaryOrOctalDigits(/* base */ 8);
+                            if (value < 0) {
+                                error(Diagnostics.Octal_digit_expected);
+                                value = 0;
+                            }
+                            tokenValue = "" + value;
                             return SyntaxKind.NumericLiteral;
                         }
                         // Try to parse as an octal
                         if (pos + 1 < len && isOctalDigit(text.charCodeAt(pos + 1))) {
                             tokenValue = "" + scanOctalDigits();
-                            return SyntaxKind.NumericLiteral;
+                            return token = SyntaxKind.NumericLiteral;
                         }
                         // This fall-through is a deviation from the EcmaScript grammar. The grammar says that a leading zero
                         // can only be followed by an octal digit, a dot, or the end of the number literal. However, we are being
@@ -1069,12 +1120,14 @@ module ts {
                     // If we reach the end of a file, or hit a newline, then this is an unterminated
                     // regex.  Report error and return what we have so far.
                     if (p >= len) {
+                        tokenIsUnterminated = true;
                         error(Diagnostics.Unterminated_regular_expression_literal)
                         break;
                     }
 
                     var ch = text.charCodeAt(p);
                     if (isLineBreak(ch)) {
+                        tokenIsUnterminated = true;
                         error(Diagnostics.Unterminated_regular_expression_literal)
                         break;
                     }
@@ -1167,6 +1220,7 @@ module ts {
             hasPrecedingLineBreak: () => precedingLineBreak,
             isIdentifier: () => token === SyntaxKind.Identifier || token > SyntaxKind.LastReservedWord,
             isReservedWord: () => token >= SyntaxKind.FirstReservedWord && token <= SyntaxKind.LastReservedWord,
+            isUnterminated: () => tokenIsUnterminated,
             reScanGreaterToken,
             reScanSlashToken,
             reScanTemplateToken,

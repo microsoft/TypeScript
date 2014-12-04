@@ -6,7 +6,7 @@
 
 goTo.marker('parameterFunction1');
 verify.signatureHelpCountIs(1);
-verify.currentSignatureParamterCountIs(2);
+verify.currentSignatureParameterCountIs(2);
 verify.currentSignatureHelpIs('callback(a: number, b: string): void');
 verify.currentParameterHelpArgumentNameIs("a");
 verify.currentParameterSpanIs("a: number");

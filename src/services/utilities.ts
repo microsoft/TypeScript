@@ -280,10 +280,6 @@ module ts {
     }
 
     function nodeHasTokens(n: Node): boolean {
-        if (n.kind === SyntaxKind.Unknown) {
-            return false;
-        }
-
         // If we have a token or node that has a non-zero width, it must have tokens.
         // Note, that getWidth() does not take trivia into account.
         return n.getWidth() !== 0;
@@ -319,5 +315,10 @@ module ts {
 
     export function isPunctuation(kind: SyntaxKind): boolean {
         return SyntaxKind.FirstPunctuation <= kind && kind <= SyntaxKind.LastPunctuation;
+    }
+
+    export function isInsideTemplateLiteral(node: LiteralExpression, position: number) {
+        return isTemplateLiteralKind(node.kind)
+            && (node.getStart() < position && position < node.getEnd()) || (!!node.isUnterminated && position === node.getEnd());
     }
 }

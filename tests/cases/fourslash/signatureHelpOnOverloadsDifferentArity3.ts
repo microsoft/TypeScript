@@ -10,17 +10,17 @@
 goTo.marker();
 verify.signatureHelpCountIs(4);
 verify.currentSignatureHelpIs("f(): any");
-verify.currentSignatureParamterCountIs(0);
+verify.currentSignatureParameterCountIs(0);
 verify.signatureHelpArgumentCountIs(0);
 
 edit.insert(", ");
 verify.signatureHelpCountIs(4);
 verify.currentSignatureHelpIs("f(s: string, b: boolean): any");
-verify.currentSignatureParamterCountIs(2);
+verify.currentSignatureParameterCountIs(2);
 verify.currentParameterHelpArgumentNameIs("b");
 verify.currentParameterSpanIs("b: boolean");
 
 edit.insert(", ");
 verify.signatureHelpCountIs(4);
 verify.currentSignatureHelpIs("f(s: string, b: boolean): any");
-verify.currentSignatureParamterCountIs(2);
+verify.currentSignatureParameterCountIs(2);

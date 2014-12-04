@@ -6,9 +6,6 @@
 /////<reference path='document.ts' />
 /////<reference path='flags.ts' />
 /////<reference path='hashTable.ts' />
-/////<reference path='ast.ts' />
-/////<reference path='astHelpers.ts' />
-/////<reference path='astWalker.ts' />
 /////<reference path='base64.ts' />
 /////<reference path='sourceMapping.ts' />
 /////<reference path='emitter.ts' />

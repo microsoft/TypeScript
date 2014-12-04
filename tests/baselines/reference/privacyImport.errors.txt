@@ -1,5 +1,5 @@
-tests/cases/compiler/privacyImport.ts(49,5): error TS4000: Import declaration 'm1_im2_private' is using private name 'm1_M2_private'.
-tests/cases/compiler/privacyImport.ts(80,5): error TS4000: Import declaration 'm1_im2_public' is using private name 'm1_M2_private'.
+tests/cases/compiler/privacyImport.ts(49,29): error TS4000: Import declaration 'm1_im2_private' is using private name 'm1_M2_private'.
+tests/cases/compiler/privacyImport.ts(80,35): error TS4000: Import declaration 'm1_im2_public' is using private name 'm1_M2_private'.
 
 
 ==== tests/cases/compiler/privacyImport.ts (2 errors) ====
@@ -52,7 +52,7 @@ tests/cases/compiler/privacyImport.ts(80,5): error TS4000: Import declaration 'm
     
     
         import m1_im2_private = m1_M2_private;
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                                ~~~~~~~~~~~~~
 !!! error TS4000: Import declaration 'm1_im2_private' is using private name 'm1_M2_private'.
         export var m1_im2_private_v1_public = m1_im2_private.c1;
         export var m1_im2_private_v2_public = new m1_im2_private.c1();
@@ -85,7 +85,7 @@ tests/cases/compiler/privacyImport.ts(80,5): error TS4000: Import declaration 'm
     
         export import m1_im1_public = m1_M1_public;
         export import m1_im2_public = m1_M2_private;
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                                      ~~~~~~~~~~~~~
 !!! error TS4000: Import declaration 'm1_im2_public' is using private name 'm1_M2_private'.
         //export import m1_im3_public = require("m1_M3_public");
         //export import m1_im4_public = require("m1_M4_private");

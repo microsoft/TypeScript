@@ -66,6 +66,12 @@ condNumber ? exprIsObject1 : exprIsObject2;
 >exprIsObject1 : Object
 >exprIsObject2 : Object
 
+condNumber ? exprString1 : exprBoolean1; // Union
+>condNumber ? exprString1 : exprBoolean1 : string | boolean
+>condNumber : number
+>exprString1 : string
+>exprBoolean1 : boolean
+
 //Cond is a number type literal
 1 ? exprAny1 : exprAny2;
 >1 ? exprAny1 : exprAny2 : any
@@ -92,6 +98,11 @@ condNumber ? exprIsObject1 : exprIsObject2;
 >1000000000000 ? exprIsObject1 : exprIsObject2 : Object
 >exprIsObject1 : Object
 >exprIsObject2 : Object
+
+10000 ? exprString1 : exprBoolean1; // Union
+>10000 ? exprString1 : exprBoolean1 : string | boolean
+>exprString1 : string
+>exprBoolean1 : boolean
 
 //Cond is a number type expression
 function foo() { return 1 };
@@ -137,6 +148,13 @@ foo() / array[1] ? exprIsObject1 : exprIsObject2;
 >exprIsObject1 : Object
 >exprIsObject2 : Object
 
+foo() ? exprString1 : exprBoolean1; // Union
+>foo() ? exprString1 : exprBoolean1 : string | boolean
+>foo() : number
+>foo : () => number
+>exprString1 : string
+>exprBoolean1 : boolean
+
 //Results shoud be same as Expr1 and Expr2
 var resultIsAny1 = condNumber ? exprAny1 : exprAny2;
 >resultIsAny1 : any
@@ -173,6 +191,13 @@ var resultIsObject1 = condNumber ? exprIsObject1 : exprIsObject2;
 >exprIsObject1 : Object
 >exprIsObject2 : Object
 
+var resultIsStringOrBoolean1 = condNumber ? exprString1 : exprBoolean1; // Union
+>resultIsStringOrBoolean1 : string | boolean
+>condNumber ? exprString1 : exprBoolean1 : string | boolean
+>condNumber : number
+>exprString1 : string
+>exprBoolean1 : boolean
+
 var resultIsAny2 = 1 ? exprAny1 : exprAny2;
 >resultIsAny2 : any
 >1 ? exprAny1 : exprAny2 : any
@@ -203,6 +228,12 @@ var resultIsObject2 = 1000000000000 ? exprIsObject1 : exprIsObject2;
 >1000000000000 ? exprIsObject1 : exprIsObject2 : Object
 >exprIsObject1 : Object
 >exprIsObject2 : Object
+
+var resultIsStringOrBoolean2 = 10000 ? exprString1 : exprBoolean1; // Union
+>resultIsStringOrBoolean2 : string | boolean
+>10000 ? exprString1 : exprBoolean1 : string | boolean
+>exprString1 : string
+>exprBoolean1 : boolean
 
 var resultIsAny3 = 1 * 0 ? exprAny1 : exprAny2;
 >resultIsAny3 : any
@@ -244,4 +275,15 @@ var resultIsObject3 = foo() / array[1] ? exprIsObject1 : exprIsObject2;
 >array : number[]
 >exprIsObject1 : Object
 >exprIsObject2 : Object
+
+var resultIsStringOrBoolean3 = foo() / array[1] ? exprString1 : exprBoolean1; // Union
+>resultIsStringOrBoolean3 : string | boolean
+>foo() / array[1] ? exprString1 : exprBoolean1 : string | boolean
+>foo() / array[1] : number
+>foo() : number
+>foo : () => number
+>array[1] : number
+>array : number[]
+>exprString1 : string
+>exprBoolean1 : boolean
 

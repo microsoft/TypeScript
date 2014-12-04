@@ -11,6 +11,7 @@ tests/cases/*/*/*.js.map
 tests/cases/*/*/*/*.js.map
 tests/cases/*/*/*/*/*.js.map
 tests/cases/rwc/*
+tests/cases/test262/*
 tests/cases/perf/*
 !tests/cases/webharness/compilerToString.js
 test-args.txt
@@ -19,6 +20,7 @@ tests/baselines/local/*
 tests/services/baselines/local/*
 tests/baselines/prototyping/local/*
 tests/baselines/rwc/*
+tests/baselines/test262/*
 tests/services/baselines/prototyping/local/*
 tests/services/browser/typescriptServices.js
 scripts/processDiagnosticMessages.d.ts
@@ -39,4 +41,5 @@ scripts/debug.bat
 scripts/run.bat
 scripts/word2md.js
 scripts/ior.js
+scripts/*.js.map
 coverage/

@@ -1,29 +1,29 @@
-tests/cases/compiler/giant.ts(25,5): error TS1005: '{' expected.
-tests/cases/compiler/giant.ts(27,5): error TS1005: '{' expected.
-tests/cases/compiler/giant.ts(29,5): error TS1005: '{' expected.
-tests/cases/compiler/giant.ts(31,5): error TS1005: '{' expected.
-tests/cases/compiler/giant.ts(35,5): error TS1005: '{' expected.
-tests/cases/compiler/giant.ts(37,1): error TS1005: '{' expected.
-tests/cases/compiler/giant.ts(61,6): error TS1022: An index signature parameter must have a type annotation.
+tests/cases/compiler/giant.ts(24,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/giant.ts(26,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/giant.ts(28,17): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/giant.ts(30,17): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/giant.ts(34,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/giant.ts(36,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/giant.ts(61,5): error TS1169: Computed property names are not allowed in interfaces.
 tests/cases/compiler/giant.ts(62,5): error TS1021: An index signature must have a type annotation.
 tests/cases/compiler/giant.ts(63,6): error TS1096: An index signature must have exactly one parameter.
-tests/cases/compiler/giant.ts(89,9): error TS1005: '{' expected.
-tests/cases/compiler/giant.ts(91,9): error TS1005: '{' expected.
-tests/cases/compiler/giant.ts(93,9): error TS1005: '{' expected.
-tests/cases/compiler/giant.ts(95,9): error TS1005: '{' expected.
-tests/cases/compiler/giant.ts(99,9): error TS1005: '{' expected.
-tests/cases/compiler/giant.ts(101,5): error TS1005: '{' expected.
-tests/cases/compiler/giant.ts(125,10): error TS1022: An index signature parameter must have a type annotation.
+tests/cases/compiler/giant.ts(88,20): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/giant.ts(90,20): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/giant.ts(92,21): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/giant.ts(94,21): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/giant.ts(98,20): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/giant.ts(100,20): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/giant.ts(125,9): error TS1169: Computed property names are not allowed in interfaces.
 tests/cases/compiler/giant.ts(126,9): error TS1021: An index signature must have a type annotation.
 tests/cases/compiler/giant.ts(127,10): error TS1096: An index signature must have exactly one parameter.
 tests/cases/compiler/giant.ts(154,39): error TS1037: A function implementation cannot be declared in an ambient context.
-tests/cases/compiler/giant.ts(168,9): error TS1005: '{' expected.
-tests/cases/compiler/giant.ts(170,9): error TS1005: '{' expected.
-tests/cases/compiler/giant.ts(172,9): error TS1005: '{' expected.
-tests/cases/compiler/giant.ts(174,9): error TS1005: '{' expected.
-tests/cases/compiler/giant.ts(178,9): error TS1005: '{' expected.
-tests/cases/compiler/giant.ts(180,5): error TS1005: '{' expected.
-tests/cases/compiler/giant.ts(204,10): error TS1022: An index signature parameter must have a type annotation.
+tests/cases/compiler/giant.ts(167,20): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/giant.ts(169,20): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/giant.ts(171,21): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/giant.ts(173,21): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/giant.ts(177,20): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/giant.ts(179,20): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/giant.ts(204,9): error TS1169: Computed property names are not allowed in interfaces.
 tests/cases/compiler/giant.ts(205,9): error TS1021: An index signature must have a type annotation.
 tests/cases/compiler/giant.ts(206,10): error TS1096: An index signature must have exactly one parameter.
 tests/cases/compiler/giant.ts(233,39): error TS1037: A function implementation cannot be declared in an ambient context.
@@ -48,32 +48,32 @@ tests/cases/compiler/giant.ts(262,22): error TS1037: A function implementation c
 tests/cases/compiler/giant.ts(262,25): error TS1036: Statements are not allowed in ambient contexts.
 tests/cases/compiler/giant.ts(267,30): error TS1037: A function implementation cannot be declared in an ambient context.
 tests/cases/compiler/giant.ts(267,33): error TS1036: Statements are not allowed in ambient contexts.
-tests/cases/compiler/giant.ts(283,5): error TS1005: '{' expected.
-tests/cases/compiler/giant.ts(285,5): error TS1005: '{' expected.
-tests/cases/compiler/giant.ts(287,5): error TS1005: '{' expected.
-tests/cases/compiler/giant.ts(289,5): error TS1005: '{' expected.
-tests/cases/compiler/giant.ts(293,5): error TS1005: '{' expected.
-tests/cases/compiler/giant.ts(295,1): error TS1005: '{' expected.
-tests/cases/compiler/giant.ts(319,6): error TS1022: An index signature parameter must have a type annotation.
+tests/cases/compiler/giant.ts(282,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/giant.ts(284,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/giant.ts(286,17): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/giant.ts(288,17): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/giant.ts(292,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/giant.ts(294,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/giant.ts(319,5): error TS1169: Computed property names are not allowed in interfaces.
 tests/cases/compiler/giant.ts(320,5): error TS1021: An index signature must have a type annotation.
 tests/cases/compiler/giant.ts(321,6): error TS1096: An index signature must have exactly one parameter.
-tests/cases/compiler/giant.ts(347,9): error TS1005: '{' expected.
-tests/cases/compiler/giant.ts(349,9): error TS1005: '{' expected.
-tests/cases/compiler/giant.ts(351,9): error TS1005: '{' expected.
-tests/cases/compiler/giant.ts(353,9): error TS1005: '{' expected.
-tests/cases/compiler/giant.ts(357,9): error TS1005: '{' expected.
-tests/cases/compiler/giant.ts(359,5): error TS1005: '{' expected.
-tests/cases/compiler/giant.ts(383,10): error TS1022: An index signature parameter must have a type annotation.
+tests/cases/compiler/giant.ts(346,20): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/giant.ts(348,20): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/giant.ts(350,21): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/giant.ts(352,21): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/giant.ts(356,20): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/giant.ts(358,20): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/giant.ts(383,9): error TS1169: Computed property names are not allowed in interfaces.
 tests/cases/compiler/giant.ts(384,9): error TS1021: An index signature must have a type annotation.
 tests/cases/compiler/giant.ts(385,10): error TS1096: An index signature must have exactly one parameter.
 tests/cases/compiler/giant.ts(412,39): error TS1037: A function implementation cannot be declared in an ambient context.
-tests/cases/compiler/giant.ts(426,9): error TS1005: '{' expected.
-tests/cases/compiler/giant.ts(428,9): error TS1005: '{' expected.
-tests/cases/compiler/giant.ts(430,9): error TS1005: '{' expected.
-tests/cases/compiler/giant.ts(432,9): error TS1005: '{' expected.
-tests/cases/compiler/giant.ts(436,9): error TS1005: '{' expected.
-tests/cases/compiler/giant.ts(438,5): error TS1005: '{' expected.
-tests/cases/compiler/giant.ts(462,10): error TS1022: An index signature parameter must have a type annotation.
+tests/cases/compiler/giant.ts(425,20): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/giant.ts(427,20): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/giant.ts(429,21): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/giant.ts(431,21): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/giant.ts(435,20): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/giant.ts(437,20): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/giant.ts(462,9): error TS1169: Computed property names are not allowed in interfaces.
 tests/cases/compiler/giant.ts(463,9): error TS1021: An index signature must have a type annotation.
 tests/cases/compiler/giant.ts(464,10): error TS1096: An index signature must have exactly one parameter.
 tests/cases/compiler/giant.ts(491,39): error TS1037: A function implementation cannot be declared in an ambient context.
@@ -120,7 +120,7 @@ tests/cases/compiler/giant.ts(556,21): error TS1036: Statements are not allowed 
 tests/cases/compiler/giant.ts(558,24): error TS1111: A constructor implementation cannot be declared in an ambient context.
 tests/cases/compiler/giant.ts(561,21): error TS1037: A function implementation cannot be declared in an ambient context.
 tests/cases/compiler/giant.ts(563,21): error TS1037: A function implementation cannot be declared in an ambient context.
-tests/cases/compiler/giant.ts(587,10): error TS1022: An index signature parameter must have a type annotation.
+tests/cases/compiler/giant.ts(587,9): error TS1169: Computed property names are not allowed in interfaces.
 tests/cases/compiler/giant.ts(588,9): error TS1021: An index signature must have a type annotation.
 tests/cases/compiler/giant.ts(589,10): error TS1096: An index signature must have exactly one parameter.
 tests/cases/compiler/giant.ts(606,22): error TS1037: A function implementation cannot be declared in an ambient context.
@@ -129,7 +129,6 @@ tests/cases/compiler/giant.ts(611,30): error TS1037: A function implementation c
 tests/cases/compiler/giant.ts(611,33): error TS1036: Statements are not allowed in ambient contexts.
 tests/cases/compiler/giant.ts(615,16): error TS1038: A 'declare' modifier cannot be used in an already ambient context.
 tests/cases/compiler/giant.ts(616,16): error TS1038: A 'declare' modifier cannot be used in an already ambient context.
-tests/cases/compiler/giant.ts(616,39): error TS1037: A function implementation cannot be declared in an ambient context.
 tests/cases/compiler/giant.ts(616,42): error TS1036: Statements are not allowed in ambient contexts.
 tests/cases/compiler/giant.ts(617,16): error TS1038: A 'declare' modifier cannot be used in an already ambient context.
 tests/cases/compiler/giant.ts(618,16): error TS1038: A 'declare' modifier cannot be used in an already ambient context.
@@ -138,7 +137,7 @@ tests/cases/compiler/giant.ts(621,29): error TS1036: Statements are not allowed 
 tests/cases/compiler/giant.ts(623,24): error TS1111: A constructor implementation cannot be declared in an ambient context.
 tests/cases/compiler/giant.ts(626,21): error TS1037: A function implementation cannot be declared in an ambient context.
 tests/cases/compiler/giant.ts(628,21): error TS1037: A function implementation cannot be declared in an ambient context.
-tests/cases/compiler/giant.ts(653,10): error TS1022: An index signature parameter must have a type annotation.
+tests/cases/compiler/giant.ts(653,9): error TS1169: Computed property names are not allowed in interfaces.
 tests/cases/compiler/giant.ts(654,9): error TS1021: An index signature must have a type annotation.
 tests/cases/compiler/giant.ts(655,10): error TS1096: An index signature must have exactly one parameter.
 tests/cases/compiler/giant.ts(672,22): error TS1037: A function implementation cannot be declared in an ambient context.
@@ -147,51 +146,42 @@ tests/cases/compiler/giant.ts(676,30): error TS1037: A function implementation c
 tests/cases/compiler/giant.ts(676,33): error TS1036: Statements are not allowed in ambient contexts.
 tests/cases/compiler/giant.ts(23,12): error TS2300: Duplicate identifier 'pgF'.
 tests/cases/compiler/giant.ts(24,16): error TS2300: Duplicate identifier 'pgF'.
-tests/cases/compiler/giant.ts(24,16): error TS2378: A 'get' accessor must return a value or consist of a single 'throw' statement.
 tests/cases/compiler/giant.ts(25,12): error TS2300: Duplicate identifier 'psF'.
 tests/cases/compiler/giant.ts(26,16): error TS2300: Duplicate identifier 'psF'.
 tests/cases/compiler/giant.ts(27,13): error TS2300: Duplicate identifier 'rgF'.
 tests/cases/compiler/giant.ts(28,17): error TS2300: Duplicate identifier 'rgF'.
-tests/cases/compiler/giant.ts(28,17): error TS2378: A 'get' accessor must return a value or consist of a single 'throw' statement.
 tests/cases/compiler/giant.ts(29,13): error TS2300: Duplicate identifier 'rsF'.
 tests/cases/compiler/giant.ts(30,17): error TS2300: Duplicate identifier 'rsF'.
 tests/cases/compiler/giant.ts(33,12): error TS2300: Duplicate identifier 'tsF'.
 tests/cases/compiler/giant.ts(34,16): error TS2300: Duplicate identifier 'tsF'.
 tests/cases/compiler/giant.ts(35,12): error TS2300: Duplicate identifier 'tgF'.
 tests/cases/compiler/giant.ts(36,16): error TS2300: Duplicate identifier 'tgF'.
-tests/cases/compiler/giant.ts(36,16): error TS2378: A 'get' accessor must return a value or consist of a single 'throw' statement.
 tests/cases/compiler/giant.ts(76,5): error TS2386: Overload signatures must all be optional or required.
 tests/cases/compiler/giant.ts(87,16): error TS2300: Duplicate identifier 'pgF'.
 tests/cases/compiler/giant.ts(88,20): error TS2300: Duplicate identifier 'pgF'.
-tests/cases/compiler/giant.ts(88,20): error TS2378: A 'get' accessor must return a value or consist of a single 'throw' statement.
 tests/cases/compiler/giant.ts(89,16): error TS2300: Duplicate identifier 'psF'.
 tests/cases/compiler/giant.ts(90,20): error TS2300: Duplicate identifier 'psF'.
 tests/cases/compiler/giant.ts(91,17): error TS2300: Duplicate identifier 'rgF'.
 tests/cases/compiler/giant.ts(92,21): error TS2300: Duplicate identifier 'rgF'.
-tests/cases/compiler/giant.ts(92,21): error TS2378: A 'get' accessor must return a value or consist of a single 'throw' statement.
 tests/cases/compiler/giant.ts(93,17): error TS2300: Duplicate identifier 'rsF'.
 tests/cases/compiler/giant.ts(94,21): error TS2300: Duplicate identifier 'rsF'.
 tests/cases/compiler/giant.ts(97,16): error TS2300: Duplicate identifier 'tsF'.
 tests/cases/compiler/giant.ts(98,20): error TS2300: Duplicate identifier 'tsF'.
 tests/cases/compiler/giant.ts(99,16): error TS2300: Duplicate identifier 'tgF'.
 tests/cases/compiler/giant.ts(100,20): error TS2300: Duplicate identifier 'tgF'.
-tests/cases/compiler/giant.ts(100,20): error TS2378: A 'get' accessor must return a value or consist of a single 'throw' statement.
 tests/cases/compiler/giant.ts(140,9): error TS2386: Overload signatures must all be optional or required.
 tests/cases/compiler/giant.ts(166,16): error TS2300: Duplicate identifier 'pgF'.
 tests/cases/compiler/giant.ts(167,20): error TS2300: Duplicate identifier 'pgF'.
-tests/cases/compiler/giant.ts(167,20): error TS2378: A 'get' accessor must return a value or consist of a single 'throw' statement.
 tests/cases/compiler/giant.ts(168,16): error TS2300: Duplicate identifier 'psF'.
 tests/cases/compiler/giant.ts(169,20): error TS2300: Duplicate identifier 'psF'.
 tests/cases/compiler/giant.ts(170,17): error TS2300: Duplicate identifier 'rgF'.
 tests/cases/compiler/giant.ts(171,21): error TS2300: Duplicate identifier 'rgF'.
-tests/cases/compiler/giant.ts(171,21): error TS2378: A 'get' accessor must return a value or consist of a single 'throw' statement.
 tests/cases/compiler/giant.ts(172,17): error TS2300: Duplicate identifier 'rsF'.
 tests/cases/compiler/giant.ts(173,21): error TS2300: Duplicate identifier 'rsF'.
 tests/cases/compiler/giant.ts(176,16): error TS2300: Duplicate identifier 'tsF'.
 tests/cases/compiler/giant.ts(177,20): error TS2300: Duplicate identifier 'tsF'.
 tests/cases/compiler/giant.ts(178,16): error TS2300: Duplicate identifier 'tgF'.
 tests/cases/compiler/giant.ts(179,20): error TS2300: Duplicate identifier 'tgF'.
-tests/cases/compiler/giant.ts(179,20): error TS2378: A 'get' accessor must return a value or consist of a single 'throw' statement.
 tests/cases/compiler/giant.ts(219,9): error TS2386: Overload signatures must all be optional or required.
 tests/cases/compiler/giant.ts(245,16): error TS2300: Duplicate identifier 'pgF'.
 tests/cases/compiler/giant.ts(246,20): error TS2300: Duplicate identifier 'pgF'.
@@ -207,51 +197,42 @@ tests/cases/compiler/giant.ts(257,16): error TS2300: Duplicate identifier 'tgF'.
 tests/cases/compiler/giant.ts(258,20): error TS2300: Duplicate identifier 'tgF'.
 tests/cases/compiler/giant.ts(281,12): error TS2300: Duplicate identifier 'pgF'.
 tests/cases/compiler/giant.ts(282,16): error TS2300: Duplicate identifier 'pgF'.
-tests/cases/compiler/giant.ts(282,16): error TS2378: A 'get' accessor must return a value or consist of a single 'throw' statement.
 tests/cases/compiler/giant.ts(283,12): error TS2300: Duplicate identifier 'psF'.
 tests/cases/compiler/giant.ts(284,16): error TS2300: Duplicate identifier 'psF'.
 tests/cases/compiler/giant.ts(285,13): error TS2300: Duplicate identifier 'rgF'.
 tests/cases/compiler/giant.ts(286,17): error TS2300: Duplicate identifier 'rgF'.
-tests/cases/compiler/giant.ts(286,17): error TS2378: A 'get' accessor must return a value or consist of a single 'throw' statement.
 tests/cases/compiler/giant.ts(287,13): error TS2300: Duplicate identifier 'rsF'.
 tests/cases/compiler/giant.ts(288,17): error TS2300: Duplicate identifier 'rsF'.
 tests/cases/compiler/giant.ts(291,12): error TS2300: Duplicate identifier 'tsF'.
 tests/cases/compiler/giant.ts(292,16): error TS2300: Duplicate identifier 'tsF'.
 tests/cases/compiler/giant.ts(293,12): error TS2300: Duplicate identifier 'tgF'.
 tests/cases/compiler/giant.ts(294,16): error TS2300: Duplicate identifier 'tgF'.
-tests/cases/compiler/giant.ts(294,16): error TS2378: A 'get' accessor must return a value or consist of a single 'throw' statement.
 tests/cases/compiler/giant.ts(334,5): error TS2386: Overload signatures must all be optional or required.
 tests/cases/compiler/giant.ts(345,16): error TS2300: Duplicate identifier 'pgF'.
 tests/cases/compiler/giant.ts(346,20): error TS2300: Duplicate identifier 'pgF'.
-tests/cases/compiler/giant.ts(346,20): error TS2378: A 'get' accessor must return a value or consist of a single 'throw' statement.
 tests/cases/compiler/giant.ts(347,16): error TS2300: Duplicate identifier 'psF'.
 tests/cases/compiler/giant.ts(348,20): error TS2300: Duplicate identifier 'psF'.
 tests/cases/compiler/giant.ts(349,17): error TS2300: Duplicate identifier 'rgF'.
 tests/cases/compiler/giant.ts(350,21): error TS2300: Duplicate identifier 'rgF'.
-tests/cases/compiler/giant.ts(350,21): error TS2378: A 'get' accessor must return a value or consist of a single 'throw' statement.
 tests/cases/compiler/giant.ts(351,17): error TS2300: Duplicate identifier 'rsF'.
 tests/cases/compiler/giant.ts(352,21): error TS2300: Duplicate identifier 'rsF'.
 tests/cases/compiler/giant.ts(355,16): error TS2300: Duplicate identifier 'tsF'.
 tests/cases/compiler/giant.ts(356,20): error TS2300: Duplicate identifier 'tsF'.
 tests/cases/compiler/giant.ts(357,16): error TS2300: Duplicate identifier 'tgF'.
 tests/cases/compiler/giant.ts(358,20): error TS2300: Duplicate identifier 'tgF'.
-tests/cases/compiler/giant.ts(358,20): error TS2378: A 'get' accessor must return a value or consist of a single 'throw' statement.
 tests/cases/compiler/giant.ts(398,9): error TS2386: Overload signatures must all be optional or required.
 tests/cases/compiler/giant.ts(424,16): error TS2300: Duplicate identifier 'pgF'.
 tests/cases/compiler/giant.ts(425,20): error TS2300: Duplicate identifier 'pgF'.
-tests/cases/compiler/giant.ts(425,20): error TS2378: A 'get' accessor must return a value or consist of a single 'throw' statement.
 tests/cases/compiler/giant.ts(426,16): error TS2300: Duplicate identifier 'psF'.
 tests/cases/compiler/giant.ts(427,20): error TS2300: Duplicate identifier 'psF'.
 tests/cases/compiler/giant.ts(428,17): error TS2300: Duplicate identifier 'rgF'.
 tests/cases/compiler/giant.ts(429,21): error TS2300: Duplicate identifier 'rgF'.
-tests/cases/compiler/giant.ts(429,21): error TS2378: A 'get' accessor must return a value or consist of a single 'throw' statement.
 tests/cases/compiler/giant.ts(430,17): error TS2300: Duplicate identifier 'rsF'.
 tests/cases/compiler/giant.ts(431,21): error TS2300: Duplicate identifier 'rsF'.
 tests/cases/compiler/giant.ts(434,16): error TS2300: Duplicate identifier 'tsF'.
 tests/cases/compiler/giant.ts(435,20): error TS2300: Duplicate identifier 'tsF'.
 tests/cases/compiler/giant.ts(436,16): error TS2300: Duplicate identifier 'tgF'.
 tests/cases/compiler/giant.ts(437,20): error TS2300: Duplicate identifier 'tgF'.
-tests/cases/compiler/giant.ts(437,20): error TS2378: A 'get' accessor must return a value or consist of a single 'throw' statement.
 tests/cases/compiler/giant.ts(477,9): error TS2386: Overload signatures must all be optional or required.
 tests/cases/compiler/giant.ts(503,16): error TS2300: Duplicate identifier 'pgF'.
 tests/cases/compiler/giant.ts(504,20): error TS2300: Duplicate identifier 'pgF'.
@@ -281,7 +262,7 @@ tests/cases/compiler/giant.ts(602,9): error TS2386: Overload signatures must all
 tests/cases/compiler/giant.ts(668,9): error TS2386: Overload signatures must all be optional or required.
 
 
-==== tests/cases/compiler/giant.ts (281 errors) ====
+==== tests/cases/compiler/giant.ts (262 errors) ====
     
     /*
         Prefixes
@@ -309,58 +290,52 @@ tests/cases/compiler/giant.ts(668,9): error TS2386: Overload signatures must all
 !!! error TS2300: Duplicate identifier 'pgF'.
         public get pgF()
                    ~~~
-!!! error TS2300: Duplicate identifier 'pgF'.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
                    ~~~
-!!! error TS2378: A 'get' accessor must return a value or consist of a single 'throw' statement.
+!!! error TS2300: Duplicate identifier 'pgF'.
         public psF(param:any) { }
-        ~~~~~~
-!!! error TS1005: '{' expected.
                ~~~
 !!! error TS2300: Duplicate identifier 'psF'.
         public set psF(param:any)
                    ~~~
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+                   ~~~
 !!! error TS2300: Duplicate identifier 'psF'.
         private rgF() { }
-        ~~~~~~~
-!!! error TS1005: '{' expected.
                 ~~~
 !!! error TS2300: Duplicate identifier 'rgF'.
         private get rgF()
                     ~~~
-!!! error TS2300: Duplicate identifier 'rgF'.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
                     ~~~
-!!! error TS2378: A 'get' accessor must return a value or consist of a single 'throw' statement.
+!!! error TS2300: Duplicate identifier 'rgF'.
         private rsF(param:any) { }
-        ~~~~~~~
-!!! error TS1005: '{' expected.
                 ~~~
 !!! error TS2300: Duplicate identifier 'rsF'.
         private set rsF(param:any)
                     ~~~
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+                    ~~~
 !!! error TS2300: Duplicate identifier 'rsF'.
         static tV;
-        ~~~~~~
-!!! error TS1005: '{' expected.
         static tF() { }
         static tsF(param:any) { }
                ~~~
 !!! error TS2300: Duplicate identifier 'tsF'.
         static set tsF(param:any)
                    ~~~
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+                   ~~~
 !!! error TS2300: Duplicate identifier 'tsF'.
         static tgF() { }
-        ~~~~~~
-!!! error TS1005: '{' expected.
                ~~~
 !!! error TS2300: Duplicate identifier 'tgF'.
         static get tgF()
                    ~~~
-!!! error TS2300: Duplicate identifier 'tgF'.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
                    ~~~
-!!! error TS2378: A 'get' accessor must return a value or consist of a single 'throw' statement.
+!!! error TS2300: Duplicate identifier 'tgF'.
     }
-    ~
-!!! error TS1005: '{' expected.
     interface I {
         //Call Signature
         ();
@@ -385,10 +360,10 @@ tests/cases/compiler/giant.ts(668,9): error TS2386: Overload signatures must all
     
         //Index Signature
         [p];
-         ~
-!!! error TS1022: An index signature parameter must have a type annotation.
+        ~~~
+!!! error TS1169: Computed property names are not allowed in interfaces.
         [p1: string];
-        ~~~~~~~~~~~~
+        ~~~~~~~~~~~~~
 !!! error TS1021: An index signature must have a type annotation.
         [p2: string, p3: number];
          ~~
@@ -423,58 +398,52 @@ tests/cases/compiler/giant.ts(668,9): error TS2386: Overload signatures must all
 !!! error TS2300: Duplicate identifier 'pgF'.
             public get pgF()
                        ~~~
-!!! error TS2300: Duplicate identifier 'pgF'.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
                        ~~~
-!!! error TS2378: A 'get' accessor must return a value or consist of a single 'throw' statement.
+!!! error TS2300: Duplicate identifier 'pgF'.
             public psF(param:any) { }
-            ~~~~~~
-!!! error TS1005: '{' expected.
                    ~~~
 !!! error TS2300: Duplicate identifier 'psF'.
             public set psF(param:any)
                        ~~~
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+                       ~~~
 !!! error TS2300: Duplicate identifier 'psF'.
             private rgF() { }
-            ~~~~~~~
-!!! error TS1005: '{' expected.
                     ~~~
 !!! error TS2300: Duplicate identifier 'rgF'.
             private get rgF()
                         ~~~
-!!! error TS2300: Duplicate identifier 'rgF'.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
                         ~~~
-!!! error TS2378: A 'get' accessor must return a value or consist of a single 'throw' statement.
+!!! error TS2300: Duplicate identifier 'rgF'.
             private rsF(param:any) { }
-            ~~~~~~~
-!!! error TS1005: '{' expected.
                     ~~~
 !!! error TS2300: Duplicate identifier 'rsF'.
             private set rsF(param:any)
                         ~~~
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+                        ~~~
 !!! error TS2300: Duplicate identifier 'rsF'.
             static tV;
-            ~~~~~~
-!!! error TS1005: '{' expected.
             static tF() { }
             static tsF(param:any) { }
                    ~~~
 !!! error TS2300: Duplicate identifier 'tsF'.
             static set tsF(param:any)
                        ~~~
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+                       ~~~
 !!! error TS2300: Duplicate identifier 'tsF'.
             static tgF() { }
-            ~~~~~~
-!!! error TS1005: '{' expected.
                    ~~~
 !!! error TS2300: Duplicate identifier 'tgF'.
             static get tgF()
                        ~~~
-!!! error TS2300: Duplicate identifier 'tgF'.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
                        ~~~
-!!! error TS2378: A 'get' accessor must return a value or consist of a single 'throw' statement.
+!!! error TS2300: Duplicate identifier 'tgF'.
         }
-        ~
-!!! error TS1005: '{' expected.
         interface I {
             //Call Signature
             ();
@@ -499,10 +468,10 @@ tests/cases/compiler/giant.ts(668,9): error TS2386: Overload signatures must all
     
             //Index Signature
             [p];
-             ~
-!!! error TS1022: An index signature parameter must have a type annotation.
+            ~~~
+!!! error TS1169: Computed property names are not allowed in interfaces.
             [p1: string];
-            ~~~~~~~~~~~~
+            ~~~~~~~~~~~~~
 !!! error TS1021: An index signature must have a type annotation.
             [p2: string, p3: number];
              ~~
@@ -554,58 +523,52 @@ tests/cases/compiler/giant.ts(668,9): error TS2386: Overload signatures must all
 !!! error TS2300: Duplicate identifier 'pgF'.
             public get pgF()
                        ~~~
-!!! error TS2300: Duplicate identifier 'pgF'.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
                        ~~~
-!!! error TS2378: A 'get' accessor must return a value or consist of a single 'throw' statement.
+!!! error TS2300: Duplicate identifier 'pgF'.
             public psF(param:any) { }
-            ~~~~~~
-!!! error TS1005: '{' expected.
                    ~~~
 !!! error TS2300: Duplicate identifier 'psF'.
             public set psF(param:any)
                        ~~~
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+                       ~~~
 !!! error TS2300: Duplicate identifier 'psF'.
             private rgF() { }
-            ~~~~~~~
-!!! error TS1005: '{' expected.
                     ~~~
 !!! error TS2300: Duplicate identifier 'rgF'.
             private get rgF()
                         ~~~
-!!! error TS2300: Duplicate identifier 'rgF'.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
                         ~~~
-!!! error TS2378: A 'get' accessor must return a value or consist of a single 'throw' statement.
+!!! error TS2300: Duplicate identifier 'rgF'.
             private rsF(param:any) { }
-            ~~~~~~~
-!!! error TS1005: '{' expected.
                     ~~~
 !!! error TS2300: Duplicate identifier 'rsF'.
             private set rsF(param:any)
                         ~~~
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+                        ~~~
 !!! error TS2300: Duplicate identifier 'rsF'.
             static tV;
-            ~~~~~~
-!!! error TS1005: '{' expected.
             static tF() { }
             static tsF(param:any) { }
                    ~~~
 !!! error TS2300: Duplicate identifier 'tsF'.
             static set tsF(param:any)
                        ~~~
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+                       ~~~
 !!! error TS2300: Duplicate identifier 'tsF'.
             static tgF() { }
-            ~~~~~~
-!!! error TS1005: '{' expected.
                    ~~~
 !!! error TS2300: Duplicate identifier 'tgF'.
             static get tgF()
                        ~~~
-!!! error TS2300: Duplicate identifier 'tgF'.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
                        ~~~
-!!! error TS2378: A 'get' accessor must return a value or consist of a single 'throw' statement.
+!!! error TS2300: Duplicate identifier 'tgF'.
         }
-        ~
-!!! error TS1005: '{' expected.
         export interface eI {
             //Call Signature
             ();
@@ -630,10 +593,10 @@ tests/cases/compiler/giant.ts(668,9): error TS2386: Overload signatures must all
     
             //Index Signature
             [p];
-             ~
-!!! error TS1022: An index signature parameter must have a type annotation.
+            ~~~
+!!! error TS1169: Computed property names are not allowed in interfaces.
             [p1: string];
-            ~~~~~~~~~~~~
+            ~~~~~~~~~~~~~
 !!! error TS1021: An index signature must have a type annotation.
             [p2: string, p3: number];
              ~~
@@ -787,58 +750,52 @@ tests/cases/compiler/giant.ts(668,9): error TS2386: Overload signatures must all
 !!! error TS2300: Duplicate identifier 'pgF'.
         public get pgF()
                    ~~~
-!!! error TS2300: Duplicate identifier 'pgF'.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
                    ~~~
-!!! error TS2378: A 'get' accessor must return a value or consist of a single 'throw' statement.
+!!! error TS2300: Duplicate identifier 'pgF'.
         public psF(param:any) { }
-        ~~~~~~
-!!! error TS1005: '{' expected.
                ~~~
 !!! error TS2300: Duplicate identifier 'psF'.
         public set psF(param:any)
                    ~~~
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+                   ~~~
 !!! error TS2300: Duplicate identifier 'psF'.
         private rgF() { }
-        ~~~~~~~
-!!! error TS1005: '{' expected.
                 ~~~
 !!! error TS2300: Duplicate identifier 'rgF'.
         private get rgF()
                     ~~~
-!!! error TS2300: Duplicate identifier 'rgF'.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
                     ~~~
-!!! error TS2378: A 'get' accessor must return a value or consist of a single 'throw' statement.
+!!! error TS2300: Duplicate identifier 'rgF'.
         private rsF(param:any) { }
-        ~~~~~~~
-!!! error TS1005: '{' expected.
                 ~~~
 !!! error TS2300: Duplicate identifier 'rsF'.
         private set rsF(param:any)
                     ~~~
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+                    ~~~
 !!! error TS2300: Duplicate identifier 'rsF'.
         static tV;
-        ~~~~~~
-!!! error TS1005: '{' expected.
         static tF() { }
         static tsF(param:any) { }
                ~~~
 !!! error TS2300: Duplicate identifier 'tsF'.
         static set tsF(param:any)
                    ~~~
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+                   ~~~
 !!! error TS2300: Duplicate identifier 'tsF'.
         static tgF() { }
-        ~~~~~~
-!!! error TS1005: '{' expected.
                ~~~
 !!! error TS2300: Duplicate identifier 'tgF'.
         static get tgF()
                    ~~~
-!!! error TS2300: Duplicate identifier 'tgF'.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
                    ~~~
-!!! error TS2378: A 'get' accessor must return a value or consist of a single 'throw' statement.
+!!! error TS2300: Duplicate identifier 'tgF'.
     }
-    ~
-!!! error TS1005: '{' expected.
     export interface eI {
         //Call Signature
         ();
@@ -863,10 +820,10 @@ tests/cases/compiler/giant.ts(668,9): error TS2386: Overload signatures must all
     
         //Index Signature
         [p];
-         ~
-!!! error TS1022: An index signature parameter must have a type annotation.
+        ~~~
+!!! error TS1169: Computed property names are not allowed in interfaces.
         [p1: string];
-        ~~~~~~~~~~~~
+        ~~~~~~~~~~~~~
 !!! error TS1021: An index signature must have a type annotation.
         [p2: string, p3: number];
          ~~
@@ -901,58 +858,52 @@ tests/cases/compiler/giant.ts(668,9): error TS2386: Overload signatures must all
 !!! error TS2300: Duplicate identifier 'pgF'.
             public get pgF()
                        ~~~
-!!! error TS2300: Duplicate identifier 'pgF'.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
                        ~~~
-!!! error TS2378: A 'get' accessor must return a value or consist of a single 'throw' statement.
+!!! error TS2300: Duplicate identifier 'pgF'.
             public psF(param:any) { }
-            ~~~~~~
-!!! error TS1005: '{' expected.
                    ~~~
 !!! error TS2300: Duplicate identifier 'psF'.
             public set psF(param:any)
                        ~~~
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+                       ~~~
 !!! error TS2300: Duplicate identifier 'psF'.
             private rgF() { }
-            ~~~~~~~
-!!! error TS1005: '{' expected.
                     ~~~
 !!! error TS2300: Duplicate identifier 'rgF'.
             private get rgF()
                         ~~~
-!!! error TS2300: Duplicate identifier 'rgF'.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
                         ~~~
-!!! error TS2378: A 'get' accessor must return a value or consist of a single 'throw' statement.
+!!! error TS2300: Duplicate identifier 'rgF'.
             private rsF(param:any) { }
-            ~~~~~~~
-!!! error TS1005: '{' expected.
                     ~~~
 !!! error TS2300: Duplicate identifier 'rsF'.
             private set rsF(param:any)
                         ~~~
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+                        ~~~
 !!! error TS2300: Duplicate identifier 'rsF'.
             static tV;
-            ~~~~~~
-!!! error TS1005: '{' expected.
             static tF() { }
             static tsF(param:any) { }
                    ~~~
 !!! error TS2300: Duplicate identifier 'tsF'.
             static set tsF(param:any)
                        ~~~
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+                       ~~~
 !!! error TS2300: Duplicate identifier 'tsF'.
             static tgF() { }
-            ~~~~~~
-!!! error TS1005: '{' expected.
                    ~~~
 !!! error TS2300: Duplicate identifier 'tgF'.
             static get tgF()
                        ~~~
-!!! error TS2300: Duplicate identifier 'tgF'.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
                        ~~~
-!!! error TS2378: A 'get' accessor must return a value or consist of a single 'throw' statement.
+!!! error TS2300: Duplicate identifier 'tgF'.
         }
-        ~
-!!! error TS1005: '{' expected.
         interface I {
             //Call Signature
             ();
@@ -977,10 +928,10 @@ tests/cases/compiler/giant.ts(668,9): error TS2386: Overload signatures must all
     
             //Index Signature
             [p];
-             ~
-!!! error TS1022: An index signature parameter must have a type annotation.
+            ~~~
+!!! error TS1169: Computed property names are not allowed in interfaces.
             [p1: string];
-            ~~~~~~~~~~~~
+            ~~~~~~~~~~~~~
 !!! error TS1021: An index signature must have a type annotation.
             [p2: string, p3: number];
              ~~
@@ -1032,58 +983,52 @@ tests/cases/compiler/giant.ts(668,9): error TS2386: Overload signatures must all
 !!! error TS2300: Duplicate identifier 'pgF'.
             public get pgF()
                        ~~~
-!!! error TS2300: Duplicate identifier 'pgF'.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
                        ~~~
-!!! error TS2378: A 'get' accessor must return a value or consist of a single 'throw' statement.
+!!! error TS2300: Duplicate identifier 'pgF'.
             public psF(param:any) { }
-            ~~~~~~
-!!! error TS1005: '{' expected.
                    ~~~
 !!! error TS2300: Duplicate identifier 'psF'.
             public set psF(param:any)
                        ~~~
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+                       ~~~
 !!! error TS2300: Duplicate identifier 'psF'.
             private rgF() { }
-            ~~~~~~~
-!!! error TS1005: '{' expected.
                     ~~~
 !!! error TS2300: Duplicate identifier 'rgF'.
             private get rgF()
                         ~~~
-!!! error TS2300: Duplicate identifier 'rgF'.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
                         ~~~
-!!! error TS2378: A 'get' accessor must return a value or consist of a single 'throw' statement.
+!!! error TS2300: Duplicate identifier 'rgF'.
             private rsF(param:any) { }
-            ~~~~~~~
-!!! error TS1005: '{' expected.
                     ~~~
 !!! error TS2300: Duplicate identifier 'rsF'.
             private set rsF(param:any)
                         ~~~
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+                        ~~~
 !!! error TS2300: Duplicate identifier 'rsF'.
             static tV;
-            ~~~~~~
-!!! error TS1005: '{' expected.
             static tF() { }
             static tsF(param:any) { }
                    ~~~
 !!! error TS2300: Duplicate identifier 'tsF'.
             static set tsF(param:any)
                        ~~~
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+                       ~~~
 !!! error TS2300: Duplicate identifier 'tsF'.
             static tgF() { }
-            ~~~~~~
-!!! error TS1005: '{' expected.
                    ~~~
 !!! error TS2300: Duplicate identifier 'tgF'.
             static get tgF()
                        ~~~
-!!! error TS2300: Duplicate identifier 'tgF'.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
                        ~~~
-!!! error TS2378: A 'get' accessor must return a value or consist of a single 'throw' statement.
+!!! error TS2300: Duplicate identifier 'tgF'.
         }
-        ~
-!!! error TS1005: '{' expected.
         export interface eI {
             //Call Signature
             ();
@@ -1108,10 +1053,10 @@ tests/cases/compiler/giant.ts(668,9): error TS2386: Overload signatures must all
     
             //Index Signature
             [p];
-             ~
-!!! error TS1022: An index signature parameter must have a type annotation.
+            ~~~
+!!! error TS1169: Computed property names are not allowed in interfaces.
             [p1: string];
-            ~~~~~~~~~~~~
+            ~~~~~~~~~~~~~
 !!! error TS1021: An index signature must have a type annotation.
             [p2: string, p3: number];
              ~~
@@ -1377,10 +1322,10 @@ tests/cases/compiler/giant.ts(668,9): error TS2386: Overload signatures must all
     
             //Index Signature
             [p];
-             ~
-!!! error TS1022: An index signature parameter must have a type annotation.
+            ~~~
+!!! error TS1169: Computed property names are not allowed in interfaces.
             [p1: string];
-            ~~~~~~~~~~~~
+            ~~~~~~~~~~~~~
 !!! error TS1021: An index signature must have a type annotation.
             [p2: string, p3: number];
              ~~
@@ -1426,8 +1371,6 @@ tests/cases/compiler/giant.ts(668,9): error TS2386: Overload signatures must all
             export declare function eaF() { };
                    ~~~~~~~
 !!! error TS1038: A 'declare' modifier cannot be used in an already ambient context.
-                                          ~
-!!! error TS1037: A function implementation cannot be declared in an ambient context.
                                              ~
 !!! error TS1036: Statements are not allowed in ambient contexts.
             export declare class eaC { }
@@ -1481,10 +1424,10 @@ tests/cases/compiler/giant.ts(668,9): error TS2386: Overload signatures must all
     
             //Index Signature
             [p];
-             ~
-!!! error TS1022: An index signature parameter must have a type annotation.
+            ~~~
+!!! error TS1169: Computed property names are not allowed in interfaces.
             [p1: string];
-            ~~~~~~~~~~~~
+            ~~~~~~~~~~~~~
 !!! error TS1021: An index signature must have a type annotation.
             [p2: string, p3: number];
              ~~

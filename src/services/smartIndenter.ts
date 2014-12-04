@@ -227,10 +227,10 @@ module ts.formatting {
                             return (<TypeReferenceNode>node.parent).typeArguments;
                         }
                         break;
-                    case SyntaxKind.ObjectLiteral:
-                        return (<ObjectLiteral>node.parent).properties;
-                    case SyntaxKind.ArrayLiteral:
-                        return (<ArrayLiteral>node.parent).elements;
+                    case SyntaxKind.ObjectLiteralExpression:
+                        return (<ObjectLiteralExpression>node.parent).properties;
+                    case SyntaxKind.ArrayLiteralExpression:
+                        return (<ArrayLiteralExpression>node.parent).elements;
                     case SyntaxKind.FunctionDeclaration:
                     case SyntaxKind.FunctionExpression:
                     case SyntaxKind.ArrowFunction:
@@ -253,7 +253,8 @@ module ts.formatting {
                             rangeContainsStartEnd((<CallExpression>node.parent).typeArguments, start, node.getEnd())) {
                             return (<CallExpression>node.parent).typeArguments;
                         }
-                        if (rangeContainsStartEnd((<CallExpression>node.parent).arguments, start, node.getEnd())) {
+                        if ((<CallExpression>node.parent).arguments &&
+                            rangeContainsStartEnd((<CallExpression>node.parent).arguments, start, node.getEnd())) {
                             return (<CallExpression>node.parent).arguments;
                         }
                         break;
@@ -323,19 +324,18 @@ module ts.formatting {
                 case SyntaxKind.ClassDeclaration:
                 case SyntaxKind.InterfaceDeclaration:
                 case SyntaxKind.EnumDeclaration:
-                case SyntaxKind.ArrayLiteral:
+                case SyntaxKind.ArrayLiteralExpression:
                 case SyntaxKind.Block:
                 case SyntaxKind.FunctionBlock:
                 case SyntaxKind.TryBlock:
-                case SyntaxKind.CatchBlock:
                 case SyntaxKind.FinallyBlock:
                 case SyntaxKind.ModuleBlock:
-                case SyntaxKind.ObjectLiteral:
+                case SyntaxKind.ObjectLiteralExpression:
                 case SyntaxKind.TypeLiteral:
                 case SyntaxKind.SwitchStatement:
                 case SyntaxKind.DefaultClause:
                 case SyntaxKind.CaseClause:
-                case SyntaxKind.ParenExpression:
+                case SyntaxKind.ParenthesizedExpression:
                 case SyntaxKind.CallExpression:
                 case SyntaxKind.NewExpression:
                 case SyntaxKind.VariableStatement:
@@ -393,19 +393,24 @@ module ts.formatting {
          * This function is always called when position of the cursor is located after the node
          */
         function isCompletedNode(n: Node, sourceFile: SourceFile): boolean {
+            if (n.getFullWidth() === 0) {
+                return false;
+            }
+
             switch (n.kind) {
                 case SyntaxKind.ClassDeclaration:
                 case SyntaxKind.InterfaceDeclaration:
                 case SyntaxKind.EnumDeclaration:
-                case SyntaxKind.ObjectLiteral:
+                case SyntaxKind.ObjectLiteralExpression:
                 case SyntaxKind.Block:
-                case SyntaxKind.CatchBlock:
                 case SyntaxKind.FinallyBlock:
                 case SyntaxKind.FunctionBlock:
                 case SyntaxKind.ModuleBlock:
                 case SyntaxKind.SwitchStatement:
                     return nodeEndsWith(n, SyntaxKind.CloseBraceToken, sourceFile);
-                case SyntaxKind.ParenExpression:
+                case SyntaxKind.CatchClause:
+                    return isCompletedNode((<CatchClause>n).block, sourceFile);
+                case SyntaxKind.ParenthesizedExpression:
                 case SyntaxKind.CallSignature:
                 case SyntaxKind.CallExpression:
                 case SyntaxKind.ConstructSignature:
@@ -424,10 +429,8 @@ module ts.formatting {
                     return isCompletedNode((<IfStatement>n).thenStatement, sourceFile);
                 case SyntaxKind.ExpressionStatement:
                     return isCompletedNode((<ExpressionStatement>n).expression, sourceFile);
-                case SyntaxKind.ArrayLiteral:
+                case SyntaxKind.ArrayLiteralExpression:
                     return nodeEndsWith(n, SyntaxKind.CloseBracketToken, sourceFile);
-                case SyntaxKind.Missing:
-                    return false;
                 case SyntaxKind.CaseClause:
                 case SyntaxKind.DefaultClause:
                     // there is no such thing as terminator token for CaseClause\DefaultClause so for simplicitly always consider them non-completed

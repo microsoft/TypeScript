@@ -1,23 +1,11 @@
-tests/cases/conformance/parser/ecmascript5/ClassDeclarations/parserClassDeclaration2.ts(1,22): error TS1005: '{' expected.
-tests/cases/conformance/parser/ecmascript5/ClassDeclarations/parserClassDeclaration2.ts(1,33): error TS1005: ';' expected.
-tests/cases/conformance/parser/ecmascript5/ClassDeclarations/parserClassDeclaration2.ts(1,35): error TS1005: ';' expected.
+tests/cases/conformance/parser/ecmascript5/ClassDeclarations/parserClassDeclaration2.ts(1,22): error TS1175: 'implements' clause already seen.
 tests/cases/conformance/parser/ecmascript5/ClassDeclarations/parserClassDeclaration2.ts(1,20): error TS2304: Cannot find name 'A'.
-tests/cases/conformance/parser/ecmascript5/ClassDeclarations/parserClassDeclaration2.ts(1,22): error TS2304: Cannot find name 'implements'.
-tests/cases/conformance/parser/ecmascript5/ClassDeclarations/parserClassDeclaration2.ts(1,33): error TS2304: Cannot find name 'B'.
 
 
-==== tests/cases/conformance/parser/ecmascript5/ClassDeclarations/parserClassDeclaration2.ts (6 errors) ====
+==== tests/cases/conformance/parser/ecmascript5/ClassDeclarations/parserClassDeclaration2.ts (2 errors) ====
     class C implements A implements B {
                          ~~~~~~~~~~
-!!! error TS1005: '{' expected.
-                                    ~
-!!! error TS1005: ';' expected.
-                                      ~
-!!! error TS1005: ';' expected.
+!!! error TS1175: 'implements' clause already seen.
                        ~
 !!! error TS2304: Cannot find name 'A'.
-                         ~~~~~~~~~~
-!!! error TS2304: Cannot find name 'implements'.
-                                    ~
-!!! error TS2304: Cannot find name 'B'.
     }

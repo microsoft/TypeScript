@@ -41,3 +41,32 @@ undefined === function (): number {
     throw undefined;
     var x = 4;
 };
+
+class Base { private x; }
+class AnotherClass { private y; }
+class Derived1 extends Base { private m; }
+class Derived2 extends Base { private n; }
+function f8() {
+    return new Derived1();
+    return new Derived2();    
+}
+var f9 = function () {
+    return new Derived1();
+    return new Derived2();
+};
+var f10 = () => {
+    return new Derived1();
+    return new Derived2();
+};
+function f11() {
+    return new Base();
+    return new AnotherClass();
+}
+var f12 = function () {
+    return new Base();
+    return new AnotherClass();
+};
+var f13 = () => {
+    return new Base();
+    return new AnotherClass();
+};
