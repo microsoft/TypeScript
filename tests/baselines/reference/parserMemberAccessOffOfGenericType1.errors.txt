@@ -1,13 +1,16 @@
-tests/cases/conformance/parser/ecmascript5/Generics/parserMemberAccessOffOfGenericType1.ts(1,21): error TS1109: Expression expected.
+tests/cases/conformance/parser/ecmascript5/Generics/parserMemberAccessOffOfGenericType1.ts(1,21): error TS1005: '(' expected.
+tests/cases/conformance/parser/ecmascript5/Generics/parserMemberAccessOffOfGenericType1.ts(1,33): error TS1005: ')' expected.
 tests/cases/conformance/parser/ecmascript5/Generics/parserMemberAccessOffOfGenericType1.ts(1,9): error TS2304: Cannot find name 'List'.
-tests/cases/conformance/parser/ecmascript5/Generics/parserMemberAccessOffOfGenericType1.ts(1,14): error TS2304: Cannot find name 'number'.
+tests/cases/conformance/parser/ecmascript5/Generics/parserMemberAccessOffOfGenericType1.ts(1,22): error TS2304: Cannot find name 'makeChild'.
 
 
-==== tests/cases/conformance/parser/ecmascript5/Generics/parserMemberAccessOffOfGenericType1.ts (3 errors) ====
+==== tests/cases/conformance/parser/ecmascript5/Generics/parserMemberAccessOffOfGenericType1.ts (4 errors) ====
     var v = List<number>.makeChild();
                         ~
-!!! error TS1109: Expression expected.
+!!! error TS1005: '(' expected.
+                                    ~
+!!! error TS1005: ')' expected.
             ~~~~
 !!! error TS2304: Cannot find name 'List'.
-                 ~~~~~~
-!!! error TS2304: Cannot find name 'number'.
+                         ~~~~~~~~~
+!!! error TS2304: Cannot find name 'makeChild'.
