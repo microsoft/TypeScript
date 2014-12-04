@@ -997,6 +997,10 @@ module ts {
         //
         // Getting this all correct is tricky and requires careful reading of the grammar to 
         // understand when these values should be changed versus when they should be inherited.
+        //
+        // Note: it should not be necessary to save/restore these flags during speculative/lookahead
+        // parsing.  These context flags are naturally stored and restored through normal recursive
+        // descent parsing and unwinding.
         var contextFlags: ParserContextFlags = 0;
 
         function setContextFlag(val: Boolean, flag: ParserContextFlags) {
@@ -1156,16 +1160,21 @@ module ts {
             return token = scanner.reScanTemplateToken();
         }
 
-        function lookAheadHelper<T>(callback: () => T, alwaysResetState: boolean): T {
+        function speculationHelper<T>(callback: () => T, isLookAhead: boolean): T {
             // Keep track of the state we'll need to rollback to if lookahead fails (or if the 
             // caller asked us to always reset our state).
             var saveToken = token;
             var saveParseDiagnosticsLength = sourceFile.parseDiagnostics.length;
 
-            var result = callback();
+            // If we're only looking ahead, then tell the scanner to only lookahead as well.
+            // If we're actually speculatively parsing, then tell the scanner to do the same. 
+            var result = isLookAhead
+                ? scanner.lookAhead(callback)
+                : scanner.tryScan(callback);
 
-            // Now restore as appropriate.
-            if (!result || alwaysResetState) {
+            // If our callback returned something 'falsy' or we're just looking ahead,
+            // then unconditionally restore us to where we were.
+            if (!result || isLookAhead) {
                 token = saveToken;
                 sourceFile.parseDiagnostics.length = saveParseDiagnosticsLength;
             }
@@ -1173,25 +1182,19 @@ module ts {
             return result;
         }
 
+        // Invokes the provided callback then unconditionally restores the parser to the state it 
+        // was in immediately prior to invoking the callback.  The result of invoking the callback
+        // is returned from this function.
         function lookAhead<T>(callback: () => T): T {
-            var result: T;
-            scanner.tryScan(() => {
-                result = lookAheadHelper(callback, /*alwaysResetState:*/ true);
-
-                // Returning false here indicates to the scanner that it should always jump
-                // back to where it started.  This makes sense as 'lookahead' acts as if 
-                // neither the parser nor scanner was affected by the operation.
-                //
-                // Note: the rewinding of the parser state is already handled in lookAheadHelper
-                // (because we passed 'true' for alwaysResetState).
-                return false;
-            });
-
-            return result;
+            return speculationHelper(callback, /*isLookAhead:*/ true);
         }
-
+        
+        // Invokes the provided callback.  If the callback returns something falsy, then it restores
+        // the parser to the state it was in immediately prior to invoking the callback.  If the 
+        // callback returns something truthy, then the parser state is not rolled back.  The result
+        // of invoking the callback is returned from this function.
         function tryParse<T>(callback: () => T): T {
-            return scanner.tryScan(() => lookAheadHelper(callback, /*alwaysResetState:*/ false));
+            return speculationHelper(callback, /*isLookAhead:*/ false);
         }
 
         function isIdentifier(): boolean {
@@ -4631,8 +4634,7 @@ module ts {
 
         function checkTypeArguments(typeArguments: NodeArray<TypeNode>) {
             return checkForDisallowedTrailingComma(typeArguments) ||
-                checkForAtLeastOneTypeArgument(typeArguments) ||
-                checkForMissingTypeArgument(typeArguments);
+                checkForAtLeastOneTypeArgument(typeArguments);
         }
 
         function checkForOmittedArgument(arguments: NodeArray<Expression>) {
@@ -4641,17 +4643,6 @@ module ts {
                     var arg = arguments[i];
                     if (arg.kind === SyntaxKind.OmittedExpression) {
                         return grammarErrorAtPos(arg.pos, 0, Diagnostics.Argument_expression_expected);
-                    }
-                }
-            }
-        }
-
-        function checkForMissingTypeArgument(typeArguments: NodeArray<TypeNode>) {
-            if (typeArguments) {
-                for (var i = 0, n = typeArguments.length; i < n; i++) {
-                    var arg = typeArguments[i];
-                    if (arg.kind === SyntaxKind.TypeReference && getFullWidth((<TypeReferenceNode>arg).typeName) === 0) {
-                        return grammarErrorAtPos(arg.pos, 0, Diagnostics.Type_expected);
                     }
                 }
             }
