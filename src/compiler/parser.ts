@@ -951,10 +951,8 @@ module ts {
     }
 
     export function createSourceFile(filename: string, sourceText: string, languageVersion: ScriptTarget, version: string, isOpen: boolean = false): SourceFile {
-        var scanner: Scanner;
         var token: SyntaxKind;
         var parsingContext: ParsingContext;
-        var commentRanges: TextRange[];
         var identifiers: Map<string> = {};
         var identifierCount = 0;
         var nodeCount = 0;
@@ -1134,10 +1132,6 @@ module ts {
         function scanError(message: DiagnosticMessage) {
             var pos = scanner.getTextPos();
             parseErrorAtPosition(pos, 0, message);
-        }
-
-        function onComment(pos: number, end: number) {
-            if (commentRanges) commentRanges.push({ pos: pos, end: end });
         }
 
         function getNodePos(): number {
@@ -4173,14 +4167,25 @@ module ts {
         }
 
         function processReferenceComments(): ReferenceComments {
+            var triviaScanner = createScanner(languageVersion, /*skipTrivia*/false, sourceText);
             var referencedFiles: FileReference[] = [];
             var amdDependencies: string[] = [];
             var amdModuleName: string;
-            commentRanges = [];
-            token = scanner.scan();
 
-            for (var i = 0; i < commentRanges.length; i++) {
-                var range = commentRanges[i];
+            // Keep scanning all the leading trivia in the file until we get to something that 
+            // isn't trivia.  Any single line comment will be analyzed to see if it is a 
+            // reference comment.
+            while (true) {
+                var kind = triviaScanner.scan();
+                if (kind === SyntaxKind.WhitespaceTrivia || kind === SyntaxKind.NewLineTrivia || kind === SyntaxKind.MultiLineCommentTrivia) {
+                    continue;
+                }
+                if (kind !== SyntaxKind.SingleLineCommentTrivia) {
+                    break;
+                }
+
+                var range = { pos: triviaScanner.getTokenPos(), end: triviaScanner.getTextPos() };
+
                 var comment = sourceText.substring(range.pos, range.end);
                 var referencePathMatchResult = getFileReferenceFromReferencePath(comment, range);
                 if (referencePathMatchResult) {
@@ -4211,7 +4216,7 @@ module ts {
                     }
                 }
             }
-            commentRanges = undefined;
+
             return {
                 referencedFiles,
                 amdDependencies,
@@ -4247,7 +4252,6 @@ module ts {
             return syntacticDiagnostics;
         }
 
-        scanner = createScanner(languageVersion, /*skipTrivia*/ true, sourceText, scanError, onComment);
         var rootNodeFlags: NodeFlags = 0;
         if (fileExtensionIs(filename, ".d.ts")) {
             rootNodeFlags = NodeFlags.DeclarationFile;
@@ -4272,6 +4276,10 @@ module ts {
         sourceFile.referencedFiles = referenceComments.referencedFiles;
         sourceFile.amdDependencies = referenceComments.amdDependencies;
         sourceFile.amdModuleName = referenceComments.amdModuleName;
+
+        // Create and prime the scanner before parsing the source elements.
+        var scanner = createScanner(languageVersion, /*skipTrivia*/ true, sourceText, scanError);
+        nextToken();
 
         sourceFile.statements = parseList(ParsingContext.SourceElements, /*checkForStrictMode*/ true, parseSourceElement);
         Debug.assert(token === SyntaxKind.EndOfFileToken);
