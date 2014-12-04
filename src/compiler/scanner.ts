@@ -29,6 +29,15 @@ module ts {
         scan(): SyntaxKind;
         setText(text: string): void;
         setTextPos(textPos: number): void;
+        // Invokes the provided callback then unconditionally restores the scanner to the state it 
+        // was in immediately prior to invoking the callback.  The result of invoking the callback
+        // is returned from this function.
+        lookAhead<T>(callback: () => T): T;
+
+        // Invokes the provided callback.  If the callback returns something falsy, then it restores
+        // the scanner to the state it was in immediately prior to invoking the callback.  If the 
+        // callback returns something truthy, then the scanner state is not rolled back.  The result
+        // of invoking the callback is returned from this function.
         tryScan<T>(callback: () => T): T;
     }
 
@@ -1174,7 +1183,7 @@ module ts {
             return token = scanTemplateAndSetTokenValue();
         }
 
-        function tryScan<T>(callback: () => T): T {
+        function speculationHelper<T>(callback: () => T, isLookahead: boolean): T {
             var savePos = pos;
             var saveStartPos = startPos;
             var saveTokenPos = tokenPos;
@@ -1182,7 +1191,10 @@ module ts {
             var saveTokenValue = tokenValue;
             var savePrecedingLineBreak = precedingLineBreak;
             var result = callback();
-            if (!result) {
+
+            // If our callback returned something 'falsy' or we're just looking ahead,
+            // then unconditionally restore us to where we were.
+            if (!result || isLookahead) {
                 pos = savePos;
                 startPos = saveStartPos;
                 tokenPos = saveTokenPos;
@@ -1191,6 +1203,14 @@ module ts {
                 precedingLineBreak = savePrecedingLineBreak;
             }
             return result;
+        }
+
+        function lookAhead<T>(callback: () => T): T {
+            return speculationHelper(callback, /*isLookahead:*/ true);
+        }
+
+        function tryScan<T>(callback: () => T): T {
+            return speculationHelper(callback, /*isLookahead:*/ false);
         }
 
         function setText(newText: string) {
@@ -1228,6 +1248,7 @@ module ts {
             setText,
             setTextPos,
             tryScan,
+            lookAhead,
         };
     }
 }
