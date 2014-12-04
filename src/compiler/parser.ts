@@ -1166,11 +1166,19 @@ module ts {
             var saveToken = token;
             var saveParseDiagnosticsLength = sourceFile.parseDiagnostics.length;
 
+            // Note: it is not actually necessary to save/restore the context falgs here.  That's
+            // because the saving/restorating of these flags happens naturally through the recursive
+            // descent nature of our parser.  However, we still store this here just so we can 
+            // assert that that invariant holds.
+            var saveContextFlags = contextFlags;
+
             // If we're only looking ahead, then tell the scanner to only lookahead as well.
             // If we're actually speculatively parsing, then tell the scanner to do the same. 
             var result = isLookAhead
                 ? scanner.lookAhead(callback)
                 : scanner.tryScan(callback);
+
+            Debug.assert(saveContextFlags === contextFlags);
 
             // If our callback returned something 'falsy' or we're just looking ahead,
             // then unconditionally restore us to where we were.
@@ -1958,6 +1966,9 @@ module ts {
                 return result;
             }
 
+            // We didn't even have an open paren.  If the caller requires a complete parameter list,
+            // we definitely can't provide that.  However, if they're ok with an incomplete one,
+            // then just return an empty set of parameters.
             return requireCompleteParameterList ? undefined : createMissingList<ParameterDeclaration>();
         }
 
