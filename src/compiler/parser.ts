@@ -43,21 +43,34 @@ module ts {
         return node.pos;
     }
 
+    export function isMissingNode(node: Node) {
+        return node.pos === node.end && node.kind !== SyntaxKind.EndOfFileToken;
+    }
+
     export function getTokenPosOfNode(node: Node, sourceFile?: SourceFile): number {
         // With nodes that have no width (i.e. 'Missing' nodes), we actually *don't*
         // want to skip trivia because this will launch us forward to the next token.
-        if (node.pos === node.end) {
+        if (isMissingNode(node)) {
             return node.pos;
         }
+
         return skipTrivia((sourceFile || getSourceFileOfNode(node)).text, node.pos);
     }
 
     export function getSourceTextOfNodeFromSourceFile(sourceFile: SourceFile, node: Node): string {
+        if (isMissingNode(node)) {
+            return "";
+        }
+
         var text = sourceFile.text;
         return text.substring(skipTrivia(text, node.pos), node.end);
     }
 
     export function getTextOfNodeFromSourceText(sourceText: string, node: Node): string {
+        if (isMissingNode(node)) {
+            return "";
+        }
+
         return sourceText.substring(skipTrivia(sourceText, node.pos), node.end);
     }
 

@@ -203,7 +203,6 @@ module ts.NavigationBar {
                     if ((node.flags & NodeFlags.Modifier) === 0) {
                         return undefined;
                     }
-
                     return createItem(node, getTextOfNode((<ParameterDeclaration>node).name), ts.ScriptElementKind.memberVariableElement);
 
                 case SyntaxKind.Method:
