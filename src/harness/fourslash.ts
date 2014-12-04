@@ -143,7 +143,7 @@ module FourSlash {
     // List of allowed metadata names
     var fileMetadataNames = [testOptMetadataNames.filename, testOptMetadataNames.emitThisFile, testOptMetadataNames.resolveReference];
     var globalMetadataNames = [testOptMetadataNames.baselineFile, testOptMetadataNames.declaration,
-        testOptMetadataNames.mapRoot, testOptMetadataNames.module , testOptMetadataNames.out,
+        testOptMetadataNames.mapRoot, testOptMetadataNames.module, testOptMetadataNames.out,
         testOptMetadataNames.outDir, testOptMetadataNames.sourceMap, testOptMetadataNames.sourceRoot, testOptMetadataNames.target];
 
     function convertGlobalOptionsToCompilationSettings(globalOptions: { [idx: string]: string }): ts.CompilationSettings {
