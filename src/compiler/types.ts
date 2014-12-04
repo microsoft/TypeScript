@@ -294,10 +294,27 @@ module ts {
     export const enum ParserContextFlags {
         // Set if this node was parsed in strict mode.  Used for grammar error checks, as well as
         // checking if the node can be reused in incremental settings.
-        StrictMode          = 1 << 0,
-        DisallowIn          = 1 << 1,
-        Yield               = 1 << 2,
-        GeneratorParameter  = 1 << 3,
+        StrictMode = 1 << 0,
+
+        // If this node was parsed in a context where 'in-expressions' are not allowed.
+        DisallowIn = 1 << 1,
+
+        // If this node was parsed in the 'yield' context created when parsing a generator.
+        Yield = 1 << 2,
+
+        // If this node was parsed in the parameters of a generator.
+        GeneratorParameter = 1 << 3,
+
+        // If the parser encountered an error when parsing the code that created this node.  Note
+        // the parser only sets this directly on the node it creates right after encountering the
+        // error.  We then propagate that flag upwards to parent nodes during incremental parsing.
+        ContainsError = 1 << 4,
+
+        // Used during incremental parsing to determine if we need to visit this node to see if
+        // any of its children had an error.  Once we compute that once, we can set this bit on the
+        // node to know that we never have to do it again.  From that point on, we can just check
+        // the node directly for 'ContainsError'.
+        HasPropagatedChildContainsErrorFlag = 1 << 5
     }
 
     export interface Node extends TextRange {

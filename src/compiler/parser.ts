@@ -1007,6 +1007,35 @@ module ts {
         // understand when these values should be changed versus when they should be inherited.
         var contextFlags: ParserContextFlags = 0;
 
+        // Whether or not we've had a parse error since creating the last AST node.  If we have 
+        // encountered an error, it will be stored on the next AST node we create.  Parse errors
+        // can be broken down into three categories:
+        //
+        // 1) An error that occurred during scanning.  For example, an unterminated literal, or a
+        //    character that was completely not understood.
+        //
+        // 2) A token was expected, but was not present.  This type of error is commonly produced
+        //    by the 'parseExpected' function.
+        //
+        // 3) A token was present that no parsing function was able to consume.  This type of error
+        //    only occurs in the 'abortParsingListOrMoveToNextToken' function when the parser 
+        //    decides to skip the token.
+        //
+        // In all of these cases, we want to mark the next node as having had an error before it.
+        // With this mark, we can know in incremental settings if this node can be reused, or if
+        // we have to reparse it.  If we don't keep this information around, we may just reuse the
+        // node.  in that event we would then not produce the same errors as we did before, causing
+        // significant confusion problems.
+        //
+        // Note: it is necessary that this value be saved/restored during speculative/lookahead 
+        // parsing.  During lookahead parsing, we will often create a node.  That node will have 
+        // this value attached, and then this value will be set back to 'false'.  If we decide to
+        // rewind, we must get back to the same value we had prior to the lookahead.
+        //
+        // Note: any errors at the end of the file that do not precede a regular node, should get
+        // attached to the EOF token.
+        var parseErrorBeforeNextFinishedNode = false;
+
         function setContextFlag(val: Boolean, flag: ParserContextFlags) {
             if (val) {
                 contextFlags |= flag;
@@ -1108,23 +1137,23 @@ module ts {
             return getPositionFromLineAndCharacter(getLineStarts(), line, character);
         }
 
-        function parseErrorAtCurrentToken(message: DiagnosticMessage, arg0?: any, arg1?: any, arg2?: any): void {
+        function parseErrorAtCurrentToken(message: DiagnosticMessage, arg0?: any): void {
             var start = scanner.getTokenPos();
             var length = scanner.getTextPos() - start;
 
-            parseErrorAtPosition(start, length, message, arg0, arg1, arg2);
+            parseErrorAtPosition(start, length, message, arg0);
         }
 
-        function parseErrorAtPosition(start: number, length: number, message: DiagnosticMessage, arg0?: any, arg1?: any, arg2?: any): void {
-            var lastErrorPosition = sourceFile.parseDiagnostics.length
-                ? sourceFile.parseDiagnostics[sourceFile.parseDiagnostics.length - 1].start
-                : -1;
-
+        function parseErrorAtPosition(start: number, length: number, message: DiagnosticMessage, arg0?: any): void {
             // Don't report another error if it would just be at the same position as the last error.
-            if (start !== lastErrorPosition) {
-                var diagnostic = createFileDiagnostic(sourceFile, start, length, message, arg0, arg1, arg2);
-                sourceFile.parseDiagnostics.push(diagnostic);
+            var lastError = lastOrUndefined(sourceFile.parseDiagnostics);
+            if (!lastError || start !== lastError.start) {
+                sourceFile.parseDiagnostics.push(createFileDiagnostic(sourceFile, start, length, message, arg0));
             }
+
+            // Mark that we've encountered an error.  We'll set an appropriate bit on the next 
+            // node we finish so that it can't be reused incrementally.
+            parseErrorBeforeNextFinishedNode = true;
 
             if (lookAheadMode === LookAheadMode.NoErrorYet) {
                 lookAheadMode = LookAheadMode.Error;
@@ -1173,6 +1202,7 @@ module ts {
             // caller asked us to always reset our state).
             var saveToken = token;
             var saveSyntacticErrorsLength = sourceFile.parseDiagnostics.length;
+            var saveParseErrorBeforeNextFinishedNode = parseErrorBeforeNextFinishedNode;
 
             // Keep track of the current look ahead mode (this matters if we have nested 
             // speculative parsing).
@@ -1195,6 +1225,7 @@ module ts {
             if (!result || alwaysResetState) {
                 token = saveToken;
                 sourceFile.parseDiagnostics.length = saveSyntacticErrorsLength;
+                parseErrorBeforeNextFinishedNode = saveParseErrorBeforeNextFinishedNode;
             }
 
             return result;
@@ -1307,6 +1338,14 @@ module ts {
 
             if (contextFlags) {
                 node.parserContextFlags = contextFlags;
+            }
+
+            // Keep track on the node if we encountered an error while parsing it.  If we did, then
+            // we cannot reuse the node incrementally.  Once we've marked this node, clear out the
+            // flag so that we don't mark any subsequent nodes.
+            if (parseErrorBeforeNextFinishedNode) {
+                parseErrorBeforeNextFinishedNode = false;
+                node.parserContextFlags |= ParserContextFlags.ContainsError;
             }
 
             return node;
