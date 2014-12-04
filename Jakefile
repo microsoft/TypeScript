@@ -489,22 +489,22 @@ task("runtests-browser", ["tests", "browserify", builtLocalDirectory], function(
 }, {async: true});
 
 function getDiffTool() {
-    var program = process.env['DIFF'] || null
-    if (!program)
-        throw new Error("Add the %DIFF% environment variable to the path of the program you want to use.")
-
+    var program = process.env['DIFF']
+    if (!program) {
+        fail("Add the 'DIFF' environment variable to the path of the program you want to use.")
+    }
     return program;
 }
 
 // Baseline Diff
-desc("Diffs the compiler baselines using the diff tool specified by the %DIFF% environment variable");
+desc("Diffs the compiler baselines using the diff tool specified by the 'DIFF' environment variable");
 task('diff', function () {
     var cmd = '"' +  getDiffTool()  + '" ' + refBaseline + ' ' + localBaseline;
     console.log(cmd)
     exec(cmd);
 }, {async: true});
 
-desc("Diffs the RWC baselines using the diff tool specified by the %DIFF% environment variable");
+desc("Diffs the RWC baselines using the diff tool specified by the 'DIFF' environment variable");
 task('diff-rwc', function () {
     var cmd = '"' +  getDiffTool()  + '" ' + refRwcBaseline + ' ' + localRwcBaseline;
     console.log(cmd)
