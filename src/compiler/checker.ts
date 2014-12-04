@@ -93,9 +93,9 @@ module ts {
             getIndexTypeOfType,
             getReturnTypeOfSignature,
             getSymbolsInScope,
-            getSymbolInfoOfLocation,
+            getSymbolAtLocation,
             getShorthandAssignmentValueSymbol,
-            getTypeOfLocation,
+            getTypeAtLocation,
             typeToString,
             getSymbolDisplayBuilder,
             symbolToString,
@@ -4398,18 +4398,30 @@ module ts {
             ts.forEach(containerNodes, node => { getTypeOfNode(node); });
         }
 
-        function getSymbolInfoOfLocation(node: Node): Symbol {
+        function getSymbolAtLocation(node: Node): Symbol {
             resolveLocation(node);
             return getSymbolInfo(node);
         }
 
-        function getTypeOfLocation(node: Node): Type {
+        function getTypeAtLocation(node: Node): Type {
             resolveLocation(node);
             return getTypeOfNode(node);
         }
 
         function getTypeOfSymbolAtLocation(symbol: Symbol, node: Node): Type {
             resolveLocation(node);
+            // Get the narrowed type of symbol at given location instead of just getting 
+            // the type of the symbol.
+            // eg. 
+            // function foo(a: string | number) {
+            //     if (typeof a === "string") {
+            //         a/**/
+            //     }
+            // }
+            // getTypeOfSymbol for a would return type of parameter symbol string | number
+            // Unless we provide location /**/, checker wouldn't know how to narrow the type
+            // By using getNarrowedTypeOfSymbol would return string since it would be able to narrow
+            // it by typeguard in the if true condition
             return getNarrowedTypeOfSymbol(symbol, node);
         }
 
