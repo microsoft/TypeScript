@@ -1304,10 +1304,6 @@ module ts {
                 parseErrorAtCurrentToken(diagnosticMessage, arg0);
             }
 
-            return createMissingNodeWithoutError(kind);
-        }
-
-        function createMissingNodeWithoutError(kind: SyntaxKind) {
             var result = createNode(kind, scanner.getStartPos());
             (<Identifier>result).text = "";
             return finishNode(result);
