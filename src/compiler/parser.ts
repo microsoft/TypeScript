@@ -9,6 +9,33 @@ module ts {
         return node.end - node.pos;
     }
 
+    function hasFlag(val: number, flag: number): boolean {
+        return (val & flag) !== 0;
+    }
+
+    // Returns true if this node contains a parse error anywhere underneath it.
+    export function containsParseError(node: Node): boolean {
+        if (!hasFlag(node.parserContextFlags, ParserContextFlags.HasPropagatedChildContainsErrorFlag)) {
+            // A node is considered to contain a parse error if:
+            //  a) the parser explicitly marked that it had an error
+            //  b) any of it's children reported that it had an error.
+            var val = hasFlag(node.parserContextFlags, ParserContextFlags.ContainsError) ||
+                forEachChild(node, containsParseError);
+
+            // If so, mark ourselves accordingly. 
+            if (val) {
+                node.parserContextFlags |= ParserContextFlags.ContainsError;
+            }
+
+            // Also mark that we've propogated the child information to this node.  This way we can
+            // always consult the bit directly on this node without needing to check its children
+            // again.
+            node.parserContextFlags |= ParserContextFlags.HasPropagatedChildContainsErrorFlag;
+        }
+
+        return hasFlag(node.parserContextFlags, ParserContextFlags.ContainsError);
+    }
+
     export function getNodeConstructor(kind: SyntaxKind): new () => Node {
         return nodeConstructors[kind] || (nodeConstructors[kind] = objectAllocator.getNodeConstructor(kind));
     }
