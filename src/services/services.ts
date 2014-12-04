@@ -5379,19 +5379,6 @@ module ts {
                 return new RegExp(regExpString, "gim");
             }
 
-            function getContainingComment(comments: CommentRange[], position: number): CommentRange {
-                if (comments) {
-                    for (var i = 0, n = comments.length; i < n; i++) {
-                        var comment = comments[i];
-                        if (comment.pos <= position && position < comment.end) {
-                            return comment;
-                        }
-                    }
-                }
-
-                return undefined;
-            }
-
             function isLetterOrDigit(char: number): boolean {
                 return (char >= CharacterCodes.a && char <= CharacterCodes.z) ||
                     (char >= CharacterCodes.A && char <= CharacterCodes.Z) ||
