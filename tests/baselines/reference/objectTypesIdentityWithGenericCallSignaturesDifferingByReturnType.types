@@ -64,10 +64,9 @@ var a: { foo<T>(x: T): T }
 >T : T
 
 var b = { foo<T>(x: T) { return null; } };
->b : { foo: <T>(x: T) => any; }
->{ foo<T>(x: T) { return null; } } : { foo: <T>(x: T) => any; }
+>b : { foo<T>(x: T): any; }
+>{ foo<T>(x: T) { return null; } } : { foo<T>(x: T): any; }
 >foo : <T>(x: T) => any
->foo<T>(x: T) { return null; } : <T>(x: T) => any
 >T : T
 >x : T
 >T : T
@@ -143,17 +142,17 @@ function foo3(x: any) { }
 >x : any
 
 function foo4(x: typeof b);
->foo4 : { (x: { foo: <T>(x: T) => any; }): any; (x: { foo: <T>(x: T) => any; }): any; }
->x : { foo: <T>(x: T) => any; }
->b : { foo: <T>(x: T) => any; }
+>foo4 : { (x: { foo<T>(x: T): any; }): any; (x: { foo<T>(x: T): any; }): any; }
+>x : { foo<T>(x: T): any; }
+>b : { foo<T>(x: T): any; }
 
 function foo4(x: typeof b); // error
->foo4 : { (x: { foo: <T>(x: T) => any; }): any; (x: { foo: <T>(x: T) => any; }): any; }
->x : { foo: <T>(x: T) => any; }
->b : { foo: <T>(x: T) => any; }
+>foo4 : { (x: { foo<T>(x: T): any; }): any; (x: { foo<T>(x: T): any; }): any; }
+>x : { foo<T>(x: T): any; }
+>b : { foo<T>(x: T): any; }
 
 function foo4(x: any) { }
->foo4 : { (x: { foo: <T>(x: T) => any; }): any; (x: { foo: <T>(x: T) => any; }): any; }
+>foo4 : { (x: { foo<T>(x: T): any; }): any; (x: { foo<T>(x: T): any; }): any; }
 >x : any
 
 function foo5(x: A);
@@ -255,17 +254,17 @@ function foo10(x: any) { }
 >x : any
 
 function foo11(x: B<string>);
->foo11 : { (x: B<string>): any; (x: { foo: <T>(x: T) => any; }): any; }
+>foo11 : { (x: B<string>): any; (x: { foo<T>(x: T): any; }): any; }
 >x : B<string>
 >B : B<T>
 
 function foo11(x: typeof b); // ok
->foo11 : { (x: B<string>): any; (x: { foo: <T>(x: T) => any; }): any; }
->x : { foo: <T>(x: T) => any; }
->b : { foo: <T>(x: T) => any; }
+>foo11 : { (x: B<string>): any; (x: { foo<T>(x: T): any; }): any; }
+>x : { foo<T>(x: T): any; }
+>b : { foo<T>(x: T): any; }
 
 function foo11(x: any) { }
->foo11 : { (x: B<string>): any; (x: { foo: <T>(x: T) => any; }): any; }
+>foo11 : { (x: B<string>): any; (x: { foo<T>(x: T): any; }): any; }
 >x : any
 
 function foo12(x: I<string>);
@@ -311,17 +310,17 @@ function foo13(x: any) { }
 >x : any
 
 function foo14(x: I<string>);
->foo14 : { (x: I<string>): any; (x: { foo: <T>(x: T) => any; }): any; }
+>foo14 : { (x: I<string>): any; (x: { foo<T>(x: T): any; }): any; }
 >x : I<string>
 >I : I<T>
 
 function foo14(x: typeof b); // ok
->foo14 : { (x: I<string>): any; (x: { foo: <T>(x: T) => any; }): any; }
->x : { foo: <T>(x: T) => any; }
->b : { foo: <T>(x: T) => any; }
+>foo14 : { (x: I<string>): any; (x: { foo<T>(x: T): any; }): any; }
+>x : { foo<T>(x: T): any; }
+>b : { foo<T>(x: T): any; }
 
 function foo14(x: any) { }
->foo14 : { (x: I<string>): any; (x: { foo: <T>(x: T) => any; }): any; }
+>foo14 : { (x: I<string>): any; (x: { foo<T>(x: T): any; }): any; }
 >x : any
 
 function foo15(x: I2);

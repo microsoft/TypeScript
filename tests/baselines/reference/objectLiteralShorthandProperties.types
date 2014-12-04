@@ -23,7 +23,7 @@ var x2 = {
 
 var x3 = {
 >x3 : any
->{    a: 0,    b,    c,    d() { },    x3,    parent: x3} : { a: number; b: any; c: any; d: () => void; x3: any; parent: any; }
+>{    a: 0,    b,    c,    d() { },    x3,    parent: x3} : { a: number; b: any; c: any; d(): void; x3: any; parent: any; }
 
     a: 0,
 >a : number
@@ -36,7 +36,6 @@ var x3 = {
 
     d() { },
 >d : () => void
->d() { } : () => void
 
     x3,
 >x3 : any

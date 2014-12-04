@@ -2227,6 +2227,30 @@ module ts {
                 emit(node.expression);
                 write("]");
             }
+
+            function emitDownlevelMethod(node: MethodDeclaration) {
+                if (!isObjectLiteralMethod(node)) {
+                    return;
+                }
+
+                emitLeadingComments(node);
+                emit(node.name);
+                write(": ");
+                write("function ");
+                emitSignatureAndBody(node);
+                emitTrailingComments(node);
+            }
+
+            function emitMethod(node: MethodDeclaration) {
+                if (!isObjectLiteralMethod(node)) {
+                    return;
+                }
+
+                emitLeadingComments(node);
+                emit(node.name);
+                emitSignatureAndBody(node);
+                emitTrailingComments(node);
+            }
     
             function emitPropertyAssignment(node: PropertyDeclaration) {
                 emitLeadingComments(node);
@@ -2236,7 +2260,7 @@ module ts {
                 emitTrailingComments(node);
             }
 
-            function emitDownlevelShorthandPropertyAssignment(node: ShorthandPropertyDeclaration) {
+            function emitDownlevelShorthandPropertyAssignment(node: ShorthandPropertyAssignment) {
                 emitLeadingComments(node);
                 // Emit identifier as an identifier
                 emit(node.name);
@@ -2247,7 +2271,7 @@ module ts {
                 emitTrailingComments(node);
             }
 
-            function emitShorthandPropertyAssignment(node: ShorthandPropertyDeclaration) {
+            function emitShorthandPropertyAssignment(node: ShorthandPropertyAssignment) {
                 // If short-hand property has a prefix, then regardless of the target version, we will emit it as normal property assignment. For example:
                 //  module m {
                 //      export var y;
@@ -2841,17 +2865,17 @@ module ts {
                 scopeEmitStart(node);
                 increaseIndent();
 
-                emitDetachedComments(node.body.kind === SyntaxKind.FunctionBlock ? (<Block>node.body).statements : node.body);
+                emitDetachedComments(node.body.kind === SyntaxKind.Block ? (<Block>node.body).statements : node.body);
 
                 var startIndex = 0;
-                if (node.body.kind === SyntaxKind.FunctionBlock) {
+                if (node.body.kind === SyntaxKind.Block) {
                     startIndex = emitDirectivePrologues((<Block>node.body).statements, /*startWithNewLine*/ true);
                 }
                 var outPos = writer.getTextPos();
                 emitCaptureThisForNodeIfNecessary(node);
                 emitDefaultValueAssignments(node);
                 emitRestParameter(node);
-                if (node.body.kind !== SyntaxKind.FunctionBlock && outPos === writer.getTextPos()) {
+                if (node.body.kind !== SyntaxKind.Block && outPos === writer.getTextPos()) {
                     decreaseIndent();
                     write(" ");
                     emitStart(node.body);
@@ -2864,7 +2888,7 @@ module ts {
                     emitEnd(node.body);
                 }
                 else {
-                    if (node.body.kind === SyntaxKind.FunctionBlock) {
+                    if (node.body.kind === SyntaxKind.Block) {
                         emitLinesStartingAt((<Block>node.body).statements, startIndex);
                     }
                     else {
@@ -2876,7 +2900,7 @@ module ts {
                         emitTrailingComments(node.body);
                     }
                     writeLine();
-                    if (node.body.kind === SyntaxKind.FunctionBlock) {
+                    if (node.body.kind === SyntaxKind.Block) {
                         emitLeadingCommentsOfPosition((<Block>node.body).statements.end);
                         decreaseIndent();
                         emitToken(SyntaxKind.CloseBraceToken, (<Block>node.body).statements.end);
@@ -3566,7 +3590,6 @@ module ts {
                     case SyntaxKind.Block:
                     case SyntaxKind.TryBlock:
                     case SyntaxKind.FinallyBlock:
-                    case SyntaxKind.FunctionBlock:
                     case SyntaxKind.ModuleBlock:
                         return emitBlock(<Block>node);
                     case SyntaxKind.VariableStatement:
@@ -3628,7 +3651,9 @@ module ts {
                     // Emit node down-level
                     switch (node.kind) {
                         case SyntaxKind.ShorthandPropertyAssignment:
-                            return emitDownlevelShorthandPropertyAssignment(<ShorthandPropertyDeclaration>node);
+                            return emitDownlevelShorthandPropertyAssignment(<ShorthandPropertyAssignment>node);
+                        case SyntaxKind.Method:
+                            return emitDownlevelMethod(<MethodDeclaration>node);
                     }
                 }
                 else {
@@ -3636,7 +3661,9 @@ module ts {
                     Debug.assert(compilerOptions.target >= ScriptTarget.ES6, "Invalid ScriptTarget. We should emit as ES6 or above");
                     switch (node.kind) {
                         case SyntaxKind.ShorthandPropertyAssignment:
-                            return emitShorthandPropertyAssignment(<ShorthandPropertyDeclaration>node);
+                            return emitShorthandPropertyAssignment(<ShorthandPropertyAssignment>node);
+                        case SyntaxKind.Method:
+                            return emitMethod(<MethodDeclaration>node);
                     }
                 }
             }

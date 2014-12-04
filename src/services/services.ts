@@ -806,8 +806,13 @@ module ts {
                         case SyntaxKind.Constructor:
                         case SyntaxKind.VariableStatement:
                         case SyntaxKind.ModuleBlock:
-                        case SyntaxKind.FunctionBlock:
                             forEachChild(node, visit);
+                            break;
+
+                        case SyntaxKind.Block:
+                            if (isFunctionBlock(node)) {
+                                forEachChild(node, visit);
+                            }
                             break;
 
                         case SyntaxKind.Parameter:
@@ -1444,7 +1449,7 @@ module ts {
             }
 
             // If the parent is not sourceFile or module block it is local variable
-            for (var parent = declaration.parent; parent.kind !== SyntaxKind.FunctionBlock; parent = parent.parent) {
+            for (var parent = declaration.parent; !isFunctionBlock(parent); parent = parent.parent) {
                 // Reached source file or module block
                 if (parent.kind === SyntaxKind.SourceFile || parent.kind === SyntaxKind.ModuleBlock) {
                     return false;
@@ -3526,7 +3531,7 @@ module ts {
                 var func = <FunctionLikeDeclaration>getContainingFunction(returnStatement);
 
                 // If we didn't find a containing function with a block body, bail out.
-                if (!(func && hasKind(func.body, SyntaxKind.FunctionBlock))) {
+                if (!(func && hasKind(func.body, SyntaxKind.Block))) {
                     return undefined;
                 }
 
@@ -3558,7 +3563,7 @@ module ts {
 
                 // If the "owner" is a function, then we equate 'return' and 'throw' statements in their
                 // ability to "jump out" of the function, and include occurrences for both.
-                if (owner.kind === SyntaxKind.FunctionBlock) {
+                if (isFunctionBlock(owner)) {
                     forEachReturnStatement(<Block>owner, returnStatement => {
                         pushKeywordIf(keywords, returnStatement.getFirstToken(), SyntaxKind.ReturnKeyword);
                     });
@@ -3614,7 +3619,7 @@ module ts {
                 while (child.parent) {
                     var parent = child.parent;
 
-                    if (parent.kind === SyntaxKind.FunctionBlock || parent.kind === SyntaxKind.SourceFile) {
+                    if (isFunctionBlock(parent) || parent.kind === SyntaxKind.SourceFile) {
                         return parent;
                     }
                     
@@ -4311,8 +4316,12 @@ module ts {
                 var staticFlag = NodeFlags.Static;
 
                 switch (searchSpaceNode.kind) {
-                    case SyntaxKind.Property:
                     case SyntaxKind.Method:
+                        if (isObjectLiteralMethod(searchSpaceNode)) {
+                            break;
+                        }
+                        // fall through
+                    case SyntaxKind.Property:
                     case SyntaxKind.Constructor:
                     case SyntaxKind.GetAccessor:
                     case SyntaxKind.SetAccessor:
@@ -4362,6 +4371,11 @@ module ts {
                             case SyntaxKind.FunctionExpression:
                             case SyntaxKind.FunctionDeclaration:
                                 if (searchSpaceNode.symbol === container.symbol) {
+                                    result.push(getReferenceEntryFromNode(node));
+                                }
+                                break;
+                            case SyntaxKind.Method:
+                                if (isObjectLiteralMethod(searchSpaceNode) && searchSpaceNode.symbol === container.symbol) {
                                     result.push(getReferenceEntryFromNode(node));
                                 }
                                 break;
@@ -4493,7 +4507,7 @@ module ts {
 
             function getPropertySymbolsFromContextualType(node: Node): Symbol[] {
                 if (isNameOfPropertyAssignment(node)) {
-                    var objectLiteral = node.parent.parent;
+                    var objectLiteral = <ObjectLiteralExpression>node.parent.parent;
                     var contextualType = typeInfoResolver.getContextualType(objectLiteral);
                     var name = (<Identifier>node).text;
                     if (contextualType) {

@@ -32,7 +32,7 @@ var x3 = {
     a: 0,
     b,
     c,
-    d: function () {
+    d() {
     },
     x3,
     parent: x3

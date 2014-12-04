@@ -326,7 +326,6 @@ module ts.formatting {
                 case SyntaxKind.EnumDeclaration:
                 case SyntaxKind.ArrayLiteralExpression:
                 case SyntaxKind.Block:
-                case SyntaxKind.FunctionBlock:
                 case SyntaxKind.TryBlock:
                 case SyntaxKind.FinallyBlock:
                 case SyntaxKind.ModuleBlock:
@@ -357,7 +356,6 @@ module ts.formatting {
                 case SyntaxKind.ForInStatement:
                 case SyntaxKind.ForStatement:
                 case SyntaxKind.IfStatement:
-                    return child !== SyntaxKind.Block;
                 case SyntaxKind.FunctionDeclaration:
                 case SyntaxKind.FunctionExpression:
                 case SyntaxKind.Method:
@@ -365,7 +363,7 @@ module ts.formatting {
                 case SyntaxKind.Constructor:
                 case SyntaxKind.GetAccessor:
                 case SyntaxKind.SetAccessor:
-                    return child !== SyntaxKind.FunctionBlock;
+                    return child !== SyntaxKind.Block;
                 default:
                     return false;
             }
@@ -404,7 +402,6 @@ module ts.formatting {
                 case SyntaxKind.ObjectLiteralExpression:
                 case SyntaxKind.Block:
                 case SyntaxKind.FinallyBlock:
-                case SyntaxKind.FunctionBlock:
                 case SyntaxKind.ModuleBlock:
                 case SyntaxKind.SwitchStatement:
                     return nodeEndsWith(n, SyntaxKind.CloseBraceToken, sourceFile);

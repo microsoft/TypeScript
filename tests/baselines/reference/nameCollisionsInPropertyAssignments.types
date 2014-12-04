@@ -3,10 +3,9 @@ var x = 1
 >x : number
 
 var y = { x() { x++; } }; 
->y : { x: () => void; }
->{ x() { x++; } } : { x: () => void; }
+>y : { x(): void; }
+>{ x() { x++; } } : { x(): void; }
 >x : () => void
->x() { x++; } : () => void
 >x++ : number
 >x : number
 
