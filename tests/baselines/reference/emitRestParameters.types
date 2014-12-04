@@ -1,0 +1,72 @@
+=== tests/cases/conformance/es6/restParameters/emitRestParameters.ts ===
+function bar(...rest) { }
+>bar : (...rest: any[]) => void
+>rest : any[]
+
+function foo(x: number, y: string, ...rest) { }
+>foo : (x: number, y: string, ...rest: any[]) => void
+>x : number
+>y : string
+>rest : any[]
+
+class C {
+>C : C
+
+    constructor(name: string, ...rest) { }
+>name : string
+>rest : any[]
+
+    public bar(...rest) { }
+>bar : (...rest: any[]) => void
+>rest : any[]
+
+    public foo(x: number, ...rest) { }
+>foo : (x: number, ...rest: any[]) => void
+>x : number
+>rest : any[]
+}
+
+class D {
+>D : D
+
+    constructor(...rest) { }
+>rest : any[]
+
+    public bar(...rest) { }
+>bar : (...rest: any[]) => void
+>rest : any[]
+
+    public foo(x: number, ...rest) { }
+>foo : (x: number, ...rest: any[]) => void
+>x : number
+>rest : any[]
+}
+
+var funcExp = (...rest) => { }
+>funcExp : (...rest: any[]) => void
+>(...rest) => { } : (...rest: any[]) => void
+>rest : any[]
+
+var funcExp1 = (X: number, ...rest) => { }
+>funcExp1 : (X: number, ...rest: any[]) => void
+>(X: number, ...rest) => { } : (X: number, ...rest: any[]) => void
+>X : number
+>rest : any[]
+
+var obj: {
+>obj : { func1: (...rest: any[]) => void; }
+
+    func1: (...rest) => void
+>func1 : (...rest: any[]) => void
+>rest : any[]
+}
+
+var obj2 = {
+>obj2 : { func: (...rest: any[]) => void; }
+>{    func(...rest) { }} : { func: (...rest: any[]) => void; }
+
+    func(...rest) { }
+>func : (...rest: any[]) => void
+>func(...rest) { } : (...rest: any[]) => void
+>rest : any[]
+}
