@@ -148,7 +148,11 @@ module TypeScript.Parser {
         // started at.
         var diagnostics: Diagnostic[] = [];
 
-        var _skippedTokens: ISyntaxToken[] = undefined;
+        // Any tokens we decided to skip during list (when we can't find any parse function that 
+        // will accept the token).  These tokens will be attached to the next token we actually
+        // consume.  If there are any skipped tokens at the end of the file, they will be attached
+        // to the EndOfFile token.
+        var skippedTokens: ISyntaxToken[] = undefined;
 
         function setContextFlag(val: boolean, flag: ParserContextFlags) {
             if (val) {
@@ -299,13 +303,13 @@ module TypeScript.Parser {
             // See the comments in IParserRewindPoint for the explanation on why we need to store
             // this data, and what it is used for.
             var savedDiagnosticsCount = diagnostics.length;
-            var savedSkippedTokens = _skippedTokens ? _skippedTokens.slice(0) : undefined;
+            var savedSkippedTokens = skippedTokens ? skippedTokens.slice(0) : undefined;
 
             var result = source.tryParse(callback);
 
             if (!result) {
                 diagnostics.length = savedDiagnosticsCount;
-                _skippedTokens = savedSkippedTokens;
+                skippedTokens = savedSkippedTokens;
             }
 
             return result;
@@ -316,7 +320,7 @@ module TypeScript.Parser {
             // TODO(cyrusn): This may be too conservative.  Perhaps we could reuse hte node and
             // attach the skipped tokens in front?  For now though, being conservative is nice and
             // safe, and likely won't ever affect perf.
-            if (!_skippedTokens) {
+            if (!skippedTokens) {
                 var node = source.currentNode();
 
                 // We can only reuse a node if it was parsed under the same strict mode that we're 
@@ -353,8 +357,8 @@ module TypeScript.Parser {
         }
 
         function skipToken(token: ISyntaxToken): void {
-            _skippedTokens = _skippedTokens || [];
-            _skippedTokens.push(token);
+            skippedTokens = skippedTokens || [];
+            skippedTokens.push(token);
 
             // directly tell the source to just consume the token we're skipping.  i.e. do not 
             // call 'consumeToken'.  Doing so would attempt to add any previous skipped tokens
@@ -371,9 +375,9 @@ module TypeScript.Parser {
 
             // Now, if we had any skipped tokens, we want to add them to the start of this token
             // we're consuming.
-            if (_skippedTokens) {
-                token = addSkippedTokensBeforeToken(token, _skippedTokens);
-                _skippedTokens = undefined;
+            if (skippedTokens) {
+                token = addSkippedTokensBeforeToken(token, skippedTokens);
+                skippedTokens = undefined;
             }
 
             return token;
@@ -424,7 +428,7 @@ module TypeScript.Parser {
         }
 
         function consumeNode(node: ISyntaxNode): void {
-            Debug.assert(_skippedTokens === undefined);
+            Debug.assert(skippedTokens === undefined);
             source.consumeNodeOrToken(node);
         }
 
@@ -597,7 +601,7 @@ module TypeScript.Parser {
             // So, if we have any skipped tokens, then the position of the empty token should be
             // the position of the first skipped token we have.  Otherwise it's just at the position
             // of the parser.
-            var fullStart = _skippedTokens ? _skippedTokens[0].fullStart() : source.absolutePosition();
+            var fullStart = skippedTokens ? skippedTokens[0].fullStart() : source.absolutePosition();
             return Syntax.emptyToken(kind, fullStart);
         }
 
