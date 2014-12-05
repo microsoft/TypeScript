@@ -48,7 +48,7 @@ sourceFile:sourceMapValidationClass.ts
 1 >Emitted(3, 9) Source(2, 42) + SourceIndex(0) name (Greeter.constructor)
 2 >Emitted(3, 20) Source(2, 56) + SourceIndex(0) name (Greeter.constructor)
 ---
->>>        for (var _a = 1; _a < arguments.length; _a++) {
+>>>        for (var _i = 1; _i < arguments.length; _i++) {
 1->^^^^^^^^^^^^^
 2 >             ^^^^^^^^^^^
 3 >                        ^
@@ -68,7 +68,7 @@ sourceFile:sourceMapValidationClass.ts
 5 >Emitted(4, 49) Source(2, 42) + SourceIndex(0) name (Greeter.constructor)
 6 >Emitted(4, 53) Source(2, 56) + SourceIndex(0) name (Greeter.constructor)
 ---
->>>            b[_a - 1] = arguments[_a];
+>>>            b[_i - 1] = arguments[_i];
 1 >^^^^^^^^^^^^
 2 >            ^^^^^^^^^^^^^^^^^^^^^^^^^^
 1 >

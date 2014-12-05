@@ -7,8 +7,8 @@ panic([], 'one', 'two');
 //// [arrayLiteralInNonVarArgParameter.js]
 function panic(val) {
     var opt = [];
-    for (var _a = 1; _a < arguments.length; _a++) {
-        opt[_a - 1] = arguments[_a];
+    for (var _i = 1; _i < arguments.length; _i++) {
+        opt[_i - 1] = arguments[_i];
     }
 }
 panic([], 'one', 'two');

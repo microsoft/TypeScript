@@ -22,8 +22,8 @@ var TestFile = (function () {
             /// <param name="message" type="String" />
             /// <returns type="Function" />
             var x = [];
-            for (var _a = 0; _a < arguments.length; _a++) {
-                x[_a - 0] = arguments[_a];
+            for (var _i = 0; _i < arguments.length; _i++) {
+                x[_i - 0] = arguments[_i];
             }
             return message + _this.name;
         };

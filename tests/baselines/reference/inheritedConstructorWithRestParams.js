@@ -24,8 +24,8 @@ var __extends = this.__extends || function (d, b) {
 var Base = (function () {
     function Base() {
         var a = [];
-        for (var _a = 0; _a < arguments.length; _a++) {
-            a[_a - 0] = arguments[_a];
+        for (var _i = 0; _i < arguments.length; _i++) {
+            a[_i - 0] = arguments[_i];
         }
     }
     return Base;

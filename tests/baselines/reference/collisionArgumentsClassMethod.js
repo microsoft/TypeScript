@@ -54,15 +54,15 @@ var c1 = (function () {
     }
     c1.prototype.foo = function (i) {
         var arguments = [];
-        for (var _a = 1; _a < arguments.length; _a++) {
-            arguments[_a - 1] = arguments[_a];
+        for (var _i = 1; _i < arguments.length; _i++) {
+            arguments[_i - 1] = arguments[_i];
         }
         var arguments; // no error
     };
     c1.prototype.foo1 = function (arguments) {
         var rest = [];
-        for (var _a = 1; _a < arguments.length; _a++) {
-            rest[_a - 1] = arguments[_a];
+        for (var _i = 1; _i < arguments.length; _i++) {
+            rest[_i - 1] = arguments[_i];
         }
         var arguments = 10; // no error
     };
@@ -71,15 +71,15 @@ var c1 = (function () {
     };
     c1.prototype.f4 = function (i) {
         var arguments = [];
-        for (var _a = 1; _a < arguments.length; _a++) {
-            arguments[_a - 1] = arguments[_a];
+        for (var _i = 1; _i < arguments.length; _i++) {
+            arguments[_i - 1] = arguments[_i];
         }
         var arguments; // no error
     };
     c1.prototype.f41 = function (arguments) {
         var rest = [];
-        for (var _a = 1; _a < arguments.length; _a++) {
-            rest[_a - 1] = arguments[_a];
+        for (var _i = 1; _i < arguments.length; _i++) {
+            rest[_i - 1] = arguments[_i];
         }
         var arguments; // no error
     };
@@ -93,8 +93,8 @@ var c3 = (function () {
     }
     c3.prototype.foo = function () {
         var restParameters = [];
-        for (var _a = 0; _a < arguments.length; _a++) {
-            restParameters[_a - 0] = arguments[_a];
+        for (var _i = 0; _i < arguments.length; _i++) {
+            restParameters[_i - 0] = arguments[_i];
         }
         var arguments = 10; // no error
     };

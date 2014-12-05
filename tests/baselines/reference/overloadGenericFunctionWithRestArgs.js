@@ -23,8 +23,8 @@ var A = (function () {
 })();
 function Choice() {
     var v_args = [];
-    for (var _a = 0; _a < arguments.length; _a++) {
-        v_args[_a - 0] = arguments[_a];
+    for (var _i = 0; _i < arguments.length; _i++) {
+        v_args[_i - 0] = arguments[_i];
     }
     return new A();
 }

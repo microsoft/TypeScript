@@ -118,8 +118,8 @@ exports.ConstructorWithParameters = ConstructorWithParameters;
 var ConstructorWithRestParamters = (function () {
     function ConstructorWithRestParamters(a) {
         var rests = [];
-        for (var _a = 1; _a < arguments.length; _a++) {
-            rests[_a - 1] = arguments[_a];
+        for (var _i = 1; _i < arguments.length; _i++) {
+            rests[_i - 1] = arguments[_i];
         }
         return a + rests.join("");
     }
@@ -180,8 +180,8 @@ var GlobalConstructorWithParameters = (function () {
 var GlobalConstructorWithRestParamters = (function () {
     function GlobalConstructorWithRestParamters(a) {
         var rests = [];
-        for (var _a = 1; _a < arguments.length; _a++) {
-            rests[_a - 1] = arguments[_a];
+        for (var _i = 1; _i < arguments.length; _i++) {
+            rests[_i - 1] = arguments[_i];
         }
         return a + rests.join("");
     }

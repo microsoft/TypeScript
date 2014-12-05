@@ -18,8 +18,8 @@ var TestFile = (function () {
         var _this = this;
         return function () {
             var x = [];
-            for (var _a = 0; _a < arguments.length; _a++) {
-                x[_a - 0] = arguments[_a];
+            for (var _i = 0; _i < arguments.length; _i++) {
+                x[_i - 0] = arguments[_i];
             }
             /// <summary>Test summary</summary>
             /// <param name="message" type="String" />

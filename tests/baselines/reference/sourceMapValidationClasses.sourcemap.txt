@@ -456,7 +456,7 @@ sourceFile:sourceMapValidationClasses.ts
 1->Emitted(21, 13) Source(21, 37) + SourceIndex(0) name (Foo.Bar.foo2)
 2 >Emitted(21, 36) Source(21, 83) + SourceIndex(0) name (Foo.Bar.foo2)
 ---
->>>            for (var _a = 1; _a < arguments.length; _a++) {
+>>>            for (var _i = 1; _i < arguments.length; _i++) {
 1->^^^^^^^^^^^^^^^^^
 2 >                 ^^^^^^^^^^^
 3 >                            ^
@@ -476,7 +476,7 @@ sourceFile:sourceMapValidationClasses.ts
 5 >Emitted(22, 53) Source(21, 37) + SourceIndex(0) name (Foo.Bar.foo2)
 6 >Emitted(22, 57) Source(21, 83) + SourceIndex(0) name (Foo.Bar.foo2)
 ---
->>>                restGreetings[_a - 1] = arguments[_a];
+>>>                restGreetings[_i - 1] = arguments[_i];
 1 >^^^^^^^^^^^^^^^^
 2 >                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 1 >

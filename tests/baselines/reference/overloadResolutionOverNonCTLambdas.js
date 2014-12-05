@@ -34,13 +34,13 @@ var Bugs;
     // replace(searchValue: RegExp, replaceValue: (substring: string, ...args: any[]) => string): string;
     function bug2(message) {
         var args = [];
-        for (var _a = 1; _a < arguments.length; _a++) {
-            args[_a - 1] = arguments[_a];
+        for (var _i = 1; _i < arguments.length; _i++) {
+            args[_i - 1] = arguments[_i];
         }
         var result = message.replace(/\{(\d+)\}/g, function (match) {
             var rest = [];
-            for (var _a = 1; _a < arguments.length; _a++) {
-                rest[_a - 1] = arguments[_a];
+            for (var _i = 1; _i < arguments.length; _i++) {
+                rest[_i - 1] = arguments[_i];
             }
             var index = rest[0];
             return typeof args[index] !== 'undefined' ? args[index] : match;

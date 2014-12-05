@@ -22,8 +22,8 @@ function bar(x: number = 10) {
 function foo() {
     "use strict";
     var args = [];
-    for (var _a = 0; _a < arguments.length; _a++) {
-        args[_a - 0] = arguments[_a];
+    for (var _i = 0; _i < arguments.length; _i++) {
+        args[_i - 0] = arguments[_i];
     }
 }
 var A = (function () {

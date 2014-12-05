@@ -32,8 +32,8 @@ var T = (function () {
     }
     T.prototype.m = function () {
         var p3 = [];
-        for (var _a = 0; _a < arguments.length; _a++) {
-            p3[_a - 0] = arguments[_a];
+        for (var _i = 0; _i < arguments.length; _i++) {
+            p3[_i - 0] = arguments[_i];
         }
     };
     return T;

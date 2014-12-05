@@ -11,8 +11,8 @@ foo('foo', 'bar', 3);
 //// [functionCall16.js]
 function foo(a, b) {
     var c = [];
-    for (var _a = 2; _a < arguments.length; _a++) {
-        c[_a - 2] = arguments[_a];
+    for (var _i = 2; _i < arguments.length; _i++) {
+        c[_i - 2] = arguments[_i];
     }
 }
 foo('foo', 1);

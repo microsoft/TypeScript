@@ -985,8 +985,8 @@ var fibonacci = _.memoize(function (n) {
 });
 var log = _.bind(function (message) {
     var rest = [];
-    for (var _a = 1; _a < arguments.length; _a++) {
-        rest[_a - 1] = arguments[_a];
+    for (var _i = 1; _i < arguments.length; _i++) {
+        rest[_i - 1] = arguments[_i];
     }
 }, Date);
 _.delay(log, 1000, 'logged later');
