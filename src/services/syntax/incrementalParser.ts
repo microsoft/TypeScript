@@ -30,8 +30,6 @@ module TypeScript.IncrementalParser {
         // The cursor we use to navigate through and retrieve nodes and tokens from the old tree.
         var oldSourceUnit = oldSyntaxTree.sourceUnit();
 
-        var _isSpeculativelyParsing = false;
-
         // Start the cursor pointing at the first element in the source unit (if it exists).
         var _oldSourceUnitCursor = getSyntaxCursor();
         if (oldSourceUnit.moduleElements.length > 0) {
@@ -113,20 +111,12 @@ module TypeScript.IncrementalParser {
 
         function tryParse<T extends ISyntaxNode>(callback: () => T): T {
             // Clone our cursor.  That way we can restore to that point if the parser needs to rewind.
-            var savedOldSourceUnitCursor = cloneSyntaxCursor(_oldSourceUnitCursor);
-            var savedIsSpeculativelyParsing = _isSpeculativelyParsing;
-
-            // Mark that we're speculative parsing.  During speculative parsing we cannot ruse 
-            // nodes from the parse tree.  See the comment in trySynchronizeCursorToPosition for
-            // the reasons why.
-            _isSpeculativelyParsing = true;
+            var savedOldSourceUnitCursor = cloneSyntaxCursor(oldSourceUnitCursor);
 
             // Now defer to our underlying scanner source to actually invoke the callback.  That 
             // way, if the parser decides to rewind, both the scanner source and this incremental
             // source will rewind appropriately.
             var result = _scannerParserSource.tryParse(callback);
-
-            _isSpeculativelyParsing = savedIsSpeculativelyParsing;
 
             if (!result) {
                 // We're rewinding. Reset the cursor to what it was when we got the rewind point.  
@@ -143,27 +133,6 @@ module TypeScript.IncrementalParser {
         }
 
         function trySynchronizeCursorToPosition() {
-            // If we're currently pinned, then do not want to touch the cursor.  Here's why.  First,
-            // recall that we're 'pinned' when we're speculatively parsing.  So say we were to allow
-            // returning old nodes/tokens while speculatively parsing. Then, the parser might start
-            // mutating the nodes and tokens we returned (i.e. by setting their parents).   Then, 
-            // when we rewound, those nodes and tokens would still have those updated parents.  
-            // Parents which we just decided we did *not* want to parse (hence why we rewound).  For
-            // Example, say we have something like:
-            //
-            //          var v = f<a,b,c>e;  // note: this is not generic.
-            //
-            // When incrementally parsing, we will need to speculatively parse to determine if the
-            // above is generic.  This will cause us to reuse the "a, b, c" tokens, and set their 
-            // parent to a new type argument list.  A type argument list we will then throw away once
-            // we decide that it isn't actually generic.  We will have now 'broken' the original tree.
-            //
-            // As such, the rule is simple.  We only return nodes/tokens from teh original tree if
-            // we know the parser will accept and consume them and never rewind back before them.
-            if (_isSpeculativelyParsing) {
-                return false;
-            }
-
             var absolutePos = absolutePosition();
             while (true) {
                 if (_oldSourceUnitCursor.isFinished()) {
@@ -374,7 +343,7 @@ module TypeScript.IncrementalParser {
             peekToken: peekToken,
             consumeNodeOrToken: consumeNodeOrToken,
             tryParse: tryParse,
-            tokenDiagnostics: tokenDiagnostics,
+            diagnostics: diagnostics
         };
     }
 

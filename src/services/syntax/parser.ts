@@ -292,11 +292,40 @@ module TypeScript.Parser {
 
         function parseSyntaxTreeWorker(isDeclaration: boolean): SyntaxTree {
             var sourceUnit = parseSourceUnit();
+            setupParentsForSyntaxNodeOrToken(sourceUnit);
 
             var allDiagnostics = source.tokenDiagnostics().concat(diagnostics);
             allDiagnostics.sort((a: Diagnostic, b: Diagnostic) => a.start() - b.start());
 
             return new SyntaxTree(sourceUnit, isDeclaration, allDiagnostics, source.fileName, source.text, source.languageVersion);
+        }
+
+        function setupParentsForElement(element: ISyntaxElement, parent: ISyntaxElement) {
+            if (element) {
+                if (element.parent === parent) {
+                    return;
+                }
+                element.parent = parent;
+
+                if (isList(element)) {
+                    setupParentsForList(<ISyntaxNodeOrToken[]>element);
+                }
+                else {
+                    setupParentsForSyntaxNodeOrToken(<ISyntaxNodeOrToken>element);
+                }
+            }
+        }
+
+        function setupParentsForList(list: ISyntaxNodeOrToken[]) {
+            for (var i = 0, n = list.length; i < n; i++) {
+                setupParentsForElement(list[i], list);
+            }
+        }
+
+        function setupParentsForSyntaxNodeOrToken(nodeOrToken: ISyntaxNodeOrToken) {
+            for (var i = 0, n = nodeOrToken.childCount; i < n; i++) {
+                setupParentsForElement(nodeOrToken.childAt(i), nodeOrToken);
+            }
         }
 
         function tryParse<T extends ISyntaxNode>(callback: () => T): T {
