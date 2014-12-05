@@ -1456,14 +1456,6 @@ module TypeScript.Scanner {
         // The scanner we're pulling tokens from.
         var scanner = createScanner(languageVersion, text, reportDiagnostic);
 
-        function release() {
-            slidingWindow = undefined;
-            scanner = undefined;
-            _tokenDiagnostics = [];
-            lastDiagnostic = undefined;
-            reportDiagnostic = undefined;
-        }
-
         function currentNode(): ISyntaxNode {
             // The normal parser source never returns nodes.  They're only returned by the 
             // incremental parser source.
@@ -1605,12 +1597,8 @@ module TypeScript.Scanner {
             currentContextualToken: currentContextualToken,
             peekToken: peekToken,
             consumeNodeOrToken: consumeNodeOrToken,
-            //getRewindPoint: getRewindPoint,
-            //rewind: rewind,
-            //releaseRewindPoint: releaseRewindPoint,
             tryParse: tryParse,
             tokenDiagnostics: tokenDiagnostics,
-            release: release,
             absolutePosition: absolutePosition,
         };
     }

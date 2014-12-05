@@ -77,26 +77,19 @@ module TypeScript.Parser {
         // Retrieves the diagnostics generated while the source was producing nodes or tokens. 
         // Should generally only be called after the document has been completely parsed.
         tokenDiagnostics(): Diagnostic[];
-
-        release(): void;
     }
 
     // Contains the actual logic to parse typescript/javascript.  This is the code that generally
     // represents the logic necessary to handle all the language grammar constructs.  When the 
     // language changes, this should generally only be the place necessary to fix up.
     function createParseSyntaxTree(): (source: IParserSource, isDeclaration: boolean) => SyntaxTree {
-        // Name of the file we're parsing.
-        var fileName: string;
-
         // Underlying source where we pull nodes and tokens from.
         var source: IParserSource;
-
-        var languageVersion: ts.ScriptTarget;
 
         // TODO: do we need to store/restore this when speculative parsing?  I don't think so.  The
         // parsing logic already handles storing/restoring this and should work properly even if we're
         // speculative parsing.
-        var listParsingState: number = 0;
+        var listParsingState: ListParsingState = 0;
 
         // Whether or not we are in strict parsing mode.  All that changes in strict parsing mode is
         // that some tokens that would be considered identifiers may be considered keywords.  When 
@@ -155,7 +148,11 @@ module TypeScript.Parser {
         // started at.
         var diagnostics: Diagnostic[] = [];
 
-        var _skippedTokens: ISyntaxToken[] = undefined;
+        // Any tokens we decided to skip during list (when we can't find any parse function that 
+        // will accept the token).  These tokens will be attached to the next token we actually
+        // consume.  If there are any skipped tokens at the end of the file, they will be attached
+        // to the EndOfFile token.
+        var skippedTokens: ISyntaxToken[] = undefined;
 
         function setContextFlag(val: boolean, flag: ParserContextFlags) {
             if (val) {
@@ -280,9 +277,7 @@ module TypeScript.Parser {
 
         function parseSyntaxTree(_source: IParserSource, isDeclaration: boolean): SyntaxTree {
             // First, set up our state.
-            fileName = _source.fileName;
             source = _source;
-            languageVersion = source.languageVersion;
 
             // Now actually parse the tree.
             var result = parseSyntaxTreeWorker(isDeclaration);
@@ -290,10 +285,7 @@ module TypeScript.Parser {
             // Now, clear out our state so that our singleton parser doesn't keep things alive.
             diagnostics = [];
             contextFlags = 0;
-            fileName = undefined;
-            source.release();
             source = undefined;
-            _source = undefined;
 
             return result;
         }
@@ -304,20 +296,20 @@ module TypeScript.Parser {
             var allDiagnostics = source.tokenDiagnostics().concat(diagnostics);
             allDiagnostics.sort((a: Diagnostic, b: Diagnostic) => a.start() - b.start());
 
-            return new SyntaxTree(sourceUnit, isDeclaration, allDiagnostics, fileName, source.text, languageVersion);
+            return new SyntaxTree(sourceUnit, isDeclaration, allDiagnostics, source.fileName, source.text, source.languageVersion);
         }
 
         function tryParse<T extends ISyntaxNode>(callback: () => T): T {
             // See the comments in IParserRewindPoint for the explanation on why we need to store
             // this data, and what it is used for.
             var savedDiagnosticsCount = diagnostics.length;
-            var savedSkippedTokens = _skippedTokens ? _skippedTokens.slice(0) : undefined;
+            var savedSkippedTokens = skippedTokens ? skippedTokens.slice(0) : undefined;
 
             var result = source.tryParse(callback);
 
             if (!result) {
                 diagnostics.length = savedDiagnosticsCount;
-                _skippedTokens = savedSkippedTokens;
+                skippedTokens = savedSkippedTokens;
             }
 
             return result;
@@ -328,7 +320,7 @@ module TypeScript.Parser {
             // TODO(cyrusn): This may be too conservative.  Perhaps we could reuse hte node and
             // attach the skipped tokens in front?  For now though, being conservative is nice and
             // safe, and likely won't ever affect perf.
-            if (!_skippedTokens) {
+            if (!skippedTokens) {
                 var node = source.currentNode();
 
                 // We can only reuse a node if it was parsed under the same strict mode that we're 
@@ -365,8 +357,8 @@ module TypeScript.Parser {
         }
 
         function skipToken(token: ISyntaxToken): void {
-            _skippedTokens = _skippedTokens || [];
-            _skippedTokens.push(token);
+            skippedTokens = skippedTokens || [];
+            skippedTokens.push(token);
 
             // directly tell the source to just consume the token we're skipping.  i.e. do not 
             // call 'consumeToken'.  Doing so would attempt to add any previous skipped tokens
@@ -383,9 +375,9 @@ module TypeScript.Parser {
 
             // Now, if we had any skipped tokens, we want to add them to the start of this token
             // we're consuming.
-            if (_skippedTokens) {
-                token = addSkippedTokensBeforeToken(token, _skippedTokens);
-                _skippedTokens = undefined;
+            if (skippedTokens) {
+                token = addSkippedTokensBeforeToken(token, skippedTokens);
+                skippedTokens = undefined;
             }
 
             return token;
@@ -436,7 +428,7 @@ module TypeScript.Parser {
         }
 
         function consumeNode(node: ISyntaxNode): void {
-            Debug.assert(_skippedTokens === undefined);
+            Debug.assert(skippedTokens === undefined);
             source.consumeNodeOrToken(node);
         }
 
@@ -609,7 +601,7 @@ module TypeScript.Parser {
             // So, if we have any skipped tokens, then the position of the empty token should be
             // the position of the first skipped token we have.  Otherwise it's just at the position
             // of the parser.
-            var fullStart = _skippedTokens ? _skippedTokens[0].fullStart() : source.absolutePosition();
+            var fullStart = skippedTokens ? skippedTokens[0].fullStart() : source.absolutePosition();
             return Syntax.emptyToken(kind, fullStart);
         }
 
@@ -647,7 +639,7 @@ module TypeScript.Parser {
                 }
             }
 
-            return new Diagnostic(fileName, source.text.lineMap(), start(token, source.text), width(token), diagnosticCode, args);
+            return new Diagnostic(source.fileName, source.text.lineMap(), start(token, source.text), width(token), diagnosticCode, args);
         }
 
         function getBinaryExpressionPrecedence(tokenKind: SyntaxKind): BinaryExpressionPrecedence {
@@ -4397,7 +4389,7 @@ module TypeScript.Parser {
         function reportUnexpectedTokenDiagnostic(listType: ListParsingState): void {
             var token = currentToken();
 
-            var diagnostic = new Diagnostic(fileName, source.text.lineMap(),
+            var diagnostic = new Diagnostic(source.fileName, source.text.lineMap(),
                 start(token, source.text), width(token), DiagnosticCode.Unexpected_token_0_expected, [getExpectedListElementType(listType)]);
             addDiagnostic(diagnostic);
         }

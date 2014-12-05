@@ -378,7 +378,6 @@ module TypeScript {
 
     export interface ISyntaxNode extends ISyntaxNodeOrToken {
         __data: number;
-        __cachedTokens: ISyntaxToken[];
     }
 
     export interface IModuleReferenceSyntax extends ISyntaxNode {
