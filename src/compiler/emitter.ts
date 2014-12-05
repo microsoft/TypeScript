@@ -2738,6 +2738,7 @@ module ts {
                 }
                 emit(node.name);
                 if (node.initializer) {
+                    write(" = ");
                     emit(node.initializer);
                 }
                 emitTrailingComments(node);
