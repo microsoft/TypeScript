@@ -3699,7 +3699,6 @@ module ts {
                 case SyntaxKind.OpenBraceToken:
                     return parseBlock(SyntaxKind.Block, /* ignoreMissingOpenBrace */ false, /*checkForStrictMode*/ false);
                 case SyntaxKind.VarKeyword:
-                case SyntaxKind.LetKeyword:
                 case SyntaxKind.ConstKeyword:
                     // const here should always be parsed as const declaration because of check in 'isStatement' 
                     return parseVariableStatement(scanner.getStartPos(), /*modifiers:*/ undefined);
@@ -3734,6 +3733,12 @@ module ts {
                     return parseTryStatement();
                 case SyntaxKind.DebuggerKeyword:
                     return parseDebuggerStatement();
+                case SyntaxKind.LetKeyword:
+                    // If let follows identifier on the same line, it is declaration parse it as variable statement
+                    if (isLetDeclaration()) {
+                        return parseVariableStatement(scanner.getStartPos(), /*modifiers:*/ undefined);
+                    }
+                    // Else parse it like identifier - fall through
                 default:
                     return isLabel()
                         ? parseLabeledStatement()
@@ -4166,14 +4171,21 @@ module ts {
             parseSemicolon();
             return finishNode(node);
         }
+        
+        function isLetDeclaration() {
+            // It is let declaration if in strict mode or next token is identifier on same line.
+            // otherwise it needs to be treated like identifier
+            return inStrictModeContext() || lookAhead(nextTokenIsIdentifierOnSameLine);
+        }
 
         function isDeclarationStart(): boolean {
             switch (token) {
                 case SyntaxKind.VarKeyword:
-                case SyntaxKind.LetKeyword:
                 case SyntaxKind.ConstKeyword:
                 case SyntaxKind.FunctionKeyword:
                     return true;
+                case SyntaxKind.LetKeyword:
+                    return isLetDeclaration(); 
                 case SyntaxKind.ClassKeyword:
                 case SyntaxKind.InterfaceKeyword:
                 case SyntaxKind.EnumKeyword:
