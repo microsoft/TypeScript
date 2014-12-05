@@ -27,12 +27,14 @@
 ///<reference path='syntaxToken.ts' />
 ///<reference path='syntaxTrivia.ts' />
 ///<reference path='syntaxTriviaList.ts' />
-///<reference path='syntaxUtilities.ts' />
 ///<reference path='syntaxVisitor.generated.ts' />
 ///<reference path='syntaxWalker.generated.ts' />
 
 // SyntaxInformationMap depends on SyntaxWalker
 // ///<reference path='syntaxNodeInvariantsChecker.ts' />
+
+// SyntaxUtilities depends on SyntaxWalker
+///<reference path='syntaxUtilities.ts' />
 
 ///<reference path='parser.ts' />
 
@@ -44,3 +46,5 @@
 ///<reference path='syntaxTree.ts' />
 
 ///<reference path='unicode.ts' />
+///<reference path='syntaxCursor.ts' />
+///<reference path='incrementalParser.ts' />
