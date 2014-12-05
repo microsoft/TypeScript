@@ -2737,10 +2737,14 @@ module ts {
                     write("...");
                 }
                 emit(node.name);
+                if (node.initializer) {
+                    write(" = ");
+                    emit(node.initializer);
+                }
                 emitTrailingComments(node);
             }
 
-            function emitDefaultValueAssignments(node: FunctionLikeDeclaration) {
+            function emitDownlevelDefaultValueAssignment(node: FunctionLikeDeclaration) {
                 forEach(node.parameters, param => {
                     if (param.initializer) {
                         writeLine();
@@ -2864,8 +2868,8 @@ module ts {
                 }
                 var outPos = writer.getTextPos();
                 emitCaptureThisForNodeIfNecessary(node);
-                emitDefaultValueAssignments(node);
                 if (compilerOptions.target < ScriptTarget.ES6) {
+                    emitDownlevelDefaultValueAssignment(node);
                     emitDownlevelRestParameter(node);
                 }
                 if (node.body.kind !== SyntaxKind.FunctionBlock && outPos === writer.getTextPos()) {
@@ -3141,8 +3145,8 @@ module ts {
                     }
                     emitCaptureThisForNodeIfNecessary(node);
                     if (ctor) {
-                        emitDefaultValueAssignments(ctor);
                         if (compilerOptions.target < ScriptTarget.ES6) {
+                            emitDownlevelDefaultValueAssignment(ctor);
                             emitDownlevelRestParameter(ctor);
                         }
                         if (baseTypeNode) {

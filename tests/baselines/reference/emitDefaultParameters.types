@@ -1,0 +1,145 @@
+=== tests/cases/conformance/es6/defaultParameters/emitDefaultParameters.ts ===
+function foo(x: string, y = 10) { }
+>foo : (x: string, y?: number) => void
+>x : string
+>y : number
+
+function baz(x: string, y = 5, ...rest) { }
+>baz : (x: string, y?: number, ...rest: any[]) => void
+>x : string
+>y : number
+>rest : any[]
+
+function bar(y = 10) { }
+>bar : (y?: number) => void
+>y : number
+
+function bar1(y = 10, ...rest) { }
+>bar1 : (y?: number, ...rest: any[]) => void
+>y : number
+>rest : any[]
+
+class C {
+>C : C
+
+    constructor(t: boolean, z: string, x: number, y = "hello") { }
+>t : boolean
+>z : string
+>x : number
+>y : string
+
+    public foo(x: string, t = false) { }
+>foo : (x: string, t?: boolean) => void
+>x : string
+>t : boolean
+
+    public foo1(x: string, t = false, ...rest) { }
+>foo1 : (x: string, t?: boolean, ...rest: any[]) => void
+>x : string
+>t : boolean
+>rest : any[]
+
+    public bar(t = false) { }
+>bar : (t?: boolean) => void
+>t : boolean
+
+    public boo(t = false, ...rest) { }
+>boo : (t?: boolean, ...rest: any[]) => void
+>t : boolean
+>rest : any[]
+}
+
+class D {
+>D : D
+
+    constructor(y = "hello") { }
+>y : string
+}
+
+class E {
+>E : E
+
+    constructor(y = "hello", ...rest) { }
+>y : string
+>rest : any[]
+}
+
+var lambda1 = (y = "hello") => { }
+>lambda1 : (y?: string) => void
+>(y = "hello") => { } : (y?: string) => void
+>y : string
+
+var lambda2 = (x: number, y = "hello") => { }
+>lambda2 : (x: number, y?: string) => void
+>(x: number, y = "hello") => { } : (x: number, y?: string) => void
+>x : number
+>y : string
+
+var lambda3 = (x: number, y = "hello", ...rest) => { }
+>lambda3 : (x: number, y?: string, ...rest: any[]) => void
+>(x: number, y = "hello", ...rest) => { } : (x: number, y?: string, ...rest: any[]) => void
+>x : number
+>y : string
+>rest : any[]
+
+var lambda4 = (y = "hello", ...rest) => { }
+>lambda4 : (y?: string, ...rest: any[]) => void
+>(y = "hello", ...rest) => { } : (y?: string, ...rest: any[]) => void
+>y : string
+>rest : any[]
+
+var obj2 = {
+>obj2 : { func1: (y?: number, ...rest: any[]) => void; func2: (x?: string) => void; func3: (x: string, z: number, y?: string) => void; func4: (x: string, z: number, y?: string, ...rest: any[]) => void; }
+>{    func1(y = 10, ...rest) { },    func2(x = "hello") { },    func3(x: string, z: number, y = "hello") { },    func4(x: string, z: number, y = "hello", ...rest) { },} : { func1: (y?: number, ...rest: any[]) => void; func2: (x?: string) => void; func3: (x: string, z: number, y?: string) => void; func4: (x: string, z: number, y?: string, ...rest: any[]) => void; }
+
+    func1(y = 10, ...rest) { },
+>func1 : (y?: number, ...rest: any[]) => void
+>func1(y = 10, ...rest) { } : (y?: number, ...rest: any[]) => void
+>y : number
+>rest : any[]
+
+    func2(x = "hello") { },
+>func2 : (x?: string) => void
+>func2(x = "hello") { } : (x?: string) => void
+>x : string
+
+    func3(x: string, z: number, y = "hello") { },
+>func3 : (x: string, z: number, y?: string) => void
+>func3(x: string, z: number, y = "hello") { } : (x: string, z: number, y?: string) => void
+>x : string
+>z : number
+>y : string
+
+    func4(x: string, z: number, y = "hello", ...rest) { },
+>func4 : (x: string, z: number, y?: string, ...rest: any[]) => void
+>func4(x: string, z: number, y = "hello", ...rest) { } : (x: string, z: number, y?: string, ...rest: any[]) => void
+>x : string
+>z : number
+>y : string
+>rest : any[]
+}
+
+var x = function (str = "hello", ...rest) { }
+>x : (str?: string, ...rest: any[]) => void
+>function (str = "hello", ...rest) { } : (str?: string, ...rest: any[]) => void
+>str : string
+>rest : any[]
+
+var y = (function (num = 10, boo = false, ...rest) { })()
+>y : void
+>(function (num = 10, boo = false, ...rest) { })() : void
+>(function (num = 10, boo = false, ...rest) { }) : (num?: number, boo?: boolean, ...rest: any[]) => void
+>function (num = 10, boo = false, ...rest) { } : (num?: number, boo?: boolean, ...rest: any[]) => void
+>num : number
+>boo : boolean
+>rest : any[]
+
+var z = (function (num: number, boo = false, ...rest) { })(10)
+>z : void
+>(function (num: number, boo = false, ...rest) { })(10) : void
+>(function (num: number, boo = false, ...rest) { }) : (num: number, boo?: boolean, ...rest: any[]) => void
+>function (num: number, boo = false, ...rest) { } : (num: number, boo?: boolean, ...rest: any[]) => void
+>num : number
+>boo : boolean
+>rest : any[]
+
