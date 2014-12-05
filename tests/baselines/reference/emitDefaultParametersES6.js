@@ -39,129 +39,58 @@ var z = (function (num: number, boo = false, ...rest) { })(10)
 
 
 //// [emitDefaultParametersES6.js]
-function foo(x, y) {
-    if (y === void 0) { y = 10; }
+function foo(x, y = 10) {
 }
-function baz(x, y) {
-    if (y === void 0) { y = 5; }
-    var rest = [];
-    for (var _i = 2; _i < arguments.length; _i++) {
-        rest[_i - 2] = arguments[_i];
-    }
+function baz(x, y = 5, ...rest) {
 }
-function bar(y) {
-    if (y === void 0) { y = 10; }
+function bar(y = 10) {
 }
-function bar1(y) {
-    if (y === void 0) { y = 10; }
-    var rest = [];
-    for (var _i = 1; _i < arguments.length; _i++) {
-        rest[_i - 1] = arguments[_i];
-    }
+function bar1(y = 10, ...rest) {
 }
 var C = (function () {
-    function C(t, z, x, y) {
-        if (y === void 0) { y = "hello"; }
+    function C(t, z, x, y = "hello") {
     }
-    C.prototype.foo = function (x, t) {
-        if (t === void 0) { t = false; }
+    C.prototype.foo = function (x, t = false) {
     };
-    C.prototype.foo1 = function (x, t) {
-        if (t === void 0) { t = false; }
-        var rest = [];
-        for (var _i = 2; _i < arguments.length; _i++) {
-            rest[_i - 2] = arguments[_i];
-        }
+    C.prototype.foo1 = function (x, t = false, ...rest) {
     };
-    C.prototype.bar = function (t) {
-        if (t === void 0) { t = false; }
+    C.prototype.bar = function (t = false) {
     };
-    C.prototype.boo = function (t) {
-        if (t === void 0) { t = false; }
-        var rest = [];
-        for (var _i = 1; _i < arguments.length; _i++) {
-            rest[_i - 1] = arguments[_i];
-        }
+    C.prototype.boo = function (t = false, ...rest) {
     };
     return C;
 })();
 var D = (function () {
-    function D(y) {
-        if (y === void 0) { y = "hello"; }
+    function D(y = "hello") {
     }
     return D;
 })();
 var E = (function () {
-    function E(y) {
-        if (y === void 0) { y = "hello"; }
-        var rest = [];
-        for (var _i = 1; _i < arguments.length; _i++) {
-            rest[_i - 1] = arguments[_i];
-        }
+    function E(y = "hello", ...rest) {
     }
     return E;
 })();
-var lambda1 = function (y) {
-    if (y === void 0) { y = "hello"; }
+var lambda1 = function (y = "hello") {
 };
-var lambda2 = function (x, y) {
-    if (y === void 0) { y = "hello"; }
+var lambda2 = function (x, y = "hello") {
 };
-var lambda3 = function (x, y) {
-    if (y === void 0) { y = "hello"; }
-    var rest = [];
-    for (var _i = 2; _i < arguments.length; _i++) {
-        rest[_i - 2] = arguments[_i];
-    }
+var lambda3 = function (x, y = "hello", ...rest) {
 };
-var lambda4 = function (y) {
-    if (y === void 0) { y = "hello"; }
-    var rest = [];
-    for (var _i = 1; _i < arguments.length; _i++) {
-        rest[_i - 1] = arguments[_i];
-    }
+var lambda4 = function (y = "hello", ...rest) {
 };
 var obj2 = {
-    func1: function (y) {
-        if (y === void 0) { y = 10; }
-        var rest = [];
-        for (var _i = 1; _i < arguments.length; _i++) {
-            rest[_i - 1] = arguments[_i];
-        }
+    func1: function (y = 10, ...rest) {
     },
-    func2: function (x) {
-        if (x === void 0) { x = "hello"; }
+    func2: function (x = "hello") {
     },
-    func3: function (x, z, y) {
-        if (y === void 0) { y = "hello"; }
+    func3: function (x, z, y = "hello") {
     },
-    func4: function (x, z, y) {
-        if (y === void 0) { y = "hello"; }
-        var rest = [];
-        for (var _i = 3; _i < arguments.length; _i++) {
-            rest[_i - 3] = arguments[_i];
-        }
-    }
+    func4: function (x, z, y = "hello", ...rest) {
+    },
 };
-var x = function (str) {
-    if (str === void 0) { str = "hello"; }
-    var rest = [];
-    for (var _i = 1; _i < arguments.length; _i++) {
-        rest[_i - 1] = arguments[_i];
-    }
+var x = function (str = "hello", ...rest) {
 };
-var y = (function (num, boo) {
-    if (num === void 0) { num = 10; }
-    if (boo === void 0) { boo = false; }
-    var rest = [];
-    for (var _i = 2; _i < arguments.length; _i++) {
-        rest[_i - 2] = arguments[_i];
-    }
+var y = (function (num = 10, boo = false, ...rest) {
 })();
-var z = (function (num, boo) {
-    if (boo === void 0) { boo = false; }
-    var rest = [];
-    for (var _i = 2; _i < arguments.length; _i++) {
-        rest[_i - 2] = arguments[_i];
-    }
+var z = (function (num, boo = false, ...rest) {
 })(10);

@@ -1,11 +1,11 @@
-﻿// @target: es6
+﻿// @target: es5
 function foo(x: string, y = 10) { }
 function baz(x: string, y = 5, ...rest) { }
 function bar(y = 10) { }
 function bar1(y = 10, ...rest) { }
 
 class C {
-    constructor(t:boolean, z: string, x: number, y = "hello") { }
+    constructor(t: boolean, z: string, x: number, y = "hello") { }
 
     public foo(x: string, t = false) { }
     public foo1(x: string, t = false, ...rest) { }
@@ -34,5 +34,5 @@ var obj2 = {
 }
 
 var x = function (str = "hello", ...rest) { }
-var y = (function (num=10, boo = false, ...rest) { })()
+var y = (function (num = 10, boo = false, ...rest) { })()
 var z = (function (num: number, boo = false, ...rest) { })(10)
