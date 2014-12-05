@@ -1,11 +1,6 @@
 ///<reference path="references.ts" />
 
 module TypeScript.IncrementalParser {
-    interface IParserRewindPoint {
-        // Information used by the incremental parser source.
-        oldSourceUnitCursor: SyntaxCursor;
-    }
-
     interface ISyntaxElementInternal extends ISyntaxElement {
         intersectsChange: boolean;
     }
@@ -35,7 +30,7 @@ module TypeScript.IncrementalParser {
         // The cursor we use to navigate through and retrieve nodes and tokens from the old tree.
         var oldSourceUnit = oldSyntaxTree.sourceUnit();
 
-        var _outstandingRewindPointCount = 0;
+        var _isSpeculativelyParsing = false;
 
         // Start the cursor pointing at the first element in the source unit (if it exists).
         var _oldSourceUnitCursor = getSyntaxCursor();
@@ -81,7 +76,7 @@ module TypeScript.IncrementalParser {
             _scannerParserSource.release();
             _scannerParserSource = undefined;
             _oldSourceUnitCursor = undefined;
-            _outstandingRewindPointCount = 0;
+            _isSpeculativelyParsing = false;
         }
 
         function extendToAffectedRange(changeRange: TextChangeRange, sourceUnit: SourceUnitSyntax): TextChangeRange {
@@ -123,44 +118,35 @@ module TypeScript.IncrementalParser {
             return _scannerParserSource.tokenDiagnostics();
         }
 
-        function getRewindPoint() {
-            // Get a rewind point for our new text reader and for our old source unit cursor.
-            var rewindPoint = <IParserRewindPoint>_scannerParserSource.getRewindPoint();
-
+        function tryParse<T extends ISyntaxNode>(callback: () => T): T {
             // Clone our cursor.  That way we can restore to that point if the parser needs to rewind.
-            rewindPoint.oldSourceUnitCursor = cloneSyntaxCursor(_oldSourceUnitCursor);
+            var savedOldSourceUnitCursor = cloneSyntaxCursor(_oldSourceUnitCursor);
+            var savedIsSpeculativelyParsing = _isSpeculativelyParsing;
 
-            _outstandingRewindPointCount++;
-            return rewindPoint;
-        }
+            // Mark that we're speculative parsing.  During speculative parsing we cannot ruse 
+            // nodes from the parse tree.  See the comment in trySynchronizeCursorToPosition for
+            // the reasons why.
+            _isSpeculativelyParsing = true;
 
-        function rewind(rewindPoint: IParserRewindPoint): void {
-            // Restore our state to the values when the rewind point was created.
+            // Now defer to our underlying scanner source to actually invoke the callback.  That 
+            // way, if the parser decides to rewind, both the scanner source and this incremental
+            // source will rewind appropriately.
+            var result = _scannerParserSource.tryParse(callback);
 
-            // Reset the cursor to what it was when we got the rewind point.  Make sure to return 
-            // our existing cursor to the pool so it can be reused.
-            returnSyntaxCursor(_oldSourceUnitCursor);
-            _oldSourceUnitCursor = rewindPoint.oldSourceUnitCursor;
+            _isSpeculativelyParsing = savedIsSpeculativelyParsing;
 
-            // Clear the cursor that the rewind point points to.  This way we don't try
-            // to return it in 'releaseRewindPoint'.
-            rewindPoint.oldSourceUnitCursor = undefined;
-
-            _scannerParserSource.rewind(rewindPoint);
-        }
-
-        function releaseRewindPoint(rewindPoint: IParserRewindPoint): void {
-            if (rewindPoint.oldSourceUnitCursor) {
-                returnSyntaxCursor(rewindPoint.oldSourceUnitCursor);
+            if (!result) {
+                // We're rewinding. Reset the cursor to what it was when we got the rewind point.  
+                // Make sure to return our existing cursor to the pool so it can be reused.
+                returnSyntaxCursor(_oldSourceUnitCursor);
+                _oldSourceUnitCursor = savedOldSourceUnitCursor;
+            }
+            else {
+                // We're not rewinding.  Return the cloned original cursor back to the pool.
+                returnSyntaxCursor(savedOldSourceUnitCursor);
             }
 
-            _scannerParserSource.releaseRewindPoint(rewindPoint);
-            _outstandingRewindPointCount--;
-            Debug.assert(_outstandingRewindPointCount >= 0);
-        }
-
-        function isPinned() {
-            return _outstandingRewindPointCount > 0;
+            return result;
         }
 
         function trySynchronizeCursorToPosition() {
@@ -181,7 +167,7 @@ module TypeScript.IncrementalParser {
             //
             // As such, the rule is simple.  We only return nodes/tokens from teh original tree if
             // we know the parser will accept and consume them and never rewind back before them.
-            if (isPinned()) {
+            if (_isSpeculativelyParsing) {
                 return false;
             }
 
@@ -394,9 +380,7 @@ module TypeScript.IncrementalParser {
             currentContextualToken: currentContextualToken,
             peekToken: peekToken,
             consumeNodeOrToken: consumeNodeOrToken,
-            getRewindPoint: getRewindPoint,
-            rewind: rewind,
-            releaseRewindPoint: releaseRewindPoint,
+            tryParse: tryParse,
             tokenDiagnostics: tokenDiagnostics,
             release: release
         };

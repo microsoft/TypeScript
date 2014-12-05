@@ -1432,12 +1432,6 @@ module TypeScript.Scanner {
         return !hadError && SyntaxFacts.isIdentifierNameOrAnyKeyword(token) && width(token) === text.length();
     }
 
-    interface IScannerRewindPoint extends Parser.IRewindPoint {
-        // Information used by normal parser source.
-        absolutePosition: number;
-        slidingWindowIndex: number;
-    }
-
     // Parser source used in batch scenarios.  Directly calls into an underlying text scanner and
     // supports none of the functionality to reuse nodes.  Good for when you just want want to do
     // a single parse of a file.
@@ -1450,10 +1444,6 @@ module TypeScript.Scanner {
         // in the token stream we're pointing at.  However, it will get modified if we we decide to
         // reparse a / or /= as a regular expression.
         var _tokenDiagnostics: Diagnostic[] = [];
-
-        // Pool of rewind points we give out if the parser needs one.
-        var rewindPointPool: IScannerRewindPoint[] = [];
-        var rewindPointPoolCount = 0;
 
         var lastDiagnostic: Diagnostic = undefined;
         var reportDiagnostic = (position: number, fullWidth: number, diagnosticKey: string, args: any[]) => {
@@ -1470,7 +1460,6 @@ module TypeScript.Scanner {
             slidingWindow = undefined;
             scanner = undefined;
             _tokenDiagnostics = [];
-            rewindPointPool = [];
             lastDiagnostic = undefined;
             reportDiagnostic = undefined;
         }
@@ -1490,42 +1479,17 @@ module TypeScript.Scanner {
             return _tokenDiagnostics;
         }
 
-        function getOrCreateRewindPoint(): IScannerRewindPoint {
-            if (rewindPointPoolCount === 0) {
-                return <IScannerRewindPoint>{};
+        function tryParse<T extends ISyntaxNode>(callback: () => T): T {
+            var savedSlidingWindowIndex = slidingWindow.getAndPinAbsoluteIndex();
+            var savedAbsolutePosition = _absolutePosition;
+
+            var result = callback();
+            if (!result) {
+                slidingWindow.rewindToPinnedIndex(savedSlidingWindowIndex);
+                _absolutePosition = savedAbsolutePosition;
             }
 
-            rewindPointPoolCount--;
-            var result = rewindPointPool[rewindPointPoolCount];
-            rewindPointPool[rewindPointPoolCount] = undefined;
             return result;
-        }
-
-        function getRewindPoint(): IScannerRewindPoint {
-            var slidingWindowIndex = slidingWindow.getAndPinAbsoluteIndex();
-
-            var rewindPoint = getOrCreateRewindPoint();
-
-            rewindPoint.slidingWindowIndex = slidingWindowIndex;
-            rewindPoint.absolutePosition = _absolutePosition;
-
-            // rewindPoint.pinCount = slidingWindow.pinCount();
-
-            return rewindPoint;
-        }
-
-        function rewind(rewindPoint: IScannerRewindPoint): void {
-            slidingWindow.rewindToPinnedIndex(rewindPoint.slidingWindowIndex);
-
-            _absolutePosition = rewindPoint.absolutePosition;
-        }
-
-        function releaseRewindPoint(rewindPoint: IScannerRewindPoint): void {
-            // Debug.assert(slidingWindow.pinCount() === rewindPoint.pinCount);
-            slidingWindow.releaseAndUnpinAbsoluteIndex((<any>rewindPoint).absoluteIndex);
-
-            rewindPointPool[rewindPointPoolCount] = rewindPoint;
-            rewindPointPoolCount++;
         }
 
         function fetchNextItem(allowContextualToken: boolean): ISyntaxToken {
@@ -1641,9 +1605,10 @@ module TypeScript.Scanner {
             currentContextualToken: currentContextualToken,
             peekToken: peekToken,
             consumeNodeOrToken: consumeNodeOrToken,
-            getRewindPoint: getRewindPoint,
-            rewind: rewind,
-            releaseRewindPoint: releaseRewindPoint,
+            //getRewindPoint: getRewindPoint,
+            //rewind: rewind,
+            //releaseRewindPoint: releaseRewindPoint,
+            tryParse: tryParse,
             tokenDiagnostics: tokenDiagnostics,
             release: release,
             absolutePosition: absolutePosition,

@@ -72,64 +72,13 @@ module TypeScript.Parser {
         // current one.
         consumeNodeOrToken(node: ISyntaxNodeOrToken): void;
 
-        // Gets a rewind point that the parser can use to move back to after it speculatively 
-        // parses something.  The source guarantees that if the parser calls 'rewind' with that 
-        // point that it will be mostly in the same state that it was in when 'getRewindPoint'
-        // was called.  i.e. calling currentToken, peekToken, tokenDiagnostics, etc. will result
-        // in the same values.  One allowed exemption to this is 'currentNode'.  If a rewind point
-        // is requested and rewound, then getting the currentNode may not be possible.  However,
-        // as this is purely a performance optimization, it will not affect correctness.
-        //
-        // Note: that rewind points are not free (but they should also not be too expensive).  So
-        // they should be used judiciously.  While a rewind point is held by the parser, the source
-        // is not free to do things that it would normally do.  For example, it cannot throw away
-        // tokens that it has scanned on or after the rewind point as it must keep them alive for
-        // the parser to move back to.
-        //
-        // Rewind points also work in a stack fashion.  The first rewind point given out must be
-        // the last rewind point released.  Do not release them out of order, or bad things can 
-        // happen.
-        //
-        // Do *NOT* forget to release a rewind point.  Always put them in a finally block to ensure
-        // that they are released.  If they are not released, things will still work, you will just
-        // consume far more memory than necessary.
-        getRewindPoint(): IRewindPoint;
-
-        // Rewinds the source to the position and state it was at when this rewind point was created.
-        // This does not need to be called if the parser decides it does not need to rewind.  For 
-        // example, the parser may speculatively parse out a lambda expression when it sees something
-        // ambiguous like "(a = b, c = ...".  If it succeeds parsing that as a lambda, then it will
-        // just return that result.  However, if it fails *then* it will rewind and try it again as
-        // a parenthesized expression.  
-        rewind(rewindPoint: IRewindPoint): void;
-
-        // Called when the parser is done speculative parsing and no longer needs the rewind point.
-        // Must be called for every rewind point retrived.
-        releaseRewindPoint(rewindPoint: IRewindPoint): void;
+        tryParse<T extends ISyntaxNode>(callback: () => T): T;
 
         // Retrieves the diagnostics generated while the source was producing nodes or tokens. 
         // Should generally only be called after the document has been completely parsed.
         tokenDiagnostics(): Diagnostic[];
 
         release(): void;
-    }
-
-    // Information the parser needs to effectively rewind.
-    export interface IRewindPoint {
-    }
-
-    interface IParserRewindPoint extends IRewindPoint {
-        // As we speculatively parse, we may build up diagnostics.  When we rewind we want to 
-        // 'forget' that information.In order to do that we store the count of diagnostics and 
-        // when we start speculating, and we reset to that count when we're done.  That way the
-        // speculative parse does not affect any further results.
-        diagnosticsCount: number;
-
-        // As we speculatively parse we may end up adding additional skipped tokens to the 
-        // _skippedTokens array in the parser.  When we rewind we don't want those items in the 
-        // array.  We may also, during speculative parsing, attach our skipped tokens to some
-        // new token.  When we rewind we need to restore whatever skipped tokens we started with.
-        skippedTokens: ISyntaxToken[];
     }
 
     // Contains the actual logic to parse typescript/javascript.  This is the code that generally
@@ -358,29 +307,20 @@ module TypeScript.Parser {
             return new SyntaxTree(sourceUnit, isDeclaration, allDiagnostics, fileName, source.text, languageVersion);
         }
 
-        function getRewindPoint(): IParserRewindPoint {
-            var rewindPoint = <IParserRewindPoint>source.getRewindPoint();
-
+        function tryParse<T extends ISyntaxNode>(callback: () => T): T {
             // See the comments in IParserRewindPoint for the explanation on why we need to store
             // this data, and what it is used for.
-            rewindPoint.diagnosticsCount = diagnostics.length;
-            rewindPoint.skippedTokens = _skippedTokens ? _skippedTokens.slice(0) : undefined;
+            var savedDiagnosticsCount = diagnostics.length;
+            var savedSkippedTokens = _skippedTokens ? _skippedTokens.slice(0) : undefined;
 
-            return rewindPoint;
-        }
+            var result = source.tryParse(callback);
 
-        function rewind(rewindPoint: IParserRewindPoint): void {
-            source.rewind(rewindPoint);
+            if (!result) {
+                diagnostics.length = savedDiagnosticsCount;
+                _skippedTokens = savedSkippedTokens;
+            }
 
-            diagnostics.length = rewindPoint.diagnosticsCount;
-            _skippedTokens = rewindPoint.skippedTokens;
-        }
-
-        function releaseRewindPoint(rewindPoint: IParserRewindPoint): void {
-            // Debug.assert(listParsingState === rewindPoint.listParsingState);
-            // Debug.assert(isInStrictMode === rewindPoint.isInStrictMode);
-
-            source.releaseRewindPoint(rewindPoint);
+            return result;
         }
 
         function currentNode(): ISyntaxNode {
@@ -914,80 +854,6 @@ module TypeScript.Parser {
 
         function parseModuleNameModuleReference(): ModuleNameModuleReferenceSyntax {
             return new ModuleNameModuleReferenceSyntax(contextFlags, parseName(/*allowIdentifierNames:*/ false));
-        }
-
-        function tryParseTypeArgumentList(inExpression: boolean): TypeArgumentListSyntax {
-            var _currentToken = currentToken();
-            if (_currentToken.kind !== SyntaxKind.LessThanToken) {
-                return undefined;
-            }
-
-            if (!inExpression) {
-                // if we're not in an expression, this must be a type argument list.  Just parse
-                // it out as such.
-                return new TypeArgumentListSyntax(contextFlags, 
-                    consumeToken(_currentToken), 
-                    parseSeparatedSyntaxList<ITypeSyntax>(ListParsingState.TypeArgumentList_Types),
-                    eatToken(SyntaxKind.GreaterThanToken));
-            }
-
-            // If we're in an expression, then we only want to consume this as a type argument list
-            // if we're sure that it's a type arg list and not an arithmetic expression.
-
-            var rewindPoint = getRewindPoint();
-
-            // We've seen a '<'.  Try to parse it out as a type argument list.
-            var lessThanToken = consumeToken(_currentToken);
-            var typeArguments = parseSeparatedSyntaxList<ITypeSyntax>(ListParsingState.TypeArgumentList_Types);
-            var greaterThanToken = eatToken(SyntaxKind.GreaterThanToken);
-
-            // We're in a context where '<' could be the start of a type argument list, or part
-            // of an arithmetic expression.  We'll presume it's the latter unless we see the '>'
-            // and a following token that guarantees that it's supposed to be a type argument list.
-            if (greaterThanToken.fullWidth() === 0 || !canFollowTypeArgumentListInExpression(currentToken().kind)) {
-                rewind(rewindPoint);
-                releaseRewindPoint(rewindPoint);
-                return undefined;
-            }
-            else {
-                releaseRewindPoint(rewindPoint);
-                return new TypeArgumentListSyntax(contextFlags, lessThanToken, typeArguments, greaterThanToken);
-            }
-        }
-
-        function canFollowTypeArgumentListInExpression(kind: SyntaxKind): boolean {
-            switch (kind) {
-                case SyntaxKind.OpenParenToken:                 // foo<x>(   
-                case SyntaxKind.DotToken:                       // foo<x>.
-                    // These two cases are the only cases where this token can legally follow a
-                    // type argument list.  So we definitely want to treat this as a type arg list.
-
-                case SyntaxKind.CloseParenToken:                // foo<x>)
-                case SyntaxKind.CloseBracketToken:              // foo<x>]
-                case SyntaxKind.ColonToken:                     // foo<x>:
-                case SyntaxKind.SemicolonToken:                 // foo<x>;
-                case SyntaxKind.CommaToken:                     // foo<x>,
-                case SyntaxKind.QuestionToken:                  // foo<x>?
-                case SyntaxKind.EqualsEqualsToken:              // foo<x> ==
-                case SyntaxKind.EqualsEqualsEqualsToken:        // foo<x> ===
-                case SyntaxKind.ExclamationEqualsToken:         // foo<x> !=
-                case SyntaxKind.ExclamationEqualsEqualsToken:   // foo<x> !==
-                case SyntaxKind.AmpersandAmpersandToken:        // foo<x> &&
-                case SyntaxKind.BarBarToken:                    // foo<x> ||
-                case SyntaxKind.CaretToken:                     // foo<x> ^
-                case SyntaxKind.AmpersandToken:                 // foo<x> &
-                case SyntaxKind.BarToken:                       // foo<x> |
-                case SyntaxKind.CloseBraceToken:                // foo<x> }
-                case SyntaxKind.EndOfFileToken:                 // foo<x>
-                    // these cases can't legally follow a type arg list.  However, they're not legal 
-                    // expressions either.  The user is probably in the middle of a generic type. So
-                    // treat it as such.
-                    return true;
-
-                default:
-                    // Anything else treat as an expression.
-                    return false;
-            }
         }
 
         function parseName(allowIdentifierName: boolean): INameSyntax {
@@ -3042,44 +2908,79 @@ module TypeScript.Parser {
             // Debug.assert(currentToken().kind === SyntaxKind.LessThanToken);
             // If we have a '<', then only parse this as a arugment list if the type arguments
             // are complete and we have an open paren.  if we don't, rewind and return nothing.
-            var rewindPoint = getRewindPoint();
-
-            var typeArgumentList = tryParseTypeArgumentList(/*inExpression:*/ true);
-            var token0 = currentToken();
-            var tokenKind = token0.kind;
-
-            var isOpenParen = tokenKind === SyntaxKind.OpenParenToken;
-            var isDot = tokenKind === SyntaxKind.DotToken;
-            var isOpenParenOrDot = isOpenParen || isDot;
-
-            var argumentList: ArgumentListSyntax = undefined;
-            if (!typeArgumentList || !isOpenParenOrDot) {
-                // Wasn't generic.  Rewind to where we started so this can be parsed as an 
-                // arithmetic expression.
-                rewind(rewindPoint);
-                releaseRewindPoint(rewindPoint);
+            var typeArgumentList = tryParse(speculativeParseTypeArgumentList);
+            if (!typeArgumentList) {
                 return undefined;
             }
-            else {
-                Debug.assert(typeArgumentList && isOpenParenOrDot);
 
-                releaseRewindPoint(rewindPoint);
-                // It's not uncommon for a user to type: "Foo<T>."
-                //
-                // This is not legal in typescript (as an parameter list must follow the type
-                // arguments).  We want to give a good error message for this as otherwise
-                // we'll bail out here and give a poor error message when we try to parse this
-                // as an arithmetic expression.
-                if (isDot) {
-                    return new ArgumentListSyntax(contextFlags, typeArgumentList,
-                        createMissingToken(SyntaxKind.OpenParenToken, undefined, DiagnosticCode.A_parameter_list_must_follow_a_generic_type_argument_list_expected), 
-                        <any>[],
-                        eatToken(SyntaxKind.CloseParenToken));
-                }
-                else {
-                    Debug.assert(token0.kind === SyntaxKind.OpenParenToken);
-                    return parseArgumentList(typeArgumentList, token0);
-                }
+            var _currentToken = currentToken();
+            if (_currentToken.kind === SyntaxKind.OpenParenToken) {
+                return parseArgumentList(typeArgumentList, _currentToken);
+            }
+
+            // It's not uncommon for a user to type: "Foo<T>."
+            //
+            // This is not legal in typescript (as an parameter list must follow the type
+            // arguments).  We want to give a good error message for this as otherwise
+            // we'll bail out here and give a poor error message when we try to parse this
+            // as an arithmetic expression.
+            return new ArgumentListSyntax(contextFlags, typeArgumentList,
+                createMissingToken(SyntaxKind.OpenParenToken, undefined, DiagnosticCode.A_parameter_list_must_follow_a_generic_type_argument_list_expected),
+                <any>[],
+                eatToken(SyntaxKind.CloseParenToken));
+        }
+
+        function speculativeParseTypeArgumentList(): TypeArgumentListSyntax {
+            // If we're in an expression, then we only want to consume this as a type argument list
+            // if we're sure that it's a type arg list and not an arithmetic expression.
+
+            // We've seen a '<'.  Try to parse it out as a type argument list.
+            var lessThanToken = consumeToken(currentToken());
+            var typeArguments = parseSeparatedSyntaxList<ITypeSyntax>(ListParsingState.TypeArgumentList_Types);
+            var greaterThanToken = tryEatToken(SyntaxKind.GreaterThanToken);
+
+            // We're in a context where '<' could be the start of a type argument list, or part
+            // of an arithmetic expression.  We'll presume it's the latter unless we see the '>'
+            // and a following token that guarantees that it's supposed to be a type argument list.
+            if (greaterThanToken === undefined || !canFollowTypeArgumentListInExpression(currentToken().kind)) {
+                return undefined;
+            }
+
+            return new TypeArgumentListSyntax(contextFlags, lessThanToken, typeArguments, greaterThanToken);
+        }
+
+        function canFollowTypeArgumentListInExpression(kind: SyntaxKind): boolean {
+            switch (kind) {
+                case SyntaxKind.OpenParenToken:                 // foo<x>(   
+                case SyntaxKind.DotToken:                       // foo<x>.
+                // These two cases are the only cases where this token can legally follow a
+                // type argument list.  So we definitely want to treat this as a type arg list.
+
+                case SyntaxKind.CloseParenToken:                // foo<x>)
+                case SyntaxKind.CloseBracketToken:              // foo<x>]
+                case SyntaxKind.ColonToken:                     // foo<x>:
+                case SyntaxKind.SemicolonToken:                 // foo<x>;
+                case SyntaxKind.CommaToken:                     // foo<x>,
+                case SyntaxKind.QuestionToken:                  // foo<x>?
+                case SyntaxKind.EqualsEqualsToken:              // foo<x> ==
+                case SyntaxKind.EqualsEqualsEqualsToken:        // foo<x> ===
+                case SyntaxKind.ExclamationEqualsToken:         // foo<x> !=
+                case SyntaxKind.ExclamationEqualsEqualsToken:   // foo<x> !==
+                case SyntaxKind.AmpersandAmpersandToken:        // foo<x> &&
+                case SyntaxKind.BarBarToken:                    // foo<x> ||
+                case SyntaxKind.CaretToken:                     // foo<x> ^
+                case SyntaxKind.AmpersandToken:                 // foo<x> &
+                case SyntaxKind.BarToken:                       // foo<x> |
+                case SyntaxKind.CloseBraceToken:                // foo<x> }
+                case SyntaxKind.EndOfFileToken:                 // foo<x>
+                    // these cases can't legally follow a type arg list.  However, they're not legal 
+                    // expressions either.  The user is probably in the middle of a generic type. So
+                    // treat it as such.
+                    return true;
+
+                default:
+                    // Anything else treat as an expression.
+                    return false;
             }
         }
 
@@ -3335,28 +3236,24 @@ module TypeScript.Parser {
             if (isDefinitelyArrowFunctionExpression()) {
                 // We have something like "() =>" or "(a) =>".  Definitely a lambda, so parse it
                 // unilaterally as such.
-                return tryParseParenthesizedArrowFunctionExpressionWorker(/*requiresArrow:*/ false);
+                return parseParenthesizedArrowFunctionExpressionWorker(/*requireArrow:*/ false);
             }
 
             // Now, look for cases where we're sure it's not an arrow function.  This will help save us
             // a costly parse.
+
             if (!isPossiblyArrowFunctionExpression()) {
                 return undefined;
             }
 
-            // Then, try to actually parse it as a arrow function, and only return if we see an => 
-            var rewindPoint = getRewindPoint();
-
-            var arrowFunction = tryParseParenthesizedArrowFunctionExpressionWorker(/*requiresArrow:*/ true);
-            if (arrowFunction === undefined) {
-                rewind(rewindPoint);
-            }
-
-            releaseRewindPoint(rewindPoint);
-            return arrowFunction;
+            return tryParse(speculativeParseParenthesizedArrowFunctionExpression);
         }
 
-        function tryParseParenthesizedArrowFunctionExpressionWorker(requireArrow: boolean): ParenthesizedArrowFunctionExpressionSyntax {
+        function speculativeParseParenthesizedArrowFunctionExpression() {
+            return parseParenthesizedArrowFunctionExpressionWorker(/*requireArrow:*/ true);
+        }
+
+        function parseParenthesizedArrowFunctionExpressionWorker(requireArrow: boolean): ParenthesizedArrowFunctionExpressionSyntax {
             var asyncKeyword = tryEatToken(SyntaxKind.AsyncKeyword);
 
             // From the static semantic section:
@@ -3367,7 +3264,6 @@ module TypeScript.Parser {
             //  return the result of parsing the lexical token stream matched by CoverParenthesizedExpressionAndArrowParameterList
             //  using ArrowFormalParameters as the goal symbol.
             var callSignature = parseCallSignatureWithoutSemicolonOrComma(/*requireCompleteTypeParameterList:*/ true, /*yieldAndGeneratorParameterContext:*/ inYieldContext(), /*asyncContext:*/ !!asyncKeyword);
-
             if (requireArrow && currentToken().kind !== SyntaxKind.EqualsGreaterThanToken) {
                 return undefined;
             }
@@ -3885,23 +3781,25 @@ module TypeScript.Parser {
                 return undefined;
             }
 
-            var rewindPoint = getRewindPoint();
+            return requireCompleteTypeParameterList
+                ? tryParse(speculativeParseTypeParameterList)
+                : parseTypeArgumentListWorker(/*requireCompleteTypeParameterList:*/ false);
+        }
 
-            var lessThanToken = consumeToken(_currentToken);
+        function speculativeParseTypeParameterList() {
+            return parseTypeArgumentListWorker(/*requireCompleteTypeParameterList:*/ true);
+        }
+
+        function parseTypeArgumentListWorker(requireCompleteTypeParameterList: boolean) {
+            var lessThanToken = consumeToken(currentToken());
             var typeParameters = parseSeparatedSyntaxList<TypeParameterSyntax>(ListParsingState.TypeParameterList_TypeParameters);
 
-            var greaterThanToken = eatToken(SyntaxKind.GreaterThanToken);
-
             // return undefined if we were required to have a '>' token and we did not  have one.
-            if (requireCompleteTypeParameterList && greaterThanToken.fullWidth() === 0) {
-                rewind(rewindPoint);
-                releaseRewindPoint(rewindPoint);
+            if (requireCompleteTypeParameterList && currentToken().kind !== SyntaxKind.GreaterThanToken) {
                 return undefined;
             }
-            else {
-                releaseRewindPoint(rewindPoint);
-                return new TypeParameterListSyntax(contextFlags, lessThanToken, typeParameters, greaterThanToken);
-            }
+
+            return new TypeParameterListSyntax(contextFlags, lessThanToken, typeParameters, eatToken(SyntaxKind.GreaterThanToken));
         }
 
         function isTypeParameter(): boolean {
@@ -4147,10 +4045,17 @@ module TypeScript.Parser {
                 return name;
             }
 
-            var typeArgumentList = tryParseTypeArgumentList(/*inExpression:*/ false);
-            return !typeArgumentList
-                ? name
-                : new GenericTypeSyntax(contextFlags, name, typeArgumentList);
+            var _currentToken = currentToken();
+            if (_currentToken.kind !== SyntaxKind.LessThanToken) {
+                return name;
+            }
+
+            return new GenericTypeSyntax(contextFlags,
+                name,
+                new TypeArgumentListSyntax(contextFlags,
+                    consumeToken(_currentToken),
+                    parseSeparatedSyntaxList<ITypeSyntax>(ListParsingState.TypeArgumentList_Types),
+                    eatToken(SyntaxKind.GreaterThanToken)));
         }
 
         function isFunctionType(): boolean {
