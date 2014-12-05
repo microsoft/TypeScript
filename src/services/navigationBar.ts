@@ -46,11 +46,16 @@ module ts.NavigationBar {
                     case SyntaxKind.VariableStatement:
                         forEach((<VariableStatement>node).declarations, visit);
                         break;
+                    case SyntaxKind.ObjectBindingPattern:
+                    case SyntaxKind.ArrayBindingPattern:
+                        forEach((<BindingPattern>node).elements, visit);
+                        break;
                     case SyntaxKind.VariableDeclaration:
                         if (isBindingPattern(node)) {
-                            forEach((<BindingPattern>(<VariableDeclaration>node).name).elements, visit);
+                            visit((<VariableDeclaration>node).name);
                             break;
                         }
+                        // Fall through
                     case SyntaxKind.ClassDeclaration:
                     case SyntaxKind.EnumDeclaration:
                     case SyntaxKind.InterfaceDeclaration:

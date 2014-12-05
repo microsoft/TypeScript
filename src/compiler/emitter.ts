@@ -1881,13 +1881,18 @@ module ts {
                 writeFile(compilerHost, diagnostics, jsFilePath, emitOutput, writeByteOrderMark);
             }
 
-            function createTempVariable(location: Node): Identifier {
-                do {
-                    // First _a..._z, then _0, _1, ...
-                    var name = "_" + (tempCount < 26 ? String.fromCharCode(tempCount + 0x61) : tempCount - 26);
+            // Create a temporary variable with a unique unused name. The forLoopVariable parameter signals that the
+            // name should be one that is appropriate for a for loop variable.
+            function createTempVariable(location: Node, forLoopVariable?: boolean): Identifier {
+                var name = forLoopVariable ? "_i" : undefined;
+                while (true) {
+                    if (name && resolver.isUnknownIdentifier(location, name)) {
+                        break;
+                    }
+                    // _a .. _h, _j ... _z, _0, _1, ...
+                    name = "_" + (tempCount < 25 ? String.fromCharCode(tempCount + (tempCount < 8 ? 0: 1) + CharacterCodes.a) : tempCount - 25);
                     tempCount++;
                 }
-                while (!resolver.isUnknownIdentifier(location, name));
                 var result = <Identifier>createNode(SyntaxKind.Identifier);
                 result.text = name;
                 return result;
@@ -2758,6 +2763,8 @@ module ts {
 
             function emitDestructuring(root: BinaryExpression | BindingElement, value?: Expression) {
                 var emitCount = 0;
+                // An exported declaration is actually emitted as an assignment (to a property on the module object), so
+                // temporary variables in an exported declaration need to have real declarations elsewhere.
                 var isDeclaration = (root.kind === SyntaxKind.VariableDeclaration && !(root.flags & NodeFlags.Export)) || root.kind === SyntaxKind.Parameter;
                 if (root.kind === SyntaxKind.BinaryExpression) {
                     emitAssignmentExpression(<BinaryExpression>root);
@@ -3038,7 +3045,7 @@ module ts {
                 if (hasRestParameters(node)) {
                     var restIndex = node.parameters.length - 1;
                     var restParam = node.parameters[restIndex];
-                    var tempName = createTempVariable(node).text;
+                    var tempName = createTempVariable(node, /*forLoopVariable*/ true).text;
                     writeLine();
                     emitLeadingComments(restParam);
                     emitStart(restParam);

@@ -1660,17 +1660,23 @@ module ts {
             return classType.typeParameters ? createTypeReference(<GenericType>classType, map(classType.typeParameters, _ => anyType)) : classType;
         }
 
+        // Return the type of the given property in the given type, or undefined if no such property exists
         function getTypeOfPropertyOfType(type: Type, name: string): Type {
             var prop = getPropertyOfType(type, name);
             return prop ? getTypeOfSymbol(prop) : undefined;
         }
 
+        // Return the inferred type for a binding element
         function getTypeForBindingElement(declaration: BindingElement): Type {
             var pattern = <BindingPattern>declaration.parent;
             var parentType = getTypeForVariableDeclaration(<VariableDeclaration>pattern.parent);
+            // If parent has the unknown (error) type, then so does this binding element
             if (parentType === unknownType) {
                 return unknownType;
             }
+            // If no type was specified or inferred for parent, or if the specified or inferred type is any,
+            // infer from the initializer of the binding element if one is present. Otherwise, go with the
+            // undefined or any type of the parent.
             if (!parentType || parentType === anyType) {
                 if (declaration.initializer) {
                     return checkExpressionCached(declaration.initializer);
@@ -1678,7 +1684,10 @@ module ts {
                 return parentType;
             }
             if (pattern.kind === SyntaxKind.ObjectBindingPattern) {
+                // Use explicitly specified property name ({ p: xxx } form), or otherwise the implied name ({ p } form)
                 var name = declaration.propertyName || <Identifier>declaration.name;
+                // Use type of the specified property, or otherwise, for a numeric name, the type of the numeric index signature,
+                // or otherwise the type of the string index signature.
                 var type = getTypeOfPropertyOfType(parentType, name.text) ||
                     isNumericName(name.text) && getIndexTypeOfType(parentType, IndexKind.Number) ||
                     getIndexTypeOfType(parentType, IndexKind.String);
@@ -1688,12 +1697,14 @@ module ts {
                 }
                 return type;
             }
+            // For an array binding element the specified or inferred type of the parent must be assignable to any[]
             if (!isTypeAssignableTo(parentType, anyArrayType)) {
                 error(pattern, Diagnostics.Type_0_is_not_an_array_type, typeToString(parentType));
                 return unknownType;
             }
+            // Use specific property type when parent is a tuple or numeric index type when parent is an array
             var propName = "" + indexOf(pattern.elements, declaration);
-            var type = isTupleType(parentType) ? getTypeOfPropertyOfType(parentType, propName) : getIndexTypeOfType(parentType, IndexKind.Number);
+            var type = isTupleLikeType(parentType) ? getTypeOfPropertyOfType(parentType, propName) : getIndexTypeOfType(parentType, IndexKind.Number);
             if (!type) {
                 error(declaration, Diagnostics.Type_0_has_no_property_1, typeToString(parentType), propName);
                 return unknownType;
@@ -1701,6 +1712,7 @@ module ts {
             return type;
         }
 
+        // Return the inferred type for a variable, parameter, or property declaration
         function getTypeForVariableDeclaration(declaration: VariableDeclaration): Type {
             // A variable declared in a for..in statement is always of type any
             if (declaration.parent.kind === SyntaxKind.ForInStatement) {
@@ -1732,15 +1744,17 @@ module ts {
             if (declaration.initializer) {
                 return checkExpressionCached(declaration.initializer);
             }
-            // If it is a short-hand property assignment; Use the type of the identifier
+            // If it is a short-hand property assignment, use the type of the identifier
             if (declaration.kind === SyntaxKind.ShorthandPropertyAssignment) {
-                var type = checkIdentifier(<Identifier>declaration.name);
-                return type
+                return checkIdentifier(<Identifier>declaration.name);
             }
             // No type specified and nothing can be inferred
             return undefined;
         }
 
+        // Return the type implied by a binding pattern element. This is the type of the initializer of the element if
+        // one is present. Otherwise, if the element is itself a binding pattern, it is the type implied by the binding
+        // pattern. Otherwise, it is the type any.
         function getTypeFromBindingElement(element: BindingElement): Type {
             if (element.initializer) {
                 return getWidenedType(checkExpressionCached(element.initializer));
@@ -1751,6 +1765,13 @@ module ts {
             return anyType;
         }
 
+        // Return the type implied by a binding pattern. This is the type implied purely by the binding pattern itself
+        // and without regard to its context (i.e. without regard any type annotation or initializer associated with the
+        // declaration in which the binding pattern is contained). For example, the implied type of [x, y] is [any, any]
+        // and the implied type of { x, y: z = 1 } is { x: any; y: number; }. The type implied by a binding pattern is
+        // used as the contextual type of an initializer associated with the binding pattern. Also, for a destructuring
+        // parameter with no type annotation or initializer, the type implied by the binding pattern becomes the type of
+        // the parameter.
         function getTypeFromBindingPattern(pattern: BindingPattern): Type {
             if (pattern.kind === SyntaxKind.ArrayBindingPattern) {
                 return createTupleType(map(pattern.elements, e => e.kind === SyntaxKind.OmittedExpression ? anyType : getTypeFromBindingElement(e)));
@@ -1766,14 +1787,28 @@ module ts {
             return createAnonymousType(undefined, members, emptyArray, emptyArray, undefined, undefined);
         }
 
+        // Return the type associated with a variable, parameter, or property declaration. In the simple case this is the type
+        // specified in a type annotation or inferred from an initializer. However, in the case of a destructuring declaration it
+        // is a bit more involved. For example:
+        //
+        //   var [x, s = ""] = [1, "one"];
+        //
+        // Here, the array literal [1, "one"] is contextually typed by the type [any, string], which is the implied type of the
+        // binding pattern [x, s = ""]. Because the contextual type is a tuple type, the resulting type of [1, "one"] is the
+        // tuple type [number, string]. Thus, the type inferred for 'x' is number and the type inferred for 's' is string.
         function getWidenedTypeForVariableDeclaration(declaration: VariableDeclaration, reportErrors?: boolean): Type {
             var type = getTypeForVariableDeclaration(declaration);
             if (type) {
                 if (reportErrors) {
                     reportErrorsFromWidening(declaration, type);
                 }
+                // During a normal type check we'll never get to here with a property assignment (the check of the containing
+                // object literal uses a different path). We exclude widening only so that language services and type verification
+                // tools see the actual type.
                 return declaration.kind !== SyntaxKind.PropertyAssignment ? getWidenedType(type) : type;
             }
+            // If no type was specified and nothing could be inferred, and if the declaration specifies a binding pattern, use
+            // the type implied by the binding pattern
             if (isBindingPattern(declaration.name)) {
                 return getTypeFromBindingPattern(<BindingPattern>declaration.name);
             }
@@ -4052,7 +4087,7 @@ module ts {
             return type.flags & TypeFlags.Reference && (<TypeReference>type).target === globalArrayType;
         }
 
-        function isTupleType(type: Type): boolean {
+        function isTupleLikeType(type: Type): boolean {
             return !!getPropertyOfType(type, "0");
         }
 
@@ -4890,9 +4925,10 @@ module ts {
         }
 
         // In a variable, parameter or property declaration with a type annotation, the contextual type of an initializer
-        // expression is the type of the variable, parameter or property. In a parameter declaration of a contextually
-        // typed function expression, the contextual type of an initializer expression is the contextual type of the
-        // parameter.
+        // expression is the type of the variable, parameter or property. Otherwise, in a parameter declaration of a
+        // contextually typed function expression, the contextual type of an initializer expression is the contextual type
+        // of the parameter. Otherwise, in a variable or parameter declaration with a binding pattern name, the contextual
+        // type of an initializer expression is the type implied by the binding pattern.
         function getContextualTypeForInitializerExpression(node: Expression): Type {
             var declaration = <VariableOrParameterDeclaration>node.parent;
             if (node === declaration.initializer) {
@@ -5001,8 +5037,8 @@ module ts {
         }
 
         // Return true if the given contextual type is a tuple-like type
-        function contextualTypeIsTupleType(type: Type): boolean {
-            return !!(type.flags & TypeFlags.Union ? forEach((<UnionType>type).types, t => isTupleType(t)) : isTupleType(type));
+        function contextualTypeIsTupleLikeType(type: Type): boolean {
+            return !!(type.flags & TypeFlags.Union ? forEach((<UnionType>type).types, t => isTupleLikeType(t)) : isTupleLikeType(type));
         }
 
         // Return true if the given contextual type provides an index signature of the given kind
@@ -5160,6 +5196,9 @@ module ts {
             return mapper && mapper !== identityMapper;
         }
 
+        // A node is an assignment target if it is on the left hand side of an '=' token, if it is parented by a property
+        // assignment in an object literal that is an assignment target, or if it is parented by an array literal that is
+        // an assignment target. Examples include 'a = xxx', '{ p: a } = xxx', '[{ p: a}] = xxx'.
         function isAssignmentTarget(node: Node): boolean {
             var parent = node.parent;
             if (parent.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>parent).operator === SyntaxKind.EqualsToken && (<BinaryExpression>parent).left === node) {
@@ -5181,7 +5220,7 @@ module ts {
             }
             var elementTypes = map(elements, e => checkExpression(e, contextualMapper));
             var contextualType = getContextualType(node);
-            if ((contextualType && contextualTypeIsTupleType(contextualType)) || isAssignmentTarget(node)) {
+            if ((contextualType && contextualTypeIsTupleLikeType(contextualType)) || isAssignmentTarget(node)) {
                 return createTupleType(elementTypes);
             }
             return createArrayType(getUnionType(elementTypes));
@@ -6492,7 +6531,7 @@ module ts {
                 var p = properties[i];
                 if (p.kind === SyntaxKind.PropertyAssignment || p.kind === SyntaxKind.ShorthandPropertyAssignment) {
                     // TODO(andersh): Computed property support
-                    var name = <Identifier>((<PropertyDeclaration>p).name);
+                    var name = <Identifier>(<PropertyDeclaration>p).name;
                     var type = sourceType.flags & TypeFlags.Any ? sourceType :
                         getTypeOfPropertyOfType(sourceType, name.text) ||
                         isNumericName(name.text) && getIndexTypeOfType(sourceType, IndexKind.Number) ||
@@ -6523,7 +6562,7 @@ module ts {
                 if (e.kind !== SyntaxKind.OmittedExpression) {
                     var propName = "" + i;
                     var type = sourceType.flags & TypeFlags.Any ? sourceType :
-                        isTupleType(sourceType) ? getTypeOfPropertyOfType(sourceType, propName) :
+                        isTupleLikeType(sourceType) ? getTypeOfPropertyOfType(sourceType, propName) :
                         getIndexTypeOfType(sourceType, IndexKind.Number);
                     if (type) {
                         checkDestructuringAssignment(e, type, contextualMapper);

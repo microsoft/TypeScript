@@ -812,7 +812,7 @@ module ts {
         return undefined;
     }
 
-    enum ParsingContext {
+    const enum ParsingContext {
         SourceElements,          // Elements in source file
         ModuleElements,          // Elements in module declaration
         BlockStatements,         // Statements in block
