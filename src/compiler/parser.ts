@@ -235,19 +235,29 @@ module ts {
     // a truthy value, iteration stops and that value is returned. Otherwise, undefined is returned.
     export function forEachChild<T>(node: Node, cbNode: (node: Node) => T, cbNodes?: (nodes: Node[]) => T): T {
         function child(node: Node): T {
-            if (node) return cbNode(node);
+            if (node) {
+                return cbNode(node);
+            }
         }
         function children(nodes: Node[]) {
             if (nodes) {
-                if (cbNodes) return cbNodes(nodes);
-                var result: T;
-                for (var i = 0, len = nodes.length; i < len; i++) {
-                    if (result = cbNode(nodes[i])) break;
+                if (cbNodes) {
+                    return cbNodes(nodes);
                 }
-                return result;
+
+                for (var i = 0, len = nodes.length; i < len; i++) {
+                    var result = cbNode(nodes[i])
+                    if (result) {
+                        return result;
+                    }
+                }
+
+                return undefined;
             }
         }
-        if (!node) return;
+        if (!node) {
+            return;
+        }
         switch (node.kind) {
             case SyntaxKind.QualifiedName:
                 return child((<QualifiedName>node).left) ||
