@@ -70,3 +70,16 @@ var obj2 = {
 >func(...rest) { } : (...rest: any[]) => void
 >rest : any[]
 }
+
+var x = function (...rest) { }
+>x : (...rest: any[]) => void
+>function (...rest) { } : (...rest: any[]) => void
+>rest : any[]
+
+var y = (function (...rest) { })()
+>y : void
+>(function (...rest) { })() : void
+>(function (...rest) { }) : (...rest: any[]) => void
+>function (...rest) { } : (...rest: any[]) => void
+>rest : any[]
+

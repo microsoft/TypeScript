@@ -27,6 +27,10 @@ var obj2 = {
     func(...rest) { }
 }
 
+var x = function (...rest) { }
+var y = (function (...rest) { })()
+
+
 //// [emitRestParametersES6.js]
 function bar(...rest) {
 }
@@ -59,3 +63,7 @@ var obj2 = {
     func: function (...rest) {
     }
 };
+var x = function (...rest) {
+};
+var y = (function (...rest) {
+})();

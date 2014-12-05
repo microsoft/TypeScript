@@ -212,9 +212,9 @@ module FourSlash {
     }
 
     export class TestCancellationToken implements ts.CancellationToken {
-        // 0 - cancelled
-        // >0 - not cancelled 
-        // <0 - not cancelled and value denotes number of isCancellationRequested after which token become cancelled
+        // 0 - canceled
+        // >0 - not canceled
+        // <0 - not canceled and value denotes number of isCancellationRequested after which token become canceled
         private static NotCancelled: number = -1;
         private numberOfCallsBeforeCancellation: number = TestCancellationToken.NotCancelled;
         public isCancellationRequested(): boolean {
@@ -2253,7 +2253,6 @@ module FourSlash {
     }
 
     export function runFourSlashTestContent(content: string, fileName: string): TestXmlData {
-        debugger;
         // Parse out the files and their metadata
         var testData = parseTestData(content, fileName);
 

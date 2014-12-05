@@ -27,6 +27,10 @@ var obj2 = {
     func(...rest) { }
 }
 
+var x = function (...rest) { }
+var y = (function (...rest) { })()
+
+
 //// [emitRestParameters.js]
 function bar() {
     var rest = [];
@@ -103,3 +107,15 @@ var obj2 = {
         }
     }
 };
+var x = function () {
+    var rest = [];
+    for (var _i = 0; _i < arguments.length; _i++) {
+        rest[_i - 0] = arguments[_i];
+    }
+};
+var y = (function () {
+    var rest = [];
+    for (var _i = 0; _i < arguments.length; _i++) {
+        rest[_i - 0] = arguments[_i];
+    }
+})();

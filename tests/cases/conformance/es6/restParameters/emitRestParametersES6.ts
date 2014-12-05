@@ -26,3 +26,6 @@ var obj: {
 var obj2 = {
     func(...rest) { }
 }
+
+var x = function (...rest) { }
+var y = (function (...rest) { })()

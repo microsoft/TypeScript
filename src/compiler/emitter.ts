@@ -2725,8 +2725,17 @@ module ts {
                 emitTrailingComments(node);
             }
 
+            function emitDownlevelParameter(node: ParameterDeclaration) {
+                emitLeadingComments(node);
+                emit(node.name);
+                emitTrailingComments(node);
+            }
+
             function emitParameter(node: ParameterDeclaration) {
                 emitLeadingComments(node);
+                if (node.dotDotDotToken !== undefined) {
+                    write("...");
+                }
                 emit(node.name);
                 emitTrailingComments(node);
             }
@@ -2751,7 +2760,7 @@ module ts {
                 });
             }
 
-            function emitRestParameter(node: FunctionLikeDeclaration) {
+            function emitDownlevelRestParameter(node: FunctionLikeDeclaration) {
                 if (hasRestParameters(node)) {
                     var restIndex = node.parameters.length - 1;
                     var restParam = node.parameters[restIndex];
@@ -2829,18 +2838,12 @@ module ts {
                 increaseIndent();
                 write("(");
                 if (node) {
-                    var hasRestParam = hasRestParameters(node);
                     var numberOfParameters = node.parameters.length
-                    emitCommaList(node.parameters, /*includeTrailingComma*/ false, numberOfParameters - (hasRestParam ? 1 : 0));
-                    // Emit rest parameters natively in ES6 or above
-                    if (hasRestParam && compilerOptions.target >= ScriptTarget.ES6) {
-                        var restParamIdex = numberOfParameters - 1;
-                        // There are other parameters
-                        if (restParamIdex > 0) {
-                            write(", ");
-                        }
-                        write("...");
-                        emit(node.parameters[node.parameters.length - 1]);
+                    if (compilerOptions.target < ScriptTarget.ES6) {
+                        emitCommaList(node.parameters, /*includeTrailingComma*/ false, numberOfParameters - (hasRestParameters(node) ? 1 : 0));
+                    }
+                    else {
+                        emitCommaList(node.parameters, /*includeTrailingComma*/ false, numberOfParameters);
                     }
                 }
                 write(")");
@@ -2863,7 +2866,7 @@ module ts {
                 emitCaptureThisForNodeIfNecessary(node);
                 emitDefaultValueAssignments(node);
                 if (compilerOptions.target < ScriptTarget.ES6) {
-                    emitRestParameter(node);
+                    emitDownlevelRestParameter(node);
                 }
                 if (node.body.kind !== SyntaxKind.FunctionBlock && outPos === writer.getTextPos()) {
                     decreaseIndent();
@@ -3140,7 +3143,7 @@ module ts {
                     if (ctor) {
                         emitDefaultValueAssignments(ctor);
                         if (compilerOptions.target < ScriptTarget.ES6) {
-                            emitRestParameter(ctor);
+                            emitDownlevelRestParameter(ctor);
                         }
                         if (baseTypeNode) {
                             var superCall = findInitialSuperCall(ctor);
@@ -3508,8 +3511,6 @@ module ts {
                 switch (node.kind) {
                     case SyntaxKind.Identifier:
                         return emitIdentifier(<Identifier>node);
-                    case SyntaxKind.Parameter:
-                        return emitParameter(<ParameterDeclaration>node);
                     case SyntaxKind.GetAccessor:
                     case SyntaxKind.SetAccessor:
                         return emitAccessor(<AccessorDeclaration>node);
@@ -3645,14 +3646,18 @@ module ts {
                     switch (node.kind) {
                         case SyntaxKind.ShorthandPropertyAssignment:
                             return emitDownlevelShorthandPropertyAssignment(<ShorthandPropertyDeclaration>node);
+                        case SyntaxKind.Parameter:
+                            return emitDownlevelParameter(<ParameterDeclaration>node);
                     }
                 }
-                else {
+                else if (compilerOptions.target >= ScriptTarget.ES6) {
                     // Emit node natively
-                    Debug.assert(compilerOptions.target >= ScriptTarget.ES6, "Invalid ScriptTarget. We should emit as ES6 or above");
+                    Debug.assert(compilerOptions.target >= ScriptTarget.ES6, "Invalid ScriptTarget: " + compilerOptions.target + ". ScriptTarget must be ES6 or above.");
                     switch (node.kind) {
                         case SyntaxKind.ShorthandPropertyAssignment:
                             return emitShorthandPropertyAssignment(<ShorthandPropertyDeclaration>node);
+                        case SyntaxKind.Parameter:
+                            return emitParameter(<ParameterDeclaration>node);
                     }
                 }
             }
