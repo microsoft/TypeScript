@@ -7613,28 +7613,69 @@ module ts {
             }
         }
 
-        function checkCollisionWithAwaiterVariablesInGeneratedCode(node: Node, name: DeclarationName): void {
-            if (!name || name.kind !== SyntaxKind.Identifier) {
-                return;
+        function getPromiseConstructorName(node: FunctionLikeDeclaration): EntityName {
+            if (node.type && node.type.kind === SyntaxKind.TypeReference) {
+                var typeReference = <TypeReferenceNode>node.type;
+                return typeReference.typeName;
+            }
+        }
 
+        function getPromiseConstructor(node: FunctionLikeDeclaration): string {
+            var typeName = getPromiseConstructorName(node);
+            if (typeName) {
+                var promiseConstructor: string = "";
+                while (typeName.kind === SyntaxKind.QualifiedName) {
+                    var qname = <QualifiedName>typeName;
+                    if (promiseConstructor) {
+                        promiseConstructor = "." + promiseConstructor;
+                    }
+                    promiseConstructor = qname.right.text + promiseConstructor;
+                    typeName = qname.left;
+                }
+                var identifier = <Identifier>typeName;
+                if (promiseConstructor) {
+                    promiseConstructor = "." + promiseConstructor;
+                }
+                promiseConstructor = identifier.text + promiseConstructor;
+                var prefix = getExpressionNamePrefix(identifier);
+                if (prefix) {
+                    promiseConstructor = prefix + "." + promiseConstructor;
+                }
+            }
+            return promiseConstructor;
+        }
+
+        function checkCollisionWithAwaiterVariablesInGeneratedCode(node: Node, name: DeclarationName): void {
+            if (!name || name.kind !== SyntaxKind.Identifier || isTypeNode(name)) {
+                return;
             }
 
             var identifier = <Identifier>name;
-            if (identifier.text !== "__awaiter") {
-                return;
+            if (identifier.text === "__awaiter") {
+                var isDeclaration = node.kind !== SyntaxKind.Identifier;
+                if (isDeclaration) {
+                    error(node, Diagnostics.Duplicate_identifier_0_Compiler_uses_variable_declaration_0_to_support_async_functions, identifier.text);
+                } else {
+                    error(node, Diagnostics.Expression_resolves_to_variable_declaration_0_that_compiler_uses_to_support_async_functions, identifier.text);
+                }
             }
 
-            // TODO(rbuckton): Need to be more specific for these checks. Currently defaulting to reporting errors
-            var isDeclaration = node.kind !== SyntaxKind.Identifier;
-            if (isDeclaration) {
-                error(node, Diagnostics.Duplicate_identifier_0_Compiler_uses_variable_declaration_0_to_support_async_functions, identifier.text);
-            } else {
-                error(node, Diagnostics.Expression_resolves_to_variable_declaration_0_that_compiler_uses_to_support_async_functions, identifier.text);
+            var container = getContainingFunction(name);
+            if (container && container.flags & NodeFlags.Async) {
+                var promiseConstructor = getPromiseConstructorName(container);
+                if (promiseConstructor && promiseConstructor.kind === SyntaxKind.Identifier && identifier.text === (<Identifier>promiseConstructor).text) {
+                    var isDeclaration = node.kind !== SyntaxKind.Identifier;
+                    if (isDeclaration) {
+                        error(node, Diagnostics.Duplicate_identifier_0_Compiler_uses_variable_declaration_0_to_support_async_functions, identifier.text);
+                    } else {
+                        error(node, Diagnostics.Expression_resolves_to_variable_declaration_0_that_compiler_uses_to_support_async_functions, identifier.text);
+                    }
+                }
             }
         }
 
         function checkCollisionWithGeneratorVariablesInGeneratedCode(node: Node, name: DeclarationName): void {
-            if (!name || name.kind !== SyntaxKind.Identifier || compilerOptions.target > ScriptTarget.ES5) {
+            if (!name || name.kind !== SyntaxKind.Identifier || compilerOptions.target > ScriptTarget.ES5 || isTypeNode(name)) {
                 return;
             }
 
