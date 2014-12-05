@@ -25,6 +25,7 @@ declare var require: any;
 declare var module: any;
 declare var process: any;
 declare var global: any;
+declare var __filename: string;
 
 var sys: System = (function () {
 
@@ -224,10 +225,10 @@ var sys: System = (function () {
                 }
             },
             getExecutingFilePath() {
-                return process.mainModule.filename;
+                return __filename;
             },
             getCurrentDirectory() {
-                return (<any>process).cwd();
+                return process.cwd();
             },
             getMemoryUsage() {
                 if (global.gc) {

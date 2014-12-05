@@ -25,7 +25,7 @@
 // this will work in the browser via browserify
 var _chai: typeof chai = require('chai');
 var assert: typeof _chai.assert = _chai.assert;
-declare var __dirname: any; // Node-specific
+declare var __dirname: string; // Node-specific
 var global = <any>Function("return this").call(null);
 
 module Utils {
