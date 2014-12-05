@@ -1138,7 +1138,7 @@ var definitions = [
         children: [
             { name: 'asyncKeyword', isToken: true, isOptional: true },
             { name: 'callSignature', type: 'CallSignatureSyntax' },
-            { name: 'equalsGreaterThanToken', isToken: true, excludeFromAST: true },
+            { name: 'equalsGreaterThanToken', isToken: true, isOptional: true },
             { name: 'body', type: 'BlockSyntax | IExpressionSyntax' }
         ],
         isTypeScriptSpecific: true

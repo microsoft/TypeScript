@@ -275,7 +275,7 @@ var definitions:ITypeDefinition[] = [
         children: [
             <any>{ name: 'asyncKeyword', isToken: true, isOptional: true },
             <any>{ name: 'callSignature', type: 'CallSignatureSyntax' },
-            <any>{ name: 'equalsGreaterThanToken', isToken: true, excludeFromAST: true },
+            <any>{ name: 'equalsGreaterThanToken', isToken: true, isOptional: true },
             <any>{ name: 'body', type: 'BlockSyntax | IExpressionSyntax' }
         ],
         isTypeScriptSpecific: true

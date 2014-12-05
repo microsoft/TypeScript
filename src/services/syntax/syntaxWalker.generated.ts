@@ -428,7 +428,7 @@ module TypeScript {
         public visitParenthesizedArrowFunctionExpression(node: ParenthesizedArrowFunctionExpressionSyntax): void {
             this.visitOptionalToken(node.asyncKeyword);
             visitNodeOrToken(this, node.callSignature);
-            this.visitToken(node.equalsGreaterThanToken);
+            this.visitOptionalToken(node.equalsGreaterThanToken);
             visitNodeOrToken(this, node.body);
         }
 

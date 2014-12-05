@@ -1286,7 +1286,7 @@ module TypeScript {
         this.body = body,
         asyncKeyword && (asyncKeyword.parent = this),
         callSignature.parent = this,
-        equalsGreaterThanToken.parent = this,
+        equalsGreaterThanToken && (equalsGreaterThanToken.parent = this),
         body.parent = this;
     };
     ParenthesizedArrowFunctionExpressionSyntax.prototype.kind = SyntaxKind.ParenthesizedArrowFunctionExpression;
