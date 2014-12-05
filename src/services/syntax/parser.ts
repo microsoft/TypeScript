@@ -77,26 +77,19 @@ module TypeScript.Parser {
         // Retrieves the diagnostics generated while the source was producing nodes or tokens. 
         // Should generally only be called after the document has been completely parsed.
         tokenDiagnostics(): Diagnostic[];
-
-        release(): void;
     }
 
     // Contains the actual logic to parse typescript/javascript.  This is the code that generally
     // represents the logic necessary to handle all the language grammar constructs.  When the 
     // language changes, this should generally only be the place necessary to fix up.
     function createParseSyntaxTree(): (source: IParserSource, isDeclaration: boolean) => SyntaxTree {
-        // Name of the file we're parsing.
-        var fileName: string;
-
         // Underlying source where we pull nodes and tokens from.
         var source: IParserSource;
-
-        var languageVersion: ts.ScriptTarget;
 
         // TODO: do we need to store/restore this when speculative parsing?  I don't think so.  The
         // parsing logic already handles storing/restoring this and should work properly even if we're
         // speculative parsing.
-        var listParsingState: number = 0;
+        var listParsingState: ListParsingState = 0;
 
         // Whether or not we are in strict parsing mode.  All that changes in strict parsing mode is
         // that some tokens that would be considered identifiers may be considered keywords.  When 
@@ -280,9 +273,7 @@ module TypeScript.Parser {
 
         function parseSyntaxTree(_source: IParserSource, isDeclaration: boolean): SyntaxTree {
             // First, set up our state.
-            fileName = _source.fileName;
             source = _source;
-            languageVersion = source.languageVersion;
 
             // Now actually parse the tree.
             var result = parseSyntaxTreeWorker(isDeclaration);
@@ -290,10 +281,7 @@ module TypeScript.Parser {
             // Now, clear out our state so that our singleton parser doesn't keep things alive.
             diagnostics = [];
             contextFlags = 0;
-            fileName = undefined;
-            source.release();
             source = undefined;
-            _source = undefined;
 
             return result;
         }
@@ -304,7 +292,7 @@ module TypeScript.Parser {
             var allDiagnostics = source.tokenDiagnostics().concat(diagnostics);
             allDiagnostics.sort((a: Diagnostic, b: Diagnostic) => a.start() - b.start());
 
-            return new SyntaxTree(sourceUnit, isDeclaration, allDiagnostics, fileName, source.text, languageVersion);
+            return new SyntaxTree(sourceUnit, isDeclaration, allDiagnostics, source.fileName, source.text, source.languageVersion);
         }
 
         function tryParse<T extends ISyntaxNode>(callback: () => T): T {
@@ -647,7 +635,7 @@ module TypeScript.Parser {
                 }
             }
 
-            return new Diagnostic(fileName, source.text.lineMap(), start(token, source.text), width(token), diagnosticCode, args);
+            return new Diagnostic(source.fileName, source.text.lineMap(), start(token, source.text), width(token), diagnosticCode, args);
         }
 
         function getBinaryExpressionPrecedence(tokenKind: SyntaxKind): BinaryExpressionPrecedence {
@@ -4397,7 +4385,7 @@ module TypeScript.Parser {
         function reportUnexpectedTokenDiagnostic(listType: ListParsingState): void {
             var token = currentToken();
 
-            var diagnostic = new Diagnostic(fileName, source.text.lineMap(),
+            var diagnostic = new Diagnostic(source.fileName, source.text.lineMap(),
                 start(token, source.text), width(token), DiagnosticCode.Unexpected_token_0_expected, [getExpectedListElementType(listType)]);
             addDiagnostic(diagnostic);
         }

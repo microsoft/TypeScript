@@ -72,13 +72,6 @@ module TypeScript.IncrementalParser {
         updateTokenPositionsAndMarkElements(<ISyntaxElementInternal><ISyntaxElement>oldSourceUnit,
             _changeRange.span().start(), _changeRange.span().end(), delta, /*fullStart:*/ 0);
 
-        function release() {
-            _scannerParserSource.release();
-            _scannerParserSource = undefined;
-            _oldSourceUnitCursor = undefined;
-            _isSpeculativelyParsing = false;
-        }
-
         function extendToAffectedRange(changeRange: TextChangeRange, sourceUnit: SourceUnitSyntax): TextChangeRange {
             // Consider the following code:
             //      void foo() { /; }
@@ -382,7 +375,6 @@ module TypeScript.IncrementalParser {
             consumeNodeOrToken: consumeNodeOrToken,
             tryParse: tryParse,
             tokenDiagnostics: tokenDiagnostics,
-            release: release
         };
     }
 
