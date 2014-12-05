@@ -48,22 +48,10 @@ module TypeScript.Syntax {
     addArrayPrototypeValue("kind", SyntaxKind.List);
 
     export function list<T extends ISyntaxNodeOrToken>(nodes: T[]): T[] {
-        //if (nodes !== undefined) {
-        //    for (var i = 0, n = nodes.length; i < n; i++) {
-        //        nodes[i].parent = nodes;
-        //    }
-        //}
-
         return nodes;
     }
 
     export function separatedList<T extends ISyntaxNodeOrToken>(nodesAndTokens: ISyntaxNodeOrToken[]): ISeparatedSyntaxList<T> {
-        //if (nodesAndTokens !== undefined) {
-        //    for (var i = 0, n = nodesAndTokens.length; i < n; i++) {
-        //        nodesAndTokens[i].parent = nodesAndTokens;
-        //    }
-        //}
-
         return <ISeparatedSyntaxList<T>>nodesAndTokens;
     }
 }

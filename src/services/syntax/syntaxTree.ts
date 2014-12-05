@@ -74,54 +74,10 @@ module TypeScript {
             return this._languageVersion;
         }
 
-        private cacheSyntaxTreeInfo(): void {
-            // If we're not keeping around the syntax tree, store the diagnostics and line
-            // map so they don't have to be recomputed.
-            var firstToken = firstSyntaxTreeToken(this);
-            var leadingTrivia = firstToken.leadingTrivia(this.text);
-
-            this._isExternalModule = !!externalModuleIndicatorSpanWorker(this, firstToken);
-
-            var amdDependencies: string[] = [];
-            for (var i = 0, n = leadingTrivia.count(); i < n; i++) {
-                var trivia = leadingTrivia.syntaxTriviaAt(i);
-                if (trivia.isComment()) {
-                    var amdDependency = this.getAmdDependency(trivia.fullText());
-                    if (amdDependency) {
-                        amdDependencies.push(amdDependency);
-                    }
-                }
-            }
-
-            this._amdDependencies = amdDependencies;
-        }
-
         private getAmdDependency(comment: string): string {
             var amdDependencyRegEx = /^\/\/\/\s*<amd-dependency\s+path=('|")(.+?)\1/gim;
             var match = amdDependencyRegEx.exec(comment);
             return match ? match[2] : undefined;
-        }
-
-        public isExternalModule(): boolean {
-            // October 11, 2013
-            // External modules are written as separate source files that contain at least one 
-            // external import declaration, export assignment, or top-level exported declaration.
-            if (this._isExternalModule === undefined) {
-                // force the info about isExternalModule to get created.
-                this.cacheSyntaxTreeInfo();
-                Debug.assert(this._isExternalModule !== undefined);
-            }
-
-            return this._isExternalModule;
-        }
-
-        public amdDependencies(): string[] {
-            if (this._amdDependencies === undefined) {
-                this.cacheSyntaxTreeInfo();
-                Debug.assert(this._amdDependencies !== undefined);
-            }
-
-            return this._amdDependencies;
         }
     }
 
@@ -1033,6 +989,15 @@ module TypeScript {
             super.visitExportAssignment(node);
         }
 
+        public visitExternalModuleReference(node: ExternalModuleReferenceSyntax): void {
+            if (node.expression.kind !== SyntaxKind.StringLiteral) {
+                this.pushDiagnostic(node.expression, DiagnosticCode.String_literal_expected);
+                return;
+            }
+
+            super.visitExternalModuleReference(node);
+        }
+
         public visitExpressionBody(node: ExpressionBody): void {
             // These are always errors.  So no need to ever recurse on them.
             this.pushDiagnostic(node.equalsGreaterThanToken, DiagnosticCode._0_expected, ["{"]);
@@ -1741,16 +1706,6 @@ module TypeScript {
         return scanner.scan(/*allowContextualToken:*/ false);
     }
 
-    export function externalModuleIndicatorSpan(syntaxTree: SyntaxTree): TextSpan {
-        var firstToken = firstSyntaxTreeToken(syntaxTree);
-        return externalModuleIndicatorSpanWorker(syntaxTree, firstToken);
-    }
-
-    export function externalModuleIndicatorSpanWorker(syntaxTree: SyntaxTree, firstToken: ISyntaxToken) {
-        var leadingTrivia = firstToken.leadingTrivia(syntaxTree.text);
-        return implicitImportSpan(leadingTrivia) || topLevelImportOrExportSpan(syntaxTree.sourceUnit());
-    }
-
     function implicitImportSpan(sourceUnitLeadingTrivia: ISyntaxTriviaList): TextSpan {
         for (var i = 0, n = sourceUnitLeadingTrivia.count(); i < n; i++) {
             var trivia = sourceUnitLeadingTrivia.syntaxTriviaAt(i);
@@ -1772,27 +1727,6 @@ module TypeScript {
 
         if (match) {
             return new TextSpan(trivia.fullStart(), trivia.fullWidth());
-        }
-
-        return undefined;
-    }
-
-    function topLevelImportOrExportSpan(node: SourceUnitSyntax): TextSpan {
-        for (var i = 0, n = node.moduleElements.length; i < n; i++) {
-            var moduleElement = node.moduleElements[i];
-
-            var _firstToken = firstToken(moduleElement);
-            if (_firstToken && _firstToken.kind === SyntaxKind.ExportKeyword) {
-                return new TextSpan(start(_firstToken), width(_firstToken));
-            }
-
-            if (moduleElement.kind === SyntaxKind.ImportDeclaration) {
-                var importDecl = <ImportDeclarationSyntax>moduleElement;
-                if (importDecl.moduleReference.kind === SyntaxKind.ExternalModuleReference) {
-                    var literal = (<TypeScript.ExternalModuleReferenceSyntax>importDecl.moduleReference).stringLiteral;
-                    return new TextSpan(start(literal), width(literal));
-                }
-            }
         }
 
         return undefined;
