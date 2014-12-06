@@ -60,15 +60,15 @@ module TypeScript.Scanner {
     // This gives us 23bit for width (or 8MB of width which should be enough for any codebase).
 
     enum ScannerConstants {
-        LargeTokenFullWidthShift        = 3,
+        LargeTokenFullWidthShift = 3,
 
-        WhitespaceTrivia                = 0x01, // 00000001
-        NewlineTrivia                   = 0x02, // 00000010
-        CommentTrivia                   = 0x04, // 00000100
-        TriviaMask                      = 0x07, // 00000111
+        WhitespaceTrivia = 0x01, // 00000001
+        NewlineTrivia = 0x02, // 00000010
+        CommentTrivia = 0x04, // 00000100
+        TriviaMask = 0x07, // 00000111
 
-        KindMask                        = 0x7F, // 01111111
-        IsVariableWidthMask             = 0x80, // 10000000
+        KindMask = 0x7F, // 01111111
+        IsVariableWidthMask = 0x80, // 10000000
     }
 
     function largeTokenPackData(fullWidth: number, leadingTriviaInfo: number) {
@@ -154,7 +154,7 @@ module TypeScript.Scanner {
     var lastTokenInfo = { leadingTriviaWidth: -1 };
     var lastTokenInfoTokenID: number = -1;
 
-    var triviaScanner = createScannerInternal(ts.ScriptTarget.Latest, SimpleText.fromString(""), () => { });
+    var triviaScanner = createScannerInternal(ts.ScriptTarget.Latest, SimpleText.fromString(""),() => { });
 
     interface IScannerToken extends ISyntaxToken {
     }
@@ -208,7 +208,7 @@ module TypeScript.Scanner {
         public setFullStart(fullStart: number): void {
             this._fullStart = fullStart;
         }
-        
+
         public childAt(index: number): ISyntaxElement { throw Errors.invalidOperation() }
 
         public isIncrementallyUnusable(): boolean { return false; }
@@ -1425,7 +1425,7 @@ module TypeScript.Scanner {
 
     export function isValidIdentifier(text: ISimpleText, languageVersion: ts.ScriptTarget): boolean {
         var hadError = false;
-        var scanner = createScanner(languageVersion, text, () => hadError = true);
+        var scanner = createScanner(languageVersion, text,() => hadError = true);
 
         var token = scanner.scan(/*allowContextualToken:*/ false);
 
@@ -1467,7 +1467,7 @@ module TypeScript.Scanner {
             return _absolutePosition;
         }
 
-        function tokenDiagnostics(): Diagnostic[] {
+        function diagnostics(): Diagnostic[] {
             return _tokenDiagnostics;
         }
 
@@ -1598,8 +1598,8 @@ module TypeScript.Scanner {
             peekToken: peekToken,
             consumeNodeOrToken: consumeNodeOrToken,
             tryParse: tryParse,
-            tokenDiagnostics: tokenDiagnostics,
-            absolutePosition: absolutePosition,
+            diagnostics: diagnostics,
+            absolutePosition: absolutePosition
         };
     }
 

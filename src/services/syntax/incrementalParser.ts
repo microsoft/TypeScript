@@ -25,17 +25,15 @@ module TypeScript.IncrementalParser {
         //
         // This parser source also keeps track of the absolute position in the text that we're in,
         // and any token diagnostics produced.  That way we dont' have to track that ourselves.
-        var _scannerParserSource = Scanner.createParserSource(oldSyntaxTree.fileName(), text, oldSyntaxTree.languageVersion());
+        var scannerParserSource = Scanner.createParserSource(oldSyntaxTree.fileName(), text, oldSyntaxTree.languageVersion());
 
         // The cursor we use to navigate through and retrieve nodes and tokens from the old tree.
         var oldSourceUnit = oldSyntaxTree.sourceUnit();
 
-        var _isSpeculativelyParsing = false;
-
         // Start the cursor pointing at the first element in the source unit (if it exists).
-        var _oldSourceUnitCursor = getSyntaxCursor();
+        var oldSourceUnitCursor = getSyntaxCursor();
         if (oldSourceUnit.moduleElements.length > 0) {
-            _oldSourceUnitCursor.pushElement(childAt(oldSourceUnit.moduleElements, 0), /*indexInParent:*/ 0);
+            oldSourceUnitCursor.pushElement(childAt(oldSourceUnit.moduleElements, 0), /*indexInParent:*/ 0);
         }
 
         // In general supporting multiple individual edits is just not that important.  So we 
@@ -43,18 +41,16 @@ module TypeScript.IncrementalParser {
         // time this could be problematic would be if the user made a ton of discontinuous edits.
         // For example, doing a column select on a *large* section of a code.  If this is a 
         // problem, we can always update this code to handle multiple changes.
-        var _changeRange = extendToAffectedRange(textChangeRange, oldSourceUnit);
-
-        // Cached value of _changeRange.newSpan().  Cached for performance.
-        var _changeRangeNewSpan = _changeRange.newSpan();
+        var changeRange = extendToAffectedRange(textChangeRange, oldSourceUnit);
 
         // The old tree's length, plus whatever length change was caused by the edit
         // Had better equal the new text's length!
         if (Debug.shouldAssert(AssertionLevel.Aggressive)) {
-            Debug.assert((fullWidth(oldSourceUnit) - _changeRange.span().length() + _changeRange.newLength()) === text.length());
+            Debug.assert((fullWidth(oldSourceUnit) - changeRange.span().length() + changeRange.newLength()) === text.length());
         }
 
-        var delta = _changeRange.newSpan().length() - _changeRange.span().length();
+        var delta = changeRange.newSpan().length() - changeRange.span().length();
+
         // If we added or removed characters during the edit, then we need to go and adjust all
         // the nodes after the edit.  Those nodes may move forward down (if we inserted chars)
         // or they may move backward (if we deleted chars).
@@ -70,7 +66,7 @@ module TypeScript.IncrementalParser {
         // Also, mark any syntax elements that intersect the changed span.  We know, up front,
         // that we cannot reuse these elements.
         updateTokenPositionsAndMarkElements(<ISyntaxElementInternal><ISyntaxElement>oldSourceUnit,
-            _changeRange.span().start(), _changeRange.span().end(), delta, /*fullStart:*/ 0);
+            changeRange.span().start(), changeRange.span().end(), delta, /*fullStart:*/ 0);
 
         function extendToAffectedRange(changeRange: TextChangeRange, sourceUnit: SourceUnitSyntax): TextChangeRange {
             // Consider the following code:
@@ -104,35 +100,27 @@ module TypeScript.IncrementalParser {
         }
 
         function absolutePosition() {
-            return _scannerParserSource.absolutePosition();
+            return scannerParserSource.absolutePosition();
         }
 
-        function tokenDiagnostics(): Diagnostic[] {
-            return _scannerParserSource.tokenDiagnostics();
+        function diagnostics(): Diagnostic[] {
+            return scannerParserSource.diagnostics();
         }
 
         function tryParse<T extends ISyntaxNode>(callback: () => T): T {
             // Clone our cursor.  That way we can restore to that point if the parser needs to rewind.
-            var savedOldSourceUnitCursor = cloneSyntaxCursor(_oldSourceUnitCursor);
-            var savedIsSpeculativelyParsing = _isSpeculativelyParsing;
-
-            // Mark that we're speculative parsing.  During speculative parsing we cannot ruse 
-            // nodes from the parse tree.  See the comment in trySynchronizeCursorToPosition for
-            // the reasons why.
-            _isSpeculativelyParsing = true;
+            var savedOldSourceUnitCursor = cloneSyntaxCursor(oldSourceUnitCursor);
 
             // Now defer to our underlying scanner source to actually invoke the callback.  That 
             // way, if the parser decides to rewind, both the scanner source and this incremental
             // source will rewind appropriately.
-            var result = _scannerParserSource.tryParse(callback);
-
-            _isSpeculativelyParsing = savedIsSpeculativelyParsing;
+            var result = scannerParserSource.tryParse(callback);
 
             if (!result) {
                 // We're rewinding. Reset the cursor to what it was when we got the rewind point.  
                 // Make sure to return our existing cursor to the pool so it can be reused.
-                returnSyntaxCursor(_oldSourceUnitCursor);
-                _oldSourceUnitCursor = savedOldSourceUnitCursor;
+                returnSyntaxCursor(oldSourceUnitCursor);
+                oldSourceUnitCursor = savedOldSourceUnitCursor;
             }
             else {
                 // We're not rewinding.  Return the cloned original cursor back to the pool.
@@ -143,36 +131,15 @@ module TypeScript.IncrementalParser {
         }
 
         function trySynchronizeCursorToPosition() {
-            // If we're currently pinned, then do not want to touch the cursor.  Here's why.  First,
-            // recall that we're 'pinned' when we're speculatively parsing.  So say we were to allow
-            // returning old nodes/tokens while speculatively parsing. Then, the parser might start
-            // mutating the nodes and tokens we returned (i.e. by setting their parents).   Then, 
-            // when we rewound, those nodes and tokens would still have those updated parents.  
-            // Parents which we just decided we did *not* want to parse (hence why we rewound).  For
-            // Example, say we have something like:
-            //
-            //          var v = f<a,b,c>e;  // note: this is not generic.
-            //
-            // When incrementally parsing, we will need to speculatively parse to determine if the
-            // above is generic.  This will cause us to reuse the "a, b, c" tokens, and set their 
-            // parent to a new type argument list.  A type argument list we will then throw away once
-            // we decide that it isn't actually generic.  We will have now 'broken' the original tree.
-            //
-            // As such, the rule is simple.  We only return nodes/tokens from teh original tree if
-            // we know the parser will accept and consume them and never rewind back before them.
-            if (_isSpeculativelyParsing) {
-                return false;
-            }
-
             var absolutePos = absolutePosition();
             while (true) {
-                if (_oldSourceUnitCursor.isFinished()) {
+                if (oldSourceUnitCursor.isFinished()) {
                     // Can't synchronize the cursor to the current position if the cursor is finished.
                     return false;
                 }
 
                 // Start with the current node or token the cursor is pointing at.
-                var currentNodeOrToken = _oldSourceUnitCursor.currentNodeOrToken();
+                var currentNodeOrToken = oldSourceUnitCursor.currentNodeOrToken();
 
                 // Node, move the cursor past any nodes or tokens that intersect the change range
                 // 1) they are never reusable.
@@ -182,10 +149,10 @@ module TypeScript.IncrementalParser {
                 // of the incremental algorithm.
                 if ((<ISyntaxElementInternal><ISyntaxElement>currentNodeOrToken).intersectsChange) {
                     if (isNode(currentNodeOrToken)) {
-                        _oldSourceUnitCursor.moveToFirstChild();
+                        oldSourceUnitCursor.moveToFirstChild();
                     }
                     else {
-                        _oldSourceUnitCursor.moveToNextSibling();
+                        oldSourceUnitCursor.moveToNextSibling();
                     }
                     continue;
                 }
@@ -213,13 +180,13 @@ module TypeScript.IncrementalParser {
                 // able to break up that token any further and we should just move to the next 
                 // token.  
                 if (currentNodeOrTokenFullEnd <= absolutePos || isToken(currentNodeOrToken)) {
-                    _oldSourceUnitCursor.moveToNextSibling();
+                    oldSourceUnitCursor.moveToNextSibling();
                 }
                 else {
                     // We have a node, and it started before our absolute pos, and ended after our 
                     // pos. Try to crumble this node to see if we'll be able to skip the first node 
                     // or token contained within.
-                    _oldSourceUnitCursor.moveToFirstChild();
+                    oldSourceUnitCursor.moveToFirstChild();
                 }
             }
         }
@@ -248,12 +215,12 @@ module TypeScript.IncrementalParser {
 
             // Either we couldn't read from the old source unit, or we weren't able to successfully
             // get a token from it.  In this case we need to read a token from the underlying text.
-            return _scannerParserSource.currentToken();
+            return scannerParserSource.currentToken();
         }
 
         function currentContextualToken(): ISyntaxToken {
             // Just delegate to the underlying source to handle 
-            return _scannerParserSource.currentContextualToken();
+            return scannerParserSource.currentContextualToken();
         }
 
         function tryGetNodeFromOldSourceUnit(): ISyntaxNode {
@@ -264,7 +231,7 @@ module TypeScript.IncrementalParser {
             //  c) it does not have a regex token in it.
             //  d) we are still in the same strict or non-strict state that the node was originally parsed in.
             while (true) {
-                var node = _oldSourceUnitCursor.currentNode();
+                var node = oldSourceUnitCursor.currentNode();
                 if (node === undefined) {
                     // Couldn't even read a node, nothing to return.
                     return undefined;
@@ -279,7 +246,7 @@ module TypeScript.IncrementalParser {
                 // We couldn't use currentNode. Try to move to its first child (in case that's a 
                 // node).  If it is we can try using that.  Otherwise we'll just bail out in the
                 // next iteration of the loop.
-                _oldSourceUnitCursor.moveToFirstChild();
+                oldSourceUnitCursor.moveToFirstChild();
             }
         }
 
@@ -309,7 +276,7 @@ module TypeScript.IncrementalParser {
 
         function tryGetTokenFromOldSourceUnit(): ISyntaxToken {
             // get the current token that the cursor is pointing at.
-            var token = _oldSourceUnitCursor.currentToken();
+            var token = oldSourceUnitCursor.currentToken();
 
             return canReuseTokenFromOldSourceUnit(token) ? token : undefined;
         }
@@ -323,44 +290,44 @@ module TypeScript.IncrementalParser {
             }
 
             // Couldn't peek this far in the old tree.  Get the token from the new text.
-            return _scannerParserSource.peekToken(n);
+            return scannerParserSource.peekToken(n);
         }
 
         function tryPeekTokenFromOldSourceUnit(n: number): ISyntaxToken {
             // clone the existing cursor so we can move it forward and then restore ourselves back
             // to where we started from.
 
-            var cursorClone = cloneSyntaxCursor(_oldSourceUnitCursor);
+            var cursorClone = cloneSyntaxCursor(oldSourceUnitCursor);
 
             var token = tryPeekTokenFromOldSourceUnitWorker(n);
 
-            returnSyntaxCursor(_oldSourceUnitCursor);
-            _oldSourceUnitCursor = cursorClone;
+            returnSyntaxCursor(oldSourceUnitCursor);
+            oldSourceUnitCursor = cursorClone;
 
             return token;
         }
 
         function tryPeekTokenFromOldSourceUnitWorker(n: number): ISyntaxToken {
             // First, make sure the cursor is pointing at a token.
-            _oldSourceUnitCursor.moveToFirstToken();
+            oldSourceUnitCursor.moveToFirstToken();
 
             // Now, keep walking forward to successive tokens.
             for (var i = 0; i < n; i++) {
-                var interimToken = _oldSourceUnitCursor.currentToken();
+                var interimToken = oldSourceUnitCursor.currentToken();
 
                 if (!canReuseTokenFromOldSourceUnit(interimToken)) {
                     return undefined;
                 }
 
-                _oldSourceUnitCursor.moveToNextSibling();
+                oldSourceUnitCursor.moveToNextSibling();
             }
 
-            var token = _oldSourceUnitCursor.currentToken();
+            var token = oldSourceUnitCursor.currentToken();
             return canReuseTokenFromOldSourceUnit(token) ? token : undefined;
         }
 
         function consumeNodeOrToken(nodeOrToken: ISyntaxNodeOrToken): void {
-            _scannerParserSource.consumeNodeOrToken(nodeOrToken);
+            scannerParserSource.consumeNodeOrToken(nodeOrToken);
         }
 
         return {
@@ -372,15 +339,15 @@ module TypeScript.IncrementalParser {
             currentToken: currentToken,
             currentContextualToken: currentContextualToken,
             peekToken: peekToken,
-            consumeNodeOrToken: consumeNodeOrToken,
+            consumeNodeOrToken: scannerParserSource.consumeNodeOrToken,
             tryParse: tryParse,
-            tokenDiagnostics: tokenDiagnostics,
+            diagnostics: diagnostics
         };
     }
 
     function updateTokenPositionsAndMarkElements(element: ISyntaxElement, changeStart: number, changeRangeOldEnd: number, delta: number, fullStart: number): void {
-            // First, try to skip past any elements that we dont' need to move.  We don't need to 
-            // move any elements that don't start after the end of the change range.  
+        // First, try to skip past any elements that we dont' need to move.  We don't need to 
+        // move any elements that don't start after the end of the change range.  
         if (fullStart > changeRangeOldEnd) {
             // Note, we only move elements that are truly after the end of the change range.
             // We consider elements that are touching the end of the change range to be unusable.
@@ -444,8 +411,7 @@ module TypeScript.IncrementalParser {
             forceUpdateTokenPosition(<ISyntaxToken>nodeOrToken, delta);
         }
         else {
-            var node = <ISyntaxNode>nodeOrToken;
-            var tokens = getTokens(node);
+            var tokens = getTokens(<ISyntaxNode>nodeOrToken);
             for (var i = 0, n = tokens.length; i < n; i++) {
                 forceUpdateTokenPosition(tokens[i], delta);
             }
