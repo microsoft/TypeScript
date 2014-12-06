@@ -490,4 +490,4 @@ module ts {
     }
 }
 
-ts.executeCommandLine(sys.args);
+ts.executeCommandLine(ts.sys.args);
