@@ -1681,7 +1681,7 @@ module ts {
         // Return the inferred type for a binding element
         function getTypeForBindingElement(declaration: BindingElement): Type {
             var pattern = <BindingPattern>declaration.parent;
-            var parentType = getTypeForVariableDeclaration(<VariableLikeDeclaration>pattern.parent);
+            var parentType = getTypeForVariableLikeDeclaration(<VariableLikeDeclaration>pattern.parent);
             // If parent has the unknown (error) type, then so does this binding element
             if (parentType === unknownType) {
                 return unknownType;
@@ -1725,7 +1725,7 @@ module ts {
         }
 
         // Return the inferred type for a variable, parameter, or property declaration
-        function getTypeForVariableDeclaration(declaration: VariableLikeDeclaration): Type {
+        function getTypeForVariableLikeDeclaration(declaration: VariableLikeDeclaration): Type {
             // A variable declared in a for..in statement is always of type any
             if (declaration.parent.kind === SyntaxKind.ForInStatement) {
                 return anyType;
@@ -1808,8 +1808,8 @@ module ts {
         // Here, the array literal [1, "one"] is contextually typed by the type [any, string], which is the implied type of the
         // binding pattern [x, s = ""]. Because the contextual type is a tuple type, the resulting type of [1, "one"] is the
         // tuple type [number, string]. Thus, the type inferred for 'x' is number and the type inferred for 's' is string.
-        function getWidenedTypeForVariableDeclaration(declaration: VariableLikeDeclaration, reportErrors?: boolean): Type {
-            var type = getTypeForVariableDeclaration(declaration);
+        function getWidenedTypeForVariableLikeDeclaration(declaration: VariableLikeDeclaration, reportErrors?: boolean): Type {
+            var type = getTypeForVariableLikeDeclaration(declaration);
             if (type) {
                 if (reportErrors) {
                     reportErrorsFromWidening(declaration, type);
@@ -1850,7 +1850,7 @@ module ts {
                 }
                 // Handle variable, parameter or property
                 links.type = resolvingType;
-                var type = getWidenedTypeForVariableDeclaration(<VariableLikeDeclaration>declaration, /*reportErrors*/ true);
+                var type = getWidenedTypeForVariableLikeDeclaration(<VariableLikeDeclaration>declaration, /*reportErrors*/ true);
                 if (links.type === resolvingType) {
                     links.type = type;
                 }
@@ -6970,7 +6970,7 @@ module ts {
                 var seenStringIndexer = false;
                 for (var i = 0, len = indexSymbol.declarations.length; i < len; ++i) {
                     var declaration = <SignatureDeclaration>indexSymbol.declarations[i];
-                    if (declaration.parameters.length == 1 && declaration.parameters[0].type) {
+                    if (declaration.parameters.length === 1 && declaration.parameters[0].type) {
                         switch (declaration.parameters[0].type.kind) {
                             case SyntaxKind.StringKeyword:
                                 if (!seenStringIndexer) {
@@ -7755,7 +7755,7 @@ module ts {
             // For a binding pattern, validate the initializer and exit
             if (isBindingPattern(node.name)) {
                 if (node.initializer) {
-                    checkTypeAssignableTo(checkExpressionCached(node.initializer), getWidenedTypeForVariableDeclaration(node), node, /*headMessage*/ undefined);
+                    checkTypeAssignableTo(checkExpressionCached(node.initializer), getWidenedTypeForVariableLikeDeclaration(node), node, /*headMessage*/ undefined);
                     checkParameterInitializer(node);
                 }
                 return;
@@ -7772,7 +7772,7 @@ module ts {
             else {
                 // Node is a secondary declaration, check that type is identical to primary declaration and check that
                 // initializer is consistent with type associated with the node
-                var declarationType = getWidenedTypeForVariableDeclaration(node);
+                var declarationType = getWidenedTypeForVariableLikeDeclaration(node);
                 if (type !== unknownType && declarationType !== unknownType && !isTypeIdenticalTo(type, declarationType)) {
                     error(node.name, Diagnostics.Subsequent_variable_declarations_must_have_the_same_type_Variable_0_must_be_of_type_1_but_here_has_type_2, declarationNameToString(node.name), typeToString(type), typeToString(declarationType));
                 }
