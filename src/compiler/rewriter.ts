@@ -31,6 +31,7 @@ module ts {
         var isDownlevelGenerator = isDownlevel && isGenerator;
         var isDownlevelAsync = isDownlevel && isAsync;
         var isUplevelAsync = !isDownlevel && isAsync;
+        var inRewrittenBlock = false;
 
         if (!isAsync && !isDownlevelGenerator) {
             return node;
@@ -603,7 +604,16 @@ module ts {
 
         function visitReturnStatement(node: ReturnStatement): Node {
             if (isDownlevel) {
-                return builder.createInlineReturn(visit(node.expression));
+                var result = builder.createInlineReturn(visit(node.expression));
+                if (shouldCopyLeadingComments(node)) {
+                    result.leadingComments = getLeadingCommentRangesOfNode(node);
+                }
+
+                if (shouldCopyTrailingComments(node)) {
+                    result.trailingComments = getTrailingCommentRangesOfNode(node);
+                }
+
+                return result;
             } else {
                 return factory.updateReturnStatement(node, visit(node.expression));
             }
@@ -836,8 +846,10 @@ module ts {
                 var elseLabel = builder.defineLabel();
             }
 
+            builder.writeLeadingCommentsOfNode(node);
             builder.setLocation(node.expression);
             builder.emit(OpCode.BrFalse, elseLabel || resumeLabel, node.expression);
+
             builder.setLocation(node.thenStatement);
             visitAndEmitNode(node.thenStatement);
             if (node.elseStatement) {
@@ -846,13 +858,16 @@ module ts {
                 builder.markLabel(elseLabel);
                 visitAndEmitNode(node.elseStatement);
             }
+
             builder.markLabel(resumeLabel);
+            builder.writeTrailingCommentsOfNode(node);
         }
 
         function rewriteDoStatement(node: DoStatement): void {
             var bodyLabel = builder.defineLabel();
             var conditionLabel = builder.defineLabel();
             var endLabel = builder.beginContinueBlock(conditionLabel, getTarget(node));
+
             builder.markLabel(bodyLabel);
             builder.setLocation(node.statement);
             visitAndEmitNode(node.statement);
@@ -879,6 +894,7 @@ module ts {
             var conditionLabel = builder.defineLabel();
             var iteratorLabel = builder.defineLabel();
             var endLabel = builder.beginContinueBlock(iteratorLabel, getTarget(node));
+
             var head = visitVariableDeclarationsOrInitializer(node.declarations, node.initializer, node);
             if (head.initializer) {
                 builder.setLocation(head.initializer);
@@ -1062,7 +1078,9 @@ module ts {
         }
 
         function rewriteReturnStatement(node: ReturnStatement): void {
+            builder.writeLeadingCommentsOfNode(node);
             builder.emit(OpCode.Return, visit(node.expression));
+            builder.writeTrailingCommentsOfNode(node);
         }
 
         function rewriteThrowStatement(node: ThrowStatement): void {
@@ -1161,13 +1179,15 @@ module ts {
             }
         }
 
-        function getLeadingComments(node: Node): CommentRange[] {
-            var sourceFile = getSourceFileOfNode(node);
-            var leadingComments = getLeadingCommentRanges(sourceFile.text, node.pos);
-            return leadingComments;
+        function shouldCopyLeadingComments(node: Node): boolean {
+            return node.parent.kind === SyntaxKind.SourceFile || node.pos != node.parent.pos;
         }
 
-        function getTrailingComments(node: Node): CommentRange[] {
+        function shouldCopyTrailingComments(node: Node): boolean {
+            return node.parent.kind === SyntaxKind.SourceFile || node.end != node.parent.end;
+        }
+        
+        function getTrailingCommentRangesOfNode(node: Node): CommentRange[] {
             var sourceFile = getSourceFileOfNode(node);
             var trailingComments = getTrailingCommentRanges(sourceFile.text, node.end);
             return trailingComments;
@@ -1201,10 +1221,14 @@ module ts {
         }
 
         function emitNode(node: Node): void {
+            builder.setLocation(node);
             builder.emit(OpCode.Statement, node);
         }
 
         function visitAndEmitBlockOrClause(node: Block | CaseOrDefaultClause): void {
+            builder.setLocation(node);
+            builder.writeLeadingCommentsOfNode(node);
+
             for (var i = 0; i < node.statements.length; i++) {
                 var statement = node.statements[i];
                 if (isAnyBlockOrClause(statement) && hasAwaitOrYield(statement)) {
@@ -1213,6 +1237,9 @@ module ts {
                     visitAndEmitStatementOrExpression(statement);
                 }
             }
+
+            builder.setLocation(node);
+            builder.writeTrailingCommentsOfNode(node);
         }
 
         function visitAndEmitStatementOrExpression(node: Statement | Expression): void {

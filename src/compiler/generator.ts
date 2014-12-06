@@ -74,7 +74,8 @@ module ts {
             if (!generatedLocals) generatedLocals = [];
             var localDeclarationName = createUniqueIdentifier(location, name);
             generatedLocals.push(localDeclarationName);
-            return localDeclarationName;
+
+            return factory.createGeneratedNode(localDeclarationName.text, /*contents*/ undefined, location);
         }
 
         function buildLocals(location: TextRange): GeneratedNode {
@@ -152,6 +153,8 @@ module ts {
             beginBreakBlock,
             endBreakBlock,
             emit,
+            writeLeadingCommentsOfNode,
+            writeTrailingCommentsOfNode,
             cacheExpression,
             createUniqueIdentifier,
             createInlineBreak,
@@ -452,6 +455,29 @@ module ts {
             operations[operationIndex] = code;
             operationArguments[operationIndex] = args;
             operationLocations[operationIndex] = relatedLocation;
+        }
+
+        function writeLeadingCommentsOfNode(node: Node): void {
+            if (node.parent.kind === SyntaxKind.SourceFile || node.pos !== node.parent.pos) {
+                var comments = getLeadingCommentRangesOfNode(node);
+                if (comments) {
+                    var empty = createGeneratedNode("");
+                    empty.leadingComments = comments;
+                    emit(OpCode.Statement, empty);
+                }
+            }
+        }
+
+        function writeTrailingCommentsOfNode(node: Node): void {
+            if (node.parent.kind === SyntaxKind.SourceFile || node.end !== node.parent.end) {
+                var sourceFileOfNode = getSourceFileOfNode(node);
+                var comments = getTrailingCommentRanges(sourceFileOfNode.text, node.end);
+                if (comments) {
+                    var empty = createGeneratedNode("");
+                    empty.trailingComments = comments;
+                    emit(OpCode.Statement, empty);
+                }
+            }
         }
 
         function pushLocation(location: TextRange): void {

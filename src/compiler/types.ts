@@ -787,6 +787,9 @@ module ts {
         emit(code: OpCode, text: string, content?: Map<Node|Node[]>): void;
         emit(code: OpCode, label: Label, text: string, content?: Map<Node|Node[]>): void;
 
+        writeLeadingCommentsOfNode(node: Node): void;
+        writeTrailingCommentsOfNode(node: Node): void;
+
         cacheExpression(expression: Expression): GeneratedNode;
 
         createUniqueIdentifier(name?: string): GeneratedNode;
