@@ -315,33 +315,6 @@ module TypeScript.Parser {
             return result;
         }
 
-        function currentNode(): ISyntaxNode {
-            // If we have any outstanding tokens, then don't reuse a node.  
-            // TODO(cyrusn): This may be too conservative.  Perhaps we could reuse hte node and
-            // attach the skipped tokens in front?  For now though, being conservative is nice and
-            // safe, and likely won't ever affect perf.
-            if (!skippedTokens) {
-                var node = source.currentNode();
-
-                // We can only reuse a node if it was parsed under the same strict mode that we're 
-                // currently in.  i.e. if we originally parsed a node in non-strict mode, but then
-                // the user added 'using strict' at the top of the file, then we can't use that node
-                // again as the presense of strict mode may cause us to parse the tokens in the file
-                // differetly.
-                //
-                // Note: we *can* reuse tokens when the strict mode changes.  That's because tokens
-                // are unaffected by strict mode.  It's just the parser will decide what to do with it
-                // differently depending on what mode it is in.
-                if (node &&
-                    parserContextFlags(node) === contextFlags) {
-
-                    return node;
-                }
-            }
-
-            return undefined;
-        }
-
         function currentToken(): ISyntaxToken {
             return source.currentToken();
         }
@@ -427,9 +400,10 @@ module TypeScript.Parser {
             }
         }
 
-        function consumeNode(node: ISyntaxNode): void {
+        function consumeNode(node: ISyntaxNode): ISyntaxNode {
             Debug.assert(skippedTokens === undefined);
             source.consumeNodeOrToken(node);
+            return node;
         }
 
         //this method is called very frequently
@@ -721,22 +695,12 @@ module TypeScript.Parser {
         }
 
         function isModuleElement(inErrorRecovery: boolean): boolean {
-            if (SyntaxUtilities.isModuleElement(currentNode())) {
-                return true;
-            }
-
             var _modifierCount = modifierCount();
             return isInterfaceEnumClassModuleImportExportOrTypeAlias(_modifierCount) ||
                    isStatement(_modifierCount, inErrorRecovery);
         }
 
         function tryParseModuleElement(inErrorRecovery: boolean): IModuleElementSyntax {
-            var node = currentNode();
-            if (SyntaxUtilities.isModuleElement(node)) {
-                consumeNode(node);
-                return <IModuleElementSyntax>node;
-            }
-
             var _currentToken = currentToken();
             var _modifierCount = modifierCount();
 
@@ -922,11 +886,6 @@ module TypeScript.Parser {
         }
 
         function isEnumElement(inErrorRecovery: boolean): boolean {
-            var node = currentNode();
-            if (node && node.kind === SyntaxKind.EnumElement) {
-                return true;
-            }
-
             return isPropertyName(/*peekToken:*/ 0, inErrorRecovery);
         }
         
@@ -935,12 +894,6 @@ module TypeScript.Parser {
         }
 
         function tryParseEnumElement(inErrorRecovery: boolean): EnumElementSyntax {
-            var node = currentNode();
-            if (node && node.kind === SyntaxKind.EnumElement) {
-                consumeNode(node);
-                return <EnumElementSyntax>node;
-            }
-
             if (!isPropertyName(/*peekToken:*/ 0, inErrorRecovery)) {
                 return undefined;
             }
@@ -1140,10 +1093,6 @@ module TypeScript.Parser {
         }
 
         function isClassElement(inErrorRecovery: boolean): boolean {
-            if (SyntaxUtilities.isClassElement(currentNode())) {
-                return true;
-            }
-
             return isAtModifier() ||
                    isConstructorDeclaration() ||
                    isAccessor(inErrorRecovery) ||
@@ -1207,12 +1156,6 @@ module TypeScript.Parser {
         }
 
         function tryParseClassElement(inErrorRecovery: boolean): IClassElementSyntax {
-            var node = currentNode();
-            if (SyntaxUtilities.isClassElement(node)) {
-                consumeNode(node);
-                return <IClassElementSyntax>node;
-            }
-
             // Have to check for indexers before anything else.  That way if we see "[foo:" we 
             // parse it out as an indexer and not a member function or variable.
             var modifiers = parseModifiers();
@@ -1387,10 +1330,6 @@ module TypeScript.Parser {
         }
 
         function isTypeMember(inErrorRecovery: boolean): boolean {
-            if (SyntaxUtilities.isTypeMember(currentNode())) {
-                return true;
-            }
-
             return isCallSignature(/*tokenIndex:*/ 0) ||
                    isConstructSignature() ||
                    isIndexSignature(/*tokenIndex:*/ 0) ||
@@ -1426,12 +1365,6 @@ module TypeScript.Parser {
         }
 
         function tryParseTypeMember(inErrorRecovery: boolean): ITypeMemberSyntax {
-            var node = currentNode();
-            if (SyntaxUtilities.isTypeMember(node)) {
-                consumeNode(node);
-                return <ITypeMemberSyntax>node;
-            }
-
             if (isCallSignature(/*tokenIndex:*/ 0)) {
                 // A call signature for a type member can both use 'yield' as a parameter name, and 
                 // does not have parameter initializers.  So we can pass 'false' for both [Yield]
@@ -1666,10 +1599,6 @@ module TypeScript.Parser {
         }
 
         function isStatement(modifierCount: number, inErrorRecovery: boolean): boolean {
-            if (SyntaxUtilities.isStatement(currentNode())) {
-                return true;
-            }
-
             if (isDefinitelyNotStatement()) {
                 return false;
             }
@@ -1708,12 +1637,6 @@ module TypeScript.Parser {
         }
 
         function tryParseStatement(inErrorRecovery: boolean): IStatementSyntax {
-            var node = currentNode();
-            if (SyntaxUtilities.isStatement(node)) {
-                consumeNode(node);
-                return <IStatementSyntax><ISyntaxNode>node;
-            }
-
             var _currentToken = currentToken();
             var currentTokenKind = _currentToken.kind;
             return tryParseStatementWorker(_currentToken, currentTokenKind, modifierCount(), inErrorRecovery);
@@ -2007,33 +1930,20 @@ module TypeScript.Parser {
         }
 
         function isSwitchClause(): boolean {
-            if (SyntaxUtilities.isSwitchClause(currentNode())) {
-                return true;
-            }
-
             var currentTokenKind = currentToken().kind;
             return currentTokenKind === SyntaxKind.CaseKeyword || currentTokenKind === SyntaxKind.DefaultKeyword;
         }
 
         function tryParseSwitchClause(): ISwitchClauseSyntax {
-            // Debug.assert(isSwitchClause());
-            var node = currentNode();
-            if (SyntaxUtilities.isSwitchClause(node)) {
-                consumeNode(node);
-                return <ISwitchClauseSyntax><ISyntaxNode>node;
+            var _currentToken = currentToken();
+            switch (_currentToken.kind) {
+                case SyntaxKind.CaseKeyword:
+                    return parseCaseSwitchClause(_currentToken);
+                case SyntaxKind.DefaultKeyword:
+                    return parseDefaultSwitchClause(_currentToken);
             }
 
-            var _currentToken = currentToken();
-            var kind = _currentToken.kind;
-            if (kind === SyntaxKind.CaseKeyword) {
-                return parseCaseSwitchClause(_currentToken);
-            }
-            else if (kind === SyntaxKind.DefaultKeyword) {
-                return parseDefaultSwitchClause(_currentToken);
-            }
-            else {
-                return undefined;
-            }
+            return undefined;
         }
 
         function parseCaseSwitchClause(caseKeyword: ISyntaxToken): CaseSwitchClauseSyntax {
@@ -2270,44 +2180,10 @@ module TypeScript.Parser {
         }
 
         function isVariableDeclarator(): boolean {
-            var node = currentNode();
-            if (node && node.kind === SyntaxKind.VariableDeclarator) {
-                return true;
-            }
-
             return isIdentifier(currentToken());
         }
 
-        function canReuseVariableDeclaratorNode(node: ISyntaxNode) {
-            if (!node || node.kind !== SyntaxKind.VariableDeclarator) {
-                return false;
-            }
-
-            // Very subtle incremental parsing bug.  Consider the following code:
-            //
-            //      var v = new List < A, B
-            //
-            // This is actually legal code.  It's a list of variable declarators "v = new List<A" 
-            // on one side and "B" on the other. If you then change that to:
-            //
-            //      var v = new List < A, B >()
-            // 
-            // then we have a problem.  "v = new List<A" doesn't intersect the change range, so we
-            // start reparsing at "B" and we completely fail to handle this properly.
-            //
-            // In order to prevent this, we do not allow a variable declarator to be reused if it
-            // has an initializer.
-            var variableDeclarator = <VariableDeclaratorSyntax>node;
-            return variableDeclarator.equalsValueClause === undefined;
-        }
-
         function tryParseVariableDeclarator(): VariableDeclaratorSyntax {
-            var node = currentNode();
-            if (canReuseVariableDeclaratorNode(node)) {
-                consumeNode(node);
-                return <VariableDeclaratorSyntax>node;
-            }
-
             if (!isIdentifier(currentToken())) {
                 return undefined;
             }
@@ -4132,10 +4008,6 @@ module TypeScript.Parser {
         }
 
         function isParameter(): boolean {
-            if (currentNode() && currentNode().kind === SyntaxKind.Parameter) {
-                return true;
-            }
-
             return isParameterHelper(currentToken());
         }
 
@@ -4153,12 +4025,6 @@ module TypeScript.Parser {
         }
 
         function tryParseParameter(): ParameterSyntax {
-            var node = currentNode();
-            if (node && node.kind === SyntaxKind.Parameter) {
-                consumeNode(node);
-                return <ParameterSyntax>node;
-            }
-
             var dotDotDotToken = tryEatToken(SyntaxKind.DotDotDotToken);
             var modifiers = parseModifiers();
 
@@ -4626,14 +4492,21 @@ module TypeScript.Parser {
             return currentToken().kind === SyntaxKind.FinallyKeyword;
         }
 
-        function isExpectedListItem(currentListType: ListParsingState, inErrorRecovery: boolean): any {
+        function isExpectedListItem(currentListType: ListParsingState, inErrorRecovery: boolean): boolean {
+            // If we're able to parse out a node for the current list type from the old parse tree,
+            // then definitely have an expected list item.
+            var node = currentNode(currentListType);
+            if (node) {
+                return true;
+            }
+
             switch (currentListType) {
-                case ListParsingState.SourceUnit_ModuleElements:                            return isModuleElement(inErrorRecovery);
-                case ListParsingState.ClassDeclaration_ClassElements:                       return isClassElement(inErrorRecovery);
-                case ListParsingState.ModuleDeclaration_ModuleElements:                     return isModuleElement(inErrorRecovery);
-                case ListParsingState.SwitchStatement_SwitchClauses:                        return isSwitchClause();
-                case ListParsingState.SwitchClause_Statements:                              return isStatement(modifierCount(), inErrorRecovery);
-                case ListParsingState.Block_Statements:                                     return isStatement(modifierCount(), inErrorRecovery);
+                case ListParsingState.SourceUnit_ModuleElements:                    return isModuleElement(inErrorRecovery);
+                case ListParsingState.ClassDeclaration_ClassElements:               return isClassElement(inErrorRecovery);
+                case ListParsingState.ModuleDeclaration_ModuleElements:             return isModuleElement(inErrorRecovery);
+                case ListParsingState.SwitchStatement_SwitchClauses:                return isSwitchClause();
+                case ListParsingState.SwitchClause_Statements:                      return isStatement(modifierCount(), inErrorRecovery);
+                case ListParsingState.Block_Statements:                             return isStatement(modifierCount(), inErrorRecovery);
                 // These two are special.  They're just augmentations of "Block_Statements" 
                 // used so we can abort out of the try block if we see a 'catch' or 'finally'
                 // keyword.  There are no additional list items that they add, so we just
@@ -4674,6 +4547,11 @@ module TypeScript.Parser {
         }
 
         function tryParseExpectedListItemWorker(currentListType: ListParsingState, inErrorRecovery: boolean): ISyntaxNodeOrToken {
+            var node = currentNode(currentListType);
+            if (node) {
+                return node;
+            }
+
             switch (currentListType) {
                 case ListParsingState.SourceUnit_ModuleElements:                    return tryParseModuleElement(inErrorRecovery);
                 case ListParsingState.ClassDeclaration_ClassElements:               return tryParseClassElement(inErrorRecovery);
@@ -4698,6 +4576,151 @@ module TypeScript.Parser {
                 case ListParsingState.TupleType_Types:                              return tryParseType();
                 default: throw Errors.invalidOperation();
             }
+        }
+
+        function currentNode(currentListType: ListParsingState): ISyntaxNode {
+            // If we have any outstanding tokens, then don't reuse a node.  
+            // TODO(cyrusn): This may be too conservative.  Perhaps we could reuse hte node and
+            // attach the skipped tokens in front?  For now though, being conservative is nice and
+            // safe, and likely won't ever affect perf.
+            if (skippedTokens) {
+                return undefined;
+            }
+
+            var node = source.currentNode();
+            if (!node) {
+                return undefined;
+            }
+
+            // We can only reuse a node if it was parsed under the same strict mode that we're 
+            // currently in.  i.e. if we originally parsed a node in non-strict mode, but then
+            // the user added 'using strict' at the top of the file, then we can't use that node
+            // again as the presense of strict mode may cause us to parse the tokens in the file
+            // differetly.
+            // 
+            // Note: we *can* reuse tokens when the strict mode changes.  That's because tokens
+            // are unaffected by strict mode.  It's just the parser will decide what to do with it
+            // differently depending on what mode it is in.
+            //
+            // This also applies to all our other context flags as well.
+            if (parserContextFlags(node) !== contextFlags) {
+                return undefined;
+            }
+
+            // Ok, we have a node that looks like it could be reused.  Now verify that it is valid
+            // in the currest list parsing context that we're currently at.
+            if (!canReuseNode(node, currentListType)) {
+                return undefined;
+            }
+
+            // It was valid.  Let teh source know we're consuming this node, and pass to the list
+            // parser.
+            return consumeNode(node);
+        }
+
+        function canReuseNode(node: ISyntaxNode, listParsingState: ListParsingState): boolean {
+            switch (listParsingState) {
+                case ListParsingState.SourceUnit_ModuleElements:
+                    return SyntaxUtilities.isModuleElement(node);
+
+                case ListParsingState.ClassDeclaration_ClassElements:
+                    return SyntaxUtilities.isClassElement(node);
+
+                case ListParsingState.ModuleDeclaration_ModuleElements:
+                    return SyntaxUtilities.isModuleElement(node);
+
+                case ListParsingState.SwitchStatement_SwitchClauses:
+                    return SyntaxUtilities.isSwitchClause(node);
+
+                case ListParsingState.SwitchClause_Statements:
+                case ListParsingState.Block_Statements: 
+                case ListParsingState.TryBlock_Statements: 
+                case ListParsingState.CatchBlock_Statements:
+                    return SyntaxUtilities.isStatement(node);
+
+                case ListParsingState.EnumDeclaration_EnumElements:
+                    return node.kind === SyntaxKind.EnumElement;
+
+                case ListParsingState.ObjectType_TypeMembers:
+                    return SyntaxUtilities.isTypeMember(node);
+
+                case ListParsingState.VariableDeclaration_VariableDeclarators:
+                    return canReuseVariableDeclaratorNode(node);
+
+                case ListParsingState.ParameterList_Parameters:
+                    return node.kind === SyntaxKind.Parameter;
+
+                case ListParsingState.IndexSignature_Parameters:
+                    return node.kind === SyntaxKind.Parameter;
+
+                // Any other lists we do not care about reusing nodes in.  But feel free to add if 
+                // you can do so safely.  Danger areas involve nodes that may involve speculative
+                // parsing.  If speculative parsing is involved with the node, then the range the
+                // parser reached while looking ahead might be in the edited range (see the example
+                // in canReuseVariableDeclaratorNode for a good case of this).
+                case ListParsingState.ClassOrInterfaceDeclaration_HeritageClauses:
+                    // This would probably be safe to reuse.  There is no speculative parsing with 
+                    // heritage clauses.
+
+                case ListParsingState.HeritageClause_TypeNameList: 
+                    // This would probably be safe to reuse.  There is no speculative parsing with 
+                    // type names in a heritage clause.  There can be generic names in the type
+                    // name list.  But because it is a type context, we never use speculative 
+                    // parsing on the type argument list.
+
+                case ListParsingState.TypeParameterList_TypeParameters: 
+                    // This would probably be safe to reuse.  There is no speculative parsing with 
+                    // type parameters.  Note that that's because type *parameters* only occur in
+                    // unambiguous *type* contexts.  While type *arguments* occur in very ambiguous
+                    // *expression* contexts.
+
+                case ListParsingState.TupleType_Types: 
+                    // This would probably be safe to reuse.  There is no speculative parsing with 
+                    // tuple types.
+
+                // Technically, type argument list types are probably safe to reuse.  While 
+                // speculative parsing is involved with them (since type argument lists are only
+                // produced from speculative parsing a < as a type argument list), we only have
+                // the types because speculative parsing succeeded.  Thus, the lookahead never
+                // went past the end of the list and rewound.
+                case ListParsingState.TypeArgumentList_Types: 
+
+                // Note: these are almost certainly not safe to ever reuse.  Expressions commonly
+                // need a large amount of lookahead, and we should not reuse them as they may 
+                // have actually intersected the edit.
+                case ListParsingState.ArgumentList_AssignmentExpressions:
+                case ListParsingState.ArrayLiteralExpression_AssignmentExpressions:
+
+                // This is not safe to reuse for the same reason as the 'AssignmentExpression'
+                // cases.  i.e. a property assignment may end with an expression, and thus might 
+                // have lookahead far beyond it's old node.
+                case ListParsingState.ObjectLiteralExpression_PropertyAssignments: 
+            }
+
+            return false;
+        }
+        
+        function canReuseVariableDeclaratorNode(node: ISyntaxNode) {
+            if (!node || node.kind !== SyntaxKind.VariableDeclarator) {
+                return false;
+            }
+
+            // Very subtle incremental parsing bug.  Consider the following code:
+            //
+            //      var v = new List < A, B
+            //
+            // This is actually legal code.  It's a list of variable declarators "v = new List<A" 
+            // on one side and "B" on the other. If you then change that to:
+            //
+            //      var v = new List < A, B >()
+            // 
+            // then we have a problem.  "v = new List<A" doesn't intersect the change range, so we
+            // start reparsing at "B" and we completely fail to handle this properly.
+            //
+            // In order to prevent this, we do not allow a variable declarator to be reused if it
+            // has an initializer.
+            var variableDeclarator = <VariableDeclaratorSyntax>node;
+            return variableDeclarator.equalsValueClause === undefined;
         }
 
         function getExpectedListElementType(currentListType: ListParsingState): string {
