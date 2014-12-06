@@ -627,7 +627,7 @@ module TypeScript {
         public visitExternalModuleReference(node: ExternalModuleReferenceSyntax): void {
             this.visitToken(node.requireKeyword);
             this.visitToken(node.openParenToken);
-            this.visitToken(node.stringLiteral);
+            visitNodeOrToken(this, node.expression);
             this.visitToken(node.closeParenToken);
         }
 
