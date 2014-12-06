@@ -740,18 +740,12 @@ module ts {
     export type Label = number;
 
     export interface LocalGenerator {
-        setContext(node: Node): void;
-        setLocation(location: TextRange): void;
-        createUniqueIdentifier(name?: string): GeneratedNode;
-        declareLocal(name?: string): GeneratedNode;
-        buildLocals(): GeneratedNode;
+        createUniqueIdentifier(location: TextRange, name?: string): GeneratedNode;
+        declareLocal(location: TextRange, name?: string): GeneratedNode;
+        buildLocals(location: TextRange): GeneratedNode;
     }
 
     export interface CodeGenerator {
-        setContext(node: Node): void;
-        pushContext(node: Node): void;
-        popContext(): void;
-
         setLocation(location: TextRange): void;
         pushLocation(location: TextRange): void;
         popLocation(): void;

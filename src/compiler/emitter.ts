@@ -3736,7 +3736,7 @@ module ts {
 
             function getLeadingCommentsToEmit(node: Node) {
                 // Emit the leading comments only if the parent's pos doesn't match because parent should take care of emitting these comments
-                if (node.parent.kind === SyntaxKind.SourceFile || node.pos !== node.parent.pos) {
+                if (node.parent.kind === SyntaxKind.SourceFile || node.parent.kind === SyntaxKind.GeneratedNode || node.pos !== node.parent.pos) {
                     var leadingComments: CommentRange[];
                     if (hasDetachedComments(node.pos)) {
                         // get comments without detached comments
@@ -3767,7 +3767,7 @@ module ts {
                 if (node.kind === SyntaxKind.GeneratedNode) {
                     var trailingComments = (<GeneratedNode>node).trailingComments;
                 }
-                else if (node.parent.kind === SyntaxKind.SourceFile || node.end !== node.parent.end) {
+                else if (node.parent.kind === SyntaxKind.SourceFile || node.parent.kind === SyntaxKind.GeneratedNode || node.end !== node.parent.end) {
                     var trailingComments = getTrailingCommentRanges(currentSourceFile.text, node.end);
                 }
 

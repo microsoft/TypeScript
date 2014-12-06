@@ -44,29 +44,17 @@ module ts {
         continueLabel: Label;
     }
 
-    export function createLocalGenerator(resolver: EmitResolver): LocalGenerator {
+    export function createLocalGenerator(resolver: EmitResolver, context: Node): LocalGenerator {
         var localIds: Map<number>;
         var generatedLocals: GeneratedNode[];
-        var relatedLocation: TextRange;
-        var context: Node;
 
         return {
-            setLocation,
-            setContext,
             createUniqueIdentifier,
             declareLocal,
             buildLocals
         };
-
-        function setLocation(location: TextRange): void {
-            relatedLocation = location;
-        }
         
-        function setContext(node: Node): void {
-            context = node;
-        }
-
-        function createUniqueIdentifier(name: string = ""): GeneratedNode {
+        function createUniqueIdentifier(location: TextRange, name: string = ""): GeneratedNode {
             if (!name || !resolver.isUnknownIdentifier(context, name)) {
                 if (!localIds) localIds = {};
                 var nextLocalId = localIds[name] || 0;
@@ -79,19 +67,19 @@ module ts {
                 name = tempName;
             }
 
-            return factory.createGeneratedNode(name, /*contents*/ undefined, relatedLocation);
+            return factory.createGeneratedNode(name, /*contents*/ undefined, location);
         }
 
-        function declareLocal(name?: string): GeneratedNode {
+        function declareLocal(location: TextRange, name?: string): GeneratedNode {
             if (!generatedLocals) generatedLocals = [];
-            var localDeclarationName = createUniqueIdentifier(name);
+            var localDeclarationName = createUniqueIdentifier(location, name);
             generatedLocals.push(localDeclarationName);
             return localDeclarationName;
         }
 
-        function buildLocals(): GeneratedNode {
+        function buildLocals(location: TextRange): GeneratedNode {
             if (generatedLocals) {
-                return factory.createGeneratedNode(`var ${generatedLocals};`, { generatedLocals }, relatedLocation);
+                return factory.createGeneratedNode(`var \${generatedLocals};`, { generatedLocals }, location);
             }
         }
     }
@@ -102,8 +90,6 @@ module ts {
         var statementsLocation: TextRange = functionLocation;
         var relatedLocation: TextRange = functionLocation;
         var locationStack: TextRange[];
-        var context: Node = functionLocation;
-        var contextStack: Node[];
 
         // locals/hoisted variables/hoisted functions
         var parameters: ParameterDeclaration[];
@@ -129,7 +115,6 @@ module ts {
         var operationArguments: any[][];
         var operationLocations: TextRange[];
 
-        var resolve: GeneratedNode;
         var state: GeneratedNode;
 
         if (isAnyFunction(functionLocation)) {
@@ -140,18 +125,7 @@ module ts {
             }
         }
 
-        if (options) {
-            pushContext(bodyLocation);
-            pushLocation(bodyLocation);
-            resolve = createUniqueIdentifier("_resolve");
-            popLocation();
-            popContext();
-        }
-
         return {
-            pushContext,
-            popContext,
-            setContext,
             pushLocation,
             popLocation,
             setLocation,
@@ -213,11 +187,11 @@ module ts {
         }
 
         function declareLocal(name: string = ""): GeneratedNode {
-            return locals.declareLocal(name);
+            return locals.declareLocal(relatedLocation, name);
         }
 
         function createUniqueIdentifier(name: string = ""): GeneratedNode {
-            return locals.createUniqueIdentifier(name);
+            return locals.createUniqueIdentifier(relatedLocation, name);
         }
 
         function defineLabel(): Label {
@@ -494,25 +468,6 @@ module ts {
         function setLocation(location: TextRange): void {
             if (location) {
                 relatedLocation = location;
-                locals.setLocation(location);
-            }
-        }
-
-        function pushContext(context: Node): void {
-            if (!contextStack) contextStack = [];
-            contextStack.push(context);
-            setContext(context);
-        }
-
-        function popContext(): void {
-            if (!contextStack) return;
-            setContext(contextStack.pop());
-        }
-
-        function setContext(node: Node): void {
-            if (node) {
-                context = node;
-                locals.setContext(node);
             }
         }
 
@@ -563,15 +518,10 @@ module ts {
 
         function buildFunction(kind: SyntaxKind, name: DeclarationName) {
             var statements: Statement[] = factory.createNodeArray<Statement>([], statementsLocation);
-            pushContext(bodyLocation);
-            pushLocation(statementsLocation);
-            var generatedLocals = locals.buildLocals();
+            var generatedLocals = locals.buildLocals(statementsLocation);
             if (generatedLocals) {
                 statements.push(generatedLocals);
             }
-
-            popContext();
-            popLocation();
 
             if (variableStatements) {
                 statements = statements.concat(variableStatements);
@@ -582,17 +532,11 @@ module ts {
             }
 
 
-            pushLocation(statementsLocation);
             var state = getState();
             var cases = buildFunctionBody();
-            popLocation();
 
-            pushLocation(statementsLocation);
             if (options) {
-                pushContext(bodyLocation);
-                var resolve = createUniqueIdentifier("_resolve");
-                popContext();
-
+                var resolve = locals.createUniqueIdentifier(statementsLocation, "_resolve");
                 var promiseConstructor = options.promiseConstructor;
                 statements.push(createGeneratedNode(`
                     return new \${promiseConstructor}(function (\${resolve}) {
@@ -664,11 +608,9 @@ module ts {
                     var args = operationArguments[operationIndex];
                     ensureLabels();
 
-                    pushContext(bodyLocation);
                     pushLocation(operationLocations[operationIndex]);
                     writeOperation(code, args);
                     popLocation();
-                    popContext();
                 }
             }
 
@@ -698,7 +640,6 @@ module ts {
             }
 
             function newCase() {
-                pushContext(bodyLocation);
                 pushLocation(statementsLocation);
 
                 var labelNumber = clauses.length;
@@ -719,7 +660,6 @@ module ts {
                         @{statements}`, { labelExpression, statements }));
 
                 popLocation();
-                popContext();
             }
 
             function writeOperation(code: OpCode, args: any[]): void {

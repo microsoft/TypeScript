@@ -23,7 +23,7 @@ module ts {
 
     /** rewrites an async or generator function or method declaration */
     export function rewriteFunction(node: FunctionLikeDeclaration, compilerOptions: CompilerOptions, resolver: EmitResolver): FunctionLikeDeclaration {
-        var locals = createLocalGenerator(resolver);
+        var locals = createLocalGenerator(resolver, node.body);
         var builder: CodeGenerator;
         var isDownlevel = compilerOptions.target <= ScriptTarget.ES5;
         var isAsync = (node.flags & NodeFlags.Async) !== 0;
@@ -517,12 +517,7 @@ module ts {
         }
 
         function visitExpressionStatement(node: ExpressionStatement): Node {
-            if (isDownlevel && isAwaitOrYield(node.expression)) {
-                visit(node.expression);
-                return;
-            } else {
-                return factory.updateExpressionStatement(node, visit(node.expression));
-            }
+            return factory.updateExpressionStatement(node, visit(node.expression));
         }
 
         function visitIfStatement(node: IfStatement): Node {
@@ -1166,6 +1161,18 @@ module ts {
             }
         }
 
+        function getLeadingComments(node: Node): CommentRange[] {
+            var sourceFile = getSourceFileOfNode(node);
+            var leadingComments = getLeadingCommentRanges(sourceFile.text, node.pos);
+            return leadingComments;
+        }
+
+        function getTrailingComments(node: Node): CommentRange[] {
+            var sourceFile = getSourceFileOfNode(node);
+            var trailingComments = getTrailingCommentRanges(sourceFile.text, node.end);
+            return trailingComments;
+        }
+
         function getTarget(node: Node): string {
             var label: Identifier;
             switch (node.kind) {
@@ -1234,17 +1241,16 @@ module ts {
         function rewriteAsyncAsGeneratorWorker(): FunctionLikeDeclaration {
             var promiseConstructor = getPromiseConstructor(node);
 
-            locals.setContext(node.body);
             if (node.body.kind === SyntaxKind.FunctionBlock) {
                 var block = <Block>node.body;
-                locals.setLocation(block.statements);
+                var statementsLocation: TextRange = block.statements;
                 var statements = factory.createNodeArray(map(block.statements, visit), block.statements);
             } else {
-                locals.setLocation(node.body);
+                var statementsLocation: TextRange = node.body;
                 var statements = factory.createNodeArray<Statement>([visit(node.body)], node.body);
             }
 
-            var resolve = builder.createUniqueIdentifier("_resolve");
+            var resolve = locals.createUniqueIdentifier(statementsLocation, "_resolve");
             var body = factory.createGeneratedNode(`
                 return new \${promiseConstructor}(function (\${resolve}) {
                     \${resolve}(__awaiter(function* () {
