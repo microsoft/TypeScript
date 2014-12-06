@@ -666,6 +666,8 @@ module ts {
     export interface GeneratedNode extends Node {
         text: string;
         content?: Map<Node | Node[]>;
+        leadingComments?: CommentRange[];
+        trailingComments?: CommentRange[];
     }
 
     export interface GeneratedLabel extends Expression {
@@ -737,9 +739,21 @@ module ts {
 
     export type Label = number;
 
+    export interface LocalGenerator {
+        setContext(node: Node): void;
+        setLocation(location: TextRange): void;
+        createUniqueIdentifier(name?: string): GeneratedNode;
+        declareLocal(name?: string): GeneratedNode;
+        buildLocals(): GeneratedNode;
+    }
+
     export interface CodeGenerator {
-        setLocation(location: Node): void;
-        pushLocation(location: Node): void;
+        setContext(node: Node): void;
+        pushContext(node: Node): void;
+        popContext(): void;
+
+        setLocation(location: TextRange): void;
+        pushLocation(location: TextRange): void;
         popLocation(): void;
 
         addParameter(name: Identifier, flags?: NodeFlags): void;
@@ -750,6 +764,9 @@ module ts {
 
         defineLabel(): Label;
         markLabel(label: Label): void;
+
+        beginVariableStatement(): void;
+        endVariableStatement(): void;
 
         beginExceptionBlock(): Label;
         beginCatchBlock(variable: Identifier): void;
@@ -781,11 +798,10 @@ module ts {
         createUniqueIdentifier(name?: string): GeneratedNode;
         createInlineBreak(label: Label): GeneratedNode;
         createInlineReturn(expression: Expression): GeneratedNode;
-        createGeneratedNode(text: string, content?: Map<Node|Node[]>): GeneratedNode;
+        createGeneratedNode(text: string, content?: Map<Node|Node[]>, leadingComments?: CommentRange[], trailingComments?: CommentRange[]): GeneratedNode;
         createResume(): GeneratedNode;
 
-        buildGeneratorFunction(kind: SyntaxKind, name: DeclarationName, location: Node): FunctionLikeDeclaration;
-        buildAsyncFunction(kind: SyntaxKind, name: DeclarationName, promiseType: EntityName, location: Node): FunctionLikeDeclaration;
+        buildFunction(kind: SyntaxKind, name: DeclarationName): FunctionLikeDeclaration;
     }
 
     export interface SourceMapSpan {

@@ -699,11 +699,13 @@ module ts {
             return node;
         }
 
-        export function createGeneratedNode(text: string, content: Map<Node|Node[]>, location: TextRange): GeneratedNode {
-            var statement = beginNode<GeneratedNode>(SyntaxKind.GeneratedNode);
-            statement.text = text;
-            statement.content = content;
-            return finishNode(statement, location);
+        export function createGeneratedNode(text: string, content: Map<Node|Node[]>, location: TextRange, leadingComments?: CommentRange[], trailingComments?: CommentRange[]): GeneratedNode {
+            var node = beginNode<GeneratedNode>(SyntaxKind.GeneratedNode);
+            node.text = text;
+            node.content = content;
+            node.leadingComments = leadingComments;
+            node.trailingComments = trailingComments;
+            return finishNode(node, location);
         }
 
         export function createGeneratedLabel(label: Label, labelNumbers: number[], location: TextRange): GeneratedLabel  {

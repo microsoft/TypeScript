@@ -23,6 +23,7 @@ module ts {
 
     /** rewrites an async or generator function or method declaration */
     export function rewriteFunction(node: FunctionLikeDeclaration, compilerOptions: CompilerOptions, resolver: EmitResolver): FunctionLikeDeclaration {
+        var locals = createLocalGenerator(resolver);
         var builder: CodeGenerator;
         var isDownlevel = compilerOptions.target <= ScriptTarget.ES5;
         var isAsync = (node.flags & NodeFlags.Async) !== 0;
@@ -35,7 +36,6 @@ module ts {
             return node;
         }
 
-        builder = createCodeGenerator(resolver);
         return rewriteWorker();
 
         function visit(node: Node): Node {
@@ -503,7 +503,10 @@ module ts {
 
         function visitVariableStatement(node: VariableStatement): Node {
             if (isDownlevel) {
+                builder.beginVariableStatement();
                 var assignment = visitVariableDeclarationsOrInitializer(node.declarations, /*initializer*/ undefined, node).initializer;
+                builder.endVariableStatement();
+
                 if (assignment) {
                     builder.setLocation(node);
                     return builder.createGeneratedNode(`\${assignment};`, { assignment });
@@ -748,6 +751,7 @@ module ts {
             var local = builder.createGeneratedNode(node.name.text);
             var initializer = visit(node.initializer);
             if (initializer) {
+                builder.setLocation(node.initializer);
                 return builder.createGeneratedNode(`\${left} = \${right}`, { left: local, right: initializer });
             }
         }
@@ -1230,11 +1234,14 @@ module ts {
         function rewriteAsyncAsGeneratorWorker(): FunctionLikeDeclaration {
             var promiseConstructor = getPromiseConstructor(node);
 
-            var statements: Statement[];
+            locals.setContext(node.body);
             if (node.body.kind === SyntaxKind.FunctionBlock) {
-                statements = map((<Block>node.body).statements, visit);
+                var block = <Block>node.body;
+                locals.setLocation(block.statements);
+                var statements = factory.createNodeArray(map(block.statements, visit), block.statements);
             } else {
-                statements = [visit(node.body)];
+                locals.setLocation(node.body);
+                var statements = factory.createNodeArray<Statement>([visit(node.body)], node.body);
             }
 
             var resolve = builder.createUniqueIdentifier("_resolve");
@@ -1244,9 +1251,9 @@ module ts {
                         @{statements}
                     }()));
                 });
-            `, { promiseConstructor, resolve, statements }, node.body);
+            `, { promiseConstructor, resolve, statements }, statements);
 
-            var block = factory.createFunctionBlock([body], node.body);
+            var block = factory.createFunctionBlock([body], statements);
             body.parent = block;
 
             var func = factory.updateFunctionLikeDeclaration(node, node.name, block, node.parameters);
@@ -1256,6 +1263,14 @@ module ts {
         }
 
         function rewriteDownlevelWorker(): FunctionLikeDeclaration {
+            if (node.flags & NodeFlags.Async) {
+                var promiseConstructor = getPromiseConstructor(node);
+                builder = createCodeGenerator(locals, resolver, node, { promiseConstructor });
+            }
+            else {
+                builder = createCodeGenerator(locals, resolver, node);
+            }
+
             builder.markLabel(builder.defineLabel());
             if (node.parameters) {
                 for (var i = 0; i < node.parameters.length; i++) {
@@ -1268,28 +1283,13 @@ module ts {
                 }
             }
 
-            builder.setLocation(node.body);
             if (node.body.kind !== SyntaxKind.FunctionBlock) {
                 builder.emit(OpCode.Return, visit(node.body));
             } else {
                 visitAndEmitNode(node.body);
             }
 
-            if (node.flags & NodeFlags.Async) {
-                var promiseConstructor = getPromiseConstructor(node);
-                var func = builder.buildAsyncFunction(
-                    node.kind,
-                    node.name,
-                    promiseConstructor,
-                    node);
-            } else {
-                Debug.assert(!!node.asteriskToken, "Node was not a generator.");
-                var func = builder.buildGeneratorFunction(
-                    node.kind,
-                    node.name,
-                    node);
-            }
-
+            var func = builder.buildFunction(node.kind, node.name);
             func.flags = node.flags;
             func.modifiers = node.modifiers;
             func.id = node.id;

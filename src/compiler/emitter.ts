@@ -2389,7 +2389,9 @@ module ts {
             }
 
             function emitGeneratedNode(node: GeneratedNode) {
+                emitLeadingComments(node);
                 writeGeneratedContent(node.text, node.content);
+                emitTrailingComments(node);
             }
 
             function writeGeneratedContent(text: string, content?: Map<Node|Node[]>) {
@@ -3749,7 +3751,12 @@ module ts {
             }
 
             function emitLeadingDeclarationComments(node: Node) {
-                var leadingComments = getLeadingCommentsToEmit(node);
+                if (node.kind === SyntaxKind.GeneratedNode) {
+                    var leadingComments = (<GeneratedNode>node).leadingComments;
+                }
+                else {
+                    var leadingComments = getLeadingCommentsToEmit(node);
+                }
                 emitNewLineBeforeLeadingComments(currentSourceFile, writer, node, leadingComments);
                 // Leading comments are emitted at /*leading comment1 */space/*leading comment*/space
                 emitComments(currentSourceFile, writer, leadingComments, /*trailingSeparator*/ true, newLine, writeComment);
@@ -3757,11 +3764,15 @@ module ts {
 
             function emitTrailingDeclarationComments(node: Node) {
                 // Emit the trailing comments only if the parent's end doesn't match
-                if (node.parent.kind === SyntaxKind.SourceFile || node.end !== node.parent.end) {
-                    var trailingComments = getTrailingCommentRanges(currentSourceFile.text, node.end);
-                    // trailing comments are emitted at space/*trailing comment1 */space/*trailing comment*/
-                    emitComments(currentSourceFile, writer, trailingComments, /*trailingSeparator*/ false, newLine, writeComment);                    
+                if (node.kind === SyntaxKind.GeneratedNode) {
+                    var trailingComments = (<GeneratedNode>node).trailingComments;
                 }
+                else if (node.parent.kind === SyntaxKind.SourceFile || node.end !== node.parent.end) {
+                    var trailingComments = getTrailingCommentRanges(currentSourceFile.text, node.end);
+                }
+
+                // trailing comments are emitted at space/*trailing comment1 */space/*trailing comment*/
+                emitComments(currentSourceFile, writer, trailingComments, /*trailingSeparator*/ false, newLine, writeComment);                                    
             }
 
             function emitLeadingCommentsOfLocalPosition(pos: number) {

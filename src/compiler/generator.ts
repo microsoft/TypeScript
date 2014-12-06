@@ -44,17 +44,73 @@ module ts {
         continueLabel: Label;
     }
 
-    export function createCodeGenerator(resolver: EmitResolver): CodeGenerator {
+    export function createLocalGenerator(resolver: EmitResolver): LocalGenerator {
+        var localIds: Map<number>;
+        var generatedLocals: GeneratedNode[];
+        var relatedLocation: TextRange;
+        var context: Node;
+
+        return {
+            setLocation,
+            setContext,
+            createUniqueIdentifier,
+            declareLocal,
+            buildLocals
+        };
+
+        function setLocation(location: TextRange): void {
+            relatedLocation = location;
+        }
+        
+        function setContext(node: Node): void {
+            context = node;
+        }
+
+        function createUniqueIdentifier(name: string = ""): GeneratedNode {
+            if (!name || !resolver.isUnknownIdentifier(context, name)) {
+                if (!localIds) localIds = {};
+                var nextLocalId = localIds[name] || 0;
+                do {
+                    var tempName = name + "_" + (nextLocalId < 26 ? String.fromCharCode(nextLocalId + 0x61) : nextLocalId - 26);
+                    nextLocalId++;
+                }
+                while (!resolver.isUnknownIdentifier(context, tempName));
+                localIds[name] = nextLocalId;
+                name = tempName;
+            }
+
+            return factory.createGeneratedNode(name, /*contents*/ undefined, relatedLocation);
+        }
+
+        function declareLocal(name?: string): GeneratedNode {
+            if (!generatedLocals) generatedLocals = [];
+            var localDeclarationName = createUniqueIdentifier(name);
+            generatedLocals.push(localDeclarationName);
+            return localDeclarationName;
+        }
+
+        function buildLocals(): GeneratedNode {
+            if (generatedLocals) {
+                return factory.createGeneratedNode(`var ${generatedLocals};`, { generatedLocals }, relatedLocation);
+            }
+        }
+    }
+
+    export function createCodeGenerator(locals: LocalGenerator, resolver: EmitResolver, functionLocation: Node, options?: { promiseConstructor: EntityName; }): CodeGenerator {
         // locations
-        var relatedLocation: Node;
-        var locationStack: Node[];
+        var bodyLocation: Node = functionLocation;
+        var statementsLocation: TextRange = functionLocation;
+        var relatedLocation: TextRange = functionLocation;
+        var locationStack: TextRange[];
+        var context: Node = functionLocation;
+        var contextStack: Node[];
 
         // locals/hoisted variables/hoisted functions
-        var localIds: Map<number>;
         var parameters: ParameterDeclaration[];
-        var variables: GeneratedNode[];
-        var generatedLocals: GeneratedNode[];
         var functions: FunctionDeclaration[];
+        var variableStatements: VariableStatement[] = [];
+        var currentVariableStatement: VariableStatement;
+        var variableDeclarations: VariableDeclaration[];
 
         // blocks
         var blocks: BlockScope[];
@@ -71,11 +127,31 @@ module ts {
         // operations
         var operations: OpCode[];
         var operationArguments: any[][];
-        var operationLocations: Node[];
+        var operationLocations: TextRange[];
 
+        var resolve: GeneratedNode;
         var state: GeneratedNode;
 
+        if (isAnyFunction(functionLocation)) {
+            bodyLocation = (<FunctionLikeDeclaration>functionLocation).body;
+            statementsLocation = bodyLocation;
+            if (bodyLocation.kind === SyntaxKind.FunctionBlock) {
+                statementsLocation = (<Block>bodyLocation).statements;
+            }
+        }
+
+        if (options) {
+            pushContext(bodyLocation);
+            pushLocation(bodyLocation);
+            resolve = createUniqueIdentifier("_resolve");
+            popLocation();
+            popContext();
+        }
+
         return {
+            pushContext,
+            popContext,
+            setContext,
             pushLocation,
             popLocation,
             setLocation,
@@ -85,6 +161,8 @@ module ts {
             declareLocal,
             defineLabel,
             markLabel,
+            beginVariableStatement,
+            endVariableStatement,
             beginExceptionBlock,
             beginCatchBlock,
             beginFinallyBlock,
@@ -106,8 +184,7 @@ module ts {
             createInlineReturn,
             createGeneratedNode,
             createResume,
-            buildGeneratorFunction,
-            buildAsyncFunction
+            buildFunction
         };
 
         function addParameter(name: Identifier, flags?: NodeFlags): void {
@@ -115,10 +192,19 @@ module ts {
             parameters.push(factory.createParameterDeclaration(name, undefined, relatedLocation, flags));
         }
 
+        function beginVariableStatement(): void {
+            variableDeclarations = [];
+            pushLocation(relatedLocation);
+        }
+
+        function endVariableStatement(): void {
+            popLocation();
+            variableStatements.push(factory.createVariableStatement(variableDeclarations, relatedLocation));
+        }
+
         function addVariable(name: Identifier, flags?: NodeFlags): void {
-            if (!variables) variables = [];
-            var declarationName = createGeneratedNode(name.text);
-            variables.push(declarationName);
+            Debug.assert(!!variableDeclarations, "No variable statement was marked.");
+            variableDeclarations.push(factory.createVariableDeclaration(name, /*initializer*/ undefined, relatedLocation));
         }
 
         function addFunction(func: FunctionDeclaration): void {
@@ -127,26 +213,11 @@ module ts {
         }
 
         function declareLocal(name: string = ""): GeneratedNode {
-            if (!generatedLocals) generatedLocals = [];
-            var localDeclarationName = createUniqueIdentifier(name);
-            generatedLocals.push(localDeclarationName);
-            return localDeclarationName;
+            return locals.declareLocal(name);
         }
 
         function createUniqueIdentifier(name: string = ""): GeneratedNode {
-            if (!name || !resolver.isUnknownIdentifier(relatedLocation, name)) {
-                if (!localIds) localIds = {};
-                var nextLocalId = localIds[name] || 0;
-                do {
-                    var tempName = name + "_" + (nextLocalId < 26 ? String.fromCharCode(nextLocalId + 0x61) : nextLocalId - 26);
-                    nextLocalId++;
-                }
-                while (!resolver.isUnknownIdentifier(relatedLocation, tempName));
-                localIds[name] = nextLocalId;
-                name = tempName;
-            }
-
-            return createGeneratedNode(name);
+            return locals.createUniqueIdentifier(name);
         }
 
         function defineLabel(): Label {
@@ -409,7 +480,7 @@ module ts {
             operationLocations[operationIndex] = relatedLocation;
         }
 
-        function pushLocation(location: Node): void {
+        function pushLocation(location: TextRange): void {
             if (!locationStack) locationStack = [];
             locationStack.push(relatedLocation);
             setLocation(location);
@@ -420,9 +491,28 @@ module ts {
             setLocation(locationStack.pop());
         }
 
-        function setLocation(location: Node): void {
+        function setLocation(location: TextRange): void {
             if (location) {
                 relatedLocation = location;
+                locals.setLocation(location);
+            }
+        }
+
+        function pushContext(context: Node): void {
+            if (!contextStack) contextStack = [];
+            contextStack.push(context);
+            setContext(context);
+        }
+
+        function popContext(): void {
+            if (!contextStack) return;
+            setContext(contextStack.pop());
+        }
+
+        function setContext(node: Node): void {
+            if (node) {
+                context = node;
+                locals.setContext(node);
             }
         }
 
@@ -437,7 +527,7 @@ module ts {
             return factory.createGeneratedLabel(label, labelNumbers, relatedLocation);
         }
 
-        function createGeneratedNode(text: string, content?: Map<Node|Node[]>): GeneratedNode {
+        function createGeneratedNode(text: string, content?: Map<Node|Node[]>, leadingComments?: CommentRange[], trailingComment?: CommentRange[]): GeneratedNode {
             return factory.createGeneratedNode(text, content, relatedLocation);
         }
 
@@ -471,79 +561,83 @@ module ts {
             return state;
         }
 
-        function buildGeneratorFunction(kind: SyntaxKind, name: DeclarationName, location: Node) {
-            pushLocation(location);
-            var locals = buildLocals();
-            var cases = buildFunctionBody();
-            var state = getState();
-            var body = createGeneratedNode(`
-                \${locals}
-                @{functions}
-                return __generator(function (\${state}) {
-                    switch (\${state}.label) {
-                        @{cases}
-                    }
-                });`, { locals, functions, cases, state });
-            var node = buildFunction(kind, name, body, location);
-            popLocation();
-            return node;
-        }
+        function buildFunction(kind: SyntaxKind, name: DeclarationName) {
+            var statements: Statement[] = factory.createNodeArray<Statement>([], statementsLocation);
+            pushContext(bodyLocation);
+            pushLocation(statementsLocation);
+            var generatedLocals = locals.buildLocals();
+            if (generatedLocals) {
+                statements.push(generatedLocals);
+            }
 
-        function buildAsyncFunction(kind: SyntaxKind, name: DeclarationName, promiseConstructor: EntityName, location: Node) {
-            pushLocation(location);
-            var resolve = createUniqueIdentifier("_resolve");
-            var locals = buildLocals();
-            var cases = buildFunctionBody();
+            popContext();
+            popLocation();
+
+            if (variableStatements) {
+                statements = statements.concat(variableStatements);
+            }
+
+            if (functions) {
+                statements = statements.concat(functions);
+            }
+
+
+            pushLocation(statementsLocation);
             var state = getState();
-            var body = createGeneratedNode(`
-                \${locals}
-                @{functions}
-                return new \${promiseConstructor}(function (\${resolve}) {
-                    \${resolve}(__awaiter(__generator(function (\${state}) {
+            var cases = buildFunctionBody();
+            popLocation();
+
+            pushLocation(statementsLocation);
+            if (options) {
+                pushContext(bodyLocation);
+                var resolve = createUniqueIdentifier("_resolve");
+                popContext();
+
+                var promiseConstructor = options.promiseConstructor;
+                statements.push(createGeneratedNode(`
+                    return new \${promiseConstructor}(function (\${resolve}) {
+                        \${resolve}(__awaiter(__generator(function (\${state}) {
+                            switch (\${state}.label) {
+                                @{cases}
+                            }
+                        })));
+                    });`, { promiseConstructor, cases, resolve, state }));
+            } else {
+                statements.push(createGeneratedNode(`
+                    return __generator(function (\${state}) {
                         switch (\${state}.label) {
                             @{cases}
                         }
-                    })));
-                });`, { locals, functions, promiseConstructor, cases, resolve, state });
-            var node = buildFunction(kind, name, body, location);
-            popLocation();
-            return node;
-        }
+                    });`, { cases, state }));
+            }
 
-        function buildFunction(kind: SyntaxKind, name: DeclarationName, body: GeneratedNode, location: TextRange) {
-            var block = factory.createFunctionBlock([body], relatedLocation);
+            popLocation();
+
+            var body = factory.createFunctionBlock(statements, bodyLocation);
             var node: FunctionLikeDeclaration;
             switch (kind) {
                 case SyntaxKind.FunctionDeclaration:
-                    node = factory.createFunctionDeclaration(<Identifier>name, block, parameters, location);
+                    node = factory.createFunctionDeclaration(<Identifier>name, body, parameters, functionLocation);
                     break;
 
                 case SyntaxKind.Method:
-                    node = factory.createMethodDeclaration(name, block, parameters, location);
+                    node = factory.createMethodDeclaration(name, body, parameters, functionLocation);
                     break;
 
                 case SyntaxKind.GetAccessor:
-                    node = factory.createGetAccessor(name, block, parameters, location);
+                    node = factory.createGetAccessor(name, body, parameters, functionLocation);
                     break;
 
                 case SyntaxKind.FunctionExpression:
-                    node = factory.createFunctionExpression(<Identifier>name, block, parameters, location);
+                    node = factory.createFunctionExpression(<Identifier>name, body, parameters, functionLocation);
                     break;
 
                 case SyntaxKind.ArrowFunction:
-                    node = factory.createArrowFunction(block, parameters, location);
+                    node = factory.createArrowFunction(body, parameters, functionLocation);
                     break;
             }
-            return node;
-        }
 
-        function buildLocals(): GeneratedNode {
-            var locals: GeneratedNode[];
-            if (variables) locals = variables;
-            if (generatedLocals) locals = locals ? locals.concat(generatedLocals) : generatedLocals;
-            if (locals) {
-                return createGeneratedNode(`var \${locals};`, { locals });
-            }
+            return node;
         }
 
         function buildFunctionBody(): GeneratedNode[] {
@@ -559,22 +653,31 @@ module ts {
 
             if (hasProtectedRegions) {
                 newCase();
+                pushLocation(statementsLocation);
                 writeStatement(createGeneratedNode(`\${state}.trys = [];`, { state }));
+                popLocation();
             }
 
             if (operations) {
                 for (var operationIndex = 0; operationIndex < operations.length; operationIndex++) {
                     var code = operations[operationIndex];
                     var args = operationArguments[operationIndex];
-                    relatedLocation = operationLocations[operationIndex];
                     ensureLabels();
+
+                    pushContext(bodyLocation);
+                    pushLocation(operationLocations[operationIndex]);
                     writeOperation(code, args);
+                    popLocation();
+                    popContext();
                 }
             }
 
             ensureLabels();
+
             if (!instructionWasCompletion) {
+                pushLocation(statementsLocation);
                 writeReturn();
+                popLocation();
             }
 
             return clauses;
@@ -595,6 +698,9 @@ module ts {
             }
 
             function newCase() {
+                pushContext(bodyLocation);
+                pushLocation(statementsLocation);
+
                 var labelNumber = clauses.length;
                 var labelExpression = createGeneratedNode(String(labelNumber));
 
@@ -611,6 +717,9 @@ module ts {
                 clauses.push(createGeneratedNode(`
                     case \${labelExpression}:
                         @{statements}`, { labelExpression, statements }));
+
+                popLocation();
+                popContext();
             }
 
             function writeOperation(code: OpCode, args: any[]): void {
@@ -624,9 +733,11 @@ module ts {
                             if (exception.catchLabel > 0) {
                                 var catchLabel = createLabel(exception.catchLabel);
                             }
+
                             if (exception.finallyLabel > 0) {
                                 var finallyLabel = createLabel(exception.finallyLabel);
                             }
+
                             writeStatement(createGeneratedNode(`\${state}.trys.push([\${startLabel},\${catchLabel},\${finallyLabel},\${endLabel}])`, {
                                 state,
                                 startLabel,
