@@ -15,7 +15,8 @@ async function func(): Promise<void> {
 
 //// [awaitObjectLiteral3.js]
 function func() {
-    var o, _a;
+    var _a;
+    var o;
     return new Promise(function (_resolve) {
         _resolve(__awaiter(__generator(function (_state) {
             switch (_state.label) {

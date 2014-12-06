@@ -466,6 +466,7 @@ module ts {
             var variable = initializer;
             if (isDownlevel) {
                 if (declarations) {
+                    builder.beginVariableStatement();
                     var assignments: GeneratedNode[] = [];
                     for (var i = 0; i < declarations.length; i++) {
                         var declaration = declarations[i];
@@ -478,6 +479,7 @@ module ts {
                             variable = builder.createGeneratedNode(declaration.name.text);
                         }
                     }
+                    builder.endVariableStatement();
 
                     initializer = undefined;
                     declarations = undefined;
@@ -504,10 +506,7 @@ module ts {
 
         function visitVariableStatement(node: VariableStatement): Node {
             if (isDownlevel) {
-                builder.beginVariableStatement();
                 var assignment = visitVariableDeclarationsOrInitializer(node.declarations, /*initializer*/ undefined, node).initializer;
-                builder.endVariableStatement();
-
                 if (assignment) {
                     builder.setLocation(node);
                     return builder.createGeneratedNode(`\${assignment};`, { assignment });
@@ -518,6 +517,11 @@ module ts {
         }
 
         function visitExpressionStatement(node: ExpressionStatement): Node {
+            if (isDownlevel && isAwaitOrYield(node.expression)) {
+                visit(node.expression);
+                return;
+            }
+
             return factory.updateExpressionStatement(node, visit(node.expression));
         }
 

@@ -5,9 +5,10 @@ tests/cases/conformance/async/downlevel/asyncArrowFunction/asyncArrowFunction7.t
 tests/cases/conformance/async/downlevel/asyncArrowFunction/asyncArrowFunction7.ts(10,1): error TS1128: Declaration or statement expected.
 tests/cases/conformance/async/downlevel/asyncArrowFunction/asyncArrowFunction7.ts(8,13): error TS2304: Cannot find name 'async'.
 tests/cases/conformance/async/downlevel/asyncArrowFunction/asyncArrowFunction7.ts(8,20): error TS2304: Cannot find name 'a'.
+tests/cases/conformance/async/downlevel/asyncArrowFunction/asyncArrowFunction7.ts(8,32): error TS2459: Duplicate identifier 'Promise'. Compiler uses variable declaration 'Promise' to support async functions.
 
 
-==== tests/cases/conformance/async/downlevel/asyncArrowFunction/asyncArrowFunction7.ts (7 errors) ====
+==== tests/cases/conformance/async/downlevel/asyncArrowFunction/asyncArrowFunction7.ts (8 errors) ====
     declare class Promise<T> {
         constructor(init: (resolve: (value?: T | IPromise<T>) => void, reject: (reason?: any) => void) => void);
         then<TResult>(onfulfilled?: (value: T) => TResult | IPromise<TResult>, onrejected?: (reason: any) => TResult | IPromise<TResult>): Promise<TResult>;
@@ -28,6 +29,8 @@ tests/cases/conformance/async/downlevel/asyncArrowFunction/asyncArrowFunction7.t
 !!! error TS2304: Cannot find name 'async'.
                        ~
 !!! error TS2304: Cannot find name 'a'.
+                                   ~~~~~~~
+!!! error TS2459: Duplicate identifier 'Promise'. Compiler uses variable declaration 'Promise' to support async functions.
       }
     }
     ~

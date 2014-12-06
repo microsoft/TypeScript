@@ -14,7 +14,8 @@ async function f(): Promise<void> {
 
 //// [awaitContinueStatement7.js]
 function f() {
-    var a, _a, _b;
+    var _a, _b;
+    var a;
     return new Promise(function (_resolve) {
         _resolve(__awaiter(__generator(function (_state) {
             switch (_state.label) {

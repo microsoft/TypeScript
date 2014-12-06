@@ -17,7 +17,8 @@ async function func(): Promise<void> {
 
 //// [awaitCallExpression6.js]
 function func() {
-    var b, _a, _b;
+    var _a, _b;
+    var b;
     return new Promise(function (_resolve) {
         _resolve(__awaiter(__generator(function (_state) {
             switch (_state.label) {

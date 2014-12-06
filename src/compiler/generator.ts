@@ -55,8 +55,8 @@ module ts {
         };
         
         function createUniqueIdentifier(location: TextRange, name: string = ""): GeneratedNode {
-            if (!name || !resolver.isUnknownIdentifier(context, name)) {
-                if (!localIds) localIds = {};
+            if (!localIds) localIds = {};
+            if (!name || !resolver.isUnknownIdentifier(context, name) || hasProperty(localIds, name)) {
                 var nextLocalId = localIds[name] || 0;
                 do {
                     var tempName = name + "_" + (nextLocalId < 26 ? String.fromCharCode(nextLocalId + 0x61) : nextLocalId - 26);
@@ -65,6 +65,8 @@ module ts {
                 while (!resolver.isUnknownIdentifier(context, tempName));
                 localIds[name] = nextLocalId;
                 name = tempName;
+            } else {
+                localIds[name] = 0;
             }
 
             return factory.createGeneratedNode(name, /*contents*/ undefined, location);
@@ -176,7 +178,9 @@ module ts {
 
         function endVariableStatement(): void {
             popLocation();
-            variableStatements.push(factory.createVariableStatement(variableDeclarations, relatedLocation));
+            if (variableDeclarations.length) {
+                variableStatements.push(factory.createVariableStatement(variableDeclarations, relatedLocation));
+            }
         }
 
         function addVariable(name: Identifier, flags?: NodeFlags): void {
