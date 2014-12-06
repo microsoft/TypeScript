@@ -1291,6 +1291,7 @@ module ts {
         public static interfaceName = "interface name";
         public static moduleName = "module name";
         public static typeParameterName = "type parameter name";
+        public static typeAlias = "type alias name";
     }
 
     enum MatchKind {
@@ -4945,6 +4946,9 @@ module ts {
                 }
                 else if (flags & SymbolFlags.Enum) {
                     return ClassificationTypeNames.enumName;
+                }
+                else if (flags & SymbolFlags.TypeAlias) {
+                    return ClassificationTypeNames.typeAlias;
                 }
                 else if (meaningAtPosition & SemanticMeaning.Type) {
                     if (flags & SymbolFlags.Interface) {
