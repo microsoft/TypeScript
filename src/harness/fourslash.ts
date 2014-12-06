@@ -363,7 +363,7 @@ module FourSlash {
             this.formatCodeOptions = {
                 IndentSize: 4,
                 TabSize: 4,
-                NewLineCharacter: sys.newLine,
+                NewLineCharacter: ts.sys.newLine,
                 ConvertTabsToSpaces: true,
                 InsertSpaceAfterCommaDelimiter: true,
                 InsertSpaceAfterSemicolonInForStatements: true,
@@ -1747,9 +1747,9 @@ module FourSlash {
             }
 
             function jsonMismatchString() {
-                return sys.newLine +
-                    "expected: '" + sys.newLine + JSON.stringify(expected, (k,v) => v, 2) + "'" + sys.newLine +
-                    "actual:   '" + sys.newLine + JSON.stringify(actual, (k, v) => v, 2) + "'";
+                return ts.sys.newLine +
+                    "expected: '" + ts.sys.newLine + JSON.stringify(expected, (k,v) => v, 2) + "'" + ts.sys.newLine +
+                    "actual:   '" + ts.sys.newLine + JSON.stringify(actual, (k, v) => v, 2) + "'";
             }
         }
 
@@ -2246,7 +2246,7 @@ module FourSlash {
             { unitName: fileName, content: content }],
             (fn, contents) => result = contents,
             ts.ScriptTarget.Latest,
-            sys.useCaseSensitiveFileNames);
+            ts.sys.useCaseSensitiveFileNames);
         // TODO (drosen): We need to enforce checking on these tests.
         var program = ts.createProgram([Harness.Compiler.fourslashFilename, fileName], { out: "fourslashTestOutput.js", noResolve: true }, host);
         var checker = ts.createTypeChecker(program, /*fullTypeCheckMode*/ true);
