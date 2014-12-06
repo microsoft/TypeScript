@@ -1435,7 +1435,7 @@ module ts {
                     writePunctuation(writer, SyntaxKind.DotDotDotToken);
                 }
                 appendSymbolNameOnly(p, writer);
-                if (hasQuestionToken(p.valueDeclaration) || (<VariableDeclaration>p.valueDeclaration).initializer) {
+                if (hasQuestionToken(p.valueDeclaration) || (<ParameterDeclaration>p.valueDeclaration).initializer) {
                     writePunctuation(writer, SyntaxKind.QuestionToken);
                 }
                 writePunctuation(writer, SyntaxKind.ColonToken);
@@ -1589,6 +1589,7 @@ module ts {
             function determineIfDeclarationIsVisible() {
                 switch (node.kind) {
                     case SyntaxKind.VariableDeclaration:
+                    case SyntaxKind.BindingElement:
                     case SyntaxKind.ModuleDeclaration:
                     case SyntaxKind.ClassDeclaration:
                     case SyntaxKind.InterfaceDeclaration:
@@ -1596,8 +1597,7 @@ module ts {
                     case SyntaxKind.FunctionDeclaration:
                     case SyntaxKind.EnumDeclaration:
                     case SyntaxKind.ImportDeclaration:
-                        // In case of variable declaration, node.parent is variable statement so look at the variable statement's parent
-                        var parent = node.kind === SyntaxKind.VariableDeclaration ? node.parent.parent : node.parent;
+                        var parent = getDeclarationContainer(node);
                         // If the node is not exported or it is not ambient module element (except import declaration)
                         if (!(node.flags & NodeFlags.Export) &&
                             !(node.kind !== SyntaxKind.ImportDeclaration && parent.kind !== SyntaxKind.SourceFile && isInAmbientContext(parent))) {
@@ -1651,6 +1651,18 @@ module ts {
             }
         }
 
+        function getRootDeclaration(node: Node): Node {
+            while (node.kind === SyntaxKind.BindingElement) {
+                node = node.parent.parent;
+            }
+            return node;
+        }
+
+        function getDeclarationContainer(node: Node): Node {
+            node = getRootDeclaration(node);
+            return node.kind === SyntaxKind.VariableDeclaration ? node.parent.parent : node.parent;
+        }
+
         function getTypeOfPrototypeProperty(prototype: Symbol): Type {
             // TypeScript 1.0 spec (April 2014): 8.4
             // Every class automatically contains a static property member named 'prototype', 
@@ -1669,7 +1681,7 @@ module ts {
         // Return the inferred type for a binding element
         function getTypeForBindingElement(declaration: BindingElement): Type {
             var pattern = <BindingPattern>declaration.parent;
-            var parentType = getTypeForVariableDeclaration(<VariableDeclaration>pattern.parent);
+            var parentType = getTypeForVariableDeclaration(<VariableLikeDeclaration>pattern.parent);
             // If parent has the unknown (error) type, then so does this binding element
             if (parentType === unknownType) {
                 return unknownType;
@@ -1713,7 +1725,7 @@ module ts {
         }
 
         // Return the inferred type for a variable, parameter, or property declaration
-        function getTypeForVariableDeclaration(declaration: VariableDeclaration): Type {
+        function getTypeForVariableDeclaration(declaration: VariableLikeDeclaration): Type {
             // A variable declared in a for..in statement is always of type any
             if (declaration.parent.kind === SyntaxKind.ForInStatement) {
                 return anyType;
@@ -1796,7 +1808,7 @@ module ts {
         // Here, the array literal [1, "one"] is contextually typed by the type [any, string], which is the implied type of the
         // binding pattern [x, s = ""]. Because the contextual type is a tuple type, the resulting type of [1, "one"] is the
         // tuple type [number, string]. Thus, the type inferred for 'x' is number and the type inferred for 's' is string.
-        function getWidenedTypeForVariableDeclaration(declaration: VariableDeclaration, reportErrors?: boolean): Type {
+        function getWidenedTypeForVariableDeclaration(declaration: VariableLikeDeclaration, reportErrors?: boolean): Type {
             var type = getTypeForVariableDeclaration(declaration);
             if (type) {
                 if (reportErrors) {
@@ -1814,9 +1826,12 @@ module ts {
             }
             // Rest parameters default to type any[], other parameters default to type any
             type = declaration.dotDotDotToken ? anyArrayType : anyType;
-             // Report implicit any errors unless this is a private property within an ambient declaration
-            if (reportErrors && compilerOptions.noImplicitAny && !isPrivateWithinAmbient(declaration) && !(declaration.kind === SyntaxKind.Parameter && isPrivateWithinAmbient(declaration.parent))) {
-                reportImplicitAnyError(declaration, type);
+            // Report implicit any errors unless this is a private property within an ambient declaration
+            if (reportErrors && compilerOptions.noImplicitAny) {
+                var root = getRootDeclaration(declaration);
+                if (!isPrivateWithinAmbient(root) && !(root.kind === SyntaxKind.Parameter && isPrivateWithinAmbient(root.parent))) {
+                    reportImplicitAnyError(declaration, type);
+                }
             }
             return type;
         }
@@ -1835,7 +1850,7 @@ module ts {
                 }
                 // Handle variable, parameter or property
                 links.type = resolvingType;
-                var type = getWidenedTypeForVariableDeclaration(<VariableDeclaration>declaration, /*reportErrors*/ true);
+                var type = getWidenedTypeForVariableDeclaration(<VariableLikeDeclaration>declaration, /*reportErrors*/ true);
                 if (links.type === resolvingType) {
                     links.type = type;
                 }
@@ -1843,7 +1858,7 @@ module ts {
             else if (links.type === resolvingType) {
                 links.type = anyType;
                 if (compilerOptions.noImplicitAny) {
-                    var diagnostic = (<VariableDeclaration>symbol.valueDeclaration).type ?
+                    var diagnostic = (<VariableLikeDeclaration>symbol.valueDeclaration).type ?
                         Diagnostics._0_implicitly_has_type_any_because_it_is_referenced_directly_or_indirectly_in_its_own_type_annotation :
                         Diagnostics._0_implicitly_has_type_any_because_it_is_does_not_have_a_type_annotation_and_is_referenced_directly_or_indirectly_in_its_own_initializer;
                     error(symbol.valueDeclaration, diagnostic, symbolToString(symbol));
@@ -3090,7 +3105,7 @@ module ts {
             }
             return links.resolvedType;
         }
-        
+
         function getTypeFromTypeLiteralOrFunctionOrConstructorTypeNode(node: Node): Type {
             var links = getNodeLinks(node);
             if (!links.resolvedType) {
@@ -3912,7 +3927,7 @@ module ts {
                     return related;
                 }
                 return Ternary.True;
-            } 
+            }
 
             function numberIndexTypesRelatedTo(source: ObjectType, target: ObjectType, reportErrors: boolean): Ternary {
                 if (relation === identityRelation) {
@@ -4375,7 +4390,7 @@ module ts {
             }
         }
 
-        function getInferenceCandidates(context: InferenceContext, index: number): Type[]{
+        function getInferenceCandidates(context: InferenceContext, index: number): Type[] {
             var inferences = context.inferences[index];
             return inferences.primary || inferences.secondary || emptyArray;
         }
@@ -4454,8 +4469,8 @@ module ts {
             return type;
         }
 
-        function hasInitializer(node: VariableDeclaration): boolean {
-            return !!(node.initializer || isBindingPattern(node.parent) && hasInitializer(<VariableDeclaration>node.parent.parent));
+        function hasInitializer(node: VariableLikeDeclaration): boolean {
+            return !!(node.initializer || isBindingPattern(node.parent) && hasInitializer(<VariableLikeDeclaration>node.parent.parent));
         }
 
         // Check if a given variable is assigned within a given syntax node
@@ -4485,7 +4500,7 @@ module ts {
                 return forEachChild(node, isAssignedIn);
             }
 
-            function isAssignedInVariableDeclaration(node: VariableDeclaration) {
+            function isAssignedInVariableDeclaration(node: VariableLikeDeclaration) {
                 if (!isBindingPattern(node.name) && getSymbolOfNode(node) === symbol && hasInitializer(node)) {
                     return true;
                 }
@@ -4497,7 +4512,8 @@ module ts {
                     case SyntaxKind.BinaryExpression:
                         return isAssignedInBinaryExpression(<BinaryExpression>node);
                     case SyntaxKind.VariableDeclaration:
-                        return isAssignedInVariableDeclaration(<VariableDeclaration>node);
+                    case SyntaxKind.BindingElement:
+                        return isAssignedInVariableDeclaration(<VariableLikeDeclaration>node);
                     case SyntaxKind.ObjectBindingPattern:
                     case SyntaxKind.ArrayBindingPattern:
                     case SyntaxKind.ArrayLiteralExpression:
@@ -4856,7 +4872,7 @@ module ts {
                                 container.kind === SyntaxKind.Property ||
                                 container.kind === SyntaxKind.Constructor;
                         }
-                    }                    
+                    }
                 }
 
                 if (canUseSuperExpression) {
@@ -4914,7 +4930,7 @@ module ts {
                         }
 
                         // If last parameter is contextually rest parameter get its type
-                        if (indexOfParameter === (func.parameters.length - 1) && 
+                        if (indexOfParameter === (func.parameters.length - 1) &&
                             funcHasRestParameters && contextualSignature.hasRestParameter && func.parameters.length >= contextualSignature.parameters.length) {
                             return getTypeOfSymbol(contextualSignature.parameters[contextualSignature.parameters.length - 1]);
                         }
@@ -4930,13 +4946,13 @@ module ts {
         // of the parameter. Otherwise, in a variable or parameter declaration with a binding pattern name, the contextual
         // type of an initializer expression is the type implied by the binding pattern.
         function getContextualTypeForInitializerExpression(node: Expression): Type {
-            var declaration = <VariableOrParameterDeclaration>node.parent;
+            var declaration = <VariableLikeDeclaration>node.parent;
             if (node === declaration.initializer) {
                 if (declaration.type) {
                     return getTypeFromTypeNode(declaration.type);
                 }
                 if (declaration.kind === SyntaxKind.Parameter) {
-                    var type = getContextuallyTypedParameterType(declaration);
+                    var type = getContextuallyTypedParameterType(<ParameterDeclaration>declaration);
                     if (type) {
                         return type;
                     }
@@ -5079,7 +5095,7 @@ module ts {
         // In a contextually typed conditional expression, the true/false expressions are contextually typed by the same type.
         function getContextualTypeForConditionalOperand(node: Expression): Type {
             var conditional = <ConditionalExpression>node.parent;
-            return node === conditional.whenTrue || node === conditional.whenFalse ? getContextualType(conditional) : undefined; 
+            return node === conditional.whenTrue || node === conditional.whenFalse ? getContextualType(conditional) : undefined;
         }
 
         // Return the contextual type for a given expression node. During overload resolution, a contextual type may temporarily
@@ -5097,6 +5113,7 @@ module ts {
                 case SyntaxKind.VariableDeclaration:
                 case SyntaxKind.Parameter:
                 case SyntaxKind.Property:
+                case SyntaxKind.BindingElement:
                     return getContextualTypeForInitializerExpression(node);
                 case SyntaxKind.ArrowFunction:
                 case SyntaxKind.ReturnStatement:
@@ -5225,7 +5242,7 @@ module ts {
             }
             return createArrayType(getUnionType(elementTypes));
         }
-        
+
         function isNumericName(name: string) {
             // The intent of numeric names is that
             //     - they are names with text in a numeric form, and that
@@ -5250,7 +5267,7 @@ module ts {
             // with the strings '"Infinity"', '"-Infinity"', and '"NaN"' respectively.
             return (+name).toString() === name;
         }
-        
+
         function checkObjectLiteral(node: ObjectLiteralExpression, contextualMapper?: TypeMapper): Type {
             var members = node.symbol.members;
             var properties: SymbolTable = {};
@@ -5581,10 +5598,7 @@ module ts {
              * @param callIsIncomplete Whether or not a call is unfinished, and we should be "lenient" when we have too few arguments.
              * @param signature        The signature whose arity we are comparing.
              */
-            function checkArity(adjustedArgCount: number,
-                                typeArguments: NodeArray<TypeNode>,
-                                callIsIncomplete: boolean,
-                                signature: Signature): boolean {
+            function checkArity(adjustedArgCount: number, typeArguments: NodeArray<TypeNode>, callIsIncomplete: boolean, signature: Signature): boolean {
                 // Too many arguments implies incorrect arity.
                 if (!signature.hasRestParameter && adjustedArgCount > signature.parameters.length) {
                     return false;
@@ -5686,7 +5700,7 @@ module ts {
                     var constraint = getConstraintOfTypeParameter(typeParameters[i]);
                     if (constraint) {
                         typeArgumentsAreAssignable = checkTypeAssignableTo(typeArgument, constraint, reportErrors ? typeArgNode : undefined,
-                                Diagnostics.Type_0_does_not_satisfy_the_constraint_1);
+                            Diagnostics.Type_0_does_not_satisfy_the_constraint_1);
                     }
                 }
             }
@@ -6487,7 +6501,7 @@ module ts {
             return (type.flags & TypeFlags.Structured) !== 0;
         }
 
-        function isConstEnumObjectType(type: Type) : boolean {
+        function isConstEnumObjectType(type: Type): boolean {
             return type.flags & (TypeFlags.ObjectType | TypeFlags.Anonymous) && type.symbol && isConstEnumSymbol(type.symbol);
         }
 
@@ -6634,8 +6648,8 @@ module ts {
                     // if a user tries to apply a bitwise operator to 2 boolean operands 
                     // try and return them a helpful suggestion
                     if ((leftType.flags & TypeFlags.Boolean) &&
-                        (rightType.flags & TypeFlags.Boolean) && 
-                        (suggestedOperator = getSuggestedBooleanOperator(node.operator)) !== undefined) {   
+                        (rightType.flags & TypeFlags.Boolean) &&
+                        (suggestedOperator = getSuggestedBooleanOperator(node.operator)) !== undefined) {
                         error(node, Diagnostics.The_0_operator_is_not_allowed_for_boolean_types_Consider_using_1_instead, tokenToString(node.operator), tokenToString(suggestedOperator));
                     }
                     else {
@@ -6644,7 +6658,7 @@ module ts {
                         var rightOk = checkArithmeticOperandType(node.right, rightType, Diagnostics.The_right_hand_side_of_an_arithmetic_operation_must_be_of_type_any_number_or_an_enum_type);
                         if (leftOk && rightOk) {
                             checkAssignmentOperator(numberType);
-                        }    
+                        }
                     }
 
                     return numberType;
@@ -6709,8 +6723,8 @@ module ts {
                 case SyntaxKind.CommaToken:
                     return rightType;
             }
-            
-            function getSuggestedBooleanOperator(operator: SyntaxKind): SyntaxKind { 
+
+            function getSuggestedBooleanOperator(operator: SyntaxKind): SyntaxKind {
                 switch (operator) {
                     case SyntaxKind.BarToken:
                     case SyntaxKind.BarEqualsToken:
@@ -6899,49 +6913,17 @@ module ts {
         }
 
         function checkParameter(node: ParameterDeclaration) {
-            checkVariableDeclaration(node);
-            if (isBindingPattern(node.name)) {
-                return;
-            }
+            checkVariableLikeDeclaration(node);
             var func = getContainingFunction(node);
-            if (node.flags & (NodeFlags.Public | NodeFlags.Private | NodeFlags.Protected) &&
-                !(func.kind === SyntaxKind.Constructor && func.body)) {
-                error(node, Diagnostics.A_parameter_property_is_only_allowed_in_a_constructor_implementation);
+            if (node.flags & (NodeFlags.Public | NodeFlags.Private | NodeFlags.Protected)) {
+                func = getContainingFunction(node);
+                if (!(func.kind === SyntaxKind.Constructor && func.body)) {
+                    error(node, Diagnostics.A_parameter_property_is_only_allowed_in_a_constructor_implementation);
+                }
             }
             if (node.dotDotDotToken) {
                 if (!isArrayType(getTypeOfSymbol(node.symbol))) {
                     error(node, Diagnostics.A_rest_parameter_must_be_of_an_array_type);
-                }
-            }
-            if (node.initializer) {
-                if (!func.body) {
-                    error(node, Diagnostics.A_parameter_initializer_is_only_allowed_in_a_function_or_constructor_implementation);
-                }
-                checkReferencesInInitializer(node.initializer);
-            }
-
-            function checkReferencesInInitializer(n: Node): void {
-                if (n.kind === SyntaxKind.Identifier) {
-                    var referencedSymbol = getNodeLinks(n).resolvedSymbol;
-                    // check FunctionLikeDeclaration.locals (stores parameters\function local variable) 
-                    // if it contains entry with a specified name and if this entry matches the resolved symbol
-                    if (referencedSymbol && referencedSymbol !== unknownSymbol && getSymbol(func.locals, referencedSymbol.name, SymbolFlags.Value) === referencedSymbol) {
-                        if (referencedSymbol.valueDeclaration.kind === SyntaxKind.Parameter) {
-                            if (referencedSymbol.valueDeclaration === node) {
-                                error(n, Diagnostics.Parameter_0_cannot_be_referenced_in_its_initializer, declarationNameToString(node.name));
-                                return;
-                            }
-                            if (referencedSymbol.valueDeclaration.pos < node.pos) {
-                                // legal case - parameter initializer references some parameter strictly on left of current parameter declaration
-                                return;
-                            }
-                            // fall through to error reporting
-                        }
-                        error(n, Diagnostics.Initializer_of_parameter_0_cannot_reference_identifier_1_declared_after_it, declarationNameToString(node.name), declarationNameToString(<Identifier>n));
-                    }
-                }
-                else {
-                    forEachChild(n, checkReferencesInInitializer);
                 }
             }
         }
@@ -6988,7 +6970,7 @@ module ts {
                 var seenStringIndexer = false;
                 for (var i = 0, len = indexSymbol.declarations.length; i < len; ++i) {
                     var declaration = <SignatureDeclaration>indexSymbol.declarations[i];
-                    if (declaration.parameters.length  == 1 && declaration.parameters[0].type) {
+                    if (declaration.parameters.length == 1 && declaration.parameters[0].type) {
                         switch (declaration.parameters[0].type.kind) {
                             case SyntaxKind.StringKeyword:
                                 if (!seenStringIndexer) {
@@ -7013,8 +6995,7 @@ module ts {
         }
 
         function checkPropertyDeclaration(node: PropertyDeclaration) {
-            // TODO(andesh): Reconcile declaration types
-            checkVariableDeclaration(<VariableDeclaration><Declaration>node);
+            checkVariableLikeDeclaration(node);
         }
 
         function checkMethodDeclaration(node: MethodDeclaration) {
@@ -7077,7 +7058,7 @@ module ts {
             // Constructors of classes with no extends clause may not contain super calls, whereas 
             // constructors of derived classes must contain at least one super call somewhere in their function body.
             if (getClassBaseTypeNode(<ClassDeclaration>node.parent)) {
-                
+
                 if (containsSuperCall(node.body)) {
                     // The first statement in the body of a constructor must be a super call if both of the following are true:
                     // - The containing class is a derived class.
@@ -7517,7 +7498,7 @@ module ts {
                     case SyntaxKind.ImportDeclaration:
                         var result: SymbolFlags = 0;
                         var target = resolveImport(getSymbolOfNode(d));
-                        forEach(target.declarations, d => { result |= getDeclarationSpaces(d); } );
+                        forEach(target.declarations, d => { result |= getDeclarationSpaces(d); });
                         return result;
                     default:
                         return SymbolFlags.ExportValue;
@@ -7606,7 +7587,8 @@ module ts {
                 return false;
             }
 
-            if (node.kind === SyntaxKind.Parameter && !(<FunctionLikeDeclaration>node.parent).body) {
+            var root = getRootDeclaration(node);
+            if (root.kind === SyntaxKind.Parameter && !(<FunctionLikeDeclaration>root.parent).body) {
                 // just an overload - no codegen impact
                 return false;
             }
@@ -7672,7 +7654,7 @@ module ts {
             }
 
             // In case of variable declaration, node.parent is variable statement so look at the variable statement's parent
-            var parent = node.kind === SyntaxKind.VariableDeclaration ? node.parent.parent : node.parent;
+            var parent = getDeclarationContainer(node);
             if (parent.kind === SyntaxKind.SourceFile && isExternalModule(<SourceFile>parent)) {
                 // If the declaration happens to be in external module, report error that require and exports are reserved keywords
                 error(name, Diagnostics.Duplicate_identifier_0_Compiler_reserves_name_1_in_top_level_scope_of_an_external_module,
@@ -7680,7 +7662,7 @@ module ts {
             }
         }
 
-        function checkCollisionWithConstDeclarations(node: VariableOrParameterDeclaration) {
+        function checkCollisionWithConstDeclarations(node: VariableLikeDeclaration) {
             // Variable declarations are hoisted to the top of their function scope. They can shadow
             // block scoped declarations, which bind tighter. this will not be flagged as duplicate definition
             // by the binder as the declaration scope is different.
@@ -7712,30 +7694,84 @@ module ts {
             }
         }
 
-        function checkVariableDeclaration(node: VariableDeclaration) {
+        function isParameterDeclaration(node: VariableLikeDeclaration) {
+            while (node.kind === SyntaxKind.BindingElement) {
+                node = <VariableLikeDeclaration>node.parent.parent;
+            }
+            return node.kind === SyntaxKind.Parameter;
+        }
+
+        // Check that a parameter initializer contains no references to parameters declared to the right of itself
+        function checkParameterInitializer(node: VariableLikeDeclaration): void {
+            if (getRootDeclaration(node).kind === SyntaxKind.Parameter) {
+                var func = getContainingFunction(node);
+                visit(node.initializer);
+            }
+            function visit(n: Node) {
+                if (n.kind === SyntaxKind.Identifier) {
+                    var referencedSymbol = getNodeLinks(n).resolvedSymbol;
+                    // check FunctionLikeDeclaration.locals (stores parameters\function local variable) 
+                    // if it contains entry with a specified name and if this entry matches the resolved symbol
+                    if (referencedSymbol && referencedSymbol !== unknownSymbol && getSymbol(func.locals, referencedSymbol.name, SymbolFlags.Value) === referencedSymbol) {
+                        if (referencedSymbol.valueDeclaration.kind === SyntaxKind.Parameter) {
+                            if (referencedSymbol.valueDeclaration === node) {
+                                error(n, Diagnostics.Parameter_0_cannot_be_referenced_in_its_initializer, declarationNameToString(node.name));
+                                return;
+                            }
+                            if (referencedSymbol.valueDeclaration.pos < node.pos) {
+                                // legal case - parameter initializer references some parameter strictly on left of current parameter declaration
+                                return;
+                            }
+                            // fall through to error reporting
+                        }
+                        error(n, Diagnostics.Initializer_of_parameter_0_cannot_reference_identifier_1_declared_after_it, declarationNameToString(node.name), declarationNameToString(<Identifier>n));
+                    }
+                }
+                else {
+                    forEachChild(n, visit);
+                }
+            }
+        }
+
+        // Check variable, parameter, or property declaration
+        function checkVariableLikeDeclaration(node: VariableLikeDeclaration) {
             checkSourceElement(node.type);
-            if (isBindingPattern(node.name)) {
-                forEach((<BindingPattern>node.name).elements, checkSourceElement);
+            // For a computed property, just check the initializer and exit
+            if (hasComputedNameButNotSymbol(node)) {
                 if (node.initializer) {
-                    checkTypeAssignableTo(checkExpressionCached(node.initializer), getWidenedTypeForVariableDeclaration(node), node, /*headMessage*/ undefined);
+                    checkExpressionCached(node.initializer);
                 }
                 return;
             }
-            if (hasComputedNameButNotSymbol(node)) {
-                // Just check the initializer, since this property won't contribute to the enclosing type
+            // For a binding pattern, check contained binding elements
+            if (isBindingPattern(node.name)) {
+                forEach((<BindingPattern>node.name).elements, checkSourceElement);
+            }
+            // For a parameter declaration with an initializer, error and exit if the containing function doesn't have a body
+            if (node.initializer && getRootDeclaration(node).kind === SyntaxKind.Parameter && !getContainingFunction(node).body) {
+                error(node, Diagnostics.A_parameter_initializer_is_only_allowed_in_a_function_or_constructor_implementation);
+                return;
+            }
+            // For a binding pattern, validate the initializer and exit
+            if (isBindingPattern(node.name)) {
                 if (node.initializer) {
-                    checkExpressionCached(node.initializer);
+                    checkTypeAssignableTo(checkExpressionCached(node.initializer), getWidenedTypeForVariableDeclaration(node), node, /*headMessage*/ undefined);
+                    checkParameterInitializer(node);
                 }
                 return;
             }
             var symbol = getSymbolOfNode(node);
             var type = getTypeOfVariableOrParameterOrProperty(symbol);
             if (node === symbol.valueDeclaration) {
+                // Node is the primary declaration of the symbol, just validate the initializer
                 if (node.initializer) {
                     checkTypeAssignableTo(checkExpressionCached(node.initializer), type, node, /*headMessage*/ undefined);
+                    checkParameterInitializer(node);
                 }
             }
             else {
+                // Node is a secondary declaration, check that type is identical to primary declaration and check that
+                // initializer is consistent with type associated with the node
                 var declarationType = getWidenedTypeForVariableDeclaration(node);
                 if (type !== unknownType && declarationType !== unknownType && !isTypeIdenticalTo(type, declarationType)) {
                     error(node.name, Diagnostics.Subsequent_variable_declarations_must_have_the_same_type_Variable_0_must_be_of_type_1_but_here_has_type_2, declarationNameToString(node.name), typeToString(type), typeToString(declarationType));
@@ -7747,7 +7783,7 @@ module ts {
             if (node.kind !== SyntaxKind.Property) {
                 // We know we don't have a binding pattern or computed name here
                 checkExportsOnMergedDeclarations(node);
-                checkCollisionWithConstDeclarations(<VariableDeclaration>node);
+                checkCollisionWithConstDeclarations(node);
                 checkCollisionWithCapturedSuperVariable(node, <Identifier>node.name);
                 checkCollisionWithCapturedThisVariable(node, <Identifier>node.name);
                 checkCollisionWithRequireExportsInGeneratedCode(node, <Identifier>node.name);
@@ -7779,7 +7815,7 @@ module ts {
         }
 
         function checkForStatement(node: ForStatement) {
-            if (node.declarations) forEach(node.declarations, checkVariableDeclaration);
+            if (node.declarations) forEach(<VariableLikeDeclaration[]>node.declarations, checkVariableLikeDeclaration);
             if (node.initializer) checkExpression(node.initializer);
             if (node.condition) checkExpression(node.condition);
             if (node.iterator) checkExpression(node.iterator);
@@ -7796,7 +7832,7 @@ module ts {
             if (node.declarations) {
                 if (node.declarations.length >= 1) {
                     var decl = node.declarations[0];
-                    checkVariableDeclaration(decl);
+                    checkVariableLikeDeclaration(decl);
                     if (decl.type) {
                         error(decl, Diagnostics.The_left_hand_side_of_a_for_in_statement_cannot_use_a_type_annotation);
                     }
@@ -8646,7 +8682,8 @@ module ts {
                 case SyntaxKind.TryStatement:
                     return checkTryStatement(<TryStatement>node);
                 case SyntaxKind.VariableDeclaration:
-                    return checkVariableDeclaration(<VariableDeclaration>node);
+                case SyntaxKind.BindingElement:
+                    return checkVariableLikeDeclaration(<VariableLikeDeclaration>node);
                 case SyntaxKind.ClassDeclaration:
                     return checkClassDeclaration(<ClassDeclaration>node);
                 case SyntaxKind.InterfaceDeclaration:
@@ -8694,6 +8731,7 @@ module ts {
                 case SyntaxKind.Property:
                 case SyntaxKind.ObjectBindingPattern:
                 case SyntaxKind.ArrayBindingPattern:
+                case SyntaxKind.BindingElement:
                 case SyntaxKind.ArrayLiteralExpression:
                 case SyntaxKind.ObjectLiteralExpression:
                 case SyntaxKind.PropertyAssignment:
@@ -8973,7 +9011,7 @@ module ts {
                         case SyntaxKind.Property:
                         case SyntaxKind.Parameter:
                         case SyntaxKind.VariableDeclaration:
-                            return node === (<VariableDeclaration>parent).type;
+                            return node === (<VariableLikeDeclaration>parent).type;
                         case SyntaxKind.FunctionDeclaration:
                         case SyntaxKind.FunctionExpression:
                         case SyntaxKind.ArrowFunction:
@@ -9394,7 +9432,7 @@ module ts {
             return undefined;
         }
 
-        function writeTypeOfDeclaration(declaration: AccessorDeclaration | VariableOrParameterDeclaration, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter) {
+        function writeTypeOfDeclaration(declaration: AccessorDeclaration | VariableLikeDeclaration, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter) {
             // Get type of the symbol if this is the valid symbol otherwise get type at location
             var symbol = getSymbolOfNode(declaration);
             var type = symbol && !(symbol.flags & (SymbolFlags.TypeLiteral | SymbolFlags.Signature))

@@ -102,6 +102,7 @@ module ts {
             // This list is a work in progress. Add missing node kinds to improve their error
             // spans.
             case SyntaxKind.VariableDeclaration:
+            case SyntaxKind.BindingElement:
             case SyntaxKind.ClassDeclaration:
             case SyntaxKind.InterfaceDeclaration:
             case SyntaxKind.ModuleDeclaration:
@@ -216,13 +217,14 @@ module ts {
             case SyntaxKind.PropertyAssignment:
             case SyntaxKind.ShorthandPropertyAssignment:
             case SyntaxKind.VariableDeclaration:
+            case SyntaxKind.BindingElement:
                 return children(node.modifiers) ||
-                    child((<VariableDeclaration>node).propertyName) ||
-                    child((<VariableDeclaration>node).dotDotDotToken) ||
-                    child((<VariableDeclaration>node).name) ||
-                    child((<VariableDeclaration>node).questionToken) ||
-                    child((<VariableDeclaration>node).type) ||
-                    child((<VariableDeclaration>node).initializer);
+                    child((<VariableLikeDeclaration>node).propertyName) ||
+                    child((<VariableLikeDeclaration>node).dotDotDotToken) ||
+                    child((<VariableLikeDeclaration>node).name) ||
+                    child((<VariableLikeDeclaration>node).questionToken) ||
+                    child((<VariableLikeDeclaration>node).type) ||
+                    child((<VariableLikeDeclaration>node).initializer);
             case SyntaxKind.FunctionType:
             case SyntaxKind.ConstructorType:
             case SyntaxKind.CallSignature:
@@ -580,7 +582,8 @@ module ts {
                     case SyntaxKind.Property:
                     case SyntaxKind.EnumMember:
                     case SyntaxKind.PropertyAssignment:
-                        return (<VariableDeclaration>parent).initializer === node;
+                    case SyntaxKind.BindingElement:
+                        return (<VariableLikeDeclaration>parent).initializer === node;
                     case SyntaxKind.ExpressionStatement:
                     case SyntaxKind.IfStatement:
                     case SyntaxKind.DoStatement:
@@ -679,6 +682,7 @@ module ts {
             case SyntaxKind.TypeParameter:
             case SyntaxKind.Parameter:
             case SyntaxKind.VariableDeclaration:
+            case SyntaxKind.BindingElement:
             case SyntaxKind.Property:
             case SyntaxKind.PropertyAssignment:
             case SyntaxKind.ShorthandPropertyAssignment:
@@ -1892,12 +1896,7 @@ module ts {
             //      [+GeneratorParameter]BindingIdentifier[Yield]Initializer[In]opt
             //      [~GeneratorParameter]BindingIdentifier[?Yield]Initializer[In, ?Yield]opt
 
-            var savedYieldContext = inYieldContext();
-            if (inGeneratorParameterContext()) {
-                setYieldContext(true);
-            }
-            node.name = parseIdentifierOrPattern(SyntaxKind.Parameter);
-            setYieldContext(savedYieldContext);
+            node.name = inGeneratorParameterContext() ? doInYieldContext(parseIdentifierOrPattern) : parseIdentifierOrPattern();
 
             if (getFullWidth(node.name) === 0 && node.flags === 0 && isModifier(token)) {
                 // in cases like
@@ -1913,9 +1912,7 @@ module ts {
 
             node.questionToken = parseOptionalToken(SyntaxKind.QuestionToken);
             node.type = parseParameterType();
-            node.initializer = inGeneratorParameterContext()
-                ? doOutsideOfYieldContext(parseParameterInitializer)
-                : parseParameterInitializer();
+            node.initializer = inGeneratorParameterContext() ? doOutsideOfYieldContext(parseParameterInitializer) : parseParameterInitializer();
 
             // Do not check for initializers in an ambient context for parameters. This is not
             // a grammar error because the grammar allows arbitrary call signatures in
@@ -3691,11 +3688,11 @@ module ts {
 
         // DECLARATIONS
 
-        function parseBindingElement(kind: SyntaxKind, context: ParsingContext): BindingElement {
+        function parseBindingElement(context: ParsingContext): BindingElement {
             if (context === ParsingContext.ArrayBindingElements && token === SyntaxKind.CommaToken) {
                 return <BindingElement>createNode(SyntaxKind.OmittedExpression);
             }
-            var node = <BindingElement>createNode(kind);
+            var node = <BindingElement>createNode(SyntaxKind.BindingElement);
             if (context === ParsingContext.ObjectBindingElements) {
                 // TODO(andersh): Handle computed properties
                 var id = parsePropertyName();
@@ -3705,32 +3702,32 @@ module ts {
                 else {
                     parseExpected(SyntaxKind.ColonToken);
                     node.propertyName = <Identifier>id;
-                    node.name = parseIdentifierOrPattern(kind);
+                    node.name = parseIdentifierOrPattern();
                 }
             }
             else {
-                node.name = parseIdentifierOrPattern(kind);
+                node.name = parseIdentifierOrPattern();
             }
             node.initializer = parseInitializer(/*inParameter*/ false);
             return finishNode(node);
         }
 
-        function parseBindingList(kind: SyntaxKind, context: ParsingContext): NodeArray<BindingElement> {
-            return parseDelimitedList(context, () => parseBindingElement(kind, context));
+        function parseBindingList(context: ParsingContext): NodeArray<BindingElement> {
+            return parseDelimitedList(context, () => parseBindingElement(context));
         }
 
-        function parseObjectBindingPattern(kind: SyntaxKind): BindingPattern {
+        function parseObjectBindingPattern(): BindingPattern {
             var node = <BindingPattern>createNode(SyntaxKind.ObjectBindingPattern);
             parseExpected(SyntaxKind.OpenBraceToken);
-            node.elements = parseBindingList(kind, ParsingContext.ObjectBindingElements);
+            node.elements = parseBindingList(ParsingContext.ObjectBindingElements);
             parseExpected(SyntaxKind.CloseBraceToken);
             return finishNode(node);
         }
 
-        function parseArrayBindingPattern(kind: SyntaxKind): BindingPattern {
+        function parseArrayBindingPattern(): BindingPattern {
             var node = <BindingPattern>createNode(SyntaxKind.ArrayBindingPattern);
             parseExpected(SyntaxKind.OpenBracketToken);
-            node.elements = parseBindingList(kind, ParsingContext.ArrayBindingElements);
+            node.elements = parseBindingList(ParsingContext.ArrayBindingElements);
             parseExpected(SyntaxKind.CloseBracketToken);
             return finishNode(node);
         }
@@ -3739,19 +3736,19 @@ module ts {
             return token === SyntaxKind.OpenBraceToken || token === SyntaxKind.OpenBracketToken || isIdentifier();
         }
 
-        function parseIdentifierOrPattern(kind: SyntaxKind): Identifier | BindingPattern {
+        function parseIdentifierOrPattern(): Identifier | BindingPattern {
             if (token === SyntaxKind.OpenBracketToken) {
-                return parseArrayBindingPattern(kind);
+                return parseArrayBindingPattern();
             }
             if (token === SyntaxKind.OpenBraceToken) {
-                return parseObjectBindingPattern(kind);
+                return parseObjectBindingPattern();
             }
             return parseIdentifier();
         }
 
         function parseVariableDeclaration(): VariableDeclaration {
             var node = <VariableDeclaration>createNode(SyntaxKind.VariableDeclaration);
-            node.name = parseIdentifierOrPattern(SyntaxKind.VariableDeclaration);
+            node.name = parseIdentifierOrPattern();
             node.type = parseTypeAnnotation();
             node.initializer = parseInitializer(/*inParameter*/ false);
             return finishNode(node);
@@ -4492,6 +4489,7 @@ module ts {
 
                 case SyntaxKind.EnumDeclaration:                return checkEnumDeclaration(<EnumDeclaration>node);
                 case SyntaxKind.BinaryExpression:               return checkBinaryExpression(<BinaryExpression>node);
+                case SyntaxKind.BindingElement:                 return checkBindingElement(<BindingElement>node);
                 case SyntaxKind.CatchClause:                    return checkCatchClause(<CatchClause>node);
                 case SyntaxKind.ClassDeclaration:               return checkClassDeclaration(<ClassDeclaration>node);
                 case SyntaxKind.ComputedPropertyName:           return checkComputedPropertyName(<ComputedPropertyName>node);
@@ -5594,14 +5592,22 @@ module ts {
             return checkTypeArguments(node.typeArguments);
         }
 
+        function checkBindingElement(node: BindingElement) {
+            if (node.parserContextFlags & ParserContextFlags.StrictMode && isEvalOrArgumentsIdentifier(node.name)) {
+                // It is a SyntaxError if a VariableDeclaration or VariableDeclarationNoIn occurs within strict code 
+                // and its Identifier is eval or arguments 
+                return reportInvalidUseInStrictMode(<Identifier>node.name);
+            }
+        }
+
         function checkVariableDeclaration(node: VariableDeclaration) {
             if (inAmbientContext) {
                 if (isBindingPattern(node.name)) {
                     return grammarErrorOnNode(node, Diagnostics.Destructuring_declarations_are_not_allowed_in_ambient_contexts);
                 }
                 if (node.initializer) {
-                    var equalsPos = node.type ? skipTrivia(sourceText, node.type.end) : skipTrivia(sourceText, node.name.end);
-                    return grammarErrorAtPos(equalsPos, "=".length, Diagnostics.Initializers_are_not_allowed_in_ambient_contexts);
+                    // Error on equals token which immediate precedes the initializer
+                    return grammarErrorAtPos(node.initializer.pos - 1, 1, Diagnostics.Initializers_are_not_allowed_in_ambient_contexts);
                 }
             }
             else {

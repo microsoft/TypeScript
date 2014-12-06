@@ -389,18 +389,14 @@ module ts {
                     break;
                 case SyntaxKind.Parameter:
                     if (isBindingPattern((<Declaration>node).name)) {
-                        if (isBindingPattern(parent)) {
-                            bindChildren(node, 0, /*isBlockScopeContainer*/ false);
-                        }
-                        else {
-                            bindAnonymousDeclaration(<Declaration>node, SymbolFlags.FunctionScopedVariable, getDestructuringParameterName(<Declaration>node), /*isBlockScopeContainer*/ false);
-                        }
+                        bindAnonymousDeclaration(<Declaration>node, SymbolFlags.FunctionScopedVariable, getDestructuringParameterName(<Declaration>node), /*isBlockScopeContainer*/ false);
                     }
                     else {
                         bindDeclaration(<Declaration>node, SymbolFlags.FunctionScopedVariable, SymbolFlags.ParameterExcludes, /*isBlockScopeContainer*/ false);
                     }
                     break;
                 case SyntaxKind.VariableDeclaration:
+                case SyntaxKind.BindingElement:
                     if (isBindingPattern((<Declaration>node).name)) {
                         bindChildren(node, 0, /*isBlockScopeContainer*/ false);
                     }

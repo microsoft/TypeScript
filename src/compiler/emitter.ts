@@ -440,7 +440,7 @@ module ts {
             handleSymbolAccessibilityError(resolver.isSymbolAccessible(symbol, enclosingDeclaration, meaning));
         }
 
-        function writeTypeOfDeclaration(declaration: AccessorDeclaration | VariableOrParameterDeclaration, type: TypeNode | StringLiteralExpression, getSymbolAccessibilityDiagnostic: GetSymbolAccessibilityDiagnostic) {
+        function writeTypeOfDeclaration(declaration: AccessorDeclaration | VariableLikeDeclaration, type: TypeNode | StringLiteralExpression, getSymbolAccessibilityDiagnostic: GetSymbolAccessibilityDiagnostic) {
             writer.getSymbolAccessibilityDiagnostic = getSymbolAccessibilityDiagnostic;
             write(": ");
             if (type) {
@@ -996,7 +996,7 @@ module ts {
             }
         }
 
-        function emitTypeOfVariableDeclarationFromTypeLiteral(node: VariableOrParameterDeclaration) {
+        function emitTypeOfVariableDeclarationFromTypeLiteral(node: VariableLikeDeclaration) {
             // if this is property of type literal, 
             // or is parameter of method/call/construct/index signature of type literal
             // emit only if type is specified
@@ -2149,6 +2149,7 @@ module ts {
                 switch (parent.kind) {
                     case SyntaxKind.Parameter:
                     case SyntaxKind.VariableDeclaration:
+                    case SyntaxKind.BindingElement:
                     case SyntaxKind.Property:
                     case SyntaxKind.PropertyAssignment:
                     case SyntaxKind.ShorthandPropertyAssignment:
@@ -2761,10 +2762,10 @@ module ts {
                 emitEnd(node.name);
             }
 
-            function emitDestructuring(root: BinaryExpression | BindingElement, value?: Expression) {
+            function emitDestructuring(root: BinaryExpression | VariableDeclaration | ParameterDeclaration, value?: Expression) {
                 var emitCount = 0;
                 // An exported declaration is actually emitted as an assignment (to a property on the module object), so
-                // temporary variables in an exported declaration need to have real declarations elsewhere.
+                // temporary variables in an exported declaration need to have real declarations elsewhere
                 var isDeclaration = (root.kind === SyntaxKind.VariableDeclaration && !(root.flags & NodeFlags.Export)) || root.kind === SyntaxKind.Parameter;
                 if (root.kind === SyntaxKind.BinaryExpression) {
                     emitAssignmentExpression(<BinaryExpression>root);
@@ -2777,8 +2778,8 @@ module ts {
                     if (emitCount++) {
                         write(", ");
                     }
-                    if (name.parent && name.parent.kind === SyntaxKind.VariableDeclaration) {
-                        emitModuleMemberName(<VariableDeclaration>name.parent);
+                    if (name.parent && (name.parent.kind === SyntaxKind.VariableDeclaration || name.parent.kind === SyntaxKind.BindingElement)) {
+                        emitModuleMemberName(<Declaration>name.parent);
                     }
                     else {
                         emit(name);

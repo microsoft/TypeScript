@@ -168,6 +168,7 @@ module ts {
         // Binding patterns
         ObjectBindingPattern,
         ArrayBindingPattern,
+        BindingElement,
         // Expression
         ArrayLiteralExpression,
         ObjectLiteralExpression,
@@ -366,35 +367,63 @@ module ts {
     export interface SignatureDeclaration extends Declaration, ParsedSignature {
     }
 
+    // SyntaxKind.VariableDeclaration
     export interface VariableDeclaration extends Declaration {
-        propertyName?: Identifier;          // Binding property name (in object binding pattern)
-        dotDotDotToken?: Node;              // Present on rest parameter or rest element in binding pattern
         name: Identifier | BindingPattern;  // Declared variable name
-        questionToken?: Node;               // Present on optional parameter or property
         type?: TypeNode;                    // Optional type annotation
         initializer?: Expression;           // Optional initializer
     }
 
-    export interface BindingPattern extends Node {
-        elements: NodeArray<BindingElement>;
+    // SyntaxKind.Parameter
+    export interface ParameterDeclaration extends Declaration {
+        dotDotDotToken?: Node;              // Present on rest parameter
+        name: Identifier | BindingPattern;  // Declared parameter name
+        questionToken?: Node;               // Present on optional parameter
+        type?: TypeNode;                    // Optional type annotation
+        initializer?: Expression;           // Optional initializer
     }
 
-    export interface BindingElement extends VariableDeclaration { }
+    // SyntaxKind.BindingElement
+    export interface BindingElement extends Declaration {
+        propertyName?: Identifier;          // Binding property name (in object binding pattern)
+        dotDotDotToken?: Node;              // Present on rest binding element
+        name: Identifier | BindingPattern;  // Declared binding element name
+        initializer?: Expression;           // Optional initializer
+    }
 
-    export interface ParameterDeclaration extends VariableDeclaration { }
-
+    // SyntaxKind.Property
+    // SyntaxKind.PropertyAssignment
     export interface PropertyDeclaration extends Declaration, ClassElement {
+        name: DeclarationName;              // Declared property name
+        questionToken?: Node;               // Present on optional property
+        type?: TypeNode;                    // Optional type annotation
+        initializer?: Expression;           // Optional initializer
+    }
+
+    // SyntaxKind.ShorthandPropertyAssignment
+    export interface ShorthandPropertyDeclaration extends Declaration {
+        name: Identifier;
+        questionToken?: Node;
+    }
+
+    // SyntaxKind.VariableDeclaration
+    // SyntaxKind.Parameter
+    // SyntaxKind.BindingElement
+    // SyntaxKind.Property
+    // SyntaxKind.PropertyAssignment
+    // SyntaxKind.ShorthandPropertyAssignment
+    // SyntaxKind.EnumMember
+    export interface VariableLikeDeclaration extends Declaration {
+        propertyName?: Identifier;
+        dotDotDotToken?: Node;
+        name: DeclarationName;
         questionToken?: Node;
         type?: TypeNode;
         initializer?: Expression;
     }
 
-    export type VariableOrParameterDeclaration = VariableDeclaration | ParameterDeclaration;
-    export type VariableOrParameterOrPropertyDeclaration = VariableOrParameterDeclaration | PropertyDeclaration;
-
-    export interface ShorthandPropertyDeclaration extends Declaration {
-        name: Identifier;
-        questionToken?: Node;
+    export interface BindingPattern extends Node {
+        elements: NodeArray<BindingElement>;
     }
 
     /**
@@ -1004,7 +1033,7 @@ module ts {
         hasSemanticErrors(sourceFile?: SourceFile): boolean;
         isDeclarationVisible(node: Declaration): boolean;
         isImplementationOfOverload(node: FunctionLikeDeclaration): boolean;
-        writeTypeOfDeclaration(declaration: AccessorDeclaration | VariableOrParameterDeclaration, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter): void;
+        writeTypeOfDeclaration(declaration: AccessorDeclaration | VariableLikeDeclaration, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter): void;
         writeReturnTypeOfSignatureDeclaration(signatureDeclaration: SignatureDeclaration, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter): void;
         isSymbolAccessible(symbol: Symbol, enclosingDeclaration: Node, meaning: SymbolFlags): SymbolAccessiblityResult;
         isEntityNameVisible(entityName: EntityName, enclosingDeclaration: Node): SymbolVisibilityResult;
@@ -1056,9 +1085,9 @@ module ts {
         Module    = ValueModule | NamespaceModule,
         Accessor  = GetAccessor | SetAccessor,
 
-        // Variables can be redeclared, but can not redeclare a block-scoped declaration with the 
+        // Variables can be redeclared, but can not redeclare a block-scoped declaration with the
         // same name, or any other value that is not a variable, e.g. ValueModule or Class
-        FunctionScopedVariableExcludes = Value & ~FunctionScopedVariable,   
+        FunctionScopedVariableExcludes = Value & ~FunctionScopedVariable,
 
         // Block-scoped declarations are not allowed to be re-declared
         // they can not merge with anything in the value space

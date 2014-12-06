@@ -819,6 +819,7 @@ module ts {
                             }
                             // fall through
                         case SyntaxKind.VariableDeclaration:
+                        case SyntaxKind.BindingElement:
                             if (isBindingPattern((<VariableDeclaration>node).name)) {
                                 forEachChild((<VariableDeclaration>node).name, visit);
                                 break;
@@ -4712,6 +4713,7 @@ module ts {
             switch (node.kind) {
                 case SyntaxKind.Parameter:
                 case SyntaxKind.VariableDeclaration:
+                case SyntaxKind.BindingElement:
                 case SyntaxKind.Property:
                 case SyntaxKind.PropertyAssignment:
                 case SyntaxKind.ShorthandPropertyAssignment:

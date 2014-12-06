@@ -224,6 +224,9 @@ module ts.NavigationBar {
         function createChildItem(node: Node): ts.NavigationBarItem {
             switch (node.kind) {
                 case SyntaxKind.Parameter:
+                    if (isBindingPattern((<VariableDeclaration>node).name)) {
+                        break;
+                    }
                     if ((node.flags & NodeFlags.Modifier) === 0) {
                         return undefined;
                     }
