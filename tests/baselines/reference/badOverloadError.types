@@ -3,8 +3,8 @@ function method() {
 >method : () => void
 
     var dictionary = <{ [index: string]: string; }>{};
->dictionary : { [x: string]: string; }
-><{ [index: string]: string; }>{} : { [x: string]: string; }
+>dictionary : { [index: string]: string; }
+><{ [index: string]: string; }>{} : { [index: string]: string; }
 >index : string
 >{} : { [x: string]: undefined; }
 }

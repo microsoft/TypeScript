@@ -5,7 +5,7 @@ export class Collection<TItem extends CollectionItem> {
 >CollectionItem : CollectionItem
 
     _itemsByKey: { [key: string]: TItem; };
->_itemsByKey : { [x: string]: TItem; }
+>_itemsByKey : { [key: string]: TItem; }
 >key : string
 >TItem : TItem
 }
