@@ -135,21 +135,21 @@ var j2 = new j2(j2);
 
 // Indexers
 var k: { [n: number]: typeof k;[s: string]: typeof k };
->k : { [x: string]: any; [x: number]: any; }
+>k : { [s: string]: any; [n: number]: any; }
 >n : number
->k : { [x: string]: any; [x: number]: any; }
+>k : { [s: string]: any; [n: number]: any; }
 >s : string
->k : { [x: string]: any; [x: number]: any; }
+>k : { [s: string]: any; [n: number]: any; }
 
 var k = k[0];
->k : { [x: string]: any; [x: number]: any; }
->k[0] : { [x: string]: any; [x: number]: any; }
->k : { [x: string]: any; [x: number]: any; }
+>k : { [s: string]: any; [n: number]: any; }
+>k[0] : { [s: string]: any; [n: number]: any; }
+>k : { [s: string]: any; [n: number]: any; }
 
 var k = k[''];
->k : { [x: string]: any; [x: number]: any; }
->k[''] : { [x: string]: any; [x: number]: any; }
->k : { [x: string]: any; [x: number]: any; }
+>k : { [s: string]: any; [n: number]: any; }
+>k[''] : { [s: string]: any; [n: number]: any; }
+>k : { [s: string]: any; [n: number]: any; }
 
 // Hybrid - contains type literals as well as type arguments
 // These two are recursive
