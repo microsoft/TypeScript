@@ -1370,7 +1370,6 @@ module ts {
                     if (resolved.stringIndexType) {
                         // [x: string]: 
                         writePunctuation(writer, SyntaxKind.OpenBracketToken);
-                        resolved.symbol
                         writer.writeParameter(getIndexerParameterName(resolved, IndexKind.String, /*fallbackName*/"x"));
                         writePunctuation(writer, SyntaxKind.ColonToken);
                         writeSpace(writer);
