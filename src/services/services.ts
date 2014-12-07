@@ -865,6 +865,8 @@ module ts {
 
     export interface Logger {
         log(s: string): void;
+        trace(s: string): void;
+        error(s: string): void;
     }
 
     //

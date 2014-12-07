@@ -341,6 +341,14 @@ module ts {
             this.shimHost.log(s);
         }
 
+        public trace(s: string): void {
+            this.shimHost.trace(s);
+        }
+        
+        public error(s: string): void {
+            this.shimHost.error(s);
+        }
+
         public getCompilationSettings(): CompilerOptions {
             var settingsJson = this.shimHost.getCompilationSettings();
             if (settingsJson == null || settingsJson == "") {
