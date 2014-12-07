@@ -14,6 +14,9 @@
 /// <reference path='formatting.ts' />
 
 module ts {
+
+    export var ScriptAPIVersion = "1.4"
+
     export interface Node {
         getSourceFile(): SourceFile;
         getChildCount(sourceFile?: SourceFile): number;
