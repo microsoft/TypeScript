@@ -862,7 +862,7 @@ module ts {
         /*
          * Returns script API version.
          */
-        public getApiVersion(dummy: any): string {
+        public getApiVersion(): string {
             return ScriptAPIVersion;
         }
 
