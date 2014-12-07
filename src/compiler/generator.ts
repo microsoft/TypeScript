@@ -87,7 +87,7 @@ module ts {
         }
     }
 
-    export function createCodeGenerator(locals: LocalGenerator, resolver: EmitResolver, functionLocation: Node, options?: { promiseConstructor: EntityName; }): CodeGenerator {
+    export function createCodeGenerator(locals: LocalGenerator, resolver: EmitResolver, functionLocation: Node, options?: { promiseConstructor: string; }): CodeGenerator {
         // locations
         var bodyLocation: Node = functionLocation;
         var statementsLocation: TextRange = functionLocation;
@@ -567,7 +567,7 @@ module ts {
 
             if (options) {
                 var resolve = locals.createUniqueIdentifier(statementsLocation, "_resolve");
-                var promiseConstructor = options.promiseConstructor;
+                var promiseConstructor = createGeneratedNode(options.promiseConstructor);
                 statements.push(createGeneratedNode(`
                     return new \${promiseConstructor}(function (\${resolve}) {
                         \${resolve}(__awaiter(__generator(function (\${state}) {

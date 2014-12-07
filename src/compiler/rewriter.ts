@@ -1301,7 +1301,7 @@ module ts {
 
         function rewriteDownlevelWorker(): FunctionLikeDeclaration {
             if (node.flags & NodeFlags.Async) {
-                var promiseConstructor = getPromiseConstructor(node);
+                var promiseConstructor = resolver.getPromiseConstructor(node);
                 builder = createCodeGenerator(locals, resolver, node, { promiseConstructor });
             }
             else {

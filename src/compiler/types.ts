@@ -972,6 +972,7 @@ module ts {
         isUnknownIdentifier(location: Node, name: string): boolean;
         renameSymbol(symbol: Symbol, generatedName: string): void;
         getRenamedIdentifier(name: Identifier): string;
+        getPromiseConstructor(node: FunctionLikeDeclaration): string;
     }
 
     export const enum SymbolFlags {
