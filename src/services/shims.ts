@@ -862,8 +862,8 @@ module ts {
         /*
          * Returns script API version.
          */
-        public getApiVersion(): string {
-            return ScriptAPIVersion;
+        public getServicesVersion(): string {
+            return servicesVersion;
         }
 
         public createLanguageServiceShim(host: LanguageServiceShimHost): LanguageServiceShim {
