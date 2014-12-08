@@ -837,9 +837,15 @@ module Harness {
                         case 'errortruncation':
                             options.noErrorTruncation = setting.value === 'false';
                             break;
+
                         case 'preserveconstenums':
                             options.preserveConstEnums = setting.value === 'true';
                             break;
+
+                        case 'includebuiltfile':
+                            inputFiles.push({ unitName: setting.value, content: IO.readFile(libFolder + setting.value)});
+                            break;
+
                         default:
                             throw new Error('Unsupported compiler setting ' + setting.flag);
                     }
@@ -1229,7 +1235,7 @@ module Harness {
         var optionRegex = /^[\/]{2}\s*@(\w+)\s*:\s*(\S*)/gm;  // multiple matches on multiple lines
 
         // List of allowed metadata names
-        var fileMetadataNames = ["filename", "comments", "declaration", "module", "nolib", "sourcemap", "target", "out", "outdir", "noemitonerror","noimplicitany", "noresolve", "newline", "newlines", "emitbom", "errortruncation", "usecasesensitivefilenames", "preserveconstenums"];
+        var fileMetadataNames = ["filename", "comments", "declaration", "module", "nolib", "sourcemap", "target", "out", "outdir", "noemitonerror", "noimplicitany", "noresolve", "newline", "newlines", "emitbom", "errortruncation", "usecasesensitivefilenames", "preserveconstenums", "includebuiltfile"];
 
         function extractCompilerSettings(content: string): CompilerSetting[] {
 
