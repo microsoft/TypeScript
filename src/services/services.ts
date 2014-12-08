@@ -15,7 +15,7 @@
 
 module ts {
 
-    export var ScriptAPIVersion = "1.4"
+    export var servicesVersion = "0.4"
 
     export interface Node {
         getSourceFile(): SourceFile;
