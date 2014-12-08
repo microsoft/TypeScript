@@ -1,6 +1,9 @@
 /// <reference path="core.ts"/>
 
 module ts {
+    export interface Map<T> {
+        [index: string]: T;
+    }
 
     export interface TextRange {
         pos: number;
