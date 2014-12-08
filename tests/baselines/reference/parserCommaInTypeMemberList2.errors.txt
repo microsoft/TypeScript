@@ -1,6 +1,6 @@
 tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserCommaInTypeMemberList2.ts(1,38): error TS1134: Variable declaration expected.
 tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserCommaInTypeMemberList2.ts(1,60): error TS1005: ';' expected.
-tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserCommaInTypeMemberList2.ts(1,70): error TS1128: Declaration or statement expected.
+tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserCommaInTypeMemberList2.ts(1,70): error TS1109: Expression expected.
 tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserCommaInTypeMemberList2.ts(1,9): error TS2304: Cannot find name '$'.
 tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserCommaInTypeMemberList2.ts(1,31): error TS2304: Cannot find name 'any'.
 tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserCommaInTypeMemberList2.ts(1,50): error TS2304: Cannot find name 'any'.
@@ -15,7 +15,7 @@ tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserCommaInTypeMember
                                                                ~
 !!! error TS1005: ';' expected.
                                                                          ~
-!!! error TS1128: Declaration or statement expected.
+!!! error TS1109: Expression expected.
             ~
 !!! error TS2304: Cannot find name '$'.
                                   ~~~
