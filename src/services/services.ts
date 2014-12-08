@@ -4,13 +4,13 @@
 /// <reference path="..\compiler\parser.ts"/>
 /// <reference path="..\compiler\checker.ts"/>
 
+/// <reference path='breakpoints.ts' />
 /// <reference path='outliningElementsCollector.ts' />
 /// <reference path='navigationBar.ts' />
-/// <reference path='breakpoints.ts' />
 /// <reference path='signatureHelp.ts' />
 /// <reference path='utilities.ts' />
-/// <reference path='smartIndenter.ts' />
-/// <reference path='formatting.ts' />
+/// <reference path='formatting\formatting.ts' />
+/// <reference path='formatting\smartIndenter.ts' />
 
 module ts {
     export interface Node {
