@@ -750,11 +750,11 @@ module FourSlash {
         }
 
         private getMemberListAtCaret() {
-            return this.languageService.getCompletionsAtPosition(this.activeFile.fileName, this.currentCaretPosition, true);
+            return this.languageService.getCompletionsAtPosition(this.activeFile.fileName, this.currentCaretPosition);
         }
 
         private getCompletionListAtCaret() {
-            return this.languageService.getCompletionsAtPosition(this.activeFile.fileName, this.currentCaretPosition, false);
+            return this.languageService.getCompletionsAtPosition(this.activeFile.fileName, this.currentCaretPosition);
         }
 
         private getCompletionEntryDetails(entryName: string) {
@@ -1364,7 +1364,7 @@ module FourSlash {
                     this.languageService.getSignatureHelpItems(this.activeFile.fileName, offset);
                 } else if (prevChar === ' ' && /A-Za-z_/.test(ch)) {
                     /* Completions */
-                    this.languageService.getCompletionsAtPosition(this.activeFile.fileName, offset, false);
+                    this.languageService.getCompletionsAtPosition(this.activeFile.fileName, offset);
                 }
 
                 if (i % errorCadence === 0) {
