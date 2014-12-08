@@ -914,7 +914,7 @@ module ts {
         getSyntacticClassifications(fileName: string, span: TextSpan): ClassifiedSpan[];
         getSemanticClassifications(fileName: string, span: TextSpan): ClassifiedSpan[];
 
-        getCompletionsAtPosition(fileName: string, position: number, isMemberCompletion: boolean): CompletionInfo;
+        getCompletionsAtPosition(fileName: string, position: number): CompletionInfo;
         getCompletionEntryDetails(fileName: string, position: number, entryName: string): CompletionEntryDetails;
 
         getQuickInfoAtPosition(fileName: string, position: number): QuickInfo;
@@ -2669,7 +2669,7 @@ module ts {
             };
         }
 
-        function getCompletionsAtPosition(filename: string, position: number, isMemberCompletion: boolean) {
+        function getCompletionsAtPosition(filename: string, position: number) {
             synchronizeHostData();
 
             filename = normalizeSlashes(filename);
@@ -2744,7 +2744,7 @@ module ts {
             if (isRightOfDot) {
                 // Right of dot member completion list
                 var symbols: Symbol[] = [];
-                isMemberCompletion = true;
+                var isMemberCompletion = true;
 
                 if (node.kind === SyntaxKind.Identifier || node.kind === SyntaxKind.QualifiedName || node.kind === SyntaxKind.PropertyAccessExpression) {
                     var symbol = typeInfoResolver.getSymbolAtLocation(node);

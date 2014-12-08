@@ -88,7 +88,7 @@ module ts {
 
         getSyntacticClassifications(fileName: string, start: number, length: number): string;
 
-        getCompletionsAtPosition(fileName: string, position: number, isMemberCompletion: boolean): string;
+        getCompletionsAtPosition(fileName: string, position: number): string;
         getCompletionEntryDetails(fileName: string, position: number, entryName: string): string;
 
         getQuickInfoAtPosition(fileName: string, position: number): string;
@@ -694,11 +694,11 @@ module ts {
          * to provide at the given source position and providing a member completion 
          * list if requested.
          */
-        public getCompletionsAtPosition(fileName: string, position: number, isMemberCompletion: boolean) {
+        public getCompletionsAtPosition(fileName: string, position: number) {
             return this.forwardJSONCall(
-                "getCompletionsAtPosition('" + fileName + "', " + position + ", " + isMemberCompletion + ")",
+                "getCompletionsAtPosition('" + fileName + "', " + position + ")",
                 () => {
-                    var completion = this.languageService.getCompletionsAtPosition(fileName, position, isMemberCompletion);
+                    var completion = this.languageService.getCompletionsAtPosition(fileName, position);
                     return completion;
                 });
         }
