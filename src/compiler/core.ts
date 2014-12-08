@@ -15,10 +15,6 @@ module ts {
         True  = -1
     }
 
-    export interface Map<T> {
-        [index: string]: T;
-    }
-
     export const enum Comparison {
         LessThan    = -1,
         EqualTo     = 0,
