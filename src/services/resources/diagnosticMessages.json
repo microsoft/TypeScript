@@ -411,6 +411,10 @@
         "category": "Error",
         "code": 1120
     },
+    "String literal expected.": {
+        "category": "Error",
+        "code": 1121
+    },
     "Duplicate identifier '{0}'.": {
         "category": "Error",
         "code": 2000

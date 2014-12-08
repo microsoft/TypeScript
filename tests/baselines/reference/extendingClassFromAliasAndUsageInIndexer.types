@@ -22,7 +22,7 @@ var moduleATyped: IHasVisualizationModel = moduleA;
 >moduleA : typeof moduleA
 
 var moduleMap: { [key: string]: IHasVisualizationModel } = {
->moduleMap : { [x: string]: IHasVisualizationModel; }
+>moduleMap : { [key: string]: IHasVisualizationModel; }
 >key : string
 >IHasVisualizationModel : IHasVisualizationModel
 >{    "moduleA": moduleA,    "moduleB": moduleB} : { [x: string]: typeof moduleA; "moduleA": typeof moduleA; "moduleB": typeof moduleB; }
@@ -42,7 +42,7 @@ var visModel = new moduleMap[moduleName].VisualizationModel();
 >new moduleMap[moduleName].VisualizationModel() : Backbone.Model
 >moduleMap[moduleName].VisualizationModel : typeof Backbone.Model
 >moduleMap[moduleName] : IHasVisualizationModel
->moduleMap : { [x: string]: IHasVisualizationModel; }
+>moduleMap : { [key: string]: IHasVisualizationModel; }
 >moduleName : string
 >VisualizationModel : typeof Backbone.Model
 

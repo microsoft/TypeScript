@@ -216,7 +216,6 @@ module ts {
         DebuggerStatement,
         VariableDeclaration,
         FunctionDeclaration,
-        FunctionBlock,
         ClassDeclaration,
         InterfaceDeclaration,
         TypeAliasDeclaration,
@@ -238,6 +237,7 @@ module ts {
         // Property assignments
         PropertyAssignment,
         ShorthandPropertyAssignment,
+
         // Enum
         EnumMember,
         // Top-level nodes
@@ -298,10 +298,27 @@ module ts {
     export const enum ParserContextFlags {
         // Set if this node was parsed in strict mode.  Used for grammar error checks, as well as
         // checking if the node can be reused in incremental settings.
-        StrictMode          = 1 << 0,
-        DisallowIn          = 1 << 1,
-        Yield               = 1 << 2,
-        GeneratorParameter  = 1 << 3,
+        StrictMode = 1 << 0,
+
+        // If this node was parsed in a context where 'in-expressions' are not allowed.
+        DisallowIn = 1 << 1,
+
+        // If this node was parsed in the 'yield' context created when parsing a generator.
+        Yield = 1 << 2,
+
+        // If this node was parsed in the parameters of a generator.
+        GeneratorParameter = 1 << 3,
+
+        // If the parser encountered an error when parsing the code that created this node.  Note
+        // the parser only sets this directly on the node it creates right after encountering the
+        // error.  We then propagate that flag upwards to parent nodes during incremental parsing.
+        ContainsError = 1 << 4,
+
+        // Used during incremental parsing to determine if we need to visit this node to see if
+        // any of its children had an error.  Once we compute that once, we can set this bit on the
+        // node to know that we never have to do it again.  From that point on, we can just check
+        // the node directly for 'ContainsError'.
+        HasPropagatedChildContainsErrorFlag = 1 << 5
     }
 
     export interface Node extends TextRange {
@@ -339,12 +356,6 @@ module ts {
 
     export type EntityName = Identifier | QualifiedName;
 
-    export interface ParsedSignature {
-        typeParameters?: NodeArray<TypeParameterDeclaration>;
-        parameters: NodeArray<ParameterDeclaration>;
-        type?: TypeNode;
-    }
-
     export type DeclarationName = Identifier | LiteralExpression | ComputedPropertyName | BindingPattern;
 
     export interface Declaration extends Node {
@@ -364,7 +375,10 @@ module ts {
         expression?: Expression;
     }
 
-    export interface SignatureDeclaration extends Declaration, ParsedSignature {
+    export interface SignatureDeclaration extends Declaration {
+        typeParameters?: NodeArray<TypeParameterDeclaration>;
+        parameters: NodeArray<ParameterDeclaration>;
+        type?: TypeNode;
     }
 
     // SyntaxKind.VariableDeclaration
@@ -392,7 +406,6 @@ module ts {
     }
 
     // SyntaxKind.Property
-    // SyntaxKind.PropertyAssignment
     export interface PropertyDeclaration extends Declaration, ClassElement {
         name: DeclarationName;              // Declared property name
         questionToken?: Node;               // Present on optional property
@@ -400,8 +413,20 @@ module ts {
         initializer?: Expression;           // Optional initializer
     }
 
+    export interface ObjectLiteralElement extends Declaration {
+        _objectLiteralBrandBrand: any;
+    }
+
+    // SyntaxKind.PropertyAssignment
+    export interface PropertyAssignment extends ObjectLiteralElement {
+        _propertyAssignmentBrand: any;
+        name: DeclarationName;
+        questionToken?: Node;
+        initializer: Expression;
+    }
+
     // SyntaxKind.ShorthandPropertyAssignment
-    export interface ShorthandPropertyDeclaration extends Declaration {
+    export interface ShorthandPropertyAssignment extends ObjectLiteralElement {
         name: Identifier;
         questionToken?: Node;
     }
@@ -447,7 +472,16 @@ module ts {
         body?: Block;
     }
 
-    export interface MethodDeclaration extends FunctionLikeDeclaration, ClassElement {
+    // Note that a MethodDeclaration is considered both a ClassElement and an ObjectLiteralElement.
+    // Both the grammars for ClassDeclaration and ObjectLiteralExpression allow for MethodDeclarations
+    // as child elements, and so a MethodDeclaration satisfies both interfaces.  This avoids the
+    // alternative where we would need separate kinds/types for ClassMethodDeclaration and
+    // ObjectLiteralMethodDeclaration, which would look identical.
+    //
+    // Because of this, it may be necessary to determine what sort of MethodDeclaration you have
+    // at later stages of the compiler pipeline.  In that case, you can either check the parent kind
+    // of the method, or use helpers like isObjectLiteralMethodDeclaration
+    export interface MethodDeclaration extends FunctionLikeDeclaration, ClassElement, ObjectLiteralElement {
         body?: Block;
     }
 
@@ -455,8 +489,11 @@ module ts {
         body?: Block;
     }
 
-    export interface AccessorDeclaration extends FunctionLikeDeclaration, ClassElement  {
-        body?: Block;
+    // See the comment on MethodDeclaration for the intuition behind AccessorDeclaration being a 
+    // ClassElement and an ObjectLiteralElement.
+    export interface AccessorDeclaration extends FunctionLikeDeclaration, ClassElement, ObjectLiteralElement {
+        _accessorDeclarationBrand: any;
+        body: Block;
     }
 
     export interface IndexSignatureDeclaration extends SignatureDeclaration, ClassElement {
@@ -613,7 +650,7 @@ module ts {
     
     // An ObjectLiteralExpression is the declaration node for an anonymous symbol.
     export interface ObjectLiteralExpression extends PrimaryExpression, Declaration {
-        properties: NodeArray<Declaration>;
+        properties: NodeArray<ObjectLiteralElement>;
     }
 
     export interface PropertyAccessExpression extends MemberExpression {
@@ -920,8 +957,7 @@ module ts {
         getSymbolCount(): number;
         getTypeCount(): number;
         emitFiles(targetSourceFile?: SourceFile): EmitResult;
-        getParentOfSymbol(symbol: Symbol): Symbol;
-        getNarrowedTypeOfSymbol(symbol: Symbol, node: Node): Type;
+        getTypeOfSymbolAtLocation(symbol: Symbol, node: Node): Type;
         getDeclaredTypeOfSymbol(symbol: Symbol): Type;
         getPropertiesOfType(type: Type): Symbol[];
         getPropertyOfType(type: Type, propertyName: string): Symbol;
@@ -929,16 +965,16 @@ module ts {
         getIndexTypeOfType(type: Type, kind: IndexKind): Type;
         getReturnTypeOfSignature(signature: Signature): Type;
         getSymbolsInScope(location: Node, meaning: SymbolFlags): Symbol[];
-        getSymbolInfo(node: Node): Symbol;
+        getSymbolAtLocation(node: Node): Symbol;
         getShorthandAssignmentValueSymbol(location: Node): Symbol;
-        getTypeOfNode(node: Node): Type;
+        getTypeAtLocation(node: Node): Type;
         typeToString(type: Type, enclosingDeclaration?: Node, flags?: TypeFormatFlags): string;
         symbolToString(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags): string;
         getSymbolDisplayBuilder(): SymbolDisplayBuilder;
         getFullyQualifiedName(symbol: Symbol): string;
         getAugmentedPropertiesOfType(type: Type): Symbol[];
         getRootSymbols(symbol: Symbol): Symbol[];
-        getContextualType(node: Node): Type;
+        getContextualType(node: Expression): Type;
         getResolvedSignature(node: CallLikeExpression, candidatesOutArray?: Signature[]): Signature;
         getSignatureFromDeclaration(declaration: SignatureDeclaration): Signature;
         isImplementationOfOverload(node: FunctionLikeDeclaration): boolean;

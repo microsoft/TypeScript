@@ -101,10 +101,11 @@ module ts.BreakpointResolver {
                     case SyntaxKind.ArrowFunction:
                         return spanInFunctionDeclaration(<FunctionLikeDeclaration>node);
 
-                    case SyntaxKind.FunctionBlock:
-                        return spanInFunctionBlock(<Block>node);
-
                     case SyntaxKind.Block:
+                        if (isFunctionBlock(node)) {
+                            return spanInFunctionBlock(<Block>node);
+                        }
+                        // Fall through
                     case SyntaxKind.TryBlock:
                     case SyntaxKind.FinallyBlock:
                     case SyntaxKind.ModuleBlock:
@@ -414,13 +415,18 @@ module ts.BreakpointResolver {
                             return undefined;
                         }
 
-                    case SyntaxKind.FunctionBlock:
                     case SyntaxKind.EnumDeclaration:
                     case SyntaxKind.ClassDeclaration:
                         // Span on close brace token
                         return textSpan(node);
 
                     case SyntaxKind.Block:
+                        if (isFunctionBlock(node.parent)) {
+                            // Span on close brace token
+                            return textSpan(node);
+                        }
+                        // fall through.
+
                     case SyntaxKind.TryBlock:
                     case SyntaxKind.CatchClause:
                     case SyntaxKind.FinallyBlock:

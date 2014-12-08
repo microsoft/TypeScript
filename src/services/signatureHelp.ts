@@ -396,7 +396,7 @@ module ts.SignatureHelp {
 
         function getContainingArgumentInfo(node: Node): ArgumentListInfo {
             for (var n = node; n.kind !== SyntaxKind.SourceFile; n = n.parent) {
-                if (n.kind === SyntaxKind.FunctionBlock) {
+                if (isFunctionBlock(n)) {
                     return undefined;
                 }
 
@@ -457,7 +457,7 @@ module ts.SignatureHelp {
 
             var invocation = argumentListInfo.invocation;
             var callTarget = getInvokedExpression(invocation)
-            var callTargetSymbol = typeInfoResolver.getSymbolInfo(callTarget);
+            var callTargetSymbol = typeInfoResolver.getSymbolAtLocation(callTarget);
             var callTargetDisplayParts = callTargetSymbol && symbolToDisplayParts(typeInfoResolver, callTargetSymbol, /*enclosingDeclaration*/ undefined, /*meaning*/ undefined);
             var items: SignatureHelpItem[] = map(candidates, candidateSignature => {
                 var signatureHelpParameters: SignatureHelpParameter[];

@@ -104,21 +104,6 @@ module ts {
         return syntaxList;
     }
 
-    /**
-     * Includes the start position of each child, but excludes the end.
-     */
-    export function findListItemIndexContainingPosition(list: Node, position: number): number {
-        Debug.assert(list.kind === SyntaxKind.SyntaxList);
-        var children = list.getChildren();
-        for (var i = 0; i < children.length; i++) {
-            if (children[i].pos <= position && children[i].end > position) {
-                return i;
-            }
-        }
-
-        return -1;
-    }
-
     /* Gets the token whose text has range [start, end) and 
      * position >= start and (position < end or (position === end && token is keyword or identifier))
      */

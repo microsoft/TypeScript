@@ -265,7 +265,7 @@ var C = (function () {
 })();
 // object literals
 var o = {
-    f: function () {
+    f() {
         const c = 0;
         n = c;
     },

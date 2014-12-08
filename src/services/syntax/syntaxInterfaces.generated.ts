@@ -702,10 +702,10 @@ module TypeScript {
     export interface ExternalModuleReferenceSyntax extends ISyntaxNode, IModuleReferenceSyntax {
         requireKeyword: ISyntaxToken;
         openParenToken: ISyntaxToken;
-        stringLiteral: ISyntaxToken;
+        expression: IExpressionSyntax;
         closeParenToken: ISyntaxToken;
     }
-    export interface ExternalModuleReferenceConstructor { new (data: number, requireKeyword: ISyntaxToken, openParenToken: ISyntaxToken, stringLiteral: ISyntaxToken, closeParenToken: ISyntaxToken): ExternalModuleReferenceSyntax }
+    export interface ExternalModuleReferenceConstructor { new (data: number, requireKeyword: ISyntaxToken, openParenToken: ISyntaxToken, expression: IExpressionSyntax, closeParenToken: ISyntaxToken): ExternalModuleReferenceSyntax }
 
     export interface ModuleNameModuleReferenceSyntax extends ISyntaxNode, IModuleReferenceSyntax {
         moduleName: INameSyntax;

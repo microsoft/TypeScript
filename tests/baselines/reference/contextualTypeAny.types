@@ -3,7 +3,7 @@ var x: any;
 >x : any
 
 var obj: { [s: string]: number } = { p: "", q: x };
->obj : { [x: string]: number; }
+>obj : { [s: string]: number; }
 >s : string
 >{ p: "", q: x } : { [x: string]: any; p: string; q: any; }
 >p : string

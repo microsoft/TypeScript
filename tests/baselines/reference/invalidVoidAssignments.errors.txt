@@ -12,7 +12,7 @@ tests/cases/conformance/types/primitives/void/invalidVoidAssignments.ts(21,5): e
 tests/cases/conformance/types/primitives/void/invalidVoidAssignments.ts(23,1): error TS2364: Invalid left-hand side of assignment expression.
 tests/cases/conformance/types/primitives/void/invalidVoidAssignments.ts(26,1): error TS2322: Type 'typeof E' is not assignable to type 'void'.
 tests/cases/conformance/types/primitives/void/invalidVoidAssignments.ts(27,1): error TS2322: Type 'E' is not assignable to type 'void'.
-tests/cases/conformance/types/primitives/void/invalidVoidAssignments.ts(29,1): error TS2322: Type '{ f: () => void; }' is not assignable to type 'void'.
+tests/cases/conformance/types/primitives/void/invalidVoidAssignments.ts(29,1): error TS2322: Type '{ f(): void; }' is not assignable to type 'void'.
 
 
 ==== tests/cases/conformance/types/primitives/void/invalidVoidAssignments.ts (13 errors) ====
@@ -72,4 +72,4 @@ tests/cases/conformance/types/primitives/void/invalidVoidAssignments.ts(29,1): e
     
     x = { f() { } }
     ~
-!!! error TS2322: Type '{ f: () => void; }' is not assignable to type 'void'.
+!!! error TS2322: Type '{ f(): void; }' is not assignable to type 'void'.

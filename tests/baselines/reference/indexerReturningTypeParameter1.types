@@ -3,7 +3,7 @@ interface f {
 >f : f
 
     groupBy<T>(): { [key: string]: T[]; };
->groupBy : <T>() => { [x: string]: T[]; }
+>groupBy : <T>() => { [key: string]: T[]; }
 >T : T
 >key : string
 >T : T
@@ -13,17 +13,17 @@ var a: f;
 >f : f
 
 var r = a.groupBy();
->r : { [x: string]: {}[]; }
->a.groupBy() : { [x: string]: {}[]; }
->a.groupBy : <T>() => { [x: string]: T[]; }
+>r : { [key: string]: {}[]; }
+>a.groupBy() : { [key: string]: {}[]; }
+>a.groupBy : <T>() => { [key: string]: T[]; }
 >a : f
->groupBy : <T>() => { [x: string]: T[]; }
+>groupBy : <T>() => { [key: string]: T[]; }
 
 class c {
 >c : c
 
     groupBy<T>(): { [key: string]: T[]; } {
->groupBy : <T>() => { [x: string]: T[]; }
+>groupBy : <T>() => { [key: string]: T[]; }
 >T : T
 >key : string
 >T : T
@@ -36,9 +36,9 @@ var a2: c;
 >c : c
 
 var r2 = a2.groupBy();
->r2 : { [x: string]: {}[]; }
->a2.groupBy() : { [x: string]: {}[]; }
->a2.groupBy : <T>() => { [x: string]: T[]; }
+>r2 : { [key: string]: {}[]; }
+>a2.groupBy() : { [key: string]: {}[]; }
+>a2.groupBy : <T>() => { [key: string]: T[]; }
 >a2 : c
->groupBy : <T>() => { [x: string]: T[]; }
+>groupBy : <T>() => { [key: string]: T[]; }
 

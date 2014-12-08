@@ -60,15 +60,15 @@ module TypeScript.Scanner {
     // This gives us 23bit for width (or 8MB of width which should be enough for any codebase).
 
     enum ScannerConstants {
-        LargeTokenFullWidthShift        = 3,
+        LargeTokenFullWidthShift = 3,
 
-        WhitespaceTrivia                = 0x01, // 00000001
-        NewlineTrivia                   = 0x02, // 00000010
-        CommentTrivia                   = 0x04, // 00000100
-        TriviaMask                      = 0x07, // 00000111
+        WhitespaceTrivia = 0x01, // 00000001
+        NewlineTrivia = 0x02, // 00000010
+        CommentTrivia = 0x04, // 00000100
+        TriviaMask = 0x07, // 00000111
 
-        KindMask                        = 0x7F, // 01111111
-        IsVariableWidthMask             = 0x80, // 10000000
+        KindMask = 0x7F, // 01111111
+        IsVariableWidthMask = 0x80, // 10000000
     }
 
     function largeTokenPackData(fullWidth: number, leadingTriviaInfo: number) {
@@ -154,7 +154,7 @@ module TypeScript.Scanner {
     var lastTokenInfo = { leadingTriviaWidth: -1 };
     var lastTokenInfoTokenID: number = -1;
 
-    var triviaScanner = createScannerInternal(ts.ScriptTarget.Latest, SimpleText.fromString(""), () => { });
+    var triviaScanner = createScannerInternal(ts.ScriptTarget.Latest, SimpleText.fromString(""),() => { });
 
     interface IScannerToken extends ISyntaxToken {
     }
@@ -208,7 +208,7 @@ module TypeScript.Scanner {
         public setFullStart(fullStart: number): void {
             this._fullStart = fullStart;
         }
-        
+
         public childAt(index: number): ISyntaxElement { throw Errors.invalidOperation() }
 
         public isIncrementallyUnusable(): boolean { return false; }
@@ -1425,17 +1425,11 @@ module TypeScript.Scanner {
 
     export function isValidIdentifier(text: ISimpleText, languageVersion: ts.ScriptTarget): boolean {
         var hadError = false;
-        var scanner = createScanner(languageVersion, text, () => hadError = true);
+        var scanner = createScanner(languageVersion, text,() => hadError = true);
 
         var token = scanner.scan(/*allowContextualToken:*/ false);
 
         return !hadError && SyntaxFacts.isIdentifierNameOrAnyKeyword(token) && width(token) === text.length();
-    }
-
-    interface IScannerRewindPoint extends Parser.IRewindPoint {
-        // Information used by normal parser source.
-        absolutePosition: number;
-        slidingWindowIndex: number;
     }
 
     // Parser source used in batch scenarios.  Directly calls into an underlying text scanner and
@@ -1451,10 +1445,6 @@ module TypeScript.Scanner {
         // reparse a / or /= as a regular expression.
         var _tokenDiagnostics: Diagnostic[] = [];
 
-        // Pool of rewind points we give out if the parser needs one.
-        var rewindPointPool: IScannerRewindPoint[] = [];
-        var rewindPointPoolCount = 0;
-
         var lastDiagnostic: Diagnostic = undefined;
         var reportDiagnostic = (position: number, fullWidth: number, diagnosticKey: string, args: any[]) => {
             lastDiagnostic = new Diagnostic(fileName, text.lineMap(), position, fullWidth, diagnosticKey, args);
@@ -1465,15 +1455,6 @@ module TypeScript.Scanner {
 
         // The scanner we're pulling tokens from.
         var scanner = createScanner(languageVersion, text, reportDiagnostic);
-
-        function release() {
-            slidingWindow = undefined;
-            scanner = undefined;
-            _tokenDiagnostics = [];
-            rewindPointPool = [];
-            lastDiagnostic = undefined;
-            reportDiagnostic = undefined;
-        }
 
         function currentNode(): ISyntaxNode {
             // The normal parser source never returns nodes.  They're only returned by the 
@@ -1486,46 +1467,21 @@ module TypeScript.Scanner {
             return _absolutePosition;
         }
 
-        function tokenDiagnostics(): Diagnostic[] {
+        function diagnostics(): Diagnostic[] {
             return _tokenDiagnostics;
         }
 
-        function getOrCreateRewindPoint(): IScannerRewindPoint {
-            if (rewindPointPoolCount === 0) {
-                return <IScannerRewindPoint>{};
+        function tryParse<T extends ISyntaxNode>(callback: () => T): T {
+            var savedSlidingWindowIndex = slidingWindow.getAndPinAbsoluteIndex();
+            var savedAbsolutePosition = _absolutePosition;
+
+            var result = callback();
+            if (!result) {
+                slidingWindow.rewindToPinnedIndex(savedSlidingWindowIndex);
+                _absolutePosition = savedAbsolutePosition;
             }
 
-            rewindPointPoolCount--;
-            var result = rewindPointPool[rewindPointPoolCount];
-            rewindPointPool[rewindPointPoolCount] = undefined;
             return result;
-        }
-
-        function getRewindPoint(): IScannerRewindPoint {
-            var slidingWindowIndex = slidingWindow.getAndPinAbsoluteIndex();
-
-            var rewindPoint = getOrCreateRewindPoint();
-
-            rewindPoint.slidingWindowIndex = slidingWindowIndex;
-            rewindPoint.absolutePosition = _absolutePosition;
-
-            // rewindPoint.pinCount = slidingWindow.pinCount();
-
-            return rewindPoint;
-        }
-
-        function rewind(rewindPoint: IScannerRewindPoint): void {
-            slidingWindow.rewindToPinnedIndex(rewindPoint.slidingWindowIndex);
-
-            _absolutePosition = rewindPoint.absolutePosition;
-        }
-
-        function releaseRewindPoint(rewindPoint: IScannerRewindPoint): void {
-            // Debug.assert(slidingWindow.pinCount() === rewindPoint.pinCount);
-            slidingWindow.releaseAndUnpinAbsoluteIndex((<any>rewindPoint).absoluteIndex);
-
-            rewindPointPool[rewindPointPoolCount] = rewindPoint;
-            rewindPointPoolCount++;
         }
 
         function fetchNextItem(allowContextualToken: boolean): ISyntaxToken {
@@ -1641,12 +1597,9 @@ module TypeScript.Scanner {
             currentContextualToken: currentContextualToken,
             peekToken: peekToken,
             consumeNodeOrToken: consumeNodeOrToken,
-            getRewindPoint: getRewindPoint,
-            rewind: rewind,
-            releaseRewindPoint: releaseRewindPoint,
-            tokenDiagnostics: tokenDiagnostics,
-            release: release,
-            absolutePosition: absolutePosition,
+            tryParse: tryParse,
+            diagnostics: diagnostics,
+            absolutePosition: absolutePosition
         };
     }
 

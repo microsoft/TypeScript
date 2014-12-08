@@ -83,15 +83,14 @@ class C<T> {
 }
 
 var aa = {
->aa : { id: number; biz: () => void; }
->{    id:12,    biz() {        throw this;    }} : { id: number; biz: () => void; }
+>aa : { id: number; biz(): void; }
+>{    id:12,    biz() {        throw this;    }} : { id: number; biz(): void; }
 
     id:12,
 >id : number
 
     biz() {
 >biz : () => void
->biz() {        throw this;    } : () => void
 
         throw this;
 >this : any

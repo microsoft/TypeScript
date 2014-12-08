@@ -32,8 +32,8 @@ function foo(animals: IAnimal[]) { }
 >IAnimal : IAnimal
 
 function bar(animals: { [n: number]: IAnimal }) { }
->bar : (animals: { [x: number]: IAnimal; }) => void
->animals : { [x: number]: IAnimal; }
+>bar : (animals: { [n: number]: IAnimal; }) => void
+>animals : { [n: number]: IAnimal; }
 >n : number
 >IAnimal : IAnimal
 
@@ -53,7 +53,7 @@ foo([
 ]); // Legal because of the contextual type IAnimal provided by the parameter
 bar([
 >bar([    new Giraffe(),    new Elephant()]) : void
->bar : (animals: { [x: number]: IAnimal; }) => void
+>bar : (animals: { [n: number]: IAnimal; }) => void
 >[    new Giraffe(),    new Elephant()] : (Giraffe | Elephant)[]
 
     new Giraffe(),
@@ -81,6 +81,6 @@ foo(arr); // ok because arr is Array<Giraffe|Elephant> not {}[]
 
 bar(arr); // ok because arr is Array<Giraffe|Elephant> not {}[]
 >bar(arr) : void
->bar : (animals: { [x: number]: IAnimal; }) => void
+>bar : (animals: { [n: number]: IAnimal; }) => void
 >arr : (Giraffe | Elephant)[]
 

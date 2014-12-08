@@ -4,19 +4,19 @@ class LazyArray<T> {
 >T : T
 
     private objects = <{ [objectId: string]: T; }>{};
->objects : { [x: string]: T; }
-><{ [objectId: string]: T; }>{} : { [x: string]: T; }
+>objects : { [objectId: string]: T; }
+><{ [objectId: string]: T; }>{} : { [objectId: string]: T; }
 >objectId : string
 >T : T
 >{} : { [x: string]: undefined; }
 
     array() {
->array : () => { [x: string]: T; }
+>array : () => { [objectId: string]: T; }
 
         return this.objects;
->this.objects : { [x: string]: T; }
+>this.objects : { [objectId: string]: T; }
 >this : LazyArray<T>
->objects : { [x: string]: T; }
+>objects : { [objectId: string]: T; }
     }
 }
 var lazyArray = new LazyArray<string>();
@@ -27,8 +27,8 @@ var lazyArray = new LazyArray<string>();
 var value: string = lazyArray.array()["test"]; // used to be an error
 >value : string
 >lazyArray.array()["test"] : string
->lazyArray.array() : { [x: string]: string; }
->lazyArray.array : () => { [x: string]: string; }
+>lazyArray.array() : { [objectId: string]: string; }
+>lazyArray.array : () => { [objectId: string]: string; }
 >lazyArray : LazyArray<string>
->array : () => { [x: string]: string; }
+>array : () => { [objectId: string]: string; }
 

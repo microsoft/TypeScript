@@ -428,7 +428,7 @@ module TypeScript {
         public visitParenthesizedArrowFunctionExpression(node: ParenthesizedArrowFunctionExpressionSyntax): void {
             this.visitOptionalToken(node.asyncKeyword);
             visitNodeOrToken(this, node.callSignature);
-            this.visitToken(node.equalsGreaterThanToken);
+            this.visitOptionalToken(node.equalsGreaterThanToken);
             visitNodeOrToken(this, node.body);
         }
 
@@ -627,7 +627,7 @@ module TypeScript {
         public visitExternalModuleReference(node: ExternalModuleReferenceSyntax): void {
             this.visitToken(node.requireKeyword);
             this.visitToken(node.openParenToken);
-            this.visitToken(node.stringLiteral);
+            visitNodeOrToken(this, node.expression);
             this.visitToken(node.closeParenToken);
         }
 

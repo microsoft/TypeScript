@@ -423,7 +423,12 @@ module ts {
                     bindDeclaration(<Declaration>node, SymbolFlags.Signature, 0, /*isBlockScopeContainer*/ false);
                     break;
                 case SyntaxKind.Method:
-                    bindDeclaration(<Declaration>node, SymbolFlags.Method | ((<MethodDeclaration>node).questionToken ? SymbolFlags.Optional : 0), SymbolFlags.MethodExcludes, /*isBlockScopeContainer*/ true);
+                    // If this is an ObjectLiteralExpression method, then it sits in the same space
+                    // as other properties in the object literal.  So we use SymbolFlags.PropertyExcludes
+                    // so that it will conflict with any other object literal members with the same
+                    // name.
+                    bindDeclaration(<Declaration>node, SymbolFlags.Method | ((<MethodDeclaration>node).questionToken ? SymbolFlags.Optional : 0),
+                        isObjectLiteralMethod(node) ? SymbolFlags.PropertyExcludes : SymbolFlags.MethodExcludes, /*isBlockScopeContainer*/ true);
                     break;
                 case SyntaxKind.FunctionDeclaration:
                     bindDeclaration(<Declaration>node, SymbolFlags.Function, SymbolFlags.FunctionExcludes, /*isBlockScopeContainer*/ true);

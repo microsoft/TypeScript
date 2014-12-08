@@ -2,6 +2,7 @@
 /// <reference path="core.ts"/>
 /// <reference path="scanner.ts"/>
 /// <reference path="parser.ts"/>
+/// <reference path="binder.ts"/>
 
 module ts {
     interface EmitTextWriter {
@@ -2281,7 +2282,20 @@ module ts {
                 emit(node.expression);
                 write("]");
             }
-    
+
+            function emitMethod(node: MethodDeclaration) {
+                if (!isObjectLiteralMethod(node)) {
+                    return;
+                }
+                emitLeadingComments(node);
+                emit(node.name);
+                if (compilerOptions.target < ScriptTarget.ES6) {
+                    write(": function ");
+                }
+                emitSignatureAndBody(node);
+                emitTrailingComments(node);
+            }
+
             function emitPropertyAssignment(node: PropertyDeclaration) {
                 emitLeadingComments(node);
                 emit(node.name);
@@ -2290,18 +2304,9 @@ module ts {
                 emitTrailingComments(node);
             }
 
-            function emitDownlevelShorthandPropertyAssignment(node: ShorthandPropertyDeclaration) {
+            function emitShorthandPropertyAssignment(node: ShorthandPropertyAssignment) {
                 emitLeadingComments(node);
-                // Emit identifier as an identifier
                 emit(node.name);
-                write(": ");
-                // Even though this is stored as identifier treat it as an expression
-                // Short-hand, { x }, is equivalent of normal form { x: x }
-                emitExpressionIdentifier(node.name);
-                emitTrailingComments(node);
-            }
-
-            function emitShorthandPropertyAssignment(node: ShorthandPropertyDeclaration) {
                 // If short-hand property has a prefix, then regardless of the target version, we will emit it as normal property assignment. For example:
                 //  module m {
                 //      export var y;
@@ -2310,16 +2315,14 @@ module ts {
                 //      export var obj = { y };
                 //  }
                 //  The short-hand property in obj need to emit as such ... = { y : m.y } regardless of the TargetScript version
-                var prefix = resolver.getExpressionNamePrefix(node.name);
-                if (prefix) {
-                    emitDownlevelShorthandPropertyAssignment(node);
+                if (compilerOptions.target < ScriptTarget.ES6 || resolver.getExpressionNamePrefix(node.name)) {
+                    // Emit identifier as an identifier
+                    write(": ");
+                    // Even though this is stored as identifier treat it as an expression
+                    // Short-hand, { x }, is equivalent of normal form { x: x }
+                    emitExpressionIdentifier(node.name);
                 }
-                // If short-hand property has no prefix, emit it as short-hand.
-                else {
-                    emitLeadingComments(node);
-                    emit(node.name);
-                    emitTrailingComments(node);
-                }
+                emitTrailingComments(node);
             }
 
             function tryEmitConstantValue(node: PropertyAccessExpression | ElementAccessExpression): boolean {
@@ -2868,8 +2871,8 @@ module ts {
                         var p = properties[i];
                         if (p.kind === SyntaxKind.PropertyAssignment || p.kind === SyntaxKind.ShorthandPropertyAssignment) {
                             // TODO(andersh): Computed property support
-                            var propName = <Identifier>((<PropertyDeclaration>p).name);
-                            emitDestructuringAssignment((<PropertyDeclaration>p).initializer || propName, createPropertyAccess(value, propName));
+                            var propName = <Identifier>((<PropertyAssignment>p).name);
+                            emitDestructuringAssignment((<PropertyAssignment>p).initializer || propName, createPropertyAccess(value, propName));
                         }
                     }
                 }
@@ -3139,17 +3142,17 @@ module ts {
                 scopeEmitStart(node);
                 increaseIndent();
 
-                emitDetachedComments(node.body.kind === SyntaxKind.FunctionBlock ? (<Block>node.body).statements : node.body);
+                emitDetachedComments(node.body.kind === SyntaxKind.Block ? (<Block>node.body).statements : node.body);
 
                 var startIndex = 0;
-                if (node.body.kind === SyntaxKind.FunctionBlock) {
+                if (node.body.kind === SyntaxKind.Block) {
                     startIndex = emitDirectivePrologues((<Block>node.body).statements, /*startWithNewLine*/ true);
                 }
                 var outPos = writer.getTextPos();
                 emitCaptureThisForNodeIfNecessary(node);
                 emitDefaultValueAssignments(node);
                 emitRestParameter(node);
-                if (node.body.kind !== SyntaxKind.FunctionBlock && outPos === writer.getTextPos()) {
+                if (node.body.kind !== SyntaxKind.Block && outPos === writer.getTextPos()) {
                     decreaseIndent();
                     write(" ");
                     emitStart(node.body);
@@ -3164,7 +3167,7 @@ module ts {
                     emitEnd(node.body);
                 }
                 else {
-                    if (node.body.kind === SyntaxKind.FunctionBlock) {
+                    if (node.body.kind === SyntaxKind.Block) {
                         emitLinesStartingAt((<Block>node.body).statements, startIndex);
                     }
                     else {
@@ -3177,7 +3180,7 @@ module ts {
                     }
                     emitTempDeclarations(/*newLine*/ true);
                     writeLine();
-                    if (node.body.kind === SyntaxKind.FunctionBlock) {
+                    if (node.body.kind === SyntaxKind.Block) {
                         emitLeadingCommentsOfPosition((<Block>node.body).statements.end);
                         decreaseIndent();
                         emitToken(SyntaxKind.CloseBraceToken,(<Block>node.body).statements.end);
@@ -3812,6 +3815,8 @@ module ts {
                         return emitIdentifier(<Identifier>node);
                     case SyntaxKind.Parameter:
                         return emitParameter(<ParameterDeclaration>node);
+                    case SyntaxKind.Method:
+                        return emitMethod(<MethodDeclaration>node);
                     case SyntaxKind.GetAccessor:
                     case SyntaxKind.SetAccessor:
                         return emitAccessor(<AccessorDeclaration>node);
@@ -3849,6 +3854,8 @@ module ts {
                         return emitObjectLiteral(<ObjectLiteralExpression>node);
                     case SyntaxKind.PropertyAssignment:
                         return emitPropertyAssignment(<PropertyDeclaration>node);
+                    case SyntaxKind.ShorthandPropertyAssignment:
+                        return emitShorthandPropertyAssignment(<ShorthandPropertyAssignment>node);
                     case SyntaxKind.ComputedPropertyName:
                         return emitComputedPropertyName(<ComputedPropertyName>node);
                     case SyntaxKind.PropertyAccessExpression:
@@ -3888,7 +3895,6 @@ module ts {
                     case SyntaxKind.Block:
                     case SyntaxKind.TryBlock:
                     case SyntaxKind.FinallyBlock:
-                    case SyntaxKind.FunctionBlock:
                     case SyntaxKind.ModuleBlock:
                         return emitBlock(<Block>node);
                     case SyntaxKind.VariableStatement:
@@ -3943,23 +3949,6 @@ module ts {
                         return emitImportDeclaration(<ImportDeclaration>node);
                     case SyntaxKind.SourceFile:
                         return emitSourceFile(<SourceFile>node);
-                }
-
-                // Emit node which needs to be emitted differently depended on ScriptTarget
-                if (compilerOptions.target < ScriptTarget.ES6) {
-                    // Emit node down-level
-                    switch (node.kind) {
-                        case SyntaxKind.ShorthandPropertyAssignment:
-                            return emitDownlevelShorthandPropertyAssignment(<ShorthandPropertyDeclaration>node);
-                    }
-                }
-                else {
-                    // Emit node natively
-                    Debug.assert(compilerOptions.target >= ScriptTarget.ES6, "Invalid ScriptTarget. We should emit as ES6 or above");
-                    switch (node.kind) {
-                        case SyntaxKind.ShorthandPropertyAssignment:
-                            return emitShorthandPropertyAssignment(<ShorthandPropertyDeclaration>node);
-                    }
                 }
             }
 

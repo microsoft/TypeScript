@@ -1,4 +1,4 @@
-﻿declare type PropertyKey = string | number | Symbol;
+declare type PropertyKey = string | number | Symbol;
 
 interface Symbol {
     /** Returns a string representation of an object. */
@@ -211,7 +211,7 @@ interface NumberConstructor {
       * Converts a string to a floating-point number. 
       * @param string A string that contains a floating-point number. 
       */
-    parseFloat(string: string);
+    parseFloat(string: string): number;
 
     /**
       * Converts A string to an integer.
@@ -438,7 +438,7 @@ interface StringConstructor {
       * @param template A well-formed template string call site representation.
       * @param substitutions A set of substitution values.
       */
-    raw(template: TemplateStringsArray, ...substitutions: any[]);
+    raw(template: TemplateStringsArray, ...substitutions: any[]): string;
 }
 
 interface IteratorResult<T> {
@@ -472,8 +472,8 @@ declare var GeneratorFunction: GeneratorFunctionConstructor;
 
 interface Generator<T> extends Iterator<T> {
     next(value?: any): IteratorResult<T>;
-    throw (exception: any);
-    return (value: T);
+    throw (exception: any): IteratorResult<T>;
+    return (value: T): IteratorResult<T>;
     // [Symbol.toStringTag]: string;
 }
 
@@ -874,7 +874,7 @@ interface DataView {
 }
 
 interface DataViewConstructor {
-    new (buffer: ArrayBuffer, byteOffset?: number, byteLength?: number);
+    new (buffer: ArrayBuffer, byteOffset?: number, byteLength?: number): DataView;
 }
 declare var DataView: DataViewConstructor;
 
