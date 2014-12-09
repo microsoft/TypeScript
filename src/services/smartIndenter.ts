@@ -234,7 +234,8 @@ module ts.formatting {
                     case SyntaxKind.FunctionDeclaration:
                     case SyntaxKind.FunctionExpression:
                     case SyntaxKind.ArrowFunction:
-                    case SyntaxKind.Method:
+                    case SyntaxKind.MethodDeclaration:
+                    case SyntaxKind.MethodSignature:
                     case SyntaxKind.CallSignature:
                     case SyntaxKind.ConstructSignature:
                         var start = node.getStart(sourceFile);
@@ -358,7 +359,8 @@ module ts.formatting {
                 case SyntaxKind.IfStatement:
                 case SyntaxKind.FunctionDeclaration:
                 case SyntaxKind.FunctionExpression:
-                case SyntaxKind.Method:
+                case SyntaxKind.MethodDeclaration:
+                case SyntaxKind.MethodSignature:
                 case SyntaxKind.ArrowFunction:
                 case SyntaxKind.Constructor:
                 case SyntaxKind.GetAccessor:
@@ -414,7 +416,8 @@ module ts.formatting {
                     return nodeEndsWith(n, SyntaxKind.CloseParenToken, sourceFile);
                 case SyntaxKind.FunctionDeclaration:
                 case SyntaxKind.FunctionExpression:
-                case SyntaxKind.Method:
+                case SyntaxKind.MethodDeclaration:
+                case SyntaxKind.MethodSignature:
                 case SyntaxKind.ArrowFunction:
                     return !(<FunctionLikeDeclaration>n).body || isCompletedNode((<FunctionLikeDeclaration>n).body, sourceFile);
                 case SyntaxKind.ModuleDeclaration:

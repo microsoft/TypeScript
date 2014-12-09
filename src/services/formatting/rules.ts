@@ -458,7 +458,8 @@ module ts.formatting {
                 // equal in p = 0;
                 case SyntaxKind.Parameter:
                 case SyntaxKind.EnumMember:
-                case SyntaxKind.Property:
+                case SyntaxKind.PropertyDeclaration:
+                case SyntaxKind.PropertySignature:
                     return context.currentTokenSpan.kind === SyntaxKind.EqualsToken || context.nextTokenSpan.kind === SyntaxKind.EqualsToken;
                 // "in" keyword in for (var x in []) { }
                 case SyntaxKind.ForInStatement:
@@ -536,7 +537,8 @@ module ts.formatting {
         static IsFunctionDeclContext(context: FormattingContext): boolean {
             switch (context.contextNode.kind) {
                 case SyntaxKind.FunctionDeclaration:
-                case SyntaxKind.Method:
+                case SyntaxKind.MethodDeclaration:
+                case SyntaxKind.MethodSignature:
                 //case SyntaxKind.MemberFunctionDeclaration:
                 case SyntaxKind.GetAccessor:
                 case SyntaxKind.SetAccessor:
@@ -656,7 +658,8 @@ module ts.formatting {
                 case SyntaxKind.FunctionDeclaration:
                 case SyntaxKind.FunctionExpression:
                 case SyntaxKind.ArrowFunction:
-                case SyntaxKind.Method:
+                case SyntaxKind.MethodDeclaration:
+                case SyntaxKind.MethodSignature:
                 case SyntaxKind.CallSignature:
                 case SyntaxKind.ConstructSignature:
                 case SyntaxKind.CallExpression:
