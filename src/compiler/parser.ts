@@ -48,12 +48,6 @@ module ts {
         return node;
     }
 
-    interface ReferenceComments {
-        referencedFiles: FileReference[];
-        amdDependencies: string[];
-        amdModuleName: string;
-    }
-
     export function getSourceFileOfNode(node: Node): SourceFile {
         while (node && node.kind !== SyntaxKind.SourceFile) node = node.parent;
         return <SourceFile>node;
@@ -1007,7 +1001,6 @@ module ts {
     }
 
     export function createSourceFile(filename: string, sourceText: string, languageVersion: ScriptTarget, version: string, isOpen: boolean = false): SourceFile {
-        var token: SyntaxKind;
         var parsingContext: ParsingContext;
         var identifiers: Map<string> = {};
         var identifierCount = 0;
@@ -1016,8 +1009,7 @@ module ts {
 
         // Flags that dictate what parsing context we're in.  For example:
         // Whether or not we are in strict parsing mode.  All that changes in strict parsing mode is
-        // that some tokens that would be considered identifiers may be considered keywords.  When 
-        // rewinding, we need to store and restore this as the mode may have changed.
+        // that some tokens that would be considered identifiers may be considered keywords.
         //
         // When adding more parser context flags, consider which is the more common case that the 
         // flag will be in.  This should be hte 'false' state for that flag.  The reason for this is
@@ -1091,6 +1083,41 @@ module ts {
         // Note: any errors at the end of the file that do not precede a regular node, should get
         // attached to the EOF token.
         var parseErrorBeforeNextFinishedNode = false;
+        var sourceFile = <SourceFile>createRootNode(SyntaxKind.SourceFile, 0, sourceText.length,
+            fileExtensionIs(filename, ".d.ts") ? NodeFlags.DeclarationFile : 0);
+
+        sourceFile.getLineAndCharacterFromPosition = getLineAndCharacterFromSourcePosition;
+        sourceFile.getPositionFromLineAndCharacter = getPositionFromSourceLineAndCharacter;
+        sourceFile.getLineStarts = getLineStarts;
+        sourceFile.getSyntacticDiagnostics = getSyntacticDiagnostics;
+
+        sourceFile.filename = normalizePath(filename);
+        sourceFile.text = sourceText;
+
+        sourceFile.referenceDiagnostics = [];
+        sourceFile.parseDiagnostics = [];
+        sourceFile.grammarDiagnostics = [];
+        sourceFile.semanticDiagnostics = [];
+
+        processReferenceComments();
+
+        // Create and prime the scanner before parsing the source elements.
+        var scanner = createScanner(languageVersion, /*skipTrivia*/ true, sourceText, scanError);
+        var token = nextToken();
+
+        sourceFile.statements = parseList(ParsingContext.SourceElements, /*checkForStrictMode*/ true, parseSourceElement);
+        Debug.assert(token === SyntaxKind.EndOfFileToken);
+        sourceFile.endOfFileToken = parseTokenNode();
+
+        sourceFile.externalModuleIndicator = getExternalModuleIndicator();
+
+        sourceFile.nodeCount = nodeCount;
+        sourceFile.identifierCount = identifierCount;
+        sourceFile.version = version;
+        sourceFile.isOpen = isOpen;
+        sourceFile.languageVersion = languageVersion;
+        sourceFile.identifiers = identifiers;
+        return sourceFile;
 
         function setContextFlag(val: Boolean, flag: ParserContextFlags) {
             if (val) {
@@ -4338,7 +4365,7 @@ module ts {
                 : parseStatement();
         }
 
-        function processReferenceComments(): ReferenceComments {
+        function processReferenceComments(): void {
             var triviaScanner = createScanner(languageVersion, /*skipTrivia*/false, sourceText);
             var referencedFiles: FileReference[] = [];
             var amdDependencies: string[] = [];
@@ -4389,11 +4416,9 @@ module ts {
                 }
             }
 
-            return {
-                referencedFiles,
-                amdDependencies,
-                amdModuleName
-            };
+            sourceFile.referencedFiles = referencedFiles;
+            sourceFile.amdDependencies = amdDependencies;
+            sourceFile.amdModuleName = amdModuleName;
         }
 
         function getExternalModuleIndicator() {
@@ -4423,49 +4448,6 @@ module ts {
             Debug.assert(syntacticDiagnostics !== undefined);
             return syntacticDiagnostics;
         }
-
-        var rootNodeFlags: NodeFlags = 0;
-        if (fileExtensionIs(filename, ".d.ts")) {
-            rootNodeFlags = NodeFlags.DeclarationFile;
-        }
-
-        var sourceFile = <SourceFile>createRootNode(SyntaxKind.SourceFile, 0, sourceText.length, rootNodeFlags);
-
-        sourceFile.getLineAndCharacterFromPosition = getLineAndCharacterFromSourcePosition;
-        sourceFile.getPositionFromLineAndCharacter = getPositionFromSourceLineAndCharacter;
-        sourceFile.getLineStarts = getLineStarts;
-        sourceFile.getSyntacticDiagnostics = getSyntacticDiagnostics;
-
-        sourceFile.filename = normalizePath(filename);
-        sourceFile.text = sourceText;
-
-        sourceFile.referenceDiagnostics = [];
-        sourceFile.parseDiagnostics = [];
-        sourceFile.grammarDiagnostics = [];
-        sourceFile.semanticDiagnostics = [];
-
-        var referenceComments = processReferenceComments(); 
-        sourceFile.referencedFiles = referenceComments.referencedFiles;
-        sourceFile.amdDependencies = referenceComments.amdDependencies;
-        sourceFile.amdModuleName = referenceComments.amdModuleName;
-
-        // Create and prime the scanner before parsing the source elements.
-        var scanner = createScanner(languageVersion, /*skipTrivia*/ true, sourceText, scanError);
-        nextToken();
-
-        sourceFile.statements = parseList(ParsingContext.SourceElements, /*checkForStrictMode*/ true, parseSourceElement);
-        Debug.assert(token === SyntaxKind.EndOfFileToken);
-        sourceFile.endOfFileToken = parseTokenNode();
-
-        sourceFile.externalModuleIndicator = getExternalModuleIndicator();
-
-        sourceFile.nodeCount = nodeCount;
-        sourceFile.identifierCount = identifierCount;
-        sourceFile.version = version;
-        sourceFile.isOpen = isOpen;
-        sourceFile.languageVersion = languageVersion;
-        sourceFile.identifiers = identifiers;
-        return sourceFile;
     }
 
     function isLeftHandSideExpression(expr: Expression): boolean {
