@@ -227,7 +227,8 @@ module ts.NavigationBar {
                 case SyntaxKind.ConstructSignature:
                     return createItem(node, "new()", ts.ScriptElementKind.constructSignatureElement);
 
-                case SyntaxKind.Property:
+                case SyntaxKind.PropertyDeclaration:
+                case SyntaxKind.PropertySignature:
                     return createItem(node, getTextOfNode((<PropertyDeclaration>node).name), ts.ScriptElementKind.memberVariableElement);
 
                 case SyntaxKind.FunctionDeclaration:

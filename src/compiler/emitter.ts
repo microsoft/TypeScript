@@ -950,10 +950,10 @@ module ts {
             if (node.kind !== SyntaxKind.VariableDeclaration || resolver.isDeclarationVisible(node)) {
                 writeTextOfNode(currentSourceFile, node.name);
                 // If optional property emit ?
-                if (node.kind === SyntaxKind.Property && hasQuestionToken(node)) {
+                if ((node.kind === SyntaxKind.PropertyDeclaration || node.kind === SyntaxKind.PropertySignature) && hasQuestionToken(node)) {
                     write("?");
                 }
-                if (node.kind === SyntaxKind.Property && node.parent.kind === SyntaxKind.TypeLiteral) {
+                if ((node.kind === SyntaxKind.PropertyDeclaration || node.kind === SyntaxKind.PropertySignature) && node.parent.kind === SyntaxKind.TypeLiteral) {
                     emitTypeOfVariableDeclarationFromTypeLiteral(node);
                 }
                 else if (!(node.flags & NodeFlags.Private)) {
@@ -971,7 +971,7 @@ module ts {
                     Diagnostics.Exported_variable_0_has_or_is_using_private_name_1;
                 }
                 // This check is to ensure we don't report error on constructor parameter property as that error would be reported during parameter emit
-                else if (node.kind === SyntaxKind.Property) {
+                else if (node.kind === SyntaxKind.PropertyDeclaration || node.kind === SyntaxKind.PropertySignature) {
                     // TODO(jfreeman): Deal with computed properties in error reporting.
                     if (node.flags & NodeFlags.Static) {
                         diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
@@ -1363,7 +1363,8 @@ module ts {
                     return emitAccessorDeclaration(<AccessorDeclaration>node);
                 case SyntaxKind.VariableStatement:
                     return emitVariableStatement(<VariableStatement>node);
-                case SyntaxKind.Property:
+                case SyntaxKind.PropertyDeclaration:
+                case SyntaxKind.PropertySignature:
                     return emitPropertyDeclaration(<PropertyDeclaration>node);
                 case SyntaxKind.InterfaceDeclaration:
                     return emitInterfaceDeclaration(<InterfaceDeclaration>node);
@@ -2132,7 +2133,8 @@ module ts {
                 switch (parent.kind) {
                     case SyntaxKind.Parameter:
                     case SyntaxKind.VariableDeclaration:
-                    case SyntaxKind.Property:
+                    case SyntaxKind.PropertyDeclaration:
+                    case SyntaxKind.PropertySignature:
                     case SyntaxKind.PropertyAssignment:
                     case SyntaxKind.ShorthandPropertyAssignment:
                     case SyntaxKind.EnumMember:
@@ -2985,7 +2987,7 @@ module ts {
 
             function emitMemberAssignments(node: ClassDeclaration, staticFlag: NodeFlags) {
                 forEach(node.members, member => {
-                    if (member.kind === SyntaxKind.Property && (member.flags & NodeFlags.Static) === staticFlag && (<PropertyDeclaration>member).initializer) {
+                    if (member.kind === SyntaxKind.PropertyDeclaration && (member.flags & NodeFlags.Static) === staticFlag && (<PropertyDeclaration>member).initializer) {
                         writeLine();
                         emitLeadingComments(member);
                         emitStart(member);

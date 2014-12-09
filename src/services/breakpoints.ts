@@ -86,7 +86,8 @@ module ts.BreakpointResolver {
                         return spanInVariableDeclaration((<VariableStatement>node).declarations[0]);
 
                     case SyntaxKind.VariableDeclaration:
-                    case SyntaxKind.Property:
+                    case SyntaxKind.PropertyDeclaration:
+                    case SyntaxKind.PropertySignature:
                         return spanInVariableDeclaration(<VariableDeclaration>node);
 
                     case SyntaxKind.Parameter:

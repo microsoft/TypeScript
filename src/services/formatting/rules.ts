@@ -458,7 +458,8 @@ module ts.formatting {
                 // equal in p = 0;
                 case SyntaxKind.Parameter:
                 case SyntaxKind.EnumMember:
-                case SyntaxKind.Property:
+                case SyntaxKind.PropertyDeclaration:
+                case SyntaxKind.PropertySignature:
                     return context.currentTokenSpan.kind === SyntaxKind.EqualsToken || context.nextTokenSpan.kind === SyntaxKind.EqualsToken;
                 // "in" keyword in for (var x in []) { }
                 case SyntaxKind.ForInStatement:

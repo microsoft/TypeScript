@@ -361,7 +361,8 @@ module ts {
                             break loop;
                         }
                         break;
-                    case SyntaxKind.Property:
+                    case SyntaxKind.PropertyDeclaration:
+                    case SyntaxKind.PropertySignature:
                         // TypeScript 1.0 spec (April 2014): 8.4.1
                         // Initializer expressions for instance member variables are evaluated in the scope 
                         // of the class constructor body but are not permitted to reference parameters or 
@@ -1622,7 +1623,8 @@ module ts {
                         // Exported members/ambient module elements (exception import declaration) are visible if parent is visible
                         return isDeclarationVisible(<Declaration>parent);
 
-                    case SyntaxKind.Property:
+                    case SyntaxKind.PropertyDeclaration:
+                    case SyntaxKind.PropertySignature:
                     case SyntaxKind.GetAccessor:
                     case SyntaxKind.SetAccessor:
                     case SyntaxKind.MethodDeclaration:
@@ -1740,7 +1742,8 @@ module ts {
                     return;
                 }
                 switch (declaration.kind) {
-                    case SyntaxKind.Property:
+                    case SyntaxKind.PropertyDeclaration:
+                    case SyntaxKind.PropertySignature:
                         var diagnostic = Diagnostics.Member_0_implicitly_has_an_1_type;
                         break;
                     case SyntaxKind.Parameter:
@@ -4631,7 +4634,7 @@ module ts {
         function captureLexicalThis(node: Node, container: Node): void {
             var classNode = container.parent && container.parent.kind === SyntaxKind.ClassDeclaration ? container.parent : undefined;
             getNodeLinks(node).flags |= NodeCheckFlags.LexicalThis;
-            if (container.kind === SyntaxKind.Property || container.kind === SyntaxKind.Constructor) {
+            if (container.kind === SyntaxKind.PropertyDeclaration || container.kind === SyntaxKind.Constructor) {
                 getNodeLinks(classNode).flags |= NodeCheckFlags.CaptureThis;
             }
             else {
@@ -4666,7 +4669,8 @@ module ts {
                         // do not return here so in case if lexical this is captured - it will be reflected in flags on NodeLinks
                     }
                     break;
-                case SyntaxKind.Property:
+                case SyntaxKind.PropertyDeclaration:
+                case SyntaxKind.PropertySignature:
                     if (container.flags & NodeFlags.Static) {
                         error(node, Diagnostics.this_cannot_be_referenced_in_a_static_property_initializer);
                         // do not return here so in case if lexical this is captured - it will be reflected in flags on NodeLinks
@@ -4694,7 +4698,8 @@ module ts {
                     case SyntaxKind.FunctionDeclaration:
                     case SyntaxKind.FunctionExpression:
                     case SyntaxKind.ArrowFunction:
-                    case SyntaxKind.Property:
+                    case SyntaxKind.PropertyDeclaration:
+                    case SyntaxKind.PropertySignature:
                     case SyntaxKind.MethodDeclaration:
                     case SyntaxKind.MethodSignature:
                     case SyntaxKind.Constructor:
@@ -4765,7 +4770,8 @@ module ts {
                                 container.kind === SyntaxKind.MethodSignature ||
                                 container.kind === SyntaxKind.GetAccessor ||
                                 container.kind === SyntaxKind.SetAccessor ||
-                                container.kind === SyntaxKind.Property ||
+                                container.kind === SyntaxKind.PropertyDeclaration ||
+                                container.kind === SyntaxKind.PropertySignature ||
                                 container.kind === SyntaxKind.Constructor;
                         }
                     }                    
@@ -5010,7 +5016,8 @@ module ts {
             switch (parent.kind) {
                 case SyntaxKind.VariableDeclaration:
                 case SyntaxKind.Parameter:
-                case SyntaxKind.Property:
+                case SyntaxKind.PropertyDeclaration:
+                case SyntaxKind.PropertySignature:
                     return getContextualTypeForInitializerExpression(node);
                 case SyntaxKind.ArrowFunction:
                 case SyntaxKind.ReturnStatement:
@@ -5229,7 +5236,7 @@ module ts {
         // If a symbol is a synthesized symbol with no value declaration, we assume it is a property. Example of this are the synthesized
         // '.prototype' property as well as synthesized tuple index properties.
         function getDeclarationKindFromSymbol(s: Symbol) {
-            return s.valueDeclaration ? s.valueDeclaration.kind : SyntaxKind.Property;
+            return s.valueDeclaration ? s.valueDeclaration.kind : SyntaxKind.PropertyDeclaration;
         }
 
         function getDeclarationFlagsFromSymbol(s: Symbol) {
@@ -6952,7 +6959,7 @@ module ts {
             }
 
             function isInstancePropertyWithInitializer(n: Node): boolean {
-                return n.kind === SyntaxKind.Property &&
+                return n.kind === SyntaxKind.PropertyDeclaration &&
                     !(n.flags & NodeFlags.Static) &&
                     !!(<PropertyDeclaration>n).initializer;
             }
@@ -7569,7 +7576,8 @@ module ts {
                 return false;
             }
 
-            if (node.kind === SyntaxKind.Property ||
+            if (node.kind === SyntaxKind.PropertyDeclaration ||
+                node.kind === SyntaxKind.PropertySignature ||
                 node.kind === SyntaxKind.MethodDeclaration ||
                 node.kind === SyntaxKind.MethodSignature ||
                 node.kind === SyntaxKind.GetAccessor ||
@@ -8573,7 +8581,8 @@ module ts {
                     return checkTypeParameter(<TypeParameterDeclaration>node);
                 case SyntaxKind.Parameter:
                     return checkParameter(<ParameterDeclaration>node);
-                case SyntaxKind.Property:
+                case SyntaxKind.PropertyDeclaration:
+                case SyntaxKind.PropertySignature:
                     return checkPropertyDeclaration(<PropertyDeclaration>node);
                 case SyntaxKind.FunctionType:
                 case SyntaxKind.ConstructorType:
@@ -8689,7 +8698,8 @@ module ts {
                     checkFunctionExpressionBodies((<WithStatement>node).expression);
                     break;
                 case SyntaxKind.Parameter:
-                case SyntaxKind.Property:
+                case SyntaxKind.PropertyDeclaration:
+                case SyntaxKind.PropertySignature:
                 case SyntaxKind.ArrayLiteralExpression:
                 case SyntaxKind.ObjectLiteralExpression:
                 case SyntaxKind.PropertyAssignment:
@@ -8946,7 +8956,8 @@ module ts {
                     switch (parent.kind) {
                         case SyntaxKind.TypeParameter:
                             return node === (<TypeParameterDeclaration>parent).constraint;
-                        case SyntaxKind.Property:
+                        case SyntaxKind.PropertyDeclaration:
+                        case SyntaxKind.PropertySignature:
                         case SyntaxKind.Parameter:
                         case SyntaxKind.VariableDeclaration:
                             return node === (<VariableDeclaration>parent).type;

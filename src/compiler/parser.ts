@@ -272,7 +272,8 @@ module ts {
                     child((<ParameterDeclaration>node).questionToken) ||
                     child((<ParameterDeclaration>node).type) ||
                     child((<ParameterDeclaration>node).initializer);
-            case SyntaxKind.Property:
+            case SyntaxKind.PropertyDeclaration:
+            case SyntaxKind.PropertySignature:
             case SyntaxKind.PropertyAssignment:
             case SyntaxKind.ShorthandPropertyAssignment:
                 return children(node.modifiers) ||
@@ -554,7 +555,8 @@ module ts {
                 case SyntaxKind.FunctionDeclaration:
                 case SyntaxKind.FunctionExpression:
                 case SyntaxKind.ModuleDeclaration:
-                case SyntaxKind.Property:
+                case SyntaxKind.PropertyDeclaration:
+                case SyntaxKind.PropertySignature:
                 case SyntaxKind.MethodDeclaration:
                 case SyntaxKind.MethodSignature:
                 case SyntaxKind.Constructor:
@@ -574,7 +576,8 @@ module ts {
                 return undefined;
             }
             switch (node.kind) {
-                case SyntaxKind.Property:
+                case SyntaxKind.PropertyDeclaration:
+                case SyntaxKind.PropertySignature:
                 case SyntaxKind.MethodDeclaration:
                 case SyntaxKind.MethodSignature:
                 case SyntaxKind.Constructor:
@@ -641,7 +644,8 @@ module ts {
                 switch (parent.kind) {
                     case SyntaxKind.VariableDeclaration:
                     case SyntaxKind.Parameter:
-                    case SyntaxKind.Property:
+                    case SyntaxKind.PropertyDeclaration:
+                    case SyntaxKind.PropertySignature:
                     case SyntaxKind.EnumMember:
                     case SyntaxKind.PropertyAssignment:
                         return (<VariableDeclaration>parent).initializer === node;
@@ -703,7 +707,8 @@ module ts {
                     return (<MethodDeclaration>node).questionToken !== undefined;
                 case SyntaxKind.ShorthandPropertyAssignment:
                 case SyntaxKind.PropertyAssignment:
-                case SyntaxKind.Property:
+                case SyntaxKind.PropertyDeclaration:
+                case SyntaxKind.PropertySignature:
                     return (<PropertyDeclaration>node).questionToken !== undefined;
             }
         }
@@ -740,7 +745,8 @@ module ts {
             case SyntaxKind.TypeParameter:
             case SyntaxKind.Parameter:
             case SyntaxKind.VariableDeclaration:
-            case SyntaxKind.Property:
+            case SyntaxKind.PropertyDeclaration:
+            case SyntaxKind.PropertySignature:
             case SyntaxKind.PropertyAssignment:
             case SyntaxKind.ShorthandPropertyAssignment:
             case SyntaxKind.EnumMember:
@@ -2158,7 +2164,7 @@ module ts {
                 return finishNode(method);
             }
             else {
-                var property = <PropertyDeclaration>createNode(SyntaxKind.Property, fullStart);
+                var property = <PropertyDeclaration>createNode(SyntaxKind.PropertySignature, fullStart);
                 property.name = name;
                 property.questionToken = questionToken;
                 property.type = parseTypeAnnotation();
@@ -3857,7 +3863,7 @@ module ts {
                 return parseMethodDeclaration(fullStart, modifiers, asteriskToken, name, questionToken, /*requireBlock:*/ false);
             }
             else {
-                var property = <PropertyDeclaration>createNode(SyntaxKind.Property, fullStart);
+                var property = <PropertyDeclaration>createNode(SyntaxKind.PropertyDeclaration, fullStart);
                 setModifiers(property, modifiers);
                 property.name = name;
                 property.questionToken = questionToken;
@@ -4566,7 +4572,9 @@ module ts {
                 case SyntaxKind.Parameter:                      return checkParameter(<ParameterDeclaration>node);
                 case SyntaxKind.PostfixUnaryExpression:         return checkPostfixUnaryExpression(<PostfixUnaryExpression>node);
                 case SyntaxKind.PrefixUnaryExpression:          return checkPrefixUnaryExpression(<PrefixUnaryExpression>node);
-                case SyntaxKind.Property:                       return checkProperty(<PropertyDeclaration>node);
+                case SyntaxKind.PropertyDeclaration:
+                case SyntaxKind.PropertySignature:
+                    return checkProperty(<PropertyDeclaration>node);
                 case SyntaxKind.ReturnStatement:                return checkReturnStatement(<ReturnStatement>node);
                 case SyntaxKind.SetAccessor:                    return checkSetAccessor(<MethodDeclaration>node);
                 case SyntaxKind.SourceFile:                     return checkSourceFile(<SourceFile>node);
@@ -5228,7 +5236,8 @@ module ts {
                 case SyntaxKind.GetAccessor:
                 case SyntaxKind.SetAccessor:
                 case SyntaxKind.Constructor:
-                case SyntaxKind.Property:
+                case SyntaxKind.PropertyDeclaration:
+                case SyntaxKind.PropertySignature:
                 case SyntaxKind.MethodDeclaration:
                 case SyntaxKind.MethodSignature:
                 case SyntaxKind.IndexSignature:
