@@ -2455,6 +2455,14 @@ module ts {
                     // a generator, or in strict mode (or both)) and it started a yield expression.
                     return true;
                 default:
+                    // Error tolerance.  If we see the start of some binary operator, we consider
+                    // that the start of an expression.  That way we'll parse out a missing identifier,
+                    // give a good message about an identifier being missing, and then consume the
+                    // rest of the binary expression.
+                    if (isBinaryOperator()) {
+                        return true;
+                    }
+
                     return isIdentifier();
             }
         }
@@ -2841,7 +2849,7 @@ module ts {
                 // reScanGreaterToken so that we merge token sequences like > and = into >=
 
                 reScanGreaterToken();
-                var newPrecedence = getOperatorPrecedence();
+                var newPrecedence = getBinaryOperatorPrecedence();
 
                 // Check the precedence to see if we should "take" this operator
                 if (newPrecedence <= precedence) {
@@ -2860,7 +2868,15 @@ module ts {
             return leftOperand;
         }
 
-        function getOperatorPrecedence(): number {
+        function isBinaryOperator() {
+            if (inDisallowInContext() && token === SyntaxKind.InKeyword) {
+                return false;
+            }
+
+            return getBinaryOperatorPrecedence() > 0;
+        }
+
+        function getBinaryOperatorPrecedence(): number {
             switch (token) {
                 case SyntaxKind.BarBarToken:
                     return 1;
