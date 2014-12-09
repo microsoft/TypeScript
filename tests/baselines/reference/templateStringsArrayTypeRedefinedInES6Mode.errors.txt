@@ -1,4 +1,4 @@
-lib.d.ts(513,11): error TS2300: Duplicate identifier 'TemplateStringsArray'.
+lib.d.ts(515,11): error TS2300: Duplicate identifier 'TemplateStringsArray'.
 tests/cases/compiler/templateStringsArrayTypeRedefinedInES6Mode.ts(2,7): error TS2300: Duplicate identifier 'TemplateStringsArray'.
 tests/cases/compiler/templateStringsArrayTypeRedefinedInES6Mode.ts(8,3): error TS2345: Argument of type '{ [x: number]: undefined; }' is not assignable to parameter of type 'TemplateStringsArray'.
   Property 'raw' is missing in type '{ [x: number]: undefined; }'.
