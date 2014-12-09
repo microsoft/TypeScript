@@ -1012,7 +1012,7 @@ module ts {
             var symbol = resolveName(enclosingDeclaration, (<Identifier>firstIdentifier).text, meaning, /*nodeNotFoundErrorMessage*/ undefined, /*nameArg*/ undefined);
 
             // Verify if the symbol is accessible
-            return hasVisibleDeclarations(symbol) || <SymbolVisibilityResult>{
+            return (symbol && hasVisibleDeclarations(symbol)) || <SymbolVisibilityResult>{
                 accessibility: SymbolAccessibility.NotAccessible,
                 errorSymbolName: getTextOfNode(firstIdentifier),
                 errorNode: firstIdentifier
@@ -1307,6 +1307,17 @@ module ts {
                     buildSymbolDisplay(type.symbol, writer, enclosingDeclaration, SymbolFlags.Value);
                 }
 
+                function getIndexerParameterName(type: ObjectType, indexKind: IndexKind, fallbackName: string): string {
+                    var declaration = <SignatureDeclaration>getIndexDeclarationOfSymbol(type.symbol, indexKind);
+                    if (!declaration) {
+                        // declaration might not be found if indexer was added from the contextual type.
+                        // in this case use fallback name
+                        return fallbackName;
+                    }
+                    Debug.assert(declaration.parameters.length !== 0);
+                    return declarationNameToString(declaration.parameters[0].name);
+                }
+
                 function writeLiteralType(type: ObjectType, flags: TypeFormatFlags) {
                     var resolved = resolveObjectOrUnionTypeMembers(type);
                     if (!resolved.properties.length && !resolved.stringIndexType && !resolved.numberIndexType) {
@@ -1359,7 +1370,7 @@ module ts {
                     if (resolved.stringIndexType) {
                         // [x: string]: 
                         writePunctuation(writer, SyntaxKind.OpenBracketToken);
-                        writer.writeParameter("x");
+                        writer.writeParameter(getIndexerParameterName(resolved, IndexKind.String, /*fallbackName*/"x"));
                         writePunctuation(writer, SyntaxKind.ColonToken);
                         writeSpace(writer);
                         writeKeyword(writer, SyntaxKind.StringKeyword);
@@ -1373,7 +1384,7 @@ module ts {
                     if (resolved.numberIndexType) {
                         // [x: number]: 
                         writePunctuation(writer, SyntaxKind.OpenBracketToken);
-                        writer.writeParameter("x");
+                        writer.writeParameter(getIndexerParameterName(resolved, IndexKind.Number, /*fallbackName*/"x"));
                         writePunctuation(writer, SyntaxKind.ColonToken);
                         writeSpace(writer);
                         writeKeyword(writer, SyntaxKind.NumberKeyword);

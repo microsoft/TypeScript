@@ -97,7 +97,7 @@ var x8: Array<Base> = [d1, d2];
 >d2 : Derived2
 
 var x9: { [n: number]: Base; } = [d1, d2];
->x9 : { [x: number]: Base; }
+>x9 : { [n: number]: Base; }
 >n : number
 >Base : Base
 >[d1, d2] : (Derived1 | Derived2)[]
@@ -210,7 +210,7 @@ class x20 { member: Array<Base> = [d1, d2] }
 
 class x21 { member: { [n: number]: Base; } = [d1, d2] }
 >x21 : x21
->member : { [x: number]: Base; }
+>member : { [n: number]: Base; }
 >n : number
 >Base : Base
 >[d1, d2] : (Derived1 | Derived2)[]
@@ -326,7 +326,7 @@ class x32 { private member: Array<Base> = [d1, d2] }
 
 class x33 { private member: { [n: number]: Base; } = [d1, d2] }
 >x33 : x33
->member : { [x: number]: Base; }
+>member : { [n: number]: Base; }
 >n : number
 >Base : Base
 >[d1, d2] : (Derived1 | Derived2)[]
@@ -442,7 +442,7 @@ class x44 { public member: Array<Base> = [d1, d2] }
 
 class x45 { public member: { [n: number]: Base; } = [d1, d2] }
 >x45 : x45
->member : { [x: number]: Base; }
+>member : { [n: number]: Base; }
 >n : number
 >Base : Base
 >[d1, d2] : (Derived1 | Derived2)[]
@@ -558,7 +558,7 @@ class x56 { static member: Array<Base> = [d1, d2] }
 
 class x57 { static member: { [n: number]: Base; } = [d1, d2] }
 >x57 : x57
->member : { [x: number]: Base; }
+>member : { [n: number]: Base; }
 >n : number
 >Base : Base
 >[d1, d2] : (Derived1 | Derived2)[]
@@ -674,7 +674,7 @@ class x68 { private static member: Array<Base> = [d1, d2] }
 
 class x69 { private static member: { [n: number]: Base; } = [d1, d2] }
 >x69 : x69
->member : { [x: number]: Base; }
+>member : { [n: number]: Base; }
 >n : number
 >Base : Base
 >[d1, d2] : (Derived1 | Derived2)[]
@@ -790,7 +790,7 @@ class x80 { public static member: Array<Base> = [d1, d2] }
 
 class x81 { public static member: { [n: number]: Base; } = [d1, d2] }
 >x81 : x81
->member : { [x: number]: Base; }
+>member : { [n: number]: Base; }
 >n : number
 >Base : Base
 >[d1, d2] : (Derived1 | Derived2)[]
@@ -906,7 +906,7 @@ class x92 { constructor(parm: Array<Base> = [d1, d2]) { } }
 
 class x93 { constructor(parm: { [n: number]: Base; } = [d1, d2]) { } }
 >x93 : x93
->parm : { [x: number]: Base; }
+>parm : { [n: number]: Base; }
 >n : number
 >Base : Base
 >[d1, d2] : (Derived1 | Derived2)[]
@@ -1022,7 +1022,7 @@ class x104 { constructor(public parm: Array<Base> = [d1, d2]) { } }
 
 class x105 { constructor(public parm: { [n: number]: Base; } = [d1, d2]) { } }
 >x105 : x105
->parm : { [x: number]: Base; }
+>parm : { [n: number]: Base; }
 >n : number
 >Base : Base
 >[d1, d2] : (Derived1 | Derived2)[]
@@ -1138,7 +1138,7 @@ class x116 { constructor(private parm: Array<Base> = [d1, d2]) { } }
 
 class x117 { constructor(private parm: { [n: number]: Base; } = [d1, d2]) { } }
 >x117 : x117
->parm : { [x: number]: Base; }
+>parm : { [n: number]: Base; }
 >n : number
 >Base : Base
 >[d1, d2] : (Derived1 | Derived2)[]
@@ -1253,8 +1253,8 @@ function x128(parm: Array<Base> = [d1, d2]) { }
 >d2 : Derived2
 
 function x129(parm: { [n: number]: Base; } = [d1, d2]) { }
->x129 : (parm?: { [x: number]: Base; }) => void
->parm : { [x: number]: Base; }
+>x129 : (parm?: { [n: number]: Base; }) => void
+>parm : { [n: number]: Base; }
 >n : number
 >Base : Base
 >[d1, d2] : (Derived1 | Derived2)[]
@@ -1361,7 +1361,7 @@ function x140(): Array<Base> { return [d1, d2]; }
 >d2 : Derived2
 
 function x141(): { [n: number]: Base; } { return [d1, d2]; }
->x141 : () => { [x: number]: Base; }
+>x141 : () => { [n: number]: Base; }
 >n : number
 >Base : Base
 >[d1, d2] : (Derived1 | Derived2)[]
@@ -1497,7 +1497,7 @@ function x152(): Array<Base> { return [d1, d2]; return [d1, d2]; }
 >d2 : Derived2
 
 function x153(): { [n: number]: Base; } { return [d1, d2]; return [d1, d2]; }
->x153 : () => { [x: number]: Base; }
+>x153 : () => { [n: number]: Base; }
 >n : number
 >Base : Base
 >[d1, d2] : (Derived1 | Derived2)[]
@@ -1628,7 +1628,7 @@ var x164: () => Array<Base> = () => { return [d1, d2]; };
 >d2 : Derived2
 
 var x165: () => { [n: number]: Base; } = () => { return [d1, d2]; };
->x165 : () => { [x: number]: Base; }
+>x165 : () => { [n: number]: Base; }
 >n : number
 >Base : Base
 >() => { return [d1, d2]; } : () => (Derived1 | Derived2)[]
@@ -1744,7 +1744,7 @@ var x176: () => Array<Base> = function() { return [d1, d2]; };
 >d2 : Derived2
 
 var x177: () => { [n: number]: Base; } = function() { return [d1, d2]; };
->x177 : () => { [x: number]: Base; }
+>x177 : () => { [n: number]: Base; }
 >n : number
 >Base : Base
 >function() { return [d1, d2]; } : () => (Derived1 | Derived2)[]
@@ -1861,7 +1861,7 @@ module x188 { var t: Array<Base> = [d1, d2]; }
 
 module x189 { var t: { [n: number]: Base; } = [d1, d2]; }
 >x189 : typeof x189
->t : { [x: number]: Base; }
+>t : { [n: number]: Base; }
 >n : number
 >Base : Base
 >[d1, d2] : (Derived1 | Derived2)[]
@@ -1977,7 +1977,7 @@ module x200 { export var t: Array<Base> = [d1, d2]; }
 
 module x201 { export var t: { [n: number]: Base; } = [d1, d2]; }
 >x201 : typeof x201
->t : { [x: number]: Base; }
+>t : { [n: number]: Base; }
 >n : number
 >Base : Base
 >[d1, d2] : (Derived1 | Derived2)[]
@@ -2074,8 +2074,8 @@ var x212 = <Array<Base>>[d1, d2];
 >d2 : Derived2
 
 var x213 = <{ [n: number]: Base; }>[d1, d2];
->x213 : { [x: number]: Base; }
-><{ [n: number]: Base; }>[d1, d2] : { [x: number]: Base; }
+>x213 : { [n: number]: Base; }
+><{ [n: number]: Base; }>[d1, d2] : { [n: number]: Base; }
 >n : number
 >Base : Base
 >[d1, d2] : (Derived1 | Derived2)[]
@@ -2180,10 +2180,10 @@ var x222 = (<Array<Base>>undefined) || [d1, d2];
 >d2 : Derived2
 
 var x223 = (<{ [n: number]: Base; }>undefined) || [d1, d2];
->x223 : { [x: number]: Base; }
->(<{ [n: number]: Base; }>undefined) || [d1, d2] : { [x: number]: Base; }
->(<{ [n: number]: Base; }>undefined) : { [x: number]: Base; }
-><{ [n: number]: Base; }>undefined : { [x: number]: Base; }
+>x223 : { [n: number]: Base; }
+>(<{ [n: number]: Base; }>undefined) || [d1, d2] : { [n: number]: Base; }
+>(<{ [n: number]: Base; }>undefined) : { [n: number]: Base; }
+><{ [n: number]: Base; }>undefined : { [n: number]: Base; }
 >n : number
 >Base : Base
 >undefined : undefined
@@ -2287,11 +2287,11 @@ var x232: Array<Base>; x232 = [d1, d2];
 >d2 : Derived2
 
 var x233: { [n: number]: Base; }; x233 = [d1, d2];
->x233 : { [x: number]: Base; }
+>x233 : { [n: number]: Base; }
 >n : number
 >Base : Base
 >x233 = [d1, d2] : (Derived1 | Derived2)[]
->x233 : { [x: number]: Base; }
+>x233 : { [n: number]: Base; }
 >[d1, d2] : (Derived1 | Derived2)[]
 >d1 : Derived1
 >d2 : Derived2
@@ -2423,8 +2423,8 @@ var x244: { n: Array<Base>; } = { n: [d1, d2] };
 >d2 : Derived2
 
 var x245: { n: { [n: number]: Base; }; } = { n: [d1, d2] };
->x245 : { n: { [x: number]: Base; }; }
->n : { [x: number]: Base; }
+>x245 : { n: { [n: number]: Base; }; }
+>n : { [n: number]: Base; }
 >n : number
 >Base : Base
 >{ n: [d1, d2] } : { n: (Derived1 | Derived2)[]; }
@@ -2519,7 +2519,7 @@ var x256: Array<Base>[] = [[d1, d2]];
 >d2 : Derived2
 
 var x257: { [n: number]: Base; }[] = [[d1, d2]];
->x257 : { [x: number]: Base; }[]
+>x257 : { [n: number]: Base; }[]
 >n : number
 >Base : Base
 >[[d1, d2]] : (Derived1 | Derived2)[][]
@@ -2613,7 +2613,7 @@ var x266: Array<Base> = [d1, d2] || undefined;
 >undefined : undefined
 
 var x267: { [n: number]: Base; } = [d1, d2] || undefined;
->x267 : { [x: number]: Base; }
+>x267 : { [n: number]: Base; }
 >n : number
 >Base : Base
 >[d1, d2] || undefined : (Derived1 | Derived2)[]
@@ -2696,7 +2696,7 @@ var x274: Array<Base> = undefined || [d1, d2];
 >d2 : Derived2
 
 var x275: { [n: number]: Base; } = undefined || [d1, d2];
->x275 : { [x: number]: Base; }
+>x275 : { [n: number]: Base; }
 >n : number
 >Base : Base
 >undefined || [d1, d2] : (Derived1 | Derived2)[]
@@ -2797,7 +2797,7 @@ var x282: Array<Base> = [d1, d2] || [d1, d2];
 >d2 : Derived2
 
 var x283: { [n: number]: Base; } = [d1, d2] || [d1, d2];
->x283 : { [x: number]: Base; }
+>x283 : { [n: number]: Base; }
 >n : number
 >Base : Base
 >[d1, d2] || [d1, d2] : (Derived1 | Derived2)[]
@@ -2930,7 +2930,7 @@ var x292: Array<Base> = true ? [d1, d2] : [d1, d2];
 >d2 : Derived2
 
 var x293: { [n: number]: Base; } = true ? [d1, d2] : [d1, d2];
->x293 : { [x: number]: Base; }
+>x293 : { [n: number]: Base; }
 >n : number
 >Base : Base
 >true ? [d1, d2] : [d1, d2] : (Derived1 | Derived2)[]
@@ -3073,7 +3073,7 @@ var x304: Array<Base> = true ? undefined : [d1, d2];
 >d2 : Derived2
 
 var x305: { [n: number]: Base; } = true ? undefined : [d1, d2];
->x305 : { [x: number]: Base; }
+>x305 : { [n: number]: Base; }
 >n : number
 >Base : Base
 >true ? undefined : [d1, d2] : (Derived1 | Derived2)[]
@@ -3201,7 +3201,7 @@ var x316: Array<Base> = true ? [d1, d2] : undefined;
 >undefined : undefined
 
 var x317: { [n: number]: Base; } = true ? [d1, d2] : undefined;
->x317 : { [x: number]: Base; }
+>x317 : { [n: number]: Base; }
 >n : number
 >Base : Base
 >true ? [d1, d2] : undefined : (Derived1 | Derived2)[]
@@ -3337,12 +3337,12 @@ function x328(n: Array<Base>) { }; x328([d1, d2]);
 >d2 : Derived2
 
 function x329(n: { [n: number]: Base; }) { }; x329([d1, d2]);
->x329 : (n: { [x: number]: Base; }) => void
->n : { [x: number]: Base; }
+>x329 : (n: { [n: number]: Base; }) => void
+>n : { [n: number]: Base; }
 >n : number
 >Base : Base
 >x329([d1, d2]) : void
->x329 : (n: { [x: number]: Base; }) => void
+>x329 : (n: { [n: number]: Base; }) => void
 >[d1, d2] : (Derived1 | Derived2)[]
 >d1 : Derived1
 >d2 : Derived2
@@ -3493,14 +3493,14 @@ var x340 = (n: Array<Base>) => n; x340([d1, d2]);
 >d2 : Derived2
 
 var x341 = (n: { [n: number]: Base; }) => n; x341([d1, d2]);
->x341 : (n: { [x: number]: Base; }) => { [x: number]: Base; }
->(n: { [n: number]: Base; }) => n : (n: { [x: number]: Base; }) => { [x: number]: Base; }
->n : { [x: number]: Base; }
+>x341 : (n: { [n: number]: Base; }) => { [n: number]: Base; }
+>(n: { [n: number]: Base; }) => n : (n: { [n: number]: Base; }) => { [n: number]: Base; }
+>n : { [n: number]: Base; }
 >n : number
 >Base : Base
->n : { [x: number]: Base; }
->x341([d1, d2]) : { [x: number]: Base; }
->x341 : (n: { [x: number]: Base; }) => { [x: number]: Base; }
+>n : { [n: number]: Base; }
+>x341([d1, d2]) : { [n: number]: Base; }
+>x341 : (n: { [n: number]: Base; }) => { [n: number]: Base; }
 >[d1, d2] : (Derived1 | Derived2)[]
 >d1 : Derived1
 >d2 : Derived2
@@ -3649,13 +3649,13 @@ var x352 = function(n: Array<Base>) { }; x352([d1, d2]);
 >d2 : Derived2
 
 var x353 = function(n: { [n: number]: Base; }) { }; x353([d1, d2]);
->x353 : (n: { [x: number]: Base; }) => void
->function(n: { [n: number]: Base; }) { } : (n: { [x: number]: Base; }) => void
->n : { [x: number]: Base; }
+>x353 : (n: { [n: number]: Base; }) => void
+>function(n: { [n: number]: Base; }) { } : (n: { [n: number]: Base; }) => void
+>n : { [n: number]: Base; }
 >n : number
 >Base : Base
 >x353([d1, d2]) : void
->x353 : (n: { [x: number]: Base; }) => void
+>x353 : (n: { [n: number]: Base; }) => void
 >[d1, d2] : (Derived1 | Derived2)[]
 >d1 : Derived1
 >d2 : Derived2

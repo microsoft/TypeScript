@@ -2,6 +2,7 @@
 /// <reference path="core.ts"/>
 /// <reference path="scanner.ts"/>
 /// <reference path="parser.ts"/>
+/// <reference path="binder.ts"/>
 
 module ts {
     interface EmitTextWriter {

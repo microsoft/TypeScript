@@ -1964,17 +1964,23 @@ function generateConstructorFunction(definition) {
     }
     result += ") {\r\n";
     result += "        if (data) { this.__data = data; }\r\n";
+    result += "        this.parent = undefined";
     if (definition.children.length) {
         result += "        ";
         for (var i = 0; i < definition.children.length; i++) {
+<<<<<<< HEAD
             if (i) {
                 result += ", ";
             }
+=======
+            result += ",\r\n";
+>>>>>>> 691a8a7... Remove restriction that you cannot reuse nodes/tokens during incremental parsing while doing speculatively operations.
             var child = definition.children[i];
             result += "this." + child.name + " = " + getSafeName(child);
         }
         result += ";\r\n";
     }
+<<<<<<< HEAD
     if (definition.children.length > 0) {
         result += "        ";
         for (var i = 0; i < definition.children.length; i++) {
@@ -1991,6 +1997,9 @@ function generateConstructorFunction(definition) {
         }
         result += ";\r\n";
     }
+=======
+    result += ";\r\n";
+>>>>>>> 691a8a7... Remove restriction that you cannot reuse nodes/tokens during incremental parsing while doing speculatively operations.
     result += "    };\r\n";
     result += "    " + definition.name + ".prototype.kind = SyntaxKind." + getNameWithoutSuffix(definition) + ";\r\n";
     result += "    " + definition.name + ".prototype.childCount = " + definition.children.length + ";\r\n";

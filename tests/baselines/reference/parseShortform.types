@@ -3,7 +3,7 @@ interface I {
 >I : I
 
     w: {
->w : { (): boolean; [x: string]: { x: any; y: any; }; [x: number]: { x: any; y: any; }; z: I; }
+>w : { (): boolean; [s: string]: { x: any; y: any; }; [n: number]: { x: any; y: any; }; z: I; }
 
         z: I;
 >z : I

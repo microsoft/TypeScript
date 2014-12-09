@@ -21,15 +21,50 @@ class Test262BaselineRunner extends RunnerBase {
         return Test262BaselineRunner.basePath + "/" + filename;
     }
 
+    private static checkInvariants(node: ts.Node, parent: ts.Node): void {
+        if (node) {
+            if (node.pos < 0) {
+                throw new Error("node.pos < 0");
+            }
+            if (node.end < 0) {
+                throw new Error("node.end < 0");
+            }
+            if (node.end < node.pos) {
+                throw new Error("node.end < node.pos");
+            }
+            if (node.parent !== parent) {
+                throw new Error("node.parent !== parent");
+            }
+            ts.forEachChild(node, child => {
+                Test262BaselineRunner.checkInvariants(child, node);
+            });
+
+            var childNodesAndArrays: any[] = [];
+            ts.forEachChild(node, child => { childNodesAndArrays.push(child) }, array => { childNodesAndArrays.push(array) });
+
+            for (var childName in node) {
+                var child = (<any>node)[childName];
+                if (Test262BaselineRunner.isNodeOrArray(child)) {
+                    if (childNodesAndArrays.indexOf(child) < 0) {
+                        throw new Error("Child when forEach'ing over node. " + (<any>ts).SyntaxKind[node.kind] + "-" + childName);
+                    }
+                }
+            }
+        }
+    }
+
     private static serializeSourceFile(file: ts.SourceFile): string {
         function getKindName(k: number): string {
             return (<any>ts).SyntaxKind[k]
         }
 
         function getFlagName(flags: any, f: number): any {
-            if (f === 0) return 0;
+            if (f === 0) {
+                return 0;
+            }
+
             var result = "";
-            ts.forEach(Object.getOwnPropertyNames(flags),(v: any) => {
+            ts.forEach(Object.getOwnPropertyNames(flags), (v: any) => {
                 if (isFinite(v)) {
                     v = +v;
                     if (f === +v) {
@@ -51,47 +86,62 @@ class Test262BaselineRunner extends RunnerBase {
         function getParserContextFlagName(f: number) { return getFlagName((<any>ts).ParserContextFlags, f); }
 
         function serializeNode(n: ts.Node): any {
-            var o = { kind: getKindName(n.kind) };
-            ts.forEach(Object.getOwnPropertyNames(n), i => {
-                switch (i) {
+            var o: any = { kind: getKindName(n.kind) };
+
+            ts.forEach(Object.getOwnPropertyNames(n), propertyName => {
+                switch (propertyName) {
                     case "parent":
                     case "symbol":
                     case "locals":
                     case "localSymbol":
                     case "kind":
                     case "semanticDiagnostics":
-                    case "parseDiagnostics":
-                    case "grammarDiagnostics":
-                        return undefined;
+                    case "id":
+                    case "nodeCount":
+                    case "symbolCount":
+                    case "identifierCount":
+                        // Blacklist of items we never put in the baseline file.
+                        break;
 
                     case "flags":
-                        (<any>o)[i] = getNodeFlagName(n.flags);
-                        return undefined;
+                        // Print out flags with their enum names.
+                        o[propertyName] = getNodeFlagName(n.flags);
+                        break;
 
                     case "parserContextFlags":
-                        (<any>o)[i] = getParserContextFlagName(n.parserContextFlags);
-                        return undefined;
+                        o[propertyName] = getParserContextFlagName(n.parserContextFlags);
+                        break;
 
                     case "nextContainer":
                         if (n.nextContainer) {
-                            (<any>o)[i] = { kind: n.nextContainer.kind, pos: n.nextContainer.pos, end: n.nextContainer.end };
-                            return undefined;
+                            o[propertyName] = { kind: n.nextContainer.kind, pos: n.nextContainer.pos, end: n.nextContainer.end };
                         }
+                        break;
 
                     case "text":
-                        if (n.kind === ts.SyntaxKind.SourceFile) return undefined;
+                        // Include 'text' field for identifiers/literals, but not for source files.
+                        if (n.kind !== ts.SyntaxKind.SourceFile) {
+                            o[propertyName] = (<any>n)[propertyName];
+                        }
+                        break;
 
                     default:
-                        (<any>o)[i] = ((<any>n)[i]);
+                        o[propertyName] = (<any>n)[propertyName];
                 }
+
                 return undefined;
             });
+
             return o;
         }
 
-        return JSON.stringify(file,(k, v) => {
-            return (v && typeof v.pos === "number") ? serializeNode(v) : v;
+        return JSON.stringify(file, (k, v) => {
+            return Test262BaselineRunner.isNodeOrArray(v) ? serializeNode(v) : v;
         }, "    ");
+    }
+
+    private static isNodeOrArray(a: any): boolean {
+        return a !== undefined && typeof a.pos === "number";
     }
 
     private runTest(filePath: string) {
@@ -148,6 +198,11 @@ class Test262BaselineRunner extends RunnerBase {
 
                     return Harness.Compiler.getErrorBaseline(testState.inputFiles, errors);
                 }, false, Test262BaselineRunner.baselineOptions);
+            });
+
+            it('satisfies invariants', () => {
+                var sourceFile = testState.checker.getProgram().getSourceFile(Test262BaselineRunner.getTestFilePath(testState.filename));
+                Test262BaselineRunner.checkInvariants(sourceFile, /*parent:*/ undefined);
             });
 
             it('has the expected AST',() => {

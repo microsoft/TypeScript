@@ -33,7 +33,7 @@ var arr: Contextual[] = [e]; // Ellement[]
 >e : Ellement
 
 var obj: { [s: string]: Contextual } = { s: e }; // { s: Ellement; [s: string]: Ellement }
->obj : { [x: string]: Contextual; }
+>obj : { [s: string]: Contextual; }
 >s : string
 >Contextual : Contextual
 >{ s: e } : { [x: string]: Ellement; s: Ellement; }
