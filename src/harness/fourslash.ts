@@ -2248,7 +2248,7 @@ module FourSlash {
             ts.ScriptTarget.Latest,
             ts.sys.useCaseSensitiveFileNames);
         // TODO (drosen): We need to enforce checking on these tests.
-        var program = ts.createProgram([Harness.Compiler.fourslashFilename, fileName], { out: "fourslashTestOutput.js", noResolve: true }, host);
+        var program = ts.createProgram([Harness.Compiler.fourslashFilename, fileName], { out: "fourslashTestOutput.js", noResolve: true, target: ts.ScriptTarget.ES3 }, host);
         var checker = ts.createTypeChecker(program, /*fullTypeCheckMode*/ true);
 
         var errors = program.getDiagnostics().concat(checker.getDiagnostics());
