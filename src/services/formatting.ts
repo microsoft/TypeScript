@@ -247,6 +247,41 @@ module ts.formatting {
         return precedingToken ? precedingToken.end : enclosingNode.pos;
     }
 
+    /*
+     * For cases like 
+     * if (a ||
+     *     b ||$
+     *     c) {...}
+     * If we hit Enter at $ we want line '    b ||' to be indented.
+     * Formatting will be applied to the last two lines.
+     * Node that fully encloses these lines is binary expression 'a ||...'.
+     * Initial indentation for this node will be 0.
+     * Binary expressions don't introduce new indentation scopes, however it is possible
+     * that some parent node on the same line does - like if statement in this case.
+     * Note that we are considering parents only from the same line with initial node - 
+     * if parent is on the different line - its delta was already contributed 
+     * to the initial indentation.
+     */
+    function getOwnOrInheritedDelta(n: Node, options: FormatCodeOptions, sourceFile: SourceFile): number {
+        var previousLine = Constants.Unknown;
+        var childKind = SyntaxKind.Unknown;
+        while (n) {
+            var line = sourceFile.getLineAndCharacterFromPosition(n.getStart(sourceFile)).line;
+            if (previousLine !== Constants.Unknown && line !== previousLine) {
+                break;
+            }
+
+            if (SmartIndenter.shouldIndentChildNode(n.kind, childKind)) {
+                return options.IndentSize;
+            }
+
+            previousLine = line;
+            childKind = n.kind;
+            n = n.parent;
+        }
+        return 0;
+    }
+
     function formatSpan(originalRange: TextRange,
         sourceFile: SourceFile,
         options: FormatCodeOptions,
@@ -276,7 +311,7 @@ module ts.formatting {
 
         if (formattingScanner.isOnToken()) {
             var startLine = sourceFile.getLineAndCharacterFromPosition(enclosingNode.getStart(sourceFile)).line;
-            var delta = SmartIndenter.shouldIndentChildNode(enclosingNode.kind, SyntaxKind.Unknown) ? options.IndentSize : 0;
+            var delta = getOwnOrInheritedDelta(enclosingNode, options, sourceFile);
             processNode(enclosingNode, enclosingNode, startLine, initialIndentation, delta);
         }
 
