@@ -27,7 +27,7 @@ module ts {
                 node.parserContextFlags |= ParserContextFlags.ContainsError;
             }
 
-            // Also mark that we've propogated the child information to this node.  This way we can
+            // Also mark that we've propagated the child information to this node.  This way we can
             // always consult the bit directly on this node without needing to check its children
             // again.
             node.parserContextFlags |= ParserContextFlags.HasPropagatedChildContainsErrorFlag;

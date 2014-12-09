@@ -128,9 +128,16 @@ module ts {
             name: "preserveConstEnums",
             type: "boolean",
             description: Diagnostics.Do_not_erase_const_enum_declarations_in_generated_code
-        }
+        },
+        {
+            name: "suppress",
+            type: { "implicitanyindex": ErrorGroup.ImplicitAnyIndex},
+            description: Diagnostics.Suppress_a_set_of_compiler_checks,
+            paramType: Diagnostics.ERRORGROUP,
+            error: Diagnostics.Argument_for_suppress_option_can_only_be_implicitAnyIndex
+        },
     ];
-
+    
     var shortOptionNames: Map<string> = {};
     var optionNameMap: Map<CommandLineOption> = {};
 

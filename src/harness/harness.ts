@@ -777,6 +777,16 @@ module Harness {
                         case 'preserveconstenums':
                             options.preserveConstEnums = setting.value === 'true';
                             break;
+
+                        case 'suppress':
+                            if (typeof setting.value === 'string' && setting.value.toLowerCase() === 'implicitanyindex') {
+                                options.suppress = ts.ErrorGroup.ImplicitAnyIndex;
+                            }
+                            else {
+                                throw new Error('Unkown value for suppress ' + setting.value);
+                            }
+                            break;
+
                         default:
                             throw new Error('Unsupported compiler setting ' + setting.flag);
                     }
@@ -1162,7 +1172,7 @@ module Harness {
         var optionRegex = /^[\/]{2}\s*@(\w+)\s*:\s*(\S*)/gm;  // multiple matches on multiple lines
 
         // List of allowed metadata names
-        var fileMetadataNames = ["filename", "comments", "declaration", "module", "nolib", "sourcemap", "target", "out", "outdir", "noemitonerror","noimplicitany", "noresolve", "newline", "newlines", "emitbom", "errortruncation", "usecasesensitivefilenames", "preserveconstenums"];
+        var fileMetadataNames = ["filename", "comments", "declaration", "module", "nolib", "sourcemap", "target", "out", "outdir", "noemitonerror", "noimplicitany", "noresolve", "newline", "newlines", "emitbom", "errortruncation", "usecasesensitivefilenames", "preserveconstenums", "suppress"];
 
         function extractCompilerSettings(content: string): CompilerSetting[] {
 

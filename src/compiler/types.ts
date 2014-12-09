@@ -1381,6 +1381,7 @@ module ts {
         watch?: boolean;
         preserveConstEnums?: boolean;
         allowNonTsExtensions?: boolean;
+        suppress?: ErrorGroup;
         [option: string]: string | number | boolean;
     }
 
@@ -1555,7 +1556,11 @@ module ts {
         tab = 0x09,                   // \t
         verticalTab = 0x0B,           // \v
     }
-    
+
+    export const enum ErrorGroup {
+        ImplicitAnyIndex = 0x01
+    }
+
     export interface CancellationToken {
         isCancellationRequested(): boolean;
     }

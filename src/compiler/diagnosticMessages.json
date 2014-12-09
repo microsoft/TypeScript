@@ -1591,6 +1591,10 @@
         "category": "Message",
         "code": 6038
     },
+    "ERRORGROUP": {
+        "category": "Message",
+        "code": 6039
+    },
     "Compilation complete. Watching for file changes.": {
         "category": "Message",
         "code": 6042
@@ -1643,6 +1647,15 @@
         "category": "Error",
         "code": 6054
     },
+    "Suppress a set of compiler checks.": {
+        "category": "Message",
+        "code": 6055
+    },
+    "Argument for '--suppress' option can only be 'implicitAnyIndex'.": {
+        "category": "Error",
+        "code": 6056
+    },
+
 
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
