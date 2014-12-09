@@ -42,7 +42,19 @@ class Test262BaselineRunner extends RunnerBase {
             var childNodesAndArrays: any[] = [];
             ts.forEachChild(node, child => { childNodesAndArrays.push(child) }, array => { childNodesAndArrays.push(array) });
 
+            /*
+                    parent?: Node;                // Parent node (initialized by binding)
+        symbol?: Symbol;              // Symbol declared by node (initialized by binding)
+        locals?: SymbolTable;         // Locals associated with node (initialized by binding)
+        nextContainer?: Node;         // Next container in declaration order (initialized by binding)
+        localSymbol?: Symbol;         // Local symbol declared by node (initialized by binding only for exported nodes)
+        modifiers?: ModifiersArray;           // Array of modifiers
+            */
+
             for (var childName in node) {
+                if (childName === "parent" || childName === "nextContainer" || childName === "modifiers") {
+                    continue;
+                }
                 var child = (<any>node)[childName];
                 if (Test262BaselineRunner.isNodeOrArray(child)) {
                     if (childNodesAndArrays.indexOf(child) < 0) {
