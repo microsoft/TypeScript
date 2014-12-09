@@ -48,12 +48,6 @@ module ts {
         return node;
     }
 
-    interface ReferenceComments {
-        referencedFiles: FileReference[];
-        amdDependencies: string[];
-        amdModuleName: string;
-    }
-
     export function getSourceFileOfNode(node: Node): SourceFile {
         while (node && node.kind !== SyntaxKind.SourceFile) node = node.parent;
         return <SourceFile>node;
