@@ -43,6 +43,9 @@ class Test262BaselineRunner extends RunnerBase {
             ts.forEachChild(node, child => { childNodesAndArrays.push(child) }, array => { childNodesAndArrays.push(array) });
 
             for (var childName in node) {
+                if (childName === "parent" || childName === "nextContainer" || childName === "modifiers") {
+                    continue;
+                }
                 var child = (<any>node)[childName];
                 if (Test262BaselineRunner.isNodeOrArray(child)) {
                     if (childNodesAndArrays.indexOf(child) < 0) {
@@ -84,6 +87,19 @@ class Test262BaselineRunner extends RunnerBase {
 
         function getNodeFlagName(f: number) { return getFlagName((<any>ts).NodeFlags, f); }
         function getParserContextFlagName(f: number) { return getFlagName((<any>ts).ParserContextFlags, f); }
+        function convertDiagnostics(diagnostics: ts.Diagnostic[]) {
+            return diagnostics.map(convertDiagnostic);
+        }
+
+        function convertDiagnostic(diagnostic: ts.Diagnostic): any {
+            return {
+                start: diagnostic.start,
+                length: diagnostic.length,
+                messageText: diagnostic.messageText,
+                category: (<any>ts).DiagnosticCategory[diagnostic.category],
+                code: diagnostic.code
+            };
+        }
 
         function serializeNode(n: ts.Node): any {
             var o: any = { kind: getKindName(n.kind) };
@@ -110,6 +126,12 @@ class Test262BaselineRunner extends RunnerBase {
 
                     case "parserContextFlags":
                         o[propertyName] = getParserContextFlagName(n.parserContextFlags);
+                        break;
+
+                    case "referenceDiagnostics":
+                    case "parseDiagnostics":
+                    case "grammarDiagnostics":
+                        o[propertyName] = convertDiagnostics((<any>n)[propertyName]);
                         break;
 
                     case "nextContainer":
