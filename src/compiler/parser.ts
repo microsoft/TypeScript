@@ -44,12 +44,6 @@ module ts {
         return new (getNodeConstructor(kind))();
     }
 
-    interface ReferenceComments {
-        referencedFiles: FileReference[];
-        amdDependencies: string[];
-        amdModuleName: string;
-    }
-
     export function getSourceFileOfNode(node: Node): SourceFile {
         while (node && node.kind !== SyntaxKind.SourceFile) node = node.parent;
         return <SourceFile>node;
@@ -263,7 +257,8 @@ module ts {
                 return child((<TypeParameterDeclaration>node).name) ||
                     child((<TypeParameterDeclaration>node).constraint);
             case SyntaxKind.Parameter:
-            case SyntaxKind.Property:
+            case SyntaxKind.PropertyDeclaration:
+            case SyntaxKind.PropertySignature:
             case SyntaxKind.PropertyAssignment:
             case SyntaxKind.ShorthandPropertyAssignment:
             case SyntaxKind.VariableDeclaration:
@@ -284,7 +279,8 @@ module ts {
                     children((<SignatureDeclaration>node).typeParameters) ||
                     children((<SignatureDeclaration>node).parameters) ||
                     child((<SignatureDeclaration>node).type);
-            case SyntaxKind.Method:
+            case SyntaxKind.MethodDeclaration:
+            case SyntaxKind.MethodSignature:
             case SyntaxKind.Constructor:
             case SyntaxKind.GetAccessor:
             case SyntaxKind.SetAccessor:
@@ -292,6 +288,7 @@ module ts {
             case SyntaxKind.FunctionDeclaration:
             case SyntaxKind.ArrowFunction:
                 return children(node.modifiers) ||
+                    child((<FunctionLikeDeclaration>node).asteriskToken) ||
                     child((<FunctionLikeDeclaration>node).name) ||
                     child((<FunctionLikeDeclaration>node).questionToken) ||
                     children((<FunctionLikeDeclaration>node).typeParameters) ||
@@ -347,6 +344,9 @@ module ts {
                 return child((<VoidExpression>node).expression);
             case SyntaxKind.PrefixUnaryExpression:
                 return child((<PrefixUnaryExpression>node).operand);
+            case SyntaxKind.YieldExpression:
+                return child((<YieldExpression>node).asteriskToken) ||
+                    child((<YieldExpression>node).expression);
             case SyntaxKind.PostfixUnaryExpression:
                 return child((<PostfixUnaryExpression>node).operand);
             case SyntaxKind.BinaryExpression:
@@ -499,8 +499,12 @@ module ts {
     export function isAnyFunction(node: Node): boolean {
         if (node) {
             switch (node.kind) {
-                case SyntaxKind.Method:
                 case SyntaxKind.Constructor:
+                case SyntaxKind.FunctionExpression:
+                case SyntaxKind.FunctionDeclaration:
+                case SyntaxKind.ArrowFunction:
+                case SyntaxKind.MethodDeclaration:
+                case SyntaxKind.MethodSignature:
                 case SyntaxKind.GetAccessor:
                 case SyntaxKind.SetAccessor:
                 case SyntaxKind.CallSignature:
@@ -523,7 +527,7 @@ module ts {
     }
 
     export function isObjectLiteralMethod(node: Node) {
-        return node && node.kind === SyntaxKind.Method && node.parent.kind === SyntaxKind.ObjectLiteralExpression;
+        return node && node.kind === SyntaxKind.MethodDeclaration && node.parent.kind === SyntaxKind.ObjectLiteralExpression;
     }
 
     export function getContainingFunction(node: Node): FunctionLikeDeclaration {
@@ -550,8 +554,10 @@ module ts {
                 case SyntaxKind.FunctionDeclaration:
                 case SyntaxKind.FunctionExpression:
                 case SyntaxKind.ModuleDeclaration:
-                case SyntaxKind.Property:
-                case SyntaxKind.Method:
+                case SyntaxKind.PropertyDeclaration:
+                case SyntaxKind.PropertySignature:
+                case SyntaxKind.MethodDeclaration:
+                case SyntaxKind.MethodSignature:
                 case SyntaxKind.Constructor:
                 case SyntaxKind.GetAccessor:
                 case SyntaxKind.SetAccessor:
@@ -569,8 +575,10 @@ module ts {
                 return undefined;
             }
             switch (node.kind) {
-                case SyntaxKind.Property:
-                case SyntaxKind.Method:
+                case SyntaxKind.PropertyDeclaration:
+                case SyntaxKind.PropertySignature:
+                case SyntaxKind.MethodDeclaration:
+                case SyntaxKind.MethodSignature:
                 case SyntaxKind.Constructor:
                 case SyntaxKind.GetAccessor:
                 case SyntaxKind.SetAccessor:
@@ -635,7 +643,8 @@ module ts {
                 switch (parent.kind) {
                     case SyntaxKind.VariableDeclaration:
                     case SyntaxKind.Parameter:
-                    case SyntaxKind.Property:
+                    case SyntaxKind.PropertyDeclaration:
+                    case SyntaxKind.PropertySignature:
                     case SyntaxKind.EnumMember:
                     case SyntaxKind.PropertyAssignment:
                     case SyntaxKind.BindingElement:
@@ -693,11 +702,13 @@ module ts {
             switch (node.kind) {
                 case SyntaxKind.Parameter:
                     return (<ParameterDeclaration>node).questionToken !== undefined;
-                case SyntaxKind.Method:
+                case SyntaxKind.MethodDeclaration:
+                case SyntaxKind.MethodSignature:
                     return (<MethodDeclaration>node).questionToken !== undefined;
                 case SyntaxKind.ShorthandPropertyAssignment:
                 case SyntaxKind.PropertyAssignment:
-                case SyntaxKind.Property:
+                case SyntaxKind.PropertyDeclaration:
+                case SyntaxKind.PropertySignature:
                     return (<PropertyDeclaration>node).questionToken !== undefined;
             }
         }
@@ -739,11 +750,13 @@ module ts {
             case SyntaxKind.Parameter:
             case SyntaxKind.VariableDeclaration:
             case SyntaxKind.BindingElement:
-            case SyntaxKind.Property:
+            case SyntaxKind.PropertyDeclaration:
+            case SyntaxKind.PropertySignature:
             case SyntaxKind.PropertyAssignment:
             case SyntaxKind.ShorthandPropertyAssignment:
             case SyntaxKind.EnumMember:
-            case SyntaxKind.Method:
+            case SyntaxKind.MethodDeclaration:
+            case SyntaxKind.MethodSignature:
             case SyntaxKind.FunctionDeclaration:
             case SyntaxKind.GetAccessor:
             case SyntaxKind.SetAccessor:
@@ -1003,7 +1016,6 @@ module ts {
     }
 
     export function createSourceFile(filename: string, sourceText: string, languageVersion: ScriptTarget, version: string, isOpen: boolean = false): SourceFile {
-        var token: SyntaxKind;
         var parsingContext: ParsingContext;
         var identifiers: Map<string> = {};
         var identifierCount = 0;
@@ -1012,8 +1024,7 @@ module ts {
 
         // Flags that dictate what parsing context we're in.  For example:
         // Whether or not we are in strict parsing mode.  All that changes in strict parsing mode is
-        // that some tokens that would be considered identifiers may be considered keywords.  When 
-        // rewinding, we need to store and restore this as the mode may have changed.
+        // that some tokens that would be considered identifiers may be considered keywords.
         //
         // When adding more parser context flags, consider which is the more common case that the 
         // flag will be in.  This should be hte 'false' state for that flag.  The reason for this is
@@ -1087,6 +1098,44 @@ module ts {
         // Note: any errors at the end of the file that do not precede a regular node, should get
         // attached to the EOF token.
         var parseErrorBeforeNextFinishedNode = false;
+
+        var sourceFile = <SourceFile>createNode(SyntaxKind.SourceFile, 0);
+        if (fileExtensionIs(filename, ".d.ts")) {
+            sourceFile.flags = NodeFlags.DeclarationFile;
+        }
+        sourceFile.end = sourceText.length;
+        sourceFile.filename = normalizePath(filename);
+        sourceFile.text = sourceText;
+
+        sourceFile.getLineAndCharacterFromPosition = getLineAndCharacterFromSourcePosition;
+        sourceFile.getPositionFromLineAndCharacter = getPositionFromSourceLineAndCharacter;
+        sourceFile.getLineStarts = getLineStarts;
+        sourceFile.getSyntacticDiagnostics = getSyntacticDiagnostics;
+
+        sourceFile.referenceDiagnostics = [];
+        sourceFile.parseDiagnostics = [];
+        sourceFile.grammarDiagnostics = [];
+        sourceFile.semanticDiagnostics = [];
+
+        processReferenceComments();
+
+        // Create and prime the scanner before parsing the source elements.
+        var scanner = createScanner(languageVersion, /*skipTrivia*/ true, sourceText, scanError);
+        var token = nextToken();
+
+        sourceFile.statements = parseList(ParsingContext.SourceElements, /*checkForStrictMode*/ true, parseSourceElement);
+        Debug.assert(token === SyntaxKind.EndOfFileToken);
+        sourceFile.endOfFileToken = parseTokenNode();
+
+        sourceFile.externalModuleIndicator = getExternalModuleIndicator();
+
+        sourceFile.nodeCount = nodeCount;
+        sourceFile.identifierCount = identifierCount;
+        sourceFile.version = version;
+        sourceFile.isOpen = isOpen;
+        sourceFile.languageVersion = languageVersion;
+        sourceFile.identifiers = identifiers;
+        return sourceFile;
 
         function setContextFlag(val: Boolean, flag: ParserContextFlags) {
             if (val) {
@@ -1346,15 +1395,17 @@ module ts {
             return token === SyntaxKind.CloseBraceToken || token === SyntaxKind.EndOfFileToken || scanner.hasPrecedingLineBreak();
         }
 
-        function parseSemicolon(diagnosticMessage?: DiagnosticMessage): void {
+        function parseSemicolon(diagnosticMessage?: DiagnosticMessage): boolean {
             if (canParseSemicolon()) {
                 if (token === SyntaxKind.SemicolonToken) {
                     // consume the semicolon if it was explicitly provided.
                     nextToken();
                 }
+
+                return true;
             }
             else {
-                parseExpected(SyntaxKind.SemicolonToken, diagnosticMessage);
+                return parseExpected(SyntaxKind.SemicolonToken, diagnosticMessage);
             }
         }
 
@@ -2063,13 +2114,27 @@ module ts {
             return requireCompleteParameterList ? undefined : createMissingList<ParameterDeclaration>();
         }
 
+        function parseTypeMemberSemicolon() {
+            // Try to parse out an explicit or implicit (ASI) semicolon for a type member.  If we
+            // don't have one, then an appropriate error will be reported.
+            if (parseSemicolon()) {
+                return;
+            }
+
+            // If we don't have a semicolon, then the user may have written a comma instead 
+            // accidently (pretty easy to do since commas are so prevalent as list separators). So
+            // just consume the comma and keep going.  Note: we'll have already reported the error
+            // about the missing semicolon above.
+            parseOptional(SyntaxKind.CommaToken);
+        }
+
         function parseSignatureMember(kind: SyntaxKind): SignatureDeclaration {
             var node = <SignatureDeclaration>createNode(kind);
             if (kind === SyntaxKind.ConstructSignature) {
                 parseExpected(SyntaxKind.NewKeyword);
             }
             fillSignature(SyntaxKind.ColonToken, /*yieldAndGeneratorParameterContext:*/ false, /*requireCompleteParameterList:*/ false, node);
-            parseSemicolon();
+            parseTypeMemberSemicolon();
             return finishNode(node);
         }
 
@@ -2141,33 +2206,32 @@ module ts {
             setModifiers(node, modifiers);
             node.parameters = parseBracketedList(ParsingContext.Parameters, parseParameter, SyntaxKind.OpenBracketToken, SyntaxKind.CloseBracketToken);
             node.type = parseTypeAnnotation();
-            parseSemicolon();
+            parseTypeMemberSemicolon();
             return finishNode(node)
         }
 
-        function parsePropertyOrMethod(): Declaration {
+        function parsePropertyOrMethodSignature(): Declaration {
             var fullStart = scanner.getStartPos();
             var name = parsePropertyName();
             var questionToken = parseOptionalToken(SyntaxKind.QuestionToken);
 
             if (token === SyntaxKind.OpenParenToken || token === SyntaxKind.LessThanToken) {
-                var method = <MethodDeclaration>createNode(SyntaxKind.Method, fullStart);
+                var method = <MethodDeclaration>createNode(SyntaxKind.MethodSignature, fullStart);
                 method.name = name;
                 method.questionToken = questionToken;
 
                 // Method signatues don't exist in expression contexts.  So they have neither
                 // [Yield] nor [GeneratorParameter]
                 fillSignature(SyntaxKind.ColonToken, /*yieldAndGeneratorParameterContext:*/ false, /*requireCompleteParameterList:*/ false, method);
-
-                parseSemicolon();
+                parseTypeMemberSemicolon();
                 return finishNode(method);
             }
             else {
-                var property = <PropertyDeclaration>createNode(SyntaxKind.Property, fullStart);
+                var property = <PropertyDeclaration>createNode(SyntaxKind.PropertySignature, fullStart);
                 property.name = name;
                 property.questionToken = questionToken;
                 property.type = parseTypeAnnotation();
-                parseSemicolon();
+                parseTypeMemberSemicolon();
                 return finishNode(property);
             }
         }
@@ -2199,7 +2263,7 @@ module ts {
                     return parseSignatureMember(SyntaxKind.CallSignature);
                 case SyntaxKind.OpenBracketToken:
                     // Indexer or computed property
-                    return isIndexSignature() ? parseIndexSignatureDeclaration(scanner.getStartPos(), /*modifiers:*/ undefined) : parsePropertyOrMethod();
+                    return isIndexSignature() ? parseIndexSignatureDeclaration(scanner.getStartPos(), /*modifiers:*/ undefined) : parsePropertyOrMethodSignature();
                 case SyntaxKind.NewKeyword:
                     if (lookAhead(isStartOfConstructSignature)) {
                         return parseSignatureMember(SyntaxKind.ConstructSignature);
@@ -2207,10 +2271,10 @@ module ts {
                     // fall through.
                 case SyntaxKind.StringLiteral:
                 case SyntaxKind.NumericLiteral:
-                    return parsePropertyOrMethod();
+                    return parsePropertyOrMethodSignature();
                 default:
                     if (isIdentifierOrKeyword()) {
-                        return parsePropertyOrMethod();
+                        return parsePropertyOrMethodSignature();
                     }
             }
         }
@@ -2451,6 +2515,14 @@ module ts {
                     // a generator, or in strict mode (or both)) and it started a yield expression.
                     return true;
                 default:
+                    // Error tolerance.  If we see the start of some binary operator, we consider
+                    // that the start of an expression.  That way we'll parse out a missing identifier,
+                    // give a good message about an identifier being missing, and then consume the
+                    // rest of the binary expression.
+                    if (isBinaryOperator()) {
+                        return true;
+                    }
+
                     return isIdentifier();
             }
         }
@@ -2837,7 +2909,7 @@ module ts {
                 // reScanGreaterToken so that we merge token sequences like > and = into >=
 
                 reScanGreaterToken();
-                var newPrecedence = getOperatorPrecedence();
+                var newPrecedence = getBinaryOperatorPrecedence();
 
                 // Check the precedence to see if we should "take" this operator
                 if (newPrecedence <= precedence) {
@@ -2856,7 +2928,15 @@ module ts {
             return leftOperand;
         }
 
-        function getOperatorPrecedence(): number {
+        function isBinaryOperator() {
+            if (inDisallowInContext() && token === SyntaxKind.InKeyword) {
+                return false;
+            }
+
+            return getBinaryOperatorPrecedence() > 0;
+        }
+
+        function getBinaryOperatorPrecedence(): number {
             switch (token) {
                 case SyntaxKind.BarBarToken:
                     return 1;
@@ -3902,7 +3982,7 @@ module ts {
         }
 
         function parseMethodDeclaration(fullStart: number, modifiers: ModifiersArray, asteriskToken: Node, name: DeclarationName, questionToken: Node, requireBlock: boolean): MethodDeclaration {
-            var method = <MethodDeclaration>createNode(SyntaxKind.Method, fullStart);
+            var method = <MethodDeclaration>createNode(SyntaxKind.MethodDeclaration, fullStart);
             setModifiers(method, modifiers);
             method.asteriskToken = asteriskToken;
             method.name = name;
@@ -3923,7 +4003,7 @@ module ts {
                 return parseMethodDeclaration(fullStart, modifiers, asteriskToken, name, questionToken, /*requireBlock:*/ false);
             }
             else {
-                var property = <PropertyDeclaration>createNode(SyntaxKind.Property, fullStart);
+                var property = <PropertyDeclaration>createNode(SyntaxKind.PropertyDeclaration, fullStart);
                 setModifiers(property, modifiers);
                 property.name = name;
                 property.questionToken = questionToken;
@@ -4367,7 +4447,7 @@ module ts {
                 : parseStatement();
         }
 
-        function processReferenceComments(): ReferenceComments {
+        function processReferenceComments(): void {
             var triviaScanner = createScanner(languageVersion, /*skipTrivia*/false, sourceText);
             var referencedFiles: FileReference[] = [];
             var amdDependencies: string[] = [];
@@ -4418,11 +4498,9 @@ module ts {
                 }
             }
 
-            return {
-                referencedFiles,
-                amdDependencies,
-                amdModuleName
-            };
+            sourceFile.referencedFiles = referencedFiles;
+            sourceFile.amdDependencies = amdDependencies;
+            sourceFile.amdModuleName = amdModuleName;
         }
 
         function getExternalModuleIndicator() {
@@ -4452,49 +4530,6 @@ module ts {
             Debug.assert(syntacticDiagnostics !== undefined);
             return syntacticDiagnostics;
         }
-
-
-        var scanner = createScanner(languageVersion, /*skipTrivia*/ true, sourceText, scanError);
-        var sourceFile = <SourceFile>createNode(SyntaxKind.SourceFile);
-
-        if (fileExtensionIs(filename, ".d.ts")) {
-            sourceFile.flags = NodeFlags.DeclarationFile;
-        }
-        sourceFile.end = sourceText.length;
-        sourceFile.filename = normalizePath(filename);
-        sourceFile.text = sourceText;
-
-        sourceFile.getLineAndCharacterFromPosition = getLineAndCharacterFromSourcePosition;
-        sourceFile.getPositionFromLineAndCharacter = getPositionFromSourceLineAndCharacter;
-        sourceFile.getLineStarts = getLineStarts;
-        sourceFile.getSyntacticDiagnostics = getSyntacticDiagnostics;
-
-        sourceFile.referenceDiagnostics = [];
-        sourceFile.parseDiagnostics = [];
-        sourceFile.grammarDiagnostics = [];
-        sourceFile.semanticDiagnostics = [];
-
-        var referenceComments = processReferenceComments(); 
-        sourceFile.referencedFiles = referenceComments.referencedFiles;
-        sourceFile.amdDependencies = referenceComments.amdDependencies;
-        sourceFile.amdModuleName = referenceComments.amdModuleName;
-
-        // Prime the scanner before parsing the source elements
-        nextToken();
-
-        sourceFile.statements = parseList(ParsingContext.SourceElements, /*checkForStrictMode*/ true, parseSourceElement);
-        Debug.assert(token === SyntaxKind.EndOfFileToken);
-        sourceFile.endOfFileToken = parseTokenNode();
-
-        sourceFile.externalModuleIndicator = getExternalModuleIndicator();
-
-        sourceFile.nodeCount = nodeCount;
-        sourceFile.identifierCount = identifierCount;
-        sourceFile.version = version;
-        sourceFile.isOpen = isOpen;
-        sourceFile.languageVersion = languageVersion;
-        sourceFile.identifiers = identifiers;
-        return sourceFile;
     }
 
     function isLeftHandSideExpression(expr: Expression): boolean {
@@ -4624,14 +4659,18 @@ module ts {
                 case SyntaxKind.InterfaceDeclaration:           return checkInterfaceDeclaration(<InterfaceDeclaration>node);
                 case SyntaxKind.LabeledStatement:               return checkLabeledStatement(<LabeledStatement>node);
                 case SyntaxKind.PropertyAssignment:             return checkPropertyAssignment(<PropertyAssignment>node);
-                case SyntaxKind.Method:                         return checkMethod(<MethodDeclaration>node);
+                case SyntaxKind.MethodDeclaration:
+                case SyntaxKind.MethodSignature:
+                    return checkMethod(<MethodDeclaration>node);
                 case SyntaxKind.ModuleDeclaration:              return checkModuleDeclaration(<ModuleDeclaration>node);
                 case SyntaxKind.ObjectLiteralExpression:        return checkObjectLiteralExpression(<ObjectLiteralExpression>node);
                 case SyntaxKind.NumericLiteral:                 return checkNumericLiteral(<LiteralExpression>node);
                 case SyntaxKind.Parameter:                      return checkParameter(<ParameterDeclaration>node);
                 case SyntaxKind.PostfixUnaryExpression:         return checkPostfixUnaryExpression(<PostfixUnaryExpression>node);
                 case SyntaxKind.PrefixUnaryExpression:          return checkPrefixUnaryExpression(<PrefixUnaryExpression>node);
-                case SyntaxKind.Property:                       return checkProperty(<PropertyDeclaration>node);
+                case SyntaxKind.PropertyDeclaration:
+                case SyntaxKind.PropertySignature:
+                    return checkProperty(<PropertyDeclaration>node);
                 case SyntaxKind.ReturnStatement:                return checkReturnStatement(<ReturnStatement>node);
                 case SyntaxKind.SetAccessor:                    return checkSetAccessor(<MethodDeclaration>node);
                 case SyntaxKind.SourceFile:                     return checkSourceFile(<SourceFile>node);
@@ -5239,7 +5278,7 @@ module ts {
                 var currentKind: number;
                 if (prop.kind === SyntaxKind.PropertyAssignment ||
                     prop.kind === SyntaxKind.ShorthandPropertyAssignment ||
-                    prop.kind === SyntaxKind.Method) {
+                    prop.kind === SyntaxKind.MethodDeclaration) {
                     currentKind = Property;
                 }
                 else if (prop.kind === SyntaxKind.GetAccessor) {
@@ -5293,8 +5332,10 @@ module ts {
                 case SyntaxKind.GetAccessor:
                 case SyntaxKind.SetAccessor:
                 case SyntaxKind.Constructor:
-                case SyntaxKind.Property:
-                case SyntaxKind.Method:
+                case SyntaxKind.PropertyDeclaration:
+                case SyntaxKind.PropertySignature:
+                case SyntaxKind.MethodDeclaration:
+                case SyntaxKind.MethodSignature:
                 case SyntaxKind.IndexSignature:
                 case SyntaxKind.ClassDeclaration:
                 case SyntaxKind.InterfaceDeclaration:

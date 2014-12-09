@@ -147,8 +147,10 @@ module ts {
         TypeParameter,
         Parameter,
         // TypeMember
-        Property,
-        Method,
+        PropertySignature,
+        PropertyDeclaration,
+        MethodSignature,
+        MethodDeclaration,
         Constructor,
         GetAccessor,
         SetAccessor,
