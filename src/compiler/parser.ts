@@ -293,6 +293,7 @@ module ts {
             case SyntaxKind.FunctionDeclaration:
             case SyntaxKind.ArrowFunction:
                 return children(node.modifiers) ||
+                    child((<FunctionLikeDeclaration>node).asteriskToken) ||
                     child((<FunctionLikeDeclaration>node).name) ||
                     child((<FunctionLikeDeclaration>node).questionToken) ||
                     children((<FunctionLikeDeclaration>node).typeParameters) ||
@@ -345,6 +346,9 @@ module ts {
                 return child((<VoidExpression>node).expression);
             case SyntaxKind.PrefixUnaryExpression:
                 return child((<PrefixUnaryExpression>node).operand);
+            case SyntaxKind.YieldExpression:
+                return child((<YieldExpression>node).asteriskToken) ||
+                    child((<YieldExpression>node).expression);
             case SyntaxKind.PostfixUnaryExpression:
                 return child((<PostfixUnaryExpression>node).operand);
             case SyntaxKind.BinaryExpression:

@@ -35,15 +35,55 @@ class Test262BaselineRunner extends RunnerBase {
             if (node.parent !== parent) {
                 throw new Error("node.parent !== parent");
             }
+            if (parent) {
+                // Make sure each child is contained within the parent.
+                if (node.pos < parent.pos) {
+                    throw new Error("node.pos < parent.pos");
+                }
+                if (node.end > parent.end) {
+                    throw new Error("node.end > parent.end");
+                }
+            }
+
             ts.forEachChild(node, child => {
                 Test262BaselineRunner.checkInvariants(child, node);
             });
+
+            // Make sure each of the children is in order.
+            var currentPos = 0;
+            ts.forEachChild(node,
+                child => {
+                    if (child.pos < currentPos) {
+                        throw new Error("child.pos < currentPos");
+                    }
+                    currentPos = child.end;
+                },
+                (array: ts.NodeArray<ts.Node>) => {
+                    if (array.pos < node.pos) {
+                        throw new Error("array.pos < node.pos");
+                    }
+                    if (array.end > node.end) {
+                        throw new Error("array.end > node.end");
+                    }
+
+                    if (array.pos < currentPos) {
+                        throw new Error("array.pos < currentPos");
+                    }
+                    for (var i = 0, n = array.length; i < n; i++) {
+                        if (array[i].pos < currentPos) {
+                            throw new Error("array[i].pos < currentPos");
+                        }
+                        currentPos = array[i].end
+                    }
+
+                    currentPos = array.end;
+                });
 
             var childNodesAndArrays: any[] = [];
             ts.forEachChild(node, child => { childNodesAndArrays.push(child) }, array => { childNodesAndArrays.push(array) });
 
             for (var childName in node) {
-                if (childName === "parent" || childName === "nextContainer" || childName === "modifiers") {
+                if (childName === "parent" || childName === "nextContainer" || childName === "modifiers" || childName === "externalModuleIndicator") {
                     continue;
                 }
                 var child = (<any>node)[childName];
