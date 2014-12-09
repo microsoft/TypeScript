@@ -37,26 +37,50 @@ module ts.NavigationBar {
 
             return indent;
         }
-          
+
         function getChildNodes(nodes: Node[]): Node[] {
-            var childNodes: Node[] = [];    
+            var childNodes: Node[] = [];
 
-            for (var i = 0, n = nodes.length; i < n; i++) {
-                var node = nodes[i];
-
-                if (node.kind === SyntaxKind.ClassDeclaration ||
-                    node.kind === SyntaxKind.EnumDeclaration ||
-                    node.kind === SyntaxKind.InterfaceDeclaration ||
-                    node.kind === SyntaxKind.ModuleDeclaration ||
-                    node.kind === SyntaxKind.FunctionDeclaration) {
-
-                    childNodes.push(node);
-                }
-                else if (node.kind === SyntaxKind.VariableStatement) {
-                    childNodes.push.apply(childNodes, (<VariableStatement>node).declarations);
+            function visit(node: Node) {
+                switch (node.kind) {
+                    case SyntaxKind.VariableStatement:
+                        forEach((<VariableStatement>node).declarations, visit);
+                        break;
+                    case SyntaxKind.ObjectBindingPattern:
+                    case SyntaxKind.ArrayBindingPattern:
+                        forEach((<BindingPattern>node).elements, visit);
+                        break;
+                    case SyntaxKind.VariableDeclaration:
+                        if (isBindingPattern(node)) {
+                            visit((<VariableDeclaration>node).name);
+                            break;
+                        }
+                        // Fall through
+                    case SyntaxKind.ClassDeclaration:
+                    case SyntaxKind.EnumDeclaration:
+                    case SyntaxKind.InterfaceDeclaration:
+                    case SyntaxKind.ModuleDeclaration:
+                    case SyntaxKind.FunctionDeclaration:
+                        childNodes.push(node);
                 }
             }
 
+            //for (var i = 0, n = nodes.length; i < n; i++) {
+            //    var node = nodes[i];
+
+            //    if (node.kind === SyntaxKind.ClassDeclaration ||
+            //        node.kind === SyntaxKind.EnumDeclaration ||
+            //        node.kind === SyntaxKind.InterfaceDeclaration ||
+            //        node.kind === SyntaxKind.ModuleDeclaration ||
+            //        node.kind === SyntaxKind.FunctionDeclaration) {
+
+            //        childNodes.push(node);
+            //    }
+            //    else if (node.kind === SyntaxKind.VariableStatement) {
+            //        childNodes.push.apply(childNodes, (<VariableStatement>node).declarations);
+            //    }
+            //}
+            forEach(nodes, visit);
             return sortNodes(childNodes);
         }
 
@@ -200,6 +224,9 @@ module ts.NavigationBar {
         function createChildItem(node: Node): ts.NavigationBarItem {
             switch (node.kind) {
                 case SyntaxKind.Parameter:
+                    if (isBindingPattern((<ParameterDeclaration>node).name)) {
+                        break;
+                    }
                     if ((node.flags & NodeFlags.Modifier) === 0) {
                         return undefined;
                     }
@@ -235,6 +262,9 @@ module ts.NavigationBar {
                     return createItem(node, getTextOfNode((<FunctionLikeDeclaration>node).name), ts.ScriptElementKind.functionElement);
 
                 case SyntaxKind.VariableDeclaration:
+                    if (isBindingPattern((<VariableDeclaration>node).name)) {
+                        break;
+                    }
                     if (isConst(node)) {
                         return createItem(node, getTextOfNode((<VariableDeclaration>node).name), ts.ScriptElementKind.constElement);
                     }

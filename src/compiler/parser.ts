@@ -40,12 +40,8 @@ module ts {
         return nodeConstructors[kind] || (nodeConstructors[kind] = objectAllocator.getNodeConstructor(kind));
     }
  
-    function createRootNode(kind: SyntaxKind, pos: number, end: number, flags: NodeFlags): Node {
-        var node = new (getNodeConstructor(kind))();
-        node.pos = pos;
-        node.end = end;
-        node.flags = flags;
-        return node;
+    export function createNode(kind: SyntaxKind): Node {
+        return new (getNodeConstructor(kind))();
     }
 
     export function getSourceFileOfNode(node: Node): SourceFile {
@@ -140,6 +136,7 @@ module ts {
             // This list is a work in progress. Add missing node kinds to improve their error
             // spans.
             case SyntaxKind.VariableDeclaration:
+            case SyntaxKind.BindingElement:
             case SyntaxKind.ClassDeclaration:
             case SyntaxKind.InterfaceDeclaration:
             case SyntaxKind.ModuleDeclaration:
@@ -260,21 +257,19 @@ module ts {
                 return child((<TypeParameterDeclaration>node).name) ||
                     child((<TypeParameterDeclaration>node).constraint);
             case SyntaxKind.Parameter:
-                return children(node.modifiers) ||
-                    child((<ParameterDeclaration>node).dotDotDotToken) ||
-                    child((<ParameterDeclaration>node).name) ||
-                    child((<ParameterDeclaration>node).questionToken) ||
-                    child((<ParameterDeclaration>node).type) ||
-                    child((<ParameterDeclaration>node).initializer);
             case SyntaxKind.PropertyDeclaration:
             case SyntaxKind.PropertySignature:
             case SyntaxKind.PropertyAssignment:
             case SyntaxKind.ShorthandPropertyAssignment:
+            case SyntaxKind.VariableDeclaration:
+            case SyntaxKind.BindingElement:
                 return children(node.modifiers) ||
-                    child((<PropertyDeclaration>node).name) ||
-                    child((<PropertyDeclaration>node).questionToken) ||
-                    child((<PropertyDeclaration>node).type) ||
-                    child((<PropertyDeclaration>node).initializer);
+                    child((<VariableLikeDeclaration>node).propertyName) ||
+                    child((<VariableLikeDeclaration>node).dotDotDotToken) ||
+                    child((<VariableLikeDeclaration>node).name) ||
+                    child((<VariableLikeDeclaration>node).questionToken) ||
+                    child((<VariableLikeDeclaration>node).type) ||
+                    child((<VariableLikeDeclaration>node).initializer);
             case SyntaxKind.FunctionType:
             case SyntaxKind.ConstructorType:
             case SyntaxKind.CallSignature:
@@ -315,6 +310,9 @@ module ts {
                 return children((<UnionTypeNode>node).types);
             case SyntaxKind.ParenthesizedType:
                 return child((<ParenthesizedTypeNode>node).type);
+            case SyntaxKind.ObjectBindingPattern:
+            case SyntaxKind.ArrayBindingPattern:
+                return children((<BindingPattern>node).elements);
             case SyntaxKind.ArrayLiteralExpression:
                 return children((<ArrayLiteralExpression>node).elements);
             case SyntaxKind.ObjectLiteralExpression:
@@ -421,11 +419,6 @@ module ts {
                 return child((<CatchClause>node).name) ||
                     child((<CatchClause>node).type) ||
                     child((<CatchClause>node).block);
-            case SyntaxKind.VariableDeclaration:
-                return children(node.modifiers) ||
-                    child((<VariableDeclaration>node).name) ||
-                    child((<VariableDeclaration>node).type) ||
-                    child((<VariableDeclaration>node).initializer);
             case SyntaxKind.ClassDeclaration:
                 return children(node.modifiers) ||
                     child((<ClassDeclaration>node).name) ||
@@ -506,6 +499,7 @@ module ts {
     export function isAnyFunction(node: Node): boolean {
         if (node) {
             switch (node.kind) {
+                case SyntaxKind.Constructor:
                 case SyntaxKind.FunctionExpression:
                 case SyntaxKind.FunctionDeclaration:
                 case SyntaxKind.ArrowFunction:
@@ -513,7 +507,14 @@ module ts {
                 case SyntaxKind.MethodSignature:
                 case SyntaxKind.GetAccessor:
                 case SyntaxKind.SetAccessor:
-                case SyntaxKind.Constructor:
+                case SyntaxKind.CallSignature:
+                case SyntaxKind.ConstructSignature:
+                case SyntaxKind.IndexSignature:
+                case SyntaxKind.FunctionType:
+                case SyntaxKind.ConstructorType:
+                case SyntaxKind.FunctionExpression:
+                case SyntaxKind.ArrowFunction:
+                case SyntaxKind.FunctionDeclaration:
                     return true;
             }
         }
@@ -522,11 +523,11 @@ module ts {
     }
 
     export function isFunctionBlock(node: Node) {
-        return node !== undefined && node.kind === SyntaxKind.Block && isAnyFunction(node.parent);
+        return node && node.kind === SyntaxKind.Block && isAnyFunction(node.parent);
     }
 
     export function isObjectLiteralMethod(node: Node) {
-        return node !== undefined && node.kind === SyntaxKind.MethodDeclaration && node.parent.kind === SyntaxKind.ObjectLiteralExpression;
+        return node && node.kind === SyntaxKind.MethodDeclaration && node.parent.kind === SyntaxKind.ObjectLiteralExpression;
     }
 
     export function getContainingFunction(node: Node): FunctionLikeDeclaration {
@@ -646,7 +647,8 @@ module ts {
                     case SyntaxKind.PropertySignature:
                     case SyntaxKind.EnumMember:
                     case SyntaxKind.PropertyAssignment:
-                        return (<VariableDeclaration>parent).initializer === node;
+                    case SyntaxKind.BindingElement:
+                        return (<VariableLikeDeclaration>parent).initializer === node;
                     case SyntaxKind.ExpressionStatement:
                     case SyntaxKind.IfStatement:
                     case SyntaxKind.DoStatement:
@@ -730,6 +732,10 @@ module ts {
         return SyntaxKind.FirstTemplateToken <= kind && kind <= SyntaxKind.LastTemplateToken;
     }
 
+    export function isBindingPattern(node: Node) {
+        return node.kind === SyntaxKind.ArrayBindingPattern || node.kind === SyntaxKind.ObjectBindingPattern;
+    }
+
     export function isInAmbientContext(node: Node): boolean {
         while (node) {
             if (node.flags & (NodeFlags.Ambient | NodeFlags.DeclarationFile)) return true;
@@ -743,6 +749,7 @@ module ts {
             case SyntaxKind.TypeParameter:
             case SyntaxKind.Parameter:
             case SyntaxKind.VariableDeclaration:
+            case SyntaxKind.BindingElement:
             case SyntaxKind.PropertyDeclaration:
             case SyntaxKind.PropertySignature:
             case SyntaxKind.PropertyAssignment:
@@ -889,6 +896,8 @@ module ts {
         EnumMembers,             // Members in enum declaration
         TypeReferences,          // Type references in extends or implements clause
         VariableDeclarations,    // Variable declarations in variable statement
+        ObjectBindingElements,   // Binding elements in object binding list
+        ArrayBindingElements,    // Binding elements in array binding list
         ArgumentExpressions,     // Expressions in argument list
         ObjectLiteralMembers,    // Members in object literal
         ArrayLiteralMembers,     // Members in array literal
@@ -918,6 +927,8 @@ module ts {
             case ParsingContext.EnumMembers:            return Diagnostics.Enum_member_expected;
             case ParsingContext.TypeReferences:     return Diagnostics.Type_reference_expected;
             case ParsingContext.VariableDeclarations:   return Diagnostics.Variable_declaration_expected;
+            case ParsingContext.ObjectBindingElements:  return Diagnostics.Property_destructuring_pattern_expected;
+            case ParsingContext.ArrayBindingElements:   return Diagnostics.Array_element_destructuring_pattern_expected;
             case ParsingContext.ArgumentExpressions:    return Diagnostics.Argument_expression_expected;
             case ParsingContext.ObjectLiteralMembers:   return Diagnostics.Property_assignment_expected;
             case ParsingContext.ArrayLiteralMembers:    return Diagnostics.Expression_or_comma_expected;
@@ -1087,16 +1098,19 @@ module ts {
         // Note: any errors at the end of the file that do not precede a regular node, should get
         // attached to the EOF token.
         var parseErrorBeforeNextFinishedNode = false;
-        var sourceFile = <SourceFile>createRootNode(SyntaxKind.SourceFile, 0, sourceText.length,
-            fileExtensionIs(filename, ".d.ts") ? NodeFlags.DeclarationFile : 0);
+
+        var sourceFile = <SourceFile>createNode(SyntaxKind.SourceFile, 0);
+        if (fileExtensionIs(filename, ".d.ts")) {
+            sourceFile.flags = NodeFlags.DeclarationFile;
+        }
+        sourceFile.end = sourceText.length;
+        sourceFile.filename = normalizePath(filename);
+        sourceFile.text = sourceText;
 
         sourceFile.getLineAndCharacterFromPosition = getLineAndCharacterFromSourcePosition;
         sourceFile.getPositionFromLineAndCharacter = getPositionFromSourceLineAndCharacter;
         sourceFile.getLineStarts = getLineStarts;
         sourceFile.getSyntacticDiagnostics = getSyntacticDiagnostics;
-
-        sourceFile.filename = normalizePath(filename);
-        sourceFile.text = sourceText;
 
         sourceFile.referenceDiagnostics = [];
         sourceFile.parseDiagnostics = [];
@@ -1559,11 +1573,16 @@ module ts {
                     return token === SyntaxKind.OpenBracketToken || isLiteralPropertyName();
                 case ParsingContext.ObjectLiteralMembers:
                     return token === SyntaxKind.OpenBracketToken || token === SyntaxKind.AsteriskToken || isLiteralPropertyName();
+                case ParsingContext.ObjectBindingElements:
+                    return isLiteralPropertyName();
                 case ParsingContext.TypeReferences:
                     // We want to make sure that the "extends" in "extends foo" or the "implements" in
                     // "implements foo" is not considered a type name.
                     return isIdentifier() && !isNotHeritageClauseTypeName();
                 case ParsingContext.VariableDeclarations:
+                    return isIdentifierOrPattern();
+                case ParsingContext.ArrayBindingElements:
+                    return token === SyntaxKind.CommaToken || isIdentifierOrPattern();
                 case ParsingContext.TypeParameters:
                     return isIdentifier();
                 case ParsingContext.ArgumentExpressions:
@@ -1612,6 +1631,7 @@ module ts {
                 case ParsingContext.ClassMembers:
                 case ParsingContext.EnumMembers:
                 case ParsingContext.ObjectLiteralMembers:
+                case ParsingContext.ObjectBindingElements:
                     return token === SyntaxKind.CloseBraceToken;
                 case ParsingContext.SwitchClauseStatements:
                     return token === SyntaxKind.CloseBraceToken || token === SyntaxKind.CaseKeyword || token === SyntaxKind.DefaultKeyword;
@@ -1627,10 +1647,11 @@ module ts {
                     return token === SyntaxKind.CloseParenToken || token === SyntaxKind.SemicolonToken;
                 case ParsingContext.ArrayLiteralMembers:
                 case ParsingContext.TupleElementTypes:
+                case ParsingContext.ArrayBindingElements:
                     return token === SyntaxKind.CloseBracketToken;
                 case ParsingContext.Parameters:
                     // Tokens other than ')' and ']' (the latter for index signatures) are here for better error recovery
-                    return token === SyntaxKind.CloseParenToken || token === SyntaxKind.CloseBracketToken || token === SyntaxKind.OpenBraceToken;
+                    return token === SyntaxKind.CloseParenToken || token === SyntaxKind.CloseBracketToken /*|| token === SyntaxKind.OpenBraceToken*/;
                 case ParsingContext.TypeArguments:
                     // Tokens other than '>' are here for better error recovery
                     return token === SyntaxKind.GreaterThanToken || token === SyntaxKind.OpenParenToken;
@@ -1966,10 +1987,10 @@ module ts {
             }
         }
 
-        function parseParameterType(): TypeNode | StringLiteralExpression {
+        function parseParameterType(): TypeNode {
             if (parseOptional(SyntaxKind.ColonToken)) {
                 return token === SyntaxKind.StringLiteral
-                    ? <StringLiteralExpression>parseLiteralNode(/*internName:*/ true)
+                    ? <StringLiteralTypeNode>parseLiteralNode(/*internName:*/ true)
                     : parseType();
             }
 
@@ -1977,7 +1998,7 @@ module ts {
         }
 
         function isStartOfParameter(): boolean {
-            return token === SyntaxKind.DotDotDotToken || isIdentifier() || isModifier(token);
+            return token === SyntaxKind.DotDotDotToken || isIdentifierOrPattern() || isModifier(token);
         }
 
         function setModifiers(node: Node, modifiers: ModifiersArray) {
@@ -1996,9 +2017,7 @@ module ts {
             //      [+GeneratorParameter]BindingIdentifier[Yield]Initializer[In]opt
             //      [~GeneratorParameter]BindingIdentifier[?Yield]Initializer[In, ?Yield]opt
 
-            node.name = inGeneratorParameterContext()
-                ? doInYieldContext(parseIdentifier)
-                : parseIdentifier();
+            node.name = inGeneratorParameterContext() ? doInYieldContext(parseIdentifierOrPattern) : parseIdentifierOrPattern();
 
             if (getFullWidth(node.name) === 0 && node.flags === 0 && isModifier(token)) {
                 // in cases like
@@ -2014,9 +2033,7 @@ module ts {
 
             node.questionToken = parseOptionalToken(SyntaxKind.QuestionToken);
             node.type = parseParameterType();
-            node.initializer = inGeneratorParameterContext()
-                ? doOutsideOfYieldContext(parseParameterInitializer)
-                : parseParameterInitializer();
+            node.initializer = inGeneratorParameterContext() ? doOutsideOfYieldContext(parseParameterInitializer) : parseParameterInitializer();
 
             // Do not check for initializers in an ambient context for parameters. This is not
             // a grammar error because the grammar allows arbitrary call signatures in
@@ -3841,20 +3858,81 @@ module ts {
 
         // DECLARATIONS
 
+        function parseBindingElement(context: ParsingContext): BindingElement {
+            if (context === ParsingContext.ArrayBindingElements && token === SyntaxKind.CommaToken) {
+                return <BindingElement>createNode(SyntaxKind.OmittedExpression);
+            }
+            var node = <BindingElement>createNode(SyntaxKind.BindingElement);
+            if (context === ParsingContext.ObjectBindingElements) {
+                // TODO(andersh): Handle computed properties
+                var id = parsePropertyName();
+                if (id.kind === SyntaxKind.Identifier && token !== SyntaxKind.ColonToken) {
+                    node.name = <Identifier>id;
+                }
+                else {
+                    parseExpected(SyntaxKind.ColonToken);
+                    node.propertyName = <Identifier>id;
+                    node.name = parseIdentifierOrPattern();
+                }
+            }
+            else {
+                node.name = parseIdentifierOrPattern();
+            }
+            node.initializer = parseInitializer(/*inParameter*/ false);
+            return finishNode(node);
+        }
+
+        function parseBindingList(context: ParsingContext): NodeArray<BindingElement> {
+            return parseDelimitedList(context, () => parseBindingElement(context));
+        }
+
+        function parseObjectBindingPattern(): BindingPattern {
+            var node = <BindingPattern>createNode(SyntaxKind.ObjectBindingPattern);
+            parseExpected(SyntaxKind.OpenBraceToken);
+            node.elements = parseBindingList(ParsingContext.ObjectBindingElements);
+            parseExpected(SyntaxKind.CloseBraceToken);
+            return finishNode(node);
+        }
+
+        function parseArrayBindingPattern(): BindingPattern {
+            var node = <BindingPattern>createNode(SyntaxKind.ArrayBindingPattern);
+            parseExpected(SyntaxKind.OpenBracketToken);
+            node.elements = parseBindingList(ParsingContext.ArrayBindingElements);
+            parseExpected(SyntaxKind.CloseBracketToken);
+            return finishNode(node);
+        }
+
+        function isIdentifierOrPattern() {
+            return token === SyntaxKind.OpenBraceToken || token === SyntaxKind.OpenBracketToken || isIdentifier();
+        }
+
+        function parseIdentifierOrPattern(): Identifier | BindingPattern {
+            if (token === SyntaxKind.OpenBracketToken) {
+                return parseArrayBindingPattern();
+            }
+            if (token === SyntaxKind.OpenBraceToken) {
+                return parseObjectBindingPattern();
+            }
+            return parseIdentifier();
+        }
+
         function parseVariableDeclaration(): VariableDeclaration {
             var node = <VariableDeclaration>createNode(SyntaxKind.VariableDeclaration);
-            node.name = parseIdentifier();
+            node.name = parseIdentifierOrPattern();
             node.type = parseTypeAnnotation();
             node.initializer = parseInitializer(/*inParameter*/ false);
             return finishNode(node);
         }
 
-        function setFlag(array: NodeArray<VariableDeclaration>, flag: NodeFlags): NodeArray<VariableDeclaration> {
-            for (var i = 0, n = array.length; i < n; i++) {
-                array[i].flags |= flag;
+        function setFlag(nodes: NodeArray<VariableDeclaration>, flag: NodeFlags): NodeArray<VariableDeclaration> {
+            for (var i = 0; i < nodes.length; i++) {
+                var node = nodes[i];
+                node.flags |= flag;
+                if (node.name && isBindingPattern(node.name)) {
+                    setFlag((<BindingPattern>node.name).elements, flag);
+                }
             }
-
-            return array;
+            return nodes;
         }
 
         function parseVariableDeclarationList(): NodeArray<VariableDeclaration> {
@@ -4562,6 +4640,7 @@ module ts {
 
                 case SyntaxKind.EnumDeclaration:                return checkEnumDeclaration(<EnumDeclaration>node);
                 case SyntaxKind.BinaryExpression:               return checkBinaryExpression(<BinaryExpression>node);
+                case SyntaxKind.BindingElement:                 return checkBindingElement(<BindingElement>node);
                 case SyntaxKind.CatchClause:                    return checkCatchClause(<CatchClause>node);
                 case SyntaxKind.ClassDeclaration:               return checkClassDeclaration(<ClassDeclaration>node);
                 case SyntaxKind.ComputedPropertyName:           return checkComputedPropertyName(<ComputedPropertyName>node);
@@ -5386,7 +5465,7 @@ module ts {
             // It is a SyntaxError if the identifier eval or arguments appears within a FormalParameterList of a 
             // strict mode FunctionLikeDeclaration or FunctionExpression(13.1) 
             if (node.parserContextFlags & ParserContextFlags.StrictMode && isEvalOrArgumentsIdentifier(node.name)) {
-                return reportInvalidUseInStrictMode(node.name);
+                return reportInvalidUseInStrictMode(<Identifier>node.name);
             }
         }
 
@@ -5658,18 +5737,38 @@ module ts {
             return checkTypeArguments(node.typeArguments);
         }
 
-        function checkVariableDeclaration(node: VariableDeclaration) {
-            if (inAmbientContext && node.initializer) {
-                var equalsPos = node.type ? skipTrivia(sourceText, node.type.end) : skipTrivia(sourceText, node.name.end);
-                return grammarErrorAtPos(equalsPos, "=".length, Diagnostics.Initializers_are_not_allowed_in_ambient_contexts);
+        function checkBindingElement(node: BindingElement) {
+            if (node.parserContextFlags & ParserContextFlags.StrictMode && isEvalOrArgumentsIdentifier(node.name)) {
+                // It is a SyntaxError if a VariableDeclaration or VariableDeclarationNoIn occurs within strict code 
+                // and its Identifier is eval or arguments 
+                return reportInvalidUseInStrictMode(<Identifier>node.name);
             }
-            if (!inAmbientContext && !node.initializer && isConst(node)) {
-                return grammarErrorOnNode(node, Diagnostics.const_declarations_must_be_initialized);
+        }
+
+        function checkVariableDeclaration(node: VariableDeclaration) {
+            if (inAmbientContext) {
+                if (isBindingPattern(node.name)) {
+                    return grammarErrorOnNode(node, Diagnostics.Destructuring_declarations_are_not_allowed_in_ambient_contexts);
+                }
+                if (node.initializer) {
+                    // Error on equals token which immediate precedes the initializer
+                    return grammarErrorAtPos(node.initializer.pos - 1, 1, Diagnostics.Initializers_are_not_allowed_in_ambient_contexts);
+                }
+            }
+            else {
+                if (!node.initializer) {
+                    if (isBindingPattern(node.name) && !isBindingPattern(node.parent)) {
+                        return grammarErrorOnNode(node, Diagnostics.A_destructuring_declaration_must_have_an_initializer);
+                    }
+                    if (isConst(node)) {
+                        return grammarErrorOnNode(node, Diagnostics.const_declarations_must_be_initialized);
+                    }
+                }
             }
             if (node.parserContextFlags & ParserContextFlags.StrictMode && isEvalOrArgumentsIdentifier(node.name)) {
                 // It is a SyntaxError if a VariableDeclaration or VariableDeclarationNoIn occurs within strict code 
                 // and its Identifier is eval or arguments 
-                return reportInvalidUseInStrictMode(node.name);
+                return reportInvalidUseInStrictMode(<Identifier>node.name);
             }
         }
 

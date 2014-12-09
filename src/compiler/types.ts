@@ -167,6 +167,10 @@ module ts {
         TupleType,
         UnionType,
         ParenthesizedType,
+        // Binding patterns
+        ObjectBindingPattern,
+        ArrayBindingPattern,
+        BindingElement,
         // Expression
         ArrayLiteralExpression,
         ObjectLiteralExpression,
@@ -353,7 +357,8 @@ module ts {
     }
 
     export type EntityName = Identifier | QualifiedName;
-    export type DeclarationName = Identifier | LiteralExpression | ComputedPropertyName;
+
+    export type DeclarationName = Identifier | LiteralExpression | ComputedPropertyName | BindingPattern;
 
     export interface Declaration extends Node {
         _declarationBrand: any;
@@ -378,44 +383,74 @@ module ts {
         type?: TypeNode;
     }
 
+    // SyntaxKind.VariableDeclaration
     export interface VariableDeclaration extends Declaration {
-        name: Identifier;
-        type?: TypeNode;
-        initializer?: Expression;
+        name: Identifier | BindingPattern;  // Declared variable name
+        type?: TypeNode;                    // Optional type annotation
+        initializer?: Expression;           // Optional initializer
     }
 
+    // SyntaxKind.Parameter
     export interface ParameterDeclaration extends Declaration {
-        dotDotDotToken?: Node;
-        name: Identifier;
-        questionToken?: Node;
-        type?: TypeNode | StringLiteralExpression;
-        initializer?: Expression;
+        dotDotDotToken?: Node;              // Present on rest parameter
+        name: Identifier | BindingPattern;  // Declared parameter name
+        questionToken?: Node;               // Present on optional parameter
+        type?: TypeNode;                    // Optional type annotation
+        initializer?: Expression;           // Optional initializer
     }
 
+    // SyntaxKind.BindingElement
+    export interface BindingElement extends Declaration {
+        propertyName?: Identifier;          // Binding property name (in object binding pattern)
+        dotDotDotToken?: Node;              // Present on rest binding element
+        name: Identifier | BindingPattern;  // Declared binding element name
+        initializer?: Expression;           // Optional initializer
+    }
+
+    // SyntaxKind.Property
     export interface PropertyDeclaration extends Declaration, ClassElement {
-        _propertyDeclarationBrand: any;
-        questionToken?: Node;
-        type?: TypeNode;
-        initializer?: Expression;
+        name: DeclarationName;              // Declared property name
+        questionToken?: Node;               // Present on optional property
+        type?: TypeNode;                    // Optional type annotation
+        initializer?: Expression;           // Optional initializer
     }
-
-    export type VariableOrParameterDeclaration = VariableDeclaration | ParameterDeclaration;
-    export type VariableOrParameterOrPropertyDeclaration = VariableOrParameterDeclaration | PropertyDeclaration;
 
     export interface ObjectLiteralElement extends Declaration {
         _objectLiteralBrandBrand: any;
     }
 
-    export interface ShorthandPropertyAssignment extends ObjectLiteralElement {
-        name: Identifier;
-        questionToken?: Node;
-    }
-
+    // SyntaxKind.PropertyAssignment
     export interface PropertyAssignment extends ObjectLiteralElement {
         _propertyAssignmentBrand: any;
         name: DeclarationName;
         questionToken?: Node;
         initializer: Expression;
+    }
+
+    // SyntaxKind.ShorthandPropertyAssignment
+    export interface ShorthandPropertyAssignment extends ObjectLiteralElement {
+        name: Identifier;
+        questionToken?: Node;
+    }
+
+    // SyntaxKind.VariableDeclaration
+    // SyntaxKind.Parameter
+    // SyntaxKind.BindingElement
+    // SyntaxKind.Property
+    // SyntaxKind.PropertyAssignment
+    // SyntaxKind.ShorthandPropertyAssignment
+    // SyntaxKind.EnumMember
+    export interface VariableLikeDeclaration extends Declaration {
+        propertyName?: Identifier;
+        dotDotDotToken?: Node;
+        name: DeclarationName;
+        questionToken?: Node;
+        type?: TypeNode;
+        initializer?: Expression;
+    }
+
+    export interface BindingPattern extends Node {
+        elements: NodeArray<BindingElement>;
     }
 
     /**
@@ -504,6 +539,8 @@ module ts {
     export interface ParenthesizedTypeNode extends TypeNode {
         type: TypeNode;
     }
+
+    export interface StringLiteralTypeNode extends LiteralExpression, TypeNode { }
 
     // Note: 'brands' in our syntax nodes serve to give us a small amount of nominal typing.  
     // Consider 'Expression'.  Without the brand, 'Expression' is actually no different
@@ -1034,13 +1071,14 @@ module ts {
         hasSemanticErrors(sourceFile?: SourceFile): boolean;
         isDeclarationVisible(node: Declaration): boolean;
         isImplementationOfOverload(node: FunctionLikeDeclaration): boolean;
-        writeTypeOfDeclaration(declaration: AccessorDeclaration | VariableOrParameterDeclaration, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter): void;
+        writeTypeOfDeclaration(declaration: AccessorDeclaration | VariableLikeDeclaration, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter): void;
         writeReturnTypeOfSignatureDeclaration(signatureDeclaration: SignatureDeclaration, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter): void;
         isSymbolAccessible(symbol: Symbol, enclosingDeclaration: Node, meaning: SymbolFlags): SymbolAccessiblityResult;
         isEntityNameVisible(entityName: EntityName, enclosingDeclaration: Node): SymbolVisibilityResult;
         // Returns the constant value this property access resolves to, or 'undefined' for a non-constant
         getConstantValue(node: PropertyAccessExpression | ElementAccessExpression): number;
         isEmitBlocked(sourceFile?: SourceFile): boolean;
+        isUnknownIdentifier(location: Node, name: string): boolean;
     }
 
     export const enum SymbolFlags {
@@ -1061,35 +1099,33 @@ module ts {
         Constructor            = 0x00004000,  // Constructor
         GetAccessor            = 0x00008000,  // Get accessor
         SetAccessor            = 0x00010000,  // Set accessor
-        CallSignature          = 0x00020000,  // Call signature
-        ConstructSignature     = 0x00040000,  // Construct signature
-        IndexSignature         = 0x00080000,  // Index signature
-        TypeParameter          = 0x00100000,  // Type parameter
-        TypeAlias              = 0x00200000,  // Type alias
+        Signature              = 0x00020000,  // Call, construct, or index signature
+        TypeParameter          = 0x00040000,  // Type parameter
+        TypeAlias              = 0x00080000,  // Type alias
 
         // Export markers (see comment in declareModuleMember in binder)
-        ExportValue            = 0x00400000,  // Exported value marker
-        ExportType             = 0x00800000,  // Exported type marker
-        ExportNamespace        = 0x01000000,  // Exported namespace marker
-        Import                 = 0x02000000,  // Import
-        Instantiated           = 0x04000000,  // Instantiated symbol
-        Merged                 = 0x08000000,  // Merged symbol (created during program binding)
-        Transient              = 0x10000000,  // Transient symbol (created during type check)
-        Prototype              = 0x20000000,  // Prototype property (no source representation)
-        UnionProperty          = 0x40000000,  // Property in union type
+        ExportValue            = 0x00100000,  // Exported value marker
+        ExportType             = 0x00200000,  // Exported type marker
+        ExportNamespace        = 0x00400000,  // Exported namespace marker
+        Import                 = 0x00800000,  // Import
+        Instantiated           = 0x01000000,  // Instantiated symbol
+        Merged                 = 0x02000000,  // Merged symbol (created during program binding)
+        Transient              = 0x04000000,  // Transient symbol (created during type check)
+        Prototype              = 0x08000000,  // Prototype property (no source representation)
+        UnionProperty          = 0x10000000,  // Property in union type
+        Optional               = 0x20000000,  // Optional property
 
-        Enum                   = RegularEnum | ConstEnum,
+        Enum      = RegularEnum | ConstEnum,
         Variable  = FunctionScopedVariable | BlockScopedVariable,
         Value     = Variable | Property | EnumMember | Function | Class | Enum | ValueModule | Method | GetAccessor | SetAccessor,
         Type      = Class | Interface | Enum | TypeLiteral | ObjectLiteral | TypeParameter | TypeAlias,
         Namespace = ValueModule | NamespaceModule,
         Module    = ValueModule | NamespaceModule,
         Accessor  = GetAccessor | SetAccessor,
-        Signature = CallSignature | ConstructSignature | IndexSignature,
 
-        // Variables can be redeclared, but can not redeclare a block-scoped declaration with the 
+        // Variables can be redeclared, but can not redeclare a block-scoped declaration with the
         // same name, or any other value that is not a variable, e.g. ValueModule or Class
-        FunctionScopedVariableExcludes = Value & ~FunctionScopedVariable,   
+        FunctionScopedVariableExcludes = Value & ~FunctionScopedVariable,
 
         // Block-scoped declarations are not allowed to be re-declared
         // they can not merge with anything in the value space
@@ -1198,6 +1234,7 @@ module ts {
         Union              = 0x00004000,  // Union
         Anonymous          = 0x00008000,  // Anonymous
         FromSignature      = 0x00010000,  // Created for signature assignment check
+        Unwidened          = 0x00020000,  // Unwidened type (is or contains Undefined or Null type)
 
         Intrinsic  = Any | String | Number | Boolean | Void | Undefined | Null,
         StringLike = String | StringLiteral,

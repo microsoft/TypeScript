@@ -56,7 +56,7 @@ var r = f({ x: new Derived(), y: new Derived2() }); // {}[]
 >Derived2 : typeof Derived2
 
 var r2 = f({ x: new Base(), y: new Derived2() }); // {}[]
->r2 : Base[]
+>r2 : (Base | Derived2)[]
 >f({ x: new Base(), y: new Derived2() }) : (Base | Derived2)[]
 >f : <T extends Base, U extends Base>(a: { x: T; y: U; }) => (T | U)[]
 >{ x: new Base(), y: new Derived2() } : { x: Base; y: Derived2; }

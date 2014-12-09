@@ -806,6 +806,8 @@ module ts {
                             // fall through
                         case SyntaxKind.Constructor:
                         case SyntaxKind.VariableStatement:
+                        case SyntaxKind.ObjectBindingPattern:
+                        case SyntaxKind.ArrayBindingPattern:
                         case SyntaxKind.ModuleBlock:
                             forEachChild(node, visit);
                             break;
@@ -823,6 +825,11 @@ module ts {
                             }
                             // fall through
                         case SyntaxKind.VariableDeclaration:
+                        case SyntaxKind.BindingElement:
+                            if (isBindingPattern((<VariableDeclaration>node).name)) {
+                                forEachChild((<VariableDeclaration>node).name, visit);
+                                break;
+                            }
                         case SyntaxKind.EnumMember:
                         case SyntaxKind.PropertyDeclaration:
                         case SyntaxKind.PropertySignature:
@@ -4746,6 +4753,7 @@ module ts {
             switch (node.kind) {
                 case SyntaxKind.Parameter:
                 case SyntaxKind.VariableDeclaration:
+                case SyntaxKind.BindingElement:
                 case SyntaxKind.PropertyDeclaration:
                 case SyntaxKind.PropertySignature:
                 case SyntaxKind.PropertyAssignment:

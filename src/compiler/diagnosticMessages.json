@@ -552,6 +552,22 @@
         "category": "Error",
         "code": 1179
     },
+    "Property destructuring pattern expected.": {
+        "category": "Error",
+        "code": 1180
+    },
+    "Array element destructuring pattern expected.": {
+        "category": "Error",
+        "code": 1181
+    },
+    "A destructuring declaration must have an initializer.": {
+        "category": "Error",
+        "code": 1182
+    },
+    "Destructuring declarations are not allowed in ambient contexts.": {
+        "category": "Error",
+        "code": 1183
+    },
 
     "Duplicate identifier '{0}'.": {
         "category": "Error",
@@ -921,14 +937,6 @@
         "category": "Error",
         "code": 2396
     },
-    "Duplicate identifier '_i'. Compiler uses '_i' to initialize rest parameter.": {
-        "category": "Error",
-        "code": 2397
-    },
-    "Expression resolves to variable declaration '_i' that compiler uses to initialize rest parameter.": {
-        "category": "Error",
-        "code": 2398
-    },
     "Duplicate identifier '_this'. Compiler uses variable declaration '_this' to capture 'this' reference.": {
         "category": "Error",
         "code": 2399
@@ -1152,6 +1160,18 @@
     "An AMD module cannot have multiple name assignments.": {
         "category": "Error",
         "code": 2458
+    },
+    "Type '{0}' has no property '{1}' and no string index signature.": {
+        "category": "Error",
+        "code": 2459
+    },
+    "Type '{0}' has no property '{1}'.": {
+        "category": "Error",
+        "code": 2460
+    },
+    "Type '{0}' is not an array type.": {
+        "category": "Error",
+        "code": 2461
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {

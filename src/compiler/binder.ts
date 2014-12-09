@@ -332,10 +332,9 @@ module ts {
             // symbol as its sole member. To the rest of the system, this symbol will be  indistinguishable 
             // from an actual type literal symbol you would have gotten had you used the long form.
 
-            var symbolKind = node.kind === SyntaxKind.FunctionType ? SymbolFlags.CallSignature : SymbolFlags.ConstructSignature;
-            var symbol = createSymbol(symbolKind, getDeclarationName(node));
-            addDeclarationToSymbol(symbol, node, symbolKind);
-            bindChildren(node, symbolKind, /*isBlockScopeContainer:*/ false);
+            var symbol = createSymbol(SymbolFlags.Signature, getDeclarationName(node));
+            addDeclarationToSymbol(symbol, node, SymbolFlags.Signature);
+            bindChildren(node, SymbolFlags.Signature, /*isBlockScopeContainer:*/ false);
 
             var typeLiteralSymbol = createSymbol(SymbolFlags.TypeLiteral, "__type");
             addDeclarationToSymbol(typeLiteralSymbol, node, SymbolFlags.TypeLiteral);
@@ -376,8 +375,11 @@ module ts {
                     }
                     declareSymbol(blockScopeContainer.locals, undefined, node, SymbolFlags.BlockScopedVariable, SymbolFlags.BlockScopedVariableExcludes);
             }
-
             bindChildren(node, SymbolFlags.BlockScopedVariable, /*isBlockScopeContainer*/ false);
+        }
+
+        function getDestructuringParameterName(node: Declaration) {
+            return "__" + indexOf((<SignatureDeclaration>node.parent).parameters, node);
         }
 
         function bind(node: Node) {
@@ -387,10 +389,19 @@ module ts {
                     bindDeclaration(<Declaration>node, SymbolFlags.TypeParameter, SymbolFlags.TypeParameterExcludes, /*isBlockScopeContainer*/ false);
                     break;
                 case SyntaxKind.Parameter:
-                    bindDeclaration(<Declaration>node, SymbolFlags.FunctionScopedVariable, SymbolFlags.ParameterExcludes, /*isBlockScopeContainer*/ false);
+                    if (isBindingPattern((<Declaration>node).name)) {
+                        bindAnonymousDeclaration(<Declaration>node, SymbolFlags.FunctionScopedVariable, getDestructuringParameterName(<Declaration>node), /*isBlockScopeContainer*/ false);
+                    }
+                    else {
+                        bindDeclaration(<Declaration>node, SymbolFlags.FunctionScopedVariable, SymbolFlags.ParameterExcludes, /*isBlockScopeContainer*/ false);
+                    }
                     break;
                 case SyntaxKind.VariableDeclaration:
-                    if (node.flags & NodeFlags.BlockScoped) {
+                case SyntaxKind.BindingElement:
+                    if (isBindingPattern((<Declaration>node).name)) {
+                        bindChildren(node, 0, /*isBlockScopeContainer*/ false);
+                    }
+                    else if (node.flags & NodeFlags.BlockScoped) {
                         bindBlockScopedVariableDeclaration(<Declaration>node);
                     }
                     else {
@@ -399,6 +410,8 @@ module ts {
                     break;
                 case SyntaxKind.PropertyDeclaration:
                 case SyntaxKind.PropertySignature:
+                    bindDeclaration(<Declaration>node, SymbolFlags.Property | ((<PropertyDeclaration>node).questionToken ? SymbolFlags.Optional : 0), SymbolFlags.PropertyExcludes, /*isBlockScopeContainer*/ false);
+                    break;
                 case SyntaxKind.PropertyAssignment:
                 case SyntaxKind.ShorthandPropertyAssignment:
                     bindDeclaration(<Declaration>node, SymbolFlags.Property, SymbolFlags.PropertyExcludes, /*isBlockScopeContainer*/ false);
@@ -407,10 +420,9 @@ module ts {
                     bindDeclaration(<Declaration>node, SymbolFlags.EnumMember, SymbolFlags.EnumMemberExcludes, /*isBlockScopeContainer*/ false);
                     break;
                 case SyntaxKind.CallSignature:
-                    bindDeclaration(<Declaration>node, SymbolFlags.CallSignature, 0, /*isBlockScopeContainer*/ false);
-                    break;
                 case SyntaxKind.ConstructSignature:
-                    bindDeclaration(<Declaration>node, SymbolFlags.ConstructSignature, 0, /*isBlockScopeContainer*/ true);
+                case SyntaxKind.IndexSignature:
+                    bindDeclaration(<Declaration>node, SymbolFlags.Signature, 0, /*isBlockScopeContainer*/ false);
                     break;
                 case SyntaxKind.MethodDeclaration:
                 case SyntaxKind.MethodSignature:
@@ -418,11 +430,8 @@ module ts {
                     // as other properties in the object literal.  So we use SymbolFlags.PropertyExcludes
                     // so that it will conflict with any other object literal members with the same
                     // name.
-                    bindDeclaration(<Declaration>node, SymbolFlags.Method, 
+                    bindDeclaration(<Declaration>node, SymbolFlags.Method | ((<MethodDeclaration>node).questionToken ? SymbolFlags.Optional : 0),
                         isObjectLiteralMethod(node) ? SymbolFlags.PropertyExcludes : SymbolFlags.MethodExcludes, /*isBlockScopeContainer*/ true);
-                    break;
-                case SyntaxKind.IndexSignature:
-                    bindDeclaration(<Declaration>node, SymbolFlags.IndexSignature, 0, /*isBlockScopeContainer*/ false);
                     break;
                 case SyntaxKind.FunctionDeclaration:
                     bindDeclaration(<Declaration>node, SymbolFlags.Function, SymbolFlags.FunctionExcludes, /*isBlockScopeContainer*/ true);
@@ -483,7 +492,6 @@ module ts {
                         bindAnonymousDeclaration(<SourceFile>node, SymbolFlags.ValueModule, '"' + removeFileExtension((<SourceFile>node).filename) + '"', /*isBlockScopeContainer*/ true);
                         break;
                     }
-
                 case SyntaxKind.Block:
                 case SyntaxKind.TryBlock:
                 case SyntaxKind.CatchClause:
@@ -491,9 +499,8 @@ module ts {
                 case SyntaxKind.ForStatement:
                 case SyntaxKind.ForInStatement:
                 case SyntaxKind.SwitchStatement:
-                    bindChildren(node, 0 , true);
+                    bindChildren(node, 0, /*isBlockScopeContainer*/ true);
                     break;
-
                 default:
                     var saveParent = parent;
                     parent = node;

@@ -19,7 +19,8 @@ tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(2
 tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(30,1): error TS2364: Invalid left-hand side of assignment expression.
 tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(31,1): error TS2364: Invalid left-hand side of assignment expression.
 tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(32,1): error TS2364: Invalid left-hand side of assignment expression.
-tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(38,1): error TS2364: Invalid left-hand side of assignment expression.
+tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(38,2): error TS2364: Invalid left-hand side of assignment expression.
+tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(38,6): error TS2364: Invalid left-hand side of assignment expression.
 tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(54,1): error TS2364: Invalid left-hand side of assignment expression.
 tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(57,1): error TS2364: Invalid left-hand side of assignment expression.
 tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(58,1): error TS2364: Invalid left-hand side of assignment expression.
@@ -37,7 +38,7 @@ tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(6
 tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(70,1): error TS2364: Invalid left-hand side of assignment expression.
 
 
-==== tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts (37 errors) ====
+==== tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts (38 errors) ====
     // expected error for all the LHS of assignments
     var value;
     
@@ -108,7 +109,9 @@ tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(7
     
     // array literals
     ['', ''] = value;
-    ~~~~~~~~
+     ~~
+!!! error TS2364: Invalid left-hand side of assignment expression.
+         ~~
 !!! error TS2364: Invalid left-hand side of assignment expression.
     
     // super
