@@ -761,6 +761,10 @@ module ts {
             writeLine();
         }
 
+        function isPrivateMethodTypeParameter(node: TypeParameterDeclaration) {
+            return node.parent.kind === SyntaxKind.MethodDeclaration && (node.parent.flags & NodeFlags.Private);
+        }
+
         function emitTypeParameters(typeParameters: TypeParameterDeclaration[]) {
             function emitTypeParameter(node: TypeParameterDeclaration) {
                 increaseIndent();
@@ -768,12 +772,13 @@ module ts {
                 decreaseIndent();
                 writeTextOfNode(currentSourceFile, node.name);
                 // If there is constraint present and this is not a type parameter of the private method emit the constraint
-                if (node.constraint && (node.parent.kind !== SyntaxKind.Method || !(node.parent.flags & NodeFlags.Private))) {
+                if (node.constraint && !isPrivateMethodTypeParameter(node)) {
                     write(" extends ");
                     if (node.parent.kind === SyntaxKind.FunctionType ||
                         node.parent.kind === SyntaxKind.ConstructorType ||
                         (node.parent.parent && node.parent.parent.kind === SyntaxKind.TypeLiteral)) {
-                        Debug.assert(node.parent.kind === SyntaxKind.Method ||
+                        Debug.assert(node.parent.kind === SyntaxKind.MethodDeclaration ||
+                            node.parent.kind === SyntaxKind.MethodSignature ||
                             node.parent.kind === SyntaxKind.FunctionType ||
                             node.parent.kind === SyntaxKind.ConstructorType ||
                             node.parent.kind === SyntaxKind.CallSignature ||
@@ -805,7 +810,8 @@ module ts {
                             diagnosticMessage = Diagnostics.Type_parameter_0_of_call_signature_from_exported_interface_has_or_is_using_private_name_1;
                             break;
 
-                        case SyntaxKind.Method:
+                        case SyntaxKind.MethodDeclaration:
+                        case SyntaxKind.MethodSignature:
                             if (node.parent.flags & NodeFlags.Static) {
                                 diagnosticMessage = Diagnostics.Type_parameter_0_of_public_static_method_from_exported_class_has_or_is_using_private_name_1;
                             }
@@ -1113,7 +1119,7 @@ module ts {
                 if (node.kind === SyntaxKind.FunctionDeclaration) {
                     emitModuleElementDeclarationFlags(node);
                 }
-                else if (node.kind === SyntaxKind.Method) {
+                else if (node.kind === SyntaxKind.MethodDeclaration) {
                     emitClassMemberDeclarationFlags(node);
                 }
                 if (node.kind === SyntaxKind.FunctionDeclaration) {
@@ -1208,7 +1214,8 @@ module ts {
                         Diagnostics.Return_type_of_index_signature_from_exported_interface_has_or_is_using_private_name_0;
                         break;
 
-                    case SyntaxKind.Method:
+                    case SyntaxKind.MethodDeclaration:
+                    case SyntaxKind.MethodSignature:
                         if (node.flags & NodeFlags.Static) {
                             diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
                             symbolAccesibilityResult.accessibility === SymbolAccessibility.CannotBeNamed ?
@@ -1296,7 +1303,8 @@ module ts {
                         Diagnostics.Parameter_0_of_call_signature_from_exported_interface_has_or_is_using_private_name_1;
                         break;
 
-                    case SyntaxKind.Method:
+                    case SyntaxKind.MethodDeclaration:
+                    case SyntaxKind.MethodSignature:
                         if (node.parent.flags & NodeFlags.Static) {
                             diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
                             symbolAccesibilityResult.accessibility === SymbolAccessibility.CannotBeNamed ?
@@ -1343,7 +1351,8 @@ module ts {
             switch (node.kind) {
                 case SyntaxKind.Constructor:
                 case SyntaxKind.FunctionDeclaration:
-                case SyntaxKind.Method:
+                case SyntaxKind.MethodDeclaration:
+                case SyntaxKind.MethodSignature:
                     return emitFunctionDeclaration(<FunctionLikeDeclaration>node);
                 case SyntaxKind.ConstructSignature:
                 case SyntaxKind.CallSignature:
@@ -1728,7 +1737,8 @@ module ts {
                     }
                     else if (node.kind === SyntaxKind.FunctionDeclaration ||
                         node.kind === SyntaxKind.FunctionExpression ||
-                        node.kind === SyntaxKind.Method ||
+                        node.kind === SyntaxKind.MethodDeclaration ||
+                        node.kind === SyntaxKind.MethodSignature ||
                         node.kind === SyntaxKind.GetAccessor ||
                         node.kind === SyntaxKind.SetAccessor ||
                         node.kind === SyntaxKind.ModuleDeclaration ||
@@ -2126,7 +2136,8 @@ module ts {
                     case SyntaxKind.PropertyAssignment:
                     case SyntaxKind.ShorthandPropertyAssignment:
                     case SyntaxKind.EnumMember:
-                    case SyntaxKind.Method:
+                    case SyntaxKind.MethodDeclaration:
+                    case SyntaxKind.MethodSignature:
                     case SyntaxKind.FunctionDeclaration:
                     case SyntaxKind.GetAccessor:
                     case SyntaxKind.SetAccessor:
@@ -2827,7 +2838,7 @@ module ts {
                     return emitPinnedOrTripleSlashComments(node);
                 }
 
-                if (node.kind !== SyntaxKind.Method) {
+                if (node.kind !== SyntaxKind.MethodDeclaration && node.kind !== SyntaxKind.MethodSignature) {
                     // Methods will emit the comments as part of emitting method declaration
                     emitLeadingComments(node);
                 }
@@ -2836,7 +2847,7 @@ module ts {
                     emit(node.name);
                 }
                 emitSignatureAndBody(node);
-                if (node.kind !== SyntaxKind.Method) {
+                if (node.kind !== SyntaxKind.MethodDeclaration && node.kind !== SyntaxKind.MethodSignature) {
                     emitTrailingComments(node);
                 }
             }
@@ -2998,7 +3009,7 @@ module ts {
 
             function emitMemberFunctions(node: ClassDeclaration) {
                 forEach(node.members, member => {
-                    if (member.kind === SyntaxKind.Method) {
+                    if (member.kind === SyntaxKind.MethodDeclaration || node.kind === SyntaxKind.MethodSignature) {
                         if (!(<MethodDeclaration>member).body) {
                             return emitPinnedOrTripleSlashComments(member);
                         }
@@ -3653,7 +3664,8 @@ module ts {
                     switch (node.kind) {
                         case SyntaxKind.ShorthandPropertyAssignment:
                             return emitDownlevelShorthandPropertyAssignment(<ShorthandPropertyAssignment>node);
-                        case SyntaxKind.Method:
+                        case SyntaxKind.MethodDeclaration:
+                        case SyntaxKind.MethodSignature:
                             return emitDownlevelMethod(<MethodDeclaration>node);
                     }
                 }
@@ -3663,7 +3675,8 @@ module ts {
                     switch (node.kind) {
                         case SyntaxKind.ShorthandPropertyAssignment:
                             return emitShorthandPropertyAssignment(<ShorthandPropertyAssignment>node);
-                        case SyntaxKind.Method:
+                        case SyntaxKind.MethodDeclaration:
+                        case SyntaxKind.MethodSignature:
                             return emitMethod(<MethodDeclaration>node);
                     }
                 }

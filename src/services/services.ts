@@ -766,7 +766,8 @@ module ts {
                 forEachChild(sourceFile, function visit(node: Node): void {
                     switch (node.kind) {
                         case SyntaxKind.FunctionDeclaration:
-                        case SyntaxKind.Method:
+                        case SyntaxKind.MethodDeclaration:
+                        case SyntaxKind.MethodSignature:
                             var functionDeclaration = <FunctionLikeDeclaration>node;
 
                             if (functionDeclaration.name && functionDeclaration.name.getFullWidth() > 0) {
@@ -1990,7 +1991,8 @@ module ts {
                 case SyntaxKind.Property:
                 case SyntaxKind.PropertyAssignment:
                 case SyntaxKind.EnumMember:
-                case SyntaxKind.Method:
+                case SyntaxKind.MethodDeclaration:
+                case SyntaxKind.MethodSignature:
                 case SyntaxKind.GetAccessor:
                 case SyntaxKind.SetAccessor:
                 case SyntaxKind.ModuleDeclaration:
@@ -2571,7 +2573,8 @@ module ts {
                     case SyntaxKind.FunctionExpression:
                     case SyntaxKind.ArrowFunction:
                     case SyntaxKind.FunctionDeclaration:
-                    case SyntaxKind.Method:
+                    case SyntaxKind.MethodDeclaration:
+                    case SyntaxKind.MethodSignature:
                     case SyntaxKind.Constructor:
                     case SyntaxKind.GetAccessor:
                     case SyntaxKind.SetAccessor:
@@ -2732,7 +2735,8 @@ module ts {
                 }
                 switch (node.kind) {
                     case SyntaxKind.SourceFile:
-                    case SyntaxKind.Method:
+                    case SyntaxKind.MethodDeclaration:
+                    case SyntaxKind.MethodSignature:
                     case SyntaxKind.FunctionDeclaration:
                     case SyntaxKind.FunctionExpression:
                     case SyntaxKind.GetAccessor:
@@ -2847,7 +2851,9 @@ module ts {
                 case SyntaxKind.FunctionDeclaration: return ScriptElementKind.functionElement;
                 case SyntaxKind.GetAccessor: return ScriptElementKind.memberGetAccessorElement;
                 case SyntaxKind.SetAccessor: return ScriptElementKind.memberSetAccessorElement;
-                case SyntaxKind.Method: return ScriptElementKind.memberFunctionElement;
+                case SyntaxKind.MethodDeclaration:
+                case SyntaxKind.MethodSignature:
+                    return ScriptElementKind.memberFunctionElement;
                 case SyntaxKind.Property: return ScriptElementKind.memberVariableElement;
                 case SyntaxKind.IndexSignature: return ScriptElementKind.indexSignatureElement;
                 case SyntaxKind.ConstructSignature: return ScriptElementKind.constructSignatureElement;
@@ -3258,7 +3264,7 @@ module ts {
 
                 forEach(signatureDeclarations, d => {
                     if ((selectConstructors && d.kind === SyntaxKind.Constructor) ||
-                        (!selectConstructors && (d.kind === SyntaxKind.FunctionDeclaration || d.kind === SyntaxKind.Method))) {
+                        (!selectConstructors && (d.kind === SyntaxKind.FunctionDeclaration || d.kind === SyntaxKind.MethodDeclaration || d.kind === SyntaxKind.MethodSignature))) {
                         declarations.push(d);
                         if ((<FunctionLikeDeclaration>d).body) definition = d;
                     }
@@ -4272,7 +4278,8 @@ module ts {
 
                 switch (searchSpaceNode.kind) {
                     case SyntaxKind.Property:
-                    case SyntaxKind.Method:
+                    case SyntaxKind.MethodDeclaration:
+                    case SyntaxKind.MethodSignature:
                     case SyntaxKind.Constructor:
                     case SyntaxKind.GetAccessor:
                     case SyntaxKind.SetAccessor:
@@ -4316,7 +4323,8 @@ module ts {
                 var staticFlag = NodeFlags.Static;
 
                 switch (searchSpaceNode.kind) {
-                    case SyntaxKind.Method:
+                    case SyntaxKind.MethodDeclaration:
+                    case SyntaxKind.MethodSignature:
                         if (isObjectLiteralMethod(searchSpaceNode)) {
                             break;
                         }
@@ -4374,7 +4382,8 @@ module ts {
                                     result.push(getReferenceEntryFromNode(node));
                                 }
                                 break;
-                            case SyntaxKind.Method:
+                            case SyntaxKind.MethodDeclaration:
+                            case SyntaxKind.MethodSignature:
                                 if (isObjectLiteralMethod(searchSpaceNode) && searchSpaceNode.symbol === container.symbol) {
                                     result.push(getReferenceEntryFromNode(node));
                                 }
@@ -4735,7 +4744,8 @@ module ts {
                 case SyntaxKind.PropertyAssignment:
                 case SyntaxKind.ShorthandPropertyAssignment:
                 case SyntaxKind.EnumMember:
-                case SyntaxKind.Method:
+                case SyntaxKind.MethodDeclaration:
+                case SyntaxKind.MethodSignature:
                 case SyntaxKind.Constructor:
                 case SyntaxKind.GetAccessor:
                 case SyntaxKind.SetAccessor:

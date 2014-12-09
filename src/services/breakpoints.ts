@@ -93,7 +93,8 @@ module ts.BreakpointResolver {
                         return spanInParameterDeclaration(<ParameterDeclaration>node);
 
                     case SyntaxKind.FunctionDeclaration:
-                    case SyntaxKind.Method:
+                    case SyntaxKind.MethodDeclaration:
+                    case SyntaxKind.MethodSignature:
                     case SyntaxKind.GetAccessor:
                     case SyntaxKind.SetAccessor:
                     case SyntaxKind.Constructor:
@@ -463,7 +464,8 @@ module ts.BreakpointResolver {
                     case SyntaxKind.FunctionExpression:
                     case SyntaxKind.FunctionDeclaration:
                     case SyntaxKind.ArrowFunction:
-                    case SyntaxKind.Method:
+                    case SyntaxKind.MethodDeclaration:
+                    case SyntaxKind.MethodSignature:
                     case SyntaxKind.GetAccessor:
                     case SyntaxKind.SetAccessor:
                     case SyntaxKind.Constructor:

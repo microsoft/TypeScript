@@ -289,7 +289,8 @@ module ts {
                     children((<SignatureDeclaration>node).typeParameters) ||
                     children((<SignatureDeclaration>node).parameters) ||
                     child((<SignatureDeclaration>node).type);
-            case SyntaxKind.Method:
+            case SyntaxKind.MethodDeclaration:
+            case SyntaxKind.MethodSignature:
             case SyntaxKind.Constructor:
             case SyntaxKind.GetAccessor:
             case SyntaxKind.SetAccessor:
@@ -509,7 +510,8 @@ module ts {
                 case SyntaxKind.FunctionExpression:
                 case SyntaxKind.FunctionDeclaration:
                 case SyntaxKind.ArrowFunction:
-                case SyntaxKind.Method:
+                case SyntaxKind.MethodDeclaration:
+                case SyntaxKind.MethodSignature:
                 case SyntaxKind.GetAccessor:
                 case SyntaxKind.SetAccessor:
                 case SyntaxKind.Constructor:
@@ -525,7 +527,7 @@ module ts {
     }
 
     export function isObjectLiteralMethod(node: Node) {
-        return node !== undefined && node.kind === SyntaxKind.Method && node.parent.kind === SyntaxKind.ObjectLiteralExpression;
+        return node !== undefined && node.kind === SyntaxKind.MethodDeclaration && node.parent.kind === SyntaxKind.ObjectLiteralExpression;
     }
 
     export function getContainingFunction(node: Node): FunctionLikeDeclaration {
@@ -553,7 +555,8 @@ module ts {
                 case SyntaxKind.FunctionExpression:
                 case SyntaxKind.ModuleDeclaration:
                 case SyntaxKind.Property:
-                case SyntaxKind.Method:
+                case SyntaxKind.MethodDeclaration:
+                case SyntaxKind.MethodSignature:
                 case SyntaxKind.Constructor:
                 case SyntaxKind.GetAccessor:
                 case SyntaxKind.SetAccessor:
@@ -572,7 +575,8 @@ module ts {
             }
             switch (node.kind) {
                 case SyntaxKind.Property:
-                case SyntaxKind.Method:
+                case SyntaxKind.MethodDeclaration:
+                case SyntaxKind.MethodSignature:
                 case SyntaxKind.Constructor:
                 case SyntaxKind.GetAccessor:
                 case SyntaxKind.SetAccessor:
@@ -694,7 +698,8 @@ module ts {
             switch (node.kind) {
                 case SyntaxKind.Parameter:
                     return (<ParameterDeclaration>node).questionToken !== undefined;
-                case SyntaxKind.Method:
+                case SyntaxKind.MethodDeclaration:
+                case SyntaxKind.MethodSignature:
                     return (<MethodDeclaration>node).questionToken !== undefined;
                 case SyntaxKind.ShorthandPropertyAssignment:
                 case SyntaxKind.PropertyAssignment:
@@ -739,7 +744,8 @@ module ts {
             case SyntaxKind.PropertyAssignment:
             case SyntaxKind.ShorthandPropertyAssignment:
             case SyntaxKind.EnumMember:
-            case SyntaxKind.Method:
+            case SyntaxKind.MethodDeclaration:
+            case SyntaxKind.MethodSignature:
             case SyntaxKind.FunctionDeclaration:
             case SyntaxKind.GetAccessor:
             case SyntaxKind.SetAccessor:
@@ -2134,13 +2140,13 @@ module ts {
             return finishNode(node)
         }
 
-        function parsePropertyOrMethod(): Declaration {
+        function parsePropertyOrMethodSignature(): Declaration {
             var fullStart = scanner.getStartPos();
             var name = parsePropertyName();
             var questionToken = parseOptionalToken(SyntaxKind.QuestionToken);
 
             if (token === SyntaxKind.OpenParenToken || token === SyntaxKind.LessThanToken) {
-                var method = <MethodDeclaration>createNode(SyntaxKind.Method, fullStart);
+                var method = <MethodDeclaration>createNode(SyntaxKind.MethodSignature, fullStart);
                 method.name = name;
                 method.questionToken = questionToken;
 
@@ -2188,7 +2194,7 @@ module ts {
                     return parseSignatureMember(SyntaxKind.CallSignature);
                 case SyntaxKind.OpenBracketToken:
                     // Indexer or computed property
-                    return isIndexSignature() ? parseIndexSignatureDeclaration(scanner.getStartPos(), /*modifiers:*/ undefined) : parsePropertyOrMethod();
+                    return isIndexSignature() ? parseIndexSignatureDeclaration(scanner.getStartPos(), /*modifiers:*/ undefined) : parsePropertyOrMethodSignature();
                 case SyntaxKind.NewKeyword:
                     if (lookAhead(isStartOfConstructSignature)) {
                         return parseSignatureMember(SyntaxKind.ConstructSignature);
@@ -2196,10 +2202,10 @@ module ts {
                     // fall through.
                 case SyntaxKind.StringLiteral:
                 case SyntaxKind.NumericLiteral:
-                    return parsePropertyOrMethod();
+                    return parsePropertyOrMethodSignature();
                 default:
                     if (isIdentifierOrKeyword()) {
-                        return parsePropertyOrMethod();
+                        return parsePropertyOrMethodSignature();
                     }
             }
         }
@@ -3830,7 +3836,7 @@ module ts {
         }
 
         function parseMethodDeclaration(fullStart: number, modifiers: ModifiersArray, asteriskToken: Node, name: DeclarationName, questionToken: Node, requireBlock: boolean): MethodDeclaration {
-            var method = <MethodDeclaration>createNode(SyntaxKind.Method, fullStart);
+            var method = <MethodDeclaration>createNode(SyntaxKind.MethodDeclaration, fullStart);
             setModifiers(method, modifiers);
             method.asteriskToken = asteriskToken;
             method.name = name;
@@ -4551,7 +4557,9 @@ module ts {
                 case SyntaxKind.InterfaceDeclaration:           return checkInterfaceDeclaration(<InterfaceDeclaration>node);
                 case SyntaxKind.LabeledStatement:               return checkLabeledStatement(<LabeledStatement>node);
                 case SyntaxKind.PropertyAssignment:             return checkPropertyAssignment(<PropertyAssignment>node);
-                case SyntaxKind.Method:                         return checkMethod(<MethodDeclaration>node);
+                case SyntaxKind.MethodDeclaration:
+                case SyntaxKind.MethodSignature:
+                    return checkMethod(<MethodDeclaration>node);
                 case SyntaxKind.ModuleDeclaration:              return checkModuleDeclaration(<ModuleDeclaration>node);
                 case SyntaxKind.ObjectLiteralExpression:        return checkObjectLiteralExpression(<ObjectLiteralExpression>node);
                 case SyntaxKind.NumericLiteral:                 return checkNumericLiteral(<LiteralExpression>node);
@@ -5166,7 +5174,7 @@ module ts {
                 var currentKind: number;
                 if (prop.kind === SyntaxKind.PropertyAssignment ||
                     prop.kind === SyntaxKind.ShorthandPropertyAssignment ||
-                    prop.kind === SyntaxKind.Method) {
+                    prop.kind === SyntaxKind.MethodDeclaration) {
                     currentKind = Property;
                 }
                 else if (prop.kind === SyntaxKind.GetAccessor) {
@@ -5221,7 +5229,8 @@ module ts {
                 case SyntaxKind.SetAccessor:
                 case SyntaxKind.Constructor:
                 case SyntaxKind.Property:
-                case SyntaxKind.Method:
+                case SyntaxKind.MethodDeclaration:
+                case SyntaxKind.MethodSignature:
                 case SyntaxKind.IndexSignature:
                 case SyntaxKind.ClassDeclaration:
                 case SyntaxKind.InterfaceDeclaration:

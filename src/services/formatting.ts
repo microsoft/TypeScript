@@ -911,7 +911,8 @@ module ts.formatting {
             case SyntaxKind.Constructor:
             case SyntaxKind.FunctionDeclaration:
             case SyntaxKind.FunctionExpression:
-            case SyntaxKind.Method:
+            case SyntaxKind.MethodDeclaration:
+            case SyntaxKind.MethodSignature:
             case SyntaxKind.ArrowFunction:
                 if ((<FunctionDeclaration>node).typeParameters === list) {
                     return SyntaxKind.LessThanToken;
