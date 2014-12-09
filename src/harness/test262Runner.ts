@@ -42,15 +42,6 @@ class Test262BaselineRunner extends RunnerBase {
             var childNodesAndArrays: any[] = [];
             ts.forEachChild(node, child => { childNodesAndArrays.push(child) }, array => { childNodesAndArrays.push(array) });
 
-            /*
-                    parent?: Node;                // Parent node (initialized by binding)
-        symbol?: Symbol;              // Symbol declared by node (initialized by binding)
-        locals?: SymbolTable;         // Locals associated with node (initialized by binding)
-        nextContainer?: Node;         // Next container in declaration order (initialized by binding)
-        localSymbol?: Symbol;         // Local symbol declared by node (initialized by binding only for exported nodes)
-        modifiers?: ModifiersArray;           // Array of modifiers
-            */
-
             for (var childName in node) {
                 if (childName === "parent" || childName === "nextContainer" || childName === "modifiers") {
                     continue;
@@ -96,6 +87,19 @@ class Test262BaselineRunner extends RunnerBase {
 
         function getNodeFlagName(f: number) { return getFlagName((<any>ts).NodeFlags, f); }
         function getParserContextFlagName(f: number) { return getFlagName((<any>ts).ParserContextFlags, f); }
+        function convertDiagnostics(diagnostics: ts.Diagnostic[]) {
+            return diagnostics.map(convertDiagnostic);
+        }
+
+        function convertDiagnostic(diagnostic: ts.Diagnostic): any {
+            return {
+                start: diagnostic.start,
+                length: diagnostic.length,
+                messageText: diagnostic.messageText,
+                category: (<any>ts).DiagnosticCategory[diagnostic.category],
+                code: diagnostic.code
+            };
+        }
 
         function serializeNode(n: ts.Node): any {
             var o: any = { kind: getKindName(n.kind) };
@@ -122,6 +126,12 @@ class Test262BaselineRunner extends RunnerBase {
 
                     case "parserContextFlags":
                         o[propertyName] = getParserContextFlagName(n.parserContextFlags);
+                        break;
+
+                    case "referenceDiagnostics":
+                    case "parseDiagnostics":
+                    case "grammarDiagnostics":
+                        o[propertyName] = convertDiagnostics((<any>n)[propertyName]);
                         break;
 
                     case "nextContainer":
