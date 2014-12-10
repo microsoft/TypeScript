@@ -7020,7 +7020,7 @@ module ts {
             // Grammar Checking
             if (node.expression) {
                 var sourceFile = getSourceFileOfNode(node);
-                grammarErrorOnFirstToken(sourceFile, node.expression, Diagnostics.Type_expected);
+                grammarErrorOnFirstToken(node.expression, Diagnostics.Type_expected);
             }
 
             checkSourceElement(node.constraint);
@@ -7275,10 +7275,9 @@ module ts {
 
         function checkTupleType(node: TupleTypeNode) {
             // Grammar checking
-            var sourceFile = getSourceFileOfNode(node);
-            checkGrammarForDisallowedTrailingComma(sourceFile, node.elementTypes);
-            if (node.elementTypes.length === 0) {
-                grammarErrorOnNode(sourceFile, node, Diagnostics.A_tuple_type_element_list_cannot_be_empty);
+            var hasErrorFromDisallowedTrailingComma = checkGrammarForDisallowedTrailingComma(node.elementTypes);
+            if (!hasErrorFromDisallowedTrailingComma && node.elementTypes.length === 0) {
+                grammarErrorOnNode(node, Diagnostics.A_tuple_type_element_list_cannot_be_empty);
             }
 
             forEach(node.elementTypes, checkSourceElement);
@@ -8669,22 +8668,35 @@ module ts {
         }
 
         // GRAMMAR CHECKING
-        function checkGrammarForDisallowedTrailingComma(sourceFile: SourceFile, list: NodeArray<Node>): void {
+        function checkGrammarForDisallowedTrailingComma(list: NodeArray<Node>): boolean {
             if (list && list.hasTrailingComma) {
                 var start = list.end - ",".length;
                 var end = list.end;
+                var sourceFile = getSourceFileOfNode(list[0]);
                 grammarErrorAtPos(sourceFile, start, end - start, Diagnostics.Trailing_comma_not_allowed);
+                return true;
             }
         }
 
         function hasParseDiagnostics(sourceFile: SourceFile): boolean {
-            return sourceFile.parseDiagnostics.length > 0 ? true : false;
+            return sourceFile.parseDiagnostics.length > 0;
         }
 
-        function grammarErrorOnFirstToken(sourceFile: SourceFile, node: Node, message: DiagnosticMessage, arg0?: any, arg1?: any, arg2?: any): void {
+        function scanToken(scanner: Scanner, pos: number) {
+            scanner.setTextPos(pos);
+            scanner.scan();
+            var start = scanner.getTokenPos();
+            scanner.setTextPos(start);
+            scanner.scan();
+            return start;
+        }
+
+        function grammarErrorOnFirstToken(node: Node, message: DiagnosticMessage, arg0?: any, arg1?: any, arg2?: any): void {
+            var sourceFile = getSourceFileOfNode(node);
             if (!hasParseDiagnostics(sourceFile)) {
-                var start = skipTrivia(sourceFile.text, node.pos);
-                diagnostics.push(createFileDiagnostic(sourceFile, start, node.end - start, message, arg0, arg1, arg2));
+                var scanner = createScanner(compilerOptions.target, /*skipTrivia*/ true, sourceFile.text);
+                var start = scanToken(scanner, node.pos);
+                diagnostics.push(createFileDiagnostic(sourceFile, start, scanner.getTextPos() - start, message, arg0, arg1, arg2));
             }
         }
 
@@ -8694,7 +8706,8 @@ module ts {
             }
         }
 
-        function grammarErrorOnNode(sourceFile: SourceFile, node: Node, message: DiagnosticMessage, arg0?: any, arg1?: any, arg2?: any): void {
+        function grammarErrorOnNode(node: Node, message: DiagnosticMessage, arg0?: any, arg1?: any, arg2?: any): void {
+            var sourceFile = getSourceFileOfNode(node);
             if (!hasParseDiagnostics(sourceFile)) {
                 var span = getErrorSpanForNode(node);
                 var start = span.end > span.pos ? skipTrivia(sourceFile.text, span.pos) : span.pos;

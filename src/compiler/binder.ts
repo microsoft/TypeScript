@@ -387,6 +387,9 @@ module ts {
             switch (node.kind) {
                 case SyntaxKind.TypeParameter:
                     bindDeclaration(<Declaration>node, SymbolFlags.TypeParameter, SymbolFlags.TypeParameterExcludes, /*isBlockScopeContainer*/ false);
+                    if ((<TypeParameterDeclaration>node).expression) {
+                        (<TypeParameterDeclaration>node).expression.parent = node;
+                    }
                     break;
                 case SyntaxKind.Parameter:
                     if (isBindingPattern((<Declaration>node).name)) {
