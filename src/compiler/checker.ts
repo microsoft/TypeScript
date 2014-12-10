@@ -164,12 +164,6 @@ module ts {
         var diagnostics: Diagnostic[] = [];
         var diagnosticsModified: boolean = false;
 
-        // Grammar checking
-        var sourceText: string = undefined;
-        var scanner: Scanner = undefined;
-        var hasParserError: boolean;
-        var sourceFile: SourceFile;
-
         function addDiagnostic(diagnostic: Diagnostic) {
             diagnostics.push(diagnostic);
             diagnosticsModified = true;
@@ -7024,8 +7018,8 @@ module ts {
 
         function checkTypeParameter(node: TypeParameterDeclaration) {
             // Grammar Checking
-            if (!hasParserError && node.expression) {
-                var sourceFile = getSourceFileOfNode(node);
+            var sourceFile = getSourceFileOfNode(node);
+            if (node.expression && !hasParseDiagnostics(sourceFile)) {
                 grammarErrorOnNode(sourceFile, node.expression, Diagnostics.Type_expected);
             }
 
@@ -8668,6 +8662,10 @@ module ts {
         }
 
         // Grammar checking helper functions
+        function hasParseDiagnostics(sourceFile: SourceFile): boolean {
+            return sourceFile.parseDiagnostics.length > 0 ? true : false;
+        }
+
         function grammarErrorOnNode(sourceFile: SourceFile, node: Node, message: DiagnosticMessage, arg0?: any, arg1?: any, arg2?: any): void {
             var start = getFullWidth(node) === 0 ? node.pos : skipTrivia(sourceFile.text, node.pos);
             var length = node.end - start;
@@ -8928,11 +8926,6 @@ module ts {
 
         // Fully type check a source file and collect the relevant diagnostics.
         function checkSourceFile(node: SourceFile) {
-            sourceText = node.text;
-            scanner = createScanner(compilerOptions.target, /*skipTrivia*/ true, sourceText);
-            hasParserError = node.parseDiagnostics.length > 0 ? true : false;
-            sourceFile = node;
-
             var links = getNodeLinks(node);
             if (!(links.flags & NodeCheckFlags.TypeChecked)) {
                 emitExtends = false;
