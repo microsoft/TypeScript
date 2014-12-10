@@ -648,7 +648,6 @@ module m3 { }\
         });
 
         it('Insert function above arrow function with comment',() => {
-
             var source =
                 "\
 () =>\
@@ -659,7 +658,17 @@ module m3 { }\
             var index = 0;
             var newTextAndChange = withInsert(oldText, index, "function Foo() { }");
 
-            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, -1);
+            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 0);
+        });
+
+        it('Finish incomplete regular expression',() => {
+            var source = "while (true) /3; return;"
+
+            var oldText = ScriptSnapshot.fromString(source);
+            var index = source.length - 1;
+            var newTextAndChange = withInsert(oldText, index, "/");
+
+            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 0);
         });
 
         // Simulated typing tests.
