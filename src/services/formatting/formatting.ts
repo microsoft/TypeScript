@@ -1,5 +1,6 @@
 ///<reference path='..\services.ts' />
 ///<reference path='formattingScanner.ts' />
+///<reference path='rulesProvider.ts' />
 ///<reference path='references.ts' />
 
 module ts.formatting {
