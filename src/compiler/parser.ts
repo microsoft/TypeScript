@@ -1015,7 +1015,24 @@ module ts {
         return 0;
     }
 
-    export function createSourceFile(filename: string, sourceText: string, languageVersion: ScriptTarget, version: string, isOpen: boolean = false): SourceFile {
+    function fixupParentReferences(sourceFile: SourceFile) {
+        // normally parent references are set during binding.
+        // however here SourceFile data is used only for syntactic features so running the whole binding process is an overhead.
+        // walk over the nodes and set parent references
+        var parent: Node = sourceFile;
+        function walk(n: Node): void {
+            n.parent = parent;
+
+            var saveParent = parent;
+            parent = n;
+            forEachChild(n, walk);
+            parent = saveParent;
+        }
+
+        forEachChild(sourceFile, walk);
+    }
+
+    export function createSourceFile(filename: string, sourceText: string, languageVersion: ScriptTarget, setParentNodes = false): SourceFile {
         var parsingContext: ParsingContext;
         var identifiers: Map<string> = {};
         var identifierCount = 0;
@@ -1131,10 +1148,13 @@ module ts {
 
         sourceFile.nodeCount = nodeCount;
         sourceFile.identifierCount = identifierCount;
-        sourceFile.version = version;
-        sourceFile.isOpen = isOpen;
         sourceFile.languageVersion = languageVersion;
         sourceFile.identifiers = identifiers;
+
+        if (setParentNodes) {
+            fixupParentReferences(sourceFile);
+        }
+
         return sourceFile;
 
         function setContextFlag(val: Boolean, flag: ParserContextFlags) {

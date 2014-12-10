@@ -895,8 +895,6 @@ module ts {
         nodeCount: number;
         identifierCount: number;
         symbolCount: number;
-        isOpen: boolean;
-        version: string;
         languageVersion: ScriptTarget;
         identifiers: Map<string>;
     }

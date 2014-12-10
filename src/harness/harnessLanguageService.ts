@@ -111,7 +111,10 @@ module Harness.LanguageService {
             scriptSnapshot: ts.IScriptSnapshot,
             version: string,
             isOpen: boolean): ts.SourceFile {
-            return ts.createSourceFile(fileName, scriptSnapshot.getText(0, scriptSnapshot.getLength()), compilationSettings.target, version, isOpen);
+            var sourceFile = ts.createSourceFile(fileName, scriptSnapshot.getText(0, scriptSnapshot.getLength()), compilationSettings.target);
+            sourceFile.version = version;
+            sourceFile.isOpen = isOpen;
+            return sourceFile;
         }
 
         public updateDocument(
@@ -264,7 +267,10 @@ module Harness.LanguageService {
 
         /** Parse file given its source text */
         public parseSourceText(fileName: string, sourceText: ts.IScriptSnapshot): ts.SourceFile {
-            return ts.createSourceFile(fileName, sourceText.getText(0, sourceText.getLength()), ts.ScriptTarget.Latest, "1", true);
+            var result = ts.createSourceFile(fileName, sourceText.getText(0, sourceText.getLength()), ts.ScriptTarget.Latest);
+            result.version = "1";
+            result.isOpen = true;
+            return result;
         }
 
         /** Parse a file on disk given its fileName */

@@ -59,6 +59,9 @@ module ts {
     }
 
     export interface SourceFile {
+        isOpen: boolean;
+        version: string;
+
         getScriptSnapshot(): IScriptSnapshot;
         getNamedDeclarations(): Declaration[];
         update(scriptSnapshot: IScriptSnapshot, version: string, isOpen: boolean, textChangeRange: TextChangeRange): SourceFile;
@@ -866,7 +869,9 @@ module ts {
         }
 
         public static createSourceFileObject(filename: string, scriptSnapshot: IScriptSnapshot, languageVersion: ScriptTarget, version: string, isOpen: boolean) {
-            var newSourceFile = <SourceFileObject><any>createSourceFile(filename, scriptSnapshot.getText(0, scriptSnapshot.getLength()), languageVersion, version, isOpen);
+            var newSourceFile = <SourceFileObject><any>createSourceFile(filename, scriptSnapshot.getText(0, scriptSnapshot.getLength()), languageVersion, /*setParentNodes:*/ true);
+            newSourceFile.version = version;
+            newSourceFile.isOpen = isOpen;
             newSourceFile.scriptSnapshot = scriptSnapshot;
             return newSourceFile;
         }
@@ -1678,7 +1683,6 @@ module ts {
                 this.host.log("SyntaxTreeCache.Initialize: createSourceFile: " + (new Date().getTime() - start));
 
                 var start = new Date().getTime();
-                fixupParentReferences(sourceFile);
                 this.host.log("SyntaxTreeCache.Initialize: fixupParentRefs : " + (new Date().getTime() - start));
             }
             else if (this.currentFileVersion !== version) {
@@ -1693,7 +1697,6 @@ module ts {
                 this.host.log("SyntaxTreeCache.Initialize: updateSourceFile: " + (new Date().getTime() - start));
 
                 var start = new Date().getTime();
-                fixupParentReferences(sourceFile);
                 this.host.log("SyntaxTreeCache.Initialize: fixupParentRefs : " + (new Date().getTime() - start));
             }
 
@@ -1702,22 +1705,6 @@ module ts {
                 this.currentFileVersion = version;
                 this.currentFilename = filename;
                 this.currentSourceFile = sourceFile;
-            }
-
-            function fixupParentReferences(sourceFile: SourceFile) {
-                // normally parent references are set during binding.
-                // however here SourceFile data is used only for syntactic features so running the whole binding process is an overhead.
-                // walk over the nodes and set parent references
-                var parent: Node = sourceFile;
-                function walk(n: Node): void {
-                    n.parent = parent;
-
-                    var saveParent = parent;
-                    parent = n;
-                    forEachChild(n, walk);
-                    parent = saveParent;
-                }
-                forEachChild(sourceFile, walk);
             }
         }
 
