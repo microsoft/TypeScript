@@ -1613,7 +1613,7 @@ module ts {
         public getChangeRange(filename: string, lastKnownVersion: string, oldScriptSnapshot: IScriptSnapshot): TextChangeRange {
             var currentVersion = this.getVersion(filename);
             if (lastKnownVersion === currentVersion) {
-                return TextChangeRangeObject.unchanged; // "No changes"
+                return unchangedTextChangeRange; // "No changes"
             }
 
             var scriptSnapshot = this.getScriptSnapshot(filename);

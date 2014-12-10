@@ -328,7 +328,7 @@ module ts {
             }
 
             var decoded: { span: { start: number; length: number; }; newLength: number; } = JSON.parse(encoded);
-            return new TextChangeRangeObject(
+            return createTextChangeRange(
                 createTextSpan(decoded.span.start, decoded.span.length), decoded.newLength);
         }
     }

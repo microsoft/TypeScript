@@ -32,7 +32,7 @@ module Harness.LanguageService {
             // Store edit range + new length of script
             this.editRanges.push({
                 length: this.content.length,
-                textChangeRange: new ts.TextChangeRangeObject(
+                textChangeRange: ts.createTextChangeRange(
                     ts.createTextSpanFromBounds(minChar, limChar), newText.length)
             });
 
@@ -43,14 +43,14 @@ module Harness.LanguageService {
         public getTextChangeRangeBetweenVersions(startVersion: number, endVersion: number): ts.TextChangeRange {
             if (startVersion === endVersion) {
                 // No edits!
-                return ts.TextChangeRangeObject.unchanged;
+                return ts.unchangedTextChangeRange;
             }
 
             var initialEditRangeIndex = this.editRanges.length - (this.version - startVersion);
             var lastEditRangeIndex = this.editRanges.length - (this.version - endVersion);
 
             var entries = this.editRanges.slice(initialEditRangeIndex, lastEditRangeIndex);
-            return ts.TextChangeRangeObject.collapseChangesAcrossMultipleVersions(entries.map(e => e.textChangeRange));
+            return ts.collapseTextChangeRangesAcrossMultipleVersions(entries.map(e => e.textChangeRange));
         }
     }
 
