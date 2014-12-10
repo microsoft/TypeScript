@@ -160,6 +160,7 @@ module ts {
             var oldText = ScriptSnapshot.fromString(source);
             var semicolonIndex = source.indexOf(";");
             var newTextAndChange = withInsert(oldText, semicolonIndex, " + 1");
+
             compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 0);
         });
 
@@ -175,6 +176,7 @@ module ts {
             var index = source.indexOf("+ 1");
             var oldText = ScriptSnapshot.fromString(source);
             var newTextAndChange = withDelete(oldText, index, "+ 1".length);
+
             compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 0);
         });
 
@@ -182,9 +184,9 @@ module ts {
             var source = "class C { public foo1() { /; } public foo2() { return 1;} public foo3() { } }";
 
             var semicolonIndex = source.indexOf(";}");
-
             var oldText = ScriptSnapshot.fromString(source);
             var newTextAndChange = withInsert(oldText, semicolonIndex, "/");
+
             compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 0);
         });
 
@@ -192,9 +194,19 @@ module ts {
             var source = "class C { public foo1() { ; } public foo2() { return 1/;} public foo3() { } }";
 
             var semicolonIndex = source.indexOf(";");
-
             var oldText = ScriptSnapshot.fromString(source);
             var newTextAndChange = withInsert(oldText, semicolonIndex, "/");
+
+            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 0);
+        });
+
+        it('Regular comment 1',() => {
+            var source = "class C { public foo1() { /; } public foo2() { return 1; } public foo3() { } }";
+
+            var semicolonIndex = source.indexOf(";");
+            var oldText = ScriptSnapshot.fromString(source);
+            var newTextAndChange = withInsert(oldText, semicolonIndex, "/");
+
             compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 0);
         });
     });
