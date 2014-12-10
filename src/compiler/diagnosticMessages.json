@@ -17,7 +17,8 @@
     },
     "Trailing comma not allowed.": {
         "category": "Error",
-        "code": 1009
+        "code": 1009,
+        "isEarly":  true
     },
     "'*/' expected.": {
         "category": "Error",
@@ -334,7 +335,8 @@
     },
     "A tuple type element list cannot be empty.": {
         "category": "Error",
-        "code": 1122
+        "code": 1122,
+        "isEarly":  true
     },
     "Variable declaration list cannot be empty.": {
         "category": "Error",

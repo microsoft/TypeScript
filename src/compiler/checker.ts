@@ -7274,6 +7274,13 @@ module ts {
         }
 
         function checkTupleType(node: TupleTypeNode) {
+            // Grammar checking
+            var sourceFile = getSourceFileOfNode(node);
+            checkGrammarForDisallowedTrailingComma(sourceFile, node.elementTypes);
+            if (node.elementTypes.length === 0) {
+                grammarErrorOnNode(sourceFile, node, Diagnostics.A_tuple_type_element_list_cannot_be_empty);
+            }
+
             forEach(node.elementTypes, checkSourceElement);
         }
 
@@ -8661,7 +8668,15 @@ module ts {
             return <Identifier>node;
         }
 
-        // Grammar checking helper functions
+        // GRAMMAR CHECKING
+        function checkGrammarForDisallowedTrailingComma(sourceFile: SourceFile, list: NodeArray<Node>): void {
+            if (list && list.hasTrailingComma) {
+                var start = list.end - ",".length;
+                var end = list.end;
+                grammarErrorAtPos(sourceFile, start, end - start, Diagnostics.Trailing_comma_not_allowed);
+            }
+        }
+
         function hasParseDiagnostics(sourceFile: SourceFile): boolean {
             return sourceFile.parseDiagnostics.length > 0 ? true : false;
         }
@@ -8669,8 +8684,21 @@ module ts {
         function grammarErrorOnFirstToken(sourceFile: SourceFile, node: Node, message: DiagnosticMessage, arg0?: any, arg1?: any, arg2?: any): void {
             if (!hasParseDiagnostics(sourceFile)) {
                 var start = skipTrivia(sourceFile.text, node.pos);
-                var length = node.end - start;
+                diagnostics.push(createFileDiagnostic(sourceFile, start, node.end - start, message, arg0, arg1, arg2));
+            }
+        }
+
+        function grammarErrorAtPos(sourceFile: SourceFile, start: number, length: number, message: DiagnosticMessage, arg0?: any, arg1?: any, arg2?: any): void {
+            if (!hasParseDiagnostics(sourceFile)) {
                 diagnostics.push(createFileDiagnostic(sourceFile, start, length, message, arg0, arg1, arg2));
+            }
+        }
+
+        function grammarErrorOnNode(sourceFile: SourceFile, node: Node, message: DiagnosticMessage, arg0?: any, arg1?: any, arg2?: any): void {
+            if (!hasParseDiagnostics(sourceFile)) {
+                var span = getErrorSpanForNode(node);
+                var start = span.end > span.pos ? skipTrivia(sourceFile.text, span.pos) : span.pos;
+                diagnostics.push(createFileDiagnostic(sourceFile, start, span.end - start, message, arg0, arg1, arg2));
             }
         }
 

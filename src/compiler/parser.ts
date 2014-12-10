@@ -4678,7 +4678,7 @@ module ts {
                 case SyntaxKind.SwitchStatement:                return checkSwitchStatement(<SwitchStatement>node);
                 case SyntaxKind.TaggedTemplateExpression:       return checkTaggedTemplateExpression(<TaggedTemplateExpression>node);
                 case SyntaxKind.ThrowStatement:                 return checkThrowStatement(<ThrowStatement>node);
-                case SyntaxKind.TupleType:                      return checkTupleType(<TupleTypeNode>node);
+                //case SyntaxKind.TupleType:                      return checkTupleType(<TupleTypeNode>node);
                 case SyntaxKind.TypeReference:                  return checkTypeReference(<TypeReferenceNode>node);
                 case SyntaxKind.VariableDeclaration:            return checkVariableDeclaration(<VariableDeclaration>node);
                 case SyntaxKind.VariableStatement:              return checkVariableStatement(<VariableStatement>node);
