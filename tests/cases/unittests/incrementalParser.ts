@@ -218,5 +218,14 @@ module ts {
 
             compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 0);
         });
+
+        it('Comment 3',() => {
+            var source = "//class C { public foo1() { /; } public foo2() { return 1; } public foo3() { } }";
+
+            var oldText = ScriptSnapshot.fromString(source);
+            var newTextAndChange = withDelete(oldText, 0, 2);
+
+            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 0);
+        });
     });
 }
