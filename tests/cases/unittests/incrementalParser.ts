@@ -263,5 +263,16 @@ module ts {
 
             compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 0);
         });
+
+        it('Enum element 1',() => {
+            // Should be able to reuse most of the enum elements.
+            var source = "enum E { a = 1, b = 1 << 1, c = 3, e = 4, f = 5, g = 7, h = 8, i = 9, j = 10 }";
+
+            var index = source.indexOf("<<");
+            var oldText = ScriptSnapshot.fromString(source);
+            var newTextAndChange = withChange(oldText, index, 2, "+");
+
+            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 0);
+        });
     });
 }
