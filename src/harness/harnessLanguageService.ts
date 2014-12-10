@@ -139,6 +139,9 @@ module Harness.LanguageService {
         constructor(private cancellationToken: ts.CancellationToken = CancellationToken.None) {
         }
 
+        public trace(s: string) {
+        }
+
         public addDefaultLibrary() {
             this.addScript(Harness.Compiler.defaultLibFileName, Harness.Compiler.defaultLibSourceFile.text);
         }
