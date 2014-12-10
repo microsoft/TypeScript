@@ -32,8 +32,8 @@ module Harness.LanguageService {
             // Store edit range + new length of script
             this.editRanges.push({
                 length: this.content.length,
-                textChangeRange: new ts.TextChangeRange(
-                    ts.TextSpan.fromBounds(minChar, limChar), newText.length)
+                textChangeRange: new ts.TextChangeRangeObject(
+                    ts.TextSpanObject.fromBounds(minChar, limChar), newText.length)
             });
 
             // Update version #
@@ -43,14 +43,14 @@ module Harness.LanguageService {
         public getTextChangeRangeBetweenVersions(startVersion: number, endVersion: number): ts.TextChangeRange {
             if (startVersion === endVersion) {
                 // No edits!
-                return ts.TextChangeRange.unchanged;
+                return ts.TextChangeRangeObject.unchanged;
             }
 
             var initialEditRangeIndex = this.editRanges.length - (this.version - startVersion);
             var lastEditRangeIndex = this.editRanges.length - (this.version - endVersion);
 
             var entries = this.editRanges.slice(initialEditRangeIndex, lastEditRangeIndex);
-            return ts.TextChangeRange.collapseChangesAcrossMultipleVersions(entries.map(e => e.textChangeRange));
+            return ts.TextChangeRangeObject.collapseChangesAcrossMultipleVersions(entries.map(e => e.textChangeRange));
         }
     }
 
@@ -126,7 +126,7 @@ module Harness.LanguageService {
             isOpen: boolean,
             textChangeRange: ts.TextChangeRange
             ): ts.SourceFile {
-            return document.update(scriptSnapshot, version, isOpen, textChangeRange);
+            return ts.updateLanguageServiceSourceFile(document, scriptSnapshot, version, isOpen, textChangeRange);
         }
 
         public releaseDocument(fileName: string, compilationSettings: ts.CompilerOptions): void {

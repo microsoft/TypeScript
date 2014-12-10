@@ -6,7 +6,7 @@ module ts {
         var contents = text.getText(0, text.getLength());
         var newContents = contents.substr(0, start) + newText + contents.substring(start + length);
 
-        return { text: ScriptSnapshot.fromString(newContents), textChangeRange: new TextChangeRange(new TextSpan(start, length), newText.length) }
+        return { text: ScriptSnapshot.fromString(newContents), textChangeRange: new TextChangeRangeObject(new TextSpanObject(start, length), newText.length) }
     }
 
     function withInsert(text: IScriptSnapshot, start: number, newText: string): { text: IScriptSnapshot; textChangeRange: TextChangeRange; } {
@@ -18,10 +18,7 @@ module ts {
     }
 
     function createTree(text: IScriptSnapshot, version: string) {
-        var options: CompilerOptions = {};
-        options.target = ScriptTarget.ES5;
-
-        return createLanguageServiceSourceFile(/*fileName:*/ "", text, options, version, /*isOpen:*/ true)
+        return createLanguageServiceSourceFile(/*fileName:*/ "", text, ScriptTarget.Latest, version, /*isOpen:*/ true, /*setNodeParents:*/ true)
     }
 
     // NOTE: 'reusedElements' is the expected count of elements reused from the old tree to the new
@@ -38,7 +35,7 @@ module ts {
         Utils.assertInvariants(newTree, /*parent:*/ undefined);
 
         // Create a tree for the new text, in an incremental fashion.
-        var incrementalNewTree = oldTree.update(newText, oldTree.version + ".", /*isOpen:*/ true, textChangeRange);
+        var incrementalNewTree = updateLanguageServiceSourceFile(oldTree, newText, oldTree.version + ".", /*isOpen:*/ true, textChangeRange);
         Utils.assertInvariants(incrementalNewTree, /*parent:*/ undefined);
 
         // We should get the same tree when doign a full or incremental parse.

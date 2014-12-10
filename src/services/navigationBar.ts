@@ -462,8 +462,8 @@ module ts.NavigationBar {
 
         function getNodeSpan(node: Node) {
             return node.kind === SyntaxKind.SourceFile
-                ? TextSpan.fromBounds(node.getFullStart(), node.getEnd())
-                : TextSpan.fromBounds(node.getStart(), node.getEnd());
+                ? TextSpanObject.fromBounds(node.getFullStart(), node.getEnd())
+                : TextSpanObject.fromBounds(node.getStart(), node.getEnd());
         }
 
         function getTextOfNode(node: Node): string {

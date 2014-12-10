@@ -866,9 +866,20 @@ module ts {
 
         filename: string;
         text: string;
+
         getLineAndCharacterFromPosition(position: number): LineAndCharacter;
         getPositionFromLineAndCharacter(line: number, character: number): number;
         getLineStarts(): number[];
+
+        // Updates this source file to represent the 'newText' passed in.  The 'textChangeRange' 
+        // parameter indicates what changed between the 'text' that this SourceFile has and the
+        // 'newText'.
+        //
+        // Note: this function mutates nodes from this SourceFile. That means any existing nodes
+        // from this SourceFile that are being held onto may change as a result (including 
+        // becoming detached from any SourceFile).
+        update(newText: string, textChangeRange: TextChangeRange): SourceFile;
+
         amdDependencies: string[];
         amdModuleName: string;
         referencedFiles: FileReference[];
@@ -1435,7 +1446,6 @@ module ts {
         character: number;
     }
 
-
     export const enum ScriptTarget {
         ES3,
         ES5,
@@ -1606,5 +1616,27 @@ module ts {
         getCanonicalFileName(fileName: string): string;
         useCaseSensitiveFileNames(): boolean;
         getNewLine(): string;
+    }
+
+    export interface TextChangeRange {
+        span(): TextSpan;
+        newLength(): number;
+        newSpan(): TextSpan;
+        isUnchanged(): boolean;
+    }
+
+    export interface TextSpan {
+        start(): number;
+        length(): number;
+        end(): number;
+        isEmpty(): boolean;
+        containsPosition(position: number): boolean;
+        containsTextSpan(span: TextSpan): boolean;
+        overlapsWith(span: TextSpan): boolean;
+        overlap(span: TextSpan): TextSpan;
+        intersectsWithTextSpan(span: TextSpan): boolean;
+        intersectsWith(start: number, length: number): boolean;
+        intersectsWithPosition(position: number): boolean;
+        intersection(span: TextSpan): TextSpan;
     }
 }

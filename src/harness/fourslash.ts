@@ -1755,14 +1755,14 @@ module FourSlash {
 
         public verifySemanticClassifications(expected: { classificationType: string; text: string }[]) {
             var actual = this.languageService.getSemanticClassifications(this.activeFile.fileName,
-                new ts.TextSpan(0, this.activeFile.content.length));
+                new ts.TextSpanObject(0, this.activeFile.content.length));
 
             this.verifyClassifications(expected, actual);
         }
 
         public verifySyntacticClassifications(expected: { classificationType: string; text: string }[]) {
             var actual = this.languageService.getSyntacticClassifications(this.activeFile.fileName, 
-                new ts.TextSpan(0, this.activeFile.content.length));
+                new ts.TextSpanObject(0, this.activeFile.content.length));
 
             this.verifyClassifications(expected, actual);
         }
@@ -1796,7 +1796,7 @@ module FourSlash {
             for (var i = 0; i < spans.length; i++) {
                 var expectedSpan = spans[i];
                 var actualComment = actual[i];
-                var actualCommentSpan = new ts.TextSpan(actualComment.position, actualComment.message.length);
+                var actualCommentSpan = new ts.TextSpanObject(actualComment.position, actualComment.message.length);
 
                 if (expectedSpan.start !== actualCommentSpan.start() || expectedSpan.end !== actualCommentSpan.end()) {
                     this.raiseError('verifyOutliningSpans failed - span ' + (i + 1) + ' expected: (' + expectedSpan.start + ',' + expectedSpan.end + '),  actual: (' + actualCommentSpan.start() + ',' + actualCommentSpan.end() + ')');

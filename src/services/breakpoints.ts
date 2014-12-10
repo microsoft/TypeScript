@@ -38,7 +38,7 @@ module ts.BreakpointResolver {
         return spanInNode(tokenAtLocation);
 
         function textSpan(startNode: Node, endNode?: Node) {
-            return TextSpan.fromBounds(startNode.getStart(), (endNode || startNode).getEnd());
+            return TextSpanObject.fromBounds(startNode.getStart(), (endNode || startNode).getEnd());
         }
 
         function spanInNodeIfStartsOnSameLine(node: Node, otherwiseOnNode?: Node): TextSpan {

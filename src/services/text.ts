@@ -1,5 +1,5 @@
 module ts {
-    export class TextSpan {
+    export class TextSpanObject {
         private _start: number;
         private _length: number;
 
@@ -49,7 +49,7 @@ module ts {
          * @param span The span to check.
          */
         public containsTextSpan(span: TextSpan): boolean {
-            return span._start >= this._start && span.end() <= this.end();
+            return span.start() >= this._start && span.end() <= this.end();
         }
 
         /**
@@ -59,7 +59,7 @@ module ts {
          * @param span The span to check.
          */
         public overlapsWith(span: TextSpan): boolean {
-            var overlapStart = Math.max(this._start, span._start);
+            var overlapStart = Math.max(this._start, span.start());
             var overlapEnd = Math.min(this.end(), span.end());
 
             return overlapStart < overlapEnd;
@@ -70,11 +70,11 @@ module ts {
          * @param span The span to check.
          */
         public overlap(span: TextSpan): TextSpan {
-            var overlapStart = Math.max(this._start, span._start);
+            var overlapStart = Math.max(this._start, span.start());
             var overlapEnd = Math.min(this.end(), span.end());
 
             if (overlapStart < overlapEnd) {
-                return TextSpan.fromBounds(overlapStart, overlapEnd);
+                return TextSpanObject.fromBounds(overlapStart, overlapEnd);
             }
 
             return undefined;
@@ -87,7 +87,7 @@ module ts {
          * @param The span to check.
          */
         public intersectsWithTextSpan(span: TextSpan): boolean {
-            return span._start <= this.end() && span.end() >= this._start;
+            return span.start() <= this.end() && span.end() >= this._start;
         }
 
         public intersectsWith(start: number, length: number): boolean {
@@ -110,11 +110,11 @@ module ts {
          * @param span The span to check.
          */
         public intersection(span: TextSpan): TextSpan {
-            var intersectStart = Math.max(this._start, span._start);
+            var intersectStart = Math.max(this._start, span.start());
             var intersectEnd = Math.min(this.end(), span.end());
 
             if (intersectStart <= intersectEnd) {
-                return TextSpan.fromBounds(intersectStart, intersectEnd);
+                return TextSpanObject.fromBounds(intersectStart, intersectEnd);
             }
 
             return undefined;
@@ -127,12 +127,12 @@ module ts {
         public static fromBounds(start: number, end: number): TextSpan {
             Debug.assert(start >= 0);
             Debug.assert(end - start >= 0);
-            return new TextSpan(start, end - start);
+            return new TextSpanObject(start, end - start);
         }
     }
 
-    export class TextChangeRange {
-        public static unchanged = new TextChangeRange(new TextSpan(0, 0), 0);
+    export class TextChangeRangeObject implements TextChangeRange {
+        public static unchanged = new TextChangeRangeObject(new TextSpanObject(0, 0), 0);
 
         private _span: TextSpan;
         private _newLength: number;
@@ -162,7 +162,7 @@ module ts {
         }
 
         public newSpan(): TextSpan {
-            return new TextSpan(this.span().start(), this.newLength());
+            return new TextSpanObject(this.span().start(), this.newLength());
         }
 
         public isUnchanged(): boolean {
@@ -179,7 +179,7 @@ module ts {
          */
         public static collapseChangesAcrossMultipleVersions(changes: TextChangeRange[]): TextChangeRange {
             if (changes.length === 0) {
-                return TextChangeRange.unchanged;
+                return TextChangeRangeObject.unchanged;
             }
 
             if (changes.length === 1) {
@@ -290,7 +290,7 @@ module ts {
                 newEndN = Math.max(newEnd2, newEnd2 + (newEnd1 - oldEnd2));
             }
 
-            return new TextChangeRange(TextSpan.fromBounds(oldStartN, oldEndN), /*newLength: */newEndN - oldStartN);
+            return new TextChangeRangeObject(TextSpanObject.fromBounds(oldStartN, oldEndN), /*newLength: */newEndN - oldStartN);
         }
     }
 }

@@ -328,8 +328,8 @@ module ts {
             }
 
             var decoded: { span: { start: number; length: number; }; newLength: number; } = JSON.parse(encoded);
-            return new TextChangeRange(
-                new TextSpan(decoded.span.start, decoded.span.length), decoded.newLength);
+            return new TextChangeRangeObject(
+                new TextSpanObject(decoded.span.start, decoded.span.length), decoded.newLength);
         }
     }
 
@@ -510,7 +510,7 @@ module ts {
             return this.forwardJSONCall(
                 "getSyntacticClassifications('" + fileName + "', " + start + ", " + length + ")",
                 () => {
-                    var classifications = this.languageService.getSyntacticClassifications(fileName, new TextSpan(start, length));
+                    var classifications = this.languageService.getSyntacticClassifications(fileName, new TextSpanObject(start, length));
                     return classifications;
                 });
         }
@@ -519,7 +519,7 @@ module ts {
             return this.forwardJSONCall(
                 "getSemanticClassifications('" + fileName + "', " + start + ", " + length + ")",
                 () => {
-                    var classifications = this.languageService.getSemanticClassifications(fileName, new TextSpan(start, length));
+                    var classifications = this.languageService.getSemanticClassifications(fileName, new TextSpanObject(start, length));
                     return classifications;
                 });
         }

@@ -61,10 +61,9 @@ module ts {
     export interface SourceFile {
         isOpen: boolean;
         version: string;
+        scriptSnapshot: IScriptSnapshot;
 
-        getScriptSnapshot(): IScriptSnapshot;
         getNamedDeclarations(): Declaration[];
-        update(scriptSnapshot: IScriptSnapshot, version: string, isOpen: boolean, textChangeRange: TextChangeRange): SourceFile;
     }
 
     /**
@@ -724,6 +723,7 @@ module ts {
         public _declarationBrand: any;
         public filename: string;
         public text: string;
+        public scriptSnapshot: IScriptSnapshot;
 
         public statements: NodeArray<Statement>;
         public endOfFileToken: Node;
@@ -734,6 +734,7 @@ module ts {
         public getPositionFromLineAndCharacter: (line: number, character: number) => number;
         public getLineStarts: () => number[];
         public getSyntacticDiagnostics: () => Diagnostic[];
+        public update: (newText: string, textChangeRange: TextChangeRange) => SourceFile;
 
         public amdDependencies: string[];
         public amdModuleName: string;
@@ -754,12 +755,7 @@ module ts {
         public languageVersion: ScriptTarget;
         public identifiers: Map<string>;
 
-        private scriptSnapshot: IScriptSnapshot;
         private namedDeclarations: Declaration[];
-
-        public getScriptSnapshot(): IScriptSnapshot {
-            return this.scriptSnapshot;
-        }
 
         public getNamedDeclarations() {
             if (!this.namedDeclarations) {
@@ -845,35 +841,6 @@ module ts {
             }
 
             return this.namedDeclarations;
-        }
-
-        public update(scriptSnapshot: IScriptSnapshot, version: string, isOpen: boolean, textChangeRange: TextChangeRange): SourceFile {
-            if (textChangeRange && Debug.shouldAssert(AssertionLevel.Normal)) {
-                var oldText = this.scriptSnapshot;
-                var newText = scriptSnapshot;
-
-                Debug.assert((oldText.getLength() - textChangeRange.span().length() + textChangeRange.newLength()) === newText.getLength());
-
-                if (Debug.shouldAssert(AssertionLevel.VeryAggressive)) {
-                    var oldTextPrefix = oldText.getText(0, textChangeRange.span().start());
-                    var newTextPrefix = newText.getText(0, textChangeRange.span().start());
-                    Debug.assert(oldTextPrefix === newTextPrefix);
-
-                    var oldTextSuffix = oldText.getText(textChangeRange.span().end(), oldText.getLength());
-                    var newTextSuffix = newText.getText(textChangeRange.newSpan().end(), newText.getLength());
-                    Debug.assert(oldTextSuffix === newTextSuffix);
-                }
-            }
-
-            return SourceFileObject.createSourceFileObject(this.filename, scriptSnapshot, this.languageVersion, version, isOpen);
-        }
-
-        public static createSourceFileObject(filename: string, scriptSnapshot: IScriptSnapshot, languageVersion: ScriptTarget, version: string, isOpen: boolean) {
-            var newSourceFile = <SourceFileObject><any>createSourceFile(filename, scriptSnapshot.getText(0, scriptSnapshot.getLength()), languageVersion, /*setParentNodes:*/ true);
-            newSourceFile.version = version;
-            newSourceFile.isOpen = isOpen;
-            newSourceFile.scriptSnapshot = scriptSnapshot;
-            return newSourceFile;
         }
     }
 
@@ -1646,7 +1613,7 @@ module ts {
         public getChangeRange(filename: string, lastKnownVersion: string, oldScriptSnapshot: IScriptSnapshot): TextChangeRange {
             var currentVersion = this.getVersion(filename);
             if (lastKnownVersion === currentVersion) {
-                return TextChangeRange.unchanged; // "No changes"
+                return TextChangeRangeObject.unchanged; // "No changes"
             }
 
             var scriptSnapshot = this.getScriptSnapshot(filename);
@@ -1679,25 +1646,17 @@ module ts {
                 var scriptSnapshot = this.hostCache.getScriptSnapshot(filename);
 
                 var start = new Date().getTime();
-                sourceFile = createLanguageServiceSourceFile(filename, scriptSnapshot, getDefaultCompilerOptions(), version, /*isOpen*/ true);
+                sourceFile = createLanguageServiceSourceFile(filename, scriptSnapshot, ScriptTarget.Latest, version, /*isOpen*/ true, /*setNodeParents;*/ true);
                 this.host.log("SyntaxTreeCache.Initialize: createSourceFile: " + (new Date().getTime() - start));
-
-                var start = new Date().getTime();
-                this.host.log("SyntaxTreeCache.Initialize: fixupParentRefs : " + (new Date().getTime() - start));
             }
             else if (this.currentFileVersion !== version) {
                 var scriptSnapshot = this.hostCache.getScriptSnapshot(filename);
 
-                var editRange = this.hostCache.getChangeRange(filename, this.currentFileVersion, this.currentSourceFile.getScriptSnapshot());
+                var editRange = this.hostCache.getChangeRange(filename, this.currentFileVersion, this.currentSourceFile.scriptSnapshot);
 
                 var start = new Date().getTime();
-                sourceFile = !editRange 
-                    ? createLanguageServiceSourceFile(filename, scriptSnapshot, getDefaultCompilerOptions(), version, /*isOpen*/ true)
-                    : this.currentSourceFile.update(scriptSnapshot, version, /*isOpen*/ true, editRange);
+                sourceFile = updateLanguageServiceSourceFile(this.currentSourceFile, scriptSnapshot, version, /*isOpen*/ true, editRange);
                 this.host.log("SyntaxTreeCache.Initialize: updateSourceFile: " + (new Date().getTime() - start));
-
-                var start = new Date().getTime();
-                this.host.log("SyntaxTreeCache.Initialize: fixupParentRefs : " + (new Date().getTime() - start));
             }
 
             if (sourceFile) {
@@ -1714,12 +1673,52 @@ module ts {
         }
 
         public getCurrentScriptSnapshot(filename: string): IScriptSnapshot {
-            return this.getCurrentSourceFile(filename).getScriptSnapshot();
+            return this.getCurrentSourceFile(filename).scriptSnapshot;
         }
     }
 
-    export function createLanguageServiceSourceFile(filename: string, scriptSnapshot: IScriptSnapshot, settings: CompilerOptions, version: string, isOpen: boolean): SourceFile {
-        return SourceFileObject.createSourceFileObject(filename, scriptSnapshot, settings.target, version, isOpen);
+    function setSourceFileFields(sourceFile: SourceFile, scriptSnapshot: IScriptSnapshot, version: string, isOpen: boolean) {
+        sourceFile.version = version;
+        sourceFile.isOpen = isOpen;
+        sourceFile.scriptSnapshot = scriptSnapshot;
+    } 
+
+    export function createLanguageServiceSourceFile(filename: string, scriptSnapshot: IScriptSnapshot, scriptTarget: ScriptTarget, version: string, isOpen: boolean, setNodeParents: boolean): SourceFile {
+        var sourceFile = createSourceFile(filename, scriptSnapshot.getText(0, scriptSnapshot.getLength()), scriptTarget, setNodeParents);
+        setSourceFileFields(sourceFile, scriptSnapshot, version, isOpen);
+        return sourceFile;
+    }
+
+    export function updateLanguageServiceSourceFile(sourceFile: SourceFile, scriptSnapshot: IScriptSnapshot, version: string, isOpen: boolean, textChangeRange: TextChangeRange): SourceFile {
+        if (textChangeRange && Debug.shouldAssert(AssertionLevel.Normal)) {
+            var oldText = sourceFile.scriptSnapshot;
+            var newText = scriptSnapshot;
+
+            Debug.assert((oldText.getLength() - textChangeRange.span().length() + textChangeRange.newLength()) === newText.getLength());
+
+            if (Debug.shouldAssert(AssertionLevel.VeryAggressive)) {
+                var oldTextPrefix = oldText.getText(0, textChangeRange.span().start());
+                var newTextPrefix = newText.getText(0, textChangeRange.span().start());
+                Debug.assert(oldTextPrefix === newTextPrefix);
+
+                var oldTextSuffix = oldText.getText(textChangeRange.span().end(), oldText.getLength());
+                var newTextSuffix = newText.getText(textChangeRange.newSpan().end(), newText.getLength());
+                Debug.assert(oldTextSuffix === newTextSuffix);
+            }
+        }
+
+        // If we were given a text change range, and our version or open-ness changed, then 
+        // incrementally parse this file.
+        if (textChangeRange) {
+            if (version !== sourceFile.version || isOpen != sourceFile.isOpen) {
+                var newSourceFile = sourceFile.update(scriptSnapshot.getText(0, scriptSnapshot.getLength()), textChangeRange);
+                setSourceFileFields(newSourceFile, scriptSnapshot, version, isOpen);
+                return newSourceFile;
+            }
+        }
+
+        // Otherwise, just create a new source file.
+        return createLanguageServiceSourceFile(sourceFile.filename, scriptSnapshot, sourceFile.languageVersion, version, isOpen, /*setNodeParents:*/ true);
     }
 
     export function createDocumentRegistry(): DocumentRegistry {
@@ -1769,7 +1768,7 @@ module ts {
             var bucket = getBucketForCompilationSettings(compilationSettings, /*createIfMissing*/ true);
             var entry = lookUp(bucket, filename);
             if (!entry) {
-                var sourceFile = createLanguageServiceSourceFile(filename, scriptSnapshot, compilationSettings, version, isOpen);
+                var sourceFile = createLanguageServiceSourceFile(filename, scriptSnapshot, compilationSettings.target, version, isOpen, /*setNodeParents:*/ false);
 
                 bucket[filename] = entry = {
                     sourceFile: sourceFile,
@@ -1797,11 +1796,7 @@ module ts {
             var entry = lookUp(bucket, filename);
             Debug.assert(entry !== undefined);
 
-            if (entry.sourceFile.isOpen === isOpen && entry.sourceFile.version === version) {
-                return entry.sourceFile;
-            }
-
-            entry.sourceFile = entry.sourceFile.update(scriptSnapshot, version, isOpen, textChangeRange);
+            entry.sourceFile = updateLanguageServiceSourceFile(entry.sourceFile, scriptSnapshot, version, isOpen, textChangeRange);
             return entry.sourceFile;
         }
 
@@ -2225,7 +2220,7 @@ module ts {
                     // new text buffer).
                     var textChangeRange: TextChangeRange = null;
                     if (sourceFile.isOpen && isOpen) {
-                        textChangeRange = hostCache.getChangeRange(filename, sourceFile.version, sourceFile.getScriptSnapshot());
+                        textChangeRange = hostCache.getChangeRange(filename, sourceFile.version, sourceFile.scriptSnapshot);
                     }
 
                     sourceFile = documentRegistry.updateDocument(sourceFile, filename, compilationSettings, scriptSnapshot, version, isOpen, textChangeRange);
@@ -3223,7 +3218,7 @@ module ts {
                             return {
                                 kind: ScriptElementKind.unknown,
                                 kindModifiers: ScriptElementKindModifier.none,
-                                textSpan: new TextSpan(node.getStart(), node.getWidth()),
+                                textSpan: new TextSpanObject(node.getStart(), node.getWidth()),
                                 displayParts: typeToDisplayParts(typeInfoResolver, type, getContainerNode(node)),
                                 documentation: type.symbol ? type.symbol.getDocumentationComment() : undefined
                             };
@@ -3237,7 +3232,7 @@ module ts {
             return {
                 kind: displayPartsDocumentationsAndKind.symbolKind,
                 kindModifiers: getSymbolModifiers(symbol),
-                textSpan: new TextSpan(node.getStart(), node.getWidth()),
+                textSpan: new TextSpanObject(node.getStart(), node.getWidth()),
                 displayParts: displayPartsDocumentationsAndKind.displayParts,
                 documentation: displayPartsDocumentationsAndKind.documentation
             };
@@ -3248,7 +3243,7 @@ module ts {
             function getDefinitionInfo(node: Node, symbolKind: string, symbolName: string, containerName: string): DefinitionInfo {
                 return {
                     fileName: node.getSourceFile().filename,
-                    textSpan: TextSpan.fromBounds(node.getStart(), node.getEnd()),
+                    textSpan: TextSpanObject.fromBounds(node.getStart(), node.getEnd()),
                     kind: symbolKind,
                     name: symbolName,
                     containerKind: undefined,
@@ -3325,7 +3320,7 @@ module ts {
                 if (referenceFile) {
                     return [{
                         fileName: referenceFile.filename,
-                        textSpan: TextSpan.fromBounds(0, 0),
+                        textSpan: TextSpanObject.fromBounds(0, 0),
                         kind: ScriptElementKind.scriptElement,
                         name: comment.filename,
                         containerName: undefined,
@@ -3516,7 +3511,7 @@ module ts {
                         if (shouldHighlightNextKeyword) {
                             result.push({
                                 fileName: filename,
-                                textSpan: TextSpan.fromBounds(elseKeyword.getStart(), ifKeyword.end),
+                                textSpan: TextSpanObject.fromBounds(elseKeyword.getStart(), ifKeyword.end),
                                 isWriteAccess: false
                             });
                             i++; // skip the next keyword
@@ -4208,7 +4203,7 @@ module ts {
                                 (findInComments && isInComment(position))) {
                                 result.push({
                                     fileName: sourceFile.filename,
-                                    textSpan: new TextSpan(position, searchText.length),
+                                    textSpan: new TextSpanObject(position, searchText.length),
                                     isWriteAccess: false
                                 });
                             }
@@ -4591,7 +4586,7 @@ module ts {
 
             return {
                 fileName: node.getSourceFile().filename,
-                textSpan: TextSpan.fromBounds(start, end),
+                textSpan: TextSpanObject.fromBounds(start, end),
                 isWriteAccess: isWriteAccess(node)
             };
         }
@@ -4647,7 +4642,7 @@ module ts {
                             kindModifiers: getNodeModifiers(declaration),
                             matchKind: MatchKind[matchKind],
                             fileName: filename,
-                            textSpan: TextSpan.fromBounds(declaration.getStart(), declaration.getEnd()),
+                            textSpan: TextSpanObject.fromBounds(declaration.getStart(), declaration.getEnd()),
                             // TODO(jfreeman): What should be the containerName when the container has a computed name?
                             containerName: container && container.name ? (<Identifier>container.name).text : "",
                             containerKind: container && container.name ? getNodeKind(container) : ""
@@ -4924,7 +4919,7 @@ module ts {
                 }
             }
 
-            return TextSpan.fromBounds(nodeForStartPos.getStart(), node.getEnd());
+            return TextSpanObject.fromBounds(nodeForStartPos.getStart(), node.getEnd());
         }
 
         function getBreakpointStatementAtPosition(filename: string, position: number) {
@@ -5001,7 +4996,7 @@ module ts {
                             var type = classifySymbol(symbol, getMeaningFromLocation(node));
                             if (type) {
                                 result.push({
-                                    textSpan: new TextSpan(node.getStart(), node.getWidth()),
+                                    textSpan: new TextSpanObject(node.getStart(), node.getWidth()),
                                     classificationType: type
                                 });
                             }
@@ -5027,7 +5022,7 @@ module ts {
                 var width = comment.end - comment.pos;
                 if (span.intersectsWith(comment.pos, width)) {
                     result.push({
-                        textSpan: new TextSpan(comment.pos, width),
+                        textSpan: new TextSpanObject(comment.pos, width),
                         classificationType: ClassificationTypeNames.comment
                     });
                 }
@@ -5040,7 +5035,7 @@ module ts {
                     var type = classifyTokenType(token);
                     if (type) {
                         result.push({
-                            textSpan: new TextSpan(token.getStart(), token.getWidth()),
+                            textSpan: new TextSpanObject(token.getStart(), token.getWidth()),
                             classificationType: type
                         });
                     }
@@ -5168,8 +5163,8 @@ module ts {
                         var current = childNodes[i];
 
                         if (current.kind === matchKind) {
-                            var range1 = new TextSpan(token.getStart(sourceFile), token.getWidth(sourceFile));
-                            var range2 = new TextSpan(current.getStart(sourceFile), current.getWidth(sourceFile));
+                            var range1 = new TextSpanObject(token.getStart(sourceFile), token.getWidth(sourceFile));
+                            var range2 = new TextSpanObject(current.getStart(sourceFile), current.getWidth(sourceFile));
 
                             // We want to order the braces when we return the result.
                             if (range1.start() < range2.start()) {
@@ -5420,7 +5415,7 @@ module ts {
                     if (kind) {
                         return getRenameInfo(symbol.name, typeInfoResolver.getFullyQualifiedName(symbol), kind,
                             getSymbolModifiers(symbol),
-                            new TextSpan(node.getStart(), node.getWidth()));
+                            new TextSpanObject(node.getStart(), node.getWidth()));
                     }
                 }
             }

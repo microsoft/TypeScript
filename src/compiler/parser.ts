@@ -1034,10 +1034,13 @@ module ts {
 
     export function createSourceFile(filename: string, sourceText: string, languageVersion: ScriptTarget, setParentNodes = false): SourceFile {
         var parsingContext: ParsingContext;
-        var identifiers: Map<string> = {};
+        var identifiers: Map<string>;
         var identifierCount = 0;
         var nodeCount = 0;
         var lineStarts: number[];
+        var syntacticDiagnostics: Diagnostic[];
+        var scanner: Scanner;
+        var token: SyntaxKind;
 
         // Flags that dictate what parsing context we're in.  For example:
         // Whether or not we are in strict parsing mode.  All that changes in strict parsing mode is
@@ -1085,7 +1088,7 @@ module ts {
         // Note: it should not be necessary to save/restore these flags during speculative/lookahead
         // parsing.  These context flags are naturally stored and restored through normal recursive
         // descent parsing and unwinding.
-        var contextFlags: ParserContextFlags = 0;
+        var contextFlags: ParserContextFlags;
 
         // Whether or not we've had a parse error since creating the last AST node.  If we have 
         // encountered an error, it will be stored on the next AST node we create.  Parse errors
@@ -1114,48 +1117,69 @@ module ts {
         //
         // Note: any errors at the end of the file that do not precede a regular node, should get
         // attached to the EOF token.
-        var parseErrorBeforeNextFinishedNode = false;
+        var parseErrorBeforeNextFinishedNode: boolean;
 
-        var sourceFile = <SourceFile>createNode(SyntaxKind.SourceFile, 0);
-        if (fileExtensionIs(filename, ".d.ts")) {
-            sourceFile.flags = NodeFlags.DeclarationFile;
+        var sourceFile: SourceFile;
+
+        return parseSourceFile(sourceText, /*textChangeRange:*/ undefined, setParentNodes);
+
+        function parseSourceFile(text: string, textChangeRange: TextChangeRange, setParentNodes: boolean): SourceFile {
+            // Set our initial state before parsing.
+            sourceText = text;
+            parsingContext = 0;
+            identifiers = {};
+            lineStarts = undefined;
+            syntacticDiagnostics = undefined;
+            contextFlags = 0;
+            parseErrorBeforeNextFinishedNode = false;
+
+            sourceFile = <SourceFile>createNode(SyntaxKind.SourceFile, 0);
+            sourceFile.referenceDiagnostics = [];
+            sourceFile.parseDiagnostics = [];
+            sourceFile.grammarDiagnostics = [];
+            sourceFile.semanticDiagnostics = [];
+
+            // Create and prime the scanner before parsing the source elements.
+            scanner = createScanner(languageVersion, /*skipTrivia*/ true, sourceText, scanError);
+            token = nextToken();
+
+            sourceFile.flags = fileExtensionIs(filename, ".d.ts") ? NodeFlags.DeclarationFile : 0;
+            sourceFile.end = sourceText.length;
+            sourceFile.filename = normalizePath(filename);
+            sourceFile.text = sourceText;
+
+            sourceFile.getLineAndCharacterFromPosition = getLineAndCharacterFromSourcePosition;
+            sourceFile.getPositionFromLineAndCharacter = getPositionFromSourceLineAndCharacter;
+            sourceFile.getLineStarts = getLineStarts;
+            sourceFile.getSyntacticDiagnostics = getSyntacticDiagnostics;
+            sourceFile.update = update;
+
+            processReferenceComments(sourceFile);
+
+            sourceFile.statements = parseList(ParsingContext.SourceElements, /*checkForStrictMode*/ true, parseSourceElement);
+            Debug.assert(token === SyntaxKind.EndOfFileToken);
+            sourceFile.endOfFileToken = parseTokenNode();
+
+            setExternalModuleIndicator(sourceFile);
+
+            sourceFile.nodeCount = nodeCount;
+            sourceFile.identifierCount = identifierCount;
+            sourceFile.languageVersion = languageVersion;
+            sourceFile.identifiers = identifiers;
+
+            if (setParentNodes) {
+                fixupParentReferences(sourceFile);
+            }
+
+            return sourceFile;
         }
-        sourceFile.end = sourceText.length;
-        sourceFile.filename = normalizePath(filename);
-        sourceFile.text = sourceText;
 
-        sourceFile.getLineAndCharacterFromPosition = getLineAndCharacterFromSourcePosition;
-        sourceFile.getPositionFromLineAndCharacter = getPositionFromSourceLineAndCharacter;
-        sourceFile.getLineStarts = getLineStarts;
-        sourceFile.getSyntacticDiagnostics = getSyntacticDiagnostics;
-
-        sourceFile.referenceDiagnostics = [];
-        sourceFile.parseDiagnostics = [];
-        sourceFile.grammarDiagnostics = [];
-        sourceFile.semanticDiagnostics = [];
-
-        processReferenceComments();
-
-        // Create and prime the scanner before parsing the source elements.
-        var scanner = createScanner(languageVersion, /*skipTrivia*/ true, sourceText, scanError);
-        var token = nextToken();
-
-        sourceFile.statements = parseList(ParsingContext.SourceElements, /*checkForStrictMode*/ true, parseSourceElement);
-        Debug.assert(token === SyntaxKind.EndOfFileToken);
-        sourceFile.endOfFileToken = parseTokenNode();
-
-        sourceFile.externalModuleIndicator = getExternalModuleIndicator();
-
-        sourceFile.nodeCount = nodeCount;
-        sourceFile.identifierCount = identifierCount;
-        sourceFile.languageVersion = languageVersion;
-        sourceFile.identifiers = identifiers;
-
-        if (setParentNodes) {
-            fixupParentReferences(sourceFile);
+        function update(newText: string, textChangeRange: TextChangeRange) {
+            // Don't pass along the text change range for now. We'll pass it along once incremental
+            // parsing is enabled.
+            return parseSourceFile(newText, /*textChangeRange:*/ undefined, /*setNodeParents*/ true);
         }
 
-        return sourceFile;
 
         function setContextFlag(val: Boolean, flag: ParserContextFlags) {
             if (val) {
@@ -4467,7 +4491,7 @@ module ts {
                 : parseStatement();
         }
 
-        function processReferenceComments(): void {
+        function processReferenceComments(sourceFile: SourceFile): void {
             var triviaScanner = createScanner(languageVersion, /*skipTrivia*/false, sourceText);
             var referencedFiles: FileReference[] = [];
             var amdDependencies: string[] = [];
@@ -4523,16 +4547,15 @@ module ts {
             sourceFile.amdModuleName = amdModuleName;
         }
 
-        function getExternalModuleIndicator() {
-            return forEach(sourceFile.statements, node =>
+        function setExternalModuleIndicator(sourceFile: SourceFile) {
+            sourceFile.externalModuleIndicator = forEach(sourceFile.statements, node =>
                 node.flags & NodeFlags.Export
                 || node.kind === SyntaxKind.ImportDeclaration && (<ImportDeclaration>node).moduleReference.kind === SyntaxKind.ExternalModuleReference
                 || node.kind === SyntaxKind.ExportAssignment
-                ? node
-                : undefined);
+                    ? node
+                    : undefined);
         }
 
-        var syntacticDiagnostics: Diagnostic[];
         function getSyntacticDiagnostics() {
             if (syntacticDiagnostics === undefined) {
                 if (sourceFile.parseDiagnostics.length > 0) {

@@ -38,8 +38,8 @@ module ts {
             function addOutliningSpan(hintSpanNode: Node, startElement: Node, endElement: Node, autoCollapse: boolean) {
                 if (hintSpanNode && startElement && endElement) {
                     var span: OutliningSpan = {
-                        textSpan: TextSpan.fromBounds(startElement.pos, endElement.end),
-                        hintSpan: TextSpan.fromBounds(hintSpanNode.getStart(), hintSpanNode.end),
+                        textSpan: TextSpanObject.fromBounds(startElement.pos, endElement.end),
+                        hintSpan: TextSpanObject.fromBounds(hintSpanNode.getStart(), hintSpanNode.end),
                         bannerText: collapseText,
                         autoCollapse: autoCollapse
                     };
@@ -88,7 +88,7 @@ module ts {
                             else {
                                 // Block was a standalone block.  In this case we want to only collapse
                                 // the span of the block, independent of any parent span.
-                                var span = TextSpan.fromBounds(n.getStart(), n.end);
+                                var span = TextSpanObject.fromBounds(n.getStart(), n.end);
                                 elements.push({
                                     textSpan: span,
                                     hintSpan: span,
