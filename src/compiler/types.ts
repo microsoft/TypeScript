@@ -1201,7 +1201,7 @@ module ts {
         StringLike = String | StringLiteral,
         NumberLike = Number | Enum,
         ObjectType = Class | Interface | Reference | Tuple | Anonymous,
-        Structured = Any | ObjectType | Union | TypeParameter
+        Structured = ObjectType | Union | TypeParameter
     }
 
     // Properties common to all types
