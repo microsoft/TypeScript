@@ -25,4 +25,3 @@
 ///<reference path='rules.ts' />
 ///<reference path='rulesMap.ts' />
 ///<reference path='tokenRange.ts' />
-///<reference path='tokenSpan.ts' /> 
