@@ -17,24 +17,28 @@ module ts {
         return withChange(text, start, length, "");
     }
 
+    function createTree(text: IScriptSnapshot, version: string) {
+        var options: CompilerOptions = {};
+        options.target = ScriptTarget.ES5;
+
+        return createLanguageServiceSourceFile(/*fileName:*/ "", text, options, version, /*isOpen:*/ true)
+    }
+
     // NOTE: 'reusedElements' is the expected count of elements reused from the old tree to the new
     // tree.  It may change as we tweak the parser.  If the count increases then that should always
     // be a good thing.  If it decreases, that's not great (less reusability), but that may be 
     // unavoidable.  If it does decrease an investigation should be done to make sure that things 
     // are still ok and we're still appropriately reusing most of the tree.
-    function compareTrees(oldText: IScriptSnapshot, newText: IScriptSnapshot, textChangeRange: TextChangeRange, expectedReusedElements: number = -1): void {
-        // Create a tree for the new text, in a non-incremental fashion.
-        var options: CompilerOptions = {};
-        options.target = ScriptTarget.ES5;
+    function compareTrees(oldText: IScriptSnapshot, newText: IScriptSnapshot, textChangeRange: TextChangeRange, expectedReusedElements: number, oldTree?: SourceFile): SourceFile {
+        oldTree = oldTree || createTree(oldText, /*version:*/ ".");
+        Utils.checkInvariants(oldTree, /*parent:*/ undefined);
 
-        var newTree = createLanguageServiceSourceFile(/*fileName:*/ "", newText, options, /*version:*/ "0", /*isOpen:*/ true);
+        // Create a tree for the new text, in a non-incremental fashion.
+        var newTree = createTree(newText, oldTree.version + ".");
         Utils.checkInvariants(newTree, /*parent:*/ undefined);
 
         // Create a tree for the new text, in an incremental fashion.
-        var oldTree = createLanguageServiceSourceFile(/*fileName:*/ "", oldText, options, /*version:*/ "0", /*isOpen:*/ true);
-        Utils.checkInvariants(oldTree, /*parent:*/ undefined);
-
-        var incrementalNewTree = oldTree.update(newText, "1", /*isOpen:*/ true, textChangeRange);
+        var incrementalNewTree = oldTree.update(newText, oldTree.version + ".", /*isOpen:*/ true, textChangeRange);
         Utils.checkInvariants(incrementalNewTree, /*parent:*/ undefined);
 
         // We should get the same tree when doign a full or incremental parse.
@@ -47,6 +51,8 @@ module ts {
             var actualReusedCount = reusedElements(oldTree, incrementalNewTree);
             Debug.assert(actualReusedCount === expectedReusedElements, actualReusedCount + " !== " + expectedReusedElements);
         }
+
+        return incrementalNewTree;
     }
 
     function assertStructuralEquals(node1: Node, node2: Node) {
@@ -149,13 +155,27 @@ module ts {
 
     function deleteCode(source: string, index: number, toDelete: string) {
         var repeat = toDelete.length;
-
+        var oldTree = createTree(ScriptSnapshot.fromString(source), /*version:*/ ".");
         for (var i = 0; i < repeat; i++) {
             var oldText = ScriptSnapshot.fromString(source);
             var newTextAndChange = withDelete(oldText, index, 1);
-            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, -1);
+            var newTree = compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, -1, oldTree);
 
             source = newTextAndChange.text.getText(0, newTextAndChange.text.getLength());
+            oldTree = newTree;
+        }
+    }
+
+    function insertCode(source: string, index: number, toInsert: string) {
+        var repeat = toInsert.length;
+        var oldTree = createTree(ScriptSnapshot.fromString(source), /*version:*/ ".");
+        for (var i = 0; i < repeat; i++) {
+            var oldText = ScriptSnapshot.fromString(source);
+            var newTextAndChange = withInsert(oldText, index + i, toInsert.charAt(i));
+            var newTree = compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, -1, oldTree);
+
+            source = newTextAndChange.text.getText(0, newTextAndChange.text.getLength());
+            oldTree = newTree;
         }
     }
 
@@ -710,6 +730,28 @@ module m3 { }\
 
             var index = source.indexOf('extends');
             deleteCode(source, index, "extends IFoo<T>");
+        });
+
+        it('Type after incomplete enum 1',() => {
+            var source = "function foo() {\r\n" +
+                "            function getOccurrencesAtPosition() {\r\n" +
+                "            switch (node) {\r\n" +
+                "                enum \r\n" +
+                "            }\r\n" +
+                "                \r\n" +
+                "                return undefined;\r\n" +
+                "                \r\n" +
+                "                function keywordToReferenceEntry() {\r\n" +
+                "                }\r\n" +
+                "            }\r\n" +
+                "                \r\n" +
+                "            return {\r\n" +
+                "                getEmitOutput: (filename): Bar => null,\r\n" +
+                "            };\r\n" +
+                "        }";
+
+            var index = source.indexOf("enum ") + "enum ".length;
+            insertCode(source, index, "Fo");
         });
     });
 }
