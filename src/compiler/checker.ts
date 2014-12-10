@@ -7384,6 +7384,37 @@ module ts {
                 }
             }
 
+            function findDuplicateDeclarations (declarations:Declaration[] ){
+                function checkDuplicateDeclaration(decl: FunctionLikeDeclaration , compareTo : FunctionLikeDeclaration){
+                    if ( decl.body || compareTo.body ){
+                        return ;
+                    }
+                    var declSignature = getSignatureFromDeclaration(decl);
+                    var compareToSignature = getSignatureFromDeclaration(compareTo);
+                    return compareSignatures(declSignature, compareToSignature, /*compareReturnTypes*/ false, compareTypes);
+                }
+
+                
+                
+                var duplicateIndexes: Map<boolean> = {};
+                for (var i = 0; i < declarations.length; i++) {
+                    for (var j = 0; j < i; j++) {
+                        if (declarations[i].parent === declarations[j].parent && checkDuplicateDeclaration(<FunctionLikeDeclaration>declarations[i], <FunctionLikeDeclaration>declarations[j])) {
+                            if (duplicateIndexes[i] === undefined ){
+                                duplicateIndexes[i]= true;
+                            }
+                            if (duplicateIndexes[j] === undefined ){
+                                duplicateIndexes[j]= true;
+                            }
+                        }
+                    }
+                }
+
+                for (var key in duplicateIndexes){
+                    error(declarations[key], ts.Diagnostics.Duplicate_overload_signature_for_0, ts.declarationNameToString(declarations[key].name)) ;
+                }
+            }
+
             var flagsToCheck: NodeFlags = NodeFlags.Export | NodeFlags.Ambient | NodeFlags.Private | NodeFlags.Protected;
             var someNodeFlags: NodeFlags = 0;
             var allNodeFlags = flagsToCheck;
@@ -7543,6 +7574,8 @@ module ts {
                     }
                 }
             }
+
+            findDuplicateDeclarations(declarations);
         }
 
         function checkExportsOnMergedDeclarations(node: Node): void {
