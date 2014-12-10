@@ -4553,6 +4553,7 @@ module ts {
                     case SyntaxKind.VoidExpression:
                     case SyntaxKind.PostfixUnaryExpression:
                     case SyntaxKind.ConditionalExpression:
+                    case SyntaxKind.SpreadElementExpression:
                     case SyntaxKind.Block:
                     case SyntaxKind.VariableStatement:
                     case SyntaxKind.ExpressionStatement:
@@ -8876,6 +8877,7 @@ module ts {
                 case SyntaxKind.PostfixUnaryExpression:
                 case SyntaxKind.BinaryExpression:
                 case SyntaxKind.ConditionalExpression:
+                case SyntaxKind.SpreadElementExpression:
                 case SyntaxKind.Block:
                 case SyntaxKind.ModuleBlock:
                 case SyntaxKind.VariableStatement:

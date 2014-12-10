@@ -356,6 +356,8 @@ module ts {
                 return child((<ConditionalExpression>node).condition) ||
                     child((<ConditionalExpression>node).whenTrue) ||
                     child((<ConditionalExpression>node).whenFalse);
+            case SyntaxKind.SpreadElementExpression:
+                return child((<SpreadElementExpression>node).expression);
             case SyntaxKind.Block:
             case SyntaxKind.TryBlock:
             case SyntaxKind.FinallyBlock:
@@ -622,6 +624,7 @@ module ts {
             case SyntaxKind.PostfixUnaryExpression:
             case SyntaxKind.BinaryExpression:
             case SyntaxKind.ConditionalExpression:
+            case SyntaxKind.SpreadElementExpression:
             case SyntaxKind.TemplateExpression:
             case SyntaxKind.NoSubstitutionTemplateLiteral:
             case SyntaxKind.OmittedExpression:
@@ -3354,8 +3357,15 @@ module ts {
                 : parseAssignmentExpressionOrHigher();
         }
 
+        function parseSpreadElement(): Expression {
+            var node = <SpreadElementExpression>createNode(SyntaxKind.SpreadElementExpression);
+            parseExpected(SyntaxKind.DotDotDotToken);
+            node.expression = parseAssignmentExpressionOrHigher();
+            return finishNode(node);
+        }
+
         function parseArrayLiteralElement(): Expression {
-            return parseAssignmentExpressionOrOmittedExpression();
+            return token === SyntaxKind.DotDotDotToken ? parseSpreadElement() : parseAssignmentExpressionOrOmittedExpression();
         }
 
         function parseArgumentExpression(): Expression {
