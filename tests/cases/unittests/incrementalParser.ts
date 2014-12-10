@@ -274,5 +274,19 @@ module ts {
 
             compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 0);
         });
+
+        it('Strict mode 1',() => {
+            // In non-strict mode 'package' means nothing and can be reused.  In strict mode though
+            // we'll have to reparse the nodes (and generate an error for 'package();'
+            //
+            // Note: in this test we don't actually add 'use strict'.  This is so we can compare 
+            // reuse with/without a strict mode change.
+            var source = "foo1();\r\nfoo1();\r\nfoo1();\r\package();";
+
+            var oldText = ScriptSnapshot.fromString(source);
+            var newTextAndChange = withInsert(oldText, 0, "'strict';\r\n");
+
+            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 0);
+        });
     });
 }
