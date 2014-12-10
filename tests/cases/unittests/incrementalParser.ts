@@ -671,6 +671,16 @@ module m3 { }\
             compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 0);
         });
 
+        it('Regular expression to divide operation',() => {
+            var source = "return;\r\nwhile (true) /3/g;"
+
+            var oldText = ScriptSnapshot.fromString(source);
+            var index = source.indexOf("while");
+            var newTextAndChange = withDelete(oldText, index, "while ".length);
+
+            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 0);
+        });
+
         // Simulated typing tests.
 
         it('Type extends clause 1',() => {
