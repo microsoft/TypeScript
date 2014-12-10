@@ -575,7 +575,6 @@ module Harness {
 
             return {
                 getCurrentDirectory: ts.sys.getCurrentDirectory,
-                getCancellationToken: (): any => undefined,
                 getSourceFile: (fn, languageVersion) => {
                     if (Object.prototype.hasOwnProperty.call(filemap, getCanonicalFileName(fn))) {
                         return filemap[getCanonicalFileName(fn)];
