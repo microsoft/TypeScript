@@ -618,6 +618,22 @@ var o2 = { set Foo(val:number) { } };";
             compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 0);
         });
 
+        it('Insert parameter ahead of parameter',() => {
+            var source =
+                "alert(100);\
+\
+class OverloadedMonster {\
+constructor();\
+constructor(name) { }\
+}";
+
+            var oldText = ScriptSnapshot.fromString(source);
+            var index = source.indexOf("100");
+            var newTextAndChange = withInsert(oldText, index, "'1', ");
+
+            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 0);
+        });
+
         // Simulated typing tests.
 
         it('Type extends clause 1',() => {
