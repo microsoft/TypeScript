@@ -169,131 +169,6 @@ module ts {
         getDefaultCompilationSettings(): string;
     }
 
-    /// TODO: delete this, it is only needed until the VS interface is updated
-    export const enum LanguageVersion {
-        EcmaScript3 = 0,
-        EcmaScript5 = 1,
-        EcmaScript6 = 2,
-    }
-
-    export const enum ModuleGenTarget {
-        Unspecified = 0,
-        Synchronous = 1,
-        Asynchronous = 2,
-    }
-
-    export interface CompilationSettings {
-        propagateEnumConstants?: boolean;
-        removeComments?: boolean;
-        watch?: boolean;
-        noResolve?: boolean;
-        allowAutomaticSemicolonInsertion?: boolean;
-        noImplicitAny?: boolean;
-        noLib?: boolean;
-        codeGenTarget?: LanguageVersion;
-        moduleGenTarget?: ModuleGenTarget;
-        outFileOption?: string;
-        outDirOption?: string;
-        mapSourceFiles?: boolean;
-        mapRoot?: string;
-        sourceRoot?: string;
-        generateDeclarationFiles?: boolean;
-        useCaseSensitiveFileResolution?: boolean;
-        gatherDiagnostics?: boolean;
-        codepage?: number;
-        emitBOM?: boolean;
-
-        // Declare indexer signature
-        [index: string]: any;
-    }
-
-    function languageVersionToScriptTarget(languageVersion: LanguageVersion): ScriptTarget {
-        if (typeof languageVersion === "undefined") return undefined;
-
-        switch (languageVersion) {
-            case LanguageVersion.EcmaScript3: return ScriptTarget.ES3
-            case LanguageVersion.EcmaScript5: return ScriptTarget.ES5;
-            case LanguageVersion.EcmaScript6: return ScriptTarget.ES6;
-            default: throw Error("unsupported LanguageVersion value: " + languageVersion);
-        }
-    }
-
-    function moduleGenTargetToModuleKind(moduleGenTarget: ModuleGenTarget): ModuleKind {
-        if (typeof moduleGenTarget === "undefined") return undefined;
-
-        switch (moduleGenTarget) {
-            case ModuleGenTarget.Asynchronous: return ModuleKind.AMD;
-            case ModuleGenTarget.Synchronous: return ModuleKind.CommonJS;
-            case ModuleGenTarget.Unspecified: return ModuleKind.None;
-            default: throw Error("unsupported ModuleGenTarget value: " + moduleGenTarget);
-        }
-    }
-
-    function scriptTargetTolanguageVersion(scriptTarget: ScriptTarget): LanguageVersion {
-        if (typeof scriptTarget === "undefined") return undefined;
-
-        switch (scriptTarget) {
-            case ScriptTarget.ES3: return LanguageVersion.EcmaScript3;
-            case ScriptTarget.ES5: return LanguageVersion.EcmaScript5;
-            case ScriptTarget.ES6: return LanguageVersion.EcmaScript6;
-            default: throw Error("unsupported ScriptTarget value: " + scriptTarget);
-        }
-    }
-
-    function moduleKindToModuleGenTarget(moduleKind: ModuleKind): ModuleGenTarget {
-        if (typeof moduleKind === "undefined") return undefined;
-
-        switch (moduleKind) {
-            case ModuleKind.AMD: return ModuleGenTarget.Asynchronous;
-            case ModuleKind.CommonJS: return ModuleGenTarget.Synchronous;
-            case ModuleKind.None: return ModuleGenTarget.Unspecified;
-            default: throw Error("unsupported ModuleKind value: " + moduleKind);
-        }
-    }
-
-    function compilationSettingsToCompilerOptions(settings: CompilationSettings): CompilerOptions {
-        // TODO: we should not be converting, but use options all the way
-        var options: CompilerOptions = {};
-        //options.propagateEnumConstants = settings.propagateEnumConstants;
-        options.removeComments = settings.removeComments;
-        options.noResolve = settings.noResolve;
-        options.noImplicitAny = settings.noImplicitAny;
-        options.noLib = settings.noLib;
-        options.target = languageVersionToScriptTarget(settings.codeGenTarget);
-        options.module = moduleGenTargetToModuleKind(settings.moduleGenTarget);
-        options.out = settings.outFileOption;
-        options.outDir = settings.outDirOption;
-        options.sourceMap = settings.mapSourceFiles;
-        options.mapRoot = settings.mapRoot;
-        options.sourceRoot = settings.sourceRoot;
-        options.declaration = settings.generateDeclarationFiles;
-        //options.useCaseSensitiveFileResolution = settings.useCaseSensitiveFileResolution;
-        options.codepage = settings.codepage;
-        options.emitBOM = settings.emitBOM;
-        return options;
-    }
-
-    function compilerOptionsToCompilationSettings(options: CompilerOptions): CompilationSettings {
-        var settings: CompilationSettings = {};
-        //options.propagateEnumConstants = settings.propagateEnumConstants;
-        settings.removeComments = options.removeComments;
-        settings.noResolve = options.noResolve;
-        settings.noImplicitAny = options.noImplicitAny;
-        settings.noLib = options.noLib;
-        settings.codeGenTarget = scriptTargetTolanguageVersion(options.target);
-        settings.moduleGenTarget = moduleKindToModuleGenTarget(options.module);
-        settings.outFileOption = options.out;
-        settings.outDirOption = options.outDir;
-        settings.mapSourceFiles = options.sourceMap;
-        settings.mapRoot = options.mapRoot;
-        settings.sourceRoot = options.sourceRoot;
-        settings.generateDeclarationFiles = options.declaration;
-        // settings.useCaseSensitiveFileResolution = options.useCaseSensitiveFileResolution;
-        settings.codepage = options.codepage;
-        settings.emitBOM = options.emitBOM;
-        return settings;
-    }
-
     function logInternalError(logger: Logger, err: Error) {
         logger.log("*INTERNAL ERROR* - Exception in typescript services: " + err.message);
     }
@@ -347,9 +222,7 @@ module ts {
                 throw Error("LanguageServiceShimHostAdapter.getCompilationSettings: empty compilationSettings");
                 return null;
             }
-            var options = compilationSettingsToCompilerOptions(<CompilerOptions>JSON.parse(<any>settingsJson));
-
-            return options;
+            return <CompilerOptions>JSON.parse(<any>settingsJson);
         }
 
         public getScriptFileNames(): string[] {
@@ -850,7 +723,7 @@ module ts {
             return this.forwardJSONCall(
                 "getDefaultCompilationSettings()",
                 () => {
-                    return compilerOptionsToCompilationSettings(getDefaultCompilerOptions());
+                    return getDefaultCompilerOptions();
                 });
         }
     }

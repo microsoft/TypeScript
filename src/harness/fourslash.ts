@@ -145,14 +145,14 @@ module FourSlash {
         testOptMetadataNames.mapRoot, testOptMetadataNames.module, testOptMetadataNames.out,
         testOptMetadataNames.outDir, testOptMetadataNames.sourceMap, testOptMetadataNames.sourceRoot]
 
-    function convertGlobalOptionsToCompilationSettings(globalOptions: { [idx: string]: string }): ts.CompilationSettings {
-        var settings: ts.CompilationSettings = {};
+    function convertGlobalOptionsToCompilerOptions(globalOptions: { [idx: string]: string }): ts.CompilerOptions {
+        var settings: ts.CompilerOptions = {};
         // Convert all property in globalOptions into ts.CompilationSettings
         for (var prop in globalOptions) {
             if (globalOptions.hasOwnProperty(prop)) {
                 switch (prop) {
                     case testOptMetadataNames.declaration:
-                        settings.generateDeclarationFiles = true;
+                        settings.declaration = true;
                         break;
                     case testOptMetadataNames.mapRoot:
                         settings.mapRoot = globalOptions[prop];
@@ -161,24 +161,24 @@ module FourSlash {
                         // create appropriate external module target for CompilationSettings
                         switch (globalOptions[prop]) {
                           case "AMD":
-                            settings.moduleGenTarget = ts.ModuleGenTarget.Asynchronous;
+                            settings.module = ts.ModuleKind.AMD;
                             break;
                           case "CommonJS":
-                            settings.moduleGenTarget = ts.ModuleGenTarget.Synchronous;
+                            settings.module = ts.ModuleKind.CommonJS;
                             break;
                           default:
-                            settings.moduleGenTarget = ts.ModuleGenTarget.Unspecified;
+                            settings.module = ts.ModuleKind.None;
                             break;
                         }
                         break;
                     case testOptMetadataNames.out:
-                        settings.outFileOption = globalOptions[prop];
+                        settings.out = globalOptions[prop];
                         break;
                     case testOptMetadataNames.outDir:
-                        settings.outDirOption = globalOptions[prop];
+                        settings.outDir = globalOptions[prop];
                         break;
                     case testOptMetadataNames.sourceMap:
-                        settings.mapSourceFiles = true;
+                        settings.sourceMap = true;
                         break;
                     case testOptMetadataNames.sourceRoot:
                         settings.sourceRoot = globalOptions[prop];
@@ -300,7 +300,7 @@ module FourSlash {
             this.cancellationToken = new TestCancellationToken();
             this.languageServiceShimHost = new Harness.LanguageService.TypeScriptLS(this.cancellationToken);
 
-            var compilationSettings = convertGlobalOptionsToCompilationSettings(this.testData.globalOptions);
+            var compilationSettings = convertGlobalOptionsToCompilerOptions(this.testData.globalOptions);
             this.languageServiceShimHost.setCompilationSettings(compilationSettings);
 
             var startResolveFileRef: FourSlashFile = undefined;
