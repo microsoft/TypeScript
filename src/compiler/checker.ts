@@ -164,6 +164,13 @@ module ts {
         var diagnostics: Diagnostic[] = [];
         var diagnosticsModified: boolean = false;
 
+        // Grammar checking
+        var sourceText: string = undefined;
+        var scanner: Scanner = undefined;
+        var hasParserError: boolean;
+        var grammarDiagnostics: Diagnostic[];
+        var sourceFile: SourceFile;
+
         function addDiagnostic(diagnostic: Diagnostic) {
             diagnostics.push(diagnostic);
             diagnosticsModified = true;
@@ -7017,6 +7024,11 @@ module ts {
         // DECLARATION AND STATEMENT TYPE CHECKING
 
         function checkTypeParameter(node: TypeParameterDeclaration) {
+            // Grammar Checking
+            if (!hasParserError && node.expression) {
+                grammarErrorOnFirstToken(node.expression, Diagnostics.Type_expected);
+            }
+
             checkSourceElement(node.constraint);
             if (fullTypeCheck) {
                 checkTypeParameterHasIllegalReferencesInConstraint(node);
@@ -8655,6 +8667,36 @@ module ts {
             return <Identifier>node;
         }
 
+        // Grammar checking helper functions
+        function scanToken(pos: number) {
+            var start = skipTrivia(sourceText, pos);
+            scanner.setTextPos(start);
+            scanner.scan();
+            return start;
+        }
+
+        function grammarErrorOnFirstToken(node: Node, message: DiagnosticMessage, arg0?: any, arg1?: any, arg2?: any): void {
+            var start = scanToken(node.pos);
+            diagnostics.push(createFileDiagnostic(sourceFile, start, scanner.getTextPos() - start, message, arg0, arg1, arg2));
+        }
+
+        function grammarErrorAfterFirstToken(node: Node, message: DiagnosticMessage, arg0?: any, arg1?: any, arg2?: any): void {
+            scanToken(node.pos);
+            diagnostics.push(createFileDiagnostic(sourceFile, scanner.getTextPos(), 0, message, arg0, arg1, arg2));
+        }
+
+        function grammarErrorOnNode(node: Node, message: DiagnosticMessage, arg0?: any, arg1?: any, arg2?: any): void {
+            var span = getErrorSpanForNode(node);
+            var start = span.end > span.pos ? skipTrivia(sourceFile.text, span.pos) : span.pos;
+            var length = span.end - start;
+
+            diagnostics.push(createFileDiagnostic(sourceFile, start, length, message, arg0, arg1, arg2));
+        }
+
+        function grammarErrorAtPos(start: number, length: number, message: DiagnosticMessage, arg0?: any, arg1?: any, arg2?: any): void {
+            diagnostics.push(createFileDiagnostic(sourceFile, start, length, message, arg0, arg1, arg2));
+        }
+
         function checkImportDeclaration(node: ImportDeclaration) {
             checkCollisionWithCapturedThisVariable(node, node.name);
             checkCollisionWithRequireExportsInGeneratedCode(node, node.name);
@@ -8909,6 +8951,12 @@ module ts {
 
         // Fully type check a source file and collect the relevant diagnostics.
         function checkSourceFile(node: SourceFile) {
+            sourceText = node.text;
+            scanner = createScanner(compilerOptions.target, /*skipTrivia*/ true, sourceText);
+            hasParserError = node.parseDiagnostics.length > 0 ? true : false;
+            sourceFile = node;
+            //grammarDiagnostics = [];
+
             var links = getNodeLinks(node);
             if (!(links.flags & NodeCheckFlags.TypeChecked)) {
                 emitExtends = false;
@@ -9469,7 +9517,7 @@ module ts {
             return program.getDiagnostics(sourceFile).length !== 0 ||
                 hasEarlyErrors(sourceFile) ||
                 (compilerOptions.noEmitOnError && getDiagnostics(sourceFile).length !== 0);
-        }
+       }
 
         function hasEarlyErrors(sourceFile?: SourceFile): boolean {
             return forEach(getDiagnostics(sourceFile), d => d.isEarly);

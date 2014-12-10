@@ -285,7 +285,8 @@
     },
     "Type expected.": {
         "category": "Error",
-        "code": 1110
+        "code": 1110,
+        "isEarly": true
     },
     "A constructor implementation cannot be declared in an ambient context.": {
         "category": "Error",

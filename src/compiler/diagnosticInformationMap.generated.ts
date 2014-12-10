@@ -73,7 +73,7 @@ module ts {
         Jump_target_cannot_cross_function_boundary: { code: 1107, category: DiagnosticCategory.Error, key: "Jump target cannot cross function boundary." },
         A_return_statement_can_only_be_used_within_a_function_body: { code: 1108, category: DiagnosticCategory.Error, key: "A 'return' statement can only be used within a function body." },
         Expression_expected: { code: 1109, category: DiagnosticCategory.Error, key: "Expression expected." },
-        Type_expected: { code: 1110, category: DiagnosticCategory.Error, key: "Type expected." },
+        Type_expected: { code: 1110, category: DiagnosticCategory.Error, key: "Type expected.", isEarly: true },
         A_constructor_implementation_cannot_be_declared_in_an_ambient_context: { code: 1111, category: DiagnosticCategory.Error, key: "A constructor implementation cannot be declared in an ambient context." },
         A_class_member_cannot_be_declared_optional: { code: 1112, category: DiagnosticCategory.Error, key: "A class member cannot be declared optional." },
         A_default_clause_cannot_appear_more_than_once_in_a_switch_statement: { code: 1113, category: DiagnosticCategory.Error, key: "A 'default' clause cannot appear more than once in a 'switch' statement." },

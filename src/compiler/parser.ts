@@ -4679,7 +4679,6 @@ module ts {
                 case SyntaxKind.TaggedTemplateExpression:       return checkTaggedTemplateExpression(<TaggedTemplateExpression>node);
                 case SyntaxKind.ThrowStatement:                 return checkThrowStatement(<ThrowStatement>node);
                 case SyntaxKind.TupleType:                      return checkTupleType(<TupleTypeNode>node);
-                case SyntaxKind.TypeParameter:                  return checkTypeParameter(<TypeParameterDeclaration>node);
                 case SyntaxKind.TypeReference:                  return checkTypeReference(<TypeReferenceNode>node);
                 case SyntaxKind.VariableDeclaration:            return checkVariableDeclaration(<VariableDeclaration>node);
                 case SyntaxKind.VariableStatement:              return checkVariableStatement(<VariableStatement>node);
@@ -5724,12 +5723,6 @@ module ts {
         function checkForAtLeastOneType(node: TupleTypeNode): boolean {
             if (node.elementTypes.length === 0) {
                 return grammarErrorOnNode(node, Diagnostics.A_tuple_type_element_list_cannot_be_empty)
-            }
-        }
-
-        function checkTypeParameter(node: TypeParameterDeclaration) {
-            if (node.expression) {
-                return grammarErrorOnFirstToken(node.expression, Diagnostics.Type_expected);
             }
         }
 
