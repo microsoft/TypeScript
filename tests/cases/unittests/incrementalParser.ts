@@ -147,6 +147,18 @@ module ts {
         }
     }
 
+    function deleteCode(source: string, index: number, toDelete: string) {
+        var repeat = toDelete.length;
+
+        for (var i = 0; i < repeat; i++) {
+            var oldText = ScriptSnapshot.fromString(source);
+            var newTextAndChange = withDelete(oldText, index, 1);
+            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, -1);
+
+            source = newTextAndChange.text.getText(0, newTextAndChange.text.getLength());
+        }
+    }
+
     describe('Incremental',() => {
         it('Inserting into method',() => {
             var source = "class C {\r\n" +
@@ -417,6 +429,15 @@ module ts {
             var newTextAndChange = withInsert(oldText, index + 1, ",x");
 
             compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, -1);
+        });
+
+        // Simulated typing tests.
+
+        it('Type extends clause 1',() => {
+            var source = "interface IFoo<T> { }\r\ninterface Array<T> extends IFoo<T> { }";
+
+            var index = source.indexOf('extends');
+            deleteCode(source, index, "extends IFoo<T>");
         });
     });
 }
