@@ -192,7 +192,7 @@ module ts {
             compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 0);
         });
 
-        it('Regular expression 1', () => {
+        it('Regular expression 1',() => {
             var source = "class C { public foo1() { /; } public foo2() { return 1;} public foo3() { } }";
 
             var semicolonIndex = source.indexOf(";}");
@@ -606,7 +606,7 @@ module ts {
 
         it('Modifier added to accessor',() => {
             var source =
-"class C {\
+                "class C {\
     set Bar(bar:string) {}\
 }\
 var o2 = { set Foo(val:number) { } };";
@@ -620,7 +620,7 @@ var o2 = { set Foo(val:number) { } };";
 
         it('Insert parameter ahead of parameter',() => {
             var source =
-"alert(100);\
+                "alert(100);\
 \
 class OverloadedMonster {\
 constructor();\
@@ -636,7 +636,7 @@ constructor(name) { }\
 
         it('Insert declare modifier before module',() => {
             var source =
-"module mAmbient {\
+                "module mAmbient {\
 module m3 { }\
 }";
 
@@ -645,6 +645,21 @@ module m3 { }\
             var newTextAndChange = withInsert(oldText, index, "declare ");
 
             compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 0);
+        });
+
+        it('Insert function above arrow function with comment',() => {
+
+            var source =
+                "\
+() =>\
+   // do something\
+0;";
+
+            var oldText = ScriptSnapshot.fromString(source);
+            var index = 0;
+            var newTextAndChange = withInsert(oldText, index, "function Foo() { }");
+
+            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, -1);
         });
 
         // Simulated typing tests.
