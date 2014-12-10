@@ -431,6 +431,16 @@ module ts {
             compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, -1);
         });
 
+        it('Assertion to arrow function',() => {
+            var source = "var v = <T>(a);";
+
+            var index = source.indexOf(';');
+            var oldText = ScriptSnapshot.fromString(source);
+            var newTextAndChange = withInsert(oldText, index, " => 1");
+
+            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 0);
+        });
+
         // Simulated typing tests.
 
         it('Type extends clause 1',() => {
