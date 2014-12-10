@@ -1185,6 +1185,8 @@ module ts {
                 return sourceFile;
             }
 
+
+
             // Don't pass along the text change range for now. We'll pass it along once incremental
             // parsing is enabled.
             return parseSourceFile(newText, /*textChangeRange:*/ undefined, /*setNodeParents*/ true);

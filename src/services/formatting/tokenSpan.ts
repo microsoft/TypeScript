@@ -16,9 +16,4 @@
 ///<reference path='references.ts' />
 
 module ts.formatting {
-    export class TokenSpan extends TextSpanObject {
-        constructor(public kind: SyntaxKind, start: number, length: number) {
-            super(start, length);
-        }
-    }
 }

@@ -367,7 +367,7 @@ module ts.SignatureHelp {
             // but not including parentheses)
             var applicableSpanStart = argumentsList.getFullStart();
             var applicableSpanEnd = skipTrivia(sourceFile.text, argumentsList.getEnd(), /*stopAfterLineBreak*/ false);
-            return new TextSpanObject(applicableSpanStart, applicableSpanEnd - applicableSpanStart);
+            return createTextSpan(applicableSpanStart, applicableSpanEnd - applicableSpanStart);
         }
 
         function getApplicableSpanForTaggedTemplate(taggedTemplate: TaggedTemplateExpression): TextSpan {
@@ -391,7 +391,7 @@ module ts.SignatureHelp {
                 }
             }
 
-            return new TextSpanObject(applicableSpanStart, applicableSpanEnd - applicableSpanStart);
+            return createTextSpan(applicableSpanStart, applicableSpanEnd - applicableSpanStart);
         }
 
         function getContainingArgumentInfo(node: Node): ArgumentListInfo {

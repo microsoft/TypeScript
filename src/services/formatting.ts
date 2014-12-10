@@ -868,7 +868,7 @@ module ts.formatting {
         }
 
         function newTextChange(start: number, len: number, newText: string): TextChange {
-            return { span: new TextSpanObject(start, len), newText }
+            return { span: createTextSpan(start, len), newText }
         }
 
         function recordDelete(start: number, len: number) {

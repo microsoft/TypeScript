@@ -33,7 +33,7 @@ module Harness.LanguageService {
             this.editRanges.push({
                 length: this.content.length,
                 textChangeRange: new ts.TextChangeRangeObject(
-                    ts.TextSpanObject.fromBounds(minChar, limChar), newText.length)
+                    ts.createTextSpanFromBounds(minChar, limChar), newText.length)
             });
 
             // Update version #

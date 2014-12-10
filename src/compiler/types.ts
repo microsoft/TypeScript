@@ -279,18 +279,18 @@ module ts {
     }
 
     export const enum NodeFlags {
-        Export              = 0x00000001,  // Declarations
-        Ambient             = 0x00000002,  // Declarations
-        Public              = 0x00000010,  // Property/Method
-        Private             = 0x00000020,  // Property/Method
-        Protected           = 0x00000040,  // Property/Method
-        Static              = 0x00000080,  // Property/Method
-        MultiLine           = 0x00000100,  // Multi-line array or object literal
-        Synthetic           = 0x00000200,  // Synthetic node (for full fidelity)
-        DeclarationFile     = 0x00000400,  // Node is a .d.ts file
-        Let                 = 0x00000800,  // Variable declaration
-        Const               = 0x00001000,  // Variable declaration
-        OctalLiteral        = 0x00002000,
+        Export = 0x00000001,  // Declarations
+        Ambient = 0x00000002,  // Declarations
+        Public = 0x00000010,  // Property/Method
+        Private = 0x00000020,  // Property/Method
+        Protected = 0x00000040,  // Property/Method
+        Static = 0x00000080,  // Property/Method
+        MultiLine = 0x00000100,  // Multi-line array or object literal
+        Synthetic = 0x00000200,  // Synthetic node (for full fidelity)
+        DeclarationFile = 0x00000400,  // Node is a .d.ts file
+        Let = 0x00000800,  // Variable declaration
+        Const = 0x00001000,  // Variable declaration
+        OctalLiteral = 0x00002000,
 
         Modifier = Export | Ambient | Public | Private | Protected | Static,
         AccessibilityModifier = Public | Private | Protected,
@@ -595,7 +595,7 @@ module ts {
     export interface VoidExpression extends UnaryExpression {
         expression: UnaryExpression;
     }
-    
+
     export interface YieldExpression extends Expression {
         asteriskToken?: Node;
         expression: Expression;
@@ -871,7 +871,7 @@ module ts {
         getPositionFromLineAndCharacter(line: number, character: number): number;
         getLineStarts(): number[];
 
-        // Produces a new SourceFile for the 'newText' provided.  The 'textChangeRange' parameter 
+        // Produces a new SourceFile for the 'newText' provided. The 'textChangeRange' parameter 
         // indicates what changed between the 'text' that this SourceFile has and the 'newText'.
         // The SourceFile will be created with the compiler attempting to reuse as many nodes from 
         // this file as possible.
@@ -1032,25 +1032,25 @@ module ts {
     }
 
     export const enum TypeFormatFlags {
-        None                            = 0x00000000, 
-        WriteArrayAsGenericType         = 0x00000001,  // Write Array<T> instead T[]
-        UseTypeOfFunction               = 0x00000002,  // Write typeof instead of function type literal
-        NoTruncation                    = 0x00000004,  // Don't truncate typeToString result
-        WriteArrowStyleSignature        = 0x00000008,  // Write arrow style signature
-        WriteOwnNameForAnyLike          = 0x00000010,  // Write symbol's own name instead of 'any' for any like types (eg. unknown, __resolving__ etc)
-        WriteTypeArgumentsOfSignature   = 0x00000020,  // Write the type arguments instead of type parameters of the signature
-        InElementType                   = 0x00000040,  // Writing an array or union element type
+        None = 0x00000000,
+        WriteArrayAsGenericType = 0x00000001,  // Write Array<T> instead T[]
+        UseTypeOfFunction = 0x00000002,  // Write typeof instead of function type literal
+        NoTruncation = 0x00000004,  // Don't truncate typeToString result
+        WriteArrowStyleSignature = 0x00000008,  // Write arrow style signature
+        WriteOwnNameForAnyLike = 0x00000010,  // Write symbol's own name instead of 'any' for any like types (eg. unknown, __resolving__ etc)
+        WriteTypeArgumentsOfSignature = 0x00000020,  // Write the type arguments instead of type parameters of the signature
+        InElementType = 0x00000040,  // Writing an array or union element type
     }
 
     export const enum SymbolFormatFlags {
-        None                            = 0x00000000,
-        WriteTypeParametersOrArguments  = 0x00000001,  // Write symbols's type argument if it is instantiated symbol
-                                                       // eg. class C<T> { p: T }   <-- Show p as C<T>.p here
-                                                       //     var a: C<number>; 
-                                                       //     var p = a.p;  <--- Here p is property of C<number> so show it as C<number>.p instead of just C.p
-        UseOnlyExternalAliasing         = 0x00000002,  // Use only external alias information to get the symbol name in the given context
-                                                       // eg.  module m { export class c { } } import x = m.c; 
-                                                       // When this flag is specified m.c will be used to refer to the class instead of alias symbol x
+        None = 0x00000000,
+        WriteTypeParametersOrArguments = 0x00000001,  // Write symbols's type argument if it is instantiated symbol
+        // eg. class C<T> { p: T }   <-- Show p as C<T>.p here
+        //     var a: C<number>; 
+        //     var p = a.p;  <--- Here p is property of C<number> so show it as C<number>.p instead of just C.p
+        UseOnlyExternalAliasing = 0x00000002,  // Use only external alias information to get the symbol name in the given context
+        // eg.  module m { export class c { } } import x = m.c; 
+        // When this flag is specified m.c will be used to refer to the class instead of alias symbol x
     }
 
     export const enum SymbolAccessibility {
@@ -1094,45 +1094,45 @@ module ts {
 
     export const enum SymbolFlags {
         FunctionScopedVariable = 0x00000001,  // Variable (var) or parameter
-        BlockScopedVariable    = 0x00000002,  // A block-scoped variable (let or const)
-        Property               = 0x00000004,  // Property or enum member
-        EnumMember             = 0x00000008,  // Enum member
-        Function               = 0x00000010,  // Function
-        Class                  = 0x00000020,  // Class
-        Interface              = 0x00000040,  // Interface
-        ConstEnum              = 0x00000080,  // Const enum
-        RegularEnum            = 0x00000100,  // Enum
-        ValueModule            = 0x00000200,  // Instantiated module
-        NamespaceModule        = 0x00000400,  // Uninstantiated module
-        TypeLiteral            = 0x00000800,  // Type Literal
-        ObjectLiteral          = 0x00001000,  // Object Literal
-        Method                 = 0x00002000,  // Method
-        Constructor            = 0x00004000,  // Constructor
-        GetAccessor            = 0x00008000,  // Get accessor
-        SetAccessor            = 0x00010000,  // Set accessor
-        Signature              = 0x00020000,  // Call, construct, or index signature
-        TypeParameter          = 0x00040000,  // Type parameter
-        TypeAlias              = 0x00080000,  // Type alias
+        BlockScopedVariable = 0x00000002,  // A block-scoped variable (let or const)
+        Property = 0x00000004,  // Property or enum member
+        EnumMember = 0x00000008,  // Enum member
+        Function = 0x00000010,  // Function
+        Class = 0x00000020,  // Class
+        Interface = 0x00000040,  // Interface
+        ConstEnum = 0x00000080,  // Const enum
+        RegularEnum = 0x00000100,  // Enum
+        ValueModule = 0x00000200,  // Instantiated module
+        NamespaceModule = 0x00000400,  // Uninstantiated module
+        TypeLiteral = 0x00000800,  // Type Literal
+        ObjectLiteral = 0x00001000,  // Object Literal
+        Method = 0x00002000,  // Method
+        Constructor = 0x00004000,  // Constructor
+        GetAccessor = 0x00008000,  // Get accessor
+        SetAccessor = 0x00010000,  // Set accessor
+        Signature = 0x00020000,  // Call, construct, or index signature
+        TypeParameter = 0x00040000,  // Type parameter
+        TypeAlias = 0x00080000,  // Type alias
 
         // Export markers (see comment in declareModuleMember in binder)
-        ExportValue            = 0x00100000,  // Exported value marker
-        ExportType             = 0x00200000,  // Exported type marker
-        ExportNamespace        = 0x00400000,  // Exported namespace marker
-        Import                 = 0x00800000,  // Import
-        Instantiated           = 0x01000000,  // Instantiated symbol
-        Merged                 = 0x02000000,  // Merged symbol (created during program binding)
-        Transient              = 0x04000000,  // Transient symbol (created during type check)
-        Prototype              = 0x08000000,  // Prototype property (no source representation)
-        UnionProperty          = 0x10000000,  // Property in union type
-        Optional               = 0x20000000,  // Optional property
+        ExportValue = 0x00100000,  // Exported value marker
+        ExportType = 0x00200000,  // Exported type marker
+        ExportNamespace = 0x00400000,  // Exported namespace marker
+        Import = 0x00800000,  // Import
+        Instantiated = 0x01000000,  // Instantiated symbol
+        Merged = 0x02000000,  // Merged symbol (created during program binding)
+        Transient = 0x04000000,  // Transient symbol (created during type check)
+        Prototype = 0x08000000,  // Prototype property (no source representation)
+        UnionProperty = 0x10000000,  // Property in union type
+        Optional = 0x20000000,  // Optional property
 
-        Enum      = RegularEnum | ConstEnum,
-        Variable  = FunctionScopedVariable | BlockScopedVariable,
-        Value     = Variable | Property | EnumMember | Function | Class | Enum | ValueModule | Method | GetAccessor | SetAccessor,
-        Type      = Class | Interface | Enum | TypeLiteral | ObjectLiteral | TypeParameter | TypeAlias,
+        Enum = RegularEnum | ConstEnum,
+        Variable = FunctionScopedVariable | BlockScopedVariable,
+        Value = Variable | Property | EnumMember | Function | Class | Enum | ValueModule | Method | GetAccessor | SetAccessor,
+        Type = Class | Interface | Enum | TypeLiteral | ObjectLiteral | TypeParameter | TypeAlias,
         Namespace = ValueModule | NamespaceModule,
-        Module    = ValueModule | NamespaceModule,
-        Accessor  = GetAccessor | SetAccessor,
+        Module = ValueModule | NamespaceModule,
+        Accessor = GetAccessor | SetAccessor,
 
         // Variables can be redeclared, but can not redeclare a block-scoped declaration with the
         // same name, or any other value that is not a variable, e.g. ValueModule or Class
@@ -1142,34 +1142,34 @@ module ts {
         // they can not merge with anything in the value space
         BlockScopedVariableExcludes = Value,
 
-        ParameterExcludes       = Value,
-        PropertyExcludes        = Value,
-        EnumMemberExcludes      = Value,
-        FunctionExcludes        = Value & ~(Function | ValueModule),
-        ClassExcludes           = (Value | Type) & ~ValueModule,
-        InterfaceExcludes       = Type & ~Interface,
-        RegularEnumExcludes     = (Value | Type) & ~(RegularEnum | ValueModule), // regular enums merge only with regular enums and modules
-        ConstEnumExcludes       = (Value | Type) & ~ConstEnum, // const enums merge only with const enums
-        ValueModuleExcludes     = Value & ~(Function | Class | RegularEnum | ValueModule),
+        ParameterExcludes = Value,
+        PropertyExcludes = Value,
+        EnumMemberExcludes = Value,
+        FunctionExcludes = Value & ~(Function | ValueModule),
+        ClassExcludes = (Value | Type) & ~ValueModule,
+        InterfaceExcludes = Type & ~Interface,
+        RegularEnumExcludes = (Value | Type) & ~(RegularEnum | ValueModule), // regular enums merge only with regular enums and modules
+        ConstEnumExcludes = (Value | Type) & ~ConstEnum, // const enums merge only with const enums
+        ValueModuleExcludes = Value & ~(Function | Class | RegularEnum | ValueModule),
         NamespaceModuleExcludes = 0,
-        MethodExcludes          = Value & ~Method,
-        GetAccessorExcludes     = Value & ~SetAccessor,
-        SetAccessorExcludes     = Value & ~GetAccessor,
-        TypeParameterExcludes   = Type & ~TypeParameter,
-        TypeAliasExcludes       = Type,
-        ImportExcludes          = Import,  // Imports collide with all other imports with the same name
+        MethodExcludes = Value & ~Method,
+        GetAccessorExcludes = Value & ~SetAccessor,
+        SetAccessorExcludes = Value & ~GetAccessor,
+        TypeParameterExcludes = Type & ~TypeParameter,
+        TypeAliasExcludes = Type,
+        ImportExcludes = Import,  // Imports collide with all other imports with the same name
 
         ModuleMember = Variable | Function | Class | Interface | Enum | Module | TypeAlias | Import,
 
         ExportHasLocal = Function | Class | Enum | ValueModule,
 
-        HasLocals  = Function | Module | Method | Constructor | Accessor | Signature,
+        HasLocals = Function | Module | Method | Constructor | Accessor | Signature,
         HasExports = Class | Enum | Module,
         HasMembers = Class | Interface | TypeLiteral | ObjectLiteral,
 
-        IsContainer        = HasLocals | HasExports | HasMembers,
+        IsContainer = HasLocals | HasExports | HasMembers,
         PropertyOrAccessor = Property | Accessor,
-        Export             = ExportNamespace | ExportType | ExportValue,
+        Export = ExportNamespace | ExportType | ExportValue,
     }
 
     export interface Symbol {
@@ -1203,13 +1203,13 @@ module ts {
     }
 
     export const enum NodeCheckFlags {
-        TypeChecked        = 0x00000001,  // Node has been type checked
-        LexicalThis        = 0x00000002,  // Lexical 'this' reference
-        CaptureThis        = 0x00000004,  // Lexical 'this' used in body
-        EmitExtends        = 0x00000008,  // Emit __extends
-        SuperInstance      = 0x00000010,  // Instance 'super' reference
-        SuperStatic        = 0x00000020,  // Static 'super' reference
-        ContextChecked     = 0x00000040,  // Contextual types have been assigned
+        TypeChecked = 0x00000001,  // Node has been type checked
+        LexicalThis = 0x00000002,  // Lexical 'this' reference
+        CaptureThis = 0x00000004,  // Lexical 'this' used in body
+        EmitExtends = 0x00000008,  // Emit __extends
+        SuperInstance = 0x00000010,  // Instance 'super' reference
+        SuperStatic = 0x00000020,  // Static 'super' reference
+        ContextChecked = 0x00000040,  // Contextual types have been assigned
 
         // Values for enum members have been computed, and any errors have been reported for them.
         EnumValuesComputed = 0x00000080,
@@ -1228,26 +1228,26 @@ module ts {
     }
 
     export const enum TypeFlags {
-        Any                = 0x00000001,
-        String             = 0x00000002,
-        Number             = 0x00000004,
-        Boolean            = 0x00000008,
-        Void               = 0x00000010,
-        Undefined          = 0x00000020,
-        Null               = 0x00000040,
-        Enum               = 0x00000080,  // Enum type
-        StringLiteral      = 0x00000100,  // String literal type
-        TypeParameter      = 0x00000200,  // Type parameter
-        Class              = 0x00000400,  // Class
-        Interface          = 0x00000800,  // Interface
-        Reference          = 0x00001000,  // Generic type reference
-        Tuple              = 0x00002000,  // Tuple
-        Union              = 0x00004000,  // Union
-        Anonymous          = 0x00008000,  // Anonymous
-        FromSignature      = 0x00010000,  // Created for signature assignment check
-        Unwidened          = 0x00020000,  // Unwidened type (is or contains Undefined or Null type)
+        Any = 0x00000001,
+        String = 0x00000002,
+        Number = 0x00000004,
+        Boolean = 0x00000008,
+        Void = 0x00000010,
+        Undefined = 0x00000020,
+        Null = 0x00000040,
+        Enum = 0x00000080,  // Enum type
+        StringLiteral = 0x00000100,  // String literal type
+        TypeParameter = 0x00000200,  // Type parameter
+        Class = 0x00000400,  // Class
+        Interface = 0x00000800,  // Interface
+        Reference = 0x00001000,  // Generic type reference
+        Tuple = 0x00002000,  // Tuple
+        Union = 0x00004000,  // Union
+        Anonymous = 0x00008000,  // Anonymous
+        FromSignature = 0x00010000,  // Created for signature assignment check
+        Unwidened = 0x00020000,  // Unwidened type (is or contains Undefined or Null type)
 
-        Intrinsic  = Any | String | Number | Boolean | Void | Undefined | Null,
+        Intrinsic = Any | String | Number | Boolean | Void | Undefined | Null,
         StringLike = String | StringLiteral,
         NumberLike = Number | Enum,
         ObjectType = Class | Interface | Reference | Tuple | Anonymous,
@@ -1365,7 +1365,7 @@ module ts {
         inferences: TypeInferences[];       // Inferences made for each type parameter
         inferredTypes: Type[];              // Inferred type for each type parameter
         failedTypeParameterIndex?: number;  // Index of type parameter for which inference failed
-                                            // It is optional because in contextual signature instantiation, nothing fails
+        // It is optional because in contextual signature instantiation, nothing fails
     }
 
     export interface DiagnosticMessage {
@@ -1498,7 +1498,7 @@ module ts {
         narrowNoBreakSpace = 0x202F,
         ideographicSpace = 0x3000,
         mathematicalSpace = 0x205F,
-        ogham = 0x1680, 
+        ogham = 0x1680,
 
         _ = 0x5F,
         $ = 0x24,
@@ -1604,7 +1604,7 @@ module ts {
         tab = 0x09,                   // \t
         verticalTab = 0x0B,           // \v
     }
-    
+
     export interface CancellationToken {
         isCancellationRequested(): boolean;
     }
@@ -1641,4 +1641,161 @@ module ts {
         intersectsWithPosition(position: number): boolean;
         intersection(span: TextSpan): TextSpan;
     }
+
+    /**
+        * Creates a TextSpan instance beginning with the position Start and having the Length
+        * specified with length.
+        */
+    /*
+    export function createTextSpan(start: number, length: number): TextSpan {
+        Debug.assert(start >= 0, "start");
+        Debug.assert(length >= 0, "length");
+
+        function end() {
+            return start + length;
+        }
+
+        function overlapsWith(span: TextSpan): boolean {
+            var overlapStart = Math.max(start, span.start());
+            var overlapEnd = Math.min(end(), span.end());
+
+            return overlapStart < overlapEnd;
+        }
+
+        function overlap(span: TextSpan): TextSpan {
+            var overlapStart = Math.max(start, span.start());
+            var overlapEnd = Math.min(end(), span.end());
+
+            if (overlapStart < overlapEnd) {
+                return createTextSpanFromBounds(overlapStart, overlapEnd);
+            }
+
+            return undefined;
+        }
+
+        function intersectsWithTextSpan(span: TextSpan): boolean {
+            return span.start() <= end() && span.end() >= start;
+        }
+
+        function intersectsWith(_start: number, _length: number): boolean {
+            var _end = _start + _length;
+            return _start <= end() && _end >= start;
+        }
+
+        function intersectsWithPosition(position: number): boolean {
+            return position <= end() && position >= start;
+        }
+
+        function intersection(span: TextSpan): TextSpan {
+            var intersectStart = Math.max(start, span.start());
+            var intersectEnd = Math.min(end(), span.end());
+
+            if (intersectStart <= intersectEnd) {
+                return createTextSpanFromBounds(intersectStart, intersectEnd);
+            }
+
+            return undefined;
+        }
+
+
+        return {
+            start: () => start, length: () => length,
+            toJSON: key  => { start, length },
+            end: end,
+            isEmpty: () => length === 0,
+            containsPosition: position => position >= start && position < end(),
+            containsTextSpan: span => span.start() >= start && span.end() <= end(),
+            overlapsWith: overlapsWith,
+            overlap: overlap,
+            intersectsWithTextSpan: intersectsWithTextSpan,
+            intersectsWith: intersectsWith,
+            intersectsWithPosition: intersectsWithPosition,
+            intersection: intersection,
+        }
+    }
+    */
+
+    export function createTextSpanFromBounds(start: number, end: number) {
+        return createTextSpan(start, end - start);
+    }
+
+    export function createTextSpan(start: number, length: number): TextSpan {
+        return new (<any>textSpanConstructor)(start, length);
+    }
+
+    var textSpanConstructor = (function () {
+        function TextSpanObject(start: number, length: number) {
+            ts.Debug.assert(start >= 0, "start");
+            ts.Debug.assert(length >= 0, "length");
+            this._start = start;
+            this._length = length;
+        }
+
+        TextSpanObject.prototype.toJSON = function (key: string) {
+            return { start: this._start, length: this._length };
+        };
+
+        TextSpanObject.prototype.start = function () {
+            return this._start;
+        };
+
+        TextSpanObject.prototype.length = function () {
+            return this._length;
+        };
+
+        TextSpanObject.prototype.end = function () {
+            return this._start + this._length;
+        };
+
+        TextSpanObject.prototype.isEmpty = function () {
+            return this._length === 0;
+        };
+
+        TextSpanObject.prototype.containsPosition = function (position: number) {
+            return position >= this._start && position < this.end();
+        };
+
+        TextSpanObject.prototype.containsTextSpan = function (span: TextSpan) {
+            return span.start() >= this._start && span.end() <= this.end();
+        };
+
+        TextSpanObject.prototype.overlapsWith = function (span: TextSpan) {
+            var overlapStart = Math.max(this._start, span.start());
+            var overlapEnd = Math.min(this.end(), span.end());
+            return overlapStart < overlapEnd;
+        };
+
+        TextSpanObject.prototype.overlap = function (span: TextSpan) {
+            var overlapStart = Math.max(this._start, span.start());
+            var overlapEnd = Math.min(this.end(), span.end());
+            if (overlapStart < overlapEnd) {
+                return createTextSpanFromBounds(overlapStart, overlapEnd);
+            }
+            return undefined;
+        };
+
+        TextSpanObject.prototype.intersectsWithTextSpan = function (span: TextSpan) {
+            return span.start() <= this.end() && span.end() >= this._start;
+        };
+
+        TextSpanObject.prototype.intersectsWith = function (start: number, length: number) {
+            var end = start + length;
+            return start <= this.end() && end >= this._start;
+        };
+
+        TextSpanObject.prototype.intersectsWithPosition = function (position: number) {
+            return position <= this.end() && position >= this._start;
+        };
+
+        TextSpanObject.prototype.intersection = function (span: TextSpan) {
+            var intersectStart = Math.max(this._start, span.start());
+            var intersectEnd = Math.min(this.end(), span.end());
+            if (intersectStart <= intersectEnd) {
+                return createTextSpanFromBounds(intersectStart, intersectEnd);
+            }
+            return undefined;
+        };
+
+        return TextSpanObject;
+    })();
 }

@@ -3219,7 +3219,7 @@ module ts {
                             return {
                                 kind: ScriptElementKind.unknown,
                                 kindModifiers: ScriptElementKindModifier.none,
-                                textSpan: new TextSpanObject(node.getStart(), node.getWidth()),
+                                textSpan: createTextSpan(node.getStart(), node.getWidth()),
                                 displayParts: typeToDisplayParts(typeInfoResolver, type, getContainerNode(node)),
                                 documentation: type.symbol ? type.symbol.getDocumentationComment() : undefined
                             };
@@ -3233,7 +3233,7 @@ module ts {
             return {
                 kind: displayPartsDocumentationsAndKind.symbolKind,
                 kindModifiers: getSymbolModifiers(symbol),
-                textSpan: new TextSpanObject(node.getStart(), node.getWidth()),
+                textSpan: createTextSpan(node.getStart(), node.getWidth()),
                 displayParts: displayPartsDocumentationsAndKind.displayParts,
                 documentation: displayPartsDocumentationsAndKind.documentation
             };
@@ -3244,7 +3244,7 @@ module ts {
             function getDefinitionInfo(node: Node, symbolKind: string, symbolName: string, containerName: string): DefinitionInfo {
                 return {
                     fileName: node.getSourceFile().filename,
-                    textSpan: TextSpanObject.fromBounds(node.getStart(), node.getEnd()),
+                    textSpan: createTextSpanFromBounds(node.getStart(), node.getEnd()),
                     kind: symbolKind,
                     name: symbolName,
                     containerKind: undefined,
@@ -3321,7 +3321,7 @@ module ts {
                 if (referenceFile) {
                     return [{
                         fileName: referenceFile.filename,
-                        textSpan: TextSpanObject.fromBounds(0, 0),
+                        textSpan: createTextSpanFromBounds(0, 0),
                         kind: ScriptElementKind.scriptElement,
                         name: comment.filename,
                         containerName: undefined,
@@ -3512,7 +3512,7 @@ module ts {
                         if (shouldHighlightNextKeyword) {
                             result.push({
                                 fileName: filename,
-                                textSpan: TextSpanObject.fromBounds(elseKeyword.getStart(), ifKeyword.end),
+                                textSpan: createTextSpanFromBounds(elseKeyword.getStart(), ifKeyword.end),
                                 isWriteAccess: false
                             });
                             i++; // skip the next keyword
@@ -4204,7 +4204,7 @@ module ts {
                                 (findInComments && isInComment(position))) {
                                 result.push({
                                     fileName: sourceFile.filename,
-                                    textSpan: new TextSpanObject(position, searchText.length),
+                                    textSpan: createTextSpan(position, searchText.length),
                                     isWriteAccess: false
                                 });
                             }
@@ -4587,7 +4587,7 @@ module ts {
 
             return {
                 fileName: node.getSourceFile().filename,
-                textSpan: TextSpanObject.fromBounds(start, end),
+                textSpan: createTextSpanFromBounds(start, end),
                 isWriteAccess: isWriteAccess(node)
             };
         }
@@ -4643,7 +4643,7 @@ module ts {
                             kindModifiers: getNodeModifiers(declaration),
                             matchKind: MatchKind[matchKind],
                             fileName: filename,
-                            textSpan: TextSpanObject.fromBounds(declaration.getStart(), declaration.getEnd()),
+                            textSpan: createTextSpanFromBounds(declaration.getStart(), declaration.getEnd()),
                             // TODO(jfreeman): What should be the containerName when the container has a computed name?
                             containerName: container && container.name ? (<Identifier>container.name).text : "",
                             containerKind: container && container.name ? getNodeKind(container) : ""
@@ -4920,7 +4920,7 @@ module ts {
                 }
             }
 
-            return TextSpanObject.fromBounds(nodeForStartPos.getStart(), node.getEnd());
+            return createTextSpanFromBounds(nodeForStartPos.getStart(), node.getEnd());
         }
 
         function getBreakpointStatementAtPosition(filename: string, position: number) {
@@ -4997,7 +4997,7 @@ module ts {
                             var type = classifySymbol(symbol, getMeaningFromLocation(node));
                             if (type) {
                                 result.push({
-                                    textSpan: new TextSpanObject(node.getStart(), node.getWidth()),
+                                    textSpan: createTextSpan(node.getStart(), node.getWidth()),
                                     classificationType: type
                                 });
                             }
@@ -5023,7 +5023,7 @@ module ts {
                 var width = comment.end - comment.pos;
                 if (span.intersectsWith(comment.pos, width)) {
                     result.push({
-                        textSpan: new TextSpanObject(comment.pos, width),
+                        textSpan: createTextSpan(comment.pos, width),
                         classificationType: ClassificationTypeNames.comment
                     });
                 }
@@ -5036,7 +5036,7 @@ module ts {
                     var type = classifyTokenType(token);
                     if (type) {
                         result.push({
-                            textSpan: new TextSpanObject(token.getStart(), token.getWidth()),
+                            textSpan: createTextSpan(token.getStart(), token.getWidth()),
                             classificationType: type
                         });
                     }
@@ -5164,8 +5164,8 @@ module ts {
                         var current = childNodes[i];
 
                         if (current.kind === matchKind) {
-                            var range1 = new TextSpanObject(token.getStart(sourceFile), token.getWidth(sourceFile));
-                            var range2 = new TextSpanObject(current.getStart(sourceFile), current.getWidth(sourceFile));
+                            var range1 = createTextSpan(token.getStart(sourceFile), token.getWidth(sourceFile));
+                            var range2 = createTextSpan(current.getStart(sourceFile), current.getWidth(sourceFile));
 
                             // We want to order the braces when we return the result.
                             if (range1.start() < range2.start()) {
@@ -5416,7 +5416,7 @@ module ts {
                     if (kind) {
                         return getRenameInfo(symbol.name, typeInfoResolver.getFullyQualifiedName(symbol), kind,
                             getSymbolModifiers(symbol),
-                            new TextSpanObject(node.getStart(), node.getWidth()));
+                            createTextSpan(node.getStart(), node.getWidth()));
                     }
                 }
             }
