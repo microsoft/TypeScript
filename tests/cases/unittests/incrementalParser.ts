@@ -594,6 +594,16 @@ module ts {
             compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 0);
         });
 
+        it('Delete parameter after comment',() => {
+            var source = "function fn(/* comment! */ a: number, c) { }";
+
+            var oldText = ScriptSnapshot.fromString(source);
+            var index = source.indexOf("a:");
+            var newTextAndChange = withDelete(oldText, index, "a: number,".length);
+
+            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 0);
+        });
+
         // Simulated typing tests.
 
         it('Type extends clause 1',() => {
