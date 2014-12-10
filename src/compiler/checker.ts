@@ -4622,8 +4622,8 @@ module ts {
         // Get the narrowed type of a given symbol at a given location
         function getNarrowedTypeOfSymbol(symbol: Symbol, node: Node) {
             var type = getTypeOfSymbol(symbol);
-            // Only narrow when symbol is variable of a structured type
-            if (node && (symbol.flags & SymbolFlags.Variable && type.flags & TypeFlags.Structured)) {
+            // Only narrow when symbol is variable of an object, union, or type parameter type
+            if (node && symbol.flags & SymbolFlags.Variable && type.flags & (TypeFlags.ObjectType | TypeFlags.Union | TypeFlags.TypeParameter)) {
                 loop: while (node.parent) {
                     var child = node;
                     node = node.parent;
@@ -6587,12 +6587,12 @@ module ts {
             return numberType;
         }
 
-        // Return true if type is any, an object type, a type parameter, or a union type composed of only those kinds of types
+        // Return true if type an object type, a type parameter, or a union type composed of only those kinds of types
         function isStructuredType(type: Type): boolean {
             if (type.flags & TypeFlags.Union) {
                 return !forEach((<UnionType>type).types, t => !isStructuredType(t));
             }
-            return (type.flags & TypeFlags.Structured) !== 0;
+            return (type.flags & (TypeFlags.ObjectType | TypeFlags.TypeParameter)) !== 0;
         }
 
         function isConstEnumObjectType(type: Type): boolean {
@@ -6609,11 +6609,11 @@ module ts {
             // and the right operand to be of type Any or a subtype of the 'Function' interface type. 
             // The result is always of the Boolean primitive type.
             // NOTE: do not raise error if leftType is unknown as related error was already reported
-            if (leftType !== unknownType && !isStructuredType(leftType)) {
+            if (!(leftType.flags & TypeFlags.Any || isStructuredType(leftType))) {
                 error(node.left, Diagnostics.The_left_hand_side_of_an_instanceof_expression_must_be_of_type_any_an_object_type_or_a_type_parameter);
             }
             // NOTE: do not raise error if right is unknown as related error was already reported
-            if (rightType !== unknownType && rightType !== anyType && !isTypeSubtypeOf(rightType, globalFunctionType)) {
+            if (!(rightType.flags & TypeFlags.Any || isTypeSubtypeOf(rightType, globalFunctionType))) {
                 error(node.right, Diagnostics.The_right_hand_side_of_an_instanceof_expression_must_be_of_type_any_or_of_a_type_assignable_to_the_Function_interface_type);
             }
             return booleanType;
@@ -6627,7 +6627,7 @@ module ts {
             if (leftType !== anyType && leftType !== stringType && leftType !== numberType) {
                 error(node.left, Diagnostics.The_left_hand_side_of_an_in_expression_must_be_of_types_any_string_or_number);
             }
-            if (!isStructuredType(rightType)) {
+            if (!(rightType.flags & TypeFlags.Any || isStructuredType(rightType))) {
                 error(node.right, Diagnostics.The_right_hand_side_of_an_in_expression_must_be_of_type_any_an_object_type_or_a_type_parameter);
             }
             return booleanType;
@@ -7975,7 +7975,7 @@ module ts {
             var exprType = checkExpression(node.expression);
             // unknownType is returned i.e. if node.expression is identifier whose name cannot be resolved
             // in this case error about missing name is already reported - do not report extra one
-            if (!isStructuredType(exprType) && exprType !== unknownType) {
+            if (!(exprType.flags & TypeFlags.Any || isStructuredType(exprType))) {
                 error(node.expression, Diagnostics.The_right_hand_side_of_a_for_in_statement_must_be_of_type_any_an_object_type_or_a_type_parameter);
             }
 
