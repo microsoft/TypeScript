@@ -481,6 +481,16 @@ module ts {
             compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 0);
         });
 
+        it('Test generic invocation to contextual shift',() => {
+            var source = "var v = Foo<Bar<T>>(2)";
+
+            var index = source.indexOf('Foo<Bar<');
+            var oldText = ScriptSnapshot.fromString(source);
+            var newTextAndChange = withDelete(oldText, index, "Foo<Bar<".length);
+
+            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 0);
+        });
+
         // Simulated typing tests.
 
         it('Type extends clause 1',() => {
