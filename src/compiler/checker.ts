@@ -4445,8 +4445,8 @@ module ts {
         // Get the narrowed type of a given symbol at a given location
         function getNarrowedTypeOfSymbol(symbol: Symbol, node: Node) {
             var type = getTypeOfSymbol(symbol);
-            // Only narrow when symbol is variable of a structured type
-            if (node && (symbol.flags & SymbolFlags.Variable && type.flags & TypeFlags.Structured)) {
+            // Only narrow when symbol is variable of an object, union, or type parameter type
+            if (node && symbol.flags & SymbolFlags.Variable && type.flags & (TypeFlags.ObjectType | TypeFlags.Union | TypeFlags.TypeParameter)) {
                 loop: while (node.parent) {
                     var child = node;
                     node = node.parent;
@@ -6400,12 +6400,12 @@ module ts {
             return numberType;
         }
 
-        // Return true if type is any, an object type, a type parameter, or a union type composed of only those kinds of types
+        // Return true if type an object type, a type parameter, or a union type composed of only those kinds of types
         function isStructuredType(type: Type): boolean {
             if (type.flags & TypeFlags.Union) {
                 return !forEach((<UnionType>type).types, t => !isStructuredType(t));
             }
-            return (type.flags & TypeFlags.Structured) !== 0;
+            return (type.flags & (TypeFlags.ObjectType | TypeFlags.TypeParameter)) !== 0;
         }
 
         function isConstEnumObjectType(type: Type) : boolean {
