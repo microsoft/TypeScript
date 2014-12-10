@@ -230,7 +230,7 @@ module ts {
                 throw Error("LanguageServiceShimHostAdapter.getCompilationSettings: empty compilationSettings");
                 return null;
             }
-            return <CompilerOptions>JSON.parse(<any>settingsJson);
+            return <CompilerOptions>JSON.parse(settingsJson);
         }
 
         public getScriptFileNames(): string[] {
