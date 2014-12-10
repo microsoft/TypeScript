@@ -371,14 +371,24 @@ module ts {
             compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 0);
         });
 
-        it('Parenthesized expression to arrow function',() => {
+        it('Parenthesized expression to arrow function 1',() => {
             var source = "var v = (a, b, c, d, e)";
 
             var index = source.indexOf('a');
             var oldText = ScriptSnapshot.fromString(source);
             var newTextAndChange = withInsert(oldText, index + 1, ":");
 
-            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, -1);
+            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 0);
+        });
+
+        it('Parenthesized expression to arrow function 2',() => {
+            var source = "var v = (a, b) = c";
+
+            var index = source.indexOf("= c") + 1;
+            var oldText = ScriptSnapshot.fromString(source);
+            var newTextAndChange = withInsert(oldText, index, ">");
+
+            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 0);
         });
 
         it('Arrow function to parenthesized expression',() => {
