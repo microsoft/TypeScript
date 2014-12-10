@@ -111,6 +111,63 @@ module Utils {
             }
         });
     }
+
+    export function assertInvariants(node: ts.Node, parent: ts.Node): void {
+        if (node) {
+            assert.isFalse(node.pos < 0, "node.pos < 0");
+            assert.isFalse(node.end < 0, "node.end < 0");
+            assert.isFalse(node.end < node.pos, "node.end < node.pos");
+            assert.equal(node.parent, parent, "node.parent !== parent");
+
+            if (parent) {
+                // Make sure each child is contained within the parent.
+                assert.isFalse(node.pos < parent.pos, "node.pos < parent.pos");
+                assert.isFalse(node.end > parent.end, "node.end > parent.end");
+            }
+
+            ts.forEachChild(node, child => {
+                assertInvariants(child, node);
+            });
+
+            // Make sure each of the children is in order.
+            var currentPos = 0;
+            ts.forEachChild(node,
+                child => {
+                    assert.isFalse(child.pos < currentPos, "child.pos < currentPos");
+                    currentPos = child.end;
+                },
+                (array: ts.NodeArray<ts.Node>) => {
+                    assert.isFalse(array.pos < node.pos, "array.pos < node.pos");
+                    assert.isFalse(array.end > node.end, "array.end > node.end");
+                    assert.isFalse(array.pos < currentPos, "array.pos < currentPos");
+
+                    for (var i = 0, n = array.length; i < n; i++) {
+                        assert.isFalse(array[i].pos < currentPos, "array[i].pos < currentPos");
+                        currentPos = array[i].end
+                    }
+
+                    currentPos = array.end;
+                });
+
+            var childNodesAndArrays: any[] = [];
+            ts.forEachChild(node, child => { childNodesAndArrays.push(child) }, array => { childNodesAndArrays.push(array) });
+
+            for (var childName in node) {
+                if (childName === "parent" || childName === "nextContainer" || childName === "modifiers" || childName === "externalModuleIndicator") {
+                    continue;
+                }
+                var child = (<any>node)[childName];
+                if (isNodeOrArray(child)) {
+                    assert.isFalse(childNodesAndArrays.indexOf(child) < 0,
+                        "Missing child when forEach'ing over node: " + (<any>ts).SyntaxKind[node.kind] + "-" + childName);
+                }
+            }
+        }
+    }
+
+    function isNodeOrArray(a: any): boolean {
+        return a !== undefined && typeof a.pos === "number";
+    }
 }
 
 module Harness.Path {
