@@ -491,6 +491,16 @@ module ts {
             compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 0);
         });
 
+        it('Contextual shift to generic type and initializer',() => {
+            var source = "var v = T>>=2;";
+
+            var index = source.indexOf('=');
+            var oldText = ScriptSnapshot.fromString(source);
+            var newTextAndChange = withChange(oldText, index, "= ".length, ": Foo<Bar<");
+
+            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 0);
+        });
+
         // Simulated typing tests.
 
         it('Type extends clause 1',() => {
