@@ -865,11 +865,11 @@ module ts {
                 }
             }
 
-            return SourceFileObject.createSourceFileObject(this.filename, scriptSnapshot, this.languageVersion, version, isOpen);
+            return createLanguageServiceSourceFile(this.filename, scriptSnapshot, this.languageVersion, version, isOpen, /*setNodeParents:*/ true);
         }
 
-        public static createSourceFileObject(filename: string, scriptSnapshot: IScriptSnapshot, languageVersion: ScriptTarget, version: string, isOpen: boolean) {
-            var newSourceFile = <SourceFileObject><any>createSourceFile(filename, scriptSnapshot.getText(0, scriptSnapshot.getLength()), languageVersion, /*setParentNodes:*/ true);
+        public static createSourceFileObject(filename: string, scriptSnapshot: IScriptSnapshot, languageVersion: ScriptTarget, version: string, isOpen: boolean, setParentNodes: boolean) {
+            var newSourceFile = <SourceFileObject><any>createSourceFile(filename, scriptSnapshot.getText(0, scriptSnapshot.getLength()), languageVersion, setParentNodes);
             newSourceFile.version = version;
             newSourceFile.isOpen = isOpen;
             newSourceFile.scriptSnapshot = scriptSnapshot;
@@ -1679,7 +1679,7 @@ module ts {
                 var scriptSnapshot = this.hostCache.getScriptSnapshot(filename);
 
                 var start = new Date().getTime();
-                sourceFile = createLanguageServiceSourceFile(filename, scriptSnapshot, getDefaultCompilerOptions(), version, /*isOpen*/ true);
+                sourceFile = createLanguageServiceSourceFile(filename, scriptSnapshot, getDefaultCompilerOptions().target, version, /*isOpen*/ true, /*setNodeParents:*/ true);
                 this.host.log("SyntaxTreeCache.Initialize: createSourceFile: " + (new Date().getTime() - start));
 
                 var start = new Date().getTime();
@@ -1692,7 +1692,7 @@ module ts {
 
                 var start = new Date().getTime();
                 sourceFile = !editRange 
-                    ? createLanguageServiceSourceFile(filename, scriptSnapshot, getDefaultCompilerOptions(), version, /*isOpen*/ true)
+                    ? createLanguageServiceSourceFile(filename, scriptSnapshot, getDefaultCompilerOptions().target, version, /*isOpen*/ true, /*setNodeParents:*/ true)
                     : this.currentSourceFile.update(scriptSnapshot, version, /*isOpen*/ true, editRange);
                 this.host.log("SyntaxTreeCache.Initialize: updateSourceFile: " + (new Date().getTime() - start));
 
@@ -1718,8 +1718,8 @@ module ts {
         }
     }
 
-    export function createLanguageServiceSourceFile(filename: string, scriptSnapshot: IScriptSnapshot, settings: CompilerOptions, version: string, isOpen: boolean): SourceFile {
-        return SourceFileObject.createSourceFileObject(filename, scriptSnapshot, settings.target, version, isOpen);
+    export function createLanguageServiceSourceFile(filename: string, scriptSnapshot: IScriptSnapshot, scriptTarget: ScriptTarget, version: string, isOpen: boolean, setNodeParents: boolean): SourceFile {
+        return SourceFileObject.createSourceFileObject(filename, scriptSnapshot, scriptTarget, version, isOpen, setNodeParents);
     }
 
     export function createDocumentRegistry(): DocumentRegistry {
@@ -1769,7 +1769,7 @@ module ts {
             var bucket = getBucketForCompilationSettings(compilationSettings, /*createIfMissing*/ true);
             var entry = lookUp(bucket, filename);
             if (!entry) {
-                var sourceFile = createLanguageServiceSourceFile(filename, scriptSnapshot, compilationSettings, version, isOpen);
+                var sourceFile = createLanguageServiceSourceFile(filename, scriptSnapshot, compilationSettings.target, version, isOpen, /*setNodeParents:*/ false);
 
                 bucket[filename] = entry = {
                     sourceFile: sourceFile,

@@ -1021,12 +1021,17 @@ module ts {
         // walk over the nodes and set parent references
         var parent: Node = sourceFile;
         function walk(n: Node): void {
-            n.parent = parent;
+            // walk down setting parents that differ from the parent we think it should be.  This
+            // allows us to quickly bail out of setting parents for subtrees during incremental 
+            // parsing
+            if (n.parent !== parent) {
+                n.parent = parent;
 
-            var saveParent = parent;
-            parent = n;
-            forEachChild(n, walk);
-            parent = saveParent;
+                var saveParent = parent;
+                parent = n;
+                forEachChild(n, walk);
+                parent = saveParent;
+            }
         }
 
         forEachChild(sourceFile, walk);

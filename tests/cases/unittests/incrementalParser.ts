@@ -18,10 +18,7 @@ module ts {
     }
 
     function createTree(text: IScriptSnapshot, version: string) {
-        var options: CompilerOptions = {};
-        options.target = ScriptTarget.ES5;
-
-        return createLanguageServiceSourceFile(/*fileName:*/ "", text, options, version, /*isOpen:*/ true)
+        return createLanguageServiceSourceFile(/*fileName:*/ "", text, ScriptTarget.ES5, version, /*isOpen:*/ true, /*setNodeParents:*/ true)
     }
 
     // NOTE: 'reusedElements' is the expected count of elements reused from the old tree to the new
