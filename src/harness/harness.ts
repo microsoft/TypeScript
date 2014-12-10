@@ -112,58 +112,37 @@ module Utils {
         });
     }
 
-    export function checkInvariants(node: ts.Node, parent: ts.Node): void {
-        if(node) {
-            if (node.pos < 0) {
-                throw new Error("node.pos < 0");
-            }
-            if (node.end < 0) {
-                throw new Error("node.end < 0");
-            }
-            if (node.end < node.pos) {
-                throw new Error("node.end < node.pos");
-            }
-            if (node.parent !== parent) {
-                throw new Error("node.parent !== parent");
-            }
+    export function assertInvariants(node: ts.Node, parent: ts.Node): void {
+        if (node) {
+            assert.isFalse(node.pos < 0, "node.pos < 0");
+            assert.isFalse(node.end < 0, "node.end < 0");
+            assert.isFalse(node.end < node.pos, "node.end < node.pos");
+            assert.equal(node.parent, parent, "node.parent !== parent");
+
             if (parent) {
                 // Make sure each child is contained within the parent.
-                if (node.pos < parent.pos) {
-                    throw new Error("node.pos < parent.pos");
-                }
-                if (node.end > parent.end) {
-                    throw new Error("node.end > parent.end");
-                }
+                assert.isFalse(node.pos < parent.pos, "node.pos < parent.pos");
+                assert.isFalse(node.end > parent.end, "node.end > parent.end");
             }
 
             ts.forEachChild(node, child => {
-                checkInvariants(child, node);
+                assertInvariants(child, node);
             });
 
             // Make sure each of the children is in order.
             var currentPos = 0;
             ts.forEachChild(node,
                 child => {
-                    if (child.pos < currentPos) {
-                        throw new Error("child.pos < currentPos");
-                    }
+                    assert.isFalse(child.pos < currentPos, "child.pos < currentPos");
                     currentPos = child.end;
                 },
                 (array: ts.NodeArray<ts.Node>) => {
-                    if (array.pos < node.pos) {
-                        throw new Error("array.pos < node.pos");
-                    }
-                    if (array.end > node.end) {
-                        throw new Error("array.end > node.end");
-                    }
+                    assert.isFalse(array.pos < node.pos, "array.pos < node.pos");
+                    assert.isFalse(array.end > node.end, "array.end > node.end");
+                    assert.isFalse(array.pos < currentPos, "array.pos < currentPos");
 
-                    if (array.pos < currentPos) {
-                        throw new Error("array.pos < currentPos");
-                    }
                     for (var i = 0, n = array.length; i < n; i++) {
-                        if (array[i].pos < currentPos) {
-                            throw new Error("array[i].pos < currentPos");
-                        }
+                        assert.isFalse(array[i].pos < currentPos, "array[i].pos < currentPos");
                         currentPos = array[i].end
                     }
 
@@ -179,9 +158,8 @@ module Utils {
                 }
                 var child = (<any>node)[childName];
                 if (isNodeOrArray(child)) {
-                    if (childNodesAndArrays.indexOf(child) < 0) {
-                        throw new Error("Child when forEach'ing over node. " + (<any>ts).SyntaxKind[node.kind] + "-" + childName);
-                    }
+                    assert.isFalse(childNodesAndArrays.indexOf(child) < 0,
+                        "Missing child when forEach'ing over node: " + (<any>ts).SyntaxKind[node.kind] + "-" + childName);
                 }
             }
         }

@@ -31,25 +31,25 @@ module ts {
     // are still ok and we're still appropriately reusing most of the tree.
     function compareTrees(oldText: IScriptSnapshot, newText: IScriptSnapshot, textChangeRange: TextChangeRange, expectedReusedElements: number, oldTree?: SourceFile): SourceFile {
         oldTree = oldTree || createTree(oldText, /*version:*/ ".");
-        Utils.checkInvariants(oldTree, /*parent:*/ undefined);
+        Utils.assertInvariants(oldTree, /*parent:*/ undefined);
 
         // Create a tree for the new text, in a non-incremental fashion.
         var newTree = createTree(newText, oldTree.version + ".");
-        Utils.checkInvariants(newTree, /*parent:*/ undefined);
+        Utils.assertInvariants(newTree, /*parent:*/ undefined);
 
         // Create a tree for the new text, in an incremental fashion.
         var incrementalNewTree = oldTree.update(newText, oldTree.version + ".", /*isOpen:*/ true, textChangeRange);
-        Utils.checkInvariants(incrementalNewTree, /*parent:*/ undefined);
+        Utils.assertInvariants(incrementalNewTree, /*parent:*/ undefined);
 
         // We should get the same tree when doign a full or incremental parse.
         assertStructuralEquals(newTree, incrementalNewTree);
 
         // There should be no reused nodes between two trees that are fully parsed.
-        Debug.assert(reusedElements(oldTree, newTree) === 0);
+        assert.isTrue(reusedElements(oldTree, newTree) === 0);
 
         if (expectedReusedElements !== -1) {
             var actualReusedCount = reusedElements(oldTree, incrementalNewTree);
-            Debug.assert(actualReusedCount === expectedReusedElements, actualReusedCount + " !== " + expectedReusedElements);
+            assert.equal(actualReusedCount, expectedReusedElements, actualReusedCount + " !== " + expectedReusedElements);
         }
 
         return incrementalNewTree;
@@ -60,29 +60,13 @@ module ts {
             return;
         }
 
-        if (!node1 || !node2) {
-            throw new Error("!node1 || !node2");
-        }
-
-        if (node1.pos !== node2.pos) {
-            throw new Error("node1.pos !== node2.pos");
-        }
-
-        if (node1.end !== node2.end) {
-            throw new Error("node1.end !== node2.end");
-        }
-
-        if (node1.kind !== node2.kind) {
-            throw new Error("node1.kind !== node2.kind");
-        }
-
-        if (node1.flags !== node2.flags) {
-            throw new Error("node1.flags !== node2.flags");
-        }
-
-        if (node1.parserContextFlags !== node2.parserContextFlags) {
-            throw new Error("node1.parserContextFlags !== node2.parserContextFlags");
-        }
+        assert(node1, "node1");
+        assert(node2, "node2");
+        assert.equal(node1.pos, node2.pos, "node1.pos !== node2.pos");
+        assert.equal(node1.end, node2.end, "node1.end !== node2.end");
+        assert.equal(node1.kind, node2.kind, "node1.kind !== node2.kind");
+        assert.equal(node1.flags, node2.flags, "node1.flags !== node2.flags");
+        assert.equal(node1.parserContextFlags, node2.parserContextFlags, "node1.parserContextFlags !== node2.parserContextFlags");
 
         forEachChild(node1,
             child1 => {
@@ -104,21 +88,11 @@ module ts {
             return;
         }
 
-        if (!array1 || !array2) {
-            throw new Error("!array1 || !array2");
-        }
-
-        if (array1.pos !== array2.pos) {
-            throw new Error("array1.pos !== array2.pos");
-        }
-
-        if (array1.end !== array2.end) {
-            throw new Error("array1.end !== array2.end");
-        }
-
-        if (array1.length !== array2.length) {
-            throw new Error("array1.length !== array2.length");
-        }
+        assert(array1, "array1");
+        assert(array2, "array2");
+        assert.equal(array1.pos, array2.pos, "array1.pos !== array2.pos");
+        assert.equal(array1.end, array2.end, "array1.end !== array2.end");
+        assert.equal(array1.length, array2.length, "array1.length !== array2.length");
 
         for (var i = 0, n = array1.length; i < n; i++) {
             assertStructuralEquals(array1[i], array2[i]);

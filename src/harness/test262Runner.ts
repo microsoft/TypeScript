@@ -189,7 +189,7 @@ class Test262BaselineRunner extends RunnerBase {
 
             it('satisfies invariants', () => {
                 var sourceFile = testState.checker.getProgram().getSourceFile(Test262BaselineRunner.getTestFilePath(testState.filename));
-                Utils.checkInvariants(sourceFile, /*parent:*/ undefined);
+                Utils.assertInvariants(sourceFile, /*parent:*/ undefined);
             });
 
             it('has the expected AST',() => {
