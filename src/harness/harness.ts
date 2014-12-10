@@ -538,8 +538,8 @@ module Harness {
         }
 
         export var defaultLibFileName = 'lib.d.ts';
-        export var defaultLibSourceFile = ts.createSourceFile(defaultLibFileName, IO.readFile(libFolder + 'lib.core.d.ts'), /*languageVersion*/ ts.ScriptTarget.Latest, /*version:*/ "0");
-        export var defaultES6LibSourceFile = ts.createSourceFile(defaultLibFileName, IO.readFile(libFolder + 'lib.core.es6.d.ts'), /*languageVersion*/ ts.ScriptTarget.Latest, /*version:*/ "0");
+        export var defaultLibSourceFile = ts.createSourceFile(defaultLibFileName, IO.readFile(libFolder + 'lib.core.d.ts'), /*languageVersion*/ ts.ScriptTarget.Latest);
+        export var defaultES6LibSourceFile = ts.createSourceFile(defaultLibFileName, IO.readFile(libFolder + 'lib.core.es6.d.ts'), /*languageVersion*/ ts.ScriptTarget.Latest);
 
 
         // Cache these between executions so we don't have to re-parse them for every test
@@ -565,7 +565,7 @@ module Harness {
             function register(file: { unitName: string; content: string; }) {
                 if (file.content !== undefined) {
                     var filename = ts.normalizeSlashes(file.unitName);
-                    filemap[getCanonicalFileName(filename)] = ts.createSourceFile(filename, file.content, scriptTarget, /*version:*/ "0");
+                    filemap[getCanonicalFileName(filename)] = ts.createSourceFile(filename, file.content, scriptTarget);
                 }
             };
             inputFiles.forEach(register);
@@ -579,7 +579,7 @@ module Harness {
                     }
                     else if (fn === fourslashFilename) {
                         var tsFn = 'tests/cases/fourslash/' + fourslashFilename;
-                        fourslashSourceFile = fourslashSourceFile || ts.createSourceFile(tsFn, Harness.IO.readFile(tsFn), scriptTarget, /*version*/ "0", /*isOpen*/ false);
+                        fourslashSourceFile = fourslashSourceFile || ts.createSourceFile(tsFn, Harness.IO.readFile(tsFn), scriptTarget);
                         return fourslashSourceFile;
                     }
                     else {
@@ -786,7 +786,7 @@ module Harness {
                 var register = (file: { unitName: string; content: string; }) => {
                     if (file.content !== undefined) {
                         var filename = ts.normalizeSlashes(file.unitName);
-                        filemap[getCanonicalFileName(filename)] = ts.createSourceFile(filename, file.content, options.target, /*version:*/ "0");
+                        filemap[getCanonicalFileName(filename)] = ts.createSourceFile(filename, file.content, options.target);
                     }
                 };
                 inputFiles.forEach(register);
