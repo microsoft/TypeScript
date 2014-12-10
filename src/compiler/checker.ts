@@ -7018,9 +7018,9 @@ module ts {
 
         function checkTypeParameter(node: TypeParameterDeclaration) {
             // Grammar Checking
-            var sourceFile = getSourceFileOfNode(node);
-            if (node.expression && !hasParseDiagnostics(sourceFile)) {
-                grammarErrorOnNode(sourceFile, node.expression, Diagnostics.Type_expected);
+            if (node.expression) {
+                var sourceFile = getSourceFileOfNode(node);
+                grammarErrorOnFirstToken(sourceFile, node.expression, Diagnostics.Type_expected);
             }
 
             checkSourceElement(node.constraint);
@@ -8666,10 +8666,12 @@ module ts {
             return sourceFile.parseDiagnostics.length > 0 ? true : false;
         }
 
-        function grammarErrorOnNode(sourceFile: SourceFile, node: Node, message: DiagnosticMessage, arg0?: any, arg1?: any, arg2?: any): void {
-            var start = getFullWidth(node) === 0 ? node.pos : skipTrivia(sourceFile.text, node.pos);
-            var length = node.end - start;
-            diagnostics.push(createFileDiagnostic(sourceFile, start, length, message, arg0, arg1, arg2));
+        function grammarErrorOnFirstToken(sourceFile: SourceFile, node: Node, message: DiagnosticMessage, arg0?: any, arg1?: any, arg2?: any): void {
+            if (!hasParseDiagnostics(sourceFile)) {
+                var start = skipTrivia(sourceFile.text, node.pos);
+                var length = node.end - start;
+                diagnostics.push(createFileDiagnostic(sourceFile, start, length, message, arg0, arg1, arg2));
+            }
         }
 
         function checkImportDeclaration(node: ImportDeclaration) {
