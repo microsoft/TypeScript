@@ -32,6 +32,7 @@ module ts {
         var isDownlevelAsync = isDownlevel && isAsync;
         var isUplevelAsync = !isDownlevel && isAsync;
         var inRewrittenBlock = false;
+        var generatedLocation: TextRange = { pos: -1, end: -1 };
 
         if (!isAsync && !isDownlevelGenerator) {
             return node;
@@ -43,8 +44,6 @@ module ts {
             if (!node) {
                 return node;
             }
-
-            if (isDownlevel) builder.pushLocation(node);
 
             switch (node.kind) {
                 case SyntaxKind.VariableDeclaration:
@@ -220,7 +219,6 @@ module ts {
                     break;
             }
 
-            if (isDownlevel) builder.popLocation();
             return node;
         }
 
@@ -406,8 +404,8 @@ module ts {
                 var arguments = visitList<Node>(node.arguments, builder.cacheExpression);
                 var target = result.target;
                 var thisArg = result.thisArg;
+                builder.writeLocation(node);
                 if (thisArg) {
-                    builder.setLocation(node);
                     return builder.createGeneratedNode(`\${target}.call(\${thisArg}, \${arguments})`, { target, thisArg, arguments });
                 } else {
                     return builder.createGeneratedNode(`\${target}(\${arguments})`, { target, arguments });
@@ -466,30 +464,31 @@ module ts {
             var variable = initializer;
             if (isDownlevel) {
                 if (declarations) {
-                    builder.beginVariableStatement();
-                    var assignments: GeneratedNode[] = [];
+                    var assignments: BinaryExpression;
                     for (var i = 0; i < declarations.length; i++) {
                         var declaration = declarations[i];
                         var generated = rewriteVariableDeclaration(declaration);
                         if (generated) {
-                            assignments.push(generated);
+                            if (assignments) {
+                                assignments = factory.createBinaryExpression(SyntaxKind.CommaToken, assignments, generated, generatedLocation);
+                            }
+                            else {
+                                assignments = generated;
+                            }
                         }
                         if (node.kind === SyntaxKind.ForInStatement && !variable) {
-                            builder.setLocation(declaration);
-                            variable = builder.createGeneratedNode(declaration.name.text);
+                            variable = factory.createIdentifier(declaration.name.text, declaration);
                         }
                     }
-                    builder.endVariableStatement();
-
+                    
                     initializer = undefined;
                     declarations = undefined;
 
-                    if (assignments.length) {
-                        builder.setLocation(node);
+                    if (assignments) {
                         if (node.kind === SyntaxKind.ForInStatement) {
-                            builder.emit(OpCode.Statement, `\${assignments};`, { assignments });
+                            builder.emit(OpCode.Statement, assignments);
                         } else {
-                            initializer = builder.createGeneratedNode(`\${assignments}`, { assignments });
+                            initializer = assignments;
                         }
                     }
                 } else if (initializer) {
@@ -508,8 +507,7 @@ module ts {
             if (isDownlevel) {
                 var assignment = visitVariableDeclarationsOrInitializer(node.declarations, /*initializer*/ undefined, node).initializer;
                 if (assignment) {
-                    builder.setLocation(node);
-                    return builder.createGeneratedNode(`\${assignment};`, { assignment });
+                    return factory.createExpressionStatement(assignment, node);
                 }
             } else {
                 return factory.updateVariableStatement(node, visitNodes(node.declarations));
@@ -588,6 +586,7 @@ module ts {
             if (isDownlevel) {
                 var label = builder.findBreakTarget(getTarget(node));
                 if (label > 0) {
+                    builder.writeLocation(node);
                     return builder.createInlineBreak(label);
                 }
             }
@@ -599,6 +598,7 @@ module ts {
             if (isDownlevel) {
                 var label = builder.findContinueTarget(getTarget(node));
                 if (label > 0) {
+                    builder.writeLocation(node);
                     return builder.createInlineBreak(label);
                 }
             }
@@ -608,16 +608,9 @@ module ts {
 
         function visitReturnStatement(node: ReturnStatement): Node {
             if (isDownlevel) {
-                var result = builder.createInlineReturn(visit(node.expression));
-                if (shouldCopyLeadingComments(node)) {
-                    result.leadingComments = getLeadingCommentRangesOfNode(node);
-                }
-
-                if (shouldCopyTrailingComments(node)) {
-                    result.trailingComments = getTrailingCommentRangesOfNode(node);
-                }
-
-                return result;
+                var expression = visit(node.expression);
+                builder.writeLocation(node);
+                return builder.createInlineReturn(expression);
             } else {
                 return factory.updateReturnStatement(node, visit(node.expression));
             }
@@ -729,49 +722,46 @@ module ts {
         }
 
         function visitIndexedAccessForCall(node: IndexedAccess): { target: GeneratedNode; thisArg?: GeneratedNode; } {
-            builder.setLocation(node.object);
             var thisArg = builder.cacheExpression(visit(node.object));
 
-            builder.setLocation(node.index);
             var target = builder.declareLocal();
             var index = visit(node.index);
+            var indexedAccess = factory.createIndexedAccess(thisArg, index, node);
+            var assignExpression = factory.createBinaryExpression(SyntaxKind.EqualsToken, target, indexedAccess);
 
-            builder.setLocation(node);
-            builder.emit(OpCode.Statement, `\${target} = \${thisArg}[\${index}];`, { target, thisArg, index });
+            builder.writeLocation(node);
+            builder.emit(OpCode.Statement, assignExpression);
             return { target, thisArg };
         }
 
         function visitPropertyAccessForCall(node: PropertyAccess): { target: GeneratedNode; thisArg?: GeneratedNode; } {
-            builder.setLocation(node.left);
             var thisArg = builder.cacheExpression(visit(node.left));
 
-            builder.setLocation(node.right);
             var target = builder.declareLocal();
-            var property = builder.createGeneratedNode(node.right.text);
+            var property = factory.createIdentifier(node.right.text);
 
-            builder.setLocation(node);
-            builder.emit(OpCode.Statement, `\${target} = \${thisArg}.\${property};`, { target, thisArg, property });
+            var propertyAccess = factory.createPropertyAccess(thisArg, property, node);
+            var assignExpression = factory.createBinaryExpression(SyntaxKind.EqualsToken, target, propertyAccess);
+            
+            builder.writeLocation(node);
+            builder.emit(OpCode.Statement, assignExpression);
             return { target, thisArg };
         }
 
-        function rewriteVariableDeclaration(node: VariableDeclaration): GeneratedNode {
-            builder.setLocation(node);
+        function rewriteVariableDeclaration(node: VariableDeclaration): BinaryExpression {
             builder.addVariable(node.name);
-            var local = builder.createGeneratedNode(node.name.text);
             var initializer = visit(node.initializer);
             if (initializer) {
-                builder.setLocation(node.initializer);
-                return builder.createGeneratedNode(`\${left} = \${right}`, { left: local, right: initializer });
+                return factory.createBinaryExpression(SyntaxKind.EqualsToken, node.name, initializer, node);
             }
         }
 
         function rewriteAwaitExpressionDownlevel(node: UnaryExpression): Expression {
             var operand = visit(node.operand);
             var resumeLabel = builder.defineLabel();
-            builder.setLocation(node.operand);
+            builder.writeLocation(node);
             builder.emit(OpCode.Yield, operand);
             builder.markLabel(resumeLabel);
-            builder.setLocation(node);
             return builder.createResume();
         }
 
@@ -783,12 +773,11 @@ module ts {
             var resumeLabel = builder.defineLabel();
             var resultLocal = builder.declareLocal();
             var code = node.operator === SyntaxKind.AmpersandAmpersandToken ? OpCode.BrFalse : OpCode.BrTrue;
-            builder.setLocation(node.left);
+            builder.writeLocation(node.left);
             builder.emit(OpCode.Assign, resultLocal, visit(node.left));
             builder.emit(code, resumeLabel, resultLocal);
-            builder.setLocation(node.right);
+            builder.writeLocation(node.right);
             builder.emit(OpCode.Assign, resultLocal, visit(node.right));
-            builder.setLocation(node);
             builder.markLabel(resumeLabel);
             return resultLocal;
         }
@@ -797,19 +786,18 @@ module ts {
             var whenFalseLabel = builder.defineLabel();
             var resumeLabel = builder.defineLabel();
             var resultLocal = builder.declareLocal();
-            builder.setLocation(node.condition);
             builder.emit(OpCode.BrFalse, whenFalseLabel, visit(node.condition));
-            builder.setLocation(node.whenTrue);
+            builder.writeLocation(node.whenTrue);
             builder.emit(OpCode.Assign, resultLocal, visit(node.whenTrue));
             builder.emit(OpCode.Break, resumeLabel);
             builder.markLabel(whenFalseLabel);
-            builder.setLocation(node.whenFalse);
+            builder.writeLocation(node.whenFalse);
             builder.emit(OpCode.Assign, resultLocal, visit(node.whenFalse));
             builder.markLabel(resumeLabel);
             return resultLocal;
         }
 
-        function rewriteYieldExpression(node: YieldExpression): GeneratedNode {
+        function rewriteYieldExpression(node: YieldExpression): Expression {
             // TODO: only supported if we support a pseudo iterator symbol via a wrapper like `__values`
             ////if (node.asteriskToken) {
             ////    var iterator = builder.declareLocal();
@@ -837,10 +825,9 @@ module ts {
 
             var operand = visit(node.expression);
             var resumeLabel = builder.defineLabel();
-            builder.setLocation(node.expression);
+            builder.writeLocation(node);
             builder.emit(OpCode.Yield, operand);
             builder.markLabel(resumeLabel);
-            builder.setLocation(node);
             return builder.createResume();
         }
 
@@ -850,21 +837,16 @@ module ts {
                 var elseLabel = builder.defineLabel();
             }
 
-            builder.writeLeadingCommentsOfNode(node);
-            builder.setLocation(node.expression);
-            builder.emit(OpCode.BrFalse, elseLabel || resumeLabel, node.expression);
-
-            builder.setLocation(node.thenStatement);
+            builder.emit(OpCode.BrFalse, elseLabel || resumeLabel, visit(node.expression));
+            
             visitAndEmitNode(node.thenStatement);
             if (node.elseStatement) {
                 builder.emit(OpCode.Break, resumeLabel);
-                builder.setLocation(node.elseStatement);
                 builder.markLabel(elseLabel);
                 visitAndEmitNode(node.elseStatement);
             }
 
             builder.markLabel(resumeLabel);
-            builder.writeTrailingCommentsOfNode(node);
         }
 
         function rewriteDoStatement(node: DoStatement): void {
@@ -873,10 +855,8 @@ module ts {
             var endLabel = builder.beginContinueBlock(conditionLabel, getTarget(node));
 
             builder.markLabel(bodyLabel);
-            builder.setLocation(node.statement);
             visitAndEmitNode(node.statement);
             builder.markLabel(conditionLabel);
-            builder.setLocation(node.expression);
             builder.emit(OpCode.BrTrue, bodyLabel, visit(node.expression));
             builder.endContinueBlock();
         }
@@ -885,10 +865,8 @@ module ts {
             var conditionLabel = builder.defineLabel();
             var bodyLabel = builder.defineLabel();
             var endLabel = builder.beginContinueBlock(conditionLabel, getTarget(node));
-            builder.setLocation(node.expression);
-            builder.markLabel(conditionLabel);
-            builder.emit(OpCode.BrFalse, endLabel, visit(node.expression));
-            builder.setLocation(node.statement);
+            builder.markLabel(conditionLabel);            
+            builder.emit(OpCode.BrFalse, endLabel, visit(node.expression));            
             visitAndEmitNode(node.statement);
             builder.emit(OpCode.Break, conditionLabel);
             builder.endContinueBlock();
@@ -901,19 +879,16 @@ module ts {
 
             var head = visitVariableDeclarationsOrInitializer(node.declarations, node.initializer, node);
             if (head.initializer) {
-                builder.setLocation(head.initializer);
-                builder.emit(OpCode.Statement, `\${initializer};`, { initializer: head.initializer });
+                builder.writeLocation(node.declarations || node.initializer);
+                builder.emit(OpCode.Statement, head.initializer);
             }
             builder.markLabel(conditionLabel);
             if (node.condition) {
-                builder.setLocation(node.condition);
                 builder.emit(OpCode.BrFalse, endLabel, visit(node.condition));
             }
-            builder.setLocation(node.statement);
-            visitAndEmitNode(node.statement);            
+            visitAndEmitNode(node.statement);
             builder.markLabel(iteratorLabel);
             if (node.iterator) {
-                builder.setLocation(node.iterator);
                 visitAndEmitNode(node.iterator);
             }
             builder.emit(OpCode.Break, conditionLabel);
@@ -928,7 +903,6 @@ module ts {
             var iteratorLabel = builder.defineLabel();
             var endLabel = builder.beginContinueBlock(iteratorLabel, getTarget(node));
 
-            builder.setLocation(node.expression);
             builder.emit(OpCode.Statement, `
                 \${keysLocal} = [];
                 for (\${tempLocal} in \${expression}) {
@@ -940,20 +914,19 @@ module ts {
                     expression: visit(node.expression)
                 });
             builder.markLabel(conditionLabel);
-            builder.setLocation(head.variable);
             builder.emit(OpCode.BrTrue, endLabel, `\${tempLocal} >= \${keysLocal}.length`, {
                 keysLocal,
                 tempLocal
             });
+            builder.writeLocation(head.variable);
             builder.emit(OpCode.Statement, `\${variable} = \${keysLocal}[\${tempLocal}];`, {
                 variable: head.variable,
                 keysLocal,
                 tempLocal
             });
-            builder.setLocation(node.statement);
             visitAndEmitNode(node.statement);
             builder.markLabel(iteratorLabel);
-            builder.setLocation(node.expression);
+            builder.writeLocation(head.variable);
             builder.emit(OpCode.Statement, `\${tempLocal}++;`, { tempLocal });
             builder.emit(OpCode.Break, conditionLabel);
             builder.endContinueBlock();
@@ -992,11 +965,12 @@ module ts {
                 if (hasAwaitOrYield(clause.expression)) {
                     emitPartialSwitchStatement(lastAwaitedClause + 1, i - 1);
 
-                    builder.setLocation(clause.expression);
+                    var clauseExpression = visit(clause.expression);
                     var clauseLabel = clauseLabels[clauseLabelMap[i]];
-                    builder.emit(OpCode.BrTrue, clauseLabel, "${expression} === ${test}", {
+                    builder.writeLocation(clause.expression);
+                    builder.emit(OpCode.BrTrue, clauseLabel, `\${expression} === \${test}`, {
                         expression: expression,
-                        test: visit(clause.expression)
+                        test: clauseExpression
                     });
 
                     lastAwaitedClause = i;
@@ -1008,7 +982,7 @@ module ts {
             // emit default case (if any, but not statements)
             if (defaultClauseIndex > -1) {
                 var defaultClauseLabel = clauseLabels[clauseLabelMap[defaultClauseIndex]];
-                builder.setLocation(node.clauses[defaultClauseIndex]);
+                builder.writeLocation(node.clauses[defaultClauseIndex]);
                 builder.emit(OpCode.Break, defaultClauseLabel);
             } else {
                 builder.emit(OpCode.Break, endLabel);
@@ -1021,9 +995,7 @@ module ts {
                 }
                 var clause = node.clauses[i];
                 var clauseLabel = clauseLabels[clauseLabelMap[i]];
-                builder.setLocation(clause.expression);
                 builder.markLabel(clauseLabel);
-                builder.setLocation(clause);
                 visitAndEmitBlockOrClause(clause);
             }
 
@@ -1038,16 +1010,14 @@ module ts {
 
                     var clause = node.clauses[i];
                     var clauseLabel = clauseLabels[clauseLabelMap[i]];
-                    builder.setLocation(clause.expression);
-                    var caseClause = factory.createCaseClause(visit(clause.expression), [
-                        builder.createInlineBreak(clauseLabel)
-                    ], clause.expression);
+                    builder.writeLocation(clause.expression);
+                    var inlineBreak = builder.createInlineBreak(clauseLabel);
+                    var caseClause = factory.createCaseClause(visit(clause.expression), [inlineBreak], clause.expression);
                     clauses.push(caseClause);
                 }
 
                 if (clauses.length) {
-                    var switchStatement = factory.createSwitchStatement(expression, clauses, node);
-                    builder.setLocation(node);
+                    var switchStatement = factory.createSwitchStatement(expression, clauses, node);                    
                     builder.emit(OpCode.Statement, switchStatement);
                 }
             }
@@ -1068,7 +1038,6 @@ module ts {
             var endLabel = builder.beginExceptionBlock();
             visitAndEmitBlockOrClause(node.tryBlock);
             if (node.catchBlock) {
-                builder.setLocation(node.catchBlock.variable);
                 var variable = builder.declareLocal(node.catchBlock.variable.text);
                 resolver.renameSymbol(node.catchBlock.symbol, variable.text);
                 builder.beginCatchBlock(variable);
@@ -1082,24 +1051,28 @@ module ts {
         }
 
         function rewriteReturnStatement(node: ReturnStatement): void {
-            builder.writeLeadingCommentsOfNode(node);
-            builder.emit(OpCode.Return, visit(node.expression));
-            builder.writeTrailingCommentsOfNode(node);
+            var expression = visit(node.expression);
+            builder.writeLocation(node);
+            builder.emit(OpCode.Return, expression);
         }
 
         function rewriteThrowStatement(node: ThrowStatement): void {
-            builder.emit(OpCode.Throw, visit(node.expression));
+            var expression = visit(node.expression);
+            builder.writeLocation(node);
+            builder.emit(OpCode.Throw, expression);
         }
 
         function rewriteBreakStatement(node: BreakOrContinueStatement): void {
             var label = builder.findBreakTarget(getTarget(node));
             Debug.assert(label > 0, "Expected break statement to point to a label.");
+            builder.writeLocation(node);
             builder.emit(OpCode.Break, label);
         }
 
         function rewriteContinueStatement(node: BreakOrContinueStatement): void {
             var label = builder.findContinueTarget(getTarget(node));
             Debug.assert(label > 0, "Expected continue statement to point to a label.");
+            builder.writeLocation(node);
             builder.emit(OpCode.Break, label);
         }
 
@@ -1190,7 +1163,7 @@ module ts {
         function shouldCopyTrailingComments(node: Node): boolean {
             return node.parent.kind === SyntaxKind.SourceFile || node.end != node.parent.end;
         }
-        
+
         function getTrailingCommentRangesOfNode(node: Node): CommentRange[] {
             var sourceFile = getSourceFileOfNode(node);
             var trailingComments = getTrailingCommentRanges(sourceFile.text, node.end);
@@ -1225,12 +1198,11 @@ module ts {
         }
 
         function emitNode(node: Node): void {
-            builder.setLocation(node);
+            builder.writeLocation(node);
             builder.emit(OpCode.Statement, node);
         }
 
         function visitAndEmitBlockOrClause(node: Block | CaseOrDefaultClause): void {
-            builder.setLocation(node);
             builder.writeLeadingCommentsOfNode(node);
 
             for (var i = 0; i < node.statements.length; i++) {
@@ -1242,7 +1214,6 @@ module ts {
                 }
             }
 
-            builder.setLocation(node);
             builder.writeTrailingCommentsOfNode(node);
         }
 
@@ -1281,7 +1252,7 @@ module ts {
                 var statements = factory.createNodeArray<Statement>([visit(node.body)], node.body);
             }
 
-            var resolve = locals.createUniqueIdentifier(statementsLocation, "_resolve");
+            var resolve = locals.createUniqueIdentifier("_resolve");
             var body = factory.createGeneratedNode(`
                 return new \${promiseConstructor}(function (\${resolve}) {
                     \${resolve}(__awaiter(function* () {
@@ -1312,7 +1283,7 @@ module ts {
             if (node.parameters) {
                 for (var i = 0; i < node.parameters.length; i++) {
                     var parameter = node.parameters[i];
-                    builder.setLocation(parameter);
+                    builder.writeLocation(parameter);
                     builder.addParameter(parameter.name, parameter.flags);
                     if (parameter.initializer) {
                         builder.emit(OpCode.Assign, builder.createGeneratedNode(parameter.name.text), visit(parameter.initializer));

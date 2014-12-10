@@ -1653,20 +1653,33 @@ module ts {
                 }
 
                 function recordEmitNodeStartSpan(node: Node) {
+                    if (node.pos < 0) {
+                        return;
+                    }
+
                     // Get the token pos after skipping to the token (ignoring the leading trivia)
                     recordSourceMapSpan(skipTrivia(currentSourceFile.text, node.pos));
                 }
 
                 function recordEmitNodeEndSpan(node: Node) {
+                    if (node.pos < 0) {
+                        return;
+                    }
+
                     recordSourceMapSpan(node.end);
                 }
 
                 function writeTextWithSpanRecord(tokenKind: SyntaxKind, startPos: number, emitFn?: () => void) {
-                    var tokenStartPos = ts.skipTrivia(currentSourceFile.text, startPos);
-                    recordSourceMapSpan(tokenStartPos);
+                    if (startPos >= 0) {
+                        var tokenStartPos = ts.skipTrivia(currentSourceFile.text, startPos);
+                        recordSourceMapSpan(tokenStartPos);
+                    }
                     var tokenEndPos = emitTokenText(tokenKind, tokenStartPos, emitFn);
-                    recordSourceMapSpan(tokenEndPos);
-                    return tokenEndPos;
+                    if (startPos >= 0) {
+                        recordSourceMapSpan(tokenEndPos);
+                        return tokenEndPos;
+                    }
+                    return -1;
                 }
 
                 function recordNewSourceFileStart(node: SourceFile) {
@@ -1934,7 +1947,12 @@ module ts {
             }
 
             function emitLiteral(node: LiteralExpression) {
-                var text = getLiteralText();
+                if (node.pos < 0) {
+                    var text = node.text;
+                }
+                else {
+                    var text = getLiteralText();
+                }
 
                 if (compilerOptions.sourceMap && (node.kind === SyntaxKind.StringLiteral || isTemplateLiteralKind(node.kind))) {
                     writer.writeLiteral(text);
@@ -2122,15 +2140,24 @@ module ts {
                     write(prefix);
                     write(".");
                 }
-                writeTextOfNode(currentSourceFile, node);
+                if (node.pos < 0) {
+                    write(node.text);
+                }
+                else {
+                    writeTextOfNode(currentSourceFile, node);
+                }
             }
 
             function emitIdentifier(node: Identifier) {
                 var generatedName = resolver.getRenamedIdentifier(node);
                 if (generatedName) {
                     write(generatedName);
-                } else if (!isNotExpressionIdentifier(node)) {
+                }
+                else if (!isNotExpressionIdentifier(node)) {
                     emitExpressionIdentifier(node);
+                }
+                else if (node.pos < 0) {
+                    write(node.text);
                 }
                 else {                    
                     writeTextOfNode(currentSourceFile, node);
@@ -3736,7 +3763,7 @@ module ts {
 
             function getLeadingCommentsToEmit(node: Node) {
                 // Emit the leading comments only if the parent's pos doesn't match because parent should take care of emitting these comments
-                if (node.parent.kind === SyntaxKind.SourceFile || node.parent.kind === SyntaxKind.GeneratedNode || node.pos !== node.parent.pos) {
+                if (node.pos >= 0 && (node.parent.kind === SyntaxKind.SourceFile || node.parent.kind === SyntaxKind.GeneratedNode || node.pos !== node.parent.pos)) {
                     var leadingComments: CommentRange[];
                     if (hasDetachedComments(node.pos)) {
                         // get comments without detached comments
@@ -3767,7 +3794,7 @@ module ts {
                 if (node.kind === SyntaxKind.GeneratedNode) {
                     var trailingComments = (<GeneratedNode>node).trailingComments;
                 }
-                else if (node.parent.kind === SyntaxKind.SourceFile || node.parent.kind === SyntaxKind.GeneratedNode || node.end !== node.parent.end) {
+                else if (node.pos >= 0 && (node.parent.kind === SyntaxKind.SourceFile || node.parent.kind === SyntaxKind.GeneratedNode || node.end !== node.parent.end)) {
                     var trailingComments = getTrailingCommentRanges(currentSourceFile.text, node.end);
                 }
 
@@ -3776,6 +3803,9 @@ module ts {
             }
 
             function emitLeadingCommentsOfLocalPosition(pos: number) {
+                if (pos < 0) {
+                    return;
+                }
                 var leadingComments: CommentRange[];
                 if (hasDetachedComments(pos)) {
                     // get comments without detached comments
@@ -3791,6 +3821,9 @@ module ts {
             }
 
             function emitDetachedCommentsAtPosition(node: TextRange) {
+                if (node.pos < 0) {
+                    return;
+                }
                 var leadingComments = getLeadingCommentRanges(currentSourceFile.text, node.pos);
                 if (leadingComments) {
                     var detachedComments: CommentRange[] = [];

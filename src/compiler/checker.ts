@@ -7661,15 +7661,10 @@ module ts {
             }
 
             var container = getContainingFunction(name);
-            if (container && container.flags & NodeFlags.Async) {
+            if (container && container.flags & NodeFlags.Async && node.kind !== SyntaxKind.Identifier) {
                 var promiseConstructor = getPromiseConstructor(container);
                 if (promiseConstructor === identifier.text) {
-                    var isDeclaration = node.kind !== SyntaxKind.Identifier;
-                    if (isDeclaration) {
-                        error(node, Diagnostics.Duplicate_identifier_0_Compiler_uses_variable_declaration_0_to_support_async_functions, identifier.text);
-                    } else {
-                        error(node, Diagnostics.Expression_resolves_to_variable_declaration_0_that_compiler_uses_to_support_async_functions, identifier.text);
-                    }
+                    error(node, Diagnostics.Duplicate_identifier_0_Compiler_uses_variable_declaration_0_to_support_async_functions, identifier.text);
                 }
             }
         }

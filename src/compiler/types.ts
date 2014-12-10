@@ -740,15 +740,13 @@ module ts {
     export type Label = number;
 
     export interface LocalGenerator {
-        createUniqueIdentifier(location: TextRange, name?: string): GeneratedNode;
-        declareLocal(location: TextRange, name?: string): GeneratedNode;
-        buildLocals(location: TextRange): GeneratedNode;
+        createUniqueIdentifier(name?: string): Identifier;
+        declareLocal(name?: string): Identifier;
+        buildLocals(): VariableStatement;
     }
 
     export interface CodeGenerator {
-        setLocation(location: TextRange): void;
-        pushLocation(location: TextRange): void;
-        popLocation(): void;
+        writeLocation(location: TextRange): void;
 
         addParameter(name: Identifier, flags?: NodeFlags): void;
         addVariable(name: Identifier, flags?: NodeFlags): void
@@ -758,9 +756,6 @@ module ts {
 
         defineLabel(): Label;
         markLabel(label: Label): void;
-
-        beginVariableStatement(): void;
-        endVariableStatement(): void;
 
         beginExceptionBlock(): Label;
         beginCatchBlock(variable: Identifier): void;
@@ -792,11 +787,11 @@ module ts {
 
         cacheExpression(expression: Expression): GeneratedNode;
 
-        createUniqueIdentifier(name?: string): GeneratedNode;
-        createInlineBreak(label: Label): GeneratedNode;
-        createInlineReturn(expression: Expression): GeneratedNode;
+        createUniqueIdentifier(name?: string): Identifier;
+        createInlineBreak(label: Label): ReturnStatement;
+        createInlineReturn(expression: Expression): ReturnStatement;
+        createResume(): Expression;
         createGeneratedNode(text: string, content?: Map<Node|Node[]>, leadingComments?: CommentRange[], trailingComments?: CommentRange[]): GeneratedNode;
-        createResume(): GeneratedNode;
 
         buildFunction(kind: SyntaxKind, name: DeclarationName): FunctionLikeDeclaration;
     }
@@ -804,10 +799,10 @@ module ts {
     export interface SourceMapSpan {
         emittedLine: number;    // Line number in the .js file
         emittedColumn: number;  // Column number in the .js file
-        sourceLine: number;     // Line number in the .ts file
-        sourceColumn: number;   // Column number in the .ts file
+        sourceLine?: number;    // Line number in the .ts file
+        sourceColumn?: number;  // Column number in the .ts file
         nameIndex?: number;     // Optional name (index into names array) associated with this span
-        sourceIndex: number;    // .ts file (index into sources array) associated with this span*/
+        sourceIndex?: number;   // .ts file (index into sources array) associated with this span
     }
 
     export interface SourceMapData {
