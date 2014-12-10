@@ -391,14 +391,24 @@ module ts {
             compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 0);
         });
 
-        it('Arrow function to parenthesized expression',() => {
+        it('Arrow function to parenthesized expression 1',() => {
             var source = "var v = (a:, b, c, d, e)";
 
             var index = source.indexOf(':');
             var oldText = ScriptSnapshot.fromString(source);
             var newTextAndChange = withDelete(oldText, index, 1);
 
-            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, -1);
+            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 0);
+        });
+
+        it('Arrow function to parenthesized expression 2',() => {
+            var source = "var v = (a, b) => c";
+
+            var index = source.indexOf(">");
+            var oldText = ScriptSnapshot.fromString(source);
+            var newTextAndChange = withDelete(oldText, index, 1);
+
+            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 0);
         });
 
         it('Speculative generic lookahead 1',() => {
