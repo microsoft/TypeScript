@@ -501,6 +501,17 @@ module ts {
             compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 0);
         });
 
+        it('Generic type and initializer to contextual shift',() => {
+            var source = "var v : Foo<Bar<T>>=2;";
+
+            var index = source.indexOf(':');
+            var oldText = ScriptSnapshot.fromString(source);
+            var newTextAndChange = withChange(oldText, index, ": Foo<Bar<".length, "= ");
+
+            // Note the decreased reuse of nodes compared to testStrictMode3
+            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 0);
+        });
+
         // Simulated typing tests.
 
         it('Type extends clause 1',() => {
