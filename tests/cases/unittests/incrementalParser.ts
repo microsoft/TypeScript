@@ -187,5 +187,15 @@ module ts {
             var newTextAndChange = withInsert(oldText, semicolonIndex, "/");
             compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 0);
         });
+
+        it('Regular expression 2',() => {
+            var source = "class C { public foo1() { ; } public foo2() { return 1/;} public foo3() { } }";
+
+            var semicolonIndex = source.indexOf(";");
+
+            var oldText = ScriptSnapshot.fromString(source);
+            var newTextAndChange = withInsert(oldText, semicolonIndex, "/");
+            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 0);
+        });
     });
 }
