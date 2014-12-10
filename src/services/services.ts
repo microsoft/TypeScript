@@ -1679,7 +1679,7 @@ module ts {
                 var scriptSnapshot = this.hostCache.getScriptSnapshot(filename);
 
                 var start = new Date().getTime();
-                sourceFile = createSourceFileFromScriptSnapshot(filename, scriptSnapshot, getDefaultCompilerOptions(), version, /*isOpen*/ true);
+                sourceFile = createLanguageServiceSourceFile(filename, scriptSnapshot, getDefaultCompilerOptions(), version, /*isOpen*/ true);
                 this.host.log("SyntaxTreeCache.Initialize: createSourceFile: " + (new Date().getTime() - start));
 
                 var start = new Date().getTime();
@@ -1692,7 +1692,7 @@ module ts {
 
                 var start = new Date().getTime();
                 sourceFile = !editRange 
-                    ? createSourceFileFromScriptSnapshot(filename, scriptSnapshot, getDefaultCompilerOptions(), version, /*isOpen*/ true)
+                    ? createLanguageServiceSourceFile(filename, scriptSnapshot, getDefaultCompilerOptions(), version, /*isOpen*/ true)
                     : this.currentSourceFile.update(scriptSnapshot, version, /*isOpen*/ true, editRange);
                 this.host.log("SyntaxTreeCache.Initialize: updateSourceFile: " + (new Date().getTime() - start));
 
@@ -1718,7 +1718,7 @@ module ts {
         }
     }
 
-    function createSourceFileFromScriptSnapshot(filename: string, scriptSnapshot: IScriptSnapshot, settings: CompilerOptions, version: string, isOpen: boolean) {
+    export function createLanguageServiceSourceFile(filename: string, scriptSnapshot: IScriptSnapshot, settings: CompilerOptions, version: string, isOpen: boolean): SourceFile {
         return SourceFileObject.createSourceFileObject(filename, scriptSnapshot, settings.target, version, isOpen);
     }
 
@@ -1769,7 +1769,7 @@ module ts {
             var bucket = getBucketForCompilationSettings(compilationSettings, /*createIfMissing*/ true);
             var entry = lookUp(bucket, filename);
             if (!entry) {
-                var sourceFile = createSourceFileFromScriptSnapshot(filename, scriptSnapshot, compilationSettings, version, isOpen);
+                var sourceFile = createLanguageServiceSourceFile(filename, scriptSnapshot, compilationSettings, version, isOpen);
 
                 bucket[filename] = entry = {
                     sourceFile: sourceFile,

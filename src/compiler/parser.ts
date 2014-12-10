@@ -359,6 +359,7 @@ module ts {
             case SyntaxKind.Block:
             case SyntaxKind.TryBlock:
             case SyntaxKind.FinallyBlock:
+                return children((<Block>node).statements);
             case SyntaxKind.ModuleBlock:
                 return children((<Block>node).statements);
             case SyntaxKind.SourceFile:
