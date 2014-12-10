@@ -168,7 +168,6 @@ module ts {
         var sourceText: string = undefined;
         var scanner: Scanner = undefined;
         var hasParserError: boolean;
-        var grammarDiagnostics: Diagnostic[];
         var sourceFile: SourceFile;
 
         function addDiagnostic(diagnostic: Diagnostic) {
@@ -8955,7 +8954,6 @@ module ts {
             scanner = createScanner(compilerOptions.target, /*skipTrivia*/ true, sourceText);
             hasParserError = node.parseDiagnostics.length > 0 ? true : false;
             sourceFile = node;
-            //grammarDiagnostics = [];
 
             var links = getNodeLinks(node);
             if (!(links.flags & NodeCheckFlags.TypeChecked)) {
