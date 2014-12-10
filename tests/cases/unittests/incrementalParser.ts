@@ -408,5 +408,15 @@ module ts {
 
             compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, -1);
         });
+
+        it('Speculative generic lookahead 4',() => {
+            var source = "var v = F<a,b,c,d>e";
+
+            var index = source.indexOf('b');
+            var oldText = ScriptSnapshot.fromString(source);
+            var newTextAndChange = withInsert(oldText, index + 1, ",x");
+
+            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, -1);
+        });
     });
 }
