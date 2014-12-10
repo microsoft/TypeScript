@@ -346,7 +346,17 @@ module ts {
             var oldText = ScriptSnapshot.fromString(source);
             var newTextAndChange = withChange(oldText, index, 6, "blahhh");
 
-            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 37);
+            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 0);
+        });
+
+        it('Strict mode 7',() => {
+            var source = "'use blahhh';\r\nfoo1();\r\nfoo2();\r\nfoo3();\r\nfoo4();\r\nfoo4();\r\nfoo6();\r\nfoo7();\r\nfoo8();\r\nfoo9();\r\n";
+
+            var index = source.indexOf('f');
+            var oldText = ScriptSnapshot.fromString(source);
+            var newTextAndChange = withDelete(oldText, 0, index);
+
+            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 0);
         });
     });
 }
