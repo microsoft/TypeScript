@@ -368,5 +368,15 @@ module ts {
 
             compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, -1);
         });
+
+        it('Arrow function to parenthesized expression',() => {
+            var source = "var v = (a:, b, c, d, e)";
+
+            var index = source.indexOf(':');
+            var oldText = ScriptSnapshot.fromString(source);
+            var newTextAndChange = withDelete(oldText, index, 1);
+
+            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, -1);
+        });
     });
 }
