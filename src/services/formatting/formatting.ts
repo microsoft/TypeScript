@@ -622,14 +622,21 @@ module ts.formatting {
 
                 var tokenStart = sourceFile.getLineAndCharacterFromPosition(currentTokenInfo.token.pos);
                 if (isTokenInRange) {
+                    var rangeHasError = rangeContainsError(currentTokenInfo.token);
                     // save prevStartLine since processRange will overwrite this value with current ones
                     var prevStartLine = previousRangeStartLine;
                     lineAdded = processRange(currentTokenInfo.token, tokenStart, parent, childContextNode, dynamicIndentation);
-                    if (lineAdded !== undefined) {
-                        indentToken = lineAdded;
+                    if (rangeHasError) {
+                        // do not indent comments\token if token range overlaps with some error
+                        indentToken = false;
                     }
                     else {
-                        indentToken = lastTriviaWasNewLine && tokenStart.line !== prevStartLine;
+                        if (lineAdded !== undefined) {
+                            indentToken = lineAdded;
+                        }
+                        else {
+                            indentToken = lastTriviaWasNewLine && tokenStart.line !== prevStartLine;
+                        }
                     }
                 }
 
