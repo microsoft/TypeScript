@@ -604,6 +604,20 @@ module ts {
             compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 0);
         });
 
+        it('Modifier added to accessor',() => {
+            var source =
+                "class C {\
+    set Bar(bar:string) {}\
+}\
+var o2 = { set Foo(val:number) { } };";
+
+            var oldText = ScriptSnapshot.fromString(source);
+            var index = source.indexOf("set");
+            var newTextAndChange = withInsert(oldText, index, "public ");
+
+            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 0);
+        });
+
         // Simulated typing tests.
 
         it('Type extends clause 1',() => {
