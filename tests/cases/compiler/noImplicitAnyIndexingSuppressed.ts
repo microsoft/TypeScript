@@ -1,5 +1,5 @@
 ﻿//@noImplicitAny: true
-//@suppress: implicitAnyIndex
+//@suppressImplicitAnyIndexErrors: true
 
 enum MyEmusEnum {
     emu

@@ -1356,6 +1356,7 @@ module ts {
     }
 
     export interface CompilerOptions {
+        allowNonTsExtensions?: boolean;
         charset?: string;
         codepage?: number;
         declaration?: boolean;
@@ -1373,15 +1374,14 @@ module ts {
         noResolve?: boolean;
         out?: string;
         outDir?: string;
+        preserveConstEnums?: boolean;
         removeComments?: boolean;
         sourceMap?: boolean;
         sourceRoot?: string;
+        suppressImplicitAnyIndexErrors?: boolean;
         target?: ScriptTarget;
         version?: boolean;
         watch?: boolean;
-        preserveConstEnums?: boolean;
-        allowNonTsExtensions?: boolean;
-        suppress?: ErrorGroup;
         [option: string]: string | number | boolean;
     }
 
@@ -1555,10 +1555,6 @@ module ts {
         byteOrderMark = 0xFEFF,
         tab = 0x09,                   // \t
         verticalTab = 0x0B,           // \v
-    }
-
-    export const enum ErrorGroup {
-        ImplicitAnyIndex = 0x01
     }
 
     export interface CancellationToken {
