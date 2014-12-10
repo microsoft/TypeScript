@@ -341,6 +341,7 @@ module ts.formatting {
                 case SyntaxKind.VariableDeclaration:
                 case SyntaxKind.ExportAssignment:
                 case SyntaxKind.ReturnStatement:
+                case SyntaxKind.ConditionalExpression:
                     return true;
             }
             return false;
