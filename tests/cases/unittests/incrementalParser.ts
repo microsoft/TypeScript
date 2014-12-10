@@ -584,6 +584,16 @@ module ts {
             compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 0);
         });
 
+        it('Edit after empty type parameter list',() => {
+            var source = "class Dictionary<> { }\r\nvar y;\r\n";
+
+            var oldText = ScriptSnapshot.fromString(source);
+            var index = source.length;
+            var newTextAndChange = withInsert(oldText, index, "var x;");
+
+            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 0);
+        });
+
         // Simulated typing tests.
 
         it('Type extends clause 1',() => {
