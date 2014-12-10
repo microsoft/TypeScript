@@ -681,6 +681,16 @@ module m3 { }\
             compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 0);
         });
 
+        it('Divide operation to regular expression',() => {
+            var source = "return;\r\n(true) /3/g;"
+
+            var oldText = ScriptSnapshot.fromString(source);
+            var index = source.indexOf("(");
+            var newTextAndChange = withInsert(oldText, index, "while ");
+
+            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 0);
+        });
+
         // Simulated typing tests.
 
         it('Type extends clause 1',() => {
