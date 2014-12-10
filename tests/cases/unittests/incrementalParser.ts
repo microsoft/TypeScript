@@ -691,6 +691,18 @@ module m3 { }\
             compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 0);
         });
 
+        it('Unterminated comment after keyword converted to identifier',() => {
+            // 'public' as a keyword should be incrementally unusable (because it has an 
+            // unterminated comment).  When we convert it to an identifier, that shouldn't
+            // change anything, and we should still get the same errors.
+            var source = "return; a.public /*"
+
+            var oldText = ScriptSnapshot.fromString(source);
+            var newTextAndChange = withInsert(oldText, 0, "");
+
+            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 0);
+        });
+
         // Simulated typing tests.
 
         it('Type extends clause 1',() => {
