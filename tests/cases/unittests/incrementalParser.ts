@@ -549,7 +549,18 @@ module ts {
             var oldText = ScriptSnapshot.fromString(source);
             var newTextAndChange = withDelete(oldText, index, 2);
 
-            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, -1);
+            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 0);
+        });
+
+        it('Yield context 1',() => {
+            // We're changing from a non-generator to a genarator.  We can't reuse statement nodes.
+            var source = "function foo() {\r\nyield(foo1);\r\n}";
+
+            var oldText = ScriptSnapshot.fromString(source);
+            var index = source.indexOf("foo");
+            var newTextAndChange = withInsert(oldText, index, "*");
+
+            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 0);
         });
 
         // Simulated typing tests.
