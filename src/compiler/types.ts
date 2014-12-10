@@ -1425,9 +1425,9 @@ module ts {
     }
 
     export const enum ModuleKind {
-        None,
-        CommonJS,
-        AMD,
+        None = 0,
+        CommonJS = 1,
+        AMD = 2,
     }
 
     export interface LineAndCharacter {
@@ -1440,9 +1440,9 @@ module ts {
 
 
     export const enum ScriptTarget {
-        ES3,
-        ES5,
-        ES6,
+        ES3 = 0,
+        ES5 = 1,
+        ES6 = 2,
         Latest = ES6,
     }
 
