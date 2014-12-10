@@ -154,13 +154,10 @@ module ts {
             beginBreakBlock,
             endBreakBlock,
             emit,
-            writeLeadingCommentsOfNode,
-            writeTrailingCommentsOfNode,
             cacheExpression,
             createUniqueIdentifier,
             createInlineBreak,
             createInlineReturn,
-            createGeneratedNode,
             createResume,
             buildFunction
         };
@@ -456,29 +453,6 @@ module ts {
             operationLocations[operationIndex] = location;
         }
 
-        function writeLeadingCommentsOfNode(node: Node): void {
-            if (node.parent.kind === SyntaxKind.SourceFile || node.pos !== node.parent.pos) {
-                var comments = getLeadingCommentRangesOfNode(node);
-                if (comments) {
-                    var empty = createGeneratedNode("");
-                    empty.leadingComments = comments;
-                    emit(OpCode.Statement, empty);
-                }
-            }
-        }
-
-        function writeTrailingCommentsOfNode(node: Node): void {
-            if (node.parent.kind === SyntaxKind.SourceFile || node.end !== node.parent.end) {
-                var sourceFileOfNode = getSourceFileOfNode(node);
-                var comments = getTrailingCommentRanges(sourceFileOfNode.text, node.end);
-                if (comments) {
-                    var empty = createGeneratedNode("");
-                    empty.trailingComments = comments;
-                    emit(OpCode.Statement, empty);
-                }
-            }
-        }
-
         function cacheExpression(node: Expression): GeneratedNode {
             var local = declareLocal();
             var assignExpression = factory.createBinaryExpression(SyntaxKind.EqualsToken, local, node);
@@ -489,10 +463,6 @@ module ts {
         function createLabel(label: Label): GeneratedLabel {
             if (!labelNumbers) labelNumbers = [];
             return factory.createGeneratedLabel(label, labelNumbers);
-        }
-
-        function createGeneratedNode(text: string, content?: Map<Node|Node[]>, leadingComments?: CommentRange[], trailingComment?: CommentRange[]): GeneratedNode {
-            return factory.createGeneratedNode(text, content, readLocation());
         }
 
         function createInlineBreak(label: Label): ReturnStatement {

@@ -404,11 +404,14 @@ module ts {
                 var arguments = visitList<Node>(node.arguments, builder.cacheExpression);
                 var target = result.target;
                 var thisArg = result.thisArg;
-                builder.writeLocation(node);
                 if (thisArg) {
-                    return builder.createGeneratedNode(`\${target}.call(\${thisArg}, \${arguments})`, { target, thisArg, arguments });
+                    var callArguments: NodeArray<Expression> = factory.createNodeArray([<Expression>thisArg].concat(arguments), node.arguments);
+                    var callProperty = factory.createPropertyAccess(target, factory.createIdentifier("call"));
+                    var callExpression = factory.createCallExpression(callProperty, callArguments, node);
+                    return callExpression;
                 } else {
-                    return builder.createGeneratedNode(`\${target}(\${arguments})`, { target, arguments });
+                    var callExpression = factory.createCallExpression(target, arguments, node);
+                    return callExpression;
                 }
             } else {
                 return factory.updateCallExpression(node, visit(node.func), visitNodes(node.arguments));
@@ -1156,20 +1159,6 @@ module ts {
             }
         }
 
-        function shouldCopyLeadingComments(node: Node): boolean {
-            return node.parent.kind === SyntaxKind.SourceFile || node.pos != node.parent.pos;
-        }
-
-        function shouldCopyTrailingComments(node: Node): boolean {
-            return node.parent.kind === SyntaxKind.SourceFile || node.end != node.parent.end;
-        }
-
-        function getTrailingCommentRangesOfNode(node: Node): CommentRange[] {
-            var sourceFile = getSourceFileOfNode(node);
-            var trailingComments = getTrailingCommentRanges(sourceFile.text, node.end);
-            return trailingComments;
-        }
-
         function getTarget(node: Node): string {
             var label: Identifier;
             switch (node.kind) {
@@ -1203,8 +1192,6 @@ module ts {
         }
 
         function visitAndEmitBlockOrClause(node: Block | CaseOrDefaultClause): void {
-            builder.writeLeadingCommentsOfNode(node);
-
             for (var i = 0; i < node.statements.length; i++) {
                 var statement = node.statements[i];
                 if (isAnyBlockOrClause(statement) && hasAwaitOrYield(statement)) {
@@ -1213,8 +1200,6 @@ module ts {
                     visitAndEmitStatementOrExpression(statement);
                 }
             }
-
-            builder.writeTrailingCommentsOfNode(node);
         }
 
         function visitAndEmitStatementOrExpression(node: Statement | Expression): void {
@@ -1286,7 +1271,7 @@ module ts {
                     builder.writeLocation(parameter);
                     builder.addParameter(parameter.name, parameter.flags);
                     if (parameter.initializer) {
-                        builder.emit(OpCode.Assign, builder.createGeneratedNode(parameter.name.text), visit(parameter.initializer));
+                        builder.emit(OpCode.Assign, factory.createIdentifier(parameter.name.text), visit(parameter.initializer));
                     }
                 }
             }

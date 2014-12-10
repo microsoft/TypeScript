@@ -782,16 +782,12 @@ module ts {
         emit(code: OpCode, text: string, content?: Map<Node|Node[]>): void;
         emit(code: OpCode, label: Label, text: string, content?: Map<Node|Node[]>): void;
 
-        writeLeadingCommentsOfNode(node: Node): void;
-        writeTrailingCommentsOfNode(node: Node): void;
-
         cacheExpression(expression: Expression): GeneratedNode;
 
         createUniqueIdentifier(name?: string): Identifier;
         createInlineBreak(label: Label): ReturnStatement;
         createInlineReturn(expression: Expression): ReturnStatement;
         createResume(): Expression;
-        createGeneratedNode(text: string, content?: Map<Node|Node[]>, leadingComments?: CommentRange[], trailingComments?: CommentRange[]): GeneratedNode;
 
         buildFunction(kind: SyntaxKind, name: DeclarationName): FunctionLikeDeclaration;
     }
