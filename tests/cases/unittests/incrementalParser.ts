@@ -574,6 +574,16 @@ module ts {
             compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 0);
         });
 
+        it('Delete semicolon',() => {
+            var source = "export class Foo {\r\n}\r\n\r\nexport var foo = new Foo();\r\n\r\n    export function test(foo: Foo) {\r\n        return true;\r\n    }\r\n";
+
+            var oldText = ScriptSnapshot.fromString(source);
+            var index = source.lastIndexOf(";");
+            var newTextAndChange = withDelete(oldText, index, 1);
+
+            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 0);
+        });
+
         // Simulated typing tests.
 
         it('Type extends clause 1',() => {
