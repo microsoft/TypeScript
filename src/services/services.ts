@@ -14,6 +14,9 @@
 /// <reference path='formatting.ts' />
 
 module ts {
+
+    export var servicesVersion = "0.4"
+
     export interface Node {
         getSourceFile(): SourceFile;
         getChildCount(sourceFile?: SourceFile): number;
@@ -879,6 +882,8 @@ module ts {
 
     export interface Logger {
         log(s: string): void;
+        trace(s: string): void;
+        error(s: string): void;
     }
 
     //
