@@ -200,12 +200,21 @@ module ts {
             compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 0);
         });
 
-        it('Regular comment 1',() => {
+        it('Comment 1',() => {
             var source = "class C { public foo1() { /; } public foo2() { return 1; } public foo3() { } }";
 
             var semicolonIndex = source.indexOf(";");
             var oldText = ScriptSnapshot.fromString(source);
             var newTextAndChange = withInsert(oldText, semicolonIndex, "/");
+
+            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 0);
+        });
+
+        it('Comment 2',() => {
+            var source = "class C { public foo1() { /; } public foo2() { return 1; } public foo3() { } }";
+
+            var oldText = ScriptSnapshot.fromString(source);
+            var newTextAndChange = withInsert(oldText, 0, "//");
 
             compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 0);
         });
