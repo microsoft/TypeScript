@@ -168,7 +168,6 @@ module ts {
         var sourceText: string = undefined;
         var scanner: Scanner = undefined;
         var hasParserError: boolean;
-        var grammarDiagnostics: Diagnostic[];
         var sourceFile: SourceFile;
 
         function addDiagnostic(diagnostic: Diagnostic) {
@@ -7026,7 +7025,8 @@ module ts {
         function checkTypeParameter(node: TypeParameterDeclaration) {
             // Grammar Checking
             if (!hasParserError && node.expression) {
-                grammarErrorOnFirstToken(node.expression, Diagnostics.Type_expected);
+                var sourceFile = getSourceFileOfNode(node);
+                grammarErrorOnNode(sourceFile, node.expression, Diagnostics.Type_expected);
             }
 
             checkSourceElement(node.constraint);
@@ -8668,32 +8668,9 @@ module ts {
         }
 
         // Grammar checking helper functions
-        function scanToken(pos: number) {
-            var start = skipTrivia(sourceText, pos);
-            scanner.setTextPos(start);
-            scanner.scan();
-            return start;
-        }
-
-        function grammarErrorOnFirstToken(node: Node, message: DiagnosticMessage, arg0?: any, arg1?: any, arg2?: any): void {
-            var start = scanToken(node.pos);
-            diagnostics.push(createFileDiagnostic(sourceFile, start, scanner.getTextPos() - start, message, arg0, arg1, arg2));
-        }
-
-        function grammarErrorAfterFirstToken(node: Node, message: DiagnosticMessage, arg0?: any, arg1?: any, arg2?: any): void {
-            scanToken(node.pos);
-            diagnostics.push(createFileDiagnostic(sourceFile, scanner.getTextPos(), 0, message, arg0, arg1, arg2));
-        }
-
-        function grammarErrorOnNode(node: Node, message: DiagnosticMessage, arg0?: any, arg1?: any, arg2?: any): void {
-            var span = getErrorSpanForNode(node);
-            var start = span.end > span.pos ? skipTrivia(sourceFile.text, span.pos) : span.pos;
-            var length = span.end - start;
-
-            diagnostics.push(createFileDiagnostic(sourceFile, start, length, message, arg0, arg1, arg2));
-        }
-
-        function grammarErrorAtPos(start: number, length: number, message: DiagnosticMessage, arg0?: any, arg1?: any, arg2?: any): void {
+        function grammarErrorOnNode(sourceFile: SourceFile, node: Node, message: DiagnosticMessage, arg0?: any, arg1?: any, arg2?: any): void {
+            var start = getFullWidth(node) === 0 ? node.pos : skipTrivia(sourceFile.text, node.pos);
+            var length = node.end - start;
             diagnostics.push(createFileDiagnostic(sourceFile, start, length, message, arg0, arg1, arg2));
         }
 
@@ -8955,7 +8932,6 @@ module ts {
             scanner = createScanner(compilerOptions.target, /*skipTrivia*/ true, sourceText);
             hasParserError = node.parseDiagnostics.length > 0 ? true : false;
             sourceFile = node;
-            //grammarDiagnostics = [];
 
             var links = getNodeLinks(node);
             if (!(links.flags & NodeCheckFlags.TypeChecked)) {
