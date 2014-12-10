@@ -162,5 +162,20 @@ module ts {
             var newTextAndChange = withInsert(oldText, semicolonIndex, " + 1");
             compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 0);
         });
+
+        it('Deleting from method',() => {
+            var source = "class C {\r\n" +
+                "    public foo1() { }\r\n" +
+                "    public foo2() {\r\n" +
+                "        return 1 + 1;\r\n" +
+                "    }\r\n" +
+                "    public foo3() { }\r\n" +
+                "}";
+
+            var index = source.indexOf("+ 1");
+            var oldText = ScriptSnapshot.fromString(source);
+            var newTextAndChange = withDelete(oldText, index, "+ 1".length);
+            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 0);
+        });
     });
 }
