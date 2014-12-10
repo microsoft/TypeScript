@@ -1180,11 +1180,15 @@ module ts {
         }
 
         function update(newText: string, textChangeRange: TextChangeRange) {
+            if (textChangeRange.isUnchanged()) {
+                // if the text didn't change, then we can just return our current source file as-is.
+                return sourceFile;
+            }
+
             // Don't pass along the text change range for now. We'll pass it along once incremental
             // parsing is enabled.
             return parseSourceFile(newText, /*textChangeRange:*/ undefined, /*setNodeParents*/ true);
         }
-
 
         function setContextFlag(val: Boolean, flag: ParserContextFlags) {
             if (val) {

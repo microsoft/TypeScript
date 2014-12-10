@@ -1711,9 +1711,10 @@ module ts {
         // incrementally parse this file.
         if (textChangeRange) {
             if (version !== sourceFile.version || isOpen != sourceFile.isOpen) {
-                var newSourceFile = sourceFile.update(scriptSnapshot.getText(0, scriptSnapshot.getLength()), textChangeRange);
-                setSourceFileFields(newSourceFile, scriptSnapshot, version, isOpen);
-                return newSourceFile;
+                // Once incremental parsing is ready, then just call into this function.
+                // var newSourceFile = sourceFile.update(scriptSnapshot.getText(0, scriptSnapshot.getLength()), textChangeRange);
+                // setSourceFileFields(newSourceFile, scriptSnapshot, version, isOpen);
+                // return newSourceFile;
             }
         }
 
