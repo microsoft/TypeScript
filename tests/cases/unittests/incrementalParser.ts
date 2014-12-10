@@ -252,5 +252,16 @@ module ts {
 
             compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 0);
         });
+
+        it('Type member 1',() => {
+            // Should be able to reuse most of the type members.
+            var source = "interface I { a: number; b: string; (c): d; new (e): f; g(): h }";
+
+            var index = source.indexOf(": string");
+            var oldText = ScriptSnapshot.fromString(source);
+            var newTextAndChange = withInsert(oldText, index, "?");
+
+            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 0);
+        });
     });
 }
