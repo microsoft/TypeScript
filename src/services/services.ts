@@ -894,8 +894,8 @@ module ts {
         getScriptVersion(fileName: string): string;
         getScriptIsOpen(fileName: string): boolean;
         getScriptSnapshot(fileName: string): IScriptSnapshot;
-        getLocalizedDiagnosticMessages(): any;
-        getCancellationToken(): CancellationToken;
+        getLocalizedDiagnosticMessages?(): any;
+        getCancellationToken?(): CancellationToken;
         getCurrentDirectory(): string;
         getDefaultLibFilename(options: CompilerOptions): string;
     }
@@ -2398,12 +2398,12 @@ module ts {
         var useCaseSensitivefilenames = false;
         var sourceFilesByName: Map<SourceFile> = {};
         var documentRegistry = documentRegistry;
-        var cancellationToken = new CancellationTokenObject(host.getCancellationToken());
+        var cancellationToken = new CancellationTokenObject(host.getCancellationToken && host.getCancellationToken());
         var activeCompletionSession: CompletionSession;         // The current active completion session, used to get the completion entry details
         var writer: (filename: string, data: string, writeByteOrderMark: boolean) => void = undefined;
 
         // Check if the localized messages json is set, otherwise query the host for it
-        if (!localizedDiagnosticMessages) {
+        if (!localizedDiagnosticMessages && host.getLocalizedDiagnosticMessages) {
             localizedDiagnosticMessages = host.getLocalizedDiagnosticMessages();
         }
 
