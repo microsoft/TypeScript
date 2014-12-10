@@ -24,7 +24,8 @@ function func() {
                     "before";
                     _state.label = 1;
                 case 1:
-                    if (!(a)) { return ["break", 3]; }
+                    if (!(a))
+                        return ["break", 3];
                     "body1";
                     return ["yield", p];
                 case 2:

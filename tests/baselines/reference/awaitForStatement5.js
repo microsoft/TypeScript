@@ -23,7 +23,8 @@ function func() {
                     i = 0;
                     _state.label = 1;
                 case 1:
-                    if (!(i < 1)) { return ["break", 4]; }
+                    if (!(i < 1))
+                        return ["break", 4];
                     "body";
                     _state.label = 2;
                 case 2:

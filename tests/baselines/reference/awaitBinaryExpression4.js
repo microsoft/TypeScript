@@ -20,11 +20,12 @@ function func() {
             switch (_state.label) {
                 case 0:
                     "before";
-                    _a = a
-                    if (_a) { return ["break", 2]; }
+                    _a = a;
+                    if (_a)
+                        return ["break", 2];
                     return ["yield", p];
                 case 1:
-                    _a = _state.sent
+                    _a = _state.sent;
                     _state.label = 2;
                 case 2:
                     b = _a;

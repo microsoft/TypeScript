@@ -27,7 +27,8 @@ function func() {
                 case 2:
                     return ["yield", p];
                 case 3:
-                    if (_state.sent) { return ["break", 1]; }
+                    if (_state.sent)
+                        return ["break", 1];
                     _state.label = 4;
                 case 4:
                     "after";

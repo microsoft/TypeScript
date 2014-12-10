@@ -27,7 +27,8 @@ function f() {
                     _b = 0;
                     _state.label = 1;
                 case 1:
-                    if (_b >= _a.length) { return ["break", 4]; }
+                    if (_b >= _a.length)
+                        return ["break", 4];
                     a = _a[_b];
                     return ["yield", p];
                 case 2:

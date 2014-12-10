@@ -657,6 +657,7 @@ module ts {
             case SyntaxKind.ReturnStatement:
             case SyntaxKind.SwitchStatement:
             case SyntaxKind.ThrowKeyword:
+            case SyntaxKind.ThrowStatement:
             case SyntaxKind.TryStatement:
             case SyntaxKind.VariableStatement:
             case SyntaxKind.WhileStatement:

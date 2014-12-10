@@ -12,7 +12,6 @@ var foo = async function (): Promise<void> {
 
 //// [asyncFunctionExpression12.js]
 var foo = function () {
-    // Legal to use 'await' in a type context.
     var v;
     return new Promise(function (_resolve) {
         _resolve(__awaiter(__generator(function (_state) {

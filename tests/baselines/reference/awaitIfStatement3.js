@@ -27,7 +27,8 @@ function func() {
             switch (_state.label) {
                 case 0:
                     "before";
-                    if (!(a)) { return ["break", 2]; }
+                    if (!(a))
+                        return ["break", 2];
                     "then1";
                     return ["yield", p];
                 case 1:

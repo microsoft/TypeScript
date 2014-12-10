@@ -20,7 +20,8 @@ function f() {
         _resolve(__awaiter(__generator(function (_state) {
             switch (_state.label) {
                 case 0:
-                    if (!(true)) { return ["break", 2]; }
+                    if (!(true))
+                        return ["break", 2];
                     return ["yield", p];
                 case 1:
                     while (false) {

@@ -27,7 +27,8 @@ function func() {
                     _a = i;
                     return ["yield", p];
                 case 2:
-                    if (!(_a < _state.sent)) { return ["break", 4]; }
+                    if (!(_a < _state.sent))
+                        return ["break", 4];
                     "body";
                     _state.label = 3;
                 case 3:

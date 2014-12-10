@@ -32,7 +32,7 @@ function func() {
                     "before";
                     _state.label = 2;
                 case 2:
-                    _state.trys.push([2,3,4,6])
+                    _state.trys.push([2, 3, 4, 6]);
                     "try";
                     return ["break", 6];
                 case 3:

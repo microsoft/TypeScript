@@ -40,11 +40,11 @@ function func() {
                     "before";
                     _state.label = 2;
                 case 2:
-                    _state.trys.push([2,8,9,10])
+                    _state.trys.push([2, 8, 9, 10]);
                     "try0.0";
                     _state.label = 3;
                 case 3:
-                    _state.trys.push([3,4,6,7])
+                    _state.trys.push([3, 4, 6, 7]);
                     "try1";
                     return ["break", 7];
                 case 4:

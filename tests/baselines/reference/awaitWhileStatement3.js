@@ -25,7 +25,8 @@ function func() {
                 case 1:
                     return ["yield", p];
                 case 2:
-                    if (!(_state.sent)) { return ["break", 3]; }
+                    if (!(_state.sent))
+                        return ["break", 3];
                     "body";
                     return ["break", 1];
                 case 3:

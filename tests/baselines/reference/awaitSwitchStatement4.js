@@ -33,7 +33,8 @@ function func() {
                     }
                     return ["yield", p];
                 case 1:
-                    if (_a === _state.sent) { return ["break", 3]; }
+                    if (_a === _state.sent)
+                        return ["break", 3];
                     return ["break", 3];
                 case 2:
                     "body0";

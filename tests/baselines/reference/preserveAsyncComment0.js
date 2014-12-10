@@ -21,14 +21,12 @@ async function func(): Promise<void> {
 
 //// [preserveAsyncComment0.js]
 function func() {
-    // variable statement
-    var a;
-    var b;
-    var c;
+    var a, b, c;
     return new Promise(function (_resolve) {
         _resolve(__awaiter(__generator(function (_state) {
             switch (_state.label) {
                 case 0:
+                    // variable statement
                     a = 1;
                     b = 1;
                     c = 1;

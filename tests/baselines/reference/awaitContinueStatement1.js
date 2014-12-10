@@ -22,7 +22,8 @@ function f() {
                 case 1:
                     return ["break", 2];
                 case 2:
-                    if (true) { return ["break", 0]; }
+                    if (true)
+                        return ["break", 0];
                     _state.label = 3;
                 case 3:
                     return ["return"];

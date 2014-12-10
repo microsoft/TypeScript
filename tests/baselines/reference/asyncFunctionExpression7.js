@@ -12,18 +12,18 @@ var bar = async function (): Promise<void> {
 
 //// [asyncFunctionExpression7.js]
 var bar = function () {
-    // 'await' here is an identifier, and not an await expression.
     var foo;
     return new Promise(function (_resolve) {
         _resolve(__awaiter(__generator(function (_state) {
             switch (_state.label) {
                 case 0:
+                    // 'await' here is an identifier, and not an await expression.
                     foo = function (a) {
                         return new Promise(function (_resolve) {
                             _resolve(__awaiter(__generator(function (_state) {
                                 switch (_state.label) {
                                     case 0:
-                                        a = await
+                                        a = await;
                                         return ["return"];
                                 }
                             })));

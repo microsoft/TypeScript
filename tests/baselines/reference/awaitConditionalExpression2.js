@@ -17,13 +17,14 @@ function func() {
         _resolve(__awaiter(__generator(function (_state) {
             switch (_state.label) {
                 case 0:
-                    if (!(a)) { return ["break", 2]; }
+                    if (!(a))
+                        return ["break", 2];
                     return ["yield", p];
                 case 1:
-                    _a = _state.sent
+                    _a = _state.sent;
                     return ["break", 3];
                 case 2:
-                    _a = a
+                    _a = a;
                     _state.label = 3;
                 case 3:
                     b = _a;

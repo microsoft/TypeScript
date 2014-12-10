@@ -29,7 +29,8 @@ function func() {
                     "body2";
                     _state.label = 3;
                 case 3:
-                    if (a) { return ["break", 1]; }
+                    if (a)
+                        return ["break", 1];
                     _state.label = 4;
                 case 4:
                     return ["return"];

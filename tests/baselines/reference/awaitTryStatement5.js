@@ -29,7 +29,7 @@ function func() {
                     "before";
                     _state.label = 2;
                 case 2:
-                    _state.trys.push([2,,4,5])
+                    _state.trys.push([2, , 4, 5]);
                     "try0";
                     return ["yield", p];
                 case 3:

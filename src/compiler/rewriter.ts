@@ -473,14 +473,14 @@ module ts {
                         var generated = rewriteVariableDeclaration(declaration);
                         if (generated) {
                             if (assignments) {
-                                assignments = factory.createBinaryExpression(SyntaxKind.CommaToken, assignments, generated, generatedLocation);
+                                assignments = factory.createBinaryExpression(SyntaxKind.CommaToken, assignments, generated);
                             }
                             else {
                                 assignments = generated;
                             }
                         }
                         if (node.kind === SyntaxKind.ForInStatement && !variable) {
-                            variable = factory.createIdentifier(declaration.name.text, declaration);
+                            variable = factory.createIdentifier(declaration.name.text, declaration.name);
                         }
                     }
                     

@@ -32,7 +32,8 @@ function func() {
                     _b = 0;
                     _state.label = 1;
                 case 1:
-                    if (_b >= _a.length) { return ["break", 4]; }
+                    if (_b >= _a.length)
+                        return ["break", 4];
                     i = _a[_b];
                     "body1";
                     return ["yield", p];

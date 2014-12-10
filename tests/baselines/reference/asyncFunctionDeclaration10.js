@@ -13,7 +13,7 @@ function foo(a) {
         _resolve(__awaiter(__generator(function (_state) {
             switch (_state.label) {
                 case 0:
-                    a = function (await) { return await; }
+                    a = function (await) { return await; };
                     return ["return"];
             }
         })));
