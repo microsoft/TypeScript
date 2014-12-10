@@ -532,6 +532,16 @@ module ts {
             compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 0);
         });
 
+        it('Arithmetic operator to type argument list',() => {
+            var source = "var v = new Dictionary<A, B>0";
+
+            var index = source.indexOf("0");
+            var oldText = ScriptSnapshot.fromString(source);
+            var newTextAndChange = withChange(oldText, index, 1, "()");
+
+            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 0);
+        });
+
         // Simulated typing tests.
 
         it('Type extends clause 1',() => {
