@@ -3418,11 +3418,15 @@ module ts {
                         return getThrowOccurrences(<ThrowStatement>node.parent);
                     }
                     break;
-                case SyntaxKind.TryKeyword:
                 case SyntaxKind.CatchKeyword:
-                case SyntaxKind.FinallyKeyword:
                     if (hasKind(parent(parent(node)), SyntaxKind.TryStatement)) {
                         return getTryCatchFinallyOccurrences(<TryStatement>node.parent.parent);
+                    }
+                    break;
+                case SyntaxKind.TryKeyword:
+                case SyntaxKind.FinallyKeyword:
+                    if (hasKind(parent(node), SyntaxKind.TryStatement)) {
+                        return getTryCatchFinallyOccurrences(<TryStatement>node.parent);
                     }
                     break;
                 case SyntaxKind.SwitchKeyword:
@@ -3658,7 +3662,12 @@ module ts {
                 }
 
                 if (tryStatement.finallyBlock) {
-                    pushKeywordIf(keywords, tryStatement.finallyBlock.getFirstToken(), SyntaxKind.FinallyKeyword);
+                    var children = tryStatement.getChildren();
+                    for (var i = 0, n = children.length; i < n; i++) {
+                        if (pushKeywordIf(keywords, children[i], SyntaxKind.FinallyKeyword)) {
+                            break;
+                        }
+                    }
                 }
 
                 return map(keywords, getReferenceEntryFromNode);

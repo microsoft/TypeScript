@@ -154,8 +154,6 @@ module ts.formatting {
                 return body && body.kind === SyntaxKind.Block && rangeContainsRange((<Block>body).statements, node);
             case SyntaxKind.SourceFile:
             case SyntaxKind.Block:
-            case SyntaxKind.TryBlock:
-            case SyntaxKind.FinallyBlock:
             case SyntaxKind.ModuleBlock:
                 return rangeContainsRange((<Block>parent).statements, node);
             case SyntaxKind.CatchClause:
@@ -932,9 +930,6 @@ module ts.formatting {
     function isSomeBlock(kind: SyntaxKind): boolean {
         switch (kind) {
             case SyntaxKind.Block:
-            case SyntaxKind.Block:
-            case SyntaxKind.TryBlock:
-            case SyntaxKind.FinallyBlock:
             case SyntaxKind.ModuleBlock:
                 return true;
         }

@@ -213,8 +213,6 @@ module ts {
         LabeledStatement,
         ThrowStatement,
         TryStatement,
-        TryBlock,
-        FinallyBlock,
         DebuggerStatement,
         VariableDeclaration,
         FunctionDeclaration,

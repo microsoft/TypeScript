@@ -4569,9 +4569,7 @@ module ts {
                     case SyntaxKind.LabeledStatement:
                     case SyntaxKind.ThrowStatement:
                     case SyntaxKind.TryStatement:
-                    case SyntaxKind.TryBlock:
                     case SyntaxKind.CatchClause:
-                    case SyntaxKind.FinallyBlock:
                         return forEachChild(node, isAssignedIn);
                 }
                 return false;
@@ -8894,9 +8892,7 @@ module ts {
                 case SyntaxKind.LabeledStatement:
                 case SyntaxKind.ThrowStatement:
                 case SyntaxKind.TryStatement:
-                case SyntaxKind.TryBlock:
                 case SyntaxKind.CatchClause:
-                case SyntaxKind.FinallyBlock:
                 case SyntaxKind.VariableDeclaration:
                 case SyntaxKind.ClassDeclaration:
                 case SyntaxKind.EnumDeclaration:

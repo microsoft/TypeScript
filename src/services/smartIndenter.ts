@@ -327,8 +327,6 @@ module ts.formatting {
                 case SyntaxKind.EnumDeclaration:
                 case SyntaxKind.ArrayLiteralExpression:
                 case SyntaxKind.Block:
-                case SyntaxKind.TryBlock:
-                case SyntaxKind.FinallyBlock:
                 case SyntaxKind.ModuleBlock:
                 case SyntaxKind.ObjectLiteralExpression:
                 case SyntaxKind.TypeLiteral:
@@ -403,7 +401,6 @@ module ts.formatting {
                 case SyntaxKind.EnumDeclaration:
                 case SyntaxKind.ObjectLiteralExpression:
                 case SyntaxKind.Block:
-                case SyntaxKind.FinallyBlock:
                 case SyntaxKind.ModuleBlock:
                 case SyntaxKind.SwitchStatement:
                     return nodeEndsWith(n, SyntaxKind.CloseBraceToken, sourceFile);
