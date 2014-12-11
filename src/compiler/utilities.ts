@@ -90,7 +90,9 @@ module ts {
     }
 
     export function getSourceFileOfNode(node: Node): SourceFile {
-        while (node && node.kind !== SyntaxKind.SourceFile) node = node.parent;
+        while (node && node.kind !== SyntaxKind.SourceFile) {
+            node = node.parent;
+        }
         return <SourceFile>node;
     }
 
@@ -161,7 +163,7 @@ module ts {
         node = getErrorSpanForNode(node);
         var file = getSourceFileOfNode(node);
 
-        var start = getFullWidth(node) === 0 ? node.pos : skipTrivia(file.text, node.pos);
+        var start = getTokenPosOfNode(node, file);
         var length = node.end - start;
 
         return createFileDiagnostic(file, start, length, message, arg0, arg1, arg2);

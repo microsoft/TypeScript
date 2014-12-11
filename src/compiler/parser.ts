@@ -323,7 +323,9 @@ module ts {
                 sys.writeFile(fileName, data, writeByteOrderMark);
             }
             catch (e) {
-                if (onError) onError(e.message);
+                if (onError) {
+                    onError(e.message);
+                }
             }
         }
 
@@ -405,14 +407,13 @@ module ts {
 
     function isEvalOrArgumentsIdentifier(node: Node): boolean {
         return node.kind === SyntaxKind.Identifier &&
-            (<Identifier>node).text &&
             ((<Identifier>node).text === "eval" || (<Identifier>node).text === "arguments");
     }
 
     /// Should be called only on prologue directives (isPrologueDirective(node) should be true)
     function isUseStrictPrologueDirective(node: Node): boolean {
         Debug.assert(isPrologueDirective(node));
-        return (<Identifier>(<ExpressionStatement>node).expression).text === "use strict";
+        return getTextOfNode((<ExpressionStatement>node).expression) === '"use strict"';
     }
 
     export function createSourceFile(filename: string, sourceText: string, languageVersion: ScriptTarget, version: string, isOpen: boolean = false): SourceFile {
