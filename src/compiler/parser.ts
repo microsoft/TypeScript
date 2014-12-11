@@ -61,6 +61,10 @@ module ts {
     }
 
     export function isMissingNode(node: Node) {
+        if (node === undefined) {
+            return true;
+        }
+
         return node.pos === node.end && node.kind !== SyntaxKind.EndOfFileToken;
     }
 
@@ -1377,7 +1381,7 @@ module ts {
             return inStrictModeContext() ? token > SyntaxKind.LastFutureReservedWord : token > SyntaxKind.LastReservedWord;
         }
 
-        function parseExpected(kind: SyntaxKind, diagnosticMessage?: DiagnosticMessage, arg0?: any): boolean {
+        function parseExpected(kind: SyntaxKind, diagnosticMessage?: DiagnosticMessage): boolean {
             if (token === kind) {
                 nextToken();
                 return true;
@@ -1385,7 +1389,7 @@ module ts {
 
             // Report specific message if provided with one.  Otherwise, report generic fallback message.
             if (diagnosticMessage) {
-                parseErrorAtCurrentToken(diagnosticMessage, arg0);
+                parseErrorAtCurrentToken(diagnosticMessage);
             }
             else {
                 parseErrorAtCurrentToken(Diagnostics._0_expected, tokenToString(kind));
@@ -1420,7 +1424,7 @@ module ts {
             return token === SyntaxKind.CloseBraceToken || token === SyntaxKind.EndOfFileToken || scanner.hasPrecedingLineBreak();
         }
 
-        function parseSemicolon(diagnosticMessage?: DiagnosticMessage): boolean {
+        function parseSemicolon(): boolean {
             if (canParseSemicolon()) {
                 if (token === SyntaxKind.SemicolonToken) {
                     // consume the semicolon if it was explicitly provided.
@@ -1430,7 +1434,7 @@ module ts {
                 return true;
             }
             else {
-                return parseExpected(SyntaxKind.SemicolonToken, diagnosticMessage);
+                return parseExpected(SyntaxKind.SemicolonToken);
             }
         }
 
@@ -3438,21 +3442,22 @@ module ts {
             var fullStart = scanner.getStartPos();
             var initialToken = token;
 
+            var modifiers = parseModifiers();
             if (parseContextualModifier(SyntaxKind.GetKeyword) || parseContextualModifier(SyntaxKind.SetKeyword)) {
                 var kind = initialToken === SyntaxKind.GetKeyword ? SyntaxKind.GetAccessor : SyntaxKind.SetAccessor;
-                return parseAccessorDeclaration(kind, fullStart, /*modifiers*/undefined);
+                return parseAccessorDeclaration(kind, fullStart, modifiers);
             }
 
             var asteriskToken = parseOptionalToken(SyntaxKind.AsteriskToken);
             var tokenIsIdentifier = isIdentifier();
             var nameToken = token;
             var propertyName = parsePropertyName();
-            if (asteriskToken || token === SyntaxKind.OpenParenToken || token === SyntaxKind.LessThanToken) {
-                return parseMethodDeclaration(fullStart, /*modifiers:*/ undefined, asteriskToken, propertyName, /*questionToken:*/ undefined, /*requireBlock:*/ true);
-            }
 
             // Disallowing of optional property assignments happens in the grammar checker.
             var questionToken = parseOptionalToken(SyntaxKind.QuestionToken);
+            if (asteriskToken || token === SyntaxKind.OpenParenToken || token === SyntaxKind.LessThanToken) {
+                return parseMethodDeclaration(fullStart, modifiers, asteriskToken, propertyName, questionToken);
+            }
 
             // Parse to check if it is short-hand property assignment or normal property assignment
             if ((token === SyntaxKind.CommaToken || token === SyntaxKind.CloseBraceToken) && tokenIsIdentifier) {
@@ -3514,9 +3519,9 @@ module ts {
         }
 
         // STATEMENTS
-        function parseBlock(kind: SyntaxKind, ignoreMissingOpenBrace: boolean, checkForStrictMode: boolean): Block {
+        function parseBlock(kind: SyntaxKind, ignoreMissingOpenBrace: boolean, checkForStrictMode: boolean, diagnosticMessage?: DiagnosticMessage): Block {
             var node = <Block>createNode(kind);
-            if (parseExpected(SyntaxKind.OpenBraceToken) || ignoreMissingOpenBrace) {
+            if (parseExpected(SyntaxKind.OpenBraceToken, diagnosticMessage) || ignoreMissingOpenBrace) {
                 node.statements = parseList(ParsingContext.BlockStatements, checkForStrictMode, parseStatement);
                 parseExpected(SyntaxKind.CloseBraceToken);
             }
@@ -3526,11 +3531,11 @@ module ts {
             return finishNode(node);
         }
 
-        function parseFunctionBlock(allowYield: boolean, ignoreMissingOpenBrace: boolean): Block {
+        function parseFunctionBlock(allowYield: boolean, ignoreMissingOpenBrace: boolean, diagnosticMessage?: DiagnosticMessage): Block {
             var savedYieldContext = inYieldContext();
             setYieldContext(allowYield);
 
-            var block = parseBlock(SyntaxKind.Block, ignoreMissingOpenBrace, /*checkForStrictMode*/ true);
+            var block = parseBlock(SyntaxKind.Block, ignoreMissingOpenBrace, /*checkForStrictMode*/ true, diagnosticMessage);
 
             setYieldContext(savedYieldContext);
 
@@ -3949,13 +3954,13 @@ module ts {
             return undefined;
         }
 
-        function parseFunctionBlockOrSemicolon(isGenerator: boolean): Block {
-            if (token === SyntaxKind.OpenBraceToken) {
-                return parseFunctionBlock(isGenerator, /*ignoreMissingOpenBrace:*/ false);
+        function parseFunctionBlockOrSemicolon(isGenerator: boolean, diagnosticMessage?: DiagnosticMessage): Block {
+            if (token !== SyntaxKind.OpenBraceToken && canParseSemicolon()) {
+                parseSemicolon();
+                return;
             }
 
-            parseSemicolon(Diagnostics.or_expected);
-            return undefined;
+            return parseFunctionBlock(isGenerator, /*ignoreMissingOpenBrace:*/ false, diagnosticMessage);
         }
 
         // DECLARATIONS
@@ -4070,7 +4075,7 @@ module ts {
             node.asteriskToken = parseOptionalToken(SyntaxKind.AsteriskToken);
             node.name = parseIdentifier();
             fillSignature(SyntaxKind.ColonToken, /*yieldAndGeneratorParameterContext:*/ !!node.asteriskToken, /*requireCompleteParameterList:*/ false, node);
-            node.body = parseFunctionBlockOrSemicolon(!!node.asteriskToken);
+            node.body = parseFunctionBlockOrSemicolon(!!node.asteriskToken, Diagnostics.or_expected);
             return finishNode(node);
         }
 
@@ -4079,18 +4084,18 @@ module ts {
             setModifiers(node, modifiers);
             parseExpected(SyntaxKind.ConstructorKeyword);
             fillSignature(SyntaxKind.ColonToken, /*yieldAndGeneratorParameterContext:*/ false, /*requireCompleteParameterList:*/ false, node);
-            node.body = parseFunctionBlockOrSemicolon(/*isGenerator:*/ false);
+            node.body = parseFunctionBlockOrSemicolon(/*isGenerator:*/ false, Diagnostics.or_expected);
             return finishNode(node);
         }
 
-        function parseMethodDeclaration(fullStart: number, modifiers: ModifiersArray, asteriskToken: Node, name: DeclarationName, questionToken: Node, requireBlock: boolean): MethodDeclaration {
+        function parseMethodDeclaration(fullStart: number, modifiers: ModifiersArray, asteriskToken: Node, name: DeclarationName, questionToken: Node, diagnosticMessage?: DiagnosticMessage): MethodDeclaration {
             var method = <MethodDeclaration>createNode(SyntaxKind.MethodDeclaration, fullStart);
             setModifiers(method, modifiers);
             method.asteriskToken = asteriskToken;
             method.name = name;
             method.questionToken = questionToken;
             fillSignature(SyntaxKind.ColonToken, /*yieldAndGeneratorParameterContext:*/ !!asteriskToken, /*requireCompleteParameterList:*/ false, method);
-            method.body = requireBlock ? parseFunctionBlock(!!asteriskToken, /*ignoreMissingOpenBrace:*/ false) : parseFunctionBlockOrSemicolon(!!asteriskToken);
+            method.body = parseFunctionBlockOrSemicolon(!!asteriskToken, diagnosticMessage);
             return finishNode(method);
         }
 
@@ -4102,7 +4107,7 @@ module ts {
             // report an error in the grammar checker.
             var questionToken = parseOptionalToken(SyntaxKind.QuestionToken);
             if (asteriskToken || token === SyntaxKind.OpenParenToken || token === SyntaxKind.LessThanToken) {
-                return parseMethodDeclaration(fullStart, modifiers, asteriskToken, name, questionToken, /*requireBlock:*/ false);
+                return parseMethodDeclaration(fullStart, modifiers, asteriskToken, name, questionToken, Diagnostics.or_expected);
             }
             else {
                 var property = <PropertyDeclaration>createNode(SyntaxKind.PropertyDeclaration, fullStart);
@@ -4681,6 +4686,7 @@ module ts {
         // We're automatically in an ambient context if this is a .d.ts file.
         var inAmbientContext = fileExtensionIs(file.filename, ".d.ts");
         var inFunctionBlock = false;
+        var inObjectLiteralExpression = false;
         var inBlock = false;
         var parent: Node;
         visitNode(file);
@@ -4700,7 +4706,10 @@ module ts {
                 if (node.kind === SyntaxKind.Block || node.kind === SyntaxKind.TryBlock || node.kind === SyntaxKind.FinallyBlock) {
                     inBlock = true;
                 }
-
+                var savedInObjectLiteralExpression = inObjectLiteralExpression;
+                if (node.kind === SyntaxKind.ObjectLiteralExpression) {
+                    inObjectLiteralExpression = true;
+                }
                 var savedInAmbientContext = inAmbientContext
                 if (node.flags & NodeFlags.Ambient) {
                     inAmbientContext = true;
@@ -4711,6 +4720,7 @@ module ts {
                 inAmbientContext = savedInAmbientContext;
                 inFunctionBlock = savedInFunctionBlock;
                 inBlock = savedInBlock;
+                inObjectLiteralExpression = savedInObjectLiteralExpression;
             }
 
             parent = savedParent;
@@ -5172,7 +5182,7 @@ module ts {
         }
 
         function checkFunctionDeclaration(node: FunctionLikeDeclaration) {
-            return checkForDisallowedModifiersInBlock(node) ||
+            return checkForDisallowedModifiersInBlockOrObjectLiteral(node) ||
                 checkAnySignatureDeclaration(node) ||
                 checkFunctionName(node.name) ||
                 checkForBodyInAmbientContext(node.body, /*isConstructor:*/ false) ||
@@ -5200,7 +5210,8 @@ module ts {
         }
 
         function checkGetAccessor(node: MethodDeclaration) {
-            return checkAnySignatureDeclaration(node) ||
+            return checkForDisallowedModifiersInBlockOrObjectLiteral(node) ||
+                checkAnySignatureDeclaration(node) ||
                 checkAccessor(node);
         }
 
@@ -5298,10 +5309,20 @@ module ts {
         }
 
         function checkMethod(node: MethodDeclaration) {
-            if (checkAnySignatureDeclaration(node) ||
+            if (checkForDisallowedModifiersInBlockOrObjectLiteral(node) ||
+                checkAnySignatureDeclaration(node) ||
                 checkForBodyInAmbientContext(node.body, /*isConstructor:*/ false) ||
                 checkForGenerator(node)) {
                 return true;
+            }
+
+            if (node.parent.kind === SyntaxKind.ObjectLiteralExpression) {
+                if (checkForInvalidQuestionMark(node, node.questionToken, Diagnostics.A_class_member_cannot_be_declared_optional)) {
+                    return true;
+                }
+                else if (node.body === undefined) {
+                    return grammarErrorAtPos(node.end - 1, ";".length, Diagnostics._0_expected, "{");
+                }
             }
 
             if (node.parent.kind === SyntaxKind.ClassDeclaration) {
@@ -5316,7 +5337,7 @@ module ts {
                 if (inAmbientContext) {
                     return checkForDisallowedComputedProperty(node.name, Diagnostics.Computed_property_names_are_not_allowed_in_an_ambient_context);
                 }
-                else if (!node.body) {
+                else if (isMissingNode(node.body)) {
                     return checkForDisallowedComputedProperty(node.name, Diagnostics.Computed_property_names_are_not_allowed_in_method_overloads);
                 }
             }
@@ -5711,7 +5732,8 @@ module ts {
         }
 
         function checkSetAccessor(node: MethodDeclaration) {
-            return checkAnySignatureDeclaration(node) ||
+            return checkForDisallowedModifiersInBlockOrObjectLiteral(node) ||
+                checkAnySignatureDeclaration(node) ||
                 checkAccessor(node);
         }
 
@@ -5908,14 +5930,16 @@ module ts {
         }
 
         function checkVariableStatement(node: VariableStatement) {
-            return checkForDisallowedModifiersInBlock(node) ||
+            return checkForDisallowedModifiersInBlockOrObjectLiteral(node) ||
                 checkVariableDeclarations(node.declarations) ||
                 checkForDisallowedLetOrConstStatement(node);
         }
 
-        function checkForDisallowedModifiersInBlock(node: Node) {
-            if (inBlock && node.modifiers) {
-                return grammarErrorOnFirstToken(node, Diagnostics.Modifiers_cannot_appear_here);
+        function checkForDisallowedModifiersInBlockOrObjectLiteral(node: Node) {
+            if (node.modifiers) {
+                if (inBlock || inObjectLiteralExpression) {
+                    return grammarErrorOnFirstToken(node, Diagnostics.Modifiers_cannot_appear_here);
+                }
             }
         }
 
