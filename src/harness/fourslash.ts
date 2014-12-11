@@ -363,7 +363,7 @@ module FourSlash {
             this.formatCodeOptions = {
                 IndentSize: 4,
                 TabSize: 4,
-                NewLineCharacter: sys.newLine,
+                NewLineCharacter: ts.sys.newLine,
                 ConvertTabsToSpaces: true,
                 InsertSpaceAfterCommaDelimiter: true,
                 InsertSpaceAfterSemicolonInForStatements: true,
@@ -750,11 +750,11 @@ module FourSlash {
         }
 
         private getMemberListAtCaret() {
-            return this.languageService.getCompletionsAtPosition(this.activeFile.fileName, this.currentCaretPosition, true);
+            return this.languageService.getCompletionsAtPosition(this.activeFile.fileName, this.currentCaretPosition);
         }
 
         private getCompletionListAtCaret() {
-            return this.languageService.getCompletionsAtPosition(this.activeFile.fileName, this.currentCaretPosition, false);
+            return this.languageService.getCompletionsAtPosition(this.activeFile.fileName, this.currentCaretPosition);
         }
 
         private getCompletionEntryDetails(entryName: string) {
@@ -1364,7 +1364,7 @@ module FourSlash {
                     this.languageService.getSignatureHelpItems(this.activeFile.fileName, offset);
                 } else if (prevChar === ' ' && /A-Za-z_/.test(ch)) {
                     /* Completions */
-                    this.languageService.getCompletionsAtPosition(this.activeFile.fileName, offset, false);
+                    this.languageService.getCompletionsAtPosition(this.activeFile.fileName, offset);
                 }
 
                 if (i % errorCadence === 0) {
@@ -1747,9 +1747,9 @@ module FourSlash {
             }
 
             function jsonMismatchString() {
-                return sys.newLine +
-                    "expected: '" + sys.newLine + JSON.stringify(expected, (k,v) => v, 2) + "'" + sys.newLine +
-                    "actual:   '" + sys.newLine + JSON.stringify(actual, (k, v) => v, 2) + "'";
+                return ts.sys.newLine +
+                    "expected: '" + ts.sys.newLine + JSON.stringify(expected, (k,v) => v, 2) + "'" + ts.sys.newLine +
+                    "actual:   '" + ts.sys.newLine + JSON.stringify(actual, (k, v) => v, 2) + "'";
             }
         }
 
@@ -2246,9 +2246,9 @@ module FourSlash {
             { unitName: fileName, content: content }],
             (fn, contents) => result = contents,
             ts.ScriptTarget.Latest,
-            sys.useCaseSensitiveFileNames);
+            ts.sys.useCaseSensitiveFileNames);
         // TODO (drosen): We need to enforce checking on these tests.
-        var program = ts.createProgram([Harness.Compiler.fourslashFilename, fileName], { out: "fourslashTestOutput.js", noResolve: true }, host);
+        var program = ts.createProgram([Harness.Compiler.fourslashFilename, fileName], { out: "fourslashTestOutput.js", noResolve: true, target: ts.ScriptTarget.ES3 }, host);
         var checker = ts.createTypeChecker(program, /*fullTypeCheckMode*/ true);
 
         var errors = program.getDiagnostics().concat(checker.getDiagnostics());

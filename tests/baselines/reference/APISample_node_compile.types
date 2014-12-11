@@ -1,0 +1,5746 @@
+=== tests/cases/compiler/APISample_node_compile.ts ===
+
+import ts = require("typescript");
+>ts : typeof ts
+
+var sourceFile = ts.createSourceFile("file1.ts", "var x = 0;", ts.ScriptTarget.Latest, "0.0");
+>sourceFile : ts.SourceFile
+>ts.createSourceFile("file1.ts", "var x = 0;", ts.ScriptTarget.Latest, "0.0") : ts.SourceFile
+>ts.createSourceFile : (filename: string, sourceText: string, languageVersion: ts.ScriptTarget, version: string, isOpen?: boolean) => ts.SourceFile
+>ts : typeof ts
+>createSourceFile : (filename: string, sourceText: string, languageVersion: ts.ScriptTarget, version: string, isOpen?: boolean) => ts.SourceFile
+>ts.ScriptTarget.Latest : ts.ScriptTarget
+>ts.ScriptTarget : typeof ts.ScriptTarget
+>ts : typeof ts
+>ScriptTarget : typeof ts.ScriptTarget
+>Latest : ts.ScriptTarget
+
+var program = ts.createProgram(["file1.ts"], {}, undefined);
+>program : ts.Program
+>ts.createProgram(["file1.ts"], {}, undefined) : ts.Program
+>ts.createProgram : (rootNames: string[], options: ts.CompilerOptions, host: ts.CompilerHost) => ts.Program
+>ts : typeof ts
+>createProgram : (rootNames: string[], options: ts.CompilerOptions, host: ts.CompilerHost) => ts.Program
+>["file1.ts"] : string[]
+>{} : { [x: string]: undefined; }
+>undefined : undefined
+
+=== typescript.d.ts ===
+/*! *****************************************************************************
+Copyright (c) Microsoft Corporation. All rights reserved. 
+Licensed under the Apache License, Version 2.0 (the "License"); you may not use
+this file except in compliance with the License. You may obtain a copy of the
+License at http://www.apache.org/licenses/LICENSE-2.0  
+ 
+THIS CODE IS PROVIDED ON AN *AS IS* BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, EITHER EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION ANY IMPLIED
+WARRANTIES OR CONDITIONS OF TITLE, FITNESS FOR A PARTICULAR PURPOSE, 
+MERCHANTABLITY OR NON-INFRINGEMENT. 
+ 
+See the Apache Version 2.0 License for specific language governing permissions
+and limitations under the License.
+***************************************************************************** */
+
+declare module "typescript" {
+    interface Map<T> {
+>Map : Map<T>
+>T : T
+
+        [index: string]: T;
+>index : string
+>T : T
+    }
+    interface TextRange {
+>TextRange : TextRange
+
+        pos: number;
+>pos : number
+
+        end: number;
+>end : number
+    }
+    const enum SyntaxKind {
+>SyntaxKind : SyntaxKind
+
+        Unknown = 0,
+>Unknown : SyntaxKind
+
+        EndOfFileToken = 1,
+>EndOfFileToken : SyntaxKind
+
+        SingleLineCommentTrivia = 2,
+>SingleLineCommentTrivia : SyntaxKind
+
+        MultiLineCommentTrivia = 3,
+>MultiLineCommentTrivia : SyntaxKind
+
+        NewLineTrivia = 4,
+>NewLineTrivia : SyntaxKind
+
+        WhitespaceTrivia = 5,
+>WhitespaceTrivia : SyntaxKind
+
+        NumericLiteral = 6,
+>NumericLiteral : SyntaxKind
+
+        StringLiteral = 7,
+>StringLiteral : SyntaxKind
+
+        RegularExpressionLiteral = 8,
+>RegularExpressionLiteral : SyntaxKind
+
+        NoSubstitutionTemplateLiteral = 9,
+>NoSubstitutionTemplateLiteral : SyntaxKind
+
+        TemplateHead = 10,
+>TemplateHead : SyntaxKind
+
+        TemplateMiddle = 11,
+>TemplateMiddle : SyntaxKind
+
+        TemplateTail = 12,
+>TemplateTail : SyntaxKind
+
+        OpenBraceToken = 13,
+>OpenBraceToken : SyntaxKind
+
+        CloseBraceToken = 14,
+>CloseBraceToken : SyntaxKind
+
+        OpenParenToken = 15,
+>OpenParenToken : SyntaxKind
+
+        CloseParenToken = 16,
+>CloseParenToken : SyntaxKind
+
+        OpenBracketToken = 17,
+>OpenBracketToken : SyntaxKind
+
+        CloseBracketToken = 18,
+>CloseBracketToken : SyntaxKind
+
+        DotToken = 19,
+>DotToken : SyntaxKind
+
+        DotDotDotToken = 20,
+>DotDotDotToken : SyntaxKind
+
+        SemicolonToken = 21,
+>SemicolonToken : SyntaxKind
+
+        CommaToken = 22,
+>CommaToken : SyntaxKind
+
+        LessThanToken = 23,
+>LessThanToken : SyntaxKind
+
+        GreaterThanToken = 24,
+>GreaterThanToken : SyntaxKind
+
+        LessThanEqualsToken = 25,
+>LessThanEqualsToken : SyntaxKind
+
+        GreaterThanEqualsToken = 26,
+>GreaterThanEqualsToken : SyntaxKind
+
+        EqualsEqualsToken = 27,
+>EqualsEqualsToken : SyntaxKind
+
+        ExclamationEqualsToken = 28,
+>ExclamationEqualsToken : SyntaxKind
+
+        EqualsEqualsEqualsToken = 29,
+>EqualsEqualsEqualsToken : SyntaxKind
+
+        ExclamationEqualsEqualsToken = 30,
+>ExclamationEqualsEqualsToken : SyntaxKind
+
+        EqualsGreaterThanToken = 31,
+>EqualsGreaterThanToken : SyntaxKind
+
+        PlusToken = 32,
+>PlusToken : SyntaxKind
+
+        MinusToken = 33,
+>MinusToken : SyntaxKind
+
+        AsteriskToken = 34,
+>AsteriskToken : SyntaxKind
+
+        SlashToken = 35,
+>SlashToken : SyntaxKind
+
+        PercentToken = 36,
+>PercentToken : SyntaxKind
+
+        PlusPlusToken = 37,
+>PlusPlusToken : SyntaxKind
+
+        MinusMinusToken = 38,
+>MinusMinusToken : SyntaxKind
+
+        LessThanLessThanToken = 39,
+>LessThanLessThanToken : SyntaxKind
+
+        GreaterThanGreaterThanToken = 40,
+>GreaterThanGreaterThanToken : SyntaxKind
+
+        GreaterThanGreaterThanGreaterThanToken = 41,
+>GreaterThanGreaterThanGreaterThanToken : SyntaxKind
+
+        AmpersandToken = 42,
+>AmpersandToken : SyntaxKind
+
+        BarToken = 43,
+>BarToken : SyntaxKind
+
+        CaretToken = 44,
+>CaretToken : SyntaxKind
+
+        ExclamationToken = 45,
+>ExclamationToken : SyntaxKind
+
+        TildeToken = 46,
+>TildeToken : SyntaxKind
+
+        AmpersandAmpersandToken = 47,
+>AmpersandAmpersandToken : SyntaxKind
+
+        BarBarToken = 48,
+>BarBarToken : SyntaxKind
+
+        QuestionToken = 49,
+>QuestionToken : SyntaxKind
+
+        ColonToken = 50,
+>ColonToken : SyntaxKind
+
+        EqualsToken = 51,
+>EqualsToken : SyntaxKind
+
+        PlusEqualsToken = 52,
+>PlusEqualsToken : SyntaxKind
+
+        MinusEqualsToken = 53,
+>MinusEqualsToken : SyntaxKind
+
+        AsteriskEqualsToken = 54,
+>AsteriskEqualsToken : SyntaxKind
+
+        SlashEqualsToken = 55,
+>SlashEqualsToken : SyntaxKind
+
+        PercentEqualsToken = 56,
+>PercentEqualsToken : SyntaxKind
+
+        LessThanLessThanEqualsToken = 57,
+>LessThanLessThanEqualsToken : SyntaxKind
+
+        GreaterThanGreaterThanEqualsToken = 58,
+>GreaterThanGreaterThanEqualsToken : SyntaxKind
+
+        GreaterThanGreaterThanGreaterThanEqualsToken = 59,
+>GreaterThanGreaterThanGreaterThanEqualsToken : SyntaxKind
+
+        AmpersandEqualsToken = 60,
+>AmpersandEqualsToken : SyntaxKind
+
+        BarEqualsToken = 61,
+>BarEqualsToken : SyntaxKind
+
+        CaretEqualsToken = 62,
+>CaretEqualsToken : SyntaxKind
+
+        Identifier = 63,
+>Identifier : SyntaxKind
+
+        BreakKeyword = 64,
+>BreakKeyword : SyntaxKind
+
+        CaseKeyword = 65,
+>CaseKeyword : SyntaxKind
+
+        CatchKeyword = 66,
+>CatchKeyword : SyntaxKind
+
+        ClassKeyword = 67,
+>ClassKeyword : SyntaxKind
+
+        ConstKeyword = 68,
+>ConstKeyword : SyntaxKind
+
+        ContinueKeyword = 69,
+>ContinueKeyword : SyntaxKind
+
+        DebuggerKeyword = 70,
+>DebuggerKeyword : SyntaxKind
+
+        DefaultKeyword = 71,
+>DefaultKeyword : SyntaxKind
+
+        DeleteKeyword = 72,
+>DeleteKeyword : SyntaxKind
+
+        DoKeyword = 73,
+>DoKeyword : SyntaxKind
+
+        ElseKeyword = 74,
+>ElseKeyword : SyntaxKind
+
+        EnumKeyword = 75,
+>EnumKeyword : SyntaxKind
+
+        ExportKeyword = 76,
+>ExportKeyword : SyntaxKind
+
+        ExtendsKeyword = 77,
+>ExtendsKeyword : SyntaxKind
+
+        FalseKeyword = 78,
+>FalseKeyword : SyntaxKind
+
+        FinallyKeyword = 79,
+>FinallyKeyword : SyntaxKind
+
+        ForKeyword = 80,
+>ForKeyword : SyntaxKind
+
+        FunctionKeyword = 81,
+>FunctionKeyword : SyntaxKind
+
+        IfKeyword = 82,
+>IfKeyword : SyntaxKind
+
+        ImportKeyword = 83,
+>ImportKeyword : SyntaxKind
+
+        InKeyword = 84,
+>InKeyword : SyntaxKind
+
+        InstanceOfKeyword = 85,
+>InstanceOfKeyword : SyntaxKind
+
+        NewKeyword = 86,
+>NewKeyword : SyntaxKind
+
+        NullKeyword = 87,
+>NullKeyword : SyntaxKind
+
+        ReturnKeyword = 88,
+>ReturnKeyword : SyntaxKind
+
+        SuperKeyword = 89,
+>SuperKeyword : SyntaxKind
+
+        SwitchKeyword = 90,
+>SwitchKeyword : SyntaxKind
+
+        ThisKeyword = 91,
+>ThisKeyword : SyntaxKind
+
+        ThrowKeyword = 92,
+>ThrowKeyword : SyntaxKind
+
+        TrueKeyword = 93,
+>TrueKeyword : SyntaxKind
+
+        TryKeyword = 94,
+>TryKeyword : SyntaxKind
+
+        TypeOfKeyword = 95,
+>TypeOfKeyword : SyntaxKind
+
+        VarKeyword = 96,
+>VarKeyword : SyntaxKind
+
+        VoidKeyword = 97,
+>VoidKeyword : SyntaxKind
+
+        WhileKeyword = 98,
+>WhileKeyword : SyntaxKind
+
+        WithKeyword = 99,
+>WithKeyword : SyntaxKind
+
+        ImplementsKeyword = 100,
+>ImplementsKeyword : SyntaxKind
+
+        InterfaceKeyword = 101,
+>InterfaceKeyword : SyntaxKind
+
+        LetKeyword = 102,
+>LetKeyword : SyntaxKind
+
+        PackageKeyword = 103,
+>PackageKeyword : SyntaxKind
+
+        PrivateKeyword = 104,
+>PrivateKeyword : SyntaxKind
+
+        ProtectedKeyword = 105,
+>ProtectedKeyword : SyntaxKind
+
+        PublicKeyword = 106,
+>PublicKeyword : SyntaxKind
+
+        StaticKeyword = 107,
+>StaticKeyword : SyntaxKind
+
+        YieldKeyword = 108,
+>YieldKeyword : SyntaxKind
+
+        AnyKeyword = 109,
+>AnyKeyword : SyntaxKind
+
+        BooleanKeyword = 110,
+>BooleanKeyword : SyntaxKind
+
+        ConstructorKeyword = 111,
+>ConstructorKeyword : SyntaxKind
+
+        DeclareKeyword = 112,
+>DeclareKeyword : SyntaxKind
+
+        GetKeyword = 113,
+>GetKeyword : SyntaxKind
+
+        ModuleKeyword = 114,
+>ModuleKeyword : SyntaxKind
+
+        RequireKeyword = 115,
+>RequireKeyword : SyntaxKind
+
+        NumberKeyword = 116,
+>NumberKeyword : SyntaxKind
+
+        SetKeyword = 117,
+>SetKeyword : SyntaxKind
+
+        StringKeyword = 118,
+>StringKeyword : SyntaxKind
+
+        TypeKeyword = 119,
+>TypeKeyword : SyntaxKind
+
+        QualifiedName = 120,
+>QualifiedName : SyntaxKind
+
+        ComputedPropertyName = 121,
+>ComputedPropertyName : SyntaxKind
+
+        TypeParameter = 122,
+>TypeParameter : SyntaxKind
+
+        Parameter = 123,
+>Parameter : SyntaxKind
+
+        Property = 124,
+>Property : SyntaxKind
+
+        Method = 125,
+>Method : SyntaxKind
+
+        Constructor = 126,
+>Constructor : SyntaxKind
+
+        GetAccessor = 127,
+>GetAccessor : SyntaxKind
+
+        SetAccessor = 128,
+>SetAccessor : SyntaxKind
+
+        CallSignature = 129,
+>CallSignature : SyntaxKind
+
+        ConstructSignature = 130,
+>ConstructSignature : SyntaxKind
+
+        IndexSignature = 131,
+>IndexSignature : SyntaxKind
+
+        TypeReference = 132,
+>TypeReference : SyntaxKind
+
+        FunctionType = 133,
+>FunctionType : SyntaxKind
+
+        ConstructorType = 134,
+>ConstructorType : SyntaxKind
+
+        TypeQuery = 135,
+>TypeQuery : SyntaxKind
+
+        TypeLiteral = 136,
+>TypeLiteral : SyntaxKind
+
+        ArrayType = 137,
+>ArrayType : SyntaxKind
+
+        TupleType = 138,
+>TupleType : SyntaxKind
+
+        UnionType = 139,
+>UnionType : SyntaxKind
+
+        ParenthesizedType = 140,
+>ParenthesizedType : SyntaxKind
+
+        ArrayLiteralExpression = 141,
+>ArrayLiteralExpression : SyntaxKind
+
+        ObjectLiteralExpression = 142,
+>ObjectLiteralExpression : SyntaxKind
+
+        PropertyAccessExpression = 143,
+>PropertyAccessExpression : SyntaxKind
+
+        ElementAccessExpression = 144,
+>ElementAccessExpression : SyntaxKind
+
+        CallExpression = 145,
+>CallExpression : SyntaxKind
+
+        NewExpression = 146,
+>NewExpression : SyntaxKind
+
+        TaggedTemplateExpression = 147,
+>TaggedTemplateExpression : SyntaxKind
+
+        TypeAssertionExpression = 148,
+>TypeAssertionExpression : SyntaxKind
+
+        ParenthesizedExpression = 149,
+>ParenthesizedExpression : SyntaxKind
+
+        FunctionExpression = 150,
+>FunctionExpression : SyntaxKind
+
+        ArrowFunction = 151,
+>ArrowFunction : SyntaxKind
+
+        DeleteExpression = 152,
+>DeleteExpression : SyntaxKind
+
+        TypeOfExpression = 153,
+>TypeOfExpression : SyntaxKind
+
+        VoidExpression = 154,
+>VoidExpression : SyntaxKind
+
+        PrefixUnaryExpression = 155,
+>PrefixUnaryExpression : SyntaxKind
+
+        PostfixUnaryExpression = 156,
+>PostfixUnaryExpression : SyntaxKind
+
+        BinaryExpression = 157,
+>BinaryExpression : SyntaxKind
+
+        ConditionalExpression = 158,
+>ConditionalExpression : SyntaxKind
+
+        TemplateExpression = 159,
+>TemplateExpression : SyntaxKind
+
+        YieldExpression = 160,
+>YieldExpression : SyntaxKind
+
+        OmittedExpression = 161,
+>OmittedExpression : SyntaxKind
+
+        TemplateSpan = 162,
+>TemplateSpan : SyntaxKind
+
+        Block = 163,
+>Block : SyntaxKind
+
+        VariableStatement = 164,
+>VariableStatement : SyntaxKind
+
+        EmptyStatement = 165,
+>EmptyStatement : SyntaxKind
+
+        ExpressionStatement = 166,
+>ExpressionStatement : SyntaxKind
+
+        IfStatement = 167,
+>IfStatement : SyntaxKind
+
+        DoStatement = 168,
+>DoStatement : SyntaxKind
+
+        WhileStatement = 169,
+>WhileStatement : SyntaxKind
+
+        ForStatement = 170,
+>ForStatement : SyntaxKind
+
+        ForInStatement = 171,
+>ForInStatement : SyntaxKind
+
+        ContinueStatement = 172,
+>ContinueStatement : SyntaxKind
+
+        BreakStatement = 173,
+>BreakStatement : SyntaxKind
+
+        ReturnStatement = 174,
+>ReturnStatement : SyntaxKind
+
+        WithStatement = 175,
+>WithStatement : SyntaxKind
+
+        SwitchStatement = 176,
+>SwitchStatement : SyntaxKind
+
+        LabeledStatement = 177,
+>LabeledStatement : SyntaxKind
+
+        ThrowStatement = 178,
+>ThrowStatement : SyntaxKind
+
+        TryStatement = 179,
+>TryStatement : SyntaxKind
+
+        TryBlock = 180,
+>TryBlock : SyntaxKind
+
+        FinallyBlock = 181,
+>FinallyBlock : SyntaxKind
+
+        DebuggerStatement = 182,
+>DebuggerStatement : SyntaxKind
+
+        VariableDeclaration = 183,
+>VariableDeclaration : SyntaxKind
+
+        FunctionDeclaration = 184,
+>FunctionDeclaration : SyntaxKind
+
+        ClassDeclaration = 185,
+>ClassDeclaration : SyntaxKind
+
+        InterfaceDeclaration = 186,
+>InterfaceDeclaration : SyntaxKind
+
+        TypeAliasDeclaration = 187,
+>TypeAliasDeclaration : SyntaxKind
+
+        EnumDeclaration = 188,
+>EnumDeclaration : SyntaxKind
+
+        ModuleDeclaration = 189,
+>ModuleDeclaration : SyntaxKind
+
+        ModuleBlock = 190,
+>ModuleBlock : SyntaxKind
+
+        ImportDeclaration = 191,
+>ImportDeclaration : SyntaxKind
+
+        ExportAssignment = 192,
+>ExportAssignment : SyntaxKind
+
+        ExternalModuleReference = 193,
+>ExternalModuleReference : SyntaxKind
+
+        CaseClause = 194,
+>CaseClause : SyntaxKind
+
+        DefaultClause = 195,
+>DefaultClause : SyntaxKind
+
+        HeritageClause = 196,
+>HeritageClause : SyntaxKind
+
+        CatchClause = 197,
+>CatchClause : SyntaxKind
+
+        PropertyAssignment = 198,
+>PropertyAssignment : SyntaxKind
+
+        ShorthandPropertyAssignment = 199,
+>ShorthandPropertyAssignment : SyntaxKind
+
+        EnumMember = 200,
+>EnumMember : SyntaxKind
+
+        SourceFile = 201,
+>SourceFile : SyntaxKind
+
+        Program = 202,
+>Program : SyntaxKind
+
+        SyntaxList = 203,
+>SyntaxList : SyntaxKind
+
+        Count = 204,
+>Count : SyntaxKind
+
+        FirstAssignment = 51,
+>FirstAssignment : SyntaxKind
+
+        LastAssignment = 62,
+>LastAssignment : SyntaxKind
+
+        FirstReservedWord = 64,
+>FirstReservedWord : SyntaxKind
+
+        LastReservedWord = 99,
+>LastReservedWord : SyntaxKind
+
+        FirstKeyword = 64,
+>FirstKeyword : SyntaxKind
+
+        LastKeyword = 119,
+>LastKeyword : SyntaxKind
+
+        FirstFutureReservedWord = 100,
+>FirstFutureReservedWord : SyntaxKind
+
+        LastFutureReservedWord = 108,
+>LastFutureReservedWord : SyntaxKind
+
+        FirstTypeNode = 132,
+>FirstTypeNode : SyntaxKind
+
+        LastTypeNode = 140,
+>LastTypeNode : SyntaxKind
+
+        FirstPunctuation = 13,
+>FirstPunctuation : SyntaxKind
+
+        LastPunctuation = 62,
+>LastPunctuation : SyntaxKind
+
+        FirstToken = 0,
+>FirstToken : SyntaxKind
+
+        LastToken = 119,
+>LastToken : SyntaxKind
+
+        FirstTriviaToken = 2,
+>FirstTriviaToken : SyntaxKind
+
+        LastTriviaToken = 5,
+>LastTriviaToken : SyntaxKind
+
+        FirstLiteralToken = 6,
+>FirstLiteralToken : SyntaxKind
+
+        LastLiteralToken = 9,
+>LastLiteralToken : SyntaxKind
+
+        FirstTemplateToken = 9,
+>FirstTemplateToken : SyntaxKind
+
+        LastTemplateToken = 12,
+>LastTemplateToken : SyntaxKind
+
+        FirstOperator = 21,
+>FirstOperator : SyntaxKind
+
+        LastOperator = 62,
+>LastOperator : SyntaxKind
+
+        FirstBinaryOperator = 23,
+>FirstBinaryOperator : SyntaxKind
+
+        LastBinaryOperator = 62,
+>LastBinaryOperator : SyntaxKind
+
+        FirstNode = 120,
+>FirstNode : SyntaxKind
+    }
+    const enum NodeFlags {
+>NodeFlags : NodeFlags
+
+        Export = 1,
+>Export : NodeFlags
+
+        Ambient = 2,
+>Ambient : NodeFlags
+
+        Public = 16,
+>Public : NodeFlags
+
+        Private = 32,
+>Private : NodeFlags
+
+        Protected = 64,
+>Protected : NodeFlags
+
+        Static = 128,
+>Static : NodeFlags
+
+        MultiLine = 256,
+>MultiLine : NodeFlags
+
+        Synthetic = 512,
+>Synthetic : NodeFlags
+
+        DeclarationFile = 1024,
+>DeclarationFile : NodeFlags
+
+        Let = 2048,
+>Let : NodeFlags
+
+        Const = 4096,
+>Const : NodeFlags
+
+        OctalLiteral = 8192,
+>OctalLiteral : NodeFlags
+
+        Modifier = 243,
+>Modifier : NodeFlags
+
+        AccessibilityModifier = 112,
+>AccessibilityModifier : NodeFlags
+
+        BlockScoped = 6144,
+>BlockScoped : NodeFlags
+    }
+    const enum ParserContextFlags {
+>ParserContextFlags : ParserContextFlags
+
+        StrictMode = 1,
+>StrictMode : ParserContextFlags
+
+        DisallowIn = 2,
+>DisallowIn : ParserContextFlags
+
+        Yield = 4,
+>Yield : ParserContextFlags
+
+        GeneratorParameter = 8,
+>GeneratorParameter : ParserContextFlags
+
+        ContainsError = 16,
+>ContainsError : ParserContextFlags
+
+        HasPropagatedChildContainsErrorFlag = 32,
+>HasPropagatedChildContainsErrorFlag : ParserContextFlags
+    }
+    interface Node extends TextRange {
+>Node : Node
+>TextRange : TextRange
+
+        kind: SyntaxKind;
+>kind : SyntaxKind
+>SyntaxKind : SyntaxKind
+
+        flags: NodeFlags;
+>flags : NodeFlags
+>NodeFlags : NodeFlags
+
+        parserContextFlags?: ParserContextFlags;
+>parserContextFlags : ParserContextFlags
+>ParserContextFlags : ParserContextFlags
+
+        id?: number;
+>id : number
+
+        parent?: Node;
+>parent : Node
+>Node : Node
+
+        symbol?: Symbol;
+>symbol : Symbol
+>Symbol : Symbol
+
+        locals?: SymbolTable;
+>locals : SymbolTable
+>SymbolTable : SymbolTable
+
+        nextContainer?: Node;
+>nextContainer : Node
+>Node : Node
+
+        localSymbol?: Symbol;
+>localSymbol : Symbol
+>Symbol : Symbol
+
+        modifiers?: ModifiersArray;
+>modifiers : ModifiersArray
+>ModifiersArray : ModifiersArray
+    }
+    interface NodeArray<T> extends Array<T>, TextRange {
+>NodeArray : NodeArray<T>
+>T : T
+>Array : T[]
+>T : T
+>TextRange : TextRange
+
+        hasTrailingComma?: boolean;
+>hasTrailingComma : boolean
+    }
+    interface ModifiersArray extends NodeArray<Node> {
+>ModifiersArray : ModifiersArray
+>NodeArray : NodeArray<T>
+>Node : Node
+
+        flags: number;
+>flags : number
+    }
+    interface Identifier extends PrimaryExpression {
+>Identifier : Identifier
+>PrimaryExpression : PrimaryExpression
+
+        text: string;
+>text : string
+    }
+    interface QualifiedName extends Node {
+>QualifiedName : QualifiedName
+>Node : Node
+
+        left: EntityName;
+>left : Identifier | QualifiedName
+>EntityName : Identifier | QualifiedName
+
+        right: Identifier;
+>right : Identifier
+>Identifier : Identifier
+    }
+    type EntityName = Identifier | QualifiedName;
+>EntityName : Identifier | QualifiedName
+>Identifier : Identifier
+>QualifiedName : QualifiedName
+
+    type DeclarationName = Identifier | LiteralExpression | ComputedPropertyName;
+>DeclarationName : Identifier | LiteralExpression | ComputedPropertyName
+>Identifier : Identifier
+>LiteralExpression : LiteralExpression
+>ComputedPropertyName : ComputedPropertyName
+
+    interface Declaration extends Node {
+>Declaration : Declaration
+>Node : Node
+
+        _declarationBrand: any;
+>_declarationBrand : any
+
+        name?: DeclarationName;
+>name : Identifier | LiteralExpression | ComputedPropertyName
+>DeclarationName : Identifier | LiteralExpression | ComputedPropertyName
+    }
+    interface ComputedPropertyName extends Node {
+>ComputedPropertyName : ComputedPropertyName
+>Node : Node
+
+        expression: Expression;
+>expression : Expression
+>Expression : Expression
+    }
+    interface TypeParameterDeclaration extends Declaration {
+>TypeParameterDeclaration : TypeParameterDeclaration
+>Declaration : Declaration
+
+        name: Identifier;
+>name : Identifier
+>Identifier : Identifier
+
+        constraint?: TypeNode;
+>constraint : TypeNode
+>TypeNode : TypeNode
+
+        expression?: Expression;
+>expression : Expression
+>Expression : Expression
+    }
+    interface SignatureDeclaration extends Declaration {
+>SignatureDeclaration : SignatureDeclaration
+>Declaration : Declaration
+
+        typeParameters?: NodeArray<TypeParameterDeclaration>;
+>typeParameters : NodeArray<TypeParameterDeclaration>
+>NodeArray : NodeArray<T>
+>TypeParameterDeclaration : TypeParameterDeclaration
+
+        parameters: NodeArray<ParameterDeclaration>;
+>parameters : NodeArray<ParameterDeclaration>
+>NodeArray : NodeArray<T>
+>ParameterDeclaration : ParameterDeclaration
+
+        type?: TypeNode;
+>type : TypeNode
+>TypeNode : TypeNode
+    }
+    interface VariableDeclaration extends Declaration {
+>VariableDeclaration : VariableDeclaration
+>Declaration : Declaration
+
+        name: Identifier;
+>name : Identifier
+>Identifier : Identifier
+
+        type?: TypeNode;
+>type : TypeNode
+>TypeNode : TypeNode
+
+        initializer?: Expression;
+>initializer : Expression
+>Expression : Expression
+    }
+    interface ParameterDeclaration extends Declaration {
+>ParameterDeclaration : ParameterDeclaration
+>Declaration : Declaration
+
+        dotDotDotToken?: Node;
+>dotDotDotToken : Node
+>Node : Node
+
+        name: Identifier;
+>name : Identifier
+>Identifier : Identifier
+
+        questionToken?: Node;
+>questionToken : Node
+>Node : Node
+
+        type?: TypeNode | StringLiteralExpression;
+>type : TypeNode | StringLiteralExpression
+>TypeNode : TypeNode
+>StringLiteralExpression : StringLiteralExpression
+
+        initializer?: Expression;
+>initializer : Expression
+>Expression : Expression
+    }
+    interface PropertyDeclaration extends Declaration, ClassElement {
+>PropertyDeclaration : PropertyDeclaration
+>Declaration : Declaration
+>ClassElement : ClassElement
+
+        _propertyDeclarationBrand: any;
+>_propertyDeclarationBrand : any
+
+        questionToken?: Node;
+>questionToken : Node
+>Node : Node
+
+        type?: TypeNode;
+>type : TypeNode
+>TypeNode : TypeNode
+
+        initializer?: Expression;
+>initializer : Expression
+>Expression : Expression
+    }
+    type VariableOrParameterDeclaration = VariableDeclaration | ParameterDeclaration;
+>VariableOrParameterDeclaration : ParameterDeclaration | VariableDeclaration
+>VariableDeclaration : VariableDeclaration
+>ParameterDeclaration : ParameterDeclaration
+
+    type VariableOrParameterOrPropertyDeclaration = VariableOrParameterDeclaration | PropertyDeclaration;
+>VariableOrParameterOrPropertyDeclaration : ParameterDeclaration | VariableDeclaration | PropertyDeclaration
+>VariableOrParameterDeclaration : ParameterDeclaration | VariableDeclaration
+>PropertyDeclaration : PropertyDeclaration
+
+    interface ObjectLiteralElement extends Declaration {
+>ObjectLiteralElement : ObjectLiteralElement
+>Declaration : Declaration
+
+        _objectLiteralBrandBrand: any;
+>_objectLiteralBrandBrand : any
+    }
+    interface ShorthandPropertyAssignment extends ObjectLiteralElement {
+>ShorthandPropertyAssignment : ShorthandPropertyAssignment
+>ObjectLiteralElement : ObjectLiteralElement
+
+        name: Identifier;
+>name : Identifier
+>Identifier : Identifier
+
+        questionToken?: Node;
+>questionToken : Node
+>Node : Node
+    }
+    interface PropertyAssignment extends ObjectLiteralElement {
+>PropertyAssignment : PropertyAssignment
+>ObjectLiteralElement : ObjectLiteralElement
+
+        _propertyAssignmentBrand: any;
+>_propertyAssignmentBrand : any
+
+        name: DeclarationName;
+>name : Identifier | LiteralExpression | ComputedPropertyName
+>DeclarationName : Identifier | LiteralExpression | ComputedPropertyName
+
+        questionToken?: Node;
+>questionToken : Node
+>Node : Node
+
+        initializer: Expression;
+>initializer : Expression
+>Expression : Expression
+    }
+    /**
+     * Several node kinds share function-like features such as a signature,
+     * a name, and a body. These nodes should extend FunctionLikeDeclaration.
+     * Examples:
+     *  FunctionDeclaration
+     *  MethodDeclaration
+     *  AccessorDeclaration
+     */
+    interface FunctionLikeDeclaration extends SignatureDeclaration {
+>FunctionLikeDeclaration : FunctionLikeDeclaration
+>SignatureDeclaration : SignatureDeclaration
+
+        _functionLikeDeclarationBrand: any;
+>_functionLikeDeclarationBrand : any
+
+        asteriskToken?: Node;
+>asteriskToken : Node
+>Node : Node
+
+        questionToken?: Node;
+>questionToken : Node
+>Node : Node
+
+        body?: Block | Expression;
+>body : Expression | Block
+>Block : Block
+>Expression : Expression
+    }
+    interface FunctionDeclaration extends FunctionLikeDeclaration, Statement {
+>FunctionDeclaration : FunctionDeclaration
+>FunctionLikeDeclaration : FunctionLikeDeclaration
+>Statement : Statement
+
+        name: Identifier;
+>name : Identifier
+>Identifier : Identifier
+
+        body?: Block;
+>body : Block
+>Block : Block
+    }
+    interface MethodDeclaration extends FunctionLikeDeclaration, ClassElement, ObjectLiteralElement {
+>MethodDeclaration : MethodDeclaration
+>FunctionLikeDeclaration : FunctionLikeDeclaration
+>ClassElement : ClassElement
+>ObjectLiteralElement : ObjectLiteralElement
+
+        body?: Block;
+>body : Block
+>Block : Block
+    }
+    interface ConstructorDeclaration extends FunctionLikeDeclaration, ClassElement {
+>ConstructorDeclaration : ConstructorDeclaration
+>FunctionLikeDeclaration : FunctionLikeDeclaration
+>ClassElement : ClassElement
+
+        body?: Block;
+>body : Block
+>Block : Block
+    }
+    interface AccessorDeclaration extends FunctionLikeDeclaration, ClassElement, ObjectLiteralElement {
+>AccessorDeclaration : AccessorDeclaration
+>FunctionLikeDeclaration : FunctionLikeDeclaration
+>ClassElement : ClassElement
+>ObjectLiteralElement : ObjectLiteralElement
+
+        _accessorDeclarationBrand: any;
+>_accessorDeclarationBrand : any
+
+        body: Block;
+>body : Block
+>Block : Block
+    }
+    interface IndexSignatureDeclaration extends SignatureDeclaration, ClassElement {
+>IndexSignatureDeclaration : IndexSignatureDeclaration
+>SignatureDeclaration : SignatureDeclaration
+>ClassElement : ClassElement
+
+        _indexSignatureDeclarationBrand: any;
+>_indexSignatureDeclarationBrand : any
+    }
+    interface TypeNode extends Node {
+>TypeNode : TypeNode
+>Node : Node
+
+        _typeNodeBrand: any;
+>_typeNodeBrand : any
+    }
+    interface FunctionOrConstructorTypeNode extends TypeNode, SignatureDeclaration {
+>FunctionOrConstructorTypeNode : FunctionOrConstructorTypeNode
+>TypeNode : TypeNode
+>SignatureDeclaration : SignatureDeclaration
+
+        _functionOrConstructorTypeNodeBrand: any;
+>_functionOrConstructorTypeNodeBrand : any
+    }
+    interface TypeReferenceNode extends TypeNode {
+>TypeReferenceNode : TypeReferenceNode
+>TypeNode : TypeNode
+
+        typeName: EntityName;
+>typeName : Identifier | QualifiedName
+>EntityName : Identifier | QualifiedName
+
+        typeArguments?: NodeArray<TypeNode>;
+>typeArguments : NodeArray<TypeNode>
+>NodeArray : NodeArray<T>
+>TypeNode : TypeNode
+    }
+    interface TypeQueryNode extends TypeNode {
+>TypeQueryNode : TypeQueryNode
+>TypeNode : TypeNode
+
+        exprName: EntityName;
+>exprName : Identifier | QualifiedName
+>EntityName : Identifier | QualifiedName
+    }
+    interface TypeLiteralNode extends TypeNode, Declaration {
+>TypeLiteralNode : TypeLiteralNode
+>TypeNode : TypeNode
+>Declaration : Declaration
+
+        members: NodeArray<Node>;
+>members : NodeArray<Node>
+>NodeArray : NodeArray<T>
+>Node : Node
+    }
+    interface ArrayTypeNode extends TypeNode {
+>ArrayTypeNode : ArrayTypeNode
+>TypeNode : TypeNode
+
+        elementType: TypeNode;
+>elementType : TypeNode
+>TypeNode : TypeNode
+    }
+    interface TupleTypeNode extends TypeNode {
+>TupleTypeNode : TupleTypeNode
+>TypeNode : TypeNode
+
+        elementTypes: NodeArray<TypeNode>;
+>elementTypes : NodeArray<TypeNode>
+>NodeArray : NodeArray<T>
+>TypeNode : TypeNode
+    }
+    interface UnionTypeNode extends TypeNode {
+>UnionTypeNode : UnionTypeNode
+>TypeNode : TypeNode
+
+        types: NodeArray<TypeNode>;
+>types : NodeArray<TypeNode>
+>NodeArray : NodeArray<T>
+>TypeNode : TypeNode
+    }
+    interface ParenthesizedTypeNode extends TypeNode {
+>ParenthesizedTypeNode : ParenthesizedTypeNode
+>TypeNode : TypeNode
+
+        type: TypeNode;
+>type : TypeNode
+>TypeNode : TypeNode
+    }
+    interface Expression extends Node {
+>Expression : Expression
+>Node : Node
+
+        _expressionBrand: any;
+>_expressionBrand : any
+
+        contextualType?: Type;
+>contextualType : Type
+>Type : Type
+    }
+    interface UnaryExpression extends Expression {
+>UnaryExpression : UnaryExpression
+>Expression : Expression
+
+        _unaryExpressionBrand: any;
+>_unaryExpressionBrand : any
+    }
+    interface PrefixUnaryExpression extends UnaryExpression {
+>PrefixUnaryExpression : PrefixUnaryExpression
+>UnaryExpression : UnaryExpression
+
+        operator: SyntaxKind;
+>operator : SyntaxKind
+>SyntaxKind : SyntaxKind
+
+        operand: UnaryExpression;
+>operand : UnaryExpression
+>UnaryExpression : UnaryExpression
+    }
+    interface PostfixUnaryExpression extends PostfixExpression {
+>PostfixUnaryExpression : PostfixUnaryExpression
+>PostfixExpression : PostfixExpression
+
+        operand: LeftHandSideExpression;
+>operand : LeftHandSideExpression
+>LeftHandSideExpression : LeftHandSideExpression
+
+        operator: SyntaxKind;
+>operator : SyntaxKind
+>SyntaxKind : SyntaxKind
+    }
+    interface PostfixExpression extends UnaryExpression {
+>PostfixExpression : PostfixExpression
+>UnaryExpression : UnaryExpression
+
+        _postfixExpressionBrand: any;
+>_postfixExpressionBrand : any
+    }
+    interface LeftHandSideExpression extends PostfixExpression {
+>LeftHandSideExpression : LeftHandSideExpression
+>PostfixExpression : PostfixExpression
+
+        _leftHandSideExpressionBrand: any;
+>_leftHandSideExpressionBrand : any
+    }
+    interface MemberExpression extends LeftHandSideExpression {
+>MemberExpression : MemberExpression
+>LeftHandSideExpression : LeftHandSideExpression
+
+        _memberExpressionBrand: any;
+>_memberExpressionBrand : any
+    }
+    interface PrimaryExpression extends MemberExpression {
+>PrimaryExpression : PrimaryExpression
+>MemberExpression : MemberExpression
+
+        _primaryExpressionBrand: any;
+>_primaryExpressionBrand : any
+    }
+    interface DeleteExpression extends UnaryExpression {
+>DeleteExpression : DeleteExpression
+>UnaryExpression : UnaryExpression
+
+        expression: UnaryExpression;
+>expression : UnaryExpression
+>UnaryExpression : UnaryExpression
+    }
+    interface TypeOfExpression extends UnaryExpression {
+>TypeOfExpression : TypeOfExpression
+>UnaryExpression : UnaryExpression
+
+        expression: UnaryExpression;
+>expression : UnaryExpression
+>UnaryExpression : UnaryExpression
+    }
+    interface VoidExpression extends UnaryExpression {
+>VoidExpression : VoidExpression
+>UnaryExpression : UnaryExpression
+
+        expression: UnaryExpression;
+>expression : UnaryExpression
+>UnaryExpression : UnaryExpression
+    }
+    interface YieldExpression extends Expression {
+>YieldExpression : YieldExpression
+>Expression : Expression
+
+        asteriskToken?: Node;
+>asteriskToken : Node
+>Node : Node
+
+        expression: Expression;
+>expression : Expression
+>Expression : Expression
+    }
+    interface BinaryExpression extends Expression {
+>BinaryExpression : BinaryExpression
+>Expression : Expression
+
+        left: Expression;
+>left : Expression
+>Expression : Expression
+
+        operator: SyntaxKind;
+>operator : SyntaxKind
+>SyntaxKind : SyntaxKind
+
+        right: Expression;
+>right : Expression
+>Expression : Expression
+    }
+    interface ConditionalExpression extends Expression {
+>ConditionalExpression : ConditionalExpression
+>Expression : Expression
+
+        condition: Expression;
+>condition : Expression
+>Expression : Expression
+
+        whenTrue: Expression;
+>whenTrue : Expression
+>Expression : Expression
+
+        whenFalse: Expression;
+>whenFalse : Expression
+>Expression : Expression
+    }
+    interface FunctionExpression extends PrimaryExpression, FunctionLikeDeclaration {
+>FunctionExpression : FunctionExpression
+>PrimaryExpression : PrimaryExpression
+>FunctionLikeDeclaration : FunctionLikeDeclaration
+
+        name?: Identifier;
+>name : Identifier
+>Identifier : Identifier
+
+        body: Block | Expression;
+>body : Expression | Block
+>Block : Block
+>Expression : Expression
+    }
+    interface LiteralExpression extends PrimaryExpression {
+>LiteralExpression : LiteralExpression
+>PrimaryExpression : PrimaryExpression
+
+        text: string;
+>text : string
+
+        isUnterminated?: boolean;
+>isUnterminated : boolean
+    }
+    interface StringLiteralExpression extends LiteralExpression {
+>StringLiteralExpression : StringLiteralExpression
+>LiteralExpression : LiteralExpression
+
+        _stringLiteralExpressionBrand: any;
+>_stringLiteralExpressionBrand : any
+    }
+    interface TemplateExpression extends PrimaryExpression {
+>TemplateExpression : TemplateExpression
+>PrimaryExpression : PrimaryExpression
+
+        head: LiteralExpression;
+>head : LiteralExpression
+>LiteralExpression : LiteralExpression
+
+        templateSpans: NodeArray<TemplateSpan>;
+>templateSpans : NodeArray<TemplateSpan>
+>NodeArray : NodeArray<T>
+>TemplateSpan : TemplateSpan
+    }
+    interface TemplateSpan extends Node {
+>TemplateSpan : TemplateSpan
+>Node : Node
+
+        expression: Expression;
+>expression : Expression
+>Expression : Expression
+
+        literal: LiteralExpression;
+>literal : LiteralExpression
+>LiteralExpression : LiteralExpression
+    }
+    interface ParenthesizedExpression extends PrimaryExpression {
+>ParenthesizedExpression : ParenthesizedExpression
+>PrimaryExpression : PrimaryExpression
+
+        expression: Expression;
+>expression : Expression
+>Expression : Expression
+    }
+    interface ArrayLiteralExpression extends PrimaryExpression {
+>ArrayLiteralExpression : ArrayLiteralExpression
+>PrimaryExpression : PrimaryExpression
+
+        elements: NodeArray<Expression>;
+>elements : NodeArray<Expression>
+>NodeArray : NodeArray<T>
+>Expression : Expression
+    }
+    interface ObjectLiteralExpression extends PrimaryExpression, Declaration {
+>ObjectLiteralExpression : ObjectLiteralExpression
+>PrimaryExpression : PrimaryExpression
+>Declaration : Declaration
+
+        properties: NodeArray<ObjectLiteralElement>;
+>properties : NodeArray<ObjectLiteralElement>
+>NodeArray : NodeArray<T>
+>ObjectLiteralElement : ObjectLiteralElement
+    }
+    interface PropertyAccessExpression extends MemberExpression {
+>PropertyAccessExpression : PropertyAccessExpression
+>MemberExpression : MemberExpression
+
+        expression: LeftHandSideExpression;
+>expression : LeftHandSideExpression
+>LeftHandSideExpression : LeftHandSideExpression
+
+        name: Identifier;
+>name : Identifier
+>Identifier : Identifier
+    }
+    interface ElementAccessExpression extends MemberExpression {
+>ElementAccessExpression : ElementAccessExpression
+>MemberExpression : MemberExpression
+
+        expression: LeftHandSideExpression;
+>expression : LeftHandSideExpression
+>LeftHandSideExpression : LeftHandSideExpression
+
+        argumentExpression?: Expression;
+>argumentExpression : Expression
+>Expression : Expression
+    }
+    interface CallExpression extends LeftHandSideExpression {
+>CallExpression : CallExpression
+>LeftHandSideExpression : LeftHandSideExpression
+
+        expression: LeftHandSideExpression;
+>expression : LeftHandSideExpression
+>LeftHandSideExpression : LeftHandSideExpression
+
+        typeArguments?: NodeArray<TypeNode>;
+>typeArguments : NodeArray<TypeNode>
+>NodeArray : NodeArray<T>
+>TypeNode : TypeNode
+
+        arguments: NodeArray<Expression>;
+>arguments : NodeArray<Expression>
+>NodeArray : NodeArray<T>
+>Expression : Expression
+    }
+    interface NewExpression extends CallExpression, PrimaryExpression {
+>NewExpression : NewExpression
+>CallExpression : CallExpression
+>PrimaryExpression : PrimaryExpression
+    }
+    interface TaggedTemplateExpression extends MemberExpression {
+>TaggedTemplateExpression : TaggedTemplateExpression
+>MemberExpression : MemberExpression
+
+        tag: LeftHandSideExpression;
+>tag : LeftHandSideExpression
+>LeftHandSideExpression : LeftHandSideExpression
+
+        template: LiteralExpression | TemplateExpression;
+>template : LiteralExpression | TemplateExpression
+>LiteralExpression : LiteralExpression
+>TemplateExpression : TemplateExpression
+    }
+    type CallLikeExpression = CallExpression | NewExpression | TaggedTemplateExpression;
+>CallLikeExpression : CallExpression | NewExpression | TaggedTemplateExpression
+>CallExpression : CallExpression
+>NewExpression : NewExpression
+>TaggedTemplateExpression : TaggedTemplateExpression
+
+    interface TypeAssertion extends UnaryExpression {
+>TypeAssertion : TypeAssertion
+>UnaryExpression : UnaryExpression
+
+        type: TypeNode;
+>type : TypeNode
+>TypeNode : TypeNode
+
+        expression: UnaryExpression;
+>expression : UnaryExpression
+>UnaryExpression : UnaryExpression
+    }
+    interface Statement extends Node, ModuleElement {
+>Statement : Statement
+>Node : Node
+>ModuleElement : ModuleElement
+
+        _statementBrand: any;
+>_statementBrand : any
+    }
+    interface Block extends Statement {
+>Block : Block
+>Statement : Statement
+
+        statements: NodeArray<Statement>;
+>statements : NodeArray<Statement>
+>NodeArray : NodeArray<T>
+>Statement : Statement
+    }
+    interface VariableStatement extends Statement {
+>VariableStatement : VariableStatement
+>Statement : Statement
+
+        declarations: NodeArray<VariableDeclaration>;
+>declarations : NodeArray<VariableDeclaration>
+>NodeArray : NodeArray<T>
+>VariableDeclaration : VariableDeclaration
+    }
+    interface ExpressionStatement extends Statement {
+>ExpressionStatement : ExpressionStatement
+>Statement : Statement
+
+        expression: Expression;
+>expression : Expression
+>Expression : Expression
+    }
+    interface IfStatement extends Statement {
+>IfStatement : IfStatement
+>Statement : Statement
+
+        expression: Expression;
+>expression : Expression
+>Expression : Expression
+
+        thenStatement: Statement;
+>thenStatement : Statement
+>Statement : Statement
+
+        elseStatement?: Statement;
+>elseStatement : Statement
+>Statement : Statement
+    }
+    interface IterationStatement extends Statement {
+>IterationStatement : IterationStatement
+>Statement : Statement
+
+        statement: Statement;
+>statement : Statement
+>Statement : Statement
+    }
+    interface DoStatement extends IterationStatement {
+>DoStatement : DoStatement
+>IterationStatement : IterationStatement
+
+        expression: Expression;
+>expression : Expression
+>Expression : Expression
+    }
+    interface WhileStatement extends IterationStatement {
+>WhileStatement : WhileStatement
+>IterationStatement : IterationStatement
+
+        expression: Expression;
+>expression : Expression
+>Expression : Expression
+    }
+    interface ForStatement extends IterationStatement {
+>ForStatement : ForStatement
+>IterationStatement : IterationStatement
+
+        declarations?: NodeArray<VariableDeclaration>;
+>declarations : NodeArray<VariableDeclaration>
+>NodeArray : NodeArray<T>
+>VariableDeclaration : VariableDeclaration
+
+        initializer?: Expression;
+>initializer : Expression
+>Expression : Expression
+
+        condition?: Expression;
+>condition : Expression
+>Expression : Expression
+
+        iterator?: Expression;
+>iterator : Expression
+>Expression : Expression
+    }
+    interface ForInStatement extends IterationStatement {
+>ForInStatement : ForInStatement
+>IterationStatement : IterationStatement
+
+        declarations?: NodeArray<VariableDeclaration>;
+>declarations : NodeArray<VariableDeclaration>
+>NodeArray : NodeArray<T>
+>VariableDeclaration : VariableDeclaration
+
+        variable?: Expression;
+>variable : Expression
+>Expression : Expression
+
+        expression: Expression;
+>expression : Expression
+>Expression : Expression
+    }
+    interface BreakOrContinueStatement extends Statement {
+>BreakOrContinueStatement : BreakOrContinueStatement
+>Statement : Statement
+
+        label?: Identifier;
+>label : Identifier
+>Identifier : Identifier
+    }
+    interface ReturnStatement extends Statement {
+>ReturnStatement : ReturnStatement
+>Statement : Statement
+
+        expression?: Expression;
+>expression : Expression
+>Expression : Expression
+    }
+    interface WithStatement extends Statement {
+>WithStatement : WithStatement
+>Statement : Statement
+
+        expression: Expression;
+>expression : Expression
+>Expression : Expression
+
+        statement: Statement;
+>statement : Statement
+>Statement : Statement
+    }
+    interface SwitchStatement extends Statement {
+>SwitchStatement : SwitchStatement
+>Statement : Statement
+
+        expression: Expression;
+>expression : Expression
+>Expression : Expression
+
+        clauses: NodeArray<CaseOrDefaultClause>;
+>clauses : NodeArray<CaseClause | DefaultClause>
+>NodeArray : NodeArray<T>
+>CaseOrDefaultClause : CaseClause | DefaultClause
+    }
+    interface CaseClause extends Node {
+>CaseClause : CaseClause
+>Node : Node
+
+        expression?: Expression;
+>expression : Expression
+>Expression : Expression
+
+        statements: NodeArray<Statement>;
+>statements : NodeArray<Statement>
+>NodeArray : NodeArray<T>
+>Statement : Statement
+    }
+    interface DefaultClause extends Node {
+>DefaultClause : DefaultClause
+>Node : Node
+
+        statements: NodeArray<Statement>;
+>statements : NodeArray<Statement>
+>NodeArray : NodeArray<T>
+>Statement : Statement
+    }
+    type CaseOrDefaultClause = CaseClause | DefaultClause;
+>CaseOrDefaultClause : CaseClause | DefaultClause
+>CaseClause : CaseClause
+>DefaultClause : DefaultClause
+
+    interface LabeledStatement extends Statement {
+>LabeledStatement : LabeledStatement
+>Statement : Statement
+
+        label: Identifier;
+>label : Identifier
+>Identifier : Identifier
+
+        statement: Statement;
+>statement : Statement
+>Statement : Statement
+    }
+    interface ThrowStatement extends Statement {
+>ThrowStatement : ThrowStatement
+>Statement : Statement
+
+        expression: Expression;
+>expression : Expression
+>Expression : Expression
+    }
+    interface TryStatement extends Statement {
+>TryStatement : TryStatement
+>Statement : Statement
+
+        tryBlock: Block;
+>tryBlock : Block
+>Block : Block
+
+        catchClause?: CatchClause;
+>catchClause : CatchClause
+>CatchClause : CatchClause
+
+        finallyBlock?: Block;
+>finallyBlock : Block
+>Block : Block
+    }
+    interface CatchClause extends Declaration {
+>CatchClause : CatchClause
+>Declaration : Declaration
+
+        name: Identifier;
+>name : Identifier
+>Identifier : Identifier
+
+        type?: TypeNode;
+>type : TypeNode
+>TypeNode : TypeNode
+
+        block: Block;
+>block : Block
+>Block : Block
+    }
+    interface ModuleElement extends Node {
+>ModuleElement : ModuleElement
+>Node : Node
+
+        _moduleElementBrand: any;
+>_moduleElementBrand : any
+    }
+    interface ClassDeclaration extends Declaration, ModuleElement {
+>ClassDeclaration : ClassDeclaration
+>Declaration : Declaration
+>ModuleElement : ModuleElement
+
+        name: Identifier;
+>name : Identifier
+>Identifier : Identifier
+
+        typeParameters?: NodeArray<TypeParameterDeclaration>;
+>typeParameters : NodeArray<TypeParameterDeclaration>
+>NodeArray : NodeArray<T>
+>TypeParameterDeclaration : TypeParameterDeclaration
+
+        heritageClauses?: NodeArray<HeritageClause>;
+>heritageClauses : NodeArray<HeritageClause>
+>NodeArray : NodeArray<T>
+>HeritageClause : HeritageClause
+
+        members: NodeArray<ClassElement>;
+>members : NodeArray<ClassElement>
+>NodeArray : NodeArray<T>
+>ClassElement : ClassElement
+    }
+    interface ClassElement extends Declaration {
+>ClassElement : ClassElement
+>Declaration : Declaration
+
+        _classElementBrand: any;
+>_classElementBrand : any
+    }
+    interface InterfaceDeclaration extends Declaration, ModuleElement {
+>InterfaceDeclaration : InterfaceDeclaration
+>Declaration : Declaration
+>ModuleElement : ModuleElement
+
+        name: Identifier;
+>name : Identifier
+>Identifier : Identifier
+
+        typeParameters?: NodeArray<TypeParameterDeclaration>;
+>typeParameters : NodeArray<TypeParameterDeclaration>
+>NodeArray : NodeArray<T>
+>TypeParameterDeclaration : TypeParameterDeclaration
+
+        heritageClauses?: NodeArray<HeritageClause>;
+>heritageClauses : NodeArray<HeritageClause>
+>NodeArray : NodeArray<T>
+>HeritageClause : HeritageClause
+
+        members: NodeArray<Declaration>;
+>members : NodeArray<Declaration>
+>NodeArray : NodeArray<T>
+>Declaration : Declaration
+    }
+    interface HeritageClause extends Node {
+>HeritageClause : HeritageClause
+>Node : Node
+
+        token: SyntaxKind;
+>token : SyntaxKind
+>SyntaxKind : SyntaxKind
+
+        types?: NodeArray<TypeReferenceNode>;
+>types : NodeArray<TypeReferenceNode>
+>NodeArray : NodeArray<T>
+>TypeReferenceNode : TypeReferenceNode
+    }
+    interface TypeAliasDeclaration extends Declaration, ModuleElement {
+>TypeAliasDeclaration : TypeAliasDeclaration
+>Declaration : Declaration
+>ModuleElement : ModuleElement
+
+        name: Identifier;
+>name : Identifier
+>Identifier : Identifier
+
+        type: TypeNode;
+>type : TypeNode
+>TypeNode : TypeNode
+    }
+    interface EnumMember extends Declaration {
+>EnumMember : EnumMember
+>Declaration : Declaration
+
+        name: DeclarationName;
+>name : Identifier | LiteralExpression | ComputedPropertyName
+>DeclarationName : Identifier | LiteralExpression | ComputedPropertyName
+
+        initializer?: Expression;
+>initializer : Expression
+>Expression : Expression
+    }
+    interface EnumDeclaration extends Declaration, ModuleElement {
+>EnumDeclaration : EnumDeclaration
+>Declaration : Declaration
+>ModuleElement : ModuleElement
+
+        name: Identifier;
+>name : Identifier
+>Identifier : Identifier
+
+        members: NodeArray<EnumMember>;
+>members : NodeArray<EnumMember>
+>NodeArray : NodeArray<T>
+>EnumMember : EnumMember
+    }
+    interface ModuleDeclaration extends Declaration, ModuleElement {
+>ModuleDeclaration : ModuleDeclaration
+>Declaration : Declaration
+>ModuleElement : ModuleElement
+
+        name: Identifier | LiteralExpression;
+>name : Identifier | LiteralExpression
+>Identifier : Identifier
+>LiteralExpression : LiteralExpression
+
+        body: ModuleBlock | ModuleDeclaration;
+>body : ModuleDeclaration | ModuleBlock
+>ModuleBlock : ModuleBlock
+>ModuleDeclaration : ModuleDeclaration
+    }
+    interface ModuleBlock extends Node, ModuleElement {
+>ModuleBlock : ModuleBlock
+>Node : Node
+>ModuleElement : ModuleElement
+
+        statements: NodeArray<ModuleElement>;
+>statements : NodeArray<ModuleElement>
+>NodeArray : NodeArray<T>
+>ModuleElement : ModuleElement
+    }
+    interface ImportDeclaration extends Declaration, ModuleElement {
+>ImportDeclaration : ImportDeclaration
+>Declaration : Declaration
+>ModuleElement : ModuleElement
+
+        name: Identifier;
+>name : Identifier
+>Identifier : Identifier
+
+        moduleReference: EntityName | ExternalModuleReference;
+>moduleReference : Identifier | QualifiedName | ExternalModuleReference
+>EntityName : Identifier | QualifiedName
+>ExternalModuleReference : ExternalModuleReference
+    }
+    interface ExternalModuleReference extends Node {
+>ExternalModuleReference : ExternalModuleReference
+>Node : Node
+
+        expression?: Expression;
+>expression : Expression
+>Expression : Expression
+    }
+    interface ExportAssignment extends Statement, ModuleElement {
+>ExportAssignment : ExportAssignment
+>Statement : Statement
+>ModuleElement : ModuleElement
+
+        exportName: Identifier;
+>exportName : Identifier
+>Identifier : Identifier
+    }
+    interface FileReference extends TextRange {
+>FileReference : FileReference
+>TextRange : TextRange
+
+        filename: string;
+>filename : string
+    }
+    interface CommentRange extends TextRange {
+>CommentRange : CommentRange
+>TextRange : TextRange
+
+        hasTrailingNewLine?: boolean;
+>hasTrailingNewLine : boolean
+    }
+    interface SourceFile extends Declaration {
+>SourceFile : SourceFile
+>Declaration : Declaration
+
+        statements: NodeArray<ModuleElement>;
+>statements : NodeArray<ModuleElement>
+>NodeArray : NodeArray<T>
+>ModuleElement : ModuleElement
+
+        endOfFileToken: Node;
+>endOfFileToken : Node
+>Node : Node
+
+        filename: string;
+>filename : string
+
+        text: string;
+>text : string
+
+        getLineAndCharacterFromPosition(position: number): LineAndCharacter;
+>getLineAndCharacterFromPosition : (position: number) => LineAndCharacter
+>position : number
+>LineAndCharacter : LineAndCharacter
+
+        getPositionFromLineAndCharacter(line: number, character: number): number;
+>getPositionFromLineAndCharacter : (line: number, character: number) => number
+>line : number
+>character : number
+
+        getLineStarts(): number[];
+>getLineStarts : () => number[]
+
+        amdDependencies: string[];
+>amdDependencies : string[]
+
+        amdModuleName: string;
+>amdModuleName : string
+
+        referencedFiles: FileReference[];
+>referencedFiles : FileReference[]
+>FileReference : FileReference
+
+        referenceDiagnostics: Diagnostic[];
+>referenceDiagnostics : Diagnostic[]
+>Diagnostic : Diagnostic
+
+        parseDiagnostics: Diagnostic[];
+>parseDiagnostics : Diagnostic[]
+>Diagnostic : Diagnostic
+
+        grammarDiagnostics: Diagnostic[];
+>grammarDiagnostics : Diagnostic[]
+>Diagnostic : Diagnostic
+
+        getSyntacticDiagnostics(): Diagnostic[];
+>getSyntacticDiagnostics : () => Diagnostic[]
+>Diagnostic : Diagnostic
+
+        semanticDiagnostics: Diagnostic[];
+>semanticDiagnostics : Diagnostic[]
+>Diagnostic : Diagnostic
+
+        hasNoDefaultLib: boolean;
+>hasNoDefaultLib : boolean
+
+        externalModuleIndicator: Node;
+>externalModuleIndicator : Node
+>Node : Node
+
+        nodeCount: number;
+>nodeCount : number
+
+        identifierCount: number;
+>identifierCount : number
+
+        symbolCount: number;
+>symbolCount : number
+
+        isOpen: boolean;
+>isOpen : boolean
+
+        version: string;
+>version : string
+
+        languageVersion: ScriptTarget;
+>languageVersion : ScriptTarget
+>ScriptTarget : ScriptTarget
+
+        identifiers: Map<string>;
+>identifiers : Map<string>
+>Map : Map<T>
+    }
+    interface Program {
+>Program : Program
+
+        getSourceFile(filename: string): SourceFile;
+>getSourceFile : (filename: string) => SourceFile
+>filename : string
+>SourceFile : SourceFile
+
+        getSourceFiles(): SourceFile[];
+>getSourceFiles : () => SourceFile[]
+>SourceFile : SourceFile
+
+        getCompilerOptions(): CompilerOptions;
+>getCompilerOptions : () => CompilerOptions
+>CompilerOptions : CompilerOptions
+
+        getCompilerHost(): CompilerHost;
+>getCompilerHost : () => CompilerHost
+>CompilerHost : CompilerHost
+
+        getDiagnostics(sourceFile?: SourceFile): Diagnostic[];
+>getDiagnostics : (sourceFile?: SourceFile) => Diagnostic[]
+>sourceFile : SourceFile
+>SourceFile : SourceFile
+>Diagnostic : Diagnostic
+
+        getGlobalDiagnostics(): Diagnostic[];
+>getGlobalDiagnostics : () => Diagnostic[]
+>Diagnostic : Diagnostic
+
+        getTypeChecker(fullTypeCheckMode: boolean): TypeChecker;
+>getTypeChecker : (fullTypeCheckMode: boolean) => TypeChecker
+>fullTypeCheckMode : boolean
+>TypeChecker : TypeChecker
+
+        getCommonSourceDirectory(): string;
+>getCommonSourceDirectory : () => string
+    }
+    interface SourceMapSpan {
+>SourceMapSpan : SourceMapSpan
+
+        emittedLine: number;
+>emittedLine : number
+
+        emittedColumn: number;
+>emittedColumn : number
+
+        sourceLine: number;
+>sourceLine : number
+
+        sourceColumn: number;
+>sourceColumn : number
+
+        nameIndex?: number;
+>nameIndex : number
+
+        sourceIndex: number;
+>sourceIndex : number
+    }
+    interface SourceMapData {
+>SourceMapData : SourceMapData
+
+        sourceMapFilePath: string;
+>sourceMapFilePath : string
+
+        jsSourceMappingURL: string;
+>jsSourceMappingURL : string
+
+        sourceMapFile: string;
+>sourceMapFile : string
+
+        sourceMapSourceRoot: string;
+>sourceMapSourceRoot : string
+
+        sourceMapSources: string[];
+>sourceMapSources : string[]
+
+        inputSourceFileNames: string[];
+>inputSourceFileNames : string[]
+
+        sourceMapNames?: string[];
+>sourceMapNames : string[]
+
+        sourceMapMappings: string;
+>sourceMapMappings : string
+
+        sourceMapDecodedMappings: SourceMapSpan[];
+>sourceMapDecodedMappings : SourceMapSpan[]
+>SourceMapSpan : SourceMapSpan
+    }
+    enum EmitReturnStatus {
+>EmitReturnStatus : EmitReturnStatus
+
+        Succeeded = 0,
+>Succeeded : EmitReturnStatus
+
+        AllOutputGenerationSkipped = 1,
+>AllOutputGenerationSkipped : EmitReturnStatus
+
+        JSGeneratedWithSemanticErrors = 2,
+>JSGeneratedWithSemanticErrors : EmitReturnStatus
+
+        DeclarationGenerationSkipped = 3,
+>DeclarationGenerationSkipped : EmitReturnStatus
+
+        EmitErrorsEncountered = 4,
+>EmitErrorsEncountered : EmitReturnStatus
+
+        CompilerOptionsErrors = 5,
+>CompilerOptionsErrors : EmitReturnStatus
+    }
+    interface EmitResult {
+>EmitResult : EmitResult
+
+        emitResultStatus: EmitReturnStatus;
+>emitResultStatus : EmitReturnStatus
+>EmitReturnStatus : EmitReturnStatus
+
+        diagnostics: Diagnostic[];
+>diagnostics : Diagnostic[]
+>Diagnostic : Diagnostic
+
+        sourceMaps: SourceMapData[];
+>sourceMaps : SourceMapData[]
+>SourceMapData : SourceMapData
+    }
+    interface TypeChecker {
+>TypeChecker : TypeChecker
+
+        getProgram(): Program;
+>getProgram : () => Program
+>Program : Program
+
+        getDiagnostics(sourceFile?: SourceFile): Diagnostic[];
+>getDiagnostics : (sourceFile?: SourceFile) => Diagnostic[]
+>sourceFile : SourceFile
+>SourceFile : SourceFile
+>Diagnostic : Diagnostic
+
+        getDeclarationDiagnostics(sourceFile: SourceFile): Diagnostic[];
+>getDeclarationDiagnostics : (sourceFile: SourceFile) => Diagnostic[]
+>sourceFile : SourceFile
+>SourceFile : SourceFile
+>Diagnostic : Diagnostic
+
+        getGlobalDiagnostics(): Diagnostic[];
+>getGlobalDiagnostics : () => Diagnostic[]
+>Diagnostic : Diagnostic
+
+        getNodeCount(): number;
+>getNodeCount : () => number
+
+        getIdentifierCount(): number;
+>getIdentifierCount : () => number
+
+        getSymbolCount(): number;
+>getSymbolCount : () => number
+
+        getTypeCount(): number;
+>getTypeCount : () => number
+
+        emitFiles(targetSourceFile?: SourceFile): EmitResult;
+>emitFiles : (targetSourceFile?: SourceFile) => EmitResult
+>targetSourceFile : SourceFile
+>SourceFile : SourceFile
+>EmitResult : EmitResult
+
+        getTypeOfSymbolAtLocation(symbol: Symbol, node: Node): Type;
+>getTypeOfSymbolAtLocation : (symbol: Symbol, node: Node) => Type
+>symbol : Symbol
+>Symbol : Symbol
+>node : Node
+>Node : Node
+>Type : Type
+
+        getDeclaredTypeOfSymbol(symbol: Symbol): Type;
+>getDeclaredTypeOfSymbol : (symbol: Symbol) => Type
+>symbol : Symbol
+>Symbol : Symbol
+>Type : Type
+
+        getPropertiesOfType(type: Type): Symbol[];
+>getPropertiesOfType : (type: Type) => Symbol[]
+>type : Type
+>Type : Type
+>Symbol : Symbol
+
+        getPropertyOfType(type: Type, propertyName: string): Symbol;
+>getPropertyOfType : (type: Type, propertyName: string) => Symbol
+>type : Type
+>Type : Type
+>propertyName : string
+>Symbol : Symbol
+
+        getSignaturesOfType(type: Type, kind: SignatureKind): Signature[];
+>getSignaturesOfType : (type: Type, kind: SignatureKind) => Signature[]
+>type : Type
+>Type : Type
+>kind : SignatureKind
+>SignatureKind : SignatureKind
+>Signature : Signature
+
+        getIndexTypeOfType(type: Type, kind: IndexKind): Type;
+>getIndexTypeOfType : (type: Type, kind: IndexKind) => Type
+>type : Type
+>Type : Type
+>kind : IndexKind
+>IndexKind : IndexKind
+>Type : Type
+
+        getReturnTypeOfSignature(signature: Signature): Type;
+>getReturnTypeOfSignature : (signature: Signature) => Type
+>signature : Signature
+>Signature : Signature
+>Type : Type
+
+        getSymbolsInScope(location: Node, meaning: SymbolFlags): Symbol[];
+>getSymbolsInScope : (location: Node, meaning: SymbolFlags) => Symbol[]
+>location : Node
+>Node : Node
+>meaning : SymbolFlags
+>SymbolFlags : SymbolFlags
+>Symbol : Symbol
+
+        getSymbolAtLocation(node: Node): Symbol;
+>getSymbolAtLocation : (node: Node) => Symbol
+>node : Node
+>Node : Node
+>Symbol : Symbol
+
+        getShorthandAssignmentValueSymbol(location: Node): Symbol;
+>getShorthandAssignmentValueSymbol : (location: Node) => Symbol
+>location : Node
+>Node : Node
+>Symbol : Symbol
+
+        getTypeAtLocation(node: Node): Type;
+>getTypeAtLocation : (node: Node) => Type
+>node : Node
+>Node : Node
+>Type : Type
+
+        typeToString(type: Type, enclosingDeclaration?: Node, flags?: TypeFormatFlags): string;
+>typeToString : (type: Type, enclosingDeclaration?: Node, flags?: TypeFormatFlags) => string
+>type : Type
+>Type : Type
+>enclosingDeclaration : Node
+>Node : Node
+>flags : TypeFormatFlags
+>TypeFormatFlags : TypeFormatFlags
+
+        symbolToString(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags): string;
+>symbolToString : (symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags) => string
+>symbol : Symbol
+>Symbol : Symbol
+>enclosingDeclaration : Node
+>Node : Node
+>meaning : SymbolFlags
+>SymbolFlags : SymbolFlags
+
+        getSymbolDisplayBuilder(): SymbolDisplayBuilder;
+>getSymbolDisplayBuilder : () => SymbolDisplayBuilder
+>SymbolDisplayBuilder : SymbolDisplayBuilder
+
+        getFullyQualifiedName(symbol: Symbol): string;
+>getFullyQualifiedName : (symbol: Symbol) => string
+>symbol : Symbol
+>Symbol : Symbol
+
+        getAugmentedPropertiesOfType(type: Type): Symbol[];
+>getAugmentedPropertiesOfType : (type: Type) => Symbol[]
+>type : Type
+>Type : Type
+>Symbol : Symbol
+
+        getRootSymbols(symbol: Symbol): Symbol[];
+>getRootSymbols : (symbol: Symbol) => Symbol[]
+>symbol : Symbol
+>Symbol : Symbol
+>Symbol : Symbol
+
+        getContextualType(node: Expression): Type;
+>getContextualType : (node: Expression) => Type
+>node : Expression
+>Expression : Expression
+>Type : Type
+
+        getResolvedSignature(node: CallLikeExpression, candidatesOutArray?: Signature[]): Signature;
+>getResolvedSignature : (node: CallExpression | NewExpression | TaggedTemplateExpression, candidatesOutArray?: Signature[]) => Signature
+>node : CallExpression | NewExpression | TaggedTemplateExpression
+>CallLikeExpression : CallExpression | NewExpression | TaggedTemplateExpression
+>candidatesOutArray : Signature[]
+>Signature : Signature
+>Signature : Signature
+
+        getSignatureFromDeclaration(declaration: SignatureDeclaration): Signature;
+>getSignatureFromDeclaration : (declaration: SignatureDeclaration) => Signature
+>declaration : SignatureDeclaration
+>SignatureDeclaration : SignatureDeclaration
+>Signature : Signature
+
+        isImplementationOfOverload(node: FunctionLikeDeclaration): boolean;
+>isImplementationOfOverload : (node: FunctionLikeDeclaration) => boolean
+>node : FunctionLikeDeclaration
+>FunctionLikeDeclaration : FunctionLikeDeclaration
+
+        isUndefinedSymbol(symbol: Symbol): boolean;
+>isUndefinedSymbol : (symbol: Symbol) => boolean
+>symbol : Symbol
+>Symbol : Symbol
+
+        isArgumentsSymbol(symbol: Symbol): boolean;
+>isArgumentsSymbol : (symbol: Symbol) => boolean
+>symbol : Symbol
+>Symbol : Symbol
+
+        isEmitBlocked(sourceFile?: SourceFile): boolean;
+>isEmitBlocked : (sourceFile?: SourceFile) => boolean
+>sourceFile : SourceFile
+>SourceFile : SourceFile
+
+        getEnumMemberValue(node: EnumMember): number;
+>getEnumMemberValue : (node: EnumMember) => number
+>node : EnumMember
+>EnumMember : EnumMember
+
+        isValidPropertyAccess(node: PropertyAccessExpression | QualifiedName, propertyName: string): boolean;
+>isValidPropertyAccess : (node: QualifiedName | PropertyAccessExpression, propertyName: string) => boolean
+>node : QualifiedName | PropertyAccessExpression
+>PropertyAccessExpression : PropertyAccessExpression
+>QualifiedName : QualifiedName
+>propertyName : string
+
+        getAliasedSymbol(symbol: Symbol): Symbol;
+>getAliasedSymbol : (symbol: Symbol) => Symbol
+>symbol : Symbol
+>Symbol : Symbol
+>Symbol : Symbol
+    }
+    interface SymbolDisplayBuilder {
+>SymbolDisplayBuilder : SymbolDisplayBuilder
+
+        buildTypeDisplay(type: Type, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
+>buildTypeDisplay : (type: Type, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags) => void
+>type : Type
+>Type : Type
+>writer : SymbolWriter
+>SymbolWriter : SymbolWriter
+>enclosingDeclaration : Node
+>Node : Node
+>flags : TypeFormatFlags
+>TypeFormatFlags : TypeFormatFlags
+
+        buildSymbolDisplay(symbol: Symbol, writer: SymbolWriter, enclosingDeclaration?: Node, meaning?: SymbolFlags, flags?: SymbolFormatFlags): void;
+>buildSymbolDisplay : (symbol: Symbol, writer: SymbolWriter, enclosingDeclaration?: Node, meaning?: SymbolFlags, flags?: SymbolFormatFlags) => void
+>symbol : Symbol
+>Symbol : Symbol
+>writer : SymbolWriter
+>SymbolWriter : SymbolWriter
+>enclosingDeclaration : Node
+>Node : Node
+>meaning : SymbolFlags
+>SymbolFlags : SymbolFlags
+>flags : SymbolFormatFlags
+>SymbolFormatFlags : SymbolFormatFlags
+
+        buildSignatureDisplay(signatures: Signature, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
+>buildSignatureDisplay : (signatures: Signature, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags) => void
+>signatures : Signature
+>Signature : Signature
+>writer : SymbolWriter
+>SymbolWriter : SymbolWriter
+>enclosingDeclaration : Node
+>Node : Node
+>flags : TypeFormatFlags
+>TypeFormatFlags : TypeFormatFlags
+
+        buildParameterDisplay(parameter: Symbol, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
+>buildParameterDisplay : (parameter: Symbol, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags) => void
+>parameter : Symbol
+>Symbol : Symbol
+>writer : SymbolWriter
+>SymbolWriter : SymbolWriter
+>enclosingDeclaration : Node
+>Node : Node
+>flags : TypeFormatFlags
+>TypeFormatFlags : TypeFormatFlags
+
+        buildTypeParameterDisplay(tp: TypeParameter, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
+>buildTypeParameterDisplay : (tp: TypeParameter, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags) => void
+>tp : TypeParameter
+>TypeParameter : TypeParameter
+>writer : SymbolWriter
+>SymbolWriter : SymbolWriter
+>enclosingDeclaration : Node
+>Node : Node
+>flags : TypeFormatFlags
+>TypeFormatFlags : TypeFormatFlags
+
+        buildTypeParameterDisplayFromSymbol(symbol: Symbol, writer: SymbolWriter, enclosingDeclaraiton?: Node, flags?: TypeFormatFlags): void;
+>buildTypeParameterDisplayFromSymbol : (symbol: Symbol, writer: SymbolWriter, enclosingDeclaraiton?: Node, flags?: TypeFormatFlags) => void
+>symbol : Symbol
+>Symbol : Symbol
+>writer : SymbolWriter
+>SymbolWriter : SymbolWriter
+>enclosingDeclaraiton : Node
+>Node : Node
+>flags : TypeFormatFlags
+>TypeFormatFlags : TypeFormatFlags
+
+        buildDisplayForParametersAndDelimiters(parameters: Symbol[], writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
+>buildDisplayForParametersAndDelimiters : (parameters: Symbol[], writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags) => void
+>parameters : Symbol[]
+>Symbol : Symbol
+>writer : SymbolWriter
+>SymbolWriter : SymbolWriter
+>enclosingDeclaration : Node
+>Node : Node
+>flags : TypeFormatFlags
+>TypeFormatFlags : TypeFormatFlags
+
+        buildDisplayForTypeParametersAndDelimiters(typeParameters: TypeParameter[], writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
+>buildDisplayForTypeParametersAndDelimiters : (typeParameters: TypeParameter[], writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags) => void
+>typeParameters : TypeParameter[]
+>TypeParameter : TypeParameter
+>writer : SymbolWriter
+>SymbolWriter : SymbolWriter
+>enclosingDeclaration : Node
+>Node : Node
+>flags : TypeFormatFlags
+>TypeFormatFlags : TypeFormatFlags
+
+        buildReturnTypeDisplay(signature: Signature, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
+>buildReturnTypeDisplay : (signature: Signature, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags) => void
+>signature : Signature
+>Signature : Signature
+>writer : SymbolWriter
+>SymbolWriter : SymbolWriter
+>enclosingDeclaration : Node
+>Node : Node
+>flags : TypeFormatFlags
+>TypeFormatFlags : TypeFormatFlags
+    }
+    interface SymbolWriter {
+>SymbolWriter : SymbolWriter
+
+        writeKeyword(text: string): void;
+>writeKeyword : (text: string) => void
+>text : string
+
+        writeOperator(text: string): void;
+>writeOperator : (text: string) => void
+>text : string
+
+        writePunctuation(text: string): void;
+>writePunctuation : (text: string) => void
+>text : string
+
+        writeSpace(text: string): void;
+>writeSpace : (text: string) => void
+>text : string
+
+        writeStringLiteral(text: string): void;
+>writeStringLiteral : (text: string) => void
+>text : string
+
+        writeParameter(text: string): void;
+>writeParameter : (text: string) => void
+>text : string
+
+        writeSymbol(text: string, symbol: Symbol): void;
+>writeSymbol : (text: string, symbol: Symbol) => void
+>text : string
+>symbol : Symbol
+>Symbol : Symbol
+
+        writeLine(): void;
+>writeLine : () => void
+
+        increaseIndent(): void;
+>increaseIndent : () => void
+
+        decreaseIndent(): void;
+>decreaseIndent : () => void
+
+        clear(): void;
+>clear : () => void
+
+        trackSymbol(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags): void;
+>trackSymbol : (symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags) => void
+>symbol : Symbol
+>Symbol : Symbol
+>enclosingDeclaration : Node
+>Node : Node
+>meaning : SymbolFlags
+>SymbolFlags : SymbolFlags
+    }
+    const enum TypeFormatFlags {
+>TypeFormatFlags : TypeFormatFlags
+
+        None = 0,
+>None : TypeFormatFlags
+
+        WriteArrayAsGenericType = 1,
+>WriteArrayAsGenericType : TypeFormatFlags
+
+        UseTypeOfFunction = 2,
+>UseTypeOfFunction : TypeFormatFlags
+
+        NoTruncation = 4,
+>NoTruncation : TypeFormatFlags
+
+        WriteArrowStyleSignature = 8,
+>WriteArrowStyleSignature : TypeFormatFlags
+
+        WriteOwnNameForAnyLike = 16,
+>WriteOwnNameForAnyLike : TypeFormatFlags
+
+        WriteTypeArgumentsOfSignature = 32,
+>WriteTypeArgumentsOfSignature : TypeFormatFlags
+
+        InElementType = 64,
+>InElementType : TypeFormatFlags
+    }
+    const enum SymbolFormatFlags {
+>SymbolFormatFlags : SymbolFormatFlags
+
+        None = 0,
+>None : SymbolFormatFlags
+
+        WriteTypeParametersOrArguments = 1,
+>WriteTypeParametersOrArguments : SymbolFormatFlags
+
+        UseOnlyExternalAliasing = 2,
+>UseOnlyExternalAliasing : SymbolFormatFlags
+    }
+    const enum SymbolAccessibility {
+>SymbolAccessibility : SymbolAccessibility
+
+        Accessible = 0,
+>Accessible : SymbolAccessibility
+
+        NotAccessible = 1,
+>NotAccessible : SymbolAccessibility
+
+        CannotBeNamed = 2,
+>CannotBeNamed : SymbolAccessibility
+    }
+    interface SymbolVisibilityResult {
+>SymbolVisibilityResult : SymbolVisibilityResult
+
+        accessibility: SymbolAccessibility;
+>accessibility : SymbolAccessibility
+>SymbolAccessibility : SymbolAccessibility
+
+        aliasesToMakeVisible?: ImportDeclaration[];
+>aliasesToMakeVisible : ImportDeclaration[]
+>ImportDeclaration : ImportDeclaration
+
+        errorSymbolName?: string;
+>errorSymbolName : string
+
+        errorNode?: Node;
+>errorNode : Node
+>Node : Node
+    }
+    interface SymbolAccessiblityResult extends SymbolVisibilityResult {
+>SymbolAccessiblityResult : SymbolAccessiblityResult
+>SymbolVisibilityResult : SymbolVisibilityResult
+
+        errorModuleName?: string;
+>errorModuleName : string
+    }
+    interface EmitResolver {
+>EmitResolver : EmitResolver
+
+        getProgram(): Program;
+>getProgram : () => Program
+>Program : Program
+
+        getLocalNameOfContainer(container: ModuleDeclaration | EnumDeclaration): string;
+>getLocalNameOfContainer : (container: EnumDeclaration | ModuleDeclaration) => string
+>container : EnumDeclaration | ModuleDeclaration
+>ModuleDeclaration : ModuleDeclaration
+>EnumDeclaration : EnumDeclaration
+
+        getExpressionNamePrefix(node: Identifier): string;
+>getExpressionNamePrefix : (node: Identifier) => string
+>node : Identifier
+>Identifier : Identifier
+
+        getExportAssignmentName(node: SourceFile): string;
+>getExportAssignmentName : (node: SourceFile) => string
+>node : SourceFile
+>SourceFile : SourceFile
+
+        isReferencedImportDeclaration(node: ImportDeclaration): boolean;
+>isReferencedImportDeclaration : (node: ImportDeclaration) => boolean
+>node : ImportDeclaration
+>ImportDeclaration : ImportDeclaration
+
+        isTopLevelValueImportWithEntityName(node: ImportDeclaration): boolean;
+>isTopLevelValueImportWithEntityName : (node: ImportDeclaration) => boolean
+>node : ImportDeclaration
+>ImportDeclaration : ImportDeclaration
+
+        getNodeCheckFlags(node: Node): NodeCheckFlags;
+>getNodeCheckFlags : (node: Node) => NodeCheckFlags
+>node : Node
+>Node : Node
+>NodeCheckFlags : NodeCheckFlags
+
+        getEnumMemberValue(node: EnumMember): number;
+>getEnumMemberValue : (node: EnumMember) => number
+>node : EnumMember
+>EnumMember : EnumMember
+
+        hasSemanticErrors(sourceFile?: SourceFile): boolean;
+>hasSemanticErrors : (sourceFile?: SourceFile) => boolean
+>sourceFile : SourceFile
+>SourceFile : SourceFile
+
+        isDeclarationVisible(node: Declaration): boolean;
+>isDeclarationVisible : (node: Declaration) => boolean
+>node : Declaration
+>Declaration : Declaration
+
+        isImplementationOfOverload(node: FunctionLikeDeclaration): boolean;
+>isImplementationOfOverload : (node: FunctionLikeDeclaration) => boolean
+>node : FunctionLikeDeclaration
+>FunctionLikeDeclaration : FunctionLikeDeclaration
+
+        writeTypeOfDeclaration(declaration: AccessorDeclaration | VariableOrParameterDeclaration, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter): void;
+>writeTypeOfDeclaration : (declaration: ParameterDeclaration | VariableDeclaration | AccessorDeclaration, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter) => void
+>declaration : ParameterDeclaration | VariableDeclaration | AccessorDeclaration
+>AccessorDeclaration : AccessorDeclaration
+>VariableOrParameterDeclaration : ParameterDeclaration | VariableDeclaration
+>enclosingDeclaration : Node
+>Node : Node
+>flags : TypeFormatFlags
+>TypeFormatFlags : TypeFormatFlags
+>writer : SymbolWriter
+>SymbolWriter : SymbolWriter
+
+        writeReturnTypeOfSignatureDeclaration(signatureDeclaration: SignatureDeclaration, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter): void;
+>writeReturnTypeOfSignatureDeclaration : (signatureDeclaration: SignatureDeclaration, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter) => void
+>signatureDeclaration : SignatureDeclaration
+>SignatureDeclaration : SignatureDeclaration
+>enclosingDeclaration : Node
+>Node : Node
+>flags : TypeFormatFlags
+>TypeFormatFlags : TypeFormatFlags
+>writer : SymbolWriter
+>SymbolWriter : SymbolWriter
+
+        isSymbolAccessible(symbol: Symbol, enclosingDeclaration: Node, meaning: SymbolFlags): SymbolAccessiblityResult;
+>isSymbolAccessible : (symbol: Symbol, enclosingDeclaration: Node, meaning: SymbolFlags) => SymbolAccessiblityResult
+>symbol : Symbol
+>Symbol : Symbol
+>enclosingDeclaration : Node
+>Node : Node
+>meaning : SymbolFlags
+>SymbolFlags : SymbolFlags
+>SymbolAccessiblityResult : SymbolAccessiblityResult
+
+        isEntityNameVisible(entityName: EntityName, enclosingDeclaration: Node): SymbolVisibilityResult;
+>isEntityNameVisible : (entityName: Identifier | QualifiedName, enclosingDeclaration: Node) => SymbolVisibilityResult
+>entityName : Identifier | QualifiedName
+>EntityName : Identifier | QualifiedName
+>enclosingDeclaration : Node
+>Node : Node
+>SymbolVisibilityResult : SymbolVisibilityResult
+
+        getConstantValue(node: PropertyAccessExpression | ElementAccessExpression): number;
+>getConstantValue : (node: PropertyAccessExpression | ElementAccessExpression) => number
+>node : PropertyAccessExpression | ElementAccessExpression
+>PropertyAccessExpression : PropertyAccessExpression
+>ElementAccessExpression : ElementAccessExpression
+
+        isEmitBlocked(sourceFile?: SourceFile): boolean;
+>isEmitBlocked : (sourceFile?: SourceFile) => boolean
+>sourceFile : SourceFile
+>SourceFile : SourceFile
+    }
+    const enum SymbolFlags {
+>SymbolFlags : SymbolFlags
+
+        FunctionScopedVariable = 1,
+>FunctionScopedVariable : SymbolFlags
+
+        BlockScopedVariable = 2,
+>BlockScopedVariable : SymbolFlags
+
+        Property = 4,
+>Property : SymbolFlags
+
+        EnumMember = 8,
+>EnumMember : SymbolFlags
+
+        Function = 16,
+>Function : SymbolFlags
+
+        Class = 32,
+>Class : SymbolFlags
+
+        Interface = 64,
+>Interface : SymbolFlags
+
+        ConstEnum = 128,
+>ConstEnum : SymbolFlags
+
+        RegularEnum = 256,
+>RegularEnum : SymbolFlags
+
+        ValueModule = 512,
+>ValueModule : SymbolFlags
+
+        NamespaceModule = 1024,
+>NamespaceModule : SymbolFlags
+
+        TypeLiteral = 2048,
+>TypeLiteral : SymbolFlags
+
+        ObjectLiteral = 4096,
+>ObjectLiteral : SymbolFlags
+
+        Method = 8192,
+>Method : SymbolFlags
+
+        Constructor = 16384,
+>Constructor : SymbolFlags
+
+        GetAccessor = 32768,
+>GetAccessor : SymbolFlags
+
+        SetAccessor = 65536,
+>SetAccessor : SymbolFlags
+
+        CallSignature = 131072,
+>CallSignature : SymbolFlags
+
+        ConstructSignature = 262144,
+>ConstructSignature : SymbolFlags
+
+        IndexSignature = 524288,
+>IndexSignature : SymbolFlags
+
+        TypeParameter = 1048576,
+>TypeParameter : SymbolFlags
+
+        TypeAlias = 2097152,
+>TypeAlias : SymbolFlags
+
+        ExportValue = 4194304,
+>ExportValue : SymbolFlags
+
+        ExportType = 8388608,
+>ExportType : SymbolFlags
+
+        ExportNamespace = 16777216,
+>ExportNamespace : SymbolFlags
+
+        Import = 33554432,
+>Import : SymbolFlags
+
+        Instantiated = 67108864,
+>Instantiated : SymbolFlags
+
+        Merged = 134217728,
+>Merged : SymbolFlags
+
+        Transient = 268435456,
+>Transient : SymbolFlags
+
+        Prototype = 536870912,
+>Prototype : SymbolFlags
+
+        UnionProperty = 1073741824,
+>UnionProperty : SymbolFlags
+
+        Enum = 384,
+>Enum : SymbolFlags
+
+        Variable = 3,
+>Variable : SymbolFlags
+
+        Value = 107455,
+>Value : SymbolFlags
+
+        Type = 3152352,
+>Type : SymbolFlags
+
+        Namespace = 1536,
+>Namespace : SymbolFlags
+
+        Module = 1536,
+>Module : SymbolFlags
+
+        Accessor = 98304,
+>Accessor : SymbolFlags
+
+        Signature = 917504,
+>Signature : SymbolFlags
+
+        FunctionScopedVariableExcludes = 107454,
+>FunctionScopedVariableExcludes : SymbolFlags
+
+        BlockScopedVariableExcludes = 107455,
+>BlockScopedVariableExcludes : SymbolFlags
+
+        ParameterExcludes = 107455,
+>ParameterExcludes : SymbolFlags
+
+        PropertyExcludes = 107455,
+>PropertyExcludes : SymbolFlags
+
+        EnumMemberExcludes = 107455,
+>EnumMemberExcludes : SymbolFlags
+
+        FunctionExcludes = 106927,
+>FunctionExcludes : SymbolFlags
+
+        ClassExcludes = 3258879,
+>ClassExcludes : SymbolFlags
+
+        InterfaceExcludes = 3152288,
+>InterfaceExcludes : SymbolFlags
+
+        RegularEnumExcludes = 3258623,
+>RegularEnumExcludes : SymbolFlags
+
+        ConstEnumExcludes = 3259263,
+>ConstEnumExcludes : SymbolFlags
+
+        ValueModuleExcludes = 106639,
+>ValueModuleExcludes : SymbolFlags
+
+        NamespaceModuleExcludes = 0,
+>NamespaceModuleExcludes : SymbolFlags
+
+        MethodExcludes = 99263,
+>MethodExcludes : SymbolFlags
+
+        GetAccessorExcludes = 41919,
+>GetAccessorExcludes : SymbolFlags
+
+        SetAccessorExcludes = 74687,
+>SetAccessorExcludes : SymbolFlags
+
+        TypeParameterExcludes = 2103776,
+>TypeParameterExcludes : SymbolFlags
+
+        TypeAliasExcludes = 3152352,
+>TypeAliasExcludes : SymbolFlags
+
+        ImportExcludes = 33554432,
+>ImportExcludes : SymbolFlags
+
+        ModuleMember = 35653619,
+>ModuleMember : SymbolFlags
+
+        ExportHasLocal = 944,
+>ExportHasLocal : SymbolFlags
+
+        HasLocals = 1041936,
+>HasLocals : SymbolFlags
+
+        HasExports = 1952,
+>HasExports : SymbolFlags
+
+        HasMembers = 6240,
+>HasMembers : SymbolFlags
+
+        IsContainer = 1048560,
+>IsContainer : SymbolFlags
+
+        PropertyOrAccessor = 98308,
+>PropertyOrAccessor : SymbolFlags
+
+        Export = 29360128,
+>Export : SymbolFlags
+    }
+    interface Symbol {
+>Symbol : Symbol
+
+        flags: SymbolFlags;
+>flags : SymbolFlags
+>SymbolFlags : SymbolFlags
+
+        name: string;
+>name : string
+
+        id?: number;
+>id : number
+
+        mergeId?: number;
+>mergeId : number
+
+        declarations?: Declaration[];
+>declarations : Declaration[]
+>Declaration : Declaration
+
+        parent?: Symbol;
+>parent : Symbol
+>Symbol : Symbol
+
+        members?: SymbolTable;
+>members : SymbolTable
+>SymbolTable : SymbolTable
+
+        exports?: SymbolTable;
+>exports : SymbolTable
+>SymbolTable : SymbolTable
+
+        exportSymbol?: Symbol;
+>exportSymbol : Symbol
+>Symbol : Symbol
+
+        valueDeclaration?: Declaration;
+>valueDeclaration : Declaration
+>Declaration : Declaration
+
+        constEnumOnlyModule?: boolean;
+>constEnumOnlyModule : boolean
+    }
+    interface SymbolLinks {
+>SymbolLinks : SymbolLinks
+
+        target?: Symbol;
+>target : Symbol
+>Symbol : Symbol
+
+        type?: Type;
+>type : Type
+>Type : Type
+
+        declaredType?: Type;
+>declaredType : Type
+>Type : Type
+
+        mapper?: TypeMapper;
+>mapper : TypeMapper
+>TypeMapper : TypeMapper
+
+        referenced?: boolean;
+>referenced : boolean
+
+        exportAssignSymbol?: Symbol;
+>exportAssignSymbol : Symbol
+>Symbol : Symbol
+
+        unionType?: UnionType;
+>unionType : UnionType
+>UnionType : UnionType
+    }
+    interface TransientSymbol extends Symbol, SymbolLinks {
+>TransientSymbol : TransientSymbol
+>Symbol : Symbol
+>SymbolLinks : SymbolLinks
+    }
+    interface SymbolTable {
+>SymbolTable : SymbolTable
+
+        [index: string]: Symbol;
+>index : string
+>Symbol : Symbol
+    }
+    const enum NodeCheckFlags {
+>NodeCheckFlags : NodeCheckFlags
+
+        TypeChecked = 1,
+>TypeChecked : NodeCheckFlags
+
+        LexicalThis = 2,
+>LexicalThis : NodeCheckFlags
+
+        CaptureThis = 4,
+>CaptureThis : NodeCheckFlags
+
+        EmitExtends = 8,
+>EmitExtends : NodeCheckFlags
+
+        SuperInstance = 16,
+>SuperInstance : NodeCheckFlags
+
+        SuperStatic = 32,
+>SuperStatic : NodeCheckFlags
+
+        ContextChecked = 64,
+>ContextChecked : NodeCheckFlags
+
+        EnumValuesComputed = 128,
+>EnumValuesComputed : NodeCheckFlags
+    }
+    interface NodeLinks {
+>NodeLinks : NodeLinks
+
+        resolvedType?: Type;
+>resolvedType : Type
+>Type : Type
+
+        resolvedSignature?: Signature;
+>resolvedSignature : Signature
+>Signature : Signature
+
+        resolvedSymbol?: Symbol;
+>resolvedSymbol : Symbol
+>Symbol : Symbol
+
+        flags?: NodeCheckFlags;
+>flags : NodeCheckFlags
+>NodeCheckFlags : NodeCheckFlags
+
+        enumMemberValue?: number;
+>enumMemberValue : number
+
+        isIllegalTypeReferenceInConstraint?: boolean;
+>isIllegalTypeReferenceInConstraint : boolean
+
+        isVisible?: boolean;
+>isVisible : boolean
+
+        localModuleName?: string;
+>localModuleName : string
+
+        assignmentChecks?: Map<boolean>;
+>assignmentChecks : Map<boolean>
+>Map : Map<T>
+    }
+    const enum TypeFlags {
+>TypeFlags : TypeFlags
+
+        Any = 1,
+>Any : TypeFlags
+
+        String = 2,
+>String : TypeFlags
+
+        Number = 4,
+>Number : TypeFlags
+
+        Boolean = 8,
+>Boolean : TypeFlags
+
+        Void = 16,
+>Void : TypeFlags
+
+        Undefined = 32,
+>Undefined : TypeFlags
+
+        Null = 64,
+>Null : TypeFlags
+
+        Enum = 128,
+>Enum : TypeFlags
+
+        StringLiteral = 256,
+>StringLiteral : TypeFlags
+
+        TypeParameter = 512,
+>TypeParameter : TypeFlags
+
+        Class = 1024,
+>Class : TypeFlags
+
+        Interface = 2048,
+>Interface : TypeFlags
+
+        Reference = 4096,
+>Reference : TypeFlags
+
+        Tuple = 8192,
+>Tuple : TypeFlags
+
+        Union = 16384,
+>Union : TypeFlags
+
+        Anonymous = 32768,
+>Anonymous : TypeFlags
+
+        FromSignature = 65536,
+>FromSignature : TypeFlags
+
+        Intrinsic = 127,
+>Intrinsic : TypeFlags
+
+        StringLike = 258,
+>StringLike : TypeFlags
+
+        NumberLike = 132,
+>NumberLike : TypeFlags
+
+        ObjectType = 48128,
+>ObjectType : TypeFlags
+    }
+    interface Type {
+>Type : Type
+
+        flags: TypeFlags;
+>flags : TypeFlags
+>TypeFlags : TypeFlags
+
+        id: number;
+>id : number
+
+        symbol?: Symbol;
+>symbol : Symbol
+>Symbol : Symbol
+    }
+    interface IntrinsicType extends Type {
+>IntrinsicType : IntrinsicType
+>Type : Type
+
+        intrinsicName: string;
+>intrinsicName : string
+    }
+    interface StringLiteralType extends Type {
+>StringLiteralType : StringLiteralType
+>Type : Type
+
+        text: string;
+>text : string
+    }
+    interface ObjectType extends Type {
+>ObjectType : ObjectType
+>Type : Type
+    }
+    interface InterfaceType extends ObjectType {
+>InterfaceType : InterfaceType
+>ObjectType : ObjectType
+
+        typeParameters: TypeParameter[];
+>typeParameters : TypeParameter[]
+>TypeParameter : TypeParameter
+
+        baseTypes: ObjectType[];
+>baseTypes : ObjectType[]
+>ObjectType : ObjectType
+
+        declaredProperties: Symbol[];
+>declaredProperties : Symbol[]
+>Symbol : Symbol
+
+        declaredCallSignatures: Signature[];
+>declaredCallSignatures : Signature[]
+>Signature : Signature
+
+        declaredConstructSignatures: Signature[];
+>declaredConstructSignatures : Signature[]
+>Signature : Signature
+
+        declaredStringIndexType: Type;
+>declaredStringIndexType : Type
+>Type : Type
+
+        declaredNumberIndexType: Type;
+>declaredNumberIndexType : Type
+>Type : Type
+    }
+    interface TypeReference extends ObjectType {
+>TypeReference : TypeReference
+>ObjectType : ObjectType
+
+        target: GenericType;
+>target : GenericType
+>GenericType : GenericType
+
+        typeArguments: Type[];
+>typeArguments : Type[]
+>Type : Type
+    }
+    interface GenericType extends InterfaceType, TypeReference {
+>GenericType : GenericType
+>InterfaceType : InterfaceType
+>TypeReference : TypeReference
+
+        instantiations: Map<TypeReference>;
+>instantiations : Map<TypeReference>
+>Map : Map<T>
+>TypeReference : TypeReference
+
+        openReferenceTargets: GenericType[];
+>openReferenceTargets : GenericType[]
+>GenericType : GenericType
+
+        openReferenceChecks: Map<boolean>;
+>openReferenceChecks : Map<boolean>
+>Map : Map<T>
+    }
+    interface TupleType extends ObjectType {
+>TupleType : TupleType
+>ObjectType : ObjectType
+
+        elementTypes: Type[];
+>elementTypes : Type[]
+>Type : Type
+
+        baseArrayType: TypeReference;
+>baseArrayType : TypeReference
+>TypeReference : TypeReference
+    }
+    interface UnionType extends Type {
+>UnionType : UnionType
+>Type : Type
+
+        types: Type[];
+>types : Type[]
+>Type : Type
+
+        resolvedProperties: SymbolTable;
+>resolvedProperties : SymbolTable
+>SymbolTable : SymbolTable
+    }
+    interface ResolvedType extends ObjectType, UnionType {
+>ResolvedType : ResolvedType
+>ObjectType : ObjectType
+>UnionType : UnionType
+
+        members: SymbolTable;
+>members : SymbolTable
+>SymbolTable : SymbolTable
+
+        properties: Symbol[];
+>properties : Symbol[]
+>Symbol : Symbol
+
+        callSignatures: Signature[];
+>callSignatures : Signature[]
+>Signature : Signature
+
+        constructSignatures: Signature[];
+>constructSignatures : Signature[]
+>Signature : Signature
+
+        stringIndexType: Type;
+>stringIndexType : Type
+>Type : Type
+
+        numberIndexType: Type;
+>numberIndexType : Type
+>Type : Type
+    }
+    interface TypeParameter extends Type {
+>TypeParameter : TypeParameter
+>Type : Type
+
+        constraint: Type;
+>constraint : Type
+>Type : Type
+
+        target?: TypeParameter;
+>target : TypeParameter
+>TypeParameter : TypeParameter
+
+        mapper?: TypeMapper;
+>mapper : TypeMapper
+>TypeMapper : TypeMapper
+    }
+    const enum SignatureKind {
+>SignatureKind : SignatureKind
+
+        Call = 0,
+>Call : SignatureKind
+
+        Construct = 1,
+>Construct : SignatureKind
+    }
+    interface Signature {
+>Signature : Signature
+
+        declaration: SignatureDeclaration;
+>declaration : SignatureDeclaration
+>SignatureDeclaration : SignatureDeclaration
+
+        typeParameters: TypeParameter[];
+>typeParameters : TypeParameter[]
+>TypeParameter : TypeParameter
+
+        parameters: Symbol[];
+>parameters : Symbol[]
+>Symbol : Symbol
+
+        resolvedReturnType: Type;
+>resolvedReturnType : Type
+>Type : Type
+
+        minArgumentCount: number;
+>minArgumentCount : number
+
+        hasRestParameter: boolean;
+>hasRestParameter : boolean
+
+        hasStringLiterals: boolean;
+>hasStringLiterals : boolean
+
+        target?: Signature;
+>target : Signature
+>Signature : Signature
+
+        mapper?: TypeMapper;
+>mapper : TypeMapper
+>TypeMapper : TypeMapper
+
+        unionSignatures?: Signature[];
+>unionSignatures : Signature[]
+>Signature : Signature
+
+        erasedSignatureCache?: Signature;
+>erasedSignatureCache : Signature
+>Signature : Signature
+
+        isolatedSignatureType?: ObjectType;
+>isolatedSignatureType : ObjectType
+>ObjectType : ObjectType
+    }
+    const enum IndexKind {
+>IndexKind : IndexKind
+
+        String = 0,
+>String : IndexKind
+
+        Number = 1,
+>Number : IndexKind
+    }
+    interface TypeMapper {
+>TypeMapper : TypeMapper
+
+        (t: Type): Type;
+>t : Type
+>Type : Type
+>Type : Type
+    }
+    interface TypeInferences {
+>TypeInferences : TypeInferences
+
+        primary: Type[];
+>primary : Type[]
+>Type : Type
+
+        secondary: Type[];
+>secondary : Type[]
+>Type : Type
+    }
+    interface InferenceContext {
+>InferenceContext : InferenceContext
+
+        typeParameters: TypeParameter[];
+>typeParameters : TypeParameter[]
+>TypeParameter : TypeParameter
+
+        inferUnionTypes: boolean;
+>inferUnionTypes : boolean
+
+        inferences: TypeInferences[];
+>inferences : TypeInferences[]
+>TypeInferences : TypeInferences
+
+        inferredTypes: Type[];
+>inferredTypes : Type[]
+>Type : Type
+
+        failedTypeParameterIndex?: number;
+>failedTypeParameterIndex : number
+    }
+    interface DiagnosticMessage {
+>DiagnosticMessage : DiagnosticMessage
+
+        key: string;
+>key : string
+
+        category: DiagnosticCategory;
+>category : DiagnosticCategory
+>DiagnosticCategory : DiagnosticCategory
+
+        code: number;
+>code : number
+
+        isEarly?: boolean;
+>isEarly : boolean
+    }
+    interface DiagnosticMessageChain {
+>DiagnosticMessageChain : DiagnosticMessageChain
+
+        messageText: string;
+>messageText : string
+
+        category: DiagnosticCategory;
+>category : DiagnosticCategory
+>DiagnosticCategory : DiagnosticCategory
+
+        code: number;
+>code : number
+
+        next?: DiagnosticMessageChain;
+>next : DiagnosticMessageChain
+>DiagnosticMessageChain : DiagnosticMessageChain
+    }
+    interface Diagnostic {
+>Diagnostic : Diagnostic
+
+        file: SourceFile;
+>file : SourceFile
+>SourceFile : SourceFile
+
+        start: number;
+>start : number
+
+        length: number;
+>length : number
+
+        messageText: string;
+>messageText : string
+
+        category: DiagnosticCategory;
+>category : DiagnosticCategory
+>DiagnosticCategory : DiagnosticCategory
+
+        code: number;
+>code : number
+
+        /**
+          * Early error - any error (can be produced at parsing\binding\typechecking step) that blocks emit
+          */
+        isEarly?: boolean;
+>isEarly : boolean
+    }
+    enum DiagnosticCategory {
+>DiagnosticCategory : DiagnosticCategory
+
+        Warning = 0,
+>Warning : DiagnosticCategory
+
+        Error = 1,
+>Error : DiagnosticCategory
+
+        Message = 2,
+>Message : DiagnosticCategory
+    }
+    interface CompilerOptions {
+>CompilerOptions : CompilerOptions
+
+        charset?: string;
+>charset : string
+
+        codepage?: number;
+>codepage : number
+
+        declaration?: boolean;
+>declaration : boolean
+
+        diagnostics?: boolean;
+>diagnostics : boolean
+
+        emitBOM?: boolean;
+>emitBOM : boolean
+
+        help?: boolean;
+>help : boolean
+
+        locale?: string;
+>locale : string
+
+        mapRoot?: string;
+>mapRoot : string
+
+        module?: ModuleKind;
+>module : ModuleKind
+>ModuleKind : ModuleKind
+
+        noEmitOnError?: boolean;
+>noEmitOnError : boolean
+
+        noErrorTruncation?: boolean;
+>noErrorTruncation : boolean
+
+        noImplicitAny?: boolean;
+>noImplicitAny : boolean
+
+        noLib?: boolean;
+>noLib : boolean
+
+        noLibCheck?: boolean;
+>noLibCheck : boolean
+
+        noResolve?: boolean;
+>noResolve : boolean
+
+        out?: string;
+>out : string
+
+        outDir?: string;
+>outDir : string
+
+        removeComments?: boolean;
+>removeComments : boolean
+
+        sourceMap?: boolean;
+>sourceMap : boolean
+
+        sourceRoot?: string;
+>sourceRoot : string
+
+        target?: ScriptTarget;
+>target : ScriptTarget
+>ScriptTarget : ScriptTarget
+
+        version?: boolean;
+>version : boolean
+
+        watch?: boolean;
+>watch : boolean
+
+        preserveConstEnums?: boolean;
+>preserveConstEnums : boolean
+
+        allowNonTsExtensions?: boolean;
+>allowNonTsExtensions : boolean
+
+        [option: string]: string | number | boolean;
+>option : string
+    }
+    const enum ModuleKind {
+>ModuleKind : ModuleKind
+
+        None = 0,
+>None : ModuleKind
+
+        CommonJS = 1,
+>CommonJS : ModuleKind
+
+        AMD = 2,
+>AMD : ModuleKind
+    }
+    interface LineAndCharacter {
+>LineAndCharacter : LineAndCharacter
+
+        line: number;
+>line : number
+
+        character: number;
+>character : number
+    }
+    const enum ScriptTarget {
+>ScriptTarget : ScriptTarget
+
+        ES3 = 0,
+>ES3 : ScriptTarget
+
+        ES5 = 1,
+>ES5 : ScriptTarget
+
+        ES6 = 2,
+>ES6 : ScriptTarget
+
+        Latest = 2,
+>Latest : ScriptTarget
+    }
+    interface ParsedCommandLine {
+>ParsedCommandLine : ParsedCommandLine
+
+        options: CompilerOptions;
+>options : CompilerOptions
+>CompilerOptions : CompilerOptions
+
+        filenames: string[];
+>filenames : string[]
+
+        errors: Diagnostic[];
+>errors : Diagnostic[]
+>Diagnostic : Diagnostic
+    }
+    interface CommandLineOption {
+>CommandLineOption : CommandLineOption
+
+        name: string;
+>name : string
+
+        type: string | Map<number>;
+>type : string | Map<number>
+>Map : Map<T>
+
+        shortName?: string;
+>shortName : string
+
+        description?: DiagnosticMessage;
+>description : DiagnosticMessage
+>DiagnosticMessage : DiagnosticMessage
+
+        paramName?: DiagnosticMessage;
+>paramName : DiagnosticMessage
+>DiagnosticMessage : DiagnosticMessage
+
+        error?: DiagnosticMessage;
+>error : DiagnosticMessage
+>DiagnosticMessage : DiagnosticMessage
+    }
+    const enum CharacterCodes {
+>CharacterCodes : CharacterCodes
+
+        nullCharacter = 0,
+>nullCharacter : CharacterCodes
+
+        maxAsciiCharacter = 127,
+>maxAsciiCharacter : CharacterCodes
+
+        lineFeed = 10,
+>lineFeed : CharacterCodes
+
+        carriageReturn = 13,
+>carriageReturn : CharacterCodes
+
+        lineSeparator = 8232,
+>lineSeparator : CharacterCodes
+
+        paragraphSeparator = 8233,
+>paragraphSeparator : CharacterCodes
+
+        nextLine = 133,
+>nextLine : CharacterCodes
+
+        space = 32,
+>space : CharacterCodes
+
+        nonBreakingSpace = 160,
+>nonBreakingSpace : CharacterCodes
+
+        enQuad = 8192,
+>enQuad : CharacterCodes
+
+        emQuad = 8193,
+>emQuad : CharacterCodes
+
+        enSpace = 8194,
+>enSpace : CharacterCodes
+
+        emSpace = 8195,
+>emSpace : CharacterCodes
+
+        threePerEmSpace = 8196,
+>threePerEmSpace : CharacterCodes
+
+        fourPerEmSpace = 8197,
+>fourPerEmSpace : CharacterCodes
+
+        sixPerEmSpace = 8198,
+>sixPerEmSpace : CharacterCodes
+
+        figureSpace = 8199,
+>figureSpace : CharacterCodes
+
+        punctuationSpace = 8200,
+>punctuationSpace : CharacterCodes
+
+        thinSpace = 8201,
+>thinSpace : CharacterCodes
+
+        hairSpace = 8202,
+>hairSpace : CharacterCodes
+
+        zeroWidthSpace = 8203,
+>zeroWidthSpace : CharacterCodes
+
+        narrowNoBreakSpace = 8239,
+>narrowNoBreakSpace : CharacterCodes
+
+        ideographicSpace = 12288,
+>ideographicSpace : CharacterCodes
+
+        mathematicalSpace = 8287,
+>mathematicalSpace : CharacterCodes
+
+        ogham = 5760,
+>ogham : CharacterCodes
+
+        _ = 95,
+>_ : CharacterCodes
+
+        $ = 36,
+>$ : CharacterCodes
+
+        _0 = 48,
+>_0 : CharacterCodes
+
+        _1 = 49,
+>_1 : CharacterCodes
+
+        _2 = 50,
+>_2 : CharacterCodes
+
+        _3 = 51,
+>_3 : CharacterCodes
+
+        _4 = 52,
+>_4 : CharacterCodes
+
+        _5 = 53,
+>_5 : CharacterCodes
+
+        _6 = 54,
+>_6 : CharacterCodes
+
+        _7 = 55,
+>_7 : CharacterCodes
+
+        _8 = 56,
+>_8 : CharacterCodes
+
+        _9 = 57,
+>_9 : CharacterCodes
+
+        a = 97,
+>a : CharacterCodes
+
+        b = 98,
+>b : CharacterCodes
+
+        c = 99,
+>c : CharacterCodes
+
+        d = 100,
+>d : CharacterCodes
+
+        e = 101,
+>e : CharacterCodes
+
+        f = 102,
+>f : CharacterCodes
+
+        g = 103,
+>g : CharacterCodes
+
+        h = 104,
+>h : CharacterCodes
+
+        i = 105,
+>i : CharacterCodes
+
+        j = 106,
+>j : CharacterCodes
+
+        k = 107,
+>k : CharacterCodes
+
+        l = 108,
+>l : CharacterCodes
+
+        m = 109,
+>m : CharacterCodes
+
+        n = 110,
+>n : CharacterCodes
+
+        o = 111,
+>o : CharacterCodes
+
+        p = 112,
+>p : CharacterCodes
+
+        q = 113,
+>q : CharacterCodes
+
+        r = 114,
+>r : CharacterCodes
+
+        s = 115,
+>s : CharacterCodes
+
+        t = 116,
+>t : CharacterCodes
+
+        u = 117,
+>u : CharacterCodes
+
+        v = 118,
+>v : CharacterCodes
+
+        w = 119,
+>w : CharacterCodes
+
+        x = 120,
+>x : CharacterCodes
+
+        y = 121,
+>y : CharacterCodes
+
+        z = 122,
+>z : CharacterCodes
+
+        A = 65,
+>A : CharacterCodes
+
+        B = 66,
+>B : CharacterCodes
+
+        C = 67,
+>C : CharacterCodes
+
+        D = 68,
+>D : CharacterCodes
+
+        E = 69,
+>E : CharacterCodes
+
+        F = 70,
+>F : CharacterCodes
+
+        G = 71,
+>G : CharacterCodes
+
+        H = 72,
+>H : CharacterCodes
+
+        I = 73,
+>I : CharacterCodes
+
+        J = 74,
+>J : CharacterCodes
+
+        K = 75,
+>K : CharacterCodes
+
+        L = 76,
+>L : CharacterCodes
+
+        M = 77,
+>M : CharacterCodes
+
+        N = 78,
+>N : CharacterCodes
+
+        O = 79,
+>O : CharacterCodes
+
+        P = 80,
+>P : CharacterCodes
+
+        Q = 81,
+>Q : CharacterCodes
+
+        R = 82,
+>R : CharacterCodes
+
+        S = 83,
+>S : CharacterCodes
+
+        T = 84,
+>T : CharacterCodes
+
+        U = 85,
+>U : CharacterCodes
+
+        V = 86,
+>V : CharacterCodes
+
+        W = 87,
+>W : CharacterCodes
+
+        X = 88,
+>X : CharacterCodes
+
+        Y = 89,
+>Y : CharacterCodes
+
+        Z = 90,
+>Z : CharacterCodes
+
+        ampersand = 38,
+>ampersand : CharacterCodes
+
+        asterisk = 42,
+>asterisk : CharacterCodes
+
+        at = 64,
+>at : CharacterCodes
+
+        backslash = 92,
+>backslash : CharacterCodes
+
+        backtick = 96,
+>backtick : CharacterCodes
+
+        bar = 124,
+>bar : CharacterCodes
+
+        caret = 94,
+>caret : CharacterCodes
+
+        closeBrace = 125,
+>closeBrace : CharacterCodes
+
+        closeBracket = 93,
+>closeBracket : CharacterCodes
+
+        closeParen = 41,
+>closeParen : CharacterCodes
+
+        colon = 58,
+>colon : CharacterCodes
+
+        comma = 44,
+>comma : CharacterCodes
+
+        dot = 46,
+>dot : CharacterCodes
+
+        doubleQuote = 34,
+>doubleQuote : CharacterCodes
+
+        equals = 61,
+>equals : CharacterCodes
+
+        exclamation = 33,
+>exclamation : CharacterCodes
+
+        greaterThan = 62,
+>greaterThan : CharacterCodes
+
+        lessThan = 60,
+>lessThan : CharacterCodes
+
+        minus = 45,
+>minus : CharacterCodes
+
+        openBrace = 123,
+>openBrace : CharacterCodes
+
+        openBracket = 91,
+>openBracket : CharacterCodes
+
+        openParen = 40,
+>openParen : CharacterCodes
+
+        percent = 37,
+>percent : CharacterCodes
+
+        plus = 43,
+>plus : CharacterCodes
+
+        question = 63,
+>question : CharacterCodes
+
+        semicolon = 59,
+>semicolon : CharacterCodes
+
+        singleQuote = 39,
+>singleQuote : CharacterCodes
+
+        slash = 47,
+>slash : CharacterCodes
+
+        tilde = 126,
+>tilde : CharacterCodes
+
+        backspace = 8,
+>backspace : CharacterCodes
+
+        formFeed = 12,
+>formFeed : CharacterCodes
+
+        byteOrderMark = 65279,
+>byteOrderMark : CharacterCodes
+
+        tab = 9,
+>tab : CharacterCodes
+
+        verticalTab = 11,
+>verticalTab : CharacterCodes
+    }
+    interface CancellationToken {
+>CancellationToken : CancellationToken
+
+        isCancellationRequested(): boolean;
+>isCancellationRequested : () => boolean
+    }
+    interface CompilerHost {
+>CompilerHost : CompilerHost
+
+        getSourceFile(filename: string, languageVersion: ScriptTarget, onError?: (message: string) => void): SourceFile;
+>getSourceFile : (filename: string, languageVersion: ScriptTarget, onError?: (message: string) => void) => SourceFile
+>filename : string
+>languageVersion : ScriptTarget
+>ScriptTarget : ScriptTarget
+>onError : (message: string) => void
+>message : string
+>SourceFile : SourceFile
+
+        getDefaultLibFilename(options: CompilerOptions): string;
+>getDefaultLibFilename : (options: CompilerOptions) => string
+>options : CompilerOptions
+>CompilerOptions : CompilerOptions
+
+        getCancellationToken?(): CancellationToken;
+>getCancellationToken : () => CancellationToken
+>CancellationToken : CancellationToken
+
+        writeFile(filename: string, data: string, writeByteOrderMark: boolean, onError?: (message: string) => void): void;
+>writeFile : (filename: string, data: string, writeByteOrderMark: boolean, onError?: (message: string) => void) => void
+>filename : string
+>data : string
+>writeByteOrderMark : boolean
+>onError : (message: string) => void
+>message : string
+
+        getCurrentDirectory(): string;
+>getCurrentDirectory : () => string
+
+        getCanonicalFileName(fileName: string): string;
+>getCanonicalFileName : (fileName: string) => string
+>fileName : string
+
+        useCaseSensitiveFileNames(): boolean;
+>useCaseSensitiveFileNames : () => boolean
+
+        getNewLine(): string;
+>getNewLine : () => string
+    }
+}
+declare module "typescript" {
+    interface ErrorCallback {
+>ErrorCallback : ErrorCallback
+
+        (message: DiagnosticMessage): void;
+>message : DiagnosticMessage
+>DiagnosticMessage : DiagnosticMessage
+    }
+    interface CommentCallback {
+>CommentCallback : CommentCallback
+
+        (pos: number, end: number): void;
+>pos : number
+>end : number
+    }
+    interface Scanner {
+>Scanner : Scanner
+
+        getStartPos(): number;
+>getStartPos : () => number
+
+        getToken(): SyntaxKind;
+>getToken : () => SyntaxKind
+>SyntaxKind : SyntaxKind
+
+        getTextPos(): number;
+>getTextPos : () => number
+
+        getTokenPos(): number;
+>getTokenPos : () => number
+
+        getTokenText(): string;
+>getTokenText : () => string
+
+        getTokenValue(): string;
+>getTokenValue : () => string
+
+        hasPrecedingLineBreak(): boolean;
+>hasPrecedingLineBreak : () => boolean
+
+        isIdentifier(): boolean;
+>isIdentifier : () => boolean
+
+        isReservedWord(): boolean;
+>isReservedWord : () => boolean
+
+        isUnterminated(): boolean;
+>isUnterminated : () => boolean
+
+        reScanGreaterToken(): SyntaxKind;
+>reScanGreaterToken : () => SyntaxKind
+>SyntaxKind : SyntaxKind
+
+        reScanSlashToken(): SyntaxKind;
+>reScanSlashToken : () => SyntaxKind
+>SyntaxKind : SyntaxKind
+
+        reScanTemplateToken(): SyntaxKind;
+>reScanTemplateToken : () => SyntaxKind
+>SyntaxKind : SyntaxKind
+
+        scan(): SyntaxKind;
+>scan : () => SyntaxKind
+>SyntaxKind : SyntaxKind
+
+        setText(text: string): void;
+>setText : (text: string) => void
+>text : string
+
+        setTextPos(textPos: number): void;
+>setTextPos : (textPos: number) => void
+>textPos : number
+
+        lookAhead<T>(callback: () => T): T;
+>lookAhead : <T>(callback: () => T) => T
+>T : T
+>callback : () => T
+>T : T
+>T : T
+
+        tryScan<T>(callback: () => T): T;
+>tryScan : <T>(callback: () => T) => T
+>T : T
+>callback : () => T
+>T : T
+>T : T
+    }
+    function tokenToString(t: SyntaxKind): string;
+>tokenToString : (t: SyntaxKind) => string
+>t : SyntaxKind
+>SyntaxKind : SyntaxKind
+
+    function computeLineStarts(text: string): number[];
+>computeLineStarts : (text: string) => number[]
+>text : string
+
+    function getPositionFromLineAndCharacter(lineStarts: number[], line: number, character: number): number;
+>getPositionFromLineAndCharacter : (lineStarts: number[], line: number, character: number) => number
+>lineStarts : number[]
+>line : number
+>character : number
+
+    function getLineAndCharacterOfPosition(lineStarts: number[], position: number): {
+>getLineAndCharacterOfPosition : (lineStarts: number[], position: number) => { line: number; character: number; }
+>lineStarts : number[]
+>position : number
+
+        line: number;
+>line : number
+
+        character: number;
+>character : number
+
+    };
+    function positionToLineAndCharacter(text: string, pos: number): {
+>positionToLineAndCharacter : (text: string, pos: number) => { line: number; character: number; }
+>text : string
+>pos : number
+
+        line: number;
+>line : number
+
+        character: number;
+>character : number
+
+    };
+    function isWhiteSpace(ch: number): boolean;
+>isWhiteSpace : (ch: number) => boolean
+>ch : number
+
+    function isLineBreak(ch: number): boolean;
+>isLineBreak : (ch: number) => boolean
+>ch : number
+
+    function isOctalDigit(ch: number): boolean;
+>isOctalDigit : (ch: number) => boolean
+>ch : number
+
+    function skipTrivia(text: string, pos: number, stopAfterLineBreak?: boolean): number;
+>skipTrivia : (text: string, pos: number, stopAfterLineBreak?: boolean) => number
+>text : string
+>pos : number
+>stopAfterLineBreak : boolean
+
+    function getLeadingCommentRanges(text: string, pos: number): CommentRange[];
+>getLeadingCommentRanges : (text: string, pos: number) => CommentRange[]
+>text : string
+>pos : number
+>CommentRange : CommentRange
+
+    function getTrailingCommentRanges(text: string, pos: number): CommentRange[];
+>getTrailingCommentRanges : (text: string, pos: number) => CommentRange[]
+>text : string
+>pos : number
+>CommentRange : CommentRange
+
+    function isIdentifierStart(ch: number, languageVersion: ScriptTarget): boolean;
+>isIdentifierStart : (ch: number, languageVersion: ScriptTarget) => boolean
+>ch : number
+>languageVersion : ScriptTarget
+>ScriptTarget : ScriptTarget
+
+    function isIdentifierPart(ch: number, languageVersion: ScriptTarget): boolean;
+>isIdentifierPart : (ch: number, languageVersion: ScriptTarget) => boolean
+>ch : number
+>languageVersion : ScriptTarget
+>ScriptTarget : ScriptTarget
+
+    function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean, text?: string, onError?: ErrorCallback): Scanner;
+>createScanner : (languageVersion: ScriptTarget, skipTrivia: boolean, text?: string, onError?: ErrorCallback) => Scanner
+>languageVersion : ScriptTarget
+>ScriptTarget : ScriptTarget
+>skipTrivia : boolean
+>text : string
+>onError : ErrorCallback
+>ErrorCallback : ErrorCallback
+>Scanner : Scanner
+}
+declare module "typescript" {
+    function getNodeConstructor(kind: SyntaxKind): new () => Node;
+>getNodeConstructor : (kind: SyntaxKind) => new () => Node
+>kind : SyntaxKind
+>SyntaxKind : SyntaxKind
+>Node : Node
+
+    function forEachChild<T>(node: Node, cbNode: (node: Node) => T, cbNodes?: (nodes: Node[]) => T): T;
+>forEachChild : <T>(node: Node, cbNode: (node: Node) => T, cbNodes?: (nodes: Node[]) => T) => T
+>T : T
+>node : Node
+>Node : Node
+>cbNode : (node: Node) => T
+>node : Node
+>Node : Node
+>T : T
+>cbNodes : (nodes: Node[]) => T
+>nodes : Node[]
+>Node : Node
+>T : T
+>T : T
+
+    function createCompilerHost(options: CompilerOptions): CompilerHost;
+>createCompilerHost : (options: CompilerOptions) => CompilerHost
+>options : CompilerOptions
+>CompilerOptions : CompilerOptions
+>CompilerHost : CompilerHost
+
+    function createSourceFile(filename: string, sourceText: string, languageVersion: ScriptTarget, version: string, isOpen?: boolean): SourceFile;
+>createSourceFile : (filename: string, sourceText: string, languageVersion: ScriptTarget, version: string, isOpen?: boolean) => SourceFile
+>filename : string
+>sourceText : string
+>languageVersion : ScriptTarget
+>ScriptTarget : ScriptTarget
+>version : string
+>isOpen : boolean
+>SourceFile : SourceFile
+
+    function createProgram(rootNames: string[], options: CompilerOptions, host: CompilerHost): Program;
+>createProgram : (rootNames: string[], options: CompilerOptions, host: CompilerHost) => Program
+>rootNames : string[]
+>options : CompilerOptions
+>CompilerOptions : CompilerOptions
+>host : CompilerHost
+>CompilerHost : CompilerHost
+>Program : Program
+}
+declare module "typescript" {
+    function createTypeChecker(program: Program, fullTypeCheck: boolean): TypeChecker;
+>createTypeChecker : (program: Program, fullTypeCheck: boolean) => TypeChecker
+>program : Program
+>Program : Program
+>fullTypeCheck : boolean
+>TypeChecker : TypeChecker
+}
+declare module "typescript" {
+    var servicesVersion: string;
+>servicesVersion : string
+
+    interface Node {
+>Node : Node
+
+        getSourceFile(): SourceFile;
+>getSourceFile : () => SourceFile
+>SourceFile : SourceFile
+
+        getChildCount(sourceFile?: SourceFile): number;
+>getChildCount : (sourceFile?: SourceFile) => number
+>sourceFile : SourceFile
+>SourceFile : SourceFile
+
+        getChildAt(index: number, sourceFile?: SourceFile): Node;
+>getChildAt : (index: number, sourceFile?: SourceFile) => Node
+>index : number
+>sourceFile : SourceFile
+>SourceFile : SourceFile
+>Node : Node
+
+        getChildren(sourceFile?: SourceFile): Node[];
+>getChildren : (sourceFile?: SourceFile) => Node[]
+>sourceFile : SourceFile
+>SourceFile : SourceFile
+>Node : Node
+
+        getStart(sourceFile?: SourceFile): number;
+>getStart : (sourceFile?: SourceFile) => number
+>sourceFile : SourceFile
+>SourceFile : SourceFile
+
+        getFullStart(): number;
+>getFullStart : () => number
+
+        getEnd(): number;
+>getEnd : () => number
+
+        getWidth(sourceFile?: SourceFile): number;
+>getWidth : (sourceFile?: SourceFile) => number
+>sourceFile : SourceFile
+>SourceFile : SourceFile
+
+        getFullWidth(): number;
+>getFullWidth : () => number
+
+        getLeadingTriviaWidth(sourceFile?: SourceFile): number;
+>getLeadingTriviaWidth : (sourceFile?: SourceFile) => number
+>sourceFile : SourceFile
+>SourceFile : SourceFile
+
+        getFullText(sourceFile?: SourceFile): string;
+>getFullText : (sourceFile?: SourceFile) => string
+>sourceFile : SourceFile
+>SourceFile : SourceFile
+
+        getText(sourceFile?: SourceFile): string;
+>getText : (sourceFile?: SourceFile) => string
+>sourceFile : SourceFile
+>SourceFile : SourceFile
+
+        getFirstToken(sourceFile?: SourceFile): Node;
+>getFirstToken : (sourceFile?: SourceFile) => Node
+>sourceFile : SourceFile
+>SourceFile : SourceFile
+>Node : Node
+
+        getLastToken(sourceFile?: SourceFile): Node;
+>getLastToken : (sourceFile?: SourceFile) => Node
+>sourceFile : SourceFile
+>SourceFile : SourceFile
+>Node : Node
+    }
+    interface Symbol {
+>Symbol : Symbol
+
+        getFlags(): SymbolFlags;
+>getFlags : () => SymbolFlags
+>SymbolFlags : SymbolFlags
+
+        getName(): string;
+>getName : () => string
+
+        getDeclarations(): Declaration[];
+>getDeclarations : () => Declaration[]
+>Declaration : Declaration
+
+        getDocumentationComment(): SymbolDisplayPart[];
+>getDocumentationComment : () => SymbolDisplayPart[]
+>SymbolDisplayPart : SymbolDisplayPart
+    }
+    interface Type {
+>Type : Type
+
+        getFlags(): TypeFlags;
+>getFlags : () => TypeFlags
+>TypeFlags : TypeFlags
+
+        getSymbol(): Symbol;
+>getSymbol : () => Symbol
+>Symbol : Symbol
+
+        getProperties(): Symbol[];
+>getProperties : () => Symbol[]
+>Symbol : Symbol
+
+        getProperty(propertyName: string): Symbol;
+>getProperty : (propertyName: string) => Symbol
+>propertyName : string
+>Symbol : Symbol
+
+        getApparentProperties(): Symbol[];
+>getApparentProperties : () => Symbol[]
+>Symbol : Symbol
+
+        getCallSignatures(): Signature[];
+>getCallSignatures : () => Signature[]
+>Signature : Signature
+
+        getConstructSignatures(): Signature[];
+>getConstructSignatures : () => Signature[]
+>Signature : Signature
+
+        getStringIndexType(): Type;
+>getStringIndexType : () => Type
+>Type : Type
+
+        getNumberIndexType(): Type;
+>getNumberIndexType : () => Type
+>Type : Type
+    }
+    interface Signature {
+>Signature : Signature
+
+        getDeclaration(): SignatureDeclaration;
+>getDeclaration : () => SignatureDeclaration
+>SignatureDeclaration : SignatureDeclaration
+
+        getTypeParameters(): Type[];
+>getTypeParameters : () => Type[]
+>Type : Type
+
+        getParameters(): Symbol[];
+>getParameters : () => Symbol[]
+>Symbol : Symbol
+
+        getReturnType(): Type;
+>getReturnType : () => Type
+>Type : Type
+
+        getDocumentationComment(): SymbolDisplayPart[];
+>getDocumentationComment : () => SymbolDisplayPart[]
+>SymbolDisplayPart : SymbolDisplayPart
+    }
+    interface SourceFile {
+>SourceFile : SourceFile
+
+        getScriptSnapshot(): IScriptSnapshot;
+>getScriptSnapshot : () => IScriptSnapshot
+>IScriptSnapshot : IScriptSnapshot
+
+        getNamedDeclarations(): Declaration[];
+>getNamedDeclarations : () => Declaration[]
+>Declaration : Declaration
+
+        update(scriptSnapshot: IScriptSnapshot, version: string, isOpen: boolean, textChangeRange: TextChangeRange): SourceFile;
+>update : (scriptSnapshot: IScriptSnapshot, version: string, isOpen: boolean, textChangeRange: TextChangeRange) => SourceFile
+>scriptSnapshot : IScriptSnapshot
+>IScriptSnapshot : IScriptSnapshot
+>version : string
+>isOpen : boolean
+>textChangeRange : TextChangeRange
+>TextChangeRange : TextChangeRange
+>SourceFile : SourceFile
+    }
+    /**
+     * Represents an immutable snapshot of a script at a specified time.Once acquired, the
+     * snapshot is observably immutable. i.e. the same calls with the same parameters will return
+     * the same values.
+     */
+    interface IScriptSnapshot {
+>IScriptSnapshot : IScriptSnapshot
+
+        /** Gets a portion of the script snapshot specified by [start, end). */
+        getText(start: number, end: number): string;
+>getText : (start: number, end: number) => string
+>start : number
+>end : number
+
+        /** Gets the length of this script snapshot. */
+        getLength(): number;
+>getLength : () => number
+
+        /**
+         * This call returns the array containing the start position of every line.
+         * i.e."[0, 10, 55]".  TODO: consider making this optional.  The language service could
+         * always determine this (albeit in a more expensive manner).
+         */
+        getLineStartPositions(): number[];
+>getLineStartPositions : () => number[]
+
+        /**
+         * Gets the TextChangeRange that describe how the text changed between this text and
+         * an older version.  This information is used by the incremental parser to determine
+         * what sections of the script need to be re-parsed.  'undefined' can be returned if the
+         * change range cannot be determined.  However, in that case, incremental parsing will
+         * not happen and the entire document will be re - parsed.
+         */
+        getChangeRange(oldSnapshot: IScriptSnapshot): TextChangeRange;
+>getChangeRange : (oldSnapshot: IScriptSnapshot) => TextChangeRange
+>oldSnapshot : IScriptSnapshot
+>IScriptSnapshot : IScriptSnapshot
+>TextChangeRange : TextChangeRange
+    }
+    module ScriptSnapshot {
+>ScriptSnapshot : typeof ScriptSnapshot
+
+        function fromString(text: string): IScriptSnapshot;
+>fromString : (text: string) => IScriptSnapshot
+>text : string
+>IScriptSnapshot : IScriptSnapshot
+    }
+    interface PreProcessedFileInfo {
+>PreProcessedFileInfo : PreProcessedFileInfo
+
+        referencedFiles: FileReference[];
+>referencedFiles : FileReference[]
+>FileReference : FileReference
+
+        importedFiles: FileReference[];
+>importedFiles : FileReference[]
+>FileReference : FileReference
+
+        isLibFile: boolean;
+>isLibFile : boolean
+    }
+    interface Logger {
+>Logger : Logger
+
+        log(s: string): void;
+>log : (s: string) => void
+>s : string
+    }
+    interface LanguageServiceHost extends Logger {
+>LanguageServiceHost : LanguageServiceHost
+>Logger : Logger
+
+        getCompilationSettings(): CompilerOptions;
+>getCompilationSettings : () => CompilerOptions
+>CompilerOptions : CompilerOptions
+
+        getScriptFileNames(): string[];
+>getScriptFileNames : () => string[]
+
+        getScriptVersion(fileName: string): string;
+>getScriptVersion : (fileName: string) => string
+>fileName : string
+
+        getScriptIsOpen(fileName: string): boolean;
+>getScriptIsOpen : (fileName: string) => boolean
+>fileName : string
+
+        getScriptSnapshot(fileName: string): IScriptSnapshot;
+>getScriptSnapshot : (fileName: string) => IScriptSnapshot
+>fileName : string
+>IScriptSnapshot : IScriptSnapshot
+
+        getLocalizedDiagnosticMessages?(): any;
+>getLocalizedDiagnosticMessages : () => any
+
+        getCancellationToken?(): CancellationToken;
+>getCancellationToken : () => CancellationToken
+>CancellationToken : CancellationToken
+
+        getCurrentDirectory(): string;
+>getCurrentDirectory : () => string
+
+        getDefaultLibFilename(options: CompilerOptions): string;
+>getDefaultLibFilename : (options: CompilerOptions) => string
+>options : CompilerOptions
+>CompilerOptions : CompilerOptions
+    }
+    interface LanguageService {
+>LanguageService : LanguageService
+
+        cleanupSemanticCache(): void;
+>cleanupSemanticCache : () => void
+
+        getSyntacticDiagnostics(fileName: string): Diagnostic[];
+>getSyntacticDiagnostics : (fileName: string) => Diagnostic[]
+>fileName : string
+>Diagnostic : Diagnostic
+
+        getSemanticDiagnostics(fileName: string): Diagnostic[];
+>getSemanticDiagnostics : (fileName: string) => Diagnostic[]
+>fileName : string
+>Diagnostic : Diagnostic
+
+        getCompilerOptionsDiagnostics(): Diagnostic[];
+>getCompilerOptionsDiagnostics : () => Diagnostic[]
+>Diagnostic : Diagnostic
+
+        getSyntacticClassifications(fileName: string, span: TextSpan): ClassifiedSpan[];
+>getSyntacticClassifications : (fileName: string, span: TextSpan) => ClassifiedSpan[]
+>fileName : string
+>span : TextSpan
+>TextSpan : TextSpan
+>ClassifiedSpan : ClassifiedSpan
+
+        getSemanticClassifications(fileName: string, span: TextSpan): ClassifiedSpan[];
+>getSemanticClassifications : (fileName: string, span: TextSpan) => ClassifiedSpan[]
+>fileName : string
+>span : TextSpan
+>TextSpan : TextSpan
+>ClassifiedSpan : ClassifiedSpan
+
+        getCompletionsAtPosition(fileName: string, position: number): CompletionInfo;
+>getCompletionsAtPosition : (fileName: string, position: number) => CompletionInfo
+>fileName : string
+>position : number
+>CompletionInfo : CompletionInfo
+
+        getCompletionEntryDetails(fileName: string, position: number, entryName: string): CompletionEntryDetails;
+>getCompletionEntryDetails : (fileName: string, position: number, entryName: string) => CompletionEntryDetails
+>fileName : string
+>position : number
+>entryName : string
+>CompletionEntryDetails : CompletionEntryDetails
+
+        getQuickInfoAtPosition(fileName: string, position: number): QuickInfo;
+>getQuickInfoAtPosition : (fileName: string, position: number) => QuickInfo
+>fileName : string
+>position : number
+>QuickInfo : QuickInfo
+
+        getNameOrDottedNameSpan(fileName: string, startPos: number, endPos: number): TextSpan;
+>getNameOrDottedNameSpan : (fileName: string, startPos: number, endPos: number) => TextSpan
+>fileName : string
+>startPos : number
+>endPos : number
+>TextSpan : TextSpan
+
+        getBreakpointStatementAtPosition(fileName: string, position: number): TextSpan;
+>getBreakpointStatementAtPosition : (fileName: string, position: number) => TextSpan
+>fileName : string
+>position : number
+>TextSpan : TextSpan
+
+        getSignatureHelpItems(fileName: string, position: number): SignatureHelpItems;
+>getSignatureHelpItems : (fileName: string, position: number) => SignatureHelpItems
+>fileName : string
+>position : number
+>SignatureHelpItems : SignatureHelpItems
+
+        getRenameInfo(fileName: string, position: number): RenameInfo;
+>getRenameInfo : (fileName: string, position: number) => RenameInfo
+>fileName : string
+>position : number
+>RenameInfo : RenameInfo
+
+        findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean): RenameLocation[];
+>findRenameLocations : (fileName: string, position: number, findInStrings: boolean, findInComments: boolean) => RenameLocation[]
+>fileName : string
+>position : number
+>findInStrings : boolean
+>findInComments : boolean
+>RenameLocation : RenameLocation
+
+        getDefinitionAtPosition(fileName: string, position: number): DefinitionInfo[];
+>getDefinitionAtPosition : (fileName: string, position: number) => DefinitionInfo[]
+>fileName : string
+>position : number
+>DefinitionInfo : DefinitionInfo
+
+        getReferencesAtPosition(fileName: string, position: number): ReferenceEntry[];
+>getReferencesAtPosition : (fileName: string, position: number) => ReferenceEntry[]
+>fileName : string
+>position : number
+>ReferenceEntry : ReferenceEntry
+
+        getOccurrencesAtPosition(fileName: string, position: number): ReferenceEntry[];
+>getOccurrencesAtPosition : (fileName: string, position: number) => ReferenceEntry[]
+>fileName : string
+>position : number
+>ReferenceEntry : ReferenceEntry
+
+        getNavigateToItems(searchValue: string): NavigateToItem[];
+>getNavigateToItems : (searchValue: string) => NavigateToItem[]
+>searchValue : string
+>NavigateToItem : NavigateToItem
+
+        getNavigationBarItems(fileName: string): NavigationBarItem[];
+>getNavigationBarItems : (fileName: string) => NavigationBarItem[]
+>fileName : string
+>NavigationBarItem : NavigationBarItem
+
+        getOutliningSpans(fileName: string): OutliningSpan[];
+>getOutliningSpans : (fileName: string) => OutliningSpan[]
+>fileName : string
+>OutliningSpan : OutliningSpan
+
+        getTodoComments(fileName: string, descriptors: TodoCommentDescriptor[]): TodoComment[];
+>getTodoComments : (fileName: string, descriptors: TodoCommentDescriptor[]) => TodoComment[]
+>fileName : string
+>descriptors : TodoCommentDescriptor[]
+>TodoCommentDescriptor : TodoCommentDescriptor
+>TodoComment : TodoComment
+
+        getBraceMatchingAtPosition(fileName: string, position: number): TextSpan[];
+>getBraceMatchingAtPosition : (fileName: string, position: number) => TextSpan[]
+>fileName : string
+>position : number
+>TextSpan : TextSpan
+
+        getIndentationAtPosition(fileName: string, position: number, options: EditorOptions): number;
+>getIndentationAtPosition : (fileName: string, position: number, options: EditorOptions) => number
+>fileName : string
+>position : number
+>options : EditorOptions
+>EditorOptions : EditorOptions
+
+        getFormattingEditsForRange(fileName: string, start: number, end: number, options: FormatCodeOptions): TextChange[];
+>getFormattingEditsForRange : (fileName: string, start: number, end: number, options: FormatCodeOptions) => TextChange[]
+>fileName : string
+>start : number
+>end : number
+>options : FormatCodeOptions
+>FormatCodeOptions : FormatCodeOptions
+>TextChange : TextChange
+
+        getFormattingEditsForDocument(fileName: string, options: FormatCodeOptions): TextChange[];
+>getFormattingEditsForDocument : (fileName: string, options: FormatCodeOptions) => TextChange[]
+>fileName : string
+>options : FormatCodeOptions
+>FormatCodeOptions : FormatCodeOptions
+>TextChange : TextChange
+
+        getFormattingEditsAfterKeystroke(fileName: string, position: number, key: string, options: FormatCodeOptions): TextChange[];
+>getFormattingEditsAfterKeystroke : (fileName: string, position: number, key: string, options: FormatCodeOptions) => TextChange[]
+>fileName : string
+>position : number
+>key : string
+>options : FormatCodeOptions
+>FormatCodeOptions : FormatCodeOptions
+>TextChange : TextChange
+
+        getEmitOutput(fileName: string): EmitOutput;
+>getEmitOutput : (fileName: string) => EmitOutput
+>fileName : string
+>EmitOutput : EmitOutput
+
+        getSourceFile(filename: string): SourceFile;
+>getSourceFile : (filename: string) => SourceFile
+>filename : string
+>SourceFile : SourceFile
+
+        dispose(): void;
+>dispose : () => void
+    }
+    class TextSpan {
+>TextSpan : TextSpan
+
+        private _start;
+>_start : any
+
+        private _length;
+>_length : any
+
+        /**
+            * Creates a TextSpan instance beginning with the position Start and having the Length
+            * specified with length.
+            */
+        constructor(start: number, length: number);
+>start : number
+>length : number
+
+        toJSON(key: any): any;
+>toJSON : (key: any) => any
+>key : any
+
+        start(): number;
+>start : () => number
+
+        length(): number;
+>length : () => number
+
+        end(): number;
+>end : () => number
+
+        isEmpty(): boolean;
+>isEmpty : () => boolean
+
+        /**
+            * Determines whether the position lies within the span. Returns true if the position is greater than or equal to Start and strictly less
+            * than End, otherwise false.
+            * @param position The position to check.
+            */
+        containsPosition(position: number): boolean;
+>containsPosition : (position: number) => boolean
+>position : number
+
+        /**
+            * Determines whether span falls completely within this span. Returns true if the specified span falls completely within this span, otherwise false.
+            * @param span The span to check.
+            */
+        containsTextSpan(span: TextSpan): boolean;
+>containsTextSpan : (span: TextSpan) => boolean
+>span : TextSpan
+>TextSpan : TextSpan
+
+        /**
+            * Determines whether the given span overlaps this span. Two spans are considered to overlap
+            * if they have positions in common and neither is empty. Empty spans do not overlap with any
+            * other span. Returns true if the spans overlap, false otherwise.
+            * @param span The span to check.
+            */
+        overlapsWith(span: TextSpan): boolean;
+>overlapsWith : (span: TextSpan) => boolean
+>span : TextSpan
+>TextSpan : TextSpan
+
+        /**
+            * Returns the overlap with the given span, or undefined if there is no overlap.
+            * @param span The span to check.
+            */
+        overlap(span: TextSpan): TextSpan;
+>overlap : (span: TextSpan) => TextSpan
+>span : TextSpan
+>TextSpan : TextSpan
+>TextSpan : TextSpan
+
+        /**
+            * Determines whether span intersects this span. Two spans are considered to
+            * intersect if they have positions in common or the end of one span
+            * coincides with the start of the other span. Returns true if the spans intersect, false otherwise.
+            * @param The span to check.
+            */
+        intersectsWithTextSpan(span: TextSpan): boolean;
+>intersectsWithTextSpan : (span: TextSpan) => boolean
+>span : TextSpan
+>TextSpan : TextSpan
+
+        intersectsWith(start: number, length: number): boolean;
+>intersectsWith : (start: number, length: number) => boolean
+>start : number
+>length : number
+
+        /**
+            * Determines whether the given position intersects this span.
+            * A position is considered to intersect if it is between the start and
+            * end positions (inclusive) of this span. Returns true if the position intersects, false otherwise.
+            * @param position The position to check.
+            */
+        intersectsWithPosition(position: number): boolean;
+>intersectsWithPosition : (position: number) => boolean
+>position : number
+
+        /**
+            * Returns the intersection with the given span, or undefined if there is no intersection.
+            * @param span The span to check.
+            */
+        intersection(span: TextSpan): TextSpan;
+>intersection : (span: TextSpan) => TextSpan
+>span : TextSpan
+>TextSpan : TextSpan
+>TextSpan : TextSpan
+
+        /**
+            * Creates a new TextSpan from the given start and end positions
+            * as opposed to a position and length.
+            */
+        static fromBounds(start: number, end: number): TextSpan;
+>fromBounds : (start: number, end: number) => TextSpan
+>start : number
+>end : number
+>TextSpan : TextSpan
+    }
+    class TextChangeRange {
+>TextChangeRange : TextChangeRange
+
+        static unchanged: TextChangeRange;
+>unchanged : TextChangeRange
+>TextChangeRange : TextChangeRange
+
+        private _span;
+>_span : any
+
+        private _newLength;
+>_newLength : any
+
+        /**
+            * Initializes a new instance of TextChangeRange.
+            */
+        constructor(span: TextSpan, newLength: number);
+>span : TextSpan
+>TextSpan : TextSpan
+>newLength : number
+
+        /**
+            * The span of text before the edit which is being changed
+            */
+        span(): TextSpan;
+>span : () => TextSpan
+>TextSpan : TextSpan
+
+        /**
+            * Width of the span after the edit.  A 0 here would represent a delete
+            */
+        newLength(): number;
+>newLength : () => number
+
+        newSpan(): TextSpan;
+>newSpan : () => TextSpan
+>TextSpan : TextSpan
+
+        isUnchanged(): boolean;
+>isUnchanged : () => boolean
+
+        /**
+            * Called to merge all the changes that occurred across several versions of a script snapshot
+            * into a single change.  i.e. if a user keeps making successive edits to a script we will
+            * have a text change from V1 to V2, V2 to V3, ..., Vn.
+            *
+            * This function will then merge those changes into a single change range valid between V1 and
+            * Vn.
+            */
+        static collapseChangesAcrossMultipleVersions(changes: TextChangeRange[]): TextChangeRange;
+>collapseChangesAcrossMultipleVersions : (changes: TextChangeRange[]) => TextChangeRange
+>changes : TextChangeRange[]
+>TextChangeRange : TextChangeRange
+>TextChangeRange : TextChangeRange
+    }
+    interface ClassifiedSpan {
+>ClassifiedSpan : ClassifiedSpan
+
+        textSpan: TextSpan;
+>textSpan : TextSpan
+>TextSpan : TextSpan
+
+        classificationType: string;
+>classificationType : string
+    }
+    interface NavigationBarItem {
+>NavigationBarItem : NavigationBarItem
+
+        text: string;
+>text : string
+
+        kind: string;
+>kind : string
+
+        kindModifiers: string;
+>kindModifiers : string
+
+        spans: TextSpan[];
+>spans : TextSpan[]
+>TextSpan : TextSpan
+
+        childItems: NavigationBarItem[];
+>childItems : NavigationBarItem[]
+>NavigationBarItem : NavigationBarItem
+
+        indent: number;
+>indent : number
+
+        bolded: boolean;
+>bolded : boolean
+
+        grayed: boolean;
+>grayed : boolean
+    }
+    interface TodoCommentDescriptor {
+>TodoCommentDescriptor : TodoCommentDescriptor
+
+        text: string;
+>text : string
+
+        priority: number;
+>priority : number
+    }
+    interface TodoComment {
+>TodoComment : TodoComment
+
+        descriptor: TodoCommentDescriptor;
+>descriptor : TodoCommentDescriptor
+>TodoCommentDescriptor : TodoCommentDescriptor
+
+        message: string;
+>message : string
+
+        position: number;
+>position : number
+    }
+    class TextChange {
+>TextChange : TextChange
+
+        span: TextSpan;
+>span : TextSpan
+>TextSpan : TextSpan
+
+        newText: string;
+>newText : string
+    }
+    interface RenameLocation {
+>RenameLocation : RenameLocation
+
+        textSpan: TextSpan;
+>textSpan : TextSpan
+>TextSpan : TextSpan
+
+        fileName: string;
+>fileName : string
+    }
+    interface ReferenceEntry {
+>ReferenceEntry : ReferenceEntry
+
+        textSpan: TextSpan;
+>textSpan : TextSpan
+>TextSpan : TextSpan
+
+        fileName: string;
+>fileName : string
+
+        isWriteAccess: boolean;
+>isWriteAccess : boolean
+    }
+    interface NavigateToItem {
+>NavigateToItem : NavigateToItem
+
+        name: string;
+>name : string
+
+        kind: string;
+>kind : string
+
+        kindModifiers: string;
+>kindModifiers : string
+
+        matchKind: string;
+>matchKind : string
+
+        fileName: string;
+>fileName : string
+
+        textSpan: TextSpan;
+>textSpan : TextSpan
+>TextSpan : TextSpan
+
+        containerName: string;
+>containerName : string
+
+        containerKind: string;
+>containerKind : string
+    }
+    interface EditorOptions {
+>EditorOptions : EditorOptions
+
+        IndentSize: number;
+>IndentSize : number
+
+        TabSize: number;
+>TabSize : number
+
+        NewLineCharacter: string;
+>NewLineCharacter : string
+
+        ConvertTabsToSpaces: boolean;
+>ConvertTabsToSpaces : boolean
+    }
+    interface FormatCodeOptions extends EditorOptions {
+>FormatCodeOptions : FormatCodeOptions
+>EditorOptions : EditorOptions
+
+        InsertSpaceAfterCommaDelimiter: boolean;
+>InsertSpaceAfterCommaDelimiter : boolean
+
+        InsertSpaceAfterSemicolonInForStatements: boolean;
+>InsertSpaceAfterSemicolonInForStatements : boolean
+
+        InsertSpaceBeforeAndAfterBinaryOperators: boolean;
+>InsertSpaceBeforeAndAfterBinaryOperators : boolean
+
+        InsertSpaceAfterKeywordsInControlFlowStatements: boolean;
+>InsertSpaceAfterKeywordsInControlFlowStatements : boolean
+
+        InsertSpaceAfterFunctionKeywordForAnonymousFunctions: boolean;
+>InsertSpaceAfterFunctionKeywordForAnonymousFunctions : boolean
+
+        InsertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis: boolean;
+>InsertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis : boolean
+
+        PlaceOpenBraceOnNewLineForFunctions: boolean;
+>PlaceOpenBraceOnNewLineForFunctions : boolean
+
+        PlaceOpenBraceOnNewLineForControlBlocks: boolean;
+>PlaceOpenBraceOnNewLineForControlBlocks : boolean
+    }
+    interface DefinitionInfo {
+>DefinitionInfo : DefinitionInfo
+
+        fileName: string;
+>fileName : string
+
+        textSpan: TextSpan;
+>textSpan : TextSpan
+>TextSpan : TextSpan
+
+        kind: string;
+>kind : string
+
+        name: string;
+>name : string
+
+        containerKind: string;
+>containerKind : string
+
+        containerName: string;
+>containerName : string
+    }
+    enum SymbolDisplayPartKind {
+>SymbolDisplayPartKind : SymbolDisplayPartKind
+
+        aliasName = 0,
+>aliasName : SymbolDisplayPartKind
+
+        className = 1,
+>className : SymbolDisplayPartKind
+
+        enumName = 2,
+>enumName : SymbolDisplayPartKind
+
+        fieldName = 3,
+>fieldName : SymbolDisplayPartKind
+
+        interfaceName = 4,
+>interfaceName : SymbolDisplayPartKind
+
+        keyword = 5,
+>keyword : SymbolDisplayPartKind
+
+        lineBreak = 6,
+>lineBreak : SymbolDisplayPartKind
+
+        numericLiteral = 7,
+>numericLiteral : SymbolDisplayPartKind
+
+        stringLiteral = 8,
+>stringLiteral : SymbolDisplayPartKind
+
+        localName = 9,
+>localName : SymbolDisplayPartKind
+
+        methodName = 10,
+>methodName : SymbolDisplayPartKind
+
+        moduleName = 11,
+>moduleName : SymbolDisplayPartKind
+
+        operator = 12,
+>operator : SymbolDisplayPartKind
+
+        parameterName = 13,
+>parameterName : SymbolDisplayPartKind
+
+        propertyName = 14,
+>propertyName : SymbolDisplayPartKind
+
+        punctuation = 15,
+>punctuation : SymbolDisplayPartKind
+
+        space = 16,
+>space : SymbolDisplayPartKind
+
+        text = 17,
+>text : SymbolDisplayPartKind
+
+        typeParameterName = 18,
+>typeParameterName : SymbolDisplayPartKind
+
+        enumMemberName = 19,
+>enumMemberName : SymbolDisplayPartKind
+
+        functionName = 20,
+>functionName : SymbolDisplayPartKind
+
+        regularExpressionLiteral = 21,
+>regularExpressionLiteral : SymbolDisplayPartKind
+    }
+    interface SymbolDisplayPart {
+>SymbolDisplayPart : SymbolDisplayPart
+
+        text: string;
+>text : string
+
+        kind: string;
+>kind : string
+    }
+    interface QuickInfo {
+>QuickInfo : QuickInfo
+
+        kind: string;
+>kind : string
+
+        kindModifiers: string;
+>kindModifiers : string
+
+        textSpan: TextSpan;
+>textSpan : TextSpan
+>TextSpan : TextSpan
+
+        displayParts: SymbolDisplayPart[];
+>displayParts : SymbolDisplayPart[]
+>SymbolDisplayPart : SymbolDisplayPart
+
+        documentation: SymbolDisplayPart[];
+>documentation : SymbolDisplayPart[]
+>SymbolDisplayPart : SymbolDisplayPart
+    }
+    interface RenameInfo {
+>RenameInfo : RenameInfo
+
+        canRename: boolean;
+>canRename : boolean
+
+        localizedErrorMessage: string;
+>localizedErrorMessage : string
+
+        displayName: string;
+>displayName : string
+
+        fullDisplayName: string;
+>fullDisplayName : string
+
+        kind: string;
+>kind : string
+
+        kindModifiers: string;
+>kindModifiers : string
+
+        triggerSpan: TextSpan;
+>triggerSpan : TextSpan
+>TextSpan : TextSpan
+    }
+    interface SignatureHelpParameter {
+>SignatureHelpParameter : SignatureHelpParameter
+
+        name: string;
+>name : string
+
+        documentation: SymbolDisplayPart[];
+>documentation : SymbolDisplayPart[]
+>SymbolDisplayPart : SymbolDisplayPart
+
+        displayParts: SymbolDisplayPart[];
+>displayParts : SymbolDisplayPart[]
+>SymbolDisplayPart : SymbolDisplayPart
+
+        isOptional: boolean;
+>isOptional : boolean
+    }
+    /**
+     * Represents a single signature to show in signature help.
+     * The id is used for subsequent calls into the language service to ask questions about the
+     * signature help item in the context of any documents that have been updated.  i.e. after
+     * an edit has happened, while signature help is still active, the host can ask important
+     * questions like 'what parameter is the user currently contained within?'.
+     */
+    interface SignatureHelpItem {
+>SignatureHelpItem : SignatureHelpItem
+
+        isVariadic: boolean;
+>isVariadic : boolean
+
+        prefixDisplayParts: SymbolDisplayPart[];
+>prefixDisplayParts : SymbolDisplayPart[]
+>SymbolDisplayPart : SymbolDisplayPart
+
+        suffixDisplayParts: SymbolDisplayPart[];
+>suffixDisplayParts : SymbolDisplayPart[]
+>SymbolDisplayPart : SymbolDisplayPart
+
+        separatorDisplayParts: SymbolDisplayPart[];
+>separatorDisplayParts : SymbolDisplayPart[]
+>SymbolDisplayPart : SymbolDisplayPart
+
+        parameters: SignatureHelpParameter[];
+>parameters : SignatureHelpParameter[]
+>SignatureHelpParameter : SignatureHelpParameter
+
+        documentation: SymbolDisplayPart[];
+>documentation : SymbolDisplayPart[]
+>SymbolDisplayPart : SymbolDisplayPart
+    }
+    /**
+     * Represents a set of signature help items, and the preferred item that should be selected.
+     */
+    interface SignatureHelpItems {
+>SignatureHelpItems : SignatureHelpItems
+
+        items: SignatureHelpItem[];
+>items : SignatureHelpItem[]
+>SignatureHelpItem : SignatureHelpItem
+
+        applicableSpan: TextSpan;
+>applicableSpan : TextSpan
+>TextSpan : TextSpan
+
+        selectedItemIndex: number;
+>selectedItemIndex : number
+
+        argumentIndex: number;
+>argumentIndex : number
+
+        argumentCount: number;
+>argumentCount : number
+    }
+    interface CompletionInfo {
+>CompletionInfo : CompletionInfo
+
+        isMemberCompletion: boolean;
+>isMemberCompletion : boolean
+
+        entries: CompletionEntry[];
+>entries : CompletionEntry[]
+>CompletionEntry : CompletionEntry
+    }
+    interface CompletionEntry {
+>CompletionEntry : CompletionEntry
+
+        name: string;
+>name : string
+
+        kind: string;
+>kind : string
+
+        kindModifiers: string;
+>kindModifiers : string
+    }
+    interface CompletionEntryDetails {
+>CompletionEntryDetails : CompletionEntryDetails
+
+        name: string;
+>name : string
+
+        kind: string;
+>kind : string
+
+        kindModifiers: string;
+>kindModifiers : string
+
+        displayParts: SymbolDisplayPart[];
+>displayParts : SymbolDisplayPart[]
+>SymbolDisplayPart : SymbolDisplayPart
+
+        documentation: SymbolDisplayPart[];
+>documentation : SymbolDisplayPart[]
+>SymbolDisplayPart : SymbolDisplayPart
+    }
+    interface OutliningSpan {
+>OutliningSpan : OutliningSpan
+
+        /** The span of the document to actually collapse. */
+        textSpan: TextSpan;
+>textSpan : TextSpan
+>TextSpan : TextSpan
+
+        /** The span of the document to display when the user hovers over the collapsed span. */
+        hintSpan: TextSpan;
+>hintSpan : TextSpan
+>TextSpan : TextSpan
+
+        /** The text to display in the editor for the collapsed region. */
+        bannerText: string;
+>bannerText : string
+
+        /**
+          * Whether or not this region should be automatically collapsed when
+          * the 'Collapse to Definitions' command is invoked.
+          */
+        autoCollapse: boolean;
+>autoCollapse : boolean
+    }
+    interface EmitOutput {
+>EmitOutput : EmitOutput
+
+        outputFiles: OutputFile[];
+>outputFiles : OutputFile[]
+>OutputFile : OutputFile
+
+        emitOutputStatus: EmitReturnStatus;
+>emitOutputStatus : EmitReturnStatus
+>EmitReturnStatus : EmitReturnStatus
+    }
+    const enum OutputFileType {
+>OutputFileType : OutputFileType
+
+        JavaScript = 0,
+>JavaScript : OutputFileType
+
+        SourceMap = 1,
+>SourceMap : OutputFileType
+
+        Declaration = 2,
+>Declaration : OutputFileType
+    }
+    interface OutputFile {
+>OutputFile : OutputFile
+
+        name: string;
+>name : string
+
+        writeByteOrderMark: boolean;
+>writeByteOrderMark : boolean
+
+        text: string;
+>text : string
+    }
+    const enum EndOfLineState {
+>EndOfLineState : EndOfLineState
+
+        Start = 0,
+>Start : EndOfLineState
+
+        InMultiLineCommentTrivia = 1,
+>InMultiLineCommentTrivia : EndOfLineState
+
+        InSingleQuoteStringLiteral = 2,
+>InSingleQuoteStringLiteral : EndOfLineState
+
+        InDoubleQuoteStringLiteral = 3,
+>InDoubleQuoteStringLiteral : EndOfLineState
+    }
+    enum TokenClass {
+>TokenClass : TokenClass
+
+        Punctuation = 0,
+>Punctuation : TokenClass
+
+        Keyword = 1,
+>Keyword : TokenClass
+
+        Operator = 2,
+>Operator : TokenClass
+
+        Comment = 3,
+>Comment : TokenClass
+
+        Whitespace = 4,
+>Whitespace : TokenClass
+
+        Identifier = 5,
+>Identifier : TokenClass
+
+        NumberLiteral = 6,
+>NumberLiteral : TokenClass
+
+        StringLiteral = 7,
+>StringLiteral : TokenClass
+
+        RegExpLiteral = 8,
+>RegExpLiteral : TokenClass
+    }
+    interface ClassificationResult {
+>ClassificationResult : ClassificationResult
+
+        finalLexState: EndOfLineState;
+>finalLexState : EndOfLineState
+>EndOfLineState : EndOfLineState
+
+        entries: ClassificationInfo[];
+>entries : ClassificationInfo[]
+>ClassificationInfo : ClassificationInfo
+    }
+    interface ClassificationInfo {
+>ClassificationInfo : ClassificationInfo
+
+        length: number;
+>length : number
+
+        classification: TokenClass;
+>classification : TokenClass
+>TokenClass : TokenClass
+    }
+    interface Classifier {
+>Classifier : Classifier
+
+        getClassificationsForLine(text: string, lexState: EndOfLineState, classifyKeywordsInGenerics?: boolean): ClassificationResult;
+>getClassificationsForLine : (text: string, lexState: EndOfLineState, classifyKeywordsInGenerics?: boolean) => ClassificationResult
+>text : string
+>lexState : EndOfLineState
+>EndOfLineState : EndOfLineState
+>classifyKeywordsInGenerics : boolean
+>ClassificationResult : ClassificationResult
+    }
+    interface DocumentRegistry {
+>DocumentRegistry : DocumentRegistry
+
+        acquireDocument(filename: string, compilationSettings: CompilerOptions, scriptSnapshot: IScriptSnapshot, version: string, isOpen: boolean): SourceFile;
+>acquireDocument : (filename: string, compilationSettings: CompilerOptions, scriptSnapshot: IScriptSnapshot, version: string, isOpen: boolean) => SourceFile
+>filename : string
+>compilationSettings : CompilerOptions
+>CompilerOptions : CompilerOptions
+>scriptSnapshot : IScriptSnapshot
+>IScriptSnapshot : IScriptSnapshot
+>version : string
+>isOpen : boolean
+>SourceFile : SourceFile
+
+        updateDocument(sourceFile: SourceFile, filename: string, compilationSettings: CompilerOptions, scriptSnapshot: IScriptSnapshot, version: string, isOpen: boolean, textChangeRange: TextChangeRange): SourceFile;
+>updateDocument : (sourceFile: SourceFile, filename: string, compilationSettings: CompilerOptions, scriptSnapshot: IScriptSnapshot, version: string, isOpen: boolean, textChangeRange: TextChangeRange) => SourceFile
+>sourceFile : SourceFile
+>SourceFile : SourceFile
+>filename : string
+>compilationSettings : CompilerOptions
+>CompilerOptions : CompilerOptions
+>scriptSnapshot : IScriptSnapshot
+>IScriptSnapshot : IScriptSnapshot
+>version : string
+>isOpen : boolean
+>textChangeRange : TextChangeRange
+>TextChangeRange : TextChangeRange
+>SourceFile : SourceFile
+
+        releaseDocument(filename: string, compilationSettings: CompilerOptions): void;
+>releaseDocument : (filename: string, compilationSettings: CompilerOptions) => void
+>filename : string
+>compilationSettings : CompilerOptions
+>CompilerOptions : CompilerOptions
+    }
+    class ScriptElementKind {
+>ScriptElementKind : ScriptElementKind
+
+        static unknown: string;
+>unknown : string
+
+        static keyword: string;
+>keyword : string
+
+        static scriptElement: string;
+>scriptElement : string
+
+        static moduleElement: string;
+>moduleElement : string
+
+        static classElement: string;
+>classElement : string
+
+        static interfaceElement: string;
+>interfaceElement : string
+
+        static typeElement: string;
+>typeElement : string
+
+        static enumElement: string;
+>enumElement : string
+
+        static variableElement: string;
+>variableElement : string
+
+        static localVariableElement: string;
+>localVariableElement : string
+
+        static functionElement: string;
+>functionElement : string
+
+        static localFunctionElement: string;
+>localFunctionElement : string
+
+        static memberFunctionElement: string;
+>memberFunctionElement : string
+
+        static memberGetAccessorElement: string;
+>memberGetAccessorElement : string
+
+        static memberSetAccessorElement: string;
+>memberSetAccessorElement : string
+
+        static memberVariableElement: string;
+>memberVariableElement : string
+
+        static constructorImplementationElement: string;
+>constructorImplementationElement : string
+
+        static callSignatureElement: string;
+>callSignatureElement : string
+
+        static indexSignatureElement: string;
+>indexSignatureElement : string
+
+        static constructSignatureElement: string;
+>constructSignatureElement : string
+
+        static parameterElement: string;
+>parameterElement : string
+
+        static typeParameterElement: string;
+>typeParameterElement : string
+
+        static primitiveType: string;
+>primitiveType : string
+
+        static label: string;
+>label : string
+
+        static alias: string;
+>alias : string
+
+        static constElement: string;
+>constElement : string
+
+        static letElement: string;
+>letElement : string
+    }
+    class ScriptElementKindModifier {
+>ScriptElementKindModifier : ScriptElementKindModifier
+
+        static none: string;
+>none : string
+
+        static publicMemberModifier: string;
+>publicMemberModifier : string
+
+        static privateMemberModifier: string;
+>privateMemberModifier : string
+
+        static protectedMemberModifier: string;
+>protectedMemberModifier : string
+
+        static exportedModifier: string;
+>exportedModifier : string
+
+        static ambientModifier: string;
+>ambientModifier : string
+
+        static staticModifier: string;
+>staticModifier : string
+    }
+    class ClassificationTypeNames {
+>ClassificationTypeNames : ClassificationTypeNames
+
+        static comment: string;
+>comment : string
+
+        static identifier: string;
+>identifier : string
+
+        static keyword: string;
+>keyword : string
+
+        static numericLiteral: string;
+>numericLiteral : string
+
+        static operator: string;
+>operator : string
+
+        static stringLiteral: string;
+>stringLiteral : string
+
+        static whiteSpace: string;
+>whiteSpace : string
+
+        static text: string;
+>text : string
+
+        static punctuation: string;
+>punctuation : string
+
+        static className: string;
+>className : string
+
+        static enumName: string;
+>enumName : string
+
+        static interfaceName: string;
+>interfaceName : string
+
+        static moduleName: string;
+>moduleName : string
+
+        static typeParameterName: string;
+>typeParameterName : string
+
+        static typeAlias: string;
+>typeAlias : string
+    }
+    interface DisplayPartsSymbolWriter extends SymbolWriter {
+>DisplayPartsSymbolWriter : DisplayPartsSymbolWriter
+>SymbolWriter : SymbolWriter
+
+        displayParts(): SymbolDisplayPart[];
+>displayParts : () => SymbolDisplayPart[]
+>SymbolDisplayPart : SymbolDisplayPart
+    }
+    function displayPartsToString(displayParts: SymbolDisplayPart[]): string;
+>displayPartsToString : (displayParts: SymbolDisplayPart[]) => string
+>displayParts : SymbolDisplayPart[]
+>SymbolDisplayPart : SymbolDisplayPart
+
+    function getDefaultCompilerOptions(): CompilerOptions;
+>getDefaultCompilerOptions : () => CompilerOptions
+>CompilerOptions : CompilerOptions
+
+    class OperationCanceledException {
+>OperationCanceledException : OperationCanceledException
+    }
+    class CancellationTokenObject {
+>CancellationTokenObject : CancellationTokenObject
+
+        private cancellationToken;
+>cancellationToken : any
+
+        static None: CancellationTokenObject;
+>None : CancellationTokenObject
+>CancellationTokenObject : CancellationTokenObject
+
+        constructor(cancellationToken: CancellationToken);
+>cancellationToken : CancellationToken
+>CancellationToken : CancellationToken
+
+        isCancellationRequested(): boolean;
+>isCancellationRequested : () => boolean
+
+        throwIfCancellationRequested(): void;
+>throwIfCancellationRequested : () => void
+    }
+    function createDocumentRegistry(): DocumentRegistry;
+>createDocumentRegistry : () => DocumentRegistry
+>DocumentRegistry : DocumentRegistry
+
+    function preProcessFile(sourceText: string, readImportFiles?: boolean): PreProcessedFileInfo;
+>preProcessFile : (sourceText: string, readImportFiles?: boolean) => PreProcessedFileInfo
+>sourceText : string
+>readImportFiles : boolean
+>PreProcessedFileInfo : PreProcessedFileInfo
+
+    function createLanguageService(host: LanguageServiceHost, documentRegistry: DocumentRegistry): LanguageService;
+>createLanguageService : (host: LanguageServiceHost, documentRegistry: DocumentRegistry) => LanguageService
+>host : LanguageServiceHost
+>LanguageServiceHost : LanguageServiceHost
+>documentRegistry : DocumentRegistry
+>DocumentRegistry : DocumentRegistry
+>LanguageService : LanguageService
+
+    function createClassifier(host: Logger): Classifier;
+>createClassifier : (host: Logger) => Classifier
+>host : Logger
+>Logger : Logger
+>Classifier : Classifier
+}
+
