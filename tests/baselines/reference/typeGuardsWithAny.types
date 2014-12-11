@@ -1,0 +1,23 @@
+=== tests/cases/conformance/expressions/typeGuards/typeGuardsWithAny.ts ===
+var x: any = { p: 0 };
+>x : any
+>{ p: 0 } : { p: number; }
+>p : number
+
+if (x instanceof Object) {
+>x instanceof Object : boolean
+>x : any
+>Object : ObjectConstructor
+
+    x.p; // No error, type any unaffected by type guard
+>x.p : any
+>x : any
+>p : any
+}
+else {
+    x.p; // No error, type any unaffected by type guard
+>x.p : any
+>x : any
+>p : any
+}
+

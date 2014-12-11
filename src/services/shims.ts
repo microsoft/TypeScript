@@ -859,6 +859,13 @@ module ts {
         private _shims: Shim[] = [];
         private documentRegistry: DocumentRegistry = createDocumentRegistry();
 
+        /*
+         * Returns script API version.
+         */
+        public getServicesVersion(): string {
+            return servicesVersion;
+        }
+
         public createLanguageServiceShim(host: LanguageServiceShimHost): LanguageServiceShim {
             try {
                 var hostAdapter = new LanguageServiceShimHostAdapter(host);
