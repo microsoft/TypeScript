@@ -1037,6 +1037,19 @@ module ts {
         forEachChild(sourceFile, walk);
     }
 
+    interface IncrementalElement extends TextRange {
+        intersectsChange: boolean
+        length?: number;
+        _children: Node[];
+    }
+
+    interface IncrementalNode extends Node, IncrementalElement {
+    }
+
+    interface IncrementalNodeArray extends NodeArray<IncrementalNode>, IncrementalElement {
+        length: number
+    }
+
     export function createSourceFile(filename: string, sourceText: string, languageVersion: ScriptTarget, setParentNodes = false): SourceFile {
         var parsingContext: ParsingContext;
         var identifiers: Map<string>;
@@ -1189,9 +1202,105 @@ module ts {
             // might have intersected the change.
             var changeRange = extendToAffectedRange(textChangeRange);
 
+            // The is the amount the nodes after the edit range need to be adjusted.  It can be 
+            // positive (if the edit added characters), negative (if the edit deleted characters)
+            // or zero (if this was a pure overwrite with nothing added/removed).
+            var delta = changeRange.newSpan().length() - changeRange.span().length();
+
+            // If we added or removed characters during the edit, then we need to go and adjust all
+            // the nodes after the edit.  Those nodes may move forward down (if we inserted chars)
+            // or they may move backward (if we deleted chars).
+            //
+            // Doing this helps us out in two ways.  First, it means that any nodes/tokens we want
+            // to reuse are already at the appropriate position in the new text.  That way when we
+            // reuse them, we don't have to figure out if they need to be adjusted.  Second, it makes
+            // it very easy to determine if we can reuse a node.  If the node's position is at where
+            // we are in the text, then we can reuse it.  Otherwise we can't.  If hte node's position
+            // is ahead of us, then we'll need to rescan tokens.  If the node's position is behind
+            // us, then we'll need to skip it or crumble it as appropriate
+            //
+            // Also, mark any syntax elements that intersect the changed span.  We know, up front,
+            // that we cannot reuse these elements.
+            updateTokenPositionsAndMarkElements(<IncrementalNode><Node>sourceFile,
+                changeRange.span().start(), changeRange.span().end(), delta);
+
             // Don't pass along the text change range for now. We'll pass it along once incremental
             // parsing is enabled.
             return parseSourceFile(newText, /*textChangeRange:*/ undefined, /*setNodeParents*/ true);
+        }
+
+        function updateTokenPositionsAndMarkElements(node: IncrementalNode, changeStart: number, changeRangeOldEnd: number, delta: number): void {
+            forEachChild(node, visitNode, visitArray);
+
+            function visitNode(child: IncrementalNode) {
+                if (child.pos > changeRangeOldEnd) {
+                    forceUpdateTokenPositionsForElement(child, delta);
+                }
+                else {
+                    // Check if the element intersects the change range.  If it does, then it is not
+                    // reusable.  Also, we'll need to recurse to see what constituent portions we may
+                    // be able to use.
+                    var fullEnd = child.end;
+                    if (fullEnd >= changeStart) {
+                        child.intersectsChange = true;
+                        forEachChild(child, visitNode, visitArray);
+                    }
+                    // else {
+                    // Otherwise, the node is entirely before the change range.  No need to do anything with it.
+                    // }
+                }
+            }
+
+            function visitArray(array: IncrementalNodeArray) {
+                if (array.pos > changeRangeOldEnd) {
+                    // Array is entirely after the change range.  We need to move it, and move any of
+                    // its children.
+                    forceUpdateTokenPositionsForElement(array, delta);
+                }
+                else {
+                    // Check if the element intersects the change range.  If it does, then it is not
+                    // reusable.  Also, we'll need to recurse to see what constituent portions we may
+                    // be able to use.
+                    var fullEnd = array.end;
+                    if (fullEnd >= changeStart) {
+                        array.intersectsChange = true;
+                        for (var i = 0, n = array.length; i < n; i++) {
+                            forEachChild(array[i], visitNode, visitArray);
+                        }
+                    }
+                    // else {
+                    // Otherwise, the array is entirely before the change range.  No need to do anything with it.
+                    // }
+                }
+            }
+        }
+
+        function forceUpdateTokenPositionsForElement(element: IncrementalElement, delta: number) {
+            if (element.length) {
+                visitArray(<IncrementalNodeArray>element);
+            }
+            else {
+                visitNode(<IncrementalNode>element);
+            }
+
+            function visitNode(node: IncrementalNode) {
+                // Ditch any existing LS children we may have created.  This way we can avoid 
+                // moving them forward.
+                node._children = undefined;
+                node.pos += delta;
+                node.end += delta;
+
+                forEachChild(node, visitNode, visitArray);
+            }
+
+            function visitArray(array: IncrementalNodeArray) {
+                array.pos += delta;
+                array.end += delta;
+
+                for (var i = 0, n = array.length; i < n; i++) {
+                    forEachChild(array[i], visitNode, visitArray);
+                }
+            }
         }
 
         function extendToAffectedRange(changeRange: TextChangeRange): TextChangeRange {
