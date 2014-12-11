@@ -6397,6 +6397,11 @@ module ts {
         function checkFunctionExpressionOrObjectLiteralMethod(node: FunctionExpression | MethodDeclaration, contextualMapper?: TypeMapper): Type {
             Debug.assert(node.kind !== SyntaxKind.MethodDeclaration || isObjectLiteralMethod(node));
 
+            // Grammar checking
+            if (node.kind === SyntaxKind.ArrowFunction) {
+                checkGrammarFunctionLikeDeclaration(<FunctionLikeDeclaration>node);
+            }
+
             // The identityMapper object is used to indicate that function expressions are wildcards
             if (contextualMapper === identityMapper) {
                 return anyFunctionType;
@@ -6992,10 +6997,7 @@ module ts {
                 case SyntaxKind.ParenthesizedExpression:
                     return checkExpression((<ParenthesizedExpression>node).expression);
                 case SyntaxKind.FunctionExpression:
-                    return checkFunctionExpressionOrObjectLiteralMethod(<FunctionExpression>node, contextualMapper);
                 case SyntaxKind.ArrowFunction:
-                    // Grammar checking
-                    checkGrammarSignatureDeclarationOrArrowFunction(<FunctionExpression>node);
                     return checkFunctionExpressionOrObjectLiteralMethod(<FunctionExpression>node, contextualMapper);
                 case SyntaxKind.TypeOfExpression:
                     return checkTypeOfExpression(<TypeOfExpression>node);
@@ -7021,7 +7023,7 @@ module ts {
 
         function checkTypeParameter(node: TypeParameterDeclaration) {
             // Grammar Checking
-            if (node.expression) {
+            if (!checkGrammarModifiers(node) && node.expression) {
                 grammarErrorOnFirstToken(node.expression, Diagnostics.Type_expected);
             }
 
@@ -8758,7 +8760,7 @@ module ts {
                 case SyntaxKind.CallSignature:
                 case SyntaxKind.ConstructSignature:
                     // Grammar checking
-                    checkGrammarSignatureDeclarationOrArrowFunction(<SignatureDeclaration>node)
+                    checkGrammarFunctionLikeDeclaration(<FunctionLikeDeclaration>node)
                     return checkSignatureDeclaration(<SignatureDeclaration>node);
                 case SyntaxKind.IndexSignature:
                     // Grammar checking
@@ -9643,7 +9645,7 @@ module ts {
 
 
         // GRAMMAR CHECKING
-        function checkModifiers(node: Node): boolean {
+        function checkGrammarModifiers(node: Node): boolean {
             switch (node.kind) {
                 case SyntaxKind.GetAccessor:
                 case SyntaxKind.SetAccessor:
@@ -9770,14 +9772,14 @@ module ts {
             }
         }
 
-        function checkGrammarTypeParameterList(signatureDecl: SignatureDeclaration | Expression, typeParameters: NodeArray<TypeParameterDeclaration>): boolean {
+        function checkGrammarTypeParameterList(node: FunctionLikeDeclaration, typeParameters: NodeArray<TypeParameterDeclaration>): boolean {
             if (checkGrammarForDisallowedTrailingComma(typeParameters)) {
                 return true;
             }
 
             if (typeParameters && typeParameters.length === 0) {
                 var start = typeParameters.pos - "<".length;
-                var sourceFile = getSourceFileOfNode(signatureDecl);
+                var sourceFile = getSourceFileOfNode(node);
                 var end = skipTrivia(sourceFile.text, typeParameters.end) + ">".length;
                 return grammarErrorAtPos(sourceFile, start, end - start, Diagnostics.Type_parameter_list_cannot_be_empty);
             }
@@ -9821,9 +9823,10 @@ module ts {
             }
         }
 
-        function checkGrammarSignatureDeclarationOrArrowFunction(node: SignatureDeclaration | FunctionExpression) {
-            if (!checkGrammarTypeParameterList(node, (<SignatureDeclaration>node).typeParameters)) {
-                checkGrammarParameterList((<SignatureDeclaration>node).parameters);
+        function checkGrammarFunctionLikeDeclaration(node: FunctionLikeDeclaration) {
+            var hasGrammarErrorFromCheckModifierOrTypeParameterList = checkGrammarModifiers(node) ? true : checkGrammarTypeParameterList(node, node.typeParameters);
+            if (!hasGrammarErrorFromCheckModifierOrTypeParameterList) {
+                checkGrammarParameterList(node.parameters);
             }
         }
 
@@ -9867,8 +9870,8 @@ module ts {
         }
 
         function checkGrammarIndexSignature(node: SignatureDeclaration) {
-            var hasErrorFromCheckModifiersOrParameters = checkModifiers(node) ? true: checkGrammarIndexSignatureParameters(node);
-            if (!hasErrorFromCheckModifiersOrParameters) {
+            var hasGrammarErrorFromCheckModifiersOrParameters = checkGrammarModifiers(node) ? true: checkGrammarIndexSignatureParameters(node);
+            if (!hasGrammarErrorFromCheckModifiersOrParameters) {
                 checkGrammarForIndexSignatureModifier(node);
             }
         }
