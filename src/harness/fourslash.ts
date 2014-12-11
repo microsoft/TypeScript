@@ -167,7 +167,7 @@ module FourSlash {
                             settings.module = ts.ModuleKind.CommonJS;
                             break;
                           default:
-                            ts.Debug.assert(typeof globalOptions[prop] === "undefined" || globalOptions[prop] === "None");
+                            ts.Debug.assert(globalOptions[prop] === undefined || globalOptions[prop] === "None");
                             settings.module = ts.ModuleKind.None;
                             break;
                         }
