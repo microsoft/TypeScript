@@ -6248,6 +6248,12 @@ module ts {
         }
 
         function checkCallExpression(node: CallExpression): Type {
+            // Grammar checking
+            var hasGrammarErrorFromCheckModifierOrTypeArguments = checkGrammarModifiers(node) ? true : checkGrammarTypeArguments(node, node.typeArguments);
+            if (!hasGrammarErrorFromCheckModifierOrTypeArguments) {
+                checkGrammarArguments(node, node.arguments);
+            }
+
             var signature = getResolvedSignature(node);
             if (node.expression.kind === SyntaxKind.SuperKeyword) {
                 return voidType;
@@ -9874,6 +9880,37 @@ module ts {
             if (!hasGrammarErrorFromCheckModifiersOrParameters) {
                 checkGrammarForIndexSignatureModifier(node);
             }
+        }
+
+        function checkGrammarForAtLeastOneTypeArgument(node: CallExpression, typeArguments: NodeArray<TypeNode>): boolean {
+            if (typeArguments && typeArguments.length === 0) {
+                var sourceFile = getSourceFileOfNode(node);
+                var start = typeArguments.pos - "<".length;
+                var end = skipTrivia(sourceFile.text, typeArguments.end) + ">".length;
+                return grammarErrorAtPos(sourceFile, start, end - start, Diagnostics.Type_argument_list_cannot_be_empty);
+            }
+        }
+
+        function checkGrammarTypeArguments(node: CallExpression, typeArguments: NodeArray<TypeNode>): boolean {
+            return checkGrammarForDisallowedTrailingComma(typeArguments) ||
+                checkGrammarForAtLeastOneTypeArgument(node, typeArguments);
+        }
+
+        function checkGrammarForOmittedArgument(node: CallExpression, arguments: NodeArray<Expression>): boolean {
+            if (arguments) {
+                var sourceFile = getSourceFileOfNode(node);
+                for (var i = 0, n = arguments.length; i < n; i++) {
+                    var arg = arguments[i];
+                    if (arg.kind === SyntaxKind.OmittedExpression) {
+                        return grammarErrorAtPos(sourceFile, arg.pos, 0, Diagnostics.Argument_expression_expected);
+                    }
+                }
+            }
+        }
+
+        function checkGrammarArguments(node: CallExpression, arguments: NodeArray<Expression>): boolean {
+            return checkGrammarForDisallowedTrailingComma(arguments) ||
+                checkGrammarForOmittedArgument(node, arguments);
         }
 
         function hasParseDiagnostics(sourceFile: SourceFile): boolean {
