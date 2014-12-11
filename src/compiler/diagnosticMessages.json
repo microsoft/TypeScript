@@ -568,6 +568,10 @@
         "category": "Error",
         "code": 1183
     },
+    "Modifiers cannot appear here.": {
+        "category": "Error",
+        "code": 1184
+    },
 
     "Duplicate identifier '{0}'.": {
         "category": "Error",

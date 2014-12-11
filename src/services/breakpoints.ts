@@ -108,8 +108,6 @@ module ts.BreakpointResolver {
                             return spanInFunctionBlock(<Block>node);
                         }
                         // Fall through
-                    case SyntaxKind.TryBlock:
-                    case SyntaxKind.FinallyBlock:
                     case SyntaxKind.ModuleBlock:
                         return spanInBlock(<Block>node);
 
@@ -429,9 +427,7 @@ module ts.BreakpointResolver {
                         }
                         // fall through.
 
-                    case SyntaxKind.TryBlock:
                     case SyntaxKind.CatchClause:
-                    case SyntaxKind.FinallyBlock:
                         return spanInNode((<Block>node.parent).statements[(<Block>node.parent).statements.length - 1]);;
 
                     case SyntaxKind.SwitchStatement:

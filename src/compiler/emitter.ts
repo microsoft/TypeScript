@@ -268,7 +268,7 @@ module ts {
 
     function getFirstConstructorWithBody(node: ClassDeclaration): ConstructorDeclaration {
         return forEach(node.members, member => {
-            if (member.kind === SyntaxKind.Constructor && (<ConstructorDeclaration>member).body) {
+            if (member.kind === SyntaxKind.Constructor && !isMissingNode((<ConstructorDeclaration>member).body)) {
                 return <ConstructorDeclaration>member;
             }
         });
@@ -3106,7 +3106,7 @@ module ts {
             }
 
             function emitFunctionDeclaration(node: FunctionLikeDeclaration) {
-                if (!node.body) {
+                if (isMissingNode(node.body)) {
                     return emitPinnedOrTripleSlashComments(node);
                 }
 
@@ -3907,8 +3907,6 @@ module ts {
                     case SyntaxKind.OmittedExpression:
                         return;
                     case SyntaxKind.Block:
-                    case SyntaxKind.TryBlock:
-                    case SyntaxKind.FinallyBlock:
                     case SyntaxKind.ModuleBlock:
                         return emitBlock(<Block>node);
                     case SyntaxKind.VariableStatement:

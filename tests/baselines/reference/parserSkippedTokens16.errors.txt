@@ -6,10 +6,9 @@ tests/cases/conformance/parser/ecmascript5/SkippedTokens/parserSkippedTokens16.t
 tests/cases/conformance/parser/ecmascript5/SkippedTokens/parserSkippedTokens16.ts(8,14): error TS1109: Expression expected.
 tests/cases/conformance/parser/ecmascript5/SkippedTokens/parserSkippedTokens16.ts(1,1): error TS2304: Cannot find name 'foo'.
 tests/cases/conformance/parser/ecmascript5/SkippedTokens/parserSkippedTokens16.ts(1,8): error TS2304: Cannot find name 'Bar'.
-tests/cases/conformance/parser/ecmascript5/SkippedTokens/parserSkippedTokens16.ts(2,10): error TS2391: Function implementation is missing or not immediately following the declaration.
 
 
-==== tests/cases/conformance/parser/ecmascript5/SkippedTokens/parserSkippedTokens16.ts (9 errors) ====
+==== tests/cases/conformance/parser/ecmascript5/SkippedTokens/parserSkippedTokens16.ts (8 errors) ====
     foo(): Bar { }
          ~
 !!! error TS1005: ';' expected.
@@ -22,8 +21,6 @@ tests/cases/conformance/parser/ecmascript5/SkippedTokens/parserSkippedTokens16.t
     function Foo      () #   { }
                          
 !!! error TS1127: Invalid character.
-             ~~~
-!!! error TS2391: Function implementation is missing or not immediately following the declaration.
     4+:5
       ~
 !!! error TS1109: Expression expected.
