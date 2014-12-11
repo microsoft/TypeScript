@@ -255,7 +255,8 @@ module ts {
                     child((<QualifiedName>node).right);
             case SyntaxKind.TypeParameter:
                 return child((<TypeParameterDeclaration>node).name) ||
-                    child((<TypeParameterDeclaration>node).constraint);
+                    child((<TypeParameterDeclaration>node).constraint) ||
+                    child((<TypeParameterDeclaration>node).expression);
             case SyntaxKind.Parameter:
             case SyntaxKind.PropertyDeclaration:
             case SyntaxKind.PropertySignature:

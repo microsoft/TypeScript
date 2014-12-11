@@ -7019,7 +7019,6 @@ module ts {
         function checkTypeParameter(node: TypeParameterDeclaration) {
             // Grammar Checking
             if (node.expression) {
-                var sourceFile = getSourceFileOfNode(node);
                 grammarErrorOnFirstToken(node.expression, Diagnostics.Type_expected);
             }
 
@@ -9879,8 +9878,6 @@ module ts {
             scanner.setTextPos(pos);
             scanner.scan();
             var start = scanner.getTokenPos();
-            scanner.setTextPos(start);
-            scanner.scan();
             return start;
         }
 
