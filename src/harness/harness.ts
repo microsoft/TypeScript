@@ -70,14 +70,18 @@ module Utils {
         }
     }
 
-    /** Splits the given string on \r\n or on only \n if that fails */
+    /** Splits the given string on \r\n, or on only \n if that fails, or on only \r if *that* fails. */
     export function splitContentByNewlines(content: string) {
         // Split up the input file by line
         // Note: IE JS engine incorrectly handles consecutive delimiters here when using RegExp split, so
-        // we have to string-based splitting instead and try to figure out the delimiting chars
+        // we have to use string-based splitting instead and try to figure out the delimiting chars
         var lines = content.split('\r\n');
         if (lines.length === 1) {
             lines = content.split('\n');
+
+            if (lines.length === 1) {
+                lines = content.split("\r");
+            }
         }
         return lines;
     }
@@ -1020,6 +1024,10 @@ module Harness {
 
                 var lineStarts = ts.computeLineStarts(inputFile.content);
                 var lines = inputFile.content.split('\n');
+                if (lines.length === 1) {
+                    lines = lines[0].split("\r");
+                }
+
                 lines.forEach((line, lineIndex) => {
                     if (line.length > 0 && line.charAt(line.length - 1) === '\r') {
                         line = line.substr(0, line.length - 1);

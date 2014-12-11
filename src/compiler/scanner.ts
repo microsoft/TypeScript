@@ -640,14 +640,14 @@ module ts {
 
                 // Speculated ECMAScript 6 Spec 11.8.6.1:
                 // <CR><LF> and <CR> LineTerminatorSequences are normalized to <LF> for Template Values
-                // An explicit EscapeSequence is needed to include a <CR> or <CR><LF> sequence.
                 if (currChar === CharacterCodes.carriageReturn) {
                     contents += text.substring(start, pos);
+                    pos++;
 
-                    if (pos + 1 < len && text.charCodeAt(pos + 1) === CharacterCodes.lineFeed) {
+                    if (pos < len && text.charCodeAt(pos) === CharacterCodes.lineFeed) {
                         pos++;
                     }
-                    pos++;
+
                     contents += "\n";
                     start = pos;
                     continue;

@@ -3,4 +3,4 @@
 `\\\\\\`
 
 //// [templateStringTermination5.js]
-"\\\";
+"\\\\\\";
