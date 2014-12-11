@@ -1002,7 +1002,7 @@ module ts {
         return false;
     }
 
-    function modifierToFlag(token: SyntaxKind): NodeFlags {
+    export function modifierToFlag(token: SyntaxKind): NodeFlags {
         switch (token) {
             case SyntaxKind.StaticKeyword: return NodeFlags.Static;
             case SyntaxKind.PublicKeyword: return NodeFlags.Public;
@@ -4626,10 +4626,6 @@ module ts {
             // Now do node specific checks.
             switch (nodeKind) {
                 case SyntaxKind.ArrowFunction:
-                case SyntaxKind.CallSignature:
-                case SyntaxKind.ConstructorType:
-                case SyntaxKind.ConstructSignature:
-                case SyntaxKind.FunctionType:
                     return checkAnySignatureDeclaration(<FunctionLikeDeclaration>node);
                 case SyntaxKind.BreakStatement:
                 case SyntaxKind.ContinueStatement:
@@ -4655,7 +4651,6 @@ module ts {
                 case SyntaxKind.FunctionExpression:             return checkFunctionExpression(<FunctionExpression>node);
                 case SyntaxKind.GetAccessor:                    return checkGetAccessor(<MethodDeclaration>node);
                 case SyntaxKind.HeritageClause:                 return checkHeritageClause(<HeritageClause>node);
-                case SyntaxKind.IndexSignature:                 return checkIndexSignature(<SignatureDeclaration>node);
                 case SyntaxKind.InterfaceDeclaration:           return checkInterfaceDeclaration(<InterfaceDeclaration>node);
                 case SyntaxKind.LabeledStatement:               return checkLabeledStatement(<LabeledStatement>node);
                 case SyntaxKind.PropertyAssignment:             return checkPropertyAssignment(<PropertyAssignment>node);
@@ -5335,7 +5330,6 @@ module ts {
                 case SyntaxKind.PropertySignature:
                 case SyntaxKind.MethodDeclaration:
                 case SyntaxKind.MethodSignature:
-                case SyntaxKind.IndexSignature:
                 case SyntaxKind.ClassDeclaration:
                 case SyntaxKind.InterfaceDeclaration:
                 case SyntaxKind.ModuleDeclaration:

@@ -5,8 +5,6 @@ tests/cases/compiler/giant.ts(30,17): error TS1056: Accessors are only available
 tests/cases/compiler/giant.ts(34,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/giant.ts(36,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/giant.ts(61,5): error TS1169: Computed property names are not allowed in interfaces.
-tests/cases/compiler/giant.ts(62,5): error TS1021: An index signature must have a type annotation.
-tests/cases/compiler/giant.ts(63,6): error TS1096: An index signature must have exactly one parameter.
 tests/cases/compiler/giant.ts(88,20): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/giant.ts(90,20): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/giant.ts(92,21): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
@@ -14,8 +12,6 @@ tests/cases/compiler/giant.ts(94,21): error TS1056: Accessors are only available
 tests/cases/compiler/giant.ts(98,20): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/giant.ts(100,20): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/giant.ts(125,9): error TS1169: Computed property names are not allowed in interfaces.
-tests/cases/compiler/giant.ts(126,9): error TS1021: An index signature must have a type annotation.
-tests/cases/compiler/giant.ts(127,10): error TS1096: An index signature must have exactly one parameter.
 tests/cases/compiler/giant.ts(154,39): error TS1037: A function implementation cannot be declared in an ambient context.
 tests/cases/compiler/giant.ts(167,20): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/giant.ts(169,20): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
@@ -24,8 +20,6 @@ tests/cases/compiler/giant.ts(173,21): error TS1056: Accessors are only availabl
 tests/cases/compiler/giant.ts(177,20): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/giant.ts(179,20): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/giant.ts(204,9): error TS1169: Computed property names are not allowed in interfaces.
-tests/cases/compiler/giant.ts(205,9): error TS1021: An index signature must have a type annotation.
-tests/cases/compiler/giant.ts(206,10): error TS1096: An index signature must have exactly one parameter.
 tests/cases/compiler/giant.ts(233,39): error TS1037: A function implementation cannot be declared in an ambient context.
 tests/cases/compiler/giant.ts(238,35): error TS1037: A function implementation cannot be declared in an ambient context.
 tests/cases/compiler/giant.ts(240,24): error TS1111: A constructor implementation cannot be declared in an ambient context.
@@ -55,8 +49,6 @@ tests/cases/compiler/giant.ts(288,17): error TS1056: Accessors are only availabl
 tests/cases/compiler/giant.ts(292,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/giant.ts(294,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/giant.ts(319,5): error TS1169: Computed property names are not allowed in interfaces.
-tests/cases/compiler/giant.ts(320,5): error TS1021: An index signature must have a type annotation.
-tests/cases/compiler/giant.ts(321,6): error TS1096: An index signature must have exactly one parameter.
 tests/cases/compiler/giant.ts(346,20): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/giant.ts(348,20): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/giant.ts(350,21): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
@@ -64,8 +56,6 @@ tests/cases/compiler/giant.ts(352,21): error TS1056: Accessors are only availabl
 tests/cases/compiler/giant.ts(356,20): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/giant.ts(358,20): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/giant.ts(383,9): error TS1169: Computed property names are not allowed in interfaces.
-tests/cases/compiler/giant.ts(384,9): error TS1021: An index signature must have a type annotation.
-tests/cases/compiler/giant.ts(385,10): error TS1096: An index signature must have exactly one parameter.
 tests/cases/compiler/giant.ts(412,39): error TS1037: A function implementation cannot be declared in an ambient context.
 tests/cases/compiler/giant.ts(425,20): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/giant.ts(427,20): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
@@ -74,8 +64,6 @@ tests/cases/compiler/giant.ts(431,21): error TS1056: Accessors are only availabl
 tests/cases/compiler/giant.ts(435,20): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/giant.ts(437,20): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/giant.ts(462,9): error TS1169: Computed property names are not allowed in interfaces.
-tests/cases/compiler/giant.ts(463,9): error TS1021: An index signature must have a type annotation.
-tests/cases/compiler/giant.ts(464,10): error TS1096: An index signature must have exactly one parameter.
 tests/cases/compiler/giant.ts(491,39): error TS1037: A function implementation cannot be declared in an ambient context.
 tests/cases/compiler/giant.ts(496,35): error TS1037: A function implementation cannot be declared in an ambient context.
 tests/cases/compiler/giant.ts(498,24): error TS1111: A constructor implementation cannot be declared in an ambient context.
@@ -121,8 +109,6 @@ tests/cases/compiler/giant.ts(558,24): error TS1111: A constructor implementatio
 tests/cases/compiler/giant.ts(561,21): error TS1037: A function implementation cannot be declared in an ambient context.
 tests/cases/compiler/giant.ts(563,21): error TS1037: A function implementation cannot be declared in an ambient context.
 tests/cases/compiler/giant.ts(587,9): error TS1169: Computed property names are not allowed in interfaces.
-tests/cases/compiler/giant.ts(588,9): error TS1021: An index signature must have a type annotation.
-tests/cases/compiler/giant.ts(589,10): error TS1096: An index signature must have exactly one parameter.
 tests/cases/compiler/giant.ts(606,22): error TS1037: A function implementation cannot be declared in an ambient context.
 tests/cases/compiler/giant.ts(606,25): error TS1036: Statements are not allowed in ambient contexts.
 tests/cases/compiler/giant.ts(611,30): error TS1037: A function implementation cannot be declared in an ambient context.
@@ -138,8 +124,6 @@ tests/cases/compiler/giant.ts(623,24): error TS1111: A constructor implementatio
 tests/cases/compiler/giant.ts(626,21): error TS1037: A function implementation cannot be declared in an ambient context.
 tests/cases/compiler/giant.ts(628,21): error TS1037: A function implementation cannot be declared in an ambient context.
 tests/cases/compiler/giant.ts(653,9): error TS1169: Computed property names are not allowed in interfaces.
-tests/cases/compiler/giant.ts(654,9): error TS1021: An index signature must have a type annotation.
-tests/cases/compiler/giant.ts(655,10): error TS1096: An index signature must have exactly one parameter.
 tests/cases/compiler/giant.ts(672,22): error TS1037: A function implementation cannot be declared in an ambient context.
 tests/cases/compiler/giant.ts(672,25): error TS1036: Statements are not allowed in ambient contexts.
 tests/cases/compiler/giant.ts(676,30): error TS1037: A function implementation cannot be declared in an ambient context.
@@ -156,6 +140,8 @@ tests/cases/compiler/giant.ts(33,12): error TS2300: Duplicate identifier 'tsF'.
 tests/cases/compiler/giant.ts(34,16): error TS2300: Duplicate identifier 'tsF'.
 tests/cases/compiler/giant.ts(35,12): error TS2300: Duplicate identifier 'tgF'.
 tests/cases/compiler/giant.ts(36,16): error TS2300: Duplicate identifier 'tgF'.
+tests/cases/compiler/giant.ts(62,5): error TS1021: An index signature must have a type annotation.
+tests/cases/compiler/giant.ts(63,6): error TS1096: An index signature must have exactly one parameter.
 tests/cases/compiler/giant.ts(76,5): error TS2386: Overload signatures must all be optional or required.
 tests/cases/compiler/giant.ts(87,16): error TS2300: Duplicate identifier 'pgF'.
 tests/cases/compiler/giant.ts(88,20): error TS2300: Duplicate identifier 'pgF'.
@@ -169,6 +155,8 @@ tests/cases/compiler/giant.ts(97,16): error TS2300: Duplicate identifier 'tsF'.
 tests/cases/compiler/giant.ts(98,20): error TS2300: Duplicate identifier 'tsF'.
 tests/cases/compiler/giant.ts(99,16): error TS2300: Duplicate identifier 'tgF'.
 tests/cases/compiler/giant.ts(100,20): error TS2300: Duplicate identifier 'tgF'.
+tests/cases/compiler/giant.ts(126,9): error TS1021: An index signature must have a type annotation.
+tests/cases/compiler/giant.ts(127,10): error TS1096: An index signature must have exactly one parameter.
 tests/cases/compiler/giant.ts(140,9): error TS2386: Overload signatures must all be optional or required.
 tests/cases/compiler/giant.ts(166,16): error TS2300: Duplicate identifier 'pgF'.
 tests/cases/compiler/giant.ts(167,20): error TS2300: Duplicate identifier 'pgF'.
@@ -182,6 +170,8 @@ tests/cases/compiler/giant.ts(176,16): error TS2300: Duplicate identifier 'tsF'.
 tests/cases/compiler/giant.ts(177,20): error TS2300: Duplicate identifier 'tsF'.
 tests/cases/compiler/giant.ts(178,16): error TS2300: Duplicate identifier 'tgF'.
 tests/cases/compiler/giant.ts(179,20): error TS2300: Duplicate identifier 'tgF'.
+tests/cases/compiler/giant.ts(205,9): error TS1021: An index signature must have a type annotation.
+tests/cases/compiler/giant.ts(206,10): error TS1096: An index signature must have exactly one parameter.
 tests/cases/compiler/giant.ts(219,9): error TS2386: Overload signatures must all be optional or required.
 tests/cases/compiler/giant.ts(245,16): error TS2300: Duplicate identifier 'pgF'.
 tests/cases/compiler/giant.ts(246,20): error TS2300: Duplicate identifier 'pgF'.
@@ -207,6 +197,8 @@ tests/cases/compiler/giant.ts(291,12): error TS2300: Duplicate identifier 'tsF'.
 tests/cases/compiler/giant.ts(292,16): error TS2300: Duplicate identifier 'tsF'.
 tests/cases/compiler/giant.ts(293,12): error TS2300: Duplicate identifier 'tgF'.
 tests/cases/compiler/giant.ts(294,16): error TS2300: Duplicate identifier 'tgF'.
+tests/cases/compiler/giant.ts(320,5): error TS1021: An index signature must have a type annotation.
+tests/cases/compiler/giant.ts(321,6): error TS1096: An index signature must have exactly one parameter.
 tests/cases/compiler/giant.ts(334,5): error TS2386: Overload signatures must all be optional or required.
 tests/cases/compiler/giant.ts(345,16): error TS2300: Duplicate identifier 'pgF'.
 tests/cases/compiler/giant.ts(346,20): error TS2300: Duplicate identifier 'pgF'.
@@ -220,6 +212,8 @@ tests/cases/compiler/giant.ts(355,16): error TS2300: Duplicate identifier 'tsF'.
 tests/cases/compiler/giant.ts(356,20): error TS2300: Duplicate identifier 'tsF'.
 tests/cases/compiler/giant.ts(357,16): error TS2300: Duplicate identifier 'tgF'.
 tests/cases/compiler/giant.ts(358,20): error TS2300: Duplicate identifier 'tgF'.
+tests/cases/compiler/giant.ts(384,9): error TS1021: An index signature must have a type annotation.
+tests/cases/compiler/giant.ts(385,10): error TS1096: An index signature must have exactly one parameter.
 tests/cases/compiler/giant.ts(398,9): error TS2386: Overload signatures must all be optional or required.
 tests/cases/compiler/giant.ts(424,16): error TS2300: Duplicate identifier 'pgF'.
 tests/cases/compiler/giant.ts(425,20): error TS2300: Duplicate identifier 'pgF'.
@@ -233,6 +227,8 @@ tests/cases/compiler/giant.ts(434,16): error TS2300: Duplicate identifier 'tsF'.
 tests/cases/compiler/giant.ts(435,20): error TS2300: Duplicate identifier 'tsF'.
 tests/cases/compiler/giant.ts(436,16): error TS2300: Duplicate identifier 'tgF'.
 tests/cases/compiler/giant.ts(437,20): error TS2300: Duplicate identifier 'tgF'.
+tests/cases/compiler/giant.ts(463,9): error TS1021: An index signature must have a type annotation.
+tests/cases/compiler/giant.ts(464,10): error TS1096: An index signature must have exactly one parameter.
 tests/cases/compiler/giant.ts(477,9): error TS2386: Overload signatures must all be optional or required.
 tests/cases/compiler/giant.ts(503,16): error TS2300: Duplicate identifier 'pgF'.
 tests/cases/compiler/giant.ts(504,20): error TS2300: Duplicate identifier 'pgF'.
@@ -258,7 +254,11 @@ tests/cases/compiler/giant.ts(549,12): error TS2300: Duplicate identifier 'tsF'.
 tests/cases/compiler/giant.ts(550,16): error TS2300: Duplicate identifier 'tsF'.
 tests/cases/compiler/giant.ts(551,12): error TS2300: Duplicate identifier 'tgF'.
 tests/cases/compiler/giant.ts(552,16): error TS2300: Duplicate identifier 'tgF'.
+tests/cases/compiler/giant.ts(588,9): error TS1021: An index signature must have a type annotation.
+tests/cases/compiler/giant.ts(589,10): error TS1096: An index signature must have exactly one parameter.
 tests/cases/compiler/giant.ts(602,9): error TS2386: Overload signatures must all be optional or required.
+tests/cases/compiler/giant.ts(654,9): error TS1021: An index signature must have a type annotation.
+tests/cases/compiler/giant.ts(655,10): error TS1096: An index signature must have exactly one parameter.
 tests/cases/compiler/giant.ts(668,9): error TS2386: Overload signatures must all be optional or required.
 
 

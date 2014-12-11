@@ -8667,54 +8667,6 @@ module ts {
             return <Identifier>node;
         }
 
-        // GRAMMAR CHECKING
-        function checkGrammarForDisallowedTrailingComma(list: NodeArray<Node>): boolean {
-            if (list && list.hasTrailingComma) {
-                var start = list.end - ",".length;
-                var end = list.end;
-                var sourceFile = getSourceFileOfNode(list[0]);
-                grammarErrorAtPos(sourceFile, start, end - start, Diagnostics.Trailing_comma_not_allowed);
-                return true;
-            }
-        }
-
-        function hasParseDiagnostics(sourceFile: SourceFile): boolean {
-            return sourceFile.parseDiagnostics.length > 0;
-        }
-
-        function scanToken(scanner: Scanner, pos: number) {
-            scanner.setTextPos(pos);
-            scanner.scan();
-            var start = scanner.getTokenPos();
-            scanner.setTextPos(start);
-            scanner.scan();
-            return start;
-        }
-
-        function grammarErrorOnFirstToken(node: Node, message: DiagnosticMessage, arg0?: any, arg1?: any, arg2?: any): void {
-            var sourceFile = getSourceFileOfNode(node);
-            if (!hasParseDiagnostics(sourceFile)) {
-                var scanner = createScanner(compilerOptions.target, /*skipTrivia*/ true, sourceFile.text);
-                var start = scanToken(scanner, node.pos);
-                diagnostics.push(createFileDiagnostic(sourceFile, start, scanner.getTextPos() - start, message, arg0, arg1, arg2));
-            }
-        }
-
-        function grammarErrorAtPos(sourceFile: SourceFile, start: number, length: number, message: DiagnosticMessage, arg0?: any, arg1?: any, arg2?: any): void {
-            if (!hasParseDiagnostics(sourceFile)) {
-                diagnostics.push(createFileDiagnostic(sourceFile, start, length, message, arg0, arg1, arg2));
-            }
-        }
-
-        function grammarErrorOnNode(node: Node, message: DiagnosticMessage, arg0?: any, arg1?: any, arg2?: any): void {
-            var sourceFile = getSourceFileOfNode(node);
-            if (!hasParseDiagnostics(sourceFile)) {
-                var span = getErrorSpanForNode(node);
-                var start = span.end > span.pos ? skipTrivia(sourceFile.text, span.pos) : span.pos;
-                diagnostics.push(createFileDiagnostic(sourceFile, start, span.end - start, message, arg0, arg1, arg2));
-            }
-        }
-
         function checkImportDeclaration(node: ImportDeclaration) {
             checkCollisionWithCapturedThisVariable(node, node.name);
             checkCollisionWithRequireExportsInGeneratedCode(node, node.name);
@@ -8803,7 +8755,12 @@ module ts {
                 case SyntaxKind.ConstructorType:
                 case SyntaxKind.CallSignature:
                 case SyntaxKind.ConstructSignature:
+                    // Grammar checking
+                    checkGrammarSignatureDeclaration(<SignatureDeclaration>node)
+                    return checkSignatureDeclaration(<SignatureDeclaration>node);
                 case SyntaxKind.IndexSignature:
+                    // Grammar checking
+                    checkGrammarIndexSignature(<SignatureDeclaration>node);
                     return checkSignatureDeclaration(<SignatureDeclaration>node);
                 case SyntaxKind.MethodDeclaration:
                 case SyntaxKind.MethodSignature:
@@ -9680,6 +9637,278 @@ module ts {
                 ? getGlobalType("TemplateStringsArray")
                 : unknownType;
             anyArrayType = createArrayType(anyType);
+        }
+
+
+        // GRAMMAR CHECKING
+        function checkModifiers(node: Node): boolean {
+            switch (node.kind) {
+                case SyntaxKind.GetAccessor:
+                case SyntaxKind.SetAccessor:
+                case SyntaxKind.Constructor:
+                case SyntaxKind.PropertyDeclaration:
+                case SyntaxKind.PropertySignature:
+                case SyntaxKind.MethodDeclaration:
+                case SyntaxKind.MethodSignature:
+                case SyntaxKind.IndexSignature:
+                case SyntaxKind.ClassDeclaration:
+                case SyntaxKind.InterfaceDeclaration:
+                case SyntaxKind.ModuleDeclaration:
+                case SyntaxKind.EnumDeclaration:
+                case SyntaxKind.ExportAssignment:
+                case SyntaxKind.VariableStatement:
+                case SyntaxKind.FunctionDeclaration:
+                case SyntaxKind.TypeAliasDeclaration:
+                case SyntaxKind.ImportDeclaration:
+                case SyntaxKind.Parameter:
+                    break;
+                default:
+                    return false;
+            }
+
+            if (!node.modifiers) {
+                return;
+            }
+
+            var lastStatic: Node, lastPrivate: Node, lastProtected: Node, lastDeclare: Node;
+            var flags = 0;
+            for (var i = 0, n = node.modifiers.length; i < n; i++) {
+                var modifier = node.modifiers[i];
+
+                switch (modifier.kind) {
+                    case SyntaxKind.PublicKeyword:
+                    case SyntaxKind.ProtectedKeyword:
+                    case SyntaxKind.PrivateKeyword:
+                        var text: string;
+                        if (modifier.kind === SyntaxKind.PublicKeyword) {
+                            text = "public";
+                        }
+                        else if (modifier.kind === SyntaxKind.ProtectedKeyword) {
+                            text = "protected";
+                            lastProtected = modifier;
+                        }
+                        else {
+                            text = "private";
+                            lastPrivate = modifier;
+                        }
+
+                        if (flags & NodeFlags.AccessibilityModifier) {
+                            return grammarErrorOnNode(modifier, Diagnostics.Accessibility_modifier_already_seen);
+                        }
+                        else if (flags & NodeFlags.Static) {
+                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_must_precede_1_modifier, text, "static");
+                        }
+                        else if (node.parent.kind === SyntaxKind.ModuleBlock || node.parent.kind === SyntaxKind.SourceFile) {
+                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_appear_on_a_module_element, text);
+                        }
+                        flags |= modifierToFlag(modifier.kind);
+                        break;
+
+                    case SyntaxKind.StaticKeyword:
+                        if (flags & NodeFlags.Static) {
+                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_already_seen, "static");
+                        }
+                        else if (node.parent.kind === SyntaxKind.ModuleBlock || node.parent.kind === SyntaxKind.SourceFile) {
+                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_appear_on_a_module_element, "static");
+                        }
+                        else if (node.kind === SyntaxKind.Parameter) {
+                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_appear_on_a_parameter, "static");
+                        }
+                        flags |= NodeFlags.Static;
+                        lastStatic = modifier;
+                        break;
+
+                    case SyntaxKind.ExportKeyword:
+                        if (flags & NodeFlags.Export) {
+                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_already_seen, "export");
+                        }
+                        else if (flags & NodeFlags.Ambient) {
+                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_must_precede_1_modifier, "export", "declare");
+                        }
+                        else if (node.parent.kind === SyntaxKind.ClassDeclaration) {
+                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_appear_on_a_class_element, "export");
+                        }
+                        else if (node.kind === SyntaxKind.Parameter) {
+                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_appear_on_a_parameter, "export");
+                        }
+                        flags |= NodeFlags.Export;
+                        break;
+
+                    case SyntaxKind.DeclareKeyword:
+                        // TODO (yuisu) : Bring back the parser grammar checking
+                        break;
+                }
+            }
+
+            if (node.kind === SyntaxKind.Constructor) {
+                if (flags & NodeFlags.Static) {
+                    return grammarErrorOnNode(lastStatic, Diagnostics._0_modifier_cannot_appear_on_a_constructor_declaration, "static");
+                }
+                else if (flags & NodeFlags.Protected) {
+                    return grammarErrorOnNode(lastProtected, Diagnostics._0_modifier_cannot_appear_on_a_constructor_declaration, "protected");
+                }
+                else if (flags & NodeFlags.Private) {
+                    return grammarErrorOnNode(lastPrivate, Diagnostics._0_modifier_cannot_appear_on_a_constructor_declaration, "private");
+                }
+            }
+            else if (node.kind === SyntaxKind.ImportDeclaration && flags & NodeFlags.Ambient) {
+                return grammarErrorOnNode(lastDeclare, Diagnostics.A_declare_modifier_cannot_be_used_with_an_import_declaration, "declare");
+            }
+            else if (node.kind === SyntaxKind.InterfaceDeclaration && flags & NodeFlags.Ambient) {
+                return grammarErrorOnNode(lastDeclare, Diagnostics.A_declare_modifier_cannot_be_used_with_an_interface_declaration, "declare");
+            }
+        }
+
+        function checkGrammarForDisallowedTrailingComma(list: NodeArray<Node>): boolean {
+            if (list && list.hasTrailingComma) {
+                var start = list.end - ",".length;
+                var end = list.end;
+                var sourceFile = getSourceFileOfNode(list[0]);
+                return grammarErrorAtPos(sourceFile, start, end - start, Diagnostics.Trailing_comma_not_allowed);
+            }
+        }
+
+        function checkGrammarTypeParameterList(signatureDecl: SignatureDeclaration, typeParameters: NodeArray<TypeParameterDeclaration>): boolean {
+            if (checkGrammarForDisallowedTrailingComma(typeParameters)) {
+                return true;
+            }
+
+            if (typeParameters && typeParameters.length === 0) {
+                var start = typeParameters.pos - "<".length;
+                var sourceFile = getSourceFileOfNode(signatureDecl);
+                var end = skipTrivia(sourceFile.text, typeParameters.end) + ">".length;
+                return grammarErrorAtPos(sourceFile, start, end - start, Diagnostics.Type_parameter_list_cannot_be_empty);
+            }
+        }
+
+        function checkGrammarParameterList(parameters: NodeArray<ParameterDeclaration>) {
+            if (checkGrammarForDisallowedTrailingComma(parameters)) {
+                return true;
+            }
+
+            var seenOptionalParameter = false;
+            var parameterCount = parameters.length;
+
+            for (var i = 0; i < parameterCount; i++) {
+                var parameter = parameters[i];
+                if (parameter.dotDotDotToken) {
+                    if (i !== (parameterCount - 1)) {
+                        return grammarErrorOnNode(parameter.dotDotDotToken, Diagnostics.A_rest_parameter_must_be_last_in_a_parameter_list);
+                    }
+
+                    if (parameter.questionToken) {
+                        return grammarErrorOnNode(parameter.questionToken, Diagnostics.A_rest_parameter_cannot_be_optional);
+                    }
+
+                    if (parameter.initializer) {
+                        return grammarErrorOnNode(parameter.name, Diagnostics.A_rest_parameter_cannot_have_an_initializer);
+                    }
+                }
+                else if (parameter.questionToken || parameter.initializer) {
+                    seenOptionalParameter = true;
+
+                    if (parameter.questionToken && parameter.initializer) {
+                        return grammarErrorOnNode(parameter.name, Diagnostics.Parameter_cannot_have_question_mark_and_initializer);
+                    }
+                }
+                else {
+                    if (seenOptionalParameter) {
+                        return grammarErrorOnNode(parameter.name, Diagnostics.A_required_parameter_cannot_follow_an_optional_parameter);
+                    }
+                }
+            }
+        }
+
+        function checkGrammarSignatureDeclaration(node: SignatureDeclaration) {
+            if (!checkGrammarTypeParameterList(node, node.typeParameters)) {
+                checkGrammarParameterList(node.parameters);
+            }
+        }
+
+        function checkGrammarIndexSignatureParameters(node: SignatureDeclaration): boolean {
+            var parameter = node.parameters[0];
+            if (node.parameters.length !== 1) {
+                if (parameter) {
+                    return grammarErrorOnNode(parameter.name, Diagnostics.An_index_signature_must_have_exactly_one_parameter);
+                }
+                else {
+                    return grammarErrorOnNode(node, Diagnostics.An_index_signature_must_have_exactly_one_parameter);
+                }
+            }
+            else if (parameter.dotDotDotToken) {
+                return grammarErrorOnNode(parameter.dotDotDotToken, Diagnostics.An_index_signature_cannot_have_a_rest_parameter);
+            }
+            else if (parameter.flags & NodeFlags.Modifier) {
+                return grammarErrorOnNode(parameter.name, Diagnostics.An_index_signature_parameter_cannot_have_an_accessibility_modifier);
+            }
+            else if (parameter.questionToken) {
+                return grammarErrorOnNode(parameter.questionToken, Diagnostics.An_index_signature_parameter_cannot_have_a_question_mark);
+            }
+            else if (parameter.initializer) {
+                return grammarErrorOnNode(parameter.name, Diagnostics.An_index_signature_parameter_cannot_have_an_initializer);
+            }
+            else if (!parameter.type) {
+                return grammarErrorOnNode(parameter.name, Diagnostics.An_index_signature_parameter_must_have_a_type_annotation);
+            }
+            else if (parameter.type.kind !== SyntaxKind.StringKeyword && parameter.type.kind !== SyntaxKind.NumberKeyword) {
+                return grammarErrorOnNode(parameter.name, Diagnostics.An_index_signature_parameter_type_must_be_string_or_number);
+            }
+            else if (!node.type) {
+                return grammarErrorOnNode(node, Diagnostics.An_index_signature_must_have_a_type_annotation);
+            }
+        }
+
+        function checkGrammarForIndexSignatureModifier(node: SignatureDeclaration): void {
+            if (node.flags & NodeFlags.Modifier) {
+                grammarErrorOnFirstToken(node, Diagnostics.Modifiers_not_permitted_on_index_signature_members);
+            }
+        }
+
+        function checkGrammarIndexSignature(node: SignatureDeclaration) {
+            var hasErrorFromCheckModifiersOrParameters = checkModifiers(node) ? true: checkGrammarIndexSignatureParameters(node);
+            if (!hasErrorFromCheckModifiersOrParameters) {
+                checkGrammarForIndexSignatureModifier(node);
+            }
+        }
+
+        function hasParseDiagnostics(sourceFile: SourceFile): boolean {
+            return sourceFile.parseDiagnostics.length > 0;
+        }
+
+        function scanToken(scanner: Scanner, pos: number) {
+            scanner.setTextPos(pos);
+            scanner.scan();
+            var start = scanner.getTokenPos();
+            scanner.setTextPos(start);
+            scanner.scan();
+            return start;
+        }
+
+        function grammarErrorOnFirstToken(node: Node, message: DiagnosticMessage, arg0?: any, arg1?: any, arg2?: any): boolean {
+            var sourceFile = getSourceFileOfNode(node);
+            if (!hasParseDiagnostics(sourceFile)) {
+                var scanner = createScanner(compilerOptions.target, /*skipTrivia*/ true, sourceFile.text);
+                var start = scanToken(scanner, node.pos);
+                diagnostics.push(createFileDiagnostic(sourceFile, start, scanner.getTextPos() - start, message, arg0, arg1, arg2));
+                return true;
+            }
+        }
+
+        function grammarErrorAtPos(sourceFile: SourceFile, start: number, length: number, message: DiagnosticMessage, arg0?: any, arg1?: any, arg2?: any): boolean {
+            if (!hasParseDiagnostics(sourceFile)) {
+                diagnostics.push(createFileDiagnostic(sourceFile, start, length, message, arg0, arg1, arg2));
+                return true;
+            }
+        }
+
+        function grammarErrorOnNode(node: Node, message: DiagnosticMessage, arg0?: any, arg1?: any, arg2?: any): boolean {
+            var sourceFile = getSourceFileOfNode(node);
+            if (!hasParseDiagnostics(sourceFile)) {
+                var span = getErrorSpanForNode(node);
+                var start = span.end > span.pos ? skipTrivia(sourceFile.text, span.pos) : span.pos;
+                diagnostics.push(createFileDiagnostic(sourceFile, start, span.end - start, message, arg0, arg1, arg2));
+                return true;
+            }
         }
 
         initializeTypeChecker();
