@@ -7895,6 +7895,12 @@ module ts {
 
         // Check variable, parameter, or property declaration
         function checkVariableLikeDeclaration(node: VariableLikeDeclaration) {
+            // Grammar checking
+            // TODO (yuisu) : Revisit this check once move all grammar checking
+            if (node.kind === SyntaxKind.BindingElement) {
+                checkGrammarBindingElement(<BindingElement>node);
+            }
+
             checkSourceElement(node.type);
             // For a computed property, just check the initializer and exit
             if (hasComputedNameButNotSymbol(node)) {
@@ -9761,7 +9767,7 @@ module ts {
                         break;
 
                     case SyntaxKind.DeclareKeyword:
-                        // TODO (yuisu) : Bring back the parser grammar checking
+                        // TODO (yuisu) : Revisit this once moving ambient Context into type checking
                         break;
                 }
             }
@@ -9923,6 +9929,14 @@ module ts {
         function checkGrammarArguments(node: CallExpression, arguments: NodeArray<Expression>): boolean {
             return checkGrammarForDisallowedTrailingComma(arguments) ||
                 checkGrammarForOmittedArgument(node, arguments);
+        }
+
+        function checkGrammarBindingElement(node: BindingElement) {
+            if (!checkGrammarModifiers(node) && (node.parserContextFlags & ParserContextFlags.StrictMode && isEvalOrArgumentsIdentifier(node.name))) {
+                    // It is a SyntaxError if a VariableDeclaration or VariableDeclarationNoIn occurs within strict code
+                    // and its Identifier is eval or arguments
+                    reportGrammarErrorOfInvalidUseInStrictMode(<Identifier>node.name);
+            }
         }
 
         function hasParseDiagnostics(sourceFile: SourceFile): boolean {
