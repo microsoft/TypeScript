@@ -112,7 +112,7 @@ module ts {
         {
             name: "suppressImplicitAnyIndexErrors",
             type: "boolean",
-            description: Diagnostics.Suppress_noImplicitAny_errors_for_indexing_into_objects_lacking_index_signatures,
+            description: Diagnostics.Suppress_noImplicitAny_errors_for_indexing_objects_lacking_index_signatures,
         },
         {
             name: "target",

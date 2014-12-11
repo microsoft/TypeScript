@@ -1643,7 +1643,7 @@
         "category": "Error",
         "code": 6054
     },
-    "Suppress noImplicitAny errors for indexing into objects lacking index signatures.": {
+    "Suppress noImplicitAny errors for indexing objects lacking index signatures.": {
         "category": "Message",
         "code": 6055
     },
