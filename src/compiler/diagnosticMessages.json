@@ -166,7 +166,8 @@
     },
     "A rest parameter cannot be optional.": {
         "category": "Error",
-        "code": 1047
+        "code": 1047,
+        "isEarly":  true
     },
     "A rest parameter cannot have an initializer.": {
         "category": "Error",

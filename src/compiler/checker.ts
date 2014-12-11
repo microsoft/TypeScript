@@ -6992,7 +6992,10 @@ module ts {
                 case SyntaxKind.ParenthesizedExpression:
                     return checkExpression((<ParenthesizedExpression>node).expression);
                 case SyntaxKind.FunctionExpression:
+                    return checkFunctionExpressionOrObjectLiteralMethod(<FunctionExpression>node, contextualMapper);
                 case SyntaxKind.ArrowFunction:
+                    // Grammar checking
+                    checkGrammarSignatureDeclarationOrArrowFunction(<FunctionExpression>node);
                     return checkFunctionExpressionOrObjectLiteralMethod(<FunctionExpression>node, contextualMapper);
                 case SyntaxKind.TypeOfExpression:
                     return checkTypeOfExpression(<TypeOfExpression>node);
@@ -8755,7 +8758,7 @@ module ts {
                 case SyntaxKind.CallSignature:
                 case SyntaxKind.ConstructSignature:
                     // Grammar checking
-                    checkGrammarSignatureDeclaration(<SignatureDeclaration>node)
+                    checkGrammarSignatureDeclarationOrArrowFunction(<SignatureDeclaration>node)
                     return checkSignatureDeclaration(<SignatureDeclaration>node);
                 case SyntaxKind.IndexSignature:
                     // Grammar checking
@@ -9767,7 +9770,7 @@ module ts {
             }
         }
 
-        function checkGrammarTypeParameterList(signatureDecl: SignatureDeclaration, typeParameters: NodeArray<TypeParameterDeclaration>): boolean {
+        function checkGrammarTypeParameterList(signatureDecl: SignatureDeclaration | Expression, typeParameters: NodeArray<TypeParameterDeclaration>): boolean {
             if (checkGrammarForDisallowedTrailingComma(typeParameters)) {
                 return true;
             }
@@ -9818,9 +9821,9 @@ module ts {
             }
         }
 
-        function checkGrammarSignatureDeclaration(node: SignatureDeclaration) {
-            if (!checkGrammarTypeParameterList(node, node.typeParameters)) {
-                checkGrammarParameterList(node.parameters);
+        function checkGrammarSignatureDeclarationOrArrowFunction(node: SignatureDeclaration | FunctionExpression) {
+            if (!checkGrammarTypeParameterList(node, (<SignatureDeclaration>node).typeParameters)) {
+                checkGrammarParameterList((<SignatureDeclaration>node).parameters);
             }
         }
 

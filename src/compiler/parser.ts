@@ -4626,8 +4626,6 @@ module ts {
         function checkNode(node: Node, nodeKind: SyntaxKind): boolean {
             // Now do node specific checks.
             switch (nodeKind) {
-                case SyntaxKind.ArrowFunction:
-                    return checkAnySignatureDeclaration(<FunctionLikeDeclaration>node);
                 case SyntaxKind.BreakStatement:
                 case SyntaxKind.ContinueStatement:
                     return checkBreakOrContinueStatement(<BreakOrContinueStatement>node);

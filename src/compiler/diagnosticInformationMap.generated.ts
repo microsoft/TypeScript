@@ -38,7 +38,7 @@ module ts {
         _0_modifier_cannot_appear_on_a_module_element: { code: 1044, category: DiagnosticCategory.Error, key: "'{0}' modifier cannot appear on a module element.", isEarly: true },
         A_declare_modifier_cannot_be_used_with_an_interface_declaration: { code: 1045, category: DiagnosticCategory.Error, key: "A 'declare' modifier cannot be used with an interface declaration." },
         A_declare_modifier_is_required_for_a_top_level_declaration_in_a_d_ts_file: { code: 1046, category: DiagnosticCategory.Error, key: "A 'declare' modifier is required for a top level declaration in a .d.ts file." },
-        A_rest_parameter_cannot_be_optional: { code: 1047, category: DiagnosticCategory.Error, key: "A rest parameter cannot be optional." },
+        A_rest_parameter_cannot_be_optional: { code: 1047, category: DiagnosticCategory.Error, key: "A rest parameter cannot be optional.", isEarly: true },
         A_rest_parameter_cannot_have_an_initializer: { code: 1048, category: DiagnosticCategory.Error, key: "A rest parameter cannot have an initializer." },
         A_set_accessor_must_have_exactly_one_parameter: { code: 1049, category: DiagnosticCategory.Error, key: "A 'set' accessor must have exactly one parameter." },
         A_set_accessor_cannot_have_an_optional_parameter: { code: 1051, category: DiagnosticCategory.Error, key: "A 'set' accessor cannot have an optional parameter." },
