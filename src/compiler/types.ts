@@ -1,6 +1,9 @@
 /// <reference path="core.ts"/>
 
 module ts {
+    export interface Map<T> {
+        [index: string]: T;
+    }
 
     export interface TextRange {
         pos: number;
@@ -1201,7 +1204,6 @@ module ts {
         StringLike = String | StringLiteral,
         NumberLike = Number | Enum,
         ObjectType = Class | Interface | Reference | Tuple | Anonymous,
-        Structured = Any | ObjectType | Union | TypeParameter
     }
 
     // Properties common to all types
