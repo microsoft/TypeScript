@@ -756,6 +756,60 @@ module m3 { }\
             compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 0);
         });
 
+        it('Moving methods from class to object literal',() => {
+            var source = "class C { public A() { } public B() { } public C() { } }"
+
+            var oldText = ScriptSnapshot.fromString(source);
+            var newTextAndChange = withChange(oldText, 0, "class C".length, "var v =");
+
+            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 0);
+        });
+
+        it('Moving methods from object literal to class',() => {
+            var source = "var v = { public A() { } public B() { } public C() { } }"
+
+            var oldText = ScriptSnapshot.fromString(source);
+            var newTextAndChange = withChange(oldText, 0, "var v =".length, "class C");
+
+            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 0);
+        });
+
+        it('Moving index signatures from class to interface',() => {
+            var source = "class C { public [a: number]: string; public [a: number]: string; public [a: number]: string }"
+
+            var oldText = ScriptSnapshot.fromString(source);
+            var newTextAndChange = withChange(oldText, 0, "class".length, "interface");
+
+            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 0);
+        });
+
+        it('Moving index signatures from interface to class',() => {
+            var source = "interface C { public [a: number]: string; public [a: number]: string; public [a: number]: string }"
+
+            var oldText = ScriptSnapshot.fromString(source);
+            var newTextAndChange = withChange(oldText, 0, "interface".length, "class");
+
+            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 0);
+        });
+
+        it('Moving accessors from class to object literal',() => {
+            var source = "class C { public get A() { } public get B() { } public get C() { } }"
+
+            var oldText = ScriptSnapshot.fromString(source);
+            var newTextAndChange = withChange(oldText, 0, "class C".length, "var v =");
+
+            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 0);
+        });
+
+        it('Moving accessors from object literal to class',() => {
+            var source = "var v = { public get A() { } public get B() { } public get C() { } }"
+
+            var oldText = ScriptSnapshot.fromString(source);
+            var newTextAndChange = withChange(oldText, 0, "var v =".length, "class C");
+
+            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 0);
+        });
+
         // Simulated typing tests.
 
         it('Type extends clause 1',() => {
