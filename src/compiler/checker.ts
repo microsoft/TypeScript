@@ -8095,7 +8095,11 @@ module ts {
 
         function checkTryStatement(node: TryStatement) {
             checkBlock(node.tryBlock);
-            if (node.catchClause) checkBlock(node.catchClause.block);
+            if (node.catchClause) {
+                // Grammar checking
+                checkGrammarCatchClause(node.catchClause);
+                checkBlock(node.catchClause.block);
+            }
             if (node.finallyBlock) checkBlock(node.finallyBlock);
         }
 
@@ -9936,6 +9940,19 @@ module ts {
                     // It is a SyntaxError if a VariableDeclaration or VariableDeclarationNoIn occurs within strict code
                     // and its Identifier is eval or arguments
                     reportGrammarErrorOfInvalidUseInStrictMode(<Identifier>node.name);
+            }
+        }
+
+        function checkGrammarCatchClause(node: CatchClause) {
+            if (node.type) {
+                var sourceFile = getSourceFileOfNode(node);
+                var colonStart = skipTrivia(sourceFile.text, node.name.end);
+                grammarErrorAtPos(sourceFile, colonStart, ":".length, Diagnostics.Catch_clause_parameter_cannot_have_a_type_annotation);
+            }
+            if (node.parserContextFlags & ParserContextFlags.StrictMode && isEvalOrArgumentsIdentifier(node.name)) {
+                // It is a SyntaxError if a TryStatement with a Catch occurs within strict code and the Identifier of the 
+                // Catch production is eval or arguments
+                reportGrammarErrorOfInvalidUseInStrictMode(node.name);
             }
         }
 

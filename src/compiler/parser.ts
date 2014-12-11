@@ -4636,7 +4636,7 @@ module ts {
                 case SyntaxKind.EnumDeclaration:                return checkEnumDeclaration(<EnumDeclaration>node);
                 //case SyntaxKind.BinaryExpression:               return checkBinaryExpression(<BinaryExpression>node);
                 //case SyntaxKind.BindingElement:                 return checkBindingElement(<BindingElement>node);
-                case SyntaxKind.CatchClause:                    return checkCatchClause(<CatchClause>node);
+                //case SyntaxKind.CatchClause:                    return checkCatchClause(<CatchClause>node);
                 case SyntaxKind.ClassDeclaration:               return checkClassDeclaration(<ClassDeclaration>node);
                 case SyntaxKind.ComputedPropertyName:           return checkComputedPropertyName(<ComputedPropertyName>node);
                 case SyntaxKind.Constructor:                    return checkConstructor(<ConstructorDeclaration>node);
