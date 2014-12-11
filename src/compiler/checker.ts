@@ -6405,7 +6405,7 @@ module ts {
 
             // Grammar checking
             if (node.kind === SyntaxKind.ArrowFunction) {
-                checkGrammarFunctionLikeDeclaration(<FunctionLikeDeclaration>node);
+                checkGrammarAnySignatureDeclaration(<FunctionLikeDeclaration>node);
             }
 
             // The identityMapper object is used to indicate that function expressions are wildcards
@@ -7058,6 +7058,16 @@ module ts {
         }
 
         function checkSignatureDeclaration(node: SignatureDeclaration) {
+            // Grammar checking
+            if (node.kind === SyntaxKind.IndexSignature) {
+                checkGrammarIndexSignature(<SignatureDeclaration>node);
+            }
+            // TODO (yuisu): Remove this check in else-if when SyntaxKind.Construct is moved and ambient context is handled
+            else  if (node.kind === SyntaxKind.FunctionType || node.kind === SyntaxKind.ConstructorType ||
+                      node.kind === SyntaxKind.CallSignature || node.kind === SyntaxKind.ConstructSignature){
+                checkGrammarAnySignatureDeclaration(<FunctionLikeDeclaration>node);
+            }
+
             checkTypeParameters(node.typeParameters);
             forEach(node.parameters, checkParameter);
             if (node.type) {
@@ -8765,12 +8775,8 @@ module ts {
                 case SyntaxKind.ConstructorType:
                 case SyntaxKind.CallSignature:
                 case SyntaxKind.ConstructSignature:
-                    // Grammar checking
-                    checkGrammarFunctionLikeDeclaration(<FunctionLikeDeclaration>node)
                     return checkSignatureDeclaration(<SignatureDeclaration>node);
                 case SyntaxKind.IndexSignature:
-                    // Grammar checking
-                    checkGrammarIndexSignature(<SignatureDeclaration>node);
                     return checkSignatureDeclaration(<SignatureDeclaration>node);
                 case SyntaxKind.MethodDeclaration:
                 case SyntaxKind.MethodSignature:
@@ -9829,7 +9835,7 @@ module ts {
             }
         }
 
-        function checkGrammarFunctionLikeDeclaration(node: FunctionLikeDeclaration) {
+        function checkGrammarAnySignatureDeclaration(node: FunctionLikeDeclaration) {
             var hasGrammarErrorFromCheckModifierOrTypeParameterList = checkGrammarModifiers(node) ? true : checkGrammarTypeParameterList(node, node.typeParameters);
             if (!hasGrammarErrorFromCheckModifierOrTypeParameterList) {
                 checkGrammarParameterList(node.parameters);
