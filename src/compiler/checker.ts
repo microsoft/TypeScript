@@ -6992,7 +6992,10 @@ module ts {
                 case SyntaxKind.ParenthesizedExpression:
                     return checkExpression((<ParenthesizedExpression>node).expression);
                 case SyntaxKind.FunctionExpression:
+                    return checkFunctionExpressionOrObjectLiteralMethod(<FunctionExpression>node, contextualMapper);
                 case SyntaxKind.ArrowFunction:
+                    // Grammar checking
+                    checkGrammarSignatureDeclaration(node);
                     return checkFunctionExpressionOrObjectLiteralMethod(<FunctionExpression>node, contextualMapper);
                 case SyntaxKind.TypeOfExpression:
                     return checkTypeOfExpression(<TypeOfExpression>node);
@@ -9767,7 +9770,7 @@ module ts {
             }
         }
 
-        function checkGrammarTypeParameterList(signatureDecl: SignatureDeclaration, typeParameters: NodeArray<TypeParameterDeclaration>): boolean {
+        function checkGrammarTypeParameterList(signatureDecl: SignatureDeclaration | Expression, typeParameters: NodeArray<TypeParameterDeclaration>): boolean {
             if (checkGrammarForDisallowedTrailingComma(typeParameters)) {
                 return true;
             }
@@ -9818,9 +9821,9 @@ module ts {
             }
         }
 
-        function checkGrammarSignatureDeclaration(node: SignatureDeclaration) {
-            if (!checkGrammarTypeParameterList(node, node.typeParameters)) {
-                checkGrammarParameterList(node.parameters);
+        function checkGrammarSignatureDeclaration(node: SignatureDeclaration | Expression) {
+            if (!checkGrammarTypeParameterList(node, (<SignatureDeclaration>node).typeParameters)) {
+                checkGrammarParameterList((<SignatureDeclaration>node).parameters);
             }
         }
 
