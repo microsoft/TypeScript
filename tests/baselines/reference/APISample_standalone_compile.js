@@ -2,7 +2,7 @@
 
 //// [APISample_standalone_compile.ts]
 
-var sourceFile = ts.createSourceFile("file1.ts", "var x = 0;", ts.ScriptTarget.Latest, "0.0");
+var sourceFile = ts.createSourceFile("file1.ts", "var x = 0;", ts.ScriptTarget.Latest);
 
 var program = ts.createProgram(["file1.ts"], {}, undefined);
 //// [typescriptServices.d.ts]
@@ -154,87 +154,92 @@ declare module ts {
         ComputedPropertyName = 121,
         TypeParameter = 122,
         Parameter = 123,
-        Property = 124,
-        Method = 125,
-        Constructor = 126,
-        GetAccessor = 127,
-        SetAccessor = 128,
-        CallSignature = 129,
-        ConstructSignature = 130,
-        IndexSignature = 131,
-        TypeReference = 132,
-        FunctionType = 133,
-        ConstructorType = 134,
-        TypeQuery = 135,
-        TypeLiteral = 136,
-        ArrayType = 137,
-        TupleType = 138,
-        UnionType = 139,
-        ParenthesizedType = 140,
-        ArrayLiteralExpression = 141,
-        ObjectLiteralExpression = 142,
-        PropertyAccessExpression = 143,
-        ElementAccessExpression = 144,
-        CallExpression = 145,
-        NewExpression = 146,
-        TaggedTemplateExpression = 147,
-        TypeAssertionExpression = 148,
-        ParenthesizedExpression = 149,
-        FunctionExpression = 150,
-        ArrowFunction = 151,
-        DeleteExpression = 152,
-        TypeOfExpression = 153,
-        VoidExpression = 154,
-        PrefixUnaryExpression = 155,
-        PostfixUnaryExpression = 156,
-        BinaryExpression = 157,
-        ConditionalExpression = 158,
-        TemplateExpression = 159,
-        YieldExpression = 160,
-        OmittedExpression = 161,
-        TemplateSpan = 162,
-        Block = 163,
-        VariableStatement = 164,
-        EmptyStatement = 165,
-        ExpressionStatement = 166,
-        IfStatement = 167,
-        DoStatement = 168,
-        WhileStatement = 169,
-        ForStatement = 170,
-        ForInStatement = 171,
-        ContinueStatement = 172,
-        BreakStatement = 173,
-        ReturnStatement = 174,
-        WithStatement = 175,
-        SwitchStatement = 176,
-        LabeledStatement = 177,
-        ThrowStatement = 178,
-        TryStatement = 179,
-        TryBlock = 180,
-        FinallyBlock = 181,
-        DebuggerStatement = 182,
-        VariableDeclaration = 183,
-        FunctionDeclaration = 184,
-        ClassDeclaration = 185,
-        InterfaceDeclaration = 186,
-        TypeAliasDeclaration = 187,
-        EnumDeclaration = 188,
-        ModuleDeclaration = 189,
-        ModuleBlock = 190,
-        ImportDeclaration = 191,
-        ExportAssignment = 192,
-        ExternalModuleReference = 193,
-        CaseClause = 194,
-        DefaultClause = 195,
-        HeritageClause = 196,
-        CatchClause = 197,
-        PropertyAssignment = 198,
-        ShorthandPropertyAssignment = 199,
-        EnumMember = 200,
-        SourceFile = 201,
-        Program = 202,
-        SyntaxList = 203,
-        Count = 204,
+        PropertySignature = 124,
+        PropertyDeclaration = 125,
+        MethodSignature = 126,
+        MethodDeclaration = 127,
+        Constructor = 128,
+        GetAccessor = 129,
+        SetAccessor = 130,
+        CallSignature = 131,
+        ConstructSignature = 132,
+        IndexSignature = 133,
+        TypeReference = 134,
+        FunctionType = 135,
+        ConstructorType = 136,
+        TypeQuery = 137,
+        TypeLiteral = 138,
+        ArrayType = 139,
+        TupleType = 140,
+        UnionType = 141,
+        ParenthesizedType = 142,
+        ObjectBindingPattern = 143,
+        ArrayBindingPattern = 144,
+        BindingElement = 145,
+        ArrayLiteralExpression = 146,
+        ObjectLiteralExpression = 147,
+        PropertyAccessExpression = 148,
+        ElementAccessExpression = 149,
+        CallExpression = 150,
+        NewExpression = 151,
+        TaggedTemplateExpression = 152,
+        TypeAssertionExpression = 153,
+        ParenthesizedExpression = 154,
+        FunctionExpression = 155,
+        ArrowFunction = 156,
+        DeleteExpression = 157,
+        TypeOfExpression = 158,
+        VoidExpression = 159,
+        PrefixUnaryExpression = 160,
+        PostfixUnaryExpression = 161,
+        BinaryExpression = 162,
+        ConditionalExpression = 163,
+        TemplateExpression = 164,
+        YieldExpression = 165,
+        OmittedExpression = 166,
+        TemplateSpan = 167,
+        Block = 168,
+        VariableStatement = 169,
+        EmptyStatement = 170,
+        ExpressionStatement = 171,
+        IfStatement = 172,
+        DoStatement = 173,
+        WhileStatement = 174,
+        ForStatement = 175,
+        ForInStatement = 176,
+        ContinueStatement = 177,
+        BreakStatement = 178,
+        ReturnStatement = 179,
+        WithStatement = 180,
+        SwitchStatement = 181,
+        LabeledStatement = 182,
+        ThrowStatement = 183,
+        TryStatement = 184,
+        TryBlock = 185,
+        FinallyBlock = 186,
+        DebuggerStatement = 187,
+        VariableDeclaration = 188,
+        FunctionDeclaration = 189,
+        ClassDeclaration = 190,
+        InterfaceDeclaration = 191,
+        TypeAliasDeclaration = 192,
+        EnumDeclaration = 193,
+        ModuleDeclaration = 194,
+        ModuleBlock = 195,
+        ImportDeclaration = 196,
+        ExportAssignment = 197,
+        ExternalModuleReference = 198,
+        CaseClause = 199,
+        DefaultClause = 200,
+        HeritageClause = 201,
+        CatchClause = 202,
+        PropertyAssignment = 203,
+        ShorthandPropertyAssignment = 204,
+        EnumMember = 205,
+        SourceFile = 206,
+        Program = 207,
+        SyntaxList = 208,
+        Count = 209,
         FirstAssignment = 51,
         LastAssignment = 62,
         FirstReservedWord = 64,
@@ -243,8 +248,8 @@ declare module ts {
         LastKeyword = 119,
         FirstFutureReservedWord = 100,
         LastFutureReservedWord = 108,
-        FirstTypeNode = 132,
-        LastTypeNode = 140,
+        FirstTypeNode = 134,
+        LastTypeNode = 142,
         FirstPunctuation = 13,
         LastPunctuation = 62,
         FirstToken = 0,
@@ -312,7 +317,7 @@ declare module ts {
         right: Identifier;
     }
     type EntityName = Identifier | QualifiedName;
-    type DeclarationName = Identifier | LiteralExpression | ComputedPropertyName;
+    type DeclarationName = Identifier | LiteralExpression | ComputedPropertyName | BindingPattern;
     interface Declaration extends Node {
         _declarationBrand: any;
         name?: DeclarationName;
@@ -331,37 +336,52 @@ declare module ts {
         type?: TypeNode;
     }
     interface VariableDeclaration extends Declaration {
-        name: Identifier;
+        name: Identifier | BindingPattern;
         type?: TypeNode;
         initializer?: Expression;
     }
     interface ParameterDeclaration extends Declaration {
         dotDotDotToken?: Node;
-        name: Identifier;
-        questionToken?: Node;
-        type?: TypeNode | StringLiteralExpression;
-        initializer?: Expression;
-    }
-    interface PropertyDeclaration extends Declaration, ClassElement {
-        _propertyDeclarationBrand: any;
+        name: Identifier | BindingPattern;
         questionToken?: Node;
         type?: TypeNode;
         initializer?: Expression;
     }
-    type VariableOrParameterDeclaration = VariableDeclaration | ParameterDeclaration;
-    type VariableOrParameterOrPropertyDeclaration = VariableOrParameterDeclaration | PropertyDeclaration;
+    interface BindingElement extends Declaration {
+        propertyName?: Identifier;
+        dotDotDotToken?: Node;
+        name: Identifier | BindingPattern;
+        initializer?: Expression;
+    }
+    interface PropertyDeclaration extends Declaration, ClassElement {
+        name: DeclarationName;
+        questionToken?: Node;
+        type?: TypeNode;
+        initializer?: Expression;
+    }
     interface ObjectLiteralElement extends Declaration {
         _objectLiteralBrandBrand: any;
-    }
-    interface ShorthandPropertyAssignment extends ObjectLiteralElement {
-        name: Identifier;
-        questionToken?: Node;
     }
     interface PropertyAssignment extends ObjectLiteralElement {
         _propertyAssignmentBrand: any;
         name: DeclarationName;
         questionToken?: Node;
         initializer: Expression;
+    }
+    interface ShorthandPropertyAssignment extends ObjectLiteralElement {
+        name: Identifier;
+        questionToken?: Node;
+    }
+    interface VariableLikeDeclaration extends Declaration {
+        propertyName?: Identifier;
+        dotDotDotToken?: Node;
+        name: DeclarationName;
+        questionToken?: Node;
+        type?: TypeNode;
+        initializer?: Expression;
+    }
+    interface BindingPattern extends Node {
+        elements: NodeArray<BindingElement>;
     }
     /**
      * Several node kinds share function-like features such as a signature,
@@ -421,6 +441,8 @@ declare module ts {
     }
     interface ParenthesizedTypeNode extends TypeNode {
         type: TypeNode;
+    }
+    interface StringLiteralTypeNode extends LiteralExpression, TypeNode {
     }
     interface Expression extends Node {
         _expressionBrand: any;
@@ -678,8 +700,6 @@ declare module ts {
         nodeCount: number;
         identifierCount: number;
         symbolCount: number;
-        isOpen: boolean;
-        version: string;
         languageVersion: ScriptTarget;
         identifiers: Map<string>;
     }
@@ -829,12 +849,13 @@ declare module ts {
         hasSemanticErrors(sourceFile?: SourceFile): boolean;
         isDeclarationVisible(node: Declaration): boolean;
         isImplementationOfOverload(node: FunctionLikeDeclaration): boolean;
-        writeTypeOfDeclaration(declaration: AccessorDeclaration | VariableOrParameterDeclaration, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter): void;
+        writeTypeOfDeclaration(declaration: AccessorDeclaration | VariableLikeDeclaration, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter): void;
         writeReturnTypeOfSignatureDeclaration(signatureDeclaration: SignatureDeclaration, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter): void;
         isSymbolAccessible(symbol: Symbol, enclosingDeclaration: Node, meaning: SymbolFlags): SymbolAccessiblityResult;
         isEntityNameVisible(entityName: EntityName, enclosingDeclaration: Node): SymbolVisibilityResult;
         getConstantValue(node: PropertyAccessExpression | ElementAccessExpression): number;
         isEmitBlocked(sourceFile?: SourceFile): boolean;
+        isUnknownIdentifier(location: Node, name: string): boolean;
     }
     const enum SymbolFlags {
         FunctionScopedVariable = 1,
@@ -854,54 +875,52 @@ declare module ts {
         Constructor = 16384,
         GetAccessor = 32768,
         SetAccessor = 65536,
-        CallSignature = 131072,
-        ConstructSignature = 262144,
-        IndexSignature = 524288,
-        TypeParameter = 1048576,
-        TypeAlias = 2097152,
-        ExportValue = 4194304,
-        ExportType = 8388608,
-        ExportNamespace = 16777216,
-        Import = 33554432,
-        Instantiated = 67108864,
-        Merged = 134217728,
-        Transient = 268435456,
-        Prototype = 536870912,
-        UnionProperty = 1073741824,
+        Signature = 131072,
+        TypeParameter = 262144,
+        TypeAlias = 524288,
+        ExportValue = 1048576,
+        ExportType = 2097152,
+        ExportNamespace = 4194304,
+        Import = 8388608,
+        Instantiated = 16777216,
+        Merged = 33554432,
+        Transient = 67108864,
+        Prototype = 134217728,
+        UnionProperty = 268435456,
+        Optional = 536870912,
         Enum = 384,
         Variable = 3,
         Value = 107455,
-        Type = 3152352,
+        Type = 793056,
         Namespace = 1536,
         Module = 1536,
         Accessor = 98304,
-        Signature = 917504,
         FunctionScopedVariableExcludes = 107454,
         BlockScopedVariableExcludes = 107455,
         ParameterExcludes = 107455,
         PropertyExcludes = 107455,
         EnumMemberExcludes = 107455,
         FunctionExcludes = 106927,
-        ClassExcludes = 3258879,
-        InterfaceExcludes = 3152288,
-        RegularEnumExcludes = 3258623,
-        ConstEnumExcludes = 3259263,
+        ClassExcludes = 899583,
+        InterfaceExcludes = 792992,
+        RegularEnumExcludes = 899327,
+        ConstEnumExcludes = 899967,
         ValueModuleExcludes = 106639,
         NamespaceModuleExcludes = 0,
         MethodExcludes = 99263,
         GetAccessorExcludes = 41919,
         SetAccessorExcludes = 74687,
-        TypeParameterExcludes = 2103776,
-        TypeAliasExcludes = 3152352,
-        ImportExcludes = 33554432,
-        ModuleMember = 35653619,
+        TypeParameterExcludes = 530912,
+        TypeAliasExcludes = 793056,
+        ImportExcludes = 8388608,
+        ModuleMember = 8914931,
         ExportHasLocal = 944,
-        HasLocals = 1041936,
+        HasLocals = 255504,
         HasExports = 1952,
         HasMembers = 6240,
-        IsContainer = 1048560,
+        IsContainer = 262128,
         PropertyOrAccessor = 98308,
-        Export = 29360128,
+        Export = 7340032,
     }
     interface Symbol {
         flags: SymbolFlags;
@@ -969,6 +988,7 @@ declare module ts {
         Union = 16384,
         Anonymous = 32768,
         FromSignature = 65536,
+        Unwidened = 131072,
         Intrinsic = 127,
         StringLike = 258,
         NumberLike = 132,
@@ -1336,8 +1356,10 @@ declare module ts {
 }
 declare module ts {
     function getNodeConstructor(kind: SyntaxKind): new () => Node;
+    function createNode(kind: SyntaxKind): Node;
     function forEachChild<T>(node: Node, cbNode: (node: Node) => T, cbNodes?: (nodes: Node[]) => T): T;
-    function createSourceFile(filename: string, sourceText: string, languageVersion: ScriptTarget, version: string, isOpen?: boolean): SourceFile;
+    function createCompilerHost(options: CompilerOptions): CompilerHost;
+    function createSourceFile(filename: string, sourceText: string, languageVersion: ScriptTarget, setParentNodes?: boolean): SourceFile;
     function createProgram(rootNames: string[], options: CompilerOptions, host: CompilerHost): Program;
 }
 declare module ts {
@@ -1386,6 +1408,8 @@ declare module ts {
         getDocumentationComment(): SymbolDisplayPart[];
     }
     interface SourceFile {
+        isOpen: boolean;
+        version: string;
         getScriptSnapshot(): IScriptSnapshot;
         getNamedDeclarations(): Declaration[];
         update(scriptSnapshot: IScriptSnapshot, version: string, isOpen: boolean, textChangeRange: TextChangeRange): SourceFile;
@@ -1425,6 +1449,8 @@ declare module ts {
     }
     interface Logger {
         log(s: string): void;
+        trace(s: string): void;
+        error(s: string): void;
     }
     interface LanguageServiceHost extends Logger {
         getCompilationSettings(): CompilerOptions;
@@ -1848,6 +1874,7 @@ declare module ts {
         isCancellationRequested(): boolean;
         throwIfCancellationRequested(): void;
     }
+    function createLanguageServiceSourceFile(filename: string, scriptSnapshot: IScriptSnapshot, scriptTarget: ScriptTarget, version: string, isOpen: boolean, setNodeParents: boolean): SourceFile;
     function createDocumentRegistry(): DocumentRegistry;
     function preProcessFile(sourceText: string, readImportFiles?: boolean): PreProcessedFileInfo;
     function createLanguageService(host: LanguageServiceHost, documentRegistry: DocumentRegistry): LanguageService;
@@ -1856,5 +1883,5 @@ declare module ts {
 
 
 //// [APISample_standalone_compile.js]
-var sourceFile = ts.createSourceFile("file1.ts", "var x = 0;", 2 /* Latest */, "0.0");
+var sourceFile = ts.createSourceFile("file1.ts", "var x = 0;", 2 /* Latest */);
 var program = ts.createProgram(["file1.ts"], {}, undefined);
