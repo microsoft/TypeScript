@@ -14,18 +14,6 @@ module ts {
         return new (getNodeConstructor(kind))();
     }
 
-    function isEvalOrArgumentsIdentifier(node: Node): boolean {
-        return node.kind === SyntaxKind.Identifier &&
-            (<Identifier>node).text &&
-            ((<Identifier>node).text === "eval" || (<Identifier>node).text === "arguments");
-    }
-
-    /// Should be called only on prologue directives (isPrologueDirective(node) should be true)
-    function isUseStrictPrologueDirective(node: Node): boolean {
-        Debug.assert(isPrologueDirective(node));
-        return (<Identifier>(<ExpressionStatement>node).expression).text === "use strict";
-    }
-
     // Invokes a callback for each child of the given node. The 'cbNode' callback is invoked for all child nodes
     // stored in properties. If a 'cbNodes' callback is specified, it is invoked for embedded arrays; otherwise,
     // embedded arrays are flattened and the 'cbNode' callback is invoked for each element. If a callback returns
@@ -327,7 +315,9 @@ module ts {
                 sys.writeFile(fileName, data, writeByteOrderMark);
             }
             catch (e) {
-                if (onError) onError(e.message);
+                if (onError) {
+                    onError(e.message);
+                }
             }
         }
 
@@ -431,6 +421,17 @@ module ts {
         }
 
         forEachChild(sourceFile, walk);
+    }
+
+    function isEvalOrArgumentsIdentifier(node: Node): boolean {
+        return node.kind === SyntaxKind.Identifier &&
+            ((<Identifier>node).text === "eval" || (<Identifier>node).text === "arguments");
+    }
+
+    /// Should be called only on prologue directives (isPrologueDirective(node) should be true)
+    function isUseStrictPrologueDirective(node: Node): boolean {
+        Debug.assert(isPrologueDirective(node));
+        return getTextOfNode((<ExpressionStatement>node).expression) === '"use strict"';
     }
 
     export function createSourceFile(filename: string, sourceText: string, languageVersion: ScriptTarget, setParentNodes = false): SourceFile {
