@@ -429,9 +429,10 @@ module ts {
     }
 
     /// Should be called only on prologue directives (isPrologueDirective(node) should be true)
-    function isUseStrictPrologueDirective(node: Node): boolean {
+    function isUseStrictPrologueDirective(sourceFile: SourceFile, node: Node): boolean {
         Debug.assert(isPrologueDirective(node));
-        return getTextOfNode((<ExpressionStatement>node).expression) === '"use strict"';
+        var nodeText = getSourceTextOfNodeFromSourceFile(sourceFile,(<ExpressionStatement>node).expression);
+        return nodeText === '"use strict"' || nodeText === "'use strict'";
     }
 
     export function createSourceFile(filename: string, sourceText: string, languageVersion: ScriptTarget, setParentNodes = false): SourceFile {
@@ -1137,7 +1138,7 @@ module ts {
                     // test elements only if we are not already in strict mode
                     if (checkForStrictMode && !inStrictModeContext()) {
                         if (isPrologueDirective(element)) {
-                            if (isUseStrictPrologueDirective(element)) {
+                            if (isUseStrictPrologueDirective(sourceFile, element)) {
                                 setStrictModeContext(true);
                                 checkForStrictMode = false;
                             }
