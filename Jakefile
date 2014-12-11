@@ -35,6 +35,7 @@ var compilerSources = [
     "types.ts",
     "scanner.ts",
     "parser.ts",
+    "utilities.ts",
     "binder.ts",
     "checker.ts",
     "emitter.ts",
@@ -47,25 +48,52 @@ var compilerSources = [
 
 var servicesSources = [
     "core.ts",
+    "sys.ts",
     "types.ts",
     "scanner.ts",
     "parser.ts",
+    "utilities.ts",
     "binder.ts",
     "checker.ts",
-    "emitter.ts"
+    "emitter.ts",
+    "diagnosticInformationMap.generated.ts"
 ].map(function (f) {
     return path.join(compilerDirectory, f);
 }).concat([
     "breakpoints.ts",
+    "navigationBar.ts",
+    "outliningElementsCollector.ts",
     "services.ts",
     "shims.ts",
     "signatureHelp.ts",
     "utilities.ts",
-    "navigationBar.ts",
-    "outliningElementsCollector.ts"
+    "formatting/formatting.ts",
+    "formatting/formattingContext.ts",
+    "formatting/formattingRequestKind.ts",
+    "formatting/formattingScanner.ts",
+    "formatting/references.ts",
+    "formatting/rule.ts",
+    "formatting/ruleAction.ts",
+    "formatting/ruleDescriptor.ts",
+    "formatting/ruleFlag.ts",
+    "formatting/ruleOperation.ts",
+    "formatting/ruleOperationContext.ts",
+    "formatting/rules.ts",
+    "formatting/rulesMap.ts",
+    "formatting/rulesProvider.ts",
+    "formatting/smartIndenter.ts",
+    "formatting/tokenRange.ts"
 ].map(function (f) {
     return path.join(servicesDirectory, f);
 }));
+
+var definitionsRoots = [
+    "compiler/types.d.ts",
+    "compiler/scanner.d.ts",
+    "compiler/parser.d.ts",
+    "compiler/checker.d.ts",
+    "services/services.d.ts",
+];
 
 var harnessSources = [
     "harness.ts",
@@ -148,25 +176,48 @@ var compilerFilename = "tsc.js";
     * @param prefixes: a list of files to prepend to the target file
     * @param useBuiltCompiler: true to use the built compiler, false to use the LKG
     * @param noOutFile: true to compile without using --out
+    * @param generateDeclarations: true to compile using --declaration
+    * @param outDir: true to compile using --outDir
+    * @param keepComments: false to compile using --removeComments
+    * @param callback: a function to execute after the compilation process ends
     */
-function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, noOutFile, generateDeclarations, callback) {
+function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, noOutFile, generateDeclarations, outDir, keepComments, noResolve, callback) {
     file(outFile, prereqs, function() {
         var dir = useBuiltCompiler ? builtLocalDirectory : LKGDirectory;
-        var options = "-removeComments --module commonjs -noImplicitAny ";
+        var options = "--module commonjs -noImplicitAny";
+
+        if (!keepComments) {
+            options += " -removeComments";
+        }
+
         if (generateDeclarations) {
-            options += "--declaration ";
+            options += " --declaration";
         }
 
         if (useDebugMode) {
-            options += "--preserveConstEnums ";
+            options += " --preserveConstEnums";
+        }
+
+        if (outDir) {
+            options += " --outDir " + outDir;
+        }
+
+        if (!noOutFile) {
+            options += " --out " + outFile;
+        }
+
+        if(noResolve) {
+            options += " --noResolve";
+        }
+
+        if (useDebugMode) {
+            options += " -sourcemap -mapRoot file:///" + path.resolve(path.dirname(outFile));
         }
 
         var cmd = host + " " + dir + compilerFilename + " " + options + " ";
-        cmd = cmd + sources.join(" ") + (!noOutFile ? " -out " + outFile : "");
-        if (useDebugMode) {
-            cmd = cmd + " -sourcemap -mapRoot file:///" + path.resolve(path.dirname(outFile));
-        }
+        cmd = cmd + sources.join(" ");
         console.log(cmd + "\n");
+
         var ex = jake.createExec([cmd]);
         // Add listeners for output and error
         ex.addListener("stdout", function(output) {
@@ -259,24 +310,38 @@ var tscFile = path.join(builtLocalDirectory, compilerFilename);
 compileFile(tscFile, compilerSources, [builtLocalDirectory, copyright].concat(compilerSources), [copyright], /*useBuiltCompiler:*/ false);
 
 var servicesFile = path.join(builtLocalDirectory, "typescriptServices.js");
-var servicesDefinitionsFile = path.join(builtLocalDirectory, "typescriptServices.d.ts");
+compileFile(servicesFile, servicesSources,[builtLocalDirectory, copyright].concat(servicesSources), [copyright], /*useBuiltCompiler*/ true);
 
-compileFile(servicesFile,
-            servicesSources,
-            [builtLocalDirectory, copyright].concat(servicesSources),
-            [copyright],
+var nodeDefinitionsFile = path.join(builtLocalDirectory, "typescript.d.ts");
+var standaloneDefinitionsFile = path.join(builtLocalDirectory, "typescriptServices.d.ts");
+var tempDirPath = path.join(builtLocalDirectory, "temptempdir");
+compileFile(nodeDefinitionsFile, servicesSources,[builtLocalDirectory, copyright].concat(servicesSources),
+            /*prefixes*/ undefined,
             /*useBuiltCompiler*/ true,
-            /*noOutFile*/ false,
+            /*noOutFile*/ true,
             /*generateDeclarations*/ true,
-            /*callback*/ fixDeclarationFile);
+            /*outDir*/ tempDirPath,
+            /*keepComments*/ true,
+            /*noResolve*/ true,
+            /*callback*/ function () {
+                concatenateFiles(standaloneDefinitionsFile, definitionsRoots.map(function (f) {
+                    return path.join(tempDirPath, f);
+                }));
+                prependFile(copyright, standaloneDefinitionsFile);
 
-function fixDeclarationFile() {
-    fs.appendFileSync(servicesDefinitionsFile, os.EOL + "export = ts;")
-}
+                // Create the node definition file by replacing 'ts' module with '"typescript"' as a module.
+                jake.cpR(standaloneDefinitionsFile, nodeDefinitionsFile, {silent: true});
+                var definitionFileContents = fs.readFileSync(nodeDefinitionsFile).toString();
+                definitionFileContents = definitionFileContents.replace(/declare module ts/g, 'declare module "typescript"');
+                fs.writeFileSync(nodeDefinitionsFile, definitionFileContents);
+
+                // Delete the temp dir
+                jake.rmRf(tempDirPath, {silent: true});
+           });
 
 // Local target to build the compiler and services
 desc("Builds the full compiler and services");
-task("local", ["generate-diagnostics", "lib", tscFile, servicesFile]);
+task("local", ["generate-diagnostics", "lib", tscFile, servicesFile, nodeDefinitionsFile]);
 
 // Local target to build the compiler and services
 desc("Sets release mode flag");
@@ -327,7 +392,7 @@ task("generate-spec", [specMd])
 // Makes a new LKG. This target does not build anything, but errors if not all the outputs are present in the built/local directory
 desc("Makes a new LKG out of the built js files");
 task("LKG", ["clean", "release", "local"].concat(libraryTargets), function() {
-    var expectedFiles = [tscFile, servicesFile, servicesDefinitionsFile].concat(libraryTargets);
+    var expectedFiles = [tscFile, servicesFile, nodeDefinitionsFile, standaloneDefinitionsFile].concat(libraryTargets);
     var missingFiles = expectedFiles.filter(function (f) {
         return !fs.existsSync(f);
     });
