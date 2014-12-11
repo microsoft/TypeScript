@@ -64,7 +64,7 @@ module ts {
         An_index_signature_must_have_exactly_one_parameter: { code: 1096, category: DiagnosticCategory.Error, key: "An index signature must have exactly one parameter.", isEarly: true },
         _0_list_cannot_be_empty: { code: 1097, category: DiagnosticCategory.Error, key: "'{0}' list cannot be empty.", isEarly: true },
         Type_parameter_list_cannot_be_empty: { code: 1098, category: DiagnosticCategory.Error, key: "Type parameter list cannot be empty.", isEarly: true },
-        Type_argument_list_cannot_be_empty: { code: 1099, category: DiagnosticCategory.Error, key: "Type argument list cannot be empty." },
+        Type_argument_list_cannot_be_empty: { code: 1099, category: DiagnosticCategory.Error, key: "Type argument list cannot be empty.", isEarly: true },
         Invalid_use_of_0_in_strict_mode: { code: 1100, category: DiagnosticCategory.Error, key: "Invalid use of '{0}' in strict mode.", isEarly: true },
         with_statements_are_not_allowed_in_strict_mode: { code: 1101, category: DiagnosticCategory.Error, key: "'with' statements are not allowed in strict mode.", isEarly: true },
         delete_cannot_be_called_on_an_identifier_in_strict_mode: { code: 1102, category: DiagnosticCategory.Error, key: "'delete' cannot be called on an identifier in strict mode.", isEarly: true },

@@ -287,7 +287,8 @@
     },
     "Type argument list cannot be empty.": {
         "category": "Error",
-        "code": 1099
+        "code": 1099,
+        "isEarly":  true
     },
     "Invalid use of '{0}' in strict mode.": {
         "category": "Error",

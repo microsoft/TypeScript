@@ -4629,9 +4629,9 @@ module ts {
                 case SyntaxKind.BreakStatement:
                 case SyntaxKind.ContinueStatement:
                     return checkBreakOrContinueStatement(<BreakOrContinueStatement>node);
-                case SyntaxKind.CallExpression:
-                case SyntaxKind.NewExpression:
-                    return checkCallOrNewExpression(<NewExpression>node);
+                //case SyntaxKind.CallExpression:
+                //case SyntaxKind.NewExpression:
+                    //return checkCallOrNewExpression(<NewExpression>node);
 
                 case SyntaxKind.EnumDeclaration:                return checkEnumDeclaration(<EnumDeclaration>node);
                 case SyntaxKind.BinaryExpression:               return checkBinaryExpression(<BinaryExpression>node);
