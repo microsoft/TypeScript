@@ -2226,7 +2226,8 @@ module ts {
             return token === SyntaxKind.ColonToken || token === SyntaxKind.CommaToken || token === SyntaxKind.CloseBracketToken;
         }
 
-        function parseIndexSignatureDeclaration(fullStart: number, modifiers: ModifiersArray): IndexSignatureDeclaration {
+        function parseIndexSignatureDeclaration(modifiers: ModifiersArray): IndexSignatureDeclaration {
+            var fullStart = modifiers ? modifiers.pos : scanner.getStartPos();
             var node = <IndexSignatureDeclaration>createNode(SyntaxKind.IndexSignature, fullStart);
             setModifiers(node, modifiers);
             node.parameters = parseBracketedList(ParsingContext.Parameters, parseParameter, SyntaxKind.OpenBracketToken, SyntaxKind.CloseBracketToken);
@@ -2268,8 +2269,23 @@ module ts {
                 case SyntaxKind.OpenBracketToken: // Both for indexers and computed properties
                     return true;
                 default:
+                    if (isModifier(token)) {
+                        var result = lookAhead(isStartOfIndexSignatureDeclaration);
+                        if (result) {
+                            return result;
+                        }
+                    }
+
                     return isLiteralPropertyName() && lookAhead(isTypeMemberWithLiteralPropertyName);
             }
+        }
+
+        function isStartOfIndexSignatureDeclaration() {
+            while (isModifier(token)) {
+                nextToken();
+            }
+
+            return isIndexSignature();
         }
 
         function isTypeMemberWithLiteralPropertyName() {
@@ -2288,7 +2304,9 @@ module ts {
                     return parseSignatureMember(SyntaxKind.CallSignature);
                 case SyntaxKind.OpenBracketToken:
                     // Indexer or computed property
-                    return isIndexSignature() ? parseIndexSignatureDeclaration(scanner.getStartPos(), /*modifiers:*/ undefined) : parsePropertyOrMethodSignature();
+                    return isIndexSignature()
+                        ? parseIndexSignatureDeclaration(/*modifiers:*/ undefined)
+                        : parsePropertyOrMethodSignature();
                 case SyntaxKind.NewKeyword:
                     if (lookAhead(isStartOfConstructSignature)) {
                         return parseSignatureMember(SyntaxKind.ConstructSignature);
@@ -2298,10 +2316,30 @@ module ts {
                 case SyntaxKind.NumericLiteral:
                     return parsePropertyOrMethodSignature();
                 default:
+                    // Index declaration as allowed as a type member.  But as per the grammar, 
+                    // they also allow modifiers. So we have to check for an index declaration
+                    // that might be following modifiers. This ensures that things work properly 
+                    // when incrementally parsing as the parser will produce the Index declaration
+                    // if it has the same text regardless of whether it is inside a class or an
+                    // object type.
+                    if (isModifier(token)) {
+                        var result = tryParse(parseIndexSignatureWithModifiers);
+                        if (result) {
+                            return result;
+                        }
+                    }
+
                     if (isIdentifierOrKeyword()) {
                         return parsePropertyOrMethodSignature();
                     }
             }
+        }
+
+        function parseIndexSignatureWithModifiers() {
+            var modifiers = parseModifiers();
+            return isIndexSignature()
+                ? parseIndexSignatureDeclaration(modifiers)
+                : undefined;
         }
 
         function isStartOfConstructSignature() {
@@ -3866,6 +3904,12 @@ module ts {
                     }
                     // Else parse it like identifier - fall through
                 default:
+                    // Functions and variable statements are allowed as a statement.  But as per 
+                    // the grammar, they also allow modifiers.  So we have to check for those 
+                    // statements that might be following modifiers.  This ensures that things
+                    // work properly when incrementally parsing as the parser will produce the
+                    // same FunctionDeclaraiton or VariableStatement if it has the same text
+                    // regardless of whether it is inside a block or not.
                     if (isModifier(token)) {
                         var result = tryParse(parseVariableStatementOrFunctionDeclarationWithModifiers);
                         if (result) {
@@ -4177,12 +4221,16 @@ module ts {
                 return parseConstructorDeclaration(fullStart, modifiers);
             }
             if (isIndexSignature()) {
-                return parseIndexSignatureDeclaration(fullStart, modifiers);
+                return parseIndexSignatureDeclaration(modifiers);
             }
             // It is very important that we check this *after* checking indexers because
             // the [ token can start an index signature or a computed property name
-            if (isIdentifierOrKeyword() || token === SyntaxKind.StringLiteral || token === SyntaxKind.NumericLiteral ||
-                token === SyntaxKind.AsteriskToken || token === SyntaxKind.OpenBracketToken) {
+            if (isIdentifierOrKeyword() ||
+                token === SyntaxKind.StringLiteral ||
+                token === SyntaxKind.NumericLiteral ||
+                token === SyntaxKind.AsteriskToken ||
+                token === SyntaxKind.OpenBracketToken) {
+
                 return parsePropertyOrMethodDeclaration(fullStart, modifiers);
             }
 
