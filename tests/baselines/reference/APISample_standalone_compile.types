@@ -3482,6 +3482,9 @@ declare module ts {
     interface CompilerOptions {
 >CompilerOptions : CompilerOptions
 
+        allowNonTsExtensions?: boolean;
+>allowNonTsExtensions : boolean
+
         charset?: string;
 >charset : string
 
@@ -3534,6 +3537,9 @@ declare module ts {
         outDir?: string;
 >outDir : string
 
+        preserveConstEnums?: boolean;
+>preserveConstEnums : boolean
+
         removeComments?: boolean;
 >removeComments : boolean
 
@@ -3542,6 +3548,9 @@ declare module ts {
 
         sourceRoot?: string;
 >sourceRoot : string
+
+        suppressImplicitAnyIndexErrors?: boolean;
+>suppressImplicitAnyIndexErrors : boolean
 
         target?: ScriptTarget;
 >target : ScriptTarget
@@ -3552,12 +3561,6 @@ declare module ts {
 
         watch?: boolean;
 >watch : boolean
-
-        preserveConstEnums?: boolean;
->preserveConstEnums : boolean
-
-        allowNonTsExtensions?: boolean;
->allowNonTsExtensions : boolean
 
         [option: string]: string | number | boolean;
 >option : string
@@ -3629,8 +3632,8 @@ declare module ts {
 >description : DiagnosticMessage
 >DiagnosticMessage : DiagnosticMessage
 
-        paramName?: DiagnosticMessage;
->paramName : DiagnosticMessage
+        paramType?: DiagnosticMessage;
+>paramType : DiagnosticMessage
 >DiagnosticMessage : DiagnosticMessage
 
         error?: DiagnosticMessage;

@@ -3483,6 +3483,9 @@ declare module "typescript" {
     interface CompilerOptions {
 >CompilerOptions : CompilerOptions
 
+        allowNonTsExtensions?: boolean;
+>allowNonTsExtensions : boolean
+
         charset?: string;
 >charset : string
 
@@ -3535,6 +3538,9 @@ declare module "typescript" {
         outDir?: string;
 >outDir : string
 
+        preserveConstEnums?: boolean;
+>preserveConstEnums : boolean
+
         removeComments?: boolean;
 >removeComments : boolean
 
@@ -3543,6 +3549,9 @@ declare module "typescript" {
 
         sourceRoot?: string;
 >sourceRoot : string
+
+        suppressImplicitAnyIndexErrors?: boolean;
+>suppressImplicitAnyIndexErrors : boolean
 
         target?: ScriptTarget;
 >target : ScriptTarget
@@ -3553,12 +3562,6 @@ declare module "typescript" {
 
         watch?: boolean;
 >watch : boolean
-
-        preserveConstEnums?: boolean;
->preserveConstEnums : boolean
-
-        allowNonTsExtensions?: boolean;
->allowNonTsExtensions : boolean
 
         [option: string]: string | number | boolean;
 >option : string
@@ -3630,8 +3633,8 @@ declare module "typescript" {
 >description : DiagnosticMessage
 >DiagnosticMessage : DiagnosticMessage
 
-        paramName?: DiagnosticMessage;
->paramName : DiagnosticMessage
+        paramType?: DiagnosticMessage;
+>paramType : DiagnosticMessage
 >DiagnosticMessage : DiagnosticMessage
 
         error?: DiagnosticMessage;
