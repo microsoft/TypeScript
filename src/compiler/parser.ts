@@ -1845,8 +1845,13 @@ module ts {
         }
 
         // True if positioned at the start of a list element
-        function isListElement(kind: ParsingContext, inErrorRecovery: boolean): boolean {
-            switch (kind) {
+        function isListElement(parsingContext: ParsingContext, inErrorRecovery: boolean): boolean {
+            var node = currentNode(parsingContext);
+            if (node) {
+                return true;
+            }
+
+            switch (parsingContext) {
                 case ParsingContext.SourceElements:
                 case ParsingContext.ModuleElements:
                     return isSourceElement(inErrorRecovery);
@@ -2001,7 +2006,7 @@ module ts {
 
             while (!isListTerminator(kind)) {
                 if (isListElement(kind, /* inErrorRecovery */ false)) {
-                    var element = parseElement();
+                    var element = <T>currentNode(kind) || parseElement();
                     result.push(element);
 
                     // test elements only if we are not already in strict mode
@@ -2031,6 +2036,265 @@ module ts {
             return result;
         }
 
+        function currentNode(parsingContext: ParsingContext): Node {
+            var node: Node = currentNodeFromCursor();
+            if (!node) {
+                return undefined;
+            }
+
+            // We can only reuse a node if it was parsed under the same strict mode that we're 
+            // currently in.  i.e. if we originally parsed a node in non-strict mode, but then
+            // the user added 'using strict' at the top of the file, then we can't use that node
+            // again as the presense of strict mode may cause us to parse the tokens in the file
+            // differetly.
+            // 
+            // Note: we *can* reuse tokens when the strict mode changes.  That's because tokens
+            // are unaffected by strict mode.  It's just the parser will decide what to do with it
+            // differently depending on what mode it is in.
+            //
+            // This also applies to all our other context flags as well.
+            if (node.parserContextFlags !== contextFlags) {
+                return undefined;
+            }
+
+            // Ok, we have a node that looks like it could be reused.  Now verify that it is valid
+            // in the currest list parsing context that we're currently at.
+            if (!canReuseNode(node, parsingContext)) {
+                return undefined;
+            }
+
+            // It was valid.  Let teh source know we're consuming this node, and pass to the list
+            // parser.
+            return consumeNode(node);
+        }
+
+        function consumeNode(node: Node) {
+            // Move the scanner so it is after the node we just consumed
+            scanner.setTextPos(node.end);
+            nextToken();
+            return node;
+        }
+
+        function canReuseNode(node: Node, parsingContext: ParsingContext): boolean {
+            switch (parsingContext) {
+                case ParsingContext.ModuleElements:
+                    return isReusableModuleElement(node);
+
+                case ParsingContext.ClassMembers:
+                    return isReusableClassMember(node);
+
+                case ParsingContext.SwitchClauses:
+                    return isReusableSwitchClause(node);
+
+                case ParsingContext.BlockStatements:
+                case ParsingContext.SwitchClauseStatements:
+                    return isReusableStatement(node);
+
+                case ParsingContext.EnumMembers:
+                    return isReusableEnumMember(node);
+
+                case ParsingContext.TypeMembers:
+                    return isReusableTypeMember(node);
+
+                case ParsingContext.VariableDeclarations:
+                    return isReusableVariableDeclaration(node);
+
+                case ParsingContext.Parameters:
+                    return isReusableParameter(node);
+
+                // Any other lists we do not care about reusing nodes in.  But feel free to add if 
+                // you can do so safely.  Danger areas involve nodes that may involve speculative
+                // parsing.  If speculative parsing is involved with the node, then the range the
+                // parser reached while looking ahead might be in the edited range (see the example
+                // in canReuseVariableDeclaratorNode for a good case of this).
+                case ParsingContext.HeritageClauses:
+                // This would probably be safe to reuse.  There is no speculative parsing with 
+                // heritage clauses.
+
+                case ParsingContext.TypeReferences:
+                // This would probably be safe to reuse.  There is no speculative parsing with 
+                // type names in a heritage clause.  There can be generic names in the type
+                // name list.  But because it is a type context, we never use speculative 
+                // parsing on the type argument list.
+
+                case ParsingContext.TypeParameters:
+                // This would probably be safe to reuse.  There is no speculative parsing with 
+                // type parameters.  Note that that's because type *parameters* only occur in
+                // unambiguous *type* contexts.  While type *arguments* occur in very ambiguous
+                // *expression* contexts.
+
+                case ParsingContext.TupleElementTypes:
+                // This would probably be safe to reuse.  There is no speculative parsing with 
+                // tuple types.
+
+                // Technically, type argument list types are probably safe to reuse.  While 
+                // speculative parsing is involved with them (since type argument lists are only
+                // produced from speculative parsing a < as a type argument list), we only have
+                // the types because speculative parsing succeeded.  Thus, the lookahead never
+                // went past the end of the list and rewound.
+                case ParsingContext.TypeArguments:
+
+                // Note: these are almost certainly not safe to ever reuse.  Expressions commonly
+                // need a large amount of lookahead, and we should not reuse them as they may 
+                // have actually intersected the edit.
+                case ParsingContext.ArgumentExpressions:
+
+                // This is not safe to reuse for the same reason as the 'AssignmentExpression'
+                // cases.  i.e. a property assignment may end with an expression, and thus might 
+                // have lookahead far beyond it's old node.
+                case ParsingContext.ObjectLiteralMembers:
+            }
+
+            return false;
+        }
+
+        function isReusableModuleElement(node: Node) {
+            if (node) {
+                switch (node.kind) {
+                    case SyntaxKind.ImportDeclaration:
+                    case SyntaxKind.ExportAssignment:
+                    case SyntaxKind.ClassDeclaration:
+                    case SyntaxKind.InterfaceDeclaration:
+                    case SyntaxKind.ModuleDeclaration:
+                    case SyntaxKind.EnumDeclaration:
+
+                    // Keep in sync with isStatement:
+                    case SyntaxKind.FunctionDeclaration:
+                    case SyntaxKind.VariableStatement:
+                    case SyntaxKind.Block:
+                    case SyntaxKind.IfStatement:
+                    case SyntaxKind.ExpressionStatement:
+                    case SyntaxKind.ThrowStatement:
+                    case SyntaxKind.ReturnStatement:
+                    case SyntaxKind.SwitchStatement:
+                    case SyntaxKind.BreakStatement:
+                    case SyntaxKind.ContinueStatement:
+                    case SyntaxKind.ForInStatement:
+                    case SyntaxKind.ForStatement:
+                    case SyntaxKind.WhileStatement:
+                    case SyntaxKind.WithStatement:
+                    case SyntaxKind.EmptyStatement:
+                    case SyntaxKind.TryStatement:
+                    case SyntaxKind.LabeledStatement:
+                    case SyntaxKind.DoStatement:
+                    case SyntaxKind.DebuggerStatement:
+                        return true;
+                }
+            }
+
+            return false;
+        }
+
+        function isReusableClassMember(node: Node) {
+            if (node) {
+                switch (node.kind) {
+                    case SyntaxKind.Constructor:
+                    case SyntaxKind.IndexSignature:
+                    case SyntaxKind.MethodDeclaration:
+                    case SyntaxKind.GetAccessor:
+                    case SyntaxKind.SetAccessor:
+                    case SyntaxKind.PropertyDeclaration:
+                        return true;
+                }
+            }
+
+            return false;
+        }
+
+        function isReusableSwitchClause(node: Node) {
+            if (node) {
+                switch (node.kind) {
+                    case SyntaxKind.CaseClause:
+                    case SyntaxKind.DefaultClause:
+                        return true;
+                }
+            }
+
+            return false;
+        }
+
+        function isReusableStatement(node: Node) {
+            if (node) {
+                switch (node.kind) {
+                    case SyntaxKind.FunctionDeclaration:
+                    case SyntaxKind.VariableStatement:
+                    case SyntaxKind.Block:
+                    case SyntaxKind.IfStatement:
+                    case SyntaxKind.ExpressionStatement:
+                    case SyntaxKind.ThrowStatement:
+                    case SyntaxKind.ReturnStatement:
+                    case SyntaxKind.SwitchStatement:
+                    case SyntaxKind.BreakStatement:
+                    case SyntaxKind.ContinueStatement:
+                    case SyntaxKind.ForInStatement:
+                    case SyntaxKind.ForStatement:
+                    case SyntaxKind.WhileStatement:
+                    case SyntaxKind.WithStatement:
+                    case SyntaxKind.EmptyStatement:
+                    case SyntaxKind.TryStatement:
+                    case SyntaxKind.LabeledStatement:
+                    case SyntaxKind.DoStatement:
+                    case SyntaxKind.DebuggerStatement:
+                        return true;
+                }
+            }
+
+            return false;
+        }
+
+        function isReusableEnumMember(node: Node) {
+            return node.kind === SyntaxKind.EnumMember;
+        }
+
+        function isReusableTypeMember(node: Node) {
+            if (node) {
+                switch (node.kind) {
+                    case SyntaxKind.ConstructSignature:
+                    case SyntaxKind.MethodSignature:
+                    case SyntaxKind.IndexSignature:
+                    case SyntaxKind.PropertySignature:
+                    case SyntaxKind.CallSignature:
+                        return true;
+                }
+            }
+
+            return false;
+        }
+
+        function isReusableVariableDeclaration(node: Node) {
+            if (node.kind !== SyntaxKind.VariableDeclaration) {
+                return false;
+            }
+
+            // Very subtle incremental parsing bug.  Consider the following code:
+            //
+            //      var v = new List < A, B
+            //
+            // This is actually legal code.  It's a list of variable declarators "v = new List<A" 
+            // on one side and "B" on the other. If you then change that to:
+            //
+            //      var v = new List < A, B >()
+            // 
+            // then we have a problem.  "v = new List<A" doesn't intersect the change range, so we
+            // start reparsing at "B" and we completely fail to handle this properly.
+            //
+            // In order to prevent this, we do not allow a variable declarator to be reused if it
+            // has an initializer.
+            var variableDeclarator = <VariableDeclaration>node;
+            return variableDeclarator.initializer === undefined;
+        }
+
+        function isReusableParameter(node: Node) {
+            // TODO: this most likely needs the same initializer check that 
+            // isReusableVariableDeclaration has.
+            return node.kind === SyntaxKind.Parameter;
+        }
+
+        function currentNodeFromCursor(): Node {
+            // NYI
+            return undefined;
+        }
+
         // Returns true if we should abort parsing.
         function abortParsingListOrMoveToNextToken(kind: ParsingContext) {
             parseErrorAtCurrentToken(parsingContextErrors(kind));
@@ -2052,7 +2316,7 @@ module ts {
             var commaStart = -1; // Meaning the previous token was not a comma
             while (true) {
                 if (isListElement(kind, /* inErrorRecovery */ false)) {
-                    result.push(parseElement());
+                    result.push(<T>currentNode(kind) || parseElement());
                     commaStart = scanner.getTokenPos();
                     if (parseOptional(SyntaxKind.CommaToken)) {
                         continue;
