@@ -1185,11 +1185,139 @@ module ts {
                 return sourceFile;
             }
 
-
+            // Make the actual change larger so that we know to reparse anything whose lookahead 
+            // might have intersected the change.
+            var changeRange = extendToAffectedRange(textChangeRange);
 
             // Don't pass along the text change range for now. We'll pass it along once incremental
             // parsing is enabled.
             return parseSourceFile(newText, /*textChangeRange:*/ undefined, /*setNodeParents*/ true);
+        }
+
+        function extendToAffectedRange(changeRange: TextChangeRange): TextChangeRange {
+            // Consider the following code:
+            //      void foo() { /; }
+            //
+            // If the text changes with an insertion of / just before the semicolon then we end up with:
+            //      void foo() { //; }
+            //
+            // If we were to just use the changeRange a is, then we would not rescan the { token 
+            // (as it does not intersect the actual original change range).  Because an edit may
+            // change the token touching it, we actually need to look back *at least* one token so
+            // that the prior token sees that change.  
+            var maxLookahead = 1;
+
+            var start = changeRange.span().start();
+
+            // the first iteration aligns us with the change start. subsequent iteration move us to
+            // the left by maxLookahead tokens.  We only need to do this as long as we're not at the
+            // start of the tree.
+            for (var i = 0; start > 0 && i <= maxLookahead; i++) {
+                var nearestNode = findNearestNodeStartingBeforeOrAtPosition(start);
+                var position = nearestNode.pos;
+
+                start = Math.max(0, position - 1);
+            }
+
+            var finalSpan = createTextSpanFromBounds(start, changeRange.span().end());
+            var finalLength = changeRange.newLength() + (changeRange.span().start() - start);
+
+            return createTextChangeRange(finalSpan, finalLength);
+        }
+
+        function findNearestNodeStartingBeforeOrAtPosition(position: number): Node {
+            var bestResult: Node = sourceFile;
+            var lastNodeEntirelyBeforePosition: Node;
+
+            forEachChild(sourceFile, visit);
+
+            if (lastNodeEntirelyBeforePosition) {
+                var lastChildOfLastEntireNodeBeforePosition = getLastChild(lastNodeEntirelyBeforePosition);
+                if (lastChildOfLastEntireNodeBeforePosition.pos > bestResult.pos) {
+                    bestResult = lastChildOfLastEntireNodeBeforePosition;
+                }
+            }
+
+            return bestResult;
+
+            function getLastChild(node: Node): Node {
+                while (true) {
+                    var lastChild = getLastChildWorker(node);
+                    if (lastChild) {
+                        node = lastChild;
+                    }
+                    else {
+                        return node;
+                    }
+                }
+            }
+
+            function getLastChildWorker(node: Node): Node {
+                var last:Node = undefined;
+                forEachChild(node, child => {
+                    if (!isMissingNode(child)) {
+                        last = child;
+                    }
+                });
+                return last;
+            }
+
+            function visit(child: Node) {
+                if (isMissingNode(child)) {
+                    // Missing nodes are effectively invisible to us.  We never even consider them
+                    // When trying to find the nearest node before us.
+                    return;
+                }
+
+                // If the child intersects this position, then this node is currently the nearest 
+                // node that starts before the position.
+                if (child.pos <= position) {
+                    if (child.pos >= bestResult.pos) {
+                        // This node starts before the position, and is closer to the position than
+                        // the previous best node we found.  It is now the new best node.
+                        bestResult = child;
+                    }
+
+                    // Now, the node may overlap the position, or it may end entirely before the
+                    // position.  If it overlaps with the position, then either it, or one of its
+                    // children must be the nearest node before the position.  So we can just 
+                    // recurse into this child to see if we can find something better.
+                    if (position < child.end) {
+                        // The nearest node is either this child, or one of the children inside
+                        // of it.  We've already marked this child as the best so far.  Recurse
+                        // in case one of the children is better.
+                        forEachChild(child, visit);
+
+                        // Once we look at the children of this node, then there's no need to
+                        // continue any further.
+                        return true;
+                    }
+                    else {
+                        Debug.assert(child.end <= position);
+                        // The child ends entirely before this position.  Say you have the following
+                        // (where $ is the position)
+                        // 
+                        //      <complex expr 1> ? <complex expr 2> $ : <...> <...> 
+                        //
+                        // We would want to find the nearest preceding node in "complex expr 2". 
+                        // To support that, we keep track of this node, and once we're done searching
+                        // for a best node, we recurse down this node to see if we can find a good
+                        // result in it.
+                        //
+                        // This approach allows us to quickly skip over nodes that are entirely 
+                        // before the position, while still allowing us to find any nodes in the
+                        // last one that might be what we want.
+                        lastNodeEntirelyBeforePosition = child;
+                    }
+                }
+                else {
+                    Debug.assert(child.pos > position);
+                    // We're now at a node that is entirely past the position we're searching for.
+                    // This node (and all following nodes) could never contribute to the result,
+                    // so just skip them by returning 'true' here.
+                    return true;
+                }
+            }
         }
 
         function setContextFlag(val: Boolean, flag: ParserContextFlags) {
