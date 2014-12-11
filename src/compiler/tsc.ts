@@ -378,12 +378,12 @@ module ts {
             var usageText = " ";
             if (option.shortName) {
                 usageText += "-" + option.shortName;
-                usageText += getParamName(option);
+                usageText += getParamType(option);
                 usageText += ", ";
             }
 
             usageText += "--" + option.name;
-            usageText += getParamName(option);
+            usageText += getParamType(option);
 
             usageColumn.push(usageText);
             descriptionColumn.push(getDiagnosticText(option.description));
@@ -408,9 +408,9 @@ module ts {
         sys.write(output);
         return;
 
-        function getParamName(option: CommandLineOption) {
-            if (option.paramName !== undefined) {
-                return " " + getDiagnosticText(option.paramName);
+        function getParamType(option: CommandLineOption) {
+            if (option.paramType !== undefined) {
+                return " " + getDiagnosticText(option.paramType);
             }
             return "";
         }

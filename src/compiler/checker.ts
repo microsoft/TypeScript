@@ -5547,7 +5547,7 @@ module ts {
                 }
 
                 // Fall back to any.
-                if (compilerOptions.noImplicitAny && objectType !== anyType) {
+                if (compilerOptions.noImplicitAny && !compilerOptions.suppressImplicitAnyIndexErrors && objectType !== anyType) {
                     error(node, Diagnostics.Index_signature_of_object_type_implicitly_has_an_any_type);
                 }
 

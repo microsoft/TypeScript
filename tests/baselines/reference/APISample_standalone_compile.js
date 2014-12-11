@@ -1112,6 +1112,7 @@ declare module ts {
         Message = 2,
     }
     interface CompilerOptions {
+        allowNonTsExtensions?: boolean;
         charset?: string;
         codepage?: number;
         declaration?: boolean;
@@ -1129,14 +1130,14 @@ declare module ts {
         noResolve?: boolean;
         out?: string;
         outDir?: string;
+        preserveConstEnums?: boolean;
         removeComments?: boolean;
         sourceMap?: boolean;
         sourceRoot?: string;
+        suppressImplicitAnyIndexErrors?: boolean;
         target?: ScriptTarget;
         version?: boolean;
         watch?: boolean;
-        preserveConstEnums?: boolean;
-        allowNonTsExtensions?: boolean;
         [option: string]: string | number | boolean;
     }
     const enum ModuleKind {
@@ -1164,7 +1165,7 @@ declare module ts {
         type: string | Map<number>;
         shortName?: string;
         description?: DiagnosticMessage;
-        paramName?: DiagnosticMessage;
+        paramType?: DiagnosticMessage;
         error?: DiagnosticMessage;
     }
     const enum CharacterCodes {

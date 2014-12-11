@@ -1663,6 +1663,10 @@
         "category": "Error",
         "code": 6054
     },
+    "Suppress noImplicitAny errors for indexing objects lacking index signatures.": {
+        "category": "Message",
+        "code": 6055
+    },
 
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
