@@ -1337,6 +1337,7 @@ declare module ts {
 declare module ts {
     function getNodeConstructor(kind: SyntaxKind): new () => Node;
     function forEachChild<T>(node: Node, cbNode: (node: Node) => T, cbNodes?: (nodes: Node[]) => T): T;
+    function createCompilerHost(options: CompilerOptions): CompilerHost;
     function createSourceFile(filename: string, sourceText: string, languageVersion: ScriptTarget, version: string, isOpen?: boolean): SourceFile;
     function createProgram(rootNames: string[], options: CompilerOptions, host: CompilerHost): Program;
 }

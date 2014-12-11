@@ -4259,6 +4259,12 @@ declare module "typescript" {
 >T : T
 >T : T
 
+    function createCompilerHost(options: CompilerOptions): CompilerHost;
+>createCompilerHost : (options: CompilerOptions) => CompilerHost
+>options : CompilerOptions
+>CompilerOptions : CompilerOptions
+>CompilerHost : CompilerHost
+
     function createSourceFile(filename: string, sourceText: string, languageVersion: ScriptTarget, version: string, isOpen?: boolean): SourceFile;
 >createSourceFile : (filename: string, sourceText: string, languageVersion: ScriptTarget, version: string, isOpen?: boolean) => SourceFile
 >filename : string
