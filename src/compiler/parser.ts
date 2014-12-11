@@ -3438,14 +3438,24 @@ module ts {
             return finishNode(node);
         }
 
+        function tryParseAccessorDeclaration(fullStart: number, modifiers: ModifiersArray): AccessorDeclaration {
+            if (parseContextualModifier(SyntaxKind.GetKeyword)) {
+                return parseAccessorDeclaration(SyntaxKind.GetAccessor, fullStart, modifiers);
+            }
+            else if (parseContextualModifier(SyntaxKind.SetKeyword)) {
+                return parseAccessorDeclaration(SyntaxKind.SetAccessor, fullStart, modifiers);
+            }
+
+            return undefined;
+        }
+
         function parseObjectLiteralElement(): ObjectLiteralElement {
             var fullStart = scanner.getStartPos();
-            var initialToken = token;
-
             var modifiers = parseModifiers();
-            if (parseContextualModifier(SyntaxKind.GetKeyword) || parseContextualModifier(SyntaxKind.SetKeyword)) {
-                var kind = initialToken === SyntaxKind.GetKeyword ? SyntaxKind.GetAccessor : SyntaxKind.SetAccessor;
-                return parseAccessorDeclaration(kind, fullStart, modifiers);
+
+            var accessor = tryParseAccessorDeclaration(fullStart, modifiers);
+            if (accessor) {
+                return accessor;
             }
 
             var asteriskToken = parseOptionalToken(SyntaxKind.AsteriskToken);
@@ -4216,18 +4226,20 @@ module ts {
         function parseClassElement(): ClassElement {
             var fullStart = getNodePos();
             var modifiers = parseModifiers();
-            if (parseContextualModifier(SyntaxKind.GetKeyword)) {
-                return parseAccessorDeclaration(SyntaxKind.GetAccessor, fullStart, modifiers);
+
+            var accessor = tryParseAccessorDeclaration(fullStart, modifiers);
+            if (accessor) {
+                return accessor;
             }
-            if (parseContextualModifier(SyntaxKind.SetKeyword)) {
-                return parseAccessorDeclaration(SyntaxKind.SetAccessor, fullStart, modifiers);
-            }
+
             if (token === SyntaxKind.ConstructorKeyword) {
                 return parseConstructorDeclaration(fullStart, modifiers);
             }
+
             if (isIndexSignature()) {
                 return parseIndexSignatureDeclaration(modifiers);
             }
+
             // It is very important that we check this *after* checking indexers because
             // the [ token can start an index signature or a computed property name
             if (isIdentifierOrKeyword() ||
