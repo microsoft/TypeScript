@@ -866,6 +866,7 @@ module ts {
 
         filename: string;
         text: string;
+
         getLineAndCharacterFromPosition(position: number): LineAndCharacter;
         getPositionFromLineAndCharacter(line: number, character: number): number;
         getLineStarts(): number[];

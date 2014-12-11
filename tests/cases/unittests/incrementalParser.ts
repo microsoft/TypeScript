@@ -67,6 +67,9 @@ module ts {
         // There should be no reused nodes between two trees that are fully parsed.
         assert.isTrue(reusedElements(oldTree, newTree) === 0);
 
+        assert.equal(newTree.filename, incrementalNewTree.filename, "newTree.filename !== incrementalNewTree.filename");
+        assert.equal(newTree.text, incrementalNewTree.text, "newTree.filename !== incrementalNewTree.filename");
+
         if (expectedReusedElements !== -1) {
             var actualReusedCount = reusedElements(oldTree, incrementalNewTree);
             assert.equal(actualReusedCount, expectedReusedElements, actualReusedCount + " !== " + expectedReusedElements);
