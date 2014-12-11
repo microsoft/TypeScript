@@ -341,6 +341,14 @@ module ts {
             this.shimHost.log(s);
         }
 
+        public trace(s: string): void {
+            this.shimHost.trace(s);
+        }
+        
+        public error(s: string): void {
+            this.shimHost.error(s);
+        }
+
         public getCompilationSettings(): CompilerOptions {
             var settingsJson = this.shimHost.getCompilationSettings();
             if (settingsJson == null || settingsJson == "") {
@@ -858,6 +866,13 @@ module ts {
     export class TypeScriptServicesFactory implements ShimFactory {
         private _shims: Shim[] = [];
         private documentRegistry: DocumentRegistry = createDocumentRegistry();
+
+        /*
+         * Returns script API version.
+         */
+        public getServicesVersion(): string {
+            return servicesVersion;
+        }
 
         public createLanguageServiceShim(host: LanguageServiceShimHost): LanguageServiceShim {
             try {
