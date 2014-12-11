@@ -6710,6 +6710,19 @@ module ts {
         }
 
         function checkBinaryExpression(node: BinaryExpression, contextualMapper?: TypeMapper) {
+            // Grammar checking
+            if (!checkGrammarModifiers(node)) {
+                if (node.parserContextFlags & ParserContextFlags.StrictMode) {
+                    if (isLeftHandSideExpression(node.left) && isAssignmentOperator(node.operator)) {
+                        if (isEvalOrArgumentsIdentifier(node.left)) {
+                            // ECMA 262 (Annex C) The identifier eval or arguments may not appear as the LeftHandSideExpression of an
+                            // Assignment operator(11.13) or of a PostfixExpression(11.3)
+                            reportGrammarErrorOfInvalidUseInStrictMode(<Identifier>node.left);
+                        }
+                    }
+                }
+            }
+
             var operator = node.operator;
             if (operator === SyntaxKind.EqualsToken && (node.left.kind === SyntaxKind.ObjectLiteralExpression || node.left.kind === SyntaxKind.ArrayLiteralExpression)) {
                 return checkDestructuringAssignment(node.left, checkExpression(node.right, contextualMapper), contextualMapper);
@@ -9948,6 +9961,13 @@ module ts {
                 diagnostics.push(createFileDiagnostic(sourceFile, start, span.end - start, message, arg0, arg1, arg2));
                 return true;
             }
+        }
+
+        function reportGrammarErrorOfInvalidUseInStrictMode(node: Identifier): boolean {
+            // declarationNameToString cannot be used here since it uses a backreference to 'parent' that is not yet set
+            var sourceText = getSourceFileOfNode(node).text;
+            var name = sourceText.substring(skipTrivia(sourceText, node.pos), node.end);
+            return grammarErrorOnNode(node, Diagnostics.Invalid_use_of_0_in_strict_mode, name);
         }
 
         initializeTypeChecker();

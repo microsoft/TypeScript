@@ -178,7 +178,7 @@ module ts {
         return node.kind === SyntaxKind.ExpressionStatement && (<ExpressionStatement>node).expression.kind === SyntaxKind.StringLiteral;
     }
 
-    function isEvalOrArgumentsIdentifier(node: Node): boolean {
+    export function isEvalOrArgumentsIdentifier(node: Node): boolean {
         return node.kind === SyntaxKind.Identifier &&
             (<Identifier>node).text &&
             ((<Identifier>node).text === "eval" || (<Identifier>node).text === "arguments");
@@ -4533,7 +4533,7 @@ module ts {
         }
     }
 
-    function isLeftHandSideExpression(expr: Expression): boolean {
+    export function isLeftHandSideExpression(expr: Expression): boolean {
         if (expr) {
             switch (expr.kind) {
                 case SyntaxKind.PropertyAccessExpression:
@@ -4563,7 +4563,7 @@ module ts {
         return false;
     }
 
-    function isAssignmentOperator(token: SyntaxKind): boolean {
+    export function isAssignmentOperator(token: SyntaxKind): boolean {
         return token >= SyntaxKind.FirstAssignment && token <= SyntaxKind.LastAssignment;
     }
 
@@ -4634,7 +4634,7 @@ module ts {
                     //return checkCallOrNewExpression(<NewExpression>node);
 
                 case SyntaxKind.EnumDeclaration:                return checkEnumDeclaration(<EnumDeclaration>node);
-                case SyntaxKind.BinaryExpression:               return checkBinaryExpression(<BinaryExpression>node);
+                //case SyntaxKind.BinaryExpression:               return checkBinaryExpression(<BinaryExpression>node);
                 case SyntaxKind.BindingElement:                 return checkBindingElement(<BindingElement>node);
                 case SyntaxKind.CatchClause:                    return checkCatchClause(<CatchClause>node);
                 case SyntaxKind.ClassDeclaration:               return checkClassDeclaration(<ClassDeclaration>node);
