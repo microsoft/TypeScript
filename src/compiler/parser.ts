@@ -1585,7 +1585,7 @@ module ts {
                     return isSourceElement(inErrorRecovery);
                 case ParsingContext.BlockStatements:
                 case ParsingContext.SwitchClauseStatements:
-                    return isStatement(inErrorRecovery);
+                    return isStartOfStatement(inErrorRecovery);
                 case ParsingContext.SwitchClauses:
                     return token === SyntaxKind.CaseKeyword || token === SyntaxKind.DefaultKeyword;
                 case ParsingContext.TypeMembers:
@@ -2886,7 +2886,7 @@ module ts {
                 return parseFunctionBlock(/*allowYield:*/ false, /* ignoreMissingOpenBrace */ false);
             }
 
-            if (isStatement(/* inErrorRecovery */ true) && !isStartOfExpressionStatement() && token !== SyntaxKind.FunctionKeyword) {
+            if (isStartOfStatement(/*inErrorRecovery:*/ true) && !isStartOfExpressionStatement() && token !== SyntaxKind.FunctionKeyword) {
                 // Check if we got a plain statement (i.e. no expression-statements, no functions expressions/declarations)
                 //
                 // Here we try to recover from a potential error situation in the case where the 
@@ -3748,7 +3748,7 @@ module ts {
             return finishNode(node);
         }
 
-        function isStatement(inErrorRecovery: boolean): boolean {
+        function isStartOfStatement(inErrorRecovery: boolean): boolean {
             switch (token) {
                 case SyntaxKind.SemicolonToken:
                     // If we're in error recovery, then we don't want to treat ';' as an empty statement.
@@ -4455,7 +4455,7 @@ module ts {
         }
 
         function isSourceElement(inErrorRecovery: boolean): boolean {
-            return isDeclarationStart() || isStatement(inErrorRecovery);
+            return isDeclarationStart() || isStartOfStatement(inErrorRecovery);
         }
 
         function parseSourceElement() {
