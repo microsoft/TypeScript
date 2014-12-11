@@ -3866,10 +3866,43 @@ module ts {
                     }
                     // Else parse it like identifier - fall through
                 default:
+                    if (isModifier(token)) {
+                        var result = tryParse(parseVariableStatementOrFunctionDeclarationWithModifiers);
+                        if (result) {
+                            return result;
+                        }
+                    }
+
                     return isLabel()
                         ? parseLabeledStatement()
                         : parseExpressionStatement();
             }
+        }
+
+        function parseVariableStatementOrFunctionDeclarationWithModifiers(): FunctionDeclaration | VariableStatement {
+            var start = scanner.getStartPos();
+            var modifiers = parseModifiers();
+            switch (token) {
+                case SyntaxKind.ConstKeyword:
+                    var nextTokenIsEnum = lookAhead(nextTokenIsEnumKeyword)
+                    if (nextTokenIsEnum) {
+                        return undefined;
+                    }
+                    return parseVariableStatement(start, modifiers);
+
+                case SyntaxKind.LetKeyword:
+                    if (!isLetDeclaration()) {
+                        return undefined;
+                    }
+                    return parseVariableStatement(start, modifiers);
+
+                case SyntaxKind.VarKeyword:
+                    return parseVariableStatement(start, modifiers);
+                case SyntaxKind.FunctionKeyword:
+                    return parseFunctionDeclaration(start, modifiers);
+            }
+
+            return undefined;
         }
 
         function parseFunctionBlockOrSemicolon(isGenerator: boolean): Block {
@@ -4600,6 +4633,7 @@ module ts {
         // We're automatically in an ambient context if this is a .d.ts file.
         var inAmbientContext = fileExtensionIs(file.filename, ".d.ts");
         var inFunctionBlock = false;
+        var inBlock = false;
         var parent: Node;
         visitNode(file);
 
@@ -4614,6 +4648,10 @@ module ts {
                 if (isFunctionBlock(node)) {
                     inFunctionBlock = true;
                 }
+                var savedInBlock = inBlock;
+                if (node.kind === SyntaxKind.Block || node.kind === SyntaxKind.TryBlock || node.kind === SyntaxKind.FinallyBlock) {
+                    inBlock = true;
+                }
 
                 var savedInAmbientContext = inAmbientContext
                 if (node.flags & NodeFlags.Ambient) {
@@ -4624,6 +4662,7 @@ module ts {
 
                 inAmbientContext = savedInAmbientContext;
                 inFunctionBlock = savedInFunctionBlock;
+                inBlock = savedInBlock;
             }
 
             parent = savedParent;
@@ -5085,7 +5124,8 @@ module ts {
         }
 
         function checkFunctionDeclaration(node: FunctionLikeDeclaration) {
-            return checkAnySignatureDeclaration(node) ||
+            return checkForDisallowedModifiersInBlock(node) ||
+                checkAnySignatureDeclaration(node) ||
                 checkFunctionName(node.name) ||
                 checkForBodyInAmbientContext(node.body, /*isConstructor:*/ false) ||
                 checkForGenerator(node);
@@ -5820,8 +5860,15 @@ module ts {
         }
 
         function checkVariableStatement(node: VariableStatement) {
-            return checkVariableDeclarations(node.declarations) ||
+            return checkForDisallowedModifiersInBlock(node) ||
+                checkVariableDeclarations(node.declarations) ||
                 checkForDisallowedLetOrConstStatement(node);
+        }
+
+        function checkForDisallowedModifiersInBlock(node: Node) {
+            if (inBlock && node.modifiers) {
+                return grammarErrorOnFirstToken(node, Diagnostics.Modifiers_cannot_appear_here);
+            }
         }
 
         function checkForDisallowedLetOrConstStatement(node: VariableStatement) {
