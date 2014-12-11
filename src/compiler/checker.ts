@@ -6402,7 +6402,7 @@ module ts {
 
             // Grammar checking
             if (node.kind === SyntaxKind.ArrowFunction) {
-                checkGrammarAnySignatureDeclaration(<FunctionLikeDeclaration>node);
+                checkGrammarFunctionLikeDeclaration(node);
             }
 
             // The identityMapper object is used to indicate that function expressions are wildcards
@@ -6711,14 +6711,12 @@ module ts {
 
         function checkBinaryExpression(node: BinaryExpression, contextualMapper?: TypeMapper) {
             // Grammar checking
-            if (!checkGrammarModifiers(node)) {
-                if (node.parserContextFlags & ParserContextFlags.StrictMode) {
-                    if (isLeftHandSideExpression(node.left) && isAssignmentOperator(node.operator)) {
-                        if (isEvalOrArgumentsIdentifier(node.left)) {
-                            // ECMA 262 (Annex C) The identifier eval or arguments may not appear as the LeftHandSideExpression of an
-                            // Assignment operator(11.13) or of a PostfixExpression(11.3)
-                            reportGrammarErrorOfInvalidUseInStrictMode(<Identifier>node.left);
-                        }
+            if (node.parserContextFlags & ParserContextFlags.StrictMode) {
+                if (isLeftHandSideExpression(node.left) && isAssignmentOperator(node.operator)) {
+                    if (isEvalOrArgumentsIdentifier(node.left)) {
+                        // ECMA 262 (Annex C) The identifier eval or arguments may not appear as the LeftHandSideExpression of an
+                        // Assignment operator(11.13) or of a PostfixExpression(11.3)
+                        reportGrammarErrorOfInvalidUseInStrictMode(<Identifier>node.left);
                     }
                 }
             }
@@ -7039,7 +7037,7 @@ module ts {
 
         function checkTypeParameter(node: TypeParameterDeclaration) {
             // Grammar Checking
-            if (!checkGrammarModifiers(node) && node.expression) {
+            if (node.expression) {
                 grammarErrorOnFirstToken(node.expression, Diagnostics.Type_expected);
             }
 
@@ -7075,7 +7073,7 @@ module ts {
             // TODO (yuisu): Remove this check in else-if when SyntaxKind.Construct is moved and ambient context is handled
             else  if (node.kind === SyntaxKind.FunctionType || node.kind === SyntaxKind.ConstructorType ||
                       node.kind === SyntaxKind.CallSignature || node.kind === SyntaxKind.ConstructSignature){
-                checkGrammarAnySignatureDeclaration(<FunctionLikeDeclaration>node);
+                checkGrammarFunctionLikeDeclaration(<FunctionLikeDeclaration>node);
             }
 
             checkTypeParameters(node.typeParameters);
@@ -9855,7 +9853,7 @@ module ts {
             }
         }
 
-        function checkGrammarAnySignatureDeclaration(node: FunctionLikeDeclaration) {
+        function checkGrammarFunctionLikeDeclaration(node: FunctionLikeDeclaration) {
             // Prevent cascading error by short-circuit
             checkGrammarModifiers(node) || checkGrammarTypeParameterList(node, node.typeParameters) || checkGrammarParameterList(node.parameters);
         }
@@ -9936,10 +9934,10 @@ module ts {
         }
 
         function checkGrammarBindingElement(node: BindingElement) {
-            if (!checkGrammarModifiers(node) && (node.parserContextFlags & ParserContextFlags.StrictMode && isEvalOrArgumentsIdentifier(node.name))) {
-                    // It is a SyntaxError if a VariableDeclaration or VariableDeclarationNoIn occurs within strict code
-                    // and its Identifier is eval or arguments
-                    reportGrammarErrorOfInvalidUseInStrictMode(<Identifier>node.name);
+            if (node.parserContextFlags & ParserContextFlags.StrictMode && isEvalOrArgumentsIdentifier(node.name)) {
+                // It is a SyntaxError if a VariableDeclaration or VariableDeclarationNoIn occurs within strict code
+                // and its Identifier is eval or arguments
+                reportGrammarErrorOfInvalidUseInStrictMode(<Identifier>node.name);
             }
         }
 
@@ -9995,9 +9993,9 @@ module ts {
         }
 
         function reportGrammarErrorOfInvalidUseInStrictMode(node: Identifier): boolean {
-            // declarationNameToString cannot be used here since it uses a backreference to 'parent' that is not yet set
-            var sourceText = getSourceFileOfNode(node).text;
-            var name = sourceText.substring(skipTrivia(sourceText, node.pos), node.end);
+            //var sourceText = getSourceFileOfNode(node).text;
+            //var name = sourceText.substring(skipTrivia(sourceText, node.pos), node.end);
+            var name = declarationNameToString(node);
             return grammarErrorOnNode(node, Diagnostics.Invalid_use_of_0_in_strict_mode, name);
         }
 
