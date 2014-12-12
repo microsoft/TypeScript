@@ -1,4 +1,4 @@
-/// <reference path="..\formatting.ts"/>
+/// <reference path="formatting.ts"/>
 /// <reference path="..\..\compiler\scanner.ts"/>
 
 module ts.formatting {

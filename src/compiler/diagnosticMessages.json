@@ -1667,6 +1667,10 @@
         "category": "Error",
         "code": 6054
     },
+    "Suppress noImplicitAny errors for indexing objects lacking index signatures.": {
+        "category": "Message",
+        "code": 6055
+    },
 
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
@@ -1740,8 +1744,12 @@
         "category": "Error",
         "code": 9000
     },
-    "'generators' are not currently supported.": {
+    "Generators are not currently supported.": {
         "category": "Error",
         "code": 9001
+    },
+    "Computed property names are not currently supported.": {
+        "category": "Error",
+        "code": 9002
     }
 }
