@@ -7155,6 +7155,11 @@ module ts {
         }
 
         function checkMethodDeclaration(node: MethodDeclaration) {
+            // Grammar checking
+            if (node.name.kind === SyntaxKind.ComputedPropertyName) {
+                checkGrammarComputedPropertyName(<ComputedPropertyName>node.name);
+            }
+
             checkFunctionLikeDeclaration(node);
         }
 
@@ -7242,6 +7247,11 @@ module ts {
         }
 
         function checkAccessorDeclaration(node: AccessorDeclaration) {
+            // Grammar checking
+            if (node.name.kind === SyntaxKind.ComputedPropertyName) {
+                checkGrammarComputedPropertyName(<ComputedPropertyName>node.name);
+            }
+
             if (fullTypeCheck) {
                 if (node.kind === SyntaxKind.GetAccessor) {
                     if (!isInAmbientContext(node) && node.body && !(bodyContainsAReturnStatement(<Block>node.body) || bodyContainsSingleThrowStatement(<Block>node.body))) {
@@ -10000,12 +10010,18 @@ module ts {
         }
 
         function checkGrammarComputedPropertyName(node: ComputedPropertyName): void {
+            // Since computed properties are not supported in the type checker, disallow them in TypeScript 1.4
+            // Once full support is added, remove this error.
+            grammarErrorOnNode(node, Diagnostics.Computed_property_names_are_not_currently_supported);
+
+            /* TODO (jfreeman)
             if (compilerOptions.target < ScriptTarget.ES6) {
                 grammarErrorOnNode(node, Diagnostics.Computed_property_names_are_only_available_when_targeting_ECMAScript_6_and_higher);
             }
             else if (node.expression.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>node.expression).operator === SyntaxKind.CommaToken) {
                 grammarErrorOnNode(node.expression, Diagnostics.A_comma_expression_is_not_allowed_in_a_computed_property_name);
             }
+            */
         }
 
         function hasParseDiagnostics(sourceFile: SourceFile): boolean {
