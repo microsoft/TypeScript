@@ -1,11 +1,8 @@
 tests/cases/compiler/innerModExport1.ts(5,12): error TS1005: ';' expected.
-tests/cases/compiler/innerModExport1.ts(7,9): error TS1129: Statement expected.
-tests/cases/compiler/innerModExport1.ts(14,5): error TS1148: Cannot compile external modules unless the '--module' flag is provided.
-tests/cases/compiler/innerModExport1.ts(17,1): error TS1128: Declaration or statement expected.
 tests/cases/compiler/innerModExport1.ts(5,5): error TS2304: Cannot find name 'module'.
 
 
-==== tests/cases/compiler/innerModExport1.ts (5 errors) ====
+==== tests/cases/compiler/innerModExport1.ts (2 errors) ====
     module Outer {
     
         // inner mod 1
@@ -17,8 +14,6 @@ tests/cases/compiler/innerModExport1.ts(5,5): error TS2304: Cannot find name 'mo
 !!! error TS2304: Cannot find name 'module'.
             var non_export_var = 0;
             export var export_var = 1;
-            ~~~~~~
-!!! error TS1129: Statement expected.
     
             function NonExportFunc() { return 0; }
     
@@ -26,12 +21,8 @@ tests/cases/compiler/innerModExport1.ts(5,5): error TS2304: Cannot find name 'mo
         }
     
         export var outer_var_export = 0;
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS1148: Cannot compile external modules unless the '--module' flag is provided.
         export function outerFuncExport() { return 0; }
     
     }
-    ~
-!!! error TS1128: Declaration or statement expected.
     
     Outer.ExportFunc();

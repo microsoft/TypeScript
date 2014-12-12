@@ -3965,6 +3965,18 @@ module ts {
         }
 
         function isStartOfStatement(inErrorRecovery: boolean): boolean {
+            // Functions and variable statements are allowed as a statement.  But as per the grammar,
+            // they also allow modifiers.  So we have to check for those statements that might be 
+            // following modifiers.This ensures that things work properly when incrementally parsing 
+            // as the parser will produce the same FunctionDeclaraiton or VariableStatement if it has 
+            // the same text regardless of whether it is inside a block or not.
+            if (isModifier(token)) {
+                var result = lookAhead(parseVariableStatementOrFunctionDeclarationWithModifiers);
+                if (result) {
+                    return true;
+                }
+            }
+
             switch (token) {
                 case SyntaxKind.SemicolonToken:
                     // If we're in error recovery, then we don't want to treat ';' as an empty statement.

@@ -183,7 +183,6 @@ module ts {
 
     describe('Incremental',() => {
         it('Inserting into method',() => {
-            debugger;
             var source = "class C {\r\n" +
                 "    public foo1() { }\r\n" +
                 "    public foo2() {\r\n" +
@@ -745,12 +744,13 @@ module m3 { }\
         });
 
         it('Surrounding function declarations with block',() => {
+            debugger;
             var source = "declare function F1() { } export function F2() { } declare export function F3() { }"
 
             var oldText = ScriptSnapshot.fromString(source);
             var newTextAndChange = withInsert(oldText, 0, "{");
 
-            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 0);
+            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 9);
         });
 
         it('Removing block around function declarations',() => {
@@ -772,7 +772,6 @@ module m3 { }\
         });
 
         it('Moving methods from object literal to class',() => {
-            debugger;
             var source = "var v = { public A() { } public B() { } public C() { } }"
 
             var oldText = ScriptSnapshot.fromString(source);
