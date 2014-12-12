@@ -5360,7 +5360,7 @@ module ts {
 
             // Grammar checking for computedPropertyName
             forEach(node.properties, property => {
-                if (property.name && property.name.kind === SyntaxKind.ComputedPropertyName) {
+                if (property.name.kind === SyntaxKind.ComputedPropertyName) {
                     checkGrammarComputedPropertyName(<ComputedPropertyName>property.name);
                 }
             });
