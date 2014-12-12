@@ -2947,7 +2947,16 @@ module ts {
                     for (var i = 0; i < elements.length; i++) {
                         var e = elements[i];
                         if (e.kind !== SyntaxKind.OmittedExpression) {
-                            emitDestructuringAssignment(e, createElementAccess(value, createNumericLiteral(i)));
+                            if (e.kind !== SyntaxKind.SpreadElementExpression) {
+                                emitDestructuringAssignment(e, createElementAccess(value, createNumericLiteral(i)));
+                            }
+                            else {
+                                if (i === elements.length - 1) {
+                                    value = ensureIdentifier(value);
+                                    emitAssignment(<Identifier>(<SpreadElementExpression>e).expression, value);
+                                    write(".slice(" + i + ")");
+                                }
+                            }
                         }
                     }
                 }
@@ -3772,17 +3781,18 @@ module ts {
                 increaseIndent();
                 emitCaptureThisForNodeIfNecessary(node);
                 emitLinesStartingAt(node.statements, startIndex);
+                emitTempDeclarations(/*newLine*/ true);
                 var exportName = resolver.getExportAssignmentName(node);
                 if (exportName) {
                     writeLine();
-                    var exportAssignement = getFirstExportAssignment(node);
-                    emitStart(exportAssignement);
+                    var exportAssignment = getFirstExportAssignment(node);
+                    emitStart(exportAssignment);
                     write("return ");
-                    emitStart(exportAssignement.exportName);
+                    emitStart(exportAssignment.exportName);
                     write(exportName);
-                    emitEnd(exportAssignement.exportName);
+                    emitEnd(exportAssignment.exportName);
                     write(";");
-                    emitEnd(exportAssignement);
+                    emitEnd(exportAssignment);
                 }
                 decreaseIndent();
                 writeLine();
@@ -3792,17 +3802,18 @@ module ts {
             function emitCommonJSModule(node: SourceFile, startIndex: number) {
                 emitCaptureThisForNodeIfNecessary(node);
                 emitLinesStartingAt(node.statements, startIndex);
+                emitTempDeclarations(/*newLine*/ true);
                 var exportName = resolver.getExportAssignmentName(node);
                 if (exportName) {
                     writeLine();
-                    var exportAssignement = getFirstExportAssignment(node);
-                    emitStart(exportAssignement);
+                    var exportAssignment = getFirstExportAssignment(node);
+                    emitStart(exportAssignment);
                     write("module.exports = ");
-                    emitStart(exportAssignement.exportName);
+                    emitStart(exportAssignment.exportName);
                     write(exportName);
-                    emitEnd(exportAssignement.exportName);
+                    emitEnd(exportAssignment.exportName);
                     write(";");
-                    emitEnd(exportAssignement);
+                    emitEnd(exportAssignment);
                 }
             }
 
@@ -3858,6 +3869,7 @@ module ts {
                 else {
                     emitCaptureThisForNodeIfNecessary(node);
                     emitLinesStartingAt(node.statements, startIndex);
+                    emitTempDeclarations(/*newLine*/ true);
                 }
 
                 emitLeadingComments(node.endOfFileToken);

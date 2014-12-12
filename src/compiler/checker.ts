@@ -6689,15 +6689,25 @@ module ts {
             for (var i = 0; i < elements.length; i++) {
                 var e = elements[i];
                 if (e.kind !== SyntaxKind.OmittedExpression) {
-                    var propName = "" + i;
-                    var type = sourceType.flags & TypeFlags.Any ? sourceType :
-                        isTupleLikeType(sourceType) ? getTypeOfPropertyOfType(sourceType, propName) :
-                        getIndexTypeOfType(sourceType, IndexKind.Number);
-                    if (type) {
-                        checkDestructuringAssignment(e, type, contextualMapper);
+                    if (e.kind !== SyntaxKind.SpreadElementExpression) {
+                        var propName = "" + i;
+                        var type = sourceType.flags & TypeFlags.Any ? sourceType :
+                            isTupleLikeType(sourceType) ? getTypeOfPropertyOfType(sourceType, propName) :
+                            getIndexTypeOfType(sourceType, IndexKind.Number);
+                        if (type) {
+                            checkDestructuringAssignment(e, type, contextualMapper);
+                        }
+                        else {
+                            error(e, Diagnostics.Type_0_has_no_property_1, typeToString(sourceType), propName);
+                        }
                     }
                     else {
-                        error(e, Diagnostics.Type_0_has_no_property_1, typeToString(sourceType), propName);
+                        if (i === elements.length - 1) {
+                            checkReferenceAssignment((<SpreadElementExpression>e).expression, sourceType, contextualMapper);
+                        }
+                        else {
+                            error(e, Diagnostics.A_rest_element_must_be_last_in_an_array_destructuring_pattern);
+                        }
                     }
                 }
             }
@@ -6715,6 +6725,10 @@ module ts {
             if (target.kind === SyntaxKind.ArrayLiteralExpression) {
                 return checkArrayLiteralAssignment(<ArrayLiteralExpression>target, sourceType, contextualMapper);
             }
+            return checkReferenceAssignment(target, sourceType, contextualMapper);
+        }
+
+        function checkReferenceAssignment(target: Expression, sourceType: Type, contextualMapper?: TypeMapper): Type {
             var targetType = checkExpression(target, contextualMapper);
             if (checkReferenceExpression(target, Diagnostics.Invalid_left_hand_side_of_assignment_expression, Diagnostics.Left_hand_side_of_assignment_expression_cannot_be_a_constant)) {
                 checkTypeAssignableTo(sourceType, targetType, target, /*headMessage*/ undefined);

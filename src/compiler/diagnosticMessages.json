@@ -1173,6 +1173,10 @@
         "category": "Error",
         "code": 2461
     },
+    "A rest element must be last in an array destructuring pattern": {
+        "category": "Error",
+        "code": 2462
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
