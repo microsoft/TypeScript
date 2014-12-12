@@ -1419,18 +1419,19 @@ module FourSlash {
                 return;
             }
 
-            // Get syntactic errors (to force a refresh)
-            var incrSyntaxErrs = JSON.stringify(Utils.convertDiagnostics(this.languageService.getSyntacticDiagnostics(this.activeFile.fileName)));
+            var incrementalSourceFile = this.languageService.getSourceFile(this.activeFile.fileName);
+            var incrementalSyntaxDiagnostics = JSON.stringify(Utils.convertDiagnostics(incrementalSourceFile.getSyntacticDiagnostics()));
 
             // Check syntactic structure
             var snapshot = this.languageServiceShimHost.getScriptSnapshot(this.activeFile.fileName);
             var content = snapshot.getText(0, snapshot.getLength());
-            var refSyntaxTree = ts.createLanguageServiceSourceFile(
-                this.activeFile.fileName, createScriptSnapShot(content), ts.ScriptTarget.Latest, /*version:*/ "0", /*isOpen:*/ false, /*setNodeParents:*/ false);
-            var fullSyntaxErrs = JSON.stringify(Utils.convertDiagnostics(refSyntaxTree.getSyntacticDiagnostics()));
 
-            if (incrSyntaxErrs !== fullSyntaxErrs) {
-                this.raiseError('Mismatched incremental/full syntactic errors for file ' + this.activeFile.fileName + '.\n=== Incremental errors ===\n' + incrSyntaxErrs + '\n=== Full Errors ===\n' + fullSyntaxErrs);
+            var referenceSourceFile = ts.createLanguageServiceSourceFile(
+                this.activeFile.fileName, createScriptSnapShot(content), ts.ScriptTarget.Latest, /*version:*/ "0", /*isOpen:*/ false, /*setNodeParents:*/ false);
+            var referenceSyntaxDiagnostics = JSON.stringify(Utils.convertDiagnostics(referenceSourceFile.getSyntacticDiagnostics()));
+
+            if (incrementalSyntaxDiagnostics !== referenceSyntaxDiagnostics) {
+                this.raiseError('Mismatched incremental/reference syntactic diagnostics for file ' + this.activeFile.fileName + '.\n=== Incremental diagnostics ===\n' + incrementalSyntaxDiagnostics + '\n=== Reference Diagnostics ===\n' + referenceSyntaxDiagnostics);
             }
 
              //if (this.editValidation !== IncrementalEditValidation.SyntacticOnly) {
