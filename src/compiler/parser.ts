@@ -4642,7 +4642,7 @@ module ts {
                 case SyntaxKind.Constructor:                    return checkConstructor(<ConstructorDeclaration>node);
                 //case SyntaxKind.DeleteExpression:               return checkDeleteExpression(<DeleteExpression> node);
                 //case SyntaxKind.ElementAccessExpression:        return checkElementAccessExpression(<ElementAccessExpression>node);
-                case SyntaxKind.ExportAssignment:               return checkExportAssignment(<ExportAssignment>node);
+                //case SyntaxKind.ExportAssignment:               return checkExportAssignment(<ExportAssignment>node);
                 case SyntaxKind.ExternalModuleReference:        return checkExternalModuleReference(<ExternalModuleReference>node);
                 case SyntaxKind.ForInStatement:                 return checkForInStatement(<ForInStatement>node);
                 case SyntaxKind.ForStatement:                   return checkForStatement(<ForStatement>node);
