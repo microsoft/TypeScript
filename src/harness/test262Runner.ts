@@ -21,81 +21,6 @@ class Test262BaselineRunner extends RunnerBase {
         return Test262BaselineRunner.basePath + "/" + filename;
     }
 
-    private static checkInvariants(node: ts.Node, parent: ts.Node): void {
-        if (node) {
-            if (node.pos < 0) {
-                throw new Error("node.pos < 0");
-            }
-            if (node.end < 0) {
-                throw new Error("node.end < 0");
-            }
-            if (node.end < node.pos) {
-                throw new Error("node.end < node.pos");
-            }
-            if (node.parent !== parent) {
-                throw new Error("node.parent !== parent");
-            }
-            if (parent) {
-                // Make sure each child is contained within the parent.
-                if (node.pos < parent.pos) {
-                    throw new Error("node.pos < parent.pos");
-                }
-                if (node.end > parent.end) {
-                    throw new Error("node.end > parent.end");
-                }
-            }
-
-            ts.forEachChild(node, child => {
-                Test262BaselineRunner.checkInvariants(child, node);
-            });
-
-            // Make sure each of the children is in order.
-            var currentPos = 0;
-            ts.forEachChild(node,
-                child => {
-                    if (child.pos < currentPos) {
-                        throw new Error("child.pos < currentPos");
-                    }
-                    currentPos = child.end;
-                },
-                (array: ts.NodeArray<ts.Node>) => {
-                    if (array.pos < node.pos) {
-                        throw new Error("array.pos < node.pos");
-                    }
-                    if (array.end > node.end) {
-                        throw new Error("array.end > node.end");
-                    }
-
-                    if (array.pos < currentPos) {
-                        throw new Error("array.pos < currentPos");
-                    }
-                    for (var i = 0, n = array.length; i < n; i++) {
-                        if (array[i].pos < currentPos) {
-                            throw new Error("array[i].pos < currentPos");
-                        }
-                        currentPos = array[i].end
-                    }
-
-                    currentPos = array.end;
-                });
-
-            var childNodesAndArrays: any[] = [];
-            ts.forEachChild(node, child => { childNodesAndArrays.push(child) }, array => { childNodesAndArrays.push(array) });
-
-            for (var childName in node) {
-                if (childName === "parent" || childName === "nextContainer" || childName === "modifiers" || childName === "externalModuleIndicator") {
-                    continue;
-                }
-                var child = (<any>node)[childName];
-                if (Test262BaselineRunner.isNodeOrArray(child)) {
-                    if (childNodesAndArrays.indexOf(child) < 0) {
-                        throw new Error("Child when forEach'ing over node. " + (<any>ts).SyntaxKind[node.kind] + "-" + childName);
-                    }
-                }
-            }
-        }
-    }
-
     private static serializeSourceFile(file: ts.SourceFile): string {
         function getKindName(k: number): string {
             return (<any>ts).SyntaxKind[k]
@@ -126,7 +51,12 @@ class Test262BaselineRunner extends RunnerBase {
         }
 
         function getNodeFlagName(f: number) { return getFlagName((<any>ts).NodeFlags, f); }
-        function getParserContextFlagName(f: number) { return getFlagName((<any>ts).ParserContextFlags, f); }
+        function getParserContextFlagName(f: number) {
+            // Clear the flag that are produced by aggregating child values..  That is ephemeral 
+            // data we don't care about in the dump.  We only care what the parser set directly
+            // on the ast.
+            return getFlagName((<any>ts).ParserContextFlags, f & ts.ParserContextFlags.ParserGeneratedFlags);
+        }
         function convertDiagnostics(diagnostics: ts.Diagnostic[]) {
             return diagnostics.map(convertDiagnostic);
         }
@@ -143,6 +73,9 @@ class Test262BaselineRunner extends RunnerBase {
 
         function serializeNode(n: ts.Node): any {
             var o: any = { kind: getKindName(n.kind) };
+            if (ts.containsParseError(n)) {
+                o.containsParseError = true;
+            }
 
             ts.forEach(Object.getOwnPropertyNames(n), propertyName => {
                 switch (propertyName) {
@@ -264,7 +197,7 @@ class Test262BaselineRunner extends RunnerBase {
 
             it('satisfies invariants', () => {
                 var sourceFile = testState.checker.getProgram().getSourceFile(Test262BaselineRunner.getTestFilePath(testState.filename));
-                Test262BaselineRunner.checkInvariants(sourceFile, /*parent:*/ undefined);
+                Utils.assertInvariants(sourceFile, /*parent:*/ undefined);
             });
 
             it('has the expected AST',() => {

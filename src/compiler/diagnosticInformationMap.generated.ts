@@ -144,7 +144,8 @@ module ts {
         Array_element_destructuring_pattern_expected: { code: 1181, category: DiagnosticCategory.Error, key: "Array element destructuring pattern expected." },
         A_destructuring_declaration_must_have_an_initializer: { code: 1182, category: DiagnosticCategory.Error, key: "A destructuring declaration must have an initializer." },
         Destructuring_declarations_are_not_allowed_in_ambient_contexts: { code: 1183, category: DiagnosticCategory.Error, key: "Destructuring declarations are not allowed in ambient contexts." },
-        A_rest_element_cannot_have_an_initializer: { code: 1184, category: DiagnosticCategory.Error, key: "A rest element cannot have an initializer." },
+        Merge_conflict_marker_encountered: { code: 1184, category: DiagnosticCategory.Error, key: "Merge conflict marker encountered." },
+        A_rest_element_cannot_have_an_initializer: { code: 1185, category: DiagnosticCategory.Error, key: "A rest element cannot have an initializer." },
         Duplicate_identifier_0: { code: 2300, category: DiagnosticCategory.Error, key: "Duplicate identifier '{0}'." },
         Initializer_of_instance_member_variable_0_cannot_reference_identifier_1_declared_in_the_constructor: { code: 2301, category: DiagnosticCategory.Error, key: "Initializer of instance member variable '{0}' cannot reference identifier '{1}' declared in the constructor." },
         Static_members_cannot_reference_class_type_parameters: { code: 2302, category: DiagnosticCategory.Error, key: "Static members cannot reference class type parameters." },
@@ -418,6 +419,7 @@ module ts {
         Warn_on_expressions_and_declarations_with_an_implied_any_type: { code: 6052, category: DiagnosticCategory.Message, key: "Warn on expressions and declarations with an implied 'any' type." },
         File_0_not_found: { code: 6053, category: DiagnosticCategory.Error, key: "File '{0}' not found." },
         File_0_must_have_extension_ts_or_d_ts: { code: 6054, category: DiagnosticCategory.Error, key: "File '{0}' must have extension '.ts' or '.d.ts'." },
+        Suppress_noImplicitAny_errors_for_indexing_objects_lacking_index_signatures: { code: 6055, category: DiagnosticCategory.Message, key: "Suppress noImplicitAny errors for indexing objects lacking index signatures." },
         Variable_0_implicitly_has_an_1_type: { code: 7005, category: DiagnosticCategory.Error, key: "Variable '{0}' implicitly has an '{1}' type." },
         Parameter_0_implicitly_has_an_1_type: { code: 7006, category: DiagnosticCategory.Error, key: "Parameter '{0}' implicitly has an '{1}' type." },
         Member_0_implicitly_has_an_1_type: { code: 7008, category: DiagnosticCategory.Error, key: "Member '{0}' implicitly has an '{1}' type." },
@@ -436,6 +438,7 @@ module ts {
         Function_implicitly_has_return_type_any_because_it_does_not_have_a_return_type_annotation_and_is_referenced_directly_or_indirectly_in_one_of_its_return_expressions: { code: 7024, category: DiagnosticCategory.Error, key: "Function implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions." },
         You_cannot_rename_this_element: { code: 8000, category: DiagnosticCategory.Error, key: "You cannot rename this element." },
         yield_expressions_are_not_currently_supported: { code: 9000, category: DiagnosticCategory.Error, key: "'yield' expressions are not currently supported." },
-        generators_are_not_currently_supported: { code: 9001, category: DiagnosticCategory.Error, key: "'generators' are not currently supported." },
+        Generators_are_not_currently_supported: { code: 9001, category: DiagnosticCategory.Error, key: "Generators are not currently supported." },
+        Computed_property_names_are_not_currently_supported: { code: 9002, category: DiagnosticCategory.Error, key: "Computed property names are not currently supported." },
     };
 }

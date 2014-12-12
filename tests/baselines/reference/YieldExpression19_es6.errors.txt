@@ -1,10 +1,10 @@
-tests/cases/conformance/es6/yieldExpressions/YieldExpression19_es6.ts(1,9): error TS9001: 'generators' are not currently supported.
+tests/cases/conformance/es6/yieldExpressions/YieldExpression19_es6.ts(1,9): error TS9001: Generators are not currently supported.
 
 
 ==== tests/cases/conformance/es6/yieldExpressions/YieldExpression19_es6.ts (1 errors) ====
     function*foo() {
             ~
-!!! error TS9001: 'generators' are not currently supported.
+!!! error TS9001: Generators are not currently supported.
       function bar() {
         function* quux() {
           yield(foo);

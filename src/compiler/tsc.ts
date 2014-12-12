@@ -133,75 +133,6 @@ module ts {
         reportStatisticalValue(name, (time / 1000).toFixed(2) + "s");
     }
 
-    function createCompilerHost(options: CompilerOptions): CompilerHost {
-        var currentDirectory: string;
-        var existingDirectories: Map<boolean> = {};
-
-        function getCanonicalFileName(fileName: string): string {
-            // if underlying system can distinguish between two files whose names differs only in cases then file name already in canonical form.
-            // otherwise use toLowerCase as a canonical form.
-            return sys.useCaseSensitiveFileNames ? fileName : fileName.toLowerCase();
-        }
-        
-        // returned by CScript sys environment
-        var unsupportedFileEncodingErrorCode = -2147024809;
-        
-        function getSourceFile(filename: string, languageVersion: ScriptTarget, onError?: (message: string) => void): SourceFile {
-            try {
-                var text = sys.readFile(filename, options.charset);
-            }
-            catch (e) {
-                if (onError) {
-                    onError(e.number === unsupportedFileEncodingErrorCode ? 
-                                getDiagnosticText(Diagnostics.Unsupported_file_encoding) :
-                                e.message);
-                }
-                text = "";
-            }
-            return text !== undefined ? createSourceFile(filename, text, languageVersion, /*version:*/ "0") : undefined;
-        }
-
-        function writeFile(fileName: string, data: string, writeByteOrderMark: boolean, onError?: (message: string) => void) {
-
-            function directoryExists(directoryPath: string): boolean {
-                if (hasProperty(existingDirectories, directoryPath)) {
-                    return true;
-                }
-                if (sys.directoryExists(directoryPath)) {
-                    existingDirectories[directoryPath] = true;
-                    return true;
-                }
-                return false;
-            }
-
-            function ensureDirectoriesExist(directoryPath: string) {
-                if (directoryPath.length > getRootLength(directoryPath) && !directoryExists(directoryPath)) {
-                    var parentDirectory = getDirectoryPath(directoryPath);
-                    ensureDirectoriesExist(parentDirectory);
-                    sys.createDirectory(directoryPath);
-                }
-            }
-
-            try {
-                ensureDirectoriesExist(getDirectoryPath(normalizePath(fileName)));
-                sys.writeFile(fileName, data, writeByteOrderMark);
-            }
-            catch (e) {
-                if (onError) onError(e.message);
-            }
-        }
-
-        return {
-            getSourceFile,
-            getDefaultLibFilename: options => combinePaths(getDirectoryPath(normalizePath(sys.getExecutingFilePath())), options.target === ScriptTarget.ES6 ? "lib.es6.d.ts" : "lib.d.ts"),
-            writeFile,
-            getCurrentDirectory: () => currentDirectory || (currentDirectory = sys.getCurrentDirectory()),
-            useCaseSensitiveFileNames: () => sys.useCaseSensitiveFileNames,
-            getCanonicalFileName,
-            getNewLine: () => sys.newLine
-        };
-    }
-
     export function executeCommandLine(args: string[]): void {
         var commandLine = parseCommandLine(args);
         var compilerOptions = commandLine.options;
@@ -447,12 +378,12 @@ module ts {
             var usageText = " ";
             if (option.shortName) {
                 usageText += "-" + option.shortName;
-                usageText += getParamName(option);
+                usageText += getParamType(option);
                 usageText += ", ";
             }
 
             usageText += "--" + option.name;
-            usageText += getParamName(option);
+            usageText += getParamType(option);
 
             usageColumn.push(usageText);
             descriptionColumn.push(getDiagnosticText(option.description));
@@ -477,9 +408,9 @@ module ts {
         sys.write(output);
         return;
 
-        function getParamName(option: CommandLineOption) {
-            if (option.paramName !== undefined) {
-                return " " + getDiagnosticText(option.paramName);
+        function getParamType(option: CommandLineOption) {
+            if (option.paramType !== undefined) {
+                return " " + getDiagnosticText(option.paramType);
             }
             return "";
         }
@@ -490,4 +421,4 @@ module ts {
     }
 }
 
-ts.executeCommandLine(sys.args);
+ts.executeCommandLine(ts.sys.args);

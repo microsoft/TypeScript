@@ -89,6 +89,11 @@ module ts {
             paramType: Diagnostics.DIRECTORY,
         },
         {
+            name: "preserveConstEnums",
+            type: "boolean",
+            description: Diagnostics.Do_not_erase_const_enum_declarations_in_generated_code
+        },
+        {
             name: "removeComments",
             type: "boolean",
             description: Diagnostics.Do_not_emit_comments_to_output,
@@ -103,6 +108,11 @@ module ts {
             type: "string",
             description: Diagnostics.Specifies_the_location_where_debugger_should_locate_TypeScript_files_instead_of_source_locations,
             paramType: Diagnostics.LOCATION,
+        },
+        {
+            name: "suppressImplicitAnyIndexErrors",
+            type: "boolean",
+            description: Diagnostics.Suppress_noImplicitAny_errors_for_indexing_objects_lacking_index_signatures,
         },
         {
             name: "target",
@@ -123,14 +133,9 @@ module ts {
             shortName: "w",
             type: "boolean",
             description: Diagnostics.Watch_input_files,
-        },
-        {
-            name: "preserveConstEnums",
-            type: "boolean",
-            description: Diagnostics.Do_not_erase_const_enum_declarations_in_generated_code
         }
     ];
-
+    
     var shortOptionNames: Map<string> = {};
     var optionNameMap: Map<CommandLineOption> = {};
 
