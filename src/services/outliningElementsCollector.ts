@@ -14,22 +14,6 @@
 //
 
 module ts {
-
-    export interface OutliningSpan {
-        /** 
-         * @param textSpan The span of the document to actually collapse.
-         * @param hintSpan The span of the document to display when the user hovers over the 
-         *       collapsed span.
-         * @param bannerText The text to display in the editor for the collapsed region.
-         * @param autoCollapse Whether or not this region should be automatically collapsed when 
-         *        the 'Collapse to Definitions' command is invoked.
-         */
-        textSpan: TextSpan;
-        hintSpan: TextSpan;
-        bannerText: string;
-        autoCollapse: boolean;
-    }
-
     export module OutliningElementsCollector {
         export function collectElements(sourceFile: SourceFile): OutliningSpan[] {
             var elements: OutliningSpan[] = [];

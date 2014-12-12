@@ -145,14 +145,14 @@ module FourSlash {
         testOptMetadataNames.mapRoot, testOptMetadataNames.module, testOptMetadataNames.out,
         testOptMetadataNames.outDir, testOptMetadataNames.sourceMap, testOptMetadataNames.sourceRoot]
 
-    function convertGlobalOptionsToCompilationSettings(globalOptions: { [idx: string]: string }): ts.CompilationSettings {
-        var settings: ts.CompilationSettings = {};
+    function convertGlobalOptionsToCompilerOptions(globalOptions: { [idx: string]: string }): ts.CompilerOptions {
+        var settings: ts.CompilerOptions = {};
         // Convert all property in globalOptions into ts.CompilationSettings
         for (var prop in globalOptions) {
             if (globalOptions.hasOwnProperty(prop)) {
                 switch (prop) {
                     case testOptMetadataNames.declaration:
-                        settings.generateDeclarationFiles = true;
+                        settings.declaration = true;
                         break;
                     case testOptMetadataNames.mapRoot:
                         settings.mapRoot = globalOptions[prop];
@@ -161,24 +161,25 @@ module FourSlash {
                         // create appropriate external module target for CompilationSettings
                         switch (globalOptions[prop]) {
                           case "AMD":
-                            settings.moduleGenTarget = ts.ModuleGenTarget.Asynchronous;
+                            settings.module = ts.ModuleKind.AMD;
                             break;
                           case "CommonJS":
-                            settings.moduleGenTarget = ts.ModuleGenTarget.Synchronous;
+                            settings.module = ts.ModuleKind.CommonJS;
                             break;
                           default:
-                            settings.moduleGenTarget = ts.ModuleGenTarget.Unspecified;
+                            ts.Debug.assert(globalOptions[prop] === undefined || globalOptions[prop] === "None");
+                            settings.module = ts.ModuleKind.None;
                             break;
                         }
                         break;
                     case testOptMetadataNames.out:
-                        settings.outFileOption = globalOptions[prop];
+                        settings.out = globalOptions[prop];
                         break;
                     case testOptMetadataNames.outDir:
-                        settings.outDirOption = globalOptions[prop];
+                        settings.outDir = globalOptions[prop];
                         break;
                     case testOptMetadataNames.sourceMap:
-                        settings.mapSourceFiles = true;
+                        settings.sourceMap = true;
                         break;
                     case testOptMetadataNames.sourceRoot:
                         settings.sourceRoot = globalOptions[prop];
@@ -300,7 +301,7 @@ module FourSlash {
             this.cancellationToken = new TestCancellationToken();
             this.languageServiceShimHost = new Harness.LanguageService.TypeScriptLS(this.cancellationToken);
 
-            var compilationSettings = convertGlobalOptionsToCompilationSettings(this.testData.globalOptions);
+            var compilationSettings = convertGlobalOptionsToCompilerOptions(this.testData.globalOptions);
             this.languageServiceShimHost.setCompilationSettings(compilationSettings);
 
             var startResolveFileRef: FourSlashFile = undefined;
@@ -363,7 +364,7 @@ module FourSlash {
             this.formatCodeOptions = {
                 IndentSize: 4,
                 TabSize: 4,
-                NewLineCharacter: sys.newLine,
+                NewLineCharacter: ts.sys.newLine,
                 ConvertTabsToSpaces: true,
                 InsertSpaceAfterCommaDelimiter: true,
                 InsertSpaceAfterSemicolonInForStatements: true,
@@ -750,11 +751,11 @@ module FourSlash {
         }
 
         private getMemberListAtCaret() {
-            return this.languageService.getCompletionsAtPosition(this.activeFile.fileName, this.currentCaretPosition, true);
+            return this.languageService.getCompletionsAtPosition(this.activeFile.fileName, this.currentCaretPosition);
         }
 
         private getCompletionListAtCaret() {
-            return this.languageService.getCompletionsAtPosition(this.activeFile.fileName, this.currentCaretPosition, false);
+            return this.languageService.getCompletionsAtPosition(this.activeFile.fileName, this.currentCaretPosition);
         }
 
         private getCompletionEntryDetails(entryName: string) {
@@ -1364,7 +1365,7 @@ module FourSlash {
                     this.languageService.getSignatureHelpItems(this.activeFile.fileName, offset);
                 } else if (prevChar === ' ' && /A-Za-z_/.test(ch)) {
                     /* Completions */
-                    this.languageService.getCompletionsAtPosition(this.activeFile.fileName, offset, false);
+                    this.languageService.getCompletionsAtPosition(this.activeFile.fileName, offset);
                 }
 
                 if (i % errorCadence === 0) {
@@ -1414,44 +1415,50 @@ module FourSlash {
         }
 
         private checkPostEditInvariants() {
-            return;
+            if (this.editValidation === IncrementalEditValidation.None) {
+                return;
+            }
 
-            /// TODO: reimplement this section
-            //if (this.editValidation === IncrementalEditValidation.None) {
-            //    return;
-            //}
+            var incrementalSourceFile = this.languageService.getSourceFile(this.activeFile.fileName);
+            var incrementalSyntaxDiagnostics = JSON.stringify(Utils.convertDiagnostics(incrementalSourceFile.getSyntacticDiagnostics()));
 
-            //// Get syntactic errors (to force a refresh)
-            //var incrSyntaxErrs = JSON.stringify(this.languageService.getSyntacticDiagnostics(this.activeFile.fileName));
+            // Check syntactic structure
+            var snapshot = this.languageServiceShimHost.getScriptSnapshot(this.activeFile.fileName);
+            var content = snapshot.getText(0, snapshot.getLength());
 
-            //// Check syntactic structure
-            //var snapshot = this.languageServiceShimHost.getScriptSnapshot(this.activeFile.fileName);
-            //var content = snapshot.getText(0, snapshot.getLength());
-            //var refSyntaxTree = TypeScript.Parser.parse(this.activeFile.fileName, TypeScript.SimpleText.fromString(content), ts.ScriptTarget.ES5, TypeScript.isDTSFile(this.activeFile.fileName));
-            //var fullSyntaxErrs = JSON.stringify(refSyntaxTree.diagnostics());
+            var referenceSourceFile = ts.createLanguageServiceSourceFile(
+                this.activeFile.fileName, createScriptSnapShot(content), ts.ScriptTarget.Latest, /*version:*/ "0", /*isOpen:*/ false, /*setNodeParents:*/ false);
+            var referenceSyntaxDiagnostics = JSON.stringify(Utils.convertDiagnostics(referenceSourceFile.getSyntacticDiagnostics()));
 
-            //if (incrSyntaxErrs !== fullSyntaxErrs) {
-            //    this.raiseError('Mismatched incremental/full syntactic errors for file ' + this.activeFile.fileName + '.\n=== Incremental errors ===\n' + incrSyntaxErrs + '\n=== Full Errors ===\n' + fullSyntaxErrs);
-            //}
+            if (incrementalSyntaxDiagnostics !== referenceSyntaxDiagnostics) {
+                this.raiseError('Mismatched incremental/reference syntactic diagnostics for file ' + this.activeFile.fileName + '.\n=== Incremental diagnostics ===\n' + incrementalSyntaxDiagnostics + '\n=== Reference Diagnostics ===\n' + referenceSyntaxDiagnostics);
+            }
 
-            // if (this.editValidation !== IncrementalEditValidation.SyntacticOnly) {
-            //    var compiler = new TypeScript.TypeScriptCompiler();
-            //    for (var i = 0; i < this.testData.files.length; i++) {
-            //        snapshot = this.languageServiceShimHost.getScriptSnapshot(this.testData.files[i].fileName);
-            //        compiler.addFile(this.testData.files[i].fileName, TypeScript.ScriptSnapshot.fromString(snapshot.getText(0, snapshot.getLength())), ts.ByteOrderMark.None, 0, true);
-            //    }
+            var incrementalSourceFileJSON = Utils.sourceFileToJSON(incrementalSourceFile);
+            var referenceSourceFileJSON = Utils.sourceFileToJSON(referenceSourceFile);
 
-            //    compiler.addFile('lib.d.ts', TypeScript.ScriptSnapshot.fromString(Harness.Compiler.libTextMinimal), ts.ByteOrderMark.None, 0, true);
+            if (incrementalSyntaxDiagnostics !== referenceSyntaxDiagnostics) {
+                this.raiseError('Mismatched incremental/reference ast for file ' + this.activeFile.fileName + '.\n=== Incremental AST ===\n' + incrementalSourceFileJSON + '\n=== Reference AST ===\n' + referenceSourceFileJSON);
+            }
 
-            //    for (var i = 0; i < this.testData.files.length; i++) {
-            //        var refSemanticErrs = JSON.stringify(compiler.getSemanticDiagnostics(this.testData.files[i].fileName));
-            //        var incrSemanticErrs = JSON.stringify(this.languageService.getSemanticDiagnostics(this.testData.files[i].fileName));
+             //if (this.editValidation !== IncrementalEditValidation.SyntacticOnly) {
+             //   var compiler = new TypeScript.TypeScriptCompiler();
+             //   for (var i = 0; i < this.testData.files.length; i++) {
+             //       snapshot = this.languageServiceShimHost.getScriptSnapshot(this.testData.files[i].fileName);
+             //       compiler.addFile(this.testData.files[i].fileName, TypeScript.ScriptSnapshot.fromString(snapshot.getText(0, snapshot.getLength())), ts.ByteOrderMark.None, 0, true);
+             //   }
 
-            //        if (incrSemanticErrs !== refSemanticErrs) {
-            //            this.raiseError('Mismatched incremental/full semantic errors for file ' + this.testData.files[i].fileName + '\n=== Incremental errors ===\n' + incrSemanticErrs + '\n=== Full Errors ===\n' + refSemanticErrs);
-            //        }
-            //    }
-            // }
+             //   compiler.addFile('lib.d.ts', TypeScript.ScriptSnapshot.fromString(Harness.Compiler.libTextMinimal), ts.ByteOrderMark.None, 0, true);
+
+             //   for (var i = 0; i < this.testData.files.length; i++) {
+             //       var refSemanticErrs = JSON.stringify(compiler.getSemanticDiagnostics(this.testData.files[i].fileName));
+             //       var incrSemanticErrs = JSON.stringify(this.languageService.getSemanticDiagnostics(this.testData.files[i].fileName));
+
+             //       if (incrSemanticErrs !== refSemanticErrs) {
+             //           this.raiseError('Mismatched incremental/full semantic errors for file ' + this.testData.files[i].fileName + '\n=== Incremental errors ===\n' + incrSemanticErrs + '\n=== Full Errors ===\n' + refSemanticErrs);
+             //       }
+             //   }
+             //}
         }
 
         private fixCaretPosition() {
@@ -1747,9 +1754,9 @@ module FourSlash {
             }
 
             function jsonMismatchString() {
-                return sys.newLine +
-                    "expected: '" + sys.newLine + JSON.stringify(expected, (k,v) => v, 2) + "'" + sys.newLine +
-                    "actual:   '" + sys.newLine + JSON.stringify(actual, (k, v) => v, 2) + "'";
+                return ts.sys.newLine +
+                    "expected: '" + ts.sys.newLine + JSON.stringify(expected, (k,v) => v, 2) + "'" + ts.sys.newLine +
+                    "actual:   '" + ts.sys.newLine + JSON.stringify(actual, (k, v) => v, 2) + "'";
             }
         }
 
@@ -2246,9 +2253,9 @@ module FourSlash {
             { unitName: fileName, content: content }],
             (fn, contents) => result = contents,
             ts.ScriptTarget.Latest,
-            sys.useCaseSensitiveFileNames);
+            ts.sys.useCaseSensitiveFileNames);
         // TODO (drosen): We need to enforce checking on these tests.
-        var program = ts.createProgram([Harness.Compiler.fourslashFilename, fileName], { out: "fourslashTestOutput.js", noResolve: true }, host);
+        var program = ts.createProgram([Harness.Compiler.fourslashFilename, fileName], { out: "fourslashTestOutput.js", noResolve: true, target: ts.ScriptTarget.ES3 }, host);
         var checker = ts.createTypeChecker(program, /*fullTypeCheckMode*/ true);
 
         var errors = program.getDiagnostics().concat(checker.getDiagnostics());

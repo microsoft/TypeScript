@@ -1,6 +1,9 @@
 /// <reference path="core.ts"/>
 
 module ts {
+    export interface Map<T> {
+        [index: string]: T;
+    }
 
     export interface TextRange {
         pos: number;
@@ -15,6 +18,7 @@ module ts {
         MultiLineCommentTrivia,
         NewLineTrivia,
         WhitespaceTrivia,
+        ConflictMarkerTrivia,
         // Literals
         NumericLiteral,
         StringLiteral,
@@ -264,7 +268,7 @@ module ts {
         FirstToken = Unknown,
         LastToken = TypeKeyword,
         FirstTriviaToken = SingleLineCommentTrivia,
-        LastTriviaToken = WhitespaceTrivia,
+        LastTriviaToken = ConflictMarkerTrivia,
         FirstLiteralToken = NumericLiteral,
         LastLiteralToken = NoSubstitutionTemplateLiteral,
         FirstTemplateToken = NoSubstitutionTemplateLiteral,
@@ -311,14 +315,22 @@ module ts {
 
         // If the parser encountered an error when parsing the code that created this node.  Note
         // the parser only sets this directly on the node it creates right after encountering the
-        // error.  We then propagate that flag upwards to parent nodes during incremental parsing.
-        ContainsError = 1 << 4,
+        // error.  
+        ThisNodeHasError = 1 << 4,
+
+        // Context flags set directly by the parser.
+        ParserGeneratedFlags = StrictMode | DisallowIn | Yield | GeneratorParameter | ThisNodeHasError,
+
+        // Context flags computed by aggregating child flags upwards.
+
+        // If this node, or any of it's children (transitively) contain an error.  
+        ThisNodeOrAnySubNodesHasError = 1 << 5,
 
         // Used during incremental parsing to determine if we need to visit this node to see if
         // any of its children had an error.  Once we compute that once, we can set this bit on the
         // node to know that we never have to do it again.  From that point on, we can just check
         // the node directly for 'ContainsError'.
-        HasPropagatedChildContainsErrorFlag = 1 << 5
+        HasComputedThisNodeOrAnySubNodesHasError = 1 << 6
     }
 
     export interface Node extends TextRange {
@@ -1391,6 +1403,7 @@ module ts {
     }
 
     export interface CompilerOptions {
+        allowNonTsExtensions?: boolean;
         charset?: string;
         codepage?: number;
         declaration?: boolean;
@@ -1408,21 +1421,21 @@ module ts {
         noResolve?: boolean;
         out?: string;
         outDir?: string;
+        preserveConstEnums?: boolean;
         removeComments?: boolean;
         sourceMap?: boolean;
         sourceRoot?: string;
+        suppressImplicitAnyIndexErrors?: boolean;
         target?: ScriptTarget;
         version?: boolean;
         watch?: boolean;
-        preserveConstEnums?: boolean;
-        allowNonTsExtensions?: boolean;
         [option: string]: string | number | boolean;
     }
 
     export const enum ModuleKind {
-        None,
-        CommonJS,
-        AMD,
+        None = 0,
+        CommonJS = 1,
+        AMD = 2,
     }
 
     export interface LineAndCharacter {
@@ -1435,9 +1448,9 @@ module ts {
 
 
     export const enum ScriptTarget {
-        ES3,
-        ES5,
-        ES6,
+        ES3 = 0,
+        ES5 = 1,
+        ES6 = 2,
         Latest = ES6,
     }
 
@@ -1452,7 +1465,7 @@ module ts {
         type: string | Map<number>;         // "string", "number", "boolean", or an object literal mapping named values to actual values
         shortName?: string;                 // A short mnemonic for convenience - for instance, 'h' can be used in place of 'help'.
         description?: DiagnosticMessage;    // The message describing what the command line switch does
-        paramName?: DiagnosticMessage;      // The name to be used for a non-boolean option's parameter.
+        paramType?: DiagnosticMessage;      // The name to be used for a non-boolean option's parameter.
         error?: DiagnosticMessage;          // The error given when the argument does not fit a customized 'type'.
     }
 
@@ -1590,7 +1603,7 @@ module ts {
         tab = 0x09,                   // \t
         verticalTab = 0x0B,           // \v
     }
-    
+
     export interface CancellationToken {
         isCancellationRequested(): boolean;
     }

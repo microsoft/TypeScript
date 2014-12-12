@@ -1,0 +1,9 @@
+tests/cases/conformance/parser/ecmascript6/ComputedPropertyNames/parserComputedPropertyName24.ts(2,9): error TS9002: Computed property names are not currently supported.
+
+
+==== tests/cases/conformance/parser/ecmascript6/ComputedPropertyNames/parserComputedPropertyName24.ts (1 errors) ====
+    class C {
+        set [e](v) { }
+            ~~~
+!!! error TS9002: Computed property names are not currently supported.
+    }

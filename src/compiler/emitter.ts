@@ -2819,9 +2819,8 @@ module ts {
                 function createVoidZero(): Expression {
                     var zero = <LiteralExpression>createNode(SyntaxKind.NumericLiteral);
                     zero.text = "0";
-                    var result = <PrefixUnaryExpression>createNode(SyntaxKind.PrefixUnaryExpression);
-                    result.operator = SyntaxKind.VoidKeyword;
-                    result.operand = zero;
+                    var result = <VoidExpression>createNode(SyntaxKind.VoidExpression);
+                    result.expression = zero;
                     return result;
                 }
 
