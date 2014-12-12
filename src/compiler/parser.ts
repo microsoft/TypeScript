@@ -437,6 +437,7 @@ module ts {
     }
 
     interface IncrementalElement extends TextRange {
+        parent?: Node;
         intersectsChange: boolean
         length?: number;
         _children: Node[];
@@ -624,10 +625,15 @@ module ts {
             // is ahead of us, then we'll need to rescan tokens.  If the node's position is behind
             // us, then we'll need to skip it or crumble it as appropriate
             //
+            // We will also adjust the positions of nodes that intersect the change range as well.
+            // By doing this, we ensure that all the positions in the old tree are consistent, not
+            // just the positions of nodes entirely before/after the change range.  By being 
+            // consistent, we can then easily map from positions to nodes in the old tree easily.
+            //
             // Also, mark any syntax elements that intersect the changed span.  We know, up front,
             // that we cannot reuse these elements.
             updateTokenPositionsAndMarkElements(<IncrementalNode><Node>sourceFile,
-                changeRange.span().start(), changeRange.span().end(), delta);
+                changeRange.span().start(), changeRange.span().end(), changeRange.newSpan().end(), delta);
 
             // Don't pass along the text change range for now. We'll pass it along once incremental
             // parsing is enabled.
@@ -641,12 +647,14 @@ module ts {
             return parseSourceFile(newText, /*textChangeRange:*/ undefined, /*setNodeParents*/ true);
         }
 
-        function updateTokenPositionsAndMarkElements(node: IncrementalNode, changeStart: number, changeRangeOldEnd: number, delta: number): void {
+        function updateTokenPositionsAndMarkElements(node: IncrementalNode, changeStart: number, changeRangeOldEnd: number, changeRangeNewEnd: number, delta: number): void {
             forEachChild(node, visitNode, visitArray);
 
             function visitNode(child: IncrementalNode) {
                 if (child.pos > changeRangeOldEnd) {
-                    forceUpdateTokenPositionsForElement(child, delta);
+                    // Node is entirely past the change range.  We need to move both its pos and 
+                    // end, forward or backward appropriately.
+                    moveElementEntirelyPastChangeRange(child, delta);
                 }
                 else {
                     // Check if the element intersects the change range.  If it does, then it is not
@@ -655,6 +663,9 @@ module ts {
                     var fullEnd = child.end;
                     if (fullEnd >= changeStart) {
                         child.intersectsChange = true;
+
+                        // Adjust the pos or end (or both) of the intersecting element accordingly.
+                        adjustIntersectingElement(child, changeStart, changeRangeOldEnd, changeRangeNewEnd, delta);
                         forEachChild(child, visitNode, visitArray);
                     }
                     // else {
@@ -667,7 +678,7 @@ module ts {
                 if (array.pos > changeRangeOldEnd) {
                     // Array is entirely after the change range.  We need to move it, and move any of
                     // its children.
-                    forceUpdateTokenPositionsForElement(array, delta);
+                    moveElementEntirelyPastChangeRange(array, delta);
                 }
                 else {
                     // Check if the element intersects the change range.  If it does, then it is not
@@ -676,6 +687,9 @@ module ts {
                     var fullEnd = array.end;
                     if (fullEnd >= changeStart) {
                         array.intersectsChange = true;
+
+                        // Adjust the pos or end (or both) of the intersecting array accordingly.
+                        adjustIntersectingElement(array, changeStart, changeRangeOldEnd, changeRangeNewEnd, delta);
                         for (var i = 0, n = array.length; i < n; i++) {
                             forEachChild(array[i], visitNode, visitArray);
                         }
@@ -687,7 +701,81 @@ module ts {
             }
         }
 
-        function forceUpdateTokenPositionsForElement(element: IncrementalElement, delta: number) {
+        function adjustIntersectingElement(element: IncrementalElement, changeStart: number, changeRangeOldEnd: number, changeRangeNewEnd: number, delta: number) {
+            Debug.assert(element.end >= changeStart, "Adjusting an element that was entirely before the change range");
+            Debug.assert(element.pos <= changeRangeOldEnd, "Adjusting an element that was entirely after the change range");
+
+            // We have an element that intersects the change range in some way.  It may have its
+            // start, or its end (or both) in the changed range.  We want to adjust any part
+            // that intersects such that the final tree is in a consistent state.  i.e. all
+            // chlidren have spans within the span of their parent, and all siblings are ordered
+            // properly.
+
+            // We may need to update both the 'pos' and the 'end' of the element.
+
+            // If the 'pos' is before the start of the change, then we don't need to touch it.  
+            // If it isn't, then the 'pos' must be inside the change.  How we update it will 
+            // depend if delta is  positive or negative.  If delta is positive then we have 
+            // something like:
+            //
+            //  -------------------AAA-----------------
+            //  -------------------BBBCCCCCCC-----------------
+            //
+            // In this case, we consider any node that started in the change range to still be
+            // starting at the same position.
+            //
+            // however, if the delta is negative, then we instead have something like this:
+            //
+            //  -------------------XXXYYYYYYY-----------------
+            //  -------------------ZZZ-----------------
+            //
+            // In this case, any element that started in the 'X' range will keep its position.  
+            // However any element htat started after that will have their pos adjusted to be
+            // at the end of the new range.  i.e. any node that started in the 'Y' range will
+            // be adjusted to have their start at the end of the 'Z' range.
+            //
+            // The element will keep its position if possible.  Or Move backward to the new-end
+            // if it's in the 'Y' range.
+            element.pos = Math.min(element.pos, changeRangeNewEnd);
+
+            // If the 'end' is after the change range, then we always adjust it by the delta
+            // amount.  However, if the end is in the change range, then how we adjust it 
+            // will depend on if delta is  positive or negative.  If delta is positive then we
+            // have something like:
+            //
+            //  -------------------AAA-----------------
+            //  -------------------BBBCCCCCCC-----------------
+            //
+            // In this case, we consider any node that ended inside the change range to keep its
+            // end position.
+            //
+            // however, if the delta is negative, then we instead have something like this:
+            //
+            //  -------------------XXXYYYYYYY-----------------
+            //  -------------------ZZZ-----------------
+            //
+            // In this case, any element that ended in the 'X' range will keep its position.  
+            // However any element htat ended after that will have their pos adjusted to be
+            // at the end of the new range.  i.e. any node that ended in the 'Y' range will
+            // be adjusted to have their end at the end of the 'Z' range.
+            if (element.end >= changeRangeOldEnd) {
+                // Element ends after the change range.  Always adjust the end pos.
+                element.end += delta;
+            }
+            else {
+                // Element ends in the change range.  The element will keep its position if 
+                // possible. Or Move backward to the new-end if it's in the 'Y' range.
+                element.end = Math.min(element.end, changeRangeNewEnd);
+            }
+
+            Debug.assert(element.pos <= element.end);
+            if (element.parent) {
+                Debug.assert(element.pos >= element.parent.pos);
+                Debug.assert(element.end <= element.parent.end);
+            }
+        }
+
+        function moveElementEntirelyPastChangeRange(element: IncrementalElement, delta: number) {
             if (element.length) {
                 visitArray(<IncrementalNodeArray>element);
             }
