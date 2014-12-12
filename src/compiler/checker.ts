@@ -468,6 +468,13 @@ module ts {
             if (!links.target) {
                 links.target = resolvingSymbol;
                 var node = <ImportDeclaration>getDeclarationOfKind(symbol, SyntaxKind.ImportDeclaration);
+                // Grammar checking
+                if (node.moduleReference.kind === SyntaxKind.ExternalModuleReference) {
+                    if ((<ExternalModuleReference>node.moduleReference).expression.kind !== SyntaxKind.StringLiteral) {
+                        grammarErrorOnNode((<ExternalModuleReference>node.moduleReference).expression, Diagnostics.String_literal_expected);
+                    }
+                }
+
                 var target = node.moduleReference.kind === SyntaxKind.ExternalModuleReference
                     ? resolveExternalModuleName(node, getExternalModuleImportDeclarationExpression(node))
                     : getSymbolOfPartOfRightHandSideOfImport(<EntityName>node.moduleReference, node);
@@ -10040,15 +10047,14 @@ module ts {
             // Since computed properties are not supported in the type checker, disallow them in TypeScript 1.4
             // Once full support is added, remove this error.
             grammarErrorOnNode(node, Diagnostics.Computed_property_names_are_not_currently_supported);
+            return;
 
-            /* TODO (jfreeman)
             if (compilerOptions.target < ScriptTarget.ES6) {
                 grammarErrorOnNode(node, Diagnostics.Computed_property_names_are_only_available_when_targeting_ECMAScript_6_and_higher);
             }
             else if (node.expression.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>node.expression).operator === SyntaxKind.CommaToken) {
                 grammarErrorOnNode(node.expression, Diagnostics.A_comma_expression_is_not_allowed_in_a_computed_property_name);
             }
-            */
         }
 
         function hasParseDiagnostics(sourceFile: SourceFile): boolean {
