@@ -1822,7 +1822,7 @@
         "code": 9000,
         "isEarly":  true
     },
-    "'generators' are not currently supported.": {
+    "Generators are not currently supported.": {
         "category": "Error",
         "code": 9001,
         "isEarly":  true

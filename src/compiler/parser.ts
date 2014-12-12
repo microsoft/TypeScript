@@ -5060,7 +5060,7 @@ module ts {
 
         function checkForGenerator(node: FunctionLikeDeclaration) {
             if (node.asteriskToken) {
-                return grammarErrorOnNode(node.asteriskToken, Diagnostics.generators_are_not_currently_supported);
+                return grammarErrorOnNode(node.asteriskToken, Diagnostics.Generators_are_not_currently_supported);
             }
         }
 
