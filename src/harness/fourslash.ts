@@ -1415,44 +1415,42 @@ module FourSlash {
         }
 
         private checkPostEditInvariants() {
-            return;
+            if (this.editValidation === IncrementalEditValidation.None) {
+                return;
+            }
 
-            /// TODO: reimplement this section
-            //if (this.editValidation === IncrementalEditValidation.None) {
-            //    return;
-            //}
+            // Get syntactic errors (to force a refresh)
+            var incrSyntaxErrs = JSON.stringify(Utils.convertDiagnostics(this.languageService.getSyntacticDiagnostics(this.activeFile.fileName)));
 
-            //// Get syntactic errors (to force a refresh)
-            //var incrSyntaxErrs = JSON.stringify(this.languageService.getSyntacticDiagnostics(this.activeFile.fileName));
+            // Check syntactic structure
+            var snapshot = this.languageServiceShimHost.getScriptSnapshot(this.activeFile.fileName);
+            var content = snapshot.getText(0, snapshot.getLength());
+            var refSyntaxTree = ts.createLanguageServiceSourceFile(
+                this.activeFile.fileName, createScriptSnapShot(content), ts.ScriptTarget.Latest, /*version:*/ "0", /*isOpen:*/ false, /*setNodeParents:*/ false);
+            var fullSyntaxErrs = JSON.stringify(Utils.convertDiagnostics(refSyntaxTree.getSyntacticDiagnostics()));
 
-            //// Check syntactic structure
-            //var snapshot = this.languageServiceShimHost.getScriptSnapshot(this.activeFile.fileName);
-            //var content = snapshot.getText(0, snapshot.getLength());
-            //var refSyntaxTree = TypeScript.Parser.parse(this.activeFile.fileName, TypeScript.SimpleText.fromString(content), ts.ScriptTarget.ES5, TypeScript.isDTSFile(this.activeFile.fileName));
-            //var fullSyntaxErrs = JSON.stringify(refSyntaxTree.diagnostics());
+            if (incrSyntaxErrs !== fullSyntaxErrs) {
+                this.raiseError('Mismatched incremental/full syntactic errors for file ' + this.activeFile.fileName + '.\n=== Incremental errors ===\n' + incrSyntaxErrs + '\n=== Full Errors ===\n' + fullSyntaxErrs);
+            }
 
-            //if (incrSyntaxErrs !== fullSyntaxErrs) {
-            //    this.raiseError('Mismatched incremental/full syntactic errors for file ' + this.activeFile.fileName + '.\n=== Incremental errors ===\n' + incrSyntaxErrs + '\n=== Full Errors ===\n' + fullSyntaxErrs);
-            //}
+             //if (this.editValidation !== IncrementalEditValidation.SyntacticOnly) {
+             //   var compiler = new TypeScript.TypeScriptCompiler();
+             //   for (var i = 0; i < this.testData.files.length; i++) {
+             //       snapshot = this.languageServiceShimHost.getScriptSnapshot(this.testData.files[i].fileName);
+             //       compiler.addFile(this.testData.files[i].fileName, TypeScript.ScriptSnapshot.fromString(snapshot.getText(0, snapshot.getLength())), ts.ByteOrderMark.None, 0, true);
+             //   }
 
-            // if (this.editValidation !== IncrementalEditValidation.SyntacticOnly) {
-            //    var compiler = new TypeScript.TypeScriptCompiler();
-            //    for (var i = 0; i < this.testData.files.length; i++) {
-            //        snapshot = this.languageServiceShimHost.getScriptSnapshot(this.testData.files[i].fileName);
-            //        compiler.addFile(this.testData.files[i].fileName, TypeScript.ScriptSnapshot.fromString(snapshot.getText(0, snapshot.getLength())), ts.ByteOrderMark.None, 0, true);
-            //    }
+             //   compiler.addFile('lib.d.ts', TypeScript.ScriptSnapshot.fromString(Harness.Compiler.libTextMinimal), ts.ByteOrderMark.None, 0, true);
 
-            //    compiler.addFile('lib.d.ts', TypeScript.ScriptSnapshot.fromString(Harness.Compiler.libTextMinimal), ts.ByteOrderMark.None, 0, true);
+             //   for (var i = 0; i < this.testData.files.length; i++) {
+             //       var refSemanticErrs = JSON.stringify(compiler.getSemanticDiagnostics(this.testData.files[i].fileName));
+             //       var incrSemanticErrs = JSON.stringify(this.languageService.getSemanticDiagnostics(this.testData.files[i].fileName));
 
-            //    for (var i = 0; i < this.testData.files.length; i++) {
-            //        var refSemanticErrs = JSON.stringify(compiler.getSemanticDiagnostics(this.testData.files[i].fileName));
-            //        var incrSemanticErrs = JSON.stringify(this.languageService.getSemanticDiagnostics(this.testData.files[i].fileName));
-
-            //        if (incrSemanticErrs !== refSemanticErrs) {
-            //            this.raiseError('Mismatched incremental/full semantic errors for file ' + this.testData.files[i].fileName + '\n=== Incremental errors ===\n' + incrSemanticErrs + '\n=== Full Errors ===\n' + refSemanticErrs);
-            //        }
-            //    }
-            // }
+             //       if (incrSemanticErrs !== refSemanticErrs) {
+             //           this.raiseError('Mismatched incremental/full semantic errors for file ' + this.testData.files[i].fileName + '\n=== Incremental errors ===\n' + incrSemanticErrs + '\n=== Full Errors ===\n' + refSemanticErrs);
+             //       }
+             //   }
+             //}
         }
 
         private fixCaretPosition() {

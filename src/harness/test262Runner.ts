@@ -52,19 +52,6 @@ class Test262BaselineRunner extends RunnerBase {
 
         function getNodeFlagName(f: number) { return getFlagName((<any>ts).NodeFlags, f); }
         function getParserContextFlagName(f: number) { return getFlagName((<any>ts).ParserContextFlags, f); }
-        function convertDiagnostics(diagnostics: ts.Diagnostic[]) {
-            return diagnostics.map(convertDiagnostic);
-        }
-
-        function convertDiagnostic(diagnostic: ts.Diagnostic): any {
-            return {
-                start: diagnostic.start,
-                length: diagnostic.length,
-                messageText: diagnostic.messageText,
-                category: (<any>ts).DiagnosticCategory[diagnostic.category],
-                code: diagnostic.code
-            };
-        }
 
         function serializeNode(n: ts.Node): any {
             var o: any = { kind: getKindName(n.kind) };
@@ -97,7 +84,7 @@ class Test262BaselineRunner extends RunnerBase {
                     case "referenceDiagnostics":
                     case "parseDiagnostics":
                     case "grammarDiagnostics":
-                        o[propertyName] = convertDiagnostics((<any>n)[propertyName]);
+                        o[propertyName] = Utils.convertDiagnostics((<any>n)[propertyName]);
                         break;
 
                     case "nextContainer":

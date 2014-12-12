@@ -175,6 +175,20 @@ module Utils {
     function isNodeOrArray(a: any): boolean {
         return a !== undefined && typeof a.pos === "number";
     }
+
+    export function convertDiagnostics(diagnostics: ts.Diagnostic[]) {
+        return diagnostics.map(convertDiagnostic);
+    }
+
+    function convertDiagnostic(diagnostic: ts.Diagnostic) {
+        return {
+            start: diagnostic.start,
+            length: diagnostic.length,
+            messageText: diagnostic.messageText,
+            category: (<any>ts).DiagnosticCategory[diagnostic.category],
+            code: diagnostic.code
+        };
+    }
 }
 
 module Harness.Path {
