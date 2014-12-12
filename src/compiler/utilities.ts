@@ -68,25 +68,25 @@ module ts {
 
     // Returns true if this node contains a parse error anywhere underneath it.
     export function containsParseError(node: Node): boolean {
-        if (!hasFlag(node.flags, NodeFlags.HasPropagatedChildContainsErrorFlag)) {
+        if (!hasFlag(node.parserContextFlags, ParserContextFlags.HasComputedThisNodeOrAnySubNodesHasError)) {
             // A node is considered to contain a parse error if:
             //  a) the parser explicitly marked that it had an error
             //  b) any of it's children reported that it had an error.
-            var val = hasFlag(node.flags, NodeFlags.ContainsError) ||
+            var val = hasFlag(node.parserContextFlags, ParserContextFlags.ThisNodeHasError) ||
                 forEachChild(node, containsParseError);
 
             // If so, mark ourselves accordingly. 
             if (val) {
-                node.flags |= NodeFlags.ContainsError;
+                node.parserContextFlags |= ParserContextFlags.ThisNodeOrAnySubNodesHasError;
             }
 
             // Also mark that we've propogated the child information to this node.  This way we can
             // always consult the bit directly on this node without needing to check its children
             // again.
-            node.flags |= NodeFlags.HasPropagatedChildContainsErrorFlag;
+            node.parserContextFlags |= ParserContextFlags.HasComputedThisNodeOrAnySubNodesHasError;
         }
 
-        return hasFlag(node.flags, NodeFlags.ContainsError);
+        return hasFlag(node.parserContextFlags, ParserContextFlags.ThisNodeOrAnySubNodesHasError);
     }
 
     export function getSourceFileOfNode(node: Node): SourceFile {

@@ -294,17 +294,6 @@ module ts {
         Const =             0x00001000,  // Variable declaration
         OctalLiteral =      0x00002000,
 
-        // If the parser encountered an error when parsing the code that created this node.  Note
-        // the parser only sets this directly on the node it creates right after encountering the
-        // error.  We then propagate that flag upwards to parent nodes during incremental parsing.
-        ContainsError =     0x00004000,
-
-        // Used during incremental parsing to determine if we need to visit this node to see if
-        // any of its children had an error.  Once we compute that once, we can set this bit on the
-        // node to know that we never have to do it again.  From that point on, we can just check
-        // the node directly for 'ContainsError'.
-        HasPropagatedChildContainsErrorFlag = 0x00008000,
-
         Modifier = Export | Ambient | Public | Private | Protected | Static,
         AccessibilityModifier = Public | Private | Protected,
         BlockScoped = Let | Const
@@ -324,7 +313,24 @@ module ts {
         // If this node was parsed in the parameters of a generator.
         GeneratorParameter = 1 << 3,
 
-        FlagsMask = StrictMode | DisallowIn | Yield | GeneratorParameter,
+        // If the parser encountered an error when parsing the code that created this node.  Note
+        // the parser only sets this directly on the node it creates right after encountering the
+        // error.  
+        ThisNodeHasError = 1 << 4,
+
+        // Context flags set directly by the parser.
+        ParserGeneratedFlags = StrictMode | DisallowIn | Yield | GeneratorParameter | ThisNodeHasError,
+
+        // Context flags computed by aggregating child flags upwards.
+
+        // If this node, or any of it's children (transitively) contain an error.  
+        ThisNodeOrAnySubNodesHasError = 1 << 5,
+
+        // Used during incremental parsing to determine if we need to visit this node to see if
+        // any of its children had an error.  Once we compute that once, we can set this bit on the
+        // node to know that we never have to do it again.  From that point on, we can just check
+        // the node directly for 'ContainsError'.
+        HasComputedThisNodeOrAnySubNodesHasError = 1 << 6
     }
 
     export interface Node extends TextRange {
