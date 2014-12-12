@@ -68,6 +68,7 @@ class Test262BaselineRunner extends RunnerBase {
 
         function serializeNode(n: ts.Node): any {
             var o: any = { kind: getKindName(n.kind) };
+            o.containsParseError = ts.containsParseError(n);
 
             ts.forEach(Object.getOwnPropertyNames(n), propertyName => {
                 switch (propertyName) {
