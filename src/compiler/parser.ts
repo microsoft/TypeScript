@@ -597,6 +597,12 @@ module ts {
                 return sourceFile;
             }
 
+            if (sourceFile.statements.length === 0) {
+                // If we don't have any statements in the current source file, hten there's no real
+                // way to incrementally parse.  So just do a full parse instead.
+                return parseSourceFile(newText, /*textChangeRange:*/ undefined, /*setNodeParents*/ true);
+            }
+
             // Make the actual change larger so that we know to reparse anything whose lookahead 
             // might have intersected the change.
             var changeRange = extendToAffectedRange(textChangeRange);
@@ -625,6 +631,13 @@ module ts {
 
             // Don't pass along the text change range for now. We'll pass it along once incremental
             // parsing is enabled.
+            // 
+            // Note: passing in 'true' for setNodeParents is very important.  When incrementally
+            // parsing, we will be reusing nodes from the old tree, and placing it into new
+            // parents.  If we don't set the parents now, we'll end up with an observably 
+            // inconsistent tree.  Setting the parents on the new tree should be very fast.  We 
+            // will immediately bail out of walking any subtrees when we can see that their parents
+            // are already correct.
             return parseSourceFile(newText, /*textChangeRange:*/ undefined, /*setNodeParents*/ true);
         }
 
