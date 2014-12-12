@@ -8213,6 +8213,45 @@ module ts {
         }
 
         function checkClassDeclaration(node: ClassDeclaration) {
+            // Grammar checking
+            var seenExtendsClause = false;
+            var seenImplementsClause = false;
+
+            if (!checkGrammarModifiers(node) && node.heritageClauses) {
+                for (var i = 0, n = node.heritageClauses.length; i < n; i++) {
+                    Debug.assert(i <= 2);
+                    var heritageClause = node.heritageClauses[i];
+
+                    if (heritageClause.token === SyntaxKind.ExtendsKeyword) {
+                        if (seenExtendsClause) {
+                            grammarErrorOnFirstToken(heritageClause, Diagnostics.extends_clause_already_seen)
+                            break;
+                        }
+
+                        if (seenImplementsClause) {
+                            grammarErrorOnFirstToken(heritageClause, Diagnostics.extends_clause_must_precede_implements_clause);
+                            break;
+                        }
+
+                        if (heritageClause.types.length > 1) {
+                            grammarErrorOnFirstToken(heritageClause.types[1], Diagnostics.Classes_can_only_extend_a_single_class);
+                            break;
+                        }
+
+                        seenExtendsClause = true;
+                    }
+                    else {
+                        Debug.assert(heritageClause.token === SyntaxKind.ImplementsKeyword);
+                        if (seenImplementsClause) {
+                            grammarErrorOnFirstToken(heritageClause, Diagnostics.implements_clause_already_seen);
+                            break;
+                        }
+
+                        seenImplementsClause = true;
+                    }
+                }
+            }
+
             checkTypeNameIsReserved(node.name, Diagnostics.Class_name_cannot_be_0);
             checkTypeParameters(node.typeParameters);
             checkCollisionWithCapturedThisVariable(node, node.name);

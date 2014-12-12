@@ -4637,7 +4637,7 @@ module ts {
                 //case SyntaxKind.BinaryExpression:               return checkBinaryExpression(<BinaryExpression>node);
                 //case SyntaxKind.BindingElement:                 return checkBindingElement(<BindingElement>node);
                 //case SyntaxKind.CatchClause:                    return checkCatchClause(<CatchClause>node);
-                case SyntaxKind.ClassDeclaration:               return checkClassDeclaration(<ClassDeclaration>node);
+                //case SyntaxKind.ClassDeclaration:               return checkClassDeclaration(<ClassDeclaration>node);
                 case SyntaxKind.ComputedPropertyName:           return checkComputedPropertyName(<ComputedPropertyName>node);
                 case SyntaxKind.Constructor:                    return checkConstructor(<ConstructorDeclaration>node);
                 case SyntaxKind.DeleteExpression:               return checkDeleteExpression(<DeleteExpression> node);
@@ -5328,7 +5328,7 @@ module ts {
                 case SyntaxKind.PropertySignature:
                 case SyntaxKind.MethodDeclaration:
                 case SyntaxKind.MethodSignature:
-                case SyntaxKind.ClassDeclaration:
+                //case SyntaxKind.ClassDeclaration:
                 case SyntaxKind.InterfaceDeclaration:
                 case SyntaxKind.ModuleDeclaration:
                 case SyntaxKind.EnumDeclaration:
