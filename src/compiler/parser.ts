@@ -758,7 +758,7 @@ module ts {
         }
 
         function updateTokenPositionsAndMarkElements(node: IncrementalNode, changeStart: number, changeRangeOldEnd: number, changeRangeNewEnd: number, delta: number): void {
-            forEachChild(node, visitNode, visitArray);
+            visitNode(node);
 
             function visitNode(child: IncrementalNode) {
                 if (child.pos > changeRangeOldEnd) {
