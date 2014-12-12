@@ -242,7 +242,7 @@ function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, noOu
         });
         ex.addListener("error", function() {
             fs.unlinkSync(outFile);
-            console.log("Compilation of " + outFile + " unsuccessful");
+            fail("Compilation of " + outFile + " unsuccessful");
         });
         ex.run();
     }, {async: true});
