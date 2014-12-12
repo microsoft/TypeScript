@@ -224,12 +224,7 @@ module Utils {
         }
 
         function getNodeFlagName(f: number) { return getFlagName((<any>ts).NodeFlags, f); }
-        function getParserContextFlagName(f: number) {
-            // Clear the flag that are produced by aggregating child values..  That is ephemeral 
-            // data we don't care about in the dump.  We only care what the parser set directly
-            // on the ast.
-            return getFlagName((<any>ts).ParserContextFlags, f & ts.ParserContextFlags.ParserGeneratedFlags);
-        }
+        function getParserContextFlagName(f: number) { return getFlagName((<any>ts).ParserContextFlags, f); }
 
         function serializeNode(n: ts.Node): any {
             var o: any = { kind: getKindName(n.kind) };
@@ -257,7 +252,13 @@ module Utils {
                         break;
 
                     case "parserContextFlags":
-                        o[propertyName] = getParserContextFlagName(n.parserContextFlags);
+                        // Clear the flag that are produced by aggregating child values..  That is ephemeral 
+                        // data we don't care about in the dump.  We only care what the parser set directly
+                        // on the ast.
+                        var value = n.parserContextFlags & ts.ParserContextFlags.ParserGeneratedFlags;
+                        if (value) {
+                            o[propertyName] = getParserContextFlagName(value);
+                        }
                         break;
 
                     case "referenceDiagnostics":
