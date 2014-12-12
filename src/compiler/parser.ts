@@ -490,6 +490,9 @@ module ts {
                 // called with 'isListElement', we don't want to redo the work when parseListElement
                 // is called immediately after.
                 lastQueriedPosition = position;
+
+                // Either we don'd have a node, or we have a node at the position being asked for.
+                Debug.assert(!current || current.pos === position);
                 return <IncrementalNode>current;
             }
         };
