@@ -856,7 +856,7 @@ module ts {
             // flag so that we don't mark any subsequent nodes.
             if (parseErrorBeforeNextFinishedNode) {
                 parseErrorBeforeNextFinishedNode = false;
-                node.parserContextFlags |= ParserContextFlags.ContainsError;
+                node.parserContextFlags |= ParserContextFlags.ThisNodeHasError;
             }
 
             return node;

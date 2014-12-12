@@ -317,14 +317,22 @@ module ts {
 
         // If the parser encountered an error when parsing the code that created this node.  Note
         // the parser only sets this directly on the node it creates right after encountering the
-        // error.  We then propagate that flag upwards to parent nodes during incremental parsing.
-        ContainsError = 1 << 4,
+        // error.  
+        ThisNodeHasError = 1 << 4,
+
+        // Context flags set directly by the parser.
+        ParserGeneratedFlags = StrictMode | DisallowIn | Yield | GeneratorParameter | ThisNodeHasError,
+
+        // Context flags computed by aggregating child flags upwards.
+
+        // If this node, or any of it's children (transitively) contain an error.  
+        ThisNodeOrAnySubNodesHasError = 1 << 5,
 
         // Used during incremental parsing to determine if we need to visit this node to see if
         // any of its children had an error.  Once we compute that once, we can set this bit on the
         // node to know that we never have to do it again.  From that point on, we can just check
         // the node directly for 'ContainsError'.
-        HasPropagatedChildContainsErrorFlag = 1 << 5
+        HasComputedThisNodeOrAnySubNodesHasError = 1 << 6
     }
 
     export interface Node extends TextRange {
