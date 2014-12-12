@@ -1436,6 +1436,17 @@ module ts {
         }
 
         function currentNode(parsingContext: ParsingContext): Node {
+            // If there is an outstanding parse error that we've encountered, but not attached to
+            // some node, then we cannot get a node from the old source tree.  This is because we
+            // want to mark the next node we encounter as being unusable.
+            // 
+            // Note: This may be too conservative.  Perhaps we could reuse hte node and set the bit
+            // on it (or its leftmost child) as having the error.  For now though, being conservative 
+            // is nice and likely won't ever affect perf.
+            if (parseErrorBeforeNextFinishedNode) {
+                return undefined;
+            }
+
             var node: Node = currentNodeFromCursor();
             if (!node) {
                 return undefined;
