@@ -8468,6 +8468,9 @@ module ts {
         }
 
         function checkInterfaceDeclaration(node: InterfaceDeclaration) {
+            // Grammar checking
+            checkGrammarInterfaceDeclaration(node);
+
             checkTypeParameters(node.typeParameters);
             if (fullTypeCheck) {
                 checkTypeNameIsReserved(node.name, Diagnostics.Interface_name_cannot_be_0);
@@ -10008,6 +10011,18 @@ module ts {
             }
         }
 
+        function checkGrammarHeritageClause(node: HeritageClause): boolean {
+            var types = node.types;
+            if (checkGrammarForDisallowedTrailingComma(types)) {
+                return true;
+            }
+            var listType = tokenToString(node.token);
+            if (types && types.length === 0) {
+                var sourceFile = getSourceFileOfNode(node);
+                return grammarErrorAtPos(sourceFile, types.pos, 0, Diagnostics._0_list_cannot_be_empty, listType)
+            }
+        }
+
         function checkGrammarClassDeclarationHeritageClauses(node: ClassDeclaration) {
             var seenExtendsClause = false;
             var seenImplementsClause = false;
@@ -10044,8 +10059,39 @@ module ts {
 
                         seenImplementsClause = true;
                     }
+
+                    // Grammar checking heritageClause inside class declaration
+                    checkGrammarHeritageClause(heritageClause);
                 }
             }
+        }
+
+        function checkGrammarInterfaceDeclaration(node: InterfaceDeclaration) {
+            var seenExtendsClause = false;
+
+            if (node.heritageClauses) {
+                for (var i = 0, n = node.heritageClauses.length; i < n; i++) {
+                    Debug.assert(i <= 1);
+                    var heritageClause = node.heritageClauses[i];
+
+                    if (heritageClause.token === SyntaxKind.ExtendsKeyword) {
+                        if (seenExtendsClause) {
+                            return grammarErrorOnFirstToken(heritageClause, Diagnostics.extends_clause_already_seen);
+                        }
+
+                        seenExtendsClause = true;
+                    }
+                    else {
+                        Debug.assert(heritageClause.token === SyntaxKind.ImplementsKeyword);
+                        return grammarErrorOnFirstToken(heritageClause, Diagnostics.Interface_declaration_cannot_have_implements_clause);
+                    }
+
+                    // Grammar checking heritageClause inside class declaration
+                    checkGrammarHeritageClause(heritageClause);
+                }
+            }
+
+            return false;
         }
 
         function checkGrammarComputedPropertyName(node: ComputedPropertyName): void {
