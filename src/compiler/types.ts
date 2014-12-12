@@ -1,6 +1,9 @@
 /// <reference path="core.ts"/>
 
 module ts {
+    export interface Map<T> {
+        [index: string]: T;
+    }
 
     export interface TextRange {
         pos: number;
@@ -1201,7 +1204,6 @@ module ts {
         StringLike = String | StringLiteral,
         NumberLike = Number | Enum,
         ObjectType = Class | Interface | Reference | Tuple | Anonymous,
-        Structured = Any | ObjectType | Union | TypeParameter
     }
 
     // Properties common to all types
@@ -1356,6 +1358,7 @@ module ts {
     }
 
     export interface CompilerOptions {
+        allowNonTsExtensions?: boolean;
         charset?: string;
         codepage?: number;
         declaration?: boolean;
@@ -1373,14 +1376,14 @@ module ts {
         noResolve?: boolean;
         out?: string;
         outDir?: string;
+        preserveConstEnums?: boolean;
         removeComments?: boolean;
         sourceMap?: boolean;
         sourceRoot?: string;
+        suppressImplicitAnyIndexErrors?: boolean;
         target?: ScriptTarget;
         version?: boolean;
         watch?: boolean;
-        preserveConstEnums?: boolean;
-        allowNonTsExtensions?: boolean;
         [option: string]: string | number | boolean;
     }
 
@@ -1417,7 +1420,7 @@ module ts {
         type: string | Map<number>;         // "string", "number", "boolean", or an object literal mapping named values to actual values
         shortName?: string;                 // A short mnemonic for convenience - for instance, 'h' can be used in place of 'help'.
         description?: DiagnosticMessage;    // The message describing what the command line switch does
-        paramName?: DiagnosticMessage;      // The name to be used for a non-boolean option's parameter.
+        paramType?: DiagnosticMessage;      // The name to be used for a non-boolean option's parameter.
         error?: DiagnosticMessage;          // The error given when the argument does not fit a customized 'type'.
     }
 
@@ -1555,7 +1558,7 @@ module ts {
         tab = 0x09,                   // \t
         verticalTab = 0x0B,           // \v
     }
-    
+
     export interface CancellationToken {
         isCancellationRequested(): boolean;
     }

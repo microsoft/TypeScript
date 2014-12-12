@@ -22,10 +22,13 @@
 /// <reference path='external\chai.d.ts'/>
 /// <reference path='sourceMapRecorder.ts'/>
 
+declare var require: any;
+declare var process: any;
+
 // this will work in the browser via browserify
 var _chai: typeof chai = require('chai');
 var assert: typeof _chai.assert = _chai.assert;
-declare var __dirname: any; // Node-specific
+declare var __dirname: string; // Node-specific
 var global = <any>Function("return this").call(null);
 
 module Utils {
@@ -41,7 +44,7 @@ module Utils {
     export function getExecutionEnvironment() {
         if (typeof WScript !== "undefined" && typeof ActiveXObject === "function") {
             return ExecutionEnvironment.CScript;
-        } else if (process && (<any>process).execPath && (<any>process).execPath.indexOf("node") !== -1) {
+        } else if (process && process.execPath && process.execPath.indexOf("node") !== -1) {
             return ExecutionEnvironment.Node;
         } else {
             return ExecutionEnvironment.Browser;
@@ -89,7 +92,7 @@ module Utils {
         }
 
         try {
-            var content = sys.readFile(Harness.userSpecifiedroot + path);
+            var content = ts.sys.readFile(Harness.userSpecifiedroot + path);
         }
         catch (err) {
             return undefined;
@@ -156,8 +159,8 @@ module Harness {
                 fso = {};
             }
 
-            export var readFile: typeof IO.readFile = sys.readFile;
-            export var writeFile: typeof IO.writeFile = sys.writeFile;
+            export var readFile: typeof IO.readFile = ts.sys.readFile;
+            export var writeFile: typeof IO.writeFile = ts.sys.writeFile;
             export var directoryName: typeof IO.directoryName = fso.GetParentFolderName;
             export var directoryExists: typeof IO.directoryExists = fso.FolderExists;
             export var fileExists: typeof IO.fileExists = fso.FileExists;
@@ -218,8 +221,8 @@ module Harness {
                 fs = pathModule = {};
             }
 
-            export var readFile: typeof IO.readFile = sys.readFile;
-            export var writeFile: typeof IO.writeFile = sys.writeFile;
+            export var readFile: typeof IO.readFile = ts.sys.readFile;
+            export var writeFile: typeof IO.writeFile = ts.sys.writeFile;
             export var fileExists: typeof IO.fileExists = fs.existsSync;
             export var log: typeof IO.log = console.log;
 
@@ -547,7 +550,7 @@ module Harness {
         export var fourslashSourceFile: ts.SourceFile;
 
         export function getCanonicalFileName(fileName: string): string {
-            return sys.useCaseSensitiveFileNames ? fileName : fileName.toLowerCase();
+            return ts.sys.useCaseSensitiveFileNames ? fileName : fileName.toLowerCase();
         }
 
         export function createCompilerHost(inputFiles: { unitName: string; content: string; }[],
@@ -571,8 +574,7 @@ module Harness {
             inputFiles.forEach(register);
 
             return {
-                getCurrentDirectory: sys.getCurrentDirectory,
-                getCancellationToken: (): any => undefined,
+                getCurrentDirectory: ts.sys.getCurrentDirectory,
                 getSourceFile: (fn, languageVersion) => {
                     if (Object.prototype.hasOwnProperty.call(filemap, getCanonicalFileName(fn))) {
                         return filemap[getCanonicalFileName(fn)];
@@ -594,7 +596,7 @@ module Harness {
                 writeFile,
                 getCanonicalFileName,
                 useCaseSensitiveFileNames: () => useCaseSensitiveFileNames,
-                getNewLine: ()=> sys.newLine
+                getNewLine: ()=> ts.sys.newLine
             };
         }
 
@@ -664,7 +666,7 @@ module Harness {
                     settingsCallback(null);
                 }
 
-                var useCaseSensitiveFileNames = sys.useCaseSensitiveFileNames;
+                var useCaseSensitiveFileNames = ts.sys.useCaseSensitiveFileNames;
                 this.settings.forEach(setting => {
                     switch (setting.flag.toLowerCase()) {
                         // "filename", "comments", "declaration", "module", "nolib", "sourcemap", "target", "out", "outdir", "noimplicitany", "noresolve"
@@ -742,7 +744,7 @@ module Harness {
 
                         case 'newline':
                         case 'newlines':
-                            sys.newLine = setting.value;
+                            ts.sys.newLine = setting.value;
                             break;
 
                         case 'comments':
@@ -774,9 +776,19 @@ module Harness {
                         case 'errortruncation':
                             options.noErrorTruncation = setting.value === 'false';
                             break;
+
                         case 'preserveconstenums':
                             options.preserveConstEnums = setting.value === 'true';
                             break;
+
+                        case 'suppressimplicitanyindexerrors':
+                            options.suppressImplicitAnyIndexErrors = setting.value === 'true';
+                            break;
+
+                        case 'includebuiltfile':
+                            inputFiles.push({ unitName: setting.value, content: IO.readFile(libFolder + setting.value)});
+                            break;
+
                         default:
                             throw new Error('Unsupported compiler setting ' + setting.flag);
                     }
@@ -817,11 +829,11 @@ module Harness {
                 });
                 this.lastErrors = errors;
 
-                var result = new CompilerResult(fileOutputs, errors, program, sys.getCurrentDirectory(), emitResult ? emitResult.sourceMaps : undefined);
+                var result = new CompilerResult(fileOutputs, errors, program, ts.sys.getCurrentDirectory(), emitResult ? emitResult.sourceMaps : undefined);
                 onComplete(result, checker);
 
                 // reset what newline means in case the last test changed it
-                sys.newLine = '\r\n';
+                ts.sys.newLine = '\r\n';
                 return options;
             }
 
@@ -916,7 +928,7 @@ module Harness {
                     errorOutput += diagnotic.filename + "(" + diagnotic.line + "," + diagnotic.character + "): ";
                 }
 
-                errorOutput += diagnotic.category + " TS" + diagnotic.code + ": " + diagnotic.message + sys.newLine;
+                errorOutput += diagnotic.category + " TS" + diagnotic.code + ": " + diagnotic.message + ts.sys.newLine;
             });
 
             return errorOutput;
@@ -1014,7 +1026,7 @@ module Harness {
             assert.equal(totalErrorsReported + numLibraryDiagnostics, diagnostics.length, 'total number of errors');
 
             return minimalDiagnosticsToString(diagnostics) +
-                sys.newLine + sys.newLine + outputLines.join('\r\n');
+                ts.sys.newLine + ts.sys.newLine + outputLines.join('\r\n');
         }
 
         export function collateOutputs(outputFiles: Harness.Compiler.GeneratedFile[], clean?: (s: string) => string) {
@@ -1162,7 +1174,8 @@ module Harness {
         var optionRegex = /^[\/]{2}\s*@(\w+)\s*:\s*(\S*)/gm;  // multiple matches on multiple lines
 
         // List of allowed metadata names
-        var fileMetadataNames = ["filename", "comments", "declaration", "module", "nolib", "sourcemap", "target", "out", "outdir", "noemitonerror","noimplicitany", "noresolve", "newline", "newlines", "emitbom", "errortruncation", "usecasesensitivefilenames", "preserveconstenums"];
+
+        var fileMetadataNames = ["filename", "comments", "declaration", "module", "nolib", "sourcemap", "target", "out", "outdir", "noemitonerror", "noimplicitany", "noresolve", "newline", "newlines", "emitbom", "errortruncation", "usecasesensitivefilenames", "preserveconstenums", "includebuiltfile", "suppressimplicitanyindexerrors"];
 
         function extractCompilerSettings(content: string): CompilerSetting[] {
 

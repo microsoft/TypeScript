@@ -6,17 +6,17 @@
 
 module RWC {
     function runWithIOLog(ioLog: IOLog, fn: () => void) {
-        var oldSys = sys;
+        var oldSys = ts.sys;
 
-        var wrappedSys = Playback.wrapSystem(sys);
+        var wrappedSys = Playback.wrapSystem(ts.sys);
         wrappedSys.startReplayFromData(ioLog);
-        sys = wrappedSys;
+        ts.sys = wrappedSys;
 
         try {
             fn();
         } finally {
             wrappedSys.endReplay();
-            sys = oldSys;
+            ts.sys = oldSys;
         }
     }
 
@@ -74,7 +74,7 @@ module RWC {
                     }
 
                     ts.forEach(ioLog.filesRead, fileRead => {
-                        var resolvedPath = ts.normalizeSlashes(sys.resolvePath(fileRead.path));
+                        var resolvedPath = ts.normalizeSlashes(ts.sys.resolvePath(fileRead.path));
                         var inInputList = ts.forEach(inputFiles, inputFile=> inputFile.unitName === resolvedPath);
                         if (!inInputList) {
                             // Add the file to other files
@@ -92,9 +92,9 @@ module RWC {
                 });
 
                 function getHarnessCompilerInputUnit(fileName: string) {
-                    var unitName = ts.normalizeSlashes(sys.resolvePath(fileName));
+                    var unitName = ts.normalizeSlashes(ts.sys.resolvePath(fileName));
                     try {
-                        var content = sys.readFile(unitName);
+                        var content = ts.sys.readFile(unitName);
                     }
                     catch (e) {
                         // Leave content undefined.
@@ -160,7 +160,7 @@ module RWC {
                         }
 
                         return Harness.Compiler.minimalDiagnosticsToString(declFileCompilationResult.declResult.errors) +
-                            sys.newLine + sys.newLine +
+                            ts.sys.newLine + ts.sys.newLine +
                             Harness.Compiler.getErrorBaseline(declFileCompilationResult.declInputFiles.concat(declFileCompilationResult.declOtherFiles), declFileCompilationResult.declResult.errors);
                     }, false, baselineOpts);
                 }
