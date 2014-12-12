@@ -4638,7 +4638,7 @@ module ts {
                 //case SyntaxKind.BindingElement:                 return checkBindingElement(<BindingElement>node);
                 //case SyntaxKind.CatchClause:                    return checkCatchClause(<CatchClause>node);
                 //case SyntaxKind.ClassDeclaration:               return checkClassDeclaration(<ClassDeclaration>node);
-                case SyntaxKind.ComputedPropertyName:           return checkComputedPropertyName(<ComputedPropertyName>node);
+                //case SyntaxKind.ComputedPropertyName:           return checkComputedPropertyName(<ComputedPropertyName>node);
                 case SyntaxKind.Constructor:                    return checkConstructor(<ConstructorDeclaration>node);
                 case SyntaxKind.DeleteExpression:               return checkDeleteExpression(<DeleteExpression> node);
                 case SyntaxKind.ElementAccessExpression:        return checkElementAccessExpression(<ElementAccessExpression>node);

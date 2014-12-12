@@ -5357,6 +5357,14 @@ module ts {
             var properties: SymbolTable = {};
             var contextualType = getContextualType(node);
             var typeFlags: TypeFlags;
+
+            // Grammar checking for computedPropertyName
+            forEach(node.properties, property => {
+                if (property.name && property.name.kind === SyntaxKind.ComputedPropertyName) {
+                    checkGrammarComputedPropertyName(<ComputedPropertyName>property.name);
+                }
+            });
+
             for (var id in members) {
                 if (hasProperty(members, id)) {
                     var member = members[id];
@@ -5405,6 +5413,7 @@ module ts {
                     properties[member.name] = member;
                 }
             }
+
             var stringIndexType = getIndexType(IndexKind.String);
             var numberIndexType = getIndexType(IndexKind.Number);
             var result = createAnonymousType(node.symbol, properties, emptyArray, emptyArray, stringIndexType, numberIndexType);
@@ -9987,6 +9996,15 @@ module ts {
                 // It is a SyntaxError if a VariableDeclaration or VariableDeclarationNoIn occurs within strict code
                 // and its Identifier is eval or arguments
                 reportGrammarErrorOfInvalidUseInStrictMode(<Identifier>node.name);
+            }
+        }
+
+        function checkGrammarComputedPropertyName(node: ComputedPropertyName): void {
+            if (compilerOptions.target < ScriptTarget.ES6) {
+                grammarErrorOnNode(node, Diagnostics.Computed_property_names_are_only_available_when_targeting_ECMAScript_6_and_higher);
+            }
+            else if (node.expression.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>node.expression).operator === SyntaxKind.CommaToken) {
+                grammarErrorOnNode(node.expression, Diagnostics.A_comma_expression_is_not_allowed_in_a_computed_property_name);
             }
         }
 
