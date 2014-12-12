@@ -572,6 +572,10 @@
         "category": "Error",
         "code": 1184
     },
+    "Merge conflict marker encountered.": {
+        "category": "Error",
+        "code": 1185
+    },
 
     "Duplicate identifier '{0}'.": {
         "category": "Error",
