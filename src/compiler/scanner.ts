@@ -371,6 +371,7 @@ module ts {
                         continue;
                     }
                     break;
+
                 case CharacterCodes.lessThan:
                 case CharacterCodes.equals:
                 case CharacterCodes.greaterThan:
@@ -378,7 +379,8 @@ module ts {
                         pos = scanConflictMarkerTrivia(text, pos);
                         continue;
                     }
-                    // fall through
+                    break;
+
                 default:
                     if (ch > CharacterCodes.maxAsciiCharacter && (isWhiteSpace(ch) || isLineBreak(ch))) {
                         pos++;
@@ -395,8 +397,8 @@ module ts {
         if (pos > 0 && isLineBreak(text.charCodeAt(pos - 1))) {
             var ch = text.charCodeAt(pos);
 
-            // All conflict markers the same character repeated seven times.  If it is a 
-            // <<<<<<< or >>>>>>> marker then it is also followd by a space.
+            // All conflict markers consist of the same character repeated seven times.  If it is 
+            // a <<<<<<< or >>>>>>> marker then it is also followd by a space.
             var markerLength = "<<<<<<<".length;
 
             if ((pos + markerLength) < text.length) {
