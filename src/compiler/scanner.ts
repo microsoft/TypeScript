@@ -333,10 +333,14 @@ module ts {
             var ch = text.charCodeAt(pos);
             switch (ch) {
                 case CharacterCodes.carriageReturn:
-                    if (text.charCodeAt(pos + 1) === CharacterCodes.lineFeed) pos++;
+                    if (text.charCodeAt(pos + 1) === CharacterCodes.lineFeed) {
+                        pos++;
+                    }
                 case CharacterCodes.lineFeed:
                     pos++;
-                    if (stopAfterLineBreak) return pos;
+                    if (stopAfterLineBreak) {
+                        return pos;
+                    }
                     continue;
                 case CharacterCodes.tab:
                 case CharacterCodes.verticalTab:
@@ -367,6 +371,14 @@ module ts {
                         continue;
                     }
                     break;
+                case CharacterCodes.lessThan:
+                case CharacterCodes.equals:
+                case CharacterCodes.greaterThan:
+                    if (isConflictMarkerTrivia(text, pos)) {
+                        pos = scanConflictMarkerTrivia(text, pos);
+                        continue;
+                    }
+                    // fall through
                 default:
                     if (ch > CharacterCodes.maxAsciiCharacter && (isWhiteSpace(ch) || isLineBreak(ch))) {
                         pos++;
@@ -376,6 +388,39 @@ module ts {
             }
             return pos;
         }
+    }
+
+    function isConflictMarkerTrivia(text: string, pos: number) {
+        // Conflict markers must be at the start of a line.
+        if (pos > 0 && isLineBreak(text.charCodeAt(pos - 1))) {
+            var ch = text.charCodeAt(pos);
+
+            // All conflict markers the same character repeated seven times.  If it is a 
+            // <<<<<<< or >>>>>>> marker then it is also followd by a space.
+            var markerLength = "<<<<<<<".length;
+
+            if ((pos + markerLength) < text.length) {
+                for (var i = 0, n = markerLength; i < n; i++) {
+                    if (text.charCodeAt(pos + i) !== ch) {
+                        return false;
+                    }
+                }
+
+                return ch === CharacterCodes.equals ||
+                    text.charCodeAt(pos + markerLength) === CharacterCodes.space;
+            }
+        }
+
+        return false;
+    }
+
+    function scanConflictMarkerTrivia(text: string, pos: number) {
+        var len = text.length;
+        while (pos < len && !isLineBreak(text.charCodeAt(pos))) {
+            pos++;
+        }
+
+        return pos;
     }
 
     // Extract comments from the given source text starting at the given position. If trailing is false, whitespace is skipped until
@@ -1010,6 +1055,17 @@ module ts {
                     case CharacterCodes.semicolon:
                         return pos++, token = SyntaxKind.SemicolonToken;
                     case CharacterCodes.lessThan:
+                        if (isConflictMarkerTrivia(text, pos)) {
+                            error(Diagnostics.Merge_conflict_marker_encountered);
+                            pos = scanConflictMarkerTrivia(text, pos);
+                            if (skipTrivia) {
+                                continue;
+                            }
+                            else {
+                                return token = SyntaxKind.ConflictMarkerTrivia;
+                            }
+                        }
+
                         if (text.charCodeAt(pos + 1) === CharacterCodes.lessThan) {
                             if (text.charCodeAt(pos + 2) === CharacterCodes.equals) {
                                 return pos += 3, token = SyntaxKind.LessThanLessThanEqualsToken;
@@ -1021,6 +1077,17 @@ module ts {
                         }
                         return pos++, token = SyntaxKind.LessThanToken;
                     case CharacterCodes.equals:
+                        if (isConflictMarkerTrivia(text, pos)) {
+                            error(Diagnostics.Merge_conflict_marker_encountered);
+                            pos = scanConflictMarkerTrivia(text, pos);
+                            if (skipTrivia) {
+                                continue;
+                            }
+                            else {
+                                return token = SyntaxKind.ConflictMarkerTrivia;
+                            }
+                        }
+
                         if (text.charCodeAt(pos + 1) === CharacterCodes.equals) {
                             if (text.charCodeAt(pos + 2) === CharacterCodes.equals) {
                                 return pos += 3, token = SyntaxKind.EqualsEqualsEqualsToken;
@@ -1032,6 +1099,17 @@ module ts {
                         }
                         return pos++, token = SyntaxKind.EqualsToken;
                     case CharacterCodes.greaterThan:
+                        if (isConflictMarkerTrivia(text, pos)) {
+                            error(Diagnostics.Merge_conflict_marker_encountered);
+                            pos = scanConflictMarkerTrivia(text, pos);
+                            if (skipTrivia) {
+                                continue;
+                            }
+                            else {
+                                return token = SyntaxKind.ConflictMarkerTrivia;
+                            }
+                        }
+
                         return pos++, token = SyntaxKind.GreaterThanToken;
                     case CharacterCodes.question:
                         return pos++, token = SyntaxKind.QuestionToken;
