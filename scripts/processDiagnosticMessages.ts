@@ -15,6 +15,7 @@ interface IIndexable<V> {
 }
 
 function main(): void {
+    var sys = ts.sys;
     if (sys.args.length < 1) {
         sys.write("Usage:" + sys.newLine)
         sys.write("\tnode processDiagnosticMessages.js <diagnostic-json-input-file>" + sys.newLine);
