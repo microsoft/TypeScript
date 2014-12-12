@@ -6432,8 +6432,9 @@ module ts {
             Debug.assert(node.kind !== SyntaxKind.MethodDeclaration || isObjectLiteralMethod(node));
 
             // Grammar checking
-            if (node.kind === SyntaxKind.ArrowFunction) {
-                checkGrammarFunctionLikeDeclaration(node);
+            var hasGrammarError = checkGrammarFunctionLikeDeclaration(node);
+            if (!hasGrammarError && node.kind === SyntaxKind.FunctionExpression) {
+                checkGrammarFunctionName(node.name) || checkGrammarForGenerator(node);
             }
 
             // The identityMapper object is used to indicate that function expressions are wildcards
@@ -9955,9 +9956,9 @@ module ts {
             }
         }
 
-        function checkGrammarFunctionLikeDeclaration(node: FunctionLikeDeclaration) {
+        function checkGrammarFunctionLikeDeclaration(node: FunctionLikeDeclaration): boolean {
             // Prevent cascading error by short-circuit
-            checkGrammarModifiers(node) || checkGrammarTypeParameterList(node, node.typeParameters) || checkGrammarParameterList(node.parameters);
+            return checkGrammarModifiers(node) || checkGrammarTypeParameterList(node, node.typeParameters) || checkGrammarParameterList(node.parameters);
         }
 
         function checkGrammarIndexSignatureParameters(node: SignatureDeclaration): boolean {
@@ -10054,6 +10055,20 @@ module ts {
             }
             else if (node.expression.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>node.expression).operator === SyntaxKind.CommaToken) {
                 grammarErrorOnNode(node.expression, Diagnostics.A_comma_expression_is_not_allowed_in_a_computed_property_name);
+            }
+        }
+
+        function checkGrammarForGenerator(node: FunctionLikeDeclaration) {
+            if (node.asteriskToken) {
+                return grammarErrorOnNode(node.asteriskToken, Diagnostics.Generators_are_not_currently_supported);
+            }
+        }
+
+        function checkGrammarFunctionName(name: Node) {
+            if (name && name.parserContextFlags & ParserContextFlags.StrictMode && isEvalOrArgumentsIdentifier(name)) {
+                // It is a SyntaxError to use within strict mode code the identifiers eval or arguments as the
+                // Identifier of a FunctionLikeDeclaration or FunctionExpression or as a formal parameter name(13.1)
+                return reportGrammarErrorOfInvalidUseInStrictMode(<Identifier>name);
             }
         }
 

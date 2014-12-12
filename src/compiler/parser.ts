@@ -4647,7 +4647,7 @@ module ts {
                 case SyntaxKind.ForInStatement:                 return checkForInStatement(<ForInStatement>node);
                 case SyntaxKind.ForStatement:                   return checkForStatement(<ForStatement>node);
                 case SyntaxKind.FunctionDeclaration:            return checkFunctionDeclaration(<FunctionLikeDeclaration>node);
-                case SyntaxKind.FunctionExpression:             return checkFunctionExpression(<FunctionExpression>node);
+                //case SyntaxKind.FunctionExpression:             return checkFunctionExpression(<FunctionExpression>node);
                 case SyntaxKind.GetAccessor:                    return checkGetAccessor(<MethodDeclaration>node);
                 case SyntaxKind.HeritageClause:                 return checkHeritageClause(<HeritageClause>node);
                 case SyntaxKind.InterfaceDeclaration:           return checkInterfaceDeclaration(<InterfaceDeclaration>node);
