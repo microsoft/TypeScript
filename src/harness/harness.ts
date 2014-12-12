@@ -175,6 +175,120 @@ module Utils {
     function isNodeOrArray(a: any): boolean {
         return a !== undefined && typeof a.pos === "number";
     }
+
+    export function convertDiagnostics(diagnostics: ts.Diagnostic[]) {
+        return diagnostics.map(convertDiagnostic);
+    }
+
+    function convertDiagnostic(diagnostic: ts.Diagnostic) {
+        return {
+            start: diagnostic.start,
+            length: diagnostic.length,
+            messageText: diagnostic.messageText,
+            category: (<any>ts).DiagnosticCategory[diagnostic.category],
+            code: diagnostic.code
+        };
+    }
+
+    export function sourceFileToJSON(file: ts.SourceFile): string {
+        return JSON.stringify(file,(k, v) => {
+            return isNodeOrArray(v) ? serializeNode(v) : v;
+        }, "    ");
+
+        function getKindName(k: number): string {
+            return (<any>ts).SyntaxKind[k]
+        }
+
+        function getFlagName(flags: any, f: number): any {
+            if (f === 0) {
+                return 0;
+            }
+
+            var result = "";
+            ts.forEach(Object.getOwnPropertyNames(flags),(v: any) => {
+                if (isFinite(v)) {
+                    v = +v;
+                    if (f === +v) {
+                        result = flags[v];
+                        return true;
+                    }
+                    else if ((f & v) > 0) {
+                        if (result.length)
+                            result += " | ";
+                        result += flags[v];
+                        return false;
+                    }
+                }
+            });
+            return result;
+        }
+
+        function getNodeFlagName(f: number) { return getFlagName((<any>ts).NodeFlags, f); }
+        function getParserContextFlagName(f: number) {
+            // Clear the flag that are produced by aggregating child values..  That is ephemeral 
+            // data we don't care about in the dump.  We only care what the parser set directly
+            // on the ast.
+            return getFlagName((<any>ts).ParserContextFlags, f & ts.ParserContextFlags.ParserGeneratedFlags);
+        }
+
+        function serializeNode(n: ts.Node): any {
+            var o: any = { kind: getKindName(n.kind) };
+            o.containsParseError = ts.containsParseError(n);
+
+            ts.forEach(Object.getOwnPropertyNames(n), propertyName => {
+                switch (propertyName) {
+                    case "parent":
+                    case "symbol":
+                    case "locals":
+                    case "localSymbol":
+                    case "kind":
+                    case "semanticDiagnostics":
+                    case "id":
+                    case "nodeCount":
+                    case "symbolCount":
+                    case "identifierCount":
+                    case "scriptSnapshot":
+                        // Blacklist of items we never put in the baseline file.
+                        break;
+
+                    case "flags":
+                        // Print out flags with their enum names.
+                        o[propertyName] = getNodeFlagName(n.flags);
+                        break;
+
+                    case "parserContextFlags":
+                        o[propertyName] = getParserContextFlagName(n.parserContextFlags);
+                        break;
+
+                    case "referenceDiagnostics":
+                    case "parseDiagnostics":
+                    case "grammarDiagnostics":
+                        o[propertyName] = Utils.convertDiagnostics((<any>n)[propertyName]);
+                        break;
+
+                    case "nextContainer":
+                        if (n.nextContainer) {
+                            o[propertyName] = { kind: n.nextContainer.kind, pos: n.nextContainer.pos, end: n.nextContainer.end };
+                        }
+                        break;
+
+                    case "text":
+                        // Include 'text' field for identifiers/literals, but not for source files.
+                        if (n.kind !== ts.SyntaxKind.SourceFile) {
+                            o[propertyName] = (<any>n)[propertyName];
+                        }
+                        break;
+
+                    default:
+                        o[propertyName] = (<any>n)[propertyName];
+                }
+
+                return undefined;
+            });
+
+            return o;
+        }
+    }
 }
 
 module Harness.Path {
