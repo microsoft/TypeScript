@@ -5315,14 +5315,34 @@ module ts {
             return false;
         }
 
+        function checkSpreadElementExpression(node: SpreadElementExpression, contextualMapper?: TypeMapper): Type {
+            var type = checkExpressionCached(node.expression, contextualMapper);
+            if (!isTypeAssignableTo(type, anyArrayType)) {
+                error(node.expression, Diagnostics.Type_0_is_not_an_array_type, typeToString(type));
+                return unknownType;
+            }
+            return type;
+        }
+
         function checkArrayLiteral(node: ArrayLiteralExpression, contextualMapper?: TypeMapper): Type {
             var elements = node.elements;
             if (!elements.length) {
                 return createArrayType(undefinedType);
             }
-            var elementTypes = map(elements, e => checkExpression(e, contextualMapper));
             var contextualType = getContextualType(node);
-            if ((contextualType && contextualTypeIsTupleLikeType(contextualType)) || isAssignmentTarget(node)) {
+            var isTupleType = (contextualType && contextualTypeIsTupleLikeType(contextualType)) || isAssignmentTarget(node);
+            var elementTypes: Type[] = [];
+            forEach(elements, e => {
+                var type = checkExpression(e, contextualMapper);
+                if (e.kind === SyntaxKind.SpreadElementExpression) {
+                    elementTypes.push(getIndexTypeOfType(type, IndexKind.Number) || anyType);
+                    isTupleType = false;
+                }
+                else {
+                    elementTypes.push(type);
+                }
+            });
+            if (isTupleType) {
                 return createTupleType(elementTypes);
             }
             return createArrayType(getUnionType(elementTypes));
@@ -7009,6 +7029,8 @@ module ts {
                     return checkBinaryExpression(<BinaryExpression>node, contextualMapper);
                 case SyntaxKind.ConditionalExpression:
                     return checkConditionalExpression(<ConditionalExpression>node, contextualMapper);
+                case SyntaxKind.SpreadElementExpression:
+                    return checkSpreadElementExpression(<SpreadElementExpression>node, contextualMapper);
                 case SyntaxKind.OmittedExpression:
                     return undefinedType;
             }
