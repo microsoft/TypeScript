@@ -450,6 +450,104 @@ module ts {
         length: number
     }
 
+    // Allows finding nodes in the source file at a certain position in an efficient manner.
+    // The implementation takes advantage of the calling pattern it knows hte parser will
+    // make in order to optimize finding nodes as quickly as possible.
+    interface SyntaxCursor {
+        currentNode(position: number): IncrementalNode;
+    }
+
+    function createSyntaxCursor(sourceFile: SourceFile): SyntaxCursor {
+        var currentArray: NodeArray<Node> = sourceFile.statements;
+        var currentArrayIndex = 0;
+
+        Debug.assert(currentArrayIndex < currentArray.length);
+        var current = currentArray[currentArrayIndex];
+        var lastQueriedPosition = -1;
+
+        return {
+            currentNode(position: number) {
+                // If the position is different than the last time we were asked.
+                if (position !== lastQueriedPosition) {
+                    // Much of the time the parser will be need the very next node in the array 
+                    // that we just returned a node from.  So just simply check for that case and
+                    // move forward in the array instead of searching for the node again.
+                    if (current && current.end === position && currentArrayIndex < currentArray.length) {
+                        currentArrayIndex++;
+                        current = currentArray[currentArrayIndex];
+                    }
+
+                    // If we don't have a node, or the node we have isn't in the right position,
+                    // then try to find a viable node at the position requested.
+                    if (!current || current.pos !== position) {
+                        findHighestNodeAtPosition(position);
+                    }
+                }
+
+                // Cache this query so that we don't do any extra work if the parser calls back 
+                // into us.  Note: this is very common as the parser will make pairs of calls like
+                // 'isListElement -> parseListElement'.  If we were unable to find a node when
+                // called with 'isListElement', we don't want to redo the work when parseListElement
+                // is called immediately after.
+                lastQueriedPosition = position;
+                return <IncrementalNode>current;
+            }
+        };
+
+        function findHighestNodeAtPosition(position: number) {
+            // Clear out any cached state about the last node we found.
+            currentArray = undefined;
+            currentArrayIndex = -1;
+            current = undefined;
+
+            // Recurse into the source file to find the highest node at this position.
+            forEachChild(sourceFile, visitNode, visitArray);
+
+            function visitNode(node: Node) {
+                if (position >= node.pos && position < node.end) {
+                    // Position was within this node.  Keep searching deeper to find the node.
+                    forEachChild(node, visitNode, visitArray);
+
+                    // don't procede any futher in the search.
+                    return true;
+                }
+
+                // position wasn't in this node, have to keep searching.
+                return false;
+            }
+
+            function visitArray(array: NodeArray<Node>) {
+                if (position >= array.pos && position < array.end) {
+                    // position was in this array.  Search through this array to see if we find a
+                    // viable element.
+                    for (var i = 0, n = array.length; i < n; i++) {
+                        var child = array[i];
+                        if (child) {
+                            if (child.pos === position) {
+                                // Found the right node.  We're done.
+                                currentArray = array;
+                                currentArrayIndex = i;
+                                current = child;
+                                return true;
+                            }
+                            else {
+                                if (child.pos > position && position < child.end) {
+                                    // Position in somewhere within this child.  Search in it and 
+                                    // stop searching in this array.
+                                    forEachChild(child, visitNode, visitArray);
+                                    return true;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                // position wasn't in this array, have to keep searching.
+                return false;
+            }
+        }
+    }
+
     export function createSourceFile(filename: string, sourceText: string, languageVersion: ScriptTarget, setParentNodes = false): SourceFile {
         var parsingContext: ParsingContext;
         var identifiers: Map<string>;
@@ -459,6 +557,7 @@ module ts {
         var syntacticDiagnostics: Diagnostic[];
         var scanner: Scanner;
         var token: SyntaxKind;
+        var syntaxCursor: SyntaxCursor;
 
         // Flags that dictate what parsing context we're in.  For example:
         // Whether or not we are in strict parsing mode.  All that changes in strict parsing mode is
@@ -604,6 +703,8 @@ module ts {
                 return parseSourceFile(newText, /*textChangeRange:*/ undefined, /*setNodeParents*/ true);
             }
 
+            syntaxCursor = createSyntaxCursor(sourceFile);
+
             // Make the actual change larger so that we know to reparse anything whose lookahead 
             // might have intersected the change.
             var changeRange = extendToAffectedRange(textChangeRange);
@@ -644,7 +745,12 @@ module ts {
             // inconsistent tree.  Setting the parents on the new tree should be very fast.  We 
             // will immediately bail out of walking any subtrees when we can see that their parents
             // are already correct.
-            return parseSourceFile(newText, /*textChangeRange:*/ undefined, /*setNodeParents*/ true);
+            var result = parseSourceFile(newText, /*textChangeRange:*/ undefined, /*setNodeParents*/ true);
+
+            // Clear out the syntax cursor so it doesn't keep anything alive longer than it should.
+            syntaxCursor = undefined;
+
+            return result;
         }
 
         function updateTokenPositionsAndMarkElements(node: IncrementalNode, changeStart: number, changeRangeOldEnd: number, changeRangeNewEnd: number, delta: number): void {
@@ -1548,8 +1654,20 @@ module ts {
                 return undefined;
             }
 
-            var node: Node = currentNodeFromCursor();
-            if (!node) {
+            if (!syntaxCursor) {
+                // if we don't have a cursor, we could never return a node from the old tree.
+                return undefined;
+            }
+
+            var node = syntaxCursor.currentNode(scanner.getTextPos());
+
+            // Can't reuse a missing node.
+            if (isMissingNode(node)) {
+                return undefined;
+            }
+
+            // Can't reuse a node that intersected the change range.
+            if (node.intersectsChange) {
                 return undefined;
             }
 
@@ -1799,11 +1917,6 @@ module ts {
             // TODO: this most likely needs the same initializer check that 
             // isReusableVariableDeclaration has.
             return node.kind === SyntaxKind.Parameter;
-        }
-
-        function currentNodeFromCursor(): Node {
-            // NYI
-            return undefined;
         }
 
         // Returns true if we should abort parsing.
