@@ -430,7 +430,7 @@ module ts {
         Function_implicitly_has_return_type_any_because_it_does_not_have_a_return_type_annotation_and_is_referenced_directly_or_indirectly_in_one_of_its_return_expressions: { code: 7024, category: DiagnosticCategory.Error, key: "Function implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions." },
         You_cannot_rename_this_element: { code: 8000, category: DiagnosticCategory.Error, key: "You cannot rename this element." },
         yield_expressions_are_not_currently_supported: { code: 9000, category: DiagnosticCategory.Error, key: "'yield' expressions are not currently supported." },
-        generators_are_not_currently_supported: { code: 9001, category: DiagnosticCategory.Error, key: "'generators' are not currently supported." },
+        Generators_are_not_currently_supported: { code: 9001, category: DiagnosticCategory.Error, key: "Generators are not currently supported." },
         Computed_property_names_are_not_currently_supported: { code: 9002, category: DiagnosticCategory.Error, key: "Computed property names are not currently supported." },
     };
 }

@@ -1720,7 +1720,7 @@
         "category": "Error",
         "code": 9000
     },
-    "'generators' are not currently supported.": {
+    "Generators are not currently supported.": {
         "category": "Error",
         "code": 9001
     },
