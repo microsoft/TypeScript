@@ -4410,7 +4410,7 @@ module ts {
 
         function checkForGenerator(node: FunctionLikeDeclaration) {
             if (node.asteriskToken) {
-                return grammarErrorOnNode(node.asteriskToken, Diagnostics.generators_are_not_currently_supported);
+                return grammarErrorOnNode(node.asteriskToken, Diagnostics.Generators_are_not_currently_supported);
             }
         }
 
@@ -4901,6 +4901,10 @@ module ts {
         }
 
         function checkComputedPropertyName(node: ComputedPropertyName) {
+            // Since computed properties are not supported in the type checker, disallow them in TypeScript 1.4
+            // Once full support is added, remove this error.
+            return grammarErrorOnNode(node, Diagnostics.Computed_property_names_are_not_currently_supported);
+            
             if (languageVersion < ScriptTarget.ES6) {
                 return grammarErrorOnNode(node, Diagnostics.Computed_property_names_are_only_available_when_targeting_ECMAScript_6_and_higher);
             }
