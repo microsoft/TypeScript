@@ -4,57 +4,12 @@
 /// <reference path="parser.ts"/>
 /// <reference path="binder.ts"/>
 /// <reference path="emitter.ts"/>
+/// <reference path="utilities.ts"/>
 
 module ts {
     var nextSymbolId = 1;
     var nextNodeId = 1;
-    var nextMergeId = 1;
-
-    export function getDeclarationOfKind(symbol: Symbol, kind: SyntaxKind): Declaration {
-        var declarations = symbol.declarations;
-        for (var i = 0; i < declarations.length; i++) {
-            var declaration = declarations[i];
-            if (declaration.kind === kind) {
-                return declaration;
-            }
-        }
-
-        return undefined;
-    }
-
-    export interface StringSymbolWriter extends SymbolWriter {
-        string(): string;
-    }
-
-    // Pool writers to avoid needing to allocate them for every symbol we write.
-    var stringWriters: StringSymbolWriter[] = [];
-    export function getSingleLineStringWriter(): StringSymbolWriter {
-        if (stringWriters.length == 0) {
-            var str = "";
-
-            var writeText: (text: string) => void = text => str += text;
-            return {
-                string: () => str,
-                writeKeyword: writeText,
-                writeOperator: writeText,
-                writePunctuation: writeText,
-                writeSpace: writeText,
-                writeStringLiteral: writeText,
-                writeParameter: writeText,
-                writeSymbol: writeText,
-
-                // Completely ignore indentation for string writers.  And map newlines to
-                // a single space.
-                writeLine: () => str += " ",
-                increaseIndent: () => { },
-                decreaseIndent: () => { },
-                clear: () => str = "",
-                trackSymbol: () => { }
-            };
-        }
-
-        return stringWriters.pop();
-    }
+    var nextMergeId = 1;    
 
     /// fullTypeCheck denotes if this instance of the typechecker will be used to get semantic diagnostics.
     /// If fullTypeCheck === true,  then the typechecker should do every possible check to produce all errors
@@ -1010,11 +965,6 @@ module ts {
                 errorSymbolName: getTextOfNode(firstIdentifier),
                 errorNode: firstIdentifier
             };
-        }
-
-        function releaseStringWriter(writer: StringSymbolWriter) {
-            writer.clear()
-            stringWriters.push(writer);
         }
 
         function writeKeyword(writer: SymbolWriter, kind: SyntaxKind) {
@@ -5597,7 +5547,7 @@ module ts {
                 }
 
                 // Fall back to any.
-                if (compilerOptions.noImplicitAny && objectType !== anyType) {
+                if (compilerOptions.noImplicitAny && !compilerOptions.suppressImplicitAnyIndexErrors && objectType !== anyType) {
                     error(node, Diagnostics.Index_signature_of_object_type_implicitly_has_an_any_type);
                 }
 
