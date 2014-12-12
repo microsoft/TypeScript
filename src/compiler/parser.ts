@@ -3123,27 +3123,25 @@ module ts {
             return finishNode(node);
         }
 
-        function isLabel(): boolean {
-            return isIdentifier() && lookAhead(nextTokenIsColonToken);
-        }
+        function parseExpressionOrLabeledStatement(): ExpressionStatement | LabeledStatement {
+            // Avoiding having to do the lookahead for a labeled statement by just trying to parse
+            // out an expression, seeing if it is identifier and then seeing if it is followed by
+            // a colon.
+            var fullStart = scanner.getStartPos();
+            var expression = allowInAnd(parseExpression);
 
-        function nextTokenIsColonToken() {
-            return nextToken() === SyntaxKind.ColonToken;
-        }
-
-        function parseLabeledStatement(): LabeledStatement {
-            var node = <LabeledStatement>createNode(SyntaxKind.LabeledStatement);
-            node.label = parseIdentifier();
-            parseExpected(SyntaxKind.ColonToken);
-            node.statement = parseStatement();
-            return finishNode(node);
-        }
-
-        function parseExpressionStatement(): ExpressionStatement {
-            var node = <ExpressionStatement>createNode(SyntaxKind.ExpressionStatement);
-            node.expression = allowInAnd(parseExpression);
-            parseSemicolon();
-            return finishNode(node);
+            if (expression.kind === SyntaxKind.Identifier && parseOptional(SyntaxKind.ColonToken)) {
+                var labeledStatement = <LabeledStatement>createNode(SyntaxKind.LabeledStatement, fullStart);
+                labeledStatement.label = <Identifier>expression;
+                labeledStatement.statement = parseStatement();
+                return finishNode(labeledStatement);
+            }
+            else {
+                var expressionStatement = <ExpressionStatement>createNode(SyntaxKind.ExpressionStatement, fullStart);
+                expressionStatement.expression = expression;
+                parseSemicolon();
+                return finishNode(expressionStatement);
+            }
         }
 
         function isStatement(inErrorRecovery: boolean): boolean {
@@ -3264,9 +3262,7 @@ module ts {
                     }
                     // Else parse it like identifier - fall through
                 default:
-                    return isLabel()
-                        ? parseLabeledStatement()
-                        : parseExpressionStatement();
+                    return parseExpressionOrLabeledStatement();
             }
         }
 
