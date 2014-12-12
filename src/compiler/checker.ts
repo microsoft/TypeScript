@@ -1794,17 +1794,8 @@ module ts {
             return anyType;
         }
 
-        // Return the type implied by a binding pattern. This is the type implied purely by the binding pattern itself
-        // and without regard to its context (i.e. without regard any type annotation or initializer associated with the
-        // declaration in which the binding pattern is contained). For example, the implied type of [x, y] is [any, any]
-        // and the implied type of { x, y: z = 1 } is { x: any; y: number; }. The type implied by a binding pattern is
-        // used as the contextual type of an initializer associated with the binding pattern. Also, for a destructuring
-        // parameter with no type annotation or initializer, the type implied by the binding pattern becomes the type of
-        // the parameter.
-        function getTypeFromBindingPattern(pattern: BindingPattern): Type {
-            if (pattern.kind === SyntaxKind.ArrayBindingPattern) {
-                return createTupleType(map(pattern.elements, e => e.kind === SyntaxKind.OmittedExpression ? anyType : getTypeFromBindingElement(e)));
-            }
+        // Return the type implied by an object binding pattern
+        function getTypeFromObjectBindingPattern(pattern: BindingPattern): Type {
             var members: SymbolTable = {};
             forEach(pattern.elements, e => {
                 var flags = SymbolFlags.Property | SymbolFlags.Transient | (e.initializer ? SymbolFlags.Optional : 0);
@@ -1814,6 +1805,32 @@ module ts {
                 members[symbol.name] = symbol;
             });
             return createAnonymousType(undefined, members, emptyArray, emptyArray, undefined, undefined);
+        }
+
+        // Return the type implied by an array binding pattern
+        function getTypeFromArrayBindingPattern(pattern: BindingPattern): Type {
+            var hasSpreadElement: boolean = false;
+            var elementTypes: Type[] = [];
+            forEach(pattern.elements, e => {
+                elementTypes.push(e.kind === SyntaxKind.OmittedExpression || e.dotDotDotToken ? anyType : getTypeFromBindingElement(e));
+                if (e.dotDotDotToken) {
+                    hasSpreadElement = true;
+                }
+            });
+            return !elementTypes.length ? anyArrayType : hasSpreadElement ? createArrayType(getUnionType(elementTypes)) : createTupleType(elementTypes);
+        }
+
+        // Return the type implied by a binding pattern. This is the type implied purely by the binding pattern itself
+        // and without regard to its context (i.e. without regard any type annotation or initializer associated with the
+        // declaration in which the binding pattern is contained). For example, the implied type of [x, y] is [any, any]
+        // and the implied type of { x, y: z = 1 } is { x: any; y: number; }. The type implied by a binding pattern is
+        // used as the contextual type of an initializer associated with the binding pattern. Also, for a destructuring
+        // parameter with no type annotation or initializer, the type implied by the binding pattern becomes the type of
+        // the parameter.
+        function getTypeFromBindingPattern(pattern: BindingPattern): Type {
+            return pattern.kind === SyntaxKind.ObjectBindingPattern
+                ? getTypeFromObjectBindingPattern(pattern)
+                : getTypeFromArrayBindingPattern(pattern);
         }
 
         // Return the type associated with a variable, parameter, or property declaration. In the simple case this is the type
@@ -5336,21 +5353,23 @@ module ts {
             if (!elements.length) {
                 return createArrayType(undefinedType);
             }
-            var contextualType = getContextualType(node);
-            var isTupleType = (contextualType && contextualTypeIsTupleLikeType(contextualType)) || isAssignmentTarget(node);
+            var hasSpreadElement: boolean = false;
             var elementTypes: Type[] = [];
             forEach(elements, e => {
                 var type = checkExpression(e, contextualMapper);
                 if (e.kind === SyntaxKind.SpreadElementExpression) {
                     elementTypes.push(getIndexTypeOfType(type, IndexKind.Number) || anyType);
-                    isTupleType = false;
+                    hasSpreadElement = true;
                 }
                 else {
                     elementTypes.push(type);
                 }
             });
-            if (isTupleType) {
-                return createTupleType(elementTypes);
+            if (!hasSpreadElement) {
+                var contextualType = getContextualType(node);
+                if (contextualType && contextualTypeIsTupleLikeType(contextualType) || isAssignmentTarget(node)) {
+                    return createTupleType(elementTypes);
+                }
             }
             return createArrayType(getUnionType(elementTypes));
         }
