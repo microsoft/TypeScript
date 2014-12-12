@@ -6555,6 +6555,13 @@ module ts {
         }
 
         function checkDeleteExpression(node: DeleteExpression): Type {
+            // Grammar checking
+            if (node.parserContextFlags & ParserContextFlags.StrictMode && node.expression.kind === SyntaxKind.Identifier) {
+                // When a delete operator occurs within strict mode code, a SyntaxError is thrown if its
+                // UnaryExpression is a direct reference to a variable, function argument, or function name
+                grammarErrorOnNode(node.expression, Diagnostics.delete_cannot_be_called_on_an_identifier_in_strict_mode);
+            }
+
             var operandType = checkExpression(node.expression);
             return booleanType;
         }
