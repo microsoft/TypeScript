@@ -1335,7 +1335,7 @@ module ts {
             // flag so that we don't mark any subsequent nodes.
             if (parseErrorBeforeNextFinishedNode) {
                 parseErrorBeforeNextFinishedNode = false;
-                node.parserContextFlags |= ParserContextFlags.ContainsError;
+                node.flags |= NodeFlags.ContainsError;
             }
 
             return node;
@@ -1684,6 +1684,12 @@ module ts {
                 return undefined;
             }
 
+            // Can't reuse a node that contains a parse error.  This is necessary so that we 
+            // produce the same set of errors again.
+            if (containsParseError(node)) {
+                return undefined;
+            }
+
             // We can only reuse a node if it was parsed under the same strict mode that we're 
             // currently in.  i.e. if we originally parsed a node in non-strict mode, but then
             // the user added 'using strict' at the top of the file, then we can't use that node
@@ -1695,7 +1701,7 @@ module ts {
             // differently depending on what mode it is in.
             //
             // This also applies to all our other context flags as well.
-            var nodeContextFlags = node.parserContextFlags || 0;
+            var nodeContextFlags = node.parserContextFlags & ParserContextFlags.FlagsMask;
             if (nodeContextFlags !== contextFlags) {
                 return undefined;
             }

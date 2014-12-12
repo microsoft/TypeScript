@@ -88,6 +88,11 @@ module ts {
         assert.equal(node1.pos, node2.pos, "node1.pos !== node2.pos");
         assert.equal(node1.end, node2.end, "node1.end !== node2.end");
         assert.equal(node1.kind, node2.kind, "node1.kind !== node2.kind");
+
+        // call this on both nodes to ensure all propagated flags have been set (and thus can be 
+        // compared).
+        ts.containsParseError(node1);
+        ts.containsParseError(node2);
         assert.equal(node1.flags, node2.flags, "node1.flags !== node2.flags");
         assert.equal(node1.parserContextFlags, node2.parserContextFlags, "node1.parserContextFlags !== node2.parserContextFlags");
 
@@ -177,7 +182,6 @@ module ts {
     }
 
     describe('Incremental',() => {
-        debugger;
         it('Inserting into method',() => {
             debugger;
             var source = "class C {\r\n" +
@@ -768,12 +772,13 @@ module m3 { }\
         });
 
         it('Moving methods from object literal to class',() => {
+            debugger;
             var source = "var v = { public A() { } public B() { } public C() { } }"
 
             var oldText = ScriptSnapshot.fromString(source);
             var newTextAndChange = withChange(oldText, 0, "var v =".length, "class C");
 
-            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 0);
+            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 4);
         });
 
         it('Moving index signatures from class to interface',() => {
@@ -809,7 +814,7 @@ module m3 { }\
             var oldText = ScriptSnapshot.fromString(source);
             var newTextAndChange = withChange(oldText, 0, "var v =".length, "class C");
 
-            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 16);
+            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 4);
         });
 
         // Simulated typing tests.

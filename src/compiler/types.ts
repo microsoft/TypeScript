@@ -281,18 +281,29 @@ module ts {
     }
 
     export const enum NodeFlags {
-        Export = 0x00000001,  // Declarations
-        Ambient = 0x00000002,  // Declarations
-        Public = 0x00000010,  // Property/Method
-        Private = 0x00000020,  // Property/Method
-        Protected = 0x00000040,  // Property/Method
-        Static = 0x00000080,  // Property/Method
-        MultiLine = 0x00000100,  // Multi-line array or object literal
-        Synthetic = 0x00000200,  // Synthetic node (for full fidelity)
-        DeclarationFile = 0x00000400,  // Node is a .d.ts file
-        Let = 0x00000800,  // Variable declaration
-        Const = 0x00001000,  // Variable declaration
-        OctalLiteral = 0x00002000,
+        Export =            0x00000001,  // Declarations
+        Ambient =           0x00000002,  // Declarations
+        Public =            0x00000010,  // Property/Method
+        Private =           0x00000020,  // Property/Method
+        Protected =         0x00000040,  // Property/Method
+        Static =            0x00000080,  // Property/Method
+        MultiLine =         0x00000100,  // Multi-line array or object literal
+        Synthetic =         0x00000200,  // Synthetic node (for full fidelity)
+        DeclarationFile =   0x00000400,  // Node is a .d.ts file
+        Let =               0x00000800,  // Variable declaration
+        Const =             0x00001000,  // Variable declaration
+        OctalLiteral =      0x00002000,
+
+        // If the parser encountered an error when parsing the code that created this node.  Note
+        // the parser only sets this directly on the node it creates right after encountering the
+        // error.  We then propagate that flag upwards to parent nodes during incremental parsing.
+        ContainsError =     0x00004000,
+
+        // Used during incremental parsing to determine if we need to visit this node to see if
+        // any of its children had an error.  Once we compute that once, we can set this bit on the
+        // node to know that we never have to do it again.  From that point on, we can just check
+        // the node directly for 'ContainsError'.
+        HasPropagatedChildContainsErrorFlag = 0x00008000,
 
         Modifier = Export | Ambient | Public | Private | Protected | Static,
         AccessibilityModifier = Public | Private | Protected,
@@ -313,16 +324,7 @@ module ts {
         // If this node was parsed in the parameters of a generator.
         GeneratorParameter = 1 << 3,
 
-        // If the parser encountered an error when parsing the code that created this node.  Note
-        // the parser only sets this directly on the node it creates right after encountering the
-        // error.  We then propagate that flag upwards to parent nodes during incremental parsing.
-        ContainsError = 1 << 4,
-
-        // Used during incremental parsing to determine if we need to visit this node to see if
-        // any of its children had an error.  Once we compute that once, we can set this bit on the
-        // node to know that we never have to do it again.  From that point on, we can just check
-        // the node directly for 'ContainsError'.
-        HasPropagatedChildContainsErrorFlag = 1 << 5
+        FlagsMask = StrictMode | DisallowIn | Yield | GeneratorParameter,
     }
 
     export interface Node extends TextRange {
