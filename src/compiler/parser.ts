@@ -641,9 +641,9 @@ module ts {
 
         var sourceFile: SourceFile;
 
-        return parseSourceFile(sourceText, /*textChangeRange:*/ undefined, setParentNodes);
+        return parseSourceFile(sourceText, setParentNodes);
 
-        function parseSourceFile(text: string, textChangeRange: TextChangeRange, setParentNodes: boolean): SourceFile {
+        function parseSourceFile(text: string, setParentNodes: boolean): SourceFile {
             // Set our initial state before parsing.
             sourceText = text;
             parsingContext = 0;
@@ -703,7 +703,7 @@ module ts {
             if (sourceFile.statements.length === 0) {
                 // If we don't have any statements in the current source file, hten there's no real
                 // way to incrementally parse.  So just do a full parse instead.
-                return parseSourceFile(newText, /*textChangeRange:*/ undefined, /*setNodeParents*/ true);
+                return parseSourceFile(newText, /*setNodeParents*/ true);
             }
 
             syntaxCursor = createSyntaxCursor(sourceFile);
@@ -739,8 +739,9 @@ module ts {
             updateTokenPositionsAndMarkElements(<IncrementalNode><Node>sourceFile,
                 changeRange.span().start(), changeRange.span().end(), changeRange.newSpan().end(), delta);
 
-            // Don't pass along the text change range for now. We'll pass it along once incremental
-            // parsing is enabled.
+            // Now that we've set up our internal incremental state just proceed and parse the
+            // source file in the normal fashion.  When possible the parser will retrieve and
+            // reuse nodes from the old tree.
             // 
             // Note: passing in 'true' for setNodeParents is very important.  When incrementally
             // parsing, we will be reusing nodes from the old tree, and placing it into new
@@ -748,7 +749,7 @@ module ts {
             // inconsistent tree.  Setting the parents on the new tree should be very fast.  We 
             // will immediately bail out of walking any subtrees when we can see that their parents
             // are already correct.
-            var result = parseSourceFile(newText, /*textChangeRange:*/ undefined, /*setNodeParents*/ true);
+            var result = parseSourceFile(newText, /*setNodeParents*/ true);
 
             // Clear out the syntax cursor so it doesn't keep anything alive longer than it should.
             syntaxCursor = undefined;

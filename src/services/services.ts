@@ -1519,7 +1519,7 @@ module ts {
                 var editRange = this.hostCache.getChangeRange(filename, this.currentFileVersion, this.currentSourceFile.scriptSnapshot);
 
                 var start = new Date().getTime();
-                sourceFile = updateLanguageServiceSourceFile(this.currentSourceFile, scriptSnapshot, version, /*isOpen*/ true, editRange);
+                sourceFile = updateLanguageServiceSourceFile(this.currentSourceFile, scriptSnapshot, version, /*isOpen*/ true, editRange, /*useIncremental:*/ false);
                 this.host.log("SyntaxTreeCache.Initialize: updateSourceFile: " + (new Date().getTime() - start));
             }
 
@@ -1553,7 +1553,7 @@ module ts {
         return sourceFile;
     }
 
-    export function updateLanguageServiceSourceFile(sourceFile: SourceFile, scriptSnapshot: IScriptSnapshot, version: string, isOpen: boolean, textChangeRange: TextChangeRange): SourceFile {
+    export function updateLanguageServiceSourceFile(sourceFile: SourceFile, scriptSnapshot: IScriptSnapshot, version: string, isOpen: boolean, textChangeRange: TextChangeRange, useIncremental: boolean): SourceFile {
         if (textChangeRange && Debug.shouldAssert(AssertionLevel.Normal)) {
             var oldText = sourceFile.scriptSnapshot;
             var newText = scriptSnapshot;
@@ -1576,9 +1576,11 @@ module ts {
         if (textChangeRange) {
             if (version !== sourceFile.version || isOpen != sourceFile.isOpen) {
                 // Once incremental parsing is ready, then just call into this function.
-                // var newSourceFile = sourceFile.update(scriptSnapshot.getText(0, scriptSnapshot.getLength()), textChangeRange);
-                // setSourceFileFields(newSourceFile, scriptSnapshot, version, isOpen);
-                // return newSourceFile;
+                if (useIncremental) {
+                    var newSourceFile = sourceFile.update(scriptSnapshot.getText(0, scriptSnapshot.getLength()), textChangeRange);
+                    setSourceFileFields(newSourceFile, scriptSnapshot, version, isOpen);
+                    return newSourceFile;
+                }
             }
         }
 
@@ -1661,7 +1663,7 @@ module ts {
             var entry = lookUp(bucket, filename);
             Debug.assert(entry !== undefined);
 
-            entry.sourceFile = updateLanguageServiceSourceFile(entry.sourceFile, scriptSnapshot, version, isOpen, textChangeRange);
+            entry.sourceFile = updateLanguageServiceSourceFile(entry.sourceFile, scriptSnapshot, version, isOpen, textChangeRange, /*useIncremental:*/ false);
             return entry.sourceFile;
         }
 
