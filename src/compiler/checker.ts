@@ -1717,19 +1717,26 @@ module ts {
                     error(name, Diagnostics.Type_0_has_no_property_1_and_no_string_index_signature, typeToString(parentType), declarationNameToString(name));
                     return unknownType;
                 }
-                return type;
             }
-            // For an array binding element the specified or inferred type of the parent must be assignable to any[]
-            if (!isTypeAssignableTo(parentType, anyArrayType)) {
-                error(pattern, Diagnostics.Type_0_is_not_an_array_type, typeToString(parentType));
-                return unknownType;
-            }
-            // Use specific property type when parent is a tuple or numeric index type when parent is an array
-            var propName = "" + indexOf(pattern.elements, declaration);
-            var type = isTupleLikeType(parentType) ? getTypeOfPropertyOfType(parentType, propName) : getIndexTypeOfType(parentType, IndexKind.Number);
-            if (!type) {
-                error(declaration, Diagnostics.Type_0_has_no_property_1, typeToString(parentType), propName);
-                return unknownType;
+            else {
+                // For an array binding element the specified or inferred type of the parent must be assignable to any[]
+                if (!isTypeAssignableTo(parentType, anyArrayType)) {
+                    error(pattern, Diagnostics.Type_0_is_not_an_array_type, typeToString(parentType));
+                    return unknownType;
+                }
+                if (!declaration.dotDotDotToken) {
+                    // Use specific property type when parent is a tuple or numeric index type when parent is an array
+                    var propName = "" + indexOf(pattern.elements, declaration);
+                    var type = isTupleLikeType(parentType) ? getTypeOfPropertyOfType(parentType, propName) : getIndexTypeOfType(parentType, IndexKind.Number);
+                    if (!type) {
+                        error(declaration, Diagnostics.Type_0_has_no_property_1, typeToString(parentType), propName);
+                        return unknownType;
+                    }
+                }
+                else {
+                    // Rest element has an array type with the same element type as the parent type
+                    var type = createArrayType(getIndexTypeOfType(parentType, IndexKind.Number));
+                }
             }
             return type;
         }
