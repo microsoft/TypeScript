@@ -4734,14 +4734,47 @@ module ts {
                 return type;
             }
         }
+        /*Transitively mark all linked imports as referenced*/
+        function markLinkedImportsAsReferenced(node: ImportDeclaration): void {
+            var nodeLinks = getNodeLinks(node);
+            while (nodeLinks.importOnRightSide) {
+                var rightSide = nodeLinks.importOnRightSide;
+                nodeLinks.importOnRightSide = undefined;
+
+                getSymbolLinks(rightSide).referenced = true;
+                nodeLinks = getNodeLinks(rightSide.declarations[0])
+            }
+        }
 
         function checkIdentifier(node: Identifier): Type {
             var symbol = getResolvedSymbol(node);
 
             if (symbol.flags & SymbolFlags.Import) {
-                // Mark the import as referenced so that we emit it in the final .js file.
-                // exception: identifiers that appear in type queries, const enums, modules that contain only const enums
-                getSymbolLinks(symbol).referenced = getSymbolLinks(symbol).referenced || (!isInTypeQuery(node) && !isConstEnumOrConstEnumOnlyModule(resolveImport(symbol)));
+                var symbolLinks = getSymbolLinks(symbol);
+                if (!symbolLinks.referenced) {
+                    var importOrExportAssignment = getLeftSideOfImportOrExportAssignment(node);
+
+                    // decision about whether import is referenced can be made now if
+                    // - import that are used anywhere except right side of import declarations
+                    // - imports that are used on the right side of exported import declarations
+                    // for other cases defer decision until the check of left side
+                    if (!importOrExportAssignment ||
+                        (importOrExportAssignment.flags & NodeFlags.Export) ||
+                        (importOrExportAssignment.kind === SyntaxKind.ExportAssignment)) {
+                        // Mark the import as referenced so that we emit it in the final .js file.
+                        // exception: identifiers that appear in type queries, const enums, modules that contain only const enums
+                        symbolLinks.referenced = !isInTypeQuery(node) && !isConstEnumOrConstEnumOnlyModule(resolveImport(symbol));
+                    }
+                    else {
+                        var nodeLinks = getNodeLinks(importOrExportAssignment);
+                        Debug.assert(!nodeLinks.importOnRightSide);
+                        nodeLinks.importOnRightSide = symbol;
+                    }
+                }
+                
+                if (symbolLinks.referenced) {
+                    markLinkedImportsAsReferenced(<ImportDeclaration>symbol.declarations[0]);
+                }
             }
 
             checkCollisionWithCapturedSuperVariable(node, node);
@@ -8872,6 +8905,8 @@ module ts {
                     if (symbol && symbol.flags & SymbolFlags.Import) {
                         // Mark the import as referenced so that we emit it in the final .js file.
                         getSymbolLinks(symbol).referenced = true;
+                        // mark any import declarations that depend upon this import as referenced
+                        markLinkedImportsAsReferenced(<ImportDeclaration>symbol.declarations[0])
                     }
                 }
 
@@ -9097,19 +9132,24 @@ module ts {
             return false;
         }
 
+        function getLeftSideOfImportOrExportAssignment(nodeOnRightSide: EntityName): ImportDeclaration | ExportAssignment {
+            while (nodeOnRightSide.parent.kind === SyntaxKind.QualifiedName) {
+                nodeOnRightSide = <QualifiedName>nodeOnRightSide.parent;
+            }
+
+            if (nodeOnRightSide.parent.kind === SyntaxKind.ImportDeclaration) {
+                return (<ImportDeclaration>nodeOnRightSide.parent).moduleReference === nodeOnRightSide && <ImportDeclaration>nodeOnRightSide.parent;
+            }
+
+            if (nodeOnRightSide.parent.kind === SyntaxKind.ExportAssignment) {
+                return (<ExportAssignment>nodeOnRightSide.parent).exportName === nodeOnRightSide && <ExportAssignment>nodeOnRightSide.parent;
+            }
+
+            return undefined;
+        }
+
         function isInRightSideOfImportOrExportAssignment(node: EntityName) {
-            while (node.parent.kind === SyntaxKind.QualifiedName) {
-                node = <QualifiedName>node.parent;
-            }
-
-            if (node.parent.kind === SyntaxKind.ImportDeclaration) {
-                return (<ImportDeclaration>node.parent).moduleReference === node;
-            }
-            if (node.parent.kind === SyntaxKind.ExportAssignment) {
-                return (<ExportAssignment>node.parent).exportName === node;
-            }
-
-            return false;
+            return getLeftSideOfImportOrExportAssignment(node) !== undefined;
         }
 
         function isRightSideOfQualifiedNameOrPropertyAccess(node: Node) {
