@@ -1,8 +1,5 @@
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(4,1): error TS6053: File 'tests/cases/conformance/parser/ecmascript5/typescript.ts' not found.
-tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(193,40): error TS1150: 'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(867,29): error TS1015: Parameter cannot have question mark and initializer.
-tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1009,45): error TS1150: 'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.
-tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1024,47): error TS1150: 'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(13,22): error TS2304: Cannot find name 'Type'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(14,24): error TS2304: Cannot find name 'ASTFlags'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(17,38): error TS2304: Cannot find name 'CompilerDiagnostics'.
@@ -44,6 +41,7 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(151,57): error 
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(155,26): error TS2304: Cannot find name 'NodeType'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(184,19): error TS2304: Cannot find name 'NodeType'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(192,32): error TS2304: Cannot find name 'SymbolScope'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(193,40): error TS1150: 'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(196,19): error TS2304: Cannot find name 'NodeType'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(199,42): error TS2304: Cannot find name 'ControlFlowContext'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(219,33): error TS2304: Cannot find name 'NodeType'.
@@ -252,7 +250,9 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1004,44): error
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1004,67): error TS2304: Cannot find name 'FncFlags'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1005,57): error TS2304: Cannot find name 'FncFlags'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1007,47): error TS2304: Cannot find name 'Symbol'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1009,45): error TS1150: 'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1022,32): error TS2304: Cannot find name 'Symbol'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1024,47): error TS1150: 'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1032,36): error TS2304: Cannot find name 'ControlFlowContext'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1033,29): error TS2304: Cannot find name 'BasicBlock'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1034,28): error TS2304: Cannot find name 'BasicBlock'.

@@ -5555,6 +5555,21 @@ module ts {
         }
 
         function checkIndexedAccess(node: ElementAccessExpression): Type {
+            // Grammar checking
+            if (!node.argumentExpression) {
+                var sourceFile = getSourceFile(node);
+                if (node.parent.kind === SyntaxKind.NewExpression && (<NewExpression>node.parent).expression === node) {
+                    var start = skipTrivia(sourceFile.text, node.expression.end);
+                    var end = node.end;
+                    grammarErrorAtPos(sourceFile, start, end - start, Diagnostics.new_T_cannot_be_used_to_create_an_array_Use_new_Array_T_instead);
+                }
+                else {
+                    var start = node.end - "]".length;
+                    var end = node.end;
+                    grammarErrorAtPos(sourceFile, start, end - start, Diagnostics.Expression_expected);
+                }
+            }
+
             // Obtain base constraint such that we can bail out if the constraint is an unknown type
             var objectType = getApparentType(checkExpression(node.expression));
             var indexType = node.argumentExpression ? checkExpression(node.argumentExpression) : unknownType;
