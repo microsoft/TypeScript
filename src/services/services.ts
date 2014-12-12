@@ -5920,6 +5920,7 @@ module ts {
                     return TokenClass.StringLiteral;
                 case SyntaxKind.RegularExpressionLiteral:
                     return TokenClass.RegExpLiteral;
+                case SyntaxKind.ConflictMarkerTrivia:
                 case SyntaxKind.MultiLineCommentTrivia:
                 case SyntaxKind.SingleLineCommentTrivia:
                     return TokenClass.Comment;

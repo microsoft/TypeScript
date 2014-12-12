@@ -18,6 +18,7 @@ module ts {
         MultiLineCommentTrivia,
         NewLineTrivia,
         WhitespaceTrivia,
+        ConflictMarkerTrivia,
         // Literals
         NumericLiteral,
         StringLiteral,
@@ -269,7 +270,7 @@ module ts {
         FirstToken = Unknown,
         LastToken = TypeKeyword,
         FirstTriviaToken = SingleLineCommentTrivia,
-        LastTriviaToken = WhitespaceTrivia,
+        LastTriviaToken = ConflictMarkerTrivia,
         FirstLiteralToken = NumericLiteral,
         LastLiteralToken = NoSubstitutionTemplateLiteral,
         FirstTemplateToken = NoSubstitutionTemplateLiteral,
