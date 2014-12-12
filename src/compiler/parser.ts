@@ -801,7 +801,7 @@ module ts {
                         // Adjust the pos or end (or both) of the intersecting array accordingly.
                         adjustIntersectingElement(array, changeStart, changeRangeOldEnd, changeRangeNewEnd, delta);
                         for (var i = 0, n = array.length; i < n; i++) {
-                            forEachChild(array[i], visitNode, visitArray);
+                            visitNode(array[i]);
                         }
                     }
                     // else {
@@ -908,7 +908,7 @@ module ts {
                 array.end += delta;
 
                 for (var i = 0, n = array.length; i < n; i++) {
-                    forEachChild(array[i], visitNode, visitArray);
+                    visitNode(array[i]);
                 }
             }
         }

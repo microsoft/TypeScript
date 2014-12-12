@@ -55,7 +55,7 @@ module ts {
         Utils.assertInvariants(newTree, /*parent:*/ undefined);
 
         // Create a tree for the new text, in an incremental fashion.
-        var incrementalNewTree = updateLanguageServiceSourceFile(oldTree, newText, oldTree.version + ".", /*isOpen:*/ true, textChangeRange, /*useIncremental:*/ false);
+        var incrementalNewTree = updateLanguageServiceSourceFile(oldTree, newText, oldTree.version + ".", /*isOpen:*/ true, textChangeRange, /*useIncremental:*/ true);
         Utils.assertInvariants(incrementalNewTree, /*parent:*/ undefined);
 
         // We should get the same tree when doign a full or incremental parse.
@@ -177,7 +177,9 @@ module ts {
     }
 
     describe('Incremental',() => {
+        debugger;
         it('Inserting into method',() => {
+            debugger;
             var source = "class C {\r\n" +
                 "    public foo1() { }\r\n" +
                 "    public foo2() {\r\n" +
