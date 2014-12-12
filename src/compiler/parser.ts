@@ -534,7 +534,7 @@ module ts {
                                 return true;
                             }
                             else {
-                                if (child.pos > position && position < child.end) {
+                                if (child.pos < position && position < child.end) {
                                     // Position in somewhere within this child.  Search in it and 
                                     // stop searching in this array.
                                     forEachChild(child, visitNode, visitArray);
@@ -1616,7 +1616,7 @@ module ts {
 
             while (!isListTerminator(kind)) {
                 if (isListElement(kind, /* inErrorRecovery */ false)) {
-                    var element = <T>currentNode(kind) || parseElement();
+                    var element = parseListElement(kind, parseElement);
                     result.push(element);
 
                     // test elements only if we are not already in strict mode
@@ -1646,6 +1646,15 @@ module ts {
             return result;
         }
 
+        function parseListElement<T extends Node>(kind: ParsingContext, parseElement: () => T): T {
+            var node = currentNode(kind);
+            if (node) {
+                return <T>consumeNode(node);
+            }
+            
+            return parseElement();
+        }
+
         function currentNode(parsingContext: ParsingContext): Node {
             // If there is an outstanding parse error that we've encountered, but not attached to
             // some node, then we cannot get a node from the old source tree.  This is because we
@@ -1663,7 +1672,7 @@ module ts {
                 return undefined;
             }
 
-            var node = syntaxCursor.currentNode(scanner.getTextPos());
+            var node = syntaxCursor.currentNode(scanner.getStartPos());
 
             // Can't reuse a missing node.
             if (isMissingNode(node)) {
@@ -1686,7 +1695,8 @@ module ts {
             // differently depending on what mode it is in.
             //
             // This also applies to all our other context flags as well.
-            if (node.parserContextFlags !== contextFlags) {
+            var nodeContextFlags = node.parserContextFlags || 0;
+            if (nodeContextFlags !== contextFlags) {
                 return undefined;
             }
 
@@ -1696,13 +1706,11 @@ module ts {
                 return undefined;
             }
 
-            // It was valid.  Let teh source know we're consuming this node, and pass to the list
-            // parser.
-            return consumeNode(node);
+            return node;
         }
 
         function consumeNode(node: Node) {
-            // Move the scanner so it is after the node we just consumed
+            // Move the scanner so it is after the node we just consumed.
             scanner.setTextPos(node.end);
             nextToken();
             return node;
@@ -1944,7 +1952,7 @@ module ts {
             var commaStart = -1; // Meaning the previous token was not a comma
             while (true) {
                 if (isListElement(kind, /* inErrorRecovery */ false)) {
-                    result.push(<T>currentNode(kind) || parseElement());
+                    result.push(parseListElement(kind, parseElement));
                     commaStart = scanner.getTokenPos();
                     if (parseOptional(SyntaxKind.CommaToken)) {
                         continue;

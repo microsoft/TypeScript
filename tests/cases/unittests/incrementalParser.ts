@@ -192,7 +192,7 @@ module ts {
             var semicolonIndex = source.indexOf(";");
             var newTextAndChange = withInsert(oldText, semicolonIndex, " + 1");
 
-            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 0);
+            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 8);
         });
 
         it('Deleting from method',() => {
@@ -208,7 +208,7 @@ module ts {
             var oldText = ScriptSnapshot.fromString(source);
             var newTextAndChange = withDelete(oldText, index, "+ 1".length);
 
-            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 0);
+            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 8);
         });
 
         it('Regular expression 1',() => {
@@ -228,7 +228,7 @@ module ts {
             var oldText = ScriptSnapshot.fromString(source);
             var newTextAndChange = withInsert(oldText, semicolonIndex, "/");
 
-            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 0);
+            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 4);
         });
 
         it('Comment 1',() => {
@@ -266,7 +266,7 @@ module ts {
             var oldText = ScriptSnapshot.fromString(source);
             var newTextAndChange = withInsert(oldText, index, "*");
 
-            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 0);
+            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 4);
         });
 
         it('Parameter 1',() => {
@@ -281,7 +281,7 @@ module ts {
             var oldText = ScriptSnapshot.fromString(source);
             var newTextAndChange = withInsert(oldText, semicolonIndex, " + 1");
 
-            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 0);
+            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 8);
         });
 
         it('Type member 1',() => {
@@ -292,7 +292,7 @@ module ts {
             var oldText = ScriptSnapshot.fromString(source);
             var newTextAndChange = withInsert(oldText, index, "?");
 
-            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 0);
+            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 14);
         });
 
         it('Enum element 1',() => {
@@ -303,7 +303,7 @@ module ts {
             var oldText = ScriptSnapshot.fromString(source);
             var newTextAndChange = withChange(oldText, index, 2, "+");
 
-            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 0);
+            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 21);
         });
 
         it('Strict mode 1',() => {
@@ -600,7 +600,7 @@ module ts {
             var index = source.lastIndexOf(";");
             var newTextAndChange = withDelete(oldText, index, 1);
 
-            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 0);
+            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 4);
         });
 
         it('Edit after empty type parameter list',() => {
@@ -634,7 +634,7 @@ var o2 = { set Foo(val:number) { } };";
             var index = source.indexOf("set");
             var newTextAndChange = withInsert(oldText, index, "public ");
 
-            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 0);
+            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 6);
         });
 
         it('Insert parameter ahead of parameter',() => {
@@ -650,7 +650,7 @@ constructor(name) { }\
             var index = source.indexOf("100");
             var newTextAndChange = withInsert(oldText, index, "'1', ");
 
-            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 0);
+            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 5);
         });
 
         it('Insert declare modifier before module',() => {
@@ -663,7 +663,7 @@ module m3 { }\
             var index = 0;
             var newTextAndChange = withInsert(oldText, index, "declare ");
 
-            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 0);
+            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 3);
         });
 
         it('Insert function above arrow function with comment',() => {
@@ -719,7 +719,7 @@ module m3 { }\
             var oldText = ScriptSnapshot.fromString(source);
             var newTextAndChange = withInsert(oldText, 0, "");
 
-            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 0);
+            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 7);
         });
 
         it('Class to interface',() => {
@@ -782,7 +782,7 @@ module m3 { }\
             var oldText = ScriptSnapshot.fromString(source);
             var newTextAndChange = withChange(oldText, 0, "class".length, "interface");
 
-            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 0);
+            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 18);
         });
 
         it('Moving index signatures from interface to class',() => {
@@ -791,7 +791,7 @@ module m3 { }\
             var oldText = ScriptSnapshot.fromString(source);
             var newTextAndChange = withChange(oldText, 0, "interface".length, "class");
 
-            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 0);
+            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 18);
         });
 
         it('Moving accessors from class to object literal',() => {
@@ -809,7 +809,7 @@ module m3 { }\
             var oldText = ScriptSnapshot.fromString(source);
             var newTextAndChange = withChange(oldText, 0, "var v =".length, "class C");
 
-            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 0);
+            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 16);
         });
 
         // Simulated typing tests.
