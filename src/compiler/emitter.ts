@@ -3022,8 +3022,17 @@ module ts {
                                 emitBindingElement(element, createPropertyAccess(value, propName));
                             }
                             else if (element.kind !== SyntaxKind.OmittedExpression) {
-                                // Rewrite element to a declaration that accesses array element at index i
-                                emitBindingElement(element, createElementAccess(value, createNumericLiteral(i)));
+                                if (!element.dotDotDotToken) {
+                                    // Rewrite element to a declaration that accesses array element at index i
+                                    emitBindingElement(element, createElementAccess(value, createNumericLiteral(i)));
+                                }
+                                else {
+                                    if (i === elements.length - 1) {
+                                        value = ensureIdentifier(value);
+                                        emitAssignment(<Identifier>element.name, value);
+                                        write(".slice(" + i + ")");
+                                    }
+                                }
                             }
                         }
                     }

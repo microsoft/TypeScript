@@ -1585,7 +1585,7 @@ module ts {
                 case ParsingContext.VariableDeclarations:
                     return isIdentifierOrPattern();
                 case ParsingContext.ArrayBindingElements:
-                    return token === SyntaxKind.CommaToken || isIdentifierOrPattern();
+                    return token === SyntaxKind.CommaToken || token === SyntaxKind.DotDotDotToken || isIdentifierOrPattern();
                 case ParsingContext.TypeParameters:
                     return isIdentifier();
                 case ParsingContext.ArgumentExpressions:
@@ -3886,6 +3886,7 @@ module ts {
                 }
             }
             else {
+                node.dotDotDotToken = parseOptionalToken(SyntaxKind.DotDotDotToken);
                 node.name = parseIdentifierOrPattern();
             }
             node.initializer = parseInitializer(/*inParameter*/ false);
@@ -5748,6 +5749,16 @@ module ts {
         }
 
         function checkBindingElement(node: BindingElement) {
+            if (node.dotDotDotToken) {
+                var elements = (<BindingPattern>node.parent).elements;
+                if (node !== elements[elements.length - 1]) {
+                    return grammarErrorOnNode(node, Diagnostics.A_rest_element_must_be_last_in_an_array_destructuring_pattern);
+                }
+                if (node.initializer) {
+                    // Error on equals token which immediate precedes the initializer
+                    return grammarErrorAtPos(node.initializer.pos - 1, 1, Diagnostics.A_rest_element_cannot_have_an_initializer);
+                }
+            }
             if (node.parserContextFlags & ParserContextFlags.StrictMode && isEvalOrArgumentsIdentifier(node.name)) {
                 // It is a SyntaxError if a VariableDeclaration or VariableDeclarationNoIn occurs within strict code 
                 // and its Identifier is eval or arguments 
