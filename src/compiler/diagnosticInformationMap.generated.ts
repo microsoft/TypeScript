@@ -431,5 +431,6 @@ module ts {
         You_cannot_rename_this_element: { code: 8000, category: DiagnosticCategory.Error, key: "You cannot rename this element." },
         yield_expressions_are_not_currently_supported: { code: 9000, category: DiagnosticCategory.Error, key: "'yield' expressions are not currently supported." },
         generators_are_not_currently_supported: { code: 9001, category: DiagnosticCategory.Error, key: "'generators' are not currently supported." },
+        Computed_property_names_are_not_currently_supported: { code: 9002, category: DiagnosticCategory.Error, key: "Computed property names are not currently supported." },
     };
 }

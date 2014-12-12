@@ -1723,5 +1723,9 @@
     "'generators' are not currently supported.": {
         "category": "Error",
         "code": 9001
+    },
+    "Computed property names are not currently supported.": {
+        "category": "Error",
+        "code": 9002
     }
 }
