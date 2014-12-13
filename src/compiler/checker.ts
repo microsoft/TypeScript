@@ -9347,11 +9347,18 @@ module ts {
         }
 
         function isUniqueLocalName(name: string, container: Node): boolean {
-            for (var node = container; isNodeDescendentOf(node, container); node = node.nextContainer) {
-                if (node.locals && hasProperty(node.locals, name) && node.locals[name].flags & (SymbolFlags.Value | SymbolFlags.ExportValue)) {
-                    return false;
+            if (container.locals && hasProperty(container.locals, name) && container.locals[name].flags & (SymbolFlags.Value | SymbolFlags.ExportValue)) {
+                return false;
+            }
+
+            if (container.childContainers) {
+                for (var i = 0, n = container.childContainers.length; i < n; i++) {
+                    if (!isUniqueLocalName(name, container.childContainers[i])) {
+                        return false;
+                    }
                 }
             }
+
             return true;
         }
 

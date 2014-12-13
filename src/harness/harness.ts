@@ -267,9 +267,9 @@ module Utils {
                         o[propertyName] = Utils.convertDiagnostics((<any>n)[propertyName]);
                         break;
 
-                    case "nextContainer":
-                        if (n.nextContainer) {
-                            o[propertyName] = { kind: n.nextContainer.kind, pos: n.nextContainer.pos, end: n.nextContainer.end };
+                    case "childContainers":
+                        if (n.childContainers) {
+                            o[propertyName] = n.childContainers.map(c => { kind: c.kind; pos: c.pos; end: c.end });
                         }
                         break;
 
