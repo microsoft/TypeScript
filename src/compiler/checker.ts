@@ -5360,17 +5360,13 @@ module ts {
         }
 
         function checkObjectLiteral(node: ObjectLiteralExpression, contextualMapper?: TypeMapper): Type {
+            // Grammar checking
+            checkGrammarObjectLiteralExpression(node);
+
             var members = node.symbol.members;
             var properties: SymbolTable = {};
             var contextualType = getContextualType(node);
             var typeFlags: TypeFlags;
-
-            // Grammar checking for computedPropertyName
-            forEach(node.properties, property => {
-                if (property.name.kind === SyntaxKind.ComputedPropertyName) {
-                    checkGrammarComputedPropertyName(<ComputedPropertyName>property.name);
-                }
-            });
 
             for (var id in members) {
                 if (hasProperty(members, id)) {
@@ -10144,6 +10140,77 @@ module ts {
             if (questionToken) {
                 return grammarErrorOnNode(questionToken, message);
             }
+        }
+
+        function checkGrammarObjectLiteralExpression(node: ObjectLiteralExpression) {
+            var seen: Map<SymbolFlags> = {};
+            var Property = 1;
+            var GetAccessor = 2;
+            var SetAccesor = 4;
+            var GetOrSetAccessor = GetAccessor | SetAccesor;
+            var inStrictMode = (node.parserContextFlags & ParserContextFlags.StrictMode) !== 0;
+
+            for (var i = 0, n = node.properties.length; i < n; i++) {
+                var prop = <Declaration>node.properties[i];
+                var name = prop.name;
+                if (prop.kind === SyntaxKind.OmittedExpression || name.kind === SyntaxKind.ComputedPropertyName) {
+                    continue;
+                }
+
+                // ECMA-262 11.1.5 Object Initialiser
+                // If previous is not undefined then throw a SyntaxError exception if any of the following conditions are true
+                // a.This production is contained in strict code and IsDataDescriptor(previous) is true and
+                // IsDataDescriptor(propId.descriptor) is true.
+                //    b.IsDataDescriptor(previous) is true and IsAccessorDescriptor(propId.descriptor) is true.
+                //    c.IsAccessorDescriptor(previous) is true and IsDataDescriptor(propId.descriptor) is true.
+                //    d.IsAccessorDescriptor(previous) is true and IsAccessorDescriptor(propId.descriptor) is true
+                // and either both previous and propId.descriptor have[[Get]] fields or both previous and propId.descriptor have[[Set]] fields
+                var currentKind: number;
+                if (prop.kind === SyntaxKind.PropertyAssignment ||
+                    prop.kind === SyntaxKind.ShorthandPropertyAssignment ||
+                    prop.kind === SyntaxKind.MethodDeclaration) {
+                    currentKind = Property;
+                }
+                else if (prop.kind === SyntaxKind.GetAccessor) {
+                    currentKind = GetAccessor;
+                }
+                else if (prop.kind === SyntaxKind.SetAccessor) {
+                    currentKind = SetAccesor;
+                }
+                else {
+                    Debug.fail("Unexpected syntax kind:" + prop.kind);
+                }
+
+                if (!hasProperty(seen, (<Identifier>name).text)) {
+                    seen[(<Identifier>name).text] = currentKind;
+                }
+                else {
+                    var existingKind = seen[(<Identifier>name).text];
+                    if (currentKind === Property && existingKind === Property) {
+                        if (inStrictMode) {
+                            grammarErrorOnNode(name, Diagnostics.An_object_literal_cannot_have_multiple_properties_with_the_same_name_in_strict_mode);
+                        }
+                    }
+                    else if ((currentKind & GetOrSetAccessor) && (existingKind & GetOrSetAccessor)) {
+                        if (existingKind !== GetOrSetAccessor && currentKind !== existingKind) {
+                            seen[(<Identifier>name).text] = currentKind | existingKind;
+                        }
+                        else {
+                            return grammarErrorOnNode(name, Diagnostics.An_object_literal_cannot_have_multiple_get_Slashset_accessors_with_the_same_name);
+                        }
+                    }
+                    else {
+                        return grammarErrorOnNode(name, Diagnostics.An_object_literal_cannot_have_property_and_accessor_with_the_same_name);
+                    }
+                }
+            }
+
+            // Grammar checking for computedPropertName
+            forEach(node.properties, prop => {
+                if (prop.name.kind === SyntaxKind.ComputedPropertyName) {
+                    checkGrammarComputedPropertyName(<ComputedPropertyName>prop.name);
+                }
+            });
         }
 
         function hasParseDiagnostics(sourceFile: SourceFile): boolean {
