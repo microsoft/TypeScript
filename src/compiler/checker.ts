@@ -5378,6 +5378,9 @@ module ts {
                     if (member.flags & SymbolFlags.Property || isObjectLiteralMethod(member.declarations[0])) {
                         var memberDecl = <ObjectLiteralElement>member.declarations[0];
                         if (memberDecl.kind === SyntaxKind.PropertyAssignment) {
+                            // Grammar checking
+                            checkGrammarForInvalidQuestionMark(memberDecl,(<PropertyAssignment>memberDecl).questionToken, Diagnostics.An_object_member_cannot_be_declared_optional);
+
                             var type = checkExpression((<PropertyAssignment>memberDecl).initializer, contextualMapper);
                         }
                         else if (memberDecl.kind === SyntaxKind.MethodDeclaration) {
@@ -10134,6 +10137,12 @@ module ts {
                 // It is a SyntaxError to use within strict mode code the identifiers eval or arguments as the
                 // Identifier of a FunctionLikeDeclaration or FunctionExpression or as a formal parameter name(13.1)
                 return reportGrammarErrorOfInvalidUseInStrictMode(<Identifier>name);
+            }
+        }
+
+        function checkGrammarForInvalidQuestionMark(node: Declaration, questionToken: Node, message: DiagnosticMessage): boolean {
+            if (questionToken) {
+                return grammarErrorOnNode(questionToken, message);
             }
         }
 

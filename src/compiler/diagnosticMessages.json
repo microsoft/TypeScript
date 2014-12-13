@@ -551,7 +551,8 @@
     },
     "An object member cannot be declared optional.": {
         "category": "Error",
-        "code": 1162
+        "code": 1162,
+        "isEarly":  true
     },
     "'yield' expression must be contained_within a generator declaration."
     : {
