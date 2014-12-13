@@ -4651,7 +4651,7 @@ module ts {
                 case SyntaxKind.GetAccessor:                    return checkGetAccessor(<MethodDeclaration>node);
                 //case SyntaxKind.HeritageClause:                 return checkHeritageClause(<HeritageClause>node);
                 //case SyntaxKind.InterfaceDeclaration:           return checkInterfaceDeclaration(<InterfaceDeclaration>node);
-                case SyntaxKind.LabeledStatement:               return checkLabeledStatement(<LabeledStatement>node);
+                //case SyntaxKind.LabeledStatement:               return checkLabeledStatement(<LabeledStatement>node);
                 case SyntaxKind.PropertyAssignment:             return checkPropertyAssignment(<PropertyAssignment>node);
                 case SyntaxKind.MethodDeclaration:
                 case SyntaxKind.MethodSignature:

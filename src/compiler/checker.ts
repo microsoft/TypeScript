@@ -8131,6 +8131,21 @@ module ts {
         }
 
         function checkLabeledStatement(node: LabeledStatement) {
+            // ensure that label is unique
+            // Grammar checking
+            var current = node.parent;
+            while (current) {
+                if (isAnyFunction(current)) {
+                    break;
+                }
+                if (current.kind === SyntaxKind.LabeledStatement && (<LabeledStatement>current).label.text === node.label.text) {
+                    var sourceFile = getSourceFileOfNode(node);
+                    grammarErrorOnNode(node.label, Diagnostics.Duplicate_label_0, getTextOfNodeFromSourceText(sourceFile.text, node.label));
+                    break;
+                }
+                current = current.parent;
+            }
+
             checkSourceElement(node.statement);
         }
 
