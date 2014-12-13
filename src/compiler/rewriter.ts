@@ -862,11 +862,11 @@ module ts {
                 var elseLabel = builder.defineLabel();
             }
             builder.emit(OpCode.BrFalse, elseLabel || resumeLabel, visitExpression(node.expression));
-            rewriteStatement(node.thenStatement);
+            rewriteBlockOrStatement(node.thenStatement);
             if (node.elseStatement) {
                 builder.emit(OpCode.Break, resumeLabel);
                 builder.markLabel(elseLabel);
-                rewriteStatement(node.elseStatement);
+                rewriteBlockOrStatement(node.elseStatement);
             }
             builder.markLabel(resumeLabel);
         }
@@ -876,7 +876,7 @@ module ts {
             var conditionLabel = builder.defineLabel();
             var endLabel = builder.beginContinueBlock(conditionLabel, getTarget(node));
             builder.markLabel(bodyLabel);
-            rewriteStatement(node.statement);
+            rewriteBlockOrStatement(node.statement);
             builder.markLabel(conditionLabel);
             builder.emit(OpCode.BrTrue, bodyLabel, visitExpression(node.expression));
             builder.endContinueBlock();
@@ -888,7 +888,7 @@ module ts {
             var endLabel = builder.beginContinueBlock(conditionLabel, getTarget(node));
             builder.markLabel(conditionLabel);
             builder.emit(OpCode.BrFalse, endLabel, visitExpression(node.expression));
-            rewriteStatement(node.statement);
+            rewriteBlockOrStatement(node.statement);
             builder.emit(OpCode.Break, conditionLabel);
             builder.endContinueBlock();
         }
@@ -906,7 +906,7 @@ module ts {
             if (node.condition) {
                 builder.emit(OpCode.BrFalse, endLabel, visitExpression(node.condition));
             }
-            rewriteStatement(node.statement);
+            rewriteBlockOrStatement(node.statement);
             builder.markLabel(iteratorLabel);
             if (node.iterator) {
                 builder.emit(OpCode.Statement, factory.createExpressionStatement(visitExpression(node.iterator)));
@@ -939,7 +939,7 @@ module ts {
             var assignVariableExpression = factory.createBinaryExpression(SyntaxKind.EqualsToken, head.variable, readKeyExpression);
             builder.writeLocation(head.variable);
             builder.emit(OpCode.Statement, factory.createExpressionStatement(assignVariableExpression, head.variable));
-            rewriteStatement(node.statement);
+            rewriteBlockOrStatement(node.statement);
             builder.markLabel(iteratorLabel);
             var incrementTempExpression = factory.createPostfixUnaryExpression(SyntaxKind.PlusPlusToken, tempLocal);
             builder.writeLocation(head.variable);
@@ -1052,7 +1052,7 @@ module ts {
             if (statementSupportsBreak) {
                 builder.beginBreakBlock(getTarget(node));
             }
-            rewriteStatement(node.statement);
+            rewriteBlockOrStatement(node.statement);
             if (statementSupportsBreak) {
                 builder.endBreakBlock();
             }
@@ -1098,18 +1098,6 @@ module ts {
             Debug.assert(label > 0, "Expected continue statement to point to a label.");
             builder.writeLocation(node);
             builder.emit(OpCode.Break, label);
-        }
-
-        function isAwaitOrYield(node: Node): boolean {
-            return node && (node.kind === SyntaxKind.AwaitExpression || node.kind === SyntaxKind.YieldExpression);
-        }
-
-        function hasAwaitOrYield(node: Node): boolean {
-            if (!node) {
-                return false;
-            }
-
-            return (resolver.getNodeCheckFlags(node) & NodeCheckFlags.HasAwaitOrYield) !== 0;
         }
 
         function isLabeledOrIterationOrSwitchStatement(node: Node): boolean {
@@ -1218,6 +1206,20 @@ module ts {
             for (var i = 0; i < statements.length; i++) {
                 var statement = statements[i];
                 rewriteStatement(statement);
+            }
+        }
+
+        function rewriteBlockOrStatement(node: Statement): void {
+            if (!node) {
+                return;
+            }
+
+            switch (node.kind) {
+                case SyntaxKind.Block:
+                    return rewriteBlock(<Block>node);
+
+                default:
+                    return rewriteStatement(node);
             }
         }
 

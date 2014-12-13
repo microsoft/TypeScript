@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 tests/cases/conformance/es6/templates/TemplateExpression1.ts(1,19): error TS1005: '}' expected.
 tests/cases/conformance/es6/templates/TemplateExpression1.ts(1,17): error TS2304: Cannot find name 'a'.
 
@@ -8,15 +7,4 @@ tests/cases/conformance/es6/templates/TemplateExpression1.ts(1,17): error TS2304
                       
 !!! error TS1005: '}' expected.
                     ~
-=======
-tests/cases/conformance/es6/templates/TemplateExpression1.ts(1,19): error TS1158: Invalid template literal; expected '}'
-tests/cases/conformance/es6/templates/TemplateExpression1.ts(1,17): error TS2304: Cannot find name 'a'.
-
-
-==== tests/cases/conformance/es6/templates/TemplateExpression1.ts (2 errors) ====
-    var v = `foo ${ a 
-                      
-!!! error TS1158: Invalid template literal; expected '}'
-                    ~
->>>>>>> prototypeAsync
 !!! error TS2304: Cannot find name 'a'.

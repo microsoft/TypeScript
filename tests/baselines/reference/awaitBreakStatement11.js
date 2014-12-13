@@ -22,15 +22,15 @@ function f() {
                 case 0:
                     _a = a;
                     switch (_a) {
-                        case 0: return ["break", 1];
+                        case 0:
+                            return ["break", 1];
                     }
                     return ["break", 3];
                 case 1:
                     return ["yield", p];
                 case 2:
                     return ["break", 3];
-                case 3:
-                    return ["return"];
+                case 3: return ["return"];
             }
         })));
     });

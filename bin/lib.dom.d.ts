@@ -647,6 +647,7 @@ interface Map<K, V> {
 }
 declare var Map: {
     new <K, V>(): Map<K, V>;
+    prototype: Map<any, any>;
 }
 
 interface WeakMap<K, V> {
@@ -658,6 +659,7 @@ interface WeakMap<K, V> {
 }
 declare var WeakMap: {
     new <K, V>(): WeakMap<K, V>;
+    prototype: WeakMap<any, any>;
 }
 
 interface Set<T> {
@@ -670,10 +672,13 @@ interface Set<T> {
 }
 declare var Set: {
     new <T>(): Set<T>;
+    prototype: Set<any>;
 }
+/////////////////////////////
+/// ECMAScript Internationalization API 
+/////////////////////////////
 
 declare module Intl {
-
     interface CollatorOptions {
         usage?: string;
         localeMatcher?: string;

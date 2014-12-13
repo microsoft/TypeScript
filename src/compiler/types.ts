@@ -1,6 +1,9 @@
 /// <reference path="core.ts"/>
 
 module ts {
+    export interface Map<T> {
+        [index: string]: T;
+    }
 
     export interface TextRange {
         pos: number;
@@ -15,6 +18,7 @@ module ts {
         MultiLineCommentTrivia,
         NewLineTrivia,
         WhitespaceTrivia,
+        ConflictMarkerTrivia,
         // Literals
         NumericLiteral,
         StringLiteral,
@@ -269,7 +273,7 @@ module ts {
         FirstToken = Unknown,
         LastToken = AwaitKeyword,
         FirstTriviaToken = SingleLineCommentTrivia,
-        LastTriviaToken = WhitespaceTrivia,
+        LastTriviaToken = ConflictMarkerTrivia,
         FirstLiteralToken = NumericLiteral,
         LastLiteralToken = NoSubstitutionTemplateLiteral,
         FirstTemplateToken = NoSubstitutionTemplateLiteral,
@@ -317,17 +321,26 @@ module ts {
 
         // If the parser encountered an error when parsing the code that created this node.  Note
         // the parser only sets this directly on the node it creates right after encountering the
-        // error.  We then propagate that flag upwards to parent nodes during incremental parsing.
-        ContainsError = 1 << 4,
-
-        // Used during incremental parsing to determine if we need to visit this node to see if
-        // any of its children had an error.  Once we compute that once, we can set this bit on the
-        // node to know that we never have to do it again.  From that point on, we can just check
-        // the node directly for 'ContainsError'.
-        HasPropagatedChildContainsErrorFlag = 1 << 5,
+        // error.  
+        ThisNodeHasError = 1 << 4,
 
         // If this node was parsed in the 'await' context created when parsing an async function.
-        Await = 1 << 6
+        Await = 1 << 5,
+
+        // Context flags set directly by the parser.
+        ParserGeneratedFlags = StrictMode | DisallowIn | Yield | GeneratorParameter | ThisNodeHasError | Await,
+
+        // Context flags computed by aggregating child flags upwards.
+
+        // Used during incremental parsing to determine if this node or any of its children had an 
+        // error.  Computed only once and then cached.
+        ThisNodeOrAnySubNodesHasError = 1 << 6,
+
+        // Used to know if we've computed whether any children of this node are or contain an 'await' or 'yield' expression.
+        ThisNodeOrAnySubNodesHasAwaitOrYield  = 1 << 7,
+
+        // Used to know if we've computed data from children and cached it in this node.
+        HasAggregatedChildData = 1 << 8,
     }
 
     export interface Node extends TextRange {
@@ -574,7 +587,7 @@ module ts {
         operand: LeftHandSideExpression;
         operator: SyntaxKind;
     }
-    
+
     export interface PostfixExpression extends UnaryExpression {
         _postfixExpressionBrand: any;
     }
@@ -660,7 +673,7 @@ module ts {
     export interface ArrayLiteralExpression extends PrimaryExpression {
         elements: NodeArray<Expression>;
     }
-
+    
     // An ObjectLiteralExpression is the declaration node for an anonymous symbol.
     export interface ObjectLiteralExpression extends PrimaryExpression, Declaration {
         properties: NodeArray<ObjectLiteralElement>;
@@ -1205,9 +1218,9 @@ module ts {
         Module    = ValueModule | NamespaceModule,
         Accessor  = GetAccessor | SetAccessor,
 
-        // Variables can be redeclared, but can not redeclare a block-scoped declaration with the 
+        // Variables can be redeclared, but can not redeclare a block-scoped declaration with the
         // same name, or any other value that is not a variable, e.g. ValueModule or Class
-        FunctionScopedVariableExcludes = Value & ~FunctionScopedVariable,   
+        FunctionScopedVariableExcludes = Value & ~FunctionScopedVariable,
 
         // Block-scoped declarations are not allowed to be re-declared
         // they can not merge with anything in the value space
@@ -1290,7 +1303,6 @@ module ts {
 
         EmitAwaiter        = 0x00000100,  // Emit __awaiter
         EmitGenerator      = 0x00000200,  // Emit __generator
-        HasAwaitOrYield    = 0x00000400,  // This node has an 'await' or 'yield' in its descendants.
     }
 
     export interface NodeLinks {
@@ -1483,6 +1495,7 @@ module ts {
     }
 
     export interface CompilerOptions {
+        allowNonTsExtensions?: boolean;
         charset?: string;
         codepage?: number;
         declaration?: boolean;
@@ -1501,21 +1514,21 @@ module ts {
         noResolve?: boolean;
         out?: string;
         outDir?: string;
+        preserveConstEnums?: boolean;
         removeComments?: boolean;
         sourceMap?: boolean;
         sourceRoot?: string;
+        suppressImplicitAnyIndexErrors?: boolean;
         target?: ScriptTarget;
         version?: boolean;
         watch?: boolean;
-        preserveConstEnums?: boolean;
-        allowNonTsExtensions?: boolean;
         [option: string]: string | number | boolean;
     }
 
     export const enum ModuleKind {
-        None,
-        CommonJS,
-        AMD,
+        None = 0,
+        CommonJS = 1,
+        AMD = 2,
     }
 
     export interface LineAndCharacter {
@@ -1528,9 +1541,9 @@ module ts {
 
 
     export const enum ScriptTarget {
-        ES3,
-        ES5,
-        ES6,
+        ES3 = 0,
+        ES5 = 1,
+        ES6 = 2,
         Latest = ES6,
     }
 
@@ -1545,7 +1558,7 @@ module ts {
         type: string | Map<number>;         // "string", "number", "boolean", or an object literal mapping named values to actual values
         shortName?: string;                 // A short mnemonic for convenience - for instance, 'h' can be used in place of 'help'.
         description?: DiagnosticMessage;    // The message describing what the command line switch does
-        paramName?: DiagnosticMessage;      // The name to be used for a non-boolean option's parameter.
+        paramType?: DiagnosticMessage;      // The name to be used for a non-boolean option's parameter.
         error?: DiagnosticMessage;          // The error given when the argument does not fit a customized 'type'.
     }
 

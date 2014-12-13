@@ -4,57 +4,12 @@
 /// <reference path="parser.ts"/>
 /// <reference path="binder.ts"/>
 /// <reference path="emitter.ts"/>
+/// <reference path="utilities.ts"/>
 
 module ts {
     var nextSymbolId = 1;
     var nextNodeId = 1;
-    var nextMergeId = 1;
-
-    export function getDeclarationOfKind(symbol: Symbol, kind: SyntaxKind): Declaration {
-        var declarations = symbol.declarations;
-        for (var i = 0; i < declarations.length; i++) {
-            var declaration = declarations[i];
-            if (declaration.kind === kind) {
-                return declaration;
-            }
-        }
-
-        return undefined;
-    }
-
-    export interface StringSymbolWriter extends SymbolWriter {
-        string(): string;
-    }
-
-    // Pool writers to avoid needing to allocate them for every symbol we write.
-    var stringWriters: StringSymbolWriter[] = [];
-    export function getSingleLineStringWriter(): StringSymbolWriter {
-        if (stringWriters.length == 0) {
-            var str = "";
-
-            var writeText: (text: string) => void = text => str += text;
-            return {
-                string: () => str,
-                writeKeyword: writeText,
-                writeOperator: writeText,
-                writePunctuation: writeText,
-                writeSpace: writeText,
-                writeStringLiteral: writeText,
-                writeParameter: writeText,
-                writeSymbol: writeText,
-
-                // Completely ignore indentation for string writers.  And map newlines to
-                // a single space.
-                writeLine: () => str += " ",
-                increaseIndent: () => { },
-                decreaseIndent: () => { },
-                clear: () => str = "",
-                trackSymbol: () => { }
-            };
-        }
-
-        return stringWriters.pop();
-    }
+    var nextMergeId = 1;    
 
     /// fullTypeCheck denotes if this instance of the typechecker will be used to get semantic diagnostics.
     /// If fullTypeCheck === true,  then the typechecker should do every possible check to produce all errors
@@ -1019,11 +974,6 @@ module ts {
                 errorSymbolName: getTextOfNode(firstIdentifier),
                 errorNode: firstIdentifier
             };
-        }
-
-        function releaseStringWriter(writer: StringSymbolWriter) {
-            writer.clear()
-            stringWriters.push(writer);
         }
 
         function writeKeyword(writer: SymbolWriter, kind: SyntaxKind) {
@@ -5410,7 +5360,6 @@ module ts {
                         prop.type = type;
                         prop.target = member;
                         member = prop;
-                        checkAwait(memberDecl);
                     }
                     else {
                         // TypeScript 1.0 spec (April 2014)
@@ -5623,7 +5572,7 @@ module ts {
                 }
 
                 // Fall back to any.
-                if (compilerOptions.noImplicitAny && objectType !== anyType) {
+                if (compilerOptions.noImplicitAny && !compilerOptions.suppressImplicitAnyIndexErrors && objectType !== anyType) {
                     error(node, Diagnostics.Index_signature_of_object_type_implicitly_has_an_any_type);
                 }
 
@@ -6915,7 +6864,6 @@ module ts {
             // in tagged templates.
             forEach((<TemplateExpression>node).templateSpans, templateSpan => {
                 checkExpression(templateSpan.expression);
-                checkAwait(templateSpan);
             });
 
             return stringType;
@@ -6961,7 +6909,6 @@ module ts {
 
         function checkExpression(node: Expression, contextualMapper?: TypeMapper): Type {
             var type = checkExpressionOrQualifiedName(node, contextualMapper);
-            checkAwait(node);
             return type;
         }
 
@@ -7821,7 +7768,6 @@ module ts {
             if (isFunctionBlock(node) || node.kind === SyntaxKind.ModuleBlock) {
                 checkFunctionExpressionBodies(node);
             }
-            checkAwait(node);
         }
 
         function checkCollisionWithArgumentsInGeneratedCode(node: SignatureDeclaration) {
@@ -8108,37 +8054,30 @@ module ts {
                 checkCollisionWithCapturedThisVariable(node, <Identifier>node.name);
                 checkCollisionWithRequireExportsInGeneratedCode(node, <Identifier>node.name);
             }
-
-            checkAwait(node);
         }
 
         function checkVariableStatement(node: VariableStatement) {
             forEach(node.declarations, checkSourceElement);
-            checkAwait(node);
         }
 
         function checkExpressionStatement(node: ExpressionStatement) {
             checkExpression(node.expression);
-            checkAwait(node);
         }
 
         function checkIfStatement(node: IfStatement) {
             checkExpression(node.expression);
             checkSourceElement(node.thenStatement);
             checkSourceElement(node.elseStatement);
-            checkAwait(node);
         }
 
         function checkDoStatement(node: DoStatement) {
             checkSourceElement(node.statement);
             checkExpression(node.expression);
-            checkAwait(node);
         }
 
         function checkWhileStatement(node: WhileStatement) {
             checkExpression(node.expression);
             checkSourceElement(node.statement);
-            checkAwait(node);
         }
 
         function checkForStatement(node: ForStatement) {
@@ -8147,7 +8086,6 @@ module ts {
             if (node.condition) checkExpression(node.condition);
             if (node.iterator) checkExpression(node.iterator);
             checkSourceElement(node.statement);
-            checkAwait(node);
         }
 
         function checkForInStatement(node: ForInStatement) {
@@ -8190,7 +8128,6 @@ module ts {
             }
 
             checkSourceElement(node.statement);
-            checkAwait(node);
         }
 
         function checkBreakOrContinueStatement(node: BreakOrContinueStatement) {
@@ -8226,7 +8163,6 @@ module ts {
                     }
                 }
             }
-            checkAwait(node);
         }
 
         function checkWithStatement(node: WithStatement) {
@@ -8249,26 +8185,22 @@ module ts {
                 }
                 forEach(clause.statements, checkSourceElement);
             });
-            checkAwait(node);
         }
 
         function checkLabeledStatement(node: LabeledStatement) {
             checkSourceElement(node.statement);
-            checkAwait(node);
         }
 
         function checkThrowStatement(node: ThrowStatement) {
             if (node.expression) {
-            checkExpression(node.expression);
-            checkAwait(node);
-        }
+                checkExpression(node.expression);
+            }
         }
 
         function checkTryStatement(node: TryStatement) {
             checkBlock(node.tryBlock);
             if (node.catchClause) checkBlock(node.catchClause.block);
             if (node.finallyBlock) checkBlock(node.finallyBlock);
-            checkAwait(node);
         }
 
         function checkIndexConstraints(type: Type) { 
@@ -9172,22 +9104,6 @@ module ts {
                 }
                 links.flags |= NodeCheckFlags.TypeChecked;
             }
-        }
-
-        function checkAwait(node: Node): void {            
-            if (!isAnyFunction(node) && (isAwaitOrYield(node) || forEachChild(node, hasAwaitOrYield))) {
-                getNodeLinks(node).flags |= NodeCheckFlags.HasAwaitOrYield;
-            }
-        }
-
-        function isAwaitOrYield(node: Node) {
-            return (node.kind === SyntaxKind.AwaitExpression)
-                || (node.kind === SyntaxKind.YieldExpression);
-        }
-
-        function hasAwaitOrYield(node: Node) {
-            return isAwaitOrYield(node)
-                || (getNodeLinks(node).flags & NodeCheckFlags.HasAwaitOrYield)
         }
 
         function getSortedDiagnostics(): Diagnostic[]{

@@ -91,7 +91,7 @@ module Playback {
         return run;
     }
 
-    export interface PlaybackSystem extends System, PlaybackControl { }
+    export interface PlaybackSystem extends ts.System, PlaybackControl { }
 
     function createEmptyLog(): IOLog {
         return {
@@ -221,7 +221,7 @@ module Playback {
         //console.log("Swallowed write operation during replay: " + name);
     }
 
-    export function wrapSystem(underlying: System): PlaybackSystem {
+    export function wrapSystem(underlying: ts.System): PlaybackSystem {
         var wrapper: PlaybackSystem = <any>{};
         initWrapper(wrapper, underlying);
 

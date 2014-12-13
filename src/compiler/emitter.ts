@@ -139,6 +139,7 @@ module ts {
     }
 
     function getLineOfLocalPosition(currentSourceFile: SourceFile, pos: number) {
+        if (pos < 0) return -1;
         return currentSourceFile.getLineAndCharacterFromPosition(pos).line;
     }
 
@@ -2725,7 +2726,7 @@ module ts {
                 emitToken(SyntaxKind.CloseBraceToken, node.clauses.end);
             }
 
-            function isOnSameLine(node1: Node, node2: Node) {
+            function isOnSameLine(node1: Node, node2: Node) {                
                 return getLineOfLocalPosition(currentSourceFile, skipTrivia(currentSourceFile.text, node1.pos)) ===
                 getLineOfLocalPosition(currentSourceFile, skipTrivia(currentSourceFile.text, node2.pos));
             }
@@ -2848,9 +2849,8 @@ module ts {
                 function createVoidZero(): Expression {
                     var zero = <LiteralExpression>createNode(SyntaxKind.NumericLiteral);
                     zero.text = "0";
-                    var result = <PrefixUnaryExpression>createNode(SyntaxKind.PrefixUnaryExpression);
-                    result.operator = SyntaxKind.VoidKeyword;
-                    result.operand = zero;
+                    var result = <VoidExpression>createNode(SyntaxKind.VoidExpression);
+                    result.expression = zero;
                     return result;
                 }
 
