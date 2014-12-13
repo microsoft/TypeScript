@@ -7009,6 +7009,19 @@ module ts {
             return type;
         }
 
+        function checkNumericLiteral(node: LiteralExpression): Type {
+            // Grammar checking
+            if (node.flags & NodeFlags.OctalLiteral) {
+                if (node.parserContextFlags & ParserContextFlags.StrictMode) {
+                    grammarErrorOnNode(node, Diagnostics.Octal_literals_are_not_allowed_in_strict_mode);
+                }
+                else if (compilerOptions.target >= ScriptTarget.ES5) {
+                    grammarErrorOnNode(node, Diagnostics.Octal_literals_are_not_available_when_targeting_ECMAScript_5_and_higher);
+                }
+            }
+            return numberType;
+        }
+
         function checkExpressionWorker(node: Expression, contextualMapper: TypeMapper): Type {
             switch (node.kind) {
                 case SyntaxKind.Identifier:
@@ -7023,7 +7036,7 @@ module ts {
                 case SyntaxKind.FalseKeyword:
                     return booleanType;
                 case SyntaxKind.NumericLiteral:
-                    return numberType;
+                    return checkNumericLiteral(<LiteralExpression>node);
                 case SyntaxKind.TemplateExpression:
                     return checkTemplateExpression(<TemplateExpression>node);
                 case SyntaxKind.StringLiteral:
