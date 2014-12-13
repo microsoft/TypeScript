@@ -71,6 +71,7 @@ module ts {
         var lastContainer: Node;
         var symbolCount = 0;
         var Symbol = objectAllocator.getSymbolConstructor();
+        var redeclaration = false;
 
         if (!file.locals) {
             file.locals = {};
@@ -233,8 +234,9 @@ module ts {
             parent = node;
             if (symbolKind & SymbolFlags.IsContainer) {
                 container = node;
-                // If container is not on container list, add it to the list
-                if (lastContainer !== container && !container.nextContainer) {
+                // Add container to container list unless this is a redeclaration
+                if (!redeclaration) {
+                    container.nextContainer = undefined;
                     if (lastContainer) {
                         lastContainer.nextContainer = container;
                     }
@@ -294,11 +296,14 @@ module ts {
 
         function bindConstructorDeclaration(node: ConstructorDeclaration) {
             bindDeclaration(node, SymbolFlags.Constructor, 0, /*isBlockScopeContainer*/ true);
+            var saveRedeclaration = redeclaration;
+            redeclaration = true;
             forEach(node.parameters, p => {
                 if (p.flags & (NodeFlags.Public | NodeFlags.Private | NodeFlags.Protected)) {
                     bindDeclaration(p, SymbolFlags.Property, SymbolFlags.PropertyExcludes, /*isBlockScopeContainer*/ false);
                 }
             });
+            redeclaration = saveRedeclaration;
         }
 
         function bindModuleDeclaration(node: ModuleDeclaration) {
