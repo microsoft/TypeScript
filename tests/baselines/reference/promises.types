@@ -1,27 +1,27 @@
 === tests/cases/compiler/promises.ts ===
-interface Promise_<T> {
->Promise_ : Promise_<T>
+interface Promise<T> {
+>Promise : Promise<T>
 >T : T
 
-    then<U>(success?: (value: T) => U): Promise_<U>;
->then : { <U>(success?: (value: T) => U): Promise_<U>; <U>(success?: (value: T) => Promise_<U>): Promise_<U>; }
+    then<U>(success?: (value: T) => U): Promise<U>;
+>then : { <U>(success?: (value: T) => U): Promise<U>; <U>(success?: (value: T) => Promise<U>): Promise<U>; }
 >U : U
 >success : (value: T) => U
 >value : T
 >T : T
 >U : U
->Promise_ : Promise_<T>
+>Promise : Promise<T>
 >U : U
 
-    then<U>(success?: (value: T) => Promise_<U>): Promise_<U>;
->then : { <U>(success?: (value: T) => U): Promise_<U>; <U>(success?: (value: T) => Promise_<U>): Promise_<U>; }
+    then<U>(success?: (value: T) => Promise<U>): Promise<U>;
+>then : { <U>(success?: (value: T) => U): Promise<U>; <U>(success?: (value: T) => Promise<U>): Promise<U>; }
 >U : U
->success : (value: T) => Promise_<U>
+>success : (value: T) => Promise<U>
 >value : T
 >T : T
->Promise_ : Promise_<T>
+>Promise : Promise<T>
 >U : U
->Promise_ : Promise_<T>
+>Promise : Promise<T>
 >U : U
 
     value: T;

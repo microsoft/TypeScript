@@ -1,6 +1,6 @@
 //// [bestCommonTypeReturnStatement.ts]
-interface IPromise_<T> {
-    then(successCallback: (promiseValue: T) => any, errorCallback?: (reason: any) => any): IPromise_<any>;
+interface IPromise<T> {
+    then(successCallback: (promiseValue: T) => any, errorCallback?: (reason: any) => any): IPromise<any>;
 }
 
 function f() {
@@ -9,8 +9,8 @@ function f() {
 }
 
 
-function b(): IPromise_<void> { return null; }
-function d(): IPromise_<any> { return null; }
+function b(): IPromise<void> { return null; }
+function d(): IPromise<any> { return null; }
 
 //// [bestCommonTypeReturnStatement.js]
 function f() {

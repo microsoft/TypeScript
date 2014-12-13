@@ -1,20 +1,20 @@
-tests/cases/compiler/promiseIdentityWithAny2.ts(10,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type 'IPromise1<string, number>', but here has type 'Promise1<string, boolean>'.
+tests/cases/compiler/promiseIdentityWithAny2.ts(10,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type 'IPromise<string, number>', but here has type 'Promise<string, boolean>'.
 tests/cases/compiler/promiseIdentityWithAny2.ts(22,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'y' must be of type 'IPromise2<string, number>', but here has type 'Promise2<string, boolean>'.
 
 
 ==== tests/cases/compiler/promiseIdentityWithAny2.ts (2 errors) ====
-    interface IPromise1<T, V> {
-        then<U, W>(callback: (x: T) => IPromise1<U, W>): IPromise1<U, W>;
+    interface IPromise<T, V> {
+        then<U, W>(callback: (x: T) => IPromise<U, W>): IPromise<U, W>;
     }
-    interface Promise1<T, V> {
-        then(callback: (x: T) => Promise1<any, any>): Promise1<any, any>;
+    interface Promise<T, V> {
+        then(callback: (x: T) => Promise<any, any>): Promise<any, any>;
     }
     
     // Error because type parameter arity doesn't match
-    var x: IPromise1<string, number>;
-    var x: Promise1<string, boolean>;
+    var x: IPromise<string, number>;
+    var x: Promise<string, boolean>;
         ~
-!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type 'IPromise1<string, number>', but here has type 'Promise1<string, boolean>'.
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type 'IPromise<string, number>', but here has type 'Promise<string, boolean>'.
     
     
     interface IPromise2<T, V> {

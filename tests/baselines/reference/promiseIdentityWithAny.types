@@ -1,45 +1,45 @@
 === tests/cases/compiler/promiseIdentityWithAny.ts ===
-interface IPromise1<T, V> {
->IPromise1 : IPromise1<T, V>
+interface IPromise<T, V> {
+>IPromise : IPromise<T, V>
 >T : T
 >V : V
 
-    then<U, W>(callback: (x: T) => IPromise1<U, W>): IPromise1<U, W>;
->then : <U, W>(callback: (x: T) => IPromise1<U, W>) => IPromise1<U, W>
+    then<U, W>(callback: (x: T) => IPromise<U, W>): IPromise<U, W>;
+>then : <U, W>(callback: (x: T) => IPromise<U, W>) => IPromise<U, W>
 >U : U
 >W : W
->callback : (x: T) => IPromise1<U, W>
+>callback : (x: T) => IPromise<U, W>
 >x : T
 >T : T
->IPromise1 : IPromise1<T, V>
+>IPromise : IPromise<T, V>
 >U : U
 >W : W
->IPromise1 : IPromise1<T, V>
+>IPromise : IPromise<T, V>
 >U : U
 >W : W
 }
-interface Promise1<T, V> {
->Promise1 : Promise1<T, V>
+interface Promise<T, V> {
+>Promise : Promise<T, V>
 >T : T
 >V : V
 
-    then<U, W>(callback: (x: T) => Promise1<any, any>): Promise1<any, any>;
->then : <U, W>(callback: (x: T) => Promise1<any, any>) => Promise1<any, any>
+    then<U, W>(callback: (x: T) => Promise<any, any>): Promise<any, any>;
+>then : <U, W>(callback: (x: T) => Promise<any, any>) => Promise<any, any>
 >U : U
 >W : W
->callback : (x: T) => Promise1<any, any>
+>callback : (x: T) => Promise<any, any>
 >x : T
 >T : T
->Promise1 : Promise1<T, V>
->Promise1 : Promise1<T, V>
+>Promise : Promise<T, V>
+>Promise : Promise<T, V>
 }
 
 // Should be ok because signature type parameters get erased to any
-var x: IPromise1<string, number>;
->x : IPromise1<string, number>
->IPromise1 : IPromise1<T, V>
+var x: IPromise<string, number>;
+>x : IPromise<string, number>
+>IPromise : IPromise<T, V>
 
-var x: Promise1<string, boolean>;
->x : IPromise1<string, number>
->Promise1 : Promise1<T, V>
+var x: Promise<string, boolean>;
+>x : IPromise<string, number>
+>Promise : Promise<T, V>
 
