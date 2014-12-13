@@ -346,7 +346,8 @@ module ts {
         localSymbol?: Symbol;         // Local symbol declared by node (initialized by binding only for exported nodes)
         modifiers?: ModifiersArray;   // Array of modifiers
         
-        childContainers?: Node[];
+        // Might just be a single node, or a list of nodes if there is more than one.
+        childContainers?: Node | Node[];
     }
 
     export interface NodeArray<T> extends Array<T>, TextRange {

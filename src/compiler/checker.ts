@@ -9352,9 +9352,15 @@ module ts {
             }
 
             if (container.childContainers) {
-                for (var i = 0, n = container.childContainers.length; i < n; i++) {
-                    if (!isUniqueLocalName(name, container.childContainers[i])) {
-                        return false;
+                if ((<Node[]>container.childContainers).length === undefined) {
+                    return isUniqueLocalName(name, <Node>container.childContainers);
+                }
+                else {
+                    var array = <Node[]>container.childContainers;
+                    for (var i = 0, n = array.length; i < n; i++) {
+                        if (!isUniqueLocalName(name, array[i])) {
+                            return false;
+                        }
                     }
                 }
             }

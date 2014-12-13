@@ -269,7 +269,9 @@ module Utils {
 
                     case "childContainers":
                         if (n.childContainers) {
-                            o[propertyName] = n.childContainers.map(c => { kind: c.kind; pos: c.pos; end: c.end });
+                            o[propertyName] = (<ts.Node[]>n.childContainers).length === undefined
+                                ? convertContainer(<ts.Node>n.childContainers)
+                                : (<ts.Node[]>n.childContainers).map(convertContainer);
                         }
                         break;
 
@@ -288,6 +290,10 @@ module Utils {
             });
 
             return o;
+        }
+
+        function convertContainer(n: ts.Node) {
+            return { kind: n.kind, pos: n.pos, end: n.end };
         }
     }
 }
