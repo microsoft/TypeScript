@@ -8,7 +8,7 @@ module ts {
     export function getFullWidth(node: Node) {
         return node.end - node.pos;
     }
-
+ 
     function hasFlag(val: number, flag: number): boolean {
         return (val & flag) !== 0;
     }
@@ -347,6 +347,8 @@ module ts {
             case SyntaxKind.YieldExpression:
                 return child((<YieldExpression>node).asteriskToken) ||
                     child((<YieldExpression>node).expression);
+            case SyntaxKind.AwaitExpression:
+                return child((<AwaitExpression>node).expression);
             case SyntaxKind.PostfixUnaryExpression:
                 return child((<PostfixUnaryExpression>node).operand);
             case SyntaxKind.BinaryExpression:
@@ -618,6 +620,7 @@ module ts {
             case SyntaxKind.VoidExpression:
             case SyntaxKind.DeleteExpression:
             case SyntaxKind.TypeOfExpression:
+            case SyntaxKind.AwaitExpression:
             case SyntaxKind.PrefixUnaryExpression:
             case SyntaxKind.PostfixUnaryExpression:
             case SyntaxKind.BinaryExpression:
@@ -787,6 +790,7 @@ module ts {
             case SyntaxKind.ReturnStatement:
             case SyntaxKind.SwitchStatement:
             case SyntaxKind.ThrowKeyword:
+            case SyntaxKind.ThrowStatement:
             case SyntaxKind.TryStatement:
             case SyntaxKind.VariableStatement:
             case SyntaxKind.WhileStatement:
@@ -925,7 +929,7 @@ module ts {
             case ParsingContext.TypeMembers:            return Diagnostics.Property_or_signature_expected;
             case ParsingContext.ClassMembers:           return Diagnostics.Unexpected_token_A_constructor_method_accessor_or_property_was_expected;
             case ParsingContext.EnumMembers:            return Diagnostics.Enum_member_expected;
-            case ParsingContext.TypeReferences:     return Diagnostics.Type_reference_expected;
+            case ParsingContext.TypeReferences:         return Diagnostics.Type_reference_expected;
             case ParsingContext.VariableDeclarations:   return Diagnostics.Variable_declaration_expected;
             case ParsingContext.ObjectBindingElements:  return Diagnostics.Property_destructuring_pattern_expected;
             case ParsingContext.ArrayBindingElements:   return Diagnostics.Array_element_destructuring_pattern_expected;
@@ -997,6 +1001,7 @@ module ts {
             case SyntaxKind.ExportKeyword:
             case SyntaxKind.DeclareKeyword:
             case SyntaxKind.ConstKeyword:
+            case SyntaxKind.AsyncKeyword:
                 return true;
         }
         return false;
@@ -1011,6 +1016,7 @@ module ts {
             case SyntaxKind.ExportKeyword: return NodeFlags.Export;
             case SyntaxKind.DeclareKeyword: return NodeFlags.Ambient;
             case SyntaxKind.ConstKeyword: return NodeFlags.Const;
+            case SyntaxKind.AsyncKeyword: return NodeFlags.Async;
         }
         return 0;
     }
@@ -1187,6 +1193,10 @@ module ts {
             setContextFlag(val, ParserContextFlags.GeneratorParameter);
         }
 
+        function setAwaitContext(val: boolean) {
+            setContextFlag(val, ParserContextFlags.Await);
+        }
+
         function allowInAnd<T>(func: () => T): T {
             if (contextFlags & ParserContextFlags.DisallowIn) {
                 setDisallowInContext(false);
@@ -1235,6 +1245,30 @@ module ts {
             return func();
         }
 
+        function doInAwaitContext<T>(func: () => T): T {
+            if (inAwaitContext()) {
+                // no need to do anything special if we're already in the [Await] context.
+                return func();
+            }
+
+            setAwaitContext(true);
+            var result = func();
+            setAwaitContext(false);
+            return result;
+        }
+
+        function doOutsideOfAwaitContext<T>(func: () => T): T {
+            if (!inAwaitContext()) {
+                // no need to do anything special if we're not in the [Await] context.
+                return func();
+            }
+
+            setAwaitContext(false);
+            var result = func();
+            setAwaitContext(true);
+            return result;
+        }
+
         function inYieldContext() {
             return (contextFlags & ParserContextFlags.Yield) !== 0;
         }
@@ -1249,6 +1283,10 @@ module ts {
 
         function inDisallowInContext() {
             return (contextFlags & ParserContextFlags.DisallowIn) !== 0;
+        }
+
+        function inAwaitContext() {
+            return (contextFlags & ParserContextFlags.Await) !== 0;
         }
 
         function getLineStarts(): number[] {
@@ -1354,7 +1392,7 @@ module ts {
         function lookAhead<T>(callback: () => T): T {
             return speculationHelper(callback, /*isLookAhead:*/ true);
         }
-        
+
         // Invokes the provided callback.  If the callback returns something falsy, then it restores
         // the parser to the state it was in immediately prior to invoking the callback.  If the 
         // callback returns something truthy, then the parser state is not rolled back.  The result
@@ -1371,6 +1409,12 @@ module ts {
             // If we have a 'yield' keyword, and we're in the [yield] context, then 'yield' is 
             // considered a keyword and is not an identifier.
             if (token === SyntaxKind.YieldKeyword && inYieldContext()) {
+                return false;
+            }
+            
+            // If we have an 'await' keyword, and we're in the [Await] context, then 'await' is
+            // considered a keyword and is not an identifier.
+            if (token === SyntaxKind.AwaitKeyword && inAwaitContext()) {
                 return false;
             }
             
@@ -1555,6 +1599,11 @@ module ts {
         }
 
         function nextTokenCanFollowModifier() {
+            if (token === SyntaxKind.AsyncKeyword) {
+                nextToken();
+                return canFollowAsyncModifier();
+            }
+
             nextToken();
             return canFollowModifier();
         }
@@ -1569,13 +1618,26 @@ module ts {
                 return nextToken() === SyntaxKind.EnumKeyword;
             }
 
+            if (token === SyntaxKind.AsyncKeyword) {
+                nextToken();
+                return canFollowAsyncModifier();
+            }
+
             nextToken();
             return canFollowModifier();
         }
 
+        function canFollowAsyncModifier(): boolean {
+            if (scanner.hasPrecedingLineBreak()) {
+                return false;
+            }
+
+            return token === SyntaxKind.OpenParenToken || token === SyntaxKind.LessThanToken || canFollowModifier();
+        }
+
         function canFollowModifier(): boolean {
             return token === SyntaxKind.OpenBracketToken || token === SyntaxKind.AsteriskToken || isLiteralPropertyName();
-        }
+        }        
 
         // True if positioned at the start of a list element
         function isListElement(kind: ParsingContext, inErrorRecovery: boolean): boolean {
@@ -1754,9 +1816,9 @@ module ts {
                 }
 
                 if (abortParsingListOrMoveToNextToken(kind)) {
-                    break;
+                        break;
+                    }
                 }
-            }
 
             setStrictModeContext(savedStrictModeContext);
             result.end = getNodeEnd();
@@ -1803,9 +1865,9 @@ module ts {
                 }
 
                 if (abortParsingListOrMoveToNextToken(kind)) {
-                    break;
+                        break;
+                    }
                 }
-            }
 
             // Recording the trailing comma is deliberately done after the previous
             // loop, and not just if we see a list terminator. This is because the list
@@ -2017,7 +2079,7 @@ module ts {
                 return token === SyntaxKind.StringLiteral
                     ? <StringLiteralTypeNode>parseLiteralNode(/*internName:*/ true)
                     : parseType();
-            }
+        }
 
             return undefined;
         }
@@ -2078,11 +2140,12 @@ module ts {
         function fillSignature(
                 returnToken: SyntaxKind,
                 yieldAndGeneratorParameterContext: boolean,
+                awaitContext: boolean,
                 requireCompleteParameterList: boolean,
                 signature: SignatureDeclaration): void {
             var returnTokenRequired = returnToken === SyntaxKind.EqualsGreaterThanToken;
             signature.typeParameters = parseTypeParameters();
-            signature.parameters = parseParameterList(yieldAndGeneratorParameterContext, requireCompleteParameterList);
+            signature.parameters = parseParameterList(yieldAndGeneratorParameterContext, awaitContext, requireCompleteParameterList);
 
             if (returnTokenRequired) {
                 parseExpected(returnToken);
@@ -2097,7 +2160,7 @@ module ts {
         // have 'Yield' And 'GeneratorParameter' not in sync.  i.e. any production calling
         // this FormalParameters production either always sets both to true, or always sets
         // both to false.  As such we only have a single parameter to represent both.
-        function parseParameterList(yieldAndGeneratorParameterContext: boolean, requireCompleteParameterList: boolean) {
+        function parseParameterList(yieldAndGeneratorParameterContext: boolean, awaitContext: boolean, requireCompleteParameterList: boolean) {
             // FormalParameters[Yield,GeneratorParameter] :
             //      ...
             //
@@ -2115,14 +2178,17 @@ module ts {
             if (parseExpected(SyntaxKind.OpenParenToken)) {
                 var savedYieldContext = inYieldContext();
                 var savedGeneratorParameterContext = inGeneratorParameterContext();
+                var savedAwaitContext = inAwaitContext();
 
                 setYieldContext(yieldAndGeneratorParameterContext);
                 setGeneratorParameterContext(yieldAndGeneratorParameterContext);
+                setAwaitContext(awaitContext);
 
                 var result = parseDelimitedList(ParsingContext.Parameters, parseParameter);
 
                 setYieldContext(savedYieldContext);
                 setGeneratorParameterContext(savedGeneratorParameterContext);
+                setAwaitContext(savedAwaitContext);
 
                 if (!parseExpected(SyntaxKind.CloseParenToken) && requireCompleteParameterList) {
                     // Caller insisted that we had to end with a )   We didn't.  So just return
@@ -2158,7 +2224,7 @@ module ts {
             if (kind === SyntaxKind.ConstructSignature) {
                 parseExpected(SyntaxKind.NewKeyword);
             }
-            fillSignature(SyntaxKind.ColonToken, /*yieldAndGeneratorParameterContext:*/ false, /*requireCompleteParameterList:*/ false, node);
+            fillSignature(SyntaxKind.ColonToken, /*yieldAndGeneratorParameterContext:*/ false, /*awaitContext:*/ false, /*requireCompleteParameterList:*/ false, node);
             parseTypeMemberSemicolon();
             return finishNode(node);
         }
@@ -2246,8 +2312,8 @@ module ts {
                 method.questionToken = questionToken;
 
                 // Method signatues don't exist in expression contexts.  So they have neither
-                // [Yield] nor [GeneratorParameter]
-                fillSignature(SyntaxKind.ColonToken, /*yieldAndGeneratorParameterContext:*/ false, /*requireCompleteParameterList:*/ false, method);
+                // [Yield] nor [GeneratorParameter] nor [Await]
+                fillSignature(SyntaxKind.ColonToken, /*yieldAndGeneratorParameterContext:*/ false, /*awaitContext:*/ false, /*requireCompleteParameterList:*/ false, method);
                 parseTypeMemberSemicolon();
                 return finishNode(method);
             }
@@ -2347,7 +2413,7 @@ module ts {
             if (kind === SyntaxKind.ConstructorType) {
                 parseExpected(SyntaxKind.NewKeyword);
             }
-            fillSignature(SyntaxKind.EqualsGreaterThanToken, /*yieldAndGeneratorParameterContext:*/ false, /*requireCompleteParameterList:*/ false, node);
+            fillSignature(SyntaxKind.EqualsGreaterThanToken, /*yieldAndGeneratorParameterContext:*/ false, /*awaitContext:*/ false, /*requireCompleteParameterList:*/ false, node);
             return finishNode(node);
         }
 
@@ -2376,8 +2442,8 @@ module ts {
                 case SyntaxKind.OpenParenToken:
                     return parseParenthesizedType();
                 default:
-                    return parseTypeReference();
-            }
+                        return parseTypeReference();
+                    }
         }
 
         function isStartOfType(): boolean {
@@ -2443,33 +2509,33 @@ module ts {
         }
 
         function isUnambiguouslyStartOfFunctionType() {
-            nextToken();
-            if (token === SyntaxKind.CloseParenToken || token === SyntaxKind.DotDotDotToken) {
-                // ( )
-                // ( ...
-                return true;
-            }
-            if (isIdentifier() || isModifier(token)) {
                 nextToken();
-                if (token === SyntaxKind.ColonToken || token === SyntaxKind.CommaToken ||
-                    token === SyntaxKind.QuestionToken || token === SyntaxKind.EqualsToken ||
-                    isIdentifier() || isModifier(token)) {
-                    // ( id :
-                    // ( id ,
-                    // ( id ?
-                    // ( id =
-                    // ( modifier id
+                if (token === SyntaxKind.CloseParenToken || token === SyntaxKind.DotDotDotToken) {
+                    // ( )
+                    // ( ...
                     return true;
                 }
-                if (token === SyntaxKind.CloseParenToken) {
+                if (isIdentifier() || isModifier(token)) {
                     nextToken();
-                    if (token === SyntaxKind.EqualsGreaterThanToken) {
-                        // ( id ) =>
+                    if (token === SyntaxKind.ColonToken || token === SyntaxKind.CommaToken ||
+                        token === SyntaxKind.QuestionToken || token === SyntaxKind.EqualsToken ||
+                        isIdentifier() || isModifier(token)) {
+                        // ( id :
+                        // ( id ,
+                        // ( id ?
+                        // ( id =
+                        // ( modifier id
                         return true;
                     }
+                    if (token === SyntaxKind.CloseParenToken) {
+                        nextToken();
+                        if (token === SyntaxKind.EqualsGreaterThanToken) {
+                            // ( id ) =>
+                            return true;
+                        }
+                    }
                 }
-            }
-            return false;
+                return false;
         }
 
         function parseType(): TypeNode {
@@ -2534,6 +2600,7 @@ module ts {
                 case SyntaxKind.MinusMinusToken:
                 case SyntaxKind.LessThanToken:
                 case SyntaxKind.Identifier:
+                case SyntaxKind.AwaitKeyword:
                 case SyntaxKind.YieldKeyword:
                     // Yield always starts an expression.  Either it is an identifier (in which case
                     // it is definitely an expression).  Or it's a keyword (either because we're in
@@ -2727,12 +2794,13 @@ module ts {
             node.parameters.end = parameter.end;
 
             parseExpected(SyntaxKind.EqualsGreaterThanToken);
-            node.body = parseArrowFunctionExpressionBody();
+            node.body = parseArrowFunctionExpressionBody(/*isAsync*/ false);
 
             return finishNode(node);
         }
 
         function tryParseParenthesizedArrowFunctionExpression(): Expression {
+            // Indicates whether we are certain that we should parse an arrow expression.
             var triState = isParenthesizedArrowFunctionExpression();
 
             if (triState === Tristate.False) {
@@ -2756,13 +2824,13 @@ module ts {
             // If we have an arrow, then try to parse the body. Even if not, try to parse if we 
             // have an opening brace, just in case we're in an error state.
             if (parseExpected(SyntaxKind.EqualsGreaterThanToken) || token === SyntaxKind.OpenBraceToken) {
-                arrowFunction.body = parseArrowFunctionExpressionBody();
+                arrowFunction.body = parseArrowFunctionExpressionBody(/*isAsync*/ !!(arrowFunction.flags & NodeFlags.Async));
             }
             else {
                 // If not, we're probably better off bailing out and returning a bogus function expression.
                 arrowFunction.body = parseIdentifier();
             }
-
+            
             return finishNode(arrowFunction);
         }
 
@@ -2771,7 +2839,7 @@ module ts {
         //  Unknown     -> There *might* be a parenthesized arrow function here.
         //                 Speculatively look ahead to be sure, and rollback if not.
         function isParenthesizedArrowFunctionExpression(): Tristate {
-            if (token === SyntaxKind.OpenParenToken || token === SyntaxKind.LessThanToken) {
+            if (token === SyntaxKind.OpenParenToken || token === SyntaxKind.LessThanToken || token === SyntaxKind.AsyncKeyword) {
                 return lookAhead(isParenthesizedArrowFunctionExpressionWorker);
             }
 
@@ -2786,6 +2854,16 @@ module ts {
         }
 
         function isParenthesizedArrowFunctionExpressionWorker() {
+            if (token === SyntaxKind.AsyncKeyword) {
+                // If we see an "async" keyword with no line break, this could be an async arrow function.
+                nextToken();
+                if (scanner.hasPrecedingLineBreak()) {
+                    return Tristate.False;
+                }
+
+                var sawAsyncKeyword = true;
+            }
+            
             var first = token;
             var second = nextToken();
 
@@ -2834,6 +2912,12 @@ module ts {
             else {
                 Debug.assert(first === SyntaxKind.LessThanToken);
 
+                // If we saw an "async" keyword followed by "<", then 
+                // this is definately not an arrow function.
+                if (sawAsyncKeyword) {
+                    return Tristate.False;
+                }
+
                 // If we have "<" not followed by an identifier,
                 // then this definitely is not an arrow function.
                 if (!isIdentifier()) {
@@ -2851,6 +2935,10 @@ module ts {
 
         function parseParenthesizedArrowFunctionExpressionHead(allowAmbiguity: boolean): FunctionExpression {
             var node = <FunctionExpression>createNode(SyntaxKind.ArrowFunction);
+            var modifiers = parseModifiers();
+            setModifiers(node, modifiers);
+            var isAsync = !!(node.flags & NodeFlags.Async);
+
             // Arrow functions are never generators.
             //
             // If we're speculatively parsing a signature for a parenthesized arrow function, then
@@ -2858,7 +2946,7 @@ module ts {
             // a => (b => c)
             // And think that "(b =>" was actually a parenthesized arrow function with a missing 
             // close paren.
-            fillSignature(SyntaxKind.ColonToken, /*yieldAndGeneratorParameterContext:*/ false, /*requireCompleteParameterList:*/ !allowAmbiguity, node);
+            fillSignature(SyntaxKind.ColonToken, /*yieldAndGeneratorParameterContext:*/ false, /*awaitContext*/ isAsync, /*requireCompleteParameterList:*/ !allowAmbiguity, node);
 
             // If we couldn't get parameters, we definitely could not parse out an arrow function.
             if (!node.parameters) {
@@ -2881,9 +2969,9 @@ module ts {
             return node;
         }
 
-        function parseArrowFunctionExpressionBody(): Block | Expression {
+        function parseArrowFunctionExpressionBody(isAsync: boolean): Block | Expression {
             if (token === SyntaxKind.OpenBraceToken) {
-                return parseFunctionBlock(/*allowYield:*/ false, /* ignoreMissingOpenBrace */ false);
+                return parseFunctionBlock(/*allowYield:*/ false, /*allowAwait:*/ isAsync, /* ignoreMissingOpenBrace */ false);
             }
 
             if (isStatement(/* inErrorRecovery */ true) && !isStartOfExpressionStatement() && token !== SyntaxKind.FunctionKeyword) {
@@ -2901,10 +2989,12 @@ module ts {
                 // up preemptively closing the containing construct.
                 //
                 // Note: even when 'ignoreMissingOpenBrace' is passed as true, parseBody will still error.
-                return parseFunctionBlock(/*allowYield:*/ false, /* ignoreMissingOpenBrace */ true);
+                return parseFunctionBlock(/*allowYield:*/ false, /*allowAwait:*/ isAsync, /* ignoreMissingOpenBrace */ true);
             }
 
-            return parseAssignmentExpressionOrHigher();
+            return isAsync ?
+                doInAwaitContext(parseAssignmentExpressionOrHigher) :
+                doOutsideOfAwaitContext(parseAssignmentExpressionOrHigher);
         }
 
         function parseConditionalExpressionRest(leftOperand: Expression): Expression {
@@ -3040,6 +3130,13 @@ module ts {
             return finishNode(node);
         }
 
+        function parseAwaitExpression() {
+            var node = <AwaitExpression>createNode(SyntaxKind.AwaitExpression);
+            nextToken();
+            node.expression = parseUnaryExpressionOrHigher();
+            return finishNode(node);
+        }
+
         function parseUnaryExpressionOrHigher(): UnaryExpression {
             switch (token) {
                 case SyntaxKind.PlusToken:
@@ -3057,6 +3154,12 @@ module ts {
                     return parseVoidExpression();
                 case SyntaxKind.LessThanToken:
                     return parseTypeAssertion();
+                case SyntaxKind.AwaitKeyword:
+                    if (inAwaitContext()) {
+                        return parseAwaitExpression();
+                    }
+                    // fall-through
+
                 default:
                     return parsePostfixExpressionOrHigher();
             }
@@ -3294,7 +3397,7 @@ module ts {
                 ? typeArguments
                 : undefined;
         }
-        
+
         function canFollowTypeArgumentsInExpression(): boolean {
             switch (token) {
                 case SyntaxKind.OpenParenToken:                 // foo<x>(   
@@ -3349,7 +3452,7 @@ module ts {
                 case SyntaxKind.OpenBraceToken:
                     return parseObjectLiteralExpression();
                 case SyntaxKind.FunctionKeyword:
-                    return parseFunctionExpression();
+                    return parseFunctionExpression(/*modifiers*/ undefined);
                 case SyntaxKind.NewKeyword:
                     return parseNewExpression();
                 case SyntaxKind.SlashToken:
@@ -3360,6 +3463,11 @@ module ts {
                     break;
                 case SyntaxKind.TemplateHead:
                     return parseTemplateExpression();
+            }
+
+            if (isAsyncFunctionExpression()) {
+                var modifiers = parseModifiers();
+                return parseFunctionExpression(modifiers);
             }
 
             return parseIdentifier(Diagnostics.Expression_expected);
@@ -3394,15 +3502,16 @@ module ts {
             node.elements = parseDelimitedList(ParsingContext.ArrayLiteralMembers, parseArrayLiteralElement);
             parseExpected(SyntaxKind.CloseBracketToken);
             return finishNode(node);
-        }
+        }        
 
         function parseObjectLiteralElement(): ObjectLiteralElement {
             var fullStart = scanner.getStartPos();
-            var initialToken = token;
 
+            var modifiers = parseModifiers();
+            var initialToken = token;
             if (parseContextualModifier(SyntaxKind.GetKeyword) || parseContextualModifier(SyntaxKind.SetKeyword)) {
                 var kind = initialToken === SyntaxKind.GetKeyword ? SyntaxKind.GetAccessor : SyntaxKind.SetAccessor;
-                return parseAccessorDeclaration(kind, fullStart, /*modifiers*/undefined);
+                return parseAccessorDeclaration(kind, fullStart, modifiers);
             }
 
             var asteriskToken = parseOptionalToken(SyntaxKind.AsteriskToken);
@@ -3410,7 +3519,7 @@ module ts {
             var nameToken = token;
             var propertyName = parsePropertyName();
             if (asteriskToken || token === SyntaxKind.OpenParenToken || token === SyntaxKind.LessThanToken) {
-                return parseMethodDeclaration(fullStart, /*modifiers:*/ undefined, asteriskToken, propertyName, /*questionToken:*/ undefined, /*requireBlock:*/ true);
+                return parseMethodDeclaration(fullStart, modifiers, asteriskToken, propertyName, /*questionToken:*/ undefined, /*requireBlock:*/ true);
             }
 
             // Disallowing of optional property assignments happens in the grammar checker.
@@ -3445,17 +3554,29 @@ module ts {
             return finishNode(node);
         }
 
-        function parseFunctionExpression(): FunctionExpression {
+        function isAsyncFunctionExpression() {
+            if (token === SyntaxKind.AsyncKeyword) {
+                return lookAhead(isAsyncFunctionExpressionWorker);
+            }
+        }
+
+        function isAsyncFunctionExpressionWorker() {
+            return nextToken() === SyntaxKind.FunctionKeyword && !scanner.hasPrecedingLineBreak();
+        }        
+
+        function parseFunctionExpression(modifiers: ModifiersArray): FunctionExpression {
             // GeneratorExpression :
             //      function * BindingIdentifier[Yield]opt (FormalParameters[Yield, GeneratorParameter]) { GeneratorBody[Yield] }
             // FunctionExpression:
             //      function BindingIdentifieropt(FormalParameters) { FunctionBody }
             var node = <FunctionExpression>createNode(SyntaxKind.FunctionExpression);
             parseExpected(SyntaxKind.FunctionKeyword);
+            setModifiers(node, modifiers);
+            var isAsync = !!(node.flags & NodeFlags.Async);
             node.asteriskToken = parseOptionalToken(SyntaxKind.AsteriskToken);
             node.name = node.asteriskToken ? doInYieldContext(parseOptionalIdentifier) : parseOptionalIdentifier();
-            fillSignature(SyntaxKind.ColonToken, /*yieldAndGeneratorParameterContext:*/ !!node.asteriskToken, /*requireCompleteParameterList:*/ false, node);
-            node.body = parseFunctionBlock(/*allowYield:*/ !!node.asteriskToken, /* ignoreMissingOpenBrace */ false);
+            fillSignature(SyntaxKind.ColonToken, /*yieldAndGeneratorParameterContext:*/ !!node.asteriskToken, /*awaitContext*/ isAsync, /*requireCompleteParameterList:*/ false, node);
+            node.body = parseFunctionBlock(/*allowYield:*/ !!node.asteriskToken, /*allowAwait:*/ isAsync, /* ignoreMissingOpenBrace */ false);
             return finishNode(node);
         }
 
@@ -3488,13 +3609,17 @@ module ts {
             return finishNode(node);
         }
 
-        function parseFunctionBlock(allowYield: boolean, ignoreMissingOpenBrace: boolean): Block {
+        function parseFunctionBlock(allowYield: boolean, allowAwait: boolean, ignoreMissingOpenBrace: boolean): Block {
             var savedYieldContext = inYieldContext();
             setYieldContext(allowYield);
+
+            var savedAwaitContext = inAwaitContext();
+            setAwaitContext(allowAwait);
 
             var block = parseBlock(SyntaxKind.Block, ignoreMissingOpenBrace, /*checkForStrictMode*/ true);
 
             setYieldContext(savedYieldContext);
+            setAwaitContext(savedAwaitContext);
 
             return block;
         }
@@ -3872,9 +3997,9 @@ module ts {
             }
         }
 
-        function parseFunctionBlockOrSemicolon(isGenerator: boolean): Block {
+        function parseFunctionBlockOrSemicolon(isGenerator: boolean, isAsync: boolean): Block {
             if (token === SyntaxKind.OpenBraceToken) {
-                return parseFunctionBlock(isGenerator, /*ignoreMissingOpenBrace:*/ false);
+                return parseFunctionBlock(/*allowYield*/ isGenerator, /*allowAwait*/ isAsync, /* ignoreMissingOpenBrace */ false);
             }
 
             parseSemicolon(Diagnostics.or_expected);
@@ -3990,10 +4115,11 @@ module ts {
             var node = <FunctionDeclaration>createNode(SyntaxKind.FunctionDeclaration, fullStart);
             setModifiers(node, modifiers);
             parseExpected(SyntaxKind.FunctionKeyword);
+            var isAsync = (node.flags & NodeFlags.Async) !== 0;
             node.asteriskToken = parseOptionalToken(SyntaxKind.AsteriskToken);
             node.name = parseIdentifier();
-            fillSignature(SyntaxKind.ColonToken, /*yieldAndGeneratorParameterContext:*/ !!node.asteriskToken, /*requireCompleteParameterList:*/ false, node);
-            node.body = parseFunctionBlockOrSemicolon(!!node.asteriskToken);
+            fillSignature(SyntaxKind.ColonToken, /*yieldAndGeneratorParameterContext:*/ !!node.asteriskToken, isAsync, /*requireCompleteParameterList:*/ false, node);
+            node.body = parseFunctionBlockOrSemicolon(!!node.asteriskToken, isAsync);
             return finishNode(node);
         }
 
@@ -4001,19 +4127,20 @@ module ts {
             var node = <ConstructorDeclaration>createNode(SyntaxKind.Constructor, pos);
             setModifiers(node, modifiers);
             parseExpected(SyntaxKind.ConstructorKeyword);
-            fillSignature(SyntaxKind.ColonToken, /*yieldAndGeneratorParameterContext:*/ false, /*requireCompleteParameterList:*/ false, node);
-            node.body = parseFunctionBlockOrSemicolon(/*isGenerator:*/ false);
+            fillSignature(SyntaxKind.ColonToken, /*yieldAndGeneratorParameterContext:*/ false, /*awaitContext*/ false, /*requireCompleteParameterList:*/ false, node);
+            node.body = parseFunctionBlockOrSemicolon(/*isGenerator:*/ false, /*isAsync*/ false);
             return finishNode(node);
         }
 
         function parseMethodDeclaration(fullStart: number, modifiers: ModifiersArray, asteriskToken: Node, name: DeclarationName, questionToken: Node, requireBlock: boolean): MethodDeclaration {
             var method = <MethodDeclaration>createNode(SyntaxKind.MethodDeclaration, fullStart);
             setModifiers(method, modifiers);
+            var isAsync = !!(method.flags & NodeFlags.Async);
             method.asteriskToken = asteriskToken;
             method.name = name;
             method.questionToken = questionToken;
-            fillSignature(SyntaxKind.ColonToken, /*yieldAndGeneratorParameterContext:*/ !!asteriskToken, /*requireCompleteParameterList:*/ false, method);
-            method.body = requireBlock ? parseFunctionBlock(!!asteriskToken, /*ignoreMissingOpenBrace:*/ false) : parseFunctionBlockOrSemicolon(!!asteriskToken);
+            fillSignature(SyntaxKind.ColonToken, /*yieldAndGeneratorParameterContext:*/ !!asteriskToken, /*awaitContext:*/ isAsync, /*requireCompleteParameterList:*/ false, method);
+            method.body = requireBlock ? parseFunctionBlock(!!asteriskToken, isAsync, /*ignoreMissingOpenBrace:*/ false) : parseFunctionBlockOrSemicolon(!!asteriskToken, isAsync);
             return finishNode(method);
         }
 
@@ -4021,8 +4148,8 @@ module ts {
             var asteriskToken = parseOptionalToken(SyntaxKind.AsteriskToken);
             var name = parsePropertyName();
 
-            // Note: this is not legal as per the grammar.  But we allow it in the parser and
-            // report an error in the grammar checker.
+                // Note: this is not legal as per the grammar.  But we allow it in the parser and
+                // report an error in the grammar checker.
             var questionToken = parseOptionalToken(SyntaxKind.QuestionToken);
             if (asteriskToken || token === SyntaxKind.OpenParenToken || token === SyntaxKind.LessThanToken) {
                 return parseMethodDeclaration(fullStart, modifiers, asteriskToken, name, questionToken, /*requireBlock:*/ false);
@@ -4046,9 +4173,10 @@ module ts {
         function parseAccessorDeclaration(kind: SyntaxKind, fullStart: number, modifiers: ModifiersArray): AccessorDeclaration {
             var node = <AccessorDeclaration>createNode(kind, fullStart);
             setModifiers(node, modifiers);
+            var isAsync = (node.flags & NodeFlags.Async) !== 0;
             node.name = parsePropertyName();
-            fillSignature(SyntaxKind.ColonToken, /*yieldAndGeneratorParameterContext:*/ false, /*requireCompleteParameterList:*/ false, node);
-            node.body = parseFunctionBlockOrSemicolon(/*isGenerator:*/ false);
+            fillSignature(SyntaxKind.ColonToken, /*yieldAndGeneratorParameterContext:*/ false, /*awaitContext*/ isAsync, /*requireCompleteParameterList:*/ false, node);
+            node.body = parseFunctionBlockOrSemicolon(/*isGenerator:*/ false, isAsync);
             return finishNode(node);
         }
 
@@ -4105,7 +4233,7 @@ module ts {
 
             return false;
         }
-
+        
         function parseModifiers(): ModifiersArray {
             var flags = 0;
             var modifiers: ModifiersArray;
@@ -4190,7 +4318,7 @@ module ts {
                 return isClassHeritageClause && inGeneratorParameterContext()
                     ? doOutsideOfYieldContext(parseHeritageClausesWorker)
                     : parseHeritageClausesWorker();
-            }
+        }
 
             return undefined;
         }
@@ -4358,7 +4486,7 @@ module ts {
             parseSemicolon();
             return finishNode(node);
         }
-        
+
         function isLetDeclaration() {
             // It is let declaration if in strict mode or next token is identifier on same line.
             // otherwise it needs to be treated like identifier
@@ -4393,6 +4521,10 @@ module ts {
                 case SyntaxKind.StaticKeyword:
                     // Check for modifier on source element
                     return lookAhead(nextTokenIsDeclarationStart);
+
+                case SyntaxKind.AsyncKeyword:
+                    // Check for modifier on source element
+                    return lookAhead(nextTokenIsDeclarationStartOnSameLine);
             }
         }
 
@@ -4418,6 +4550,11 @@ module ts {
         function nextTokenIsDeclarationStart() {
             nextToken();
             return isDeclarationStart();
+        }
+
+        function nextTokenIsDeclarationStartOnSameLine() {
+            nextToken();
+            return !scanner.hasPrecedingLineBreak() && isDeclarationStart();
         }
 
         function parseDeclaration(): ModuleElement {
@@ -4452,7 +4589,7 @@ module ts {
                 default:
                     Debug.fail("Mismatch between isDeclarationStart and parseDeclaration");
             }
-        }
+            }
 
         function isSourceElement(inErrorRecovery: boolean): boolean {
             return isDeclarationStart() || isStatement(inErrorRecovery);
@@ -4555,7 +4692,7 @@ module ts {
             Debug.assert(syntacticDiagnostics !== undefined);
             return syntacticDiagnostics;
         }
-    }
+        }
 
     function isLeftHandSideExpression(expr: Expression): boolean {
         if (expr) {
@@ -4671,6 +4808,7 @@ module ts {
                 case SyntaxKind.ComputedPropertyName:           return checkComputedPropertyName(<ComputedPropertyName>node);
                 case SyntaxKind.Constructor:                    return checkConstructor(<ConstructorDeclaration>node);
                 case SyntaxKind.DeleteExpression:               return checkDeleteExpression(<DeleteExpression> node);
+                case SyntaxKind.AwaitExpression:                return checkAwaitExpression(<AwaitExpression> node);
                 case SyntaxKind.ElementAccessExpression:        return checkElementAccessExpression(<ElementAccessExpression>node);
                 case SyntaxKind.ExportAssignment:               return checkExportAssignment(<ExportAssignment>node);
                 case SyntaxKind.ExternalModuleReference:        return checkExternalModuleReference(<ExternalModuleReference>node);
@@ -5120,9 +5258,9 @@ module ts {
             if (!node.argumentExpression) {
                 if (node.parent.kind === SyntaxKind.NewExpression && (<NewExpression>node.parent).expression === node) {
                     var start = skipTrivia(sourceText, node.expression.end);
-                    var end = node.end;
-                    return grammarErrorAtPos(start, end - start, Diagnostics.new_T_cannot_be_used_to_create_an_array_Use_new_Array_T_instead);
-                }
+                var end = node.end;
+                return grammarErrorAtPos(start, end - start, Diagnostics.new_T_cannot_be_used_to_create_an_array_Use_new_Array_T_instead);
+            }
                 else {
                     var start = node.end - "]".length;
                     var end = node.end;
@@ -5381,7 +5519,7 @@ module ts {
                 return;
             }
 
-            var lastStatic: Node, lastPrivate: Node, lastProtected: Node, lastDeclare: Node;
+            var lastStatic: Node, lastPrivate: Node, lastProtected: Node, lastDeclare: Node, lastAsync: Node;
             var flags = 0;
             for (var i = 0, n = node.modifiers.length; i < n; i++) {
                 var modifier = node.modifiers[i];
@@ -5409,6 +5547,9 @@ module ts {
                         else if (flags & NodeFlags.Static) {
                             return grammarErrorOnNode(modifier, Diagnostics._0_modifier_must_precede_1_modifier, text, "static");
                         }
+                        else if (flags & NodeFlags.Async) {
+                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_must_precede_1_modifier, text, "async");
+                        }
                         else if (node.parent.kind === SyntaxKind.ModuleBlock || node.parent.kind === SyntaxKind.SourceFile) {
                             return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_appear_on_a_module_element, text);
                         }
@@ -5418,6 +5559,9 @@ module ts {
                     case SyntaxKind.StaticKeyword:
                         if (flags & NodeFlags.Static) {
                             return grammarErrorOnNode(modifier, Diagnostics._0_modifier_already_seen, "static");
+                        }
+                        else if (flags & NodeFlags.Async) {
+                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_must_precede_1_modifier, "static", "async");
                         }
                         else if (node.parent.kind === SyntaxKind.ModuleBlock || node.parent.kind === SyntaxKind.SourceFile) {
                             return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_appear_on_a_module_element, "static");
@@ -5436,6 +5580,9 @@ module ts {
                         else if (flags & NodeFlags.Ambient) {
                             return grammarErrorOnNode(modifier, Diagnostics._0_modifier_must_precede_1_modifier, "export", "declare");
                         }
+                        else if (flags & NodeFlags.Async) {
+                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_must_precede_1_modifier, "export", "async");
+                        }
                         else if (node.parent.kind === SyntaxKind.ClassDeclaration) {
                             return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_appear_on_a_class_element, "export");
                         }
@@ -5449,6 +5596,9 @@ module ts {
                         if (flags & NodeFlags.Ambient) {
                             return grammarErrorOnNode(modifier, Diagnostics._0_modifier_already_seen, "declare");
                         }
+                        else if (flags & NodeFlags.Async) {
+                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_be_used_in_an_ambient_context, "async");
+                        }
                         else if (node.parent.kind === SyntaxKind.ClassDeclaration) {
                             return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_appear_on_a_class_element, "declare");
                         }
@@ -5460,6 +5610,20 @@ module ts {
                         }
                         flags |= NodeFlags.Ambient;
                         lastDeclare = modifier;
+                        break;
+
+                    case SyntaxKind.AsyncKeyword:
+                        if (flags & NodeFlags.Async) {
+                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_already_seen, "async");
+                        }
+                        else if (flags & NodeFlags.Ambient || inAmbientContext) {
+                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_be_used_in_an_ambient_context, "async");
+                        }
+                        else if (node.kind === SyntaxKind.Parameter) {
+                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_appear_on_a_parameter, "async");
+                        }
+                        flags |= NodeFlags.Async;
+                        lastAsync = modifier;
                         break;
                 }
             }
@@ -5474,12 +5638,51 @@ module ts {
                 else if (flags & NodeFlags.Private) {
                     return grammarErrorOnNode(lastPrivate, Diagnostics._0_modifier_cannot_appear_on_a_constructor_declaration, "private");
                 }
+                else if (flags & NodeFlags.Async) {
+                    return grammarErrorOnNode(lastAsync, Diagnostics._0_modifier_cannot_appear_on_a_constructor_declaration, "async");
+                }
             }
             else if (node.kind === SyntaxKind.ImportDeclaration && flags & NodeFlags.Ambient) {
-                return grammarErrorOnNode(lastDeclare, Diagnostics.A_declare_modifier_cannot_be_used_with_an_import_declaration, "declare");
+                return grammarErrorOnNode(lastDeclare, Diagnostics._0_modifier_cannot_be_used_with_an_import_declaration, "declare");
             }
             else if (node.kind === SyntaxKind.InterfaceDeclaration && flags & NodeFlags.Ambient) {
-                return grammarErrorOnNode(lastDeclare, Diagnostics.A_declare_modifier_cannot_be_used_with_an_interface_declaration, "declare");
+                return grammarErrorOnNode(lastDeclare, Diagnostics._0_modifier_cannot_be_used_with_an_interface_declaration, "declare");
+            }
+            else if (flags & NodeFlags.Async) {
+                return checkAsyncModifier(node, lastAsync);
+            }
+        }
+
+        function checkAsyncModifier(node: Node, asyncModifier: Node): boolean {
+            switch (node.kind) {
+                case SyntaxKind.SetAccessor:
+                    return grammarErrorOnNode(asyncModifier, Diagnostics._0_modifier_cannot_be_used_on_a_1_accessor, "async", "set");
+                case SyntaxKind.Constructor:
+                    return grammarErrorOnNode(asyncModifier, Diagnostics._0_modifier_cannot_appear_on_a_constructor_declaration, "async");
+                case SyntaxKind.PropertyDeclaration:
+                    return grammarErrorOnNode(asyncModifier, Diagnostics._0_modifier_cannot_appear_on_a_data_property, "async");
+                case SyntaxKind.IndexSignature:
+                    return grammarErrorOnNode(asyncModifier, Diagnostics._0_modifier_cannot_be_used_in_an_ambient_context, "async");
+                case SyntaxKind.ClassDeclaration:
+                    return grammarErrorOnNode(asyncModifier, Diagnostics._0_modifier_cannot_be_used_with_a_class_declaration, "async");
+                case SyntaxKind.InterfaceDeclaration:
+                    return grammarErrorOnNode(asyncModifier, Diagnostics._0_modifier_cannot_be_used_with_an_interface_declaration, "async");
+                case SyntaxKind.ModuleDeclaration:
+                    return grammarErrorOnNode(asyncModifier, Diagnostics._0_modifier_cannot_be_used_with_a_module_declaration, "async");
+                case SyntaxKind.EnumDeclaration:
+                    return grammarErrorOnNode(asyncModifier, Diagnostics._0_modifier_cannot_be_used_with_an_enum_declaration, "async");
+                case SyntaxKind.ExportAssignment:
+                    return grammarErrorOnNode(asyncModifier, Diagnostics._0_modifier_cannot_be_used_with_an_export_assignment_declaration, "async");
+                case SyntaxKind.VariableStatement:
+                    return grammarErrorOnNode(asyncModifier, Diagnostics._0_modifier_cannot_be_used_on_a_variable_statement, "async");
+                case SyntaxKind.TypeAliasDeclaration:
+                    return grammarErrorOnNode(asyncModifier, Diagnostics._0_modifier_cannot_be_used_with_a_type_declaration, "async");
+                case SyntaxKind.ImportDeclaration:
+                    return grammarErrorOnNode(asyncModifier, Diagnostics._0_modifier_cannot_be_used_with_an_import_declaration, "async");
+                case SyntaxKind.Parameter:
+                    return grammarErrorOnNode(asyncModifier, Diagnostics._0_modifier_cannot_be_used_with_a_parameter_declaration, "async");
+                default:
+                    return false;
             }
         }
 
@@ -5588,7 +5791,7 @@ module ts {
         function checkComputedPropertyName(node: ComputedPropertyName) {
             if (languageVersion < ScriptTarget.ES6) {
                 return grammarErrorOnNode(node, Diagnostics.Computed_property_names_are_only_available_when_targeting_ECMAScript_6_and_higher);
-            }
+                }
             else if (node.expression.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>node.expression).operator === SyntaxKind.CommaToken) {
                 return grammarErrorOnNode(node.expression, Diagnostics.A_comma_expression_is_not_allowed_in_a_computed_property_name);
             }
@@ -5784,10 +5987,10 @@ module ts {
                 if (!node.initializer) {
                     if (isBindingPattern(node.name) && !isBindingPattern(node.parent)) {
                         return grammarErrorOnNode(node, Diagnostics.A_destructuring_declaration_must_have_an_initializer);
-                    }
+            }
                     if (isConst(node)) {
-                        return grammarErrorOnNode(node, Diagnostics.const_declarations_must_be_initialized);
-                    }
+                return grammarErrorOnNode(node, Diagnostics.const_declarations_must_be_initialized);
+            }
                 }
             }
             if (node.parserContextFlags & ParserContextFlags.StrictMode && isEvalOrArgumentsIdentifier(node.name)) {
@@ -5857,6 +6060,10 @@ module ts {
                 // a context is an 
                 return grammarErrorOnFirstToken(node, Diagnostics.with_statements_are_not_allowed_in_strict_mode);
             }
+            else if (node.parserContextFlags & ParserContextFlags.Await) {
+                // Async mode code may not include a WithStatement.
+                return grammarErrorOnFirstToken(node, Diagnostics.with_statements_are_not_allowed_in_an_async_function_block);
+            }
         }
 
         function checkYieldExpression(node: YieldExpression): boolean {
@@ -5864,6 +6071,12 @@ module ts {
                 return grammarErrorOnFirstToken(node, Diagnostics.yield_expression_must_be_contained_within_a_generator_declaration);
             }
             return grammarErrorOnFirstToken(node, Diagnostics.yield_expressions_are_not_currently_supported);
+        }
+
+        function checkAwaitExpression(node: AwaitExpression): boolean {
+            if (!(node.parserContextFlags & ParserContextFlags.Await)) {
+                return grammarErrorOnFirstToken(node, Diagnostics.await_expression_must_be_contained_within_an_async_function);
+            }            
         }
     }
 

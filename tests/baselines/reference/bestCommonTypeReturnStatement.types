@@ -1,36 +1,36 @@
 === tests/cases/compiler/bestCommonTypeReturnStatement.ts ===
-interface IPromise<T> {
->IPromise : IPromise<T>
+interface IPromise_<T> {
+>IPromise_ : IPromise_<T>
 >T : T
 
-    then(successCallback: (promiseValue: T) => any, errorCallback?: (reason: any) => any): IPromise<any>;
->then : (successCallback: (promiseValue: T) => any, errorCallback?: (reason: any) => any) => IPromise<any>
+    then(successCallback: (promiseValue: T) => any, errorCallback?: (reason: any) => any): IPromise_<any>;
+>then : (successCallback: (promiseValue: T) => any, errorCallback?: (reason: any) => any) => IPromise_<any>
 >successCallback : (promiseValue: T) => any
 >promiseValue : T
 >T : T
 >errorCallback : (reason: any) => any
 >reason : any
->IPromise : IPromise<T>
+>IPromise_ : IPromise_<T>
 }
 
 function f() {
->f : () => IPromise<void>
+>f : () => IPromise_<void>
 
     if (true) return b();
->b() : IPromise<void>
->b : () => IPromise<void>
+>b() : IPromise_<void>
+>b : () => IPromise_<void>
 
     return d();
->d() : IPromise<any>
->d : () => IPromise<any>
+>d() : IPromise_<any>
+>d : () => IPromise_<any>
 }
 
 
-function b(): IPromise<void> { return null; }
->b : () => IPromise<void>
->IPromise : IPromise<T>
+function b(): IPromise_<void> { return null; }
+>b : () => IPromise_<void>
+>IPromise_ : IPromise_<T>
 
-function d(): IPromise<any> { return null; }
->d : () => IPromise<any>
->IPromise : IPromise<T>
+function d(): IPromise_<any> { return null; }
+>d : () => IPromise_<any>
+>IPromise_ : IPromise_<T>
 

@@ -77,6 +77,10 @@ module ts {
             type: "boolean",
         },
         {
+            name: "noHelpers",
+            type: "boolean",
+        },
+        {
             name: "out",
             type: "string",
             description: Diagnostics.Concatenate_and_emit_output_to_single_file,

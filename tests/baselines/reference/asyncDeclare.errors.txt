@@ -1,0 +1,12 @@
+tests/cases/conformance/async/downlevel/asyncDeclare.ts(6,9): error TS1040: 'async' modifier cannot be used in an ambient context.
+
+
+==== tests/cases/conformance/async/downlevel/asyncDeclare.ts (1 errors) ====
+    declare class Promise<T> {
+        constructor(init: (resolve: (value?: T | IPromise<T>) => void, reject: (reason?: any) => void) => void);
+        then<TResult>(onfulfilled?: (value: T) => TResult | IPromise<TResult>, onrejected?: (reason: any) => TResult | IPromise<TResult>): Promise<TResult>;
+    }
+    
+    declare async function foo(): Promise<void>;
+            ~~~~~
+!!! error TS1040: 'async' modifier cannot be used in an ambient context.

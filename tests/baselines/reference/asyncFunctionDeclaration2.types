@@ -1,0 +1,5 @@
+=== tests/cases/conformance/async/downlevel/asyncFunctionDeclaration/asyncFunctionDeclaration2.ts ===
+function f(await) {
+>f : (await: any) => void
+>await : any
+}

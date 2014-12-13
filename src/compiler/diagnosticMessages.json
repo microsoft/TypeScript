@@ -131,11 +131,27 @@
         "category": "Error",
         "code": 1039
     },
+    "'{0}' modifier cannot be used in an ambient context.": {
+        "category": "Error",
+        "code": 1040
+    },
+    "'{0}' modifier cannot be used with a class declaration.": {
+        "category": "Error",
+        "code": 1041
+    },
+    "'{0}' modifier cannot be used on a '{1}' accessor.": {
+        "category": "Error",
+        "code": 1042
+    },
+    "'{0}' modifier cannot appear on a data property.": { 
+        "category": "Error",
+        "code": 1043
+    },
     "'{0}' modifier cannot appear on a module element.": {
         "category": "Error",
         "code": 1044
     },
-    "A 'declare' modifier cannot be used with an interface declaration.": {
+    "'{0}' modifier cannot be used with an interface declaration.": {
         "category": "Error",
         "code": 1045
     },
@@ -175,6 +191,14 @@
         "category": "Error",
         "code": 1056
     },
+    "An async function or method must have a valid awaitable return type.": {
+        "category": "Error",
+        "code": 1057
+    },
+    "Type for `await` does not have a valid callable `then` member.": {
+        "category": "Error",
+        "code": 1058
+    },
     "Enum member must have initializer.": {
         "category": "Error",
         "code": 1061
@@ -191,7 +215,7 @@
         "category": "Error",
         "code": 1068
     },
-    "A 'declare' modifier cannot be used with an import declaration.": {
+    "'{0}' modifier cannot be used with an import declaration.": {
         "category": "Error",
         "code": 1079
     },
@@ -567,6 +591,43 @@
     "Destructuring declarations are not allowed in ambient contexts.": {
         "category": "Error",
         "code": 1183
+    },
+
+    "'with' statements are not allowed in an async function block.": {
+        "category": "Error",
+        "code": 1170
+    },
+    "'{0}' modifier cannot be used with a generator.": {
+        "category": "Error",
+        "code": 1171
+    },
+    "'{0}' modifier cannot be used with a module declaration.": {
+        "category": "Error",
+        "code": 1172
+    },
+    "'{0}' modifier cannot be used with an enum declaration.": {
+        "category": "Error",
+        "code": 1173
+    },
+    "'{0}' modifier cannot be used with an export assignment declaration.": {
+        "category": "Error",
+        "code": 1174
+    },
+    "'{0}' modifier cannot be used on a variable statement.": {
+        "category": "Error",
+        "code": 1175
+    },
+    "'{0}' modifier cannot be used with a type declaration.": {
+        "category": "Error",
+        "code": 1176
+    },
+    "'{0}' modifier cannot be used with a parameter declaration.": {
+        "category": "Error",
+        "code": 1178
+    },
+    "'await' expression must be contained within an async function.": {
+        "category": "Error",
+        "code": 1379
     },
 
     "Duplicate identifier '{0}'.": {
@@ -1172,6 +1233,15 @@
     "Type '{0}' is not an array type.": {
         "category": "Error",
         "code": 2461
+    },
+
+    "Duplicate identifier '{0}'. Compiler uses variable declaration '{0}' to support async functions.": {
+        "category": "Error",
+        "code": 2459
+    },
+    "Expression resolves to variable declaration '{0}' that compiler uses to support async functions.": {
+        "category": "Error",
+        "code": 2460
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {

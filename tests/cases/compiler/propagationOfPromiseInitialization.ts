@@ -1,8 +1,8 @@
-interface IPromise<T> {
-    then<TResult>(successCallback: (promiseValue: T) => TResult, errorCallback?: (reason: any) => TResult): IPromise<TResult>;
+interface IPromise1<T> {
+    then<TResult>(successCallback: (promiseValue: T) => TResult, errorCallback?: (reason: any) => TResult): IPromise1<TResult>;
 }
 
-var foo: IPromise<number>;
+var foo: IPromise1<number>;
 foo.then((x) => {
     // x is inferred to be a number
     return "asdf";

@@ -1,0 +1,16 @@
+tests/cases/conformance/async/downlevel/asyncArrowFunction/asyncArrowFunction7.ts(8,29): error TS1109: Expression expected.
+
+
+==== tests/cases/conformance/async/downlevel/asyncArrowFunction/asyncArrowFunction7.ts (1 errors) ====
+    declare class Promise<T> {
+        constructor(init: (resolve: (value?: T | IPromise<T>) => void, reject: (reason?: any) => void) => void);
+        then<TResult>(onfulfilled?: (value: T) => TResult | IPromise<TResult>, onrejected?: (reason: any) => TResult | IPromise<TResult>): Promise<TResult>;
+    }
+    
+    var bar = async (): Promise<void> => {
+      // 'await' here is an identifier, and not an await expression.
+      var foo = async (a = await): Promise<void> => {
+                                ~
+!!! error TS1109: Expression expected.
+      }
+    }

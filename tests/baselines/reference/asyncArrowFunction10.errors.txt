@@ -1,0 +1,28 @@
+tests/cases/conformance/async/downlevel/asyncArrowFunction/asyncArrowFunction10.ts(6,17): error TS1005: ',' expected.
+tests/cases/conformance/async/downlevel/asyncArrowFunction/asyncArrowFunction10.ts(6,20): error TS1005: '=' expected.
+tests/cases/conformance/async/downlevel/asyncArrowFunction/asyncArrowFunction10.ts(6,11): error TS2304: Cannot find name 'async'.
+tests/cases/conformance/async/downlevel/asyncArrowFunction/asyncArrowFunction10.ts(6,24): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value or consist of a single 'throw' statement.
+tests/cases/conformance/async/downlevel/asyncArrowFunction/asyncArrowFunction10.ts(8,11): error TS2304: Cannot find name 'await'.
+
+
+==== tests/cases/conformance/async/downlevel/asyncArrowFunction/asyncArrowFunction10.ts (5 errors) ====
+    declare class Promise<T> {
+        constructor(init: (resolve: (value?: T | IPromise<T>) => void, reject: (reason?: any) => void) => void);
+        then<TResult>(onfulfilled?: (value: T) => TResult | IPromise<TResult>, onrejected?: (reason: any) => TResult | IPromise<TResult>): Promise<TResult>;
+    }
+    
+    var foo = async foo(): Promise<void> => {
+                    ~~~
+!!! error TS1005: ',' expected.
+                       ~
+!!! error TS1005: '=' expected.
+              ~~~~~
+!!! error TS2304: Cannot find name 'async'.
+                           ~~~~~~~~~~~~~
+!!! error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value or consist of a single 'throw' statement.
+       // Legal to use 'await' in a type context.
+       var v: await;
+              ~~~~~
+!!! error TS2304: Cannot find name 'await'.
+    }
+    

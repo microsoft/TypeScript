@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 === tests/cases/compiler/declFileTypeAnnotationTypeLiteral.ts ===
 
 class c {
@@ -83,3 +84,90 @@ var z: new (a: string) => m.c;
 >m : unknown
 >c : m.c
 
+=======
+=== tests/cases/compiler/declFileTypeAnnotationTypeLiteral.ts ===
+
+class c {
+>c : c
+}
+class g<T> {
+>g : g<T>
+>T : T
+}
+module m {
+>m : typeof m
+
+    export class c {
+>c : c
+    }
+}
+
+// Object literal with everything
+var x: {
+>x : { (a: number): c; (a: string): g<string>; new (a: number): c; new (a: string): m.c; [x: string]: c; [x: number]: c; a: c; b: g<string>; m1(): g<number>; m2(a: string, b?: number, ...c: c[]): string; }
+
+    // Call signatures
+    (a: number): c;
+>a : number
+>c : c
+
+    (a: string): g<string>;
+>a : string
+>g : g<T>
+
+    // Construct signatures
+    new (a: number): c;
+>a : number
+>c : c
+
+    new (a: string): m.c;
+>a : string
+>m : unknown
+>c : m.c
+
+    // Indexers
+    [n: number]: c;
+>n : number
+>c : c
+
+    [n: string]: c;
+>n : string
+>c : c
+
+    // Properties
+    a: c;
+>a : c
+>c : c
+
+    b: g<string>;
+>b : g<string>
+>g : g<T>
+
+    // methods
+    m1(): g<number>;
+>m1 : () => g<number>
+>g : g<T>
+
+    m2(a: string, b?: number, ...c: c[]): string;
+>m2 : (a: string, b?: number, ...c: c[]) => string
+>a : string
+>b : number
+>c : c[]
+>c : c
+
+};
+
+
+// Function type
+var y: (a: string) => string;
+>y : (a: string) => string
+>a : string
+
+// constructor type
+var z: new (a: string) => m.c;
+>z : new (a: string) => m.c
+>a : string
+>m : unknown
+>c : m.c
+
+>>>>>>> prototypeAsync

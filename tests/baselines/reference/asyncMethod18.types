@@ -1,0 +1,9 @@
+=== tests/cases/conformance/async/downlevel/asyncMethod/asyncMethod18.ts ===
+var o = {
+>o : { await(): void; }
+>{  await() {  }} : { await(): void; }
+
+  await() {
+>await : () => void
+  }
+}

@@ -137,7 +137,8 @@ module ts {
         SetKeyword,
         StringKeyword,
         TypeKeyword,
-
+        AsyncKeyword,
+        AwaitKeyword,
         // Parse tree nodes
 
         // Names
@@ -192,6 +193,8 @@ module ts {
         ConditionalExpression,
         TemplateExpression,
         YieldExpression,
+        AwaitExpression,
+        GeneratedLabel,
         OmittedExpression,
         // Misc
         TemplateSpan,
@@ -256,7 +259,7 @@ module ts {
         FirstReservedWord = BreakKeyword,
         LastReservedWord = WithKeyword,
         FirstKeyword = BreakKeyword,
-        LastKeyword = TypeKeyword,
+        LastKeyword = AwaitKeyword,
         FirstFutureReservedWord = ImplementsKeyword,
         LastFutureReservedWord = YieldKeyword,
         FirstTypeNode = TypeReference,
@@ -264,7 +267,7 @@ module ts {
         FirstPunctuation = OpenBraceToken,
         LastPunctuation = CaretEqualsToken,
         FirstToken = Unknown,
-        LastToken = TypeKeyword,
+        LastToken = AwaitKeyword,
         FirstTriviaToken = SingleLineCommentTrivia,
         LastTriviaToken = WhitespaceTrivia,
         FirstLiteralToken = NumericLiteral,
@@ -291,8 +294,9 @@ module ts {
         Let                 = 0x00000800,  // Variable declaration
         Const               = 0x00001000,  // Variable declaration
         OctalLiteral        = 0x00002000,
+		Async				= 0x00010000,  // Method/Function
 
-        Modifier = Export | Ambient | Public | Private | Protected | Static,
+        Modifier = Export | Ambient | Public | Private | Protected | Static | Async,
         AccessibilityModifier = Public | Private | Protected,
         BlockScoped = Let | Const
     }
@@ -320,7 +324,10 @@ module ts {
         // any of its children had an error.  Once we compute that once, we can set this bit on the
         // node to know that we never have to do it again.  From that point on, we can just check
         // the node directly for 'ContainsError'.
-        HasPropagatedChildContainsErrorFlag = 1 << 5
+        HasPropagatedChildContainsErrorFlag = 1 << 5,
+
+        // If this node was parsed in the 'await' context created when parsing an async function.
+        Await = 1 << 6
     }
 
     export interface Node extends TextRange {
@@ -567,7 +574,7 @@ module ts {
         operand: LeftHandSideExpression;
         operator: SyntaxKind;
     }
-
+    
     export interface PostfixExpression extends UnaryExpression {
         _postfixExpressionBrand: any;
     }
@@ -596,6 +603,10 @@ module ts {
         expression: UnaryExpression;
     }
     
+    export interface AwaitExpression extends UnaryExpression {
+        expression: UnaryExpression;
+    }
+
     export interface YieldExpression extends Expression {
         asteriskToken?: Node;
         expression: Expression;
@@ -649,7 +660,7 @@ module ts {
     export interface ArrayLiteralExpression extends PrimaryExpression {
         elements: NodeArray<Expression>;
     }
-    
+
     // An ObjectLiteralExpression is the declaration node for an anonymous symbol.
     export interface ObjectLiteralExpression extends PrimaryExpression, Declaration {
         properties: NodeArray<ObjectLiteralElement>;
@@ -851,6 +862,11 @@ module ts {
         exportName: Identifier;
     }
 
+    export interface GeneratedLabel extends Expression {
+        label: Label;
+        labelNumbers?: number[];
+    }
+
     export interface FileReference extends TextRange {
         filename: string;
     }
@@ -910,13 +926,78 @@ module ts {
         getCommonSourceDirectory(): string;
     }
 
+    export enum OpCode {
+        Statement,              // A regular javascript statement
+        Assign,                 // An assignment
+        Break,                  // A break instruction used to jump to a label
+        BrTrue,                 // A break instruction used to jump to a label if a condition evaluates to true
+        BrFalse,                // A break instruction used to jump to a label if a condition evaluates to false
+        Yield,                  // A completion instruction for the `yield` keyword
+        YieldStar,              // A completion instruction for the `yield*` keyword
+        Return,                 // A completion instruction for the `return` keyword
+        Throw,                  // A completion instruction for the `throw` keyword
+        Endfinally              // Marks the end of a `finally` block
+    }
+
+    export type Label = number;
+
+    export interface LocalGenerator {
+        createUniqueIdentifier(name?: string): Identifier;
+        declareLocal(name?: string): Identifier;
+        buildLocals(): VariableStatement;
+    }
+
+    export interface CodeGenerator {
+        writeLocation(location: TextRange): void;
+
+        addParameter(name: Identifier, flags?: NodeFlags): void;
+        addVariable(name: Identifier, flags?: NodeFlags): void
+        addFunction(func: FunctionDeclaration): void;
+
+        declareLocal(name?: string): Identifier;
+
+        defineLabel(): Label;
+        markLabel(label: Label): void;
+
+        beginExceptionBlock(): Label;
+        beginCatchBlock(variable: Identifier): void;
+        beginFinallyBlock(): void;
+        endExceptionBlock(): void;
+
+        findBreakTarget(labelText?: string): Label;
+        findContinueTarget(labelText?: string): Label;
+
+        beginScriptContinueBlock(labelText: string): void;
+        endScriptContinueBlock(): void;
+        beginScriptBreakBlock(labelText: string): void;
+        endScriptBreakBlock(): void;
+        beginContinueBlock(continueLabel: Label, labelText: string): Label;
+        endContinueBlock(): void;
+        beginBreakBlock(labelText: string): Label;
+        endBreakBlock(): void;
+
+        emit(code: OpCode): void;
+        emit(code: OpCode, label: Label): void;
+        emit(code: OpCode, label: Label, condition: Expression): void;
+        emit(code: OpCode, node: Statement): void;
+        emit(code: OpCode, node: Expression): void;
+        emit(code: OpCode, left: Expression, right: Expression): void;
+
+        createUniqueIdentifier(name?: string): Identifier;
+        createInlineBreak(label: Label): ReturnStatement;
+        createInlineReturn(expression: Expression): ReturnStatement;
+        createResume(): LeftHandSideExpression;
+
+        buildFunction(kind: SyntaxKind, name: DeclarationName, location?: TextRange, flags?: NodeFlags, modifiers?: ModifiersArray): FunctionLikeDeclaration;
+    }
+
     export interface SourceMapSpan {
         emittedLine: number;    // Line number in the .js file
         emittedColumn: number;  // Column number in the .js file
-        sourceLine: number;     // Line number in the .ts file
-        sourceColumn: number;   // Column number in the .ts file
+        sourceLine?: number;    // Line number in the .ts file
+        sourceColumn?: number;  // Column number in the .ts file
         nameIndex?: number;     // Optional name (index into names array) associated with this span
-        sourceIndex: number;    // .ts file (index into sources array) associated with this span*/
+        sourceIndex?: number;   // .ts file (index into sources array) associated with this span
     }
 
     export interface SourceMapData {
@@ -1077,6 +1158,9 @@ module ts {
         getConstantValue(node: PropertyAccessExpression | ElementAccessExpression): number;
         isEmitBlocked(sourceFile?: SourceFile): boolean;
         isUnknownIdentifier(location: Node, name: string): boolean;
+        renameSymbol(symbol: Symbol, generatedName: string): void;
+        getRenamedIdentifier(name: Identifier): string;
+        getPromiseConstructor(node: SignatureDeclaration): EntityName;
     }
 
     export const enum SymbolFlags {
@@ -1121,9 +1205,9 @@ module ts {
         Module    = ValueModule | NamespaceModule,
         Accessor  = GetAccessor | SetAccessor,
 
-        // Variables can be redeclared, but can not redeclare a block-scoped declaration with the
+        // Variables can be redeclared, but can not redeclare a block-scoped declaration with the 
         // same name, or any other value that is not a variable, e.g. ValueModule or Class
-        FunctionScopedVariableExcludes = Value & ~FunctionScopedVariable,
+        FunctionScopedVariableExcludes = Value & ~FunctionScopedVariable,   
 
         // Block-scoped declarations are not allowed to be re-declared
         // they can not merge with anything in the value space
@@ -1169,8 +1253,9 @@ module ts {
         members?: SymbolTable;         // Class, interface or literal instance members
         exports?: SymbolTable;         // Module exports
         exportSymbol?: Symbol;         // Exported symbol associated with this symbol
-        valueDeclaration?: Declaration // First value declaration of the symbol,
-        constEnumOnlyModule?: boolean // For modules - if true - module contains only const enums or other modules with only const enums.
+        valueDeclaration?: Declaration;// First value declaration of the symbol,
+        constEnumOnlyModule?: boolean; // For modules - if true - module contains only const enums or other modules with only const enums.
+        generatedName?: string;        // A generated name for a renamed symbol
     }
 
     export interface SymbolLinks {
@@ -1181,6 +1266,8 @@ module ts {
         referenced?: boolean;          // True if alias symbol has been referenced as a value
         exportAssignSymbol?: Symbol;   // Symbol exported from external module
         unionType?: UnionType;         // Containing union type for union property
+        awaitedType?: Type;            // Awaited type of symbol
+        promiseType?: boolean;         // True if the type represents a creatable promise
     }
 
     export interface TransientSymbol extends Symbol, SymbolLinks { }
@@ -1200,6 +1287,10 @@ module ts {
 
         // Values for enum members have been computed, and any errors have been reported for them.
         EnumValuesComputed = 0x00000080,
+
+        EmitAwaiter        = 0x00000100,  // Emit __awaiter
+        EmitGenerator      = 0x00000200,  // Emit __generator
+        HasAwaitOrYield    = 0x00000400,  // This node has an 'await' or 'yield' in its descendants.
     }
 
     export interface NodeLinks {
@@ -1406,6 +1497,7 @@ module ts {
         noImplicitAny?: boolean;
         noLib?: boolean;
         noLibCheck?: boolean;
+        noHelpers?: boolean;
         noResolve?: boolean;
         out?: string;
         outDir?: string;
