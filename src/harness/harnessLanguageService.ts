@@ -126,7 +126,7 @@ module Harness.LanguageService {
             isOpen: boolean,
             textChangeRange: ts.TextChangeRange
             ): ts.SourceFile {
-            return ts.updateLanguageServiceSourceFile(document, scriptSnapshot, version, isOpen, textChangeRange, /*useIncremental:*/ false);
+            return ts.updateLanguageServiceSourceFile(document, scriptSnapshot, version, isOpen, textChangeRange);
         }
 
         public releaseDocument(fileName: string, compilationSettings: ts.CompilerOptions): void {
