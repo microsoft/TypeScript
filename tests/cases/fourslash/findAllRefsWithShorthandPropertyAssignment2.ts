@@ -10,7 +10,6 @@
 //// M.y./*4*/dx;
 
 goTo.marker('1');
-debugger;
 verify.referencesCountIs(1);
 
 goTo.marker('2');
