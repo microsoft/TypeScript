@@ -7,9 +7,6 @@
 ////var bbb: string;
 /////*1*/
 
-// Disable test triggered type check
-diagnostics.setEditValidation(IncrementalEditValidation.None);
-
 goTo.marker("1");
 verify.completionListContains("aaa");
 verify.completionListContains("bbb");

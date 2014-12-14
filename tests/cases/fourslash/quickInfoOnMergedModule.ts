@@ -15,8 +15,6 @@
 ////    var r = a.fo/*1*/o + a.bar;
 ////}
 
-diagnostics.setEditValidation(IncrementalEditValidation.None);
-
 goTo.marker('1');
 verify.quickInfoIs("(property) M2.A.foo: string", undefined);
 verify.numberOfErrorsInCurrentFile(0);

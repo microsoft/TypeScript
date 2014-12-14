@@ -9,6 +9,5 @@
 // @Filename: signatureHelpInFunctionCallOnFunctionDeclarationInMultipleFiles_file2.ts
 ////fn(/*1*/
 
-diagnostics.setEditValidation(IncrementalEditValidation.None);
 goTo.marker('1');
 verify.signatureHelpCountIs(2);

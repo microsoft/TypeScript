@@ -96,19 +96,6 @@ module FourSlash {
         end: number;
     }
 
-    export enum IncrementalEditValidation {
-        None,
-        SyntacticOnly,
-        Complete
-    }
-
-    export enum TypingFidelity {
-        /// Performs typing and formatting (if formatting is enabled)
-        Low,
-        /// Performs typing, checks completion lists, signature help, and formatting (if enabled)
-        High
-    }
-
     var entityMap: ts.Map<string> = {
         '&': '&amp;',
         '"': '&quot;',
@@ -278,9 +265,6 @@ module FourSlash {
         public formatCodeOptions: ts.FormatCodeOptions;
 
         public cancellationToken: TestCancellationToken;
-
-        public editValidation = IncrementalEditValidation.Complete;
-        public typingFidelity = TypingFidelity.Low;
 
         private scenarioActions: string[] = [];
         private taoInvalidReason: string = null;
@@ -1305,38 +1289,7 @@ module FourSlash {
                 this.scenarioActions.push('<InsertText><![CDATA[' + text + ']]></InsertText>');
             }
 
-            if (this.typingFidelity === TypingFidelity.Low) {
-                return this.typeLowFidelity(text);
-            } else {
-                return this.typeHighFidelity(text);
-            }
-        }
-
-        private typeLowFidelity(text: string) {
-            var offset = this.currentCaretPosition;
-            for (var i = 0; i < text.length; i++) {
-                // Make the edit
-                var ch = text.charAt(i);
-                this.languageServiceShimHost.editScript(this.activeFile.fileName, offset, offset, ch);
-                this.updateMarkersForEdit(this.activeFile.fileName, offset, offset, ch);
-                this.checkPostEditInvariants();
-                offset++;
-
-                // Handle post-keystroke formatting
-                if (this.enableFormatting) {
-                    var edits = this.languageService.getFormattingEditsAfterKeystroke(this.activeFile.fileName, offset, ch, this.formatCodeOptions);
-                    if (edits.length) {
-                        offset += this.applyEdits(this.activeFile.fileName, edits, true);
-                        this.checkPostEditInvariants();
-                    }
-                }
-            }
-
-            // Move the caret to wherever we ended up
-            this.currentCaretPosition = offset;
-
-            this.fixCaretPosition();
-            this.checkPostEditInvariants();
+            return this.typeHighFidelity(text);
         }
 
         // Enters lines of text at the current caret position, invoking
@@ -1380,7 +1333,6 @@ module FourSlash {
             this.currentCaretPosition = offset;
 
             this.fixCaretPosition();
-
             this.checkPostEditInvariants();
         }
 
@@ -1410,10 +1362,6 @@ module FourSlash {
         }
 
         private checkPostEditInvariants() {
-            if (this.editValidation === IncrementalEditValidation.None) {
-                return;
-            }
-
             var incrementalSourceFile = this.languageService.getSourceFile(this.activeFile.fileName);
             var incrementalSyntaxDiagnostics = JSON.stringify(Utils.convertDiagnostics(incrementalSourceFile.getSyntacticDiagnostics()));
 
