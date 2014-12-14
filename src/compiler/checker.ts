@@ -6622,6 +6622,14 @@ module ts {
         }
 
         function checkPostfixUnaryExpression(node: PostfixUnaryExpression): Type {
+            // Grammar checking
+            // The identifier eval or arguments may not appear as the LeftHandSideExpression of an
+            // Assignment operator(11.13) or of a PostfixExpression(11.3) or as the UnaryExpression
+            // operated upon by a Prefix Increment(11.4.4) or a Prefix Decrement(11.4.5) operator.
+            if (node.parserContextFlags & ParserContextFlags.StrictMode && isEvalOrArgumentsIdentifier(node.operand)) {
+                reportGrammarErrorOfInvalidUseInStrictMode(<Identifier>node.operand);
+            }
+
             var operandType = checkExpression(node.operand);
             var ok = checkArithmeticOperandType(node.operand, operandType, Diagnostics.An_arithmetic_operand_must_be_of_type_any_number_or_an_enum_type);
             if (ok) {
