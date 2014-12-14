@@ -302,6 +302,10 @@ module Utils {
         assert.equal(node1.end, node2.end, "node1.end !== node2.end");
         assert.equal(node1.kind, node2.kind, "node1.kind !== node2.kind");
         assert.equal(node1.flags, node2.flags, "node1.flags !== node2.flags");
+
+        // call this on both nodes to ensure all propagated flags have been set (and thus can be 
+        // compared).
+        assert.equal(ts.containsParseError(node1), ts.containsParseError(node2));
         assert.equal(node1.parserContextFlags, node2.parserContextFlags, "node1.parserContextFlags !== node2.parserContextFlags");
 
         ts.forEachChild(node1,
