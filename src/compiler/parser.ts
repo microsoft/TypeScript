@@ -4659,7 +4659,7 @@ module ts {
                 case SyntaxKind.ModuleDeclaration:              return checkModuleDeclaration(<ModuleDeclaration>node);
                 //case SyntaxKind.ObjectLiteralExpression:        return checkObjectLiteralExpression(<ObjectLiteralExpression>node);
                 //case SyntaxKind.NumericLiteral:                 return checkNumericLiteral(<LiteralExpression>node);
-                case SyntaxKind.Parameter:                      return checkParameter(<ParameterDeclaration>node);
+                //case SyntaxKind.Parameter:                      return checkParameter(<ParameterDeclaration>node);
                 case SyntaxKind.PostfixUnaryExpression:         return checkPostfixUnaryExpression(<PostfixUnaryExpression>node);
                 case SyntaxKind.PrefixUnaryExpression:          return checkPrefixUnaryExpression(<PrefixUnaryExpression>node);
                 case SyntaxKind.PropertyDeclaration:
@@ -5337,7 +5337,7 @@ module ts {
                 case SyntaxKind.FunctionDeclaration:
                 case SyntaxKind.TypeAliasDeclaration:
                 case SyntaxKind.ImportDeclaration:
-                case SyntaxKind.Parameter:
+                //case SyntaxKind.Parameter:
                     break;
                 default:
                     return false;

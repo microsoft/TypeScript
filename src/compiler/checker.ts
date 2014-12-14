@@ -7101,6 +7101,16 @@ module ts {
         }
 
         function checkParameter(node: ParameterDeclaration) {
+            // Grammar checking
+            // It is a SyntaxError if the Identifier "eval" or the Identifier "arguments" occurs as the
+            // Identifier in a PropertySetParameterList of a PropertyAssignment that is contained in strict code
+            // or if its FunctionBody is strict code(11.1.5).
+            // It is a SyntaxError if the identifier eval or arguments appears within a FormalParameterList of a
+            // strict mode FunctionLikeDeclaration or FunctionExpression(13.1)
+            if (!checkGrammarModifiers(node) && (node.parserContextFlags & ParserContextFlags.StrictMode && isEvalOrArgumentsIdentifier(node.name))) {
+                reportGrammarErrorOfInvalidUseInStrictMode(<Identifier>node.name);
+            }
+
             checkVariableLikeDeclaration(node);
             var func = getContainingFunction(node);
             if (node.flags & (NodeFlags.Public | NodeFlags.Private | NodeFlags.Protected)) {
