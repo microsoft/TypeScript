@@ -1233,11 +1233,6 @@ module FourSlash {
             ts.forEach(fileNames, Harness.IO.log);
         }
 
-        private editCheckpoint(filename: string) {
-            // TODO: What's this for? It is being called by deleteChar
-            // this.languageService.getScriptLexicalStructure(filename);
-        }
-
         public deleteChar(count = 1) {
             this.scenarioActions.push('<DeleteCharNext Count="' + count + '" />');
 
@@ -1248,7 +1243,7 @@ module FourSlash {
                 // Make the edit
                 this.languageServiceShimHost.editScript(this.activeFile.fileName, offset, offset + 1, ch);
                 this.updateMarkersForEdit(this.activeFile.fileName, offset, offset + 1, ch);
-                this.editCheckpoint(this.activeFile.fileName);
+                this.checkPostEditInvariants();
 
                 // Handle post-keystroke formatting
                 if (this.enableFormatting) {
@@ -1269,7 +1264,7 @@ module FourSlash {
 
             this.languageServiceShimHost.editScript(this.activeFile.fileName, start, start + length, text);
             this.updateMarkersForEdit(this.activeFile.fileName, start, start + length, text);
-            this.editCheckpoint(this.activeFile.fileName);
+            this.checkPostEditInvariants();
 
             this.checkPostEditInvariants();
         }
@@ -1285,13 +1280,13 @@ module FourSlash {
                 // Make the edit
                 this.languageServiceShimHost.editScript(this.activeFile.fileName, offset, offset + 1, ch);
                 this.updateMarkersForEdit(this.activeFile.fileName, offset, offset + 1, ch);
-                this.editCheckpoint(this.activeFile.fileName);
+                this.checkPostEditInvariants();
 
                 // Handle post-keystroke formatting
                 if (this.enableFormatting) {
                     var edits = this.languageService.getFormattingEditsAfterKeystroke(this.activeFile.fileName, offset, ch, this.formatCodeOptions);
                     offset += this.applyEdits(this.activeFile.fileName, edits, true);
-                    this.editCheckpoint(this.activeFile.fileName);
+                    this.checkPostEditInvariants();
                 }
             }
 
@@ -1299,7 +1294,6 @@ module FourSlash {
             this.currentCaretPosition = offset;
 
             this.fixCaretPosition();
-
             this.checkPostEditInvariants();
         }
 
@@ -1325,14 +1319,16 @@ module FourSlash {
                 var ch = text.charAt(i);
                 this.languageServiceShimHost.editScript(this.activeFile.fileName, offset, offset, ch);
                 this.updateMarkersForEdit(this.activeFile.fileName, offset, offset, ch);
-                this.editCheckpoint(this.activeFile.fileName);
+                this.checkPostEditInvariants();
                 offset++;
 
                 // Handle post-keystroke formatting
                 if (this.enableFormatting) {
                     var edits = this.languageService.getFormattingEditsAfterKeystroke(this.activeFile.fileName, offset, ch, this.formatCodeOptions);
-                    offset += this.applyEdits(this.activeFile.fileName, edits, true);
-                    this.editCheckpoint(this.activeFile.fileName);
+                    if (edits.length) {
+                        offset += this.applyEdits(this.activeFile.fileName, edits, true);
+                        this.checkPostEditInvariants();
+                    }
                 }
             }
 
@@ -1340,7 +1336,6 @@ module FourSlash {
             this.currentCaretPosition = offset;
 
             this.fixCaretPosition();
-
             this.checkPostEditInvariants();
         }
 
@@ -1357,7 +1352,7 @@ module FourSlash {
                 this.languageService.getBraceMatchingAtPosition(this.activeFile.fileName, offset);
 
                 this.updateMarkersForEdit(this.activeFile.fileName, offset, offset, ch);
-                this.editCheckpoint(this.activeFile.fileName);
+                this.checkPostEditInvariants();
                 offset++;
 
                 if (ch === '(' || ch === ',') {
@@ -1377,7 +1372,7 @@ module FourSlash {
                 if (this.enableFormatting) {
                     var edits = this.languageService.getFormattingEditsAfterKeystroke(this.activeFile.fileName, offset, ch, this.formatCodeOptions);
                     offset += this.applyEdits(this.activeFile.fileName, edits, true);
-                    this.editCheckpoint(this.activeFile.fileName);
+                    this.checkPostEditInvariants();
                 }
             }
 
@@ -1397,14 +1392,14 @@ module FourSlash {
             var offset = this.currentCaretPosition;
             this.languageServiceShimHost.editScript(this.activeFile.fileName, offset, offset, text);
             this.updateMarkersForEdit(this.activeFile.fileName, offset, offset, text);
-            this.editCheckpoint(this.activeFile.fileName);
+            this.checkPostEditInvariants();
             offset += text.length;
 
             // Handle formatting
             if (this.enableFormatting) {
                 var edits = this.languageService.getFormattingEditsForRange(this.activeFile.fileName, start, offset, this.formatCodeOptions);
                 offset += this.applyEdits(this.activeFile.fileName, edits, true);
-                this.editCheckpoint(this.activeFile.fileName);
+                this.checkPostEditInvariants();
             }
 
             // Move the caret to wherever we ended up
