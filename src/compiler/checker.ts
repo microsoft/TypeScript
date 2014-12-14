@@ -8126,6 +8126,20 @@ module ts {
         }
 
         function checkReturnStatement(node: ReturnStatement) {
+            // Grammar checking
+            var parent = node.parent;
+            var inFunctionBlock = false;
+            while (parent && parent.kind !== SyntaxKind.SourceFile) {
+                inFunctionBlock = isFunctionBlock(parent);
+                if (inFunctionBlock) {
+                    break;
+                }
+                parent = parent.parent;
+            }
+            if (!inFunctionBlock) {
+                grammarErrorOnFirstToken(node, Diagnostics.A_return_statement_can_only_be_used_within_a_function_body);
+            }
+
             if (node.expression) {
                 var func = getContainingFunction(node);
                 if (func) {
@@ -8149,6 +8163,20 @@ module ts {
         }
 
         function checkWithStatement(node: WithStatement) {
+            // Grammar checking
+            if (node.statement.kind === SyntaxKind.ReturnStatement) {
+                // Grammar check for invalid use of return statement
+                grammarErrorOnFirstToken(node.statement, Diagnostics.A_return_statement_can_only_be_used_within_a_function_body);
+            }
+            else if (node.statement.kind === SyntaxKind.Block) {
+                forEach((<Block>node.statement).statements, statement => {
+                    if (statement.kind === SyntaxKind.ReturnStatement) {
+                        // Grammar check for invalid use of return statement
+                        grammarErrorOnFirstToken(node.statement, Diagnostics.A_return_statement_can_only_be_used_within_a_function_body);
+                    }
+                });
+            }
+
             checkExpression(node.expression);
             error(node.expression, Diagnostics.All_symbols_within_a_with_block_will_be_resolved_to_any);
         }
