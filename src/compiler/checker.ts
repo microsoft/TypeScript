@@ -6599,6 +6599,16 @@ module ts {
         }
 
         function checkPrefixUnaryExpression(node: PrefixUnaryExpression): Type {
+            // Grammar checking
+            if (node.parserContextFlags & ParserContextFlags.StrictMode) {
+                // The identifier eval or arguments may not appear as the LeftHandSideExpression of an
+                // Assignment operator(11.13) or of a PostfixExpression(11.3) or as the UnaryExpression
+                // operated upon by a Prefix Increment(11.4.4) or a Prefix Decrement(11.4.5) operator
+                if ((node.operator === SyntaxKind.PlusPlusToken || node.operator === SyntaxKind.MinusMinusToken) && isEvalOrArgumentsIdentifier(node.operand)) {
+                    reportGrammarErrorOfInvalidUseInStrictMode(<Identifier>node.operand);
+                }
+            }
+
             var operandType = checkExpression(node.operand);
             switch (node.operator) {
                 case SyntaxKind.PlusToken:
