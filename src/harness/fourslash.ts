@@ -1434,12 +1434,7 @@ module FourSlash {
                 this.raiseError('Mismatched incremental/reference syntactic diagnostics for file ' + this.activeFile.fileName + '.\n=== Incremental diagnostics ===\n' + incrementalSyntaxDiagnostics + '\n=== Reference Diagnostics ===\n' + referenceSyntaxDiagnostics);
             }
 
-            var incrementalSourceFileJSON = Utils.sourceFileToJSON(incrementalSourceFile);
-            var referenceSourceFileJSON = Utils.sourceFileToJSON(referenceSourceFile);
-
-            if (incrementalSyntaxDiagnostics !== referenceSyntaxDiagnostics) {
-                this.raiseError('Mismatched incremental/reference ast for file ' + this.activeFile.fileName + '.\n=== Incremental AST ===\n' + incrementalSourceFileJSON + '\n=== Reference AST ===\n' + referenceSourceFileJSON);
-            }
+            Utils.assertStructuralEquals(incrementalSourceFile, referenceSourceFile);
 
              //if (this.editValidation !== IncrementalEditValidation.SyntacticOnly) {
              //   var compiler = new TypeScript.TypeScriptCompiler();
