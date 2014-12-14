@@ -2261,6 +2261,23 @@ module ts {
                 write("]");
             }
 
+            function emitBindingElement(node: BindingElement) {
+                if (node.propertyName) {
+                    emit(node.propertyName);
+                    write(": ");
+                }
+                if (node.dotDotDotToken) {
+                    write("...");
+                }
+                if (isBindingPattern(node.name)) {
+                    emit(node.name);
+                }
+                else {
+                    emitModuleMemberName(node);
+                }
+                emitOptional(" = ", node.initializer);
+            }
+
             function emitSpreadElementExpression(node: SpreadElementExpression) {
                 write("...");
                 emit((<SpreadElementExpression>node).expression);
@@ -2552,7 +2569,8 @@ module ts {
 
 
             function emitBinaryExpression(node: BinaryExpression) {
-                if (node.operator === SyntaxKind.EqualsToken && (node.left.kind === SyntaxKind.ObjectLiteralExpression || node.left.kind === SyntaxKind.ArrayLiteralExpression)) {
+                if (compilerOptions.target < ScriptTarget.ES6 && node.operator === SyntaxKind.EqualsToken &&
+                    (node.left.kind === SyntaxKind.ObjectLiteralExpression || node.left.kind === SyntaxKind.ArrayLiteralExpression)) {
                     emitDestructuring(node);
                 }
                 else {
@@ -3044,7 +3062,13 @@ module ts {
             function emitVariableDeclaration(node: VariableDeclaration) {
                 emitLeadingComments(node);
                 if (isBindingPattern(node.name)) {
-                    emitDestructuring(node);
+                    if (compilerOptions.target < ScriptTarget.ES6) {
+                        emitDestructuring(node);
+                    }
+                    else {
+                        emit(node.name);
+                        emitOptional(" = ", node.initializer);
+                    }
                 }
                 else {
                     emitModuleMemberName(node);
@@ -3073,57 +3097,61 @@ module ts {
 
             function emitParameter(node: ParameterDeclaration) {
                 emitLeadingComments(node);
-                if (isBindingPattern(node.name)) {
-                    var name = createTempVariable(node);
-                    if (!tempParameters) {
-                        tempParameters = [];
+                if (compilerOptions.target < ScriptTarget.ES6) {
+                    if (isBindingPattern(node.name)) {
+                        var name = createTempVariable(node);
+                        if (!tempParameters) {
+                            tempParameters = [];
+                        }
+                        tempParameters.push(name);
+                        emit(name);
                     }
-                    tempParameters.push(name);
-                    emit(name);
+                    else {
+                        emit(node.name);
+                    }
                 }
                 else {
+                    if (node.dotDotDotToken) {
+                        write("...");
+                    }
                     emit(node.name);
+                    emitOptional(" = ", node.initializer);
                 }
-                // TODO(andersh): Enable ES6 code generation below
-                //if (node.propertyName) {
-                //    emit(node.propertyName);
-                //    write(": ");
-                //}
-                //emit(node.name);
-                //emitOptional(" = ", node.initializer);
                 emitTrailingComments(node);
             }
 
             function emitDefaultValueAssignments(node: FunctionLikeDeclaration) {
-                var tempIndex = 0;
-                forEach(node.parameters, p => {
-                    if (isBindingPattern(p.name)) {
-                        writeLine();
-                        write("var ");
-                        emitDestructuring(p, tempParameters[tempIndex]);
-                        write(";");
-                        tempIndex++;
-                    }
-                    else if (p.initializer) {
-                        writeLine();
-                        emitStart(p);
-                        write("if (");
-                        emitNode(p.name);
-                        write(" === void 0)");
-                        emitEnd(p);
-                        write(" { ");
-                        emitStart(p);
-                        emitNode(p.name);
-                        write(" = ");
-                        emitNode(p.initializer);
-                        emitEnd(p);
-                        write("; }");
-                    }
-                });
+                if (compilerOptions.target < ScriptTarget.ES6) {
+                    var tempIndex = 0;
+                    forEach(node.parameters, p => {
+                        if (isBindingPattern(p.name)) {
+                            writeLine();
+                            write("var ");
+                            emitDestructuring(p, tempParameters[tempIndex]);
+                            write(";");
+                            tempIndex++;
+                        }
+                        else if (p.initializer) {
+                            writeLine();
+                            emitStart(p);
+                            write("if (");
+                            emitNode(p.name);
+                            write(" === void 0)");
+                            emitEnd(p);
+                            write(" { ");
+                            emitStart(p);
+                            emitNode(p.name);
+                            write(" = ");
+                            emitNode(p.initializer);
+                            emitEnd(p);
+                            write("; }");
+                        }
+                    });
+                }
             }
 
             function emitRestParameter(node: FunctionLikeDeclaration) {
-                if (hasRestParameters(node)) {
+                if (compilerOptions.target < ScriptTarget.ES6 && hasRestParameters(node)) {
                     var restIndex = node.parameters.length - 1;
                     var restParam = node.parameters[restIndex];
                     var tempName = createTempVariable(node, /*forLoopVariable*/ true).text;
@@ -3202,7 +3230,8 @@ module ts {
                 write("(");
                 if (node) {
                     var parameters = node.parameters;
-                    emitList(parameters, 0, parameters.length - (hasRestParameters(node) ? 1 : 0), /*multiLine*/ false, /*trailingComma*/ false);
+                    var omitCount = compilerOptions.target < ScriptTarget.ES6 && hasRestParameters(node) ? 1 : 0;
+                    emitList(parameters, 0, parameters.length - omitCount, /*multiLine*/ false, /*trailingComma*/ false);
                 }
                 write(")");
                 decreaseIndent();
@@ -3930,6 +3959,8 @@ module ts {
                         return emitObjectBindingPattern(<BindingPattern>node);
                     case SyntaxKind.ArrayBindingPattern:
                         return emitArrayBindingPattern(<BindingPattern>node);
+                    case SyntaxKind.BindingElement:
+                        return emitBindingElement(<BindingElement>node);
                     case SyntaxKind.ArrayLiteralExpression:
                         return emitArrayLiteral(<ArrayLiteralExpression>node);
                     case SyntaxKind.ObjectLiteralExpression:
