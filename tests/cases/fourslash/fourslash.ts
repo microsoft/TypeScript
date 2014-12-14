@@ -31,19 +31,6 @@
 
 declare var FourSlash;
 
-enum IncrementalEditValidation {
-    None = FourSlash.IncrementalEditValidation.None,
-    SyntacticOnly = FourSlash.IncrementalEditValidation.SyntacticOnly,
-    Complete = FourSlash.IncrementalEditValidation.Complete
-}
-
-enum TypingFidelity {
-    /** Performs typing and formatting (if formatting is enabled) */
-    Low = FourSlash.TypingFidelity.Low,
-    /** Performs typing, checks completion lists, signature help, and formatting (if enabled) */
-    High = FourSlash.TypingFidelity.High
-}
-
 // Return code used by getEmitOutput function to indicate status of the function
 // It is a duplicate of the one in types.ts to expose it to testcases in fourslash
 enum EmitReturnStatus {
@@ -100,14 +87,6 @@ module FourSlashInterface {
 
         public validateTypesAtPositions(...positions: number[]) {
             return FourSlash.currentTestState.verifyTypesAgainstFullCheckAtPositions(positions);
-        }
-
-        public setEditValidation(validation: IncrementalEditValidation) {
-            FourSlash.currentTestState.editValidation = validation;
-        }
-
-        public setTypingFidelity(fidelity: TypingFidelity) {
-            FourSlash.currentTestState.typingFidelity = fidelity;
         }
     }
 
