@@ -14,5 +14,4 @@
 // @emitThisFile: true
 //// var x:string = "hello";
 
-debugger;
 verify.baselineGetEmitOutput();
