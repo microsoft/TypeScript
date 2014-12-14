@@ -1013,7 +1013,7 @@ module ts {
 
             function emitPartialSwitchStatement(): void {
                 var clauses: CaseOrDefaultClause[] = [];
-                if (lastClauseOffset < node.clauses.length) {
+                if (lastClauseOffset < clauseIndex) {
                     var clause = node.clauses[lastClauseOffset];
                     if (clause.kind === SyntaxKind.CaseClause) {
                         var caseClause = <CaseClause>clause;
@@ -1267,6 +1267,7 @@ module ts {
             var resolve = locals.createUniqueIdentifier("_resolve");
             var generatorFunctionBody = factory.createBlock(statements);
             var generatorFunction = factory.createFunctionExpression(/*name*/ undefined, generatorFunctionBody, []);
+            generatorFunction.asteriskToken = factory.createTokenNode(SyntaxKind.AsteriskToken);
             var callGeneratorFunction = factory.createCallExpression(generatorFunction, []);
             var awaiterCallExpression = factory.createCallExpression(factory.createIdentifier("__awaiter"), [callGeneratorFunction]);
             var resolveCallExpression = factory.createCallExpression(resolve, [awaiterCallExpression]);

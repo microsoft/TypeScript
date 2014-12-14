@@ -30,10 +30,11 @@ function func() {
                     _a = a;
                     return ["yield", p];
                 case 1:
-                    if (_a === _state.sent)
-                        return ["break", 2];
                     switch (_a) {
-                        case 1: return ["break", 3];
+                        case _state.sent:
+                            return ["break", 2];
+                        case 1:
+                            return ["break", 3];
                     }
                     return ["break", 3];
                 case 2:

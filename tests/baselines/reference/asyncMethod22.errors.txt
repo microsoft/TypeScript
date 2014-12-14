@@ -3,19 +3,14 @@ tests/cases/conformance/async/downlevel/asyncMethod/asyncMethod22.ts(7,9): error
 tests/cases/conformance/async/downlevel/asyncMethod/asyncMethod22.ts(7,14): error TS1005: ';' expected.
 tests/cases/conformance/async/downlevel/asyncMethod/asyncMethod22.ts(7,28): error TS1109: Expression expected.
 tests/cases/conformance/async/downlevel/asyncMethod/asyncMethod22.ts(8,9): error TS1005: ':' expected.
-tests/cases/conformance/async/downlevel/asyncMethod/asyncMethod22.ts(8,15): error TS1136: Property assignment expected.
-tests/cases/conformance/async/downlevel/asyncMethod/asyncMethod22.ts(8,22): error TS1005: ',' expected.
-tests/cases/conformance/async/downlevel/asyncMethod/asyncMethod22.ts(9,3): error TS1128: Declaration or statement expected.
 tests/cases/conformance/async/downlevel/asyncMethod/asyncMethod22.ts(10,1): error TS1128: Declaration or statement expected.
 tests/cases/conformance/async/downlevel/asyncMethod/asyncMethod22.ts(7,3): error TS2304: Cannot find name 'async'.
 tests/cases/conformance/async/downlevel/asyncMethod/asyncMethod22.ts(7,9): error TS2304: Cannot find name 'foo'.
-tests/cases/conformance/async/downlevel/asyncMethod/asyncMethod22.ts(7,16): error TS2365: Operator '>' cannot be applied to types 'boolean' and '{ var: any; foo: any; }'.
+tests/cases/conformance/async/downlevel/asyncMethod/asyncMethod22.ts(7,16): error TS2365: Operator '>' cannot be applied to types 'boolean' and '{ var: {}; }'.
 tests/cases/conformance/async/downlevel/asyncMethod/asyncMethod22.ts(8,9): error TS2304: Cannot find name 'v'.
-tests/cases/conformance/async/downlevel/asyncMethod/asyncMethod22.ts(8,16): error TS2304: Cannot find name 'await'.
-tests/cases/conformance/async/downlevel/asyncMethod/asyncMethod22.ts(8,24): error TS2304: Cannot find name 'foo'.
 
 
-==== tests/cases/conformance/async/downlevel/asyncMethod/asyncMethod22.ts (15 errors) ====
+==== tests/cases/conformance/async/downlevel/asyncMethod/asyncMethod22.ts (10 errors) ====
     declare class Promise<T> {
         constructor(init: (resolve: (value?: T | IPromise<T>) => void, reject: (reason?: any) => void) => void);
         then<TResult>(onfulfilled?: (value: T) => TResult | IPromise<TResult>, onrejected?: (reason: any) => TResult | IPromise<TResult>): Promise<TResult>;
@@ -39,21 +34,12 @@ tests/cases/conformance/async/downlevel/asyncMethod/asyncMethod22.ts(8,24): erro
         var v = { [await]: foo }
             ~
 !!! error TS1005: ':' expected.
-                  ~
-!!! error TS1136: Property assignment expected.
-                         ~
-!!! error TS1005: ',' expected.
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2365: Operator '>' cannot be applied to types 'boolean' and '{ var: any; foo: any; }'.
             ~
 !!! error TS2304: Cannot find name 'v'.
-                   ~~~~~
-!!! error TS2304: Cannot find name 'await'.
-                           ~~~
-!!! error TS2304: Cannot find name 'foo'.
       }
-      ~
-!!! error TS1128: Declaration or statement expected.
+    ~~~
+!!! error TS2365: Operator '>' cannot be applied to types 'boolean' and '{ var: {}; }'.
     }
     ~
 !!! error TS1128: Declaration or statement expected.

@@ -17,6 +17,7 @@ async function func(): Promise<void> {
 
 //// [awaitCallExpression8.js]
 function func() {
+    var _a, _b;
     var b;
     return new Promise(function (_resolve) {
         _resolve(__awaiter(__generator(function (_state) {
@@ -25,7 +26,9 @@ function func() {
                     "before";
                     return ["yield", po];
                 case 1:
-                    b = (_state.sent).fn(a, a, a);
+                    _a = (_state.sent);
+                    _b = _a.fn;
+                    b = _b.call(_a, a, a, a);
                     "after";
                     return ["return"];
             }

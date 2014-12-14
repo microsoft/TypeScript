@@ -1,13 +1,18 @@
-tests/cases/conformance/async/es6/functionDeclarations/asyncFunctionDeclaration6_es6.ts(6,24): error TS2304: Cannot find name 'await'.
+tests/cases/conformance/async/es6/functionDeclarations/asyncFunctionDeclaration6_es6.ts(6,29): error TS1109: Expression expected.
+lib.d.ts(4709,11): error TS2300: Duplicate identifier 'Promise'.
+lib.d.ts(4794,13): error TS2300: Duplicate identifier 'Promise'.
+tests/cases/conformance/async/es6/functionDeclarations/asyncFunctionDeclaration6_es6.ts(1,15): error TS2300: Duplicate identifier 'Promise'.
 
 
-==== tests/cases/conformance/async/es6/functionDeclarations/asyncFunctionDeclaration6_es6.ts (1 errors) ====
+==== tests/cases/conformance/async/es6/functionDeclarations/asyncFunctionDeclaration6_es6.ts (2 errors) ====
     declare class Promise<T> {
+                  ~~~~~~~
+!!! error TS2300: Duplicate identifier 'Promise'.
         constructor(init: (resolve: (value?: T | IPromise<T>) => void, reject: (reason?: any) => void) => void);
         then<TResult>(onfulfilled?: (value: T) => TResult | IPromise<TResult>, onrejected?: (reason: any) => TResult | IPromise<TResult>): Promise<TResult>;
     }
     
     async function foo(a = await): Promise<void> {
-                           ~~~~~
-!!! error TS2304: Cannot find name 'await'.
+                                ~
+!!! error TS1109: Expression expected.
     }

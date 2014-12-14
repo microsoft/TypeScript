@@ -18,6 +18,10 @@ module ts {
             return nodeArray;
         }
 
+        export function createTokenNode(token: SyntaxKind, location?: TextRange, flags?: NodeFlags): Node {
+            return finishNode(beginNode(token), location, flags);
+        }
+
         // entity names
         export function createIdentifier(text: string, location?: TextRange, flags?: NodeFlags): Identifier {
             var node = beginNode<Identifier>(SyntaxKind.Identifier);

@@ -995,7 +995,7 @@ module ts {
 
         function nextTokenCanFollowModifier() {
             if (token === SyntaxKind.AsyncKeyword) {
-            nextToken();
+                nextToken();
                 return canFollowAsyncModifier();
             }
 
@@ -1014,7 +1014,7 @@ module ts {
             }
 
             if (token === SyntaxKind.AsyncKeyword) {
-            nextToken();
+                nextToken();
                 return canFollowAsyncModifier();
             }
 
@@ -2247,12 +2247,12 @@ module ts {
             // Definitely not a parenthesized arrow function.
             return Tristate.False;
         }
-
+        
         function isParenthesizedArrowFunctionExpressionWorker() {
             if (token === SyntaxKind.AsyncKeyword) {
                 // If we see an "async" keyword with no line break, this could be an async arrow function.
                 nextToken();
-                if (scanner.hasPrecedingLineBreak()) {
+                if (scanner.hasPrecedingLineBreak() || (token !== SyntaxKind.OpenParenToken && token !== SyntaxKind.LessThanToken)) {
                     return Tristate.False;
                 }
 
@@ -3257,11 +3257,11 @@ module ts {
                 labeledStatement.label = <Identifier>expression;
                 labeledStatement.statement = parseStatement();
                 return finishNode(labeledStatement);
-        }
+            }
             else {
                 var expressionStatement = <ExpressionStatement>createNode(SyntaxKind.ExpressionStatement, fullStart);
                 expressionStatement.expression = expression;
-            parseSemicolon();
+                parseSemicolon();
                 return finishNode(expressionStatement);
             }
         }
@@ -3303,6 +3303,15 @@ module ts {
                     // In ES 6 'enum' is a future reserved keyword, so it should not be used as identifier
                     var isConstEnum = lookAhead(nextTokenIsEnumKeyword);
                     return !isConstEnum;
+
+                case SyntaxKind.AsyncKeyword:
+                    // When followed by the function keyword on the same line, this is a statement
+                    if (lookAhead(nextTokenIsFunctionKeywordOnSameLine)) {
+                        return true;
+                    }
+
+                    return isStartOfExpression();
+
                 case SyntaxKind.InterfaceKeyword:
                 case SyntaxKind.ClassKeyword:
                 case SyntaxKind.ModuleKeyword:
@@ -3323,6 +3332,7 @@ module ts {
                     if (lookAhead(nextTokenIsIdentifierOrKeywordOnSameLine)) {
                         return false;
                     }
+
                 default:
                     return isStartOfExpression();
             }
@@ -3346,6 +3356,15 @@ module ts {
                 case SyntaxKind.ConstKeyword:
                     // const here should always be parsed as const declaration because of check in 'isStatement' 
                     return parseVariableStatement(scanner.getStartPos(), /*modifiers:*/ undefined);
+                case SyntaxKind.AsyncKeyword:
+                    // If 'async' is followed by 'function' on the same line, then is an async function declaration
+                    if (lookAhead(nextTokenIsFunctionKeywordOnSameLine)) {
+                        var modifiers = parseModifiers();
+                        return parseFunctionDeclaration(scanner.getStartPos(), modifiers);
+                    }
+
+                    // else it is part of an expression
+                    break;
                 case SyntaxKind.FunctionKeyword:
                     return parseFunctionDeclaration(scanner.getStartPos(), /*modifiers:*/ undefined);
                 case SyntaxKind.SemicolonToken:
@@ -3382,10 +3401,12 @@ module ts {
                     if (isLetDeclaration()) {
                         return parseVariableStatement(scanner.getStartPos(), /*modifiers:*/ undefined);
                     }
-                    // Else parse it like identifier - fall through
-                default:
-                    return parseExpressionOrLabeledStatement();
+                    
+                    // Else parse it like identifier
+                    break;
             }
+
+            return parseExpressionOrLabeledStatement();
         }
 
         function parseFunctionBlockOrSemicolon(isGenerator: boolean, isAsync: boolean): Block {
@@ -3946,6 +3967,11 @@ module ts {
         function nextTokenIsDeclarationStartOnSameLine() {
             nextToken();
             return !scanner.hasPrecedingLineBreak() && isDeclarationStart();
+        }
+
+        function nextTokenIsFunctionKeywordOnSameLine() {
+            nextToken();
+            return !scanner.hasPrecedingLineBreak() && token === SyntaxKind.FunctionKeyword;
         }
 
         function parseDeclaration(): ModuleElement {

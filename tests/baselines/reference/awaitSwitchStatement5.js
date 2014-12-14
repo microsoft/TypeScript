@@ -31,8 +31,10 @@ function func() {
                     "before";
                     _a = a;
                     switch (_a) {
-                        case b: return ["break", 1];
-                        case 1: return ["break", 3];
+                        case b:
+                            return ["break", 1];
+                        case 1:
+                            return ["break", 3];
                     }
                     return ["break", 3];
                 case 1:

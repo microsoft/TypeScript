@@ -29,12 +29,15 @@ function func() {
                     "before";
                     _a = a;
                     switch (_a) {
-                        case b: return ["break", 2];
+                        case b:
+                            return ["break", 2];
                     }
                     return ["yield", p];
                 case 1:
-                    if (_a === _state.sent)
-                        return ["break", 3];
+                    switch (_a) {
+                        case _state.sent:
+                            return ["break", 3];
+                    }
                     return ["break", 3];
                 case 2:
                     "body0";

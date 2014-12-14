@@ -7935,7 +7935,7 @@ module ts {
             var container = getContainingFunction(name);
             if (container && container.flags & NodeFlags.Async && node.kind !== SyntaxKind.Identifier) {
                 var promiseConstructor = getPromiseConstructor(container);
-                if (promiseConstructor.kind === SyntaxKind.Identifier && (<Identifier>promiseConstructor).text === identifier.text) {
+                if (promiseConstructor && promiseConstructor.kind === SyntaxKind.Identifier && (<Identifier>promiseConstructor).text === identifier.text) {
                     error(node, Diagnostics.Duplicate_identifier_0_Compiler_uses_variable_declaration_0_to_support_async_functions, identifier.text);
                 }
             }

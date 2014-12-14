@@ -3143,11 +3143,9 @@ module ts {
                     // Methods will emit the comments as part of emitting method declaration
                     emitLeadingComments(node);
                 }
-                if (node.asteriskToken) {
-                    write("function* ");
-                } else {
-                    write("function ");
-                }
+                write("function");
+                emit(node.asteriskToken);
+                write(" ");
 
                 if (node.kind === SyntaxKind.FunctionDeclaration || (node.kind === SyntaxKind.FunctionExpression && node.name)) {
                     emit(node.name);
@@ -4049,6 +4047,8 @@ module ts {
                         return write("true");
                     case SyntaxKind.FalseKeyword:
                         return write("false");
+                    case SyntaxKind.AsteriskToken:
+                        return write("*");
                     case SyntaxKind.NumericLiteral:
                     case SyntaxKind.StringLiteral:
                     case SyntaxKind.RegularExpressionLiteral:
