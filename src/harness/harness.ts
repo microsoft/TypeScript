@@ -290,6 +290,60 @@ module Utils {
             return o;
         }
     }
+
+    export function assertStructuralEquals(node1: ts.Node, node2: ts.Node) {
+        if (node1 === node2) {
+            return;
+        }
+
+        assert(node1, "node1");
+        assert(node2, "node2");
+        assert.equal(node1.pos, node2.pos, "node1.pos !== node2.pos");
+        assert.equal(node1.end, node2.end, "node1.end !== node2.end");
+        assert.equal(node1.kind, node2.kind, "node1.kind !== node2.kind");
+        assert.equal(node1.flags, node2.flags, "node1.flags !== node2.flags");
+        assert.equal(node1.parserContextFlags, node2.parserContextFlags, "node1.parserContextFlags !== node2.parserContextFlags");
+
+        ts.forEachChild(node1,
+            child1 => {
+                var childName = findChildName(node1, child1);
+                var child2: ts.Node = (<any>node2)[childName];
+
+                assertStructuralEquals(child1, child2);
+            },
+            (array1: ts.NodeArray<ts.Node>) => {
+                var childName = findChildName(node1, array1);
+                var array2: ts.NodeArray<ts.Node> = (<any>node2)[childName];
+
+                assertArrayStructuralEquals(array1, array2);
+            });
+    }
+
+    function assertArrayStructuralEquals(array1: ts.NodeArray<ts.Node>, array2: ts.NodeArray<ts.Node>) {
+        if (array1 === array2) {
+            return;
+        }
+
+        assert(array1, "array1");
+        assert(array2, "array2");
+        assert.equal(array1.pos, array2.pos, "array1.pos !== array2.pos");
+        assert.equal(array1.end, array2.end, "array1.end !== array2.end");
+        assert.equal(array1.length, array2.length, "array1.length !== array2.length");
+
+        for (var i = 0, n = array1.length; i < n; i++) {
+            assertStructuralEquals(array1[i], array2[i]);
+        }
+    }
+
+    function findChildName(parent: any, child: any) {
+        for (var name in parent) {
+            if (parent.hasOwnProperty(name) && parent[name] === child) {
+                return name;
+            }
+        }
+
+        throw new Error("Could not find child in parent");
+    }
 }
 
 module Harness.Path {
