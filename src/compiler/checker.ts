@@ -8171,7 +8171,12 @@ module ts {
         }
 
         function checkWithStatement(node: WithStatement) {
-            // Grammar checking
+            // Grammar checking for withStatement
+            if (node.parserContextFlags & ParserContextFlags.StrictMode) {
+                grammarErrorOnFirstToken(node, Diagnostics.with_statements_are_not_allowed_in_strict_mode);
+            }
+
+            // Grammar checking for invalid use of return statement
             if (node.statement.kind === SyntaxKind.ReturnStatement) {
                 // Grammar check for invalid use of return statement
                 grammarErrorOnFirstToken(node.statement, Diagnostics.A_return_statement_can_only_be_used_within_a_function_body);
