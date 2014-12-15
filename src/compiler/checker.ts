@@ -7363,6 +7363,9 @@ module ts {
         }
 
         function checkTypeReference(node: TypeReferenceNode) {
+            // Grammar checking
+            checkGrammarTypeArguments(node, node.typeArguments);
+
             var type = getTypeFromTypeReferenceNode(node);
             if (type !== unknownType && node.typeArguments) {
                 // Do type argument local checks only if referenced type is successfully resolved
@@ -10082,7 +10085,7 @@ module ts {
             checkGrammarModifiers(node) || checkGrammarIndexSignatureParameters(node) || checkGrammarForIndexSignatureModifier(node);
         }
 
-        function checkGrammarForAtLeastOneTypeArgument(node: CallExpression, typeArguments: NodeArray<TypeNode>): boolean {
+        function checkGrammarForAtLeastOneTypeArgument(node: Node, typeArguments: NodeArray<TypeNode>): boolean {
             if (typeArguments && typeArguments.length === 0) {
                 var sourceFile = getSourceFileOfNode(node);
                 var start = typeArguments.pos - "<".length;
@@ -10091,7 +10094,7 @@ module ts {
             }
         }
 
-        function checkGrammarTypeArguments(node: CallExpression, typeArguments: NodeArray<TypeNode>): boolean {
+        function checkGrammarTypeArguments(node: Node, typeArguments: NodeArray<TypeNode>): boolean {
             return checkGrammarForDisallowedTrailingComma(typeArguments) ||
                 checkGrammarForAtLeastOneTypeArgument(node, typeArguments);
         }
