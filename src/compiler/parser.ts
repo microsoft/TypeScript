@@ -4626,9 +4626,9 @@ module ts {
         function checkNode(node: Node, nodeKind: SyntaxKind): boolean {
             // Now do node specific checks.
             switch (nodeKind) {
-                case SyntaxKind.BreakStatement:
-                case SyntaxKind.ContinueStatement:
-                    return checkBreakOrContinueStatement(<BreakOrContinueStatement>node);
+                //case SyntaxKind.BreakStatement:
+                //case SyntaxKind.ContinueStatement:
+                    //return checkBreakOrContinueStatement(<BreakOrContinueStatement>node);
                 //case SyntaxKind.CallExpression:
                 //case SyntaxKind.NewExpression:
                     //return checkCallOrNewExpression(<NewExpression>node);
