@@ -485,7 +485,7 @@ function deleteTemporaryProjectOutput() {
     }
 }
 
-var testTimeout = 6000;
+var testTimeout = 20000;
 desc("Runs the tests using the built run.js file. Syntax is jake runtests. Optional parameters 'host=', 'tests=[regex], reporter=[list|spec|json|<more>]'.");
 task("runtests", ["tests", builtLocalDirectory], function() {
     cleanTestDirs();
