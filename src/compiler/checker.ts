@@ -8139,14 +8139,8 @@ module ts {
             // Grammar checking
             var parent = node.parent;
             var inFunctionBlock = false;
-            while (parent && parent.kind !== SyntaxKind.SourceFile) {
-                inFunctionBlock = isFunctionBlock(parent);
-                if (inFunctionBlock) {
-                    break;
-                }
-                parent = parent.parent;
-            }
-            if (!inFunctionBlock) {
+            var functionBlock = getContainingFunction(node);
+            if (!functionBlock) {
                 grammarErrorOnFirstToken(node, Diagnostics.A_return_statement_can_only_be_used_within_a_function_body);
             }
 
@@ -8174,21 +8168,16 @@ module ts {
 
         function checkWithStatement(node: WithStatement) {
             // Grammar checking for withStatement
+            var hasStrictModeError = false;
             if (node.parserContextFlags & ParserContextFlags.StrictMode) {
                 grammarErrorOnFirstToken(node, Diagnostics.with_statements_are_not_allowed_in_strict_mode);
+                hasStrictModeError = true;
             }
 
             // Grammar checking for invalid use of return statement
-            if (node.statement.kind === SyntaxKind.ReturnStatement) {
-                // Grammar check for invalid use of return statement
-                grammarErrorOnFirstToken(node.statement, Diagnostics.A_return_statement_can_only_be_used_within_a_function_body);
-            }
-            else if (node.statement.kind === SyntaxKind.Block) {
-                forEach((<Block>node.statement).statements, statement => {
-                    if (statement.kind === SyntaxKind.ReturnStatement) {
-                        // Grammar check for invalid use of return statement
-                        grammarErrorOnFirstToken(node.statement, Diagnostics.A_return_statement_can_only_be_used_within_a_function_body);
-                    }
+            if (!hasStrictModeError) {
+                forEachReturnStatement(<Block>node.statement, (returnStatement) => {
+                    grammarErrorOnFirstToken(returnStatement, Diagnostics.A_return_statement_can_only_be_used_within_a_function_body);
                 });
             }
 
