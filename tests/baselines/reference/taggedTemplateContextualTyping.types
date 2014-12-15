@@ -1,0 +1,124 @@
+=== tests/cases/conformance/expressions/contextualTyping/taggedTemplateContextualTyping.ts ===
+
+function tempTag1<T>(templateStrs: TemplateStringsArray, f: (x: T) => T, x: T): T;
+>tempTag1 : { <T>(templateStrs: TemplateStringsArray, f: (x: T) => T, x: T): T; <T>(templateStrs: TemplateStringsArray, f: (x: T) => T, h: (y: T) => T, x: T): T; }
+>T : T
+>templateStrs : TemplateStringsArray
+>TemplateStringsArray : TemplateStringsArray
+>f : (x: T) => T
+>x : T
+>T : T
+>T : T
+>x : T
+>T : T
+>T : T
+
+function tempTag1<T>(templateStrs: TemplateStringsArray, f: (x: T) => T, h: (y: T) => T, x: T): T;
+>tempTag1 : { <T>(templateStrs: TemplateStringsArray, f: (x: T) => T, x: T): T; <T>(templateStrs: TemplateStringsArray, f: (x: T) => T, h: (y: T) => T, x: T): T; }
+>T : T
+>templateStrs : TemplateStringsArray
+>TemplateStringsArray : TemplateStringsArray
+>f : (x: T) => T
+>x : T
+>T : T
+>T : T
+>h : (y: T) => T
+>y : T
+>T : T
+>T : T
+>x : T
+>T : T
+>T : T
+
+function tempTag1<T>(...rest: any[]): T {
+>tempTag1 : { <T>(templateStrs: TemplateStringsArray, f: (x: T) => T, x: T): T; <T>(templateStrs: TemplateStringsArray, f: (x: T) => T, h: (y: T) => T, x: T): T; }
+>T : T
+>rest : any[]
+>T : T
+
+    return undefined;
+>undefined : undefined
+}
+
+tempTag1 `${ x => x }${ 10 }`;
+>tempTag1 : { <T>(templateStrs: TemplateStringsArray, f: (x: T) => T, x: T): T; <T>(templateStrs: TemplateStringsArray, f: (x: T) => T, h: (y: T) => T, x: T): T; }
+>x => x : (x: number) => number
+>x : number
+>x : number
+
+tempTag1 `${ x => x }${ y => y }${ 10 }`;
+>tempTag1 : { <T>(templateStrs: TemplateStringsArray, f: (x: T) => T, x: T): T; <T>(templateStrs: TemplateStringsArray, f: (x: T) => T, h: (y: T) => T, x: T): T; }
+>x => x : (x: number) => number
+>x : number
+>x : number
+>y => y : (y: number) => number
+>y : number
+>y : number
+
+tempTag1 `${ x => x }${ (y: number) => y }${ undefined }`;
+>tempTag1 : { <T>(templateStrs: TemplateStringsArray, f: (x: T) => T, x: T): T; <T>(templateStrs: TemplateStringsArray, f: (x: T) => T, h: (y: T) => T, x: T): T; }
+>x => x : (x: number) => number
+>x : number
+>x : number
+>(y: number) => y : (y: number) => number
+>y : number
+>y : number
+>undefined : undefined
+
+tempTag1 `${ (x: number) => x }${ y => y }${ undefined }`;
+>tempTag1 : { <T>(templateStrs: TemplateStringsArray, f: (x: T) => T, x: T): T; <T>(templateStrs: TemplateStringsArray, f: (x: T) => T, h: (y: T) => T, x: T): T; }
+>(x: number) => x : (x: number) => number
+>x : number
+>x : number
+>y => y : (y: number) => number
+>y : number
+>y : number
+>undefined : undefined
+
+function tempTag2(templateStrs: TemplateStringsArray, f: (x: number) => number, x: number): number;
+>tempTag2 : { (templateStrs: TemplateStringsArray, f: (x: number) => number, x: number): number; (templateStrs: TemplateStringsArray, f: (x: string) => string, h: (y: string) => string, x: string): string; }
+>templateStrs : TemplateStringsArray
+>TemplateStringsArray : TemplateStringsArray
+>f : (x: number) => number
+>x : number
+>x : number
+
+function tempTag2(templateStrs: TemplateStringsArray, f: (x: string) => string, h: (y: string) => string, x: string): string;
+>tempTag2 : { (templateStrs: TemplateStringsArray, f: (x: number) => number, x: number): number; (templateStrs: TemplateStringsArray, f: (x: string) => string, h: (y: string) => string, x: string): string; }
+>templateStrs : TemplateStringsArray
+>TemplateStringsArray : TemplateStringsArray
+>f : (x: string) => string
+>x : string
+>h : (y: string) => string
+>y : string
+>x : string
+
+function tempTag2(...rest: any[]): any {
+>tempTag2 : { (templateStrs: TemplateStringsArray, f: (x: number) => number, x: number): number; (templateStrs: TemplateStringsArray, f: (x: string) => string, h: (y: string) => string, x: string): string; }
+>rest : any[]
+
+    return undefined;
+>undefined : undefined
+}
+
+tempTag2 `${ x => x }${ 0 }`;
+>tempTag2 : { (templateStrs: TemplateStringsArray, f: (x: number) => number, x: number): number; (templateStrs: TemplateStringsArray, f: (x: string) => string, h: (y: string) => string, x: string): string; }
+>x => x : (x: number) => number
+>x : number
+>x : number
+
+tempTag2 `${ x => x }${ y => y }${ "hello" }`;
+>tempTag2 : { (templateStrs: TemplateStringsArray, f: (x: number) => number, x: number): number; (templateStrs: TemplateStringsArray, f: (x: string) => string, h: (y: string) => string, x: string): string; }
+>x => x : (x: string) => string
+>x : string
+>x : string
+>y => y : (y: string) => string
+>y : string
+>y : string
+
+tempTag2 `${ x => x }${ 0 }`;
+>tempTag2 : { (templateStrs: TemplateStringsArray, f: (x: number) => number, x: number): number; (templateStrs: TemplateStringsArray, f: (x: string) => string, h: (y: string) => string, x: string): string; }
+>x => x : (x: number) => number
+>x : number
+>x : number
+
