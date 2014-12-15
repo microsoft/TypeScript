@@ -76,7 +76,7 @@ module ts {
         Type_expected: { code: 1110, category: DiagnosticCategory.Error, key: "Type expected.", isEarly: true },
         A_constructor_implementation_cannot_be_declared_in_an_ambient_context: { code: 1111, category: DiagnosticCategory.Error, key: "A constructor implementation cannot be declared in an ambient context.", isEarly: true },
         A_class_member_cannot_be_declared_optional: { code: 1112, category: DiagnosticCategory.Error, key: "A class member cannot be declared optional.", isEarly: true },
-        A_default_clause_cannot_appear_more_than_once_in_a_switch_statement: { code: 1113, category: DiagnosticCategory.Error, key: "A 'default' clause cannot appear more than once in a 'switch' statement." },
+        A_default_clause_cannot_appear_more_than_once_in_a_switch_statement: { code: 1113, category: DiagnosticCategory.Error, key: "A 'default' clause cannot appear more than once in a 'switch' statement.", isEarly: true },
         Duplicate_label_0: { code: 1114, category: DiagnosticCategory.Error, key: "Duplicate label '{0}'", isEarly: true },
         A_continue_statement_can_only_jump_to_a_label_of_an_enclosing_iteration_statement: { code: 1115, category: DiagnosticCategory.Error, key: "A 'continue' statement can only jump to a label of an enclosing iteration statement.", isEarly: true },
         A_break_statement_can_only_jump_to_a_label_of_an_enclosing_statement: { code: 1116, category: DiagnosticCategory.Error, key: "A 'break' statement can only jump to a label of an enclosing statement.", isEarly: true },

@@ -8182,8 +8182,26 @@ module ts {
         }
 
         function checkSwitchStatement(node: SwitchStatement) {
+            // Grammar checking
+            var firstDefaultClause: CaseOrDefaultClause;
+            var hasDuplicateDefaultClause = false;
+
             var expressionType = checkExpression(node.expression);
             forEach(node.clauses, clause => {
+                // Grammar check for duplicate default clauses, skip if we already report duplicate default clause
+                if (clause.kind === SyntaxKind.DefaultClause && !hasDuplicateDefaultClause) {
+                    if (firstDefaultClause === undefined) {
+                        firstDefaultClause = clause;
+                    }
+                    else {
+                        var sourceFile = getSourceFileOfNode(node);
+                        var start = skipTrivia(sourceFile.text, clause.pos);
+                        var end = clause.statements.length > 0 ? clause.statements[0].pos : clause.end;
+                        grammarErrorAtPos(sourceFile, start, end - start, Diagnostics.A_default_clause_cannot_appear_more_than_once_in_a_switch_statement);
+                        hasDuplicateDefaultClause = true;
+                    }
+                }
+
                 if (fullTypeCheck && clause.kind === SyntaxKind.CaseClause) {
                     var caseClause = <CaseClause>clause;
                     // TypeScript 1.0 spec (April 2014):5.9

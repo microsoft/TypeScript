@@ -347,7 +347,8 @@
     },
     "A 'default' clause cannot appear more than once in a 'switch' statement.": {
         "category": "Error",
-        "code": 1113
+        "code": 1113,
+        "isEarly":  true
     },
     "Duplicate label '{0}'": {
         "category": "Error",
