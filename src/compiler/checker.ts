@@ -6936,6 +6936,16 @@ module ts {
             }
         }
 
+        function checkYieldExpression(node: YieldExpression): void {
+            // Grammar checking
+            if (!(node.parserContextFlags & ParserContextFlags.Yield)) {
+                grammarErrorOnFirstToken(node, Diagnostics.yield_expression_must_be_contained_within_a_generator_declaration);
+            }
+            else {
+                grammarErrorOnFirstToken(node, Diagnostics.yield_expressions_are_not_currently_supported);
+            }
+        }
+
         function checkConditionalExpression(node: ConditionalExpression, contextualMapper?: TypeMapper): Type {
             checkExpression(node.condition);
             var type1 = checkExpression(node.whenTrue, contextualMapper);
@@ -7103,6 +7113,9 @@ module ts {
                     return checkConditionalExpression(<ConditionalExpression>node, contextualMapper);
                 case SyntaxKind.OmittedExpression:
                     return undefinedType;
+                case SyntaxKind.YieldExpression:
+                    checkYieldExpression(<YieldExpression>node);
+                    return unknownType;
             }
             return unknownType;
         }

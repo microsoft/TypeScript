@@ -4676,7 +4676,7 @@ module ts {
                 case SyntaxKind.VariableDeclaration:            return checkVariableDeclaration(<VariableDeclaration>node);
                 case SyntaxKind.VariableStatement:              return checkVariableStatement(<VariableStatement>node);
                 //case SyntaxKind.WithStatement:                  return checkWithStatement(<WithStatement>node);
-                case SyntaxKind.YieldExpression:                return checkYieldExpression(<YieldExpression>node);
+                //case SyntaxKind.YieldExpression:                return checkYieldExpression(<YieldExpression>node);
             }
         }
 
