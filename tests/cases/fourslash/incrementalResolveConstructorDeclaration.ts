@@ -9,8 +9,6 @@
 ////var val = new c1("hello");
 /////*1*/val;
 
-diagnostics.setEditValidation(IncrementalEditValidation.None);
-
 // Do resolve without typeCheck
 goTo.marker('1');
 verify.quickInfoIs("(var) val: c1");
