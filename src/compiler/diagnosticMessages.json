@@ -540,7 +540,8 @@
     },
     "Tagged templates are only available when targeting ECMAScript 6 and higher.": {
         "category": "Error",
-        "code": 1159
+        "code": 1159,
+        "isEarly":  true
     },
     "Unterminated template literal.": {
         "category": "Error",

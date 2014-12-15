@@ -4670,7 +4670,7 @@ module ts {
                 case SyntaxKind.SourceFile:                     return checkSourceFile(<SourceFile>node);
                 //case SyntaxKind.ShorthandPropertyAssignment:    return checkShorthandPropertyAssignment(<ShorthandPropertyAssignment>node);
                 //case SyntaxKind.SwitchStatement:                return checkSwitchStatement(<SwitchStatement>node);
-                case SyntaxKind.TaggedTemplateExpression:       return checkTaggedTemplateExpression(<TaggedTemplateExpression>node);
+                //case SyntaxKind.TaggedTemplateExpression:       return checkTaggedTemplateExpression(<TaggedTemplateExpression>node);
                 case SyntaxKind.ThrowStatement:                 return checkThrowStatement(<ThrowStatement>node);
                 case SyntaxKind.TypeReference:                  return checkTypeReference(<TypeReferenceNode>node);
                 case SyntaxKind.VariableDeclaration:            return checkVariableDeclaration(<VariableDeclaration>node);
