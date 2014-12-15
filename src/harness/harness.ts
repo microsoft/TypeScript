@@ -830,7 +830,7 @@ module Harness {
                 writeFile,
                 getCanonicalFileName,
                 useCaseSensitiveFileNames: () => useCaseSensitiveFileNames,
-                getNewLine: ()=> ts.sys.newLine
+                getNewLine: () => ts.sys.newLine
             };
         }
 
@@ -872,7 +872,7 @@ module Harness {
             }
 
             public emitAll(ioHost?: IEmitterIOHost) {
-                this.compileFiles(this.inputFiles, [], (result) => {
+                this.compileFiles(this.inputFiles, [],(result) => {
                     result.files.forEach(file => {
                         ioHost.writeFile(file.fileName, file.code, false);
                     });
@@ -882,7 +882,7 @@ module Harness {
                     result.sourceMaps.forEach(file => {
                         ioHost.writeFile(file.fileName, file.code, false);
                     });
-                }, () => { }, this.compileOptions);
+                },() => { }, this.compileOptions);
             }
 
             public compileFiles(inputFiles: { unitName: string; content: string }[],
@@ -1020,7 +1020,7 @@ module Harness {
                             break;
 
                         case 'includebuiltfile':
-                            inputFiles.push({ unitName: setting.value, content: IO.readFile(libFolder + setting.value)});
+                            inputFiles.push({ unitName: setting.value, content: IO.readFile(libFolder + setting.value) });
                             break;
 
                         default:
@@ -1129,7 +1129,7 @@ module Harness {
                                 return ts.removeFileExtension(sourceFileName) + ".d.ts";
                             }
                         });
-                        
+
                         return ts.forEach(result.declFilesCode, declFile => declFile.fileName === dTsFileName ? declFile : undefined);
                     }
 

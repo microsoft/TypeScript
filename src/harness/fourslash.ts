@@ -113,22 +113,22 @@ module FourSlash {
     // To add additional option, add property into the testOptMetadataNames, refer the property in either globalMetadataNames or fileMetadataNames
     // Add cases into convertGlobalOptionsToCompilationsSettings function for the compiler to acknowledge such option from meta data
     var testOptMetadataNames = {
-       baselineFile: 'BaselineFile',  
-       declaration: 'declaration',
-       emitThisFile: 'emitThisFile',  // This flag is used for testing getEmitOutput feature. It allows test-cases to indicate what file to be output in multiple files project
-       filename: 'Filename',
-       mapRoot: 'mapRoot',
-       module: 'module',
-       out: 'out',
-       outDir: 'outDir',
-       sourceMap: 'sourceMap',
-       sourceRoot: 'sourceRoot',
-       resolveReference: 'ResolveReference',  // This flag is used to specify entry file for resolve file references. The flag is only allow once per test file
+        baselineFile: 'BaselineFile',
+        declaration: 'declaration',
+        emitThisFile: 'emitThisFile',  // This flag is used for testing getEmitOutput feature. It allows test-cases to indicate what file to be output in multiple files project
+        filename: 'Filename',
+        mapRoot: 'mapRoot',
+        module: 'module',
+        out: 'out',
+        outDir: 'outDir',
+        sourceMap: 'sourceMap',
+        sourceRoot: 'sourceRoot',
+        resolveReference: 'ResolveReference',  // This flag is used to specify entry file for resolve file references. The flag is only allow once per test file
     };
 
     // List of allowed metadata names
     var fileMetadataNames = [testOptMetadataNames.filename, testOptMetadataNames.emitThisFile, testOptMetadataNames.resolveReference];
-    var globalMetadataNames = [testOptMetadataNames.baselineFile,  testOptMetadataNames.declaration,
+    var globalMetadataNames = [testOptMetadataNames.baselineFile, testOptMetadataNames.declaration,
         testOptMetadataNames.mapRoot, testOptMetadataNames.module, testOptMetadataNames.out,
         testOptMetadataNames.outDir, testOptMetadataNames.sourceMap, testOptMetadataNames.sourceRoot]
 
@@ -147,16 +147,16 @@ module FourSlash {
                     case testOptMetadataNames.module:
                         // create appropriate external module target for CompilationSettings
                         switch (globalOptions[prop]) {
-                          case "AMD":
-                            settings.module = ts.ModuleKind.AMD;
-                            break;
-                          case "CommonJS":
-                            settings.module = ts.ModuleKind.CommonJS;
-                            break;
-                          default:
-                            ts.Debug.assert(globalOptions[prop] === undefined || globalOptions[prop] === "None");
-                            settings.module = ts.ModuleKind.None;
-                            break;
+                            case "AMD":
+                                settings.module = ts.ModuleKind.AMD;
+                                break;
+                            case "CommonJS":
+                                settings.module = ts.ModuleKind.CommonJS;
+                                break;
+                            default:
+                                ts.Debug.assert(globalOptions[prop] === undefined || globalOptions[prop] === "None");
+                                settings.module = ts.ModuleKind.None;
+                                break;
                         }
                         break;
                     case testOptMetadataNames.out:
@@ -755,7 +755,7 @@ module FourSlash {
         }
 
         public verifyQuickInfoString(negative: boolean, expectedText?: string, expectedDocumentation?: string) {
-        [expectedText, expectedDocumentation].forEach(str => {
+            [expectedText, expectedDocumentation].forEach(str => {
                 if (str) {
                     this.scenarioActions.push('<ShowQuickInfo />');
                     this.scenarioActions.push('<VerifyQuickInfoTextContains IgnoreSpacing="true" Text="' + escapeXmlAttributeValue(str) + '" ' + (negative ? 'ExpectsFailure="true"' : '') + ' />');
@@ -800,7 +800,7 @@ module FourSlash {
                         result = "[\n    ";
                     }
                     result += JSON.stringify(part);
-                }); 
+                });
                 if (result) {
                     result += "\n]";
                 }
@@ -869,8 +869,8 @@ module FourSlash {
 
             var help = this.getActiveSignatureHelpItem();
             assert.equal(
-                ts.displayPartsToString(help.prefixDisplayParts) + 
-                help.parameters.map(p => ts.displayPartsToString(p.displayParts)).join(ts.displayPartsToString(help.separatorDisplayParts)) + 
+                ts.displayPartsToString(help.prefixDisplayParts) +
+                help.parameters.map(p => ts.displayPartsToString(p.displayParts)).join(ts.displayPartsToString(help.separatorDisplayParts)) +
                 ts.displayPartsToString(help.suffixDisplayParts), expected);
         }
 
@@ -1363,6 +1363,8 @@ module FourSlash {
 
         private checkPostEditInvariants() {
             var incrementalSourceFile = this.languageService.getSourceFile(this.activeFile.fileName);
+            Utils.assertInvariants(incrementalSourceFile, /*parent:*/ undefined);
+
             var incrementalSyntaxDiagnostics = JSON.stringify(Utils.convertDiagnostics(incrementalSourceFile.getSyntacticDiagnostics()));
 
             // Check syntactic structure
@@ -1379,24 +1381,24 @@ module FourSlash {
 
             Utils.assertStructuralEquals(incrementalSourceFile, referenceSourceFile);
 
-             //if (this.editValidation !== IncrementalEditValidation.SyntacticOnly) {
-             //   var compiler = new TypeScript.TypeScriptCompiler();
-             //   for (var i = 0; i < this.testData.files.length; i++) {
-             //       snapshot = this.languageServiceShimHost.getScriptSnapshot(this.testData.files[i].fileName);
-             //       compiler.addFile(this.testData.files[i].fileName, TypeScript.ScriptSnapshot.fromString(snapshot.getText(0, snapshot.getLength())), ts.ByteOrderMark.None, 0, true);
-             //   }
+            //if (this.editValidation !== IncrementalEditValidation.SyntacticOnly) {
+            //   var compiler = new TypeScript.TypeScriptCompiler();
+            //   for (var i = 0; i < this.testData.files.length; i++) {
+            //       snapshot = this.languageServiceShimHost.getScriptSnapshot(this.testData.files[i].fileName);
+            //       compiler.addFile(this.testData.files[i].fileName, TypeScript.ScriptSnapshot.fromString(snapshot.getText(0, snapshot.getLength())), ts.ByteOrderMark.None, 0, true);
+            //   }
 
-             //   compiler.addFile('lib.d.ts', TypeScript.ScriptSnapshot.fromString(Harness.Compiler.libTextMinimal), ts.ByteOrderMark.None, 0, true);
+            //   compiler.addFile('lib.d.ts', TypeScript.ScriptSnapshot.fromString(Harness.Compiler.libTextMinimal), ts.ByteOrderMark.None, 0, true);
 
-             //   for (var i = 0; i < this.testData.files.length; i++) {
-             //       var refSemanticErrs = JSON.stringify(compiler.getSemanticDiagnostics(this.testData.files[i].fileName));
-             //       var incrSemanticErrs = JSON.stringify(this.languageService.getSemanticDiagnostics(this.testData.files[i].fileName));
+            //   for (var i = 0; i < this.testData.files.length; i++) {
+            //       var refSemanticErrs = JSON.stringify(compiler.getSemanticDiagnostics(this.testData.files[i].fileName));
+            //       var incrSemanticErrs = JSON.stringify(this.languageService.getSemanticDiagnostics(this.testData.files[i].fileName));
 
-             //       if (incrSemanticErrs !== refSemanticErrs) {
-             //           this.raiseError('Mismatched incremental/full semantic errors for file ' + this.testData.files[i].fileName + '\n=== Incremental errors ===\n' + incrSemanticErrs + '\n=== Full Errors ===\n' + refSemanticErrs);
-             //       }
-             //   }
-             //}
+            //       if (incrSemanticErrs !== refSemanticErrs) {
+            //           this.raiseError('Mismatched incremental/full semantic errors for file ' + this.testData.files[i].fileName + '\n=== Incremental errors ===\n' + incrSemanticErrs + '\n=== Full Errors ===\n' + refSemanticErrs);
+            //       }
+            //   }
+            //}
         }
 
         private fixCaretPosition() {
@@ -1652,8 +1654,8 @@ module FourSlash {
         private verifyClassifications(expected: { classificationType: string; text: string; textSpan?: TextSpan }[], actual: ts.ClassifiedSpan[]) {
             if (actual.length !== expected.length) {
                 this.raiseError('verifyClassifications failed - expected total classifications to be ' + expected.length +
-                                ', but was ' + actual.length +
-                                jsonMismatchString());
+                    ', but was ' + actual.length +
+                    jsonMismatchString());
             }
 
             for (var i = 0; i < expected.length; i++) {
@@ -1693,8 +1695,8 @@ module FourSlash {
 
             function jsonMismatchString() {
                 return ts.sys.newLine +
-                    "expected: '" + ts.sys.newLine + JSON.stringify(expected, (k,v) => v, 2) + "'" + ts.sys.newLine +
-                    "actual:   '" + ts.sys.newLine + JSON.stringify(actual, (k, v) => v, 2) + "'";
+                    "expected: '" + ts.sys.newLine + JSON.stringify(expected,(k, v) => v, 2) + "'" + ts.sys.newLine +
+                    "actual:   '" + ts.sys.newLine + JSON.stringify(actual,(k, v) => v, 2) + "'";
             }
         }
 
