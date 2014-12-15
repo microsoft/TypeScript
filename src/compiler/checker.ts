@@ -8779,6 +8779,9 @@ module ts {
         }
 
         function checkEnumDeclaration(node: EnumDeclaration) {
+            // Grammar checking
+            checkGrammarModifiers(node) || checkGrammarEnumDeclaration(node);
+
             if (!fullTypeCheck) {
                 return;
             }
@@ -10380,6 +10383,57 @@ module ts {
                     : Diagnostics.A_continue_statement_can_only_be_used_within_an_enclosing_iteration_statement;
                 return grammarErrorOnNode(node, message)
             }
+        }
+
+        function isIntegerLiteral(expression: Expression): boolean {
+            if (expression.kind === SyntaxKind.PrefixUnaryExpression) {
+                var unaryExpression = <PrefixUnaryExpression>expression;
+                if (unaryExpression.operator === SyntaxKind.PlusToken || unaryExpression.operator === SyntaxKind.MinusToken) {
+                    expression = unaryExpression.operand;
+                }
+            }
+            if (expression.kind === SyntaxKind.NumericLiteral) {
+                // Allows for scientific notation since literalExpression.text was formed by
+                // coercing a number to a string. Sometimes this coercion can yield a string
+                // in scientific notation.
+                // We also don't need special logic for hex because a hex integer is converted
+                // to decimal when it is coerced.
+                return /^[0-9]+([eE]\+?[0-9]+)?$/.test((<LiteralExpression>expression).text);
+            }
+
+            return false;
+        }
+
+        function checkGrammarEnumDeclaration(enumDecl: EnumDeclaration): boolean {
+            var enumIsConst = (enumDecl.flags & NodeFlags.Const) !== 0;
+
+            var hasError = false;
+
+            // skip checks below for const enums  - they allow arbitrary initializers as long as they can be evaluated to constant expressions.
+            // since all values are known in compile time - it is not necessary to check that constant enum section precedes computed enum members.
+            if (!enumIsConst) {
+                var inConstantEnumMemberSection = true;
+                var inAmbientContext = isInAmbientContext(enumDecl);
+                for (var i = 0, n = enumDecl.members.length; i < n; i++) {
+                    var node = enumDecl.members[i];
+                    if (node.name.kind === SyntaxKind.ComputedPropertyName) {
+                        hasError = grammarErrorOnNode(node.name, Diagnostics.Computed_property_names_are_not_allowed_in_enums);
+                    }
+                    else if (inAmbientContext) {
+                        if (node.initializer && !isIntegerLiteral(node.initializer)) {
+                            hasError = grammarErrorOnNode(node.name, Diagnostics.Ambient_enum_elements_can_only_have_integer_literal_initializers) || hasError;
+                        }
+                    }
+                    else if (node.initializer) {
+                        inConstantEnumMemberSection = isIntegerLiteral(node.initializer);
+                    }
+                    else if (!inConstantEnumMemberSection) {
+                        hasError = grammarErrorOnNode(node.name, Diagnostics.Enum_member_must_have_initializer) || hasError;
+                    }
+                }
+            }
+
+            return hasError;
         }
 
         function hasParseDiagnostics(sourceFile: SourceFile): boolean {
