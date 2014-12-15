@@ -5374,9 +5374,6 @@ module ts {
                     if (member.flags & SymbolFlags.Property || isObjectLiteralMethod(member.declarations[0])) {
                         var memberDecl = <ObjectLiteralElement>member.declarations[0];
                         if (memberDecl.kind === SyntaxKind.PropertyAssignment) {
-                            // Grammar checking
-                            checkGrammarForInvalidQuestionMark(memberDecl,(<PropertyAssignment>memberDecl).questionToken, Diagnostics.An_object_member_cannot_be_declared_optional);
-
                             var type = checkExpression((<PropertyAssignment>memberDecl).initializer, contextualMapper);
                         }
                         else if (memberDecl.kind === SyntaxKind.MethodDeclaration) {
@@ -6605,13 +6602,11 @@ module ts {
 
         function checkPrefixUnaryExpression(node: PrefixUnaryExpression): Type {
             // Grammar checking
-            if (node.parserContextFlags & ParserContextFlags.StrictMode) {
-                // The identifier eval or arguments may not appear as the LeftHandSideExpression of an
-                // Assignment operator(11.13) or of a PostfixExpression(11.3) or as the UnaryExpression
-                // operated upon by a Prefix Increment(11.4.4) or a Prefix Decrement(11.4.5) operator
-                if ((node.operator === SyntaxKind.PlusPlusToken || node.operator === SyntaxKind.MinusMinusToken) && isEvalOrArgumentsIdentifier(node.operand)) {
-                    reportGrammarErrorOfInvalidUseInStrictMode(<Identifier>node.operand);
-                }
+            // The identifier eval or arguments may not appear as the LeftHandSideExpression of an
+            // Assignment operator(11.13) or of a PostfixExpression(11.3) or as the UnaryExpression
+            // operated upon by a Prefix Increment(11.4.4) or a Prefix Decrement(11.4.5) operator
+            if ((node.operator === SyntaxKind.PlusPlusToken || node.operator === SyntaxKind.MinusMinusToken)) {
+                checkGrammarEvalOrArgumentsInStrictMode(node, <Identifier>node.operand);
             }
 
             var operandType = checkExpression(node.operand);
@@ -6641,9 +6636,7 @@ module ts {
             // The identifier eval or arguments may not appear as the LeftHandSideExpression of an
             // Assignment operator(11.13) or of a PostfixExpression(11.3) or as the UnaryExpression
             // operated upon by a Prefix Increment(11.4.4) or a Prefix Decrement(11.4.5) operator.
-            if (node.parserContextFlags & ParserContextFlags.StrictMode && isEvalOrArgumentsIdentifier(node.operand)) {
-                reportGrammarErrorOfInvalidUseInStrictMode(<Identifier>node.operand);
-            }
+            checkGrammarEvalOrArgumentsInStrictMode(node, <Identifier>node.operand);
 
             var operandType = checkExpression(node.operand);
             var ok = checkArithmeticOperandType(node.operand, operandType, Diagnostics.An_arithmetic_operand_must_be_of_type_any_number_or_an_enum_type);
@@ -6772,14 +6765,10 @@ module ts {
 
         function checkBinaryExpression(node: BinaryExpression, contextualMapper?: TypeMapper) {
             // Grammar checking
-            if (node.parserContextFlags & ParserContextFlags.StrictMode) {
-                if (isLeftHandSideExpression(node.left) && isAssignmentOperator(node.operator)) {
-                    if (isEvalOrArgumentsIdentifier(node.left)) {
-                        // ECMA 262 (Annex C) The identifier eval or arguments may not appear as the LeftHandSideExpression of an
-                        // Assignment operator(11.13) or of a PostfixExpression(11.3)
-                        reportGrammarErrorOfInvalidUseInStrictMode(<Identifier>node.left);
-                    }
-                }
+            if (isLeftHandSideExpression(node.left) && isAssignmentOperator(node.operator)) {
+                // ECMA 262 (Annex C) The identifier eval or arguments may not appear as the LeftHandSideExpression of an
+                // Assignment operator(11.13) or of a PostfixExpression(11.3)
+                checkGrammarEvalOrArgumentsInStrictMode(node, <Identifier>node.left);
             }
 
             var operator = node.operator;
@@ -7143,8 +7132,8 @@ module ts {
             // or if its FunctionBody is strict code(11.1.5).
             // It is a SyntaxError if the identifier eval or arguments appears within a FormalParameterList of a
             // strict mode FunctionLikeDeclaration or FunctionExpression(13.1)
-            if (!checkGrammarModifiers(node) && (node.parserContextFlags & ParserContextFlags.StrictMode && isEvalOrArgumentsIdentifier(node.name))) {
-                reportGrammarErrorOfInvalidUseInStrictMode(<Identifier>node.name);
+            if (!checkGrammarModifiers(node)) {
+                checkGrammarEvalOrArgumentsInStrictMode(node, <Identifier>node.name);
             }
 
             checkVariableLikeDeclaration(node);
@@ -8281,11 +8270,10 @@ module ts {
                     var colonStart = skipTrivia(sourceFile.text, catchClause.name.end);
                     grammarErrorAtPos(sourceFile, colonStart, ":".length, Diagnostics.Catch_clause_parameter_cannot_have_a_type_annotation);
                 }
-                if (node.parserContextFlags & ParserContextFlags.StrictMode && isEvalOrArgumentsIdentifier(catchClause.name)) {
-                    // It is a SyntaxError if a TryStatement with a Catch occurs within strict code and the Identifier of the
-                    // Catch production is eval or arguments
-                    reportGrammarErrorOfInvalidUseInStrictMode(catchClause.name);
-                }
+                // It is a SyntaxError if a TryStatement with a Catch occurs within strict code and the Identifier of the
+                // Catch production is eval or arguments
+                checkGrammarEvalOrArgumentsInStrictMode(node, catchClause.name);
+
                 checkBlock(catchClause.block);
             }
             if (node.finallyBlock) checkBlock(node.finallyBlock);
@@ -10135,11 +10123,9 @@ module ts {
         }
 
         function checkGrammarBindingElement(node: BindingElement) {
-            if (node.parserContextFlags & ParserContextFlags.StrictMode && isEvalOrArgumentsIdentifier(node.name)) {
-                // It is a SyntaxError if a VariableDeclaration or VariableDeclarationNoIn occurs within strict code
-                // and its Identifier is eval or arguments
-                reportGrammarErrorOfInvalidUseInStrictMode(<Identifier>node.name);
-            }
+            // It is a SyntaxError if a VariableDeclaration or VariableDeclarationNoIn occurs within strict code
+            // and its Identifier is eval or arguments
+            checkGrammarEvalOrArgumentsInStrictMode(node, <Identifier>node.name);
         }
 
         function checkGrammarHeritageClause(node: HeritageClause): boolean {
@@ -10147,8 +10133,8 @@ module ts {
             if (checkGrammarForDisallowedTrailingComma(types)) {
                 return true;
             }
-            var listType = tokenToString(node.token);
             if (types && types.length === 0) {
+                var listType = tokenToString(node.token);
                 var sourceFile = getSourceFileOfNode(node);
                 return grammarErrorAtPos(sourceFile, types.pos, 0, Diagnostics._0_list_cannot_be_empty, listType)
             }
@@ -10165,18 +10151,15 @@ module ts {
 
                     if (heritageClause.token === SyntaxKind.ExtendsKeyword) {
                         if (seenExtendsClause) {
-                            grammarErrorOnFirstToken(heritageClause, Diagnostics.extends_clause_already_seen)
-                            break;
+                            return grammarErrorOnFirstToken(heritageClause, Diagnostics.extends_clause_already_seen)
                         }
 
                         if (seenImplementsClause) {
-                            grammarErrorOnFirstToken(heritageClause, Diagnostics.extends_clause_must_precede_implements_clause);
-                            break;
+                            return grammarErrorOnFirstToken(heritageClause, Diagnostics.extends_clause_must_precede_implements_clause);
                         }
 
                         if (heritageClause.types.length > 1) {
-                            grammarErrorOnFirstToken(heritageClause.types[1], Diagnostics.Classes_can_only_extend_a_single_class);
-                            break;
+                            return grammarErrorOnFirstToken(heritageClause.types[1], Diagnostics.Classes_can_only_extend_a_single_class);
                         }
 
                         seenExtendsClause = true;
@@ -10184,8 +10167,7 @@ module ts {
                     else {
                         Debug.assert(heritageClause.token === SyntaxKind.ImplementsKeyword);
                         if (seenImplementsClause) {
-                            grammarErrorOnFirstToken(heritageClause, Diagnostics.implements_clause_already_seen);
-                            break;
+                            return grammarErrorOnFirstToken(heritageClause, Diagnostics.implements_clause_already_seen);
                         }
 
                         seenImplementsClause = true;
@@ -10246,11 +10228,8 @@ module ts {
         }
 
         function checkGrammarFunctionName(name: Node) {
-            if (name && name.parserContextFlags & ParserContextFlags.StrictMode && isEvalOrArgumentsIdentifier(name)) {
-                // It is a SyntaxError to use within strict mode code the identifiers eval or arguments as the
-                // Identifier of a FunctionLikeDeclaration or FunctionExpression or as a formal parameter name(13.1)
-                return reportGrammarErrorOfInvalidUseInStrictMode(<Identifier>name);
-            }
+            // It is a SyntaxError if the identifier eval or arguments appears within a FormalParameterList of a strict mode FunctionDeclaration or FunctionExpression (13.1))
+            return checkGrammarEvalOrArgumentsInStrictMode(name, <Identifier>name);
         }
 
         function checkGrammarForInvalidQuestionMark(node: Declaration, questionToken: Node, message: DiagnosticMessage): boolean {
@@ -10268,9 +10247,13 @@ module ts {
             var inStrictMode = (node.parserContextFlags & ParserContextFlags.StrictMode) !== 0;
 
             for (var i = 0, n = node.properties.length; i < n; i++) {
-                var prop = <Declaration>node.properties[i];
+                var prop = node.properties[i];
                 var name = prop.name;
-                if (prop.kind === SyntaxKind.OmittedExpression || name.kind === SyntaxKind.ComputedPropertyName) {
+                if (prop.kind === SyntaxKind.OmittedExpression) {
+                    continue;
+                }
+                else if (name.kind === SyntaxKind.ComputedPropertyName) {
+                    checkGrammarComputedPropertyName(<ComputedPropertyName>name);
                     continue;
                 }
 
@@ -10283,9 +10266,12 @@ module ts {
                 //    d.IsAccessorDescriptor(previous) is true and IsAccessorDescriptor(propId.descriptor) is true
                 // and either both previous and propId.descriptor have[[Get]] fields or both previous and propId.descriptor have[[Set]] fields
                 var currentKind: number;
-                if (prop.kind === SyntaxKind.PropertyAssignment ||
-                    prop.kind === SyntaxKind.ShorthandPropertyAssignment ||
-                    prop.kind === SyntaxKind.MethodDeclaration) {
+                if (prop.kind === SyntaxKind.PropertyAssignment || prop.kind === SyntaxKind.ShorthandPropertyAssignment) {
+                    // Grammar checking for computedPropertName and shorthandPropertyAssignment
+                    checkGrammarForInvalidQuestionMark(prop,(<PropertyAssignment>prop).questionToken, Diagnostics.An_object_member_cannot_be_declared_optional);
+                    currentKind = Property;
+                }
+                else if ( prop.kind === SyntaxKind.MethodDeclaration) {
                     currentKind = Property;
                 }
                 else if (prop.kind === SyntaxKind.GetAccessor) {
@@ -10321,16 +10307,6 @@ module ts {
                     }
                 }
             }
-
-            // Grammar checking for computedPropertName and shorthandPropertyAssignment
-            forEach(node.properties, prop => {
-                if (prop.name.kind === SyntaxKind.ComputedPropertyName) {
-                    checkGrammarComputedPropertyName(<ComputedPropertyName>prop.name);
-                }
-                else if (prop.kind === SyntaxKind.ShorthandPropertyAssignment) {
-                    checkGrammarForInvalidQuestionMark(prop, (<ShorthandPropertyAssignment>prop).questionToken, Diagnostics.An_object_member_cannot_be_declared_optional);
-                }
-            });
         }
 
         function hasParseDiagnostics(sourceFile: SourceFile): boolean {
@@ -10371,11 +10347,11 @@ module ts {
             }
         }
 
-        function reportGrammarErrorOfInvalidUseInStrictMode(node: Identifier): boolean {
-            //var sourceText = getSourceFileOfNode(node).text;
-            //var name = sourceText.substring(skipTrivia(sourceText, node.pos), node.end);
-            var name = declarationNameToString(node);
-            return grammarErrorOnNode(node, Diagnostics.Invalid_use_of_0_in_strict_mode, name);
+        function checkGrammarEvalOrArgumentsInStrictMode(contextNode: Node, identifier: Identifier): boolean {
+            if (contextNode && (contextNode.parserContextFlags & ParserContextFlags.StrictMode) && isEvalOrArgumentsIdentifier(identifier)) {
+                var name = declarationNameToString(identifier);
+                return grammarErrorOnNode(identifier, Diagnostics.Invalid_use_of_0_in_strict_mode, name);
+            }
         }
 
         function grammarErrorAfterFirstToken(sourceFile: SourceFile, node: Node, message: DiagnosticMessage, arg0?: any, arg1?: any, arg2?: any): boolean {
