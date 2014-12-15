@@ -2313,6 +2313,7 @@ module ts {
                 var pos = 0;
                 var group = 0;
                 while (pos < length) {
+                    // Emit using the pattern <group0>.concat(<group1>, <group2>, ...)
                     if (group === 1) {
                         write(".concat(");
                     }
@@ -2326,7 +2327,10 @@ module ts {
                         pos++;
                     }
                     else {
-                        for (var i = pos; i < length && elements[i].kind !== SyntaxKind.SpreadElementExpression; i++);
+                        var i = pos;
+                        while (i < length && elements[i].kind !== SyntaxKind.SpreadElementExpression) {
+                            i++;
+                        }
                         write("[");
                         emitList(elements, pos, i - pos, /*multiLine*/ (node.flags & NodeFlags.MultiLine) !== 0,
                             /*trailingComma*/ elements.hasTrailingComma);
