@@ -8241,6 +8241,10 @@ module ts {
         }
 
         function checkThrowStatement(node: ThrowStatement) {
+            if (node.expression === undefined) {
+                grammarErrorAfterFirstToken(getSourceFileOfNode(node), node, Diagnostics.Line_break_not_permitted_here);
+            }
+
             if (node.expression) {
                 checkExpression(node.expression);
             }
@@ -10351,6 +10355,15 @@ module ts {
             //var name = sourceText.substring(skipTrivia(sourceText, node.pos), node.end);
             var name = declarationNameToString(node);
             return grammarErrorOnNode(node, Diagnostics.Invalid_use_of_0_in_strict_mode, name);
+        }
+
+        function grammarErrorAfterFirstToken(sourceFile: SourceFile, node: Node, message: DiagnosticMessage, arg0?: any, arg1?: any, arg2?: any): boolean {
+            if (!hasParseDiagnostics(sourceFile)) {
+                var scanner = createScanner(compilerOptions.target, /*skipTrivia*/ true, sourceFile.text);
+                scanToken(scanner, node.pos);
+                diagnostics.push(createFileDiagnostic(sourceFile, scanner.getTextPos(), 0, message, arg0, arg1, arg2));
+                return true;
+            }
         }
 
         initializeTypeChecker();

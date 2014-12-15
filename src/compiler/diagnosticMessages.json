@@ -476,7 +476,8 @@
     },
     "Line break not permitted here.": {
         "category": "Error",
-        "code": 1142
+        "code": 1142,
+        "isEarly": true
     },
     "'{' or ';' expected.": {
         "category": "Error",

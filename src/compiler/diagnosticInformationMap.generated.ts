@@ -105,7 +105,7 @@ module ts {
         Type_parameter_declaration_expected: { code: 1139, category: DiagnosticCategory.Error, key: "Type parameter declaration expected." },
         Type_argument_expected: { code: 1140, category: DiagnosticCategory.Error, key: "Type argument expected." },
         String_literal_expected: { code: 1141, category: DiagnosticCategory.Error, key: "String literal expected.", isEarly: true },
-        Line_break_not_permitted_here: { code: 1142, category: DiagnosticCategory.Error, key: "Line break not permitted here." },
+        Line_break_not_permitted_here: { code: 1142, category: DiagnosticCategory.Error, key: "Line break not permitted here.", isEarly: true },
         or_expected: { code: 1144, category: DiagnosticCategory.Error, key: "'{' or ';' expected." },
         Modifiers_not_permitted_on_index_signature_members: { code: 1145, category: DiagnosticCategory.Error, key: "Modifiers not permitted on index signature members.", isEarly: true },
         Declaration_expected: { code: 1146, category: DiagnosticCategory.Error, key: "Declaration expected." },
