@@ -292,15 +292,6 @@ module ts {
             bindChildren(node, symbolKind, isBlockScopeContainer);
         }
 
-        function bindConstructorDeclaration(node: ConstructorDeclaration) {
-            bindDeclaration(node, SymbolFlags.Constructor, 0, /*isBlockScopeContainer*/ true);
-            forEach(node.parameters, p => {
-                if (p.flags & (NodeFlags.Public | NodeFlags.Private | NodeFlags.Protected)) {
-                    bindDeclaration(p, SymbolFlags.Property, SymbolFlags.PropertyExcludes, /*isBlockScopeContainer*/ false);
-                }
-            });
-        }
-
         function bindModuleDeclaration(node: ModuleDeclaration) {
             if (node.name.kind === SyntaxKind.StringLiteral) {
                 bindDeclaration(node, SymbolFlags.ValueModule, SymbolFlags.ValueModuleExcludes, /*isBlockScopeContainer*/ true);
@@ -389,12 +380,7 @@ module ts {
                     bindDeclaration(<Declaration>node, SymbolFlags.TypeParameter, SymbolFlags.TypeParameterExcludes, /*isBlockScopeContainer*/ false);
                     break;
                 case SyntaxKind.Parameter:
-                    if (isBindingPattern((<Declaration>node).name)) {
-                        bindAnonymousDeclaration(<Declaration>node, SymbolFlags.FunctionScopedVariable, getDestructuringParameterName(<Declaration>node), /*isBlockScopeContainer*/ false);
-                    }
-                    else {
-                        bindDeclaration(<Declaration>node, SymbolFlags.FunctionScopedVariable, SymbolFlags.ParameterExcludes, /*isBlockScopeContainer*/ false);
-                    }
+                    bindParameter(<ParameterDeclaration>node);
                     break;
                 case SyntaxKind.VariableDeclaration:
                 case SyntaxKind.BindingElement:
@@ -437,7 +423,7 @@ module ts {
                     bindDeclaration(<Declaration>node, SymbolFlags.Function, SymbolFlags.FunctionExcludes, /*isBlockScopeContainer*/ true);
                     break;
                 case SyntaxKind.Constructor:
-                    bindConstructorDeclaration(<ConstructorDeclaration>node);
+                    bindDeclaration(<Declaration>node, SymbolFlags.Constructor, /*symbolExcludes:*/ 0, /*isBlockScopeContainer:*/ true);
                     break;
                 case SyntaxKind.GetAccessor:
                     bindDeclaration(<Declaration>node, SymbolFlags.GetAccessor, SymbolFlags.GetAccessorExcludes, /*isBlockScopeContainer*/ true);
@@ -506,6 +492,25 @@ module ts {
                     parent = node;
                     forEachChild(node, bind);
                     parent = saveParent;
+            }
+        }
+
+        function bindParameter(node: ParameterDeclaration) {
+            if (isBindingPattern(node.name)) {
+                bindAnonymousDeclaration(node, SymbolFlags.FunctionScopedVariable, getDestructuringParameterName(node), /*isBlockScopeContainer*/ false);
+            }
+            else {
+                bindDeclaration(node, SymbolFlags.FunctionScopedVariable, SymbolFlags.ParameterExcludes, /*isBlockScopeContainer*/ false);
+            }
+
+            // If this is a property-parameter, then also declare the property symbol into the 
+            // containing class.
+            if (node.flags & NodeFlags.AccessibilityModifier &&
+                node.parent.kind === SyntaxKind.Constructor &&
+                node.parent.parent.kind === SyntaxKind.ClassDeclaration) {
+
+                var classDeclaration = <ClassDeclaration>node.parent.parent;
+                declareSymbol(classDeclaration.symbol.members, classDeclaration.symbol, node, SymbolFlags.Property, SymbolFlags.PropertyExcludes);
             }
         }
     }
