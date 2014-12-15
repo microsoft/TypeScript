@@ -1363,6 +1363,8 @@ module FourSlash {
 
         private checkPostEditInvariants() {
             var incrementalSourceFile = this.languageService.getSourceFile(this.activeFile.fileName);
+            Utils.assertInvariants(incrementalSourceFile, /*parent:*/ undefined);
+
             var incrementalSyntaxDiagnostics = JSON.stringify(Utils.convertDiagnostics(incrementalSourceFile.getSyntacticDiagnostics()));
 
             // Check syntactic structure
