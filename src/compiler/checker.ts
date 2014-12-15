@@ -10274,10 +10274,13 @@ module ts {
                 }
             }
 
-            // Grammar checking for computedPropertName
+            // Grammar checking for computedPropertName and shorthandPropertyAssignment
             forEach(node.properties, prop => {
                 if (prop.name.kind === SyntaxKind.ComputedPropertyName) {
                     checkGrammarComputedPropertyName(<ComputedPropertyName>prop.name);
+                }
+                else if (prop.kind === SyntaxKind.ShorthandPropertyAssignment) {
+                    checkGrammarForInvalidQuestionMark(prop, (<ShorthandPropertyAssignment>prop).questionToken, Diagnostics.An_object_member_cannot_be_declared_optional);
                 }
             });
         }
