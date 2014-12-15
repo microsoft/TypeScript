@@ -144,7 +144,8 @@
     },
     "A 'declare' modifier cannot be used in an already ambient context.": {
         "category": "Error",
-        "code": 1038
+        "code": 1038,
+        "isEarly":  true
     },
     "Initializers are not allowed in ambient contexts.": {
         "category": "Error",

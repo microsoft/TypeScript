@@ -9947,7 +9947,20 @@ module ts {
                         break;
 
                     case SyntaxKind.DeclareKeyword:
-                        // TODO (yuisu) : Revisit this once moving ambient Context into type checking
+                        if (flags & NodeFlags.Ambient) {
+                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_already_seen, "declare");
+                        }
+                        else if (node.parent.kind === SyntaxKind.ClassDeclaration) {
+                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_appear_on_a_class_element, "declare");
+                        }
+                        else if (node.kind === SyntaxKind.Parameter) {
+                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_appear_on_a_parameter, "declare");
+                        }
+                        else if (isInAmbientContext(node.parent) && node.parent.kind === SyntaxKind.ModuleBlock) {
+                            return grammarErrorOnNode(modifier, Diagnostics.A_declare_modifier_cannot_be_used_in_an_already_ambient_context);
+                        }
+                        flags |= NodeFlags.Ambient;
+                        lastDeclare = modifier
                         break;
                 }
             }

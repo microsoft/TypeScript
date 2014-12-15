@@ -33,7 +33,7 @@ module ts {
         Only_ambient_modules_can_use_quoted_names: { code: 1035, category: DiagnosticCategory.Error, key: "Only ambient modules can use quoted names.", isEarly: true },
         Statements_are_not_allowed_in_ambient_contexts: { code: 1036, category: DiagnosticCategory.Error, key: "Statements are not allowed in ambient contexts.", isEarly: true },
         A_function_implementation_cannot_be_declared_in_an_ambient_context: { code: 1037, category: DiagnosticCategory.Error, key: "A function implementation cannot be declared in an ambient context.", isEarly: true },
-        A_declare_modifier_cannot_be_used_in_an_already_ambient_context: { code: 1038, category: DiagnosticCategory.Error, key: "A 'declare' modifier cannot be used in an already ambient context." },
+        A_declare_modifier_cannot_be_used_in_an_already_ambient_context: { code: 1038, category: DiagnosticCategory.Error, key: "A 'declare' modifier cannot be used in an already ambient context.", isEarly: true },
         Initializers_are_not_allowed_in_ambient_contexts: { code: 1039, category: DiagnosticCategory.Error, key: "Initializers are not allowed in ambient contexts.", isEarly: true },
         _0_modifier_cannot_appear_on_a_module_element: { code: 1044, category: DiagnosticCategory.Error, key: "'{0}' modifier cannot appear on a module element.", isEarly: true },
         A_declare_modifier_cannot_be_used_with_an_interface_declaration: { code: 1045, category: DiagnosticCategory.Error, key: "A 'declare' modifier cannot be used with an interface declaration." },
