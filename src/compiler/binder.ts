@@ -227,23 +227,27 @@ module ts {
             if (symbolKind & SymbolFlags.HasLocals) {
                 node.locals = {};
             }
+
             var saveParent = parent;
             var saveContainer = container;
             var savedBlockScopeContainer = blockScopeContainer;
             parent = node;
             if (symbolKind & SymbolFlags.IsContainer) {
                 container = node;
-                // If container is not on container list, add it to the list
-                if (lastContainer !== container && !container.nextContainer) {
-                    if (lastContainer) {
-                        lastContainer.nextContainer = container;
-                    }
-                    lastContainer = container;
+                Debug.assert(container.nextContainer === undefined);
+
+                if (lastContainer) {
+                    Debug.assert(lastContainer.nextContainer === undefined);
+                    lastContainer.nextContainer = container;
                 }
+
+                lastContainer = container;
             }
+
             if (isBlockScopeContainer) {
                 blockScopeContainer = node;
             }
+
             forEachChild(node, bind);
             container = saveContainer;
             parent = saveParent;
