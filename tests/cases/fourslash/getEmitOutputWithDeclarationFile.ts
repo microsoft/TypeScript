@@ -14,5 +14,4 @@
 ////    y : number;
 //// }
 
-debugger;
 verify.baselineGetEmitOutput();
