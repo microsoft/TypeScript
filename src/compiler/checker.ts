@@ -4742,7 +4742,9 @@ module ts {
                 nodeLinks.importOnRightSide = undefined;
 
                 getSymbolLinks(rightSide).referenced = true;
-                nodeLinks = getNodeLinks(rightSide.declarations[0])
+                Debug.assert((rightSide.flags & SymbolFlags.Import) !== 0);
+
+                nodeLinks = getNodeLinks(getDeclarationOfKind(rightSide, SyntaxKind.ImportDeclaration))
             }
         }
 
@@ -4773,7 +4775,7 @@ module ts {
                 }
                 
                 if (symbolLinks.referenced) {
-                    markLinkedImportsAsReferenced(<ImportDeclaration>symbol.declarations[0]);
+                    markLinkedImportsAsReferenced(<ImportDeclaration>getDeclarationOfKind(symbol, SyntaxKind.ImportDeclaration));
                 }
             }
 
@@ -8906,7 +8908,7 @@ module ts {
                         // Mark the import as referenced so that we emit it in the final .js file.
                         getSymbolLinks(symbol).referenced = true;
                         // mark any import declarations that depend upon this import as referenced
-                        markLinkedImportsAsReferenced(<ImportDeclaration>symbol.declarations[0])
+                        markLinkedImportsAsReferenced(<ImportDeclaration>getDeclarationOfKind(symbol, SyntaxKind.ImportDeclaration))
                     }
                 }
 
