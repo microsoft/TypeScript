@@ -18,7 +18,6 @@ async function func(): Promise<void> {
 
 //// [awaitForInStatement8.js]
 function func() {
-    var _a, _b;
     return new Promise(function (_resolve) {
         _resolve(__awaiter(__generator(function (_state) {
             switch (_state.label) {
@@ -47,4 +46,5 @@ function func() {
             }
         })));
     });
+    var _a, _b;
 }

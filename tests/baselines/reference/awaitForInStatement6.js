@@ -18,7 +18,6 @@ async function func(): Promise<void> {
 
 //// [awaitForInStatement6.js]
 function func() {
-    var _a, _b;
     var i;
     return new Promise(function (_resolve) {
         _resolve(__awaiter(__generator(function (_state) {
@@ -48,4 +47,5 @@ function func() {
             }
         })));
     });
+    var _a, _b;
 }

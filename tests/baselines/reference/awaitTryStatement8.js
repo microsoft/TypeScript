@@ -21,7 +21,6 @@ async function func(): Promise<void> {
 
 //// [awaitTryStatement8.js]
 function func() {
-    var e;
     return new Promise(function (_resolve) {
         _resolve(__awaiter(__generator(function (_state) {
             switch (_state.label) {
@@ -36,7 +35,7 @@ function func() {
                     "try";
                     return ["break", 6];
                 case 3:
-                    e = _state.error;
+                    _a = _state.error;
                     "catch0";
                     return ["yield", p];
                 case 4:
@@ -51,4 +50,5 @@ function func() {
             }
         })));
     });
+    var _a;
 }

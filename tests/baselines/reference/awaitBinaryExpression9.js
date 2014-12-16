@@ -13,7 +13,6 @@ async function func(): Promise<void> {
 
 //// [awaitBinaryExpression9.js]
 function func() {
-    var _a;
     var b;
     return new Promise(function (_resolve) {
         _resolve(__awaiter(__generator(function (_state) {
@@ -29,4 +28,5 @@ function func() {
             }
         })));
     });
+    var _a;
 }

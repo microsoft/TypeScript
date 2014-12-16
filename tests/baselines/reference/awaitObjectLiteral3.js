@@ -15,7 +15,6 @@ async function func(): Promise<void> {
 
 //// [awaitObjectLiteral3.js]
 function func() {
-    var _a;
     var o;
     return new Promise(function (_resolve) {
         _resolve(__awaiter(__generator(function (_state) {
@@ -33,4 +32,5 @@ function func() {
             }
         })));
     });
+    var _a;
 }

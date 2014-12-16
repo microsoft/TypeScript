@@ -11,8 +11,7 @@
 // TODO(rbuckton): pass in a LocalGenerator from emitter, and use it for local generation instead.
 module ts {
     /** rewrites an async or generator function or method declaration */
-    export function rewriteFunction(node: FunctionLikeDeclaration, compilerOptions: CompilerOptions, resolver: EmitResolver): FunctionLikeDeclaration {
-        var locals = createLocalsBuilder(resolver, node.body);
+    export function rewriteFunction(node: FunctionLikeDeclaration, compilerOptions: CompilerOptions, resolver: EmitResolver, locals: LocalsBuilder): FunctionLikeDeclaration {
         var builder: CodeGenerator;
         var isDownlevel = compilerOptions.target <= ScriptTarget.ES5;
         var isAsync = (node.flags & NodeFlags.Async) !== 0;
@@ -721,6 +720,11 @@ module ts {
                 return;
             }
 
+            // we're not rewriting, so clear any generated name on the symbol
+            if (node.symbol) {
+                node.symbol.generatedName = undefined;
+            }
+
             return factory.updateCatchBlock(node, node.name, visitBlock(node.block));
         }
 
@@ -1060,8 +1064,13 @@ module ts {
             var endLabel = builder.beginExceptionBlock();
             rewriteBlock(node.tryBlock);
             if (node.catchClause) {
-                var variable = builder.declareLocal(node.catchClause.name.text);
-                resolver.renameSymbol(node.catchClause.symbol, variable.text);
+                var variable = builder.declareLocal(/*name*/ undefined, /*globallyUnique*/ true);
+                
+                // rename the symbol for the catch clause
+                if (node.catchClause.symbol) {
+                    node.catchClause.symbol.generatedName = variable.text;
+                }
+
                 builder.beginCatchBlock(variable);
                 rewriteBlock(node.catchClause.block);
             }

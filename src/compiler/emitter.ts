@@ -1499,8 +1499,14 @@ module ts {
             var extendsEmitted = false;
             var awaiterEmitted = false;
             var generatorEmitted = false;
-            var tempCount = 0;
-            var tempVariables: Identifier[];
+
+            // holds the node used for scoping unique names
+            var localsScope: Node;
+            // holds locals for the current scope
+            var locals: LocalsBuilder;
+            // holds locals that should be unique in all contexts, this is for downlevel rewrite of catch clauses and downlevel let/const
+            var globals: Map<boolean>;
+
             var tempParameters: Identifier[];
 
             /** write emitted output to disk*/
@@ -1910,41 +1916,30 @@ module ts {
                 writeFile(compilerHost, diagnostics, jsFilePath, emitOutput, writeByteOrderMark);
             }
 
-            // Create a temporary variable with a unique unused name. The forLoopVariable parameter signals that the
-            // name should be one that is appropriate for a for loop variable.
-            function createTempVariable(location: Node, forLoopVariable?: boolean): Identifier {
-                var name = forLoopVariable ? "_i" : undefined;
-                while (true) {
-                    if (name && resolver.isUnknownIdentifier(location, name)) {
-                        break;
-                    }
-                    // _a .. _h, _j ... _z, _0, _1, ...
-                    name = "_" + (tempCount < 25 ? String.fromCharCode(tempCount + (tempCount < 8 ? 0: 1) + CharacterCodes.a) : tempCount - 25);
-                    tempCount++;
+            function ensureLocals() {
+                if (!globals) {
+                    globals = {};
                 }
-                var result = <Identifier>createNode(SyntaxKind.Identifier);
-                result.text = name;
-                return result;
-            }
 
-            function recordTempDeclaration(name: Identifier) {
-                if (!tempVariables) {
-                    tempVariables = [];
+                if (!locals) {
+                    locals = createLocalsBuilder(resolver, localsScope, globals);
                 }
-                tempVariables.push(name);
             }
 
             function emitTempDeclarations(newLine: boolean) {
-                if (tempVariables) {
-                    if (newLine) {
-                        writeLine();
+                if (locals) {
+                    var variables = locals.getVariables();
+                    if (variables) {
+                        if (newLine) {
+                            writeLine();
+                        }
+                        else {
+                            write(" ");
+                        }
+                        write("var ");
+                        emitCommaList(variables);
+                        write(";");
                     }
-                    else {
-                        write(" ");
-                    }
-                    write("var ");
-                    emitCommaList(tempVariables);
-                    write(";");
                 }
             }
 
@@ -2836,9 +2831,10 @@ module ts {
 
                 function ensureIdentifier(expr: Expression): Expression {
                     if (expr.kind !== SyntaxKind.Identifier) {
-                        var identifier = createTempVariable(root);
+                        ensureLocals();
+                        var identifier = locals.createUniqueIdentifier();
                         if (!isDeclaration) {
-                            recordTempDeclaration(identifier);
+                            locals.recordVariable(identifier);
                         }
                         emitAssignment(identifier, expr);
                         expr = identifier;
@@ -3039,7 +3035,8 @@ module ts {
             function emitParameter(node: ParameterDeclaration) {
                 emitLeadingComments(node);
                 if (isBindingPattern(node.name)) {
-                    var name = createTempVariable(node);
+                    ensureLocals();
+                    var name = locals.createUniqueIdentifier();
                     if (!tempParameters) {
                         tempParameters = [];
                     }
@@ -3089,9 +3086,10 @@ module ts {
 
             function emitRestParameter(node: FunctionLikeDeclaration) {
                 if (hasRestParameters(node)) {
+                    ensureLocals();
                     var restIndex = node.parameters.length - 1;
                     var restParam = node.parameters[restIndex];
-                    var tempName = createTempVariable(node, /*forLoopVariable*/ true).text;
+                    var tempName = locals.createUniqueIdentifier("_i").text;
                     writeLine();
                     emitLeadingComments(restParam);
                     emitStart(restParam);
@@ -3176,15 +3174,17 @@ module ts {
             }
 
             function emitSignatureAndBody(node: FunctionLikeDeclaration) {
-                var saveTempCount = tempCount;
-                var saveTempVariables = tempVariables;
+                var saveLocals = locals;
+                var saveLocalsScope = localsScope;
+                localsScope = node.body;
+                locals = undefined;
+
                 var saveTempParameters = tempParameters;
-                tempCount = 0;
-                tempVariables = undefined;
                 tempParameters = undefined;
                 if (node.flags & NodeFlags.Async || (node.asteriskToken && compilerOptions.target <= ScriptTarget.ES5)) {
                     // NOTE: rewriteFunction supports downlevel generators, but is not currently enabled.
-                    node = rewriteFunction(node, compilerOptions, resolver);
+                    ensureLocals();
+                    node = rewriteFunction(node, compilerOptions, resolver, locals);
                 }
 
                 emitSignatureParameters(node);
@@ -3252,9 +3252,11 @@ module ts {
                     emitEnd(node);
                     write(";");
                 }
-                tempCount = saveTempCount;
-                tempVariables = saveTempVariables;
+
                 tempParameters = saveTempParameters;
+
+                locals = saveLocals;
+                localsScope = saveLocalsScope;
             }
 
             function findInitialSuperCall(ctor: ConstructorDeclaration): ExpressionStatement {
@@ -3458,12 +3460,13 @@ module ts {
                 emitTrailingComments(node);
 
                 function emitConstructorOfClass() {
-                    var saveTempCount = tempCount;
-                    var saveTempVariables = tempVariables;
+                    var saveLocals = locals;
+                    var saveLocalsScope = localsScope;
                     var saveTempParameters = tempParameters;
-                    tempCount = 0;
-                    tempVariables = undefined;
+                    locals = undefined;
+                    localsScope = node;
                     tempParameters = undefined;
+
                     // Emit the constructor overload pinned comments
                     forEach(node.members, member => {
                         if (member.kind === SyntaxKind.Constructor && !(<ConstructorDeclaration>member).body) {
@@ -3475,6 +3478,7 @@ module ts {
                     if (ctor) {
                         emitLeadingComments(ctor);
                     }
+                    
                     emitStart(<Node>ctor || node);
                     write("function ");
                     emit(node.name);
@@ -3487,6 +3491,7 @@ module ts {
                     }
                     emitCaptureThisForNodeIfNecessary(node);
                     if (ctor) {
+                        localsScope = ctor.body;
                         emitDefaultValueAssignments(ctor);
                         emitRestParameter(ctor);
                         if (baseTypeNode) {
@@ -3497,6 +3502,7 @@ module ts {
                             }
                         }
                         emitParameterPropertyAssignments(ctor);
+                        localsScope = node;
                     }
                     else {
                         if (baseTypeNode) {
@@ -3524,9 +3530,9 @@ module ts {
                     if (ctor) {
                         emitTrailingComments(ctor);
                     }
-                    tempCount = saveTempCount;
-                    tempVariables = saveTempVariables;
                     tempParameters = saveTempParameters;
+                    locals = saveLocals;
+                    localsScope = saveLocalsScope;
                 }
             }
 
@@ -3634,13 +3640,15 @@ module ts {
                 emitEnd(node.name);
                 write(") ");
                 if (node.body.kind === SyntaxKind.ModuleBlock) {
-                    var saveTempCount = tempCount;
-                    var saveTempVariables = tempVariables;
-                    tempCount = 0;
-                    tempVariables = undefined;
+                    var saveLocals = locals;
+                    var saveLocalsScope = localsScope;
+                    locals = undefined;
+                    localsScope = node.body;
+
                     emit(node.body);
-                    tempCount = saveTempCount;
-                    tempVariables = saveTempVariables;
+
+                    locals = saveLocals;
+                    localsScope = saveLocalsScope;
                 }
                 else {
                     write("{");
@@ -3813,6 +3821,10 @@ module ts {
 
             function emitSourceFile(node: SourceFile) {
                 currentSourceFile = node;
+                globals = undefined;
+                localsScope = node;
+                locals = undefined;
+
                 // Start new file on new line
                 writeLine();
                 emitDetachedComments(node);

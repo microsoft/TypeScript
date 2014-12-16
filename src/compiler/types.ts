@@ -959,10 +959,9 @@ module ts {
     export type Label = number;
 
     export interface LocalsBuilder {
-        isReservedIdentifier(name: string): boolean;
-        createUniqueIdentifier(name?: string, reserve?: boolean): Identifier;
-        declareLocal(name?: string, reserve?: boolean): Identifier;
-        getLocals(): VariableDeclaration[];
+        createUniqueIdentifier(name?: string, globallyUnique?: boolean): Identifier;
+        recordVariable(name: Identifier): void;
+        getVariables(): Identifier[];
     }
 
     export interface CodeGenerator {
@@ -972,7 +971,7 @@ module ts {
         addVariable(name: Identifier, flags?: NodeFlags): void
         addFunction(func: FunctionDeclaration): void;
 
-        declareLocal(name?: string): Identifier;
+        declareLocal(name?: string, globallyUnique?: boolean): Identifier;
 
         defineLabel(): Label;
         markLabel(label: Label): void;
@@ -1001,7 +1000,7 @@ module ts {
         emit(code: OpCode, node: Expression): void;
         emit(code: OpCode, left: Expression, right: Expression): void;
 
-        createUniqueIdentifier(name?: string): Identifier;
+        createUniqueIdentifier(name?: string, globallyUnique?: boolean): Identifier;
         createInlineBreak(label: Label): ReturnStatement;
         createInlineReturn(expression: Expression): ReturnStatement;
         createResume(): LeftHandSideExpression;
@@ -1176,7 +1175,6 @@ module ts {
         getConstantValue(node: PropertyAccessExpression | ElementAccessExpression): number;
         isEmitBlocked(sourceFile?: SourceFile): boolean;
         isUnknownIdentifier(location: Node, name: string): boolean;
-        renameSymbol(symbol: Symbol, generatedName: string): void;
         getRenamedIdentifier(name: Identifier): string;
         getPromiseConstructor(node: SignatureDeclaration): EntityName;
     }

@@ -4745,10 +4745,6 @@ module ts {
             }
         }
 
-        function renameSymbol(symbol: Symbol, generatedName: string): void {
-            symbol.generatedName = generatedName;
-        }
-
         function getRenamedIdentifier(name: Identifier): string {
             var links = getNodeLinks(name);
             if (links.resolvedSymbol) {
@@ -9748,7 +9744,6 @@ module ts {
                 isEntityNameVisible,
                 getConstantValue,
                 isUnknownIdentifier,
-                renameSymbol,
                 getRenamedIdentifier,
                 getPromiseConstructor
             };

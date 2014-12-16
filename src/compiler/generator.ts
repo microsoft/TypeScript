@@ -44,67 +44,57 @@ module ts {
         continueLabel: Label;
     }
 
-    export function createLocalsBuilder(resolver: EmitResolver, context: Node, parent?: LocalsBuilder): LocalsBuilder {
-        var locals: VariableDeclaration[];
-        var temps: Map<number>;
-        var reserved: Map<boolean>;
+    export function createLocalsBuilder(resolver: EmitResolver, context: Node, globals: Map<boolean>): LocalsBuilder {
+        var locals: Identifier[];
+        var tempCount = 0;
 
         return {
-            isReservedIdentifier,
             createUniqueIdentifier,
-            declareLocal,
-            getLocals
+            recordVariable,
+            getVariables
         };
 
-        function isUnknownIdentifier(name: string): boolean {
-            return resolver.isUnknownIdentifier(context, name) && !isReservedIdentifier(name);
+        function hasGlobalIdentifier(name: string): boolean {
+            if (globals && hasProperty(globals, name)) {
+                return true;
+            }
         }
 
-        function isReservedIdentifier(name: string): boolean {
-            if (reserved && hasProperty(reserved, name)) {
-                return true;
-            }
-            
-            if (parent && parent.isReservedIdentifier(name)) {
-                return true;
-            }
+        function isUnknownIdentifier(name: string): boolean {
+            return !hasGlobalIdentifier(name) && resolver.isUnknownIdentifier(context, name);
         }
         
-        function createUniqueIdentifier(name: string = "", reserve?: boolean): Identifier {
-            if (!temps) temps = {};
-            if (!name || !isUnknownIdentifier(name) || hasProperty(temps, name)) {
-                var nextLocalId = temps[name] || 0;
-                do {
-                    var tempName = name + "_" + (nextLocalId < 25 ? String.fromCharCode(nextLocalId + (nextLocalId < 8 ? 0 : 1) + CharacterCodes.a) : nextLocalId - 25);
-                    nextLocalId++;
+        function createUniqueIdentifier(name?: string, globallyUnique?: boolean): Identifier {
+            // when we generate a "global" unique identifier, we it to be unique in all contexts. This is 
+            // to reduce the possibility of collisions when generating names used to rename symbols during emit
+            // for downlevel rewrite of a catch block, and for future support for downlevel let/const.
+            // We do this here rather than introduce new symbols into symbol table of the containing scope so that we don't 
+            // make changes that would be compatible with incremental parse
+            while (true) {
+                if (name && resolver.isUnknownIdentifier(context, name)) {
+                    break;
                 }
-                while (!isUnknownIdentifier(tempName));
-                temps[name] = nextLocalId;
-                name = tempName;
-            } else {
-                temps[name] = 0;
+                // _a .. _h, _j ... _z, _0, _1, ...
+                name = "_" + (tempCount < 25 ? String.fromCharCode(tempCount + (tempCount < 8 ? 0 : 1) + CharacterCodes.a) : tempCount - 25);
+                tempCount++;
             }
-
-            if (reserve) {
-                if (!reserved) {
-                    reserved = {};
-                }
-                
-                reserved[name] = true;
+            
+            if (globallyUnique) {
+                globals[name] = true;
             }
 
             return factory.createIdentifier(name);
         }
 
-        function declareLocal(name?: string, reserve?: boolean): Identifier {
-            if (!locals) locals = [];
-            var localDeclarationName = createUniqueIdentifier(name, reserve);
-            var localDeclaration = factory.createVariableDeclaration(localDeclarationName);
-            locals.push(localDeclaration);
-            return localDeclarationName;
+        function recordVariable(name: Identifier): void {
+            if (!locals) {
+                locals = [];
+            }
+
+            locals.push(name);
         }
 
-        function getLocals(): VariableDeclaration[] {
+        function getVariables(): Identifier[] {
             return locals;
         }
     }
@@ -138,8 +128,6 @@ module ts {
         var operationLocations: TextRange[];
 
         var state: Identifier;
-        var declareLocal = locals.declareLocal;
-        var createUniqueIdentifier = locals.createUniqueIdentifier;
 
         return {
             writeLocation,
@@ -170,6 +158,16 @@ module ts {
             createResume,
             buildFunction
         };
+
+        function declareLocal(name?: string, globallyUnique?: boolean): Identifier {
+            var local = locals.createUniqueIdentifier(name, globallyUnique);
+            locals.recordVariable(local);
+            return local;
+        }
+
+        function createUniqueIdentifier(name?: string, globallyUnique?: boolean): Identifier {
+            return locals.createUniqueIdentifier(name, globallyUnique);
+        }
 
         function writeLocation(location: TextRange): void {
             pendingLocation = location;
@@ -496,11 +494,6 @@ module ts {
 
         function buildFunction(kind: SyntaxKind, name: DeclarationName, location?: TextRange, flags?: NodeFlags, modifiers?: ModifiersArray) {
             var statements: Statement[] = [];
-            var generatedLocals = locals.getLocals();
-            if (generatedLocals) {
-                statements.push(factory.createVariableStatement(generatedLocals));
-            }
-
             if (variableDeclarations) {
                 statements.push(factory.createVariableStatement(variableDeclarations));
             }

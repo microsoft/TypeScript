@@ -15,7 +15,6 @@ async function f(): Promise<void> {
 
 //// [awaitBreakStatement11.js]
 function f() {
-    var _a;
     return new Promise(function (_resolve) {
         _resolve(__awaiter(__generator(function (_state) {
             switch (_state.label) {
@@ -34,4 +33,5 @@ function f() {
             }
         })));
     });
+    var _a;
 }

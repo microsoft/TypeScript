@@ -28,7 +28,6 @@ async function func(): Promise<void> {
 
 //// [awaitTryStatement14.js]
 function func() {
-    var e, e_a;
     return new Promise(function (_resolve) {
         _resolve(__awaiter(__generator(function (_state) {
             switch (_state.label) {
@@ -47,7 +46,7 @@ function func() {
                     "try1";
                     return ["break", 7];
                 case 4:
-                    e = _state.error;
+                    _a = _state.error;
                     "catch1";
                     return ["break", 7];
                 case 5:
@@ -60,7 +59,7 @@ function func() {
                     "try0.1";
                     return ["break", 10];
                 case 8:
-                    e_a = _state.error;
+                    _b = _state.error;
                     "catch0";
                     return ["break", 10];
                 case 9:
@@ -72,4 +71,5 @@ function func() {
             }
         })));
     });
+    var _a, _b;
 }

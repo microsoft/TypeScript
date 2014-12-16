@@ -14,7 +14,6 @@ async function f(): Promise<void> {
 
 //// [awaitBreakStatement9.js]
 function f() {
-    var _a, _b;
     var a;
     return new Promise(function (_resolve) {
         _resolve(__awaiter(__generator(function (_state) {
@@ -39,4 +38,5 @@ function f() {
             }
         })));
     });
+    var _a, _b;
 }

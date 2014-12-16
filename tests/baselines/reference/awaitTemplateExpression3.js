@@ -11,7 +11,6 @@ async function f(): Promise<void> {
 
 //// [awaitTemplateExpression3.js]
 function f() {
-    var _a;
     var b;
     return new Promise(function (_resolve) {
         _resolve(__awaiter(__generator(function (_state) {
@@ -25,4 +24,5 @@ function f() {
             }
         })));
     });
+    var _a;
 }
