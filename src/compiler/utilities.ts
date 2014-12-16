@@ -220,12 +220,40 @@ module ts {
         return node.kind === SyntaxKind.EnumDeclaration && isConst(node);
     }
 
+    function walkUpBindingElementsAndPatterns(node: Node): Node {
+        while (node && (node.kind === SyntaxKind.BindingElement || isBindingPattern(node))) {
+            node = node.parent;
+        }
+
+        return node;
+    }
+
+    export function getNodeFlags(node: Node): NodeFlags {
+        node = walkUpBindingElementsAndPatterns(node);
+
+        var flags = node.flags;
+        if (node.kind === SyntaxKind.VariableDeclaration) {
+            node = node.parent;
+        }
+
+        if (node && node.kind === SyntaxKind.VariableDeclarationList) {
+            flags |= node.flags;
+            node = node.parent;
+        }
+
+        if (node && node.kind === SyntaxKind.VariableStatement) {
+            flags |= node.flags;
+        }
+
+        return flags;
+    }
+
     export function isConst(node: Node): boolean {
-        return !!(node.flags & NodeFlags.Const);
+        return !!(getNodeFlags(node) & NodeFlags.Const);
     }
 
     export function isLet(node: Node): boolean {
-        return !!(node.flags & NodeFlags.Let);
+        return !!(getNodeFlags(node) & NodeFlags.Let);
     }
 
     export function isPrologueDirective(node: Node): boolean {
@@ -456,12 +484,14 @@ module ts {
                     case SyntaxKind.SwitchStatement:
                         return (<ExpressionStatement>parent).expression === node;
                     case SyntaxKind.ForStatement:
-                        return (<ForStatement>parent).initializer === node ||
-                            (<ForStatement>parent).condition === node ||
-                            (<ForStatement>parent).iterator === node;
+                        var forStatement = <ForStatement>parent;
+                        return (forStatement.initializer === node && forStatement.initializer.kind !== SyntaxKind.VariableDeclarationList) ||
+                            forStatement.condition === node ||
+                            forStatement.iterator === node;
                     case SyntaxKind.ForInStatement:
-                        return (<ForInStatement>parent).variable === node ||
-                            (<ForInStatement>parent).expression === node;
+                        var forInStatement = <ForInStatement>parent;
+                        return (forInStatement.initializer === node && forInStatement.initializer.kind !== SyntaxKind.VariableDeclarationList) ||
+                            forInStatement.expression === node;
                     case SyntaxKind.TypeAssertionExpression:
                         return node === (<TypeAssertion>parent).expression;
                     case SyntaxKind.TemplateSpan:
@@ -533,7 +563,10 @@ module ts {
 
     export function isInAmbientContext(node: Node): boolean {
         while (node) {
-            if (node.flags & (NodeFlags.Ambient | NodeFlags.DeclarationFile)) return true;
+            if (node.flags & (NodeFlags.Ambient | NodeFlags.DeclarationFile)) {
+                return true;
+            }
+
             node = node.parent;
         }
         return false;

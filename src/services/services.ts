@@ -364,7 +364,7 @@ module ts {
 
                 // Get the cleaned js doc comment text from the declaration
                 ts.forEach(getJsDocCommentTextRange(
-                    declaration.kind === SyntaxKind.VariableDeclaration ? declaration.parent : declaration, sourceFileOfDeclaration), jsDocCommentTextRange => {
+                    declaration.kind === SyntaxKind.VariableDeclaration ? declaration.parent.parent : declaration, sourceFileOfDeclaration), jsDocCommentTextRange => {
                         var cleanedJsDocComment = getCleanedJsDocComment(jsDocCommentTextRange.pos, jsDocCommentTextRange.end, sourceFileOfDeclaration);
                         if (cleanedJsDocComment) {
                             jsDocCommentParts.push.apply(jsDocCommentParts, cleanedJsDocComment);
@@ -807,6 +807,7 @@ module ts {
                             // fall through
                         case SyntaxKind.Constructor:
                         case SyntaxKind.VariableStatement:
+                        case SyntaxKind.VariableDeclarationList:
                         case SyntaxKind.ObjectBindingPattern:
                         case SyntaxKind.ArrayBindingPattern:
                         case SyntaxKind.ModuleBlock:
@@ -2438,6 +2439,7 @@ module ts {
                     switch (previousToken.kind) {
                         case SyntaxKind.CommaToken:
                             return containingNodeKind === SyntaxKind.VariableDeclaration ||
+                                containingNodeKind === SyntaxKind.VariableDeclarationList ||
                                 containingNodeKind === SyntaxKind.VariableStatement ||
                                 containingNodeKind === SyntaxKind.EnumDeclaration ||           // enum a { foo, |
                                 isFunction(containingNodeKind);
@@ -2631,7 +2633,7 @@ module ts {
                 else if (symbol.valueDeclaration && isConst(symbol.valueDeclaration)) {
                     return ScriptElementKind.constElement;
                 }
-                else if (forEach(symbol.declarations, declaration => isLet(declaration))) {
+                else if (forEach(symbol.declarations, isLet)) {
                     return ScriptElementKind.letElement;
                 }
                 return isLocalVariableOrFunction(symbol) ? ScriptElementKind.localVariableElement : ScriptElementKind.variableElement;
@@ -2689,11 +2691,12 @@ module ts {
                 case SyntaxKind.InterfaceDeclaration: return ScriptElementKind.interfaceElement;
                 case SyntaxKind.TypeAliasDeclaration: return ScriptElementKind.typeElement;
                 case SyntaxKind.EnumDeclaration: return ScriptElementKind.enumElement;
-                case SyntaxKind.VariableDeclaration: return isConst(node)
-                    ? ScriptElementKind.constElement
-                    : node.flags & NodeFlags.Let
-                        ? ScriptElementKind.letElement
-                        : ScriptElementKind.variableElement;
+                case SyntaxKind.VariableDeclaration:
+                    return isConst(node)
+                        ? ScriptElementKind.constElement
+                        : isLet(node)
+                            ? ScriptElementKind.letElement
+                            : ScriptElementKind.variableElement;
                 case SyntaxKind.FunctionDeclaration: return ScriptElementKind.functionElement;
                 case SyntaxKind.GetAccessor: return ScriptElementKind.memberGetAccessorElement;
                 case SyntaxKind.SetAccessor: return ScriptElementKind.memberSetAccessorElement;
@@ -2874,7 +2877,7 @@ module ts {
             }
             if (symbolFlags & SymbolFlags.Enum) {
                 addNewLineIfDisplayPartsExist();
-                if (forEach(symbol.declarations, declaration => isConstEnumDeclaration(declaration))) {
+                if (forEach(symbol.declarations, isConstEnumDeclaration)) {
                     displayParts.push(keywordPart(SyntaxKind.ConstKeyword));
                     displayParts.push(spacePart());
                 }

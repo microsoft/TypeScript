@@ -44,7 +44,7 @@ module ts.NavigationBar {
             function visit(node: Node) {
                 switch (node.kind) {
                     case SyntaxKind.VariableStatement:
-                        forEach((<VariableStatement>node).declarations, visit);
+                        forEach((<VariableStatement>node).declarationList.declarations, visit);
                         break;
                     case SyntaxKind.ObjectBindingPattern:
                     case SyntaxKind.ArrayBindingPattern:
