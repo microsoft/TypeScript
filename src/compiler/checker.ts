@@ -7232,6 +7232,9 @@ module ts {
         }
 
         function checkPropertyDeclaration(node: PropertyDeclaration) {
+            // Grammar checking
+            checkGrammarModifiers(node) || checkGrammarProperty(node);
+
             checkVariableLikeDeclaration(node);
         }
 
@@ -10698,6 +10701,29 @@ module ts {
                     ? Diagnostics.A_constructor_implementation_cannot_be_declared_in_an_ambient_context
                     : Diagnostics.A_function_implementation_cannot_be_declared_in_an_ambient_context;
                 return grammarErrorOnFirstToken(body, diagnostic);
+            }
+        }
+
+        function checkGrammarProperty(node: PropertyDeclaration) {
+            if (node.parent.kind === SyntaxKind.ClassDeclaration) {
+                if (checkGrammarForInvalidQuestionMark(node, node.questionToken, Diagnostics.A_class_member_cannot_be_declared_optional) ||
+                    checkGrammarForDisallowedComputedProperty(node.name, Diagnostics.Computed_property_names_are_not_allowed_in_class_property_declarations)) {
+                    return true;
+                }
+            }
+            else if (node.parent.kind === SyntaxKind.InterfaceDeclaration) {
+                if (checkGrammarForDisallowedComputedProperty(node.name, Diagnostics.Computed_property_names_are_not_allowed_in_interfaces)) {
+                    return true;
+                }
+            }
+            else if (node.parent.kind === SyntaxKind.TypeLiteral) {
+                if (checkGrammarForDisallowedComputedProperty(node.name, Diagnostics.Computed_property_names_are_not_allowed_in_type_literals)) {
+                    return true;
+                }
+            }
+
+            if (isInAmbientContext(node) && node.initializer) {
+                return grammarErrorOnFirstToken(node.initializer, Diagnostics.Initializers_are_not_allowed_in_ambient_contexts);
             }
         }
 

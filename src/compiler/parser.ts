@@ -4662,9 +4662,9 @@ module ts {
                 //case SyntaxKind.Parameter:                      return checkParameter(<ParameterDeclaration>node);
                 //case SyntaxKind.PostfixUnaryExpression:         return checkPostfixUnaryExpression(<PostfixUnaryExpression>node);
                 //case SyntaxKind.PrefixUnaryExpression:          return checkPrefixUnaryExpression(<PrefixUnaryExpression>node);
-                case SyntaxKind.PropertyDeclaration:
-                case SyntaxKind.PropertySignature:
-                    return checkProperty(<PropertyDeclaration>node);
+                //case SyntaxKind.PropertyDeclaration:
+                //case SyntaxKind.PropertySignature:
+                    //return checkProperty(<PropertyDeclaration>node);
                 //case SyntaxKind.ReturnStatement:                return checkReturnStatement(<ReturnStatement>node);
                 //case SyntaxKind.SetAccessor:                    return checkSetAccessor(<MethodDeclaration>node);
                 case SyntaxKind.SourceFile:                     return checkSourceFile(<SourceFile>node);
@@ -5324,8 +5324,8 @@ module ts {
                 //case SyntaxKind.GetAccessor:
                 //case SyntaxKind.SetAccessor:
                 //case SyntaxKind.Constructor:
-                case SyntaxKind.PropertyDeclaration:
-                case SyntaxKind.PropertySignature:
+                //case SyntaxKind.PropertyDeclaration:
+                //case SyntaxKind.PropertySignature:
                 //case SyntaxKind.MethodDeclaration:
                 //case SyntaxKind.MethodSignature:
                 //case SyntaxKind.ClassDeclaration:

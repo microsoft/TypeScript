@@ -1,6 +1,6 @@
 tests/cases/conformance/types/namedTypes/classWithOptionalParameter.ts(4,6): error TS1112: A class member cannot be declared optional.
-tests/cases/conformance/types/namedTypes/classWithOptionalParameter.ts(9,6): error TS1112: A class member cannot be declared optional.
 tests/cases/conformance/types/namedTypes/classWithOptionalParameter.ts(5,6): error TS1112: A class member cannot be declared optional.
+tests/cases/conformance/types/namedTypes/classWithOptionalParameter.ts(9,6): error TS1112: A class member cannot be declared optional.
 tests/cases/conformance/types/namedTypes/classWithOptionalParameter.ts(10,6): error TS1112: A class member cannot be declared optional.
 
 
