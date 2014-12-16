@@ -2,7 +2,6 @@
 /// <reference path="emitter.ts" />
 
 module ts {
-    // TODO (drosen, mhegazy): Move to a more appropriate file.
     export function createCompilerHost(options: CompilerOptions): CompilerHost {
         var currentDirectory: string;
         var existingDirectories: Map<boolean> = {};
