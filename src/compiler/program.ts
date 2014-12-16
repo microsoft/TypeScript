@@ -102,13 +102,28 @@ module ts {
             getDeclarationDiagnostics: getDeclarationDiagnostics,
             getTypeChecker,
             getCommonSourceDirectory: () => commonSourceDirectory,
-            emitFiles: invokeEmitter
+            emitFiles: invokeEmitter,
+            isEmitBlocked,
         };
         return program;
 
+        function hasEarlyErrors(sourceFile?: SourceFile): boolean {
+            return forEach(getDiagnosticsProducingTypeChecker().getDiagnostics(sourceFile), d => d.isEarly);
+        }
+
+        function isEmitBlocked(sourceFile?: SourceFile): boolean {
+            return getDiagnostics(sourceFile).length !== 0 ||
+                hasEarlyErrors(sourceFile) ||
+                (options.noEmitOnError && getDiagnosticsProducingTypeChecker().getDiagnostics(sourceFile).length !== 0);
+        }
+
+        function getDiagnosticsProducingTypeChecker() {
+            return diagnosticsProducingTypeChecker || (diagnosticsProducingTypeChecker = createTypeChecker(program, /*produceDiagnostics:*/ true));
+        }
+
         function getTypeChecker(produceDiagnostics: boolean) {
             if (produceDiagnostics) {
-                return diagnosticsProducingTypeChecker || (diagnosticsProducingTypeChecker = createTypeChecker(program, produceDiagnostics));
+                return getDiagnosticsProducingTypeChecker();
             }
             else {
                 return noDiagnosticsTypeChecker || (noDiagnosticsTypeChecker = createTypeChecker(program, produceDiagnostics));
@@ -116,14 +131,14 @@ module ts {
         }
 
         function getDeclarationDiagnostics(targetSourceFile: SourceFile): Diagnostic[]{
-            var fullTypeChecker = getTypeChecker(/*produceDiagnostics:*/true);
-            fullTypeChecker.getDiagnostics(targetSourceFile);
-            var resolver = fullTypeChecker.getEmitResolver();
+            var typeChecker = getDiagnosticsProducingTypeChecker();
+            typeChecker.getDiagnostics(targetSourceFile);
+            var resolver = typeChecker.getEmitResolver();
             return ts.getDeclarationDiagnostics(program, resolver, targetSourceFile);
         }
 
         function invokeEmitter(targetSourceFile?: SourceFile) {
-            var resolver = getTypeChecker(/*produceDiagnostics:*/true).getEmitResolver();
+            var resolver = getDiagnosticsProducingTypeChecker().getEmitResolver();
             return emitFiles(resolver, program, targetSourceFile);
         }
 

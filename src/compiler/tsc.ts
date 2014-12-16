@@ -286,7 +286,7 @@ module ts {
             var checker = program.getTypeChecker(/*fullTypeCheckMode*/ true);
             var checkStart = new Date().getTime();
             errors = checker.getDiagnostics();
-            if (checker.isEmitBlocked()) {
+            if (program.isEmitBlocked()) {
                 exitStatus = EmitReturnStatus.AllOutputGenerationSkipped;
             }
             else {

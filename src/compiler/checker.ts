@@ -9,7 +9,7 @@ module ts {
     /// If fullTypeCheck === true,  then the typechecker should do every possible check to produce all errors
     /// If fullTypeCheck === false, the typechecker can take shortcuts and skip checks that only produce errors.
     /// NOTE: checks that somehow affect decisions being made during typechecking should be executed in both cases.
-    export function createTypeChecker(program: Program, produceDiagnostics: boolean): TypeChecker {
+    export function createTypeChecker(host: TypeCheckerHost, produceDiagnostics: boolean): TypeChecker {
         var Symbol = objectAllocator.getSymbolConstructor();
         var Type = objectAllocator.getTypeConstructor();
         var Signature = objectAllocator.getSignatureConstructor();
@@ -19,13 +19,13 @@ module ts {
         var emptyArray: any[] = [];
         var emptySymbols: SymbolTable = {};
 
-        var compilerOptions = program.getCompilerOptions();
+        var compilerOptions = host.getCompilerOptions();
         var emitResolver = createResolver();
 
         var checker: TypeChecker = {
-            getNodeCount: () => sum(program.getSourceFiles(), "nodeCount"),
-            getIdentifierCount: () => sum(program.getSourceFiles(), "identifierCount"),
-            getSymbolCount: () => sum(program.getSourceFiles(), "symbolCount"),
+            getNodeCount: () => sum(host.getSourceFiles(), "nodeCount"),
+            getIdentifierCount: () => sum(host.getSourceFiles(), "identifierCount"),
+            getSymbolCount: () => sum(host.getSourceFiles(), "symbolCount"),
             getTypeCount: () => typeCount,
             isUndefinedSymbol: symbol => symbol === undefinedSymbol,
             isArgumentsSymbol: symbol => symbol === argumentsSymbol,
@@ -55,8 +55,6 @@ module ts {
             getSignatureFromDeclaration,
             isImplementationOfOverload,
             getAliasedSymbol: resolveImport,
-            hasEarlyErrors,
-            isEmitBlocked,
             getEmitResolver: () => emitResolver,
         };
 
@@ -277,7 +275,7 @@ module ts {
                 return true;
             }
 
-            var sourceFiles = program.getSourceFiles();
+            var sourceFiles = host.getSourceFiles();
             return sourceFiles.indexOf(file1) <= sourceFiles.indexOf(file2);
         }
 
@@ -517,7 +515,7 @@ module ts {
             }
             while (true) {
                 var filename = normalizePath(combinePaths(searchPath, moduleName));
-                var sourceFile = program.getSourceFile(filename + ".ts") || program.getSourceFile(filename + ".d.ts");
+                var sourceFile = host.getSourceFile(filename + ".ts") || host.getSourceFile(filename + ".d.ts");
                 if (sourceFile || isRelative) break;
                 var parentPath = getDirectoryPath(searchPath);
                 if (parentPath === searchPath) break;
@@ -3394,7 +3392,7 @@ module ts {
                 if (containingMessageChain) {
                     errorInfo = concatenateDiagnosticMessageChains(containingMessageChain, errorInfo);
                 }
-                addDiagnostic(createDiagnosticForNodeFromMessageChain(errorNode, errorInfo, program.getCompilerHost().getNewLine()));
+                addDiagnostic(createDiagnosticForNodeFromMessageChain(errorNode, errorInfo, host.getCompilerHost().getNewLine()));
             }
             return result !== Ternary.False;
 
@@ -8323,7 +8321,7 @@ module ts {
 
                             var errorInfo = chainDiagnosticMessages(undefined, Diagnostics.Named_properties_0_of_types_1_and_2_are_not_identical, prop.name, typeName1, typeName2);
                             errorInfo = chainDiagnosticMessages(errorInfo, Diagnostics.Interface_0_cannot_simultaneously_extend_types_1_and_2, typeToString(type), typeName1, typeName2);
-                            addDiagnostic(createDiagnosticForNodeFromMessageChain(typeNode, errorInfo, program.getCompilerHost().getNewLine()));
+                            addDiagnostic(createDiagnosticForNodeFromMessageChain(typeNode, errorInfo, host.getCompilerHost().getNewLine()));
                         }
                     }
                 }
@@ -8934,7 +8932,7 @@ module ts {
                 checkSourceFile(sourceFile);
                 return filter(getSortedDiagnostics(), d => d.file === sourceFile);
             }
-            forEach(program.getSourceFiles(), checkSourceFile);
+            forEach(host.getSourceFiles(), checkSourceFile);
             return getSortedDiagnostics();
         }
 
@@ -9451,16 +9449,6 @@ module ts {
             return getDiagnostics(sourceFile).length > 0 || getGlobalDiagnostics().length > 0;
         }
 
-        function isEmitBlocked(sourceFile?: SourceFile): boolean {
-            return program.getDiagnostics(sourceFile).length !== 0 ||
-                hasEarlyErrors(sourceFile) ||
-                (compilerOptions.noEmitOnError && getDiagnostics(sourceFile).length !== 0);
-        }
-
-        function hasEarlyErrors(sourceFile?: SourceFile): boolean {
-            return forEach(getDiagnostics(sourceFile), d => d.isEarly);
-        }
-
         function isImportResolvedToValue(symbol: Symbol): boolean {
             var target = resolveImport(symbol);
             // const enums and modules that contain only const enums are not considered values from the emit perespective
@@ -9556,7 +9544,6 @@ module ts {
                 getEnumMemberValue,
                 isTopLevelValueImportWithEntityName,
                 hasSemanticErrors,
-                isEmitBlocked,
                 isDeclarationVisible,
                 isImplementationOfOverload,
                 writeTypeOfDeclaration,
@@ -9570,12 +9557,12 @@ module ts {
 
         function initializeTypeChecker() {
             // Bind all source files and propagate errors
-            forEach(program.getSourceFiles(), file => {
+            forEach(host.getSourceFiles(), file => {
                 bindSourceFile(file);
                 forEach(file.semanticDiagnostics, addDiagnostic);
             });
             // Initialize global symbol table
-            forEach(program.getSourceFiles(), file => {
+            forEach(host.getSourceFiles(), file => {
                 if (!isExternalModule(file)) {
                     extendSymbolTable(globals, file.locals);
                 }

@@ -1046,7 +1046,7 @@ module Harness {
 
                 var checker = program.getTypeChecker(/*produceDiagnostics*/ true);
 
-                var isEmitBlocked = checker.isEmitBlocked();
+                var isEmitBlocked = program.isEmitBlocked();
 
                 // only emit if there weren't parse errors
                 var emitResult: ts.EmitResult;
