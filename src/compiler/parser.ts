@@ -4644,7 +4644,7 @@ module ts {
                 //case SyntaxKind.ElementAccessExpression:        return checkElementAccessExpression(<ElementAccessExpression>node);
                 //case SyntaxKind.ExportAssignment:               return checkExportAssignment(<ExportAssignment>node);
                 //case SyntaxKind.ExternalModuleReference:        return checkExternalModuleReference(<ExternalModuleReference>node);
-                case SyntaxKind.ForInStatement:                 return checkForInStatement(<ForInStatement>node);
+                //case SyntaxKind.ForInStatement:                 return checkForInStatement(<ForInStatement>node);
                 case SyntaxKind.ForStatement:                   return checkForStatement(<ForStatement>node);
                 case SyntaxKind.FunctionDeclaration:            return checkFunctionDeclaration(<FunctionLikeDeclaration>node);
                 //case SyntaxKind.FunctionExpression:             return checkFunctionExpression(<FunctionExpression>node);

@@ -8097,6 +8097,14 @@ module ts {
         }
 
         function checkForInStatement(node: ForInStatement) {
+            // Grammar checking
+            var declarations = node.declarations;
+            if (!checkGrammarVariableDeclarations(node, declarations)) {
+                if (declarations && declarations.length > 1) {
+                    grammarErrorOnFirstToken(declarations[1], Diagnostics.Only_a_single_variable_declaration_is_allowed_in_a_for_in_statement);
+                }
+            }
+
             // TypeScript 1.0 spec  (April 2014): 5.4
             // In a 'for-in' statement of the form
             // for (var VarDecl in Expr) Statement
@@ -10411,14 +10419,14 @@ module ts {
             return  checkGrammarEvalOrArgumentsInStrictMode(node, <Identifier>node.name);
         }
 
-        function checkGrammarVariableDeclarations(variableStatement: VariableStatement, declarations: NodeArray<VariableDeclaration>): boolean {
+        function checkGrammarVariableDeclarations(container: Node, declarations: NodeArray<VariableDeclaration>): boolean {
             if (declarations) {
                 if (checkGrammarForDisallowedTrailingComma(declarations)) {
                     return true;
                 }
 
                 if (!declarations.length) {
-                    return grammarErrorAtPos(getSourceFileOfNode(variableStatement), declarations.pos, declarations.end - declarations.pos, Diagnostics.Variable_declaration_list_cannot_be_empty);
+                    return grammarErrorAtPos(getSourceFileOfNode(container), declarations.pos, declarations.end - declarations.pos, Diagnostics.Variable_declaration_list_cannot_be_empty);
                 }
 
                 var decl = declarations[0];
