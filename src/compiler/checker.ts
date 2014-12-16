@@ -7157,7 +7157,8 @@ module ts {
                 checkGrammarIndexSignature(<SignatureDeclaration>node);
             }
             // TODO (yuisu): Remove this check in else-if when SyntaxKind.Construct is moved and ambient context is handled
-            else  if (node.kind === SyntaxKind.FunctionType || node.kind === SyntaxKind.ConstructorType || node.kind === SyntaxKind.CallSignature){
+            else  if (node.kind === SyntaxKind.FunctionType || node.kind === SyntaxKind.ConstructorType ||
+                      node.kind === SyntaxKind.CallSignature || node.kind === SyntaxKind.Constructor){
                 checkGrammarFunctionLikeDeclaration(<FunctionLikeDeclaration>node);
             }
 
@@ -7240,10 +7241,11 @@ module ts {
         }
 
         function checkConstructorDeclaration(node: ConstructorDeclaration) {
-            // Grammar check on signature of constructor is done in checkSignatureDeclaration function
-            checkGrammarModifiers(node) || checkGrammarFunctionLikeDeclaration(<FunctionLikeDeclaration>node) || checkGrammarConstructorTypeParameters(node) || checkGrammarConstructorTypeAnnotation(node) || checkGrammarForBodyInAmbientContext(node.body, /*isConstructor:*/ true);
-
+            // Grammar check on signature of constructor and modifier of the constructor is done in checkSignatureDeclaration function.
             checkSignatureDeclaration(node);
+            // Grammar check for checking only related to constructoDeclaration
+            checkGrammarConstructorTypeParameters(node) || checkGrammarConstructorTypeAnnotation(node) || checkGrammarForBodyInAmbientContext(node.body, /*isConstructor:*/ true);
+
             checkSourceElement(node.body);
 
             var symbol = getSymbolOfNode(node);
@@ -8178,7 +8180,7 @@ module ts {
             }
             else {
                 // Grammar checking for invalid use of return statement
-                forEachReturnStatement(<Block>node.statement, (returnStatement) => {
+                forEachReturnStatement(<Block>node.statement, returnStatement => {
                     grammarErrorOnFirstToken(returnStatement, Diagnostics.A_return_statement_can_only_be_used_within_a_function_body);
                 });
             }
