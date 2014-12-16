@@ -23,7 +23,6 @@ module ts {
         var emitResolver = createResolver();
 
         var checker: TypeChecker = {
-            getProgram: () => program,
             getNodeCount: () => sum(program.getSourceFiles(), "nodeCount"),
             getIdentifierCount: () => sum(program.getSourceFiles(), "identifierCount"),
             getSymbolCount: () => sum(program.getSourceFiles(), "symbolCount"),
@@ -9549,7 +9548,6 @@ module ts {
 
         function createResolver(): EmitResolver {
             return {
-                getProgram: () => program,
                 getLocalNameOfContainer,
                 getExpressionNamePrefix,
                 getExportAssignmentName,

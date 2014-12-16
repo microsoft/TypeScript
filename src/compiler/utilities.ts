@@ -636,11 +636,11 @@ module ts {
         return undefined;
     }
 
-    export function tryResolveScriptReference(program: Program, sourceFile: SourceFile, reference: FileReference) {
-        if (!program.getCompilerOptions().noResolve) {
+    export function tryResolveScriptReference(host: EmitHost, sourceFile: SourceFile, reference: FileReference) {
+        if (!host.getCompilerOptions().noResolve) {
             var referenceFileName = isRootedDiskPath(reference.filename) ? reference.filename : combinePaths(getDirectoryPath(sourceFile.filename), reference.filename);
-            referenceFileName = getNormalizedAbsolutePath(referenceFileName, program.getCompilerHost().getCurrentDirectory());
-            return program.getSourceFile(referenceFileName);
+            referenceFileName = getNormalizedAbsolutePath(referenceFileName, host.getCompilerHost().getCurrentDirectory());
+            return host.getSourceFile(referenceFileName);
         }
     }
 

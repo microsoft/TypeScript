@@ -885,7 +885,7 @@ module Harness {
 
             public compileFiles(inputFiles: { unitName: string; content: string }[],
                 otherFiles: { unitName: string; content: string }[],
-                onComplete: (result: CompilerResult, checker: ts.TypeChecker) => void,
+                onComplete: (result: CompilerResult, program: ts.Program) => void,
                 settingsCallback?: (settings: ts.CompilerOptions) => void,
                 options?: ts.CompilerOptions) {
 
@@ -1062,7 +1062,7 @@ module Harness {
                 this.lastErrors = errors;
 
                 var result = new CompilerResult(fileOutputs, errors, program, ts.sys.getCurrentDirectory(), emitResult ? emitResult.sourceMaps : undefined);
-                onComplete(result, checker);
+                onComplete(result, program);
 
                 // reset what newline means in case the last test changed it
                 ts.sys.newLine = '\r\n';

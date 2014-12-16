@@ -246,7 +246,6 @@ module ts {
         EnumMember,
         // Top-level nodes
         SourceFile,
-        Program,
 
         // Synthesized list
         SyntaxList,
@@ -968,7 +967,6 @@ module ts {
     }
 
     export interface TypeChecker {
-        getProgram(): Program;
         getEmitResolver(): EmitResolver;
         getDiagnostics(sourceFile?: SourceFile): Diagnostic[];
         getGlobalDiagnostics(): Diagnostic[];
@@ -1076,8 +1074,15 @@ module ts {
         errorModuleName?: string // If the symbol is not visible from module, module's name
     }
 
+    export interface EmitHost {
+        getSourceFile(filename: string): SourceFile;
+        getSourceFiles(): SourceFile[];
+        getCompilerHost(): CompilerHost;
+        getCompilerOptions(): CompilerOptions;
+        getCommonSourceDirectory(): string;
+    }
+
     export interface EmitResolver {
-        getProgram(): Program;
         getLocalNameOfContainer(container: ModuleDeclaration | EnumDeclaration): string;
         getExpressionNamePrefix(node: Identifier): string;
         getExportAssignmentName(node: SourceFile): string;
