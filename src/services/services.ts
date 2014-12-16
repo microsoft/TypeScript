@@ -1,8 +1,4 @@
-/// <reference path="..\compiler\types.ts"/>
-/// <reference path="..\compiler\core.ts"/>
-/// <reference path="..\compiler\scanner.ts"/>
-/// <reference path="..\compiler\parser.ts"/>
-/// <reference path="..\compiler\checker.ts"/>
+/// <reference path="..\compiler\program.ts"/>
 
 /// <reference path='breakpoints.ts' />
 /// <reference path='outliningElementsCollector.ts' />
@@ -13,7 +9,6 @@
 /// <reference path='formatting\smartIndenter.ts' />
 
 module ts {
-
     export var servicesVersion = "0.4"
 
     export interface Node {
@@ -2435,7 +2430,7 @@ module ts {
             var allDiagnostics = checker.getDiagnostics(targetSourceFile);
             if (compilerOptions.declaration) {
                 // If '-d' is enabled, check for emitter error. One example of emitter error is export class implements non-export interface
-                allDiagnostics = allDiagnostics.concat(checker.getDeclarationDiagnostics(targetSourceFile));
+                allDiagnostics = allDiagnostics.concat(program.getDeclarationDiagnostics(targetSourceFile));
             }
             return allDiagnostics
         }
@@ -4870,7 +4865,7 @@ module ts {
             // Initialize writer for CompilerHost.writeFile
             writer = getEmitOutputWriter;
 
-            var emitOutput = getFullTypeCheckChecker().emitFiles(sourceFile);
+            var emitOutput = program.emitFiles(sourceFile);
 
             // Reset writer back to undefined to make sure that we produce an error message if CompilerHost.writeFile method is called when we are not in getEmitOutput
             writer = undefined;

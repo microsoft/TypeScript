@@ -1,8 +1,4 @@
-/// <reference path="types.ts"/>
-/// <reference path="core.ts"/>
-/// <reference path="scanner.ts"/>
-/// <reference path="parser.ts"/>
-/// <reference path="binder.ts"/>
+/// <reference path="checker.ts"/>
 
 module ts {
     interface EmitTextWriter {

@@ -16,8 +16,6 @@
 
 /// <reference path='..\services\services.ts' />
 /// <reference path='..\services\shims.ts' />
-/// <reference path='..\compiler\core.ts' />
-/// <reference path='..\compiler\sys.ts' />
 /// <reference path='external\mocha.d.ts'/>
 /// <reference path='external\chai.d.ts'/>
 /// <reference path='sourceMapRecorder.ts'/>
@@ -1053,7 +1051,7 @@ module Harness {
                 // only emit if there weren't parse errors
                 var emitResult: ts.EmitResult;
                 if (!isEmitBlocked) {
-                    emitResult = checker.emitFiles();
+                    emitResult = program.emitFiles();
                 }
 
                 var errors: HarnessDiagnostic[] = [];

@@ -1,5 +1,3 @@
-/// <reference path="core.ts"/>
-
 module ts {
     export interface Map<T> {
         [index: string]: T;
@@ -914,10 +912,14 @@ module ts {
         getSourceFiles(): SourceFile[];
         getCompilerOptions(): CompilerOptions;
         getCompilerHost(): CompilerHost;
+
         getDiagnostics(sourceFile?: SourceFile): Diagnostic[];
         getGlobalDiagnostics(): Diagnostic[];
+        getDeclarationDiagnostics(sourceFile: SourceFile): Diagnostic[];
+
         getTypeChecker(fullTypeCheckMode: boolean): TypeChecker;
         getCommonSourceDirectory(): string;
+        emitFiles(targetSourceFile?: SourceFile): EmitResult;
     }
 
     export interface SourceMapSpan {
@@ -959,14 +961,13 @@ module ts {
 
     export interface TypeChecker {
         getProgram(): Program;
+        getEmitResolver(): EmitResolver;
         getDiagnostics(sourceFile?: SourceFile): Diagnostic[];
-        getDeclarationDiagnostics(sourceFile: SourceFile): Diagnostic[];
         getGlobalDiagnostics(): Diagnostic[];
         getNodeCount(): number;
         getIdentifierCount(): number;
         getSymbolCount(): number;
         getTypeCount(): number;
-        emitFiles(targetSourceFile?: SourceFile): EmitResult;
         getTypeOfSymbolAtLocation(symbol: Symbol, node: Node): Type;
         getDeclaredTypeOfSymbol(symbol: Symbol): Type;
         getPropertiesOfType(type: Type): Symbol[];

@@ -1,10 +1,4 @@
-/// <reference path="types.ts"/>
-/// <reference path="core.ts"/>
-/// <reference path="scanner.ts"/>
-/// <reference path="parser.ts"/>
 /// <reference path="binder.ts"/>
-/// <reference path="emitter.ts"/>
-/// <reference path="utilities.ts"/>
 
 module ts {
     var nextSymbolId = 1;
@@ -16,7 +10,6 @@ module ts {
     /// If fullTypeCheck === false, the typechecker can take shortcuts and skip checks that only produce errors.
     /// NOTE: checks that somehow affect decisions being made during typechecking should be executed in both cases.
     export function createTypeChecker(program: Program, fullTypeCheck: boolean): TypeChecker {
-
         var Symbol = objectAllocator.getSymbolConstructor();
         var Type = objectAllocator.getTypeConstructor();
         var Signature = objectAllocator.getSignatureConstructor();
@@ -27,6 +20,7 @@ module ts {
         var emptySymbols: SymbolTable = {};
 
         var compilerOptions = program.getCompilerOptions();
+        var emitResolver = createResolver();
 
         var checker: TypeChecker = {
             getProgram: () => program,
@@ -36,9 +30,7 @@ module ts {
             getTypeCount: () => typeCount,
             isUndefinedSymbol: symbol => symbol === undefinedSymbol,
             isArgumentsSymbol: symbol => symbol === argumentsSymbol,
-            emitFiles: invokeEmitter,
             getDiagnostics,
-            getDeclarationDiagnostics,
             getGlobalDiagnostics,
             getTypeOfSymbolAtLocation,
             getDeclaredTypeOfSymbol,
@@ -66,6 +58,7 @@ module ts {
             getAliasedSymbol: resolveImport,
             hasEarlyErrors,
             isEmitBlocked,
+            getEmitResolver: () => emitResolver,
         };
 
         var undefinedSymbol = createSymbol(SymbolFlags.Property | SymbolFlags.Transient, "undefined");
@@ -8945,12 +8938,6 @@ module ts {
             return getSortedDiagnostics();
         }
 
-        function getDeclarationDiagnostics(targetSourceFile: SourceFile): Diagnostic[] {
-            var resolver = createResolver();
-            checkSourceFile(targetSourceFile);
-            return ts.getDeclarationDiagnostics(program, resolver, targetSourceFile);
-        }
-
         function getGlobalDiagnostics(): Diagnostic[] {
             return filter(getSortedDiagnostics(), d => !d.file);
         }
@@ -9573,11 +9560,6 @@ module ts {
                 getConstantValue,
                 isUnknownIdentifier,
             };
-        }
-
-        function invokeEmitter(targetSourceFile?: SourceFile) {
-            var resolver = createResolver();
-            return emitFiles(resolver, targetSourceFile);
         }
 
         function initializeTypeChecker() {
