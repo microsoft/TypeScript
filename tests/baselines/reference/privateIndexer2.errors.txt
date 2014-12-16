@@ -1,6 +1,6 @@
-tests/cases/conformance/classes/indexMemberDeclarations/privateIndexer2.ts(4,13): error TS1005: ':' expected.
-tests/cases/conformance/classes/indexMemberDeclarations/privateIndexer2.ts(4,15): error TS1005: ',' expected.
-tests/cases/conformance/classes/indexMemberDeclarations/privateIndexer2.ts(4,24): error TS1005: ',' expected.
+tests/cases/conformance/classes/indexMemberDeclarations/privateIndexer2.ts(4,15): error TS1005: ']' expected.
+tests/cases/conformance/classes/indexMemberDeclarations/privateIndexer2.ts(4,23): error TS1005: ',' expected.
+tests/cases/conformance/classes/indexMemberDeclarations/privateIndexer2.ts(4,24): error TS1136: Property assignment expected.
 tests/cases/conformance/classes/indexMemberDeclarations/privateIndexer2.ts(4,32): error TS1005: ':' expected.
 tests/cases/conformance/classes/indexMemberDeclarations/privateIndexer2.ts(5,1): error TS1128: Declaration or statement expected.
 tests/cases/conformance/classes/indexMemberDeclarations/privateIndexer2.ts(8,5): error TS1131: Property or signature expected.
@@ -8,27 +8,24 @@ tests/cases/conformance/classes/indexMemberDeclarations/privateIndexer2.ts(8,14)
 tests/cases/conformance/classes/indexMemberDeclarations/privateIndexer2.ts(8,22): error TS1005: ';' expected.
 tests/cases/conformance/classes/indexMemberDeclarations/privateIndexer2.ts(8,23): error TS1128: Declaration or statement expected.
 tests/cases/conformance/classes/indexMemberDeclarations/privateIndexer2.ts(9,1): error TS1128: Declaration or statement expected.
-tests/cases/conformance/classes/indexMemberDeclarations/privateIndexer2.ts(4,17): error TS2304: Cannot find name 'string'.
 tests/cases/conformance/classes/indexMemberDeclarations/privateIndexer2.ts(8,5): error TS2304: Cannot find name 'private'.
 tests/cases/conformance/classes/indexMemberDeclarations/privateIndexer2.ts(8,16): error TS2304: Cannot find name 'string'.
 tests/cases/conformance/classes/indexMemberDeclarations/privateIndexer2.ts(8,25): error TS2304: Cannot find name 'string'.
 
 
-==== tests/cases/conformance/classes/indexMemberDeclarations/privateIndexer2.ts (14 errors) ====
+==== tests/cases/conformance/classes/indexMemberDeclarations/privateIndexer2.ts (13 errors) ====
     // private indexers not allowed
     
     var x = {
         private [x: string]: string;
-                ~
-!!! error TS1005: ':' expected.
                   ~
+!!! error TS1005: ']' expected.
+                          ~
 !!! error TS1005: ',' expected.
                            ~
-!!! error TS1005: ',' expected.
+!!! error TS1136: Property assignment expected.
                                    ~
 !!! error TS1005: ':' expected.
-                    ~~~~~~
-!!! error TS2304: Cannot find name 'string'.
     }
     ~
 !!! error TS1128: Declaration or statement expected.

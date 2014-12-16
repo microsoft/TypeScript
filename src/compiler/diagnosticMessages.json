@@ -632,6 +632,10 @@
         "category": "Error",
         "code": 1308
     },
+    "'{0}' modifier cannot be used on an object literal element.": {
+        "category": "Error",
+        "code": 1309
+    },
 
     "Duplicate identifier '{0}'.": {
         "category": "Error",

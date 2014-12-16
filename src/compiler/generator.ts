@@ -44,53 +44,74 @@ module ts {
         continueLabel: Label;
     }
 
-    export function createLocalGenerator(resolver: EmitResolver, context: Node): LocalGenerator {
-        var localIds: Map<number>;
-        var generatedLocals: VariableDeclaration[];
+    export function createLocalsBuilder(resolver: EmitResolver, context: Node, parent?: LocalsBuilder): LocalsBuilder {
+        var locals: VariableDeclaration[];
+        var temps: Map<number>;
+        var reserved: Map<boolean>;
 
         return {
+            isReservedIdentifier,
             createUniqueIdentifier,
             declareLocal,
-            buildLocals
+            getLocals
         };
+
+        function isUnknownIdentifier(name: string): boolean {
+            return resolver.isUnknownIdentifier(context, name) && !isReservedIdentifier(name);
+        }
+
+        function isReservedIdentifier(name: string): boolean {
+            if (reserved && hasProperty(reserved, name)) {
+                return true;
+            }
+            
+            if (parent && parent.isReservedIdentifier(name)) {
+                return true;
+            }
+        }
         
-        function createUniqueIdentifier(name: string = ""): Identifier {
-            if (!localIds) localIds = {};
-            if (!name || !resolver.isUnknownIdentifier(context, name) || hasProperty(localIds, name)) {
-                var nextLocalId = localIds[name] || 0;
+        function createUniqueIdentifier(name: string = "", reserve?: boolean): Identifier {
+            if (!temps) temps = {};
+            if (!name || !isUnknownIdentifier(name) || hasProperty(temps, name)) {
+                var nextLocalId = temps[name] || 0;
                 do {
-                    var tempName = name + "_" + (nextLocalId < 26 ? String.fromCharCode(nextLocalId + 0x61) : nextLocalId - 26);
+                    var tempName = name + "_" + (nextLocalId < 25 ? String.fromCharCode(nextLocalId + (nextLocalId < 8 ? 0 : 1) + CharacterCodes.a) : nextLocalId - 25);
                     nextLocalId++;
                 }
-                while (!resolver.isUnknownIdentifier(context, tempName));
-                localIds[name] = nextLocalId;
+                while (!isUnknownIdentifier(tempName));
+                temps[name] = nextLocalId;
                 name = tempName;
             } else {
-                localIds[name] = 0;
+                temps[name] = 0;
+            }
+
+            if (reserve) {
+                if (!reserved) {
+                    reserved = {};
+                }
+                
+                reserved[name] = true;
             }
 
             return factory.createIdentifier(name);
         }
 
-        function declareLocal(name?: string): Identifier {
-            if (!generatedLocals) generatedLocals = [];
-            var localDeclarationName = createUniqueIdentifier(name);
+        function declareLocal(name?: string, reserve?: boolean): Identifier {
+            if (!locals) locals = [];
+            var localDeclarationName = createUniqueIdentifier(name, reserve);
             var localDeclaration = factory.createVariableDeclaration(localDeclarationName);
-            generatedLocals.push(localDeclaration);
+            locals.push(localDeclaration);
             return localDeclarationName;
         }
 
-        function buildLocals(): VariableStatement {
-            if (generatedLocals) {
-                return factory.createVariableStatement(generatedLocals);
-            }
+        function getLocals(): VariableDeclaration[] {
+            return locals;
         }
     }
 
-    export function createCodeGenerator(locals: LocalGenerator, resolver: EmitResolver, options?: { promiseConstructor: EntityName; }): CodeGenerator {
+    export function createCodeGenerator(locals: LocalsBuilder, resolver: EmitResolver, options?: { promiseConstructor: EntityName; }): CodeGenerator {
         // locations
-        var generatedLocation: TextRange = { pos: -1, end: -1 };
-        var pendingLocation: TextRange = generatedLocation;
+        var pendingLocation: TextRange;
 
         // locals/hoisted variables/hoisted functions
         var parameters: ParameterDeclaration[];
@@ -156,7 +177,7 @@ module ts {
 
         function readLocation(): TextRange {
             var location = pendingLocation;
-            pendingLocation = generatedLocation;
+            pendingLocation = undefined;
             return location;
         }
 
@@ -167,10 +188,10 @@ module ts {
 
         function addVariable(name: Identifier, flags?: NodeFlags): void {
             if (!variableDeclarations) {
-                variableDeclarations = factory.createNodeArray([], generatedLocation);
+                variableDeclarations = factory.createNodeArray([]);
             }
 
-            variableDeclarations.push(factory.createVariableDeclaration(factory.createIdentifier(name.text, generatedLocation), /*initializer*/ undefined, generatedLocation));
+            variableDeclarations.push(factory.createVariableDeclaration(factory.createIdentifier(name.text)));
         }
 
         function addFunction(func: FunctionDeclaration): void {
@@ -475,13 +496,13 @@ module ts {
 
         function buildFunction(kind: SyntaxKind, name: DeclarationName, location?: TextRange, flags?: NodeFlags, modifiers?: ModifiersArray) {
             var statements: Statement[] = [];
-            var generatedLocals = locals.buildLocals();
+            var generatedLocals = locals.getLocals();
             if (generatedLocals) {
-                statements.push(generatedLocals);
+                statements.push(factory.createVariableStatement(generatedLocals));
             }
 
             if (variableDeclarations) {
-                statements.push(factory.createVariableStatement(variableDeclarations, generatedLocation));
+                statements.push(factory.createVariableStatement(variableDeclarations));
             }
 
             if (functions) {
@@ -540,7 +561,7 @@ module ts {
             var instructionWasAbrupt = false;
             var instructionWasCompletion = false;
             var state = getState();
-            var relatedLocation: TextRange = generatedLocation;
+            var relatedLocation: TextRange;
 
             if (hasProtectedRegions) {
                 newCase();
@@ -565,7 +586,7 @@ module ts {
             ensureLabels();
 
             if (!instructionWasCompletion) {
-                relatedLocation = generatedLocation;
+                relatedLocation = undefined;
                 writeReturn();
             }
 

@@ -12,7 +12,7 @@
 module ts {
     /** rewrites an async or generator function or method declaration */
     export function rewriteFunction(node: FunctionLikeDeclaration, compilerOptions: CompilerOptions, resolver: EmitResolver): FunctionLikeDeclaration {
-        var locals = createLocalGenerator(resolver, node.body);
+        var locals = createLocalsBuilder(resolver, node.body);
         var builder: CodeGenerator;
         var isDownlevel = compilerOptions.target <= ScriptTarget.ES5;
         var isAsync = (node.flags & NodeFlags.Async) !== 0;
@@ -20,7 +20,6 @@ module ts {
         var isDownlevelGenerator = isDownlevel && isGenerator;
         var isDownlevelAsync = isDownlevel && isAsync;
         var isUplevelAsync = !isDownlevel && isAsync;
-        var generatedLocation: TextRange = { pos: -1, end: -1 };
 
         if (!isAsync && !isDownlevelGenerator) {
             return node;
@@ -33,7 +32,6 @@ module ts {
                 return nodes;
             }
 
-            var rewrittenNodes: TNode[];
             var updatedNodes: TNode[];
             var updatedOffset = 0;
             var cacheOffset = 0;
@@ -530,7 +528,7 @@ module ts {
         }
 
         function visitVariableDeclaration(node: VariableDeclaration): VariableDeclaration {
-            Debug.assert(!!isDownlevel, "downlevel rewrite shouldn't call visitVariableDeclaration");
+            Debug.assert(!isDownlevel, "downlevel rewrite shouldn't call visitVariableDeclaration");
             return factory.updateVariableDeclaration(node, node.name, visitExpression(node.initializer));
         }
 

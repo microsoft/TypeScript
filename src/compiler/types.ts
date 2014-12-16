@@ -306,6 +306,7 @@ module ts {
     }
 
     export const enum ParserContextFlags {
+        None = 0,
         // Set if this node was parsed in strict mode.  Used for grammar error checks, as well as
         // checking if the node can be reused in incremental settings.
         StrictMode = 1 << 0,
@@ -324,23 +325,26 @@ module ts {
         // error.  
         ThisNodeHasError = 1 << 4,
 
+        // If this node was parsed in the parameters of an async function.
+        AsyncParameter = 1 << 5,
+
         // If this node was parsed in the 'await' context created when parsing an async function.
-        Await = 1 << 5,
+        Await = 1 << 6,
 
         // Context flags set directly by the parser.
-        ParserGeneratedFlags = StrictMode | DisallowIn | Yield | GeneratorParameter | ThisNodeHasError | Await,
+        ParserGeneratedFlags = StrictMode | DisallowIn | Yield | GeneratorParameter | ThisNodeHasError | AsyncParameter | Await,
 
         // Context flags computed by aggregating child flags upwards.
 
         // Used during incremental parsing to determine if this node or any of its children had an 
         // error.  Computed only once and then cached.
-        ThisNodeOrAnySubNodesHasError = 1 << 6,
+        ThisNodeOrAnySubNodesHasError = 1 << 7,
 
         // Used to know if we've computed whether any children of this node are or contain an 'await' or 'yield' expression.
-        ThisNodeOrAnySubNodesHasAwaitOrYield  = 1 << 7,
+        ThisNodeOrAnySubNodesHasAwaitOrYield = 1 << 8,
 
         // Used to know if we've computed data from children and cached it in this node.
-        HasAggregatedChildData = 1 << 8,
+        HasAggregatedChildData = 1 << 9,
     }
 
     export interface Node extends TextRange {
@@ -954,10 +958,11 @@ module ts {
 
     export type Label = number;
 
-    export interface LocalGenerator {
-        createUniqueIdentifier(name?: string): Identifier;
-        declareLocal(name?: string): Identifier;
-        buildLocals(): VariableStatement;
+    export interface LocalsBuilder {
+        isReservedIdentifier(name: string): boolean;
+        createUniqueIdentifier(name?: string, reserve?: boolean): Identifier;
+        declareLocal(name?: string, reserve?: boolean): Identifier;
+        getLocals(): VariableDeclaration[];
     }
 
     export interface CodeGenerator {

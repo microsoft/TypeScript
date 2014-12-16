@@ -1,0 +1,31 @@
+tests/cases/conformance/async/downlevel/asyncFunctionDeclaration/asyncFunctionDeclaration5.ts(6,20): error TS1138: Parameter declaration expected.
+tests/cases/conformance/async/downlevel/asyncFunctionDeclaration/asyncFunctionDeclaration5.ts(6,25): error TS1005: ';' expected.
+tests/cases/conformance/async/downlevel/asyncFunctionDeclaration/asyncFunctionDeclaration5.ts(6,26): error TS1128: Declaration or statement expected.
+tests/cases/conformance/async/downlevel/asyncFunctionDeclaration/asyncFunctionDeclaration5.ts(6,40): error TS1109: Expression expected.
+tests/cases/conformance/async/downlevel/asyncFunctionDeclaration/asyncFunctionDeclaration5.ts(6,1): error TS1057: An async function or method must have a valid awaitable return type.
+tests/cases/conformance/async/downlevel/asyncFunctionDeclaration/asyncFunctionDeclaration5.ts(6,16): error TS2391: Function implementation is missing or not immediately following the declaration.
+tests/cases/conformance/async/downlevel/asyncFunctionDeclaration/asyncFunctionDeclaration5.ts(6,20): error TS2304: Cannot find name 'await'.
+
+
+==== tests/cases/conformance/async/downlevel/asyncFunctionDeclaration/asyncFunctionDeclaration5.ts (7 errors) ====
+    declare class Promise<T> {
+        constructor(init: (resolve: (value?: T | IPromise<T>) => void, reject: (reason?: any) => void) => void);
+        then<TResult>(onfulfilled?: (value: T) => TResult | IPromise<TResult>, onrejected?: (reason: any) => TResult | IPromise<TResult>): Promise<TResult>;
+    }
+    
+    async function foo(await): Promise<void> {
+                       ~~~~~
+!!! error TS1138: Parameter declaration expected.
+                            ~
+!!! error TS1005: ';' expected.
+                             ~
+!!! error TS1128: Declaration or statement expected.
+                                           ~
+!!! error TS1109: Expression expected.
+    ~~~~~~~~~~~~~~~~~~~
+!!! error TS1057: An async function or method must have a valid awaitable return type.
+                   ~~~
+!!! error TS2391: Function implementation is missing or not immediately following the declaration.
+                       ~~~~~
+!!! error TS2304: Cannot find name 'await'.
+    }

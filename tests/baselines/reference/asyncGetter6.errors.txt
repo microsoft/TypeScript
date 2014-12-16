@@ -1,9 +1,8 @@
-tests/cases/conformance/async/downlevel/asyncGetter/asyncGetter6.ts(9,13): error TS1110: Type expected.
-tests/cases/conformance/async/downlevel/asyncGetter/asyncGetter6.ts(9,18): error TS1109: Expression expected.
 tests/cases/conformance/async/downlevel/asyncGetter/asyncGetter6.ts(7,13): error TS2378: A 'get' accessor must return a value or consist of a single 'throw' statement.
+tests/cases/conformance/async/downlevel/asyncGetter/asyncGetter6.ts(9,13): error TS2304: Cannot find name 'await'.
 
 
-==== tests/cases/conformance/async/downlevel/asyncGetter/asyncGetter6.ts (3 errors) ====
+==== tests/cases/conformance/async/downlevel/asyncGetter/asyncGetter6.ts (2 errors) ====
     declare class Promise<T> {
         constructor(init: (resolve: (value?: T | IPromise<T>) => void, reject: (reason?: any) => void) => void);
         then<TResult>(onfulfilled?: (value: T) => TResult | IPromise<TResult>, onrejected?: (reason: any) => TResult | IPromise<TResult>): Promise<TResult>;
@@ -16,8 +15,6 @@ tests/cases/conformance/async/downlevel/asyncGetter/asyncGetter6.ts(7,13): error
          // Legal to use 'await' in a type context.
          var v: await;
                 ~~~~~
-!!! error TS1110: Type expected.
-                     ~
-!!! error TS1109: Expression expected.
+!!! error TS2304: Cannot find name 'await'.
       }
     }

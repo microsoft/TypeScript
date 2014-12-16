@@ -77,6 +77,10 @@ module ts {
     }
 
     export function hasAwaitOrYield(node: Node) {
+        if (!node) {
+            return false;
+        }
+
         aggregateChildData(node);
         return hasFlag(node.parserContextFlags, ParserContextFlags.ThisNodeOrAnySubNodesHasAwaitOrYield);
     }

@@ -160,6 +160,7 @@ module ts {
         _0_modifier_cannot_be_used_with_a_type_declaration: { code: 1306, category: DiagnosticCategory.Error, key: "'{0}' modifier cannot be used with a type declaration." },
         _0_modifier_cannot_be_used_with_a_parameter_declaration: { code: 1307, category: DiagnosticCategory.Error, key: "'{0}' modifier cannot be used with a parameter declaration." },
         await_expression_must_be_contained_within_an_async_function: { code: 1308, category: DiagnosticCategory.Error, key: "'await' expression must be contained within an async function." },
+        _0_modifier_cannot_be_used_on_an_object_literal_element: { code: 1309, category: DiagnosticCategory.Error, key: "'{0}' modifier cannot be used on an object literal element." },
         Duplicate_identifier_0: { code: 2300, category: DiagnosticCategory.Error, key: "Duplicate identifier '{0}'." },
         Initializer_of_instance_member_variable_0_cannot_reference_identifier_1_declared_in_the_constructor: { code: 2301, category: DiagnosticCategory.Error, key: "Initializer of instance member variable '{0}' cannot reference identifier '{1}' declared in the constructor." },
         Static_members_cannot_reference_class_type_parameters: { code: 2302, category: DiagnosticCategory.Error, key: "Static members cannot reference class type parameters." },
