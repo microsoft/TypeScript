@@ -11,11 +11,9 @@ tests/cases/conformance/types/objectTypeLiteral/methodSignatures/objectTypesWith
 tests/cases/conformance/types/objectTypeLiteral/methodSignatures/objectTypesWithOptionalProperties2.ts(25,8): error TS1005: '{' expected.
 tests/cases/conformance/types/objectTypeLiteral/methodSignatures/objectTypesWithOptionalProperties2.ts(25,9): error TS1136: Property assignment expected.
 tests/cases/conformance/types/objectTypeLiteral/methodSignatures/objectTypesWithOptionalProperties2.ts(26,1): error TS1005: ':' expected.
-tests/cases/conformance/types/objectTypeLiteral/methodSignatures/objectTypesWithOptionalProperties2.ts(12,5): error TS2391: Function implementation is missing or not immediately following the declaration.
-tests/cases/conformance/types/objectTypeLiteral/methodSignatures/objectTypesWithOptionalProperties2.ts(20,5): error TS2391: Function implementation is missing or not immediately following the declaration.
 
 
-==== tests/cases/conformance/types/objectTypeLiteral/methodSignatures/objectTypesWithOptionalProperties2.ts (15 errors) ====
+==== tests/cases/conformance/types/objectTypeLiteral/methodSignatures/objectTypesWithOptionalProperties2.ts (13 errors) ====
     // Illegal attempts to define optional methods
     
     var a: {
@@ -40,8 +38,6 @@ tests/cases/conformance/types/objectTypeLiteral/methodSignatures/objectTypesWith
 !!! error TS1144: '{' or ';' expected.
             ~
 !!! error TS1068: Unexpected token. A constructor, method, accessor, or property was expected.
-        ~
-!!! error TS2391: Function implementation is missing or not immediately following the declaration.
     }
     
     interface I2<T> {
@@ -58,8 +54,6 @@ tests/cases/conformance/types/objectTypeLiteral/methodSignatures/objectTypesWith
 !!! error TS1144: '{' or ';' expected.
             ~
 !!! error TS1068: Unexpected token. A constructor, method, accessor, or property was expected.
-        ~
-!!! error TS2391: Function implementation is missing or not immediately following the declaration.
     }
     
     

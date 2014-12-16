@@ -1187,7 +1187,7 @@ module Harness {
 
             // Report global errors
             var globalErrors = diagnostics.filter(err => !err.filename);
-            globalErrors.forEach(err => outputErrorText(err));
+            globalErrors.forEach(outputErrorText);
 
             // 'merge' the lines of each input file with any errors associated with it
             inputFiles.filter(f => f.content !== undefined).forEach(inputFile => {

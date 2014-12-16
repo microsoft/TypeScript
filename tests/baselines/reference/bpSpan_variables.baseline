@@ -58,15 +58,13 @@
 --------------------------------
 9  >    export var xx1;
 
-    ~~~~~~~~~~~~~~~~~~~~                          => Pos: (119 to 138)  SpanInfo: {"start":123,"length":14}
-    >export var xx1
-    >:=> (line 9, col 4) to (line 9, col 18)
+    ~~~~~~~~~~~~~~~~~~~~                          => Pos: (119 to 138)  SpanInfo: undefined
 --------------------------------
 10 >    export var xx2 = 10, xx3 = 10;
 
-    ~~~~~~~~~~~~~~~~~~~~~~~~                      => Pos: (139 to 162)  SpanInfo: {"start":143,"length":19}
-    >export var xx2 = 10
-    >:=> (line 10, col 4) to (line 10, col 23)
+    ~~~~~~~~~~~~~~~~~~~~~~~~                      => Pos: (139 to 162)  SpanInfo: {"start":150,"length":12}
+    >var xx2 = 10
+    >:=> (line 10, col 11) to (line 10, col 23)
 10 >    export var xx2 = 10, xx3 = 10;
 
                             ~~~~~~~~~~~           => Pos: (163 to 173)  SpanInfo: {"start":164,"length":8}
@@ -75,14 +73,7 @@
 --------------------------------
 11 >    export var xx4, xx5;
 
-    ~~~~~~~~~~~~~~~~~~~                           => Pos: (174 to 192)  SpanInfo: {"start":178,"length":14}
-    >export var xx4
-    >:=> (line 11, col 4) to (line 11, col 18)
-11 >    export var xx4, xx5;
-
-                       ~~~~~~                     => Pos: (193 to 198)  SpanInfo: {"start":194,"length":3}
-    >xx5
-    >:=> (line 11, col 20) to (line 11, col 23)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~                     => Pos: (174 to 198)  SpanInfo: undefined
 --------------------------------
 12 >}
     ~                                             => Pos: (199 to 199)  SpanInfo: {"start":199,"length":1}

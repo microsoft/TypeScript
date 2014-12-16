@@ -83,7 +83,7 @@ module ts.BreakpointResolver {
                 switch (node.kind) {
                     case SyntaxKind.VariableStatement:
                         // Span on first variable declaration
-                        return spanInVariableDeclaration((<VariableStatement>node).declarations[0]);
+                        return spanInVariableDeclaration((<VariableStatement>node).declarationList.declarations[0]);
 
                     case SyntaxKind.VariableDeclaration:
                     case SyntaxKind.PropertyDeclaration:
@@ -108,8 +108,6 @@ module ts.BreakpointResolver {
                             return spanInFunctionBlock(<Block>node);
                         }
                         // Fall through
-                    case SyntaxKind.TryBlock:
-                    case SyntaxKind.FinallyBlock:
                     case SyntaxKind.ModuleBlock:
                         return spanInBlock(<Block>node);
 
@@ -263,16 +261,16 @@ module ts.BreakpointResolver {
 
             function spanInVariableDeclaration(variableDeclaration: VariableDeclaration): TextSpan {
                 // If declaration of for in statement, just set the span in parent
-                if (variableDeclaration.parent.kind === SyntaxKind.ForInStatement) {
-                    return spanInNode(variableDeclaration.parent);
+                if (variableDeclaration.parent.parent.kind === SyntaxKind.ForInStatement) {
+                    return spanInNode(variableDeclaration.parent.parent);
                 }
 
-                var isParentVariableStatement = variableDeclaration.parent.kind === SyntaxKind.VariableStatement;
-                var isDeclarationOfForStatement = variableDeclaration.parent.kind === SyntaxKind.ForStatement && contains((<ForStatement>variableDeclaration.parent).declarations, variableDeclaration);
+                var isParentVariableStatement = variableDeclaration.parent.parent.kind === SyntaxKind.VariableStatement;
+                var isDeclarationOfForStatement = variableDeclaration.parent.parent.kind === SyntaxKind.ForStatement && contains((<VariableDeclarationList>(<ForStatement>variableDeclaration.parent.parent).initializer).declarations, variableDeclaration);
                 var declarations = isParentVariableStatement
-                    ? (<VariableStatement>variableDeclaration.parent).declarations
+                    ? (<VariableStatement>variableDeclaration.parent.parent).declarationList.declarations
                     : isDeclarationOfForStatement
-                        ? (<ForStatement>variableDeclaration.parent).declarations
+                        ? (<VariableDeclarationList>(<ForStatement>variableDeclaration.parent.parent).initializer).declarations
                         : undefined;
 
                 // Breakpoint is possible in variableDeclaration only if there is initialization
@@ -376,12 +374,18 @@ module ts.BreakpointResolver {
             }
 
             function spanInForStatement(forStatement: ForStatement): TextSpan {
-                if (forStatement.declarations) {
-                    return spanInNode(forStatement.declarations[0]);
-                }
                 if (forStatement.initializer) {
-                    return spanInNode(forStatement.initializer);
+                    if (forStatement.initializer.kind === SyntaxKind.VariableDeclarationList) {
+                        var variableDeclarationList = <VariableDeclarationList>forStatement.initializer;
+                        if (variableDeclarationList.declarations.length > 0) {
+                            return spanInNode(variableDeclarationList.declarations[0]);
+                        }
+                    }
+                    else {
+                        return spanInNode(forStatement.initializer);
+                    }
                 }
+
                 if (forStatement.condition) {
                     return textSpan(forStatement.condition);
                 }
@@ -429,9 +433,7 @@ module ts.BreakpointResolver {
                         }
                         // fall through.
 
-                    case SyntaxKind.TryBlock:
                     case SyntaxKind.CatchClause:
-                    case SyntaxKind.FinallyBlock:
                         return spanInNode((<Block>node.parent).statements[(<Block>node.parent).statements.length - 1]);;
 
                     case SyntaxKind.SwitchStatement:

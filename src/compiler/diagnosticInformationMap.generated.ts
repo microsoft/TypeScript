@@ -145,6 +145,7 @@ module ts {
         A_destructuring_declaration_must_have_an_initializer: { code: 1182, category: DiagnosticCategory.Error, key: "A destructuring declaration must have an initializer." },
         Destructuring_declarations_are_not_allowed_in_ambient_contexts: { code: 1183, category: DiagnosticCategory.Error, key: "Destructuring declarations are not allowed in ambient contexts." },
         Merge_conflict_marker_encountered: { code: 1184, category: DiagnosticCategory.Error, key: "Merge conflict marker encountered." },
+        Modifiers_cannot_appear_here: { code: 1185, category: DiagnosticCategory.Error, key: "Modifiers cannot appear here." },
         Duplicate_identifier_0: { code: 2300, category: DiagnosticCategory.Error, key: "Duplicate identifier '{0}'." },
         Initializer_of_instance_member_variable_0_cannot_reference_identifier_1_declared_in_the_constructor: { code: 2301, category: DiagnosticCategory.Error, key: "Initializer of instance member variable '{0}' cannot reference identifier '{1}' declared in the constructor." },
         Static_members_cannot_reference_class_type_parameters: { code: 2302, category: DiagnosticCategory.Error, key: "Static members cannot reference class type parameters." },

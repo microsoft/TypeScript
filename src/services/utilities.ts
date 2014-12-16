@@ -271,7 +271,7 @@ module ts {
     }
 
     export function getNodeModifiers(node: Node): string {
-        var flags = node.flags;
+        var flags = getNodeFlags(node);
         var result: string[] = [];
 
         if (flags & NodeFlags.Private) result.push(ScriptElementKindModifier.privateMemberModifier);
