@@ -1,17 +1,17 @@
 tests/cases/compiler/overloadingStaticFunctionsInFunctions.ts(1,14): error TS1005: '(' expected.
 tests/cases/compiler/overloadingStaticFunctionsInFunctions.ts(2,3): error TS1129: Statement expected.
-tests/cases/compiler/overloadingStaticFunctionsInFunctions.ts(3,3): error TS1129: Statement expected.
-tests/cases/compiler/overloadingStaticFunctionsInFunctions.ts(3,19): error TS1005: ',' expected.
-tests/cases/compiler/overloadingStaticFunctionsInFunctions.ts(4,3): error TS1129: Statement expected.
-tests/cases/compiler/overloadingStaticFunctionsInFunctions.ts(4,20): error TS1109: Expression expected.
-tests/cases/compiler/overloadingStaticFunctionsInFunctions.ts(4,25): error TS1005: ';' expected.
 tests/cases/compiler/overloadingStaticFunctionsInFunctions.ts(2,10): error TS2304: Cannot find name 'test'.
+tests/cases/compiler/overloadingStaticFunctionsInFunctions.ts(3,3): error TS1129: Statement expected.
 tests/cases/compiler/overloadingStaticFunctionsInFunctions.ts(3,10): error TS2304: Cannot find name 'test'.
 tests/cases/compiler/overloadingStaticFunctionsInFunctions.ts(3,15): error TS2304: Cannot find name 'name'.
+tests/cases/compiler/overloadingStaticFunctionsInFunctions.ts(3,19): error TS1005: ',' expected.
 tests/cases/compiler/overloadingStaticFunctionsInFunctions.ts(3,20): error TS2304: Cannot find name 'string'.
+tests/cases/compiler/overloadingStaticFunctionsInFunctions.ts(4,3): error TS1129: Statement expected.
 tests/cases/compiler/overloadingStaticFunctionsInFunctions.ts(4,10): error TS2304: Cannot find name 'test'.
 tests/cases/compiler/overloadingStaticFunctionsInFunctions.ts(4,15): error TS2304: Cannot find name 'name'.
+tests/cases/compiler/overloadingStaticFunctionsInFunctions.ts(4,20): error TS1109: Expression expected.
 tests/cases/compiler/overloadingStaticFunctionsInFunctions.ts(4,21): error TS2304: Cannot find name 'any'.
+tests/cases/compiler/overloadingStaticFunctionsInFunctions.ts(4,25): error TS1005: ';' expected.
 
 
 ==== tests/cases/compiler/overloadingStaticFunctionsInFunctions.ts (14 errors) ====
@@ -26,25 +26,25 @@ tests/cases/compiler/overloadingStaticFunctionsInFunctions.ts(4,21): error TS230
       static test(name:string)
       ~~~~~~
 !!! error TS1129: Statement expected.
-                      ~
-!!! error TS1005: ',' expected.
              ~~~~
 !!! error TS2304: Cannot find name 'test'.
                   ~~~~
 !!! error TS2304: Cannot find name 'name'.
+                      ~
+!!! error TS1005: ',' expected.
                        ~~~~~~
 !!! error TS2304: Cannot find name 'string'.
       static test(name?:any){ }
       ~~~~~~
 !!! error TS1129: Statement expected.
-                       ~
-!!! error TS1109: Expression expected.
-                            ~
-!!! error TS1005: ';' expected.
              ~~~~
 !!! error TS2304: Cannot find name 'test'.
                   ~~~~
 !!! error TS2304: Cannot find name 'name'.
+                       ~
+!!! error TS1109: Expression expected.
                         ~~~
 !!! error TS2304: Cannot find name 'any'.
+                            ~
+!!! error TS1005: ';' expected.
     }

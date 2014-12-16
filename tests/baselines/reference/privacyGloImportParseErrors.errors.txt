@@ -1,14 +1,14 @@
-tests/cases/compiler/privacyGloImportParseErrors.ts(59,37): error TS1147: Import declarations in an internal module cannot reference an external module.
-tests/cases/compiler/privacyGloImportParseErrors.ts(121,38): error TS1147: Import declarations in an internal module cannot reference an external module.
-tests/cases/compiler/privacyGloImportParseErrors.ts(133,9): error TS1038: A 'declare' modifier cannot be used in an already ambient context.
-tests/cases/compiler/privacyGloImportParseErrors.ts(146,25): error TS1147: Import declarations in an internal module cannot reference an external module.
 tests/cases/compiler/privacyGloImportParseErrors.ts(22,27): error TS2435: Ambient external modules cannot be nested in other modules.
 tests/cases/compiler/privacyGloImportParseErrors.ts(30,20): error TS2435: Ambient external modules cannot be nested in other modules.
+tests/cases/compiler/privacyGloImportParseErrors.ts(59,37): error TS1147: Import declarations in an internal module cannot reference an external module.
 tests/cases/compiler/privacyGloImportParseErrors.ts(59,37): error TS2307: Cannot find external module 'm1_M3_public'.
 tests/cases/compiler/privacyGloImportParseErrors.ts(69,37): error TS2307: Cannot find external module 'm1_M4_private'.
+tests/cases/compiler/privacyGloImportParseErrors.ts(121,38): error TS1147: Import declarations in an internal module cannot reference an external module.
+tests/cases/compiler/privacyGloImportParseErrors.ts(133,9): error TS1038: A 'declare' modifier cannot be used in an already ambient context.
 tests/cases/compiler/privacyGloImportParseErrors.ts(133,24): error TS2435: Ambient external modules cannot be nested in other modules.
 tests/cases/compiler/privacyGloImportParseErrors.ts(138,16): error TS2435: Ambient external modules cannot be nested in other modules.
 tests/cases/compiler/privacyGloImportParseErrors.ts(141,12): error TS2435: Ambient external modules cannot be nested in other modules.
+tests/cases/compiler/privacyGloImportParseErrors.ts(146,25): error TS1147: Import declarations in an internal module cannot reference an external module.
 
 
 ==== tests/cases/compiler/privacyGloImportParseErrors.ts (11 errors) ====
