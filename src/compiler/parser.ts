@@ -5329,7 +5329,7 @@ module ts {
                 //case SyntaxKind.MethodDeclaration:
                 //case SyntaxKind.MethodSignature:
                 //case SyntaxKind.ClassDeclaration:
-                case SyntaxKind.InterfaceDeclaration:
+                //case SyntaxKind.InterfaceDeclaration:
                 //case SyntaxKind.ModuleDeclaration:
                 //case SyntaxKind.EnumDeclaration:
                 case SyntaxKind.ExportAssignment:

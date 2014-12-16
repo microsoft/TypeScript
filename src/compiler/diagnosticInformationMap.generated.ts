@@ -36,7 +36,7 @@ module ts {
         A_declare_modifier_cannot_be_used_in_an_already_ambient_context: { code: 1038, category: DiagnosticCategory.Error, key: "A 'declare' modifier cannot be used in an already ambient context.", isEarly: true },
         Initializers_are_not_allowed_in_ambient_contexts: { code: 1039, category: DiagnosticCategory.Error, key: "Initializers are not allowed in ambient contexts.", isEarly: true },
         _0_modifier_cannot_appear_on_a_module_element: { code: 1044, category: DiagnosticCategory.Error, key: "'{0}' modifier cannot appear on a module element.", isEarly: true },
-        A_declare_modifier_cannot_be_used_with_an_interface_declaration: { code: 1045, category: DiagnosticCategory.Error, key: "A 'declare' modifier cannot be used with an interface declaration." },
+        A_declare_modifier_cannot_be_used_with_an_interface_declaration: { code: 1045, category: DiagnosticCategory.Error, key: "A 'declare' modifier cannot be used with an interface declaration.", isEarly: true },
         A_declare_modifier_is_required_for_a_top_level_declaration_in_a_d_ts_file: { code: 1046, category: DiagnosticCategory.Error, key: "A 'declare' modifier is required for a top level declaration in a .d.ts file." },
         A_rest_parameter_cannot_be_optional: { code: 1047, category: DiagnosticCategory.Error, key: "A rest parameter cannot be optional.", isEarly: true },
         A_rest_parameter_cannot_have_an_initializer: { code: 1048, category: DiagnosticCategory.Error, key: "A rest parameter cannot have an initializer.", isEarly: true },
