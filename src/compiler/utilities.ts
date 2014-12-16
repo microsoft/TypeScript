@@ -636,10 +636,10 @@ module ts {
         return undefined;
     }
 
-    export function tryResolveScriptReference(host: EmitHost, sourceFile: SourceFile, reference: FileReference) {
+    export function tryResolveScriptReference(host: ScriptReferenceHost, sourceFile: SourceFile, reference: FileReference) {
         if (!host.getCompilerOptions().noResolve) {
             var referenceFileName = isRootedDiskPath(reference.filename) ? reference.filename : combinePaths(getDirectoryPath(sourceFile.filename), reference.filename);
-            referenceFileName = getNormalizedAbsolutePath(referenceFileName, host.getCompilerHost().getCurrentDirectory());
+            referenceFileName = getNormalizedAbsolutePath(referenceFileName, host.getCurrentDirectory());
             return host.getSourceFile(referenceFileName);
         }
     }
@@ -734,4 +734,18 @@ module ts {
         return false;
     }
 
+    export function createEmitHostFromProgram(program: Program): EmitHost {
+        var compilerHost = program.getCompilerHost();
+        return {
+            getCanonicalFileName: compilerHost.getCanonicalFileName,
+            getCommonSourceDirectory: program.getCommonSourceDirectory,
+            getCompilerOptions: program.getCompilerOptions,
+            getCurrentDirectory: compilerHost.getCurrentDirectory,
+            getNewLine: compilerHost.getNewLine,
+            getSourceFile: program.getSourceFile,
+            getSourceFiles: program.getSourceFiles,
+            isEmitBlocked: program.isEmitBlocked,
+            writeFile: compilerHost.writeFile,
+        };
+    }
 }

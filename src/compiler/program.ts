@@ -91,6 +91,7 @@ module ts {
 
         var diagnosticsProducingTypeChecker: TypeChecker;
         var noDiagnosticsTypeChecker: TypeChecker;
+        var emitHost: EmitHost;
 
         program = {
             getSourceFile: getSourceFile,
@@ -104,8 +105,13 @@ module ts {
             getCommonSourceDirectory: () => commonSourceDirectory,
             emitFiles: invokeEmitter,
             isEmitBlocked,
+            getCurrentDirectory: host.getCurrentDirectory,
         };
         return program;
+
+        function getEmitHost() {
+            return emitHost || (emitHost = createEmitHostFromProgram(program));
+        }
 
         function hasEarlyErrors(sourceFile?: SourceFile): boolean {
             return forEach(getDiagnosticsProducingTypeChecker().getDiagnostics(sourceFile), d => d.isEarly);
@@ -134,12 +140,12 @@ module ts {
             var typeChecker = getDiagnosticsProducingTypeChecker();
             typeChecker.getDiagnostics(targetSourceFile);
             var resolver = typeChecker.getEmitResolver();
-            return ts.getDeclarationDiagnostics(program, resolver, targetSourceFile);
+            return ts.getDeclarationDiagnostics(getEmitHost(), resolver, targetSourceFile);
         }
 
         function invokeEmitter(targetSourceFile?: SourceFile) {
             var resolver = getDiagnosticsProducingTypeChecker().getEmitResolver();
-            return emitFiles(resolver, program, targetSourceFile);
+            return emitFiles(resolver, getEmitHost(), targetSourceFile);
         }
 
         function getSourceFile(filename: string) {

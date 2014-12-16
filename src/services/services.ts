@@ -2224,7 +2224,6 @@ module ts {
         var documentRegistry = documentRegistry;
         var cancellationToken = new CancellationTokenObject(host.getCancellationToken && host.getCancellationToken());
         var activeCompletionSession: CompletionSession;         // The current active completion session, used to get the completion entry details
-        var writer: (filename: string, data: string, writeByteOrderMark: boolean) => void = undefined;
 
         // Check if the localized messages json is set, otherwise query the host for it
         if (!localizedDiagnosticMessages && host.getLocalizedDiagnosticMessages) {
@@ -2267,7 +2266,6 @@ module ts {
                     return host.getDefaultLibFilename(options);
                 },
                 writeFile: (filename, data, writeByteOrderMark) => {
-                    writer(filename, data, writeByteOrderMark);
                 },
                 getCurrentDirectory: (): string => {
                     return host.getCurrentDirectory();
@@ -4854,7 +4852,7 @@ module ts {
 
             var outputFiles: OutputFile[] = [];
 
-            function getEmitOutputWriter(filename: string, data: string, writeByteOrderMark: boolean) {
+            function writeFile(filename: string, data: string, writeByteOrderMark: boolean) {
                 outputFiles.push({
                     name: filename,
                     writeByteOrderMark: writeByteOrderMark,
@@ -4862,13 +4860,12 @@ module ts {
                 });
             }
 
-            // Initialize writer for CompilerHost.writeFile
-            writer = getEmitOutputWriter;
+            // Get an emit host from our program, but override the writeFile functionality to
+            // call our local writer function.
+            var emitHost = createEmitHostFromProgram(program);
+            emitHost.writeFile = writeFile;
 
-            var emitOutput = program.emitFiles(sourceFile);
-
-            // Reset writer back to undefined to make sure that we produce an error message if CompilerHost.writeFile method is called when we are not in getEmitOutput
-            writer = undefined;
+            var emitOutput = emitFiles(getDiagnosticsProducingTypeChecker().getEmitResolver(), emitHost, sourceFile);
 
             return {
                 outputFiles,

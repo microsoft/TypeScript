@@ -906,10 +906,8 @@ module ts {
         identifiers: Map<string>;
     }
 
-    export interface Program {
-        getSourceFile(filename: string): SourceFile;
+    export interface Program extends ScriptReferenceHost {
         getSourceFiles(): SourceFile[];
-        getCompilerOptions(): CompilerOptions;
         getCompilerHost(): CompilerHost;
 
         getDiagnostics(sourceFile?: SourceFile): Diagnostic[];
@@ -1102,13 +1100,21 @@ module ts {
         errorModuleName?: string // If the symbol is not visible from module, module's name
     }
 
-    export interface EmitHost {
-        getSourceFile(filename: string): SourceFile;
-        getSourceFiles(): SourceFile[];
-        getCompilerHost(): CompilerHost;
+    export interface ScriptReferenceHost {
         getCompilerOptions(): CompilerOptions;
-        getCommonSourceDirectory(): string;
+        getSourceFile(filename: string): SourceFile;
+        getCurrentDirectory(): string;
+    }
+
+    export interface EmitHost extends ScriptReferenceHost {
+        getSourceFiles(): SourceFile[];
         isEmitBlocked(sourceFile?: SourceFile): boolean;
+
+        getCommonSourceDirectory(): string;
+        getCanonicalFileName(fileName: string): string;
+        getNewLine(): string;
+
+        writeFile(filename: string, data: string, writeByteOrderMark: boolean, onError?: (message: string) => void): void;
     }
 
     export interface EmitResolver {
