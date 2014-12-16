@@ -1,0 +1,12 @@
+tests/cases/conformance/es6/templates/taggedTemplateStringsWithTypeErrorInFunctionExpressionsInSubstitutionExpression.ts(6,5): error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
+
+
+==== tests/cases/conformance/es6/templates/taggedTemplateStringsWithTypeErrorInFunctionExpressionsInSubstitutionExpression.ts (1 errors) ====
+    
+    
+    function foo(...rest: any[]) {
+    }
+    
+    foo `${function (x: number) { x = "bad"; } }`;
+        ~~~
+!!! error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
