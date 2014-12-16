@@ -8880,6 +8880,27 @@ module ts {
         }
 
         function checkModuleDeclaration(node: ModuleDeclaration) {
+            // Grammar checking
+            if (!checkGrammarModifiers(node)) {
+                if (!isInAmbientContext(node) && node.name.kind === SyntaxKind.StringLiteral) {
+                    grammarErrorOnNode(node.name, Diagnostics.Only_ambient_modules_can_use_quoted_names);
+                }
+                else if (node.name.kind === SyntaxKind.Identifier && node.body.kind === SyntaxKind.ModuleBlock) {
+                    var statements = (<ModuleBlock>node.body).statements;
+                    for (var i = 0, n = statements.length; i < n; i++) {
+                        var statement = statements[i];
+
+                        if (statement.kind === SyntaxKind.ExportAssignment) {
+                            // Export assignments are not allowed in an internal module
+                            grammarErrorOnNode(statement, Diagnostics.An_export_assignment_cannot_be_used_in_an_internal_module);
+                        }
+                        else if (isExternalModuleImportDeclaration(statement)) {
+                            grammarErrorOnNode(getExternalModuleImportDeclarationExpression(statement), Diagnostics.Import_declarations_in_an_internal_module_cannot_reference_an_external_module);
+                        }
+                    }
+                }
+            }
+
             if (fullTypeCheck) {
                 checkCollisionWithCapturedThisVariable(node, node.name);
                 checkCollisionWithRequireExportsInGeneratedCode(node, node.name);
