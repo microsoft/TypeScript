@@ -5362,8 +5362,13 @@ module ts {
 
                 // We haven't looked for this file, do so now and cache result
                 var file = filesByName[canonicalName] = host.getSourceFile(filename, options.target, hostErrorMessage => {
-                    errors.push(createFileDiagnostic(refFile, refStart, refLength,
-                        Diagnostics.Cannot_read_file_0_Colon_1, filename, hostErrorMessage));
+                    if (refFile) {
+                        errors.push(createFileDiagnostic(refFile, refStart, refLength,
+                            Diagnostics.Cannot_read_file_0_Colon_1, filename, hostErrorMessage));
+                    }
+                    else {
+                        errors.push(createCompilerDiagnostic(Diagnostics.Cannot_read_file_0_Colon_1, filename, hostErrorMessage));
+                    }
                 });
                 if (file) {
                     seenNoDefaultLib = seenNoDefaultLib || file.hasNoDefaultLib;
