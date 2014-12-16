@@ -8173,14 +8173,11 @@ module ts {
 
         function checkWithStatement(node: WithStatement) {
             // Grammar checking for withStatement
-            var hasStrictModeError = false;
             if (node.parserContextFlags & ParserContextFlags.StrictMode) {
                 grammarErrorOnFirstToken(node, Diagnostics.with_statements_are_not_allowed_in_strict_mode);
-                hasStrictModeError = true;
             }
-
-            // Grammar checking for invalid use of return statement
-            if (!hasStrictModeError) {
+            else {
+                // Grammar checking for invalid use of return statement
                 forEachReturnStatement(<Block>node.statement, (returnStatement) => {
                     grammarErrorOnFirstToken(returnStatement, Diagnostics.A_return_statement_can_only_be_used_within_a_function_body);
                 });
