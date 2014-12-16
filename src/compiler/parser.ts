@@ -158,7 +158,9 @@ module ts {
                     child((<SourceFile>node).endOfFileToken);
             case SyntaxKind.VariableStatement:
                 return children(node.modifiers) ||
-                    children((<VariableStatement>node).declarations);
+                    child((<VariableStatement>node).declarationList);
+            case SyntaxKind.VariableDeclarationList:
+                return children((<VariableDeclarationList>node).declarations);
             case SyntaxKind.ExpressionStatement:
                 return child((<ExpressionStatement>node).expression);
             case SyntaxKind.IfStatement:
@@ -172,14 +174,12 @@ module ts {
                 return child((<WhileStatement>node).expression) ||
                     child((<WhileStatement>node).statement);
             case SyntaxKind.ForStatement:
-                return children((<ForStatement>node).declarations) ||
-                    child((<ForStatement>node).initializer) ||
+                return child((<ForStatement>node).initializer) ||
                     child((<ForStatement>node).condition) ||
                     child((<ForStatement>node).iterator) ||
                     child((<ForStatement>node).statement);
             case SyntaxKind.ForInStatement:
-                return children((<ForInStatement>node).declarations) ||
-                    child((<ForInStatement>node).variable) ||
+                return child((<ForInStatement>node).initializer) ||
                     child((<ForInStatement>node).expression) ||
                     child((<ForInStatement>node).statement);
             case SyntaxKind.ContinueStatement:
@@ -2992,42 +2992,27 @@ module ts {
             var pos = getNodePos();
             parseExpected(SyntaxKind.ForKeyword);
             parseExpected(SyntaxKind.OpenParenToken);
+
+            var initializer: VariableDeclarationList | Expression = undefined;
             if (token !== SyntaxKind.SemicolonToken) {
-                if (parseOptional(SyntaxKind.VarKeyword)) {
-                    var declarations = disallowInAnd(parseVariableDeclarationList);
-                }
-                else if (parseOptional(SyntaxKind.LetKeyword)) {
-                    var declarations = setFlag(disallowInAnd(parseVariableDeclarationList), NodeFlags.Let);
-                }
-                else if (parseOptional(SyntaxKind.ConstKeyword)) {
-                    var declarations = setFlag(disallowInAnd(parseVariableDeclarationList), NodeFlags.Const);
+                if (token === SyntaxKind.VarKeyword || token === SyntaxKind.LetKeyword || token === SyntaxKind.ConstKeyword) {
+                    initializer = parseVariableDeclarationList(/*disallowIn:*/ true);
                 }
                 else {
-                    var varOrInit = disallowInAnd(parseExpression);
+                    initializer = disallowInAnd(parseExpression);
                 }
             }
             var forOrForInStatement: IterationStatement;
             if (parseOptional(SyntaxKind.InKeyword)) {
                 var forInStatement = <ForInStatement>createNode(SyntaxKind.ForInStatement, pos);
-                if (declarations) {
-                    forInStatement.declarations = declarations;
-                }
-                else {
-                    forInStatement.variable = varOrInit;
-                }
+                forInStatement.initializer = initializer;
                 forInStatement.expression = allowInAnd(parseExpression);
                 parseExpected(SyntaxKind.CloseParenToken);
                 forOrForInStatement = forInStatement;
             }
             else {
                 var forStatement = <ForStatement>createNode(SyntaxKind.ForStatement, pos);
-                if (declarations) {
-                    forStatement.declarations = declarations;
-                }
-                if (varOrInit) {
-                    forStatement.initializer = varOrInit;
-                }
-
+                forStatement.initializer = initializer;
                 parseExpected(SyntaxKind.SemicolonToken);
                 if (token !== SyntaxKind.SemicolonToken && token !== SyntaxKind.CloseParenToken) {
                     forStatement.condition = allowInAnd(parseExpression);
@@ -3424,39 +3409,37 @@ module ts {
             return finishNode(node);
         }
 
-        function setFlag(nodes: NodeArray<VariableDeclaration>, flag: NodeFlags): NodeArray<VariableDeclaration> {
-            for (var i = 0; i < nodes.length; i++) {
-                var node = nodes[i];
-                node.flags |= flag;
-                if (node.name && isBindingPattern(node.name)) {
-                    setFlag((<BindingPattern>node.name).elements, flag);
-                }
-            }
-            return nodes;
-        }
+        function parseVariableDeclarationList(disallowIn: boolean): VariableDeclarationList {
+            var node = <VariableDeclarationList>createNode(SyntaxKind.VariableDeclarationList);
 
-        function parseVariableDeclarationList(): NodeArray<VariableDeclaration> {
-            return parseDelimitedList(ParsingContext.VariableDeclarations, parseVariableDeclaration);
+            switch (token) {
+                case SyntaxKind.VarKeyword:
+                    break;
+                case SyntaxKind.LetKeyword:
+                    node.flags |= NodeFlags.Let;
+                    break;
+                case SyntaxKind.ConstKeyword:
+                    node.flags |= NodeFlags.Const;
+                    break;
+                default:
+                    Debug.fail();
+            }
+
+            nextToken();
+            var savedDisallowIn = inDisallowInContext();
+            setDisallowInContext(disallowIn);
+
+            node.declarations = parseDelimitedList(ParsingContext.VariableDeclarations, parseVariableDeclaration);
+
+            setDisallowInContext(savedDisallowIn);
+
+            return finishNode(node);
         }
 
         function parseVariableStatement(fullStart: number, modifiers: ModifiersArray): VariableStatement {
             var node = <VariableStatement>createNode(SyntaxKind.VariableStatement, fullStart);
             setModifiers(node, modifiers);
-
-            if (token === SyntaxKind.LetKeyword) {
-                node.flags |= NodeFlags.Let;
-            }
-            else if (token === SyntaxKind.ConstKeyword) {
-                node.flags |= NodeFlags.Const;
-            }
-            else {
-                Debug.assert(token === SyntaxKind.VarKeyword);
-            }
-
-            nextToken();
-            node.declarations = allowInAnd(parseVariableDeclarationList);
-            setFlag(node.declarations, node.flags);
-
+            node.declarationList = parseVariableDeclarationList(/*disallowIn:*/ false);
             parseSemicolon();
             return finishNode(node);
         }
@@ -4010,12 +3993,14 @@ module ts {
         }
 
         function getExternalModuleIndicator() {
-            return forEach(sourceFile.statements, node =>
-                node.flags & NodeFlags.Export
-                || node.kind === SyntaxKind.ImportDeclaration && (<ImportDeclaration>node).moduleReference.kind === SyntaxKind.ExternalModuleReference
-                || node.kind === SyntaxKind.ExportAssignment
-                ? node
-                : undefined);
+            return forEach(sourceFile.statements, node => {
+                var flags = node.flags;
+                return flags & NodeFlags.Export
+                    || node.kind === SyntaxKind.ImportDeclaration && (<ImportDeclaration>node).moduleReference.kind === SyntaxKind.ExternalModuleReference
+                    || node.kind === SyntaxKind.ExportAssignment
+                        ? node
+                        : undefined;
+            });
         }
 
         var syntacticDiagnostics: Diagnostic[];
@@ -4166,8 +4151,6 @@ module ts {
                 case SyntaxKind.ElementAccessExpression:        return checkElementAccessExpression(<ElementAccessExpression>node);
                 case SyntaxKind.ExportAssignment:               return checkExportAssignment(<ExportAssignment>node);
                 case SyntaxKind.ExternalModuleReference:        return checkExternalModuleReference(<ExternalModuleReference>node);
-                case SyntaxKind.ForInStatement:                 return checkForInStatement(<ForInStatement>node);
-                case SyntaxKind.ForStatement:                   return checkForStatement(<ForStatement>node);
                 case SyntaxKind.FunctionDeclaration:            return checkFunctionDeclaration(<FunctionLikeDeclaration>node);
                 case SyntaxKind.FunctionExpression:             return checkFunctionExpression(<FunctionExpression>node);
                 case SyntaxKind.GetAccessor:                    return checkGetAccessor(<MethodDeclaration>node);
@@ -4199,6 +4182,7 @@ module ts {
                 case SyntaxKind.TypeParameter:                  return checkTypeParameter(<TypeParameterDeclaration>node);
                 case SyntaxKind.TypeReference:                  return checkTypeReference(<TypeReferenceNode>node);
                 case SyntaxKind.VariableDeclaration:            return checkVariableDeclaration(<VariableDeclaration>node);
+                case SyntaxKind.VariableDeclarationList:        return checkVariableDeclarationList(<VariableDeclarationList>node);
                 case SyntaxKind.VariableStatement:              return checkVariableStatement(<VariableStatement>node);
                 case SyntaxKind.WithStatement:                  return checkWithStatement(<WithStatement>node);
                 case SyntaxKind.YieldExpression:                return checkYieldExpression(<YieldExpression>node);
@@ -4559,15 +4543,6 @@ module ts {
             if (node.expression.kind !== SyntaxKind.StringLiteral) {
                 return grammarErrorOnNode(node.expression, Diagnostics.String_literal_expected);
             }
-        }
-
-        function checkForInStatement(node: ForInStatement) {
-            return checkVariableDeclarations(node.declarations) ||
-                checkForMoreThanOneDeclaration(node.declarations);
-        }
-
-        function checkForStatement(node: ForStatement) {
-            return checkVariableDeclarations(node.declarations);
         }
 
         function checkForMoreThanOneDeclaration(declarations: NodeArray<VariableDeclaration>) {
@@ -5306,31 +5281,32 @@ module ts {
             }
         }
 
-        function checkVariableDeclarations(declarations: NodeArray<VariableDeclaration>): boolean {
-            if (declarations) {
-                if (checkForDisallowedTrailingComma(declarations)) {
-                    return true;
-                }
+        function checkVariableDeclarationList(declarationList: VariableDeclarationList): boolean {
+            var declarations = declarationList.declarations;
+            if (checkForDisallowedTrailingComma(declarationList.declarations)) {
+                return true;
+            }
 
-                if (!declarations.length) {
-                    return grammarErrorAtPos(declarations.pos, declarations.end - declarations.pos, Diagnostics.Variable_declaration_list_cannot_be_empty);
-                }
+            if (!declarationList.declarations.length) {
+                return grammarErrorAtPos(declarations.pos, declarations.end - declarations.pos, Diagnostics.Variable_declaration_list_cannot_be_empty);
+            }
 
-                var decl = declarations[0];
-                if (languageVersion < ScriptTarget.ES6) {
-                    if (isLet(decl)) {
-                        return grammarErrorOnFirstToken(decl, Diagnostics.let_declarations_are_only_available_when_targeting_ECMAScript_6_and_higher);
-                    }
-                    else if (isConst(decl)) {
-                        return grammarErrorOnFirstToken(decl, Diagnostics.const_declarations_are_only_available_when_targeting_ECMAScript_6_and_higher);
-                    }
+            if (declarationList.parent.kind === SyntaxKind.ForInStatement) {
+                checkForMoreThanOneDeclaration(declarationList.declarations);
+            }
+
+            if (languageVersion < ScriptTarget.ES6) {
+                if (isLet(declarationList)) {
+                    return grammarErrorOnFirstToken(declarationList, Diagnostics.let_declarations_are_only_available_when_targeting_ECMAScript_6_and_higher);
+                }
+                else if (isConst(declarationList)) {
+                    return grammarErrorOnFirstToken(declarationList, Diagnostics.const_declarations_are_only_available_when_targeting_ECMAScript_6_and_higher);
                 }
             }
         }
 
         function checkVariableStatement(node: VariableStatement) {
             return checkForDisallowedModifiersInBlockOrObjectLiteral(node) ||
-                checkVariableDeclarations(node.declarations) ||
                 checkForDisallowedLetOrConstStatement(node);
         }
 
@@ -5344,10 +5320,10 @@ module ts {
 
         function checkForDisallowedLetOrConstStatement(node: VariableStatement) {
             if (!allowLetAndConstDeclarations(node.parent)) {
-                if (isLet(node)) {
+                if (isLet(node.declarationList)) {
                     return grammarErrorOnNode(node, Diagnostics.let_declarations_can_only_be_declared_inside_a_block);
                 }
-                else if (isConst(node)) {
+                else if (isConst(node.declarationList)) {
                     return grammarErrorOnNode(node, Diagnostics.const_declarations_can_only_be_declared_inside_a_block);
                 }
             }

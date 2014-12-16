@@ -16,7 +16,6 @@ module ts {
     /// If fullTypeCheck === false, the typechecker can take shortcuts and skip checks that only produce errors.
     /// NOTE: checks that somehow affect decisions being made during typechecking should be executed in both cases.
     export function createTypeChecker(program: Program, fullTypeCheck: boolean): TypeChecker {
-
         var Symbol = objectAllocator.getSymbolConstructor();
         var Type = objectAllocator.getTypeConstructor();
         var Signature = objectAllocator.getSignatureConstructor();
@@ -407,7 +406,7 @@ module ts {
                 }
                 if (result.flags & SymbolFlags.BlockScopedVariable) {
                     // Block-scoped variables cannot be used before their definition
-                    var declaration = forEach(result.declarations, d => d.flags & NodeFlags.BlockScoped ? d : undefined);
+                    var declaration = forEach(result.declarations, d => getNodeFlags(d) & NodeFlags.BlockScoped ? d : undefined);
                     Debug.assert(declaration !== undefined, "Block-scoped variable declaration is undefined");
                     if (!isDefinedBefore(declaration, errorLocation)) {
                         error(errorLocation, Diagnostics.Block_scoped_variable_0_used_before_its_declaration, declarationNameToString(declaration.name));
@@ -1557,7 +1556,7 @@ module ts {
                     case SyntaxKind.ImportDeclaration:
                         var parent = getDeclarationContainer(node);
                         // If the node is not exported or it is not ambient module element (except import declaration)
-                        if (!(node.flags & NodeFlags.Export) &&
+                        if (!(getNodeFlags(node) & NodeFlags.Export) &&
                             !(node.kind !== SyntaxKind.ImportDeclaration && parent.kind !== SyntaxKind.SourceFile && isInAmbientContext(parent))) {
                             return isGlobalSourceFile(parent) || isUsedInExportAssignment(node);
                         }
@@ -1620,7 +1619,7 @@ module ts {
 
         function getDeclarationContainer(node: Node): Node {
             node = getRootDeclaration(node);
-            return node.kind === SyntaxKind.VariableDeclaration ? node.parent.parent : node.parent;
+            return node.kind === SyntaxKind.VariableDeclaration ? node.parent.parent.parent : node.parent;
         }
 
         function getTypeOfPrototypeProperty(prototype: Symbol): Type {
@@ -1687,7 +1686,7 @@ module ts {
         // Return the inferred type for a variable, parameter, or property declaration
         function getTypeForVariableLikeDeclaration(declaration: VariableLikeDeclaration): Type {
             // A variable declared in a for..in statement is always of type any
-            if (declaration.parent.kind === SyntaxKind.ForInStatement) {
+            if (declaration.parent.parent.kind === SyntaxKind.ForInStatement) {
                 return anyType;
             }
             if (isBindingPattern(declaration.parent)) {
@@ -5385,7 +5384,7 @@ module ts {
         }
 
         function getDeclarationFlagsFromSymbol(s: Symbol) {
-            return s.valueDeclaration ? s.valueDeclaration.flags : s.flags & SymbolFlags.Prototype ? NodeFlags.Public | NodeFlags.Static : 0;
+            return s.valueDeclaration ? getNodeFlags(s.valueDeclaration) : s.flags & SymbolFlags.Prototype ? NodeFlags.Public | NodeFlags.Static : 0;
         }
 
         function checkClassPropertyAccess(node: PropertyAccessExpression | QualifiedName, left: Expression | QualifiedName, type: Type, prop: Symbol) {
@@ -7271,7 +7270,7 @@ module ts {
         }
 
         function getEffectiveDeclarationFlags(n: Node, flagsToCheck: NodeFlags) {
-            var flags = n.flags;
+            var flags = getNodeFlags(n);
             if (n.parent.kind !== SyntaxKind.InterfaceDeclaration && isInAmbientContext(n)) {
                 if (!(flags & NodeFlags.Ambient)) {
                     // It is nested in an ambient context, which means it is automatically exported
@@ -7747,7 +7746,7 @@ module ts {
             //          const x = 0;
             //          var x = 0;
             //      }
-            if (node.initializer && (node.flags & NodeFlags.BlockScoped) === 0) {
+            if (node.initializer && (getNodeFlags(node) & NodeFlags.BlockScoped) === 0) {
                 var symbol = getSymbolOfNode(node);
                 if (symbol.flags & SymbolFlags.FunctionScopedVariable) {
                     var localDeclarationSymbol = resolveName(node, (<Identifier>node.name).text, SymbolFlags.Variable, /*nodeNotFoundErrorMessage*/ undefined, /*nameArg*/ undefined);
@@ -7797,6 +7796,10 @@ module ts {
                     forEachChild(n, visit);
                 }
             }
+        }
+
+        function checkVariableDeclaration(node: VariableDeclaration) {
+            return checkVariableLikeDeclaration(node);
         }
 
         // Check variable, parameter, or property declaration
@@ -7857,7 +7860,7 @@ module ts {
         }
 
         function checkVariableStatement(node: VariableStatement) {
-            forEach(node.declarations, checkSourceElement);
+            forEach(node.declarationList.declarations, checkSourceElement);
         }
 
         function checkExpressionStatement(node: ExpressionStatement) {
@@ -7881,8 +7884,15 @@ module ts {
         }
 
         function checkForStatement(node: ForStatement) {
-            if (node.declarations) forEach(<VariableLikeDeclaration[]>node.declarations, checkVariableLikeDeclaration);
-            if (node.initializer) checkExpression(node.initializer);
+            if (node.initializer) {
+                if (node.initializer.kind === SyntaxKind.VariableDeclarationList) {
+                    forEach((<VariableDeclarationList>node.initializer).declarations, checkVariableDeclaration)
+                }
+                else {
+                    checkExpression(<Expression>node.initializer)
+                }
+            }
+
             if (node.condition) checkExpression(node.condition);
             if (node.iterator) checkExpression(node.iterator);
             checkSourceElement(node.statement);
@@ -7895,28 +7905,29 @@ module ts {
             // for (var VarDecl in Expr) Statement
             //   VarDecl must be a variable declaration without a type annotation that declares a variable of type Any,
             //   and Expr must be an expression of type Any, an object type, or a type parameter type.                        
-            if (node.declarations) {
-                if (node.declarations.length >= 1) {
-                    var decl = node.declarations[0];
+            if (node.initializer.kind === SyntaxKind.VariableDeclarationList) {
+                var variableDeclarationList = <VariableDeclarationList>node.initializer;
+                if (variableDeclarationList.declarations.length >= 1) {
+                    var decl = variableDeclarationList.declarations[0];
                     checkVariableLikeDeclaration(decl);
                     if (decl.type) {
                         error(decl, Diagnostics.The_left_hand_side_of_a_for_in_statement_cannot_use_a_type_annotation);
                     }
                 }
             }
-
-            // In a 'for-in' statement of the form
-            // for (Var in Expr) Statement
-            //   Var must be an expression classified as a reference of type Any or the String primitive type,
-            //   and Expr must be an expression of type Any, an object type, or a type parameter type.
-            if (node.variable) {
-                var exprType = checkExpression(node.variable);
+            else {
+                // In a 'for-in' statement of the form
+                // for (Var in Expr) Statement
+                //   Var must be an expression classified as a reference of type Any or the String primitive type,
+                //   and Expr must be an expression of type Any, an object type, or a type parameter type.
+                var varExpr = <Expression>node.initializer;
+                var exprType = checkExpression(varExpr);
                 if (exprType !== anyType && exprType !== stringType) {
-                    error(node.variable, Diagnostics.The_left_hand_side_of_a_for_in_statement_must_be_of_type_string_or_any);
+                    error(varExpr, Diagnostics.The_left_hand_side_of_a_for_in_statement_must_be_of_type_string_or_any);
                 }
                 else {
                     // run check only former check succeeded to avoid cascading errors
-                    checkReferenceExpression(node.variable, Diagnostics.Invalid_left_hand_side_in_for_in_statement, Diagnostics.Left_hand_side_of_assignment_expression_cannot_be_a_constant); 
+                    checkReferenceExpression(varExpr, Diagnostics.Invalid_left_hand_side_in_for_in_statement, Diagnostics.Left_hand_side_of_assignment_expression_cannot_be_a_constant);
                 }
             }
 
@@ -8844,6 +8855,7 @@ module ts {
                 case SyntaxKind.TryStatement:
                 case SyntaxKind.CatchClause:
                 case SyntaxKind.VariableDeclaration:
+                case SyntaxKind.VariableDeclarationList:
                 case SyntaxKind.ClassDeclaration:
                 case SyntaxKind.EnumDeclaration:
                 case SyntaxKind.EnumMember:

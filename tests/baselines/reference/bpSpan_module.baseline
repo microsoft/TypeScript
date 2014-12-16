@@ -50,9 +50,9 @@
 --------------------------------
 7  >        export var x = 30;
 
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~                   => Pos: (67 to 93)  SpanInfo: {"start":75,"length":17}
-    >export var x = 30
-    >:=> (line 7, col 8) to (line 7, col 25)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~                   => Pos: (67 to 93)  SpanInfo: {"start":82,"length":10}
+    >var x = 30
+    >:=> (line 7, col 15) to (line 7, col 25)
 --------------------------------
 8  >    }
 
@@ -172,15 +172,15 @@
 --------------------------------
 25 >    {
 
-    ~~~~~~                                        => Pos: (261 to 266)  SpanInfo: {"start":275,"length":17}
-    >export var x = 30
-    >:=> (line 26, col 8) to (line 26, col 25)
+    ~~~~~~                                        => Pos: (261 to 266)  SpanInfo: {"start":282,"length":10}
+    >var x = 30
+    >:=> (line 26, col 15) to (line 26, col 25)
 --------------------------------
 26 >        export var x = 30;
 
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~                   => Pos: (267 to 293)  SpanInfo: {"start":275,"length":17}
-    >export var x = 30
-    >:=> (line 26, col 8) to (line 26, col 25)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~                   => Pos: (267 to 293)  SpanInfo: {"start":282,"length":10}
+    >var x = 30
+    >:=> (line 26, col 15) to (line 26, col 25)
 --------------------------------
 27 >    }
 

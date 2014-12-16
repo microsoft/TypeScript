@@ -219,6 +219,7 @@ module ts {
         TryStatement,
         DebuggerStatement,
         VariableDeclaration,
+        VariableDeclarationList,
         FunctionDeclaration,
         ClassDeclaration,
         InterfaceDeclaration,
@@ -396,6 +397,10 @@ module ts {
         name: Identifier | BindingPattern;  // Declared variable name
         type?: TypeNode;                    // Optional type annotation
         initializer?: Expression;           // Optional initializer
+    }
+
+    export interface VariableDeclarationList extends Node {
+        declarations: NodeArray<VariableDeclaration>;
     }
 
     // SyntaxKind.Parameter
@@ -702,7 +707,7 @@ module ts {
     }
 
     export interface VariableStatement extends Statement {
-        declarations: NodeArray<VariableDeclaration>;
+        declarationList: VariableDeclarationList; 
     }
 
     export interface ExpressionStatement extends Statement {
@@ -728,15 +733,13 @@ module ts {
     }
 
     export interface ForStatement extends IterationStatement {
-        declarations?: NodeArray<VariableDeclaration>;
-        initializer?: Expression;
+        initializer?: VariableDeclarationList | Expression;
         condition?: Expression;
         iterator?: Expression;
     }
 
     export interface ForInStatement extends IterationStatement {
-        declarations?: NodeArray<VariableDeclaration>;
-        variable?: Expression;
+        initializer: VariableDeclarationList | Expression;
         expression: Expression;
     }
 
