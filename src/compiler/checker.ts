@@ -8089,6 +8089,9 @@ module ts {
         }
 
         function checkForStatement(node: ForStatement) {
+            // Grammar checking
+            checkGrammarVariableDeclarations(node, node.declarations);
+
             if (node.declarations) forEach(<VariableLikeDeclaration[]>node.declarations, checkVariableLikeDeclaration);
             if (node.initializer) checkExpression(node.initializer);
             if (node.condition) checkExpression(node.condition);
