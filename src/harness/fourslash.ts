@@ -1217,18 +1217,20 @@ module FourSlash {
             ts.forEach(fileNames, Harness.IO.log);
         }
 
-        public deleteChar(count = 1, cadence = 10) {
+        public deleteChar(count = 1) {
             this.scenarioActions.push('<DeleteCharNext Count="' + count + '" />');
 
             var offset = this.currentCaretPosition;
             var ch = "";
+
+            var checkCadence = (count >> 2) + 1
 
             for (var i = 0; i < count; i++) {
                 // Make the edit
                 this.languageServiceShimHost.editScript(this.activeFile.fileName, offset, offset + 1, ch);
                 this.updateMarkersForEdit(this.activeFile.fileName, offset, offset + 1, ch);
 
-                if (i % cadence === 0) {
+                if (i % checkCadence === 0) {
                     this.checkPostEditInvariants();
                 }
 
@@ -1237,7 +1239,7 @@ module FourSlash {
                     var edits = this.languageService.getFormattingEditsAfterKeystroke(this.activeFile.fileName, offset, ch, this.formatCodeOptions);
                     if (edits.length) {
                         offset += this.applyEdits(this.activeFile.fileName, edits, true);
-                        this.checkPostEditInvariants();
+                        //this.checkPostEditInvariants();
                     }
                 }
             }
@@ -1257,11 +1259,12 @@ module FourSlash {
             this.checkPostEditInvariants();
         }
 
-        public deleteCharBehindMarker(count = 1, cadence = 10) {
+        public deleteCharBehindMarker(count = 1) {
             this.scenarioActions.push('<DeleteCharPrevious Count="' + count + '" />');
 
             var offset = this.currentCaretPosition;
             var ch = "";
+            var checkCadence = (count >> 2) + 1
 
             for (var i = 0; i < count; i++) {
                 offset--;
@@ -1269,7 +1272,7 @@ module FourSlash {
                 this.languageServiceShimHost.editScript(this.activeFile.fileName, offset, offset + 1, ch);
                 this.updateMarkersForEdit(this.activeFile.fileName, offset, offset + 1, ch);
 
-                if (i % cadence === 0) {
+                if (i % checkCadence === 0) {
                     this.checkPostEditInvariants();
                 }
 
@@ -1278,7 +1281,6 @@ module FourSlash {
                     var edits = this.languageService.getFormattingEditsAfterKeystroke(this.activeFile.fileName, offset, ch, this.formatCodeOptions);
                     if (edits.length) {
                         offset += this.applyEdits(this.activeFile.fileName, edits, true);
-                        this.checkPostEditInvariants();
                     }
                 }
             }
@@ -1304,9 +1306,11 @@ module FourSlash {
         // Enters lines of text at the current caret position, invoking
         // language service APIs to mimic Visual Studio's behavior
         // as much as possible
-        private typeHighFidelity(text: string, cadence = 10) {
+        private typeHighFidelity(text: string) {
             var offset = this.currentCaretPosition;
             var prevChar = ' ';
+            var checkCadence = (text.length >> 2) + 1;
+
             for (var i = 0; i < text.length; i++) {
                 // Make the edit
                 var ch = text.charAt(i);
@@ -1324,10 +1328,10 @@ module FourSlash {
                     this.languageService.getCompletionsAtPosition(this.activeFile.fileName, offset);
                 }
 
-                if (i % cadence === 0) {
+                if (i % checkCadence === 0) {
                     this.checkPostEditInvariants();
                     // this.languageService.getSyntacticDiagnostics(this.activeFile.fileName);
-                    this.languageService.getSemanticDiagnostics(this.activeFile.fileName);
+                    // this.languageService.getSemanticDiagnostics(this.activeFile.fileName);
                 }
 
                 // Handle post-keystroke formatting
@@ -1335,7 +1339,7 @@ module FourSlash {
                     var edits = this.languageService.getFormattingEditsAfterKeystroke(this.activeFile.fileName, offset, ch, this.formatCodeOptions);
                     if (edits.length) {
                         offset += this.applyEdits(this.activeFile.fileName, edits, true);
-                        this.checkPostEditInvariants();
+                        // this.checkPostEditInvariants();
                     }
                 }
             }
