@@ -447,8 +447,7 @@ function exec(cmd, completeHandler) {
         complete();
     });
     ex.addListener("error", function(e, status) {
-        process.stderr.write(status);
-        process.stderr.write(e);
+        console.error("Process exited with code " + status);
         complete();
     })
     try{
