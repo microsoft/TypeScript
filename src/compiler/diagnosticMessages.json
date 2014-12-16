@@ -173,7 +173,8 @@
     },
     "A rest parameter cannot have an initializer.": {
         "category": "Error",
-        "code": 1048
+        "code": 1048,
+        "isEarly":  true
     },
     "A 'set' accessor must have exactly one parameter.": {
         "category": "Error",

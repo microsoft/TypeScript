@@ -6972,6 +6972,9 @@ module ts {
         }
 
         function checkObjectLiteralMethod(node: MethodDeclaration, contextualMapper?: TypeMapper): Type {
+            // Grammar checking
+            checkGrammarMethod(node);
+
             var uninstantiatedType = checkFunctionExpressionOrObjectLiteralMethod(node, contextualMapper);
             return instantiateTypeWithSingleGenericCallSignature(node, uninstantiatedType, contextualMapper);
         }
@@ -7234,6 +7237,9 @@ module ts {
 
         function checkMethodDeclaration(node: MethodDeclaration) {
             // Grammar checking
+            // Grammar checking for modifiers is done inside the function checkGrammarFunctionLikeDeclaration
+            checkGrammarMethod(node);
+
             if (node.name.kind === SyntaxKind.ComputedPropertyName) {
                 checkGrammarComputedPropertyName(<ComputedPropertyName>node.name);
             }
@@ -10375,6 +10381,43 @@ module ts {
                         return grammarErrorOnNode(accessor.name, Diagnostics.A_set_accessor_parameter_cannot_have_an_initializer);
                     }
                 }
+            }
+        }
+
+        function checkGrammarForDisallowedComputedProperty(node: DeclarationName, message: DiagnosticMessage) {
+            if (node.kind === SyntaxKind.ComputedPropertyName) {
+                return grammarErrorOnNode(node, message);
+            }
+        }
+
+        function checkGrammarMethod(node: MethodDeclaration) {
+            if (checkGrammarFunctionLikeDeclaration(node) ||
+                checkGrammarForBodyInAmbientContext(node.body, /*isConstructor:*/ false) ||
+                checkGrammarForGenerator(node)) {
+                return true;
+            }
+
+            if (node.parent.kind === SyntaxKind.ClassDeclaration) {
+                if (checkGrammarForInvalidQuestionMark(node, node.questionToken, Diagnostics.A_class_member_cannot_be_declared_optional)) {
+                    return true;
+                }
+                // Technically, computed properties in ambient contexts is disallowed
+                // for property declarations and accessors too, not just methods.
+                // However, property declarations disallow computed names in general,
+                // and accessors are not allowed in ambient contexts in general,
+                // so this error only really matters for methods.
+                if (isInAmbientContext(node)) {
+                    return checkGrammarForDisallowedComputedProperty(node.name, Diagnostics.Computed_property_names_are_not_allowed_in_an_ambient_context);
+                }
+                else if (!node.body) {
+                    return checkGrammarForDisallowedComputedProperty(node.name, Diagnostics.Computed_property_names_are_not_allowed_in_method_overloads);
+                }
+            }
+            else if (node.parent.kind === SyntaxKind.InterfaceDeclaration) {
+                return checkGrammarForDisallowedComputedProperty(node.name, Diagnostics.Computed_property_names_are_not_allowed_in_interfaces);
+            }
+            else if (node.parent.kind === SyntaxKind.TypeLiteral) {
+                return checkGrammarForDisallowedComputedProperty(node.name, Diagnostics.Computed_property_names_are_not_allowed_in_type_literals);
             }
         }
 

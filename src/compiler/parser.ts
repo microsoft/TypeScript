@@ -4653,9 +4653,9 @@ module ts {
                 //case SyntaxKind.InterfaceDeclaration:           return checkInterfaceDeclaration(<InterfaceDeclaration>node);
                 //case SyntaxKind.LabeledStatement:               return checkLabeledStatement(<LabeledStatement>node);
                 //case SyntaxKind.PropertyAssignment:             return checkPropertyAssignment(<PropertyAssignment>node);
-                case SyntaxKind.MethodDeclaration:
-                case SyntaxKind.MethodSignature:
-                    return checkMethod(<MethodDeclaration>node);
+                //case SyntaxKind.MethodDeclaration:
+                //case SyntaxKind.MethodSignature:
+                    //return checkMethod(<MethodDeclaration>node);
                 case SyntaxKind.ModuleDeclaration:              return checkModuleDeclaration(<ModuleDeclaration>node);
                 //case SyntaxKind.ObjectLiteralExpression:        return checkObjectLiteralExpression(<ObjectLiteralExpression>node);
                 //case SyntaxKind.NumericLiteral:                 return checkNumericLiteral(<LiteralExpression>node);
@@ -5326,8 +5326,8 @@ module ts {
                 //case SyntaxKind.Constructor:
                 case SyntaxKind.PropertyDeclaration:
                 case SyntaxKind.PropertySignature:
-                case SyntaxKind.MethodDeclaration:
-                case SyntaxKind.MethodSignature:
+                //case SyntaxKind.MethodDeclaration:
+                //case SyntaxKind.MethodSignature:
                 //case SyntaxKind.ClassDeclaration:
                 case SyntaxKind.InterfaceDeclaration:
                 case SyntaxKind.ModuleDeclaration:

@@ -1,5 +1,4 @@
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(4,1): error TS6053: File 'tests/cases/conformance/parser/ecmascript5/typescript.ts' not found.
-tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(867,29): error TS1015: Parameter cannot have question mark and initializer.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(13,22): error TS2304: Cannot find name 'Type'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(14,24): error TS2304: Cannot find name 'ASTFlags'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(17,38): error TS2304: Cannot find name 'CompilerDiagnostics'.
@@ -215,6 +214,7 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(838,24): error 
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(841,61): error TS2304: Cannot find name 'TypeSymbol'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(850,52): error TS2304: Cannot find name 'TokenID'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(863,36): error TS2304: Cannot find name 'TypeFlow'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(867,29): error TS1015: Parameter cannot have question mark and initializer.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(868,38): error TS2304: Cannot find name 'NodeType'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(877,40): error TS2304: Cannot find name 'NodeType'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(891,27): error TS2304: Cannot find name 'VarFlags'.
