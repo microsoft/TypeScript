@@ -7329,7 +7329,10 @@ module ts {
         }
 
         function checkAccessorDeclaration(node: AccessorDeclaration) {
-            // Grammar checking
+            // Grammar checking accessors
+            checkGrammarFunctionLikeDeclaration(node) || checkGrammarAccessor(node);
+
+            // Grammar checking if name is a computed-property
             if (node.name.kind === SyntaxKind.ComputedPropertyName) {
                 checkGrammarComputedPropertyName(<ComputedPropertyName>node.name);
             }
@@ -10328,6 +10331,48 @@ module ts {
                     }
                     else {
                         return grammarErrorOnNode(name, Diagnostics.An_object_literal_cannot_have_property_and_accessor_with_the_same_name);
+                    }
+                }
+            }
+        }
+
+        function checkGrammarAccessor(accessor: MethodDeclaration): boolean {
+            var kind = accessor.kind;
+            if (compilerOptions.target < ScriptTarget.ES5) {
+                return grammarErrorOnNode(accessor.name, Diagnostics.Accessors_are_only_available_when_targeting_ECMAScript_5_and_higher);
+            }
+            else if (isInAmbientContext(accessor)) {
+                return grammarErrorOnNode(accessor.name, Diagnostics.An_accessor_cannot_be_declared_in_an_ambient_context);
+            }
+            else if (accessor.body === undefined) {
+                return grammarErrorAtPos(getSourceFileOfNode(accessor), accessor.end - 1, ";".length, Diagnostics._0_expected, "{");
+            }
+            else if (accessor.typeParameters) {
+                return grammarErrorOnNode(accessor.name, Diagnostics.An_accessor_cannot_have_type_parameters);
+            }
+            else if (kind === SyntaxKind.GetAccessor && accessor.parameters.length) {
+                return grammarErrorOnNode(accessor.name, Diagnostics.A_get_accessor_cannot_have_parameters);
+            }
+            else if (kind === SyntaxKind.SetAccessor) {
+                if (accessor.type) {
+                    return grammarErrorOnNode(accessor.name, Diagnostics.A_set_accessor_cannot_have_a_return_type_annotation);
+                }
+                else if (accessor.parameters.length !== 1) {
+                    return grammarErrorOnNode(accessor.name, Diagnostics.A_set_accessor_must_have_exactly_one_parameter);
+                }
+                else {
+                    var parameter = accessor.parameters[0];
+                    if (parameter.dotDotDotToken) {
+                        return grammarErrorOnNode(parameter.dotDotDotToken, Diagnostics.A_set_accessor_cannot_have_rest_parameter);
+                    }
+                    else if (parameter.flags & NodeFlags.Modifier) {
+                        return grammarErrorOnNode(accessor.name, Diagnostics.A_parameter_property_is_only_allowed_in_a_constructor_implementation);
+                    }
+                    else if (parameter.questionToken) {
+                        return grammarErrorOnNode(parameter.questionToken, Diagnostics.A_set_accessor_cannot_have_an_optional_parameter);
+                    }
+                    else if (parameter.initializer) {
+                        return grammarErrorOnNode(accessor.name, Diagnostics.A_set_accessor_parameter_cannot_have_an_initializer);
                     }
                 }
             }

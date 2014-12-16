@@ -9,7 +9,8 @@
     },
     "'{0}' expected.": {
         "category": "Error",
-        "code": 1005
+        "code": 1005,
+        "isEarly":  true
     },
     "A file cannot have a reference to itself.": {
         "category": "Error",
@@ -176,15 +177,18 @@
     },
     "A 'set' accessor must have exactly one parameter.": {
         "category": "Error",
-        "code": 1049
+        "code": 1049,
+        "isEarly":  true
     },
     "A 'set' accessor cannot have an optional parameter.": {
         "category": "Error",
-        "code": 1051
+        "code": 1051,
+        "isEarly":  true
     },
     "A 'set' accessor parameter cannot have an initializer.": {
         "category": "Error",
-        "code": 1052
+        "code": 1052,
+        "isEarly":  true
     },
     "A 'set' accessor cannot have rest parameter.": {
         "category": "Error",
@@ -265,11 +269,13 @@
     },
     "An accessor cannot have type parameters.": {
         "category": "Error",
-        "code": 1094
+        "code": 1094,
+        "isEarly":  true
     },
     "A 'set' accessor cannot have a return type annotation.": {
         "category": "Error",
-        "code": 1095
+        "code": 1095,
+        "isEarly":  true
     },
     "An index signature must have exactly one parameter.": {
         "category": "Error",

@@ -4648,7 +4648,7 @@ module ts {
                 //case SyntaxKind.ForStatement:                   return checkForStatement(<ForStatement>node);
                 //case SyntaxKind.FunctionDeclaration:            return checkFunctionDeclaration(<FunctionLikeDeclaration>node);
                 //case SyntaxKind.FunctionExpression:             return checkFunctionExpression(<FunctionExpression>node);
-                case SyntaxKind.GetAccessor:                    return checkGetAccessor(<MethodDeclaration>node);
+                //case SyntaxKind.GetAccessor:                    return checkGetAccessor(<MethodDeclaration>node);
                 //case SyntaxKind.HeritageClause:                 return checkHeritageClause(<HeritageClause>node);
                 //case SyntaxKind.InterfaceDeclaration:           return checkInterfaceDeclaration(<InterfaceDeclaration>node);
                 //case SyntaxKind.LabeledStatement:               return checkLabeledStatement(<LabeledStatement>node);
@@ -4666,7 +4666,7 @@ module ts {
                 case SyntaxKind.PropertySignature:
                     return checkProperty(<PropertyDeclaration>node);
                 //case SyntaxKind.ReturnStatement:                return checkReturnStatement(<ReturnStatement>node);
-                case SyntaxKind.SetAccessor:                    return checkSetAccessor(<MethodDeclaration>node);
+                //case SyntaxKind.SetAccessor:                    return checkSetAccessor(<MethodDeclaration>node);
                 case SyntaxKind.SourceFile:                     return checkSourceFile(<SourceFile>node);
                 //case SyntaxKind.ShorthandPropertyAssignment:    return checkShorthandPropertyAssignment(<ShorthandPropertyAssignment>node);
                 //case SyntaxKind.SwitchStatement:                return checkSwitchStatement(<SwitchStatement>node);
@@ -5321,8 +5321,8 @@ module ts {
 
         function checkModifiers(node: Node): boolean {
             switch (node.kind) {
-                case SyntaxKind.GetAccessor:
-                case SyntaxKind.SetAccessor:
+                //case SyntaxKind.GetAccessor:
+                //case SyntaxKind.SetAccessor:
                 //case SyntaxKind.Constructor:
                 case SyntaxKind.PropertyDeclaration:
                 case SyntaxKind.PropertySignature:
