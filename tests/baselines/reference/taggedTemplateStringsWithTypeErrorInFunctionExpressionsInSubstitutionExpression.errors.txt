@@ -1,7 +1,8 @@
 tests/cases/conformance/es6/templates/taggedTemplateStringsWithTypeErrorInFunctionExpressionsInSubstitutionExpression.ts(6,5): error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
+tests/cases/conformance/es6/templates/taggedTemplateStringsWithTypeErrorInFunctionExpressionsInSubstitutionExpression.ts(6,31): error TS2322: Type 'string' is not assignable to type 'number'.
 
 
-==== tests/cases/conformance/es6/templates/taggedTemplateStringsWithTypeErrorInFunctionExpressionsInSubstitutionExpression.ts (1 errors) ====
+==== tests/cases/conformance/es6/templates/taggedTemplateStringsWithTypeErrorInFunctionExpressionsInSubstitutionExpression.ts (2 errors) ====
     
     
     function foo(...rest: any[]) {
@@ -10,3 +11,5 @@ tests/cases/conformance/es6/templates/taggedTemplateStringsWithTypeErrorInFuncti
     foo `${function (x: number) { x = "bad"; } }`;
         ~~~
 !!! error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
+                                  ~
+!!! error TS2322: Type 'string' is not assignable to type 'number'.
