@@ -2217,7 +2217,7 @@ module ts {
 
         // the sole purpose of this checker is to return semantic diagnostics
         // creation is deferred - use getFullTypeCheckChecker to get instance
-        var fullTypeCheckChecker_doNotAccessDirectly: TypeChecker;
+        var diagnosticsProducingTypeChecker_doNotAccessDirectly: TypeChecker;
 
         var useCaseSensitivefilenames = false;
         var sourceFilesByName: Map<SourceFile> = {};
@@ -2239,8 +2239,8 @@ module ts {
             return lookUp(sourceFilesByName, getCanonicalFileName(filename));
         }
 
-        function getFullTypeCheckChecker() {
-            return fullTypeCheckChecker_doNotAccessDirectly || (fullTypeCheckChecker_doNotAccessDirectly = program.getTypeChecker(/*fullTypeCheck*/ true));
+        function getDiagnosticsProducingTypeChecker() {
+            return diagnosticsProducingTypeChecker_doNotAccessDirectly || (diagnosticsProducingTypeChecker_doNotAccessDirectly = program.getTypeChecker(/*produceDiagnostics:*/ true));
         }
 
         function getRuleProvider(options: FormatCodeOptions) {
@@ -2380,8 +2380,8 @@ module ts {
 
             // Now create a new compiler
             program = createProgram(hostfilenames, compilationSettings, createCompilerHost());
-            typeInfoResolver = program.getTypeChecker(/*fullTypeCheckMode*/ false);
-            fullTypeCheckChecker_doNotAccessDirectly = undefined;
+            typeInfoResolver = program.getTypeChecker(/*produceDiagnostics*/ false);
+            diagnosticsProducingTypeChecker_doNotAccessDirectly = undefined;
         }
 
         /**
@@ -2391,8 +2391,8 @@ module ts {
          */
         function cleanupSemanticCache(): void {
             if (program) {
-                typeInfoResolver = program.getTypeChecker(/*fullTypeCheckMode*/ false);
-                fullTypeCheckChecker_doNotAccessDirectly = undefined;
+                typeInfoResolver = program.getTypeChecker(/*produceDiagnostics*/ false);
+                diagnosticsProducingTypeChecker_doNotAccessDirectly = undefined;
             }
         }
 
@@ -2421,7 +2421,7 @@ module ts {
 
             filename = normalizeSlashes(filename)
             var compilerOptions = program.getCompilerOptions();
-            var checker = getFullTypeCheckChecker();
+            var checker = getDiagnosticsProducingTypeChecker();
             var targetSourceFile = getSourceFile(filename);
 
             // Only perform the action per file regardless of '-out' flag as LanguageServiceHost is expected to call this function per file.

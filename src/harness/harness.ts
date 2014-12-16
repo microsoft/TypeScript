@@ -1044,7 +1044,7 @@ module Harness {
                     options.target,
                     useCaseSensitiveFileNames));
 
-                var checker = program.getTypeChecker(/*fullTypeCheckMode*/ true);
+                var checker = program.getTypeChecker(/*produceDiagnostics*/ true);
 
                 var isEmitBlocked = checker.isEmitBlocked();
 

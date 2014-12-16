@@ -9,7 +9,7 @@ module ts {
     /// If fullTypeCheck === true,  then the typechecker should do every possible check to produce all errors
     /// If fullTypeCheck === false, the typechecker can take shortcuts and skip checks that only produce errors.
     /// NOTE: checks that somehow affect decisions being made during typechecking should be executed in both cases.
-    export function createTypeChecker(program: Program, fullTypeCheck: boolean): TypeChecker {
+    export function createTypeChecker(program: Program, produceDiagnostics: boolean): TypeChecker {
         var Symbol = objectAllocator.getSymbolConstructor();
         var Type = objectAllocator.getTypeConstructor();
         var Signature = objectAllocator.getSignatureConstructor();
@@ -4168,7 +4168,7 @@ module ts {
         }
 
         function reportErrorsFromWidening(declaration: Declaration, type: Type) {
-            if (fullTypeCheck && compilerOptions.noImplicitAny && type.flags & TypeFlags.Unwidened) {
+            if (produceDiagnostics && compilerOptions.noImplicitAny && type.flags & TypeFlags.Unwidened) {
                 // Report implicit any error within type if possible, otherwise report error on declaration
                 if (!reportWideningErrorsInType(type)) {
                     reportImplicitAnyError(declaration, type);
@@ -5957,7 +5957,7 @@ module ts {
             // Pick the first candidate that matches the arity. This way we can get a contextual type for cases like:
             //  declare function f(a: { xa: number; xb: number; });
             //  f({ |
-            if (!fullTypeCheck) {
+            if (!produceDiagnostics) {
                 for (var i = 0, n = candidates.length; i < n; i++) {
                     if (hasCorrectArity(node, args, candidates[i])) {
                         return candidates[i];
@@ -6254,7 +6254,7 @@ module ts {
         function checkTypeAssertion(node: TypeAssertion): Type {
             var exprType = checkExpression(node.expression);
             var targetType = getTypeFromTypeNode(node.type);
-            if (fullTypeCheck && targetType !== unknownType) {
+            if (produceDiagnostics && targetType !== unknownType) {
                 var widenedType = getWidenedType(exprType);
                 if (!(isTypeAssignableTo(targetType, widenedType))) {
                     checkTypeAssignableTo(exprType, targetType, node, Diagnostics.Neither_type_0_nor_type_1_is_assignable_to_the_other);
@@ -6340,7 +6340,7 @@ module ts {
         // must have at least one return statement somewhere in its body.
         // An exception to this rule is if the function implementation consists of a single 'throw' statement.
         function checkIfNonVoidFunctionHasReturnExpressionsOrSingleThrowStatment(func: FunctionLikeDeclaration, returnType: Type): void {
-            if (!fullTypeCheck) {
+            if (!produceDiagnostics) {
                 return;
             }
 
@@ -6406,7 +6406,7 @@ module ts {
                 }
             }
 
-            if (fullTypeCheck && node.kind !== SyntaxKind.MethodDeclaration && node.kind !== SyntaxKind.MethodSignature) {
+            if (produceDiagnostics && node.kind !== SyntaxKind.MethodDeclaration && node.kind !== SyntaxKind.MethodSignature) {
                 checkCollisionWithCapturedSuperVariable(node, (<FunctionExpression>node).name);
                 checkCollisionWithCapturedThisVariable(node,(<FunctionExpression>node).name);
             }
@@ -6813,7 +6813,7 @@ module ts {
             }
 
             function checkAssignmentOperator(valueType: Type): void {
-                if (fullTypeCheck && operator >= SyntaxKind.FirstAssignment && operator <= SyntaxKind.LastAssignment) {
+                if (produceDiagnostics && operator >= SyntaxKind.FirstAssignment && operator <= SyntaxKind.LastAssignment) {
                     // TypeScript 1.0 spec (April 2014): 4.17
                     // An assignment of the form
                     //    VarExpr = ValueExpr
@@ -6996,7 +6996,7 @@ module ts {
 
         function checkTypeParameter(node: TypeParameterDeclaration) {
             checkSourceElement(node.constraint);
-            if (fullTypeCheck) {
+            if (produceDiagnostics) {
                 checkTypeParameterHasIllegalReferencesInConstraint(node);
                 checkTypeNameIsReserved(node.name, Diagnostics.Type_parameter_name_cannot_be_0);
             }
@@ -7025,7 +7025,7 @@ module ts {
             if (node.type) {
                 checkSourceElement(node.type);
             }
-            if (fullTypeCheck) {
+            if (produceDiagnostics) {
                 checkCollisionWithArgumentsInGeneratedCode(node);
                 if (compilerOptions.noImplicitAny && !node.type) {
                     switch (node.kind) {
@@ -7109,7 +7109,7 @@ module ts {
                 return;
             }
 
-            if (!fullTypeCheck) {
+            if (!produceDiagnostics) {
                 return;
             }
 
@@ -7177,7 +7177,7 @@ module ts {
         }
 
         function checkAccessorDeclaration(node: AccessorDeclaration) {
-            if (fullTypeCheck) {
+            if (produceDiagnostics) {
                 if (node.kind === SyntaxKind.GetAccessor) {
                     if (!isInAmbientContext(node) && node.body && !(bodyContainsAReturnStatement(<Block>node.body) || bodyContainsSingleThrowStatement(<Block>node.body))) {
                         error(node.name, Diagnostics.A_get_accessor_must_return_a_value_or_consist_of_a_single_throw_statement);
@@ -7220,7 +7220,7 @@ module ts {
                 for (var i = 0; i < len; i++) {
                     checkSourceElement(node.typeArguments[i]);
                     var constraint = getConstraintOfTypeParameter((<TypeReference>type).target.typeParameters[i]);
-                    if (fullTypeCheck && constraint) {
+                    if (produceDiagnostics && constraint) {
                         var typeArgument = (<TypeReference>type).typeArguments[i];
                         checkTypeAssignableTo(typeArgument, constraint, node, Diagnostics.Type_0_does_not_satisfy_the_constraint_1);
                     }
@@ -7234,7 +7234,7 @@ module ts {
 
         function checkTypeLiteral(node: TypeLiteralNode) {
             forEach(node.members, checkSourceElement);
-            if (fullTypeCheck) {
+            if (produceDiagnostics) {
                 var type = getTypeFromTypeLiteralOrFunctionOrConstructorTypeNode(node);
                 checkIndexConstraints(type);
                 checkTypeForDuplicateIndexSignatures(node);
@@ -7258,7 +7258,7 @@ module ts {
         }
 
         function checkSpecializedSignatureDeclaration(signatureDeclarationNode: SignatureDeclaration): void {
-            if (!fullTypeCheck) {
+            if (!produceDiagnostics) {
                 return;
             }
             var signature = getSignatureFromDeclaration(signatureDeclarationNode);
@@ -7314,7 +7314,7 @@ module ts {
         }
 
         function checkFunctionOrConstructorSymbol(symbol: Symbol): void {
-            if (!fullTypeCheck) {
+            if (!produceDiagnostics) {
                 return;
             }
 
@@ -7524,7 +7524,7 @@ module ts {
         }
 
         function checkExportsOnMergedDeclarations(node: Node): void {
-            if (!fullTypeCheck) {
+            if (!produceDiagnostics) {
                 return;
             }
 
@@ -7599,7 +7599,7 @@ module ts {
 
         function checkFunctionDeclaration(node: FunctionDeclaration): void {
             checkFunctionLikeDeclaration(node);
-            if (fullTypeCheck) {
+            if (produceDiagnostics) {
                 checkCollisionWithCapturedSuperVariable(node, node.name);
                 checkCollisionWithCapturedThisVariable(node, node.name);
                 checkCollisionWithRequireExportsInGeneratedCode(node, node.name);
@@ -7999,7 +7999,7 @@ module ts {
         function checkSwitchStatement(node: SwitchStatement) {
             var expressionType = checkExpression(node.expression);
             forEach(node.clauses, clause => {
-                if (fullTypeCheck && clause.kind === SyntaxKind.CaseClause) {
+                if (produceDiagnostics && clause.kind === SyntaxKind.CaseClause) {
                     var caseClause = <CaseClause>clause;
                     // TypeScript 1.0 spec (April 2014):5.9
                     // In a 'switch' statement, each 'case' expression must be of a type that is assignable to or from the type of the 'switch' expression.
@@ -8119,7 +8119,7 @@ module ts {
                     var node = typeParameterDeclarations[i];
                     checkTypeParameter(node);
 
-                    if (fullTypeCheck) {
+                    if (produceDiagnostics) {
                         for (var j = 0; j < i; j++) {
                             if (typeParameterDeclarations[j].symbol === node.symbol) {
                                 error(node.name, Diagnostics.Duplicate_identifier_0, declarationNameToString(node.name));
@@ -8145,7 +8145,7 @@ module ts {
                 checkTypeReference(baseTypeNode);
             }
             if (type.baseTypes.length) {
-                if (fullTypeCheck) {
+                if (produceDiagnostics) {
                     var baseType = type.baseTypes[0];
                     checkTypeAssignableTo(type, baseType, node.name, Diagnostics.Class_0_incorrectly_extends_base_class_1);
                     var staticBaseType = getTypeOfSymbol(baseType.symbol);
@@ -8166,7 +8166,7 @@ module ts {
             if (implementedTypeNodes) {
                 forEach(implementedTypeNodes, typeRefNode => {
                     checkTypeReference(typeRefNode);
-                    if (fullTypeCheck) {
+                    if (produceDiagnostics) {
                         var t = getTypeFromTypeReferenceNode(typeRefNode);
                         if (t !== unknownType) {
                             var declaredType = (t.flags & TypeFlags.Reference) ? (<TypeReference>t).target : t;
@@ -8182,7 +8182,7 @@ module ts {
             }
 
             forEach(node.members, checkSourceElement);
-            if (fullTypeCheck) {
+            if (produceDiagnostics) {
                 checkIndexConstraints(type);
                 checkTypeForDuplicateIndexSignatures(node);
             }
@@ -8335,7 +8335,7 @@ module ts {
 
         function checkInterfaceDeclaration(node: InterfaceDeclaration) {
             checkTypeParameters(node.typeParameters);
-            if (fullTypeCheck) {
+            if (produceDiagnostics) {
                 checkTypeNameIsReserved(node.name, Diagnostics.Interface_name_cannot_be_0);
 
                 checkExportsOnMergedDeclarations(node);
@@ -8362,7 +8362,7 @@ module ts {
             forEach(getInterfaceBaseTypeNodes(node), checkTypeReference);
             forEach(node.members, checkSourceElement);
 
-            if (fullTypeCheck) {
+            if (produceDiagnostics) {
                 checkTypeForDuplicateIndexSignatures(node);
             }
         }
@@ -8531,7 +8531,7 @@ module ts {
         }
 
         function checkEnumDeclaration(node: EnumDeclaration) {
-            if (!fullTypeCheck) {
+            if (!produceDiagnostics) {
                 return;
             }
 
@@ -8598,7 +8598,7 @@ module ts {
         }
 
         function checkModuleDeclaration(node: ModuleDeclaration) {
-            if (fullTypeCheck) {
+            if (produceDiagnostics) {
                 checkCollisionWithCapturedThisVariable(node, node.name);
                 checkCollisionWithRequireExportsInGeneratedCode(node, node.name);
                 checkExportsOnMergedDeclarations(node);
@@ -8919,7 +8919,7 @@ module ts {
         }
 
         function getSortedDiagnostics(): Diagnostic[]{
-            Debug.assert(fullTypeCheck, "diagnostics are available only in the full typecheck mode");
+            Debug.assert(produceDiagnostics, "diagnostics are available only in the full typecheck mode");
 
             if (diagnosticsModified) {
                 diagnostics.sort(compareDiagnostics);
@@ -8929,7 +8929,8 @@ module ts {
             return diagnostics;
         }
 
-        function getDiagnostics(sourceFile?: SourceFile): Diagnostic[]{
+        function getDiagnostics(sourceFile?: SourceFile): Diagnostic[] {
+            throwIfNonDiagnosticsProducing();
             if (sourceFile) {
                 checkSourceFile(sourceFile);
                 return filter(getSortedDiagnostics(), d => d.file === sourceFile);
@@ -8938,8 +8939,15 @@ module ts {
             return getSortedDiagnostics();
         }
 
-        function getGlobalDiagnostics(): Diagnostic[] {
+        function getGlobalDiagnostics(): Diagnostic[]{
+            throwIfNonDiagnosticsProducing();
             return filter(getSortedDiagnostics(), d => !d.file);
+        }
+
+        function throwIfNonDiagnosticsProducing() {
+            if (!produceDiagnostics) {
+                throw new Error("Trying to get diagnostics from a type checker that does not produce them.");
+            }
         }
 
         // Language service support

@@ -89,15 +89,15 @@ module ts {
         verifyCompilerOptions();
         errors.sort(compareDiagnostics);
 
-        var fullTypeChecker: TypeChecker;
-        var nonFullTypeChecker: TypeChecker;
+        var diagnosticsProducingTypeChecker: TypeChecker;
+        var noDiagnosticsTypeChecker: TypeChecker;
 
-        function getTypeChecker(full: boolean) {
-            if (full) {
-                return fullTypeChecker || (fullTypeChecker = createTypeChecker(program, full));
+        function getTypeChecker(produceDiagnostics: boolean) {
+            if (produceDiagnostics) {
+                return diagnosticsProducingTypeChecker || (diagnosticsProducingTypeChecker = createTypeChecker(program, produceDiagnostics));
             }
             else {
-                return nonFullTypeChecker || (nonFullTypeChecker = createTypeChecker(program, full));
+                return noDiagnosticsTypeChecker || (noDiagnosticsTypeChecker = createTypeChecker(program, produceDiagnostics));
             }
         }
 
@@ -116,14 +116,14 @@ module ts {
         return program;
 
         function getDeclarationDiagnostics(targetSourceFile: SourceFile): Diagnostic[]{
-            var fullTypeChecker = getTypeChecker(/*full:*/ true);
+            var fullTypeChecker = getTypeChecker(/*produceDiagnostics:*/true);
             fullTypeChecker.getDiagnostics(targetSourceFile);
             var resolver = fullTypeChecker.getEmitResolver();
             return ts.getDeclarationDiagnostics(program, resolver, targetSourceFile);
         }
 
         function invokeEmitter(targetSourceFile?: SourceFile) {
-            var resolver = getTypeChecker(/*full:*/ true).getEmitResolver();
+            var resolver = getTypeChecker(/*produceDiagnostics:*/true).getEmitResolver();
             return emitFiles(resolver, targetSourceFile);
         }
 
