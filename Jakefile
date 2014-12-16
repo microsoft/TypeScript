@@ -94,6 +94,7 @@ var definitionsRoots = [
     "compiler/scanner.d.ts",
     "compiler/parser.d.ts",
     "compiler/checker.d.ts",
+    "compiler/program.d.ts",
     "services/services.d.ts",
 ];
 

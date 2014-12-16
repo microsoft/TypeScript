@@ -906,6 +906,12 @@ module ts {
         identifiers: Map<string>;
     }
 
+    export interface ScriptReferenceHost {
+        getCompilerOptions(): CompilerOptions;
+        getSourceFile(filename: string): SourceFile;
+        getCurrentDirectory(): string;
+    }
+
     export interface Program extends ScriptReferenceHost {
         getSourceFiles(): SourceFile[];
         getCompilerHost(): CompilerHost;
@@ -972,24 +978,6 @@ module ts {
 
         getSourceFiles(): SourceFile[];
         getSourceFile(filename: string): SourceFile;
-        //getSourceFiles(): SourceFile[];
-        //getCompilerOptions(): CompilerOptions;
-
-        //getDiagnostics(sourceFile?: SourceFile): Diagnostic[];
-        //getGlobalDiagnostics(): Diagnostic[];
-        //getDeclarationDiagnostics(sourceFile: SourceFile): Diagnostic[];
-
-        //// Gets a type checker that can be used to semantically analyze source fils in the program.
-        //// The 'produceDiagnostics' flag determines if the checker will produce diagnostics while
-        //// analyzing the code.  It can be set to 'false' to make many type checking operaitons 
-        //// faster.  With this flag set, the checker can avoid codepaths only necessary to produce 
-        //// diagnostics, but not necessary to answer semantic questions about the code.
-        ////
-        //// If 'produceDiagnostics' is false, then any calls to get diagnostics from the TypeChecker
-        //// will throw an invalid operation exception.
-        //getTypeChecker(produceDiagnostics: boolean): TypeChecker;
-        //getCommonSourceDirectory(): string;
-        //emitFiles(targetSourceFile?: SourceFile): EmitResult;
     }
 
     export interface TypeChecker {
@@ -1098,23 +1086,6 @@ module ts {
 
     export interface SymbolAccessiblityResult extends SymbolVisibilityResult {
         errorModuleName?: string // If the symbol is not visible from module, module's name
-    }
-
-    export interface ScriptReferenceHost {
-        getCompilerOptions(): CompilerOptions;
-        getSourceFile(filename: string): SourceFile;
-        getCurrentDirectory(): string;
-    }
-
-    export interface EmitHost extends ScriptReferenceHost {
-        getSourceFiles(): SourceFile[];
-        isEmitBlocked(sourceFile?: SourceFile): boolean;
-
-        getCommonSourceDirectory(): string;
-        getCanonicalFileName(fileName: string): string;
-        getNewLine(): string;
-
-        writeFile(filename: string, data: string, writeByteOrderMark: boolean, onError?: (message: string) => void): void;
     }
 
     export interface EmitResolver {

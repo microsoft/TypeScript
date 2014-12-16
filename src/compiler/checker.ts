@@ -3,7 +3,7 @@
 module ts {
     var nextSymbolId = 1;
     var nextNodeId = 1;
-    var nextMergeId = 1;    
+    var nextMergeId = 1;
 
     /// fullTypeCheck denotes if this instance of the typechecker will be used to get semantic diagnostics.
     /// If fullTypeCheck === true,  then the typechecker should do every possible check to produce all errors
