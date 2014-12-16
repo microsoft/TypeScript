@@ -1168,7 +1168,17 @@ module Harness {
             return errorOutput;
         }
 
+        function compareDiagnostics(d1: HarnessDiagnostic, d2: HarnessDiagnostic) {
+            return ts.compareValues(d1.filename, d2.filename) ||
+                ts.compareValues(d1.start, d2.start) ||
+                ts.compareValues(d1.end, d2.end) ||
+                ts.compareValues(d1.code, d2.code) ||
+                ts.compareValues(d1.message, d2.message) ||
+                0;
+        }
+
         export function getErrorBaseline(inputFiles: { unitName: string; content: string }[], diagnostics: HarnessDiagnostic[]) {
+            diagnostics.sort(compareDiagnostics);
 
             var outputLines: string[] = [];
             // Count up all the errors we find so we don't miss any

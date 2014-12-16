@@ -1,16 +1,16 @@
-tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ArgumentLists/parserErrorRecovery_ArgumentList5.ts(2,9): error TS1009: Trailing comma not allowed.
 tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ArgumentLists/parserErrorRecovery_ArgumentList5.ts(2,4): error TS2304: Cannot find name 'bar'.
 tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ArgumentLists/parserErrorRecovery_ArgumentList5.ts(2,8): error TS2304: Cannot find name 'a'.
+tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ArgumentLists/parserErrorRecovery_ArgumentList5.ts(2,9): error TS1009: Trailing comma not allowed.
 
 
 ==== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ArgumentLists/parserErrorRecovery_ArgumentList5.ts (3 errors) ====
     function foo() {
        bar(a,)
-            ~
-!!! error TS1009: Trailing comma not allowed.
        ~~~
 !!! error TS2304: Cannot find name 'bar'.
            ~
 !!! error TS2304: Cannot find name 'a'.
+            ~
+!!! error TS1009: Trailing comma not allowed.
        return;
     }
