@@ -234,10 +234,8 @@ module ts {
             parent = node;
             if (symbolKind & SymbolFlags.IsContainer) {
                 container = node;
-                Debug.assert(container.nextContainer === undefined);
 
                 if (lastContainer) {
-                    Debug.assert(lastContainer.nextContainer === undefined);
                     lastContainer.nextContainer = container;
                 }
 
