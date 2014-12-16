@@ -8000,7 +8000,10 @@ module ts {
             // Grammar checking
             // TODO (yuisu) : Revisit this check once move all grammar checking
             if (node.kind === SyntaxKind.BindingElement) {
-                checkGrammarBindingElement(<BindingElement>node);
+                checkGrammarEvalOrArgumentsInStrictMode(node, <Identifier>node.name);
+            }
+            else if (node.kind === SyntaxKind.VariableDeclaration) {
+                checkGrammarVariableDeclaration(<VariableDeclaration>node);
             }
 
             checkSourceElement(node.type);
@@ -8059,6 +8062,9 @@ module ts {
         }
 
         function checkVariableStatement(node: VariableStatement) {
+            // Grammar checking
+            checkGrammarModifiers(node) || checkGrammarVariableDeclarations(node, node.declarations) || checkGrammarForDisallowedLetOrConstStatement(node);
+
             forEach(node.declarations, checkSourceElement);
         }
 
@@ -8091,7 +8097,6 @@ module ts {
         }
 
         function checkForInStatement(node: ForInStatement) {
-
             // TypeScript 1.0 spec  (April 2014): 5.4
             // In a 'for-in' statement of the form
             // for (var VarDecl in Expr) Statement
@@ -10132,12 +10137,6 @@ module ts {
                 checkGrammarForOmittedArgument(node, arguments);
         }
 
-        function checkGrammarBindingElement(node: BindingElement) {
-            // It is a SyntaxError if a VariableDeclaration or VariableDeclarationNoIn occurs within strict code
-            // and its Identifier is eval or arguments
-            checkGrammarEvalOrArgumentsInStrictMode(node, <Identifier>node.name);
-        }
-
         function checkGrammarHeritageClause(node: HeritageClause): boolean {
             var types = node.types;
             if (checkGrammarForDisallowedTrailingComma(types)) {
@@ -10384,6 +10383,80 @@ module ts {
                     ? Diagnostics.A_break_statement_can_only_be_used_within_an_enclosing_iteration_or_switch_statement
                     : Diagnostics.A_continue_statement_can_only_be_used_within_an_enclosing_iteration_statement;
                 return grammarErrorOnNode(node, message)
+            }
+        }
+
+        function checkGrammarVariableDeclaration(node: VariableDeclaration) {
+            if (isInAmbientContext(node)) {
+                if (isBindingPattern(node.name)) {
+                    return grammarErrorOnNode(node, Diagnostics.Destructuring_declarations_are_not_allowed_in_ambient_contexts);
+                }
+                if (node.initializer) {
+                    // Error on equals token which immediate precedes the initializer
+                    return grammarErrorAtPos(getSourceFileOfNode(node), node.initializer.pos - 1, 1, Diagnostics.Initializers_are_not_allowed_in_ambient_contexts);
+                }
+            }
+            else {
+                if (!node.initializer) {
+                    if (isBindingPattern(node.name) && !isBindingPattern(node.parent)) {
+                        return grammarErrorOnNode(node, Diagnostics.A_destructuring_declaration_must_have_an_initializer);
+                    }
+                    if (isConst(node)) {
+                        return grammarErrorOnNode(node, Diagnostics.const_declarations_must_be_initialized);
+                    }
+                }
+            }
+            // It is a SyntaxError if a VariableDeclaration or VariableDeclarationNoIn occurs within strict code 
+            // and its Identifier is eval or arguments 
+            return  checkGrammarEvalOrArgumentsInStrictMode(node, <Identifier>node.name);
+        }
+
+        function checkGrammarVariableDeclarations(variableStatement: VariableStatement, declarations: NodeArray<VariableDeclaration>): boolean {
+            if (declarations) {
+                if (checkGrammarForDisallowedTrailingComma(declarations)) {
+                    return true;
+                }
+
+                if (!declarations.length) {
+                    return grammarErrorAtPos(getSourceFileOfNode(variableStatement), declarations.pos, declarations.end - declarations.pos, Diagnostics.Variable_declaration_list_cannot_be_empty);
+                }
+
+                var decl = declarations[0];
+                if (compilerOptions.target < ScriptTarget.ES6) {
+                    if (isLet(decl)) {
+                        return grammarErrorOnFirstToken(decl, Diagnostics.let_declarations_are_only_available_when_targeting_ECMAScript_6_and_higher);
+                    }
+                    else if (isConst(decl)) {
+                        return grammarErrorOnFirstToken(decl, Diagnostics.const_declarations_are_only_available_when_targeting_ECMAScript_6_and_higher);
+                    }
+                }
+            }
+        }
+
+        function allowLetAndConstDeclarations(parent: Node): boolean {
+            switch (parent.kind) {
+                case SyntaxKind.IfStatement:
+                case SyntaxKind.DoStatement:
+                case SyntaxKind.WhileStatement:
+                case SyntaxKind.WithStatement:
+                case SyntaxKind.ForStatement:
+                case SyntaxKind.ForInStatement:
+                    return false;
+                case SyntaxKind.LabeledStatement:
+                    return allowLetAndConstDeclarations(parent.parent);
+            }
+
+            return true;
+        }
+
+        function checkGrammarForDisallowedLetOrConstStatement(node: VariableStatement) {
+            if (!allowLetAndConstDeclarations(node.parent)) {
+                if (isLet(node)) {
+                    return grammarErrorOnNode(node, Diagnostics.let_declarations_can_only_be_declared_inside_a_block);
+                }
+                else if (isConst(node)) {
+                    return grammarErrorOnNode(node, Diagnostics.const_declarations_can_only_be_declared_inside_a_block);
+                }
             }
         }
 

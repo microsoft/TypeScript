@@ -4673,8 +4673,8 @@ module ts {
                 //case SyntaxKind.TaggedTemplateExpression:       return checkTaggedTemplateExpression(<TaggedTemplateExpression>node);
                 //case SyntaxKind.ThrowStatement:                 return checkThrowStatement(<ThrowStatement>node);
                 //case SyntaxKind.TypeReference:                  return checkTypeReference(<TypeReferenceNode>node);
-                case SyntaxKind.VariableDeclaration:            return checkVariableDeclaration(<VariableDeclaration>node);
-                case SyntaxKind.VariableStatement:              return checkVariableStatement(<VariableStatement>node);
+                //case SyntaxKind.VariableDeclaration:            return checkVariableDeclaration(<VariableDeclaration>node);
+                //case SyntaxKind.VariableStatement:              return checkVariableStatement(<VariableStatement>node);
                 //case SyntaxKind.WithStatement:                  return checkWithStatement(<WithStatement>node);
                 //case SyntaxKind.YieldExpression:                return checkYieldExpression(<YieldExpression>node);
             }
@@ -5333,7 +5333,7 @@ module ts {
                 case SyntaxKind.ModuleDeclaration:
                 //case SyntaxKind.EnumDeclaration:
                 case SyntaxKind.ExportAssignment:
-                case SyntaxKind.VariableStatement:
+                //case SyntaxKind.VariableStatement:
                 case SyntaxKind.FunctionDeclaration:
                 case SyntaxKind.TypeAliasDeclaration:
                 case SyntaxKind.ImportDeclaration:
