@@ -4146,38 +4146,39 @@ module ts {
 
         // DECLARATIONS
 
-        function parseBindingElement(context: ParsingContext): BindingElement {
-            if (context === ParsingContext.ArrayBindingElements && token === SyntaxKind.CommaToken) {
+        function parseArrayBindingElement(): BindingElement {
+            if (token === SyntaxKind.CommaToken) {
                 return <BindingElement>createNode(SyntaxKind.OmittedExpression);
             }
+
             var node = <BindingElement>createNode(SyntaxKind.BindingElement);
-            if (context === ParsingContext.ObjectBindingElements) {
-                // TODO(andersh): Handle computed properties
-                var id = parsePropertyName();
-                if (id.kind === SyntaxKind.Identifier && token !== SyntaxKind.ColonToken) {
-                    node.name = <Identifier>id;
-                }
-                else {
-                    parseExpected(SyntaxKind.ColonToken);
-                    node.propertyName = <Identifier>id;
-                    node.name = parseIdentifierOrPattern();
-                }
-            }
-            else {
-                node.name = parseIdentifierOrPattern();
-            }
+            node.name = parseIdentifierOrPattern();
             node.initializer = parseInitializer(/*inParameter*/ false);
             return finishNode(node);
         }
 
-        function parseBindingList(context: ParsingContext): NodeArray<BindingElement> {
-            return parseDelimitedList(context, () => parseBindingElement(context));
+        function parseObjectBindingElement(): BindingElement {
+            var node = <BindingElement>createNode(SyntaxKind.BindingElement);
+
+            // TODO(andersh): Handle computed properties
+            var id = parsePropertyName();
+            if (id.kind === SyntaxKind.Identifier && token !== SyntaxKind.ColonToken) {
+                node.name = <Identifier>id;
+            }
+            else {
+                parseExpected(SyntaxKind.ColonToken);
+                node.propertyName = <Identifier>id;
+                node.name = parseIdentifierOrPattern();
+            }
+
+            node.initializer = parseInitializer(/*inParameter*/ false);
+            return finishNode(node);
         }
 
         function parseObjectBindingPattern(): BindingPattern {
             var node = <BindingPattern>createNode(SyntaxKind.ObjectBindingPattern);
             parseExpected(SyntaxKind.OpenBraceToken);
-            node.elements = parseBindingList(ParsingContext.ObjectBindingElements);
+            node.elements = parseDelimitedList(ParsingContext.ObjectBindingElements, parseObjectBindingElement);
             parseExpected(SyntaxKind.CloseBraceToken);
             return finishNode(node);
         }
@@ -4185,7 +4186,7 @@ module ts {
         function parseArrayBindingPattern(): BindingPattern {
             var node = <BindingPattern>createNode(SyntaxKind.ArrayBindingPattern);
             parseExpected(SyntaxKind.OpenBracketToken);
-            node.elements = parseBindingList(ParsingContext.ArrayBindingElements);
+            node.elements = parseDelimitedList(ParsingContext.ArrayBindingElements, parseArrayBindingElement);
             parseExpected(SyntaxKind.CloseBracketToken);
             return finishNode(node);
         }

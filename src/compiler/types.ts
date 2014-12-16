@@ -1233,6 +1233,7 @@ module ts {
         isVisible?: boolean;              // Is this node visible
         localModuleName?: string;         // Local name for module instance
         assignmentChecks?: Map<boolean>;  // Cache of assignment checks
+        importOnRightSide?: Symbol;       // for import declarations - import that appear on the right side
     }
 
     export const enum TypeFlags {
