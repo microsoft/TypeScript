@@ -2669,41 +2669,35 @@ module ts {
         }
 
         function parsePrimaryExpression(): PrimaryExpression {
-            if (token === SyntaxKind.ThisKeyword ||
-                token === SyntaxKind.SuperKeyword ||
-                token === SyntaxKind.NullKeyword ||
-                token === SyntaxKind.TrueKeyword ||
-                token === SyntaxKind.FalseKeyword) {
-                return parseTokenNode<PrimaryExpression>();
-            }
-            else if (token === SyntaxKind.NumericLiteral ||
-                token === SyntaxKind.StringLiteral ||
-                token === SyntaxKind.NoSubstitutionTemplateLiteral) {
-                return parseLiteralNode();
-            }
-            else if (token === SyntaxKind.OpenParenToken) {
-                return parseParenthesizedExpression();
-            }
-            else if (token === SyntaxKind.OpenBracketToken) {
-                return parseArrayLiteralExpression();
-            }
-            else if (token === SyntaxKind.OpenBraceToken) {
-                return parseObjectLiteralExpression();
-            }
-            else if (token === SyntaxKind.FunctionKeyword) {
-                return parseFunctionExpression();
-            }
-            else if (token === SyntaxKind.NewKeyword) {
-                return parseNewExpression();
-            }
-            else if (token === SyntaxKind.SlashToken ||
-                token === SyntaxKind.SlashEqualsToken) {
-                if (reScanSlashToken() === SyntaxKind.RegularExpressionLiteral) {
+            switch (token) {
+                case SyntaxKind.NumericLiteral:
+                case SyntaxKind.StringLiteral:
+                case SyntaxKind.NoSubstitutionTemplateLiteral:
                     return parseLiteralNode();
-                }
-            }
-            else if (token === SyntaxKind.TemplateHead) {
-                return parseTemplateExpression();
+                case SyntaxKind.ThisKeyword:
+                case SyntaxKind.SuperKeyword:
+                case SyntaxKind.NullKeyword:
+                case SyntaxKind.TrueKeyword:
+                case SyntaxKind.FalseKeyword:
+                    return parseTokenNode<PrimaryExpression>();
+                case SyntaxKind.OpenParenToken:
+                    return parseParenthesizedExpression();
+                case SyntaxKind.OpenBracketToken:
+                    return parseArrayLiteralExpression();
+                case SyntaxKind.OpenBraceToken:
+                    return parseObjectLiteralExpression();
+                case SyntaxKind.FunctionKeyword:
+                    return parseFunctionExpression();
+                case SyntaxKind.NewKeyword:
+                    return parseNewExpression();
+                case SyntaxKind.SlashToken:
+                case SyntaxKind.SlashEqualsToken:
+                    if (reScanSlashToken() === SyntaxKind.RegularExpressionLiteral) {
+                        return parseLiteralNode();
+                    }
+                    break;
+                case SyntaxKind.TemplateHead:
+                    return parseTemplateExpression();
             }
 
             return parseIdentifier(Diagnostics.Expression_expected);
