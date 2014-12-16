@@ -1,12 +1,17 @@
 // @target: ES6
 
-function tempTag1<T>(templateStrs: TemplateStringsArray, f: (x: T) => T, x: T): T;
-function tempTag1<T>(templateStrs: TemplateStringsArray, f: (x: T) => T, h: (y: T) => T, x: T): T;
+type FuncType = (x: <T>(p: T) => T) => typeof x;
+
+function tempTag1<T>(templateStrs: TemplateStringsArray, f: FuncType, x: T): T;
+function tempTag1<T>(templateStrs: TemplateStringsArray, f: FuncType, h: FuncType, x: T): T;
 function tempTag1<T>(...rest: any[]): T {
     return undefined;
 }
 
-tempTag1 `${ x => x }${ 10 }`;
-tempTag1 `${ x => x }${ y => y }${ 10 }`;
-tempTag1 `${ x => x }${ (y: number) => y }${ undefined }`;
-tempTag1 `${ (x: number) => x }${ y => y }${ undefined }`;
+// If contextual typing takes place, these functions should work.
+// Otherwise, the arrow functions' parameters will be typed as 'any',
+// and it is an error to invoke an any-typed value with type arguments,
+// so this test will error.
+tempTag1 `${ x => { x<number>(undefined); return x; }                   }${ y => { y<number>(undefined); return y; }                  }${ 10 }`;
+tempTag1 `${ x => { x<number>(undefined); return x; }                   }${ (y: <T>(p: T) => T) => { y<number>(undefined); return y } }${ undefined }`;
+tempTag1 `${ (x: <T>(p: T) => T) => { x<number>(undefined); return x; } }${ y => { y<number>(undefined); return y; }                  }${ undefined }`;
