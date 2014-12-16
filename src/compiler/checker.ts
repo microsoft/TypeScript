@@ -7157,7 +7157,7 @@ module ts {
                 checkGrammarIndexSignature(<SignatureDeclaration>node);
             }
             // TODO (yuisu): Remove this check in else-if when SyntaxKind.Construct is moved and ambient context is handled
-            else  if (node.kind === SyntaxKind.FunctionType || node.kind === SyntaxKind.ConstructorType ||
+            else  if (node.kind === SyntaxKind.FunctionType || node.kind === SyntaxKind.FunctionDeclaration || node.kind === SyntaxKind.ConstructorType ||
                       node.kind === SyntaxKind.CallSignature || node.kind === SyntaxKind.Constructor ||
                       node.kind === SyntaxKind.ConstructSignature){
                 checkGrammarFunctionLikeDeclaration(<FunctionLikeDeclaration>node);
@@ -7764,7 +7764,11 @@ module ts {
         }
 
         function checkFunctionDeclaration(node: FunctionDeclaration): void {
+            // Grammar Checking, check signature of function declaration as checkFunctionLikeDeclaration call checkGarmmarFunctionLikeDeclaration
             checkFunctionLikeDeclaration(node);
+            //Grammar check other component of the functionDeclaration
+            checkGrammarFunctionName(node.name) || checkGrammarForBodyInAmbientContext(node.body, /*isConstructor*/ false) || checkGrammarForGenerator(node);
+
             if (fullTypeCheck) {
                 checkCollisionWithCapturedSuperVariable(node, node.name);
                 checkCollisionWithCapturedThisVariable(node, node.name);

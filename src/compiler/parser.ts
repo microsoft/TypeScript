@@ -4646,7 +4646,7 @@ module ts {
                 //case SyntaxKind.ExternalModuleReference:        return checkExternalModuleReference(<ExternalModuleReference>node);
                 //case SyntaxKind.ForInStatement:                 return checkForInStatement(<ForInStatement>node);
                 //case SyntaxKind.ForStatement:                   return checkForStatement(<ForStatement>node);
-                case SyntaxKind.FunctionDeclaration:            return checkFunctionDeclaration(<FunctionLikeDeclaration>node);
+                //case SyntaxKind.FunctionDeclaration:            return checkFunctionDeclaration(<FunctionLikeDeclaration>node);
                 //case SyntaxKind.FunctionExpression:             return checkFunctionExpression(<FunctionExpression>node);
                 case SyntaxKind.GetAccessor:                    return checkGetAccessor(<MethodDeclaration>node);
                 //case SyntaxKind.HeritageClause:                 return checkHeritageClause(<HeritageClause>node);
@@ -5334,7 +5334,7 @@ module ts {
                 //case SyntaxKind.EnumDeclaration:
                 case SyntaxKind.ExportAssignment:
                 //case SyntaxKind.VariableStatement:
-                case SyntaxKind.FunctionDeclaration:
+                //case SyntaxKind.FunctionDeclaration:
                 case SyntaxKind.TypeAliasDeclaration:
                 case SyntaxKind.ImportDeclaration:
                 //case SyntaxKind.Parameter:
