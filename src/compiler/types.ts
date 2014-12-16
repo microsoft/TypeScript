@@ -323,14 +323,12 @@ module ts {
 
         // Context flags computed by aggregating child flags upwards.
 
-        // If this node, or any of it's children (transitively) contain an error.  
+        // Used during incremental parsing to determine if this node or any of its children had an 
+        // error.  Computed only once and then cached.
         ThisNodeOrAnySubNodesHasError = 1 << 5,
 
-        // Used during incremental parsing to determine if we need to visit this node to see if
-        // any of its children had an error.  Once we compute that once, we can set this bit on the
-        // node to know that we never have to do it again.  From that point on, we can just check
-        // the node directly for 'ContainsError'.
-        HasComputedThisNodeOrAnySubNodesHasError = 1 << 6
+        // Used to know if we've computed data from children and cached it in this node.
+        HasAggregatedChildData = 1 << 6
     }
 
     export interface Node extends TextRange {

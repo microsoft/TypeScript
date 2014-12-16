@@ -7,8 +7,6 @@
 ////    var p;
 ////}
 
-diagnostics.setEditValidation(IncrementalEditValidation.SyntacticOnly);
-
 goTo.marker('check');
 verify.quickInfoExists();
 
