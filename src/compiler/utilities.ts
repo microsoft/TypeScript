@@ -110,7 +110,7 @@ module ts {
         return node.pos;
     }
 
-    export function isMissingNode(node: Node) {
+    export function nodeIsMissing(node: Node) {
         if (!node) {
             return true;
         }
@@ -118,10 +118,14 @@ module ts {
         return node.pos === node.end && node.kind !== SyntaxKind.EndOfFileToken;
     }
 
+    export function nodeIsPresent(node: Node) {
+        return !nodeIsMissing(node);
+    }
+
     export function getTokenPosOfNode(node: Node, sourceFile?: SourceFile): number {
         // With nodes that have no width (i.e. 'Missing' nodes), we actually *don't*
         // want to skip trivia because this will launch us forward to the next token.
-        if (isMissingNode(node)) {
+        if (nodeIsMissing(node)) {
             return node.pos;
         }
 
@@ -129,7 +133,7 @@ module ts {
     }
 
     export function getSourceTextOfNodeFromSourceFile(sourceFile: SourceFile, node: Node): string {
-        if (isMissingNode(node)) {
+        if (nodeIsMissing(node)) {
             return "";
         }
 
@@ -138,7 +142,7 @@ module ts {
     }
 
     export function getTextOfNodeFromSourceText(sourceText: string, node: Node): string {
-        if (isMissingNode(node)) {
+        if (nodeIsMissing(node)) {
             return "";
         }
 

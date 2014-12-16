@@ -974,7 +974,7 @@ module ts {
             function getLastChildWorker(node: Node): Node {
                 var last:Node = undefined;
                 forEachChild(node, child => {
-                    if (!isMissingNode(child)) {
+                    if (nodeIsPresent(child)) {
                         last = child;
                     }
                 });
@@ -982,7 +982,7 @@ module ts {
             }
 
             function visit(child: Node) {
-                if (isMissingNode(child)) {
+                if (nodeIsMissing(child)) {
                     // Missing nodes are effectively invisible to us.  We never even consider them
                     // When trying to find the nearest node before us.
                     return;
@@ -1675,7 +1675,7 @@ module ts {
             var node = syntaxCursor.currentNode(scanner.getStartPos());
 
             // Can't reuse a missing node.
-            if (isMissingNode(node)) {
+            if (nodeIsMissing(node)) {
                 return undefined;
             }
 
@@ -5493,7 +5493,7 @@ module ts {
                 if (inAmbientContext) {
                     return checkForDisallowedComputedProperty(node.name, Diagnostics.Computed_property_names_are_not_allowed_in_an_ambient_context);
                 }
-                else if (isMissingNode(node.body)) {
+                else if (nodeIsMissing(node.body)) {
                     return checkForDisallowedComputedProperty(node.name, Diagnostics.Computed_property_names_are_not_allowed_in_method_overloads);
                 }
             }

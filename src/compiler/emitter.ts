@@ -268,7 +268,7 @@ module ts {
 
     function getFirstConstructorWithBody(node: ClassDeclaration): ConstructorDeclaration {
         return forEach(node.members, member => {
-            if (member.kind === SyntaxKind.Constructor && !isMissingNode((<ConstructorDeclaration>member).body)) {
+            if (member.kind === SyntaxKind.Constructor && nodeIsPresent((<ConstructorDeclaration>member).body)) {
                 return <ConstructorDeclaration>member;
             }
         });
@@ -3108,7 +3108,7 @@ module ts {
             }
 
             function emitFunctionDeclaration(node: FunctionLikeDeclaration) {
-                if (isMissingNode(node.body)) {
+                if (nodeIsMissing(node.body)) {
                     return emitPinnedOrTripleSlashComments(node);
                 }
 

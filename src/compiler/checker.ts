@@ -649,7 +649,7 @@ module ts {
             var members = node.members;
             for (var i = 0; i < members.length; i++) {
                 var member = members[i];
-                if (member.kind === SyntaxKind.Constructor && !isMissingNode((<ConstructorDeclaration>member).body)) {
+                if (member.kind === SyntaxKind.Constructor && nodeIsPresent((<ConstructorDeclaration>member).body)) {
                     return <ConstructorDeclaration>member;
                 }
             }
@@ -2603,7 +2603,7 @@ module ts {
                         returnType = getAnnotatedAccessorType(setter);
                     }
 
-                    if (!returnType && isMissingNode((<FunctionLikeDeclaration>declaration).body)) {
+                    if (!returnType && nodeIsMissing((<FunctionLikeDeclaration>declaration).body)) {
                         returnType = anyType;
                     }
                 }
@@ -6354,7 +6354,7 @@ module ts {
             }
 
             // If all we have is a function signature, or an arrow function with an expression body, then there is nothing to check.
-            if (isMissingNode(func.body) || func.body.kind !== SyntaxKind.Block) {
+            if (nodeIsMissing(func.body) || func.body.kind !== SyntaxKind.Block) {
                 return;
             }
 
@@ -7012,7 +7012,7 @@ module ts {
             var func = getContainingFunction(node);
             if (node.flags & (NodeFlags.Public | NodeFlags.Private | NodeFlags.Protected)) {
                 func = getContainingFunction(node);
-                if (!(func.kind === SyntaxKind.Constructor && !isMissingNode(func.body))) {
+                if (!(func.kind === SyntaxKind.Constructor && nodeIsPresent(func.body))) {
                     error(node, Diagnostics.A_parameter_property_is_only_allowed_in_a_constructor_implementation);
                 }
             }
@@ -7109,7 +7109,7 @@ module ts {
             }
 
             // exit early in the case of signature - super checks are not relevant to them
-            if (isMissingNode(node.body)) {
+            if (nodeIsMissing(node.body)) {
                 return;
             }
 
@@ -7183,7 +7183,7 @@ module ts {
         function checkAccessorDeclaration(node: AccessorDeclaration) {
             if (fullTypeCheck) {
                 if (node.kind === SyntaxKind.GetAccessor) {
-                    if (!isInAmbientContext(node) && !isMissingNode(node.body) && !(bodyContainsAReturnStatement(<Block>node.body) || bodyContainsSingleThrowStatement(<Block>node.body))) {
+                    if (!isInAmbientContext(node) && nodeIsPresent(node.body) && !(bodyContainsAReturnStatement(<Block>node.body) || bodyContainsSingleThrowStatement(<Block>node.body))) {
                         error(node.name, Diagnostics.A_get_accessor_must_return_a_value_or_consist_of_a_single_throw_statement);
                     }
                 }
@@ -7272,7 +7272,7 @@ module ts {
 
             // TypeScript 1.0 spec (April 2014): 3.7.2.2
             // Specialized signatures are not permitted in conjunction with a function body
-            if (!isMissingNode((<FunctionLikeDeclaration>signatureDeclarationNode).body)) {
+            if (nodeIsPresent((<FunctionLikeDeclaration>signatureDeclarationNode).body)) {
                 error(signatureDeclarationNode, Diagnostics.A_signature_with_an_implementation_cannot_use_a_string_literal_type);
                 return;
             }
@@ -7405,7 +7405,7 @@ module ts {
                             error(errorNode, diagnostic);
                             return;
                         }
-                        else if (!isMissingNode((<FunctionLikeDeclaration>subsequentNode).body)) {
+                        else if (nodeIsPresent((<FunctionLikeDeclaration>subsequentNode).body)) {
                             error(errorNode, Diagnostics.Function_implementation_name_must_be_0, declarationNameToString(node.name));
                             return;
                         }
@@ -7447,7 +7447,7 @@ module ts {
                     someHaveQuestionToken = someHaveQuestionToken || hasQuestionToken(node);
                     allHaveQuestionToken = allHaveQuestionToken && hasQuestionToken(node);
 
-                    if (!isMissingNode(node.body) && bodyDeclaration) {
+                    if (nodeIsPresent(node.body) && bodyDeclaration) {
                         if (isConstructor) {
                             multipleConstructorImplementation = true;
                         }
@@ -7459,7 +7459,7 @@ module ts {
                         reportImplementationExpectedError(previousDeclaration);
                     }
 
-                    if (!isMissingNode(node.body)) {
+                    if (nodeIsPresent(node.body)) {
                         if (!bodyDeclaration) {
                             bodyDeclaration = node;
                         }
@@ -7642,7 +7642,7 @@ module ts {
 
             // Report an implicit any error if there is no body, no explicit return type, and node is not a private method
             // in an ambient context
-            if (compilerOptions.noImplicitAny && isMissingNode(node.body) && !node.type && !isPrivateWithinAmbient(node)) {
+            if (compilerOptions.noImplicitAny && nodeIsMissing(node.body) && !node.type && !isPrivateWithinAmbient(node)) {
                 reportImplicitAnyError(node, anyType);
             }
         }
@@ -7656,7 +7656,7 @@ module ts {
 
         function checkCollisionWithArgumentsInGeneratedCode(node: SignatureDeclaration) {
             // no rest parameters \ declaration context \ overload - no codegen impact
-            if (!hasRestParameters(node) || isInAmbientContext(node) || isMissingNode((<FunctionLikeDeclaration>node).body)) {
+            if (!hasRestParameters(node) || isInAmbientContext(node) || nodeIsMissing((<FunctionLikeDeclaration>node).body)) {
                 return;
             }
 
@@ -7688,7 +7688,7 @@ module ts {
             }
 
             var root = getRootDeclaration(node);
-            if (root.kind === SyntaxKind.Parameter && isMissingNode((<FunctionLikeDeclaration>root.parent).body)) {
+            if (root.kind === SyntaxKind.Parameter && nodeIsMissing((<FunctionLikeDeclaration>root.parent).body)) {
                 // just an overload - no codegen impact
                 return false;
             }
@@ -7852,7 +7852,7 @@ module ts {
                 forEach((<BindingPattern>node.name).elements, checkSourceElement);
             }
             // For a parameter declaration with an initializer, error and exit if the containing function doesn't have a body
-            if (node.initializer && getRootDeclaration(node).kind === SyntaxKind.Parameter && isMissingNode(getContainingFunction(node).body)) {
+            if (node.initializer && getRootDeclaration(node).kind === SyntaxKind.Parameter && nodeIsMissing(getContainingFunction(node).body)) {
                 error(node, Diagnostics.A_parameter_initializer_is_only_allowed_in_a_function_or_constructor_implementation);
                 return;
             }
@@ -8606,7 +8606,7 @@ module ts {
             var declarations = symbol.declarations;
             for (var i = 0; i < declarations.length; i++) {
                 var declaration = declarations[i];
-                if ((declaration.kind === SyntaxKind.ClassDeclaration || (declaration.kind === SyntaxKind.FunctionDeclaration && !isMissingNode((<FunctionLikeDeclaration>declaration).body))) && !isInAmbientContext(declaration)) {
+                if ((declaration.kind === SyntaxKind.ClassDeclaration || (declaration.kind === SyntaxKind.FunctionDeclaration && nodeIsPresent((<FunctionLikeDeclaration>declaration).body))) && !isInAmbientContext(declaration)) {
                     return declaration;
                 }
             }
@@ -9499,7 +9499,7 @@ module ts {
         }
 
         function isImplementationOfOverload(node: FunctionLikeDeclaration) {
-            if (!isMissingNode(node.body)) {
+            if (nodeIsPresent(node.body)) {
                 var symbol = getSymbolOfNode(node);
                 var signaturesOfSymbol = getSignaturesOfSymbol(symbol);
                 // If this function body corresponds to function with multiple signature, it is implementation of overload
