@@ -7157,8 +7157,7 @@ module ts {
                 checkGrammarIndexSignature(<SignatureDeclaration>node);
             }
             // TODO (yuisu): Remove this check in else-if when SyntaxKind.Construct is moved and ambient context is handled
-            else  if (node.kind === SyntaxKind.FunctionType || node.kind === SyntaxKind.ConstructorType ||
-                      node.kind === SyntaxKind.CallSignature || node.kind === SyntaxKind.ConstructSignature){
+            else  if (node.kind === SyntaxKind.FunctionType || node.kind === SyntaxKind.ConstructorType || node.kind === SyntaxKind.CallSignature){
                 checkGrammarFunctionLikeDeclaration(<FunctionLikeDeclaration>node);
             }
 
@@ -7241,6 +7240,9 @@ module ts {
         }
 
         function checkConstructorDeclaration(node: ConstructorDeclaration) {
+            // Grammar check on signature of constructor is done in checkSignatureDeclaration function
+            checkGrammarModifiers(node) || checkGrammarFunctionLikeDeclaration(<FunctionLikeDeclaration>node) || checkGrammarConstructorTypeParameters(node) || checkGrammarConstructorTypeAnnotation(node) || checkGrammarForBodyInAmbientContext(node.body, /*isConstructor:*/ true);
+
             checkSignatureDeclaration(node);
             checkSourceElement(node.body);
 
@@ -8244,7 +8246,7 @@ module ts {
 
         function checkThrowStatement(node: ThrowStatement) {
             if (node.expression === undefined) {
-                grammarErrorAfterFirstToken(getSourceFileOfNode(node), node, Diagnostics.Line_break_not_permitted_here);
+                grammarErrorAfterFirstToken(node, Diagnostics.Line_break_not_permitted_here);
             }
 
             if (node.expression) {
@@ -10481,7 +10483,29 @@ module ts {
             }
         }
 
-        function grammarErrorAfterFirstToken(sourceFile: SourceFile, node: Node, message: DiagnosticMessage, arg0?: any, arg1?: any, arg2?: any): boolean {
+        function checkGrammarConstructorTypeParameters(node: ConstructorDeclaration) {
+            if (node.typeParameters) {
+                return grammarErrorAtPos(getSourceFileOfNode(node), node.typeParameters.pos, node.typeParameters.end - node.typeParameters.pos, Diagnostics.Type_parameters_cannot_appear_on_a_constructor_declaration);
+            }
+        }
+
+        function checkGrammarConstructorTypeAnnotation(node: ConstructorDeclaration) {
+            if (node.type) {
+                return grammarErrorOnNode(node.type, Diagnostics.Type_annotation_cannot_appear_on_a_constructor_declaration);
+            }
+        }
+
+        function checkGrammarForBodyInAmbientContext(body: Block | Expression, isConstructor: boolean): boolean {
+            if (isInAmbientContext(body) && body && body.kind === SyntaxKind.Block) {
+                var diagnostic = isConstructor
+                    ? Diagnostics.A_constructor_implementation_cannot_be_declared_in_an_ambient_context
+                    : Diagnostics.A_function_implementation_cannot_be_declared_in_an_ambient_context;
+                return grammarErrorOnFirstToken(body, diagnostic);
+            }
+        }
+
+        function grammarErrorAfterFirstToken(node: Node, message: DiagnosticMessage, arg0?: any, arg1?: any, arg2?: any): boolean {
+            var sourceFile = getSourceFileOfNode(node);
             if (!hasParseDiagnostics(sourceFile)) {
                 var scanner = createScanner(compilerOptions.target, /*skipTrivia*/ true, sourceFile.text);
                 scanToken(scanner, node.pos);

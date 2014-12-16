@@ -4639,7 +4639,7 @@ module ts {
                 //case SyntaxKind.CatchClause:                    return checkCatchClause(<CatchClause>node);
                 //case SyntaxKind.ClassDeclaration:               return checkClassDeclaration(<ClassDeclaration>node);
                 //case SyntaxKind.ComputedPropertyName:           return checkComputedPropertyName(<ComputedPropertyName>node);
-                case SyntaxKind.Constructor:                    return checkConstructor(<ConstructorDeclaration>node);
+                //case SyntaxKind.Constructor:                    return checkConstructor(<ConstructorDeclaration>node);
                 //case SyntaxKind.DeleteExpression:               return checkDeleteExpression(<DeleteExpression> node);
                 //case SyntaxKind.ElementAccessExpression:        return checkElementAccessExpression(<ElementAccessExpression>node);
                 //case SyntaxKind.ExportAssignment:               return checkExportAssignment(<ExportAssignment>node);
@@ -5323,7 +5323,7 @@ module ts {
             switch (node.kind) {
                 case SyntaxKind.GetAccessor:
                 case SyntaxKind.SetAccessor:
-                case SyntaxKind.Constructor:
+                //case SyntaxKind.Constructor:
                 case SyntaxKind.PropertyDeclaration:
                 case SyntaxKind.PropertySignature:
                 case SyntaxKind.MethodDeclaration:
@@ -5331,7 +5331,7 @@ module ts {
                 //case SyntaxKind.ClassDeclaration:
                 case SyntaxKind.InterfaceDeclaration:
                 case SyntaxKind.ModuleDeclaration:
-                case SyntaxKind.EnumDeclaration:
+                //case SyntaxKind.EnumDeclaration:
                 case SyntaxKind.ExportAssignment:
                 case SyntaxKind.VariableStatement:
                 case SyntaxKind.FunctionDeclaration:
