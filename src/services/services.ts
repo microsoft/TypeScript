@@ -3172,7 +3172,7 @@ module ts {
             }
             if (symbolFlags & SymbolFlags.Enum) {
                 addNewLineIfDisplayPartsExist();
-                if (forEach(symbol.declarations, declaration => isConstEnumDeclaration(declaration))) {
+                if (forEach(symbol.declarations, isConstEnumDeclaration)) {
                     displayParts.push(keywordPart(SyntaxKind.ConstKeyword));
                     displayParts.push(spacePart());
                 }
