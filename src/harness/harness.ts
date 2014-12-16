@@ -291,6 +291,29 @@ module Utils {
         }
     }
 
+    export function assertDiagnosticsEquals(array1: ts.Diagnostic[], array2: ts.Diagnostic[]) {
+        if (array1 === array2) {
+            return;
+        }
+
+        assert(array1, "array1");
+        assert(array2, "array2");
+
+        assert.equal(array1.length, array2.length, "array1.length !== array2.length");
+
+        for (var i = 0, n = array1.length; i < n; i++) {
+            var d1 = array1[i];
+            var d2 = array2[i];
+
+            assert.equal(d1.start, d2.start, "d1.start !== d2.start");
+            assert.equal(d1.length, d2.length, "d1.length !== d2.length");
+            assert.equal(d1.messageText, d2.messageText, "d1.messageText !== d2.messageText");
+            assert.equal(d1.category, d2.category, "d1.category !== d2.category");
+            assert.equal(d1.code, d2.code, "d1.code !== d2.code");
+            assert.equal(d1.isEarly, d2.isEarly, "d1.isEarly !== d2.isEarly");
+        }
+    }
+
     export function assertStructuralEquals(node1: ts.Node, node2: ts.Node) {
         if (node1 === node2) {
             return;

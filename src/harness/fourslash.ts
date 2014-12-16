@@ -1217,7 +1217,7 @@ module FourSlash {
             ts.forEach(fileNames, Harness.IO.log);
         }
 
-        public deleteChar(count = 1) {
+        public deleteChar(count = 1, cadence = 10) {
             this.scenarioActions.push('<DeleteCharNext Count="' + count + '" />');
 
             var offset = this.currentCaretPosition;
@@ -1227,12 +1227,18 @@ module FourSlash {
                 // Make the edit
                 this.languageServiceShimHost.editScript(this.activeFile.fileName, offset, offset + 1, ch);
                 this.updateMarkersForEdit(this.activeFile.fileName, offset, offset + 1, ch);
-                this.checkPostEditInvariants();
+
+                if (i % cadence === 0) {
+                    this.checkPostEditInvariants();
+                }
 
                 // Handle post-keystroke formatting
                 if (this.enableFormatting) {
                     var edits = this.languageService.getFormattingEditsAfterKeystroke(this.activeFile.fileName, offset, ch, this.formatCodeOptions);
-                    offset += this.applyEdits(this.activeFile.fileName, edits, true);
+                    if (edits.length) {
+                        offset += this.applyEdits(this.activeFile.fileName, edits, true);
+                        this.checkPostEditInvariants();
+                    }
                 }
             }
 
@@ -1249,11 +1255,9 @@ module FourSlash {
             this.languageServiceShimHost.editScript(this.activeFile.fileName, start, start + length, text);
             this.updateMarkersForEdit(this.activeFile.fileName, start, start + length, text);
             this.checkPostEditInvariants();
-
-            this.checkPostEditInvariants();
         }
 
-        public deleteCharBehindMarker(count = 1) {
+        public deleteCharBehindMarker(count = 1, cadence = 10) {
             this.scenarioActions.push('<DeleteCharPrevious Count="' + count + '" />');
 
             var offset = this.currentCaretPosition;
@@ -1264,13 +1268,18 @@ module FourSlash {
                 // Make the edit
                 this.languageServiceShimHost.editScript(this.activeFile.fileName, offset, offset + 1, ch);
                 this.updateMarkersForEdit(this.activeFile.fileName, offset, offset + 1, ch);
-                this.checkPostEditInvariants();
+
+                if (i % cadence === 0) {
+                    this.checkPostEditInvariants();
+                }
 
                 // Handle post-keystroke formatting
                 if (this.enableFormatting) {
                     var edits = this.languageService.getFormattingEditsAfterKeystroke(this.activeFile.fileName, offset, ch, this.formatCodeOptions);
-                    offset += this.applyEdits(this.activeFile.fileName, edits, true);
-                    this.checkPostEditInvariants();
+                    if (edits.length) {
+                        offset += this.applyEdits(this.activeFile.fileName, edits, true);
+                        this.checkPostEditInvariants();
+                    }
                 }
             }
 
@@ -1295,7 +1304,7 @@ module FourSlash {
         // Enters lines of text at the current caret position, invoking
         // language service APIs to mimic Visual Studio's behavior
         // as much as possible
-        private typeHighFidelity(text: string, errorCadence = 5) {
+        private typeHighFidelity(text: string, cadence = 10) {
             var offset = this.currentCaretPosition;
             var prevChar = ' ';
             for (var i = 0; i < text.length; i++) {
@@ -1305,7 +1314,6 @@ module FourSlash {
                 this.languageService.getBraceMatchingAtPosition(this.activeFile.fileName, offset);
 
                 this.updateMarkersForEdit(this.activeFile.fileName, offset, offset, ch);
-                this.checkPostEditInvariants();
                 offset++;
 
                 if (ch === '(' || ch === ',') {
@@ -1316,16 +1324,19 @@ module FourSlash {
                     this.languageService.getCompletionsAtPosition(this.activeFile.fileName, offset);
                 }
 
-                if (i % errorCadence === 0) {
-                    this.languageService.getSyntacticDiagnostics(this.activeFile.fileName);
+                if (i % cadence === 0) {
+                    this.checkPostEditInvariants();
+                    // this.languageService.getSyntacticDiagnostics(this.activeFile.fileName);
                     this.languageService.getSemanticDiagnostics(this.activeFile.fileName);
                 }
 
                 // Handle post-keystroke formatting
                 if (this.enableFormatting) {
                     var edits = this.languageService.getFormattingEditsAfterKeystroke(this.activeFile.fileName, offset, ch, this.formatCodeOptions);
-                    offset += this.applyEdits(this.activeFile.fileName, edits, true);
-                    this.checkPostEditInvariants();
+                    if (edits.length) {
+                        offset += this.applyEdits(this.activeFile.fileName, edits, true);
+                        this.checkPostEditInvariants();
+                    }
                 }
             }
 
@@ -1350,8 +1361,10 @@ module FourSlash {
             // Handle formatting
             if (this.enableFormatting) {
                 var edits = this.languageService.getFormattingEditsForRange(this.activeFile.fileName, start, offset, this.formatCodeOptions);
-                offset += this.applyEdits(this.activeFile.fileName, edits, true);
-                this.checkPostEditInvariants();
+                if (edits.length) {
+                    offset += this.applyEdits(this.activeFile.fileName, edits, true);
+                    this.checkPostEditInvariants();
+                }
             }
 
             // Move the caret to wherever we ended up
@@ -1365,7 +1378,7 @@ module FourSlash {
             var incrementalSourceFile = this.languageService.getSourceFile(this.activeFile.fileName);
             Utils.assertInvariants(incrementalSourceFile, /*parent:*/ undefined);
 
-            var incrementalSyntaxDiagnostics = JSON.stringify(Utils.convertDiagnostics(incrementalSourceFile.getSyntacticDiagnostics()));
+            var incrementalSyntaxDiagnostics = incrementalSourceFile.getSyntacticDiagnostics();
 
             // Check syntactic structure
             var snapshot = this.languageServiceShimHost.getScriptSnapshot(this.activeFile.fileName);
@@ -1373,32 +1386,10 @@ module FourSlash {
 
             var referenceSourceFile = ts.createLanguageServiceSourceFile(
                 this.activeFile.fileName, createScriptSnapShot(content), ts.ScriptTarget.Latest, /*version:*/ "0", /*isOpen:*/ false, /*setNodeParents:*/ false);
-            var referenceSyntaxDiagnostics = JSON.stringify(Utils.convertDiagnostics(referenceSourceFile.getSyntacticDiagnostics()));
+            var referenceSyntaxDiagnostics = referenceSourceFile.getSyntacticDiagnostics();
 
-            if (incrementalSyntaxDiagnostics !== referenceSyntaxDiagnostics) {
-                this.raiseError('Mismatched incremental/reference syntactic diagnostics for file ' + this.activeFile.fileName + '.\n=== Incremental diagnostics ===\n' + incrementalSyntaxDiagnostics + '\n=== Reference Diagnostics ===\n' + referenceSyntaxDiagnostics);
-            }
-
+            Utils.assertDiagnosticsEquals(incrementalSyntaxDiagnostics, referenceSyntaxDiagnostics);
             Utils.assertStructuralEquals(incrementalSourceFile, referenceSourceFile);
-
-            //if (this.editValidation !== IncrementalEditValidation.SyntacticOnly) {
-            //   var compiler = new TypeScript.TypeScriptCompiler();
-            //   for (var i = 0; i < this.testData.files.length; i++) {
-            //       snapshot = this.languageServiceShimHost.getScriptSnapshot(this.testData.files[i].fileName);
-            //       compiler.addFile(this.testData.files[i].fileName, TypeScript.ScriptSnapshot.fromString(snapshot.getText(0, snapshot.getLength())), ts.ByteOrderMark.None, 0, true);
-            //   }
-
-            //   compiler.addFile('lib.d.ts', TypeScript.ScriptSnapshot.fromString(Harness.Compiler.libTextMinimal), ts.ByteOrderMark.None, 0, true);
-
-            //   for (var i = 0; i < this.testData.files.length; i++) {
-            //       var refSemanticErrs = JSON.stringify(compiler.getSemanticDiagnostics(this.testData.files[i].fileName));
-            //       var incrSemanticErrs = JSON.stringify(this.languageService.getSemanticDiagnostics(this.testData.files[i].fileName));
-
-            //       if (incrSemanticErrs !== refSemanticErrs) {
-            //           this.raiseError('Mismatched incremental/full semantic errors for file ' + this.testData.files[i].fileName + '\n=== Incremental errors ===\n' + incrSemanticErrs + '\n=== Full Errors ===\n' + refSemanticErrs);
-            //       }
-            //   }
-            //}
         }
 
         private fixCaretPosition() {
