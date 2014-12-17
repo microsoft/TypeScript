@@ -1676,19 +1676,26 @@ module ts {
                     error(name, Diagnostics.Type_0_has_no_property_1_and_no_string_index_signature, typeToString(parentType), declarationNameToString(name));
                     return unknownType;
                 }
-                return type;
             }
-            // For an array binding element the specified or inferred type of the parent must be assignable to any[]
-            if (!isTypeAssignableTo(parentType, anyArrayType)) {
-                error(pattern, Diagnostics.Type_0_is_not_an_array_type, typeToString(parentType));
-                return unknownType;
-            }
-            // Use specific property type when parent is a tuple or numeric index type when parent is an array
-            var propName = "" + indexOf(pattern.elements, declaration);
-            var type = isTupleLikeType(parentType) ? getTypeOfPropertyOfType(parentType, propName) : getIndexTypeOfType(parentType, IndexKind.Number);
-            if (!type) {
-                error(declaration, Diagnostics.Type_0_has_no_property_1, typeToString(parentType), propName);
-                return unknownType;
+            else {
+                // For an array binding element the specified or inferred type of the parent must be assignable to any[]
+                if (!isTypeAssignableTo(parentType, anyArrayType)) {
+                    error(pattern, Diagnostics.Type_0_is_not_an_array_type, typeToString(parentType));
+                    return unknownType;
+                }
+                if (!declaration.dotDotDotToken) {
+                    // Use specific property type when parent is a tuple or numeric index type when parent is an array
+                    var propName = "" + indexOf(pattern.elements, declaration);
+                    var type = isTupleLikeType(parentType) ? getTypeOfPropertyOfType(parentType, propName) : getIndexTypeOfType(parentType, IndexKind.Number);
+                    if (!type) {
+                        error(declaration, Diagnostics.Type_0_has_no_property_1, typeToString(parentType), propName);
+                        return unknownType;
+                    }
+                }
+                else {
+                    // Rest element has an array type with the same element type as the parent type
+                    var type = createArrayType(getIndexTypeOfType(parentType, IndexKind.Number));
+                }
             }
             return type;
         }
@@ -1746,17 +1753,8 @@ module ts {
             return anyType;
         }
 
-        // Return the type implied by a binding pattern. This is the type implied purely by the binding pattern itself
-        // and without regard to its context (i.e. without regard any type annotation or initializer associated with the
-        // declaration in which the binding pattern is contained). For example, the implied type of [x, y] is [any, any]
-        // and the implied type of { x, y: z = 1 } is { x: any; y: number; }. The type implied by a binding pattern is
-        // used as the contextual type of an initializer associated with the binding pattern. Also, for a destructuring
-        // parameter with no type annotation or initializer, the type implied by the binding pattern becomes the type of
-        // the parameter.
-        function getTypeFromBindingPattern(pattern: BindingPattern): Type {
-            if (pattern.kind === SyntaxKind.ArrayBindingPattern) {
-                return createTupleType(map(pattern.elements, e => e.kind === SyntaxKind.OmittedExpression ? anyType : getTypeFromBindingElement(e)));
-            }
+        // Return the type implied by an object binding pattern
+        function getTypeFromObjectBindingPattern(pattern: BindingPattern): Type {
             var members: SymbolTable = {};
             forEach(pattern.elements, e => {
                 var flags = SymbolFlags.Property | SymbolFlags.Transient | (e.initializer ? SymbolFlags.Optional : 0);
@@ -1766,6 +1764,32 @@ module ts {
                 members[symbol.name] = symbol;
             });
             return createAnonymousType(undefined, members, emptyArray, emptyArray, undefined, undefined);
+        }
+
+        // Return the type implied by an array binding pattern
+        function getTypeFromArrayBindingPattern(pattern: BindingPattern): Type {
+            var hasSpreadElement: boolean = false;
+            var elementTypes: Type[] = [];
+            forEach(pattern.elements, e => {
+                elementTypes.push(e.kind === SyntaxKind.OmittedExpression || e.dotDotDotToken ? anyType : getTypeFromBindingElement(e));
+                if (e.dotDotDotToken) {
+                    hasSpreadElement = true;
+                }
+            });
+            return !elementTypes.length ? anyArrayType : hasSpreadElement ? createArrayType(getUnionType(elementTypes)) : createTupleType(elementTypes);
+        }
+
+        // Return the type implied by a binding pattern. This is the type implied purely by the binding pattern itself
+        // and without regard to its context (i.e. without regard any type annotation or initializer associated with the
+        // declaration in which the binding pattern is contained). For example, the implied type of [x, y] is [any, any]
+        // and the implied type of { x, y: z = 1 } is { x: any; y: number; }. The type implied by a binding pattern is
+        // used as the contextual type of an initializer associated with the binding pattern. Also, for a destructuring
+        // parameter with no type annotation or initializer, the type implied by the binding pattern becomes the type of
+        // the parameter.
+        function getTypeFromBindingPattern(pattern: BindingPattern): Type {
+            return pattern.kind === SyntaxKind.ObjectBindingPattern
+                ? getTypeFromObjectBindingPattern(pattern)
+                : getTypeFromArrayBindingPattern(pattern);
         }
 
         // Return the type associated with a variable, parameter, or property declaration. In the simple case this is the type
@@ -4512,6 +4536,7 @@ module ts {
                     case SyntaxKind.VoidExpression:
                     case SyntaxKind.PostfixUnaryExpression:
                     case SyntaxKind.ConditionalExpression:
+                    case SyntaxKind.SpreadElementExpression:
                     case SyntaxKind.Block:
                     case SyntaxKind.VariableStatement:
                     case SyntaxKind.ExpressionStatement:
@@ -5306,15 +5331,37 @@ module ts {
             return false;
         }
 
+        function checkSpreadElementExpression(node: SpreadElementExpression, contextualMapper?: TypeMapper): Type {
+            var type = checkExpressionCached(node.expression, contextualMapper);
+            if (!isTypeAssignableTo(type, anyArrayType)) {
+                error(node.expression, Diagnostics.Type_0_is_not_an_array_type, typeToString(type));
+                return unknownType;
+            }
+            return type;
+        }
+
         function checkArrayLiteral(node: ArrayLiteralExpression, contextualMapper?: TypeMapper): Type {
             var elements = node.elements;
             if (!elements.length) {
                 return createArrayType(undefinedType);
             }
-            var elementTypes = map(elements, e => checkExpression(e, contextualMapper));
-            var contextualType = getContextualType(node);
-            if ((contextualType && contextualTypeIsTupleLikeType(contextualType)) || isAssignmentTarget(node)) {
-                return createTupleType(elementTypes);
+            var hasSpreadElement: boolean = false;
+            var elementTypes: Type[] = [];
+            forEach(elements, e => {
+                var type = checkExpression(e, contextualMapper);
+                if (e.kind === SyntaxKind.SpreadElementExpression) {
+                    elementTypes.push(getIndexTypeOfType(type, IndexKind.Number) || anyType);
+                    hasSpreadElement = true;
+                }
+                else {
+                    elementTypes.push(type);
+                }
+            });
+            if (!hasSpreadElement) {
+                var contextualType = getContextualType(node);
+                if (contextualType && contextualTypeIsTupleLikeType(contextualType) || isAssignmentTarget(node)) {
+                    return createTupleType(elementTypes);
+                }
             }
             return createArrayType(getUnionType(elementTypes));
         }
@@ -6715,15 +6762,25 @@ module ts {
             for (var i = 0; i < elements.length; i++) {
                 var e = elements[i];
                 if (e.kind !== SyntaxKind.OmittedExpression) {
-                    var propName = "" + i;
-                    var type = sourceType.flags & TypeFlags.Any ? sourceType :
-                        isTupleLikeType(sourceType) ? getTypeOfPropertyOfType(sourceType, propName) :
-                        getIndexTypeOfType(sourceType, IndexKind.Number);
-                    if (type) {
-                        checkDestructuringAssignment(e, type, contextualMapper);
+                    if (e.kind !== SyntaxKind.SpreadElementExpression) {
+                        var propName = "" + i;
+                        var type = sourceType.flags & TypeFlags.Any ? sourceType :
+                            isTupleLikeType(sourceType) ? getTypeOfPropertyOfType(sourceType, propName) :
+                            getIndexTypeOfType(sourceType, IndexKind.Number);
+                        if (type) {
+                            checkDestructuringAssignment(e, type, contextualMapper);
+                        }
+                        else {
+                            error(e, Diagnostics.Type_0_has_no_property_1, typeToString(sourceType), propName);
+                        }
                     }
                     else {
-                        error(e, Diagnostics.Type_0_has_no_property_1, typeToString(sourceType), propName);
+                        if (i === elements.length - 1) {
+                            checkReferenceAssignment((<SpreadElementExpression>e).expression, sourceType, contextualMapper);
+                        }
+                        else {
+                            error(e, Diagnostics.A_rest_element_must_be_last_in_an_array_destructuring_pattern);
+                        }
                     }
                 }
             }
@@ -6741,6 +6798,10 @@ module ts {
             if (target.kind === SyntaxKind.ArrayLiteralExpression) {
                 return checkArrayLiteralAssignment(<ArrayLiteralExpression>target, sourceType, contextualMapper);
             }
+            return checkReferenceAssignment(target, sourceType, contextualMapper);
+        }
+
+        function checkReferenceAssignment(target: Expression, sourceType: Type, contextualMapper?: TypeMapper): Type {
             var targetType = checkExpression(target, contextualMapper);
             if (checkReferenceExpression(target, Diagnostics.Invalid_left_hand_side_of_assignment_expression, Diagnostics.Left_hand_side_of_assignment_expression_cannot_be_a_constant)) {
                 checkTypeAssignableTo(sourceType, targetType, target, /*headMessage*/ undefined);
@@ -7081,6 +7142,8 @@ module ts {
                     return checkBinaryExpression(<BinaryExpression>node, contextualMapper);
                 case SyntaxKind.ConditionalExpression:
                     return checkConditionalExpression(<ConditionalExpression>node, contextualMapper);
+                case SyntaxKind.SpreadElementExpression:
+                    return checkSpreadElementExpression(<SpreadElementExpression>node, contextualMapper);
                 case SyntaxKind.OmittedExpression:
                     return undefinedType;
                 case SyntaxKind.YieldExpression:
@@ -7986,21 +8049,8 @@ module ts {
             }
         }
 
-        function checkVariableDeclaration(node: VariableDeclaration) {
-            return checkVariableLikeDeclaration(node);
-        }
-
         // Check variable, parameter, or property declaration
         function checkVariableLikeDeclaration(node: VariableLikeDeclaration) {
-            // Grammar checking
-            // TODO (yuisu) : Revisit this check once move all grammar checking
-            if (node.kind === SyntaxKind.BindingElement) {
-                checkGrammarEvalOrArgumentsInStrictMode(node, <Identifier>node.name);
-            }
-            else if (node.kind === SyntaxKind.VariableDeclaration) {
-                checkGrammarVariableDeclaration(<VariableDeclaration>node);
-            }
-
             checkSourceElement(node.type);
             // For a computed property, just check the initializer and exit
             if (hasComputedNameButNotSymbol(node)) {
@@ -8054,6 +8104,16 @@ module ts {
                 checkCollisionWithCapturedThisVariable(node, <Identifier>node.name);
                 checkCollisionWithRequireExportsInGeneratedCode(node, <Identifier>node.name);
             }
+        }
+
+        function checkVariableDeclaration(node: VariableDeclaration) {
+            checkGrammarVariableDeclaration(node);
+            return checkVariableLikeDeclaration(node);
+        }
+
+        function checkBindingElement(node: BindingElement) {
+            checkGrammarBindingElement(<BindingElement>node);
+            return checkVariableLikeDeclaration(node);
         }
 
         function checkVariableStatement(node: VariableStatement) {
@@ -8157,7 +8217,7 @@ module ts {
                 var variableDeclarationList = <VariableDeclarationList>node.initializer;
                 if (variableDeclarationList.declarations.length >= 1) {
                     var decl = variableDeclarationList.declarations[0];
-                    checkVariableLikeDeclaration(decl);
+                    checkVariableDeclaration(decl);
                     if (decl.type) {
                         error(decl, Diagnostics.The_left_hand_side_of_a_for_in_statement_cannot_use_a_type_annotation);
                     }
@@ -9129,8 +9189,9 @@ module ts {
                 case SyntaxKind.TryStatement:
                     return checkTryStatement(<TryStatement>node);
                 case SyntaxKind.VariableDeclaration:
+                    return checkVariableDeclaration(<VariableDeclaration>node);
                 case SyntaxKind.BindingElement:
-                    return checkVariableLikeDeclaration(<VariableLikeDeclaration>node);
+                    return checkBindingElement(<BindingElement>node);
                 case SyntaxKind.ClassDeclaration:
                     return checkClassDeclaration(<ClassDeclaration>node);
                 case SyntaxKind.InterfaceDeclaration:
@@ -9209,6 +9270,7 @@ module ts {
                 case SyntaxKind.PostfixUnaryExpression:
                 case SyntaxKind.BinaryExpression:
                 case SyntaxKind.ConditionalExpression:
+                case SyntaxKind.SpreadElementExpression:
                 case SyntaxKind.Block:
                 case SyntaxKind.ModuleBlock:
                 case SyntaxKind.VariableStatement:
@@ -10581,6 +10643,22 @@ module ts {
             }
         }
 
+        function checkGrammarBindingElement(node: BindingElement) {
+            if (node.dotDotDotToken) {
+                var elements = (<BindingPattern>node.parent).elements;
+                if (node !== elements[elements.length - 1]) {
+                    return grammarErrorOnNode(node, Diagnostics.A_rest_element_must_be_last_in_an_array_destructuring_pattern);
+                }
+                if (node.initializer) {
+                    // Error on equals token which immediate precedes the initializer
+                    return grammarErrorAtPos(getSourceFileOfNode(node), node.initializer.pos - 1, 1, Diagnostics.A_rest_element_cannot_have_an_initializer);
+                }
+            }
+            // It is a SyntaxError if a VariableDeclaration or VariableDeclarationNoIn occurs within strict code 
+            // and its Identifier is eval or arguments 
+            return checkGrammarEvalOrArgumentsInStrictMode(node, <Identifier>node.name);
+        }
+
         function checkGrammarVariableDeclaration(node: VariableDeclaration) {
             if (isInAmbientContext(node)) {
                 if (isBindingPattern(node.name)) {
@@ -10603,7 +10681,7 @@ module ts {
             }
             // It is a SyntaxError if a VariableDeclaration or VariableDeclarationNoIn occurs within strict code 
             // and its Identifier is eval or arguments 
-            return  checkGrammarEvalOrArgumentsInStrictMode(node, <Identifier>node.name);
+            return checkGrammarEvalOrArgumentsInStrictMode(node, <Identifier>node.name);
         }
 
         function checkGrammarVariableDeclarationList(declarationList: VariableDeclarationList): boolean {

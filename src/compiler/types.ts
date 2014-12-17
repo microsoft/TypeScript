@@ -196,6 +196,7 @@ module ts {
         ConditionalExpression,
         TemplateExpression,
         YieldExpression,
+        SpreadElementExpression,
         OmittedExpression,
         // Misc
         TemplateSpan,
@@ -663,7 +664,11 @@ module ts {
     export interface ArrayLiteralExpression extends PrimaryExpression {
         elements: NodeArray<Expression>;
     }
-    
+
+    export interface SpreadElementExpression extends Expression {
+        expression: Expression;
+    }
+
     // An ObjectLiteralExpression is the declaration node for an anonymous symbol.
     export interface ObjectLiteralExpression extends PrimaryExpression, Declaration {
         properties: NodeArray<ObjectLiteralElement>;

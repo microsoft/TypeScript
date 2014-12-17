@@ -8,18 +8,18 @@ tests/cases/compiler/conflictMarkerTrivia1.ts(6,1): error TS1185: Merge conflict
 ==== tests/cases/compiler/conflictMarkerTrivia1.ts (5 errors) ====
     class C {
     <<<<<<< HEAD
-    
+    ~~~~~~~
 !!! error TS1185: Merge conflict marker encountered.
         v = 1;
         ~
 !!! error TS2300: Duplicate identifier 'v'.
     =======
-    
+    ~~~~~~~
 !!! error TS1185: Merge conflict marker encountered.
         v = 2;
         ~
 !!! error TS2300: Duplicate identifier 'v'.
     >>>>>>> Branch-a
-    
+    ~~~~~~~
 !!! error TS1185: Merge conflict marker encountered.
     }

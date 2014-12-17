@@ -669,6 +669,10 @@
         "category": "Error",
         "code": 1185
     },
+    "A rest element cannot have an initializer.": {
+        "category": "Error",
+        "code": 1186
+    },
 
     "Duplicate identifier '{0}'.": {
         "category": "Error",
@@ -1273,6 +1277,10 @@
     "Type '{0}' is not an array type.": {
         "category": "Error",
         "code": 2461
+    },
+    "A rest element must be last in an array destructuring pattern": {
+        "category": "Error",
+        "code": 2462
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {

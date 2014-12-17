@@ -151,6 +151,8 @@ module ts {
                 return child((<ConditionalExpression>node).condition) ||
                     child((<ConditionalExpression>node).whenTrue) ||
                     child((<ConditionalExpression>node).whenFalse);
+            case SyntaxKind.SpreadElementExpression:
+                return child((<SpreadElementExpression>node).expression);
             case SyntaxKind.Block:
             case SyntaxKind.ModuleBlock:
                 return children((<Block>node).statements);
@@ -1169,9 +1171,9 @@ module ts {
             parseErrorBeforeNextFinishedNode = true;
         }
 
-        function scanError(message: DiagnosticMessage) {
+        function scanError(message: DiagnosticMessage, length?: number) {
             var pos = scanner.getTextPos();
-            parseErrorAtPosition(pos, 0, message);
+            parseErrorAtPosition(pos, length || 0, message);
         }
 
         function getNodePos(): number {
@@ -1499,13 +1501,13 @@ module ts {
                 case ParsingContext.VariableDeclarations:
                     return isIdentifierOrPattern();
                 case ParsingContext.ArrayBindingElements:
-                    return token === SyntaxKind.CommaToken || isIdentifierOrPattern();
+                    return token === SyntaxKind.CommaToken || token === SyntaxKind.DotDotDotToken || isIdentifierOrPattern();
                 case ParsingContext.TypeParameters:
                     return isIdentifier();
                 case ParsingContext.ArgumentExpressions:
                     return token === SyntaxKind.CommaToken || isStartOfExpression();
                 case ParsingContext.ArrayLiteralMembers:
-                    return token === SyntaxKind.CommaToken || isStartOfExpression();
+                    return token === SyntaxKind.CommaToken || token === SyntaxKind.DotDotDotToken || isStartOfExpression();
                 case ParsingContext.Parameters:
                     return isStartOfParameter();
                 case ParsingContext.TypeArguments:
@@ -3600,8 +3602,15 @@ module ts {
                 : parseAssignmentExpressionOrHigher();
         }
 
+        function parseSpreadElement(): Expression {
+            var node = <SpreadElementExpression>createNode(SyntaxKind.SpreadElementExpression);
+            parseExpected(SyntaxKind.DotDotDotToken);
+            node.expression = parseAssignmentExpressionOrHigher();
+            return finishNode(node);
+        }
+
         function parseArrayLiteralElement(): Expression {
-            return parseAssignmentExpressionOrOmittedExpression();
+            return token === SyntaxKind.DotDotDotToken ? parseSpreadElement() : parseAssignmentExpressionOrOmittedExpression();
         }
 
         function parseArgumentExpression(): Expression {
@@ -4145,8 +4154,8 @@ module ts {
             if (token === SyntaxKind.CommaToken) {
                 return <BindingElement>createNode(SyntaxKind.OmittedExpression);
             }
-
             var node = <BindingElement>createNode(SyntaxKind.BindingElement);
+            node.dotDotDotToken = parseOptionalToken(SyntaxKind.DotDotDotToken);
             node.name = parseIdentifierOrPattern();
             node.initializer = parseInitializer(/*inParameter*/ false);
             return finishNode(node);
@@ -4154,7 +4163,6 @@ module ts {
 
         function parseObjectBindingElement(): BindingElement {
             var node = <BindingElement>createNode(SyntaxKind.BindingElement);
-
             // TODO(andersh): Handle computed properties
             var id = parsePropertyName();
             if (id.kind === SyntaxKind.Identifier && token !== SyntaxKind.ColonToken) {
@@ -4165,7 +4173,6 @@ module ts {
                 node.propertyName = <Identifier>id;
                 node.name = parseIdentifierOrPattern();
             }
-
             node.initializer = parseInitializer(/*inParameter*/ false);
             return finishNode(node);
         }
