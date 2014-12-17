@@ -296,6 +296,9 @@ module ts {
             if (checker.isEmitBlocked()) {
                 exitStatus = EmitReturnStatus.AllOutputGenerationSkipped;
             }
+            else if (compilerOptions.noEmit) {
+                exitStatus = EmitReturnStatus.Succeeded;
+            }
             else {
                 var emitStart = new Date().getTime();
                 var emitOutput = checker.emitFiles();
