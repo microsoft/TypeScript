@@ -2,6 +2,8 @@
 /// <reference path="..\..\..\src\compiler\parser.ts" />
 
 module ts {
+    ts.disableIncrementalParsing = false;
+
     function withChange(text: IScriptSnapshot, start: number, length: number, newText: string): { text: IScriptSnapshot; textChangeRange: TextChangeRange; } {
         var contents = text.getText(0, text.getLength());
         var newContents = contents.substr(0, start) + newText + contents.substring(start + length);

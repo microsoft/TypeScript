@@ -18,6 +18,8 @@
 /// <reference path='harness.ts' />
 
 module FourSlash {
+    ts.disableIncrementalParsing = false;
+
     // Represents a parsed source file with metadata
     export interface FourSlashFile {
         // The contents of the file (with markers, etc stripped out)
