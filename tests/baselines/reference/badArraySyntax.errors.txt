@@ -2,10 +2,11 @@ tests/cases/compiler/badArraySyntax.ts(6,15): error TS1150: 'new T[]' cannot be 
 tests/cases/compiler/badArraySyntax.ts(7,15): error TS1150: 'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.
 tests/cases/compiler/badArraySyntax.ts(8,20): error TS1150: 'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.
 tests/cases/compiler/badArraySyntax.ts(9,20): error TS1150: 'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.
+tests/cases/compiler/badArraySyntax.ts(10,36): error TS1109: Expression expected.
 tests/cases/compiler/badArraySyntax.ts(10,40): error TS1150: 'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.
 
 
-==== tests/cases/compiler/badArraySyntax.ts (5 errors) ====
+==== tests/cases/compiler/badArraySyntax.ts (6 errors) ====
     class Z {
      public x = "";
     }
@@ -24,6 +25,8 @@ tests/cases/compiler/badArraySyntax.ts(10,40): error TS1150: 'new T[]' cannot be
                        ~~
 !!! error TS1150: 'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.
     var a6: Z[][] = new   Z     [      ]   [  ];
+                                       ~
+!!! error TS1109: Expression expected.
                                            ~~~~
 !!! error TS1150: 'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.
     

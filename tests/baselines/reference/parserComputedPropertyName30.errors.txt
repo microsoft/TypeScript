@@ -1,5 +1,5 @@
-tests/cases/conformance/parser/ecmascript6/ComputedPropertyNames/parserComputedPropertyName30.ts(4,5): error TS1005: ',' expected.
 tests/cases/conformance/parser/ecmascript6/ComputedPropertyNames/parserComputedPropertyName30.ts(3,11): error TS2304: Cannot find name 'id'.
+tests/cases/conformance/parser/ecmascript6/ComputedPropertyNames/parserComputedPropertyName30.ts(4,5): error TS1005: ',' expected.
 
 
 ==== tests/cases/conformance/parser/ecmascript6/ComputedPropertyNames/parserComputedPropertyName30.ts (2 errors) ====

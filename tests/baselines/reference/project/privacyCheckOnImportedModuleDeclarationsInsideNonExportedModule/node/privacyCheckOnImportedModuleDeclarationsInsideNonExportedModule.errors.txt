@@ -1,7 +1,10 @@
 test.ts(5,39): error TS1147: Import declarations in an internal module cannot reference an external module.
+test.ts(5,39): error TS2307: Cannot find external module 'mExported'.
+test.ts(24,35): error TS1147: Import declarations in an internal module cannot reference an external module.
+test.ts(24,35): error TS2307: Cannot find external module 'mNonExported'.
 
 
-==== test.ts (1 errors) ====
+==== test.ts (4 errors) ====
     export module m1 {
     }
     
@@ -9,6 +12,8 @@ test.ts(5,39): error TS1147: Import declarations in an internal module cannot re
         export import mExported = require("mExported");
                                           ~~~~~~~~~~~
 !!! error TS1147: Import declarations in an internal module cannot reference an external module.
+                                          ~~~~~~~~~~~
+!!! error TS2307: Cannot find external module 'mExported'.
         export var c1 = new mExported.me.class1;
         export function f1() {
             return new mExported.me.class1();
@@ -28,6 +33,10 @@ test.ts(5,39): error TS1147: Import declarations in an internal module cannot re
         }
     
         import mNonExported = require("mNonExported");
+                                      ~~~~~~~~~~~~~~
+!!! error TS1147: Import declarations in an internal module cannot reference an external module.
+                                      ~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find external module 'mNonExported'.
         export var c3 = new mNonExported.mne.class1;
         export function f3() {
             return new mNonExported.mne.class1();
