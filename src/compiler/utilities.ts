@@ -62,22 +62,18 @@ module ts {
         return node.end - node.pos;
     }
 
-    function hasFlag(val: number, flag: number): boolean {
-        return (val & flag) !== 0;
-    }
-
     // Returns true if this node contains a parse error anywhere underneath it.
     export function containsParseError(node: Node): boolean {
         aggregateChildData(node);
-        return hasFlag(node.parserContextFlags, ParserContextFlags.ThisNodeOrAnySubNodesHasError);
+        return (node.parserContextFlags & ParserContextFlags.ThisNodeOrAnySubNodesHasError) !== 0
     }
 
     function aggregateChildData(node: Node): void {
-        if (!hasFlag(node.parserContextFlags, ParserContextFlags.HasAggregatedChildData)) {
+        if (!(node.parserContextFlags & ParserContextFlags.HasAggregatedChildData)) {
             // A node is considered to contain a parse error if:
             //  a) the parser explicitly marked that it had an error
             //  b) any of it's children reported that it had an error.
-            var thisNodeOrAnySubNodesHasError = hasFlag(node.parserContextFlags, ParserContextFlags.ThisNodeHasError) ||
+            var thisNodeOrAnySubNodesHasError = ((node.parserContextFlags & ParserContextFlags.ThisNodeHasError) !== 0) ||
                 forEachChild(node, containsParseError);
 
             // If so, mark ourselves accordingly. 
