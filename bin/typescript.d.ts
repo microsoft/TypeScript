@@ -284,7 +284,7 @@ declare module "typescript" {
         ThisNodeHasError = 16,
         ParserGeneratedFlags = 31,
         ThisNodeOrAnySubNodesHasError = 32,
-        HasComputedThisNodeOrAnySubNodesHasError = 64,
+        HasAggregatedChildData = 64,
     }
     interface Node extends TextRange {
         kind: SyntaxKind;
@@ -964,6 +964,7 @@ declare module "typescript" {
         isVisible?: boolean;
         localModuleName?: string;
         assignmentChecks?: Map<boolean>;
+        importOnRightSide?: Symbol;
     }
     const enum TypeFlags {
         Any = 1,
