@@ -1515,6 +1515,10 @@
         "category": "Error",
         "code": 5040
     },
+    "Option noEmit cannot be specified with option declaration.": {
+        "category": "Error",
+        "code": 5041
+    },
     "Concatenate and emit output to single file.": {
         "category": "Message",
         "code": 6001

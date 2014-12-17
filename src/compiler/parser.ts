@@ -5544,6 +5544,10 @@ module ts {
                 if (options.out || options.outDir) {
                     errors.push(createCompilerDiagnostic(Diagnostics.Option_noEmit_cannot_be_specified_with_option_out_or_outDir));
                 }
+
+                if (options.declaration) {
+                    errors.push(createCompilerDiagnostic(Diagnostics.Option_noEmit_cannot_be_specified_with_option_declaration));
+                }
             }
         }
     }

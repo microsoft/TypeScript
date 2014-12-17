@@ -379,6 +379,7 @@ module ts {
         Option_mapRoot_cannot_be_specified_without_specifying_sourcemap_option: { code: 5038, category: DiagnosticCategory.Error, key: "Option mapRoot cannot be specified without specifying sourcemap option." },
         Option_sourceRoot_cannot_be_specified_without_specifying_sourcemap_option: { code: 5039, category: DiagnosticCategory.Error, key: "Option sourceRoot cannot be specified without specifying sourcemap option." },
         Option_noEmit_cannot_be_specified_with_option_out_or_outDir: { code: 5040, category: DiagnosticCategory.Error, key: "Option noEmit cannot be specified with option out or outDir." },
+        Option_noEmit_cannot_be_specified_with_option_declaration: { code: 5041, category: DiagnosticCategory.Error, key: "Option noEmit cannot be specified with option declaration." },
         Concatenate_and_emit_output_to_single_file: { code: 6001, category: DiagnosticCategory.Message, key: "Concatenate and emit output to single file." },
         Generates_corresponding_d_ts_file: { code: 6002, category: DiagnosticCategory.Message, key: "Generates corresponding '.d.ts' file." },
         Specifies_the_location_where_debugger_should_locate_map_files_instead_of_generated_locations: { code: 6003, category: DiagnosticCategory.Message, key: "Specifies the location where debugger should locate map files instead of generated locations." },
