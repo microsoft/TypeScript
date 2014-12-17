@@ -1515,6 +1515,14 @@ module FourSlash {
             }
         }
 
+        public verifyDefinitionsCount(negative: boolean, expectedCount: number) {
+            var assertFn = negative ? assert.notEqual : assert.equal;
+
+            var definitions = this.languageService.getDefinitionAtPosition(this.activeFile.fileName, this.currentCaretPosition);
+
+            assertFn(definitions.length, expectedCount, this.messageAtLastKnownMarker("Definitions Count"));
+        }
+
         public verifyDefinitionsName(negative: boolean, expectedName: string, expectedContainerName: string) {
             this.taoInvalidReason = 'verifyDefinititionsInfo NYI';
 
