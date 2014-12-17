@@ -22,8 +22,8 @@ module ts {
             function addOutliningSpan(hintSpanNode: Node, startElement: Node, endElement: Node, autoCollapse: boolean) {
                 if (hintSpanNode && startElement && endElement) {
                     var span: OutliningSpan = {
-                        textSpan: TextSpan.fromBounds(startElement.pos, endElement.end),
-                        hintSpan: TextSpan.fromBounds(hintSpanNode.getStart(), hintSpanNode.end),
+                        textSpan: createTextSpanFromBounds(startElement.pos, endElement.end),
+                        hintSpan: createTextSpanFromBounds(hintSpanNode.getStart(), hintSpanNode.end),
                         bannerText: collapseText,
                         autoCollapse: autoCollapse
                     };
@@ -68,25 +68,41 @@ module ts {
                                 parent.kind === SyntaxKind.CatchClause) {
 
                                 addOutliningSpan(parent, openBrace, closeBrace, autoCollapse(n));
+                                break;
                             }
-                            else {
-                                // Block was a standalone block.  In this case we want to only collapse
-                                // the span of the block, independent of any parent span.
-                                var span = TextSpan.fromBounds(n.getStart(), n.end);
-                                elements.push({
-                                    textSpan: span,
-                                    hintSpan: span,
-                                    bannerText: collapseText,
-                                    autoCollapse: autoCollapse(n)
-                                });
+
+                            if (parent.kind === SyntaxKind.TryStatement) {
+                                // Could be the try-block, or the finally-block.
+                                var tryStatement = <TryStatement>parent;
+                                if (tryStatement.tryBlock === n) {
+                                    addOutliningSpan(parent, openBrace, closeBrace, autoCollapse(n));
+                                    break;
+                                }
+                                else if (tryStatement.finallyBlock === n) {
+                                    var finallyKeyword = findChildOfKind(tryStatement, SyntaxKind.FinallyKeyword, sourceFile);
+                                    if (finallyKeyword) {
+                                        addOutliningSpan(finallyKeyword, openBrace, closeBrace, autoCollapse(n));
+                                        break;
+                                    }
+                                }
+
+                                // fall through.
                             }
+
+                            // Block was a standalone block.  In this case we want to only collapse
+                            // the span of the block, independent of any parent span.
+                            var span = createTextSpanFromBounds(n.getStart(), n.end);
+                            elements.push({
+                                textSpan: span,
+                                hintSpan: span,
+                                bannerText: collapseText,
+                                autoCollapse: autoCollapse(n)
+                            });
                             break;
                         }
                         // Fallthrough.
 
                     case SyntaxKind.ModuleBlock:
-                    case SyntaxKind.TryBlock:
-                    case SyntaxKind.FinallyBlock:
                         var openBrace = findChildOfKind(n, SyntaxKind.OpenBraceToken, sourceFile);
                         var closeBrace = findChildOfKind(n, SyntaxKind.CloseBraceToken, sourceFile);
                         addOutliningSpan(n.parent, openBrace, closeBrace, autoCollapse(n));

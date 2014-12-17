@@ -1,11 +1,12 @@
 tests/cases/conformance/types/objectTypeLiteral/callSignatures/callSignaturesWithParameterInitializers2.ts(4,14): error TS2371: A parameter initializer is only allowed in a function or constructor implementation.
 tests/cases/conformance/types/objectTypeLiteral/callSignatures/callSignaturesWithParameterInitializers2.ts(11,9): error TS2371: A parameter initializer is only allowed in a function or constructor implementation.
 tests/cases/conformance/types/objectTypeLiteral/callSignatures/callSignaturesWithParameterInitializers2.ts(20,5): error TS2300: Duplicate identifier 'foo'.
+tests/cases/conformance/types/objectTypeLiteral/callSignatures/callSignaturesWithParameterInitializers2.ts(20,9): error TS2371: A parameter initializer is only allowed in a function or constructor implementation.
 tests/cases/conformance/types/objectTypeLiteral/callSignatures/callSignaturesWithParameterInitializers2.ts(20,15): error TS1005: '{' expected.
 tests/cases/conformance/types/objectTypeLiteral/callSignatures/callSignaturesWithParameterInitializers2.ts(21,5): error TS2300: Duplicate identifier 'foo'.
 
 
-==== tests/cases/conformance/types/objectTypeLiteral/callSignatures/callSignaturesWithParameterInitializers2.ts (5 errors) ====
+==== tests/cases/conformance/types/objectTypeLiteral/callSignatures/callSignaturesWithParameterInitializers2.ts (6 errors) ====
     // Optional parameters allow initializers only in implementation signatures
     // All the below declarations are errors
     
@@ -32,6 +33,8 @@ tests/cases/conformance/types/objectTypeLiteral/callSignatures/callSignaturesWit
         foo(x = 1), // error
         ~~~
 !!! error TS2300: Duplicate identifier 'foo'.
+            ~~~~~
+!!! error TS2371: A parameter initializer is only allowed in a function or constructor implementation.
                   ~
 !!! error TS1005: '{' expected.
         foo(x = 1) { }, // error

@@ -1,0 +1,10 @@
+tests/cases/compiler/objectLiteralMemberWithModifiers2.ts(1,11): error TS1184: Modifiers cannot appear here.
+tests/cases/compiler/objectLiteralMemberWithModifiers2.ts(1,22): error TS2378: A 'get' accessor must return a value or consist of a single 'throw' statement.
+
+
+==== tests/cases/compiler/objectLiteralMemberWithModifiers2.ts (2 errors) ====
+    var v = { public get foo() { } }
+              ~~~~~~
+!!! error TS1184: Modifiers cannot appear here.
+                         ~~~
+!!! error TS2378: A 'get' accessor must return a value or consist of a single 'throw' statement.

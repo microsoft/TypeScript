@@ -2,12 +2,10 @@ tests/cases/conformance/types/objectTypeLiteral/methodSignatures/objectTypesWith
 tests/cases/conformance/types/objectTypeLiteral/methodSignatures/objectTypesWithOptionalProperties2.ts(4,9): error TS1131: Property or signature expected.
 tests/cases/conformance/types/objectTypeLiteral/methodSignatures/objectTypesWithOptionalProperties2.ts(8,8): error TS1005: ';' expected.
 tests/cases/conformance/types/objectTypeLiteral/methodSignatures/objectTypesWithOptionalProperties2.ts(8,9): error TS1131: Property or signature expected.
-tests/cases/conformance/types/objectTypeLiteral/methodSignatures/objectTypesWithOptionalProperties2.ts(12,5): error TS2391: Function implementation is missing or not immediately following the declaration.
 tests/cases/conformance/types/objectTypeLiteral/methodSignatures/objectTypesWithOptionalProperties2.ts(12,8): error TS1144: '{' or ';' expected.
 tests/cases/conformance/types/objectTypeLiteral/methodSignatures/objectTypesWithOptionalProperties2.ts(12,9): error TS1068: Unexpected token. A constructor, method, accessor, or property was expected.
 tests/cases/conformance/types/objectTypeLiteral/methodSignatures/objectTypesWithOptionalProperties2.ts(16,8): error TS1005: ';' expected.
 tests/cases/conformance/types/objectTypeLiteral/methodSignatures/objectTypesWithOptionalProperties2.ts(16,9): error TS1131: Property or signature expected.
-tests/cases/conformance/types/objectTypeLiteral/methodSignatures/objectTypesWithOptionalProperties2.ts(20,5): error TS2391: Function implementation is missing or not immediately following the declaration.
 tests/cases/conformance/types/objectTypeLiteral/methodSignatures/objectTypesWithOptionalProperties2.ts(20,8): error TS1144: '{' or ';' expected.
 tests/cases/conformance/types/objectTypeLiteral/methodSignatures/objectTypesWithOptionalProperties2.ts(20,9): error TS1068: Unexpected token. A constructor, method, accessor, or property was expected.
 tests/cases/conformance/types/objectTypeLiteral/methodSignatures/objectTypesWithOptionalProperties2.ts(25,8): error TS1005: '{' expected.
@@ -15,7 +13,7 @@ tests/cases/conformance/types/objectTypeLiteral/methodSignatures/objectTypesWith
 tests/cases/conformance/types/objectTypeLiteral/methodSignatures/objectTypesWithOptionalProperties2.ts(26,1): error TS1005: ':' expected.
 
 
-==== tests/cases/conformance/types/objectTypeLiteral/methodSignatures/objectTypesWithOptionalProperties2.ts (15 errors) ====
+==== tests/cases/conformance/types/objectTypeLiteral/methodSignatures/objectTypesWithOptionalProperties2.ts (13 errors) ====
     // Illegal attempts to define optional methods
     
     var a: {
@@ -36,8 +34,6 @@ tests/cases/conformance/types/objectTypeLiteral/methodSignatures/objectTypesWith
     
     class C {
         x()?: number; // error
-        ~
-!!! error TS2391: Function implementation is missing or not immediately following the declaration.
            ~
 !!! error TS1144: '{' or ';' expected.
             ~
@@ -54,8 +50,6 @@ tests/cases/conformance/types/objectTypeLiteral/methodSignatures/objectTypesWith
     
     class C2<T> {
         x()?: T; // error
-        ~
-!!! error TS2391: Function implementation is missing or not immediately following the declaration.
            ~
 !!! error TS1144: '{' or ';' expected.
             ~

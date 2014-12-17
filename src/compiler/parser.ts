@@ -154,8 +154,6 @@ module ts {
             case SyntaxKind.SpreadElementExpression:
                 return child((<SpreadElementExpression>node).expression);
             case SyntaxKind.Block:
-            case SyntaxKind.TryBlock:
-            case SyntaxKind.FinallyBlock:
             case SyntaxKind.ModuleBlock:
                 return children((<Block>node).statements);
             case SyntaxKind.SourceFile:
@@ -163,7 +161,9 @@ module ts {
                     child((<SourceFile>node).endOfFileToken);
             case SyntaxKind.VariableStatement:
                 return children(node.modifiers) ||
-                    children((<VariableStatement>node).declarations);
+                    child((<VariableStatement>node).declarationList);
+            case SyntaxKind.VariableDeclarationList:
+                return children((<VariableDeclarationList>node).declarations);
             case SyntaxKind.ExpressionStatement:
                 return child((<ExpressionStatement>node).expression);
             case SyntaxKind.IfStatement:
@@ -177,14 +177,12 @@ module ts {
                 return child((<WhileStatement>node).expression) ||
                     child((<WhileStatement>node).statement);
             case SyntaxKind.ForStatement:
-                return children((<ForStatement>node).declarations) ||
-                    child((<ForStatement>node).initializer) ||
+                return child((<ForStatement>node).initializer) ||
                     child((<ForStatement>node).condition) ||
                     child((<ForStatement>node).iterator) ||
                     child((<ForStatement>node).statement);
             case SyntaxKind.ForInStatement:
-                return children((<ForInStatement>node).declarations) ||
-                    child((<ForInStatement>node).variable) ||
+                return child((<ForInStatement>node).initializer) ||
                     child((<ForInStatement>node).expression) ||
                     child((<ForInStatement>node).statement);
             case SyntaxKind.ContinueStatement:
@@ -435,15 +433,147 @@ module ts {
     function isUseStrictPrologueDirective(sourceFile: SourceFile, node: Node): boolean {
         Debug.assert(isPrologueDirective(node));
         var nodeText = getSourceTextOfNodeFromSourceFile(sourceFile,(<ExpressionStatement>node).expression);
+
+        // Note: the node text must be exactly "use strict" or 'use strict'.  It is not ok for the
+        // string to contain unicode escapes (as per ES5).
         return nodeText === '"use strict"' || nodeText === "'use strict'";
+    }
+
+    interface IncrementalElement extends TextRange {
+        parent?: Node;
+        intersectsChange: boolean
+        length?: number;
+        _children: Node[];
+    }
+
+    interface IncrementalNode extends Node, IncrementalElement {
+    }
+
+    interface IncrementalNodeArray extends NodeArray<IncrementalNode>, IncrementalElement {
+        length: number
+    }
+
+    // Allows finding nodes in the source file at a certain position in an efficient manner.
+    // The implementation takes advantage of the calling pattern it knows the parser will
+    // make in order to optimize finding nodes as quickly as possible.
+    interface SyntaxCursor {
+        currentNode(position: number): IncrementalNode;
+    }
+
+    const enum InvalidPosition {
+        Value = -1
+    }
+
+    function createSyntaxCursor(sourceFile: SourceFile): SyntaxCursor {
+        var currentArray: NodeArray<Node> = sourceFile.statements;
+        var currentArrayIndex = 0;
+
+        Debug.assert(currentArrayIndex < currentArray.length);
+        var current = currentArray[currentArrayIndex];
+        var lastQueriedPosition = InvalidPosition.Value;
+
+        return {
+            currentNode(position: number) {
+                // Only compute the current node if the position is different than the last time 
+                // we were asked.  The parser commonly asks for the node at the same position 
+                // twice.  Once to know if can read an appropriate list element at a certain point,
+                // and then to actually read and consume the node.
+                if (position !== lastQueriedPosition) {
+                    // Much of the time the parser will need the very next node in the array that 
+                    // we just returned a node from.So just simply check for that case and move 
+                    // forward in the array instead of searching for the node again.
+                    if (current && current.end === position && currentArrayIndex < currentArray.length) {
+                        currentArrayIndex++;
+                        current = currentArray[currentArrayIndex];
+                    }
+
+                    // If we don't have a node, or the node we have isn't in the right position,
+                    // then try to find a viable node at the position requested.
+                    if (!current || current.pos !== position) {
+                        findHighestListElementThatStartsAtPosition(position);
+                    }
+                }
+
+                // Cache this query so that we don't do any extra work if the parser calls back 
+                // into us.  Note: this is very common as the parser will make pairs of calls like
+                // 'isListElement -> parseListElement'.  If we were unable to find a node when
+                // called with 'isListElement', we don't want to redo the work when parseListElement
+                // is called immediately after.
+                lastQueriedPosition = position;
+
+                // Either we don'd have a node, or we have a node at the position being asked for.
+                Debug.assert(!current || current.pos === position);
+                return <IncrementalNode>current;
+            }
+        };
+        
+        // Finds the highest element in the tree we can find that starts at the provided position.
+        // The element must be a direct child of some node list in the tree.  This way after we
+        // return it, we can easily return its next sibling in the list.
+        function findHighestListElementThatStartsAtPosition(position: number) {
+            // Clear out any cached state about the last node we found.
+            currentArray = undefined;
+            currentArrayIndex = InvalidPosition.Value;
+            current = undefined;
+
+            // Recurse into the source file to find the highest node at this position.
+            forEachChild(sourceFile, visitNode, visitArray);
+
+            function visitNode(node: Node) {
+                if (position >= node.pos && position < node.end) {
+                    // Position was within this node.  Keep searching deeper to find the node.
+                    forEachChild(node, visitNode, visitArray);
+
+                    // don't procede any futher in the search.
+                    return true;
+                }
+
+                // position wasn't in this node, have to keep searching.
+                return false;
+            }
+
+            function visitArray(array: NodeArray<Node>) {
+                if (position >= array.pos && position < array.end) {
+                    // position was in this array.  Search through this array to see if we find a
+                    // viable element.
+                    for (var i = 0, n = array.length; i < n; i++) {
+                        var child = array[i];
+                        if (child) {
+                            if (child.pos === position) {
+                                // Found the right node.  We're done.
+                                currentArray = array;
+                                currentArrayIndex = i;
+                                current = child;
+                                return true;
+                            }
+                            else {
+                                if (child.pos < position && position < child.end) {
+                                    // Position in somewhere within this child.  Search in it and 
+                                    // stop searching in this array.
+                                    forEachChild(child, visitNode, visitArray);
+                                    return true;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                // position wasn't in this array, have to keep searching.
+                return false;
+            }
+        }
     }
 
     export function createSourceFile(filename: string, sourceText: string, languageVersion: ScriptTarget, setParentNodes = false): SourceFile {
         var parsingContext: ParsingContext;
-        var identifiers: Map<string> = {};
+        var identifiers: Map<string>;
         var identifierCount = 0;
         var nodeCount = 0;
         var lineStarts: number[];
+        var syntacticDiagnostics: Diagnostic[];
+        var scanner: Scanner;
+        var token: SyntaxKind;
+        var syntaxCursor: SyntaxCursor;
 
         // Flags that dictate what parsing context we're in.  For example:
         // Whether or not we are in strict parsing mode.  All that changes in strict parsing mode is
@@ -491,7 +621,7 @@ module ts {
         // Note: it should not be necessary to save/restore these flags during speculative/lookahead
         // parsing.  These context flags are naturally stored and restored through normal recursive
         // descent parsing and unwinding.
-        var contextFlags: ParserContextFlags = 0;
+        var contextFlags: ParserContextFlags;
 
         // Whether or not we've had a parse error since creating the last AST node.  If we have 
         // encountered an error, it will be stored on the next AST node we create.  Parse errors
@@ -520,47 +650,406 @@ module ts {
         //
         // Note: any errors at the end of the file that do not precede a regular node, should get
         // attached to the EOF token.
-        var parseErrorBeforeNextFinishedNode = false;
+        var parseErrorBeforeNextFinishedNode: boolean;
 
-        var sourceFile = <SourceFile>createNode(SyntaxKind.SourceFile, 0);
-        if (fileExtensionIs(filename, ".d.ts")) {
-            sourceFile.flags = NodeFlags.DeclarationFile;
+        var sourceFile: SourceFile;
+
+        return parseSourceFile(sourceText, setParentNodes);
+
+        function parseSourceFile(text: string, setParentNodes: boolean): SourceFile {
+            // Set our initial state before parsing.
+            sourceText = text;
+            parsingContext = 0;
+            identifiers = {};
+            lineStarts = undefined;
+            syntacticDiagnostics = undefined;
+            contextFlags = 0;
+            parseErrorBeforeNextFinishedNode = false;
+
+            sourceFile = <SourceFile>createNode(SyntaxKind.SourceFile, 0);
+            sourceFile.referenceDiagnostics = [];
+            sourceFile.parseDiagnostics = [];
+            sourceFile.semanticDiagnostics = [];
+
+            // Create and prime the scanner before parsing the source elements.
+            scanner = createScanner(languageVersion, /*skipTrivia*/ true, sourceText, scanError);
+            token = nextToken();
+
+            sourceFile.flags = fileExtensionIs(filename, ".d.ts") ? NodeFlags.DeclarationFile : 0;
+            sourceFile.end = sourceText.length;
+            sourceFile.filename = normalizePath(filename);
+            sourceFile.text = sourceText;
+
+            sourceFile.getLineAndCharacterFromPosition = getLineAndCharacterFromSourcePosition;
+            sourceFile.getPositionFromLineAndCharacter = getPositionFromSourceLineAndCharacter;
+            sourceFile.getLineStarts = getLineStarts;
+            sourceFile.getSyntacticDiagnostics = getSyntacticDiagnostics;
+            sourceFile.update = update;
+
+            processReferenceComments(sourceFile);
+
+            sourceFile.statements = parseList(ParsingContext.SourceElements, /*checkForStrictMode*/ true, parseSourceElement);
+            Debug.assert(token === SyntaxKind.EndOfFileToken);
+            sourceFile.endOfFileToken = parseTokenNode();
+
+            setExternalModuleIndicator(sourceFile);
+
+            sourceFile.nodeCount = nodeCount;
+            sourceFile.identifierCount = identifierCount;
+            sourceFile.languageVersion = languageVersion;
+            sourceFile.identifiers = identifiers;
+
+            if (setParentNodes) {
+                fixupParentReferences(sourceFile);
+            }
+
+            return sourceFile;
         }
-        sourceFile.end = sourceText.length;
-        sourceFile.filename = normalizePath(filename);
-        sourceFile.text = sourceText;
 
-        sourceFile.getLineAndCharacterFromPosition = getLineAndCharacterFromSourcePosition;
-        sourceFile.getPositionFromLineAndCharacter = getPositionFromSourceLineAndCharacter;
-        sourceFile.getLineStarts = getLineStarts;
-        sourceFile.getSyntacticDiagnostics = getSyntacticDiagnostics;
+        function update(newText: string, textChangeRange: TextChangeRange) {
+            if (textChangeRangeIsUnchanged(textChangeRange)) {
+                // if the text didn't change, then we can just return our current source file as-is.
+                return sourceFile;
+            }
 
-        sourceFile.referenceDiagnostics = [];
-        sourceFile.parseDiagnostics = [];
-        sourceFile.semanticDiagnostics = [];
+            if (sourceFile.statements.length === 0) {
+                // If we don't have any statements in the current source file, then there's no real
+                // way to incrementally parse.  So just do a full parse instead.
+                return parseSourceFile(newText, /*setNodeParents*/ true);
+            }
 
-        processReferenceComments();
+            syntaxCursor = createSyntaxCursor(sourceFile);
 
-        // Create and prime the scanner before parsing the source elements.
-        var scanner = createScanner(languageVersion, /*skipTrivia*/ true, sourceText, scanError);
-        var token = nextToken();
+            // Make the actual change larger so that we know to reparse anything whose lookahead 
+            // might have intersected the change.
+            var changeRange = extendToAffectedRange(textChangeRange);
 
-        sourceFile.statements = parseList(ParsingContext.SourceElements, /*checkForStrictMode*/ true, parseSourceElement);
-        Debug.assert(token === SyntaxKind.EndOfFileToken);
-        sourceFile.endOfFileToken = parseTokenNode();
+            // The is the amount the nodes after the edit range need to be adjusted.  It can be 
+            // positive (if the edit added characters), negative (if the edit deleted characters)
+            // or zero (if this was a pure overwrite with nothing added/removed).
+            var delta = textChangeRangeNewSpan(changeRange).length - changeRange.span.length;
 
-        sourceFile.externalModuleIndicator = getExternalModuleIndicator();
+            // If we added or removed characters during the edit, then we need to go and adjust all
+            // the nodes after the edit.  Those nodes may move forward down (if we inserted chars)
+            // or they may move backward (if we deleted chars).
+            //
+            // Doing this helps us out in two ways.  First, it means that any nodes/tokens we want
+            // to reuse are already at the appropriate position in the new text.  That way when we
+            // reuse them, we don't have to figure out if they need to be adjusted.  Second, it makes
+            // it very easy to determine if we can reuse a node.  If the node's position is at where
+            // we are in the text, then we can reuse it.  Otherwise we can't.  If hte node's position
+            // is ahead of us, then we'll need to rescan tokens.  If the node's position is behind
+            // us, then we'll need to skip it or crumble it as appropriate
+            //
+            // We will also adjust the positions of nodes that intersect the change range as well.
+            // By doing this, we ensure that all the positions in the old tree are consistent, not
+            // just the positions of nodes entirely before/after the change range.  By being 
+            // consistent, we can then easily map from positions to nodes in the old tree easily.
+            //
+            // Also, mark any syntax elements that intersect the changed span.  We know, up front,
+            // that we cannot reuse these elements.
+            updateTokenPositionsAndMarkElements(<IncrementalNode><Node>sourceFile,
+                changeRange.span.start, textSpanEnd(changeRange.span), textSpanEnd(textChangeRangeNewSpan(changeRange)), delta);
 
-        sourceFile.nodeCount = nodeCount;
-        sourceFile.identifierCount = identifierCount;
-        sourceFile.languageVersion = languageVersion;
-        sourceFile.identifiers = identifiers;
+            // Now that we've set up our internal incremental state just proceed and parse the
+            // source file in the normal fashion.  When possible the parser will retrieve and
+            // reuse nodes from the old tree.
+            // 
+            // Note: passing in 'true' for setNodeParents is very important.  When incrementally
+            // parsing, we will be reusing nodes from the old tree, and placing it into new
+            // parents.  If we don't set the parents now, we'll end up with an observably 
+            // inconsistent tree.  Setting the parents on the new tree should be very fast.  We 
+            // will immediately bail out of walking any subtrees when we can see that their parents
+            // are already correct.
+            var result = parseSourceFile(newText, /*setNodeParents*/ true);
 
-        if (setParentNodes) {
-            fixupParentReferences(sourceFile);
+            // Clear out the syntax cursor so it doesn't keep anything alive longer than it should.
+            syntaxCursor = undefined;
+
+            return result;
         }
 
-        return sourceFile;
+        function updateTokenPositionsAndMarkElements(node: IncrementalNode, changeStart: number, changeRangeOldEnd: number, changeRangeNewEnd: number, delta: number): void {
+            visitNode(node);
+
+            function visitNode(child: IncrementalNode) {
+                if (child.pos > changeRangeOldEnd) {
+                    // Node is entirely past the change range.  We need to move both its pos and 
+                    // end, forward or backward appropriately.
+                    moveElementEntirelyPastChangeRange(child, delta);
+                    return;
+                }
+
+                // Check if the element intersects the change range.  If it does, then it is not
+                // reusable.  Also, we'll need to recurse to see what constituent portions we may
+                // be able to use.
+                var fullEnd = child.end;
+                if (fullEnd >= changeStart) {
+                    child.intersectsChange = true;
+
+                    // Adjust the pos or end (or both) of the intersecting element accordingly.
+                    adjustIntersectingElement(child, changeStart, changeRangeOldEnd, changeRangeNewEnd, delta);
+                    forEachChild(child, visitNode, visitArray);
+                    return;
+                }
+
+                // Otherwise, the node is entirely before the change range.  No need to do anything with it.
+            }
+
+            function visitArray(array: IncrementalNodeArray) {
+                if (array.pos > changeRangeOldEnd) {
+                    // Array is entirely after the change range.  We need to move it, and move any of
+                    // its children.
+                    moveElementEntirelyPastChangeRange(array, delta);
+                }
+                else {
+                    // Check if the element intersects the change range.  If it does, then it is not
+                    // reusable.  Also, we'll need to recurse to see what constituent portions we may
+                    // be able to use.
+                    var fullEnd = array.end;
+                    if (fullEnd >= changeStart) {
+                        array.intersectsChange = true;
+
+                        // Adjust the pos or end (or both) of the intersecting array accordingly.
+                        adjustIntersectingElement(array, changeStart, changeRangeOldEnd, changeRangeNewEnd, delta);
+                        for (var i = 0, n = array.length; i < n; i++) {
+                            visitNode(array[i]);
+                        }
+                    }
+                    // else {
+                    // Otherwise, the array is entirely before the change range.  No need to do anything with it.
+                    // }
+                }
+            }
+        }
+
+        function adjustIntersectingElement(element: IncrementalElement, changeStart: number, changeRangeOldEnd: number, changeRangeNewEnd: number, delta: number) {
+            Debug.assert(element.end >= changeStart, "Adjusting an element that was entirely before the change range");
+            Debug.assert(element.pos <= changeRangeOldEnd, "Adjusting an element that was entirely after the change range");
+
+            // We have an element that intersects the change range in some way.  It may have its
+            // start, or its end (or both) in the changed range.  We want to adjust any part
+            // that intersects such that the final tree is in a consistent state.  i.e. all
+            // chlidren have spans within the span of their parent, and all siblings are ordered
+            // properly.
+
+            // We may need to update both the 'pos' and the 'end' of the element.
+
+            // If the 'pos' is before the start of the change, then we don't need to touch it.  
+            // If it isn't, then the 'pos' must be inside the change.  How we update it will 
+            // depend if delta is  positive or negative.  If delta is positive then we have 
+            // something like:
+            //
+            //  -------------------AAA-----------------
+            //  -------------------BBBCCCCCCC-----------------
+            //
+            // In this case, we consider any node that started in the change range to still be
+            // starting at the same position.
+            //
+            // however, if the delta is negative, then we instead have something like this:
+            //
+            //  -------------------XXXYYYYYYY-----------------
+            //  -------------------ZZZ-----------------
+            //
+            // In this case, any element that started in the 'X' range will keep its position.  
+            // However any element htat started after that will have their pos adjusted to be
+            // at the end of the new range.  i.e. any node that started in the 'Y' range will
+            // be adjusted to have their start at the end of the 'Z' range.
+            //
+            // The element will keep its position if possible.  Or Move backward to the new-end
+            // if it's in the 'Y' range.
+            element.pos = Math.min(element.pos, changeRangeNewEnd);
+
+            // If the 'end' is after the change range, then we always adjust it by the delta
+            // amount.  However, if the end is in the change range, then how we adjust it 
+            // will depend on if delta is  positive or negative.  If delta is positive then we
+            // have something like:
+            //
+            //  -------------------AAA-----------------
+            //  -------------------BBBCCCCCCC-----------------
+            //
+            // In this case, we consider any node that ended inside the change range to keep its
+            // end position.
+            //
+            // however, if the delta is negative, then we instead have something like this:
+            //
+            //  -------------------XXXYYYYYYY-----------------
+            //  -------------------ZZZ-----------------
+            //
+            // In this case, any element that ended in the 'X' range will keep its position.  
+            // However any element htat ended after that will have their pos adjusted to be
+            // at the end of the new range.  i.e. any node that ended in the 'Y' range will
+            // be adjusted to have their end at the end of the 'Z' range.
+            if (element.end >= changeRangeOldEnd) {
+                // Element ends after the change range.  Always adjust the end pos.
+                element.end += delta;
+            }
+            else {
+                // Element ends in the change range.  The element will keep its position if 
+                // possible. Or Move backward to the new-end if it's in the 'Y' range.
+                element.end = Math.min(element.end, changeRangeNewEnd);
+            }
+
+            Debug.assert(element.pos <= element.end);
+            if (element.parent) {
+                Debug.assert(element.pos >= element.parent.pos);
+                Debug.assert(element.end <= element.parent.end);
+            }
+        }
+
+        function moveElementEntirelyPastChangeRange(element: IncrementalElement, delta: number) {
+            if (element.length) {
+                visitArray(<IncrementalNodeArray>element);
+            }
+            else {
+                visitNode(<IncrementalNode>element);
+            }
+
+            function visitNode(node: IncrementalNode) {
+                // Ditch any existing LS children we may have created.  This way we can avoid 
+                // moving them forward.
+                node._children = undefined;
+                node.pos += delta;
+                node.end += delta;
+
+                forEachChild(node, visitNode, visitArray);
+            }
+
+            function visitArray(array: IncrementalNodeArray) {
+                array.pos += delta;
+                array.end += delta;
+
+                for (var i = 0, n = array.length; i < n; i++) {
+                    visitNode(array[i]);
+                }
+            }
+        }
+
+        function extendToAffectedRange(changeRange: TextChangeRange): TextChangeRange {
+            // Consider the following code:
+            //      void foo() { /; }
+            //
+            // If the text changes with an insertion of / just before the semicolon then we end up with:
+            //      void foo() { //; }
+            //
+            // If we were to just use the changeRange a is, then we would not rescan the { token 
+            // (as it does not intersect the actual original change range).  Because an edit may
+            // change the token touching it, we actually need to look back *at least* one token so
+            // that the prior token sees that change.  
+            var maxLookahead = 1;
+
+            var start = changeRange.span.start;
+
+            // the first iteration aligns us with the change start. subsequent iteration move us to
+            // the left by maxLookahead tokens.  We only need to do this as long as we're not at the
+            // start of the tree.
+            for (var i = 0; start > 0 && i <= maxLookahead; i++) {
+                var nearestNode = findNearestNodeStartingBeforeOrAtPosition(start);
+                var position = nearestNode.pos;
+
+                start = Math.max(0, position - 1);
+            }
+
+            var finalSpan = createTextSpanFromBounds(start, textSpanEnd(changeRange.span));
+            var finalLength = changeRange.newLength + (changeRange.span.start - start);
+
+            return createTextChangeRange(finalSpan, finalLength);
+        }
+
+        function findNearestNodeStartingBeforeOrAtPosition(position: number): Node {
+            var bestResult: Node = sourceFile;
+            var lastNodeEntirelyBeforePosition: Node;
+
+            forEachChild(sourceFile, visit);
+
+            if (lastNodeEntirelyBeforePosition) {
+                var lastChildOfLastEntireNodeBeforePosition = getLastChild(lastNodeEntirelyBeforePosition);
+                if (lastChildOfLastEntireNodeBeforePosition.pos > bestResult.pos) {
+                    bestResult = lastChildOfLastEntireNodeBeforePosition;
+                }
+            }
+
+            return bestResult;
+
+            function getLastChild(node: Node): Node {
+                while (true) {
+                    var lastChild = getLastChildWorker(node);
+                    if (lastChild) {
+                        node = lastChild;
+                    }
+                    else {
+                        return node;
+                    }
+                }
+            }
+
+            function getLastChildWorker(node: Node): Node {
+                var last:Node = undefined;
+                forEachChild(node, child => {
+                    if (nodeIsPresent(child)) {
+                        last = child;
+                    }
+                });
+                return last;
+            }
+
+            function visit(child: Node) {
+                if (nodeIsMissing(child)) {
+                    // Missing nodes are effectively invisible to us.  We never even consider them
+                    // When trying to find the nearest node before us.
+                    return;
+                }
+
+                // If the child intersects this position, then this node is currently the nearest 
+                // node that starts before the position.
+                if (child.pos <= position) {
+                    if (child.pos >= bestResult.pos) {
+                        // This node starts before the position, and is closer to the position than
+                        // the previous best node we found.  It is now the new best node.
+                        bestResult = child;
+                    }
+
+                    // Now, the node may overlap the position, or it may end entirely before the
+                    // position.  If it overlaps with the position, then either it, or one of its
+                    // children must be the nearest node before the position.  So we can just 
+                    // recurse into this child to see if we can find something better.
+                    if (position < child.end) {
+                        // The nearest node is either this child, or one of the children inside
+                        // of it.  We've already marked this child as the best so far.  Recurse
+                        // in case one of the children is better.
+                        forEachChild(child, visit);
+
+                        // Once we look at the children of this node, then there's no need to
+                        // continue any further.
+                        return true;
+                    }
+                    else {
+                        Debug.assert(child.end <= position);
+                        // The child ends entirely before this position.  Say you have the following
+                        // (where $ is the position)
+                        // 
+                        //      <complex expr 1> ? <complex expr 2> $ : <...> <...> 
+                        //
+                        // We would want to find the nearest preceding node in "complex expr 2". 
+                        // To support that, we keep track of this node, and once we're done searching
+                        // for a best node, we recurse down this node to see if we can find a good
+                        // result in it.
+                        //
+                        // This approach allows us to quickly skip over nodes that are entirely 
+                        // before the position, while still allowing us to find any nodes in the
+                        // last one that might be what we want.
+                        lastNodeEntirelyBeforePosition = child;
+                    }
+                }
+                else {
+                    Debug.assert(child.pos > position);
+                    // We're now at a node that is entirely past the position we're searching for.
+                    // This node (and all following nodes) could never contribute to the result,
+                    // so just skip them by returning 'true' here.
+                    return true;
+                }
+            }
+        }
 
         function setContextFlag(val: Boolean, flag: ParserContextFlags) {
             if (val) {
@@ -682,9 +1171,9 @@ module ts {
             parseErrorBeforeNextFinishedNode = true;
         }
 
-        function scanError(message: DiagnosticMessage) {
+        function scanError(message: DiagnosticMessage, length?: number) {
             var pos = scanner.getTextPos();
-            parseErrorAtPosition(pos, 0, message);
+            parseErrorAtPosition(pos, length || 0, message);
         }
 
         function getNodePos(): number {
@@ -777,7 +1266,7 @@ module ts {
             return inStrictModeContext() ? token > SyntaxKind.LastFutureReservedWord : token > SyntaxKind.LastReservedWord;
         }
 
-        function parseExpected(kind: SyntaxKind, diagnosticMessage?: DiagnosticMessage, arg0?: any): boolean {
+        function parseExpected(kind: SyntaxKind, diagnosticMessage?: DiagnosticMessage): boolean {
             if (token === kind) {
                 nextToken();
                 return true;
@@ -785,7 +1274,7 @@ module ts {
 
             // Report specific message if provided with one.  Otherwise, report generic fallback message.
             if (diagnosticMessage) {
-                parseErrorAtCurrentToken(diagnosticMessage, arg0);
+                parseErrorAtCurrentToken(diagnosticMessage);
             }
             else {
                 parseErrorAtCurrentToken(Diagnostics._0_expected, tokenToString(kind));
@@ -820,7 +1309,7 @@ module ts {
             return token === SyntaxKind.CloseBraceToken || token === SyntaxKind.EndOfFileToken || scanner.hasPrecedingLineBreak();
         }
 
-        function parseSemicolon(diagnosticMessage?: DiagnosticMessage): boolean {
+        function parseSemicolon(): boolean {
             if (canParseSemicolon()) {
                 if (token === SyntaxKind.SemicolonToken) {
                     // consume the semicolon if it was explicitly provided.
@@ -830,7 +1319,7 @@ module ts {
                 return true;
             }
             else {
-                return parseExpected(SyntaxKind.SemicolonToken, diagnosticMessage);
+                return parseExpected(SyntaxKind.SemicolonToken);
             }
         }
 
@@ -978,14 +1467,19 @@ module ts {
         }
 
         // True if positioned at the start of a list element
-        function isListElement(kind: ParsingContext, inErrorRecovery: boolean): boolean {
-            switch (kind) {
+        function isListElement(parsingContext: ParsingContext, inErrorRecovery: boolean): boolean {
+            var node = currentNode(parsingContext);
+            if (node) {
+                return true;
+            }
+
+            switch (parsingContext) {
                 case ParsingContext.SourceElements:
                 case ParsingContext.ModuleElements:
                     return isSourceElement(inErrorRecovery);
                 case ParsingContext.BlockStatements:
                 case ParsingContext.SwitchClauseStatements:
-                    return isStatement(inErrorRecovery);
+                    return isStartOfStatement(inErrorRecovery);
                 case ParsingContext.SwitchClauses:
                     return token === SyntaxKind.CaseKeyword || token === SyntaxKind.DefaultKeyword;
                 case ParsingContext.TypeMembers:
@@ -1134,7 +1628,7 @@ module ts {
 
             while (!isListTerminator(kind)) {
                 if (isListElement(kind, /* inErrorRecovery */ false)) {
-                    var element = parseElement();
+                    var element = parseListElement(kind, parseElement);
                     result.push(element);
 
                     // test elements only if we are not already in strict mode
@@ -1164,6 +1658,297 @@ module ts {
             return result;
         }
 
+        function parseListElement<T extends Node>(kind: ParsingContext, parseElement: () => T): T {
+            var node = currentNode(kind);
+            if (node) {
+                return <T>consumeNode(node);
+            }
+            
+            return parseElement();
+        }
+
+        function currentNode(parsingContext: ParsingContext): Node {
+            // If there is an outstanding parse error that we've encountered, but not attached to
+            // some node, then we cannot get a node from the old source tree.  This is because we
+            // want to mark the next node we encounter as being unusable.
+            // 
+            // Note: This may be too conservative.  Perhaps we could reuse hte node and set the bit
+            // on it (or its leftmost child) as having the error.  For now though, being conservative 
+            // is nice and likely won't ever affect perf.
+            if (parseErrorBeforeNextFinishedNode) {
+                return undefined;
+            }
+
+            if (!syntaxCursor) {
+                // if we don't have a cursor, we could never return a node from the old tree.
+                return undefined;
+            }
+
+            var node = syntaxCursor.currentNode(scanner.getStartPos());
+
+            // Can't reuse a missing node.
+            if (nodeIsMissing(node)) {
+                return undefined;
+            }
+
+            // Can't reuse a node that intersected the change range.
+            if (node.intersectsChange) {
+                return undefined;
+            }
+
+            // Can't reuse a node that contains a parse error.  This is necessary so that we 
+            // produce the same set of errors again.
+            if (containsParseError(node)) {
+                return undefined;
+            }
+
+            // We can only reuse a node if it was parsed under the same strict mode that we're 
+            // currently in.  i.e. if we originally parsed a node in non-strict mode, but then
+            // the user added 'using strict' at the top of the file, then we can't use that node
+            // again as the presense of strict mode may cause us to parse the tokens in the file
+            // differetly.
+            // 
+            // Note: we *can* reuse tokens when the strict mode changes.  That's because tokens
+            // are unaffected by strict mode.  It's just the parser will decide what to do with it
+            // differently depending on what mode it is in.
+            //
+            // This also applies to all our other context flags as well.
+            var nodeContextFlags = node.parserContextFlags & ParserContextFlags.ParserGeneratedFlags;
+            if (nodeContextFlags !== contextFlags) {
+                return undefined;
+            }
+
+            // Ok, we have a node that looks like it could be reused.  Now verify that it is valid
+            // in the currest list parsing context that we're currently at.
+            if (!canReuseNode(node, parsingContext)) {
+                return undefined;
+            }
+
+            return node;
+        }
+
+        function consumeNode(node: Node) {
+            // Move the scanner so it is after the node we just consumed.
+            scanner.setTextPos(node.end);
+            nextToken();
+            return node;
+        }
+
+        function canReuseNode(node: Node, parsingContext: ParsingContext): boolean {
+            switch (parsingContext) {
+                case ParsingContext.ModuleElements:
+                    return isReusableModuleElement(node);
+
+                case ParsingContext.ClassMembers:
+                    return isReusableClassMember(node);
+
+                case ParsingContext.SwitchClauses:
+                    return isReusableSwitchClause(node);
+
+                case ParsingContext.BlockStatements:
+                case ParsingContext.SwitchClauseStatements:
+                    return isReusableStatement(node);
+
+                case ParsingContext.EnumMembers:
+                    return isReusableEnumMember(node);
+
+                case ParsingContext.TypeMembers:
+                    return isReusableTypeMember(node);
+
+                case ParsingContext.VariableDeclarations:
+                    return isReusableVariableDeclaration(node);
+
+                case ParsingContext.Parameters:
+                    return isReusableParameter(node);
+
+                // Any other lists we do not care about reusing nodes in.  But feel free to add if 
+                // you can do so safely.  Danger areas involve nodes that may involve speculative
+                // parsing.  If speculative parsing is involved with the node, then the range the
+                // parser reached while looking ahead might be in the edited range (see the example
+                // in canReuseVariableDeclaratorNode for a good case of this).
+                case ParsingContext.HeritageClauses:
+                // This would probably be safe to reuse.  There is no speculative parsing with 
+                // heritage clauses.
+
+                case ParsingContext.TypeReferences:
+                // This would probably be safe to reuse.  There is no speculative parsing with 
+                // type names in a heritage clause.  There can be generic names in the type
+                // name list.  But because it is a type context, we never use speculative 
+                // parsing on the type argument list.
+
+                case ParsingContext.TypeParameters:
+                // This would probably be safe to reuse.  There is no speculative parsing with 
+                // type parameters.  Note that that's because type *parameters* only occur in
+                // unambiguous *type* contexts.  While type *arguments* occur in very ambiguous
+                // *expression* contexts.
+
+                case ParsingContext.TupleElementTypes:
+                // This would probably be safe to reuse.  There is no speculative parsing with 
+                // tuple types.
+
+                // Technically, type argument list types are probably safe to reuse.  While 
+                // speculative parsing is involved with them (since type argument lists are only
+                // produced from speculative parsing a < as a type argument list), we only have
+                // the types because speculative parsing succeeded.  Thus, the lookahead never
+                // went past the end of the list and rewound.
+                case ParsingContext.TypeArguments:
+
+                // Note: these are almost certainly not safe to ever reuse.  Expressions commonly
+                // need a large amount of lookahead, and we should not reuse them as they may 
+                // have actually intersected the edit.
+                case ParsingContext.ArgumentExpressions:
+
+                // This is not safe to reuse for the same reason as the 'AssignmentExpression'
+                // cases.  i.e. a property assignment may end with an expression, and thus might 
+                // have lookahead far beyond it's old node.
+                case ParsingContext.ObjectLiteralMembers:
+            }
+
+            return false;
+        }
+
+        function isReusableModuleElement(node: Node) {
+            if (node) {
+                switch (node.kind) {
+                    case SyntaxKind.ImportDeclaration:
+                    case SyntaxKind.ExportAssignment:
+                    case SyntaxKind.ClassDeclaration:
+                    case SyntaxKind.InterfaceDeclaration:
+                    case SyntaxKind.ModuleDeclaration:
+                    case SyntaxKind.EnumDeclaration:
+
+                    // Keep in sync with isStatement:
+                    case SyntaxKind.FunctionDeclaration:
+                    case SyntaxKind.VariableStatement:
+                    case SyntaxKind.Block:
+                    case SyntaxKind.IfStatement:
+                    case SyntaxKind.ExpressionStatement:
+                    case SyntaxKind.ThrowStatement:
+                    case SyntaxKind.ReturnStatement:
+                    case SyntaxKind.SwitchStatement:
+                    case SyntaxKind.BreakStatement:
+                    case SyntaxKind.ContinueStatement:
+                    case SyntaxKind.ForInStatement:
+                    case SyntaxKind.ForStatement:
+                    case SyntaxKind.WhileStatement:
+                    case SyntaxKind.WithStatement:
+                    case SyntaxKind.EmptyStatement:
+                    case SyntaxKind.TryStatement:
+                    case SyntaxKind.LabeledStatement:
+                    case SyntaxKind.DoStatement:
+                    case SyntaxKind.DebuggerStatement:
+                        return true;
+                }
+            }
+
+            return false;
+        }
+
+        function isReusableClassMember(node: Node) {
+            if (node) {
+                switch (node.kind) {
+                    case SyntaxKind.Constructor:
+                    case SyntaxKind.IndexSignature:
+                    case SyntaxKind.MethodDeclaration:
+                    case SyntaxKind.GetAccessor:
+                    case SyntaxKind.SetAccessor:
+                    case SyntaxKind.PropertyDeclaration:
+                        return true;
+                }
+            }
+
+            return false;
+        }
+
+        function isReusableSwitchClause(node: Node) {
+            if (node) {
+                switch (node.kind) {
+                    case SyntaxKind.CaseClause:
+                    case SyntaxKind.DefaultClause:
+                        return true;
+                }
+            }
+
+            return false;
+        }
+
+        function isReusableStatement(node: Node) {
+            if (node) {
+                switch (node.kind) {
+                    case SyntaxKind.FunctionDeclaration:
+                    case SyntaxKind.VariableStatement:
+                    case SyntaxKind.Block:
+                    case SyntaxKind.IfStatement:
+                    case SyntaxKind.ExpressionStatement:
+                    case SyntaxKind.ThrowStatement:
+                    case SyntaxKind.ReturnStatement:
+                    case SyntaxKind.SwitchStatement:
+                    case SyntaxKind.BreakStatement:
+                    case SyntaxKind.ContinueStatement:
+                    case SyntaxKind.ForInStatement:
+                    case SyntaxKind.ForStatement:
+                    case SyntaxKind.WhileStatement:
+                    case SyntaxKind.WithStatement:
+                    case SyntaxKind.EmptyStatement:
+                    case SyntaxKind.TryStatement:
+                    case SyntaxKind.LabeledStatement:
+                    case SyntaxKind.DoStatement:
+                    case SyntaxKind.DebuggerStatement:
+                        return true;
+                }
+            }
+
+            return false;
+        }
+
+        function isReusableEnumMember(node: Node) {
+            return node.kind === SyntaxKind.EnumMember;
+        }
+
+        function isReusableTypeMember(node: Node) {
+            if (node) {
+                switch (node.kind) {
+                    case SyntaxKind.ConstructSignature:
+                    case SyntaxKind.MethodSignature:
+                    case SyntaxKind.IndexSignature:
+                    case SyntaxKind.PropertySignature:
+                    case SyntaxKind.CallSignature:
+                        return true;
+                }
+            }
+
+            return false;
+        }
+
+        function isReusableVariableDeclaration(node: Node) {
+            if (node.kind !== SyntaxKind.VariableDeclaration) {
+                return false;
+            }
+
+            // Very subtle incremental parsing bug.  Consider the following code:
+            //
+            //      var v = new List < A, B
+            //
+            // This is actually legal code.  It's a list of variable declarators "v = new List<A" 
+            // on one side and "B" on the other. If you then change that to:
+            //
+            //      var v = new List < A, B >()
+            // 
+            // then we have a problem.  "v = new List<A" doesn't intersect the change range, so we
+            // start reparsing at "B" and we completely fail to handle this properly.
+            //
+            // In order to prevent this, we do not allow a variable declarator to be reused if it
+            // has an initializer.
+            var variableDeclarator = <VariableDeclaration>node;
+            return variableDeclarator.initializer === undefined;
+        }
+
+        function isReusableParameter(node: Node) {
+            // TODO: this most likely needs the same initializer check that 
+            // isReusableVariableDeclaration has.
+            return node.kind === SyntaxKind.Parameter;
+        }
+
         // Returns true if we should abort parsing.
         function abortParsingListOrMoveToNextToken(kind: ParsingContext) {
             parseErrorAtCurrentToken(parsingContextErrors(kind));
@@ -1185,7 +1970,7 @@ module ts {
             var commaStart = -1; // Meaning the previous token was not a comma
             while (true) {
                 if (isListElement(kind, /* inErrorRecovery */ false)) {
-                    result.push(parseElement());
+                    result.push(parseListElement(kind, parseElement));
                     commaStart = scanner.getTokenPos();
                     if (parseOptional(SyntaxKind.CommaToken)) {
                         continue;
@@ -1626,7 +2411,8 @@ module ts {
             return token === SyntaxKind.ColonToken || token === SyntaxKind.CommaToken || token === SyntaxKind.CloseBracketToken;
         }
 
-        function parseIndexSignatureDeclaration(fullStart: number, modifiers: ModifiersArray): IndexSignatureDeclaration {
+        function parseIndexSignatureDeclaration(modifiers: ModifiersArray): IndexSignatureDeclaration {
+            var fullStart = modifiers ? modifiers.pos : scanner.getStartPos();
             var node = <IndexSignatureDeclaration>createNode(SyntaxKind.IndexSignature, fullStart);
             setModifiers(node, modifiers);
             node.parameters = parseBracketedList(ParsingContext.Parameters, parseParameter, SyntaxKind.OpenBracketToken, SyntaxKind.CloseBracketToken);
@@ -1668,8 +2454,23 @@ module ts {
                 case SyntaxKind.OpenBracketToken: // Both for indexers and computed properties
                     return true;
                 default:
+                    if (isModifier(token)) {
+                        var result = lookAhead(isStartOfIndexSignatureDeclaration);
+                        if (result) {
+                            return result;
+                        }
+                    }
+
                     return isLiteralPropertyName() && lookAhead(isTypeMemberWithLiteralPropertyName);
             }
+        }
+
+        function isStartOfIndexSignatureDeclaration() {
+            while (isModifier(token)) {
+                nextToken();
+            }
+
+            return isIndexSignature();
         }
 
         function isTypeMemberWithLiteralPropertyName() {
@@ -1688,7 +2489,9 @@ module ts {
                     return parseSignatureMember(SyntaxKind.CallSignature);
                 case SyntaxKind.OpenBracketToken:
                     // Indexer or computed property
-                    return isIndexSignature() ? parseIndexSignatureDeclaration(scanner.getStartPos(), /*modifiers:*/ undefined) : parsePropertyOrMethodSignature();
+                    return isIndexSignature()
+                        ? parseIndexSignatureDeclaration(/*modifiers:*/ undefined)
+                        : parsePropertyOrMethodSignature();
                 case SyntaxKind.NewKeyword:
                     if (lookAhead(isStartOfConstructSignature)) {
                         return parseSignatureMember(SyntaxKind.ConstructSignature);
@@ -1698,10 +2501,30 @@ module ts {
                 case SyntaxKind.NumericLiteral:
                     return parsePropertyOrMethodSignature();
                 default:
+                    // Index declaration as allowed as a type member.  But as per the grammar, 
+                    // they also allow modifiers. So we have to check for an index declaration
+                    // that might be following modifiers. This ensures that things work properly 
+                    // when incrementally parsing as the parser will produce the Index declaration
+                    // if it has the same text regardless of whether it is inside a class or an
+                    // object type.
+                    if (isModifier(token)) {
+                        var result = tryParse(parseIndexSignatureWithModifiers);
+                        if (result) {
+                            return result;
+                        }
+                    }
+
                     if (isIdentifierOrKeyword()) {
                         return parsePropertyOrMethodSignature();
                     }
             }
+        }
+
+        function parseIndexSignatureWithModifiers() {
+            var modifiers = parseModifiers();
+            return isIndexSignature()
+                ? parseIndexSignatureDeclaration(modifiers)
+                : undefined;
         }
 
         function isStartOfConstructSignature() {
@@ -2286,7 +3109,7 @@ module ts {
                 return parseFunctionBlock(/*allowYield:*/ false, /* ignoreMissingOpenBrace */ false);
             }
 
-            if (isStatement(/* inErrorRecovery */ true) && !isStartOfExpressionStatement() && token !== SyntaxKind.FunctionKeyword) {
+            if (isStartOfStatement(/*inErrorRecovery:*/ true) && !isStartOfExpressionStatement() && token !== SyntaxKind.FunctionKeyword) {
                 // Check if we got a plain statement (i.e. no expression-statements, no functions expressions/declarations)
                 //
                 // Here we try to recover from a potential error situation in the case where the 
@@ -2803,25 +3626,36 @@ module ts {
             return finishNode(node);
         }
 
+        function tryParseAccessorDeclaration(fullStart: number, modifiers: ModifiersArray): AccessorDeclaration {
+            if (parseContextualModifier(SyntaxKind.GetKeyword)) {
+                return parseAccessorDeclaration(SyntaxKind.GetAccessor, fullStart, modifiers);
+            }
+            else if (parseContextualModifier(SyntaxKind.SetKeyword)) {
+                return parseAccessorDeclaration(SyntaxKind.SetAccessor, fullStart, modifiers);
+            }
+
+            return undefined;
+        }
+
         function parseObjectLiteralElement(): ObjectLiteralElement {
             var fullStart = scanner.getStartPos();
-            var initialToken = token;
+            var modifiers = parseModifiers();
 
-            if (parseContextualModifier(SyntaxKind.GetKeyword) || parseContextualModifier(SyntaxKind.SetKeyword)) {
-                var kind = initialToken === SyntaxKind.GetKeyword ? SyntaxKind.GetAccessor : SyntaxKind.SetAccessor;
-                return parseAccessorDeclaration(kind, fullStart, /*modifiers*/undefined);
+            var accessor = tryParseAccessorDeclaration(fullStart, modifiers);
+            if (accessor) {
+                return accessor;
             }
 
             var asteriskToken = parseOptionalToken(SyntaxKind.AsteriskToken);
             var tokenIsIdentifier = isIdentifier();
             var nameToken = token;
             var propertyName = parsePropertyName();
-            if (asteriskToken || token === SyntaxKind.OpenParenToken || token === SyntaxKind.LessThanToken) {
-                return parseMethodDeclaration(fullStart, /*modifiers:*/ undefined, asteriskToken, propertyName, /*questionToken:*/ undefined, /*requireBlock:*/ true);
-            }
 
             // Disallowing of optional property assignments happens in the grammar checker.
             var questionToken = parseOptionalToken(SyntaxKind.QuestionToken);
+            if (asteriskToken || token === SyntaxKind.OpenParenToken || token === SyntaxKind.LessThanToken) {
+                return parseMethodDeclaration(fullStart, modifiers, asteriskToken, propertyName, questionToken);
+            }
 
             // Parse to check if it is short-hand property assignment or normal property assignment
             if ((token === SyntaxKind.CommaToken || token === SyntaxKind.CloseBraceToken) && tokenIsIdentifier) {
@@ -2883,9 +3717,9 @@ module ts {
         }
 
         // STATEMENTS
-        function parseBlock(kind: SyntaxKind, ignoreMissingOpenBrace: boolean, checkForStrictMode: boolean): Block {
-            var node = <Block>createNode(kind);
-            if (parseExpected(SyntaxKind.OpenBraceToken) || ignoreMissingOpenBrace) {
+        function parseBlock(ignoreMissingOpenBrace: boolean, checkForStrictMode: boolean, diagnosticMessage?: DiagnosticMessage): Block {
+            var node = <Block>createNode(SyntaxKind.Block);
+            if (parseExpected(SyntaxKind.OpenBraceToken, diagnosticMessage) || ignoreMissingOpenBrace) {
                 node.statements = parseList(ParsingContext.BlockStatements, checkForStrictMode, parseStatement);
                 parseExpected(SyntaxKind.CloseBraceToken);
             }
@@ -2895,11 +3729,11 @@ module ts {
             return finishNode(node);
         }
 
-        function parseFunctionBlock(allowYield: boolean, ignoreMissingOpenBrace: boolean): Block {
+        function parseFunctionBlock(allowYield: boolean, ignoreMissingOpenBrace: boolean, diagnosticMessage?: DiagnosticMessage): Block {
             var savedYieldContext = inYieldContext();
             setYieldContext(allowYield);
 
-            var block = parseBlock(SyntaxKind.Block, ignoreMissingOpenBrace, /*checkForStrictMode*/ true);
+            var block = parseBlock(ignoreMissingOpenBrace, /*checkForStrictMode*/ true, diagnosticMessage);
 
             setYieldContext(savedYieldContext);
 
@@ -2954,42 +3788,27 @@ module ts {
             var pos = getNodePos();
             parseExpected(SyntaxKind.ForKeyword);
             parseExpected(SyntaxKind.OpenParenToken);
+
+            var initializer: VariableDeclarationList | Expression = undefined;
             if (token !== SyntaxKind.SemicolonToken) {
-                if (parseOptional(SyntaxKind.VarKeyword)) {
-                    var declarations = disallowInAnd(parseVariableDeclarationList);
-                }
-                else if (parseOptional(SyntaxKind.LetKeyword)) {
-                    var declarations = setFlag(disallowInAnd(parseVariableDeclarationList), NodeFlags.Let);
-                }
-                else if (parseOptional(SyntaxKind.ConstKeyword)) {
-                    var declarations = setFlag(disallowInAnd(parseVariableDeclarationList), NodeFlags.Const);
+                if (token === SyntaxKind.VarKeyword || token === SyntaxKind.LetKeyword || token === SyntaxKind.ConstKeyword) {
+                    initializer = parseVariableDeclarationList(/*disallowIn:*/ true);
                 }
                 else {
-                    var varOrInit = disallowInAnd(parseExpression);
+                    initializer = disallowInAnd(parseExpression);
                 }
             }
             var forOrForInStatement: IterationStatement;
             if (parseOptional(SyntaxKind.InKeyword)) {
                 var forInStatement = <ForInStatement>createNode(SyntaxKind.ForInStatement, pos);
-                if (declarations) {
-                    forInStatement.declarations = declarations;
-                }
-                else {
-                    forInStatement.variable = varOrInit;
-                }
+                forInStatement.initializer = initializer;
                 forInStatement.expression = allowInAnd(parseExpression);
                 parseExpected(SyntaxKind.CloseParenToken);
                 forOrForInStatement = forInStatement;
             }
             else {
                 var forStatement = <ForStatement>createNode(SyntaxKind.ForStatement, pos);
-                if (declarations) {
-                    forStatement.declarations = declarations;
-                }
-                if (varOrInit) {
-                    forStatement.initializer = varOrInit;
-                }
-
+                forStatement.initializer = initializer;
                 parseExpected(SyntaxKind.SemicolonToken);
                 if (token !== SyntaxKind.SemicolonToken && token !== SyntaxKind.CloseParenToken) {
                     forStatement.condition = allowInAnd(parseExpression);
@@ -3093,25 +3912,19 @@ module ts {
         // TODO: Review for error recovery
         function parseTryStatement(): TryStatement {
             var node = <TryStatement>createNode(SyntaxKind.TryStatement);
-            node.tryBlock = parseTokenAndBlock(SyntaxKind.TryKeyword);
+
+            parseExpected(SyntaxKind.TryKeyword);
+            node.tryBlock = parseBlock(/*ignoreMissingOpenBrace:*/ false, /*checkForStrictMode*/ false);
             node.catchClause = token === SyntaxKind.CatchKeyword ? parseCatchClause() : undefined;
 
             // If we don't have a catch clause, then we must have a finally clause.  Try to parse
             // one out no matter what.
-            node.finallyBlock = !node.catchClause || token === SyntaxKind.FinallyKeyword
-                ? parseTokenAndBlock(SyntaxKind.FinallyKeyword)
-                : undefined;
-            return finishNode(node);
-        }
+            if (!node.catchClause || token === SyntaxKind.FinallyKeyword) {
+                parseExpected(SyntaxKind.FinallyKeyword);
+                node.finallyBlock = parseBlock(/*ignoreMissingOpenBrace:*/ false, /*checkForStrictMode*/ false);
+            }
 
-        function parseTokenAndBlock(token: SyntaxKind): Block {
-            var pos = getNodePos();
-            parseExpected(token);
-            var result = parseBlock(
-                token === SyntaxKind.TryKeyword ? SyntaxKind.TryBlock : SyntaxKind.FinallyBlock,
-                /* ignoreMissingOpenBrace */ false, /*checkForStrictMode*/ false);
-            result.pos = pos;
-            return result;
+            return finishNode(node);
         }
 
         function parseCatchClause(): CatchClause {
@@ -3121,7 +3934,7 @@ module ts {
             result.name = parseIdentifier();
             result.type = parseTypeAnnotation();
             parseExpected(SyntaxKind.CloseParenToken);
-            result.block = parseBlock(SyntaxKind.Block, /* ignoreMissingOpenBrace */ false, /*checkForStrictMode*/ false);
+            result.block = parseBlock(/*ignoreMissingOpenBrace:*/ false, /*checkForStrictMode:*/ false);
             return finishNode(result);
         }
 
@@ -3153,7 +3966,19 @@ module ts {
             }
         }
 
-        function isStatement(inErrorRecovery: boolean): boolean {
+        function isStartOfStatement(inErrorRecovery: boolean): boolean {
+            // Functions and variable statements are allowed as a statement.  But as per the grammar,
+            // they also allow modifiers.  So we have to check for those statements that might be 
+            // following modifiers.This ensures that things work properly when incrementally parsing 
+            // as the parser will produce the same FunctionDeclaraiton or VariableStatement if it has 
+            // the same text regardless of whether it is inside a block or not.
+            if (isModifier(token)) {
+                var result = lookAhead(parseVariableStatementOrFunctionDeclarationWithModifiers);
+                if (result) {
+                    return true;
+                }
+            }
+
             switch (token) {
                 case SyntaxKind.SemicolonToken:
                     // If we're in error recovery, then we don't want to treat ';' as an empty statement.
@@ -3228,7 +4053,7 @@ module ts {
         function parseStatement(): Statement {
             switch (token) {
                 case SyntaxKind.OpenBraceToken:
-                    return parseBlock(SyntaxKind.Block, /* ignoreMissingOpenBrace */ false, /*checkForStrictMode*/ false);
+                    return parseBlock(/*ignoreMissingOpenBrace:*/ false, /*checkForStrictMode:*/ false);
                 case SyntaxKind.VarKeyword:
                 case SyntaxKind.ConstKeyword:
                     // const here should always be parsed as const declaration because of check in 'isStatement' 
@@ -3271,17 +4096,56 @@ module ts {
                     }
                 // Else parse it like identifier - fall through
                 default:
+                    // Functions and variable statements are allowed as a statement.  But as per 
+                    // the grammar, they also allow modifiers.  So we have to check for those 
+                    // statements that might be following modifiers.  This ensures that things
+                    // work properly when incrementally parsing as the parser will produce the
+                    // same FunctionDeclaraiton or VariableStatement if it has the same text
+                    // regardless of whether it is inside a block or not.
+                    if (isModifier(token)) {
+                        var result = tryParse(parseVariableStatementOrFunctionDeclarationWithModifiers);
+                        if (result) {
+                            return result;
+                        }
+                    }
+
                     return parseExpressionOrLabeledStatement();
             }
         }
 
-        function parseFunctionBlockOrSemicolon(isGenerator: boolean): Block {
-            if (token === SyntaxKind.OpenBraceToken) {
-                return parseFunctionBlock(isGenerator, /*ignoreMissingOpenBrace:*/ false);
+        function parseVariableStatementOrFunctionDeclarationWithModifiers(): FunctionDeclaration | VariableStatement {
+            var start = scanner.getStartPos();
+            var modifiers = parseModifiers();
+            switch (token) {
+                case SyntaxKind.ConstKeyword:
+                    var nextTokenIsEnum = lookAhead(nextTokenIsEnumKeyword)
+                    if (nextTokenIsEnum) {
+                        return undefined;
+                    }
+                    return parseVariableStatement(start, modifiers);
+
+                case SyntaxKind.LetKeyword:
+                    if (!isLetDeclaration()) {
+                        return undefined;
+                    }
+                    return parseVariableStatement(start, modifiers);
+
+                case SyntaxKind.VarKeyword:
+                    return parseVariableStatement(start, modifiers);
+                case SyntaxKind.FunctionKeyword:
+                    return parseFunctionDeclaration(start, modifiers);
             }
 
-            parseSemicolon(Diagnostics.or_expected);
             return undefined;
+        }
+
+        function parseFunctionBlockOrSemicolon(isGenerator: boolean, diagnosticMessage?: DiagnosticMessage): Block {
+            if (token !== SyntaxKind.OpenBraceToken && canParseSemicolon()) {
+                parseSemicolon();
+                return;
+            }
+
+            return parseFunctionBlock(isGenerator, /*ignoreMissingOpenBrace:*/ false, diagnosticMessage);
         }
 
         // DECLARATIONS
@@ -3351,39 +4215,37 @@ module ts {
             return finishNode(node);
         }
 
-        function setFlag(nodes: NodeArray<VariableDeclaration>, flag: NodeFlags): NodeArray<VariableDeclaration> {
-            for (var i = 0; i < nodes.length; i++) {
-                var node = nodes[i];
-                node.flags |= flag;
-                if (node.name && isBindingPattern(node.name)) {
-                    setFlag((<BindingPattern>node.name).elements, flag);
-                }
-            }
-            return nodes;
-        }
+        function parseVariableDeclarationList(disallowIn: boolean): VariableDeclarationList {
+            var node = <VariableDeclarationList>createNode(SyntaxKind.VariableDeclarationList);
 
-        function parseVariableDeclarationList(): NodeArray<VariableDeclaration> {
-            return parseDelimitedList(ParsingContext.VariableDeclarations, parseVariableDeclaration);
+            switch (token) {
+                case SyntaxKind.VarKeyword:
+                    break;
+                case SyntaxKind.LetKeyword:
+                    node.flags |= NodeFlags.Let;
+                    break;
+                case SyntaxKind.ConstKeyword:
+                    node.flags |= NodeFlags.Const;
+                    break;
+                default:
+                    Debug.fail();
+            }
+
+            nextToken();
+            var savedDisallowIn = inDisallowInContext();
+            setDisallowInContext(disallowIn);
+
+            node.declarations = parseDelimitedList(ParsingContext.VariableDeclarations, parseVariableDeclaration);
+
+            setDisallowInContext(savedDisallowIn);
+
+            return finishNode(node);
         }
 
         function parseVariableStatement(fullStart: number, modifiers: ModifiersArray): VariableStatement {
             var node = <VariableStatement>createNode(SyntaxKind.VariableStatement, fullStart);
             setModifiers(node, modifiers);
-
-            if (token === SyntaxKind.LetKeyword) {
-                node.flags |= NodeFlags.Let;
-            }
-            else if (token === SyntaxKind.ConstKeyword) {
-                node.flags |= NodeFlags.Const;
-            }
-            else {
-                Debug.assert(token === SyntaxKind.VarKeyword);
-            }
-
-            nextToken();
-            node.declarations = allowInAnd(parseVariableDeclarationList);
-            setFlag(node.declarations, node.flags);
-
+            node.declarationList = parseVariableDeclarationList(/*disallowIn:*/ false);
             parseSemicolon();
             return finishNode(node);
         }
@@ -3395,7 +4257,7 @@ module ts {
             node.asteriskToken = parseOptionalToken(SyntaxKind.AsteriskToken);
             node.name = parseIdentifier();
             fillSignature(SyntaxKind.ColonToken, /*yieldAndGeneratorParameterContext:*/ !!node.asteriskToken, /*requireCompleteParameterList:*/ false, node);
-            node.body = parseFunctionBlockOrSemicolon(!!node.asteriskToken);
+            node.body = parseFunctionBlockOrSemicolon(!!node.asteriskToken, Diagnostics.or_expected);
             return finishNode(node);
         }
 
@@ -3404,18 +4266,18 @@ module ts {
             setModifiers(node, modifiers);
             parseExpected(SyntaxKind.ConstructorKeyword);
             fillSignature(SyntaxKind.ColonToken, /*yieldAndGeneratorParameterContext:*/ false, /*requireCompleteParameterList:*/ false, node);
-            node.body = parseFunctionBlockOrSemicolon(/*isGenerator:*/ false);
+            node.body = parseFunctionBlockOrSemicolon(/*isGenerator:*/ false, Diagnostics.or_expected);
             return finishNode(node);
         }
 
-        function parseMethodDeclaration(fullStart: number, modifiers: ModifiersArray, asteriskToken: Node, name: DeclarationName, questionToken: Node, requireBlock: boolean): MethodDeclaration {
+        function parseMethodDeclaration(fullStart: number, modifiers: ModifiersArray, asteriskToken: Node, name: DeclarationName, questionToken: Node, diagnosticMessage?: DiagnosticMessage): MethodDeclaration {
             var method = <MethodDeclaration>createNode(SyntaxKind.MethodDeclaration, fullStart);
             setModifiers(method, modifiers);
             method.asteriskToken = asteriskToken;
             method.name = name;
             method.questionToken = questionToken;
             fillSignature(SyntaxKind.ColonToken, /*yieldAndGeneratorParameterContext:*/ !!asteriskToken, /*requireCompleteParameterList:*/ false, method);
-            method.body = requireBlock ? parseFunctionBlock(!!asteriskToken, /*ignoreMissingOpenBrace:*/ false) : parseFunctionBlockOrSemicolon(!!asteriskToken);
+            method.body = parseFunctionBlockOrSemicolon(!!asteriskToken, diagnosticMessage);
             return finishNode(method);
         }
 
@@ -3427,7 +4289,7 @@ module ts {
             // report an error in the grammar checker.
             var questionToken = parseOptionalToken(SyntaxKind.QuestionToken);
             if (asteriskToken || token === SyntaxKind.OpenParenToken || token === SyntaxKind.LessThanToken) {
-                return parseMethodDeclaration(fullStart, modifiers, asteriskToken, name, questionToken, /*requireBlock:*/ false);
+                return parseMethodDeclaration(fullStart, modifiers, asteriskToken, name, questionToken, Diagnostics.or_expected);
             }
             else {
                 var property = <PropertyDeclaration>createNode(SyntaxKind.PropertyDeclaration, fullStart);
@@ -3536,22 +4398,28 @@ module ts {
         function parseClassElement(): ClassElement {
             var fullStart = getNodePos();
             var modifiers = parseModifiers();
-            if (parseContextualModifier(SyntaxKind.GetKeyword)) {
-                return parseAccessorDeclaration(SyntaxKind.GetAccessor, fullStart, modifiers);
+
+            var accessor = tryParseAccessorDeclaration(fullStart, modifiers);
+            if (accessor) {
+                return accessor;
             }
-            if (parseContextualModifier(SyntaxKind.SetKeyword)) {
-                return parseAccessorDeclaration(SyntaxKind.SetAccessor, fullStart, modifiers);
-            }
+
             if (token === SyntaxKind.ConstructorKeyword) {
                 return parseConstructorDeclaration(fullStart, modifiers);
             }
+
             if (isIndexSignature()) {
-                return parseIndexSignatureDeclaration(fullStart, modifiers);
+                return parseIndexSignatureDeclaration(modifiers);
             }
+
             // It is very important that we check this *after* checking indexers because
             // the [ token can start an index signature or a computed property name
-            if (isIdentifierOrKeyword() || token === SyntaxKind.StringLiteral || token === SyntaxKind.NumericLiteral ||
-                token === SyntaxKind.AsteriskToken || token === SyntaxKind.OpenBracketToken) {
+            if (isIdentifierOrKeyword() ||
+                token === SyntaxKind.StringLiteral ||
+                token === SyntaxKind.NumericLiteral ||
+                token === SyntaxKind.AsteriskToken ||
+                token === SyntaxKind.OpenBracketToken) {
+
                 return parsePropertyOrMethodDeclaration(fullStart, modifiers);
             }
 
@@ -3857,7 +4725,7 @@ module ts {
         }
 
         function isSourceElement(inErrorRecovery: boolean): boolean {
-            return isDeclarationStart() || isStatement(inErrorRecovery);
+            return isDeclarationStart() || isStartOfStatement(inErrorRecovery);
         }
 
         function parseSourceElement() {
@@ -3874,7 +4742,7 @@ module ts {
                 : parseStatement();
         }
 
-        function processReferenceComments(): void {
+        function processReferenceComments(sourceFile: SourceFile): void {
             var triviaScanner = createScanner(languageVersion, /*skipTrivia*/false, sourceText);
             var referencedFiles: FileReference[] = [];
             var amdDependencies: string[] = [];
@@ -3930,16 +4798,15 @@ module ts {
             sourceFile.amdModuleName = amdModuleName;
         }
 
-        function getExternalModuleIndicator() {
-            return forEach(sourceFile.statements, node =>
+        function setExternalModuleIndicator(sourceFile: SourceFile) {
+            sourceFile.externalModuleIndicator = forEach(sourceFile.statements, node =>
                 node.flags & NodeFlags.Export
                 || node.kind === SyntaxKind.ImportDeclaration && (<ImportDeclaration>node).moduleReference.kind === SyntaxKind.ExternalModuleReference
                 || node.kind === SyntaxKind.ExportAssignment
-                ? node
-                : undefined);
+                    ? node
+                    : undefined);
         }
 
-        var syntacticDiagnostics: Diagnostic[];
         function getSyntacticDiagnostics() {
             if (syntacticDiagnostics === undefined) {
                 // Don't bother doing any grammar checks if there are already parser errors.  

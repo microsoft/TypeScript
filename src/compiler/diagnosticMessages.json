@@ -661,13 +661,17 @@
         "code": 1184,
         "isEarly":  true
     },
-    "Merge conflict marker encountered.": {
+    "Modifiers cannot appear here.": {
         "category": "Error",
         "code": 1184
     },
-    "A rest element cannot have an initializer.": {
+    "Merge conflict marker encountered.": {
         "category": "Error",
         "code": 1185
+    },
+    "A rest element cannot have an initializer.": {
+        "category": "Error",
+        "code": 1186
     },
 
     "Duplicate identifier '{0}'.": {
