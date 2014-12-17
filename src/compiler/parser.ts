@@ -535,7 +535,6 @@ module ts {
 
         sourceFile.referenceDiagnostics = [];
         sourceFile.parseDiagnostics = [];
-        sourceFile.grammarDiagnostics = [];
         sourceFile.semanticDiagnostics = [];
 
         processReferenceComments();
