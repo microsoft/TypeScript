@@ -23,8 +23,6 @@
 ////second.start();
 ////second.stop();
 
-diagnostics.setEditValidation(IncrementalEditValidation.None);
-
 goTo.file("findAllRefsOnDefinition-import.ts");
 goTo.marker("1");
 

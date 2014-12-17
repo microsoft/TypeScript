@@ -21,124 +21,6 @@ class Test262BaselineRunner extends RunnerBase {
         return Test262BaselineRunner.basePath + "/" + filename;
     }
 
-    private static serializeSourceFile(file: ts.SourceFile): string {
-        function getKindName(k: number): string {
-            return (<any>ts).SyntaxKind[k]
-        }
-
-        function getFlagName(flags: any, f: number): any {
-            if (f === 0) {
-                return 0;
-            }
-
-            var result = "";
-            ts.forEach(Object.getOwnPropertyNames(flags), (v: any) => {
-                if (isFinite(v)) {
-                    v = +v;
-                    if (f === +v) {
-                        result = flags[v];
-                        return true;
-                    }
-                    else if ((f & v) > 0) {
-                        if (result.length)
-                            result += " | ";
-                        result += flags[v];
-                        return false;
-                    }
-                }
-            });
-            return result;
-        }
-
-        function getNodeFlagName(f: number) { return getFlagName((<any>ts).NodeFlags, f); }
-        function getParserContextFlagName(f: number) {
-            // Clear the flag that are produced by aggregating child values..  That is ephemeral 
-            // data we don't care about in the dump.  We only care what the parser set directly
-            // on the ast.
-            return getFlagName((<any>ts).ParserContextFlags, f & ts.ParserContextFlags.ParserGeneratedFlags);
-        }
-        function convertDiagnostics(diagnostics: ts.Diagnostic[]) {
-            return diagnostics.map(convertDiagnostic);
-        }
-
-        function convertDiagnostic(diagnostic: ts.Diagnostic): any {
-            return {
-                start: diagnostic.start,
-                length: diagnostic.length,
-                messageText: diagnostic.messageText,
-                category: (<any>ts).DiagnosticCategory[diagnostic.category],
-                code: diagnostic.code
-            };
-        }
-
-        function serializeNode(n: ts.Node): any {
-            var o: any = { kind: getKindName(n.kind) };
-            if (ts.containsParseError(n)) {
-                o.containsParseError = true;
-            }
-
-            ts.forEach(Object.getOwnPropertyNames(n), propertyName => {
-                switch (propertyName) {
-                    case "parent":
-                    case "symbol":
-                    case "locals":
-                    case "localSymbol":
-                    case "kind":
-                    case "semanticDiagnostics":
-                    case "id":
-                    case "nodeCount":
-                    case "symbolCount":
-                    case "identifierCount":
-                        // Blacklist of items we never put in the baseline file.
-                        break;
-
-                    case "flags":
-                        // Print out flags with their enum names.
-                        o[propertyName] = getNodeFlagName(n.flags);
-                        break;
-
-                    case "parserContextFlags":
-                        o[propertyName] = getParserContextFlagName(n.parserContextFlags);
-                        break;
-
-                    case "referenceDiagnostics":
-                    case "parseDiagnostics":
-                    case "grammarDiagnostics":
-                        o[propertyName] = convertDiagnostics((<any>n)[propertyName]);
-                        break;
-
-                    case "nextContainer":
-                        if (n.nextContainer) {
-                            o[propertyName] = { kind: n.nextContainer.kind, pos: n.nextContainer.pos, end: n.nextContainer.end };
-                        }
-                        break;
-
-                    case "text":
-                        // Include 'text' field for identifiers/literals, but not for source files.
-                        if (n.kind !== ts.SyntaxKind.SourceFile) {
-                            o[propertyName] = (<any>n)[propertyName];
-                        }
-                        break;
-
-                    default:
-                        o[propertyName] = (<any>n)[propertyName];
-                }
-
-                return undefined;
-            });
-
-            return o;
-        }
-
-        return JSON.stringify(file, (k, v) => {
-            return Test262BaselineRunner.isNodeOrArray(v) ? serializeNode(v) : v;
-        }, "    ");
-    }
-
-    private static isNodeOrArray(a: any): boolean {
-        return a !== undefined && typeof a.pos === "number";
-    }
-
     private runTest(filePath: string) {
         describe('test262 test for ' + filePath, () => {
             // Mocha holds onto the closure environment of the describe callback even after the test is done.
@@ -203,7 +85,7 @@ class Test262BaselineRunner extends RunnerBase {
             it('has the expected AST',() => {
                 Harness.Baseline.runBaseline('has the expected AST', testState.filename + '.AST.txt',() => {
                     var sourceFile = testState.checker.getProgram().getSourceFile(Test262BaselineRunner.getTestFilePath(testState.filename));
-                    return Test262BaselineRunner.serializeSourceFile(sourceFile);
+                    return Utils.sourceFileToJSON(sourceFile);
                 }, false, Test262BaselineRunner.baselineOptions);
             });
         });

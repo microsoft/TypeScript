@@ -3132,27 +3132,25 @@ module ts {
             return finishNode(node);
         }
 
-        function isLabel(): boolean {
-            return isIdentifier() && lookAhead(nextTokenIsColonToken);
-        }
+        function parseExpressionOrLabeledStatement(): ExpressionStatement | LabeledStatement {
+            // Avoiding having to do the lookahead for a labeled statement by just trying to parse
+            // out an expression, seeing if it is identifier and then seeing if it is followed by
+            // a colon.
+            var fullStart = scanner.getStartPos();
+            var expression = allowInAnd(parseExpression);
 
-        function nextTokenIsColonToken() {
-            return nextToken() === SyntaxKind.ColonToken;
-        }
-
-        function parseLabeledStatement(): LabeledStatement {
-            var node = <LabeledStatement>createNode(SyntaxKind.LabeledStatement);
-            node.label = parseIdentifier();
-            parseExpected(SyntaxKind.ColonToken);
-            node.statement = parseStatement();
-            return finishNode(node);
-        }
-
-        function parseExpressionStatement(): ExpressionStatement {
-            var node = <ExpressionStatement>createNode(SyntaxKind.ExpressionStatement);
-            node.expression = allowInAnd(parseExpression);
-            parseSemicolon();
-            return finishNode(node);
+            if (expression.kind === SyntaxKind.Identifier && parseOptional(SyntaxKind.ColonToken)) {
+                var labeledStatement = <LabeledStatement>createNode(SyntaxKind.LabeledStatement, fullStart);
+                labeledStatement.label = <Identifier>expression;
+                labeledStatement.statement = parseStatement();
+                return finishNode(labeledStatement);
+            }
+            else {
+                var expressionStatement = <ExpressionStatement>createNode(SyntaxKind.ExpressionStatement, fullStart);
+                expressionStatement.expression = expression;
+                parseSemicolon();
+                return finishNode(expressionStatement);
+            }
         }
 
         function isStatement(inErrorRecovery: boolean): boolean {
@@ -3273,9 +3271,7 @@ module ts {
                     }
                     // Else parse it like identifier - fall through
                 default:
-                    return isLabel()
-                        ? parseLabeledStatement()
-                        : parseExpressionStatement();
+                    return parseExpressionOrLabeledStatement();
             }
         }
 
@@ -3290,39 +3286,37 @@ module ts {
 
         // DECLARATIONS
 
-        function parseBindingElement(context: ParsingContext): BindingElement {
-            if (context === ParsingContext.ArrayBindingElements && token === SyntaxKind.CommaToken) {
+        function parseArrayBindingElement(): BindingElement {
+            if (token === SyntaxKind.CommaToken) {
                 return <BindingElement>createNode(SyntaxKind.OmittedExpression);
             }
             var node = <BindingElement>createNode(SyntaxKind.BindingElement);
-            if (context === ParsingContext.ObjectBindingElements) {
-                // TODO(andersh): Handle computed properties
-                var id = parsePropertyName();
-                if (id.kind === SyntaxKind.Identifier && token !== SyntaxKind.ColonToken) {
-                    node.name = <Identifier>id;
-                }
-                else {
-                    parseExpected(SyntaxKind.ColonToken);
-                    node.propertyName = <Identifier>id;
-                    node.name = parseIdentifierOrPattern();
-                }
+            node.dotDotDotToken = parseOptionalToken(SyntaxKind.DotDotDotToken);
+            node.name = parseIdentifierOrPattern();
+            node.initializer = parseInitializer(/*inParameter*/ false);
+            return finishNode(node);
+        }
+
+        function parseObjectBindingElement(): BindingElement {
+            var node = <BindingElement>createNode(SyntaxKind.BindingElement);
+            // TODO(andersh): Handle computed properties
+            var id = parsePropertyName();
+            if (id.kind === SyntaxKind.Identifier && token !== SyntaxKind.ColonToken) {
+                node.name = <Identifier>id;
             }
             else {
-                node.dotDotDotToken = parseOptionalToken(SyntaxKind.DotDotDotToken);
+                parseExpected(SyntaxKind.ColonToken);
+                node.propertyName = <Identifier>id;
                 node.name = parseIdentifierOrPattern();
             }
             node.initializer = parseInitializer(/*inParameter*/ false);
             return finishNode(node);
         }
 
-        function parseBindingList(context: ParsingContext): NodeArray<BindingElement> {
-            return parseDelimitedList(context, () => parseBindingElement(context));
-        }
-
         function parseObjectBindingPattern(): BindingPattern {
             var node = <BindingPattern>createNode(SyntaxKind.ObjectBindingPattern);
             parseExpected(SyntaxKind.OpenBraceToken);
-            node.elements = parseBindingList(ParsingContext.ObjectBindingElements);
+            node.elements = parseDelimitedList(ParsingContext.ObjectBindingElements, parseObjectBindingElement);
             parseExpected(SyntaxKind.CloseBraceToken);
             return finishNode(node);
         }
@@ -3330,7 +3324,7 @@ module ts {
         function parseArrayBindingPattern(): BindingPattern {
             var node = <BindingPattern>createNode(SyntaxKind.ArrayBindingPattern);
             parseExpected(SyntaxKind.OpenBracketToken);
-            node.elements = parseBindingList(ParsingContext.ArrayBindingElements);
+            node.elements = parseDelimitedList(ParsingContext.ArrayBindingElements, parseArrayBindingElement);
             parseExpected(SyntaxKind.CloseBracketToken);
             return finishNode(node);
         }
@@ -5386,8 +5380,13 @@ module ts {
 
                 // We haven't looked for this file, do so now and cache result
                 var file = filesByName[canonicalName] = host.getSourceFile(filename, options.target, hostErrorMessage => {
-                    errors.push(createFileDiagnostic(refFile, refStart, refLength,
-                        Diagnostics.Cannot_read_file_0_Colon_1, filename, hostErrorMessage));
+                    if (refFile) {
+                        errors.push(createFileDiagnostic(refFile, refStart, refLength,
+                            Diagnostics.Cannot_read_file_0_Colon_1, filename, hostErrorMessage));
+                    }
+                    else {
+                        errors.push(createCompilerDiagnostic(Diagnostics.Cannot_read_file_0_Colon_1, filename, hostErrorMessage));
+                    }
                 });
                 if (file) {
                     seenNoDefaultLib = seenNoDefaultLib || file.hasNoDefaultLib;

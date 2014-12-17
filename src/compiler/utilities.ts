@@ -62,31 +62,34 @@ module ts {
         return node.end - node.pos;
     }
 
-    export function hasFlag(val: number, flag: number): boolean {
+    function hasFlag(val: number, flag: number): boolean {
         return (val & flag) !== 0;
     }
 
     // Returns true if this node contains a parse error anywhere underneath it.
     export function containsParseError(node: Node): boolean {
-        if (!hasFlag(node.parserContextFlags, ParserContextFlags.HasComputedThisNodeOrAnySubNodesHasError)) {
+        aggregateChildData(node);
+        return hasFlag(node.parserContextFlags, ParserContextFlags.ThisNodeOrAnySubNodesHasError);
+    }
+
+    function aggregateChildData(node: Node): void {
+        if (!hasFlag(node.parserContextFlags, ParserContextFlags.HasAggregatedChildData)) {
             // A node is considered to contain a parse error if:
             //  a) the parser explicitly marked that it had an error
             //  b) any of it's children reported that it had an error.
-            var val = hasFlag(node.parserContextFlags, ParserContextFlags.ThisNodeHasError) ||
+            var thisNodeOrAnySubNodesHasError = hasFlag(node.parserContextFlags, ParserContextFlags.ThisNodeHasError) ||
                 forEachChild(node, containsParseError);
 
             // If so, mark ourselves accordingly. 
-            if (val) {
+            if (thisNodeOrAnySubNodesHasError) {
                 node.parserContextFlags |= ParserContextFlags.ThisNodeOrAnySubNodesHasError;
             }
 
             // Also mark that we've propogated the child information to this node.  This way we can
             // always consult the bit directly on this node without needing to check its children
             // again.
-            node.parserContextFlags |= ParserContextFlags.HasComputedThisNodeOrAnySubNodesHasError;
+            node.parserContextFlags |= ParserContextFlags.HasAggregatedChildData;
         }
-
-        return hasFlag(node.parserContextFlags, ParserContextFlags.ThisNodeOrAnySubNodesHasError);
     }
 
     export function getSourceFileOfNode(node: Node): SourceFile {

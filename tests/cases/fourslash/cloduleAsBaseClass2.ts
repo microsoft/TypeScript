@@ -30,7 +30,6 @@
 
 // this line triggers a semantic/syntactic error check, remove line when 788570 is fixed
 edit.insert('');
-diagnostics.setTypingFidelity(TypingFidelity.High);
 
 goTo.marker('1');
 verify.completionListContains('foo');

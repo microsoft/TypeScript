@@ -96,19 +96,6 @@ module FourSlash {
         end: number;
     }
 
-    export enum IncrementalEditValidation {
-        None,
-        SyntacticOnly,
-        Complete
-    }
-
-    export enum TypingFidelity {
-        /// Performs typing and formatting (if formatting is enabled)
-        Low,
-        /// Performs typing, checks completion lists, signature help, and formatting (if enabled)
-        High
-    }
-
     var entityMap: ts.Map<string> = {
         '&': '&amp;',
         '"': '&quot;',
@@ -126,22 +113,22 @@ module FourSlash {
     // To add additional option, add property into the testOptMetadataNames, refer the property in either globalMetadataNames or fileMetadataNames
     // Add cases into convertGlobalOptionsToCompilationsSettings function for the compiler to acknowledge such option from meta data
     var testOptMetadataNames = {
-       baselineFile: 'BaselineFile',  
-       declaration: 'declaration',
-       emitThisFile: 'emitThisFile',  // This flag is used for testing getEmitOutput feature. It allows test-cases to indicate what file to be output in multiple files project
-       filename: 'Filename',
-       mapRoot: 'mapRoot',
-       module: 'module',
-       out: 'out',
-       outDir: 'outDir',
-       sourceMap: 'sourceMap',
-       sourceRoot: 'sourceRoot',
-       resolveReference: 'ResolveReference',  // This flag is used to specify entry file for resolve file references. The flag is only allow once per test file
+        baselineFile: 'BaselineFile',
+        declaration: 'declaration',
+        emitThisFile: 'emitThisFile',  // This flag is used for testing getEmitOutput feature. It allows test-cases to indicate what file to be output in multiple files project
+        filename: 'Filename',
+        mapRoot: 'mapRoot',
+        module: 'module',
+        out: 'out',
+        outDir: 'outDir',
+        sourceMap: 'sourceMap',
+        sourceRoot: 'sourceRoot',
+        resolveReference: 'ResolveReference',  // This flag is used to specify entry file for resolve file references. The flag is only allow once per test file
     };
 
     // List of allowed metadata names
     var fileMetadataNames = [testOptMetadataNames.filename, testOptMetadataNames.emitThisFile, testOptMetadataNames.resolveReference];
-    var globalMetadataNames = [testOptMetadataNames.baselineFile,  testOptMetadataNames.declaration,
+    var globalMetadataNames = [testOptMetadataNames.baselineFile, testOptMetadataNames.declaration,
         testOptMetadataNames.mapRoot, testOptMetadataNames.module, testOptMetadataNames.out,
         testOptMetadataNames.outDir, testOptMetadataNames.sourceMap, testOptMetadataNames.sourceRoot]
 
@@ -160,16 +147,16 @@ module FourSlash {
                     case testOptMetadataNames.module:
                         // create appropriate external module target for CompilationSettings
                         switch (globalOptions[prop]) {
-                          case "AMD":
-                            settings.module = ts.ModuleKind.AMD;
-                            break;
-                          case "CommonJS":
-                            settings.module = ts.ModuleKind.CommonJS;
-                            break;
-                          default:
-                            ts.Debug.assert(globalOptions[prop] === undefined || globalOptions[prop] === "None");
-                            settings.module = ts.ModuleKind.None;
-                            break;
+                            case "AMD":
+                                settings.module = ts.ModuleKind.AMD;
+                                break;
+                            case "CommonJS":
+                                settings.module = ts.ModuleKind.CommonJS;
+                                break;
+                            default:
+                                ts.Debug.assert(globalOptions[prop] === undefined || globalOptions[prop] === "None");
+                                settings.module = ts.ModuleKind.None;
+                                break;
                         }
                         break;
                     case testOptMetadataNames.out:
@@ -278,9 +265,6 @@ module FourSlash {
         public formatCodeOptions: ts.FormatCodeOptions;
 
         public cancellationToken: TestCancellationToken;
-
-        public editValidation = IncrementalEditValidation.Complete;
-        public typingFidelity = TypingFidelity.Low;
 
         private scenarioActions: string[] = [];
         private taoInvalidReason: string = null;
@@ -771,7 +755,7 @@ module FourSlash {
         }
 
         public verifyQuickInfoString(negative: boolean, expectedText?: string, expectedDocumentation?: string) {
-        [expectedText, expectedDocumentation].forEach(str => {
+            [expectedText, expectedDocumentation].forEach(str => {
                 if (str) {
                     this.scenarioActions.push('<ShowQuickInfo />');
                     this.scenarioActions.push('<VerifyQuickInfoTextContains IgnoreSpacing="true" Text="' + escapeXmlAttributeValue(str) + '" ' + (negative ? 'ExpectsFailure="true"' : '') + ' />');
@@ -816,7 +800,7 @@ module FourSlash {
                         result = "[\n    ";
                     }
                     result += JSON.stringify(part);
-                }); 
+                });
                 if (result) {
                     result += "\n]";
                 }
@@ -885,8 +869,8 @@ module FourSlash {
 
             var help = this.getActiveSignatureHelpItem();
             assert.equal(
-                ts.displayPartsToString(help.prefixDisplayParts) + 
-                help.parameters.map(p => ts.displayPartsToString(p.displayParts)).join(ts.displayPartsToString(help.separatorDisplayParts)) + 
+                ts.displayPartsToString(help.prefixDisplayParts) +
+                help.parameters.map(p => ts.displayPartsToString(p.displayParts)).join(ts.displayPartsToString(help.separatorDisplayParts)) +
                 ts.displayPartsToString(help.suffixDisplayParts), expected);
         }
 
@@ -1233,11 +1217,6 @@ module FourSlash {
             ts.forEach(fileNames, Harness.IO.log);
         }
 
-        private editCheckpoint(filename: string) {
-            // TODO: What's this for? It is being called by deleteChar
-            // this.languageService.getScriptLexicalStructure(filename);
-        }
-
         public deleteChar(count = 1) {
             this.scenarioActions.push('<DeleteCharNext Count="' + count + '" />');
 
@@ -1248,7 +1227,7 @@ module FourSlash {
                 // Make the edit
                 this.languageServiceShimHost.editScript(this.activeFile.fileName, offset, offset + 1, ch);
                 this.updateMarkersForEdit(this.activeFile.fileName, offset, offset + 1, ch);
-                this.editCheckpoint(this.activeFile.fileName);
+                this.checkPostEditInvariants();
 
                 // Handle post-keystroke formatting
                 if (this.enableFormatting) {
@@ -1269,7 +1248,7 @@ module FourSlash {
 
             this.languageServiceShimHost.editScript(this.activeFile.fileName, start, start + length, text);
             this.updateMarkersForEdit(this.activeFile.fileName, start, start + length, text);
-            this.editCheckpoint(this.activeFile.fileName);
+            this.checkPostEditInvariants();
 
             this.checkPostEditInvariants();
         }
@@ -1285,13 +1264,13 @@ module FourSlash {
                 // Make the edit
                 this.languageServiceShimHost.editScript(this.activeFile.fileName, offset, offset + 1, ch);
                 this.updateMarkersForEdit(this.activeFile.fileName, offset, offset + 1, ch);
-                this.editCheckpoint(this.activeFile.fileName);
+                this.checkPostEditInvariants();
 
                 // Handle post-keystroke formatting
                 if (this.enableFormatting) {
                     var edits = this.languageService.getFormattingEditsAfterKeystroke(this.activeFile.fileName, offset, ch, this.formatCodeOptions);
                     offset += this.applyEdits(this.activeFile.fileName, edits, true);
-                    this.editCheckpoint(this.activeFile.fileName);
+                    this.checkPostEditInvariants();
                 }
             }
 
@@ -1299,7 +1278,6 @@ module FourSlash {
             this.currentCaretPosition = offset;
 
             this.fixCaretPosition();
-
             this.checkPostEditInvariants();
         }
 
@@ -1311,37 +1289,7 @@ module FourSlash {
                 this.scenarioActions.push('<InsertText><![CDATA[' + text + ']]></InsertText>');
             }
 
-            if (this.typingFidelity === TypingFidelity.Low) {
-                return this.typeLowFidelity(text);
-            } else {
-                return this.typeHighFidelity(text);
-            }
-        }
-
-        private typeLowFidelity(text: string) {
-            var offset = this.currentCaretPosition;
-            for (var i = 0; i < text.length; i++) {
-                // Make the edit
-                var ch = text.charAt(i);
-                this.languageServiceShimHost.editScript(this.activeFile.fileName, offset, offset, ch);
-                this.updateMarkersForEdit(this.activeFile.fileName, offset, offset, ch);
-                this.editCheckpoint(this.activeFile.fileName);
-                offset++;
-
-                // Handle post-keystroke formatting
-                if (this.enableFormatting) {
-                    var edits = this.languageService.getFormattingEditsAfterKeystroke(this.activeFile.fileName, offset, ch, this.formatCodeOptions);
-                    offset += this.applyEdits(this.activeFile.fileName, edits, true);
-                    this.editCheckpoint(this.activeFile.fileName);
-                }
-            }
-
-            // Move the caret to wherever we ended up
-            this.currentCaretPosition = offset;
-
-            this.fixCaretPosition();
-
-            this.checkPostEditInvariants();
+            return this.typeHighFidelity(text);
         }
 
         // Enters lines of text at the current caret position, invoking
@@ -1357,7 +1305,7 @@ module FourSlash {
                 this.languageService.getBraceMatchingAtPosition(this.activeFile.fileName, offset);
 
                 this.updateMarkersForEdit(this.activeFile.fileName, offset, offset, ch);
-                this.editCheckpoint(this.activeFile.fileName);
+                this.checkPostEditInvariants();
                 offset++;
 
                 if (ch === '(' || ch === ',') {
@@ -1377,7 +1325,7 @@ module FourSlash {
                 if (this.enableFormatting) {
                     var edits = this.languageService.getFormattingEditsAfterKeystroke(this.activeFile.fileName, offset, ch, this.formatCodeOptions);
                     offset += this.applyEdits(this.activeFile.fileName, edits, true);
-                    this.editCheckpoint(this.activeFile.fileName);
+                    this.checkPostEditInvariants();
                 }
             }
 
@@ -1385,7 +1333,6 @@ module FourSlash {
             this.currentCaretPosition = offset;
 
             this.fixCaretPosition();
-
             this.checkPostEditInvariants();
         }
 
@@ -1397,14 +1344,14 @@ module FourSlash {
             var offset = this.currentCaretPosition;
             this.languageServiceShimHost.editScript(this.activeFile.fileName, offset, offset, text);
             this.updateMarkersForEdit(this.activeFile.fileName, offset, offset, text);
-            this.editCheckpoint(this.activeFile.fileName);
+            this.checkPostEditInvariants();
             offset += text.length;
 
             // Handle formatting
             if (this.enableFormatting) {
                 var edits = this.languageService.getFormattingEditsForRange(this.activeFile.fileName, start, offset, this.formatCodeOptions);
                 offset += this.applyEdits(this.activeFile.fileName, edits, true);
-                this.editCheckpoint(this.activeFile.fileName);
+                this.checkPostEditInvariants();
             }
 
             // Move the caret to wherever we ended up
@@ -1415,44 +1362,43 @@ module FourSlash {
         }
 
         private checkPostEditInvariants() {
-            return;
+            var incrementalSourceFile = this.languageService.getSourceFile(this.activeFile.fileName);
+            Utils.assertInvariants(incrementalSourceFile, /*parent:*/ undefined);
 
-            /// TODO: reimplement this section
-            //if (this.editValidation === IncrementalEditValidation.None) {
-            //    return;
+            var incrementalSyntaxDiagnostics = JSON.stringify(Utils.convertDiagnostics(incrementalSourceFile.getSyntacticDiagnostics()));
+
+            // Check syntactic structure
+            var snapshot = this.languageServiceShimHost.getScriptSnapshot(this.activeFile.fileName);
+            var content = snapshot.getText(0, snapshot.getLength());
+
+            var referenceSourceFile = ts.createLanguageServiceSourceFile(
+                this.activeFile.fileName, createScriptSnapShot(content), ts.ScriptTarget.Latest, /*version:*/ "0", /*isOpen:*/ false, /*setNodeParents:*/ false);
+            var referenceSyntaxDiagnostics = JSON.stringify(Utils.convertDiagnostics(referenceSourceFile.getSyntacticDiagnostics()));
+
+            if (incrementalSyntaxDiagnostics !== referenceSyntaxDiagnostics) {
+                this.raiseError('Mismatched incremental/reference syntactic diagnostics for file ' + this.activeFile.fileName + '.\n=== Incremental diagnostics ===\n' + incrementalSyntaxDiagnostics + '\n=== Reference Diagnostics ===\n' + referenceSyntaxDiagnostics);
+            }
+
+            Utils.assertStructuralEquals(incrementalSourceFile, referenceSourceFile);
+
+            //if (this.editValidation !== IncrementalEditValidation.SyntacticOnly) {
+            //   var compiler = new TypeScript.TypeScriptCompiler();
+            //   for (var i = 0; i < this.testData.files.length; i++) {
+            //       snapshot = this.languageServiceShimHost.getScriptSnapshot(this.testData.files[i].fileName);
+            //       compiler.addFile(this.testData.files[i].fileName, TypeScript.ScriptSnapshot.fromString(snapshot.getText(0, snapshot.getLength())), ts.ByteOrderMark.None, 0, true);
+            //   }
+
+            //   compiler.addFile('lib.d.ts', TypeScript.ScriptSnapshot.fromString(Harness.Compiler.libTextMinimal), ts.ByteOrderMark.None, 0, true);
+
+            //   for (var i = 0; i < this.testData.files.length; i++) {
+            //       var refSemanticErrs = JSON.stringify(compiler.getSemanticDiagnostics(this.testData.files[i].fileName));
+            //       var incrSemanticErrs = JSON.stringify(this.languageService.getSemanticDiagnostics(this.testData.files[i].fileName));
+
+            //       if (incrSemanticErrs !== refSemanticErrs) {
+            //           this.raiseError('Mismatched incremental/full semantic errors for file ' + this.testData.files[i].fileName + '\n=== Incremental errors ===\n' + incrSemanticErrs + '\n=== Full Errors ===\n' + refSemanticErrs);
+            //       }
+            //   }
             //}
-
-            //// Get syntactic errors (to force a refresh)
-            //var incrSyntaxErrs = JSON.stringify(this.languageService.getSyntacticDiagnostics(this.activeFile.fileName));
-
-            //// Check syntactic structure
-            //var snapshot = this.languageServiceShimHost.getScriptSnapshot(this.activeFile.fileName);
-            //var content = snapshot.getText(0, snapshot.getLength());
-            //var refSyntaxTree = TypeScript.Parser.parse(this.activeFile.fileName, TypeScript.SimpleText.fromString(content), ts.ScriptTarget.ES5, TypeScript.isDTSFile(this.activeFile.fileName));
-            //var fullSyntaxErrs = JSON.stringify(refSyntaxTree.diagnostics());
-
-            //if (incrSyntaxErrs !== fullSyntaxErrs) {
-            //    this.raiseError('Mismatched incremental/full syntactic errors for file ' + this.activeFile.fileName + '.\n=== Incremental errors ===\n' + incrSyntaxErrs + '\n=== Full Errors ===\n' + fullSyntaxErrs);
-            //}
-
-            // if (this.editValidation !== IncrementalEditValidation.SyntacticOnly) {
-            //    var compiler = new TypeScript.TypeScriptCompiler();
-            //    for (var i = 0; i < this.testData.files.length; i++) {
-            //        snapshot = this.languageServiceShimHost.getScriptSnapshot(this.testData.files[i].fileName);
-            //        compiler.addFile(this.testData.files[i].fileName, TypeScript.ScriptSnapshot.fromString(snapshot.getText(0, snapshot.getLength())), ts.ByteOrderMark.None, 0, true);
-            //    }
-
-            //    compiler.addFile('lib.d.ts', TypeScript.ScriptSnapshot.fromString(Harness.Compiler.libTextMinimal), ts.ByteOrderMark.None, 0, true);
-
-            //    for (var i = 0; i < this.testData.files.length; i++) {
-            //        var refSemanticErrs = JSON.stringify(compiler.getSemanticDiagnostics(this.testData.files[i].fileName));
-            //        var incrSemanticErrs = JSON.stringify(this.languageService.getSemanticDiagnostics(this.testData.files[i].fileName));
-
-            //        if (incrSemanticErrs !== refSemanticErrs) {
-            //            this.raiseError('Mismatched incremental/full semantic errors for file ' + this.testData.files[i].fileName + '\n=== Incremental errors ===\n' + incrSemanticErrs + '\n=== Full Errors ===\n' + refSemanticErrs);
-            //        }
-            //    }
-            // }
         }
 
         private fixCaretPosition() {
@@ -1708,8 +1654,8 @@ module FourSlash {
         private verifyClassifications(expected: { classificationType: string; text: string; textSpan?: TextSpan }[], actual: ts.ClassifiedSpan[]) {
             if (actual.length !== expected.length) {
                 this.raiseError('verifyClassifications failed - expected total classifications to be ' + expected.length +
-                                ', but was ' + actual.length +
-                                jsonMismatchString());
+                    ', but was ' + actual.length +
+                    jsonMismatchString());
             }
 
             for (var i = 0; i < expected.length; i++) {
@@ -1749,8 +1695,8 @@ module FourSlash {
 
             function jsonMismatchString() {
                 return ts.sys.newLine +
-                    "expected: '" + ts.sys.newLine + JSON.stringify(expected, (k,v) => v, 2) + "'" + ts.sys.newLine +
-                    "actual:   '" + ts.sys.newLine + JSON.stringify(actual, (k, v) => v, 2) + "'";
+                    "expected: '" + ts.sys.newLine + JSON.stringify(expected,(k, v) => v, 2) + "'" + ts.sys.newLine +
+                    "actual:   '" + ts.sys.newLine + JSON.stringify(actual,(k, v) => v, 2) + "'";
             }
         }
 
@@ -1762,7 +1708,7 @@ module FourSlash {
         }
 
         public verifySyntacticClassifications(expected: { classificationType: string; text: string }[]) {
-            var actual = this.languageService.getSyntacticClassifications(this.activeFile.fileName, 
+            var actual = this.languageService.getSyntacticClassifications(this.activeFile.fileName,
                 new ts.TextSpan(0, this.activeFile.content.length));
 
             this.verifyClassifications(expected, actual);

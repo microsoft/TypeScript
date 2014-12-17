@@ -175,6 +175,179 @@ module Utils {
     function isNodeOrArray(a: any): boolean {
         return a !== undefined && typeof a.pos === "number";
     }
+
+    export function convertDiagnostics(diagnostics: ts.Diagnostic[]) {
+        return diagnostics.map(convertDiagnostic);
+    }
+
+    function convertDiagnostic(diagnostic: ts.Diagnostic) {
+        return {
+            start: diagnostic.start,
+            length: diagnostic.length,
+            messageText: diagnostic.messageText,
+            category: (<any>ts).DiagnosticCategory[diagnostic.category],
+            code: diagnostic.code
+        };
+    }
+
+    export function sourceFileToJSON(file: ts.SourceFile): string {
+        return JSON.stringify(file,(k, v) => {
+            return isNodeOrArray(v) ? serializeNode(v) : v;
+        }, "    ");
+
+        function getKindName(k: number): string {
+            return (<any>ts).SyntaxKind[k]
+        }
+
+        function getFlagName(flags: any, f: number): any {
+            if (f === 0) {
+                return 0;
+            }
+
+            var result = "";
+            ts.forEach(Object.getOwnPropertyNames(flags),(v: any) => {
+                if (isFinite(v)) {
+                    v = +v;
+                    if (f === +v) {
+                        result = flags[v];
+                        return true;
+                    }
+                    else if ((f & v) > 0) {
+                        if (result.length)
+                            result += " | ";
+                        result += flags[v];
+                        return false;
+                    }
+                }
+            });
+            return result;
+        }
+
+        function getNodeFlagName(f: number) { return getFlagName((<any>ts).NodeFlags, f); }
+        function getParserContextFlagName(f: number) { return getFlagName((<any>ts).ParserContextFlags, f); }
+
+        function serializeNode(n: ts.Node): any {
+            var o: any = { kind: getKindName(n.kind) };
+            o.containsParseError = ts.containsParseError(n);
+
+            ts.forEach(Object.getOwnPropertyNames(n), propertyName => {
+                switch (propertyName) {
+                    case "parent":
+                    case "symbol":
+                    case "locals":
+                    case "localSymbol":
+                    case "kind":
+                    case "semanticDiagnostics":
+                    case "id":
+                    case "nodeCount":
+                    case "symbolCount":
+                    case "identifierCount":
+                    case "scriptSnapshot":
+                        // Blacklist of items we never put in the baseline file.
+                        break;
+
+                    case "flags":
+                        // Print out flags with their enum names.
+                        o[propertyName] = getNodeFlagName(n.flags);
+                        break;
+
+                    case "parserContextFlags":
+                        // Clear the flag that are produced by aggregating child values..  That is ephemeral 
+                        // data we don't care about in the dump.  We only care what the parser set directly
+                        // on the ast.
+                        var value = n.parserContextFlags & ts.ParserContextFlags.ParserGeneratedFlags;
+                        if (value) {
+                            o[propertyName] = getParserContextFlagName(value);
+                        }
+                        break;
+
+                    case "referenceDiagnostics":
+                    case "parseDiagnostics":
+                    case "grammarDiagnostics":
+                        o[propertyName] = Utils.convertDiagnostics((<any>n)[propertyName]);
+                        break;
+
+                    case "nextContainer":
+                        if (n.nextContainer) {
+                            o[propertyName] = { kind: n.nextContainer.kind, pos: n.nextContainer.pos, end: n.nextContainer.end };
+                        }
+                        break;
+
+                    case "text":
+                        // Include 'text' field for identifiers/literals, but not for source files.
+                        if (n.kind !== ts.SyntaxKind.SourceFile) {
+                            o[propertyName] = (<any>n)[propertyName];
+                        }
+                        break;
+
+                    default:
+                        o[propertyName] = (<any>n)[propertyName];
+                }
+
+                return undefined;
+            });
+
+            return o;
+        }
+    }
+
+    export function assertStructuralEquals(node1: ts.Node, node2: ts.Node) {
+        if (node1 === node2) {
+            return;
+        }
+
+        assert(node1, "node1");
+        assert(node2, "node2");
+        assert.equal(node1.pos, node2.pos, "node1.pos !== node2.pos");
+        assert.equal(node1.end, node2.end, "node1.end !== node2.end");
+        assert.equal(node1.kind, node2.kind, "node1.kind !== node2.kind");
+        assert.equal(node1.flags, node2.flags, "node1.flags !== node2.flags");
+
+        // call this on both nodes to ensure all propagated flags have been set (and thus can be 
+        // compared).
+        assert.equal(ts.containsParseError(node1), ts.containsParseError(node2));
+        assert.equal(node1.parserContextFlags, node2.parserContextFlags, "node1.parserContextFlags !== node2.parserContextFlags");
+
+        ts.forEachChild(node1,
+            child1 => {
+                var childName = findChildName(node1, child1);
+                var child2: ts.Node = (<any>node2)[childName];
+
+                assertStructuralEquals(child1, child2);
+            },
+            (array1: ts.NodeArray<ts.Node>) => {
+                var childName = findChildName(node1, array1);
+                var array2: ts.NodeArray<ts.Node> = (<any>node2)[childName];
+
+                assertArrayStructuralEquals(array1, array2);
+            });
+    }
+
+    function assertArrayStructuralEquals(array1: ts.NodeArray<ts.Node>, array2: ts.NodeArray<ts.Node>) {
+        if (array1 === array2) {
+            return;
+        }
+
+        assert(array1, "array1");
+        assert(array2, "array2");
+        assert.equal(array1.pos, array2.pos, "array1.pos !== array2.pos");
+        assert.equal(array1.end, array2.end, "array1.end !== array2.end");
+        assert.equal(array1.length, array2.length, "array1.length !== array2.length");
+
+        for (var i = 0, n = array1.length; i < n; i++) {
+            assertStructuralEquals(array1[i], array2[i]);
+        }
+    }
+
+    function findChildName(parent: any, child: any) {
+        for (var name in parent) {
+            if (parent.hasOwnProperty(name) && parent[name] === child) {
+                return name;
+            }
+        }
+
+        throw new Error("Could not find child in parent");
+    }
 }
 
 module Harness.Path {
@@ -657,7 +830,7 @@ module Harness {
                 writeFile,
                 getCanonicalFileName,
                 useCaseSensitiveFileNames: () => useCaseSensitiveFileNames,
-                getNewLine: ()=> ts.sys.newLine
+                getNewLine: () => ts.sys.newLine
             };
         }
 
@@ -699,7 +872,7 @@ module Harness {
             }
 
             public emitAll(ioHost?: IEmitterIOHost) {
-                this.compileFiles(this.inputFiles, [], (result) => {
+                this.compileFiles(this.inputFiles, [],(result) => {
                     result.files.forEach(file => {
                         ioHost.writeFile(file.fileName, file.code, false);
                     });
@@ -709,7 +882,7 @@ module Harness {
                     result.sourceMaps.forEach(file => {
                         ioHost.writeFile(file.fileName, file.code, false);
                     });
-                }, () => { }, this.compileOptions);
+                },() => { }, this.compileOptions);
             }
 
             public compileFiles(inputFiles: { unitName: string; content: string }[],
@@ -847,7 +1020,7 @@ module Harness {
                             break;
 
                         case 'includebuiltfile':
-                            inputFiles.push({ unitName: setting.value, content: IO.readFile(libFolder + setting.value)});
+                            inputFiles.push({ unitName: setting.value, content: IO.readFile(libFolder + setting.value) });
                             break;
 
                         default:
@@ -956,7 +1129,7 @@ module Harness {
                                 return ts.removeFileExtension(sourceFileName) + ".d.ts";
                             }
                         });
-                        
+
                         return ts.forEach(result.declFilesCode, declFile => declFile.fileName === dTsFileName ? declFile : undefined);
                     }
 
@@ -995,7 +1168,17 @@ module Harness {
             return errorOutput;
         }
 
+        function compareDiagnostics(d1: HarnessDiagnostic, d2: HarnessDiagnostic) {
+            return ts.compareValues(d1.filename, d2.filename) ||
+                ts.compareValues(d1.start, d2.start) ||
+                ts.compareValues(d1.end, d2.end) ||
+                ts.compareValues(d1.code, d2.code) ||
+                ts.compareValues(d1.message, d2.message) ||
+                0;
+        }
+
         export function getErrorBaseline(inputFiles: { unitName: string; content: string }[], diagnostics: HarnessDiagnostic[]) {
+            diagnostics.sort(compareDiagnostics);
 
             var outputLines: string[] = [];
             // Count up all the errors we find so we don't miss any
