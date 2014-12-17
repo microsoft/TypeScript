@@ -2772,7 +2772,7 @@ module ts {
 
             function emitModuleMemberName(node: Declaration) {
                 emitStart(node.name);
-                if (getNodeFlags(node) & NodeFlags.Export) {
+                if (getCombinedNodeFlags(node) & NodeFlags.Export) {
                     var container = getContainingModule(node);
                     write(container ? resolver.getLocalNameOfContainer(container) : "exports");
                     write(".");
@@ -2785,7 +2785,7 @@ module ts {
                 var emitCount = 0;
                 // An exported declaration is actually emitted as an assignment (to a property on the module object), so
                 // temporary variables in an exported declaration need to have real declarations elsewhere
-                var isDeclaration = (root.kind === SyntaxKind.VariableDeclaration && !(getNodeFlags(root) & NodeFlags.Export)) || root.kind === SyntaxKind.Parameter;
+                var isDeclaration = (root.kind === SyntaxKind.VariableDeclaration && !(getCombinedNodeFlags(root) & NodeFlags.Export)) || root.kind === SyntaxKind.Parameter;
                 if (root.kind === SyntaxKind.BinaryExpression) {
                     emitAssignmentExpression(<BinaryExpression>root);
                 }

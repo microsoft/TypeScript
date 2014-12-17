@@ -244,7 +244,14 @@ module ts {
         return node;
     }
 
-    export function getNodeFlags(node: Node): NodeFlags {
+    // Returns the node flags for this node and all relevant parent nodes.  This is done so that 
+    // nodes like variable declarations and binding elements can returned a view of their flags
+    // that includes the modifiers from their container.  i.e. flags like export/declare aren't
+    // stored on the variable declaration directly, but on the containing variable statement 
+    // (if it has one).  Similarly, flags for let/const are store on the variable declaration
+    // list.  By calling this function, all those flags are combined so that the client can treat
+    // the node as if it actually had those flags.
+    export function getCombinedNodeFlags(node: Node): NodeFlags {
         node = walkUpBindingElementsAndPatterns(node);
 
         var flags = node.flags;
@@ -265,11 +272,11 @@ module ts {
     }
 
     export function isConst(node: Node): boolean {
-        return !!(getNodeFlags(node) & NodeFlags.Const);
+        return !!(getCombinedNodeFlags(node) & NodeFlags.Const);
     }
 
     export function isLet(node: Node): boolean {
-        return !!(getNodeFlags(node) & NodeFlags.Let);
+        return !!(getCombinedNodeFlags(node) & NodeFlags.Let);
     }
 
     export function isPrologueDirective(node: Node): boolean {
