@@ -895,10 +895,6 @@ module ts {
         // missing tokens, or tokens it didn't know how to deal with).
         parseDiagnostics: Diagnostic[];
 
-        // Grammar errors are for  things the parser understood, but either the ES6 or TS grammars
-        // do not allow (like putting an 'public' modifier on a 'class declaration').
-        grammarDiagnostics: Diagnostic[];
-
         // Returns all syntactic diagnostics (i.e. the reference, parser and grammar diagnostics).
         getSyntacticDiagnostics(): Diagnostic[];
 
@@ -1227,6 +1223,7 @@ module ts {
         isVisible?: boolean;              // Is this node visible
         localModuleName?: string;         // Local name for module instance
         assignmentChecks?: Map<boolean>;  // Cache of assignment checks
+        hasReportedStatementInAmbientContext?: boolean;  // Cache boolean if we report statements in ambient context
         importOnRightSide?: Symbol;       // for import declarations - import that appear on the right side
     }
 

@@ -6,11 +6,13 @@ tests/cases/conformance/es6/templates/taggedTemplateStringsWithTagsTypedAsAny.ts
 tests/cases/conformance/es6/templates/taggedTemplateStringsWithTagsTypedAsAny.ts(13,3): error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
 tests/cases/conformance/es6/templates/taggedTemplateStringsWithTagsTypedAsAny.ts(15,3): error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
 tests/cases/conformance/es6/templates/taggedTemplateStringsWithTagsTypedAsAny.ts(17,3): error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
+tests/cases/conformance/es6/templates/taggedTemplateStringsWithTagsTypedAsAny.ts(19,3): error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
 tests/cases/conformance/es6/templates/taggedTemplateStringsWithTagsTypedAsAny.ts(19,32): error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
+tests/cases/conformance/es6/templates/taggedTemplateStringsWithTagsTypedAsAny.ts(21,3): error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
 tests/cases/conformance/es6/templates/taggedTemplateStringsWithTagsTypedAsAny.ts(21,46): error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
 
 
-==== tests/cases/conformance/es6/templates/taggedTemplateStringsWithTagsTypedAsAny.ts (10 errors) ====
+==== tests/cases/conformance/es6/templates/taggedTemplateStringsWithTagsTypedAsAny.ts (12 errors) ====
     var f: any;
     
     f `abc`
@@ -46,10 +48,14 @@ tests/cases/conformance/es6/templates/taggedTemplateStringsWithTagsTypedAsAny.ts
 !!! error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
     
     f `abc`["member"].someOtherTag `abc${1}def${2}ghi`;
+      ~~~~~
+!!! error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
                                    ~~~~~~
 !!! error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
     
     f `abc${1}def${2}ghi`["member"].someOtherTag `abc${1}def${2}ghi`;
+      ~~~~~~
+!!! error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
                                                  ~~~~~~
 !!! error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
     
