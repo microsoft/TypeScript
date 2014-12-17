@@ -426,7 +426,7 @@ module ts {
             ((<Identifier>node).text === "eval" || (<Identifier>node).text === "arguments");
     }
 
-        /// Should be called only on prologue directives (isPrologueDirective(node) should be true)
+    /// Should be called only on prologue directives (isPrologueDirective(node) should be true)
     function isUseStrictPrologueDirective(sourceFile: SourceFile, node: Node): boolean {
         Debug.assert(isPrologueDirective(node));
         var nodeText = getSourceTextOfNodeFromSourceFile(sourceFile,(<ExpressionStatement>node).expression);
@@ -451,7 +451,7 @@ module ts {
     }
 
     // Allows finding nodes in the source file at a certain position in an efficient manner.
-    // The implementation takes advantage of the calling pattern it knows hte parser will
+    // The implementation takes advantage of the calling pattern it knows the parser will
     // make in order to optimize finding nodes as quickly as possible.
     interface SyntaxCursor {
         currentNode(position: number): IncrementalNode;
@@ -467,11 +467,14 @@ module ts {
 
         return {
             currentNode(position: number) {
-                // If the position is different than the last time we were asked.
+                // Only compute the current node if the position is different than the last time 
+                // we were asked.  The parser commonly asks for the node at the same position 
+                // twice.  Once to know if can read an appropriate list element at a certain point,
+                // and then to actually read and consume the node.
                 if (position !== lastQueriedPosition) {
-                    // Much of the time the parser will be need the very next node in the array 
-                    // that we just returned a node from.  So just simply check for that case and
-                    // move forward in the array instead of searching for the node again.
+                    // Much of the time the parser will need the very next node in the array that 
+                    // we just returned a node from.So just simply check for that case and move 
+                    // forward in the array instead of searching for the node again.
                     if (current && current.end === position && currentArrayIndex < currentArray.length) {
                         currentArrayIndex++;
                         current = currentArray[currentArrayIndex];
@@ -701,7 +704,7 @@ module ts {
             }
 
             if (sourceFile.statements.length === 0) {
-                // If we don't have any statements in the current source file, hten there's no real
+                // If we don't have any statements in the current source file, then there's no real
                 // way to incrementally parse.  So just do a full parse instead.
                 return parseSourceFile(newText, /*setNodeParents*/ true);
             }
@@ -765,23 +768,23 @@ module ts {
                     // Node is entirely past the change range.  We need to move both its pos and 
                     // end, forward or backward appropriately.
                     moveElementEntirelyPastChangeRange(child, delta);
+                    return;
                 }
-                else {
-                    // Check if the element intersects the change range.  If it does, then it is not
-                    // reusable.  Also, we'll need to recurse to see what constituent portions we may
-                    // be able to use.
-                    var fullEnd = child.end;
-                    if (fullEnd >= changeStart) {
-                        child.intersectsChange = true;
 
-                        // Adjust the pos or end (or both) of the intersecting element accordingly.
-                        adjustIntersectingElement(child, changeStart, changeRangeOldEnd, changeRangeNewEnd, delta);
-                        forEachChild(child, visitNode, visitArray);
-                    }
-                    // else {
-                    // Otherwise, the node is entirely before the change range.  No need to do anything with it.
-                    // }
+                // Check if the element intersects the change range.  If it does, then it is not
+                // reusable.  Also, we'll need to recurse to see what constituent portions we may
+                // be able to use.
+                var fullEnd = child.end;
+                if (fullEnd >= changeStart) {
+                    child.intersectsChange = true;
+
+                    // Adjust the pos or end (or both) of the intersecting element accordingly.
+                    adjustIntersectingElement(child, changeStart, changeRangeOldEnd, changeRangeNewEnd, delta);
+                    forEachChild(child, visitNode, visitArray);
+                    return;
                 }
+
+                // Otherwise, the node is entirely before the change range.  No need to do anything with it.
             }
 
             function visitArray(array: IncrementalNodeArray) {
