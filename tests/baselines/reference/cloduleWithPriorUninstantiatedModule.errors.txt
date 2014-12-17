@@ -1,0 +1,21 @@
+tests/cases/compiler/cloduleWithPriorUninstantiatedModule.ts(2,8): error TS2434: A module declaration cannot be located prior to a class or function with which it is merged
+
+
+==== tests/cases/compiler/cloduleWithPriorUninstantiatedModule.ts (1 errors) ====
+    // Ambient/uninstantiated module.
+    module Moclodule {
+           ~~~~~~~~~
+!!! error TS2434: A module declaration cannot be located prior to a class or function with which it is merged
+        export interface Someinterface {
+            foo(): void;
+        }
+    }
+    
+    class Moclodule {
+    }
+    
+    // Instantiated module.
+    module Moclodule {
+        export class Manager {
+        }
+    }
