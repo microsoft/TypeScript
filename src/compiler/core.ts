@@ -261,7 +261,6 @@ module ts {
             messageText: text,
             category: message.category,
             code: message.code,
-            isEarly: message.isEarly
         };
     }
 
@@ -281,7 +280,6 @@ module ts {
             messageText: text,
             category: message.category,
             code: message.code,
-            isEarly: message.isEarly
         };
     }
 

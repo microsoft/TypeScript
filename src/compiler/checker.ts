@@ -63,7 +63,6 @@ module ts {
             getSignatureFromDeclaration,
             isImplementationOfOverload,
             getAliasedSymbol: resolveImport,
-            hasEarlyErrors,
             isEmitBlocked,
         };
 
@@ -9871,13 +9870,8 @@ module ts {
 
         function isEmitBlocked(sourceFile?: SourceFile): boolean {
             return program.getDiagnostics(sourceFile).length !== 0 ||
-                hasEarlyErrors(sourceFile) ||
                 (compilerOptions.noEmitOnError && getDiagnostics(sourceFile).length !== 0);
        }
-
-        function hasEarlyErrors(sourceFile?: SourceFile): boolean {
-            return forEach(getDiagnostics(sourceFile), d => d.isEarly);
-        }
 
         function isImportResolvedToValue(symbol: Symbol): boolean {
             var target = resolveImport(symbol);
