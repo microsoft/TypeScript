@@ -14333,12 +14333,18 @@ var ts;
             }
             return undefined;
         }
-        function getContextualTypeForArgument(node) {
-            var callExpression = node.parent;
-            var argIndex = ts.indexOf(callExpression.arguments, node);
+        function getContextualTypeForArgument(callTarget, arg) {
+            var args = getEffectiveCallArguments(callTarget);
+            var argIndex = ts.indexOf(args, arg);
             if (argIndex >= 0) {
-                var signature = getResolvedSignature(callExpression);
+                var signature = getResolvedSignature(callTarget);
                 return getTypeAtPosition(signature, argIndex);
+            }
+            return undefined;
+        }
+        function getContextualTypeForSubstitutionExpression(template, substitutionExpression) {
+            if (template.parent.kind === 147 /* TaggedTemplateExpression */) {
+                return getContextualTypeForArgument(template.parent, substitutionExpression);
             }
             return undefined;
         }
@@ -14444,7 +14450,7 @@ var ts;
                     return getContextualTypeForReturnExpression(node);
                 case 145 /* CallExpression */:
                 case 146 /* NewExpression */:
-                    return getContextualTypeForArgument(node);
+                    return getContextualTypeForArgument(parent, node);
                 case 148 /* TypeAssertionExpression */:
                     return getTypeFromTypeNode(parent.type);
                 case 157 /* BinaryExpression */:
@@ -14455,6 +14461,9 @@ var ts;
                     return getContextualTypeForElementExpression(node);
                 case 158 /* ConditionalExpression */:
                     return getContextualTypeForConditionalOperand(node);
+                case 162 /* TemplateSpan */:
+                    ts.Debug.assert(parent.parent.kind === 159 /* TemplateExpression */);
+                    return getContextualTypeForSubstitutionExpression(parent.parent, node);
             }
             return undefined;
         }
@@ -17132,6 +17141,8 @@ var ts;
                 case 145 /* CallExpression */:
                 case 146 /* NewExpression */:
                 case 147 /* TaggedTemplateExpression */:
+                case 159 /* TemplateExpression */:
+                case 162 /* TemplateSpan */:
                 case 148 /* TypeAssertionExpression */:
                 case 149 /* ParenthesizedExpression */:
                 case 153 /* TypeOfExpression */:
