@@ -163,6 +163,14 @@ module TypeScript {
             return this.window[this.currentRelativeItemIndex];
         }
 
+        public currentItemWithoutFetching(): any {
+            if (this.currentRelativeItemIndex >= this.windowCount) {
+                return undefined;
+            }
+
+            return this.window[this.currentRelativeItemIndex];
+        }
+
         public peekItemN(n: number): any {
             // Assert disabled because it is actually expensive enugh to affect perf.
             // Debug.assert(n >= 0);

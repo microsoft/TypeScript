@@ -1,0 +1,17 @@
+tests/cases/conformance/es6/functionDeclarations/FunctionDeclaration7_es6.ts(1,9): error TS9001: Generators are not currently supported.
+tests/cases/conformance/es6/functionDeclarations/FunctionDeclaration7_es6.ts(3,11): error TS9001: Generators are not currently supported.
+tests/cases/conformance/es6/functionDeclarations/FunctionDeclaration7_es6.ts(3,20): error TS2304: Cannot find name 'yield'.
+
+
+==== tests/cases/conformance/es6/functionDeclarations/FunctionDeclaration7_es6.ts (3 errors) ====
+    function*bar() {
+            ~
+!!! error TS9001: Generators are not currently supported.
+      // 'yield' here is an identifier, and not a yield expression.
+      function*foo(a = yield) {
+              ~
+!!! error TS9001: Generators are not currently supported.
+                       ~~~~~
+!!! error TS2304: Cannot find name 'yield'.
+      }
+    }

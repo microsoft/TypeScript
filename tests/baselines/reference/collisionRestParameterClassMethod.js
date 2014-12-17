@@ -44,8 +44,8 @@ var c1 = (function () {
     }
     c1.prototype.foo = function (_i) {
         var restParameters = [];
-        for (var _i = 1; _i < arguments.length; _i++) {
-            restParameters[_i - 1] = arguments[_i];
+        for (var _a = 1; _a < arguments.length; _a++) {
+            restParameters[_a - 1] = arguments[_a];
         }
         var _i = 10; // no error
     };
@@ -54,8 +54,8 @@ var c1 = (function () {
     };
     c1.prototype.f4 = function (_i) {
         var rest = [];
-        for (var _i = 1; _i < arguments.length; _i++) {
-            rest[_i - 1] = arguments[_i];
+        for (var _a = 1; _a < arguments.length; _a++) {
+            rest[_a - 1] = arguments[_a];
         }
         var _i; // no error
     };
@@ -69,8 +69,8 @@ var c3 = (function () {
     }
     c3.prototype.foo = function () {
         var restParameters = [];
-        for (var _i = 0; _i < arguments.length; _i++) {
-            restParameters[_i - 0] = arguments[_i];
+        for (var _a = 0; _a < arguments.length; _a++) {
+            restParameters[_a - 0] = arguments[_a];
         }
         var _i = 10; // no error
     };

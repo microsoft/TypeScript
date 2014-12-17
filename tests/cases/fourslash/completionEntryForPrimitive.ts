@@ -2,7 +2,6 @@
 
 ////var x = Object.create(/**/
 
-diagnostics.setEditValidation(IncrementalEditValidation.None);
 goTo.marker();
 verify.not.completionListIsEmpty();
 edit.insert("nu");

@@ -1,3 +1,6 @@
+/// <reference no-default-lib="true"/>
+
+/// <reference path="..\..\bin\lib.core.d.ts"/>
 /// <reference path="analyzerEnv.ts"/>
 /// <reference path="..\compiler\types.ts"/>
 /// <reference path="..\compiler\core.ts"/>
@@ -59,7 +62,9 @@ function analyze(libFileName: string, files: string[], outputFolder: string): Pr
         getScriptIsOpen: _ => false,
         getScriptVersion: _ => "1",
         getScriptSnapshot: name => scriptSnapshots[name],
-        log: (s) => { }
+        log: (s) => { },
+        trace: (s) => { },
+        error: (s) => { }
     };
 
     var documentRegistry: ts.DocumentRegistry = {
@@ -90,7 +95,7 @@ function analyze(libFileName: string, files: string[], outputFolder: string): Pr
 
         var json = JSON.stringify(result);
         var path = ts.combinePaths(outputFolder, i + ".json");
-        sys.writeFile(path, json, /*writeByteOrderMark*/ false);
+        ts.sys.writeFile(path, json, /*writeByteOrderMark*/ false);
         processedFiles.push({ fileName: f.filename, index: i });
     }
     return processedFiles;
@@ -124,6 +129,8 @@ function analyze(libFileName: string, files: string[], outputFolder: string): Pr
 
     function getDeclarationName(decl: ts.Node): string {
         switch (decl.kind) {
+            case ts.SyntaxKind.TypeAliasDeclaration:
+                return "type alias";
             case ts.SyntaxKind.Constructor:
                 return "constructor";
             case ts.SyntaxKind.TypeParameter:
@@ -132,12 +139,14 @@ function analyze(libFileName: string, files: string[], outputFolder: string): Pr
                 return "parameter";
             case ts.SyntaxKind.VariableDeclaration:
                 return "variable";
-            case ts.SyntaxKind.Property:
+            case ts.SyntaxKind.PropertySignature:
+            case ts.SyntaxKind.PropertyDeclaration:
             case ts.SyntaxKind.PropertyAssignment:
                 return "property";
             case ts.SyntaxKind.EnumMember:
                 return "enum member"
-            case ts.SyntaxKind.Method:
+            case ts.SyntaxKind.MethodSignature:
+            case ts.SyntaxKind.MethodDeclaration:
                 return "method";
             case ts.SyntaxKind.FunctionDeclaration:
                 return "function";
@@ -180,7 +189,8 @@ function analyze(libFileName: string, files: string[], outputFolder: string): Pr
                     return ts.declarationNameToString((<ts.Declaration>decl).name); // take a shortcut
                 case ts.SyntaxKind.GetAccessor:
                 case ts.SyntaxKind.SetAccessor:
-                case ts.SyntaxKind.Property:
+                case ts.SyntaxKind.PropertyDeclaration:
+                case ts.SyntaxKind.PropertySignature:
                 case ts.SyntaxKind.PropertyAssignment:
                     if (curr.parent && curr.parent.kind === ts.SyntaxKind.TypeLiteral) {
                         return ts.declarationNameToString((<ts.Declaration>decl).name); // take a shortcut
@@ -307,7 +317,6 @@ function analyze(libFileName: string, files: string[], outputFolder: string): Pr
                         : token.parent && ts.isDeclaration(token.parent)
                         ? (<ts.Declaration>token.parent).name
                         : token;
-                    var symbol = checker.getSymbolInfo(target);
                     defStart = target.getStart();
                 }
                 var link: Hyperlink = {
@@ -329,14 +338,14 @@ function analyze(libFileName: string, files: string[], outputFolder: string): Pr
     function createProgram(files: string[]): ts.Program {
         var host: ts.CompilerHost = {
             getSourceFile: (filename, languageVersion) => {
-                if (sys.fileExists(filename)) {
-                    var text = sys.readFile(filename);
-                    return ts.createSourceFile(filename, text, languageVersion, "1");
+                if (ts.sys.fileExists(filename)) {
+                    var text = ts.sys.readFile(filename);
+                    return ts.createSourceFile(filename, text, languageVersion);
                 }
             },
             getCancellationToken: () => ts.CancellationTokenObject.None,
-            getCanonicalFileName: (filename) => sys.useCaseSensitiveFileNames ? filename : filename.toLowerCase(),
-            useCaseSensitiveFileNames: () => sys.useCaseSensitiveFileNames,
+            getCanonicalFileName: (filename) => ts.sys.useCaseSensitiveFileNames ? filename : filename.toLowerCase(),
+            useCaseSensitiveFileNames: () => ts.sys.useCaseSensitiveFileNames,
             getNewLine: () => "\r\n",
             getDefaultLibFilename: (): string => {
                 return libFileName;
@@ -345,7 +354,7 @@ function analyze(libFileName: string, files: string[], outputFolder: string): Pr
                 throw new Error("NYI");
             },
             getCurrentDirectory: (): string => {
-                return sys.getCurrentDirectory();
+                return ts.sys.getCurrentDirectory();
             }
         };
         return ts.createProgram(files, { target: ts.ScriptTarget.ES5 }, host)
@@ -355,22 +364,23 @@ function analyze(libFileName: string, files: string[], outputFolder: string): Pr
 function analyzeShim(json: string): boolean {
     var args = <{ fileNames: string[]; libFile: string; outputFolder?: string }>JSON.parse(json);
     var outputFolder = args.outputFolder || "output";
-    if (!sys.directoryExists(outputFolder)) {
-        sys.createDirectory(outputFolder);
+    if (!ts.sys.directoryExists(outputFolder)) {
+        ts.sys.createDirectory(outputFolder);
     }
     try {
         var results = analyze(args.libFile, args.fileNames, outputFolder);
-        sys.writeFile(ts.combinePaths(outputFolder, "ok.json"), JSON.stringify(results));
+        ts.sys.writeFile(ts.combinePaths(outputFolder, "ok.json"), JSON.stringify(results));
         return true;
     }
     catch (e) {
-        sys.writeFile(ts.combinePaths(outputFolder, "error.json"), JSON.stringify({ message: e.message, stack: e.stack }));
+        ts.sys.writeFile(ts.combinePaths(outputFolder, "error.json"), JSON.stringify({ message: e.message, stack: e.stack }));
         return false;
     }
 }
-
+declare var module: any;
+declare var process: any;
 if (typeof module !== "undefined" && module.exports && process.argv.length === 3) {
-    analyzeShim(sys.readFile(process.argv[2]));
+    analyzeShim(ts.sys.readFile(process.argv[2]));
 }
 
 analyzeShim

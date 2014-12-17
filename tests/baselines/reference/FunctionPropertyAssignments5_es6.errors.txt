@@ -1,0 +1,7 @@
+tests/cases/conformance/es6/functionPropertyAssignments/FunctionPropertyAssignments5_es6.ts(1,12): error TS9002: Computed property names are not currently supported.
+
+
+==== tests/cases/conformance/es6/functionPropertyAssignments/FunctionPropertyAssignments5_es6.ts (1 errors) ====
+    var v = { *[foo()]() { } }
+               ~~~~~~~
+!!! error TS9002: Computed property names are not currently supported.

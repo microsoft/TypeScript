@@ -113,3 +113,8 @@ function foo(x, y, z) {
     a = y;
     a = z;
 }
+//function foo<T, U extends T, V extends Date>(x: T, y: U, z: V) {
+//    a = x;
+//    a = y;
+//    a = z;
+//} 

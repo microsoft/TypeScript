@@ -18,8 +18,8 @@
 
 goTo.marker("propertyReference");
 goTo.definition(0);
-verify.caretAtMarker("propertyDefinition1");
+verify.caretAtMarker("propertyDefinition2");
 
 goTo.marker("propertyReference");
 goTo.definition(1);
-verify.caretAtMarker("propertyDefinition2");
+verify.caretAtMarker("propertyDefinition1");

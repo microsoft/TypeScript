@@ -14,7 +14,7 @@
 ////testFunction<, ,/*5*/>(null, null, null);
 
 // goTo.marker("1");
-//  verify.currentSignatureParamterCountIs(3);
+//  verify.currentSignatureParameterCountIs(3);
 //  verify.currentSignatureHelpIs("testFunction<T extends IFoo, U, M extends IFoo>(a: T, b: U, c: M): M");
 
 //  verify.currentParameterHelpArgumentNameIs("T");

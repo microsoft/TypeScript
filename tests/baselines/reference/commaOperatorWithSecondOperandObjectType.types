@@ -108,7 +108,7 @@ true, {}
 "string", new Date()
 >"string", new Date() : Date
 >new Date() : Date
->Date : { (): string; new (): Date; new (value: number): Date; new (value: string): Date; new (year: number, month: number, date?: number, hours?: number, minutes?: number, seconds?: number, ms?: number): Date; prototype: Date; parse(s: string): number; UTC(year: number, month: number, date?: number, hours?: number, minutes?: number, seconds?: number, ms?: number): number; now(): number; }
+>Date : DateConstructor
 
 STRING.toLowerCase(), new CLASS()
 >STRING.toLowerCase(), new CLASS() : CLASS
@@ -154,7 +154,7 @@ var resultIsObject10 = ("string", new Date());
 >("string", new Date()) : Date
 >"string", new Date() : Date
 >new Date() : Date
->Date : { (): string; new (): Date; new (value: number): Date; new (value: string): Date; new (year: number, month: number, date?: number, hours?: number, minutes?: number, seconds?: number, ms?: number): Date; prototype: Date; parse(s: string): number; UTC(year: number, month: number, date?: number, hours?: number, minutes?: number, seconds?: number, ms?: number): number; now(): number; }
+>Date : DateConstructor
 
 var resultIsObject11 = (STRING.toLowerCase(), new CLASS());
 >resultIsObject11 : CLASS

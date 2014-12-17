@@ -8,7 +8,6 @@
 ////     }
 ////}
 
-diagnostics.setEditValidation(IncrementalEditValidation.None);
 goTo.marker("1");
 edit.insert("super(");
 verify.currentSignatureHelpIs("B(x: string): B");

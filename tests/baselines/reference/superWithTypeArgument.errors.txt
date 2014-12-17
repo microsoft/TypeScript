@@ -1,5 +1,5 @@
+tests/cases/compiler/superWithTypeArgument.ts(6,5): error TS2377: Constructors for derived classes must contain a 'super' call.
 tests/cases/compiler/superWithTypeArgument.ts(7,14): error TS1034: 'super' must be followed by an argument list or member access.
-tests/cases/compiler/superWithTypeArgument.ts(7,9): error TS2346: Supplied parameters do not match any signature of call target.
 
 
 ==== tests/cases/compiler/superWithTypeArgument.ts (2 errors) ====
@@ -9,10 +9,12 @@ tests/cases/compiler/superWithTypeArgument.ts(7,9): error TS2346: Supplied param
     
     class D<T> extends C {
         constructor() {
+        ~~~~~~~~~~~~~~~
             super<T>();
+    ~~~~~~~~~~~~~~~~~~~
                  ~
 !!! error TS1034: 'super' must be followed by an argument list or member access.
-            ~~~~~~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
         }
+    ~~~~~
+!!! error TS2377: Constructors for derived classes must contain a 'super' call.
     }

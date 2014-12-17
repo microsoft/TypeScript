@@ -18,7 +18,6 @@
 ////module Module1 {
 ////    export var z = 0;
 ////}
-debugger;
 goTo.marker("file1");
 verify.getScriptLexicalStructureListContains("Module1", "module");
 verify.getScriptLexicalStructureListContains("x", "var");

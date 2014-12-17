@@ -60,15 +60,15 @@ module TypeScript.Scanner {
     // This gives us 23bit for width (or 8MB of width which should be enough for any codebase).
 
     enum ScannerConstants {
-        LargeTokenFullWidthShift        = 3,
+        LargeTokenFullWidthShift = 3,
 
-        WhitespaceTrivia                = 0x01, // 00000001
-        NewlineTrivia                   = 0x02, // 00000010
-        CommentTrivia                   = 0x04, // 00000100
-        TriviaMask                      = 0x07, // 00000111
+        WhitespaceTrivia = 0x01, // 00000001
+        NewlineTrivia = 0x02, // 00000010
+        CommentTrivia = 0x04, // 00000100
+        TriviaMask = 0x07, // 00000111
 
-        KindMask                        = 0x7F, // 01111111
-        IsVariableWidthMask             = 0x80, // 10000000
+        KindMask = 0x7F, // 01111111
+        IsVariableWidthMask = 0x80, // 10000000
     }
 
     function largeTokenPackData(fullWidth: number, leadingTriviaInfo: number) {
@@ -154,7 +154,7 @@ module TypeScript.Scanner {
     var lastTokenInfo = { leadingTriviaWidth: -1 };
     var lastTokenInfoTokenID: number = -1;
 
-    var triviaScanner = createScannerInternal(ts.ScriptTarget.Latest, SimpleText.fromString(""), () => { });
+    var triviaScanner = createScannerInternal(ts.ScriptTarget.Latest, SimpleText.fromString(""),() => { });
 
     interface IScannerToken extends ISyntaxToken {
     }
@@ -202,12 +202,13 @@ module TypeScript.Scanner {
         public childCount: number;
 
         constructor(private _fullStart: number, public kind: SyntaxKind) {
+            Debug.assert(!isNaN(_fullStart));
         }
 
         public setFullStart(fullStart: number): void {
             this._fullStart = fullStart;
         }
-        
+
         public childAt(index: number): ISyntaxElement { throw Errors.invalidOperation() }
 
         public isIncrementallyUnusable(): boolean { return false; }
@@ -236,6 +237,7 @@ module TypeScript.Scanner {
         private cachedText: string;
 
         constructor(private _fullStart: number, public kind: SyntaxKind, private _packedFullWidthAndInfo: number, cachedText: string) {
+            Debug.assert(!isNaN(_fullStart));
             if (cachedText !== undefined) {
                 this.cachedText = cachedText;
             }
@@ -1423,33 +1425,17 @@ module TypeScript.Scanner {
 
     export function isValidIdentifier(text: ISimpleText, languageVersion: ts.ScriptTarget): boolean {
         var hadError = false;
-        var scanner = createScanner(languageVersion, text, () => hadError = true);
+        var scanner = createScanner(languageVersion, text,() => hadError = true);
 
         var token = scanner.scan(/*allowContextualToken:*/ false);
 
         return !hadError && SyntaxFacts.isIdentifierNameOrAnyKeyword(token) && width(token) === text.length();
     }
 
-    // A parser source that gets its data from an underlying scanner.
-    export interface IScannerParserSource extends Parser.IParserSource {
-        // The position that the scanner is currently at.
-        absolutePosition(): number;
-
-        // Resets the source to this position. Any diagnostics produced after this point will be
-        // removed.
-        resetToPosition(absolutePosition: number): void;
-    }
-
-    interface IScannerRewindPoint extends Parser.IRewindPoint {
-        // Information used by normal parser source.
-        absolutePosition: number;
-        slidingWindowIndex: number;
-    }
-
     // Parser source used in batch scenarios.  Directly calls into an underlying text scanner and
     // supports none of the functionality to reuse nodes.  Good for when you just want want to do
     // a single parse of a file.
-    export function createParserSource(fileName: string, text: ISimpleText, languageVersion: ts.ScriptTarget): IScannerParserSource {
+    export function createParserSource(fileName: string, text: ISimpleText, languageVersion: ts.ScriptTarget): Parser.IParserSource {
         // The absolute position we're at in the text we're reading from.
         var _absolutePosition: number = 0;
 
@@ -1458,10 +1444,6 @@ module TypeScript.Scanner {
         // in the token stream we're pointing at.  However, it will get modified if we we decide to
         // reparse a / or /= as a regular expression.
         var _tokenDiagnostics: Diagnostic[] = [];
-
-        // Pool of rewind points we give out if the parser needs one.
-        var rewindPointPool: IScannerRewindPoint[] = [];
-        var rewindPointPoolCount = 0;
 
         var lastDiagnostic: Diagnostic = undefined;
         var reportDiagnostic = (position: number, fullWidth: number, diagnosticKey: string, args: any[]) => {
@@ -1474,70 +1456,32 @@ module TypeScript.Scanner {
         // The scanner we're pulling tokens from.
         var scanner = createScanner(languageVersion, text, reportDiagnostic);
 
-        function release() {
-            slidingWindow = undefined;
-            scanner = undefined;
-            _tokenDiagnostics = [];
-            rewindPointPool = [];
-            lastDiagnostic = undefined;
-            reportDiagnostic = undefined;
-        }
-
         function currentNode(): ISyntaxNode {
             // The normal parser source never returns nodes.  They're only returned by the 
             // incremental parser source.
             return undefined;
         }
 
-        function consumeNode(node: ISyntaxNode): void {
-            // Should never get called.
-            throw Errors.invalidOperation();
-        }
-
         function absolutePosition() {
+            Debug.assert(!isNaN(_absolutePosition));
             return _absolutePosition;
         }
 
-        function tokenDiagnostics(): Diagnostic[] {
+        function diagnostics(): Diagnostic[] {
             return _tokenDiagnostics;
         }
 
-        function getOrCreateRewindPoint(): IScannerRewindPoint {
-            if (rewindPointPoolCount === 0) {
-                return <IScannerRewindPoint>{};
+        function tryParse<T extends ISyntaxNode>(callback: () => T): T {
+            var savedSlidingWindowIndex = slidingWindow.getAndPinAbsoluteIndex();
+            var savedAbsolutePosition = _absolutePosition;
+
+            var result = callback();
+            if (!result) {
+                slidingWindow.rewindToPinnedIndex(savedSlidingWindowIndex);
+                _absolutePosition = savedAbsolutePosition;
             }
 
-            rewindPointPoolCount--;
-            var result = rewindPointPool[rewindPointPoolCount];
-            rewindPointPool[rewindPointPoolCount] = undefined;
             return result;
-        }
-
-        function getRewindPoint(): IScannerRewindPoint {
-            var slidingWindowIndex = slidingWindow.getAndPinAbsoluteIndex();
-
-            var rewindPoint = getOrCreateRewindPoint();
-
-            rewindPoint.slidingWindowIndex = slidingWindowIndex;
-            rewindPoint.absolutePosition = _absolutePosition;
-
-            // rewindPoint.pinCount = slidingWindow.pinCount();
-
-            return rewindPoint;
-        }
-
-        function rewind(rewindPoint: IScannerRewindPoint): void {
-            slidingWindow.rewindToPinnedIndex(rewindPoint.slidingWindowIndex);
-
-            _absolutePosition = rewindPoint.absolutePosition;
-        }
-
-        function releaseRewindPoint(rewindPoint: IScannerRewindPoint): void {
-            // Debug.assert(slidingWindow.pinCount() === rewindPoint.pinCount);
-            slidingWindow.releaseAndUnpinAbsoluteIndex((<any>rewindPoint).absoluteIndex);
-
-            rewindPointPool[rewindPointPoolCount] = rewindPoint;
-            rewindPointPoolCount++;
         }
 
         function fetchNextItem(allowContextualToken: boolean): ISyntaxToken {
@@ -1561,13 +1505,21 @@ module TypeScript.Scanner {
             return slidingWindow.peekItemN(n);
         }
 
-        function consumeToken(token: ISyntaxToken): void {
-            // Debug.assert(token.fullWidth() > 0 || token.kind === SyntaxKind.EndOfFileToken);
-
-            // Debug.assert(currentToken() === token);
-            _absolutePosition += token.fullWidth();
-
-            slidingWindow.moveToNextItem();
+        function consumeNodeOrToken(nodeOrToken: ISyntaxNodeOrToken): void {
+            if (nodeOrToken === slidingWindow.currentItemWithoutFetching()) {
+                // We're consuming the token that was just fetched from us by the parser.  We just
+                // need to move ourselves forward and ditch this token from the sliding window.
+                _absolutePosition += (<ISyntaxToken>nodeOrToken).fullWidth();
+                Debug.assert(!isNaN(_absolutePosition));
+                slidingWindow.moveToNextItem();
+            }
+            else {
+                // We're either consuming a node, or we're consuming a token that wasn't from our
+                // sliding window.  Both cases happen in incremental scenarios when the incremental
+                // parser uses a node or token from an older tree.  In that case, we simply want to
+                // point ourselves at the end of the element that the parser just consumed.
+                resetToPosition(fullEnd(nodeOrToken));
+            }
         }
 
         function currentToken(): ISyntaxToken {
@@ -1644,19 +1596,14 @@ module TypeScript.Scanner {
             currentToken: currentToken,
             currentContextualToken: currentContextualToken,
             peekToken: peekToken,
-            consumeNode: consumeNode,
-            consumeToken: consumeToken,
-            getRewindPoint: getRewindPoint,
-            rewind: rewind,
-            releaseRewindPoint: releaseRewindPoint,
-            tokenDiagnostics: tokenDiagnostics,
-            release: release,
-            absolutePosition: absolutePosition,
-            resetToPosition: resetToPosition,
+            consumeNodeOrToken: consumeNodeOrToken,
+            tryParse: tryParse,
+            diagnostics: diagnostics,
+            absolutePosition: absolutePosition
         };
     }
 
-    var fixedWidthArray = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 4, 5, 8, 8, 7, 6, 2, 4, 5, 7, 3, 8, 2, 2, 10, 3, 4, 6, 6, 4, 5, 4, 3, 6, 3, 4, 5, 4, 5, 5, 4, 6, 7, 6, 5, 10, 9, 3, 7, 7, 9, 6, 6, 5, 3, 7, 11, 7, 3, 6, 7, 6, 3, 6, 1, 1, 1, 1, 1, 1, 1, 3, 1, 1, 1, 1, 2, 2, 2, 2, 2, 3, 3, 1, 1, 1, 1, 2, 2, 2, 2, 3, 1, 1, 1, 1, 1, 2, 2, 1, 1, 1, 2, 2, 2, 2, 3, 3, 4, 2, 2, 2, 1, 2];
+    var fixedWidthArray = ScannerUtilities.fixedWidthArray;
     function fixedWidthTokenLength(kind: SyntaxKind) {
         return fixedWidthArray[kind];
     }

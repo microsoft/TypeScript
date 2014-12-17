@@ -130,18 +130,74 @@ describe('Colorization', function () {
                 operator(","));
         });
 
-        it("correctly classifies an unterminated multi-line string", function () {
+        it("correctly classifies a multi-line string with one backslash", function () {
             test("'line1\\",
                 ts.EndOfLineState.Start,
                 stringLiteral("'line1\\"),
                 finalEndOfLineState(ts.EndOfLineState.InSingleQuoteStringLiteral));
         });
 
-        it("correctly classifies the second line of an unterminated multi-line string", function () {
+        it("correctly classifies a multi-line string with three backslashes", function () {
+            test("'line1\\\\\\",
+                ts.EndOfLineState.Start,
+                stringLiteral("'line1\\\\\\"),
+                finalEndOfLineState(ts.EndOfLineState.InSingleQuoteStringLiteral));
+        });
+
+        it("correctly classifies an unterminated single-line string with no backslashes", function () {
+            test("'line1",
+                ts.EndOfLineState.Start,
+                stringLiteral("'line1"),
+                finalEndOfLineState(ts.EndOfLineState.Start));
+        });
+
+        it("correctly classifies an unterminated single-line string with two backslashes", function () {
+            test("'line1\\\\",
+                ts.EndOfLineState.Start,
+                stringLiteral("'line1\\\\"),
+                finalEndOfLineState(ts.EndOfLineState.Start));
+        });
+
+        it("correctly classifies an unterminated single-line string with four backslashes", function () {
+            test("'line1\\\\\\\\",
+                ts.EndOfLineState.Start,
+                stringLiteral("'line1\\\\\\\\"),
+                finalEndOfLineState(ts.EndOfLineState.Start));
+        });
+
+        it("correctly classifies the continuing line of a multi-line string ending in one backslash", function () {
             test("\\",
                 ts.EndOfLineState.InDoubleQuoteStringLiteral,
                 stringLiteral("\\"),
                 finalEndOfLineState(ts.EndOfLineState.InDoubleQuoteStringLiteral));
+        });
+
+        it("correctly classifies the continuing line of a multi-line string ending in three backslashes", function () {
+            test("\\",
+                ts.EndOfLineState.InDoubleQuoteStringLiteral,
+                stringLiteral("\\"),
+                finalEndOfLineState(ts.EndOfLineState.InDoubleQuoteStringLiteral));
+        });
+
+        it("correctly classifies the last line of an unterminated multi-line string ending in no backslashes", function () {
+            test("  ",
+                ts.EndOfLineState.InDoubleQuoteStringLiteral,
+                stringLiteral("  "),
+                finalEndOfLineState(ts.EndOfLineState.Start));
+        });
+
+        it("correctly classifies the last line of an unterminated multi-line string ending in two backslashes", function () {
+            test("\\\\",
+                ts.EndOfLineState.InDoubleQuoteStringLiteral,
+                stringLiteral("\\\\"),
+                finalEndOfLineState(ts.EndOfLineState.Start));
+        });
+
+        it("correctly classifies the last line of an unterminated multi-line string ending in four backslashes", function () {
+            test("\\\\\\\\",
+                ts.EndOfLineState.InDoubleQuoteStringLiteral,
+                stringLiteral("\\\\\\\\"),
+                finalEndOfLineState(ts.EndOfLineState.Start));
         });
 
         it("correctly classifies the last line of a multi-line string", function () {
@@ -261,7 +317,9 @@ describe('Colorization', function () {
                 operator("<"),
                 identifier("number"),
                 finalEndOfLineState(ts.EndOfLineState.Start));
+        });
 
+        it("ClassifiesConflictTokens", () => {
             // no longer in something that looks generic.
             test("Foo<Foo> number",
                 ts.EndOfLineState.Start,
@@ -270,6 +328,33 @@ describe('Colorization', function () {
                 identifier("Foo"),
                 operator(">"),
                 keyword("number"),
+                finalEndOfLineState(ts.EndOfLineState.Start));
+
+            // Test conflict markers.
+            test(
+"class C {\r\n\
+<<<<<<< HEAD\r\n\
+    v = 1;\r\n\
+=======\r\n\
+    v = 2;\r\n\
+>>>>>>> Branch - a\r\n\
+}",
+                ts.EndOfLineState.Start,
+                keyword("class"),
+                identifier("C"),
+                punctuation("{"),
+                comment("<<<<<<< HEAD"),
+                identifier("v"),
+                operator("="),
+                numberLiteral("1"),
+                punctuation(";"),
+                comment("======="),
+                identifier("v"),
+                operator("="),
+                numberLiteral("2"),
+                punctuation(";"),
+                comment(">>>>>>> Branch - a"),
+                punctuation("}"),
                 finalEndOfLineState(ts.EndOfLineState.Start));
         });
     });

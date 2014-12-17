@@ -1,7 +1,7 @@
 tests/cases/compiler/collisionSuperAndParameter.ts(12,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-tests/cases/compiler/collisionSuperAndParameter.ts(26,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/collisionSuperAndParameter.ts(17,22): error TS2401: Duplicate identifier '_super'. Compiler uses '_super' to capture base class reference.
 tests/cases/compiler/collisionSuperAndParameter.ts(21,7): error TS2401: Duplicate identifier '_super'. Compiler uses '_super' to capture base class reference.
+tests/cases/compiler/collisionSuperAndParameter.ts(26,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/collisionSuperAndParameter.ts(26,11): error TS2401: Duplicate identifier '_super'. Compiler uses '_super' to capture base class reference.
 tests/cases/compiler/collisionSuperAndParameter.ts(32,19): error TS2401: Duplicate identifier '_super'. Compiler uses '_super' to capture base class reference.
 tests/cases/compiler/collisionSuperAndParameter.ts(35,17): error TS2401: Duplicate identifier '_super'. Compiler uses '_super' to capture base class reference.

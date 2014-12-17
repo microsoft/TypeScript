@@ -1,8 +1,8 @@
-tests/cases/compiler/indexerAssignability.ts(5,1): error TS2322: Type '{ [x: number]: string; }' is not assignable to type '{ [x: string]: string; }'.
-  Index signature is missing in type '{ [x: number]: string; }'.
-tests/cases/compiler/indexerAssignability.ts(6,1): error TS2322: Type '{}' is not assignable to type '{ [x: string]: string; }'.
+tests/cases/compiler/indexerAssignability.ts(5,1): error TS2322: Type '{ [n: number]: string; }' is not assignable to type '{ [s: string]: string; }'.
+  Index signature is missing in type '{ [n: number]: string; }'.
+tests/cases/compiler/indexerAssignability.ts(6,1): error TS2322: Type '{}' is not assignable to type '{ [s: string]: string; }'.
   Index signature is missing in type '{}'.
-tests/cases/compiler/indexerAssignability.ts(8,1): error TS2322: Type '{}' is not assignable to type '{ [x: number]: string; }'.
+tests/cases/compiler/indexerAssignability.ts(8,1): error TS2322: Type '{}' is not assignable to type '{ [n: number]: string; }'.
   Index signature is missing in type '{}'.
 
 
@@ -13,16 +13,16 @@ tests/cases/compiler/indexerAssignability.ts(8,1): error TS2322: Type '{}' is no
     
     a = b;
     ~
-!!! error TS2322: Type '{ [x: number]: string; }' is not assignable to type '{ [x: string]: string; }'.
-!!! error TS2322:   Index signature is missing in type '{ [x: number]: string; }'.
+!!! error TS2322: Type '{ [n: number]: string; }' is not assignable to type '{ [s: string]: string; }'.
+!!! error TS2322:   Index signature is missing in type '{ [n: number]: string; }'.
     a = c;
     ~
-!!! error TS2322: Type '{}' is not assignable to type '{ [x: string]: string; }'.
+!!! error TS2322: Type '{}' is not assignable to type '{ [s: string]: string; }'.
 !!! error TS2322:   Index signature is missing in type '{}'.
     b = a;
     b = c;
     ~
-!!! error TS2322: Type '{}' is not assignable to type '{ [x: number]: string; }'.
+!!! error TS2322: Type '{}' is not assignable to type '{ [n: number]: string; }'.
 !!! error TS2322:   Index signature is missing in type '{}'.
     c = a;
     c = b;

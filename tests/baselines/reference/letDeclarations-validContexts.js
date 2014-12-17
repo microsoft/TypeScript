@@ -240,7 +240,7 @@ var C = (function () {
 })();
 // object literals
 var o = {
-    f: function () {
+    f() {
         let l28 = 0;
     },
     f2: function () {

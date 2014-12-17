@@ -4,16 +4,18 @@
 /// <reference path="..\compiler\parser.ts"/>
 /// <reference path="..\compiler\checker.ts"/>
 
-/// <reference path='text.ts' />
+/// <reference path='breakpoints.ts' />
 /// <reference path='outliningElementsCollector.ts' />
 /// <reference path='navigationBar.ts' />
-/// <reference path='breakpoints.ts' />
 /// <reference path='signatureHelp.ts' />
 /// <reference path='utilities.ts' />
-/// <reference path='smartIndenter.ts' />
-/// <reference path='formatting.ts' />
+/// <reference path='formatting\formatting.ts' />
+/// <reference path='formatting\smartIndenter.ts' />
 
 module ts {
+
+    export var servicesVersion = "0.4"
+
     export interface Node {
         getSourceFile(): SourceFile;
         getChildCount(sourceFile?: SourceFile): number;
@@ -59,6 +61,9 @@ module ts {
     }
 
     export interface SourceFile {
+        isOpen: boolean;
+        version: string;
+
         getScriptSnapshot(): IScriptSnapshot;
         getNamedDeclarations(): Declaration[];
         update(scriptSnapshot: IScriptSnapshot, version: string, isOpen: boolean, textChangeRange: TextChangeRange): SourceFile;
@@ -218,7 +223,7 @@ module ts {
         }
 
         private createChildren(sourceFile?: SourceFile) {
-            if (this.kind > SyntaxKind.Missing) {
+            if (this.kind >= SyntaxKind.FirstNode) {
                 scanner.setText((sourceFile || this.getSourceFile()).text);
                 var children: Node[] = [];
                 var pos = this.pos;
@@ -264,8 +269,11 @@ module ts {
             var children = this.getChildren();
             for (var i = 0; i < children.length; i++) {
                 var child = children[i];
-                if (child.kind < SyntaxKind.Missing) return child;
-                if (child.kind > SyntaxKind.Missing) return child.getFirstToken(sourceFile);
+                if (child.kind < SyntaxKind.FirstNode) {
+                    return child;
+                }
+
+                return child.getFirstToken(sourceFile);
             }
         }
 
@@ -273,8 +281,11 @@ module ts {
             var children = this.getChildren(sourceFile);
             for (var i = children.length - 1; i >= 0; i--) {
                 var child = children[i];
-                if (child.kind < SyntaxKind.Missing) return child;
-                if (child.kind > SyntaxKind.Missing) return child.getLastToken(sourceFile);
+                if (child.kind < SyntaxKind.FirstNode) {
+                    return child;
+                }
+
+                return child.getLastToken(sourceFile);
             }
         }
     }
@@ -349,7 +360,7 @@ module ts {
 
                 // If this is dotted module name, get the doc comments from the parent
                 while (declaration.kind === SyntaxKind.ModuleDeclaration && declaration.parent.kind === SyntaxKind.ModuleDeclaration) {
-                    declaration = declaration.parent;
+                    declaration = <ModuleDeclaration>declaration.parent;
                 } 
 
                 // Get the cleaned js doc comment text from the declaration
@@ -712,8 +723,12 @@ module ts {
     }
 
     class SourceFileObject extends NodeObject implements SourceFile {
+        public _declarationBrand: any;
         public filename: string;
         public text: string;
+
+        public statements: NodeArray<Statement>;
+        public endOfFileToken: Node;
 
         // These methods will have their implementation provided by the implementation the 
         // compiler actually exports off of SourceFile.
@@ -725,15 +740,16 @@ module ts {
         public amdDependencies: string[];
         public amdModuleName: string;
         public referencedFiles: FileReference[];
+
+        public referenceDiagnostics: Diagnostic[];
         public parseDiagnostics: Diagnostic[];
-        public grammarDiagnostics: Diagnostic[];
         public semanticDiagnostics: Diagnostic[];
+
         public hasNoDefaultLib: boolean;
         public externalModuleIndicator: Node; // The first node that causes this file to be an external module
         public nodeCount: number;
         public identifierCount: number;
         public symbolCount: number;
-        public statements: NodeArray<Statement>;
         public version: string;
         public isOpen: boolean;
         public languageVersion: ScriptTarget;
@@ -754,10 +770,11 @@ module ts {
                 forEachChild(sourceFile, function visit(node: Node): void {
                     switch (node.kind) {
                         case SyntaxKind.FunctionDeclaration:
-                        case SyntaxKind.Method:
+                        case SyntaxKind.MethodDeclaration:
+                        case SyntaxKind.MethodSignature:
                             var functionDeclaration = <FunctionLikeDeclaration>node;
 
-                            if (functionDeclaration.name && functionDeclaration.name.kind !== SyntaxKind.Missing) {
+                            if (functionDeclaration.name && functionDeclaration.name.getFullWidth() > 0) {
                                 var lastDeclaration = namedDeclarations.length > 0 ?
                                     namedDeclarations[namedDeclarations.length - 1] :
                                     undefined;
@@ -771,7 +788,7 @@ module ts {
                                     }
                                 }
                                 else {
-                                    namedDeclarations.push(node);
+                                    namedDeclarations.push(functionDeclaration);
                                 }
 
                                 forEachChild(node, visit);
@@ -793,9 +810,16 @@ module ts {
                             // fall through
                         case SyntaxKind.Constructor:
                         case SyntaxKind.VariableStatement:
+                        case SyntaxKind.ObjectBindingPattern:
+                        case SyntaxKind.ArrayBindingPattern:
                         case SyntaxKind.ModuleBlock:
-                        case SyntaxKind.FunctionBlock:
                             forEachChild(node, visit);
+                            break;
+
+                        case SyntaxKind.Block:
+                            if (isFunctionBlock(node)) {
+                                forEachChild(node, visit);
+                            }
                             break;
 
                         case SyntaxKind.Parameter:
@@ -805,8 +829,14 @@ module ts {
                             }
                             // fall through
                         case SyntaxKind.VariableDeclaration:
+                        case SyntaxKind.BindingElement:
+                            if (isBindingPattern((<VariableDeclaration>node).name)) {
+                                forEachChild((<VariableDeclaration>node).name, visit);
+                                break;
+                            }
                         case SyntaxKind.EnumMember:
-                        case SyntaxKind.Property:
+                        case SyntaxKind.PropertyDeclaration:
+                        case SyntaxKind.PropertySignature:
                             namedDeclarations.push(<Declaration>node);
                             break;
                     }
@@ -836,11 +866,13 @@ module ts {
                 }
             }
 
-            return SourceFileObject.createSourceFileObject(this.filename, scriptSnapshot, this.languageVersion, version, isOpen);
+            return createLanguageServiceSourceFile(this.filename, scriptSnapshot, this.languageVersion, version, isOpen, /*setNodeParents:*/ true);
         }
 
-        public static createSourceFileObject(filename: string, scriptSnapshot: IScriptSnapshot, languageVersion: ScriptTarget, version: string, isOpen: boolean) {
-            var newSourceFile = <SourceFileObject><any>createSourceFile(filename, scriptSnapshot.getText(0, scriptSnapshot.getLength()), languageVersion, version, isOpen);
+        public static createSourceFileObject(filename: string, scriptSnapshot: IScriptSnapshot, languageVersion: ScriptTarget, version: string, isOpen: boolean, setParentNodes: boolean) {
+            var newSourceFile = <SourceFileObject><any>createSourceFile(filename, scriptSnapshot.getText(0, scriptSnapshot.getLength()), languageVersion, setParentNodes);
+            newSourceFile.version = version;
+            newSourceFile.isOpen = isOpen;
             newSourceFile.scriptSnapshot = scriptSnapshot;
             return newSourceFile;
         }
@@ -848,6 +880,8 @@ module ts {
 
     export interface Logger {
         log(s: string): void;
+        trace(s: string): void;
+        error(s: string): void;
     }
 
     //
@@ -859,10 +893,10 @@ module ts {
         getScriptVersion(fileName: string): string;
         getScriptIsOpen(fileName: string): boolean;
         getScriptSnapshot(fileName: string): IScriptSnapshot;
-        getLocalizedDiagnosticMessages(): any;
-        getCancellationToken(): CancellationToken;
+        getLocalizedDiagnosticMessages?(): any;
+        getCancellationToken?(): CancellationToken;
         getCurrentDirectory(): string;
-        getDefaultLibFilename(): string;
+        getDefaultLibFilename(options: CompilerOptions): string;
     }
 
     //
@@ -879,7 +913,7 @@ module ts {
         getSyntacticClassifications(fileName: string, span: TextSpan): ClassifiedSpan[];
         getSemanticClassifications(fileName: string, span: TextSpan): ClassifiedSpan[];
 
-        getCompletionsAtPosition(fileName: string, position: number, isMemberCompletion: boolean): CompletionInfo;
+        getCompletionsAtPosition(fileName: string, position: number): CompletionInfo;
         getCompletionEntryDetails(fileName: string, position: number, entryName: string): CompletionEntryDetails;
 
         getQuickInfoAtPosition(fileName: string, position: number): QuickInfo;
@@ -916,6 +950,301 @@ module ts {
         dispose(): void;
     }
 
+    export class TextSpan {
+        private _start: number;
+        private _length: number;
+
+        /**
+            * Creates a TextSpan instance beginning with the position Start and having the Length
+            * specified with length.
+            */
+        constructor(start: number, length: number) {
+            Debug.assert(start >= 0, "start");
+            Debug.assert(length >= 0, "length");
+
+            this._start = start;
+            this._length = length;
+        }
+
+        public toJSON(key: any): any {
+            return { start: this._start, length: this._length };
+        }
+
+        public start(): number {
+            return this._start;
+        }
+
+        public length(): number {
+            return this._length;
+        }
+
+        public end(): number {
+            return this._start + this._length;
+        }
+
+        public isEmpty(): boolean {
+            return this._length === 0;
+        }
+
+        /**
+            * Determines whether the position lies within the span. Returns true if the position is greater than or equal to Start and strictly less 
+            * than End, otherwise false.
+            * @param position The position to check.
+            */
+        public containsPosition(position: number): boolean {
+            return position >= this._start && position < this.end();
+        }
+
+        /**
+            * Determines whether span falls completely within this span. Returns true if the specified span falls completely within this span, otherwise false.
+            * @param span The span to check.
+            */
+        public containsTextSpan(span: TextSpan): boolean {
+            return span._start >= this._start && span.end() <= this.end();
+        }
+
+        /**
+            * Determines whether the given span overlaps this span. Two spans are considered to overlap 
+            * if they have positions in common and neither is empty. Empty spans do not overlap with any 
+            * other span. Returns true if the spans overlap, false otherwise.
+            * @param span The span to check.
+            */
+        public overlapsWith(span: TextSpan): boolean {
+            var overlapStart = Math.max(this._start, span._start);
+            var overlapEnd = Math.min(this.end(), span.end());
+
+            return overlapStart < overlapEnd;
+        }
+
+        /**
+            * Returns the overlap with the given span, or undefined if there is no overlap.
+            * @param span The span to check.
+            */
+        public overlap(span: TextSpan): TextSpan {
+            var overlapStart = Math.max(this._start, span._start);
+            var overlapEnd = Math.min(this.end(), span.end());
+
+            if (overlapStart < overlapEnd) {
+                return TextSpan.fromBounds(overlapStart, overlapEnd);
+            }
+
+            return undefined;
+        }
+
+        /**
+            * Determines whether span intersects this span. Two spans are considered to 
+            * intersect if they have positions in common or the end of one span 
+            * coincides with the start of the other span. Returns true if the spans intersect, false otherwise.
+            * @param The span to check.
+            */
+        public intersectsWithTextSpan(span: TextSpan): boolean {
+            return span._start <= this.end() && span.end() >= this._start;
+        }
+
+        public intersectsWith(start: number, length: number): boolean {
+            var end = start + length;
+            return start <= this.end() && end >= this._start;
+        }
+
+        /**
+            * Determines whether the given position intersects this span. 
+            * A position is considered to intersect if it is between the start and
+            * end positions (inclusive) of this span. Returns true if the position intersects, false otherwise.
+            * @param position The position to check.
+            */
+        public intersectsWithPosition(position: number): boolean {
+            return position <= this.end() && position >= this._start;
+        }
+
+        /**
+            * Returns the intersection with the given span, or undefined if there is no intersection.
+            * @param span The span to check.
+            */
+        public intersection(span: TextSpan): TextSpan {
+            var intersectStart = Math.max(this._start, span._start);
+            var intersectEnd = Math.min(this.end(), span.end());
+
+            if (intersectStart <= intersectEnd) {
+                return TextSpan.fromBounds(intersectStart, intersectEnd);
+            }
+
+            return undefined;
+        }
+
+        /**
+            * Creates a new TextSpan from the given start and end positions
+            * as opposed to a position and length.
+            */
+        public static fromBounds(start: number, end: number): TextSpan {
+            Debug.assert(start >= 0);
+            Debug.assert(end - start >= 0);
+            return new TextSpan(start, end - start);
+        }
+    }
+
+    export class TextChangeRange {
+        public static unchanged = new TextChangeRange(new TextSpan(0, 0), 0);
+
+        private _span: TextSpan;
+        private _newLength: number;
+
+        /**
+            * Initializes a new instance of TextChangeRange.
+            */
+        constructor(span: TextSpan, newLength: number) {
+            Debug.assert(newLength >= 0, "newLength");
+
+            this._span = span;
+            this._newLength = newLength;
+        }
+
+        /**
+            * The span of text before the edit which is being changed
+            */
+        public span(): TextSpan {
+            return this._span;
+        }
+
+        /**
+            * Width of the span after the edit.  A 0 here would represent a delete
+            */
+        public newLength(): number {
+            return this._newLength;
+        }
+
+        public newSpan(): TextSpan {
+            return new TextSpan(this.span().start(), this.newLength());
+        }
+
+        public isUnchanged(): boolean {
+            return this.span().isEmpty() && this.newLength() === 0;
+        }
+
+        /**
+            * Called to merge all the changes that occurred across several versions of a script snapshot 
+            * into a single change.  i.e. if a user keeps making successive edits to a script we will
+            * have a text change from V1 to V2, V2 to V3, ..., Vn.  
+            * 
+            * This function will then merge those changes into a single change range valid between V1 and
+            * Vn.
+            */
+        public static collapseChangesAcrossMultipleVersions(changes: TextChangeRange[]): TextChangeRange {
+            if (changes.length === 0) {
+                return TextChangeRange.unchanged;
+            }
+
+            if (changes.length === 1) {
+                return changes[0];
+            }
+
+            // We change from talking about { { oldStart, oldLength }, newLength } to { oldStart, oldEnd, newEnd }
+            // as it makes things much easier to reason about.
+            var change0 = changes[0];
+
+            var oldStartN = change0.span().start();
+            var oldEndN = change0.span().end();
+            var newEndN = oldStartN + change0.newLength();
+
+            for (var i = 1; i < changes.length; i++) {
+                var nextChange = changes[i];
+
+                // Consider the following case:
+                // i.e. two edits.  The first represents the text change range { { 10, 50 }, 30 }.  i.e. The span starting
+                // at 10, with length 50 is reduced to length 30.  The second represents the text change range { { 30, 30 }, 40 }.
+                // i.e. the span starting at 30 with length 30 is increased to length 40.
+                //
+                //      0         10        20        30        40        50        60        70        80        90        100
+                //      -------------------------------------------------------------------------------------------------------
+                //                |                                                 /                                          
+                //                |                                            /----                                           
+                //  T1            |                                       /----                                                
+                //                |                                  /----                                                     
+                //                |                             /----                                                          
+                //      -------------------------------------------------------------------------------------------------------
+                //                                     |                            \                                          
+                //                                     |                               \                                       
+                //   T2                                |                                 \                                     
+                //                                     |                                   \                                   
+                //                                     |                                      \                                
+                //      -------------------------------------------------------------------------------------------------------
+                //
+                // Merging these turns out to not be too difficult.  First, determining the new start of the change is trivial
+                // it's just the min of the old and new starts.  i.e.:
+                //
+                //      0         10        20        30        40        50        60        70        80        90        100
+                //      ------------------------------------------------------------*------------------------------------------
+                //                |                                                 /                                          
+                //                |                                            /----                                           
+                //  T1            |                                       /----                                                
+                //                |                                  /----                                                     
+                //                |                             /----                                                          
+                //      ----------------------------------------$-------------------$------------------------------------------
+                //                .                    |                            \                                          
+                //                .                    |                               \                                       
+                //   T2           .                    |                                 \                                     
+                //                .                    |                                   \                                   
+                //                .                    |                                      \                                
+                //      ----------------------------------------------------------------------*--------------------------------
+                //
+                // (Note the dots represent the newly inferrred start.
+                // Determining the new and old end is also pretty simple.  Basically it boils down to paying attention to the
+                // absolute positions at the asterixes, and the relative change between the dollar signs. Basically, we see
+                // which if the two $'s precedes the other, and we move that one forward until they line up.  in this case that
+                // means:
+                //
+                //      0         10        20        30        40        50        60        70        80        90        100
+                //      --------------------------------------------------------------------------------*----------------------
+                //                |                                                                     /                      
+                //                |                                                                /----                       
+                //  T1            |                                                           /----                            
+                //                |                                                      /----                                 
+                //                |                                                 /----                                      
+                //      ------------------------------------------------------------$------------------------------------------
+                //                .                    |                            \                                          
+                //                .                    |                               \                                       
+                //   T2           .                    |                                 \                                     
+                //                .                    |                                   \                                   
+                //                .                    |                                      \                                
+                //      ----------------------------------------------------------------------*--------------------------------
+                //
+                // In other words (in this case), we're recognizing that the second edit happened after where the first edit
+                // ended with a delta of 20 characters (60 - 40).  Thus, if we go back in time to where the first edit started
+                // that's the same as if we started at char 80 instead of 60.  
+                //
+                // As it so happens, the same logic applies if the second edit precedes the first edit.  In that case rahter
+                // than pusing the first edit forward to match the second, we'll push the second edit forward to match the
+                // first.
+                //
+                // In this case that means we have { oldStart: 10, oldEnd: 80, newEnd: 70 } or, in TextChangeRange
+                // semantics: { { start: 10, length: 70 }, newLength: 60 }
+                //
+                // The math then works out as follows.
+                // If we have { oldStart1, oldEnd1, newEnd1 } and { oldStart2, oldEnd2, newEnd2 } then we can compute the 
+                // final result like so:
+                //
+                // {
+                //      oldStart3: Min(oldStart1, oldStart2),
+                //      oldEnd3  : Max(oldEnd1, oldEnd1 + (oldEnd2 - newEnd1)),
+                //      newEnd3  : Max(newEnd2, newEnd2 + (newEnd1 - oldEnd2))
+                // }
+
+                var oldStart1 = oldStartN;
+                var oldEnd1 = oldEndN;
+                var newEnd1 = newEndN;
+
+                var oldStart2 = nextChange.span().start();
+                var oldEnd2 = nextChange.span().end();
+                var newEnd2 = oldStart2 + nextChange.newLength();
+
+                oldStartN = Math.min(oldStart1, oldStart2);
+                oldEndN = Math.max(oldEnd1, oldEnd1 + (oldEnd2 - newEnd1));
+                newEndN = Math.max(newEnd2, newEnd2 + (newEnd1 - oldEnd2));
+            }
+
+            return new TextChangeRange(TextSpan.fromBounds(oldStartN, oldEndN), /*newLength: */newEndN - oldStartN);
+        }
+    }
+ 
     export interface ClassifiedSpan {
         textSpan: TextSpan;
         classificationType: string; // ClassificationTypeNames
@@ -1098,6 +1427,23 @@ module ts {
         documentation: SymbolDisplayPart[];
     }
 
+    export interface OutliningSpan {
+        /** The span of the document to actually collapse. */
+        textSpan: TextSpan;
+
+        /** The span of the document to display when the user hovers over the collapsed span. */
+        hintSpan: TextSpan;
+
+        /** The text to display in the editor for the collapsed region. */
+        bannerText: string;
+
+        /** 
+          * Whether or not this region should be automatically collapsed when 
+          * the 'Collapse to Definitions' command is invoked.
+          */
+        autoCollapse: boolean;
+    }
+
     export interface EmitOutput {
         outputFiles: OutputFile[];
         emitOutputStatus: EmitReturnStatus;
@@ -1274,6 +1620,7 @@ module ts {
         public static interfaceName = "interface name";
         public static moduleName = "module name";
         public static typeParameterName = "type parameter name";
+        public static typeAlias = "type alias name";
     }
 
     enum MatchKind {
@@ -1314,103 +1661,16 @@ module ts {
         owners: string[];
     }
 
+    export interface DisplayPartsSymbolWriter extends SymbolWriter {
+        displayParts(): SymbolDisplayPart[];
+    }
+
     export function displayPartsToString(displayParts: SymbolDisplayPart[]) {
         if (displayParts) {
             return map(displayParts, displayPart => displayPart.text).join("");
         }
 
         return "";
-    }
-
-    export interface DisplayPartsSymbolWriter extends SymbolWriter {
-        displayParts(): SymbolDisplayPart[];
-    }
-
-    var displayPartWriter = getDisplayPartWriter();
-    function getDisplayPartWriter(): DisplayPartsSymbolWriter {
-        var displayParts: SymbolDisplayPart[];
-        var lineStart: boolean;
-        var indent: number;
-
-        resetWriter();
-        return {
-            displayParts: () => displayParts,
-            writeKeyword: text => writeKind(text, SymbolDisplayPartKind.keyword),
-            writeOperator: text => writeKind(text, SymbolDisplayPartKind.operator),
-            writePunctuation: text => writeKind(text, SymbolDisplayPartKind.punctuation),
-            writeSpace: text => writeKind(text, SymbolDisplayPartKind.space),
-            writeStringLiteral: text => writeKind(text, SymbolDisplayPartKind.stringLiteral),
-            writeParameter: text => writeKind(text, SymbolDisplayPartKind.parameterName),
-            writeSymbol,
-            writeLine,
-            increaseIndent: () => { indent++; },
-            decreaseIndent: () => { indent--; },
-            clear: resetWriter,
-            trackSymbol: () => { }
-        };
-
-        function writeIndent() {
-            if (lineStart) {
-                displayParts.push(displayPart(getIndentString(indent), SymbolDisplayPartKind.space));
-                lineStart = false;
-            }
-        }
-
-        function writeKind(text: string, kind: SymbolDisplayPartKind) {
-            writeIndent();
-            displayParts.push(displayPart(text, kind));
-        }
-
-        function writeSymbol(text: string, symbol: Symbol) {
-            writeIndent();
-            displayParts.push(symbolPart(text, symbol));
-        }
-
-        function writeLine() {
-            displayParts.push(lineBreakPart());
-            lineStart = true;
-        }
-
-        function resetWriter() {
-            displayParts = []
-            lineStart = true;
-            indent = 0;
-        }
-    }
-
-    function displayPart(text: string, kind: SymbolDisplayPartKind, symbol?: Symbol): SymbolDisplayPart {
-        return <SymbolDisplayPart> {
-            text: text,
-            kind: SymbolDisplayPartKind[kind]
-        };
-    }
-    
-    export function spacePart() {
-        return displayPart(" ", SymbolDisplayPartKind.space);
-    }
-
-    export function keywordPart(kind: SyntaxKind) {
-        return displayPart(tokenToString(kind), SymbolDisplayPartKind.keyword);
-    }
-
-    export function punctuationPart(kind: SyntaxKind) {
-        return displayPart(tokenToString(kind), SymbolDisplayPartKind.punctuation);
-    }
-
-    export function operatorPart(kind: SyntaxKind) {
-        return displayPart(tokenToString(kind), SymbolDisplayPartKind.operator);
-    }
-
-    export function textPart(text: string) {
-        return displayPart(text, SymbolDisplayPartKind.text);
-    }
-
-    export function lineBreakPart() {
-        return displayPart("\n", SymbolDisplayPartKind.lineBreak);
-    }
-
-    function isFirstDeclarationOfSymbolParameter(symbol: Symbol) {
-        return symbol.declarations && symbol.declarations.length > 0 && symbol.declarations[0].kind === SyntaxKind.Parameter;
     }
 
     function isLocalVariableOrFunction(symbol: Symbol) {
@@ -1429,7 +1689,7 @@ module ts {
             }
 
             // If the parent is not sourceFile or module block it is local variable
-            for (var parent = declaration.parent; parent.kind !== SyntaxKind.FunctionBlock; parent = parent.parent) {
+            for (var parent = declaration.parent; !isFunctionBlock(parent); parent = parent.parent) {
                 // Reached source file or module block
                 if (parent.kind === SyntaxKind.SourceFile || parent.kind === SyntaxKind.ModuleBlock) {
                     return false;
@@ -1441,74 +1701,12 @@ module ts {
         });
     }
 
-    export function symbolPart(text: string, symbol: Symbol) {
-        return displayPart(text, displayPartKind(symbol), symbol);
-
-        function displayPartKind(symbol: Symbol): SymbolDisplayPartKind {
-            var flags = symbol.flags;
-
-            if (flags & SymbolFlags.Variable) {
-                return isFirstDeclarationOfSymbolParameter(symbol) ? SymbolDisplayPartKind.parameterName : SymbolDisplayPartKind.localName;
-            }
-            else if (flags & SymbolFlags.Property) { return SymbolDisplayPartKind.propertyName; }
-            else if (flags & SymbolFlags.EnumMember) { return SymbolDisplayPartKind.enumMemberName; }
-            else if (flags & SymbolFlags.Function) { return SymbolDisplayPartKind.functionName; }
-            else if (flags & SymbolFlags.Class) { return SymbolDisplayPartKind.className; }
-            else if (flags & SymbolFlags.Interface) { return SymbolDisplayPartKind.interfaceName; }
-            else if (flags & SymbolFlags.Enum) { return SymbolDisplayPartKind.enumName; }
-            else if (flags & SymbolFlags.Module) { return SymbolDisplayPartKind.moduleName; }
-            else if (flags & SymbolFlags.Method) { return SymbolDisplayPartKind.methodName; }
-            else if (flags & SymbolFlags.TypeParameter) { return SymbolDisplayPartKind.typeParameterName; }
-
-            return SymbolDisplayPartKind.text;
-        }
-    }
-
-    export function mapToDisplayParts(writeDisplayParts: (writer: DisplayPartsSymbolWriter) => void): SymbolDisplayPart[] {
-        writeDisplayParts(displayPartWriter);
-        var result = displayPartWriter.displayParts();
-        displayPartWriter.clear();
-        return result;
-    }
-
-    export function typeToDisplayParts(typechecker: TypeChecker, type: Type, enclosingDeclaration?: Node, flags?: TypeFormatFlags): SymbolDisplayPart[] {
-        return mapToDisplayParts(writer => {
-            typechecker.getSymbolDisplayBuilder().buildTypeDisplay(type, writer, enclosingDeclaration, flags);
-        });
-    }
-
-    export function symbolToDisplayParts(typeChecker: TypeChecker, symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags, flags?: SymbolFormatFlags): SymbolDisplayPart[] {
-        return mapToDisplayParts(writer => {
-            typeChecker.getSymbolDisplayBuilder().buildSymbolDisplay(symbol, writer, enclosingDeclaration, meaning, flags);
-        });
-    }
-
-    function signatureToDisplayParts(typechecker: TypeChecker, signature: Signature, enclosingDeclaration?: Node, flags?: TypeFormatFlags): SymbolDisplayPart[]{
-        return mapToDisplayParts(writer => {
-            typechecker.getSymbolDisplayBuilder().buildSignatureDisplay(signature, writer, enclosingDeclaration, flags);
-        });
-    }
-
     export function getDefaultCompilerOptions(): CompilerOptions {
         // Set "ScriptTarget.Latest" target by default for language service
         return {
             target: ScriptTarget.Latest,
             module: ModuleKind.None,
         };
-    }
-
-    export function compareDataObjects(dst: any, src: any): boolean {
-        for (var e in dst) {
-            if (typeof dst[e] === "object") {
-                if (!compareDataObjects(dst[e], src[e]))
-                    return false;
-            }
-            else if (typeof dst[e] !== "function") {
-                if (dst[e] !== src[e])
-                    return false;
-            }
-        }
-        return true;
     }
 
     export class OperationCanceledException { }
@@ -1624,7 +1822,6 @@ module ts {
         private currentSourceFile: SourceFile = null;
 
         constructor(private host: LanguageServiceHost) {
-            this.hostCache = new HostCache(host);
         }
 
         private initialize(filename: string) {
@@ -1640,11 +1837,10 @@ module ts {
                 var scriptSnapshot = this.hostCache.getScriptSnapshot(filename);
 
                 var start = new Date().getTime();
-                sourceFile = createSourceFileFromScriptSnapshot(filename, scriptSnapshot, getDefaultCompilerOptions(), version, /*isOpen*/ true);
+                sourceFile = createLanguageServiceSourceFile(filename, scriptSnapshot, getDefaultCompilerOptions().target, version, /*isOpen*/ true, /*setNodeParents:*/ true);
                 this.host.log("SyntaxTreeCache.Initialize: createSourceFile: " + (new Date().getTime() - start));
 
                 var start = new Date().getTime();
-                fixupParentReferences(sourceFile);
                 this.host.log("SyntaxTreeCache.Initialize: fixupParentRefs : " + (new Date().getTime() - start));
             }
             else if (this.currentFileVersion !== version) {
@@ -1654,12 +1850,11 @@ module ts {
 
                 var start = new Date().getTime();
                 sourceFile = !editRange 
-                    ? createSourceFileFromScriptSnapshot(filename, scriptSnapshot, getDefaultCompilerOptions(), version, /*isOpen*/ true)
+                    ? createLanguageServiceSourceFile(filename, scriptSnapshot, getDefaultCompilerOptions().target, version, /*isOpen*/ true, /*setNodeParents:*/ true)
                     : this.currentSourceFile.update(scriptSnapshot, version, /*isOpen*/ true, editRange);
                 this.host.log("SyntaxTreeCache.Initialize: updateSourceFile: " + (new Date().getTime() - start));
 
                 var start = new Date().getTime();
-                fixupParentReferences(sourceFile);
                 this.host.log("SyntaxTreeCache.Initialize: fixupParentRefs : " + (new Date().getTime() - start));
             }
 
@@ -1668,22 +1863,6 @@ module ts {
                 this.currentFileVersion = version;
                 this.currentFilename = filename;
                 this.currentSourceFile = sourceFile;
-            }
-
-            function fixupParentReferences(sourceFile: SourceFile) {
-                // normally parent references are set during binding.
-                // however here SourceFile data is used only for syntactic features so running the whole binding process is an overhead.
-                // walk over the nodes and set parent references
-                var parent: Node = sourceFile;
-                function walk(n: Node): void {
-                    n.parent = parent;
-
-                    var saveParent = parent;
-                    parent = n;
-                    forEachChild(n, walk);
-                    parent = saveParent;
-                }
-                forEachChild(sourceFile, walk);
             }
         }
 
@@ -1697,8 +1876,8 @@ module ts {
         }
     }
 
-    function createSourceFileFromScriptSnapshot(filename: string, scriptSnapshot: IScriptSnapshot, settings: CompilerOptions, version: string, isOpen: boolean) {
-        return SourceFileObject.createSourceFileObject(filename, scriptSnapshot, settings.target, version, isOpen);
+    export function createLanguageServiceSourceFile(filename: string, scriptSnapshot: IScriptSnapshot, scriptTarget: ScriptTarget, version: string, isOpen: boolean, setNodeParents: boolean): SourceFile {
+        return SourceFileObject.createSourceFileObject(filename, scriptSnapshot, scriptTarget, version, isOpen, setNodeParents);
     }
 
     export function createDocumentRegistry(): DocumentRegistry {
@@ -1748,7 +1927,7 @@ module ts {
             var bucket = getBucketForCompilationSettings(compilationSettings, /*createIfMissing*/ true);
             var entry = lookUp(bucket, filename);
             if (!entry) {
-                var sourceFile = createSourceFileFromScriptSnapshot(filename, scriptSnapshot, compilationSettings, version, isOpen);
+                var sourceFile = createLanguageServiceSourceFile(filename, scriptSnapshot, compilationSettings.target, version, isOpen, /*setNodeParents:*/ false);
 
                 bucket[filename] = entry = {
                     sourceFile: sourceFile,
@@ -1868,20 +2047,6 @@ module ts {
     }
 
     /// Helpers
-    export function getNodeModifiers(node: Node): string {
-        var flags = node.flags;
-        var result: string[] = [];
-
-        if (flags & NodeFlags.Private) result.push(ScriptElementKindModifier.privateMemberModifier);
-        if (flags & NodeFlags.Protected) result.push(ScriptElementKindModifier.protectedMemberModifier);
-        if (flags & NodeFlags.Public) result.push(ScriptElementKindModifier.publicMemberModifier);
-        if (flags & NodeFlags.Static) result.push(ScriptElementKindModifier.staticModifier);
-        if (flags & NodeFlags.Export) result.push(ScriptElementKindModifier.exportedModifier);
-        if (isInAmbientContext(node)) result.push(ScriptElementKindModifier.ambientModifier);
-
-        return result.length > 0 ? result.join(',') : ScriptElementKindModifier.none;
-    }
-
     function getTargetLabel(referenceNode: Node, labelName: string): Identifier {
         while (referenceNode) {
             if (referenceNode.kind === SyntaxKind.LabeledStatement && (<LabeledStatement>referenceNode).label.text === labelName) {
@@ -1927,21 +2092,21 @@ module ts {
     }
 
     function isRightSideOfPropertyAccess(node: Node) {
-        return node && node.parent && node.parent.kind === SyntaxKind.PropertyAccess && (<PropertyAccess>node.parent).right === node;
+        return node && node.parent && node.parent.kind === SyntaxKind.PropertyAccessExpression && (<PropertyAccessExpression>node.parent).name === node;
     }
 
     function isCallExpressionTarget(node: Node): boolean {
         if (isRightSideOfPropertyAccess(node)) {
             node = node.parent;
         }
-        return node && node.parent && node.parent.kind === SyntaxKind.CallExpression && (<CallExpression>node.parent).func === node;
+        return node && node.parent && node.parent.kind === SyntaxKind.CallExpression && (<CallExpression>node.parent).expression === node;
     }
 
     function isNewExpressionTarget(node: Node): boolean {
         if (isRightSideOfPropertyAccess(node)) {
             node = node.parent;
         }
-        return node && node.parent && node.parent.kind === SyntaxKind.NewExpression && (<CallExpression>node.parent).func === node;
+        return node && node.parent && node.parent.kind === SyntaxKind.NewExpression && (<CallExpression>node.parent).expression === node;
     }
 
     function isNameOfModuleDeclaration(node: Node) {
@@ -1962,16 +2127,18 @@ module ts {
     function isLiteralNameOfPropertyDeclarationOrIndexAccess(node: Node): boolean {
         if (node.kind === SyntaxKind.StringLiteral || node.kind === SyntaxKind.NumericLiteral) {
             switch (node.parent.kind) {
-                case SyntaxKind.Property:
+                case SyntaxKind.PropertyDeclaration:
+                case SyntaxKind.PropertySignature:
                 case SyntaxKind.PropertyAssignment:
                 case SyntaxKind.EnumMember:
-                case SyntaxKind.Method:
+                case SyntaxKind.MethodDeclaration:
+                case SyntaxKind.MethodSignature:
                 case SyntaxKind.GetAccessor:
                 case SyntaxKind.SetAccessor:
                 case SyntaxKind.ModuleDeclaration:
                     return (<Declaration>node.parent).name === node;
-                case SyntaxKind.IndexedAccess:
-                    return (<IndexedAccess>node.parent).index === node;
+                case SyntaxKind.ElementAccessExpression:
+                    return (<ElementAccessExpression>node.parent).argumentExpression === node;
             }
         }
 
@@ -1979,9 +2146,12 @@ module ts {
     }
 
     function isNameOfExternalModuleImportOrDeclaration(node: Node): boolean {
-        return node.kind === SyntaxKind.StringLiteral &&
-            (isNameOfModuleDeclaration(node) ||
-            (node.parent.kind === SyntaxKind.ImportDeclaration && (<ImportDeclaration>node.parent).externalModuleName === node));
+        if (node.kind === SyntaxKind.StringLiteral) {
+            return isNameOfModuleDeclaration(node) ||
+                (isExternalModuleImportDeclaration(node.parent.parent) && getExternalModuleImportDeclarationExpression(node.parent.parent) === node);
+        }
+
+        return false;
     }
 
     /** Returns true if the position is within a comment */
@@ -2056,12 +2226,12 @@ module ts {
         var useCaseSensitivefilenames = false;
         var sourceFilesByName: Map<SourceFile> = {};
         var documentRegistry = documentRegistry;
-        var cancellationToken = new CancellationTokenObject(host.getCancellationToken());
+        var cancellationToken = new CancellationTokenObject(host.getCancellationToken && host.getCancellationToken());
         var activeCompletionSession: CompletionSession;         // The current active completion session, used to get the completion entry details
         var writer: (filename: string, data: string, writeByteOrderMark: boolean) => void = undefined;
 
         // Check if the localized messages json is set, otherwise query the host for it
-        if (!localizedDiagnosticMessages) {
+        if (!localizedDiagnosticMessages && host.getLocalizedDiagnosticMessages) {
             localizedDiagnosticMessages = host.getLocalizedDiagnosticMessages();
         }
 
@@ -2097,8 +2267,8 @@ module ts {
                 getCanonicalFileName: (filename) => useCaseSensitivefilenames ? filename : filename.toLowerCase(),
                 useCaseSensitiveFileNames: () => useCaseSensitivefilenames,
                 getNewLine: () => "\r\n",
-                getDefaultLibFilename: (): string => {
-                    return host.getDefaultLibFilename();
+                getDefaultLibFilename: (options): string => {
+                    return host.getDefaultLibFilename(options);
                 },
                 writeFile: (filename, data, writeByteOrderMark) => {
                     writer(filename, data, writeByteOrderMark);
@@ -2243,7 +2413,7 @@ module ts {
 
             filename = normalizeSlashes(filename);
 
-            return program.getDiagnostics(getSourceFile(filename).getSourceFile());
+            return program.getDiagnostics(getSourceFile(filename));
         }
 
         /**
@@ -2327,7 +2497,7 @@ module ts {
             };
         }
 
-        function getCompletionsAtPosition(filename: string, position: number, isMemberCompletion: boolean) {
+        function getCompletionsAtPosition(filename: string, position: number) {
             synchronizeHostData();
 
             filename = normalizeSlashes(filename);
@@ -2373,9 +2543,12 @@ module ts {
             // other wise, it is a request for all visible symbols in the scope, and the node is the current location
             var node: Node;
             var isRightOfDot: boolean;
-            if (previousToken && previousToken.kind === SyntaxKind.DotToken &&
-                (previousToken.parent.kind === SyntaxKind.PropertyAccess || previousToken.parent.kind === SyntaxKind.QualifiedName)) {
-                node = (<PropertyAccess>previousToken.parent).left;
+            if (previousToken && previousToken.kind === SyntaxKind.DotToken && previousToken.parent.kind === SyntaxKind.PropertyAccessExpression) {
+                node = (<PropertyAccessExpression>previousToken.parent).expression;
+                isRightOfDot = true;
+            }
+            else if (previousToken && previousToken.kind === SyntaxKind.DotToken && previousToken.parent.kind === SyntaxKind.QualifiedName) {
+                node = (<QualifiedName>previousToken.parent).left;
                 isRightOfDot = true;
             }
             else {
@@ -2399,10 +2572,10 @@ module ts {
             if (isRightOfDot) {
                 // Right of dot member completion list
                 var symbols: Symbol[] = [];
-                isMemberCompletion = true;
+                var isMemberCompletion = true;
 
-                if (node.kind === SyntaxKind.Identifier || node.kind === SyntaxKind.QualifiedName || node.kind === SyntaxKind.PropertyAccess) {
-                    var symbol = typeInfoResolver.getSymbolInfo(node);
+                if (node.kind === SyntaxKind.Identifier || node.kind === SyntaxKind.QualifiedName || node.kind === SyntaxKind.PropertyAccessExpression) {
+                    var symbol = typeInfoResolver.getSymbolAtLocation(node);
 
                     // This is an alias, follow what it aliases
                     if (symbol && symbol.flags & SymbolFlags.Import) {
@@ -2412,18 +2585,18 @@ module ts {
                     if (symbol && symbol.flags & SymbolFlags.HasExports) {
                         // Extract module or enum members
                         forEachValue(symbol.exports, symbol => {
-                            if (typeInfoResolver.isValidPropertyAccess(<PropertyAccess>(node.parent), symbol.name)) {
+                            if (typeInfoResolver.isValidPropertyAccess(<PropertyAccessExpression>(node.parent), symbol.name)) {
                                 symbols.push(symbol);
                             }
                         });
                     }
                 }
 
-                var type = typeInfoResolver.getTypeOfNode(node);
+                var type = typeInfoResolver.getTypeAtLocation(node);
                 if (type) {
                     // Filter private properties
                     forEach(type.getApparentProperties(), symbol => {
-                        if (typeInfoResolver.isValidPropertyAccess(<PropertyAccess>(node.parent), symbol.name)) {
+                        if (typeInfoResolver.isValidPropertyAccess(<PropertyAccessExpression>(node.parent), symbol.name)) {
                             symbols.push(symbol);
                         }
                     });
@@ -2497,10 +2670,11 @@ module ts {
             }
 
             function isInStringOrRegularExpressionOrTemplateLiteral(previousToken: Node): boolean {
-                if (previousToken.kind === SyntaxKind.StringLiteral || isTemplateLiteralKind(previousToken.kind)) {
+                if (previousToken.kind === SyntaxKind.StringLiteral
+                    || previousToken.kind === SyntaxKind.RegularExpressionLiteral
+                    || isTemplateLiteralKind(previousToken.kind)) {
                     // The position has to be either: 1. entirely within the token text, or 
-                    // 2. at the end position, and the string literal is not terminated
-                    
+                    // 2. at the end position of an unterminated token.
                     var start = previousToken.getStart();
                     var end = previousToken.getEnd();
 
@@ -2508,41 +2682,14 @@ module ts {
                         return true;
                     }
                     else if (position === end) {
-                        var width = end - start;
-                        var text = previousToken.getSourceFile().text;
-
-                        // If the token is a single character, or its second-to-last charcter indicates an escape code,
-                        // then we can immediately say that we are in the middle of an unclosed string.
-                        if (width <= 1 || text.charCodeAt(end - 2) === CharacterCodes.backslash) {
-                            return true;
-                        }
-
-                        // Now check if the last character is a closing character for the token.
-                        switch (previousToken.kind) {
-                            case SyntaxKind.StringLiteral:
-                            case SyntaxKind.NoSubstitutionTemplateLiteral:
-                                return text.charCodeAt(start) !== text.charCodeAt(end - 1);
-
-                            case SyntaxKind.TemplateHead:
-                            case SyntaxKind.TemplateMiddle:
-                                return text.charCodeAt(end - 1) !== CharacterCodes.openBrace
-                                    || text.charCodeAt(end - 2) !== CharacterCodes.$;
-
-                            case SyntaxKind.TemplateTail:
-                                return text.charCodeAt(end - 1) !== CharacterCodes.backtick;
-                        }
-
-                        return false;
+                        return !!(<LiteralExpression>previousToken).isUnterminated;
                     }
-                }
-                else if (previousToken.kind === SyntaxKind.RegularExpressionLiteral) {
-                    return previousToken.getStart() < position && position < previousToken.getEnd();
                 }
 
                 return false;
             }
 
-            function getContainingObjectLiteralApplicableForCompletion(previousToken: Node): ObjectLiteral {
+            function getContainingObjectLiteralApplicableForCompletion(previousToken: Node): ObjectLiteralExpression {
                 // The locations in an object literal expression that are applicable for completion are property name definition locations.
 
                 if (previousToken) {
@@ -2551,8 +2698,8 @@ module ts {
                     switch (previousToken.kind) {
                         case SyntaxKind.OpenBraceToken:  // var x = { |
                         case SyntaxKind.CommaToken:      // var x = { a: 0, |
-                            if (parent && parent.kind === SyntaxKind.ObjectLiteral) {
-                                return <ObjectLiteral>parent;
+                            if (parent && parent.kind === SyntaxKind.ObjectLiteralExpression) {
+                                return <ObjectLiteralExpression>parent;
                             }
                             break;
                     }
@@ -2566,7 +2713,8 @@ module ts {
                     case SyntaxKind.FunctionExpression:
                     case SyntaxKind.ArrowFunction:
                     case SyntaxKind.FunctionDeclaration:
-                    case SyntaxKind.Method:
+                    case SyntaxKind.MethodDeclaration:
+                    case SyntaxKind.MethodSignature:
                     case SyntaxKind.Constructor:
                     case SyntaxKind.GetAccessor:
                     case SyntaxKind.SetAccessor:
@@ -2589,7 +2737,7 @@ module ts {
                                 isFunction(containingNodeKind);
 
                         case SyntaxKind.OpenParenToken:
-                            return containingNodeKind === SyntaxKind.CatchBlock ||
+                            return containingNodeKind === SyntaxKind.CatchClause ||
                                 isFunction(containingNodeKind);
 
                         case SyntaxKind.OpenBraceToken:
@@ -2597,7 +2745,7 @@ module ts {
                                 containingNodeKind === SyntaxKind.InterfaceDeclaration;        // interface a { |
 
                         case SyntaxKind.SemicolonToken:
-                            return containingNodeKind === SyntaxKind.Property &&
+                            return containingNodeKind === SyntaxKind.PropertySignature &&
                                 previousToken.parent.parent.kind === SyntaxKind.InterfaceDeclaration;    // interface a { f; |
 
                         case SyntaxKind.PublicKeyword:
@@ -2697,7 +2845,7 @@ module ts {
                 //               which is permissible given that it is backwards compatible; but really we should consider
                 //               passing the meaning for the node so that we don't report that a suggestion for a value is an interface.
                 //               We COULD also just do what 'getSymbolModifiers' does, which is to use the first declaration.
-                Debug.assert(session.typeChecker.getNarrowedTypeOfSymbol(symbol, location) !== undefined, "Could not find type for symbol");
+                Debug.assert(session.typeChecker.getTypeOfSymbolAtLocation(symbol, location) !== undefined, "Could not find type for symbol");
                 var displayPartsDocumentationsAndSymbolKind = getSymbolDisplayPartsDocumentationAndSymbolKind(symbol, getSourceFile(filename), location, session.typeChecker, location, SemanticMeaning.All);
                 return {
                     name: entryName,
@@ -2727,7 +2875,8 @@ module ts {
                 }
                 switch (node.kind) {
                     case SyntaxKind.SourceFile:
-                    case SyntaxKind.Method:
+                    case SyntaxKind.MethodDeclaration:
+                    case SyntaxKind.MethodSignature:
                     case SyntaxKind.FunctionDeclaration:
                     case SyntaxKind.FunctionExpression:
                     case SyntaxKind.GetAccessor:
@@ -2756,6 +2905,7 @@ module ts {
                 if (flags & SymbolFlags.TypeParameter) return ScriptElementKind.typeParameterElement;
                 if (flags & SymbolFlags.EnumMember) return ScriptElementKind.variableElement;
                 if (flags & SymbolFlags.Import) return ScriptElementKind.alias;
+                if (flags & SymbolFlags.Module) return ScriptElementKind.moduleElement;
             }
 
             return result;
@@ -2799,7 +2949,7 @@ module ts {
                     if (!unionPropertyKind) {
                         // If this was union of all methods, 
                         //make sure it has call signatures before we can label it as method
-                        var typeOfUnionProperty = typeInfoResolver.getNarrowedTypeOfSymbol(symbol, location);
+                        var typeOfUnionProperty = typeInfoResolver.getTypeOfSymbolAtLocation(symbol, location);
                         if (typeOfUnionProperty.getCallSignatures().length) {
                             return ScriptElementKind.memberFunctionElement;
                         }
@@ -2841,8 +2991,12 @@ module ts {
                 case SyntaxKind.FunctionDeclaration: return ScriptElementKind.functionElement;
                 case SyntaxKind.GetAccessor: return ScriptElementKind.memberGetAccessorElement;
                 case SyntaxKind.SetAccessor: return ScriptElementKind.memberSetAccessorElement;
-                case SyntaxKind.Method: return ScriptElementKind.memberFunctionElement;
-                case SyntaxKind.Property: return ScriptElementKind.memberVariableElement;
+                case SyntaxKind.MethodDeclaration:
+                case SyntaxKind.MethodSignature:
+                    return ScriptElementKind.memberFunctionElement;
+                case SyntaxKind.PropertyDeclaration:
+                case SyntaxKind.PropertySignature:
+                    return ScriptElementKind.memberVariableElement;
                 case SyntaxKind.IndexSignature: return ScriptElementKind.indexSignatureElement;
                 case SyntaxKind.ConstructSignature: return ScriptElementKind.constructSignatureElement;
                 case SyntaxKind.CallSignature: return ScriptElementKind.callSignatureElement;
@@ -2876,12 +3030,12 @@ module ts {
                     symbolKind = ScriptElementKind.memberVariableElement;
                 }
 
-                var type = typeResolver.getNarrowedTypeOfSymbol(symbol, location);
+                var type = typeResolver.getTypeOfSymbolAtLocation(symbol, location);
                 if (type) {
-                    if (location.parent && location.parent.kind === SyntaxKind.PropertyAccess) {
-                        var right = (<PropertyAccess>location.parent).right;
+                    if (location.parent && location.parent.kind === SyntaxKind.PropertyAccessExpression) {
+                        var right = (<PropertyAccessExpression>location.parent).name;
                         // Either the location is on the right of a property access, or on the left and the right is missing
-                        if (right === location || (right && right.kind === SyntaxKind.Missing)){
+                        if (right === location || (right && right.getFullWidth() === 0)){
                             location = location.parent;
                         }
                     }
@@ -2903,7 +3057,7 @@ module ts {
                             signature = candidateSignatures[0];
                         }
 
-                        var useConstructSignatures = callExpression.kind === SyntaxKind.NewExpression || callExpression.func.kind === SyntaxKind.SuperKeyword;
+                        var useConstructSignatures = callExpression.kind === SyntaxKind.NewExpression || callExpression.expression.kind === SyntaxKind.SuperKeyword;
                         var allSignatures = useConstructSignatures ? type.getConstructSignatures() : type.getCallSignatures();
 
                         if (!contains(allSignatures, signature.target || signature)) {
@@ -2937,6 +3091,7 @@ module ts {
                                 case ScriptElementKind.memberVariableElement:
                                 case ScriptElementKind.variableElement:
                                 case ScriptElementKind.constElement:
+                                case ScriptElementKind.letElement:
                                 case ScriptElementKind.parameterElement:
                                 case ScriptElementKind.localVariableElement:
                                     // If it is call or construct signature of lambda's write type name
@@ -2974,7 +3129,8 @@ module ts {
 
                         if (functionDeclaration.kind === SyntaxKind.Constructor) {
                             // show (constructor) Type(...) signature
-                            addPrefixForAnyFunctionOrVar(type.symbol, ScriptElementKind.constructorImplementationElement);
+                            symbolKind = ScriptElementKind.constructorImplementationElement;
+                            addPrefixForAnyFunctionOrVar(type.symbol, symbolKind);
                         }
                         else {
                             // (function/method) symbol(..signature)
@@ -3006,7 +3162,7 @@ module ts {
                 displayParts.push(spacePart());
                 addFullSymbolName(symbol);
                 displayParts.push(spacePart());
-                displayParts.push(punctuationPart(SyntaxKind.EqualsToken));
+                displayParts.push(operatorPart(SyntaxKind.EqualsToken));
                 displayParts.push(spacePart());
                 displayParts.push.apply(displayParts, typeToDisplayParts(typeResolver, typeResolver.getDeclaredTypeOfSymbol(symbol), enclosingDeclaration));
             }
@@ -3076,20 +3232,20 @@ module ts {
                 ts.forEach(symbol.declarations, declaration => {
                     if (declaration.kind === SyntaxKind.ImportDeclaration) {
                         var importDeclaration = <ImportDeclaration>declaration;
-                        if (importDeclaration.externalModuleName) {
+                        if (isExternalModuleImportDeclaration(importDeclaration)) {
                             displayParts.push(spacePart());
-                            displayParts.push(punctuationPart(SyntaxKind.EqualsToken));
+                            displayParts.push(operatorPart(SyntaxKind.EqualsToken));
                             displayParts.push(spacePart());
                             displayParts.push(keywordPart(SyntaxKind.RequireKeyword));
                             displayParts.push(punctuationPart(SyntaxKind.OpenParenToken));
-                            displayParts.push(displayPart(getTextOfNode(importDeclaration.externalModuleName), SymbolDisplayPartKind.stringLiteral));
+                            displayParts.push(displayPart(getTextOfNode(getExternalModuleImportDeclarationExpression(importDeclaration)), SymbolDisplayPartKind.stringLiteral));
                             displayParts.push(punctuationPart(SyntaxKind.CloseParenToken));
                         }
                         else {
-                            var internalAliasSymbol = typeResolver.getSymbolInfo(importDeclaration.entityName);
+                            var internalAliasSymbol = typeResolver.getSymbolAtLocation(importDeclaration.moduleReference);
                             if (internalAliasSymbol) {
                                 displayParts.push(spacePart());
-                                displayParts.push(punctuationPart(SyntaxKind.EqualsToken));
+                                displayParts.push(operatorPart(SyntaxKind.EqualsToken));
                                 displayParts.push(spacePart());
                                 addFullSymbolName(internalAliasSymbol, enclosingDeclaration);
                             }
@@ -3196,17 +3352,17 @@ module ts {
                 return undefined;
             }
 
-            var symbol = typeInfoResolver.getSymbolInfo(node);
+            var symbol = typeInfoResolver.getSymbolAtLocation(node);
             if (!symbol) {
                 // Try getting just type at this position and show
                 switch (node.kind) {
                     case SyntaxKind.Identifier:
-                    case SyntaxKind.PropertyAccess:
+                    case SyntaxKind.PropertyAccessExpression:
                     case SyntaxKind.QualifiedName:
                     case SyntaxKind.ThisKeyword:
                     case SyntaxKind.SuperKeyword:
                         // For the identifiers/this/super etc get the type at position
-                        var type = typeInfoResolver.getTypeOfNode(node);
+                        var type = typeInfoResolver.getTypeAtLocation(node);
                         if (type) {
                             return {
                                 kind: ScriptElementKind.unknown,
@@ -3250,7 +3406,7 @@ module ts {
 
                 forEach(signatureDeclarations, d => {
                     if ((selectConstructors && d.kind === SyntaxKind.Constructor) ||
-                        (!selectConstructors && (d.kind === SyntaxKind.FunctionDeclaration || d.kind === SyntaxKind.Method))) {
+                        (!selectConstructors && (d.kind === SyntaxKind.FunctionDeclaration || d.kind === SyntaxKind.MethodDeclaration || d.kind === SyntaxKind.MethodSignature))) {
                         declarations.push(d);
                         if ((<FunctionLikeDeclaration>d).body) definition = d;
                     }
@@ -3323,7 +3479,7 @@ module ts {
                 return undefined;
             }
 
-            var symbol = typeInfoResolver.getSymbolInfo(node);
+            var symbol = typeInfoResolver.getSymbolAtLocation(node);
 
             // Could not find a symbol e.g. node is string or number keyword,
             // or the symbol was an internal symbol and does not have a declaration e.g. undefined symbol
@@ -3446,6 +3602,11 @@ module ts {
                     if (hasKind(node.parent, SyntaxKind.GetAccessor) || hasKind(node.parent, SyntaxKind.SetAccessor)) {
                         return getGetAndSetOccurrences(<AccessorDeclaration>node.parent);
                     }
+                default:
+                    if (isModifier(node.kind) && node.parent &&
+                        (isDeclaration(node.parent) || node.parent.kind === SyntaxKind.VariableStatement)) {
+                        return getModifierOccurrences(node.kind, node.parent);
+                    }
             }
 
             return undefined;
@@ -3518,7 +3679,7 @@ module ts {
                 var func = <FunctionLikeDeclaration>getContainingFunction(returnStatement);
 
                 // If we didn't find a containing function with a block body, bail out.
-                if (!(func && hasKind(func.body, SyntaxKind.FunctionBlock))) {
+                if (!(func && hasKind(func.body, SyntaxKind.Block))) {
                     return undefined;
                 }
 
@@ -3550,7 +3711,7 @@ module ts {
 
                 // If the "owner" is a function, then we equate 'return' and 'throw' statements in their
                 // ability to "jump out" of the function, and include occurrences for both.
-                if (owner.kind === SyntaxKind.FunctionBlock) {
+                if (isFunctionBlock(owner)) {
                     forEachReturnStatement(<Block>owner, returnStatement => {
                         pushKeywordIf(keywords, returnStatement.getFirstToken(), SyntaxKind.ReturnKeyword);
                     });
@@ -3575,8 +3736,8 @@ module ts {
                     else if (node.kind === SyntaxKind.TryStatement) {
                         var tryStatement = <TryStatement>node;
 
-                        if (tryStatement.catchBlock) {
-                            aggregate(tryStatement.catchBlock);
+                        if (tryStatement.catchClause) {
+                            aggregate(tryStatement.catchClause);
                         }
                         else {
                             // Exceptions thrown within a try block lacking a catch clause
@@ -3606,7 +3767,7 @@ module ts {
                 while (child.parent) {
                     var parent = child.parent;
 
-                    if (parent.kind === SyntaxKind.FunctionBlock || parent.kind === SyntaxKind.SourceFile) {
+                    if (isFunctionBlock(parent) || parent.kind === SyntaxKind.SourceFile) {
                         return parent;
                     }
                     
@@ -3615,7 +3776,7 @@ module ts {
                     if (parent.kind === SyntaxKind.TryStatement) {
                         var tryStatement = <TryStatement>parent;
 
-                        if (tryStatement.tryBlock === child && tryStatement.catchBlock) {
+                        if (tryStatement.tryBlock === child && tryStatement.catchClause) {
                             return child;
                         }
                     }
@@ -3631,8 +3792,8 @@ module ts {
 
                 pushKeywordIf(keywords, tryStatement.getFirstToken(), SyntaxKind.TryKeyword);
 
-                if (tryStatement.catchBlock) {
-                    pushKeywordIf(keywords, tryStatement.catchBlock.getFirstToken(), SyntaxKind.CatchKeyword);
+                if (tryStatement.catchClause) {
+                    pushKeywordIf(keywords, tryStatement.catchClause.getFirstToken(), SyntaxKind.CatchKeyword);
                 }
 
                 if (tryStatement.finallyBlock) {
@@ -3716,7 +3877,7 @@ module ts {
 
                 function aggregate(node: Node): void {
                     if (node.kind === SyntaxKind.BreakStatement || node.kind === SyntaxKind.ContinueStatement) {
-                        statementAccumulator.push(node);
+                        statementAccumulator.push(<BreakOrContinueStatement>node);
                     }
                     // Do not cross function boundaries.
                     else if (!isAnyFunction(node)) {
@@ -3786,6 +3947,91 @@ module ts {
 
                     if (accessor) {
                         forEach(accessor.getChildren(), child => pushKeywordIf(keywords, child, SyntaxKind.GetKeyword, SyntaxKind.SetKeyword));
+                    }
+                }
+            }
+
+            function getModifierOccurrences(modifier: SyntaxKind, declaration: Node) {
+                var container = declaration.parent;
+
+                // Make sure we only highlight the keyword when it makes sense to do so.
+                if (declaration.flags & NodeFlags.AccessibilityModifier) {
+                    if (!(container.kind === SyntaxKind.ClassDeclaration ||
+                        (declaration.kind === SyntaxKind.Parameter && hasKind(container, SyntaxKind.Constructor)))) {
+                        return undefined;
+                    }
+                }
+                else if (declaration.flags & NodeFlags.Static) {
+                    if (container.kind !== SyntaxKind.ClassDeclaration) {
+                        return undefined;
+                    }
+                }
+                else if (declaration.flags & (NodeFlags.Export | NodeFlags.Ambient)) {
+                    if (!(container.kind === SyntaxKind.ModuleBlock || container.kind === SyntaxKind.SourceFile)) {
+                        return undefined;
+                    }
+                }
+                else { 
+                    // unsupported modifier
+                    return undefined;
+                }
+
+                var keywords: Node[] = [];
+                var modifierFlag: NodeFlags = getFlagFromModifier(modifier);
+
+                var nodes: Node[];
+                switch (container.kind) {
+                    case SyntaxKind.ModuleBlock:
+                    case SyntaxKind.SourceFile:
+                        nodes = (<Block>container).statements;
+                        break;
+                    case SyntaxKind.Constructor:
+                        nodes = (<Node[]>(<ConstructorDeclaration>container).parameters).concat(
+                            (<ClassDeclaration>container.parent).members);
+                        break;
+                    case SyntaxKind.ClassDeclaration:
+                        nodes = (<ClassDeclaration>container).members;
+
+                        // If we're an accessibility modifier, we're in an instance member and should search
+                        // the constructor's parameter list for instance members as well.
+                        if (modifierFlag & NodeFlags.AccessibilityModifier) {
+                            var constructor = forEach((<ClassDeclaration>container).members, member => {
+                                return member.kind === SyntaxKind.Constructor && <ConstructorDeclaration>member;
+                            });
+
+                            if (constructor) {
+                                nodes = nodes.concat(constructor.parameters);
+                            }
+                        }
+                        break;
+                    default:
+                        Debug.fail("Invalid container kind.")
+                }
+
+                forEach(nodes, node => {
+                    if (node.modifiers && node.flags & modifierFlag) {
+                        forEach(node.modifiers, child => pushKeywordIf(keywords, child, modifier));
+                    }
+                });
+
+                return map(keywords, getReferenceEntryFromNode);
+
+                function getFlagFromModifier(modifier: SyntaxKind) {
+                    switch (modifier) {
+                        case SyntaxKind.PublicKeyword:
+                            return NodeFlags.Public;
+                        case SyntaxKind.PrivateKeyword:
+                            return NodeFlags.Private;
+                        case SyntaxKind.ProtectedKeyword:
+                            return NodeFlags.Protected;
+                        case SyntaxKind.StaticKeyword:
+                            return NodeFlags.Static;
+                        case SyntaxKind.ExportKeyword:
+                            return NodeFlags.Export;
+                        case SyntaxKind.DeclareKeyword:
+                            return NodeFlags.Ambient;
+                        default:
+                            Debug.fail();
                     }
                 }
             }
@@ -3865,7 +4111,7 @@ module ts {
                 return getReferencesForSuperKeyword(node);
             }
 
-            var symbol = typeInfoResolver.getSymbolInfo(node);
+            var symbol = typeInfoResolver.getSymbolAtLocation(node);
 
             // Could not find a symbol e.g. unknown identifier
             if (!symbol) {
@@ -3887,39 +4133,56 @@ module ts {
             var searchMeaning = getIntersectingMeaningFromDeclarations(getMeaningFromLocation(node), declarations);
 
             // Get the text to search for, we need to normalize it as external module names will have quote
-            var symbolName = getNormalizedSymbolName(symbol.name, declarations);
+            var declaredName = getDeclaredName(symbol);
 
-            // Get syntactic diagnostics
+            // Try to get the smallest valid scope that we can limit our search to;
+            // otherwise we'll need to search globally (i.e. include each file).
             var scope = getSymbolScope(symbol);
 
             if (scope) {
                 result = [];
-                getReferencesInNode(scope, symbol, symbolName, node, searchMeaning, findInStrings, findInComments, result);
+                getReferencesInNode(scope, symbol, declaredName, node, searchMeaning, findInStrings, findInComments, result);
             }
             else {
+                var internedName = getInternedName(symbol, declarations)
                 forEach(sourceFiles, sourceFile => {
                     cancellationToken.throwIfCancellationRequested();
 
-                    if (lookUp(sourceFile.identifiers, symbolName)) {
+                    if (lookUp(sourceFile.identifiers, internedName)) {
                         result = result || [];
-                        getReferencesInNode(sourceFile, symbol, symbolName, node, searchMeaning, findInStrings, findInComments, result);
+                        getReferencesInNode(sourceFile, symbol, declaredName, node, searchMeaning, findInStrings, findInComments, result);
                     }
                 });
             }
 
             return result;
 
-            function getNormalizedSymbolName(symbolName: string, declarations: Declaration[]): string {
+            function getDeclaredName(symbol: Symbol) {
+                var name = typeInfoResolver.symbolToString(symbol);
+
+                return stripQuotes(name);
+            }
+
+            function getInternedName(symbol: Symbol, declarations: Declaration[]): string {
                 // Special case for function expressions, whose names are solely local to their bodies.
                 var functionExpression = forEach(declarations, d => d.kind === SyntaxKind.FunctionExpression ? <FunctionExpression>d : undefined);
 
+                // When a name gets interned into a SourceFile's 'identifiers' Map,
+                // its name is escaped and stored in the same way its symbol name/identifier
+                // name should be stored. Function expressions, however, are a special case,
+                // because despite sometimes having a name, the binder unconditionally binds them
+                // to a symbol with the name "__function".
                 if (functionExpression && functionExpression.name) {
                     var name = functionExpression.name.text;
                 }
                 else {
-                    var name = symbolName;
+                    var name = symbol.name;
                 }
 
+                return stripQuotes(name);
+            }
+
+            function stripQuotes(name: string) {
                 var length = name.length;
                 if (length >= 2 && name.charCodeAt(0) === CharacterCodes.doubleQuote && name.charCodeAt(length - 1) === CharacterCodes.doubleQuote) {
                     return name.substring(1, length - 1);
@@ -4100,7 +4363,7 @@ module ts {
                             return;
                         }
 
-                        var referenceSymbol = typeInfoResolver.getSymbolInfo(referenceLocation);
+                        var referenceSymbol = typeInfoResolver.getSymbolAtLocation(referenceLocation);
                         if (referenceSymbol) {
                             var referenceSymbolDeclaration = referenceSymbol.valueDeclaration;
                             var shorthandValueSymbol = typeInfoResolver.getShorthandAssignmentValueSymbol(referenceSymbolDeclaration);
@@ -4156,8 +4419,10 @@ module ts {
                 var staticFlag = NodeFlags.Static;
 
                 switch (searchSpaceNode.kind) {
-                    case SyntaxKind.Property:
-                    case SyntaxKind.Method:
+                    case SyntaxKind.PropertyDeclaration:
+                    case SyntaxKind.PropertySignature:
+                    case SyntaxKind.MethodDeclaration:
+                    case SyntaxKind.MethodSignature:
                     case SyntaxKind.Constructor:
                     case SyntaxKind.GetAccessor:
                     case SyntaxKind.SetAccessor:
@@ -4201,8 +4466,14 @@ module ts {
                 var staticFlag = NodeFlags.Static;
 
                 switch (searchSpaceNode.kind) {
-                    case SyntaxKind.Property:
-                    case SyntaxKind.Method:
+                    case SyntaxKind.MethodDeclaration:
+                    case SyntaxKind.MethodSignature:
+                        if (isObjectLiteralMethod(searchSpaceNode)) {
+                            break;
+                        }
+                    // fall through
+                    case SyntaxKind.PropertyDeclaration:
+                    case SyntaxKind.PropertySignature:
                     case SyntaxKind.Constructor:
                     case SyntaxKind.GetAccessor:
                     case SyntaxKind.SetAccessor:
@@ -4252,6 +4523,12 @@ module ts {
                             case SyntaxKind.FunctionExpression:
                             case SyntaxKind.FunctionDeclaration:
                                 if (searchSpaceNode.symbol === container.symbol) {
+                                    result.push(getReferenceEntryFromNode(node));
+                                }
+                                break;
+                            case SyntaxKind.MethodDeclaration:
+                            case SyntaxKind.MethodSignature:
+                                if (isObjectLiteralMethod(searchSpaceNode) && searchSpaceNode.symbol === container.symbol) {
                                     result.push(getReferenceEntryFromNode(node));
                                 }
                                 break;
@@ -4321,11 +4598,11 @@ module ts {
                 if (symbol && symbol.flags & (SymbolFlags.Class | SymbolFlags.Interface)) {
                     forEach(symbol.getDeclarations(), declaration => {
                         if (declaration.kind === SyntaxKind.ClassDeclaration) {
-                            getPropertySymbolFromTypeReference((<ClassDeclaration>declaration).baseType);
-                            forEach((<ClassDeclaration>declaration).implementedTypes, getPropertySymbolFromTypeReference);
+                            getPropertySymbolFromTypeReference(getClassBaseTypeNode(<ClassDeclaration>declaration));
+                            forEach(getClassImplementedTypeNodes(<ClassDeclaration>declaration), getPropertySymbolFromTypeReference);
                         }
                         else if (declaration.kind === SyntaxKind.InterfaceDeclaration) {
-                            forEach((<InterfaceDeclaration>declaration).baseTypes, getPropertySymbolFromTypeReference);
+                            forEach(getInterfaceBaseTypeNodes(<InterfaceDeclaration>declaration), getPropertySymbolFromTypeReference);
                         }
                     });
                 }
@@ -4333,7 +4610,7 @@ module ts {
 
                 function getPropertySymbolFromTypeReference(typeReference: TypeReferenceNode) {
                     if (typeReference) {
-                        var type = typeInfoResolver.getTypeOfNode(typeReference);
+                        var type = typeInfoResolver.getTypeAtLocation(typeReference);
                         if (type) {
                             var propertySymbol = typeInfoResolver.getPropertyOfType(type, propertyName);
                             if (propertySymbol) {
@@ -4383,7 +4660,7 @@ module ts {
 
             function getPropertySymbolsFromContextualType(node: Node): Symbol[] {
                 if (isNameOfPropertyAssignment(node)) {
-                    var objectLiteral = node.parent.parent;
+                    var objectLiteral = <ObjectLiteralExpression>node.parent.parent;
                     var contextualType = typeInfoResolver.getContextualType(objectLiteral);
                     var name = (<Identifier>node).text;
                     if (contextualType) {
@@ -4471,7 +4748,7 @@ module ts {
 
             var parent = node.parent;
             if (parent) {
-                if (parent.kind === SyntaxKind.PostfixOperator || parent.kind === SyntaxKind.PrefixOperator) {
+                if (parent.kind === SyntaxKind.PostfixUnaryExpression || parent.kind === SyntaxKind.PrefixUnaryExpression) {
                     return true;
                 }
                 else if (parent.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>parent).left === node) {
@@ -4575,18 +4852,14 @@ module ts {
 
         function getEmitOutput(filename: string): EmitOutput {
             synchronizeHostData();
+
             filename = normalizeSlashes(filename);
-            var compilerOptions = program.getCompilerOptions();
-            var targetSourceFile = program.getSourceFile(filename);  // Current selected file to be output
-            // If --out flag is not specified, shouldEmitToOwnFile is true. Otherwise shouldEmitToOwnFile is false.
-            var shouldEmitToOwnFile = ts.shouldEmitToOwnFile(targetSourceFile, compilerOptions);
-            var emitOutput: EmitOutput = {
-                outputFiles: [],
-                emitOutputStatus: undefined,
-            };
+            var sourceFile = getSourceFile(filename);
+
+            var outputFiles: OutputFile[] = [];
 
             function getEmitOutputWriter(filename: string, data: string, writeByteOrderMark: boolean) {
-                emitOutput.outputFiles.push({
+                outputFiles.push({
                     name: filename,
                     writeByteOrderMark: writeByteOrderMark,
                     text: data
@@ -4596,59 +4869,36 @@ module ts {
             // Initialize writer for CompilerHost.writeFile
             writer = getEmitOutputWriter;
 
-            var containSyntacticErrors = false;
-
-            if (shouldEmitToOwnFile) {
-                // Check only the file we want to emit
-                containSyntacticErrors = containErrors(program.getDiagnostics(targetSourceFile));
-            } else {
-                // Check the syntactic of only sourceFiles that will get emitted into single output
-                // Terminate the process immediately if we encounter a syntax error from one of the sourceFiles
-                containSyntacticErrors = forEach(program.getSourceFiles(), sourceFile => {
-                    if (!isExternalModuleOrDeclarationFile(sourceFile)) {
-                        // If emit to a single file then we will check all files that do not have external module
-                        return containErrors(program.getDiagnostics(sourceFile));
-                    }
-                    return false;
-                });
-            }
-
-            if (containSyntacticErrors) {
-                // If there is a syntax error, terminate the process and report outputStatus
-                emitOutput.emitOutputStatus = EmitReturnStatus.AllOutputGenerationSkipped;
-                // Reset writer back to undefined to make sure that we produce an error message
-                // if CompilerHost.writeFile is called when we are not in getEmitOutput
-                writer = undefined;
-                return emitOutput;
-            }
-
-            // Perform semantic and force a type check before emit to ensure that all symbols are updated
-            // EmitFiles will report if there is an error from TypeChecker and Emitter
-            // Depend whether we will have to emit into a single file or not either emit only selected file in the project, emit all files into a single file
-            var emitFilesResult = getFullTypeCheckChecker().invokeEmitter(targetSourceFile);
-            emitOutput.emitOutputStatus = emitFilesResult.emitResultStatus;
+            var emitOutput = getFullTypeCheckChecker().emitFiles(sourceFile);
 
             // Reset writer back to undefined to make sure that we produce an error message if CompilerHost.writeFile method is called when we are not in getEmitOutput
             writer = undefined;
-            return emitOutput;
+
+            return {
+                outputFiles,
+                emitOutputStatus: emitOutput.emitResultStatus
+            };
         }
 
-        function getMeaningFromDeclaration(node: Declaration): SemanticMeaning {
+        function getMeaningFromDeclaration(node: Node): SemanticMeaning {
             switch (node.kind) {
                 case SyntaxKind.Parameter:
                 case SyntaxKind.VariableDeclaration:
-                case SyntaxKind.Property:
+                case SyntaxKind.BindingElement:
+                case SyntaxKind.PropertyDeclaration:
+                case SyntaxKind.PropertySignature:
                 case SyntaxKind.PropertyAssignment:
                 case SyntaxKind.ShorthandPropertyAssignment:
                 case SyntaxKind.EnumMember:
-                case SyntaxKind.Method:
+                case SyntaxKind.MethodDeclaration:
+                case SyntaxKind.MethodSignature:
                 case SyntaxKind.Constructor:
                 case SyntaxKind.GetAccessor:
                 case SyntaxKind.SetAccessor:
                 case SyntaxKind.FunctionDeclaration:
                 case SyntaxKind.FunctionExpression:
                 case SyntaxKind.ArrowFunction:
-                case SyntaxKind.CatchBlock:
+                case SyntaxKind.CatchClause:
                     return SemanticMeaning.Value;
 
                 case SyntaxKind.TypeParameter:
@@ -4707,7 +4957,7 @@ module ts {
             while (node.parent.kind === SyntaxKind.QualifiedName) {
                 node = node.parent;
             }
-            return node.parent.kind === SyntaxKind.ImportDeclaration && (<ImportDeclaration>node.parent).entityName === node;
+            return isInternalModuleImportDeclaration(node.parent) && (<ImportDeclaration>node.parent).moduleReference === node;
         }
 
         function getMeaningFromRightHandSideOfImport(node: Node) {
@@ -4776,7 +5026,7 @@ module ts {
             }
 
             switch (node.kind) {
-                case SyntaxKind.PropertyAccess:
+                case SyntaxKind.PropertyAccessExpression:
                 case SyntaxKind.QualifiedName:
                 case SyntaxKind.StringLiteral:
                 case SyntaxKind.FalseKeyword:
@@ -4853,6 +5103,9 @@ module ts {
                 else if (flags & SymbolFlags.Enum) {
                     return ClassificationTypeNames.enumName;
                 }
+                else if (flags & SymbolFlags.TypeAlias) {
+                    return ClassificationTypeNames.typeAlias;
+                }
                 else if (meaningAtPosition & SemanticMeaning.Type) {
                     if (flags & SymbolFlags.Interface) {
                         return ClassificationTypeNames.interfaceName;
@@ -4887,7 +5140,7 @@ module ts {
                 // Only walk into nodes that intersect the requested span.
                 if (node && span.intersectsWith(node.getStart(), node.getWidth())) {
                     if (node.kind === SyntaxKind.Identifier && node.getWidth() > 0) {
-                        var symbol = typeInfoResolver.getSymbolInfo(node);
+                        var symbol = typeInfoResolver.getSymbolAtLocation(node);
                         if (symbol) {
                             var type = classifySymbol(symbol, getMeaningFromLocation(node));
                             if (type) {
@@ -4960,8 +5213,8 @@ module ts {
                     // the '=' in a variable declaration is special cased here.
                     if (token.parent.kind === SyntaxKind.BinaryExpression ||
                         token.parent.kind === SyntaxKind.VariableDeclaration ||
-                        token.parent.kind === SyntaxKind.PrefixOperator ||
-                        token.parent.kind === SyntaxKind.PostfixOperator ||
+                        token.parent.kind === SyntaxKind.PrefixUnaryExpression ||
+                        token.parent.kind === SyntaxKind.PostfixUnaryExpression ||
                         token.parent.kind === SyntaxKind.ConditionalExpression) {
                         return ClassificationTypeNames.operator;
                     }
@@ -5285,19 +5538,6 @@ module ts {
                 return new RegExp(regExpString, "gim");
             }
 
-            function getContainingComment(comments: CommentRange[], position: number): CommentRange {
-                if (comments) {
-                    for (var i = 0, n = comments.length; i < n; i++) {
-                        var comment = comments[i];
-                        if (comment.pos <= position && position < comment.end) {
-                            return comment;
-                        }
-                    }
-                }
-
-                return undefined;
-            }
-
             function isLetterOrDigit(char: number): boolean {
                 return (char >= CharacterCodes.a && char <= CharacterCodes.z) ||
                     (char >= CharacterCodes.A && char <= CharacterCodes.Z) ||
@@ -5316,7 +5556,7 @@ module ts {
 
             // Can only rename an identifier.
             if (node && node.kind === SyntaxKind.Identifier) {
-                var symbol = typeInfoResolver.getSymbolInfo(node);
+                var symbol = typeInfoResolver.getSymbolAtLocation(node);
 
                 // Only allow a symbol to be renamed if it actually has at least one declaration.
                 if (symbol && symbol.getDeclarations() && symbol.getDeclarations().length > 0) {
@@ -5558,23 +5798,29 @@ module ts {
                 addResult(end - start, classFromKind(token));
 
                 if (end >= text.length) {
-                    // We're at the end.
                     if (token === SyntaxKind.StringLiteral) {
                         // Check to see if we finished up on a multiline string literal.
                         var tokenText = scanner.getTokenText();
-                        if (tokenText.length > 0 && tokenText.charCodeAt(tokenText.length - 1) === CharacterCodes.backslash) {
-                            var quoteChar = tokenText.charCodeAt(0);
-                            result.finalLexState = quoteChar === CharacterCodes.doubleQuote
-                                ? EndOfLineState.InDoubleQuoteStringLiteral
-                                : EndOfLineState.InSingleQuoteStringLiteral;
+                        if (scanner.isUnterminated()) {
+                            var lastCharIndex = tokenText.length - 1;
+
+                            var numBackslashes = 0;
+                            while (tokenText.charCodeAt(lastCharIndex - numBackslashes) === CharacterCodes.backslash) {
+                                numBackslashes++;
+                            }
+
+                            // If we have an odd number of backslashes, then the multiline string is unclosed
+                            if (numBackslashes & 1) {
+                                var quoteChar = tokenText.charCodeAt(0);
+                                result.finalLexState = quoteChar === CharacterCodes.doubleQuote
+                                    ? EndOfLineState.InDoubleQuoteStringLiteral
+                                    : EndOfLineState.InSingleQuoteStringLiteral;
+                            }
                         }
                     }
                     else if (token === SyntaxKind.MultiLineCommentTrivia) {
                         // Check to see if the multiline comment was unclosed.
-                        var tokenText = scanner.getTokenText()
-                        if (!(tokenText.length > 3 && // need to avoid catching '/*/'
-                            tokenText.charCodeAt(tokenText.length - 2) === CharacterCodes.asterisk &&
-                            tokenText.charCodeAt(tokenText.length - 1) === CharacterCodes.slash)) {
+                        if (scanner.isUnterminated()) {
                             result.finalLexState = EndOfLineState.InMultiLineCommentTrivia;
                         }
                     }
@@ -5673,6 +5919,7 @@ module ts {
                     return TokenClass.StringLiteral;
                 case SyntaxKind.RegularExpressionLiteral:
                     return TokenClass.RegExpLiteral;
+                case SyntaxKind.ConflictMarkerTrivia:
                 case SyntaxKind.MultiLineCommentTrivia:
                 case SyntaxKind.SingleLineCommentTrivia:
                     return TokenClass.Comment;

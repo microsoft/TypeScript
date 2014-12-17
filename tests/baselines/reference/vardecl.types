@@ -52,7 +52,7 @@ complicatedArrayVar.push({ x: 30, y : 'hello world' });
 >y : string
 
 var n1: { [s: string]: number; };
->n1 : { [x: string]: number; }
+>n1 : { [s: string]: number; }
 >s : string
 
 var c : {

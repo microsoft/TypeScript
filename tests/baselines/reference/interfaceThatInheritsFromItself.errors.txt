@@ -1,14 +1,10 @@
-tests/cases/conformance/interfaces/interfaceDeclarations/interfaceThatInheritsFromItself.ts(10,15): error TS1005: '{' expected.
-tests/cases/conformance/interfaces/interfaceDeclarations/interfaceThatInheritsFromItself.ts(10,26): error TS1005: ';' expected.
-tests/cases/conformance/interfaces/interfaceDeclarations/interfaceThatInheritsFromItself.ts(10,30): error TS1005: ';' expected.
 tests/cases/conformance/interfaces/interfaceDeclarations/interfaceThatInheritsFromItself.ts(1,11): error TS2310: Type 'Foo' recursively references itself as a base type.
 tests/cases/conformance/interfaces/interfaceDeclarations/interfaceThatInheritsFromItself.ts(4,11): error TS2310: Type 'Foo2<T>' recursively references itself as a base type.
 tests/cases/conformance/interfaces/interfaceDeclarations/interfaceThatInheritsFromItself.ts(7,11): error TS2310: Type 'Foo3<T>' recursively references itself as a base type.
-tests/cases/conformance/interfaces/interfaceDeclarations/interfaceThatInheritsFromItself.ts(10,15): error TS2304: Cannot find name 'implements'.
-tests/cases/conformance/interfaces/interfaceDeclarations/interfaceThatInheritsFromItself.ts(10,26): error TS2304: Cannot find name 'Bar'.
+tests/cases/conformance/interfaces/interfaceDeclarations/interfaceThatInheritsFromItself.ts(10,15): error TS1176: Interface declaration cannot have 'implements' clause.
 
 
-==== tests/cases/conformance/interfaces/interfaceDeclarations/interfaceThatInheritsFromItself.ts (8 errors) ====
+==== tests/cases/conformance/interfaces/interfaceDeclarations/interfaceThatInheritsFromItself.ts (4 errors) ====
     interface Foo extends Foo { // error
               ~~~
 !!! error TS2310: Type 'Foo' recursively references itself as a base type.
@@ -26,15 +22,7 @@ tests/cases/conformance/interfaces/interfaceDeclarations/interfaceThatInheritsFr
     
     interface Bar implements Bar { // error
                   ~~~~~~~~~~
-!!! error TS1005: '{' expected.
-                             ~~~
-!!! error TS1005: ';' expected.
-                                 ~
-!!! error TS1005: ';' expected.
-                  ~~~~~~~~~~
-!!! error TS2304: Cannot find name 'implements'.
-                             ~~~
-!!! error TS2304: Cannot find name 'Bar'.
+!!! error TS1176: Interface declaration cannot have 'implements' clause.
     }
     
     

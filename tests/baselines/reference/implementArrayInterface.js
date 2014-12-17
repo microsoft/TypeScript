@@ -1,5 +1,5 @@
 //// [implementArrayInterface.ts]
-declare class ArrayConstructor<T> implements Array<T> {
+declare class MyArray<T> implements Array<T> {
     toString(): string;
     toLocaleString(): string;
     concat<U extends T[]>(...items: U[]): T[];

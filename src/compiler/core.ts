@@ -15,10 +15,6 @@ module ts {
         True  = -1
     }
 
-    export interface Map<T> {
-        [index: string]: T;
-    }
-
     export const enum Comparison {
         LessThan    = -1,
         EqualTo     = 0,
@@ -28,15 +24,15 @@ module ts {
     export interface StringSet extends Map<any> { }
 
     export function forEach<T, U>(array: T[], callback: (element: T) => U): U {
-        var result: U;
         if (array) {
             for (var i = 0, len = array.length; i < len; i++) {
-                if (result = callback(array[i])) {
-                    break;
+                var result = callback(array[i]);
+                if (result) {
+                    return result;
                 }
             }
         }
-        return result;
+        return undefined;
     }
 
     export function contains<T>(array: T[], value: T): boolean {
@@ -591,27 +587,44 @@ module ts {
         return path;
     }
 
-    var escapedCharsRegExp = /[\t\v\f\b\0\r\n\"\\\u2028\u2029\u0085]/g;
+    var backslashOrDoubleQuote = /[\"\\]/g;
+    var escapedCharsRegExp = /[\0-\19\t\v\f\b\0\r\n\u2028\u2029\u0085]/g;
     var escapedCharsMap: Map<string> = {
+        "\0": "\\0",
         "\t": "\\t",
         "\v": "\\v",
         "\f": "\\f",
         "\b": "\\b",
-        "\0": "\\0",
         "\r": "\\r",
         "\n": "\\n",
+        "\\": "\\\\",
         "\"": "\\\"",
         "\u2028": "\\u2028", // lineSeparator
         "\u2029": "\\u2029", // paragraphSeparator
         "\u0085": "\\u0085"  // nextLine
     };
 
-    /** NOTE: This *does not* support the full escape characters, it only supports the subset that can be used in file names
-      * or string literals. If the information encoded in the map changes, this needs to be revisited. */
+    /**
+     * Based heavily on the abstract 'Quote' operation from ECMA-262 (24.3.2.2),
+     * but augmented for a few select characters.
+     * Note that this doesn't actually wrap the input in double quotes.
+     */
     export function escapeString(s: string): string {
-        return escapedCharsRegExp.test(s) ? s.replace(escapedCharsRegExp, c => {
-            return escapedCharsMap[c] || c;
-        }) : s;
+        // Prioritize '"' and '\'
+        s = backslashOrDoubleQuote.test(s) ? s.replace(backslashOrDoubleQuote, getReplacement) : s;
+        s = escapedCharsRegExp.test(s) ? s.replace(escapedCharsRegExp, getReplacement) : s;
+
+        return s;
+
+        function getReplacement(c: string) {
+            return escapedCharsMap[c] || unicodeEscape(c);
+        }
+
+        function unicodeEscape(c: string): string {
+            var hexCharCode = c.charCodeAt(0).toString(16);
+            var paddedHexCode = ("0000" + hexCharCode).slice(-4);
+            return "\\u" + paddedHexCode;
+        }
     }
 
     export interface ObjectAllocator {

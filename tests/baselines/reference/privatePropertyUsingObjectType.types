@@ -8,7 +8,7 @@ export class FilterManager {
 >IFilterProvider : IFilterProvider
 
     private _filterProviders2: { [index: number]: IFilterProvider; };
->_filterProviders2 : { [x: number]: IFilterProvider; }
+>_filterProviders2 : { [index: number]: IFilterProvider; }
 >index : number
 >IFilterProvider : IFilterProvider
 

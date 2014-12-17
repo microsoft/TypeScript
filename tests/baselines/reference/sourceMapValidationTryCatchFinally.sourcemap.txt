@@ -91,16 +91,16 @@ sourceFile:sourceMapValidationTryCatchFinally.ts
 4 >      (
 5 >       e
 6 >        )
-7 >         
-8 >          c
+7 >          
+8 >          {
 1->Emitted(5, 1) Source(4, 3) + SourceIndex(0)
 2 >Emitted(5, 6) Source(4, 8) + SourceIndex(0)
 3 >Emitted(5, 7) Source(4, 9) + SourceIndex(0)
 4 >Emitted(5, 8) Source(4, 10) + SourceIndex(0)
 5 >Emitted(5, 9) Source(4, 11) + SourceIndex(0)
 6 >Emitted(5, 10) Source(4, 12) + SourceIndex(0)
-7 >Emitted(5, 11) Source(4, 3) + SourceIndex(0)
-8 >Emitted(5, 12) Source(4, 4) + SourceIndex(0)
+7 >Emitted(5, 11) Source(4, 13) + SourceIndex(0)
+8 >Emitted(5, 12) Source(4, 14) + SourceIndex(0)
 ---
 >>>    x = x - 1;
 1->^^^^
@@ -110,7 +110,7 @@ sourceFile:sourceMapValidationTryCatchFinally.ts
 5 >         ^^^
 6 >            ^
 7 >             ^
-1->atch (e) {
+1->
   >    
 2 >    x
 3 >      = 
@@ -267,15 +267,16 @@ sourceFile:sourceMapValidationTryCatchFinally.ts
 5 >       e
 6 >        )
 7 >         
-8 >          c
+  >         
+8 >          {
 1->Emitted(15, 1) Source(14, 1) + SourceIndex(0)
 2 >Emitted(15, 6) Source(14, 6) + SourceIndex(0)
 3 >Emitted(15, 7) Source(14, 7) + SourceIndex(0)
 4 >Emitted(15, 8) Source(14, 8) + SourceIndex(0)
 5 >Emitted(15, 9) Source(14, 9) + SourceIndex(0)
 6 >Emitted(15, 10) Source(14, 10) + SourceIndex(0)
-7 >Emitted(15, 11) Source(14, 1) + SourceIndex(0)
-8 >Emitted(15, 12) Source(14, 2) + SourceIndex(0)
+7 >Emitted(15, 11) Source(15, 1) + SourceIndex(0)
+8 >Emitted(15, 12) Source(15, 2) + SourceIndex(0)
 ---
 >>>    x = x - 1;
 1->^^^^
@@ -285,8 +286,7 @@ sourceFile:sourceMapValidationTryCatchFinally.ts
 5 >         ^^^
 6 >            ^
 7 >             ^
-1->atch (e)
-  >{
+1->
   >    
 2 >    x
 3 >      = 

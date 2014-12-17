@@ -5,7 +5,7 @@
 
 goTo.marker('objectLiteral1');
 verify.signatureHelpCountIs(1);
-verify.currentSignatureParamterCountIs(2);
+verify.currentSignatureParameterCountIs(2);
 verify.currentSignatureHelpIs('f(a: number, b: string): string');
 
 verify.currentParameterHelpArgumentNameIs("a");

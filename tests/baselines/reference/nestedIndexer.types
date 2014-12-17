@@ -4,7 +4,7 @@ function then(x) {
 >x : any
 
 var match: { [index: number]: string; }
->match : { [x: number]: string; }
+>match : { [index: number]: string; }
 >index : number
 
 }

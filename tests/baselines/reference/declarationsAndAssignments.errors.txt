@@ -1,0 +1,232 @@
+tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(5,16): error TS2460: Type '[number, string]' has no property '2'.
+tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(56,17): error TS2322: Type 'number' is not assignable to type 'string'.
+tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(63,13): error TS2460: Type '[number]' has no property '1'.
+tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(63,16): error TS2460: Type '[number]' has no property '2'.
+tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(67,9): error TS2461: Type '{ [x: number]: undefined; }' is not an array type.
+tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(68,9): error TS2461: Type '{ [x: number]: number; 0: number; 1: number; }' is not an array type.
+tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(73,11): error TS2459: Type '{}' has no property 'a' and no string index signature.
+tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(73,14): error TS2459: Type '{}' has no property 'b' and no string index signature.
+tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(74,11): error TS2459: Type 'undefined[]' has no property 'a' and no string index signature.
+tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(74,14): error TS2459: Type 'undefined[]' has no property 'b' and no string index signature.
+tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(106,5): error TS2345: Argument of type '[number, [string, { y: boolean; }]]' is not assignable to parameter of type '[number, [string, { x: any; y?: boolean; }]]'.
+  Types of property '1' are incompatible.
+    Type '[string, { y: boolean; }]' is not assignable to type '[string, { x: any; y?: boolean; }]'.
+      Types of property '1' are incompatible.
+        Type '{ y: boolean; }' is not assignable to type '{ x: any; y?: boolean; }'.
+          Property 'x' is missing in type '{ y: boolean; }'.
+tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(138,6): error TS2322: Type 'string' is not assignable to type 'number'.
+tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(138,9): error TS2322: Type 'number' is not assignable to type 'string'.
+
+
+==== tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts (13 errors) ====
+    function f0() {
+        var [] = [1, "hello"];
+        var [x] = [1, "hello"];
+        var [x, y] = [1, "hello"];
+        var [x, y, z] = [1, "hello"];  // Error
+                   ~
+!!! error TS2460: Type '[number, string]' has no property '2'.
+        var [,, z] = [0, 1, 2];
+        var x: number;
+        var y: string;
+    }
+    
+    function f1() {
+        var a = [1, "hello"];
+        var [x] = a;
+        var [x, y] = a;
+        var [x, y, z] = a;
+        var x: number | string;
+        var y: number | string;
+        var z: number | string;
+    }
+    
+    function f2() {
+        var { } = { x: 5, y: "hello" };
+        var { x } = { x: 5, y: "hello" };
+        var { y } = { x: 5, y: "hello" };
+        var { x, y } = { x: 5, y: "hello" };
+        var x: number;
+        var y: string;
+        var { x: a } = { x: 5, y: "hello" };
+        var { y: b } = { x: 5, y: "hello" };
+        var { x: a, y: b } = { x: 5, y: "hello" };
+        var a: number;
+        var b: string;
+    }
+    
+    function f3() {
+        var [x, [y, [z]]] = [1, ["hello", [true]]];
+        var x: number;
+        var y: string;
+        var z: boolean;
+    }
+    
+    function f4() {
+        var { a: x, b: { a: y, b: { a: z }}} = { a: 1, b: { a: "hello", b: { a: true } } };
+        var x: number;
+        var y: string;
+        var z: boolean;
+    }
+    
+    function f6() {
+        var [x = 0, y = ""] = [1, "hello"];
+        var x: number;
+        var y: string;
+    }
+    
+    function f7() {
+        var [x = 0, y = 1] = [1, "hello"];  // Error, initializer for y must be string
+                    ~
+!!! error TS2322: Type 'number' is not assignable to type 'string'.
+        var x: number;
+        var y: string;
+    }
+    
+    function f8() {
+        var [a, b, c] = [];   // Ok, [] is an array
+        var [d, e, f] = [1];  // Error, [1] is a tuple
+                ~
+!!! error TS2460: Type '[number]' has no property '1'.
+                   ~
+!!! error TS2460: Type '[number]' has no property '2'.
+    }
+    
+    function f9() {
+        var [a, b] = {};                // Error, not array type
+            ~~~~~~
+!!! error TS2461: Type '{ [x: number]: undefined; }' is not an array type.
+        var [c, d] = { 0: 10, 1: 20 };  // Error, not array type
+            ~~~~~~
+!!! error TS2461: Type '{ [x: number]: number; 0: number; 1: number; }' is not an array type.
+        var [e, f] = [10, 20];
+    }
+    
+    function f10() {
+        var { a, b } = {};  // Error
+              ~
+!!! error TS2459: Type '{}' has no property 'a' and no string index signature.
+                 ~
+!!! error TS2459: Type '{}' has no property 'b' and no string index signature.
+        var { a, b } = [];  // Error
+              ~
+!!! error TS2459: Type 'undefined[]' has no property 'a' and no string index signature.
+                 ~
+!!! error TS2459: Type 'undefined[]' has no property 'b' and no string index signature.
+    }
+    
+    function f11() {
+        var { x: a, y: b } = { x: 10, y: "hello" };
+        var { 0: a, 1: b } = { 0: 10, 1: "hello" };
+        var { "<": a, ">": b } = { "<": 10, ">": "hello" };
+        var { 0: a, 1: b } = [10, "hello"];
+        var a: number;
+        var b: string;
+    }
+    
+    function f12() {
+        var [a, [b, { x, y: c }] = ["abc", { x: 10, y: false }]] = [1, ["hello", { x: 5, y: true }]];
+        var a: number;
+        var b: string;
+        var x: number;
+        var c: boolean;
+    }
+    
+    function f13() {
+        var [x, y] = [1, "hello"];
+        var [a, b] = [[x, y], { x: x, y: y }];
+    }
+    
+    function f14([a = 1, [b = "hello", { x, y: c = false }]]) {
+        var a: number;
+        var b: string;
+        var c: boolean;
+    }
+    f14([2, ["abc", { x: 0, y: true }]]);
+    f14([2, ["abc", { x: 0 }]]);
+    f14([2, ["abc", { y: false }]]);  // Error, no x
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2345: Argument of type '[number, [string, { y: boolean; }]]' is not assignable to parameter of type '[number, [string, { x: any; y?: boolean; }]]'.
+!!! error TS2345:   Types of property '1' are incompatible.
+!!! error TS2345:     Type '[string, { y: boolean; }]' is not assignable to type '[string, { x: any; y?: boolean; }]'.
+!!! error TS2345:       Types of property '1' are incompatible.
+!!! error TS2345:         Type '{ y: boolean; }' is not assignable to type '{ x: any; y?: boolean; }'.
+!!! error TS2345:           Property 'x' is missing in type '{ y: boolean; }'.
+    
+    module M {
+        export var [a, b] = [1, 2];
+    }
+    
+    function f15() {
+        var a = "hello";
+        var b = 1;
+        var c = true;
+        return { a, b, c };
+    }
+    
+    function f16() {
+        var { a, b, c } = f15();
+    }
+    
+    function f17({ a = "", b = 0, c = false }) {
+    }
+    
+    f17({});
+    f17({ a: "hello" });
+    f17({ c: true });
+    f17(f15());
+    
+    function f18() {
+        var a: number;
+        var b: string;
+        var aa: number[];
+        ({ a, b } = { a, b });
+        ({ a, b } = { b, a });
+        [aa[0], b] = [a, b];
+        [a, b] = [b, a];  // Error
+         ~
+!!! error TS2322: Type 'string' is not assignable to type 'number'.
+            ~
+!!! error TS2322: Type 'number' is not assignable to type 'string'.
+        [a = 1, b = "abc"] = [2, "def"];
+    }
+    
+    function f19() {
+        var a, b;
+        [a, b] = [1, 2];
+        [a, b] = [b, a];
+        ({ a, b } = { b, a });
+        [[a, b] = [1, 2]] = [[2, 3]];
+        var x = ([a, b] = [1, 2]);
+    }
+    
+    function f20() {
+        var a: number[];
+        var x: number;
+        var y: number;
+        var z: number;
+        var [...a] = [1, 2, 3];
+        var [x, ...a] = [1, 2, 3];
+        var [x, y, ...a] = [1, 2, 3];
+        var [x, y, z, ...a] = [1, 2, 3];
+        [...a] = [1, 2, 3];
+        [x, ...a] = [1, 2, 3];
+        [x, y, ...a] = [1, 2, 3];
+        [x, y, z, ...a] = [1, 2, 3];
+    }
+    
+    function f21() {
+        var a: (number | string | boolean)[];
+        var x: number | string | boolean;
+        var y: number | string | boolean;
+        var z: number | string | boolean;
+        var [...a] = [1, "hello", true];
+        var [x, ...a] = [1, "hello", true];
+        var [x, y, ...a] = [1, "hello", true];
+        var [x, y, z, ...a] = [1, "hello", true];
+        [...a] = [1, "hello", true];
+        [x, ...a] = [1, "hello", true];
+        [x, y, ...a] = [1, "hello", true];
+        [x, y, z, ...a] = [1, "hello", true];
+    }
+    

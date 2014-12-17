@@ -1,14 +1,19 @@
 /// <reference path="..\compiler\types.ts"/>
 
-module WScript {
+var ActiveXObject: { new(...args: any[]): any }
+
+declare module WScript {
     export module Arguments {
-        export var length = 0;
+        export function Item(n: number): any;
+        export var length: number;
     }
 
     export module StdOut {
-        export function Write() {
-        }
+        export function Write(s: string): void;
     }
 
-    export var FileName = "."
+    export var FileName: string;
+    export var ScriptFullName: string;
+
+    export function Quit(n: number): void;
 }

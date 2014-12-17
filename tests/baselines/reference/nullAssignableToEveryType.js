@@ -80,3 +80,8 @@ function foo(x, y, z) {
     y = null;
     z = null;
 }
+//function foo<T, U extends T, V extends Date>(x: T, y: U, z: V) {
+//    x = null;
+//    y = null;
+//    z = null;
+//} 

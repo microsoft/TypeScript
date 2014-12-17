@@ -68,7 +68,7 @@ var r3 = utils.mapReduce(c, (x) => { return 1 }, (y) => { return new Date() });
 >(y) => { return new Date() } : (y: number) => Date
 >y : number
 >new Date() : Date
->Date : { (): string; new (): Date; new (value: number): Date; new (value: string): Date; new (year: number, month: number, date?: number, hours?: number, minutes?: number, seconds?: number, ms?: number): Date; prototype: Date; parse(s: string): number; UTC(year: number, month: number, date?: number, hours?: number, minutes?: number, seconds?: number, ms?: number): number; now(): number; }
+>Date : DateConstructor
 
 var r4 = utils.mapReduce(c, (x: string) => { return 1 }, (y: number) => { return new Date() });
 >r4 : Collection<Date>
@@ -82,7 +82,7 @@ var r4 = utils.mapReduce(c, (x: string) => { return 1 }, (y: number) => { return
 >(y: number) => { return new Date() } : (y: number) => Date
 >y : number
 >new Date() : Date
->Date : { (): string; new (): Date; new (value: number): Date; new (value: string): Date; new (year: number, month: number, date?: number, hours?: number, minutes?: number, seconds?: number, ms?: number): Date; prototype: Date; parse(s: string): number; UTC(year: number, month: number, date?: number, hours?: number, minutes?: number, seconds?: number, ms?: number): number; now(): number; }
+>Date : DateConstructor
 
 var f1 = (x: string) => { return 1 };
 >f1 : (x: string) => number
@@ -94,7 +94,7 @@ var f2 = (y: number) => { return new Date() };
 >(y: number) => { return new Date() } : (y: number) => Date
 >y : number
 >new Date() : Date
->Date : { (): string; new (): Date; new (value: number): Date; new (value: string): Date; new (year: number, month: number, date?: number, hours?: number, minutes?: number, seconds?: number, ms?: number): Date; prototype: Date; parse(s: string): number; UTC(year: number, month: number, date?: number, hours?: number, minutes?: number, seconds?: number, ms?: number): number; now(): number; }
+>Date : DateConstructor
 
 var r5 = utils.mapReduce(c, f1, f2);
 >r5 : Collection<Date>

@@ -7,7 +7,7 @@
 
 goTo.marker('anonymousFunction1');
 verify.signatureHelpCountIs(1);
-verify.currentSignatureParamterCountIs(2);
+verify.currentSignatureParameterCountIs(2);
 verify.currentSignatureHelpIs('(a: number, b: string): string');
 verify.currentParameterHelpArgumentNameIs("a");
 verify.currentParameterSpanIs("a: number");

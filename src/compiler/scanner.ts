@@ -22,12 +22,22 @@ module ts {
         hasPrecedingLineBreak(): boolean;
         isIdentifier(): boolean;
         isReservedWord(): boolean;
+        isUnterminated(): boolean;
         reScanGreaterToken(): SyntaxKind;
         reScanSlashToken(): SyntaxKind;
         reScanTemplateToken(): SyntaxKind;
         scan(): SyntaxKind;
         setText(text: string): void;
         setTextPos(textPos: number): void;
+        // Invokes the provided callback then unconditionally restores the scanner to the state it 
+        // was in immediately prior to invoking the callback.  The result of invoking the callback
+        // is returned from this function.
+        lookAhead<T>(callback: () => T): T;
+
+        // Invokes the provided callback.  If the callback returns something falsy, then it restores
+        // the scanner to the state it was in immediately prior to invoking the callback.  If the 
+        // callback returns something truthy, then the scanner state is not rolled back.  The result
+        // of invoking the callback is returned from this function.
         tryScan<T>(callback: () => T): T;
     }
 
@@ -323,10 +333,14 @@ module ts {
             var ch = text.charCodeAt(pos);
             switch (ch) {
                 case CharacterCodes.carriageReturn:
-                    if (text.charCodeAt(pos + 1) === CharacterCodes.lineFeed) pos++;
+                    if (text.charCodeAt(pos + 1) === CharacterCodes.lineFeed) {
+                        pos++;
+                    }
                 case CharacterCodes.lineFeed:
                     pos++;
-                    if (stopAfterLineBreak) return pos;
+                    if (stopAfterLineBreak) {
+                        return pos;
+                    }
                     continue;
                 case CharacterCodes.tab:
                 case CharacterCodes.verticalTab:
@@ -357,6 +371,16 @@ module ts {
                         continue;
                     }
                     break;
+
+                case CharacterCodes.lessThan:
+                case CharacterCodes.equals:
+                case CharacterCodes.greaterThan:
+                    if (isConflictMarkerTrivia(text, pos)) {
+                        pos = scanConflictMarkerTrivia(text, pos);
+                        continue;
+                    }
+                    break;
+
                 default:
                     if (ch > CharacterCodes.maxAsciiCharacter && (isWhiteSpace(ch) || isLineBreak(ch))) {
                         pos++;
@@ -366,6 +390,39 @@ module ts {
             }
             return pos;
         }
+    }
+
+    function isConflictMarkerTrivia(text: string, pos: number) {
+        // Conflict markers must be at the start of a line.
+        if (pos > 0 && isLineBreak(text.charCodeAt(pos - 1))) {
+            var ch = text.charCodeAt(pos);
+
+            // All conflict markers consist of the same character repeated seven times.  If it is 
+            // a <<<<<<< or >>>>>>> marker then it is also followd by a space.
+            var markerLength = "<<<<<<<".length;
+
+            if ((pos + markerLength) < text.length) {
+                for (var i = 0, n = markerLength; i < n; i++) {
+                    if (text.charCodeAt(pos + i) !== ch) {
+                        return false;
+                    }
+                }
+
+                return ch === CharacterCodes.equals ||
+                    text.charCodeAt(pos + markerLength) === CharacterCodes.space;
+            }
+        }
+
+        return false;
+    }
+
+    function scanConflictMarkerTrivia(text: string, pos: number) {
+        var len = text.length;
+        while (pos < len && !isLineBreak(text.charCodeAt(pos))) {
+            pos++;
+        }
+
+        return pos;
     }
 
     // Extract comments from the given source text starting at the given position. If trailing is false, whitespace is skipped until
@@ -462,7 +519,7 @@ module ts {
             ch > CharacterCodes.maxAsciiCharacter && isUnicodeIdentifierPart(ch, languageVersion);
     }
 
-    export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean, text?: string, onError?: ErrorCallback, onComment?: CommentCallback): Scanner {
+    export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean, text?: string, onError?: ErrorCallback): Scanner {
         var pos: number;       // Current position (end position of text of current token)
         var len: number;       // Length of text
         var startPos: number;  // Start position of whitespace before current token
@@ -470,6 +527,7 @@ module ts {
         var token: SyntaxKind;
         var tokenValue: string;
         var precedingLineBreak: boolean;
+        var tokenIsUnterminated: boolean;
 
         function error(message: DiagnosticMessage): void {
             if (onError) {
@@ -553,6 +611,7 @@ module ts {
             while (true) {
                 if (pos >= len) {
                     result += text.substring(start, pos);
+                    tokenIsUnterminated = true;
                     error(Diagnostics.Unterminated_string_literal);
                     break;
                 }
@@ -570,6 +629,7 @@ module ts {
                 }
                 if (isLineBreak(ch)) {
                     result += text.substring(start, pos);
+                    tokenIsUnterminated = true;
                     error(Diagnostics.Unterminated_string_literal);
                     break;
                 }
@@ -593,6 +653,7 @@ module ts {
             while (true) {
                 if (pos >= len) {
                     contents += text.substring(start, pos);
+                    tokenIsUnterminated = true;
                     error(Diagnostics.Unterminated_template_literal);
                     resultingToken = startedWithBacktick ? SyntaxKind.NoSubstitutionTemplateLiteral : SyntaxKind.TemplateTail;
                     break;
@@ -626,14 +687,14 @@ module ts {
 
                 // Speculated ECMAScript 6 Spec 11.8.6.1:
                 // <CR><LF> and <CR> LineTerminatorSequences are normalized to <LF> for Template Values
-                // An explicit EscapeSequence is needed to include a <CR> or <CR><LF> sequence.
                 if (currChar === CharacterCodes.carriageReturn) {
                     contents += text.substring(start, pos);
+                    pos++;
 
-                    if (pos + 1 < len && text.charCodeAt(pos + 1) === CharacterCodes.lineFeed) {
+                    if (pos < len && text.charCodeAt(pos) === CharacterCodes.lineFeed) {
                         pos++;
                     }
-                    pos++;
+
                     contents += "\n";
                     start = pos;
                     continue;
@@ -753,9 +814,34 @@ module ts {
             return token = SyntaxKind.Identifier;
         }
 
+        function scanBinaryOrOctalDigits(base: number): number {
+            Debug.assert(base !== 2 || base !== 8, "Expected either base 2 or base 8");
+
+            var value = 0;
+            // For counting number of digits; Valid binaryIntegerLiteral must have at least one binary digit following B or b.
+            // Similarly valid octalIntegerLiteral must have at least one octal digit following o or O.
+            var numberOfDigits = 0;  
+            while (true) {
+                var ch = text.charCodeAt(pos);
+                var valueOfCh = ch - CharacterCodes._0;
+                if (!isDigit(ch) || valueOfCh >= base) {
+                    break;
+                }
+                value = value * base + valueOfCh;
+                pos++;
+                numberOfDigits++;
+            }
+            // Invalid binaryIntegerLiteral or octalIntegerLiteral
+            if (numberOfDigits === 0) {
+                return -1;
+            }
+            return value;
+        }
+
         function scan(): SyntaxKind {
             startPos = pos;
             precedingLineBreak = false;
+            tokenIsUnterminated = false;
             while (true) {
                 tokenPos = pos;
                 if (pos >= len) {
@@ -869,9 +955,6 @@ module ts {
                                 pos++;
 
                             }
-                            if (onComment) {
-                                onComment(tokenPos, pos);
-                            }
 
                             if (skipTrivia) {
                                 continue;
@@ -904,14 +987,11 @@ module ts {
                                 error(Diagnostics.Asterisk_Slash_expected);
                             }
 
-                            if (onComment) {
-                                onComment(tokenPos, pos);
-                            }
-
                             if (skipTrivia) {
                                 continue;
                             }
                             else {
+                                tokenIsUnterminated = !commentClosed;
                                 return token = SyntaxKind.MultiLineCommentTrivia;
                             }
                         }
@@ -932,6 +1012,26 @@ module ts {
                             }
                             tokenValue = "" + value;
                             return token = SyntaxKind.NumericLiteral;
+                        }
+                        else if (pos + 2 < len && (text.charCodeAt(pos + 1) === CharacterCodes.B || text.charCodeAt(pos + 1) === CharacterCodes.b)) {
+                            pos += 2;
+                            var value = scanBinaryOrOctalDigits(/* base */ 2);
+                            if (value < 0) {
+                                error(Diagnostics.Binary_digit_expected);
+                                value = 0;
+                            }
+                            tokenValue = "" + value;
+                            return SyntaxKind.NumericLiteral;
+                        }
+                        else if (pos + 2 < len && (text.charCodeAt(pos + 1) === CharacterCodes.O || text.charCodeAt(pos + 1) === CharacterCodes.o)) {
+                            pos += 2;
+                            var value = scanBinaryOrOctalDigits(/* base */ 8);
+                            if (value < 0) {
+                                error(Diagnostics.Octal_digit_expected);
+                                value = 0;
+                            }
+                            tokenValue = "" + value;
+                            return SyntaxKind.NumericLiteral;
                         }
                         // Try to parse as an octal
                         if (pos + 1 < len && isOctalDigit(text.charCodeAt(pos + 1))) {
@@ -957,6 +1057,17 @@ module ts {
                     case CharacterCodes.semicolon:
                         return pos++, token = SyntaxKind.SemicolonToken;
                     case CharacterCodes.lessThan:
+                        if (isConflictMarkerTrivia(text, pos)) {
+                            error(Diagnostics.Merge_conflict_marker_encountered);
+                            pos = scanConflictMarkerTrivia(text, pos);
+                            if (skipTrivia) {
+                                continue;
+                            }
+                            else {
+                                return token = SyntaxKind.ConflictMarkerTrivia;
+                            }
+                        }
+
                         if (text.charCodeAt(pos + 1) === CharacterCodes.lessThan) {
                             if (text.charCodeAt(pos + 2) === CharacterCodes.equals) {
                                 return pos += 3, token = SyntaxKind.LessThanLessThanEqualsToken;
@@ -968,6 +1079,17 @@ module ts {
                         }
                         return pos++, token = SyntaxKind.LessThanToken;
                     case CharacterCodes.equals:
+                        if (isConflictMarkerTrivia(text, pos)) {
+                            error(Diagnostics.Merge_conflict_marker_encountered);
+                            pos = scanConflictMarkerTrivia(text, pos);
+                            if (skipTrivia) {
+                                continue;
+                            }
+                            else {
+                                return token = SyntaxKind.ConflictMarkerTrivia;
+                            }
+                        }
+
                         if (text.charCodeAt(pos + 1) === CharacterCodes.equals) {
                             if (text.charCodeAt(pos + 2) === CharacterCodes.equals) {
                                 return pos += 3, token = SyntaxKind.EqualsEqualsEqualsToken;
@@ -979,6 +1101,17 @@ module ts {
                         }
                         return pos++, token = SyntaxKind.EqualsToken;
                     case CharacterCodes.greaterThan:
+                        if (isConflictMarkerTrivia(text, pos)) {
+                            error(Diagnostics.Merge_conflict_marker_encountered);
+                            pos = scanConflictMarkerTrivia(text, pos);
+                            if (skipTrivia) {
+                                continue;
+                            }
+                            else {
+                                return token = SyntaxKind.ConflictMarkerTrivia;
+                            }
+                        }
+
                         return pos++, token = SyntaxKind.GreaterThanToken;
                     case CharacterCodes.question:
                         return pos++, token = SyntaxKind.QuestionToken;
@@ -1069,12 +1202,14 @@ module ts {
                     // If we reach the end of a file, or hit a newline, then this is an unterminated
                     // regex.  Report error and return what we have so far.
                     if (p >= len) {
+                        tokenIsUnterminated = true;
                         error(Diagnostics.Unterminated_regular_expression_literal)
                         break;
                     }
 
                     var ch = text.charCodeAt(p);
                     if (isLineBreak(ch)) {
+                        tokenIsUnterminated = true;
                         error(Diagnostics.Unterminated_regular_expression_literal)
                         break;
                     }
@@ -1121,7 +1256,7 @@ module ts {
             return token = scanTemplateAndSetTokenValue();
         }
 
-        function tryScan<T>(callback: () => T): T {
+        function speculationHelper<T>(callback: () => T, isLookahead: boolean): T {
             var savePos = pos;
             var saveStartPos = startPos;
             var saveTokenPos = tokenPos;
@@ -1129,7 +1264,10 @@ module ts {
             var saveTokenValue = tokenValue;
             var savePrecedingLineBreak = precedingLineBreak;
             var result = callback();
-            if (!result) {
+
+            // If our callback returned something 'falsy' or we're just looking ahead,
+            // then unconditionally restore us to where we were.
+            if (!result || isLookahead) {
                 pos = savePos;
                 startPos = saveStartPos;
                 tokenPos = saveTokenPos;
@@ -1138,6 +1276,14 @@ module ts {
                 precedingLineBreak = savePrecedingLineBreak;
             }
             return result;
+        }
+
+        function lookAhead<T>(callback: () => T): T {
+            return speculationHelper(callback, /*isLookahead:*/ true);
+        }
+
+        function tryScan<T>(callback: () => T): T {
+            return speculationHelper(callback, /*isLookahead:*/ false);
         }
 
         function setText(newText: string) {
@@ -1167,6 +1313,7 @@ module ts {
             hasPrecedingLineBreak: () => precedingLineBreak,
             isIdentifier: () => token === SyntaxKind.Identifier || token > SyntaxKind.LastReservedWord,
             isReservedWord: () => token >= SyntaxKind.FirstReservedWord && token <= SyntaxKind.LastReservedWord,
+            isUnterminated: () => tokenIsUnterminated,
             reScanGreaterToken,
             reScanSlashToken,
             reScanTemplateToken,
@@ -1174,6 +1321,7 @@ module ts {
             setText,
             setTextPos,
             tryScan,
+            lookAhead,
         };
     }
 }

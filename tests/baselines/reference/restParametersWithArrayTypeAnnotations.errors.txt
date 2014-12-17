@@ -1,9 +1,9 @@
-tests/cases/conformance/types/objectTypeLiteral/callSignatures/restParametersWithArrayTypeAnnotations.ts(5,14): error TS1014: A rest parameter must be last in a parameter list.
-tests/cases/conformance/types/objectTypeLiteral/callSignatures/restParametersWithArrayTypeAnnotations.ts(13,12): error TS1014: A rest parameter must be last in a parameter list.
-tests/cases/conformance/types/objectTypeLiteral/callSignatures/restParametersWithArrayTypeAnnotations.ts(23,24): error TS1014: A rest parameter must be last in a parameter list.
-tests/cases/conformance/types/objectTypeLiteral/callSignatures/restParametersWithArrayTypeAnnotations.ts(32,14): error TS1014: A rest parameter must be last in a parameter list.
-tests/cases/conformance/types/objectTypeLiteral/callSignatures/restParametersWithArrayTypeAnnotations.ts(40,12): error TS1014: A rest parameter must be last in a parameter list.
-tests/cases/conformance/types/objectTypeLiteral/callSignatures/restParametersWithArrayTypeAnnotations.ts(50,24): error TS1014: A rest parameter must be last in a parameter list.
+tests/cases/conformance/types/objectTypeLiteral/callSignatures/restParametersWithArrayTypeAnnotations.ts(5,11): error TS1014: A rest parameter must be last in a parameter list.
+tests/cases/conformance/types/objectTypeLiteral/callSignatures/restParametersWithArrayTypeAnnotations.ts(13,9): error TS1014: A rest parameter must be last in a parameter list.
+tests/cases/conformance/types/objectTypeLiteral/callSignatures/restParametersWithArrayTypeAnnotations.ts(23,21): error TS1014: A rest parameter must be last in a parameter list.
+tests/cases/conformance/types/objectTypeLiteral/callSignatures/restParametersWithArrayTypeAnnotations.ts(32,11): error TS1014: A rest parameter must be last in a parameter list.
+tests/cases/conformance/types/objectTypeLiteral/callSignatures/restParametersWithArrayTypeAnnotations.ts(40,9): error TS1014: A rest parameter must be last in a parameter list.
+tests/cases/conformance/types/objectTypeLiteral/callSignatures/restParametersWithArrayTypeAnnotations.ts(50,21): error TS1014: A rest parameter must be last in a parameter list.
 
 
 ==== tests/cases/conformance/types/objectTypeLiteral/callSignatures/restParametersWithArrayTypeAnnotations.ts (6 errors) ====
@@ -12,7 +12,7 @@ tests/cases/conformance/types/objectTypeLiteral/callSignatures/restParametersWit
     function foo(...x: number[]) { }
     var f = function foo(...x: number[]) { }
     var f2 = (...x: number[], ...y: number[]) => { }
-                 ~
+              ~~~
 !!! error TS1014: A rest parameter must be last in a parameter list.
     
     class C {
@@ -22,7 +22,7 @@ tests/cases/conformance/types/objectTypeLiteral/callSignatures/restParametersWit
     interface I {
         (...x: number[]);
         foo(...x: number[], ...y: number[]);
-               ~
+            ~~~
 !!! error TS1014: A rest parameter must be last in a parameter list.
     }
     
@@ -34,7 +34,7 @@ tests/cases/conformance/types/objectTypeLiteral/callSignatures/restParametersWit
     var b = {
         foo(...x: number[]) { },
         a: function foo(...x: number[], ...y: number[]) { },
-                           ~
+                        ~~~
 !!! error TS1014: A rest parameter must be last in a parameter list.
         b: (...x: number[]) => { }
     }
@@ -45,7 +45,7 @@ tests/cases/conformance/types/objectTypeLiteral/callSignatures/restParametersWit
     function foo2(...x: Array<string>) { }
     var f3 = function foo(...x: Array<string>) { }
     var f4 = (...x: Array<string>, ...y: Array<string>) => { }
-                 ~
+              ~~~
 !!! error TS1014: A rest parameter must be last in a parameter list.
     
     class C2 {
@@ -55,7 +55,7 @@ tests/cases/conformance/types/objectTypeLiteral/callSignatures/restParametersWit
     interface I2 {
         (...x: Array<string>);
         foo(...x: Array<string>, ...y: Array<string>);
-               ~
+            ~~~
 !!! error TS1014: A rest parameter must be last in a parameter list.
     }
     
@@ -67,7 +67,7 @@ tests/cases/conformance/types/objectTypeLiteral/callSignatures/restParametersWit
     var b2 = {
         foo(...x: Array<string>) { },
         a: function foo(...x: Array<string>, ...y: Array<string>) { },
-                           ~
+                        ~~~
 !!! error TS1014: A rest parameter must be last in a parameter list.
         b: (...x: Array<string>) => { }
     }

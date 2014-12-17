@@ -60,7 +60,7 @@ class ProjectRunner extends RunnerBase {
         var testCase: ProjectRunnerTestCase;
 
         try {
-            var testFileText = sys.readFile(testCaseFileName);
+            var testFileText = ts.sys.readFile(testCaseFileName);
         }
         catch (e) {
             assert(false, "Unable to open testcase file: " + testCaseFileName + ": " + e.message);
@@ -96,7 +96,7 @@ class ProjectRunner extends RunnerBase {
         }
 
         function cleanProjectUrl(url: string) {
-            var diskProjectPath = ts.normalizeSlashes(sys.resolvePath(testCase.projectRoot));
+            var diskProjectPath = ts.normalizeSlashes(ts.sys.resolvePath(testCase.projectRoot));
             var projectRootUrl = "file:///" + diskProjectPath;
             var normalizedProjectRoot = ts.normalizeSlashes(testCase.projectRoot);
             diskProjectPath = diskProjectPath.substr(0, diskProjectPath.lastIndexOf(normalizedProjectRoot));
@@ -119,7 +119,7 @@ class ProjectRunner extends RunnerBase {
         }
 
         function getCurrentDirectory() {
-            return sys.resolvePath(testCase.projectRoot);
+            return ts.sys.resolvePath(testCase.projectRoot);
         }
 
         function compileProjectFiles(moduleKind: ts.ModuleKind, getInputFiles: ()=> string[],
@@ -132,7 +132,7 @@ class ProjectRunner extends RunnerBase {
             if (!errors.length) {
                 var checker = program.getTypeChecker(/*fullTypeCheck*/ true);
                 errors = checker.getDiagnostics();
-                var emitResult = checker.invokeEmitter();
+                var emitResult = checker.emitFiles();
                 errors = ts.concatenate(errors, emitResult.diagnostics);
                 sourceMapData = emitResult.sourceMaps;
 
@@ -161,8 +161,8 @@ class ProjectRunner extends RunnerBase {
                     sourceMap: !!testCase.sourceMap,
                     out: testCase.out,
                     outDir: testCase.outDir,
-                    mapRoot: testCase.resolveMapRoot && testCase.mapRoot ? sys.resolvePath(testCase.mapRoot) : testCase.mapRoot,
-                    sourceRoot: testCase.resolveSourceRoot && testCase.sourceRoot ? sys.resolvePath(testCase.sourceRoot) : testCase.sourceRoot,
+                    mapRoot: testCase.resolveMapRoot && testCase.mapRoot ? ts.sys.resolvePath(testCase.mapRoot) : testCase.mapRoot,
+                    sourceRoot: testCase.resolveSourceRoot && testCase.sourceRoot ? ts.sys.resolvePath(testCase.sourceRoot) : testCase.sourceRoot,
                     module: moduleKind,
                     noResolve: testCase.noResolve
                 };
@@ -171,12 +171,12 @@ class ProjectRunner extends RunnerBase {
             function getSourceFile(filename: string, languageVersion: ts.ScriptTarget): ts.SourceFile {
                 var sourceFile: ts.SourceFile = undefined;
                 if (filename === Harness.Compiler.defaultLibFileName) {
-                    sourceFile = Harness.Compiler.defaultLibSourceFile;
+                    sourceFile = languageVersion === ts.ScriptTarget.ES6 ? Harness.Compiler.defaultES6LibSourceFile : Harness.Compiler.defaultLibSourceFile;
                 }
                 else {
                     var text = getSourceFileText(filename);
                     if (text !== undefined) {
-                        sourceFile = ts.createSourceFile(filename, text, languageVersion, /*version:*/ "0");
+                        sourceFile = ts.createSourceFile(filename, text, languageVersion);
                     }
                 }
 
@@ -186,12 +186,12 @@ class ProjectRunner extends RunnerBase {
             function createCompilerHost(): ts.CompilerHost {
                 return {
                     getSourceFile,
-                    getDefaultLibFilename: () => "lib.d.ts",
+                    getDefaultLibFilename: options => options.target === ts.ScriptTarget.ES6 ? "lib.es6.d.ts" : "lib.d.ts",
                     writeFile,
                     getCurrentDirectory,
                     getCanonicalFileName: Harness.Compiler.getCanonicalFileName,
-                    useCaseSensitiveFileNames: () => sys.useCaseSensitiveFileNames,
-                    getNewLine: () => sys.newLine
+                    useCaseSensitiveFileNames: () => ts.sys.useCaseSensitiveFileNames,
+                    getNewLine: () => ts.sys.newLine
                 };
             }
         }
@@ -213,7 +213,7 @@ class ProjectRunner extends RunnerBase {
 
             function getSourceFileText(filename: string): string {
                 try {
-                    var text = sys.readFile(ts.isRootedDiskPath(filename)
+                    var text = ts.sys.readFile(ts.isRootedDiskPath(filename)
                         ? filename
                         : ts.normalizeSlashes(testCase.projectRoot) + "/" + ts.normalizeSlashes(filename));
                 }
@@ -260,14 +260,14 @@ class ProjectRunner extends RunnerBase {
                 // Actual writing of file as in tc.ts
                 function ensureDirectoryStructure(directoryname: string) {
                     if (directoryname) {
-                        if (!sys.directoryExists(directoryname)) {
+                        if (!ts.sys.directoryExists(directoryname)) {
                             ensureDirectoryStructure(ts.getDirectoryPath(directoryname));
-                            sys.createDirectory(directoryname);
+                            ts.sys.createDirectory(directoryname);
                         }
                     }
                 }
                 ensureDirectoryStructure(ts.getDirectoryPath(ts.normalizePath(outputFilePath)));
-                sys.writeFile(outputFilePath, data, writeByteOrderMark);
+                ts.sys.writeFile(outputFilePath, data, writeByteOrderMark);
 
                 outputFiles.push({ emittedFileName: filename, code: data, fileName: diskRelativeName, writeByteOrderMark: writeByteOrderMark });
             }
@@ -374,7 +374,7 @@ class ProjectRunner extends RunnerBase {
                         it('Baseline of emitted result (' + moduleNameToString(compilerResult.moduleKind) + '): ' + testCaseFileName, () => {
                             Harness.Baseline.runBaseline('Baseline of emitted result (' + moduleNameToString(compilerResult.moduleKind) + '): ' + testCaseFileName, getBaselineFolder(compilerResult.moduleKind) + outputFile.fileName, () => {
                                 try {
-                                    return sys.readFile(getProjectOutputFolder(outputFile.fileName, compilerResult.moduleKind));
+                                    return ts.sys.readFile(getProjectOutputFolder(outputFile.fileName, compilerResult.moduleKind));
                                 }
                                 catch (e) {
                                     return undefined;

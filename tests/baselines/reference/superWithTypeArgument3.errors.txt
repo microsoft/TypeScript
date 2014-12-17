@@ -1,7 +1,8 @@
+tests/cases/compiler/superWithTypeArgument3.ts(7,5): error TS2377: Constructors for derived classes must contain a 'super' call.
 tests/cases/compiler/superWithTypeArgument3.ts(8,14): error TS1034: 'super' must be followed by an argument list or member access.
 
 
-==== tests/cases/compiler/superWithTypeArgument3.ts (1 errors) ====
+==== tests/cases/compiler/superWithTypeArgument3.ts (2 errors) ====
     class C<T> {
         foo: T;
         bar<U>(x: U) { }
@@ -9,10 +10,14 @@ tests/cases/compiler/superWithTypeArgument3.ts(8,14): error TS1034: 'super' must
     
     class D<T> extends C<T> {
         constructor() {
+        ~~~~~~~~~~~~~~~
             super<T>();
+    ~~~~~~~~~~~~~~~~~~~
                  ~
 !!! error TS1034: 'super' must be followed by an argument list or member access.
         }
+    ~~~~~
+!!! error TS2377: Constructors for derived classes must contain a 'super' call.
         bar() {
             super.bar<T>(null);
         }

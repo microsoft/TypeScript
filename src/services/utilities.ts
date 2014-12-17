@@ -104,21 +104,6 @@ module ts {
         return syntaxList;
     }
 
-    /**
-     * Includes the start position of each child, but excludes the end.
-     */
-    export function findListItemIndexContainingPosition(list: Node, position: number): number {
-        Debug.assert(list.kind === SyntaxKind.SyntaxList);
-        var children = list.getChildren();
-        for (var i = 0; i < children.length; i++) {
-            if (children[i].pos <= position && children[i].end > position) {
-                return i;
-            }
-        }
-
-        return -1;
-    }
-
     /* Gets the token whose text has range [start, end) and 
      * position >= start and (position < end or (position === end && token is keyword or identifier))
      */
@@ -280,16 +265,26 @@ module ts {
     }
 
     function nodeHasTokens(n: Node): boolean {
-        if (n.kind === SyntaxKind.Unknown) {
-            return false;
-        }
-
         // If we have a token or node that has a non-zero width, it must have tokens.
         // Note, that getWidth() does not take trivia into account.
         return n.getWidth() !== 0;
     }
 
-   export function getTypeArgumentOrTypeParameterList(node: Node): NodeArray<Node> {
+    export function getNodeModifiers(node: Node): string {
+        var flags = node.flags;
+        var result: string[] = [];
+
+        if (flags & NodeFlags.Private) result.push(ScriptElementKindModifier.privateMemberModifier);
+        if (flags & NodeFlags.Protected) result.push(ScriptElementKindModifier.protectedMemberModifier);
+        if (flags & NodeFlags.Public) result.push(ScriptElementKindModifier.publicMemberModifier);
+        if (flags & NodeFlags.Static) result.push(ScriptElementKindModifier.staticModifier);
+        if (flags & NodeFlags.Export) result.push(ScriptElementKindModifier.exportedModifier);
+        if (isInAmbientContext(node)) result.push(ScriptElementKindModifier.ambientModifier);
+
+        return result.length > 0 ? result.join(',') : ScriptElementKindModifier.none;
+    }
+
+    export function getTypeArgumentOrTypeParameterList(node: Node): NodeArray<Node> {
         if (node.kind === SyntaxKind.TypeReference || node.kind === SyntaxKind.CallExpression) {
             return (<CallExpression>node).typeArguments;
         }
@@ -319,5 +314,172 @@ module ts {
 
     export function isPunctuation(kind: SyntaxKind): boolean {
         return SyntaxKind.FirstPunctuation <= kind && kind <= SyntaxKind.LastPunctuation;
+    }
+
+    export function isInsideTemplateLiteral(node: LiteralExpression, position: number) {
+        return isTemplateLiteralKind(node.kind)
+            && (node.getStart() < position && position < node.getEnd()) || (!!node.isUnterminated && position === node.getEnd());
+    }
+
+    export function compareDataObjects(dst: any, src: any): boolean {
+        for (var e in dst) {
+            if (typeof dst[e] === "object") {
+                if (!compareDataObjects(dst[e], src[e])) {
+                    return false;
+                }
+            }
+            else if (typeof dst[e] !== "function") {
+                if (dst[e] !== src[e]) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+}
+
+// Display-part writer helpers
+module ts {
+    export function isFirstDeclarationOfSymbolParameter(symbol: Symbol) {
+        return symbol.declarations && symbol.declarations.length > 0 && symbol.declarations[0].kind === SyntaxKind.Parameter;
+    }
+
+    var displayPartWriter = getDisplayPartWriter();
+    function getDisplayPartWriter(): DisplayPartsSymbolWriter {
+        var displayParts: SymbolDisplayPart[];
+        var lineStart: boolean;
+        var indent: number;
+
+        resetWriter();
+        return {
+            displayParts: () => displayParts,
+            writeKeyword: text => writeKind(text, SymbolDisplayPartKind.keyword),
+            writeOperator: text => writeKind(text, SymbolDisplayPartKind.operator),
+            writePunctuation: text => writeKind(text, SymbolDisplayPartKind.punctuation),
+            writeSpace: text => writeKind(text, SymbolDisplayPartKind.space),
+            writeStringLiteral: text => writeKind(text, SymbolDisplayPartKind.stringLiteral),
+            writeParameter: text => writeKind(text, SymbolDisplayPartKind.parameterName),
+            writeSymbol,
+            writeLine,
+            increaseIndent: () => { indent++; },
+            decreaseIndent: () => { indent--; },
+            clear: resetWriter,
+            trackSymbol: () => { }
+        };
+
+        function writeIndent() {
+            if (lineStart) {
+                var indentString = getIndentString(indent);
+                if (indentString) {
+                    displayParts.push(displayPart(indentString, SymbolDisplayPartKind.space));
+                }
+                lineStart = false;
+            }
+        }
+
+        function writeKind(text: string, kind: SymbolDisplayPartKind) {
+            writeIndent();
+            displayParts.push(displayPart(text, kind));
+        }
+
+        function writeSymbol(text: string, symbol: Symbol) {
+            writeIndent();
+            displayParts.push(symbolPart(text, symbol));
+        }
+
+        function writeLine() {
+            displayParts.push(lineBreakPart());
+            lineStart = true;
+        }
+
+        function resetWriter() {
+            displayParts = []
+            lineStart = true;
+            indent = 0;
+        }
+    }
+
+    export function symbolPart(text: string, symbol: Symbol) {
+        return displayPart(text, displayPartKind(symbol), symbol);
+
+        function displayPartKind(symbol: Symbol): SymbolDisplayPartKind {
+            var flags = symbol.flags;
+
+            if (flags & SymbolFlags.Variable) {
+                return isFirstDeclarationOfSymbolParameter(symbol) ? SymbolDisplayPartKind.parameterName : SymbolDisplayPartKind.localName;
+            }
+            else if (flags & SymbolFlags.Property) { return SymbolDisplayPartKind.propertyName; }
+            else if (flags & SymbolFlags.GetAccessor) { return SymbolDisplayPartKind.propertyName; }
+            else if (flags & SymbolFlags.SetAccessor) { return SymbolDisplayPartKind.propertyName; }
+            else if (flags & SymbolFlags.EnumMember) { return SymbolDisplayPartKind.enumMemberName; }
+            else if (flags & SymbolFlags.Function) { return SymbolDisplayPartKind.functionName; }
+            else if (flags & SymbolFlags.Class) { return SymbolDisplayPartKind.className; }
+            else if (flags & SymbolFlags.Interface) { return SymbolDisplayPartKind.interfaceName; }
+            else if (flags & SymbolFlags.Enum) { return SymbolDisplayPartKind.enumName; }
+            else if (flags & SymbolFlags.Module) { return SymbolDisplayPartKind.moduleName; }
+            else if (flags & SymbolFlags.Method) { return SymbolDisplayPartKind.methodName; }
+            else if (flags & SymbolFlags.TypeParameter) { return SymbolDisplayPartKind.typeParameterName; }
+            else if (flags & SymbolFlags.TypeAlias) { return SymbolDisplayPartKind.aliasName; }
+            else if (flags & SymbolFlags.Import) { return SymbolDisplayPartKind.aliasName; }
+
+
+            return SymbolDisplayPartKind.text;
+        }
+    }
+
+    export function displayPart(text: string, kind: SymbolDisplayPartKind, symbol?: Symbol): SymbolDisplayPart {
+        return <SymbolDisplayPart> {
+            text: text,
+            kind: SymbolDisplayPartKind[kind]
+        };
+    }
+
+    export function spacePart() {
+        return displayPart(" ", SymbolDisplayPartKind.space);
+    }
+
+    export function keywordPart(kind: SyntaxKind) {
+        return displayPart(tokenToString(kind), SymbolDisplayPartKind.keyword);
+    }
+
+    export function punctuationPart(kind: SyntaxKind) {
+        return displayPart(tokenToString(kind), SymbolDisplayPartKind.punctuation);
+    }
+
+    export function operatorPart(kind: SyntaxKind) {
+        return displayPart(tokenToString(kind), SymbolDisplayPartKind.operator);
+    }
+
+    export function textPart(text: string) {
+        return displayPart(text, SymbolDisplayPartKind.text);
+    }
+
+    export function lineBreakPart() {
+        return displayPart("\n", SymbolDisplayPartKind.lineBreak);
+    }
+
+    export function mapToDisplayParts(writeDisplayParts: (writer: DisplayPartsSymbolWriter) => void): SymbolDisplayPart[] {
+        writeDisplayParts(displayPartWriter);
+        var result = displayPartWriter.displayParts();
+        displayPartWriter.clear();
+        return result;
+    }
+
+    export function typeToDisplayParts(typechecker: TypeChecker, type: Type, enclosingDeclaration?: Node, flags?: TypeFormatFlags): SymbolDisplayPart[] {
+        return mapToDisplayParts(writer => {
+            typechecker.getSymbolDisplayBuilder().buildTypeDisplay(type, writer, enclosingDeclaration, flags);
+        });
+    }
+
+    export function symbolToDisplayParts(typeChecker: TypeChecker, symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags, flags?: SymbolFormatFlags): SymbolDisplayPart[] {
+        return mapToDisplayParts(writer => {
+            typeChecker.getSymbolDisplayBuilder().buildSymbolDisplay(symbol, writer, enclosingDeclaration, meaning, flags);
+        });
+    }
+
+    export function signatureToDisplayParts(typechecker: TypeChecker, signature: Signature, enclosingDeclaration?: Node, flags?: TypeFormatFlags): SymbolDisplayPart[] {
+        return mapToDisplayParts(writer => {
+            typechecker.getSymbolDisplayBuilder().buildSignatureDisplay(signature, writer, enclosingDeclaration, flags);
+        });
     }
 }

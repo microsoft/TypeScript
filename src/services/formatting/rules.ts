@@ -283,7 +283,7 @@ module ts.formatting {
             this.NoSpaceBeforeComma = new Rule(RuleDescriptor.create2(Shared.TokenRange.Any, SyntaxKind.CommaToken), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext), RuleAction.Delete));
 
             this.SpaceAfterCertainKeywords = new Rule(RuleDescriptor.create4(Shared.TokenRange.FromTokens([SyntaxKind.VarKeyword, SyntaxKind.ThrowKeyword, SyntaxKind.NewKeyword, SyntaxKind.DeleteKeyword, SyntaxKind.ReturnKeyword, SyntaxKind.TypeOfKeyword]), Shared.TokenRange.Any), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext), RuleAction.Space));
-            this.NoSpaceBeforeOpenParenInFuncCall = new Rule(RuleDescriptor.create2(Shared.TokenRange.Any, SyntaxKind.OpenParenToken), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext, Rules.IsFunctionCallOrNewContext), RuleAction.Delete));
+            this.NoSpaceBeforeOpenParenInFuncCall = new Rule(RuleDescriptor.create2(Shared.TokenRange.Any, SyntaxKind.OpenParenToken), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext, Rules.IsFunctionCallOrNewContext, Rules.IsPreviousTokenNotComma), RuleAction.Delete));
             this.SpaceAfterFunctionInFuncDecl = new Rule(RuleDescriptor.create3(SyntaxKind.FunctionKeyword, Shared.TokenRange.Any), RuleOperation.create2(new RuleOperationContext(Rules.IsFunctionDeclContext), RuleAction.Space));
             this.NoSpaceBeforeOpenParenInFuncDecl = new Rule(RuleDescriptor.create2(Shared.TokenRange.Any, SyntaxKind.OpenParenToken), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext, Rules.IsFunctionDeclContext), RuleAction.Delete));
             this.SpaceAfterVoidOperator = new Rule(RuleDescriptor.create3(SyntaxKind.VoidKeyword, Shared.TokenRange.Any), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext, Rules.IsVoidOpContext), RuleAction.Space));
@@ -458,7 +458,8 @@ module ts.formatting {
                 // equal in p = 0;
                 case SyntaxKind.Parameter:
                 case SyntaxKind.EnumMember:
-                case SyntaxKind.Property:
+                case SyntaxKind.PropertyDeclaration:
+                case SyntaxKind.PropertySignature:
                     return context.currentTokenSpan.kind === SyntaxKind.EqualsToken || context.nextTokenSpan.kind === SyntaxKind.EqualsToken;
                 // "in" keyword in for (var x in []) { }
                 case SyntaxKind.ForInStatement:
@@ -523,11 +524,9 @@ module ts.formatting {
             switch (node.kind) {
                 case SyntaxKind.Block:
                 case SyntaxKind.SwitchStatement:
-                case SyntaxKind.ObjectLiteral:
+                case SyntaxKind.ObjectLiteralExpression:
                 case SyntaxKind.TryBlock:
-                case SyntaxKind.CatchBlock:
                 case SyntaxKind.FinallyBlock:
-                case SyntaxKind.FunctionBlock:
                 case SyntaxKind.ModuleBlock:
                     return true;
             }
@@ -538,7 +537,8 @@ module ts.formatting {
         static IsFunctionDeclContext(context: FormattingContext): boolean {
             switch (context.contextNode.kind) {
                 case SyntaxKind.FunctionDeclaration:
-                case SyntaxKind.Method:
+                case SyntaxKind.MethodDeclaration:
+                case SyntaxKind.MethodSignature:
                 //case SyntaxKind.MemberFunctionDeclaration:
                 case SyntaxKind.GetAccessor:
                 case SyntaxKind.SetAccessor:
@@ -581,9 +581,8 @@ module ts.formatting {
                 case SyntaxKind.EnumDeclaration:
                 case SyntaxKind.Block:
                 case SyntaxKind.TryBlock:
-                case SyntaxKind.CatchBlock:
+                case SyntaxKind.CatchClause:
                 case SyntaxKind.FinallyBlock:
-                case SyntaxKind.FunctionBlock:
                 case SyntaxKind.ModuleBlock:
                 case SyntaxKind.SwitchStatement:
                     return true;
@@ -603,7 +602,7 @@ module ts.formatting {
                 case SyntaxKind.WithStatement:
                 // TODO
                 // case SyntaxKind.ElseClause:
-                case SyntaxKind.CatchBlock:
+                case SyntaxKind.CatchClause:
                 case SyntaxKind.FinallyBlock:
                     return true;
 
@@ -613,7 +612,7 @@ module ts.formatting {
         }
 
         static IsObjectContext(context: FormattingContext): boolean {
-            return context.contextNode.kind === SyntaxKind.ObjectLiteral;
+            return context.contextNode.kind === SyntaxKind.ObjectLiteralExpression;
         }
 
         static IsFunctionCallContext(context: FormattingContext): boolean {
@@ -626,6 +625,10 @@ module ts.formatting {
 
         static IsFunctionCallOrNewContext(context: FormattingContext): boolean {
             return Rules.IsFunctionCallContext(context) || Rules.IsNewContext(context);
+        }
+
+        static IsPreviousTokenNotComma(context: FormattingContext): boolean {
+            return context.currentTokenSpan.kind !== SyntaxKind.CommaToken;
         }
 
         static IsSameLineTokenContext(context: FormattingContext): boolean {
@@ -655,7 +658,8 @@ module ts.formatting {
                 case SyntaxKind.FunctionDeclaration:
                 case SyntaxKind.FunctionExpression:
                 case SyntaxKind.ArrowFunction:
-                case SyntaxKind.Method:
+                case SyntaxKind.MethodDeclaration:
+                case SyntaxKind.MethodSignature:
                 case SyntaxKind.CallSignature:
                 case SyntaxKind.ConstructSignature:
                 case SyntaxKind.CallExpression:
@@ -673,7 +677,7 @@ module ts.formatting {
         }
 
         static IsVoidOpContext(context: FormattingContext): boolean {
-            return context.currentTokenSpan.kind === SyntaxKind.VoidKeyword && context.currentTokenParent.kind === SyntaxKind.PrefixOperator;
+            return context.currentTokenSpan.kind === SyntaxKind.VoidKeyword && context.currentTokenParent.kind === SyntaxKind.VoidExpression;
         }
     }
 }

@@ -31,19 +31,6 @@
 
 declare var FourSlash;
 
-enum IncrementalEditValidation {
-    None = FourSlash.IncrementalEditValidation.None,
-    SyntacticOnly = FourSlash.IncrementalEditValidation.SyntacticOnly,
-    Complete = FourSlash.IncrementalEditValidation.Complete
-}
-
-enum TypingFidelity {
-    /** Performs typing and formatting (if formatting is enabled) */
-    Low = FourSlash.TypingFidelity.Low,
-    /** Performs typing, checks completion lists, signature help, and formatting (if enabled) */
-    High = FourSlash.TypingFidelity.High
-}
-
 // Return code used by getEmitOutput function to indicate status of the function
 // It is a duplicate of the one in types.ts to expose it to testcases in fourslash
 enum EmitReturnStatus {
@@ -87,6 +74,10 @@ module FourSlashInterface {
         public ranges(): Range[] {
             return FourSlash.currentTestState.getRanges();
         }
+
+        public markerByName(s: string): Marker {
+            return FourSlash.currentTestState.getMarkerByName(s);
+        }
     }
 
     export class diagnostics {
@@ -96,14 +87,6 @@ module FourSlashInterface {
 
         public validateTypesAtPositions(...positions: number[]) {
             return FourSlash.currentTestState.verifyTypesAgainstFullCheckAtPositions(positions);
-        }
-
-        public setEditValidation(validation: IncrementalEditValidation) {
-            FourSlash.currentTestState.editValidation = validation;
-        }
-
-        public setTypingFidelity(fidelity: TypingFidelity) {
-            FourSlash.currentTestState.typingFidelity = fidelity;
         }
     }
 
@@ -227,7 +210,7 @@ module FourSlashInterface {
         }
 
         public quickInfoIs(expectedText?: string, expectedDocumentation?: string) {
-            FourSlash.currentTestState.verifyQuickInfo(this.negative, expectedText, expectedDocumentation);
+            FourSlash.currentTestState.verifyQuickInfoString(this.negative, expectedText, expectedDocumentation);
         }
 
         public quickInfoExists() {
@@ -301,11 +284,11 @@ module FourSlashInterface {
             FourSlash.currentTestState.verifySignatureHelpArgumentCount(expected);
         }
 
-        public currentSignatureParamterCountIs(expected: number) {
+        public currentSignatureParameterCountIs(expected: number) {
             FourSlash.currentTestState.verifyCurrentSignatureHelpParameterCount(expected);
         }
 
-        public currentSignatureTypeParamterCountIs(expected: number) {
+        public currentSignatureTypeParameterCountIs(expected: number) {
             FourSlash.currentTestState.verifyCurrentSignatureHelpTypeParameterCount(expected);
         }
 
@@ -383,14 +366,14 @@ module FourSlashInterface {
             searchValue: string,
             matchKind: string,
             fileName?: string,
-            parenetName?: string) {
+            parentName?: string) {
             FourSlash.currentTestState.verifyNavigationItemsListContains(
                 name,
                 kind,
                 searchValue,
                 matchKind,
                 fileName,
-                parenetName);
+                parentName);
         }
 
         public occurrencesAtPositionContains(range: Range, isWriteAccess?: boolean) {
@@ -429,6 +412,11 @@ module FourSlashInterface {
 
         public renameLocations(findInStrings: boolean, findInComments: boolean) {
             FourSlash.currentTestState.verifyRenameLocations(findInStrings, findInComments);
+        }
+
+        public verifyQuickInfoDisplayParts(kind: string, kindModifiers: string, textSpan: { start: number; length: number; },
+            displayParts: ts.SymbolDisplayPart[], documentation: ts.SymbolDisplayPart[]) {
+            FourSlash.currentTestState.verifyQuickInfoDisplayParts(kind, kindModifiers, textSpan, displayParts, documentation);
         }
     }
 
@@ -630,6 +618,10 @@ module FourSlashInterface {
             return getClassification("typeParameterName", text, position);
         }
 
+        export function typeAlias(text: string, position?: number): { classificationType: string; text: string; textSpan?: TextSpan } {
+            return getClassification("typeAlias", text, position);
+        }
+
         function getClassification(type: string, text: string, position?: number) {
             return {
                 classificationType: type,
@@ -649,6 +641,12 @@ module fs {
     export var format = new FourSlashInterface.format();
     export var diagnostics = new FourSlashInterface.diagnostics();
     export var cancellation = new FourSlashInterface.cancellation();
+}
+module ts {
+    export interface SymbolDisplayPart {
+        text: string;
+        kind: string;
+    }
 }
 function verifyOperationIsCancelled(f) {
     FourSlash.verifyOperationIsCancelled(f);

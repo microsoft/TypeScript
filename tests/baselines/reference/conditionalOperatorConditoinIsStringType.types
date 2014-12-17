@@ -66,6 +66,12 @@ condString ? exprIsObject1 : exprIsObject2;
 >exprIsObject1 : Object
 >exprIsObject2 : Object
 
+condString ? exprString1 : exprBoolean1; // union
+>condString ? exprString1 : exprBoolean1 : string | boolean
+>condString : string
+>exprString1 : string
+>exprBoolean1 : boolean
+
 //Cond is a string type literal
 "" ? exprAny1 : exprAny2;
 >"" ? exprAny1 : exprAny2 : any
@@ -91,6 +97,11 @@ condString ? exprIsObject1 : exprIsObject2;
 >"  " ? exprIsObject1 : exprIsObject2 : Object
 >exprIsObject1 : Object
 >exprIsObject2 : Object
+
+"hello " ? exprString1 : exprBoolean1; // union
+>"hello " ? exprString1 : exprBoolean1 : string | boolean
+>exprString1 : string
+>exprBoolean1 : boolean
 
 //Cond is a string type expression
 function foo() { return "string" };
@@ -136,6 +147,13 @@ array[1] ? exprIsObject1 : exprIsObject2;
 >exprIsObject1 : Object
 >exprIsObject2 : Object
 
+foo() ? exprString1 : exprBoolean1; // union
+>foo() ? exprString1 : exprBoolean1 : string | boolean
+>foo() : string
+>foo : () => string
+>exprString1 : string
+>exprBoolean1 : boolean
+
 //Results shoud be same as Expr1 and Expr2
 var resultIsAny1 = condString ? exprAny1 : exprAny2;
 >resultIsAny1 : any
@@ -172,6 +190,13 @@ var resultIsObject1 = condString ? exprIsObject1 : exprIsObject2;
 >exprIsObject1 : Object
 >exprIsObject2 : Object
 
+var resultIsStringOrBoolean1 = condString ? exprString1 : exprBoolean1; // union
+>resultIsStringOrBoolean1 : string | boolean
+>condString ? exprString1 : exprBoolean1 : string | boolean
+>condString : string
+>exprString1 : string
+>exprBoolean1 : boolean
+
 var resultIsAny2 = "" ? exprAny1 : exprAny2;
 >resultIsAny2 : any
 >"" ? exprAny1 : exprAny2 : any
@@ -201,6 +226,12 @@ var resultIsObject2 = "  " ? exprIsObject1 : exprIsObject2;
 >"  " ? exprIsObject1 : exprIsObject2 : Object
 >exprIsObject1 : Object
 >exprIsObject2 : Object
+
+var resultIsStringOrBoolean2 = "hello" ? exprString1 : exprBoolean1; // union
+>resultIsStringOrBoolean2 : string | boolean
+>"hello" ? exprString1 : exprBoolean1 : string | boolean
+>exprString1 : string
+>exprBoolean1 : boolean
 
 var resultIsAny3 = typeof condString ? exprAny1 : exprAny2;
 >resultIsAny3 : any
@@ -242,4 +273,21 @@ var resultIsObject3 = array[1] ? exprIsObject1 : exprIsObject2;
 >array : string[]
 >exprIsObject1 : Object
 >exprIsObject2 : Object
+
+var resultIsStringOrBoolean3 = typeof condString ? exprString1 : exprBoolean1; // union
+>resultIsStringOrBoolean3 : string | boolean
+>typeof condString ? exprString1 : exprBoolean1 : string | boolean
+>typeof condString : string
+>condString : string
+>exprString1 : string
+>exprBoolean1 : boolean
+
+var resultIsStringOrBoolean4 = condString.toUpperCase ? exprString1 : exprBoolean1; // union
+>resultIsStringOrBoolean4 : string | boolean
+>condString.toUpperCase ? exprString1 : exprBoolean1 : string | boolean
+>condString.toUpperCase : () => string
+>condString : string
+>toUpperCase : () => string
+>exprString1 : string
+>exprBoolean1 : boolean
 

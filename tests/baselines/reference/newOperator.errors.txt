@@ -1,17 +1,18 @@
-tests/cases/compiler/newOperator.ts(18,10): error TS1150: 'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.
-tests/cases/compiler/newOperator.ts(20,1): error TS1150: 'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.
-tests/cases/compiler/newOperator.ts(44,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/newOperator.ts(3,13): error TS2304: Cannot find name 'ifc'.
 tests/cases/compiler/newOperator.ts(10,10): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
 tests/cases/compiler/newOperator.ts(11,10): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
 tests/cases/compiler/newOperator.ts(12,5): error TS2304: Cannot find name 'string'.
 tests/cases/compiler/newOperator.ts(18,14): error TS2304: Cannot find name 'string'.
+tests/cases/compiler/newOperator.ts(18,20): error TS1150: 'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.
 tests/cases/compiler/newOperator.ts(21,1): error TS2304: Cannot find name 'string'.
+tests/cases/compiler/newOperator.ts(22,1): error TS1150: 'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.
 tests/cases/compiler/newOperator.ts(28,13): error TS2304: Cannot find name 'q'.
 tests/cases/compiler/newOperator.ts(31,10): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
+tests/cases/compiler/newOperator.ts(44,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/newOperator.ts(45,23): error TS1150: 'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.
 
 
-==== tests/cases/compiler/newOperator.ts (11 errors) ====
+==== tests/cases/compiler/newOperator.ts (12 errors) ====
     interface ifc { }
     // Attempting to 'new' an interface yields poor error
     var i = new ifc();
@@ -38,15 +39,13 @@ tests/cases/compiler/newOperator.ts(31,10): error TS2351: Cannot use 'new' with 
     
     // Various spacing
     var t3 = new string[]( );
-             ~~~~~~~~~~~~
-!!! error TS1150: 'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.
                  ~~~~~~
 !!! error TS2304: Cannot find name 'string'.
+                       ~~
+!!! error TS1150: 'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.
     var t4 =
     new
-    ~~~
     string
-    ~~~~~~
     ~~~~~~
 !!! error TS2304: Cannot find name 'string'.
     [
@@ -82,6 +81,8 @@ tests/cases/compiler/newOperator.ts(31,10): error TS2351: Cannot use 'new' with 
                    ~~
 !!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             return new M.T[];
+                          ~~
+!!! error TS1150: 'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.
         }
     }
     

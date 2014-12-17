@@ -1,7 +1,7 @@
 // If you change anything in this enum, make sure you run SyntaxGenerator again!
 
 module TypeScript {
-    export enum SyntaxKind {
+    export const enum SyntaxKind {
         // Variable width tokens, trivia and lists.
         None,
         List,
@@ -87,6 +87,8 @@ module TypeScript {
 
         // TypeScript keywords.
         AnyKeyword,
+        AsyncKeyword,
+        AwaitKeyword,
         BooleanKeyword,
         ConstructorKeyword,
         DeclareKeyword,
@@ -95,6 +97,7 @@ module TypeScript {
         RequireKeyword,
         NumberKeyword,
         SetKeyword,
+        TypeKeyword,
         StringKeyword,
 
         // Punctuators
@@ -176,10 +179,9 @@ module TypeScript {
         ExportAssignment,
 
         // ClassElements
-        MemberFunctionDeclaration,
-        MemberVariableDeclaration,
+        MethodDeclaration,
+        PropertyDeclaration,
         ConstructorDeclaration,
-        IndexMemberDeclaration,
 
         // ClassElement and PropertyAssignment
         GetAccessor,
@@ -220,7 +222,7 @@ module TypeScript {
         ConditionalExpression,
         BinaryExpression,
         PostfixUnaryExpression,
-        MemberAccessExpression,
+        PropertyAccessExpression,
         InvocationExpression,
         ArrayLiteralExpression,
         ObjectLiteralExpression,
@@ -228,13 +230,14 @@ module TypeScript {
         ParenthesizedExpression,
         ParenthesizedArrowFunctionExpression,
         SimpleArrowFunctionExpression,
-        CastExpression,
+        TypeAssertionExpression,
         ElementAccessExpression,
         FunctionExpression,
         OmittedExpression,
         TemplateExpression,
         TemplateAccessExpression,
         YieldExpression,
+        AwaitExpression,
 
         // Variable declarations
         VariableDeclaration,
@@ -260,15 +263,14 @@ module TypeScript {
         TypeParameter,
         Constraint,
 
-        // Property Assignment
-        SimplePropertyAssignment,
-        FunctionPropertyAssignment,
-
         // Misc.
         Parameter,
         EnumElement,
         TypeAnnotation,
+        ExpressionBody,
         ComputedPropertyName,
+        PropertyAssignment,
+        TypeAlias,
         ExternalModuleReference,
         ModuleNameModuleReference,
 

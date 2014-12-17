@@ -15,7 +15,7 @@ class B extends A {
 }
 
 var x: {
->x : { [x: number]: A; }
+>x : { [idx: number]: A; }
 
     [idx: number]: A;
 >idx : number
