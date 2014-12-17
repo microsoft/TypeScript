@@ -318,7 +318,11 @@ var tscFile = path.join(builtLocalDirectory, compilerFilename);
 compileFile(tscFile, compilerSources, [builtLocalDirectory, copyright].concat(compilerSources), [copyright], /*useBuiltCompiler:*/ false);
 
 var servicesFile = path.join(builtLocalDirectory, "typescriptServices.js");
-compileFile(servicesFile, servicesSources,[builtLocalDirectory, copyright].concat(servicesSources), [copyright], /*useBuiltCompiler*/ true);
+compileFile(servicesFile, servicesSources,[builtLocalDirectory, copyright].concat(servicesSources), [copyright], /*useBuiltCompiler*/ true,
+null, null, null, null, null, /*callback*/ function(){
+    // Copy so external "typescript.d.ts" matches "typescript.js"
+    jake.cpR(servicesFile, nodeServicesFile, {silent: true});
+});
 
 var nodeDefinitionsFile = path.join(builtLocalDirectory, "typescript.d.ts");
 var nodeServicesFile = path.join(builtLocalDirectory, "typescript.js");
@@ -326,9 +330,6 @@ var standaloneDefinitionsFile = path.join(builtLocalDirectory, "typescriptServic
 var internalNodeDefinitionsFile = path.join(builtLocalDirectory, "typescript_internal.d.ts");
 var internalStandaloneDefinitionsFile = path.join(builtLocalDirectory, "typescriptServices_internal.d.ts");
 var tempDirPath = path.join(builtLocalDirectory, "temptempdir");
-
-// Copy so external "typescript.d.ts" matches "typescript.ts"
-jake.cpR(servicesFile, nodeServicesFile, {silent: true});
 
 compileFile(nodeDefinitionsFile, servicesSources,[builtLocalDirectory, copyright].concat(servicesSources),
             /*prefixes*/ undefined,
