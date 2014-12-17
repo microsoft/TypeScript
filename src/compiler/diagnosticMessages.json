@@ -138,11 +138,6 @@
         "code": 1036,
         "isEarly": true
     },
-    "A function implementation cannot be declared in an ambient context.": {
-        "category": "Error",
-        "code": 1037,
-        "isEarly": true
-    },
     "A 'declare' modifier cannot be used in an already ambient context.": {
         "category": "Error",
         "code": 1038,
@@ -343,11 +338,6 @@
     "Type expected.": {
         "category": "Error",
         "code": 1110,
-        "isEarly": true
-    },
-    "A constructor implementation cannot be declared in an ambient context.": {
-        "category": "Error",
-        "code": 1111,
         "isEarly": true
     },
     "A class member cannot be declared optional.": {
