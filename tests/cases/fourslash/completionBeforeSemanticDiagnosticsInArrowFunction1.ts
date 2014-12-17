@@ -3,9 +3,6 @@
 //// var f4 = <T>(x: T/**/ ) => {
 //// }
 
-// Turn off edit validation.  We don't want semantic diagnostics to run until  we explicit call it.
-fs.diagnostics.setEditValidation(IncrementalEditValidation.None);
-
 fs.goTo.marker();
 
 // Replace the "T" type with the non-existent type 'V'.

@@ -4,57 +4,12 @@
 /// <reference path="parser.ts"/>
 /// <reference path="binder.ts"/>
 /// <reference path="emitter.ts"/>
+/// <reference path="utilities.ts"/>
 
 module ts {
     var nextSymbolId = 1;
     var nextNodeId = 1;
-    var nextMergeId = 1;
-
-    export function getDeclarationOfKind(symbol: Symbol, kind: SyntaxKind): Declaration {
-        var declarations = symbol.declarations;
-        for (var i = 0; i < declarations.length; i++) {
-            var declaration = declarations[i];
-            if (declaration.kind === kind) {
-                return declaration;
-            }
-        }
-
-        return undefined;
-    }
-
-    export interface StringSymbolWriter extends SymbolWriter {
-        string(): string;
-    }
-
-    // Pool writers to avoid needing to allocate them for every symbol we write.
-    var stringWriters: StringSymbolWriter[] = [];
-    export function getSingleLineStringWriter(): StringSymbolWriter {
-        if (stringWriters.length == 0) {
-            var str = "";
-
-            var writeText: (text: string) => void = text => str += text;
-            return {
-                string: () => str,
-                writeKeyword: writeText,
-                writeOperator: writeText,
-                writePunctuation: writeText,
-                writeSpace: writeText,
-                writeStringLiteral: writeText,
-                writeParameter: writeText,
-                writeSymbol: writeText,
-
-                // Completely ignore indentation for string writers.  And map newlines to
-                // a single space.
-                writeLine: () => str += " ",
-                increaseIndent: () => { },
-                decreaseIndent: () => { },
-                clear: () => str = "",
-                trackSymbol: () => { }
-            };
-        }
-
-        return stringWriters.pop();
-    }
+    var nextMergeId = 1;    
 
     /// fullTypeCheck denotes if this instance of the typechecker will be used to get semantic diagnostics.
     /// If fullTypeCheck === true,  then the typechecker should do every possible check to produce all errors
@@ -1017,11 +972,6 @@ module ts {
                 errorSymbolName: getTextOfNode(firstIdentifier),
                 errorNode: firstIdentifier
             };
-        }
-
-        function releaseStringWriter(writer: StringSymbolWriter) {
-            writer.clear()
-            stringWriters.push(writer);
         }
 
         function writeKeyword(writer: SymbolWriter, kind: SyntaxKind) {
@@ -4629,8 +4579,8 @@ module ts {
         // Get the narrowed type of a given symbol at a given location
         function getNarrowedTypeOfSymbol(symbol: Symbol, node: Node) {
             var type = getTypeOfSymbol(symbol);
-            // Only narrow when symbol is variable of a structured type
-            if (node && (symbol.flags & SymbolFlags.Variable && type.flags & TypeFlags.Structured)) {
+            // Only narrow when symbol is variable of an object, union, or type parameter type
+            if (node && symbol.flags & SymbolFlags.Variable && type.flags & (TypeFlags.ObjectType | TypeFlags.Union | TypeFlags.TypeParameter)) {
                 loop: while (node.parent) {
                     var child = node;
                     node = node.parent;
@@ -4791,14 +4741,49 @@ module ts {
                 return type;
             }
         }
+        /*Transitively mark all linked imports as referenced*/
+        function markLinkedImportsAsReferenced(node: ImportDeclaration): void {
+            var nodeLinks = getNodeLinks(node);
+            while (nodeLinks.importOnRightSide) {
+                var rightSide = nodeLinks.importOnRightSide;
+                nodeLinks.importOnRightSide = undefined;
+
+                getSymbolLinks(rightSide).referenced = true;
+                Debug.assert((rightSide.flags & SymbolFlags.Import) !== 0);
+
+                nodeLinks = getNodeLinks(getDeclarationOfKind(rightSide, SyntaxKind.ImportDeclaration))
+            }
+        }
 
         function checkIdentifier(node: Identifier): Type {
             var symbol = getResolvedSymbol(node);
 
             if (symbol.flags & SymbolFlags.Import) {
-                // Mark the import as referenced so that we emit it in the final .js file.
-                // exception: identifiers that appear in type queries, const enums, modules that contain only const enums
-                getSymbolLinks(symbol).referenced = getSymbolLinks(symbol).referenced || (!isInTypeQuery(node) && !isConstEnumOrConstEnumOnlyModule(resolveImport(symbol)));
+                var symbolLinks = getSymbolLinks(symbol);
+                if (!symbolLinks.referenced) {
+                    var importOrExportAssignment = getLeftSideOfImportOrExportAssignment(node);
+
+                    // decision about whether import is referenced can be made now if
+                    // - import that are used anywhere except right side of import declarations
+                    // - imports that are used on the right side of exported import declarations
+                    // for other cases defer decision until the check of left side
+                    if (!importOrExportAssignment ||
+                        (importOrExportAssignment.flags & NodeFlags.Export) ||
+                        (importOrExportAssignment.kind === SyntaxKind.ExportAssignment)) {
+                        // Mark the import as referenced so that we emit it in the final .js file.
+                        // exception: identifiers that appear in type queries, const enums, modules that contain only const enums
+                        symbolLinks.referenced = !isInTypeQuery(node) && !isConstEnumOrConstEnumOnlyModule(resolveImport(symbol));
+                    }
+                    else {
+                        var nodeLinks = getNodeLinks(importOrExportAssignment);
+                        Debug.assert(!nodeLinks.importOnRightSide);
+                        nodeLinks.importOnRightSide = symbol;
+                    }
+                }
+                
+                if (symbolLinks.referenced) {
+                    markLinkedImportsAsReferenced(<ImportDeclaration>getDeclarationOfKind(symbol, SyntaxKind.ImportDeclaration));
+                }
             }
 
             checkCollisionWithCapturedSuperVariable(node, node);
@@ -5624,7 +5609,7 @@ module ts {
                 }
 
                 // Fall back to any.
-                if (compilerOptions.noImplicitAny && objectType !== anyType) {
+                if (compilerOptions.noImplicitAny && !compilerOptions.suppressImplicitAnyIndexErrors && objectType !== anyType) {
                     error(node, Diagnostics.Index_signature_of_object_type_implicitly_has_an_any_type);
                 }
 
@@ -6649,12 +6634,12 @@ module ts {
             return numberType;
         }
 
-        // Return true if type is any, an object type, a type parameter, or a union type composed of only those kinds of types
+        // Return true if type an object type, a type parameter, or a union type composed of only those kinds of types
         function isStructuredType(type: Type): boolean {
             if (type.flags & TypeFlags.Union) {
                 return !forEach((<UnionType>type).types, t => !isStructuredType(t));
             }
-            return (type.flags & TypeFlags.Structured) !== 0;
+            return (type.flags & (TypeFlags.ObjectType | TypeFlags.TypeParameter)) !== 0;
         }
 
         function isConstEnumObjectType(type: Type): boolean {
@@ -6671,11 +6656,11 @@ module ts {
             // and the right operand to be of type Any or a subtype of the 'Function' interface type. 
             // The result is always of the Boolean primitive type.
             // NOTE: do not raise error if leftType is unknown as related error was already reported
-            if (leftType !== unknownType && !isStructuredType(leftType)) {
+            if (!(leftType.flags & TypeFlags.Any || isStructuredType(leftType))) {
                 error(node.left, Diagnostics.The_left_hand_side_of_an_instanceof_expression_must_be_of_type_any_an_object_type_or_a_type_parameter);
             }
             // NOTE: do not raise error if right is unknown as related error was already reported
-            if (rightType !== unknownType && rightType !== anyType && !isTypeSubtypeOf(rightType, globalFunctionType)) {
+            if (!(rightType.flags & TypeFlags.Any || isTypeSubtypeOf(rightType, globalFunctionType))) {
                 error(node.right, Diagnostics.The_right_hand_side_of_an_instanceof_expression_must_be_of_type_any_or_of_a_type_assignable_to_the_Function_interface_type);
             }
             return booleanType;
@@ -6689,7 +6674,7 @@ module ts {
             if (leftType !== anyType && leftType !== stringType && leftType !== numberType) {
                 error(node.left, Diagnostics.The_left_hand_side_of_an_in_expression_must_be_of_types_any_string_or_number);
             }
-            if (!isStructuredType(rightType)) {
+            if (!(rightType.flags & TypeFlags.Any || isStructuredType(rightType))) {
                 error(node.right, Diagnostics.The_right_hand_side_of_an_in_expression_must_be_of_type_any_an_object_type_or_a_type_parameter);
             }
             return booleanType;
@@ -8177,7 +8162,7 @@ module ts {
             var exprType = checkExpression(node.expression);
             // unknownType is returned i.e. if node.expression is identifier whose name cannot be resolved
             // in this case error about missing name is already reported - do not report extra one
-            if (!isStructuredType(exprType) && exprType !== unknownType) {
+            if (!(exprType.flags & TypeFlags.Any || isStructuredType(exprType))) {
                 error(node.expression, Diagnostics.The_right_hand_side_of_a_for_in_statement_must_be_of_type_any_an_object_type_or_a_type_parameter);
             }
 
@@ -9253,6 +9238,8 @@ module ts {
                     if (symbol && symbol.flags & SymbolFlags.Import) {
                         // Mark the import as referenced so that we emit it in the final .js file.
                         getSymbolLinks(symbol).referenced = true;
+                        // mark any import declarations that depend upon this import as referenced
+                        markLinkedImportsAsReferenced(<ImportDeclaration>getDeclarationOfKind(symbol, SyntaxKind.ImportDeclaration))
                     }
                 }
 
@@ -9478,19 +9465,24 @@ module ts {
             return false;
         }
 
+        function getLeftSideOfImportOrExportAssignment(nodeOnRightSide: EntityName): ImportDeclaration | ExportAssignment {
+            while (nodeOnRightSide.parent.kind === SyntaxKind.QualifiedName) {
+                nodeOnRightSide = <QualifiedName>nodeOnRightSide.parent;
+            }
+
+            if (nodeOnRightSide.parent.kind === SyntaxKind.ImportDeclaration) {
+                return (<ImportDeclaration>nodeOnRightSide.parent).moduleReference === nodeOnRightSide && <ImportDeclaration>nodeOnRightSide.parent;
+            }
+
+            if (nodeOnRightSide.parent.kind === SyntaxKind.ExportAssignment) {
+                return (<ExportAssignment>nodeOnRightSide.parent).exportName === nodeOnRightSide && <ExportAssignment>nodeOnRightSide.parent;
+            }
+
+            return undefined;
+        }
+
         function isInRightSideOfImportOrExportAssignment(node: EntityName) {
-            while (node.parent.kind === SyntaxKind.QualifiedName) {
-                node = <QualifiedName>node.parent;
-            }
-
-            if (node.parent.kind === SyntaxKind.ImportDeclaration) {
-                return (<ImportDeclaration>node.parent).moduleReference === node;
-            }
-            if (node.parent.kind === SyntaxKind.ExportAssignment) {
-                return (<ExportAssignment>node.parent).exportName === node;
-            }
-
-            return false;
+            return getLeftSideOfImportOrExportAssignment(node) !== undefined;
         }
 
         function isRightSideOfQualifiedNameOrPropertyAccess(node: Node) {

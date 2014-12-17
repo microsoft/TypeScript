@@ -317,7 +317,9 @@ describe('Colorization', function () {
                 operator("<"),
                 identifier("number"),
                 finalEndOfLineState(ts.EndOfLineState.Start));
+        });
 
+        it("ClassifiesConflictTokens", () => {
             // no longer in something that looks generic.
             test("Foo<Foo> number",
                 ts.EndOfLineState.Start,
@@ -326,6 +328,33 @@ describe('Colorization', function () {
                 identifier("Foo"),
                 operator(">"),
                 keyword("number"),
+                finalEndOfLineState(ts.EndOfLineState.Start));
+
+            // Test conflict markers.
+            test(
+"class C {\r\n\
+<<<<<<< HEAD\r\n\
+    v = 1;\r\n\
+=======\r\n\
+    v = 2;\r\n\
+>>>>>>> Branch - a\r\n\
+}",
+                ts.EndOfLineState.Start,
+                keyword("class"),
+                identifier("C"),
+                punctuation("{"),
+                comment("<<<<<<< HEAD"),
+                identifier("v"),
+                operator("="),
+                numberLiteral("1"),
+                punctuation(";"),
+                comment("======="),
+                identifier("v"),
+                operator("="),
+                numberLiteral("2"),
+                punctuation(";"),
+                comment(">>>>>>> Branch - a"),
+                punctuation("}"),
                 finalEndOfLineState(ts.EndOfLineState.Start));
         });
     });

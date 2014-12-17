@@ -670,6 +670,10 @@
         "code": 1184,
         "isEarly":  true
     },
+    "Merge conflict marker encountered.": {
+        "category": "Error",
+        "code": 1184
+    },
 
     "Duplicate identifier '{0}'.": {
         "category": "Error",
@@ -1764,6 +1768,10 @@
     "File '{0}' must have extension '.ts' or '.d.ts'.": {
         "category": "Error",
         "code": 6054
+    },
+    "Suppress noImplicitAny errors for indexing objects lacking index signatures.": {
+        "category": "Message",
+        "code": 6055
     },
 
     "Variable '{0}' implicitly has an '{1}' type.": {

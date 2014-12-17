@@ -9,7 +9,6 @@
 //// }
 
 edit.disableFormatting();
-diagnostics.setEditValidation(IncrementalEditValidation.SyntacticOnly);
 
 goTo.marker('check');
 verify.quickInfoIs('module Mod');

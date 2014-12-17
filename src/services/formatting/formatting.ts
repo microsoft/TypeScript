@@ -1,7 +1,7 @@
-///<reference path='services.ts' />
-///<reference path='formatting\indentation.ts' />
-///<reference path='formatting\formattingScanner.ts' />
-///<reference path='formatting\rulesProvider.ts' />
+///<reference path='..\services.ts' />
+///<reference path='formattingScanner.ts' />
+///<reference path='rulesProvider.ts' />
+///<reference path='references.ts' />
 
 module ts.formatting {
 
@@ -622,14 +622,21 @@ module ts.formatting {
 
                 var tokenStart = sourceFile.getLineAndCharacterFromPosition(currentTokenInfo.token.pos);
                 if (isTokenInRange) {
+                    var rangeHasError = rangeContainsError(currentTokenInfo.token);
                     // save prevStartLine since processRange will overwrite this value with current ones
                     var prevStartLine = previousRangeStartLine;
                     lineAdded = processRange(currentTokenInfo.token, tokenStart, parent, childContextNode, dynamicIndentation);
-                    if (lineAdded !== undefined) {
-                        indentToken = lineAdded;
+                    if (rangeHasError) {
+                        // do not indent comments\token if token range overlaps with some error
+                        indentToken = false;
                     }
                     else {
-                        indentToken = lastTriviaWasNewLine && tokenStart.line !== prevStartLine;
+                        if (lineAdded !== undefined) {
+                            indentToken = lineAdded;
+                        }
+                        else {
+                            indentToken = lastTriviaWasNewLine && tokenStart.line !== prevStartLine;
+                        }
                     }
                 }
 
@@ -983,5 +990,57 @@ module ts.formatting {
         }
 
         return SyntaxKind.Unknown;
+    }
+
+    var internedTabsIndentation: string[];
+    var internedSpacesIndentation: string[];
+
+    export function getIndentationString(indentation: number, options: FormatCodeOptions): string {
+        if (!options.ConvertTabsToSpaces) {
+            var tabs = Math.floor(indentation / options.TabSize);
+            var spaces = indentation - tabs * options.TabSize;
+
+            var tabString: string;
+            if (!internedTabsIndentation) {
+                internedTabsIndentation = [];
+            }
+
+            if (internedTabsIndentation[tabs] === undefined) {
+                internedTabsIndentation[tabs] = tabString = repeat('\t', tabs);
+            }
+            else {
+                tabString = internedTabsIndentation[tabs];
+            }
+
+            return spaces ? tabString + repeat(" ", spaces) : tabString;
+        }
+        else {
+            var spacesString: string;
+            var quotient = Math.floor(indentation / options.IndentSize);
+            var remainder = indentation % options.IndentSize;
+            if (!internedSpacesIndentation) {
+                internedSpacesIndentation = [];
+            }
+
+            if (internedSpacesIndentation[quotient] === undefined) {
+                spacesString = repeat(" ", options.IndentSize * quotient);
+                internedSpacesIndentation[quotient] = spacesString;
+            }
+            else {
+                spacesString = internedSpacesIndentation[quotient];
+            }
+
+
+            return remainder ? spacesString + repeat(" ", remainder) : spacesString;
+        }
+
+        function repeat(value: string, count: number): string {
+            var s = "";
+            for (var i = 0; i < count; ++i) {
+                s += value;
+            }
+
+            return s;
+        }
     }
 }

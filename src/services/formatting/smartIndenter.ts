@@ -1,4 +1,4 @@
-///<reference path='services.ts' />
+///<reference path='..\services.ts' />
 
 module ts.formatting {
     export module SmartIndenter {
@@ -342,6 +342,7 @@ module ts.formatting {
                 case SyntaxKind.VariableDeclaration:
                 case SyntaxKind.ExportAssignment:
                 case SyntaxKind.ReturnStatement:
+                case SyntaxKind.ConditionalExpression:
                     return true;
             }
             return false;

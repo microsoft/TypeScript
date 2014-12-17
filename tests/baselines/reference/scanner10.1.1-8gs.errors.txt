@@ -1,7 +1,7 @@
+tests/cases/conformance/scanner/ecmascript5/scanner10.1.1-8gs.ts(16,7): error TS2304: Cannot find name 'NotEarlyError'.
 tests/cases/conformance/scanner/ecmascript5/scanner10.1.1-8gs.ts(17,5): error TS1134: Variable declaration expected.
 tests/cases/conformance/scanner/ecmascript5/scanner10.1.1-8gs.ts(17,12): error TS1134: Variable declaration expected.
 tests/cases/conformance/scanner/ecmascript5/scanner10.1.1-8gs.ts(17,14): error TS1134: Variable declaration expected.
-tests/cases/conformance/scanner/ecmascript5/scanner10.1.1-8gs.ts(16,7): error TS2304: Cannot find name 'NotEarlyError'.
 
 
 ==== tests/cases/conformance/scanner/ecmascript5/scanner10.1.1-8gs.ts (4 errors) ====

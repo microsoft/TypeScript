@@ -3,6 +3,7 @@ tests/cases/compiler/ambientWithStatements.ts(3,5): error TS1036: Statements are
 tests/cases/compiler/ambientWithStatements.ts(4,5): error TS1036: Statements are not allowed in ambient contexts.
 tests/cases/compiler/ambientWithStatements.ts(5,5): error TS1036: Statements are not allowed in ambient contexts.
 tests/cases/compiler/ambientWithStatements.ts(7,5): error TS1036: Statements are not allowed in ambient contexts.
+tests/cases/compiler/ambientWithStatements.ts(7,15): error TS2407: The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter.
 tests/cases/compiler/ambientWithStatements.ts(8,5): error TS1036: Statements are not allowed in ambient contexts.
 tests/cases/compiler/ambientWithStatements.ts(9,5): error TS1036: Statements are not allowed in ambient contexts.
 tests/cases/compiler/ambientWithStatements.ts(10,5): error TS1036: Statements are not allowed in ambient contexts.
@@ -11,7 +12,6 @@ tests/cases/compiler/ambientWithStatements.ts(12,5): error TS1036: Statements ar
 tests/cases/compiler/ambientWithStatements.ts(18,5): error TS1036: Statements are not allowed in ambient contexts.
 tests/cases/compiler/ambientWithStatements.ts(19,5): error TS1036: Statements are not allowed in ambient contexts.
 tests/cases/compiler/ambientWithStatements.ts(25,5): error TS1036: Statements are not allowed in ambient contexts.
-tests/cases/compiler/ambientWithStatements.ts(7,15): error TS2407: The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter.
 tests/cases/compiler/ambientWithStatements.ts(25,11): error TS2410: All symbols within a 'with' block will be resolved to 'any'.
 
 
