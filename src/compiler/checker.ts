@@ -9869,8 +9869,11 @@ module ts {
         }
 
         function isEmitBlocked(sourceFile?: SourceFile): boolean {
-            return program.getDiagnostics(sourceFile).length !== 0 ||
-                (compilerOptions.noEmitOnError && getDiagnostics(sourceFile).length !== 0);
+            if (compilerOptions.noEmitOnError) {
+                return program.getDiagnostics(sourceFile).length !== 0 || getDiagnostics(sourceFile).length !== 0;
+            }
+
+            return false;
        }
 
         function isImportResolvedToValue(symbol: Symbol): boolean {
