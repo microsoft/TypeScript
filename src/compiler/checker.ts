@@ -7021,14 +7021,7 @@ module ts {
 
         function checkNumericLiteral(node: LiteralExpression): Type {
             // Grammar checking
-            if (node.flags & NodeFlags.OctalLiteral) {
-                if (node.parserContextFlags & ParserContextFlags.StrictMode) {
-                    grammarErrorOnNode(node, Diagnostics.Octal_literals_are_not_allowed_in_strict_mode);
-                }
-                else if (compilerOptions.target >= ScriptTarget.ES5) {
-                    grammarErrorOnNode(node, Diagnostics.Octal_literals_are_not_available_when_targeting_ECMAScript_5_and_higher);
-                }
-            }
+            checkGrammarNumbericLiteral(node);
             return numberType;
         }
 
@@ -10362,8 +10355,7 @@ module ts {
                     // Grammar checking for computedPropertName and shorthandPropertyAssignment
                     checkGrammarForInvalidQuestionMark(prop,(<PropertyAssignment>prop).questionToken, Diagnostics.An_object_member_cannot_be_declared_optional);
                     if (name.kind === SyntaxKind.NumericLiteral) {
-                    }
-                    else if (name.kind === SyntaxKind.StringLiteral) {
+                        checkGrammarNumbericLiteral(<Identifier>name);
                     }
                     currentKind = Property;
                 }
@@ -10455,7 +10447,6 @@ module ts {
 
         function checkGrammarMethod(node: MethodDeclaration) {
             if (checkGrammarFunctionLikeDeclaration(node) ||
-                checkGrammarForBodyInAmbientContext(node.body, /*isConstructor:*/ false) ||
                 checkGrammarForGenerator(node)) {
                 return true;
             }
@@ -10734,16 +10725,6 @@ module ts {
             }
         }
 
-        function checkGrammarForBodyInAmbientContext(body: Block | Expression, isConstructor: boolean): boolean {
-            if (isInAmbientContext(body) && body && body.kind === SyntaxKind.Block) {
-
-                var diagnostic = isConstructor
-                    ? Diagnostics.A_constructor_implementation_cannot_be_declared_in_an_ambient_context
-                    : Diagnostics.A_function_implementation_cannot_be_declared_in_an_ambient_context;
-                return getNodeLinks(body).hasReportedStatementInAmbientContext =  grammarErrorOnFirstToken(body, diagnostic);
-            }
-        }
-
         function checkGrammarProperty(node: PropertyDeclaration) {
             if (node.parent.kind === SyntaxKind.ClassDeclaration) {
                 if (checkGrammarForInvalidQuestionMark(node, node.questionToken, Diagnostics.A_class_member_cannot_be_declared_optional) ||
@@ -10835,6 +10816,18 @@ module ts {
                     // We must be parented by a statement.  If so, there's no need
                     // to report the error as our parent will have already done it.
                     // Debug.assert(isStatement(node.parent));
+                }
+            }
+        }
+
+        function checkGrammarNumbericLiteral(node: Identifier): boolean {
+            // Grammar checking
+            if (node.flags & NodeFlags.OctalLiteral) {
+                if (node.parserContextFlags & ParserContextFlags.StrictMode) {
+                    return grammarErrorOnNode(node, Diagnostics.Octal_literals_are_not_allowed_in_strict_mode);
+                }
+                else if (compilerOptions.target >= ScriptTarget.ES5) {
+                    return grammarErrorOnNode(node, Diagnostics.Octal_literals_are_not_available_when_targeting_ECMAScript_5_and_higher);
                 }
             }
         }

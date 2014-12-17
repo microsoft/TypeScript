@@ -228,7 +228,8 @@
     },
     "A 'declare' modifier cannot be used with an import declaration.": {
         "category": "Error",
-        "code": 1079
+        "code": 1079,
+        "isEarly":  true
     },
     "Invalid 'reference' directive syntax.": {
         "category": "Error",

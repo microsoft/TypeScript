@@ -50,7 +50,7 @@ module ts {
         An_export_assignment_cannot_be_used_in_an_internal_module: { code: 1063, category: DiagnosticCategory.Error, key: "An export assignment cannot be used in an internal module.", isEarly: true },
         Ambient_enum_elements_can_only_have_integer_literal_initializers: { code: 1066, category: DiagnosticCategory.Error, key: "Ambient enum elements can only have integer literal initializers.", isEarly: true },
         Unexpected_token_A_constructor_method_accessor_or_property_was_expected: { code: 1068, category: DiagnosticCategory.Error, key: "Unexpected token. A constructor, method, accessor, or property was expected." },
-        A_declare_modifier_cannot_be_used_with_an_import_declaration: { code: 1079, category: DiagnosticCategory.Error, key: "A 'declare' modifier cannot be used with an import declaration." },
+        A_declare_modifier_cannot_be_used_with_an_import_declaration: { code: 1079, category: DiagnosticCategory.Error, key: "A 'declare' modifier cannot be used with an import declaration.", isEarly: true },
         Invalid_reference_directive_syntax: { code: 1084, category: DiagnosticCategory.Error, key: "Invalid 'reference' directive syntax." },
         Octal_literals_are_not_available_when_targeting_ECMAScript_5_and_higher: { code: 1085, category: DiagnosticCategory.Error, key: "Octal literals are not available when targeting ECMAScript 5 and higher.", isEarly: true },
         An_accessor_cannot_be_declared_in_an_ambient_context: { code: 1086, category: DiagnosticCategory.Error, key: "An accessor cannot be declared in an ambient context.", isEarly: true },
