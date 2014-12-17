@@ -7113,9 +7113,9 @@ module ts {
             // or if its FunctionBody is strict code(11.1.5).
             // It is a SyntaxError if the identifier eval or arguments appears within a FormalParameterList of a
             // strict mode FunctionLikeDeclaration or FunctionExpression(13.1)
-            if (!checkGrammarModifiers(node)) {
-                checkGrammarEvalOrArgumentsInStrictMode(node, <Identifier>node.name);
-            }
+
+            // Grammar checking
+            checkGrammarModifiers(node) || checkGrammarEvalOrArgumentsInStrictMode(node, <Identifier>node.name);
 
             checkVariableLikeDeclaration(node);
             var func = getContainingFunction(node);
@@ -7218,11 +7218,7 @@ module ts {
 
         function checkMethodDeclaration(node: MethodDeclaration) {
             // Grammar checking
-            checkGrammarMethod(node);
-
-            if (node.name.kind === SyntaxKind.ComputedPropertyName) {
-                checkGrammarComputedPropertyName(<ComputedPropertyName>node.name);
-            }
+            checkGrammarMethod(node) || checkGrammarComputedPropertyName(node.name);
 
             // Grammar checking for modifiers is done inside the function checkGrammarFunctionLikeDeclaration
             checkFunctionLikeDeclaration(node);
@@ -7317,12 +7313,7 @@ module ts {
 
         function checkAccessorDeclaration(node: AccessorDeclaration) {
             // Grammar checking accessors
-            checkGrammarFunctionLikeDeclaration(node) || checkGrammarAccessor(node);
-
-            // Grammar checking if name is a computed-property
-            if (node.name.kind === SyntaxKind.ComputedPropertyName) {
-                checkGrammarComputedPropertyName(<ComputedPropertyName>node.name);
-            }
+            checkGrammarFunctionLikeDeclaration(node) || checkGrammarAccessor(node) || checkGrammarComputedPropertyName(node.name);
 
             if (fullTypeCheck) {
                 if (node.kind === SyntaxKind.GetAccessor) {
@@ -8101,8 +8092,7 @@ module ts {
 
         function checkForStatement(node: ForStatement) {
             // Grammar checking
-            checkGrammarForStatementInAmbientContext(node);
-            checkGrammarVariableDeclarations(node, node.declarations);
+            checkGrammarForStatementInAmbientContext(node) || checkGrammarVariableDeclarations(node, node.declarations);
 
             if (node.declarations) forEach(<VariableLikeDeclaration[]>node.declarations, checkVariableLikeDeclaration);
             if (node.initializer) checkExpression(node.initializer);
@@ -8112,13 +8102,13 @@ module ts {
         }
 
         function checkForInStatement(node: ForInStatement) {
-            // Grammar checkingcheck
-            checkGrammarForStatementInAmbientContext(node);
-             
-            var declarations = node.declarations;
-            if (!checkGrammarVariableDeclarations(node, declarations)) {
-                if (declarations && declarations.length > 1) {
-                    grammarErrorOnFirstToken(declarations[1], Diagnostics.Only_a_single_variable_declaration_is_allowed_in_a_for_in_statement);
+            // Grammar checking 
+            if (!checkGrammarForStatementInAmbientContext(node)) {
+                var declarations = node.declarations;
+                if (!checkGrammarVariableDeclarations(node, declarations)) {
+                    if (declarations && declarations.length > 1) {
+                        grammarErrorOnFirstToken(declarations[1], Diagnostics.Only_a_single_variable_declaration_is_allowed_in_a_for_in_statement);
+                    }
                 }
             }
 
@@ -8164,8 +8154,7 @@ module ts {
 
         function checkBreakOrContinueStatement(node: BreakOrContinueStatement) {
             // Grammar checking
-            checkGrammarForStatementInAmbientContext(node);
-            checkGrammarBreakOrContinueStatement(node);
+            checkGrammarForStatementInAmbientContext(node) || checkGrammarBreakOrContinueStatement(node);
 
             // TODO: Check that target label is valid
         }
@@ -8176,12 +8165,11 @@ module ts {
 
         function checkReturnStatement(node: ReturnStatement) {
             // Grammar checking
-            checkGrammarForStatementInAmbientContext(node);
-            var parent = node.parent;
-            var inFunctionBlock = false;
-            var functionBlock = getContainingFunction(node);
-            if (!functionBlock) {
-                grammarErrorOnFirstToken(node, Diagnostics.A_return_statement_can_only_be_used_within_a_function_body);
+            if (!checkGrammarForStatementInAmbientContext(node)) {
+                var functionBlock = getContainingFunction(node);
+                if (!functionBlock) {
+                    grammarErrorOnFirstToken(node, Diagnostics.A_return_statement_can_only_be_used_within_a_function_body);
+                }
             }
 
             if (node.expression) {
@@ -8208,10 +8196,10 @@ module ts {
 
         function checkWithStatement(node: WithStatement) {
             // Grammar checking for withStatement
-            checkGrammarForStatementInAmbientContext(node);
-
-            if (node.parserContextFlags & ParserContextFlags.StrictMode) {
-                grammarErrorOnFirstToken(node, Diagnostics.with_statements_are_not_allowed_in_strict_mode);
+            if (!checkGrammarForStatementInAmbientContext(node)) {
+                if (node.parserContextFlags & ParserContextFlags.StrictMode) {
+                    grammarErrorOnFirstToken(node, Diagnostics.with_statements_are_not_allowed_in_strict_mode);
+                }
             }
 
             checkExpression(node.expression);
@@ -8257,18 +8245,19 @@ module ts {
 
         function checkLabeledStatement(node: LabeledStatement) {
             // Grammar checking
-            checkGrammarForStatementInAmbientContext(node);
-            var current = node.parent;
-            while (current) {
-                if (isAnyFunction(current)) {
-                    break;
+            if (!checkGrammarForStatementInAmbientContext(node)) {
+                var current = node.parent;
+                while (current) {
+                    if (isAnyFunction(current)) {
+                        break;
+                    }
+                    if (current.kind === SyntaxKind.LabeledStatement && (<LabeledStatement>current).label.text === node.label.text) {
+                        var sourceFile = getSourceFileOfNode(node);
+                        grammarErrorOnNode(node.label, Diagnostics.Duplicate_label_0, getTextOfNodeFromSourceText(sourceFile.text, node.label));
+                        break;
+                    }
+                    current = current.parent;
                 }
-                if (current.kind === SyntaxKind.LabeledStatement && (<LabeledStatement>current).label.text === node.label.text) {
-                    var sourceFile = getSourceFileOfNode(node);
-                    grammarErrorOnNode(node.label, Diagnostics.Duplicate_label_0, getTextOfNodeFromSourceText(sourceFile.text, node.label));
-                    break;
-                }
-                current = current.parent;
             }
 
             // ensure that label is unique
@@ -8277,11 +8266,10 @@ module ts {
 
         function checkThrowStatement(node: ThrowStatement) {
             // Grammar checking
-            checkGrammarForStatementInAmbientContext(node)
-
-            // Type checking
-            if (node.expression === undefined) {
-                grammarErrorAfterFirstToken(node, Diagnostics.Line_break_not_permitted_here);
+            if (!checkGrammarForStatementInAmbientContext(node)) {
+                if (node.expression === undefined) {
+                    grammarErrorAfterFirstToken(node, Diagnostics.Line_break_not_permitted_here);
+                }
             }
 
             if (node.expression) {
@@ -9018,9 +9006,7 @@ module ts {
 
         function checkExportAssignment(node: ExportAssignment) {
             // Grammar checking
-            checkGrammarModifiers(node);
-
-            if (node.flags & NodeFlags.Modifier) {
+            if (!checkGrammarModifiers(node) && (node.flags & NodeFlags.Modifier)) {
                 grammarErrorOnFirstToken(node, Diagnostics.An_export_assignment_cannot_have_modifiers);
             }
 
@@ -9123,9 +9109,11 @@ module ts {
                 case SyntaxKind.ExportAssignment:
                     return checkExportAssignment(<ExportAssignment>node);
                 case SyntaxKind.EmptyStatement:
-                    return checkGrammarForStatementInAmbientContext(node);
+                    checkGrammarForStatementInAmbientContext(node);
+                    return;
                 case SyntaxKind.DebuggerStatement:
-                    return checkGrammarForStatementInAmbientContext(node);
+                    checkGrammarForStatementInAmbientContext(node);
+                    return;
             }
         }
 
@@ -10292,17 +10280,22 @@ module ts {
             return false;
         }
 
-        function checkGrammarComputedPropertyName(node: ComputedPropertyName): void {
+        function checkGrammarComputedPropertyName(node: Node): void {
+            // If node is not a computedPropertyName, just skip the grammar checking
+            if (node.kind !== SyntaxKind.ComputedPropertyName) {
+                return;
+            }
             // Since computed properties are not supported in the type checker, disallow them in TypeScript 1.4
             // Once full support is added, remove this error.
             grammarErrorOnNode(node, Diagnostics.Computed_property_names_are_not_currently_supported);
             return;
 
+            var computedPropertyName = <ComputedPropertyName>node;
             if (compilerOptions.target < ScriptTarget.ES6) {
                 grammarErrorOnNode(node, Diagnostics.Computed_property_names_are_only_available_when_targeting_ECMAScript_6_and_higher);
             }
-            else if (node.expression.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>node.expression).operator === SyntaxKind.CommaToken) {
-                grammarErrorOnNode(node.expression, Diagnostics.A_comma_expression_is_not_allowed_in_a_computed_property_name);
+            else if (computedPropertyName.expression.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>computedPropertyName.expression).operator === SyntaxKind.CommaToken) {
+                grammarErrorOnNode(computedPropertyName.expression, Diagnostics.A_comma_expression_is_not_allowed_in_a_computed_property_name);
             }
         }
 
@@ -10334,10 +10327,9 @@ module ts {
             for (var i = 0, n = node.properties.length; i < n; i++) {
                 var prop = node.properties[i];
                 var name = prop.name;
-                if (prop.kind === SyntaxKind.OmittedExpression) {
-                    continue;
-                }
-                else if (name.kind === SyntaxKind.ComputedPropertyName) {
+                if (prop.kind === SyntaxKind.OmittedExpression || 
+                    name.kind === SyntaxKind.ComputedPropertyName) {
+                    // If the name is not a ComputedPropertyName, the grammar checking will skip it
                     checkGrammarComputedPropertyName(<ComputedPropertyName>name);
                     continue;
                 }
@@ -10785,19 +10777,17 @@ module ts {
             return isInAmbientContext(node) && checkGrammarTopLevelElementsForRequiredDeclareModifier(node);
         }
 
-        function checkGrammarForStatementInAmbientContext(node: Node): void {
+        function checkGrammarForStatementInAmbientContext(node: Node): boolean {
             if (isInAmbientContext(node)) {
                 // An accessors is already reported about the ambient context
                 if (isAccessor(node.parent.kind)) {
-                    getNodeLinks(node).hasReportedStatementInAmbientContext = true;
-                    return;
+                    return getNodeLinks(node).hasReportedStatementInAmbientContext = true;
                 }
 
                 // Find containing block which is either Block, ModuleBlock, SourceFile
                 var links = getNodeLinks(node);
                 if (!links.hasReportedStatementInAmbientContext && isAnyFunction(node.parent)) {
-                    getNodeLinks(node).hasReportedStatementInAmbientContext = grammarErrorOnFirstToken(node, Diagnostics.An_implementation_cannot_be_declared_in_ambient_contexts)
-                    return;
+                    return getNodeLinks(node).hasReportedStatementInAmbientContext = grammarErrorOnFirstToken(node, Diagnostics.An_implementation_cannot_be_declared_in_ambient_contexts)
                 }
                 
                 // We are either parented by another statement, or some sort of block.
@@ -10809,7 +10799,7 @@ module ts {
                     var links = getNodeLinks(node.parent);
                     // Check if the containing block ever report this error
                     if (!links.hasReportedStatementInAmbientContext) {
-                        links.hasReportedStatementInAmbientContext = grammarErrorOnFirstToken(node, Diagnostics.Statements_are_not_allowed_in_ambient_contexts);
+                        return links.hasReportedStatementInAmbientContext = grammarErrorOnFirstToken(node, Diagnostics.Statements_are_not_allowed_in_ambient_contexts);
                     }
                 }
                 else {
