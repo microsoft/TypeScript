@@ -87,7 +87,7 @@ module Harness.LanguageService {
                 return null;
             }
 
-            return JSON.stringify({ span: { start: range.span().start, length: range.span().length }, newLength: range.newLength() });
+            return JSON.stringify({ span: { start: range.span.start, length: range.span.length }, newLength: range.newLength });
         }
     }
 

@@ -841,42 +841,34 @@ module ts {
     }
 
     export function createTextSpan(start: number, length: number): TextSpan {
+        if (start < 0) {
+            throw new Error("start < 0");
+        }
+        if (length < 0) {
+            throw new Error("length < 0");
+        }
+
         return { start, length };
     }
 
     export function createTextSpanFromBounds(start: number, end: number) {
         return createTextSpan(start, end - start);
     }
+    
+    export function textChangeRangeNewSpan(range: TextChangeRange) {
+        return createTextSpan(range.span.start, range.newLength);
+    }
 
-    var textChangeRangeConstructor = (function () {
-        function textChangeRangeConstructor(span: TextSpan, newLength: number) {
-            if (newLength < 0) {
-                throw new Error("newLength < 0");
-            }
-            this._span = span;
-            this._newLength = newLength;
-        }
-
-        textChangeRangeConstructor.prototype = {
-            span() {
-                return this._span;
-            },
-            newLength() {
-                return this._newLength;
-            },
-            newSpan() {
-                return createTextSpan(this.span().start, this.newLength());
-            },
-            isUnchanged() {
-                return textSpanIsEmpty(this.span()) && this.newLength() === 0;
-            }
-        };
-
-        return textChangeRangeConstructor;
-    })();
+    export function textChangeRangeIsUnchanged(range: TextChangeRange) {
+        return textSpanIsEmpty(range.span) && range.newLength === 0;
+    }
 
     export function createTextChangeRange(span: TextSpan, newLength: number): TextChangeRange {
-        return new (<any>textChangeRangeConstructor)(span, newLength);
+        if (newLength < 0) {
+            throw new Error("newLength < 0");
+        }
+
+        return { span, newLength };
     }
 
     export var unchangedTextChangeRange = createTextChangeRange(createTextSpan(0, 0), 0);
@@ -902,9 +894,9 @@ module ts {
         // as it makes things much easier to reason about.
         var change0 = changes[0];
 
-        var oldStartN = change0.span().start;
-        var oldEndN = textSpanEnd(change0.span());
-        var newEndN = oldStartN + change0.newLength();
+        var oldStartN = change0.span.start;
+        var oldEndN = textSpanEnd(change0.span);
+        var newEndN = oldStartN + change0.newLength;
 
         for (var i = 1; i < changes.length; i++) {
             var nextChange = changes[i];
@@ -993,9 +985,9 @@ module ts {
             var oldEnd1 = oldEndN;
             var newEnd1 = newEndN;
 
-            var oldStart2 = nextChange.span().start;
-            var oldEnd2 = textSpanEnd(nextChange.span());
-            var newEnd2 = oldStart2 + nextChange.newLength();
+            var oldStart2 = nextChange.span.start;
+            var oldEnd2 = textSpanEnd(nextChange.span);
+            var newEnd2 = oldStart2 + nextChange.newLength;
 
             oldStartN = Math.min(oldStart1, oldStart2);
             oldEndN = Math.max(oldEnd1, oldEnd1 + (oldEnd2 - newEnd1));

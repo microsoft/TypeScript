@@ -1561,15 +1561,15 @@ module ts {
             var oldText = sourceFile.scriptSnapshot;
             var newText = scriptSnapshot;
 
-            Debug.assert((oldText.getLength() - textChangeRange.span().length + textChangeRange.newLength()) === newText.getLength());
+            Debug.assert((oldText.getLength() - textChangeRange.span.length + textChangeRange.newLength) === newText.getLength());
 
             if (Debug.shouldAssert(AssertionLevel.VeryAggressive)) {
-                var oldTextPrefix = oldText.getText(0, textChangeRange.span().start);
-                var newTextPrefix = newText.getText(0, textChangeRange.span().start);
+                var oldTextPrefix = oldText.getText(0, textChangeRange.span.start);
+                var newTextPrefix = newText.getText(0, textChangeRange.span.start);
                 Debug.assert(oldTextPrefix === newTextPrefix);
 
-                var oldTextSuffix = oldText.getText(textSpanEnd(textChangeRange.span()), oldText.getLength());
-                var newTextSuffix = newText.getText(textSpanEnd(textChangeRange.newSpan()), newText.getLength());
+                var oldTextSuffix = oldText.getText(textSpanEnd(textChangeRange.span), oldText.getLength());
+                var newTextSuffix = newText.getText(textSpanEnd(textChangeRangeNewSpan(textChangeRange)), newText.getLength());
                 Debug.assert(oldTextSuffix === newTextSuffix);
             }
         }

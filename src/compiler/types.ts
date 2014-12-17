@@ -1642,9 +1642,7 @@ module ts {
     }
 
     export interface TextChangeRange {
-        span(): TextSpan;
-        newLength(): number;
-        newSpan(): TextSpan;
-        isUnchanged(): boolean;
+        span: TextSpan;
+        newLength: number;
     }
 }
