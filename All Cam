@@ -1,0 +1,91 @@
+// ==UserScript==
+// @name       View all cams on reallifecam.com
+// @namespace  None
+// @version    1
+// @description  View all cams without paying
+// @match      http://reallifecam.com/
+// @copyright  2012+, None
+// @require    http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js
+// ==/UserScript==
+var clipsDiv = $(".left_column");
+var clipsDiv2 = $(".right_column");
+var i = 6;
+var camName = '';
+var newHTML = '<div class="clips">';
+var newHTML2 = '<div class="clips">';
+var room_name = "";
+while(i <= 30)
+{
+    if(1 <= i && i <= 15) {
+        switch( i )
+        {
+            //Apartment 3, Anton and Alina, Russia, GMT+8
+            //Actually added 3rd, so close 2nd open div
+            case 1: room_name = "Den"; camName = "cam" + i; newHTML = newHTML + '</div>'; newHTML = newHTML + '<div class="galki-vpravo menu1">'; newHTML = newHTML + 'Apartment 3, Anton and Alina, Russia, GMT+8'; break;
+            case 2: room_name = "Kitchen"; camName = "cam" + i; break;
+            case 3: room_name = "Hall"; camName = "cam" + i; break;
+            case 4: room_name = "Bedroom"; camName = 'erda3j'; break;
+            case 5: room_name = "Bathroom"; camName = "dhv3j3"; break;
+
+            //Apartment 1, Lora and Max, Russia, GMT+8
+            case 6: room_name = "Den"; camName = "cam" + i; newHTML = newHTML + '<div class="galki-vpravo menu1">'; newHTML = newHTML + 'Apartment 1, Lora and Max, Russia, GMT+8'; break;
+            case 7: room_name = "Kitchen"; camName = "cam" + i; break;
+            case 8: room_name = "Hall"; camName = "cam" + i; break;
+            case 9: room_name = "Bedroom"; camName = 'cvsdfs'; break;
+            case 10: room_name = "Bathroom"; camName = '3hvngd'; break;
+
+            //Apartment 2, Maria and Jon, Russia, GMT+8
+            case 11: room_name = "Den"; camName = "cam" + i; newHTML = newHTML + '</div>'; newHTML = newHTML + '<div class="galki-vpravo menu1">'; newHTML = newHTML + 'Apartment 2, Maria and Jon, Russia, GMT+8'; break;
+            case 12: room_name = "Kitchen"; camName = "cam" + i; break;
+            case 13: room_name = "Bathroom " + (i-12).toString(); camName = "cam" + i; break;
+            case 14: room_name = "Bathroom " + (i-12).toString(); camName = 'dsfnrn'; break;
+            case 15: room_name = "Bedroom"; camName = '5hjdfn'; break;
+        }
+        newHTML = newHTML + '<div class="galki-vpravo menu1" onclick="changeclass(\'01_'+i+'\');return false;"><a href="'+camName+'.stream" id="01_'+i+'" class="">'+room_name+'</a></div>';
+    }
+    
+    if(16 <= i && i <= 27) {
+        switch( i )
+        {
+            //Apartment 4, Kristina and Evgeni, Russia, GMT+8
+            case 16: room_name = "Den"; camName = "cam" + i; newHTML2 = newHTML2 + '<div class="galki-vpravo menu1">'; newHTML2 = newHTML2 + 'Apartment 4, Kristina and Evgeni, Russia, GMT+8'; break;
+            case 17: room_name = "Kitchen"; camName = "cam" + i; break;
+            case 18: room_name = "Hall"; camName = "cam" + i; break;
+            case 19: room_name = "Bathroom" + (i-18).toString( ); camName = 'nfgnbf'; break;
+            case 20: room_name = "Bathroom" + (i-18).toString( ); camName = 'jnsdfn'; break;
+            case 21: room_name = "Bedroom"; camName = 'njn43l'; break;
+
+            //Apartment 5, Nastya and Zheka, Spain, GMT+1
+            case 22: room_name = "Den"; camName = "cam" + i; newHTML2 = newHTML2 + "</div>"; newHTML2 = newHTML2 + '<div class="galki-vpravo menu1">'; newHTML2 = newHTML2 + 'Apartment 5, Nastya and Zheka, Spain, GMT+1'; break;
+            case 23: room_name = "Kitchen"; camName = "cam" + i; break;
+            case 24: room_name = "Dance"; camName = "cam" + i; break;
+            case 25: room_name = "Bathroom"; camName = 'asdfn3'; break;
+            case 26: room_name = "Bedroom " + (i-25).toString( ); camName = 'ren3js'; break;
+            case 27: room_name = "Bedroom " + (i-25).toString( ); camName = 'sadfne'; break;
+        }
+        newHTML2 = newHTML2 + '<div class="galki-vpravo menu1" onclick="changeclass(\'01_'+i+'\');return false;"><a href="'+camName+'.stream" id="01_'+i+'" class="">'+room_name+'</a></div>';
+    }
+    
+    
+    //Hack fix the 3rd apartment to 3rd position
+    if(i == 15) {
+        i = 0;
+    }
+    if(i == 5) {
+        i = 15
+    }
+    
+    
+    i++;
+    room_name = "";
+    
+}
+
+newHTML = newHTML + "</div>";
+newHTML2 = newHTML2 + "</div>";
+
+newHTML = newHTML + "</div>";
+newHTML2 = newHTML2 + "</div>";
+
+clipsDiv.html(newHTML);
+clipsDiv2.html(newHTML2);
