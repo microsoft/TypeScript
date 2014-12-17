@@ -1,6 +1,6 @@
+tests/cases/compiler/withStatementErrors.ts(3,7): error TS2410: All symbols within a 'with' block will be resolved to 'any'.
 tests/cases/compiler/withStatementErrors.ts(11,5): error TS1129: Statement expected.
 tests/cases/compiler/withStatementErrors.ts(17,1): error TS1128: Declaration or statement expected.
-tests/cases/compiler/withStatementErrors.ts(3,7): error TS2410: All symbols within a 'with' block will be resolved to 'any'.
 
 
 ==== tests/cases/compiler/withStatementErrors.ts (3 errors) ====

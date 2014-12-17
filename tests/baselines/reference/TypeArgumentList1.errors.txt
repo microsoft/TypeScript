@@ -1,10 +1,10 @@
-tests/cases/conformance/parser/ecmascript5/ErrorRecovery/TypeArgumentLists/TypeArgumentList1.ts(1,9): error TS1127: Invalid character.
 tests/cases/conformance/parser/ecmascript5/ErrorRecovery/TypeArgumentLists/TypeArgumentList1.ts(1,1): error TS2304: Cannot find name 'Foo'.
+tests/cases/conformance/parser/ecmascript5/ErrorRecovery/TypeArgumentLists/TypeArgumentList1.ts(1,9): error TS1127: Invalid character.
 
 
 ==== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/TypeArgumentLists/TypeArgumentList1.ts (2 errors) ====
     Foo<A,B,\ C>(4, 5, 6);
-            
-!!! error TS1127: Invalid character.
     ~~~
 !!! error TS2304: Cannot find name 'Foo'.
+            
+!!! error TS1127: Invalid character.
