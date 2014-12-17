@@ -133,7 +133,7 @@ module FourSlash {
         testOptMetadataNames.outDir, testOptMetadataNames.sourceMap, testOptMetadataNames.sourceRoot]
 
     function convertGlobalOptionsToCompilerOptions(globalOptions: { [idx: string]: string }): ts.CompilerOptions {
-        var settings: ts.CompilerOptions = {};
+        var settings: ts.CompilerOptions = { target: ts.ScriptTarget.ES5 };
         // Convert all property in globalOptions into ts.CompilationSettings
         for (var prop in globalOptions) {
             if (globalOptions.hasOwnProperty(prop)) {

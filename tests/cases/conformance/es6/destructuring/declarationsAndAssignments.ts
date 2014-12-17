@@ -128,7 +128,7 @@ f17({ a: "hello" });
 f17({ c: true });
 f17(f15());
 
-function g4() {
+function f18() {
     var a: number;
     var b: string;
     var aa: number[];
@@ -139,11 +139,41 @@ function g4() {
     [a = 1, b = "abc"] = [2, "def"];
 }
 
-function g5() {
+function f19() {
     var a, b;
     [a, b] = [1, 2];
     [a, b] = [b, a];
     ({ a, b } = { b, a });
     [[a, b] = [1, 2]] = [[2, 3]];
     var x = ([a, b] = [1, 2]);
+}
+
+function f20() {
+    var a: number[];
+    var x: number;
+    var y: number;
+    var z: number;
+    var [...a] = [1, 2, 3];
+    var [x, ...a] = [1, 2, 3];
+    var [x, y, ...a] = [1, 2, 3];
+    var [x, y, z, ...a] = [1, 2, 3];
+    [...a] = [1, 2, 3];
+    [x, ...a] = [1, 2, 3];
+    [x, y, ...a] = [1, 2, 3];
+    [x, y, z, ...a] = [1, 2, 3];
+}
+
+function f21() {
+    var a: (number | string | boolean)[];
+    var x: number | string | boolean;
+    var y: number | string | boolean;
+    var z: number | string | boolean;
+    var [...a] = [1, "hello", true];
+    var [x, ...a] = [1, "hello", true];
+    var [x, y, ...a] = [1, "hello", true];
+    var [x, y, z, ...a] = [1, "hello", true];
+    [...a] = [1, "hello", true];
+    [x, ...a] = [1, "hello", true];
+    [x, y, ...a] = [1, "hello", true];
+    [x, y, z, ...a] = [1, "hello", true];
 }
