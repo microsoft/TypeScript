@@ -3174,7 +3174,7 @@ module ts {
 
             return result;
 
-                        function getDefinitionInfo(node: Node, symbolKind: string, symbolName: string, containerName: string): DefinitionInfo {
+            function getDefinitionInfo(node: Node, symbolKind: string, symbolName: string, containerName: string): DefinitionInfo {
                 return {
                     fileName: node.getSourceFile().filename,
                     textSpan: createTextSpanFromBounds(node.getStart(), node.getEnd()),
