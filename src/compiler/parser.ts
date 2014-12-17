@@ -487,7 +487,7 @@ module ts {
                     // If we don't have a node, or the node we have isn't in the right position,
                     // then try to find a viable node at the position requested.
                     if (!current || current.pos !== position) {
-                        findHighestNodeAtPosition(position);
+                        findHighestListElementThatStartsAtPosition(position);
                     }
                 }
 
@@ -503,8 +503,11 @@ module ts {
                 return <IncrementalNode>current;
             }
         };
-
-        function findHighestNodeAtPosition(position: number) {
+        
+        // Finds the highest element in the tree we can find that starts at the provided position.
+        // The element must be a direct child of some node list in the tree.  This way after we
+        // return it, we can easily return its next sibling in the list.
+        function findHighestListElementThatStartsAtPosition(position: number) {
             // Clear out any cached state about the last node we found.
             currentArray = undefined;
             currentArrayIndex = -1;
