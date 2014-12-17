@@ -1043,25 +1043,29 @@ module ts {
     }
 
     export const enum TypeFormatFlags {
-        None = 0x00000000,
-        WriteArrayAsGenericType = 0x00000001,  // Write Array<T> instead T[]
-        UseTypeOfFunction = 0x00000002,  // Write typeof instead of function type literal
-        NoTruncation = 0x00000004,  // Don't truncate typeToString result
-        WriteArrowStyleSignature = 0x00000008,  // Write arrow style signature
-        WriteOwnNameForAnyLike = 0x00000010,  // Write symbol's own name instead of 'any' for any like types (eg. unknown, __resolving__ etc)
-        WriteTypeArgumentsOfSignature = 0x00000020,  // Write the type arguments instead of type parameters of the signature
-        InElementType = 0x00000040,  // Writing an array or union element type
+        None                            = 0x00000000,
+        WriteArrayAsGenericType         = 0x00000001,  // Write Array<T> instead T[]
+        UseTypeOfFunction               = 0x00000002,  // Write typeof instead of function type literal
+        NoTruncation                    = 0x00000004,  // Don't truncate typeToString result
+        WriteArrowStyleSignature        = 0x00000008,  // Write arrow style signature
+        WriteOwnNameForAnyLike          = 0x00000010,  // Write symbol's own name instead of 'any' for any like types (eg. unknown, __resolving__ etc)
+        WriteTypeArgumentsOfSignature   = 0x00000020,  // Write the type arguments instead of type parameters of the signature
+        InElementType                   = 0x00000040,  // Writing an array or union element type
     }
 
     export const enum SymbolFormatFlags {
         None = 0x00000000,
-        WriteTypeParametersOrArguments = 0x00000001,  // Write symbols's type argument if it is instantiated symbol
+
+        // Write symbols's type argument if it is instantiated symbol
         // eg. class C<T> { p: T }   <-- Show p as C<T>.p here
         //     var a: C<number>; 
         //     var p = a.p;  <--- Here p is property of C<number> so show it as C<number>.p instead of just C.p
-        UseOnlyExternalAliasing = 0x00000002,  // Use only external alias information to get the symbol name in the given context
+        WriteTypeParametersOrArguments = 0x00000001, 
+
+        // Use only external alias information to get the symbol name in the given context
         // eg.  module m { export class c { } } import x = m.c; 
         // When this flag is specified m.c will be used to refer to the class instead of alias symbol x
+        UseOnlyExternalAliasing = 0x00000002,
     }
 
     export const enum SymbolAccessibility {
@@ -1104,38 +1108,38 @@ module ts {
     }
 
     export const enum SymbolFlags {
-        FunctionScopedVariable = 0x00000001,  // Variable (var) or parameter
-        BlockScopedVariable = 0x00000002,  // A block-scoped variable (let or const)
-        Property = 0x00000004,  // Property or enum member
-        EnumMember = 0x00000008,  // Enum member
-        Function = 0x00000010,  // Function
-        Class = 0x00000020,  // Class
-        Interface = 0x00000040,  // Interface
-        ConstEnum = 0x00000080,  // Const enum
-        RegularEnum = 0x00000100,  // Enum
-        ValueModule = 0x00000200,  // Instantiated module
-        NamespaceModule = 0x00000400,  // Uninstantiated module
-        TypeLiteral = 0x00000800,  // Type Literal
-        ObjectLiteral = 0x00001000,  // Object Literal
-        Method = 0x00002000,  // Method
-        Constructor = 0x00004000,  // Constructor
-        GetAccessor = 0x00008000,  // Get accessor
-        SetAccessor = 0x00010000,  // Set accessor
-        Signature = 0x00020000,  // Call, construct, or index signature
-        TypeParameter = 0x00040000,  // Type parameter
-        TypeAlias = 0x00080000,  // Type alias
+        FunctionScopedVariable  = 0x00000001,  // Variable (var) or parameter
+        BlockScopedVariable     = 0x00000002,  // A block-scoped variable (let or const)
+        Property                = 0x00000004,  // Property or enum member
+        EnumMember              = 0x00000008,  // Enum member
+        Function                = 0x00000010,  // Function
+        Class                   = 0x00000020,  // Class
+        Interface               = 0x00000040,  // Interface
+        ConstEnum               = 0x00000080,  // Const enum
+        RegularEnum             = 0x00000100,  // Enum
+        ValueModule             = 0x00000200,  // Instantiated module
+        NamespaceModule         = 0x00000400,  // Uninstantiated module
+        TypeLiteral             = 0x00000800,  // Type Literal
+        ObjectLiteral           = 0x00001000,  // Object Literal
+        Method                  = 0x00002000,  // Method
+        Constructor             = 0x00004000,  // Constructor
+        GetAccessor             = 0x00008000,  // Get accessor
+        SetAccessor             = 0x00010000,  // Set accessor
+        Signature               = 0x00020000,  // Call, construct, or index signature
+        TypeParameter           = 0x00040000,  // Type parameter
+        TypeAlias               = 0x00080000,  // Type alias
 
         // Export markers (see comment in declareModuleMember in binder)
-        ExportValue = 0x00100000,  // Exported value marker
-        ExportType = 0x00200000,  // Exported type marker
-        ExportNamespace = 0x00400000,  // Exported namespace marker
-        Import = 0x00800000,  // Import
-        Instantiated = 0x01000000,  // Instantiated symbol
-        Merged = 0x02000000,  // Merged symbol (created during program binding)
-        Transient = 0x04000000,  // Transient symbol (created during type check)
-        Prototype = 0x08000000,  // Prototype property (no source representation)
-        UnionProperty = 0x10000000,  // Property in union type
-        Optional = 0x20000000,  // Optional property
+        ExportValue             = 0x00100000,  // Exported value marker
+        ExportType              = 0x00200000,  // Exported type marker
+        ExportNamespace         = 0x00400000,  // Exported namespace marker
+        Import                  = 0x00800000,  // Import
+        Instantiated            = 0x01000000,  // Instantiated symbol
+        Merged                  = 0x02000000,  // Merged symbol (created during program binding)
+        Transient               = 0x04000000,  // Transient symbol (created during type check)
+        Prototype               = 0x08000000,  // Prototype property (no source representation)
+        UnionProperty           = 0x10000000,  // Property in union type
+        Optional                = 0x20000000,  // Optional property
 
         Enum = RegularEnum | ConstEnum,
         Variable = FunctionScopedVariable | BlockScopedVariable,
@@ -1214,16 +1218,16 @@ module ts {
     }
 
     export const enum NodeCheckFlags {
-        TypeChecked = 0x00000001,  // Node has been type checked
-        LexicalThis = 0x00000002,  // Lexical 'this' reference
-        CaptureThis = 0x00000004,  // Lexical 'this' used in body
-        EmitExtends = 0x00000008,  // Emit __extends
-        SuperInstance = 0x00000010,  // Instance 'super' reference
-        SuperStatic = 0x00000020,  // Static 'super' reference
-        ContextChecked = 0x00000040,  // Contextual types have been assigned
+        TypeChecked         = 0x00000001,  // Node has been type checked
+        LexicalThis         = 0x00000002,  // Lexical 'this' reference
+        CaptureThis         = 0x00000004,  // Lexical 'this' used in body
+        EmitExtends         = 0x00000008,  // Emit __extends
+        SuperInstance       = 0x00000010,  // Instance 'super' reference
+        SuperStatic         = 0x00000020,  // Static 'super' reference
+        ContextChecked      = 0x00000040,  // Contextual types have been assigned
 
         // Values for enum members have been computed, and any errors have been reported for them.
-        EnumValuesComputed = 0x00000080,
+        EnumValuesComputed  = 0x00000080,
     }
 
     export interface NodeLinks {
@@ -1240,24 +1244,24 @@ module ts {
     }
 
     export const enum TypeFlags {
-        Any = 0x00000001,
-        String = 0x00000002,
-        Number = 0x00000004,
-        Boolean = 0x00000008,
-        Void = 0x00000010,
-        Undefined = 0x00000020,
-        Null = 0x00000040,
-        Enum = 0x00000080,  // Enum type
-        StringLiteral = 0x00000100,  // String literal type
-        TypeParameter = 0x00000200,  // Type parameter
-        Class = 0x00000400,  // Class
-        Interface = 0x00000800,  // Interface
-        Reference = 0x00001000,  // Generic type reference
-        Tuple = 0x00002000,  // Tuple
-        Union = 0x00004000,  // Union
-        Anonymous = 0x00008000,  // Anonymous
-        FromSignature = 0x00010000,  // Created for signature assignment check
-        Unwidened = 0x00020000,  // Unwidened type (is or contains Undefined or Null type)
+        Any                 = 0x00000001,
+        String              = 0x00000002,
+        Number              = 0x00000004,
+        Boolean             = 0x00000008,
+        Void                = 0x00000010,
+        Undefined           = 0x00000020,
+        Null                = 0x00000040,
+        Enum                = 0x00000080,  // Enum type
+        StringLiteral       = 0x00000100,  // String literal type
+        TypeParameter       = 0x00000200,  // Type parameter
+        Class               = 0x00000400,  // Class
+        Interface           = 0x00000800,  // Interface
+        Reference           = 0x00001000,  // Generic type reference
+        Tuple               = 0x00002000,  // Tuple
+        Union               = 0x00004000,  // Union
+        Anonymous           = 0x00008000,  // Anonymous
+        FromSignature       = 0x00010000,  // Created for signature assignment check
+        Unwidened           = 0x00020000,  // Unwidened type (is or contains Undefined or Null type)
 
         Intrinsic = Any | String | Number | Boolean | Void | Undefined | Null,
         StringLike = String | StringLiteral,
