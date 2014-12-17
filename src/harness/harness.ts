@@ -263,7 +263,6 @@ module Utils {
 
                     case "referenceDiagnostics":
                     case "parseDiagnostics":
-                    case "grammarDiagnostics":
                         o[propertyName] = Utils.convertDiagnostics((<any>n)[propertyName]);
                         break;
 

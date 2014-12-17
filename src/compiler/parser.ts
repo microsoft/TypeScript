@@ -667,7 +667,6 @@ module ts {
             sourceFile = <SourceFile>createNode(SyntaxKind.SourceFile, 0);
             sourceFile.referenceDiagnostics = [];
             sourceFile.parseDiagnostics = [];
-            sourceFile.grammarDiagnostics = [];
             sourceFile.semanticDiagnostics = [];
 
             // Create and prime the scanner before parsing the source elements.

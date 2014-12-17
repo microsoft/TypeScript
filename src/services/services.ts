@@ -744,7 +744,6 @@ module ts {
 
         public referenceDiagnostics: Diagnostic[];
         public parseDiagnostics: Diagnostic[];
-        public grammarDiagnostics: Diagnostic[];
         public semanticDiagnostics: Diagnostic[];
 
         public hasNoDefaultLib: boolean;
