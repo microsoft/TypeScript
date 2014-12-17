@@ -394,6 +394,7 @@ module ts {
 
     // SyntaxKind.VariableDeclaration
     export interface VariableDeclaration extends Declaration {
+        parent?: VariableDeclarationList;
         name: Identifier | BindingPattern;  // Declared variable name
         type?: TypeNode;                    // Optional type annotation
         initializer?: Expression;           // Optional initializer
