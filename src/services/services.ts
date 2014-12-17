@@ -2598,7 +2598,7 @@ module ts {
         }
 
         // TODO(drosen): use contextual SemanticMeaning.
-        function getSymbolKind(symbol: Symbol, typeResolver: TypeChecker, location?: Node): string {
+        function getSymbolKind(symbol: Symbol, typeResolver: TypeChecker, location: Node): string {
             var flags = symbol.getFlags();
 
             if (flags & SymbolFlags.Class) return ScriptElementKind.classElement;
@@ -3149,7 +3149,7 @@ module ts {
             if (node.parent.kind === SyntaxKind.ShorthandPropertyAssignment) {
                 var shorthandSymbol = typeInfoResolver.getShorthandAssignmentValueSymbol(symbol.valueDeclaration);
                 var shorthandDeclarations = shorthandSymbol.getDeclarations();
-                var shorthandSymbolKind = getSymbolKind(shorthandSymbol, typeInfoResolver);
+                var shorthandSymbolKind = getSymbolKind(shorthandSymbol, typeInfoResolver, node);
                 var shorthandSymbolName = typeInfoResolver.symbolToString(shorthandSymbol);
                 var shorthandContainerName = typeInfoResolver.symbolToString(symbol.parent, node);
                 forEach(shorthandDeclarations, declaration => {
@@ -3160,7 +3160,7 @@ module ts {
 
             var declarations = symbol.getDeclarations();
             var symbolName = typeInfoResolver.symbolToString(symbol); // Do not get scoped name, just the name of the symbol
-            var symbolKind = getSymbolKind(symbol, typeInfoResolver);
+            var symbolKind = getSymbolKind(symbol, typeInfoResolver, node);
             var containerSymbol = symbol.parent;
             var containerName = containerSymbol ? typeInfoResolver.symbolToString(containerSymbol, node) : "";
 
@@ -3174,7 +3174,7 @@ module ts {
 
             return result;
 
-            function getDefinitionInfo(node: Node, symbolKind: string, symbolName: string, containerName: string): DefinitionInfo {
+                        function getDefinitionInfo(node: Node, symbolKind: string, symbolName: string, containerName: string): DefinitionInfo {
                 return {
                     fileName: node.getSourceFile().filename,
                     textSpan: createTextSpanFromBounds(node.getStart(), node.getEnd()),
@@ -5273,7 +5273,7 @@ module ts {
 
                 // Only allow a symbol to be renamed if it actually has at least one declaration.
                 if (symbol && symbol.getDeclarations() && symbol.getDeclarations().length > 0) {
-                    var kind = getSymbolKind(symbol, typeInfoResolver);
+                    var kind = getSymbolKind(symbol, typeInfoResolver, node);
                     if (kind) {
                         return getRenameInfo(symbol.name, typeInfoResolver.getFullyQualifiedName(symbol), kind,
                             getSymbolModifiers(symbol),
