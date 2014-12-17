@@ -1,11 +1,11 @@
-tests/cases/compiler/bases.ts(7,15): error TS1005: ';' expected.
-tests/cases/compiler/bases.ts(13,15): error TS1005: ';' expected.
 tests/cases/compiler/bases.ts(7,14): error TS2339: Property 'y' does not exist on type 'B'.
+tests/cases/compiler/bases.ts(7,15): error TS1005: ';' expected.
 tests/cases/compiler/bases.ts(7,17): error TS2304: Cannot find name 'any'.
 tests/cases/compiler/bases.ts(11,7): error TS2420: Class 'C' incorrectly implements interface 'I'.
   Property 'x' is missing in type 'C'.
 tests/cases/compiler/bases.ts(12,5): error TS2377: Constructors for derived classes must contain a 'super' call.
 tests/cases/compiler/bases.ts(13,14): error TS2339: Property 'x' does not exist on type 'C'.
+tests/cases/compiler/bases.ts(13,15): error TS1005: ';' expected.
 tests/cases/compiler/bases.ts(13,17): error TS2304: Cannot find name 'any'.
 tests/cases/compiler/bases.ts(17,9): error TS2339: Property 'x' does not exist on type 'C'.
 tests/cases/compiler/bases.ts(18,9): error TS2339: Property 'y' does not exist on type 'C'.
@@ -19,10 +19,10 @@ tests/cases/compiler/bases.ts(18,9): error TS2339: Property 'y' does not exist o
     class B {
         constructor() {
             this.y: any;
-                  ~
-!!! error TS1005: ';' expected.
                  ~
 !!! error TS2339: Property 'y' does not exist on type 'B'.
+                  ~
+!!! error TS1005: ';' expected.
                     ~~~
 !!! error TS2304: Cannot find name 'any'.
         }
@@ -35,11 +35,11 @@ tests/cases/compiler/bases.ts(18,9): error TS2339: Property 'y' does not exist o
         constructor() {
         ~~~~~~~~~~~~~~~
             this.x: any;
-                  ~
-!!! error TS1005: ';' expected.
     ~~~~~~~~~~~~~~~~~~~~
                  ~
 !!! error TS2339: Property 'x' does not exist on type 'C'.
+                  ~
+!!! error TS1005: ';' expected.
                     ~~~
 !!! error TS2304: Cannot find name 'any'.
         }

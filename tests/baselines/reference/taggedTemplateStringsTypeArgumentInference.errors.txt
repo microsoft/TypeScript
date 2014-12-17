@@ -21,15 +21,15 @@ tests/cases/conformance/es6/templates/taggedTemplateStringsTypeArgumentInference
 tests/cases/conformance/es6/templates/taggedTemplateStringsTypeArgumentInference.ts(53,15): error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
 tests/cases/conformance/es6/templates/taggedTemplateStringsTypeArgumentInference.ts(57,23): error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
 tests/cases/conformance/es6/templates/taggedTemplateStringsTypeArgumentInference.ts(58,3): error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
+tests/cases/conformance/es6/templates/taggedTemplateStringsTypeArgumentInference.ts(64,11): error TS2453: The type argument for type parameter 'T' cannot be inferred from the usage. Consider specifying the type arguments explicitly.
+  Type argument candidate 'string' is not a valid type argument because it is not a supertype of candidate 'number'.
 tests/cases/conformance/es6/templates/taggedTemplateStringsTypeArgumentInference.ts(64,25): error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
+tests/cases/conformance/es6/templates/taggedTemplateStringsTypeArgumentInference.ts(77,11): error TS2453: The type argument for type parameter 'T' cannot be inferred from the usage. Consider specifying the type arguments explicitly.
+  Type argument candidate '{ x: number; z: Date; }' is not a valid type argument because it is not a supertype of candidate '{ x: number; y: string; }'.
 tests/cases/conformance/es6/templates/taggedTemplateStringsTypeArgumentInference.ts(77,25): error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
 tests/cases/conformance/es6/templates/taggedTemplateStringsTypeArgumentInference.ts(81,25): error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
 tests/cases/conformance/es6/templates/taggedTemplateStringsTypeArgumentInference.ts(86,23): error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
 tests/cases/conformance/es6/templates/taggedTemplateStringsTypeArgumentInference.ts(90,25): error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
-tests/cases/conformance/es6/templates/taggedTemplateStringsTypeArgumentInference.ts(64,11): error TS2453: The type argument for type parameter 'T' cannot be inferred from the usage. Consider specifying the type arguments explicitly.
-  Type argument candidate 'string' is not a valid type argument because it is not a supertype of candidate 'number'.
-tests/cases/conformance/es6/templates/taggedTemplateStringsTypeArgumentInference.ts(77,11): error TS2453: The type argument for type parameter 'T' cannot be inferred from the usage. Consider specifying the type arguments explicitly.
-  Type argument candidate '{ x: number; z: Date; }' is not a valid type argument because it is not a supertype of candidate '{ x: number; y: string; }'.
 
 
 ==== tests/cases/conformance/es6/templates/taggedTemplateStringsTypeArgumentInference.ts (30 errors) ====
@@ -143,11 +143,11 @@ tests/cases/conformance/es6/templates/taggedTemplateStringsTypeArgumentInference
         return null;
     }
     var a9a = someGenerics9 `${ '' }${ 0 }${ [] }`;
-                            ~~~
-!!! error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
               ~~~~~~~~~~~~~
 !!! error TS2453: The type argument for type parameter 'T' cannot be inferred from the usage. Consider specifying the type arguments explicitly.
 !!! error TS2453:   Type argument candidate 'string' is not a valid type argument because it is not a supertype of candidate 'number'.
+                            ~~~
+!!! error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
     var a9a: {};
     
     // Generic tag with multiple parameters of generic type passed arguments with multiple best common types
@@ -161,11 +161,11 @@ tests/cases/conformance/es6/templates/taggedTemplateStringsTypeArgumentInference
     }
     
     var a9e = someGenerics9 `${ undefined }${ { x: 6, z: new Date() } }${ { x: 6, y: '' } }`;
-                            ~~~
-!!! error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
               ~~~~~~~~~~~~~
 !!! error TS2453: The type argument for type parameter 'T' cannot be inferred from the usage. Consider specifying the type arguments explicitly.
 !!! error TS2453:   Type argument candidate '{ x: number; z: Date; }' is not a valid type argument because it is not a supertype of candidate '{ x: number; y: string; }'.
+                            ~~~
+!!! error TS1159: Tagged templates are only available when targeting ECMAScript 6 and higher.
     var a9e: {};
     
     // Generic tag with multiple parameters of generic type passed arguments with a single best common type
