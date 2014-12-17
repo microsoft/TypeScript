@@ -465,14 +465,10 @@ function exec(cmd, completeHandler) {
         complete();
     });
     ex.addListener("error", function(e, status) {
-        console.error("Process exited with code " + status);
-        complete();
+        fail("Process exited with code " + status);
     })
-    try{
-        ex.run();
-    } catch(e) {
-        console.log('Exception: ' + e)
-    }
+
+    ex.run();
 }
 
 function cleanTestDirs() {
