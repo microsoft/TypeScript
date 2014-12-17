@@ -510,7 +510,7 @@ module ts {
         function findHighestListElementThatStartsAtPosition(position: number) {
             // Clear out any cached state about the last node we found.
             currentArray = undefined;
-            currentArrayIndex = -1;
+            currentArrayIndex = InvalidPosition.Value;
             current = undefined;
 
             // Recurse into the source file to find the highest node at this position.
