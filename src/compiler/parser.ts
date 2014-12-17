@@ -457,13 +457,17 @@ module ts {
         currentNode(position: number): IncrementalNode;
     }
 
+    const enum InvalidPosition {
+        Value = -1
+    }
+
     function createSyntaxCursor(sourceFile: SourceFile): SyntaxCursor {
         var currentArray: NodeArray<Node> = sourceFile.statements;
         var currentArrayIndex = 0;
 
         Debug.assert(currentArrayIndex < currentArray.length);
         var current = currentArray[currentArrayIndex];
-        var lastQueriedPosition = -1;
+        var lastQueriedPosition = InvalidPosition.Value;
 
         return {
             currentNode(position: number) {
