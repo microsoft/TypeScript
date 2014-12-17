@@ -22,12 +22,12 @@ tests/cases/conformance/expressions/objectLiterals/objectLiteralGettersAndSetter
 tests/cases/conformance/expressions/objectLiterals/objectLiteralGettersAndSetters.ts(37,59): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/conformance/expressions/objectLiterals/objectLiteralGettersAndSetters.ts(38,23): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/conformance/expressions/objectLiterals/objectLiteralGettersAndSetters.ts(38,60): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-tests/cases/conformance/expressions/objectLiterals/objectLiteralGettersAndSetters.ts(43,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/conformance/expressions/objectLiterals/objectLiteralGettersAndSetters.ts(42,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/conformance/expressions/objectLiterals/objectLiteralGettersAndSetters.ts(43,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/conformance/expressions/objectLiterals/objectLiteralGettersAndSetters.ts(50,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/conformance/expressions/objectLiterals/objectLiteralGettersAndSetters.ts(55,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-tests/cases/conformance/expressions/objectLiterals/objectLiteralGettersAndSetters.ts(64,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/conformance/expressions/objectLiterals/objectLiteralGettersAndSetters.ts(60,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/conformance/expressions/objectLiterals/objectLiteralGettersAndSetters.ts(64,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/conformance/expressions/objectLiterals/objectLiteralGettersAndSetters.ts(67,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/conformance/expressions/objectLiterals/objectLiteralGettersAndSetters.ts(68,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/conformance/expressions/objectLiterals/objectLiteralGettersAndSetters.ts(76,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.

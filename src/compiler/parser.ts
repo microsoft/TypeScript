@@ -3988,6 +3988,7 @@ module ts {
     }
 
     function checkGrammar(sourceText: string, languageVersion: ScriptTarget, file: SourceFile) {
+        return;
         var grammarDiagnostics = file.grammarDiagnostics;
 
         // Create a scanner so we can find the start of tokens to report errors on.

@@ -7225,13 +7225,13 @@ module ts {
 
         function checkMethodDeclaration(node: MethodDeclaration) {
             // Grammar checking
-            // Grammar checking for modifiers is done inside the function checkGrammarFunctionLikeDeclaration
             checkGrammarMethod(node);
 
             if (node.name.kind === SyntaxKind.ComputedPropertyName) {
                 checkGrammarComputedPropertyName(<ComputedPropertyName>node.name);
             }
 
+            // Grammar checking for modifiers is done inside the function checkGrammarFunctionLikeDeclaration
             checkFunctionLikeDeclaration(node);
         }
 
@@ -7239,7 +7239,7 @@ module ts {
             // Grammar check on signature of constructor and modifier of the constructor is done in checkSignatureDeclaration function.
             checkSignatureDeclaration(node);
             // Grammar check for checking only related to constructoDeclaration
-            checkGrammarConstructorTypeParameters(node) || checkGrammarConstructorTypeAnnotation(node) || checkGrammarForBodyInAmbientContext(node.body, /*isConstructor:*/ true);
+            checkGrammarConstructorTypeParameters(node) || checkGrammarConstructorTypeAnnotation(node);
 
             checkSourceElement(node.body);
 
@@ -7764,7 +7764,7 @@ module ts {
             // Grammar Checking, check signature of function declaration as checkFunctionLikeDeclaration call checkGarmmarFunctionLikeDeclaration
             checkFunctionLikeDeclaration(node);
             //Grammar check other component of the functionDeclaration
-            checkGrammarFunctionName(node.name) || checkGrammarForBodyInAmbientContext(node.body, /*isConstructor*/ false) || checkGrammarForGenerator(node);
+            checkGrammarFunctionName(node.name) || checkGrammarForGenerator(node);
 
             if (fullTypeCheck) {
                 checkCollisionWithCapturedSuperVariable(node, node.name);
@@ -8220,12 +8220,6 @@ module ts {
             if (node.parserContextFlags & ParserContextFlags.StrictMode) {
                 grammarErrorOnFirstToken(node, Diagnostics.with_statements_are_not_allowed_in_strict_mode);
             }
-            else {
-                // Grammar checking for invalid use of return statement
-                forEachReturnStatement(<Block>node.statement, returnStatement => {
-                    grammarErrorOnFirstToken(returnStatement, Diagnostics.A_return_statement_can_only_be_used_within_a_function_body);
-                });
-            }
 
             checkExpression(node.expression);
             error(node.expression, Diagnostics.All_symbols_within_a_with_block_will_be_resolved_to_any);
@@ -8669,6 +8663,9 @@ module ts {
         }
 
         function checkTypeAliasDeclaration(node: TypeAliasDeclaration) {
+            // Grammar checking
+            checkGrammarModifiers(node);
+            
             checkTypeNameIsReserved(node.name, Diagnostics.Type_alias_name_cannot_be_0);
             checkSourceElement(node.type);
         }
@@ -8959,6 +8956,9 @@ module ts {
         }
 
         function checkImportDeclaration(node: ImportDeclaration) {
+            // Grammar checking
+            checkGrammarModifiers(node);
+
             checkCollisionWithCapturedThisVariable(node, node.name);
             checkCollisionWithRequireExportsInGeneratedCode(node, node.name);
             var symbol = getSymbolOfNode(node);
@@ -9025,6 +9025,8 @@ module ts {
 
         function checkExportAssignment(node: ExportAssignment) {
             // Grammar checking
+            checkGrammarModifiers(node);
+
             if (node.flags & NodeFlags.Modifier) {
                 grammarErrorOnFirstToken(node, Diagnostics.An_export_assignment_cannot_have_modifiers);
             }
@@ -9222,11 +9224,11 @@ module ts {
 
         // Fully type check a source file and collect the relevant diagnostics.
         function checkSourceFile(node: SourceFile) {
-            // Grammar checking
-            checkGrammarSourceFile(node);
-
             var links = getNodeLinks(node);
             if (!(links.flags & NodeCheckFlags.TypeChecked)) {
+                // Grammar checking
+                checkGrammarSourceFile(node);
+
                 emitExtends = false;
                 potentialThisCollisions.length = 0;
 
@@ -10359,6 +10361,10 @@ module ts {
                 if (prop.kind === SyntaxKind.PropertyAssignment || prop.kind === SyntaxKind.ShorthandPropertyAssignment) {
                     // Grammar checking for computedPropertName and shorthandPropertyAssignment
                     checkGrammarForInvalidQuestionMark(prop,(<PropertyAssignment>prop).questionToken, Diagnostics.An_object_member_cannot_be_declared_optional);
+                    if (name.kind === SyntaxKind.NumericLiteral) {
+                    }
+                    else if (name.kind === SyntaxKind.StringLiteral) {
+                    }
                     currentKind = Property;
                 }
                 else if ( prop.kind === SyntaxKind.MethodDeclaration) {
@@ -10734,7 +10740,7 @@ module ts {
                 var diagnostic = isConstructor
                     ? Diagnostics.A_constructor_implementation_cannot_be_declared_in_an_ambient_context
                     : Diagnostics.A_function_implementation_cannot_be_declared_in_an_ambient_context;
-                return grammarErrorOnFirstToken(body, diagnostic);
+                return getNodeLinks(body).hasReportedStatementInAmbientContext =  grammarErrorOnFirstToken(body, diagnostic);
             }
         }
 
@@ -10800,9 +10806,16 @@ module ts {
 
         function checkGrammarForStatementInAmbientContext(node: Node): void {
             if (isInAmbientContext(node)) {
+                // An accessors is already reported about the ambient context
+                if (isAccessor(node.parent.kind)) {
+                    getNodeLinks(node).hasReportedStatementInAmbientContext = true;
+                    return;
+                }
+
                 // Find containing block which is either Block, ModuleBlock, SourceFile
-                if (isAnyFunction(node.parent)) {
-                    grammarErrorOnFirstToken(node, Diagnostics.An_implementation_cannot_be_declared_in_ambient_contexts)
+                var links = getNodeLinks(node);
+                if (!links.hasReportedStatementInAmbientContext && isAnyFunction(node.parent)) {
+                    getNodeLinks(node).hasReportedStatementInAmbientContext = grammarErrorOnFirstToken(node, Diagnostics.An_implementation_cannot_be_declared_in_ambient_contexts)
                     return;
                 }
                 
