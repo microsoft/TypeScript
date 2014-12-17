@@ -10,7 +10,7 @@
     "'{0}' expected.": {
         "category": "Error",
         "code": 1005,
-        "isEarly":  true
+        "isEarly": true
     },
     "A file cannot have a reference to itself.": {
         "category": "Error",
@@ -19,7 +19,7 @@
     "Trailing comma not allowed.": {
         "category": "Error",
         "code": 1009,
-        "isEarly":  true
+        "isEarly": true
     },
     "'*/' expected.": {
         "category": "Error",
@@ -32,57 +32,57 @@
     "Catch clause parameter cannot have a type annotation.": {
         "category": "Error",
         "code": 1013,
-        "isEarly":  true
+        "isEarly": true
     },
     "A rest parameter must be last in a parameter list.": {
         "category": "Error",
         "code": 1014,
-        "isEarly":  true
+        "isEarly": true
     },
     "Parameter cannot have question mark and initializer.": {
         "category": "Error",
         "code": 1015,
-        "isEarly":  true
+        "isEarly": true
     },
     "A required parameter cannot follow an optional parameter.": {
         "category": "Error",
         "code": 1016,
-        "isEarly":  true
+        "isEarly": true
     },
     "An index signature cannot have a rest parameter.": {
         "category": "Error",
         "code": 1017,
-        "isEarly":  true
+        "isEarly": true
     },
     "An index signature parameter cannot have an accessibility modifier.": {
         "category": "Error",
         "code": 1018,
-        "isEarly":  true
+        "isEarly": true
     },
     "An index signature parameter cannot have a question mark.": {
         "category": "Error",
         "code": 1019,
-        "isEarly":  true
+        "isEarly": true
     },
     "An index signature parameter cannot have an initializer.": {
         "category": "Error",
         "code": 1020,
-        "isEarly":  true
+        "isEarly": true
     },
     "An index signature must have a type annotation.": {
         "category": "Error",
         "code": 1021,
-        "isEarly":  true
+        "isEarly": true
     },
     "An index signature parameter must have a type annotation.": {
         "category": "Error",
         "code": 1022,
-        "isEarly":  true
+        "isEarly": true
     },
     "An index signature parameter type must be 'string' or 'number'.": {
         "category": "Error",
         "code": 1023,
-        "isEarly":  true
+        "isEarly": true
     },
     "A class or interface declaration can only have one 'extends' clause.": {
         "category": "Error",
@@ -103,22 +103,22 @@
     "Accessibility modifier already seen.": {
         "category": "Error",
         "code": 1028,
-        "isEarly":  true
+        "isEarly": true
     },
     "'{0}' modifier must precede '{1}' modifier.": {
         "category": "Error",
         "code": 1029,
-        "isEarly":  true
+        "isEarly": true
     },
     "'{0}' modifier already seen.": {
         "category": "Error",
         "code": 1030,
-        "isEarly":  true
+        "isEarly": true
     },
     "'{0}' modifier cannot appear on a class element.": {
         "category": "Error",
         "code": 1031,
-        "isEarly":  true
+        "isEarly": true
     },
     "An interface declaration cannot have an 'implements' clause.": {
         "category": "Error",
@@ -131,37 +131,37 @@
     "Only ambient modules can use quoted names.": {
         "category": "Error",
         "code": 1035,
-        "isEarly":  true
+        "isEarly": true
     },
     "Statements are not allowed in ambient contexts.": {
         "category": "Error",
         "code": 1036,
-        "isEarly":  true
+        "isEarly": true
     },
     "A function implementation cannot be declared in an ambient context.": {
         "category": "Error",
         "code": 1037,
-        "isEarly":  true
+        "isEarly": true
     },
     "A 'declare' modifier cannot be used in an already ambient context.": {
         "category": "Error",
         "code": 1038,
-        "isEarly":  true
+        "isEarly": true
     },
     "Initializers are not allowed in ambient contexts.": {
         "category": "Error",
         "code": 1039,
-        "isEarly":  true
+        "isEarly": true
     },
     "'{0}' modifier cannot appear on a module element.": {
         "category": "Error",
         "code": 1044,
-        "isEarly":  true
+        "isEarly": true
     },
     "A 'declare' modifier cannot be used with an interface declaration.": {
         "category": "Error",
         "code": 1045,
-        "isEarly":  true
+        "isEarly": true
     },
     "A 'declare' modifier is required for a top level declaration in a .d.ts file.": {
         "category": "Error",
@@ -170,57 +170,57 @@
     "A rest parameter cannot be optional.": {
         "category": "Error",
         "code": 1047,
-        "isEarly":  true
+        "isEarly": true
     },
     "A rest parameter cannot have an initializer.": {
         "category": "Error",
         "code": 1048,
-        "isEarly":  true
+        "isEarly": true
     },
     "A 'set' accessor must have exactly one parameter.": {
         "category": "Error",
         "code": 1049,
-        "isEarly":  true
+        "isEarly": true
     },
     "A 'set' accessor cannot have an optional parameter.": {
         "category": "Error",
         "code": 1051,
-        "isEarly":  true
+        "isEarly": true
     },
     "A 'set' accessor parameter cannot have an initializer.": {
         "category": "Error",
         "code": 1052,
-        "isEarly":  true
+        "isEarly": true
     },
     "A 'set' accessor cannot have rest parameter.": {
         "category": "Error",
         "code": 1053,
-        "isEarly":  true
+        "isEarly": true
     },
     "A 'get' accessor cannot have parameters.": {
         "category": "Error",
         "code": 1054,
-        "isEarly":  true
+        "isEarly": true
     },
     "Accessors are only available when targeting ECMAScript 5 and higher.": {
         "category": "Error",
         "code": 1056,
-        "isEarly":  true
+        "isEarly": true
     },
     "Enum member must have initializer.": {
         "category": "Error",
         "code": 1061,
-        "isEarly":  true
+        "isEarly": true
     },
     "An export assignment cannot be used in an internal module.": {
         "category": "Error",
         "code": 1063,
-        "isEarly":  true
+        "isEarly": true
     },
     "Ambient enum elements can only have integer literal initializers.": {
         "category": "Error",
         "code": 1066,
-        "isEarly":  true
+        "isEarly": true
     },
     "Unexpected token. A constructor, method, accessor, or property was expected.": {
         "category": "Error",
@@ -237,107 +237,107 @@
     "Octal literals are not available when targeting ECMAScript 5 and higher.": {
         "category": "Error",
         "code": 1085,
-        "isEarly":  true
+        "isEarly": true
     },
     "An accessor cannot be declared in an ambient context.": {
         "category": "Error",
         "code": 1086,
-        "isEarly":  true
+        "isEarly": true
     },
     "'{0}' modifier cannot appear on a constructor declaration.": {
         "category": "Error",
         "code": 1089,
-        "isEarly":  true
+        "isEarly": true
     },
     "'{0}' modifier cannot appear on a parameter.": {
         "category": "Error",
         "code": 1090,
-        "isEarly":  true
+        "isEarly": true
     },
     "Only a single variable declaration is allowed in a 'for...in' statement.": {
         "category": "Error",
         "code": 1091,
-        "isEarly":  true
+        "isEarly": true
     },
     "Type parameters cannot appear on a constructor declaration.": {
         "category": "Error",
         "code": 1092,
-        "isEarly":  true
+        "isEarly": true
     },
     "Type annotation cannot appear on a constructor declaration.": {
         "category": "Error",
         "code": 1093,
-        "isEarly":  true
+        "isEarly": true
     },
     "An accessor cannot have type parameters.": {
         "category": "Error",
         "code": 1094,
-        "isEarly":  true
+        "isEarly": true
     },
     "A 'set' accessor cannot have a return type annotation.": {
         "category": "Error",
         "code": 1095,
-        "isEarly":  true
+        "isEarly": true
     },
     "An index signature must have exactly one parameter.": {
         "category": "Error",
         "code": 1096,
-        "isEarly":  true
+        "isEarly": true
     },
     "'{0}' list cannot be empty.": {
         "category": "Error",
         "code": 1097,
-        "isEarly":  true
+        "isEarly": true
     },
     "Type parameter list cannot be empty.": {
         "category": "Error",
         "code": 1098,
-        "isEarly":  true
+        "isEarly": true
     },
     "Type argument list cannot be empty.": {
         "category": "Error",
         "code": 1099,
-        "isEarly":  true
+        "isEarly": true
     },
     "Invalid use of '{0}' in strict mode.": {
         "category": "Error",
         "code": 1100,
-        "isEarly":  true
+        "isEarly": true
     },
     "'with' statements are not allowed in strict mode.": {
         "category": "Error",
         "code": 1101,
-        "isEarly":  true
+        "isEarly": true
     },
     "'delete' cannot be called on an identifier in strict mode.": {
         "category": "Error",
         "code": 1102,
-        "isEarly":  true
+        "isEarly": true
     },
     "A 'continue' statement can only be used within an enclosing iteration statement.": {
         "category": "Error",
         "code": 1104,
-        "isEarly":  true
+        "isEarly": true
     },
     "A 'break' statement can only be used within an enclosing iteration or switch statement.": {
         "category": "Error",
         "code": 1105,
-        "isEarly":  true
+        "isEarly": true
     },
     "Jump target cannot cross function boundary.": {
         "category": "Error",
         "code": 1107,
-        "isEarly":  true
+        "isEarly": true
     },
     "A 'return' statement can only be used within a function body.": {
         "category": "Error",
         "code": 1108,
-        "isEarly":  true
+        "isEarly": true
     },
     "Expression expected.": {
         "category": "Error",
         "code": 1109,
-        "isEarly":  true
+        "isEarly": true
     },
     "Type expected.": {
         "category": "Error",
@@ -347,67 +347,67 @@
     "A constructor implementation cannot be declared in an ambient context.": {
         "category": "Error",
         "code": 1111,
-        "isEarly":  true
+        "isEarly": true
     },
     "A class member cannot be declared optional.": {
         "category": "Error",
         "code": 1112,
-        "isEarly":  true
+        "isEarly": true
     },
     "A 'default' clause cannot appear more than once in a 'switch' statement.": {
         "category": "Error",
         "code": 1113,
-        "isEarly":  true
+        "isEarly": true
     },
     "Duplicate label '{0}'": {
         "category": "Error",
         "code": 1114,
-        "isEarly":  true
+        "isEarly": true
     },
     "A 'continue' statement can only jump to a label of an enclosing iteration statement.": {
         "category": "Error",
         "code": 1115,
-        "isEarly":  true
+        "isEarly": true
     },
     "A 'break' statement can only jump to a label of an enclosing statement.": {
         "category": "Error",
         "code": 1116,
-        "isEarly":  true
+        "isEarly": true
     },
     "An object literal cannot have multiple properties with the same name in strict mode.": {
         "category": "Error",
         "code": 1117,
-        "isEarly":  true
+        "isEarly": true
     },
     "An object literal cannot have multiple get/set accessors with the same name.": {
         "category": "Error",
         "code": 1118,
-        "isEarly":  true
+        "isEarly": true
     },
     "An object literal cannot have property and accessor with the same name.": {
         "category": "Error",
         "code": 1119,
-        "isEarly":  true
+        "isEarly": true
     },
     "An export assignment cannot have modifiers.": {
         "category": "Error",
         "code": 1120,
-        "isEarly":  true
+        "isEarly": true
     },
     "Octal literals are not allowed in strict mode.": {
         "category": "Error",
         "code": 1121,
-        "isEarly":  true
+        "isEarly": true
     },
     "A tuple type element list cannot be empty.": {
         "category": "Error",
         "code": 1122,
-        "isEarly":  true
+        "isEarly": true
     },
     "Variable declaration list cannot be empty.": {
         "category": "Error",
         "code": 1123,
-        "isEarly":  true
+        "isEarly": true
     },
     "Digit expected.": {
         "category": "Error",
@@ -456,7 +456,7 @@
     "Argument expression expected.": {
         "category": "Error",
         "code": 1135,
-        "isEarly":  true
+        "isEarly": true
     },
     "Property assignment expected.": {
         "category": "Error",
@@ -481,7 +481,7 @@
     "String literal expected.": {
         "category": "Error",
         "code": 1141,
-        "isEarly":  true
+        "isEarly": true
     },
     "Line break not permitted here.": {
         "category": "Error",
@@ -495,7 +495,7 @@
     "Modifiers not permitted on index signature members.": {
         "category": "Error",
         "code": 1145,
-        "isEarly":  true
+        "isEarly": true
     },
     "Declaration expected.": {
         "category": "Error",
@@ -504,7 +504,7 @@
     "Import declarations in an internal module cannot reference an external module.": {
         "category": "Error",
         "code": 1147,
-        "isEarly":  true
+        "isEarly": true
     },
     "Cannot compile external modules unless the '--module' flag is provided.": {
         "category": "Error",
@@ -517,7 +517,7 @@
     "'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.": {
         "category": "Error",
         "code": 1150,
-        "isEarly":  true
+        "isEarly": true
     },
     "'var', 'let' or 'const' expected.": {
         "category": "Error",
@@ -526,32 +526,32 @@
     "'let' declarations are only available when targeting ECMAScript 6 and higher.": {
         "category": "Error",
         "code": 1153,
-        "isEarly":  true
+        "isEarly": true
     },
     "'const' declarations are only available when targeting ECMAScript 6 and higher.": {
         "category": "Error",
         "code": 1154,
-        "isEarly":  true
+        "isEarly": true
     },
     "'const' declarations must be initialized": {
         "category": "Error",
         "code": 1155,
-        "isEarly":  true
+        "isEarly": true
     },
     "'const' declarations can only be declared inside a block.": {
         "category": "Error",
         "code": 1156,
-        "isEarly":  true
+        "isEarly": true
     },
     "'let' declarations can only be declared inside a block.": {
         "category": "Error",
         "code": 1157,
-        "isEarly":  true
+        "isEarly": true
     },
     "Tagged templates are only available when targeting ECMAScript 6 and higher.": {
         "category": "Error",
         "code": 1159,
-        "isEarly":  true
+        "isEarly": true
     },
     "Unterminated template literal.": {
         "category": "Error",
@@ -564,48 +564,47 @@
     "An object member cannot be declared optional.": {
         "category": "Error",
         "code": 1162,
-        "isEarly":  true
+        "isEarly": true
     },
-    "'yield' expression must be contained_within a generator declaration."
-    : {
+    "'yield' expression must be contained_within a generator declaration.": {
         "category": "Error",
         "code": 1163,
-        "isEarly":  true
+        "isEarly": true
     },
     "Computed property names are not allowed in enums.": {
         "category": "Error",
         "code": 1164,
-        "isEarly":  true
+        "isEarly": true
     },
     "Computed property names are not allowed in an ambient context.": {
         "category": "Error",
         "code": 1165,
-        "isEarly":  true
+        "isEarly": true
     },
     "Computed property names are not allowed in class property declarations.": {
         "category": "Error",
         "code": 1166,
-        "isEarly":  true
+        "isEarly": true
     },
     "Computed property names are only available when targeting ECMAScript 6 and higher.": {
         "category": "Error",
         "code": 1167,
-        "isEarly":  true
+        "isEarly": true
     },
     "Computed property names are not allowed in method overloads.": {
         "category": "Error",
         "code": 1168,
-        "isEarly":  true
+        "isEarly": true
     },
     "Computed property names are not allowed in interfaces.": {
         "category": "Error",
         "code": 1169,
-        "isEarly":  true
+        "isEarly": true
     },
     "Computed property names are not allowed in type literals.": {
         "category": "Error",
         "code": 1170,
-        "isEarly":  true
+        "isEarly": true
     },
     "A comma expression is not allowed in a computed property name.": {
         "category": "Error",
@@ -614,27 +613,27 @@
     "'extends' clause already seen.": {
         "category": "Error",
         "code": 1172,
-        "isEarly":  true
+        "isEarly": true
     },
     "'extends' clause must precede 'implements' clause.": {
         "category": "Error",
         "code": 1173,
-        "isEarly":  true
+        "isEarly": true
     },
     "Classes can only extend a single class.": {
         "category": "Error",
         "code": 1174,
-        "isEarly":  true
+        "isEarly": true
     },
     "'implements' clause already seen.": {
         "category": "Error",
         "code": 1175,
-        "isEarly":  true
+        "isEarly": true
     },
     "Interface declaration cannot have 'implements' clause.": {
         "category": "Error",
         "code": 1176,
-        "isEarly":  true
+        "isEarly": true
     },
     "Binary digit expected.": {
         "category": "Error",
@@ -659,11 +658,16 @@
     "A destructuring declaration must have an initializer.": {
         "category": "Error",
         "code": 1182,
-        "isEarly":  true
+        "isEarly": true
     },
     "Destructuring declarations are not allowed in ambient contexts.": {
         "category": "Error",
         "code": 1183,
+        "isEarly": true
+    },
+    "An implementation cannot be declared in ambient contexts.": {
+        "category": "Error",
+        "code": 1184,
         "isEarly":  true
     },
 

@@ -4625,7 +4625,7 @@ module ts {
 
         function checkNode(node: Node, nodeKind: SyntaxKind): boolean {
             // Now do node specific checks.
-            switch (nodeKind) {
+            //switch (nodeKind) {
                 //case SyntaxKind.BreakStatement:
                 //case SyntaxKind.ContinueStatement:
                     //return checkBreakOrContinueStatement(<BreakOrContinueStatement>node);
@@ -4667,7 +4667,7 @@ module ts {
                     //return checkProperty(<PropertyDeclaration>node);
                 //case SyntaxKind.ReturnStatement:                return checkReturnStatement(<ReturnStatement>node);
                 //case SyntaxKind.SetAccessor:                    return checkSetAccessor(<MethodDeclaration>node);
-                case SyntaxKind.SourceFile:                     return checkSourceFile(<SourceFile>node);
+                //case SyntaxKind.SourceFile:                     return checkSourceFile(<SourceFile>node);
                 //case SyntaxKind.ShorthandPropertyAssignment:    return checkShorthandPropertyAssignment(<ShorthandPropertyAssignment>node);
                 //case SyntaxKind.SwitchStatement:                return checkSwitchStatement(<SwitchStatement>node);
                 //case SyntaxKind.TaggedTemplateExpression:       return checkTaggedTemplateExpression(<TaggedTemplateExpression>node);
@@ -4677,7 +4677,9 @@ module ts {
                 //case SyntaxKind.VariableStatement:              return checkVariableStatement(<VariableStatement>node);
                 //case SyntaxKind.WithStatement:                  return checkWithStatement(<WithStatement>node);
                 //case SyntaxKind.YieldExpression:                return checkYieldExpression(<YieldExpression>node);
-            }
+                //return false
+            //}
+            return false;
         }
 
         function scanToken(pos: number) {
@@ -4721,23 +4723,23 @@ module ts {
 
         function checkForStatementInAmbientContext(node: Node, kind: SyntaxKind): boolean {
             switch (kind) {
-                case SyntaxKind.Block:
+                //case SyntaxKind.Block:
                 case SyntaxKind.EmptyStatement:
-                case SyntaxKind.IfStatement:
-                case SyntaxKind.DoStatement:
-                case SyntaxKind.WhileStatement:
-                case SyntaxKind.ForStatement:
-                case SyntaxKind.ForInStatement:
-                case SyntaxKind.ContinueStatement:
-                case SyntaxKind.BreakStatement:
-                case SyntaxKind.ReturnStatement:
-                case SyntaxKind.WithStatement:
-                case SyntaxKind.SwitchStatement:
-                case SyntaxKind.ThrowStatement:
-                case SyntaxKind.TryStatement:
+                //case SyntaxKind.IfStatement:
+                //case SyntaxKind.DoStatement:
+                //case SyntaxKind.WhileStatement:
+                //case SyntaxKind.ForStatement:
+                //case SyntaxKind.ForInStatement:
+                //case SyntaxKind.ContinueStatement:
+                //case SyntaxKind.BreakStatement:
+                //case SyntaxKind.ReturnStatement:
+                //case SyntaxKind.WithStatement:
+                //case SyntaxKind.SwitchStatement:
+                //case SyntaxKind.ThrowStatement:
+                //case SyntaxKind.TryStatement:
                 case SyntaxKind.DebuggerStatement:
-                case SyntaxKind.LabeledStatement:
-                case SyntaxKind.ExpressionStatement:
+                //case SyntaxKind.LabeledStatement:
+                //case SyntaxKind.ExpressionStatement:
                     return grammarErrorOnFirstToken(node, Diagnostics.Statements_are_not_allowed_in_ambient_contexts);
             }
         }

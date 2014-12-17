@@ -7826,6 +7826,11 @@ module ts {
         }
 
         function checkBlock(node: Block) {
+            // Grammar checking for SyntaxKind.Block
+            if (node.kind === SyntaxKind.Block) {
+                checkGrammarForStatementInAmbientContext(node);
+            }
+
             forEach(node.statements, checkSourceElement);
             if (isFunctionBlock(node) || node.kind === SyntaxKind.ModuleBlock) {
                 checkFunctionExpressionBodies(node);
@@ -8085,27 +8090,40 @@ module ts {
         }
 
         function checkExpressionStatement(node: ExpressionStatement) {
+            // Grammar checking
+            checkGrammarForStatementInAmbientContext(node)
+
             checkExpression(node.expression);
         }
 
         function checkIfStatement(node: IfStatement) {
+            // Grammar checking
+            checkGrammarForStatementInAmbientContext(node);
+
             checkExpression(node.expression);
             checkSourceElement(node.thenStatement);
             checkSourceElement(node.elseStatement);
         }
 
         function checkDoStatement(node: DoStatement) {
+            // Grammar checking
+            checkGrammarForStatementInAmbientContext(node);
+
             checkSourceElement(node.statement);
             checkExpression(node.expression);
         }
 
         function checkWhileStatement(node: WhileStatement) {
+            // Grammar checking 
+            checkGrammarForStatementInAmbientContext(node);
+
             checkExpression(node.expression);
             checkSourceElement(node.statement);
         }
 
         function checkForStatement(node: ForStatement) {
             // Grammar checking
+            checkGrammarForStatementInAmbientContext(node);
             checkGrammarVariableDeclarations(node, node.declarations);
 
             if (node.declarations) forEach(<VariableLikeDeclaration[]>node.declarations, checkVariableLikeDeclaration);
@@ -8116,7 +8134,9 @@ module ts {
         }
 
         function checkForInStatement(node: ForInStatement) {
-            // Grammar checking
+            // Grammar checkingcheck
+            checkGrammarForStatementInAmbientContext(node);
+             
             var declarations = node.declarations;
             if (!checkGrammarVariableDeclarations(node, declarations)) {
                 if (declarations && declarations.length > 1) {
@@ -8166,6 +8186,7 @@ module ts {
 
         function checkBreakOrContinueStatement(node: BreakOrContinueStatement) {
             // Grammar checking
+            checkGrammarForStatementInAmbientContext(node);
             checkGrammarBreakOrContinueStatement(node);
 
             // TODO: Check that target label is valid
@@ -8177,6 +8198,7 @@ module ts {
 
         function checkReturnStatement(node: ReturnStatement) {
             // Grammar checking
+            checkGrammarForStatementInAmbientContext(node);
             var parent = node.parent;
             var inFunctionBlock = false;
             var functionBlock = getContainingFunction(node);
@@ -8208,6 +8230,8 @@ module ts {
 
         function checkWithStatement(node: WithStatement) {
             // Grammar checking for withStatement
+            checkGrammarForStatementInAmbientContext(node);
+
             if (node.parserContextFlags & ParserContextFlags.StrictMode) {
                 grammarErrorOnFirstToken(node, Diagnostics.with_statements_are_not_allowed_in_strict_mode);
             }
@@ -8224,6 +8248,8 @@ module ts {
 
         function checkSwitchStatement(node: SwitchStatement) {
             // Grammar checking
+            checkGrammarForStatementInAmbientContext(node);
+
             var firstDefaultClause: CaseOrDefaultClause;
             var hasDuplicateDefaultClause = false;
 
@@ -8258,8 +8284,8 @@ module ts {
         }
 
         function checkLabeledStatement(node: LabeledStatement) {
-            // ensure that label is unique
             // Grammar checking
+            checkGrammarForStatementInAmbientContext(node);
             var current = node.parent;
             while (current) {
                 if (isAnyFunction(current)) {
@@ -8273,10 +8299,15 @@ module ts {
                 current = current.parent;
             }
 
+            // ensure that label is unique
             checkSourceElement(node.statement);
         }
 
         function checkThrowStatement(node: ThrowStatement) {
+            // Grammar checking
+            checkGrammarForStatementInAmbientContext(node)
+
+            // Type checking
             if (node.expression === undefined) {
                 grammarErrorAfterFirstToken(node, Diagnostics.Line_break_not_permitted_here);
             }
@@ -8287,6 +8318,9 @@ module ts {
         }
 
         function checkTryStatement(node: TryStatement) {
+            // Grammar checking
+            checkGrammarForStatementInAmbientContext(node);
+
             checkBlock(node.tryBlock);
             var catchClause = node.catchClause;
             if (catchClause) {
@@ -9108,6 +9142,10 @@ module ts {
                     return checkImportDeclaration(<ImportDeclaration>node);
                 case SyntaxKind.ExportAssignment:
                     return checkExportAssignment(<ExportAssignment>node);
+                case SyntaxKind.EmptyStatement:
+                    return checkGrammarForStatementInAmbientContext(node);
+                case SyntaxKind.DebuggerStatement:
+                    return checkGrammarForStatementInAmbientContext(node);
             }
         }
 
@@ -9199,6 +9237,9 @@ module ts {
 
         // Fully type check a source file and collect the relevant diagnostics.
         function checkSourceFile(node: SourceFile) {
+            // Grammar checking
+            checkGrammarSourceFile(node);
+
             var links = getNodeLinks(node);
             if (!(links.flags & NodeCheckFlags.TypeChecked)) {
                 emitExtends = false;
@@ -10697,6 +10738,7 @@ module ts {
 
         function checkGrammarForBodyInAmbientContext(body: Block | Expression, isConstructor: boolean): boolean {
             if (isInAmbientContext(body) && body && body.kind === SyntaxKind.Block) {
+
                 var diagnostic = isConstructor
                     ? Diagnostics.A_constructor_implementation_cannot_be_declared_in_an_ambient_context
                     : Diagnostics.A_function_implementation_cannot_be_declared_in_an_ambient_context;
@@ -10724,6 +10766,71 @@ module ts {
 
             if (isInAmbientContext(node) && node.initializer) {
                 return grammarErrorOnFirstToken(node.initializer, Diagnostics.Initializers_are_not_allowed_in_ambient_contexts);
+            }
+        }
+
+        function checkGrammarTopLevelElementForRequiredDeclareModifier(node: Node): boolean {
+            // A declare modifier is required for any top level .d.ts declaration except export=, interfaces and imports:
+            // categories:
+            //
+            //  DeclarationElement:
+            //     ExportAssignment
+            //     export_opt   InterfaceDeclaration
+            //     export_opt   ImportDeclaration
+            //     export_opt   ExternalImportDeclaration
+            //     export_opt   AmbientDeclaration
+            //
+            if (node.kind === SyntaxKind.InterfaceDeclaration ||
+                node.kind === SyntaxKind.ImportDeclaration ||
+                node.kind === SyntaxKind.ExportAssignment ||
+                (node.flags & NodeFlags.Ambient)) {
+
+                return false;
+            }
+
+            return grammarErrorOnFirstToken(node, Diagnostics.A_declare_modifier_is_required_for_a_top_level_declaration_in_a_d_ts_file);
+        }
+
+        function checkGrammarTopLevelElementsForRequiredDeclareModifier(file: SourceFile): boolean {
+            for (var i = 0, n = file.statements.length; i < n; i++) {
+                var decl = file.statements[i];
+                if (isDeclaration(decl) || decl.kind === SyntaxKind.VariableStatement) {
+                    if (checkGrammarTopLevelElementForRequiredDeclareModifier(decl)) {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        function checkGrammarSourceFile(node: SourceFile): boolean {
+            return isInAmbientContext(node) && checkGrammarTopLevelElementsForRequiredDeclareModifier(node);
+        }
+
+        function checkGrammarForStatementInAmbientContext(node: Node): void {
+            if (isInAmbientContext(node)) {
+                // Find containing block which is either Block, ModuleBlock, SourceFile
+                if (isAnyFunction(node.parent)) {
+                    grammarErrorOnFirstToken(node, Diagnostics.An_implementation_cannot_be_declared_in_ambient_contexts)
+                    return;
+                }
+                
+                // We are either parented by another statement, or some sort of block.
+                // If we're in a block, we only want to really report an error once
+                // to prevent noisyness.  So use a bit on the block to indicate if
+                // this has already been reported, and don't report if it has.
+                //
+                if (node.parent.kind === SyntaxKind.Block || node.parent.kind === SyntaxKind.ModuleBlock || node.parent.kind === SyntaxKind.SourceFile) {
+                    var links = getNodeLinks(node.parent);
+                    // Check if the containing block ever report this error
+                    if (!links.hasReportedStatementInAmbientContext) {
+                        links.hasReportedStatementInAmbientContext = grammarErrorOnFirstToken(node, Diagnostics.Statements_are_not_allowed_in_ambient_contexts);
+                    }
+                }
+                else {
+                    // We must be parented by a statement.  If so, there's no need
+                    // to report the error as our parent will have already done it.
+                    // Debug.assert(isStatement(node.parent));
+                }
             }
         }
 
