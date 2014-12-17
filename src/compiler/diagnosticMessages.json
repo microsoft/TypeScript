@@ -1511,6 +1511,10 @@
         "category": "Error",
         "code": 5039
     },
+    "Option noEmit cannot be specified with option out or outDir.": {
+        "category": "Error",
+        "code": 5040
+    },
     "Concatenate and emit output to single file.": {
         "category": "Message",
         "code": 6001
