@@ -697,7 +697,7 @@ module FourSlash {
 
             for (var i = 0; i < references.length; i++) {
                 var reference = references[i];
-                if (reference && reference.fileName === fileName && reference.textSpan.start() === start && reference.textSpan.end() === end) {
+                if (reference && reference.fileName === fileName && reference.textSpan.start === start && ts.textSpanEnd(reference.textSpan) === end) {
                     if (typeof isWriteAccess !== "undefined" && reference.isWriteAccess !== isWriteAccess) {
                         this.raiseError('verifyReferencesAtPositionListContains failed - item isWriteAccess value doe not match, actual: ' + reference.isWriteAccess + ', expected: ' + isWriteAccess + '.');
                     }
@@ -828,17 +828,17 @@ module FourSlash {
                 }
 
                 ranges = ranges.sort((r1, r2) => r1.start - r2.start);
-                references = references.sort((r1, r2) => r1.textSpan.start() - r2.textSpan.start());
+                references = references.sort((r1, r2) => r1.textSpan.start - r2.textSpan.start);
 
                 for (var i = 0, n = ranges.length; i < n; i++) {
                     var reference = references[i];
                     var range = ranges[i];
 
-                    if (reference.textSpan.start() !== range.start ||
-                        reference.textSpan.end() !== range.end) {
+                    if (reference.textSpan.start !== range.start ||
+                        ts.textSpanEnd(reference.textSpan) !== range.end) {
 
                         this.raiseError(this.assertionMessage("Rename location",
-                            "[" + reference.textSpan.start() + "," + reference.textSpan.end() + ")",
+                            "[" + reference.textSpan.start + "," + ts.textSpanEnd(reference.textSpan) + ")",
                             "[" + range.start + "," + range.end + ")"));
                     }
                 }
@@ -978,10 +978,10 @@ module FourSlash {
             }
 
             var expectedRange = this.getRanges()[0];
-            if (renameInfo.triggerSpan.start() !== expectedRange.start ||
-                renameInfo.triggerSpan.end() !== expectedRange.end) {
+            if (renameInfo.triggerSpan.start !== expectedRange.start ||
+                ts.textSpanEnd(renameInfo.triggerSpan) !== expectedRange.end) {
                 this.raiseError("Expected triggerSpan [" + expectedRange.start + "," + expectedRange.end + ").  Got [" +
-                    renameInfo.triggerSpan.start() + "," + renameInfo.triggerSpan.end() + ") instead.");
+                    renameInfo.triggerSpan.start + "," + ts.textSpanEnd(renameInfo.triggerSpan) + ") instead.");
             }
         }
 
@@ -1012,7 +1012,7 @@ module FourSlash {
         private spanInfoToString(pos: number, spanInfo: ts.TextSpan, prefixString: string) {
             var resultString = "SpanInfo: " + JSON.stringify(spanInfo);
             if (spanInfo) {
-                var spanString = this.activeFile.content.substr(spanInfo.start(), spanInfo.length());
+                var spanString = this.activeFile.content.substr(spanInfo.start, spanInfo.length);
                 var spanLineMap = ts.computeLineStarts(spanString);
                 for (var i = 0; i < spanLineMap.length; i++) {
                     if (!i) {
@@ -1020,7 +1020,7 @@ module FourSlash {
                     }
                     resultString += prefixString + spanString.substring(spanLineMap[i], spanLineMap[i + 1]);
                 }
-                resultString += "\n" + prefixString + ":=> (" + this.getLineColStringAtPosition(spanInfo.start()) + ") to (" + this.getLineColStringAtPosition(spanInfo.end()) + ")";
+                resultString += "\n" + prefixString + ":=> (" + this.getLineColStringAtPosition(spanInfo.start) + ") to (" + this.getLineColStringAtPosition(ts.textSpanEnd(spanInfo)) + ")";
             }
 
             return resultString;
@@ -1411,14 +1411,14 @@ module FourSlash {
             // We get back a set of edits, but langSvc.editScript only accepts one at a time. Use this to keep track
             // of the incremental offset from each edit to the next. Assumption is that these edit ranges don't overlap
             var runningOffset = 0;
-            edits = edits.sort((a, b) => a.span.start() - b.span.start());
+            edits = edits.sort((a, b) => a.span.start - b.span.start);
             // Get a snapshot of the content of the file so we can make sure any formatting edits didn't destroy non-whitespace characters
             var snapshot = this.languageServiceShimHost.getScriptSnapshot(fileName);
             var oldContent = snapshot.getText(0, snapshot.getLength());
             for (var j = 0; j < edits.length; j++) {
-                this.languageServiceShimHost.editScript(fileName, edits[j].span.start() + runningOffset, edits[j].span.end() + runningOffset, edits[j].newText);
-                this.updateMarkersForEdit(fileName, edits[j].span.start() + runningOffset, edits[j].span.end() + runningOffset, edits[j].newText);
-                var change = (edits[j].span.start() - edits[j].span.end()) + edits[j].newText.length;
+                this.languageServiceShimHost.editScript(fileName, edits[j].span.start + runningOffset, ts.textSpanEnd(edits[j].span) + runningOffset, edits[j].newText);
+                this.updateMarkersForEdit(fileName, edits[j].span.start + runningOffset, ts.textSpanEnd(edits[j].span) + runningOffset, edits[j].newText);
+                var change = (edits[j].span.start - ts.textSpanEnd(edits[j].span)) + edits[j].newText.length;
                 runningOffset += change;
                 // TODO: Consider doing this at least some of the time for higher fidelity. Currently causes a failure (bug 707150)
                 // this.languageService.getScriptLexicalStructure(fileName);
@@ -1495,7 +1495,7 @@ module FourSlash {
 
             var definition = definitions[definitionIndex];
             this.openFile(definition.fileName);
-            this.currentCaretPosition = definition.textSpan.start();
+            this.currentCaretPosition = definition.textSpan.start;
         }
 
         public verifyDefinitionLocationExists(negative: boolean) {
@@ -1616,7 +1616,7 @@ module FourSlash {
                     '\t  Actual: undefined');
             }
 
-            var actual = this.languageServiceShimHost.getScriptSnapshot(this.activeFile.fileName).getText(span.start(), span.end());
+            var actual = this.languageServiceShimHost.getScriptSnapshot(this.activeFile.fileName).getText(span.start, ts.textSpanEnd(span));
             if (actual !== text) {
                 this.raiseError('verifyCurrentNameOrDottedNameSpanText\n' +
                     '\tExpected: "' + text + '"\n' +
@@ -1671,15 +1671,15 @@ module FourSlash {
                 if (expectedSpan) {
                     var expectedLength = expectedSpan.end - expectedSpan.start;
 
-                    if (expectedSpan.start !== actualSpan.start() || expectedLength !== actualSpan.length()) {
+                    if (expectedSpan.start !== actualSpan.start || expectedLength !== actualSpan.length) {
                         this.raiseError("verifyClassifications failed - expected span of text to be " +
                             "{start=" + expectedSpan.start + ", length=" + expectedLength + "}, but was " +
-                            "{start=" + actualSpan.start() + ", length=" + actualSpan.length() + "}" +
+                            "{start=" + actualSpan.start + ", length=" + actualSpan.length + "}" +
                             jsonMismatchString());
                     }
                 }
 
-                var actualText = this.activeFile.content.substr(actualSpan.start(), actualSpan.length());
+                var actualText = this.activeFile.content.substr(actualSpan.start, actualSpan.length);
                 if (expectedClassification.text !== actualText) {
                     this.raiseError('verifyClassifications failed - expected classified text to be ' +
                         expectedClassification.text + ', but was ' +
@@ -1721,8 +1721,8 @@ module FourSlash {
             for (var i = 0; i < spans.length; i++) {
                 var expectedSpan = spans[i];
                 var actualSpan = actual[i];
-                if (expectedSpan.start !== actualSpan.textSpan.start() || expectedSpan.end !== actualSpan.textSpan.end()) {
-                    this.raiseError('verifyOutliningSpans failed - span ' + (i + 1) + ' expected: (' + expectedSpan.start + ',' + expectedSpan.end + '),  actual: (' + actualSpan.textSpan.start() + ',' + actualSpan.textSpan.end() + ')');
+                if (expectedSpan.start !== actualSpan.textSpan.start || expectedSpan.end !== ts.textSpanEnd(actualSpan.textSpan)) {
+                    this.raiseError('verifyOutliningSpans failed - span ' + (i + 1) + ' expected: (' + expectedSpan.start + ',' + expectedSpan.end + '),  actual: (' + actualSpan.textSpan.start + ',' + ts.textSpanEnd(actualSpan.textSpan) + ')');
                 }
             }
         }
@@ -1740,8 +1740,8 @@ module FourSlash {
                 var actualComment = actual[i];
                 var actualCommentSpan = ts.createTextSpan(actualComment.position, actualComment.message.length);
 
-                if (expectedSpan.start !== actualCommentSpan.start() || expectedSpan.end !== actualCommentSpan.end()) {
-                    this.raiseError('verifyOutliningSpans failed - span ' + (i + 1) + ' expected: (' + expectedSpan.start + ',' + expectedSpan.end + '),  actual: (' + actualCommentSpan.start() + ',' + actualCommentSpan.end() + ')');
+                if (expectedSpan.start !== actualCommentSpan.start || expectedSpan.end !== ts.textSpanEnd(actualCommentSpan)) {
+                    this.raiseError('verifyOutliningSpans failed - span ' + (i + 1) + ' expected: (' + expectedSpan.start + ',' + expectedSpan.end + '),  actual: (' + actualCommentSpan.start + ',' + ts.textSpanEnd(actualCommentSpan) + ')');
                 }
             }
         }
@@ -1756,12 +1756,12 @@ module FourSlash {
             }
 
             var actualMatchPosition = -1;
-            if (bracePosition === actual[0].start()) {
-                actualMatchPosition = actual[1].start();
-            } else if (bracePosition === actual[1].start()) {
-                actualMatchPosition = actual[0].start();
+            if (bracePosition === actual[0].start) {
+                actualMatchPosition = actual[1].start;
+            } else if (bracePosition === actual[1].start) {
+                actualMatchPosition = actual[0].start;
             } else {
-                this.raiseError('verifyMatchingBracePosition failed - could not find the brace position: ' + bracePosition + ' in the returned list: (' + actual[0].start() + ',' + actual[0].end() + ') and (' + actual[1].start() + ',' + actual[1].end() + ')');
+                this.raiseError('verifyMatchingBracePosition failed - could not find the brace position: ' + bracePosition + ' in the returned list: (' + actual[0].start + ',' + ts.textSpanEnd(actual[0]) + ') and (' + actual[1].start + ',' + ts.textSpanEnd(actual[1]) + ')');
             }
 
             if (actualMatchPosition !== expectedMatchPosition) {
@@ -2001,7 +2001,7 @@ module FourSlash {
 
             for (var i = 0; i < occurances.length; i++) {
                 var occurance = occurances[i];
-                if (occurance && occurance.fileName === fileName && occurance.textSpan.start() === start && occurance.textSpan.end() === end) {
+                if (occurance && occurance.fileName === fileName && occurance.textSpan.start === start && ts.textSpanEnd(occurance.textSpan) === end) {
                     if (typeof isWriteAccess !== "undefined" && occurance.isWriteAccess !== isWriteAccess) {
                         this.raiseError('verifyOccurancesAtPositionListContains failed - item isWriteAccess value doe not match, actual: ' + occurance.isWriteAccess + ', expected: ' + isWriteAccess + '.');
                     }

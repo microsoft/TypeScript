@@ -1561,15 +1561,15 @@ module ts {
             var oldText = sourceFile.scriptSnapshot;
             var newText = scriptSnapshot;
 
-            Debug.assert((oldText.getLength() - textChangeRange.span().length() + textChangeRange.newLength()) === newText.getLength());
+            Debug.assert((oldText.getLength() - textChangeRange.span().length + textChangeRange.newLength()) === newText.getLength());
 
             if (Debug.shouldAssert(AssertionLevel.VeryAggressive)) {
-                var oldTextPrefix = oldText.getText(0, textChangeRange.span().start());
-                var newTextPrefix = newText.getText(0, textChangeRange.span().start());
+                var oldTextPrefix = oldText.getText(0, textChangeRange.span().start);
+                var newTextPrefix = newText.getText(0, textChangeRange.span().start);
                 Debug.assert(oldTextPrefix === newTextPrefix);
 
-                var oldTextSuffix = oldText.getText(textChangeRange.span().end(), oldText.getLength());
-                var newTextSuffix = newText.getText(textChangeRange.newSpan().end(), newText.getLength());
+                var oldTextSuffix = oldText.getText(textSpanEnd(textChangeRange.span()), oldText.getLength());
+                var newTextSuffix = newText.getText(textSpanEnd(textChangeRange.newSpan()), newText.getLength());
                 Debug.assert(oldTextSuffix === newTextSuffix);
             }
         }
@@ -4852,7 +4852,7 @@ module ts {
 
             function processNode(node: Node) {
                 // Only walk into nodes that intersect the requested span.
-                if (node && span.intersectsWith(node.getStart(), node.getWidth())) {
+                if (node && textSpanIntersectsWith(span, node.getStart(), node.getWidth())) {
                     if (node.kind === SyntaxKind.Identifier && node.getWidth() > 0) {
                         var symbol = typeInfoResolver.getSymbolAtLocation(node);
                         if (symbol) {
@@ -4883,7 +4883,7 @@ module ts {
 
             function classifyComment(comment: CommentRange) {
                 var width = comment.end - comment.pos;
-                if (span.intersectsWith(comment.pos, width)) {
+                if (textSpanIntersectsWith(span, comment.pos, width)) {
                     result.push({
                         textSpan: createTextSpan(comment.pos, width),
                         classificationType: ClassificationTypeNames.comment
@@ -4985,7 +4985,7 @@ module ts {
 
             function processElement(element: Node) {
                 // Ignore nodes that don't intersect the original span to classify.
-                if (span.intersectsWith(element.getFullStart(), element.getFullWidth())) {
+                if (textSpanIntersectsWith(span, element.getFullStart(), element.getFullWidth())) {
                     var children = element.getChildren();
                     for (var i = 0, n = children.length; i < n; i++) {
                         var child = children[i];
@@ -5030,7 +5030,7 @@ module ts {
                             var range2 = createTextSpan(current.getStart(sourceFile), current.getWidth(sourceFile));
 
                             // We want to order the braces when we return the result.
-                            if (range1.start() < range2.start()) {
+                            if (range1.start < range2.start) {
                                 result.push(range1, range2);
                             }
                             else {

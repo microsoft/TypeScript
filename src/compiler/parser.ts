@@ -725,7 +725,7 @@ module ts {
             // The is the amount the nodes after the edit range need to be adjusted.  It can be 
             // positive (if the edit added characters), negative (if the edit deleted characters)
             // or zero (if this was a pure overwrite with nothing added/removed).
-            var delta = changeRange.newSpan().length() - changeRange.span().length();
+            var delta = changeRange.newSpan().length - changeRange.span().length;
 
             // If we added or removed characters during the edit, then we need to go and adjust all
             // the nodes after the edit.  Those nodes may move forward down (if we inserted chars)
@@ -747,7 +747,7 @@ module ts {
             // Also, mark any syntax elements that intersect the changed span.  We know, up front,
             // that we cannot reuse these elements.
             updateTokenPositionsAndMarkElements(<IncrementalNode><Node>sourceFile,
-                changeRange.span().start(), changeRange.span().end(), changeRange.newSpan().end(), delta);
+                changeRange.span().start, textSpanEnd(changeRange.span()), textSpanEnd(changeRange.newSpan()), delta);
 
             // Now that we've set up our internal incremental state just proceed and parse the
             // source file in the normal fashion.  When possible the parser will retrieve and
@@ -936,7 +936,7 @@ module ts {
             // that the prior token sees that change.  
             var maxLookahead = 1;
 
-            var start = changeRange.span().start();
+            var start = changeRange.span().start;
 
             // the first iteration aligns us with the change start. subsequent iteration move us to
             // the left by maxLookahead tokens.  We only need to do this as long as we're not at the
@@ -948,8 +948,8 @@ module ts {
                 start = Math.max(0, position - 1);
             }
 
-            var finalSpan = createTextSpanFromBounds(start, changeRange.span().end());
-            var finalLength = changeRange.newLength() + (changeRange.span().start() - start);
+            var finalSpan = createTextSpanFromBounds(start, textSpanEnd(changeRange.span()));
+            var finalLength = changeRange.newLength() + (changeRange.span().start - start);
 
             return createTextChangeRange(finalSpan, finalLength);
         }

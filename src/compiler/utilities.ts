@@ -786,78 +786,62 @@ module ts {
         return false;
     }
 
-    var textSpanConstructor = (function () {
-        function textSpanConstructor(start: number, length: number) {
-            if (start < 0) {
-                throw new Error("start < 0");
-            }
-            if (length < 0) {
-                throw new Error("length < 0");
-            }
-            this._start = start;
-            this._length = length;
+    export function textSpanEnd(span: TextSpan) {
+        return span.start + span.length
+    }
+
+    export function textSpanIsEmpty(span: TextSpan) {
+        return span.length === 0
+    }
+
+    export function textSpanContainsPosition(span: TextSpan, position: number) {
+        return position >= span.start && position < textSpanEnd(span);
+    }
+
+    // Returns true if 'span' contains 'other'.
+    export function textSpanContainsTextSpan(span: TextSpan, other: TextSpan) {
+        return other.start >= span.start && textSpanEnd(other) <= textSpanEnd(span);
+    }
+
+    export function textSpanOverlapsWith(span: TextSpan, other: TextSpan) {
+        var overlapStart = Math.max(span.start, other.start);
+        var overlapEnd = Math.min(textSpanEnd(span), textSpanEnd(other));
+        return overlapStart < overlapEnd;
+    }
+
+    export function textSpanOverlap(span1: TextSpan, span2: TextSpan) {
+        var overlapStart = Math.max(span1.start, span2.start);
+        var overlapEnd = Math.min(textSpanEnd(span1), textSpanEnd(span2));
+        if (overlapStart < overlapEnd) {
+            return createTextSpanFromBounds(overlapStart, overlapEnd);
         }
+        return undefined;
+    }
 
-        textSpanConstructor.prototype = {
-            toJSON(key: string) {
-                return { start: this._start, length: this._length }
-            },
-            start() {
-                return this._start
-            },
-            length() {
-                return this._length
-            },
-            end() {
-                return this._start + this._length
-            },
-            isEmpty() {
-                return this._length === 0
-            },
-            containsPosition(position: number) {
-                return position >= this._start && position < this.end()
-            },
-            containsTextSpan(span: TextSpan) {
-                return span.start() >= this._start && span.end() <= this.end()
-            },
-            overlapsWith(span: TextSpan) {
-                var overlapStart = Math.max(this._start, span.start());
-                var overlapEnd = Math.min(this.end(), span.end());
-                return overlapStart < overlapEnd;
-            },
-            overlap(span: TextSpan) {
-                var overlapStart = Math.max(this._start, span.start());
-                var overlapEnd = Math.min(this.end(), span.end());
-                if (overlapStart < overlapEnd) {
-                    return createTextSpanFromBounds(overlapStart, overlapEnd);
-                }
-                return undefined;
-            },
-            intersectsWithTextSpan(span: TextSpan) {
-                return span.start() <= this.end() && span.end() >= this._start
-            },
-            intersectsWith(start: number, length: number) {
-                var end = start + length;
-                return start <= this.end() && end >= this._start;
-            },
-            intersectsWithPosition(position: number) {
-                return position <= this.end() && position >= this._start;
-            },
-            intersection(span: TextSpan) {
-                var intersectStart = Math.max(this._start, span.start());
-                var intersectEnd = Math.min(this.end(), span.end());
-                if (intersectStart <= intersectEnd) {
-                    return createTextSpanFromBounds(intersectStart, intersectEnd);
-                }
-                return undefined;
-            }
-        };
+    export function textSpanIntersectsWithTextSpan(span: TextSpan, other: TextSpan) {
+        return other.start <= textSpanEnd(span) && textSpanEnd(other) >= span.start
+    }
 
-        return textSpanConstructor;
-    })();
+    export function textSpanIntersectsWith(span: TextSpan, start: number, length: number) {
+        var end = start + length;
+        return start <= textSpanEnd(span) && end >= span.start;
+    }
+
+    export function textSpanIntersectsWithPosition(span: TextSpan, position: number) {
+        return position <= textSpanEnd(span) && position >= span.start;
+    }
+
+    export function textSpanIntersection(span1: TextSpan, span2: TextSpan) {
+        var intersectStart = Math.max(span1.start, span2.start);
+        var intersectEnd = Math.min(textSpanEnd(span1), textSpanEnd(span2));
+        if (intersectStart <= intersectEnd) {
+            return createTextSpanFromBounds(intersectStart, intersectEnd);
+        }
+        return undefined;
+    }
 
     export function createTextSpan(start: number, length: number): TextSpan {
-        return new (<any>textSpanConstructor)(start, length);
+        return { start, length };
     }
 
     export function createTextSpanFromBounds(start: number, end: number) {
@@ -881,10 +865,10 @@ module ts {
                 return this._newLength;
             },
             newSpan() {
-                return createTextSpan(this.span().start(), this.newLength());
+                return createTextSpan(this.span().start, this.newLength());
             },
             isUnchanged() {
-                return this.span().isEmpty() && this.newLength() === 0;
+                return textSpanIsEmpty(this.span()) && this.newLength() === 0;
             }
         };
 
@@ -918,8 +902,8 @@ module ts {
         // as it makes things much easier to reason about.
         var change0 = changes[0];
 
-        var oldStartN = change0.span().start();
-        var oldEndN = change0.span().end();
+        var oldStartN = change0.span().start;
+        var oldEndN = textSpanEnd(change0.span());
         var newEndN = oldStartN + change0.newLength();
 
         for (var i = 1; i < changes.length; i++) {
@@ -1009,8 +993,8 @@ module ts {
             var oldEnd1 = oldEndN;
             var newEnd1 = newEndN;
 
-            var oldStart2 = nextChange.span().start();
-            var oldEnd2 = nextChange.span().end();
+            var oldStart2 = nextChange.span().start;
+            var oldEnd2 = textSpanEnd(nextChange.span());
             var newEnd2 = oldStart2 + nextChange.newLength();
 
             oldStartN = Math.min(oldStart1, oldStart2);

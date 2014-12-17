@@ -1637,18 +1637,8 @@ module ts {
     }
 
     export interface TextSpan {
-        start(): number;
-        length(): number;
-        end(): number;
-        isEmpty(): boolean;
-        containsPosition(position: number): boolean;
-        containsTextSpan(span: TextSpan): boolean;
-        overlapsWith(span: TextSpan): boolean;
-        overlap(span: TextSpan): TextSpan;
-        intersectsWithTextSpan(span: TextSpan): boolean;
-        intersectsWith(start: number, length: number): boolean;
-        intersectsWithPosition(position: number): boolean;
-        intersection(span: TextSpan): TextSpan;
+        start: number;
+        length: number;
     }
 
     export interface TextChangeRange {
