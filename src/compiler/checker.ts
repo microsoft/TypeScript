@@ -1619,6 +1619,9 @@ module ts {
 
         function getDeclarationContainer(node: Node): Node {
             node = getRootDeclaration(node);
+
+            // Parent chain: 
+            // VaribleDeclaration -> VariableDeclarationList -> VariableStatement -> 'Declaration Container'
             return node.kind === SyntaxKind.VariableDeclaration ? node.parent.parent.parent : node.parent;
         }
 

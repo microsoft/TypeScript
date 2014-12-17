@@ -110,6 +110,18 @@ module ts {
         return node.pos;
     }
 
+    // Returns true if this node is missing from the actual source code.  'missing' is different
+    // from 'undefined/defined'.  When a node is undefined (which can happen for optional nodes
+    // in the tree), it is definitel missing.  HOwever, a node may be defined, but still be 
+    // missing.  This happens whenever the parser knows it needs to parse something, but can't
+    // get anything in the source code that it expects at that location.  For example:
+    //
+    //          var a: ;
+    //
+    // Here, the Type in the Type-Annotation is not-optional (as there is a colon in the source 
+    // code).  So the parser will attempt to parse out a type, and will create an actual node.
+    // However, this node will be 'missing' in the sense that no actual source-code/tokens are
+    // contained within it.
     export function nodeIsMissing(node: Node) {
         if (!node) {
             return true;
@@ -117,7 +129,7 @@ module ts {
 
         return node.pos === node.end && node.kind !== SyntaxKind.EndOfFileToken;
     }
-
+    
     export function nodeIsPresent(node: Node) {
         return !nodeIsMissing(node);
     }
@@ -780,7 +792,7 @@ module ts {
                 throw new Error("start < 0");
             }
             if (length < 0) {
-                throw new Error("start < 0");
+                throw new Error("length < 0");
             }
             this._start = start;
             this._length = length;
