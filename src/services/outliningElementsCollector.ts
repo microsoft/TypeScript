@@ -79,12 +79,10 @@ module ts {
                                     break;
                                 }
                                 else if (tryStatement.finallyBlock === n) {
-                                    var children = tryStatement.getChildren();
-                                    for (var i = 0, m = children.length; i < m; i++) {
-                                        if (children[i].kind === SyntaxKind.FinallyKeyword) {
-                                            addOutliningSpan(children[i], openBrace, closeBrace, autoCollapse(n));
-                                            break;
-                                        }
+                                    var finallyKeyword = findChildOfKind(tryStatement, SyntaxKind.FinallyKeyword, sourceFile);
+                                    if (finallyKeyword) {
+                                        addOutliningSpan(finallyKeyword, openBrace, closeBrace, autoCollapse(n));
+                                        break;
                                     }
                                 }
 

@@ -3510,12 +3510,8 @@ module ts {
                 }
 
                 if (tryStatement.finallyBlock) {
-                    var children = tryStatement.getChildren();
-                    for (var i = 0, n = children.length; i < n; i++) {
-                        if (pushKeywordIf(keywords, children[i], SyntaxKind.FinallyKeyword)) {
-                            break;
-                        }
-                    }
+                    var finallyKeyword = findChildOfKind(tryStatement, SyntaxKind.FinallyKeyword, sourceFile);
+                    pushKeywordIf(keywords, finallyKeyword, SyntaxKind.FinallyKeyword);
                 }
 
                 return map(keywords, getReferenceEntryFromNode);
