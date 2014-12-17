@@ -2670,16 +2670,16 @@ module ts {
 
         function parsePrimaryExpression(): PrimaryExpression {
             switch (token) {
+                case SyntaxKind.NumericLiteral:
+                case SyntaxKind.StringLiteral:
+                case SyntaxKind.NoSubstitutionTemplateLiteral:
+                    return parseLiteralNode();
                 case SyntaxKind.ThisKeyword:
                 case SyntaxKind.SuperKeyword:
                 case SyntaxKind.NullKeyword:
                 case SyntaxKind.TrueKeyword:
                 case SyntaxKind.FalseKeyword:
                     return parseTokenNode<PrimaryExpression>();
-                case SyntaxKind.NumericLiteral:
-                case SyntaxKind.StringLiteral:
-                case SyntaxKind.NoSubstitutionTemplateLiteral:
-                    return parseLiteralNode();
                 case SyntaxKind.OpenParenToken:
                     return parseParenthesizedExpression();
                 case SyntaxKind.OpenBracketToken:
