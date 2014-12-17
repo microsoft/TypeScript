@@ -1,25 +1,25 @@
-tests/cases/compiler/conflictMarkerTrivia1.ts(2,1): error TS1184: Merge conflict marker encountered.
+tests/cases/compiler/conflictMarkerTrivia1.ts(2,1): error TS1185: Merge conflict marker encountered.
 tests/cases/compiler/conflictMarkerTrivia1.ts(3,5): error TS2300: Duplicate identifier 'v'.
-tests/cases/compiler/conflictMarkerTrivia1.ts(4,1): error TS1184: Merge conflict marker encountered.
+tests/cases/compiler/conflictMarkerTrivia1.ts(4,1): error TS1185: Merge conflict marker encountered.
 tests/cases/compiler/conflictMarkerTrivia1.ts(5,5): error TS2300: Duplicate identifier 'v'.
-tests/cases/compiler/conflictMarkerTrivia1.ts(6,1): error TS1184: Merge conflict marker encountered.
+tests/cases/compiler/conflictMarkerTrivia1.ts(6,1): error TS1185: Merge conflict marker encountered.
 
 
 ==== tests/cases/compiler/conflictMarkerTrivia1.ts (5 errors) ====
     class C {
     <<<<<<< HEAD
-    
-!!! error TS1184: Merge conflict marker encountered.
+    ~~~~~~~
+!!! error TS1185: Merge conflict marker encountered.
         v = 1;
         ~
 !!! error TS2300: Duplicate identifier 'v'.
     =======
-    
-!!! error TS1184: Merge conflict marker encountered.
+    ~~~~~~~
+!!! error TS1185: Merge conflict marker encountered.
         v = 2;
         ~
 !!! error TS2300: Duplicate identifier 'v'.
     >>>>>>> Branch-a
-    
-!!! error TS1184: Merge conflict marker encountered.
+    ~~~~~~~
+!!! error TS1185: Merge conflict marker encountered.
     }

@@ -44,7 +44,7 @@ module ts.NavigationBar {
             function visit(node: Node) {
                 switch (node.kind) {
                     case SyntaxKind.VariableStatement:
-                        forEach((<VariableStatement>node).declarations, visit);
+                        forEach((<VariableStatement>node).declarationList.declarations, visit);
                         break;
                     case SyntaxKind.ObjectBindingPattern:
                     case SyntaxKind.ArrayBindingPattern:
@@ -462,8 +462,8 @@ module ts.NavigationBar {
 
         function getNodeSpan(node: Node) {
             return node.kind === SyntaxKind.SourceFile
-                ? TextSpan.fromBounds(node.getFullStart(), node.getEnd())
-                : TextSpan.fromBounds(node.getStart(), node.getEnd());
+                ? createTextSpanFromBounds(node.getFullStart(), node.getEnd())
+                : createTextSpanFromBounds(node.getStart(), node.getEnd());
         }
 
         function getTextOfNode(node: Node): string {

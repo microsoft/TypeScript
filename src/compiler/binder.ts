@@ -202,7 +202,8 @@ module ts {
             if (symbolKind & SymbolFlags.Namespace) {
                 exportKind |= SymbolFlags.ExportNamespace;
             }
-            if (node.flags & NodeFlags.Export || (node.kind !== SyntaxKind.ImportDeclaration && isAmbientContext(container))) {
+
+            if (getCombinedNodeFlags(node) & NodeFlags.Export || (node.kind !== SyntaxKind.ImportDeclaration && isAmbientContext(container))) {
                 if (exportKind) {
                     var local = declareSymbol(container.locals, undefined, node, exportKind, symbolExcludes);
                     local.exportSymbol = declareSymbol(container.symbol.exports, container.symbol, node, symbolKind, symbolExcludes);
@@ -230,10 +231,8 @@ module ts {
             parent = node;
             if (symbolKind & SymbolFlags.IsContainer) {
                 container = node;
-                Debug.assert(container.nextContainer === undefined);
 
                 if (lastContainer) {
-                    Debug.assert(lastContainer.nextContainer === undefined);
                     lastContainer.nextContainer = container;
                 }
 
@@ -387,7 +386,7 @@ module ts {
                     if (isBindingPattern((<Declaration>node).name)) {
                         bindChildren(node, 0, /*isBlockScopeContainer*/ false);
                     }
-                    else if (node.flags & NodeFlags.BlockScoped) {
+                    else if (getCombinedNodeFlags(node) & NodeFlags.BlockScoped) {
                         bindBlockScopedVariableDeclaration(<Declaration>node);
                     }
                     else {
@@ -479,9 +478,7 @@ module ts {
                         break;
                     }
                 case SyntaxKind.Block:
-                case SyntaxKind.TryBlock:
                 case SyntaxKind.CatchClause:
-                case SyntaxKind.FinallyBlock:
                 case SyntaxKind.ForStatement:
                 case SyntaxKind.ForInStatement:
                 case SyntaxKind.SwitchStatement:
