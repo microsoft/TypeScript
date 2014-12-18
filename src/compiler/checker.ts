@@ -9003,7 +9003,12 @@ module ts {
                 checkCollisionWithRequireExportsInGeneratedCode(node, node.name);
                 checkExportsOnMergedDeclarations(node);
                 var symbol = getSymbolOfNode(node);
-                if (symbol.flags & SymbolFlags.ValueModule && symbol.declarations.length > 1 && !isInAmbientContext(node)) {
+
+                // The following checks only apply on a non-ambient instantiated module declaration.
+                if (symbol.flags & SymbolFlags.ValueModule
+                    && symbol.declarations.length > 1
+                    && !isInAmbientContext(node)
+                    && isInstantiatedModule(node, compilerOptions.preserveConstEnums)) {
                     var classOrFunc = getFirstNonAmbientClassOrFunctionDeclaration(symbol);
                     if (classOrFunc) {
                         if (getSourceFileOfNode(node) !== getSourceFileOfNode(classOrFunc)) {
@@ -9014,6 +9019,8 @@ module ts {
                         }
                     }
                 }
+
+                // Checks for ambient external modules.
                 if (node.name.kind === SyntaxKind.StringLiteral) {
                     if (!isGlobalSourceFile(node.parent)) {
                         error(node.name, Diagnostics.Ambient_external_modules_cannot_be_nested_in_other_modules);
