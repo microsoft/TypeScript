@@ -1920,10 +1920,6 @@ module ts {
         // this checker is used to answer all LS questions except errors 
         var typeInfoResolver: TypeChecker;
 
-        // the sole purpose of this checker is to return semantic diagnostics
-        // creation is deferred - use getFullTypeCheckChecker to get instance
-        var diagnosticsProducingTypeChecker_doNotAccessDirectly: TypeChecker;
-
         var useCaseSensitivefilenames = false;
         var sourceFilesByName: Map<SourceFile> = {};
         var documentRegistry = documentRegistry;
@@ -1944,7 +1940,7 @@ module ts {
         }
 
         function getDiagnosticsProducingTypeChecker() {
-            return diagnosticsProducingTypeChecker_doNotAccessDirectly || (diagnosticsProducingTypeChecker_doNotAccessDirectly = program.getTypeChecker(/*produceDiagnostics:*/ true));
+            return program.getTypeChecker(/*produceDiagnostics:*/ true);
         }
 
         function getRuleProvider(options: FormatCodeOptions) {
@@ -2084,7 +2080,6 @@ module ts {
             // Now create a new compiler
             program = createProgram(hostfilenames, compilationSettings, createCompilerHost());
             typeInfoResolver = program.getTypeChecker(/*produceDiagnostics*/ false);
-            diagnosticsProducingTypeChecker_doNotAccessDirectly = undefined;
         }
 
         /**
@@ -2095,7 +2090,6 @@ module ts {
         function cleanupSemanticCache(): void {
             if (program) {
                 typeInfoResolver = program.getTypeChecker(/*produceDiagnostics*/ false);
-                diagnosticsProducingTypeChecker_doNotAccessDirectly = undefined;
             }
         }
 
