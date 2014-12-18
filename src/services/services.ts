@@ -2598,7 +2598,7 @@ module ts {
         }
 
         // TODO(drosen): use contextual SemanticMeaning.
-        function getSymbolKind(symbol: Symbol, typeResolver: TypeChecker, location?: Node): string {
+        function getSymbolKind(symbol: Symbol, typeResolver: TypeChecker, location: Node): string {
             var flags = symbol.getFlags();
 
             if (flags & SymbolFlags.Class) return ScriptElementKind.classElement;
@@ -3097,6 +3097,83 @@ module ts {
 
         /// Goto definition
         function getDefinitionAtPosition(filename: string, position: number): DefinitionInfo[] {
+            synchronizeHostData();
+
+            filename = normalizeSlashes(filename);
+            var sourceFile = getSourceFile(filename);
+
+            var node = getTouchingPropertyName(sourceFile, position);
+            if (!node) {
+                return undefined;
+            }
+
+            // Labels
+            if (isJumpStatementTarget(node)) {
+                var labelName = (<Identifier>node).text;
+                var label = getTargetLabel((<BreakOrContinueStatement>node.parent), (<Identifier>node).text);
+                return label ? [getDefinitionInfo(label, ScriptElementKind.label, labelName, /*containerName*/ undefined)] : undefined;
+            }
+
+            /// Triple slash reference comments
+            var comment = forEach(sourceFile.referencedFiles, r => (r.pos <= position && position < r.end) ? r : undefined);
+            if (comment) {
+                var referenceFile = tryResolveScriptReference(program, sourceFile, comment);
+                if (referenceFile) {
+                    return [{
+                        fileName: referenceFile.filename,
+                        textSpan: createTextSpanFromBounds(0, 0),
+                        kind: ScriptElementKind.scriptElement,
+                        name: comment.filename,
+                        containerName: undefined,
+                        containerKind: undefined
+                    }];
+                }
+                return undefined;
+            }
+
+            var symbol = typeInfoResolver.getSymbolAtLocation(node);
+
+            // Could not find a symbol e.g. node is string or number keyword,
+            // or the symbol was an internal symbol and does not have a declaration e.g. undefined symbol
+            if (!symbol) {
+                return undefined;
+            }
+
+            var result: DefinitionInfo[] = [];
+
+            // Because name in short-hand property assignment has two different meanings: property name and property value,
+            // using go-to-definition at such position should go to the variable declaration of the property value rather than
+            // go to the declaration of the property name (in this case stay at the same position). However, if go-to-definition 
+            // is performed at the location of property access, we would like to go to definition of the property in the short-hand
+            // assignment. This case and others are handled by the following code.
+            if (node.parent.kind === SyntaxKind.ShorthandPropertyAssignment) {
+                var shorthandSymbol = typeInfoResolver.getShorthandAssignmentValueSymbol(symbol.valueDeclaration);
+                var shorthandDeclarations = shorthandSymbol.getDeclarations();
+                var shorthandSymbolKind = getSymbolKind(shorthandSymbol, typeInfoResolver, node);
+                var shorthandSymbolName = typeInfoResolver.symbolToString(shorthandSymbol);
+                var shorthandContainerName = typeInfoResolver.symbolToString(symbol.parent, node);
+                forEach(shorthandDeclarations, declaration => {
+                    result.push(getDefinitionInfo(declaration, shorthandSymbolKind, shorthandSymbolName, shorthandContainerName));
+                });
+                return result
+            }
+
+            var declarations = symbol.getDeclarations();
+            var symbolName = typeInfoResolver.symbolToString(symbol); // Do not get scoped name, just the name of the symbol
+            var symbolKind = getSymbolKind(symbol, typeInfoResolver, node);
+            var containerSymbol = symbol.parent;
+            var containerName = containerSymbol ? typeInfoResolver.symbolToString(containerSymbol, node) : "";
+
+            if (!tryAddConstructSignature(symbol, node, symbolKind, symbolName, containerName, result) &&
+                !tryAddCallSignature(symbol, node, symbolKind, symbolName, containerName, result)) {
+                // Just add all the declarations. 
+                forEach(declarations, declaration => {
+                    result.push(getDefinitionInfo(declaration, symbolKind, symbolName, containerName));
+                });
+            }
+
+            return result;
+
             function getDefinitionInfo(node: Node, symbolKind: string, symbolName: string, containerName: string): DefinitionInfo {
                 return {
                     fileName: node.getSourceFile().filename,
@@ -3152,83 +3229,6 @@ module ts {
                 }
                 return false;
             }
-
-            synchronizeHostData();
-
-            filename = normalizeSlashes(filename);
-            var sourceFile = getSourceFile(filename);
-
-            var node = getTouchingPropertyName(sourceFile, position);
-            if (!node) {
-                return undefined;
-            }
-
-            // Labels
-            if (isJumpStatementTarget(node)) {
-                var labelName = (<Identifier>node).text;
-                var label = getTargetLabel((<BreakOrContinueStatement>node.parent), (<Identifier>node).text);
-                return label ? [getDefinitionInfo(label, ScriptElementKind.label, labelName, /*containerName*/ undefined)] : undefined;
-            }
-
-            /// Triple slash reference comments
-            var comment = forEach(sourceFile.referencedFiles, r => (r.pos <= position && position < r.end) ? r : undefined);
-            if (comment) {
-                var referenceFile = tryResolveScriptReference(program, sourceFile, comment);
-                if (referenceFile) {
-                    return [{
-                        fileName: referenceFile.filename,
-                        textSpan: createTextSpanFromBounds(0, 0),
-                        kind: ScriptElementKind.scriptElement,
-                        name: comment.filename,
-                        containerName: undefined,
-                        containerKind: undefined
-                    }];
-                }
-                return undefined;
-            }
-
-            var symbol = typeInfoResolver.getSymbolAtLocation(node);
-
-            // Could not find a symbol e.g. node is string or number keyword,
-            // or the symbol was an internal symbol and does not have a declaration e.g. undefined symbol
-            if (!symbol) {
-                return undefined;
-            }
-
-            var result: DefinitionInfo[] = [];
-
-            // Because name in short-hand property assignment has two different meanings: property name and property value,
-            // using go-to-definition at such position should go to the variable declaration of the property value rather than
-            // go to the declaration of the property name (in this case stay at the same position). However, if go-to-definition 
-            // is performed at the location of property access, we would like to go to definition of the property in the short-hand
-            // assignment. This case and others are handled by the following code.
-            if (node.parent.kind === SyntaxKind.ShorthandPropertyAssignment) {
-                var shorthandSymbol = typeInfoResolver.getShorthandAssignmentValueSymbol(symbol.valueDeclaration);
-                var shorthandDeclarations = shorthandSymbol.getDeclarations();
-                var shorthandSymbolKind = getSymbolKind(shorthandSymbol, typeInfoResolver);
-                var shorthandSymbolName = typeInfoResolver.symbolToString(shorthandSymbol);
-                var shorthandContainerName = typeInfoResolver.symbolToString(symbol.parent, node);
-                forEach(shorthandDeclarations, declaration => {
-                    result.push(getDefinitionInfo(declaration, shorthandSymbolKind, shorthandSymbolName, shorthandContainerName));
-                });
-                return result
-            }
-
-            var declarations = symbol.getDeclarations();
-            var symbolName = typeInfoResolver.symbolToString(symbol); // Do not get scoped name, just the name of the symbol
-            var symbolKind = getSymbolKind(symbol, typeInfoResolver);
-            var containerSymbol = symbol.parent;
-            var containerName = containerSymbol ? typeInfoResolver.symbolToString(containerSymbol, node) : "";
-
-            if (!tryAddConstructSignature(symbol, node, symbolKind, symbolName, containerName, result) &&
-                !tryAddCallSignature(symbol, node, symbolKind, symbolName, containerName, result)) {
-                // Just add all the declarations. 
-                forEach(declarations, declaration => {
-                    result.push(getDefinitionInfo(declaration, symbolKind, symbolName, containerName));
-                });
-            }
-
-            return result;
         }
 
         /// References and Occurrences
@@ -5273,7 +5273,7 @@ module ts {
 
                 // Only allow a symbol to be renamed if it actually has at least one declaration.
                 if (symbol && symbol.getDeclarations() && symbol.getDeclarations().length > 0) {
-                    var kind = getSymbolKind(symbol, typeInfoResolver);
+                    var kind = getSymbolKind(symbol, typeInfoResolver, node);
                     if (kind) {
                         return getRenameInfo(symbol.name, typeInfoResolver.getFullyQualifiedName(symbol), kind,
                             getSymbolModifiers(symbol),

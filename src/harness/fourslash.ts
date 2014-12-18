@@ -1515,6 +1515,14 @@ module FourSlash {
             }
         }
 
+        public verifyDefinitionsCount(negative: boolean, expectedCount: number) {
+            var assertFn = negative ? assert.notEqual : assert.equal;
+
+            var definitions = this.languageService.getDefinitionAtPosition(this.activeFile.fileName, this.currentCaretPosition);
+
+            assertFn(definitions.length, expectedCount, this.messageAtLastKnownMarker("Definitions Count"));
+        }
+
         public verifyDefinitionsName(negative: boolean, expectedName: string, expectedContainerName: string) {
             this.taoInvalidReason = 'verifyDefinititionsInfo NYI';
 
@@ -1523,10 +1531,10 @@ module FourSlash {
             var actualDefinitionContainerName = definitions && definitions.length ? definitions[0].containerName : "";
             if (negative) {
                 assert.notEqual(actualDefinitionName, expectedName, this.messageAtLastKnownMarker("Definition Info Name"));
-                assert.notEqual(actualDefinitionName, expectedName, this.messageAtLastKnownMarker("Definition Info Container Name"));
+                assert.notEqual(actualDefinitionContainerName, expectedContainerName, this.messageAtLastKnownMarker("Definition Info Container Name"));
             } else {
                 assert.equal(actualDefinitionName, expectedName, this.messageAtLastKnownMarker("Definition Info Name"));
-                assert.equal(actualDefinitionName, expectedName, this.messageAtLastKnownMarker("Definition Info Container Name"));
+                assert.equal(actualDefinitionContainerName, expectedContainerName, this.messageAtLastKnownMarker("Definition Info Container Name"));
             }
         }
 
