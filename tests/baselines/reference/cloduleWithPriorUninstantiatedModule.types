@@ -1,5 +1,5 @@
 === tests/cases/compiler/cloduleWithPriorUninstantiatedModule.ts ===
-// Ambient/uninstantiated module.
+// Non-ambient & uninstantiated module.
 module Moclodule {
 >Moclodule : typeof Moclodule
 

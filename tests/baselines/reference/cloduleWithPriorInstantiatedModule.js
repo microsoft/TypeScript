@@ -1,9 +1,10 @@
-//// [cloduleWithPriorUninstantiatedModule.ts]
-// Non-ambient & uninstantiated module.
+//// [cloduleWithPriorInstantiatedModule.ts]
+// Non-ambient & instantiated module.
 module Moclodule {
     export interface Someinterface {
         foo(): void;
     }
+    var x = 10;
 }
 
 class Moclodule {
@@ -15,7 +16,12 @@ module Moclodule {
     }
 }
 
-//// [cloduleWithPriorUninstantiatedModule.js]
+//// [cloduleWithPriorInstantiatedModule.js]
+// Non-ambient & instantiated module.
+var Moclodule;
+(function (Moclodule) {
+    var x = 10;
+})(Moclodule || (Moclodule = {}));
 var Moclodule = (function () {
     function Moclodule() {
     }
