@@ -1,8 +1,4 @@
-/// <reference path="types.ts"/>
-/// <reference path="core.ts"/>
-/// <reference path="scanner.ts"/>
-/// <reference path="parser.ts"/>
-/// <reference path="binder.ts"/>
+/// <reference path="checker.ts"/>
 
 module ts {
     interface EmitTextWriter {
@@ -316,17 +312,16 @@ module ts {
         };
     }
 
-    function getSourceFilePathInNewDir(sourceFile: SourceFile, program: Program, newDirPath: string) {
-        var compilerHost = program.getCompilerHost();
-        var sourceFilePath = getNormalizedAbsolutePath(sourceFile.filename, compilerHost.getCurrentDirectory());
-        sourceFilePath = sourceFilePath.replace(program.getCommonSourceDirectory(), "");
+    function getSourceFilePathInNewDir(sourceFile: SourceFile, host: EmitHost, newDirPath: string) {
+        var sourceFilePath = getNormalizedAbsolutePath(sourceFile.filename, host.getCurrentDirectory());
+        sourceFilePath = sourceFilePath.replace(host.getCommonSourceDirectory(), "");
         return combinePaths(newDirPath, sourceFilePath);
     }
 
-    function getOwnEmitOutputFilePath(sourceFile: SourceFile, program: Program, extension: string){
-        var compilerOptions = program.getCompilerOptions();
+    function getOwnEmitOutputFilePath(sourceFile: SourceFile, host: EmitHost, extension: string){
+        var compilerOptions = host.getCompilerOptions();
         if (compilerOptions.outDir) {
-            var emitOutputFilePathWithoutExtension = removeFileExtension(getSourceFilePathInNewDir(sourceFile, program, compilerOptions.outDir));
+            var emitOutputFilePathWithoutExtension = removeFileExtension(getSourceFilePathInNewDir(sourceFile, host, compilerOptions.outDir));
         }
         else {
             var emitOutputFilePathWithoutExtension = removeFileExtension(sourceFile.filename);
@@ -335,16 +330,15 @@ module ts {
         return emitOutputFilePathWithoutExtension + extension;
     }
 
-    function writeFile(compilerHost: CompilerHost, diagnostics: Diagnostic[], filename: string, data: string, writeByteOrderMark: boolean) {
-        compilerHost.writeFile(filename, data, writeByteOrderMark, hostErrorMessage => {
+    function writeFile(host: EmitHost, diagnostics: Diagnostic[], filename: string, data: string, writeByteOrderMark: boolean) {
+        host.writeFile(filename, data, writeByteOrderMark, hostErrorMessage => {
             diagnostics.push(createCompilerDiagnostic(Diagnostics.Could_not_write_file_0_Colon_1, filename, hostErrorMessage));
         });
     }
 
-    function emitDeclarations(program: Program, resolver: EmitResolver, diagnostics: Diagnostic[], jsFilePath: string, root?: SourceFile): DeclarationEmit {
-        var newLine = program.getCompilerHost().getNewLine();
-        var compilerOptions = program.getCompilerOptions();
-        var compilerHost = program.getCompilerHost();
+    function emitDeclarations(host: EmitHost, resolver: EmitResolver, diagnostics: Diagnostic[], jsFilePath: string, root?: SourceFile): DeclarationEmit {
+        var newLine = host.getNewLine();
+        var compilerOptions = host.getCompilerOptions();
 
         var write: (s: string) => void;
         var writeLine: () => void;
@@ -1400,14 +1394,14 @@ module ts {
             var declFileName = referencedFile.flags & NodeFlags.DeclarationFile
                 ? referencedFile.filename // Declaration file, use declaration file name
                 : shouldEmitToOwnFile(referencedFile, compilerOptions)
-                ? getOwnEmitOutputFilePath(referencedFile, program, ".d.ts") // Own output file so get the .d.ts file
-                : removeFileExtension(compilerOptions.out) + ".d.ts";// Global out file
+                    ? getOwnEmitOutputFilePath(referencedFile, host, ".d.ts") // Own output file so get the .d.ts file
+                    : removeFileExtension(compilerOptions.out) + ".d.ts";// Global out file
 
             declFileName = getRelativePathToDirectoryOrUrl(
                 getDirectoryPath(normalizeSlashes(jsFilePath)),
                 declFileName,
-                compilerHost.getCurrentDirectory(),
-                compilerHost.getCanonicalFileName,
+                host.getCurrentDirectory(),
+                host.getCanonicalFileName,
             /*isAbsolutePathAnUrl*/ false);
 
             referencePathsOutput += "/// <reference path=\"" + declFileName + "\" />" + newLine;
@@ -1418,7 +1412,7 @@ module ts {
             if (!compilerOptions.noResolve) {
                 var addedGlobalFileReference = false;
                 forEach(root.referencedFiles, fileReference => {
-                    var referencedFile = tryResolveScriptReference(program, root, fileReference);
+                    var referencedFile = tryResolveScriptReference(host, root, fileReference);
 
                     // All the references that are not going to be part of same file
                     if (referencedFile && ((referencedFile.flags & NodeFlags.DeclarationFile) || // This is a declare file reference
@@ -1438,12 +1432,12 @@ module ts {
         else {
             // Emit references corresponding to this file
             var emittedReferencedFiles: SourceFile[] = [];
-            forEach(program.getSourceFiles(), sourceFile => {
+            forEach(host.getSourceFiles(), sourceFile => {
                 if (!isExternalModuleOrDeclarationFile(sourceFile)) {
                     // Check what references need to be added
                     if (!compilerOptions.noResolve) {
                         forEach(sourceFile.referencedFiles, fileReference => {
-                            var referencedFile = tryResolveScriptReference(program, sourceFile, fileReference);
+                            var referencedFile = tryResolveScriptReference(host, sourceFile, fileReference);
 
                             // If the reference file is a declaration file or an external module, emit that reference
                             if (referencedFile && (isExternalModuleOrDeclarationFile(referencedFile) &&
@@ -1468,21 +1462,31 @@ module ts {
         }
     }
 
-    export function getDeclarationDiagnostics(program: Program, resolver: EmitResolver, targetSourceFile: SourceFile): Diagnostic[] {
+    export interface EmitHost extends ScriptReferenceHost {
+        getSourceFiles(): SourceFile[];
+        isEmitBlocked(sourceFile?: SourceFile): boolean;
+
+        getCommonSourceDirectory(): string;
+        getCanonicalFileName(fileName: string): string;
+        getNewLine(): string;
+
+        writeFile(filename: string, data: string, writeByteOrderMark: boolean, onError?: (message: string) => void): void;
+    }
+
+    export function getDeclarationDiagnostics(host: EmitHost, resolver: EmitResolver, targetSourceFile: SourceFile): Diagnostic[] {
         var diagnostics: Diagnostic[] = [];
-        var jsFilePath = getOwnEmitOutputFilePath(targetSourceFile, program, ".js");
-        emitDeclarations(program, resolver, diagnostics, jsFilePath, targetSourceFile);
+        var jsFilePath = getOwnEmitOutputFilePath(targetSourceFile, host, ".js");
+        emitDeclarations(host, resolver, diagnostics, jsFilePath, targetSourceFile);
         return diagnostics;
     }
 
     // targetSourceFile is when users only want one file in entire project to be emitted. This is used in compilerOnSave feature
-    export function emitFiles(resolver: EmitResolver, targetSourceFile?: SourceFile): EmitResult {
-        var program = resolver.getProgram();
-        var compilerHost = program.getCompilerHost();
-        var compilerOptions = program.getCompilerOptions();
+    export function emitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFile?: SourceFile): EmitResult {
+        // var program = resolver.getProgram();
+        var compilerOptions = host.getCompilerOptions();
         var sourceMapDataList: SourceMapData[] = compilerOptions.sourceMap ? [] : undefined;
         var diagnostics: Diagnostic[] = [];
-        var newLine = program.getCompilerHost().getNewLine();
+        var newLine = host.getNewLine();
 
         function emitJavaScript(jsFilePath: string, root?: SourceFile) {
             var writer = createTextWriter(newLine);
@@ -1704,12 +1708,12 @@ module ts {
                     // Add the file to tsFilePaths
                     // If sourceroot option: Use the relative path corresponding to the common directory path 
                     // otherwise source locations relative to map file location
-                    var sourcesDirectoryPath = compilerOptions.sourceRoot ? program.getCommonSourceDirectory() : sourceMapDir;
+                    var sourcesDirectoryPath = compilerOptions.sourceRoot ? host.getCommonSourceDirectory() : sourceMapDir;
 
                     sourceMapData.sourceMapSources.push(getRelativePathToDirectoryOrUrl(sourcesDirectoryPath,
                         node.filename,
-                        compilerHost.getCurrentDirectory(),
-                        compilerHost.getCanonicalFileName,
+                        host.getCurrentDirectory(),
+                        host.getCanonicalFileName,
                         /*isAbsolutePathAnUrl*/ true));
                     sourceMapSourceIndex = sourceMapData.sourceMapSources.length - 1;
 
@@ -1805,7 +1809,7 @@ module ts {
                 function writeJavaScriptAndSourceMapFile(emitOutput: string, writeByteOrderMark: boolean) {
                     // Write source map file
                     encodeLastRecordedSourceMapSpan();
-                    writeFile(compilerHost, diagnostics, sourceMapData.sourceMapFilePath, serializeSourceMapContents(
+                    writeFile(host, diagnostics, sourceMapData.sourceMapFilePath, serializeSourceMapContents(
                         3,
                         sourceMapData.sourceMapFile,
                         sourceMapData.sourceMapSourceRoot,
@@ -1844,17 +1848,17 @@ module ts {
                     if (root) { // emitting single module file
                         // For modules or multiple emit files the mapRoot will have directory structure like the sources
                         // So if src\a.ts and src\lib\b.ts are compiled together user would be moving the maps into mapRoot\a.js.map and mapRoot\lib\b.js.map
-                        sourceMapDir = getDirectoryPath(getSourceFilePathInNewDir(root, program, sourceMapDir));
+                        sourceMapDir = getDirectoryPath(getSourceFilePathInNewDir(root, host, sourceMapDir));
                     }
 
                     if (!isRootedDiskPath(sourceMapDir) && !isUrl(sourceMapDir)) {
                         // The relative paths are relative to the common directory
-                        sourceMapDir = combinePaths(program.getCommonSourceDirectory(), sourceMapDir);
+                        sourceMapDir = combinePaths(host.getCommonSourceDirectory(), sourceMapDir);
                         sourceMapData.jsSourceMappingURL = getRelativePathToDirectoryOrUrl(
                             getDirectoryPath(normalizePath(jsFilePath)), // get the relative sourceMapDir path based on jsFilePath
                             combinePaths(sourceMapDir, sourceMapData.jsSourceMappingURL), // this is where user expects to see sourceMap
-                            compilerHost.getCurrentDirectory(),
-                            compilerHost.getCanonicalFileName,
+                            host.getCurrentDirectory(),
+                            host.getCanonicalFileName,
                             /*isAbsolutePathAnUrl*/ true);
                     }
                     else {
@@ -1890,7 +1894,7 @@ module ts {
             }
 
             function writeJavaScriptFile(emitOutput: string, writeByteOrderMark: boolean) {
-                writeFile(compilerHost, diagnostics, jsFilePath, emitOutput, writeByteOrderMark);
+                writeFile(host, diagnostics, jsFilePath, emitOutput, writeByteOrderMark);
             }
 
             // Create a temporary variable with a unique unused name. The forLoopVariable parameter signals that the
@@ -4215,7 +4219,7 @@ module ts {
                 emit(root);
             }
             else {
-                forEach(program.getSourceFiles(), sourceFile => {
+                forEach(host.getSourceFiles(), sourceFile => {
                     if (!isExternalModuleOrDeclarationFile(sourceFile)) {
                         emit(sourceFile);
                     }
@@ -4227,7 +4231,7 @@ module ts {
         }
 
         function writeDeclarationFile(jsFilePath: string, sourceFile: SourceFile) {
-            var emitDeclarationResult = emitDeclarations(program, resolver, diagnostics, jsFilePath, sourceFile);
+            var emitDeclarationResult = emitDeclarations(host, resolver, diagnostics, jsFilePath, sourceFile);
             // TODO(shkamat): Should we not write any declaration file if any of them can produce error, 
             // or should we just not write this file like we are doing now
             if (!emitDeclarationResult.reportedDeclarationError) {
@@ -4242,7 +4246,7 @@ module ts {
                     }
                 });
                 declarationOutput += emitDeclarationResult.synchronousDeclarationOutput.substring(appliedSyncOutputPos);
-                writeFile(compilerHost, diagnostics, removeFileExtension(jsFilePath) + ".d.ts", declarationOutput, compilerOptions.emitBOM);
+                writeFile(host, diagnostics, removeFileExtension(jsFilePath) + ".d.ts", declarationOutput, compilerOptions.emitBOM);
             }
         }
 
@@ -4252,11 +4256,11 @@ module ts {
         if (targetSourceFile === undefined) {
             // No targetSourceFile is specified (e.g. calling emitter from batch compiler)
             hasSemanticErrors = resolver.hasSemanticErrors();
-            isEmitBlocked = resolver.isEmitBlocked();
+            isEmitBlocked = host.isEmitBlocked();
 
-            forEach(program.getSourceFiles(), sourceFile => {
+            forEach(host.getSourceFiles(), sourceFile => {
                 if (shouldEmitToOwnFile(sourceFile, compilerOptions)) {
-                    var jsFilePath = getOwnEmitOutputFilePath(sourceFile, program, ".js");
+                    var jsFilePath = getOwnEmitOutputFilePath(sourceFile, host, ".js");
                     emitFile(jsFilePath, sourceFile);
                 }
             });
@@ -4270,18 +4274,18 @@ module ts {
             if (shouldEmitToOwnFile(targetSourceFile, compilerOptions)) {
                 // If shouldEmitToOwnFile returns true or targetSourceFile is an external module file, then emit targetSourceFile in its own output file
                 hasSemanticErrors = resolver.hasSemanticErrors(targetSourceFile);
-                isEmitBlocked = resolver.isEmitBlocked(targetSourceFile);
+                isEmitBlocked = host.isEmitBlocked(targetSourceFile);
 
-                var jsFilePath = getOwnEmitOutputFilePath(targetSourceFile, program, ".js");
+                var jsFilePath = getOwnEmitOutputFilePath(targetSourceFile, host, ".js");
                 emitFile(jsFilePath, targetSourceFile);
             }
             else if (!isDeclarationFile(targetSourceFile) && compilerOptions.out) {
                 // Otherwise, if --out is specified and targetSourceFile is not a declaration file,
                 // Emit all, non-external-module file, into one single output file
-                forEach(program.getSourceFiles(), sourceFile => {
+                forEach(host.getSourceFiles(), sourceFile => {
                     if (!shouldEmitToOwnFile(sourceFile, compilerOptions)) {
                         hasSemanticErrors = hasSemanticErrors || resolver.hasSemanticErrors(sourceFile);
-                        isEmitBlocked = isEmitBlocked || resolver.isEmitBlocked(sourceFile);
+                        isEmitBlocked = isEmitBlocked || host.isEmitBlocked(sourceFile);
                     }
                 });
 

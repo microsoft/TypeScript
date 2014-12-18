@@ -1,10 +1,6 @@
-/// <reference path="types.ts"/>
-/// <reference path="core.ts"/>
-/// <reference path="scanner.ts"/>
 /// <reference path="parser.ts"/>
 
 module ts {
-
     export const enum ModuleInstanceState {
         NonInstantiated = 0,
         Instantiated    = 1,

@@ -1,11 +1,4 @@
-/// <reference path="core.ts"/>
-/// <reference path="sys.ts"/>
-/// <reference path="types.ts"/>
-/// <reference path="scanner.ts"/>
-/// <reference path="parser.ts"/>
-/// <reference path="binder.ts"/>
-/// <reference path="checker.ts"/>
-/// <reference path="emitter.ts"/>
+/// <reference path="program.ts"/>
 /// <reference path="commandLineParser.ts"/>
 
 module ts {
@@ -293,7 +286,7 @@ module ts {
             var checker = program.getTypeChecker(/*fullTypeCheckMode*/ true);
             var checkStart = new Date().getTime();
             errors = checker.getDiagnostics();
-            if (checker.isEmitBlocked()) {
+            if (program.isEmitBlocked()) {
                 exitStatus = EmitReturnStatus.AllOutputGenerationSkipped;
             }
             else if (compilerOptions.noEmit) {
@@ -301,7 +294,7 @@ module ts {
             }
             else {
                 var emitStart = new Date().getTime();
-                var emitOutput = checker.emitFiles();
+                var emitOutput = program.emitFiles();
                 var emitErrors = emitOutput.diagnostics;
                 exitStatus = emitOutput.emitResultStatus;
                 var reportStart = new Date().getTime();

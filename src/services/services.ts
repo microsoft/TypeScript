@@ -1,8 +1,4 @@
-/// <reference path="..\compiler\types.ts"/>
-/// <reference path="..\compiler\core.ts"/>
-/// <reference path="..\compiler\scanner.ts"/>
-/// <reference path="..\compiler\parser.ts"/>
-/// <reference path="..\compiler\checker.ts"/>
+/// <reference path="..\compiler\program.ts"/>
 
 /// <reference path='breakpoints.ts' />
 /// <reference path='outliningElementsCollector.ts' />
@@ -13,7 +9,6 @@
 /// <reference path='formatting\smartIndenter.ts' />
 
 module ts {
-
     export var servicesVersion = "0.4"
 
     export interface Node {
@@ -1925,16 +1920,11 @@ module ts {
         // this checker is used to answer all LS questions except errors 
         var typeInfoResolver: TypeChecker;
 
-        // the sole purpose of this checker is to return semantic diagnostics
-        // creation is deferred - use getFullTypeCheckChecker to get instance
-        var fullTypeCheckChecker_doNotAccessDirectly: TypeChecker;
-
         var useCaseSensitivefilenames = false;
         var sourceFilesByName: Map<SourceFile> = {};
         var documentRegistry = documentRegistry;
         var cancellationToken = new CancellationTokenObject(host.getCancellationToken && host.getCancellationToken());
         var activeCompletionSession: CompletionSession;         // The current active completion session, used to get the completion entry details
-        var writer: (filename: string, data: string, writeByteOrderMark: boolean) => void = undefined;
 
         // Check if the localized messages json is set, otherwise query the host for it
         if (!localizedDiagnosticMessages && host.getLocalizedDiagnosticMessages) {
@@ -1949,8 +1939,8 @@ module ts {
             return lookUp(sourceFilesByName, getCanonicalFileName(filename));
         }
 
-        function getFullTypeCheckChecker() {
-            return fullTypeCheckChecker_doNotAccessDirectly || (fullTypeCheckChecker_doNotAccessDirectly = program.getTypeChecker(/*fullTypeCheck*/ true));
+        function getDiagnosticsProducingTypeChecker() {
+            return program.getTypeChecker(/*produceDiagnostics:*/ true);
         }
 
         function getRuleProvider(options: FormatCodeOptions) {
@@ -1977,7 +1967,6 @@ module ts {
                     return host.getDefaultLibFilename(options);
                 },
                 writeFile: (filename, data, writeByteOrderMark) => {
-                    writer(filename, data, writeByteOrderMark);
                 },
                 getCurrentDirectory: (): string => {
                     return host.getCurrentDirectory();
@@ -2090,8 +2079,7 @@ module ts {
 
             // Now create a new compiler
             program = createProgram(hostfilenames, compilationSettings, createCompilerHost());
-            typeInfoResolver = program.getTypeChecker(/*fullTypeCheckMode*/ false);
-            fullTypeCheckChecker_doNotAccessDirectly = undefined;
+            typeInfoResolver = program.getTypeChecker(/*produceDiagnostics*/ false);
         }
 
         /**
@@ -2101,8 +2089,7 @@ module ts {
          */
         function cleanupSemanticCache(): void {
             if (program) {
-                typeInfoResolver = program.getTypeChecker(/*fullTypeCheckMode*/ false);
-                fullTypeCheckChecker_doNotAccessDirectly = undefined;
+                typeInfoResolver = program.getTypeChecker(/*produceDiagnostics*/ false);
             }
         }
 
@@ -2131,7 +2118,7 @@ module ts {
 
             filename = normalizeSlashes(filename)
             var compilerOptions = program.getCompilerOptions();
-            var checker = getFullTypeCheckChecker();
+            var checker = getDiagnosticsProducingTypeChecker();
             var targetSourceFile = getSourceFile(filename);
 
             // Only perform the action per file regardless of '-out' flag as LanguageServiceHost is expected to call this function per file.
@@ -2140,7 +2127,7 @@ module ts {
             var allDiagnostics = checker.getDiagnostics(targetSourceFile);
             if (compilerOptions.declaration) {
                 // If '-d' is enabled, check for emitter error. One example of emitter error is export class implements non-export interface
-                allDiagnostics = allDiagnostics.concat(checker.getDeclarationDiagnostics(targetSourceFile));
+                allDiagnostics = allDiagnostics.concat(program.getDeclarationDiagnostics(targetSourceFile));
             }
             return allDiagnostics
         }
@@ -4571,7 +4558,7 @@ module ts {
 
             var outputFiles: OutputFile[] = [];
 
-            function getEmitOutputWriter(filename: string, data: string, writeByteOrderMark: boolean) {
+            function writeFile(filename: string, data: string, writeByteOrderMark: boolean) {
                 outputFiles.push({
                     name: filename,
                     writeByteOrderMark: writeByteOrderMark,
@@ -4579,13 +4566,12 @@ module ts {
                 });
             }
 
-            // Initialize writer for CompilerHost.writeFile
-            writer = getEmitOutputWriter;
+            // Get an emit host from our program, but override the writeFile functionality to
+            // call our local writer function.
+            var emitHost = createEmitHostFromProgram(program);
+            emitHost.writeFile = writeFile;
 
-            var emitOutput = getFullTypeCheckChecker().emitFiles(sourceFile);
-
-            // Reset writer back to undefined to make sure that we produce an error message if CompilerHost.writeFile method is called when we are not in getEmitOutput
-            writer = undefined;
+            var emitOutput = emitFiles(getDiagnosticsProducingTypeChecker().getEmitResolver(), emitHost, sourceFile);
 
             return {
                 outputFiles,
