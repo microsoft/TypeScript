@@ -34,7 +34,7 @@ declare var FourSlash;
 // Return code used by getEmitOutput function to indicate status of the function
 // It is a duplicate of the one in types.ts to expose it to testcases in fourslash
 enum EmitReturnStatus {
-    Succeeded = 0,                      // All outputs generated as requested (.js, .map, .d.ts), no errors reported
+    Succeeded = 0,                      // All outputs generated if requested (.js, .map, .d.ts), no errors reported
     AllOutputGenerationSkipped = 1,     // No .js generated because of syntax errors, or compiler options errors, nothing generated
     JSGeneratedWithSemanticErrors = 2,  // .js and .map generated with semantic errors
     DeclarationGenerationSkipped = 3,   // .d.ts generation skipped because of semantic errors or declaration emitter specific errors; Output .js with semantic errors

@@ -3342,7 +3342,7 @@ module ts {
         }
 
         function isContextSensitiveFunctionLikeDeclaration(node: FunctionLikeDeclaration) {
-            return !node.typeParameters && !forEach(node.parameters, p => p.type);
+            return !node.typeParameters && node.parameters.length && !forEach(node.parameters, p => p.type);
         }
 
         function getTypeWithoutConstructors(type: Type): Type {

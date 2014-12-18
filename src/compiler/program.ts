@@ -88,6 +88,7 @@ module ts {
         verifyCompilerOptions();
         errors.sort(compareDiagnostics);
 
+
         var diagnosticsProducingTypeChecker: TypeChecker;
         var noDiagnosticsTypeChecker: TypeChecker;
         var emitHost: EmitHost;
@@ -145,9 +146,7 @@ module ts {
         function invokeEmitter(targetSourceFile?: SourceFile) {
             var resolver = getDiagnosticsProducingTypeChecker().getEmitResolver();
             return emitFiles(resolver, getEmitHost(), targetSourceFile);
-        }
-
-        function getSourceFile(filename: string) {
+        }        function getSourceFile(filename: string) {
             filename = host.getCanonicalFileName(filename);
             return hasProperty(filesByName, filename) ? filesByName[filename] : undefined;
         }
@@ -218,8 +217,13 @@ module ts {
 
                 // We haven't looked for this file, do so now and cache result
                 var file = filesByName[canonicalName] = host.getSourceFile(filename, options.target, hostErrorMessage => {
-                    errors.push(createFileDiagnostic(refFile, refStart, refLength,
-                        Diagnostics.Cannot_read_file_0_Colon_1, filename, hostErrorMessage));
+                    if (refFile) {
+                        errors.push(createFileDiagnostic(refFile, refStart, refLength,
+                            Diagnostics.Cannot_read_file_0_Colon_1, filename, hostErrorMessage));
+                    }
+                    else {
+                        errors.push(createCompilerDiagnostic(Diagnostics.Cannot_read_file_0_Colon_1, filename, hostErrorMessage));
+                    }
                 });
                 if (file) {
                     seenNoDefaultLib = seenNoDefaultLib || file.hasNoDefaultLib;
@@ -387,6 +391,16 @@ module ts {
                     // used to replace with "" to get the relative path of the source file and the relative path doesn't
                     // start with / making it rooted path
                     commonSourceDirectory += directorySeparator;
+                }
+            }
+
+            if (options.noEmit) {
+                if (options.out || options.outDir) {
+                    errors.push(createCompilerDiagnostic(Diagnostics.Option_noEmit_cannot_be_specified_with_option_out_or_outDir));
+                }
+
+                if (options.declaration) {
+                    errors.push(createCompilerDiagnostic(Diagnostics.Option_noEmit_cannot_be_specified_with_option_declaration));
                 }
             }
         }
