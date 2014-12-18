@@ -17,6 +17,7 @@
 ////x.common./*propertyReference*/a;
 
 goTo.marker("propertyReference");
+verify.definitionCountIs(2);
 goTo.definition(0);
 verify.caretAtMarker("propertyDefinition2");
 
