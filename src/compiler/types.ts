@@ -1,5 +1,3 @@
-/// <reference path="core.ts"/>
-
 module ts {
     export interface Map<T> {
         [index: string]: T;
@@ -248,7 +246,6 @@ module ts {
         EnumMember,
         // Top-level nodes
         SourceFile,
-        Program,
 
         // Synthesized list
         SyntaxList,
@@ -925,15 +922,33 @@ module ts {
         identifiers: Map<string>;
     }
 
-    export interface Program {
-        getSourceFile(filename: string): SourceFile;
-        getSourceFiles(): SourceFile[];
+    export interface ScriptReferenceHost {
         getCompilerOptions(): CompilerOptions;
+        getSourceFile(filename: string): SourceFile;
+        getCurrentDirectory(): string;
+    }
+
+    export interface Program extends ScriptReferenceHost {
+        getSourceFiles(): SourceFile[];
         getCompilerHost(): CompilerHost;
+
         getDiagnostics(sourceFile?: SourceFile): Diagnostic[];
         getGlobalDiagnostics(): Diagnostic[];
-        getTypeChecker(fullTypeCheckMode: boolean): TypeChecker;
+        getDeclarationDiagnostics(sourceFile: SourceFile): Diagnostic[];
+
+        // Gets a type checker that can be used to semantically analyze source fils in the program.
+        // The 'produceDiagnostics' flag determines if the checker will produce diagnostics while
+        // analyzing the code.  It can be set to 'false' to make many type checking operaitons 
+        // faster.  With this flag set, the checker can avoid codepaths only necessary to produce 
+        // diagnostics, but not necessary to answer semantic questions about the code.
+        //
+        // If 'produceDiagnostics' is false, then any calls to get diagnostics from the TypeChecker
+        // will throw an invalid operation exception.
+        getTypeChecker(produceDiagnostics: boolean): TypeChecker;
         getCommonSourceDirectory(): string;
+
+        emitFiles(targetSourceFile?: SourceFile): EmitResult;
+        isEmitBlocked(sourceFile?: SourceFile): boolean;
     }
 
     export interface SourceMapSpan {
@@ -959,7 +974,7 @@ module ts {
 
     // Return code used by getEmitOutput function to indicate status of the function
     export enum EmitReturnStatus {
-        Succeeded = 0,                      // All outputs generated as requested (.js, .map, .d.ts), no errors reported
+        Succeeded = 0,                      // All outputs generated if requested (.js, .map, .d.ts), no errors reported
         AllOutputGenerationSkipped = 1,     // No .js generated because of syntax errors, nothing generated
         JSGeneratedWithSemanticErrors = 2,  // .js and .map generated with semantic errors
         DeclarationGenerationSkipped = 3,   // .d.ts generation skipped because of semantic errors or declaration emitter specific errors; Output .js with semantic errors
@@ -973,16 +988,22 @@ module ts {
         sourceMaps: SourceMapData[];  // Array of sourceMapData if compiler emitted sourcemaps
     }
 
+    export interface TypeCheckerHost {
+        getCompilerOptions(): CompilerOptions;
+        getCompilerHost(): CompilerHost;
+
+        getSourceFiles(): SourceFile[];
+        getSourceFile(filename: string): SourceFile;
+    }
+
     export interface TypeChecker {
-        getProgram(): Program;
+        getEmitResolver(): EmitResolver;
         getDiagnostics(sourceFile?: SourceFile): Diagnostic[];
-        getDeclarationDiagnostics(sourceFile: SourceFile): Diagnostic[];
         getGlobalDiagnostics(): Diagnostic[];
         getNodeCount(): number;
         getIdentifierCount(): number;
         getSymbolCount(): number;
         getTypeCount(): number;
-        emitFiles(targetSourceFile?: SourceFile): EmitResult;
         getTypeOfSymbolAtLocation(symbol: Symbol, node: Node): Type;
         getDeclaredTypeOfSymbol(symbol: Symbol): Type;
         getPropertiesOfType(type: Type): Symbol[];
@@ -1006,7 +1027,7 @@ module ts {
         isImplementationOfOverload(node: FunctionLikeDeclaration): boolean;
         isUndefinedSymbol(symbol: Symbol): boolean;
         isArgumentsSymbol(symbol: Symbol): boolean;
-        isEmitBlocked(sourceFile?: SourceFile): boolean;
+
         // Returns the constant value of this enum member, or 'undefined' if the enum member has a computed value.
         getEnumMemberValue(node: EnumMember): number;
         isValidPropertyAccess(node: PropertyAccessExpression | QualifiedName, propertyName: string): boolean;
@@ -1088,7 +1109,6 @@ module ts {
     }
 
     export interface EmitResolver {
-        getProgram(): Program;
         getLocalNameOfContainer(container: ModuleDeclaration | EnumDeclaration): string;
         getExpressionNamePrefix(node: Identifier): string;
         getExportAssignmentName(node: SourceFile): string;
@@ -1105,7 +1125,6 @@ module ts {
         isEntityNameVisible(entityName: EntityName, enclosingDeclaration: Node): SymbolVisibilityResult;
         // Returns the constant value this property access resolves to, or 'undefined' for a non-constant
         getConstantValue(node: PropertyAccessExpression | ElementAccessExpression): number;
-        isEmitBlocked(sourceFile?: SourceFile): boolean;
         isUnknownIdentifier(location: Node, name: string): boolean;
     }
 
@@ -1429,6 +1448,7 @@ module ts {
         locale?: string;
         mapRoot?: string;
         module?: ModuleKind;
+        noEmit?: boolean;
         noEmitOnError?: boolean;
         noErrorTruncation?: boolean;
         noImplicitAny?: boolean;

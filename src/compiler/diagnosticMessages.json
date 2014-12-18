@@ -1513,6 +1513,14 @@
         "category": "Error",
         "code": 5039
     },
+    "Option noEmit cannot be specified with option out or outDir.": {
+        "category": "Error",
+        "code": 5040
+    },
+    "Option noEmit cannot be specified with option declaration.": {
+        "category": "Error",
+        "code": 5041
+    },
     "Concatenate and emit output to single file.": {
         "category": "Message",
         "code": 6001
@@ -1548,6 +1556,10 @@
     "Do not emit comments to output.": {
         "category": "Message",
         "code": 6009
+    },
+    "Do not emit outputs.": {
+        "category": "Message",
+        "code": 6010
     },
     "Specify ECMAScript target version: 'ES3' (default), 'ES5', or 'ES6' (experimental)": {
         "category": "Message",

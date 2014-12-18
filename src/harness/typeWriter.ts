@@ -10,11 +10,16 @@ class TypeWriterWalker {
     results: TypeWriterResult[];
     currentSourceFile: ts.SourceFile;
 
-    constructor(public checker: ts.TypeChecker) {
+    private checker: ts.TypeChecker;
+
+    constructor(private program: ts.Program) {
+        // Consider getting both the diagnostics checker and the non-diagnostics checker to verify 
+        // they are consistent.
+        this.checker = program.getTypeChecker(/*produceDiagnostics:*/ true);
     }
 
     public getTypes(fileName: string): TypeWriterResult[] {
-        var sourceFile = this.checker.getProgram().getSourceFile(fileName);
+        var sourceFile = this.program.getSourceFile(fileName);
         this.currentSourceFile = sourceFile;
         this.results = [];
         this.visitNode(sourceFile);

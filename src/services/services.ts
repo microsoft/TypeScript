@@ -1,8 +1,4 @@
-/// <reference path="..\compiler\types.ts"/>
-/// <reference path="..\compiler\core.ts"/>
-/// <reference path="..\compiler\scanner.ts"/>
-/// <reference path="..\compiler\parser.ts"/>
-/// <reference path="..\compiler\checker.ts"/>
+/// <reference path="..\compiler\program.ts"/>
 
 /// <reference path='breakpoints.ts' />
 /// <reference path='outliningElementsCollector.ts' />
@@ -13,7 +9,6 @@
 /// <reference path='formatting\smartIndenter.ts' />
 
 module ts {
-
     export var servicesVersion = "0.4"
 
     export interface Node {
@@ -1925,16 +1920,11 @@ module ts {
         // this checker is used to answer all LS questions except errors 
         var typeInfoResolver: TypeChecker;
 
-        // the sole purpose of this checker is to return semantic diagnostics
-        // creation is deferred - use getFullTypeCheckChecker to get instance
-        var fullTypeCheckChecker_doNotAccessDirectly: TypeChecker;
-
         var useCaseSensitivefilenames = false;
         var sourceFilesByName: Map<SourceFile> = {};
         var documentRegistry = documentRegistry;
         var cancellationToken = new CancellationTokenObject(host.getCancellationToken && host.getCancellationToken());
         var activeCompletionSession: CompletionSession;         // The current active completion session, used to get the completion entry details
-        var writer: (filename: string, data: string, writeByteOrderMark: boolean) => void = undefined;
 
         // Check if the localized messages json is set, otherwise query the host for it
         if (!localizedDiagnosticMessages && host.getLocalizedDiagnosticMessages) {
@@ -1949,8 +1939,8 @@ module ts {
             return lookUp(sourceFilesByName, getCanonicalFileName(filename));
         }
 
-        function getFullTypeCheckChecker() {
-            return fullTypeCheckChecker_doNotAccessDirectly || (fullTypeCheckChecker_doNotAccessDirectly = program.getTypeChecker(/*fullTypeCheck*/ true));
+        function getDiagnosticsProducingTypeChecker() {
+            return program.getTypeChecker(/*produceDiagnostics:*/ true);
         }
 
         function getRuleProvider(options: FormatCodeOptions) {
@@ -1977,7 +1967,6 @@ module ts {
                     return host.getDefaultLibFilename(options);
                 },
                 writeFile: (filename, data, writeByteOrderMark) => {
-                    writer(filename, data, writeByteOrderMark);
                 },
                 getCurrentDirectory: (): string => {
                     return host.getCurrentDirectory();
@@ -2090,8 +2079,7 @@ module ts {
 
             // Now create a new compiler
             program = createProgram(hostfilenames, compilationSettings, createCompilerHost());
-            typeInfoResolver = program.getTypeChecker(/*fullTypeCheckMode*/ false);
-            fullTypeCheckChecker_doNotAccessDirectly = undefined;
+            typeInfoResolver = program.getTypeChecker(/*produceDiagnostics*/ false);
         }
 
         /**
@@ -2101,8 +2089,7 @@ module ts {
          */
         function cleanupSemanticCache(): void {
             if (program) {
-                typeInfoResolver = program.getTypeChecker(/*fullTypeCheckMode*/ false);
-                fullTypeCheckChecker_doNotAccessDirectly = undefined;
+                typeInfoResolver = program.getTypeChecker(/*produceDiagnostics*/ false);
             }
         }
 
@@ -2131,7 +2118,7 @@ module ts {
 
             filename = normalizeSlashes(filename)
             var compilerOptions = program.getCompilerOptions();
-            var checker = getFullTypeCheckChecker();
+            var checker = getDiagnosticsProducingTypeChecker();
             var targetSourceFile = getSourceFile(filename);
 
             // Only perform the action per file regardless of '-out' flag as LanguageServiceHost is expected to call this function per file.
@@ -2140,7 +2127,7 @@ module ts {
             var allDiagnostics = checker.getDiagnostics(targetSourceFile);
             if (compilerOptions.declaration) {
                 // If '-d' is enabled, check for emitter error. One example of emitter error is export class implements non-export interface
-                allDiagnostics = allDiagnostics.concat(checker.getDeclarationDiagnostics(targetSourceFile));
+                allDiagnostics = allDiagnostics.concat(program.getDeclarationDiagnostics(targetSourceFile));
             }
             return allDiagnostics
         }
@@ -2598,7 +2585,7 @@ module ts {
         }
 
         // TODO(drosen): use contextual SemanticMeaning.
-        function getSymbolKind(symbol: Symbol, typeResolver: TypeChecker, location?: Node): string {
+        function getSymbolKind(symbol: Symbol, typeResolver: TypeChecker, location: Node): string {
             var flags = symbol.getFlags();
 
             if (flags & SymbolFlags.Class) return ScriptElementKind.classElement;
@@ -3097,6 +3084,83 @@ module ts {
 
         /// Goto definition
         function getDefinitionAtPosition(filename: string, position: number): DefinitionInfo[] {
+            synchronizeHostData();
+
+            filename = normalizeSlashes(filename);
+            var sourceFile = getSourceFile(filename);
+
+            var node = getTouchingPropertyName(sourceFile, position);
+            if (!node) {
+                return undefined;
+            }
+
+            // Labels
+            if (isJumpStatementTarget(node)) {
+                var labelName = (<Identifier>node).text;
+                var label = getTargetLabel((<BreakOrContinueStatement>node.parent), (<Identifier>node).text);
+                return label ? [getDefinitionInfo(label, ScriptElementKind.label, labelName, /*containerName*/ undefined)] : undefined;
+            }
+
+            /// Triple slash reference comments
+            var comment = forEach(sourceFile.referencedFiles, r => (r.pos <= position && position < r.end) ? r : undefined);
+            if (comment) {
+                var referenceFile = tryResolveScriptReference(program, sourceFile, comment);
+                if (referenceFile) {
+                    return [{
+                        fileName: referenceFile.filename,
+                        textSpan: createTextSpanFromBounds(0, 0),
+                        kind: ScriptElementKind.scriptElement,
+                        name: comment.filename,
+                        containerName: undefined,
+                        containerKind: undefined
+                    }];
+                }
+                return undefined;
+            }
+
+            var symbol = typeInfoResolver.getSymbolAtLocation(node);
+
+            // Could not find a symbol e.g. node is string or number keyword,
+            // or the symbol was an internal symbol and does not have a declaration e.g. undefined symbol
+            if (!symbol) {
+                return undefined;
+            }
+
+            var result: DefinitionInfo[] = [];
+
+            // Because name in short-hand property assignment has two different meanings: property name and property value,
+            // using go-to-definition at such position should go to the variable declaration of the property value rather than
+            // go to the declaration of the property name (in this case stay at the same position). However, if go-to-definition 
+            // is performed at the location of property access, we would like to go to definition of the property in the short-hand
+            // assignment. This case and others are handled by the following code.
+            if (node.parent.kind === SyntaxKind.ShorthandPropertyAssignment) {
+                var shorthandSymbol = typeInfoResolver.getShorthandAssignmentValueSymbol(symbol.valueDeclaration);
+                var shorthandDeclarations = shorthandSymbol.getDeclarations();
+                var shorthandSymbolKind = getSymbolKind(shorthandSymbol, typeInfoResolver, node);
+                var shorthandSymbolName = typeInfoResolver.symbolToString(shorthandSymbol);
+                var shorthandContainerName = typeInfoResolver.symbolToString(symbol.parent, node);
+                forEach(shorthandDeclarations, declaration => {
+                    result.push(getDefinitionInfo(declaration, shorthandSymbolKind, shorthandSymbolName, shorthandContainerName));
+                });
+                return result
+            }
+
+            var declarations = symbol.getDeclarations();
+            var symbolName = typeInfoResolver.symbolToString(symbol); // Do not get scoped name, just the name of the symbol
+            var symbolKind = getSymbolKind(symbol, typeInfoResolver, node);
+            var containerSymbol = symbol.parent;
+            var containerName = containerSymbol ? typeInfoResolver.symbolToString(containerSymbol, node) : "";
+
+            if (!tryAddConstructSignature(symbol, node, symbolKind, symbolName, containerName, result) &&
+                !tryAddCallSignature(symbol, node, symbolKind, symbolName, containerName, result)) {
+                // Just add all the declarations. 
+                forEach(declarations, declaration => {
+                    result.push(getDefinitionInfo(declaration, symbolKind, symbolName, containerName));
+                });
+            }
+
+            return result;
+
             function getDefinitionInfo(node: Node, symbolKind: string, symbolName: string, containerName: string): DefinitionInfo {
                 return {
                     fileName: node.getSourceFile().filename,
@@ -3152,83 +3216,6 @@ module ts {
                 }
                 return false;
             }
-
-            synchronizeHostData();
-
-            filename = normalizeSlashes(filename);
-            var sourceFile = getSourceFile(filename);
-
-            var node = getTouchingPropertyName(sourceFile, position);
-            if (!node) {
-                return undefined;
-            }
-
-            // Labels
-            if (isJumpStatementTarget(node)) {
-                var labelName = (<Identifier>node).text;
-                var label = getTargetLabel((<BreakOrContinueStatement>node.parent), (<Identifier>node).text);
-                return label ? [getDefinitionInfo(label, ScriptElementKind.label, labelName, /*containerName*/ undefined)] : undefined;
-            }
-
-            /// Triple slash reference comments
-            var comment = forEach(sourceFile.referencedFiles, r => (r.pos <= position && position < r.end) ? r : undefined);
-            if (comment) {
-                var referenceFile = tryResolveScriptReference(program, sourceFile, comment);
-                if (referenceFile) {
-                    return [{
-                        fileName: referenceFile.filename,
-                        textSpan: createTextSpanFromBounds(0, 0),
-                        kind: ScriptElementKind.scriptElement,
-                        name: comment.filename,
-                        containerName: undefined,
-                        containerKind: undefined
-                    }];
-                }
-                return undefined;
-            }
-
-            var symbol = typeInfoResolver.getSymbolAtLocation(node);
-
-            // Could not find a symbol e.g. node is string or number keyword,
-            // or the symbol was an internal symbol and does not have a declaration e.g. undefined symbol
-            if (!symbol) {
-                return undefined;
-            }
-
-            var result: DefinitionInfo[] = [];
-
-            // Because name in short-hand property assignment has two different meanings: property name and property value,
-            // using go-to-definition at such position should go to the variable declaration of the property value rather than
-            // go to the declaration of the property name (in this case stay at the same position). However, if go-to-definition 
-            // is performed at the location of property access, we would like to go to definition of the property in the short-hand
-            // assignment. This case and others are handled by the following code.
-            if (node.parent.kind === SyntaxKind.ShorthandPropertyAssignment) {
-                var shorthandSymbol = typeInfoResolver.getShorthandAssignmentValueSymbol(symbol.valueDeclaration);
-                var shorthandDeclarations = shorthandSymbol.getDeclarations();
-                var shorthandSymbolKind = getSymbolKind(shorthandSymbol, typeInfoResolver);
-                var shorthandSymbolName = typeInfoResolver.symbolToString(shorthandSymbol);
-                var shorthandContainerName = typeInfoResolver.symbolToString(symbol.parent, node);
-                forEach(shorthandDeclarations, declaration => {
-                    result.push(getDefinitionInfo(declaration, shorthandSymbolKind, shorthandSymbolName, shorthandContainerName));
-                });
-                return result
-            }
-
-            var declarations = symbol.getDeclarations();
-            var symbolName = typeInfoResolver.symbolToString(symbol); // Do not get scoped name, just the name of the symbol
-            var symbolKind = getSymbolKind(symbol, typeInfoResolver);
-            var containerSymbol = symbol.parent;
-            var containerName = containerSymbol ? typeInfoResolver.symbolToString(containerSymbol, node) : "";
-
-            if (!tryAddConstructSignature(symbol, node, symbolKind, symbolName, containerName, result) &&
-                !tryAddCallSignature(symbol, node, symbolKind, symbolName, containerName, result)) {
-                // Just add all the declarations. 
-                forEach(declarations, declaration => {
-                    result.push(getDefinitionInfo(declaration, symbolKind, symbolName, containerName));
-                });
-            }
-
-            return result;
         }
 
         /// References and Occurrences
@@ -4571,7 +4558,7 @@ module ts {
 
             var outputFiles: OutputFile[] = [];
 
-            function getEmitOutputWriter(filename: string, data: string, writeByteOrderMark: boolean) {
+            function writeFile(filename: string, data: string, writeByteOrderMark: boolean) {
                 outputFiles.push({
                     name: filename,
                     writeByteOrderMark: writeByteOrderMark,
@@ -4579,13 +4566,12 @@ module ts {
                 });
             }
 
-            // Initialize writer for CompilerHost.writeFile
-            writer = getEmitOutputWriter;
+            // Get an emit host from our program, but override the writeFile functionality to
+            // call our local writer function.
+            var emitHost = createEmitHostFromProgram(program);
+            emitHost.writeFile = writeFile;
 
-            var emitOutput = getFullTypeCheckChecker().emitFiles(sourceFile);
-
-            // Reset writer back to undefined to make sure that we produce an error message if CompilerHost.writeFile method is called when we are not in getEmitOutput
-            writer = undefined;
+            var emitOutput = emitFiles(getDiagnosticsProducingTypeChecker().getEmitResolver(), emitHost, sourceFile);
 
             return {
                 outputFiles,
@@ -5273,7 +5259,7 @@ module ts {
 
                 // Only allow a symbol to be renamed if it actually has at least one declaration.
                 if (symbol && symbol.getDeclarations() && symbol.getDeclarations().length > 0) {
-                    var kind = getSymbolKind(symbol, typeInfoResolver);
+                    var kind = getSymbolKind(symbol, typeInfoResolver, node);
                     if (kind) {
                         return getRenameInfo(symbol.name, typeInfoResolver.getFullyQualifiedName(symbol), kind,
                             getSymbolModifiers(symbol),
