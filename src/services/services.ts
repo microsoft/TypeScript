@@ -4985,10 +4985,17 @@ module ts {
                 }
 
                 if (isPunctuation(tokenKind)) {
-                    // the '=' in a variable declaration is special cased here.
                     if (token) {
+                        if (tokenKind === SyntaxKind.EqualsToken) {
+                            // the '=' in a variable declaration is special cased here.
+                            if (token.parent.kind === SyntaxKind.VariableDeclaration ||
+                                token.parent.kind === SyntaxKind.PropertyDeclaration ||
+                                token.parent.kind === SyntaxKind.Parameter) {
+                                return ClassificationTypeNames.operator;
+                            }
+                        }
+
                         if (token.parent.kind === SyntaxKind.BinaryExpression ||
-                            token.parent.kind === SyntaxKind.VariableDeclaration ||
                             token.parent.kind === SyntaxKind.PrefixUnaryExpression ||
                             token.parent.kind === SyntaxKind.PostfixUnaryExpression ||
                             token.parent.kind === SyntaxKind.ConditionalExpression) {
