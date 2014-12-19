@@ -272,8 +272,6 @@ module ts {
         LastLiteralToken = NoSubstitutionTemplateLiteral,
         FirstTemplateToken = NoSubstitutionTemplateLiteral,
         LastTemplateToken = TemplateTail,
-        FirstOperator = SemicolonToken,
-        LastOperator = CaretEqualsToken,
         FirstBinaryOperator = LessThanToken,
         LastBinaryOperator = CaretEqualsToken,
         FirstNode = QualifiedName,
