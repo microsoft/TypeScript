@@ -5244,8 +5244,8 @@ module ts {
         // Return the contextual signature for a given expression node. A contextual type provides a
         // contextual signature if it has a single call signature and if that call signature is non-generic.
         // If the contextual type is a union type, get the signature from each type possible and if they are 
-        // all identical ignoring their return type, the result is same signature but with a union type of 
-        // the return types of these signatures
+        // all identical ignoring their return type, the result is same signature but with return type as 
+        // union type of return types from these signatures
         function getContextualSignature(node: FunctionExpression | MethodDeclaration): Signature {
             Debug.assert(node.kind !== SyntaxKind.MethodDeclaration || isObjectLiteralMethod(node));
             var type = isObjectLiteralMethod(node)
