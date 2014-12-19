@@ -1,4 +1,4 @@
-tests/cases/compiler/externSyntax.ts(8,20): error TS1037: A function implementation cannot be declared in an ambient context.
+tests/cases/compiler/externSyntax.ts(8,20): error TS1177: An implementation cannot be declared in ambient contexts.
 
 
 ==== tests/cases/compiler/externSyntax.ts (1 errors) ====
@@ -11,7 +11,7 @@ tests/cases/compiler/externSyntax.ts(8,20): error TS1037: A function implementat
             public f();
             public g() { } // error body
                        ~
-!!! error TS1037: A function implementation cannot be declared in an ambient context.
+!!! error TS1177: An implementation cannot be declared in ambient contexts.
         }
     }
     

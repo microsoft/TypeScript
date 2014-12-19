@@ -1,5 +1,5 @@
 tests/cases/compiler/methodInAmbientClass1.ts(2,12): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value or consist of a single 'throw' statement.
-tests/cases/compiler/methodInAmbientClass1.ts(2,20): error TS1037: A function implementation cannot be declared in an ambient context.
+tests/cases/compiler/methodInAmbientClass1.ts(2,20): error TS1177: An implementation cannot be declared in ambient contexts.
 
 
 ==== tests/cases/compiler/methodInAmbientClass1.ts (2 errors) ====
@@ -8,6 +8,6 @@ tests/cases/compiler/methodInAmbientClass1.ts(2,20): error TS1037: A function im
         	      ~~~~~~~
 !!! error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value or consist of a single 'throw' statement.
         	              ~
-!!! error TS1037: A function implementation cannot be declared in an ambient context.
+!!! error TS1177: An implementation cannot be declared in ambient contexts.
         	}
         }

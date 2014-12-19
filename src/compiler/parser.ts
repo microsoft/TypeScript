@@ -59,7 +59,8 @@ module ts {
                     child((<QualifiedName>node).right);
             case SyntaxKind.TypeParameter:
                 return child((<TypeParameterDeclaration>node).name) ||
-                    child((<TypeParameterDeclaration>node).constraint);
+                    child((<TypeParameterDeclaration>node).constraint) ||
+                    child((<TypeParameterDeclaration>node).expression);
             case SyntaxKind.Parameter:
                 return children(node.modifiers) ||
                     child((<ParameterDeclaration>node).dotDotDotToken) ||
@@ -92,6 +93,7 @@ module ts {
             case SyntaxKind.FunctionDeclaration:
             case SyntaxKind.ArrowFunction:
                 return children(node.modifiers) ||
+                    child((<FunctionLikeDeclaration>node).asteriskToken) ||
                     child((<FunctionLikeDeclaration>node).name) ||
                     child((<FunctionLikeDeclaration>node).questionToken) ||
                     children((<FunctionLikeDeclaration>node).typeParameters) ||
@@ -392,7 +394,7 @@ module ts {
         }
     };
 
-    function modifierToFlag(token: SyntaxKind): NodeFlags {
+    export function modifierToFlag(token: SyntaxKind): NodeFlags {
         switch (token) {
             case SyntaxKind.StaticKeyword: return NodeFlags.Static;
             case SyntaxKind.PublicKeyword: return NodeFlags.Public;
@@ -405,7 +407,7 @@ module ts {
         return 0;
     }
 
-    function isEvalOrArgumentsIdentifier(node: Node): boolean {
+    export function isEvalOrArgumentsIdentifier(node: Node): boolean {
         return node.kind === SyntaxKind.Identifier &&
             ((<Identifier>node).text === "eval" || (<Identifier>node).text === "arguments");
     }
@@ -3879,7 +3881,7 @@ module ts {
         return sourceFile;
     }
 
-    function isLeftHandSideExpression(expr: Expression): boolean {
+    export function isLeftHandSideExpression(expr: Expression): boolean {
         if (expr) {
             switch (expr.kind) {
                 case SyntaxKind.PropertyAccessExpression:
@@ -3909,11 +3911,12 @@ module ts {
         return false;
     }
 
-    function isAssignmentOperator(token: SyntaxKind): boolean {
+    export function isAssignmentOperator(token: SyntaxKind): boolean {
         return token >= SyntaxKind.FirstAssignment && token <= SyntaxKind.LastAssignment;
     }
 
     function checkGrammar(sourceText: string, languageVersion: ScriptTarget, file: SourceFile) {
+        return;
         var grammarDiagnostics = file.grammarDiagnostics;
 
         // Create a scanner so we can find the start of tokens to report errors on.
@@ -4559,10 +4562,11 @@ module ts {
 
         function checkForBodyInAmbientContext(body: Block | Expression, isConstructor: boolean): boolean {
             if (inAmbientContext && body && body.kind === SyntaxKind.Block) {
-                var diagnostic = isConstructor
-                    ? Diagnostics.A_constructor_implementation_cannot_be_declared_in_an_ambient_context
-                    : Diagnostics.A_function_implementation_cannot_be_declared_in_an_ambient_context;
-                return grammarErrorOnFirstToken(body, diagnostic);
+               // var diagnostic = isConstructor
+                //    ? Diagnostics.A_constructor_implementation_cannot_be_declared_in_an_ambient_context
+                 //   : Diagnostics.A_function_implementation_cannot_be_declared_in_an_ambient_context;
+               // return grammarErrorOnFirstToken(body, diagnostic);
+                return false;
             }
         }
 

@@ -1,16 +1,16 @@
 tests/cases/conformance/ambient/ambientErrors.ts(2,15): error TS1039: Initializers are not allowed in ambient contexts.
 tests/cases/conformance/ambient/ambientErrors.ts(6,1): error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
 tests/cases/conformance/ambient/ambientErrors.ts(17,22): error TS2371: A parameter initializer is only allowed in a function or constructor implementation.
-tests/cases/conformance/ambient/ambientErrors.ts(20,24): error TS1037: A function implementation cannot be declared in an ambient context.
+tests/cases/conformance/ambient/ambientErrors.ts(20,24): error TS1177: An implementation cannot be declared in ambient contexts.
 tests/cases/conformance/ambient/ambientErrors.ts(24,5): error TS1066: Ambient enum elements can only have integer literal initializers.
 tests/cases/conformance/ambient/ambientErrors.ts(29,5): error TS1066: Ambient enum elements can only have integer literal initializers.
 tests/cases/conformance/ambient/ambientErrors.ts(34,11): error TS1039: Initializers are not allowed in ambient contexts.
-tests/cases/conformance/ambient/ambientErrors.ts(35,19): error TS1037: A function implementation cannot be declared in an ambient context.
+tests/cases/conformance/ambient/ambientErrors.ts(35,19): error TS1177: An implementation cannot be declared in ambient contexts.
 tests/cases/conformance/ambient/ambientErrors.ts(37,20): error TS1039: Initializers are not allowed in ambient contexts.
 tests/cases/conformance/ambient/ambientErrors.ts(38,13): error TS1039: Initializers are not allowed in ambient contexts.
-tests/cases/conformance/ambient/ambientErrors.ts(39,23): error TS1111: A constructor implementation cannot be declared in an ambient context.
-tests/cases/conformance/ambient/ambientErrors.ts(40,14): error TS1037: A function implementation cannot be declared in an ambient context.
-tests/cases/conformance/ambient/ambientErrors.ts(41,22): error TS1037: A function implementation cannot be declared in an ambient context.
+tests/cases/conformance/ambient/ambientErrors.ts(39,23): error TS1177: An implementation cannot be declared in ambient contexts.
+tests/cases/conformance/ambient/ambientErrors.ts(40,14): error TS1177: An implementation cannot be declared in ambient contexts.
+tests/cases/conformance/ambient/ambientErrors.ts(41,22): error TS1177: An implementation cannot be declared in ambient contexts.
 tests/cases/conformance/ambient/ambientErrors.ts(47,20): error TS2435: Ambient external modules cannot be nested in other modules.
 tests/cases/conformance/ambient/ambientErrors.ts(51,16): error TS2436: Ambient external module declaration cannot specify relative module name.
 tests/cases/conformance/ambient/ambientErrors.ts(57,5): error TS2309: An export assignment cannot be used in a module with other exported elements.
@@ -44,7 +44,7 @@ tests/cases/conformance/ambient/ambientErrors.ts(57,5): error TS2309: An export 
     // Ambient function with function body
     declare function fn4() { };
                            ~
-!!! error TS1037: A function implementation cannot be declared in an ambient context.
+!!! error TS1177: An implementation cannot be declared in ambient contexts.
     
     // Ambient enum with non - integer literal constant member
     declare enum E1 {
@@ -67,7 +67,7 @@ tests/cases/conformance/ambient/ambientErrors.ts(57,5): error TS2309: An export 
 !!! error TS1039: Initializers are not allowed in ambient contexts.
         function fn() { }
                       ~
-!!! error TS1037: A function implementation cannot be declared in an ambient context.
+!!! error TS1177: An implementation cannot be declared in ambient contexts.
         class C {
             static x = 3;
                        ~
@@ -77,13 +77,13 @@ tests/cases/conformance/ambient/ambientErrors.ts(57,5): error TS2309: An export 
 !!! error TS1039: Initializers are not allowed in ambient contexts.
             constructor() { }
                           ~
-!!! error TS1111: A constructor implementation cannot be declared in an ambient context.
+!!! error TS1177: An implementation cannot be declared in ambient contexts.
             fn() { }
                  ~
-!!! error TS1037: A function implementation cannot be declared in an ambient context.
+!!! error TS1177: An implementation cannot be declared in ambient contexts.
             static sfn() { }
                          ~
-!!! error TS1037: A function implementation cannot be declared in an ambient context.
+!!! error TS1177: An implementation cannot be declared in ambient contexts.
         }
     }
     

@@ -1,74 +1,44 @@
 tests/cases/compiler/ambientWithStatements.ts(2,5): error TS1036: Statements are not allowed in ambient contexts.
-tests/cases/compiler/ambientWithStatements.ts(3,5): error TS1036: Statements are not allowed in ambient contexts.
-tests/cases/compiler/ambientWithStatements.ts(4,5): error TS1036: Statements are not allowed in ambient contexts.
-tests/cases/compiler/ambientWithStatements.ts(5,5): error TS1036: Statements are not allowed in ambient contexts.
-tests/cases/compiler/ambientWithStatements.ts(7,5): error TS1036: Statements are not allowed in ambient contexts.
+tests/cases/compiler/ambientWithStatements.ts(3,5): error TS1104: A 'continue' statement can only be used within an enclosing iteration statement.
 tests/cases/compiler/ambientWithStatements.ts(7,15): error TS2407: The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter.
-tests/cases/compiler/ambientWithStatements.ts(8,5): error TS1036: Statements are not allowed in ambient contexts.
-tests/cases/compiler/ambientWithStatements.ts(9,5): error TS1036: Statements are not allowed in ambient contexts.
-tests/cases/compiler/ambientWithStatements.ts(10,5): error TS1036: Statements are not allowed in ambient contexts.
-tests/cases/compiler/ambientWithStatements.ts(11,5): error TS1036: Statements are not allowed in ambient contexts.
-tests/cases/compiler/ambientWithStatements.ts(12,5): error TS1036: Statements are not allowed in ambient contexts.
-tests/cases/compiler/ambientWithStatements.ts(18,5): error TS1036: Statements are not allowed in ambient contexts.
-tests/cases/compiler/ambientWithStatements.ts(19,5): error TS1036: Statements are not allowed in ambient contexts.
-tests/cases/compiler/ambientWithStatements.ts(25,5): error TS1036: Statements are not allowed in ambient contexts.
+tests/cases/compiler/ambientWithStatements.ts(11,5): error TS1108: A 'return' statement can only be used within a function body.
 tests/cases/compiler/ambientWithStatements.ts(25,11): error TS2410: All symbols within a 'with' block will be resolved to 'any'.
 
 
-==== tests/cases/compiler/ambientWithStatements.ts (15 errors) ====
+==== tests/cases/compiler/ambientWithStatements.ts (5 errors) ====
     declare module M {
         break;
         ~~~~~
 !!! error TS1036: Statements are not allowed in ambient contexts.
         continue;
-        ~~~~~~~~
-!!! error TS1036: Statements are not allowed in ambient contexts.
+        ~~~~~~~~~
+!!! error TS1104: A 'continue' statement can only be used within an enclosing iteration statement.
         debugger;
-        ~~~~~~~~
-!!! error TS1036: Statements are not allowed in ambient contexts.
         do { } while (true);
-        ~~
-!!! error TS1036: Statements are not allowed in ambient contexts.
         var x;
         for (x in null) { }
-        ~~~
-!!! error TS1036: Statements are not allowed in ambient contexts.
                   ~~~~
 !!! error TS2407: The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter.
         if (true) { } else { }
-        ~~
-!!! error TS1036: Statements are not allowed in ambient contexts.
         1;
-        ~
-!!! error TS1036: Statements are not allowed in ambient contexts.
         L: var y;
-        ~
-!!! error TS1036: Statements are not allowed in ambient contexts.
         return;
         ~~~~~~
-!!! error TS1036: Statements are not allowed in ambient contexts.
+!!! error TS1108: A 'return' statement can only be used within a function body.
         switch (x) {
-        ~~~~~~
-!!! error TS1036: Statements are not allowed in ambient contexts.
             case 1:
                 break;
             default:
                 break;
         }
         throw "nooo";
-        ~~~~~
-!!! error TS1036: Statements are not allowed in ambient contexts.
         try {
-        ~~~
-!!! error TS1036: Statements are not allowed in ambient contexts.
         }
         catch (e) {
         }
         finally {
         }
         with (x) {
-        ~~~~
-!!! error TS1036: Statements are not allowed in ambient contexts.
               ~
 !!! error TS2410: All symbols within a 'with' block will be resolved to 'any'.
         }
