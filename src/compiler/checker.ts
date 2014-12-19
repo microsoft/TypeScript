@@ -4016,7 +4016,7 @@ module ts {
                     result &= related;
                 }
             }
-            else if (source.typeParameters || source.typeParameters) {
+            else if (source.typeParameters || target.typeParameters) {
                 return Ternary.False;
             }
             // Spec 1.0 Section 3.8.3 & 3.8.4:
@@ -5244,8 +5244,8 @@ module ts {
         // Return the contextual signature for a given expression node. A contextual type provides a
         // contextual signature if it has a single call signature and if that call signature is non-generic.
         // If the contextual type is a union type, get the signature from each type possible and if they are 
-        // all identical ignoring their return type, the result is same signature but with return type as 
-        // union type of return types from these signatures
+        // all identical ignoring their return type, the result is same signature but with a union type of 
+        // the return types of these signatures
         function getContextualSignature(node: FunctionExpression | MethodDeclaration): Signature {
             Debug.assert(node.kind !== SyntaxKind.MethodDeclaration || isObjectLiteralMethod(node));
             var type = isObjectLiteralMethod(node)
@@ -5274,7 +5274,7 @@ module ts {
                         signatureList = [signature];
                     }
                     else if (!compareSignatures(signatureList[0], signature, /*compareReturnTypes*/ false, compareTypes)) {
-                        // Signatures arent identical, do not use
+                        // Signatures aren't identical, do not use
                         return undefined;
                     }
                     else {
