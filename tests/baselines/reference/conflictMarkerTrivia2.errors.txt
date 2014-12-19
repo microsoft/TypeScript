@@ -1,15 +1,10 @@
 tests/cases/compiler/conflictMarkerTrivia2.ts(3,1): error TS1185: Merge conflict marker encountered.
 tests/cases/compiler/conflictMarkerTrivia2.ts(4,6): error TS2304: Cannot find name 'a'.
 tests/cases/compiler/conflictMarkerTrivia2.ts(6,1): error TS1185: Merge conflict marker encountered.
-tests/cases/compiler/conflictMarkerTrivia2.ts(7,6): error TS2391: Function implementation is missing or not immediately following the declaration.
 tests/cases/compiler/conflictMarkerTrivia2.ts(9,1): error TS1185: Merge conflict marker encountered.
-tests/cases/compiler/conflictMarkerTrivia2.ts(11,3): error TS1128: Declaration or statement expected.
-tests/cases/compiler/conflictMarkerTrivia2.ts(11,10): error TS2304: Cannot find name 'bar'.
-tests/cases/compiler/conflictMarkerTrivia2.ts(11,16): error TS1005: ';' expected.
-tests/cases/compiler/conflictMarkerTrivia2.ts(12,1): error TS1128: Declaration or statement expected.
 
 
-==== tests/cases/compiler/conflictMarkerTrivia2.ts (9 errors) ====
+==== tests/cases/compiler/conflictMarkerTrivia2.ts (4 errors) ====
     class C {
       foo() {
     <<<<<<< B
@@ -23,21 +18,11 @@ tests/cases/compiler/conflictMarkerTrivia2.ts(12,1): error TS1128: Declaration o
     ~~~~~~~
 !!! error TS1185: Merge conflict marker encountered.
          b();
-         ~
-!!! error TS2391: Function implementation is missing or not immediately following the declaration.
       }
     >>>>>>> A
     ~~~~~~~
 !!! error TS1185: Merge conflict marker encountered.
     
       public bar() { }
-      ~~~~~~
-!!! error TS1128: Declaration or statement expected.
-             ~~~
-!!! error TS2304: Cannot find name 'bar'.
-                   ~
-!!! error TS1005: ';' expected.
     }
-    ~
-!!! error TS1128: Declaration or statement expected.
     

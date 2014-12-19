@@ -2155,7 +2155,7 @@ module ts {
                     // invalid identifier name. We need to check if whatever was inside the quotes is actually a valid identifier name.
                     displayName = displayName.substring(1, displayName.length - 1);
                 }
-                
+
                 var isValid = isIdentifierStart(displayName.charCodeAt(0), target);
                 for (var i = 1, n = displayName.length; isValid && i < n; i++) {
                     isValid = isIdentifierPart(displayName.charCodeAt(i), target);
@@ -2206,7 +2206,7 @@ module ts {
             // Completion not allowed inside comments, bail out if this is the case
             var insideComment = isInsideComment(sourceFile, currentToken, position);
             host.log("getCompletionsAtPosition: Is inside comment: " + (new Date().getTime() - start));
-            
+
             if (insideComment) {
                 host.log("Returning an empty list because completion was inside a comment.");
                 return undefined;
@@ -2593,7 +2593,7 @@ module ts {
             if (flags & SymbolFlags.TypeAlias) return ScriptElementKind.typeElement;
             if (flags & SymbolFlags.Interface) return ScriptElementKind.interfaceElement;
             if (flags & SymbolFlags.TypeParameter) return ScriptElementKind.typeParameterElement;
-            
+
             var result = getSymbolKindOfConstructorPropertyMethodAccessorFunctionOrVar(symbol, flags, typeResolver, location);
             if (result === ScriptElementKind.unknown) {
                 if (flags & SymbolFlags.TypeParameter) return ScriptElementKind.typeParameterElement;
@@ -2656,7 +2656,7 @@ module ts {
 
             return ScriptElementKind.unknown;
         }
-        
+
         function getTypeKind(type: Type): string {
             var flags = type.getFlags();
 
@@ -2730,7 +2730,7 @@ module ts {
                     if (location.parent && location.parent.kind === SyntaxKind.PropertyAccessExpression) {
                         var right = (<PropertyAccessExpression>location.parent).name;
                         // Either the location is on the right of a property access, or on the left and the right is missing
-                        if (right === location || (right && right.getFullWidth() === 0)){
+                        if (right === location || (right && right.getFullWidth() === 0)) {
                             location = location.parent;
                         }
                     }
@@ -2974,7 +2974,7 @@ module ts {
                             symbolFlags & SymbolFlags.Method ||
                             symbolFlags & SymbolFlags.Constructor ||
                             symbolFlags & SymbolFlags.Signature ||
-                            symbolFlags & SymbolFlags.Accessor || 
+                            symbolFlags & SymbolFlags.Accessor ||
                             symbolKind === ScriptElementKind.memberFunctionElement) {
                             var allSignatures = type.getCallSignatures();
                             addSignatureDisplayParts(allSignatures[0], allSignatures);
@@ -3333,7 +3333,7 @@ module ts {
                     if (!hasKind(ifStatement.elseStatement, SyntaxKind.IfStatement)) {
                         break
                     }
-                    
+
                     ifStatement = <IfStatement>ifStatement.elseStatement;
                 }
 
@@ -3355,7 +3355,7 @@ module ts {
                                 break;
                             }
                         }
-                        
+
                         if (shouldHighlightNextKeyword) {
                             result.push({
                                 fileName: filename,
@@ -3394,7 +3394,7 @@ module ts {
 
                 return map(keywords, getReferenceEntryFromNode);
             }
-            
+
             function getThrowOccurrences(throwStatement: ThrowStatement) {
                 var owner = getThrowStatementOwner(throwStatement);
 
@@ -3403,7 +3403,7 @@ module ts {
                 }
 
                 var keywords: Node[] = [];
-                
+
                 forEach(aggregateOwnedThrowStatements(owner), throwStatement => {
                     pushKeywordIf(keywords, throwStatement.getFirstToken(), SyntaxKind.ThrowKeyword);
                 });
@@ -3415,7 +3415,7 @@ module ts {
                         pushKeywordIf(keywords, returnStatement.getFirstToken(), SyntaxKind.ReturnKeyword);
                     });
                 }
-                
+
                 return map(keywords, getReferenceEntryFromNode);
             }
 
@@ -3551,7 +3551,7 @@ module ts {
                 return map(keywords, getReferenceEntryFromNode);
             }
 
-            function getBreakOrContinueStatementOccurences(breakOrContinueStatement: BreakOrContinueStatement): ReferenceEntry[]{
+            function getBreakOrContinueStatementOccurences(breakOrContinueStatement: BreakOrContinueStatement): ReferenceEntry[] {
                 var owner = getBreakOrContinueOwner(breakOrContinueStatement);
 
                 if (owner) {
@@ -3599,7 +3599,7 @@ module ts {
                             if (statement.kind === SyntaxKind.ContinueStatement) {
                                 continue;
                             }
-                            // Fall through.
+                        // Fall through.
                         case SyntaxKind.ForStatement:
                         case SyntaxKind.ForInStatement:
                         case SyntaxKind.WhileStatement:
@@ -4024,13 +4024,13 @@ module ts {
               * searchLocation: a node where the search value 
               */
             function getReferencesInNode(container: Node,
-                                         searchSymbol: Symbol,
-                                         searchText: string,
-                                         searchLocation: Node,
-                                         searchMeaning: SemanticMeaning,
-                                         findInStrings: boolean,
-                                         findInComments: boolean,
-                                         result: ReferenceEntry[]): void {
+                searchSymbol: Symbol,
+                searchText: string,
+                searchLocation: Node,
+                searchMeaning: SemanticMeaning,
+                findInStrings: boolean,
+                findInComments: boolean,
+                result: ReferenceEntry[]): void {
                 var sourceFile = container.getSourceFile();
                 var tripleSlashDirectivePrefixRegex = /^\/\/\/\s*</
 
@@ -4110,7 +4110,7 @@ module ts {
                 }
             }
 
-            function getReferencesForSuperKeyword(superKeyword: Node): ReferenceEntry[]{
+            function getReferencesForSuperKeyword(superKeyword: Node): ReferenceEntry[] {
                 var searchSpaceNode = getSuperContainer(superKeyword);
                 if (!searchSpaceNode) {
                     return undefined;
@@ -4184,7 +4184,7 @@ module ts {
                         if (isExternalModule(<SourceFile>searchSpaceNode)) {
                             return undefined;
                         }
-                        // Fall through
+                    // Fall through
                     case SyntaxKind.FunctionDeclaration:
                     case SyntaxKind.FunctionExpression:
                         break;
@@ -4861,26 +4861,105 @@ module ts {
             fileName = normalizeSlashes(fileName);
             var sourceFile = getCurrentSourceFile(fileName);
 
+            // Make a scanner we can get trivia from.
+            var triviaScanner = createScanner(ScriptTarget.Latest, /*skipTrivia:*/ false, sourceFile.text);
+            var mergeConflictScanner = createScanner(ScriptTarget.Latest, /*skipTrivia:*/ false, sourceFile.text);
+
             var result: ClassifiedSpan[] = [];
             processElement(sourceFile);
 
             return result;
 
-            function classifyComment(comment: CommentRange) {
-                var width = comment.end - comment.pos;
-                if (textSpanIntersectsWith(span, comment.pos, width)) {
+            function classifyLeadingTrivia(token: Node): void {
+                var tokenStart = skipTrivia(sourceFile.text, token.pos, /*stopAfterLineBreak:*/ false);
+                if (tokenStart === token.pos) {
+                    return;
+                }
+
+                // token has trivia.  Classify them appropriately.
+                triviaScanner.setTextPos(token.pos);
+                while (true) {
+                    var start = triviaScanner.getTextPos();
+                    var kind = triviaScanner.scan();
+                    var end = triviaScanner.getTextPos();
+                    var width = end - start;
+
+                    if (textSpanIntersectsWith(span, start, width)) {
+                        if (!isTrivia(kind)) {
+                            return;
+                        }
+
+                        if (isComment(kind)) {
+                            // Simple comment.  Just add as is.
+                            result.push({
+                                textSpan: createTextSpan(start, width),
+                                classificationType: ClassificationTypeNames.comment
+                            })
+                            continue;
+                        }
+
+                        if (kind === SyntaxKind.ConflictMarkerTrivia) {
+                            var text = sourceFile.text;
+                            var ch = text.charCodeAt(start);
+
+                            // for the <<<<<<< and >>>>>>> markers, we just add them as in as
+                            // comments in the classification stream.
+                            if (ch === CharacterCodes.lessThan || ch === CharacterCodes.greaterThan) {
+                                result.push({
+                                    textSpan: createTextSpan(start, width),
+                                    classificationType: ClassificationTypeNames.comment
+                                });
+                                continue;
+                            }
+
+                            // for the ======== add a comment for the first line, and then lex all
+                            // subsequent lines up until the end of the conflict marker.
+                            Debug.assert(ch === CharacterCodes.equals);
+                            classifyDisabledCode(text, start, end);
+                        }
+                    }
+                }
+            }
+
+            function classifyDisabledCode(text: string, start: number, end: number) {
+                // Classify the line that the ======= marker is on as a comment.  Then just lex 
+                // all further tokens and add them to the result.
+                for (var i = start; i < end; i++) {
+                    if (isLineBreak(text.charCodeAt(i))) {
+                        break;
+                    }
+                }
+                result.push({
+                    textSpan: createTextSpanFromBounds(start, i),
+                    classificationType: ClassificationTypeNames.comment
+                });
+
+                mergeConflictScanner.setTextPos(i);
+
+                while (mergeConflictScanner.getTextPos() < end) {
+                    classifyDisabledCodeToken();
+                }
+            }
+
+            function classifyDisabledCodeToken() {
+                var start = mergeConflictScanner.getTextPos();
+                var tokenKind = mergeConflictScanner.scan();
+                var end = mergeConflictScanner.getTextPos();
+
+                var type = classifyTokenType(tokenKind);
+                if (type) {
                     result.push({
-                        textSpan: createTextSpan(comment.pos, width),
-                        classificationType: ClassificationTypeNames.comment
+                        textSpan: createTextSpanFromBounds(start, end),
+                        classificationType: type
                     });
                 }
             }
 
             function classifyToken(token: Node): void {
-                forEach(getLeadingCommentRanges(sourceFile.text, token.getFullStart()), classifyComment);
+                classifyLeadingTrivia(token);
 
                 if (token.getWidth() > 0) {
-                    var type = classifyTokenType(token);
+                    var type = classifyTokenType(token.kind, token);
                     if (type) {
                         result.push({
                             textSpan: createTextSpan(token.getStart(), token.getWidth()),
@@ -4888,12 +4967,9 @@ module ts {
                         });
                     }
                 }
-
-                forEach(getTrailingCommentRanges(sourceFile.text, token.getEnd()), classifyComment);
             }
 
-            function classifyTokenType(token: Node): string {
-                var tokenKind = token.kind;
+            function classifyTokenType(tokenKind: SyntaxKind, token?: Node): string {
                 if (isKeyword(tokenKind)) {
                     return ClassificationTypeNames.keyword;
                 }
@@ -4903,23 +4979,24 @@ module ts {
                 if (tokenKind === SyntaxKind.LessThanToken || tokenKind === SyntaxKind.GreaterThanToken) {
                     // If the node owning the token has a type argument list or type parameter list, then
                     // we can effectively assume that a '<' and '>' belong to those lists.
-                    if (getTypeArgumentOrTypeParameterList(token.parent)) {
+                    if (token && getTypeArgumentOrTypeParameterList(token.parent)) {
                         return ClassificationTypeNames.punctuation;
                     }
                 }
 
-                if (isPunctuation(token.kind)) {
+                if (isPunctuation(tokenKind)) {
                     // the '=' in a variable declaration is special cased here.
-                    if (token.parent.kind === SyntaxKind.BinaryExpression ||
-                        token.parent.kind === SyntaxKind.VariableDeclaration ||
-                        token.parent.kind === SyntaxKind.PrefixUnaryExpression ||
-                        token.parent.kind === SyntaxKind.PostfixUnaryExpression ||
-                        token.parent.kind === SyntaxKind.ConditionalExpression) {
-                        return ClassificationTypeNames.operator;
+                    if (token) {
+                        if (token.parent.kind === SyntaxKind.BinaryExpression ||
+                            token.parent.kind === SyntaxKind.VariableDeclaration ||
+                            token.parent.kind === SyntaxKind.PrefixUnaryExpression ||
+                            token.parent.kind === SyntaxKind.PostfixUnaryExpression ||
+                            token.parent.kind === SyntaxKind.ConditionalExpression) {
+                            return ClassificationTypeNames.operator;
+                        }
                     }
-                    else {
-                        return ClassificationTypeNames.punctuation;
-                    }
+
+                    return ClassificationTypeNames.punctuation;
                 }
                 else if (tokenKind === SyntaxKind.NumericLiteral) {
                     return ClassificationTypeNames.numericLiteral;
@@ -4936,35 +5013,37 @@ module ts {
                     return ClassificationTypeNames.stringLiteral;
                 }
                 else if (tokenKind === SyntaxKind.Identifier) {
-                    switch (token.parent.kind) {
-                        case SyntaxKind.ClassDeclaration:
-                            if ((<ClassDeclaration>token.parent).name === token) {
-                                return ClassificationTypeNames.className;
-                            }
-                            return;
-                        case SyntaxKind.TypeParameter:
-                            if ((<TypeParameterDeclaration>token.parent).name === token) {
-                                return ClassificationTypeNames.typeParameterName;
-                            }
-                            return;
-                        case SyntaxKind.InterfaceDeclaration:
-                            if ((<InterfaceDeclaration>token.parent).name === token) {
-                                return ClassificationTypeNames.interfaceName;
-                            }
-                            return;
-                        case SyntaxKind.EnumDeclaration:
-                            if ((<EnumDeclaration>token.parent).name === token) {
-                                return ClassificationTypeNames.enumName;
-                            }
-                            return;
-                        case SyntaxKind.ModuleDeclaration:
-                            if ((<ModuleDeclaration>token.parent).name === token) {
-                                return ClassificationTypeNames.moduleName;
-                            }
-                            return;
-                        default:
-                            return ClassificationTypeNames.text;
+                    if (token) {
+                        switch (token.parent.kind) {
+                            case SyntaxKind.ClassDeclaration:
+                                if ((<ClassDeclaration>token.parent).name === token) {
+                                    return ClassificationTypeNames.className;
+                                }
+                                return;
+                            case SyntaxKind.TypeParameter:
+                                if ((<TypeParameterDeclaration>token.parent).name === token) {
+                                    return ClassificationTypeNames.typeParameterName;
+                                }
+                                return;
+                            case SyntaxKind.InterfaceDeclaration:
+                                if ((<InterfaceDeclaration>token.parent).name === token) {
+                                    return ClassificationTypeNames.interfaceName;
+                                }
+                                return;
+                            case SyntaxKind.EnumDeclaration:
+                                if ((<EnumDeclaration>token.parent).name === token) {
+                                    return ClassificationTypeNames.enumName;
+                                }
+                                return;
+                            case SyntaxKind.ModuleDeclaration:
+                                if ((<ModuleDeclaration>token.parent).name === token) {
+                                    return ClassificationTypeNames.moduleName;
+                                }
+                                return;
+                        }
                     }
+
+                    return ClassificationTypeNames.text;
                 }
             }
 
@@ -5493,7 +5572,6 @@ module ts {
                 var start = scanner.getTokenPos();
                 var end = scanner.getTextPos();
 
-                // add the token
                 addResult(end - start, classFromKind(token));
 
                 if (end >= text.length) {

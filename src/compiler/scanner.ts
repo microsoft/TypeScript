@@ -7,10 +7,6 @@ module ts {
         (message: DiagnosticMessage, length: number): void;
     }
 
-    export interface CommentCallback {
-        (pos: number, end: number): void;
-    }
-
     export interface Scanner {
         getStartPos(): number;
         getToken(): SyntaxKind;
@@ -396,8 +392,10 @@ module ts {
     var mergeConflictMarkerLength = "<<<<<<<".length;
 
     function isConflictMarkerTrivia(text: string, pos: number) {
+        Debug.assert(pos >= 0);
+
         // Conflict markers must be at the start of a line.
-        if (pos > 0 && isLineBreak(text.charCodeAt(pos - 1))) {
+        if (pos === 0 || isLineBreak(text.charCodeAt(pos - 1))) {
             var ch = text.charCodeAt(pos);
 
             if ((pos + mergeConflictMarkerLength) < text.length) {
@@ -415,10 +413,31 @@ module ts {
         return false;
     }
 
-    function scanConflictMarkerTrivia(text: string, pos: number) {
-        var len = text.length;
-        while (pos < len && !isLineBreak(text.charCodeAt(pos))) {
-            pos++;
+    function scanConflictMarkerTrivia(text: string, pos: number, error?: ErrorCallback) {
+        if (error) {
+            error(Diagnostics.Merge_conflict_marker_encountered, mergeConflictMarkerLength);
+        }
+
+        var ch = text.charCodeAt(pos);
+        if (ch === CharacterCodes.lessThan || ch === CharacterCodes.greaterThan) {
+            var len = text.length;
+            while (pos < len && !isLineBreak(text.charCodeAt(pos))) {
+                pos++;
+            }
+        }
+        else {
+            Debug.assert(ch === CharacterCodes.equals);
+            // Consume everything from the start of the mid-conlict marker to the start of the next
+            // end-conflict marker.
+            var len = text.length;
+            while (pos < len) {
+                var ch = text.charCodeAt(pos);
+                if (ch === CharacterCodes.greaterThan && isConflictMarkerTrivia(text, pos)) {
+                    break;
+                }
+
+                pos++;
+            }
         }
 
         return pos;
@@ -1057,8 +1076,7 @@ module ts {
                         return pos++, token = SyntaxKind.SemicolonToken;
                     case CharacterCodes.lessThan:
                         if (isConflictMarkerTrivia(text, pos)) {
-                            mergeConflictError();
-                            pos = scanConflictMarkerTrivia(text, pos);
+                            pos = scanConflictMarkerTrivia(text, pos, error);
                             if (skipTrivia) {
                                 continue;
                             }
@@ -1079,8 +1097,7 @@ module ts {
                         return pos++, token = SyntaxKind.LessThanToken;
                     case CharacterCodes.equals:
                         if (isConflictMarkerTrivia(text, pos)) {
-                            mergeConflictError();
-                            pos = scanConflictMarkerTrivia(text, pos);
+                            pos = scanConflictMarkerTrivia(text, pos, error);
                             if (skipTrivia) {
                                 continue;
                             }
@@ -1101,8 +1118,7 @@ module ts {
                         return pos++, token = SyntaxKind.EqualsToken;
                     case CharacterCodes.greaterThan:
                         if (isConflictMarkerTrivia(text, pos)) {
-                            mergeConflictError();
-                            pos = scanConflictMarkerTrivia(text, pos);
+                            pos = scanConflictMarkerTrivia(text, pos, error);
                             if (skipTrivia) {
                                 continue;
                             }
@@ -1169,10 +1185,6 @@ module ts {
                         return pos++, token = SyntaxKind.Unknown;
                 }
             }
-        }
-
-        function mergeConflictError() {
-            error(Diagnostics.Merge_conflict_marker_encountered, mergeConflictMarkerLength);
         }
 
         function reScanGreaterToken(): SyntaxKind {
