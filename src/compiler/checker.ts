@@ -72,7 +72,6 @@ module ts {
         var argumentsSymbol = createSymbol(SymbolFlags.Property | SymbolFlags.Transient, "arguments");
         var unknownSymbol = createSymbol(SymbolFlags.Property | SymbolFlags.Transient, "unknown");
         var resolvingSymbol = createSymbol(SymbolFlags.Transient, "__resolving__");
-        var awaitableSymbol = createSymbol(SymbolFlags.Transient, "__awaitable__");
 
         var anyType = createIntrinsicType(TypeFlags.Any, "any");
         var stringType = createIntrinsicType(TypeFlags.String, "string");
@@ -83,7 +82,6 @@ module ts {
         var nullType = createIntrinsicType(TypeFlags.Null | TypeFlags.Unwidened, "null");
         var unknownType = createIntrinsicType(TypeFlags.Any, "unknown");
         var resolvingType = createIntrinsicType(TypeFlags.Any, "__resolving__");
-        var awaitedType = createIntrinsicType(TypeFlags.Any, "__awaitable__");
         var thenableType: ResolvedType;
 
         var emptyObjectType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
@@ -106,10 +104,10 @@ module ts {
         var globalBooleanType: ObjectType;
         var globalRegExpType: ObjectType;
         var globalTemplateStringsArrayType: ObjectType;
-        var globalPromiseType: ObjectType;
+        var globalIPromiseType: ObjectType;
         var globalPromiseThenPropertyType: Type;
         var globalPromiseOnFulfilledParameterType: Type;
-        var globalPromiseConstructorType: ObjectType;
+        var globalIPromiseConstructorType: ObjectType;
 
         var anyArrayType: Type;
 
@@ -7640,7 +7638,7 @@ module ts {
                 }
 
                 seen[type.id] = true;
-                if (checkTypeRelatedTo(type, globalPromiseType, assignableRelation, undefined)) {
+                if (checkTypeRelatedTo(type, globalIPromiseType, assignableRelation, undefined)) {
                     var thenProp = getPropertyOfType(type, "then");
                     var thenType = getTypeOfSymbol(thenProp);
                     var thenSignatures = getSignaturesOfType(thenType, SignatureKind.Call);
@@ -7689,7 +7687,7 @@ module ts {
                 }
 
                 var type = getTypeOfSymbol(returnType.symbol);
-                if (isTypeAssignableTo(type, globalPromiseConstructorType)) {
+                if (isTypeAssignableTo(type, globalIPromiseConstructorType)) {
                     var awaitedType = getAwaitedType(returnType);
                     if (awaitedType) {
                         links.promiseType = true;
@@ -9786,19 +9784,11 @@ module ts {
                 ? getGlobalType("TemplateStringsArray")
                 : unknownType;
 
-            var promiseType = <TypeReference>getTypeOfGlobalSymbol(getGlobalSymbol("IPromise"), 1);
-            if (promiseType.typeArguments) {
-                globalPromiseType = instantiateType(promiseType, createTypeMapper(promiseType.typeArguments, [awaitedType]));
-            } else {
-                globalPromiseType = promiseType;
-            }
+            var iPromiseType = getTypeOfGlobalSymbol(getGlobalSymbol("IPromise"), 1);
+            globalIPromiseType = createTypeReference(<GenericType>iPromiseType, [anyType]);
 
-            var promiseConstructorType = <TypeReference>getTypeOfGlobalSymbol(getGlobalSymbol("IPromiseConstructor"), 1);
-            if (promiseConstructorType.typeArguments) {
-                globalPromiseConstructorType = instantiateType(promiseConstructorType, createTypeMapper(promiseConstructorType.typeArguments, [awaitedType]));
-            } else {
-                globalPromiseConstructorType = promiseConstructorType;
-            }
+            var iPromiseConstructorType = <TypeReference>getTypeOfGlobalSymbol(getGlobalSymbol("IPromiseConstructor"), 1);
+            globalIPromiseConstructorType = createTypeReference(<GenericType>iPromiseConstructorType, [anyType]);
 
             // thenable type used to verify against a non-promise "thenable" operand to `await`.
             var thenPropertySymbol = createSymbol(SymbolFlags.Transient | SymbolFlags.Property, "then");
@@ -9806,6 +9796,7 @@ module ts {
             thenableType = <ResolvedType>createObjectType(TypeFlags.ObjectType);
             thenableType.properties = [thenPropertySymbol];
             thenableType.members = createSymbolTable(thenableType.properties);
+
             anyArrayType = createArrayType(anyType);
         }
 
