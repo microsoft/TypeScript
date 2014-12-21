@@ -2484,6 +2484,13 @@ module ts {
                 emit(node.expression);
             }
 
+            function emitYieldExpression(node: YieldExpression) {
+                write(tokenToString(SyntaxKind.YieldKeyword));
+                emit(node.asteriskToken);
+                write(" ");
+                emit(node.expression);
+            }
+
             function emitTypeOfExpression(node: TypeOfExpression) {
                 write(tokenToString(SyntaxKind.TypeOfKeyword));
                 write(" ");
@@ -4113,6 +4120,8 @@ module ts {
                         return emitTypeOfExpression(<TypeOfExpression>node);
                     case SyntaxKind.VoidExpression:
                         return emitVoidExpression(<VoidExpression>node);
+                    case SyntaxKind.YieldExpression:
+                        return emitYieldExpression(<YieldExpression>node);
                     case SyntaxKind.PrefixUnaryExpression:
                         return emitPrefixUnaryExpression(<PrefixUnaryExpression>node);
                     case SyntaxKind.PostfixUnaryExpression:
