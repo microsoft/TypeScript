@@ -7678,7 +7678,7 @@ module ts {
             // in an `initializer` function that in turn supplies a `resolve` function as one of its arguments
             // and results in an object with a callable `then` signature.
 
-            if (returnType) {
+            if (returnType && returnType.symbol) {
                 var links = getSymbolLinks(returnType.symbol);
                 if (links.promiseType) {
                     if (!links.awaitedType) {
