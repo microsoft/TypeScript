@@ -962,7 +962,6 @@ module ts {
         writeFile(filename: string, data: string, writeByteOrderMark: boolean, onError?: (message: string) => void): void;
     }
 
-
     export interface SourceMapSpan {
         emittedLine: number;    // Line number in the .js file
         emittedColumn: number;  // Column number in the .js file
