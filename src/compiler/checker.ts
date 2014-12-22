@@ -4016,7 +4016,7 @@ module ts {
                     result &= related;
                 }
             }
-            else if (source.typeParameters || source.typeParameters) {
+            else if (source.typeParameters || target.typeParameters) {
                 return Ternary.False;
             }
             // Spec 1.0 Section 3.8.3 & 3.8.4:
@@ -5274,7 +5274,7 @@ module ts {
                         signatureList = [signature];
                     }
                     else if (!compareSignatures(signatureList[0], signature, /*compareReturnTypes*/ false, compareTypes)) {
-                        // Signatures arent identical, do not use
+                        // Signatures aren't identical, do not use
                         return undefined;
                     }
                     else {
