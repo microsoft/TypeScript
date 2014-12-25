@@ -6112,6 +6112,8 @@ module ts {
                 var lastSymbol: Symbol;
                 var cutoffPos: number = 0;
                 var pos: number;
+                var specializedPos: number = -1;
+                var splicePos: number;
                 Debug.assert(!result.length);
                 for (var i = 0; i < signatures.length; i++) {
                     var signature = signatures[i];
@@ -6134,10 +6136,23 @@ module ts {
                     }
                     lastSymbol = symbol;
 
-                    for (var j = result.length; j > pos; j--) {
+                    // specialized signatures always need to be placed before non-specialized signatures regardless
+                    // of the cutoff position; see GH#1133
+                    if (signature.hasStringLiterals) {
+                        splicePos = ++specializedPos;
+                        // The cutoff position needs to be increased to account for the fact that we are adding things
+                        // before the cutoff point. If the cutoff position is not incremented, merged interfaces will
+                        // start adding their merged signatures at the wrong position
+                        ++cutoffPos;
+                    }
+                    else {
+                        splicePos = pos;
+                    }
+
+                    for (var j = result.length; j > splicePos; j--) {
                         result[j] = result[j - 1];
                     }
-                    result[pos] = signature;
+                    result[splicePos] = signature;
                 }
             }
         }
