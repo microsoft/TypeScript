@@ -1548,7 +1548,7 @@ module ts {
         return sourceFile;
     }
 
-    export var disableIncrementalParsing = true;
+    export var disableIncrementalParsing = false;
 
     export function updateLanguageServiceSourceFile(sourceFile: SourceFile, scriptSnapshot: IScriptSnapshot, version: string, isOpen: boolean, textChangeRange: TextChangeRange): SourceFile {
         if (textChangeRange && Debug.shouldAssert(AssertionLevel.Normal)) {
