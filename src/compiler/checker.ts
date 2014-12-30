@@ -3482,7 +3482,7 @@ module ts {
                         }
                     }
                 }
-                else if (source.flags & TypeFlags.TypeParameter && target.flags & TypeFlags.TypeParameter) {getFullyQualifiedName
+                else if (source.flags & TypeFlags.TypeParameter && target.flags & TypeFlags.TypeParameter) {
                     if (result = typeParameterRelatedTo(<TypeParameter>source, <TypeParameter>target, reportErrors)) {
                         return result;
                     }
