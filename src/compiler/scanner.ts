@@ -419,8 +419,9 @@ module ts {
         }
 
         var ch = text.charCodeAt(pos);
+        var len = text.length;
+
         if (ch === CharacterCodes.lessThan || ch === CharacterCodes.greaterThan) {
-            var len = text.length;
             while (pos < len && !isLineBreak(text.charCodeAt(pos))) {
                 pos++;
             }
@@ -429,7 +430,6 @@ module ts {
             Debug.assert(ch === CharacterCodes.equals);
             // Consume everything from the start of the mid-conlict marker to the start of the next
             // end-conflict marker.
-            var len = text.length;
             while (pos < len) {
                 var ch = text.charCodeAt(pos);
                 if (ch === CharacterCodes.greaterThan && isConflictMarkerTrivia(text, pos)) {

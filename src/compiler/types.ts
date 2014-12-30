@@ -16,6 +16,8 @@ module ts {
         MultiLineCommentTrivia,
         NewLineTrivia,
         WhitespaceTrivia,
+        // We detect and provide better error recovery when we encounter a git merge marker.  This
+        // allows us to edit files with git-conflict markers in them in a much more pleasant manner.
         ConflictMarkerTrivia,
         // Literals
         NumericLiteral,

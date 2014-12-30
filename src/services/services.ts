@@ -4902,8 +4902,8 @@ module ts {
                             var text = sourceFile.text;
                             var ch = text.charCodeAt(start);
 
-                            // for the <<<<<<< and >>>>>>> markers, we just add them as in as
-                            // comments in the classification stream.
+                            // for the <<<<<<< and >>>>>>> markers, we just add them in as comments
+                            // in the classification stream.
                             if (ch === CharacterCodes.lessThan || ch === CharacterCodes.greaterThan) {
                                 result.push({
                                     textSpan: createTextSpan(start, width),
@@ -4915,13 +4915,13 @@ module ts {
                             // for the ======== add a comment for the first line, and then lex all
                             // subsequent lines up until the end of the conflict marker.
                             Debug.assert(ch === CharacterCodes.equals);
-                            classifyDisabledCode(text, start, end);
+                            classifyDisabledMergeCode(text, start, end);
                         }
                     }
                 }
             }
 
-            function classifyDisabledCode(text: string, start: number, end: number) {
+            function classifyDisabledMergeCode(text: string, start: number, end: number) {
                 // Classify the line that the ======= marker is on as a comment.  Then just lex 
                 // all further tokens and add them to the result.
                 for (var i = start; i < end; i++) {
@@ -4969,6 +4969,9 @@ module ts {
                 }
             }
 
+            // for accurate classification, the actual token should be passed in.  however, for 
+            // cases like 'disabled merge code' classification, we just get the token kind and
+            // classify based on that instead.
             function classifyTokenType(tokenKind: SyntaxKind, token?: Node): string {
                 if (isKeyword(tokenKind)) {
                     return ClassificationTypeNames.keyword;
