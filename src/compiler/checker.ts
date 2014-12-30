@@ -3482,7 +3482,7 @@ module ts {
                         }
                     }
                 }
-                else if (source.flags & TypeFlags.TypeParameter && target.flags & TypeFlags.TypeParameter) {
+                else if (source.flags & TypeFlags.TypeParameter && target.flags & TypeFlags.TypeParameter) {getFullyQualifiedName
                     if (result = typeParameterRelatedTo(<TypeParameter>source, <TypeParameter>target, reportErrors)) {
                         return result;
                     }
@@ -3517,7 +3517,6 @@ module ts {
                         // a more insightful error message
                         reportError(headMessage, getFullyQualifiedName(source.symbol), getFullyQualifiedName(target.symbol));
                     }
-                    //reportError(headMessage, typeToString(source), typeToString(target));
                 }
                 return Ternary.False;
             }
