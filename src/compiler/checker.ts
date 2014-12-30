@@ -3508,7 +3508,16 @@ module ts {
                 }
                 if (reportErrors) {
                     headMessage = headMessage || Diagnostics.Type_0_is_not_assignable_to_type_1;
-                    reportError(headMessage, typeToString(source), typeToString(target));
+                    var sourceType = typeToString(source);
+                    var targetType = typeToString(target);
+                    if (sourceType !== targetType) {
+                        reportError(headMessage, sourceType, targetType);
+                    } else {
+                        // If the types are incompatible but have the same name, use the qualified names to give
+                        // a more insightful error message
+                        reportError(headMessage, getFullyQualifiedName(source.symbol), getFullyQualifiedName(target.symbol));
+                    }
+                    //reportError(headMessage, typeToString(source), typeToString(target));
                 }
                 return Ternary.False;
             }
