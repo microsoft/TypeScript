@@ -25,7 +25,7 @@ tests/cases/conformance/statements/VariableStatements/everyTypeWithAnnotationAnd
   Type 'string' is not assignable to type 'number'.
 tests/cases/conformance/statements/VariableStatements/everyTypeWithAnnotationAndInvalidInitializer.ts(50,5): error TS2322: Type 'typeof N' is not assignable to type 'typeof M'.
   Types of property 'A' are incompatible.
-    Type 'N.A' is not assignable to type 'M.A'.
+    Type 'typeof N.A' is not assignable to type 'typeof M.A'.
       Type 'N.A' is not assignable to type 'M.A'.
         Property 'name' is missing in type 'A'.
 tests/cases/conformance/statements/VariableStatements/everyTypeWithAnnotationAndInvalidInitializer.ts(51,5): error TS2322: Type 'N.A' is not assignable to type 'M.A'.
@@ -124,7 +124,7 @@ tests/cases/conformance/statements/VariableStatements/everyTypeWithAnnotationAnd
         ~~~~~~~
 !!! error TS2322: Type 'typeof N' is not assignable to type 'typeof M'.
 !!! error TS2322:   Types of property 'A' are incompatible.
-!!! error TS2322:     Type 'N.A' is not assignable to type 'M.A'.
+!!! error TS2322:     Type 'typeof N.A' is not assignable to type 'typeof M.A'.
 !!! error TS2322:       Type 'N.A' is not assignable to type 'M.A'.
 !!! error TS2322:         Property 'name' is missing in type 'A'.
     var aClassInModule: M.A = new N.A();

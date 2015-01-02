@@ -1033,7 +1033,7 @@ module ts {
              * Enclosing declaration is optional when we don't want to get qualified name in the enclosing declaration scope
              * Meaning needs to be specified if the enclosing declaration is given
              */
-            function buildSymbolDisplay(symbol: Symbol, writer: SymbolWriter, enclosingDeclaration?: Node, meaning?: SymbolFlags, flags?: SymbolFormatFlags): void {
+            function buildSymbolDisplay(symbol: Symbol, writer: SymbolWriter, enclosingDeclaration?: Node, meaning?: SymbolFlags, flags?: SymbolFormatFlags, typeFlags?: TypeFormatFlags): void {
                 var parentSymbol: Symbol;
                 function appendParentTypeArgumentsAndSymbolName(symbol: Symbol): void {
                     if (parentSymbol) {
@@ -1096,9 +1096,11 @@ module ts {
                 }
 
                 // Get qualified name 
-                if (enclosingDeclaration &&
+                if ((enclosingDeclaration &&
                     // TypeParameters do not need qualification
-                    !(symbol.flags & SymbolFlags.TypeParameter)) {
+                    !(symbol.flags & SymbolFlags.TypeParameter))
+                    // unless we use a format flag specifying that we want it
+                    || TypeFormatFlags.UseFullyQualifiedType & typeFlags) {
 
                     walkSymbol(symbol, meaning);
                     return;
@@ -1122,7 +1124,7 @@ module ts {
                         writeTypeReference(<TypeReference>type, flags);
                     }
                     else if (type.flags & (TypeFlags.Class | TypeFlags.Interface | TypeFlags.Enum | TypeFlags.TypeParameter)) {
-                        buildSymbolDisplay(type.symbol, writer, enclosingDeclaration, SymbolFlags.Type);
+                        buildSymbolDisplay(type.symbol, writer, enclosingDeclaration, SymbolFlags.Type, undefined, flags);
                     }
                     else if (type.flags & TypeFlags.Tuple) {
                         writeTupleType(<TupleType>type);
@@ -1193,17 +1195,17 @@ module ts {
                 function writeAnonymousType(type: ObjectType, flags: TypeFormatFlags) {
                     // Always use 'typeof T' for type of class, enum, and module objects
                     if (type.symbol && type.symbol.flags & (SymbolFlags.Class | SymbolFlags.Enum | SymbolFlags.ValueModule)) {
-                        writeTypeofSymbol(type);
+                        writeTypeofSymbol(type, flags);
                     }
                     // Use 'typeof T' for types of functions and methods that circularly reference themselves
                     else if (shouldWriteTypeOfFunctionSymbol()) {
-                        writeTypeofSymbol(type);
+                        writeTypeofSymbol(type, flags);
                     }
                     else if (typeStack && contains(typeStack, type)) {
                         // If type is an anonymous type literal in a type alias declaration, use type alias name
                         var typeAlias = getTypeAliasForTypeLiteral(type);
                         if (typeAlias) {
-                            buildSymbolDisplay(typeAlias, writer, enclosingDeclaration, SymbolFlags.Type);
+                            buildSymbolDisplay(typeAlias, writer, enclosingDeclaration, SymbolFlags.Type, undefined, flags);
                         }
                         else {
                             // Recursive usage, use any
@@ -1237,10 +1239,10 @@ module ts {
                     }
                 }
 
-                function writeTypeofSymbol(type: ObjectType) {
+                function writeTypeofSymbol(type: ObjectType, flags?: TypeFormatFlags) {
                     writeKeyword(writer, SyntaxKind.TypeOfKeyword);
                     writeSpace(writer);
-                    buildSymbolDisplay(type.symbol, writer, enclosingDeclaration, SymbolFlags.Value);
+                    buildSymbolDisplay(type.symbol, writer, enclosingDeclaration, SymbolFlags.Value, undefined, flags);
                 }
 
                 function getIndexerParameterName(type: ObjectType, indexKind: IndexKind, fallbackName: string): string {
@@ -3513,9 +3515,7 @@ module ts {
                     if (sourceType !== targetType) {
                         reportError(headMessage, sourceType, targetType);
                     } else {
-                        // If the types are incompatible but have the same name, use the qualified names to give
-                        // a more insightful error message
-                        reportError(headMessage, getFullyQualifiedName(source.symbol), getFullyQualifiedName(target.symbol));
+                        reportError(headMessage, typeToString(source, undefined, TypeFormatFlags.UseFullyQualifiedType), typeToString(target, undefined, TypeFormatFlags.UseFullyQualifiedType));
                     }
                 }
                 return Ternary.False;
