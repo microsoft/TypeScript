@@ -6319,11 +6319,6 @@ module ts {
         }
 
         function checkTaggedTemplateExpression(node: TaggedTemplateExpression): Type {
-            // Grammar checking
-            if (compilerOptions.target < ScriptTarget.ES6) {
-                grammarErrorOnFirstToken(node.template, Diagnostics.Tagged_templates_are_only_available_when_targeting_ECMAScript_6_and_higher);
-            }
-
             return getReturnTypeOfSignature(getResolvedSignature(node));
         }
 
