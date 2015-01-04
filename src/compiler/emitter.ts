@@ -2048,7 +2048,12 @@ module ts {
             }
 
             function getTemplateLiteralAsStringLiteral(node: LiteralExpression): string {
-                return '"' + escapeString(node.text) + '"';
+                if (node.parent.kind === SyntaxKind.TaggedTemplateExpression) {
+					// Emit tagged template as foo(["string"])
+					return '["' + escapeString(node.text) + '"]';
+				} else {
+					return '"' + escapeString(node.text) + '"';
+				}
             }
 
             function emitTemplateExpression(node: TemplateExpression): void {
