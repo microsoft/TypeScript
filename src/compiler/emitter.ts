@@ -2059,8 +2059,26 @@ module ts {
                     return;
                 }
 
-                Debug.assert(node.parent.kind !== SyntaxKind.TaggedTemplateExpression);
-
+                if (node.parent.kind === SyntaxKind.TaggedTemplateExpression) {
+                    // Emit should like:
+                    // foo(["a", "b", "c"], expressions0, expression1)
+                    // First we emit the string literal array
+                    write("[");
+                    emitLiteral(node.head);
+                    forEach(node.templateSpans, templateSpan => {
+                        write(", ");
+                        emitLiteral(templateSpan.literal);
+                    });
+                    write("]");
+                    
+                    // Now we emit the expressions
+                    forEach(node.templateSpans, templateSpan => {
+                        write(", ");
+                        emit(templateSpan.expression);
+                    });
+                    return;
+                }
+                
                 var emitOuterParens = isExpression(node.parent)
                     && templateNeedsParens(node, <Expression>node.parent);
 
@@ -2487,10 +2505,15 @@ module ts {
             }
 
             function emitTaggedTemplateExpression(node: TaggedTemplateExpression): void {
-                Debug.assert(compilerOptions.target >= ScriptTarget.ES6, "Trying to emit a tagged template in pre-ES6 mode.");
                 emit(node.tag);
-                write(" ");
-                emit(node.template);
+                if (compilerOptions.target >= ScriptTarget.ES6) {
+                    write(" ");
+                    emit(node.template);
+                } else {
+                    write("(");
+                    emit(node.template);
+                    write(")");
+                }
             }
 
             function emitParenExpression(node: ParenthesizedExpression) {
