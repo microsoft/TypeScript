@@ -1095,13 +1095,11 @@ module ts {
                     }
                 }
 
-                // Get qualified name 
-                if ((enclosingDeclaration &&
-                    // TypeParameters do not need qualification
-                    !(symbol.flags & SymbolFlags.TypeParameter))
-                    // unless we use a format flag specifying that we want it
-                    || TypeFormatFlags.UseFullyQualifiedType & typeFlags) {
-
+                // Get qualified name if there is an enclosing declaration and it is not a
+                // type parameter or we have a flag telling us to
+                var needFullyQualifiedName = (enclosingDeclaration && !(symbol.flags & SymbolFlags.TypeParameter));
+                var useFullyQualifiedFlag = TypeFormatFlags.UseFullyQualifiedType & typeFlags;
+                if (needFullyQualifiedName || useFullyQualifiedFlag) {
                     walkSymbol(symbol, meaning);
                     return;
                 }
@@ -1124,7 +1122,7 @@ module ts {
                         writeTypeReference(<TypeReference>type, flags);
                     }
                     else if (type.flags & (TypeFlags.Class | TypeFlags.Interface | TypeFlags.Enum | TypeFlags.TypeParameter)) {
-                        buildSymbolDisplay(type.symbol, writer, enclosingDeclaration, SymbolFlags.Type, undefined, flags);
+                        buildSymbolDisplay(type.symbol, writer, enclosingDeclaration, SymbolFlags.Type, /*flags*/ undefined, flags);
                     }
                     else if (type.flags & TypeFlags.Tuple) {
                         writeTupleType(<TupleType>type);
@@ -1205,7 +1203,7 @@ module ts {
                         // If type is an anonymous type literal in a type alias declaration, use type alias name
                         var typeAlias = getTypeAliasForTypeLiteral(type);
                         if (typeAlias) {
-                            buildSymbolDisplay(typeAlias, writer, enclosingDeclaration, SymbolFlags.Type, undefined, flags);
+                            buildSymbolDisplay(typeAlias, writer, enclosingDeclaration, SymbolFlags.Type, /*flags*/ undefined, flags);
                         }
                         else {
                             // Recursive usage, use any
@@ -1242,7 +1240,7 @@ module ts {
                 function writeTypeofSymbol(type: ObjectType, flags?: TypeFormatFlags) {
                     writeKeyword(writer, SyntaxKind.TypeOfKeyword);
                     writeSpace(writer);
-                    buildSymbolDisplay(type.symbol, writer, enclosingDeclaration, SymbolFlags.Value, undefined, flags);
+                    buildSymbolDisplay(type.symbol, writer, enclosingDeclaration, SymbolFlags.Value, /*flags*/ undefined, flags);
                 }
 
                 function getIndexerParameterName(type: ObjectType, indexKind: IndexKind, fallbackName: string): string {
@@ -3512,11 +3510,11 @@ module ts {
                     headMessage = headMessage || Diagnostics.Type_0_is_not_assignable_to_type_1;
                     var sourceType = typeToString(source);
                     var targetType = typeToString(target);
-                    if (sourceType !== targetType) {
-                        reportError(headMessage, sourceType, targetType);
-                    } else {
-                        reportError(headMessage, typeToString(source, undefined, TypeFormatFlags.UseFullyQualifiedType), typeToString(target, undefined, TypeFormatFlags.UseFullyQualifiedType));
+                    if (sourceType === targetType) {
+                        sourceType = typeToString(source, /*enclosingDeclaration*/ undefined, TypeFormatFlags.UseFullyQualifiedType);
+                        targetType = typeToString(target, /*enclosingDeclaration*/ undefined, TypeFormatFlags.UseFullyQualifiedType);
                     }
+                    reportError(headMessage, sourceType, targetType);
                 }
                 return Ternary.False;
             }
