@@ -6274,30 +6274,64 @@ module ts {
             }
         }
 
+        function getPromiseType(type: Type, location: Node): Type {
+            var symbol = resolveName(location, "Promise", SymbolFlags.Value, undefined, undefined);
+            if (symbol) {
+                var promiseType = getDeclaredTypeOfSymbol(symbol);
+                if (getAwaitedType(promiseType)) {
+                    if ((<InterfaceType>promiseType).typeParameters) {
+                        if ((<InterfaceType>promiseType).typeParameters.length === 1) {
+                            return createTypeReference(<GenericType>promiseType, [type]);
+                        }
+                    }
+                    else {
+                        return promiseType;
+                    }
+                }
+            }
+            return type;
+        }
+
         function getReturnTypeFromBody(func: FunctionLikeDeclaration, contextualMapper?: TypeMapper): Type {
             var contextualSignature = getContextualSignatureForFunctionLikeDeclaration(func);
+            var isAsync = func.flags & NodeFlags.Async;
+            var type: Type;
             if (func.body.kind !== SyntaxKind.Block) {
-                var type = checkExpressionCached(<Expression>func.body, contextualMapper);
+                type = checkExpressionCached(<Expression>func.body, contextualMapper);
             }
             else {
-            // Aggregate the types of expressions within all the return statements.
-            var types = checkAndAggregateReturnExpressionTypes(<Block>func.body, contextualMapper);
+                // Aggregate the types of expressions within all the return statements.
+                var types = checkAndAggregateReturnExpressionTypes(<Block>func.body, contextualMapper);
                 if (types.length === 0) {
-                    return voidType;
+                    type = voidType;
+                    if (!isAsync) {
+                        return type;
+                    }
                 }
-                // When return statements are contextually typed we allow the return type to be a union type. Otherwise we require the
-                // return expressions to have a best common supertype.
-                var type = contextualSignature ? getUnionType(types) : getCommonSupertype(types);
+                else {
+                    // When return statements are contextually typed we allow the return type to be a union type. Otherwise we require the
+                    // return expressions to have a best common supertype.
+                    type = contextualSignature ? getUnionType(types) : getCommonSupertype(types);
+                    if (!type) {
+                        error(func, Diagnostics.No_best_common_type_exists_among_return_expressions);
+                        return unknownType;
+                    }
+                }
+            }
+
+            if (isAsync) {
+                type = getPromiseType(type, func);
                 if (!type) {
-                    error(func, Diagnostics.No_best_common_type_exists_among_return_expressions);
                     return unknownType;
                 }
-                    }
+            }
+
             if (!contextualSignature) {
                 reportErrorsFromWidening(func, type);
-                    }
-            return getWidenedType(type);
-                }
+            }
+            type = getWidenedType(type);
+            return type;
+        }
 
         /// Returns a set of types relating to every return expression relating to a function block.
         function checkAndAggregateReturnExpressionTypes(body: Block, contextualMapper?: TypeMapper): Type[] {
@@ -7676,6 +7710,10 @@ module ts {
             // in an `initializer` function that in turn supplies a `resolve` function as one of its arguments
             // and results in an object with a callable `then` signature.
 
+            if (!returnType) {
+                returnType = getReturnTypeOfSignature(getSignatureFromDeclaration(node));
+            }
+
             if (returnType && returnType.symbol) {
                 var links = getSymbolLinks(returnType.symbol);
                 if (links.promiseType) {
@@ -7714,25 +7752,25 @@ module ts {
             checkSignatureDeclaration(node);
 
             if (!hasComputedNameButNotSymbol(node)) {
-            // first we want to check the local symbol that contain this declaration
-            // - if node.localSymbol !== undefined - this is current declaration is exported and localSymbol points to the local symbol
-            // - if node.localSymbol === undefined - this node is non-exported so we can just pick the result of getSymbolOfNode
+                // first we want to check the local symbol that contain this declaration
+                // - if node.localSymbol !== undefined - this is current declaration is exported and localSymbol points to the local symbol
+                // - if node.localSymbol === undefined - this node is non-exported so we can just pick the result of getSymbolOfNode
                 var symbol = getSymbolOfNode(node);
-            var localSymbol = node.localSymbol || symbol;
+                var localSymbol = node.localSymbol || symbol;
 
-            var firstDeclaration = getDeclarationOfKind(localSymbol, node.kind);
-            // Only type check the symbol once
-            if (node === firstDeclaration) {
-                checkFunctionOrConstructorSymbol(localSymbol);
-            }
-
-            if (symbol.parent) {
-                // run check once for the first declaration
-                if (getDeclarationOfKind(symbol, node.kind) === node) {
-                    // run check on export symbol to check that modifiers agree across all exported declarations
-                    checkFunctionOrConstructorSymbol(symbol);
+                var firstDeclaration = getDeclarationOfKind(localSymbol, node.kind);
+                // Only type check the symbol once
+                if (node === firstDeclaration) {
+                    checkFunctionOrConstructorSymbol(localSymbol);
                 }
-            }
+
+                if (symbol.parent) {
+                    // run check once for the first declaration
+                    if (getDeclarationOfKind(symbol, node.kind) === node) {
+                        // run check on export symbol to check that modifiers agree across all exported declarations
+                        checkFunctionOrConstructorSymbol(symbol);
+                    }
+                }
             }
 
             checkSourceElement(node.body);
@@ -7908,6 +7946,11 @@ module ts {
             if (node.type && node.type.kind === SyntaxKind.TypeReference) {
                 var typeReference = <TypeReferenceNode>node.type;
                 return typeReference.typeName;
+            }
+
+            var returnType = getReturnTypeOfSignature(getSignatureFromDeclaration(node));
+            if (returnType && returnType.symbol && returnType.symbol.valueDeclaration && returnType.symbol.valueDeclaration.name.kind == SyntaxKind.Identifier) {
+                return <Identifier>returnType.symbol.valueDeclaration.name;
             }
         }        
 
@@ -8145,7 +8188,7 @@ module ts {
                         if (func.kind === SyntaxKind.Constructor) {
                             if (!isTypeAssignableTo(exprType, returnType)) {
                                 error(node.expression, Diagnostics.Return_type_of_constructor_signature_must_be_assignable_to_the_instance_type_of_the_class);
-                        }
+                            }
                         }
                         else if (func.type || isGetAccessorWithAnnotatatedSetAccessor(func)) {
                             if (func.flags & NodeFlags.Async) { 
