@@ -3651,7 +3651,7 @@ module ts {
                     var maybeCache = maybeStack[depth];
                     // If result is definitely true, copy assumptions to global cache, else copy to next level up
                     var destinationCache = result === Ternary.True || depth === 0 ? relation : maybeStack[depth - 1];
-                    copyMap(maybeCache, destinationCache);
+                    copyMap(/*source*/maybeCache, /*target*/destinationCache);
                 }
                 else {
                     // A false result goes straight into global cache (when something is false under assumptions it
