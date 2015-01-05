@@ -2030,8 +2030,19 @@ module ts {
                 }
                 return false;
             }
+            
+            function emitDownlevelTaggedTemplateLiteral(node: LiteralExpression) {
+                // Emit tagged template as foo(["string"])
+                write("[");
+                writer.writeLiteral(getTemplateLiteralAsStringLiteral(node));
+                write("]");
+			}
 
             function emitLiteral(node: LiteralExpression) {
+                if (node.parent.kind === SyntaxKind.TaggedTemplateExpression && compilerOptions.target < ScriptTarget.ES6) {
+                    return emitDownlevelTaggedTemplateLiteral(node);
+                }
+                
                 var text = compilerOptions.target < ScriptTarget.ES6 && isTemplateLiteralKind(node.kind) ? getTemplateLiteralAsStringLiteral(node) :
                     node.parent ? getSourceTextOfNodeFromSourceFile(currentSourceFile, node) :
                     node.text;
@@ -2048,12 +2059,28 @@ module ts {
             }
 
             function getTemplateLiteralAsStringLiteral(node: LiteralExpression): string {
-                if (node.parent.kind === SyntaxKind.TaggedTemplateExpression) {
-					// Emit tagged template as foo(["string"])
-					return '["' + escapeString(node.text) + '"]';
-				} else {
-					return '"' + escapeString(node.text) + '"';
-				}
+                return '"' + escapeString(node.text) + '"';
+            }
+            
+            function emitDownlevelTaggedTemplate(node: TemplateExpression): void {
+                // Emit should like:
+                // foo(["a", "b", "c"], expressions0, expression1)
+                // First we emit the string literal array
+                write("[");
+                emitLiteral(node.head);
+                forEach(node.templateSpans, templateSpan => {
+                    write(", ");
+                    emitLiteral(templateSpan.literal);
+                });
+                write("]");
+                
+                // Now we emit the expressions
+                forEach(node.templateSpans, templateSpan => {
+                    write(", ");
+                    var needsParens = templateSpan.expression.kind === SyntaxKind.BinaryExpression
+                        && (<BinaryExpression> templateSpan.expression).operator === SyntaxKind.CommaToken;
+                    emitParenthesized(templateSpan.expression, needsParens);
+                });
             }
 
             function emitTemplateExpression(node: TemplateExpression): void {
@@ -2065,25 +2092,7 @@ module ts {
                 }
 
                 if (node.parent.kind === SyntaxKind.TaggedTemplateExpression) {
-                    // Emit should like:
-                    // foo(["a", "b", "c"], expressions0, expression1)
-                    // First we emit the string literal array
-                    write("[");
-                    emitLiteral(node.head);
-                    forEach(node.templateSpans, templateSpan => {
-                        write(", ");
-                        emitLiteral(templateSpan.literal);
-                    });
-                    write("]");
-                    
-                    // Now we emit the expressions
-                    forEach(node.templateSpans, templateSpan => {
-                        write(", ");
-                        var needsParens = templateSpan.expression.kind === SyntaxKind.BinaryExpression
-                            && (<BinaryExpression> templateSpan.expression).operator === SyntaxKind.CommaToken;
-                        emitParenthesized(templateSpan.expression, needsParens);
-                    });
-                    return;
+                    return emitDownlevelTaggedTemplate(node);
                 }
                 
                 var emitOuterParens = isExpression(node.parent)
