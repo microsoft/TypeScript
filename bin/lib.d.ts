@@ -12197,7 +12197,12 @@ declare var MSManipulationEvent: {
 }
 
 interface FormData {
-    append(name: any, value: any, blobName?: string): void;
+    append(name: string, value: any, filename?: string): void;
+    delete(name: string): void;
+    get(name: string): any;
+    getAll(name: string): any;
+    has(name: string): boolean;
+    set(name: string, value: any, filename?: string): void;
 }
 declare var FormData: {
     prototype: FormData;
