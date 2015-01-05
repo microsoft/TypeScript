@@ -1,0 +1,84 @@
+=== tests/cases/conformance/expressions/contextualTyping/taggedTemplateContextualTyping2.ts ===
+
+type FuncType1 = (x: <T>(p: T) => T) => typeof x;
+>FuncType1 : (x: <T>(p: T) => T) => <T>(p: T) => T
+>x : <T>(p: T) => T
+>T : T
+>p : T
+>T : T
+>T : T
+>x : <T>(p: T) => T
+
+type FuncType2 = (x: <S, T>(p: T) => T) => typeof x;
+>FuncType2 : (x: <S, T>(p: T) => T) => <S, T>(p: T) => T
+>x : <S, T>(p: T) => T
+>S : S
+>T : T
+>p : T
+>T : T
+>T : T
+>x : <S, T>(p: T) => T
+
+function tempTag2(templateStrs: TemplateStringsArray, f: FuncType1, x: number): number;
+>tempTag2 : { (templateStrs: TemplateStringsArray, f: (x: <T>(p: T) => T) => <T>(p: T) => T, x: number): number; (templateStrs: TemplateStringsArray, f: (x: <S, T>(p: T) => T) => <S, T>(p: T) => T, h: (x: <S, T>(p: T) => T) => <S, T>(p: T) => T, x: string): string; }
+>templateStrs : TemplateStringsArray
+>TemplateStringsArray : TemplateStringsArray
+>f : (x: <T>(p: T) => T) => <T>(p: T) => T
+>FuncType1 : (x: <T>(p: T) => T) => <T>(p: T) => T
+>x : number
+
+function tempTag2(templateStrs: TemplateStringsArray, f: FuncType2, h: FuncType2, x: string): string;
+>tempTag2 : { (templateStrs: TemplateStringsArray, f: (x: <T>(p: T) => T) => <T>(p: T) => T, x: number): number; (templateStrs: TemplateStringsArray, f: (x: <S, T>(p: T) => T) => <S, T>(p: T) => T, h: (x: <S, T>(p: T) => T) => <S, T>(p: T) => T, x: string): string; }
+>templateStrs : TemplateStringsArray
+>TemplateStringsArray : TemplateStringsArray
+>f : (x: <S, T>(p: T) => T) => <S, T>(p: T) => T
+>FuncType2 : (x: <S, T>(p: T) => T) => <S, T>(p: T) => T
+>h : (x: <S, T>(p: T) => T) => <S, T>(p: T) => T
+>FuncType2 : (x: <S, T>(p: T) => T) => <S, T>(p: T) => T
+>x : string
+
+function tempTag2(...rest: any[]): any {
+>tempTag2 : { (templateStrs: TemplateStringsArray, f: (x: <T>(p: T) => T) => <T>(p: T) => T, x: number): number; (templateStrs: TemplateStringsArray, f: (x: <S, T>(p: T) => T) => <S, T>(p: T) => T, h: (x: <S, T>(p: T) => T) => <S, T>(p: T) => T, x: string): string; }
+>rest : any[]
+
+    return undefined;
+>undefined : undefined
+}
+
+// If contextual typing takes place, these functions should work.
+// Otherwise, the arrow functions' parameters will be typed as 'any',
+// and it is an error to invoke an any-typed value with type arguments,
+// so this test will error.
+tempTag2 `${ x => { x<number>(undefined); return x; }         }${ 0 }`;
+>tempTag2 : { (templateStrs: TemplateStringsArray, f: (x: <T>(p: T) => T) => <T>(p: T) => T, x: number): number; (templateStrs: TemplateStringsArray, f: (x: <S, T>(p: T) => T) => <S, T>(p: T) => T, h: (x: <S, T>(p: T) => T) => <S, T>(p: T) => T, x: string): string; }
+>x => { x<number>(undefined); return x; } : (x: <T>(p: T) => T) => <T>(p: T) => T
+>x : <T>(p: T) => T
+>x<number>(undefined) : number
+>x : <T>(p: T) => T
+>undefined : undefined
+>x : <T>(p: T) => T
+
+tempTag2 `${ x => { x<number, string>(undefined); return x; } }${ y => { y<string, number>(null); return y; } }${ "hello" }`;
+>tempTag2 : { (templateStrs: TemplateStringsArray, f: (x: <T>(p: T) => T) => <T>(p: T) => T, x: number): number; (templateStrs: TemplateStringsArray, f: (x: <S, T>(p: T) => T) => <S, T>(p: T) => T, h: (x: <S, T>(p: T) => T) => <S, T>(p: T) => T, x: string): string; }
+>x => { x<number, string>(undefined); return x; } : (x: <S, T>(p: T) => T) => <S, T>(p: T) => T
+>x : <S, T>(p: T) => T
+>x<number, string>(undefined) : string
+>x : <S, T>(p: T) => T
+>undefined : undefined
+>x : <S, T>(p: T) => T
+>y => { y<string, number>(null); return y; } : (y: <S, T>(p: T) => T) => <S, T>(p: T) => T
+>y : <S, T>(p: T) => T
+>y<string, number>(null) : number
+>y : <S, T>(p: T) => T
+>y : <S, T>(p: T) => T
+
+tempTag2 `${ x => { x<number, string>(undefined); return x; } }${ undefined }${ "hello" }`;
+>tempTag2 : { (templateStrs: TemplateStringsArray, f: (x: <T>(p: T) => T) => <T>(p: T) => T, x: number): number; (templateStrs: TemplateStringsArray, f: (x: <S, T>(p: T) => T) => <S, T>(p: T) => T, h: (x: <S, T>(p: T) => T) => <S, T>(p: T) => T, x: string): string; }
+>x => { x<number, string>(undefined); return x; } : (x: <S, T>(p: T) => T) => <S, T>(p: T) => T
+>x : <S, T>(p: T) => T
+>x<number, string>(undefined) : string
+>x : <S, T>(p: T) => T
+>undefined : undefined
+>x : <S, T>(p: T) => T
+>undefined : undefined
+

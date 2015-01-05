@@ -5057,14 +5057,22 @@ module ts {
             return undefined;
         }
 
-        // In a typed function call, an argument expression is contextually typed by the type of the corresponding parameter.
-        function getContextualTypeForArgument(node: Expression): Type {
-            var callExpression = <CallExpression>node.parent;
-            var argIndex = indexOf(callExpression.arguments, node);
+        // In a typed function call, an argument or substitution expression is contextually typed by the type of the corresponding parameter.
+        function getContextualTypeForArgument(callTarget: CallLikeExpression, arg: Expression): Type {
+            var args = getEffectiveCallArguments(callTarget);
+            var argIndex = indexOf(args, arg);
             if (argIndex >= 0) {
-                var signature = getResolvedSignature(callExpression);
+                var signature = getResolvedSignature(callTarget);
                 return getTypeAtPosition(signature, argIndex);
             }
+            return undefined;
+        }
+
+        function getContextualTypeForSubstitutionExpression(template: TemplateExpression, substitutionExpression: Expression) {
+            if (template.parent.kind === SyntaxKind.TaggedTemplateExpression) {
+                return getContextualTypeForArgument(<TaggedTemplateExpression>template.parent, substitutionExpression);
+            }
+
             return undefined;
         }
 
@@ -5205,7 +5213,7 @@ module ts {
                     return getContextualTypeForReturnExpression(node);
                 case SyntaxKind.CallExpression:
                 case SyntaxKind.NewExpression:
-                    return getContextualTypeForArgument(node);
+                    return getContextualTypeForArgument(<CallExpression>parent, node);
                 case SyntaxKind.TypeAssertionExpression:
                     return getTypeFromTypeNode((<TypeAssertion>parent).type);
                 case SyntaxKind.BinaryExpression:
@@ -5216,6 +5224,9 @@ module ts {
                     return getContextualTypeForElementExpression(node);
                 case SyntaxKind.ConditionalExpression:
                     return getContextualTypeForConditionalOperand(node);
+                case SyntaxKind.TemplateSpan:
+                    Debug.assert(parent.parent.kind === SyntaxKind.TemplateExpression);
+                    return getContextualTypeForSubstitutionExpression(<TemplateExpression>parent.parent, node);
             }
             return undefined;
         }
@@ -5876,7 +5887,7 @@ module ts {
         }
 
         /**
-         * Returns the effective arguments for an expression that works like a function invokation.
+         * Returns the effective arguments for an expression that works like a function invocation.
          *
          * If 'node' is a CallExpression or a NewExpression, then its argument list is returned.
          * If 'node' is a TaggedTemplateExpression, a new argument list is constructed from the substitution
@@ -9247,6 +9258,8 @@ module ts {
                 case SyntaxKind.CallExpression:
                 case SyntaxKind.NewExpression:
                 case SyntaxKind.TaggedTemplateExpression:
+                case SyntaxKind.TemplateExpression:
+                case SyntaxKind.TemplateSpan:
                 case SyntaxKind.TypeAssertionExpression:
                 case SyntaxKind.ParenthesizedExpression:
                 case SyntaxKind.TypeOfExpression:
@@ -9790,8 +9803,20 @@ module ts {
 
         function isUniqueLocalName(name: string, container: Node): boolean {
             for (var node = container; isNodeDescendentOf(node, container); node = node.nextContainer) {
-                if (node.locals && hasProperty(node.locals, name) && node.locals[name].flags & (SymbolFlags.Value | SymbolFlags.ExportValue)) {
-                    return false;
+                if (node.locals && hasProperty(node.locals, name)) {
+                    var symbolWithRelevantName = node.locals[name];
+                    if (symbolWithRelevantName.flags & (SymbolFlags.Value | SymbolFlags.ExportValue)) {
+                        return false;
+                    }
+                    
+                    // An import can be emitted too, if it is referenced as a value.
+                    // Make sure the name in question does not collide with an import.
+                    if (symbolWithRelevantName.flags & SymbolFlags.Import) {
+                        var importDeclarationWithRelevantName = <ImportDeclaration>getDeclarationOfKind(symbolWithRelevantName, SyntaxKind.ImportDeclaration);
+                        if (isReferencedImportDeclaration(importDeclarationWithRelevantName)) {
+                            return false;
+                        }
+                    }
                 }
             }
             return true;
