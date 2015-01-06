@@ -3,9 +3,9 @@ tests/cases/conformance/classes/nestedClassDeclaration.ts(7,1): error TS1128: De
 tests/cases/conformance/classes/nestedClassDeclaration.ts(10,5): error TS1129: Statement expected.
 tests/cases/conformance/classes/nestedClassDeclaration.ts(12,1): error TS1128: Declaration or statement expected.
 tests/cases/conformance/classes/nestedClassDeclaration.ts(15,11): error TS1005: ':' expected.
+tests/cases/conformance/classes/nestedClassDeclaration.ts(15,11): error TS2304: Cannot find name 'C4'.
 tests/cases/conformance/classes/nestedClassDeclaration.ts(15,14): error TS1005: ',' expected.
 tests/cases/conformance/classes/nestedClassDeclaration.ts(17,1): error TS1128: Declaration or statement expected.
-tests/cases/conformance/classes/nestedClassDeclaration.ts(15,11): error TS2304: Cannot find name 'C4'.
 
 
 ==== tests/cases/conformance/classes/nestedClassDeclaration.ts (8 errors) ====
@@ -34,10 +34,10 @@ tests/cases/conformance/classes/nestedClassDeclaration.ts(15,11): error TS2304: 
         class C4 {
               ~~
 !!! error TS1005: ':' expected.
-                 ~
-!!! error TS1005: ',' expected.
               ~~
 !!! error TS2304: Cannot find name 'C4'.
+                 ~
+!!! error TS1005: ',' expected.
         }
     }
     ~

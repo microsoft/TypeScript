@@ -1,6 +1,3 @@
-/// <reference path="types.ts"/>
-/// <reference path="core.ts"/>
-/// <reference path="scanner.ts"/>
 /// <reference path="parser.ts"/>
 
 module ts {
@@ -36,6 +33,39 @@ module ts {
             return finishNode(node, location, flags);
         }
 
+        export function createComputedPropertyName(expression: Expression, location?: TextRange, flags?: NodeFlags): ComputedPropertyName {
+            var node = beginNode<ComputedPropertyName>(SyntaxKind.ComputedPropertyName);
+            node.expression = expression;
+            return finishNode(node, location, flags);
+        }
+
+        export function updateComputedPropertyName(node: ComputedPropertyName, expression: Expression): ComputedPropertyName {
+            if (node.expression !== expression) {
+                return createComputedPropertyName(expression, node, node.flags);
+            }
+            return node;
+        }
+
+        export function createObjectBindingPattern(elements: BindingElement[], location?: TextRange, flags?: NodeFlags): BindingPattern {
+            var node = beginNode<BindingPattern>(SyntaxKind.ObjectBindingPattern);
+            node.elements = createNodeArray(elements);
+            return finishNode(node, location, flags);
+        }
+
+        export function createArrayBindingPattern(elements: BindingElement[], location?: TextRange, flags?: NodeFlags): BindingPattern {
+            var node = beginNode<BindingPattern>(SyntaxKind.ArrayBindingPattern);
+            node.elements = createNodeArray(elements);
+            return finishNode(node, location, flags);
+        }
+
+        export function createBindingElement(name: Identifier | BindingPattern, propertyName?: Identifier, initializer?: Expression, location?: TextRange, flags?: NodeFlags) {
+            var node = beginNode<BindingElement>(SyntaxKind.BindingElement);
+            node.name = name;
+            node.propertyName = propertyName;
+            node.initializer = initializer;
+            return finishNode(node, location, flags);
+        }
+
         // declarations
         export function createVariableDeclaration(name: Identifier | BindingPattern, initializer?: Expression, location?: TextRange, flags?: NodeFlags): VariableDeclaration {
             var node = beginNode<VariableDeclaration>(SyntaxKind.VariableDeclaration);
@@ -51,12 +81,15 @@ module ts {
             return node;
         }
 
-        export function createParameterDeclaration(name: Identifier, initializer?: Expression, location?: TextRange, flags?: NodeFlags): ParameterDeclaration {
-            return createVariableDeclaration(name, initializer, location, flags);
+        export function createParameterDeclaration(name: Identifier | BindingPattern, initializer?: Expression, location?: TextRange, flags?: NodeFlags): ParameterDeclaration {
+            var node = beginNode<ParameterDeclaration>(SyntaxKind.Parameter);
+            node.name = name;
+            node.initializer = initializer;
+            return finishNode(node, location, flags);
         }
 
-        export function updateParameterDeclaration(node: ParameterDeclaration, name: Identifier, initializer: Expression): ParameterDeclaration {
-            return updateVariableDeclaration(node, name, initializer);
+        export function updateParameterDeclaration(node: ParameterDeclaration, name: Identifier | BindingPattern, initializer: Expression): ParameterDeclaration {
+            return updateParameterDeclaration(node, name, initializer);
         }
 
         export function updateFunctionLikeDeclaration(node: FunctionLikeDeclaration, name: DeclarationName, body: Expression | Block, parameters: ParameterDeclaration[]): FunctionLikeDeclaration {
@@ -149,6 +182,33 @@ module ts {
             return node;
         }
 
+        export function createVoidExpression(expression: UnaryExpression, location?: TextRange, flags?: NodeFlags): VoidExpression {
+            var node = beginNode<VoidExpression>(SyntaxKind.VoidExpression);
+            node.expression = expression;
+            return finishNode(node, location, flags);
+        }
+
+        export function updateVoidExpression(node: VoidExpression, expression: UnaryExpression): VoidExpression {
+            if (node.expression !== expression) {
+                return createVoidExpression(expression, node, node.flags);
+            }
+            return node;
+        }
+
+        export function createYieldExpression(expression: Expression, asteriskToken?: Node, location?: TextRange, flags?: NodeFlags): YieldExpression {
+            var node = beginNode<YieldExpression>(SyntaxKind.YieldExpression);
+            node.expression = expression;
+            node.asteriskToken = asteriskToken;
+            return finishNode(node, location, flags);
+        }
+
+        export function updateYieldExpression(node: YieldExpression, expression: Expression): YieldExpression {
+            if (node.expression !== expression) {
+                return createYieldExpression(expression, node.asteriskToken, node, node.flags);
+            }
+            return node;
+        }
+
         export function createPrefixUnaryExpression(operator: SyntaxKind, operand: UnaryExpression, location?: TextRange, flags?: NodeFlags): PrefixUnaryExpression {
             var node = beginNode<PrefixUnaryExpression>(SyntaxKind.PrefixUnaryExpression);
             node.operator = operator;
@@ -175,12 +235,6 @@ module ts {
                 return createPostfixUnaryExpression(node.operator, operand, node, node.flags);
             }
             return node;
-        }
-
-        export function createYieldExpression(expression: Expression, location?: TextRange, flags?: NodeFlags): YieldExpression {
-            var node = beginNode<YieldExpression>(SyntaxKind.YieldExpression);
-            node.expression = expression;
-            return finishNode(node, location, flags);
         }
 
         export function createBinaryExpression(operator: SyntaxKind, left: Expression, right: Expression, location?: TextRange, flags?: NodeFlags): BinaryExpression {
@@ -436,6 +490,18 @@ module ts {
             return finishNode(node, location, flags);
         }
 
+        export function createSpreadElementExpression(expression: Expression, location?: TextRange, flags?: NodeFlags): SpreadElementExpression {
+            var node = beginNode<SpreadElementExpression>(SyntaxKind.SpreadElementExpression);
+            return finishNode(node, location, flags);
+        }
+
+        export function updateSpreadElementExpression(node: SpreadElementExpression, expression: Expression): SpreadElementExpression {
+            if (node.expression !== expression) {
+                return createSpreadElementExpression(expression, node, node.flags);
+            }
+            return node;
+        }
+
         // statements
         export function createBlock(statements: Statement[], location?: TextRange, flags?: NodeFlags): Block {
             var node = beginNode<Block>(SyntaxKind.Block);
@@ -450,15 +516,28 @@ module ts {
             return node;
         }        
 
-        export function createVariableStatement(declarations: VariableDeclaration[], location?: TextRange, flags?: NodeFlags): VariableStatement {
-            var node = beginNode<VariableStatement>(SyntaxKind.VariableStatement);
+        export function createVariableDeclarationList(declarations: VariableDeclaration[], location?: TextRange, flags?: NodeFlags): VariableDeclarationList {
+            var node = beginNode<VariableDeclarationList>(SyntaxKind.VariableDeclarationList);
             node.declarations = createNodeArray(declarations);
             return finishNode(node, location, flags);
         }
 
-        export function updateVariableStatement(node: VariableStatement, declarations: VariableDeclaration[]): VariableStatement {
+        export function updateVariableDeclarationList(node: VariableDeclarationList, declarations: VariableDeclaration[]): VariableDeclarationList {
             if (node.declarations !== declarations) {
-                return createVariableStatement(declarations, node, node.flags);
+                return createVariableDeclarationList(declarations, node, node.flags);
+            }
+            return node;
+        }
+
+        export function createVariableStatement(declarationList: VariableDeclarationList, location?: TextRange, flags?: NodeFlags): VariableStatement {
+            var node = beginNode<VariableStatement>(SyntaxKind.VariableStatement);
+            node.declarationList = declarationList;
+            return finishNode(node, location, flags);
+        }
+
+        export function updateVariableStatement(node: VariableStatement, declarationList: VariableDeclarationList): VariableStatement {
+            if (node.declarationList !== declarationList) {
+                return createVariableStatement(declarationList, node, node.flags);
             }
             return node;
         }
@@ -524,9 +603,8 @@ module ts {
             return node;
         }
 
-        export function createForStatement(declarations: VariableDeclaration[], initializer: Expression, condition: Expression, iterator: Expression, statement: Statement, location?: TextRange, flags?: NodeFlags): ForStatement {
+        export function createForStatement(initializer: VariableDeclarationList | Expression, condition: Expression, iterator: Expression, statement: Statement, location?: TextRange, flags?: NodeFlags): ForStatement {
             var node = beginNode<ForStatement>(SyntaxKind.ForStatement);
-            node.declarations = declarations && createNodeArray(declarations);
             node.initializer = initializer;
             node.condition = condition;
             node.iterator = iterator;
@@ -534,25 +612,24 @@ module ts {
             return finishNode(node, location, flags);
         }
 
-        export function updateForStatement(node: ForStatement, declarations: VariableDeclaration[], initializer: Expression, condition: Expression, iterator: Expression, statement: Statement): ForStatement {
-            if (node.declarations !== declarations || node.initializer !== initializer || node.condition !== condition || node.iterator !== iterator || node.statement !== statement) {
-                return createForStatement(declarations, initializer, condition, iterator, statement, node, node.flags);
+        export function updateForStatement(node: ForStatement, initializer: VariableDeclarationList | Expression, condition: Expression, iterator: Expression, statement: Statement): ForStatement {
+            if (node.initializer !== initializer || node.condition !== condition || node.iterator !== iterator || node.statement !== statement) {
+                return createForStatement(initializer, condition, iterator, statement, node, node.flags);
             }
             return node;
         }
 
-        export function createForInStatement(declarations: VariableDeclaration[], variable: Expression, expression: Expression, statement: Statement, location?: TextRange, flags?: NodeFlags): ForInStatement {
+        export function createForInStatement(initializer: VariableDeclarationList | Expression, expression: Expression, statement: Statement, location?: TextRange, flags?: NodeFlags): ForInStatement {
             var node = beginNode<ForInStatement>(SyntaxKind.ForInStatement);
-            node.declarations = declarations && createNodeArray(declarations);
-            node.variable = variable;
+            node.initializer = initializer;
             node.expression = expression;
             node.statement = statement;
             return finishNode(node, location, flags);
         }
 
-        export function updateForInStatement(node: ForInStatement, declarations: VariableDeclaration[], variable: Expression, expression: Expression, statement: Statement): ForInStatement {
-            if (node.declarations !== declarations || node.variable !== variable || node.expression !== expression || node.statement !== statement) {
-                return createForInStatement(declarations, variable, expression, statement, node, node.flags);
+        export function updateForInStatement(node: ForInStatement, initializer: VariableDeclarationList | Expression, expression: Expression, statement: Statement): ForInStatement {
+            if (node.initializer !== initializer || node.expression !== expression || node.statement !== statement) {
+                return createForInStatement(initializer, expression, statement, node, node.flags);
             }
             return node;
         }
@@ -692,19 +769,6 @@ module ts {
             return node;
         }
 
-        export function createTryBlock(statements: Statement[], location?: TextRange, flags?: NodeFlags): Block {
-            var node = beginNode<Block>(SyntaxKind.TryBlock);
-            node.statements = createNodeArray(statements);
-            return finishNode(node, location, flags);
-        }
-
-        export function updateTryBlock(node: Block, statements: Statement[]): Block {
-            if (node.statements !== statements) {
-                return createTryBlock(statements, node, node.flags);
-            }
-            return node;
-        }
-
         export function createCatchClause(name: Identifier, block: Block, location?: TextRange, flags?: NodeFlags): CatchClause {
             var node = beginNode<CatchClause>(SyntaxKind.CatchClause);
             node.name = name;
@@ -715,19 +779,6 @@ module ts {
         export function updateCatchBlock(node: CatchClause, name: Identifier, block: Block): CatchClause {
             if (node.name !== name || node.block !== block) {
                 return createCatchClause(name, block, node, node.flags);
-            }
-            return node;
-        }
-
-        export function createFinallyBlock(statements: Statement[], location?: TextRange, flags?: NodeFlags): Block {
-            var node = beginNode<Block>(SyntaxKind.FinallyBlock);
-            node.statements = createNodeArray(statements);
-            return finishNode(node, location, flags);
-        }
-
-        export function updateFinallyBlock(node: Block, statements: Statement[]): Block {
-            if (node.statements !== statements) {
-                return createFinallyBlock(statements, node, node.flags);
             }
             return node;
         }

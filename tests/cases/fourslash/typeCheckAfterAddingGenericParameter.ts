@@ -13,8 +13,6 @@
 //// }
 //// 
 
-diagnostics.setEditValidation(IncrementalEditValidation.SyntacticOnly);
-
 goTo.marker('addParam');
 
 edit.insert(", X");

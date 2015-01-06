@@ -1,7 +1,7 @@
-tests/cases/conformance/parser/ecmascript6/ComputedPropertyNames/parserComputedPropertyName5.ts(1,11): error TS1309: 'public' modifier cannot be used on an object literal element.
+tests/cases/conformance/parser/ecmascript6/ComputedPropertyNames/parserComputedPropertyName5.ts(1,22): error TS9002: Computed property names are not currently supported.
 
 
 ==== tests/cases/conformance/parser/ecmascript6/ComputedPropertyNames/parserComputedPropertyName5.ts (1 errors) ====
     var v = { public get [e]() { } };
-              ~~~~~~
-!!! error TS1309: 'public' modifier cannot be used on an object literal element.
+                         ~~~
+!!! error TS9002: Computed property names are not currently supported.

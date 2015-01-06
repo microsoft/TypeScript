@@ -55,6 +55,11 @@ module ts {
             error: Diagnostics.Argument_for_module_option_must_be_commonjs_or_amd
         },
         {
+            name: "noEmit",
+            type: "boolean",
+            description: Diagnostics.Do_not_emit_outputs,
+        },
+        {
             name: "noEmitOnError",
             type: "boolean",
             description: Diagnostics.Do_not_emit_outputs_if_any_type_checking_errors_were_reported,

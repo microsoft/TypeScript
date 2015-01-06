@@ -84,9 +84,9 @@
 --------------------------------
 11 >    export let ll2 = 0;
 
-    ~~~~~~~~~~~~~~~~~~~~~~~~                      => Pos: (221 to 244)  SpanInfo: {"start":225,"length":18}
-    >export let ll2 = 0
-    >:=> (line 11, col 4) to (line 11, col 22)
+    ~~~~~~~~~~~~~~~~~~~~~~~~                      => Pos: (221 to 244)  SpanInfo: {"start":232,"length":11}
+    >let ll2 = 0
+    >:=> (line 11, col 11) to (line 11, col 22)
 --------------------------------
 12 >}
     ~                                             => Pos: (245 to 245)  SpanInfo: {"start":245,"length":1}

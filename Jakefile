@@ -42,6 +42,7 @@ var compilerSources = [
     "generator.ts",
     "rewriter.ts",
     "emitter.ts",
+    "program.ts",
     "commandLineParser.ts",
     "tsc.ts",
     "diagnosticInformationMap.generated.ts"
@@ -62,6 +63,7 @@ var servicesSources = [
     "generator.ts",
     "rewriter.ts",
     "emitter.ts",
+    "program.ts",
     "diagnosticInformationMap.generated.ts"
 ].map(function (f) {
     return path.join(compilerDirectory, f);
@@ -98,7 +100,15 @@ var definitionsRoots = [
     "compiler/scanner.d.ts",
     "compiler/parser.d.ts",
     "compiler/checker.d.ts",
+    "compiler/program.d.ts",
     "services/services.d.ts",
+];
+
+var internalDefinitionsRoots = [
+    "compiler/core.d.ts",
+    "compiler/sys.d.ts",
+    "compiler/utilities.d.ts",
+    "services/utilities.d.ts",
 ];
 
 var harnessSources = [
@@ -321,6 +331,8 @@ compileFile(servicesFile, servicesSources,[builtLocalDirectory, copyright].conca
 
 var nodeDefinitionsFile = path.join(builtLocalDirectory, "typescript.d.ts");
 var standaloneDefinitionsFile = path.join(builtLocalDirectory, "typescriptServices.d.ts");
+var internalNodeDefinitionsFile = path.join(builtLocalDirectory, "typescript_internal.d.ts");
+var internalStandaloneDefinitionsFile = path.join(builtLocalDirectory, "typescriptServices_internal.d.ts");
 var tempDirPath = path.join(builtLocalDirectory, "temptempdir");
 compileFile(nodeDefinitionsFile, servicesSources,[builtLocalDirectory, copyright].concat(servicesSources),
             /*prefixes*/ undefined,
@@ -331,16 +343,25 @@ compileFile(nodeDefinitionsFile, servicesSources,[builtLocalDirectory, copyright
             /*keepComments*/ true,
             /*noResolve*/ true,
             /*callback*/ function () {
-                concatenateFiles(standaloneDefinitionsFile, definitionsRoots.map(function (f) {
-                    return path.join(tempDirPath, f);
-                }));
-                prependFile(copyright, standaloneDefinitionsFile);
+                function makeDefinitionFiles(definitionsRoots, standaloneDefinitionsFile, nodeDefinitionsFile) {
+                    // Create the standalone definition file
+                    concatenateFiles(standaloneDefinitionsFile, definitionsRoots.map(function (f) {
+                        return path.join(tempDirPath, f);
+                    }));
+                    prependFile(copyright, standaloneDefinitionsFile);
 
-                // Create the node definition file by replacing 'ts' module with '"typescript"' as a module.
-                jake.cpR(standaloneDefinitionsFile, nodeDefinitionsFile, {silent: true});
-                var definitionFileContents = fs.readFileSync(nodeDefinitionsFile).toString();
-                definitionFileContents = definitionFileContents.replace(/declare module ts/g, 'declare module "typescript"');
-                fs.writeFileSync(nodeDefinitionsFile, definitionFileContents);
+                    // Create the node definition file by replacing 'ts' module with '"typescript"' as a module.
+                    jake.cpR(standaloneDefinitionsFile, nodeDefinitionsFile, {silent: true});
+                    var definitionFileContents = fs.readFileSync(nodeDefinitionsFile).toString();
+                    definitionFileContents = definitionFileContents.replace(/declare module ts/g, 'declare module "typescript"');
+                    fs.writeFileSync(nodeDefinitionsFile, definitionFileContents);
+                }
+
+                // Create the public definition files
+                makeDefinitionFiles(definitionsRoots, standaloneDefinitionsFile, nodeDefinitionsFile);
+                
+                // Create the internal definition files
+                makeDefinitionFiles(internalDefinitionsRoots, internalStandaloneDefinitionsFile, internalNodeDefinitionsFile);
 
                 // Delete the temp dir
                 jake.rmRf(tempDirPath, {silent: true});
@@ -399,7 +420,7 @@ task("generate-spec", [specMd])
 // Makes a new LKG. This target does not build anything, but errors if not all the outputs are present in the built/local directory
 desc("Makes a new LKG out of the built js files");
 task("LKG", ["clean", "release", "local"].concat(libraryTargets), function() {
-    var expectedFiles = [tscFile, servicesFile, nodeDefinitionsFile, standaloneDefinitionsFile].concat(libraryTargets);
+    var expectedFiles = [tscFile, servicesFile, nodeDefinitionsFile, standaloneDefinitionsFile, internalNodeDefinitionsFile, internalStandaloneDefinitionsFile].concat(libraryTargets);
     var missingFiles = expectedFiles.filter(function (f) {
         return !fs.existsSync(f);
     });
@@ -453,15 +474,10 @@ function exec(cmd, completeHandler) {
         complete();
     });
     ex.addListener("error", function(e, status) {
-        process.stderr.write(status);
-        process.stderr.write(e);
-        complete();
+        fail("Process exited with code " + status);
     })
-    try{
-        ex.run();
-    } catch(e) {
-        console.log('Exception: ' + e)
-    }
+
+    ex.run();
 }
 
 function cleanTestDirs() {
@@ -491,7 +507,7 @@ function deleteTemporaryProjectOutput() {
     }
 }
 
-var testTimeout = 5000;
+var testTimeout = 20000;
 desc("Runs the tests using the built run.js file. Syntax is jake runtests. Optional parameters 'host=', 'tests=[regex], reporter=[list|spec|json|<more>]'.");
 task("runtests", ["tests", builtLocalDirectory], function() {
     cleanTestDirs();

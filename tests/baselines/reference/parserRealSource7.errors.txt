@@ -1,8 +1,8 @@
 tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(4,1): error TS6053: File 'tests/cases/conformance/parser/ecmascript5/typescript.ts' not found.
-tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(16,45): error TS1150: 'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.
 tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(12,38): error TS2304: Cannot find name 'ASTList'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(12,62): error TS2304: Cannot find name 'TypeLink'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(16,37): error TS2304: Cannot find name 'TypeLink'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(16,45): error TS1150: 'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.
 tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(21,36): error TS2304: Cannot find name 'TypeLink'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(29,29): error TS2304: Cannot find name 'Type'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(29,45): error TS2304: Cannot find name 'TypeDeclaration'.
@@ -326,10 +326,10 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(828,13): error T
                 var len = bases.members.length;
                 if (baseTypeLinks == null) {
                     baseTypeLinks = new TypeLink[];
-                                                ~~
-!!! error TS1150: 'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.
                                         ~~~~~~~~
 !!! error TS2304: Cannot find name 'TypeLink'.
+                                                ~~
+!!! error TS1150: 'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.
                 }
                 for (var i = 0; i < len; i++) {
                     var baseExpr = bases.members[i];

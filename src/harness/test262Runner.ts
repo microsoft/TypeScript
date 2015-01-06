@@ -29,7 +29,7 @@ class Test262BaselineRunner extends RunnerBase {
                 filename: string;
                 compilerResult: Harness.Compiler.CompilerResult;
                 inputFiles: { unitName: string; content: string }[];
-                checker: ts.TypeChecker;
+                program: ts.Program;
             };
 
             before(() => {
@@ -46,12 +46,12 @@ class Test262BaselineRunner extends RunnerBase {
                     filename: testFilename,
                     inputFiles: inputFiles,
                     compilerResult: undefined,
-                    checker: undefined,
+                    program: undefined,
                 };
 
-                Harness.Compiler.getCompiler().compileFiles([Test262BaselineRunner.helperFile].concat(inputFiles), /*otherFiles*/ [], (compilerResult, checker) => {
+                Harness.Compiler.getCompiler().compileFiles([Test262BaselineRunner.helperFile].concat(inputFiles), /*otherFiles*/ [], (compilerResult, program) => {
                     testState.compilerResult = compilerResult;
-                    testState.checker = checker;
+                    testState.program = program;
                 }, /*settingsCallback*/ undefined, Test262BaselineRunner.options);
             });
 
@@ -78,13 +78,13 @@ class Test262BaselineRunner extends RunnerBase {
             });
 
             it('satisfies invariants', () => {
-                var sourceFile = testState.checker.getProgram().getSourceFile(Test262BaselineRunner.getTestFilePath(testState.filename));
+                var sourceFile = testState.program.getSourceFile(Test262BaselineRunner.getTestFilePath(testState.filename));
                 Utils.assertInvariants(sourceFile, /*parent:*/ undefined);
             });
 
             it('has the expected AST',() => {
                 Harness.Baseline.runBaseline('has the expected AST', testState.filename + '.AST.txt',() => {
-                    var sourceFile = testState.checker.getProgram().getSourceFile(Test262BaselineRunner.getTestFilePath(testState.filename));
+                    var sourceFile = testState.program.getSourceFile(Test262BaselineRunner.getTestFilePath(testState.filename));
                     return Utils.sourceFileToJSON(sourceFile);
                 }, false, Test262BaselineRunner.baselineOptions);
             });

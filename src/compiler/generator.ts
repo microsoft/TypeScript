@@ -495,7 +495,8 @@ module ts {
         function buildFunction(kind: SyntaxKind, name: DeclarationName, location?: TextRange, flags?: NodeFlags, modifiers?: ModifiersArray) {
             var statements: Statement[] = [];
             if (variableDeclarations) {
-                statements.push(factory.createVariableStatement(variableDeclarations));
+                var variableDeclarationList = factory.createVariableDeclarationList(variableDeclarations);
+                statements.push(factory.createVariableStatement(variableDeclarationList));
             }
 
             if (functions) {

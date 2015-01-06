@@ -1,20 +1,20 @@
-tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserUnfinishedTypeNameBeforeKeyword1.ts(2,8): error TS1005: '=' expected.
-tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserUnfinishedTypeNameBeforeKeyword1.ts(2,20): error TS1005: ',' expected.
 tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserUnfinishedTypeNameBeforeKeyword1.ts(1,8): error TS2304: Cannot find name 'TypeModule1'.
+tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserUnfinishedTypeNameBeforeKeyword1.ts(2,8): error TS1005: '=' expected.
 tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserUnfinishedTypeNameBeforeKeyword1.ts(2,8): error TS2304: Cannot find name 'TypeModule2'.
+tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserUnfinishedTypeNameBeforeKeyword1.ts(2,20): error TS1005: ',' expected.
 
 
 ==== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserUnfinishedTypeNameBeforeKeyword1.ts (4 errors) ====
     var x: TypeModule1.
            ~~~~~~~~~~~~
     module TypeModule2 {
-           ~~~~~~~~~~~
-!!! error TS1005: '=' expected.
-                       ~
-!!! error TS1005: ',' expected.
     ~~~~~~
 !!! error TS2304: Cannot find name 'TypeModule1'.
            ~~~~~~~~~~~
+!!! error TS1005: '=' expected.
+           ~~~~~~~~~~~
 !!! error TS2304: Cannot find name 'TypeModule2'.
+                       ~
+!!! error TS1005: ',' expected.
     }
     

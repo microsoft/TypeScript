@@ -16,8 +16,6 @@
 
 /// <reference path='..\services\services.ts' />
 /// <reference path='..\services\shims.ts' />
-/// <reference path='..\compiler\core.ts' />
-/// <reference path='..\compiler\sys.ts' />
 /// <reference path='external\mocha.d.ts'/>
 /// <reference path='external\chai.d.ts'/>
 /// <reference path='sourceMapRecorder.ts'/>
@@ -263,7 +261,6 @@ module Utils {
 
                     case "referenceDiagnostics":
                     case "parseDiagnostics":
-                    case "grammarDiagnostics":
                         o[propertyName] = Utils.convertDiagnostics((<any>n)[propertyName]);
                         break;
 
@@ -289,6 +286,87 @@ module Utils {
 
             return o;
         }
+    }
+
+    export function assertDiagnosticsEquals(array1: ts.Diagnostic[], array2: ts.Diagnostic[]) {
+        if (array1 === array2) {
+            return;
+        }
+
+        assert(array1, "array1");
+        assert(array2, "array2");
+
+        assert.equal(array1.length, array2.length, "array1.length !== array2.length");
+
+        for (var i = 0, n = array1.length; i < n; i++) {
+            var d1 = array1[i];
+            var d2 = array2[i];
+
+            assert.equal(d1.start, d2.start, "d1.start !== d2.start");
+            assert.equal(d1.length, d2.length, "d1.length !== d2.length");
+            assert.equal(d1.messageText, d2.messageText, "d1.messageText !== d2.messageText");
+            assert.equal(d1.category, d2.category, "d1.category !== d2.category");
+            assert.equal(d1.code, d2.code, "d1.code !== d2.code");
+            assert.equal(d1.isEarly, d2.isEarly, "d1.isEarly !== d2.isEarly");
+        }
+    }
+
+    export function assertStructuralEquals(node1: ts.Node, node2: ts.Node) {
+        if (node1 === node2) {
+            return;
+        }
+
+        assert(node1, "node1");
+        assert(node2, "node2");
+        assert.equal(node1.pos, node2.pos, "node1.pos !== node2.pos");
+        assert.equal(node1.end, node2.end, "node1.end !== node2.end");
+        assert.equal(node1.kind, node2.kind, "node1.kind !== node2.kind");
+        assert.equal(node1.flags, node2.flags, "node1.flags !== node2.flags");
+
+        // call this on both nodes to ensure all propagated flags have been set (and thus can be 
+        // compared).
+        assert.equal(ts.containsParseError(node1), ts.containsParseError(node2));
+        assert.equal(node1.parserContextFlags, node2.parserContextFlags, "node1.parserContextFlags !== node2.parserContextFlags");
+
+        ts.forEachChild(node1,
+            child1 => {
+                var childName = findChildName(node1, child1);
+                var child2: ts.Node = (<any>node2)[childName];
+
+                assertStructuralEquals(child1, child2);
+            },
+            (array1: ts.NodeArray<ts.Node>) => {
+                var childName = findChildName(node1, array1);
+                var array2: ts.NodeArray<ts.Node> = (<any>node2)[childName];
+
+                assertArrayStructuralEquals(array1, array2);
+            });
+    }
+
+    function assertArrayStructuralEquals(array1: ts.NodeArray<ts.Node>, array2: ts.NodeArray<ts.Node>) {
+        if (array1 === array2) {
+            return;
+        }
+
+        assert(array1, "array1");
+        assert(array2, "array2");
+        assert.equal(array1.pos, array2.pos, "array1.pos !== array2.pos");
+        assert.equal(array1.end, array2.end, "array1.end !== array2.end");
+        assert.equal(array1.length, array2.length, "array1.length !== array2.length");
+
+        for (var i = 0, n = array1.length; i < n; i++) {
+            assertStructuralEquals(array1[i], array2[i]);
+        }
+    }
+
+    function findChildName(parent: any, child: any) {
+        for (var name in parent) {
+            if (parent.hasOwnProperty(name) && parent[name] === child) {
+                return name;
+            }
+        }
+
+        throw new Error("Could not find child in parent");
     }
 }
 
@@ -772,7 +850,7 @@ module Harness {
                 writeFile,
                 getCanonicalFileName,
                 useCaseSensitiveFileNames: () => useCaseSensitiveFileNames,
-                getNewLine: ()=> ts.sys.newLine
+                getNewLine: () => ts.sys.newLine
             };
         }
 
@@ -814,7 +892,7 @@ module Harness {
             }
 
             public emitAll(ioHost?: IEmitterIOHost) {
-                this.compileFiles(this.inputFiles, [], (result) => {
+                this.compileFiles(this.inputFiles, [],(result) => {
                     result.files.forEach(file => {
                         ioHost.writeFile(file.fileName, file.code, false);
                     });
@@ -824,12 +902,12 @@ module Harness {
                     result.sourceMaps.forEach(file => {
                         ioHost.writeFile(file.fileName, file.code, false);
                     });
-                }, () => { }, this.compileOptions);
+                },() => { }, this.compileOptions);
             }
 
             public compileFiles(inputFiles: { unitName: string; content: string }[],
                 otherFiles: { unitName: string; content: string }[],
-                onComplete: (result: CompilerResult, checker: ts.TypeChecker) => void,
+                onComplete: (result: CompilerResult, program: ts.Program) => void,
                 settingsCallback?: (settings: ts.CompilerOptions) => void,
                 options?: ts.CompilerOptions) {
 
@@ -962,7 +1040,7 @@ module Harness {
                             break;
 
                         case 'includebuiltfile':
-                            inputFiles.push({ unitName: setting.value, content: IO.readFile(libFolder + setting.value)});
+                            inputFiles.push({ unitName: setting.value, content: IO.readFile(libFolder + setting.value) });
                             break;
 
                         case 'nohelpers':
@@ -991,14 +1069,14 @@ module Harness {
                     options.target,
                     useCaseSensitiveFileNames));
 
-                var checker = program.getTypeChecker(/*fullTypeCheckMode*/ true);
+                var checker = program.getTypeChecker(/*produceDiagnostics*/ true);
 
-                var isEmitBlocked = checker.isEmitBlocked();
+                var isEmitBlocked = program.isEmitBlocked();
 
                 // only emit if there weren't parse errors
                 var emitResult: ts.EmitResult;
                 if (!isEmitBlocked) {
-                    emitResult = checker.emitFiles();
+                    emitResult = program.emitFiles();
                 }
 
                 var errors: HarnessDiagnostic[] = [];
@@ -1009,7 +1087,7 @@ module Harness {
                 this.lastErrors = errors;
 
                 var result = new CompilerResult(fileOutputs, errors, program, ts.sys.getCurrentDirectory(), emitResult ? emitResult.sourceMaps : undefined);
-                onComplete(result, checker);
+                onComplete(result, program);
 
                 // reset what newline means in case the last test changed it
                 ts.sys.newLine = '\r\n';
@@ -1074,7 +1152,7 @@ module Harness {
                                 return ts.removeFileExtension(sourceFileName) + ".d.ts";
                             }
                         });
-                        
+
                         return ts.forEach(result.declFilesCode, declFile => declFile.fileName === dTsFileName ? declFile : undefined);
                     }
 
@@ -1113,7 +1191,17 @@ module Harness {
             return errorOutput;
         }
 
+        function compareDiagnostics(d1: HarnessDiagnostic, d2: HarnessDiagnostic) {
+            return ts.compareValues(d1.filename, d2.filename) ||
+                ts.compareValues(d1.start, d2.start) ||
+                ts.compareValues(d1.end, d2.end) ||
+                ts.compareValues(d1.code, d2.code) ||
+                ts.compareValues(d1.message, d2.message) ||
+                0;
+        }
+
         export function getErrorBaseline(inputFiles: { unitName: string; content: string }[], diagnostics: HarnessDiagnostic[]) {
+            diagnostics.sort(compareDiagnostics);
 
             var outputLines: string[] = [];
             // Count up all the errors we find so we don't miss any
@@ -1132,7 +1220,7 @@ module Harness {
 
             // Report global errors
             var globalErrors = diagnostics.filter(err => !err.filename);
-            globalErrors.forEach(err => outputErrorText(err));
+            globalErrors.forEach(outputErrorText);
 
             // 'merge' the lines of each input file with any errors associated with it
             inputFiles.filter(f => f.content !== undefined).forEach(inputFile => {
