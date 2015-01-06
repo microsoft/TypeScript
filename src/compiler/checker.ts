@@ -5399,56 +5399,48 @@ module ts {
             // Grammar checking
             checkGrammarObjectLiteralExpression(node);
 
-            var members = node.symbol.members;
             var properties: SymbolTable = {};
             var contextualType = getContextualType(node);
             var typeFlags: TypeFlags;
 
-            for (var id in members) {
-                if (hasProperty(members, id)) {
-                    var member = members[id];
-                    if (member.flags & SymbolFlags.Property || isObjectLiteralMethod(member.declarations[0])) {
-                        var memberDecl = <ObjectLiteralElement>member.declarations[0];
-                        if (memberDecl.kind === SyntaxKind.PropertyAssignment) {
-                            var type = checkExpression((<PropertyAssignment>memberDecl).initializer, contextualMapper);
-                        }
-                        else if (memberDecl.kind === SyntaxKind.MethodDeclaration) {
-                            var type = checkObjectLiteralMethod(<MethodDeclaration>memberDecl, contextualMapper);
-                        }
-                        else {
-                            Debug.assert(memberDecl.kind === SyntaxKind.ShorthandPropertyAssignment);
-                            var type = memberDecl.name.kind === SyntaxKind.ComputedPropertyName
-                                ? unknownType
-                                : checkExpression(<Identifier>memberDecl.name, contextualMapper);
-                        }
-                        typeFlags |= type.flags;
-                        var prop = <TransientSymbol>createSymbol(SymbolFlags.Property | SymbolFlags.Transient | member.flags, member.name);
-                        prop.declarations = member.declarations;
-                        prop.parent = member.parent;
-                        if (member.valueDeclaration) {
-                            prop.valueDeclaration = member.valueDeclaration;
-                        }
-
-                        prop.type = type;
-                        prop.target = member;
-                        member = prop;
+            for (var i = 0; i < node.properties.length; i++) {
+                var memberDecl = node.properties[i];
+                if (memberDecl.kind === SyntaxKind.PropertyAssignment ||
+                    memberDecl.kind === SyntaxKind.ShorthandPropertyAssignment ||
+                    isObjectLiteralMethod(memberDecl)) {
+                    if (memberDecl.kind === SyntaxKind.PropertyAssignment) {
+                        var type = checkExpression((<PropertyAssignment>memberDecl).initializer, contextualMapper);
+                    }
+                    else if (memberDecl.kind === SyntaxKind.MethodDeclaration) {
+                        var type = checkObjectLiteralMethod(<MethodDeclaration>memberDecl, contextualMapper);
                     }
                     else {
-                        // TypeScript 1.0 spec (April 2014)
-                        // A get accessor declaration is processed in the same manner as 
-                        // an ordinary function declaration(section 6.1) with no parameters.
-                        // A set accessor declaration is processed in the same manner 
-                        // as an ordinary function declaration with a single parameter and a Void return type.
-                        var getAccessor = <AccessorDeclaration>getDeclarationOfKind(member, SyntaxKind.GetAccessor);
-                        if (getAccessor) {
-                            checkAccessorDeclaration(getAccessor);
-                        }
-
-                        var setAccessor = <AccessorDeclaration>getDeclarationOfKind(member, SyntaxKind.SetAccessor);
-                        if (setAccessor) {
-                            checkAccessorDeclaration(setAccessor);
-                        }
+                        Debug.assert(memberDecl.kind === SyntaxKind.ShorthandPropertyAssignment);
+                        var type = memberDecl.name.kind === SyntaxKind.ComputedPropertyName
+                            ? unknownType
+                            : checkExpression(<Identifier>memberDecl.name, contextualMapper);
                     }
+                    typeFlags |= type.flags;
+                    var prop = <TransientSymbol>createSymbol(SymbolFlags.Property | SymbolFlags.Transient | member.flags, member.name);
+                    var member = memberDecl.symbol;
+                    prop.declarations = member.declarations;
+                    prop.parent = member.parent;
+                    if (member.valueDeclaration) {
+                        prop.valueDeclaration = member.valueDeclaration;
+                    }
+
+                    prop.type = type;
+                    prop.target = member;
+                    properties[prop.name] = prop;
+                }
+                else {
+                    // TypeScript 1.0 spec (April 2014)
+                    // A get accessor declaration is processed in the same manner as 
+                    // an ordinary function declaration(section 6.1) with no parameters.
+                    // A set accessor declaration is processed in the same manner 
+                    // as an ordinary function declaration with a single parameter and a Void return type.
+                    Debug.assert(memberDecl.kind === SyntaxKind.GetAccessor || memberDecl.kind === SyntaxKind.SetAccessor);
+                    checkAccessorDeclaration(<AccessorDeclaration>memberDecl);
                     properties[member.name] = member;
                 }
             }
