@@ -10416,22 +10416,18 @@ module ts {
             return false;
         }
 
-        function checkGrammarComputedPropertyName(node: Node): void {
+        function checkGrammarComputedPropertyName(node: Node): boolean {
             // If node is not a computedPropertyName, just skip the grammar checking
             if (node.kind !== SyntaxKind.ComputedPropertyName) {
-                return;
+                return false;
             }
-            // Since computed properties are not supported in the type checker, disallow them in TypeScript 1.4
-            // Once full support is added, remove this error.
-            grammarErrorOnNode(node, Diagnostics.Computed_property_names_are_not_currently_supported);
-            return;
 
             var computedPropertyName = <ComputedPropertyName>node;
             if (compilerOptions.target < ScriptTarget.ES6) {
-                grammarErrorOnNode(node, Diagnostics.Computed_property_names_are_only_available_when_targeting_ECMAScript_6_and_higher);
+                return grammarErrorOnNode(node, Diagnostics.Computed_property_names_are_only_available_when_targeting_ECMAScript_6_and_higher);
             }
             else if (computedPropertyName.expression.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>computedPropertyName.expression).operator === SyntaxKind.CommaToken) {
-                grammarErrorOnNode(computedPropertyName.expression, Diagnostics.A_comma_expression_is_not_allowed_in_a_computed_property_name);
+                return grammarErrorOnNode(computedPropertyName.expression, Diagnostics.A_comma_expression_is_not_allowed_in_a_computed_property_name);
             }
         }
 

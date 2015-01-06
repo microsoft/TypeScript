@@ -1,7 +1,7 @@
-tests/cases/conformance/parser/ecmascript5/ComputedPropertyNames/parserES5ComputedPropertyName2.ts(1,11): error TS9002: Computed property names are not currently supported.
+tests/cases/conformance/parser/ecmascript5/ComputedPropertyNames/parserES5ComputedPropertyName2.ts(1,11): error TS1167: Computed property names are only available when targeting ECMAScript 6 and higher.
 
 
 ==== tests/cases/conformance/parser/ecmascript5/ComputedPropertyNames/parserES5ComputedPropertyName2.ts (1 errors) ====
     var v = { [e]: 1 };
               ~~~
-!!! error TS9002: Computed property names are not currently supported.
+!!! error TS1167: Computed property names are only available when targeting ECMAScript 6 and higher.

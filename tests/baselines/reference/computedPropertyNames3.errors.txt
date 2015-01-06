@@ -1,36 +1,18 @@
-tests/cases/conformance/es6/computedProperties/computedPropertyNames3.ts(3,5): error TS9002: Computed property names are not currently supported.
-tests/cases/conformance/es6/computedProperties/computedPropertyNames3.ts(4,12): error TS9002: Computed property names are not currently supported.
 tests/cases/conformance/es6/computedProperties/computedPropertyNames3.ts(5,9): error TS2378: A 'get' accessor must return a value or consist of a single 'throw' statement.
-tests/cases/conformance/es6/computedProperties/computedPropertyNames3.ts(5,9): error TS9002: Computed property names are not currently supported.
-tests/cases/conformance/es6/computedProperties/computedPropertyNames3.ts(6,9): error TS9002: Computed property names are not currently supported.
 tests/cases/conformance/es6/computedProperties/computedPropertyNames3.ts(7,16): error TS2378: A 'get' accessor must return a value or consist of a single 'throw' statement.
-tests/cases/conformance/es6/computedProperties/computedPropertyNames3.ts(7,16): error TS9002: Computed property names are not currently supported.
-tests/cases/conformance/es6/computedProperties/computedPropertyNames3.ts(8,16): error TS9002: Computed property names are not currently supported.
 
 
-==== tests/cases/conformance/es6/computedProperties/computedPropertyNames3.ts (8 errors) ====
+==== tests/cases/conformance/es6/computedProperties/computedPropertyNames3.ts (2 errors) ====
     var id;
     class C {
         [0 + 1]() { }
-        ~~~~~~~
-!!! error TS9002: Computed property names are not currently supported.
         static [() => { }]() { }
-               ~~~~~~~~~~~
-!!! error TS9002: Computed property names are not currently supported.
         get [delete id]() { }
             ~~~~~~~~~~~
 !!! error TS2378: A 'get' accessor must return a value or consist of a single 'throw' statement.
-            ~~~~~~~~~~~
-!!! error TS9002: Computed property names are not currently supported.
         set [[0, 1]](v) { }
-            ~~~~~~~~
-!!! error TS9002: Computed property names are not currently supported.
         static get [<String>""]() { }
                    ~~~~~~~~~~~~
 !!! error TS2378: A 'get' accessor must return a value or consist of a single 'throw' statement.
-                   ~~~~~~~~~~~~
-!!! error TS9002: Computed property names are not currently supported.
         static set [id.toString()](v) { }
-                   ~~~~~~~~~~~~~~~
-!!! error TS9002: Computed property names are not currently supported.
     }

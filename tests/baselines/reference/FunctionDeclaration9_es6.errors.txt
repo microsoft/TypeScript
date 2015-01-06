@@ -1,5 +1,5 @@
 tests/cases/conformance/es6/functionDeclarations/FunctionDeclaration9_es6.ts(1,10): error TS9001: Generators are not currently supported.
-tests/cases/conformance/es6/functionDeclarations/FunctionDeclaration9_es6.ts(2,13): error TS9002: Computed property names are not currently supported.
+tests/cases/conformance/es6/functionDeclarations/FunctionDeclaration9_es6.ts(2,13): error TS1167: Computed property names are only available when targeting ECMAScript 6 and higher.
 
 
 ==== tests/cases/conformance/es6/functionDeclarations/FunctionDeclaration9_es6.ts (2 errors) ====
@@ -8,5 +8,5 @@ tests/cases/conformance/es6/functionDeclarations/FunctionDeclaration9_es6.ts(2,1
 !!! error TS9001: Generators are not currently supported.
       var v = { [yield]: foo }
                 ~~~~~~~
-!!! error TS9002: Computed property names are not currently supported.
+!!! error TS1167: Computed property names are only available when targeting ECMAScript 6 and higher.
     }
