@@ -1698,7 +1698,7 @@ module ts {
                 }
 
                 function recordEmitNodeStartSpan(node: Node) {
-                    if (nodeIsMissing(node)) {
+                    if (nodeIsMissingOrGenerated(node)) {
                         return;
                     }
 
@@ -1707,7 +1707,7 @@ module ts {
                 }
 
                 function recordEmitNodeEndSpan(node: Node) {
-                    if (nodeIsMissing(node)) {
+                    if (nodeIsMissingOrGenerated(node)) {
                         return;
                     }
 
@@ -2226,7 +2226,7 @@ module ts {
                     write(prefix);
                     write(".");
                 }
-                if (!node.parent || nodeIsMissing(node)) {
+                if (!node.parent || nodeIsMissingOrGenerated(node)) {
                     write(node.text);
                 }
                 else {
@@ -2239,7 +2239,7 @@ module ts {
                 if (generatedName) {
                     write(generatedName);
                 }
-                else if (!node.parent || nodeIsMissing(node)) {
+                else if (!node.parent || nodeIsMissingOrGenerated(node)) {
                     write(node.text);
                 }
                 else if (!isNotExpressionIdentifier(node)) {

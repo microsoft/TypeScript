@@ -147,10 +147,26 @@ module ts {
             return true;
         }
 
-        return node.pos === node.end && node.kind !== SyntaxKind.EndOfFileToken;
+        return node.pos === node.end && node.kind !== SyntaxKind.EndOfFileToken && node.pos >= 0;
+    }
+
+    export function nodeIsGenerated(node: Node) {
+        if (!node) {
+            return true;
+        }
+
+        return node.pos === node.end && node.kind !== SyntaxKind.EndOfFileToken && node.pos < 0;
+    }
+
+    export function nodeIsMissingOrGenerated(node: Node) {
+        return nodeIsMissing(node) || nodeIsGenerated(node);
     }
     
     export function nodeIsPresent(node: Node) {
+        return !nodeIsMissingOrGenerated(node);
+    }
+
+    export function nodeIsPresentOrGenerated(node: Node) {
         return !nodeIsMissing(node);
     }
 
