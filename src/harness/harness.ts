@@ -873,28 +873,26 @@ module Harness {
                     }
 
                     function findResultCodeFile(fileName: string) {
-                        var dTsFileName = ts.forEach(result.program.getSourceFiles(), sourceFile => {
-                            if (sourceFile.filename === fileName) {
-                                // Is this file going to be emitted separately
-                                var sourceFileName: string;
-                                if (ts.isExternalModule(sourceFile) || !options.out) {
-                                    if (options.outDir) {
-                                        var sourceFilePath = ts.getNormalizedAbsolutePath(sourceFile.filename, result.currentDirectoryForProgram);
-                                        sourceFilePath = sourceFilePath.replace(result.program.getCommonSourceDirectory(), "");
-                                        sourceFileName = ts.combinePaths(options.outDir, sourceFilePath);
-                                    }
-                                    else {
-                                        sourceFileName = sourceFile.filename;
-                                    }
-                                }
-                                else {
-                                    // Goes to single --out file
-                                    sourceFileName = options.out;
-                                }
-
-                                return ts.removeFileExtension(sourceFileName) + ".d.ts";
+                        var sourceFile = result.program.getSourceFile(fileName);
+                        assert(sourceFile, "Program has no source file with name '" + fileName + "'");
+                        // Is this file going to be emitted separately
+                        var sourceFileName: string;
+                        if (ts.isExternalModule(sourceFile) || !options.out) {
+                            if (options.outDir) {
+                                var sourceFilePath = ts.getNormalizedAbsolutePath(sourceFile.filename, result.currentDirectoryForProgram);
+                                sourceFilePath = sourceFilePath.replace(result.program.getCommonSourceDirectory(), "");
+                                sourceFileName = ts.combinePaths(options.outDir, sourceFilePath);
                             }
-                        });
+                            else {
+                                sourceFileName = sourceFile.filename;
+                            }
+                        }
+                        else {
+                            // Goes to single --out file
+                            sourceFileName = options.out;
+                        }
+
+                        var dTsFileName = ts.removeFileExtension(sourceFileName) + ".d.ts";
                         
                         return ts.forEach(result.declFilesCode, declFile => declFile.fileName === dTsFileName ? declFile : undefined);
                     }
