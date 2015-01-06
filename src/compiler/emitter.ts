@@ -2117,7 +2117,8 @@ module ts {
                  * or equal precedence to the binary '+' operator
                  */
                 function comparePrecedenceToBinaryPlus(expression: Expression): Comparison {
-                    // All binary expressions have lower precedence than '+' apart from '*', '/', and '%'.
+                    // All binary expressions have lower precedence than '+' apart from '*', '/', and '%'
+                    // which have greater precedence and '-' which has equal precedence.
                     // All unary operators have a higher precedence apart from yield.
                     // Arrow functions and conditionals have a lower precedence, 
                     // although we convert the former into regular function expressions in ES5 mode,
@@ -2134,6 +2135,7 @@ module ts {
                                 case SyntaxKind.PercentToken:
                                     return Comparison.GreaterThan;
                                 case SyntaxKind.PlusToken:
+                                case SyntaxKind.MinusToken:
                                     return Comparison.EqualTo;
                                 default:
                                     return Comparison.LessThan;
