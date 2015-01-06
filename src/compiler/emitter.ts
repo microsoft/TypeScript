@@ -2068,9 +2068,15 @@ module ts {
                     write("(");
                 }
 
-                emitLiteral(node.head);
+                var headEmitted = false;
+                if (shouldEmitTemplateHead()) {
+                    emitLiteral(node.head);
+                    headEmitted = true;
+                }
 
-                forEach(node.templateSpans, templateSpan => {
+                for (var i = 0; i < node.templateSpans.length; i++) {
+                    var templateSpan = node.templateSpans[i];
+
                     // Check if the expression has operands and binds its operands less closely than binary '+'.
                     // If it does, we need to wrap the expression in parentheses. Otherwise, something like
                     //    `abc${ 1 << 2 }`
@@ -2082,7 +2088,14 @@ module ts {
                     //    "abc" + (1 << 2) + ""
                     var needsParens = templateSpan.expression.kind !== SyntaxKind.ParenthesizedExpression
                         && comparePrecedenceToBinaryPlus(templateSpan.expression) !== Comparison.GreaterThan;
-                    write(" + ");
+
+                    if (i > 0 || headEmitted) {
+                        // If this is the first span and the head was not emitted, then this templateSpan's
+                        // expression will be the first to be emitted. Don't emit the preceding ' + ' in that
+                        // case.
+                        write(" + ");
+                    }
+
                     emitParenthesized(templateSpan.expression, needsParens);
                     // Only emit if the literal is non-empty.
                     // The binary '+' operator is left-associative, so the first string concatenation
@@ -2092,10 +2105,32 @@ module ts {
                         write(" + ")
                         emitLiteral(templateSpan.literal);
                     }
-                });
+                }
 
                 if (emitOuterParens) {
                     write(")");
+                }
+
+                function shouldEmitTemplateHead() {
+                    // If this expression has an empty head literal and the first template span has a non-empty
+                    // literal, then emitting the empty head literal is not necessary.
+                    //     `${ foo } and ${ bar }`
+                    // can be emitted as
+                    //     foo + " and " + bar
+                    // This is because it is only required that one of the first two operands in the emit
+                    // output must be a string literal, so that the other operand and all following operands
+                    // are forced into strings.
+                    //
+                    // If the first template span has an empty literal, then the head must still be emitted.
+                    //     `${ foo }${ bar }`
+                    // must still be emitted as
+                    //     "" + foo + bar
+
+                    // There is always atleast one templateSpan in this code path, since
+                    // NoSubstitutionTemplateLiterals are directly emitted via emitLiteral()
+                    Debug.assert(node.templateSpans.length !== 0);
+
+                    return node.head.text.length !== 0 || node.templateSpans[0].literal.text.length === 0;
                 }
 
                 function templateNeedsParens(template: TemplateExpression, parent: Expression) {
