@@ -3210,6 +3210,13 @@ module ts {
                 emitTrailingComments(node);
             }
 
+            function isES6ArrowFunction(node: FunctionLikeDeclaration): boolean {
+                if (node.kind === SyntaxKind.ArrowFunction && compilerOptions.target >= ScriptTarget.ES6) {
+                    return true;
+                }
+                return false;
+            }
+
             function emitFunctionDeclaration(node: FunctionLikeDeclaration) {
                 if (nodeIsMissing(node.body)) {
                     return emitPinnedOrTripleSlashComments(node);
@@ -3220,11 +3227,9 @@ module ts {
                     emitLeadingComments(node);
                 }
 
-                if (node.kind !== SyntaxKind.ArrowFunction) {
-                    write("function ");
-                }
-                else if (node.kind === SyntaxKind.ArrowFunction && compilerOptions.target < ScriptTarget.ES6) {
-                    // When targeting ES6, emit arrow function natively in ES6 by omitting function keyword and using fat arrow instead
+                // For targeting below es6, emit functions-like declaration including arrow function using function keyword.
+                // When targeting ES6, emit arrow function natively in ES6 by omitting function keyword and using fat arrow instead
+                if (!isES6ArrowFunction(node)) {
                     write("function ");
                 }
 
@@ -3268,7 +3273,7 @@ module ts {
                 emitSignatureParameters(node);
 
                 // When targeting ES6, emit arrow function natively in ES6
-                if (node.kind === SyntaxKind.ArrowFunction && compilerOptions.target >= ScriptTarget.ES6) {
+                if (isES6ArrowFunction(node)) {
                    write(" => ");
                 }
 
@@ -3283,7 +3288,12 @@ module ts {
                     startIndex = emitDirectivePrologues((<Block>node.body).statements, /*startWithNewLine*/ true);
                 }
                 var outPos = writer.getTextPos();
-                emitCaptureThisForNodeIfNecessary(node);
+
+                // In ES6, fat arrow function lexically binds this value. Therefore, when targeting es6, we can omit capturing of "this" in the fat arrow function
+                if (!isES6ArrowFunction(node)) {
+                    emitCaptureThisForNodeIfNecessary(node);
+                }
+
                 emitDefaultValueAssignments(node);
                 emitRestParameter(node);
                 if (node.body.kind !== SyntaxKind.Block && outPos === writer.getTextPos()) {
