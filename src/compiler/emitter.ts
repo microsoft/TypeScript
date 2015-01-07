@@ -3686,8 +3686,8 @@ module ts {
             }
 
             function emitModuleDeclaration(node: ModuleDeclaration) {
-                var shouldEmit = getModuleInstanceState(node) === ModuleInstanceState.Instantiated ||
-                    (getModuleInstanceState(node) === ModuleInstanceState.ConstEnumOnly && compilerOptions.preserveConstEnums);
+                // Emit only if this module is non-ambient.
+                var shouldEmit = isInstantiatedModule(node, compilerOptions.preserveConstEnums);
 
                 if (!shouldEmit) {
                     return emitPinnedOrTripleSlashComments(node);

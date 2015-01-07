@@ -525,6 +525,12 @@ module ts {
         return false;
     }
 
+    export function isInstantiatedModule(node: ModuleDeclaration, preserveConstEnums: boolean) {
+        var moduleState = getModuleInstanceState(node)
+        return moduleState === ModuleInstanceState.Instantiated ||
+               (preserveConstEnums && moduleState === ModuleInstanceState.ConstEnumOnly);
+    }
+
     export function isExternalModuleImportDeclaration(node: Node) {
         return node.kind === SyntaxKind.ImportDeclaration && (<ImportDeclaration>node).moduleReference.kind === SyntaxKind.ExternalModuleReference;
     }
