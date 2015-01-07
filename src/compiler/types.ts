@@ -995,14 +995,118 @@ module ts {
         getVariables(): Identifier[];
     }
 
+    export interface Visitor extends Visitor.Handler {
+        visitStatement(node: Statement): Statement;
+        visitIdentifierOrBindingPattern(node: Identifier | BindingPattern): Identifier | BindingPattern;
+        visitExpression(node: Expression): Expression;
+        visitUnaryExpression(node: UnaryExpression): UnaryExpression;
+        visitLeftHandSideExpression(node: LeftHandSideExpression): LeftHandSideExpression;
+        visitCaseOrDefaultClause(node: CaseOrDefaultClause): CaseOrDefaultClause;
+        visitObjectLiteralElement(node: ObjectLiteralElement): ObjectLiteralElement;
+        visitDeclarationName(node: DeclarationName): DeclarationName;
+        visitTemplateLiteralOrTemplateExpression(node: LiteralExpression | TemplateExpression): LiteralExpression | TemplateExpression;
+    }
+
+    export module Visitor {
+        export interface Handler {
+            // Names
+            visitComputedPropertyName? (node: ComputedPropertyName): DeclarationName;
+
+            // TypeMember
+            visitMethodDeclaration? (node: MethodDeclaration): ClassElement | ObjectLiteralElement;
+            visitGetAccessor? (node: AccessorDeclaration): ClassElement | ObjectLiteralElement;
+            visitSetAccessor? (node: AccessorDeclaration): ClassElement | ObjectLiteralElement;
+
+            // Binding patterns
+            visitObjectBindingPattern? (node: BindingPattern): BindingPattern | Identifier;
+            visitArrayBindingPattern? (node: BindingPattern): BindingPattern | Identifier;
+            visitBindingElement? (node: BindingElement): BindingElement;
+
+            // Expression
+            visitBinaryExpression? (node: BinaryExpression): Expression;
+            visitConditionalExpression? (node: ConditionalExpression): Expression;
+            visitYieldExpression? (node: YieldExpression): Expression;
+            visitSpreadElementExpression? (node: SpreadElementExpression): Expression;
+            visitPrefixUnaryExpression? (node: PrefixUnaryExpression): UnaryExpression;
+            visitPostfixUnaryExpression? (node: PostfixUnaryExpression): UnaryExpression;
+            visitAwaitExpression? (node: AwaitExpression): UnaryExpression;
+            visitTypeOfExpression? (node: TypeOfExpression): UnaryExpression;
+            visitDeleteExpression? (node: DeleteExpression): UnaryExpression;
+            visitVoidExpression? (node: VoidExpression): UnaryExpression;
+            visitTypeAssertion? (node: TypeAssertion): UnaryExpression;            
+            visitParenthesizedExpression? (node: ParenthesizedExpression): LeftHandSideExpression;
+            visitArrayLiteralExpression? (node: ArrayLiteralExpression): LeftHandSideExpression;
+            visitObjectLiteralExpression? (node: ObjectLiteralExpression): LeftHandSideExpression;
+            visitPropertyAccessExpression? (node: PropertyAccessExpression): LeftHandSideExpression;
+            visitElementAccessExpression? (node: ElementAccessExpression): LeftHandSideExpression;
+            visitFunctionExpression? (node: FunctionExpression): LeftHandSideExpression;
+            visitArrowFunction? (node: FunctionExpression): LeftHandSideExpression;
+            visitCallExpression? (node: CallExpression): LeftHandSideExpression;
+            visitNewExpression? (node: NewExpression): LeftHandSideExpression;
+            visitTaggedTemplateExpression? (node: TaggedTemplateExpression): LeftHandSideExpression;
+            visitTemplateExpression? (node: TemplateExpression): LeftHandSideExpression | LiteralExpression | TemplateExpression;
+            visitTemplateLiteral? (node: LiteralExpression): LiteralExpression | TemplateExpression;
+            visitOmittedExpression? (node: Expression): Expression;
+
+            // Misc
+            visitTemplateSpan? (node: TemplateSpan): TemplateSpan;
+
+            // Element
+            visitBlock? (node: Block): Block;
+            visitVariableStatement? (node: VariableStatement): Statement;
+            visitEmptyStatement? (node: Statement): Statement;
+            visitExpressionStatement? (node: ExpressionStatement): Statement;
+            visitIfStatement? (node: IfStatement): Statement;
+            visitDoStatement? (node: DoStatement): Statement;
+            visitWhileStatement? (node: WhileStatement): Statement;
+            visitForStatement? (node: ForStatement): Statement;
+            visitForInStatement? (node: ForInStatement): Statement;
+            visitContinueStatement? (node: BreakOrContinueStatement): Statement;
+            visitBreakStatement? (node: BreakOrContinueStatement): Statement;
+            visitReturnStatement? (node: ReturnStatement): Statement;
+            visitWithStatement? (node: WithStatement): Statement;
+            visitSwitchStatement? (node: SwitchStatement): Statement;
+            visitLabeledStatement? (node: LabeledStatement): Statement;
+            visitThrowStatement? (node: ThrowStatement): Statement;
+            visitTryStatement? (node: TryStatement): Statement;
+            visitDebuggerStatement? (node: Statement): Statement;
+            visitVariableDeclaration? (node: VariableDeclaration): VariableDeclaration;
+            visitVariableDeclarationList? (node: VariableDeclarationList): VariableDeclarationList;
+            visitFunctionDeclaration? (node: FunctionDeclaration): Statement;
+            visitVariableDeclarationListOrInitializer? (node: VariableDeclarationList | Expression): VariableDeclarationList | Expression;
+
+            // Clauses
+            visitCaseClause? (node: CaseClause): CaseOrDefaultClause;
+            visitDefaultClause? (node: DefaultClause): CaseOrDefaultClause;
+            visitCatchClause? (node: CatchClause): CatchClause;
+
+            // Property assignments
+            visitPropertyAssignment? (node: PropertyAssignment): ObjectLiteralElement;
+            visitShorthandPropertyAssignment? (node: ShorthandPropertyAssignment): ObjectLiteralElement;
+        }
+    }
+
     export interface CodeGenerator {
         writeLocation(location: TextRange): void;
 
+        declareLocal(name?: string, globallyUnique?: boolean): Identifier;
+
+        emit(code: OpCode): void;
+        emit(code: OpCode, node: Statement): void;
+        emit(code: OpCode, node: Expression): void;
+        emit(code: OpCode, left: Expression, right: Expression): void;
+
+        createUniqueIdentifier(name?: string, globallyUnique?: boolean): Identifier;
+    }
+
+    export interface StatementsGenerator extends CodeGenerator {
+        buildStatements(): Statement[];
+    }
+
+    export interface FunctionGenerator extends CodeGenerator {
         addParameter(name: Identifier, flags?: NodeFlags): void;
         addVariable(name: Identifier, flags?: NodeFlags): void
         addFunction(func: FunctionDeclaration): void;
-
-        declareLocal(name?: string, globallyUnique?: boolean): Identifier;
 
         defineLabel(): Label;
         markLabel(label: Label): void;
@@ -1031,7 +1135,6 @@ module ts {
         emit(code: OpCode, node: Expression): void;
         emit(code: OpCode, left: Expression, right: Expression): void;
 
-        createUniqueIdentifier(name?: string, globallyUnique?: boolean): Identifier;
         createInlineBreak(label: Label): ReturnStatement;
         createInlineReturn(expression: Expression): ReturnStatement;
         createResume(): LeftHandSideExpression;

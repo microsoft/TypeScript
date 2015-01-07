@@ -72,7 +72,7 @@ module ts {
         return node && (node.kind === SyntaxKind.AwaitExpression || node.kind === SyntaxKind.YieldExpression);
     }
 
-    export function hasAwaitOrYield(node: Node) {
+    export function hasAwaitOrYield(node: Node): boolean {
         if (!node) {
             return false;
         }
@@ -412,6 +412,23 @@ module ts {
         return node && node.kind === SyntaxKind.MethodDeclaration && node.parent.kind === SyntaxKind.ObjectLiteralExpression;
     }
 
+    export function isObjectLiteralElement(node: Node): boolean {
+        if (node) {
+            switch (node.kind) {
+                case SyntaxKind.PropertyAssignment:
+                case SyntaxKind.ShorthandPropertyAssignment:
+                case SyntaxKind.MethodDeclaration:
+                case SyntaxKind.GetAccessor:
+                case SyntaxKind.SetAccessor:
+                    return true;
+
+
+            }
+        }
+
+        return false;
+    }
+
     export function getContainingFunction(node: Node): FunctionLikeDeclaration {
         while (true) {
             node = node.parent;
@@ -566,6 +583,50 @@ module ts {
         return false;
     }
 
+    export function isLabeledOrIterationOrSwitchStatement(node: Node): boolean {
+        switch (node.kind) {
+            case SyntaxKind.DoStatement:
+            case SyntaxKind.WhileStatement:
+            case SyntaxKind.ForStatement:
+            case SyntaxKind.ForInStatement:
+            case SyntaxKind.SwitchStatement:
+            case SyntaxKind.LabeledStatement:
+                return true;
+        }
+
+        return false;
+    }
+
+    export function isLogicalBinary(node: BinaryExpression): boolean {
+        switch (node.operator) {
+            case SyntaxKind.AmpersandAmpersandToken:
+            case SyntaxKind.BarBarToken:
+                return true;
+        }
+
+        return false;
+    }
+
+    export function isAssignment(node: BinaryExpression): boolean {
+        switch (node.operator) {
+            case SyntaxKind.EqualsToken:
+            case SyntaxKind.PlusEqualsToken:
+            case SyntaxKind.MinusEqualsToken:
+            case SyntaxKind.AsteriskEqualsToken:
+            case SyntaxKind.SlashEqualsToken:
+            case SyntaxKind.PercentEqualsToken:
+            case SyntaxKind.LessThanLessThanEqualsToken:
+            case SyntaxKind.GreaterThanGreaterThanEqualsToken:
+            case SyntaxKind.GreaterThanGreaterThanGreaterThanEqualsToken:
+            case SyntaxKind.AmpersandEqualsToken:
+            case SyntaxKind.BarEqualsToken:
+            case SyntaxKind.CaretEqualsToken:
+                return true;
+        }
+
+        return false;
+    }
+
     export function isExternalModuleImportDeclaration(node: Node) {
         return node.kind === SyntaxKind.ImportDeclaration && (<ImportDeclaration>node).moduleReference.kind === SyntaxKind.ExternalModuleReference;
     }
@@ -618,8 +679,16 @@ module ts {
         return SyntaxKind.FirstTemplateToken <= kind && kind <= SyntaxKind.LastTemplateToken;
     }
 
-    export function isBindingPattern(node: Node) {
+    export function isTemplateLiteralOrTemplateExpression(node: Node): boolean {
+        return node.kind === SyntaxKind.TemplateExpression || isTemplateLiteralKind(node.kind);
+    }
+
+    export function isBindingPattern(node: Node): boolean {
         return node.kind === SyntaxKind.ArrayBindingPattern || node.kind === SyntaxKind.ObjectBindingPattern;
+    }
+
+    export function isIdentifierOrBindingPattern(node: Node): boolean {
+        return node.kind === SyntaxKind.Identifier || isBindingPattern(node);
     }
 
     export function isInAmbientContext(node: Node): boolean {

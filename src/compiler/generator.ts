@@ -99,7 +99,19 @@ module ts {
         }
     }
 
-    export function createCodeGenerator(locals: LocalsBuilder, resolver: EmitResolver, options?: { promiseConstructor: EntityName; }): CodeGenerator {
+    export function createStatementsGenerator(locals: LocalsBuilder): StatementsGenerator {
+        return <StatementsGenerator>createCodeGenerator(locals, /*isStatementsGenerator*/ true);
+    }
+
+    export function createFunctionGenerator(locals: LocalsBuilder): FunctionGenerator {
+        return <FunctionGenerator>createCodeGenerator(locals, /*isStatementsGenerator*/ false);
+    }
+
+    export function createAsyncFunctionGenerator(locals: LocalsBuilder, promiseConstructor: EntityName): FunctionGenerator {
+        return <FunctionGenerator>createCodeGenerator(locals, /*isStatementsGenerator*/ false, promiseConstructor);
+    }
+
+    function createCodeGenerator(locals: LocalsBuilder, isStatementsGenerator: boolean, promiseConstructor?: EntityName): CodeGenerator {
         // locations
         var pendingLocation: TextRange;
 
@@ -129,35 +141,51 @@ module ts {
 
         var state: Identifier;
 
-        return {
-            writeLocation,
-            addParameter,
-            addVariable,
-            addFunction,
-            declareLocal,
-            defineLabel,
-            markLabel,
-            beginExceptionBlock,
-            beginCatchBlock,
-            beginFinallyBlock,
-            endExceptionBlock,
-            findBreakTarget,
-            findContinueTarget,
-            beginScriptContinueBlock,
-            endScriptContinueBlock,
-            beginScriptBreakBlock,
-            endScriptBreakBlock,
-            beginContinueBlock,
-            endContinueBlock,
-            beginBreakBlock,
-            endBreakBlock,
-            emit,
-            createUniqueIdentifier,
-            createInlineBreak,
-            createInlineReturn,
-            createResume,
-            buildFunction
-        };
+        function createStatementsGenerator(): StatementsGenerator {
+            return {
+                writeLocation,
+                declareLocal,
+                defineLabel,
+                markLabel,
+                emit,
+                createUniqueIdentifier,
+                buildStatements
+            };
+        }
+
+        function createFunctionGenerator(): FunctionGenerator {
+            return {
+                writeLocation,
+                addParameter,
+                addVariable,
+                addFunction,
+                declareLocal,
+                defineLabel,
+                markLabel,
+                beginExceptionBlock,
+                beginCatchBlock,
+                beginFinallyBlock,
+                endExceptionBlock,
+                findBreakTarget,
+                findContinueTarget,
+                beginScriptContinueBlock,
+                endScriptContinueBlock,
+                beginScriptBreakBlock,
+                endScriptBreakBlock,
+                beginContinueBlock,
+                endContinueBlock,
+                beginBreakBlock,
+                endBreakBlock,
+                emit,
+                createUniqueIdentifier,
+                createInlineBreak,
+                createInlineReturn,
+                createResume,
+                buildFunction
+            };
+        }
+
+        return isStatementsGenerator ? createStatementsGenerator() : createFunctionGenerator();
 
         function declareLocal(name?: string, globallyUnique?: boolean): Identifier {
             var local = locals.createUniqueIdentifier(name, globallyUnique);
@@ -184,7 +212,7 @@ module ts {
             parameters.push(factory.createParameterDeclaration(name, undefined, readLocation(), flags));
         }
 
-        function addVariable(name: Identifier, flags?: NodeFlags): void {
+        function addVariable(name: Identifier, flags?: NodeFlags): void {            
             if (!variableDeclarations) {
                 variableDeclarations = factory.createNodeArray([]);
             }
@@ -428,7 +456,41 @@ module ts {
             return false;
         }
 
+        function reportUnexpectedOpCode(code: OpCode): void {
+            var text: string;
+            if (typeof (<any>ts).OpCode === "object") {
+                text = (<any>ts).OpCode[code];
+            }
+            else {
+                text = String(code);
+            }
+
+            Debug.fail("Unexpected OpCode: " + text);
+        }
+
         function emit(code: OpCode, ...args: any[]): void {
+            switch (code) {
+                case OpCode.Assign:
+                case OpCode.Statement:
+                case OpCode.Return:
+                case OpCode.Throw:
+                    break;
+
+                case OpCode.Break:
+                case OpCode.BrFalse:
+                case OpCode.BrTrue:
+                case OpCode.Endfinally:
+                case OpCode.Yield:
+                case OpCode.YieldStar:
+                    if (!isStatementsGenerator) {
+                        break;
+                    }
+
+                default:
+                    reportUnexpectedOpCode(code);
+                    return;
+            }
+
             var location = readLocation();
             if (code === OpCode.Statement) {
                 var node = args[0];
@@ -452,13 +514,6 @@ module ts {
             operations[operationIndex] = code;
             operationArguments[operationIndex] = args;
             operationLocations[operationIndex] = location;
-        }
-
-        function cacheExpression(node: Expression): Identifier {
-            var local = declareLocal();
-            var assignExpression = factory.createBinaryExpression(SyntaxKind.EqualsToken, local, node);
-            emit(OpCode.Statement, assignExpression);
-            return local;
         }
 
         function createLabel(label: Label): GeneratedLabel {
@@ -504,21 +559,19 @@ module ts {
             }
 
             var state = getState();
-            var clauses = buildFunctionBody();
-            var labelExpression = factory.createPropertyAccessExpression(state, factory.createIdentifier("label"));
-            var switchStatement = factory.createSwitchStatement(labelExpression, clauses);
-            var generatorFunctionBody = factory.createBlock([switchStatement]);
+            var generatorStatements = buildStatements();
+            var generatorFunctionBody = factory.createBlock(generatorStatements);
             var generatorFunction = factory.createFunctionExpression(/*name*/ undefined, generatorFunctionBody, [factory.createParameterDeclaration(state)]);
             var generatorExpression = factory.createCallExpression(factory.createIdentifier("__generator"), [generatorFunction]);
 
-            if (options) {
+            if (promiseConstructor) {
                 var resolve = createUniqueIdentifier("_resolve");
-                var promiseConstructor = factory.getExpressionForEntityName(options.promiseConstructor);
+                var promiseConstructorExpression = factory.getExpressionForEntityName(promiseConstructor);
                 var awaiterExpression = factory.createCallExpression(factory.createIdentifier("__awaiter"), [generatorExpression]);
                 var resolveExpression = factory.createCallExpression(resolve, [awaiterExpression]);
                 var promiseFunctionBody = factory.createBlock([factory.createExpressionStatement(resolveExpression)]);
                 var promiseFunction = factory.createFunctionExpression(/*name*/ undefined, promiseFunctionBody, [factory.createParameterDeclaration(resolve)]);
-                var newPromiseExpression = factory.createNewExpression(promiseConstructor, [promiseFunction]);
+                var newPromiseExpression = factory.createNewExpression(promiseConstructorExpression, [promiseFunction]);
                 var returnStatement = factory.createReturnStatement(newPromiseExpression);
                 statements.push(returnStatement);
             } else {
@@ -545,22 +598,21 @@ module ts {
             }
         }
 
-        function buildFunctionBody(): CaseClause[] {
-            Debug.assert(!!labels, "No labels were defined.");
+        function buildStatements(): Statement[] {
             var exceptionStack: ExceptionBlock[] = [];
-            var clauses: CaseClause[] = [];
-            var statements: Statement[] = [];
+            var clauses: CaseClause[];
+            var rootStatements: Statement[] = [];
+            var statements = rootStatements;
             var statementsStack: NodeArray<Statement>[] = [];
             var blockIndex: number = 0;
             var instructionWasAbrupt = false;
             var instructionWasCompletion = false;
-            var state = getState();
             var relatedLocation: TextRange;
 
             if (hasProtectedRegions) {
-                newCase();
+                startNewCase();
 
-                var trysProperty = factory.createPropertyAccessExpression(state, factory.createIdentifier("trys"));
+                var trysProperty = factory.createPropertyAccessExpression(getState(), factory.createIdentifier("trys"));
                 var trysArray = factory.createArrayLiteralExpression([]);
                 var assignTrys = factory.createBinaryExpression(SyntaxKind.EqualsToken, trysProperty, trysArray);
                 writeStatement(assignTrys);
@@ -584,40 +636,78 @@ module ts {
                 writeReturn();
             }
 
-            return clauses;
+            writePendingCase();
+            return rootStatements;
+
+            function ensureSwitchStatement(): void {
+                if (rootStatements === statements) {
+                    clauses = [];
+                    var state = getState();
+                    var labelExpression = factory.createPropertyAccessExpression(state, factory.createIdentifier("label"));
+                    var switchStatement = factory.createSwitchStatement(labelExpression, clauses);
+                    rootStatements = [switchStatement];
+                    if (statements.length) {
+                        writePendingCase();
+                        resetStatements();
+                    }
+                }
+            }
 
             function ensureLabels(): void {
                 if (!labelNumbers) labelNumbers = [];
+
                 var createCase = false;
                 for (var label = 0; label < labels.length; label++) {
                     if (labels[label] === operationIndex) {
+                        ensureSwitchStatement();
                         labelNumbers[label] = clauses.length;
                         createCase = true;
                     }
                 }
 
                 if (createCase) {
-                    newCase();
+                    startNewCase();
                 }
             }
 
-            function newCase() {
-                var labelNumber = clauses.length;
+            function writeFallThrough(): void {
+                if (!statements.length) {
+                    return;
+                }
+
+                var labelNumber = clauses.length + 1;
                 var labelExpression = factory.createNumericLiteral(labelNumber);
 
                 // handle implicit fall-through
                 if (!instructionWasAbrupt && !instructionWasCompletion && labelNumber > 0) {
-                    var labelProperty = factory.createPropertyAccessExpression(state, factory.createIdentifier("label"));
+                    var labelProperty = factory.createPropertyAccessExpression(getState(), factory.createIdentifier("label"));
                     var labelAssign = factory.createBinaryExpression(SyntaxKind.EqualsToken, labelProperty, labelExpression);
                     writeStatement(labelAssign);
                 }
+            }
 
+            function writePendingCase(): void {
+                if (!statements.length || rootStatements === statements) {
+                    return;
+                }
+
+                var labelNumber = clauses.length;
+                var labelExpression = factory.createNumericLiteral(labelNumber);
+                var caseClause = factory.createCaseClause(labelExpression, statements);
+                clauses.push(caseClause);
+            }
+
+            function resetStatements(): void {
                 statements = [];
                 instructionWasAbrupt = false;
                 instructionWasCompletion = false;
+            }
 
-                var caseClause = factory.createCaseClause(labelExpression, statements);
-                clauses.push(caseClause);
+            function startNewCase() {
+                ensureSwitchStatement();
+                writeFallThrough();
+                writePendingCase();
+                resetStatements();
             }
 
             function writeOperation(code: OpCode, args: any[]): void {
@@ -645,7 +735,7 @@ module ts {
                             }
                             
                             var labelsArray = factory.createArrayLiteralExpression([startLabel, catchLabel, finallyLabel, endLabel]);
-                            var trysProperty = factory.createPropertyAccessExpression(state, factory.createIdentifier("trys"));
+                            var trysProperty = factory.createPropertyAccessExpression(getState(), factory.createIdentifier("trys"));
                             var pushMethod = factory.createPropertyAccessExpression(trysProperty, factory.createIdentifier("push"));
                             var callExpression = factory.createCallExpression(pushMethod, [labelsArray]);
                             writeStatement(callExpression);
@@ -677,10 +767,6 @@ module ts {
                 
                 if (isExpression(node)) {
                     node = factory.createExpressionStatement(<Expression>node);
-                }
-
-                if (!node.parent) {
-                    node.parent = clauses[clauses.length - 1];
                 }
 
                 statements.push(<Statement>node);
