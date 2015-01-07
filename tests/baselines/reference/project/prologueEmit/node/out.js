@@ -1,6 +1,6 @@
 var _this = this;
 // Add a lambda to ensure global 'this' capture is triggered
-(function () { return _this.window; });
+(() =>  { return _this.window; });
 var __extends = this.__extends || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }

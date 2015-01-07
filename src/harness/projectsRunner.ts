@@ -165,7 +165,7 @@ class ProjectRunner extends RunnerBase {
                     sourceRoot: testCase.resolveSourceRoot && testCase.sourceRoot ? ts.sys.resolvePath(testCase.sourceRoot) : testCase.sourceRoot,
                     module: moduleKind,
                     noResolve: testCase.noResolve,
-                    target: ts.ScriptTarget.ES6
+                    target: ts.ScriptTarget.Latest
                 };
             }
 

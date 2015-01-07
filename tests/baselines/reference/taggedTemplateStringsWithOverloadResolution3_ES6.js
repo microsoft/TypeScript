@@ -118,5 +118,5 @@ fn4 `${null}${true}`;
 function fn5() {
     return undefined;
 }
-fn5 `${function (n) { return n.toFixed(); }}`; // will error; 'n' should have type 'string'.
-fn5 `${function (n) { return n.substr(0); }}`;
+fn5 `${(n) =>  { return n.toFixed(); }}`; // will error; 'n' should have type 'string'.
+fn5 `${(n) =>  { return n.substr(0); }}`;

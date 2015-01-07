@@ -203,7 +203,7 @@ let l18 = 0;
 function F() {
     let l19 = 0;
 }
-var F2 = function () {
+var F2 = () =>  {
     let l20 = 0;
 };
 var F3 = function () {
@@ -243,7 +243,7 @@ var o = {
     f() {
         let l28 = 0;
     },
-    f2: function () {
+    f2: () =>  {
         let l29 = 0;
     }
 };

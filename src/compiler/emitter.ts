@@ -3219,7 +3219,15 @@ module ts {
                     // Methods will emit the comments as part of emitting method declaration
                     emitLeadingComments(node);
                 }
-                write("function ");
+
+                if (node.kind !== SyntaxKind.ArrowFunction) {
+                    write("function ");
+                }
+                else if (node.kind === SyntaxKind.ArrowFunction && compilerOptions.target < ScriptTarget.ES6) {
+                    // When targeting ES6, emit arrow function natively in ES6 by omitting function keyword and using fat arrow instead
+                    write("function ");
+                }
+
                 if (node.kind === SyntaxKind.FunctionDeclaration || (node.kind === SyntaxKind.FunctionExpression && node.name)) {
                     emit(node.name);
                 }
@@ -3258,6 +3266,12 @@ module ts {
                 tempVariables = undefined;
                 tempParameters = undefined;
                 emitSignatureParameters(node);
+
+                // When targeting ES6, emit arrow function natively in ES6
+                if (node.kind === SyntaxKind.ArrowFunction && compilerOptions.target >= ScriptTarget.ES6) {
+                   write(" => ");
+                }
+
                 write(" {");
                 scopeEmitStart(node);
                 increaseIndent();
