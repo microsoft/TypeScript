@@ -1587,7 +1587,6 @@ module ts {
                     case SyntaxKind.IndexSignature:
                     case SyntaxKind.Parameter:
                     case SyntaxKind.ModuleBlock:
-                    case SyntaxKind.TypeParameter:
                     case SyntaxKind.FunctionType:
                     case SyntaxKind.ConstructorType:
                     case SyntaxKind.TypeLiteral:
@@ -1597,7 +1596,9 @@ module ts {
                     case SyntaxKind.UnionType:
                     case SyntaxKind.ParenthesizedType:
                         return isDeclarationVisible(<Declaration>node.parent);
-
+                    
+                    // Type parameters are always visible
+                    case SyntaxKind.TypeParameter:
                     // Source file is always visible
                     case SyntaxKind.SourceFile:
                         return true;
