@@ -10261,10 +10261,14 @@ module ts {
                 : unknownType;
 
             var iPromiseType = getTypeOfGlobalSymbol(getGlobalSymbol("IPromise"), 1);
-            globalIPromiseType = createTypeReference(<GenericType>iPromiseType, [anyType]);
+            if (iPromiseType !== emptyObjectType) {
+                globalIPromiseType = createTypeReference(<GenericType>iPromiseType, [anyType]);
+            }
 
-            var iPromiseConstructorType = <TypeReference>getTypeOfGlobalSymbol(getGlobalSymbol("IPromiseConstructor"), 1);
-            globalIPromiseConstructorType = createTypeReference(<GenericType>iPromiseConstructorType, [anyType]);
+            var iPromiseConstructorType = getTypeOfGlobalSymbol(getGlobalSymbol("IPromiseConstructor"), 1);
+            if (iPromiseConstructorType !== emptyObjectType) {
+                globalIPromiseConstructorType = createTypeReference(<GenericType>iPromiseConstructorType, [anyType]);
+            }
 
             // thenable type used to verify against a non-promise "thenable" operand to `await`.
             var thenPropertySymbol = createSymbol(SymbolFlags.Transient | SymbolFlags.Property, "then");
