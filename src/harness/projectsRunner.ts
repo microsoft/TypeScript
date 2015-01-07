@@ -164,7 +164,8 @@ class ProjectRunner extends RunnerBase {
                     mapRoot: testCase.resolveMapRoot && testCase.mapRoot ? ts.sys.resolvePath(testCase.mapRoot) : testCase.mapRoot,
                     sourceRoot: testCase.resolveSourceRoot && testCase.sourceRoot ? ts.sys.resolvePath(testCase.sourceRoot) : testCase.sourceRoot,
                     module: moduleKind,
-                    noResolve: testCase.noResolve
+                    noResolve: testCase.noResolve,
+                    target: ts.ScriptTarget.ES6
                 };
             }
 
@@ -186,7 +187,7 @@ class ProjectRunner extends RunnerBase {
             function createCompilerHost(): ts.CompilerHost {
                 return {
                     getSourceFile,
-                    getDefaultLibFilename: options => options.target === ts.ScriptTarget.ES6 ? "lib.es6.d.ts" : "lib.d.ts",
+                    getDefaultLibFilename: options => Harness.Compiler.defaultLibFileName,
                     writeFile,
                     getCurrentDirectory,
                     getCanonicalFileName: Harness.Compiler.getCanonicalFileName,
