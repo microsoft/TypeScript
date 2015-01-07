@@ -1,10 +1,10 @@
+tests/cases/conformance/async/downlevel/asyncFunctionExpression/asyncFunctionExpression5.ts(1,15): error TS2300: Duplicate identifier 'Promise'.
+tests/cases/conformance/async/downlevel/asyncFunctionExpression/asyncFunctionExpression5.ts(6,17): error TS1057: An async function or method must have a valid awaitable return type.
 tests/cases/conformance/async/downlevel/asyncFunctionExpression/asyncFunctionExpression5.ts(6,27): error TS1138: Parameter declaration expected.
 tests/cases/conformance/async/downlevel/asyncFunctionExpression/asyncFunctionExpression5.ts(6,32): error TS1005: ',' expected.
 tests/cases/conformance/async/downlevel/asyncFunctionExpression/asyncFunctionExpression5.ts(6,33): error TS1134: Variable declaration expected.
-tests/cases/conformance/async/downlevel/asyncFunctionExpression/asyncFunctionExpression5.ts(6,42): error TS1005: '=' expected.
-tests/cases/conformance/async/downlevel/asyncFunctionExpression/asyncFunctionExpression5.ts(1,15): error TS2300: Duplicate identifier 'Promise'.
-tests/cases/conformance/async/downlevel/asyncFunctionExpression/asyncFunctionExpression5.ts(6,17): error TS1057: An async function or method must have a valid awaitable return type.
 tests/cases/conformance/async/downlevel/asyncFunctionExpression/asyncFunctionExpression5.ts(6,35): error TS2300: Duplicate identifier 'Promise'.
+tests/cases/conformance/async/downlevel/asyncFunctionExpression/asyncFunctionExpression5.ts(6,42): error TS1005: '=' expected.
 tests/cases/conformance/async/downlevel/asyncFunctionExpression/asyncFunctionExpression5.ts(6,42): error TS2352: Neither type '{}' nor type 'void' is assignable to the other.
 
 
@@ -17,18 +17,18 @@ tests/cases/conformance/async/downlevel/asyncFunctionExpression/asyncFunctionExp
     }
     
     var foo = async function (await): Promise<void> {
+                    ~~~~~~~~~~
+!!! error TS1057: An async function or method must have a valid awaitable return type.
                               ~~~~~
 !!! error TS1138: Parameter declaration expected.
                                    ~
 !!! error TS1005: ',' expected.
                                     ~
 !!! error TS1134: Variable declaration expected.
-                                             ~
-!!! error TS1005: '=' expected.
-                    ~~~~~~~~~~
-!!! error TS1057: An async function or method must have a valid awaitable return type.
                                       ~~~~~~~
 !!! error TS2300: Duplicate identifier 'Promise'.
+                                             ~
+!!! error TS1005: '=' expected.
                                              ~~~~~~~~
     }
     ~

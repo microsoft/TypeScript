@@ -1364,7 +1364,7 @@ module ts {
             for (var i = 0; i < nodes.length; i++) {
                 var updatedIndex = i - updatedOffset;
                 var node = nodes[i];
-                if (shouldCacheNode(node)) {
+                if (shouldCacheNode && shouldCacheNode(node)) {
                     if (!updatedNodes) {
                         updatedNodes = nodes.slice(0, i);
                     }
@@ -1869,7 +1869,7 @@ module ts {
             else if (node.kind === SyntaxKind.TemplateExpression) {
                 var visited = activeVisitor.visitTemplateExpression(<TemplateExpression>node);
                 if (visited && !isTemplateLiteralOrTemplateExpression(visited)) {
-                    reportWrongResult(visited, node);
+                    reportUnexpectedNodeAfterVisit(visited, node);
                     return node;
                 }
 
@@ -2304,7 +2304,7 @@ module ts {
             }
 
             if (visited && !isObjectLiteralElement(visited)) {
-                reportWrongResult(visited, node);
+                reportUnexpectedNodeAfterVisit(visited, node);
                 return node;
             }
 
@@ -2331,28 +2331,5 @@ module ts {
 
         // Top-level nodes
         //// export function visitSourceFile(node: SourceFile): SourceFile;
-
-        function reportUnexpectedNode(node: Node): void {
-            var nodeKind = node ? getSyntaxKind(node.kind) : "Unknown";
-            Debug.fail("Unexpected node: " + nodeKind);
-        }
-
-        function reportWrongResult(visited: Node, node: Node): void {
-            var visitedKind = visited ? getSyntaxKind(visited.kind) : "Unknown";
-            var nodeKind = node ? getSyntaxKind(node.kind) : "Unknown";
-            Debug.fail("Unexpected node after visit: " + visitedKind + ", source: " + nodeKind);
-        }
-
-        function getSyntaxKind(kind: SyntaxKind): string {
-            var nodeKind: string;
-            if (typeof (<any>ts).SyntaxKind === "object") {
-                nodeKind = (<any>ts).SyntaxKind[kind];
-            }
-            else {
-                nodeKind = "SyntaxKind[" + String(kind) + "]";
-            }
-
-            return nodeKind;
-        }
     }
 }

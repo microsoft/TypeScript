@@ -593,13 +593,14 @@ module ts {
                 case SyntaxKind.ArrowFunction:
                     return factory.createArrowFunction(body, parameters, location, flags, modifiers);
                 default:
-                    Debug.fail("Unexpected node: " + node.kind);
+                    reportUnexpectedNode(node);
                     return node;
             }
         }
 
         function buildStatements(): Statement[] {
             var exceptionStack: ExceptionBlock[] = [];
+            var nextLabelNumber = 0;
             var clauses: CaseClause[];
             var rootStatements: Statement[] = [];
             var statements = rootStatements;
@@ -655,12 +656,13 @@ module ts {
 
             function ensureLabels(): void {
                 if (!labelNumbers) labelNumbers = [];
+                if (!labels) labels = [];
 
                 var createCase = false;
                 for (var label = 0; label < labels.length; label++) {
                     if (labels[label] === operationIndex) {
                         ensureSwitchStatement();
-                        labelNumbers[label] = clauses.length;
+                        labelNumbers[label] = nextLabelNumber;
                         createCase = true;
                     }
                 }
@@ -675,13 +677,11 @@ module ts {
                     return;
                 }
 
-                var labelNumber = clauses.length + 1;
-                var labelExpression = factory.createNumericLiteral(labelNumber);
-
                 // handle implicit fall-through
-                if (!instructionWasAbrupt && !instructionWasCompletion && labelNumber > 0) {
+                if (!instructionWasAbrupt && !instructionWasCompletion && nextLabelNumber > 0) {
+                    var nextLabelExpression = factory.createNumericLiteral(nextLabelNumber);
                     var labelProperty = factory.createPropertyAccessExpression(getState(), factory.createIdentifier("label"));
-                    var labelAssign = factory.createBinaryExpression(SyntaxKind.EqualsToken, labelProperty, labelExpression);
+                    var labelAssign = factory.createBinaryExpression(SyntaxKind.EqualsToken, labelProperty, nextLabelExpression);
                     writeStatement(labelAssign);
                 }
             }
@@ -691,7 +691,7 @@ module ts {
                     return;
                 }
 
-                var labelNumber = clauses.length;
+                var labelNumber = nextLabelNumber - 1;
                 var labelExpression = factory.createNumericLiteral(labelNumber);
                 var caseClause = factory.createCaseClause(labelExpression, statements);
                 clauses.push(caseClause);
@@ -708,6 +708,7 @@ module ts {
                 writeFallThrough();
                 writePendingCase();
                 resetStatements();
+                nextLabelNumber++;
             }
 
             function writeOperation(code: OpCode, args: any[]): void {

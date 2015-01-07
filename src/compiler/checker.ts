@@ -8351,8 +8351,11 @@ module ts {
 
         function checkGrammarDisallowedModifiersInBlockOrObjectLiteralExpression(node: Node) {
             if (node.modifiers) {
-                if (inBlockOrObjectLiteralExpression(node)) {
-                    return grammarErrorOnFirstToken(node, Diagnostics.Modifiers_cannot_appear_here);
+                switch (inBlockOrObjectLiteralExpression(node)) {
+                    case SyntaxKind.ObjectLiteralExpression:
+                        return checkGrammarModifiers(node);
+                    case SyntaxKind.Block:
+                        return grammarErrorOnFirstToken(node, Diagnostics.Modifiers_cannot_appear_here);                        
                 }
             }
         }
@@ -8360,7 +8363,7 @@ module ts {
         function inBlockOrObjectLiteralExpression(node: Node) {
             while (node) {
                 if (node.kind === SyntaxKind.Block || node.kind === SyntaxKind.ObjectLiteralExpression) {
-                    return true;
+                    return node.kind;
                 }
 
                 node = node.parent;
@@ -10426,6 +10429,7 @@ module ts {
                 else if (flags & NodeFlags.Async) {
                     return grammarErrorOnNode(lastAsync, Diagnostics._0_modifier_cannot_appear_on_a_constructor_declaration, "async");
                 }
+                return;
             }
             else if (node.kind === SyntaxKind.ImportDeclaration && flags & NodeFlags.Ambient) {
                 return grammarErrorOnNode(lastDeclare, Diagnostics._0_modifier_cannot_be_used_with_an_import_declaration, "declare");
@@ -10433,7 +10437,13 @@ module ts {
             else if (node.kind === SyntaxKind.InterfaceDeclaration && flags & NodeFlags.Ambient) {
                 return grammarErrorOnNode(lastDeclare, Diagnostics._0_modifier_cannot_be_used_with_an_interface_declaration, "declare");
             }
-            else if (flags & NodeFlags.Async) {
+            else if (node.parent.kind === SyntaxKind.ObjectLiteralExpression) {
+                if (flags & ~NodeFlags.Async) {
+                    return grammarErrorOnFirstToken(node, Diagnostics.Modifiers_cannot_appear_here);
+                }
+            }
+
+            if (flags & NodeFlags.Async) {
                 return checkAsyncModifier(node, lastAsync);
             }
         }

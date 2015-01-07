@@ -1,5 +1,5 @@
-tests/cases/conformance/async/downlevel/asyncGetter/asyncGetter3.ts(9,33): error TS1109: Expression expected.
 tests/cases/conformance/async/downlevel/asyncGetter/asyncGetter3.ts(7,13): error TS2378: A 'get' accessor must return a value or consist of a single 'throw' statement.
+tests/cases/conformance/async/downlevel/asyncGetter/asyncGetter3.ts(9,33): error TS1109: Expression expected.
 
 
 ==== tests/cases/conformance/async/downlevel/asyncGetter/asyncGetter3.ts (2 errors) ====

@@ -596,7 +596,7 @@ module ts {
             var conditionLabel = builder.defineLabel();
             var iteratorLabel = builder.defineLabel();
             var endLabel = builder.beginContinueBlock(iteratorLabel, getTarget(node));
-            var initializer = <Expression>visitVariableDeclarationListOrInitializer(node.initializer);
+            var initializer = <Expression>nodeVisitor.visitVariableDeclarationListOrInitializer(node.initializer);
             if (initializer) {
                 builder.writeLocation(node.initializer);
                 builder.emit(OpCode.Statement, factory.createExpressionStatement(initializer));
@@ -615,7 +615,7 @@ module ts {
         }
 
         function rewriteForInStatement(node: ForInStatement): void {
-            var variable = <Expression>visitVariableDeclarationListOrInitializer(node.initializer);
+            var variable = <Expression>nodeVisitor.visitVariableDeclarationListOrInitializer(node.initializer);
             while (variable.kind === SyntaxKind.BinaryExpression) {
                 variable = (<BinaryExpression>variable).left;
             }

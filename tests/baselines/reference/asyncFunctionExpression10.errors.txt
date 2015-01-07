@@ -1,9 +1,9 @@
-tests/cases/conformance/async/downlevel/asyncFunctionExpression/asyncFunctionExpression10.ts(6,28): error TS1005: '(' expected.
-tests/cases/conformance/async/downlevel/asyncFunctionExpression/asyncFunctionExpression10.ts(6,33): error TS1005: '=' expected.
-tests/cases/conformance/async/downlevel/asyncFunctionExpression/asyncFunctionExpression10.ts(6,51): error TS1005: '=>' expected.
 tests/cases/conformance/async/downlevel/asyncFunctionExpression/asyncFunctionExpression10.ts(6,19): error TS1057: An async function or method must have a valid awaitable return type.
-tests/cases/conformance/async/downlevel/asyncFunctionExpression/asyncFunctionExpression10.ts(6,28): error TS2403: Subsequent variable declarations must have the same type.  Variable 'await' must be of type '() => void', but here has type '() => Promise<void>'.
+tests/cases/conformance/async/downlevel/asyncFunctionExpression/asyncFunctionExpression10.ts(6,28): error TS1005: '(' expected.
+tests/cases/conformance/async/downlevel/asyncFunctionExpression/asyncFunctionExpression10.ts(6,28): error TS2403: Subsequent variable declarations must have the same type.  Variable 'await' must be of type '() => any', but here has type '() => Promise<void>'.
+tests/cases/conformance/async/downlevel/asyncFunctionExpression/asyncFunctionExpression10.ts(6,33): error TS1005: '=' expected.
 tests/cases/conformance/async/downlevel/asyncFunctionExpression/asyncFunctionExpression10.ts(6,37): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value or consist of a single 'throw' statement.
+tests/cases/conformance/async/downlevel/asyncFunctionExpression/asyncFunctionExpression10.ts(6,51): error TS1005: '=>' expected.
 
 
 ==== tests/cases/conformance/async/downlevel/asyncFunctionExpression/asyncFunctionExpression10.ts (6 errors) ====
@@ -13,16 +13,16 @@ tests/cases/conformance/async/downlevel/asyncFunctionExpression/asyncFunctionExp
     }
     
     var await = async function await(): Promise<void> {
-                               ~~~~~
-!!! error TS1005: '(' expected.
-                                    ~
-!!! error TS1005: '=' expected.
-                                                      ~
-!!! error TS1005: '=>' expected.
                       ~~~~~~~~
 !!! error TS1057: An async function or method must have a valid awaitable return type.
                                ~~~~~
-!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'await' must be of type '() => void', but here has type '() => Promise<void>'.
+!!! error TS1005: '(' expected.
+                               ~~~~~
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'await' must be of type '() => any', but here has type '() => Promise<void>'.
+                                    ~
+!!! error TS1005: '=' expected.
                                         ~~~~~~~~~~~~~
 !!! error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value or consist of a single 'throw' statement.
+                                                      ~
+!!! error TS1005: '=>' expected.
     }

@@ -1,6 +1,6 @@
+tests/cases/conformance/async/downlevel/asyncArrowFunction/asyncArrowFunction10.ts(6,11): error TS2304: Cannot find name 'async'.
 tests/cases/conformance/async/downlevel/asyncArrowFunction/asyncArrowFunction10.ts(6,17): error TS1005: ',' expected.
 tests/cases/conformance/async/downlevel/asyncArrowFunction/asyncArrowFunction10.ts(6,20): error TS1005: '=' expected.
-tests/cases/conformance/async/downlevel/asyncArrowFunction/asyncArrowFunction10.ts(6,11): error TS2304: Cannot find name 'async'.
 tests/cases/conformance/async/downlevel/asyncArrowFunction/asyncArrowFunction10.ts(6,24): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value or consist of a single 'throw' statement.
 tests/cases/conformance/async/downlevel/asyncArrowFunction/asyncArrowFunction10.ts(8,11): error TS2304: Cannot find name 'await'.
 
@@ -12,12 +12,12 @@ tests/cases/conformance/async/downlevel/asyncArrowFunction/asyncArrowFunction10.
     }
     
     var foo = async foo(): Promise<void> => {
+              ~~~~~
+!!! error TS2304: Cannot find name 'async'.
                     ~~~
 !!! error TS1005: ',' expected.
                        ~
 !!! error TS1005: '=' expected.
-              ~~~~~
-!!! error TS2304: Cannot find name 'async'.
                            ~~~~~~~~~~~~~
 !!! error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value or consist of a single 'throw' statement.
        // Legal to use 'await' in a type context.

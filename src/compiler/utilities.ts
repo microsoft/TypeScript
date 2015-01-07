@@ -1127,4 +1127,27 @@ module ts {
 
         return createTextChangeRange(createTextSpanFromBounds(oldStartN, oldEndN), /*newLength: */newEndN - oldStartN);
     }
+
+    export function reportUnexpectedNode(node: Node): void {
+        var nodeKind = node ? getSyntaxKind(node.kind) : "Unknown";
+        Debug.fail("Unexpected node: " + nodeKind);
+    }
+
+    export function reportUnexpectedNodeAfterVisit(visited: Node, node: Node): void {
+        var visitedKind = visited ? getSyntaxKind(visited.kind) : "Unknown";
+        var nodeKind = node ? getSyntaxKind(node.kind) : "Unknown";
+        Debug.fail("Unexpected node after visit: " + visitedKind + ", source: " + nodeKind);
+    }
+
+    function getSyntaxKind(kind: SyntaxKind): string {
+        var nodeKind: string;
+        if (typeof (<any>ts).SyntaxKind === "object") {
+            nodeKind = (<any>ts).SyntaxKind[kind];
+        }
+        else {
+            nodeKind = "SyntaxKind[" + String(kind) + "]";
+        }
+
+        return nodeKind;
+    }    
 }
