@@ -1095,11 +1095,11 @@ module ts {
                     }
                 }
 
-                // Get qualified name if there is an enclosing declaration and it is not a
-                // type parameter or we have a flag telling us to
-                var needFullyQualifiedName = (enclosingDeclaration && !(symbol.flags & SymbolFlags.TypeParameter));
-                var useFullyQualifiedFlag = TypeFormatFlags.UseFullyQualifiedType & typeFlags;
-                if (needFullyQualifiedName || useFullyQualifiedFlag) {
+                // Get qualified name if the symbol is not a type parameter
+                // and we have an enclosing declaration or a typeformat flag
+                var typeParameter = (symbol.flags & SymbolFlags.TypeParameter);
+                var typeFormatFlag = TypeFormatFlags.UseFullyQualifiedType & typeFlags;
+                if (!typeParameter && (enclosingDeclaration || typeFormatFlag)) {
                     walkSymbol(symbol, meaning);
                     return;
                 }
