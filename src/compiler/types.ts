@@ -1331,8 +1331,6 @@ module ts {
     // Generic class and interface types
     export interface GenericType extends InterfaceType, TypeReference {
         instantiations: Map<TypeReference>;   // Generic instantiation cache
-        openReferenceTargets: GenericType[];  // Open type reference targets
-        openReferenceChecks: Map<boolean>;    // Open type reference check cache
     }
 
     export interface TupleType extends ObjectType {
