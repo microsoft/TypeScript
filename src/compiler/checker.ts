@@ -8509,7 +8509,7 @@ module ts {
             var staticType = <ObjectType>getTypeOfSymbol(symbol);
             var baseTypeNode = getClassBaseTypeNode(node);
             if (baseTypeNode) {
-                emitExtends = emitExtends || !isInAmbientContext(node);
+                emitExtends = emitExtends || !(isInAmbientContext(node) || resolveName(node.parent, escapeIdentifier('__extends'), SymbolFlags.Value, undefined, undefined));
                 checkTypeReference(baseTypeNode);
             }
             if (type.baseTypes.length) {

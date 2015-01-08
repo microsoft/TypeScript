@@ -1,0 +1,16 @@
+=== tests/cases/compiler/__extendsModule.ts ===
+
+module M {
+>M : typeof M
+
+  export var __extends;
+>__extends : any
+}
+
+class A { }
+>A : A
+
+class B extends A { }
+>B : B
+>A : A
+
