@@ -3310,6 +3310,7 @@ interface Document extends Node, NodeSelector, MSEventAttachmentTarget, Document
     getElementsByTagName(name: "style"): NodeListOf<HTMLStyleElement>;
     getElementsByTagName(name: "sub"): NodeListOf<HTMLPhraseElement>;
     getElementsByTagName(name: "sup"): NodeListOf<HTMLPhraseElement>;
+    getElementsByTagName(name: "svg"): NodeListOf<SVGSVGElement>;
     getElementsByTagName(name: "table"): NodeListOf<HTMLTableElement>;
     getElementsByTagName(name: "tbody"): NodeListOf<HTMLTableSectionElement>;
     getElementsByTagName(name: "td"): NodeListOf<HTMLTableDataCellElement>;
@@ -4721,6 +4722,7 @@ interface Element extends Node, NodeSelector, ElementTraversal, GlobalEventHandl
     getElementsByTagName(name: "style"): NodeListOf<HTMLStyleElement>;
     getElementsByTagName(name: "sub"): NodeListOf<HTMLPhraseElement>;
     getElementsByTagName(name: "sup"): NodeListOf<HTMLPhraseElement>;
+    getElementsByTagName(name: "svg"): NodeListOf<SVGSVGElement>;
     getElementsByTagName(name: "table"): NodeListOf<HTMLTableElement>;
     getElementsByTagName(name: "tbody"): NodeListOf<HTMLTableSectionElement>;
     getElementsByTagName(name: "td"): NodeListOf<HTMLTableDataCellElement>;
