@@ -28,12 +28,6 @@ module RWC {
             var compilerOptions: ts.CompilerOptions;
             var baselineOpts: Harness.Baseline.BaselineOptions = { Subfolder: 'rwc' };
             var baseName = /(.*)\/(.*).json/.exec(ts.normalizeSlashes(jsonPath))[2];
-            // Compile .d.ts files
-            var declFileCompilationResult: {
-                declInputFiles: { unitName: string; content: string }[];
-                declOtherFiles: { unitName: string; content: string }[];
-                declResult: Harness.Compiler.CompilerResult;
-            };
 
             after(() => {
                 // Mocha holds onto the closure environment of the describe callback even after the test is done.
@@ -44,7 +38,6 @@ module RWC {
                 compilerOptions = undefined;
                 baselineOpts = undefined;
                 baseName = undefined;
-                declFileCompilationResult = undefined;
             });
 
             it('can compile', () => {
@@ -103,11 +96,6 @@ module RWC {
                 }
             });
 
-            // Baselines
-            it('Correct compiler generated.d.ts', () => {
-                declFileCompilationResult = Harness.Compiler.getCompiler().compileDeclarationFiles(inputFiles, otherFiles, compilerResult, /*settingscallback*/ undefined, compilerOptions);
-            });
-
 
             it('has the expected emitted code', () => {
                 Harness.Baseline.runBaseline('has the expected emitted code', baseName + '.output.js', () => {
@@ -152,9 +140,12 @@ module RWC {
                 }, false, baselineOpts);
             });
 
-            it('has no errors in generated declaration files', () => {
+            // Ideally, a generated declaration file will have no errors. But we allow generated
+            // declaration file errors as part of the baseline.
+            it('has the expected errors in generated declaration files', () => {
                 if (compilerOptions.declaration && !compilerResult.errors.length) {
-                    Harness.Baseline.runBaseline('has no errors in generated declaration files', baseName + '.dts.errors.txt', () => {
+                    Harness.Baseline.runBaseline('has the expected errors in generated declaration files', baseName + '.dts.errors.txt', () => {
+                        var declFileCompilationResult = Harness.Compiler.getCompiler().compileDeclarationFiles(inputFiles, otherFiles, compilerResult, /*settingscallback*/ undefined, compilerOptions);
                         if (declFileCompilationResult.declResult.errors.length === 0) {
                             return null;
                         }

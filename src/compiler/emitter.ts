@@ -1,8 +1,4 @@
-/// <reference path="types.ts"/>
-/// <reference path="core.ts"/>
-/// <reference path="scanner.ts"/>
-/// <reference path="parser.ts"/>
-/// <reference path="binder.ts"/>
+/// <reference path="checker.ts"/>
 
 module ts {
     interface EmitTextWriter {
@@ -268,7 +264,7 @@ module ts {
 
     function getFirstConstructorWithBody(node: ClassDeclaration): ConstructorDeclaration {
         return forEach(node.members, member => {
-            if (member.kind === SyntaxKind.Constructor && (<ConstructorDeclaration>member).body) {
+            if (member.kind === SyntaxKind.Constructor && nodeIsPresent((<ConstructorDeclaration>member).body)) {
                 return <ConstructorDeclaration>member;
             }
         });
@@ -316,17 +312,16 @@ module ts {
         };
     }
 
-    function getSourceFilePathInNewDir(sourceFile: SourceFile, program: Program, newDirPath: string) {
-        var compilerHost = program.getCompilerHost();
-        var sourceFilePath = getNormalizedAbsolutePath(sourceFile.filename, compilerHost.getCurrentDirectory());
-        sourceFilePath = sourceFilePath.replace(program.getCommonSourceDirectory(), "");
+    function getSourceFilePathInNewDir(sourceFile: SourceFile, host: EmitHost, newDirPath: string) {
+        var sourceFilePath = getNormalizedAbsolutePath(sourceFile.filename, host.getCurrentDirectory());
+        sourceFilePath = sourceFilePath.replace(host.getCommonSourceDirectory(), "");
         return combinePaths(newDirPath, sourceFilePath);
     }
 
-    function getOwnEmitOutputFilePath(sourceFile: SourceFile, program: Program, extension: string){
-        var compilerOptions = program.getCompilerOptions();
+    function getOwnEmitOutputFilePath(sourceFile: SourceFile, host: EmitHost, extension: string){
+        var compilerOptions = host.getCompilerOptions();
         if (compilerOptions.outDir) {
-            var emitOutputFilePathWithoutExtension = removeFileExtension(getSourceFilePathInNewDir(sourceFile, program, compilerOptions.outDir));
+            var emitOutputFilePathWithoutExtension = removeFileExtension(getSourceFilePathInNewDir(sourceFile, host, compilerOptions.outDir));
         }
         else {
             var emitOutputFilePathWithoutExtension = removeFileExtension(sourceFile.filename);
@@ -335,16 +330,15 @@ module ts {
         return emitOutputFilePathWithoutExtension + extension;
     }
 
-    function writeFile(compilerHost: CompilerHost, diagnostics: Diagnostic[], filename: string, data: string, writeByteOrderMark: boolean) {
-        compilerHost.writeFile(filename, data, writeByteOrderMark, hostErrorMessage => {
+    function writeFile(host: EmitHost, diagnostics: Diagnostic[], filename: string, data: string, writeByteOrderMark: boolean) {
+        host.writeFile(filename, data, writeByteOrderMark, hostErrorMessage => {
             diagnostics.push(createCompilerDiagnostic(Diagnostics.Could_not_write_file_0_Colon_1, filename, hostErrorMessage));
         });
     }
 
-    function emitDeclarations(program: Program, resolver: EmitResolver, diagnostics: Diagnostic[], jsFilePath: string, root?: SourceFile): DeclarationEmit {
-        var newLine = program.getCompilerHost().getNewLine();
-        var compilerOptions = program.getCompilerOptions();
-        var compilerHost = program.getCompilerHost();
+    function emitDeclarations(host: EmitHost, resolver: EmitResolver, diagnostics: Diagnostic[], jsFilePath: string, root?: SourceFile): DeclarationEmit {
+        var newLine = host.getNewLine();
+        var compilerOptions = host.getCompilerOptions();
 
         var write: (s: string) => void;
         var writeLine: () => void;
@@ -1014,20 +1008,20 @@ module ts {
         }
 
         function emitVariableStatement(node: VariableStatement) {
-            var hasDeclarationWithEmit = forEach(node.declarations, varDeclaration => resolver.isDeclarationVisible(varDeclaration));
+            var hasDeclarationWithEmit = forEach(node.declarationList.declarations, varDeclaration => resolver.isDeclarationVisible(varDeclaration));
             if (hasDeclarationWithEmit) {
                 emitJsDocComments(node);
                 emitModuleElementDeclarationFlags(node);
-                if (isLet(node)) {
+                if (isLet(node.declarationList)) {
                     write("let ");
                 }
-                else if (isConst(node)) {
+                else if (isConst(node.declarationList)) {
                     write("const ");
                 }
                 else {
                     write("var ");
                 }
-                emitCommaList(node.declarations, emitVariableDeclaration);
+                emitCommaList(node.declarationList.declarations, emitVariableDeclaration);
                 write(";");
                 writeLine();
             }
@@ -1400,14 +1394,14 @@ module ts {
             var declFileName = referencedFile.flags & NodeFlags.DeclarationFile
                 ? referencedFile.filename // Declaration file, use declaration file name
                 : shouldEmitToOwnFile(referencedFile, compilerOptions)
-                ? getOwnEmitOutputFilePath(referencedFile, program, ".d.ts") // Own output file so get the .d.ts file
-                : removeFileExtension(compilerOptions.out) + ".d.ts";// Global out file
+                    ? getOwnEmitOutputFilePath(referencedFile, host, ".d.ts") // Own output file so get the .d.ts file
+                    : removeFileExtension(compilerOptions.out) + ".d.ts";// Global out file
 
             declFileName = getRelativePathToDirectoryOrUrl(
                 getDirectoryPath(normalizeSlashes(jsFilePath)),
                 declFileName,
-                compilerHost.getCurrentDirectory(),
-                compilerHost.getCanonicalFileName,
+                host.getCurrentDirectory(),
+                host.getCanonicalFileName,
             /*isAbsolutePathAnUrl*/ false);
 
             referencePathsOutput += "/// <reference path=\"" + declFileName + "\" />" + newLine;
@@ -1418,7 +1412,7 @@ module ts {
             if (!compilerOptions.noResolve) {
                 var addedGlobalFileReference = false;
                 forEach(root.referencedFiles, fileReference => {
-                    var referencedFile = tryResolveScriptReference(program, root, fileReference);
+                    var referencedFile = tryResolveScriptReference(host, root, fileReference);
 
                     // All the references that are not going to be part of same file
                     if (referencedFile && ((referencedFile.flags & NodeFlags.DeclarationFile) || // This is a declare file reference
@@ -1438,12 +1432,12 @@ module ts {
         else {
             // Emit references corresponding to this file
             var emittedReferencedFiles: SourceFile[] = [];
-            forEach(program.getSourceFiles(), sourceFile => {
+            forEach(host.getSourceFiles(), sourceFile => {
                 if (!isExternalModuleOrDeclarationFile(sourceFile)) {
                     // Check what references need to be added
                     if (!compilerOptions.noResolve) {
                         forEach(sourceFile.referencedFiles, fileReference => {
-                            var referencedFile = tryResolveScriptReference(program, sourceFile, fileReference);
+                            var referencedFile = tryResolveScriptReference(host, sourceFile, fileReference);
 
                             // If the reference file is a declaration file or an external module, emit that reference
                             if (referencedFile && (isExternalModuleOrDeclarationFile(referencedFile) &&
@@ -1467,22 +1461,21 @@ module ts {
             referencePathsOutput,
         }
     }
-
-    export function getDeclarationDiagnostics(program: Program, resolver: EmitResolver, targetSourceFile: SourceFile): Diagnostic[] {
+    
+    export function getDeclarationDiagnostics(host: EmitHost, resolver: EmitResolver, targetSourceFile: SourceFile): Diagnostic[] {
         var diagnostics: Diagnostic[] = [];
-        var jsFilePath = getOwnEmitOutputFilePath(targetSourceFile, program, ".js");
-        emitDeclarations(program, resolver, diagnostics, jsFilePath, targetSourceFile);
+        var jsFilePath = getOwnEmitOutputFilePath(targetSourceFile, host, ".js");
+        emitDeclarations(host, resolver, diagnostics, jsFilePath, targetSourceFile);
         return diagnostics;
     }
 
     // targetSourceFile is when users only want one file in entire project to be emitted. This is used in compilerOnSave feature
-    export function emitFiles(resolver: EmitResolver, targetSourceFile?: SourceFile): EmitResult {
-        var program = resolver.getProgram();
-        var compilerHost = program.getCompilerHost();
-        var compilerOptions = program.getCompilerOptions();
+    export function emitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFile?: SourceFile): EmitResult {
+        // var program = resolver.getProgram();
+        var compilerOptions = host.getCompilerOptions();
         var sourceMapDataList: SourceMapData[] = compilerOptions.sourceMap ? [] : undefined;
         var diagnostics: Diagnostic[] = [];
-        var newLine = program.getCompilerHost().getNewLine();
+        var newLine = host.getNewLine();
 
         function emitJavaScript(jsFilePath: string, root?: SourceFile) {
             var writer = createTextWriter(newLine);
@@ -1704,12 +1697,12 @@ module ts {
                     // Add the file to tsFilePaths
                     // If sourceroot option: Use the relative path corresponding to the common directory path 
                     // otherwise source locations relative to map file location
-                    var sourcesDirectoryPath = compilerOptions.sourceRoot ? program.getCommonSourceDirectory() : sourceMapDir;
+                    var sourcesDirectoryPath = compilerOptions.sourceRoot ? host.getCommonSourceDirectory() : sourceMapDir;
 
                     sourceMapData.sourceMapSources.push(getRelativePathToDirectoryOrUrl(sourcesDirectoryPath,
                         node.filename,
-                        compilerHost.getCurrentDirectory(),
-                        compilerHost.getCanonicalFileName,
+                        host.getCurrentDirectory(),
+                        host.getCanonicalFileName,
                         /*isAbsolutePathAnUrl*/ true));
                     sourceMapSourceIndex = sourceMapData.sourceMapSources.length - 1;
 
@@ -1805,7 +1798,7 @@ module ts {
                 function writeJavaScriptAndSourceMapFile(emitOutput: string, writeByteOrderMark: boolean) {
                     // Write source map file
                     encodeLastRecordedSourceMapSpan();
-                    writeFile(compilerHost, diagnostics, sourceMapData.sourceMapFilePath, serializeSourceMapContents(
+                    writeFile(host, diagnostics, sourceMapData.sourceMapFilePath, serializeSourceMapContents(
                         3,
                         sourceMapData.sourceMapFile,
                         sourceMapData.sourceMapSourceRoot,
@@ -1844,17 +1837,17 @@ module ts {
                     if (root) { // emitting single module file
                         // For modules or multiple emit files the mapRoot will have directory structure like the sources
                         // So if src\a.ts and src\lib\b.ts are compiled together user would be moving the maps into mapRoot\a.js.map and mapRoot\lib\b.js.map
-                        sourceMapDir = getDirectoryPath(getSourceFilePathInNewDir(root, program, sourceMapDir));
+                        sourceMapDir = getDirectoryPath(getSourceFilePathInNewDir(root, host, sourceMapDir));
                     }
 
                     if (!isRootedDiskPath(sourceMapDir) && !isUrl(sourceMapDir)) {
                         // The relative paths are relative to the common directory
-                        sourceMapDir = combinePaths(program.getCommonSourceDirectory(), sourceMapDir);
+                        sourceMapDir = combinePaths(host.getCommonSourceDirectory(), sourceMapDir);
                         sourceMapData.jsSourceMappingURL = getRelativePathToDirectoryOrUrl(
                             getDirectoryPath(normalizePath(jsFilePath)), // get the relative sourceMapDir path based on jsFilePath
                             combinePaths(sourceMapDir, sourceMapData.jsSourceMappingURL), // this is where user expects to see sourceMap
-                            compilerHost.getCurrentDirectory(),
-                            compilerHost.getCanonicalFileName,
+                            host.getCurrentDirectory(),
+                            host.getCanonicalFileName,
                             /*isAbsolutePathAnUrl*/ true);
                     }
                     else {
@@ -1890,7 +1883,7 @@ module ts {
             }
 
             function writeJavaScriptFile(emitOutput: string, writeByteOrderMark: boolean) {
-                writeFile(compilerHost, diagnostics, jsFilePath, emitOutput, writeByteOrderMark);
+                writeFile(host, diagnostics, jsFilePath, emitOutput, writeByteOrderMark);
             }
 
             // Create a temporary variable with a unique unused name. The forLoopVariable parameter signals that the
@@ -2064,9 +2057,15 @@ module ts {
                     write("(");
                 }
 
-                emitLiteral(node.head);
+                var headEmitted = false;
+                if (shouldEmitTemplateHead()) {
+                    emitLiteral(node.head);
+                    headEmitted = true;
+                }
 
-                forEach(node.templateSpans, templateSpan => {
+                for (var i = 0; i < node.templateSpans.length; i++) {
+                    var templateSpan = node.templateSpans[i];
+
                     // Check if the expression has operands and binds its operands less closely than binary '+'.
                     // If it does, we need to wrap the expression in parentheses. Otherwise, something like
                     //    `abc${ 1 << 2 }`
@@ -2078,7 +2077,14 @@ module ts {
                     //    "abc" + (1 << 2) + ""
                     var needsParens = templateSpan.expression.kind !== SyntaxKind.ParenthesizedExpression
                         && comparePrecedenceToBinaryPlus(templateSpan.expression) !== Comparison.GreaterThan;
-                    write(" + ");
+
+                    if (i > 0 || headEmitted) {
+                        // If this is the first span and the head was not emitted, then this templateSpan's
+                        // expression will be the first to be emitted. Don't emit the preceding ' + ' in that
+                        // case.
+                        write(" + ");
+                    }
+
                     emitParenthesized(templateSpan.expression, needsParens);
                     // Only emit if the literal is non-empty.
                     // The binary '+' operator is left-associative, so the first string concatenation
@@ -2088,10 +2094,32 @@ module ts {
                         write(" + ")
                         emitLiteral(templateSpan.literal);
                     }
-                });
+                }
 
                 if (emitOuterParens) {
                     write(")");
+                }
+
+                function shouldEmitTemplateHead() {
+                    // If this expression has an empty head literal and the first template span has a non-empty
+                    // literal, then emitting the empty head literal is not necessary.
+                    //     `${ foo } and ${ bar }`
+                    // can be emitted as
+                    //     foo + " and " + bar
+                    // This is because it is only required that one of the first two operands in the emit
+                    // output must be a string literal, so that the other operand and all following operands
+                    // are forced into strings.
+                    //
+                    // If the first template span has an empty literal, then the head must still be emitted.
+                    //     `${ foo }${ bar }`
+                    // must still be emitted as
+                    //     "" + foo + bar
+
+                    // There is always atleast one templateSpan in this code path, since
+                    // NoSubstitutionTemplateLiterals are directly emitted via emitLiteral()
+                    Debug.assert(node.templateSpans.length !== 0);
+
+                    return node.head.text.length !== 0 || node.templateSpans[0].literal.text.length === 0;
                 }
 
                 function templateNeedsParens(template: TemplateExpression, parent: Expression) {
@@ -2113,7 +2141,8 @@ module ts {
                  * or equal precedence to the binary '+' operator
                  */
                 function comparePrecedenceToBinaryPlus(expression: Expression): Comparison {
-                    // All binary expressions have lower precedence than '+' apart from '*', '/', and '%'.
+                    // All binary expressions have lower precedence than '+' apart from '*', '/', and '%'
+                    // which have greater precedence and '-' which has equal precedence.
                     // All unary operators have a higher precedence apart from yield.
                     // Arrow functions and conditionals have a lower precedence, 
                     // although we convert the former into regular function expressions in ES5 mode,
@@ -2130,6 +2159,7 @@ module ts {
                                 case SyntaxKind.PercentToken:
                                     return Comparison.GreaterThan;
                                 case SyntaxKind.PlusToken:
+                                case SyntaxKind.MinusToken:
                                     return Comparison.EqualTo;
                                 default:
                                     return Comparison.LessThan;
@@ -2681,20 +2711,22 @@ module ts {
                 var endPos = emitToken(SyntaxKind.ForKeyword, node.pos);
                 write(" ");
                 endPos = emitToken(SyntaxKind.OpenParenToken, endPos);
-                if (node.declarations) {
-                    if (node.declarations[0] && isLet(node.declarations[0])) {
+                if (node.initializer && node.initializer.kind === SyntaxKind.VariableDeclarationList) {
+                    var variableDeclarationList = <VariableDeclarationList>node.initializer;
+                    var declarations = variableDeclarationList.declarations;
+                    if (declarations[0] && isLet(declarations[0])) {
                         emitToken(SyntaxKind.LetKeyword, endPos);
                     }
-                    else if (node.declarations[0] && isConst(node.declarations[0])) {
+                    else if (declarations[0] && isConst(declarations[0])) {
                         emitToken(SyntaxKind.ConstKeyword, endPos);
                     }
                     else {
                         emitToken(SyntaxKind.VarKeyword, endPos);
                     }
                     write(" ");
-                    emitCommaList(node.declarations);
+                    emitCommaList(variableDeclarationList.declarations);
                 }
-                if (node.initializer) {
+                else if (node.initializer) {
                     emit(node.initializer);
                 }
                 write(";");
@@ -2709,9 +2741,10 @@ module ts {
                 var endPos = emitToken(SyntaxKind.ForKeyword, node.pos);
                 write(" ");
                 endPos = emitToken(SyntaxKind.OpenParenToken, endPos);
-                if (node.declarations) {
-                    if (node.declarations.length >= 1) {
-                        var decl = node.declarations[0];
+                if (node.initializer.kind === SyntaxKind.VariableDeclarationList) {
+                    var variableDeclarationList = <VariableDeclarationList>node.initializer;
+                    if (variableDeclarationList.declarations.length >= 1) {
+                        var decl = variableDeclarationList.declarations[0];
                         if (isLet(decl)) {
                             emitToken(SyntaxKind.LetKeyword, endPos);
                         }
@@ -2723,7 +2756,7 @@ module ts {
                     }
                 }
                 else {
-                    emit(node.variable);
+                    emit(node.initializer);
                 }
                 write(" in ");
                 emit(node.expression);
@@ -2840,7 +2873,7 @@ module ts {
 
             function emitModuleMemberName(node: Declaration) {
                 emitStart(node.name);
-                if (node.flags & NodeFlags.Export) {
+                if (getCombinedNodeFlags(node) & NodeFlags.Export) {
                     var container = getContainingModule(node);
                     write(container ? resolver.getLocalNameOfContainer(container) : "exports");
                     write(".");
@@ -2853,7 +2886,7 @@ module ts {
                 var emitCount = 0;
                 // An exported declaration is actually emitted as an assignment (to a property on the module object), so
                 // temporary variables in an exported declaration need to have real declarations elsewhere
-                var isDeclaration = (root.kind === SyntaxKind.VariableDeclaration && !(root.flags & NodeFlags.Export)) || root.kind === SyntaxKind.Parameter;
+                var isDeclaration = (root.kind === SyntaxKind.VariableDeclaration && !(getCombinedNodeFlags(root) & NodeFlags.Export)) || root.kind === SyntaxKind.Parameter;
                 if (root.kind === SyntaxKind.BinaryExpression) {
                     emitAssignmentExpression(<BinaryExpression>root);
                 }
@@ -3086,17 +3119,17 @@ module ts {
             function emitVariableStatement(node: VariableStatement) {
                 emitLeadingComments(node);
                 if (!(node.flags & NodeFlags.Export)) {
-                    if (isLet(node)) {
+                    if (isLet(node.declarationList)) {
                         write("let ");
                     }
-                    else if (isConst(node)) {
+                    else if (isConst(node.declarationList)) {
                         write("const ");
                     }
                     else {
                         write("var ");
                     }
                 }
-                emitCommaList(node.declarations);
+                emitCommaList(node.declarationList.declarations);
                 write(";");
                 emitTrailingComments(node);
             }
@@ -3204,7 +3237,7 @@ module ts {
             }
 
             function emitFunctionDeclaration(node: FunctionLikeDeclaration) {
-                if (!node.body) {
+                if (nodeIsMissing(node.body)) {
                     return emitPinnedOrTripleSlashComments(node);
                 }
 
@@ -3677,8 +3710,8 @@ module ts {
             }
 
             function emitModuleDeclaration(node: ModuleDeclaration) {
-                var shouldEmit = getModuleInstanceState(node) === ModuleInstanceState.Instantiated ||
-                    (getModuleInstanceState(node) === ModuleInstanceState.ConstEnumOnly && compilerOptions.preserveConstEnums);
+                // Emit only if this module is non-ambient.
+                var shouldEmit = isInstantiatedModule(node, compilerOptions.preserveConstEnums);
 
                 if (!shouldEmit) {
                     return emitPinnedOrTripleSlashComments(node);
@@ -3922,6 +3955,7 @@ module ts {
                 if (!node) {
                     return;
                 }
+
                 if (node.flags & NodeFlags.Ambient) {
                     return emitPinnedOrTripleSlashComments(node);
                 }
@@ -4014,8 +4048,6 @@ module ts {
                     case SyntaxKind.OmittedExpression:
                         return;
                     case SyntaxKind.Block:
-                    case SyntaxKind.TryBlock:
-                    case SyntaxKind.FinallyBlock:
                     case SyntaxKind.ModuleBlock:
                         return emitBlock(<Block>node);
                     case SyntaxKind.VariableStatement:
@@ -4213,7 +4245,7 @@ module ts {
                 emit(root);
             }
             else {
-                forEach(program.getSourceFiles(), sourceFile => {
+                forEach(host.getSourceFiles(), sourceFile => {
                     if (!isExternalModuleOrDeclarationFile(sourceFile)) {
                         emit(sourceFile);
                     }
@@ -4225,7 +4257,7 @@ module ts {
         }
 
         function writeDeclarationFile(jsFilePath: string, sourceFile: SourceFile) {
-            var emitDeclarationResult = emitDeclarations(program, resolver, diagnostics, jsFilePath, sourceFile);
+            var emitDeclarationResult = emitDeclarations(host, resolver, diagnostics, jsFilePath, sourceFile);
             // TODO(shkamat): Should we not write any declaration file if any of them can produce error, 
             // or should we just not write this file like we are doing now
             if (!emitDeclarationResult.reportedDeclarationError) {
@@ -4240,7 +4272,7 @@ module ts {
                     }
                 });
                 declarationOutput += emitDeclarationResult.synchronousDeclarationOutput.substring(appliedSyncOutputPos);
-                writeFile(compilerHost, diagnostics, removeFileExtension(jsFilePath) + ".d.ts", declarationOutput, compilerOptions.emitBOM);
+                writeFile(host, diagnostics, removeFileExtension(jsFilePath) + ".d.ts", declarationOutput, compilerOptions.emitBOM);
             }
         }
 
@@ -4250,11 +4282,11 @@ module ts {
         if (targetSourceFile === undefined) {
             // No targetSourceFile is specified (e.g. calling emitter from batch compiler)
             hasSemanticErrors = resolver.hasSemanticErrors();
-            isEmitBlocked = resolver.isEmitBlocked();
+            isEmitBlocked = host.isEmitBlocked();
 
-            forEach(program.getSourceFiles(), sourceFile => {
+            forEach(host.getSourceFiles(), sourceFile => {
                 if (shouldEmitToOwnFile(sourceFile, compilerOptions)) {
-                    var jsFilePath = getOwnEmitOutputFilePath(sourceFile, program, ".js");
+                    var jsFilePath = getOwnEmitOutputFilePath(sourceFile, host, ".js");
                     emitFile(jsFilePath, sourceFile);
                 }
             });
@@ -4268,18 +4300,18 @@ module ts {
             if (shouldEmitToOwnFile(targetSourceFile, compilerOptions)) {
                 // If shouldEmitToOwnFile returns true or targetSourceFile is an external module file, then emit targetSourceFile in its own output file
                 hasSemanticErrors = resolver.hasSemanticErrors(targetSourceFile);
-                isEmitBlocked = resolver.isEmitBlocked(targetSourceFile);
+                isEmitBlocked = host.isEmitBlocked(targetSourceFile);
 
-                var jsFilePath = getOwnEmitOutputFilePath(targetSourceFile, program, ".js");
+                var jsFilePath = getOwnEmitOutputFilePath(targetSourceFile, host, ".js");
                 emitFile(jsFilePath, targetSourceFile);
             }
             else if (!isDeclarationFile(targetSourceFile) && compilerOptions.out) {
                 // Otherwise, if --out is specified and targetSourceFile is not a declaration file,
                 // Emit all, non-external-module file, into one single output file
-                forEach(program.getSourceFiles(), sourceFile => {
+                forEach(host.getSourceFiles(), sourceFile => {
                     if (!shouldEmitToOwnFile(sourceFile, compilerOptions)) {
                         hasSemanticErrors = hasSemanticErrors || resolver.hasSemanticErrors(sourceFile);
-                        isEmitBlocked = isEmitBlocked || resolver.isEmitBlocked(sourceFile);
+                        isEmitBlocked = isEmitBlocked || host.isEmitBlocked(sourceFile);
                     }
                 });
 

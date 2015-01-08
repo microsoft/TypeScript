@@ -53,19 +53,13 @@ class CompilerBaselineRunner extends RunnerBase {
             var rootDir: string;
 
             var result: Harness.Compiler.CompilerResult;
-            var checker: ts.TypeChecker;
+            var program: ts.Program;
             var options: ts.CompilerOptions;
             // equivalent to the files that will be passed on the command line
             var toBeCompiled: { unitName: string; content: string }[];
             // equivalent to other files on the file system not directly passed to the compiler (ie things that are referenced by other files)
             var otherFiles: { unitName: string; content: string }[];
             var harnessCompiler: Harness.Compiler.HarnessCompiler;
-
-            var declFileCompilationResult: {
-                declInputFiles: { unitName: string; content: string }[];
-                declOtherFiles: { unitName: string; content: string }[];
-                declResult: Harness.Compiler.CompilerResult;
-            };
 
             var createNewInstance = false;
 
@@ -97,10 +91,10 @@ class CompilerBaselineRunner extends RunnerBase {
                     });
                 }
 
-                options = harnessCompiler.compileFiles(toBeCompiled, otherFiles, function (compileResult, _checker) {
+                options = harnessCompiler.compileFiles(toBeCompiled, otherFiles, function (compileResult, _program) {
                     result = compileResult;
-                    // The checker will be used by typeWriter
-                    checker = _checker;
+                    // The program will be used by typeWriter
+                    program = _program;
                 }, function (settings) {
                         harnessCompiler.setCompilerSettings(tcSettings);
                 });
@@ -138,12 +132,11 @@ class CompilerBaselineRunner extends RunnerBase {
                 lastUnit = undefined;
                 rootDir = undefined;
                 result = undefined;
-                checker = undefined;
+                program = undefined;
                 options = undefined;
                 toBeCompiled = undefined;
                 otherFiles = undefined;
                 harnessCompiler = undefined;
-                declFileCompilationResult = undefined;
             });
 
             function getByteOrderMarkText(file: Harness.Compiler.GeneratedFile): string {
@@ -177,13 +170,6 @@ class CompilerBaselineRunner extends RunnerBase {
                         return record;
                     });
                 }
-            });
-
-            // Compile .d.ts files
-            it('Correct compiler generated.d.ts for ' + fileName, () => {
-                declFileCompilationResult = harnessCompiler.compileDeclarationFiles(toBeCompiled, otherFiles, result, function (settings) {
-                    harnessCompiler.setCompilerSettings(tcSettings);
-                }, options);
             });
 
 
@@ -222,6 +208,10 @@ class CompilerBaselineRunner extends RunnerBase {
                                 jsCode += result.declFilesCode[i].code;
                             }
                         }
+
+                        var declFileCompilationResult = harnessCompiler.compileDeclarationFiles(toBeCompiled, otherFiles, result, function (settings) {
+                            harnessCompiler.setCompilerSettings(tcSettings);
+                        }, options);
 
                         if (declFileCompilationResult && declFileCompilationResult.declResult.errors.length) {
                             jsCode += '\r\n\r\n//// [DtsFileErrors]\r\n';
@@ -267,10 +257,10 @@ class CompilerBaselineRunner extends RunnerBase {
                 // NEWTODO: Type baselines
                 if (result.errors.length === 0) {
                     Harness.Baseline.runBaseline('Correct expression types for ' + fileName, justName.replace(/\.ts/, '.types'), () => {
-                        var allFiles = toBeCompiled.concat(otherFiles).filter(file => !!checker.getProgram().getSourceFile(file.unitName));
+                        var allFiles = toBeCompiled.concat(otherFiles).filter(file => !!program.getSourceFile(file.unitName));
                         var typeLines: string[] = [];
                         var typeMap: { [fileName: string]: { [lineNum: number]: string[]; } } = {};
-                        var walker = new TypeWriterWalker(checker);
+                        var walker = new TypeWriterWalker(program);
                         allFiles.forEach(file => {
                             var codeLines = file.content.split('\n');
                             walker.getTypes(file.unitName).forEach(result => {

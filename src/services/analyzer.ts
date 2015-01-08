@@ -78,7 +78,7 @@ function analyze(libFileName: string, files: string[], outputFolder: string): Pr
     var processedFiles: ProcessedFile[] = [];
     for (var i = 0, len = sourceFiles.length; i < len; ++i) {
         var f = sourceFiles[i];
-        var fileSpan = new ts.TextSpan(0, f.text.length);
+        var fileSpan = ts.createTextSpan(0, f.text.length);
 
         var syntacticClassifications = ls.getSyntacticClassifications(f.filename, fileSpan);
         var convertedSyntactic = convertClassifications(syntacticClassifications, f, /*addHyperlinks*/ true);
@@ -235,8 +235,8 @@ function analyze(libFileName: string, files: string[], outputFolder: string): Pr
             }
 
             var classification = c.classificationType;
-            var start = c.textSpan.start();
-            var length = c.textSpan.length();
+            var start = c.textSpan.start;
+            var length = c.textSpan.length;
             var hyperlinks: Hyperlink[];
 
             var definitionSymbolId: string;
@@ -305,7 +305,7 @@ function analyze(libFileName: string, files: string[], outputFolder: string): Pr
                     hyperlinks = [];
                 }
 
-                var defStart = d.textSpan.start();
+                var defStart = d.textSpan.start;
                 var defFile = program.getSourceFile(d.fileName);
 
                 var token = ts.getTouchingToken(defFile, defStart, /*includeItemAtEndPosition*/ undefined);
@@ -321,7 +321,7 @@ function analyze(libFileName: string, files: string[], outputFolder: string): Pr
                 }
                 var link: Hyperlink = {
                     sourceFile: d.fileName,
-                    start: d.textSpan.start(),
+                    start: d.textSpan.start,
                     symbolId: makeSymbolId(d.fileName, defStart)
                 };
                 hyperlinks.push(link);

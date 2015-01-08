@@ -2,11 +2,13 @@
 /// <reference path="..\..\..\src\compiler\parser.ts" />
 
 module ts {
+    ts.disableIncrementalParsing = false;
+
     function withChange(text: IScriptSnapshot, start: number, length: number, newText: string): { text: IScriptSnapshot; textChangeRange: TextChangeRange; } {
         var contents = text.getText(0, text.getLength());
         var newContents = contents.substr(0, start) + newText + contents.substring(start + length);
 
-        return { text: ScriptSnapshot.fromString(newContents), textChangeRange: new TextChangeRange(new TextSpan(start, length), newText.length) }
+        return { text: ScriptSnapshot.fromString(newContents), textChangeRange: createTextChangeRange(createTextSpan(start, length), newText.length) }
     }
 
     function withInsert(text: IScriptSnapshot, start: number, newText: string): { text: IScriptSnapshot; textChangeRange: TextChangeRange; } {
@@ -18,7 +20,27 @@ module ts {
     }
 
     function createTree(text: IScriptSnapshot, version: string) {
-        return createLanguageServiceSourceFile(/*fileName:*/ "", text, ScriptTarget.ES5, version, /*isOpen:*/ true, /*setNodeParents:*/ true)
+        return createLanguageServiceSourceFile(/*fileName:*/ "", text, ScriptTarget.Latest, version, /*isOpen:*/ true, /*setNodeParents:*/ true)
+    }
+
+    function assertSameDiagnostics(file1: SourceFile, file2: SourceFile) {
+        var diagnostics1 = file1.getSyntacticDiagnostics();
+        var diagnostics2 = file2.getSyntacticDiagnostics();
+
+        assert.equal(diagnostics1.length, diagnostics2.length, "diagnostics1.length !== diagnostics2.length");
+        for (var i = 0, n = diagnostics1.length; i < n; i++) {
+            var d1 = diagnostics1[i];
+            var d2 = diagnostics2[i];
+
+            assert.equal(d1.file, file1, "d1.file !== file1");
+            assert.equal(d2.file, file2, "d2.file !== file2");
+            assert.equal(d1.start, d2.start, "d1.start !== d2.start");
+            assert.equal(d1.length, d2.length, "d1.length !== d2.length");
+            assert.equal(d1.messageText, d2.messageText, "d1.messageText !== d2.messageText");
+            assert.equal(d1.category, d2.category, "d1.category !== d2.category");
+            assert.equal(d1.code, d2.code, "d1.code !== d2.code");
+            assert.equal(d1.isEarly, d2.isEarly, "d1.isEarly !== d2.isEarly");
+        }
     }
 
     // NOTE: 'reusedElements' is the expected count of elements reused from the old tree to the new
@@ -35,14 +57,20 @@ module ts {
         Utils.assertInvariants(newTree, /*parent:*/ undefined);
 
         // Create a tree for the new text, in an incremental fashion.
-        var incrementalNewTree = oldTree.update(newText, oldTree.version + ".", /*isOpen:*/ true, textChangeRange);
+        var incrementalNewTree = updateLanguageServiceSourceFile(oldTree, newText, oldTree.version + ".", /*isOpen:*/ true, textChangeRange);
         Utils.assertInvariants(incrementalNewTree, /*parent:*/ undefined);
 
         // We should get the same tree when doign a full or incremental parse.
         Utils.assertStructuralEquals(newTree, incrementalNewTree);
 
+        // We should also get the exact same set of diagnostics.
+        assertSameDiagnostics(newTree, incrementalNewTree);
+
         // There should be no reused nodes between two trees that are fully parsed.
         assert.isTrue(reusedElements(oldTree, newTree) === 0);
+
+        assert.equal(newTree.filename, incrementalNewTree.filename, "newTree.filename !== incrementalNewTree.filename");
+        assert.equal(newTree.text, incrementalNewTree.text, "newTree.filename !== incrementalNewTree.filename");
 
         if (expectedReusedElements !== -1) {
             var actualReusedCount = reusedElements(oldTree, incrementalNewTree);
@@ -110,7 +138,7 @@ module ts {
             var semicolonIndex = source.indexOf(";");
             var newTextAndChange = withInsert(oldText, semicolonIndex, " + 1");
 
-            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 0);
+            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 8);
         });
 
         it('Deleting from method',() => {
@@ -126,7 +154,7 @@ module ts {
             var oldText = ScriptSnapshot.fromString(source);
             var newTextAndChange = withDelete(oldText, index, "+ 1".length);
 
-            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 0);
+            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 8);
         });
 
         it('Regular expression 1',() => {
@@ -146,7 +174,7 @@ module ts {
             var oldText = ScriptSnapshot.fromString(source);
             var newTextAndChange = withInsert(oldText, semicolonIndex, "/");
 
-            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 0);
+            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 4);
         });
 
         it('Comment 1',() => {
@@ -184,7 +212,7 @@ module ts {
             var oldText = ScriptSnapshot.fromString(source);
             var newTextAndChange = withInsert(oldText, index, "*");
 
-            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 0);
+            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 4);
         });
 
         it('Parameter 1',() => {
@@ -199,7 +227,7 @@ module ts {
             var oldText = ScriptSnapshot.fromString(source);
             var newTextAndChange = withInsert(oldText, semicolonIndex, " + 1");
 
-            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 0);
+            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 8);
         });
 
         it('Type member 1',() => {
@@ -210,7 +238,7 @@ module ts {
             var oldText = ScriptSnapshot.fromString(source);
             var newTextAndChange = withInsert(oldText, index, "?");
 
-            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 0);
+            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 14);
         });
 
         it('Enum element 1',() => {
@@ -221,7 +249,7 @@ module ts {
             var oldText = ScriptSnapshot.fromString(source);
             var newTextAndChange = withChange(oldText, index, 2, "+");
 
-            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 0);
+            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 21);
         });
 
         it('Strict mode 1',() => {
@@ -518,7 +546,7 @@ module ts {
             var index = source.lastIndexOf(";");
             var newTextAndChange = withDelete(oldText, index, 1);
 
-            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 0);
+            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 4);
         });
 
         it('Edit after empty type parameter list',() => {
@@ -552,7 +580,7 @@ var o2 = { set Foo(val:number) { } };";
             var index = source.indexOf("set");
             var newTextAndChange = withInsert(oldText, index, "public ");
 
-            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 0);
+            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 6);
         });
 
         it('Insert parameter ahead of parameter',() => {
@@ -568,7 +596,7 @@ constructor(name) { }\
             var index = source.indexOf("100");
             var newTextAndChange = withInsert(oldText, index, "'1', ");
 
-            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 0);
+            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 5);
         });
 
         it('Insert declare modifier before module',() => {
@@ -581,7 +609,7 @@ module m3 { }\
             var index = 0;
             var newTextAndChange = withInsert(oldText, index, "declare ");
 
-            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 0);
+            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 3);
         });
 
         it('Insert function above arrow function with comment',() => {
@@ -637,7 +665,98 @@ module m3 { }\
             var oldText = ScriptSnapshot.fromString(source);
             var newTextAndChange = withInsert(oldText, 0, "");
 
+            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 7);
+        });
+
+        it('Class to interface',() => {
+            var source = "class A { public M1() { } public M2() { } public M3() { } p1 = 0; p2 = 0; p3 = 0 }"
+
+            var oldText = ScriptSnapshot.fromString(source);
+            var newTextAndChange = withChange(oldText, 0, "class".length, "interface");
+
             compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 0);
+        });
+
+        it('Interface to class',() => {
+            var source = "interface A { M1?(); M2?(); M3?(); p1?; p2?; p3? }"
+
+            var oldText = ScriptSnapshot.fromString(source);
+            var newTextAndChange = withChange(oldText, 0, "interface".length, "class");
+
+            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 0);
+        });
+
+        it('Surrounding function declarations with block',() => {
+            debugger;
+            var source = "declare function F1() { } export function F2() { } declare export function F3() { }"
+
+            var oldText = ScriptSnapshot.fromString(source);
+            var newTextAndChange = withInsert(oldText, 0, "{");
+
+            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 9);
+        });
+
+        it('Removing block around function declarations',() => {
+            var source = "{ declare function F1() { } export function F2() { } declare export function F3() { }"
+
+            var oldText = ScriptSnapshot.fromString(source);
+            var newTextAndChange = withDelete(oldText, 0, "{".length);
+
+            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 0);
+        });
+
+        it('Moving methods from class to object literal',() => {
+            var source = "class C { public A() { } public B() { } public C() { } }"
+
+            var oldText = ScriptSnapshot.fromString(source);
+            var newTextAndChange = withChange(oldText, 0, "class C".length, "var v =");
+
+            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 0);
+        });
+
+        it('Moving methods from object literal to class',() => {
+            var source = "var v = { public A() { } public B() { } public C() { } }"
+
+            var oldText = ScriptSnapshot.fromString(source);
+            var newTextAndChange = withChange(oldText, 0, "var v =".length, "class C");
+
+            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 4);
+        });
+
+        it('Moving index signatures from class to interface',() => {
+            var source = "class C { public [a: number]: string; public [a: number]: string; public [a: number]: string }"
+
+            var oldText = ScriptSnapshot.fromString(source);
+            var newTextAndChange = withChange(oldText, 0, "class".length, "interface");
+
+            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 18);
+        });
+
+        it('Moving index signatures from interface to class',() => {
+            var source = "interface C { public [a: number]: string; public [a: number]: string; public [a: number]: string }"
+
+            var oldText = ScriptSnapshot.fromString(source);
+            var newTextAndChange = withChange(oldText, 0, "interface".length, "class");
+
+            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 18);
+        });
+
+        it('Moving accessors from class to object literal',() => {
+            var source = "class C { public get A() { } public get B() { } public get C() { } }"
+
+            var oldText = ScriptSnapshot.fromString(source);
+            var newTextAndChange = withChange(oldText, 0, "class C".length, "var v =");
+
+            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 0);
+        });
+
+        it('Moving accessors from object literal to class',() => {
+            var source = "var v = { public get A() { } public get B() { } public get C() { } }"
+
+            var oldText = ScriptSnapshot.fromString(source);
+            var newTextAndChange = withChange(oldText, 0, "var v =".length, "class C");
+
+            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 4);
         });
 
         // Simulated typing tests.

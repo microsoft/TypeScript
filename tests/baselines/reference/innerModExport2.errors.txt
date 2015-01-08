@@ -1,12 +1,11 @@
 tests/cases/compiler/innerModExport2.ts(5,5): error TS2304: Cannot find name 'module'.
 tests/cases/compiler/innerModExport2.ts(5,12): error TS1005: ';' expected.
-tests/cases/compiler/innerModExport2.ts(7,9): error TS1129: Statement expected.
-tests/cases/compiler/innerModExport2.ts(15,5): error TS1148: Cannot compile external modules unless the '--module' flag is provided.
-tests/cases/compiler/innerModExport2.ts(18,1): error TS1128: Declaration or statement expected.
+tests/cases/compiler/innerModExport2.ts(7,20): error TS2395: Individual declarations in merged declaration export_var must be all exported or all local.
+tests/cases/compiler/innerModExport2.ts(13,9): error TS2395: Individual declarations in merged declaration export_var must be all exported or all local.
 tests/cases/compiler/innerModExport2.ts(20,7): error TS2339: Property 'NonExportFunc' does not exist on type 'typeof Outer'.
 
 
-==== tests/cases/compiler/innerModExport2.ts (6 errors) ====
+==== tests/cases/compiler/innerModExport2.ts (5 errors) ====
     module Outer {
     
         // inner mod 1
@@ -18,23 +17,21 @@ tests/cases/compiler/innerModExport2.ts(20,7): error TS2339: Property 'NonExport
 !!! error TS1005: ';' expected.
             var non_export_var = 0;
             export var export_var = 1;
-            ~~~~~~
-!!! error TS1129: Statement expected.
+                       ~~~~~~~~~~
+!!! error TS2395: Individual declarations in merged declaration export_var must be all exported or all local.
     
             function NonExportFunc() { return 0; }
     
             export function ExportFunc() { return 0; }
         }
         var export_var: number;
+            ~~~~~~~~~~
+!!! error TS2395: Individual declarations in merged declaration export_var must be all exported or all local.
     
         export var outer_var_export = 0;
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS1148: Cannot compile external modules unless the '--module' flag is provided.
         export function outerFuncExport() { return 0; }
     
     }
-    ~
-!!! error TS1128: Declaration or statement expected.
     
     Outer.NonExportFunc();
           ~~~~~~~~~~~~~

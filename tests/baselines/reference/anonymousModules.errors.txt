@@ -1,29 +1,18 @@
 tests/cases/compiler/anonymousModules.ts(1,1): error TS2304: Cannot find name 'module'.
 tests/cases/compiler/anonymousModules.ts(1,8): error TS1005: ';' expected.
-tests/cases/compiler/anonymousModules.ts(2,2): error TS1129: Statement expected.
-tests/cases/compiler/anonymousModules.ts(2,2): error TS1148: Cannot compile external modules unless the '--module' flag is provided.
 tests/cases/compiler/anonymousModules.ts(4,2): error TS2304: Cannot find name 'module'.
 tests/cases/compiler/anonymousModules.ts(4,9): error TS1005: ';' expected.
-tests/cases/compiler/anonymousModules.ts(5,3): error TS1129: Statement expected.
-tests/cases/compiler/anonymousModules.ts(5,14): error TS2395: Individual declarations in merged declaration bar must be all exported or all local.
-tests/cases/compiler/anonymousModules.ts(6,2): error TS1128: Declaration or statement expected.
-tests/cases/compiler/anonymousModules.ts(8,6): error TS2395: Individual declarations in merged declaration bar must be all exported or all local.
 tests/cases/compiler/anonymousModules.ts(10,2): error TS2304: Cannot find name 'module'.
 tests/cases/compiler/anonymousModules.ts(10,9): error TS1005: ';' expected.
-tests/cases/compiler/anonymousModules.ts(13,1): error TS1128: Declaration or statement expected.
 
 
-==== tests/cases/compiler/anonymousModules.ts (13 errors) ====
+==== tests/cases/compiler/anonymousModules.ts (6 errors) ====
     module {
     ~~~~~~
 !!! error TS2304: Cannot find name 'module'.
            ~
 !!! error TS1005: ';' expected.
     	export var foo = 1;
-    	~~~~~~
-!!! error TS1129: Statement expected.
-    	~~~~~~~~~~~~~~~~~~~
-!!! error TS1148: Cannot compile external modules unless the '--module' flag is provided.
     
     	module {
     	~~~~~~
@@ -31,17 +20,9 @@ tests/cases/compiler/anonymousModules.ts(13,1): error TS1128: Declaration or sta
     	       ~
 !!! error TS1005: ';' expected.
     		export var bar = 1;
-    		~~~~~~
-!!! error TS1129: Statement expected.
-    		           ~~~
-!!! error TS2395: Individual declarations in merged declaration bar must be all exported or all local.
     	}
-    	~
-!!! error TS1128: Declaration or statement expected.
     
     	var bar = 2;
-    	    ~~~
-!!! error TS2395: Individual declarations in merged declaration bar must be all exported or all local.
     
     	module {
     	~~~~~~
@@ -51,5 +32,3 @@ tests/cases/compiler/anonymousModules.ts(13,1): error TS1128: Declaration or sta
     		var x = bar;
     	}
     }
-    ~
-!!! error TS1128: Declaration or statement expected.

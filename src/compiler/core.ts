@@ -23,10 +23,10 @@ module ts {
 
     export interface StringSet extends Map<any> { }
 
-    export function forEach<T, U>(array: T[], callback: (element: T) => U): U {
+    export function forEach<T, U>(array: T[], callback: (element: T, index: number) => U): U {
         if (array) {
             for (var i = 0, len = array.length; i < len; i++) {
-                var result = callback(array[i]);
+                var result = callback(array[i], i);
                 if (result) {
                     return result;
                 }
@@ -206,6 +206,12 @@ module ts {
         }
 
         return result;
+    }
+
+    export function copyMap<T>(source: Map<T>, target: Map<T>): void {
+        for (var p in source) {
+            target[p] = source[p];
+        }
     }
 
     /**

@@ -16,8 +16,6 @@
 
 /// <reference path='..\services\services.ts' />
 /// <reference path='..\services\shims.ts' />
-/// <reference path='..\compiler\core.ts' />
-/// <reference path='..\compiler\sys.ts' />
 /// <reference path='external\mocha.d.ts'/>
 /// <reference path='external\chai.d.ts'/>
 /// <reference path='sourceMapRecorder.ts'/>
@@ -287,6 +285,29 @@ module Utils {
             });
 
             return o;
+        }
+    }
+
+    export function assertDiagnosticsEquals(array1: ts.Diagnostic[], array2: ts.Diagnostic[]) {
+        if (array1 === array2) {
+            return;
+        }
+
+        assert(array1, "array1");
+        assert(array2, "array2");
+
+        assert.equal(array1.length, array2.length, "array1.length !== array2.length");
+
+        for (var i = 0, n = array1.length; i < n; i++) {
+            var d1 = array1[i];
+            var d2 = array2[i];
+
+            assert.equal(d1.start, d2.start, "d1.start !== d2.start");
+            assert.equal(d1.length, d2.length, "d1.length !== d2.length");
+            assert.equal(d1.messageText, d2.messageText, "d1.messageText !== d2.messageText");
+            assert.equal(d1.category, d2.category, "d1.category !== d2.category");
+            assert.equal(d1.code, d2.code, "d1.code !== d2.code");
+            assert.equal(d1.isEarly, d2.isEarly, "d1.isEarly !== d2.isEarly");
         }
     }
 
@@ -886,7 +907,7 @@ module Harness {
 
             public compileFiles(inputFiles: { unitName: string; content: string }[],
                 otherFiles: { unitName: string; content: string }[],
-                onComplete: (result: CompilerResult, checker: ts.TypeChecker) => void,
+                onComplete: (result: CompilerResult, program: ts.Program) => void,
                 settingsCallback?: (settings: ts.CompilerOptions) => void,
                 options?: ts.CompilerOptions) {
 
@@ -1045,14 +1066,14 @@ module Harness {
                     options.target,
                     useCaseSensitiveFileNames));
 
-                var checker = program.getTypeChecker(/*fullTypeCheckMode*/ true);
+                var checker = program.getTypeChecker(/*produceDiagnostics*/ true);
 
-                var isEmitBlocked = checker.isEmitBlocked();
+                var isEmitBlocked = program.isEmitBlocked();
 
                 // only emit if there weren't parse errors
                 var emitResult: ts.EmitResult;
                 if (!isEmitBlocked) {
-                    emitResult = checker.emitFiles();
+                    emitResult = program.emitFiles();
                 }
 
                 var errors: HarnessDiagnostic[] = [];
@@ -1063,7 +1084,7 @@ module Harness {
                 this.lastErrors = errors;
 
                 var result = new CompilerResult(fileOutputs, errors, program, ts.sys.getCurrentDirectory(), emitResult ? emitResult.sourceMaps : undefined);
-                onComplete(result, checker);
+                onComplete(result, program);
 
                 // reset what newline means in case the last test changed it
                 ts.sys.newLine = '\r\n';
@@ -1106,29 +1127,27 @@ module Harness {
                     }
 
                     function findResultCodeFile(fileName: string) {
-                        var dTsFileName = ts.forEach(result.program.getSourceFiles(), sourceFile => {
-                            if (sourceFile.filename === fileName) {
-                                // Is this file going to be emitted separately
-                                var sourceFileName: string;
-                                if (ts.isExternalModule(sourceFile) || !options.out) {
-                                    if (options.outDir) {
-                                        var sourceFilePath = ts.getNormalizedAbsolutePath(sourceFile.filename, result.currentDirectoryForProgram);
-                                        sourceFilePath = sourceFilePath.replace(result.program.getCommonSourceDirectory(), "");
-                                        sourceFileName = ts.combinePaths(options.outDir, sourceFilePath);
-                                    }
-                                    else {
-                                        sourceFileName = sourceFile.filename;
-                                    }
-                                }
-                                else {
-                                    // Goes to single --out file
-                                    sourceFileName = options.out;
-                                }
-
-                                return ts.removeFileExtension(sourceFileName) + ".d.ts";
+                        var sourceFile = result.program.getSourceFile(fileName);
+                        assert(sourceFile, "Program has no source file with name '" + fileName + "'");
+                        // Is this file going to be emitted separately
+                        var sourceFileName: string;
+                        if (ts.isExternalModule(sourceFile) || !options.out) {
+                            if (options.outDir) {
+                                var sourceFilePath = ts.getNormalizedAbsolutePath(sourceFile.filename, result.currentDirectoryForProgram);
+                                sourceFilePath = sourceFilePath.replace(result.program.getCommonSourceDirectory(), "");
+                                sourceFileName = ts.combinePaths(options.outDir, sourceFilePath);
                             }
-                        });
+                            else {
+                                sourceFileName = sourceFile.filename;
+                            }
+                        }
+                        else {
+                            // Goes to single --out file
+                            sourceFileName = options.out;
+                        }
 
+                        var dTsFileName = ts.removeFileExtension(sourceFileName) + ".d.ts";
+                        
                         return ts.forEach(result.declFilesCode, declFile => declFile.fileName === dTsFileName ? declFile : undefined);
                     }
 
@@ -1196,7 +1215,7 @@ module Harness {
 
             // Report global errors
             var globalErrors = diagnostics.filter(err => !err.filename);
-            globalErrors.forEach(err => outputErrorText(err));
+            globalErrors.forEach(outputErrorText);
 
             // 'merge' the lines of each input file with any errors associated with it
             inputFiles.filter(f => f.content !== undefined).forEach(inputFile => {

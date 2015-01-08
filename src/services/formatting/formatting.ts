@@ -154,8 +154,6 @@ module ts.formatting {
                 return body && body.kind === SyntaxKind.Block && rangeContainsRange((<Block>body).statements, node);
             case SyntaxKind.SourceFile:
             case SyntaxKind.Block:
-            case SyntaxKind.TryBlock:
-            case SyntaxKind.FinallyBlock:
             case SyntaxKind.ModuleBlock:
                 return rangeContainsRange((<Block>parent).statements, node);
             case SyntaxKind.CatchClause:
@@ -875,7 +873,7 @@ module ts.formatting {
         }
 
         function newTextChange(start: number, len: number, newText: string): TextChange {
-            return { span: new TextSpan(start, len), newText }
+            return { span: createTextSpan(start, len), newText }
         }
 
         function recordDelete(start: number, len: number) {
@@ -939,9 +937,6 @@ module ts.formatting {
     function isSomeBlock(kind: SyntaxKind): boolean {
         switch (kind) {
             case SyntaxKind.Block:
-            case SyntaxKind.Block:
-            case SyntaxKind.TryBlock:
-            case SyntaxKind.FinallyBlock:
             case SyntaxKind.ModuleBlock:
                 return true;
         }

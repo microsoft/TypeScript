@@ -32,8 +32,8 @@ module Harness.LanguageService {
             // Store edit range + new length of script
             this.editRanges.push({
                 length: this.content.length,
-                textChangeRange: new ts.TextChangeRange(
-                    ts.TextSpan.fromBounds(minChar, limChar), newText.length)
+                textChangeRange: ts.createTextChangeRange(
+                    ts.createTextSpanFromBounds(minChar, limChar), newText.length)
             });
 
             // Update version #
@@ -43,14 +43,14 @@ module Harness.LanguageService {
         public getTextChangeRangeBetweenVersions(startVersion: number, endVersion: number): ts.TextChangeRange {
             if (startVersion === endVersion) {
                 // No edits!
-                return ts.TextChangeRange.unchanged;
+                return ts.unchangedTextChangeRange;
             }
 
             var initialEditRangeIndex = this.editRanges.length - (this.version - startVersion);
             var lastEditRangeIndex = this.editRanges.length - (this.version - endVersion);
 
             var entries = this.editRanges.slice(initialEditRangeIndex, lastEditRangeIndex);
-            return ts.TextChangeRange.collapseChangesAcrossMultipleVersions(entries.map(e => e.textChangeRange));
+            return ts.collapseTextChangeRangesAcrossMultipleVersions(entries.map(e => e.textChangeRange));
         }
     }
 
@@ -87,7 +87,7 @@ module Harness.LanguageService {
                 return null;
             }
 
-            return JSON.stringify({ span: { start: range.span().start(), length: range.span().length() }, newLength: range.newLength() });
+            return JSON.stringify({ span: { start: range.span.start, length: range.span.length }, newLength: range.newLength });
         }
     }
 
@@ -126,7 +126,7 @@ module Harness.LanguageService {
             isOpen: boolean,
             textChangeRange: ts.TextChangeRange
             ): ts.SourceFile {
-            return document.update(scriptSnapshot, version, isOpen, textChangeRange);
+            return ts.updateLanguageServiceSourceFile(document, scriptSnapshot, version, isOpen, textChangeRange);
         }
 
         public releaseDocument(fileName: string, compilationSettings: ts.CompilerOptions): void {
@@ -346,9 +346,9 @@ module Harness.LanguageService {
 
             for (var i = edits.length - 1; i >= 0; i--) {
                 var edit = edits[i];
-                var prefix = result.substring(0, edit.span.start());
+                var prefix = result.substring(0, edit.span.start);
                 var middle = edit.newText;
-                var suffix = result.substring(edit.span.end());
+                var suffix = result.substring(ts.textSpanEnd(edit.span));
                 result = prefix + middle + suffix;
             }
             return result;
@@ -367,7 +367,7 @@ module Harness.LanguageService {
             }
 
             var temp = mapEdits(edits).sort(function (a, b) {
-                var result = a.edit.span.start() - b.edit.span.start();
+                var result = a.edit.span.start - b.edit.span.start;
                 if (result === 0)
                     result = a.index - b.index;
                 return result;
@@ -386,7 +386,7 @@ module Harness.LanguageService {
                 }
                 var nextEdit = temp[next].edit;
 
-                var gap = nextEdit.span.start() - currentEdit.span.end();
+                var gap = nextEdit.span.start - ts.textSpanEnd(currentEdit.span);
 
                 // non-overlapping edits
                 if (gap >= 0) {
@@ -398,7 +398,7 @@ module Harness.LanguageService {
  
                 // overlapping edits: for now, we only support ignoring an next edit 
                 // entirely contained in the current edit.
-                if (currentEdit.span.end() >= nextEdit.span.end()) {
+                if (ts.textSpanEnd(currentEdit.span) >= ts.textSpanEnd(nextEdit.span)) {
                     next++;
                     continue;
                 }
