@@ -2360,7 +2360,7 @@ module ts {
             function isCompletionListBlocker(previousToken: Node): boolean {
                 var start = new Date().getTime();
                 var result = isInStringOrRegularExpressionOrTemplateLiteral(previousToken) ||
-                   // isIdentifierDefinitionLocation(previousToken) ||
+                    isIdentifierDefinitionLocation(previousToken) ||
                     isRightOfIllegalDot(previousToken);
                 host.log("getCompletionsAtPosition: isCompletionListBlocker: " + (new Date().getTime() - start));
                 return result;
@@ -2450,7 +2450,7 @@ module ts {
                         case SyntaxKind.PrivateKeyword:
                         case SyntaxKind.StaticKeyword:
                         case SyntaxKind.DotDotDotToken:
-                            return containingNodeKind === SyntaxKind.Parameter;
+                            return containingNodeKind === SyntaxKind.Parameter || containingNodeKind === SyntaxKind.PropertyDeclaration;
 
                         case SyntaxKind.ClassKeyword:
                         case SyntaxKind.ModuleKeyword:
