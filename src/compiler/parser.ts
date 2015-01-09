@@ -13,11 +13,15 @@ module ts {
     }
 
     function visitNode<T>(cbNode: (node: Node) => T, node: Node): T {
-        return node ? cbNode(node) : void 0;
+        if (node) {
+            return cbNode(node);
+        }
     }
 
     function visitNodeArray<T>(cbNodes: (nodes: Node[]) => T, nodes: Node[]) {
-        return nodes ? cbNodes(nodes) : void 0;
+        if (nodes) {
+            return cbNodes(nodes);
+        }
     }
 
     function visitEachNode<T>(cbNode: (node: Node) => T, nodes: Node[]) {
@@ -39,6 +43,9 @@ module ts {
         if (!node) {
             return;
         }
+        // The visitXXX functions could be written as local functions that close over the cbNode and cbNodeArray
+        // callback parameters, but that causes a closure allocation for each invocation with noticeable effects
+        // on performance.
         var visitNodes: (cb: (node: Node | Node[]) => T, nodes: Node[]) => T = cbNodeArray ? visitNodeArray : visitEachNode;
         var cbNodes = cbNodeArray || cbNode;
         switch (node.kind) {
