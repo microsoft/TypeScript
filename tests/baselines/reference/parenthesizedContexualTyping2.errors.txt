@@ -12,11 +12,10 @@ tests/cases/conformance/expressions/contextualTyping/parenthesizedContexualTypin
 tests/cases/conformance/expressions/contextualTyping/parenthesizedContexualTyping2.ts(27,44): error TS2347: Untyped function calls may not accept type arguments.
 tests/cases/conformance/expressions/contextualTyping/parenthesizedContexualTyping2.ts(28,46): error TS2347: Untyped function calls may not accept type arguments.
 tests/cases/conformance/expressions/contextualTyping/parenthesizedContexualTyping2.ts(28,114): error TS2347: Untyped function calls may not accept type arguments.
-tests/cases/conformance/expressions/contextualTyping/parenthesizedContexualTyping2.ts(30,45): error TS2349: Cannot invoke an expression whose type lacks a call signature.
-tests/cases/conformance/expressions/contextualTyping/parenthesizedContexualTyping2.ts(31,46): error TS2347: Untyped function calls may not accept type arguments.
+tests/cases/conformance/expressions/contextualTyping/parenthesizedContexualTyping2.ts(31,33): error TS2347: Untyped function calls may not accept type arguments.
 
 
-==== tests/cases/conformance/expressions/contextualTyping/parenthesizedContexualTyping2.ts (16 errors) ====
+==== tests/cases/conformance/expressions/contextualTyping/parenthesizedContexualTyping2.ts (15 errors) ====
     // These tests ensure that in cases where it may *appear* that a value has a type,
     // they actually are properly being contextually typed. The way we test this is
     // that we invoke contextually typed arguments with type arguments.
@@ -74,11 +73,9 @@ tests/cases/conformance/expressions/contextualTyping/parenthesizedContexualTypin
                                                                                                                      ~~~~~~~~~~~~~~~~~~~~
 !!! error TS2347: Untyped function calls may not accept type arguments.
     
-    var lambda1: (x: number) => number = x => { x<number>(undefined); return x; };
-                                                ~~~~~~~~~~~~~~~~~~~~
-!!! error TS2349: Cannot invoke an expression whose type lacks a call signature.
-    var lambda2: (x: number) => number = (x => { x<number>(undefined); return x; });
-                                                 ~~~~~~~~~~~~~~~~~~~~
+    var lambda1: FuncType = x => { x<number>(undefined); return x; };
+    var lambda2: FuncType = (x => { x<number>(undefined); return x; });
+                                    ~~~~~~~~~~~~~~~~~~~~
 !!! error TS2347: Untyped function calls may not accept type arguments.
     
     type ObjType = { x: (p: number) => string; y: (p: string) => number };

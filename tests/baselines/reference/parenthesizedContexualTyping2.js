@@ -28,8 +28,8 @@ var j = fun((Math.random() < 0.5 ? (x => { x<number>(undefined); return x; }) : 
 var k = fun((Math.random() < 0.5 ? (x => { x<number>(undefined); return x; }) : (x => undefined)), x => { x<number>(undefined); return x; }, 10);
 var l = fun(((Math.random() < 0.5 ? ((x => { x<number>(undefined); return x; })) : ((x => undefined)))),((x => { x<number>(undefined); return x; })), 10);
 
-var lambda1: (x: number) => number = x => { x<number>(undefined); return x; };
-var lambda2: (x: number) => number = (x => { x<number>(undefined); return x; });
+var lambda1: FuncType = x => { x<number>(undefined); return x; };
+var lambda2: FuncType = (x => { x<number>(undefined); return x; });
 
 type ObjType = { x: (p: number) => string; y: (p: string) => number };
 var obj1: ObjType = { x: x => (x, undefined), y: y => (y, undefined) };
