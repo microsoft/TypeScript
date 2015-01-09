@@ -12,43 +12,48 @@ module ts {
         return new (getNodeConstructor(kind))();
     }
 
+    function child<T>(cbNode: (node: Node) => T, node: Node): T {
+        return node ? cbNode(node) : void 0;
+    }
+
+    function children1<T>(cbNodes: (nodes: Node[]) => T, nodes: Node[]) {
+        return nodes ? cbNodes(nodes) : void 0;
+    }
+
+    function children2<T>(cbNode: (node: Node) => T, nodes: Node[]) {
+        if (nodes) {
+            for (var i = 0, len = nodes.length; i < len; i++) {
+                var result = cbNode(nodes[i])
+                if (result) {
+                    return result;
+                }
+            }
+        }
+    }
+
     // Invokes a callback for each child of the given node. The 'cbNode' callback is invoked for all child nodes
     // stored in properties. If a 'cbNodes' callback is specified, it is invoked for embedded arrays; otherwise,
     // embedded arrays are flattened and the 'cbNode' callback is invoked for each element. If a callback returns
     // a truthy value, iteration stops and that value is returned. Otherwise, undefined is returned.
     export function forEachChild<T>(node: Node, cbNode: (node: Node) => T, cbNodes?: (nodes: Node[]) => T): T {
-        function child(node: Node): T {
-            if (node) {
-                return cbNode(node);
-            }
-        }
-        function children(nodes: Node[]) {
-            if (nodes) {
-                if (cbNodes) {
-                    return cbNodes(nodes);
-                }
-
-                for (var i = 0, len = nodes.length; i < len; i++) {
-                    var result = cbNode(nodes[i])
-                    if (result) {
-                        return result;
-                    }
-                }
-
-                return undefined;
-            }
-        }
         if (!node) {
             return;
         }
+        if (cbNodes) {
+            var children = children1;
+        }
+        else {
+            cbNodes = <typeof cbNodes><Object>cbNode;
+            children = <typeof children><Object>children2;
+        }
         switch (node.kind) {
             case SyntaxKind.QualifiedName:
-                return child((<QualifiedName>node).left) ||
-                    child((<QualifiedName>node).right);
+                return child(cbNode, (<QualifiedName>node).left) ||
+                    child(cbNode, (<QualifiedName>node).right);
             case SyntaxKind.TypeParameter:
-                return child((<TypeParameterDeclaration>node).name) ||
-                    child((<TypeParameterDeclaration>node).constraint) ||
-                    child((<TypeParameterDeclaration>node).expression);
+                return child(cbNode, (<TypeParameterDeclaration>node).name) ||
+                    child(cbNode, (<TypeParameterDeclaration>node).constraint) ||
+                    child(cbNode, (<TypeParameterDeclaration>node).expression);
             case SyntaxKind.Parameter:
             case SyntaxKind.PropertyDeclaration:
             case SyntaxKind.PropertySignature:
@@ -56,22 +61,22 @@ module ts {
             case SyntaxKind.ShorthandPropertyAssignment:
             case SyntaxKind.VariableDeclaration:
             case SyntaxKind.BindingElement:
-                return children(node.modifiers) ||
-                    child((<VariableLikeDeclaration>node).propertyName) ||
-                    child((<VariableLikeDeclaration>node).dotDotDotToken) ||
-                    child((<VariableLikeDeclaration>node).name) ||
-                    child((<VariableLikeDeclaration>node).questionToken) ||
-                    child((<VariableLikeDeclaration>node).type) ||
-                    child((<VariableLikeDeclaration>node).initializer);
+                return children(cbNodes, node.modifiers) ||
+                    child(cbNode, (<VariableLikeDeclaration>node).propertyName) ||
+                    child(cbNode, (<VariableLikeDeclaration>node).dotDotDotToken) ||
+                    child(cbNode, (<VariableLikeDeclaration>node).name) ||
+                    child(cbNode, (<VariableLikeDeclaration>node).questionToken) ||
+                    child(cbNode, (<VariableLikeDeclaration>node).type) ||
+                    child(cbNode, (<VariableLikeDeclaration>node).initializer);
             case SyntaxKind.FunctionType:
             case SyntaxKind.ConstructorType:
             case SyntaxKind.CallSignature:
             case SyntaxKind.ConstructSignature:
             case SyntaxKind.IndexSignature:
-                return children(node.modifiers) ||
-                    children((<SignatureDeclaration>node).typeParameters) ||
-                    children((<SignatureDeclaration>node).parameters) ||
-                    child((<SignatureDeclaration>node).type);
+                return children(cbNodes, node.modifiers) ||
+                    children(cbNodes, (<SignatureDeclaration>node).typeParameters) ||
+                    children(cbNodes, (<SignatureDeclaration>node).parameters) ||
+                    child(cbNode, (<SignatureDeclaration>node).type);
             case SyntaxKind.MethodDeclaration:
             case SyntaxKind.MethodSignature:
             case SyntaxKind.Constructor:
@@ -80,182 +85,182 @@ module ts {
             case SyntaxKind.FunctionExpression:
             case SyntaxKind.FunctionDeclaration:
             case SyntaxKind.ArrowFunction:
-                return children(node.modifiers) ||
-                    child((<FunctionLikeDeclaration>node).asteriskToken) ||
-                    child((<FunctionLikeDeclaration>node).name) ||
-                    child((<FunctionLikeDeclaration>node).questionToken) ||
-                    children((<FunctionLikeDeclaration>node).typeParameters) ||
-                    children((<FunctionLikeDeclaration>node).parameters) ||
-                    child((<FunctionLikeDeclaration>node).type) ||
-                    child((<FunctionLikeDeclaration>node).body);
+                return children(cbNodes, node.modifiers) ||
+                    child(cbNode, (<FunctionLikeDeclaration>node).asteriskToken) ||
+                    child(cbNode, (<FunctionLikeDeclaration>node).name) ||
+                    child(cbNode, (<FunctionLikeDeclaration>node).questionToken) ||
+                    children(cbNodes, (<FunctionLikeDeclaration>node).typeParameters) ||
+                    children(cbNodes, (<FunctionLikeDeclaration>node).parameters) ||
+                    child(cbNode, (<FunctionLikeDeclaration>node).type) ||
+                    child(cbNode, (<FunctionLikeDeclaration>node).body);
             case SyntaxKind.TypeReference:
-                return child((<TypeReferenceNode>node).typeName) ||
-                    children((<TypeReferenceNode>node).typeArguments);
+                return child(cbNode, (<TypeReferenceNode>node).typeName) ||
+                    children(cbNodes, (<TypeReferenceNode>node).typeArguments);
             case SyntaxKind.TypeQuery:
-                return child((<TypeQueryNode>node).exprName);
+                return child(cbNode, (<TypeQueryNode>node).exprName);
             case SyntaxKind.TypeLiteral:
-                return children((<TypeLiteralNode>node).members);
+                return children(cbNodes, (<TypeLiteralNode>node).members);
             case SyntaxKind.ArrayType:
-                return child((<ArrayTypeNode>node).elementType);
+                return child(cbNode, (<ArrayTypeNode>node).elementType);
             case SyntaxKind.TupleType:
-                return children((<TupleTypeNode>node).elementTypes);
+                return children(cbNodes, (<TupleTypeNode>node).elementTypes);
             case SyntaxKind.UnionType:
-                return children((<UnionTypeNode>node).types);
+                return children(cbNodes, (<UnionTypeNode>node).types);
             case SyntaxKind.ParenthesizedType:
-                return child((<ParenthesizedTypeNode>node).type);
+                return child(cbNode, (<ParenthesizedTypeNode>node).type);
             case SyntaxKind.ObjectBindingPattern:
             case SyntaxKind.ArrayBindingPattern:
-                return children((<BindingPattern>node).elements);
+                return children(cbNodes, (<BindingPattern>node).elements);
             case SyntaxKind.ArrayLiteralExpression:
-                return children((<ArrayLiteralExpression>node).elements);
+                return children(cbNodes, (<ArrayLiteralExpression>node).elements);
             case SyntaxKind.ObjectLiteralExpression:
-                return children((<ObjectLiteralExpression>node).properties);
+                return children(cbNodes, (<ObjectLiteralExpression>node).properties);
             case SyntaxKind.PropertyAccessExpression:
-                return child((<PropertyAccessExpression>node).expression) ||
-                    child((<PropertyAccessExpression>node).name);
+                return child(cbNode, (<PropertyAccessExpression>node).expression) ||
+                    child(cbNode, (<PropertyAccessExpression>node).name);
             case SyntaxKind.ElementAccessExpression:
-                return child((<ElementAccessExpression>node).expression) ||
-                    child((<ElementAccessExpression>node).argumentExpression);
+                return child(cbNode, (<ElementAccessExpression>node).expression) ||
+                    child(cbNode, (<ElementAccessExpression>node).argumentExpression);
             case SyntaxKind.CallExpression:
             case SyntaxKind.NewExpression:
-                return child((<CallExpression>node).expression) ||
-                    children((<CallExpression>node).typeArguments) ||
-                    children((<CallExpression>node).arguments);
+                return child(cbNode, (<CallExpression>node).expression) ||
+                    children(cbNodes, (<CallExpression>node).typeArguments) ||
+                    children(cbNodes, (<CallExpression>node).arguments);
             case SyntaxKind.TaggedTemplateExpression:
-                return child((<TaggedTemplateExpression>node).tag) ||
-                    child((<TaggedTemplateExpression>node).template);
+                return child(cbNode, (<TaggedTemplateExpression>node).tag) ||
+                    child(cbNode, (<TaggedTemplateExpression>node).template);
             case SyntaxKind.TypeAssertionExpression:
-                return child((<TypeAssertion>node).type) ||
-                    child((<TypeAssertion>node).expression);
+                return child(cbNode, (<TypeAssertion>node).type) ||
+                    child(cbNode, (<TypeAssertion>node).expression);
             case SyntaxKind.ParenthesizedExpression:
-                return child((<ParenthesizedExpression>node).expression);
+                return child(cbNode, (<ParenthesizedExpression>node).expression);
             case SyntaxKind.DeleteExpression:
-                return child((<DeleteExpression>node).expression);
+                return child(cbNode, (<DeleteExpression>node).expression);
             case SyntaxKind.TypeOfExpression:
-                return child((<TypeOfExpression>node).expression);
+                return child(cbNode, (<TypeOfExpression>node).expression);
             case SyntaxKind.VoidExpression:
-                return child((<VoidExpression>node).expression);
+                return child(cbNode, (<VoidExpression>node).expression);
             case SyntaxKind.PrefixUnaryExpression:
-                return child((<PrefixUnaryExpression>node).operand);
+                return child(cbNode, (<PrefixUnaryExpression>node).operand);
             case SyntaxKind.YieldExpression:
-                return child((<YieldExpression>node).asteriskToken) ||
-                    child((<YieldExpression>node).expression);
+                return child(cbNode, (<YieldExpression>node).asteriskToken) ||
+                    child(cbNode, (<YieldExpression>node).expression);
             case SyntaxKind.PostfixUnaryExpression:
-                return child((<PostfixUnaryExpression>node).operand);
+                return child(cbNode, (<PostfixUnaryExpression>node).operand);
             case SyntaxKind.BinaryExpression:
-                return child((<BinaryExpression>node).left) ||
-                    child((<BinaryExpression>node).right);
+                return child(cbNode, (<BinaryExpression>node).left) ||
+                    child(cbNode, (<BinaryExpression>node).right);
             case SyntaxKind.ConditionalExpression:
-                return child((<ConditionalExpression>node).condition) ||
-                    child((<ConditionalExpression>node).whenTrue) ||
-                    child((<ConditionalExpression>node).whenFalse);
+                return child(cbNode, (<ConditionalExpression>node).condition) ||
+                    child(cbNode, (<ConditionalExpression>node).whenTrue) ||
+                    child(cbNode, (<ConditionalExpression>node).whenFalse);
             case SyntaxKind.SpreadElementExpression:
-                return child((<SpreadElementExpression>node).expression);
+                return child(cbNode, (<SpreadElementExpression>node).expression);
             case SyntaxKind.Block:
             case SyntaxKind.ModuleBlock:
-                return children((<Block>node).statements);
+                return children(cbNodes, (<Block>node).statements);
             case SyntaxKind.SourceFile:
-                return children((<SourceFile>node).statements) ||
-                    child((<SourceFile>node).endOfFileToken);
+                return children(cbNodes, (<SourceFile>node).statements) ||
+                    child(cbNode, (<SourceFile>node).endOfFileToken);
             case SyntaxKind.VariableStatement:
-                return children(node.modifiers) ||
-                    child((<VariableStatement>node).declarationList);
+                return children(cbNodes, node.modifiers) ||
+                    child(cbNode, (<VariableStatement>node).declarationList);
             case SyntaxKind.VariableDeclarationList:
-                return children((<VariableDeclarationList>node).declarations);
+                return children(cbNodes, (<VariableDeclarationList>node).declarations);
             case SyntaxKind.ExpressionStatement:
-                return child((<ExpressionStatement>node).expression);
+                return child(cbNode, (<ExpressionStatement>node).expression);
             case SyntaxKind.IfStatement:
-                return child((<IfStatement>node).expression) ||
-                    child((<IfStatement>node).thenStatement) ||
-                    child((<IfStatement>node).elseStatement);
+                return child(cbNode, (<IfStatement>node).expression) ||
+                    child(cbNode, (<IfStatement>node).thenStatement) ||
+                    child(cbNode, (<IfStatement>node).elseStatement);
             case SyntaxKind.DoStatement:
-                return child((<DoStatement>node).statement) ||
-                    child((<DoStatement>node).expression);
+                return child(cbNode, (<DoStatement>node).statement) ||
+                    child(cbNode, (<DoStatement>node).expression);
             case SyntaxKind.WhileStatement:
-                return child((<WhileStatement>node).expression) ||
-                    child((<WhileStatement>node).statement);
+                return child(cbNode, (<WhileStatement>node).expression) ||
+                    child(cbNode, (<WhileStatement>node).statement);
             case SyntaxKind.ForStatement:
-                return child((<ForStatement>node).initializer) ||
-                    child((<ForStatement>node).condition) ||
-                    child((<ForStatement>node).iterator) ||
-                    child((<ForStatement>node).statement);
+                return child(cbNode, (<ForStatement>node).initializer) ||
+                    child(cbNode, (<ForStatement>node).condition) ||
+                    child(cbNode, (<ForStatement>node).iterator) ||
+                    child(cbNode, (<ForStatement>node).statement);
             case SyntaxKind.ForInStatement:
-                return child((<ForInStatement>node).initializer) ||
-                    child((<ForInStatement>node).expression) ||
-                    child((<ForInStatement>node).statement);
+                return child(cbNode, (<ForInStatement>node).initializer) ||
+                    child(cbNode, (<ForInStatement>node).expression) ||
+                    child(cbNode, (<ForInStatement>node).statement);
             case SyntaxKind.ContinueStatement:
             case SyntaxKind.BreakStatement:
-                return child((<BreakOrContinueStatement>node).label);
+                return child(cbNode, (<BreakOrContinueStatement>node).label);
             case SyntaxKind.ReturnStatement:
-                return child((<ReturnStatement>node).expression);
+                return child(cbNode, (<ReturnStatement>node).expression);
             case SyntaxKind.WithStatement:
-                return child((<WithStatement>node).expression) ||
-                    child((<WithStatement>node).statement);
+                return child(cbNode, (<WithStatement>node).expression) ||
+                    child(cbNode, (<WithStatement>node).statement);
             case SyntaxKind.SwitchStatement:
-                return child((<SwitchStatement>node).expression) ||
-                    children((<SwitchStatement>node).clauses);
+                return child(cbNode, (<SwitchStatement>node).expression) ||
+                    children(cbNodes, (<SwitchStatement>node).clauses);
             case SyntaxKind.CaseClause:
-                return child((<CaseClause>node).expression) ||
-                    children((<CaseClause>node).statements);
+                return child(cbNode, (<CaseClause>node).expression) ||
+                    children(cbNodes, (<CaseClause>node).statements);
             case SyntaxKind.DefaultClause:
-                return children((<DefaultClause>node).statements);
+                return children(cbNodes, (<DefaultClause>node).statements);
             case SyntaxKind.LabeledStatement:
-                return child((<LabeledStatement>node).label) ||
-                    child((<LabeledStatement>node).statement);
+                return child(cbNode, (<LabeledStatement>node).label) ||
+                    child(cbNode, (<LabeledStatement>node).statement);
             case SyntaxKind.ThrowStatement:
-                return child((<ThrowStatement>node).expression);
+                return child(cbNode, (<ThrowStatement>node).expression);
             case SyntaxKind.TryStatement:
-                return child((<TryStatement>node).tryBlock) ||
-                    child((<TryStatement>node).catchClause) ||
-                    child((<TryStatement>node).finallyBlock);
+                return child(cbNode, (<TryStatement>node).tryBlock) ||
+                    child(cbNode, (<TryStatement>node).catchClause) ||
+                    child(cbNode, (<TryStatement>node).finallyBlock);
             case SyntaxKind.CatchClause:
-                return child((<CatchClause>node).name) ||
-                    child((<CatchClause>node).type) ||
-                    child((<CatchClause>node).block);
+                return child(cbNode, (<CatchClause>node).name) ||
+                    child(cbNode, (<CatchClause>node).type) ||
+                    child(cbNode, (<CatchClause>node).block);
             case SyntaxKind.ClassDeclaration:
-                return children(node.modifiers) ||
-                    child((<ClassDeclaration>node).name) ||
-                    children((<ClassDeclaration>node).typeParameters) ||
-                    children((<ClassDeclaration>node).heritageClauses) ||
-                    children((<ClassDeclaration>node).members);
+                return children(cbNodes, node.modifiers) ||
+                    child(cbNode, (<ClassDeclaration>node).name) ||
+                    children(cbNodes, (<ClassDeclaration>node).typeParameters) ||
+                    children(cbNodes, (<ClassDeclaration>node).heritageClauses) ||
+                    children(cbNodes, (<ClassDeclaration>node).members);
             case SyntaxKind.InterfaceDeclaration:
-                return children(node.modifiers) ||
-                    child((<InterfaceDeclaration>node).name) ||
-                    children((<InterfaceDeclaration>node).typeParameters) ||
-                    children((<ClassDeclaration>node).heritageClauses) ||
-                    children((<InterfaceDeclaration>node).members);
+                return children(cbNodes, node.modifiers) ||
+                    child(cbNode, (<InterfaceDeclaration>node).name) ||
+                    children(cbNodes, (<InterfaceDeclaration>node).typeParameters) ||
+                    children(cbNodes, (<ClassDeclaration>node).heritageClauses) ||
+                    children(cbNodes, (<InterfaceDeclaration>node).members);
             case SyntaxKind.TypeAliasDeclaration:
-                return children(node.modifiers) ||
-                    child((<TypeAliasDeclaration>node).name) ||
-                    child((<TypeAliasDeclaration>node).type);
+                return children(cbNodes, node.modifiers) ||
+                    child(cbNode, (<TypeAliasDeclaration>node).name) ||
+                    child(cbNode, (<TypeAliasDeclaration>node).type);
             case SyntaxKind.EnumDeclaration:
-                return children(node.modifiers) ||
-                    child((<EnumDeclaration>node).name) ||
-                    children((<EnumDeclaration>node).members);
+                return children(cbNodes, node.modifiers) ||
+                    child(cbNode, (<EnumDeclaration>node).name) ||
+                    children(cbNodes, (<EnumDeclaration>node).members);
             case SyntaxKind.EnumMember:
-                return child((<EnumMember>node).name) ||
-                    child((<EnumMember>node).initializer);
+                return child(cbNode, (<EnumMember>node).name) ||
+                    child(cbNode, (<EnumMember>node).initializer);
             case SyntaxKind.ModuleDeclaration:
-                return children(node.modifiers) ||
-                    child((<ModuleDeclaration>node).name) ||
-                    child((<ModuleDeclaration>node).body);
+                return children(cbNodes, node.modifiers) ||
+                    child(cbNode, (<ModuleDeclaration>node).name) ||
+                    child(cbNode, (<ModuleDeclaration>node).body);
             case SyntaxKind.ImportDeclaration:
-                return children(node.modifiers) ||
-                    child((<ImportDeclaration>node).name) ||
-                    child((<ImportDeclaration>node).moduleReference);
+                return children(cbNodes, node.modifiers) ||
+                    child(cbNode, (<ImportDeclaration>node).name) ||
+                    child(cbNode, (<ImportDeclaration>node).moduleReference);
             case SyntaxKind.ExportAssignment:
-                return children(node.modifiers) ||
-                    child((<ExportAssignment>node).exportName);
+                return children(cbNodes, node.modifiers) ||
+                    child(cbNode, (<ExportAssignment>node).exportName);
             case SyntaxKind.TemplateExpression:
-                return child((<TemplateExpression>node).head) || children((<TemplateExpression>node).templateSpans);
+                return child(cbNode, (<TemplateExpression>node).head) || children(cbNodes, (<TemplateExpression>node).templateSpans);
             case SyntaxKind.TemplateSpan:
-                return child((<TemplateSpan>node).expression) || child((<TemplateSpan>node).literal);
+                return child(cbNode, (<TemplateSpan>node).expression) || child(cbNode, (<TemplateSpan>node).literal);
             case SyntaxKind.ComputedPropertyName:
-                return child((<ComputedPropertyName>node).expression);
+                return child(cbNode, (<ComputedPropertyName>node).expression);
             case SyntaxKind.HeritageClause:
-                return children((<HeritageClause>node).types);
+                return children(cbNodes, (<HeritageClause>node).types);
             case SyntaxKind.ExternalModuleReference:
-                return child((<ExternalModuleReference>node).expression);
+                return child(cbNode, (<ExternalModuleReference>node).expression);
         }
     }
 
