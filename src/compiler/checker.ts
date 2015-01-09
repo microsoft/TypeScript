@@ -5405,6 +5405,7 @@ module ts {
 
             for (var i = 0; i < node.properties.length; i++) {
                 var memberDecl = node.properties[i];
+                var member = memberDecl.symbol;
                 if (memberDecl.kind === SyntaxKind.PropertyAssignment ||
                     memberDecl.kind === SyntaxKind.ShorthandPropertyAssignment ||
                     isObjectLiteralMethod(memberDecl)) {
@@ -5422,7 +5423,6 @@ module ts {
                     }
                     typeFlags |= type.flags;
                     var prop = <TransientSymbol>createSymbol(SymbolFlags.Property | SymbolFlags.Transient | member.flags, member.name);
-                    var member = memberDecl.symbol;
                     prop.declarations = member.declarations;
                     prop.parent = member.parent;
                     if (member.valueDeclaration) {
@@ -5431,7 +5431,7 @@ module ts {
 
                     prop.type = type;
                     prop.target = member;
-                    properties[prop.name] = prop;
+                    member = prop;
                 }
                 else {
                     // TypeScript 1.0 spec (April 2014)
@@ -5441,8 +5441,9 @@ module ts {
                     // as an ordinary function declaration with a single parameter and a Void return type.
                     Debug.assert(memberDecl.kind === SyntaxKind.GetAccessor || memberDecl.kind === SyntaxKind.SetAccessor);
                     checkAccessorDeclaration(<AccessorDeclaration>memberDecl);
-                    properties[member.name] = member;
                 }
+
+                properties[member.name] = member;
             }
 
             var stringIndexType = getIndexType(IndexKind.String);
@@ -7427,9 +7428,9 @@ module ts {
                             }
                         }
                     }
-
-                    checkAndStoreTypeOfAccessors(getSymbolOfNode(node));
                 }
+
+                checkAndStoreTypeOfAccessors(getSymbolOfNode(node));
             }
 
             checkFunctionLikeDeclaration(node);
