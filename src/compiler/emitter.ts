@@ -2030,19 +2030,8 @@ module ts {
                 }
                 return false;
             }
-            
-            function emitDownlevelTaggedTemplateLiteral(node: LiteralExpression) {
-                // Emit tagged template as foo(["string"])
-                write("[");
-                writer.writeLiteral(getTemplateLiteralAsStringLiteral(node));
-                write("]");
-			}
 
             function emitLiteral(node: LiteralExpression) {
-                if (node.parent.kind === SyntaxKind.TaggedTemplateExpression && compilerOptions.target < ScriptTarget.ES6) {
-                    return emitDownlevelTaggedTemplateLiteral(node);
-                }
-                
                 var text = compilerOptions.target < ScriptTarget.ES6 && isTemplateLiteralKind(node.kind) ? getTemplateLiteralAsStringLiteral(node) :
                     node.parent ? getSourceTextOfNodeFromSourceFile(currentSourceFile, node) :
                     node.text;
@@ -2062,25 +2051,89 @@ module ts {
                 return '"' + escapeString(node.text) + '"';
             }
             
-            function emitDownlevelTaggedTemplate(node: TemplateExpression): void {
-                // Emit should like:
-                // foo(["a", "b", "c"], expressions0, expression1)
-                // First we emit the string literal array
-                write("[");
-                emitLiteral(node.head);
-                forEach(node.templateSpans, templateSpan => {
-                    write(", ");
-                    emitLiteral(templateSpan.literal);
-                });
+            function emitDownlevelRawTemplateLiteral(node: LiteralExpression, isLast: boolean) {
+                var text = getSourceTextOfNodeFromSourceFile(currentSourceFile, node);
+                
+                // text contains the original source, it will also contain quotes ("`"), dolar signs and braces ("${" en "}"),
+                // thus we need to remove those characters.
+                // First template piece starts with "`", others with "}"
+                // Last template piece ends with "`", others with "${"
+                text = text.substring(1, text.length - (isLast ? 1 : 2));
+                
+                write('"' + escapeString(text) + '"');
+			}
+            
+            function emitDownlevelTaggedTemplateVariable(node: TaggedTemplateExpression) {
+                node.tempVariable = createTempVariable(node);
+                
+                write("var ");
+                emit(node.tempVariable);
+                write(";");
+                writeLine();
+            }
+            function emitDownlevelTaggedTemplateStrings(node: TaggedTemplateExpression, inLoop: boolean) {
+                if (!inLoop) {
+                    node.tempVariable = createTempVariable(node);
+                    
+                    write("var ");
+                } else {
+                    // node.tempVariable is initialized in emitDownlevelTaggedTemplateVariable
+                    
+                    write("(");
+                }
+                emit(node.tempVariable);
+                write(" = [");
+                
+                if (node.template.kind === SyntaxKind.NoSubstitutionTemplateLiteral) {
+                    emit(node.template);
+                } else {
+                    emit((<TemplateExpression> node.template).head);
+                    forEach((<TemplateExpression> node.template).templateSpans, (child) => {
+                        write(", ");
+                        emit(child.literal);
+                    });
+                }
                 write("]");
                 
-                // Now we emit the expressions
-                forEach(node.templateSpans, templateSpan => {
+                if (!inLoop) {
+                    write(";");
+                    writeLine();
+                }
+                else {
                     write(", ");
-                    var needsParens = templateSpan.expression.kind === SyntaxKind.BinaryExpression
-                        && (<BinaryExpression> templateSpan.expression).operator === SyntaxKind.CommaToken;
-                    emitParenthesized(templateSpan.expression, needsParens);
-                });
+                }
+                emit(node.tempVariable);
+                write(".raw = [");
+                if (node.template.kind === SyntaxKind.NoSubstitutionTemplateLiteral) {
+                    emitDownlevelRawTemplateLiteral(<LiteralExpression> node.template, true);
+                } else {
+                    emitDownlevelRawTemplateLiteral((<TemplateExpression> node.template).head, false);
+                    forEach((<TemplateExpression> node.template).templateSpans, (child, index) => {
+                        write(", ");
+                        emitDownlevelRawTemplateLiteral(child.literal, index === (<TemplateExpression> node.template).templateSpans.length - 1);
+                    });
+                }
+                write("]");
+                if (!inLoop) {
+                    write(";");
+                    writeLine();
+                }
+            }
+            
+            function emitDownlevelTaggedTemplate(node: LiteralExpression | TemplateExpression): void {
+                // Emit should like:
+                // foo(tempVar, expressions0, expression1)
+                emit((<TaggedTemplateExpression> node.parent).tempVariable);
+                
+                // Now we emit the expressions
+                if (node.kind === SyntaxKind.TemplateExpression) {
+                    forEach((<TemplateExpression> node).templateSpans, templateSpan => {
+                        write(", ");
+                        var needsParens = templateSpan.expression.kind === SyntaxKind.BinaryExpression
+                            && (<BinaryExpression> templateSpan.expression).operator === SyntaxKind.CommaToken;
+                        emitParenthesized(templateSpan.expression, needsParens);
+                    });
+                }
             }
 
             function emitTemplateExpression(node: TemplateExpression): void {
@@ -2527,7 +2580,7 @@ module ts {
                     emit(node.template);
                 } else {
                     write("(");
-                    emit(node.template);
+                    emitDownlevelTaggedTemplate(node.template);
                     write(")");
                 }
             }
@@ -3969,6 +4022,11 @@ module ts {
                     return;
                 }
 
+                if (isStatement(node)) {
+                    // TODO: Check whether node is a loop
+                    forEach((<Statement> node).downlevelTaggedTemplates, node => emitDownlevelTaggedTemplateStrings(node, false));
+                }
+                
                 if (node.flags & NodeFlags.Ambient) {
                     return emitPinnedOrTripleSlashComments(node);
                 }
