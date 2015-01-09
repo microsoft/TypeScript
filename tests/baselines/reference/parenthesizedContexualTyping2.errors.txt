@@ -1,0 +1,86 @@
+tests/cases/conformance/expressions/contextualTyping/parenthesizedContexualTyping2.ts(15,21): error TS2347: Untyped function calls may not accept type arguments.
+tests/cases/conformance/expressions/contextualTyping/parenthesizedContexualTyping2.ts(16,22): error TS2347: Untyped function calls may not accept type arguments.
+tests/cases/conformance/expressions/contextualTyping/parenthesizedContexualTyping2.ts(17,23): error TS2347: Untyped function calls may not accept type arguments.
+tests/cases/conformance/expressions/contextualTyping/parenthesizedContexualTyping2.ts(20,21): error TS2347: Untyped function calls may not accept type arguments.
+tests/cases/conformance/expressions/contextualTyping/parenthesizedContexualTyping2.ts(20,64): error TS2347: Untyped function calls may not accept type arguments.
+tests/cases/conformance/expressions/contextualTyping/parenthesizedContexualTyping2.ts(21,22): error TS2347: Untyped function calls may not accept type arguments.
+tests/cases/conformance/expressions/contextualTyping/parenthesizedContexualTyping2.ts(21,67): error TS2347: Untyped function calls may not accept type arguments.
+tests/cases/conformance/expressions/contextualTyping/parenthesizedContexualTyping2.ts(22,23): error TS2347: Untyped function calls may not accept type arguments.
+tests/cases/conformance/expressions/contextualTyping/parenthesizedContexualTyping2.ts(22,69): error TS2347: Untyped function calls may not accept type arguments.
+tests/cases/conformance/expressions/contextualTyping/parenthesizedContexualTyping2.ts(25,43): error TS2347: Untyped function calls may not accept type arguments.
+tests/cases/conformance/expressions/contextualTyping/parenthesizedContexualTyping2.ts(26,44): error TS2347: Untyped function calls may not accept type arguments.
+tests/cases/conformance/expressions/contextualTyping/parenthesizedContexualTyping2.ts(27,44): error TS2347: Untyped function calls may not accept type arguments.
+tests/cases/conformance/expressions/contextualTyping/parenthesizedContexualTyping2.ts(28,46): error TS2347: Untyped function calls may not accept type arguments.
+tests/cases/conformance/expressions/contextualTyping/parenthesizedContexualTyping2.ts(28,114): error TS2347: Untyped function calls may not accept type arguments.
+tests/cases/conformance/expressions/contextualTyping/parenthesizedContexualTyping2.ts(30,45): error TS2349: Cannot invoke an expression whose type lacks a call signature.
+tests/cases/conformance/expressions/contextualTyping/parenthesizedContexualTyping2.ts(31,46): error TS2347: Untyped function calls may not accept type arguments.
+
+
+==== tests/cases/conformance/expressions/contextualTyping/parenthesizedContexualTyping2.ts (16 errors) ====
+    // These tests ensure that in cases where it may *appear* that a value has a type,
+    // they actually are properly being contextually typed. The way we test this is
+    // that we invoke contextually typed arguments with type arguments.
+    // Since 'any' cannot be invoked with type arguments, we should get errors back.
+    
+    type FuncType = (x: <T>(p: T) => T) => typeof x;
+    
+    function fun<T>(f: FuncType, x: T): T;
+    function fun<T>(f: FuncType, g: FuncType, x: T): T;
+    function fun<T>(...rest: any[]): T {
+        return undefined;
+    }
+    
+    var a = fun(x => { x<number>(undefined); return x; }, 10);
+    var b = fun((x => { x<number>(undefined); return x; }), 10);
+                        ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2347: Untyped function calls may not accept type arguments.
+    var c = fun(((x => { x<number>(undefined); return x; })), 10);
+                         ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2347: Untyped function calls may not accept type arguments.
+    var d = fun((((x => { x<number>(undefined); return x; }))), 10);
+                          ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2347: Untyped function calls may not accept type arguments.
+    
+    var e = fun(x => { x<number>(undefined); return x; }, x => { x<number>(undefined); return x; }, 10);
+    var f = fun((x => { x<number>(undefined); return x; }),(x => { x<number>(undefined); return x; }), 10);
+                        ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2347: Untyped function calls may not accept type arguments.
+                                                                   ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2347: Untyped function calls may not accept type arguments.
+    var g = fun(((x => { x<number>(undefined); return x; })),((x => { x<number>(undefined); return x; })), 10);
+                         ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2347: Untyped function calls may not accept type arguments.
+                                                                      ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2347: Untyped function calls may not accept type arguments.
+    var h = fun((((x => { x<number>(undefined); return x; }))),((x => { x<number>(undefined); return x; })), 10);
+                          ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2347: Untyped function calls may not accept type arguments.
+                                                                        ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2347: Untyped function calls may not accept type arguments.
+    
+    // Ternaries in parens
+    var i = fun((Math.random() < 0.5 ? x => { x<number>(undefined); return x; } : x => undefined), 10);
+                                              ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2347: Untyped function calls may not accept type arguments.
+    var j = fun((Math.random() < 0.5 ? (x => { x<number>(undefined); return x; }) : (x => undefined)), 10);
+                                               ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2347: Untyped function calls may not accept type arguments.
+    var k = fun((Math.random() < 0.5 ? (x => { x<number>(undefined); return x; }) : (x => undefined)), x => { x<number>(undefined); return x; }, 10);
+                                               ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2347: Untyped function calls may not accept type arguments.
+    var l = fun(((Math.random() < 0.5 ? ((x => { x<number>(undefined); return x; })) : ((x => undefined)))),((x => { x<number>(undefined); return x; })), 10);
+                                                 ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2347: Untyped function calls may not accept type arguments.
+                                                                                                                     ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2347: Untyped function calls may not accept type arguments.
+    
+    var lambda1: (x: number) => number = x => { x<number>(undefined); return x; };
+                                                ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2349: Cannot invoke an expression whose type lacks a call signature.
+    var lambda2: (x: number) => number = (x => { x<number>(undefined); return x; });
+                                                 ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2347: Untyped function calls may not accept type arguments.
+    
+    type ObjType = { x: (p: number) => string; y: (p: string) => number };
+    var obj1: ObjType = { x: x => (x, undefined), y: y => (y, undefined) };
+    var obj2: ObjType = ({ x: x => (x, undefined), y: y => (y, undefined) });
