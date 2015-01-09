@@ -1,7 +1,8 @@
 // These tests ensure that in cases where it may *appear* that a value has a type,
 // they actually are properly being contextually typed. The way we test this is
 // that we invoke contextually typed arguments with type arguments.
-// Since 'any' cannot be invoked with type arguments, we should get errors back.
+// Since 'any' cannot be invoked with type arguments, we should get errors
+// back if contextual typing is not taking effect.
 
 type FuncType = (x: <T>(p: T) => T) => typeof x;
 
