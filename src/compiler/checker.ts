@@ -3337,6 +3337,8 @@ module ts {
                 case SyntaxKind.MethodDeclaration:
                 case SyntaxKind.MethodSignature:
                     return isContextSensitiveFunctionLikeDeclaration(<MethodDeclaration>node);
+                case SyntaxKind.ParenthesizedExpression:
+                    return isContextSensitive((<ParenthesizedExpression>node).expression);
             }
 
             return false;
@@ -5226,6 +5228,8 @@ module ts {
                 case SyntaxKind.TemplateSpan:
                     Debug.assert(parent.parent.kind === SyntaxKind.TemplateExpression);
                     return getContextualTypeForSubstitutionExpression(<TemplateExpression>parent.parent, node);
+                case SyntaxKind.ParenthesizedExpression:
+                    return getContextualType(<ParenthesizedExpression>parent);
             }
             return undefined;
         }
