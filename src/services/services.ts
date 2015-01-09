@@ -1078,6 +1078,7 @@ module ts {
 
     export interface CompletionInfo {
         isMemberCompletion: boolean;
+        isBuilder: boolean;
         entries: CompletionEntry[];
     }
 
@@ -2266,6 +2267,7 @@ module ts {
                 // Right of dot member completion list
                 var symbols: Symbol[] = [];
                 var isMemberCompletion = true;
+                var isBuilder = false;
 
                 if (node.kind === SyntaxKind.Identifier || node.kind === SyntaxKind.QualifiedName || node.kind === SyntaxKind.PropertyAccessExpression) {
                     var symbol = typeInfoResolver.getSymbolAtLocation(node);
@@ -2318,6 +2320,7 @@ module ts {
                 else {
                     // Get scope members
                     isMemberCompletion = false;
+                    isBuilder = true;
 
                     /// TODO filter meaning based on the current context
                     var symbolMeanings = SymbolFlags.Type | SymbolFlags.Value | SymbolFlags.Namespace | SymbolFlags.Import;
@@ -2335,6 +2338,7 @@ module ts {
 
             return {
                 isMemberCompletion,
+                isBuilder,
                 entries: activeCompletionSession.entries
             };
 
@@ -2356,7 +2360,7 @@ module ts {
             function isCompletionListBlocker(previousToken: Node): boolean {
                 var start = new Date().getTime();
                 var result = isInStringOrRegularExpressionOrTemplateLiteral(previousToken) ||
-                    isIdentifierDefinitionLocation(previousToken) ||
+                   // isIdentifierDefinitionLocation(previousToken) ||
                     isRightOfIllegalDot(previousToken);
                 host.log("getCompletionsAtPosition: isCompletionListBlocker: " + (new Date().getTime() - start));
                 return result;
