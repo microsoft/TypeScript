@@ -598,117 +598,142 @@ module ts {
             }
         }
 
-        function buildStatements(): Statement[] {
+        function buildStatements(): Statement[]{
             var exceptionStack: ExceptionBlock[] = [];
-            var nextLabelNumber = 0;
-            var clauses: CaseClause[];
-            var rootStatements: Statement[] = [];
-            var statements = rootStatements;
             var statementsStack: NodeArray<Statement>[] = [];
+            var operationIndex: number = 0;
             var blockIndex: number = 0;
+            var nextLabelNumber: number = 0;
             var instructionWasAbrupt = false;
             var instructionWasCompletion = false;
             var relatedLocation: TextRange;
+            var clauses: CaseClause[];
+            var rootStatements: Statement[];
+            var statements: Statement[];
 
-            if (hasProtectedRegions) {
-                startNewCase();
+            var shouldEmitSwitchStatement = emitRequiresSwitchStatement();
+            if (shouldEmitSwitchStatement) {
+                initializeSwitchStatement();
+                if (hasProtectedRegions) {
+                    initializeProtectedRegions();
+                }
+            }
+            else {
+                initializeStatementList();
+            }
 
+            if (operations) {
+                writeOperations();
+            }
+
+            if (!instructionWasCompletion) {
+                writeLabels();
+                relatedLocation = undefined;
+                writeReturn();
+            }
+
+            if (shouldEmitSwitchStatement) {
+                flushLabel();
+            }
+
+            return rootStatements;
+
+            function emitRequiresSwitchStatement(): boolean {
+                if (hasProtectedRegions) {
+                    return true;
+                }
+
+                if (labels) {
+                    for (var i = 0; i < labels.length; i++) {
+                        if (labels[i] !== -1) {
+                            return true;
+                        }
+                    }
+                }
+
+                return false;
+            }
+
+            function initializeSwitchStatement(): void {
+                clauses = [];
+                var state = getState();
+                var labelExpression = factory.createPropertyAccessExpression(state, factory.createIdentifier("label"));
+                var switchStatement = factory.createSwitchStatement(labelExpression, clauses);
+                rootStatements = [switchStatement];
+            }
+
+            function initializeStatementList(): void {
+                rootStatements = statements = [];
+            }
+
+            function initializeProtectedRegions(): void {
+                beginLabel();
                 var trysProperty = factory.createPropertyAccessExpression(getState(), factory.createIdentifier("trys"));
                 var trysArray = factory.createArrayLiteralExpression([]);
                 var assignTrys = factory.createBinaryExpression(SyntaxKind.EqualsToken, trysProperty, trysArray);
                 writeStatement(assignTrys);
             }
 
-            if (operations) {
-                for (var operationIndex = 0; operationIndex < operations.length; operationIndex++) {
-                    var code = operations[operationIndex];
-                    var args = operationArguments[operationIndex];
-                    ensureLabels();
-
-                    relatedLocation = operationLocations[operationIndex];
-                    writeOperation(code, args);
-                }
-            }
-
-            ensureLabels();
-
-            if (!instructionWasCompletion) {
-                relatedLocation = undefined;
-                writeReturn();
-            }
-
-            writePendingCase();
-            return rootStatements;
-
-            function ensureSwitchStatement(): void {
-                if (rootStatements === statements) {
-                    clauses = [];
-                    var state = getState();
-                    var labelExpression = factory.createPropertyAccessExpression(state, factory.createIdentifier("label"));
-                    var switchStatement = factory.createSwitchStatement(labelExpression, clauses);
-                    rootStatements = [switchStatement];
-                    if (statements.length) {
-                        writePendingCase();
-                        resetStatements();
-                    }
-                }
-            }
-
-            function ensureLabels(): void {
-                if (!labelNumbers) labelNumbers = [];
-                if (!labels) labels = [];
-
-                var createCase = false;
-                for (var label = 0; label < labels.length; label++) {
-                    if (labels[label] === operationIndex) {
-                        ensureSwitchStatement();
-                        labelNumbers[label] = nextLabelNumber;
-                        createCase = true;
-                    }
-                }
-
-                if (createCase) {
-                    startNewCase();
-                }
-            }
-
-            function writeFallThrough(): void {
-                if (!statements.length) {
+            function writeLabels(): void {
+                if (!shouldEmitSwitchStatement) {
                     return;
                 }
 
-                // handle implicit fall-through
-                if (!instructionWasAbrupt && !instructionWasCompletion && nextLabelNumber > 0) {
+                if (!labelNumbers) labelNumbers = [];
+
+                var shouldBeginLabel = false;
+                for (var label = 0; label < labels.length; label++) {
+                    if (labels[label] === operationIndex) {
+                        labelNumbers[label] = nextLabelNumber;
+                        shouldBeginLabel = true;
+                    }
+                }
+
+                if (shouldBeginLabel) {
+                    beginLabel();
+                }
+            }
+
+            function beginLabel() {
+                if (nextLabelNumber > 0) {
+                    flushLabel();
+                }
+
+                statements = [];
+                instructionWasAbrupt = false;
+                instructionWasCompletion = false;
+                nextLabelNumber++;
+            }
+
+            function flushLabel(): void {
+                if (!statements) {
+                    return;
+                }
+
+                if (!instructionWasAbrupt && !instructionWasCompletion) {
                     var nextLabelExpression = factory.createNumericLiteral(nextLabelNumber);
                     var labelProperty = factory.createPropertyAccessExpression(getState(), factory.createIdentifier("label"));
                     var labelAssign = factory.createBinaryExpression(SyntaxKind.EqualsToken, labelProperty, nextLabelExpression);
                     writeStatement(labelAssign);
-                }
-            }
-
-            function writePendingCase(): void {
-                if (!statements.length || rootStatements === statements) {
-                    return;
                 }
 
                 var labelNumber = nextLabelNumber - 1;
                 var labelExpression = factory.createNumericLiteral(labelNumber);
                 var caseClause = factory.createCaseClause(labelExpression, statements);
                 clauses.push(caseClause);
+                statements = undefined;
             }
 
-            function resetStatements(): void {
-                statements = [];
-                instructionWasAbrupt = false;
-                instructionWasCompletion = false;
-            }
-
-            function startNewCase() {
-                ensureSwitchStatement();
-                writeFallThrough();
-                writePendingCase();
-                resetStatements();
-                nextLabelNumber++;
+            // operations
+            function writeOperations(): void {
+                while (operationIndex < operations.length) {
+                    var code = operations[operationIndex];
+                    var args = operationArguments[operationIndex];
+                    relatedLocation = operationLocations[operationIndex];
+                    writeLabels();
+                    writeOperation(code, args);
+                    operationIndex++;
+                }
             }
 
             function writeOperation(code: OpCode, args: any[]): void {
@@ -764,8 +789,7 @@ module ts {
                 }
             }
 
-            function writeStatement(node: Node): void {
-                
+            function writeStatement(node: Node): void {                
                 if (isExpression(node)) {
                     node = factory.createExpressionStatement(<Expression>node);
                 }
