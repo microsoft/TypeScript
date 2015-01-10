@@ -5395,6 +5395,17 @@ module ts {
             return (+name).toString() === name;
         }
 
+        function checkComputedPropertyName(node: ComputedPropertyName): void {
+            var computedNameType = checkExpression(node.expression);
+
+            // This will only allow types number, string, or any. Any types more complex will
+            // be disallowed, even union types like string | number. In the future, we might consider
+            // allowing types like that.
+            if ((computedNameType.flags & (TypeFlags.Number | TypeFlags.String | TypeFlags.Any)) === 0) {
+                error(node, Diagnostics.A_computed_property_name_must_be_of_type_string_number_or_any);
+            }
+        }
+
         function checkObjectLiteral(node: ObjectLiteralExpression, contextualMapper?: TypeMapper): Type {
             // Grammar checking
             checkGrammarObjectLiteralExpression(node);
@@ -5443,7 +5454,12 @@ module ts {
                     checkAccessorDeclaration(<AccessorDeclaration>memberDecl);
                 }
 
-                properties[member.name] = member;
+                if (hasComputedNameButNotSymbol(memberDecl)) {
+                    checkComputedPropertyName(<ComputedPropertyName>memberDecl.name);
+                }
+                else {
+                    properties[member.name] = member;
+                }
             }
 
             var stringIndexType = getIndexType(IndexKind.String);

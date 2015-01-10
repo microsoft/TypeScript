@@ -675,7 +675,7 @@
     },
     "A parameter property may not be a binding pattern.": {
         "category": "Error",
-        "code":  1187
+        "code": 1187
     },
 
     "Duplicate identifier '{0}'.": {
@@ -1288,7 +1288,11 @@
     },
     "A binding pattern parameter cannot be optional in an implementation signature.": {
         "category": "Error",
-        "code":  2463
+        "code": 2463
+    },
+    "A computed property name must be of type 'string', 'number', or 'any'.": {
+        "category": "Error",
+        "code": 2464
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {

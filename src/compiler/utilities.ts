@@ -527,6 +527,8 @@ module ts {
                         return node === (<TypeAssertion>parent).expression;
                     case SyntaxKind.TemplateSpan:
                         return node === (<TemplateSpan>parent).expression;
+                    case SyntaxKind.ComputedPropertyName:
+                        return node === (<ComputedPropertyName>parent).expression;
                     default:
                         if (isExpression(parent)) {
                             return true;

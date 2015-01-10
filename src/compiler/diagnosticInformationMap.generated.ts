@@ -299,6 +299,7 @@ module ts {
         Type_0_is_not_an_array_type: { code: 2461, category: DiagnosticCategory.Error, key: "Type '{0}' is not an array type." },
         A_rest_element_must_be_last_in_an_array_destructuring_pattern: { code: 2462, category: DiagnosticCategory.Error, key: "A rest element must be last in an array destructuring pattern" },
         A_binding_pattern_parameter_cannot_be_optional_in_an_implementation_signature: { code: 2463, category: DiagnosticCategory.Error, key: "A binding pattern parameter cannot be optional in an implementation signature." },
+        A_computed_property_name_must_be_of_type_string_number_or_any: { code: 2464, category: DiagnosticCategory.Error, key: "A computed property name must be of type 'string', 'number', or 'any'." },
         Import_declaration_0_is_using_private_name_1: { code: 4000, category: DiagnosticCategory.Error, key: "Import declaration '{0}' is using private name '{1}'." },
         Type_parameter_0_of_exported_class_has_or_is_using_private_name_1: { code: 4002, category: DiagnosticCategory.Error, key: "Type parameter '{0}' of exported class has or is using private name '{1}'." },
         Type_parameter_0_of_exported_interface_has_or_is_using_private_name_1: { code: 4004, category: DiagnosticCategory.Error, key: "Type parameter '{0}' of exported interface has or is using private name '{1}'." },
