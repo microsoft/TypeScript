@@ -711,7 +711,7 @@ module Harness {
         default:
             throw new Error('Unknown context');
     }
-    export var tcServicesFile = IO.readFile(tcServicesFilename);
+    export var tcServicesFile = IO.readFile(tcServicesFilename) + "\n//# sourceURL=" + tcServicesFilename;
 
     export interface SourceMapEmitterCallback {
         (emittedFile: string, emittedLine: number, emittedColumn: number, sourceFile: string, sourceLine: number, sourceColumn: number, sourceName: string): void;

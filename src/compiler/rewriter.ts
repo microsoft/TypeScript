@@ -211,6 +211,8 @@ module ts {
                 if (assignment) {
                     return factory.createExpressionStatement(assignment);
                 }
+
+                return;
             }
 
             return Visitor.visitVariableStatement(node);
@@ -248,7 +250,7 @@ module ts {
                 return;
             }
 
-            return visitContinueBlockDefault(node, Visitor.visitDoStatement);
+            return defaultVisitContinueBlock(node, Visitor.visitDoStatement);
         }
 
         function visitWhileStatement(node: WhileStatement): WhileStatement {
@@ -257,7 +259,7 @@ module ts {
                 return;
             }
 
-            return visitContinueBlockDefault(node, Visitor.visitWhileStatement);
+            return defaultVisitContinueBlock(node, Visitor.visitWhileStatement);
         }
 
         function visitForStatement(node: ForStatement): ForStatement {
@@ -266,7 +268,7 @@ module ts {
                 return;
             }
 
-            return visitContinueBlockDefault(node, Visitor.visitForStatement);
+            return defaultVisitContinueBlock(node, Visitor.visitForStatement);
         }
 
         function visitForInStatement(node: ForInStatement): ForInStatement {
@@ -275,7 +277,7 @@ module ts {
                 return;
             }
 
-            return visitContinueBlockDefault(node, Visitor.visitForInStatement);
+            return defaultVisitContinueBlock(node, Visitor.visitForInStatement);
         }
 
         function visitBreakStatement(node: BreakOrContinueStatement): Statement {
@@ -287,7 +289,7 @@ module ts {
                 }
             }
 
-            return node;
+            return Visitor.visitBreakStatement(node);
         }
 
         function visitContinueStatement(node: BreakOrContinueStatement): Statement {
@@ -299,7 +301,7 @@ module ts {
                 }
             }
 
-            return node;
+            return Visitor.visitContinueStatement(node);
         }
 
         function visitReturnStatement(node: ReturnStatement): Statement {
@@ -318,11 +320,17 @@ module ts {
                 return;
             }
 
-            return visitBreakBlockDefault(node, Visitor.visitSwitchStatement);
+            return defaultVisitBreakBlock(node, Visitor.visitSwitchStatement);
         }
 
         function visitWithStatement(node: WithStatement): Statement {
-            return node;
+            if (isDownlevel && hasAwaitOrYield(node.statement)) {
+                Debug.fail("with statements cannot contain 'await' or 'yield' expressions.");
+                Visitor.visitWithStatement(node);
+                return;
+            }
+
+            return Visitor.visitWithStatement(node);
         }
 
         function visitLabeledStatement(node: LabeledStatement): Statement {
@@ -331,7 +339,7 @@ module ts {
                 return;
             }
 
-            return visitBreakBlockDefault(node, Visitor.visitLabeledStatement);
+            return defaultVisitBreakBlock(node, Visitor.visitLabeledStatement);
         }
 
         function visitTryStatement(node: TryStatement): TryStatement {
@@ -353,10 +361,10 @@ module ts {
                 node.symbol.generatedName = undefined;
             }
 
-            return factory.updateCatchClause(node, node.name, visitBlock(node.block));
+            return Visitor.visitCatchClause(node);
         }
 
-        function visitBreakBlockDefault<TNode extends Statement>(node: TNode, visitNode: (node: TNode) => TNode): TNode {
+        function defaultVisitBreakBlock<TNode extends Statement>(node: TNode, visitNode: (node: TNode) => TNode): TNode {
             if (isDownlevel) {
                 builder.beginScriptBreakBlock(getTarget(node));
             }
@@ -370,7 +378,7 @@ module ts {
             return result;
         }
 
-        function visitContinueBlockDefault<TNode extends IterationStatement>(node: TNode, visitNode: (node: TNode) => TNode): TNode {
+        function defaultVisitContinueBlock<TNode extends IterationStatement>(node: TNode, visitNode: (node: TNode) => TNode): TNode {
             if (isDownlevel) {
                 builder.beginScriptContinueBlock(getTarget(node));
             }
