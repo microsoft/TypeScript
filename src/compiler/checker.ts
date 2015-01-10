@@ -1575,7 +1575,6 @@ module ts {
                     case SyntaxKind.IndexSignature:
                     case SyntaxKind.Parameter:
                     case SyntaxKind.ModuleBlock:
-                    case SyntaxKind.TypeParameter:
                     case SyntaxKind.FunctionType:
                     case SyntaxKind.ConstructorType:
                     case SyntaxKind.TypeLiteral:
@@ -1585,7 +1584,9 @@ module ts {
                     case SyntaxKind.UnionType:
                     case SyntaxKind.ParenthesizedType:
                         return isDeclarationVisible(<Declaration>node.parent);
-
+                    
+                    // Type parameters are always visible
+                    case SyntaxKind.TypeParameter:
                     // Source file is always visible
                     case SyntaxKind.SourceFile:
                         return true;
@@ -3651,9 +3652,7 @@ module ts {
                     var maybeCache = maybeStack[depth];
                     // If result is definitely true, copy assumptions to global cache, else copy to next level up
                     var destinationCache = result === Ternary.True || depth === 0 ? relation : maybeStack[depth - 1];
-                    for (var p in maybeCache) {
-                        destinationCache[p] = maybeCache[p];
-                    }
+                    copyMap(/*source*/maybeCache, /*target*/destinationCache);
                 }
                 else {
                     // A false result goes straight into global cache (when something is false under assumptions it
@@ -9000,7 +8999,12 @@ module ts {
                 checkCollisionWithRequireExportsInGeneratedCode(node, node.name);
                 checkExportsOnMergedDeclarations(node);
                 var symbol = getSymbolOfNode(node);
-                if (symbol.flags & SymbolFlags.ValueModule && symbol.declarations.length > 1 && !isInAmbientContext(node)) {
+
+                // The following checks only apply on a non-ambient instantiated module declaration.
+                if (symbol.flags & SymbolFlags.ValueModule
+                    && symbol.declarations.length > 1
+                    && !isInAmbientContext(node)
+                    && isInstantiatedModule(node, compilerOptions.preserveConstEnums)) {
                     var classOrFunc = getFirstNonAmbientClassOrFunctionDeclaration(symbol);
                     if (classOrFunc) {
                         if (getSourceFileOfNode(node) !== getSourceFileOfNode(classOrFunc)) {
@@ -9011,6 +9015,8 @@ module ts {
                         }
                     }
                 }
+
+                // Checks for ambient external modules.
                 if (node.name.kind === SyntaxKind.StringLiteral) {
                     if (!isGlobalSourceFile(node.parent)) {
                         error(node.name, Diagnostics.Ambient_external_modules_cannot_be_nested_in_other_modules);

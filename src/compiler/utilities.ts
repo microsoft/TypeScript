@@ -23,6 +23,17 @@ module ts {
         string(): string;
     }
 
+    export interface EmitHost extends ScriptReferenceHost {
+        getSourceFiles(): SourceFile[];
+        isEmitBlocked(sourceFile?: SourceFile): boolean;
+
+        getCommonSourceDirectory(): string;
+        getCanonicalFileName(fileName: string): string;
+        getNewLine(): string;
+
+        writeFile(filename: string, data: string, writeByteOrderMark: boolean, onError?: (message: string) => void): void;
+    }
+
     // Pool writers to avoid needing to allocate them for every symbol we write.
     var stringWriters: StringSymbolWriter[] = [];
     export function getSingleLineStringWriter(): StringSymbolWriter {
@@ -523,6 +534,12 @@ module ts {
                 }
         }
         return false;
+    }
+
+    export function isInstantiatedModule(node: ModuleDeclaration, preserveConstEnums: boolean) {
+        var moduleState = getModuleInstanceState(node)
+        return moduleState === ModuleInstanceState.Instantiated ||
+               (preserveConstEnums && moduleState === ModuleInstanceState.ConstEnumOnly);
     }
 
     export function isExternalModuleImportDeclaration(node: Node) {
