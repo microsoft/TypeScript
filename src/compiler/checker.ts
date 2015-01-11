@@ -5721,7 +5721,7 @@ module ts {
                 adjustedArgCount = callExpression.arguments.hasTrailingComma ? args.length + 1 : args.length;
 
                 // If we are missing the close paren, the call is incomplete.
-                callIsIncomplete = (<CallExpression>callExpression).arguments.end === callExpression.end;
+                callIsIncomplete = !!(<CallExpression>callExpression).arguments.closeTokenIsMissing;
 
                 typeArguments = callExpression.typeArguments;
             }
@@ -10158,8 +10158,8 @@ module ts {
 
         function checkGrammarForDisallowedTrailingComma(list: NodeArray<Node>): boolean {
             if (list && list.hasTrailingComma) {
-                var start = list.end - ",".length;
-                var end = list.end;
+                var end = nodeArrayEnd(list);
+                var start = end - ",".length;
                 var sourceFile = getSourceFileOfNode(list[0]);
                 return grammarErrorAtPos(sourceFile, start, end - start, Diagnostics.Trailing_comma_not_allowed);
             }
@@ -10173,7 +10173,7 @@ module ts {
             if (typeParameters && typeParameters.length === 0) {
                 var start = typeParameters.pos - "<".length;
                 var sourceFile = getSourceFileOfNode(node);
-                var end = skipTrivia(sourceFile.text, typeParameters.end) + ">".length;
+                var end = skipTrivia(sourceFile.text, nodeArrayEnd(typeParameters)) + ">".length;
                 return grammarErrorAtPos(sourceFile, start, end - start, Diagnostics.Type_parameter_list_cannot_be_empty);
             }
         }
@@ -10269,7 +10269,7 @@ module ts {
             if (typeArguments && typeArguments.length === 0) {
                 var sourceFile = getSourceFileOfNode(node);
                 var start = typeArguments.pos - "<".length;
-                var end = skipTrivia(sourceFile.text, typeArguments.end) + ">".length;
+                var end = skipTrivia(sourceFile.text, nodeArrayEnd(typeArguments)) + ">".length;
                 return grammarErrorAtPos(sourceFile, start, end - start, Diagnostics.Type_argument_list_cannot_be_empty);
             }
         }
@@ -10688,7 +10688,7 @@ module ts {
             }
 
             if (!declarationList.declarations.length) {
-                return grammarErrorAtPos(getSourceFileOfNode(declarationList), declarations.pos, declarations.end - declarations.pos, Diagnostics.Variable_declaration_list_cannot_be_empty);
+                return grammarErrorAtPos(getSourceFileOfNode(declarationList), declarations.pos, nodeArrayEnd(declarations) - declarations.pos, Diagnostics.Variable_declaration_list_cannot_be_empty);
             }
 
             if (compilerOptions.target  < ScriptTarget.ES6) {
@@ -10826,7 +10826,7 @@ module ts {
 
         function checkGrammarConstructorTypeParameters(node: ConstructorDeclaration) {
             if (node.typeParameters) {
-                return grammarErrorAtPos(getSourceFileOfNode(node), node.typeParameters.pos, node.typeParameters.end - node.typeParameters.pos, Diagnostics.Type_parameters_cannot_appear_on_a_constructor_declaration);
+                return grammarErrorAtPos(getSourceFileOfNode(node), node.typeParameters.pos, nodeArrayEnd(node.typeParameters) - node.typeParameters.pos, Diagnostics.Type_parameters_cannot_appear_on_a_constructor_declaration);
             }
         }
 

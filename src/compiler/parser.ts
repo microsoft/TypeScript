@@ -371,7 +371,8 @@ module ts {
         return nodeText === '"use strict"' || nodeText === "'use strict'";
     }
 
-    interface IncrementalElement extends TextRange {
+    interface IncrementalElement {
+        pos: number;
         parent?: Node;
         intersectsChange: boolean
         length?: number;
@@ -465,7 +466,7 @@ module ts {
             }
 
             function visitArray(array: NodeArray<Node>) {
-                if (position >= array.pos && position < array.end) {
+                if (array.length > 0 && position >= array.pos && position < lastOrUndefined(array).end) {
                     // position was in this array.  Search through this array to see if we find a
                     // viable element.
                     for (var i = 0, n = array.length; i < n; i++) {
@@ -720,7 +721,7 @@ module ts {
                     child.intersectsChange = true;
 
                     // Adjust the pos or end (or both) of the intersecting element accordingly.
-                    adjustIntersectingElement(child, changeStart, changeRangeOldEnd, changeRangeNewEnd, delta);
+                    adjustIntersectingElement(child, child.end, changeStart, changeRangeOldEnd, changeRangeNewEnd, delta);
                     forEachChild(child, visitNode, visitArray);
                     return;
                 }
@@ -738,12 +739,12 @@ module ts {
                     // Check if the element intersects the change range.  If it does, then it is not
                     // reusable.  Also, we'll need to recurse to see what constituent portions we may
                     // be able to use.
-                    var fullEnd = array.end;
+                    var fullEnd = nodeArrayEnd(array);
                     if (fullEnd >= changeStart) {
                         array.intersectsChange = true;
 
                         // Adjust the pos or end (or both) of the intersecting array accordingly.
-                        adjustIntersectingElement(array, changeStart, changeRangeOldEnd, changeRangeNewEnd, delta);
+                        adjustIntersectingElement(array, fullEnd, changeStart, changeRangeOldEnd, changeRangeNewEnd, delta);
                         for (var i = 0, n = array.length; i < n; i++) {
                             visitNode(array[i]);
                         }
@@ -755,8 +756,8 @@ module ts {
             }
         }
 
-        function adjustIntersectingElement(element: IncrementalElement, changeStart: number, changeRangeOldEnd: number, changeRangeNewEnd: number, delta: number) {
-            Debug.assert(element.end >= changeStart, "Adjusting an element that was entirely before the change range");
+        function adjustIntersectingElement(element: IncrementalElement, end: number, changeStart: number, changeRangeOldEnd: number, changeRangeNewEnd: number, delta: number) {
+            Debug.assert(end >= changeStart, "Adjusting an element that was entirely before the change range");
             Debug.assert(element.pos <= changeRangeOldEnd, "Adjusting an element that was entirely after the change range");
 
             // We have an element that intersects the change range in some way.  It may have its
@@ -812,20 +813,20 @@ module ts {
             // However any element htat ended after that will have their pos adjusted to be
             // at the end of the new range.  i.e. any node that ended in the 'Y' range will
             // be adjusted to have their end at the end of the 'Z' range.
-            if (element.end >= changeRangeOldEnd) {
+            if (end >= changeRangeOldEnd) {
                 // Element ends after the change range.  Always adjust the end pos.
-                element.end += delta;
+                (<any>element).end = end + delta;
             }
             else {
                 // Element ends in the change range.  The element will keep its position if 
                 // possible. Or Move backward to the new-end if it's in the 'Y' range.
-                element.end = Math.min(element.end, changeRangeNewEnd);
+                (<any>element).end = Math.min(end, changeRangeNewEnd);
             }
 
-            Debug.assert(element.pos <= element.end);
+            Debug.assert(element.pos <= (<any>element).end);
             if (element.parent) {
                 Debug.assert(element.pos >= element.parent.pos);
-                Debug.assert(element.end <= element.parent.end);
+                Debug.assert((<any>element).end <= element.parent.end);
             }
         }
 
@@ -849,7 +850,6 @@ module ts {
 
             function visitArray(array: IncrementalNodeArray) {
                 array.pos += delta;
-                array.end += delta;
 
                 for (var i = 0, n = array.length; i < n; i++) {
                     visitNode(array[i]);
@@ -1585,7 +1585,6 @@ module ts {
             }
 
             setStrictModeContext(savedStrictModeContext);
-            result.end = getNodeEnd();
             parsingContext = saveParsingContext;
             return result;
         }
@@ -1934,7 +1933,6 @@ module ts {
                 result.hasTrailingComma = true;
             }
 
-            result.end = getNodeEnd();
             parsingContext = saveParsingContext;
             return result;
         }
@@ -1943,7 +1941,6 @@ module ts {
             var pos = getNodePos();
             var result = <NodeArray<T>>[];
             result.pos = pos;
-            result.end = pos;
             return result;
         }
 
@@ -2025,9 +2022,7 @@ module ts {
             }
             while (templateSpans[templateSpans.length - 1].literal.kind === SyntaxKind.TemplateMiddle)
 
-            templateSpans.end = getNodeEnd();
             template.templateSpans = templateSpans;
-
             return finishNode(template);
         }
 
@@ -2581,7 +2576,7 @@ module ts {
                 while (parseOptional(SyntaxKind.BarToken)) {
                     types.push(parseArrayTypeOrHigher());
                 }
-                types.end = getNodeEnd();
+
                 var node = <UnionTypeNode>createNode(SyntaxKind.UnionType, type.pos);
                 node.types = types;
                 type = finishNode(node);
@@ -2879,7 +2874,6 @@ module ts {
 
             node.parameters = <NodeArray<ParameterDeclaration>>[parameter];
             node.parameters.pos = parameter.pos;
-            node.parameters.end = parameter.end;
 
             parseExpected(SyntaxKind.EqualsGreaterThanToken);
             node.body = parseArrowFunctionExpressionBody();
@@ -3428,7 +3422,9 @@ module ts {
         function parseArgumentList() {
             parseExpected(SyntaxKind.OpenParenToken);
             var result = parseDelimitedList(ParsingContext.ArgumentExpressions, parseArgumentExpression);
-            parseExpected(SyntaxKind.CloseParenToken);
+            if (!parseExpected(SyntaxKind.CloseParenToken)) {
+                result.closeTokenIsMissing = true;
+            }
             return result;
         }
 
@@ -4322,7 +4318,6 @@ module ts {
             }
             if (modifiers) {
                 modifiers.flags = flags;
-                modifiers.end = scanner.getStartPos();
             }
             return modifiers;
         }

@@ -143,7 +143,7 @@ module Utils {
                 },
                 (array: ts.NodeArray<ts.Node>) => {
                     assert.isFalse(array.pos < node.pos, "array.pos < node.pos");
-                    assert.isFalse(array.end > node.end, "array.end > node.end");
+                    assert.isFalse(ts.nodeArrayEnd(array) > node.end, "array.end > node.end");
                     assert.isFalse(array.pos < currentPos, "array.pos < currentPos");
 
                     for (var i = 0, n = array.length; i < n; i++) {
@@ -151,7 +151,7 @@ module Utils {
                         currentPos = array[i].end
                     }
 
-                    currentPos = array.end;
+                    currentPos = ts.nodeArrayEnd(array);
                 });
 
             var childNodesAndArrays: any[] = [];
@@ -351,7 +351,7 @@ module Utils {
         assert(array1, "array1");
         assert(array2, "array2");
         assert.equal(array1.pos, array2.pos, "array1.pos !== array2.pos");
-        assert.equal(array1.end, array2.end, "array1.end !== array2.end");
+        assert.equal(array1.hasTrailingComma, array2.hasTrailingComma, "array1.hasTrailingComma !== array2.hasTrailingComma");
         assert.equal(array1.length, array2.length, "array1.length !== array2.length");
 
         for (var i = 0, n = array1.length; i < n; i++) {

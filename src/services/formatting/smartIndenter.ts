@@ -223,7 +223,7 @@ module ts.formatting {
                 switch (node.parent.kind) {
                     case SyntaxKind.TypeReference:
                         if ((<TypeReferenceNode>node.parent).typeArguments &&
-                            rangeContainsStartEnd((<TypeReferenceNode>node.parent).typeArguments, node.getStart(sourceFile), node.getEnd())) {
+                            nodeArrayContainsStartEnd((<TypeReferenceNode>node.parent).typeArguments, node.getStart(sourceFile), node.getEnd())) {
                             return (<TypeReferenceNode>node.parent).typeArguments;
                         }
                         break;
@@ -240,10 +240,10 @@ module ts.formatting {
                     case SyntaxKind.ConstructSignature:
                         var start = node.getStart(sourceFile);
                         if ((<SignatureDeclaration>node.parent).typeParameters &&
-                            rangeContainsStartEnd((<SignatureDeclaration>node.parent).typeParameters, start, node.getEnd())) {
+                            nodeArrayContainsStartEnd((<SignatureDeclaration>node.parent).typeParameters, start, node.getEnd())) {
                             return (<SignatureDeclaration>node.parent).typeParameters;
                         }
-                        if (rangeContainsStartEnd((<SignatureDeclaration>node.parent).parameters, start, node.getEnd())) {
+                        if (nodeArrayContainsStartEnd((<SignatureDeclaration>node.parent).parameters, start, node.getEnd())) {
                             return (<SignatureDeclaration>node.parent).parameters;
                         }
                         break;
@@ -251,11 +251,11 @@ module ts.formatting {
                     case SyntaxKind.CallExpression:
                         var start = node.getStart(sourceFile);
                         if ((<CallExpression>node.parent).typeArguments &&
-                            rangeContainsStartEnd((<CallExpression>node.parent).typeArguments, start, node.getEnd())) {
+                            nodeArrayContainsStartEnd((<CallExpression>node.parent).typeArguments, start, node.getEnd())) {
                             return (<CallExpression>node.parent).typeArguments;
                         }
                         if ((<CallExpression>node.parent).arguments &&
-                            rangeContainsStartEnd((<CallExpression>node.parent).arguments, start, node.getEnd())) {
+                            nodeArrayContainsStartEnd((<CallExpression>node.parent).arguments, start, node.getEnd())) {
                             return (<CallExpression>node.parent).arguments;
                         }
                         break;

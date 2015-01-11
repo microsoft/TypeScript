@@ -148,16 +148,16 @@ module ts.formatting {
         switch (parent.kind) {
             case SyntaxKind.ClassDeclaration:
             case SyntaxKind.InterfaceDeclaration:
-                return rangeContainsRange((<InterfaceDeclaration>parent).members, node);
+                return nodeArrayContainsRange((<InterfaceDeclaration>parent).members, node);
             case SyntaxKind.ModuleDeclaration:
                 var body = (<ModuleDeclaration>parent).body;
-                return body && body.kind === SyntaxKind.Block && rangeContainsRange((<Block>body).statements, node);
+                return body && body.kind === SyntaxKind.Block && nodeArrayContainsRange((<Block>body).statements, node);
             case SyntaxKind.SourceFile:
             case SyntaxKind.Block:
             case SyntaxKind.ModuleBlock:
-                return rangeContainsRange((<Block>parent).statements, node);
+                return nodeArrayContainsRange((<Block>parent).statements, node);
             case SyntaxKind.CatchClause:
-                return rangeContainsRange((<CatchClause>parent).block.statements, node);
+                return nodeArrayContainsRange((<CatchClause>parent).block.statements, node);
         }
 
         return false;

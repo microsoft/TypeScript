@@ -137,10 +137,10 @@ module ts {
         return currentSourceFile.getLineAndCharacterFromPosition(pos).line;
     }
 
-    function emitNewLineBeforeLeadingComments(currentSourceFile: SourceFile, writer: EmitTextWriter, node: TextRange, leadingComments: CommentRange[]) {
+    function emitNewLineBeforeLeadingComments(currentSourceFile: SourceFile, writer: EmitTextWriter, start: number, leadingComments: CommentRange[]) {
         // If the leading comments start on different line than the start of node, write new line
-        if (leadingComments && leadingComments.length && node.pos !== leadingComments[0].pos &&
-            getLineOfLocalPosition(currentSourceFile, node.pos) !== getLineOfLocalPosition(currentSourceFile, leadingComments[0].pos)) {
+        if (leadingComments && leadingComments.length && start !== leadingComments[0].pos &&
+            getLineOfLocalPosition(currentSourceFile, start) !== getLineOfLocalPosition(currentSourceFile, leadingComments[0].pos)) {
             writer.writeLine();
         }
     }
@@ -483,7 +483,7 @@ module ts {
         function writeJsDocComments(declaration: Node) {
             if (declaration) {
                 var jsDocComments = getJsDocComments(declaration, currentSourceFile);
-                emitNewLineBeforeLeadingComments(currentSourceFile, writer, declaration, jsDocComments);
+                emitNewLineBeforeLeadingComments(currentSourceFile, writer, declaration.pos, jsDocComments);
                 // jsDoc comments are emitted at /*leading comment1 */space/*leading comment*/space
                 emitComments(currentSourceFile, writer, jsDocComments, /*trailingSeparator*/ true, newLine, writeCommentRange);
             }
@@ -1505,7 +1505,7 @@ module ts {
 
             var detachedCommentsInfo: { nodePos: number; detachedCommentEndPos: number }[];
             /** Emit detached comments of the node */
-            var emitDetachedComments = compilerOptions.removeComments ? (node: TextRange) => { } : emitDetachedCommentsAtPosition;
+            var emitDetachedComments = compilerOptions.removeComments ? (pos: number) => { } : emitDetachedCommentsAtPosition;
 
             /** Emits /// or pinned which is comment starting with /*! comments */
             var emitPinnedOrTripleSlashComments = compilerOptions.removeComments ? (node: Node) => { } : emitPinnedOrTripleSlashCommentsOfNode;
@@ -2640,7 +2640,7 @@ module ts {
                 }
                 decreaseIndent();
                 writeLine();
-                emitToken(SyntaxKind.CloseBraceToken, node.statements.end);
+                emitToken(SyntaxKind.CloseBraceToken, nodeArrayEnd(node.statements));
                 scopeEmitEnd();
             }
 
@@ -2797,7 +2797,7 @@ module ts {
                 emitLines(node.clauses);
                 decreaseIndent();
                 writeLine();
-                emitToken(SyntaxKind.CloseBraceToken, node.clauses.end);
+                emitToken(SyntaxKind.CloseBraceToken, nodeArrayEnd(node.clauses));
             }
 
             function isOnSameLine(node1: Node, node2: Node) {
@@ -3288,7 +3288,7 @@ module ts {
                 scopeEmitStart(node);
                 increaseIndent();
 
-                emitDetachedComments(node.body.kind === SyntaxKind.Block ? (<Block>node.body).statements : node.body);
+                emitDetachedComments(node.body.kind === SyntaxKind.Block ? (<Block>node.body).statements.pos : node.body.pos);
 
                 var startIndex = 0;
                 if (node.body.kind === SyntaxKind.Block) {
@@ -3327,9 +3327,9 @@ module ts {
                     emitTempDeclarations(/*newLine*/ true);
                     writeLine();
                     if (node.body.kind === SyntaxKind.Block) {
-                        emitLeadingCommentsOfPosition((<Block>node.body).statements.end);
+                        emitLeadingCommentsOfPosition(nodeArrayEnd((<Block>node.body).statements));
                         decreaseIndent();
-                        emitToken(SyntaxKind.CloseBraceToken,(<Block>node.body).statements.end);
+                        emitToken(SyntaxKind.CloseBraceToken, nodeArrayEnd((<Block>node.body).statements));
                     }
                     else {
                         decreaseIndent();
@@ -3529,11 +3529,11 @@ module ts {
                     write("return ");
                     emitNode(node.name);
                 }
-                emitToken(SyntaxKind.CloseBraceToken, node.members.end, emitClassReturnStatement);
+                emitToken(SyntaxKind.CloseBraceToken, nodeArrayEnd(node.members), emitClassReturnStatement);
                 write(";");
                 decreaseIndent();
                 writeLine();
-                emitToken(SyntaxKind.CloseBraceToken, node.members.end);
+                emitToken(SyntaxKind.CloseBraceToken, nodeArrayEnd(node.members));
                 scopeEmitEnd();
                 emitStart(node);
                 write(")(");
@@ -3579,7 +3579,7 @@ module ts {
                     scopeEmitStart(node, "constructor");
                     increaseIndent();
                     if (ctor) {
-                        emitDetachedComments((<Block>ctor.body).statements);
+                        emitDetachedComments((<Block>ctor.body).statements.pos);
                     }
                     emitCaptureThisForNodeIfNecessary(node);
                     if (ctor) {
@@ -3611,10 +3611,10 @@ module ts {
                     emitTempDeclarations(/*newLine*/ true);
                     writeLine();
                     if (ctor) {
-                        emitLeadingCommentsOfPosition((<Block>ctor.body).statements.end);
+                        emitLeadingCommentsOfPosition(nodeArrayEnd((<Block>ctor.body).statements));
                     }
                     decreaseIndent();
-                    emitToken(SyntaxKind.CloseBraceToken, ctor ? (<Block>ctor.body).statements.end : node.members.end);
+                    emitToken(SyntaxKind.CloseBraceToken, ctor ? nodeArrayEnd((<Block>ctor.body).statements) : nodeArrayEnd(node.members));
                     scopeEmitEnd();
                     emitEnd(<Node>ctor || node);
                     if (ctor) {
@@ -3656,7 +3656,7 @@ module ts {
                 emitEnumMemberDeclarations(isConstEnum);
                 decreaseIndent();
                 writeLine();
-                emitToken(SyntaxKind.CloseBraceToken, node.members.end);
+                emitToken(SyntaxKind.CloseBraceToken, nodeArrayEnd(node.members));
                 scopeEmitEnd();
                 write(")(");
                 emitModuleMemberName(node);
@@ -3748,7 +3748,7 @@ module ts {
                     decreaseIndent();
                     writeLine();
                     var moduleBlock = <ModuleBlock>getInnerMostModuleDeclarationFromDottedModule(node).body;
-                    emitToken(SyntaxKind.CloseBraceToken, moduleBlock.statements.end);
+                    emitToken(SyntaxKind.CloseBraceToken, nodeArrayEnd(moduleBlock.statements));
                     scopeEmitEnd();
                 }
                 write(")(");
@@ -3913,7 +3913,7 @@ module ts {
                 currentSourceFile = node;
                 // Start new file on new line
                 writeLine();
-                emitDetachedComments(node);
+                emitDetachedComments(node.pos);
 
                 // emit prologue directives prior to __extends
                 var startIndex = emitDirectivePrologues(node.statements, /*startWithNewLine*/ false);
@@ -4141,7 +4141,7 @@ module ts {
 
             function emitLeadingDeclarationComments(node: Node) {
                 var leadingComments = getLeadingCommentsToEmit(node);
-                emitNewLineBeforeLeadingComments(currentSourceFile, writer, node, leadingComments);
+                emitNewLineBeforeLeadingComments(currentSourceFile, writer, node.pos, leadingComments);
                 // Leading comments are emitted at /*leading comment1 */space/*leading comment*/space
                 emitComments(currentSourceFile, writer, leadingComments, /*trailingSeparator*/ true, newLine, writeComment);
             }
@@ -4165,13 +4165,13 @@ module ts {
                     // get the leading comments from the node
                     leadingComments = getLeadingCommentRanges(currentSourceFile.text, pos);
                 }
-                emitNewLineBeforeLeadingComments(currentSourceFile, writer, { pos: pos, end: pos }, leadingComments);
+                emitNewLineBeforeLeadingComments(currentSourceFile, writer, pos, leadingComments);
                 // Leading comments are emitted at /*leading comment1 */space/*leading comment*/space
                 emitComments(currentSourceFile, writer, leadingComments, /*trailingSeparator*/ true, newLine, writeComment);                
             }
 
-            function emitDetachedCommentsAtPosition(node: TextRange) {
-                var leadingComments = getLeadingCommentRanges(currentSourceFile.text, node.pos);
+            function emitDetachedCommentsAtPosition(pos: number) {
+                var leadingComments = getLeadingCommentRanges(currentSourceFile.text, pos);
                 if (leadingComments) {
                     var detachedComments: CommentRange[] = [];
                     var lastComment: CommentRange;
@@ -4198,12 +4198,12 @@ module ts {
                         // sure there is at least one blank line between it and the node.  If not, it's not
                         // a copyright header.
                         var lastCommentLine = getLineOfLocalPosition(currentSourceFile, detachedComments[detachedComments.length - 1].end);
-                        var astLine = getLineOfLocalPosition(currentSourceFile, skipTrivia(currentSourceFile.text, node.pos));
+                        var astLine = getLineOfLocalPosition(currentSourceFile, skipTrivia(currentSourceFile.text, pos));
                         if (astLine >= lastCommentLine + 2) {
                             // Valid detachedComments
-                            emitNewLineBeforeLeadingComments(currentSourceFile, writer, node, leadingComments);
+                            emitNewLineBeforeLeadingComments(currentSourceFile, writer, pos, leadingComments);
                             emitComments(currentSourceFile, writer, detachedComments, /*trailingSeparator*/ true, newLine, writeComment);
-                            var currentDetachedCommentInfo = { nodePos: node.pos, detachedCommentEndPos: detachedComments[detachedComments.length - 1].end };
+                            var currentDetachedCommentInfo = { nodePos: pos, detachedCommentEndPos: detachedComments[detachedComments.length - 1].end };
                             if (detachedCommentsInfo) {
                                 detachedCommentsInfo.push(currentDetachedCommentInfo);
                             }
@@ -4232,7 +4232,7 @@ module ts {
                     }
                 }
 
-                emitNewLineBeforeLeadingComments(currentSourceFile, writer, node, pinnedComments);
+                emitNewLineBeforeLeadingComments(currentSourceFile, writer, node.pos, pinnedComments);
                 // Leading comments are emitted at /*leading comment1 */space/*leading comment*/space
                 emitComments(currentSourceFile, writer, pinnedComments, /*trailingSeparator*/ true, newLine, writeComment);
             }

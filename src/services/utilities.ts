@@ -43,12 +43,20 @@ module ts {
         return lineStarts[line - 1];
     }
 
+    export function nodeArrayContainsRange(array: NodeArray<Node>, r2: TextRange): boolean {
+        return startEndContainsRange(array.pos, nodeArrayEnd(array), r2);
+    }
+
     export function rangeContainsRange(r1: TextRange, r2: TextRange): boolean {
         return startEndContainsRange(r1.pos, r1.end, r2);
     }
 
     export function startEndContainsRange(start: number, end: number, range: TextRange): boolean {
         return start <= range.pos && end >= range.end;
+    }
+
+    export function nodeArrayContainsStartEnd(array: NodeArray<Node>, start: number, end: number): boolean {
+        return array.pos <= start && nodeArrayEnd(array) >= end;
     }
 
     export function rangeContainsStartEnd(range: TextRange, start: number, end: number): boolean {

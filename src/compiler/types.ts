@@ -345,8 +345,10 @@ module ts {
         modifiers?: ModifiersArray;           // Array of modifiers
     }
 
-    export interface NodeArray<T> extends Array<T>, TextRange {
+    export interface NodeArray<T> extends Array<T> /*, TextRange */ {
+        pos: number;
         hasTrailingComma?: boolean;
+        closeTokenIsMissing?: boolean;
     }
 
     export interface ModifiersArray extends NodeArray<Node> {

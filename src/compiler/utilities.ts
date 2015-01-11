@@ -1032,4 +1032,19 @@ module ts {
 
         return createTextChangeRange(createTextSpanFromBounds(oldStartN, oldEndN), /*newLength: */newEndN - oldStartN);
     }
+
+    export function nodeArrayEnd(array: NodeArray<Node>) {
+        var end = array.length === 0 ? array.pos : lastOrUndefined(array).end;
+        if (!array.hasTrailingComma) {
+            return end;
+        }
+
+        Debug.assert(array.length > 0);
+        var sourceFile = getSourceFileOfNode(array[0]);
+        var scanner = createScanner(sourceFile.languageVersion, /*skipTrivia:*/ true, sourceFile.text);
+        scanner.setTextPos(end);
+        var kind = scanner.scan();
+        Debug.assert(kind === SyntaxKind.CommaToken);
+        return scanner.getTextPos();
+    }
 }

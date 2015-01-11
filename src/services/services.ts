@@ -199,7 +199,7 @@ module ts {
         }
 
         private createSyntaxList(nodes: NodeArray<Node>): Node {
-            var list = createNode(SyntaxKind.SyntaxList, nodes.pos, nodes.end, NodeFlags.Synthetic, this);
+            var list = createNode(SyntaxKind.SyntaxList, nodes.pos, nodeArrayEnd(nodes), NodeFlags.Synthetic, this);
             list._children = [];
             var pos = nodes.pos;
             for (var i = 0, len = nodes.length; i < len; i++) {
@@ -210,9 +210,10 @@ module ts {
                 list._children.push(node);
                 pos = node.end;
             }
-            if (pos < nodes.end) {
-                this.addSyntheticNodes(list._children, pos, nodes.end);
+            if (pos < nodeArrayEnd(nodes)) {
+                this.addSyntheticNodes(list._children, pos, nodeArrayEnd(nodes));
             }
+
             return list;
         }
 
@@ -233,7 +234,7 @@ module ts {
                         pos = this.addSyntheticNodes(children, pos, nodes.pos);
                     }
                     children.push(this.createSyntaxList(<NodeArray<Node>>nodes));
-                    pos = nodes.end;
+                    pos = nodeArrayEnd(nodes);
                 };
                 forEachChild(this, processNode, processNodes);
                 if (pos < this.end) {
