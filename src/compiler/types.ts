@@ -4,7 +4,7 @@ module ts {
     }
 
     export interface TextRange {
-        pos: number;
+        start: number;
         end: number;
     }
 
@@ -346,7 +346,7 @@ module ts {
     }
 
     export interface NodeArray<T> extends Array<T> /*, TextRange */ {
-        pos: number;
+        start: number;
         hasTrailingComma?: boolean;
         closeTokenIsMissing?: boolean;
     }

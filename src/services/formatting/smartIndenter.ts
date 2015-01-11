@@ -90,7 +90,7 @@ module ts.formatting {
                 var useActualIndentation = true;
                 if (ignoreActualIndentationRange) {
                     var start = current.getStart(sourceFile);
-                    useActualIndentation = start < ignoreActualIndentationRange.pos || start > ignoreActualIndentationRange.end;
+                    useActualIndentation = start < ignoreActualIndentationRange.start || start > ignoreActualIndentationRange.end;
                 }
 
                 if (useActualIndentation) {
@@ -130,7 +130,7 @@ module ts.formatting {
         function getParentStart(parent: Node, child: Node, sourceFile: SourceFile): LineAndCharacter {
             var containingList = getContainingList(child, sourceFile);
             if (containingList) {
-                return sourceFile.getLineAndCharacterFromPosition(containingList.pos);
+                return sourceFile.getLineAndCharacterFromPosition(containingList.start);
             }
 
             return sourceFile.getLineAndCharacterFromPosition(parent.getStart(sourceFile));

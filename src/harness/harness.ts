@@ -119,14 +119,14 @@ module Utils {
 
     export function assertInvariants(node: ts.Node, parent: ts.Node): void {
         if (node) {
-            assert.isFalse(node.pos < 0, "node.pos < 0");
+            assert.isFalse(node.start < 0, "node.start < 0");
             assert.isFalse(node.end < 0, "node.end < 0");
-            assert.isFalse(node.end < node.pos, "node.end < node.pos");
+            assert.isFalse(node.end < node.start, "node.end < node.start");
             assert.equal(node.parent, parent, "node.parent !== parent");
 
             if (parent) {
                 // Make sure each child is contained within the parent.
-                assert.isFalse(node.pos < parent.pos, "node.pos < parent.pos");
+                assert.isFalse(node.start < parent.start, "node.start < parent.start");
                 assert.isFalse(node.end > parent.end, "node.end > parent.end");
             }
 
@@ -138,16 +138,16 @@ module Utils {
             var currentPos = 0;
             ts.forEachChild(node,
                 child => {
-                    assert.isFalse(child.pos < currentPos, "child.pos < currentPos");
+                    assert.isFalse(child.start < currentPos, "child.start < currentPos");
                     currentPos = child.end;
                 },
                 (array: ts.NodeArray<ts.Node>) => {
-                    assert.isFalse(array.pos < node.pos, "array.pos < node.pos");
+                    assert.isFalse(array.start < node.start, "array.start < node.start");
                     assert.isFalse(ts.nodeArrayEnd(array) > node.end, "array.end > node.end");
-                    assert.isFalse(array.pos < currentPos, "array.pos < currentPos");
+                    assert.isFalse(array.start < currentPos, "array.start < currentPos");
 
                     for (var i = 0, n = array.length; i < n; i++) {
-                        assert.isFalse(array[i].pos < currentPos, "array[i].pos < currentPos");
+                        assert.isFalse(array[i].start < currentPos, "array[i].start < currentPos");
                         currentPos = array[i].end
                     }
 
@@ -171,7 +171,7 @@ module Utils {
     }
 
     function isNodeOrArray(a: any): boolean {
-        return a !== undefined && typeof a.pos === "number";
+        return a !== undefined && typeof a.start === "number";
     }
 
     export function convertDiagnostics(diagnostics: ts.Diagnostic[]) {
@@ -266,7 +266,7 @@ module Utils {
 
                     case "nextContainer":
                         if (n.nextContainer) {
-                            o[propertyName] = { kind: n.nextContainer.kind, pos: n.nextContainer.pos, end: n.nextContainer.end };
+                            o[propertyName] = { kind: n.nextContainer.kind, pos: n.nextContainer.start, end: n.nextContainer.end };
                         }
                         break;
 
@@ -318,7 +318,7 @@ module Utils {
 
         assert(node1, "node1");
         assert(node2, "node2");
-        assert.equal(node1.pos, node2.pos, "node1.pos !== node2.pos");
+        assert.equal(node1.start, node2.start, "node1.start !== node2.start");
         assert.equal(node1.end, node2.end, "node1.end !== node2.end");
         assert.equal(node1.kind, node2.kind, "node1.kind !== node2.kind");
         assert.equal(node1.flags, node2.flags, "node1.flags !== node2.flags");
@@ -350,7 +350,7 @@ module Utils {
 
         assert(array1, "array1");
         assert(array2, "array2");
-        assert.equal(array1.pos, array2.pos, "array1.pos !== array2.pos");
+        assert.equal(array1.start, array2.start, "array1.start !== array2.start");
         assert.equal(array1.hasTrailingComma, array2.hasTrailingComma, "array1.hasTrailingComma !== array2.hasTrailingComma");
         assert.equal(array1.length, array2.length, "array1.length !== array2.length");
 

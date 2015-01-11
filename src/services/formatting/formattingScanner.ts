@@ -77,7 +77,7 @@ module ts.formatting {
                 // consume leading trivia
                 scanner.scan();
                 var item = {
-                    pos: pos,
+                    start: pos,
                     end: scanner.getStartPos(),
                     kind: t
                 }
@@ -181,7 +181,7 @@ module ts.formatting {
             }
 
             var token: TextRangeWithKind = {
-                pos: scanner.getStartPos(),
+                start: scanner.getStartPos(),
                 end: scanner.getTextPos(),
                 kind: currentToken
             }
@@ -193,7 +193,7 @@ module ts.formatting {
                     break;
                 }
                 var trivia = {
-                    pos: scanner.getStartPos(),
+                    start: scanner.getStartPos(),
                     end: scanner.getTextPos(),
                     kind: currentToken
                 };
@@ -222,7 +222,7 @@ module ts.formatting {
 
         function isOnToken(): boolean {
             var current = (lastTokenInfo && lastTokenInfo.token.kind) ||  scanner.getToken();
-            var startPos = (lastTokenInfo && lastTokenInfo.token.pos) || scanner.getStartPos();
+            var startPos = (lastTokenInfo && lastTokenInfo.token.start) || scanner.getStartPos();
             return startPos < endPos && current !== SyntaxKind.EndOfFileToken && !isTrivia(current);
         }
 

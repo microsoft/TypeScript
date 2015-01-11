@@ -71,8 +71,8 @@ module ts.formatting {
 
         public TokensAreOnSameLine(): boolean {
             if (this.tokensAreOnSameLine === undefined) {
-                var startLine = this.sourceFile.getLineAndCharacterFromPosition(this.currentTokenSpan.pos).line;
-                var endLine = this.sourceFile.getLineAndCharacterFromPosition(this.nextTokenSpan.pos).line;
+                var startLine = this.sourceFile.getLineAndCharacterFromPosition(this.currentTokenSpan.start).line;
+                var endLine = this.sourceFile.getLineAndCharacterFromPosition(this.nextTokenSpan.start).line;
                 this.tokensAreOnSameLine = (startLine == endLine);
             }
 

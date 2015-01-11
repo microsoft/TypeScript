@@ -21,7 +21,7 @@ module ts.BreakpointResolver {
             //     var y = 10; 
             // token at position will return var keyword on second line as the token but we would like to use 
             // token on same line if trailing trivia (comments or white spaces on same line) part of the last token on that line
-            tokenAtLocation = findPrecedingToken(tokenAtLocation.pos, sourceFile);
+            tokenAtLocation = findPrecedingToken(tokenAtLocation.start, sourceFile);
 
             // Its a blank line
             if (!tokenAtLocation || sourceFile.getLineAndCharacterFromPosition(tokenAtLocation.getEnd()).line !== lineOfPosition) {
@@ -49,7 +49,7 @@ module ts.BreakpointResolver {
         }
 
         function spanInPreviousNode(node: Node): TextSpan {
-            return spanInNode(findPrecedingToken(node.pos, sourceFile));
+            return spanInNode(findPrecedingToken(node.start, sourceFile));
         }
 
         function spanInNextNode(node: Node): TextSpan {
@@ -205,7 +205,7 @@ module ts.BreakpointResolver {
                     // Tokens:
                     case SyntaxKind.SemicolonToken:
                     case SyntaxKind.EndOfFileToken:
-                        return spanInNodeIfStartsOnSameLine(findPrecedingToken(node.pos, sourceFile));
+                        return spanInNodeIfStartsOnSameLine(findPrecedingToken(node.start, sourceFile));
 
                     case SyntaxKind.CommaToken:
                         return spanInPreviousNode(node)
@@ -283,7 +283,7 @@ module ts.BreakpointResolver {
                         else {
                             Debug.assert(isDeclarationOfForStatement);
                             // Include var keyword from for statement declarations in the span
-                            return textSpan(findPrecedingToken(variableDeclaration.pos, sourceFile, variableDeclaration.parent), variableDeclaration);
+                            return textSpan(findPrecedingToken(variableDeclaration.start, sourceFile, variableDeclaration.parent), variableDeclaration);
                         }
                     }
                     else {
@@ -366,7 +366,7 @@ module ts.BreakpointResolver {
 
                     // Set span on previous token if it starts on same line otherwise on the first statement of the block
                     case SyntaxKind.ForStatement:
-                        return spanInNodeIfStartsOnSameLine(findPrecedingToken(block.pos, sourceFile, block.parent), block.statements[0]);
+                        return spanInNodeIfStartsOnSameLine(findPrecedingToken(block.start, sourceFile, block.parent), block.statements[0]);
                 }
 
                 // Default action is to set on first statement
@@ -399,11 +399,11 @@ module ts.BreakpointResolver {
                 switch (node.parent.kind) {
                     case SyntaxKind.EnumDeclaration:
                         var enumDeclaration = <EnumDeclaration>node.parent;
-                        return spanInNodeIfStartsOnSameLine(findPrecedingToken(node.pos, sourceFile, node.parent), enumDeclaration.members.length ? enumDeclaration.members[0] : enumDeclaration.getLastToken(sourceFile));
+                        return spanInNodeIfStartsOnSameLine(findPrecedingToken(node.start, sourceFile, node.parent), enumDeclaration.members.length ? enumDeclaration.members[0] : enumDeclaration.getLastToken(sourceFile));
 
                     case SyntaxKind.ClassDeclaration:
                         var classDeclaration = <ClassDeclaration>node.parent;
-                        return spanInNodeIfStartsOnSameLine(findPrecedingToken(node.pos, sourceFile, node.parent), classDeclaration.members.length ? classDeclaration.members[0] : classDeclaration.getLastToken(sourceFile));
+                        return spanInNodeIfStartsOnSameLine(findPrecedingToken(node.start, sourceFile, node.parent), classDeclaration.members.length ? classDeclaration.members[0] : classDeclaration.getLastToken(sourceFile));
 
                     case SyntaxKind.SwitchStatement:
                         return spanInNodeIfStartsOnSameLine(node.parent, (<SwitchStatement>node.parent).clauses[0]);

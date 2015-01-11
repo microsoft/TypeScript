@@ -22,7 +22,7 @@ module ts {
             function addOutliningSpan(hintSpanNode: Node, startElement: Node, endElement: Node, autoCollapse: boolean) {
                 if (hintSpanNode && startElement && endElement) {
                     var span: OutliningSpan = {
-                        textSpan: createTextSpanFromBounds(startElement.pos, endElement.end),
+                        textSpan: createTextSpanFromBounds(startElement.start, endElement.end),
                         hintSpan: createTextSpanFromBounds(hintSpanNode.getStart(), hintSpanNode.end),
                         bannerText: collapseText,
                         autoCollapse: autoCollapse

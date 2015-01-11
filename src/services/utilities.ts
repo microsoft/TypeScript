@@ -44,27 +44,27 @@ module ts {
     }
 
     export function nodeArrayContainsRange(array: NodeArray<Node>, r2: TextRange): boolean {
-        return startEndContainsRange(array.pos, nodeArrayEnd(array), r2);
+        return startEndContainsRange(array.start, nodeArrayEnd(array), r2);
     }
 
     export function rangeContainsRange(r1: TextRange, r2: TextRange): boolean {
-        return startEndContainsRange(r1.pos, r1.end, r2);
+        return startEndContainsRange(r1.start, r1.end, r2);
     }
 
     export function startEndContainsRange(start: number, end: number, range: TextRange): boolean {
-        return start <= range.pos && end >= range.end;
+        return start <= range.start && end >= range.end;
     }
 
     export function nodeArrayContainsStartEnd(array: NodeArray<Node>, start: number, end: number): boolean {
-        return array.pos <= start && nodeArrayEnd(array) >= end;
+        return array.start <= start && nodeArrayEnd(array) >= end;
     }
 
     export function rangeContainsStartEnd(range: TextRange, start: number, end: number): boolean {
-        return range.pos <= start && range.end >= end;
+        return range.start <= start && range.end >= end;
     }
 
     export function rangeOverlapsWithStartEnd(r1: TextRange, start: number, end: number) {
-        return startEndOverlapsWithStartEnd(r1.pos, r1.end, start, end);
+        return startEndOverlapsWithStartEnd(r1.start, r1.end, start, end);
     }
 
     export function startEndOverlapsWithStartEnd(start1: number, end1: number, start2: number, end2: number) {
@@ -104,7 +104,7 @@ module ts {
         // for the position of the relevant node (or comma).
         var syntaxList = forEach(node.parent.getChildren(), c => {
             // find syntax list that covers the span of the node
-            if (c.kind === SyntaxKind.SyntaxList && c.pos <= node.pos && c.end >= node.end) {
+            if (c.kind === SyntaxKind.SyntaxList && c.start <= node.start && c.end >= node.end) {
                 return c;
             }
         });
@@ -190,7 +190,7 @@ module ts {
         return find(parent);
 
         function find(n: Node): Node {
-            if (isToken(n) && n.pos === previousToken.end) {
+            if (isToken(n) && n.start === previousToken.end) {
                 // this is token that starts at the end of previous token - return it
                 return n;
             }
@@ -200,9 +200,9 @@ module ts {
                 var child = children[i];
                 var shouldDiveInChildNode =
                     // previous token is enclosed somewhere in the child
-                    (child.pos <= previousToken.pos && child.end > previousToken.end) ||
+                    (child.start <= previousToken.start && child.end > previousToken.end) ||
                     // previous token ends exactly at the beginning of child
-                    (child.pos === previousToken.end);
+                    (child.start === previousToken.end);
 
                 if (shouldDiveInChildNode && nodeHasTokens(child)) {
                     return find(child);

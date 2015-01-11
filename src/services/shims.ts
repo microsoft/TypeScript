@@ -711,16 +711,16 @@ module ts {
                     forEach(result.referencedFiles, refFile => {
                         convertResult.referencedFiles.push({
                             path: normalizePath(refFile.filename),
-                            position: refFile.pos,
-                            length: refFile.end - refFile.pos
+                            position: refFile.start,
+                            length: refFile.end - refFile.start
                         });
                     });
 
                     forEach(result.importedFiles, importedFile => {
                         convertResult.importedFiles.push({
                             path: normalizeSlashes(importedFile.filename),
-                            position: importedFile.pos,
-                            length: importedFile.end - importedFile.pos
+                            position: importedFile.start,
+                            length: importedFile.end - importedFile.start
                         });
                     });
                     return convertResult;

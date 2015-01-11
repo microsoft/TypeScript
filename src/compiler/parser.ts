@@ -372,7 +372,7 @@ module ts {
     }
 
     interface IncrementalElement {
-        pos: number;
+        start: number;
         parent?: Node;
         intersectsChange: boolean
         length?: number;
@@ -422,7 +422,7 @@ module ts {
 
                     // If we don't have a node, or the node we have isn't in the right position,
                     // then try to find a viable node at the position requested.
-                    if (!current || current.pos !== position) {
+                    if (!current || current.start !== position) {
                         findHighestListElementThatStartsAtPosition(position);
                     }
                 }
@@ -435,7 +435,7 @@ module ts {
                 lastQueriedPosition = position;
 
                 // Either we don'd have a node, or we have a node at the position being asked for.
-                Debug.assert(!current || current.pos === position);
+                Debug.assert(!current || current.start === position);
                 return <IncrementalNode>current;
             }
         };
@@ -453,7 +453,7 @@ module ts {
             forEachChild(sourceFile, visitNode, visitArray);
 
             function visitNode(node: Node) {
-                if (position >= node.pos && position < node.end) {
+                if (position >= node.start && position < node.end) {
                     // Position was within this node.  Keep searching deeper to find the node.
                     forEachChild(node, visitNode, visitArray);
 
@@ -466,13 +466,13 @@ module ts {
             }
 
             function visitArray(array: NodeArray<Node>) {
-                if (array.length > 0 && position >= array.pos && position < lastOrUndefined(array).end) {
+                if (array.length > 0 && position >= array.start && position < lastOrUndefined(array).end) {
                     // position was in this array.  Search through this array to see if we find a
                     // viable element.
                     for (var i = 0, n = array.length; i < n; i++) {
                         var child = array[i];
                         if (child) {
-                            if (child.pos === position) {
+                            if (child.start === position) {
                                 // Found the right node.  We're done.
                                 currentArray = array;
                                 currentArrayIndex = i;
@@ -480,7 +480,7 @@ module ts {
                                 return true;
                             }
                             else {
-                                if (child.pos < position && position < child.end) {
+                                if (child.start < position && position < child.end) {
                                     // Position in somewhere within this child.  Search in it and 
                                     // stop searching in this array.
                                     forEachChild(child, visitNode, visitArray);
@@ -706,7 +706,7 @@ module ts {
             visitNode(node);
 
             function visitNode(child: IncrementalNode) {
-                if (child.pos > changeRangeOldEnd) {
+                if (child.start > changeRangeOldEnd) {
                     // Node is entirely past the change range.  We need to move both its pos and 
                     // end, forward or backward appropriately.
                     moveElementEntirelyPastChangeRange(child, delta);
@@ -730,7 +730,7 @@ module ts {
             }
 
             function visitArray(array: IncrementalNodeArray) {
-                if (array.pos > changeRangeOldEnd) {
+                if (array.start > changeRangeOldEnd) {
                     // Array is entirely after the change range.  We need to move it, and move any of
                     // its children.
                     moveElementEntirelyPastChangeRange(array, delta);
@@ -758,7 +758,7 @@ module ts {
 
         function adjustIntersectingElement(element: IncrementalElement, end: number, changeStart: number, changeRangeOldEnd: number, changeRangeNewEnd: number, delta: number) {
             Debug.assert(end >= changeStart, "Adjusting an element that was entirely before the change range");
-            Debug.assert(element.pos <= changeRangeOldEnd, "Adjusting an element that was entirely after the change range");
+            Debug.assert(element.start <= changeRangeOldEnd, "Adjusting an element that was entirely after the change range");
 
             // We have an element that intersects the change range in some way.  It may have its
             // start, or its end (or both) in the changed range.  We want to adjust any part
@@ -791,7 +791,7 @@ module ts {
             //
             // The element will keep its position if possible.  Or Move backward to the new-end
             // if it's in the 'Y' range.
-            element.pos = Math.min(element.pos, changeRangeNewEnd);
+            element.start = Math.min(element.start, changeRangeNewEnd);
 
             // If the 'end' is after the change range, then we always adjust it by the delta
             // amount.  However, if the end is in the change range, then how we adjust it 
@@ -823,9 +823,9 @@ module ts {
                 (<any>element).end = Math.min(end, changeRangeNewEnd);
             }
 
-            Debug.assert(element.pos <= (<any>element).end);
+            Debug.assert(element.start <= (<any>element).end);
             if (element.parent) {
-                Debug.assert(element.pos >= element.parent.pos);
+                Debug.assert(element.start >= element.parent.start);
                 Debug.assert((<any>element).end <= element.parent.end);
             }
         }
@@ -842,14 +842,14 @@ module ts {
                 // Ditch any existing LS children we may have created.  This way we can avoid 
                 // moving them forward.
                 node._children = undefined;
-                node.pos += delta;
+                node.start += delta;
                 node.end += delta;
 
                 forEachChild(node, visitNode, visitArray);
             }
 
             function visitArray(array: IncrementalNodeArray) {
-                array.pos += delta;
+                array.start += delta;
 
                 for (var i = 0, n = array.length; i < n; i++) {
                     visitNode(array[i]);
@@ -877,7 +877,7 @@ module ts {
             // start of the tree.
             for (var i = 0; start > 0 && i <= maxLookahead; i++) {
                 var nearestNode = findNearestNodeStartingBeforeOrAtPosition(start);
-                var position = nearestNode.pos;
+                var position = nearestNode.start;
 
                 start = Math.max(0, position - 1);
             }
@@ -896,7 +896,7 @@ module ts {
 
             if (lastNodeEntirelyBeforePosition) {
                 var lastChildOfLastEntireNodeBeforePosition = getLastChild(lastNodeEntirelyBeforePosition);
-                if (lastChildOfLastEntireNodeBeforePosition.pos > bestResult.pos) {
+                if (lastChildOfLastEntireNodeBeforePosition.start > bestResult.start) {
                     bestResult = lastChildOfLastEntireNodeBeforePosition;
                 }
             }
@@ -934,8 +934,8 @@ module ts {
 
                 // If the child intersects this position, then this node is currently the nearest 
                 // node that starts before the position.
-                if (child.pos <= position) {
-                    if (child.pos >= bestResult.pos) {
+                if (child.start <= position) {
+                    if (child.start >= bestResult.start) {
                         // This node starts before the position, and is closer to the position than
                         // the previous best node we found.  It is now the new best node.
                         bestResult = child;
@@ -974,7 +974,7 @@ module ts {
                     }
                 }
                 else {
-                    Debug.assert(child.pos > position);
+                    Debug.assert(child.start > position);
                     // We're now at a node that is entirely past the position we're searching for.
                     // This node (and all following nodes) could never contribute to the result,
                     // so just skip them by returning 'true' here.
@@ -1262,7 +1262,7 @@ module ts {
                 pos = scanner.getStartPos();
             }
 
-            node.pos = pos;
+            node.start = pos;
             node.end = pos;
             return node;
         }
@@ -1555,7 +1555,7 @@ module ts {
             var saveParsingContext = parsingContext;
             parsingContext |= 1 << kind;
             var result = <NodeArray<T>>[];
-            result.pos = getNodePos();
+            result.start = getNodePos();
             var savedStrictModeContext = inStrictModeContext();
 
             while (!isListTerminator(kind)) {
@@ -1896,7 +1896,7 @@ module ts {
             var saveParsingContext = parsingContext;
             parsingContext |= 1 << kind;
             var result = <NodeArray<T>>[];
-            result.pos = getNodePos();
+            result.start = getNodePos();
 
             var commaStart = -1; // Meaning the previous token was not a comma
             while (true) {
@@ -1940,7 +1940,7 @@ module ts {
         function createMissingList<T>(): NodeArray<T> {
             var pos = getNodePos();
             var result = <NodeArray<T>>[];
-            result.pos = pos;
+            result.start = pos;
             return result;
         }
 
@@ -1958,7 +1958,7 @@ module ts {
         function parseEntityName(allowReservedWords: boolean, diagnosticMessage?: DiagnosticMessage): EntityName {
             var entity: EntityName = parseIdentifier(diagnosticMessage);
             while (parseOptional(SyntaxKind.DotToken)) {
-                var node = <QualifiedName>createNode(SyntaxKind.QualifiedName, entity.pos);
+                var node = <QualifiedName>createNode(SyntaxKind.QualifiedName, entity.start);
                 node.left = entity;
                 node.right = parseRightSideOfDot(allowReservedWords);
                 entity = finishNode(node);
@@ -2015,7 +2015,7 @@ module ts {
             Debug.assert(template.head.kind === SyntaxKind.TemplateHead, "Template head has wrong token kind");
 
             var templateSpans = <NodeArray<TemplateSpan>>[];
-            templateSpans.pos = getNodePos();
+            templateSpans.start = getNodePos();
 
             do {
                 templateSpans.push(parseTemplateSpan());
@@ -2339,7 +2339,7 @@ module ts {
         }
 
         function parseIndexSignatureDeclaration(modifiers: ModifiersArray): IndexSignatureDeclaration {
-            var fullStart = modifiers ? modifiers.pos : scanner.getStartPos();
+            var fullStart = modifiers ? modifiers.start : scanner.getStartPos();
             var node = <IndexSignatureDeclaration>createNode(SyntaxKind.IndexSignature, fullStart);
             setModifiers(node, modifiers);
             node.parameters = parseBracketedList(ParsingContext.Parameters, parseParameter, SyntaxKind.OpenBracketToken, SyntaxKind.CloseBracketToken);
@@ -2561,7 +2561,7 @@ module ts {
             var type = parseNonArrayType();
             while (!scanner.hasPrecedingLineBreak() && parseOptional(SyntaxKind.OpenBracketToken)) {
                 parseExpected(SyntaxKind.CloseBracketToken);
-                var node = <ArrayTypeNode>createNode(SyntaxKind.ArrayType, type.pos);
+                var node = <ArrayTypeNode>createNode(SyntaxKind.ArrayType, type.start);
                 node.elementType = type;
                 type = finishNode(node);
             }
@@ -2572,12 +2572,12 @@ module ts {
             var type = parseArrayTypeOrHigher();
             if (token === SyntaxKind.BarToken) {
                 var types = <NodeArray<TypeNode>>[type];
-                types.pos = type.pos;
+                types.start = type.start;
                 while (parseOptional(SyntaxKind.BarToken)) {
                     types.push(parseArrayTypeOrHigher());
                 }
 
-                var node = <UnionTypeNode>createNode(SyntaxKind.UnionType, type.pos);
+                var node = <UnionTypeNode>createNode(SyntaxKind.UnionType, type.start);
                 node.types = types;
                 type = finishNode(node);
             }
@@ -2866,14 +2866,14 @@ module ts {
         function parseSimpleArrowFunctionExpression(identifier: Identifier): Expression {
             Debug.assert(token === SyntaxKind.EqualsGreaterThanToken, "parseSimpleArrowFunctionExpression should only have been called if we had a =>");
 
-            var node = <FunctionExpression>createNode(SyntaxKind.ArrowFunction, identifier.pos);
+            var node = <FunctionExpression>createNode(SyntaxKind.ArrowFunction, identifier.start);
 
-            var parameter = <ParameterDeclaration>createNode(SyntaxKind.Parameter, identifier.pos);
+            var parameter = <ParameterDeclaration>createNode(SyntaxKind.Parameter, identifier.start);
             parameter.name = identifier;
             finishNode(parameter);
 
             node.parameters = <NodeArray<ParameterDeclaration>>[parameter];
-            node.parameters.pos = parameter.pos;
+            node.parameters.start = parameter.start;
 
             parseExpected(SyntaxKind.EqualsGreaterThanToken);
             node.body = parseArrowFunctionExpressionBody();
@@ -3064,7 +3064,7 @@ module ts {
 
             // Note: we explicitly 'allowIn' in the whenTrue part of the condition expression, and 
             // we do not that for the 'whenFalse' part.  
-            var node = <ConditionalExpression>createNode(SyntaxKind.ConditionalExpression, leftOperand.pos);
+            var node = <ConditionalExpression>createNode(SyntaxKind.ConditionalExpression, leftOperand.start);
             node.condition = leftOperand;
             node.whenTrue = allowInAnd(parseAssignmentExpressionOrHigher);
             parseExpected(SyntaxKind.ColonToken);
@@ -3153,7 +3153,7 @@ module ts {
         }
 
         function makeBinaryExpression(left: Expression, operator: SyntaxKind, right: Expression): BinaryExpression {
-            var node = <BinaryExpression>createNode(SyntaxKind.BinaryExpression, left.pos);
+            var node = <BinaryExpression>createNode(SyntaxKind.BinaryExpression, left.start);
             node.left = left;
             node.operator = operator;
             node.right = right;
@@ -3216,7 +3216,7 @@ module ts {
 
             Debug.assert(isLeftHandSideExpression(expression));
             if ((token === SyntaxKind.PlusPlusToken || token === SyntaxKind.MinusMinusToken) && !scanner.hasPrecedingLineBreak()) {
-                var node = <PostfixUnaryExpression>createNode(SyntaxKind.PostfixUnaryExpression, expression.pos);
+                var node = <PostfixUnaryExpression>createNode(SyntaxKind.PostfixUnaryExpression, expression.start);
                 node.operand = expression;
                 node.operator = token;
                 nextToken();
@@ -3326,7 +3326,7 @@ module ts {
 
             // If we have seen "super" it must be followed by '(' or '.'.
             // If it wasn't then just try to parse out a '.' and report an error.
-            var node = <PropertyAccessExpression>createNode(SyntaxKind.PropertyAccessExpression, expression.pos);
+            var node = <PropertyAccessExpression>createNode(SyntaxKind.PropertyAccessExpression, expression.start);
             node.expression = expression;
             parseExpected(SyntaxKind.DotToken, Diagnostics.super_must_be_followed_by_an_argument_list_or_member_access);
             node.name = parseRightSideOfDot(/*allowIdentifierNames:*/ true);
@@ -3346,7 +3346,7 @@ module ts {
             while (true) {
                 var dotOrBracketStart = scanner.getTokenPos();
                 if (parseOptional(SyntaxKind.DotToken)) {
-                    var propertyAccess = <PropertyAccessExpression>createNode(SyntaxKind.PropertyAccessExpression, expression.pos);
+                    var propertyAccess = <PropertyAccessExpression>createNode(SyntaxKind.PropertyAccessExpression, expression.start);
                     propertyAccess.expression = expression;
                     propertyAccess.name = parseRightSideOfDot(/*allowIdentifierNames:*/ true);
                     expression = finishNode(propertyAccess);
@@ -3354,7 +3354,7 @@ module ts {
                 }
 
                 if (parseOptional(SyntaxKind.OpenBracketToken)) {
-                    var indexedAccess = <ElementAccessExpression>createNode(SyntaxKind.ElementAccessExpression, expression.pos);
+                    var indexedAccess = <ElementAccessExpression>createNode(SyntaxKind.ElementAccessExpression, expression.start);
                     indexedAccess.expression = expression;
 
                     // It's not uncommon for a user to write: "new Type[]".
@@ -3373,7 +3373,7 @@ module ts {
                 }
 
                 if (token === SyntaxKind.NoSubstitutionTemplateLiteral || token === SyntaxKind.TemplateHead) {
-                    var tagExpression = <TaggedTemplateExpression>createNode(SyntaxKind.TaggedTemplateExpression, expression.pos);
+                    var tagExpression = <TaggedTemplateExpression>createNode(SyntaxKind.TaggedTemplateExpression, expression.start);
                     tagExpression.tag = expression;
                     tagExpression.template = token === SyntaxKind.NoSubstitutionTemplateLiteral
                         ? parseLiteralNode()
@@ -3400,7 +3400,7 @@ module ts {
                         return expression;
                     }
 
-                    var callExpr = <CallExpression>createNode(SyntaxKind.CallExpression, expression.pos);
+                    var callExpr = <CallExpression>createNode(SyntaxKind.CallExpression, expression.start);
                     callExpr.expression = expression;
                     callExpr.typeArguments = typeArguments;
                     callExpr.arguments = parseArgumentList();
@@ -3408,7 +3408,7 @@ module ts {
                     continue;
                 }
                 else if (token === SyntaxKind.OpenParenToken) {
-                    var callExpr = <CallExpression>createNode(SyntaxKind.CallExpression, expression.pos);
+                    var callExpr = <CallExpression>createNode(SyntaxKind.CallExpression, expression.start);
                     callExpr.expression = expression;
                     callExpr.arguments = parseArgumentList();
                     expression = finishNode(callExpr);
@@ -4311,7 +4311,7 @@ module ts {
 
                 if (!modifiers) {
                     modifiers = <ModifiersArray>[];
-                    modifiers.pos = modifierStart;
+                    modifiers.start = modifierStart;
                 }
                 flags |= modifierToFlag(modifierKind);
                 modifiers.push(finishNode(createNode(modifierKind, modifierStart)));
@@ -4687,9 +4687,9 @@ module ts {
                     break;
                 }
 
-                var range = { pos: triviaScanner.getTokenPos(), end: triviaScanner.getTextPos() };
+                var range = { start: triviaScanner.getTokenPos(), end: triviaScanner.getTextPos() };
 
-                var comment = sourceText.substring(range.pos, range.end);
+                var comment = sourceText.substring(range.start, range.end);
                 var referencePathMatchResult = getFileReferenceFromReferencePath(comment, range);
                 if (referencePathMatchResult) {
                     var fileReference = referencePathMatchResult.fileReference;
@@ -4699,7 +4699,7 @@ module ts {
                         referencedFiles.push(fileReference);
                     }
                     if (diagnosticMessage) {
-                        sourceFile.referenceDiagnostics.push(createFileDiagnostic(sourceFile, range.pos, range.end - range.pos, diagnosticMessage));
+                        sourceFile.referenceDiagnostics.push(createFileDiagnostic(sourceFile, range.start, range.end - range.start, diagnosticMessage));
                     }
                 }
                 else {
@@ -4707,7 +4707,7 @@ module ts {
                     var amdModuleNameMatchResult = amdModuleNameRegEx.exec(comment);
                     if (amdModuleNameMatchResult) {
                         if (amdModuleName) {
-                            sourceFile.referenceDiagnostics.push(createFileDiagnostic(sourceFile, range.pos, range.end - range.pos, Diagnostics.An_AMD_module_cannot_have_multiple_name_assignments));
+                            sourceFile.referenceDiagnostics.push(createFileDiagnostic(sourceFile, range.start, range.end - range.start, Diagnostics.An_AMD_module_cannot_have_multiple_name_assignments));
                         }
                         amdModuleName = amdModuleNameMatchResult[2];
                     }

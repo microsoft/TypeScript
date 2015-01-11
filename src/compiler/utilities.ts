@@ -70,7 +70,7 @@ module ts {
     }
 
     export function getFullWidth(node: Node) {
-        return node.end - node.pos;
+        return node.end - node.start;
     }
 
     // Returns true if this node contains a parse error anywhere underneath it.
@@ -109,12 +109,12 @@ module ts {
     // This is a useful function for debugging purposes.
     export function nodePosToString(node: Node): string {
         var file = getSourceFileOfNode(node);
-        var loc = file.getLineAndCharacterFromPosition(node.pos);
+        var loc = file.getLineAndCharacterFromPosition(node.start);
         return file.filename + "(" + loc.line + "," + loc.character + ")";
     }
 
     export function getStartPosOfNode(node: Node): number {
-        return node.pos;
+        return node.start;
     }
 
     // Returns true if this node is missing from the actual source code.  'missing' is different
@@ -134,7 +134,7 @@ module ts {
             return true;
         }
 
-        return node.pos === node.end && node.kind !== SyntaxKind.EndOfFileToken;
+        return node.start === node.end && node.kind !== SyntaxKind.EndOfFileToken;
     }
     
     export function nodeIsPresent(node: Node) {
@@ -145,10 +145,10 @@ module ts {
         // With nodes that have no width (i.e. 'Missing' nodes), we actually *don't*
         // want to skip trivia because this will launch us forward to the next token.
         if (nodeIsMissing(node)) {
-            return node.pos;
+            return node.start;
         }
 
-        return skipTrivia((sourceFile || getSourceFileOfNode(node)).text, node.pos);
+        return skipTrivia((sourceFile || getSourceFileOfNode(node)).text, node.start);
     }
 
     export function getSourceTextOfNodeFromSourceFile(sourceFile: SourceFile, node: Node): string {
@@ -157,7 +157,7 @@ module ts {
         }
 
         var text = sourceFile.text;
-        return text.substring(skipTrivia(text, node.pos), node.end);
+        return text.substring(skipTrivia(text, node.start), node.end);
     }
 
     export function getTextOfNodeFromSourceText(sourceText: string, node: Node): string {
@@ -165,7 +165,7 @@ module ts {
             return "";
         }
 
-        return sourceText.substring(skipTrivia(sourceText, node.pos), node.end);
+        return sourceText.substring(skipTrivia(sourceText, node.start), node.end);
     }
 
     export function getTextOfNode(node: Node): string {
@@ -202,7 +202,7 @@ module ts {
     export function createDiagnosticForNodeFromMessageChain(node: Node, messageChain: DiagnosticMessageChain, newLine: string): Diagnostic {
         node = getErrorSpanForNode(node);
         var file = getSourceFileOfNode(node);
-        var start = skipTrivia(file.text, node.pos);
+        var start = skipTrivia(file.text, node.start);
         var length = node.end - start;
         return flattenDiagnosticChain(file, start, length, messageChain, newLine);
     }
@@ -228,7 +228,7 @@ module ts {
         // Alternatively, it might be required and missing (e.g. the name of a module), in which
         // case its pos will equal its end (length 0). In either of these cases, we should fall
         // back to the original node that the error was issued on.
-        return errorSpan && errorSpan.pos < errorSpan.end ? errorSpan : node;
+        return errorSpan && errorSpan.start < errorSpan.end ? errorSpan : node;
     }
 
     export function isExternalModule(file: SourceFile): boolean {
@@ -296,14 +296,14 @@ module ts {
         // If parameter/type parameter, the prev token trailing comments are part of this node too
         if (node.kind === SyntaxKind.Parameter || node.kind === SyntaxKind.TypeParameter) {
             // e.g.   (/** blah */ a, /** blah */ b);
-            return concatenate(getTrailingCommentRanges(sourceFileOfNode.text, node.pos),
+            return concatenate(getTrailingCommentRanges(sourceFileOfNode.text, node.start),
                 // e.g.:     (
                 //            /** blah */ a,
                 //            /** blah */ b);
-                getLeadingCommentRanges(sourceFileOfNode.text, node.pos));
+                getLeadingCommentRanges(sourceFileOfNode.text, node.start));
         }
         else {
-            return getLeadingCommentRanges(sourceFileOfNode.text, node.pos);
+            return getLeadingCommentRanges(sourceFileOfNode.text, node.start);
         }
     }
 
@@ -312,9 +312,9 @@ module ts {
 
         function isJsDocComment(comment: CommentRange) {
             // True if the comment starts with '/**' but not if it is '/**/'
-            return sourceFileOfNode.text.charCodeAt(comment.pos + 1) === CharacterCodes.asterisk &&
-                sourceFileOfNode.text.charCodeAt(comment.pos + 2) === CharacterCodes.asterisk &&
-                sourceFileOfNode.text.charCodeAt(comment.pos + 3) !== CharacterCodes.slash;
+            return sourceFileOfNode.text.charCodeAt(comment.start + 1) === CharacterCodes.asterisk &&
+                sourceFileOfNode.text.charCodeAt(comment.start + 2) === CharacterCodes.asterisk &&
+                sourceFileOfNode.text.charCodeAt(comment.start + 3) !== CharacterCodes.slash;
         }
     }
 
@@ -762,11 +762,11 @@ module ts {
             else {
                 var matchResult = fullTripleSlashReferencePathRegEx.exec(comment);
                 if (matchResult) {
-                    var start = commentRange.pos;
+                    var start = commentRange.start;
                     var end = commentRange.end;
                     return {
                         fileReference: {
-                            pos: start,
+                            start: start,
                             end: end,
                             filename: matchResult[3]
                         },
@@ -1034,7 +1034,7 @@ module ts {
     }
 
     export function nodeArrayEnd(array: NodeArray<Node>) {
-        var end = array.length === 0 ? array.pos : lastOrUndefined(array).end;
+        var end = array.length === 0 ? array.start : lastOrUndefined(array).end;
         if (!array.hasTrailingComma) {
             return end;
         }

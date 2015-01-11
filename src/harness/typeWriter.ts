@@ -82,7 +82,7 @@ class TypeWriterWalker {
     }
 
     private log(node: ts.Node, type: ts.Type): void {
-        var actualPos = ts.skipTrivia(this.currentSourceFile.text, node.pos);
+        var actualPos = ts.skipTrivia(this.currentSourceFile.text, node.start);
         var lineAndCharacter = this.currentSourceFile.getLineAndCharacterFromPosition(actualPos);
         var sourceText = ts.getTextOfNodeFromSourceText(this.currentSourceFile.text, node);
         

@@ -231,7 +231,7 @@ module ts.SignatureHelp {
                     // Find the list that starts right *after* the < or ( token.
                     // If the user has just opened a list, consider this item 0.
                     var list = getChildListThatStartsWithOpenerToken(callExpression, node, sourceFile);
-                    var isTypeArgList = callExpression.typeArguments && callExpression.typeArguments.pos === list.pos;
+                    var isTypeArgList = callExpression.typeArguments && callExpression.typeArguments.start === list.start;
                     Debug.assert(list !== undefined);
                     return {
                         kind: isTypeArgList ? ArgumentListKind.TypeArguments : ArgumentListKind.CallArguments,
@@ -251,7 +251,7 @@ module ts.SignatureHelp {
                 var listItemInfo = findListItemInfo(node);
                 if (listItemInfo) {
                     var list = listItemInfo.list;
-                    var isTypeArgList = callExpression.typeArguments && callExpression.typeArguments.pos === list.pos;
+                    var isTypeArgList = callExpression.typeArguments && callExpression.typeArguments.start === list.start;
 
                     // The listItemIndex we got back includes commas. Our goal is to return the index of the proper
                     // item (not including commas). Here are some examples:
@@ -402,7 +402,7 @@ module ts.SignatureHelp {
 
                 // If the node is not a subspan of its parent, this is a big problem.
                 // There have been crashes that might be caused by this violation.
-                if (n.pos < n.parent.pos || n.end > n.parent.end) {
+                if (n.start < n.parent.start || n.end > n.parent.end) {
                     Debug.fail("Node of kind " + n.kind + " is not a subspan of its parent of kind " + n.parent.kind);
                 }
 

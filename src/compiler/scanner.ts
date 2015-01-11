@@ -498,7 +498,7 @@ module ts {
                         }
                         if (collecting) {
                             if (!result) result = [];
-                            result.push({ pos: startPos, end: pos, hasTrailingNewLine: hasTrailingNewLine });
+                            result.push({ start: startPos, end: pos, hasTrailingNewLine: hasTrailingNewLine });
                         }
                         continue;
                     }
