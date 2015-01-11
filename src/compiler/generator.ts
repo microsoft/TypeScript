@@ -689,7 +689,7 @@ module ts {
                     }
                 }
 
-                if (shouldBeginLabel) {
+                if (shouldBeginLabel || operationIndex === 0) {
                     beginLabel();
                 }
             }

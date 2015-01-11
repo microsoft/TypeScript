@@ -1,9 +1,12 @@
+tests/cases/conformance/parser/ecmascript5/Accessors/parserAccessors10.ts(2,3): error TS1185: Modifiers cannot appear here.
 tests/cases/conformance/parser/ecmascript5/Accessors/parserAccessors10.ts(2,14): error TS2378: A 'get' accessor must return a value or consist of a single 'throw' statement.
 
 
-==== tests/cases/conformance/parser/ecmascript5/Accessors/parserAccessors10.ts (1 errors) ====
+==== tests/cases/conformance/parser/ecmascript5/Accessors/parserAccessors10.ts (2 errors) ====
     var v = {
       public get foo() { }
+      ~~~~~~
+!!! error TS1185: Modifiers cannot appear here.
                  ~~~
 !!! error TS2378: A 'get' accessor must return a value or consist of a single 'throw' statement.
     };

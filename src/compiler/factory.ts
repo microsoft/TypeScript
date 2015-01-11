@@ -1282,7 +1282,7 @@ module ts {
             }
 
             function visitVariableDeclarationListOrInitializer(node: VariableDeclarationList | Expression): VariableDeclarationList | Expression {
-                return visitNode(node, Visitor.visitVariableDeclarationListOrInitializer);
+                return visitNode(node, Visitor.visitVariableDeclarationListOrInitializer, handler.visitVariableDeclarationListOrInitializer);
             }
 
             function visitFunctionDeclaration(node: FunctionDeclaration): Statement {

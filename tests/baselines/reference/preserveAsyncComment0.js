@@ -26,7 +26,6 @@ function func() {
         _resolve(__awaiter(__generator(function (_state) {
             switch (_state.label) {
                 case 0:
-                    // variable statement
                     a = 1;
                     b = 1;
                     c = 1;

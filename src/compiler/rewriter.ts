@@ -493,14 +493,15 @@ module ts {
             var assignments = map(declarations, rewriteVariableDeclaration);
             assignments = filter<BinaryExpression>(assignments, nodeIsPresent);
             var assignment = reduceRight(assignments, mergeAssignments);
-            if (assignment) {
-                if (node.parent.kind === SyntaxKind.ForInStatement) {
+            if (node.parent.kind === SyntaxKind.ForInStatement) {
+                if (assignment) {
                     builder.emit(OpCode.Statement, factory.createExpressionStatement(assignment));
-
                 }
-
-                return assignment;
+                var declaration = declarations[0];
+                return <Identifier>declaration.name;
             }
+
+            return assignment;
         }
 
         function rewriteVariableDeclaration(node: VariableDeclaration): BinaryExpression {

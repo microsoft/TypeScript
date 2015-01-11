@@ -1,8 +1,7 @@
 tests/cases/conformance/async/downlevel/asyncSetter.ts(7,3): error TS1042: 'async' modifier cannot be used on a 'set' accessor.
-tests/cases/conformance/async/downlevel/asyncSetter.ts(7,3): error TS1057: An async function or method must have a valid awaitable return type.
 
 
-==== tests/cases/conformance/async/downlevel/asyncSetter.ts (2 errors) ====
+==== tests/cases/conformance/async/downlevel/asyncSetter.ts (1 errors) ====
     declare class Promise<T> {
         constructor(init: (resolve: (value?: T | IPromise<T>) => void, reject: (reason?: any) => void) => void);
         then<TResult>(onfulfilled?: (value: T) => TResult | IPromise<TResult>, onrejected?: (reason: any) => TResult | IPromise<TResult>): Promise<TResult>;
@@ -12,8 +11,5 @@ tests/cases/conformance/async/downlevel/asyncSetter.ts(7,3): error TS1057: An as
       async set foo(value) {
       ~~~~~
 !!! error TS1042: 'async' modifier cannot be used on a 'set' accessor.
-      ~~~~~~~~~~~~~~~~~~~~~~
       }
-    ~~~
-!!! error TS1057: An async function or method must have a valid awaitable return type.
     }

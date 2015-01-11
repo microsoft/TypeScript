@@ -14,9 +14,7 @@ function f() {
     var a;
     return new Promise(function (_resolve) {
         _resolve(__awaiter(__generator(function (_state) {
-            switch (_state.label) {
-                case 0: return ["return"];
-            }
+            return ["return"];
         })));
     });
 }

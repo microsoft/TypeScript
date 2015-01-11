@@ -158,7 +158,8 @@
     },
     "'{0}' modifier cannot be used on a '{1}' accessor.": {
         "category": "Error",
-        "code": 1042
+        "code": 1042,
+        "isEarly": true
     },
     "'{0}' modifier cannot appear on a data property.": { 
         "category": "Error",
@@ -220,11 +221,13 @@
     },
     "An async function or method must have a valid awaitable return type.": {
         "category": "Error",
-        "code": 1057
+        "code": 1057,
+        "isEarly": true
     },
     "Type for `await` does not have a valid callable `then` member.": {
         "category": "Error",
-        "code": 1058
+        "code": 1058,
+        "isEarly": true
     },
     "Enum member must have initializer.": {
         "category": "Error",
