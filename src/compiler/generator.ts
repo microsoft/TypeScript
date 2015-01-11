@@ -559,7 +559,7 @@ module ts {
             }
 
             var state = getState();
-            var generatorStatements = buildStatements();
+            var generatorStatements = buildStatements(/*forceReturn*/ true);
             var generatorFunctionBody = factory.createBlock(generatorStatements);
             var generatorFunction = factory.createFunctionExpression(/*name*/ undefined, generatorFunctionBody, [factory.createParameterDeclaration(state)]);
             var generatorExpression = factory.createCallExpression(factory.createIdentifier("__generator"), [generatorFunction]);
@@ -598,111 +598,48 @@ module ts {
             }
         }
 
-        function buildStatements(): Statement[]{
-            var exceptionStack: ExceptionBlock[] = [];
-            var statementsStack: NodeArray<Statement>[] = [];
-            var operationIndex: number = 0;
+        function buildStatements(forceReturn?: boolean): Statement[] {
             var blockIndex: number = 0;
-            var nextLabelNumber: number = 0;
-            var instructionWasAbrupt = false;
-            var instructionWasCompletion = false;
-            var relatedLocation: TextRange;
+            var labelNumber: number = 0;
+            var lastOperationWasAbrupt = false;
+            var lastOperationWasCompletion = false;
             var clauses: CaseClause[];
-            var rootStatements: Statement[];
             var statements: Statement[];
 
-            var shouldEmitSwitchStatement = emitRequiresSwitchStatement();
-            if (shouldEmitSwitchStatement) {
-                initializeSwitchStatement();
-                if (hasProtectedRegions) {
-                    initializeProtectedRegions();
-                }
-            }
-            else {
-                initializeStatementList();
+            if (hasProtectedRegions) {
+                initializeProtectedRegions();
             }
 
             if (operations) {
-                writeOperations();
-            }
-
-            if (!instructionWasCompletion) {
-                writeLabels();
-                relatedLocation = undefined;
-                writeReturn();
-            }
-
-            if (shouldEmitSwitchStatement) {
-                flushLabel();
-            }
-
-            return rootStatements;
-
-            function emitRequiresSwitchStatement(): boolean {
-                if (hasProtectedRegions) {
-                    return true;
+                for (var operationIndex = 0; operationIndex < operations.length; operationIndex++) {
+                    writeOperation(
+                        operations[operationIndex],
+                        operationArguments[operationIndex],
+                        operationLocations[operationIndex]);
                 }
-
-                if (labels) {
-                    for (var i = 0; i < labels.length; i++) {
-                        if (labels[i] !== -1) {
-                            return true;
-                        }
-                    }
-                }
-
-                return false;
             }
 
-            function initializeSwitchStatement(): void {
-                clauses = [];
+            flushFinalLabel();
+
+            if (clauses) {
                 var state = getState();
                 var labelExpression = factory.createPropertyAccessExpression(state, factory.createIdentifier("label"));
                 var switchStatement = factory.createSwitchStatement(labelExpression, clauses);
-                rootStatements = [switchStatement];
+                return [switchStatement];
             }
 
-            function initializeStatementList(): void {
-                rootStatements = statements = [];
+            if (statements) {
+                return statements;
             }
+
+            return [];
 
             function initializeProtectedRegions(): void {
-                beginLabel();
                 var trysProperty = factory.createPropertyAccessExpression(getState(), factory.createIdentifier("trys"));
                 var trysArray = factory.createArrayLiteralExpression([]);
                 var assignTrys = factory.createBinaryExpression(SyntaxKind.EqualsToken, trysProperty, trysArray);
                 writeStatement(assignTrys);
-            }
-
-            function writeLabels(): void {
-                if (!shouldEmitSwitchStatement) {
-                    return;
-                }
-
-                if (!labelNumbers) labelNumbers = [];
-
-                var shouldBeginLabel = false;
-                for (var label = 0; label < labels.length; label++) {
-                    if (labels[label] === operationIndex) {
-                        labelNumbers[label] = nextLabelNumber;
-                        shouldBeginLabel = true;
-                    }
-                }
-
-                if (shouldBeginLabel || operationIndex === 0) {
-                    beginLabel();
-                }
-            }
-
-            function beginLabel() {
-                if (nextLabelNumber > 0) {
-                    flushLabel();
-                }
-
-                statements = [];
-                instructionWasAbrupt = false;
-                instructionWasCompletion = false;
-                nextLabelNumber++;
+                flushLabel();
             }
 
             function flushLabel(): void {
@@ -710,33 +647,70 @@ module ts {
                     return;
                 }
 
-                if (!instructionWasAbrupt && !instructionWasCompletion) {
-                    var nextLabelExpression = factory.createNumericLiteral(nextLabelNumber);
-                    var labelProperty = factory.createPropertyAccessExpression(getState(), factory.createIdentifier("label"));
-                    var labelAssign = factory.createBinaryExpression(SyntaxKind.EqualsToken, labelProperty, nextLabelExpression);
-                    writeStatement(labelAssign);
+                if (!lastOperationWasAbrupt) {
+                    markLabelEnd();
                 }
 
-                var labelNumber = nextLabelNumber - 1;
-                var labelExpression = factory.createNumericLiteral(labelNumber);
-                var caseClause = factory.createCaseClause(labelExpression, statements);
-                clauses.push(caseClause);
+                appendLabel();
+
                 statements = undefined;
+                lastOperationWasAbrupt = false;
+                lastOperationWasCompletion = false;
+                labelNumber++;
             }
 
-            // operations
-            function writeOperations(): void {
-                while (operationIndex < operations.length) {
-                    var code = operations[operationIndex];
-                    var args = operationArguments[operationIndex];
-                    relatedLocation = operationLocations[operationIndex];
-                    writeLabels();
-                    writeOperation(code, args);
-                    operationIndex++;
+            function flushFinalLabel(): void {
+                if (!lastOperationWasCompletion && forceReturn) {
+                    tryEnterLabel();
+                    writeReturn();
+                }
+
+                if (!statements) {
+                    return;
+                }
+
+                if (clauses) {
+                    appendLabel();
                 }
             }
 
-            function writeOperation(code: OpCode, args: any[]): void {
+            function appendLabel(): void {
+                if (!clauses) {
+                    clauses = [];
+                }
+
+                var labelNumberExpression = factory.createNumericLiteral(labelNumber);
+                var clause = factory.createCaseClause(labelNumberExpression, statements);
+                clauses.push(clause);
+            }
+
+            function markLabelEnd(): void {
+                if (!lastOperationWasAbrupt) {
+                    var nextLabelNumberExpression = factory.createNumericLiteral(labelNumber + 1);
+                    var labelProperty = factory.createPropertyAccessExpression(getState(), factory.createIdentifier("label"));
+                    var labelAssign = factory.createBinaryExpression(SyntaxKind.EqualsToken, labelProperty, nextLabelNumberExpression);
+                    writeStatement(factory.createExpressionStatement(labelAssign));
+                }
+            }
+
+            function tryEnterLabel(): void {
+                if (!labels) {
+                    return;
+                }
+
+                var isLabel: boolean = false;
+                for (var label = 0; label < labels.length; label++) {
+                    if (labels[label] === operationIndex) {
+                        flushLabel();
+                        if (!labelNumbers) {
+                            labelNumbers = [];
+                        }
+                        labelNumbers[label] = labelNumber;
+                    }
+                }
+            }
+
+            function tryEnterProtectedRegion(): void {
                 if (blocks) {
                     for (; blockIndex < blockActions.length && blockOffsets[blockIndex] <= operationIndex; blockIndex++) {
                         var block = blocks[blockIndex];
@@ -759,7 +733,7 @@ module ts {
                             else {
                                 finallyLabel = factory.createOmittedExpression();
                             }
-                            
+
                             var labelsArray = factory.createArrayLiteralExpression([startLabel, catchLabel, finallyLabel, endLabel]);
                             var trysProperty = factory.createPropertyAccessExpression(getState(), factory.createIdentifier("trys"));
                             var pushMethod = factory.createPropertyAccessExpression(trysProperty, factory.createIdentifier("push"));
@@ -768,23 +742,29 @@ module ts {
                         }
                     }
                 }
+            }
+
+            // operations
+            function writeOperation(operation: OpCode, operationArguments: any[], operationLocation: TextRange): void {
+                tryEnterLabel();
+                tryEnterProtectedRegion();
 
                 // early termination, nothing else to process in this label
-                if (instructionWasAbrupt || instructionWasCompletion) {
+                if (lastOperationWasAbrupt) {
                     return;
                 }
 
-                instructionWasAbrupt = false;
-                instructionWasCompletion = false;
-                switch (code) {
-                    case OpCode.Statement: return writeStatement(<Node>args[0]);
-                    case OpCode.Assign: return writeAssign(<Expression>args[0], <Expression>args[1]);
-                    case OpCode.Break: return writeBreak(<Label>args[0]);
-                    case OpCode.BrTrue: return writeBrTrue(<Label>args[0], <Expression>args[1]);
-                    case OpCode.BrFalse: return writeBrFalse(<Label>args[0], <Expression>args[1]);
-                    case OpCode.Yield: return writeYield(<Expression>args[0]);
-                    case OpCode.Return: return writeReturn(<Expression>args[0]);
-                    case OpCode.Throw: return writeThrow(<Expression>args[0]);
+                lastOperationWasAbrupt = false;
+                lastOperationWasCompletion = false;
+                switch (operation) {
+                    case OpCode.Statement: return writeStatement(<Node>operationArguments[0]);
+                    case OpCode.Assign: return writeAssign(<Expression>operationArguments[0], <Expression>operationArguments[1], operationLocation);
+                    case OpCode.Break: return writeBreak(<Label>operationArguments[0], operationLocation);
+                    case OpCode.BrTrue: return writeBrTrue(<Label>operationArguments[0], <Expression>operationArguments[1], operationLocation);
+                    case OpCode.BrFalse: return writeBrFalse(<Label>operationArguments[0], <Expression>operationArguments[1], operationLocation);
+                    case OpCode.Yield: return writeYield(<Expression>operationArguments[0], operationLocation);
+                    case OpCode.Return: return writeReturn(<Expression>operationArguments[0], operationLocation);
+                    case OpCode.Throw: return writeThrow(<Expression>operationArguments[0], operationLocation);
                     case OpCode.Endfinally: return writeEndfinally();
                 }
             }
@@ -794,70 +774,76 @@ module ts {
                     node = factory.createExpressionStatement(<Expression>node);
                 }
 
+                if (!statements) {
+                    statements = [];
+                }
+
                 statements.push(<Statement>node);
             }
 
-            function writeAssign(left: Expression, right: Expression): void {
-                var assignExpression = factory.createBinaryExpression(SyntaxKind.EqualsToken, left, right);
+            function writeAssign(left: Expression, right: Expression, operationLocation?: TextRange): void {
+                var assignExpression = factory.createBinaryExpression(SyntaxKind.EqualsToken, left, right, operationLocation);
                 writeStatement(assignExpression);
             }
 
-            function writeBreak(label: Label): void {
-                instructionWasAbrupt = true;
+            function writeBreak(label: Label, operationLocation?: TextRange): void {
+                lastOperationWasAbrupt = true;
                 var instruction = factory.createStringLiteral('"break"');
                 var returnExpression = factory.createArrayLiteralExpression([instruction, createLabel(label)]);
-                var returnStatement = factory.createReturnStatement(returnExpression, relatedLocation);
+                var returnStatement = factory.createReturnStatement(returnExpression, operationLocation);
                 writeStatement(returnStatement);
             }
 
-            function writeBrTrue(label: Label, condition: Expression): void {
+            function writeBrTrue(label: Label, condition: Expression, operationLocation?: TextRange): void {
                 var instruction = factory.createStringLiteral('"break"');
                 var returnExpression = factory.createArrayLiteralExpression([instruction, createLabel(label)]);
-                var returnStatement = factory.createReturnStatement(returnExpression, relatedLocation);
+                var returnStatement = factory.createReturnStatement(returnExpression, operationLocation);
                 var ifStatement = factory.createIfStatement(condition, returnStatement);
                 writeStatement(ifStatement);
             }
 
-            function writeBrFalse(label: Label, condition: Expression): void {
+            function writeBrFalse(label: Label, condition: Expression, operationLocation?: TextRange): void {
                 var instruction = factory.createStringLiteral('"break"');
                 var returnExpression = factory.createArrayLiteralExpression([instruction, createLabel(label)]);
-                var returnStatement = factory.createReturnStatement(returnExpression, relatedLocation);
+                var returnStatement = factory.createReturnStatement(returnExpression, operationLocation);
                 var parenExpression = factory.createParenthesizedExpression(condition);
                 var notExpression = factory.createPrefixUnaryExpression(SyntaxKind.ExclamationToken, parenExpression);
                 var ifStatement = factory.createIfStatement(notExpression, returnStatement);
                 writeStatement(ifStatement);
             }
 
-            function writeYield(expression: Expression): void {
-                instructionWasAbrupt = true;
+            function writeYield(expression: Expression, operationLocation?: TextRange): void {
+                lastOperationWasAbrupt = true;
                 var elements: Expression[] = [factory.createStringLiteral('"yield"')];
                 if (expression) {
                     elements.push(expression);
                 }
                 var returnExpression = factory.createArrayLiteralExpression(elements);
-                var returnStatement = factory.createReturnStatement(returnExpression, relatedLocation);
+                var returnStatement = factory.createReturnStatement(returnExpression, operationLocation);
                 writeStatement(returnStatement);
             }
 
-            function writeReturn(expression?: Expression): void {
-                instructionWasCompletion = true;
+            function writeReturn(expression?: Expression, operationLocation?: TextRange): void {
+                lastOperationWasAbrupt = true;
+                lastOperationWasCompletion = true;
                 var elements: Expression[] = [factory.createStringLiteral('"return"')];
                 if (expression) {
                     elements.push(expression);
                 }
                 var returnExpression = factory.createArrayLiteralExpression(elements);
-                var returnStatement = factory.createReturnStatement(returnExpression, relatedLocation);
+                var returnStatement = factory.createReturnStatement(returnExpression, operationLocation);
                 writeStatement(returnStatement);
             }
 
-            function writeThrow(expression: Expression): void {
-                instructionWasCompletion = true;
-                var throwStatement = factory.createThrowStatement(expression, relatedLocation);
+            function writeThrow(expression: Expression, operationLocation?: TextRange): void {
+                lastOperationWasAbrupt = true;
+                lastOperationWasCompletion = true;
+                var throwStatement = factory.createThrowStatement(expression, operationLocation);
                 writeStatement(throwStatement);
             }
 
             function writeEndfinally(): void {
-                instructionWasAbrupt = true;
+                lastOperationWasAbrupt = true;
                 var instruction = factory.createStringLiteral('"endfinally"');
                 var returnExpression = factory.createArrayLiteralExpression([instruction]);
                 var returnStatement = factory.createReturnStatement(returnExpression);

@@ -18,18 +18,15 @@ async function func(): Promise<void> {
 function func() {
     return new Promise(function (_resolve) {
         _resolve(__awaiter(__generator(function (_state) {
-            switch (_state.label) {
-                case 0:
-                    "before";
-                    try {
-                        "try";
-                    }
-                    catch (e) {
-                        "catch";
-                    }
-                    "after";
-                    return ["return"];
+            "before";
+            try {
+                "try";
             }
+            catch (e) {
+                "catch";
+            }
+            "after";
+            return ["return"];
         })));
     });
 }

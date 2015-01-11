@@ -22,18 +22,15 @@ var p;
 function func() {
     return new Promise(function (_resolve) {
         _resolve(__awaiter(__generator(function (_state) {
-            switch (_state.label) {
-                case 0:
-                    "before";
-                    if (a) {
-                        "then";
-                    }
-                    else {
-                        "else";
-                    }
-                    "after";
-                    return ["return"];
+            "before";
+            if (a) {
+                "then";
             }
+            else {
+                "else";
+            }
+            "after";
+            return ["return"];
         })));
     });
 }

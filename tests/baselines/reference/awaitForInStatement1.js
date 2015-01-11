@@ -19,15 +19,12 @@ function func() {
     var i;
     return new Promise(function (_resolve) {
         _resolve(__awaiter(__generator(function (_state) {
-            switch (_state.label) {
-                case 0:
-                    "before";
-                    for (i in a) {
-                        "body";
-                    }
-                    "after";
-                    return ["return"];
+            "before";
+            for (i in a) {
+                "body";
             }
+            "after";
+            return ["return"];
         })));
     });
 }

@@ -24,13 +24,10 @@ function func() {
     var a, b, c;
     return new Promise(function (_resolve) {
         _resolve(__awaiter(__generator(function (_state) {
-            switch (_state.label) {
-                case 0:
-                    a = 1;
-                    b = 1;
-                    c = 1;
-                    return ["return"];
-            }
+            a = 1;
+            b = 1;
+            c = 1;
+            return ["return"];
         })));
     });
 }

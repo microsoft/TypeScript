@@ -23,20 +23,17 @@ async function func(): Promise<void> {
 function func() {
     return new Promise(function (_resolve) {
         _resolve(__awaiter(__generator(function (_state) {
-            switch (_state.label) {
-                case 0:
-                    "before";
-                    switch (a) {
-                        case b:
-                            "body0";
-                            break;
-                        case 1:
-                        default:
-                            "body1";
-                    }
-                    "after";
-                    return ["return"];
+            "before";
+            switch (a) {
+                case b:
+                    "body0";
+                    break;
+                case 1:
+                default:
+                    "body1";
             }
+            "after";
+            return ["return"];
         })));
     });
 }

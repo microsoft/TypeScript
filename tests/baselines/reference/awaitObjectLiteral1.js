@@ -17,14 +17,11 @@ function func() {
     var o;
     return new Promise(function (_resolve) {
         _resolve(__awaiter(__generator(function (_state) {
-            switch (_state.label) {
-                case 0:
-                    o = {
-                        a: a,
-                        b: 1
-                    };
-                    return ["return"];
-            }
+            o = {
+                a: a,
+                b: 1
+            };
+            return ["return"];
         })));
     });
 }

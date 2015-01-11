@@ -16,13 +16,10 @@ async function func(): Promise<void> {
 function func() {
     return new Promise(function (_resolve) {
         _resolve(__awaiter(__generator(function (_state) {
-            switch (_state.label) {
-                case 0:
-                    "before";
-                    o.b = a;
-                    "after";
-                    return ["return"];
-            }
+            "before";
+            o.b = a;
+            "after";
+            return ["return"];
         })));
     });
 }
