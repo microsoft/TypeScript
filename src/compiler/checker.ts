@@ -7893,14 +7893,6 @@ module ts {
                     return fallbackType;
                 }
 
-                var links: SymbolLinks;
-                if (type.symbol && !(type.flags & TypeFlags.Reference)) {
-                    links = getSymbolLinks(type.symbol);
-                    if (links.awaitedType) {
-                        return links.awaitedType;
-            }
-        }
-
                 seen[type.id] = true;
                 if (checkTypeRelatedTo(type, globalIPromiseType, assignableRelation, undefined)) {
                     var thenProp = getPropertyOfType(type, "then");
@@ -7910,9 +7902,6 @@ module ts {
                     var onFulfilledParameterSignatures = getSignaturesOfType(onFulfilledParameterType, SignatureKind.Call);
                     var awaitedType = getUnionType(map(onFulfilledParameterSignatures, signature => getTypeAtPosition(getErasedSignature(signature), 0)));
                     if (seen[awaitedType.id]) return fallbackType;
-                    if (links) {
-                        links.awaitedType = awaitedType;
-                    }
                     return getAwaitedTypeRecursive(awaitedType, /*fallbackType*/ awaitedType);
                 } else {
                     if (isTypeAssignableTo(type, thenableType)) {
@@ -7946,23 +7935,21 @@ module ts {
 
             if (returnType && returnType.symbol) {
                 var links = getSymbolLinks(returnType.symbol);
-                if (links.promiseType) {
-                    if (!links.awaitedType) {
-                        return getAwaitedType(returnType);
+                if (!links.promiseType) {
+                    var type = getTypeOfSymbol(returnType.symbol);
+                    if (isTypeAssignableTo(type, globalIPromiseConstructorType)) {
+                        links.promiseType = true;
                     }
-
-                    return links.awaitedType;
                 }
 
-                var type = getTypeOfSymbol(returnType.symbol);
-                if (isTypeAssignableTo(type, globalIPromiseConstructorType)) {
+                if (links.promiseType) {
                     var awaitedType = getAwaitedType(returnType);
                     if (awaitedType) {
-                        links.promiseType = true;
                         var promiseConstructor = getPromiseConstructor(node);
                         checkExpressionOrQualifiedName(promiseConstructor);
-                        return awaitedType;
                     }
+
+                    return awaitedType;
                 }
             }
 
