@@ -4,7 +4,7 @@
 module Harness.LanguageService {
     export class ScriptInfo {
         public version: number = 1;
-        public editRanges: { length: number; textChangeRange: ts.TextChangeRange; }[] = [];
+        public textChangeRanges: ts.TextChangeRange[] = [];
         public lineMap: number[] = null;
 
         constructor(public fileName: string, public content: string, public isOpen = true) {
@@ -17,7 +17,7 @@ module Harness.LanguageService {
         }
 
         public updateContent(content: string): void {
-            this.editRanges = [];
+            this.textChangeRanges = [];
             this.setContent(content);
             this.version++;
         }
@@ -30,11 +30,8 @@ module Harness.LanguageService {
             this.setContent(prefix + middle + suffix);
 
             // Store edit range + new length of script
-            this.editRanges.push({
-                length: this.content.length,
-                textChangeRange: ts.createTextChangeRange(
-                    ts.createSpanFromBounds(minChar, limChar), newText.length)
-            });
+            this.textChangeRanges.push(ts.createTextChangeRange(
+                ts.createSpanFromBounds(minChar, limChar), newText.length));
 
             // Update version #
             this.version++;
@@ -46,11 +43,11 @@ module Harness.LanguageService {
                 return ts.unchangedTextChangeRange;
             }
 
-            var initialEditRangeIndex = this.editRanges.length - (this.version - startVersion);
-            var lastEditRangeIndex = this.editRanges.length - (this.version - endVersion);
+            var initialEditRangeIndex = this.textChangeRanges.length - (this.version - startVersion);
+            var lastEditRangeIndex = this.textChangeRanges.length - (this.version - endVersion);
 
-            var entries = this.editRanges.slice(initialEditRangeIndex, lastEditRangeIndex);
-            return ts.collapseTextChangeRangesAcrossMultipleVersions(entries.map(e => e.textChangeRange));
+            var entries = this.textChangeRanges.slice(initialEditRangeIndex, lastEditRangeIndex);
+            return ts.collapseTextChangeRangesAcrossMultipleVersions(entries);
         }
     }
 
