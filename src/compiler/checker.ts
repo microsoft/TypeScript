@@ -7222,6 +7222,10 @@ module ts {
             }
 
             checkSpecializedSignatureDeclaration(node);
+            var nodeSymbol = getSymbolOfNode(node);
+            if (nodeSymbol){
+                checkDuplicateDeclarationOfSymbolInSameBlock(nodeSymbol);
+            }
         }
 
         function checkTypeForDuplicateIndexSignatures(node: Node) {
@@ -7516,6 +7520,54 @@ module ts {
             }
 
             return flags & flagsToCheck;
+        }
+
+        function checkDuplicateDeclarationOfSymbolInSameBlock(symbol: Symbol): void {
+            if ( !symbol.declarations) return;
+            
+            var declarations = symbol.declarations;
+            var duplicateDeclarationIndexes: Map<boolean> = {};
+            var signatures = getSignaturesOfSymbol(symbol);
+
+            for (var i = 0; i < signatures.length; i++) {
+                var signature1 = signatures[i];
+                for (var j = 0; j < i; j++) {
+                    var signature2 = signatures[j];
+                    switch(signature1.declaration.kind){
+                        case SyntaxKind.FunctionDeclaration:
+                        case SyntaxKind.MethodDeclaration:
+                        case SyntaxKind.MethodSignature:
+                        case SyntaxKind.Constructor:
+                        case SyntaxKind.CallSignature:
+                        case SyntaxKind.ConstructSignature:
+                            if (signature1.declaration.parent === signature2.declaration.parent && 
+                                compareSignatures(signature1, signature2, /*compareReturnTypes*/ false, compareTypes)=== Ternary.True) {
+                                duplicateDeclarationIndexes[i] = true;
+                                duplicateDeclarationIndexes[j] = true;
+                            }
+                            break;
+                    }
+                }
+            }
+
+            for (var key in duplicateDeclarationIndexes) {
+                switch (declarations[key].kind) {
+                    case SyntaxKind.FunctionDeclaration:
+                    case SyntaxKind.MethodDeclaration:
+                    case SyntaxKind.MethodSignature:
+                        error(declarations[key], ts.Diagnostics.Duplicate_overload_signature_for_0, ts.declarationNameToString(declarations[key].name));
+                        break;
+                    case SyntaxKind.Constructor:
+                        error(declarations[key], ts.Diagnostics.Duplicate_overload_signature_for_0, "constructor");
+                        break;
+                    case SyntaxKind.CallSignature:
+                        error(declarations[key], ts.Diagnostics.Duplicate_overload_signature_for_0, "call signature");
+                        break;
+                    case SyntaxKind.ConstructSignature:
+                        error(declarations[key], ts.Diagnostics.Duplicate_overload_signature_for_0, "construct signature");
+                        break;
+                }
+            }
         }
 
         function checkFunctionOrConstructorSymbol(symbol: Symbol): void {

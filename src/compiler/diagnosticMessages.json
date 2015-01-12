@@ -1282,6 +1282,10 @@
         "category": "Error",
         "code": 2462
     },
+    "Duplicate overload signature for {0}.": {
+        "category": "Error",
+        "code": 2463
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
