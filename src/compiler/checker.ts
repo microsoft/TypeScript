@@ -3568,9 +3568,6 @@ module ts {
 
             function typeParameterRelatedTo(source: TypeParameter, target: TypeParameter, reportErrors: boolean): Ternary {
                 if (relation === identityRelation) {
-                    if (source.symbol.name !== target.symbol.name) {
-                        return Ternary.False;
-                    }
                     // covers case when both type parameters does not have constraint (both equal to noConstraintType)
                     if (source.constraint === target.constraint) {
                         return Ternary.True;
