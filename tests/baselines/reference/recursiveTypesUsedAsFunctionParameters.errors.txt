@@ -1,9 +1,13 @@
+tests/cases/conformance/types/typeRelationships/recursiveTypes/recursiveTypesUsedAsFunctionParameters.ts(11,1): error TS2463: Duplicate overload signature for foo.
+tests/cases/conformance/types/typeRelationships/recursiveTypes/recursiveTypesUsedAsFunctionParameters.ts(12,1): error TS2463: Duplicate overload signature for foo.
+tests/cases/conformance/types/typeRelationships/recursiveTypes/recursiveTypesUsedAsFunctionParameters.ts(16,1): error TS2463: Duplicate overload signature for foo2.
+tests/cases/conformance/types/typeRelationships/recursiveTypes/recursiveTypesUsedAsFunctionParameters.ts(17,1): error TS2463: Duplicate overload signature for foo2.
 tests/cases/conformance/types/typeRelationships/recursiveTypes/recursiveTypesUsedAsFunctionParameters.ts(21,16): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
 tests/cases/conformance/types/typeRelationships/recursiveTypes/recursiveTypesUsedAsFunctionParameters.ts(34,5): error TS2463: Duplicate overload signature for foo5.
 tests/cases/conformance/types/typeRelationships/recursiveTypes/recursiveTypesUsedAsFunctionParameters.ts(35,5): error TS2463: Duplicate overload signature for foo5.
 
 
-==== tests/cases/conformance/types/typeRelationships/recursiveTypes/recursiveTypesUsedAsFunctionParameters.ts (3 errors) ====
+==== tests/cases/conformance/types/typeRelationships/recursiveTypes/recursiveTypesUsedAsFunctionParameters.ts (7 errors) ====
     class List<T> {
         data: T;
         next: List<List<T>>;
@@ -15,12 +19,20 @@ tests/cases/conformance/types/typeRelationships/recursiveTypes/recursiveTypesUse
     }
     
     function foo<T>(x: List<T>);
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for foo.
     function foo<U>(x: List<U>); // error, duplicate
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for foo.
     function foo<T>(x: List<T>) {
     }
     
     function foo2<T>(x: List<T>);
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for foo2.
     function foo2<U>(x: MyList<U>); // ok, nominally compared with first overload
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for foo2.
     function foo2<T>(x: any) {
     }
     

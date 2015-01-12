@@ -41,6 +41,8 @@ tests/cases/compiler/duplicateFunctionDeclaration.ts(109,1): error TS2463: Dupli
 tests/cases/compiler/duplicateFunctionDeclaration.ts(110,1): error TS2463: Duplicate overload signature for f8f.
 tests/cases/compiler/duplicateFunctionDeclaration.ts(121,1): error TS2463: Duplicate overload signature for f10A.
 tests/cases/compiler/duplicateFunctionDeclaration.ts(122,1): error TS2463: Duplicate overload signature for f10A.
+tests/cases/compiler/duplicateFunctionDeclaration.ts(125,1): error TS2463: Duplicate overload signature for f10B.
+tests/cases/compiler/duplicateFunctionDeclaration.ts(126,1): error TS2463: Duplicate overload signature for f10B.
 tests/cases/compiler/duplicateFunctionDeclaration.ts(130,5): error TS2463: Duplicate overload signature for f11.
 tests/cases/compiler/duplicateFunctionDeclaration.ts(131,5): error TS2463: Duplicate overload signature for f11.
 tests/cases/compiler/duplicateFunctionDeclaration.ts(144,5): error TS2463: Duplicate overload signature for foo.
@@ -59,7 +61,7 @@ tests/cases/compiler/duplicateFunctionDeclaration.ts(193,1): error TS2463: Dupli
 tests/cases/compiler/duplicateFunctionDeclaration.ts(194,1): error TS2463: Duplicate overload signature for f14C.
 
 
-==== tests/cases/compiler/duplicateFunctionDeclaration.ts (59 errors) ====
+==== tests/cases/compiler/duplicateFunctionDeclaration.ts (61 errors) ====
     declare function f1(); // error
     ~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2463: Duplicate overload signature for f1.
@@ -271,7 +273,11 @@ tests/cases/compiler/duplicateFunctionDeclaration.ts(194,1): error TS2463: Dupli
     function f10A<T>(x: T) { }
     
     function f10B<T>(x: T); // error
+    ~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for f10B.
     function f10B<Y>(z: Y); // error
+    ~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for f10B.
     function f10B(a){ }
     
     class C4<T> {

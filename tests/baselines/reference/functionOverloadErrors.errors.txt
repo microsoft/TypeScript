@@ -5,8 +5,14 @@ tests/cases/conformance/functions/functionOverloadErrors.ts(11,1): error TS2463:
 tests/cases/conformance/functions/functionOverloadErrors.ts(12,1): error TS2463: Duplicate overload signature for fn2b.
 tests/cases/conformance/functions/functionOverloadErrors.ts(17,1): error TS2463: Duplicate overload signature for fn3.
 tests/cases/conformance/functions/functionOverloadErrors.ts(18,1): error TS2463: Duplicate overload signature for fn3.
+tests/cases/conformance/functions/functionOverloadErrors.ts(34,1): error TS2463: Duplicate overload signature for fn8.
+tests/cases/conformance/functions/functionOverloadErrors.ts(35,1): error TS2463: Duplicate overload signature for fn8.
+tests/cases/conformance/functions/functionOverloadErrors.ts(39,1): error TS2463: Duplicate overload signature for fn9.
+tests/cases/conformance/functions/functionOverloadErrors.ts(40,1): error TS2463: Duplicate overload signature for fn9.
 tests/cases/conformance/functions/functionOverloadErrors.ts(44,25): error TS2304: Cannot find name 'Window'.
+tests/cases/conformance/functions/functionOverloadErrors.ts(50,1): error TS2463: Duplicate overload signature for fn11.
 tests/cases/conformance/functions/functionOverloadErrors.ts(50,25): error TS2304: Cannot find name 'Window'.
+tests/cases/conformance/functions/functionOverloadErrors.ts(51,1): error TS2463: Duplicate overload signature for fn11.
 tests/cases/conformance/functions/functionOverloadErrors.ts(51,32): error TS2304: Cannot find name 'window'.
 tests/cases/conformance/functions/functionOverloadErrors.ts(58,1): error TS2463: Duplicate overload signature for fn12.
 tests/cases/conformance/functions/functionOverloadErrors.ts(59,1): error TS2463: Duplicate overload signature for fn12.
@@ -24,7 +30,7 @@ tests/cases/conformance/functions/functionOverloadErrors.ts(110,1): error TS2463
 tests/cases/conformance/functions/functionOverloadErrors.ts(116,19): error TS2371: A parameter initializer is only allowed in a function or constructor implementation.
 
 
-==== tests/cases/conformance/functions/functionOverloadErrors.ts (24 errors) ====
+==== tests/cases/conformance/functions/functionOverloadErrors.ts (30 errors) ====
     //Function overload signature with initializer
     function fn1(x = 3);
                  ~~~~~
@@ -73,12 +79,20 @@ tests/cases/conformance/functions/functionOverloadErrors.ts(116,19): error TS237
     
     //Function overloads that differ only by type parameter name
     function fn8<T>(n: string);
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for fn8.
     function fn8<S>(n: string);
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for fn8.
     function fn8() { }
     
     //Function overloads that differ only by type parameter name when used in parameter type annotations
     function fn9<T>(n: T);
+    ~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for fn9.
     function fn9<S>(n: S);
+    ~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for fn9.
     function fn9() { }
     
     //Function overloads that differ only by type parameter constraints
@@ -91,9 +105,13 @@ tests/cases/conformance/functions/functionOverloadErrors.ts(116,19): error TS237
     
     //Function overloads that differ only by type parameter constraints where constraints are structually identical
     function fn11<T extends Window>();
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for fn11.
                             ~~~~~~
 !!! error TS2304: Cannot find name 'Window'.
     function fn11<S extends typeof window>();
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for fn11.
                                    ~~~~~~
 !!! error TS2304: Cannot find name 'window'.
     function fn11() { }

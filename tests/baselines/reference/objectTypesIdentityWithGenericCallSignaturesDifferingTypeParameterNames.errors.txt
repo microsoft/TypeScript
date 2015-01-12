@@ -10,6 +10,8 @@ tests/cases/conformance/types/typeRelationships/typeAndMemberIdentity/objectType
 tests/cases/conformance/types/typeRelationships/typeAndMemberIdentity/objectTypesIdentityWithGenericCallSignaturesDifferingTypeParameterNames.ts(43,1): error TS2463: Duplicate overload signature for foo3.
 tests/cases/conformance/types/typeRelationships/typeAndMemberIdentity/objectTypesIdentityWithGenericCallSignaturesDifferingTypeParameterNames.ts(46,1): error TS2463: Duplicate overload signature for foo4.
 tests/cases/conformance/types/typeRelationships/typeAndMemberIdentity/objectTypesIdentityWithGenericCallSignaturesDifferingTypeParameterNames.ts(47,1): error TS2463: Duplicate overload signature for foo4.
+tests/cases/conformance/types/typeRelationships/typeAndMemberIdentity/objectTypesIdentityWithGenericCallSignaturesDifferingTypeParameterNames.ts(62,1): error TS2463: Duplicate overload signature for foo7.
+tests/cases/conformance/types/typeRelationships/typeAndMemberIdentity/objectTypesIdentityWithGenericCallSignaturesDifferingTypeParameterNames.ts(63,1): error TS2463: Duplicate overload signature for foo7.
 tests/cases/conformance/types/typeRelationships/typeAndMemberIdentity/objectTypesIdentityWithGenericCallSignaturesDifferingTypeParameterNames.ts(66,1): error TS2463: Duplicate overload signature for foo8.
 tests/cases/conformance/types/typeRelationships/typeAndMemberIdentity/objectTypesIdentityWithGenericCallSignaturesDifferingTypeParameterNames.ts(67,1): error TS2463: Duplicate overload signature for foo8.
 tests/cases/conformance/types/typeRelationships/typeAndMemberIdentity/objectTypesIdentityWithGenericCallSignaturesDifferingTypeParameterNames.ts(70,1): error TS2463: Duplicate overload signature for foo9.
@@ -18,7 +20,7 @@ tests/cases/conformance/types/typeRelationships/typeAndMemberIdentity/objectType
 tests/cases/conformance/types/typeRelationships/typeAndMemberIdentity/objectTypesIdentityWithGenericCallSignaturesDifferingTypeParameterNames.ts(83,1): error TS2463: Duplicate overload signature for foo12.
 
 
-==== tests/cases/conformance/types/typeRelationships/typeAndMemberIdentity/objectTypesIdentityWithGenericCallSignaturesDifferingTypeParameterNames.ts (18 errors) ====
+==== tests/cases/conformance/types/typeRelationships/typeAndMemberIdentity/objectTypesIdentityWithGenericCallSignaturesDifferingTypeParameterNames.ts (20 errors) ====
     // object types are identical structurally
     
     class A {
@@ -105,7 +107,11 @@ tests/cases/conformance/types/typeRelationships/typeAndMemberIdentity/objectType
     function foo6(x: any) { }
     
     function foo7(x: A);
+    ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for foo7.
     function foo7(x: typeof a); // error
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for foo7.
     function foo7(x: any) { }
     
     function foo8(x: B<string>);
