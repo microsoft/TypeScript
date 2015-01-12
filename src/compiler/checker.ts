@@ -2127,7 +2127,10 @@ module ts {
             if (!links.declaredType) {
                 var type = <TypeParameter>createType(TypeFlags.TypeParameter);
                 type.symbol = symbol;
-                if (!(<TypeParameterDeclaration>getDeclarationOfKind(symbol, SyntaxKind.TypeParameter)).constraint) {
+                var constraint = (<TypeParameterDeclaration>getDeclarationOfKind(symbol, SyntaxKind.TypeParameter)).constraint;
+                if (constraint) {
+                    type.constraint = getTypeFromTypeNode(constraint);
+                }else{
                     type.constraint = noConstraintType;
                 }
                 links.declaredType = type;
