@@ -1,7 +1,15 @@
 tests/cases/conformance/functions/functionOverloadErrors.ts(2,14): error TS2371: A parameter initializer is only allowed in a function or constructor implementation.
+tests/cases/conformance/functions/functionOverloadErrors.ts(6,1): error TS2463: Duplicate overload signature for fn2a.
+tests/cases/conformance/functions/functionOverloadErrors.ts(7,1): error TS2463: Duplicate overload signature for fn2a.
+tests/cases/conformance/functions/functionOverloadErrors.ts(11,1): error TS2463: Duplicate overload signature for fn2b.
+tests/cases/conformance/functions/functionOverloadErrors.ts(12,1): error TS2463: Duplicate overload signature for fn2b.
+tests/cases/conformance/functions/functionOverloadErrors.ts(17,1): error TS2463: Duplicate overload signature for fn3.
+tests/cases/conformance/functions/functionOverloadErrors.ts(18,1): error TS2463: Duplicate overload signature for fn3.
 tests/cases/conformance/functions/functionOverloadErrors.ts(44,25): error TS2304: Cannot find name 'Window'.
 tests/cases/conformance/functions/functionOverloadErrors.ts(50,25): error TS2304: Cannot find name 'Window'.
 tests/cases/conformance/functions/functionOverloadErrors.ts(51,32): error TS2304: Cannot find name 'window'.
+tests/cases/conformance/functions/functionOverloadErrors.ts(58,1): error TS2463: Duplicate overload signature for fn12.
+tests/cases/conformance/functions/functionOverloadErrors.ts(59,1): error TS2463: Duplicate overload signature for fn12.
 tests/cases/conformance/functions/functionOverloadErrors.ts(65,13): error TS2385: Overload signatures must all be public, private or protected.
 tests/cases/conformance/functions/functionOverloadErrors.ts(68,13): error TS2385: Overload signatures must all be public, private or protected.
 tests/cases/conformance/functions/functionOverloadErrors.ts(75,21): error TS2383: Overload signatures must all be exported or not exported.
@@ -11,10 +19,12 @@ tests/cases/conformance/functions/functionOverloadErrors.ts(90,18): error TS2384
 tests/cases/conformance/functions/functionOverloadErrors.ts(94,1): error TS2394: Overload signature is not compatible with function implementation.
 tests/cases/conformance/functions/functionOverloadErrors.ts(99,1): error TS2394: Overload signature is not compatible with function implementation.
 tests/cases/conformance/functions/functionOverloadErrors.ts(103,1): error TS2394: Overload signature is not compatible with function implementation.
+tests/cases/conformance/functions/functionOverloadErrors.ts(109,1): error TS2463: Duplicate overload signature for fn15.
+tests/cases/conformance/functions/functionOverloadErrors.ts(110,1): error TS2463: Duplicate overload signature for fn15.
 tests/cases/conformance/functions/functionOverloadErrors.ts(116,19): error TS2371: A parameter initializer is only allowed in a function or constructor implementation.
 
 
-==== tests/cases/conformance/functions/functionOverloadErrors.ts (14 errors) ====
+==== tests/cases/conformance/functions/functionOverloadErrors.ts (24 errors) ====
     //Function overload signature with initializer
     function fn1(x = 3);
                  ~~~~~
@@ -23,18 +33,30 @@ tests/cases/conformance/functions/functionOverloadErrors.ts(116,19): error TS237
     
     //Multiple function overload signatures that are identical
     function fn2a();
+    ~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for fn2a.
     function fn2a();
+    ~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for fn2a.
     function fn2a() {
     
     }
     function fn2b(n: number[]);
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for fn2b.
     function fn2b(n: Array<number>);
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for fn2b.
     function fn2b() {
     }
     
     //Multiple function overload signatures that differ only by return type
     function fn3(x: string): string;
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for fn3.
     function fn3(y: string): number;
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for fn3.
     function fn3(): any {
         return null;
     }
@@ -81,7 +103,11 @@ tests/cases/conformance/functions/functionOverloadErrors.ts(116,19): error TS237
         parents: List<List<T>>;
     }
     function fn12<T extends List<List<any>>>();
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for fn12.
     function fn12<T extends List<any>>();
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for fn12.
     function fn12() { }
     
     //Function overloads that differ by accessibility
@@ -150,7 +176,11 @@ tests/cases/conformance/functions/functionOverloadErrors.ts(116,19): error TS237
     
     //Function overloads where return types are different infinitely recursive type reference
     function fn15<T extends List<List<any>>>(): T;
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for fn15.
     function fn15<T extends List<any>>(): T;
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for fn15.
     function fn15() {
         return undefined;
     }

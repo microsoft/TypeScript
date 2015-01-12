@@ -1,13 +1,19 @@
 tests/cases/compiler/anyIdenticalToItself.ts(1,1): error TS2394: Overload signature is not compatible with function implementation.
+tests/cases/compiler/anyIdenticalToItself.ts(1,1): error TS2463: Duplicate overload signature for foo.
+tests/cases/compiler/anyIdenticalToItself.ts(2,1): error TS2463: Duplicate overload signature for foo.
 tests/cases/compiler/anyIdenticalToItself.ts(6,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/anyIdenticalToItself.ts(10,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 
 
-==== tests/cases/compiler/anyIdenticalToItself.ts (3 errors) ====
+==== tests/cases/compiler/anyIdenticalToItself.ts (5 errors) ====
     function foo(x: any);
     ~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2394: Overload signature is not compatible with function implementation.
+    ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for foo.
     function foo(x: any);
+    ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for foo.
     function foo(x: any, y: number) { }
     
     class C {

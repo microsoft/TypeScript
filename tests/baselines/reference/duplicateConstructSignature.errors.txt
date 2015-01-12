@@ -1,0 +1,13 @@
+tests/cases/compiler/duplicateConstructSignature.ts(2,5): error TS2463: Duplicate overload signature for call signature.
+tests/cases/compiler/duplicateConstructSignature.ts(3,5): error TS2463: Duplicate overload signature for call signature.
+
+
+==== tests/cases/compiler/duplicateConstructSignature.ts (2 errors) ====
+    interface I {
+        (): number;
+        ~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for call signature.
+        (): string;
+        ~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for call signature.
+    }

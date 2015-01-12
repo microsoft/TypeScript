@@ -1,0 +1,21 @@
+tests/cases/compiler/recursiveTypeIdentity.ts(10,5): error TS2463: Duplicate overload signature for call signature.
+tests/cases/compiler/recursiveTypeIdentity.ts(11,5): error TS2463: Duplicate overload signature for call signature.
+
+
+==== tests/cases/compiler/recursiveTypeIdentity.ts (2 errors) ====
+    interface A {
+        <T extends A>(x: T): void;
+    }
+    
+    interface B {
+        <T extends B>(x: T): void;
+    }
+    
+    interface C {
+        (x: A): void;
+        ~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for call signature.
+        (x: B): void;
+        ~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for call signature.
+    }

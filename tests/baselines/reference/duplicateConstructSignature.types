@@ -1,7 +1,0 @@
-=== tests/cases/compiler/duplicateConstructSignature.ts ===
-interface I {
->I : I
-
-    (): number;
-    (): string;
-}

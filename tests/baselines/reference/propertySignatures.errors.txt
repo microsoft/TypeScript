@@ -1,9 +1,11 @@
 tests/cases/compiler/propertySignatures.ts(2,13): error TS2300: Duplicate identifier 'a'.
 tests/cases/compiler/propertySignatures.ts(2,23): error TS2300: Duplicate identifier 'a'.
+tests/cases/compiler/propertySignatures.ts(10,13): error TS2463: Duplicate overload signature for call signature.
+tests/cases/compiler/propertySignatures.ts(10,25): error TS2463: Duplicate overload signature for call signature.
 tests/cases/compiler/propertySignatures.ts(14,12): error TS2304: Cannot find name 'foo'.
 
 
-==== tests/cases/compiler/propertySignatures.ts (3 errors) ====
+==== tests/cases/compiler/propertySignatures.ts (5 errors) ====
     // Should be error - duplicate identifiers
     var foo1: { a:string; a: string; };
                 ~
@@ -18,6 +20,10 @@ tests/cases/compiler/propertySignatures.ts(14,12): error TS2304: Cannot find nam
     
     // Should be error
     var foo3: { (): string; (): string; };
+                ~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for call signature.
+                            ~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for call signature.
     
     // Should be OK
     var foo4: { (): void; };

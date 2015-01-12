@@ -1,40 +1,64 @@
 tests/cases/conformance/parser/ecmascript5/MemberFunctionDeclarations/parserMemberFunctionDeclarationAmbiguities1.ts(2,3): error TS2393: Duplicate function implementation.
+tests/cases/conformance/parser/ecmascript5/MemberFunctionDeclarations/parserMemberFunctionDeclarationAmbiguities1.ts(2,3): error TS2463: Duplicate overload signature for public.
 tests/cases/conformance/parser/ecmascript5/MemberFunctionDeclarations/parserMemberFunctionDeclarationAmbiguities1.ts(3,3): error TS2393: Duplicate function implementation.
+tests/cases/conformance/parser/ecmascript5/MemberFunctionDeclarations/parserMemberFunctionDeclarationAmbiguities1.ts(3,3): error TS2463: Duplicate overload signature for static.
+tests/cases/conformance/parser/ecmascript5/MemberFunctionDeclarations/parserMemberFunctionDeclarationAmbiguities1.ts(5,3): error TS2463: Duplicate overload signature for public.
 tests/cases/conformance/parser/ecmascript5/MemberFunctionDeclarations/parserMemberFunctionDeclarationAmbiguities1.ts(5,10): error TS2393: Duplicate function implementation.
+tests/cases/conformance/parser/ecmascript5/MemberFunctionDeclarations/parserMemberFunctionDeclarationAmbiguities1.ts(6,3): error TS2463: Duplicate overload signature for static.
 tests/cases/conformance/parser/ecmascript5/MemberFunctionDeclarations/parserMemberFunctionDeclarationAmbiguities1.ts(6,10): error TS2393: Duplicate function implementation.
+tests/cases/conformance/parser/ecmascript5/MemberFunctionDeclarations/parserMemberFunctionDeclarationAmbiguities1.ts(8,3): error TS2463: Duplicate overload signature for public.
 tests/cases/conformance/parser/ecmascript5/MemberFunctionDeclarations/parserMemberFunctionDeclarationAmbiguities1.ts(8,17): error TS2393: Duplicate function implementation.
+tests/cases/conformance/parser/ecmascript5/MemberFunctionDeclarations/parserMemberFunctionDeclarationAmbiguities1.ts(9,3): error TS2463: Duplicate overload signature for static.
 tests/cases/conformance/parser/ecmascript5/MemberFunctionDeclarations/parserMemberFunctionDeclarationAmbiguities1.ts(9,17): error TS2393: Duplicate function implementation.
+tests/cases/conformance/parser/ecmascript5/MemberFunctionDeclarations/parserMemberFunctionDeclarationAmbiguities1.ts(11,3): error TS2463: Duplicate overload signature for public.
 tests/cases/conformance/parser/ecmascript5/MemberFunctionDeclarations/parserMemberFunctionDeclarationAmbiguities1.ts(11,10): error TS2393: Duplicate function implementation.
+tests/cases/conformance/parser/ecmascript5/MemberFunctionDeclarations/parserMemberFunctionDeclarationAmbiguities1.ts(12,3): error TS2463: Duplicate overload signature for static.
 tests/cases/conformance/parser/ecmascript5/MemberFunctionDeclarations/parserMemberFunctionDeclarationAmbiguities1.ts(12,10): error TS2393: Duplicate function implementation.
 
 
-==== tests/cases/conformance/parser/ecmascript5/MemberFunctionDeclarations/parserMemberFunctionDeclarationAmbiguities1.ts (8 errors) ====
+==== tests/cases/conformance/parser/ecmascript5/MemberFunctionDeclarations/parserMemberFunctionDeclarationAmbiguities1.ts (16 errors) ====
     class C {
       public() {}
       ~~~~~~
 !!! error TS2393: Duplicate function implementation.
+      ~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for public.
       static() {}
       ~~~~~~
 !!! error TS2393: Duplicate function implementation.
+      ~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for static.
     
       public public() {}
+      ~~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for public.
              ~~~~~~
 !!! error TS2393: Duplicate function implementation.
       public static() {}
+      ~~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for static.
              ~~~~~~
 !!! error TS2393: Duplicate function implementation.
     
       public static public() {}
+      ~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for public.
                     ~~~~~~
 !!! error TS2393: Duplicate function implementation.
       public static static() {}
+      ~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for static.
                     ~~~~~~
 !!! error TS2393: Duplicate function implementation.
       
       static public() {}
+      ~~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for public.
              ~~~~~~
 !!! error TS2393: Duplicate function implementation.
       static static() {}
+      ~~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for static.
              ~~~~~~
 !!! error TS2393: Duplicate function implementation.
     }

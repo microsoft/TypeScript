@@ -1,0 +1,23 @@
+tests/cases/compiler/callSignatureFunctionOverload.ts(10,5): error TS2463: Duplicate overload signature for call signature.
+tests/cases/compiler/callSignatureFunctionOverload.ts(11,5): error TS2463: Duplicate overload signature for call signature.
+
+
+==== tests/cases/compiler/callSignatureFunctionOverload.ts (2 errors) ====
+    var foo: {
+        (name: string): string;
+        (name: 'order'): string;
+        (name: 'content'): string;
+        (name: 'done'): string;
+    }
+    
+    var foo2: {
+        (name: string): string;
+        (name: 'order'): string;
+        ~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for call signature.
+        (name: 'order'): string;
+        ~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for call signature.
+        (name: 'done'): string;
+    }
+    

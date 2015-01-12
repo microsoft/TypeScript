@@ -21,3 +21,22 @@ declare class C {
     private foo(x);
     private foo(x);
 }
+
+
+//// [DtsFileErrors]
+
+
+tests/cases/compiler/declFileForClassWithPrivateOverloadedFunction.d.ts(2,5): error TS2463: Duplicate overload signature for foo.
+tests/cases/compiler/declFileForClassWithPrivateOverloadedFunction.d.ts(3,5): error TS2463: Duplicate overload signature for foo.
+
+
+==== tests/cases/compiler/declFileForClassWithPrivateOverloadedFunction.d.ts (2 errors) ====
+    declare class C {
+        private foo(x);
+        ~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for foo.
+        private foo(x);
+        ~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for foo.
+    }
+    

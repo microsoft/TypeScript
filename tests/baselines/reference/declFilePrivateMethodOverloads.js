@@ -52,3 +52,32 @@ declare class c2 {
     private overload2(context);
     private overload2(context, fn);
 }
+
+
+//// [DtsFileErrors]
+
+
+tests/cases/compiler/declFilePrivateMethodOverloads.d.ts(5,5): error TS2463: Duplicate overload signature for _forEachBindingContext.
+tests/cases/compiler/declFilePrivateMethodOverloads.d.ts(6,5): error TS2463: Duplicate overload signature for _forEachBindingContext.
+
+
+==== tests/cases/compiler/declFilePrivateMethodOverloads.d.ts (2 errors) ====
+    interface IContext {
+        someMethod(): any;
+    }
+    declare class c1 {
+        private _forEachBindingContext(bindingContext, fn);
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for _forEachBindingContext.
+        private _forEachBindingContext(bindingContextArray, fn);
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for _forEachBindingContext.
+        private overloadWithArityDifference(bindingContext);
+        private overloadWithArityDifference(bindingContextArray, fn);
+    }
+    declare class c2 {
+        private overload1(context, fn);
+        private overload2(context);
+        private overload2(context, fn);
+    }
+    

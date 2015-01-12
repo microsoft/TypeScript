@@ -1,0 +1,28 @@
+tests/cases/compiler/mixedExports.ts(2,6): error TS2463: Duplicate overload signature for foo.
+tests/cases/compiler/mixedExports.ts(3,6): error TS2463: Duplicate overload signature for foo.
+tests/cases/compiler/mixedExports.ts(4,6): error TS2463: Duplicate overload signature for foo.
+
+
+==== tests/cases/compiler/mixedExports.ts (3 errors) ====
+    declare module M {
+         function foo();
+         ~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for foo.
+         export function foo();
+         ~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for foo.
+         function foo();
+         ~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for foo.
+    }
+    
+    declare module M1 {
+         export interface Foo {}
+         interface Foo {}
+    }
+    
+    module A {
+         interface X {x}
+         export module X {}
+         interface X {y}
+    }

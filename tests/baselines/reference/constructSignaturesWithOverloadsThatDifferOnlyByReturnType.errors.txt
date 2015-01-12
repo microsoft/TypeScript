@@ -1,0 +1,65 @@
+tests/cases/conformance/types/objectTypeLiteral/constructSignatures/constructSignaturesWithOverloadsThatDifferOnlyByReturnType.ts(12,5): error TS2463: Duplicate overload signature for construct signature.
+tests/cases/conformance/types/objectTypeLiteral/constructSignatures/constructSignaturesWithOverloadsThatDifferOnlyByReturnType.ts(13,5): error TS2463: Duplicate overload signature for construct signature.
+tests/cases/conformance/types/objectTypeLiteral/constructSignatures/constructSignaturesWithOverloadsThatDifferOnlyByReturnType.ts(17,5): error TS2463: Duplicate overload signature for construct signature.
+tests/cases/conformance/types/objectTypeLiteral/constructSignatures/constructSignaturesWithOverloadsThatDifferOnlyByReturnType.ts(18,5): error TS2463: Duplicate overload signature for construct signature.
+tests/cases/conformance/types/objectTypeLiteral/constructSignatures/constructSignaturesWithOverloadsThatDifferOnlyByReturnType.ts(19,5): error TS2463: Duplicate overload signature for construct signature.
+tests/cases/conformance/types/objectTypeLiteral/constructSignatures/constructSignaturesWithOverloadsThatDifferOnlyByReturnType.ts(20,5): error TS2463: Duplicate overload signature for construct signature.
+tests/cases/conformance/types/objectTypeLiteral/constructSignatures/constructSignaturesWithOverloadsThatDifferOnlyByReturnType.ts(25,5): error TS2463: Duplicate overload signature for construct signature.
+tests/cases/conformance/types/objectTypeLiteral/constructSignatures/constructSignaturesWithOverloadsThatDifferOnlyByReturnType.ts(26,5): error TS2463: Duplicate overload signature for construct signature.
+tests/cases/conformance/types/objectTypeLiteral/constructSignatures/constructSignaturesWithOverloadsThatDifferOnlyByReturnType.ts(30,5): error TS2463: Duplicate overload signature for construct signature.
+tests/cases/conformance/types/objectTypeLiteral/constructSignatures/constructSignaturesWithOverloadsThatDifferOnlyByReturnType.ts(31,5): error TS2463: Duplicate overload signature for construct signature.
+
+
+==== tests/cases/conformance/types/objectTypeLiteral/constructSignatures/constructSignaturesWithOverloadsThatDifferOnlyByReturnType.ts (10 errors) ====
+    // Error for construct signature overloads to differ only by return type
+    
+    class C {
+        constructor(x: number) { }
+    }
+    
+    class C2<T> {
+        constructor(x: T, y?: string) { }
+    }
+    
+    interface I {
+        new(x: number, y: string): C;
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for construct signature.
+        new(x: number, y: string): C2<number>; // error
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for construct signature.
+    }
+    
+    interface I2<T> {
+        new (x: T, y: string): C2<number>;
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for construct signature.
+        new (x: T, y: string): C; // error
+        ~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for construct signature.
+        new <T>(x: T, y: string): C2<T>;
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for construct signature.
+        new <T>(x: T, y: string): C; // error
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for construct signature.
+    
+    }
+    
+    var a: {
+        new (x: number, y: string): C2<number>;
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for construct signature.
+        new (x: number, y: string): C; // error
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for construct signature.
+    }
+    
+    var b: {
+        new <T>(x: T, y: string): C2<T>;
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for construct signature.
+        new <T>(x: T, y: string): C; // error
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for construct signature.
+    }

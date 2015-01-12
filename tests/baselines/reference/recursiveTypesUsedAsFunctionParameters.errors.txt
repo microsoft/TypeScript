@@ -1,7 +1,9 @@
 tests/cases/conformance/types/typeRelationships/recursiveTypes/recursiveTypesUsedAsFunctionParameters.ts(21,16): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+tests/cases/conformance/types/typeRelationships/recursiveTypes/recursiveTypesUsedAsFunctionParameters.ts(34,5): error TS2463: Duplicate overload signature for foo5.
+tests/cases/conformance/types/typeRelationships/recursiveTypes/recursiveTypesUsedAsFunctionParameters.ts(35,5): error TS2463: Duplicate overload signature for foo5.
 
 
-==== tests/cases/conformance/types/typeRelationships/recursiveTypes/recursiveTypesUsedAsFunctionParameters.ts (1 errors) ====
+==== tests/cases/conformance/types/typeRelationships/recursiveTypes/recursiveTypesUsedAsFunctionParameters.ts (3 errors) ====
     class List<T> {
         data: T;
         next: List<List<T>>;
@@ -38,7 +40,11 @@ tests/cases/conformance/types/typeRelationships/recursiveTypes/recursiveTypesUse
         // ok
         function foo5<V>(x: T): string;
         function foo5<V>(x: List<V>): number;
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for foo5.
         function foo5<V>(x: MyList<V>): boolean;
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for foo5.
         function foo5<V>(x: any): any { return null; }
     
         var list: List<string>;
