@@ -1096,7 +1096,7 @@ module ts {
                 }
 
                 // Get qualified name if the symbol is not a type parameter
-                // and we have an enclosing declaration or a typeformat flag
+                // and we spe
                 var typeParameter = (symbol.flags & SymbolFlags.TypeParameter);
                 var typeFormatFlag = TypeFormatFlags.UseFullyQualifiedType & typeFlags;
                 if (!typeParameter && (enclosingDeclaration || typeFormatFlag)) {
@@ -1122,7 +1122,7 @@ module ts {
                         writeTypeReference(<TypeReference>type, flags);
                     }
                     else if (type.flags & (TypeFlags.Class | TypeFlags.Interface | TypeFlags.Enum | TypeFlags.TypeParameter)) {
-                        buildSymbolDisplay(type.symbol, writer, enclosingDeclaration, SymbolFlags.Type, /*flags*/ undefined, flags);
+                        buildSymbolDisplay(type.symbol, writer, enclosingDeclaration, SymbolFlags.Type, /*flags*/ None, flags);
                     }
                     else if (type.flags & TypeFlags.Tuple) {
                         writeTupleType(<TupleType>type);
@@ -1203,7 +1203,7 @@ module ts {
                         // If type is an anonymous type literal in a type alias declaration, use type alias name
                         var typeAlias = getTypeAliasForTypeLiteral(type);
                         if (typeAlias) {
-                            buildSymbolDisplay(typeAlias, writer, enclosingDeclaration, SymbolFlags.Type, /*flags*/ undefined, flags);
+                            buildSymbolDisplay(typeAlias, writer, enclosingDeclaration, SymbolFlags.Type, /*flags*/ None, flags);
                         }
                         else {
                             // Recursive usage, use any
@@ -1240,7 +1240,7 @@ module ts {
                 function writeTypeofSymbol(type: ObjectType, flags?: TypeFormatFlags) {
                     writeKeyword(writer, SyntaxKind.TypeOfKeyword);
                     writeSpace(writer);
-                    buildSymbolDisplay(type.symbol, writer, enclosingDeclaration, SymbolFlags.Value, /*flags*/ undefined, flags);
+                    buildSymbolDisplay(type.symbol, writer, enclosingDeclaration, SymbolFlags.Value, /*flags*/ None, flags);
                 }
 
                 function getIndexerParameterName(type: ObjectType, indexKind: IndexKind, fallbackName: string): string {
