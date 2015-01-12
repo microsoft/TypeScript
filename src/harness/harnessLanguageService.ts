@@ -33,7 +33,7 @@ module Harness.LanguageService {
             this.editRanges.push({
                 length: this.content.length,
                 textChangeRange: ts.createTextChangeRange(
-                    ts.createTextSpanFromBounds(minChar, limChar), newText.length)
+                    ts.createSpanFromBounds(minChar, limChar), newText.length)
             });
 
             // Update version #
@@ -348,7 +348,7 @@ module Harness.LanguageService {
                 var edit = edits[i];
                 var prefix = result.substring(0, edit.span.start);
                 var middle = edit.newText;
-                var suffix = result.substring(ts.textSpanEnd(edit.span));
+                var suffix = result.substring(ts.spanEnd(edit.span));
                 result = prefix + middle + suffix;
             }
             return result;
@@ -386,7 +386,7 @@ module Harness.LanguageService {
                 }
                 var nextEdit = temp[next].edit;
 
-                var gap = nextEdit.span.start - ts.textSpanEnd(currentEdit.span);
+                var gap = nextEdit.span.start - ts.spanEnd(currentEdit.span);
 
                 // non-overlapping edits
                 if (gap >= 0) {
@@ -398,7 +398,7 @@ module Harness.LanguageService {
  
                 // overlapping edits: for now, we only support ignoring an next edit 
                 // entirely contained in the current edit.
-                if (ts.textSpanEnd(currentEdit.span) >= ts.textSpanEnd(nextEdit.span)) {
+                if (ts.spanEnd(currentEdit.span) >= ts.spanEnd(nextEdit.span)) {
                     next++;
                     continue;
                 }

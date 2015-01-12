@@ -138,16 +138,16 @@ module Utils {
             ts.forEachChild(node,
                 child => {
                     assert.isFalse(child.start < currentPos, "child.start < currentPos");
-                    currentPos = ts.textSpanEnd(child);
+                    currentPos = ts.spanEnd(child);
                 },
                 (array: ts.NodeArray<ts.Node>) => {
                     assert.isFalse(array.start < node.start, "array.start < node.start");
-                    assert.isFalse(ts.nodeArrayEnd(array) > ts.textSpanEnd(node), "array.end > node.end");
+                    assert.isFalse(ts.nodeArrayEnd(array) > ts.spanEnd(node), "array.end > node.end");
                     assert.isFalse(array.start < currentPos, "array.start < currentPos");
 
                     for (var i = 0, n = array.length; i < n; i++) {
                         assert.isFalse(array[i].start < currentPos, "array[i].start < currentPos");
-                        currentPos = ts.textSpanEnd(array[i]);
+                        currentPos = ts.spanEnd(array[i]);
                     }
 
                     currentPos = ts.nodeArrayEnd(array);
@@ -265,7 +265,7 @@ module Utils {
 
                     case "nextContainer":
                         if (n.nextContainer) {
-                            o[propertyName] = { kind: n.nextContainer.kind, pos: n.nextContainer.start, end: ts.textSpanEnd(n.nextContainer) };
+                            o[propertyName] = { kind: n.nextContainer.kind, pos: n.nextContainer.start, end: ts.spanEnd(n.nextContainer) };
                         }
                         break;
 

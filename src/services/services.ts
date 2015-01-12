@@ -180,7 +180,7 @@ module ts {
         }
 
         public getFullText(sourceFile?: SourceFile): string {
-            return (sourceFile || this.getSourceFile()).text.substring(this.start, textSpanEnd(this));
+            return (sourceFile || this.getSourceFile()).text.substring(this.start, spanEnd(this));
         }
 
         public getText(sourceFile?: SourceFile): string {
@@ -208,7 +208,7 @@ module ts {
                     pos = this.addSyntheticNodes(list._children, pos, node.start);
                 }
                 list._children.push(node);
-                pos = textSpanEnd(node);
+                pos = spanEnd(node);
             }
             if (pos < nodeArrayEnd(nodes)) {
                 this.addSyntheticNodes(list._children, pos, nodeArrayEnd(nodes));
@@ -227,7 +227,7 @@ module ts {
                         pos = this.addSyntheticNodes(children, pos, node.start);
                     }
                     children.push(node);
-                    pos = textSpanEnd(node);
+                    pos = spanEnd(node);
                 };
                 var processNodes = (nodes: NodeArray<Node>) => {
                     if (pos < nodes.start) {
@@ -237,8 +237,8 @@ module ts {
                     pos = nodeArrayEnd(nodes);
                 };
                 forEachChild(this, processNode, processNodes);
-                if (pos < textSpanEnd(this)) {
-                    this.addSyntheticNodes(children, pos, textSpanEnd(this));
+                if (pos < spanEnd(this)) {
+                    this.addSyntheticNodes(children, pos, spanEnd(this));
                 }
                 scanner.setText(undefined);
             }
@@ -341,7 +341,7 @@ module ts {
                 // If it is parameter - try and get the jsDoc comment with @param tag from function declaration's jsDoc comments
                 if (canUseParsedParamTagComments && declaration.kind === SyntaxKind.Parameter) {
                     ts.forEach(getJsDocCommentSpan(declaration.parent, sourceFileOfDeclaration), jsDocCommentTextRange => {
-                        var cleanedParamJsDocComment = getCleanedParamJsDocComment(jsDocCommentTextRange.start, textSpanEnd(jsDocCommentTextRange), sourceFileOfDeclaration);
+                        var cleanedParamJsDocComment = getCleanedParamJsDocComment(jsDocCommentTextRange.start, spanEnd(jsDocCommentTextRange), sourceFileOfDeclaration);
                         if (cleanedParamJsDocComment) {
                             jsDocCommentParts.push.apply(jsDocCommentParts, cleanedParamJsDocComment);
                         }
@@ -361,7 +361,7 @@ module ts {
                 // Get the cleaned js doc comment text from the declaration
                 ts.forEach(getJsDocCommentSpan(
                     declaration.kind === SyntaxKind.VariableDeclaration ? declaration.parent.parent : declaration, sourceFileOfDeclaration), jsDocCommentTextRange => {
-                        var cleanedJsDocComment = getCleanedJsDocComment(jsDocCommentTextRange.start, textSpanEnd(jsDocCommentTextRange), sourceFileOfDeclaration);
+                        var cleanedJsDocComment = getCleanedJsDocComment(jsDocCommentTextRange.start, spanEnd(jsDocCommentTextRange), sourceFileOfDeclaration);
                         if (cleanedJsDocComment) {
                             jsDocCommentParts.push.apply(jsDocCommentParts, cleanedJsDocComment);
                         }
@@ -370,12 +370,12 @@ module ts {
 
             return jsDocCommentParts;
 
-            function getJsDocCommentSpan(node: Node, sourceFile: SourceFile): TextSpan[] {
+            function getJsDocCommentSpan(node: Node, sourceFile: SourceFile): Span[] {
                 return ts.map(getJsDocComments(node, sourceFile),
                     jsDocComment => {
-                        return createTextSpanFromBounds(
+                        return createSpanFromBounds(
                             jsDocComment.start + "/*".length, // Consume /* from the comment
-                            textSpanEnd(jsDocComment) - "*/".length // Trim off comment end indicator
+                            spanEnd(jsDocComment) - "*/".length // Trim off comment end indicator
                         );
                     });
             }
@@ -874,17 +874,17 @@ module ts {
         getSemanticDiagnostics(fileName: string): Diagnostic[];
         getCompilerOptionsDiagnostics(): Diagnostic[];
 
-        getSyntacticClassifications(fileName: string, span: TextSpan): ClassifiedSpan[];
-        getSemanticClassifications(fileName: string, span: TextSpan): ClassifiedSpan[];
+        getSyntacticClassifications(fileName: string, span: Span): ClassifiedSpan[];
+        getSemanticClassifications(fileName: string, span: Span): ClassifiedSpan[];
 
         getCompletionsAtPosition(fileName: string, position: number): CompletionInfo;
         getCompletionEntryDetails(fileName: string, position: number, entryName: string): CompletionEntryDetails;
 
         getQuickInfoAtPosition(fileName: string, position: number): QuickInfo;
 
-        getNameOrDottedNameSpan(fileName: string, startPos: number, endPos: number): TextSpan;
+        getNameOrDottedNameSpan(fileName: string, startPos: number, endPos: number): Span;
 
-        getBreakpointStatementAtPosition(fileName: string, position: number): TextSpan;
+        getBreakpointStatementAtPosition(fileName: string, position: number): Span;
 
         getSignatureHelpItems(fileName: string, position: number): SignatureHelpItems;
 
@@ -900,7 +900,7 @@ module ts {
 
         getOutliningSpans(fileName: string): OutliningSpan[];
         getTodoComments(fileName: string, descriptors: TodoCommentDescriptor[]): TodoComment[];
-        getBraceMatchingAtPosition(fileName: string, position: number): TextSpan[];
+        getBraceMatchingAtPosition(fileName: string, position: number): Span[];
         getIndentationAtPosition(fileName: string, position: number, options: EditorOptions): number;
 
         getFormattingEditsForRange(fileName: string, start: number, end: number, options: FormatCodeOptions): TextChange[];
@@ -915,7 +915,7 @@ module ts {
     }
  
     export interface ClassifiedSpan {
-        textSpan: TextSpan;
+        textSpan: Span;
         classificationType: string; // ClassificationTypeNames
     }
 
@@ -923,7 +923,7 @@ module ts {
         text: string;
         kind: string;
         kindModifiers: string;
-        spans: TextSpan[];
+        spans: Span[];
         childItems: NavigationBarItem[];
         indent: number;
         bolded: boolean;
@@ -942,17 +942,17 @@ module ts {
     }
 
     export class TextChange {
-        span: TextSpan;
+        span: Span;
         newText: string;
     }
 
     export interface RenameLocation {
-        textSpan: TextSpan;
+        textSpan: Span;
         fileName: string;
     }
 
     export interface ReferenceEntry {
-        textSpan: TextSpan;
+        textSpan: Span;
         fileName: string;
         isWriteAccess: boolean;
     }
@@ -963,7 +963,7 @@ module ts {
         kindModifiers: string;
         matchKind: string;
         fileName: string;
-        textSpan: TextSpan;
+        textSpan: Span;
         containerName: string;
         containerKind: string;
     }
@@ -988,7 +988,7 @@ module ts {
 
     export interface DefinitionInfo {
         fileName: string;
-        textSpan: TextSpan;
+        textSpan: Span;
         kind: string;
         name: string;
         containerKind: string;
@@ -1028,7 +1028,7 @@ module ts {
     export interface QuickInfo {
         kind: string;
         kindModifiers: string;
-        textSpan: TextSpan;
+        textSpan: Span;
         displayParts: SymbolDisplayPart[];
         documentation: SymbolDisplayPart[];
     }
@@ -1040,7 +1040,7 @@ module ts {
         fullDisplayName: string;
         kind: string;
         kindModifiers: string;
-        triggerSpan: TextSpan;
+        triggerSpan: Span;
     }
 
     export interface SignatureHelpParameter {
@@ -1071,7 +1071,7 @@ module ts {
      */
     export interface SignatureHelpItems {
         items: SignatureHelpItem[];
-        applicableSpan: TextSpan;
+        applicableSpan: Span;
         selectedItemIndex: number;
         argumentIndex: number;
         argumentCount: number;
@@ -1098,10 +1098,10 @@ module ts {
 
     export interface OutliningSpan {
         /** The span of the document to actually collapse. */
-        textSpan: TextSpan;
+        textSpan: Span;
 
         /** The span of the document to display when the user hovers over the collapsed span. */
-        hintSpan: TextSpan;
+        hintSpan: Span;
 
         /** The text to display in the editor for the collapsed region. */
         bannerText: string;
@@ -1563,8 +1563,8 @@ module ts {
                 var newTextPrefix = newText.getText(0, textChangeRange.span.start);
                 Debug.assert(oldTextPrefix === newTextPrefix);
 
-                var oldTextSuffix = oldText.getText(textSpanEnd(textChangeRange.span), oldText.getLength());
-                var newTextSuffix = newText.getText(textSpanEnd(textChangeRangeNewSpan(textChangeRange)), newText.getLength());
+                var oldTextSuffix = oldText.getText(spanEnd(textChangeRange.span), oldText.getLength());
+                var newTextSuffix = newText.getText(spanEnd(textChangeRangeNewSpan(textChangeRange)), newText.getLength());
                 Debug.assert(oldTextSuffix === newTextSuffix);
             }
         }
@@ -1866,10 +1866,10 @@ module ts {
         function isInsideCommentSpan(comments: CommentSpan[]): boolean {
             return forEach(comments, comment => {
                 // either we are 1. completely inside the comment, or 2. at the end of the comment
-                if (comment.start < position && position < textSpanEnd(comment)) {
+                if (comment.start < position && position < spanEnd(comment)) {
                     return true;
                 }
-                else if (position === textSpanEnd(comment)) {
+                else if (position === spanEnd(comment)) {
                     var text = sourceFile.text;
                     var width = comment.length;
                     // is single line comment or just /*
@@ -1878,8 +1878,8 @@ module ts {
                     }
                     else {
                         // is unterminated multi-line comment
-                        return !(text.charCodeAt(textSpanEnd(comment) - 1) === CharacterCodes.slash &&
-                            text.charCodeAt(textSpanEnd(comment) - 2) === CharacterCodes.asterisk);
+                        return !(text.charCodeAt(spanEnd(comment) - 1) === CharacterCodes.slash &&
+                            text.charCodeAt(spanEnd(comment) - 2) === CharacterCodes.asterisk);
                     }
                 }
                 return false;
@@ -2221,7 +2221,7 @@ module ts {
 
             // The caret is at the end of an identifier; this is a partial identifier that we want to complete: e.g. a.toS|
             // Skip this partial identifier to the previous token
-            if (previousToken && position <= textSpanEnd(previousToken) && previousToken.kind === SyntaxKind.Identifier) {
+            if (previousToken && position <= spanEnd(previousToken) && previousToken.kind === SyntaxKind.Identifier) {
                 var start = new Date().getTime();
                 previousToken = findPrecedingToken(previousToken.start, sourceFile);
                 host.log("getCompletionsAtPosition: Get previous token 2: " + (new Date().getTime() - start));
@@ -3063,7 +3063,7 @@ module ts {
                             return {
                                 kind: ScriptElementKind.unknown,
                                 kindModifiers: ScriptElementKindModifier.none,
-                                textSpan: createTextSpan(node.getStart(), node.getWidth()),
+                                textSpan: createSpan(node.getStart(), node.getWidth()),
                                 displayParts: typeToDisplayParts(typeInfoResolver, type, getContainerNode(node)),
                                 documentation: type.symbol ? type.symbol.getDocumentationComment() : undefined
                             };
@@ -3077,7 +3077,7 @@ module ts {
             return {
                 kind: displayPartsDocumentationsAndKind.symbolKind,
                 kindModifiers: getSymbolModifiers(symbol),
-                textSpan: createTextSpan(node.getStart(), node.getWidth()),
+                textSpan: createSpan(node.getStart(), node.getWidth()),
                 displayParts: displayPartsDocumentationsAndKind.displayParts,
                 documentation: displayPartsDocumentationsAndKind.documentation
             };
@@ -3103,13 +3103,13 @@ module ts {
             }
 
             /// Triple slash reference comments
-            var comment = forEach(sourceFile.referencedFiles, r => (r.start <= position && position < textSpanEnd(r)) ? r : undefined);
+            var comment = forEach(sourceFile.referencedFiles, r => (r.start <= position && position < spanEnd(r)) ? r : undefined);
             if (comment) {
                 var referenceFile = tryResolveScriptReference(program, sourceFile, comment);
                 if (referenceFile) {
                     return [{
                         fileName: referenceFile.filename,
-                        textSpan: createTextSpanFromBounds(0, 0),
+                        textSpan: createSpanFromBounds(0, 0),
                         kind: ScriptElementKind.scriptElement,
                         name: comment.filename,
                         containerName: undefined,
@@ -3165,7 +3165,7 @@ module ts {
             function getDefinitionInfo(node: Node, symbolKind: string, symbolName: string, containerName: string): DefinitionInfo {
                 return {
                     fileName: node.getSourceFile().filename,
-                    textSpan: createTextSpanFromBounds(node.getStart(), node.getEnd()),
+                    textSpan: createSpanFromBounds(node.getStart(), node.getEnd()),
                     kind: symbolKind,
                     name: symbolName,
                     containerKind: undefined,
@@ -3350,7 +3350,7 @@ module ts {
                         var shouldHighlightNextKeyword = true;
 
                         // Avoid recalculating getStart() by iterating backwards.
-                        for (var j = ifKeyword.getStart() - 1; j >= textSpanEnd(elseKeyword); j--) {
+                        for (var j = ifKeyword.getStart() - 1; j >= spanEnd(elseKeyword); j--) {
                             if (!isWhiteSpace(sourceFile.text.charCodeAt(j))) {
                                 shouldHighlightNextKeyword = false;
                                 break;
@@ -3360,7 +3360,7 @@ module ts {
                         if (shouldHighlightNextKeyword) {
                             result.push({
                                 fileName: filename,
-                                textSpan: createTextSpanFromBounds(elseKeyword.getStart(), textSpanEnd(ifKeyword)),
+                                textSpan: createSpanFromBounds(elseKeyword.getStart(), spanEnd(ifKeyword)),
                                 isWriteAccess: false
                             });
                             i++; // skip the next keyword
@@ -4053,7 +4053,7 @@ module ts {
                                 (findInComments && isInComment(position))) {
                                 result.push({
                                     fileName: sourceFile.filename,
-                                    textSpan: createTextSpan(position, searchText.length),
+                                    textSpan: createSpan(position, searchText.length),
                                     isWriteAccess: false
                                 });
                             }
@@ -4098,8 +4098,8 @@ module ts {
                         // Then we want to make sure that it wasn't in a "///<" directive comment
                         // We don't want to unintentionally update a file name.
                         return forEach(commentRanges, c => {
-                            if (c.start < position && position < textSpanEnd(c)) {
-                                var commentText = sourceFile.text.substring(c.start, textSpanEnd(c));
+                            if (c.start < position && position < spanEnd(c)) {
+                                var commentText = sourceFile.text.substring(c.start, spanEnd(c));
                                 if (!tripleSlashDirectivePrefixRegex.test(commentText)) {
                                     return true;
                                 }
@@ -4436,7 +4436,7 @@ module ts {
 
             return {
                 fileName: node.getSourceFile().filename,
-                textSpan: createTextSpanFromBounds(start, end),
+                textSpan: createSpanFromBounds(start, end),
                 isWriteAccess: isWriteAccess(node)
             };
         }
@@ -4492,7 +4492,7 @@ module ts {
                             kindModifiers: getNodeModifiers(declaration),
                             matchKind: MatchKind[matchKind],
                             fileName: filename,
-                            textSpan: createTextSpanFromBounds(declaration.getStart(), declaration.getEnd()),
+                            textSpan: createSpanFromBounds(declaration.getStart(), declaration.getEnd()),
                             // TODO(jfreeman): What should be the containerName when the container has a computed name?
                             containerName: container && container.name ? (<Identifier>container.name).text : "",
                             containerKind: container && container.name ? getNodeKind(container) : ""
@@ -4716,7 +4716,7 @@ module ts {
             return currentSourceFile;
         }
 
-        function getNameOrDottedNameSpan(filename: string, startPos: number, endPos: number): TextSpan {
+        function getNameOrDottedNameSpan(filename: string, startPos: number, endPos: number): Span {
             filename = ts.normalizeSlashes(filename);
             // Get node at the location
             var node = getTouchingPropertyName(getCurrentSourceFile(filename), startPos);
@@ -4768,7 +4768,7 @@ module ts {
                 }
             }
 
-            return createTextSpanFromBounds(nodeForStartPos.getStart(), node.getEnd());
+            return createSpanFromBounds(nodeForStartPos.getStart(), node.getEnd());
         }
 
         function getBreakpointStatementAtPosition(filename: string, position: number) {
@@ -4783,7 +4783,7 @@ module ts {
             return NavigationBar.getNavigationBarItems(getCurrentSourceFile(filename));
         }
 
-        function getSemanticClassifications(fileName: string, span: TextSpan): ClassifiedSpan[] {
+        function getSemanticClassifications(fileName: string, span: Span): ClassifiedSpan[] {
             synchronizeHostData();
             fileName = normalizeSlashes(fileName);
 
@@ -4838,14 +4838,14 @@ module ts {
 
             function processNode(node: Node) {
                 // Only walk into nodes that intersect the requested span.
-                if (node && textSpanIntersectsWith(span, node.getStart(), node.getWidth())) {
+                if (node && spanIntersectsWith(span, node.getStart(), node.getWidth())) {
                     if (node.kind === SyntaxKind.Identifier && node.getWidth() > 0) {
                         var symbol = typeInfoResolver.getSymbolAtLocation(node);
                         if (symbol) {
                             var type = classifySymbol(symbol, getMeaningFromLocation(node));
                             if (type) {
                                 result.push({
-                                    textSpan: createTextSpan(node.getStart(), node.getWidth()),
+                                    textSpan: createSpan(node.getStart(), node.getWidth()),
                                     classificationType: type
                                 });
                             }
@@ -4857,7 +4857,7 @@ module ts {
             }
         }
 
-        function getSyntacticClassifications(fileName: string, span: TextSpan): ClassifiedSpan[] {
+        function getSyntacticClassifications(fileName: string, span: Span): ClassifiedSpan[] {
             // doesn't use compiler - no need to synchronize with host
             fileName = normalizeSlashes(fileName);
             var sourceFile = getCurrentSourceFile(fileName);
@@ -4885,7 +4885,7 @@ module ts {
                     var end = triviaScanner.getTextPos();
                     var width = end - start;
 
-                    if (textSpanIntersectsWith(span, start, width)) {
+                    if (spanIntersectsWith(span, start, width)) {
                         if (!isTrivia(kind)) {
                             return;
                         }
@@ -4893,7 +4893,7 @@ module ts {
                         if (isComment(kind)) {
                             // Simple comment.  Just add as is.
                             result.push({
-                                textSpan: createTextSpan(start, width),
+                                textSpan: createSpan(start, width),
                                 classificationType: ClassificationTypeNames.comment
                             })
                             continue;
@@ -4907,7 +4907,7 @@ module ts {
                             // in the classification stream.
                             if (ch === CharacterCodes.lessThan || ch === CharacterCodes.greaterThan) {
                                 result.push({
-                                    textSpan: createTextSpan(start, width),
+                                    textSpan: createSpan(start, width),
                                     classificationType: ClassificationTypeNames.comment
                                 });
                                 continue;
@@ -4931,7 +4931,7 @@ module ts {
                     }
                 }
                 result.push({
-                    textSpan: createTextSpanFromBounds(start, i),
+                    textSpan: createSpanFromBounds(start, i),
                     classificationType: ClassificationTypeNames.comment
                 });
 
@@ -4950,7 +4950,7 @@ module ts {
                 var type = classifyTokenType(tokenKind);
                 if (type) {
                     result.push({
-                        textSpan: createTextSpanFromBounds(start, end),
+                        textSpan: createSpanFromBounds(start, end),
                         classificationType: type
                     });
                 }
@@ -4963,7 +4963,7 @@ module ts {
                     var type = classifyTokenType(token.kind, token);
                     if (type) {
                         result.push({
-                            textSpan: createTextSpan(token.getStart(), token.getWidth()),
+                            textSpan: createSpan(token.getStart(), token.getWidth()),
                             classificationType: type
                         });
                     }
@@ -5060,7 +5060,7 @@ module ts {
 
             function processElement(element: Node) {
                 // Ignore nodes that don't intersect the original span to classify.
-                if (textSpanIntersectsWith(span, element.getFullStart(), element.getFullWidth())) {
+                if (spanIntersectsWith(span, element.getFullStart(), element.getFullWidth())) {
                     var children = element.getChildren();
                     for (var i = 0, n = children.length; i < n; i++) {
                         var child = children[i];
@@ -5085,7 +5085,7 @@ module ts {
 
         function getBraceMatchingAtPosition(filename: string, position: number) {
             var sourceFile = getCurrentSourceFile(filename);
-            var result: TextSpan[] = [];
+            var result: Span[] = [];
 
             var token = getTouchingToken(sourceFile, position);
 
@@ -5101,8 +5101,8 @@ module ts {
                         var current = childNodes[i];
 
                         if (current.kind === matchKind) {
-                            var range1 = createTextSpan(token.getStart(sourceFile), token.getWidth(sourceFile));
-                            var range2 = createTextSpan(current.getStart(sourceFile), current.getWidth(sourceFile));
+                            var range1 = createSpan(token.getStart(sourceFile), token.getWidth(sourceFile));
+                            var range2 = createSpan(current.getStart(sourceFile), current.getWidth(sourceFile));
 
                             // We want to order the braces when we return the result.
                             if (range1.start < range2.start) {
@@ -5353,7 +5353,7 @@ module ts {
                     if (kind) {
                         return getRenameInfo(symbol.name, typeInfoResolver.getFullyQualifiedName(symbol), kind,
                             getSymbolModifiers(symbol),
-                            createTextSpan(node.getStart(), node.getWidth()));
+                            createSpan(node.getStart(), node.getWidth()));
                     }
                 }
             }
@@ -5372,7 +5372,7 @@ module ts {
                 };
             }
 
-            function getRenameInfo(displayName: string, fullDisplayName: string, kind: string, kindModifiers: string, triggerSpan: TextSpan): RenameInfo {
+            function getRenameInfo(displayName: string, fullDisplayName: string, kind: string, kindModifiers: string, triggerSpan: Span): RenameInfo {
                 return {
                     canRename: true,
                     localizedErrorMessage: undefined,

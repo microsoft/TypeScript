@@ -17,8 +17,8 @@
 
 module ts.formatting {
     export class FormattingContext {
-        public currentTokenSpan: TextSpanWithKind;
-        public nextTokenSpan: TextSpanWithKind;
+        public currentTokenSpan: SpanWithKind;
+        public nextTokenSpan: SpanWithKind;
         public contextNode: Node;
         public currentTokenParent: Node;
         public nextTokenParent: Node;
@@ -32,7 +32,7 @@ module ts.formatting {
         constructor(private sourceFile: SourceFile, public formattingRequestKind: FormattingRequestKind) {
         }
 
-        public updateContext(currentSpan: TextSpanWithKind, currentTokenParent: Node, nextSpan: TextSpanWithKind, nextTokenParent: Node, commonParent: Node) {
+        public updateContext(currentSpan: SpanWithKind, currentTokenParent: Node, nextSpan: SpanWithKind, nextTokenParent: Node, commonParent: Node) {
             Debug.assert(currentSpan !== undefined, "currentTokenSpan is null");
             Debug.assert(currentTokenParent !== undefined, "currentTokenParent is null");
             Debug.assert(nextSpan !== undefined, "nextTokenSpan is null");

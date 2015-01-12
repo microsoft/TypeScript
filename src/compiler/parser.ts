@@ -414,7 +414,7 @@ module ts {
                     // Much of the time the parser will need the very next node in the array that 
                     // we just returned a node from.So just simply check for that case and move 
                     // forward in the array instead of searching for the node again.
-                    if (current && textSpanEnd(current) === position && currentArrayIndex < currentArray.length) {
+                    if (current && spanEnd(current) === position && currentArrayIndex < currentArray.length) {
                         currentArrayIndex++;
                         current = currentArray[currentArrayIndex];
                     }
@@ -452,7 +452,7 @@ module ts {
             forEachChild(sourceFile, visitNode, visitArray);
 
             function visitNode(node: Node) {
-                if (position >= node.start && position < textSpanEnd(node)) {
+                if (position >= node.start && position < spanEnd(node)) {
                     // Position was within this node.  Keep searching deeper to find the node.
                     forEachChild(node, visitNode, visitArray);
 
@@ -465,7 +465,7 @@ module ts {
             }
 
             function visitArray(array: NodeArray<Node>) {
-                if (array.length > 0 && position >= array.start && position < textSpanEnd(lastOrUndefined(array))) {
+                if (array.length > 0 && position >= array.start && position < spanEnd(lastOrUndefined(array))) {
                     // position was in this array.  Search through this array to see if we find a
                     // viable element.
                     for (var i = 0, n = array.length; i < n; i++) {
@@ -479,7 +479,7 @@ module ts {
                                 return true;
                             }
                             else {
-                                if (child.start < position && position < textSpanEnd(child)) {
+                                if (child.start < position && position < spanEnd(child)) {
                                     // Position in somewhere within this child.  Search in it and 
                                     // stop searching in this array.
                                     forEachChild(child, visitNode, visitArray);
@@ -681,7 +681,7 @@ module ts {
             // Also, mark any syntax elements that intersect the changed span.  We know, up front,
             // that we cannot reuse these elements.
             updateTokenPositionsAndMarkElements(<IncrementalNode><Node>sourceFile,
-                changeRange.span.start, textSpanEnd(changeRange.span), textSpanEnd(textChangeRangeNewSpan(changeRange)), delta);
+                changeRange.span.start, spanEnd(changeRange.span), spanEnd(textChangeRangeNewSpan(changeRange)), delta);
 
             // Now that we've set up our internal incremental state just proceed and parse the
             // source file in the normal fashion.  When possible the parser will retrieve and
@@ -715,12 +715,12 @@ module ts {
                 // Check if the element intersects the change range.  If it does, then it is not
                 // reusable.  Also, we'll need to recurse to see what constituent portions we may
                 // be able to use.
-                var fullEnd = textSpanEnd(child);
+                var fullEnd = spanEnd(child);
                 if (fullEnd >= changeStart) {
                     child.intersectsChange = true;
 
                     // Adjust the pos or end (or both) of the intersecting element accordingly.
-                    adjustIntersectingElement(child, textSpanEnd(child), changeStart, changeRangeOldEnd, changeRangeNewEnd, delta, /*isArray:*/ false);
+                    adjustIntersectingElement(child, spanEnd(child), changeStart, changeRangeOldEnd, changeRangeNewEnd, delta, /*isArray:*/ false);
                     forEachChild(child, visitNode, visitArray);
                     return;
                 }
@@ -886,7 +886,7 @@ module ts {
                 start = Math.max(0, position - 1);
             }
 
-            var finalSpan = createTextSpanFromBounds(start, textSpanEnd(changeRange.span));
+            var finalSpan = createSpanFromBounds(start, spanEnd(changeRange.span));
             var finalLength = changeRange.newLength + (changeRange.span.start - start);
 
             return createTextChangeRange(finalSpan, finalLength);
@@ -949,7 +949,7 @@ module ts {
                     // position.  If it overlaps with the position, then either it, or one of its
                     // children must be the nearest node before the position.  So we can just 
                     // recurse into this child to see if we can find something better.
-                    if (position < textSpanEnd(child)) {
+                    if (position < spanEnd(child)) {
                         // The nearest node is either this child, or one of the children inside
                         // of it.  We've already marked this child as the best so far.  Recurse
                         // in case one of the children is better.
@@ -960,7 +960,7 @@ module ts {
                         return true;
                     }
                     else {
-                        Debug.assert(textSpanEnd(child) <= position);
+                        Debug.assert(spanEnd(child) <= position);
                         // The child ends entirely before this position.  Say you have the following
                         // (where $ is the position)
                         // 
@@ -1664,7 +1664,7 @@ module ts {
 
         function consumeNode(node: Node) {
             // Move the scanner so it is after the node we just consumed.
-            scanner.setTextPos(textSpanEnd(node));
+            scanner.setTextPos(spanEnd(node));
             nextToken();
             return node;
         }
@@ -4691,7 +4691,7 @@ module ts {
                     break;
                 }
 
-                var range = createTextSpanFromBounds(triviaScanner.getTokenPos(), triviaScanner.getTextPos());
+                var range = createSpanFromBounds(triviaScanner.getTokenPos(), triviaScanner.getTextPos());
 
                 var comment = sourceText.substr(range.start, range.length);
                 var referencePathMatchResult = getFileReferenceFromReferencePath(comment, range);

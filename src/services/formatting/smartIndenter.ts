@@ -15,7 +15,7 @@ module ts.formatting {
             // no indentation in string \regex literals
             if ((precedingToken.kind === SyntaxKind.StringLiteral || precedingToken.kind === SyntaxKind.RegularExpressionLiteral) &&
                 precedingToken.getStart(sourceFile) <= position &&
-                textSpanEnd(precedingToken) > position) {
+                spanEnd(precedingToken) > position) {
                 return 0;
             }
 
@@ -68,7 +68,7 @@ module ts.formatting {
             return getIndentationForNodeWorker(current, currentStart, /*ignoreActualIndentationRange*/ undefined, indentationDelta, sourceFile, options);
         }
 
-        export function getIndentationForNode(n: Node, ignoreActualIndentationSpan: TextSpan, sourceFile: SourceFile, options: FormatCodeOptions): number {
+        export function getIndentationForNode(n: Node, ignoreActualIndentationSpan: Span, sourceFile: SourceFile, options: FormatCodeOptions): number {
             var start = sourceFile.getLineAndCharacterFromPosition(n.getStart(sourceFile));
             return getIndentationForNodeWorker(n, start, ignoreActualIndentationSpan, /*indentationDelta*/ 0, sourceFile, options);
         }
@@ -76,7 +76,7 @@ module ts.formatting {
         function getIndentationForNodeWorker(
             current: Node,
             currentStart: LineAndCharacter,
-            ignoreActualIndentationSpan: TextSpan,
+            ignoreActualIndentationSpan: Span,
             indentationDelta: number,
             sourceFile: SourceFile,
             options: EditorOptions): number {
@@ -90,7 +90,7 @@ module ts.formatting {
                 var useActualIndentation = true;
                 if (ignoreActualIndentationSpan) {
                     var start = current.getStart(sourceFile);
-                    useActualIndentation = start < ignoreActualIndentationSpan.start || start > textSpanEnd(ignoreActualIndentationSpan);
+                    useActualIndentation = start < ignoreActualIndentationSpan.start || start > spanEnd(ignoreActualIndentationSpan);
                 }
 
                 if (useActualIndentation) {
@@ -203,10 +203,10 @@ module ts.formatting {
         }
 
         function positionBelongsToNode(candidate: Node, position: number, sourceFile: SourceFile): boolean {
-            return textSpanEnd(candidate) > position || !isCompletedNode(candidate, sourceFile);
+            return spanEnd(candidate) > position || !isCompletedNode(candidate, sourceFile);
         }
 
-        export function childStartsOnTheSameLineWithElseInIfStatement(parent: Node, child: TextSpanWithKind, childStartLine: number, sourceFile: SourceFile): boolean {
+        export function childStartsOnTheSameLineWithElseInIfStatement(parent: Node, child: SpanWithKind, childStartLine: number, sourceFile: SourceFile): boolean {
             if (parent.kind === SyntaxKind.IfStatement && (<IfStatement>parent).elseStatement === child) {
                 var elseKeyword = findChildOfKind(parent, SyntaxKind.ElseKeyword, sourceFile);
                 Debug.assert(elseKeyword !== undefined);
@@ -287,7 +287,7 @@ module ts.formatting {
                     continue;
                 }
                 // skip list items that ends on the same line with the current list element
-                var prevEndLine = sourceFile.getLineAndCharacterFromPosition(textSpanEnd(list[i])).line;
+                var prevEndLine = sourceFile.getLineAndCharacterFromPosition(spanEnd(list[i])).line;
                 if (prevEndLine !== lineAndCharacter.line) {
                     return findColumnForFirstNonWhitespaceCharacterInLine(lineAndCharacter, sourceFile, options);
                 }

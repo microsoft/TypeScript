@@ -173,7 +173,7 @@ module ts.SignatureHelp {
     interface ArgumentListInfo {
         kind: ArgumentListKind;
         invocation: CallLikeExpression;
-        argumentsSpan: TextSpan;
+        argumentsSpan: Span;
         argumentIndex?: number;
         argumentCount: number;
     }
@@ -356,7 +356,7 @@ module ts.SignatureHelp {
             };
         }
 
-        function getApplicableSpanForArguments(argumentsList: Node): TextSpan {
+        function getApplicableSpanForArguments(argumentsList: Node): Span {
             // We use full start and skip trivia on the end because we want to include trivia on
             // both sides. For example,
             //
@@ -367,10 +367,10 @@ module ts.SignatureHelp {
             // but not including parentheses)
             var applicableSpanStart = argumentsList.getFullStart();
             var applicableSpanEnd = skipTrivia(sourceFile.text, argumentsList.getEnd(), /*stopAfterLineBreak*/ false);
-            return createTextSpan(applicableSpanStart, applicableSpanEnd - applicableSpanStart);
+            return createSpan(applicableSpanStart, applicableSpanEnd - applicableSpanStart);
         }
 
-        function getApplicableSpanForTaggedTemplate(taggedTemplate: TaggedTemplateExpression): TextSpan {
+        function getApplicableSpanForTaggedTemplate(taggedTemplate: TaggedTemplateExpression): Span {
             var template = taggedTemplate.template;
             var applicableSpanStart = template.getStart();
             var applicableSpanEnd = template.getEnd();
@@ -391,7 +391,7 @@ module ts.SignatureHelp {
                 }
             }
 
-            return createTextSpan(applicableSpanStart, applicableSpanEnd - applicableSpanStart);
+            return createSpan(applicableSpanStart, applicableSpanEnd - applicableSpanStart);
         }
 
         function getContainingArgumentInfo(node: Node): ArgumentListInfo {
@@ -402,7 +402,7 @@ module ts.SignatureHelp {
 
                 // If the node is not a subspan of its parent, this is a big problem.
                 // There have been crashes that might be caused by this violation.
-                if (n.start < n.parent.start || textSpanEnd(n) > textSpanEnd(n.parent)) {
+                if (n.start < n.parent.start || spanEnd(n) > spanEnd(n.parent)) {
                     Debug.fail("Node of kind " + n.kind + " is not a subspan of its parent of kind " + n.parent.kind);
                 }
 

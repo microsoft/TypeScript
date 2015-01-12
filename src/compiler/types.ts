@@ -3,7 +3,7 @@ module ts {
         [index: string]: T;
     }
 
-    export interface TextSpan {
+    export interface Span {
         start: number;
         length: number;
     }
@@ -330,7 +330,7 @@ module ts {
         HasAggregatedChildData = 1 << 6
     }
 
-    export interface Node extends TextSpan {
+    export interface Node extends Span {
         kind: SyntaxKind;
         flags: NodeFlags;
         // Specific context the parser was in when this node was created.  Normally undefined. 
@@ -867,11 +867,11 @@ module ts {
         exportName: Identifier;
     }
 
-    export interface FileReference extends TextSpan {
+    export interface FileReference extends Span {
         filename: string;
     }
 
-    export interface CommentSpan extends TextSpan {
+    export interface CommentSpan extends Span {
         hasTrailingNewLine?: boolean;
     }
 
@@ -1660,7 +1660,7 @@ module ts {
     }
 
     export interface TextChangeRange {
-        span: TextSpan;
+        span: Span;
         newLength: number;
     }
 }

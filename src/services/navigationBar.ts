@@ -290,7 +290,7 @@ module ts.NavigationBar {
             return !text || text.trim() === "";
         }
 
-        function getNavigationBarItem(text: string, kind: string, kindModifiers: string, spans: TextSpan[], childItems: NavigationBarItem[] = [], indent: number = 0): NavigationBarItem {
+        function getNavigationBarItem(text: string, kind: string, kindModifiers: string, spans: Span[], childItems: NavigationBarItem[] = [], indent: number = 0): NavigationBarItem {
             if (isEmpty(text)) {
                 return undefined;
             }
@@ -462,8 +462,8 @@ module ts.NavigationBar {
 
         function getNodeSpan(node: Node) {
             return node.kind === SyntaxKind.SourceFile
-                ? createTextSpanFromBounds(node.getFullStart(), node.getEnd())
-                : createTextSpanFromBounds(node.getStart(), node.getEnd());
+                ? createSpanFromBounds(node.getFullStart(), node.getEnd())
+                : createSpanFromBounds(node.getStart(), node.getEnd());
         }
 
         function getTextOfNode(node: Node): string {

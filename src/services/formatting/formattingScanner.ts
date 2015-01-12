@@ -25,8 +25,8 @@ module ts.formatting {
         scanner.setTextPos(startPos);
 
         var wasNewLine: boolean = true;
-        var leadingTrivia: TextSpanWithKind[];
-        var trailingTrivia: TextSpanWithKind[];
+        var leadingTrivia: SpanWithKind[];
+        var trailingTrivia: SpanWithKind[];
         
         var savedPos: number;
         var lastScanAction: ScanAction;
@@ -180,7 +180,7 @@ module ts.formatting {
                 lastScanAction = ScanAction.Scan;
             }
 
-            var token: TextSpanWithKind = {
+            var token: SpanWithKind = {
                 start: scanner.getStartPos(),
                 length: scanner.getTextPos() - scanner.getStartPos(),
                 kind: currentToken

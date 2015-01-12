@@ -157,7 +157,7 @@ module ts {
         }
 
         var text = sourceFile.text;
-        return text.substring(skipTrivia(text, node.start), textSpanEnd(node));
+        return text.substring(skipTrivia(text, node.start), spanEnd(node));
     }
 
     export function getTextOfNodeFromSourceText(sourceText: string, node: Node): string {
@@ -165,7 +165,7 @@ module ts {
             return "";
         }
 
-        return sourceText.substring(skipTrivia(sourceText, node.start), textSpanEnd(node));
+        return sourceText.substring(skipTrivia(sourceText, node.start), spanEnd(node));
     }
 
     export function getTextOfNode(node: Node): string {
@@ -194,7 +194,7 @@ module ts {
         var file = getSourceFileOfNode(node);
 
         var start = getTokenPosOfNode(node, file);
-        var length = textSpanEnd(node) - start;
+        var length = spanEnd(node) - start;
 
         return createFileDiagnostic(file, start, length, message, arg0, arg1, arg2);
     }
@@ -203,7 +203,7 @@ module ts {
         node = getErrorSpanForNode(node);
         var file = getSourceFileOfNode(node);
         var start = skipTrivia(file.text, node.start);
-        var length = textSpanEnd(node) - start;
+        var length = spanEnd(node) - start;
         return flattenDiagnosticChain(file, start, length, messageChain, newLine);
     }
 
@@ -228,7 +228,7 @@ module ts {
         // Alternatively, it might be required and missing (e.g. the name of a module), in which
         // case its pos will equal its end (length 0). In either of these cases, we should fall
         // back to the original node that the error was issued on.
-        return errorSpan && errorSpan.start < textSpanEnd(errorSpan) ? errorSpan : node;
+        return errorSpan && errorSpan.start < spanEnd(errorSpan) ? errorSpan : node;
     }
 
     export function isExternalModule(file: SourceFile): boolean {
@@ -820,61 +820,61 @@ module ts {
         };
     }
 
-    export function textSpanEnd(span: TextSpan) {
+    export function spanEnd(span: Span) {
         return span.start + span.length
     }
 
-    export function textSpanIsEmpty(span: TextSpan) {
+    export function spanIsEmpty(span: Span) {
         return span.length === 0
     }
 
-    export function textSpanContainsPosition(span: TextSpan, position: number) {
-        return position >= span.start && position < textSpanEnd(span);
+    export function spanContainsPosition(span: Span, position: number) {
+        return position >= span.start && position < spanEnd(span);
     }
 
     // Returns true if 'span' contains 'other'.
-    export function textSpanContainsTextSpan(span: TextSpan, other: TextSpan) {
-        return other.start >= span.start && textSpanEnd(other) <= textSpanEnd(span);
+    export function spanContainsSpan(span: Span, other: Span) {
+        return other.start >= span.start && spanEnd(other) <= spanEnd(span);
     }
 
-    export function textSpanOverlapsWith(span: TextSpan, other: TextSpan) {
+    export function spanOverlapsWith(span: Span, other: Span) {
         var overlapStart = Math.max(span.start, other.start);
-        var overlapEnd = Math.min(textSpanEnd(span), textSpanEnd(other));
+        var overlapEnd = Math.min(spanEnd(span), spanEnd(other));
         return overlapStart < overlapEnd;
     }
 
-    export function textSpanOverlap(span1: TextSpan, span2: TextSpan) {
+    export function spanOverlap(span1: Span, span2: Span) {
         var overlapStart = Math.max(span1.start, span2.start);
-        var overlapEnd = Math.min(textSpanEnd(span1), textSpanEnd(span2));
+        var overlapEnd = Math.min(spanEnd(span1), spanEnd(span2));
         if (overlapStart < overlapEnd) {
-            return createTextSpanFromBounds(overlapStart, overlapEnd);
+            return createSpanFromBounds(overlapStart, overlapEnd);
         }
         return undefined;
     }
 
-    export function textSpanIntersectsWithTextSpan(span: TextSpan, other: TextSpan) {
-        return other.start <= textSpanEnd(span) && textSpanEnd(other) >= span.start
+    export function spanIntersectsWithSpan(span: Span, other: Span) {
+        return other.start <= spanEnd(span) && spanEnd(other) >= span.start
     }
 
-    export function textSpanIntersectsWith(span: TextSpan, start: number, length: number) {
+    export function spanIntersectsWith(span: Span, start: number, length: number) {
         var end = start + length;
-        return start <= textSpanEnd(span) && end >= span.start;
+        return start <= spanEnd(span) && end >= span.start;
     }
 
-    export function textSpanIntersectsWithPosition(span: TextSpan, position: number) {
-        return position <= textSpanEnd(span) && position >= span.start;
+    export function spanIntersectsWithPosition(span: Span, position: number) {
+        return position <= spanEnd(span) && position >= span.start;
     }
 
-    export function textSpanIntersection(span1: TextSpan, span2: TextSpan) {
+    export function spanIntersection(span1: Span, span2: Span) {
         var intersectStart = Math.max(span1.start, span2.start);
-        var intersectEnd = Math.min(textSpanEnd(span1), textSpanEnd(span2));
+        var intersectEnd = Math.min(spanEnd(span1), spanEnd(span2));
         if (intersectStart <= intersectEnd) {
-            return createTextSpanFromBounds(intersectStart, intersectEnd);
+            return createSpanFromBounds(intersectStart, intersectEnd);
         }
         return undefined;
     }
 
-    export function createTextSpan(start: number, length: number): TextSpan {
+    export function createSpan(start: number, length: number): Span {
         if (start < 0) {
             throw new Error("start < 0");
         }
@@ -885,19 +885,19 @@ module ts {
         return { start, length };
     }
 
-    export function createTextSpanFromBounds(start: number, end: number) {
-        return createTextSpan(start, end - start);
+    export function createSpanFromBounds(start: number, end: number) {
+        return createSpan(start, end - start);
     }
     
     export function textChangeRangeNewSpan(range: TextChangeRange) {
-        return createTextSpan(range.span.start, range.newLength);
+        return createSpan(range.span.start, range.newLength);
     }
 
     export function textChangeRangeIsUnchanged(range: TextChangeRange) {
-        return textSpanIsEmpty(range.span) && range.newLength === 0;
+        return spanIsEmpty(range.span) && range.newLength === 0;
     }
 
-    export function createTextChangeRange(span: TextSpan, newLength: number): TextChangeRange {
+    export function createTextChangeRange(span: Span, newLength: number): TextChangeRange {
         if (newLength < 0) {
             throw new Error("newLength < 0");
         }
@@ -905,7 +905,7 @@ module ts {
         return { span, newLength };
     }
 
-    export var unchangedTextChangeRange = createTextChangeRange(createTextSpan(0, 0), 0);
+    export var unchangedTextChangeRange = createTextChangeRange(createSpan(0, 0), 0);
 
     /**
      * Called to merge all the changes that occurred across several versions of a script snapshot 
@@ -929,7 +929,7 @@ module ts {
         var change0 = changes[0];
 
         var oldStartN = change0.span.start;
-        var oldEndN = textSpanEnd(change0.span);
+        var oldEndN = spanEnd(change0.span);
         var newEndN = oldStartN + change0.newLength;
 
         for (var i = 1; i < changes.length; i++) {
@@ -1020,7 +1020,7 @@ module ts {
             var newEnd1 = newEndN;
 
             var oldStart2 = nextChange.span.start;
-            var oldEnd2 = textSpanEnd(nextChange.span);
+            var oldEnd2 = spanEnd(nextChange.span);
             var newEnd2 = oldStart2 + nextChange.newLength;
 
             oldStartN = Math.min(oldStart1, oldStart2);
@@ -1028,11 +1028,11 @@ module ts {
             newEndN = Math.max(newEnd2, newEnd2 + (newEnd1 - oldEnd2));
         }
 
-        return createTextChangeRange(createTextSpanFromBounds(oldStartN, oldEndN), /*newLength: */newEndN - oldStartN);
+        return createTextChangeRange(createSpanFromBounds(oldStartN, oldEndN), /*newLength: */newEndN - oldStartN);
     }
 
     export function nodeArrayEnd(array: NodeArray<Node>) {
-        var end = array.length === 0 ? array.start : textSpanEnd(lastOrUndefined(array));
+        var end = array.length === 0 ? array.start : spanEnd(lastOrUndefined(array));
         if (!array.hasTrailingComma) {
             return end;
         }
