@@ -58,6 +58,7 @@ var servicesSources = [
     "checker.ts",
     "emitter.ts",
     "program.ts",
+    "commandLineParser.ts",
     "diagnosticInformationMap.generated.ts"
 ].map(function (f) {
     return path.join(compilerDirectory, f);
@@ -102,6 +103,7 @@ var internalDefinitionsRoots = [
     "compiler/core.d.ts",
     "compiler/sys.d.ts",
     "compiler/utilities.d.ts",
+    "compiler/commandLineParser.d.ts",
     "services/utilities.d.ts",
 ];
 
