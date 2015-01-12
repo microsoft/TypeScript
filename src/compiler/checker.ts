@@ -6110,10 +6110,10 @@ module ts {
                 var result = candidates;
                 var lastParent: Node;
                 var lastSymbol: Symbol;
-                var cutoffPos: number = 0;
-                var pos: number;
-                var specializedPos: number = -1;
-                var splicePos: number;
+                var cutoffIndex: number = 0;
+                var index: number;
+                var specializedIndex: number = -1;
+                var spliceIndex: number;
                 Debug.assert(!result.length);
                 for (var i = 0; i < signatures.length; i++) {
                     var signature = signatures[i];
@@ -6121,17 +6121,17 @@ module ts {
                     var parent = signature.declaration && signature.declaration.parent;
                     if (!lastSymbol || symbol === lastSymbol) {
                         if (lastParent && parent === lastParent) {
-                            pos++;
+                            index++;
                         }
                         else {
                             lastParent = parent;
-                            pos = cutoffPos;
+                            index = cutoffIndex;
                         }
                     }
                     else {
                         // current declaration belongs to a different symbol
-                        // set cutoffPos so re-orderings in the future won't change result set from 0 to cutoffPos
-                        pos = cutoffPos = result.length;
+                        // set cutoffIndex so re-orderings in the future won't change result set from 0 to cutoffIndex
+                        index = cutoffIndex = result.length;
                         lastParent = parent;
                     }
                     lastSymbol = symbol;
@@ -6139,20 +6139,18 @@ module ts {
                     // specialized signatures always need to be placed before non-specialized signatures regardless
                     // of the cutoff position; see GH#1133
                     if (signature.hasStringLiterals) {
-                        splicePos = ++specializedPos;
-                        // The cutoff position needs to be increased to account for the fact that we are adding things
-                        // before the cutoff point. If the cutoff position is not incremented, merged interfaces will
-                        // start adding their merged signatures at the wrong position
-                        ++cutoffPos;
+                        specializedIndex++;
+                        spliceIndex = specializedIndex;
+                        // The cutoff index always needs to be greater than or equal to the specialized signature index
+                        // in order to prevent non-specialized signatures from being added before a specialized
+                        // signature.
+                        cutoffIndex++;
                     }
                     else {
-                        splicePos = pos;
+                        spliceIndex = index;
                     }
 
-                    for (var j = result.length; j > splicePos; j--) {
-                        result[j] = result[j - 1];
-                    }
-                    result[splicePos] = signature;
+                    result.splice(spliceIndex, 0, signature);
                 }
             }
         }
