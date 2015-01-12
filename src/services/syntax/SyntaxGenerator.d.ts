@@ -417,7 +417,7 @@ declare module TypeScript {
         This_version_of_the_Javascript_runtime_does_not_support_the_0_function: string;
         Unknown_rule: string;
         Invalid_line_number_0: string;
-        Warn_on_expressions_and_declarations_with_an_implied_any_type: string;
+        Raise_error_on_expressions_and_declarations_with_an_implied_any_type: string;
         Variable_0_implicitly_has_an_any_type: string;
         Parameter_0_of_1_implicitly_has_an_any_type: string;
         Parameter_0_of_function_type_implicitly_has_an_any_type: string;

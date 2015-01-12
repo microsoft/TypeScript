@@ -1772,7 +1772,7 @@
         "category": "Error",
         "code": 6051
     },
-    "Warn on expressions and declarations with an implied 'any' type.": {
+    "Raise error on expressions and declarations with an implied 'any' type.": {
         "category": "Message",
         "code": 6052
     },
