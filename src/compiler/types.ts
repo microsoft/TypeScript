@@ -5,7 +5,7 @@ module ts {
 
     export interface TextRange {
         start: number;
-        end: number;
+        length: number;
     }
 
     // token > SyntaxKind.Identifer => token is a keyword

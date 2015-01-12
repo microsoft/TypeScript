@@ -2660,7 +2660,7 @@ module ts {
                         // precedes the implementation node (i.e. has the same parent and ends where the implementation starts).
                         if (i > 0 && (<FunctionLikeDeclaration>node).body) {
                             var previous = symbol.declarations[i - 1];
-                            if (node.parent === previous.parent && node.kind === previous.kind && node.start === previous.end) {
+                            if (node.parent === previous.parent && node.kind === previous.kind && node.start === textSpanEnd(previous)) {
                                 break;
                             }
                         }
@@ -5586,13 +5586,13 @@ module ts {
             if (!node.argumentExpression) {
                 var sourceFile = getSourceFile(node);
                 if (node.parent.kind === SyntaxKind.NewExpression && (<NewExpression>node.parent).expression === node) {
-                    var start = skipTrivia(sourceFile.text, node.expression.end);
-                    var end = node.end;
+                    var start = skipTrivia(sourceFile.text, textSpanEnd(node.expression));
+                    var end = textSpanEnd(node);
                     grammarErrorAtPos(sourceFile, start, end - start, Diagnostics.new_T_cannot_be_used_to_create_an_array_Use_new_Array_T_instead);
                 }
                 else {
-                    var start = node.end - "]".length;
-                    var end = node.end;
+                    var start = textSpanEnd(node) - "]".length;
+                    var end = textSpanEnd(node);
                     grammarErrorAtPos(sourceFile, start, end - start, Diagnostics.Expression_expected);
                 }
             }
@@ -7653,7 +7653,7 @@ module ts {
                             duplicateFunctionDeclaration = true;
                         }
                     }
-                    else if (!isExportSymbolInsideModule && previousDeclaration && previousDeclaration.parent === node.parent && previousDeclaration.end !== node.start) {
+                    else if (!isExportSymbolInsideModule && previousDeclaration && previousDeclaration.parent === node.parent && textSpanEnd(previousDeclaration) !== node.start) {
                         reportImplementationExpectedError(previousDeclaration);
                     }
 
@@ -8311,7 +8311,7 @@ module ts {
                     else {
                         var sourceFile = getSourceFileOfNode(node);
                         var start = skipTrivia(sourceFile.text, clause.start);
-                        var end = clause.statements.length > 0 ? clause.statements[0].start : clause.end;
+                        var end = clause.statements.length > 0 ? clause.statements[0].start : textSpanEnd(clause);
                         grammarErrorAtPos(sourceFile, start, end - start, Diagnostics.A_default_clause_cannot_appear_more_than_once_in_a_switch_statement);
                         hasDuplicateDefaultClause = true;
                     }
@@ -8375,7 +8375,7 @@ module ts {
                 // Grammar checking
                 if (catchClause.type) {
                     var sourceFile = getSourceFileOfNode(node);
-                    var colonStart = skipTrivia(sourceFile.text, catchClause.name.end);
+                    var colonStart = skipTrivia(sourceFile.text, textSpanEnd(catchClause.name));
                     grammarErrorAtPos(sourceFile, colonStart, ":".length, Diagnostics.Catch_clause_parameter_cannot_have_a_type_annotation);
                 }
                 // It is a SyntaxError if a TryStatement with a Catch occurs within strict code and the Identifier of the
@@ -10493,7 +10493,7 @@ module ts {
                 return grammarErrorOnNode(accessor.name, Diagnostics.An_accessor_cannot_be_declared_in_an_ambient_context);
             }
             else if (accessor.body === undefined) {
-                return grammarErrorAtPos(getSourceFileOfNode(accessor), accessor.end - 1, ";".length, Diagnostics._0_expected, "{");
+                return grammarErrorAtPos(getSourceFileOfNode(accessor), textSpanEnd(accessor) - 1, ";".length, Diagnostics._0_expected, "{");
             }
             else if (accessor.typeParameters) {
                 return grammarErrorOnNode(accessor.name, Diagnostics.An_accessor_cannot_have_type_parameters);
@@ -10544,7 +10544,7 @@ module ts {
                     return true;
                 }
                 else if (node.body === undefined) {
-                    return grammarErrorAtPos(getSourceFile(node), node.end - 1, ";".length, Diagnostics._0_expected, "{");
+                    return grammarErrorAtPos(getSourceFile(node), textSpanEnd(node) - 1, ";".length, Diagnostics._0_expected, "{");
                 }
             }
 
@@ -10811,8 +10811,8 @@ module ts {
             var sourceFile = getSourceFileOfNode(node);
             if (!hasParseDiagnostics(sourceFile)) {
                 var span = getErrorSpanForNode(node);
-                var start = span.end > span.start ? skipTrivia(sourceFile.text, span.start) : span.start;
-                diagnostics.push(createFileDiagnostic(sourceFile, start, span.end - start, message, arg0, arg1, arg2));
+                var start = textSpanEnd(span) > span.start ? skipTrivia(sourceFile.text, span.start) : span.start;
+                diagnostics.push(createFileDiagnostic(sourceFile, start, textSpanEnd(span) - start, message, arg0, arg1, arg2));
                 return true;
             }
         }

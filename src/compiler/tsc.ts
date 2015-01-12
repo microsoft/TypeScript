@@ -68,7 +68,7 @@ module ts {
     function countLines(program: Program): number {
         var count = 0;
         forEach(program.getSourceFiles(), file => {
-            count += file.getLineAndCharacterFromPosition(file.end).line;
+            count += file.getLineAndCharacterFromPosition(textSpanEnd(file)).line;
         });
         return count;
     }

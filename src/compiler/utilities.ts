@@ -70,7 +70,7 @@ module ts {
     }
 
     export function getFullWidth(node: Node) {
-        return node.end - node.start;
+        return node.length;
     }
 
     // Returns true if this node contains a parse error anywhere underneath it.
@@ -134,7 +134,7 @@ module ts {
             return true;
         }
 
-        return node.start === node.end && node.kind !== SyntaxKind.EndOfFileToken;
+        return node.length === 0 && node.kind !== SyntaxKind.EndOfFileToken;
     }
     
     export function nodeIsPresent(node: Node) {
@@ -157,7 +157,7 @@ module ts {
         }
 
         var text = sourceFile.text;
-        return text.substring(skipTrivia(text, node.start), node.end);
+        return text.substring(skipTrivia(text, node.start), textSpanEnd(node));
     }
 
     export function getTextOfNodeFromSourceText(sourceText: string, node: Node): string {
@@ -165,7 +165,7 @@ module ts {
             return "";
         }
 
-        return sourceText.substring(skipTrivia(sourceText, node.start), node.end);
+        return sourceText.substring(skipTrivia(sourceText, node.start), textSpanEnd(node));
     }
 
     export function getTextOfNode(node: Node): string {
@@ -194,7 +194,7 @@ module ts {
         var file = getSourceFileOfNode(node);
 
         var start = getTokenPosOfNode(node, file);
-        var length = node.end - start;
+        var length = textSpanEnd(node) - start;
 
         return createFileDiagnostic(file, start, length, message, arg0, arg1, arg2);
     }
@@ -203,7 +203,7 @@ module ts {
         node = getErrorSpanForNode(node);
         var file = getSourceFileOfNode(node);
         var start = skipTrivia(file.text, node.start);
-        var length = node.end - start;
+        var length = textSpanEnd(node) - start;
         return flattenDiagnosticChain(file, start, length, messageChain, newLine);
     }
 
@@ -228,7 +228,7 @@ module ts {
         // Alternatively, it might be required and missing (e.g. the name of a module), in which
         // case its pos will equal its end (length 0). In either of these cases, we should fall
         // back to the original node that the error was issued on.
-        return errorSpan && errorSpan.start < errorSpan.end ? errorSpan : node;
+        return errorSpan && errorSpan.start < textSpanEnd(errorSpan) ? errorSpan : node;
     }
 
     export function isExternalModule(file: SourceFile): boolean {
@@ -762,12 +762,10 @@ module ts {
             else {
                 var matchResult = fullTripleSlashReferencePathRegEx.exec(comment);
                 if (matchResult) {
-                    var start = commentRange.start;
-                    var end = commentRange.end;
                     return {
                         fileReference: {
-                            start: start,
-                            end: end,
+                            start: commentRange.start,
+                            length: commentRange.length,
                             filename: matchResult[3]
                         },
                         isNoDefaultLib: false
@@ -1034,7 +1032,7 @@ module ts {
     }
 
     export function nodeArrayEnd(array: NodeArray<Node>) {
-        var end = array.length === 0 ? array.start : lastOrUndefined(array).end;
+        var end = array.length === 0 ? array.start : textSpanEnd(lastOrUndefined(array));
         if (!array.hasTrailingComma) {
             return end;
         }

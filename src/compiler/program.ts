@@ -265,7 +265,7 @@ module ts {
         function processReferencedFiles(file: SourceFile, basePath: string) {
             forEach(file.referencedFiles, ref => {
                 var referencedFilename = isRootedDiskPath(ref.filename) ? ref.filename : combinePaths(basePath, ref.filename);
-                processSourceFile(normalizePath(referencedFilename), /* isDefaultLib */ false, file, ref.start, ref.end);
+                processSourceFile(normalizePath(referencedFilename), /* isDefaultLib */ false, file, ref.start, textSpanEnd(ref));
             });
         }
 
@@ -320,7 +320,7 @@ module ts {
             });
 
             function findModuleSourceFile(filename: string, nameLiteral: LiteralExpression) {
-                return findSourceFile(filename, /* isDefaultLib */ false, file, nameLiteral.start, nameLiteral.end - nameLiteral.start);
+                return findSourceFile(filename, /* isDefaultLib */ false, file, nameLiteral.start, nameLiteral.length);
             }
         }
 
@@ -341,7 +341,7 @@ module ts {
                 // We cannot use createDiagnosticFromNode because nodes do not have parents yet
                 var externalModuleErrorSpan = getErrorSpanForNode(firstExternalModule.externalModuleIndicator);
                 var errorStart = skipTrivia(firstExternalModule.text, externalModuleErrorSpan.start);
-                var errorLength = externalModuleErrorSpan.end - errorStart;
+                var errorLength = textSpanEnd(externalModuleErrorSpan) - errorStart;
                 errors.push(createFileDiagnostic(firstExternalModule, errorStart, errorLength, Diagnostics.Cannot_compile_external_modules_unless_the_module_flag_is_provided));
             }
 

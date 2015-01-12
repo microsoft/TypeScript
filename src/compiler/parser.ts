@@ -375,7 +375,6 @@ module ts {
         start: number;
         parent?: Node;
         intersectsChange: boolean
-        length?: number;
         _children: Node[];
     }
 
@@ -415,7 +414,7 @@ module ts {
                     // Much of the time the parser will need the very next node in the array that 
                     // we just returned a node from.So just simply check for that case and move 
                     // forward in the array instead of searching for the node again.
-                    if (current && current.end === position && currentArrayIndex < currentArray.length) {
+                    if (current && textSpanEnd(current) === position && currentArrayIndex < currentArray.length) {
                         currentArrayIndex++;
                         current = currentArray[currentArrayIndex];
                     }
@@ -453,7 +452,7 @@ module ts {
             forEachChild(sourceFile, visitNode, visitArray);
 
             function visitNode(node: Node) {
-                if (position >= node.start && position < node.end) {
+                if (position >= node.start && position < textSpanEnd(node)) {
                     // Position was within this node.  Keep searching deeper to find the node.
                     forEachChild(node, visitNode, visitArray);
 
@@ -466,7 +465,7 @@ module ts {
             }
 
             function visitArray(array: NodeArray<Node>) {
-                if (array.length > 0 && position >= array.start && position < lastOrUndefined(array).end) {
+                if (array.length > 0 && position >= array.start && position < textSpanEnd(lastOrUndefined(array))) {
                     // position was in this array.  Search through this array to see if we find a
                     // viable element.
                     for (var i = 0, n = array.length; i < n; i++) {
@@ -480,7 +479,7 @@ module ts {
                                 return true;
                             }
                             else {
-                                if (child.start < position && position < child.end) {
+                                if (child.start < position && position < textSpanEnd(child)) {
                                     // Position in somewhere within this child.  Search in it and 
                                     // stop searching in this array.
                                     forEachChild(child, visitNode, visitArray);
@@ -609,7 +608,7 @@ module ts {
             token = nextToken();
 
             sourceFile.flags = fileExtensionIs(filename, ".d.ts") ? NodeFlags.DeclarationFile : 0;
-            sourceFile.end = sourceText.length;
+            sourceFile.length = sourceText.length;
             sourceFile.filename = normalizePath(filename);
             sourceFile.text = sourceText;
 
@@ -709,19 +708,19 @@ module ts {
                 if (child.start > changeRangeOldEnd) {
                     // Node is entirely past the change range.  We need to move both its pos and 
                     // end, forward or backward appropriately.
-                    moveElementEntirelyPastChangeRange(child, delta);
+                    moveElementEntirelyPastChangeRange(child, delta, /*isArray:*/ false);
                     return;
                 }
 
                 // Check if the element intersects the change range.  If it does, then it is not
                 // reusable.  Also, we'll need to recurse to see what constituent portions we may
                 // be able to use.
-                var fullEnd = child.end;
+                var fullEnd = textSpanEnd(child);
                 if (fullEnd >= changeStart) {
                     child.intersectsChange = true;
 
                     // Adjust the pos or end (or both) of the intersecting element accordingly.
-                    adjustIntersectingElement(child, child.end, changeStart, changeRangeOldEnd, changeRangeNewEnd, delta);
+                    adjustIntersectingElement(child, textSpanEnd(child), changeStart, changeRangeOldEnd, changeRangeNewEnd, delta, /*isArray:*/ false);
                     forEachChild(child, visitNode, visitArray);
                     return;
                 }
@@ -733,7 +732,7 @@ module ts {
                 if (array.start > changeRangeOldEnd) {
                     // Array is entirely after the change range.  We need to move it, and move any of
                     // its children.
-                    moveElementEntirelyPastChangeRange(array, delta);
+                    moveElementEntirelyPastChangeRange(array, delta, /*isArray:*/ true);
                 }
                 else {
                     // Check if the element intersects the change range.  If it does, then it is not
@@ -744,7 +743,7 @@ module ts {
                         array.intersectsChange = true;
 
                         // Adjust the pos or end (or both) of the intersecting array accordingly.
-                        adjustIntersectingElement(array, fullEnd, changeStart, changeRangeOldEnd, changeRangeNewEnd, delta);
+                        adjustIntersectingElement(array, fullEnd, changeStart, changeRangeOldEnd, changeRangeNewEnd, delta, /*isArray:*/ true);
                         for (var i = 0, n = array.length; i < n; i++) {
                             visitNode(array[i]);
                         }
@@ -756,7 +755,7 @@ module ts {
             }
         }
 
-        function adjustIntersectingElement(element: IncrementalElement, end: number, changeStart: number, changeRangeOldEnd: number, changeRangeNewEnd: number, delta: number) {
+        function adjustIntersectingElement(element: IncrementalElement, end: number, changeStart: number, changeRangeOldEnd: number, changeRangeNewEnd: number, delta: number, isArray: boolean) {
             Debug.assert(end >= changeStart, "Adjusting an element that was entirely before the change range");
             Debug.assert(element.start <= changeRangeOldEnd, "Adjusting an element that was entirely after the change range");
 
@@ -793,45 +792,51 @@ module ts {
             // if it's in the 'Y' range.
             element.start = Math.min(element.start, changeRangeNewEnd);
 
-            // If the 'end' is after the change range, then we always adjust it by the delta
-            // amount.  However, if the end is in the change range, then how we adjust it 
-            // will depend on if delta is  positive or negative.  If delta is positive then we
-            // have something like:
-            //
-            //  -------------------AAA-----------------
-            //  -------------------BBBCCCCCCC-----------------
-            //
-            // In this case, we consider any node that ended inside the change range to keep its
-            // end position.
-            //
-            // however, if the delta is negative, then we instead have something like this:
-            //
-            //  -------------------XXXYYYYYYY-----------------
-            //  -------------------ZZZ-----------------
-            //
-            // In this case, any element that ended in the 'X' range will keep its position.  
-            // However any element htat ended after that will have their pos adjusted to be
-            // at the end of the new range.  i.e. any node that ended in the 'Y' range will
-            // be adjusted to have their end at the end of the 'Z' range.
-            if (end >= changeRangeOldEnd) {
-                // Element ends after the change range.  Always adjust the end pos.
-                (<any>element).end = end + delta;
-            }
-            else {
-                // Element ends in the change range.  The element will keep its position if 
-                // possible. Or Move backward to the new-end if it's in the 'Y' range.
-                (<any>element).end = Math.min(end, changeRangeNewEnd);
+            // If is wasn't an array (i.e. it was a node), then we may want to adjust the length 
+            // of it depending on if the edit caused the file to grow or shrink.
+            if (!isArray) {
+                // If the 'end' is after the change range, then we always adjust it by the delta
+                // amount.  However, if the end is in the change range, then how we adjust it 
+                // will depend on if delta is  positive or negative.  If delta is positive then we
+                // have something like:
+                //
+                //  -------------------AAA-----------------
+                //  -------------------BBBCCCCCCC-----------------
+                //
+                // In this case, we consider any node that ended inside the change range to keep its
+                // end position.
+                //
+                // however, if the delta is negative, then we instead have something like this:
+                //
+                //  -------------------XXXYYYYYYY-----------------
+                //  -------------------ZZZ-----------------
+                //
+                // In this case, any element that ended in the 'X' range will keep its position.  
+                // However any element htat ended after that will have their pos adjusted to be
+                // at the end of the new range.  i.e. any node that ended in the 'Y' range will
+                // be adjusted to have their end at the end of the 'Z' range.
+                if (end >= changeRangeOldEnd) {
+                    // Element ends after the change range.  Always adjust the end pos.
+                    var newEnd = end + delta;
+                }
+                else {
+                    // Element ends in the change range.  The element will keep its position if 
+                    // possible. Or Move backward to the new-end if it's in the 'Y' range.
+                    var newEnd = Math.min(end, changeRangeNewEnd);
+                }
+
+                var incrementalNode = <IncrementalNode>element;
+                incrementalNode.length = newEnd - incrementalNode.start;
+                Debug.assert(incrementalNode.length >= 0);
             }
 
-            Debug.assert(element.start <= (<any>element).end);
             if (element.parent) {
                 Debug.assert(element.start >= element.parent.start);
-                Debug.assert((<any>element).end <= element.parent.end);
             }
         }
 
-        function moveElementEntirelyPastChangeRange(element: IncrementalElement, delta: number) {
-            if (element.length) {
+        function moveElementEntirelyPastChangeRange(element: IncrementalElement, delta: number, isArray: boolean) {
+            if (isArray) {
                 visitArray(<IncrementalNodeArray>element);
             }
             else {
@@ -843,7 +848,6 @@ module ts {
                 // moving them forward.
                 node._children = undefined;
                 node.start += delta;
-                node.end += delta;
 
                 forEachChild(node, visitNode, visitArray);
             }
@@ -945,7 +949,7 @@ module ts {
                     // position.  If it overlaps with the position, then either it, or one of its
                     // children must be the nearest node before the position.  So we can just 
                     // recurse into this child to see if we can find something better.
-                    if (position < child.end) {
+                    if (position < textSpanEnd(child)) {
                         // The nearest node is either this child, or one of the children inside
                         // of it.  We've already marked this child as the best so far.  Recurse
                         // in case one of the children is better.
@@ -956,7 +960,7 @@ module ts {
                         return true;
                     }
                     else {
-                        Debug.assert(child.end <= position);
+                        Debug.assert(textSpanEnd(child) <= position);
                         // The child ends entirely before this position.  Say you have the following
                         // (where $ is the position)
                         // 
@@ -1263,12 +1267,12 @@ module ts {
             }
 
             node.start = pos;
-            node.end = pos;
             return node;
         }
 
         function finishNode<T extends Node>(node: T): T {
-            node.end = scanner.getStartPos();
+            node.length = scanner.getStartPos() - node.start;
+            // Debug.assert(node.length >= 0);
 
             if (contextFlags) {
                 node.parserContextFlags = contextFlags;
@@ -1660,7 +1664,7 @@ module ts {
 
         function consumeNode(node: Node) {
             // Move the scanner so it is after the node we just consumed.
-            scanner.setTextPos(node.end);
+            scanner.setTextPos(textSpanEnd(node));
             nextToken();
             return node;
         }
@@ -4687,9 +4691,9 @@ module ts {
                     break;
                 }
 
-                var range = { start: triviaScanner.getTokenPos(), end: triviaScanner.getTextPos() };
+                var range = createTextSpanFromBounds(triviaScanner.getTokenPos(), triviaScanner.getTextPos());
 
-                var comment = sourceText.substring(range.start, range.end);
+                var comment = sourceText.substr(range.start, range.length);
                 var referencePathMatchResult = getFileReferenceFromReferencePath(comment, range);
                 if (referencePathMatchResult) {
                     var fileReference = referencePathMatchResult.fileReference;
@@ -4699,7 +4703,7 @@ module ts {
                         referencedFiles.push(fileReference);
                     }
                     if (diagnosticMessage) {
-                        sourceFile.referenceDiagnostics.push(createFileDiagnostic(sourceFile, range.start, range.end - range.start, diagnosticMessage));
+                        sourceFile.referenceDiagnostics.push(createFileDiagnostic(sourceFile, range.start, range.length, diagnosticMessage));
                     }
                 }
                 else {
@@ -4707,7 +4711,7 @@ module ts {
                     var amdModuleNameMatchResult = amdModuleNameRegEx.exec(comment);
                     if (amdModuleNameMatchResult) {
                         if (amdModuleName) {
-                            sourceFile.referenceDiagnostics.push(createFileDiagnostic(sourceFile, range.start, range.end - range.start, Diagnostics.An_AMD_module_cannot_have_multiple_name_assignments));
+                            sourceFile.referenceDiagnostics.push(createFileDiagnostic(sourceFile, range.start, range.length, Diagnostics.An_AMD_module_cannot_have_multiple_name_assignments));
                         }
                         amdModuleName = amdModuleNameMatchResult[2];
                     }

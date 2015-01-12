@@ -78,7 +78,7 @@ module ts.formatting {
                 scanner.scan();
                 var item = {
                     start: pos,
-                    end: scanner.getStartPos(),
+                    length: scanner.getStartPos() - pos,
                     kind: t
                 }
 
@@ -182,7 +182,7 @@ module ts.formatting {
 
             var token: TextRangeWithKind = {
                 start: scanner.getStartPos(),
-                end: scanner.getTextPos(),
+                length: scanner.getTextPos() - scanner.getStartPos(),
                 kind: currentToken
             }
 
@@ -194,7 +194,7 @@ module ts.formatting {
                 }
                 var trivia = {
                     start: scanner.getStartPos(),
-                    end: scanner.getTextPos(),
+                    length: scanner.getTextPos() - scanner.getStartPos(),
                     kind: currentToken
                 };
 

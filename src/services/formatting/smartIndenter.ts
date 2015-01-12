@@ -15,7 +15,7 @@ module ts.formatting {
             // no indentation in string \regex literals
             if ((precedingToken.kind === SyntaxKind.StringLiteral || precedingToken.kind === SyntaxKind.RegularExpressionLiteral) &&
                 precedingToken.getStart(sourceFile) <= position &&
-                precedingToken.end > position) {
+                textSpanEnd(precedingToken) > position) {
                 return 0;
             }
 
@@ -90,7 +90,7 @@ module ts.formatting {
                 var useActualIndentation = true;
                 if (ignoreActualIndentationRange) {
                     var start = current.getStart(sourceFile);
-                    useActualIndentation = start < ignoreActualIndentationRange.start || start > ignoreActualIndentationRange.end;
+                    useActualIndentation = start < ignoreActualIndentationRange.start || start > textSpanEnd(ignoreActualIndentationRange);
                 }
 
                 if (useActualIndentation) {
@@ -203,7 +203,7 @@ module ts.formatting {
         }
 
         function positionBelongsToNode(candidate: Node, position: number, sourceFile: SourceFile): boolean {
-            return candidate.end > position || !isCompletedNode(candidate, sourceFile);
+            return textSpanEnd(candidate) > position || !isCompletedNode(candidate, sourceFile);
         }
 
         export function childStartsOnTheSameLineWithElseInIfStatement(parent: Node, child: TextRangeWithKind, childStartLine: number, sourceFile: SourceFile): boolean {
@@ -287,7 +287,7 @@ module ts.formatting {
                     continue;
                 }
                 // skip list items that ends on the same line with the current list element
-                var prevEndLine = sourceFile.getLineAndCharacterFromPosition(list[i].end).line;
+                var prevEndLine = sourceFile.getLineAndCharacterFromPosition(textSpanEnd(list[i])).line;
                 if (prevEndLine !== lineAndCharacter.line) {
                     return findColumnForFirstNonWhitespaceCharacterInLine(lineAndCharacter, sourceFile, options);
                 }

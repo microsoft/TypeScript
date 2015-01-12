@@ -120,14 +120,13 @@ module Utils {
     export function assertInvariants(node: ts.Node, parent: ts.Node): void {
         if (node) {
             assert.isFalse(node.start < 0, "node.start < 0");
-            assert.isFalse(node.end < 0, "node.end < 0");
-            assert.isFalse(node.end < node.start, "node.end < node.start");
+            assert.isFalse(node.length < 0, "node.length < 0");
             assert.equal(node.parent, parent, "node.parent !== parent");
 
             if (parent) {
                 // Make sure each child is contained within the parent.
                 assert.isFalse(node.start < parent.start, "node.start < parent.start");
-                assert.isFalse(node.end > parent.end, "node.end > parent.end");
+                assert.isFalse(node.length > parent.length, "node.length > parent.length");
             }
 
             ts.forEachChild(node, child => {
@@ -139,16 +138,16 @@ module Utils {
             ts.forEachChild(node,
                 child => {
                     assert.isFalse(child.start < currentPos, "child.start < currentPos");
-                    currentPos = child.end;
+                    currentPos = ts.textSpanEnd(child);
                 },
                 (array: ts.NodeArray<ts.Node>) => {
                     assert.isFalse(array.start < node.start, "array.start < node.start");
-                    assert.isFalse(ts.nodeArrayEnd(array) > node.end, "array.end > node.end");
+                    assert.isFalse(ts.nodeArrayEnd(array) > ts.textSpanEnd(node), "array.end > node.end");
                     assert.isFalse(array.start < currentPos, "array.start < currentPos");
 
                     for (var i = 0, n = array.length; i < n; i++) {
                         assert.isFalse(array[i].start < currentPos, "array[i].start < currentPos");
-                        currentPos = array[i].end
+                        currentPos = ts.textSpanEnd(array[i]);
                     }
 
                     currentPos = ts.nodeArrayEnd(array);
@@ -266,7 +265,7 @@ module Utils {
 
                     case "nextContainer":
                         if (n.nextContainer) {
-                            o[propertyName] = { kind: n.nextContainer.kind, pos: n.nextContainer.start, end: n.nextContainer.end };
+                            o[propertyName] = { kind: n.nextContainer.kind, pos: n.nextContainer.start, end: ts.textSpanEnd(n.nextContainer) };
                         }
                         break;
 
@@ -319,7 +318,7 @@ module Utils {
         assert(node1, "node1");
         assert(node2, "node2");
         assert.equal(node1.start, node2.start, "node1.start !== node2.start");
-        assert.equal(node1.end, node2.end, "node1.end !== node2.end");
+        assert.equal(node1.length, node2.length, "node1.length !== node2.length");
         assert.equal(node1.kind, node2.kind, "node1.kind !== node2.kind");
         assert.equal(node1.flags, node2.flags, "node1.flags !== node2.flags");
 

@@ -134,10 +134,10 @@ module ts {
 
     var emptyArray: any[] = [];
 
-    function createNode(kind: SyntaxKind, pos: number, end: number, flags: NodeFlags, parent?: Node): NodeObject {
+    function createNode(kind: SyntaxKind, start: number, end: number, flags: NodeFlags, parent?: Node): NodeObject {
         var node = <NodeObject> new (getNodeConstructor(kind))();
-        node.start = pos;
-        node.end = end;
+        node.start = start;
+        node.length = end - start;
         node.flags = flags;
         node.parent = parent;
         return node;
@@ -146,7 +146,7 @@ module ts {
     class NodeObject implements Node {
         public kind: SyntaxKind;
         public start: number;
-        public end: number;
+        public length: number;
         public flags: NodeFlags;
         public parent: Node;
         private _children: Node[];
@@ -164,7 +164,7 @@ module ts {
         }
 
         public getEnd(): number {
-            return this.end;
+            return this.start + this.length;
         }
 
         public getWidth(sourceFile?: SourceFile): number {
@@ -172,7 +172,7 @@ module ts {
         }
 
         public getFullWidth(): number {
-            return this.end - this.getFullStart();
+            return this.length;
         }
 
         public getLeadingTriviaWidth(sourceFile?: SourceFile): number {
@@ -180,7 +180,7 @@ module ts {
         }
 
         public getFullText(sourceFile?: SourceFile): string {
-            return (sourceFile || this.getSourceFile()).text.substring(this.start, this.end);
+            return (sourceFile || this.getSourceFile()).text.substring(this.start, textSpanEnd(this));
         }
 
         public getText(sourceFile?: SourceFile): string {
@@ -208,7 +208,7 @@ module ts {
                     pos = this.addSyntheticNodes(list._children, pos, node.start);
                 }
                 list._children.push(node);
-                pos = node.end;
+                pos = textSpanEnd(node);
             }
             if (pos < nodeArrayEnd(nodes)) {
                 this.addSyntheticNodes(list._children, pos, nodeArrayEnd(nodes));
@@ -227,7 +227,7 @@ module ts {
                         pos = this.addSyntheticNodes(children, pos, node.start);
                     }
                     children.push(node);
-                    pos = node.end;
+                    pos = textSpanEnd(node);
                 };
                 var processNodes = (nodes: NodeArray<Node>) => {
                     if (pos < nodes.start) {
@@ -237,8 +237,8 @@ module ts {
                     pos = nodeArrayEnd(nodes);
                 };
                 forEachChild(this, processNode, processNodes);
-                if (pos < this.end) {
-                    this.addSyntheticNodes(children, pos, this.end);
+                if (pos < textSpanEnd(this)) {
+                    this.addSyntheticNodes(children, pos, textSpanEnd(this));
                 }
                 scanner.setText(undefined);
             }
@@ -341,7 +341,7 @@ module ts {
                 // If it is parameter - try and get the jsDoc comment with @param tag from function declaration's jsDoc comments
                 if (canUseParsedParamTagComments && declaration.kind === SyntaxKind.Parameter) {
                     ts.forEach(getJsDocCommentTextRange(declaration.parent, sourceFileOfDeclaration), jsDocCommentTextRange => {
-                        var cleanedParamJsDocComment = getCleanedParamJsDocComment(jsDocCommentTextRange.start, jsDocCommentTextRange.end, sourceFileOfDeclaration);
+                        var cleanedParamJsDocComment = getCleanedParamJsDocComment(jsDocCommentTextRange.start, textSpanEnd(jsDocCommentTextRange), sourceFileOfDeclaration);
                         if (cleanedParamJsDocComment) {
                             jsDocCommentParts.push.apply(jsDocCommentParts, cleanedParamJsDocComment);
                         }
@@ -361,7 +361,7 @@ module ts {
                 // Get the cleaned js doc comment text from the declaration
                 ts.forEach(getJsDocCommentTextRange(
                     declaration.kind === SyntaxKind.VariableDeclaration ? declaration.parent.parent : declaration, sourceFileOfDeclaration), jsDocCommentTextRange => {
-                        var cleanedJsDocComment = getCleanedJsDocComment(jsDocCommentTextRange.start, jsDocCommentTextRange.end, sourceFileOfDeclaration);
+                        var cleanedJsDocComment = getCleanedJsDocComment(jsDocCommentTextRange.start, textSpanEnd(jsDocCommentTextRange), sourceFileOfDeclaration);
                         if (cleanedJsDocComment) {
                             jsDocCommentParts.push.apply(jsDocCommentParts, cleanedJsDocComment);
                         }
@@ -373,10 +373,10 @@ module ts {
             function getJsDocCommentTextRange(node: Node, sourceFile: SourceFile): TextRange[] {
                 return ts.map(getJsDocComments(node, sourceFile),
                     jsDocComment => {
-                        return {
-                            start: jsDocComment.start + "/*".length, // Consume /* from the comment
-                            end: jsDocComment.end - "*/".length // Trim off comment end indicator 
-                        };
+                        return createTextSpanFromBounds(
+                            jsDocComment.start + "/*".length, // Consume /* from the comment
+                            textSpanEnd(jsDocComment) - "*/".length // Trim off comment end indicator
+                        );
                     });
             }
 
@@ -1694,7 +1694,7 @@ module ts {
         function processTripleSlashDirectives(): void {
             var commentRanges = getLeadingCommentRanges(sourceText, 0);
             forEach(commentRanges, commentRange => {
-                var comment = sourceText.substring(commentRange.start, commentRange.end);
+                var comment = sourceText.substr(commentRange.start, commentRange.length);
                 var referencePathMatchResult = getFileReferenceFromReferencePath(comment, commentRange);
                 if (referencePathMatchResult) {
                     isNoDefaultLib = referencePathMatchResult.isNoDefaultLib;
@@ -1728,7 +1728,7 @@ module ts {
                                         importedFiles.push({
                                             filename: importPath,
                                             start: pos,
-                                            end: pos + importPath.length
+                                            length: importPath.length
                                         });
                                     }
                                 }
@@ -1866,20 +1866,20 @@ module ts {
         function isInsideCommentRange(comments: CommentRange[]): boolean {
             return forEach(comments, comment => {
                 // either we are 1. completely inside the comment, or 2. at the end of the comment
-                if (comment.start < position && position < comment.end) {
+                if (comment.start < position && position < textSpanEnd(comment)) {
                     return true;
                 }
-                else if (position === comment.end) {
+                else if (position === textSpanEnd(comment)) {
                     var text = sourceFile.text;
-                    var width = comment.end - comment.start;
+                    var width = comment.length;
                     // is single line comment or just /*
                     if (width <= 2 || text.charCodeAt(comment.start + 1) === CharacterCodes.slash) {
                         return true;
                     }
                     else {
                         // is unterminated multi-line comment
-                        return !(text.charCodeAt(comment.end - 1) === CharacterCodes.slash &&
-                            text.charCodeAt(comment.end - 2) === CharacterCodes.asterisk);
+                        return !(text.charCodeAt(textSpanEnd(comment) - 1) === CharacterCodes.slash &&
+                            text.charCodeAt(textSpanEnd(comment) - 2) === CharacterCodes.asterisk);
                     }
                 }
                 return false;
@@ -2221,7 +2221,7 @@ module ts {
 
             // The caret is at the end of an identifier; this is a partial identifier that we want to complete: e.g. a.toS|
             // Skip this partial identifier to the previous token
-            if (previousToken && position <= previousToken.end && previousToken.kind === SyntaxKind.Identifier) {
+            if (previousToken && position <= textSpanEnd(previousToken) && previousToken.kind === SyntaxKind.Identifier) {
                 var start = new Date().getTime();
                 previousToken = findPrecedingToken(previousToken.start, sourceFile);
                 host.log("getCompletionsAtPosition: Get previous token 2: " + (new Date().getTime() - start));
@@ -3103,7 +3103,7 @@ module ts {
             }
 
             /// Triple slash reference comments
-            var comment = forEach(sourceFile.referencedFiles, r => (r.start <= position && position < r.end) ? r : undefined);
+            var comment = forEach(sourceFile.referencedFiles, r => (r.start <= position && position < textSpanEnd(r)) ? r : undefined);
             if (comment) {
                 var referenceFile = tryResolveScriptReference(program, sourceFile, comment);
                 if (referenceFile) {
@@ -3350,7 +3350,7 @@ module ts {
                         var shouldHighlightNextKeyword = true;
 
                         // Avoid recalculating getStart() by iterating backwards.
-                        for (var j = ifKeyword.getStart() - 1; j >= elseKeyword.end; j--) {
+                        for (var j = ifKeyword.getStart() - 1; j >= textSpanEnd(elseKeyword); j--) {
                             if (!isWhiteSpace(sourceFile.text.charCodeAt(j))) {
                                 shouldHighlightNextKeyword = false;
                                 break;
@@ -3360,7 +3360,7 @@ module ts {
                         if (shouldHighlightNextKeyword) {
                             result.push({
                                 fileName: filename,
-                                textSpan: createTextSpanFromBounds(elseKeyword.getStart(), ifKeyword.end),
+                                textSpan: createTextSpanFromBounds(elseKeyword.getStart(), textSpanEnd(ifKeyword)),
                                 isWriteAccess: false
                             });
                             i++; // skip the next keyword
@@ -4098,8 +4098,8 @@ module ts {
                         // Then we want to make sure that it wasn't in a "///<" directive comment
                         // We don't want to unintentionally update a file name.
                         return forEach(commentRanges, c => {
-                            if (c.start < position && position < c.end) {
-                                var commentText = sourceFile.text.substring(c.start, c.end);
+                            if (c.start < position && position < textSpanEnd(c)) {
+                                var commentText = sourceFile.text.substring(c.start, textSpanEnd(c));
                                 if (!tripleSlashDirectivePrefixRegex.test(commentText)) {
                                     return true;
                                 }
@@ -5730,7 +5730,7 @@ module ts {
                 var proto = kind === SyntaxKind.SourceFile ? new SourceFileObject() : new NodeObject();
                 proto.kind = kind;
                 proto.start = 0;
-                proto.end = 0;
+                proto.length = 0;
                 proto.flags = 0;
                 proto.parent = undefined;
                 Node.prototype = proto;

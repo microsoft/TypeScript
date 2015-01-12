@@ -402,7 +402,7 @@ module ts.SignatureHelp {
 
                 // If the node is not a subspan of its parent, this is a big problem.
                 // There have been crashes that might be caused by this violation.
-                if (n.start < n.parent.start || n.end > n.parent.end) {
+                if (n.start < n.parent.start || textSpanEnd(n) > textSpanEnd(n.parent)) {
                     Debug.fail("Node of kind " + n.kind + " is not a subspan of its parent of kind " + n.parent.kind);
                 }
 

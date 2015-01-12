@@ -171,7 +171,7 @@ module ts {
         if (currentSourceFile.text.charCodeAt(comment.start + 1) === CharacterCodes.asterisk) {
             var firstCommentLineAndCharacter = currentSourceFile.getLineAndCharacterFromPosition(comment.start);
             var firstCommentLineIndent: number;
-            for (var pos = comment.start, currentLine = firstCommentLineAndCharacter.line; pos < comment.end; currentLine++) {
+            for (var pos = comment.start, currentLine = firstCommentLineAndCharacter.line; pos < textSpanEnd(comment); currentLine++) {
                 var nextLineStart = currentSourceFile.getPositionFromLineAndCharacter(currentLine + 1, /*character*/1);
 
                 if (pos !== comment.start) {
@@ -226,16 +226,16 @@ module ts {
         }
         else {
             // Single line comment of style //....
-            writer.write(currentSourceFile.text.substring(comment.start, comment.end));
+            writer.write(currentSourceFile.text.substring(comment.start, textSpanEnd(comment)));
         }
 
         function writeTrimmedCurrentLine(pos: number, nextLineStart: number) {
-            var end = Math.min(comment.end, nextLineStart - 1);
+            var end = Math.min(textSpanEnd(comment), nextLineStart - 1);
             var currentLineText = currentSourceFile.text.substring(pos, end).replace(/^\s+|\s+$/g, '');
             if (currentLineText) {
                 // trimmed forward and ending spaces text
                 writer.write(currentLineText);
-                if (end !== comment.end) {
+                if (end !== textSpanEnd(comment)) {
                     writer.writeLine();
                 }
             }
@@ -1682,7 +1682,7 @@ module ts {
                 }
 
                 function recordEmitNodeEndSpan(node: Node) {
-                    recordSourceMapSpan(node.end);
+                    recordSourceMapSpan(textSpanEnd(node));
                 }
 
                 function writeTextWithSpanRecord(tokenKind: SyntaxKind, startPos: number, emitFn?: () => void) {
@@ -1766,7 +1766,7 @@ module ts {
                 function writeCommentRangeWithMap(curentSourceFile: SourceFile, writer: EmitTextWriter, comment: CommentRange, newLine: string) {
                     recordSourceMapSpan(comment.start);
                     writeCommentRange(currentSourceFile, writer, comment, newLine);
-                    recordSourceMapSpan(comment.end);
+                    recordSourceMapSpan(textSpanEnd(comment));
                 }
 
                 function serializeSourceMapContents(version: number, file: string, sourceRoot: string, sources: string[], names: string[], mappings: string) {
@@ -2670,11 +2670,11 @@ module ts {
                 write(" ");
                 endPos = emitToken(SyntaxKind.OpenParenToken, endPos);
                 emit(node.expression);
-                emitToken(SyntaxKind.CloseParenToken, node.expression.end);
+                emitToken(SyntaxKind.CloseParenToken, textSpanEnd(node.expression));
                 emitEmbeddedStatement(node.thenStatement);
                 if (node.elseStatement) {
                     writeLine();
-                    emitToken(SyntaxKind.ElseKeyword, node.thenStatement.end);
+                    emitToken(SyntaxKind.ElseKeyword, textSpanEnd(node.thenStatement));
                     if (node.elseStatement.kind === SyntaxKind.IfStatement) {
                         write(" ");
                         emit(node.elseStatement);
@@ -2760,7 +2760,7 @@ module ts {
                 }
                 write(" in ");
                 emit(node.expression);
-                emitToken(SyntaxKind.CloseParenToken, node.expression.end);
+                emitToken(SyntaxKind.CloseParenToken, textSpanEnd(node.expression));
                 emitEmbeddedStatement(node.statement);
             }
 
@@ -2790,7 +2790,7 @@ module ts {
                 write(" ");
                 emitToken(SyntaxKind.OpenParenToken, endPos);
                 emit(node.expression);
-                endPos = emitToken(SyntaxKind.CloseParenToken, node.expression.end);
+                endPos = emitToken(SyntaxKind.CloseParenToken, textSpanEnd(node.expression));
                 write(" ");
                 emitToken(SyntaxKind.OpenBraceToken, endPos);
                 increaseIndent();
@@ -2848,7 +2848,7 @@ module ts {
                 write(" ");
                 emitToken(SyntaxKind.OpenParenToken, endPos);
                 emit(node.name);
-                emitToken(SyntaxKind.CloseParenToken, node.name.end);
+                emitToken(SyntaxKind.CloseParenToken, textSpanEnd(node.name));
                 write(" ");
                 emitBlock(node.block);
             }
@@ -3804,7 +3804,7 @@ module ts {
                             emitStart(literal);
                             emitLiteral(literal);
                             emitEnd(literal);
-                            emitToken(SyntaxKind.CloseParenToken, literal.end);
+                            emitToken(SyntaxKind.CloseParenToken, textSpanEnd(literal));
                         }
                         write(";");
                         emitEnd(node);
@@ -4148,8 +4148,8 @@ module ts {
 
             function emitTrailingDeclarationComments(node: Node) {
                 // Emit the trailing comments only if the parent's end doesn't match
-                if (node.parent.kind === SyntaxKind.SourceFile || node.end !== node.parent.end) {
-                    var trailingComments = getTrailingCommentRanges(currentSourceFile.text, node.end);
+                if (node.parent.kind === SyntaxKind.SourceFile || textSpanEnd(node) !== textSpanEnd(node.parent)) {
+                    var trailingComments = getTrailingCommentRanges(currentSourceFile.text, textSpanEnd(node));
                     // trailing comments are emitted at space/*trailing comment1 */space/*trailing comment*/
                     emitComments(currentSourceFile, writer, trailingComments, /*trailingSeparator*/ false, newLine, writeComment);                    
                 }
@@ -4178,7 +4178,7 @@ module ts {
 
                     forEach(leadingComments, comment => {
                         if (lastComment) {
-                            var lastCommentLine = getLineOfLocalPosition(currentSourceFile, lastComment.end);
+                            var lastCommentLine = getLineOfLocalPosition(currentSourceFile, textSpanEnd(lastComment));
                             var commentLine = getLineOfLocalPosition(currentSourceFile, comment.start);
 
                             if (commentLine >= lastCommentLine + 2) {
@@ -4197,13 +4197,13 @@ module ts {
                         // All comments look like they could have been part of the copyright header.  Make
                         // sure there is at least one blank line between it and the node.  If not, it's not
                         // a copyright header.
-                        var lastCommentLine = getLineOfLocalPosition(currentSourceFile, detachedComments[detachedComments.length - 1].end);
+                        var lastCommentLine = getLineOfLocalPosition(currentSourceFile, textSpanEnd(detachedComments[detachedComments.length - 1]));
                         var astLine = getLineOfLocalPosition(currentSourceFile, skipTrivia(currentSourceFile.text, pos));
                         if (astLine >= lastCommentLine + 2) {
                             // Valid detachedComments
                             emitNewLineBeforeLeadingComments(currentSourceFile, writer, pos, leadingComments);
                             emitComments(currentSourceFile, writer, detachedComments, /*trailingSeparator*/ true, newLine, writeComment);
-                            var currentDetachedCommentInfo = { nodePos: pos, detachedCommentEndPos: detachedComments[detachedComments.length - 1].end };
+                            var currentDetachedCommentInfo = { nodePos: pos, detachedCommentEndPos: textSpanEnd(detachedComments[detachedComments.length - 1]) };
                             if (detachedCommentsInfo) {
                                 detachedCommentsInfo.push(currentDetachedCommentInfo);
                             }
@@ -4225,9 +4225,9 @@ module ts {
                     // Verify this is /// comment, but do the regexp match only when we first can find /// in the comment text 
                     // so that we don't end up computing comment string and doing match for all // comments
                     else if (currentSourceFile.text.charCodeAt(comment.start + 1) === CharacterCodes.slash &&
-                        comment.start + 2 < comment.end &&
+                        comment.start + 2 < textSpanEnd(comment) &&
                         currentSourceFile.text.charCodeAt(comment.start + 2) === CharacterCodes.slash &&
-                        currentSourceFile.text.substring(comment.start, comment.end).match(fullTripleSlashReferencePathRegEx)) {
+                        currentSourceFile.text.substring(comment.start, textSpanEnd(comment)).match(fullTripleSlashReferencePathRegEx)) {
                         return true;
                     }
                 }

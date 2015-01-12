@@ -712,7 +712,7 @@ module ts {
                         convertResult.referencedFiles.push({
                             path: normalizePath(refFile.filename),
                             position: refFile.start,
-                            length: refFile.end - refFile.start
+                            length: refFile.length
                         });
                     });
 
@@ -720,7 +720,7 @@ module ts {
                         convertResult.importedFiles.push({
                             path: normalizeSlashes(importedFile.filename),
                             position: importedFile.start,
-                            length: importedFile.end - importedFile.start
+                            length: importedFile.length
                         });
                     });
                     return convertResult;

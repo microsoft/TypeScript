@@ -48,11 +48,11 @@ module ts {
     }
 
     export function rangeContainsRange(r1: TextRange, r2: TextRange): boolean {
-        return startEndContainsRange(r1.start, r1.end, r2);
+        return startEndContainsRange(r1.start, textSpanEnd(r1), r2);
     }
 
     export function startEndContainsRange(start: number, end: number, range: TextRange): boolean {
-        return start <= range.start && end >= range.end;
+        return start <= range.start && end >= textSpanEnd(range);
     }
 
     export function nodeArrayContainsStartEnd(array: NodeArray<Node>, start: number, end: number): boolean {
@@ -60,11 +60,11 @@ module ts {
     }
 
     export function rangeContainsStartEnd(range: TextRange, start: number, end: number): boolean {
-        return range.start <= start && range.end >= end;
+        return range.start <= start && textSpanEnd(range) >= end;
     }
 
     export function rangeOverlapsWithStartEnd(r1: TextRange, start: number, end: number) {
-        return startEndOverlapsWithStartEnd(r1.start, r1.end, start, end);
+        return startEndOverlapsWithStartEnd(r1.start, textSpanEnd(r1), start, end);
     }
 
     export function startEndOverlapsWithStartEnd(start1: number, end1: number, start2: number, end2: number) {
@@ -104,7 +104,7 @@ module ts {
         // for the position of the relevant node (or comma).
         var syntaxList = forEach(node.parent.getChildren(), c => {
             // find syntax list that covers the span of the node
-            if (c.kind === SyntaxKind.SyntaxList && c.start <= node.start && c.end >= node.end) {
+            if (c.kind === SyntaxKind.SyntaxList && c.start <= node.start && textSpanEnd(c) >= textSpanEnd(node)) {
                 return c;
             }
         });
@@ -190,7 +190,7 @@ module ts {
         return find(parent);
 
         function find(n: Node): Node {
-            if (isToken(n) && n.start === previousToken.end) {
+            if (isToken(n) && n.start === textSpanEnd(previousToken)) {
                 // this is token that starts at the end of previous token - return it
                 return n;
             }
@@ -200,9 +200,9 @@ module ts {
                 var child = children[i];
                 var shouldDiveInChildNode =
                     // previous token is enclosed somewhere in the child
-                    (child.start <= previousToken.start && child.end > previousToken.end) ||
+                    (child.start <= previousToken.start && textSpanEnd(child) > textSpanEnd(previousToken)) ||
                     // previous token ends exactly at the beginning of child
-                    (child.start === previousToken.end);
+                    (child.start === textSpanEnd(previousToken));
 
                 if (shouldDiveInChildNode && nodeHasTokens(child)) {
                     return find(child);
@@ -236,7 +236,7 @@ module ts {
             for (var i = 0, len = children.length; i < len; ++i) {
                 var child = children[i];
                 if (nodeHasTokens(child)) {
-                    if (position <= child.end) {
+                    if (position <= textSpanEnd(child)) {
                         if (child.getStart(sourceFile) >= position) {
                             // actual start of the node is past the position - previous token should be at the end of previous child
                             var candidate = findRightmostChildNodeWithTokens(children, /*exclusiveStartPosition*/ i);
