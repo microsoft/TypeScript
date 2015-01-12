@@ -5,14 +5,14 @@
 
 module ts.formatting {
 
-    export interface TextRangeWithKind extends TextRange {
+    export interface TextSpanWithKind extends TextSpan {
         kind: SyntaxKind;
     }
 
     export interface TokenInfo {
-        leadingTrivia: TextRangeWithKind[];
-        token: TextRangeWithKind;
-        trailingTrivia: TextRangeWithKind[];
+        leadingTrivia: TextSpanWithKind[];
+        token: TextSpanWithKind;
+        trailingTrivia: TextSpanWithKind[];
     }
 
     const enum Constants {
@@ -144,27 +144,27 @@ module ts.formatting {
         switch (parent.kind) {
             case SyntaxKind.ClassDeclaration:
             case SyntaxKind.InterfaceDeclaration:
-                return nodeArrayContainsRange((<InterfaceDeclaration>parent).members, node);
+                return nodeArrayContainsSpan((<InterfaceDeclaration>parent).members, node);
             case SyntaxKind.ModuleDeclaration:
                 var body = (<ModuleDeclaration>parent).body;
-                return body && body.kind === SyntaxKind.Block && nodeArrayContainsRange((<Block>body).statements, node);
+                return body && body.kind === SyntaxKind.Block && nodeArrayContainsSpan((<Block>body).statements, node);
             case SyntaxKind.SourceFile:
             case SyntaxKind.Block:
             case SyntaxKind.ModuleBlock:
-                return nodeArrayContainsRange((<Block>parent).statements, node);
+                return nodeArrayContainsSpan((<Block>parent).statements, node);
             case SyntaxKind.CatchClause:
-                return nodeArrayContainsRange((<CatchClause>parent).block.statements, node);
+                return nodeArrayContainsSpan((<CatchClause>parent).block.statements, node);
         }
 
         return false;
     }
 
     /** find node that fully contains given text range */
-    function findEnclosingNode(range: TextRange, sourceFile: SourceFile): Node {
+    function findEnclosingNode(span: TextSpan, sourceFile: SourceFile): Node {
         return find(sourceFile);
 
         function find(n: Node): Node {
-            var candidate = forEachChild(n, c => startEndContainsRange(c.getStart(sourceFile), textSpanEnd(c), range) && c);
+            var candidate = forEachChild(n, c => startEndContainsSpan(c.getStart(sourceFile), textSpanEnd(c), span) && c);
             if (candidate) {
                 var result = find(candidate);
                 if (result) {
@@ -180,14 +180,14 @@ module ts.formatting {
       * This function will return a predicate that for a given text range will tell
       * if there are any parse errors that overlap with the range.
       */
-    function prepareRangeContainsErrorFunction(errors: Diagnostic[], originalRange: TextRange): (r: TextRange) => boolean {
+    function prepareRangeContainsErrorFunction(errors: Diagnostic[], originalSpan: TextSpan): (r: TextSpan) => boolean {
         if (!errors.length) {
             return rangeHasNoErrors;
         }
         
         // pick only errors that fall in range
         var sorted = errors
-            .filter(d => rangeOverlapsWithStartEnd(originalRange, d.start, d.start + d.length))
+            .filter(d => rangeOverlapsWithStartEnd(originalSpan, d.start, d.start + d.length))
             .sort((e1, e2) => e1.start - e2.start);
 
         if (!sorted.length) {
@@ -220,7 +220,7 @@ module ts.formatting {
             }
         };
 
-        function rangeHasNoErrors(r: TextRange): boolean {
+        function rangeHasNoErrors(r: TextSpan): boolean {
             return false;
         }
     }
@@ -230,13 +230,13 @@ module ts.formatting {
       * This function will look for token that is located before the start of target range 
       * and return its end as start position for the scanner.
       */
-    function getScanStartPosition(enclosingNode: Node, originalRange: TextRange, sourceFile: SourceFile): number {
+    function getScanStartPosition(enclosingNode: Node, originalSpan: TextSpan, sourceFile: SourceFile): number {
         var start = enclosingNode.getStart(sourceFile);
-        if (start === originalRange.start && textSpanEnd(enclosingNode) === textSpanEnd(originalRange)) {
+        if (start === originalSpan.start && textSpanEnd(enclosingNode) === textSpanEnd(originalSpan)) {
             return start;
         }
 
-        var precedingToken = findPrecedingToken(originalRange.start, sourceFile);
+        var precedingToken = findPrecedingToken(originalSpan.start, sourceFile);
         // no preceding token found - start from the beginning of enclosing node
         return precedingToken ? textSpanEnd(precedingToken) : enclosingNode.start;
     }
@@ -276,28 +276,28 @@ module ts.formatting {
         return 0;
     }
 
-    function formatSpan(originalRange: TextRange,
+    function formatSpan(originalSpan: TextSpan,
         sourceFile: SourceFile,
         options: FormatCodeOptions,
         rulesProvider: RulesProvider,
         requestKind: FormattingRequestKind): TextChange[] {
 
-        var rangeContainsError = prepareRangeContainsErrorFunction(sourceFile.parseDiagnostics, originalRange);
+        var rangeContainsError = prepareRangeContainsErrorFunction(sourceFile.parseDiagnostics, originalSpan);
 
         // formatting context is used by rules provider
         var formattingContext = new FormattingContext(sourceFile, requestKind);
 
         // find the smallest node that fully wraps the range and compute the initial indentation for the node
-        var enclosingNode = findEnclosingNode(originalRange, sourceFile);
+        var enclosingNode = findEnclosingNode(originalSpan, sourceFile);
 
-        var formattingScanner = getFormattingScanner(sourceFile, getScanStartPosition(enclosingNode, originalRange, sourceFile), textSpanEnd(originalRange));
+        var formattingScanner = getFormattingScanner(sourceFile, getScanStartPosition(enclosingNode, originalSpan, sourceFile), textSpanEnd(originalSpan));
 
-        var initialIndentation = SmartIndenter.getIndentationForNode(enclosingNode, originalRange, sourceFile, options);
+        var initialIndentation = SmartIndenter.getIndentationForNode(enclosingNode, originalSpan, sourceFile, options);
 
-        var previousRangeHasError: boolean;
-        var previousRange: TextRangeWithKind;
+        var previousSpanHasError: boolean;
+        var previousSpan: TextSpanWithKind;
         var previousParent: Node;
-        var previousRangeStartLine: number;
+        var previousSpanStartLine: number;
 
         var edits: TextChange[] = [];
 
@@ -325,10 +325,10 @@ module ts.formatting {
         function tryComputeIndentationForListItem(startPos: number, 
             endPos: number, 
             parentStartLine: number, 
-            range: TextRange, 
+            span: TextSpan, 
             inheritedIndentation: number): number {
             
-            if (rangeOverlapsWithStartEnd(range, startPos, endPos)) {
+            if (rangeOverlapsWithStartEnd(span, startPos, endPos)) {
                 if (inheritedIndentation !== Constants.Unknown) {
                     return inheritedIndentation;
                 }
@@ -346,7 +346,7 @@ module ts.formatting {
         }
         
         function computeIndentation(
-            node: TextRangeWithKind,
+            node: TextSpanWithKind,
             startLine: number,
             inheritedIndentation: number,
             parent: Node,
@@ -448,7 +448,7 @@ module ts.formatting {
         }
 
         function processNode(node: Node, contextNode: Node, nodeStartLine: number, indentation: number, delta: number) {
-            if (!rangeOverlapsWithStartEnd(originalRange, node.getStart(sourceFile), node.getEnd())) {
+            if (!rangeOverlapsWithStartEnd(originalSpan, node.getStart(sourceFile), node.getEnd())) {
                 return;
             }
 
@@ -503,14 +503,14 @@ module ts.formatting {
                 // if child is a list item - try to get its indentation
                 var childIndentationAmount = Constants.Unknown;
                 if (isListItem) {
-                    childIndentationAmount = tryComputeIndentationForListItem(childStartPos, textSpanEnd(child), parentStartLine, originalRange, inheritedIndentation);
+                    childIndentationAmount = tryComputeIndentationForListItem(childStartPos, textSpanEnd(child), parentStartLine, originalSpan, inheritedIndentation);
                     if (childIndentationAmount !== Constants.Unknown) {
                         inheritedIndentation = childIndentationAmount;
                     }
                 }
 
                 // child node is outside the target range - do not dive inside
-                if (!rangeOverlapsWithStartEnd(originalRange, child.start, textSpanEnd(child))) {
+                if (!rangeOverlapsWithStartEnd(originalSpan, child.start, textSpanEnd(child))) {
                     return inheritedIndentation;
                 }
                 
@@ -602,7 +602,7 @@ module ts.formatting {
             }
 
             function consumeTokenAndAdvanceScanner(currentTokenInfo: TokenInfo, parent: Node, dynamicIndentation: DynamicIndentation): void {
-                Debug.assert(rangeContainsRange(parent, currentTokenInfo.token));
+                Debug.assert(spanContainsSpan(parent, currentTokenInfo.token));
 
                 var lastTriviaWasNewLine = formattingScanner.lastTrailingTriviaWasNewLine();
                 var indentToken = false;
@@ -612,14 +612,14 @@ module ts.formatting {
                 }
 
                 var lineAdded: boolean;
-                var isTokenInRange = rangeContainsRange(originalRange, currentTokenInfo.token);
+                var isTokenInRange = spanContainsSpan(originalSpan, currentTokenInfo.token);
 
                 var tokenStart = sourceFile.getLineAndCharacterFromPosition(currentTokenInfo.token.start);
                 if (isTokenInRange) {
                     var rangeHasError = rangeContainsError(currentTokenInfo.token);
                     // save prevStartLine since processRange will overwrite this value with current ones
-                    var prevStartLine = previousRangeStartLine;
-                    lineAdded = processRange(currentTokenInfo.token, tokenStart, parent, childContextNode, dynamicIndentation);
+                    var prevStartLine = previousSpanStartLine;
+                    lineAdded = processSpan(currentTokenInfo.token, tokenStart, parent, childContextNode, dynamicIndentation);
                     if (rangeHasError) {
                         // do not indent comments\token if token range overlaps with some error
                         indentToken = false;
@@ -643,7 +643,7 @@ module ts.formatting {
                     if (currentTokenInfo.leadingTrivia) {
                         for (var i = 0, len = currentTokenInfo.leadingTrivia.length; i < len; ++i) {
                             var triviaItem = currentTokenInfo.leadingTrivia[i];
-                            if (!rangeContainsRange(originalRange, triviaItem)) {
+                            if (!spanContainsSpan(originalSpan, triviaItem)) {
                                 continue;
                             }
 
@@ -681,48 +681,48 @@ module ts.formatting {
             }
         }
 
-        function processTrivia(trivia: TextRangeWithKind[], parent: Node, contextNode: Node, dynamicIndentation: DynamicIndentation): void {
+        function processTrivia(trivia: TextSpanWithKind[], parent: Node, contextNode: Node, dynamicIndentation: DynamicIndentation): void {
             for (var i = 0, len = trivia.length; i < len; ++i) {
                 var triviaItem = trivia[i];
-                if (isComment(triviaItem.kind) && rangeContainsRange(originalRange, triviaItem)) {
+                if (isComment(triviaItem.kind) && spanContainsSpan(originalSpan, triviaItem)) {
                     var triviaItemStart = sourceFile.getLineAndCharacterFromPosition(triviaItem.start);
-                    processRange(triviaItem, triviaItemStart, parent, contextNode, dynamicIndentation);
+                    processSpan(triviaItem, triviaItemStart, parent, contextNode, dynamicIndentation);
                 }
             }
         }
 
-        function processRange(range: TextRangeWithKind, 
+        function processSpan(span: TextSpanWithKind, 
             rangeStart: LineAndCharacter, 
             parent: Node, 
             contextNode: Node, 
             dynamicIndentation: DynamicIndentation): boolean {
             
-            var rangeHasError = rangeContainsError(range);
+            var rangeHasError = rangeContainsError(span);
             var lineAdded: boolean;
-            if (!rangeHasError && !previousRangeHasError) {
-                if (!previousRange) {
+            if (!rangeHasError && !previousSpanHasError) {
+                if (!previousSpan) {
                     // trim whitespaces starting from the beginning of the span up to the current line
-                    var originalStart = sourceFile.getLineAndCharacterFromPosition(originalRange.start);
+                    var originalStart = sourceFile.getLineAndCharacterFromPosition(originalSpan.start);
                     trimTrailingWhitespacesForLines(originalStart.line, rangeStart.line);
                 }
                 else {
                     lineAdded = 
-                        processPair(range, rangeStart.line, parent, previousRange, previousRangeStartLine, previousParent, contextNode, dynamicIndentation)
+                        processPair(span, rangeStart.line, parent, previousSpan, previousSpanStartLine, previousParent, contextNode, dynamicIndentation)
                 }
             }
 
-            previousRange = range;
+            previousSpan = span;
             previousParent = parent;
-            previousRangeStartLine = rangeStart.line;
-            previousRangeHasError = rangeHasError;
+            previousSpanStartLine = rangeStart.line;
+            previousSpanHasError = rangeHasError;
 
             return lineAdded;
         }
 
-        function processPair(currentItem: TextRangeWithKind,
+        function processPair(currentItem: TextSpanWithKind,
             currentStartLine: number,
             currentParent: Node,
-            previousItem: TextRangeWithKind,
+            previousItem: TextSpanWithKind,
             previousStartLine: number,
             previousParent: Node,
             contextNode: Node,
@@ -788,28 +788,28 @@ module ts.formatting {
             }
         }
 
-        function indentMultilineComment(commentRange: TextRange, indentation: number, firstLineIsIndented: boolean) {
+        function indentMultilineComment(commentSpan: TextSpan, indentation: number, firstLineIsIndented: boolean) {
             // split comment in lines
-            var startLine = sourceFile.getLineAndCharacterFromPosition(commentRange.start).line;
-            var endLine = sourceFile.getLineAndCharacterFromPosition(textSpanEnd(commentRange)).line;
+            var startLine = sourceFile.getLineAndCharacterFromPosition(commentSpan.start).line;
+            var endLine = sourceFile.getLineAndCharacterFromPosition(textSpanEnd(commentSpan)).line;
 
             if (startLine === endLine) {
                 if (!firstLineIsIndented) {
                     // treat as single line comment
-                    insertIndentation(commentRange.start, indentation, /*lineAdded*/ false);
+                    insertIndentation(commentSpan.start, indentation, /*lineAdded*/ false);
                 }
                 return;
             }
             else {
-                var parts: TextRange[] = [];
-                var startPos = commentRange.start;
+                var parts: TextSpan[] = [];
+                var startPos = commentSpan.start;
                 for (var line = startLine; line < endLine; ++line) {
                     var endOfLine = getEndLinePosition(line, sourceFile);
                     parts.push(createTextSpanFromBounds(startPos, endOfLine));
                     startPos = getStartPositionOfLine(line + 1, sourceFile);
                 }
 
-                parts.push(createTextSpanFromBounds(startPos, textSpanEnd(commentRange)));
+                parts.push(createTextSpanFromBounds(startPos, textSpanEnd(commentSpan)));
             }
 
             var startLinePos = getStartPositionOfLine(startLine, sourceFile);
@@ -847,7 +847,7 @@ module ts.formatting {
             }
         }
 
-        function trimTrailingWhitespacesForLines(line1: number, line2: number, range?: TextRangeWithKind) {
+        function trimTrailingWhitespacesForLines(line1: number, line2: number, range?: TextSpanWithKind) {
             for (var line = line1; line < line2; ++line) {
                 var lineStartPosition = getStartPositionOfLine(line, sourceFile);
                 var lineEndPosition = getEndLinePosition(line, sourceFile);
@@ -885,20 +885,20 @@ module ts.formatting {
         }
 
         function applyRuleEdits(rule: Rule,
-            previousRange: TextRangeWithKind,
+            previousSpan: TextSpanWithKind,
             previousStartLine: number,
-            currentRange: TextRangeWithKind,
+            currentSpan: TextSpanWithKind,
             currentStartLine: number): void {
 
-            var between: TextRange;
+            var between: TextSpan;
             switch (rule.Operation.Action) {
                 case RuleAction.Ignore:
                     // no action required
                     return;
                 case RuleAction.Delete:
-                    if (textSpanEnd(previousRange) !== currentRange.start) {
+                    if (textSpanEnd(previousSpan) !== currentSpan.start) {
                         // delete characters starting from t1.end up to t2.start exclusive
-                        recordDelete(textSpanEnd(previousRange), currentRange.start - textSpanEnd(previousRange));
+                        recordDelete(textSpanEnd(previousSpan), currentSpan.start - textSpanEnd(previousSpan));
                     }
                     break;
                 case RuleAction.NewLine:
@@ -912,7 +912,7 @@ module ts.formatting {
                     // edit should not be applied only if we have one line feed between elements
                     var lineDelta = currentStartLine - previousStartLine;
                     if (lineDelta !== 1) {
-                        recordReplace(textSpanEnd(previousRange), currentRange.start - textSpanEnd(previousRange), options.NewLineCharacter);
+                        recordReplace(textSpanEnd(previousSpan), currentSpan.start - textSpanEnd(previousSpan), options.NewLineCharacter);
                     }
                     break;
                 case RuleAction.Space:
@@ -921,9 +921,9 @@ module ts.formatting {
                         return;
                     }
 
-                    var posDelta = currentRange.start - textSpanEnd(previousRange);
-                    if (posDelta !== 1 || sourceFile.text.charCodeAt(textSpanEnd(previousRange)) !== CharacterCodes.space) {
-                        recordReplace(textSpanEnd(previousRange), currentRange.start - textSpanEnd(previousRange), " ");
+                    var posDelta = currentSpan.start - textSpanEnd(previousSpan);
+                    if (posDelta !== 1 || sourceFile.text.charCodeAt(textSpanEnd(previousSpan)) !== CharacterCodes.space) {
+                        recordReplace(textSpanEnd(previousSpan), currentSpan.start - textSpanEnd(previousSpan), " ");
                     }
                     break;
             }

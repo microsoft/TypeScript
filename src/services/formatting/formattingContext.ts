@@ -17,8 +17,8 @@
 
 module ts.formatting {
     export class FormattingContext {
-        public currentTokenSpan: TextRangeWithKind;
-        public nextTokenSpan: TextRangeWithKind;
+        public currentTokenSpan: TextSpanWithKind;
+        public nextTokenSpan: TextSpanWithKind;
         public contextNode: Node;
         public currentTokenParent: Node;
         public nextTokenParent: Node;
@@ -32,16 +32,16 @@ module ts.formatting {
         constructor(private sourceFile: SourceFile, public formattingRequestKind: FormattingRequestKind) {
         }
 
-        public updateContext(currentRange: TextRangeWithKind, currentTokenParent: Node, nextRange: TextRangeWithKind, nextTokenParent: Node, commonParent: Node) {
-            Debug.assert(currentRange !== undefined, "currentTokenSpan is null");
+        public updateContext(currentSpan: TextSpanWithKind, currentTokenParent: Node, nextSpan: TextSpanWithKind, nextTokenParent: Node, commonParent: Node) {
+            Debug.assert(currentSpan !== undefined, "currentTokenSpan is null");
             Debug.assert(currentTokenParent !== undefined, "currentTokenParent is null");
-            Debug.assert(nextRange !== undefined, "nextTokenSpan is null");
+            Debug.assert(nextSpan !== undefined, "nextTokenSpan is null");
             Debug.assert(nextTokenParent !== undefined, "nextTokenParent is null");
             Debug.assert(commonParent !== undefined, "commonParent is null");
 
-            this.currentTokenSpan = currentRange;
+            this.currentTokenSpan = currentSpan;
             this.currentTokenParent = currentTokenParent;
-            this.nextTokenSpan = nextRange;
+            this.nextTokenSpan = nextSpan;
             this.nextTokenParent = nextTokenParent;
             this.contextNode = commonParent;
 

@@ -43,27 +43,27 @@ module ts {
         return lineStarts[line - 1];
     }
 
-    export function nodeArrayContainsRange(array: NodeArray<Node>, r2: TextRange): boolean {
-        return startEndContainsRange(array.start, nodeArrayEnd(array), r2);
+    export function nodeArrayContainsSpan(array: NodeArray<Node>, r2: TextSpan): boolean {
+        return startEndContainsSpan(array.start, nodeArrayEnd(array), r2);
     }
 
-    export function rangeContainsRange(r1: TextRange, r2: TextRange): boolean {
-        return startEndContainsRange(r1.start, textSpanEnd(r1), r2);
+    export function spanContainsSpan(r1: TextSpan, r2: TextSpan): boolean {
+        return startEndContainsSpan(r1.start, textSpanEnd(r1), r2);
     }
 
-    export function startEndContainsRange(start: number, end: number, range: TextRange): boolean {
-        return start <= range.start && end >= textSpanEnd(range);
+    export function startEndContainsSpan(start: number, end: number, span: TextSpan): boolean {
+        return start <= span.start && end >= textSpanEnd(span);
     }
 
     export function nodeArrayContainsStartEnd(array: NodeArray<Node>, start: number, end: number): boolean {
         return array.start <= start && nodeArrayEnd(array) >= end;
     }
 
-    export function rangeContainsStartEnd(range: TextRange, start: number, end: number): boolean {
-        return range.start <= start && textSpanEnd(range) >= end;
+    export function rangeContainsStartEnd(span: TextSpan, start: number, end: number): boolean {
+        return span.start <= start && textSpanEnd(span) >= end;
     }
 
-    export function rangeOverlapsWithStartEnd(r1: TextRange, start: number, end: number) {
+    export function rangeOverlapsWithStartEnd(r1: TextSpan, start: number, end: number) {
         return startEndOverlapsWithStartEnd(r1.start, textSpanEnd(r1), start, end);
     }
 

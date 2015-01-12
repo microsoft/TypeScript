@@ -340,7 +340,7 @@ module ts {
                 var sourceFileOfDeclaration = getSourceFileOfNode(declaration);
                 // If it is parameter - try and get the jsDoc comment with @param tag from function declaration's jsDoc comments
                 if (canUseParsedParamTagComments && declaration.kind === SyntaxKind.Parameter) {
-                    ts.forEach(getJsDocCommentTextRange(declaration.parent, sourceFileOfDeclaration), jsDocCommentTextRange => {
+                    ts.forEach(getJsDocCommentSpan(declaration.parent, sourceFileOfDeclaration), jsDocCommentTextRange => {
                         var cleanedParamJsDocComment = getCleanedParamJsDocComment(jsDocCommentTextRange.start, textSpanEnd(jsDocCommentTextRange), sourceFileOfDeclaration);
                         if (cleanedParamJsDocComment) {
                             jsDocCommentParts.push.apply(jsDocCommentParts, cleanedParamJsDocComment);
@@ -359,7 +359,7 @@ module ts {
                 } 
 
                 // Get the cleaned js doc comment text from the declaration
-                ts.forEach(getJsDocCommentTextRange(
+                ts.forEach(getJsDocCommentSpan(
                     declaration.kind === SyntaxKind.VariableDeclaration ? declaration.parent.parent : declaration, sourceFileOfDeclaration), jsDocCommentTextRange => {
                         var cleanedJsDocComment = getCleanedJsDocComment(jsDocCommentTextRange.start, textSpanEnd(jsDocCommentTextRange), sourceFileOfDeclaration);
                         if (cleanedJsDocComment) {
@@ -370,7 +370,7 @@ module ts {
 
             return jsDocCommentParts;
 
-            function getJsDocCommentTextRange(node: Node, sourceFile: SourceFile): TextRange[] {
+            function getJsDocCommentSpan(node: Node, sourceFile: SourceFile): TextSpan[] {
                 return ts.map(getJsDocComments(node, sourceFile),
                     jsDocComment => {
                         return createTextSpanFromBounds(
@@ -1860,10 +1860,10 @@ module ts {
     function isInsideComment(sourceFile: SourceFile, token: Node, position: number): boolean {
         // The position has to be: 1. in the leading trivia (before token.getStart()), and 2. within a comment
         return position <= token.getStart(sourceFile) &&
-            (isInsideCommentRange(getTrailingCommentRanges(sourceFile.text, token.getFullStart())) ||
-            isInsideCommentRange(getLeadingCommentRanges(sourceFile.text, token.getFullStart())));
+            (isInsideCommentSpan(getTrailingCommentRanges(sourceFile.text, token.getFullStart())) ||
+            isInsideCommentSpan(getLeadingCommentRanges(sourceFile.text, token.getFullStart())));
 
-        function isInsideCommentRange(comments: CommentRange[]): boolean {
+        function isInsideCommentSpan(comments: CommentSpan[]): boolean {
             return forEach(comments, comment => {
                 // either we are 1. completely inside the comment, or 2. at the end of the comment
                 if (comment.start < position && position < textSpanEnd(comment)) {

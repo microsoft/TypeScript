@@ -137,7 +137,7 @@ module ts {
         return currentSourceFile.getLineAndCharacterFromPosition(pos).line;
     }
 
-    function emitNewLineBeforeLeadingComments(currentSourceFile: SourceFile, writer: EmitTextWriter, start: number, leadingComments: CommentRange[]) {
+    function emitNewLineBeforeLeadingComments(currentSourceFile: SourceFile, writer: EmitTextWriter, start: number, leadingComments: CommentSpan[]) {
         // If the leading comments start on different line than the start of node, write new line
         if (leadingComments && leadingComments.length && start !== leadingComments[0].start &&
             getLineOfLocalPosition(currentSourceFile, start) !== getLineOfLocalPosition(currentSourceFile, leadingComments[0].start)) {
@@ -145,8 +145,8 @@ module ts {
         }
     }
 
-    function emitComments(currentSourceFile: SourceFile, writer: EmitTextWriter, comments: CommentRange[], trailingSeparator: boolean, newLine: string,
-                          writeComment: (currentSourceFile: SourceFile, writer: EmitTextWriter, comment: CommentRange, newLine: string) => void) {
+    function emitComments(currentSourceFile: SourceFile, writer: EmitTextWriter, comments: CommentSpan[], trailingSeparator: boolean, newLine: string,
+                          writeComment: (currentSourceFile: SourceFile, writer: EmitTextWriter, comment: CommentSpan, newLine: string) => void) {
         var emitLeadingSpace = !trailingSeparator;
         forEach(comments, comment => {
             if (emitLeadingSpace) {
@@ -167,7 +167,7 @@ module ts {
         });
     }
 
-    function writeCommentRange(currentSourceFile: SourceFile, writer: EmitTextWriter, comment: CommentRange, newLine: string){
+    function writeCommentSpan(currentSourceFile: SourceFile, writer: EmitTextWriter, comment: CommentSpan, newLine: string){
         if (currentSourceFile.text.charCodeAt(comment.start + 1) === CharacterCodes.asterisk) {
             var firstCommentLineAndCharacter = currentSourceFile.getLineAndCharacterFromPosition(comment.start);
             var firstCommentLineIndent: number;
@@ -485,7 +485,7 @@ module ts {
                 var jsDocComments = getJsDocComments(declaration, currentSourceFile);
                 emitNewLineBeforeLeadingComments(currentSourceFile, writer, declaration.start, jsDocComments);
                 // jsDoc comments are emitted at /*leading comment1 */space/*leading comment*/space
-                emitComments(currentSourceFile, writer, jsDocComments, /*trailingSeparator*/ true, newLine, writeCommentRange);
+                emitComments(currentSourceFile, writer, jsDocComments, /*trailingSeparator*/ true, newLine, writeCommentSpan);
             }
         }
 
@@ -1510,7 +1510,7 @@ module ts {
             /** Emits /// or pinned which is comment starting with /*! comments */
             var emitPinnedOrTripleSlashComments = compilerOptions.removeComments ? (node: Node) => { } : emitPinnedOrTripleSlashCommentsOfNode;
 
-            var writeComment = writeCommentRange;
+            var writeComment = writeCommentSpan;
 
             /** Emit a node */
             var emit = emitNode;
@@ -1763,9 +1763,9 @@ module ts {
                     sourceMapNameIndices.pop();
                 };
 
-                function writeCommentRangeWithMap(curentSourceFile: SourceFile, writer: EmitTextWriter, comment: CommentRange, newLine: string) {
+                function writeCommentRangeWithMap(curentSourceFile: SourceFile, writer: EmitTextWriter, comment: CommentSpan, newLine: string) {
                     recordSourceMapSpan(comment.start);
-                    writeCommentRange(currentSourceFile, writer, comment, newLine);
+                    writeCommentSpan(currentSourceFile, writer, comment, newLine);
                     recordSourceMapSpan(textSpanEnd(comment));
                 }
 
@@ -4126,7 +4126,7 @@ module ts {
             function getLeadingCommentsToEmit(node: Node) {
                 // Emit the leading comments only if the parent's pos doesn't match because parent should take care of emitting these comments
                 if (node.parent.kind === SyntaxKind.SourceFile || node.start !== node.parent.start) {
-                    var leadingComments: CommentRange[];
+                    var leadingComments: CommentSpan[];
                     if (hasDetachedComments(node.start)) {
                         // get comments without detached comments
                         leadingComments = getLeadingCommentsWithoutDetachedComments();
@@ -4156,7 +4156,7 @@ module ts {
             }
 
             function emitLeadingCommentsOfLocalPosition(pos: number) {
-                var leadingComments: CommentRange[];
+                var leadingComments: CommentSpan[];
                 if (hasDetachedComments(pos)) {
                     // get comments without detached comments
                     leadingComments = getLeadingCommentsWithoutDetachedComments();
@@ -4173,8 +4173,8 @@ module ts {
             function emitDetachedCommentsAtPosition(pos: number) {
                 var leadingComments = getLeadingCommentRanges(currentSourceFile.text, pos);
                 if (leadingComments) {
-                    var detachedComments: CommentRange[] = [];
-                    var lastComment: CommentRange;
+                    var detachedComments: CommentSpan[] = [];
+                    var lastComment: CommentSpan;
 
                     forEach(leadingComments, comment => {
                         if (lastComment) {
@@ -4218,7 +4218,7 @@ module ts {
             function emitPinnedOrTripleSlashCommentsOfNode(node: Node) {
                 var pinnedComments = ts.filter(getLeadingCommentsToEmit(node), isPinnedOrTripleSlashComment);
 
-                function isPinnedOrTripleSlashComment(comment: CommentRange) {
+                function isPinnedOrTripleSlashComment(comment: CommentSpan) {
                     if (currentSourceFile.text.charCodeAt(comment.start + 1) === CharacterCodes.asterisk) {
                         return currentSourceFile.text.charCodeAt(comment.start + 2) === CharacterCodes.exclamation;
                     }

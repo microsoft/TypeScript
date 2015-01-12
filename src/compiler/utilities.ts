@@ -310,7 +310,7 @@ module ts {
     export function getJsDocComments(node: Node, sourceFileOfNode: SourceFile) {
         return filter(getLeadingCommentRangesOfNode(node, sourceFileOfNode), isJsDocComment);
 
-        function isJsDocComment(comment: CommentRange) {
+        function isJsDocComment(comment: CommentSpan) {
             // True if the comment starts with '/**' but not if it is '/**/'
             return sourceFileOfNode.text.charCodeAt(comment.start + 1) === CharacterCodes.asterisk &&
                 sourceFileOfNode.text.charCodeAt(comment.start + 2) === CharacterCodes.asterisk &&
@@ -750,7 +750,7 @@ module ts {
         return undefined;
     }
 
-    export function getFileReferenceFromReferencePath(comment: string, commentRange: CommentRange): ReferencePathMatchResult {
+    export function getFileReferenceFromReferencePath(comment: string, commentRange: CommentSpan): ReferencePathMatchResult {
         var simpleReferenceRegEx = /^\/\/\/\s*<reference\s+/gim;
         var isNoDefaultLibRegEx = /^(\/\/\/\s*<reference\s+no-default-lib\s*=\s*)('|")(.+?)\2\s*\/>/gim;
         if (simpleReferenceRegEx.exec(comment)) {

@@ -68,15 +68,15 @@ module ts.formatting {
             return getIndentationForNodeWorker(current, currentStart, /*ignoreActualIndentationRange*/ undefined, indentationDelta, sourceFile, options);
         }
 
-        export function getIndentationForNode(n: Node, ignoreActualIndentationRange: TextRange, sourceFile: SourceFile, options: FormatCodeOptions): number {
+        export function getIndentationForNode(n: Node, ignoreActualIndentationSpan: TextSpan, sourceFile: SourceFile, options: FormatCodeOptions): number {
             var start = sourceFile.getLineAndCharacterFromPosition(n.getStart(sourceFile));
-            return getIndentationForNodeWorker(n, start, ignoreActualIndentationRange, /*indentationDelta*/ 0, sourceFile, options);
+            return getIndentationForNodeWorker(n, start, ignoreActualIndentationSpan, /*indentationDelta*/ 0, sourceFile, options);
         }
 
         function getIndentationForNodeWorker(
             current: Node,
             currentStart: LineAndCharacter,
-            ignoreActualIndentationRange: TextRange,
+            ignoreActualIndentationSpan: TextSpan,
             indentationDelta: number,
             sourceFile: SourceFile,
             options: EditorOptions): number {
@@ -88,9 +88,9 @@ module ts.formatting {
             // indentation is not added if parent and child nodes start on the same line or if parent is IfStatement and child starts on the same line with 'else clause'
             while (parent) {
                 var useActualIndentation = true;
-                if (ignoreActualIndentationRange) {
+                if (ignoreActualIndentationSpan) {
                     var start = current.getStart(sourceFile);
-                    useActualIndentation = start < ignoreActualIndentationRange.start || start > textSpanEnd(ignoreActualIndentationRange);
+                    useActualIndentation = start < ignoreActualIndentationSpan.start || start > textSpanEnd(ignoreActualIndentationSpan);
                 }
 
                 if (useActualIndentation) {
@@ -206,7 +206,7 @@ module ts.formatting {
             return textSpanEnd(candidate) > position || !isCompletedNode(candidate, sourceFile);
         }
 
-        export function childStartsOnTheSameLineWithElseInIfStatement(parent: Node, child: TextRangeWithKind, childStartLine: number, sourceFile: SourceFile): boolean {
+        export function childStartsOnTheSameLineWithElseInIfStatement(parent: Node, child: TextSpanWithKind, childStartLine: number, sourceFile: SourceFile): boolean {
             if (parent.kind === SyntaxKind.IfStatement && (<IfStatement>parent).elseStatement === child) {
                 var elseKeyword = findChildOfKind(parent, SyntaxKind.ElseKeyword, sourceFile);
                 Debug.assert(elseKeyword !== undefined);

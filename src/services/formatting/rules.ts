@@ -642,7 +642,7 @@ module ts.formatting {
             return context.contextNode.kind === SyntaxKind.TypeLiteral;// && context.contextNode.parent.kind !== SyntaxKind.InterfaceDeclaration;
         }
 
-        static IsTypeArgumentOrParameter(token: TextRangeWithKind, parent: Node): boolean {
+        static IsTypeArgumentOrParameter(token: TextSpanWithKind, parent: Node): boolean {
             if (token.kind !== SyntaxKind.LessThanToken && token.kind !== SyntaxKind.GreaterThanToken) {
                 return false;
             }
