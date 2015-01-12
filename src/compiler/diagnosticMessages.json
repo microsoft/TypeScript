@@ -1572,7 +1572,7 @@
         "category": "Error",
         "code": 4084
     },
-    "Index expression arguments in 'const' enums must be of type 'string'.": {
+    "A const enum member can only be accessed using a string literal.": {
         "category": "Error",
         "code": 4085,
         "isEarly": true

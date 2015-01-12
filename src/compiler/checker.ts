@@ -5608,7 +5608,7 @@ module ts {
             var isConstEnum = isConstEnumObjectType(objectType);
             if (isConstEnum && 
                 (!node.argumentExpression || node.argumentExpression.kind !== SyntaxKind.StringLiteral)) {
-                error(node.argumentExpression, Diagnostics.Index_expression_arguments_in_const_enums_must_be_of_type_string);
+                error(node.argumentExpression, Diagnostics.A_const_enum_member_can_only_be_accessed_using_a_string_literal);
                 return unknownType;
             }
 

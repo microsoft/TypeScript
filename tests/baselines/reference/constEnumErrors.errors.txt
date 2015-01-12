@@ -3,8 +3,8 @@ tests/cases/compiler/constEnumErrors.ts(5,8): error TS2300: Duplicate identifier
 tests/cases/compiler/constEnumErrors.ts(12,9): error TS4083: In 'const' enum declarations member initializer must be constant expression.
 tests/cases/compiler/constEnumErrors.ts(14,9): error TS4083: In 'const' enum declarations member initializer must be constant expression.
 tests/cases/compiler/constEnumErrors.ts(15,10): error TS4083: In 'const' enum declarations member initializer must be constant expression.
-tests/cases/compiler/constEnumErrors.ts(22,13): error TS4085: Index expression arguments in 'const' enums must be of type 'string'.
-tests/cases/compiler/constEnumErrors.ts(24,13): error TS4085: Index expression arguments in 'const' enums must be of type 'string'.
+tests/cases/compiler/constEnumErrors.ts(22,13): error TS4085: A const enum member can only be accessed using a string literal.
+tests/cases/compiler/constEnumErrors.ts(24,13): error TS4085: A const enum member can only be accessed using a string literal.
 tests/cases/compiler/constEnumErrors.ts(26,9): error TS4084: 'const' enums can only be used in property or index access expressions or the right hand side of an import declaration or export assignment.
 tests/cases/compiler/constEnumErrors.ts(27,10): error TS4084: 'const' enums can only be used in property or index access expressions or the right hand side of an import declaration or export assignment.
 tests/cases/compiler/constEnumErrors.ts(32,5): error TS4084: 'const' enums can only be used in property or index access expressions or the right hand side of an import declaration or export assignment.
@@ -47,11 +47,11 @@ tests/cases/compiler/constEnumErrors.ts(42,9): error TS4087: 'const' enum member
     
     var y0 = E2[1]
                 ~
-!!! error TS4085: Index expression arguments in 'const' enums must be of type 'string'.
+!!! error TS4085: A const enum member can only be accessed using a string literal.
     var name = "A";
     var y1 = E2[name];
                 ~~~~
-!!! error TS4085: Index expression arguments in 'const' enums must be of type 'string'.
+!!! error TS4085: A const enum member can only be accessed using a string literal.
     
     var x = E2;
             ~~
