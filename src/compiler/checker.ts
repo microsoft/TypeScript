@@ -5421,7 +5421,7 @@ module ts {
                     memberDecl.kind === SyntaxKind.ShorthandPropertyAssignment ||
                     isObjectLiteralMethod(memberDecl)) {
                     if (memberDecl.kind === SyntaxKind.PropertyAssignment) {
-                        var type = checkExpression((<PropertyAssignment>memberDecl).initializer, contextualMapper);
+                        var type = checkPropertyAssignment(<PropertyAssignment>memberDecl, contextualMapper);
                     }
                     else if (memberDecl.kind === SyntaxKind.MethodDeclaration) {
                         var type = checkObjectLiteralMethod(<MethodDeclaration>memberDecl, contextualMapper);
@@ -5454,10 +5454,7 @@ module ts {
                     checkAccessorDeclaration(<AccessorDeclaration>memberDecl);
                 }
 
-                if (hasComputedNameButNotSymbol(memberDecl)) {
-                    checkComputedPropertyName(<ComputedPropertyName>memberDecl.name);
-                }
-                else {
+                if (!hasComputedNameButNotSymbol(memberDecl)) {
                     properties[member.name] = member;
                 }
             }
@@ -7050,9 +7047,21 @@ module ts {
             return links.resolvedType;
         }
 
+        function checkPropertyAssignment(node: PropertyAssignment, contextualMapper?: TypeMapper): Type {
+            if (hasComputedNameButNotSymbol(node)) {
+                checkComputedPropertyName(<ComputedPropertyName>node.name);
+            }
+
+            return checkExpression((<PropertyAssignment>node).initializer, contextualMapper);
+        }
+
         function checkObjectLiteralMethod(node: MethodDeclaration, contextualMapper?: TypeMapper): Type {
             // Grammar checking
             checkGrammarMethod(node);
+
+            if (hasComputedNameButNotSymbol(node)) {
+                checkComputedPropertyName(<ComputedPropertyName>node.name);
+            }
 
             var uninstantiatedType = checkFunctionExpressionOrObjectLiteralMethod(node, contextualMapper);
             return instantiateTypeWithSingleGenericCallSignature(node, uninstantiatedType, contextualMapper);
@@ -7862,7 +7871,12 @@ module ts {
         function checkFunctionLikeDeclaration(node: FunctionLikeDeclaration): void {
             checkSignatureDeclaration(node);
 
-            if (!hasComputedNameButNotSymbol(node)) {
+            if (hasComputedNameButNotSymbol(node)) {
+                // This check will account for methods in class/interface declarations,
+                // as well as accessors in classes/object literals
+                checkComputedPropertyName(<ComputedPropertyName>node.name);
+            }
+            else {
                 // first we want to check the local symbol that contain this declaration
                 // - if node.localSymbol !== undefined - this is current declaration is exported and localSymbol points to the local symbol
                 // - if node.localSymbol === undefined - this node is non-exported so we can just pick the result of getSymbolOfNode
@@ -8092,6 +8106,7 @@ module ts {
             checkSourceElement(node.type);
             // For a computed property, just check the initializer and exit
             if (hasComputedNameButNotSymbol(node)) {
+                checkComputedPropertyName(<ComputedPropertyName>node.name);
                 if (node.initializer) {
                     checkExpressionCached(node.initializer);
                 }
