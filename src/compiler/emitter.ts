@@ -4014,7 +4014,7 @@ module ts {
                         write(`switch (d && c[0]) {`);
                         increaseIndent();
                         writeLine();
-                        write(`case "next": return { value: undefined, done: true };`);
+                        write(`case "next": return { value: void 0, done: true };`);
                         writeLine();
                         write(`case "return": return { value: c[1], done: true };`);
                         writeLine();
@@ -4053,7 +4053,7 @@ module ts {
                         writeLine();
                         write(`if (!b.done) return b;`);
                         writeLine();
-                        write(`c = ["next", b.value];`);
+                        write(`c[0] = "next", c[1] = b.value;`);
                         decreaseIndent();
                         writeLine();
                         write(`}`);
@@ -4070,7 +4070,7 @@ module ts {
                         writeLine();
                         write(`case "yield": s.label++; return { value: c[1], done: false };`);
                         writeLine();
-                        write(`case "yield*": s.label++; y = c[1]; c = ["next"]; continue;`);
+                        write(`case "yield*": s.label++; y = c[1]; c[0] = "next"; c[1] = void 0; continue;`);
                         writeLine();
                         write(`case "next": s.sent = c[1]; break;`);
                         writeLine();
@@ -4101,9 +4101,9 @@ module ts {
                         write(`} catch (e) {`);
                         increaseIndent();
                         writeLine();
-                        write(`y = undefined;`);
+                        write(`y = void 0;`);
                         writeLine();
-                        write(`c = ["throw", e];`);
+                        write(`c[0] = "throw", c[1] = e;`);
                         decreaseIndent();
                         writeLine();
                         write(`}`);
