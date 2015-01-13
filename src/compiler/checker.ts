@@ -4709,13 +4709,21 @@ module ts {
                 if (!isTypeSubtypeOf(rightType, globalFunctionType)) {
                     return type;
                 }
+                // Target type is type of prototype property
                 var prototypeProperty = getPropertyOfType(rightType, "prototype");
                 if (!prototypeProperty) {
                     return type;
                 }
-                var prototypeType = getTypeOfSymbol(prototypeProperty);
-                // Narrow to type of prototype property if it is a subtype of current type
-                return isTypeSubtypeOf(prototypeType, type) ? prototypeType : type;
+                var targetType = getTypeOfSymbol(prototypeProperty);
+                // Narrow to target type if it is a subtype of current type
+                if (isTypeSubtypeOf(targetType, type)) {
+                    return targetType;
+                }
+                // If current type is a union type, remove all constituents that aren't subtypes of target type
+                if (type.flags && TypeFlags.Union) {
+                    return getUnionType(filter((<UnionType>type).types, t => isTypeSubtypeOf(t, targetType)));
+                }
+                return type;
             }
 
             // Narrow the given type based on the given expression having the assumed boolean value
