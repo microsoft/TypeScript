@@ -787,6 +787,7 @@ module ts {
             if (node.expression !== expression) {
                 return createThrowStatement(expression, node, node.flags);
             }
+            return node;
         }
 
         export function createTryStatement(tryBlock: Block, catchBlock: CatchClause, finallyBlock: Block, location?: TextRange, flags?: NodeFlags): TryStatement {
