@@ -2048,8 +2048,6 @@ module ts {
                     return;
                 }
 
-                Debug.assert(node.parent.kind !== SyntaxKind.TaggedTemplateExpression);
-
                 var emitOuterParens = isExpression(node.parent)
                     && templateNeedsParens(node, <Expression>node.parent);
 
@@ -2127,10 +2125,9 @@ module ts {
                         case SyntaxKind.CallExpression:
                         case SyntaxKind.NewExpression:
                             return (<CallExpression>parent).expression === template;
+                        case SyntaxKind.TaggedTemplateExpression:
                         case SyntaxKind.ParenthesizedExpression:
                             return false;
-                        case SyntaxKind.TaggedTemplateExpression:
-                            Debug.fail("Path should be unreachable; tagged templates not supported pre-ES6.");
                         default:
                             return comparePrecedenceToBinaryPlus(parent) !== Comparison.LessThan;
                     }
@@ -2513,7 +2510,6 @@ module ts {
             }
 
             function emitTaggedTemplateExpression(node: TaggedTemplateExpression): void {
-                Debug.assert(compilerOptions.target >= ScriptTarget.ES6, "Trying to emit a tagged template in pre-ES6 mode.");
                 emit(node.tag);
                 write(" ");
                 emit(node.template);
@@ -3285,60 +3281,66 @@ module ts {
                 tempParameters = undefined;
                 emitSignatureParameters(node);
                 write(" {");
-                scopeEmitStart(node);
-                increaseIndent();
-
-                emitDetachedComments(node.body.kind === SyntaxKind.Block ? (<Block>node.body).statements : node.body);
-
-                var startIndex = 0;
-                if (node.body.kind === SyntaxKind.Block) {
-                    startIndex = emitDirectivePrologues((<Block>node.body).statements, /*startWithNewLine*/ true);
-                }
-                var outPos = writer.getTextPos();
-                emitCaptureThisForNodeIfNecessary(node);
-                emitDefaultValueAssignments(node);
-                emitRestParameter(node);
-                if (node.body.kind !== SyntaxKind.Block && outPos === writer.getTextPos()) {
-                    decreaseIndent();
-                    write(" ");
-                    emitStart(node.body);
-                    write("return ");
-                    emitNode(node.body);
-                    emitEnd(node.body);
-                    write(";");
-                    emitTempDeclarations(/*newLine*/ false);
-                    write(" ");
-                    emitStart(node.body);
+                if (!node.body) {
+                    writeLine();
                     write("}");
-                    emitEnd(node.body);
                 }
                 else {
+                    scopeEmitStart(node);
+                    increaseIndent();
+
+                    emitDetachedComments(node.body.kind === SyntaxKind.Block ? (<Block>node.body).statements : node.body);
+
+                    var startIndex = 0;
                     if (node.body.kind === SyntaxKind.Block) {
-                        emitLinesStartingAt((<Block>node.body).statements, startIndex);
+                        startIndex = emitDirectivePrologues((<Block>node.body).statements, /*startWithNewLine*/ true);
                     }
-                    else {
-                        writeLine();
-                        emitLeadingComments(node.body);
+                    var outPos = writer.getTextPos();
+                    emitCaptureThisForNodeIfNecessary(node);
+                    emitDefaultValueAssignments(node);
+                    emitRestParameter(node);
+                    if (node.body.kind !== SyntaxKind.Block && outPos === writer.getTextPos()) {
+                        decreaseIndent();
+                        write(" ");
+                        emitStart(node.body);
                         write("return ");
-                        emit(node.body);
+                        emitNode(node.body);
+                        emitEnd(node.body);
                         write(";");
-                        emitTrailingComments(node.body);
-                    }
-                    emitTempDeclarations(/*newLine*/ true);
-                    writeLine();
-                    if (node.body.kind === SyntaxKind.Block) {
-                        emitLeadingCommentsOfPosition((<Block>node.body).statements.end);
-                        decreaseIndent();
-                        emitToken(SyntaxKind.CloseBraceToken,(<Block>node.body).statements.end);
-                    }
-                    else {
-                        decreaseIndent();
+                        emitTempDeclarations(/*newLine*/ false);
+                        write(" ");
                         emitStart(node.body);
                         write("}");
                         emitEnd(node.body);
                     }
+                    else {
+                        if (node.body.kind === SyntaxKind.Block) {
+                            emitLinesStartingAt((<Block>node.body).statements, startIndex);
+                        }
+                        else {
+                            writeLine();
+                            emitLeadingComments(node.body);
+                            write("return ");
+                            emit(node.body);
+                            write(";");
+                            emitTrailingComments(node.body);
+                        }
+                        emitTempDeclarations(/*newLine*/ true);
+                        writeLine();
+                        if (node.body.kind === SyntaxKind.Block) {
+                            emitLeadingCommentsOfPosition((<Block>node.body).statements.end);
+                            decreaseIndent();
+                            emitToken(SyntaxKind.CloseBraceToken, (<Block>node.body).statements.end);
+                        }
+                        else {
+                            decreaseIndent();
+                            emitStart(node.body);
+                            write("}");
+                            emitEnd(node.body);
+                        }
+                    }
+                    scopeEmitEnd();
                 }
-                scopeEmitEnd();
                 if (node.flags & NodeFlags.Export) {
                     writeLine();
                     emitStart(node);
@@ -3687,18 +3689,30 @@ module ts {
                         write("[");
                         emitExpressionForPropertyName(member.name);
                         write("] = ");
-                        if (member.initializer && !isConstEnum) {
-                            emit(member.initializer);
-                        }
-                        else {
-                            write(resolver.getEnumMemberValue(member).toString());
-                        }
+                        writeEnumMemberDeclarationValue(member, isConstEnum);
                         write("] = ");
                         emitExpressionForPropertyName(member.name);
                         emitEnd(member);
                         write(";");
                         emitTrailingComments(member);
                     });
+                }
+            }
+            
+            function writeEnumMemberDeclarationValue(member: EnumMember, isConstEnum: boolean) {
+                if (!member.initializer || isConstEnum) {
+                    var value = resolver.getEnumMemberValue(member);
+                    if (value !== undefined) {
+                        write(value.toString());
+                        return;
+                    }
+                }
+
+                if (member.initializer) {
+                    emit(member.initializer);
+                }
+                else {
+                    write("undefined");
                 }
             }
 

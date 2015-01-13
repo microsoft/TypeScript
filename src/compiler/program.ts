@@ -113,14 +113,12 @@ module ts {
             return emitHost || (emitHost = createEmitHostFromProgram(program));
         }
 
-        function hasEarlyErrors(sourceFile?: SourceFile): boolean {
-            return forEach(getDiagnosticsProducingTypeChecker().getDiagnostics(sourceFile), d => d.isEarly);
-        }
-
         function isEmitBlocked(sourceFile?: SourceFile): boolean {
-            return getDiagnostics(sourceFile).length !== 0 ||
-                hasEarlyErrors(sourceFile) ||
-                (options.noEmitOnError && getDiagnosticsProducingTypeChecker().getDiagnostics(sourceFile).length !== 0);
+            if (options.noEmitOnError) {
+                return getDiagnostics(sourceFile).length !== 0 || getDiagnosticsProducingTypeChecker().getDiagnostics(sourceFile).length !== 0;
+            }
+
+            return false;
         }
 
         function getDiagnosticsProducingTypeChecker() {
