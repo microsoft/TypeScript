@@ -5448,7 +5448,8 @@ module ts {
             return result;
 
             function getIndexType(kind: IndexKind) {
-                if (contextualType && contextualTypeHasIndexSignature(contextualType, kind)) {
+                var indexType: Type;
+                if (contextualType && (indexType = getIndexTypeOfContextualType(contextualType, kind))) {
                     var propTypes: Type[] = [];
                     for (var id in properties) {
                         if (hasProperty(properties, id)) {
@@ -5460,7 +5461,7 @@ module ts {
                             }
                         }
                     }
-                    return propTypes.length ? getUnionType(propTypes) : undefinedType;
+                    return propTypes.length ? getUnionType(propTypes) : (indexType || undefinedType);
                 }
                 return undefined;
             }
