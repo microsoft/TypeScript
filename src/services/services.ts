@@ -1956,8 +1956,7 @@ module ts {
         function createCompilerHost(): CompilerHost {
             return {
                 getSourceFile: (filename, languageVersion) => {
-                    var sourceFile = getSourceFile(filename);
-                    return sourceFile && sourceFile.getSourceFile();
+                    return getSourceFile(filename);
                 },
                 getCancellationToken: () => cancellationToken,
                 getCanonicalFileName: (filename) => useCaseSensitivefilenames ? filename : filename.toLowerCase(),
