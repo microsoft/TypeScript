@@ -4089,6 +4089,7 @@ module ts {
                         writeLine();
                         write(`continue;`);
                         decreaseIndent();
+                        decreaseIndent();
                         writeLine();
                         write(`}`);
                         writeLine();
