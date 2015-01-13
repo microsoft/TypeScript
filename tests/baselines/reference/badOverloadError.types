@@ -6,6 +6,6 @@ function method() {
 >dictionary : { [index: string]: string; }
 ><{ [index: string]: string; }>{} : { [index: string]: string; }
 >index : string
->{} : { [x: string]: undefined; }
+>{} : { [x: string]: string; }
 }
 

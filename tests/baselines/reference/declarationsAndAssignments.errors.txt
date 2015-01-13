@@ -2,7 +2,7 @@ tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(5,16): e
 tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(56,17): error TS2322: Type 'number' is not assignable to type 'string'.
 tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(63,13): error TS2460: Type '[number]' has no property '1'.
 tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(63,16): error TS2460: Type '[number]' has no property '2'.
-tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(67,9): error TS2461: Type '{ [x: number]: undefined; }' is not an array type.
+tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(67,9): error TS2461: Type '{ [x: number]: any; }' is not an array type.
 tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(68,9): error TS2461: Type '{ [x: number]: number; 0: number; 1: number; }' is not an array type.
 tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(73,11): error TS2459: Type '{}' has no property 'a' and no string index signature.
 tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(73,14): error TS2459: Type '{}' has no property 'b' and no string index signature.
@@ -95,7 +95,7 @@ tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(138,9): 
     function f9() {
         var [a, b] = {};                // Error, not array type
             ~~~~~~
-!!! error TS2461: Type '{ [x: number]: undefined; }' is not an array type.
+!!! error TS2461: Type '{ [x: number]: any; }' is not an array type.
         var [c, d] = { 0: 10, 1: 20 };  // Error, not array type
             ~~~~~~
 !!! error TS2461: Type '{ [x: number]: number; 0: number; 1: number; }' is not an array type.

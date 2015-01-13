@@ -8,7 +8,7 @@ class LazyArray<T> {
 ><{ [objectId: string]: T; }>{} : { [objectId: string]: T; }
 >objectId : string
 >T : T
->{} : { [x: string]: undefined; }
+>{} : { [x: string]: T; }
 
     array() {
 >array : () => { [objectId: string]: T; }
