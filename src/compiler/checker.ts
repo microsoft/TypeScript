@@ -5605,8 +5605,11 @@ module ts {
                 return unknownType;
             }
 
-            if (isConstEnumObjectType(objectType) && node.argumentExpression && node.argumentExpression.kind !== SyntaxKind.StringLiteral) {
-                error(node.argumentExpression, Diagnostics.Index_expression_arguments_in_const_enums_must_be_of_type_string);
+            var isConstEnum = isConstEnumObjectType(objectType);
+            if (isConstEnum && 
+                (!node.argumentExpression || node.argumentExpression.kind !== SyntaxKind.StringLiteral)) {
+                error(node.argumentExpression, Diagnostics.A_const_enum_member_can_only_be_accessed_using_a_string_literal);
+                return unknownType;
             }
 
             // TypeScript 1.0 spec (April 2014): 4.10 Property Access
@@ -5626,6 +5629,10 @@ module ts {
                     if (prop) {
                         getNodeLinks(node).resolvedSymbol = prop;
                         return getTypeOfSymbol(prop);
+                    }
+                    else if (isConstEnum) {
+                        error(node.argumentExpression, Diagnostics.Property_0_does_not_exist_on_const_enum_1, name, symbolToString(objectType.symbol));
+                        return unknownType;
                     }
                 }
             }
