@@ -4560,16 +4560,16 @@ var ts;
         }
         function parsePrimaryExpression() {
             switch (token) {
+                case 6 /* NumericLiteral */:
+                case 7 /* StringLiteral */:
+                case 9 /* NoSubstitutionTemplateLiteral */:
+                    return parseLiteralNode();
                 case 91 /* ThisKeyword */:
                 case 89 /* SuperKeyword */:
                 case 87 /* NullKeyword */:
                 case 93 /* TrueKeyword */:
                 case 78 /* FalseKeyword */:
                     return parseTokenNode();
-                case 6 /* NumericLiteral */:
-                case 7 /* StringLiteral */:
-                case 9 /* NoSubstitutionTemplateLiteral */:
-                    return parseLiteralNode();
                 case 15 /* OpenParenToken */:
                     return parseParenthesizedExpression();
                 case 17 /* OpenBracketToken */:
@@ -6592,7 +6592,10 @@ var ts;
                 }
             }
             else {
-                if (!(findSourceFile(filename + ".ts", isDefaultLib, refFile, refPos, refEnd) || findSourceFile(filename + ".d.ts", isDefaultLib, refFile, refPos, refEnd))) {
+                if (options.allowNonTsExtensions && !findSourceFile(filename, isDefaultLib, refFile, refPos, refEnd)) {
+                    diagnostic = ts.Diagnostics.File_0_not_found;
+                }
+                else if (!findSourceFile(filename + ".ts", isDefaultLib, refFile, refPos, refEnd) && !findSourceFile(filename + ".d.ts", isDefaultLib, refFile, refPos, refEnd)) {
                     diagnostic = ts.Diagnostics.File_0_not_found;
                     filename += ".ts";
                 }
@@ -11583,7 +11586,6 @@ var ts;
                     case 131 /* IndexSignature */:
                     case 123 /* Parameter */:
                     case 190 /* ModuleBlock */:
-                    case 122 /* TypeParameter */:
                     case 133 /* FunctionType */:
                     case 134 /* ConstructorType */:
                     case 136 /* TypeLiteral */:
@@ -11593,6 +11595,7 @@ var ts;
                     case 139 /* UnionType */:
                     case 140 /* ParenthesizedType */:
                         return isDeclarationVisible(node.parent);
+                    case 122 /* TypeParameter */:
                     case 201 /* SourceFile */:
                         return true;
                     default:
@@ -17569,8 +17572,17 @@ var ts;
         }
         function isUniqueLocalName(name, container) {
             for (var node = container; isNodeDescendentOf(node, container); node = node.nextContainer) {
-                if (node.locals && ts.hasProperty(node.locals, name) && node.locals[name].flags & (107455 /* Value */ | 4194304 /* ExportValue */)) {
-                    return false;
+                if (node.locals && ts.hasProperty(node.locals, name)) {
+                    var symbolWithRelevantName = node.locals[name];
+                    if (symbolWithRelevantName.flags & (107455 /* Value */ | 4194304 /* ExportValue */)) {
+                        return false;
+                    }
+                    if (symbolWithRelevantName.flags & 33554432 /* Import */) {
+                        var importDeclarationWithRelevantName = ts.getDeclarationOfKind(symbolWithRelevantName, 191 /* ImportDeclaration */);
+                        if (isReferencedImportDeclaration(importDeclarationWithRelevantName)) {
+                            return false;
+                        }
+                    }
                 }
             }
             return true;
