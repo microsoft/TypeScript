@@ -4028,7 +4028,7 @@ module ts {
                         writeLine();
                         write(`f = false;`);
                         writeLine();
-                        write(`switch (!(g = s.trys && s.trys[s.trys.length - 1]) && c[0]) {`);
+                        write(`switch (!(g = s.trys && s.trys.length && s.trys[s.trys.length - 1]) && c[0]) {`);
                         increaseIndent();
                         writeLine();
                         write(`case "throw": i.length = 0; d = true; throw c[1];`);
@@ -4083,9 +4083,9 @@ module ts {
                         writeLine();
                         write(`if (c[0] === "throw" && s.label < g[1]) { s.error = c[1]; s.label = g[1]; break; }`);
                         writeLine();
-                        write(`s.trys.pop(), i.push(c);`);
+                        write(`s.trys.pop();`);
                         writeLine();
-                        write(`if (s.label < g[2]) { s.label = g[2]; break; }`);
+                        write(`if (g[2]) { i.push(c); s.label = g[2]; break; }`);
                         writeLine();
                         write(`continue;`);
                         decreaseIndent();
