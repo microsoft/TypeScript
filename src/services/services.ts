@@ -5720,6 +5720,23 @@ module ts {
         return { getClassificationsForLine };
     }
 
+    /// getDefaultLibraryFilePath
+    declare var __dirname: string;
+    declare var module: any;
+
+    /**
+      * Get the path of the default library file (lib.d.ts) as distributed with the typescript
+      * node package.
+      * The functionality is not supported if the ts module is consumed outside of a node module. 
+      */
+    export function getDefaultLibraryFilePath(options: CompilerOptions): string {
+        if (typeof module !== "undefined" && module.exports) {
+            return __dirname + directorySeparator + getDefaultLibraryFilename(options);
+        }
+
+        throw new Error("getDefaultLibraryFilename is only supported when consumed as a node module. ");
+    }
+
     function initializeServices() {
         objectAllocator = {
             getNodeConstructor: kind => {
