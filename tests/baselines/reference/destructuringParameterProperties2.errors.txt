@@ -1,7 +1,7 @@
-tests/cases/conformance/es6/destructuring/destructuringPropertyParameters2.ts(21,27): error TS2345: Argument of type '[number, undefined, string]' is not assignable to parameter of type '[number, string, boolean]'.
+tests/cases/conformance/es6/destructuring/destructuringParameterProperties2.ts(21,27): error TS2345: Argument of type '[number, undefined, string]' is not assignable to parameter of type '[number, string, boolean]'.
 
 
-==== tests/cases/conformance/es6/destructuring/destructuringPropertyParameters2.ts (1 errors) ====
+==== tests/cases/conformance/es6/destructuring/destructuringParameterProperties2.ts (1 errors) ====
     class C1 {
         constructor(private k: number, private [a, b, c]: [number, string, boolean]) {
             if ((b === undefined && c === undefined) || (this.b === undefined && this.c === undefined)) {
