@@ -543,27 +543,20 @@ module ts {
         }
 
         function getState(): Identifier {
-            if (!state) state = createUniqueIdentifier("_state");
+            if (!state) {
+                state = createUniqueIdentifier("_state");
+            }
             return state;
         }
 
-        function buildFunction(kind: SyntaxKind, name: DeclarationName, location?: TextRange, flags?: NodeFlags, modifiers?: ModifiersArray) {
+        function buildFunction(kind: SyntaxKind, name: DeclarationName, location?: TextRange, flags?: NodeFlags, modifiers?: ModifiersArray): FunctionLikeDeclaration {
             var statements: Statement[] = [];
-            if (variableDeclarations) {
-                var variableDeclarationList = factory.createVariableDeclarationList(variableDeclarations);
-                statements.push(factory.createVariableStatement(variableDeclarationList));
-            }
-
-            if (functions) {
-                statements = statements.concat(functions);
-            }
-
-            var state = getState();
+            statements = buildHoistedVariableDeclarations(statements);
+            statements = buildHoistedFunctionDeclarations(statements);
             var generatorStatements = buildStatements(/*forceReturn*/ true);
             var generatorFunctionBody = factory.createBlock(generatorStatements);
-            var generatorFunction = factory.createFunctionExpression(/*name*/ undefined, generatorFunctionBody, [factory.createParameterDeclaration(state)]);
+            var generatorFunction = factory.createFunctionExpression(/*name*/ undefined, generatorFunctionBody, [factory.createParameterDeclaration(getState())]);
             var generatorExpression = factory.createCallExpression(factory.createIdentifier("__generator"), [generatorFunction]);
-
             if (promiseConstructor) {
                 var resolve = createUniqueIdentifier("_resolve");
                 var promiseConstructorExpression = factory.getExpressionForEntityName(promiseConstructor);
@@ -596,6 +589,46 @@ module ts {
                     reportUnexpectedNode(node);
                     return node;
             }
+        }
+
+        function buildHoistedVariableDeclarations(statements: Statement[]): Statement[] {
+            if (variableDeclarations) {
+                var usedVariableNames: Map<boolean> = {};
+                if (parameters) {
+                    for (var i = 0; i < parameters.length; i++) {
+                        usedVariableNames[(<Identifier>parameters[i].name).text] = true;
+                    }
+                }
+                if (functions) {
+                    for (var i = 0; i < functions.length; i++) {
+                        usedVariableNames[functions[i].name.text] = true;
+                    }
+                }
+                var variableDeclarationsForEmit: VariableDeclaration[];
+                for (var i = 0; i < variableDeclarations.length; i++) {
+                    var variableDeclaration = variableDeclarations[i];
+                    var variableName = (<Identifier>variableDeclaration.name).text;
+                    if (!hasProperty(usedVariableNames, variableName)) {
+                        usedVariableNames[variableName] = true;
+                    }
+                    if (!variableDeclarationsForEmit) {
+                        variableDeclarationsForEmit = [];
+                    }
+                    variableDeclarationsForEmit.push(variableDeclaration);
+                }
+                if (variableDeclarationsForEmit) {
+                    var variableDeclarationList = factory.createVariableDeclarationList(variableDeclarationsForEmit);
+                    statements.push(factory.createVariableStatement(variableDeclarationList));
+                }
+            }
+            return statements;
+        }
+
+        function buildHoistedFunctionDeclarations(statements: Statement[]): Statement[] {
+            if (functions) {
+                statements = statements.concat(functions);
+            }
+            return statements;
         }
 
         function buildStatements(forceReturn?: boolean): Statement[] {

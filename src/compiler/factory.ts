@@ -217,6 +217,10 @@ module ts {
             return node;
         }
 
+        export function getUndefinedValue(location?: TextRange, flags?: NodeFlags): VoidExpression {
+            return factory.createVoidExpression(factory.createNumericLiteral(0, location, flags), location, flags);
+        }
+
         export function createAwaitExpression(expression: UnaryExpression, location?: TextRange, flags?: NodeFlags): AwaitExpression {
             var node = beginNode<AwaitExpression>(SyntaxKind.AwaitExpression);
             node.expression = expression;
@@ -342,6 +346,14 @@ module ts {
                 return createParenthesizedExpression(expression, node, node.flags);
             }
             return node;
+        }
+
+        export function parenthesize(expression: Expression): LeftHandSideExpression {
+            if (isLeftHandSideExpression(expression)) {
+                return <LeftHandSideExpression>expression;
+            }
+
+            return factory.createParenthesizedExpression(expression);
         }
 
         export function createArrayLiteralExpression(elements: Expression[], location?: TextRange, flags?: NodeFlags): ArrayLiteralExpression {

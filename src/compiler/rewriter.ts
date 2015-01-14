@@ -15,6 +15,87 @@ module ts {
         thisArg?: Identifier;
     }
 
+    export function rewriteBindingElement(root: BindingElement, locals: LocalsBuilder, value?: Expression): VariableDeclaration[] {
+        var variableDeclarations: VariableDeclaration[];
+        return rewriteWorker();
+
+        function rewriteBindingElementCore(node: BindingElement, value: Expression): void {
+            if (node.initializer) {
+                // Combine value and initializer
+                value = value ? getValueOrDefault(value, node.initializer) : node.initializer;
+            }
+            else if (!value) {
+                // Use 'void 0' in absence of value and initializer
+                value = factory.getUndefinedValue();
+            }
+
+            if (isBindingPattern(node.name)) {
+                var pattern = <BindingPattern>node.name;
+                var elements = pattern.elements;
+                if (elements.length !== 1) {
+                    // For anything but a single element destructuring we need to generate a temporary
+                    // to ensure value is evaluated exactly once.
+                    value = ensureIdentifier(value);
+                }
+                for (var i = 0; i < elements.length; i++) {
+                    var element = elements[i];
+                    if (pattern.kind === SyntaxKind.ObjectBindingPattern) {
+                        // Rewrite element to a declaration with an initializer that fetches property
+                        var propName = element.propertyName || <Identifier>element.name;
+                        rewriteBindingElementCore(element, factory.createPropertyAccessExpression(factory.parenthesize(value), propName));
+                    }
+                    else if (element.kind !== SyntaxKind.OmittedExpression) {
+                        if (!element.dotDotDotToken) {
+                            // Rewrite element to a declaration that accesses array element at index i
+                            rewriteBindingElementCore(element, factory.createElementAccessExpression(factory.parenthesize(value), factory.createNumericLiteral(i)));
+                        }
+                        else if (i === elements.length - 1) {
+                            value = ensureIdentifier(value);
+                            var name = <Identifier>element.name;
+                            var sliceExpression = factory.createPropertyAccessExpression(factory.parenthesize(value), factory.createIdentifier("slice"));
+                            var callExpression = factory.createCallExpression(sliceExpression, [factory.createNumericLiteral(i)]);
+                            writeDeclaration(name, callExpression, element);
+                        }
+                    }
+                }
+            }
+            else {
+                var name = <Identifier>node.name;
+                writeDeclaration(name, value, node);
+            }
+        }
+
+        function writeDeclaration(left: Identifier, right: Expression, location?: TextRange): void {
+            if (!variableDeclarations) {
+                variableDeclarations = [];
+            }
+
+            variableDeclarations.push(factory.createVariableDeclaration(left, right, location));
+        }
+
+        function ensureIdentifier(expression: Expression): Expression {
+            if (expression.kind !== SyntaxKind.Identifier) {
+                var local = locals.createUniqueIdentifier();
+                writeDeclaration(local, expression);
+                return local;
+            }
+
+            return expression;
+        }
+
+        function getValueOrDefault(value: Expression, defaultValue: Expression): Expression {
+            value = ensureIdentifier(value);
+            var equalityExpression = factory.createBinaryExpression(SyntaxKind.EqualsEqualsEqualsToken, value, factory.getUndefinedValue());
+            var conditionalExpression = factory.createConditionalExpression(equalityExpression, defaultValue, value);
+            return conditionalExpression;
+        }
+
+        function rewriteWorker(): VariableDeclaration[] {
+            rewriteBindingElementCore(root, value);
+            return variableDeclarations;
+        }
+    }
+
     /** rewrites an async or generator function or method declaration */
     export function rewriteFunction(node: FunctionLikeDeclaration, compilerOptions: CompilerOptions, resolver: EmitResolver, locals: LocalsBuilder): FunctionLikeDeclaration {
         var builder: FunctionGenerator;
@@ -75,13 +156,18 @@ module ts {
 
         // visitors
         function visitBinaryExpression(node: BinaryExpression): Expression {
-            if (isDownlevel && hasAwaitOrYield(node.right)) {
+            if (isDownlevel && hasAwaitOrYield(node)) {
                 if (isLogicalBinary(node)) {
                     return rewriteLogicalBinaryExpression(node);
                 } else if (isAssignment(node)) {
                     return factory.updateBinaryExpression(node, rewriteLeftHandSideOfAssignmentExpression(node.left), visitExpression(node.right));
                 } else {
-                    return factory.updateBinaryExpression(node, cacheExpression(visitExpression(node.left)), visitExpression(node.right));
+                    node = factory.updateBinaryExpression(node, cacheExpression(visitExpression(node.left)), visitExpression(node.right));
+                    if (node.operator === SyntaxKind.CommaToken && node.left.kind === SyntaxKind.Identifier) {
+                        return node.right;
+                    }
+
+                    return node;
                 }
             }
 
@@ -490,9 +576,13 @@ module ts {
 
         function rewriteVariableDeclarationList(node: VariableDeclarationList): Expression {
             var declarations = node.declarations;
+            return rewriteVariableDeclarations(declarations);
+        }
+
+        function rewriteVariableDeclarations(declarations: VariableDeclaration[]): Expression {
             var assignments = map(declarations, rewriteVariableDeclaration);
-            assignments = filter<BinaryExpression>(assignments, nodeIsPresent);
-            var assignment = reduceRight(assignments, mergeAssignments);
+            assignments = filter<BinaryExpression>(assignments, nodeIsPresentOrGenerated);
+            var assignment = reduce(assignments, mergeAssignments);
             if (node.parent.kind === SyntaxKind.ForInStatement) {
                 if (assignment) {
                     builder.emit(OpCode.Statement, factory.createExpressionStatement(assignment));
@@ -505,13 +595,95 @@ module ts {
         }
 
         function rewriteVariableDeclaration(node: VariableDeclaration): BinaryExpression {
-            Debug.assert(node.name.kind === SyntaxKind.Identifier, "Destructuring not yet supported here.");
+            if (isBindingPattern(node.name)) {
+                var declarations = rewriteBindingElement(<BindingElement>node, locals);
+                var result = rewriteVariableDeclarations(declarations);
+                rewriteExpression(result);
+                return;
+            }
+
             builder.addVariable(<Identifier>node.name);
             var initializer = visitExpression(node.initializer);
             if (initializer) {
                 return factory.createBinaryExpression(SyntaxKind.EqualsToken, <Identifier>node.name, initializer, node);
             }
         }
+
+        //function rewriteBindingElementForVariableDeclaration(node: VariableDeclaration): void {
+        //    var mergedAssignment: BinaryExpression;
+        //    return rewriteWorker();
+
+        //    function writeVariable(name: Identifier): void {
+        //        builder.addVariable(name);
+        //    }
+
+        //    function writeAssignment(left: Identifier, right: Expression, location?: TextRange): void {
+        //        var assignmentExpression = factory.createBinaryExpression(SyntaxKind.EqualsToken, left, right, location);
+        //        if (hasAwaitOrYield(right)) {
+        //            if (mergedAssignment) {
+        //                rewriteExpression(mergedAssignment);
+        //                mergedAssignment = undefined;
+        //            }
+        //            rewriteExpression(assignmentExpression);
+        //        }
+        //        else {
+        //            mergedAssignment = mergeAssignments(mergedAssignment, <BinaryExpression>nodeVisitor.visitBinaryExpression(assignmentExpression));
+        //        }
+        //    }
+
+        //    function rewriteWorker(): void {
+        //        rewriteBindingElement(node, /*value*/ undefined, locals, writeAssignment, writeVariable);
+        //        rewriteExpression(mergedAssignment);
+        //    }
+        //}
+
+        //function rewriteBindingElementNoVisit(node: BindingElement, value: Expression, assignments: BinaryExpression[]): void {
+        //    if (node.initializer) {
+        //        // Combine value and initializer
+        //        value = value ? getValueOrDefault(value, node.initializer, assignments) : node.initializer;
+        //    }
+        //    else if (!value) {
+        //        // Use 'void 0' in absence of value and initializer
+        //        value = factory.getUndefinedValue();
+        //    }
+
+        //    if (isBindingPattern(node.name)) {
+        //        var pattern = <BindingPattern>node.name;
+        //        var elements = pattern.elements;
+        //        if (elements.length !== 1) {
+        //            // For anything but a single element destructuring we need to generate a temporary
+        //            // to ensure value is evaluated exactly once.
+        //            value = ensureIdentifier(value, assignments);
+        //        }
+        //        for (var i = 0; i < elements.length; i++) {
+        //            var element = elements[i];
+        //            if (pattern.kind === SyntaxKind.ObjectBindingPattern) {
+        //                // Rewrite element to a declaration with an initializer that fetches property
+        //                var propName = element.propertyName || <Identifier>element.name;
+        //                rewriteBindingElementNoVisit(element, factory.createPropertyAccessExpression(factory.parenthesize(value), propName), assignments);
+        //            }
+        //            else if (element.kind !== SyntaxKind.OmittedExpression) {
+        //                if (!element.dotDotDotToken) {
+        //                    // Rewrite element to a declaration that accesses array element at index i
+        //                    rewriteBindingElementNoVisit(element, factory.createElementAccessExpression(factory.parenthesize(value), factory.createNumericLiteral(i)), assignments);
+        //                }
+        //                else if (i === elements.length - 1) {
+        //                    value = ensureIdentifier(value, assignments);
+        //                    var name = <Identifier>element.name;
+        //                    builder.addVariable(name);
+        //                    var sliceExpression = factory.createPropertyAccessExpression(factory.parenthesize(value), factory.createIdentifier("slice"));
+        //                    var callExpression = factory.createCallExpression(sliceExpression, [factory.createNumericLiteral(i)]);
+        //                    assignments.push(factory.createBinaryExpression(SyntaxKind.EqualsToken, name, callExpression, element));
+        //                }
+        //            }
+        //        }
+        //    }
+        //    else {
+        //        var name = <Identifier>node.name;
+        //        builder.addVariable(name);
+        //        assignments.push(factory.createBinaryExpression(SyntaxKind.EqualsToken, <Identifier>node.name, value, node));
+        //    }
+        //}
 
         function rewriteAwaitExpressionDownlevel(node: AwaitExpression): UnaryExpression {
             var operand = visitUnaryExpression(node.expression);
@@ -879,6 +1051,18 @@ module ts {
             }
         }
 
+        function rewriteExpression(node: Expression): void {
+            if (!node) {
+                return;
+            }
+
+            var visited = visitExpression(node);
+            if (visited) {
+                builder.writeLocation(node);
+                builder.emit(OpCode.Statement, visited);
+            }
+        }
+
         function rewriteAsyncAsGeneratorWorker(): FunctionLikeDeclaration {
             var promiseConstructor = resolver.getPromiseConstructor(node);
             if (node.body.kind === SyntaxKind.Block) {
@@ -909,6 +1093,33 @@ module ts {
             return func;
         }
 
+        function rewriteParameterDeclaration(node: ParameterDeclaration): void {
+            var parameterName: Identifier;
+            builder.writeLocation(node);
+            if (isBindingPattern(node.name)) {
+                parameterName = locals.createUniqueIdentifier();
+            }
+            else {
+                parameterName = <Identifier>node.name;
+            }
+
+            builder.writeLocation(node);
+            builder.addParameter(parameterName, node.flags);
+
+            if (isBindingPattern(node.name)) {
+                var declarations = rewriteBindingElement(<BindingElement>node, locals, parameterName);
+                var expression = rewriteVariableDeclarations(declarations);
+                rewriteExpression(expression);
+            }
+            else if (node.initializer) {
+                var equalityExpression = factory.createBinaryExpression(SyntaxKind.EqualsEqualsEqualsToken, parameterName, factory.getUndefinedValue());
+                var assignmentExpression = factory.createBinaryExpression(SyntaxKind.EqualsToken, parameterName, node.initializer);
+                var expressionStatement = factory.createExpressionStatement(assignmentExpression);
+                var ifStatement = factory.createIfStatement(equalityExpression, expressionStatement);
+                rewriteStatement(ifStatement);
+            }
+        }
+
         function rewriteDownlevelWorker(): FunctionLikeDeclaration {
             if (node.flags & NodeFlags.Async) {
                 var promiseConstructor = resolver.getPromiseConstructor(node);
@@ -921,12 +1132,7 @@ module ts {
             if (node.parameters) {
                 for (var i = 0; i < node.parameters.length; i++) {
                     var parameter = node.parameters[i];
-                    Debug.assert(parameter.name.kind === SyntaxKind.Identifier, "Destructuring is not yet supported here");
-                    builder.writeLocation(parameter);
-                    builder.addParameter(<Identifier>parameter.name, parameter.flags);
-                    if (parameter.initializer) {
-                        builder.emit(OpCode.Assign, factory.createIdentifier((<Identifier>parameter.name).text), visitExpression(parameter.initializer));
-                    }
+                    rewriteParameterDeclaration(parameter);
                 }
             }
 
@@ -950,8 +1156,32 @@ module ts {
             }
         }
 
-        function mergeAssignments(left: BinaryExpression, right: BinaryExpression): BinaryExpression {
-            return factory.createBinaryExpression(SyntaxKind.CommaToken, left, right);
+        function ensureIdentifier(expression: Expression, assignments: BinaryExpression[]): Expression {
+            if (expression.kind !== SyntaxKind.Identifier) {
+                var local = builder.declareLocal();
+                var assignExpression = factory.createBinaryExpression(SyntaxKind.EqualsToken, local, expression);
+                assignments.push(assignExpression);
+                return local;
+            }
+
+            return expression;
+        }
+
+        function getValueOrDefault(value: Expression, defaultValue: Expression, assignments: BinaryExpression[]): Expression {
+            value = ensureIdentifier(value, assignments);
+            var equalityExpression = factory.createBinaryExpression(SyntaxKind.EqualsEqualsEqualsToken, value, factory.getUndefinedValue());
+            var conditionalExpression = factory.createConditionalExpression(equalityExpression, defaultValue, value);
+            return conditionalExpression;
+        }
+
+        function mergeAssignments(left: BinaryExpression, right: BinaryExpression, location?: TextRange): BinaryExpression {
+            if (!right) {
+                return left;
+            }
+            if (!left) {
+                return right;
+            }
+            return factory.createBinaryExpression(SyntaxKind.CommaToken, left, right, location);
         }
 
         function getTarget(node: Node): string {
