@@ -37,7 +37,9 @@ var C1 = (function () {
     function C1(k, _a) {
         var a = _a[0], b = _a[1], c = _a[2];
         this.k = k;
-        this.[a, b, c] = [a, b, c];
+        this.a = a;
+        this.b = b;
+        this.c = c;
         if ((b === undefined && c === undefined) || (this.b === undefined && this.c === undefined)) {
             this.a = a || k;
         }

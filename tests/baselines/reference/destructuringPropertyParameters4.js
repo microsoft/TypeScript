@@ -37,7 +37,9 @@ var __extends = this.__extends || function (d, b) {
 var C1 = (function () {
     function C1(k, [a, b, c]) {
         this.k = k;
-        this.[a, b, c] = [a, b, c];
+        this.a = a;
+        this.b = b;
+        this.c = c;
         if ((b === undefined && c === undefined) || (this.b === undefined && this.c === undefined)) {
             this.a = a || k;
         }

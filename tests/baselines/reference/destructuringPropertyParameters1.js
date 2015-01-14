@@ -33,21 +33,27 @@ var [c3_x, c3_y, c3_z] = [c3.x, c3.y, c3.z];
 var C1 = (function () {
     function C1(_a) {
         var x = _a[0], y = _a[1], z = _a[2];
-        this.[x, y, z] = [x, y, z];
+        this.x = x;
+        this.y = y;
+        this.z = z;
     }
     return C1;
 })();
 var C2 = (function () {
     function C2(_a) {
         var x = _a[0], y = _a[1], z = _a[2];
-        this.[x, y, z] = [x, y, z];
+        this.x = x;
+        this.y = y;
+        this.z = z;
     }
     return C2;
 })();
 var C3 = (function () {
     function C3(_a) {
         var x = _a.x, y = _a.y, z = _a.z;
-        this.{ x, y, z } = { x, y, z };
+        this.x = x;
+        this.y = y;
+        this.z = z;
     }
     return C3;
 })();
