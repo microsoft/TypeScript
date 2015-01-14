@@ -22,7 +22,7 @@ class C1<T, U, V> {
 
 class C2 extends C1<number, string, boolean> {
     public doSomethingWithSuperProperties() {
-        return `${this.x} ${this.y} ${this.z}`;
+        return `${this.a} ${this.b} ${this.c}`;
     }
 }
 
@@ -59,7 +59,7 @@ var C2 = (function (_super) {
         _super.apply(this, arguments);
     }
     C2.prototype.doSomethingWithSuperProperties = function () {
-        return `${this.x} ${this.y} ${this.z}`;
+        return `${this.a} ${this.b} ${this.c}`;
     };
     return C2;
 })(C1);

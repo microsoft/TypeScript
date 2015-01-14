@@ -1,0 +1,129 @@
+=== tests/cases/conformance/es6/destructuring/destructuringPropertyParameters1.ts ===
+class C1 {
+>C1 : C1
+
+    constructor(public [x, y, z]: string[]) {
+>x : string
+>y : string
+>z : string
+    }
+}
+
+type TupleType1 = [string, number, boolean];
+>TupleType1 : [string, number, boolean]
+
+class C2 {
+>C2 : C2
+
+    constructor(public [x, y, z]: TupleType1) {
+>x : string
+>y : number
+>z : boolean
+>TupleType1 : [string, number, boolean]
+    }
+}
+
+type ObjType1 = { x: number; y: string; z: boolean }
+>ObjType1 : { x: number; y: string; z: boolean; }
+>x : number
+>y : string
+>z : boolean
+
+class C3 {
+>C3 : C3
+
+    constructor(public { x, y, z }: ObjType1) {
+>x : number
+>y : string
+>z : boolean
+>ObjType1 : { x: number; y: string; z: boolean; }
+    }
+}
+
+var c1 = new C1([]);
+>c1 : C1
+>new C1([]) : C1
+>C1 : typeof C1
+>[] : undefined[]
+
+c1 = new C1(["larry", "{curly}", "moe"]);
+>c1 = new C1(["larry", "{curly}", "moe"]) : C1
+>c1 : C1
+>new C1(["larry", "{curly}", "moe"]) : C1
+>C1 : typeof C1
+>["larry", "{curly}", "moe"] : string[]
+
+var useC1Properties = c1.x === c1.y && c1.y === c1.z;
+>useC1Properties : boolean
+>c1.x === c1.y && c1.y === c1.z : boolean
+>c1.x === c1.y : boolean
+>c1.x : string
+>c1 : C1
+>x : string
+>c1.y : string
+>c1 : C1
+>y : string
+>c1.y === c1.z : boolean
+>c1.y : string
+>c1 : C1
+>y : string
+>c1.z : string
+>c1 : C1
+>z : string
+
+var c2 = new C2(["10", 10, !!10]);
+>c2 : C2
+>new C2(["10", 10, !!10]) : C2
+>C2 : typeof C2
+>["10", 10, !!10] : [string, number, boolean]
+>!!10 : boolean
+>!10 : boolean
+
+var [c2_x, c2_y, c2_z] = [c2.x, c2.y, c2.z];
+>c2_x : string
+>c2_y : number
+>c2_z : boolean
+>[c2.x, c2.y, c2.z] : [string, number, boolean]
+>c2.x : string
+>c2 : C2
+>x : string
+>c2.y : number
+>c2 : C2
+>y : number
+>c2.z : boolean
+>c2 : C2
+>z : boolean
+
+var c3 = new C3({x: 0, y: "", z: false});
+>c3 : C3
+>new C3({x: 0, y: "", z: false}) : C3
+>C3 : typeof C3
+>{x: 0, y: "", z: false} : { x: number; y: string; z: boolean; }
+>x : number
+>y : string
+>z : boolean
+
+c3 = new C3({x: 0, "y": "y", z: true});
+>c3 = new C3({x: 0, "y": "y", z: true}) : C3
+>c3 : C3
+>new C3({x: 0, "y": "y", z: true}) : C3
+>C3 : typeof C3
+>{x: 0, "y": "y", z: true} : { x: number; "y": string; z: boolean; }
+>x : number
+>z : boolean
+
+var [c3_x, c3_y, c3_z] = [c3.x, c3.y, c3.z];
+>c3_x : number
+>c3_y : string
+>c3_z : boolean
+>[c3.x, c3.y, c3.z] : [number, string, boolean]
+>c3.x : number
+>c3 : C3
+>x : number
+>c3.y : string
+>c3 : C3
+>y : string
+>c3.z : boolean
+>c3 : C3
+>z : boolean
+
