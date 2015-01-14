@@ -3053,7 +3053,7 @@ module ts {
                     }
                 }
 
-                function emitBindingElement(target: BindingElement, value: Expression) {
+                function emitBindingElement(target: BindingElement, value?: Expression) {
                     if (target.initializer) {
                         // Combine value and initializer
                         value = value ? createDefaultValueCheck(value, target.initializer) : target.initializer;
@@ -3369,18 +3369,26 @@ module ts {
             }
 
             function emitParameterPropertyAssignments(node: ConstructorDeclaration) {
-                forEach(node.parameters, param => {
-                    if (param.flags & NodeFlags.AccessibilityModifier) {
-                        writeLine();
-                        emitStart(param);
-                        emitStart(param.name);
-                        write("this.");
-                        emitNode(param.name);
-                        emitEnd(param.name);
-                        write(" = ");
-                        emit(param.name);
-                        write(";");
-                        emitEnd(param);
+                forEach(node.parameters, function emitBoundProperty(binding: ParameterDeclaration | BindingElement) {
+                    if (binding.flags & NodeFlags.AccessibilityModifier) {
+                        if (isBindingPattern(binding.name)) {
+                            emitStart(binding);
+                            forEach((<BindingPattern>binding.name).elements, emitBoundProperty);
+                            emitEnd(binding.name);
+                        }
+                        else {
+                            writeLine();
+                            emitStart(binding);
+                            emitStart(binding.name);
+                            write("this.");
+                            emitNode(binding.name);
+                            emitEnd(binding.name);
+                            write(" = ");
+                            emit(binding.name);
+                            write(";");
+                            emitEnd(binding);
+                        }
+
                     }
                 });
             }

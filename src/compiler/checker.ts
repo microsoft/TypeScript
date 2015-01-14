@@ -122,7 +122,7 @@ module ts {
         }
 
         function getExcludedSymbolFlags(flags: SymbolFlags): SymbolFlags {
-            var result: SymbolFlags = 0;
+            var result = SymbolFlags.None;
             if (flags & SymbolFlags.BlockScopedVariable) result |= SymbolFlags.BlockScopedVariableExcludes;
             if (flags & SymbolFlags.FunctionScopedVariable) result |= SymbolFlags.FunctionScopedVariableExcludes;
             if (flags & SymbolFlags.Property) result |= SymbolFlags.PropertyExcludes;
@@ -1745,7 +1745,7 @@ module ts {
         function getTypeFromObjectBindingPattern(pattern: BindingPattern): Type {
             var members: SymbolTable = {};
             forEach(pattern.elements, e => {
-                var flags = SymbolFlags.Property | SymbolFlags.Transient | (e.initializer ? SymbolFlags.Optional : 0);
+                var flags = SymbolFlags.Property | SymbolFlags.Transient | (e.initializer ? SymbolFlags.Optional : SymbolFlags.None);
                 var name = e.propertyName || <Identifier>e.name;
                 var symbol = <TransientSymbol>createSymbol(flags, name.text);
                 symbol.type = getTypeFromBindingElement(e);
@@ -5485,7 +5485,7 @@ module ts {
         }
 
         function getDeclarationFlagsFromSymbol(s: Symbol) {
-            return s.valueDeclaration ? getCombinedNodeFlags(s.valueDeclaration) : s.flags & SymbolFlags.Prototype ? NodeFlags.Public | NodeFlags.Static : 0;
+            return s.valueDeclaration ? getCombinedNodeFlags(s.valueDeclaration) : s.flags & SymbolFlags.Prototype ? (NodeFlags.Public | NodeFlags.Static) : SymbolFlags.None;
         }
 
         function checkClassPropertyAccess(node: PropertyAccessExpression | QualifiedName, left: Expression | QualifiedName, type: Type, prop: Symbol) {
@@ -7206,7 +7206,7 @@ module ts {
 
             checkVariableLikeDeclaration(node);
             var func = getContainingFunction(node);
-            if (node.flags & (NodeFlags.Public | NodeFlags.Private | NodeFlags.Protected)) {
+            if (node.flags & NodeFlags.AccessibilityModifier) {
                 func = getContainingFunction(node);
                 if (!(func.kind === SyntaxKind.Constructor && nodeIsPresent(func.body))) {
                     error(node, Diagnostics.A_parameter_property_is_only_allowed_in_a_constructor_implementation);
@@ -7225,17 +7225,20 @@ module ts {
                 checkGrammarIndexSignature(<SignatureDeclaration>node);
             }
             // TODO (yuisu): Remove this check in else-if when SyntaxKind.Construct is moved and ambient context is handled
-            else  if (node.kind === SyntaxKind.FunctionType || node.kind === SyntaxKind.FunctionDeclaration || node.kind === SyntaxKind.ConstructorType ||
+            else if (node.kind === SyntaxKind.FunctionType || node.kind === SyntaxKind.FunctionDeclaration || node.kind === SyntaxKind.ConstructorType ||
                       node.kind === SyntaxKind.CallSignature || node.kind === SyntaxKind.Constructor ||
                       node.kind === SyntaxKind.ConstructSignature){
                 checkGrammarFunctionLikeDeclaration(<FunctionLikeDeclaration>node);
             }
 
             checkTypeParameters(node.typeParameters);
+
             forEach(node.parameters, checkParameter);
+
             if (node.type) {
                 checkSourceElement(node.type);
             }
+
             if (produceDiagnostics) {
                 checkCollisionWithArgumentsInGeneratedCode(node);
                 if (compilerOptions.noImplicitAny && !node.type) {
@@ -7786,8 +7789,8 @@ module ts {
 
             // we use SymbolFlags.ExportValue, SymbolFlags.ExportType and SymbolFlags.ExportNamespace 
             // to denote disjoint declarationSpaces (without making new enum type).
-            var exportedDeclarationSpaces: SymbolFlags = 0;
-            var nonExportedDeclarationSpaces: SymbolFlags = 0;
+            var exportedDeclarationSpaces = SymbolFlags.None;
+            var nonExportedDeclarationSpaces = SymbolFlags.None;
             forEach(symbol.declarations, d => {
                 var declarationSpaces = getDeclarationSpaces(d);
                 if (getEffectiveDeclarationFlags(d, NodeFlags.Export)) {
@@ -7821,7 +7824,7 @@ module ts {
                     case SyntaxKind.EnumDeclaration:
                         return SymbolFlags.ExportType | SymbolFlags.ExportValue;
                     case SyntaxKind.ImportDeclaration:
-                        var result: SymbolFlags = 0;
+                        var result = SymbolFlags.None;
                         var target = resolveImport(getSymbolOfNode(d));
                         forEach(target.declarations, d => { result |= getDeclarationSpaces(d); });
                         return result;
@@ -9122,9 +9125,9 @@ module ts {
             }
             if (target !== unknownSymbol) {
                 var excludedMeanings =
-                    (symbol.flags & SymbolFlags.Value ? SymbolFlags.Value : 0) |
-                    (symbol.flags & SymbolFlags.Type ? SymbolFlags.Type : 0) |
-                    (symbol.flags & SymbolFlags.Namespace ? SymbolFlags.Namespace : 0);
+                    (symbol.flags & SymbolFlags.Value ? SymbolFlags.Value : SymbolFlags.None) |
+                    (symbol.flags & SymbolFlags.Type ? SymbolFlags.Type : SymbolFlags.None) |
+                    (symbol.flags & SymbolFlags.Namespace ? SymbolFlags.Namespace : SymbolFlags.None);
                 if (target.flags & excludedMeanings) {
                     error(node, Diagnostics.Import_declaration_conflicts_with_local_declaration_of_0, symbolToString(symbol));
                 }

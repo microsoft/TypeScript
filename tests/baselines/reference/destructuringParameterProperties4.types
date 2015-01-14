@@ -1,0 +1,100 @@
+=== tests/cases/conformance/es6/destructuring/destructuringParameterProperties4.ts ===
+
+class C1<T, U, V> {
+>C1 : C1<T, U, V>
+>T : T
+>U : U
+>V : V
+
+    constructor(private k: T, protected [a, b, c]: [T,U,V]) {
+>k : T
+>T : T
+>a : T
+>b : U
+>c : V
+>T : T
+>U : U
+>V : V
+
+        if ((b === undefined && c === undefined) || (this.b === undefined && this.c === undefined)) {
+>(b === undefined && c === undefined) || (this.b === undefined && this.c === undefined) : boolean
+>(b === undefined && c === undefined) : boolean
+>b === undefined && c === undefined : boolean
+>b === undefined : boolean
+>b : U
+>undefined : undefined
+>c === undefined : boolean
+>c : V
+>undefined : undefined
+>(this.b === undefined && this.c === undefined) : boolean
+>this.b === undefined && this.c === undefined : boolean
+>this.b === undefined : boolean
+>this.b : U
+>this : C1<T, U, V>
+>b : U
+>undefined : undefined
+>this.c === undefined : boolean
+>this.c : V
+>this : C1<T, U, V>
+>c : V
+>undefined : undefined
+
+            this.a = a || k;
+>this.a = a || k : T
+>this.a : T
+>this : C1<T, U, V>
+>a : T
+>a || k : T
+>a : T
+>k : T
+        }
+    }
+
+    public getA() {
+>getA : () => T
+
+        return this.a
+>this.a : T
+>this : C1<T, U, V>
+>a : T
+    }
+
+    public getB() {
+>getB : () => U
+
+        return this.b
+>this.b : U
+>this : C1<T, U, V>
+>b : U
+    }
+
+    public getC() {
+>getC : () => V
+
+        return this.c;
+>this.c : V
+>this : C1<T, U, V>
+>c : V
+    }
+}
+
+class C2 extends C1<number, string, boolean> {
+>C2 : C2
+>C1 : C1<T, U, V>
+
+    public doSomethingWithSuperProperties() {
+>doSomethingWithSuperProperties : () => string
+
+        return `${this.a} ${this.b} ${this.c}`;
+>this.a : number
+>this : C2
+>a : number
+>this.b : string
+>this : C2
+>b : string
+>this.c : boolean
+>this : C2
+>c : boolean
+    }
+}
+
