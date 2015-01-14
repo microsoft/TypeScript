@@ -1,11 +1,6 @@
 tests/cases/conformance/es6/destructuring/destructuringPropertyParameters5.ts(5,27): error TS2459: Type '{ x: number; y: string; z: boolean; }' has no property 'x1' and no string index signature.
 tests/cases/conformance/es6/destructuring/destructuringPropertyParameters5.ts(5,31): error TS2459: Type '{ x: number; y: string; z: boolean; }' has no property 'x2' and no string index signature.
 tests/cases/conformance/es6/destructuring/destructuringPropertyParameters5.ts(5,35): error TS2459: Type '{ x: number; y: string; z: boolean; }' has no property 'x3' and no string index signature.
-tests/cases/conformance/es6/destructuring/destructuringPropertyParameters5.ts(7,29): error TS2339: Property 'x1' does not exist on type 'C1'.
-tests/cases/conformance/es6/destructuring/destructuringPropertyParameters5.ts(7,40): error TS2339: Property 'x2' does not exist on type 'C1'.
-tests/cases/conformance/es6/destructuring/destructuringPropertyParameters5.ts(7,51): error TS2339: Property 'x3' does not exist on type 'C1'.
-tests/cases/conformance/es6/destructuring/destructuringPropertyParameters5.ts(7,62): error TS2339: Property 'y' does not exist on type 'C1'.
-tests/cases/conformance/es6/destructuring/destructuringPropertyParameters5.ts(7,72): error TS2339: Property 'z' does not exist on type 'C1'.
 tests/cases/conformance/es6/destructuring/destructuringPropertyParameters5.ts(11,16): error TS2345: Argument of type '[{ x1: number; x2: string; x3: boolean; }, string, boolean]' is not assignable to parameter of type '[{ x: number; y: string; z: boolean; }, number, string]'.
   Types of property '0' are incompatible.
     Type '{ x1: number; x2: string; x3: boolean; }' is not assignable to type '{ x: number; y: string; z: boolean; }'.
@@ -13,7 +8,7 @@ tests/cases/conformance/es6/destructuring/destructuringPropertyParameters5.ts(11
 tests/cases/conformance/es6/destructuring/destructuringPropertyParameters5.ts(11,56): error TS1005: ',' expected.
 
 
-==== tests/cases/conformance/es6/destructuring/destructuringPropertyParameters5.ts (10 errors) ====
+==== tests/cases/conformance/es6/destructuring/destructuringPropertyParameters5.ts (5 errors) ====
     type ObjType1 = { x: number; y: string; z: boolean }
     type TupleType1 = [ObjType1, number, string]
     
@@ -27,16 +22,6 @@ tests/cases/conformance/es6/destructuring/destructuringPropertyParameters5.ts(11
 !!! error TS2459: Type '{ x: number; y: string; z: boolean; }' has no property 'x3' and no string index signature.
             var foo: any = x1 || x2 || x3 || y || z;
             var bar: any = this.x1 || this.x2 || this.x3 || this.y || this.z;
-                                ~~
-!!! error TS2339: Property 'x1' does not exist on type 'C1'.
-                                           ~~
-!!! error TS2339: Property 'x2' does not exist on type 'C1'.
-                                                      ~~
-!!! error TS2339: Property 'x3' does not exist on type 'C1'.
-                                                                 ~
-!!! error TS2339: Property 'y' does not exist on type 'C1'.
-                                                                           ~
-!!! error TS2339: Property 'z' does not exist on type 'C1'.
         }
     }
     

@@ -493,7 +493,9 @@ module ts {
         }
 
         function bindParameter(node: ParameterDeclaration) {
-            if (isBindingPattern(node.name)) {
+            var isBinding = isBindingPattern(node.name);
+
+            if (isBinding) {
                 bindAnonymousDeclaration(node, SymbolFlags.FunctionScopedVariable, getDestructuringParameterName(node), /*isBlockScopeContainer*/ false);
             }
             else {
@@ -507,7 +509,20 @@ module ts {
                 node.parent.parent.kind === SyntaxKind.ClassDeclaration) {
 
                 var classDeclaration = <ClassDeclaration>node.parent.parent;
-                declareSymbol(classDeclaration.symbol.members, classDeclaration.symbol, node, SymbolFlags.Property, SymbolFlags.PropertyExcludes);
+
+                if (isBinding) {
+                    forEach((<BindingPattern>node.name).elements, function declareBindingParameterProperties(curr: BindingElement) {
+                        if (isBindingPattern(curr.name)) {
+                            forEach((<BindingPattern>curr.name).elements, declareBindingParameterProperties)
+                        }
+                        else if (curr.name.kind === SyntaxKind.Identifier) {
+                            declareSymbol(classDeclaration.symbol.members, classDeclaration.symbol, curr, SymbolFlags.Property, SymbolFlags.PropertyExcludes);
+                        }
+                    });
+                }
+                else {
+                    declareSymbol(classDeclaration.symbol.members, classDeclaration.symbol, node, SymbolFlags.Property, SymbolFlags.PropertyExcludes);
+                }
             }
         }
     }
