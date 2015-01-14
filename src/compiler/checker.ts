@@ -7189,7 +7189,7 @@ module ts {
 
             checkVariableLikeDeclaration(node);
             var func = getContainingFunction(node);
-            if (node.flags & (NodeFlags.Public | NodeFlags.Private | NodeFlags.Protected)) {
+            if (node.flags & NodeFlags.AccessibilityModifier) {
                 func = getContainingFunction(node);
                 if (!(func.kind === SyntaxKind.Constructor && nodeIsPresent(func.body))) {
                     error(node, Diagnostics.A_parameter_property_is_only_allowed_in_a_constructor_implementation);
@@ -7208,17 +7208,20 @@ module ts {
                 checkGrammarIndexSignature(<SignatureDeclaration>node);
             }
             // TODO (yuisu): Remove this check in else-if when SyntaxKind.Construct is moved and ambient context is handled
-            else  if (node.kind === SyntaxKind.FunctionType || node.kind === SyntaxKind.FunctionDeclaration || node.kind === SyntaxKind.ConstructorType ||
+            else if (node.kind === SyntaxKind.FunctionType || node.kind === SyntaxKind.FunctionDeclaration || node.kind === SyntaxKind.ConstructorType ||
                       node.kind === SyntaxKind.CallSignature || node.kind === SyntaxKind.Constructor ||
                       node.kind === SyntaxKind.ConstructSignature){
                 checkGrammarFunctionLikeDeclaration(<FunctionLikeDeclaration>node);
             }
 
             checkTypeParameters(node.typeParameters);
+
             forEach(node.parameters, checkParameter);
+
             if (node.type) {
                 checkSourceElement(node.type);
             }
+
             if (produceDiagnostics) {
                 checkCollisionWithArgumentsInGeneratedCode(node);
                 if (compilerOptions.noImplicitAny && !node.type) {
