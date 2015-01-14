@@ -1,4 +1,4 @@
-//// [destructuringPropertyParameters1.ts]
+//// [destructuringParameterProperties1.ts]
 class C1 {
     constructor(public [x, y, z]: string[]) {
     }
@@ -29,7 +29,7 @@ var c3 = new C3({x: 0, y: "", z: false});
 c3 = new C3({x: 0, "y": "y", z: true});
 var [c3_x, c3_y, c3_z] = [c3.x, c3.y, c3.z];
 
-//// [destructuringPropertyParameters1.js]
+//// [destructuringParameterProperties1.js]
 var C1 = (function () {
     function C1(_a) {
         var x = _a[0], y = _a[1], z = _a[2];

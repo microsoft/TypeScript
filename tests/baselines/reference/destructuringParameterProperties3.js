@@ -1,4 +1,4 @@
-//// [destructuringPropertyParameters3.ts]
+//// [destructuringParameterProperties3.ts]
 class C1<T, U, V> {
     constructor(private k: T, private [a, b, c]: [T,U,V]) {
         if ((b === undefined && c === undefined) || (this.b === undefined && this.c === undefined)) {
@@ -32,7 +32,7 @@ var w = new C1(10, [undefined, undefined, undefined]);
 var [z_a, z_b, z_c] = [z.getA(), z.getB(), z.getC()];
 
 
-//// [destructuringPropertyParameters3.js]
+//// [destructuringParameterProperties3.js]
 var C1 = (function () {
     function C1(k, _a) {
         var a = _a[0], b = _a[1], c = _a[2];

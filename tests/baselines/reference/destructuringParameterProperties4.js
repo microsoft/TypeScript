@@ -1,4 +1,4 @@
-//// [destructuringPropertyParameters4.ts]
+//// [destructuringParameterProperties4.ts]
 
 class C1<T, U, V> {
     constructor(private k: T, protected [a, b, c]: [T,U,V]) {
@@ -27,7 +27,7 @@ class C2 extends C1<number, string, boolean> {
 }
 
 
-//// [destructuringPropertyParameters4.js]
+//// [destructuringParameterProperties4.js]
 var __extends = this.__extends || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }

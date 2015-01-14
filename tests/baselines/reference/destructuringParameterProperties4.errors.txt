@@ -1,15 +1,15 @@
-tests/cases/conformance/es6/destructuring/destructuringPropertyParameters4.ts(4,59): error TS2339: Property 'b' does not exist on type 'C1<T, U, V>'.
-tests/cases/conformance/es6/destructuring/destructuringPropertyParameters4.ts(4,83): error TS2339: Property 'c' does not exist on type 'C1<T, U, V>'.
-tests/cases/conformance/es6/destructuring/destructuringPropertyParameters4.ts(5,18): error TS2339: Property 'a' does not exist on type 'C1<T, U, V>'.
-tests/cases/conformance/es6/destructuring/destructuringPropertyParameters4.ts(10,21): error TS2339: Property 'a' does not exist on type 'C1<T, U, V>'.
-tests/cases/conformance/es6/destructuring/destructuringPropertyParameters4.ts(14,21): error TS2339: Property 'b' does not exist on type 'C1<T, U, V>'.
-tests/cases/conformance/es6/destructuring/destructuringPropertyParameters4.ts(18,21): error TS2339: Property 'c' does not exist on type 'C1<T, U, V>'.
-tests/cases/conformance/es6/destructuring/destructuringPropertyParameters4.ts(24,24): error TS2339: Property 'a' does not exist on type 'C2'.
-tests/cases/conformance/es6/destructuring/destructuringPropertyParameters4.ts(24,34): error TS2339: Property 'b' does not exist on type 'C2'.
-tests/cases/conformance/es6/destructuring/destructuringPropertyParameters4.ts(24,44): error TS2339: Property 'c' does not exist on type 'C2'.
+tests/cases/conformance/es6/destructuring/destructuringParameterProperties4.ts(4,59): error TS2339: Property 'b' does not exist on type 'C1<T, U, V>'.
+tests/cases/conformance/es6/destructuring/destructuringParameterProperties4.ts(4,83): error TS2339: Property 'c' does not exist on type 'C1<T, U, V>'.
+tests/cases/conformance/es6/destructuring/destructuringParameterProperties4.ts(5,18): error TS2339: Property 'a' does not exist on type 'C1<T, U, V>'.
+tests/cases/conformance/es6/destructuring/destructuringParameterProperties4.ts(10,21): error TS2339: Property 'a' does not exist on type 'C1<T, U, V>'.
+tests/cases/conformance/es6/destructuring/destructuringParameterProperties4.ts(14,21): error TS2339: Property 'b' does not exist on type 'C1<T, U, V>'.
+tests/cases/conformance/es6/destructuring/destructuringParameterProperties4.ts(18,21): error TS2339: Property 'c' does not exist on type 'C1<T, U, V>'.
+tests/cases/conformance/es6/destructuring/destructuringParameterProperties4.ts(24,24): error TS2339: Property 'a' does not exist on type 'C2'.
+tests/cases/conformance/es6/destructuring/destructuringParameterProperties4.ts(24,34): error TS2339: Property 'b' does not exist on type 'C2'.
+tests/cases/conformance/es6/destructuring/destructuringParameterProperties4.ts(24,44): error TS2339: Property 'c' does not exist on type 'C2'.
 
 
-==== tests/cases/conformance/es6/destructuring/destructuringPropertyParameters4.ts (9 errors) ====
+==== tests/cases/conformance/es6/destructuring/destructuringParameterProperties4.ts (9 errors) ====
     
     class C1<T, U, V> {
         constructor(private k: T, protected [a, b, c]: [T,U,V]) {
