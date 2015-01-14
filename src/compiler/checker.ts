@@ -4720,7 +4720,7 @@ module ts {
                     return targetType;
                 }
                 // If current type is a union type, remove all constituents that aren't subtypes of target type
-                if (type.flags && TypeFlags.Union) {
+                if (type.flags & TypeFlags.Union) {
                     return getUnionType(filter((<UnionType>type).types, t => isTypeSubtypeOf(t, targetType)));
                 }
                 return type;
