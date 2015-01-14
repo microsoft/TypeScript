@@ -22,6 +22,6 @@ class C1<T, U, V> {
 
 class C2 extends C1<number, string, boolean> {
     public doSomethingWithSuperProperties() {
-        return `${this.x} ${this.y} ${this.z}`;
+        return `${this.a} ${this.b} ${this.c}`;
     }
 }

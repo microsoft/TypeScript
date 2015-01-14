@@ -2,18 +2,15 @@ tests/cases/conformance/es6/destructuring/destructuringPropertyParameters1.ts(22
 tests/cases/conformance/es6/destructuring/destructuringPropertyParameters1.ts(22,35): error TS2339: Property 'y' does not exist on type 'C1'.
 tests/cases/conformance/es6/destructuring/destructuringPropertyParameters1.ts(22,43): error TS2339: Property 'y' does not exist on type 'C1'.
 tests/cases/conformance/es6/destructuring/destructuringPropertyParameters1.ts(22,52): error TS2339: Property 'z' does not exist on type 'C1'.
-tests/cases/conformance/es6/destructuring/destructuringPropertyParameters1.ts(25,26): error TS2339: Property 'x' does not exist on type 'C2'.
-tests/cases/conformance/es6/destructuring/destructuringPropertyParameters1.ts(25,35): error TS2339: Property 'y' does not exist on type 'C2'.
-tests/cases/conformance/es6/destructuring/destructuringPropertyParameters1.ts(25,43): error TS2339: Property 'y' does not exist on type 'C2'.
-tests/cases/conformance/es6/destructuring/destructuringPropertyParameters1.ts(25,52): error TS2339: Property 'z' does not exist on type 'C2'.
-tests/cases/conformance/es6/destructuring/destructuringPropertyParameters1.ts(28,23): error TS1005: ':' expected.
-tests/cases/conformance/es6/destructuring/destructuringPropertyParameters1.ts(29,26): error TS2339: Property 'x' does not exist on type 'C3'.
-tests/cases/conformance/es6/destructuring/destructuringPropertyParameters1.ts(29,35): error TS2339: Property 'y' does not exist on type 'C3'.
-tests/cases/conformance/es6/destructuring/destructuringPropertyParameters1.ts(29,43): error TS2339: Property 'y' does not exist on type 'C3'.
-tests/cases/conformance/es6/destructuring/destructuringPropertyParameters1.ts(29,52): error TS2339: Property 'z' does not exist on type 'C3'.
+tests/cases/conformance/es6/destructuring/destructuringPropertyParameters1.ts(25,30): error TS2339: Property 'x' does not exist on type 'C2'.
+tests/cases/conformance/es6/destructuring/destructuringPropertyParameters1.ts(25,36): error TS2339: Property 'y' does not exist on type 'C2'.
+tests/cases/conformance/es6/destructuring/destructuringPropertyParameters1.ts(25,42): error TS2339: Property 'z' does not exist on type 'C2'.
+tests/cases/conformance/es6/destructuring/destructuringPropertyParameters1.ts(29,30): error TS2339: Property 'x' does not exist on type 'C3'.
+tests/cases/conformance/es6/destructuring/destructuringPropertyParameters1.ts(29,36): error TS2339: Property 'y' does not exist on type 'C3'.
+tests/cases/conformance/es6/destructuring/destructuringPropertyParameters1.ts(29,42): error TS2339: Property 'z' does not exist on type 'C3'.
 
 
-==== tests/cases/conformance/es6/destructuring/destructuringPropertyParameters1.ts (13 errors) ====
+==== tests/cases/conformance/es6/destructuring/destructuringPropertyParameters1.ts (10 errors) ====
     class C1 {
         constructor(public [x, y, z]: string[]) {
         }
@@ -46,26 +43,20 @@ tests/cases/conformance/es6/destructuring/destructuringPropertyParameters1.ts(29
 !!! error TS2339: Property 'z' does not exist on type 'C1'.
     
     var c2 = new C2(["10", 10, !!10]);
-    var useC2Properties = c2.x === c2.y && c2.y === c2.z;
-                             ~
+    var [c2_x, c2_y, c2_z] = [c2.x, c2.y, c2.z];
+                                 ~
 !!! error TS2339: Property 'x' does not exist on type 'C2'.
-                                      ~
+                                       ~
 !!! error TS2339: Property 'y' does not exist on type 'C2'.
-                                              ~
-!!! error TS2339: Property 'y' does not exist on type 'C2'.
-                                                       ~
+                                             ~
 !!! error TS2339: Property 'z' does not exist on type 'C2'.
     
     var c3 = new C3({x: 0, y: "", z: false});
-    c3 = new C3({x: 0, "y", z: true});
-                          ~
-!!! error TS1005: ':' expected.
-    var useC3Properties = c3.x === c3.y && c3.y === c3.z;
-                             ~
+    c3 = new C3({x: 0, "y": "y", z: true});
+    var [c3_x, c3_y, c3_z] = [c3.x, c3.y, c3.z];
+                                 ~
 !!! error TS2339: Property 'x' does not exist on type 'C3'.
-                                      ~
+                                       ~
 !!! error TS2339: Property 'y' does not exist on type 'C3'.
-                                              ~
-!!! error TS2339: Property 'y' does not exist on type 'C3'.
-                                                       ~
+                                             ~
 !!! error TS2339: Property 'z' does not exist on type 'C3'.
