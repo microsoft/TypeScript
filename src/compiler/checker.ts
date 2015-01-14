@@ -5165,13 +5165,26 @@ module ts {
         function getContextualTypeForObjectLiteralElement(element: ObjectLiteralElement) {
             var objectLiteral = <ObjectLiteralExpression>element.parent;
             var type = getContextualType(objectLiteral);
-            // TODO(jfreeman): Handle this case for computed names and symbols
-            var name = (<Identifier>element.name).text;
-            if (type && name) {
-                return getTypeOfPropertyOfContextualType(type, name) ||
-                    isNumericName(name) && getIndexTypeOfContextualType(type, IndexKind.Number) ||
+            if (type) {
+                if (!hasComputedNameButNotSymbol(element)) {
+                    // For a (non-symbol) computed property, there is no reason to look up the name
+                    // in the type. It will just be "__computed", which does not appear in any
+                    // SymbolTable.
+                    var symbolName = getSymbolOfNode(element).name;
+                    var propertyType = getTypeOfPropertyOfContextualType(type, symbolName);
+                    if (propertyType) {
+                        return propertyType;
+                    }
+                }
+
+                var nameNode = element.name;
+                var propertyHasNumericName = nameNode.kind === SyntaxKind.ComputedPropertyName
+                    ? isNumericComputedName(<ComputedPropertyName>nameNode)
+                    : isNumericName((<Identifier>nameNode).text);
+                return propertyHasNumericName && getIndexTypeOfContextualType(type, IndexKind.Number) ||
                     getIndexTypeOfContextualType(type, IndexKind.String);
             }
+
             return undefined;
         }
 
@@ -5370,6 +5383,10 @@ module ts {
             return createArrayType(getUnionType(elementTypes));
         }
 
+        function isNumericComputedName(name: ComputedPropertyName): boolean {
+            return !!(checkExpression(name.expression).flags & TypeFlags.Number);
+        }
+
         function isNumericName(name: string) {
             // The intent of numeric names is that
             //     - they are names with text in a numeric form, and that
@@ -5395,15 +5412,20 @@ module ts {
             return (+name).toString() === name;
         }
 
-        function checkComputedPropertyName(node: ComputedPropertyName): void {
-            var computedNameType = checkExpression(node.expression);
+        function checkComputedPropertyName(node: ComputedPropertyName): Type {
+            var links = getNodeLinks(node.expression);
+            if (!links.resolvedType) {
+                links.resolvedType = checkExpression(node.expression);
 
-            // This will only allow types number, string, or any. Any types more complex will
-            // be disallowed, even union types like string | number. In the future, we might consider
-            // allowing types like that.
-            if ((computedNameType.flags & (TypeFlags.Number | TypeFlags.String | TypeFlags.Any)) === 0) {
-                error(node, Diagnostics.A_computed_property_name_must_be_of_type_string_number_or_any);
+                // This will only allow types number, string, or any. Any types more complex will
+                // be disallowed, even union types like string | number. In the future, we might consider
+                // allowing types like that.
+                if ((links.resolvedType.flags & (TypeFlags.Number | TypeFlags.String | TypeFlags.Any)) === 0) {
+                    error(node, Diagnostics.A_computed_property_name_must_be_of_type_string_number_or_any);
+                }
             }
+
+            return links.resolvedType;
         }
 
         function checkObjectLiteral(node: ObjectLiteralExpression, contextualMapper?: TypeMapper): Type {
