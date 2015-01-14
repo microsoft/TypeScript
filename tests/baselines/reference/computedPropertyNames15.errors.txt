@@ -1,0 +1,20 @@
+tests/cases/conformance/es6/computedProperties/computedPropertyNames15.ts(5,5): error TS2463: A computed property name must be of type 'string', 'number', or 'any'.
+tests/cases/conformance/es6/computedProperties/computedPropertyNames15.ts(6,5): error TS2463: A computed property name must be of type 'string', 'number', or 'any'.
+tests/cases/conformance/es6/computedProperties/computedPropertyNames15.ts(7,5): error TS2463: A computed property name must be of type 'string', 'number', or 'any'.
+
+
+==== tests/cases/conformance/es6/computedProperties/computedPropertyNames15.ts (3 errors) ====
+    var p1: number | string;
+    var p2: number | number[];
+    var p3: string | boolean;
+    class C {
+        [p1]() { }
+        ~~~~
+!!! error TS2463: A computed property name must be of type 'string', 'number', or 'any'.
+        [p2]() { }
+        ~~~~
+!!! error TS2463: A computed property name must be of type 'string', 'number', or 'any'.
+        [p3]() { }
+        ~~~~
+!!! error TS2463: A computed property name must be of type 'string', 'number', or 'any'.
+    }
