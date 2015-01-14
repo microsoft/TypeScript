@@ -68,7 +68,9 @@ module ts.formatting {
 
     export function formatOnEnter(position: number, sourceFile: SourceFile, rulesProvider: RulesProvider, options: FormatCodeOptions): TextChange[] {
         var line = sourceFile.getLineAndCharacterFromPosition(position).line;
-        Debug.assert(line >= 2);
+        if (line === 1) {
+            return [];
+        }
         // get the span for the previous\current line
         var span = {
             // get start position for the previous line
