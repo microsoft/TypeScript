@@ -8518,7 +8518,6 @@ module ts {
             }
         }
 
-        // TODO(jfreeman): Decide what to do for computed properties
         function checkTypeNameIsReserved(name: DeclarationName, message: DiagnosticMessage): void {
             // TS 1.0 spec (April 2014): 3.6.1
             // The predefined type keywords are reserved and cannot be used as names of user defined types.
@@ -8812,8 +8811,7 @@ module ts {
                 var enumIsConst = isConst(node);
 
                 forEach(node.members, member => {
-                    // TODO(jfreeman): Check that it is not a computed name
-                    if(isNumericName((<Identifier>member.name).text)) {
+                    if (member.name.kind !== SyntaxKind.ComputedPropertyName && isNumericName((<Identifier>member.name).text)) {
                         error(member.name, Diagnostics.An_enum_member_cannot_have_a_numeric_name);
                     }
                     var initializer = member.initializer;
