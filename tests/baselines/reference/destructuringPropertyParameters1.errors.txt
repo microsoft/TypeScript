@@ -1,4 +1,3 @@
-tests/cases/conformance/es6/destructuring/destructuringPropertyParameters1.ts(16,24): error TS1005: ',' expected.
 tests/cases/conformance/es6/destructuring/destructuringPropertyParameters1.ts(22,26): error TS2339: Property 'x' does not exist on type 'C1'.
 tests/cases/conformance/es6/destructuring/destructuringPropertyParameters1.ts(22,35): error TS2339: Property 'y' does not exist on type 'C1'.
 tests/cases/conformance/es6/destructuring/destructuringPropertyParameters1.ts(22,43): error TS2339: Property 'y' does not exist on type 'C1'.
@@ -7,12 +6,14 @@ tests/cases/conformance/es6/destructuring/destructuringPropertyParameters1.ts(25
 tests/cases/conformance/es6/destructuring/destructuringPropertyParameters1.ts(25,35): error TS2339: Property 'y' does not exist on type 'C2'.
 tests/cases/conformance/es6/destructuring/destructuringPropertyParameters1.ts(25,43): error TS2339: Property 'y' does not exist on type 'C2'.
 tests/cases/conformance/es6/destructuring/destructuringPropertyParameters1.ts(25,52): error TS2339: Property 'z' does not exist on type 'C2'.
-tests/cases/conformance/es6/destructuring/destructuringPropertyParameters1.ts(27,10): error TS2346: Supplied parameters do not match any signature of call target.
-tests/cases/conformance/es6/destructuring/destructuringPropertyParameters1.ts(28,6): error TS2346: Supplied parameters do not match any signature of call target.
 tests/cases/conformance/es6/destructuring/destructuringPropertyParameters1.ts(28,23): error TS1005: ':' expected.
+tests/cases/conformance/es6/destructuring/destructuringPropertyParameters1.ts(29,26): error TS2339: Property 'x' does not exist on type 'C3'.
+tests/cases/conformance/es6/destructuring/destructuringPropertyParameters1.ts(29,35): error TS2339: Property 'y' does not exist on type 'C3'.
+tests/cases/conformance/es6/destructuring/destructuringPropertyParameters1.ts(29,43): error TS2339: Property 'y' does not exist on type 'C3'.
+tests/cases/conformance/es6/destructuring/destructuringPropertyParameters1.ts(29,52): error TS2339: Property 'z' does not exist on type 'C3'.
 
 
-==== tests/cases/conformance/es6/destructuring/destructuringPropertyParameters1.ts (12 errors) ====
+==== tests/cases/conformance/es6/destructuring/destructuringPropertyParameters1.ts (13 errors) ====
     class C1 {
         constructor(public [x, y, z]: string[]) {
         }
@@ -29,8 +30,6 @@ tests/cases/conformance/es6/destructuring/destructuringPropertyParameters1.ts(28
     
     class C3 {
         constructor(public { x, y, z }: ObjType1) {
-                           ~
-!!! error TS1005: ',' expected.
         }
     }
     
@@ -58,11 +57,15 @@ tests/cases/conformance/es6/destructuring/destructuringPropertyParameters1.ts(28
 !!! error TS2339: Property 'z' does not exist on type 'C2'.
     
     var c3 = new C3({x: 0, y: "", z: false});
-             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
     c3 = new C3({x: 0, "y", z: true});
-         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
                           ~
 !!! error TS1005: ':' expected.
     var useC3Properties = c3.x === c3.y && c3.y === c3.z;
+                             ~
+!!! error TS2339: Property 'x' does not exist on type 'C3'.
+                                      ~
+!!! error TS2339: Property 'y' does not exist on type 'C3'.
+                                              ~
+!!! error TS2339: Property 'y' does not exist on type 'C3'.
+                                                       ~
+!!! error TS2339: Property 'z' does not exist on type 'C3'.
