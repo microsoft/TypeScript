@@ -11,14 +11,14 @@ var a: (a: string) => string;
 
 // bug 786110
 var r = a || ((a) => a.toLowerCase());
->r : (a: any) => any
->a || ((a) => a.toLowerCase()) : (a: any) => any
+>r : (a: string) => string
+>a || ((a) => a.toLowerCase()) : (a: string) => string
 >a : (a: string) => string
->((a) => a.toLowerCase()) : (a: any) => any
->(a) => a.toLowerCase() : (a: any) => any
->a : any
->a.toLowerCase() : any
->a.toLowerCase : any
->a : any
->toLowerCase : any
+>((a) => a.toLowerCase()) : (a: string) => string
+>(a) => a.toLowerCase() : (a: string) => string
+>a : string
+>a.toLowerCase() : string
+>a.toLowerCase : () => string
+>a : string
+>toLowerCase : () => string
 
