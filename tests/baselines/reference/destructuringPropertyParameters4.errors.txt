@@ -1,0 +1,57 @@
+tests/cases/conformance/es6/destructuring/destructuringPropertyParameters4.ts(4,59): error TS2339: Property 'b' does not exist on type 'C1<T, U, V>'.
+tests/cases/conformance/es6/destructuring/destructuringPropertyParameters4.ts(4,83): error TS2339: Property 'c' does not exist on type 'C1<T, U, V>'.
+tests/cases/conformance/es6/destructuring/destructuringPropertyParameters4.ts(5,18): error TS2339: Property 'a' does not exist on type 'C1<T, U, V>'.
+tests/cases/conformance/es6/destructuring/destructuringPropertyParameters4.ts(10,21): error TS2339: Property 'a' does not exist on type 'C1<T, U, V>'.
+tests/cases/conformance/es6/destructuring/destructuringPropertyParameters4.ts(14,21): error TS2339: Property 'b' does not exist on type 'C1<T, U, V>'.
+tests/cases/conformance/es6/destructuring/destructuringPropertyParameters4.ts(18,21): error TS2339: Property 'c' does not exist on type 'C1<T, U, V>'.
+tests/cases/conformance/es6/destructuring/destructuringPropertyParameters4.ts(24,24): error TS2339: Property 'x' does not exist on type 'C2'.
+tests/cases/conformance/es6/destructuring/destructuringPropertyParameters4.ts(24,34): error TS2339: Property 'y' does not exist on type 'C2'.
+tests/cases/conformance/es6/destructuring/destructuringPropertyParameters4.ts(24,44): error TS2339: Property 'z' does not exist on type 'C2'.
+
+
+==== tests/cases/conformance/es6/destructuring/destructuringPropertyParameters4.ts (9 errors) ====
+    
+    class C1<T, U, V> {
+        constructor(private k: T, protected [a, b, c]: [T,U,V]) {
+            if ((b === undefined && c === undefined) || (this.b === undefined && this.c === undefined)) {
+                                                              ~
+!!! error TS2339: Property 'b' does not exist on type 'C1<T, U, V>'.
+                                                                                      ~
+!!! error TS2339: Property 'c' does not exist on type 'C1<T, U, V>'.
+                this.a = a || k;
+                     ~
+!!! error TS2339: Property 'a' does not exist on type 'C1<T, U, V>'.
+            }
+        }
+    
+        public getA() {
+            return this.a
+                        ~
+!!! error TS2339: Property 'a' does not exist on type 'C1<T, U, V>'.
+        }
+    
+        public getB() {
+            return this.b
+                        ~
+!!! error TS2339: Property 'b' does not exist on type 'C1<T, U, V>'.
+        }
+    
+        public getC() {
+            return this.c;
+                        ~
+!!! error TS2339: Property 'c' does not exist on type 'C1<T, U, V>'.
+        }
+    }
+    
+    class C2 extends C1<number, string, boolean> {
+        public doSomethingWithSuperProperties() {
+            return `${this.x} ${this.y} ${this.z}`;
+                           ~
+!!! error TS2339: Property 'x' does not exist on type 'C2'.
+                                     ~
+!!! error TS2339: Property 'y' does not exist on type 'C2'.
+                                               ~
+!!! error TS2339: Property 'z' does not exist on type 'C2'.
+        }
+    }
+    

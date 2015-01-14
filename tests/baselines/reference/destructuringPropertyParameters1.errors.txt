@@ -1,0 +1,68 @@
+tests/cases/conformance/es6/destructuring/destructuringPropertyParameters1.ts(16,24): error TS1005: ',' expected.
+tests/cases/conformance/es6/destructuring/destructuringPropertyParameters1.ts(22,26): error TS2339: Property 'x' does not exist on type 'C1'.
+tests/cases/conformance/es6/destructuring/destructuringPropertyParameters1.ts(22,35): error TS2339: Property 'y' does not exist on type 'C1'.
+tests/cases/conformance/es6/destructuring/destructuringPropertyParameters1.ts(22,43): error TS2339: Property 'y' does not exist on type 'C1'.
+tests/cases/conformance/es6/destructuring/destructuringPropertyParameters1.ts(22,52): error TS2339: Property 'z' does not exist on type 'C1'.
+tests/cases/conformance/es6/destructuring/destructuringPropertyParameters1.ts(25,26): error TS2339: Property 'x' does not exist on type 'C2'.
+tests/cases/conformance/es6/destructuring/destructuringPropertyParameters1.ts(25,35): error TS2339: Property 'y' does not exist on type 'C2'.
+tests/cases/conformance/es6/destructuring/destructuringPropertyParameters1.ts(25,43): error TS2339: Property 'y' does not exist on type 'C2'.
+tests/cases/conformance/es6/destructuring/destructuringPropertyParameters1.ts(25,52): error TS2339: Property 'z' does not exist on type 'C2'.
+tests/cases/conformance/es6/destructuring/destructuringPropertyParameters1.ts(27,10): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/conformance/es6/destructuring/destructuringPropertyParameters1.ts(28,6): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/conformance/es6/destructuring/destructuringPropertyParameters1.ts(28,23): error TS1005: ':' expected.
+
+
+==== tests/cases/conformance/es6/destructuring/destructuringPropertyParameters1.ts (12 errors) ====
+    class C1 {
+        constructor(public [x, y, z]: string[]) {
+        }
+    }
+    
+    type TupleType1 = [string, number, boolean];
+    
+    class C2 {
+        constructor(public [x, y, z]: TupleType1) {
+        }
+    }
+    
+    type ObjType1 = { x: number; y: string; z: boolean }
+    
+    class C3 {
+        constructor(public { x, y, z }: ObjType1) {
+                           ~
+!!! error TS1005: ',' expected.
+        }
+    }
+    
+    var c1 = new C1([]);
+    c1 = new C1(["larry", "{curly}", "moe"]);
+    var useC1Properties = c1.x === c1.y && c1.y === c1.z;
+                             ~
+!!! error TS2339: Property 'x' does not exist on type 'C1'.
+                                      ~
+!!! error TS2339: Property 'y' does not exist on type 'C1'.
+                                              ~
+!!! error TS2339: Property 'y' does not exist on type 'C1'.
+                                                       ~
+!!! error TS2339: Property 'z' does not exist on type 'C1'.
+    
+    var c2 = new C2(["10", 10, !!10]);
+    var useC2Properties = c2.x === c2.y && c2.y === c2.z;
+                             ~
+!!! error TS2339: Property 'x' does not exist on type 'C2'.
+                                      ~
+!!! error TS2339: Property 'y' does not exist on type 'C2'.
+                                              ~
+!!! error TS2339: Property 'y' does not exist on type 'C2'.
+                                                       ~
+!!! error TS2339: Property 'z' does not exist on type 'C2'.
+    
+    var c3 = new C3({x: 0, y: "", z: false});
+             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2346: Supplied parameters do not match any signature of call target.
+    c3 = new C3({x: 0, "y", z: true});
+         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2346: Supplied parameters do not match any signature of call target.
+                          ~
+!!! error TS1005: ':' expected.
+    var useC3Properties = c3.x === c3.y && c3.y === c3.z;
