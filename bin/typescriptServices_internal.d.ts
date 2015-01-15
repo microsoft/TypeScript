@@ -48,6 +48,7 @@ declare module ts {
     function forEachKey<T, U>(map: Map<T>, callback: (key: string) => U): U;
     function lookUp<T>(map: Map<T>, key: string): T;
     function mapToArray<T>(map: Map<T>): T[];
+    function copyMap<T>(source: Map<T>, target: Map<T>): void;
     /**
      * Creates a map from the elements of an array.
      *
@@ -142,6 +143,14 @@ declare module ts {
     interface StringSymbolWriter extends SymbolWriter {
         string(): string;
     }
+    interface EmitHost extends ScriptReferenceHost {
+        getSourceFiles(): SourceFile[];
+        isEmitBlocked(sourceFile?: SourceFile): boolean;
+        getCommonSourceDirectory(): string;
+        getCanonicalFileName(fileName: string): string;
+        getNewLine(): string;
+        writeFile(filename: string, data: string, writeByteOrderMark: boolean, onError?: (message: string) => void): void;
+    }
     function getSingleLineStringWriter(): StringSymbolWriter;
     function releaseStringWriter(writer: StringSymbolWriter): void;
     function getFullWidth(node: Node): number;
@@ -180,6 +189,7 @@ declare module ts {
     function getSuperContainer(node: Node): Node;
     function getInvokedExpression(node: CallLikeExpression): Expression;
     function isExpression(node: Node): boolean;
+    function isInstantiatedModule(node: ModuleDeclaration, preserveConstEnums: boolean): boolean;
     function isExternalModuleImportDeclaration(node: Node): boolean;
     function getExternalModuleImportDeclarationExpression(node: Node): Expression;
     function isInternalModuleImportDeclaration(node: Node): boolean;
@@ -230,6 +240,10 @@ declare module ts {
      * Vn.
      */
     function collapseTextChangeRangesAcrossMultipleVersions(changes: TextChangeRange[]): TextChangeRange;
+}
+declare module ts {
+    var optionDeclarations: CommandLineOption[];
+    function parseCommandLine(commandLine: string[]): ParsedCommandLine;
 }
 declare module ts {
     interface ListItemInfo {

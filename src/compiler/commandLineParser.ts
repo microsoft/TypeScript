@@ -67,7 +67,7 @@ module ts {
         {
             name: "noImplicitAny",
             type: "boolean",
-            description: Diagnostics.Warn_on_expressions_and_declarations_with_an_implied_any_type,
+            description: Diagnostics.Raise_error_on_expressions_and_declarations_with_an_implied_any_type,
         },
         {
             name: "noLib",
