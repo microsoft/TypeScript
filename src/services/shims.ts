@@ -55,7 +55,6 @@ module ts {
         getLocalizedDiagnosticMessages(): string;
         getCancellationToken(): CancellationToken;
         getCurrentDirectory(): string;
-        getDefaultLibFilename(options: string): string;
     }
 
     ///
@@ -273,10 +272,6 @@ module ts {
 
         public getCancellationToken(): CancellationToken {
             return this.shimHost.getCancellationToken();
-        }
-
-        public getDefaultLibFilename(options: CompilerOptions): string {
-            return this.shimHost.getDefaultLibFilename(JSON.stringify(options));
         }
 
         public getCurrentDirectory(): string {

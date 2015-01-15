@@ -853,7 +853,6 @@ module ts {
         getLocalizedDiagnosticMessages?(): any;
         getCancellationToken?(): CancellationToken;
         getCurrentDirectory(): string;
-        getDefaultLibFilename(options: CompilerOptions): string;
         log? (s: string): void;
         trace? (s: string): void;
         error? (s: string): void;
@@ -1964,21 +1963,14 @@ module ts {
 
         function createCompilerHost(): CompilerHost {
             return {
-                getSourceFile: (filename, languageVersion) => {
-                    return getSourceFile(filename);
-                },
+                getSourceFile: getSourceFile,
                 getCancellationToken: () => cancellationToken,
-                getCanonicalFileName: (filename) => useCaseSensitivefilenames ? filename : filename.toLowerCase(),
+                getCanonicalFileName: filename => useCaseSensitivefilenames ? filename : filename.toLowerCase(),
                 useCaseSensitiveFileNames: () => useCaseSensitivefilenames,
                 getNewLine: () => "\r\n",
-                getDefaultLibFilename: (options): string => {
-                    return host.getDefaultLibFilename(options);
-                },
-                writeFile: (filename, data, writeByteOrderMark) => {
-                },
-                getCurrentDirectory: (): string => {
-                    return host.getCurrentDirectory();
-                }
+                getDefaultLibFilename: getDefaultLibraryFilename,
+                writeFile: (filename, data, writeByteOrderMark) => { },
+                getCurrentDirectory: () => host.getCurrentDirectory()
             };
         }
 

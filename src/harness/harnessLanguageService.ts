@@ -217,10 +217,6 @@ module Harness.LanguageService {
             return "";
         }
 
-        public getDefaultLibFilename(): string {
-            return "";
-        }
-
         public getScriptFileNames(): string {
             var fileNames: string[] = [];
             ts.forEachKey(this.fileNameToScript, (fileName) => { fileNames.push(fileName); });
