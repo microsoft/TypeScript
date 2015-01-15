@@ -39,6 +39,7 @@ module RWC {
                 compilerOptions = undefined;
                 baselineOpts = undefined;
                 baseName = undefined;
+                currentDirectory = undefined;
             });
 
             it('can compile', () => {
