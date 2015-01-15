@@ -1961,19 +1961,6 @@ module ts {
             return ruleProvider;
         }
 
-        function createCompilerHost(): CompilerHost {
-            return {
-                getSourceFile: getSourceFile,
-                getCancellationToken: () => cancellationToken,
-                getCanonicalFileName: filename => useCaseSensitivefilenames ? filename : filename.toLowerCase(),
-                useCaseSensitiveFileNames: () => useCaseSensitivefilenames,
-                getNewLine: () => "\r\n",
-                getDefaultLibFilename: getDefaultLibraryFilename,
-                writeFile: (filename, data, writeByteOrderMark) => { },
-                getCurrentDirectory: () => host.getCurrentDirectory()
-            };
-        }
-
         function sourceFileUpToDate(sourceFile: SourceFile): boolean {
             return sourceFile && sourceFile.version === hostCache.getVersion(sourceFile.filename) && sourceFile.isOpen === hostCache.isOpen(sourceFile.filename);
         }
@@ -2078,7 +2065,16 @@ module ts {
             }
 
             // Now create a new compiler
-            program = createProgram(hostfilenames, compilationSettings, createCompilerHost());
+            program = createProgram(hostfilenames, compilationSettings, {
+                getSourceFile: getSourceFile,
+                getCancellationToken: () => cancellationToken,
+                getCanonicalFileName: filename => useCaseSensitivefilenames ? filename : filename.toLowerCase(),
+                useCaseSensitiveFileNames: () => useCaseSensitivefilenames,
+                getNewLine: () => "\r\n",
+                getDefaultLibFilename: getDefaultLibraryFilename,
+                writeFile: (filename, data, writeByteOrderMark) => { },
+                getCurrentDirectory: () => host.getCurrentDirectory()
+            });
             typeInfoResolver = program.getTypeChecker(/*produceDiagnostics*/ false);
         }
 
