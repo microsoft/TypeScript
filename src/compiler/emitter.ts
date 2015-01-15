@@ -2021,14 +2021,14 @@ module ts {
             }
 
             function emitLiteral(node: LiteralExpression) {
-                var text = compilerOptions.target < ScriptTarget.ES6 && isTemplateLiteralKind(node.kind) ? getTemplateLiteralAsStringLiteral(node) :
+                var text = !(compilerOptions.target >= ScriptTarget.ES6) && isTemplateLiteralKind(node.kind) ? getTemplateLiteralAsStringLiteral(node) :
                     node.parent ? getSourceTextOfNodeFromSourceFile(currentSourceFile, node) :
                     node.text;
                 if (compilerOptions.sourceMap && (node.kind === SyntaxKind.StringLiteral || isTemplateLiteralKind(node.kind))) {
                     writer.writeLiteral(text);
                 }
                 // For version below ES6, emit binary integer literal and octal integer literal in canonical form
-                else if (compilerOptions.target < ScriptTarget.ES6 && node.kind === SyntaxKind.NumericLiteral && isBinaryOrOctalIntegerLiteral(text)) {
+                else if (!(compilerOptions.target >= ScriptTarget.ES6) && node.kind === SyntaxKind.NumericLiteral && isBinaryOrOctalIntegerLiteral(text)) {
                     write(node.text);
                 }
                 else {
@@ -2150,7 +2150,7 @@ module ts {
                     // 
                     // TODO (drosen): Note that we need to account for the upcoming 'yield' and
                     //                spread ('...') unary operators that are anticipated for ES6.
-                    Debug.assert(compilerOptions.target <= ScriptTarget.ES5);
+                    Debug.assert(!(compilerOptions.target >= ScriptTarget.ES6));
                     switch (expression.kind) {
                         case SyntaxKind.BinaryExpression:
                             switch ((<BinaryExpression>expression).operator) {
@@ -2405,7 +2405,7 @@ module ts {
                 }
                 emitLeadingComments(node);
                 emit(node.name);
-                if (compilerOptions.target < ScriptTarget.ES6) {
+                if (!(compilerOptions.target >= ScriptTarget.ES6)) {
                     write(": function ");
                 }
                 emitSignatureAndBody(node);
@@ -2431,7 +2431,7 @@ module ts {
                 //      export var obj = { y };
                 //  }
                 //  The short-hand property in obj need to emit as such ... = { y : m.y } regardless of the TargetScript version
-                if (compilerOptions.target < ScriptTarget.ES6 || resolver.getExpressionNamePrefix(node.name)) {
+                if (!(compilerOptions.target >= ScriptTarget.ES6) || resolver.getExpressionNamePrefix(node.name)) {
                     // Emit identifier as an identifier
                     write(": ");
                     // Even though this is stored as identifier treat it as an expression
@@ -2605,7 +2605,7 @@ module ts {
 
 
             function emitBinaryExpression(node: BinaryExpression) {
-                if (compilerOptions.target < ScriptTarget.ES6 && node.operator === SyntaxKind.EqualsToken &&
+                if (!(compilerOptions.target >= ScriptTarget.ES6) && node.operator === SyntaxKind.EqualsToken &&
                     (node.left.kind === SyntaxKind.ObjectLiteralExpression || node.left.kind === SyntaxKind.ArrayLiteralExpression)) {
                     emitDestructuring(node);
                 }
@@ -3101,7 +3101,7 @@ module ts {
             function emitVariableDeclaration(node: VariableDeclaration) {
                 emitLeadingComments(node);
                 if (isBindingPattern(node.name)) {
-                    if (compilerOptions.target < ScriptTarget.ES6) {
+                    if (!(compilerOptions.target >= ScriptTarget.ES6)) {
                         emitDestructuring(node);
                     }
                     else {
@@ -3136,7 +3136,7 @@ module ts {
 
             function emitParameter(node: ParameterDeclaration) {
                 emitLeadingComments(node);
-                if (compilerOptions.target < ScriptTarget.ES6) {
+                if (!(compilerOptions.target >= ScriptTarget.ES6)) {
                     if (isBindingPattern(node.name)) {
                         var name = createTempVariable(node);
                         if (!tempParameters) {
@@ -3160,7 +3160,7 @@ module ts {
             }
 
             function emitDefaultValueAssignments(node: FunctionLikeDeclaration) {
-                if (compilerOptions.target < ScriptTarget.ES6) {
+                if (!(compilerOptions.target >= ScriptTarget.ES6)) {
                     var tempIndex = 0;
                     forEach(node.parameters, p => {
                         if (isBindingPattern(p.name)) {
@@ -3190,7 +3190,7 @@ module ts {
             }
 
             function emitRestParameter(node: FunctionLikeDeclaration) {
-                if (compilerOptions.target < ScriptTarget.ES6 && hasRestParameters(node)) {
+                if (!(compilerOptions.target >= ScriptTarget.ES6) && hasRestParameters(node)) {
                     var restIndex = node.parameters.length - 1;
                     var restParam = node.parameters[restIndex];
                     var tempName = createTempVariable(node, /*forLoopVariable*/ true).text;
@@ -3269,7 +3269,7 @@ module ts {
                 write("(");
                 if (node) {
                     var parameters = node.parameters;
-                    var omitCount = compilerOptions.target < ScriptTarget.ES6 && hasRestParameters(node) ? 1 : 0;
+                    var omitCount = !(compilerOptions.target >= ScriptTarget.ES6) && hasRestParameters(node) ? 1 : 0;
                     emitList(parameters, 0, parameters.length - omitCount, /*multiLine*/ false, /*trailingComma*/ false);
                 }
                 write(")");

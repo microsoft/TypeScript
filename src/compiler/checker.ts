@@ -6340,7 +6340,7 @@ module ts {
 
         function checkTaggedTemplateExpression(node: TaggedTemplateExpression): Type {
             // Grammar checking
-            if (compilerOptions.target < ScriptTarget.ES6) {
+            if (!(compilerOptions.target >= ScriptTarget.ES6)) {
                 grammarErrorOnFirstToken(node.template, Diagnostics.Tagged_templates_are_only_available_when_targeting_ECMAScript_6_and_higher);
             }
 
@@ -10401,7 +10401,7 @@ module ts {
             return;
 
             var computedPropertyName = <ComputedPropertyName>node;
-            if (compilerOptions.target < ScriptTarget.ES6) {
+            if (!(compilerOptions.target >= ScriptTarget.ES6)) {
                 grammarErrorOnNode(node, Diagnostics.Computed_property_names_are_only_available_when_targeting_ECMAScript_6_and_higher);
             }
             else if (computedPropertyName.expression.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>computedPropertyName.expression).operator === SyntaxKind.CommaToken) {
@@ -10501,7 +10501,7 @@ module ts {
 
         function checkGrammarAccessor(accessor: MethodDeclaration): boolean {
             var kind = accessor.kind;
-            if (compilerOptions.target < ScriptTarget.ES5) {
+            if (!(compilerOptions.target >= ScriptTarget.ES5)) {
                 return grammarErrorOnNode(accessor.name, Diagnostics.Accessors_are_only_available_when_targeting_ECMAScript_5_and_higher);
             }
             else if (isInAmbientContext(accessor)) {
@@ -10706,7 +10706,7 @@ module ts {
                 return grammarErrorAtPos(getSourceFileOfNode(declarationList), declarations.pos, declarations.end - declarations.pos, Diagnostics.Variable_declaration_list_cannot_be_empty);
             }
 
-            if (compilerOptions.target  < ScriptTarget.ES6) {
+            if (!(compilerOptions.target >= ScriptTarget.ES6)) {
                 if (isLet(declarationList)) {
                     return grammarErrorOnFirstToken(declarationList, Diagnostics.let_declarations_are_only_available_when_targeting_ECMAScript_6_and_higher);
                 }
