@@ -14,6 +14,7 @@ module ts {
         createDirectory(directoryName: string): void;
         getExecutingFilePath(): string;
         getCurrentDirectory(): string;
+        readDirectory(path: string, extension?: string): string[];
         getMemoryUsage? (): number;
         exit(exitCode?: number): void;
     }
@@ -27,6 +28,13 @@ module ts {
     declare var process: any;
     declare var global: any;
     declare var __filename: string;
+
+    declare class Enumerator {
+        public atEnd(): boolean;
+        public moveNext(): boolean;
+        public item(): any;
+        constructor(o: any);
+    }
 
     export var sys: System = (function () {
 
@@ -100,6 +108,34 @@ module ts {
                 }
             }
 
+            function getNames(collection: any): string[] {
+                var result: string[] = [];
+                for (var e = new Enumerator(collection); !e.atEnd(); e.moveNext()) {
+                    result.push(e.item().Name);
+                }
+                return result.sort();
+            }
+
+            function readDirectory(path: string, extension?: string): string[] {
+                var result: string[] = [];
+                visitDirectory(path);
+                return result;
+                function visitDirectory(path: string) {
+                    var folder = fso.GetFolder(path || ".");
+                    var files = getNames(folder.files);
+                    for (var i = 0; i < files.length; i++) {
+                        var name = files[i];
+                        if (!extension || fileExtensionIs(name, extension)) {
+                            result.push(combinePaths(path, name));
+                        }
+                    }
+                    var subfolders = getNames(folder.subfolders);
+                    for (var i = 0; i < subfolders.length; i++) {
+                        visitDirectory(combinePaths(path, subfolders[i]));
+                    }
+                }
+            }
+
             return {
                 args,
                 newLine: "\r\n",
@@ -129,6 +165,7 @@ module ts {
                 getCurrentDirectory() {
                     return new ActiveXObject("WScript.Shell").CurrentDirectory;
                 },
+                readDirectory,
                 exit(exitCode?: number): void {
                     try {
                         WScript.Quit(exitCode);
@@ -185,6 +222,31 @@ module ts {
                 _fs.writeFileSync(fileName, data, "utf8");
             }
 
+            function readDirectory(path: string, extension?: string): string[] {
+                var result: string[] = [];
+                visitDirectory(path);
+                return result;
+                function visitDirectory(path: string) {
+                    var files = _fs.readdirSync(path || ".").sort();
+                    var directories: string[] = [];
+                    for (var i = 0; i < files.length; i++) {
+                        var name = combinePaths(path, files[i]);
+                        var stat = _fs.statSync(name);
+                        if (stat.isFile()) {
+                            if (!extension || fileExtensionIs(name, extension)) {
+                                result.push(name);
+                            }
+                        }
+                        else if (stat.isDirectory()) {
+                            directories.push(name);
+                        }
+                    }
+                    for (var i = 0; i < directories.length; i++) {
+                        visitDirectory(directories[i]);
+                    }
+                }
+            }
+
             return {
                 args: process.argv.slice(2),
                 newLine: _os.EOL,
@@ -231,6 +293,7 @@ module ts {
                 getCurrentDirectory() {
                     return process.cwd();
                 },
+                readDirectory,
                 getMemoryUsage() {
                     if (global.gc) {
                         global.gc();

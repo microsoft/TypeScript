@@ -1610,6 +1610,10 @@
         "category": "Error",
         "code": 5023
     },
+    "Compiler option '{0}' requires a value of type {1}.": {
+        "category": "Error",
+        "code": 5024
+    },
     "Could not write file '{0}': {1}": {
         "category": "Error",
         "code": 5033
@@ -1685,6 +1689,10 @@
     "Print the compiler's version.": {
         "category": "Message",
         "code": 6019
+    },
+    "Compile the project in the given directory.": {
+        "category": "Message",
+        "code": 6020
     },
     "Syntax: {0}": {
         "category": "Message",

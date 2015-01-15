@@ -81,6 +81,11 @@ module ts {
         var seenNoDefaultLib = options.noLib;
         var commonSourceDirectory: string;
 
+        //options = extend(options, {
+        //    module: ModuleKind.None,
+        //    target: ScriptTarget.ES3
+        //});
+
         forEach(rootNames, name => processRootFile(name, false));
         if (!seenNoDefaultLib) {
             processRootFile(host.getDefaultLibFilename(options), true);
@@ -146,7 +151,9 @@ module ts {
         function invokeEmitter(targetSourceFile?: SourceFile) {
             var resolver = getDiagnosticsProducingTypeChecker().getEmitResolver();
             return emitFiles(resolver, getEmitHost(), targetSourceFile);
-        }        function getSourceFile(filename: string) {
+        }
+        
+        function getSourceFile(filename: string) {
             filename = host.getCanonicalFileName(filename);
             return hasProperty(filesByName, filename) ? filesByName[filename] : undefined;
         }

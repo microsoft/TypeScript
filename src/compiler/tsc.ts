@@ -126,9 +126,28 @@ module ts {
         reportStatisticalValue(name, (time / 1000).toFixed(2) + "s");
     }
 
+    function findConfigFile(): string {
+        var searchPath = sys.getCurrentDirectory();
+        var filename = "tsconfig.json";
+        while (true) {
+            if (sys.fileExists(filename)) {
+                return filename;
+            }
+            var parentPath = getDirectoryPath(searchPath);
+            if (parentPath === searchPath) {
+                break;
+            }
+            searchPath = parentPath;
+            filename = "../" + filename;
+        }
+        return undefined;
+    }
+
     export function executeCommandLine(args: string[]): void {
         var commandLine = parseCommandLine(args);
         var compilerOptions = commandLine.options;
+        var filenames = commandLine.filenames;
+        var configFilename: string;
 
         if (compilerOptions.locale) {
             if (typeof JSON === "undefined") {
@@ -157,10 +176,35 @@ module ts {
             return sys.exit(EmitReturnStatus.Succeeded);
         }
 
-        if (commandLine.filenames.length === 0) {
+        if (compilerOptions.project) {
+            configFilename = normalizePath(combinePaths(compilerOptions.project, "tsconfig.json"));
+        }
+        else if (filenames.length === 0) {
+            configFilename = findConfigFile();
+        }
+
+        if (commandLine.filenames.length === 0 && !configFilename) {
             printVersion();
             printHelp();
             return sys.exit(EmitReturnStatus.CompilerOptionsErrors);
+        }
+
+        if (configFilename) {
+            var configObject = readConfigFile(configFilename);
+            if (!configObject) {
+                reportDiagnostic(createCompilerDiagnostic(Diagnostics.Unable_to_open_file_0, configFilename));
+                return sys.exit(EmitReturnStatus.CompilerOptionsErrors);
+            }
+
+            var configParseResult = parseConfigFile(configObject, getDirectoryPath(configFilename));
+
+            if (configParseResult.errors.length > 0) {
+                reportDiagnostics(configParseResult.errors);
+                return sys.exit(EmitReturnStatus.CompilerOptionsErrors);
+            }
+
+            compilerOptions = extend(compilerOptions, configParseResult.options);
+            filenames = configParseResult.filenames;
         }
 
         var defaultCompilerHost = createCompilerHost(compilerOptions);
@@ -170,11 +214,10 @@ module ts {
                 reportDiagnostic(createCompilerDiagnostic(Diagnostics.The_current_host_does_not_support_the_0_option, "--watch"));
                 return sys.exit(EmitReturnStatus.CompilerOptionsErrors);
             }
-
-            watchProgram(commandLine, defaultCompilerHost);
+            watchProgram(filenames, compilerOptions, defaultCompilerHost);
         }
         else {
-            var result = compile(commandLine, defaultCompilerHost).exitStatus
+            var result = compile(filenames, compilerOptions, defaultCompilerHost).exitStatus
             return sys.exit(result);
         }
     }
@@ -185,12 +228,12 @@ module ts {
      * 250ms and then perform a recompilation. The reasoning is that in some cases, an editor can
      * save all files at once, and we'd like to just perform a single recompilation.
      */
-    function watchProgram(commandLine: ParsedCommandLine, compilerHost: CompilerHost): void {
+    function watchProgram(filenames: string[], compilerOptions: CompilerOptions, compilerHost: CompilerHost): void {
         var watchers: Map<FileWatcher> = {};
         var updatedFiles: Map<boolean> = {};
 
         // Compile the program the first time and watch all given/referenced files.
-        var program = compile(commandLine, compilerHost).program;
+        var program = compile(filenames, compilerOptions, compilerHost).program;
         reportDiagnostic(createCompilerDiagnostic(Diagnostics.Compilation_complete_Watching_for_file_changes));
         addWatchers(program);
         return;
@@ -257,7 +300,7 @@ module ts {
                 return compilerHost.getSourceFile(fileName, languageVersion, onError);
             };
 
-            program = compile(commandLine, newCompilerHost).program;
+            program = compile(filenames, compilerOptions, newCompilerHost).program;
             reportDiagnostic(createCompilerDiagnostic(Diagnostics.Compilation_complete_Watching_for_file_changes));
             addWatchers(program);
         }
@@ -267,10 +310,9 @@ module ts {
         }
     }
 
-    function compile(commandLine: ParsedCommandLine, compilerHost: CompilerHost) {
+    function compile(filenames: string[], compilerOptions: CompilerOptions, compilerHost: CompilerHost) {
         var parseStart = new Date().getTime();
-        var compilerOptions = commandLine.options;
-        var program = createProgram(commandLine.filenames, compilerOptions, compilerHost);
+        var program = createProgram(filenames, compilerOptions, compilerHost);
 
         var bindStart = new Date().getTime();
         var errors: Diagnostic[] = program.getDiagnostics();
@@ -303,7 +345,14 @@ module ts {
         }
 
         reportDiagnostics(errors);
-        if (commandLine.options.diagnostics) {
+
+        if (compilerOptions.listFiles) {
+            forEach(program.getSourceFiles(), file => {
+                sys.write(file.filename + sys.newLine);
+            });
+        }
+
+        if (compilerOptions.diagnostics) {
             var memoryUsed = sys.getMemoryUsage ? sys.getMemoryUsage() : -1;
             reportCountStatistic("Files", program.getSourceFiles().length);
             reportCountStatistic("Lines", countLines(program));
