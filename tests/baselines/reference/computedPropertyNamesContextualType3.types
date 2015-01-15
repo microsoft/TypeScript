@@ -10,7 +10,7 @@ interface I {
 var o: I = {
 >o : I
 >I : I
->{    [+"foo"](y) { return y.length; },    [+"bar"]: y => y.length} : { [x: string]: undefined; }
+>{    [+"foo"](y) { return y.length; },    [+"bar"]: y => y.length} : { [x: string]: (y: string) => number; }
 
     [+"foo"](y) { return y.length; },
 >+"foo" : number

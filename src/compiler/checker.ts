@@ -1658,7 +1658,7 @@ module ts {
                 // Use type of the specified property, or otherwise, for a numeric name, the type of the numeric index signature,
                 // or otherwise the type of the string index signature.
                 var type = getTypeOfPropertyOfType(parentType, name.text) ||
-                    isNumericName(name.text) && getIndexTypeOfType(parentType, IndexKind.Number) ||
+                    isNumericLiteralName(name.text) && getIndexTypeOfType(parentType, IndexKind.Number) ||
                     getIndexTypeOfType(parentType, IndexKind.String);
                 if (!type) {
                     error(name, Diagnostics.Type_0_has_no_property_1_and_no_string_index_signature, typeToString(parentType), declarationNameToString(name));
@@ -5176,12 +5176,8 @@ module ts {
                         return propertyType;
                     }
                 }
-
-                var nameNode = element.name;
-                var propertyHasNumericName = nameNode.kind === SyntaxKind.ComputedPropertyName
-                    ? isNumericComputedName(<ComputedPropertyName>nameNode)
-                    : isNumericName((<Identifier>nameNode).text);
-                return propertyHasNumericName && getIndexTypeOfContextualType(type, IndexKind.Number) ||
+                
+                return isNumericName(element.name) && getIndexTypeOfContextualType(type, IndexKind.Number) ||
                     getIndexTypeOfContextualType(type, IndexKind.String);
             }
 
@@ -5383,11 +5379,15 @@ module ts {
             return createArrayType(getUnionType(elementTypes));
         }
 
+        function isNumericName(name: DeclarationName): boolean {
+            return name.kind === SyntaxKind.ComputedPropertyName ? isNumericComputedName(<ComputedPropertyName>name) : isNumericLiteralName((<Identifier>name).text);
+        }
+
         function isNumericComputedName(name: ComputedPropertyName): boolean {
             return !!(checkExpression(name.expression).flags & TypeFlags.Number);
         }
 
-        function isNumericName(name: string) {
+        function isNumericLiteralName(name: string) {
             // The intent of numeric names is that
             //     - they are names with text in a numeric form, and that
             //     - setting properties/indexing with them is always equivalent to doing so with the numeric literal 'numLit',
@@ -5490,13 +5490,12 @@ module ts {
             function getIndexType(kind: IndexKind) {
                 if (contextualType && contextualTypeHasIndexSignature(contextualType, kind)) {
                     var propTypes: Type[] = [];
-                    for (var id in properties) {
-                        if (hasProperty(properties, id)) {
-                            if (kind === IndexKind.String || isNumericName(id)) {
-                                var type = getTypeOfSymbol(properties[id]);
-                                if (!contains(propTypes, type)) {
-                                    propTypes.push(type);
-                                }
+                    for (var i = 0; i < node.properties.length; i++) {
+                        var propertyDecl = node.properties[i];
+                        if (kind === IndexKind.String || isNumericName(propertyDecl.name)) {
+                            var type = getTypeOfSymbol(getSymbolOfNode(propertyDecl));
+                            if (!contains(propTypes, type)) {
+                                propTypes.push(type);
                             }
                         }
                     }
@@ -6788,7 +6787,7 @@ module ts {
                     var name = <Identifier>(<PropertyAssignment>p).name;
                     var type = sourceType.flags & TypeFlags.Any ? sourceType :
                         getTypeOfPropertyOfType(sourceType, name.text) ||
-                        isNumericName(name.text) && getIndexTypeOfType(sourceType, IndexKind.Number) ||
+                        isNumericLiteralName(name.text) && getIndexTypeOfType(sourceType, IndexKind.Number) ||
                         getIndexTypeOfType(sourceType, IndexKind.String);
                     if (type) {
                         checkDestructuringAssignment((<PropertyAssignment>p).initializer || name, type);
@@ -8479,7 +8478,7 @@ module ts {
                 }
 
                 // index is numeric and property name is not valid numeric literal
-                if (indexKind === IndexKind.Number && !isNumericName(prop.name)) {
+                if (indexKind === IndexKind.Number && !isNumericLiteralName(prop.name)) {
                     return;
                 }
 
@@ -8833,7 +8832,7 @@ module ts {
                 var enumIsConst = isConst(node);
 
                 forEach(node.members, member => {
-                    if (member.name.kind !== SyntaxKind.ComputedPropertyName && isNumericName((<Identifier>member.name).text)) {
+                    if (member.name.kind !== SyntaxKind.ComputedPropertyName && isNumericLiteralName((<Identifier>member.name).text)) {
                         error(member.name, Diagnostics.An_enum_member_cannot_have_a_numeric_name);
                     }
                     var initializer = member.initializer;
