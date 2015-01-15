@@ -1,0 +1,35 @@
+tests/cases/compiler/conditionallyDuplicateOverloadsCausedByOverloadResolution.ts(5,5): error TS2463: Duplicate overload signature for bar.
+tests/cases/compiler/conditionallyDuplicateOverloadsCausedByOverloadResolution.ts(6,5): error TS2463: Duplicate overload signature for bar.
+tests/cases/compiler/conditionallyDuplicateOverloadsCausedByOverloadResolution.ts(16,9): error TS2463: Duplicate overload signature for call signature.
+tests/cases/compiler/conditionallyDuplicateOverloadsCausedByOverloadResolution.ts(17,9): error TS2463: Duplicate overload signature for call signature.
+
+
+==== tests/cases/compiler/conditionallyDuplicateOverloadsCausedByOverloadResolution.ts (4 errors) ====
+    declare function foo(func: (x: string, y: string) => any): boolean;
+    declare function foo(func: (x: string, y: number) => any): string;
+    
+    var out = foo((x, y) => {
+        function bar(a: typeof x): void;
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for bar.
+        function bar(b: typeof y): void;
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for bar.
+        function bar() { }
+        return bar;
+    });
+    
+    declare function foo2(func: (x: string, y: string) => any): boolean;
+    declare function foo2(func: (x: string, y: number) => any): string;
+    
+    var out2 = foo2((x, y) => {
+        var bar: {
+            (a: typeof x): void;
+            ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for call signature.
+            (b: typeof y): void;
+            ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for call signature.
+        };
+        return bar;
+    });

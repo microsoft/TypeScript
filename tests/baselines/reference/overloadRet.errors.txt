@@ -1,0 +1,19 @@
+tests/cases/compiler/overloadRet.ts(8,5): error TS2463: Duplicate overload signature for i.
+tests/cases/compiler/overloadRet.ts(9,5): error TS2463: Duplicate overload signature for i.
+
+
+==== tests/cases/compiler/overloadRet.ts (2 errors) ====
+    interface I {
+        f(s:string):number;  
+        f(n:number):string;
+        g(n:number):any; 
+        g(n:number,m:number):string;
+        h(n:number):I;  
+        h(b:boolean):number;
+        i(b:boolean):number;
+        ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for i.
+        i(b:boolean):any;
+        ~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for i.
+    }

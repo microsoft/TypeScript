@@ -1,0 +1,391 @@
+tests/cases/compiler/duplicateFunctionDeclaration.ts(1,1): error TS2463: Duplicate overload signature for f1.
+tests/cases/compiler/duplicateFunctionDeclaration.ts(2,1): error TS2463: Duplicate overload signature for f1.
+tests/cases/compiler/duplicateFunctionDeclaration.ts(4,1): error TS2463: Duplicate overload signature for f1A1.
+tests/cases/compiler/duplicateFunctionDeclaration.ts(5,1): error TS2463: Duplicate overload signature for f1A1.
+tests/cases/compiler/duplicateFunctionDeclaration.ts(7,1): error TS2463: Duplicate overload signature for f1A2.
+tests/cases/compiler/duplicateFunctionDeclaration.ts(8,1): error TS2463: Duplicate overload signature for f1A2.
+tests/cases/compiler/duplicateFunctionDeclaration.ts(10,1): error TS2463: Duplicate overload signature for f1A3.
+tests/cases/compiler/duplicateFunctionDeclaration.ts(11,1): error TS2463: Duplicate overload signature for f1A3.
+tests/cases/compiler/duplicateFunctionDeclaration.ts(13,1): error TS2463: Duplicate overload signature for f1A4.
+tests/cases/compiler/duplicateFunctionDeclaration.ts(14,1): error TS2463: Duplicate overload signature for f1A4.
+tests/cases/compiler/duplicateFunctionDeclaration.ts(16,1): error TS2463: Duplicate overload signature for f1A5.
+tests/cases/compiler/duplicateFunctionDeclaration.ts(17,1): error TS2463: Duplicate overload signature for f1A5.
+tests/cases/compiler/duplicateFunctionDeclaration.ts(19,1): error TS2463: Duplicate overload signature for f1A6.
+tests/cases/compiler/duplicateFunctionDeclaration.ts(20,1): error TS2463: Duplicate overload signature for f1A6.
+tests/cases/compiler/duplicateFunctionDeclaration.ts(25,1): error TS2463: Duplicate overload signature for f1A8.
+tests/cases/compiler/duplicateFunctionDeclaration.ts(26,1): error TS2463: Duplicate overload signature for f1A8.
+tests/cases/compiler/duplicateFunctionDeclaration.ts(31,5): error TS2463: Duplicate overload signature for f4.
+tests/cases/compiler/duplicateFunctionDeclaration.ts(32,5): error TS2463: Duplicate overload signature for f4.
+tests/cases/compiler/duplicateFunctionDeclaration.ts(33,5): error TS2463: Duplicate overload signature for f4.
+tests/cases/compiler/duplicateFunctionDeclaration.ts(38,5): error TS2463: Duplicate overload signature for foo.
+tests/cases/compiler/duplicateFunctionDeclaration.ts(39,5): error TS2463: Duplicate overload signature for foo.
+tests/cases/compiler/duplicateFunctionDeclaration.ts(43,5): error TS2463: Duplicate overload signature for foo.
+tests/cases/compiler/duplicateFunctionDeclaration.ts(44,5): error TS2463: Duplicate overload signature for foo.
+tests/cases/compiler/duplicateFunctionDeclaration.ts(48,5): error TS2463: Duplicate overload signature for foo.
+tests/cases/compiler/duplicateFunctionDeclaration.ts(49,5): error TS2463: Duplicate overload signature for foo.
+tests/cases/compiler/duplicateFunctionDeclaration.ts(53,1): error TS2463: Duplicate overload signature for f5.
+tests/cases/compiler/duplicateFunctionDeclaration.ts(54,1): error TS2463: Duplicate overload signature for f5.
+tests/cases/compiler/duplicateFunctionDeclaration.ts(58,5): error TS2463: Duplicate overload signature for call signature.
+tests/cases/compiler/duplicateFunctionDeclaration.ts(59,5): error TS2463: Duplicate overload signature for call signature.
+tests/cases/compiler/duplicateFunctionDeclaration.ts(61,5): error TS2463: Duplicate overload signature for foo.
+tests/cases/compiler/duplicateFunctionDeclaration.ts(62,5): error TS2463: Duplicate overload signature for foo.
+tests/cases/compiler/duplicateFunctionDeclaration.ts(69,1): error TS2463: Duplicate overload signature for f7.
+tests/cases/compiler/duplicateFunctionDeclaration.ts(70,1): error TS2463: Duplicate overload signature for f7.
+tests/cases/compiler/duplicateFunctionDeclaration.ts(89,1): error TS2463: Duplicate overload signature for f8A.
+tests/cases/compiler/duplicateFunctionDeclaration.ts(90,1): error TS2463: Duplicate overload signature for f8A.
+tests/cases/compiler/duplicateFunctionDeclaration.ts(93,1): error TS2463: Duplicate overload signature for f8B.
+tests/cases/compiler/duplicateFunctionDeclaration.ts(94,1): error TS2463: Duplicate overload signature for f8B.
+tests/cases/compiler/duplicateFunctionDeclaration.ts(97,1): error TS2463: Duplicate overload signature for f8C.
+tests/cases/compiler/duplicateFunctionDeclaration.ts(98,1): error TS2463: Duplicate overload signature for f8C.
+tests/cases/compiler/duplicateFunctionDeclaration.ts(109,1): error TS2463: Duplicate overload signature for f8f.
+tests/cases/compiler/duplicateFunctionDeclaration.ts(110,1): error TS2463: Duplicate overload signature for f8f.
+tests/cases/compiler/duplicateFunctionDeclaration.ts(121,1): error TS2463: Duplicate overload signature for f10A.
+tests/cases/compiler/duplicateFunctionDeclaration.ts(122,1): error TS2463: Duplicate overload signature for f10A.
+tests/cases/compiler/duplicateFunctionDeclaration.ts(125,1): error TS2463: Duplicate overload signature for f10B.
+tests/cases/compiler/duplicateFunctionDeclaration.ts(126,1): error TS2463: Duplicate overload signature for f10B.
+tests/cases/compiler/duplicateFunctionDeclaration.ts(130,5): error TS2463: Duplicate overload signature for f11.
+tests/cases/compiler/duplicateFunctionDeclaration.ts(131,5): error TS2463: Duplicate overload signature for f11.
+tests/cases/compiler/duplicateFunctionDeclaration.ts(144,5): error TS2463: Duplicate overload signature for foo.
+tests/cases/compiler/duplicateFunctionDeclaration.ts(145,5): error TS2463: Duplicate overload signature for foo.
+tests/cases/compiler/duplicateFunctionDeclaration.ts(153,1): error TS2463: Duplicate overload signature for f13.
+tests/cases/compiler/duplicateFunctionDeclaration.ts(154,1): error TS2463: Duplicate overload signature for f13.
+tests/cases/compiler/duplicateFunctionDeclaration.ts(158,5): error TS2463: Duplicate overload signature for constructor.
+tests/cases/compiler/duplicateFunctionDeclaration.ts(160,5): error TS2463: Duplicate overload signature for constructor.
+tests/cases/compiler/duplicateFunctionDeclaration.ts(172,5): error TS2463: Duplicate overload signature for constructor.
+tests/cases/compiler/duplicateFunctionDeclaration.ts(173,5): error TS2463: Duplicate overload signature for constructor.
+tests/cases/compiler/duplicateFunctionDeclaration.ts(180,5): error TS2463: Duplicate overload signature for construct signature.
+tests/cases/compiler/duplicateFunctionDeclaration.ts(181,5): error TS2463: Duplicate overload signature for construct signature.
+tests/cases/compiler/duplicateFunctionDeclaration.ts(187,1): error TS2463: Duplicate overload signature for f14A.
+tests/cases/compiler/duplicateFunctionDeclaration.ts(188,1): error TS2463: Duplicate overload signature for f14A.
+tests/cases/compiler/duplicateFunctionDeclaration.ts(193,1): error TS2463: Duplicate overload signature for f14C.
+tests/cases/compiler/duplicateFunctionDeclaration.ts(194,1): error TS2463: Duplicate overload signature for f14C.
+
+
+==== tests/cases/compiler/duplicateFunctionDeclaration.ts (61 errors) ====
+    declare function f1(); // error
+    ~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for f1.
+    declare function f1(); // error
+    ~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for f1.
+    
+    declare function f1A1(a: any); // error
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for f1A1.
+    declare function f1A1(a: any); // error
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for f1A1.
+    
+    declare function f1A2(a: number); // error
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for f1A2.
+    declare function f1A2(a: number); // error
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for f1A2.
+    
+    declare function f1A3(a: string); // error
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for f1A3.
+    declare function f1A3(a: string); // error
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for f1A3.
+    
+    declare function f1A4(a: boolean); // error
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for f1A4.
+    declare function f1A4(a: boolean); // error
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for f1A4.
+    
+    declare function f1A5(a: any): number; // error
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for f1A5.
+    declare function f1A5(a: any): boolean; // error
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for f1A5.
+    
+    declare function f1A6(x): number; // error
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for f1A6.
+    declare function f1A6(x): boolean; // error 
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for f1A6.
+    
+    declare function f1A7(a: any): any; // ok
+    declare function f1A7(a: boolean): any; // ok
+    
+    declare function f1A8(a: boolean): void; // error
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for f1A8.
+    declare function f1A8(a: boolean); // error
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for f1A8.
+    
+    declare function f2(); //ok
+    
+    declare module M1 {
+        function f4(); // error
+        ~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for f4.
+        export function f4(); // error
+        ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for f4.
+        function f4(); // error
+        ~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for f4.
+    }
+    
+    declare module M2 {
+        function f4(); // ok  - not in same block
+        function foo(x);   // error  
+        ~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for foo.
+        function foo(x);   // error 
+        ~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for foo.
+    }
+    
+    interface I1 {
+        foo();   // error  
+        ~~~~~~
+!!! error TS2463: Duplicate overload signature for foo.
+        foo();   // error 
+        ~~~~~~
+!!! error TS2463: Duplicate overload signature for foo.
+    }
+    
+    class C1 {
+        foo();   // error  
+        ~~~~~~
+!!! error TS2463: Duplicate overload signature for foo.
+        foo();   // error 
+        ~~~~~~
+!!! error TS2463: Duplicate overload signature for foo.
+        foo(){}
+    }
+    
+    function f5(x: C1); // error  
+    ~~~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for f5.
+    function f5(x: I1);  // error - Object Type with Identical Set of Members
+    ~~~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for f5.
+    function f5(){}
+    
+    interface I2 {
+        <T>(x: T): void;   //  error - call signature  
+        ~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for call signature.
+        <T>(x: T): void;   //  error - call signature   
+        ~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for call signature.
+    
+        foo<T>(x: T): void;   //  error
+        ~~~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for foo.
+        foo<T>(x: T): void;   //  error 
+        ~~~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for foo.
+    }
+    
+    class C2 {
+        foo<T, U>(x: T, y: U): T { return null; }
+    }  
+    var v1: { foo<T, U>(x: T, y: U): T }
+    function f7(x: C2); // error  
+    ~~~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for f7.
+    function f7(x: typeof v1);  // error - Object Type with Identical Set of Members
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for f7.
+    function f7(){}
+    
+    class C3 {
+        private s: string;
+    }
+    class PC3A extends C3 {
+        public n:number;   // same members
+    }
+    class PC3B extends C3 {
+        public n:number ;  // same members
+    }
+    class PC3C extends C3 {
+        public n:boolean;
+    }
+    function f8(x: C3);  // ok
+    function f8(x: PC3A); // ok - Subclass
+    function f8(a){};
+    
+    function f8A(x: C3):C3;  // error
+    ~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for f8A.
+    function f8A(x: C3):PC3A; // error 
+    ~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for f8A.
+    function f8A(a){ return a;}
+    
+    function f8B(x: C3):C3; // error
+    ~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for f8B.
+    function f8B(x: C3):C3; // error
+    ~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for f8B.
+    function f8B(a){ return a;}
+    
+    function f8C(x: C3, y:PC3A); // error
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for f8C.
+    function f8C(x: C3, y:PC3A); // error
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for f8C.
+    function f8C(a,b){ }
+    
+    function f8d(x: C3, y: PC3A); // ok
+    function f8d(x: PC3A, y: C3); // ok
+    function f8d(a,b){ }
+    
+    function f8e<T extends C3>(x: T): T; // error    
+    function f8e<T extends PC3A>(x: T): T; // error Question - Direct Subclass ?
+    function f8e<C3>(a){}
+    
+    function f8f<T extends PC3A>(x: T): T; // error - sub class, same members  
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for f8f.
+    function f8f<T extends PC3B>(x: T): T; // error - sub class, same members   
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for f8f.
+    function f8f<PC3A>(a){ }
+    
+    function f8g<T extends PC3C>(x: T): T; // ok 
+    function f8g<T extends PC3B>(x: T): T; // ok
+    function f8g<C3>(a){ }
+    
+    function f9<T extends Number>(x: T): T; // ok  
+    function f9<T extends String>(x: T): T; // ok   
+    function f9<String>(a){ }
+    
+    function f10A<T>(x: T); // error
+    ~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for f10A.
+    function f10A<T>(x: T); // error
+    ~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for f10A.
+    function f10A<T>(x: T) { }
+    
+    function f10B<T>(x: T); // error
+    ~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for f10B.
+    function f10B<Y>(z: Y); // error
+    ~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for f10B.
+    function f10B(a){ }
+    
+    class C4<T> {
+        f11(x: T); // error, same T
+        ~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for f11.
+        f11(x: T); // error, same T
+        ~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for f11.
+        f11(x: T) { }
+    }
+    
+    class C5 {
+        private foo(n: number);
+        private foo(n: Array<number>); // ok
+        private foo(n): void {}
+    }
+    
+    declare function f12(func: (x: string, y: string) => any): boolean;
+    declare function f12(func: (x: string, y: number) => any): string;
+    var out = f12((x, y) => {
+        function foo(a: typeof x): void; // error 
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for foo.
+        function foo(b: typeof y): void; // error  - type of y is first type = string
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for foo.
+        function foo() { }
+        return foo;
+    });
+    
+    class C10<T> { private x: T; }
+    interface I10A { f(): string; }
+    interface I10B { f(): string; }
+    function f13(a: C10<I10A>); // error
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for f13.
+    function f13(b: C10<I10B>); // error  - same members
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for f13.
+    function f13(a: C10<I10A>){}
+    
+    class C11 {
+        constructor(s: string);
+        ~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for constructor.
+        constructor(n: number);
+        constructor(s: string); // error - constructor
+        ~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for constructor.
+        constructor(x: any) { } 
+    }
+    
+    class C11A {
+        constructor(s: string);
+        constructor(n: number);
+        constructor(s?: string); // ok ? optional parameter constructor
+        constructor(x: any) { } 
+    }
+    
+    class C12<T> {
+        constructor(x: T, y: string);
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for constructor.
+        constructor(x: T, y: string); // error - constructor
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for constructor.
+        constructor(x: T) { }
+    }
+    
+    var r2 = new C12(1, '');
+    
+    interface I {
+        new (x: number, y: string); // error
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for construct signature.
+        new (x: number, y: string); // error - construct signature
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for construct signature.
+    }
+    
+    type PrimitiveArray = Array<string|number|boolean>;
+    type MyNumber = number;
+    
+    declare function f14A(x:PrimitiveArray); // error
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for f14A.
+    declare function f14A(x:Array<string|number|boolean>); // error
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for f14A.
+    
+    declare function f14B(x:PrimitiveArray); // ok
+    declare function f14B(x:Array<string>); // ok
+    
+    declare function f14C(x:number); // error
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for f14C.
+    declare function f14C(x:MyNumber); // error
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for f14C.
+    
+    declare enum E1 {
+        A = 1,
+        B,
+        C
+    }
+    
+    function f15(e: E1);
+    function f15(e: number); //ok
+    function f15(e){}
+    

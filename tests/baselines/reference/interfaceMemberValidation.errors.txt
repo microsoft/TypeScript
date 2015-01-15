@@ -2,10 +2,14 @@ tests/cases/compiler/interfaceMemberValidation.ts(2,11): error TS2430: Interface
   Types of property 'name' are incompatible.
     Type 'number' is not assignable to type 'string'.
 tests/cases/compiler/interfaceMemberValidation.ts(5,2): error TS2411: Property 'bar' of type '{ (): any; (): any; }' is not assignable to string index type 'number'.
+tests/cases/compiler/interfaceMemberValidation.ts(5,2): error TS2463: Duplicate overload signature for bar.
+tests/cases/compiler/interfaceMemberValidation.ts(6,2): error TS2463: Duplicate overload signature for bar.
+tests/cases/compiler/interfaceMemberValidation.ts(7,2): error TS2463: Duplicate overload signature for construct signature.
+tests/cases/compiler/interfaceMemberValidation.ts(8,2): error TS2463: Duplicate overload signature for construct signature.
 tests/cases/compiler/interfaceMemberValidation.ts(10,2): error TS2374: Duplicate string index signature.
 
 
-==== tests/cases/compiler/interfaceMemberValidation.ts (3 errors) ====
+==== tests/cases/compiler/interfaceMemberValidation.ts (7 errors) ====
     interface i1 { name: string; }
     interface i2 extends i1 { name: number; yo: string; }
               ~~
@@ -17,9 +21,17 @@ tests/cases/compiler/interfaceMemberValidation.ts(10,2): error TS2374: Duplicate
      bar():any;
      ~~~~~~~~~~
 !!! error TS2411: Property 'bar' of type '{ (): any; (): any; }' is not assignable to string index type 'number'.
+     ~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for bar.
      bar():any;
+     ~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for bar.
      new():void;
+     ~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for construct signature.
      new():void;
+     ~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for construct signature.
      [s:string]:number;
      [s:string]:number;
      ~~~~~~~~~~~~~~~~~~

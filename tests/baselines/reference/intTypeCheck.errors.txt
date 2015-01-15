@@ -1,4 +1,14 @@
+tests/cases/compiler/intTypeCheck.ts(14,5): error TS2463: Duplicate overload signature for call signature.
+tests/cases/compiler/intTypeCheck.ts(15,5): error TS2463: Duplicate overload signature for call signature.
+tests/cases/compiler/intTypeCheck.ts(25,5): error TS2463: Duplicate overload signature for construct signature.
+tests/cases/compiler/intTypeCheck.ts(26,5): error TS2463: Duplicate overload signature for construct signature.
+tests/cases/compiler/intTypeCheck.ts(49,5): error TS2463: Duplicate overload signature for call signature.
+tests/cases/compiler/intTypeCheck.ts(50,5): error TS2463: Duplicate overload signature for call signature.
+tests/cases/compiler/intTypeCheck.ts(61,5): error TS2463: Duplicate overload signature for construct signature.
+tests/cases/compiler/intTypeCheck.ts(62,5): error TS2463: Duplicate overload signature for construct signature.
+tests/cases/compiler/intTypeCheck.ts(82,5): error TS2463: Duplicate overload signature for p7.
 tests/cases/compiler/intTypeCheck.ts(83,5): error TS2386: Overload signatures must all be optional or required.
+tests/cases/compiler/intTypeCheck.ts(83,5): error TS2463: Duplicate overload signature for p7.
 tests/cases/compiler/intTypeCheck.ts(97,5): error TS2322: Type 'Object' is not assignable to type 'i1'.
   Property 'p' is missing in type 'Object'.
 tests/cases/compiler/intTypeCheck.ts(98,16): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
@@ -85,7 +95,7 @@ tests/cases/compiler/intTypeCheck.ts(202,22): error TS2304: Cannot find name 'i8
 tests/cases/compiler/intTypeCheck.ts(203,17): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
 
 
-==== tests/cases/compiler/intTypeCheck.ts (67 errors) ====
+==== tests/cases/compiler/intTypeCheck.ts (77 errors) ====
     interface i1 {
         //Property Signatures
         p;
@@ -100,7 +110,11 @@ tests/cases/compiler/intTypeCheck.ts(203,17): error TS2351: Cannot use 'new' wit
     interface i2 {
         //Call Signatures
         ();
+        ~~~
+!!! error TS2463: Duplicate overload signature for call signature.
         (): number;
+        ~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for call signature.
         (p);
         (p1: string);
         (p2?: string);
@@ -111,7 +125,11 @@ tests/cases/compiler/intTypeCheck.ts(203,17): error TS2351: Cannot use 'new' wit
     interface i3 {
         //Construct Signatures
         new ();
+        ~~~~~~~
+!!! error TS2463: Duplicate overload signature for construct signature.
         new (): number;
+        ~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for construct signature.
         new (p: string);
         new (p2?: string);
         new (...p3: any[]);
@@ -135,7 +153,11 @@ tests/cases/compiler/intTypeCheck.ts(203,17): error TS2351: Cannot use 'new' wit
     interface i11 {
         //Call Signatures
         ();
+        ~~~
+!!! error TS2463: Duplicate overload signature for call signature.
         (): number;
+        ~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for call signature.
         (p);
         (p1: string);
         (p2?: string);
@@ -147,7 +169,11 @@ tests/cases/compiler/intTypeCheck.ts(203,17): error TS2351: Cannot use 'new' wit
     
         //Construct Signatures
         new ();
+        ~~~~~~~
+!!! error TS2463: Duplicate overload signature for construct signature.
         new (): number;
+        ~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for construct signature.
         new (p: string);
         new (p2?: string);
         new (...p3: any[]);
@@ -168,9 +194,13 @@ tests/cases/compiler/intTypeCheck.ts(203,17): error TS2351: Cannot use 'new' wit
         p5? (): void;
         p6(pa1): void;
         p7(pa1, pa2): void;
+        ~~~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for p7.
         p7? (pa1, pa2): void;
         ~~
 !!! error TS2386: Overload signatures must all be optional or required.
+        ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for p7.
     }
     
     var anyVar: any;

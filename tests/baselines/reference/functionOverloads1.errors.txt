@@ -1,9 +1,15 @@
+tests/cases/compiler/functionOverloads1.ts(1,1): error TS2463: Duplicate overload signature for foo.
 tests/cases/compiler/functionOverloads1.ts(1,10): error TS2391: Function implementation is missing or not immediately following the declaration.
+tests/cases/compiler/functionOverloads1.ts(3,1): error TS2463: Duplicate overload signature for foo.
 
 
-==== tests/cases/compiler/functionOverloads1.ts (1 errors) ====
+==== tests/cases/compiler/functionOverloads1.ts (3 errors) ====
     function foo();
+    ~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for foo.
              ~~~
 !!! error TS2391: Function implementation is missing or not immediately following the declaration.
     1+1;
     function foo():string { return "a" }
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for foo.

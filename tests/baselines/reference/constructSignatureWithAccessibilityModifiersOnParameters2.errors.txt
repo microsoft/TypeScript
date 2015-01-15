@@ -8,17 +8,25 @@ tests/cases/conformance/types/objectTypeLiteral/callSignatures/constructSignatur
 tests/cases/conformance/types/objectTypeLiteral/callSignatures/constructSignatureWithAccessibilityModifiersOnParameters2.ts(9,25): error TS2300: Duplicate identifier 'x'.
 tests/cases/conformance/types/objectTypeLiteral/callSignatures/constructSignatureWithAccessibilityModifiersOnParameters2.ts(10,24): error TS2300: Duplicate identifier 'x'.
 tests/cases/conformance/types/objectTypeLiteral/callSignatures/constructSignatureWithAccessibilityModifiersOnParameters2.ts(14,17): error TS2369: A parameter property is only allowed in a constructor implementation.
+tests/cases/conformance/types/objectTypeLiteral/callSignatures/constructSignatureWithAccessibilityModifiersOnParameters2.ts(19,5): error TS2463: Duplicate overload signature for construct signature.
 tests/cases/conformance/types/objectTypeLiteral/callSignatures/constructSignatureWithAccessibilityModifiersOnParameters2.ts(19,10): error TS2369: A parameter property is only allowed in a constructor implementation.
+tests/cases/conformance/types/objectTypeLiteral/callSignatures/constructSignatureWithAccessibilityModifiersOnParameters2.ts(20,5): error TS2463: Duplicate overload signature for construct signature.
 tests/cases/conformance/types/objectTypeLiteral/callSignatures/constructSignatureWithAccessibilityModifiersOnParameters2.ts(20,10): error TS2369: A parameter property is only allowed in a constructor implementation.
+tests/cases/conformance/types/objectTypeLiteral/callSignatures/constructSignatureWithAccessibilityModifiersOnParameters2.ts(24,5): error TS2463: Duplicate overload signature for construct signature.
 tests/cases/conformance/types/objectTypeLiteral/callSignatures/constructSignatureWithAccessibilityModifiersOnParameters2.ts(24,10): error TS2369: A parameter property is only allowed in a constructor implementation.
+tests/cases/conformance/types/objectTypeLiteral/callSignatures/constructSignatureWithAccessibilityModifiersOnParameters2.ts(25,5): error TS2463: Duplicate overload signature for construct signature.
 tests/cases/conformance/types/objectTypeLiteral/callSignatures/constructSignatureWithAccessibilityModifiersOnParameters2.ts(25,10): error TS2369: A parameter property is only allowed in a constructor implementation.
+tests/cases/conformance/types/objectTypeLiteral/callSignatures/constructSignatureWithAccessibilityModifiersOnParameters2.ts(29,5): error TS2463: Duplicate overload signature for construct signature.
 tests/cases/conformance/types/objectTypeLiteral/callSignatures/constructSignatureWithAccessibilityModifiersOnParameters2.ts(29,10): error TS2369: A parameter property is only allowed in a constructor implementation.
+tests/cases/conformance/types/objectTypeLiteral/callSignatures/constructSignatureWithAccessibilityModifiersOnParameters2.ts(30,5): error TS2463: Duplicate overload signature for construct signature.
 tests/cases/conformance/types/objectTypeLiteral/callSignatures/constructSignatureWithAccessibilityModifiersOnParameters2.ts(30,10): error TS2369: A parameter property is only allowed in a constructor implementation.
+tests/cases/conformance/types/objectTypeLiteral/callSignatures/constructSignatureWithAccessibilityModifiersOnParameters2.ts(34,5): error TS2463: Duplicate overload signature for construct signature.
 tests/cases/conformance/types/objectTypeLiteral/callSignatures/constructSignatureWithAccessibilityModifiersOnParameters2.ts(34,10): error TS2369: A parameter property is only allowed in a constructor implementation.
+tests/cases/conformance/types/objectTypeLiteral/callSignatures/constructSignatureWithAccessibilityModifiersOnParameters2.ts(35,5): error TS2463: Duplicate overload signature for construct signature.
 tests/cases/conformance/types/objectTypeLiteral/callSignatures/constructSignatureWithAccessibilityModifiersOnParameters2.ts(35,10): error TS2369: A parameter property is only allowed in a constructor implementation.
 
 
-==== tests/cases/conformance/types/objectTypeLiteral/callSignatures/constructSignatureWithAccessibilityModifiersOnParameters2.ts (18 errors) ====
+==== tests/cases/conformance/types/objectTypeLiteral/callSignatures/constructSignatureWithAccessibilityModifiersOnParameters2.ts (26 errors) ====
     // Parameter properties are not valid in overloads of constructors
     
     class C {
@@ -58,36 +66,52 @@ tests/cases/conformance/types/objectTypeLiteral/callSignatures/constructSignatur
     
     interface I {
         new (public x);
+        ~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for construct signature.
              ~~~~~~~~
 !!! error TS2369: A parameter property is only allowed in a constructor implementation.
         new (public x);
+        ~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for construct signature.
              ~~~~~~~~
 !!! error TS2369: A parameter property is only allowed in a constructor implementation.
     }
     
     interface I2 {
         new (private x);
+        ~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for construct signature.
              ~~~~~~~~~
 !!! error TS2369: A parameter property is only allowed in a constructor implementation.
         new (private x);
+        ~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for construct signature.
              ~~~~~~~~~
 !!! error TS2369: A parameter property is only allowed in a constructor implementation.
     }
     
     var a: {
         new (public x);
+        ~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for construct signature.
              ~~~~~~~~
 !!! error TS2369: A parameter property is only allowed in a constructor implementation.
         new (public y);
+        ~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for construct signature.
              ~~~~~~~~
 !!! error TS2369: A parameter property is only allowed in a constructor implementation.
     }
     
     var b: {
         new (private x);
+        ~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for construct signature.
              ~~~~~~~~~
 !!! error TS2369: A parameter property is only allowed in a constructor implementation.
         new (private y);
+        ~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for construct signature.
              ~~~~~~~~~
 !!! error TS2369: A parameter property is only allowed in a constructor implementation.
     }

@@ -1,0 +1,69 @@
+tests/cases/compiler/genericOverloadSignatures.ts(2,5): error TS2463: Duplicate overload signature for call signature.
+tests/cases/compiler/genericOverloadSignatures.ts(3,5): error TS2463: Duplicate overload signature for call signature.
+tests/cases/compiler/genericOverloadSignatures.ts(6,1): error TS2463: Duplicate overload signature for f.
+tests/cases/compiler/genericOverloadSignatures.ts(7,1): error TS2463: Duplicate overload signature for f.
+tests/cases/compiler/genericOverloadSignatures.ts(11,5): error TS2463: Duplicate overload signature for f.
+tests/cases/compiler/genericOverloadSignatures.ts(12,5): error TS2463: Duplicate overload signature for f.
+tests/cases/compiler/genericOverloadSignatures.ts(16,5): error TS2463: Duplicate overload signature for f.
+tests/cases/compiler/genericOverloadSignatures.ts(17,5): error TS2463: Duplicate overload signature for f.
+tests/cases/compiler/genericOverloadSignatures.ts(23,5): error TS2463: Duplicate overload signature for construct signature.
+tests/cases/compiler/genericOverloadSignatures.ts(24,5): error TS2463: Duplicate overload signature for construct signature.
+tests/cases/compiler/genericOverloadSignatures.ts(28,5): error TS2463: Duplicate overload signature for call signature.
+tests/cases/compiler/genericOverloadSignatures.ts(29,5): error TS2463: Duplicate overload signature for call signature.
+
+
+==== tests/cases/compiler/genericOverloadSignatures.ts (12 errors) ====
+    interface A {
+        <T>(x: T): void;
+        ~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for call signature.
+        <T>(x: T): void;
+        ~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for call signature.
+    }
+    
+    function f<T>(a: T);
+    ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for f.
+    function f<T>(a: T);
+    ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for f.
+    function f(a) { }
+    
+    interface I2 {
+        f<T>(x: T): number;
+        ~~~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for f.
+        f<T>(x: T): string;
+        ~~~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for f.
+    }
+    
+    interface I3<T> {
+        f(x: T): number;
+        ~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for f.
+        f(x: T): string;
+        ~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for f.
+    }
+    
+    class C2<T> {
+    }
+    var b: {
+        new <T>(x: T, y: string): C2<T>;
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for construct signature.
+        new <T>(x: T, y: string): C2<T>;
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for construct signature.
+    }
+    
+    interface D {
+        <T>(x: T): T;
+        ~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for call signature.
+        <T>(x: T): T;
+        ~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for call signature.
+    }

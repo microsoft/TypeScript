@@ -1,0 +1,13 @@
+tests/cases/compiler/functionOverloads12.ts(1,1): error TS2463: Duplicate overload signature for foo.
+tests/cases/compiler/functionOverloads12.ts(2,1): error TS2463: Duplicate overload signature for foo.
+
+
+==== tests/cases/compiler/functionOverloads12.ts (2 errors) ====
+    function foo():string;
+    ~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for foo.
+    function foo():number;
+    ~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for foo.
+    function foo():any { if (true) return ""; else return 0;}
+    

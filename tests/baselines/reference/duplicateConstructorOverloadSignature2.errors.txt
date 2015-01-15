@@ -1,0 +1,14 @@
+tests/cases/compiler/duplicateConstructorOverloadSignature2.ts(2,5): error TS2463: Duplicate overload signature for constructor.
+tests/cases/compiler/duplicateConstructorOverloadSignature2.ts(3,5): error TS2463: Duplicate overload signature for constructor.
+
+
+==== tests/cases/compiler/duplicateConstructorOverloadSignature2.ts (2 errors) ====
+    class C<T> {
+        constructor(x: T);
+        ~~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for constructor.
+        constructor(x: T);
+        ~~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for constructor.
+        constructor(x: any) { }
+    }

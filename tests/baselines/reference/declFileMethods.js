@@ -457,3 +457,136 @@ interface I2 {
     fooWithOverloads(a: string): string;
     fooWithOverloads(a: number): number;
 }
+
+
+//// [DtsFileErrors]
+
+
+tests/cases/compiler/declFileMethods_0.d.ts(18,5): error TS2463: Duplicate overload signature for privateFooWithOverloads.
+tests/cases/compiler/declFileMethods_0.d.ts(19,5): error TS2463: Duplicate overload signature for privateFooWithOverloads.
+tests/cases/compiler/declFileMethods_0.d.ts(36,5): error TS2463: Duplicate overload signature for privateStaticFooWithOverloads.
+tests/cases/compiler/declFileMethods_0.d.ts(37,5): error TS2463: Duplicate overload signature for privateStaticFooWithOverloads.
+tests/cases/compiler/declFileMethods_1.d.ts(18,5): error TS2463: Duplicate overload signature for privateFooWithOverloads.
+tests/cases/compiler/declFileMethods_1.d.ts(19,5): error TS2463: Duplicate overload signature for privateFooWithOverloads.
+tests/cases/compiler/declFileMethods_1.d.ts(36,5): error TS2463: Duplicate overload signature for privateStaticFooWithOverloads.
+tests/cases/compiler/declFileMethods_1.d.ts(37,5): error TS2463: Duplicate overload signature for privateStaticFooWithOverloads.
+
+
+==== tests/cases/compiler/declFileMethods_0.d.ts (4 errors) ====
+    export declare class c1 {
+        /** This comment should appear for foo*/
+        foo(): void;
+        /** This is comment for function signature*/
+        fooWithParameters(/** this is comment about a*/ a: string, 
+            /** this is comment for b*/
+            b: number): void;
+        fooWithRestParameters(a: string, ...rests: string[]): string;
+        fooWithOverloads(a: string): string;
+        fooWithOverloads(a: number): number;
+        /** This comment should appear for privateFoo*/
+        private privateFoo();
+        /** This is comment for function signature*/
+        private privateFooWithParameters(/** this is comment about a*/ a, 
+            /** this is comment for b*/
+            b);
+        private privateFooWithRestParameters(a, ...rests);
+        private privateFooWithOverloads(a);
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for privateFooWithOverloads.
+        private privateFooWithOverloads(a);
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for privateFooWithOverloads.
+        /** This comment should appear for static foo*/
+        static staticFoo(): void;
+        /** This is comment for function signature*/
+        static staticFooWithParameters(/** this is comment about a*/ a: string, 
+            /** this is comment for b*/
+            b: number): void;
+        static staticFooWithRestParameters(a: string, ...rests: string[]): string;
+        static staticFooWithOverloads(a: string): string;
+        static staticFooWithOverloads(a: number): number;
+        /** This comment should appear for privateStaticFoo*/
+        private static privateStaticFoo();
+        /** This is comment for function signature*/
+        private static privateStaticFooWithParameters(/** this is comment about a*/ a, 
+            /** this is comment for b*/
+            b);
+        private static privateStaticFooWithRestParameters(a, ...rests);
+        private static privateStaticFooWithOverloads(a);
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for privateStaticFooWithOverloads.
+        private static privateStaticFooWithOverloads(a);
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for privateStaticFooWithOverloads.
+    }
+    export interface I1 {
+        /** This comment should appear for foo*/
+        foo(): string;
+        /** This is comment for function signature*/
+        fooWithParameters(/** this is comment about a*/ a: string, 
+            /** this is comment for b*/
+            b: number): void;
+        fooWithRestParameters(a: string, ...rests: string[]): string;
+        fooWithOverloads(a: string): string;
+        fooWithOverloads(a: number): number;
+    }
+    
+==== tests/cases/compiler/declFileMethods_1.d.ts (4 errors) ====
+    declare class c2 {
+        /** This comment should appear for foo*/
+        foo(): void;
+        /** This is comment for function signature*/
+        fooWithParameters(/** this is comment about a*/ a: string, 
+            /** this is comment for b*/
+            b: number): void;
+        fooWithRestParameters(a: string, ...rests: string[]): string;
+        fooWithOverloads(a: string): string;
+        fooWithOverloads(a: number): number;
+        /** This comment should appear for privateFoo*/
+        private privateFoo();
+        /** This is comment for function signature*/
+        private privateFooWithParameters(/** this is comment about a*/ a, 
+            /** this is comment for b*/
+            b);
+        private privateFooWithRestParameters(a, ...rests);
+        private privateFooWithOverloads(a);
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for privateFooWithOverloads.
+        private privateFooWithOverloads(a);
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for privateFooWithOverloads.
+        /** This comment should appear for static foo*/
+        static staticFoo(): void;
+        /** This is comment for function signature*/
+        static staticFooWithParameters(/** this is comment about a*/ a: string, 
+            /** this is comment for b*/
+            b: number): void;
+        static staticFooWithRestParameters(a: string, ...rests: string[]): string;
+        static staticFooWithOverloads(a: string): string;
+        static staticFooWithOverloads(a: number): number;
+        /** This comment should appear for privateStaticFoo*/
+        private static privateStaticFoo();
+        /** This is comment for function signature*/
+        private static privateStaticFooWithParameters(/** this is comment about a*/ a, 
+            /** this is comment for b*/
+            b);
+        private static privateStaticFooWithRestParameters(a, ...rests);
+        private static privateStaticFooWithOverloads(a);
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for privateStaticFooWithOverloads.
+        private static privateStaticFooWithOverloads(a);
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for privateStaticFooWithOverloads.
+    }
+    interface I2 {
+        /** This comment should appear for foo*/
+        foo(): string;
+        /** This is comment for function signature*/
+        fooWithParameters(/** this is comment about a*/ a: string, 
+            /** this is comment for b*/
+            b: number): void;
+        fooWithRestParameters(a: string, ...rests: string[]): string;
+        fooWithOverloads(a: string): string;
+        fooWithOverloads(a: number): number;
+    }
+    

@@ -1,0 +1,197 @@
+tests/cases/conformance/types/typeRelationships/typeAndMemberIdentity/objectTypesIdentityWithCallSignaturesWithOverloads.ts(42,1): error TS2463: Duplicate overload signature for foo1.
+tests/cases/conformance/types/typeRelationships/typeAndMemberIdentity/objectTypesIdentityWithCallSignaturesWithOverloads.ts(43,1): error TS2463: Duplicate overload signature for foo1.
+tests/cases/conformance/types/typeRelationships/typeAndMemberIdentity/objectTypesIdentityWithCallSignaturesWithOverloads.ts(46,1): error TS2463: Duplicate overload signature for foo1b.
+tests/cases/conformance/types/typeRelationships/typeAndMemberIdentity/objectTypesIdentityWithCallSignaturesWithOverloads.ts(47,1): error TS2463: Duplicate overload signature for foo1b.
+tests/cases/conformance/types/typeRelationships/typeAndMemberIdentity/objectTypesIdentityWithCallSignaturesWithOverloads.ts(50,1): error TS2463: Duplicate overload signature for foo1c.
+tests/cases/conformance/types/typeRelationships/typeAndMemberIdentity/objectTypesIdentityWithCallSignaturesWithOverloads.ts(51,1): error TS2463: Duplicate overload signature for foo1c.
+tests/cases/conformance/types/typeRelationships/typeAndMemberIdentity/objectTypesIdentityWithCallSignaturesWithOverloads.ts(54,1): error TS2463: Duplicate overload signature for foo2.
+tests/cases/conformance/types/typeRelationships/typeAndMemberIdentity/objectTypesIdentityWithCallSignaturesWithOverloads.ts(55,1): error TS2463: Duplicate overload signature for foo2.
+tests/cases/conformance/types/typeRelationships/typeAndMemberIdentity/objectTypesIdentityWithCallSignaturesWithOverloads.ts(58,1): error TS2463: Duplicate overload signature for foo3.
+tests/cases/conformance/types/typeRelationships/typeAndMemberIdentity/objectTypesIdentityWithCallSignaturesWithOverloads.ts(59,1): error TS2463: Duplicate overload signature for foo3.
+tests/cases/conformance/types/typeRelationships/typeAndMemberIdentity/objectTypesIdentityWithCallSignaturesWithOverloads.ts(62,1): error TS2463: Duplicate overload signature for foo4.
+tests/cases/conformance/types/typeRelationships/typeAndMemberIdentity/objectTypesIdentityWithCallSignaturesWithOverloads.ts(63,1): error TS2463: Duplicate overload signature for foo4.
+tests/cases/conformance/types/typeRelationships/typeAndMemberIdentity/objectTypesIdentityWithCallSignaturesWithOverloads.ts(66,1): error TS2463: Duplicate overload signature for foo5.
+tests/cases/conformance/types/typeRelationships/typeAndMemberIdentity/objectTypesIdentityWithCallSignaturesWithOverloads.ts(67,1): error TS2463: Duplicate overload signature for foo5.
+tests/cases/conformance/types/typeRelationships/typeAndMemberIdentity/objectTypesIdentityWithCallSignaturesWithOverloads.ts(74,1): error TS2463: Duplicate overload signature for foo6.
+tests/cases/conformance/types/typeRelationships/typeAndMemberIdentity/objectTypesIdentityWithCallSignaturesWithOverloads.ts(75,1): error TS2463: Duplicate overload signature for foo6.
+tests/cases/conformance/types/typeRelationships/typeAndMemberIdentity/objectTypesIdentityWithCallSignaturesWithOverloads.ts(78,1): error TS2463: Duplicate overload signature for foo7.
+tests/cases/conformance/types/typeRelationships/typeAndMemberIdentity/objectTypesIdentityWithCallSignaturesWithOverloads.ts(79,1): error TS2463: Duplicate overload signature for foo7.
+tests/cases/conformance/types/typeRelationships/typeAndMemberIdentity/objectTypesIdentityWithCallSignaturesWithOverloads.ts(82,1): error TS2463: Duplicate overload signature for foo8.
+tests/cases/conformance/types/typeRelationships/typeAndMemberIdentity/objectTypesIdentityWithCallSignaturesWithOverloads.ts(83,1): error TS2463: Duplicate overload signature for foo8.
+tests/cases/conformance/types/typeRelationships/typeAndMemberIdentity/objectTypesIdentityWithCallSignaturesWithOverloads.ts(90,1): error TS2463: Duplicate overload signature for foo10.
+tests/cases/conformance/types/typeRelationships/typeAndMemberIdentity/objectTypesIdentityWithCallSignaturesWithOverloads.ts(91,1): error TS2463: Duplicate overload signature for foo10.
+tests/cases/conformance/types/typeRelationships/typeAndMemberIdentity/objectTypesIdentityWithCallSignaturesWithOverloads.ts(102,1): error TS2463: Duplicate overload signature for foo12b.
+tests/cases/conformance/types/typeRelationships/typeAndMemberIdentity/objectTypesIdentityWithCallSignaturesWithOverloads.ts(103,1): error TS2463: Duplicate overload signature for foo12b.
+tests/cases/conformance/types/typeRelationships/typeAndMemberIdentity/objectTypesIdentityWithCallSignaturesWithOverloads.ts(106,1): error TS2463: Duplicate overload signature for foo13.
+tests/cases/conformance/types/typeRelationships/typeAndMemberIdentity/objectTypesIdentityWithCallSignaturesWithOverloads.ts(107,1): error TS2463: Duplicate overload signature for foo13.
+
+
+==== tests/cases/conformance/types/typeRelationships/typeAndMemberIdentity/objectTypesIdentityWithCallSignaturesWithOverloads.ts (26 errors) ====
+    // object types are identical structurally
+    
+    class A {
+        foo(x: number): number;
+        foo(x: string): string;
+        foo(x: any): any { return null; }
+    }
+    
+    class B {
+        foo(x: number): number;
+        foo(x: string): string;
+        foo(x: any): any { return null; }
+    }
+    
+    class C<T> {
+        foo(x: number): number;
+        foo(x: string): string;
+        foo(x: T): T;
+        foo(x: any): any { return null; }
+    }
+    
+    interface I {
+        foo(x: number): number;
+        foo(x: string): string;    
+    }
+    
+    interface I2<T> {
+        foo(x: number): number;
+        foo(x: string): string;
+        foo(x: T): T;
+    }
+    
+    var a: {
+        foo(x: number): number
+        foo(x: string): string
+    }
+    
+    var b = {
+        foo(x: any) { return <any>''; }
+    };
+    
+    function foo1(x: A);
+    ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for foo1.
+    function foo1(x: A); // error
+    ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for foo1.
+    function foo1(x: any) { }
+    
+    function foo1b(x: B);
+    ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for foo1b.
+    function foo1b(x: B); // error
+    ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for foo1b.
+    function foo1b(x: any) { }
+    
+    function foo1c(x: C<string>);
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for foo1c.
+    function foo1c(x: C<string>); // error
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for foo1c.
+    function foo1c(x: any) { }
+    
+    function foo2(x: I);
+    ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for foo2.
+    function foo2(x: I); // error
+    ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for foo2.
+    function foo2(x: any) { }
+    
+    function foo3(x: typeof a);
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for foo3.
+    function foo3(x: typeof a); // error
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for foo3.
+    function foo3(x: any) { }
+    
+    function foo4(x: typeof b);
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for foo4.
+    function foo4(x: typeof b); // error
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for foo4.
+    function foo4(x: any) { }
+    
+    function foo5(x: A);
+    ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for foo5.
+    function foo5(x: B); // error
+    ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for foo5.
+    function foo5(x: any) { }
+    
+    function foo5b(x: A);
+    function foo5b(x: C<string>); // ok
+    function foo5b(x: any) { }
+    
+    function foo6(x: A);
+    ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for foo6.
+    function foo6(x: I); // BUG 831930
+    ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for foo6.
+    function foo6(x: any) { }
+    
+    function foo7(x: A);
+    ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for foo7.
+    function foo7(x: typeof a); // BUG 831930
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for foo7.
+    function foo7(x: any) { }
+    
+    function foo8(x: B);
+    ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for foo8.
+    function foo8(x: I); // BUG 831930
+    ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for foo8.
+    function foo8(x: any) { }
+    
+    function foo9(x: B);
+    function foo9(x: C<string>); // ok
+    function foo9(x: any) { }
+    
+    function foo10(x: B);
+    ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for foo10.
+    function foo10(x: typeof a); // BUG 831930
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for foo10.
+    function foo10(x: any) { }
+    
+    function foo11(x: B);
+    function foo11(x: typeof b); // ok
+    function foo11(x: any) { }
+    
+    function foo12(x: I);
+    function foo12(x: C<string>); // ok
+    function foo12(x: any) { }
+    
+    function foo12b(x: I2<string>);
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for foo12b.
+    function foo12b(x: C<string>); // ok
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for foo12b.
+    function foo12b(x: any) { }
+    
+    function foo13(x: I);
+    ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for foo13.
+    function foo13(x: typeof a);  // error
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2463: Duplicate overload signature for foo13.
+    function foo13(x: any) { }
+    
+    function foo14(x: I);
+    function foo14(x: typeof b); // ok
+    function foo14(x: any) { }
+    
+    function foo15(x: I2<string>);
+    function foo15(x: C<number>); // ok
+    function foo15(x: any) { }
