@@ -296,14 +296,14 @@ module ts {
         // If parameter/type parameter, the prev token trailing comments are part of this node too
         if (node.kind === SyntaxKind.Parameter || node.kind === SyntaxKind.TypeParameter) {
             // e.g.   (/** blah */ a, /** blah */ b);
-            return concatenate(getTrailingCommentRanges(sourceFileOfNode.text, node.start),
+            return concatenate(getTrailingCommentSpans(sourceFileOfNode.text, node.start),
                 // e.g.:     (
                 //            /** blah */ a,
                 //            /** blah */ b);
-                getLeadingCommentRanges(sourceFileOfNode.text, node.start));
+                getLeadingCommentSpans(sourceFileOfNode.text, node.start));
         }
         else {
-            return getLeadingCommentRanges(sourceFileOfNode.text, node.start);
+            return getLeadingCommentSpans(sourceFileOfNode.text, node.start);
         }
     }
 

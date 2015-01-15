@@ -4111,7 +4111,7 @@ module ts {
 
             function getLeadingCommentsWithoutDetachedComments() {
                 // get the leading comments from detachedPos
-                var leadingComments = getLeadingCommentRanges(currentSourceFile.text, detachedCommentsInfo[detachedCommentsInfo.length - 1].detachedCommentEndPos);
+                var leadingComments = getLeadingCommentSpans(currentSourceFile.text, detachedCommentsInfo[detachedCommentsInfo.length - 1].detachedCommentEndPos);
                 if (detachedCommentsInfo.length - 1) {
                     detachedCommentsInfo.pop();
                 }
@@ -4149,7 +4149,7 @@ module ts {
             function emitTrailingDeclarationComments(node: Node) {
                 // Emit the trailing comments only if the parent's end doesn't match
                 if (node.parent.kind === SyntaxKind.SourceFile || spanEnd(node) !== spanEnd(node.parent)) {
-                    var trailingComments = getTrailingCommentRanges(currentSourceFile.text, spanEnd(node));
+                    var trailingComments = getTrailingCommentSpans(currentSourceFile.text, spanEnd(node));
                     // trailing comments are emitted at space/*trailing comment1 */space/*trailing comment*/
                     emitComments(currentSourceFile, writer, trailingComments, /*trailingSeparator*/ false, newLine, writeComment);                    
                 }
@@ -4163,7 +4163,7 @@ module ts {
                 }
                 else {
                     // get the leading comments from the node
-                    leadingComments = getLeadingCommentRanges(currentSourceFile.text, pos);
+                    leadingComments = getLeadingCommentSpans(currentSourceFile.text, pos);
                 }
                 emitNewLineBeforeLeadingComments(currentSourceFile, writer, pos, leadingComments);
                 // Leading comments are emitted at /*leading comment1 */space/*leading comment*/space
@@ -4171,7 +4171,7 @@ module ts {
             }
 
             function emitDetachedCommentsAtPosition(pos: number) {
-                var leadingComments = getLeadingCommentRanges(currentSourceFile.text, pos);
+                var leadingComments = getLeadingCommentSpans(currentSourceFile.text, pos);
                 if (leadingComments) {
                     var detachedComments: CommentSpan[] = [];
                     var lastComment: CommentSpan;

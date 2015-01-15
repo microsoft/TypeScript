@@ -517,11 +517,11 @@ module ts {
         }
     }
 
-    export function getLeadingCommentRanges(text: string, pos: number): CommentSpan[] {
+    export function getLeadingCommentSpans(text: string, pos: number): CommentSpan[] {
         return getCommentSpans(text, pos, /*trailing*/ false);
     }
 
-    export function getTrailingCommentRanges(text: string, pos: number): CommentSpan[] {
+    export function getTrailingCommentSpans(text: string, pos: number): CommentSpan[] {
         return getCommentSpans(text, pos, /*trailing*/ true);
     }
 

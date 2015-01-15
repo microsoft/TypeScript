@@ -1692,7 +1692,7 @@ module ts {
         var isNoDefaultLib = false;
 
         function processTripleSlashDirectives(): void {
-            var commentRanges = getLeadingCommentRanges(sourceText, 0);
+            var commentRanges = getLeadingCommentSpans(sourceText, 0);
             forEach(commentRanges, commentRange => {
                 var comment = sourceText.substr(commentRange.start, commentRange.length);
                 var referencePathMatchResult = getFileReferenceFromReferencePath(comment, commentRange);
@@ -1860,8 +1860,8 @@ module ts {
     function isInsideComment(sourceFile: SourceFile, token: Node, position: number): boolean {
         // The position has to be: 1. in the leading trivia (before token.getStart()), and 2. within a comment
         return position <= token.getStart(sourceFile) &&
-            (isInsideCommentSpan(getTrailingCommentRanges(sourceFile.text, token.getFullStart())) ||
-            isInsideCommentSpan(getLeadingCommentRanges(sourceFile.text, token.getFullStart())));
+            (isInsideCommentSpan(getTrailingCommentSpans(sourceFile.text, token.getFullStart())) ||
+            isInsideCommentSpan(getLeadingCommentSpans(sourceFile.text, token.getFullStart())));
 
         function isInsideCommentSpan(comments: CommentSpan[]): boolean {
             return forEach(comments, comment => {
@@ -4093,7 +4093,7 @@ module ts {
                     var token = getTokenAtPosition(sourceFile, position);
                     if (token && position < token.getStart()) {
                         // First, we have to see if this position actually landed in a comment.
-                        var commentRanges = getLeadingCommentRanges(sourceFile.text, token.start);
+                        var commentRanges = getLeadingCommentSpans(sourceFile.text, token.start);
 
                         // Then we want to make sure that it wasn't in a "///<" directive comment
                         // We don't want to unintentionally update a file name.
