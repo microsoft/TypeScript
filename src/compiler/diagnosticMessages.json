@@ -224,7 +224,7 @@
     "A 'declare' modifier cannot be used with an import declaration.": {
         "category": "Error",
         "code": 1079,
-        "isEarly":  true
+        "isEarly": true
     },
     "Invalid 'reference' directive syntax.": {
         "category": "Error",
@@ -659,7 +659,7 @@
     "An implementation cannot be declared in ambient contexts.": {
         "category": "Error",
         "code": 1184,
-        "isEarly":  true
+        "isEarly": true
     },
     "Modifiers cannot appear here.": {
         "category": "Error",
@@ -1281,6 +1281,10 @@
     "A rest element must be last in an array destructuring pattern": {
         "category": "Error",
         "code": 2462
+    },
+    "A binding pattern parameter may not be optional in an implementation signature.": {
+        "category": "Error",
+        "code":  2463
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {
