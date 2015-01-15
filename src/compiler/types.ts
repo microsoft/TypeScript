@@ -1105,7 +1105,7 @@ module ts {
 
     export interface FunctionGenerator extends CodeGenerator {
         addParameter(name: Identifier, flags?: NodeFlags): void;
-        addVariable(name: Identifier, flags?: NodeFlags): void
+        addVariable(name: Identifier): void
         addFunction(func: FunctionDeclaration): void;
 
         defineLabel(): Label;

@@ -63,7 +63,7 @@ module ts {
         function isUnknownIdentifier(name: string): boolean {
             return !hasGlobalIdentifier(name) && resolver.isUnknownIdentifier(context, name);
         }
-        
+
         function createUniqueIdentifier(name?: string, globallyUnique?: boolean): Identifier {
             // when we generate a "global" unique identifier, we it to be unique in all contexts. This is 
             // to reduce the possibility of collisions when generating names used to rename symbols during emit
@@ -78,7 +78,7 @@ module ts {
                 name = "_" + (tempCount < 25 ? String.fromCharCode(tempCount + (tempCount < 8 ? 0 : 1) + CharacterCodes.a) : tempCount - 25);
                 tempCount++;
             }
-            
+
             if (globallyUnique) {
                 globals[name] = true;
             }
@@ -212,12 +212,8 @@ module ts {
             parameters.push(factory.createParameterDeclaration(name, undefined, readLocation(), flags));
         }
 
-        function addVariable(name: Identifier, flags?: NodeFlags): void {            
-            if (!variableDeclarations) {
-                variableDeclarations = factory.createNodeArray([]);
-            }
-
-            variableDeclarations.push(factory.createVariableDeclaration(factory.createIdentifier(name.text)));
+        function addVariable(name: Identifier, flags?: NodeFlags): void {
+            locals.recordVariable(name);
         }
 
         function addFunction(func: FunctionDeclaration): void {
@@ -802,7 +798,7 @@ module ts {
                 }
             }
 
-            function writeStatement(node: Node): void {                
+            function writeStatement(node: Node): void {
                 if (isExpression(node)) {
                     node = factory.createExpressionStatement(<Expression>node);
                 }
