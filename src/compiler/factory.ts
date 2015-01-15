@@ -549,6 +549,23 @@ module ts {
             return node;
         }
 
+        export function ensureIdentifier(expression: Expression, locals: LocalsBuilder, writeSideAssignment: (left: Identifier, right: Expression, location?: TextRange) => void): Identifier {
+            if (expression.kind !== SyntaxKind.Identifier) {
+                var local = locals.createUniqueIdentifier();
+                writeSideAssignment(local, expression, expression);
+                return local;
+            }
+
+            return <Identifier>expression;
+        }
+
+        export function getValueOrDefault(value: Expression, defaultValue: Expression, locals: LocalsBuilder, writeSideAssignment: (left: Identifier, right: Expression, location?: TextRange) => void): Expression {
+            value = ensureIdentifier(value, locals, writeSideAssignment);
+            var equalityExpression = factory.createBinaryExpression(SyntaxKind.EqualsEqualsEqualsToken, value, getUndefinedValue());
+            var conditionalExpression = factory.createConditionalExpression(equalityExpression, defaultValue, value);
+            return conditionalExpression;
+        }
+
         // statements
         export function createBlock(statements: Statement[], location?: TextRange, flags?: NodeFlags): Block {
             var node = beginNode<Block>(SyntaxKind.Block);
