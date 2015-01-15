@@ -182,6 +182,37 @@ module ts {
         }
     }
 
+    export function rewriteSpreadElementInArrayLiteral(node: ArrayLiteralExpression): LeftHandSideExpression {
+        var segments: Expression[];
+        var elements = node.elements;
+        var length = elements.length;
+        var start = 0;
+        for (var i = 0; i < length; i++) {
+            var element = elements[i];
+            if (element.kind === SyntaxKind.SpreadElementExpression) {
+                if (!segments) {
+                    segments = [];
+                }
+                if (i > start) {
+                    segments.push(factory.createArrayLiteralExpression(elements.slice(start, i)));
+                    start = i + 1;
+                }
+                segments.push((<SpreadElementExpression>element).expression);
+            }
+        }
+        if (!segments) {
+            return node;
+        }
+        if (start < length) {
+            segments.push(factory.createArrayLiteralExpression(elements.slice(start, length)));
+        }
+        // Rewrite using the pattern <segment0>.concat(<segment1>, <segment2>, ...)
+        var head = segments.shift();
+        var concatExpression = factory.createPropertyAccessExpression(factory.parenthesize(head), factory.createIdentifier("concat"));
+        var callExpression = factory.createCallExpression(concatExpression, segments, node);
+        return callExpression;
+    }
+
     /** rewrites an async or generator function or method declaration */
     export function rewriteFunction(node: FunctionLikeDeclaration, compilerOptions: CompilerOptions, resolver: EmitResolver, locals: LocalsBuilder): FunctionLikeDeclaration {
         var builder: FunctionGenerator;
@@ -270,6 +301,11 @@ module ts {
 
         function visitArrayLiteralExpression(node: ArrayLiteralExpression): LeftHandSideExpression {
             if (isDownlevel && hasAwaitOrYield(node)) {
+                var rewritten = rewriteSpreadElementInArrayLiteral(node);
+                if (rewritten !== node) {
+                    return nodeVisitor.visitLeftHandSideExpression(rewritten);
+                }
+
                 return factory.updateArrayLiteralExpression(
                     node,
                     Visitor.visitNodes(node.elements, nodeVisitor.visitExpression, hasAwaitOrYield, cacheExpression));

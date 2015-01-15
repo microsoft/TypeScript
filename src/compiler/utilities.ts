@@ -773,6 +773,21 @@ module ts {
         }
     }
 
+    export function needsParenthesisForPropertyAccess(node: Expression) {
+        switch (node.kind) {
+            case SyntaxKind.Identifier:
+            case SyntaxKind.ArrayLiteralExpression:
+            case SyntaxKind.PropertyAccessExpression:
+            case SyntaxKind.ElementAccessExpression:
+            case SyntaxKind.CallExpression:
+            case SyntaxKind.ParenthesizedExpression:
+                // This list is not exhaustive and only includes those cases that are relevant
+                // to the check in emitArrayLiteral. More cases can be added as needed.
+                return false;
+        }
+        return true;
+    }
+
     // True if the given identifier, string literal, or number literal is the name of a declaration node
     export function isDeclarationOrFunctionExpressionOrCatchVariableName(name: Node): boolean {
         if (name.kind !== SyntaxKind.Identifier && name.kind !== SyntaxKind.StringLiteral && name.kind !== SyntaxKind.NumericLiteral) {

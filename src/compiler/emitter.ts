@@ -2330,55 +2330,28 @@ module ts {
                     write("[]");
                     return;
                 }
-                if (compilerOptions.target >= ScriptTarget.ES6) {
-                    write("[");
-                    emitList(elements, 0, elements.length, /*multiLine*/(node.flags & NodeFlags.MultiLine) !== 0,
-                        /*trailingComma*/ elements.hasTrailingComma);
-                    write("]");
-                    return;
-                }
-                var pos = 0;
-                var group = 0;
-                while (pos < length) {
-                    // Emit using the pattern <group0>.concat(<group1>, <group2>, ...)
-                    if (group === 1) {
-                        write(".concat(");
+
+                if (compilerOptions.target < ScriptTarget.ES6) {
+                    var rewritten = rewriteSpreadElementInArrayLiteral(node);
+                    if (rewritten !== node) {
+                        return emit(rewritten);
                     }
-                    else if (group > 1) {
-                        write(", ");
-                    }
-                    var e = elements[pos];
-                    if (e.kind === SyntaxKind.SpreadElementExpression) {
-                        e = (<SpreadElementExpression>e).expression;
-                        emitParenthesized(e, /*parenthesized*/ group === 0 && needsParenthesisForPropertyAccess(e));
-                        pos++;
                 }
-                else {
-                        var i = pos;
-                        while (i < length && elements[i].kind !== SyntaxKind.SpreadElementExpression) {
-                            i++;
-                        }
-                    write("[");
-                        emitList(elements, pos, i - pos, /*multiLine*/ (node.flags & NodeFlags.MultiLine) !== 0,
-                            /*trailingComma*/ elements.hasTrailingComma);
-                    write("]");
-                        pos = i;
-                    }
-                    group++;
-                }
-                if (group > 1) {
-                    write(")");
-                }
+
+                write("[");
+                emitList(elements, 0, elements.length, /*multiLine*/(node.flags & NodeFlags.MultiLine) !== 0,
+                    /*trailingComma*/ elements.hasTrailingComma);
+                write("]");
             }
 
             function emitObjectLiteral(node: ObjectLiteralExpression) {
-                    write("{");
+                write("{");
                 var properties = node.properties;
                 if (properties.length) {
                     var multiLine = (node.flags & NodeFlags.MultiLine) !== 0;
                     if (!multiLine) {
                         write(" ");
-                }
+                    }
                     emitList(properties, 0, properties.length, /*multiLine*/ multiLine,
                         /*trailingComma*/ properties.hasTrailingComma && compilerOptions.target >= ScriptTarget.ES5);
                     if (!multiLine) {
