@@ -643,20 +643,6 @@ module ts {
         return false;
     }
 
-    export function getLeftHandSideOfDestructuringAssignment(node: BinaryExpression): ObjectLiteralExpression | ArrayLiteralExpression {
-        if (node.operator === SyntaxKind.EqualsToken) {
-            var left = node.left;
-            while (left.kind === SyntaxKind.ParenthesizedExpression) {
-                left = (<ParenthesizedExpression>left).expression;
-            }
-            switch (left.kind) {
-                case SyntaxKind.ObjectLiteralExpression:
-                case SyntaxKind.ArrayLiteralExpression:
-                    return <ObjectLiteralExpression | ArrayLiteralExpression>left;
-            }
-        }
-    }
-
     export function isExternalModuleImportDeclaration(node: Node) {
         return node.kind === SyntaxKind.ImportDeclaration && (<ImportDeclaration>node).moduleReference.kind === SyntaxKind.ExternalModuleReference;
     }
