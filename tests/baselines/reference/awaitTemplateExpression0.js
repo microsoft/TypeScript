@@ -11,11 +11,11 @@ async function f(): Promise<void> {
 
 //// [awaitTemplateExpression0.js]
 function f() {
-    var b;
     return new Promise(function (_resolve) {
         _resolve(__awaiter(__generator(function (_state) {
             b = "text";
             return ["return"];
         })));
     });
+    var b;
 }

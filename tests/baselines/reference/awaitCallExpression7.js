@@ -17,7 +17,6 @@ async function func(): Promise<void> {
 
 //// [awaitCallExpression7.js]
 function func() {
-    var b;
     return new Promise(function (_resolve) {
         _resolve(__awaiter(__generator(function (_state) {
             switch (_state.label) {
@@ -34,5 +33,5 @@ function func() {
             }
         })));
     });
-    var _a, _b, _c;
+    var b, _a, _b, _c;
 }

@@ -14,11 +14,11 @@ var o = {
 //// [asyncMethod12.js]
 var o = {
     foo: function () {
-        var v;
         return new Promise(function (_resolve) {
             _resolve(__awaiter(__generator(function (_state) {
                 return ["return"];
             })));
         });
+        var v;
     }
 };

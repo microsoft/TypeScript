@@ -12,11 +12,11 @@ async function func(): Promise<void> {
 
 //// [awaitArrayLiteral1.js]
 function func() {
-    var b;
     return new Promise(function (_resolve) {
         _resolve(__awaiter(__generator(function (_state) {
             b = [a, a, a];
             return ["return"];
         })));
     });
+    var b;
 }

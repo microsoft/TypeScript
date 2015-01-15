@@ -17,7 +17,6 @@ async function func(): Promise<void> {
 
 //// [awaitNewExpression4.js]
 function func() {
-    var b;
     return new Promise(function (_resolve) {
         _resolve(__awaiter(__generator(function (_state) {
             switch (_state.label) {
@@ -32,5 +31,5 @@ function func() {
             }
         })));
     });
-    var _a;
+    var b, _a;
 }

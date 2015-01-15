@@ -195,9 +195,9 @@ module ts {
                 }
                 if (i > start) {
                     segments.push(factory.createArrayLiteralExpression(elements.slice(start, i)));
-                    start = i + 1;
                 }
                 segments.push((<SpreadElementExpression>element).expression);
+                start = i + 1;
             }
         }
         if (!segments) {
@@ -206,8 +206,13 @@ module ts {
         if (start < length) {
             segments.push(factory.createArrayLiteralExpression(elements.slice(start, length)));
         }
+
         // Rewrite using the pattern <segment0>.concat(<segment1>, <segment2>, ...)
-        var head = segments.shift();
+        if (segments.length === 1) {
+            return factory.parenthesize(segments[0]);
+        }
+
+        var head = factory.parenthesize(segments.shift());
         var concatExpression = factory.createPropertyAccessExpression(factory.parenthesize(head), factory.createIdentifier("concat"));
         var callExpression = factory.createCallExpression(concatExpression, segments, node);
         return callExpression;
@@ -616,20 +621,26 @@ module ts {
         // rewriting
         function rewriteBinaryExpression(node: BinaryExpression): Expression {
             if (isLogicalBinary(node)) {
-                return rewriteLogicalBinaryExpression(node);
+                if (hasAwaitOrYield(node.right)) {
+                    return rewriteLogicalBinaryExpression(node);
+                }
             }
             else if (isDestructuringAssignment(node)) {
                 return rewriteDestructuringAssignment(node);
             }
             else if (isAssignment(node)) {
-                return rewriteAssignmentExpression(node);
+                if (hasAwaitOrYield(node.right)) {
+                    return rewriteAssignmentExpression(node);
+                }
             }
             else if (node.operator === SyntaxKind.CommaToken) {
                 return rewriteCommaExpression(node);
             }
-            else {
+            else if (hasAwaitOrYield(node.right)) {
                 return factory.updateBinaryExpression(node, cacheExpression(nodeVisitor.visitExpression(node.left)), nodeVisitor.visitExpression(node.right));
             }
+
+            return Visitor.visitBinaryExpression(node);
         }
 
         function rewriteLogicalBinaryExpression(node: BinaryExpression): Expression {

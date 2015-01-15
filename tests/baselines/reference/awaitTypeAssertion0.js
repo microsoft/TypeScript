@@ -13,11 +13,11 @@ async function f(): Promise<void> {
 
 //// [awaitTypeAssertion0.js]
 function f() {
-    var b;
     return new Promise(function (_resolve) {
         _resolve(__awaiter(__generator(function (_state) {
             b = a;
             return ["return"];
         })));
     });
+    var b;
 }

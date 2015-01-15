@@ -12,10 +12,10 @@ var foo = async function (): Promise<void> {
 
 //// [asyncFunctionExpression12.js]
 var foo = function () {
-    var v;
     return new Promise(function (_resolve) {
         _resolve(__awaiter(__generator(function (_state) {
             return ["return"];
         })));
     });
+    var v;
 };

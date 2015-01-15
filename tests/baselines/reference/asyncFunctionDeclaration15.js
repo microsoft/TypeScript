@@ -10,11 +10,11 @@ export async function foo(): Promise<void> {
 
 //// [asyncFunctionDeclaration15.js]
 function foo() {
-    var Promise;
     return new Promise(function (_resolve) {
         _resolve(__awaiter(__generator(function (_state) {
             return ["return"];
         })));
     });
+    var Promise;
 }
 exports.foo = foo;

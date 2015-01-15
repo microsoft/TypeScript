@@ -11,7 +11,6 @@ async function f(): Promise<void> {
 
 //// [awaitTemplateExpression2.js]
 function f() {
-    var b;
     return new Promise(function (_resolve) {
         _resolve(__awaiter(__generator(function (_state) {
             switch (_state.label) {
@@ -23,4 +22,5 @@ function f() {
             }
         })));
     });
+    var b;
 }

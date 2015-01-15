@@ -14,7 +14,6 @@ async function func(): Promise<void> {
 
 //// [awaitForStatement1.js]
 function func() {
-    var i;
     return new Promise(function (_resolve) {
         _resolve(__awaiter(__generator(function (_state) {
             "before";
@@ -25,4 +24,5 @@ function func() {
             return ["return"];
         })));
     });
+    var i;
 }

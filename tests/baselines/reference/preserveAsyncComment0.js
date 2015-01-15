@@ -21,7 +21,6 @@ async function func(): Promise<void> {
 
 //// [preserveAsyncComment0.js]
 function func() {
-    var a, b, c;
     return new Promise(function (_resolve) {
         _resolve(__awaiter(__generator(function (_state) {
             a = 1;
@@ -30,6 +29,7 @@ function func() {
             return ["return"];
         })));
     });
+    var a, b, c;
 }
 function func1() {
     // variable statement

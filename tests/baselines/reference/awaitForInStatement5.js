@@ -16,7 +16,6 @@ async function func(): Promise<void> {
 
 //// [awaitForInStatement5.js]
 function func() {
-    var i;
     return new Promise(function (_resolve) {
         _resolve(__awaiter(__generator(function (_state) {
             switch (_state.label) {
@@ -32,4 +31,5 @@ function func() {
             }
         })));
     });
+    var i;
 }
