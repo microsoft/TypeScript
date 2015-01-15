@@ -1028,8 +1028,6 @@ declare module ts {
     }
     interface GenericType extends InterfaceType, TypeReference {
         instantiations: Map<TypeReference>;
-        openReferenceTargets: GenericType[];
-        openReferenceChecks: Map<boolean>;
     }
     interface TupleType extends ObjectType {
         elementTypes: Type[];
@@ -1370,7 +1368,7 @@ declare module ts {
 declare module ts {
     function getNodeConstructor(kind: SyntaxKind): new () => Node;
     function createNode(kind: SyntaxKind): Node;
-    function forEachChild<T>(node: Node, cbNode: (node: Node) => T, cbNodes?: (nodes: Node[]) => T): T;
+    function forEachChild<T>(node: Node, cbNode: (node: Node) => T, cbNodeArray?: (nodes: Node[]) => T): T;
     function modifierToFlag(token: SyntaxKind): NodeFlags;
     function isEvalOrArgumentsIdentifier(node: Node): boolean;
     function createSourceFile(filename: string, sourceText: string, languageVersion: ScriptTarget, setParentNodes?: boolean): SourceFile;

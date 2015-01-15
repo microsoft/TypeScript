@@ -1,0 +1,8 @@
+tests/cases/compiler/constEnumBadPropertyNames.ts(2,11): error TS4088: Property 'B' does not exist on 'const' enum 'E'.
+
+
+==== tests/cases/compiler/constEnumBadPropertyNames.ts (1 errors) ====
+    const enum E { A }
+    var x = E["B"]
+              ~~~
+!!! error TS4088: Property 'B' does not exist on 'const' enum 'E'.

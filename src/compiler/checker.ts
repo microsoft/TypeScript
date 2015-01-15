@@ -3337,6 +3337,8 @@ module ts {
                 case SyntaxKind.MethodDeclaration:
                 case SyntaxKind.MethodSignature:
                     return isContextSensitiveFunctionLikeDeclaration(<MethodDeclaration>node);
+                case SyntaxKind.ParenthesizedExpression:
+                    return isContextSensitive((<ParenthesizedExpression>node).expression);
             }
 
             return false;
@@ -4709,13 +4711,21 @@ module ts {
                 if (!isTypeSubtypeOf(rightType, globalFunctionType)) {
                     return type;
                 }
+                // Target type is type of prototype property
                 var prototypeProperty = getPropertyOfType(rightType, "prototype");
                 if (!prototypeProperty) {
                     return type;
                 }
-                var prototypeType = getTypeOfSymbol(prototypeProperty);
-                // Narrow to type of prototype property if it is a subtype of current type
-                return isTypeSubtypeOf(prototypeType, type) ? prototypeType : type;
+                var targetType = getTypeOfSymbol(prototypeProperty);
+                // Narrow to target type if it is a subtype of current type
+                if (isTypeSubtypeOf(targetType, type)) {
+                    return targetType;
+                }
+                // If current type is a union type, remove all constituents that aren't subtypes of target type
+                if (type.flags & TypeFlags.Union) {
+                    return getUnionType(filter((<UnionType>type).types, t => isTypeSubtypeOf(t, targetType)));
+                }
+                return type;
             }
 
             // Narrow the given type based on the given expression having the assumed boolean value
@@ -5221,6 +5231,8 @@ module ts {
                 case SyntaxKind.TemplateSpan:
                     Debug.assert(parent.parent.kind === SyntaxKind.TemplateExpression);
                     return getContextualTypeForSubstitutionExpression(<TemplateExpression>parent.parent, node);
+                case SyntaxKind.ParenthesizedExpression:
+                    return getContextualType(<ParenthesizedExpression>parent);
             }
             return undefined;
         }
@@ -5605,8 +5617,11 @@ module ts {
                 return unknownType;
             }
 
-            if (isConstEnumObjectType(objectType) && node.argumentExpression && node.argumentExpression.kind !== SyntaxKind.StringLiteral) {
-                error(node.argumentExpression, Diagnostics.Index_expression_arguments_in_const_enums_must_be_of_type_string);
+            var isConstEnum = isConstEnumObjectType(objectType);
+            if (isConstEnum && 
+                (!node.argumentExpression || node.argumentExpression.kind !== SyntaxKind.StringLiteral)) {
+                error(node.argumentExpression, Diagnostics.A_const_enum_member_can_only_be_accessed_using_a_string_literal);
+                return unknownType;
             }
 
             // TypeScript 1.0 spec (April 2014): 4.10 Property Access
@@ -5626,6 +5641,10 @@ module ts {
                     if (prop) {
                         getNodeLinks(node).resolvedSymbol = prop;
                         return getTypeOfSymbol(prop);
+                    }
+                    else if (isConstEnum) {
+                        error(node.argumentExpression, Diagnostics.Property_0_does_not_exist_on_const_enum_1, name, symbolToString(objectType.symbol));
+                        return unknownType;
                     }
                 }
             }
@@ -6115,8 +6134,10 @@ module ts {
                 var result = candidates;
                 var lastParent: Node;
                 var lastSymbol: Symbol;
-                var cutoffPos: number = 0;
-                var pos: number;
+                var cutoffIndex: number = 0;
+                var index: number;
+                var specializedIndex: number = -1;
+                var spliceIndex: number;
                 Debug.assert(!result.length);
                 for (var i = 0; i < signatures.length; i++) {
                     var signature = signatures[i];
@@ -6124,25 +6145,36 @@ module ts {
                     var parent = signature.declaration && signature.declaration.parent;
                     if (!lastSymbol || symbol === lastSymbol) {
                         if (lastParent && parent === lastParent) {
-                            pos++;
+                            index++;
                         }
                         else {
                             lastParent = parent;
-                            pos = cutoffPos;
+                            index = cutoffIndex;
                         }
                     }
                     else {
                         // current declaration belongs to a different symbol
-                        // set cutoffPos so re-orderings in the future won't change result set from 0 to cutoffPos
-                        pos = cutoffPos = result.length;
+                        // set cutoffIndex so re-orderings in the future won't change result set from 0 to cutoffIndex
+                        index = cutoffIndex = result.length;
                         lastParent = parent;
                     }
                     lastSymbol = symbol;
 
-                    for (var j = result.length; j > pos; j--) {
-                        result[j] = result[j - 1];
+                    // specialized signatures always need to be placed before non-specialized signatures regardless
+                    // of the cutoff position; see GH#1133
+                    if (signature.hasStringLiterals) {
+                        specializedIndex++;
+                        spliceIndex = specializedIndex;
+                        // The cutoff index always needs to be greater than or equal to the specialized signature index
+                        // in order to prevent non-specialized signatures from being added before a specialized
+                        // signature.
+                        cutoffIndex++;
                     }
-                    result[pos] = signature;
+                    else {
+                        spliceIndex = index;
+                    }
+
+                    result.splice(spliceIndex, 0, signature);
                 }
             }
         }

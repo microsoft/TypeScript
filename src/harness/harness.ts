@@ -809,7 +809,9 @@ module Harness {
         export function createCompilerHost(inputFiles: { unitName: string; content: string; }[],
             writeFile: (fn: string, contents: string, writeByteOrderMark: boolean) => void,
             scriptTarget: ts.ScriptTarget,
-            useCaseSensitiveFileNames: boolean): ts.CompilerHost {
+            useCaseSensitiveFileNames: boolean,
+            // the currentDirectory is needed for rwcRunner to passed in specified current directory to compiler host
+            currentDirectory?: string): ts.CompilerHost {
 
             // Local get canonical file name function, that depends on passed in parameter for useCaseSensitiveFileNames
             function getCanonicalFileName(fileName: string): string {
@@ -817,6 +819,8 @@ module Harness {
             }
 
             var filemap: { [filename: string]: ts.SourceFile; } = {};
+            var getCurrentDirectory = currentDirectory === undefined ? ts.sys.getCurrentDirectory : () => currentDirectory;
+
             // Register input files
             function register(file: { unitName: string; content: string; }) {
                 if (file.content !== undefined) {
@@ -827,10 +831,14 @@ module Harness {
             inputFiles.forEach(register);
 
             return {
-                getCurrentDirectory: ts.sys.getCurrentDirectory,
+                getCurrentDirectory,
                 getSourceFile: (fn, languageVersion) => {
                     if (Object.prototype.hasOwnProperty.call(filemap, getCanonicalFileName(fn))) {
                         return filemap[getCanonicalFileName(fn)];
+                    }
+                    else if (currentDirectory) {
+                        var canonicalAbsolutePath = getCanonicalFileName(ts.getNormalizedAbsolutePath(fn, currentDirectory));
+                        return Object.prototype.hasOwnProperty.call(filemap, getCanonicalFileName(canonicalAbsolutePath)) ? filemap[canonicalAbsolutePath] : undefined;
                     }
                     else if (fn === fourslashFilename) {
                         var tsFn = 'tests/cases/fourslash/' + fourslashFilename;
@@ -908,7 +916,9 @@ module Harness {
                 otherFiles: { unitName: string; content: string }[],
                 onComplete: (result: CompilerResult, program: ts.Program) => void,
                 settingsCallback?: (settings: ts.CompilerOptions) => void,
-                options?: ts.CompilerOptions) {
+                options?: ts.CompilerOptions,
+                // Current directory is needed for rwcRunner to be able to use currentDirectory defined in json file
+                currentDirectory?: string) {
 
                 options = options || { noResolve: false };
                 options.target = options.target || ts.ScriptTarget.ES3;
@@ -1062,8 +1072,7 @@ module Harness {
                 var programFiles = inputFiles.map(file => file.unitName);
                 var program = ts.createProgram(programFiles, options, createCompilerHost(inputFiles.concat(otherFiles),
                     (fn, contents, writeByteOrderMark) => fileOutputs.push({ fileName: fn, code: contents, writeByteOrderMark: writeByteOrderMark }),
-                    options.target,
-                    useCaseSensitiveFileNames));
+                    options.target, useCaseSensitiveFileNames, currentDirectory));
 
                 var checker = program.getTypeChecker(/*produceDiagnostics*/ true);
 
@@ -1094,7 +1103,9 @@ module Harness {
                 otherFiles: { unitName: string; content: string; }[],
                 result: CompilerResult,
                 settingsCallback?: (settings: ts.CompilerOptions) => void,
-                options?: ts.CompilerOptions) {
+                options?: ts.CompilerOptions,
+                // Current directory is needed for rwcRunner to be able to use currentDirectory defined in json file
+                currentDirectory?: string) {
                 if (options.declaration && result.errors.length === 0 && result.declFilesCode.length !== result.files.length) {
                     throw new Error('There were no errors and declFiles generated did not match number of js files generated');
                 }
@@ -1107,9 +1118,8 @@ module Harness {
 
                     ts.forEach(inputFiles, file => addDtsFile(file, declInputFiles));
                     ts.forEach(otherFiles, file => addDtsFile(file, declOtherFiles));
-                    this.compileFiles(declInputFiles, declOtherFiles, function (compileResult) {
-                        declResult = compileResult;
-                    }, settingsCallback, options);
+                    this.compileFiles(declInputFiles, declOtherFiles, function (compileResult) { declResult = compileResult; },
+                        settingsCallback, options, currentDirectory);
 
                     return { declInputFiles, declOtherFiles, declResult };
                 }

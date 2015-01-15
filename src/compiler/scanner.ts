@@ -1039,7 +1039,7 @@ module ts {
                                 value = 0;
                             }
                             tokenValue = "" + value;
-                            return SyntaxKind.NumericLiteral;
+                            return token = SyntaxKind.NumericLiteral;
                         }
                         else if (pos + 2 < len && (text.charCodeAt(pos + 1) === CharacterCodes.O || text.charCodeAt(pos + 1) === CharacterCodes.o)) {
                             pos += 2;
@@ -1049,7 +1049,7 @@ module ts {
                                 value = 0;
                             }
                             tokenValue = "" + value;
-                            return SyntaxKind.NumericLiteral;
+                            return token = SyntaxKind.NumericLiteral;
                         }
                         // Try to parse as an octal
                         if (pos + 1 < len && isOctalDigit(text.charCodeAt(pos + 1))) {

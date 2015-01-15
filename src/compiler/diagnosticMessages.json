@@ -1572,9 +1572,10 @@
         "category": "Error",
         "code": 4084
     },
-    "Index expression arguments in 'const' enums must be of type 'string'.": {
+    "A const enum member can only be accessed using a string literal.": {
         "category": "Error",
-        "code": 4085
+        "code": 4085,
+        "isEarly": true
     },
     "'const' enum member initializer was evaluated to a non-finite value.": {
         "category": "Error",
@@ -1583,6 +1584,11 @@
     "'const' enum member initializer was evaluated to disallowed value 'NaN'.": {
         "category": "Error",
         "code": 4087
+    },
+    "Property '{0}' does not exist on 'const' enum '{1}'.": {
+        "category": "Error",
+        "code": 4088,
+        "isEarly":  true
     },
     "The current host does not support the '{0}' option.": {
         "category": "Error",
