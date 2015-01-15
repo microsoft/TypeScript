@@ -1,9 +1,17 @@
 tests/cases/compiler/contextualTypingWithFixedTypeParameters1.ts(2,22): error TS2339: Property 'foo' does not exist on type 'string'.
+tests/cases/compiler/contextualTypingWithFixedTypeParameters1.ts(3,10): error TS2453: The type argument for type parameter 'T' cannot be inferred from the usage. Consider specifying the type arguments explicitly.
+  Type argument candidate 'string' is not a valid type argument because it is not a supertype of candidate 'T'.
+tests/cases/compiler/contextualTypingWithFixedTypeParameters1.ts(3,32): error TS2339: Property 'foo' does not exist on type 'T'.
 
 
-==== tests/cases/compiler/contextualTypingWithFixedTypeParameters1.ts (1 errors) ====
+==== tests/cases/compiler/contextualTypingWithFixedTypeParameters1.ts (3 errors) ====
     var f10: <T>(x: T, b: () => (a: T) => void, y: T) => T;
     f10('', () => a => a.foo, ''); // a is string
                          ~~~
 !!! error TS2339: Property 'foo' does not exist on type 'string'.
     var r9 = f10('', () => (a => a.foo), 1); // error
+             ~~~
+!!! error TS2453: The type argument for type parameter 'T' cannot be inferred from the usage. Consider specifying the type arguments explicitly.
+!!! error TS2453:   Type argument candidate 'string' is not a valid type argument because it is not a supertype of candidate 'T'.
+                                   ~~~
+!!! error TS2339: Property 'foo' does not exist on type 'T'.
