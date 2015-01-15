@@ -317,7 +317,9 @@ function analyze(libFileName: string, files: string[], outputFolder: string): Pr
                         : token.parent && ts.isDeclaration(token.parent)
                         ? (<ts.Declaration>token.parent).name
                         : token;
-                    defStart = target.getStart();
+                    if (target) {
+                        defStart = target.getStart();
+                    }
                 }
                 var link: Hyperlink = {
                     sourceFile: d.fileName,

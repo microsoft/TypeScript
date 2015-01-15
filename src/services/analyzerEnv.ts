@@ -2,18 +2,22 @@
 
 var ActiveXObject: { new(...args: any[]): any }
 
-declare module WScript {
+module WScript {
     export module Arguments {
-        export function Item(n: number): any;
-        export var length: number;
+        export function Item(n: number): any {
+            throw new Error("NYI");
+        }
+        export var length: number = 0;
     }
 
     export module StdOut {
-        export function Write(s: string): void;
+        export function Write(s: string): void {
+        }
     }
 
-    export var FileName: string;
-    export var ScriptFullName: string;
+    export var FileName: string = "tsc.js";
+    export var ScriptFullName: string = "tsc.js";
 
-    export function Quit(n: number): void;
+    export function Quit(n: number): void {
+    }
 }
