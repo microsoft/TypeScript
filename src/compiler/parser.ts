@@ -1395,7 +1395,10 @@ module ts {
         }
 
         function canFollowModifier(): boolean {
-            return token === SyntaxKind.OpenBracketToken || token === SyntaxKind.AsteriskToken || isLiteralPropertyName();
+            return token === SyntaxKind.OpenBracketToken
+                || token === SyntaxKind.OpenBraceToken
+                || token === SyntaxKind.AsteriskToken
+                || isLiteralPropertyName();
         }
 
         // True if positioned at the start of a list element

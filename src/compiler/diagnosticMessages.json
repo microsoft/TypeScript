@@ -224,7 +224,7 @@
     "A 'declare' modifier cannot be used with an import declaration.": {
         "category": "Error",
         "code": 1079,
-        "isEarly":  true
+        "isEarly": true
     },
     "Invalid 'reference' directive syntax.": {
         "category": "Error",
@@ -659,7 +659,7 @@
     "An implementation cannot be declared in ambient contexts.": {
         "category": "Error",
         "code": 1184,
-        "isEarly":  true
+        "isEarly": true
     },
     "Modifiers cannot appear here.": {
         "category": "Error",
@@ -672,6 +672,10 @@
     "A rest element cannot have an initializer.": {
         "category": "Error",
         "code": 1186
+    },
+    "A parameter property may not be a binding pattern.": {
+        "category": "Error",
+        "code":  1187
     },
 
     "Duplicate identifier '{0}'.": {
