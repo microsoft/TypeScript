@@ -599,7 +599,7 @@ module ts.formatting {
                         // there might be the case when current token matches end token but does not considered as one
                         // function (x: function) <-- 
                         // without this check close paren will be interpreted as list end token for function expression which is wrong
-                        if (tokenInfo.token.kind === listEndToken && rangeContainsRange(parent, tokenInfo.token)) {
+                        if (tokenInfo.token.kind === listEndToken && spanContainsSpan(parent, tokenInfo.token)) {
                             // consume list end token
                             consumeTokenAndAdvanceScanner(tokenInfo, parent, listDynamicIndentation);
                         }
