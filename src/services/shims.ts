@@ -37,6 +37,12 @@ module ts {
         getChangeRange(oldSnapshot: ScriptSnapshotShim): string;
     }
 
+    export interface Logger {
+        log(s: string): void;
+        trace(s: string): void;
+        error(s: string): void;
+    }
+
     /** Public interface of the host of a language service shim instance.*/
     export interface LanguageServiceShimHost extends Logger {
         getCompilationSettings(): string;
@@ -669,9 +675,9 @@ module ts {
     class ClassifierShimObject extends ShimBase implements ClassifierShim {
         public classifier: Classifier;
 
-        constructor(factory: ShimFactory, public logger: Logger) {
+        constructor(factory: ShimFactory) {
             super(factory);
-            this.classifier = createClassifier(this.logger);
+            this.classifier = createClassifier();
         }
 
         /// COLORIZATION
@@ -761,7 +767,7 @@ module ts {
 
         public createClassifierShim(logger: Logger): ClassifierShim {
             try {
-                return new ClassifierShimObject(this, logger);
+                return new ClassifierShimObject(this);
             }
             catch (err) {
                 logInternalError(logger, err);

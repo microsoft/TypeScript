@@ -841,16 +841,10 @@ module ts {
         }
     }
 
-    export interface Logger {
-        log(s: string): void;
-        trace(s: string): void;
-        error(s: string): void;
-    }
-
     //
     // Public interface of the host of a language service instance.
     //
-    export interface LanguageServiceHost extends Logger {
+    export interface LanguageServiceHost {
         getCompilationSettings(): CompilerOptions;
         getScriptFileNames(): string[];
         getScriptVersion(fileName: string): string;
@@ -860,6 +854,9 @@ module ts {
         getCancellationToken?(): CancellationToken;
         getCurrentDirectory(): string;
         getDefaultLibFilename(options: CompilerOptions): string;
+        log? (s: string): void;
+        trace? (s: string): void;
+        error? (s: string): void;
     }
 
     //
@@ -1492,11 +1489,17 @@ module ts {
         constructor(private host: LanguageServiceHost) {
         }
 
+        private log(message: string) {
+            if (this.host.log) {
+                this.host.log(message);
+            }
+        }
+
         private initialize(filename: string) {
             // ensure that both source file and syntax tree are either initialized or not initialized
             var start = new Date().getTime();
             this.hostCache = new HostCache(this.host);
-            this.host.log("SyntaxTreeCache.Initialize: new HostCache: " + (new Date().getTime() - start));
+            this.log("SyntaxTreeCache.Initialize: new HostCache: " + (new Date().getTime() - start));
 
             var version = this.hostCache.getVersion(filename);
             var sourceFile: SourceFile;
@@ -1506,7 +1509,7 @@ module ts {
 
                 var start = new Date().getTime();
                 sourceFile = createLanguageServiceSourceFile(filename, scriptSnapshot, ScriptTarget.Latest, version, /*isOpen*/ true, /*setNodeParents;*/ true);
-                this.host.log("SyntaxTreeCache.Initialize: createSourceFile: " + (new Date().getTime() - start));
+                this.log("SyntaxTreeCache.Initialize: createSourceFile: " + (new Date().getTime() - start));
             }
             else if (this.currentFileVersion !== version) {
                 var scriptSnapshot = this.hostCache.getScriptSnapshot(filename);
@@ -1515,7 +1518,7 @@ module ts {
 
                 var start = new Date().getTime();
                 sourceFile = updateLanguageServiceSourceFile(this.currentSourceFile, scriptSnapshot, version, /*isOpen*/ true, editRange);
-                this.host.log("SyntaxTreeCache.Initialize: updateSourceFile: " + (new Date().getTime() - start));
+                this.log("SyntaxTreeCache.Initialize: updateSourceFile: " + (new Date().getTime() - start));
             }
 
             if (sourceFile) {
@@ -1931,6 +1934,12 @@ module ts {
             localizedDiagnosticMessages = host.getLocalizedDiagnosticMessages();
         }
 
+        function log(message: string) {
+            if (host.log) {
+                host.log(message);
+            }
+        }
+
         function getCanonicalFileName(filename: string) {
             return useCaseSensitivefilenames ? filename : filename.toLowerCase();
         }
@@ -1946,7 +1955,7 @@ module ts {
         function getRuleProvider(options: FormatCodeOptions) {
             // Ensure rules are initialized and up to date wrt to formatting options
             if (!ruleProvider) {
-                ruleProvider = new formatting.RulesProvider(host);
+                ruleProvider = new formatting.RulesProvider();
             }
 
             ruleProvider.ensureUpToDate(options);
@@ -2199,15 +2208,15 @@ module ts {
 
             var start = new Date().getTime();
             var currentToken = getTokenAtPosition(sourceFile, position);
-            host.log("getCompletionsAtPosition: Get current token: " + (new Date().getTime() - start));
+            log("getCompletionsAtPosition: Get current token: " + (new Date().getTime() - start));
 
             var start = new Date().getTime();
             // Completion not allowed inside comments, bail out if this is the case
             var insideComment = isInsideComment(sourceFile, currentToken, position);
-            host.log("getCompletionsAtPosition: Is inside comment: " + (new Date().getTime() - start));
+            log("getCompletionsAtPosition: Is inside comment: " + (new Date().getTime() - start));
 
             if (insideComment) {
-                host.log("Returning an empty list because completion was inside a comment.");
+                log("Returning an empty list because completion was inside a comment.");
                 return undefined;
             }
 
@@ -2215,19 +2224,19 @@ module ts {
             // Note: previousToken can be undefined if we are the beginning of the file
             var start = new Date().getTime();
             var previousToken = findPrecedingToken(position, sourceFile);
-            host.log("getCompletionsAtPosition: Get previous token 1: " + (new Date().getTime() - start));
+            log("getCompletionsAtPosition: Get previous token 1: " + (new Date().getTime() - start));
 
             // The caret is at the end of an identifier; this is a partial identifier that we want to complete: e.g. a.toS|
             // Skip this partial identifier to the previous token
             if (previousToken && position <= previousToken.end && previousToken.kind === SyntaxKind.Identifier) {
                 var start = new Date().getTime();
                 previousToken = findPrecedingToken(previousToken.pos, sourceFile);
-                host.log("getCompletionsAtPosition: Get previous token 2: " + (new Date().getTime() - start));
+                log("getCompletionsAtPosition: Get previous token 2: " + (new Date().getTime() - start));
             }
 
             // Check if this is a valid completion location
             if (previousToken && isCompletionListBlocker(previousToken)) {
-                host.log("Returning an empty list because completion was requested in an invalid position.");
+                log("Returning an empty list because completion was requested in an invalid position.");
                 return undefined;
             }
 
@@ -2256,7 +2265,7 @@ module ts {
                 symbols: {},
                 typeChecker: typeInfoResolver
             };
-            host.log("getCompletionsAtPosition: Syntactic work: " + (new Date().getTime() - syntacticStart));
+            log("getCompletionsAtPosition: Syntactic work: " + (new Date().getTime() - syntacticStart));
 
             var location = getTouchingPropertyName(sourceFile, position);
             // Populate the completion list
@@ -2330,7 +2339,7 @@ module ts {
             if (!isMemberCompletion) {
                 Array.prototype.push.apply(activeCompletionSession.entries, keywordCompletions);
             }
-            host.log("getCompletionsAtPosition: Semantic work: " + (new Date().getTime() - semanticStart));
+            log("getCompletionsAtPosition: Semantic work: " + (new Date().getTime() - semanticStart));
 
             return {
                 isMemberCompletion,
@@ -2349,7 +2358,7 @@ module ts {
                         }
                     }
                 });
-                host.log("getCompletionsAtPosition: getCompletionEntriesFromSymbols: " + (new Date().getTime() - start));
+                log("getCompletionsAtPosition: getCompletionEntriesFromSymbols: " + (new Date().getTime() - start));
             }
 
             function isCompletionListBlocker(previousToken: Node): boolean {
@@ -2357,7 +2366,7 @@ module ts {
                 var result = isInStringOrRegularExpressionOrTemplateLiteral(previousToken) ||
                     isIdentifierDefinitionLocation(previousToken) ||
                     isRightOfIllegalDot(previousToken);
-                host.log("getCompletionsAtPosition: isCompletionListBlocker: " + (new Date().getTime() - start));
+                log("getCompletionsAtPosition: isCompletionListBlocker: " + (new Date().getTime() - start));
                 return result;
             }
 
@@ -5139,12 +5148,12 @@ module ts {
 
             var start = new Date().getTime();
             var sourceFile = getCurrentSourceFile(filename);
-            host.log("getIndentationAtPosition: getCurrentSourceFile: " + (new Date().getTime() - start));
+            log("getIndentationAtPosition: getCurrentSourceFile: " + (new Date().getTime() - start));
 
             var start = new Date().getTime();
 
             var result = formatting.SmartIndenter.getIndentation(position, sourceFile, editorOptions);
-            host.log("getIndentationAtPosition: computeIndentation  : " + (new Date().getTime() - start));
+            log("getIndentationAtPosition: computeIndentation  : " + (new Date().getTime() - start));
 
             return result;
         }
@@ -5417,7 +5426,7 @@ module ts {
     }
 
     /// Classifier
-    export function createClassifier(host: Logger): Classifier {
+    export function createClassifier(): Classifier {
         var scanner = createScanner(ScriptTarget.Latest, /*skipTrivia*/ false);
 
         /// We do not have a full parser support to know when we should parse a regex or not
