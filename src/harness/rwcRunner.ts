@@ -28,6 +28,7 @@ module RWC {
             var compilerOptions: ts.CompilerOptions;
             var baselineOpts: Harness.Baseline.BaselineOptions = { Subfolder: 'rwc' };
             var baseName = /(.*)\/(.*).json/.exec(ts.normalizeSlashes(jsonPath))[2];
+            var currentDirectory: string;
 
             after(() => {
                 // Mocha holds onto the closure environment of the describe callback even after the test is done.
@@ -45,6 +46,7 @@ module RWC {
                 var opts: ts.ParsedCommandLine;
 
                 var ioLog: IOLog = JSON.parse(Harness.IO.readFile(jsonPath));
+                currentDirectory = ioLog.currentDirectory;
                 runWithIOLog(ioLog, () => {
                     opts = ts.parseCommandLine(ioLog.arguments);
                     assert.equal(opts.errors.length, 0);
@@ -52,7 +54,6 @@ module RWC {
 
                 runWithIOLog(ioLog, () => {
                     harnessCompiler.reset();
-
                     // Load the files
                     ts.forEach(opts.filenames, fileName => {
                         inputFiles.push(getHarnessCompilerInputUnit(fileName));
@@ -81,7 +82,11 @@ module RWC {
                     // Emit the results
                     compilerOptions = harnessCompiler.compileFiles(inputFiles, otherFiles, compileResult => {
                         compilerResult = compileResult;
-                    }, /*settingsCallback*/ undefined, opts.options);
+                        },
+                        /*settingsCallback*/ undefined, opts.options,
+                        // Since all Rwc json file specified current directory in its json file, we need to pass this information to compilerHost
+                        // so that when the host is asked for current directory, it should give the value from json rather than from process
+                        currentDirectory);
                 });
 
                 function getHarnessCompilerInputUnit(fileName: string) {
@@ -145,7 +150,8 @@ module RWC {
             it('has the expected errors in generated declaration files', () => {
                 if (compilerOptions.declaration && !compilerResult.errors.length) {
                     Harness.Baseline.runBaseline('has the expected errors in generated declaration files', baseName + '.dts.errors.txt', () => {
-                        var declFileCompilationResult = Harness.Compiler.getCompiler().compileDeclarationFiles(inputFiles, otherFiles, compilerResult, /*settingscallback*/ undefined, compilerOptions);
+                        var declFileCompilationResult = Harness.Compiler.getCompiler().compileDeclarationFiles(inputFiles, otherFiles, compilerResult,
+                            /*settingscallback*/ undefined, compilerOptions, currentDirectory);
                         if (declFileCompilationResult.declResult.errors.length === 0) {
                             return null;
                         }
