@@ -1,4 +1,4 @@
-tests/cases/conformance/es6/computedProperties/computedPropertyNames7.ts(5,5): error TS2463: A computed property name must be of type 'string', 'number', or 'any'.
+tests/cases/conformance/es6/computedProperties/computedPropertyNames7.ts(5,5): error TS2464: A computed property name must be of type 'string', 'number', or 'any'.
 
 
 ==== tests/cases/conformance/es6/computedProperties/computedPropertyNames7.ts (1 errors) ====
@@ -8,5 +8,5 @@ tests/cases/conformance/es6/computedProperties/computedPropertyNames7.ts(5,5): e
     var v = {
         [E.member]: 0
         ~~~~~~~~~~
-!!! error TS2463: A computed property name must be of type 'string', 'number', or 'any'.
+!!! error TS2464: A computed property name must be of type 'string', 'number', or 'any'.
     }
