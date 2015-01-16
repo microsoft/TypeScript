@@ -1,3 +1,4 @@
+/// <reference path="core.ts"/>
 
 module ts {
     export interface System {
