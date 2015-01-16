@@ -245,7 +245,7 @@ module ts {
                     else {
                         files.push(file);
                     }
-                    forEach(file.getSyntacticDiagnostics(), e => {
+                    forEach(getSyntacticDiagnostics(file), e => {
                         errors.push(e);
                     });
                 }

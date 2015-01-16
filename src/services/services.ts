@@ -731,13 +731,13 @@ module ts {
 
         // These methods will have their implementation provided by the implementation the 
         // compiler actually exports off of SourceFile.
-        public getSyntacticDiagnostics: () => Diagnostic[];
         public update: (newText: string, textChangeRange: TextChangeRange) => SourceFile;
         
         public amdDependencies: string[];
         public amdModuleName: string;
         public referencedFiles: FileReference[];
 
+        public syntacticDiagnostics: Diagnostic[];
         public referenceDiagnostics: Diagnostic[];
         public parseDiagnostics: Diagnostic[];
         public semanticDiagnostics: Diagnostic[];

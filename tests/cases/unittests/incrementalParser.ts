@@ -24,8 +24,8 @@ module ts {
     }
 
     function assertSameDiagnostics(file1: SourceFile, file2: SourceFile) {
-        var diagnostics1 = file1.getSyntacticDiagnostics();
-        var diagnostics2 = file2.getSyntacticDiagnostics();
+        var diagnostics1 = getSyntacticDiagnostics(file1);
+        var diagnostics2 = getSyntacticDiagnostics(file2);
 
         assert.equal(diagnostics1.length, diagnostics2.length, "diagnostics1.length !== diagnostics2.length");
         for (var i = 0, n = diagnostics1.length; i < n; i++) {

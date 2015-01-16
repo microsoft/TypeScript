@@ -356,6 +356,16 @@ module ts {
         forEachChild(sourceFile, walk);
     }
 
+    export function getSyntacticDiagnostics(sourceFile: SourceFile) {
+        if (!sourceFile.syntacticDiagnostics) {
+            // Don't bother doing any grammar checks if there are already parser errors.  
+            // Otherwise we may end up with too many cascading errors.
+            sourceFile.syntacticDiagnostics = sourceFile.referenceDiagnostics.concat(sourceFile.parseDiagnostics);
+        }
+        return sourceFile.syntacticDiagnostics;
+    }
+
+
     export function isEvalOrArgumentsIdentifier(node: Node): boolean {
         return node.kind === SyntaxKind.Identifier &&
             ((<Identifier>node).text === "eval" || (<Identifier>node).text === "arguments");
@@ -610,7 +620,6 @@ module ts {
             sourceFile.filename = normalizePath(filename);
             sourceFile.text = sourceText;
 
-            sourceFile.getSyntacticDiagnostics = getSyntacticDiagnostics;
             sourceFile.update = update;
 
             processReferenceComments(sourceFile);
@@ -4723,17 +4732,6 @@ module ts {
                 || node.kind === SyntaxKind.ExportAssignment
                     ? node
                     : undefined);
-        }
-
-        function getSyntacticDiagnostics() {
-            if (syntacticDiagnostics === undefined) {
-                // Don't bother doing any grammar checks if there are already parser errors.  
-                // Otherwise we may end up with too many cascading errors.
-                syntacticDiagnostics = sourceFile.referenceDiagnostics.concat(sourceFile.parseDiagnostics);
-            }
-
-            Debug.assert(syntacticDiagnostics !== undefined);
-            return syntacticDiagnostics;
         }
     }
 

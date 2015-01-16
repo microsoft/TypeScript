@@ -903,11 +903,14 @@ module ts {
         // missing tokens, or tokens it didn't know how to deal with).
         parseDiagnostics: Diagnostic[];
 
-        // Returns all syntactic diagnostics (i.e. the reference, parser and grammar diagnostics).
-        getSyntacticDiagnostics(): Diagnostic[];
+        //getSyntacticDiagnostics(): Diagnostic[];
 
         // File level diagnostics reported by the binder.
         semanticDiagnostics: Diagnostic[];
+
+        // Returns all syntactic diagnostics (i.e. the reference, parser and grammar diagnostics).
+        // This field should never be used directly, use getSyntacticDiagnostics function instead.
+        syntacticDiagnostics: Diagnostic[];
 
         hasNoDefaultLib: boolean;
         externalModuleIndicator: Node; // The first node that causes this file to be an external module
@@ -917,7 +920,8 @@ module ts {
         languageVersion: ScriptTarget;
         identifiers: Map<string>;
 
-        // Stores a line map for the file. This field should never be used directly to obtain line map, use getLineMap function instead.
+        // Stores a line map for the file.
+        // This field should never be used directly to obtain line map, use getLineMap function instead.
         lineMap: number[];
     }
 
