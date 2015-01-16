@@ -3211,10 +3211,7 @@ module ts {
             }
 
             function isES6ArrowFunction(node: FunctionLikeDeclaration): boolean {
-                if (node.kind === SyntaxKind.ArrowFunction && compilerOptions.target >= ScriptTarget.ES6) {
-                    return true;
-                }
-                return false;
+                return node.kind === SyntaxKind.ArrowFunction && compilerOptions.target >= ScriptTarget.ES6;
             }
 
             function emitFunctionDeclaration(node: FunctionLikeDeclaration) {
@@ -3289,11 +3286,7 @@ module ts {
                 }
                 var outPos = writer.getTextPos();
 
-                // In ES6, fat arrow function lexically binds this value. Therefore, when targeting es6, we can omit capturing of "this" in the fat arrow function
-                if (!isES6ArrowFunction(node)) {
-                    emitCaptureThisForNodeIfNecessary(node);
-                }
-
+                emitCaptureThisForNodeIfNecessary(node);
                 emitDefaultValueAssignments(node);
                 emitRestParameter(node);
                 if (node.body.kind !== SyntaxKind.Block && outPos === writer.getTextPos()) {
