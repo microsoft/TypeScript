@@ -1286,6 +1286,10 @@
         "category": "Error",
         "code": 2462
     },
+    "A binding pattern parameter cannot be optional in an implementation signature.": {
+        "category": "Error",
+        "code":  2463
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
