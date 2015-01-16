@@ -1618,21 +1618,25 @@
         "category": "Error",
         "code": 5033
     },
-    "Option mapRoot cannot be specified without specifying sourcemap option.": {
+    "Option 'mapRoot' cannot be specified without specifying 'sourcemap' option.": {
         "category": "Error",
         "code": 5038
     },
-    "Option sourceRoot cannot be specified without specifying sourcemap option.": {
+    "Option 'sourceRoot' cannot be specified without specifying 'sourcemap' option.": {
         "category": "Error",
         "code": 5039
     },
-    "Option noEmit cannot be specified with option out or outDir.": {
+    "Option 'noEmit' cannot be specified with option 'out' or 'outDir'.": {
         "category": "Error",
         "code": 5040
     },
-    "Option noEmit cannot be specified with option declaration.": {
+    "Option 'noEmit' cannot be specified with option 'declaration'.": {
         "category": "Error",
         "code": 5041
+    },
+    "Option 'project' cannot be mixed with source files on a command line.": {
+        "category": "Error",
+        "code": 5042
     },
     "Concatenate and emit output to single file.": {
         "category": "Message",

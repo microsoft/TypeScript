@@ -326,13 +326,19 @@ module ts {
         }
 
         function getFiles(): string[] {
-            var references: string[] = json["references"] instanceof Array ? json["references"] : []
-            var files = map(references, s => combinePaths(basePath, s));
-            var sysFiles = sys.readDirectory(basePath, ".ts");
-            for (var i = 0; i < sysFiles.length; i++) {
-                var name = sysFiles[i];
-                if (!fileExtensionIs(name, ".d.ts") || !contains(sysFiles, name.substr(0, name.length - 5) + ".ts")) {
-                    files.push(name);
+            var files: string[] = [];
+            if (hasProperty(json, "files")) {
+                if (json["files"] instanceof Array) {
+                    var files = map(<string[]>json["files"], s => combinePaths(basePath, s));
+                }
+            }
+            else {
+                var sysFiles = sys.readDirectory(basePath, ".ts");
+                for (var i = 0; i < sysFiles.length; i++) {
+                    var name = sysFiles[i];
+                    if (!fileExtensionIs(name, ".d.ts") || !contains(sysFiles, name.substr(0, name.length - 5) + ".ts")) {
+                        files.push(name);
+                    }
                 }
             }
             return files;

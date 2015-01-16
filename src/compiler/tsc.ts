@@ -127,7 +127,7 @@ module ts {
     }
 
     function findConfigFile(): string {
-        var searchPath = sys.getCurrentDirectory();
+        var searchPath = normalizePath(sys.getCurrentDirectory());
         var filename = "tsconfig.json";
         while (true) {
             if (sys.fileExists(filename)) {
@@ -178,12 +178,16 @@ module ts {
 
         if (compilerOptions.project) {
             configFilename = normalizePath(combinePaths(compilerOptions.project, "tsconfig.json"));
+            if (filenames.length !== 0) {
+                reportDiagnostic(createCompilerDiagnostic(Diagnostics.Option_project_cannot_be_mixed_with_source_files_on_a_command_line));
+                return sys.exit(EmitReturnStatus.CompilerOptionsErrors);
+            }
         }
         else if (filenames.length === 0) {
             configFilename = findConfigFile();
         }
 
-        if (commandLine.filenames.length === 0 && !configFilename) {
+        if (filenames.length === 0 && !configFilename) {
             printVersion();
             printHelp();
             return sys.exit(EmitReturnStatus.CompilerOptionsErrors);
