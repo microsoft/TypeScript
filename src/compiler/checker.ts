@@ -7213,7 +7213,7 @@ module ts {
                 }
             }
             if (node.questionToken && isBindingPattern(node.name) && func.body) {
-                error(node, Diagnostics.A_binding_pattern_parameter_may_not_be_optional_in_an_implementation_signature);
+                error(node, Diagnostics.A_binding_pattern_parameter_cannot_be_optional_in_an_implementation_signature);
             }
             if (node.dotDotDotToken) {
                 if (!isArrayType(getTypeOfSymbol(node.symbol))) {

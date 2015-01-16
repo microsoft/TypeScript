@@ -1282,7 +1282,7 @@
         "category": "Error",
         "code": 2462
     },
-    "A binding pattern parameter may not be optional in an implementation signature.": {
+    "A binding pattern parameter cannot be optional in an implementation signature.": {
         "category": "Error",
         "code":  2463
     },
