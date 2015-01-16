@@ -391,7 +391,7 @@ module FourSlash {
             this.currentCaretPosition = pos;
 
             var lineStarts = ts.computeLineStarts(this.getCurrentFileContent());
-            var lineCharPos = ts.getLineAndCharacterOfPosition(lineStarts, pos);
+            var lineCharPos = ts.computeLineAndCharacterOfPosition(lineStarts, pos);
             this.scenarioActions.push('<MoveCaretToLineAndChar LineNumber="' + lineCharPos.line + '" CharNumber="' + lineCharPos.character + '" />');
         }
 

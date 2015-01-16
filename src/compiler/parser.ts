@@ -501,7 +501,6 @@ module ts {
         var identifiers: Map<string>;
         var identifierCount = 0;
         var nodeCount = 0;
-        var lineStarts: number[];
         var syntacticDiagnostics: Diagnostic[];
         var scanner: Scanner;
         var token: SyntaxKind;
@@ -593,7 +592,6 @@ module ts {
             sourceText = text;
             parsingContext = 0;
             identifiers = {};
-            lineStarts = undefined;
             syntacticDiagnostics = undefined;
             contextFlags = 0;
             parseErrorBeforeNextFinishedNode = false;
@@ -612,9 +610,6 @@ module ts {
             sourceFile.filename = normalizePath(filename);
             sourceFile.text = sourceText;
 
-            sourceFile.getLineAndCharacterFromPosition = getLineAndCharacterFromSourcePosition;
-            sourceFile.getPositionFromLineAndCharacter = getPositionFromSourceLineAndCharacter;
-            sourceFile.getLineStarts = getLineStarts;
             sourceFile.getSyntacticDiagnostics = getSyntacticDiagnostics;
             sourceFile.update = update;
 
@@ -1070,18 +1065,6 @@ module ts {
 
         function inDisallowInContext() {
             return (contextFlags & ParserContextFlags.DisallowIn) !== 0;
-        }
-
-        function getLineStarts(): number[] {
-            return lineStarts || (lineStarts = computeLineStarts(sourceText));
-        }
-
-        function getLineAndCharacterFromSourcePosition(position: number) {
-            return getLineAndCharacterOfPosition(getLineStarts(), position);
-        }
-
-        function getPositionFromSourceLineAndCharacter(line: number, character: number): number {
-            return getPositionFromLineAndCharacter(getLineStarts(), line, character);
         }
 
         function parseErrorAtCurrentToken(message: DiagnosticMessage, arg0?: any): void {

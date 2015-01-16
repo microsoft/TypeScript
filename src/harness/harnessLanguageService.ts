@@ -292,7 +292,7 @@ module Harness.LanguageService {
             assert.isTrue(line >= 1);
             assert.isTrue(col >= 1);
 
-            return ts.getPositionFromLineAndCharacter(script.lineMap, line, col);
+            return ts.computePositionFromLineAndCharacter(script.lineMap, line, col);
         }
 
         /**
@@ -303,7 +303,7 @@ module Harness.LanguageService {
             var script: ScriptInfo = this.fileNameToScript[fileName];
             assert.isNotNull(script);
 
-            var result = ts.getLineAndCharacterOfPosition(script.lineMap, position);
+            var result = ts.computeLineAndCharacterOfPosition(script.lineMap, position);
 
             assert.isTrue(result.line >= 1);
             assert.isTrue(result.character >= 1);

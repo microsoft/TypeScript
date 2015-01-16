@@ -881,10 +881,6 @@ module ts {
         filename: string;
         text: string;
 
-        getLineAndCharacterFromPosition(position: number): LineAndCharacter;
-        getPositionFromLineAndCharacter(line: number, character: number): number;
-        getLineStarts(): number[];
-
         // Produces a new SourceFile for the 'newText' provided. The 'textChangeRange' parameter 
         // indicates what changed between the 'text' that this SourceFile has and the 'newText'.
         // The SourceFile will be created with the compiler attempting to reuse as many nodes from 
@@ -920,6 +916,9 @@ module ts {
         symbolCount: number;
         languageVersion: ScriptTarget;
         identifiers: Map<string>;
+
+        // Stores a line map for the file. This field should never be used directly to obtain line map, use getLineMap function instead.
+        lineMap: number[];
     }
 
     export interface ScriptReferenceHost {

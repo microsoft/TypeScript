@@ -61,6 +61,9 @@ module ts {
         scriptSnapshot: IScriptSnapshot;
 
         getNamedDeclarations(): Declaration[];
+        getLineAndCharacterFromPosition(pos: number): LineAndCharacter;
+        getLineStarts(): number[];
+        getPositionFromLineAndCharacter(line: number, character: number): number;
     }
 
     /**
@@ -721,18 +724,16 @@ module ts {
         public filename: string;
         public text: string;
         public scriptSnapshot: IScriptSnapshot;
+        public lineMap: number[];
 
         public statements: NodeArray<Statement>;
         public endOfFileToken: Node;
 
         // These methods will have their implementation provided by the implementation the 
         // compiler actually exports off of SourceFile.
-        public getLineAndCharacterFromPosition: (position: number) => LineAndCharacter;
-        public getPositionFromLineAndCharacter: (line: number, character: number) => number;
-        public getLineStarts: () => number[];
         public getSyntacticDiagnostics: () => Diagnostic[];
         public update: (newText: string, textChangeRange: TextChangeRange) => SourceFile;
-
+        
         public amdDependencies: string[];
         public amdModuleName: string;
         public referencedFiles: FileReference[];
@@ -752,6 +753,18 @@ module ts {
         public identifiers: Map<string>;
 
         private namedDeclarations: Declaration[];
+
+        public getLineAndCharacterFromPosition(position: number): LineAndCharacter {
+            return getLineAndCharacterOfPosition(this, position);
+        }
+
+        public getLineStarts(): number[] {
+            return getLineStarts(this);
+        }
+
+        public getPositionFromLineAndCharacter(line: number, character: number): number {
+            return getPositionFromLineAndCharacter(this, line, character);
+        }
 
         public getNamedDeclarations() {
             if (!this.namedDeclarations) {
