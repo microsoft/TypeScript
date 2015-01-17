@@ -658,7 +658,7 @@ module ts {
     // from this SourceFile that are being held onto may change as a result (including 
     // becoming detached from any SourceFile).  It is recommended that this SourceFile not
     // be used once 'update' is called on it.
-    export function update(sourceFile: SourceFile, newText: string, textChangeRange: TextChangeRange): SourceFile {
+    export function updateSourceFile(sourceFile: SourceFile, newText: string, textChangeRange: TextChangeRange): SourceFile {
         if (textChangeRangeIsUnchanged(textChangeRange)) {
             // if the text didn't change, then we can just return our current source file as-is.
             return sourceFile;
