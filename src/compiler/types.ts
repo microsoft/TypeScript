@@ -881,17 +881,6 @@ module ts {
         filename: string;
         text: string;
 
-        // Produces a new SourceFile for the 'newText' provided. The 'textChangeRange' parameter 
-        // indicates what changed between the 'text' that this SourceFile has and the 'newText'.
-        // The SourceFile will be created with the compiler attempting to reuse as many nodes from 
-        // this file as possible.
-        //
-        // Note: this function mutates nodes from this SourceFile. That means any existing nodes
-        // from this SourceFile that are being held onto may change as a result (including 
-        // becoming detached from any SourceFile).  It is recommended that this SourceFile not
-        // be used once 'update' is called on it.
-        update(newText: string, textChangeRange: TextChangeRange): SourceFile;
-
         amdDependencies: string[];
         amdModuleName: string;
         referencedFiles: FileReference[];
