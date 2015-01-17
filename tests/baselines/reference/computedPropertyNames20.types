@@ -1,0 +1,10 @@
+=== tests/cases/conformance/es6/computedProperties/computedPropertyNames20.ts ===
+var obj = {
+>obj : {}
+>{    [this.bar]: 0} : {}
+
+    [this.bar]: 0
+>this.bar : any
+>this : any
+>bar : any
+}

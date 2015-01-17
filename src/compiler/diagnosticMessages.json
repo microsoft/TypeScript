@@ -1294,6 +1294,10 @@
         "category": "Error",
         "code": 2464
     },
+    "'this' cannot be referenced in a computed property name.": {
+        "category": "Error",
+        "code": 2465
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",

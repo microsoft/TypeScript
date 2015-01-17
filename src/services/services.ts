@@ -4191,6 +4191,8 @@ module ts {
                     case SyntaxKind.FunctionDeclaration:
                     case SyntaxKind.FunctionExpression:
                         break;
+                    // Computed properties in classes are not handled here because references to this are illegal,
+                    // so there is no point finding references to them.
                     default:
                         return undefined;
                 }

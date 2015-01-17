@@ -4853,6 +4853,9 @@ module ts {
                         // do not return here so in case if lexical this is captured - it will be reflected in flags on NodeLinks
                     }
                     break;
+                case SyntaxKind.ComputedPropertyName:
+                    error(node, Diagnostics.this_cannot_be_referenced_in_a_computed_property_name);
+                    break;
             }
 
             if (needToCaptureLexicalThis) {

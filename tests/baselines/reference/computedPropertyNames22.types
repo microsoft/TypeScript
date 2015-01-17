@@ -1,0 +1,21 @@
+=== tests/cases/conformance/es6/computedProperties/computedPropertyNames22.ts ===
+class C {
+>C : C
+
+    bar() {
+>bar : () => number
+
+        var obj = {
+>obj : {}
+>{            [this.bar()]() { }        } : {}
+
+            [this.bar()]() { }
+>this.bar() : any
+>this.bar : any
+>this : any
+>bar : any
+
+        };
+        return 0;
+    }
+}

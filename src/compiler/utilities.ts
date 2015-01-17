@@ -399,6 +399,14 @@ module ts {
                 return undefined;
             }
             switch (node.kind) {
+                case SyntaxKind.ComputedPropertyName:
+                    // If the grandparent node is an object literal (as opposed to a class),
+                    // then the computed property is not a 'this' container.
+                    // A computed property name in a class needs to be a this container
+                    // so that we can error on it.
+                    if (node.parent.parent.kind !== SyntaxKind.ClassDeclaration) {
+                        continue;
+                    }
                 case SyntaxKind.ArrowFunction:
                     if (!includeArrowFunctions) {
                         continue;
