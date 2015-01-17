@@ -115,7 +115,9 @@ module ts {
             }
 
             public getChangeRange(oldSnapshot: IScriptSnapshot): TextChangeRange {
-                throw new Error("not yet implemented");
+                // Text-based snapshots do not support incremental parsing. Return undefined
+                // to signal that to the caller.
+                return undefined;
             }
         }
 
