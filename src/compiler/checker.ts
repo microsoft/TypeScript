@@ -4870,26 +4870,6 @@ module ts {
             return anyType;
         }
 
-        function getSuperContainer(node: Node): Node {
-            while (true) {
-                node = node.parent;
-                if (!node) return node;
-                switch (node.kind) {
-                    case SyntaxKind.FunctionDeclaration:
-                    case SyntaxKind.FunctionExpression:
-                    case SyntaxKind.ArrowFunction:
-                    case SyntaxKind.PropertyDeclaration:
-                    case SyntaxKind.PropertySignature:
-                    case SyntaxKind.MethodDeclaration:
-                    case SyntaxKind.MethodSignature:
-                    case SyntaxKind.Constructor:
-                    case SyntaxKind.GetAccessor:
-                    case SyntaxKind.SetAccessor:
-                        return node;
-                }
-            }
-        }
-
         function isInConstructorArgumentInitializer(node: Node, constructorDecl: Node): boolean {
             for (var n = node; n && n !== constructorDecl; n = n.parent) {
                 if (n.kind === SyntaxKind.Parameter) {
@@ -4913,7 +4893,7 @@ module ts {
                 return unknownType;
             }
 
-            var container = getSuperContainer(node);
+            var container = getSuperContainer(node, /*includeFunctions*/ true);
 
             if (container) {
                 var canUseSuperExpression = false;
@@ -4931,7 +4911,7 @@ module ts {
                     // super property access might appear in arrow functions with arbitrary deep nesting
                     var needToCaptureLexicalThis = false;
                     while (container && container.kind === SyntaxKind.ArrowFunction) {
-                        container = getSuperContainer(container);
+                        container = getSuperContainer(container, /*includeFunctions*/ true);
                         needToCaptureLexicalThis = true;
                     }
 

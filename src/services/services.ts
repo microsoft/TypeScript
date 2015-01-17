@@ -4114,7 +4114,7 @@ module ts {
             }
 
             function getReferencesForSuperKeyword(superKeyword: Node): ReferenceEntry[] {
-                var searchSpaceNode = getSuperContainer(superKeyword);
+                var searchSpaceNode = getSuperContainer(superKeyword, /*includeFunctions*/ false);
                 if (!searchSpaceNode) {
                     return undefined;
                 }
@@ -4149,7 +4149,7 @@ module ts {
                         return;
                     }
 
-                    var container = getSuperContainer(node);
+                    var container = getSuperContainer(node, /*includeFunctions*/ false);
 
                     // If we have a 'super' container, we must have an enclosing class.
                     // Now make sure the owning class is the same as the search-space

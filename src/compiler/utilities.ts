@@ -429,13 +429,17 @@ module ts {
         }
     }
 
-    export function getSuperContainer(node: Node): Node {
+    export function getSuperContainer(node: Node, includeFunctions: boolean): Node {
         while (true) {
             node = node.parent;
-            if (!node) {
-                return undefined;
-            }
+            if (!node) return node;
             switch (node.kind) {
+                case SyntaxKind.FunctionDeclaration:
+                case SyntaxKind.FunctionExpression:
+                case SyntaxKind.ArrowFunction:
+                    if (!includeFunctions) {
+                        continue;
+                    }
                 case SyntaxKind.PropertyDeclaration:
                 case SyntaxKind.PropertySignature:
                 case SyntaxKind.MethodDeclaration:
