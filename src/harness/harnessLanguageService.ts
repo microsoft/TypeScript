@@ -7,7 +7,7 @@ module Harness.LanguageService {
         public editRanges: { length: number; textChangeRange: ts.TextChangeRange; }[] = [];
         public lineMap: number[] = null;
 
-        constructor(public fileName: string, public content: string, public isOpen = true) {
+        constructor(public fileName: string, public content: string) {
             this.setContent(content);
         }
 
@@ -109,11 +109,9 @@ module Harness.LanguageService {
             fileName: string,
             compilationSettings: ts.CompilerOptions,
             scriptSnapshot: ts.IScriptSnapshot,
-            version: string,
-            isOpen: boolean): ts.SourceFile {
+            version: string): ts.SourceFile {
             var sourceFile = ts.createSourceFile(fileName, scriptSnapshot.getText(0, scriptSnapshot.getLength()), compilationSettings.target);
             sourceFile.version = version;
-            sourceFile.isOpen = isOpen;
             return sourceFile;
         }
 
@@ -123,10 +121,9 @@ module Harness.LanguageService {
             compilationSettings: ts.CompilerOptions,
             scriptSnapshot: ts.IScriptSnapshot,
             version: string,
-            isOpen: boolean,
             textChangeRange: ts.TextChangeRange
             ): ts.SourceFile {
-            return ts.updateLanguageServiceSourceFile(document, scriptSnapshot, version, isOpen, textChangeRange);
+            return ts.updateLanguageServiceSourceFile(document, scriptSnapshot, version, textChangeRange);
         }
 
         public releaseDocument(fileName: string, compilationSettings: ts.CompilerOptions): void {
@@ -231,10 +228,6 @@ module Harness.LanguageService {
             return this.getScriptInfo(fileName).version.toString();
         }
 
-        public getScriptIsOpen(fileName: string): boolean {
-            return this.getScriptInfo(fileName).isOpen;
-        }
-
         public getLocalizedDiagnosticMessages(): string {
             return JSON.stringify({});
         }
@@ -268,7 +261,6 @@ module Harness.LanguageService {
         public parseSourceText(fileName: string, sourceText: ts.IScriptSnapshot): ts.SourceFile {
             var result = ts.createSourceFile(fileName, sourceText.getText(0, sourceText.getLength()), ts.ScriptTarget.Latest);
             result.version = "1";
-            result.isOpen = true;
             return result;
         }
 

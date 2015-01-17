@@ -5,8 +5,8 @@ describe("DocumentRegistry", () => {
         var documentRegistry = ts.createDocumentRegistry();
         var defaultCompilerOptions = ts.getDefaultCompilerOptions();
 
-        var f1 = documentRegistry.acquireDocument("file1.ts", defaultCompilerOptions, ts.ScriptSnapshot.fromString("var x = 1;"), "1", false);
-        var f2 = documentRegistry.acquireDocument("file1.ts", defaultCompilerOptions, ts.ScriptSnapshot.fromString("var x = 1;"), "1", false);
+        var f1 = documentRegistry.acquireDocument("file1.ts", defaultCompilerOptions, ts.ScriptSnapshot.fromString("var x = 1;"), "1");
+        var f2 = documentRegistry.acquireDocument("file1.ts", defaultCompilerOptions, ts.ScriptSnapshot.fromString("var x = 1;"), "1");
 
         assert(f1 === f2, "DocumentRegistry should return the same document for the same name");
     });
@@ -17,21 +17,21 @@ describe("DocumentRegistry", () => {
 
         // change compilation setting that doesn't affect parsing - should have the same document
         compilerOptions.declaration = true;
-        var f1 = documentRegistry.acquireDocument("file1.ts", compilerOptions, ts.ScriptSnapshot.fromString("var x = 1;"), "1", false);
+        var f1 = documentRegistry.acquireDocument("file1.ts", compilerOptions, ts.ScriptSnapshot.fromString("var x = 1;"), "1");
         compilerOptions.declaration = false;
-        var f2 = documentRegistry.acquireDocument("file1.ts", compilerOptions, ts.ScriptSnapshot.fromString("var x = 1;"), "1", false);
+        var f2 = documentRegistry.acquireDocument("file1.ts", compilerOptions, ts.ScriptSnapshot.fromString("var x = 1;"), "1");
 
         assert(f1 === f2, "Expected to have the same document instance");
 
 
         // change value of compilation setting that is used during production of AST - new document is required
         compilerOptions.target = ts.ScriptTarget.ES3;
-        var f3 = documentRegistry.acquireDocument("file1.ts", compilerOptions, ts.ScriptSnapshot.fromString("var x = 1;"), "1", false);
+        var f3 = documentRegistry.acquireDocument("file1.ts", compilerOptions, ts.ScriptSnapshot.fromString("var x = 1;"), "1");
 
         assert(f1 !== f3, "Changed target: Expected to have different instances of document");
 
         compilerOptions.module = ts.ModuleKind.CommonJS;
-        var f4 = documentRegistry.acquireDocument("file1.ts", compilerOptions, ts.ScriptSnapshot.fromString("var x = 1;"), "1", false);
+        var f4 = documentRegistry.acquireDocument("file1.ts", compilerOptions, ts.ScriptSnapshot.fromString("var x = 1;"), "1");
 
         assert(f1 !== f4, "Changed module: Expected to have different instances of document");
     });

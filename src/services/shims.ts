@@ -50,7 +50,6 @@ module ts {
         /** Returns a JSON-encoded value of the type: string[] */
         getScriptFileNames(): string;
         getScriptVersion(fileName: string): string;
-        getScriptIsOpen(fileName: string): boolean;
         getScriptSnapshot(fileName: string): ScriptSnapshotShim;
         getLocalizedDiagnosticMessages(): string;
         getCancellationToken(): CancellationToken;
@@ -249,10 +248,6 @@ module ts {
 
         public getScriptVersion(fileName: string): string {
             return this.shimHost.getScriptVersion(fileName);
-        }
-
-        public getScriptIsOpen(fileName: string): boolean {
-            return this.shimHost.getScriptIsOpen(fileName);
         }
 
         public getLocalizedDiagnosticMessages(): any {

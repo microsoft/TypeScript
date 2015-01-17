@@ -56,7 +56,6 @@ module ts {
     }
 
     export interface SourceFile {
-        isOpen: boolean;
         version: string;
         scriptSnapshot: IScriptSnapshot;
 
@@ -747,7 +746,6 @@ module ts {
         public identifierCount: number;
         public symbolCount: number;
         public version: string;
-        public isOpen: boolean;
         public languageVersion: ScriptTarget;
         public identifiers: Map<string>;
 
@@ -848,7 +846,6 @@ module ts {
         getCompilationSettings(): CompilerOptions;
         getScriptFileNames(): string[];
         getScriptVersion(fileName: string): string;
-        getScriptIsOpen(fileName: string): boolean;
         getScriptSnapshot(fileName: string): IScriptSnapshot;
         getLocalizedDiagnosticMessages?(): any;
         getCancellationToken?(): CancellationToken;
@@ -1163,8 +1160,7 @@ module ts {
             filename: string,
             compilationSettings: CompilerOptions,
             scriptSnapshot: IScriptSnapshot,
-            version: string,
-            isOpen: boolean): SourceFile;
+            version: string): SourceFile;
 
         updateDocument(
             sourceFile: SourceFile,
@@ -1172,9 +1168,7 @@ module ts {
             compilationSettings: CompilerOptions,
             scriptSnapshot: IScriptSnapshot,
             version: string,
-            isOpen: boolean,
-            textChangeRange: TextChangeRange
-            ): SourceFile;
+            textChangeRange: TextChangeRange): SourceFile;
 
         releaseDocument(filename: string, compilationSettings: CompilerOptions): void
     }
@@ -1315,7 +1309,6 @@ module ts {
     interface HostFileInformation {
         filename: string;
         version: string;
-        isOpen: boolean;
         sourceText?: IScriptSnapshot;
     }
 
@@ -1409,8 +1402,7 @@ module ts {
                 var filename = filenames[i];
                 this.filenameToEntry[normalizeSlashes(filename)] = {
                     filename: filename,
-                    version: host.getScriptVersion(filename),
-                    isOpen: host.getScriptIsOpen(filename)
+                    version: host.getScriptVersion(filename)
                 };
             }
 
@@ -1451,10 +1443,6 @@ module ts {
 
         public getVersion(filename: string): string {
             return this.getEntry(filename).version;
-        }
-
-        public isOpen(filename: string): boolean {
-            return this.getEntry(filename).isOpen;
         }
 
         public getScriptSnapshot(filename: string): IScriptSnapshot {
@@ -1507,7 +1495,7 @@ module ts {
                 var scriptSnapshot = this.hostCache.getScriptSnapshot(filename);
 
                 var start = new Date().getTime();
-                sourceFile = createLanguageServiceSourceFile(filename, scriptSnapshot, ScriptTarget.Latest, version, /*isOpen*/ true, /*setNodeParents;*/ true);
+                sourceFile = createLanguageServiceSourceFile(filename, scriptSnapshot, ScriptTarget.Latest, version, /*setNodeParents:*/ true);
                 this.log("SyntaxTreeCache.Initialize: createSourceFile: " + (new Date().getTime() - start));
             }
             else if (this.currentFileVersion !== version) {
@@ -1516,7 +1504,7 @@ module ts {
                 var editRange = this.hostCache.getChangeRange(filename, this.currentFileVersion, this.currentSourceFile.scriptSnapshot);
 
                 var start = new Date().getTime();
-                sourceFile = updateLanguageServiceSourceFile(this.currentSourceFile, scriptSnapshot, version, /*isOpen*/ true, editRange);
+                sourceFile = updateLanguageServiceSourceFile(this.currentSourceFile, scriptSnapshot, version, editRange);
                 this.log("SyntaxTreeCache.Initialize: updateSourceFile: " + (new Date().getTime() - start));
             }
 
@@ -1538,21 +1526,20 @@ module ts {
         }
     }
 
-    function setSourceFileFields(sourceFile: SourceFile, scriptSnapshot: IScriptSnapshot, version: string, isOpen: boolean) {
+    function setSourceFileFields(sourceFile: SourceFile, scriptSnapshot: IScriptSnapshot, version: string) {
         sourceFile.version = version;
-        sourceFile.isOpen = isOpen;
         sourceFile.scriptSnapshot = scriptSnapshot;
     } 
 
-    export function createLanguageServiceSourceFile(filename: string, scriptSnapshot: IScriptSnapshot, scriptTarget: ScriptTarget, version: string, isOpen: boolean, setNodeParents: boolean): SourceFile {
+    export function createLanguageServiceSourceFile(filename: string, scriptSnapshot: IScriptSnapshot, scriptTarget: ScriptTarget, version: string, setNodeParents: boolean): SourceFile {
         var sourceFile = createSourceFile(filename, scriptSnapshot.getText(0, scriptSnapshot.getLength()), scriptTarget, setNodeParents);
-        setSourceFileFields(sourceFile, scriptSnapshot, version, isOpen);
+        setSourceFileFields(sourceFile, scriptSnapshot, version);
         return sourceFile;
     }
 
     export var disableIncrementalParsing = false;
 
-    export function updateLanguageServiceSourceFile(sourceFile: SourceFile, scriptSnapshot: IScriptSnapshot, version: string, isOpen: boolean, textChangeRange: TextChangeRange): SourceFile {
+    export function updateLanguageServiceSourceFile(sourceFile: SourceFile, scriptSnapshot: IScriptSnapshot, version: string, textChangeRange: TextChangeRange): SourceFile {
         if (textChangeRange && Debug.shouldAssert(AssertionLevel.Normal)) {
             var oldText = sourceFile.scriptSnapshot;
             var newText = scriptSnapshot;
@@ -1573,18 +1560,18 @@ module ts {
         // If we were given a text change range, and our version or open-ness changed, then 
         // incrementally parse this file.
         if (textChangeRange) {
-            if (version !== sourceFile.version || isOpen != sourceFile.isOpen) {
+            if (version !== sourceFile.version) {
                 // Once incremental parsing is ready, then just call into this function.
                 if (!disableIncrementalParsing) {
                     var newSourceFile = sourceFile.update(scriptSnapshot.getText(0, scriptSnapshot.getLength()), textChangeRange);
-                    setSourceFileFields(newSourceFile, scriptSnapshot, version, isOpen);
+                    setSourceFileFields(newSourceFile, scriptSnapshot, version);
                     return newSourceFile;
                 }
             }
         }
 
         // Otherwise, just create a new source file.
-        return createLanguageServiceSourceFile(sourceFile.filename, scriptSnapshot, sourceFile.languageVersion, version, isOpen, /*setNodeParents:*/ true);
+        return createLanguageServiceSourceFile(sourceFile.filename, scriptSnapshot, sourceFile.languageVersion, version, /*setNodeParents:*/ true);
     }
 
     export function createDocumentRegistry(): DocumentRegistry {
@@ -1628,13 +1615,12 @@ module ts {
             filename: string,
             compilationSettings: CompilerOptions,
             scriptSnapshot: IScriptSnapshot,
-            version: string,
-            isOpen: boolean): SourceFile {
+            version: string): SourceFile {
 
             var bucket = getBucketForCompilationSettings(compilationSettings, /*createIfMissing*/ true);
             var entry = lookUp(bucket, filename);
             if (!entry) {
-                var sourceFile = createLanguageServiceSourceFile(filename, scriptSnapshot, compilationSettings.target, version, isOpen, /*setNodeParents:*/ false);
+                var sourceFile = createLanguageServiceSourceFile(filename, scriptSnapshot, compilationSettings.target, version, /*setNodeParents:*/ false);
 
                 bucket[filename] = entry = {
                     sourceFile: sourceFile,
@@ -1653,7 +1639,6 @@ module ts {
             compilationSettings: CompilerOptions,
             scriptSnapshot: IScriptSnapshot,
             version: string,
-            isOpen: boolean,
             textChangeRange: TextChangeRange
             ): SourceFile {
 
@@ -1662,7 +1647,7 @@ module ts {
             var entry = lookUp(bucket, filename);
             Debug.assert(entry !== undefined);
 
-            entry.sourceFile = updateLanguageServiceSourceFile(entry.sourceFile, scriptSnapshot, version, isOpen, textChangeRange);
+            entry.sourceFile = updateLanguageServiceSourceFile(entry.sourceFile, scriptSnapshot, version, textChangeRange);
             return entry.sourceFile;
         }
 
@@ -1962,7 +1947,7 @@ module ts {
         }
 
         function sourceFileUpToDate(sourceFile: SourceFile): boolean {
-            return sourceFile && sourceFile.version === hostCache.getVersion(sourceFile.filename) && sourceFile.isOpen === hostCache.isOpen(sourceFile.filename);
+            return sourceFile && sourceFile.version === hostCache.getVersion(sourceFile.filename);
         }
 
         function programUpToDate(): boolean {
@@ -2031,7 +2016,6 @@ module ts {
                 var filename = hostfilenames[i];
 
                 var version = hostCache.getVersion(filename);
-                var isOpen = hostCache.isOpen(filename);
                 var scriptSnapshot = hostCache.getScriptSnapshot(filename);
 
                 var sourceFile: SourceFile = getSourceFile(filename);
@@ -2043,21 +2027,13 @@ module ts {
                         continue;
                     }
 
-                    // Only perform incremental parsing on open files that are being edited.  If a file was
-                    // open, but is now closed, we want to re-parse entirely so we don't have any tokens that
-                    // are holding onto expensive script snapshot instances on the host.  Similarly, if a 
-                    // file was closed, then we always want to re-parse.  This is so our tree doesn't keep 
-                    // the old buffer alive that represented the file on disk (as the host has moved to a 
-                    // new text buffer).
                     var textChangeRange: TextChangeRange = null;
-                    if (sourceFile.isOpen && isOpen) {
-                        textChangeRange = hostCache.getChangeRange(filename, sourceFile.version, sourceFile.scriptSnapshot);
-                    }
+                    textChangeRange = hostCache.getChangeRange(filename, sourceFile.version, sourceFile.scriptSnapshot);
 
-                    sourceFile = documentRegistry.updateDocument(sourceFile, filename, compilationSettings, scriptSnapshot, version, isOpen, textChangeRange);
+                    sourceFile = documentRegistry.updateDocument(sourceFile, filename, compilationSettings, scriptSnapshot, version, textChangeRange);
                 }
                 else {
-                    sourceFile = documentRegistry.acquireDocument(filename, compilationSettings, scriptSnapshot, version, isOpen);
+                    sourceFile = documentRegistry.acquireDocument(filename, compilationSettings, scriptSnapshot, version);
                 }
 
                 // Remember the new sourceFile
