@@ -4926,12 +4926,12 @@ module ts {
                 syntacticDiagnostics = sourceFile.referenceDiagnostics.concat(sourceFile.parseDiagnostics);
             }
 
-        Debug.assert(syntacticDiagnostics !== undefined);
-        return syntacticDiagnostics;
-    }
+            Debug.assert(syntacticDiagnostics !== undefined);
+            return syntacticDiagnostics;
+        }
     }
 
-    export function isLeftHandSideExpression(expr: Expression): boolean {
+    export function isLeftHandSideExpression(expr: Node): boolean {
         if (expr) {
             switch (expr.kind) {
                 case SyntaxKind.PropertyAccessExpression:

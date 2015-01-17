@@ -23,11 +23,11 @@ module ts {
         function rewriteBindingElementCore(node: BindingElement, value: Expression): void {
             if (node.initializer) {
                 // Combine value and initializer
-                value = value ? factory.getValueOrDefault(value, node.initializer, locals, writeDeclaration) : node.initializer;
+                value = value ? locals.getValueOrDefault(value, node.initializer, writeDeclaration) : node.initializer;
             }
             else if (!value) {
                 // Use 'void 0' in absence of value and initializer
-                value = factory.getUndefinedValue();
+                value = Factory.createVoidZero();
             }
 
             if (isBindingPattern(node.name)) {
@@ -36,25 +36,25 @@ module ts {
                 if (elements.length !== 1) {
                     // For anything but a single element destructuring we need to generate a temporary
                     // to ensure value is evaluated exactly once.
-                    value = factory.ensureIdentifier(value, locals, writeDeclaration);
+                    value = locals.ensureIdentifier(value, writeDeclaration);
                 }
                 for (var i = 0; i < elements.length; i++) {
                     var element = elements[i];
                     if (pattern.kind === SyntaxKind.ObjectBindingPattern) {
                         // Rewrite element to a declaration with an initializer that fetches property
                         var propName = element.propertyName || <Identifier>element.name;
-                        rewriteBindingElementCore(element, factory.createPropertyAccessExpression(factory.parenthesize(value), propName));
+                        rewriteBindingElementCore(element, Factory.createPropertyAccessExpression(Factory.addParenthesisIfNessary(value), propName));
                     }
                     else if (element.kind !== SyntaxKind.OmittedExpression) {
                         if (!element.dotDotDotToken) {
                             // Rewrite element to a declaration that accesses array element at index i
-                            rewriteBindingElementCore(element, factory.createElementAccessExpression(factory.parenthesize(value), factory.createNumericLiteral(i)));
+                            rewriteBindingElementCore(element, Factory.createElementAccessExpression(Factory.addParenthesisIfNessary(value), Factory.createNumericLiteral(i)));
                         }
                         else if (i === elements.length - 1) {
-                            value = factory.ensureIdentifier(value, locals, writeDeclaration);
+                            value = locals.ensureIdentifier(value, writeDeclaration);
                             var name = <Identifier>element.name;
-                            var sliceExpression = factory.createPropertyAccessExpression(factory.parenthesize(value), factory.createIdentifier("slice"));
-                            var callExpression = factory.createCallExpression(sliceExpression, [factory.createNumericLiteral(i)]);
+                            var sliceExpression = Factory.createPropertyAccessExpression(Factory.addParenthesisIfNessary(value), Factory.createIdentifier("slice"));
+                            var callExpression = Factory.createCallExpression(sliceExpression, [Factory.createNumericLiteral(i)]);
                             writeDeclaration(name, callExpression, element);
                         }
                     }
@@ -71,7 +71,7 @@ module ts {
                 variableDeclarations = [];
             }
 
-            variableDeclarations.push(factory.createVariableDeclaration(left, right, location));
+            variableDeclarations.push(Factory.createVariableDeclaration(left, right, location));
         }
     }
 
@@ -80,9 +80,9 @@ module ts {
         return rewriteWorker();
 
         function writeAssignment(left: Identifier, right: Expression, location?: TextRange): void {
-            var assignmentExpression = factory.createBinaryExpression(SyntaxKind.EqualsToken, left, right, location);
+            var assignmentExpression = Factory.createBinaryExpression(SyntaxKind.EqualsToken, left, right, location);
             if (mergedAssignments) {
-                mergedAssignments = factory.createBinaryExpression(
+                mergedAssignments = Factory.createBinaryExpression(
                     SyntaxKind.CommaToken,
                     mergedAssignments,
                     assignmentExpression);
@@ -108,7 +108,7 @@ module ts {
 
         function rewriteDestructuringAssignment(target: Expression, value: Expression): void {
             if (target.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>target).operator === SyntaxKind.EqualsToken) {
-                value = factory.getValueOrDefault(value, (<BinaryExpression>target).right, locals, writeAssignment);
+                value = locals.getValueOrDefault(value, (<BinaryExpression>target).right, writeAssignment);
                 target = (<BinaryExpression>target).left;
             }
             if (target.kind === SyntaxKind.ObjectLiteralExpression) {
@@ -127,14 +127,14 @@ module ts {
             if (properties.length !== 1) {
                 // For anything but a single element destructuring we need to generate a temporary
                 // to ensure value is evaluated exactly once.
-                value = factory.ensureIdentifier(value, locals, writeAssignment);
+                value = locals.ensureIdentifier(value, writeAssignment);
             }
             for (var i = 0; i < properties.length; i++) {
                 var p = properties[i];
                 if (p.kind === SyntaxKind.PropertyAssignment || p.kind === SyntaxKind.ShorthandPropertyAssignment) {
                     // TODO(andersh): Computed property support
                     var propName = <Identifier>((<PropertyAssignment>p).name);
-                    rewriteDestructuringAssignment((<PropertyAssignment>p).initializer || propName, factory.createPropertyAccessExpression(factory.parenthesize(value), propName));
+                    rewriteDestructuringAssignment((<PropertyAssignment>p).initializer || propName, Factory.createPropertyAccessExpression(Factory.addParenthesisIfNessary(value), propName));
                 }
             }
         }
@@ -144,19 +144,19 @@ module ts {
             if (elements.length !== 1) {
                 // For anything but a single element destructuring we need to generate a temporary
                 // to ensure value is evaluated exactly once.
-                value = factory.ensureIdentifier(value, locals, writeAssignment);
+                value = locals.ensureIdentifier(value, writeAssignment);
             }
             for (var i = 0; i < elements.length; i++) {
                 var e = elements[i];
                 if (e.kind !== SyntaxKind.OmittedExpression) {
                     if (e.kind !== SyntaxKind.SpreadElementExpression) {
-                        rewriteDestructuringAssignment(e, factory.createElementAccessExpression(factory.parenthesize(value), factory.createNumericLiteral(i)));
+                        rewriteDestructuringAssignment(e, Factory.createElementAccessExpression(Factory.addParenthesisIfNessary(value), Factory.createNumericLiteral(i)));
                     }
                     else {
                         if (i === elements.length - 1) {
-                            value = factory.ensureIdentifier(value, locals, writeAssignment);
-                            var sliceExpression = factory.createPropertyAccessExpression(factory.parenthesize(value), factory.createIdentifier("slice"));
-                            var callExpression = factory.createCallExpression(sliceExpression, [factory.createNumericLiteral(i)]);
+                            value = locals.ensureIdentifier(value, writeAssignment);
+                            var sliceExpression = Factory.createPropertyAccessExpression(Factory.addParenthesisIfNessary(value), Factory.createIdentifier("slice"));
+                            var callExpression = Factory.createCallExpression(sliceExpression, [Factory.createNumericLiteral(i)]);
                             writeAssignment(<Identifier>(<SpreadElementExpression>e).expression, callExpression);
                         }
                     }
@@ -171,9 +171,9 @@ module ts {
                 rewriteDestructuringAssignment(target, value);
             }
             else {
-                value = factory.ensureIdentifier(value, locals, writeAssignment);
+                value = locals.ensureIdentifier(value, writeAssignment);
                 rewriteDestructuringAssignment(target, value);
-                mergedAssignments = factory.createBinaryExpression(
+                mergedAssignments = Factory.createBinaryExpression(
                     SyntaxKind.CommaToken,
                     mergedAssignments,
                     value);
@@ -194,7 +194,7 @@ module ts {
                     segments = [];
                 }
                 if (i > start) {
-                    segments.push(factory.createArrayLiteralExpression(elements.slice(start, i)));
+                    segments.push(Factory.createArrayLiteralExpression(elements.slice(start, i)));
                 }
                 segments.push((<SpreadElementExpression>element).expression);
                 start = i + 1;
@@ -204,17 +204,17 @@ module ts {
             return node;
         }
         if (start < length) {
-            segments.push(factory.createArrayLiteralExpression(elements.slice(start, length)));
+            segments.push(Factory.createArrayLiteralExpression(elements.slice(start, length)));
         }
 
         // Rewrite using the pattern <segment0>.concat(<segment1>, <segment2>, ...)
         if (segments.length === 1) {
-            return factory.parenthesize(segments[0]);
+            return Factory.addParenthesisIfNessary(segments[0]);
         }
 
-        var head = factory.parenthesize(segments.shift());
-        var concatExpression = factory.createPropertyAccessExpression(factory.parenthesize(head), factory.createIdentifier("concat"));
-        var callExpression = factory.createCallExpression(concatExpression, segments, node);
+        var head = Factory.addParenthesisIfNessary(segments.shift());
+        var concatExpression = Factory.createPropertyAccessExpression(head, Factory.createIdentifier("concat"));
+        var callExpression = Factory.createCallExpression(concatExpression, segments, node);
         return callExpression;
     }
 
@@ -248,7 +248,7 @@ module ts {
             visitTemplateExpression,
             visitFunctionDeclaration,
             visitVariableStatement,
-            visitVariableDeclarationListOrInitializer,
+            visitVariableDeclarationListOrExpression,
             visitExpressionStatement,
             visitIfStatement,
             visitDoStatement,
@@ -311,7 +311,7 @@ module ts {
                     return nodeVisitor.visitLeftHandSideExpression(rewritten);
                 }
 
-                return factory.updateArrayLiteralExpression(
+                return Factory.updateArrayLiteralExpression(
                     node,
                     Visitor.visitNodes(node.elements, nodeVisitor.visitExpression, hasAwaitOrYield, cacheExpression));
             }
@@ -321,7 +321,7 @@ module ts {
 
         function visitObjectLiteralExpression(node: ObjectLiteralExpression): LeftHandSideExpression {
             if (isDownlevel && hasAwaitOrYield(node)) {
-                return factory.updateObjectLiteralExpression(
+                return Factory.updateObjectLiteralExpression(
                     node,
                     Visitor.visitNodes(node.properties, nodeVisitor.visitObjectLiteralElement, hasAwaitOrYield, cacheObjectLiteralElement));
             }
@@ -332,7 +332,7 @@ module ts {
         function visitElementAccessExpression(node: ElementAccessExpression): LeftHandSideExpression {
             if (isDownlevel && hasAwaitOrYield(node.argumentExpression)) {
                 var object = cacheExpression(nodeVisitor.visitExpression(node.expression));
-                return factory.updateElementAccessExpression(node, object, nodeVisitor.visitExpression(node.argumentExpression));
+                return Factory.updateElementAccessExpression(node, object, nodeVisitor.visitExpression(node.argumentExpression));
             }
 
             return Visitor.visitElementAccessExpression(node);
@@ -345,12 +345,12 @@ module ts {
                 var target = binding.target;
                 var thisArg = binding.thisArg;
                 if (thisArg) {
-                    var callArguments: NodeArray<Expression> = factory.createNodeArray([<Expression>thisArg].concat(arguments), node.arguments);
-                    var callProperty = factory.createPropertyAccessExpression(target, factory.createIdentifier("call"));
-                    var callExpression = factory.createCallExpression(callProperty, callArguments, node);
+                    var callArguments: NodeArray<Expression> = Factory.createNodeArray([<Expression>thisArg].concat(arguments), node.arguments);
+                    var callProperty = Factory.createPropertyAccessExpression(target, Factory.createIdentifier("call"));
+                    var callExpression = Factory.createCallExpression(callProperty, callArguments, node);
                     return callExpression;
                 } else {
-                    var callExpression = factory.createCallExpression(target, arguments, node);
+                    var callExpression = Factory.createCallExpression(target, arguments, node);
                     return callExpression;
                 }
             }
@@ -360,7 +360,7 @@ module ts {
 
         function visitNewExpression(node: NewExpression): LeftHandSideExpression {
             if (isDownlevel && hasAwaitOrYield(node)) {
-                return factory.updateNewExpression(
+                return Factory.updateNewExpression(
                     node,
                     cacheExpression(nodeVisitor.visitExpression(node.expression)),
                     Visitor.visitNodes(node.arguments, nodeVisitor.visitExpression, hasAwaitOrYield, cacheExpression));
@@ -371,7 +371,7 @@ module ts {
 
         function visitTaggedTemplateExpression(node: TaggedTemplateExpression): LeftHandSideExpression {
             if (isDownlevel && hasAwaitOrYield(node.template)) {
-                return factory.updateTaggedTemplateExpression(node, cacheExpression(nodeVisitor.visitLeftHandSideExpression(node.tag)), nodeVisitor.visitTemplateLiteralOrTemplateExpression(node.template));
+                return Factory.updateTaggedTemplateExpression(node, cacheExpression(nodeVisitor.visitLeftHandSideExpression(node.tag)), nodeVisitor.visitTemplateLiteralOrTemplateExpression(node.template));
             }
 
             return Visitor.visitTaggedTemplateExpression(node);
@@ -379,7 +379,7 @@ module ts {
 
         function visitTemplateExpression(node: TemplateExpression): TemplateExpression {
             if (isDownlevel && hasAwaitOrYield(node)) {
-                return factory.updateTemplateExpression(
+                return Factory.updateTemplateExpression(
                     node,
                     node.head,
                     Visitor.visitNodes(node.templateSpans, nodeVisitor.visitTemplateSpan, hasAwaitOrYield, cacheTemplateSpan));
@@ -402,7 +402,7 @@ module ts {
             if (isDownlevel) {
                 var assignment = rewriteVariableDeclarationList(node.declarationList);
                 if (assignment) {
-                    return factory.createExpressionStatement(assignment);
+                    return Factory.createExpressionStatement(assignment);
                 }
 
                 return;
@@ -411,12 +411,12 @@ module ts {
             return Visitor.visitVariableStatement(node);
         }
 
-        function visitVariableDeclarationListOrInitializer(node: VariableDeclarationList | Expression): VariableDeclarationList | Expression {
+        function visitVariableDeclarationListOrExpression(node: VariableDeclarationList | Expression): VariableDeclarationList | Expression {
             if (isDownlevel && node.kind === SyntaxKind.VariableDeclarationList) {
                 return rewriteVariableDeclarationList(<VariableDeclarationList>node);
             }
 
-            return Visitor.visitVariableDeclarationListOrInitializer(node);
+            return Visitor.visitVariableDeclarationListOrExpression(node);
         }
 
         function visitExpressionStatement(node: ExpressionStatement): Statement {
@@ -588,8 +588,8 @@ module ts {
         // expression caching
         function cacheExpression(node: Expression): Identifier {
             var local = builder.declareLocal();
-            var assignExpression = factory.createBinaryExpression(SyntaxKind.EqualsToken, local, node);
-            builder.emit(OpCode.Statement, factory.createExpressionStatement(assignExpression));
+            var assignExpression = Factory.createBinaryExpression(SyntaxKind.EqualsToken, local, node);
+            builder.emit(OpCode.Statement, Factory.createExpressionStatement(assignExpression));
             return local;
         }
 
@@ -607,15 +607,15 @@ module ts {
         }
 
         function cachePropertyAssignment(node: PropertyAssignment): ObjectLiteralElement {
-            return factory.updatePropertyAssignment(node, node.name, cacheExpression(node.initializer));
+            return Factory.updatePropertyAssignment(node, node.name, cacheExpression(node.initializer));
         }
 
         function cacheShorthandPropertyAssignment(node: ShorthandPropertyAssignment): ObjectLiteralElement {
-            return factory.createPropertyAssignment(factory.createIdentifier(node.name.text), cacheExpression(node.name));
+            return Factory.createPropertyAssignment(Factory.createIdentifier(node.name.text), cacheExpression(node.name));
         }
 
         function cacheTemplateSpan(node: TemplateSpan): TemplateSpan {
-            return factory.updateTemplateSpan(node, cacheExpression(node.expression), node.literal);
+            return Factory.updateTemplateSpan(node, cacheExpression(node.expression), node.literal);
         }
 
         // rewriting
@@ -637,7 +637,7 @@ module ts {
                 return rewriteCommaExpression(node);
             }
             else if (hasAwaitOrYield(node.right)) {
-                return factory.updateBinaryExpression(node, cacheExpression(nodeVisitor.visitExpression(node.left)), nodeVisitor.visitExpression(node.right));
+                return Factory.updateBinaryExpression(node, cacheExpression(nodeVisitor.visitExpression(node.left)), nodeVisitor.visitExpression(node.right));
             }
 
             return Visitor.visitBinaryExpression(node);
@@ -662,12 +662,12 @@ module ts {
             for (var i = 0; i < expressions.length; i++) {
                 var expression = expressions[i];
                 if (hasAwaitOrYield(expression) && merged) {
-                    builder.emit(OpCode.Statement, factory.createExpressionStatement(merged));
+                    builder.emit(OpCode.Statement, Factory.createExpressionStatement(merged));
                     merged = undefined;
                 }
                 var visited = nodeVisitor.visitExpression(expression);
                 if (merged) {
-                    merged = factory.createBinaryExpression(
+                    merged = Factory.createBinaryExpression(
                         SyntaxKind.CommaToken,
                         merged,
                         visited);
@@ -683,13 +683,13 @@ module ts {
             var destructured = rewriteDestructuring(node, locals);
             var rewritten = nodeVisitor.visitBinaryExpression(destructured);
             if (node.parent.kind !== SyntaxKind.ExpressionStatement && node.parent.kind !== SyntaxKind.ParenthesizedExpression) {
-                return factory.parenthesize(rewritten);
+                return Factory.addParenthesisIfNessary(rewritten);
             }
             return rewritten;
         }
 
         function rewriteAssignmentExpression(node: BinaryExpression): Expression {
-            return factory.updateBinaryExpression(node, rewriteLeftHandSideOfAssignmentExpression(node.left), nodeVisitor.visitExpression(node.right));
+            return Factory.updateBinaryExpression(node, rewriteLeftHandSideOfAssignmentExpression(node.left), nodeVisitor.visitExpression(node.right));
         }
 
         function rewriteLeftHandSideOfAssignmentExpression(node: Expression): Expression {
@@ -706,14 +706,14 @@ module ts {
         }
 
         function rewriteLeftHandSideElementAccessExpressionOfAssignmentExpression(node: ElementAccessExpression): ElementAccessExpression {
-            return factory.updateElementAccessExpression(
+            return Factory.updateElementAccessExpression(
                 node,
                 cacheExpression(nodeVisitor.visitLeftHandSideExpression(node.expression)),
                 cacheExpression(nodeVisitor.visitExpression(node.argumentExpression)));
         }
 
         function rewriteLeftHandSidePropertyAccessExpressionOfAssignmentExpression(node: PropertyAccessExpression): PropertyAccessExpression {
-            return factory.updatePropertyAccessExpression(
+            return Factory.updatePropertyAccessExpression(
                 node,
                 cacheExpression(nodeVisitor.visitLeftHandSideExpression(node.expression)),
                 node.name);
@@ -736,21 +736,21 @@ module ts {
             var thisArg = cacheExpression(nodeVisitor.visitLeftHandSideExpression(node.expression));
             var target = builder.declareLocal();
             var index = nodeVisitor.visitExpression(node.argumentExpression);
-            var indexedAccess = factory.createElementAccessExpression(thisArg, index, node);
-            var assignExpression = factory.createBinaryExpression(SyntaxKind.EqualsToken, target, indexedAccess);
+            var indexedAccess = Factory.createElementAccessExpression(thisArg, index, node);
+            var assignExpression = Factory.createBinaryExpression(SyntaxKind.EqualsToken, target, indexedAccess);
             builder.writeLocation(node);
-            builder.emit(OpCode.Statement, factory.createExpressionStatement(assignExpression));
+            builder.emit(OpCode.Statement, Factory.createExpressionStatement(assignExpression));
             return { target, thisArg };
         }
 
         function rewriteLeftHandSidePropertyAccessExpressionOfCallExpression(node: PropertyAccessExpression): CallBinding {
             var thisArg = cacheExpression(nodeVisitor.visitLeftHandSideExpression(node.expression));
             var target = builder.declareLocal();
-            var property = factory.createIdentifier(node.name.text);
-            var propertyAccess = factory.createPropertyAccessExpression(thisArg, property, node);
-            var assignExpression = factory.createBinaryExpression(SyntaxKind.EqualsToken, target, propertyAccess);
+            var property = Factory.createIdentifier(node.name.text);
+            var propertyAccess = Factory.createPropertyAccessExpression(thisArg, property, node);
+            var assignExpression = Factory.createBinaryExpression(SyntaxKind.EqualsToken, target, propertyAccess);
             builder.writeLocation(node);
-            builder.emit(OpCode.Statement, factory.createExpressionStatement(assignExpression));
+            builder.emit(OpCode.Statement, Factory.createExpressionStatement(assignExpression));
             return { target, thisArg };
         }
 
@@ -765,13 +765,13 @@ module ts {
                 var node = declarations[i];
                 if (hasAwaitOrYield(node)) {
                     if (mergedAssignment) {
-                        builder.emit(OpCode.Statement, factory.createExpressionStatement(mergedAssignment));
+                        builder.emit(OpCode.Statement, Factory.createExpressionStatement(mergedAssignment));
                         mergedAssignment = undefined;
                     }
                 }
                 var rewritten = rewriteVariableDeclaration(node);
                 if (mergedAssignment) {
-                    mergedAssignment = factory.createBinaryExpression(
+                    mergedAssignment = Factory.createBinaryExpression(
                         SyntaxKind.CommaToken,
                         mergedAssignment,
                         rewritten);
@@ -783,7 +783,7 @@ module ts {
 
             if (parent.kind === SyntaxKind.VariableDeclarationList && parent.parent.kind === SyntaxKind.ForInStatement) {
                 if (mergedAssignment) {
-                    builder.emit(OpCode.Statement, factory.createExpressionStatement(mergedAssignment));
+                    builder.emit(OpCode.Statement, Factory.createExpressionStatement(mergedAssignment));
                     mergedAssignment = undefined;
                 }
 
@@ -805,7 +805,7 @@ module ts {
             builder.addVariable(<Identifier>node.name);
             var initializer = nodeVisitor.visitExpression(node.initializer);
             if (initializer) {
-                return factory.createBinaryExpression(SyntaxKind.EqualsToken, <Identifier>node.name, initializer, node);
+                return Factory.createBinaryExpression(SyntaxKind.EqualsToken, <Identifier>node.name, initializer, node);
             }
         }
 
@@ -819,8 +819,8 @@ module ts {
         }
 
         function rewriteAwaitExpressionUplevel(node: AwaitExpression): UnaryExpression {
-            var yieldExpression = factory.createYieldExpression(node.expression, node);
-            return factory.createParenthesizedExpression(yieldExpression);
+            var yieldExpression = Factory.createYieldExpression(node.expression, node);
+            return Factory.createParenthesizedExpression(yieldExpression);
         }
 
         function rewriteConditionalExpression(node: ConditionalExpression): Expression {
@@ -842,7 +842,7 @@ module ts {
             var expression = nodeVisitor.visitExpression(node.expression);
             var resumeLabel = builder.defineLabel();
             builder.writeLocation(node);
-            builder.emit(node.asteriskToken ? OpCode.YieldStar : OpCode.Yield, factory.createExpressionStatement(expression));
+            builder.emit(node.asteriskToken ? OpCode.YieldStar : OpCode.Yield, Factory.createExpressionStatement(expression));
             builder.markLabel(resumeLabel);
             return builder.createResume();
         }
@@ -888,10 +888,10 @@ module ts {
             var conditionLabel = builder.defineLabel();
             var iteratorLabel = builder.defineLabel();
             var endLabel = builder.beginContinueBlock(iteratorLabel, getTarget(node));
-            var initializer = <Expression>nodeVisitor.visitVariableDeclarationListOrInitializer(node.initializer);
+            var initializer = <Expression>nodeVisitor.visitVariableDeclarationListOrExpression(node.initializer);
             if (initializer) {
                 builder.writeLocation(node.initializer);
-                builder.emit(OpCode.Statement, factory.createExpressionStatement(initializer));
+                builder.emit(OpCode.Statement, Factory.createExpressionStatement(initializer));
             }
             builder.markLabel(conditionLabel);
             if (node.condition) {
@@ -900,14 +900,14 @@ module ts {
             rewriteBlockOrStatement(node.statement);
             builder.markLabel(iteratorLabel);
             if (node.iterator) {
-                builder.emit(OpCode.Statement, factory.createExpressionStatement(nodeVisitor.visitExpression(node.iterator)));
+                builder.emit(OpCode.Statement, Factory.createExpressionStatement(nodeVisitor.visitExpression(node.iterator)));
             }
             builder.emit(OpCode.Break, conditionLabel);
             builder.endContinueBlock();
         }
 
         function rewriteForInStatement(node: ForInStatement): void {
-            var variable = <Expression>nodeVisitor.visitVariableDeclarationListOrInitializer(node.initializer);
+            var variable = <Expression>nodeVisitor.visitVariableDeclarationListOrExpression(node.initializer);
             while (variable.kind === SyntaxKind.BinaryExpression) {
                 variable = (<BinaryExpression>variable).left;
             }
@@ -917,28 +917,28 @@ module ts {
             var conditionLabel = builder.defineLabel();
             var iteratorLabel = builder.defineLabel();
             var endLabel = builder.beginContinueBlock(iteratorLabel, getTarget(node));
-            var initializeKeysExpression = factory.createBinaryExpression(SyntaxKind.EqualsToken, keysLocal, factory.createArrayLiteralExpression([]));
-            builder.emit(OpCode.Statement, factory.createExpressionStatement(initializeKeysExpression));
-            var keysLengthExpression = factory.createPropertyAccessExpression(keysLocal, factory.createIdentifier("length"));
-            var keysPushExpression = factory.createElementAccessExpression(keysLocal, keysLengthExpression);
-            var assignKeyExpression = factory.createBinaryExpression(SyntaxKind.EqualsToken, keysPushExpression, tempLocal);
-            var assignKeyStatement = factory.createExpressionStatement(assignKeyExpression);
-            var forTempInExpressionStatement = factory.createForInStatement(tempLocal, nodeVisitor.visitExpression(node.expression), assignKeyStatement);
+            var initializeKeysExpression = Factory.createBinaryExpression(SyntaxKind.EqualsToken, keysLocal, Factory.createArrayLiteralExpression([]));
+            builder.emit(OpCode.Statement, Factory.createExpressionStatement(initializeKeysExpression));
+            var keysLengthExpression = Factory.createPropertyAccessExpression(keysLocal, Factory.createIdentifier("length"));
+            var keysPushExpression = Factory.createElementAccessExpression(keysLocal, keysLengthExpression);
+            var assignKeyExpression = Factory.createBinaryExpression(SyntaxKind.EqualsToken, keysPushExpression, tempLocal);
+            var assignKeyStatement = Factory.createExpressionStatement(assignKeyExpression);
+            var forTempInExpressionStatement = Factory.createForInStatement(tempLocal, nodeVisitor.visitExpression(node.expression), assignKeyStatement);
             builder.emit(OpCode.Statement, forTempInExpressionStatement);
-            var initializeTempExpression = factory.createBinaryExpression(SyntaxKind.EqualsToken, tempLocal, factory.createNumericLiteral(0));
-            builder.emit(OpCode.Statement, factory.createExpressionStatement(initializeTempExpression));
-            var conditionExpression = factory.createBinaryExpression(SyntaxKind.LessThanToken, tempLocal, keysLengthExpression);
+            var initializeTempExpression = Factory.createBinaryExpression(SyntaxKind.EqualsToken, tempLocal, Factory.createNumericLiteral(0));
+            builder.emit(OpCode.Statement, Factory.createExpressionStatement(initializeTempExpression));
+            var conditionExpression = Factory.createBinaryExpression(SyntaxKind.LessThanToken, tempLocal, keysLengthExpression);
             builder.markLabel(conditionLabel);
             builder.emit(OpCode.BrFalse, endLabel, conditionExpression);
-            var readKeyExpression = factory.createElementAccessExpression(keysLocal, tempLocal);
-            var assignVariableExpression = factory.createBinaryExpression(SyntaxKind.EqualsToken, variable, readKeyExpression);
+            var readKeyExpression = Factory.createElementAccessExpression(keysLocal, tempLocal);
+            var assignVariableExpression = Factory.createBinaryExpression(SyntaxKind.EqualsToken, variable, readKeyExpression);
             builder.writeLocation(node.initializer);
-            builder.emit(OpCode.Statement, factory.createExpressionStatement(assignVariableExpression, variable));
+            builder.emit(OpCode.Statement, Factory.createExpressionStatement(assignVariableExpression, variable));
             rewriteBlockOrStatement(node.statement);
             builder.markLabel(iteratorLabel);
-            var incrementTempExpression = factory.createPostfixUnaryExpression(SyntaxKind.PlusPlusToken, tempLocal);
+            var incrementTempExpression = Factory.createPostfixUnaryExpression(SyntaxKind.PlusPlusToken, tempLocal);
             builder.writeLocation(node.initializer);
-            builder.emit(OpCode.Statement, factory.createExpressionStatement(incrementTempExpression, variable));
+            builder.emit(OpCode.Statement, Factory.createExpressionStatement(incrementTempExpression, variable));
             builder.emit(OpCode.Break, conditionLabel);
             builder.endContinueBlock();
         }
@@ -1017,7 +1017,7 @@ module ts {
                             var clauseLabel = clauseLabels[clauseLabelMap[lastClauseOffset]];
                             builder.writeLocation(caseClause.expression);
                             var breakStatement = builder.createInlineBreak(clauseLabel);
-                            clauses.push(factory.createCaseClause(clauseExpression, [breakStatement]));
+                            clauses.push(Factory.createCaseClause(clauseExpression, [breakStatement]));
                             lastClauseOffset++;
                         }
                     }
@@ -1030,13 +1030,13 @@ module ts {
                         var caseClause = <CaseClause>clause;
                         builder.writeLocation(caseClause.expression);
                         var inlineBreak = builder.createInlineBreak(clauseLabel);
-                        clauses.push(factory.createCaseClause(nodeVisitor.visitExpression(caseClause.expression), [inlineBreak]));
+                        clauses.push(Factory.createCaseClause(nodeVisitor.visitExpression(caseClause.expression), [inlineBreak]));
                     }
                     lastClauseOffset++;
                 }
 
                 if (clauses.length) {
-                    var switchStatement = factory.createSwitchStatement(expression, clauses, node);
+                    var switchStatement = Factory.createSwitchStatement(expression, clauses, node);
                     builder.emit(OpCode.Statement, switchStatement);
                 }
             }
@@ -1178,27 +1178,27 @@ module ts {
             var promiseConstructor = resolver.getPromiseConstructor(node);
             if (node.body.kind === SyntaxKind.Block) {
                 var block = <Block>node.body;
-                var statements = factory.createNodeArray(map(block.statements, nodeVisitor.visitStatement), block.statements);
+                var statements = Factory.createNodeArray(map(block.statements, nodeVisitor.visitStatement), block.statements);
             } else {
                 var expression = nodeVisitor.visitExpression(<Expression>node.body);
-                var returnStatement = factory.createReturnStatement(expression, node.body);
-                var statements = factory.createNodeArray<Statement>([returnStatement]);
+                var returnStatement = Factory.createReturnStatement(expression, node.body);
+                var statements = Factory.createNodeArray<Statement>([returnStatement]);
             }
 
             var resolve = locals.createUniqueIdentifier("_resolve");
-            var generatorFunctionBody = factory.createBlock(statements);
-            var generatorFunction = factory.createFunctionExpression(/*name*/ undefined, generatorFunctionBody, []);
-            generatorFunction.asteriskToken = factory.createTokenNode(SyntaxKind.AsteriskToken);
-            var callGeneratorFunction = factory.createCallExpression(generatorFunction, []);
-            var awaiterCallExpression = factory.createCallExpression(factory.createIdentifier("__awaiter"), [callGeneratorFunction]);
-            var resolveCallExpression = factory.createCallExpression(resolve, [awaiterCallExpression]);
-            var resolveCallStatement = factory.createExpressionStatement(resolveCallExpression);
-            var initFunctionBody = factory.createBlock([resolveCallStatement]);
-            var initFunctionExpression = factory.createFunctionExpression(/*name*/ undefined, initFunctionBody, [factory.createParameterDeclaration(resolve)]);
-            var newPromiseExpression = factory.createNewExpression(factory.getExpressionForEntityName(promiseConstructor), [initFunctionExpression]);
-            var returnStatement = factory.createReturnStatement(newPromiseExpression);
-            var block = factory.createBlock([returnStatement], statements);
-            var func = factory.updateFunctionLikeDeclaration(node, node.name, block, node.parameters);
+            var generatorFunctionBody = Factory.createBlock(statements);
+            var generatorFunction = Factory.createFunctionExpression(/*name*/ undefined, generatorFunctionBody, []);
+            generatorFunction.asteriskToken = Factory.createTokenNode(SyntaxKind.AsteriskToken);
+            var callGeneratorFunction = Factory.createCallExpression(generatorFunction, []);
+            var awaiterCallExpression = Factory.createCallExpression(Factory.createIdentifier("__awaiter"), [callGeneratorFunction]);
+            var resolveCallExpression = Factory.createCallExpression(resolve, [awaiterCallExpression]);
+            var resolveCallStatement = Factory.createExpressionStatement(resolveCallExpression);
+            var initFunctionBody = Factory.createBlock([resolveCallStatement]);
+            var initFunctionExpression = Factory.createFunctionExpression(/*name*/ undefined, initFunctionBody, [Factory.createParameterDeclaration(resolve)]);
+            var newPromiseExpression = Factory.createNewExpression(Factory.getExpressionForEntityName(promiseConstructor), [initFunctionExpression]);
+            var returnStatement = Factory.createReturnStatement(newPromiseExpression);
+            var block = Factory.createBlock([returnStatement], statements);
+            var func = Factory.updateFunctionLikeDeclaration(node, node.name, block, node.parameters);
             func.id = node.id;
             func.parent = node.parent;
             return func;
@@ -1225,10 +1225,10 @@ module ts {
                 }
             }
             else if (node.initializer) {
-                var equalityExpression = factory.createBinaryExpression(SyntaxKind.EqualsEqualsEqualsToken, parameterName, factory.getUndefinedValue());
-                var assignmentExpression = factory.createBinaryExpression(SyntaxKind.EqualsToken, parameterName, node.initializer);
-                var expressionStatement = factory.createExpressionStatement(assignmentExpression);
-                var ifStatement = factory.createIfStatement(equalityExpression, expressionStatement);
+                var equalityExpression = Factory.createBinaryExpression(SyntaxKind.EqualsEqualsEqualsToken, parameterName, Factory.createVoidZero());
+                var assignmentExpression = Factory.createBinaryExpression(SyntaxKind.EqualsToken, parameterName, node.initializer);
+                var expressionStatement = Factory.createExpressionStatement(assignmentExpression);
+                var ifStatement = Factory.createIfStatement(equalityExpression, expressionStatement);
                 rewriteStatement(ifStatement);
             }
         }

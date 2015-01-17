@@ -1,0 +1,896 @@
+[
+    {
+        "type": "LiteralExpression",
+        "baseType": "LeftHandSideExpression"
+    },
+    {
+        "kind": "StringLiteral",
+        "type": "StringLiteralExpression",
+        "baseType": "LiteralExpression",
+        "children": [
+            { "name": "text", "type": "string" }
+        ]
+    },
+    {
+        "kind": "NumericLiteral",
+        "baseType": "LiteralExpression",
+        "children": [
+            { "name": "text", "paramName": "value", "type": "number", "converter": "String" }
+        ]
+    },
+    {
+        "kind": "RegularExpressionLiteral",
+        "baseType": "LiteralExpression"
+    },
+    {
+        "kind": "NoSubstitutionTemplateLiteral",
+        "baseType": "LiteralExpression"
+    },
+    {
+        "kind": "TemplateHead",
+        "baseType": "LiteralExpression"
+    },
+    {
+        "kind": "TemplateMiddle",
+        "baseType": "LiteralExpression"
+    },
+    {
+        "kind": "TemplateTail",
+        "baseType": "LiteralExpression"
+    },
+    {
+        "kind": "Identifier",
+        "type": "Identifier",
+        "baseType": "LeftHandSideExpression",
+        "children": [
+            { "name": "text", "type": "string" }
+        ]
+    },
+    {
+        "type": "DeclarationName",
+        "visit": true,
+        "types": "Identifier | LiteralExpression | ComputedPropertyName | BindingPattern"
+    },
+    {
+        "kind": "ThisKeyword",
+        "baseType": "LeftHandSideExpression"
+    },
+    {
+        "kind": "SuperKeyword",
+        "baseType": "LeftHandSideExpression"
+    },
+    {
+        "kind": "NullKeyword",
+        "baseType": "LeftHandSideExpression"
+    },
+    {
+        "kind": "TrueKeyword",
+        "baseType": "LeftHandSideExpression"
+    },
+    {
+        "kind": "FalseKeyword",
+        "baseType": "LeftHandSideExpression"
+    },
+
+    {
+        "type": "QualifiedName",
+        "kind": "QualifiedName",
+        "children": [
+            { "name": "left", "type": "EntityName" },
+            { "name": "right", "type": "Identifier" }
+        ]
+    },
+    {
+        "type": "ComputedPropertyName",
+        "kind": "ComputedPropertyName",
+        "handlerType": "DeclarationName",
+        "update": true,
+        "visit": true,
+        "handler": true,
+        "children": [
+            { "name": "expression", "type": "Expression", "visit": true }
+        ]
+    },
+
+    {
+        "name": "ParameterDeclaration",
+        "kind": "Parameter",
+        "type": "ParameterDeclaration",
+        "update": true,
+        "children": [
+            { "name": "name", "type": "Identifier | BindingPattern" },
+            { "name": "initializer", "type": "Expression", "optional": "true" }
+        ]
+    },
+
+    {
+        "kind": "MethodDeclaration",
+        "type": "MethodDeclaration",
+        "baseType": "ObjectLiteralElement",
+        "modifiers": true,
+        "update": true,
+        "visit": true,
+        "shallow": true,
+        "handler": true,
+        "handlerType": "ObjectLiteralElement | ClassElement",
+        "children": [
+            { "name": "name", "type": "DeclarationName" },
+            { "name": "body", "type": "Block" },
+            { "name": "parameters", "type": "ParameterDeclaration", "isNodeArray": true }
+        ]
+    },
+    {
+        "kind": "GetAccessor",
+        "type": "AccessorDeclaration",
+        "baseType": "ObjectLiteralElement",
+        "modifiers": true,
+        "update": true,
+        "visit": true,
+        "shallow": true,
+        "handler": true,
+        "handlerType": "ObjectLiteralElement | ClassElement",
+        "children": [
+            { "name": "name", "type": "DeclarationName" },
+            { "name": "body", "type": "Block" },
+            { "name": "parameters", "type": "ParameterDeclaration", "isNodeArray": true }
+        ]
+    },
+    {
+        "kind": "SetAccessor",
+        "type": "AccessorDeclaration",
+        "baseType": "ObjectLiteralElement",
+        "modifiers": true,
+        "update": true,
+        "visit": true,
+        "shallow": true,
+        "handler": true,
+        "handlerType": "ObjectLiteralElement | ClassElement",
+        "children": [
+            { "name": "name", "type": "DeclarationName" },
+            { "name": "body", "type": "Block" },
+            { "name": "parameters", "type": "ParameterDeclaration", "isNodeArray": true }
+        ]
+    },
+
+    {
+        "name": "IdentifierOrBindingPattern",
+        "type": "Identifier | BindingPattern",
+        "visit": true,
+        "types": "Identifier | BindingPattern"
+    },
+    {
+        "type": "BindingPattern"
+    },
+    {
+        "kind": "ObjectBindingPattern",
+        "baseType": "BindingPattern",
+        "update": true,
+        "visit": true,
+        "handler": true,
+        "handlerType": "BindingPattern | Identifier",
+        "children": [
+            { "name": "elements", "type": "BindingElement", "isNodeArray": true }
+        ]
+    },
+    {
+        "kind": "ArrayBindingPattern",
+        "baseType": "BindingPattern",
+        "update": true,
+        "visit": true,
+        "handler": true,
+        "handlerType": "BindingPattern | Identifier",
+        "children": [
+            { "name": "elements", "type": "BindingElement", "isNodeArray": true }
+        ]
+    },
+    {
+        "kind": "BindingElement",
+        "type": "BindingElement",
+        "update": true,
+        "visit": true,
+        "handler": true,
+        "children": [
+            { "name": "name", "type": "Identifier | BindingPattern" },
+            { "name": "propertyName", "type": "Identifier", "optional": true },
+            { "name": "initializer", "type": "Expression", "optional": true }
+        ]
+    },
+
+    {
+        "name": "Expression",
+        "type": "Expression",
+        "visit": true,
+        "nodeTest": "isExpression"
+    },
+    {
+        "name": "UnaryExpression",
+        "type": "UnaryExpression",
+        "baseType": "Expression",
+        "visit": true,
+        "nodeTest": "isUnaryExpression"
+    },
+    {
+        "name": "LeftHandSideExpression",
+        "type": "LeftHandSideExpression",
+        "baseType": "UnaryExpression",
+        "visit": true,
+        "nodeTest": "isLeftHandSideExpression"
+    },
+    {
+        "name": "TemplateLiteralOrTemplateExpression",
+        "type": "LiteralExpression | TemplateExpression",
+        "visit": true,
+        "nodeTest": "isTemplateLiteralOrTemplateExpression",
+        "types": "LiteralExpression | TemplateExpression"
+    },
+
+    {
+        "kind": "ArrayLiteralExpression",
+        "type": "ArrayLiteralExpression",
+        "baseType": "LeftHandSideExpression",
+        "update": true,
+        "visit": true,
+        "handler": true,
+        "handlerType": "LeftHandSideExpression",
+        "children": [
+            { "name": "elements", "type": "Expression", "isNodeArray": true }
+        ]
+    },
+    {
+        "kind": "ObjectLiteralExpression",
+        "type": "ObjectLiteralExpression",
+        "baseType": "LeftHandSideExpression",
+        "update": true,
+        "visit": true,
+        "handler": true,
+        "handlerType": "LeftHandSideExpression",
+        "children": [
+            { "name": "properties", "type": "ObjectLiteralElement", "isNodeArray": true }
+        ]
+    },
+    {
+        "kind": "PropertyAccessExpression",
+        "type": "PropertyAccessExpression",
+        "baseType": "LeftHandSideExpression",
+        "update": true,
+        "visit": true,
+        "handler": true,
+        "handlerType": "LeftHandSideExpression",
+        "children": [
+            { "name": "expression", "type": "LeftHandSideExpression" },
+            { "name": "name", "type": "Identifier" }
+        ]
+    },
+    {
+        "kind": "ElementAccessExpression",
+        "type": "ElementAccessExpression",
+        "baseType": "LeftHandSideExpression",
+        "update": true,
+        "visit": true,
+        "handler": true,
+        "handlerType": "LeftHandSideExpression",
+        "children": [
+            { "name": "expression", "type": "LeftHandSideExpression" },
+            { "name": "argumentExpression", "type": "Expression" }
+        ]
+    },
+    {
+        "kind": "CallExpression",
+        "type": "CallExpression",
+        "baseType": "LeftHandSideExpression",
+        "update": true,
+        "visit": true,
+        "handler": true,
+        "handlerType": "LeftHandSideExpression",
+        "children": [
+            { "name": "expression", "type": "LeftHandSideExpression" },
+            { "name": "arguments", "type": "Expression", "isNodeArray": true }
+        ]
+    },
+    {
+        "kind": "NewExpression",
+        "type": "NewExpression",
+        "baseType": "LeftHandSideExpression",
+        "update": true,
+        "visit": true,
+        "handler": true,
+        "handlerType": "LeftHandSideExpression",
+        "children": [
+            { "name": "expression", "type": "LeftHandSideExpression" },
+            { "name": "arguments", "type": "Expression", "isNodeArray": true }
+        ]
+    },
+    {
+        "kind": "TaggedTemplateExpression",
+        "type": "TaggedTemplateExpression",
+        "baseType": "LeftHandSideExpression",
+        "update": true,
+        "visit": true,
+        "handler": true,
+        "handlerType": "LeftHandSideExpression",
+        "children": [
+            { "name": "tag", "type": "LeftHandSideExpression" },
+            { "name": "template", "type": "LiteralExpression | TemplateExpression" }
+        ]
+    },
+    {
+        "name": "TypeAssertion",
+        "kind": "TypeAssertionExpression",
+        "type": "TypeAssertion",
+        "baseType": "UnaryExpression",
+        "update": true,
+        "visit": true,
+        "handler": true,
+        "handlerType": "UnaryExpression",
+        "children": [
+            { "name": "type", "type": "TypeNode", "readonly": true },
+            { "name": "expression", "type": "UnaryExpression" }
+        ]
+    },
+    {
+        "kind": "ParenthesizedExpression",
+        "type": "ParenthesizedExpression",
+        "baseType": "LeftHandSideExpression",
+        "update": true,
+        "visit": true,
+        "handler": true,
+        "handlerType": "LeftHandSideExpression",
+        "children": [
+            { "name": "expression", "type": "Expression" }
+        ]
+    },
+    {
+        "name": "ExpressionOrBlock",
+        "type": "Expression | Block",
+        "visit": true,
+        "types": "Expression | Block"
+    },
+    {
+        "kind": "FunctionExpression",
+        "type": "FunctionExpression",
+        "baseType": "LeftHandSideExpression",
+        "update": true,
+        "visit": true,
+        "modifiers": true,
+        "handler": true,
+        "handlerType": "LeftHandSideExpression",
+        "children": [
+            { "name": "name", "type": "Identifier" },
+            { "name": "body", "type": "Expression | Block" },
+            { "name": "parameters", "type": "ParameterDeclaration", "isNodeArray": true }
+        ]
+    },
+    {
+        "kind": "ArrowFunction",
+        "type": "FunctionExpression",
+        "baseType": "LeftHandSideExpression",
+        "update": true,
+        "visit": true,
+        "modifiers": true,
+        "handler": true,
+        "handlerType": "LeftHandSideExpression",
+        "children": [
+            { "name": "body", "type": "Expression | Block" },
+            { "name": "parameters", "type": "ParameterDeclaration", "isNodeArray": true }
+        ]
+    },
+    {
+        "kind": "DeleteExpression",
+        "type": "DeleteExpression",
+        "baseType": "UnaryExpression",
+        "update": true,
+        "visit": true,
+        "handler": true,
+        "handlerType": "UnaryExpression",
+        "children": [
+            { "name": "expression", "type": "UnaryExpression" }
+        ]
+    },
+    {
+        "kind": "TypeOfExpression",
+        "type": "TypeOfExpression",
+        "baseType": "UnaryExpression",
+        "update": true,
+        "visit": true,
+        "handler": true,
+        "handlerType": "UnaryExpression",
+        "children": [
+            { "name": "expression", "type": "UnaryExpression" }
+        ]
+    },
+    {
+        "kind": "VoidExpression",
+        "type": "VoidExpression",
+        "baseType": "UnaryExpression",
+        "update": true,
+        "visit": true,
+        "handler": true,
+        "handlerType": "UnaryExpression",
+        "children": [
+            { "name": "expression", "type": "UnaryExpression" }
+        ]
+    },
+    {
+        "kind": "AwaitExpression",
+        "type": "AwaitExpression",
+        "baseType": "UnaryExpression",
+        "update": true,
+        "visit": true,
+        "handler": true,
+        "handlerType": "UnaryExpression",
+        "children": [
+            { "name": "expression", "type": "UnaryExpression" }
+        ]
+    },
+    {
+        "kind": "PrefixUnaryExpression",
+        "type": "PrefixUnaryExpression",
+        "baseType": "UnaryExpression",
+        "update": true,
+        "visit": true,
+        "handler": true,
+        "handlerType": "UnaryExpression",
+        "children": [
+            { "name": "operator", "type": "SyntaxKind", "readonly": true },
+            { "name": "operand", "type": "UnaryExpression" }
+        ]
+    },
+    {
+        "kind": "PostfixUnaryExpression",
+        "type": "PostfixUnaryExpression",
+        "baseType": "UnaryExpression",
+        "update": true,
+        "visit": true,
+        "handler": true,
+        "handlerType": "UnaryExpression",
+        "children": [
+            { "name": "operator", "type": "SyntaxKind", "readonly": true },
+            { "name": "operand", "type": "LeftHandSideExpression" }
+        ]
+    },
+    {
+        "kind": "BinaryExpression",
+        "type": "BinaryExpression",
+        "baseType": "Expression",
+        "update": true,
+        "visit": true,
+        "handler": true,
+        "handlerType": "Expression",
+        "children": [
+            { "name": "operator", "type": "SyntaxKind", "readonly": true },
+            { "name": "left", "type": "Expression" },
+            { "name": "right", "type": "Expression" }
+        ]
+    },
+    {
+        "kind": "ConditionalExpression",
+        "type": "ConditionalExpression",
+        "baseType": "Expression",
+        "update": true,
+        "visit": true,
+        "handler": true,
+        "handlerType": "Expression",
+        "children": [
+            { "name": "condition", "type": "Expression" },
+            { "name": "whenTrue", "type": "Expression" },
+            { "name": "whenFalse", "type": "Expression" }
+        ]
+    },
+    {
+        "kind": "TemplateExpression",
+        "type": "TemplateExpression",
+        "baseType": "LeftHandSideExpression",
+        "update": true,
+        "visit": true,
+        "handler": true,
+        "handlerType": "LeftHandSideExpression | LiteralExpression | TemplateExpression",
+        "children": [
+            { "name": "head", "type": "LiteralExpression" },
+            { "name": "templateSpans", "type": "TemplateSpan", "isNodeArray": true }
+        ]
+    },
+    {
+        "kind": "YieldExpression",
+        "type": "YieldExpression",
+        "baseType": "Expression",
+        "update": true,
+        "visit": true,
+        "handler": true,
+        "handlerType": "Expression",
+        "children": [
+            { "name": "expression", "type": "Expression" },
+            { "name": "asteriskToken", "type": "Node", "optional": true, "readonly": true }
+        ]
+    },
+    {
+        "kind": "GeneratedLabel",
+        "type": "GeneratedLabel",
+        "children": [
+            { "name": "label", "type": "Label" },
+            { "name": "labelNumbers", "type": "number[]" }
+        ]
+    },
+    {
+        "kind": "SpreadElementExpression",
+        "type": "SpreadElementExpression",
+        "baseType": "Expression",
+        "update": true,
+        "visit": true,
+        "handler": true,
+        "handlerType": "Expression",
+        "children": [
+            { "name": "expression", "type": "Expression" }
+        ]
+    },
+    {
+        "kind": "OmittedExpression",
+        "baseType": "Expression",
+        "visit": true,
+        "shallow": true,
+        "handler": true,
+        "handlerType": "Expression",
+        "children": [
+        ]
+    },
+
+    {
+        "kind": "TemplateSpan",
+        "type": "TemplateSpan",
+        "update": true,
+        "visit": true,
+        "handler": true,
+        "children": [
+            { "name": "expression", "type": "Expression" },
+            { "name": "literal", "type": "LiteralExpression" }
+        ]
+    },
+
+    {
+        "name": "Statement",
+        "type": "Statement",
+        "visit": true
+    },
+    {
+        "kind": "Block",
+        "type": "Block",
+        "baseType": "Statement",
+        "update": true,
+        "visit": true,
+        "handler": true,
+        "handlerType": "Block",
+        "children": [
+            { "name": "statements", "type": "Statement", "isNodeArray": true }
+        ]
+    },
+    {
+        "kind": "VariableStatement",
+        "type": "VariableStatement",
+        "baseType": "Statement",
+        "update": true,
+        "visit": true,
+        "handler": true,
+        "handlerType": "Statement",
+        "children": [
+            { "name": "declarationList", "type": "VariableDeclarationList" }
+        ]
+    },
+    {
+        "kind": "EmptyStatement",
+        "baseType": "Statement",
+        "visit": true,
+        "shallow": true,
+        "handler": true,
+        "handlerType": "Statement",
+        "children": [
+        ]
+    },
+    {
+        "kind": "ExpressionStatement",
+        "type": "ExpressionStatement",
+        "baseType": "Statement",
+        "update": true,
+        "visit": true,
+        "handler": true,
+        "handlerType": "Statement",
+        "children": [
+            { "name": "expression", "type": "Expression" }
+        ]
+    },
+    {
+        "kind": "IfStatement",
+        "type": "IfStatement",
+        "baseType": "Statement",
+        "update": true,
+        "visit": true,
+        "handler": true,
+        "handlerType": "Statement",
+        "children": [
+            { "name": "expression", "type": "Expression" },
+            { "name": "thenStatement", "type": "Statement" },
+            { "name": "elseStatement", "type": "Statement", "optional": true }
+        ]
+    },
+    {
+        "kind": "DoStatement",
+        "type": "DoStatement",
+        "baseType": "Statement",
+        "update": true,
+        "visit": true,
+        "handler": true,
+        "handlerType": "Statement",
+        "children": [
+            { "name": "statement", "type": "Statement" },
+            { "name": "expression", "type": "Expression" }
+        ]
+    },
+    {
+        "kind": "WhileStatement",
+        "type": "WhileStatement",
+        "baseType": "Statement",
+        "update": true,
+        "visit": true,
+        "handler": true,
+        "handlerType": "Statement",
+        "children": [
+            { "name": "expression", "type": "Expression" },
+            { "name": "statement", "type": "Statement" }
+        ]
+    },
+    {
+        "kind": "ForStatement",
+        "type": "ForStatement",
+        "baseType": "Statement",
+        "update": true,
+        "visit": true,
+        "handler": true,
+        "handlerType": "Statement",
+        "children": [
+            { "name": "initializer", "type": "VariableDeclarationList | Expression" },
+            { "name": "condition", "type": "Expression" },
+            { "name": "iterator", "type": "Expression" },
+            { "name": "statement", "type": "Statement" }
+        ]
+    },
+    {
+        "kind": "ForInStatement",
+        "type": "ForInStatement",
+        "baseType": "Statement",
+        "update": true,
+        "visit": true,
+        "handler": true,
+        "handlerType": "Statement",
+        "children": [
+            { "name": "initializer", "type": "VariableDeclarationList | Expression" },
+            { "name": "expression", "type": "Expression" },
+            { "name": "statement", "type": "Statement" }
+        ]
+    },
+    {
+        "kind": "ContinueStatement",
+        "type": "BreakOrContinueStatement",
+        "baseType": "Statement",
+        "visit": true,
+        "shallow": true,
+        "handler": true,
+        "handlerType": "Statement",
+        "children": [
+            { "name": "label", "type": "Identifier" }
+        ]
+    },
+    {
+        "kind": "BreakStatement",
+        "type": "BreakOrContinueStatement",
+        "baseType": "Statement",
+        "visit": true,
+        "shallow": true,
+        "handler": true,
+        "handlerType": "Statement",
+        "children": [
+            { "name": "label", "type": "Identifier" }
+        ]
+    },
+    {
+        "kind": "ReturnStatement",
+        "type": "ReturnStatement",
+        "baseType": "Statement",
+        "update": true,
+        "visit": true,
+        "handler": true,
+        "handlerType": "Statement",
+        "children": [
+            { "name": "expression", "type": "Expression" }
+        ]
+    },
+    {
+        "kind": "WithStatement",
+        "type": "WithStatement",
+        "baseType": "Statement",
+        "update": true,
+        "visit": true,
+        "handler": true,
+        "handlerType": "Statement",
+        "children": [
+            { "name": "expression", "type": "Expression" },
+            { "name": "statement", "type": "Statement" }
+        ]
+    },
+    {
+        "kind": "SwitchStatement",
+        "type": "SwitchStatement",
+        "baseType": "Statement",
+        "update": true,
+        "visit": true,
+        "handler": true,
+        "handlerType": "Statement",
+        "children": [
+            { "name": "expression", "type": "Expression" },
+            { "name": "clauses", "type": "CaseOrDefaultClause", "isNodeArray": true }
+        ]
+    },
+    {
+        "kind": "LabeledStatement",
+        "type": "LabeledStatement",
+        "baseType": "Statement",
+        "update": true,
+        "visit": true,
+        "handler": true,
+        "handlerType": "Statement",
+        "children": [
+            { "name": "label", "type": "Identifier" },
+            { "name": "statement", "type": "Statement" }
+        ]
+    },
+    {
+        "kind": "ThrowStatement",
+        "type": "ThrowStatement",
+        "baseType": "Statement",
+        "update": true,
+        "visit": true,
+        "handler": true,
+        "handlerType": "Statement",
+        "children": [
+            { "name": "expression", "type": "Expression" }
+        ]
+    },
+    {
+        "kind": "TryStatement",
+        "type": "TryStatement",
+        "baseType": "Statement",
+        "update": true,
+        "visit": true,
+        "handler": true,
+        "handlerType": "Statement",
+        "children": [
+            { "name": "tryBlock", "type": "Block" },
+            { "name": "catchClause", "type": "CatchClause" },
+            { "name": "finallyBlock", "type": "Block" }
+        ]
+    },
+    {
+        "kind": "DebuggerStatement",
+        "baseType": "Statement",
+        "visit": true,
+        "handler": true,
+        "shallow": true,
+        "handlerType": "Statement",
+        "children": [
+        ]
+    },
+    {
+        "kind": "VariableDeclaration",
+        "type": "VariableDeclaration",
+        "update": true,
+        "visit": true,
+        "handler": true,
+        "children": [
+            { "name": "name", "type": "Identifier | BindingPattern" },
+            { "name": "initializer", "type": "Expression", "optional": true }
+        ]
+    },
+    {
+        "kind": "VariableDeclarationList",
+        "type": "VariableDeclarationList",
+        "update": true,
+        "visit": true,
+        "handler": true,
+        "children": [
+            { "name": "declarations", "type": "VariableDeclaration", "isNodeArray": true }
+        ]
+    },
+    {
+        "name": "VariableDeclarationListOrExpression",
+        "type": "VariableDeclarationList | Expression",
+        "visit": true,
+        "handler": true,
+        "types": "VariableDeclarationList | Expression"
+    },
+    {
+        "kind": "FunctionDeclaration",
+        "type": "FunctionDeclaration",
+        "baseType": "Statement",
+        "modifiers": true,
+        "update": true,
+        "visit": true,
+        "shallow": true,
+        "handler": true,
+        "handlerType": "Statement",
+        "children": [
+            { "name": "name", "type": "Identifier" },
+            { "name": "body", "type": "Block" },
+            { "name": "parameters", "type": "ParameterDeclaration", "isNodeArray": true }
+        ]
+    },
+
+    {
+        "name": "CaseOrDefaultClause",
+        "type": "CaseOrDefaultClause",
+        "visit": "true",
+        "types": "CaseClause | DefaultClause"
+    },
+    {
+        "kind": "CaseClause",
+        "type": "CaseClause",
+        "update": true,
+        "visit": true,
+        "handler": true,
+        "handlerType": "CaseOrDefaultClause",
+        "children": [
+            { "name": "expression", "type": "Expression" },
+            { "name": "statements", "type": "Statement", "isNodeArray": true }
+        ]
+    },
+    {
+        "kind": "DefaultClause",
+        "type": "DefaultClause",
+        "update": true,
+        "visit": true,
+        "handler": true,
+        "handlerType": "CaseOrDefaultClause",
+        "children": [
+            { "name": "statements", "type": "Statement", "isNodeArray": true }
+        ]
+    },
+    {
+        "kind": "CatchClause",
+        "type": "CatchClause",
+        "update": true,
+        "visit": true,
+        "handler": true,
+        "children": [
+            { "name": "name", "type": "Identifier" },
+            { "name": "block", "type": "Block" }
+        ]
+    },
+
+    {
+        "name": "ObjectLiteralElement",
+        "type": "ObjectLiteralElement",
+        "visit": true,
+        "nodeTest": "isObjectLiteralElement"
+    },
+    {
+        "kind": "PropertyAssignment",
+        "type": "PropertyAssignment",
+        "baseType": "ObjectLiteralElement",
+        "handlerType": "ObjectLiteralElement",
+        "update": true,
+        "visit": true,
+        "handler": true,
+        "children": [
+            { "name": "name", "type": "DeclarationName" },
+            { "name": "initializer", "type": "Expression" }
+        ]
+    },
+    {
+        "kind": "ShorthandPropertyAssignment",
+        "type": "ShorthandPropertyAssignment",
+        "baseType": "ObjectLiteralElement",
+        "handlerType": "ObjectLiteralElement",
+        "visit": true,
+        "handler": true,
+        "shallow": true,
+        "children": [
+            { "name": "name", "type": "Identifier" }
+        ]
+    }
+]

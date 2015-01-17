@@ -583,6 +583,25 @@ module ts {
         return false;
     }
 
+    export function isUnaryExpression(node: Node): boolean {
+        switch (node.kind) {
+            case SyntaxKind.TypeAssertionExpression:
+            case SyntaxKind.DeleteExpression:
+            case SyntaxKind.TypeOfExpression:
+            case SyntaxKind.VoidExpression:
+            case SyntaxKind.AwaitExpression:
+            case SyntaxKind.PrefixUnaryExpression:
+            case SyntaxKind.PostfixUnaryExpression:
+                return true;
+            default:
+                if (isLeftHandSideExpression(node)) {
+                    return true;
+                }
+        }
+
+        return false;
+    }
+
     export function isLabeledOrIterationOrSwitchStatement(node: Node): boolean {
         switch (node.kind) {
             case SyntaxKind.DoStatement:
