@@ -2054,7 +2054,7 @@ module ts {
             function emitDownlevelRawTemplateLiteral(node: LiteralExpression, isLast: boolean) {
                 var text = getSourceTextOfNodeFromSourceFile(currentSourceFile, node);
                 
-                // text contains the original source, it will also contain quotes ("`"), dolar signs and braces ("${" en "}"),
+                // text contains the original source, it will also contain quotes ("`"), dolar signs and braces ("${" and "}"),
                 // thus we need to remove those characters.
                 // First template piece starts with "`", others with "}"
                 // Last template piece ends with "`", others with "${"
@@ -2063,77 +2063,53 @@ module ts {
                 write('"' + escapeString(text) + '"');
 			}
             
-            function emitDownlevelTaggedTemplateVariable(node: TaggedTemplateExpression) {
-                node.tempVariable = createTempVariable(node);
-                
-                write("var ");
-                emit(node.tempVariable);
-                write(";");
-                writeLine();
-            }
-            function emitDownlevelTaggedTemplateStrings(node: TaggedTemplateExpression, inLoop: boolean) {
-                if (!inLoop) {
-                    node.tempVariable = createTempVariable(node);
-                    
-                    write("var ");
-                } else {
-                    // node.tempVariable is initialized in emitDownlevelTaggedTemplateVariable
-                    
-                    write("(");
-                }
-                emit(node.tempVariable);
+            function emitDownlevelTaggedTemplate(node: TaggedTemplateExpression) {
+                var tempVariable = createTempVariable(node);
+                recordTempDeclaration(tempVariable);
+                write("(");
+                emit(tempVariable);
                 write(" = [");
                 
                 if (node.template.kind === SyntaxKind.NoSubstitutionTemplateLiteral) {
                     emit(node.template);
-                } else {
+                }
+                else {
                     emit((<TemplateExpression> node.template).head);
                     forEach((<TemplateExpression> node.template).templateSpans, (child) => {
                         write(", ");
                         emit(child.literal);
                     });
                 }
-                write("]");
+                write("], ");
                 
-                if (!inLoop) {
-                    write(";");
-                    writeLine();
-                }
-                else {
-                    write(", ");
-                }
-                emit(node.tempVariable);
+                emit(tempVariable);
                 write(".raw = [");
                 if (node.template.kind === SyntaxKind.NoSubstitutionTemplateLiteral) {
                     emitDownlevelRawTemplateLiteral(<LiteralExpression> node.template, true);
-                } else {
+                }
+                else {
                     emitDownlevelRawTemplateLiteral((<TemplateExpression> node.template).head, false);
                     forEach((<TemplateExpression> node.template).templateSpans, (child, index) => {
                         write(", ");
                         emitDownlevelRawTemplateLiteral(child.literal, index === (<TemplateExpression> node.template).templateSpans.length - 1);
                     });
                 }
-                write("]");
-                if (!inLoop) {
-                    write(";");
-                    writeLine();
-                }
-            }
-            
-            function emitDownlevelTaggedTemplate(node: LiteralExpression | TemplateExpression): void {
-                // Emit should like:
-                // foo(tempVar, expressions0, expression1)
-                emit((<TaggedTemplateExpression> node.parent).tempVariable);
+                write("], ");
+                
+                emit(node.tag);
+                write("(");
+                emit(tempVariable);
                 
                 // Now we emit the expressions
-                if (node.kind === SyntaxKind.TemplateExpression) {
-                    forEach((<TemplateExpression> node).templateSpans, templateSpan => {
+                if (node.template.kind === SyntaxKind.TemplateExpression) {
+                    forEach((<TemplateExpression> node.template).templateSpans, templateSpan => {
                         write(", ");
                         var needsParens = templateSpan.expression.kind === SyntaxKind.BinaryExpression
                             && (<BinaryExpression> templateSpan.expression).operator === SyntaxKind.CommaToken;
                         emitParenthesized(templateSpan.expression, needsParens);
                     });
                 }
+                write("))");
             }
 
             function emitTemplateExpression(node: TemplateExpression): void {
@@ -2144,10 +2120,6 @@ module ts {
                     return;
                 }
 
-                if (node.parent.kind === SyntaxKind.TaggedTemplateExpression) {
-                    return emitDownlevelTaggedTemplate(node);
-                }
-                
                 var emitOuterParens = isExpression(node.parent)
                     && templateNeedsParens(node, <Expression>node.parent);
 
@@ -2574,14 +2546,13 @@ module ts {
             }
 
             function emitTaggedTemplateExpression(node: TaggedTemplateExpression): void {
-                emit(node.tag);
                 if (compilerOptions.target >= ScriptTarget.ES6) {
+                    emit(node.tag);
                     write(" ");
                     emit(node.template);
-                } else {
-                    write("(");
-                    emitDownlevelTaggedTemplate(node.template);
-                    write(")");
+                }
+                else {
+                    emitDownlevelTaggedTemplate(node);
                 }
             }
 
@@ -4022,11 +3993,6 @@ module ts {
                     return;
                 }
 
-                if (isStatement(node)) {
-                    // TODO: Check whether node is a loop
-                    forEach((<Statement> node).downlevelTaggedTemplates, node => emitDownlevelTaggedTemplateStrings(node, false));
-                }
-                
                 if (node.flags & NodeFlags.Ambient) {
                     return emitPinnedOrTripleSlashComments(node);
                 }
