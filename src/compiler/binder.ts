@@ -65,7 +65,6 @@ module ts {
         var container: Node;
         var blockScopeContainer: Node;
         var lastContainer: Node;
-        var statement: Statement;
         var symbolCount = 0;
         var Symbol = objectAllocator.getSymbolConstructor();
 
@@ -376,15 +375,6 @@ module ts {
         function bind(node: Node) {
             node.parent = parent;
             
-            var savedStatement = statement;
-            
-            if (isStatement(node)) {
-                statement = <Statement> node;
-                if (file.languageVersion < ScriptTarget.ES6) {
-                    statement.downlevelTaggedTemplates = [];
-                }
-            }
-            
             switch (node.kind) {
                 case SyntaxKind.TypeParameter:
                     bindDeclaration(<Declaration>node, SymbolFlags.TypeParameter, SymbolFlags.TypeParameterExcludes, /*isBlockScopeContainer*/ false);
@@ -501,8 +491,6 @@ module ts {
                     forEachChild(node, bind);
                     parent = saveParent;
             }
-            
-            statement = savedStatement;
         }
 
         function bindParameter(node: ParameterDeclaration) {
