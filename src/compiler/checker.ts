@@ -3339,6 +3339,8 @@ module ts {
                 case SyntaxKind.MethodDeclaration:
                 case SyntaxKind.MethodSignature:
                     return isContextSensitiveFunctionLikeDeclaration(<MethodDeclaration>node);
+                case SyntaxKind.ParenthesizedExpression:
+                    return isContextSensitive((<ParenthesizedExpression>node).expression);
             }
 
             return false;
@@ -4722,7 +4724,7 @@ module ts {
                     return targetType;
                 }
                 // If current type is a union type, remove all constituents that aren't subtypes of target type
-                if (type.flags && TypeFlags.Union) {
+                if (type.flags & TypeFlags.Union) {
                     return getUnionType(filter((<UnionType>type).types, t => isTypeSubtypeOf(t, targetType)));
                 }
                 return type;
@@ -5231,6 +5233,8 @@ module ts {
                 case SyntaxKind.TemplateSpan:
                     Debug.assert(parent.parent.kind === SyntaxKind.TemplateExpression);
                     return getContextualTypeForSubstitutionExpression(<TemplateExpression>parent.parent, node);
+                case SyntaxKind.ParenthesizedExpression:
+                    return getContextualType(<ParenthesizedExpression>parent);
             }
             return undefined;
         }
@@ -6132,8 +6136,10 @@ module ts {
                 var result = candidates;
                 var lastParent: Node;
                 var lastSymbol: Symbol;
-                var cutoffPos: number = 0;
-                var pos: number;
+                var cutoffIndex: number = 0;
+                var index: number;
+                var specializedIndex: number = -1;
+                var spliceIndex: number;
                 Debug.assert(!result.length);
                 for (var i = 0; i < signatures.length; i++) {
                     var signature = signatures[i];
@@ -6141,25 +6147,36 @@ module ts {
                     var parent = signature.declaration && signature.declaration.parent;
                     if (!lastSymbol || symbol === lastSymbol) {
                         if (lastParent && parent === lastParent) {
-                            pos++;
+                            index++;
                         }
                         else {
                             lastParent = parent;
-                            pos = cutoffPos;
+                            index = cutoffIndex;
                         }
                     }
                     else {
                         // current declaration belongs to a different symbol
-                        // set cutoffPos so re-orderings in the future won't change result set from 0 to cutoffPos
-                        pos = cutoffPos = result.length;
+                        // set cutoffIndex so re-orderings in the future won't change result set from 0 to cutoffIndex
+                        index = cutoffIndex = result.length;
                         lastParent = parent;
                     }
                     lastSymbol = symbol;
 
-                    for (var j = result.length; j > pos; j--) {
-                        result[j] = result[j - 1];
+                    // specialized signatures always need to be placed before non-specialized signatures regardless
+                    // of the cutoff position; see GH#1133
+                    if (signature.hasStringLiterals) {
+                        specializedIndex++;
+                        spliceIndex = specializedIndex;
+                        // The cutoff index always needs to be greater than or equal to the specialized signature index
+                        // in order to prevent non-specialized signatures from being added before a specialized
+                        // signature.
+                        cutoffIndex++;
                     }
-                    result[pos] = signature;
+                    else {
+                        spliceIndex = index;
+                    }
+
+                    result.splice(spliceIndex, 0, signature);
                 }
             }
         }
@@ -7191,11 +7208,14 @@ module ts {
 
             checkVariableLikeDeclaration(node);
             var func = getContainingFunction(node);
-            if (node.flags & (NodeFlags.Public | NodeFlags.Private | NodeFlags.Protected)) {
+            if (node.flags & NodeFlags.AccessibilityModifier) {
                 func = getContainingFunction(node);
                 if (!(func.kind === SyntaxKind.Constructor && nodeIsPresent(func.body))) {
                     error(node, Diagnostics.A_parameter_property_is_only_allowed_in_a_constructor_implementation);
                 }
+            }
+            if (node.questionToken && isBindingPattern(node.name) && func.body) {
+                error(node, Diagnostics.A_binding_pattern_parameter_cannot_be_optional_in_an_implementation_signature);
             }
             if (node.dotDotDotToken) {
                 if (!isArrayType(getTypeOfSymbol(node.symbol))) {
@@ -7210,17 +7230,20 @@ module ts {
                 checkGrammarIndexSignature(<SignatureDeclaration>node);
             }
             // TODO (yuisu): Remove this check in else-if when SyntaxKind.Construct is moved and ambient context is handled
-            else  if (node.kind === SyntaxKind.FunctionType || node.kind === SyntaxKind.FunctionDeclaration || node.kind === SyntaxKind.ConstructorType ||
+            else if (node.kind === SyntaxKind.FunctionType || node.kind === SyntaxKind.FunctionDeclaration || node.kind === SyntaxKind.ConstructorType ||
                       node.kind === SyntaxKind.CallSignature || node.kind === SyntaxKind.Constructor ||
                       node.kind === SyntaxKind.ConstructSignature){
                 checkGrammarFunctionLikeDeclaration(<FunctionLikeDeclaration>node);
             }
 
             checkTypeParameters(node.typeParameters);
+
             forEach(node.parameters, checkParameter);
+
             if (node.type) {
                 checkSourceElement(node.type);
             }
+
             if (produceDiagnostics) {
                 checkCollisionWithArgumentsInGeneratedCode(node);
                 if (compilerOptions.noImplicitAny && !node.type) {
@@ -10170,6 +10193,9 @@ module ts {
             }
             else if (node.kind === SyntaxKind.InterfaceDeclaration && flags & NodeFlags.Ambient) {
                 return grammarErrorOnNode(lastDeclare, Diagnostics.A_declare_modifier_cannot_be_used_with_an_interface_declaration, "declare");
+            }
+            else if (node.kind === SyntaxKind.Parameter && (flags & NodeFlags.AccessibilityModifier) && isBindingPattern((<ParameterDeclaration>node).name)) {
+                return grammarErrorOnNode(node, Diagnostics.A_parameter_property_may_not_be_a_binding_pattern);
             }
         }
 

@@ -3,11 +3,11 @@ var fs: any = require('fs');
 var path: any = require('path');
 
 function instrumentForRecording(fn: string, tscPath: string) {
-    instrument(tscPath, 'sys = Playback.wrapSystem(sys); sys.startRecord("' + fn + '");', 'sys.endRecord();');
+    instrument(tscPath, 'ts.sys = Playback.wrapSystem(ts.sys); ts.sys.startRecord("' + fn + '");', 'ts.sys.endRecord();');
 }
 
 function instrumentForReplay(logFilename: string, tscPath: string) {
-    instrument(tscPath, 'sys = Playback.wrapSystem(sys); sys.startReplay("' + logFilename + '");');
+    instrument(tscPath, 'ts.sys = Playback.wrapSystem(ts.sys); ts.sys.startReplay("' + logFilename + '");');
 }
 
 function instrument(tscPath: string, prepareCode: string, cleanupCode: string = '') {
@@ -27,8 +27,12 @@ function instrument(tscPath: string, prepareCode: string, cleanupCode: string = 
                 fs.readFile(path.resolve(path.dirname(tscPath) + '/loggedIO.js'), 'utf-8', (err: any, loggerContent: string) => {
                     if (err) throw err;
 
-                    var invocationLine = 'ts.executeCommandLine(sys.args);';
+                    var invocationLine = 'ts.executeCommandLine(ts.sys.args);';
                     var index1 = tscContent.indexOf(invocationLine);
+                    if (index1 < 0) {
+                        throw new Error("Could not find " + invocationLine);
+                    }
+
                     var index2 = index1 + invocationLine.length;
                     var newContent = tscContent.substr(0, index1) + loggerContent + prepareCode + invocationLine + cleanupCode + tscContent.substr(index2) + '\r\n';
                     fs.writeFile(tscPath, newContent);
