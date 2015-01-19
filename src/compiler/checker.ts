@@ -91,6 +91,7 @@ module ts {
         var globalTemplateStringsArrayType: ObjectType;
 
         var anyArrayType: Type;
+        var stringOrNumberType: Type;
 
         var tupleTypes: Map<TupleType> = {};
         var unionTypes: Map<UnionType> = {};
@@ -5650,10 +5651,10 @@ module ts {
             }
 
             // Check for compatible indexer types.
-            if (indexType.flags & (TypeFlags.Any | TypeFlags.StringLike | TypeFlags.NumberLike)) { 
+            if (indexType.flags & (TypeFlags.Any | TypeFlags.StringLike | TypeFlags.NumberLike) || isTypeAssignableTo(indexType, stringOrNumberType)) {
 
                 // Try to use a number indexer.
-                if (indexType.flags & (TypeFlags.Any | TypeFlags.NumberLike)) {
+                if (indexType.flags & (TypeFlags.Any | TypeFlags.NumberLike) || isTypeAssignableTo(indexType, numberType)) {
                     var numberIndexType = getIndexTypeOfType(objectType, IndexKind.Number);
                     if (numberIndexType) {
                         return numberIndexType;
@@ -10059,6 +10060,7 @@ module ts {
                 ? getGlobalType("TemplateStringsArray")
                 : unknownType;
             anyArrayType = createArrayType(anyType);
+            stringOrNumberType = getUnionType([stringType, numberType]);
         }
 
 
