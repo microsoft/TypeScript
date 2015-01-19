@@ -4,8 +4,12 @@ module TypeScript.WebTsc {
 
     declare var RealActiveXObject: { new (s: string): any };
 
-    function getWScriptSystem(): System {
+    function getWScriptSystem() {
         var fso = new RealActiveXObject("Scripting.FileSystemObject");
+
+        var fileStream = new ActiveXObject("ADODB.Stream");
+        fileStream.Type = 2 /*text*/;
+
         var args: string[] = [];
         for (var i = 0; i < WScript.Arguments.length; i++) {
             args[i] = WScript.Arguments.Item(i);
@@ -19,17 +23,35 @@ module TypeScript.WebTsc {
             writeErr(s: string): void {
                 WScript.StdErr.Write(s);
             },
-            readFile(fileName: string): string {
+            readFile(fileName: string, encoding?: string): string {
+                if (!fso.FileExists(fileName)) {
+                    return undefined;
+                }
+                fileStream.Open();
                 try {
-                    var f = fso.OpenTextFile(fileName, 1);
-                    var s: string = f.ReadAll();
-                    // TODO: Properly handle byte order marks
-                    if (s.length >= 3 && s.charCodeAt(0) === 0xEF && s.charCodeAt(1) === 0xBB && s.charCodeAt(2) === 0xBF) s = s.slice(3);
-                    f.Close();
+                    if (encoding) {
+                        fileStream.Charset = encoding;
+                        fileStream.LoadFromFile(fileName);
+                    }
+                    else {
+                        // Load file and read the first two bytes into a string with no interpretation
+                        fileStream.Charset = "x-ansi";
+                        fileStream.LoadFromFile(fileName);
+                        var bom = fileStream.ReadText(2) || "";
+                        // Position must be at 0 before encoding can be changed
+                        fileStream.Position = 0;
+                        // [0xFF,0xFE] and [0xFE,0xFF] mean utf-16 (little or big endian), otherwise default to utf-8
+                        fileStream.Charset = bom.length >= 2 && (bom.charCodeAt(0) === 0xFF && bom.charCodeAt(1) === 0xFE || bom.charCodeAt(0) === 0xFE && bom.charCodeAt(1) === 0xFF) ? "unicode" : "utf-8";
+                    }
+                    // ReadText method always strips byte order mark from resulting string
+                    return fileStream.ReadText();
                 }
                 catch (e) {
+                    throw e;
                 }
-                return s;
+                finally {
+                    fileStream.Close();
+                }
             },
             writeFile(fileName: string, data: string): boolean {
                 var f = fso.CreateTextFile(fileName, true);

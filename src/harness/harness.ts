@@ -22,6 +22,7 @@
 
 declare var require: any;
 declare var process: any;
+declare var Buffer: any;
 
 // this will work in the browser via browserify
 var _chai: typeof chai = require('chai');
@@ -1207,7 +1208,6 @@ module Harness {
 
         export function getErrorBaseline(inputFiles: { unitName: string; content: string }[], diagnostics: HarnessDiagnostic[]) {
             diagnostics.sort(compareDiagnostics);
-
             var outputLines: string[] = [];
             // Count up all the errors we find so we don't miss any
             var totalErrorsReported = 0;
@@ -1298,8 +1298,13 @@ module Harness {
                 return diagnostic.filename && isLibraryFile(diagnostic.filename);
             });
 
+            var test262HarnessDiagnostics = ts.countWhere(diagnostics, diagnostic => {
+                // Count an error generated from tests262-harness folder.This should only apply for test262
+                return diagnostic.filename.indexOf("test262-harness") >= 0;
+            });
+
             // Verify we didn't miss any errors in total
-            assert.equal(totalErrorsReported + numLibraryDiagnostics, diagnostics.length, 'total number of errors');
+            assert.equal(totalErrorsReported + numLibraryDiagnostics + test262HarnessDiagnostics, diagnostics.length, 'total number of errors');
 
             return minimalDiagnosticsToString(diagnostics) +
                 ts.sys.newLine + ts.sys.newLine + outputLines.join('\r\n');
@@ -1642,7 +1647,8 @@ module Harness {
         }
 
         function writeComparison(expected: string, actual: string, relativeFilename: string, actualFilename: string, descriptionForDescribe: string) {
-            if (expected != actual) {
+            var encoded_actual = (new Buffer(actual)).toString('utf8')
+            if (expected != encoded_actual) {
                 // Overwrite & issue error
                 var errMsg = 'The baseline file ' + relativeFilename + ' has changed';
                 throw new Error(errMsg);
