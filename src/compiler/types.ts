@@ -692,7 +692,6 @@ module ts {
     export interface TaggedTemplateExpression extends MemberExpression {
         tag: LeftHandSideExpression;
         template: LiteralExpression | TemplateExpression;
-        tempVariable?: Identifier; // Initialized in emitter.ts
     }
 
     export type CallLikeExpression = CallExpression | NewExpression | TaggedTemplateExpression;
@@ -704,7 +703,6 @@ module ts {
 
     export interface Statement extends Node, ModuleElement {
         _statementBrand: any;
-        downlevelTaggedTemplates?: TaggedTemplateExpression[]; // Initialized in binder.ts
     }
 
     export interface Block extends Statement {
