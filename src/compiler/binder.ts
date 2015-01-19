@@ -372,12 +372,6 @@ module ts {
         function getDestructuringParameterName(node: Declaration) {
             return "__" + indexOf((<SignatureDeclaration>node.parent).parameters, node);
         }
-        
-        function bindTaggedTemplateExpression(node: TaggedTemplateExpression) {
-            if (file.languageVersion >= ScriptTarget.ES6) return;
-            
-            statement.downlevelTaggedTemplates.push(node);
-        }
 
         function bind(node: Node) {
             node.parent = parent;
@@ -501,8 +495,6 @@ module ts {
                 case SyntaxKind.SwitchStatement:
                     bindChildren(node, 0, /*isBlockScopeContainer*/ true);
                     break;
-                case SyntaxKind.TaggedTemplateExpression:
-                    bindTaggedTemplateExpression(<TaggedTemplateExpression> node);
                 default:
                     var saveParent = parent;
                     parent = node;
