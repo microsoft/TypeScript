@@ -407,7 +407,7 @@ module ts {
         Options_Colon: { code: 6027, category: DiagnosticCategory.Message, key: "Options:" },
         Version_0: { code: 6029, category: DiagnosticCategory.Message, key: "Version {0}" },
         Insert_command_line_options_and_files_from_a_file: { code: 6030, category: DiagnosticCategory.Message, key: "Insert command line options and files from a file." },
-        File_change_detected_Compiling: { code: 6032, category: DiagnosticCategory.Message, key: "File change detected. Compiling..." },
+        File_change_detected_Starting_incremental_compilation: { code: 6032, category: DiagnosticCategory.Message, key: "File change detected. Starting incremental compilation..." },
         KIND: { code: 6034, category: DiagnosticCategory.Message, key: "KIND" },
         FILE: { code: 6035, category: DiagnosticCategory.Message, key: "FILE" },
         VERSION: { code: 6036, category: DiagnosticCategory.Message, key: "VERSION" },

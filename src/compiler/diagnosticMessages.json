@@ -1726,7 +1726,7 @@
         "category": "Message",
         "code": 6030
     },
-    "File change detected. Compiling...": {
+    "File change detected. Starting incremental compilation...": {
         "category": "Message",
         "code": 6032
     },
