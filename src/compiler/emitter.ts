@@ -2061,7 +2061,7 @@ module ts {
                 text = text.substring(1, text.length - (isLast ? 1 : 2));
                 
                 write('"' + escapeString(text) + '"');
-			}
+            }
             
             function emitDownlevelTaggedTemplate(node: TaggedTemplateExpression) {
                 var tempVariable = createTempVariable(node);
@@ -2119,6 +2119,8 @@ module ts {
                     forEachChild(node, emit);
                     return;
                 }
+
+                Debug.assert(node.parent.kind !== SyntaxKind.TaggedTemplateExpression);
 
                 var emitOuterParens = isExpression(node.parent)
                     && templateNeedsParens(node, <Expression>node.parent);
