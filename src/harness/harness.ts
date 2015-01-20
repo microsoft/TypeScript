@@ -22,7 +22,6 @@
 
 declare var require: any;
 declare var process: any;
-//declare var Buffer: any;
 var Buffer = require('buffer').Buffer;
 
 // this will work in the browser via browserify
