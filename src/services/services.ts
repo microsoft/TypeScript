@@ -2320,7 +2320,7 @@ module ts {
                 else {
                     // Get scope members
                     isMemberCompletion = false;
-                    isBuilder = true;
+                    isBuilder = isCompletionListBuilder(previousToken);
 
                     /// TODO filter meaning based on the current context
                     var symbolMeanings = SymbolFlags.Type | SymbolFlags.Value | SymbolFlags.Namespace | SymbolFlags.Import;
@@ -2367,10 +2367,19 @@ module ts {
             }
 
             function isCompletionListBuilder(previousToken: Node): boolean {
-                var start = new Date().getTime();
+                if (previousToken) {
+                    var containingNodeKind = previousToken.parent.kind;
+                    // identifiers in method/function calls
+                    // variable declarations
+                    switch (previousToken.kind) {
+                        case SyntaxKind.CommaToken:
+                            return containingNodeKind === SyntaxKind.CallExpression;
+                        case SyntaxKind.OpenParenToken:
+                            return containingNodeKind === SyntaxKind.CallExpression;
+                    }
+                }
 
-                host.log("getCompletionsAtPosition: isCompletionListBuilder: " + (new Date().getTime() - start));
-                return true;
+                return false;
             }
 
             function isInStringOrRegularExpressionOrTemplateLiteral(previousToken: Node): boolean {
