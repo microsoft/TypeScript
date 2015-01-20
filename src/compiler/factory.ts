@@ -27,6 +27,13 @@ module ts {
             return Factory.createParenthesizedExpression(expression);
         }
 
+        export function createPropertyOrElementAccessExpression(expression: LeftHandSideExpression, propName: Identifier | LiteralExpression): LeftHandSideExpression {
+            if (propName.kind !== SyntaxKind.Identifier) {
+                return createElementAccessExpression(expression, propName);
+            }
+            return createPropertyAccessExpression(expression, <Identifier>propName);
+        }
+
         export function updateFunctionLikeDeclaration(node: FunctionLikeDeclaration, name: DeclarationName, body: Expression | Block, parameters: ParameterDeclaration[]): FunctionLikeDeclaration {
             if (node.name !== name || node.body !== body || node.parameters !== parameters) {
                 switch (node.kind) {

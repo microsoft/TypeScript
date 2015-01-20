@@ -96,17 +96,17 @@ module ts {
             locals.push(name);
         }
 
-        function ensureIdentifier(expression: Expression, writeAssignment: (left: Identifier, right: Expression, location?: TextRange) => void): Identifier {
+        function ensureIdentifier(expression: Expression, writeAssignment: (left: Identifier, right: Expression) => void): Identifier {
             if (expression.kind !== SyntaxKind.Identifier) {
                 var local = createUniqueIdentifier();
-                writeAssignment(local, expression, expression);
+                writeAssignment(local, expression);
                 return local;
             }
 
             return <Identifier>expression;
         }
 
-        function getValueOrDefault(value: Expression, defaultValue: Expression, writeAssignment: (left: Identifier, right: Expression, location?: TextRange) => void): Expression {
+        function getValueOrDefault(value: Expression, defaultValue: Expression, writeAssignment: (left: Identifier, right: Expression) => void): Expression {
             value = ensureIdentifier(value, writeAssignment);
             var equalityExpression = Factory.createBinaryExpression(SyntaxKind.EqualsEqualsEqualsToken, value, Factory.createVoidZero());
             var conditionalExpression = Factory.createConditionalExpression(equalityExpression, defaultValue, value);

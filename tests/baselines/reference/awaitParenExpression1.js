@@ -17,7 +17,7 @@ function f() {
                 case 0:
                     return ["yield", p];
                 case 1:
-                    b = (_state.sent);
+                    b = _state.sent;
                     return ["return"];
             }
         })));

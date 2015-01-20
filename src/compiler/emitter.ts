@@ -1934,17 +1934,17 @@ module ts {
                 if (locals) {
                     var variables = locals.getVariables();
                     if (variables) {
-                    if (newLine) {
-                        writeLine();
+                        if (newLine) {
+                            writeLine();
+                        }
+                        else {
+                            write(" ");
+                        }
+                        write("var ");
+                            emitCommaList(variables);
+                        write(";");
                     }
-                    else {
-                        write(" ");
-                    }
-                    write("var ");
-                        emitCommaList(variables);
-                    write(";");
                 }
-            }
             }
 
             function emitTokenText(tokenKind: SyntaxKind, startPos: number, emitFn?: () => void) {
@@ -3055,7 +3055,7 @@ module ts {
 
                 if (node.flags & NodeFlags.Async || node.asteriskToken && compilerOptions.target <= ScriptTarget.ES5) {
                     ensureLocals();
-                    if (compilerOptions.target <= ScriptTarget.ES5) {
+                    if (compilerOptions.target >= ScriptTarget.ES6) {
                         node = rewriteAsyncFunctionUplevel(node, resolver, locals);
                     }
                     else if (node.flags & NodeFlags.Async) {

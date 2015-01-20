@@ -24,7 +24,7 @@ function func() {
                     "before";
                     return ["yield", po];
                 case 1:
-                    _a = (_state.sent);
+                    _a = _state.sent;
                     _b = _a.fn;
                     b = _b.call(_a, a, a, a);
                     "after";
