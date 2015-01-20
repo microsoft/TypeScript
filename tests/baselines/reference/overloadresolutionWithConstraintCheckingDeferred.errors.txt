@@ -1,9 +1,14 @@
 tests/cases/compiler/overloadresolutionWithConstraintCheckingDeferred.ts(14,5): error TS2322: Type 'string' is not assignable to type 'number'.
 tests/cases/compiler/overloadresolutionWithConstraintCheckingDeferred.ts(14,37): error TS2345: Argument of type 'D' is not assignable to parameter of type 'A'.
+  Property 'x' is missing in type 'D'.
 tests/cases/compiler/overloadresolutionWithConstraintCheckingDeferred.ts(16,5): error TS2322: Type 'string' is not assignable to type 'number'.
 tests/cases/compiler/overloadresolutionWithConstraintCheckingDeferred.ts(16,38): error TS2344: Type 'D' does not satisfy the constraint 'A'.
+  Property 'x' is missing in type 'D'.
 tests/cases/compiler/overloadresolutionWithConstraintCheckingDeferred.ts(18,27): error TS2345: Argument of type '(x: D) => G<D>' is not assignable to parameter of type '(x: B) => any'.
+  Types of parameters 'x' and 'x' are incompatible.
+    Type 'D' is not assignable to type 'B'.
 tests/cases/compiler/overloadresolutionWithConstraintCheckingDeferred.ts(19,12): error TS2344: Type 'D' does not satisfy the constraint 'A'.
+  Property 'x' is missing in type 'D'.
 
 
 ==== tests/cases/compiler/overloadresolutionWithConstraintCheckingDeferred.ts (6 errors) ====
@@ -25,12 +30,14 @@ tests/cases/compiler/overloadresolutionWithConstraintCheckingDeferred.ts(19,12):
 !!! error TS2322: Type 'string' is not assignable to type 'number'.
                                         ~
 !!! error TS2345: Argument of type 'D' is not assignable to parameter of type 'A'.
+!!! error TS2345:   Property 'x' is missing in type 'D'.
     
     var result2: number = foo(x => new G<typeof x>(x)); // x has type D, new G(x) fails, so first overload is picked.
         ~~~~~~~
 !!! error TS2322: Type 'string' is not assignable to type 'number'.
                                          ~~~~~~~~
 !!! error TS2344: Type 'D' does not satisfy the constraint 'A'.
+!!! error TS2344:   Property 'x' is missing in type 'D'.
     
     var result3: string = foo(x => { // x has type D
                               ~~~~~~~~~~~~~~~~~~~~~~
@@ -38,9 +45,12 @@ tests/cases/compiler/overloadresolutionWithConstraintCheckingDeferred.ts(19,12):
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                ~~~~~~~~~~~
 !!! error TS2344: Type 'D' does not satisfy the constraint 'A'.
+!!! error TS2344:   Property 'x' is missing in type 'D'.
         return y;
     ~~~~~~~~~~~~~
     });
     ~
 !!! error TS2345: Argument of type '(x: D) => G<D>' is not assignable to parameter of type '(x: B) => any'.
+!!! error TS2345:   Types of parameters 'x' and 'x' are incompatible.
+!!! error TS2345:     Type 'D' is not assignable to type 'B'.
     

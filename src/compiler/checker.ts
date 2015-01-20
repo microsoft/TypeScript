@@ -3422,6 +3422,11 @@ module ts {
                 error(errorNode, Diagnostics.Excessive_stack_depth_comparing_types_0_and_1, typeToString(source), typeToString(target));
             }
             else if (errorInfo) {
+                if (errorInfo.next === undefined) {
+                    // Recompute the relation to get a complete error
+                    errorInfo = undefined;
+                    isRelatedTo(source, target, errorNode !== undefined, headMessage, true);
+                }
                 if (containingMessageChain) {
                     errorInfo = concatenateDiagnosticMessageChains(containingMessageChain, errorInfo);
                 }
@@ -3437,7 +3442,7 @@ module ts {
             // Ternary.True if they are related with no assumptions,
             // Ternary.Maybe if they are related with assumptions of other relationships, or
             // Ternary.False if they are not related.
-            function isRelatedTo(source: Type, target: Type, reportErrors?: boolean, headMessage?: DiagnosticMessage): Ternary {
+            function isRelatedTo(source: Type, target: Type, reportErrors?: boolean, headMessage?: DiagnosticMessage, mustRecompute = false): Ternary {
                 var result: Ternary;
                 // both types are the same - covers 'they are the same primitive type or both are Any' or the same type parameter cases
                 if (source === target) return Ternary.True;
@@ -3504,7 +3509,7 @@ module ts {
                     // identity relation does not use apparent type
                     var sourceOrApparentType = relation === identityRelation ? source : getApparentType(source);
                     if (sourceOrApparentType.flags & TypeFlags.ObjectType && target.flags & TypeFlags.ObjectType &&
-                        (result = objectTypeRelatedTo(sourceOrApparentType, <ObjectType>target, reportStructuralErrors))) {
+                        (result = objectTypeRelatedTo(sourceOrApparentType, <ObjectType>target, reportStructuralErrors, mustRecompute))) {
                         errorInfo = saveErrorInfo;
                         return result;
                     }
@@ -3595,13 +3600,13 @@ module ts {
             // Third, check if both types are part of deeply nested chains of generic type instantiations and if so assume the types are
             // equal and infinitely expanding. Fourth, if we have reached a depth of 100 nested comparisons, assume we have runaway recursion
             // and issue an error. Otherwise, actually compare the structure of the two types.
-            function objectTypeRelatedTo(source: ObjectType, target: ObjectType, reportErrors: boolean): Ternary {
+            function objectTypeRelatedTo(source: ObjectType, target: ObjectType, reportErrors: boolean, mustRecompute = false): Ternary {
                 if (overflow) {
                     return Ternary.False;
                 }
                 var id = relation !== identityRelation || source.id < target.id ? source.id + "," + target.id : target.id + "," + source.id;
                 var related = relation[id];
-                if (related !== undefined) {
+                if (!mustRecompute && related !== undefined) {
                     return related ? Ternary.True : Ternary.False;
                 }
                 if (depth > 0) {

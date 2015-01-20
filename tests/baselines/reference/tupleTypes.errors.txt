@@ -7,6 +7,7 @@ tests/cases/compiler/tupleTypes.ts(17,1): error TS2322: Type '[string, number]' 
   Types of property '0' are incompatible.
     Type 'string' is not assignable to type 'number'.
 tests/cases/compiler/tupleTypes.ts(41,1): error TS2322: Type 'undefined[]' is not assignable to type '[number, string]'.
+  Property '0' is missing in type 'undefined[]'.
 tests/cases/compiler/tupleTypes.ts(47,1): error TS2322: Type '[number, string]' is not assignable to type 'number[]'.
   Types of property 'pop' are incompatible.
     Type '() => string | number' is not assignable to type '() => number'.
@@ -80,6 +81,7 @@ tests/cases/compiler/tupleTypes.ts(51,1): error TS2322: Type '[number, {}]' is n
     tt = [];  // Error
     ~~
 !!! error TS2322: Type 'undefined[]' is not assignable to type '[number, string]'.
+!!! error TS2322:   Property '0' is missing in type 'undefined[]'.
     
     var a: number[];
     var a1: [number, string];

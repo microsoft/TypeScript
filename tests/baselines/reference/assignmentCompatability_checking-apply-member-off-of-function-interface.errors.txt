@@ -7,8 +7,11 @@ tests/cases/compiler/assignmentCompatability_checking-apply-member-off-of-functi
 tests/cases/compiler/assignmentCompatability_checking-apply-member-off-of-function-interface.ts(13,1): error TS2322: Type '{}' is not assignable to type 'Applicable'.
   Property 'apply' is missing in type '{}'.
 tests/cases/compiler/assignmentCompatability_checking-apply-member-off-of-function-interface.ts(22,4): error TS2345: Argument of type 'string' is not assignable to parameter of type 'Applicable'.
+  Property 'apply' is missing in type 'String'.
 tests/cases/compiler/assignmentCompatability_checking-apply-member-off-of-function-interface.ts(23,4): error TS2345: Argument of type 'string[]' is not assignable to parameter of type 'Applicable'.
+  Property 'apply' is missing in type 'string[]'.
 tests/cases/compiler/assignmentCompatability_checking-apply-member-off-of-function-interface.ts(24,4): error TS2345: Argument of type 'number' is not assignable to parameter of type 'Applicable'.
+  Property 'apply' is missing in type 'Number'.
 tests/cases/compiler/assignmentCompatability_checking-apply-member-off-of-function-interface.ts(25,4): error TS2345: Argument of type '{}' is not assignable to parameter of type 'Applicable'.
   Property 'apply' is missing in type '{}'.
 
@@ -50,12 +53,15 @@ tests/cases/compiler/assignmentCompatability_checking-apply-member-off-of-functi
     fn('');
        ~~
 !!! error TS2345: Argument of type 'string' is not assignable to parameter of type 'Applicable'.
+!!! error TS2345:   Property 'apply' is missing in type 'String'.
     fn(['']);
        ~~~~
 !!! error TS2345: Argument of type 'string[]' is not assignable to parameter of type 'Applicable'.
+!!! error TS2345:   Property 'apply' is missing in type 'string[]'.
     fn(4);
        ~
 !!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'Applicable'.
+!!! error TS2345:   Property 'apply' is missing in type 'Number'.
     fn({});
        ~~
 !!! error TS2345: Argument of type '{}' is not assignable to parameter of type 'Applicable'.

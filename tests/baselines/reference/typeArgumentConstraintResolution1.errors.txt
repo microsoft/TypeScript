@@ -1,5 +1,7 @@
 tests/cases/compiler/typeArgumentConstraintResolution1.ts(4,12): error TS2345: Argument of type 'string' is not assignable to parameter of type 'Date'.
+  Property 'toDateString' is missing in type 'String'.
 tests/cases/compiler/typeArgumentConstraintResolution1.ts(11,12): error TS2345: Argument of type 'string' is not assignable to parameter of type 'Date'.
+  Property 'toDateString' is missing in type 'String'.
 
 
 ==== tests/cases/compiler/typeArgumentConstraintResolution1.ts (2 errors) ====
@@ -9,6 +11,7 @@ tests/cases/compiler/typeArgumentConstraintResolution1.ts(11,12): error TS2345: 
     foo1<Date>(""); // should error
                ~~
 !!! error TS2345: Argument of type 'string' is not assignable to parameter of type 'Date'.
+!!! error TS2345:   Property 'toDateString' is missing in type 'String'.
     
     
     
@@ -18,4 +21,5 @@ tests/cases/compiler/typeArgumentConstraintResolution1.ts(11,12): error TS2345: 
     foo2<Date>(""); // Type Date does not satisfy the constraint 'Number' for type parameter 'T extends Number'
                ~~
 !!! error TS2345: Argument of type 'string' is not assignable to parameter of type 'Date'.
+!!! error TS2345:   Property 'toDateString' is missing in type 'String'.
     
