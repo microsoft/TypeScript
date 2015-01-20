@@ -1143,6 +1143,9 @@ module ts {
         InMultiLineCommentTrivia,
         InSingleQuoteStringLiteral,
         InDoubleQuoteStringLiteral,
+        InTemplateHeadLiteral, // this could also be a NoSubstitutionTemplateLiteral
+        InTemplateMiddleLiteral, //this could also be a TemplateTail
+        InTemplateSubstitutionPosition,
     }
 
     export enum TokenClass {
@@ -5650,12 +5653,12 @@ module ts {
             // if there are more cases we want the classifier to be better at.
             return true;
         }
-
-        // 'classifyKeywordsInGenerics' should be 'true' when a syntactic classifier is not present.
-        function getClassificationsForLine(text: string, lexState: EndOfLineState, classifyKeywordsInGenerics?: boolean): ClassificationResult {
+        
+        function getClassificationsForLine(text: string, lexState: EndOfLineState, syntacticClassifierAbsent?: boolean): ClassificationResult {
             var offset = 0;
             var token = SyntaxKind.Unknown;
             var lastNonTriviaToken = SyntaxKind.Unknown;
+            var templateStack: SyntaxKind[];
 
             // If we're in a string literal, then prepend: "\
             // (and a newline).  That way when we lex we'll think we're still in a string literal.
@@ -5674,6 +5677,21 @@ module ts {
                 case EndOfLineState.InMultiLineCommentTrivia:
                     text = "/*\n" + text;
                     offset = 3;
+                    break;
+                case EndOfLineState.InTemplateHeadLiteral:
+                    if (syntacticClassifierAbsent) {
+                        text = "`\n" + text;
+                        offset = 2;
+                    }
+                    break;
+                case EndOfLineState.InTemplateMiddleLiteral:
+                    if (syntacticClassifierAbsent) {
+                        text = "${\n" + text;
+                        offset = 3;
+                    }
+                    // fallthrough
+                case EndOfLineState.InTemplateSubstitutionPosition:
+                    templateStack = [SyntaxKind.TemplateHead];
                     break;
             }
 
@@ -5739,12 +5757,50 @@ module ts {
                              token === SyntaxKind.StringKeyword ||
                              token === SyntaxKind.NumberKeyword ||
                              token === SyntaxKind.BooleanKeyword) {
-                             if (angleBracketStack > 0 && !classifyKeywordsInGenerics) {
-                                 // If it looks like we're could be in something generic, don't classify this 
-                                 // as a keyword.  We may just get overwritten by the syntactic classifier,
-                                 // causing a noisy experience for the user.
-                                 token = SyntaxKind.Identifier;
-                             }
+                        if (angleBracketStack > 0 && !syntacticClassifierAbsent) {
+                            // If it looks like we're could be in something generic, don't classify this 
+                            // as a keyword.  We may just get overwritten by the syntactic classifier,
+                            // causing a noisy experience for the user.
+                            token = SyntaxKind.Identifier;
+                        }
+                    }
+                    else if (token === SyntaxKind.TemplateHead && syntacticClassifierAbsent) {
+                        if (!templateStack) {
+                            templateStack = [token];
+                        }
+                        else {
+                            templateStack.push(token);
+                        }
+                    }
+                    else if (token === SyntaxKind.OpenBraceToken && syntacticClassifierAbsent) {
+                        // If we don't have anything on the template stack,
+                        // then we aren't trying to keep track of a previously scanned template head.
+                        if (templateStack && templateStack.length > 0) {
+                            templateStack.push(token);
+                        }
+                    }
+                    else if (token === SyntaxKind.CloseBraceToken && syntacticClassifierAbsent) {
+                        // If we don't have anything on the template stack,
+                        // then we aren't trying to keep track of a previously scanned template head.
+                        if (templateStack && templateStack.length > 0) {
+                            var lastTemplateStackToken = lastOrUndefined(templateStack);
+
+                            if (lastTemplateStackToken === SyntaxKind.TemplateHead) {
+                                token = scanner.reScanTemplateToken();
+
+                                // Only pop on a TemplateTail; a TemplateMiddle indicates there is more for us.
+                                if (token === SyntaxKind.TemplateTail) {
+                                    templateStack.pop();
+                                }
+                                else {
+                                    Debug.assert(token === SyntaxKind.TemplateMiddle, "Should have been a template middle. Was " + token);
+                                }
+                            }
+                            else {
+                                Debug.assert(token === SyntaxKind.CloseBraceToken, "Should have been an open brace. Was: " + token);
+                                templateStack.pop();
+                            }
+                        }
                     }
 
                     lastNonTriviaToken = token;
@@ -5760,7 +5816,7 @@ module ts {
                 var start = scanner.getTokenPos();
                 var end = scanner.getTextPos();
 
-                addResult(end - start, classFromKind(token));
+                addResult(end - start, classFromKind(token, syntacticClassifierAbsent));
 
                 if (end >= text.length) {
                     if (token === SyntaxKind.StringLiteral) {
@@ -5788,6 +5844,19 @@ module ts {
                         if (scanner.isUnterminated()) {
                             result.finalLexState = EndOfLineState.InMultiLineCommentTrivia;
                         }
+                    }
+                    else if (isTemplateLiteralKind(token) && syntacticClassifierAbsent) {
+                        if (scanner.isUnterminated()) {
+                            if (token === SyntaxKind.TemplateMiddle) {
+                                result.finalLexState = EndOfLineState.InTemplateMiddleLiteral;
+                            }
+                            else {
+                                result.finalLexState = EndOfLineState.InTemplateHeadLiteral;
+                            }
+                        }
+                    }
+                    else if (templateStack && templateStack.length > 0 && lastOrUndefined(templateStack) === SyntaxKind.TemplateHead) {
+                        result.finalLexState = EndOfLineState.InTemplateSubstitutionPosition;
                     }
                 }
             }
@@ -5866,7 +5935,7 @@ module ts {
             return token >= SyntaxKind.FirstKeyword && token <= SyntaxKind.LastKeyword;
         }
 
-        function classFromKind(token: SyntaxKind) {
+        function classFromKind(token: SyntaxKind, syntacticClassifierAbsent?: boolean) {
             if (isKeyword(token)) {
                 return TokenClass.Keyword;
             }
@@ -5892,6 +5961,10 @@ module ts {
                     return TokenClass.Whitespace;
                 case SyntaxKind.Identifier:
                 default:
+                    // Only give a classification if nothing will more accurately classify.
+                    if (syntacticClassifierAbsent && isTemplateLiteralKind(token)) {
+                        return TokenClass.StringLiteral; // should make a TemplateLiteral
+                    }
                     return TokenClass.Identifier;
             }
         }
