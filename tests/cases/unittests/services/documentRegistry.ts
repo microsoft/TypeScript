@@ -33,6 +33,6 @@ describe("DocumentRegistry", () => {
         compilerOptions.module = ts.ModuleKind.CommonJS;
         var f4 = documentRegistry.acquireDocument("file1.ts", compilerOptions, ts.ScriptSnapshot.fromString("var x = 1;"), "1");
 
-        assert(f1 !== f4, "Changed module: Expected to have different instances of document");
+        assert(f3 === f4, "Changed module: Expected to have the same instance of the document");
     });
 });
