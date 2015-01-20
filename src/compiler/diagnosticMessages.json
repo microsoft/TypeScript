@@ -224,7 +224,7 @@
     "A 'declare' modifier cannot be used with an import declaration.": {
         "category": "Error",
         "code": 1079,
-        "isEarly":  true
+        "isEarly": true
     },
     "Invalid 'reference' directive syntax.": {
         "category": "Error",
@@ -659,7 +659,7 @@
     "An implementation cannot be declared in ambient contexts.": {
         "category": "Error",
         "code": 1184,
-        "isEarly":  true
+        "isEarly": true
     },
     "Modifiers cannot appear here.": {
         "category": "Error",
@@ -672,6 +672,10 @@
     "A rest element cannot have an initializer.": {
         "category": "Error",
         "code": 1186
+    },
+    "A parameter property may not be a binding pattern.": {
+        "category": "Error",
+        "code":  1187
     },
 
     "Duplicate identifier '{0}'.": {
@@ -1282,6 +1286,10 @@
         "category": "Error",
         "code": 2462
     },
+    "A binding pattern parameter cannot be optional in an implementation signature.": {
+        "category": "Error",
+        "code":  2463
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
@@ -1572,9 +1580,10 @@
         "category": "Error",
         "code": 4084
     },
-    "Index expression arguments in 'const' enums must be of type 'string'.": {
+    "A const enum member can only be accessed using a string literal.": {
         "category": "Error",
-        "code": 4085
+        "code": 4085,
+        "isEarly": true
     },
     "'const' enum member initializer was evaluated to a non-finite value.": {
         "category": "Error",
@@ -1583,6 +1592,11 @@
     "'const' enum member initializer was evaluated to disallowed value 'NaN'.": {
         "category": "Error",
         "code": 4087
+    },
+    "Property '{0}' does not exist on 'const' enum '{1}'.": {
+        "category": "Error",
+        "code": 4088,
+        "isEarly":  true
     },
     "The current host does not support the '{0}' option.": {
         "category": "Error",
@@ -1772,7 +1786,7 @@
         "category": "Error",
         "code": 6051
     },
-    "Warn on expressions and declarations with an implied 'any' type.": {
+    "Raise error on expressions and declarations with an implied 'any' type.": {
         "category": "Message",
         "code": 6052
     },

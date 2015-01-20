@@ -208,6 +208,12 @@ module ts {
         return result;
     }
 
+    export function copyMap<T>(source: Map<T>, target: Map<T>): void {
+        for (var p in source) {
+            target[p] = source[p];
+        }
+    }
+
     /**
      * Creates a map from the elements of an array.
      *
