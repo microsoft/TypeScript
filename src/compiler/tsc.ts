@@ -6,7 +6,6 @@ module ts {
 
     export interface SourceFile {
         fileWatcher: FileWatcher;
-        fileChanged: boolean;
     }
 
     /**
@@ -262,18 +261,20 @@ module ts {
             // Use default host function
             var sourceFile = hostGetSourceFile(filename, languageVersion, onError);
             // Cache the source file in -watch mode
-            if (commandLine.options.watch) {
+            if (sourceFile && commandLine.options.watch) {
                 cacheSourceFile(sourceFile);
             }
             return sourceFile;
         }
 
+        // Cache the given source file and watch for changes
         function cacheSourceFile(sourceFile: SourceFile) {
             cachedSourceFiles = cachedSourceFiles || {};
             cachedSourceFiles[compilerHost.getCanonicalFileName(sourceFile.filename)] = sourceFile;
             sourceFile.fileWatcher = sys.watchFile(sourceFile.filename, sourceFileChanged);
         }
 
+        // Remove the given source file from the cache
         function forgetSourceFile(sourceFile: SourceFile) {
             if (sourceFile.fileWatcher) {
                 sourceFile.fileWatcher.close();
@@ -282,6 +283,7 @@ module ts {
             }
         }
 
+        // Update the cache to contain only source files in the given list
         function updateSourceFileCache(keepSourceFiles: SourceFile[]) {
             for (var filename in cachedSourceFiles) {
                 var sourceFile = cachedSourceFiles[filename];
@@ -293,6 +295,7 @@ module ts {
             }
         }
 
+        // Remove all source files from the cache
         function clearSourceFileCache() {
             if (cachedSourceFiles) {
                 for (var filename in cachedSourceFiles) {
@@ -305,6 +308,7 @@ module ts {
             cachedSourceFiles = undefined;
         }
 
+        // If a source file changes, remove that file from the cache and start the recompilation timer
         function sourceFileChanged(filename: string) {
             var sourceFile = cachedSourceFiles[filename];
             if (sourceFile) {
@@ -313,14 +317,14 @@ module ts {
             }
         }
 
+        // If the configuration file changes, clear the cache and start the recompilation timer
         function configFileChanged() {
             clearSourceFileCache();
             startTimer();
         }
 
-        // Upon detecting a file change, queue up file modification events for the next 250ms and then
-        // perform a recompilation. The reasoning is that in some cases an editor can save all files at once,
-        // and we'd like to just perform a single recompilation.
+        // Upon detecting a file change, wait for the 250ms and then perform a recompilation. The reasoning is that
+        // in some cases an editor can save all files at once, and we'd like to just perform a single recompilation.
         function startTimer() {
             if (timerHandle) {
                 clearTimeout(timerHandle);
