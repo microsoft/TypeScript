@@ -2376,9 +2376,11 @@ module ts {
                     // variable declarations
                     switch (previousToken.kind) {
                         case SyntaxKind.CommaToken:
-                            return containingNodeKind === SyntaxKind.CallExpression;
+                            return containingNodeKind === SyntaxKind.CallExpression
+                                || containingNodeKind === SyntaxKind.Constructor;
                         case SyntaxKind.OpenParenToken:
-                            return containingNodeKind === SyntaxKind.CallExpression;
+                            return containingNodeKind === SyntaxKind.CallExpression
+                                || containingNodeKind === SyntaxKind.Constructor;
                         case SyntaxKind.ModuleKeyword:
                             return true;
                         case SyntaxKind.DotToken:
@@ -2435,7 +2437,6 @@ module ts {
                     case SyntaxKind.FunctionDeclaration:
                     case SyntaxKind.MethodDeclaration:
                     case SyntaxKind.MethodSignature:
-                    case SyntaxKind.Constructor:
                     case SyntaxKind.GetAccessor:
                     case SyntaxKind.SetAccessor:
                     case SyntaxKind.CallSignature:
@@ -2482,7 +2483,9 @@ module ts {
                         case SyntaxKind.PrivateKeyword:
                         case SyntaxKind.StaticKeyword:
                         case SyntaxKind.DotDotDotToken:
-                            return containingNodeKind === SyntaxKind.Parameter || containingNodeKind === SyntaxKind.PropertyDeclaration;
+                            return containingNodeKind === SyntaxKind.Parameter
+                                || containingNodeKind === SyntaxKind.PropertyDeclaration
+                                || containingNodeKind === SyntaxKind.Constructor;
 
                         case SyntaxKind.ClassKeyword:
                         case SyntaxKind.EnumKeyword:
