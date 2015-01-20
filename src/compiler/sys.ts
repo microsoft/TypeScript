@@ -232,7 +232,7 @@ module ts {
                     var directories: string[] = [];
                     for (var i = 0; i < files.length; i++) {
                         var name = combinePaths(path, files[i]);
-                        var stat = _fs.statSync(name);
+                        var stat = _fs.lstatSync(name);
                         if (stat.isFile()) {
                             if (!extension || fileExtensionIs(name, extension)) {
                                 result.push(name);

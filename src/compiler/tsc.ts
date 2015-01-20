@@ -323,8 +323,9 @@ module ts {
             startTimer();
         }
 
-        // Upon detecting a file change, wait for the 250ms and then perform a recompilation. The reasoning is that
-        // in some cases an editor can save all files at once, and we'd like to just perform a single recompilation.
+        // Upon detecting a file change, wait for 250ms and then perform a recompilation. This gives batch
+        // operations (such as saving all modified files in an editor) a chance to complete before we kick
+        // off a new compilation.
         function startTimer() {
             if (timerHandle) {
                 clearTimeout(timerHandle);
