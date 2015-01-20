@@ -2376,6 +2376,10 @@ module ts {
                             return containingNodeKind === SyntaxKind.CallExpression;
                         case SyntaxKind.OpenParenToken:
                             return containingNodeKind === SyntaxKind.CallExpression;
+                        case SyntaxKind.ModuleKeyword:
+                            return true;
+                        case SyntaxKind.DotToken:
+                            return containingNodeKind === SyntaxKind.ModuleDeclaration;
                     }
                 }
 
@@ -2478,7 +2482,6 @@ module ts {
                             return containingNodeKind === SyntaxKind.Parameter || containingNodeKind === SyntaxKind.PropertyDeclaration;
 
                         case SyntaxKind.ClassKeyword:
-                        case SyntaxKind.ModuleKeyword:
                         case SyntaxKind.EnumKeyword:
                         case SyntaxKind.InterfaceKeyword:
                         case SyntaxKind.FunctionKeyword:
@@ -2494,7 +2497,6 @@ module ts {
                         case "class":
                         case "interface":
                         case "enum":
-                        case "module":
                         case "function":
                         case "var":
                             // TODO: add let and const
