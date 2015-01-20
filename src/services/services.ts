@@ -2366,6 +2366,13 @@ module ts {
                 return result;
             }
 
+            function isCompletionListBuilder(previousToken: Node): boolean {
+                var start = new Date().getTime();
+
+                host.log("getCompletionsAtPosition: isCompletionListBuilder: " + (new Date().getTime() - start));
+                return true;
+            }
+
             function isInStringOrRegularExpressionOrTemplateLiteral(previousToken: Node): boolean {
                 if (previousToken.kind === SyntaxKind.StringLiteral
                     || previousToken.kind === SyntaxKind.RegularExpressionLiteral
@@ -2432,7 +2439,10 @@ module ts {
                                 containingNodeKind === SyntaxKind.VariableDeclarationList ||
                                 containingNodeKind === SyntaxKind.VariableStatement ||
                                 containingNodeKind === SyntaxKind.EnumDeclaration ||           // enum a { foo, |
-                                isFunction(containingNodeKind);
+                                isFunction(containingNodeKind) ||
+                                containingNodeKind === SyntaxKind.ClassDeclaration ||        // class A<T, |
+                                containingNodeKind === SyntaxKind.FunctionDeclaration ||        // function A<T, |
+                                containingNodeKind === SyntaxKind.InterfaceDeclaration;       // interface A<T, |
 
                         case SyntaxKind.OpenParenToken:
                             return containingNodeKind === SyntaxKind.CatchClause ||
@@ -2445,6 +2455,12 @@ module ts {
                         case SyntaxKind.SemicolonToken:
                             return containingNodeKind === SyntaxKind.PropertySignature &&
                                 previousToken.parent.parent.kind === SyntaxKind.InterfaceDeclaration;    // interface a { f; |
+
+                        case SyntaxKind.FirstBinaryOperator:
+                            return containingNodeKind === SyntaxKind.ClassDeclaration ||        // class A< |
+                                containingNodeKind === SyntaxKind.FunctionDeclaration ||        // function A< |
+                                containingNodeKind === SyntaxKind.InterfaceDeclaration ||       // interface A< |
+                                containingNodeKind === SyntaxKind.MethodDeclaration;            // class A{ b< |
 
                         case SyntaxKind.PublicKeyword:
                         case SyntaxKind.PrivateKeyword:
