@@ -7212,6 +7212,9 @@ module ts {
                     error(node, Diagnostics.A_parameter_property_is_only_allowed_in_a_constructor_implementation);
                 }
             }
+            if (node.questionToken && isBindingPattern(node.name) && func.body) {
+                error(node, Diagnostics.A_binding_pattern_parameter_cannot_be_optional_in_an_implementation_signature);
+            }
             if (node.dotDotDotToken) {
                 if (!isArrayType(getTypeOfSymbol(node.symbol))) {
                     error(node, Diagnostics.A_rest_parameter_must_be_of_an_array_type);
