@@ -1302,6 +1302,10 @@
         "category": "Error",
         "code": 2466
     },
+    "A computed property name cannot reference a type parameter from its contained type.": {
+        "category": "Error",
+        "code": 2466
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",

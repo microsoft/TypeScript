@@ -335,6 +335,16 @@ module ts {
                             break loop;
                         }
                         break;
+                    case SyntaxKind.ComputedPropertyName:
+                        var grandparent = location.parent.parent;
+                        if (grandparent.kind === SyntaxKind.ClassDeclaration || grandparent.kind === SyntaxKind.InterfaceDeclaration) {
+                            // A reference to this grandparent's type parameters would be an error
+                            if (result = getSymbol(getSymbolOfNode(grandparent).members, name, meaning & SymbolFlags.Type)) {
+                                error(errorLocation, Diagnostics.A_computed_property_name_cannot_reference_a_type_parameter_from_its_contained_type);
+                                return undefined;
+                            }
+                        }
+                        break;
                     case SyntaxKind.MethodDeclaration:
                     case SyntaxKind.MethodSignature:
                     case SyntaxKind.Constructor:
