@@ -657,6 +657,18 @@ module FourSlash {
             }
         }
 
+        public verifyCompletionListIsBuilder(negative: boolean) {
+            var completions = this.getCompletionListAtCaret();
+
+            if (!completions) {
+                this.raiseError("Expected completion list");
+            } else if ((completions && !completions.isBuilder) && !negative) {
+                this.raiseError("Expected builder completion entry");
+            } else if ((completions && completions.isBuilder) && negative) {
+                this.raiseError("Un expected the builder completion entry");
+            }
+        }
+
         public verifyCompletionListContains(symbol: string, text?: string, documentation?: string, kind?: string) {
             var completions = this.getCompletionListAtCaret();
             this.assertItemInCompletionList(completions.entries, symbol, text, documentation, kind);

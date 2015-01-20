@@ -172,6 +172,10 @@ module FourSlashInterface {
             FourSlash.currentTestState.verifyCompletionListIsEmpty(this.negative);
         }
 
+        public completionListIsBuilder() {
+            FourSlash.currentTestState.verifyCompletionListIsBuilder(this.negative);
+        }
+
         public memberListIsEmpty() {
             FourSlash.currentTestState.verifyMemberListIsEmpty(this.negative);
         }
