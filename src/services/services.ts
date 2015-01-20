@@ -1143,8 +1143,8 @@ module ts {
         InMultiLineCommentTrivia,
         InSingleQuoteStringLiteral,
         InDoubleQuoteStringLiteral,
-        InTemplateHeadLiteral, // this could also be a NoSubstitutionTemplateLiteral
-        InTemplateMiddleLiteral, //this could also be a TemplateTail
+        InTemplateHeadOrNoSubstitutionTemplate,
+        InTemplateMiddleOrTail,
         InTemplateSubstitutionPosition,
     }
 
@@ -5678,20 +5678,22 @@ module ts {
                     text = "/*\n" + text;
                     offset = 3;
                     break;
-                case EndOfLineState.InTemplateHeadLiteral:
+                case EndOfLineState.InTemplateHeadOrNoSubstitutionTemplate:
                     if (syntacticClassifierAbsent) {
                         text = "`\n" + text;
                         offset = 2;
                     }
                     break;
-                case EndOfLineState.InTemplateMiddleLiteral:
+                case EndOfLineState.InTemplateMiddleOrTail:
                     if (syntacticClassifierAbsent) {
-                        text = "${\n" + text;
-                        offset = 3;
+                        text = "}\n" + text;
+                        offset = 2;
                     }
                     // fallthrough
                 case EndOfLineState.InTemplateSubstitutionPosition:
-                    templateStack = [SyntaxKind.TemplateHead];
+                    if (syntacticClassifierAbsent) {
+                        templateStack = [SyntaxKind.TemplateHead];
+                    }
                     break;
             }
 
@@ -5847,11 +5849,14 @@ module ts {
                     }
                     else if (isTemplateLiteralKind(token) && syntacticClassifierAbsent) {
                         if (scanner.isUnterminated()) {
-                            if (token === SyntaxKind.TemplateMiddle) {
-                                result.finalLexState = EndOfLineState.InTemplateMiddleLiteral;
+                            if (token === SyntaxKind.TemplateTail) {
+                                result.finalLexState = EndOfLineState.InTemplateMiddleOrTail;
+                            }
+                            else if (token === SyntaxKind.NoSubstitutionTemplateLiteral) {
+                                result.finalLexState = EndOfLineState.InTemplateHeadOrNoSubstitutionTemplate;
                             }
                             else {
-                                result.finalLexState = EndOfLineState.InTemplateHeadLiteral;
+                                Debug.fail("Only 'NoSubstitutionTemplateLiteral's and 'TemplateTail's can be unterminated; got SyntaxKind #" + token);
                             }
                         }
                     }
