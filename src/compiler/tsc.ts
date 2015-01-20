@@ -130,6 +130,10 @@ module ts {
         reportStatisticalValue(name, (time / 1000).toFixed(2) + "s");
     }
 
+    function isJSONSupported() {
+        return typeof JSON === "object" && typeof JSON.parse === "function";
+    }
+
     function findConfigFile(): string {
         var searchPath = normalizePath(sys.getCurrentDirectory());
         var filename = "tsconfig.json";
@@ -151,7 +155,7 @@ module ts {
         var commandLine = parseCommandLine(args);
         var configFilename: string;                 // Configuration file name (if any)
         var configFileWatcher: FileWatcher;         // Configuration file watcher
-        var cachedSourceFiles: Map<SourceFile>;     // Cached SourceFile objects
+        var cachedProgram: Program;                 // Program cached from last compilation
         var rootFilenames: string[];                // Root filenames for compilation
         var compilerOptions: CompilerOptions;       // Compiler options for compilation
         var compilerHost: CompilerHost;             // Compiler host
@@ -159,9 +163,9 @@ module ts {
         var timerHandle: number;                    // Handle for 0.25s wait timer
 
         if (commandLine.options.locale) {
-            if (typeof JSON === "undefined") {
+            if (!isJSONSupported()) {
                 reportDiagnostic(createCompilerDiagnostic(Diagnostics.The_current_host_does_not_support_the_0_option, "--locale"));
-                return sys.exit(1);
+                return sys.exit(EmitReturnStatus.CompilerOptionsErrors);
             }
             validateLocaleAndSetLanguage(commandLine.options.locale, commandLine.errors);
         }
@@ -185,13 +189,17 @@ module ts {
         }
 
         if (commandLine.options.project) {
+            if (!isJSONSupported()) {
+                reportDiagnostic(createCompilerDiagnostic(Diagnostics.The_current_host_does_not_support_the_0_option, "--project"));
+                return sys.exit(EmitReturnStatus.CompilerOptionsErrors);
+            }
             configFilename = normalizePath(combinePaths(commandLine.options.project, "tsconfig.json"));
             if (commandLine.filenames.length !== 0) {
                 reportDiagnostic(createCompilerDiagnostic(Diagnostics.Option_project_cannot_be_mixed_with_source_files_on_a_command_line));
                 return sys.exit(EmitReturnStatus.CompilerOptionsErrors);
             }
         }
-        else if (commandLine.filenames.length === 0) {
+        else if (commandLine.filenames.length === 0 && isJSONSupported()) {
             configFilename = findConfigFile();
         }
 
@@ -216,7 +224,7 @@ module ts {
         // Invoked to perform initial compilation or re-compilation in watch mode
         function performCompilation() {
 
-            if (!cachedSourceFiles) {
+            if (!cachedProgram) {
                 if (configFilename) {
                     var configObject = readConfigFile(configFilename);
                     if (!configObject) {
@@ -246,80 +254,53 @@ module ts {
                 return sys.exit(compileResult.exitStatus);
             }
 
-            updateSourceFileCache(compileResult.program.getSourceFiles());
+            setCachedProgram(compileResult.program);
             reportDiagnostic(createCompilerDiagnostic(Diagnostics.Compilation_complete_Watching_for_file_changes));
         }
 
         function getSourceFile(filename: string, languageVersion: ScriptTarget, onError ?: (message: string) => void) {
             // Return existing SourceFile object if one is available
-            if (cachedSourceFiles) {
-                var canonicalName = compilerHost.getCanonicalFileName(filename);
-                if (hasProperty(cachedSourceFiles, canonicalName)) {
-                    return cachedSourceFiles[canonicalName];
+            if (cachedProgram) {
+                var sourceFile = cachedProgram.getSourceFile(filename);
+                // A modified source file has no watcher and should not be reused
+                if (sourceFile && sourceFile.fileWatcher) {
+                    return sourceFile;
                 }
             }
             // Use default host function
             var sourceFile = hostGetSourceFile(filename, languageVersion, onError);
-            // Cache the source file in -watch mode
             if (sourceFile && commandLine.options.watch) {
-                cacheSourceFile(sourceFile);
+                // Attach a file watcher
+                sourceFile.fileWatcher = sys.watchFile(sourceFile.filename, () => sourceFileChanged(sourceFile));
             }
             return sourceFile;
         }
 
-        // Cache the given source file and watch for changes
-        function cacheSourceFile(sourceFile: SourceFile) {
-            cachedSourceFiles = cachedSourceFiles || {};
-            cachedSourceFiles[compilerHost.getCanonicalFileName(sourceFile.filename)] = sourceFile;
-            sourceFile.fileWatcher = sys.watchFile(sourceFile.filename, sourceFileChanged);
-        }
-
-        // Remove the given source file from the cache
-        function forgetSourceFile(sourceFile: SourceFile) {
-            if (sourceFile.fileWatcher) {
-                sourceFile.fileWatcher.close();
-                sourceFile.fileWatcher = undefined;
-                delete cachedSourceFiles[sourceFile.filename];
-            }
-        }
-
-        // Update the cache to contain only source files in the given list
-        function updateSourceFileCache(keepSourceFiles: SourceFile[]) {
-            for (var filename in cachedSourceFiles) {
-                var sourceFile = cachedSourceFiles[filename];
-                if (sourceFile) {
-                    if (!contains(keepSourceFiles, sourceFile)) {
-                        forgetSourceFile(sourceFile);
+        // Change cached program to the given program
+        function setCachedProgram(program: Program) {
+            if (cachedProgram) {
+                var newSourceFiles = program ? program.getSourceFiles() : undefined;
+                forEach(cachedProgram.getSourceFiles(), sourceFile => {
+                    if (!(newSourceFiles && contains(newSourceFiles, sourceFile))) {
+                        if (sourceFile.fileWatcher) {
+                            sourceFile.fileWatcher.close();
+                            sourceFile.fileWatcher = undefined;
+                        }
                     }
-                }
+                });
             }
+            cachedProgram = program;
         }
 
-        // Remove all source files from the cache
-        function clearSourceFileCache() {
-            if (cachedSourceFiles) {
-                for (var filename in cachedSourceFiles) {
-                    var sourceFile = cachedSourceFiles[filename];
-                    if (sourceFile) {
-                        forgetSourceFile(sourceFile);
-                    }
-                }
-            }
-            cachedSourceFiles = undefined;
+        // If a source file changes, mark it as unwatched and start the recompilation timer
+        function sourceFileChanged(sourceFile: SourceFile) {
+            sourceFile.fileWatcher = undefined;
+            startTimer();
         }
 
-        // If a source file changes, remove that file from the cache and start the recompilation timer
-        function sourceFileChanged(filename: string) {
-            var sourceFile = cachedSourceFiles[filename];
-            if (sourceFile) {
-                forgetSourceFile(sourceFile);
-                startTimer();
-            }
-        }
-
-        // If the configuration file changes, clear the cache and start the recompilation timer
+        // If the configuration file changes, forget cached program and start the recompilation timer
         function configFileChanged() {
-            clearSourceFileCache();
+            setCachedProgram(undefined);
             startTimer();
         }
 
