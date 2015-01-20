@@ -330,6 +330,12 @@ module ts {
         HasAggregatedChildData = 1 << 6
     }
 
+    export const enum RelationComparisonResult {
+        Succeeded = 0,
+        Failed = 1,
+        FailedAndReported = 2
+    }
+
     export interface Node extends TextRange {
         kind: SyntaxKind;
         flags: NodeFlags;
