@@ -1923,7 +1923,7 @@ module ts {
             function ensureLocals() {
                 if (!globals) {
                     globals = {};
-                    }
+                }
 
                 if (!locals) {
                     locals = createLocalsBuilder(resolver, localsScope, globals);
@@ -2582,15 +2582,15 @@ module ts {
             function emitBinaryExpression(node: BinaryExpression) {
                 if (compilerOptions.target < ScriptTarget.ES6 && node.operator === SyntaxKind.EqualsToken &&
                     (node.left.kind === SyntaxKind.ObjectLiteralExpression || node.left.kind === SyntaxKind.ArrayLiteralExpression)) {
-                    emitDestructuring(node);
+                    ensureLocals();
+                    node = rewriteDestructuring(node, locals);
                 }
-                else {
-                    emit(node.left);
-                    if (node.operator !== SyntaxKind.CommaToken) write(" ");
-                    write(tokenToString(node.operator));
-                    write(" ");
-                    emit(node.right);
-                }
+
+                emit(node.left);
+                if (node.operator !== SyntaxKind.CommaToken) write(" ");
+                write(tokenToString(node.operator));
+                write(" ");
+                emit(node.right);
             }
 
             function emitConditionalExpression(node: ConditionalExpression) {
@@ -3082,7 +3082,8 @@ module ts {
                 emitLeadingComments(node);
                 if (isBindingPattern(node.name)) {
                     if (compilerOptions.target < ScriptTarget.ES6) {
-                        emitDestructuring(node);
+                        ensureLocals();
+                        emitCommaList(rewriteBindingElement(<BindingElement>node, locals));
                     }
                     else {
                         emit(node.name);
@@ -3117,16 +3118,16 @@ module ts {
             function emitParameter(node: ParameterDeclaration) {
                 emitLeadingComments(node);
                 if (compilerOptions.target < ScriptTarget.ES6) {
-                if (isBindingPattern(node.name)) {
-                    ensureLocals();
-                    var name = locals.createUniqueIdentifier();
-                    if (!tempParameters) {
-                        tempParameters = [];
+                    if (isBindingPattern(node.name)) {
+                        ensureLocals();
+                        var name = locals.createUniqueIdentifier();
+                        if (!tempParameters) {
+                            tempParameters = [];
+                        }
+                        tempParameters.push(name);
+                        emit(name);
                     }
-                    tempParameters.push(name);
-                    emit(name);
-                }
-                else {
+                    else {
                         emit(node.name);
                     }
                 }
@@ -3147,7 +3148,7 @@ module ts {
                     if (isBindingPattern(p.name)) {
                         writeLine();
                         write("var ");
-                        emitDestructuring(p, tempParameters[tempIndex]);
+                        emitCommaList(rewriteBindingElement(<BindingElement>p, locals, tempParameters[tempIndex]));
                         write(";");
                         tempIndex++;
                     }
@@ -3264,15 +3265,22 @@ module ts {
             function emitSignatureAndBody(node: FunctionLikeDeclaration) {
                 var saveLocals = locals;
                 var saveLocalsScope = localsScope;
+                var saveTempParameters = tempParameters;
                 localsScope = node.body;
                 locals = undefined;
-
-                var saveTempParameters = tempParameters;
                 tempParameters = undefined;
-                if (node.flags & NodeFlags.Async || (node.asteriskToken && compilerOptions.target <= ScriptTarget.ES5)) {
-                    // NOTE: rewriteFunction supports downlevel generators, but is not currently enabled.
+
+                if (node.flags & NodeFlags.Async || node.asteriskToken && compilerOptions.target <= ScriptTarget.ES5) {
                     ensureLocals();
-                    node = rewriteFunction(node, compilerOptions, resolver, locals);
+                    if (compilerOptions.target <= ScriptTarget.ES5) {
+                        node = rewriteAsyncFunctionUplevel(node, resolver, locals);
+                    }
+                    else if (node.flags & NodeFlags.Async) {
+                        node = rewriteAsyncFunctionDownlevel(node, resolver, locals);
+                    }
+                    else {
+                        node = rewriteGeneratorFunctionDownlevel(node, resolver, locals);
+                    }
                 }
 
                 emitSignatureParameters(node);

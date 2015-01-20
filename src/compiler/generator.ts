@@ -122,7 +122,7 @@ module ts {
         return <StatementsGenerator>createCodeGenerator(locals, /*isStatementsGenerator*/ true);
     }
 
-    export function createFunctionGenerator(locals: LocalsBuilder): FunctionGenerator {
+    export function createGeneratorFunctionGenerator(locals: LocalsBuilder): FunctionGenerator {
         return <FunctionGenerator>createCodeGenerator(locals, /*isStatementsGenerator*/ false);
     }
 

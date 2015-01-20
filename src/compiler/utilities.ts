@@ -792,6 +792,20 @@ module ts {
         }
     }
 
+    export function needsParenthesis(expression: Expression): boolean {
+        if (expression.parent) {
+            switch (expression.parent.kind) {
+                case SyntaxKind.ExpressionStatement:
+                case SyntaxKind.ThrowStatement:
+                case SyntaxKind.ReturnStatement:
+                case SyntaxKind.ParenthesizedExpression:
+                    return false;
+            }
+        }
+
+        return !isLeftHandSideExpression(expression);
+    }
+
     export function needsParenthesisForPropertyAccess(node: Expression) {
         switch (node.kind) {
             case SyntaxKind.Identifier:

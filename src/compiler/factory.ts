@@ -19,7 +19,7 @@ module ts {
             return Factory.createVoidExpression(Factory.createNumericLiteral(0, location, flags), location, flags);
         }
 
-        export function addParenthesisIfNessary(expression: Expression): LeftHandSideExpression {
+        export function makeLeftHandSideExpression(expression: Expression): LeftHandSideExpression {
             if (isLeftHandSideExpression(expression)) {
                 return <LeftHandSideExpression>expression;
             }
@@ -96,6 +96,12 @@ module ts {
             if (child && !child.parent) {
                 child.parent = parent;
             }
+        }
+    }
+
+    export module Visitor {
+        export function ignore<TNode extends Node>(node: TNode): TNode {
+            return node;
         }
     }
 }
