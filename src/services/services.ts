@@ -846,6 +846,7 @@ module ts {
     //
     export interface LanguageServiceHost {
         getCompilationSettings(): CompilerOptions;
+        getNewLine?(): string;
         getScriptFileNames(): string[];
         getScriptVersion(fileName: string): string;
         getScriptSnapshot(fileName: string): IScriptSnapshot;
@@ -2048,7 +2049,7 @@ module ts {
                 getCancellationToken: () => cancellationToken,
                 getCanonicalFileName: filename => useCaseSensitivefilenames ? filename : filename.toLowerCase(),
                 useCaseSensitiveFileNames: () => useCaseSensitivefilenames,
-                getNewLine: () => "\r\n",
+                getNewLine: () => host.getNewLine ? host.getNewLine() : "\r\n",
                 getDefaultLibFilename: getDefaultLibraryFilename,
                 writeFile: (filename, data, writeByteOrderMark) => { },
                 getCurrentDirectory: () => host.getCurrentDirectory()
