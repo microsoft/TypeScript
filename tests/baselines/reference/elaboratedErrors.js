@@ -12,6 +12,19 @@ class WorkerFS implements FileSystem {
   read: string;
 }
 
+interface Alpha { x: string; }
+interface Beta { y: number; }
+var x: Alpha;
+var y: Beta;
+
+// Only one of these errors should be large
+x = y;
+x = y;
+
+// Only one of these errors should be large
+y = x;
+y = x;
+
 
 //// [elaboratedErrors.js]
 function fn(s) {
@@ -22,3 +35,11 @@ var WorkerFS = (function () {
     }
     return WorkerFS;
 })();
+var x;
+var y;
+// Only one of these errors should be large
+x = y;
+x = y;
+// Only one of these errors should be large
+y = x;
+y = x;

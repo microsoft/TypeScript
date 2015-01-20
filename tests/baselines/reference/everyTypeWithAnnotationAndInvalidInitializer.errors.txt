@@ -29,7 +29,6 @@ tests/cases/conformance/statements/VariableStatements/everyTypeWithAnnotationAnd
       Type 'A' is not assignable to type 'A'.
         Property 'name' is missing in type 'A'.
 tests/cases/conformance/statements/VariableStatements/everyTypeWithAnnotationAndInvalidInitializer.ts(51,5): error TS2322: Type 'A' is not assignable to type 'A'.
-  Property 'name' is missing in type 'A'.
 tests/cases/conformance/statements/VariableStatements/everyTypeWithAnnotationAndInvalidInitializer.ts(52,5): error TS2322: Type '(x: number) => boolean' is not assignable to type '(x: number) => string'.
   Type 'boolean' is not assignable to type 'string'.
 
@@ -131,7 +130,6 @@ tests/cases/conformance/statements/VariableStatements/everyTypeWithAnnotationAnd
     var aClassInModule: M.A = new N.A();
         ~~~~~~~~~~~~~~
 !!! error TS2322: Type 'A' is not assignable to type 'A'.
-!!! error TS2322:   Property 'name' is missing in type 'A'.
     var aFunctionInModule: typeof M.F2 = F2;
         ~~~~~~~~~~~~~~~~~
 !!! error TS2322: Type '(x: number) => boolean' is not assignable to type '(x: number) => string'.

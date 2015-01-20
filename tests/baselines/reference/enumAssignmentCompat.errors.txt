@@ -2,11 +2,9 @@ tests/cases/compiler/enumAssignmentCompat.ts(26,5): error TS2322: Type 'typeof W
 tests/cases/compiler/enumAssignmentCompat.ts(28,5): error TS2322: Type 'W' is not assignable to type 'typeof W'.
   Property 'D' is missing in type 'Number'.
 tests/cases/compiler/enumAssignmentCompat.ts(30,5): error TS2322: Type 'number' is not assignable to type 'typeof W'.
-  Property 'D' is missing in type 'Number'.
 tests/cases/compiler/enumAssignmentCompat.ts(32,5): error TS2322: Type 'W' is not assignable to type 'WStatic'.
   Property 'a' is missing in type 'Number'.
 tests/cases/compiler/enumAssignmentCompat.ts(33,5): error TS2322: Type 'number' is not assignable to type 'WStatic'.
-  Property 'a' is missing in type 'Number'.
 
 
 ==== tests/cases/compiler/enumAssignmentCompat.ts (5 errors) ====
@@ -47,7 +45,6 @@ tests/cases/compiler/enumAssignmentCompat.ts(33,5): error TS2322: Type 'number' 
     var d: typeof W = 3; // error
         ~
 !!! error TS2322: Type 'number' is not assignable to type 'typeof W'.
-!!! error TS2322:   Property 'D' is missing in type 'Number'.
     var e: typeof W.a = 4;
     var f: WStatic = W.a; // error
         ~
@@ -56,7 +53,6 @@ tests/cases/compiler/enumAssignmentCompat.ts(33,5): error TS2322: Type 'number' 
     var g: WStatic = 5; // error
         ~
 !!! error TS2322: Type 'number' is not assignable to type 'WStatic'.
-!!! error TS2322:   Property 'a' is missing in type 'Number'.
     var h: W = 3;
     var i: W = W.a;
     i = W.a;

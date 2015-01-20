@@ -3,7 +3,6 @@ tests/cases/compiler/chainedAssignment1.ts(21,1): error TS2322: Type 'Z' is not 
 tests/cases/compiler/chainedAssignment1.ts(21,6): error TS2322: Type 'Z' is not assignable to type 'Y'.
   Property 'a' is missing in type 'Z'.
 tests/cases/compiler/chainedAssignment1.ts(22,1): error TS2322: Type 'Z' is not assignable to type 'Y'.
-  Property 'a' is missing in type 'Z'.
 
 
 ==== tests/cases/compiler/chainedAssignment1.ts (3 errors) ====
@@ -37,4 +36,3 @@ tests/cases/compiler/chainedAssignment1.ts(22,1): error TS2322: Type 'Z' is not 
     c2 = c3; // Error TS111: Cannot convert Z to Y
     ~~
 !!! error TS2322: Type 'Z' is not assignable to type 'Y'.
-!!! error TS2322:   Property 'a' is missing in type 'Z'.
