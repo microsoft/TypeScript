@@ -10,10 +10,10 @@ class C {
 >{            [this.bar()]() { }        } : {}
 
             [this.bar()]() { }
->this.bar() : any
->this.bar : any
->this : any
->bar : any
+>this.bar() : number
+>this.bar : () => number
+>this : C
+>bar : () => number
 
         };
         return 0;

@@ -4966,7 +4966,10 @@ module ts {
                 }
             }
 
-            if (isCallExpression) {
+            if (container.kind === SyntaxKind.ComputedPropertyName) {
+                error(node, Diagnostics.super_cannot_be_referenced_in_a_computed_property_name);
+            }
+            else if (isCallExpression) {
                 error(node, Diagnostics.Super_calls_are_not_permitted_outside_constructors_or_in_nested_functions_inside_constructors);
             }
             else {

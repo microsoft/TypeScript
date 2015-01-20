@@ -1298,6 +1298,10 @@
         "category": "Error",
         "code": 2465
     },
+    "'super' cannot be referenced in a computed property name.": {
+        "category": "Error",
+        "code": 2466
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
