@@ -243,8 +243,18 @@ module ts.formatting {
         }
 
         var precedingToken = findPrecedingToken(originalRange.pos, sourceFile);
-        // no preceding token found - start from the beginning of enclosing node
-        return precedingToken ? precedingToken.end : enclosingNode.pos;
+        if (!precedingToken) {
+            // no preceding token found - start from the beginning of enclosing node
+            return enclosingNode.pos;
+        }
+
+        // preceding token ends after the start of original range (i.e when originaRange.pos falls in the middle of literal)
+        // start from the beginning of enclosingNode to handle the entire 'originalRange'
+        if (precedingToken.end >= originalRange.pos) {
+            return enclosingNode.pos;
+        }
+
+        return precedingToken.end;
     }
 
     /*

@@ -16,6 +16,8 @@ module ts {
         var emptySymbols: SymbolTable = {};
 
         var compilerOptions = host.getCompilerOptions();
+        var languageVersion = compilerOptions.target || ScriptTarget.ES3;
+
         var emitResolver = createResolver();
 
         var checker: TypeChecker = {
@@ -6381,7 +6383,7 @@ module ts {
 
         function checkTaggedTemplateExpression(node: TaggedTemplateExpression): Type {
             // Grammar checking
-            if (compilerOptions.target < ScriptTarget.ES6) {
+            if (languageVersion < ScriptTarget.ES6) {
                 grammarErrorOnFirstToken(node.template, Diagnostics.Tagged_templates_are_only_available_when_targeting_ECMAScript_6_and_higher);
             }
 
@@ -10115,7 +10117,7 @@ module ts {
             globalRegExpType = getGlobalType("RegExp");
             // If we're in ES6 mode, load the TemplateStringsArray.
             // Otherwise, default to 'unknown' for the purposes of type checking in LS scenarios.
-            globalTemplateStringsArrayType = compilerOptions.target >= ScriptTarget.ES6
+            globalTemplateStringsArrayType = languageVersion >= ScriptTarget.ES6
                 ? getGlobalType("TemplateStringsArray")
                 : unknownType;
             anyArrayType = createArrayType(anyType);
@@ -10483,7 +10485,7 @@ module ts {
             }
 
             var computedPropertyName = <ComputedPropertyName>node;
-            if (compilerOptions.target < ScriptTarget.ES6) {
+            if (languageVersion < ScriptTarget.ES6) {
                 return grammarErrorOnNode(node, Diagnostics.Computed_property_names_are_only_available_when_targeting_ECMAScript_6_and_higher);
             }
             else if (computedPropertyName.expression.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>computedPropertyName.expression).operator === SyntaxKind.CommaToken) {
@@ -10583,7 +10585,7 @@ module ts {
 
         function checkGrammarAccessor(accessor: MethodDeclaration): boolean {
             var kind = accessor.kind;
-            if (compilerOptions.target < ScriptTarget.ES5) {
+            if (languageVersion < ScriptTarget.ES5) {
                 return grammarErrorOnNode(accessor.name, Diagnostics.Accessors_are_only_available_when_targeting_ECMAScript_5_and_higher);
             }
             else if (isInAmbientContext(accessor)) {
@@ -10788,7 +10790,7 @@ module ts {
                 return grammarErrorAtPos(getSourceFileOfNode(declarationList), declarations.pos, declarations.end - declarations.pos, Diagnostics.Variable_declaration_list_cannot_be_empty);
             }
 
-            if (compilerOptions.target  < ScriptTarget.ES6) {
+            if (languageVersion < ScriptTarget.ES6) {
                 if (isLet(declarationList)) {
                     return grammarErrorOnFirstToken(declarationList, Diagnostics.let_declarations_are_only_available_when_targeting_ECMAScript_6_and_higher);
                 }
@@ -10890,7 +10892,7 @@ module ts {
         function grammarErrorOnFirstToken(node: Node, message: DiagnosticMessage, arg0?: any, arg1?: any, arg2?: any): boolean {
             var sourceFile = getSourceFileOfNode(node);
             if (!hasParseDiagnostics(sourceFile)) {
-                var scanner = createScanner(compilerOptions.target, /*skipTrivia*/ true, sourceFile.text);
+                var scanner = createScanner(languageVersion, /*skipTrivia*/ true, sourceFile.text);
                 var start = scanToken(scanner, node.pos);
                 diagnostics.push(createFileDiagnostic(sourceFile, start, scanner.getTextPos() - start, message, arg0, arg1, arg2));
                 return true;
@@ -11032,7 +11034,7 @@ module ts {
                 if (node.parserContextFlags & ParserContextFlags.StrictMode) {
                     return grammarErrorOnNode(node, Diagnostics.Octal_literals_are_not_allowed_in_strict_mode);
                 }
-                else if (compilerOptions.target >= ScriptTarget.ES5) {
+                else if (languageVersion >= ScriptTarget.ES5) {
                     return grammarErrorOnNode(node, Diagnostics.Octal_literals_are_not_available_when_targeting_ECMAScript_5_and_higher);
                 }
             }
@@ -11041,7 +11043,7 @@ module ts {
         function grammarErrorAfterFirstToken(node: Node, message: DiagnosticMessage, arg0?: any, arg1?: any, arg2?: any): boolean {
             var sourceFile = getSourceFileOfNode(node);
             if (!hasParseDiagnostics(sourceFile)) {
-                var scanner = createScanner(compilerOptions.target, /*skipTrivia*/ true, sourceFile.text);
+                var scanner = createScanner(languageVersion, /*skipTrivia*/ true, sourceFile.text);
                 scanToken(scanner, node.pos);
                 diagnostics.push(createFileDiagnostic(sourceFile, scanner.getTextPos(), 0, message, arg0, arg1, arg2));
                 return true;

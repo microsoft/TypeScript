@@ -1,6 +1,7 @@
 ﻿/// <reference path="fourslash.ts" />
 
 // @BaselineFile: getEmitOutputSingleFile2.baseline
+// @module: CommonJS
 // @declaration: true
 // @out: declSingleFile.js
 // @outDir: tests/cases/fourslash/

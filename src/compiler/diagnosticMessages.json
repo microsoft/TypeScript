@@ -1634,25 +1634,33 @@
         "category": "Error",
         "code": 5023
     },
+    "Compiler option '{0}' requires a value of type {1}.": {
+        "category": "Error",
+        "code": 5024
+    },
     "Could not write file '{0}': {1}": {
         "category": "Error",
         "code": 5033
     },
-    "Option mapRoot cannot be specified without specifying sourcemap option.": {
+    "Option 'mapRoot' cannot be specified without specifying 'sourcemap' option.": {
         "category": "Error",
         "code": 5038
     },
-    "Option sourceRoot cannot be specified without specifying sourcemap option.": {
+    "Option 'sourceRoot' cannot be specified without specifying 'sourcemap' option.": {
         "category": "Error",
         "code": 5039
     },
-    "Option noEmit cannot be specified with option out or outDir.": {
+    "Option 'noEmit' cannot be specified with option 'out' or 'outDir'.": {
         "category": "Error",
         "code": 5040
     },
-    "Option noEmit cannot be specified with option declaration.": {
+    "Option 'noEmit' cannot be specified with option 'declaration'.": {
         "category": "Error",
         "code": 5041
+    },
+    "Option 'project' cannot be mixed with source files on a command line.": {
+        "category": "Error",
+        "code": 5042
     },
     "Concatenate and emit output to single file.": {
         "category": "Message",
@@ -1710,6 +1718,10 @@
         "category": "Message",
         "code": 6019
     },
+    "Compile the project in the given directory.": {
+        "category": "Message",
+        "code": 6020
+    },
     "Syntax: {0}": {
         "category": "Message",
         "code": 6023
@@ -1738,7 +1750,7 @@
         "category": "Message",
         "code": 6030
     },
-    "File change detected. Compiling...": {
+    "File change detected. Starting incremental compilation...": {
         "category": "Message",
         "code": 6032
     },
