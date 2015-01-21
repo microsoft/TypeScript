@@ -930,6 +930,10 @@ module ts {
         }
 
         function emitPropertyDeclaration(node: Declaration) {
+            if (hasComputedNameButNotSymbol(node)) {
+                return;
+            }
+
             emitJsDocComments(node);
             emitClassMemberDeclarationFlags(node);
             emitVariableDeclaration(<VariableDeclaration>node);
@@ -937,11 +941,13 @@ module ts {
             writeLine();
         }
 
-        // TODO(jfreeman): Factor out common part of property definition, but treat name differently
         function emitVariableDeclaration(node: VariableDeclaration) {
             // If we are emitting property it isn't moduleElement and hence we already know it needs to be emitted
             // so there is no check needed to see if declaration is visible
             if (node.kind !== SyntaxKind.VariableDeclaration || resolver.isDeclarationVisible(node)) {
+                // If this node is a computed name, it can only be a symbol, because we've already skipped
+                // it if it's not a well known symbol. In that case, the text of the name will be exactly
+                // what we want, namely the name expression enclosed in brackets.
                 writeTextOfNode(currentSourceFile, node.name);
                 // If optional property emit ?
                 if ((node.kind === SyntaxKind.PropertyDeclaration || node.kind === SyntaxKind.PropertySignature) && hasQuestionToken(node)) {
@@ -1028,6 +1034,10 @@ module ts {
         }
 
         function emitAccessorDeclaration(node: AccessorDeclaration) {
+            if (hasComputedNameButNotSymbol(node)) {
+                return;
+            }
+            
             var accessors = getAllAccessorDeclarations(<ClassDeclaration>node.parent, node);
             if (node === accessors.firstAccessor) {
                 emitJsDocComments(accessors.getAccessor);
@@ -1105,6 +1115,10 @@ module ts {
         }
 
         function emitFunctionDeclaration(node: FunctionLikeDeclaration) {
+            if (hasComputedNameButNotSymbol(node)) {
+                return;
+            }
+
             // If we are emitting Method/Constructor it isn't moduleElement and hence already determined to be emitting
             // so no need to verify if the declaration is visible
             if ((node.kind !== SyntaxKind.FunctionDeclaration || resolver.isDeclarationVisible(node)) &&
