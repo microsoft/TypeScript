@@ -8468,49 +8468,6 @@ module ts {
         }
 
         function checkIndexConstraints(type: Type) {
-            function checkIndexConstraintForProperty(
-                prop: Symbol,
-                propertyType: Type,
-                containingType: Type,
-                indexDeclaration: Declaration,
-                indexType: Type,
-                indexKind: IndexKind): void {
-
-                if (!indexType) {
-                    return;
-                }
-
-                // index is numeric and property name is not valid numeric literal
-                if (indexKind === IndexKind.Number && !isNumericName(prop.valueDeclaration.name)) {
-                    return;
-                }
-
-                // perform property check if property or indexer is declared in 'type'
-                // this allows to rule out cases when both property and indexer are inherited from the base class
-                var errorNode: Node;
-                if (prop.valueDeclaration.name.kind === SyntaxKind.ComputedPropertyName || prop.parent === containingType.symbol) {
-                    errorNode = prop.valueDeclaration;
-                }
-                else if (indexDeclaration) {
-                    errorNode = indexDeclaration;
-                }
-                else if (containingType.flags & TypeFlags.Interface) {
-                    // for interfaces property and indexer might be inherited from different bases
-                    // check if any base class already has both property and indexer.
-                    // check should be performed only if 'type' is the first type that brings property\indexer together
-                    var someBaseClassHasBothPropertyAndIndexer = forEach((<InterfaceType>containingType).baseTypes, base => getPropertyOfObjectType(base, prop.name) && getIndexTypeOfType(base, indexKind));
-                    errorNode = someBaseClassHasBothPropertyAndIndexer ? undefined : containingType.symbol.declarations[0];
-                }
-
-                if (errorNode && !isTypeAssignableTo(propertyType, indexType)) {
-                    var errorMessage =
-                        indexKind === IndexKind.String
-                            ? Diagnostics.Property_0_of_type_1_is_not_assignable_to_string_index_type_2
-                            : Diagnostics.Property_0_of_type_1_is_not_assignable_to_numeric_index_type_2;
-                    error(errorNode, errorMessage, symbolToString(prop), typeToString(propertyType), typeToString(indexType));
-                }
-            }
-
             var declaredNumberIndexer = getIndexDeclarationOfSymbol(type.symbol, IndexKind.Number);
             var declaredStringIndexer = getIndexDeclarationOfSymbol(type.symbol, IndexKind.String);
 
@@ -8553,6 +8510,49 @@ module ts {
             if (errorNode && !isTypeAssignableTo(numberIndexType, stringIndexType)) {                
                 error(errorNode, Diagnostics.Numeric_index_type_0_is_not_assignable_to_string_index_type_1,
                     typeToString(numberIndexType), typeToString(stringIndexType));
+            }
+
+            function checkIndexConstraintForProperty(
+                prop: Symbol,
+                propertyType: Type,
+                containingType: Type,
+                indexDeclaration: Declaration,
+                indexType: Type,
+                indexKind: IndexKind): void {
+
+                if (!indexType) {
+                    return;
+                }
+
+                // index is numeric and property name is not valid numeric literal
+                if (indexKind === IndexKind.Number && !isNumericName(prop.valueDeclaration.name)) {
+                    return;
+                }
+
+                // perform property check if property or indexer is declared in 'type'
+                // this allows to rule out cases when both property and indexer are inherited from the base class
+                var errorNode: Node;
+                if (prop.valueDeclaration.name.kind === SyntaxKind.ComputedPropertyName || prop.parent === containingType.symbol) {
+                    errorNode = prop.valueDeclaration;
+                }
+                else if (indexDeclaration) {
+                    errorNode = indexDeclaration;
+                }
+                else if (containingType.flags & TypeFlags.Interface) {
+                    // for interfaces property and indexer might be inherited from different bases
+                    // check if any base class already has both property and indexer.
+                    // check should be performed only if 'type' is the first type that brings property\indexer together
+                    var someBaseClassHasBothPropertyAndIndexer = forEach((<InterfaceType>containingType).baseTypes, base => getPropertyOfObjectType(base, prop.name) && getIndexTypeOfType(base, indexKind));
+                    errorNode = someBaseClassHasBothPropertyAndIndexer ? undefined : containingType.symbol.declarations[0];
+                }
+
+                if (errorNode && !isTypeAssignableTo(propertyType, indexType)) {
+                    var errorMessage =
+                        indexKind === IndexKind.String
+                            ? Diagnostics.Property_0_of_type_1_is_not_assignable_to_string_index_type_2
+                            : Diagnostics.Property_0_of_type_1_is_not_assignable_to_numeric_index_type_2;
+                    error(errorNode, errorMessage, symbolToString(prop), typeToString(propertyType), typeToString(indexType));
+                }
             }
         }
 
