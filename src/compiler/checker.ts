@@ -4797,10 +4797,10 @@ module ts {
                     if (!importOrExportAssignment ||
                         (importOrExportAssignment.flags & NodeFlags.Export) ||
                         (importOrExportAssignment.kind === SyntaxKind.ExportAssignment)) {
-                // Mark the import as referenced so that we emit it in the final .js file.
-                // exception: identifiers that appear in type queries, const enums, modules that contain only const enums
+                        // Mark the import as referenced so that we emit it in the final .js file.
+                        // exception: identifiers that appear in type queries, const enums, modules that contain only const enums
                         symbolLinks.referenced = !isInTypeQuery(node) && !isConstEnumOrConstEnumOnlyModule(resolveImport(symbol));
-            }
+                    }
                     else {
                         var nodeLinks = getNodeLinks(importOrExportAssignment);
                         Debug.assert(!nodeLinks.importOnRightSide);
@@ -6517,6 +6517,9 @@ module ts {
             if (node.flags & NodeFlags.Async) {
                 emitAwaiter = true;
             }
+            if (node.asteriskToken && compilerOptions.target < ScriptTarget.ES6) {
+                emitGenerator = true;
+            }
             var links = getNodeLinks(node);
             var type = getTypeOfSymbol(node.symbol);
             // Check if function expression is contextually typed and assign parameter types if so
@@ -8003,6 +8006,10 @@ module ts {
                 if (awaitableReturnType) {
                     returnType = awaitableReturnType;
                 }
+            }
+
+            if (node.asteriskToken && compilerOptions.target < ScriptTarget.ES6) {
+                emitGenerator = true;
             }
 
             if (returnType && !isAccessor(node.kind)) {
@@ -9500,6 +9507,7 @@ module ts {
                 case SyntaxKind.BinaryExpression:
                 case SyntaxKind.ConditionalExpression:
                 case SyntaxKind.SpreadElementExpression:
+                case SyntaxKind.YieldExpression:
                 case SyntaxKind.Block:
                 case SyntaxKind.ModuleBlock:
                 case SyntaxKind.VariableStatement:
