@@ -1349,16 +1349,18 @@ module ts {
         TypeChecked         = 0x00000001,  // Node has been type checked
         LexicalThis         = 0x00000002,  // Lexical 'this' reference
         CaptureThis         = 0x00000004,  // Lexical 'this' used in body
-        EmitExtends         = 0x00000008,  // Emit __extends
-        SuperInstance       = 0x00000010,  // Instance 'super' reference
-        SuperStatic         = 0x00000020,  // Static 'super' reference
-        ContextChecked      = 0x00000040,  // Contextual types have been assigned
+        LexicalArguments    = 0x00000008,  // Lexical 'arguments' reference
+        CaptureArguments    = 0x00000010,  // Lexical 'arguments' used in body
+        EmitExtends         = 0x00000020,  // Emit __extends
+        SuperInstance       = 0x00000040,  // Instance 'super' reference
+        SuperStatic         = 0x00000080,  // Static 'super' reference
+        ContextChecked      = 0x00000100,  // Contextual types have been assigned
 
         // Values for enum members have been computed, and any errors have been reported for them.
-        EnumValuesComputed = 0x00000080,
+        EnumValuesComputed  = 0x00000200,
 
-        EmitAwaiter        = 0x00000100,  // Emit __awaiter
-        EmitGenerator      = 0x00000200,  // Emit __generator
+        EmitAwaiter         = 0x00000400,  // Emit __awaiter
+        EmitGenerator       = 0x00000800,  // Emit __generator
     }
 
     export interface NodeLinks {

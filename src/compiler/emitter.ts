@@ -2235,18 +2235,23 @@ module ts {
             }
 
             function emitIdentifier(node: Identifier) {
-                var generatedName = resolver.getRenamedIdentifier(node);
-                if (generatedName) {
-                    write(generatedName);
-                }
-                else if (!node.parent || nodeIsMissingOrGenerated(node)) {
-                    write(node.text);
-                }
-                else if (!isNotExpressionIdentifier(node)) {
-                    emitExpressionIdentifier(node);
+                if (resolver.getNodeCheckFlags(node) & NodeCheckFlags.LexicalArguments) {
+                    write("_arguments");
                 }
                 else {
-                    writeTextOfNode(currentSourceFile, node);
+                    var generatedName = resolver.getRenamedIdentifier(node);
+                    if (generatedName) {
+                        write(generatedName);
+                    }
+                    else if (!node.parent || nodeIsMissingOrGenerated(node)) {
+                        write(node.text);
+                    }
+                    else if (!isNotExpressionIdentifier(node)) {
+                        emitExpressionIdentifier(node);
+                    }
+                    else {
+                        writeTextOfNode(currentSourceFile, node);
+                    }
                 }
             }
 
@@ -3035,6 +3040,15 @@ module ts {
                 }
             }
 
+            function emitCaptureArgumentsForNodeIfNecessary(node: Node): void {
+                if (resolver.getNodeCheckFlags(node) & NodeCheckFlags.CaptureArguments) {
+                    writeLine();
+                    emitStart(node);
+                    write("var _arguments = arguments;");
+                    emitEnd(node);
+                }
+            }
+
             function emitSignatureParameters(node: FunctionLikeDeclaration) {
                 increaseIndent();
                 write("(");
@@ -3081,6 +3095,7 @@ module ts {
                 }
                 var outPos = writer.getTextPos();
                 emitCaptureThisForNodeIfNecessary(node);
+                emitCaptureArgumentsForNodeIfNecessary(node);
                 emitDefaultValueAssignments(node);
                 emitRestParameter(node);
                 if (node.body.kind !== SyntaxKind.Block && outPos === writer.getTextPos()) {
@@ -3536,6 +3551,7 @@ module ts {
                     increaseIndent();
                     scopeEmitStart(node);
                     emitCaptureThisForNodeIfNecessary(node);
+                    emitCaptureArgumentsForNodeIfNecessary(node);
                     writeLine();
                     emit(node.body);
                     decreaseIndent();
