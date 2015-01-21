@@ -93,7 +93,6 @@ module ts {
         var globalTemplateStringsArrayType: ObjectType;
 
         var anyArrayType: Type;
-        var stringOrNumberType: Type;
 
         var tupleTypes: Map<TupleType> = {};
         var unionTypes: Map<UnionType> = {};
@@ -10071,7 +10070,6 @@ module ts {
                 ? getGlobalType("TemplateStringsArray")
                 : unknownType;
             anyArrayType = createArrayType(anyType);
-            stringOrNumberType = getUnionType([stringType, numberType]);
         }
 
 
