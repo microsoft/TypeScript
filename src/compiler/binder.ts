@@ -9,8 +9,8 @@ module ts {
 
     export function getModuleInstanceState(node: Node): ModuleInstanceState {
         // A module is uninstantiated if it contains only 
-        // 1. interface declarations
-        if (node.kind === SyntaxKind.InterfaceDeclaration) {
+        // 1. interface declarations, type alias declarations
+        if (node.kind === SyntaxKind.InterfaceDeclaration || node.kind === SyntaxKind.TypeAliasDeclaration) {
             return ModuleInstanceState.NonInstantiated;
         }
         // 2. const enum declarations don't make module instantiated
