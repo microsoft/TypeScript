@@ -413,7 +413,7 @@ module TypeScript {
 
             opts.flag('noImplicitAny', {
                 usage: {
-                    locCode: DiagnosticCode.Warn_on_expressions_and_declarations_with_an_implied_any_type,
+                    locCode: DiagnosticCode.Raise_error_on_expressions_and_declarations_with_an_implied_any_type,
                     args: null
                 },
                 set: () => {

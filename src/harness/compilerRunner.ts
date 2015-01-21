@@ -61,12 +61,6 @@ class CompilerBaselineRunner extends RunnerBase {
             var otherFiles: { unitName: string; content: string }[];
             var harnessCompiler: Harness.Compiler.HarnessCompiler;
 
-            var declFileCompilationResult: {
-                declInputFiles: { unitName: string; content: string }[];
-                declOtherFiles: { unitName: string; content: string }[];
-                declResult: Harness.Compiler.CompilerResult;
-            };
-
             var createNewInstance = false;
 
             before(() => {
@@ -143,7 +137,6 @@ class CompilerBaselineRunner extends RunnerBase {
                 toBeCompiled = undefined;
                 otherFiles = undefined;
                 harnessCompiler = undefined;
-                declFileCompilationResult = undefined;
             });
 
             function getByteOrderMarkText(file: Harness.Compiler.GeneratedFile): string {
@@ -177,13 +170,6 @@ class CompilerBaselineRunner extends RunnerBase {
                         return record;
                     });
                 }
-            });
-
-            // Compile .d.ts files
-            it('Correct compiler generated.d.ts for ' + fileName, () => {
-                declFileCompilationResult = harnessCompiler.compileDeclarationFiles(toBeCompiled, otherFiles, result, function (settings) {
-                    harnessCompiler.setCompilerSettings(tcSettings);
-                }, options);
             });
 
 
@@ -222,6 +208,10 @@ class CompilerBaselineRunner extends RunnerBase {
                                 jsCode += result.declFilesCode[i].code;
                             }
                         }
+
+                        var declFileCompilationResult = harnessCompiler.compileDeclarationFiles(toBeCompiled, otherFiles, result, function (settings) {
+                            harnessCompiler.setCompilerSettings(tcSettings);
+                        }, options);
 
                         if (declFileCompilationResult && declFileCompilationResult.declResult.errors.length) {
                             jsCode += '\r\n\r\n//// [DtsFileErrors]\r\n';
