@@ -1734,7 +1734,14 @@ module ts {
                         if (scopeName) {
                             var parentIndex = getSourceMapNameIndex();
                             if (parentIndex !== -1) {
-                                scopeName = sourceMapData.sourceMapNames[parentIndex] + "." + scopeName;
+                                // Child scopes are always shown with a dot (even if they have no name),
+                                // unless it is a computed property. Then it is shown with brackets,
+                                // but the brackets are included in the name.
+                                var name = (<Declaration>node).name;
+                                if (!name || name.kind !== SyntaxKind.ComputedPropertyName) {
+                                    scopeName = "." + scopeName;
+                                }
+                                scopeName = sourceMapData.sourceMapNames[parentIndex] + scopeName;
                             }
 
                             scopeNameIndex = getProperty(sourceMapNameIndexMap, scopeName);
@@ -1762,8 +1769,11 @@ module ts {
                         node.kind === SyntaxKind.EnumDeclaration) {
                         // Declaration and has associated name use it
                         if ((<Declaration>node).name) {
-                            // TODO(jfreeman): Ask shkamat about what this name should be for source maps
-                            scopeName = (<Identifier>(<Declaration>node).name).text;
+                            var name = (<Declaration>node).name;
+                            // For computed property names, the text will include the brackets
+                            scopeName = name.kind === SyntaxKind.ComputedPropertyName
+                                ? getTextOfNode(name)
+                                : (<Identifier>(<Declaration>node).name).text;
                         }
                         recordScopeNameStart(scopeName);
                     }
