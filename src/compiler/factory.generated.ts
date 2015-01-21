@@ -3,6 +3,7 @@
 
 module ts {
     export interface VisitorHandler {
+        visitIdentifier? (node: Identifier): Identifier;
         visitComputedPropertyName? (node: ComputedPropertyName): DeclarationName;
         visitMethodDeclaration? (node: MethodDeclaration): ClassElement | ObjectLiteralElement;
         visitGetAccessor? (node: AccessorDeclaration): ClassElement | ObjectLiteralElement;
@@ -64,6 +65,7 @@ module ts {
     }
 
     export interface Visitor {
+        visitIdentifier(node: Identifier): Identifier;
         visitDeclarationName(node: DeclarationName): DeclarationName;
         visitComputedPropertyName(node: ComputedPropertyName): DeclarationName;
         visitMethodDeclaration(node: MethodDeclaration): ClassElement | ObjectLiteralElement;
@@ -929,6 +931,7 @@ module ts {
 
         export function create(handler: VisitorHandler): Visitor {
             var visitor: Visitor = {
+                visitIdentifier,
                 visitDeclarationName,
                 visitComputedPropertyName,
                 visitMethodDeclaration,
@@ -1000,6 +1003,10 @@ module ts {
             };
 
             return visitor;
+
+            function visitIdentifier(node: Identifier): Identifier {
+                return visitNode(node, Visitor.visitIdentifier, handler.visitIdentifier);
+            }
 
             function visitDeclarationName(node: DeclarationName): DeclarationName {
                 return visitNode(node, Visitor.visitDeclarationName);
@@ -1286,6 +1293,13 @@ module ts {
             }
         }
 
+        export function visitIdentifier(node: Identifier): Identifier {
+            if (!node || !activeVisitor) {
+                return node;
+            }
+            return node;
+        }
+
         export function visitDeclarationName(node: DeclarationName): DeclarationName {
             if (!node || !activeVisitor) {
                 return node;
@@ -1298,6 +1312,7 @@ module ts {
                 case SyntaxKind.ComputedPropertyName:
                     return activeVisitor.visitComputedPropertyName(<ComputedPropertyName>node);
                 case SyntaxKind.Identifier:
+                    return activeVisitor.visitIdentifier(<Identifier>node);
                 case SyntaxKind.StringLiteral:
                 case SyntaxKind.NumericLiteral:
                 case SyntaxKind.RegularExpressionLiteral:
@@ -1343,7 +1358,7 @@ module ts {
                 case SyntaxKind.ArrayBindingPattern:
                     return activeVisitor.visitArrayBindingPattern(<BindingPattern>node);
                 case SyntaxKind.Identifier:
-                    return node;
+                    return activeVisitor.visitIdentifier(<Identifier>node);
                 default:
                     reportUnexpectedNode(node);
                     return node;
@@ -1375,7 +1390,7 @@ module ts {
             return Factory.updateBindingElement(
                 node,
                 activeVisitor.visitIdentifierOrBindingPattern(node.name),
-                node.propertyName,
+                activeVisitor.visitIdentifier(node.propertyName),
                 activeVisitor.visitExpression(node.initializer))
         }
 
@@ -1429,7 +1444,7 @@ module ts {
             }
             switch (node.kind) {
                 case SyntaxKind.Identifier:
-                    return node;
+                    return activeVisitor.visitIdentifier(<Identifier>node);
                 case SyntaxKind.ThisKeyword:
                     return node;
                 case SyntaxKind.SuperKeyword:
@@ -1518,7 +1533,7 @@ module ts {
             return Factory.updatePropertyAccessExpression(
                 node,
                 activeVisitor.visitLeftHandSideExpression(node.expression),
-                node.name)
+                activeVisitor.visitIdentifier(node.name))
         }
 
         export function visitElementAccessExpression(node: ElementAccessExpression): ElementAccessExpression {
@@ -1601,7 +1616,7 @@ module ts {
             }
             return Factory.updateFunctionExpression(
                 node,
-                node.name,
+                activeVisitor.visitIdentifier(node.name),
                 activeVisitor.visitExpressionOrBlock(node.body),
                 node.parameters)
         }
@@ -1910,7 +1925,7 @@ module ts {
             }
             return Factory.updateLabeledStatement(
                 node,
-                node.label,
+                activeVisitor.visitIdentifier(node.label),
                 activeVisitor.visitStatement(node.statement))
         }
 
@@ -2017,7 +2032,7 @@ module ts {
             }
             return Factory.updateCatchClause(
                 node,
-                node.name,
+                activeVisitor.visitIdentifier(node.name),
                 activeVisitor.visitBlock(node.block))
         }
 

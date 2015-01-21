@@ -42,6 +42,8 @@
         "kind": "Identifier",
         "type": "Identifier",
         "baseType": "LeftHandSideExpression",
+        "visit": true,
+        "handler": true,
         "children": [
             { "name": "text", "type": "string" }
         ]
