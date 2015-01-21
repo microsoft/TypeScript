@@ -1032,11 +1032,11 @@ module ts {
 
         beginScriptContinueBlock(labelText: string): void;
         endScriptContinueBlock(): void;
-        beginScriptBreakBlock(labelText: string): void;
+        beginScriptBreakBlock(labelText: string, requireLabel: boolean): void;
         endScriptBreakBlock(): void;
         beginContinueBlock(continueLabel: Label, labelText: string): Label;
         endContinueBlock(): void;
-        beginBreakBlock(labelText: string): Label;
+        beginBreakBlock(labelText: string, requireLabel: boolean): Label;
         endBreakBlock(): void;
 
         emit(code: OpCode): void;

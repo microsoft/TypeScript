@@ -584,7 +584,7 @@ module ts {
                 return;
             }
 
-            return defaultVisitBreakBlock(node, Visitor.visitSwitchStatement);
+            return defaultVisitBreakBlock(node, Visitor.visitSwitchStatement, /*requireLabel*/ false);
         }
 
         function visitWithStatement(node: WithStatement): Statement {
@@ -602,7 +602,7 @@ module ts {
                 return;
             }
 
-            return defaultVisitBreakBlock(node, Visitor.visitLabeledStatement);
+            return defaultVisitBreakBlock(node, Visitor.visitLabeledStatement, /*requireLabel*/ true);
         }
 
         function visitTryStatement(node: TryStatement): TryStatement {
@@ -623,8 +623,8 @@ module ts {
             return Visitor.visitCatchClause(node);
         }
 
-        function defaultVisitBreakBlock<TNode extends Statement>(node: TNode, visitNode: (node: TNode) => TNode): TNode {
-            builder.beginScriptBreakBlock(getTarget(node));
+        function defaultVisitBreakBlock<TNode extends Statement>(node: TNode, visitNode: (node: TNode) => TNode, requireLabel: boolean): TNode {
+            builder.beginScriptBreakBlock(getTarget(node), requireLabel);
             var result = visitNode(node);
             builder.endScriptBreakBlock();
             return result;
@@ -822,14 +822,16 @@ module ts {
                     }
                 }
                 var rewritten = rewriteVariableDeclaration(node);
-                if (mergedAssignment) {
-                    mergedAssignment = Factory.createBinaryExpression(
-                        SyntaxKind.CommaToken,
-                        mergedAssignment,
-                        rewritten);
-                }
-                else {
-                    mergedAssignment = rewritten;
+                if (rewritten) {
+                    if (mergedAssignment) {
+                        mergedAssignment = Factory.createBinaryExpression(
+                            SyntaxKind.CommaToken,
+                            mergedAssignment,
+                            rewritten);
+                    }
+                    else {
+                        mergedAssignment = rewritten;
+                    }
                 }
             }
 
@@ -894,7 +896,7 @@ module ts {
             var expression = nodeVisitor.visitExpression(node.expression);
             var resumeLabel = builder.defineLabel();
             builder.writeLocation(node);
-            builder.emit(node.asteriskToken ? OpCode.YieldStar : OpCode.Yield, Factory.createExpressionStatement(expression));
+            builder.emit(node.asteriskToken ? OpCode.YieldStar : OpCode.Yield, expression);
             builder.markLabel(resumeLabel);
             return builder.createResume();
         }
@@ -988,7 +990,8 @@ module ts {
             var keysPushExpression = Factory.createElementAccessExpression(keysLocal, keysLengthExpression);
             var assignKeyExpression = Factory.createBinaryExpression(SyntaxKind.EqualsToken, keysPushExpression, tempLocal);
             var assignKeyStatement = Factory.createExpressionStatement(assignKeyExpression);
-            var forTempInExpressionStatement = Factory.createForInStatement(tempLocal, nodeVisitor.visitExpression(node.expression), assignKeyStatement);
+            var expression = cacheExpression(Factory.makeLeftHandSideExpression(nodeVisitor.visitExpression(node.expression)));
+            var forTempInExpressionStatement = Factory.createForInStatement(tempLocal, expression, assignKeyStatement);
             builder.emit(OpCode.Statement, forTempInExpressionStatement);
             var initializeTempExpression = Factory.createBinaryExpression(SyntaxKind.EqualsToken, tempLocal, Factory.createNumericLiteral(0));
             builder.emit(OpCode.Statement, Factory.createExpressionStatement(initializeTempExpression));
@@ -996,6 +999,8 @@ module ts {
             builder.markLabel(conditionLabel);
             builder.emit(OpCode.BrFalse, endLabel, conditionExpression);
             var readKeyExpression = Factory.createElementAccessExpression(keysLocal, tempLocal);
+            var hasKeyExpression = Factory.createBinaryExpression(SyntaxKind.InKeyword, readKeyExpression, expression);
+            builder.emit(OpCode.BrFalse, iteratorLabel, hasKeyExpression);
             var assignVariableExpression = Factory.createBinaryExpression(SyntaxKind.EqualsToken, variable, readKeyExpression);
             builder.writeLocation(node.initializer);
             builder.emit(OpCode.Statement, Factory.createExpressionStatement(assignVariableExpression, variable));
@@ -1010,7 +1015,7 @@ module ts {
 
         function rewriteSwitchStatement(node: SwitchStatement): void {
             var defaultClauseIndex: number = -1;
-            var endLabel = builder.beginBreakBlock(getTarget(node));
+            var endLabel = builder.beginBreakBlock(getTarget(node), /*requireLabel*/ false);
 
             // map clauses to labels
             var clauseHasStatements: boolean[] = [];
@@ -1108,14 +1113,9 @@ module ts {
         }
 
         function rewriteLabeledStatement(node: LabeledStatement): void {
-            var statementSupportsBreak = isLabeledOrIterationOrSwitchStatement(node.statement);
-            if (statementSupportsBreak) {
-                builder.beginBreakBlock(getTarget(node));
-            }
+            builder.beginBreakBlock(getTarget(node), /*requireLabel*/ true);
             rewriteBlockOrStatement(node.statement);
-            if (statementSupportsBreak) {
-                builder.endBreakBlock();
-            }
+            builder.endBreakBlock();
         }
 
         function rewriteTryStatement(node: TryStatement): void {

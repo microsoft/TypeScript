@@ -38,6 +38,7 @@ module ts {
     interface BreakBlock extends BlockScope {
         breakLabel: Label;
         labelText?: string;
+        requireLabel?: boolean;
     }
 
     interface ContinueBlock extends BreakBlock {
@@ -236,7 +237,9 @@ module ts {
         }
 
         function addFunction(func: FunctionDeclaration): void {
-            if (!functions) functions = [];
+            if (!functions) {
+                functions = [];
+            }
             functions.push(func);
         }
 
@@ -332,11 +335,12 @@ module ts {
             endBlock<ContinueBlock>();
         }
 
-        function beginScriptBreakBlock(labelText: string): void {
+        function beginScriptBreakBlock(labelText: string, requireLabel: boolean): void {
             beginBlock<BreakBlock>({
                 kind: BlockKind.ScriptBreak,
-                labelSymbol: labelText,
-                breakLabel: -1
+                labelText: labelText,
+                breakLabel: -1,
+                requireLabel
             });
         }
 
@@ -365,12 +369,13 @@ module ts {
             }
         }
 
-        function beginBreakBlock(labelText: string): Label {
+        function beginBreakBlock(labelText: string, requireLabel: boolean): Label {
             var breakLabel = defineLabel();
             beginBlock<BreakBlock>({
                 kind: BlockKind.Break,
                 labelText: labelText,
-                breakLabel: breakLabel
+                breakLabel: breakLabel,
+                requireLabel
             });
             return breakLabel;
         }
@@ -427,7 +432,7 @@ module ts {
                     var block = blockStack[i];
                     if (supportsBreak(block)) {
                         var breakBlock = <BreakBlock>block;
-                        if (!labelText || breakBlock.labelText === labelText) {
+                        if ((!labelText && !breakBlock.requireLabel) || breakBlock.labelText === labelText) {
                             return breakBlock.breakLabel;
                         }
                     }
@@ -810,6 +815,7 @@ module ts {
                     case OpCode.Break: return writeBreak(<Label>operationArguments[0], operationLocation);
                     case OpCode.BrTrue: return writeBrTrue(<Label>operationArguments[0], <Expression>operationArguments[1], operationLocation);
                     case OpCode.BrFalse: return writeBrFalse(<Label>operationArguments[0], <Expression>operationArguments[1], operationLocation);
+                    case OpCode.YieldStar: return writeYieldStar(<Expression>operationArguments[0], operationLocation);
                     case OpCode.Yield: return writeYield(<Expression>operationArguments[0], operationLocation);
                     case OpCode.Return: return writeReturn(<Expression>operationArguments[0], operationLocation);
                     case OpCode.Throw: return writeThrow(<Expression>operationArguments[0], operationLocation);
@@ -863,6 +869,17 @@ module ts {
             function writeYield(expression: Expression, operationLocation?: TextRange): void {
                 lastOperationWasAbrupt = true;
                 var elements: Expression[] = [Factory.createStringLiteral('"yield"')];
+                if (expression) {
+                    elements.push(expression);
+                }
+                var returnExpression = Factory.createArrayLiteralExpression(elements);
+                var returnStatement = Factory.createReturnStatement(returnExpression, operationLocation);
+                writeStatement(returnStatement);
+            }
+
+            function writeYieldStar(expression: Expression, operationLocation?: TextRange): void {
+                lastOperationWasAbrupt = true;
+                var elements: Expression[] = [Factory.createStringLiteral('"yield*"')];
                 if (expression) {
                     elements.push(expression);
                 }
