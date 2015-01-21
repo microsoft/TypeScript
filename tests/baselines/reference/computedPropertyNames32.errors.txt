@@ -1,4 +1,4 @@
-tests/cases/conformance/es6/computedProperties/computedPropertyNames32.ts(6,10): error TS2466: A computed property name cannot reference a type parameter from its contained type.
+tests/cases/conformance/es6/computedProperties/computedPropertyNames32.ts(6,10): error TS2466: A computed property name cannot reference a type parameter from its containing type.
 
 
 ==== tests/cases/conformance/es6/computedProperties/computedPropertyNames32.ts (1 errors) ====
@@ -9,5 +9,5 @@ tests/cases/conformance/es6/computedProperties/computedPropertyNames32.ts(6,10):
         }
         [foo<T>()]() { }
              ~
-!!! error TS2466: A computed property name cannot reference a type parameter from its contained type.
+!!! error TS2466: A computed property name cannot reference a type parameter from its containing type.
     }

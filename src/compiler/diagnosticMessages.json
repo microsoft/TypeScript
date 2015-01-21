@@ -1302,7 +1302,7 @@
         "category": "Error",
         "code": 2466
     },
-    "A computed property name cannot reference a type parameter from its contained type.": {
+    "A computed property name cannot reference a type parameter from its containing type.": {
         "category": "Error",
         "code": 2466
     },
