@@ -3012,7 +3012,9 @@ module ts {
                     emitLeadingComments(node);
                 }
                 write("function");
-                emit(node.asteriskToken);
+                if (compilerOptions.target >= ScriptTarget.ES6) {
+                    emit(node.asteriskToken);
+                }
                 write(" ");
 
                 if (node.kind === SyntaxKind.FunctionDeclaration || (node.kind === SyntaxKind.FunctionExpression && node.name)) {
@@ -3713,23 +3715,23 @@ module ts {
                 // emit prologue directives prior to __extends
                 var startIndex = emitDirectivePrologues(node.statements, /*startWithNewLine*/ false);
                 if (!compilerOptions.noHelpers) {
-                if (!extendsEmitted && resolver.getNodeCheckFlags(node) & NodeCheckFlags.EmitExtends) {
-                    writeLine();
-                    write("var __extends = this.__extends || function (d, b) {");
-                    increaseIndent();
-                    writeLine();
-                    write("for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];");
-                    writeLine();
-                    write("function __() { this.constructor = d; }");
-                    writeLine();
-                    write("__.prototype = b.prototype;");
-                    writeLine();
-                    write("d.prototype = new __();");
-                    decreaseIndent();
-                    writeLine();
-                    write("};");
-                    extendsEmitted = true;
-                }
+                    if (!extendsEmitted && resolver.getNodeCheckFlags(node) & NodeCheckFlags.EmitExtends) {
+                        writeLine();
+                        write("var __extends = this.__extends || function (d, b) {");
+                        increaseIndent();
+                        writeLine();
+                        write("for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];");
+                        writeLine();
+                        write("function __() { this.constructor = d; }");
+                        writeLine();
+                        write("__.prototype = b.prototype;");
+                        writeLine();
+                        write("d.prototype = new __();");
+                        decreaseIndent();
+                        writeLine();
+                        write("};");
+                        extendsEmitted = true;
+                    }
                     if (!awaiterEmitted && resolver.getNodeCheckFlags(node) & NodeCheckFlags.EmitAwaiter) {
                         writeLine();
                         write(`var __awaiter = __awaiter || function (g) {`);
@@ -3815,7 +3817,7 @@ module ts {
                         writeLine();
                         write(`b = b.call(y, c[1]);`);
                         writeLine();
-                        write(`if (!b.done) return b;`);
+                        write(`if (!b.done) return f = false, b;`);
                         writeLine();
                         write(`c[0] = "next", c[1] = b.value;`);
                         decreaseIndent();
