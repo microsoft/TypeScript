@@ -14,11 +14,13 @@
 
 ////class bar6{ constructor(public a/*constructorParamter2*/
 
-////class bar7{ constructor(private a/*constructorParamter3*/
+////class bar7{ constructor(protected a/*constructorParamter3*/
 
-////class bar8{ constructor(.../*constructorParamter4*/
+////class bar8{ constructor(private a/*constructorParamter4*/
 
-////class bar9{ constructor(...a/*constructorParamter5*/
+////class bar9{ constructor(.../*constructorParamter5*/
+
+////class bar10{ constructor(...a/*constructorParamter6*/
 
 
 test.markers().forEach((m) => {

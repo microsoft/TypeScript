@@ -407,7 +407,7 @@ module ts {
                 return pos + name.length < end &&
                     sourceFile.text.substr(pos, name.length) === name &&
                     (isWhiteSpace(sourceFile.text.charCodeAt(pos + name.length)) ||
-                    isLineBreak(sourceFile.text.charCodeAt(pos + name.length)));
+                        isLineBreak(sourceFile.text.charCodeAt(pos + name.length)));
             }
 
             function isParamTag(pos: number, end: number, sourceFile: SourceFile) {
@@ -798,7 +798,7 @@ module ts {
                             if ((<Declaration>node).name) {
                                 namedDeclarations.push(<Declaration>node);
                             }
-                            // fall through
+                        // fall through
                         case SyntaxKind.Constructor:
                         case SyntaxKind.VariableStatement:
                         case SyntaxKind.VariableDeclarationList:
@@ -819,7 +819,7 @@ module ts {
                             if (!(node.flags & NodeFlags.AccessibilityModifier)) {
                                 break;
                             }
-                            // fall through
+                        // fall through
                         case SyntaxKind.VariableDeclaration:
                         case SyntaxKind.BindingElement:
                             if (isBindingPattern((<VariableDeclaration>node).name)) {
@@ -852,13 +852,13 @@ module ts {
     //
     export interface LanguageServiceHost extends Logger {
         getCompilationSettings(): CompilerOptions;
-        getNewLine?(): string;
+        getNewLine? (): string;
         getScriptFileNames(): string[];
         getScriptVersion(fileName: string): string;
         getScriptIsOpen(fileName: string): boolean;
         getScriptSnapshot(fileName: string): IScriptSnapshot;
-        getLocalizedDiagnosticMessages?(): any;
-        getCancellationToken?(): CancellationToken;
+        getLocalizedDiagnosticMessages? (): any;
+        getCancellationToken? (): CancellationToken;
         getCurrentDirectory(): string;
         getDefaultLibFilename(options: CompilerOptions): string;
     }
@@ -890,7 +890,7 @@ module ts {
 
         getRenameInfo(fileName: string, position: number): RenameInfo;
         findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean): RenameLocation[];
-        
+
         getDefinitionAtPosition(fileName: string, position: number): DefinitionInfo[];
         getReferencesAtPosition(fileName: string, position: number): ReferenceEntry[];
         getOccurrencesAtPosition(fileName: string, position: number): ReferenceEntry[];
@@ -913,7 +913,7 @@ module ts {
 
         dispose(): void;
     }
- 
+
     export interface ClassifiedSpan {
         textSpan: TextSpan;
         classificationType: string; // ClassificationTypeNames
@@ -1024,7 +1024,7 @@ module ts {
         text: string;
         kind: string;
     }
-    
+
     export interface QuickInfo {
         kind: string;
         kindModifiers: string;
@@ -1542,7 +1542,7 @@ module ts {
         sourceFile.version = version;
         sourceFile.isOpen = isOpen;
         sourceFile.scriptSnapshot = scriptSnapshot;
-    } 
+    }
 
     export function createLanguageServiceSourceFile(filename: string, scriptSnapshot: IScriptSnapshot, scriptTarget: ScriptTarget, version: string, isOpen: boolean, setNodeParents: boolean): SourceFile {
         var sourceFile = createSourceFile(filename, scriptSnapshot.getText(0, scriptSnapshot.getLength()), scriptTarget, setNodeParents);
@@ -1862,7 +1862,7 @@ module ts {
         // The position has to be: 1. in the leading trivia (before token.getStart()), and 2. within a comment
         return position <= token.getStart(sourceFile) &&
             (isInsideCommentRange(getTrailingCommentRanges(sourceFile.text, token.getFullStart())) ||
-            isInsideCommentRange(getLeadingCommentRanges(sourceFile.text, token.getFullStart())));
+                isInsideCommentRange(getLeadingCommentRanges(sourceFile.text, token.getFullStart())));
 
         function isInsideCommentRange(comments: CommentRange[]): boolean {
             return forEach(comments, comment => {
@@ -1904,7 +1904,7 @@ module ts {
     }
 
     // A cache of completion entries for keywords, these do not change between sessions
-    var keywordCompletions:CompletionEntry[] = [];
+    var keywordCompletions: CompletionEntry[] = [];
     for (var i = SyntaxKind.FirstKeyword; i <= SyntaxKind.LastKeyword; i++) {
         keywordCompletions.push({
             name: tokenToString(i),
@@ -2372,8 +2372,6 @@ module ts {
             function isCompletionListBuilder(previousToken: Node): boolean {
                 if (previousToken) {
                     var containingNodeKind = previousToken.parent.kind;
-                    // identifiers in method/function calls
-                    // variable declarations
                     switch (previousToken.kind) {
                         case SyntaxKind.CommaToken:
                             return containingNodeKind === SyntaxKind.CallExpression
@@ -2385,6 +2383,20 @@ module ts {
                             return true;
                         case SyntaxKind.DotToken:
                             return containingNodeKind === SyntaxKind.ModuleDeclaration;
+                        case SyntaxKind.OpenBraceToken:
+                            return containingNodeKind === SyntaxKind.ClassDeclaration;
+                        case SyntaxKind.PublicKeyword:
+                        case SyntaxKind.PrivateKeyword:
+                        case SyntaxKind.ProtectedKeyword:
+                            return containingNodeKind === SyntaxKind.PropertyDeclaration;
+                    }
+
+                    // Previous token may have been a keyword that was converted to an identifier.
+                    switch (previousToken.getText()) {
+                        case "public":
+                        case "protected":
+                        case "private":
+                            return true;
                     }
                 }
 
@@ -2457,16 +2469,16 @@ module ts {
                                 containingNodeKind === SyntaxKind.VariableStatement ||
                                 containingNodeKind === SyntaxKind.EnumDeclaration ||           // enum a { foo, |
                                 isFunction(containingNodeKind) ||
-                                containingNodeKind === SyntaxKind.ClassDeclaration ||        // class A<T, |
-                                containingNodeKind === SyntaxKind.FunctionDeclaration ||        // function A<T, |
-                                containingNodeKind === SyntaxKind.InterfaceDeclaration;       // interface A<T, |
+                                containingNodeKind === SyntaxKind.ClassDeclaration ||          // class A<T, |
+                                containingNodeKind === SyntaxKind.FunctionDeclaration ||       // function A<T, |
+                                containingNodeKind === SyntaxKind.InterfaceDeclaration;        // interface A<T, |
 
                         case SyntaxKind.OpenParenToken:
                             return containingNodeKind === SyntaxKind.CatchClause ||
                                 isFunction(containingNodeKind);
 
                         case SyntaxKind.OpenBraceToken:
-                            return containingNodeKind === SyntaxKind.EnumDeclaration ||       // enum a { |
+                            return containingNodeKind === SyntaxKind.EnumDeclaration ||        // enum a { |
                                 containingNodeKind === SyntaxKind.InterfaceDeclaration;        // interface a { |
 
                         case SyntaxKind.SemicolonToken:
@@ -2477,15 +2489,18 @@ module ts {
                             return containingNodeKind === SyntaxKind.ClassDeclaration ||        // class A< |
                                 containingNodeKind === SyntaxKind.FunctionDeclaration ||        // function A< |
                                 containingNodeKind === SyntaxKind.InterfaceDeclaration ||       // interface A< |
-                                containingNodeKind === SyntaxKind.MethodDeclaration;            // class A{ b< |
+                                isFunction(containingNodeKind);
 
-                        case SyntaxKind.PublicKeyword:
-                        case SyntaxKind.PrivateKeyword:
                         case SyntaxKind.StaticKeyword:
                         case SyntaxKind.DotDotDotToken:
                             return containingNodeKind === SyntaxKind.Parameter
                                 || containingNodeKind === SyntaxKind.PropertyDeclaration
                                 || containingNodeKind === SyntaxKind.Constructor;
+
+                        case SyntaxKind.PublicKeyword:
+                        case SyntaxKind.PrivateKeyword:
+                        case SyntaxKind.ProtectedKeyword:
+                            return containingNodeKind === SyntaxKind.Parameter;
 
                         case SyntaxKind.ClassKeyword:
                         case SyntaxKind.EnumKeyword:
@@ -2505,6 +2520,7 @@ module ts {
                         case "enum":
                         case "function":
                         case "var":
+                        case "static":
                             // TODO: add let and const
                             return true;
                     }
@@ -5133,7 +5149,8 @@ module ts {
                     var parentElement = token.parent;
 
                     var childNodes = parentElement.getChildren(sourceFile);
-                    for (var i = 0, n = childNodes.length; i < n; i++) {33
+                    for (var i = 0, n = childNodes.length; i < n; i++) {
+                        33
                         var current = childNodes[i];
 
                         if (current.kind === matchKind) {
@@ -5158,14 +5175,14 @@ module ts {
 
             function getMatchingTokenKind(token: Node): ts.SyntaxKind {
                 switch (token.kind) {
-                    case ts.SyntaxKind.OpenBraceToken:    return ts.SyntaxKind.CloseBraceToken
-                    case ts.SyntaxKind.OpenParenToken:    return ts.SyntaxKind.CloseParenToken;
-                    case ts.SyntaxKind.OpenBracketToken:  return ts.SyntaxKind.CloseBracketToken;
-                    case ts.SyntaxKind.LessThanToken:     return ts.SyntaxKind.GreaterThanToken;
-                    case ts.SyntaxKind.CloseBraceToken:   return ts.SyntaxKind.OpenBraceToken
-                    case ts.SyntaxKind.CloseParenToken:   return ts.SyntaxKind.OpenParenToken;
+                    case ts.SyntaxKind.OpenBraceToken: return ts.SyntaxKind.CloseBraceToken
+                    case ts.SyntaxKind.OpenParenToken: return ts.SyntaxKind.CloseParenToken;
+                    case ts.SyntaxKind.OpenBracketToken: return ts.SyntaxKind.CloseBracketToken;
+                    case ts.SyntaxKind.LessThanToken: return ts.SyntaxKind.GreaterThanToken;
+                    case ts.SyntaxKind.CloseBraceToken: return ts.SyntaxKind.OpenBraceToken
+                    case ts.SyntaxKind.CloseParenToken: return ts.SyntaxKind.OpenParenToken;
                     case ts.SyntaxKind.CloseBracketToken: return ts.SyntaxKind.OpenBracketToken;
-                    case ts.SyntaxKind.GreaterThanToken:  return ts.SyntaxKind.LessThanToken;
+                    case ts.SyntaxKind.GreaterThanToken: return ts.SyntaxKind.LessThanToken;
                 }
 
                 return undefined;
@@ -5584,7 +5601,7 @@ module ts {
                         token = SyntaxKind.Identifier;
                     }
                     else if (lastNonTriviaToken === SyntaxKind.Identifier &&
-                             token === SyntaxKind.LessThanToken) {
+                        token === SyntaxKind.LessThanToken) {
                         // Could be the start of something generic.  Keep track of that by bumping 
                         // up the current count of generic contexts we may be in.
                         angleBracketStack++;
@@ -5595,9 +5612,9 @@ module ts {
                         angleBracketStack--;
                     }
                     else if (token === SyntaxKind.AnyKeyword ||
-                             token === SyntaxKind.StringKeyword ||
-                             token === SyntaxKind.NumberKeyword ||
-                             token === SyntaxKind.BooleanKeyword) {
+                        token === SyntaxKind.StringKeyword ||
+                        token === SyntaxKind.NumberKeyword ||
+                        token === SyntaxKind.BooleanKeyword) {
                         if (angleBracketStack > 0 && !classifyKeywordsInGenerics) {
                             // If it looks like we're could be in something generic, don't classify this 
                             // as a keyword.  We may just get overwritten by the syntactic classifier,
