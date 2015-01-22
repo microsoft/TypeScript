@@ -5455,9 +5455,10 @@ module ts {
                 }
             }
 
-            // If object literal is contextually typed, add missing optional properties from the contextual type
-            // such that the resulting type becomes a subtype in cases where only optional properties were omitted
-            if (contextualType) {
+            // If object literal is contextually (but not inferentially) typed, copy missing optional properties from
+            // the contextual type such that the resulting type becomes a subtype in cases where only optional properties
+            // were omitted. There is no need to create new property objects as nothing in them needs to change.
+            if (contextualType && !isInferentialContext(contextualMapper)) {
                 forEach(getPropertiesOfObjectType(contextualType), p => {
                     if (p.flags & SymbolFlags.Optional && !hasProperty(properties, p.name)) {
                         properties[p.name] = p;
