@@ -871,6 +871,7 @@ module ts {
     //
     export interface LanguageServiceHost extends Logger {
         getCompilationSettings(): CompilerOptions;
+        getNewLine?(): string;
         getScriptFileNames(): string[];
         getScriptVersion(fileName: string): string;
         getScriptIsOpen(fileName: string): boolean;
@@ -1981,7 +1982,9 @@ module ts {
                 getCancellationToken: () => cancellationToken,
                 getCanonicalFileName: (filename) => useCaseSensitivefilenames ? filename : filename.toLowerCase(),
                 useCaseSensitiveFileNames: () => useCaseSensitivefilenames,
-                getNewLine: () => "\r\n",
+                getNewLine: () => {
+                    return host.getNewLine ? host.getNewLine() : "\r\n";
+                },
                 getDefaultLibFilename: (options): string => {
                     return host.getDefaultLibFilename(options);
                 },

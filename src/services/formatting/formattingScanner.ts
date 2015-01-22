@@ -187,6 +187,9 @@ module ts.formatting {
             }
 
             // consume trailing trivia
+            if (trailingTrivia) {
+                trailingTrivia = undefined;
+            }
             while(scanner.getStartPos() < endPos) {
                 currentToken = scanner.scan();
                 if (!isTrivia(currentToken)) {

@@ -178,6 +178,19 @@ module ts {
         return <T>result;
     }
 
+    export function extend<T>(first: Map<T>, second: Map<T>): Map<T> {
+        var result: Map<T> = {};
+        for (var id in first) {
+            result[id] = first[id];
+        }
+        for (var id in second) {
+            if (!hasProperty(result, id)) {
+                result[id] = second[id];
+            }
+        }
+        return result;
+    }
+
     export function forEachValue<T, U>(map: Map<T>, callback: (value: T) => U): U {
         var result: U;
         for (var id in map) {
@@ -568,7 +581,7 @@ module ts {
     export function combinePaths(path1: string, path2: string) {
         if (!(path1 && path1.length)) return path2;
         if (!(path2 && path2.length)) return path1;
-        if (path2.charAt(0) === directorySeparator) return path2;
+        if (getRootLength(path2) !== 0) return path2;
         if (path1.charAt(path1.length - 1) === directorySeparator) return path1 + path2;
         return path1 + directorySeparator + path2;
     }

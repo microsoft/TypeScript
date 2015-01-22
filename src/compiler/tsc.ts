@@ -4,6 +4,10 @@
 module ts {
     var version = "1.4.0.0";
 
+    export interface SourceFile {
+        fileWatcher: FileWatcher;
+    }
+
     /**
      * Checks to see if the locale is in the appropriate format,
      * and if it is, attempts to set the appropriate language.
@@ -126,16 +130,43 @@ module ts {
         reportStatisticalValue(name, (time / 1000).toFixed(2) + "s");
     }
 
+    function isJSONSupported() {
+        return typeof JSON === "object" && typeof JSON.parse === "function";
+    }
+
+    function findConfigFile(): string {
+        var searchPath = normalizePath(sys.getCurrentDirectory());
+        var filename = "tsconfig.json";
+        while (true) {
+            if (sys.fileExists(filename)) {
+                return filename;
+            }
+            var parentPath = getDirectoryPath(searchPath);
+            if (parentPath === searchPath) {
+                break;
+            }
+            searchPath = parentPath;
+            filename = "../" + filename;
+        }
+        return undefined;
+    }
+
     export function executeCommandLine(args: string[]): void {
         var commandLine = parseCommandLine(args);
-        var compilerOptions = commandLine.options;
+        var configFilename: string;                 // Configuration file name (if any)
+        var configFileWatcher: FileWatcher;         // Configuration file watcher
+        var cachedProgram: Program;                 // Program cached from last compilation
+        var rootFilenames: string[];                // Root filenames for compilation
+        var compilerOptions: CompilerOptions;       // Compiler options for compilation
+        var compilerHost: CompilerHost;             // Compiler host
+        var hostGetSourceFile: typeof compilerHost.getSourceFile;  // getSourceFile method from default host
+        var timerHandle: number;                    // Handle for 0.25s wait timer
 
-        if (compilerOptions.locale) {
-            if (typeof JSON === "undefined") {
+        if (commandLine.options.locale) {
+            if (!isJSONSupported()) {
                 reportDiagnostic(createCompilerDiagnostic(Diagnostics.The_current_host_does_not_support_the_0_option, "--locale"));
-                return sys.exit(1);
+                return sys.exit(EmitReturnStatus.CompilerOptionsErrors);
             }
-
             validateLocaleAndSetLanguage(commandLine.options.locale, commandLine.errors);
         }
 
@@ -146,131 +177,153 @@ module ts {
             return sys.exit(EmitReturnStatus.CompilerOptionsErrors);
         }
 
-        if (compilerOptions.version) {
+        if (commandLine.options.version) {
             reportDiagnostic(createCompilerDiagnostic(Diagnostics.Version_0, version));
             return sys.exit(EmitReturnStatus.Succeeded);
         }
 
-        if (compilerOptions.help) {
+        if (commandLine.options.help) {
             printVersion();
             printHelp();
             return sys.exit(EmitReturnStatus.Succeeded);
         }
 
-        if (commandLine.filenames.length === 0) {
+        if (commandLine.options.project) {
+            if (!isJSONSupported()) {
+                reportDiagnostic(createCompilerDiagnostic(Diagnostics.The_current_host_does_not_support_the_0_option, "--project"));
+                return sys.exit(EmitReturnStatus.CompilerOptionsErrors);
+            }
+            configFilename = normalizePath(combinePaths(commandLine.options.project, "tsconfig.json"));
+            if (commandLine.filenames.length !== 0) {
+                reportDiagnostic(createCompilerDiagnostic(Diagnostics.Option_project_cannot_be_mixed_with_source_files_on_a_command_line));
+                return sys.exit(EmitReturnStatus.CompilerOptionsErrors);
+            }
+        }
+        else if (commandLine.filenames.length === 0 && isJSONSupported()) {
+            configFilename = findConfigFile();
+        }
+
+        if (commandLine.filenames.length === 0 && !configFilename) {
             printVersion();
             printHelp();
             return sys.exit(EmitReturnStatus.CompilerOptionsErrors);
         }
 
-        var defaultCompilerHost = createCompilerHost(compilerOptions);
-        
-        if (compilerOptions.watch) {
+        if (commandLine.options.watch) {
             if (!sys.watchFile) {
                 reportDiagnostic(createCompilerDiagnostic(Diagnostics.The_current_host_does_not_support_the_0_option, "--watch"));
                 return sys.exit(EmitReturnStatus.CompilerOptionsErrors);
             }
-
-            watchProgram(commandLine, defaultCompilerHost);
-        }
-        else {
-            var result = compile(commandLine, defaultCompilerHost).exitStatus
-            return sys.exit(result);
-        }
-    }
-
-    /**
-     * Compiles the program once, and then watches all given and referenced files for changes.
-     * Upon detecting a file change, watchProgram will queue up file modification events for the next
-     * 250ms and then perform a recompilation. The reasoning is that in some cases, an editor can
-     * save all files at once, and we'd like to just perform a single recompilation.
-     */
-    function watchProgram(commandLine: ParsedCommandLine, compilerHost: CompilerHost): void {
-        var watchers: Map<FileWatcher> = {};
-        var updatedFiles: Map<boolean> = {};
-
-        // Compile the program the first time and watch all given/referenced files.
-        var program = compile(commandLine, compilerHost).program;
-        reportDiagnostic(createCompilerDiagnostic(Diagnostics.Compilation_complete_Watching_for_file_changes));
-        addWatchers(program);
-        return;
-
-        function addWatchers(program: Program) {
-            forEach(program.getSourceFiles(), f => {
-                var filename = getCanonicalName(f.filename);
-                watchers[filename] = sys.watchFile(filename, fileUpdated);
-            });
-        }
-
-        function removeWatchers(program: Program) {
-            forEach(program.getSourceFiles(), f => {
-                var filename = getCanonicalName(f.filename);
-                if (hasProperty(watchers, filename)) {
-                    watchers[filename].close();
-                }
-            });
-
-            watchers = {};
-        }
-
-        // Fired off whenever a file is changed.
-        function fileUpdated(filename: string) {
-            var firstNotification = isEmpty(updatedFiles);
-            updatedFiles[getCanonicalName(filename)] = true;
-
-            // Only start this off when the first file change comes in,
-            // so that we can batch up all further changes.
-            if (firstNotification) {
-                setTimeout(() => {
-                    var changedFiles = updatedFiles;
-                    updatedFiles = {};
-
-                    recompile(changedFiles);
-                }, 250);
+            if (configFilename) {
+                configFileWatcher = sys.watchFile(configFilename, configFileChanged);
             }
         }
 
-        function recompile(changedFiles: Map<boolean>) {
-            reportDiagnostic(createCompilerDiagnostic(Diagnostics.File_change_detected_Compiling));
-            // Remove all the watchers, as we may not be watching every file
-            // specified since the last compilation cycle.
-            removeWatchers(program);
+        performCompilation();
 
-            // Reuse source files from the last compilation so long as they weren't changed.
-            var oldSourceFiles = arrayToMap(
-                filter(program.getSourceFiles(), file => !hasProperty(changedFiles, getCanonicalName(file.filename))),
-                file => getCanonicalName(file.filename));
+        // Invoked to perform initial compilation or re-compilation in watch mode
+        function performCompilation() {
 
-            // We create a new compiler host for this compilation cycle.
-            // This new host is effectively the same except that 'getSourceFile'
-            // will try to reuse the SourceFiles from the last compilation cycle
-            // so long as they were not modified.
-            var newCompilerHost = clone(compilerHost);
-            newCompilerHost.getSourceFile = (fileName, languageVersion, onError) => {
-                fileName = getCanonicalName(fileName);
-
-                var sourceFile = lookUp(oldSourceFiles, fileName);
-                if (sourceFile) {
-                    return sourceFile;
+            if (!cachedProgram) {
+                if (configFilename) {
+                    var configObject = readConfigFile(configFilename);
+                    if (!configObject) {
+                        reportDiagnostic(createCompilerDiagnostic(Diagnostics.Unable_to_open_file_0, configFilename));
+                        return sys.exit(EmitReturnStatus.CompilerOptionsErrors);
+                    }
+                    var configParseResult = parseConfigFile(configObject, getDirectoryPath(configFilename));
+                    if (configParseResult.errors.length > 0) {
+                        reportDiagnostics(configParseResult.errors);
+                        return sys.exit(EmitReturnStatus.CompilerOptionsErrors);
+                    }
+                    rootFilenames = configParseResult.filenames;
+                    compilerOptions = extend(commandLine.options, configParseResult.options);
                 }
+                else {
+                    rootFilenames = commandLine.filenames;
+                    compilerOptions = commandLine.options;
+                }
+                compilerHost = createCompilerHost(compilerOptions);
+                hostGetSourceFile = compilerHost.getSourceFile;
+                compilerHost.getSourceFile = getSourceFile;
+            }
 
-                return compilerHost.getSourceFile(fileName, languageVersion, onError);
-            };
+            var compileResult = compile(rootFilenames, compilerOptions, compilerHost);
 
-            program = compile(commandLine, newCompilerHost).program;
+            if (!commandLine.options.watch) {
+                return sys.exit(compileResult.exitStatus);
+            }
+
+            setCachedProgram(compileResult.program);
             reportDiagnostic(createCompilerDiagnostic(Diagnostics.Compilation_complete_Watching_for_file_changes));
-            addWatchers(program);
         }
 
-        function getCanonicalName(fileName: string) {
-            return compilerHost.getCanonicalFileName(fileName);
+        function getSourceFile(filename: string, languageVersion: ScriptTarget, onError ?: (message: string) => void) {
+            // Return existing SourceFile object if one is available
+            if (cachedProgram) {
+                var sourceFile = cachedProgram.getSourceFile(filename);
+                // A modified source file has no watcher and should not be reused
+                if (sourceFile && sourceFile.fileWatcher) {
+                    return sourceFile;
+                }
+            }
+            // Use default host function
+            var sourceFile = hostGetSourceFile(filename, languageVersion, onError);
+            if (sourceFile && commandLine.options.watch) {
+                // Attach a file watcher
+                sourceFile.fileWatcher = sys.watchFile(sourceFile.filename, () => sourceFileChanged(sourceFile));
+            }
+            return sourceFile;
+        }
+
+        // Change cached program to the given program
+        function setCachedProgram(program: Program) {
+            if (cachedProgram) {
+                var newSourceFiles = program ? program.getSourceFiles() : undefined;
+                forEach(cachedProgram.getSourceFiles(), sourceFile => {
+                    if (!(newSourceFiles && contains(newSourceFiles, sourceFile))) {
+                        if (sourceFile.fileWatcher) {
+                            sourceFile.fileWatcher.close();
+                            sourceFile.fileWatcher = undefined;
+                        }
+                    }
+                });
+            }
+            cachedProgram = program;
+        }
+
+        // If a source file changes, mark it as unwatched and start the recompilation timer
+        function sourceFileChanged(sourceFile: SourceFile) {
+            sourceFile.fileWatcher = undefined;
+            startTimer();
+        }
+
+        // If the configuration file changes, forget cached program and start the recompilation timer
+        function configFileChanged() {
+            setCachedProgram(undefined);
+            startTimer();
+        }
+
+        // Upon detecting a file change, wait for 250ms and then perform a recompilation. This gives batch
+        // operations (such as saving all modified files in an editor) a chance to complete before we kick
+        // off a new compilation.
+        function startTimer() {
+            if (timerHandle) {
+                clearTimeout(timerHandle);
+            }
+            timerHandle = setTimeout(recompile, 250);
+        }
+
+        function recompile() {
+            timerHandle = undefined;
+            reportDiagnostic(createCompilerDiagnostic(Diagnostics.File_change_detected_Starting_incremental_compilation));
+            performCompilation();
         }
     }
 
-    function compile(commandLine: ParsedCommandLine, compilerHost: CompilerHost) {
+    function compile(filenames: string[], compilerOptions: CompilerOptions, compilerHost: CompilerHost) {
         var parseStart = new Date().getTime();
-        var compilerOptions = commandLine.options;
-        var program = createProgram(commandLine.filenames, compilerOptions, compilerHost);
+        var program = createProgram(filenames, compilerOptions, compilerHost);
 
         var bindStart = new Date().getTime();
         var errors: Diagnostic[] = program.getDiagnostics();
@@ -303,7 +356,14 @@ module ts {
         }
 
         reportDiagnostics(errors);
-        if (commandLine.options.diagnostics) {
+
+        if (compilerOptions.listFiles) {
+            forEach(program.getSourceFiles(), file => {
+                sys.write(file.filename + sys.newLine);
+            });
+        }
+
+        if (compilerOptions.diagnostics) {
             var memoryUsed = sys.getMemoryUsage ? sys.getMemoryUsage() : -1;
             reportCountStatistic("Files", program.getSourceFiles().length);
             reportCountStatistic("Lines", countLines(program));

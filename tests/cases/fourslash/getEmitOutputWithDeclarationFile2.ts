@@ -1,6 +1,7 @@
 ﻿/// <reference path="fourslash.ts" />
 
 // @BaselineFile: getEmitOutputWithDeclarationFile2.baseline
+// @module: CommonJS
 
 // @Filename: decl.d.ts
 // @emitThisFile: true
