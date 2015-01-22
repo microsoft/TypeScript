@@ -64,6 +64,8 @@ module ts {
         getLineAndCharacterFromPosition(pos: number): LineAndCharacter;
         getLineStarts(): number[];
         getPositionFromLineAndCharacter(line: number, character: number): number;
+        getSyntacticDiagnostics(): Diagnostic[];
+        update(newText: string, textChangeRange: TextChangeRange): SourceFile;
     }
 
     /**
@@ -729,10 +731,6 @@ module ts {
         public statements: NodeArray<Statement>;
         public endOfFileToken: Node;
 
-        // These methods will have their implementation provided by the implementation the 
-        // compiler actually exports off of SourceFile.
-        public update: (newText: string, textChangeRange: TextChangeRange) => SourceFile;
-        
         public amdDependencies: string[];
         public amdModuleName: string;
         public referencedFiles: FileReference[];
@@ -753,6 +751,14 @@ module ts {
         public identifiers: Map<string>;
 
         private namedDeclarations: Declaration[];
+
+        public getSyntacticDiagnostics(): Diagnostic[]{
+            return getSyntacticDiagnostics(this);
+        }
+
+        public update(newText: string, textChangeRange: TextChangeRange): SourceFile {
+            return updateSourceFile(this, newText, textChangeRange);
+        }
 
         public getLineAndCharacterFromPosition(position: number): LineAndCharacter {
             return getLineAndCharacterOfPosition(this, position);
