@@ -3656,7 +3656,7 @@ module ts {
                 write(") {");
                 increaseIndent();
                 scopeEmitStart(node);
-                emitEnumMemberDeclarations(isConstEnum);
+                emitLines(node.members);
                 decreaseIndent();
                 writeLine();
                 emitToken(SyntaxKind.CloseBraceToken, node.members.end);
@@ -3678,31 +3678,29 @@ module ts {
                     write(";");
                 }
                 emitTrailingComments(node);
+            }
 
-                function emitEnumMemberDeclarations(isConstEnum: boolean) {
-                    forEach(node.members, member => {
-                        writeLine();
-                        emitLeadingComments(member);
-                        emitStart(member);
-                        write(resolver.getLocalNameOfContainer(node));
-                        write("[");
-                        write(resolver.getLocalNameOfContainer(node));
-                        write("[");
-                        emitExpressionForPropertyName(member.name);
-                        write("] = ");
-                        if (member.initializer && !isConstEnum) {
-                            emit(member.initializer);
-                        }
-                        else {
-                            write(resolver.getEnumMemberValue(member).toString());
-                        }
-                        write("] = ");
-                        emitExpressionForPropertyName(member.name);
-                        emitEnd(member);
-                        write(";");
-                        emitTrailingComments(member);
-                    });
+            function emitEnumMember(node: EnumMember) {
+                var enumParent = <EnumDeclaration>node.parent;
+                emitLeadingComments(node);
+                emitStart(node);
+                write(resolver.getLocalNameOfContainer(enumParent));
+                write("[");
+                write(resolver.getLocalNameOfContainer(enumParent));
+                write("[");
+                emitExpressionForPropertyName(node.name);
+                write("] = ");
+                if (node.initializer && !isConst(enumParent)) {
+                    emit(node.initializer);
                 }
+                else {
+                    write(resolver.getEnumMemberValue(node).toString());
+                }
+                write("] = ");
+                emitExpressionForPropertyName(node.name);
+                emitEnd(node);
+                write(";");
+                emitTrailingComments(node);
             }
 
             function getInnerMostModuleDeclarationFromDottedModule(moduleDeclaration: ModuleDeclaration): ModuleDeclaration {
@@ -4099,6 +4097,8 @@ module ts {
                         return emitInterfaceDeclaration(<InterfaceDeclaration>node);
                     case SyntaxKind.EnumDeclaration:
                         return emitEnumDeclaration(<EnumDeclaration>node);
+                    case SyntaxKind.EnumMember:
+                        return emitEnumMember(<EnumMember>node);
                     case SyntaxKind.ModuleDeclaration:
                         return emitModuleDeclaration(<ModuleDeclaration>node);
                     case SyntaxKind.ImportDeclaration:
