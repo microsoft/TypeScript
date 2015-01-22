@@ -148,12 +148,29 @@
         "code": 1039,
         "isEarly": true
     },
+    "'{0}' modifier cannot be used in an ambient context.": {
+        "category": "Error",
+        "code": 1040
+    },
+    "'{0}' modifier cannot be used with a class declaration.": {
+        "category": "Error",
+        "code": 1041
+    },
+    "'{0}' modifier cannot be used on a '{1}' accessor.": {
+        "category": "Error",
+        "code": 1042,
+        "isEarly": true
+    },
+    "'{0}' modifier cannot appear on a data property.": { 
+        "category": "Error",
+        "code": 1043
+    },
     "'{0}' modifier cannot appear on a module element.": {
         "category": "Error",
         "code": 1044,
         "isEarly": true
     },
-    "A 'declare' modifier cannot be used with an interface declaration.": {
+    "'{0}' modifier cannot be used with an interface declaration.": {
         "category": "Error",
         "code": 1045,
         "isEarly": true
@@ -202,6 +219,16 @@
         "code": 1056,
         "isEarly": true
     },
+    "An async function or method must have a valid awaitable return type.": {
+        "category": "Error",
+        "code": 1057,
+        "isEarly": true
+    },
+    "Type for `await` does not have a valid callable `then` member.": {
+        "category": "Error",
+        "code": 1058,
+        "isEarly": true
+    },
     "Enum member must have initializer.": {
         "category": "Error",
         "code": 1061,
@@ -221,7 +248,7 @@
         "category": "Error",
         "code": 1068
     },
-    "A 'declare' modifier cannot be used with an import declaration.": {
+    "'{0}' modifier cannot be used with an import declaration.": {
         "category": "Error",
         "code": 1079,
         "isEarly": true
@@ -557,7 +584,7 @@
         "code": 1162,
         "isEarly": true
     },
-    "'yield' expression must be contained_within a generator declaration.": {
+    "'yield' expression must be contained within a generator declaration.": {
         "category": "Error",
         "code": 1163,
         "isEarly": true
@@ -663,19 +690,60 @@
     },
     "Modifiers cannot appear here.": {
         "category": "Error",
-        "code": 1184
+        "code": 1185
     },
     "Merge conflict marker encountered.": {
         "category": "Error",
-        "code": 1185
+        "code": 1186
     },
     "A rest element cannot have an initializer.": {
         "category": "Error",
-        "code": 1186
+        "code": 1187
+    },
+
+    "'with' statements are not allowed in an async function block.": {
+        "category": "Error",
+        "code": 1300
+    },
+    "'{0}' modifier cannot be used with a generator.": {
+        "category": "Error",
+        "code": 1301
+    },
+    "'{0}' modifier cannot be used with a module declaration.": {
+        "category": "Error",
+        "code": 1302
+    },
+    "'{0}' modifier cannot be used with an enum declaration.": {
+        "category": "Error",
+        "code": 1303
+    },
+    "'{0}' modifier cannot be used with an export assignment declaration.": {
+        "category": "Error",
+        "code": 1304
+    },
+    "'{0}' modifier cannot be used on a variable statement.": {
+        "category": "Error",
+        "code": 1305
+    },
+    "'{0}' modifier cannot be used with a type declaration.": {
+        "category": "Error",
+        "code": 1306
+    },
+    "'{0}' modifier cannot be used with a parameter declaration.": {
+        "category": "Error",
+        "code": 1307
+    },
+    "'await' expression must be contained within an async function.": {
+        "category": "Error",
+        "code": 1308
+    },
+    "'{0}' modifier cannot be used on an object literal element.": {
+        "category": "Error",
+        "code": 1309
     },
     "A parameter property may not be a binding pattern.": {
         "category": "Error",
-        "code":  1187
+        "code":  1310
     },
 
     "Duplicate identifier '{0}'.": {
@@ -1289,6 +1357,24 @@
     "A binding pattern parameter cannot be optional in an implementation signature.": {
         "category": "Error",
         "code":  2463
+    },
+
+    "Duplicate identifier '{0}'. Compiler uses variable declaration '{0}' to support async functions.": {
+        "category": "Error",
+        "code": 2500
+    },
+    "Expression resolves to variable declaration '{0}' that compiler uses to support async functions.": {
+        "category": "Error",
+        "code": 2501
+    },
+
+    "Duplicate identifier '_arguments'. Compiler uses variable declaration '_arguments' to capture 'arguments' reference.": {
+        "category": "Error",
+        "code": 2502
+    },
+    "Expression resolves to variable declaration '_arguments' that compiler uses to capture 'arguments' reference.": {
+        "category": "Error",
+        "code": 2503
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {

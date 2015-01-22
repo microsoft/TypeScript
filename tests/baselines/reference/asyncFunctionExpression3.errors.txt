@@ -1,0 +1,8 @@
+tests/cases/conformance/async/downlevel/asyncFunctionExpression/asyncFunctionExpression3.ts(1,29): error TS2372: Parameter 'await' cannot be referenced in its initializer.
+
+
+==== tests/cases/conformance/async/downlevel/asyncFunctionExpression/asyncFunctionExpression3.ts (1 errors) ====
+    var foo = function (await = await) {
+                                ~~~~~
+!!! error TS2372: Parameter 'await' cannot be referenced in its initializer.
+    }

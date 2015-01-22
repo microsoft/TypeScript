@@ -70,6 +70,7 @@ module ts {
         var nullType = createIntrinsicType(TypeFlags.Null | TypeFlags.Unwidened, "null");
         var unknownType = createIntrinsicType(TypeFlags.Any, "unknown");
         var resolvingType = createIntrinsicType(TypeFlags.Any, "__resolving__");
+        var thenableType: ResolvedType;
 
         var emptyObjectType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
         var anyFunctionType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
@@ -91,6 +92,10 @@ module ts {
         var globalBooleanType: ObjectType;
         var globalRegExpType: ObjectType;
         var globalTemplateStringsArrayType: ObjectType;
+        var globalIPromiseType: ObjectType;
+        var globalPromiseThenPropertyType: Type;
+        var globalPromiseOnFulfilledParameterType: Type;
+        var globalIPromiseConstructorType: ObjectType;
 
         var anyArrayType: Type;
 
@@ -98,11 +103,14 @@ module ts {
         var unionTypes: Map<UnionType> = {};
         var stringLiteralTypes: Map<StringLiteralType> = {};
         var emitExtends = false;
+        var emitAwaiter = false;
+        var emitGenerator = false;
 
         var mergedSymbols: Symbol[] = [];
         var symbolLinks: SymbolLinks[] = [];
         var nodeLinks: NodeLinks[] = [];
         var potentialThisCollisions: Node[] = [];
+        var potentialArgumentsCollisions: Node[] = [];
 
         var diagnostics: Diagnostic[] = [];
         var diagnosticsModified: boolean = false;
@@ -472,15 +480,15 @@ module ts {
             }
 
             if (name.kind === SyntaxKind.Identifier) {
-                var symbol = resolveName(location,(<Identifier>name).text, meaning, Diagnostics.Cannot_find_name_0, <Identifier>name);
+                var symbol = resolveName(location, (<Identifier>name).text, meaning, Diagnostics.Cannot_find_name_0, <Identifier>name);
                 if (!symbol) {
                     return;
                 }
             }
             else if (name.kind === SyntaxKind.QualifiedName) {
-                var namespace = resolveEntityName(location,(<QualifiedName>name).left, SymbolFlags.Namespace);
+                var namespace = resolveEntityName(location, (<QualifiedName>name).left, SymbolFlags.Namespace);
                 if (!namespace || namespace === unknownSymbol || getFullWidth((<QualifiedName>name).right) === 0) return;
-                var symbol = getSymbol(namespace.exports,(<QualifiedName>name).right.text, meaning);
+                var symbol = getSymbol(namespace.exports, (<QualifiedName>name).right.text, meaning);
                 if (!symbol) {
                     error(location, Diagnostics.Module_0_has_no_exported_member_1, getFullyQualifiedName(namespace),
                         declarationNameToString((<QualifiedName>name).right));
@@ -1586,7 +1594,7 @@ module ts {
                     case SyntaxKind.UnionType:
                     case SyntaxKind.ParenthesizedType:
                         return isDeclarationVisible(<Declaration>node.parent);
-                    
+
                     // Type parameters are always visible
                     case SyntaxKind.TypeParameter:
                     // Source file is always visible
@@ -4522,6 +4530,7 @@ module ts {
                     case SyntaxKind.ParenthesizedExpression:
                     case SyntaxKind.PrefixUnaryExpression:
                     case SyntaxKind.DeleteExpression:
+                    case SyntaxKind.AwaitExpression:
                     case SyntaxKind.TypeOfExpression:
                     case SyntaxKind.VoidExpression:
                     case SyntaxKind.PostfixUnaryExpression:
@@ -4722,7 +4731,7 @@ module ts {
                 // Narrow to target type if it is a subtype of current type
                 if (isTypeSubtypeOf(targetType, type)) {
                     return targetType;
-                }
+            }
                 // If current type is a union type, remove all constituents that aren't subtypes of target type
                 if (type.flags & TypeFlags.Union) {
                     return getUnionType(filter((<UnionType>type).types, t => isTypeSubtypeOf(t, targetType)));
@@ -4752,7 +4761,7 @@ module ts {
                         break;
                     case SyntaxKind.PrefixUnaryExpression:
                         if ((<PrefixUnaryExpression>expr).operator === SyntaxKind.ExclamationToken) {
-                            return narrowType(type,(<PrefixUnaryExpression>expr).operand, !assumeTrue);
+                            return narrowType(type, (<PrefixUnaryExpression>expr).operand, !assumeTrue);
                         }
                         break;
                 }
@@ -4770,6 +4779,13 @@ module ts {
                 Debug.assert((rightSide.flags & SymbolFlags.Import) !== 0);
 
                 nodeLinks = getNodeLinks(getDeclarationOfKind(rightSide, SyntaxKind.ImportDeclaration))
+            }
+        }
+
+        function getRenamedIdentifier(name: Identifier): string {
+            var links = getNodeLinks(name);
+            if (links.resolvedSymbol) {
+                return links.resolvedSymbol.generatedName;
             }
         }
 
@@ -4804,8 +4820,16 @@ module ts {
                 }
             }
 
+            if (isLexicalArguments(node)) {
+                var container = getContainingFunction(node);
+                captureLexicalArguments(node, container);
+            }
+
             checkCollisionWithCapturedSuperVariable(node, node);
             checkCollisionWithCapturedThisVariable(node, node);
+            checkCollisionWithCapturedArgumentsVariable(node, node);
+            checkCollisionWithAwaiterVariablesInGeneratedCode(node, node);
+            checkCollisionWithGeneratorVariablesInGeneratedCode(node, node);
 
             return getNarrowedTypeOfSymbol(getExportSymbolOfValueSymbolIfExported(symbol), node);
         }
@@ -4830,6 +4854,8 @@ module ts {
             // Now skip arrow functions to get the "real" owner of 'this'.
             if (container.kind === SyntaxKind.ArrowFunction) {
                 container = getThisContainer(container, /* includeArrowFunctions */ false);
+                needToCaptureLexicalThis = true;
+            } else if (node.parserContextFlags & ParserContextFlags.Await) {
                 needToCaptureLexicalThis = true;
             }
 
@@ -4867,6 +4893,22 @@ module ts {
                 return container.flags & NodeFlags.Static ? getTypeOfSymbol(symbol) : getDeclaredTypeOfSymbol(symbol);
             }
             return anyType;
+        }
+
+        function isLexicalArguments(node: Identifier): boolean {
+            if (node.text === "arguments"
+                && (node.parserContextFlags & ParserContextFlags.Yield && compilerOptions.target < ScriptTarget.ES6
+                    || node.parserContextFlags & ParserContextFlags.Await)) {
+                return true;
+            }
+            return false;
+        }
+
+        function captureLexicalArguments(node: Node, container: Node): void {
+            if (node.parent.kind !== SyntaxKind.Parameter) {
+                getNodeLinks(node).flags |= NodeCheckFlags.LexicalArguments;
+            }
+            getNodeLinks(container).flags |= NodeCheckFlags.CaptureArguments;
         }
 
         function getSuperContainer(node: Node): Node {
@@ -5647,8 +5689,8 @@ module ts {
                     else if (isConstEnum) {
                         error(node.argumentExpression, Diagnostics.Property_0_does_not_exist_on_const_enum_1, name, symbolToString(objectType.symbol));
                         return unknownType;
-                    }
                 }
+            }
             }
 
             // Check for compatible indexer types.
@@ -6398,29 +6440,63 @@ module ts {
             }
         }
 
+        function getPromiseType(type: Type, location: Node): Type {
+            var symbol = resolveName(location, "Promise", SymbolFlags.Value, undefined, undefined);
+            if (symbol) {
+                var promiseType = getDeclaredTypeOfSymbol(symbol);
+                if (getAwaitedType(promiseType)) {
+                    if ((<InterfaceType>promiseType).typeParameters) {
+                        if ((<InterfaceType>promiseType).typeParameters.length === 1) {
+                            return createTypeReference(<GenericType>promiseType, [type]);
+                        }
+                    }
+                    else {
+                        return promiseType;
+                    }
+                }
+            }
+            return type;
+        }
+
         function getReturnTypeFromBody(func: FunctionLikeDeclaration, contextualMapper?: TypeMapper): Type {
             var contextualSignature = getContextualSignatureForFunctionLikeDeclaration(func);
+            var isAsync = func.flags & NodeFlags.Async;
+            var type: Type;
             if (func.body.kind !== SyntaxKind.Block) {
-                var type = checkExpressionCached(<Expression>func.body, contextualMapper);
+                type = checkExpressionCached(<Expression>func.body, contextualMapper);
             }
             else {
                 // Aggregate the types of expressions within all the return statements.
                 var types = checkAndAggregateReturnExpressionTypes(<Block>func.body, contextualMapper);
                 if (types.length === 0) {
-                    return voidType;
+                    type = voidType;
+                    if (!isAsync) {
+                        return type;
                 }
+                }
+                else {
                 // When return statements are contextually typed we allow the return type to be a union type. Otherwise we require the
                 // return expressions to have a best common supertype.
-                var type = contextualSignature ? getUnionType(types) : getCommonSupertype(types);
+                    type = contextualSignature ? getUnionType(types) : getCommonSupertype(types);
                 if (!type) {
                     error(func, Diagnostics.No_best_common_type_exists_among_return_expressions);
                     return unknownType;
                 }
             }
+            }
+
+            if (isAsync) {
+                type = getPromiseType(type, func);
+                if (!type) {
+                    return unknownType;
+                }
+            }
+
             if (!contextualSignature) {
                 reportErrorsFromWidening(func, type);
             }
-            return getWidenedType(type);
+            type = getWidenedType(type);
+            return type;
         }
 
         /// Returns a set of types relating to every return expression relating to a function block.
@@ -6500,6 +6576,12 @@ module ts {
             if (contextualMapper === identityMapper) {
                 return anyFunctionType;
             }
+            if (node.flags & NodeFlags.Async) {
+                emitAwaiter = true;
+            }
+            if (node.asteriskToken && compilerOptions.target < ScriptTarget.ES6) {
+                emitGenerator = true;
+            }
             var links = getNodeLinks(node);
             var type = getTypeOfSymbol(node.symbol);
             // Check if function expression is contextually typed and assign parameter types if so
@@ -6529,7 +6611,8 @@ module ts {
 
             if (produceDiagnostics && node.kind !== SyntaxKind.MethodDeclaration && node.kind !== SyntaxKind.MethodSignature) {
                 checkCollisionWithCapturedSuperVariable(node, (<FunctionExpression>node).name);
-                checkCollisionWithCapturedThisVariable(node,(<FunctionExpression>node).name);
+                checkCollisionWithCapturedThisVariable(node, (<FunctionExpression>node).name);
+                checkCollisionWithCapturedArgumentsVariable(node, (<FunctionExpression>node).name);
             }
 
             return type;
@@ -6537,8 +6620,15 @@ module ts {
 
         function checkFunctionExpressionOrObjectLiteralMethodBody(node: FunctionExpression | MethodDeclaration) {
             Debug.assert(node.kind !== SyntaxKind.MethodDeclaration || isObjectLiteralMethod(node));
-            if (node.type) {
-                checkIfNonVoidFunctionHasReturnExpressionsOrSingleThrowStatment(node, getTypeFromTypeNode(node.type));
+            var returnType = node.type ? getTypeFromTypeNode(node.type) : undefined;
+            if (node.flags & NodeFlags.Async) {
+                var awaitableReturnType = checkAwaitableReturnType(node, returnType);
+                if (awaitableReturnType) {
+                    returnType = awaitableReturnType;
+            }
+            }
+            if (returnType) {
+                checkIfNonVoidFunctionHasReturnExpressionsOrSingleThrowStatment(node, returnType);
             }
 
             if (node.body) {
@@ -6547,8 +6637,11 @@ module ts {
                 }
                 else {
                     var exprType = checkExpression(<Expression>node.body);
-                    if (node.type) {
-                        checkTypeAssignableTo(exprType, getTypeFromTypeNode(node.type), node.body, /*headMessage*/ undefined);
+                    if (returnType) {
+                        if (node.flags & NodeFlags.Async) {
+                            exprType = getAwaitedType(exprType, /*fallbackType*/ exprType);
+                    }
+                        checkTypeAssignableTo(exprType, returnType, node.body, /*headMessage*/ undefined);
                     }
                     checkFunctionExpressionBodies(node.body);
                 }
@@ -6656,6 +6749,16 @@ module ts {
         function checkVoidExpression(node: VoidExpression): Type {
             var operandType = checkExpression(node.expression);
             return undefinedType;
+        }
+
+        function checkAwaitExpression(node: AwaitExpression): Type {
+            // Grammar checking
+            if (!(node.parserContextFlags & ParserContextFlags.Await)) {
+                grammarErrorOnFirstToken(node, Diagnostics.await_expression_must_be_contained_within_an_async_function);
+            }
+
+            var operandType = checkExpression(node.expression);
+            return getAwaitedType(operandType, /*fallbackType*/ operandType);
         }
 
         function checkPrefixUnaryExpression(node: PrefixUnaryExpression): Type {
@@ -7012,6 +7115,7 @@ module ts {
                 grammarErrorOnFirstToken(node, Diagnostics.yield_expression_must_be_contained_within_a_generator_declaration);
             }
             else {
+                //checkExpression(node.expression);
                 grammarErrorOnFirstToken(node, Diagnostics.yield_expressions_are_not_currently_supported);
             }
         }
@@ -7078,7 +7182,8 @@ module ts {
         }
 
         function checkExpression(node: Expression, contextualMapper?: TypeMapper): Type {
-            return checkExpressionOrQualifiedName(node, contextualMapper);
+            var type = checkExpressionOrQualifiedName(node, contextualMapper);
+            return type;
         }
 
         // Checks an expression and returns its type. The contextualMapper parameter serves two purposes: When
@@ -7169,6 +7274,8 @@ module ts {
                     return checkDeleteExpression(<DeleteExpression>node);
                 case SyntaxKind.VoidExpression:
                     return checkVoidExpression(<VoidExpression>node);
+                case SyntaxKind.AwaitExpression:
+                    return checkAwaitExpression(<AwaitExpression>node);
                 case SyntaxKind.PrefixUnaryExpression:
                     return checkPrefixUnaryExpression(<PrefixUnaryExpression>node);
                 case SyntaxKind.PostfixUnaryExpression:
@@ -7241,7 +7348,7 @@ module ts {
             // TODO (yuisu): Remove this check in else-if when SyntaxKind.Construct is moved and ambient context is handled
             else if (node.kind === SyntaxKind.FunctionType || node.kind === SyntaxKind.FunctionDeclaration || node.kind === SyntaxKind.ConstructorType ||
                       node.kind === SyntaxKind.CallSignature || node.kind === SyntaxKind.Constructor ||
-                      node.kind === SyntaxKind.ConstructSignature){
+                node.kind === SyntaxKind.ConstructSignature) {
                 checkGrammarFunctionLikeDeclaration(<FunctionLikeDeclaration>node);
             }
 
@@ -7254,6 +7361,8 @@ module ts {
             }
 
             if (produceDiagnostics) {
+                checkCollisionWithAwaiterVariablesInGeneratedCode(node, node.name);
+                checkCollisionWithGeneratorVariablesInGeneratedCode(node, node.name);
                 checkCollisionWithArgumentsInGeneratedCode(node);
                 if (compilerOptions.noImplicitAny && !node.type) {
                     switch (node.kind) {
@@ -7418,7 +7527,7 @@ module ts {
         function checkAccessorDeclaration(node: AccessorDeclaration) {
             if (produceDiagnostics) {
                 // Grammar checking accessors
-                checkGrammarFunctionLikeDeclaration(node) || checkGrammarAccessor(node) || checkGrammarComputedPropertyName(node.name);
+                checkGrammarDisallowedModifiersInBlockOrObjectLiteralExpression(node) || checkGrammarFunctionLikeDeclaration(node) || checkGrammarAccessor(node) || checkGrammarComputedPropertyName(node.name);
 
                 if (node.kind === SyntaxKind.GetAccessor) {
                     if (!isInAmbientContext(node) && nodeIsPresent(node.body) && !(bodyContainsAReturnStatement(<Block>node.body) || bodyContainsSingleThrowStatement(<Block>node.body))) {
@@ -7848,6 +7957,87 @@ module ts {
             }
         }
 
+        /**
+         * Gets the result type when awaiting a value
+         * @param type The type to await
+         * @param candidatesOnly A value indicating whether to return `undefined` if an awaited type could not be found
+         * @returns The awaited type
+         */
+        function getAwaitedType(type: Type, fallbackType?: Type): Type {
+            var seen: boolean[] = [];
+
+            function getAwaitedTypeRecursive(type: Type, fallbackType: Type): Type {
+                // NOTE: This function needs an overhaul. We could introduce a `Thenable<T>` into lib.d.ts for 
+                // the minimum supported interface for a thenable, which would likely be cleaner.
+                // NOTE: Currently missing is a test that the return type of the then call signature is itself thenable. 
+                // This would be easier if we switch to adding `Thenable<T>` (above).
+                if (!(type.flags & TypeFlags.ObjectType)) {
+                    return fallbackType;
+                }
+
+                seen[type.id] = true;
+                if (checkTypeRelatedTo(type, globalIPromiseType, assignableRelation, undefined)) {
+                    var thenProp = getPropertyOfType(type, "then");
+                    var thenType = getTypeOfSymbol(thenProp);
+                    var thenSignatures = getSignaturesOfType(thenType, SignatureKind.Call);
+                    var onFulfilledParameterType = getUnionType(map(thenSignatures, signature => getTypeAtPosition(getErasedSignature(signature), 0)));
+                    var onFulfilledParameterSignatures = getSignaturesOfType(onFulfilledParameterType, SignatureKind.Call);
+                    var awaitedType = getUnionType(map(onFulfilledParameterSignatures, signature => getTypeAtPosition(getErasedSignature(signature), 0)));
+                    if (seen[awaitedType.id]) return fallbackType;
+                    return getAwaitedTypeRecursive(awaitedType, /*fallbackType*/ awaitedType);
+                } else {
+                    if (isTypeAssignableTo(type, thenableType)) {
+                        error(null, ts.Diagnostics.Type_for_await_does_not_have_a_valid_callable_then_member);
+                    }
+
+                    return fallbackType;
+                }
+            }
+
+            return getAwaitedTypeRecursive(type, fallbackType);
+        }
+
+        /**
+         * Gets and checks whether the supplied type is a valid awaitable return type for an async method or function
+         * @param node The node used when reporting errors
+         * @param returnType The return type of the method or function
+         * @returns The awaited type for the return type
+         */
+        function checkAwaitableReturnType(node: SignatureDeclaration, returnType: Type): Type {
+            // NOTE: This function needs an overhaul. We could introduce an interface into lib.d.ts that 
+            // represents a compatible Promise Construct signature, and rely on that and `Thenable<T>` instead.
+
+            // an async function has a valid return type if the type has a construct signature that takes
+            // in an `initializer` function that in turn supplies a `resolve` function as one of its arguments
+            // and results in an object with a callable `then` signature.
+
+            if (!returnType) {
+                returnType = getReturnTypeOfSignature(getSignatureFromDeclaration(node));
+            }
+
+            if (returnType && returnType.symbol) {
+                var links = getSymbolLinks(returnType.symbol);
+                if (!links.promiseType) {
+                    var type = getTypeOfSymbol(returnType.symbol);
+                    if (isTypeAssignableTo(type, globalIPromiseConstructorType)) {
+                        links.promiseType = true;
+        }
+                }
+
+                if (links.promiseType) {
+                    var awaitedType = getAwaitedType(returnType);
+                    if (awaitedType) {
+                        var promiseConstructor = getPromiseConstructor(node);
+                        checkExpressionOrQualifiedName(promiseConstructor);
+                    }
+
+                    return awaitedType;
+                }
+            }
+
+            error(node, ts.Diagnostics.An_async_function_or_method_must_have_a_valid_awaitable_return_type);
+        }
+
         function checkFunctionDeclaration(node: FunctionDeclaration): void {
             if (produceDiagnostics) {
                 checkFunctionLikeDeclaration(node) ||
@@ -7857,6 +8047,7 @@ module ts {
 
                 checkCollisionWithCapturedSuperVariable(node, node.name);
                 checkCollisionWithCapturedThisVariable(node, node.name);
+                checkCollisionWithCapturedArgumentsVariable(node, node.name);
                 checkCollisionWithRequireExportsInGeneratedCode(node, node.name);
             }
         }
@@ -7887,8 +8078,22 @@ module ts {
             }
 
             checkSourceElement(node.body);
-            if (node.type && !isAccessor(node.kind)) {
-                checkIfNonVoidFunctionHasReturnExpressionsOrSingleThrowStatment(node, getTypeFromTypeNode(node.type));
+
+            var returnType = node.type ? getTypeFromTypeNode(node.type) : undefined;
+            if (node.flags & NodeFlags.Async) {
+                emitAwaiter = true;
+                var awaitableReturnType = checkAwaitableReturnType(node, returnType);
+                if (awaitableReturnType) {
+                    returnType = awaitableReturnType;
+            }
+            }
+
+            if (node.asteriskToken && compilerOptions.target < ScriptTarget.ES6) {
+                emitGenerator = true;
+            }
+
+            if (returnType && !isAccessor(node.kind)) {
+                checkIfNonVoidFunctionHasReturnExpressionsOrSingleThrowStatment(node, returnType);
             }
 
             // Report an implicit any error if there is no body, no explicit return type, and node is not a private method
@@ -7958,6 +8163,12 @@ module ts {
             }
         }
 
+        function checkCollisionWithCapturedArgumentsVariable(node: Node, name: Identifier): void {
+            if (needCollisionCheckForIdentifier(node, name, "_arguments")) {
+                potentialArgumentsCollisions.push(node);
+            }
+        }
+
         // this function will run after checking the source file so 'CaptureThis' is correct for all nodes
         function checkIfThisIsCapturedInEnclosingScope(node: Node): void {
             var current = node;
@@ -7969,6 +8180,23 @@ module ts {
                     }
                     else {
                         error(node, Diagnostics.Expression_resolves_to_variable_declaration_this_that_compiler_uses_to_capture_this_reference);
+                    }
+                    return;
+                }
+                current = current.parent;
+            }
+        }
+
+        function checkIfArgumentsIsCapturedInEnclosingScope(node: Node): void {
+            var current = node;
+            while (current) {
+                if (getNodeCheckFlags(current) & NodeCheckFlags.CaptureArguments) {
+                    var isDeclaration = node.kind !== SyntaxKind.Identifier;
+                    if (isDeclaration) {
+                        error((<Declaration>node).name, Diagnostics.Duplicate_identifier_arguments_Compiler_uses_variable_declaration_arguments_to_capture_arguments_reference);
+                    }
+                    else {
+                        error(node, Diagnostics.Expression_resolves_to_variable_declaration_arguments_that_compiler_uses_to_capture_arguments_reference);
                     }
                     return;
                 }
@@ -8047,6 +8275,61 @@ module ts {
                         }
                     }
                 }
+            }
+        }
+
+        function getPromiseConstructor(node: SignatureDeclaration): EntityName {
+            if (node.type && node.type.kind === SyntaxKind.TypeReference) {
+                var typeReference = <TypeReferenceNode>node.type;
+                return typeReference.typeName;
+            }
+
+            var returnType = getReturnTypeOfSignature(getSignatureFromDeclaration(node));
+            if (returnType && returnType.symbol && returnType.symbol.valueDeclaration && returnType.symbol.valueDeclaration.name.kind == SyntaxKind.Identifier) {
+                return <Identifier>returnType.symbol.valueDeclaration.name;
+            }
+        }
+
+        function checkCollisionWithAwaiterVariablesInGeneratedCode(node: Node, name: DeclarationName): void {
+            if (!name || name.kind !== SyntaxKind.Identifier || isTypeNode(name)) {
+                return;
+            }
+
+            var identifier = <Identifier>name;
+            if (identifier.text === "__awaiter") {
+                var isDeclaration = node.kind !== SyntaxKind.Identifier;
+                if (isDeclaration) {
+                    error(node, Diagnostics.Duplicate_identifier_0_Compiler_uses_variable_declaration_0_to_support_async_functions, identifier.text);
+                } else {
+                    error(node, Diagnostics.Expression_resolves_to_variable_declaration_0_that_compiler_uses_to_support_async_functions, identifier.text);
+                }
+            }
+
+            var container = getContainingFunction(name);
+            if (container && container.flags & NodeFlags.Async && node.kind !== SyntaxKind.Identifier) {
+                var promiseConstructor = getPromiseConstructor(container);
+                if (promiseConstructor && promiseConstructor.kind === SyntaxKind.Identifier && (<Identifier>promiseConstructor).text === identifier.text) {
+                    error(node, Diagnostics.Duplicate_identifier_0_Compiler_uses_variable_declaration_0_to_support_async_functions, identifier.text);
+                }
+            }
+        }
+
+        function checkCollisionWithGeneratorVariablesInGeneratedCode(node: Node, name: DeclarationName): void {
+            if (!name || name.kind !== SyntaxKind.Identifier || compilerOptions.target > ScriptTarget.ES5 || isTypeNode(name)) {
+                return;
+                    }
+
+            var identifier = <Identifier>name;
+            if (identifier.text !== "__generator") {
+                return;
+                }
+
+            // TODO(rbuckton): Need to be more specific for these checks. Currently defaulting to reporting errors
+            var isDeclaration = node.kind !== SyntaxKind.Identifier;
+            if (isDeclaration) {
+                error(node, Diagnostics.Duplicate_identifier_0_Compiler_uses_variable_declaration_0_to_support_async_functions, identifier.text);
+            } else {
+                error(node, Diagnostics.Expression_resolves_to_variable_declaration_0_that_compiler_uses_to_support_async_functions, identifier.text);
             }
         }
 
@@ -8142,8 +8425,13 @@ module ts {
                 checkCollisionWithConstDeclarations(node);
                 checkCollisionWithCapturedSuperVariable(node, <Identifier>node.name);
                 checkCollisionWithCapturedThisVariable(node, <Identifier>node.name);
+                checkCollisionWithCapturedArgumentsVariable(node, <Identifier>node.name);
                 checkCollisionWithRequireExportsInGeneratedCode(node, <Identifier>node.name);
             }
+            if (!isBindingPattern(node.name) && isLexicalArguments(<Identifier>node.name)) {
+                var container = getContainingFunction(node);
+                captureLexicalArguments(node.name, container);
+        }
         }
 
         function checkVariableDeclaration(node: VariableDeclaration) {
@@ -8166,15 +8454,18 @@ module ts {
         function checkGrammarDisallowedModifiersInBlockOrObjectLiteralExpression(node: Node) {
             if (node.modifiers) {
                 if (inBlockOrObjectLiteralExpression(node)) {
+                    // disallow all but the `async` modifier here
+                    if (node.modifiers.flags & ~NodeFlags.Async) {
                     return grammarErrorOnFirstToken(node, Diagnostics.Modifiers_cannot_appear_here);
                 }
             }
+        }
         }
 
         function inBlockOrObjectLiteralExpression(node: Node) {
             while (node) {
                 if (node.kind === SyntaxKind.Block || node.kind === SyntaxKind.ObjectLiteralExpression) {
-                    return true;
+                    return node.kind;
                 }
 
                 node = node.parent;
@@ -8324,6 +8615,10 @@ module ts {
                             }
                         }
                         else if (func.type || isGetAccessorWithAnnotatatedSetAccessor(func)) {
+                            if (func.flags & NodeFlags.Async) {
+                                exprType = getAwaitedType(exprType, /*fallbackType*/ exprType);
+                                returnType = getAwaitedType(returnType, /*fallbackType*/ returnType);
+                            }
                             checkTypeAssignableTo(exprType, returnType, node.expression, /*headMessage*/ undefined);
                         }
                     }
@@ -8545,6 +8840,8 @@ module ts {
             checkTypeParameters(node.typeParameters);
             checkCollisionWithCapturedThisVariable(node, node.name);
             checkCollisionWithRequireExportsInGeneratedCode(node, node.name);
+            checkCollisionWithAwaiterVariablesInGeneratedCode(node, node.name);
+            checkCollisionWithGeneratorVariablesInGeneratedCode(node, node.name);
             checkExportsOnMergedDeclarations(node);
             var symbol = getSymbolOfNode(node);
             var type = <InterfaceType>getDeclaredTypeOfSymbol(symbol);
@@ -8633,7 +8930,7 @@ module ts {
                 if (derived) {
                     var baseDeclarationFlags = getDeclarationFlagsFromSymbol(base);
                     var derivedDeclarationFlags = getDeclarationFlagsFromSymbol(derived);
-                    if ((baseDeclarationFlags & NodeFlags.Private)  || (derivedDeclarationFlags & NodeFlags.Private)) {
+                    if ((baseDeclarationFlags & NodeFlags.Private) || (derivedDeclarationFlags & NodeFlags.Private)) {
                         // either base or derived property is private - not override, skip it
                         continue;
                     }
@@ -8766,7 +9063,7 @@ module ts {
                     // run subsequent checks only if first set succeeded
                     if (checkInheritedPropertiesAreIdentical(type, node.name)) {
                         forEach(type.baseTypes, baseType => {
-                            checkTypeAssignableTo(type, baseType, node.name , Diagnostics.Interface_0_incorrectly_extends_interface_1);
+                            checkTypeAssignableTo(type, baseType, node.name, Diagnostics.Interface_0_incorrectly_extends_interface_1);
                         });
                         checkIndexConstraints(type);
                     }
@@ -8800,7 +9097,7 @@ module ts {
 
                 forEach(node.members, member => {
                     // TODO(jfreeman): Check that it is not a computed name
-                    if(isNumericName((<Identifier>member.name).text)) {
+                    if (isNumericName((<Identifier>member.name).text)) {
                         error(member.name, Diagnostics.An_enum_member_cannot_have_a_numeric_name);
                     }
                     var initializer = member.initializer;
@@ -8957,6 +9254,8 @@ module ts {
             checkTypeNameIsReserved(node.name, Diagnostics.Enum_name_cannot_be_0);
             checkCollisionWithCapturedThisVariable(node, node.name);
             checkCollisionWithRequireExportsInGeneratedCode(node, node.name);
+            checkCollisionWithAwaiterVariablesInGeneratedCode(node, node.name);
+            checkCollisionWithGeneratorVariablesInGeneratedCode(node, node.name);
             checkExportsOnMergedDeclarations(node);
 
             computeEnumMemberValues(node);
@@ -9041,6 +9340,8 @@ module ts {
 
                 checkCollisionWithCapturedThisVariable(node, node.name);
                 checkCollisionWithRequireExportsInGeneratedCode(node, node.name);
+                checkCollisionWithAwaiterVariablesInGeneratedCode(node, node.name);
+                checkCollisionWithGeneratorVariablesInGeneratedCode(node, node.name);
                 checkExportsOnMergedDeclarations(node);
                 var symbol = getSymbolOfNode(node);
 
@@ -9086,6 +9387,8 @@ module ts {
 
             checkCollisionWithCapturedThisVariable(node, node.name);
             checkCollisionWithRequireExportsInGeneratedCode(node, node.name);
+            checkCollisionWithAwaiterVariablesInGeneratedCode(node, node.name);
+            checkCollisionWithGeneratorVariablesInGeneratedCode(node, node.name);
             var symbol = getSymbolOfNode(node);
             var target: Symbol;
             
@@ -9314,12 +9617,14 @@ module ts {
                 case SyntaxKind.ParenthesizedExpression:
                 case SyntaxKind.TypeOfExpression:
                 case SyntaxKind.VoidExpression:
+                case SyntaxKind.AwaitExpression:
                 case SyntaxKind.DeleteExpression:
                 case SyntaxKind.PrefixUnaryExpression:
                 case SyntaxKind.PostfixUnaryExpression:
                 case SyntaxKind.BinaryExpression:
                 case SyntaxKind.ConditionalExpression:
                 case SyntaxKind.SpreadElementExpression:
+                case SyntaxKind.YieldExpression:
                 case SyntaxKind.Block:
                 case SyntaxKind.ModuleBlock:
                 case SyntaxKind.VariableStatement:
@@ -9359,6 +9664,7 @@ module ts {
 
                 emitExtends = false;
                 potentialThisCollisions.length = 0;
+                potentialArgumentsCollisions.length = 0;
 
                 forEach(node.statements, checkSourceElement);
                 checkFunctionExpressionBodies(node);
@@ -9377,16 +9683,27 @@ module ts {
                     forEach(potentialThisCollisions, checkIfThisIsCapturedInEnclosingScope);
                     potentialThisCollisions.length = 0;
                 }
-
+                if (potentialArgumentsCollisions.length) {
+                    forEach(potentialArgumentsCollisions, checkIfArgumentsIsCapturedInEnclosingScope);
+                    potentialArgumentsCollisions.length = 0;
+                }
                 if (emitExtends) {
                     links.flags |= NodeCheckFlags.EmitExtends;
                 }
-
+                if (emitAwaiter) {
+                    links.flags |= NodeCheckFlags.EmitAwaiter;
+                    if (compilerOptions.target < ScriptTarget.ES6) {
+                        emitGenerator = true;
+                    }
+                }
+                if (emitGenerator) {
+                    links.flags |= NodeCheckFlags.EmitGenerator;
+                }
                 links.flags |= NodeCheckFlags.TypeChecked;
             }
         }
 
-        function getSortedDiagnostics(): Diagnostic[]{
+        function getSortedDiagnostics(): Diagnostic[] {
             Debug.assert(produceDiagnostics, "diagnostics are available only in the full typecheck mode");
 
             if (diagnosticsModified) {
@@ -9407,7 +9724,7 @@ module ts {
             return getSortedDiagnostics();
         }
 
-        function getGlobalDiagnostics(): Diagnostic[]{
+        function getGlobalDiagnostics(): Diagnostic[] {
             throwIfNonDiagnosticsProducing();
             return filter(getSortedDiagnostics(), d => !d.file);
         }
@@ -9433,7 +9750,7 @@ module ts {
             return false;
         }
 
-        function getSymbolsInScope(location: Node, meaning: SymbolFlags): Symbol[]{
+        function getSymbolsInScope(location: Node, meaning: SymbolFlags): Symbol[] {
             var symbols: SymbolTable = {};
             var memberFlags: NodeFlags = 0;
             function copySymbol(symbol: Symbol, meaning: SymbolFlags) {
@@ -9819,7 +10136,7 @@ module ts {
             return getNamedMembers(propsByName);
         }
 
-        function getRootSymbols(symbol: Symbol): Symbol[]{
+        function getRootSymbols(symbol: Symbol): Symbol[] {
             if (symbol.flags & SymbolFlags.UnionProperty) {
                 var symbols: Symbol[] = [];
                 var name = symbol.name;
@@ -9864,9 +10181,9 @@ module ts {
                     if (symbolWithRelevantName.flags & SymbolFlags.Import) {
                         var importDeclarationWithRelevantName = <ImportDeclaration>getDeclarationOfKind(symbolWithRelevantName, SyntaxKind.ImportDeclaration);
                         if (isReferencedImportDeclaration(importDeclarationWithRelevantName)) {
-                            return false;
-                        }
-                    }
+                    return false;
+                }
+            }
                 }
             }
             return true;
@@ -9916,7 +10233,7 @@ module ts {
 
         function getExportAssignmentName(node: SourceFile): string {
             var symbol = getExportAssignmentSymbol(getSymbolOfNode(node));
-            return symbol && symbolIsValue(symbol) && !isConstEnumSymbol(symbol) ? symbolToString(symbol): undefined;
+            return symbol && symbolIsValue(symbol) && !isConstEnumSymbol(symbol) ? symbolToString(symbol) : undefined;
         }
 
         function isTopLevelValueImportWithEntityName(node: ImportDeclaration): boolean {
@@ -10035,6 +10352,8 @@ module ts {
                 isEntityNameVisible,
                 getConstantValue,
                 isUnknownIdentifier,
+                getRenamedIdentifier,
+                getPromiseConstructor
             };
         }
 
@@ -10069,6 +10388,24 @@ module ts {
             globalTemplateStringsArrayType = languageVersion >= ScriptTarget.ES6
                 ? getGlobalType("TemplateStringsArray")
                 : unknownType;
+
+            var iPromiseType = getTypeOfGlobalSymbol(getGlobalSymbol("IPromise"), 1);
+            if (iPromiseType !== emptyObjectType) {
+                globalIPromiseType = createTypeReference(<GenericType>iPromiseType, [anyType]);
+            }
+
+            var iPromiseConstructorType = getTypeOfGlobalSymbol(getGlobalSymbol("IPromiseConstructor"), 1);
+            if (iPromiseConstructorType !== emptyObjectType) {
+                globalIPromiseConstructorType = createTypeReference(<GenericType>iPromiseConstructorType, [anyType]);
+            }
+
+            // thenable type used to verify against a non-promise "thenable" operand to `await`.
+            var thenPropertySymbol = createSymbol(SymbolFlags.Transient | SymbolFlags.Property, "then");
+            getSymbolLinks(thenPropertySymbol).type = globalFunctionType;
+            thenableType = <ResolvedType>createObjectType(TypeFlags.ObjectType);
+            thenableType.properties = [thenPropertySymbol];
+            thenableType.members = createSymbolTable(thenableType.properties);
+
             anyArrayType = createArrayType(anyType);
         }
 
@@ -10103,7 +10440,7 @@ module ts {
                 return;
             }
 
-            var lastStatic: Node, lastPrivate: Node, lastProtected: Node, lastDeclare: Node;
+            var lastStatic: Node, lastPrivate: Node, lastProtected: Node, lastDeclare: Node, lastAsync: Node;
             var flags = 0;
             for (var i = 0, n = node.modifiers.length; i < n; i++) {
                 var modifier = node.modifiers[i];
@@ -10131,6 +10468,9 @@ module ts {
                         else if (flags & NodeFlags.Static) {
                             return grammarErrorOnNode(modifier, Diagnostics._0_modifier_must_precede_1_modifier, text, "static");
                         }
+                        else if (flags & NodeFlags.Async) {
+                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_must_precede_1_modifier, text, "async");
+                        }
                         else if (node.parent.kind === SyntaxKind.ModuleBlock || node.parent.kind === SyntaxKind.SourceFile) {
                             return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_appear_on_a_module_element, text);
                         }
@@ -10140,6 +10480,9 @@ module ts {
                     case SyntaxKind.StaticKeyword:
                         if (flags & NodeFlags.Static) {
                             return grammarErrorOnNode(modifier, Diagnostics._0_modifier_already_seen, "static");
+                        }
+                        else if (flags & NodeFlags.Async) {
+                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_must_precede_1_modifier, "static", "async");
                         }
                         else if (node.parent.kind === SyntaxKind.ModuleBlock || node.parent.kind === SyntaxKind.SourceFile) {
                             return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_appear_on_a_module_element, "static");
@@ -10158,6 +10501,9 @@ module ts {
                         else if (flags & NodeFlags.Ambient) {
                             return grammarErrorOnNode(modifier, Diagnostics._0_modifier_must_precede_1_modifier, "export", "declare");
                         }
+                        else if (flags & NodeFlags.Async) {
+                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_must_precede_1_modifier, "export", "async");
+                        }
                         else if (node.parent.kind === SyntaxKind.ClassDeclaration) {
                             return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_appear_on_a_class_element, "export");
                         }
@@ -10171,6 +10517,9 @@ module ts {
                         if (flags & NodeFlags.Ambient) {
                             return grammarErrorOnNode(modifier, Diagnostics._0_modifier_already_seen, "declare");
                         }
+                        else if (flags & NodeFlags.Async) {
+                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_be_used_in_an_ambient_context, "async");
+                        }
                         else if (node.parent.kind === SyntaxKind.ClassDeclaration) {
                             return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_appear_on_a_class_element, "declare");
                         }
@@ -10182,6 +10531,20 @@ module ts {
                         }
                         flags |= NodeFlags.Ambient;
                         lastDeclare = modifier
+                        break;
+
+                    case SyntaxKind.AsyncKeyword:
+                        if (flags & NodeFlags.Async) {
+                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_already_seen, "async");
+                        }
+                        else if (flags & NodeFlags.Ambient || isInAmbientContext(node.parent)) {
+                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_be_used_in_an_ambient_context, "async");
+                        }
+                        else if (node.kind === SyntaxKind.Parameter) {
+                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_appear_on_a_parameter, "async");
+                        }
+                        flags |= NodeFlags.Async;
+                        lastAsync = modifier;
                         break;
                 }
             }
@@ -10196,15 +10559,62 @@ module ts {
                 else if (flags & NodeFlags.Private) {
                     return grammarErrorOnNode(lastPrivate, Diagnostics._0_modifier_cannot_appear_on_a_constructor_declaration, "private");
                 }
+                else if (flags & NodeFlags.Async) {
+                    return grammarErrorOnNode(lastAsync, Diagnostics._0_modifier_cannot_appear_on_a_constructor_declaration, "async");
+                }
+                return;
             }
             else if (node.kind === SyntaxKind.ImportDeclaration && flags & NodeFlags.Ambient) {
-                return grammarErrorOnNode(lastDeclare, Diagnostics.A_declare_modifier_cannot_be_used_with_an_import_declaration, "declare");
+                return grammarErrorOnNode(lastDeclare, Diagnostics._0_modifier_cannot_be_used_with_an_import_declaration, "declare");
             }
             else if (node.kind === SyntaxKind.InterfaceDeclaration && flags & NodeFlags.Ambient) {
-                return grammarErrorOnNode(lastDeclare, Diagnostics.A_declare_modifier_cannot_be_used_with_an_interface_declaration, "declare");
+                return grammarErrorOnNode(lastDeclare, Diagnostics._0_modifier_cannot_be_used_with_an_interface_declaration, "declare");
             }
             else if (node.kind === SyntaxKind.Parameter && (flags & NodeFlags.AccessibilityModifier) && isBindingPattern((<ParameterDeclaration>node).name)) {
                 return grammarErrorOnNode(node, Diagnostics.A_parameter_property_may_not_be_a_binding_pattern);
+            }
+            else if (node.kind === SyntaxKind.Parameter && (flags & NodeFlags.AccessibilityModifier) && isBindingPattern((<ParameterDeclaration>node).name)) {
+                return grammarErrorOnNode(node, Diagnostics.A_parameter_property_may_not_be_a_binding_pattern);
+            }
+            if (flags & NodeFlags.Async) {
+                return checkAsyncModifier(node, lastAsync);
+            }
+        }
+
+        function checkAsyncModifier(node: Node, asyncModifier: Node): boolean {
+            switch (node.kind) {
+                case SyntaxKind.SetAccessor:
+                    return grammarErrorOnNode(asyncModifier, Diagnostics._0_modifier_cannot_be_used_on_a_1_accessor, "async", "set");
+                case SyntaxKind.Constructor:
+                    return grammarErrorOnNode(asyncModifier, Diagnostics._0_modifier_cannot_appear_on_a_constructor_declaration, "async");
+                case SyntaxKind.PropertyDeclaration:
+                    return grammarErrorOnNode(asyncModifier, Diagnostics._0_modifier_cannot_appear_on_a_data_property, "async");
+                case SyntaxKind.PropertyAssignment:
+                    return grammarErrorOnNode(asyncModifier, Diagnostics._0_modifier_cannot_appear_on_a_data_property, "async");
+                case SyntaxKind.ShorthandPropertyAssignment:
+                    return grammarErrorOnNode(asyncModifier, Diagnostics._0_modifier_cannot_appear_on_a_data_property, "async");
+                case SyntaxKind.IndexSignature:
+                    return grammarErrorOnNode(asyncModifier, Diagnostics._0_modifier_cannot_be_used_in_an_ambient_context, "async");
+                case SyntaxKind.ClassDeclaration:
+                    return grammarErrorOnNode(asyncModifier, Diagnostics._0_modifier_cannot_be_used_with_a_class_declaration, "async");
+                case SyntaxKind.InterfaceDeclaration:
+                    return grammarErrorOnNode(asyncModifier, Diagnostics._0_modifier_cannot_be_used_with_an_interface_declaration, "async");
+                case SyntaxKind.ModuleDeclaration:
+                    return grammarErrorOnNode(asyncModifier, Diagnostics._0_modifier_cannot_be_used_with_a_module_declaration, "async");
+                case SyntaxKind.EnumDeclaration:
+                    return grammarErrorOnNode(asyncModifier, Diagnostics._0_modifier_cannot_be_used_with_an_enum_declaration, "async");
+                case SyntaxKind.ExportAssignment:
+                    return grammarErrorOnNode(asyncModifier, Diagnostics._0_modifier_cannot_be_used_with_an_export_assignment_declaration, "async");
+                case SyntaxKind.VariableStatement:
+                    return grammarErrorOnNode(asyncModifier, Diagnostics._0_modifier_cannot_be_used_on_a_variable_statement, "async");
+                case SyntaxKind.TypeAliasDeclaration:
+                    return grammarErrorOnNode(asyncModifier, Diagnostics._0_modifier_cannot_be_used_with_a_type_declaration, "async");
+                case SyntaxKind.ImportDeclaration:
+                    return grammarErrorOnNode(asyncModifier, Diagnostics._0_modifier_cannot_be_used_with_an_import_declaration, "async");
+                case SyntaxKind.Parameter:
+                    return grammarErrorOnNode(asyncModifier, Diagnostics._0_modifier_cannot_be_used_with_a_parameter_declaration, "async");
+                default:
+                    return false;
             }
         }
 
@@ -10492,13 +10902,13 @@ module ts {
                 var currentKind: number;
                 if (prop.kind === SyntaxKind.PropertyAssignment || prop.kind === SyntaxKind.ShorthandPropertyAssignment) {
                     // Grammar checking for computedPropertName and shorthandPropertyAssignment
-                    checkGrammarForInvalidQuestionMark(prop,(<PropertyAssignment>prop).questionToken, Diagnostics.An_object_member_cannot_be_declared_optional);
+                    checkGrammarForInvalidQuestionMark(prop, (<PropertyAssignment>prop).questionToken, Diagnostics.An_object_member_cannot_be_declared_optional);
                     if (name.kind === SyntaxKind.NumericLiteral) {
                         checkGrammarNumbericLiteral(<Identifier>name);
                     }
                     currentKind = Property;
                 }
-                else if ( prop.kind === SyntaxKind.MethodDeclaration) {
+                else if (prop.kind === SyntaxKind.MethodDeclaration) {
                     currentKind = Property;
                 }
                 else if (prop.kind === SyntaxKind.GetAccessor) {

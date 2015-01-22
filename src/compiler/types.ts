@@ -141,7 +141,8 @@ module ts {
         SetKeyword,
         StringKeyword,
         TypeKeyword,
-
+        AsyncKeyword,
+        AwaitKeyword,
         // Parse tree nodes
 
         // Names
@@ -190,12 +191,14 @@ module ts {
         DeleteExpression,
         TypeOfExpression,
         VoidExpression,
+        AwaitExpression,
         PrefixUnaryExpression,
         PostfixUnaryExpression,
         BinaryExpression,
         ConditionalExpression,
         TemplateExpression,
         YieldExpression,
+        GeneratedLabel,
         SpreadElementExpression,
         OmittedExpression,
         // Misc
@@ -259,7 +262,7 @@ module ts {
         FirstReservedWord = BreakKeyword,
         LastReservedWord = WithKeyword,
         FirstKeyword = BreakKeyword,
-        LastKeyword = TypeKeyword,
+        LastKeyword = AwaitKeyword,
         FirstFutureReservedWord = ImplementsKeyword,
         LastFutureReservedWord = YieldKeyword,
         FirstTypeNode = TypeReference,
@@ -267,7 +270,7 @@ module ts {
         FirstPunctuation = OpenBraceToken,
         LastPunctuation = CaretEqualsToken,
         FirstToken = Unknown,
-        LastToken = TypeKeyword,
+        LastToken = AwaitKeyword,
         FirstTriviaToken = SingleLineCommentTrivia,
         LastTriviaToken = ConflictMarkerTrivia,
         FirstLiteralToken = NumericLiteral,
@@ -292,13 +295,15 @@ module ts {
         Let =               0x00000800,  // Variable declaration
         Const =             0x00001000,  // Variable declaration
         OctalLiteral =      0x00002000,
+        Async =             0x00004000,  // Property/Method/Function
 
-        Modifier = Export | Ambient | Public | Private | Protected | Static,
+        Modifier = Export | Ambient | Public | Private | Protected | Static | Async,
         AccessibilityModifier = Public | Private | Protected,
         BlockScoped = Let | Const
     }
 
     export const enum ParserContextFlags {
+        None = 0,
         // Set if this node was parsed in strict mode.  Used for grammar error checks, as well as
         // checking if the node can be reused in incremental settings.
         StrictMode = 1 << 0,
@@ -317,17 +322,26 @@ module ts {
         // error.  
         ThisNodeHasError = 1 << 4,
 
+        // If this node was parsed in the parameters of an async function.
+        AsyncParameter = 1 << 5,
+
+        // If this node was parsed in the 'await' context created when parsing an async function.
+        Await = 1 << 6,
+
         // Context flags set directly by the parser.
-        ParserGeneratedFlags = StrictMode | DisallowIn | Yield | GeneratorParameter | ThisNodeHasError,
+        ParserGeneratedFlags = StrictMode | DisallowIn | Yield | GeneratorParameter | ThisNodeHasError | AsyncParameter | Await,
 
         // Context flags computed by aggregating child flags upwards.
 
         // Used during incremental parsing to determine if this node or any of its children had an 
         // error.  Computed only once and then cached.
-        ThisNodeOrAnySubNodesHasError = 1 << 5,
+        ThisNodeOrAnySubNodesHasError = 1 << 7,
+
+        // Used to know if we've computed whether any children of this node are or contain an 'await' or 'yield' expression.
+        ThisNodeOrAnySubNodesHasAwaitOrYield = 1 << 8,
 
         // Used to know if we've computed data from children and cached it in this node.
-        HasAggregatedChildData = 1 << 6
+        HasAggregatedChildData = 1 << 9,
     }
 
     export interface Node extends TextRange {
@@ -607,6 +621,10 @@ module ts {
     export interface VoidExpression extends UnaryExpression {
         expression: UnaryExpression;
     }
+    
+    export interface AwaitExpression extends UnaryExpression {
+        expression: UnaryExpression;
+    }
 
     export interface YieldExpression extends Expression {
         asteriskToken?: Node;
@@ -661,7 +679,7 @@ module ts {
     export interface ArrayLiteralExpression extends PrimaryExpression {
         elements: NodeArray<Expression>;
     }
-
+    
     export interface SpreadElementExpression extends Expression {
         expression: Expression;
     }
@@ -865,6 +883,11 @@ module ts {
         exportName: Identifier;
     }
 
+    export interface GeneratedLabel extends Expression {
+        label: Label;
+        labelNumbers?: number[];
+    }
+
     export interface FileReference extends TextRange {
         filename: string;
     }
@@ -951,13 +974,92 @@ module ts {
         isEmitBlocked(sourceFile?: SourceFile): boolean;
     }
 
+    export enum OpCode {
+        Statement,              // A regular javascript statement
+        Assign,                 // An assignment
+        Break,                  // A break instruction used to jump to a label
+        BrTrue,                 // A break instruction used to jump to a label if a condition evaluates to true
+        BrFalse,                // A break instruction used to jump to a label if a condition evaluates to false
+        Yield,                  // A completion instruction for the `yield` keyword
+        YieldStar,              // A completion instruction for the `yield*` keyword
+        Return,                 // A completion instruction for the `return` keyword
+        Throw,                  // A completion instruction for the `throw` keyword
+        Endfinally              // Marks the end of a `finally` block
+    }
+
+    export type Label = number;
+
+    export interface LocalsBuilder {
+        createUniqueIdentifier(name?: string, globallyUnique?: boolean): Identifier;
+        recordVariable(name: Identifier): void;
+        ensureIdentifier(expression: Expression, writeAssignment: (left: Identifier, right: Expression, location?: TextRange) => void): Identifier;
+        getValueOrDefault(value: Expression, defaultValue: Expression, writeAssignment: (left: Identifier, right: Expression, location?: TextRange) => void): Expression;
+        getVariables(): Identifier[];
+    }
+
+    export interface CodeGenerator {
+        writeLocation(location: TextRange): void;
+
+        declareLocal(name?: string, globallyUnique?: boolean): Identifier;
+
+        emit(code: OpCode): void;
+        emit(code: OpCode, node: Statement): void;
+        emit(code: OpCode, node: Expression): void;
+        emit(code: OpCode, left: Expression, right: Expression): void;
+
+        createUniqueIdentifier(name?: string, globallyUnique?: boolean): Identifier;
+    }
+
+    export interface StatementsGenerator extends CodeGenerator {
+        buildStatements(): Statement[];
+    }
+
+    export interface FunctionGenerator extends CodeGenerator {
+        addParameter(name: Identifier, flags?: NodeFlags): void;
+        addVariable(name: Identifier): void
+        addFunction(func: FunctionDeclaration): void;
+
+        defineLabel(): Label;
+        markLabel(label: Label): void;
+
+        beginExceptionBlock(): Label;
+        beginCatchBlock(variable: Identifier): void;
+        beginFinallyBlock(): void;
+        endExceptionBlock(): void;
+
+        findBreakTarget(labelText?: string): Label;
+        findContinueTarget(labelText?: string): Label;
+
+        beginScriptContinueBlock(labelText: string[]): void;
+        endScriptContinueBlock(): void;
+        beginScriptBreakBlock(labelText: string[], requireLabel: boolean): void;
+        endScriptBreakBlock(): void;
+        beginContinueBlock(continueLabel: Label, labelText: string[]): Label;
+        endContinueBlock(): void;
+        beginBreakBlock(labelText: string[], requireLabel: boolean): Label;
+        endBreakBlock(): void;
+
+        emit(code: OpCode): void;
+        emit(code: OpCode, label: Label): void;
+        emit(code: OpCode, label: Label, condition: Expression): void;
+        emit(code: OpCode, node: Statement): void;
+        emit(code: OpCode, node: Expression): void;
+        emit(code: OpCode, left: Expression, right: Expression): void;
+
+        createInlineBreak(label: Label): ReturnStatement;
+        createInlineReturn(expression: Expression): ReturnStatement;
+        createResume(): LeftHandSideExpression;
+
+        buildFunction(kind: SyntaxKind, name: DeclarationName, location?: TextRange, flags?: NodeFlags, modifiers?: ModifiersArray): FunctionLikeDeclaration;
+    }
+
     export interface SourceMapSpan {
         emittedLine: number;    // Line number in the .js file
         emittedColumn: number;  // Column number in the .js file
-        sourceLine: number;     // Line number in the .ts file
-        sourceColumn: number;   // Column number in the .ts file
+        sourceLine?: number;    // Line number in the .ts file
+        sourceColumn?: number;  // Column number in the .ts file
         nameIndex?: number;     // Optional name (index into names array) associated with this span
-        sourceIndex: number;    // .ts file (index into sources array) associated with this span*/
+        sourceIndex?: number;   // .ts file (index into sources array) associated with this span
     }
 
     export interface SourceMapData {
@@ -1066,7 +1168,7 @@ module ts {
     }
 
     export const enum TypeFormatFlags {
-        None                            = 0x00000000,
+        None                            = 0x00000000, 
         WriteArrayAsGenericType         = 0x00000001,  // Write Array<T> instead T[]
         UseTypeOfFunction               = 0x00000002,  // Write typeof instead of function type literal
         NoTruncation                    = 0x00000004,  // Don't truncate typeToString result
@@ -1080,14 +1182,14 @@ module ts {
         None = 0x00000000,
 
         // Write symbols's type argument if it is instantiated symbol
-        // eg. class C<T> { p: T }   <-- Show p as C<T>.p here
-        //     var a: C<number>; 
-        //     var p = a.p;  <--- Here p is property of C<number> so show it as C<number>.p instead of just C.p
+                                                       // eg. class C<T> { p: T }   <-- Show p as C<T>.p here
+                                                       //     var a: C<number>; 
+                                                       //     var p = a.p;  <--- Here p is property of C<number> so show it as C<number>.p instead of just C.p
         WriteTypeParametersOrArguments = 0x00000001, 
 
         // Use only external alias information to get the symbol name in the given context
-        // eg.  module m { export class c { } } import x = m.c; 
-        // When this flag is specified m.c will be used to refer to the class instead of alias symbol x
+                                                       // eg.  module m { export class c { } } import x = m.c; 
+                                                       // When this flag is specified m.c will be used to refer to the class instead of alias symbol x
         UseOnlyExternalAliasing = 0x00000002,
     }
 
@@ -1126,6 +1228,8 @@ module ts {
         // Returns the constant value this property access resolves to, or 'undefined' for a non-constant
         getConstantValue(node: PropertyAccessExpression | ElementAccessExpression): number;
         isUnknownIdentifier(location: Node, name: string): boolean;
+        getRenamedIdentifier(name: Identifier): string;
+        getPromiseConstructor(node: SignatureDeclaration): EntityName;
     }
 
     export const enum SymbolFlags {
@@ -1218,8 +1322,9 @@ module ts {
         members?: SymbolTable;         // Class, interface or literal instance members
         exports?: SymbolTable;         // Module exports
         exportSymbol?: Symbol;         // Exported symbol associated with this symbol
-        valueDeclaration?: Declaration // First value declaration of the symbol,
-        constEnumOnlyModule?: boolean // For modules - if true - module contains only const enums or other modules with only const enums.
+        valueDeclaration?: Declaration;// First value declaration of the symbol,
+        constEnumOnlyModule?: boolean; // For modules - if true - module contains only const enums or other modules with only const enums.
+        generatedName?: string;        // A generated name for a renamed symbol
     }
 
     export interface SymbolLinks {
@@ -1230,6 +1335,8 @@ module ts {
         referenced?: boolean;          // True if alias symbol has been referenced as a value
         exportAssignSymbol?: Symbol;   // Symbol exported from external module
         unionType?: UnionType;         // Containing union type for union property
+        awaitedType?: Type;            // Awaited type of symbol
+        promiseType?: boolean;         // True if the type represents a creatable promise
     }
 
     export interface TransientSymbol extends Symbol, SymbolLinks { }
@@ -1242,13 +1349,18 @@ module ts {
         TypeChecked         = 0x00000001,  // Node has been type checked
         LexicalThis         = 0x00000002,  // Lexical 'this' reference
         CaptureThis         = 0x00000004,  // Lexical 'this' used in body
-        EmitExtends         = 0x00000008,  // Emit __extends
-        SuperInstance       = 0x00000010,  // Instance 'super' reference
-        SuperStatic         = 0x00000020,  // Static 'super' reference
-        ContextChecked      = 0x00000040,  // Contextual types have been assigned
+        LexicalArguments    = 0x00000008,  // Lexical 'arguments' reference
+        CaptureArguments    = 0x00000010,  // Lexical 'arguments' used in body
+        EmitExtends         = 0x00000020,  // Emit __extends
+        SuperInstance       = 0x00000040,  // Instance 'super' reference
+        SuperStatic         = 0x00000080,  // Static 'super' reference
+        ContextChecked      = 0x00000100,  // Contextual types have been assigned
 
         // Values for enum members have been computed, and any errors have been reported for them.
-        EnumValuesComputed  = 0x00000080,
+        EnumValuesComputed  = 0x00000200,
+
+        EmitAwaiter         = 0x00000400,  // Emit __awaiter
+        EmitGenerator       = 0x00000800,  // Emit __generator
     }
 
     export interface NodeLinks {
@@ -1400,7 +1512,7 @@ module ts {
         inferences: TypeInferences[];       // Inferences made for each type parameter
         inferredTypes: Type[];              // Inferred type for each type parameter
         failedTypeParameterIndex?: number;  // Index of type parameter for which inference failed
-        // It is optional because in contextual signature instantiation, nothing fails
+                                            // It is optional because in contextual signature instantiation, nothing fails
     }
 
     export interface DiagnosticMessage {
@@ -1458,6 +1570,7 @@ module ts {
         noImplicitAny?: boolean;
         noLib?: boolean;
         noLibCheck?: boolean;
+        noHelpers?: boolean;
         noResolve?: boolean;
         out?: string;
         outDir?: string;
@@ -1538,7 +1651,7 @@ module ts {
         narrowNoBreakSpace = 0x202F,
         ideographicSpace = 0x3000,
         mathematicalSpace = 0x205F,
-        ogham = 0x1680,
+        ogham = 0x1680, 
 
         _ = 0x5F,
         $ = 0x24,

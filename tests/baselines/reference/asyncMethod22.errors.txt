@@ -1,0 +1,45 @@
+tests/cases/conformance/async/downlevel/asyncMethod/asyncMethod22.ts(7,3): error TS1131: Property or signature expected.
+tests/cases/conformance/async/downlevel/asyncMethod/asyncMethod22.ts(7,3): error TS2304: Cannot find name 'async'.
+tests/cases/conformance/async/downlevel/asyncMethod/asyncMethod22.ts(7,9): error TS1005: ';' expected.
+tests/cases/conformance/async/downlevel/asyncMethod/asyncMethod22.ts(7,9): error TS2304: Cannot find name 'foo'.
+tests/cases/conformance/async/downlevel/asyncMethod/asyncMethod22.ts(7,14): error TS1005: ';' expected.
+tests/cases/conformance/async/downlevel/asyncMethod/asyncMethod22.ts(7,16): error TS2365: Operator '>' cannot be applied to types 'boolean' and '{ var: {}; }'.
+tests/cases/conformance/async/downlevel/asyncMethod/asyncMethod22.ts(7,28): error TS1109: Expression expected.
+tests/cases/conformance/async/downlevel/asyncMethod/asyncMethod22.ts(8,9): error TS1005: ':' expected.
+tests/cases/conformance/async/downlevel/asyncMethod/asyncMethod22.ts(8,9): error TS2304: Cannot find name 'v'.
+tests/cases/conformance/async/downlevel/asyncMethod/asyncMethod22.ts(10,1): error TS1128: Declaration or statement expected.
+
+
+==== tests/cases/conformance/async/downlevel/asyncMethod/asyncMethod22.ts (10 errors) ====
+    declare class Promise<T> {
+        constructor(init: (resolve: (value?: T | IPromise<T>) => void, reject: (reason?: any) => void) => void);
+        then<TResult>(onfulfilled?: (value: T) => TResult | IPromise<TResult>, onrejected?: (reason: any) => TResult | IPromise<TResult>): Promise<TResult>;
+    }
+    
+    var o: {
+      async foo(): Promise<void> {
+      ~~~~~
+!!! error TS1131: Property or signature expected.
+      ~~~~~
+!!! error TS2304: Cannot find name 'async'.
+            ~~~
+!!! error TS1005: ';' expected.
+            ~~~
+!!! error TS2304: Cannot find name 'foo'.
+                 ~
+!!! error TS1005: ';' expected.
+                   ~~~~~~~~~~~~~~~
+                               ~
+!!! error TS1109: Expression expected.
+        var v = { [await]: foo }
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            ~
+!!! error TS1005: ':' expected.
+            ~
+!!! error TS2304: Cannot find name 'v'.
+      }
+    ~~~
+!!! error TS2365: Operator '>' cannot be applied to types 'boolean' and '{ var: {}; }'.
+    }
+    ~
+!!! error TS1128: Declaration or statement expected.

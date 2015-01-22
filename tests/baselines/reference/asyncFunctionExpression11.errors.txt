@@ -1,0 +1,24 @@
+tests/cases/conformance/async/downlevel/asyncFunctionExpression/asyncFunctionExpression11.ts(6,15): error TS1057: An async function or method must have a valid awaitable return type.
+tests/cases/conformance/async/downlevel/asyncFunctionExpression/asyncFunctionExpression11.ts(6,24): error TS1005: '(' expected.
+tests/cases/conformance/async/downlevel/asyncFunctionExpression/asyncFunctionExpression11.ts(6,29): error TS1005: '=' expected.
+tests/cases/conformance/async/downlevel/asyncFunctionExpression/asyncFunctionExpression11.ts(6,33): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value or consist of a single 'throw' statement.
+tests/cases/conformance/async/downlevel/asyncFunctionExpression/asyncFunctionExpression11.ts(6,47): error TS1005: '=>' expected.
+
+
+==== tests/cases/conformance/async/downlevel/asyncFunctionExpression/asyncFunctionExpression11.ts (5 errors) ====
+    declare class Promise<T> {
+        constructor(init: (resolve: (value?: T | IPromise<T>) => void, reject: (reason?: any) => void) => void);
+        then<TResult>(onfulfilled?: (value: T) => TResult | IPromise<TResult>, onrejected?: (reason: any) => TResult | IPromise<TResult>): Promise<TResult>;
+    }
+    
+    var v = async function await(): Promise<void> { }
+                  ~~~~~~~~
+!!! error TS1057: An async function or method must have a valid awaitable return type.
+                           ~~~~~
+!!! error TS1005: '(' expected.
+                                ~
+!!! error TS1005: '=' expected.
+                                    ~~~~~~~~~~~~~
+!!! error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value or consist of a single 'throw' statement.
+                                                  ~
+!!! error TS1005: '=>' expected.

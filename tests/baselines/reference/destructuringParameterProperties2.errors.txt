@@ -1,4 +1,4 @@
-tests/cases/conformance/es6/destructuring/destructuringParameterProperties2.ts(2,36): error TS1187: A parameter property may not be a binding pattern.
+tests/cases/conformance/es6/destructuring/destructuringParameterProperties2.ts(2,36): error TS1310: A parameter property may not be a binding pattern.
 tests/cases/conformance/es6/destructuring/destructuringParameterProperties2.ts(3,59): error TS2339: Property 'b' does not exist on type 'C1'.
 tests/cases/conformance/es6/destructuring/destructuringParameterProperties2.ts(3,83): error TS2339: Property 'c' does not exist on type 'C1'.
 tests/cases/conformance/es6/destructuring/destructuringParameterProperties2.ts(4,18): error TS2339: Property 'a' does not exist on type 'C1'.
@@ -12,7 +12,7 @@ tests/cases/conformance/es6/destructuring/destructuringParameterProperties2.ts(2
     class C1 {
         constructor(private k: number, private [a, b, c]: [number, string, boolean]) {
                                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS1187: A parameter property may not be a binding pattern.
+!!! error TS1310: A parameter property may not be a binding pattern.
             if ((b === undefined && c === undefined) || (this.b === undefined && this.c === undefined)) {
                                                               ~
 !!! error TS2339: Property 'b' does not exist on type 'C1'.

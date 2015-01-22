@@ -38,11 +38,15 @@ var compilerSources = [
     "utilities.ts",
     "binder.ts",
     "checker.ts",
+    "factory.ts",
+    "generator.ts",
+    "rewriter.ts",
     "emitter.ts",
     "program.ts",
     "commandLineParser.ts",
     "tsc.ts",
-    "diagnosticInformationMap.generated.ts"
+    "diagnosticInformationMap.generated.ts",
+	"factory.generated.ts"
 ].map(function (f) {
     return path.join(compilerDirectory, f);
 });
@@ -56,10 +60,14 @@ var servicesSources = [
     "utilities.ts",
     "binder.ts",
     "checker.ts",
+    "factory.ts",
+    "generator.ts",
+    "rewriter.ts",
     "emitter.ts",
     "program.ts",
     "commandLineParser.ts",
-    "diagnosticInformationMap.generated.ts"
+    "diagnosticInformationMap.generated.ts",
+	"factory.generated.ts"
 ].map(function (f) {
     return path.join(compilerDirectory, f);
 }).concat([
@@ -280,6 +288,32 @@ for (var i in libraryTargets) {
 desc("Builds the library targets");
 task("lib", libraryTargets);
 
+// Generate factory
+var processSyntaxJs = path.join(scriptsDirectory, "processSyntax.js");
+var processSyntaxTs = path.join(scriptsDirectory, "processSyntax.ts");
+var factoryJson = path.join(compilerDirectory, "factory.json");
+var factoryGeneratedTs = path.join(compilerDirectory, "factory.generated.ts");
+file(processSyntaxTs);
+compileFile(processSyntaxJs, [processSyntaxTs], [processSyntaxTs], [], /*useBuiltCompile*/ false);
+file(factoryGeneratedTs, [processSyntaxJs, factoryJson], function() {
+    var cmd = "node " + processSyntaxJs + " "  + factoryJson;
+    console.log(cmd);
+    var ex = jake.createExec([cmd]);
+    // Add listeners for output and error
+    ex.addListener("stdout", function(output) {
+        process.stdout.write(output);
+    });
+    ex.addListener("stderr", function(error) {
+        process.stderr.write(error);
+    });
+    ex.addListener("cmdEnd", function() {
+        complete();
+    });
+    ex.run();
+}, { async: true });
+
+desc("Generates the node factory and visitor in TypeScript based on an input JSON file");
+task("generate-factory", [factoryGeneratedTs]);
 
 // Generate diagnostics
 var processDiagnosticMessagesJs = path.join(scriptsDirectory, "processDiagnosticMessages.js");

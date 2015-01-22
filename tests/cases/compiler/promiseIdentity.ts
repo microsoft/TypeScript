@@ -1,11 +1,11 @@
-interface IPromise<T> {
-    then<U>(callback: (x: T) => IPromise<U>): IPromise<U>;
+interface IPromise1<T> {
+    then<U>(callback: (x: T) => IPromise1<U>): IPromise1<U>;
 }
-interface Promise<T> {
-    then<U>(callback: (x: T) => Promise<U>): Promise<U>;
+interface Promise1<T> {
+    then<U>(callback: (x: T) => Promise1<U>): Promise1<U>;
 }
-var x: IPromise<string>;
-var x: Promise<string>;
+var x: IPromise1<string>;
+var x: Promise1<string>;
 
 
 interface IPromise2<T, V> {

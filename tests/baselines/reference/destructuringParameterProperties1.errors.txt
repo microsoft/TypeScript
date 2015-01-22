@@ -1,6 +1,6 @@
-tests/cases/conformance/es6/destructuring/destructuringParameterProperties1.ts(2,17): error TS1187: A parameter property may not be a binding pattern.
-tests/cases/conformance/es6/destructuring/destructuringParameterProperties1.ts(9,17): error TS1187: A parameter property may not be a binding pattern.
-tests/cases/conformance/es6/destructuring/destructuringParameterProperties1.ts(16,17): error TS1187: A parameter property may not be a binding pattern.
+tests/cases/conformance/es6/destructuring/destructuringParameterProperties1.ts(2,17): error TS1310: A parameter property may not be a binding pattern.
+tests/cases/conformance/es6/destructuring/destructuringParameterProperties1.ts(9,17): error TS1310: A parameter property may not be a binding pattern.
+tests/cases/conformance/es6/destructuring/destructuringParameterProperties1.ts(16,17): error TS1310: A parameter property may not be a binding pattern.
 tests/cases/conformance/es6/destructuring/destructuringParameterProperties1.ts(22,26): error TS2339: Property 'x' does not exist on type 'C1'.
 tests/cases/conformance/es6/destructuring/destructuringParameterProperties1.ts(22,35): error TS2339: Property 'y' does not exist on type 'C1'.
 tests/cases/conformance/es6/destructuring/destructuringParameterProperties1.ts(22,43): error TS2339: Property 'y' does not exist on type 'C1'.
@@ -17,7 +17,7 @@ tests/cases/conformance/es6/destructuring/destructuringParameterProperties1.ts(2
     class C1 {
         constructor(public [x, y, z]: string[]) {
                     ~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS1187: A parameter property may not be a binding pattern.
+!!! error TS1310: A parameter property may not be a binding pattern.
         }
     }
     
@@ -26,7 +26,7 @@ tests/cases/conformance/es6/destructuring/destructuringParameterProperties1.ts(2
     class C2 {
         constructor(public [x, y, z]: TupleType1) {
                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS1187: A parameter property may not be a binding pattern.
+!!! error TS1310: A parameter property may not be a binding pattern.
         }
     }
     
@@ -35,7 +35,7 @@ tests/cases/conformance/es6/destructuring/destructuringParameterProperties1.ts(2
     class C3 {
         constructor(public { x, y, z }: ObjType1) {
                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS1187: A parameter property may not be a binding pattern.
+!!! error TS1310: A parameter property may not be a binding pattern.
         }
     }
     

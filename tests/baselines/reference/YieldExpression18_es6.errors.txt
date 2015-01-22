@@ -1,8 +1,8 @@
-tests/cases/conformance/es6/yieldExpressions/YieldExpression18_es6.ts(2,1): error TS1163: 'yield' expression must be contained_within a generator declaration.
+tests/cases/conformance/es6/yieldExpressions/YieldExpression18_es6.ts(2,1): error TS1163: 'yield' expression must be contained within a generator declaration.
 
 
 ==== tests/cases/conformance/es6/yieldExpressions/YieldExpression18_es6.ts (1 errors) ====
     "use strict";
     yield(foo);
     ~~~~~
-!!! error TS1163: 'yield' expression must be contained_within a generator declaration.
+!!! error TS1163: 'yield' expression must be contained within a generator declaration.

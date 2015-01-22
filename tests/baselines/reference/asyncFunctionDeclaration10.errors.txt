@@ -1,0 +1,34 @@
+tests/cases/conformance/async/downlevel/asyncFunctionDeclaration/asyncFunctionDeclaration10.ts(6,1): error TS1057: An async function or method must have a valid awaitable return type.
+tests/cases/conformance/async/downlevel/asyncFunctionDeclaration/asyncFunctionDeclaration10.ts(6,20): error TS2371: A parameter initializer is only allowed in a function or constructor implementation.
+tests/cases/conformance/async/downlevel/asyncFunctionDeclaration/asyncFunctionDeclaration10.ts(6,30): error TS1109: Expression expected.
+tests/cases/conformance/async/downlevel/asyncFunctionDeclaration/asyncFunctionDeclaration10.ts(6,33): error TS1138: Parameter declaration expected.
+tests/cases/conformance/async/downlevel/asyncFunctionDeclaration/asyncFunctionDeclaration10.ts(6,33): error TS2304: Cannot find name 'await'.
+tests/cases/conformance/async/downlevel/asyncFunctionDeclaration/asyncFunctionDeclaration10.ts(6,38): error TS1005: ';' expected.
+tests/cases/conformance/async/downlevel/asyncFunctionDeclaration/asyncFunctionDeclaration10.ts(6,39): error TS1128: Declaration or statement expected.
+tests/cases/conformance/async/downlevel/asyncFunctionDeclaration/asyncFunctionDeclaration10.ts(6,53): error TS1109: Expression expected.
+
+
+==== tests/cases/conformance/async/downlevel/asyncFunctionDeclaration/asyncFunctionDeclaration10.ts (8 errors) ====
+    declare class Promise<T> {
+        constructor(init: (resolve: (value?: T | IPromise<T>) => void, reject: (reason?: any) => void) => void);
+        then<TResult>(onfulfilled?: (value: T) => TResult | IPromise<TResult>, onrejected?: (reason: any) => TResult | IPromise<TResult>): Promise<TResult>;
+    }
+    
+    async function foo(a = await => await): Promise<void> {
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1057: An async function or method must have a valid awaitable return type.
+                       ~~~~~~~~~
+!!! error TS2371: A parameter initializer is only allowed in a function or constructor implementation.
+                                 ~~
+!!! error TS1109: Expression expected.
+                                    ~~~~~
+!!! error TS1138: Parameter declaration expected.
+                                    ~~~~~
+!!! error TS2304: Cannot find name 'await'.
+                                         ~
+!!! error TS1005: ';' expected.
+                                          ~
+!!! error TS1128: Declaration or statement expected.
+                                                        ~
+!!! error TS1109: Expression expected.
+    }

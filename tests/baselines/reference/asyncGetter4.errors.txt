@@ -1,0 +1,19 @@
+tests/cases/conformance/async/downlevel/asyncGetter/asyncGetter4.ts(7,13): error TS2378: A 'get' accessor must return a value or consist of a single 'throw' statement.
+tests/cases/conformance/async/downlevel/asyncGetter/asyncGetter4.ts(8,21): error TS1109: Expression expected.
+
+
+==== tests/cases/conformance/async/downlevel/asyncGetter/asyncGetter4.ts (2 errors) ====
+    declare class Promise<T> {
+        constructor(init: (resolve: (value?: T | IPromise<T>) => void, reject: (reason?: any) => void) => void);
+        then<TResult>(onfulfilled?: (value: T) => TResult | IPromise<TResult>, onrejected?: (reason: any) => TResult | IPromise<TResult>): Promise<TResult>;
+    }
+    
+    class C {
+      async get foo(): Promise<void> {
+                ~~~
+!!! error TS2378: A 'get' accessor must return a value or consist of a single 'throw' statement.
+        var v = { [await]: foo }
+                        ~
+!!! error TS1109: Expression expected.
+      }
+    }

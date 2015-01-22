@@ -1,54 +1,54 @@
 === tests/cases/compiler/promiseTypeInference.ts ===
-declare class Promise<T> {
->Promise : Promise<T>
+declare class Promise1<T> {
+>Promise1 : Promise1<T>
 >T : T
 
-    then<U>(success?: (value: T) => Promise<U>): Promise<U>;
->then : <U>(success?: (value: T) => Promise<U>) => Promise<U>
+    then<U>(success?: (value: T) => Promise1<U>): Promise1<U>;
+>then : <U>(success?: (value: T) => Promise1<U>) => Promise1<U>
 >U : U
->success : (value: T) => Promise<U>
+>success : (value: T) => Promise1<U>
 >value : T
 >T : T
->Promise : Promise<T>
+>Promise1 : Promise1<T>
 >U : U
->Promise : Promise<T>
+>Promise1 : Promise1<T>
 >U : U
 }
-interface IPromise<T> {
->IPromise : IPromise<T>
+interface IPromise1<T> {
+>IPromise1 : IPromise1<T>
 >T : T
 
-    then<U>(success?: (value: T) => IPromise<U>): IPromise<U>;
->then : <U>(success?: (value: T) => IPromise<U>) => IPromise<U>
+    then<U>(success?: (value: T) => IPromise1<U>): IPromise1<U>;
+>then : <U>(success?: (value: T) => IPromise1<U>) => IPromise1<U>
 >U : U
->success : (value: T) => IPromise<U>
+>success : (value: T) => IPromise1<U>
 >value : T
 >T : T
->IPromise : IPromise<T>
+>IPromise1 : IPromise1<T>
 >U : U
->IPromise : IPromise<T>
+>IPromise1 : IPromise1<T>
 >U : U
 }
-declare function load(name: string): Promise<string>;
->load : (name: string) => Promise<string>
+declare function load(name: string): Promise1<string>;
+>load : (name: string) => Promise1<string>
 >name : string
->Promise : Promise<T>
+>Promise1 : Promise1<T>
 
-declare function convert(s: string): IPromise<number>;
->convert : (s: string) => IPromise<number>
+declare function convert(s: string): IPromise1<number>;
+>convert : (s: string) => IPromise1<number>
 >s : string
->IPromise : IPromise<T>
+>IPromise1 : IPromise1<T>
 
 var $$x = load("something").then(s => convert(s));
->$$x : Promise<number>
->load("something").then(s => convert(s)) : Promise<number>
->load("something").then : <U>(success?: (value: string) => Promise<U>) => Promise<U>
->load("something") : Promise<string>
->load : (name: string) => Promise<string>
->then : <U>(success?: (value: string) => Promise<U>) => Promise<U>
->s => convert(s) : (s: string) => IPromise<number>
+>$$x : Promise1<number>
+>load("something").then(s => convert(s)) : Promise1<number>
+>load("something").then : <U>(success?: (value: string) => Promise1<U>) => Promise1<U>
+>load("something") : Promise1<string>
+>load : (name: string) => Promise1<string>
+>then : <U>(success?: (value: string) => Promise1<U>) => Promise1<U>
+>s => convert(s) : (s: string) => IPromise1<number>
 >s : string
->convert(s) : IPromise<number>
->convert : (s: string) => IPromise<number>
+>convert(s) : IPromise1<number>
+>convert : (s: string) => IPromise1<number>
 >s : string
 

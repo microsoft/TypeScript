@@ -92,6 +92,41 @@ module ts {
         return result;
     }
 
+    export function reduce<T>(array: T[], f: (a: T, x: T) => T): T;
+    export function reduce<T, U>(array: T[], f: (a: U, x: T) => U, initial: U): U;
+    export function reduce<T, U>(array: T[], f: (a: any, x: T) => any, initial?: any): any {
+        var result = initial;
+        if (array) {
+            for (var i = 0, l = array.length; i < l; i++) {
+                if (i === 0 && arguments.length <= 2) {
+                    result = array[i];
+                }
+                else {
+                    result = f(result, array[i]);
+                }
+            }
+        }
+        return result;
+    }
+
+    export function reduceRight<T>(array: T[], f: (a: T, x: T) => T): T;
+    export function reduceRight<T, U>(array: T[], f: (a: U, x: T) => U, initial: U): U;
+    export function reduceRight<T, U>(array: T[], f: (a: any, x: T) => any, initial?: any): any {
+        var result = initial;
+        if (array) {
+            var start = array.length - 1;
+            for (var i = start; i >= 0; i--) {
+                if (i === start && arguments.length <= 2) {
+                    result = array[i];
+                }
+                else {
+                    result = f(result, array[i]);
+                }
+            }
+        }
+        return result;
+    }
+
     export function concatenate<T>(array1: T[], array2: T[]): T[] {
         if (!array2 || !array2.length) return array1;
         if (!array1 || !array1.length) return array2;

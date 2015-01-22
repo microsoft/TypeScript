@@ -183,7 +183,7 @@ function f21() {
 //// [declarationsAndAssignments.js]
 function f0() {
     var _a = [1, "hello"];
-    var x = ([1, "hello"])[0];
+    var x = [1, "hello"][0];
     var _b = [1, "hello"], x = _b[0], y = _b[1];
     var _c = [1, "hello"], x = _c[0], y = _c[1], z = _c[2]; // Error
     var _d = [0, 1, 2], z = _d[2];
@@ -201,13 +201,13 @@ function f1() {
 }
 function f2() {
     var _a = { x: 5, y: "hello" };
-    var x = ({ x: 5, y: "hello" }).x;
-    var y = ({ x: 5, y: "hello" }).y;
+    var x = { x: 5, y: "hello" }.x;
+    var y = { x: 5, y: "hello" }.y;
     var _b = { x: 5, y: "hello" }, x = _b.x, y = _b.y;
     var x;
     var y;
-    var a = ({ x: 5, y: "hello" }).x;
-    var b = ({ x: 5, y: "hello" }).y;
+    var a = { x: 5, y: "hello" }.x;
+    var b = { x: 5, y: "hello" }.y;
     var _c = { x: 5, y: "hello" }, a = _c.x, b = _c.y;
     var a;
     var b;
@@ -312,7 +312,7 @@ function f19() {
     _a = [1, 2], a = _a[0], b = _a[1];
     _b = [b, a], a = _b[0], b = _b[1];
     (_c = { b: b, a: a }, a = _c.a, b = _c.b, _c);
-    _d = ([[2, 3]])[0], _e = _d === void 0 ? [1, 2] : _d, a = _e[0], b = _e[1];
+    _d = [[2, 3]][0], _e = _d === void 0 ? [1, 2] : _d, a = _e[0], b = _e[1];
     var x = (_f = [1, 2], a = _f[0], b = _f[1], _f);
     var _a, _b, _c, _d, _e, _f;
 }

@@ -1,0 +1,58 @@
+=== tests/cases/conformance/async/downlevel/awaitTypeAssertion/awaitTypeAssertion0.ts ===
+declare class Promise<T> {
+>Promise : Promise<T>
+>T : T
+
+    constructor(init: (resolve: (value?: T | IPromise<T>) => void, reject: (reason?: any) => void) => void);
+>init : (resolve: (value?: T | IPromise<T>) => void, reject: (reason?: any) => void) => void
+>resolve : (value?: T | IPromise<T>) => void
+>value : T | IPromise<T>
+>T : T
+>IPromise : IPromise<T>
+>T : T
+>reject : (reason?: any) => void
+>reason : any
+
+    then<TResult>(onfulfilled?: (value: T) => TResult | IPromise<TResult>, onrejected?: (reason: any) => TResult | IPromise<TResult>): Promise<TResult>;
+>then : <TResult>(onfulfilled?: (value: T) => TResult | IPromise<TResult>, onrejected?: (reason: any) => TResult | IPromise<TResult>) => Promise<TResult>
+>TResult : TResult
+>onfulfilled : (value: T) => TResult | IPromise<TResult>
+>value : T
+>T : T
+>TResult : TResult
+>IPromise : IPromise<T>
+>TResult : TResult
+>onrejected : (reason: any) => TResult | IPromise<TResult>
+>reason : any
+>TResult : TResult
+>IPromise : IPromise<T>
+>TResult : TResult
+>Promise : Promise<T>
+>TResult : TResult
+}
+declare class A {}
+>A : A
+
+declare class B extends A {}
+>B : B
+>A : A
+
+declare var a: B;
+>a : B
+>B : B
+
+declare var p: Promise<B>;
+>p : Promise<B>
+>Promise : Promise<T>
+>B : B
+
+async function f(): Promise<void> {
+>f : () => Promise<void>
+>Promise : Promise<T>
+
+  var b = <A>a;
+>b : A
+><A>a : A
+>A : A
+>a : B
+}
