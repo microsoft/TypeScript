@@ -12,7 +12,8 @@ module ts {
         ScriptBreak,
         Break,
         ScriptContinue,
-        Continue
+        Continue,
+        With
     }
 
     enum ExceptionBlockState {
@@ -43,6 +44,12 @@ module ts {
 
     interface ContinueBlock extends BreakBlock {
         continueLabel: Label;
+    }
+
+    interface WithBlock extends BlockScope {
+        expression: Identifier;
+        startLabel: Label;
+        endLabel: Label;
     }
 
     export function createLocalsBuilder(resolver: EmitResolver, context: Node, globals: Map<boolean>): LocalsBuilder {
@@ -138,9 +145,6 @@ module ts {
         // locals/hoisted variables/hoisted functions
         var parameters: ParameterDeclaration[];
         var functions: FunctionDeclaration[];
-        var variableStatements: VariableStatement[] = [];
-        var currentVariableStatement: VariableStatement;
-        var variableDeclarations: VariableDeclaration[];
 
         // blocks
         var blocks: BlockScope[];
@@ -186,6 +190,8 @@ module ts {
                 beginCatchBlock,
                 beginFinallyBlock,
                 endExceptionBlock,
+                beginWithBlock,
+                endWithBlock,
                 findBreakTarget,
                 findContinueTarget,
                 beginScriptContinueBlock,
@@ -255,15 +261,33 @@ module ts {
             labels[<number>label] = operations ? operations.length : 0;
         }
 
+        function beginWithBlock(expression: Identifier): void {
+            var startLabel = defineLabel();
+            var endLabel = defineLabel();
+            markLabel(startLabel);
+            beginBlock(<WithBlock>{
+                kind: BlockKind.With,
+                expression,
+                startLabel,
+                endLabel
+            });
+        }
+
+        function endWithBlock(): void {
+            Debug.assert(peekBlockKind() === BlockKind.With);
+            var withBlock = endBlock<WithBlock>();
+            markLabel(withBlock.endLabel);
+        }
+
         function beginExceptionBlock(): Label {
             var startLabel = defineLabel();
             var endLabel = defineLabel();
             markLabel(startLabel);
-            beginBlock<ExceptionBlock>({
+            beginBlock(<ExceptionBlock>{
                 kind: BlockKind.Exception,
                 state: ExceptionBlockState.Try,
                 startLabel,
-                endLabel,
+                endLabel
             });
             hasProtectedRegions = true;
             return endLabel;
@@ -571,7 +595,6 @@ module ts {
 
         function buildFunction(kind: SyntaxKind, name: DeclarationName, location?: TextRange, flags?: NodeFlags, modifiers?: ModifiersArray): FunctionLikeDeclaration {
             var statements: Statement[] = [];
-            statements = buildHoistedVariableDeclarations(statements);
             statements = buildHoistedFunctionDeclarations(statements);
             var generatorStatements = buildStatements(/*forceReturn*/ true);
             var generatorFunctionBody = Factory.createBlock(generatorStatements);
@@ -610,40 +633,7 @@ module ts {
                     return node;
             }
         }
-
-        function buildHoistedVariableDeclarations(statements: Statement[]): Statement[] {
-            if (variableDeclarations) {
-                var usedVariableNames: Map<boolean> = {};
-                if (parameters) {
-                    for (var i = 0; i < parameters.length; i++) {
-                        usedVariableNames[(<Identifier>parameters[i].name).text] = true;
-                    }
-                }
-                if (functions) {
-                    for (var i = 0; i < functions.length; i++) {
-                        usedVariableNames[functions[i].name.text] = true;
-                    }
-                }
-                var variableDeclarationsForEmit: VariableDeclaration[];
-                for (var i = 0; i < variableDeclarations.length; i++) {
-                    var variableDeclaration = variableDeclarations[i];
-                    var variableName = (<Identifier>variableDeclaration.name).text;
-                    if (!hasProperty(usedVariableNames, variableName)) {
-                        usedVariableNames[variableName] = true;
-                    }
-                    if (!variableDeclarationsForEmit) {
-                        variableDeclarationsForEmit = [];
-                    }
-                    variableDeclarationsForEmit.push(variableDeclaration);
-                }
-                if (variableDeclarationsForEmit) {
-                    var variableDeclarationList = Factory.createVariableDeclarationList(variableDeclarationsForEmit);
-                    statements.push(Factory.createVariableStatement(variableDeclarationList));
-                }
-            }
-            return statements;
-        }
-
+        
         function buildHoistedFunctionDeclarations(statements: Statement[]): Statement[] {
             if (functions) {
                 statements = statements.concat(functions);
@@ -658,6 +648,9 @@ module ts {
             var lastOperationWasCompletion = false;
             var clauses: CaseClause[];
             var statements: Statement[];
+            var exceptionBlockStack: ExceptionBlock[];
+            var currentExceptionBlock: ExceptionBlock;
+            var withBlockStack: WithBlock[];
 
             if (hasProtectedRegions) {
                 initializeProtectedRegions();
@@ -700,13 +693,8 @@ module ts {
                     return;
                 }
 
-                if (!lastOperationWasAbrupt) {
-                    markLabelEnd();
-                }
+                appendLabel(/*markLabelEnd*/ !lastOperationWasAbrupt);
 
-                appendLabel();
-
-                statements = undefined;
                 lastOperationWasAbrupt = false;
                 lastOperationWasCompletion = false;
                 labelNumber++;
@@ -718,34 +706,65 @@ module ts {
                     writeReturn();
                 }
 
-                if (!statements) {
-                    return;
-                }
-
-                if (clauses) {
-                    appendLabel();
+                if (statements && clauses) {
+                    appendLabel(/*markLabelEnd*/ false);
                 }
             }
 
-            function appendLabel(): void {
+            function appendLabel(markLabelEnd: boolean): void {
                 if (!clauses) {
                     clauses = [];
                 }
 
-                var labelNumberExpression = Factory.createNumericLiteral(labelNumber);
-                var clause = Factory.createCaseClause(labelNumberExpression, statements);
-                clauses.push(clause);
-            }
+                if (statements) {
+                    if (withBlockStack) {
+                        for (var i = withBlockStack.length - 1; i >= 0; i--) {
+                            var withBlock = withBlockStack[i];
+                            statements = [Factory.createWithStatement(withBlock.expression, Factory.createBlock(statements))];
+                        }
+                    }
 
-            function markLabelEnd(): void {
-                if (!lastOperationWasAbrupt) {
-                    var nextLabelNumberExpression = Factory.createNumericLiteral(labelNumber + 1);
-                    var labelProperty = Factory.createPropertyAccessExpression(getState(), Factory.createIdentifier("label"));
-                    var labelAssign = Factory.createBinaryExpression(SyntaxKind.EqualsToken, labelProperty, nextLabelNumberExpression);
-                    writeStatement(Factory.createExpressionStatement(labelAssign));
+                    if (currentExceptionBlock) {
+                        var startLabel = createLabel(currentExceptionBlock.startLabel);
+                        var endLabel = createLabel(currentExceptionBlock.endLabel);
+                        var catchLabel: Expression;
+                        if (currentExceptionBlock.catchLabel > 0) {
+                            catchLabel = createLabel(currentExceptionBlock.catchLabel);
+                        }
+                        else {
+                            catchLabel = Factory.createOmittedExpression();
+                        }
+
+                        var finallyLabel: Expression;
+                        if (currentExceptionBlock.finallyLabel > 0) {
+                            finallyLabel = createLabel(currentExceptionBlock.finallyLabel);
+                        }
+                        else {
+                            finallyLabel = Factory.createOmittedExpression();
+                        }
+
+                        var labelsArray = Factory.createArrayLiteralExpression([startLabel, catchLabel, finallyLabel, endLabel]);
+                        var trysProperty = Factory.createPropertyAccessExpression(getState(), Factory.createIdentifier("trys"));
+                        var pushMethod = Factory.createPropertyAccessExpression(trysProperty, Factory.createIdentifier("push"));
+                        var callExpression = Factory.createCallExpression(pushMethod, [labelsArray]);
+                        statements.unshift(Factory.createExpressionStatement(callExpression));
+                        currentExceptionBlock = undefined;
+                    }
+
+                    if (markLabelEnd) {
+                        var nextLabelNumberExpression = Factory.createNumericLiteral(labelNumber + 1);
+                        var labelProperty = Factory.createPropertyAccessExpression(getState(), Factory.createIdentifier("label"));
+                        var labelAssign = Factory.createBinaryExpression(SyntaxKind.EqualsToken, labelProperty, nextLabelNumberExpression);
+                        statements.push(Factory.createExpressionStatement(labelAssign));
+                    }
                 }
-            }
 
+                var labelNumberExpression = Factory.createNumericLiteral(labelNumber);
+                var clause = Factory.createCaseClause(labelNumberExpression, statements || []);
+                clauses.push(clause);
+                statements = undefined;
+            }
+            
             function tryEnterLabel(): void {
                 if (!labels) {
                     return;
@@ -763,35 +782,31 @@ module ts {
                 }
             }
 
-            function tryEnterProtectedRegion(): void {
+            function tryEnterOrLeaveBlock(): void {
                 if (blocks) {
                     for (; blockIndex < blockActions.length && blockOffsets[blockIndex] <= operationIndex; blockIndex++) {
                         var block = blocks[blockIndex];
-                        if (blockActions[blockIndex] === BlockAction.Open && block.kind === BlockKind.Exception) {
-                            var exception = <ExceptionBlock>block;
-                            var startLabel = createLabel(exception.startLabel);
-                            var endLabel = createLabel(exception.endLabel);
-                            var catchLabel: Expression;
-                            if (exception.catchLabel > 0) {
-                                catchLabel = createLabel(exception.catchLabel);
+                        var blockAction = blockActions[blockIndex];
+                        if (blockAction === BlockAction.Open && block.kind === BlockKind.Exception) {
+                            var exceptionBlock = <ExceptionBlock>block;
+                            if (!exceptionBlockStack) {
+                                exceptionBlockStack = [];
                             }
-                            else {
-                                catchLabel = Factory.createOmittedExpression();
+                            exceptionBlockStack.push(currentExceptionBlock);
+                            currentExceptionBlock = exceptionBlock;
+                        }
+                        else if (blockAction === BlockAction.Close && block.kind === BlockKind.Exception) {
+                            currentExceptionBlock = exceptionBlockStack.pop();
+                        }
+                        else if (blockAction === BlockAction.Open && block.kind === BlockKind.With) {
+                            var withBlock = <WithBlock>block;
+                            if (!withBlockStack) {
+                                withBlockStack = [];
                             }
-
-                            var finallyLabel: Expression;
-                            if (exception.finallyLabel > 0) {
-                                finallyLabel = createLabel(exception.finallyLabel);
-                            }
-                            else {
-                                finallyLabel = Factory.createOmittedExpression();
-                            }
-
-                            var labelsArray = Factory.createArrayLiteralExpression([startLabel, catchLabel, finallyLabel, endLabel]);
-                            var trysProperty = Factory.createPropertyAccessExpression(getState(), Factory.createIdentifier("trys"));
-                            var pushMethod = Factory.createPropertyAccessExpression(trysProperty, Factory.createIdentifier("push"));
-                            var callExpression = Factory.createCallExpression(pushMethod, [labelsArray]);
-                            writeStatement(callExpression);
+                            withBlockStack.push(withBlock);
+                        }
+                        else if (blockAction === BlockAction.Close && block.kind === BlockKind.With) {
+                            withBlockStack.pop();
                         }
                     }
                 }
@@ -800,7 +815,7 @@ module ts {
             // operations
             function writeOperation(operation: OpCode, operationArguments: any[], operationLocation: TextRange): void {
                 tryEnterLabel();
-                tryEnterProtectedRegion();
+                tryEnterOrLeaveBlock();
 
                 // early termination, nothing else to process in this label
                 if (lastOperationWasAbrupt) {

@@ -1030,6 +1030,9 @@ module ts {
         findBreakTarget(labelText?: string): Label;
         findContinueTarget(labelText?: string): Label;
 
+        beginWithBlock(expression: Identifier): void;
+        endWithBlock(): void;
+
         beginScriptContinueBlock(labelText: string[]): void;
         endScriptContinueBlock(): void;
         beginScriptBreakBlock(labelText: string[], requireLabel: boolean): void;

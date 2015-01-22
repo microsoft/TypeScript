@@ -564,7 +564,8 @@ module ts {
 
         function visitWithStatement(node: WithStatement): Statement {
             if (hasAwaitOrYield(node.statement)) {
-                Debug.fail("with statements cannot contain 'await' or 'yield' expressions.");
+                //Debug.fail("with statements cannot contain 'await' or 'yield' expressions.");
+                rewriteWithStatement(node);
                 return;
             }
             return Visitor.visitWithStatement(node);
@@ -1076,6 +1077,12 @@ module ts {
                     builder.emit(OpCode.Statement, switchStatement);
                 }
             }
+        }
+
+        function rewriteWithStatement(node: WithStatement): void {
+            builder.beginWithBlock(cacheExpression(nodeVisitor.visitExpression(node.expression)));
+            rewriteBlockOrStatement(node.statement);
+            builder.endWithBlock();
         }
 
         function rewriteLabeledStatement(node: LabeledStatement): void {
