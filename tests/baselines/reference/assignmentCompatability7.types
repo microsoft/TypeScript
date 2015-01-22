@@ -12,7 +12,7 @@ module __test1__ {
 >U : U
 >obj4 : interfaceWithPublicAndOptional<number, string>
 >interfaceWithPublicAndOptional : interfaceWithPublicAndOptional<T, U>
->{ one: 1 } : { one: number; }
+>{ one: 1 } : { one: number; two?: string; }
 >one : number
 
     export var __val__obj4 = obj4;
@@ -32,7 +32,7 @@ module __test2__ {
 >U : U
 >obj4 : interfaceWithPublicAndOptional<number, string>
 >interfaceWithPublicAndOptional : interfaceWithPublicAndOptional<T, U>
->{ one: 1 } : { one: number; }
+>{ one: 1 } : { one: number; two?: string; }
 >one : number
 
     export var __val__obj4 = obj4;

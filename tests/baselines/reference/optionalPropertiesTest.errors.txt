@@ -1,5 +1,5 @@
-tests/cases/compiler/optionalPropertiesTest.ts(14,1): error TS2322: Type '{ name: string; }' is not assignable to type 'IFoo'.
-  Property 'id' is missing in type '{ name: string; }'.
+tests/cases/compiler/optionalPropertiesTest.ts(14,1): error TS2322: Type '{ name: string; print?(): void; }' is not assignable to type 'IFoo'.
+  Property 'id' is missing in type '{ name: string; print?(): void; }'.
 tests/cases/compiler/optionalPropertiesTest.ts(25,5): error TS2322: Type '{}' is not assignable to type 'i1'.
   Property 'M' is missing in type '{}'.
 tests/cases/compiler/optionalPropertiesTest.ts(26,5): error TS2322: Type '{}' is not assignable to type 'i3'.
@@ -24,8 +24,8 @@ tests/cases/compiler/optionalPropertiesTest.ts(40,1): error TS2322: Type 'i2' is
     foo = { id: 1234, name: "test" };  // Ok
     foo = { name: "test" };            // Error, id missing
     ~~~
-!!! error TS2322: Type '{ name: string; }' is not assignable to type 'IFoo'.
-!!! error TS2322:   Property 'id' is missing in type '{ name: string; }'.
+!!! error TS2322: Type '{ name: string; print?(): void; }' is not assignable to type 'IFoo'.
+!!! error TS2322:   Property 'id' is missing in type '{ name: string; print?(): void; }'.
     foo = {id: 1234, print:()=>{}}	   // Ok
     
     var s = foo.name || "default";
