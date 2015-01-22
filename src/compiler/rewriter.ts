@@ -555,7 +555,7 @@ module ts {
         }
 
         function visitBreakStatement(node: BreakOrContinueStatement): Statement {
-            var label = builder.findBreakTarget(getTarget(node));
+            var label = builder.findBreakTarget(node.label && node.label.text);
             if (label > 0) {
                 builder.writeLocation(node);
                 return builder.createInlineBreak(label);
@@ -564,7 +564,7 @@ module ts {
         }
 
         function visitContinueStatement(node: BreakOrContinueStatement): Statement {
-            var label = builder.findContinueTarget(getTarget(node));
+            var label = builder.findContinueTarget(node.label && node.label.text);
             if (label > 0) {
                 builder.writeLocation(node);
                 return builder.createInlineBreak(label);
@@ -624,14 +624,14 @@ module ts {
         }
 
         function defaultVisitBreakBlock<TNode extends Statement>(node: TNode, visitNode: (node: TNode) => TNode, requireLabel: boolean): TNode {
-            builder.beginScriptBreakBlock(getTarget(node), requireLabel);
+            builder.beginScriptBreakBlock(getLabelNames(node), requireLabel);
             var result = visitNode(node);
             builder.endScriptBreakBlock();
             return result;
         }
 
         function defaultVisitContinueBlock<TNode extends IterationStatement>(node: TNode, visitNode: (node: TNode) => TNode): TNode {
-            builder.beginScriptContinueBlock(getTarget(node));
+            builder.beginScriptContinueBlock(getLabelNames(node));
             var result = visitNode(node);
             builder.endScriptContinueBlock();
             return result;
@@ -932,7 +932,7 @@ module ts {
         function rewriteDoStatement(node: DoStatement): void {
             var bodyLabel = builder.defineLabel();
             var conditionLabel = builder.defineLabel();
-            var endLabel = builder.beginContinueBlock(conditionLabel, getTarget(node));
+            var endLabel = builder.beginContinueBlock(conditionLabel, getLabelNames(node));
             builder.markLabel(bodyLabel);
             rewriteBlockOrStatement(node.statement);
             builder.markLabel(conditionLabel);
@@ -943,7 +943,7 @@ module ts {
         function rewriteWhileStatement(node: WhileStatement): void {
             var conditionLabel = builder.defineLabel();
             var bodyLabel = builder.defineLabel();
-            var endLabel = builder.beginContinueBlock(conditionLabel, getTarget(node));
+            var endLabel = builder.beginContinueBlock(conditionLabel, getLabelNames(node));
             builder.markLabel(conditionLabel);
             builder.emit(OpCode.BrFalse, endLabel, nodeVisitor.visitExpression(node.expression));
             rewriteBlockOrStatement(node.statement);
@@ -954,7 +954,7 @@ module ts {
         function rewriteForStatement(node: ForStatement): void {
             var conditionLabel = builder.defineLabel();
             var iteratorLabel = builder.defineLabel();
-            var endLabel = builder.beginContinueBlock(iteratorLabel, getTarget(node));
+            var endLabel = builder.beginContinueBlock(iteratorLabel, getLabelNames(node));
             var initializer = <Expression>nodeVisitor.visitVariableDeclarationListOrExpression(node.initializer);
             if (initializer) {
                 builder.writeLocation(node.initializer);
@@ -983,7 +983,7 @@ module ts {
             var tempLocal = builder.declareLocal();
             var conditionLabel = builder.defineLabel();
             var iteratorLabel = builder.defineLabel();
-            var endLabel = builder.beginContinueBlock(iteratorLabel, getTarget(node));
+            var endLabel = builder.beginContinueBlock(iteratorLabel, getLabelNames(node));
             var initializeKeysExpression = Factory.createBinaryExpression(SyntaxKind.EqualsToken, keysLocal, Factory.createArrayLiteralExpression([]));
             builder.emit(OpCode.Statement, Factory.createExpressionStatement(initializeKeysExpression));
             var keysLengthExpression = Factory.createPropertyAccessExpression(keysLocal, Factory.createIdentifier("length"));
@@ -1015,7 +1015,7 @@ module ts {
 
         function rewriteSwitchStatement(node: SwitchStatement): void {
             var defaultClauseIndex: number = -1;
-            var endLabel = builder.beginBreakBlock(getTarget(node), /*requireLabel*/ false);
+            var endLabel = builder.beginBreakBlock(getLabelNames(node), /*requireLabel*/ false);
 
             // map clauses to labels
             var clauseHasStatements: boolean[] = [];
@@ -1113,9 +1113,13 @@ module ts {
         }
 
         function rewriteLabeledStatement(node: LabeledStatement): void {
-            builder.beginBreakBlock(getTarget(node), /*requireLabel*/ true);
+            if (!isLabeledOrIterationOrSwitchStatement(node.statement)) {
+                builder.beginBreakBlock(getLabelNames(node), /*requireLabel*/ true);
+            }
             rewriteBlockOrStatement(node.statement);
-            builder.endBreakBlock();
+            if (!isLabeledOrIterationOrSwitchStatement(node.statement)) {
+                builder.endBreakBlock();
+            }
         }
 
         function rewriteTryStatement(node: TryStatement): void {
@@ -1152,14 +1156,14 @@ module ts {
         }
 
         function rewriteBreakStatement(node: BreakOrContinueStatement): void {
-            var label = builder.findBreakTarget(getTarget(node));
+            var label = builder.findBreakTarget(node.label && node.label.text);
             Debug.assert(label > 0, "Expected break statement to point to a label.");
             builder.writeLocation(node);
             builder.emit(OpCode.Break, label);
         }
 
         function rewriteContinueStatement(node: BreakOrContinueStatement): void {
-            var label = builder.findContinueTarget(getTarget(node));
+            var label = builder.findContinueTarget(node.label && node.label.text);
             Debug.assert(label > 0, "Expected continue statement to point to a label.");
             builder.writeLocation(node);
             builder.emit(OpCode.Break, label);
@@ -1303,16 +1307,11 @@ module ts {
             return expressions;
         }
 
-        function getTarget(node: Node): string {
-            var label: Identifier;
+        function getLabelNames(node: Node): string[]{
+            var labeledStatement: LabeledStatement;
             switch (node.kind) {
                 case SyntaxKind.LabeledStatement:
-                    label = (<LabeledStatement>node).label;
-                    break;
-
-                case SyntaxKind.BreakStatement:
-                case SyntaxKind.ContinueStatement:
-                    label = (<BreakOrContinueStatement>node).label;
+                    labeledStatement = <LabeledStatement>node;
                     break;
 
                 case SyntaxKind.DoStatement:
@@ -1320,15 +1319,26 @@ module ts {
                 case SyntaxKind.ForStatement:
                 case SyntaxKind.ForInStatement:
                     if (node.parent.kind === SyntaxKind.LabeledStatement) {
-                        label = (<LabeledStatement>node.parent).label;
+                        labeledStatement = <LabeledStatement>node.parent;
+                        break;
                     }
 
-                    break;
+                default:
+                    return;
             }
 
-            if (label) {
-                return label.text;
+            var labels: string[] = [];
+            while (true) {
+                labels.push(labeledStatement.label.text);
+                if (labeledStatement.parent.kind === SyntaxKind.LabeledStatement) {
+                    labeledStatement = <LabeledStatement>labeledStatement.parent;
+                }
+                else {
+                    break;
+                }
             }
+
+            return labels;
         }
     }
 }

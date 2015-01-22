@@ -1030,13 +1030,13 @@ module ts {
         findBreakTarget(labelText?: string): Label;
         findContinueTarget(labelText?: string): Label;
 
-        beginScriptContinueBlock(labelText: string): void;
+        beginScriptContinueBlock(labelText: string[]): void;
         endScriptContinueBlock(): void;
-        beginScriptBreakBlock(labelText: string, requireLabel: boolean): void;
+        beginScriptBreakBlock(labelText: string[], requireLabel: boolean): void;
         endScriptBreakBlock(): void;
-        beginContinueBlock(continueLabel: Label, labelText: string): Label;
+        beginContinueBlock(continueLabel: Label, labelText: string[]): Label;
         endContinueBlock(): void;
-        beginBreakBlock(labelText: string, requireLabel: boolean): Label;
+        beginBreakBlock(labelText: string[], requireLabel: boolean): Label;
         endBreakBlock(): void;
 
         emit(code: OpCode): void;

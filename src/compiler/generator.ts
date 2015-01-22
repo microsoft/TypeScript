@@ -37,7 +37,7 @@ module ts {
 
     interface BreakBlock extends BlockScope {
         breakLabel: Label;
-        labelText?: string;
+        labelText?: string[];
         requireLabel?: boolean;
     }
 
@@ -321,7 +321,7 @@ module ts {
             exception.state = ExceptionBlockState.Done;
         }
 
-        function beginScriptContinueBlock(labelText: string): void {
+        function beginScriptContinueBlock(labelText: string[]): void {
             beginBlock<ContinueBlock>({
                 kind: BlockKind.ScriptContinue,
                 labelText: labelText,
@@ -335,7 +335,7 @@ module ts {
             endBlock<ContinueBlock>();
         }
 
-        function beginScriptBreakBlock(labelText: string, requireLabel: boolean): void {
+        function beginScriptBreakBlock(labelText: string[], requireLabel: boolean): void {
             beginBlock<BreakBlock>({
                 kind: BlockKind.ScriptBreak,
                 labelText: labelText,
@@ -349,7 +349,7 @@ module ts {
             endBlock<BreakBlock>();
         }
 
-        function beginContinueBlock(continueLabel: Label, labelText: string): Label {
+        function beginContinueBlock(continueLabel: Label, labelText: string[]): Label {
             var breakLabel = defineLabel();
             beginBlock<ContinueBlock>({
                 kind: BlockKind.Continue,
@@ -369,7 +369,7 @@ module ts {
             }
         }
 
-        function beginBreakBlock(labelText: string, requireLabel: boolean): Label {
+        function beginBreakBlock(labelText: string[], requireLabel: boolean): Label {
             var breakLabel = defineLabel();
             beginBlock<BreakBlock>({
                 kind: BlockKind.Break,
@@ -432,7 +432,7 @@ module ts {
                     var block = blockStack[i];
                     if (supportsBreak(block)) {
                         var breakBlock = <BreakBlock>block;
-                        if ((!labelText && !breakBlock.requireLabel) || breakBlock.labelText === labelText) {
+                        if ((!labelText && !breakBlock.requireLabel) || breakBlock.labelText && breakBlock.labelText.indexOf(labelText) !== -1) {
                             return breakBlock.breakLabel;
                         }
                     }
@@ -448,7 +448,7 @@ module ts {
                     var block = blockStack[i];
                     if (supportsContinue(block)) {
                         var continueBreakBlock = <ContinueBlock>block;
-                        if (!labelText || continueBreakBlock.labelText === labelText) {
+                        if (!labelText || continueBreakBlock.labelText && continueBreakBlock.labelText.indexOf(labelText) !== -1) {
                             return continueBreakBlock.continueLabel;
                         }
                     }
@@ -542,13 +542,13 @@ module ts {
         }
 
         function createInlineBreak(label: Label): ReturnStatement {
-            var instruction = Factory.createStringLiteral('"break"');
+            var instruction = Factory.createNumericLiteral('3 /*break*/');
             var returnExpression = Factory.createArrayLiteralExpression([instruction, createLabel(label)]);
             return Factory.createReturnStatement(returnExpression, readLocation());
         }
 
         function createInlineReturn(expression: Expression): ReturnStatement {
-            var instruction = Factory.createStringLiteral('"return"');
+            var instruction = Factory.createNumericLiteral('3 /*return*/');
             if (expression) {
                 var returnExpression = Factory.createArrayLiteralExpression([instruction, expression]);
             } else {
@@ -842,14 +842,14 @@ module ts {
 
             function writeBreak(label: Label, operationLocation?: TextRange): void {
                 lastOperationWasAbrupt = true;
-                var instruction = Factory.createStringLiteral('"break"');
+                var instruction = Factory.createNumericLiteral('3 /*break*/');
                 var returnExpression = Factory.createArrayLiteralExpression([instruction, createLabel(label)]);
                 var returnStatement = Factory.createReturnStatement(returnExpression, operationLocation);
                 writeStatement(returnStatement);
             }
 
             function writeBrTrue(label: Label, condition: Expression, operationLocation?: TextRange): void {
-                var instruction = Factory.createStringLiteral('"break"');
+                var instruction = Factory.createNumericLiteral('3 /*break*/');
                 var returnExpression = Factory.createArrayLiteralExpression([instruction, createLabel(label)]);
                 var returnStatement = Factory.createReturnStatement(returnExpression, operationLocation);
                 var ifStatement = Factory.createIfStatement(condition, returnStatement);
@@ -857,7 +857,7 @@ module ts {
             }
 
             function writeBrFalse(label: Label, condition: Expression, operationLocation?: TextRange): void {
-                var instruction = Factory.createStringLiteral('"break"');
+                var instruction = Factory.createNumericLiteral('3 /*break*/');
                 var returnExpression = Factory.createArrayLiteralExpression([instruction, createLabel(label)]);
                 var returnStatement = Factory.createReturnStatement(returnExpression, operationLocation);
                 var parenExpression = Factory.createParenthesizedExpression(condition);
@@ -868,7 +868,7 @@ module ts {
 
             function writeYield(expression: Expression, operationLocation?: TextRange): void {
                 lastOperationWasAbrupt = true;
-                var elements: Expression[] = [Factory.createStringLiteral('"yield"')];
+                var elements: Expression[] = [Factory.createNumericLiteral('4 /*yield*/')];
                 if (expression) {
                     elements.push(expression);
                 }
@@ -879,7 +879,7 @@ module ts {
 
             function writeYieldStar(expression: Expression, operationLocation?: TextRange): void {
                 lastOperationWasAbrupt = true;
-                var elements: Expression[] = [Factory.createStringLiteral('"yield*"')];
+                var elements: Expression[] = [Factory.createNumericLiteral('5 /*yield**/')];
                 if (expression) {
                     elements.push(expression);
                 }
@@ -891,7 +891,7 @@ module ts {
             function writeReturn(expression?: Expression, operationLocation?: TextRange): void {
                 lastOperationWasAbrupt = true;
                 lastOperationWasCompletion = true;
-                var elements: Expression[] = [Factory.createStringLiteral('"return"')];
+                var elements: Expression[] = [Factory.createNumericLiteral('2 /*return*/')];
                 if (expression) {
                     elements.push(expression);
                 }
@@ -909,7 +909,7 @@ module ts {
 
             function writeEndfinally(): void {
                 lastOperationWasAbrupt = true;
-                var instruction = Factory.createStringLiteral('"endfinally"');
+                var instruction = Factory.createNumericLiteral('6 /*endfinally*/');
                 var returnExpression = Factory.createArrayLiteralExpression([instruction]);
                 var returnStatement = Factory.createReturnStatement(returnExpression);
                 writeStatement(returnStatement);

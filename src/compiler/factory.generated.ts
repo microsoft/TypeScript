@@ -143,7 +143,7 @@ module ts {
             return finishNode(node, location, flags);
         }
 
-        export function createNumericLiteral(value: number, location?: TextRange, flags?: NodeFlags): LiteralExpression {
+        export function createNumericLiteral(value: number | string, location?: TextRange, flags?: NodeFlags): LiteralExpression {
             var node = beginNode<LiteralExpression>(SyntaxKind.NumericLiteral);
             node.text = String(value);
             return finishNode(node, location, flags);

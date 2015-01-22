@@ -15,7 +15,7 @@
         "kind": "NumericLiteral",
         "baseType": "LiteralExpression",
         "children": [
-            { "name": "text", "paramName": "value", "type": "number", "converter": "String" }
+            { "name": "text", "paramName": "value", "type": "number | string", "converter": "String" }
         ]
     },
     {
