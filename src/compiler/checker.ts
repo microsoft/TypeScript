@@ -16,6 +16,8 @@ module ts {
         var emptySymbols: SymbolTable = {};
 
         var compilerOptions = host.getCompilerOptions();
+        var languageVersion = compilerOptions.target || ScriptTarget.ES3;
+
         var emitResolver = createResolver();
 
         var checker: TypeChecker = {
@@ -5618,7 +5620,7 @@ module ts {
             }
 
             var isConstEnum = isConstEnumObjectType(objectType);
-            if (isConstEnum && 
+            if (isConstEnum &&
                 (!node.argumentExpression || node.argumentExpression.kind !== SyntaxKind.StringLiteral)) {
                 error(node.argumentExpression, Diagnostics.A_const_enum_member_can_only_be_accessed_using_a_string_literal);
                 return unknownType;
@@ -5650,10 +5652,10 @@ module ts {
             }
 
             // Check for compatible indexer types.
-            if (indexType.flags & (TypeFlags.Any | TypeFlags.StringLike | TypeFlags.NumberLike)) { 
+            if (isTypeOfKind(indexType, TypeFlags.Any | TypeFlags.StringLike | TypeFlags.NumberLike)) {
 
                 // Try to use a number indexer.
-                if (indexType.flags & (TypeFlags.Any | TypeFlags.NumberLike)) {
+                if (isTypeOfKind(indexType, TypeFlags.Any | TypeFlags.NumberLike)) {
                     var numberIndexType = getIndexTypeOfType(objectType, IndexKind.Number);
                     if (numberIndexType) {
                         return numberIndexType;
@@ -6357,7 +6359,7 @@ module ts {
 
         function checkTaggedTemplateExpression(node: TaggedTemplateExpression): Type {
             // Grammar checking
-            if (compilerOptions.target < ScriptTarget.ES6) {
+            if (languageVersion < ScriptTarget.ES6) {
                 grammarErrorOnFirstToken(node.template, Diagnostics.Tagged_templates_are_only_available_when_targeting_ECMAScript_6_and_higher);
             }
 
@@ -6554,7 +6556,7 @@ module ts {
         }
 
         function checkArithmeticOperandType(operand: Node, type: Type, diagnostic: DiagnosticMessage): boolean {
-            if (!(type.flags & (TypeFlags.Any | TypeFlags.NumberLike))) {
+            if (!isTypeOfKind(type, TypeFlags.Any | TypeFlags.NumberLike)) {
                 error(operand, diagnostic);
                 return false;
             }
@@ -6705,12 +6707,21 @@ module ts {
             return numberType;
         }
 
-        // Return true if type an object type, a type parameter, or a union type composed of only those kinds of types
-        function isStructuredType(type: Type): boolean {
-            if (type.flags & TypeFlags.Union) {
-                return !forEach((<UnionType>type).types, t => !isStructuredType(t));
+        // Return true if type has the given flags, or is a union type composed of types that all have those flags
+        function isTypeOfKind(type: Type, kind: TypeFlags): boolean {
+            if (type.flags & kind) {
+                return true;
             }
-            return (type.flags & (TypeFlags.ObjectType | TypeFlags.TypeParameter)) !== 0;
+            if (type.flags & TypeFlags.Union) {
+                var types = (<UnionType>type).types;
+                for (var i = 0; i < types.length; i++) {
+                    if (!(types[i].flags & kind)) {
+                        return false;
+                    }
+                }
+                return true;
+            }
+            return false;
         }
 
         function isConstEnumObjectType(type: Type): boolean {
@@ -6727,7 +6738,7 @@ module ts {
             // and the right operand to be of type Any or a subtype of the 'Function' interface type. 
             // The result is always of the Boolean primitive type.
             // NOTE: do not raise error if leftType is unknown as related error was already reported
-            if (!(leftType.flags & TypeFlags.Any || isStructuredType(leftType))) {
+            if (!isTypeOfKind(leftType, TypeFlags.Any | TypeFlags.ObjectType | TypeFlags.TypeParameter)) {
                 error(node.left, Diagnostics.The_left_hand_side_of_an_instanceof_expression_must_be_of_type_any_an_object_type_or_a_type_parameter);
             }
             // NOTE: do not raise error if right is unknown as related error was already reported
@@ -6742,10 +6753,10 @@ module ts {
             // The in operator requires the left operand to be of type Any, the String primitive type, or the Number primitive type,
             // and the right operand to be of type Any, an object type, or a type parameter type.
             // The result is always of the Boolean primitive type.
-            if (leftType !== anyType && leftType !== stringType && leftType !== numberType) {
+            if (!isTypeOfKind(leftType, TypeFlags.Any | TypeFlags.StringLike | TypeFlags.NumberLike)) {
                 error(node.left, Diagnostics.The_left_hand_side_of_an_in_expression_must_be_of_types_any_string_or_number);
             }
-            if (!(rightType.flags & TypeFlags.Any || isStructuredType(rightType))) {
+            if (!isTypeOfKind(rightType, TypeFlags.Any | TypeFlags.ObjectType | TypeFlags.TypeParameter)) {
                 error(node.right, Diagnostics.The_right_hand_side_of_an_in_expression_must_be_of_type_any_an_object_type_or_a_type_parameter);
             }
             return booleanType;
@@ -6906,16 +6917,16 @@ module ts {
                     if (rightType.flags & (TypeFlags.Undefined | TypeFlags.Null)) rightType = leftType;
 
                     var resultType: Type;
-                    if (leftType.flags & TypeFlags.NumberLike && rightType.flags & TypeFlags.NumberLike) {
+                    if (isTypeOfKind(leftType, TypeFlags.NumberLike) && isTypeOfKind(rightType, TypeFlags.NumberLike)) {
                         // Operands of an enum type are treated as having the primitive type Number.
                         // If both operands are of the Number primitive type, the result is of the Number primitive type.
                         resultType = numberType;
                     }
-                    else if (leftType.flags & TypeFlags.StringLike || rightType.flags & TypeFlags.StringLike) {
+                    else if (isTypeOfKind(leftType, TypeFlags.StringLike) || isTypeOfKind(rightType, TypeFlags.StringLike)) {
                         // If one or both operands are of the String primitive type, the result is of the String primitive type.
                         resultType = stringType;
                     }
-                    else if (leftType.flags & TypeFlags.Any || leftType === unknownType || rightType.flags & TypeFlags.Any || rightType === unknownType) {
+                    else if (leftType.flags & TypeFlags.Any || rightType.flags & TypeFlags.Any) {
                         // Otherwise, the result is of type Any.
                         // NOTE: unknown type here denotes error type. Old compiler treated this case as any type so do we.
                         resultType = anyType;
@@ -8271,7 +8282,7 @@ module ts {
             var exprType = checkExpression(node.expression);
             // unknownType is returned i.e. if node.expression is identifier whose name cannot be resolved
             // in this case error about missing name is already reported - do not report extra one
-            if (!(exprType.flags & TypeFlags.Any || isStructuredType(exprType))) {
+            if (!isTypeOfKind(exprType, TypeFlags.Any | TypeFlags.ObjectType | TypeFlags.TypeParameter)) {
                 error(node.expression, Diagnostics.The_right_hand_side_of_a_for_in_statement_must_be_of_type_any_an_object_type_or_a_type_parameter);
             }
 
@@ -10055,7 +10066,7 @@ module ts {
             globalRegExpType = getGlobalType("RegExp");
             // If we're in ES6 mode, load the TemplateStringsArray.
             // Otherwise, default to 'unknown' for the purposes of type checking in LS scenarios.
-            globalTemplateStringsArrayType = compilerOptions.target >= ScriptTarget.ES6
+            globalTemplateStringsArrayType = languageVersion >= ScriptTarget.ES6
                 ? getGlobalType("TemplateStringsArray")
                 : unknownType;
             anyArrayType = createArrayType(anyType);
@@ -10427,7 +10438,7 @@ module ts {
             return;
 
             var computedPropertyName = <ComputedPropertyName>node;
-            if (compilerOptions.target < ScriptTarget.ES6) {
+            if (languageVersion < ScriptTarget.ES6) {
                 grammarErrorOnNode(node, Diagnostics.Computed_property_names_are_only_available_when_targeting_ECMAScript_6_and_higher);
             }
             else if (computedPropertyName.expression.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>computedPropertyName.expression).operator === SyntaxKind.CommaToken) {
@@ -10527,7 +10538,7 @@ module ts {
 
         function checkGrammarAccessor(accessor: MethodDeclaration): boolean {
             var kind = accessor.kind;
-            if (compilerOptions.target < ScriptTarget.ES5) {
+            if (languageVersion < ScriptTarget.ES5) {
                 return grammarErrorOnNode(accessor.name, Diagnostics.Accessors_are_only_available_when_targeting_ECMAScript_5_and_higher);
             }
             else if (isInAmbientContext(accessor)) {
@@ -10732,7 +10743,7 @@ module ts {
                 return grammarErrorAtPos(getSourceFileOfNode(declarationList), declarations.pos, declarations.end - declarations.pos, Diagnostics.Variable_declaration_list_cannot_be_empty);
             }
 
-            if (compilerOptions.target  < ScriptTarget.ES6) {
+            if (languageVersion < ScriptTarget.ES6) {
                 if (isLet(declarationList)) {
                     return grammarErrorOnFirstToken(declarationList, Diagnostics.let_declarations_are_only_available_when_targeting_ECMAScript_6_and_higher);
                 }
@@ -10834,7 +10845,7 @@ module ts {
         function grammarErrorOnFirstToken(node: Node, message: DiagnosticMessage, arg0?: any, arg1?: any, arg2?: any): boolean {
             var sourceFile = getSourceFileOfNode(node);
             if (!hasParseDiagnostics(sourceFile)) {
-                var scanner = createScanner(compilerOptions.target, /*skipTrivia*/ true, sourceFile.text);
+                var scanner = createScanner(languageVersion, /*skipTrivia*/ true, sourceFile.text);
                 var start = scanToken(scanner, node.pos);
                 diagnostics.push(createFileDiagnostic(sourceFile, start, scanner.getTextPos() - start, message, arg0, arg1, arg2));
                 return true;
@@ -10976,7 +10987,7 @@ module ts {
                 if (node.parserContextFlags & ParserContextFlags.StrictMode) {
                     return grammarErrorOnNode(node, Diagnostics.Octal_literals_are_not_allowed_in_strict_mode);
                 }
-                else if (compilerOptions.target >= ScriptTarget.ES5) {
+                else if (languageVersion >= ScriptTarget.ES5) {
                     return grammarErrorOnNode(node, Diagnostics.Octal_literals_are_not_available_when_targeting_ECMAScript_5_and_higher);
                 }
             }
@@ -10985,7 +10996,7 @@ module ts {
         function grammarErrorAfterFirstToken(node: Node, message: DiagnosticMessage, arg0?: any, arg1?: any, arg2?: any): boolean {
             var sourceFile = getSourceFileOfNode(node);
             if (!hasParseDiagnostics(sourceFile)) {
-                var scanner = createScanner(compilerOptions.target, /*skipTrivia*/ true, sourceFile.text);
+                var scanner = createScanner(languageVersion, /*skipTrivia*/ true, sourceFile.text);
                 scanToken(scanner, node.pos);
                 diagnostics.push(createFileDiagnostic(sourceFile, scanner.getTextPos(), 0, message, arg0, arg1, arg2));
                 return true;
