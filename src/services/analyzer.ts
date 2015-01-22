@@ -41,12 +41,25 @@ interface ProcessedFile {
     fileName: string;
 }
 
-function analyze(libFileName: string, files: string[], outputFolder: string): ProcessedFile[] {
-    var program = createProgram(files);
+function log<T>(text: string, f: () => T): T {
+    var start = new Date().getTime();
+    var result = f();
+    var end = new Date().getTime();
+    ts.sys.write(text + ": " + (end - start) + " ms" + ts.sys.newLine)
+    return result;
+}
+
+function analyze(libFileName: string, files: string[], outputFolder: string): ProcessedFile[]{
+
+    var sourceFileVersion = "1";
+    var sourceFileIsOpen = false;
+
+
+    var program = log("createProgram", () => createProgram(files));
     var fileNames = ts.map(program.getSourceFiles(), f => f.filename);
     var scriptSnapshots: ts.Map<ts.IScriptSnapshot> = {};
 
-    var checker = program.getTypeChecker(/*fullTypeCheckMode*/ false)
+    var checker = log("getTypeChecker", () => program.getTypeChecker(/*fullTypeCheckMode*/ false));
 
     ts.forEach(program.getSourceFiles(), f => {
         scriptSnapshots[f.filename] = ts.ScriptSnapshot.fromString(f.text);
@@ -59,8 +72,8 @@ function analyze(libFileName: string, files: string[], outputFolder: string): Pr
         getCurrentDirectory: () => ".",
         getLocalizedDiagnosticMessages: () => undefined,
         getScriptFileNames: () => fileNames,
-        getScriptIsOpen: _ => false,
-        getScriptVersion: _ => "1",
+        getScriptIsOpen: _ => sourceFileIsOpen,
+        getScriptVersion: _ => sourceFileVersion,
         getScriptSnapshot: name => scriptSnapshots[name],
         log: (s) => { },
         trace: (s) => { },
@@ -79,19 +92,20 @@ function analyze(libFileName: string, files: string[], outputFolder: string): Pr
     for (var i = 0, len = sourceFiles.length; i < len; ++i) {
         var f = sourceFiles[i];
         var fileSpan = ts.createTextSpan(0, f.text.length);
+        var result = log("getClassifications '" + f.filename + "'", () => {
+            var syntacticClassifications = ls.getSyntacticClassifications(f.filename, fileSpan);
+            var convertedSyntactic = convertClassifications(syntacticClassifications, f, /*addHyperlinks*/ true);
 
-        var syntacticClassifications = ls.getSyntacticClassifications(f.filename, fileSpan);
-        var convertedSyntactic = convertClassifications(syntacticClassifications, f, /*addHyperlinks*/ true);
+            var semanticClassifications = ls.getSemanticClassifications(f.filename, fileSpan);
+            var convertedSemantic = convertClassifications(semanticClassifications, f, /*addHyperlinks*/ false);
 
-        var semanticClassifications = ls.getSemanticClassifications(f.filename, fileSpan);
-        var convertedSemantic = convertClassifications(semanticClassifications, f, /*addHyperlinks*/ false);
-
-        var result: AnalyzedFile = {
-            fileName: f.filename,
-            syntacticClassifications: convertedSyntactic,
-            semanticClassifications: convertedSemantic,
-            fileSymbolId: makeSymbolId(f.filename, 0)
-        };
+            return {
+                fileName: f.filename,
+                syntacticClassifications: convertedSyntactic,
+                semanticClassifications: convertedSemantic,
+                fileSymbolId: makeSymbolId(f.filename, 0)
+            };
+        });
 
         var json = JSON.stringify(result);
         var path = ts.combinePaths(outputFolder, i + ".json");
@@ -342,7 +356,10 @@ function analyze(libFileName: string, files: string[], outputFolder: string): Pr
             getSourceFile: (filename, languageVersion) => {
                 if (ts.sys.fileExists(filename)) {
                     var text = ts.sys.readFile(filename);
-                    return ts.createSourceFile(filename, text, languageVersion);
+                    var sourceFile = ts.createSourceFile(filename, text, languageVersion);
+                    sourceFile.version = sourceFileVersion;
+                    sourceFile.isOpen = sourceFileIsOpen;
+                    return sourceFile;
                 }
             },
             getCancellationToken: () => ts.CancellationTokenObject.None,
