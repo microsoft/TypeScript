@@ -207,6 +207,7 @@ switch (0) {
         n = c;
         break;
 }
+// blocks
 {
     const c = 0;
     n = c;

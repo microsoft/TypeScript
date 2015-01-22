@@ -223,6 +223,7 @@ switch (0) {
         n = l;
         break;
 }
+// blocks
 {
     let l = 0;
     n = l;

@@ -1,0 +1,7 @@
+=== tests/cases/compiler/blockComments1.ts ===
+function f() {
+>f : () => void
+
+    /*block*/ {
+    }
+}

@@ -170,6 +170,7 @@ switch (0) {
         const c14 = 0;
         break;
 }
+// blocks
 {
     const c15 = 0;
     {

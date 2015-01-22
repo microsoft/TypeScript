@@ -190,6 +190,7 @@ switch (0) {
         let l14 = 0;
         break;
 }
+// blocks
 {
     let l15 = 0;
     {
