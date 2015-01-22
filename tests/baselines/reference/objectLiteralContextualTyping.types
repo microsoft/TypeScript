@@ -1,0 +1,53 @@
+=== tests/cases/conformance/expressions/contextualTyping/objectLiteralContextualTyping.ts ===
+// Test related to #1774
+
+interface Item {
+>Item : Item
+
+    name: string;
+>name : string
+
+    description?: string;
+>description : string
+}
+
+declare function foo(item: Item): string;
+>foo : { (item: Item): string; (item: any): number; }
+>item : Item
+>Item : Item
+
+declare function foo(item: any): number;
+>foo : { (item: Item): string; (item: any): number; }
+>item : any
+
+var x = foo({ name: "Sprocket" });
+>x : string
+>foo({ name: "Sprocket" }) : string
+>foo : { (item: Item): string; (item: any): number; }
+>{ name: "Sprocket" } : { name: string; description?: string; }
+>name : string
+
+var x: string;
+>x : string
+
+var y = foo({ name: "Sprocket", description: "Bumpy wheel" });
+>y : string
+>foo({ name: "Sprocket", description: "Bumpy wheel" }) : string
+>foo : { (item: Item): string; (item: any): number; }
+>{ name: "Sprocket", description: "Bumpy wheel" } : { name: string; description: string; }
+>name : string
+>description : string
+
+var y: string;
+>y : string
+
+var z = foo({ a: 10 });
+>z : number
+>foo({ a: 10 }) : number
+>foo : { (item: Item): string; (item: any): number; }
+>{ a: 10 } : { a: number; }
+>a : number
+
+var z: number;
+>z : number
+
