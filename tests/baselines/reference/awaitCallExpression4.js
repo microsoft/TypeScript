@@ -22,12 +22,12 @@ function func() {
             switch (_state.label) {
                 case 0:
                     "before";
-                    return ["yield", pfn];
+                    return [4 /*yield*/, pfn];
                 case 1:
                     _a = _state.sent;
                     b = _a(a, a, a);
                     "after";
-                    return ["return"];
+                    return [2 /*return*/];
             }
         })));
     });

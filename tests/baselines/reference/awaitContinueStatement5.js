@@ -18,14 +18,14 @@ function f() {
         _resolve(__awaiter(__generator(function (_state) {
             switch (_state.label) {
                 case 0:
-                    return ["yield", p];
+                    return [4 /*yield*/, p];
                 case 1:
-                    return ["break", 2];
+                    return [3 /*break*/, 2];
                 case 2:
                     if (true)
-                        return ["break", 0];
+                        return [3 /*break*/, 0];
                     _state.label = 3;
-                case 3: return ["return"];
+                case 3: return [2 /*return*/];
             }
         })));
     });

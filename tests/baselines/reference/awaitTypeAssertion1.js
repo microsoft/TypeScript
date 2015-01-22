@@ -17,10 +17,10 @@ function f() {
         _resolve(__awaiter(__generator(function (_state) {
             switch (_state.label) {
                 case 0:
-                    return ["yield", p];
+                    return [4 /*yield*/, p];
                 case 1:
                     b = _state.sent;
-                    return ["return"];
+                    return [2 /*return*/];
             }
         })));
     });

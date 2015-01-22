@@ -18,10 +18,10 @@ function func() {
             switch (_state.label) {
                 case 0:
                     "before";
-                    return ["yield", a];
+                    return [4 /*yield*/, a];
                 case 1:
                     "after";
-                    return ["return"];
+                    return [2 /*return*/];
             }
         })));
     });

@@ -30,7 +30,7 @@ function func() {
                 "else";
             }
             "after";
-            return ["return"];
+            return [2 /*return*/];
         })));
     });
 }

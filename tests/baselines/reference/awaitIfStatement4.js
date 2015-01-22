@@ -26,15 +26,15 @@ function func() {
                 case 0:
                     "before";
                     if (!(a))
-                        return ["break", 2];
+                        return [3 /*break*/, 2];
                     "then1";
-                    return ["yield", p];
+                    return [4 /*yield*/, p];
                 case 1:
                     "then2";
                     _state.label = 2;
                 case 2:
                     "after";
-                    return ["return"];
+                    return [2 /*return*/];
             }
         })));
     });

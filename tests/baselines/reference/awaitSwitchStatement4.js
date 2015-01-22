@@ -29,24 +29,24 @@ function func() {
                     _a = a;
                     switch (_a) {
                         case b:
-                            return ["break", 2];
+                            return [3 /*break*/, 2];
                     }
-                    return ["yield", p];
+                    return [4 /*yield*/, p];
                 case 1:
                     switch (_a) {
                         case _state.sent:
-                            return ["break", 3];
+                            return [3 /*break*/, 3];
                     }
-                    return ["break", 3];
+                    return [3 /*break*/, 3];
                 case 2:
                     "body0";
-                    return ["break", 4];
+                    return [3 /*break*/, 4];
                 case 3:
                     "body1";
                     _state.label = 4;
                 case 4:
                     "after";
-                    return ["return"];
+                    return [2 /*return*/];
             }
         })));
     });

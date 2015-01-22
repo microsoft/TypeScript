@@ -26,7 +26,7 @@ function func() {
                 "catch";
             }
             "after";
-            return ["return"];
+            return [2 /*return*/];
         })));
     });
 }

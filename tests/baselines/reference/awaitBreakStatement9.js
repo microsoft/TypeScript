@@ -19,23 +19,26 @@ function f() {
             switch (_state.label) {
                 case 0:
                     _a = [];
-                    for (_b in {})
+                    _c = {};
+                    for (_b in _c)
                         _a[_a.length] = _b;
                     _b = 0;
                     _state.label = 1;
                 case 1:
                     if (!(_b < _a.length))
-                        return ["break", 4];
+                        return [3 /*break*/, 4];
+                    if (!(_a[_b] in _c))
+                        return [3 /*break*/, 3];
                     a = _a[_b];
-                    return ["yield", p];
+                    return [4 /*yield*/, p];
                 case 2:
-                    return ["break", 4];
+                    return [3 /*break*/, 4];
                 case 3:
                     _b++;
-                    return ["break", 1];
-                case 4: return ["return"];
+                    return [3 /*break*/, 1];
+                case 4: return [2 /*return*/];
             }
         })));
     });
-    var a, _a, _b;
+    var a, _a, _b, _c;
 }

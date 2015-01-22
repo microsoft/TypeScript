@@ -13,7 +13,7 @@ async function f(): Promise<number> {
 function f() {
     return new Promise(function (_resolve) {
         _resolve(__awaiter(__generator(function (_state) {
-            return ["return", p];
+            return [2 /*return*/, p];
         })));
     });
 }

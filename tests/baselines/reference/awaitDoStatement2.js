@@ -24,15 +24,15 @@ function func() {
                     _state.label = 1;
                 case 1:
                     "body1";
-                    return ["yield", p];
+                    return [4 /*yield*/, p];
                 case 2:
                     "body2";
                     _state.label = 3;
                 case 3:
                     if (a)
-                        return ["break", 1];
+                        return [3 /*break*/, 1];
                     _state.label = 4;
-                case 4: return ["return"];
+                case 4: return [2 /*return*/];
             }
         })));
     });

@@ -22,14 +22,14 @@ function f() {
                     _a = a;
                     switch (_a) {
                         case 0:
-                            return ["break", 1];
+                            return [3 /*break*/, 1];
                     }
-                    return ["break", 3];
+                    return [3 /*break*/, 3];
                 case 1:
-                    return ["yield", p];
+                    return [4 /*yield*/, p];
                 case 2:
-                    return ["break", 3];
-                case 3: return ["return"];
+                    return [3 /*break*/, 3];
+                case 3: return [2 /*return*/];
             }
         })));
     });

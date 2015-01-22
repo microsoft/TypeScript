@@ -26,7 +26,7 @@ function func() {
             a = 1;
             b = 1;
             c = 1;
-            return ["return"];
+            return [2 /*return*/];
         })));
     });
     var a, b, c;

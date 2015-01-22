@@ -22,7 +22,7 @@ function func() {
                 "body";
             } while (a);
             "after";
-            return ["return"];
+            return [2 /*return*/];
         })));
     });
 }

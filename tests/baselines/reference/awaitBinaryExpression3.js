@@ -18,7 +18,7 @@ function func() {
             "before";
             b = a + a;
             "after";
-            return ["return"];
+            return [2 /*return*/];
         })));
     });
     var b;

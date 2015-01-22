@@ -23,18 +23,18 @@ function func() {
                     _state.label = 1;
                 case 1:
                     _a = i;
-                    return ["yield", p];
+                    return [4 /*yield*/, p];
                 case 2:
                     if (!(_a < _state.sent))
-                        return ["break", 4];
+                        return [3 /*break*/, 4];
                     "body";
                     _state.label = 3;
                 case 3:
                     i++;
-                    return ["break", 1];
+                    return [3 /*break*/, 1];
                 case 4:
                     "after";
-                    return ["return"];
+                    return [2 /*return*/];
             }
         })));
     });

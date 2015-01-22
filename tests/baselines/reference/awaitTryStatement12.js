@@ -45,30 +45,30 @@ function func() {
                 case 3:
                     _state.trys.push([3, 5, 6, 7]);
                     "try1.0";
-                    return ["yield", p];
+                    return [4 /*yield*/, p];
                 case 4:
                     "try1.1";
-                    return ["break", 7];
+                    return [3 /*break*/, 7];
                 case 5:
                     _a = _state.error;
                     "catch1";
-                    return ["break", 7];
+                    return [3 /*break*/, 7];
                 case 6:
                     "finally1";
-                    return ["endfinally"];
+                    return [6 /*endfinally*/];
                 case 7:
                     "try0.1";
-                    return ["break", 10];
+                    return [3 /*break*/, 10];
                 case 8:
                     _b = _state.error;
                     "catch0";
-                    return ["break", 10];
+                    return [3 /*break*/, 10];
                 case 9:
                     "finally0";
-                    return ["endfinally"];
+                    return [6 /*endfinally*/];
                 case 10:
                     "after";
-                    return ["return"];
+                    return [2 /*return*/];
             }
         })));
     });

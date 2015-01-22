@@ -28,18 +28,18 @@ function func() {
                 case 0:
                     "before";
                     if (!(a))
-                        return ["break", 1];
+                        return [3 /*break*/, 1];
                     "then";
-                    return ["break", 3];
+                    return [3 /*break*/, 3];
                 case 1:
                     "else1";
-                    return ["yield", p];
+                    return [4 /*yield*/, p];
                 case 2:
                     "else2";
                     _state.label = 3;
                 case 3:
                     "after";
-                    return ["return"];
+                    return [2 /*return*/];
             }
         })));
     });

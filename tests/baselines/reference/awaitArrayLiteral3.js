@@ -16,10 +16,10 @@ function func() {
             switch (_state.label) {
                 case 0:
                     _a = a;
-                    return ["yield", p];
+                    return [4 /*yield*/, p];
                 case 1:
                     b = [_a, _state.sent, a];
-                    return ["return"];
+                    return [2 /*return*/];
             }
         })));
     });

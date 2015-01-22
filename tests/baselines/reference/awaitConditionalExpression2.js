@@ -16,17 +16,17 @@ function func() {
             switch (_state.label) {
                 case 0:
                     if (!(a))
-                        return ["break", 2];
-                    return ["yield", p];
+                        return [3 /*break*/, 2];
+                    return [4 /*yield*/, p];
                 case 1:
                     _a = _state.sent;
-                    return ["break", 3];
+                    return [3 /*break*/, 3];
                 case 2:
                     _a = a;
                     _state.label = 3;
                 case 3:
                     b = _a;
-                    return ["return"];
+                    return [2 /*return*/];
             }
         })));
     });

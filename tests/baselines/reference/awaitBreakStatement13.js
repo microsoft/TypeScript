@@ -21,14 +21,14 @@ function f() {
             switch (_state.label) {
                 case 0:
                     if (!(true))
-                        return ["break", 2];
-                    return ["yield", p];
+                        return [3 /*break*/, 2];
+                    return [4 /*yield*/, p];
                 case 1:
                     while (false) {
-                        return ["break", 2];
+                        return [3 /*break*/, 2];
                     }
-                    return ["break", 0];
-                case 2: return ["return"];
+                    return [3 /*break*/, 0];
+                case 2: return [2 /*return*/];
             }
         })));
     });

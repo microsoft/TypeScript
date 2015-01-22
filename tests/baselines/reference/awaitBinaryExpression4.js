@@ -20,15 +20,15 @@ function func() {
                     "before";
                     _a = a;
                     if (_a)
-                        return ["break", 2];
-                    return ["yield", p];
+                        return [3 /*break*/, 2];
+                    return [4 /*yield*/, p];
                 case 1:
                     _a = _state.sent;
                     _state.label = 2;
                 case 2:
                     b = _a;
                     "after";
-                    return ["return"];
+                    return [2 /*return*/];
             }
         })));
     });

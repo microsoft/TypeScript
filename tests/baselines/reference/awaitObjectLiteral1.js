@@ -20,7 +20,7 @@ function func() {
                 a: a,
                 b: 1
             };
-            return ["return"];
+            return [2 /*return*/];
         })));
     });
     var o;

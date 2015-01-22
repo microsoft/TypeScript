@@ -18,7 +18,7 @@ function func() {
             "before";
             b = typeof a;
             "after";
-            return ["return"];
+            return [2 /*return*/];
         })));
     });
     var b;

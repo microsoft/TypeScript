@@ -33,20 +33,20 @@ function func() {
                 case 2:
                     _state.trys.push([2, 3, 4, 6]);
                     "try";
-                    return ["break", 6];
+                    return [3 /*break*/, 6];
                 case 3:
                     _a = _state.error;
                     "catch";
-                    return ["break", 6];
+                    return [3 /*break*/, 6];
                 case 4:
                     "finally0";
-                    return ["yield", p];
+                    return [4 /*yield*/, p];
                 case 5:
                     "finally1";
-                    return ["endfinally"];
+                    return [6 /*endfinally*/];
                 case 6:
                     "after";
-                    return ["return"];
+                    return [2 /*return*/];
             }
         })));
     });

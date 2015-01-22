@@ -50,7 +50,7 @@ function func() {
                 "finally0";
             }
             "after";
-            return ["return"];
+            return [2 /*return*/];
         })));
     });
 }

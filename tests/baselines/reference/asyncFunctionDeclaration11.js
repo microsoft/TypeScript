@@ -11,7 +11,7 @@ async function await(): Promise<void> {
 function await() {
     return new Promise(function (_resolve) {
         _resolve(__awaiter(__generator(function (_state) {
-            return ["return"];
+            return [2 /*return*/];
         })));
     });
 }

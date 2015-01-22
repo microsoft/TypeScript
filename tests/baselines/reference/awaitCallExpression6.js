@@ -24,11 +24,11 @@ function func() {
                     "before";
                     _a = o;
                     _b = _a.fn;
-                    return ["yield", p];
+                    return [4 /*yield*/, p];
                 case 1:
                     b = _b.call(_a, _state.sent, a, a);
                     "after";
-                    return ["return"];
+                    return [2 /*return*/];
             }
         })));
     });

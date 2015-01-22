@@ -24,27 +24,30 @@ function func() {
                 case 0:
                     "before";
                     _a = [];
-                    for (_b in a)
+                    _c = a;
+                    for (_b in _c)
                         _a[_a.length] = _b;
                     _b = 0;
                     _state.label = 1;
                 case 1:
                     if (!(_b < _a.length))
-                        return ["break", 4];
+                        return [3 /*break*/, 4];
+                    if (!(_a[_b] in _c))
+                        return [3 /*break*/, 3];
                     i = _a[_b];
                     "body1";
-                    return ["yield", p];
+                    return [4 /*yield*/, p];
                 case 2:
                     "body2";
                     _state.label = 3;
                 case 3:
                     _b++;
-                    return ["break", 1];
+                    return [3 /*break*/, 1];
                 case 4:
                     "after";
-                    return ["return"];
+                    return [2 /*return*/];
             }
         })));
     });
-    var i, _a, _b;
+    var i, _a, _b, _c;
 }

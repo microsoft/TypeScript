@@ -22,7 +22,7 @@ function func() {
             "before";
             b = new o.fn(a, a, a);
             "after";
-            return ["return"];
+            return [2 /*return*/];
         })));
     });
     var b;

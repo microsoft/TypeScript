@@ -18,11 +18,11 @@ function func() {
             switch (_state.label) {
                 case 0:
                     "before";
-                    return ["yield", typeof p];
+                    return [4 /*yield*/, typeof p];
                 case 1:
                     b = _state.sent;
                     "after";
-                    return ["return"];
+                    return [2 /*return*/];
             }
         })));
     });

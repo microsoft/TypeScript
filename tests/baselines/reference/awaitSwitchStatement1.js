@@ -33,7 +33,7 @@ function func() {
                     "body1";
             }
             "after";
-            return ["return"];
+            return [2 /*return*/];
         })));
     });
 }

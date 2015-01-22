@@ -31,17 +31,17 @@ function func() {
                 case 2:
                     _state.trys.push([2, 4, , 5]);
                     "try0";
-                    return ["yield", p];
+                    return [4 /*yield*/, p];
                 case 3:
                     "try1";
-                    return ["break", 5];
+                    return [3 /*break*/, 5];
                 case 4:
                     _a = _state.error;
                     "catch";
-                    return ["break", 5];
+                    return [3 /*break*/, 5];
                 case 5:
                     "after";
-                    return ["return"];
+                    return [2 /*return*/];
             }
         })));
     });

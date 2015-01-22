@@ -15,9 +15,9 @@ function f() {
         _resolve(__awaiter(__generator(function (_state) {
             switch (_state.label) {
                 case 0:
-                    return ["yield", p];
+                    return [4 /*yield*/, p];
                 case 1:
-                    return ["return", _state.sent];
+                    return [2 /*return*/, _state.sent];
             }
         })));
     });

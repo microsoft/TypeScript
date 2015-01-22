@@ -1314,6 +1314,7 @@ module ts {
                     labeledStatement = <LabeledStatement>node;
                     break;
 
+                case SyntaxKind.SwitchStatement:
                 case SyntaxKind.DoStatement:
                 case SyntaxKind.WhileStatement:
                 case SyntaxKind.ForStatement:

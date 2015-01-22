@@ -16,10 +16,10 @@ function f() {
             switch (_state.label) {
                 case 0:
                     _a = a;
-                    return ["yield", p];
+                    return [4 /*yield*/, p];
                 case 1:
                     b = "beforeValue" + _a + "beforeAwait" + _state.sent + "afterAwait" + a + "afterValue";
-                    return ["return"];
+                    return [2 /*return*/];
             }
         })));
     });

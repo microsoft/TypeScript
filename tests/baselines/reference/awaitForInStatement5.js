@@ -21,13 +21,13 @@ function func() {
             switch (_state.label) {
                 case 0:
                     "before";
-                    return ["yield", p];
+                    return [4 /*yield*/, p];
                 case 1:
                     for (i in _state.sent) {
                         "body";
                     }
                     "after";
-                    return ["return"];
+                    return [2 /*return*/];
             }
         })));
     });

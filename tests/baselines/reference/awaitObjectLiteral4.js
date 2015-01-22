@@ -21,14 +21,14 @@ function func() {
             switch (_state.label) {
                 case 0:
                     _a = 1;
-                    return ["yield", p];
+                    return [4 /*yield*/, p];
                 case 1:
                     o = {
                         a: _a,
                         b: _state.sent,
                         c: a
                     };
-                    return ["return"];
+                    return [2 /*return*/];
             }
         })));
     });

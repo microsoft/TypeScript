@@ -19,7 +19,7 @@ function func() {
             "before";
             o["b"] = a;
             "after";
-            return ["return"];
+            return [2 /*return*/];
         })));
     });
 }

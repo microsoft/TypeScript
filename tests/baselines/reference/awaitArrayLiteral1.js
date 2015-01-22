@@ -15,7 +15,7 @@ function func() {
     return new Promise(function (_resolve) {
         _resolve(__awaiter(__generator(function (_state) {
             b = [a, a, a];
-            return ["return"];
+            return [2 /*return*/];
         })));
     });
     var b;

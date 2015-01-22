@@ -23,15 +23,15 @@ function func() {
                     "before";
                     _state.label = 1;
                 case 1:
-                    return ["yield", p];
+                    return [4 /*yield*/, p];
                 case 2:
                     if (!(_state.sent))
-                        return ["break", 3];
+                        return [3 /*break*/, 3];
                     "body";
-                    return ["break", 1];
+                    return [3 /*break*/, 1];
                 case 3:
                     "after";
-                    return ["return"];
+                    return [2 /*return*/];
             }
         })));
     });

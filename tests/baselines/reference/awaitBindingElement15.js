@@ -22,17 +22,17 @@ function func(_a) {
                 case 0:
                     _b = _a[0];
                     if (!(_b === void 0))
-                        return ["break", 2];
-                    return ["yield", po];
+                        return [3 /*break*/, 2];
+                    return [4 /*yield*/, po];
                 case 1:
                     _c = _state.sent;
-                    return ["break", 3];
+                    return [3 /*break*/, 3];
                 case 2:
                     _c = _b;
                     _state.label = 3;
                 case 3:
                     x = _c.x;
-                    return ["return"];
+                    return [2 /*return*/];
             }
         })));
     });

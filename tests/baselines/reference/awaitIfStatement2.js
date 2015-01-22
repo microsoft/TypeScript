@@ -25,7 +25,7 @@ function func() {
             switch (_state.label) {
                 case 0:
                     "before";
-                    return ["yield", p];
+                    return [4 /*yield*/, p];
                 case 1:
                     if (_state.sent) {
                         "then";
@@ -34,7 +34,7 @@ function func() {
                         "else";
                     }
                     "after";
-                    return ["return"];
+                    return [2 /*return*/];
             }
         })));
     });

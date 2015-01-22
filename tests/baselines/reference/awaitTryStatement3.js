@@ -31,7 +31,7 @@ function func() {
                 "finally";
             }
             "after";
-            return ["return"];
+            return [2 /*return*/];
         })));
     });
 }

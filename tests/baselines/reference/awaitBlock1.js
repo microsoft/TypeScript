@@ -23,11 +23,11 @@ function f() {
                 case 0:
                     "before";
                     "body0";
-                    return ["yield", p];
+                    return [4 /*yield*/, p];
                 case 1:
                     "body1";
                     "after";
-                    return ["return"];
+                    return [2 /*return*/];
             }
         })));
     });

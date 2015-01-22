@@ -23,7 +23,7 @@ function func() {
                 "body";
             }
             "after";
-            return ["return"];
+            return [2 /*return*/];
         })));
     });
 }

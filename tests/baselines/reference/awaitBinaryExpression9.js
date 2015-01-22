@@ -19,11 +19,11 @@ function func() {
                 case 0:
                     "before";
                     _a = a;
-                    return ["yield", p];
+                    return [4 /*yield*/, p];
                 case 1:
                     b = _a + _state.sent;
                     "after";
-                    return ["return"];
+                    return [2 /*return*/];
             }
         })));
     });

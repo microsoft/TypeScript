@@ -25,11 +25,11 @@ function func() {
                     _a = o;
                     _b = _a.fn;
                     _c = a;
-                    return ["yield", p];
+                    return [4 /*yield*/, p];
                 case 1:
                     b = _b.call(_a, _c, _state.sent, a);
                     "after";
-                    return ["return"];
+                    return [2 /*return*/];
             }
         })));
     });
