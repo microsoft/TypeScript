@@ -3341,7 +3341,7 @@ module ts {
                         isContextSensitive((<ConditionalExpression>node).whenFalse);
                 case SyntaxKind.BinaryExpression:
                     return (<BinaryExpression>node).operator === SyntaxKind.BarBarToken &&
-                    (isContextSensitive((<BinaryExpression>node).left) || isContextSensitive((<BinaryExpression>node).right));
+                        (isContextSensitive((<BinaryExpression>node).left) || isContextSensitive((<BinaryExpression>node).right));
                 case SyntaxKind.PropertyAssignment:
                     return isContextSensitive((<PropertyAssignment>node).initializer);
                 case SyntaxKind.MethodDeclaration:
@@ -4731,7 +4731,7 @@ module ts {
                 // Narrow to target type if it is a subtype of current type
                 if (isTypeSubtypeOf(targetType, type)) {
                     return targetType;
-            }
+                }
                 // If current type is a union type, remove all constituents that aren't subtypes of target type
                 if (type.flags & TypeFlags.Union) {
                     return getUnionType(filter((<UnionType>type).types, t => isTypeSubtypeOf(t, targetType)));
@@ -5689,8 +5689,8 @@ module ts {
                     else if (isConstEnum) {
                         error(node.argumentExpression, Diagnostics.Property_0_does_not_exist_on_const_enum_1, name, symbolToString(objectType.symbol));
                         return unknownType;
+                    }
                 }
-            }
             }
 
             // Check for compatible indexer types.
@@ -6625,7 +6625,7 @@ module ts {
                 var awaitableReturnType = checkAwaitableReturnType(node, returnType);
                 if (awaitableReturnType) {
                     returnType = awaitableReturnType;
-            }
+                }
             }
             if (returnType) {
                 checkIfNonVoidFunctionHasReturnExpressionsOrSingleThrowStatment(node, returnType);
@@ -6640,7 +6640,7 @@ module ts {
                     if (returnType) {
                         if (node.flags & NodeFlags.Async) {
                             exprType = getAwaitedType(exprType, /*fallbackType*/ exprType);
-                    }
+                        }
                         checkTypeAssignableTo(exprType, returnType, node.body, /*headMessage*/ undefined);
                     }
                     checkFunctionExpressionBodies(node.body);
@@ -7347,7 +7347,7 @@ module ts {
             }
             // TODO (yuisu): Remove this check in else-if when SyntaxKind.Construct is moved and ambient context is handled
             else if (node.kind === SyntaxKind.FunctionType || node.kind === SyntaxKind.FunctionDeclaration || node.kind === SyntaxKind.ConstructorType ||
-                      node.kind === SyntaxKind.CallSignature || node.kind === SyntaxKind.Constructor ||
+                node.kind === SyntaxKind.CallSignature || node.kind === SyntaxKind.Constructor ||
                 node.kind === SyntaxKind.ConstructSignature) {
                 checkGrammarFunctionLikeDeclaration(<FunctionLikeDeclaration>node);
             }
@@ -8021,7 +8021,7 @@ module ts {
                     var type = getTypeOfSymbol(returnType.symbol);
                     if (isTypeAssignableTo(type, globalIPromiseConstructorType)) {
                         links.promiseType = true;
-        }
+                    }
                 }
 
                 if (links.promiseType) {
@@ -8085,7 +8085,7 @@ module ts {
                 var awaitableReturnType = checkAwaitableReturnType(node, returnType);
                 if (awaitableReturnType) {
                     returnType = awaitableReturnType;
-            }
+                }
             }
 
             if (node.asteriskToken && compilerOptions.target < ScriptTarget.ES6) {
@@ -8317,12 +8317,12 @@ module ts {
         function checkCollisionWithGeneratorVariablesInGeneratedCode(node: Node, name: DeclarationName): void {
             if (!name || name.kind !== SyntaxKind.Identifier || compilerOptions.target > ScriptTarget.ES5 || isTypeNode(name)) {
                 return;
-                    }
+            }
 
             var identifier = <Identifier>name;
             if (identifier.text !== "__generator") {
                 return;
-                }
+            }
 
             // TODO(rbuckton): Need to be more specific for these checks. Currently defaulting to reporting errors
             var isDeclaration = node.kind !== SyntaxKind.Identifier;
@@ -8431,7 +8431,7 @@ module ts {
             if (!isBindingPattern(node.name) && isLexicalArguments(<Identifier>node.name)) {
                 var container = getContainingFunction(node);
                 captureLexicalArguments(node.name, container);
-        }
+            }
         }
 
         function checkVariableDeclaration(node: VariableDeclaration) {
@@ -8456,10 +8456,10 @@ module ts {
                 if (inBlockOrObjectLiteralExpression(node)) {
                     // disallow all but the `async` modifier here
                     if (node.modifiers.flags & ~NodeFlags.Async) {
-                    return grammarErrorOnFirstToken(node, Diagnostics.Modifiers_cannot_appear_here);
+                        return grammarErrorOnFirstToken(node, Diagnostics.Modifiers_cannot_appear_here);
+                    }
                 }
             }
-        }
         }
 
         function inBlockOrObjectLiteralExpression(node: Node) {
@@ -10181,9 +10181,9 @@ module ts {
                     if (symbolWithRelevantName.flags & SymbolFlags.Import) {
                         var importDeclarationWithRelevantName = <ImportDeclaration>getDeclarationOfKind(symbolWithRelevantName, SyntaxKind.ImportDeclaration);
                         if (isReferencedImportDeclaration(importDeclarationWithRelevantName)) {
-                    return false;
-                }
-            }
+                            return false;
+                        }
+                    }
                 }
             }
             return true;

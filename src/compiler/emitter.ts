@@ -1915,7 +1915,7 @@ module ts {
             function ensureLocals() {
                 if (!globals) {
                     globals = {};
-                    }
+                }
 
                 if (!locals) {
                     locals = createLocalsBuilder(resolver, localsScope, globals);
@@ -1926,17 +1926,17 @@ module ts {
                 if (locals) {
                     var variables = locals.getVariables();
                     if (variables) {
-                    if (newLine) {
-                        writeLine();
+                        if (newLine) {
+                            writeLine();
+                        }
+                        else {
+                            write(" ");
+                        }
+                        write("var ");
+                        emitCommaList(variables);
+                        write(";");
                     }
-                    else {
-                        write(" ");
-                    }
-                    write("var ");
-                            emitCommaList(variables);
-                    write(";");
                 }
-            }
             }
 
             function emitTokenText(tokenKind: SyntaxKind, startPos: number, emitFn?: () => void) {
@@ -2074,7 +2074,7 @@ module ts {
 
                 var headEmitted = false;
                 if (shouldEmitTemplateHead()) {
-                emitLiteral(node.head);
+                    emitLiteral(node.head);
                     headEmitted = true;
                 }
 
@@ -2097,7 +2097,7 @@ module ts {
                         // If this is the first span and the head was not emitted, then this templateSpan's
                         // expression will be the first to be emitted. Don't emit the preceding ' + ' in that
                         // case.
-                    write(" + ");
+                        write(" + ");
                     }
 
                     emitParenthesized(templateSpan.expression, needsParens);
@@ -2259,8 +2259,8 @@ module ts {
                     write(node.text);
                 }
                 else {
-                writeTextOfNode(currentSourceFile, node);
-            }
+                    writeTextOfNode(currentSourceFile, node);
+                }
             }
 
             function emitIdentifier(node: Identifier) {
@@ -2273,15 +2273,15 @@ module ts {
                         write(generatedName);
                     }
                     else if (!node.parent || nodeIsMissingOrGenerated(node)) {
-                    write(node.text);
+                        write(node.text);
+                    }
+                    else if (!isNotExpressionIdentifier(node)) {
+                        emitExpressionIdentifier(node);
+                    }
+                    else {
+                        writeTextOfNode(currentSourceFile, node);
+                    }
                 }
-                else if (!isNotExpressionIdentifier(node)) {
-                    emitExpressionIdentifier(node);
-                }
-                else {
-                    writeTextOfNode(currentSourceFile, node);
-                }
-            }
             }
 
             function emitThis(node: Node) {
@@ -2370,12 +2370,12 @@ module ts {
                     if (rewritten !== node) {
                         return emit(rewritten);
                     }
-                        }
+                }
 
-                        write("[");
+                write("[");
                 emitList(elements, 0, elements.length, /*multiLine*/(node.flags & NodeFlags.MultiLine) !== 0,
                             /*trailingComma*/ elements.hasTrailingComma);
-                        write("]");
+                write("]");
             }
 
             function emitObjectLiteral(node: ObjectLiteralExpression) {
@@ -2620,12 +2620,12 @@ module ts {
                     node = rewriteDestructuring(node, locals);
                 }
 
-                    emit(node.left);
-                    if (node.operator !== SyntaxKind.CommaToken) write(" ");
-                    write(tokenToString(node.operator));
-                    write(" ");
-                    emit(node.right);
-                }
+                emit(node.left);
+                if (node.operator !== SyntaxKind.CommaToken) write(" ");
+                write(tokenToString(node.operator));
+                write(" ");
+                emit(node.right);
+            }
 
             function emitConditionalExpression(node: ConditionalExpression) {
                 emit(node.condition);
@@ -2965,7 +2965,7 @@ module ts {
                         if (isBindingPattern(p.name)) {
                             writeLine();
                             write("var ");
-                        emitCommaList(rewriteBindingElement(<BindingElement>p, locals, tempParameters[tempIndex]));
+                            emitCommaList(rewriteBindingElement(<BindingElement>p, locals, tempParameters[tempIndex]));
                             write(";");
                             tempIndex++;
                         }
@@ -3760,51 +3760,51 @@ module ts {
                 // emit prologue directives prior to __extends
                 var startIndex = emitDirectivePrologues(node.statements, /*startWithNewLine*/ false);
                 if (!compilerOptions.noHelpers) {
-                if (!extendsEmitted && resolver.getNodeCheckFlags(node) & NodeCheckFlags.EmitExtends) {
-                    writeLine();
-                    write("var __extends = this.__extends || function (d, b) {");
-                    increaseIndent();
-                    writeLine();
-                    write("for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];");
-                    writeLine();
-                    write("function __() { this.constructor = d; }");
-                    writeLine();
-                    write("__.prototype = b.prototype;");
-                    writeLine();
-                    write("d.prototype = new __();");
-                    decreaseIndent();
-                    writeLine();
-                    write("};");
-                    extendsEmitted = true;
-                }
+                    if (!extendsEmitted && resolver.getNodeCheckFlags(node) & NodeCheckFlags.EmitExtends) {
+                        writeLine();
+                        write("var __extends = this.__extends || function (d, b) {");
+                        increaseIndent();
+                        writeLine();
+                        write("for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];");
+                        writeLine();
+                        write("function __() { this.constructor = d; }");
+                        writeLine();
+                        write("__.prototype = b.prototype;");
+                        writeLine();
+                        write("d.prototype = new __();");
+                        decreaseIndent();
+                        writeLine();
+                        write("};");
+                        extendsEmitted = true;
+                    }
                     if (!awaiterEmitted && resolver.getNodeCheckFlags(node) & NodeCheckFlags.EmitAwaiter) {
                         writeLine();
                         write(`var __awaiter = __awaiter || function (g) {`);
                         increaseIndent();
                         writeLine();
-	                    write(`function n(r, t) {`);
+                        write(`function n(r, t) {`);
                         increaseIndent();
                         writeLine();
-		                write(`while (true) {`);
+                        write(`while (true) {`);
                         increaseIndent();
                         writeLine();
-			            write(`if (r.done) return r.value;`);
+                        write(`if (r.done) return r.value;`);
                         writeLine();
-			            write(`if (r.value && typeof (t = r.value.then) === "function")`);
+                        write(`if (r.value && typeof (t = r.value.then) === "function")`);
                         increaseIndent();
                         writeLine();
-				        write(`return t.call(r.value, function(v) { return n(g.next(v)) }, function(v) { return n(g["throw"](v)) });`);
+                        write(`return t.call(r.value, function(v) { return n(g.next(v)) }, function(v) { return n(g["throw"](v)) });`);
                         decreaseIndent();
                         writeLine();
-			            write(`r = g.next(r.value);`);
+                        write(`r = g.next(r.value);`);
                         decreaseIndent();
                         writeLine();
-		                write(`}`);
+                        write(`}`);
                         decreaseIndent();
                         writeLine();
-	                    write(`}`);
+                        write(`}`);
                         writeLine();
-	                    write(`return n(g.next());`);
+                        write(`return n(g.next());`);
                         decreaseIndent();
                         writeLine();
                         write(`};`);
@@ -4151,9 +4151,9 @@ module ts {
                     var trailingComments = getTrailingCommentRanges(currentSourceFile.text, node.end);
                 }
 
-                    // trailing comments are emitted at space/*trailing comment1 */space/*trailing comment*/
-                    emitComments(currentSourceFile, writer, trailingComments, /*trailingSeparator*/ false, newLine, writeComment);                    
-                }
+                // trailing comments are emitted at space/*trailing comment1 */space/*trailing comment*/
+                emitComments(currentSourceFile, writer, trailingComments, /*trailingSeparator*/ false, newLine, writeComment);                    
+            }
 
             function emitLeadingCommentsOfLocalPosition(pos: number) {
                 if (pos < 0) {

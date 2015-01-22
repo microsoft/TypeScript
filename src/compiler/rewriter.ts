@@ -16,10 +16,10 @@ module ts {
     export function rewriteBindingElement(root: BindingElement, locals: LocalsBuilder, value?: Expression): VariableDeclaration[] {
         var variableDeclarations: VariableDeclaration[];
         var isDeclaration = root.kind === SyntaxKind.VariableDeclaration && !(getCombinedNodeFlags(root) & NodeFlags.Export) || root.kind === SyntaxKind.Parameter;
-        rewriteBindingElementCore(root, value);
+        rewriteBindingElementWorker(root, value);
         return variableDeclarations;
 
-        function rewriteBindingElementCore(node: BindingElement, value: Expression): void {
+        function rewriteBindingElementWorker(node: BindingElement, value: Expression): void {
             if (node.initializer) {
                 // Combine value and initializer
                 value = value ? locals.getValueOrDefault(value, node.initializer, writeDeclaration) : node.initializer;
@@ -28,7 +28,6 @@ module ts {
                 // Use 'void 0' in absence of value and initializer
                 value = Factory.createVoidZero();
             }
-
             if (isBindingPattern(node.name)) {
                 var pattern = <BindingPattern>node.name;
                 var elements = pattern.elements;
@@ -42,12 +41,12 @@ module ts {
                     if (pattern.kind === SyntaxKind.ObjectBindingPattern) {
                         // Rewrite element to a declaration with an initializer that fetches property
                         var propName = element.propertyName || <Identifier>element.name;
-                        rewriteBindingElementCore(element, Factory.createPropertyOrElementAccessExpression(Factory.makeLeftHandSideExpression(value), propName));
+                        rewriteBindingElementWorker(element, Factory.createPropertyOrElementAccessExpression(Factory.makeLeftHandSideExpression(value), propName));
                     }
                     else if (element.kind !== SyntaxKind.OmittedExpression) {
                         if (!element.dotDotDotToken) {
                             // Rewrite element to a declaration that accesses array element at index i
-                            rewriteBindingElementCore(element, Factory.createElementAccessExpression(Factory.makeLeftHandSideExpression(value), Factory.createNumericLiteral(i)));
+                            rewriteBindingElementWorker(element, Factory.createElementAccessExpression(Factory.makeLeftHandSideExpression(value), Factory.createNumericLiteral(i)));
                         }
                         else if (i === elements.length - 1) {
                             value = locals.ensureIdentifier(value, writeDeclaration);
@@ -76,7 +75,6 @@ module ts {
             if (!variableDeclarations) {
                 variableDeclarations = [];
             }
-
             var variableDeclaration = Factory.createVariableDeclaration(left, right);
             if (root.kind === SyntaxKind.VariableDeclaration &&
                 left.parent &&
@@ -360,7 +358,6 @@ module ts {
             if (hasAwaitOrYield(node)) {
                 return rewriteBinaryExpression(node);
             }
-
             return Visitor.visitBinaryExpression(node);
         }
 
@@ -368,7 +365,6 @@ module ts {
             if (hasAwaitOrYield(node.whenTrue) || hasAwaitOrYield(node.whenFalse)) {
                 return rewriteConditionalExpression(node);
             }
-
             return Visitor.visitConditionalExpression(node);
         }
 
@@ -376,7 +372,6 @@ module ts {
             if (isGenerator) {
                 return rewriteYieldExpression(node);
             }
-
             return Visitor.visitYieldExpression(node);
         }
 
@@ -394,22 +389,15 @@ module ts {
                 if (rewritten !== node) {
                     return nodeVisitor.visitLeftHandSideExpression(rewritten);
                 }
-
-                return Factory.updateArrayLiteralExpression(
-                    node,
-                    Visitor.visitNodes(node.elements, nodeVisitor.visitExpression, hasAwaitOrYield, cacheExpression));
+                return Factory.updateArrayLiteralExpression(node, Visitor.visitNodes(node.elements, nodeVisitor.visitExpression, hasAwaitOrYield, cacheExpression));
             }
-
             return Visitor.visitArrayLiteralExpression(node);
         }
 
         function visitObjectLiteralExpression(node: ObjectLiteralExpression): LeftHandSideExpression {
             if (hasAwaitOrYield(node)) {
-                return Factory.updateObjectLiteralExpression(
-                    node,
-                    Visitor.visitNodes(node.properties, nodeVisitor.visitObjectLiteralElement, hasAwaitOrYield, cacheObjectLiteralElement));
+                return Factory.updateObjectLiteralExpression(node, Visitor.visitNodes(node.properties, nodeVisitor.visitObjectLiteralElement, hasAwaitOrYield, cacheObjectLiteralElement));
             }
-
             return Visitor.visitObjectLiteralExpression(node);
         }
 
@@ -418,7 +406,6 @@ module ts {
                 var object = cacheExpression(nodeVisitor.visitExpression(node.expression));
                 return Factory.updateElementAccessExpression(node, object, nodeVisitor.visitExpression(node.argumentExpression));
             }
-
             return Visitor.visitElementAccessExpression(node);
         }
 
@@ -438,7 +425,6 @@ module ts {
                     return callExpression;
                 }
             }
-
             return Visitor.visitCallExpression(node);
         }
 
@@ -449,7 +435,6 @@ module ts {
                     cacheExpression(nodeVisitor.visitExpression(node.expression)),
                     Visitor.visitNodes(node.arguments, nodeVisitor.visitExpression, hasAwaitOrYield, cacheExpression));
             }
-
             return Visitor.visitNewExpression(node);
         }
 
@@ -457,7 +442,6 @@ module ts {
             if (hasAwaitOrYield(node.template)) {
                 return Factory.updateTaggedTemplateExpression(node, cacheExpression(nodeVisitor.visitLeftHandSideExpression(node.tag)), nodeVisitor.visitTemplateLiteralOrTemplateExpression(node.template));
             }
-
             return Visitor.visitTaggedTemplateExpression(node);
         }
 
@@ -468,7 +452,6 @@ module ts {
                     node.head,
                     Visitor.visitNodes(node.templateSpans, nodeVisitor.visitTemplateSpan, hasAwaitOrYield, cacheTemplateSpan));
             }
-
             return Visitor.visitTemplateExpression(node);
         }
 
@@ -496,7 +479,6 @@ module ts {
             if (node.kind === SyntaxKind.VariableDeclarationList) {
                 return rewriteVariableDeclarationList(<VariableDeclarationList>node);
             }
-
             return Visitor.visitVariableDeclarationListOrExpression(node);
         }
 
@@ -505,7 +487,6 @@ module ts {
                 rewriteExpressionStatement(node);
                 return;
             }
-
             return Visitor.visitExpressionStatement(node);
         }
 
@@ -514,7 +495,6 @@ module ts {
                 rewriteIfStatement(node);
                 return;
             }
-
             return Visitor.visitIfStatement(node);
         }
 
@@ -523,7 +503,6 @@ module ts {
                 rewriteDoStatement(node);
                 return;
             }
-
             return defaultVisitContinueBlock(node, Visitor.visitDoStatement);
         }
 
@@ -532,7 +511,6 @@ module ts {
                 rewriteWhileStatement(node);
                 return;
             }
-
             return defaultVisitContinueBlock(node, Visitor.visitWhileStatement);
         }
 
@@ -541,7 +519,6 @@ module ts {
                 rewriteForStatement(node);
                 return;
             }
-
             return defaultVisitContinueBlock(node, Visitor.visitForStatement);
         }
 
@@ -550,7 +527,6 @@ module ts {
                 rewriteForInStatement(node);
                 return;
             }
-
             return defaultVisitContinueBlock(node, Visitor.visitForInStatement);
         }
 
@@ -583,7 +559,6 @@ module ts {
                 rewriteSwitchStatement(node);
                 return;
             }
-
             return defaultVisitBreakBlock(node, Visitor.visitSwitchStatement, /*requireLabel*/ false);
         }
 
@@ -592,7 +567,6 @@ module ts {
                 Debug.fail("with statements cannot contain 'await' or 'yield' expressions.");
                 return;
             }
-
             return Visitor.visitWithStatement(node);
         }
 
@@ -601,7 +575,6 @@ module ts {
                 rewriteLabeledStatement(node);
                 return;
             }
-
             return defaultVisitBreakBlock(node, Visitor.visitLabeledStatement, /*requireLabel*/ true);
         }
 
@@ -610,7 +583,6 @@ module ts {
                 rewriteTryStatement(node);
                 return;
             }
-
             return Visitor.visitTryStatement(node);
         }
 
@@ -619,7 +591,6 @@ module ts {
             if (node.symbol) {
                 node.symbol.generatedName = undefined;
             }
-
             return Visitor.visitCatchClause(node);
         }
 
@@ -691,7 +662,6 @@ module ts {
             else if (hasAwaitOrYield(node.right)) {
                 return Factory.updateBinaryExpression(node, cacheExpression(nodeVisitor.visitExpression(node.left)), nodeVisitor.visitExpression(node.right));
             }
-
             return Visitor.visitBinaryExpression(node);
         }
 
@@ -834,7 +804,6 @@ module ts {
                     }
                 }
             }
-
             if (parent.kind === SyntaxKind.VariableDeclarationList && parent.parent.kind === SyntaxKind.ForInStatement) {
                 if (mergedAssignment) {
                     builder.emit(OpCode.Statement, Factory.createExpressionStatement(mergedAssignment));
@@ -844,7 +813,6 @@ module ts {
                 var declaration = declarations[0];
                 return <Identifier>declaration.name;
             }
-
             return mergedAssignment;
         }
 
@@ -855,7 +823,6 @@ module ts {
                 rewriteExpression(result);
                 return;
             }
-
             builder.addVariable(<Identifier>node.name);
             var initializer = nodeVisitor.visitExpression(node.initializer);
             if (initializer) {
@@ -978,7 +945,6 @@ module ts {
             while (variable.kind === SyntaxKind.BinaryExpression) {
                 variable = (<BinaryExpression>variable).left;
             }
-
             var keysLocal = builder.declareLocal();
             var tempLocal = builder.declareLocal();
             var conditionLabel = builder.defineLabel();
@@ -1279,13 +1245,11 @@ module ts {
                     rewriteParameterDeclaration(parameter);
                 }
             }
-
             if (node.body.kind === SyntaxKind.Block) {
                 rewriteBlock(<Block>node.body);
             } else {
                 builder.emit(OpCode.Return, nodeVisitor.visitExpression(<Expression>node.body));
             }
-
             var func = builder.buildFunction(node.kind, node.name, node, node.flags, node.modifiers);
             func.id = node.id;
             func.parent = node.parent;

@@ -13,27 +13,27 @@ module ts {
     }
 
     function visitNode<T>(cbNode: (node: Node) => T, node: Node): T {
-            if (node) {
-                return cbNode(node);
-            }
+        if (node) {
+            return cbNode(node);
         }
+    }
 
     function visitNodeArray<T>(cbNodes: (nodes: Node[]) => T, nodes: Node[]) {
-            if (nodes) {
-                    return cbNodes(nodes);
-                }
+        if (nodes) {
+            return cbNodes(nodes);
+        }
     }
 
     function visitEachNode<T>(cbNode: (node: Node) => T, nodes: Node[]) {
         if (nodes) {
-                for (var i = 0, len = nodes.length; i < len; i++) {
+            for (var i = 0, len = nodes.length; i < len; i++) {
                 var result = cbNode(nodes[i]);
-                    if (result) {
-                        return result;
-                    }
+                if (result) {
+                    return result;
                 }
             }
         }
+    }
 
     // Invokes a callback for each child of the given node. The 'cbNode' callback is invoked for all child nodes
     // stored in properties. If a 'cbNodes' callback is specified, it is invoked for embedded arrays; otherwise,
@@ -1386,7 +1386,7 @@ module ts {
 
         function nextTokenCanFollowModifier() {
             if (token === SyntaxKind.AsyncKeyword) {
-            nextToken();
+                nextToken();
                 return canFollowAsyncModifier();
             }
 
@@ -1405,7 +1405,7 @@ module ts {
             }
 
             if (token === SyntaxKind.AsyncKeyword) {
-            nextToken();
+                nextToken();
                 return canFollowAsyncModifier();
             }
 
