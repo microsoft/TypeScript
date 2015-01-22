@@ -1408,7 +1408,7 @@ var ts;
     }
     ts.computeLineStarts = computeLineStarts;
     function getPositionFromLineAndCharacter(lineStarts, line, character) {
-        ts.Debug.assert(line > 0);
+        ts.Debug.assert(line > 0 && line <= lineStarts.length);
         return lineStarts[line - 1] + character - 1;
     }
     ts.getPositionFromLineAndCharacter = getPositionFromLineAndCharacter;
@@ -7281,9 +7281,10 @@ var ts;
     function writeCommentRange(currentSourceFile, writer, comment, newLine) {
         if (currentSourceFile.text.charCodeAt(comment.pos + 1) === 42 /* asterisk */) {
             var firstCommentLineAndCharacter = currentSourceFile.getLineAndCharacterFromPosition(comment.pos);
+            var lastLine = currentSourceFile.getLineStarts().length;
             var firstCommentLineIndent;
             for (var pos = comment.pos, currentLine = firstCommentLineAndCharacter.line; pos < comment.end; currentLine++) {
-                var nextLineStart = currentSourceFile.getPositionFromLineAndCharacter(currentLine + 1, 1);
+                var nextLineStart = currentLine === lastLine ? (comment.end + 1) : currentSourceFile.getPositionFromLineAndCharacter(currentLine + 1, 1);
                 if (pos !== comment.pos) {
                     if (firstCommentLineIndent === undefined) {
                         firstCommentLineIndent = calculateIndent(currentSourceFile.getPositionFromLineAndCharacter(firstCommentLineAndCharacter.line, 1), comment.pos);
@@ -17986,7 +17987,7 @@ var ts;
 })(ts || (ts = {}));
 var ts;
 (function (ts) {
-    var version = "1.4.1.0";
+    var version = "1.4.2.0";
     function validateLocaleAndSetLanguage(locale, errors) {
         var matchResult = /^([a-z]+)([_\-]([a-z]+))?$/.exec(locale.toLowerCase());
         if (!matchResult) {
