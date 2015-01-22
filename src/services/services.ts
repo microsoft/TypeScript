@@ -2485,7 +2485,7 @@ module ts {
                             return containingNodeKind === SyntaxKind.PropertySignature &&
                                 previousToken.parent.parent.kind === SyntaxKind.InterfaceDeclaration;    // interface a { f; |
 
-                        case SyntaxKind.FirstBinaryOperator:
+                        case SyntaxKind.LessThanToken:
                             return containingNodeKind === SyntaxKind.ClassDeclaration ||        // class A< |
                                 containingNodeKind === SyntaxKind.FunctionDeclaration ||        // function A< |
                                 containingNodeKind === SyntaxKind.InterfaceDeclaration ||       // interface A< |
@@ -5150,7 +5150,6 @@ module ts {
 
                     var childNodes = parentElement.getChildren(sourceFile);
                     for (var i = 0, n = childNodes.length; i < n; i++) {
-                        33
                         var current = childNodes[i];
 
                         if (current.kind === matchKind) {
@@ -5175,14 +5174,14 @@ module ts {
 
             function getMatchingTokenKind(token: Node): ts.SyntaxKind {
                 switch (token.kind) {
-                    case ts.SyntaxKind.OpenBraceToken: return ts.SyntaxKind.CloseBraceToken
-                    case ts.SyntaxKind.OpenParenToken: return ts.SyntaxKind.CloseParenToken;
-                    case ts.SyntaxKind.OpenBracketToken: return ts.SyntaxKind.CloseBracketToken;
-                    case ts.SyntaxKind.LessThanToken: return ts.SyntaxKind.GreaterThanToken;
-                    case ts.SyntaxKind.CloseBraceToken: return ts.SyntaxKind.OpenBraceToken
-                    case ts.SyntaxKind.CloseParenToken: return ts.SyntaxKind.OpenParenToken;
-                    case ts.SyntaxKind.CloseBracketToken: return ts.SyntaxKind.OpenBracketToken;
-                    case ts.SyntaxKind.GreaterThanToken: return ts.SyntaxKind.LessThanToken;
+                    case ts.SyntaxKind.OpenBraceToken:      return ts.SyntaxKind.CloseBraceToken
+                    case ts.SyntaxKind.OpenParenToken:      return ts.SyntaxKind.CloseParenToken;
+                    case ts.SyntaxKind.OpenBracketToken:    return ts.SyntaxKind.CloseBracketToken;
+                    case ts.SyntaxKind.LessThanToken:       return ts.SyntaxKind.GreaterThanToken;
+                    case ts.SyntaxKind.CloseBraceToken:     return ts.SyntaxKind.OpenBraceToken
+                    case ts.SyntaxKind.CloseParenToken:     return ts.SyntaxKind.OpenParenToken;
+                    case ts.SyntaxKind.CloseBracketToken:   return ts.SyntaxKind.OpenBracketToken;
+                    case ts.SyntaxKind.GreaterThanToken:    return ts.SyntaxKind.LessThanToken;
                 }
 
                 return undefined;
@@ -5586,41 +5585,41 @@ module ts {
 
                 if (!isTrivia(token)) {
                     if ((token === SyntaxKind.SlashToken || token === SyntaxKind.SlashEqualsToken) && !noRegexTable[lastNonTriviaToken]) {
-                        if (scanner.reScanSlashToken() === SyntaxKind.RegularExpressionLiteral) {
-                            token = SyntaxKind.RegularExpressionLiteral;
-                        }
+                         if (scanner.reScanSlashToken() === SyntaxKind.RegularExpressionLiteral) {
+                             token = SyntaxKind.RegularExpressionLiteral;
+                         }
                     }
                     else if (lastNonTriviaToken === SyntaxKind.DotToken && isKeyword(token)) {
-                        token = SyntaxKind.Identifier;
+                             token = SyntaxKind.Identifier;
                     }
                     else if (isKeyword(lastNonTriviaToken) && isKeyword(token) && !canFollow(lastNonTriviaToken, token)) {
-                        // We have two keywords in a row.  Only treat the second as a keyword if 
-                        // it's a sequence that could legally occur in the language.  Otherwise
-                        // treat it as an identifier.  This way, if someone writes "private var"
-                        // we recognize that 'var' is actually an identifier here.
-                        token = SyntaxKind.Identifier;
+                             // We have two keywords in a row.  Only treat the second as a keyword if 
+                             // it's a sequence that could legally occur in the language.  Otherwise
+                             // treat it as an identifier.  This way, if someone writes "private var"
+                             // we recognize that 'var' is actually an identifier here.
+                             token = SyntaxKind.Identifier;
                     }
                     else if (lastNonTriviaToken === SyntaxKind.Identifier &&
-                        token === SyntaxKind.LessThanToken) {
-                        // Could be the start of something generic.  Keep track of that by bumping 
-                        // up the current count of generic contexts we may be in.
-                        angleBracketStack++;
+                             token === SyntaxKind.LessThanToken) {
+                             // Could be the start of something generic.  Keep track of that by bumping 
+                             // up the current count of generic contexts we may be in.
+                             angleBracketStack++;
                     }
                     else if (token === SyntaxKind.GreaterThanToken && angleBracketStack > 0) {
-                        // If we think we're currently in something generic, then mark that that
-                        // generic entity is complete.
-                        angleBracketStack--;
+                             // If we think we're currently in something generic, then mark that that
+                             // generic entity is complete.
+                             angleBracketStack--;
                     }
                     else if (token === SyntaxKind.AnyKeyword ||
-                        token === SyntaxKind.StringKeyword ||
-                        token === SyntaxKind.NumberKeyword ||
-                        token === SyntaxKind.BooleanKeyword) {
-                        if (angleBracketStack > 0 && !classifyKeywordsInGenerics) {
-                            // If it looks like we're could be in something generic, don't classify this 
-                            // as a keyword.  We may just get overwritten by the syntactic classifier,
-                            // causing a noisy experience for the user.
-                            token = SyntaxKind.Identifier;
-                        }
+                             token === SyntaxKind.StringKeyword ||
+                             token === SyntaxKind.NumberKeyword ||
+                             token === SyntaxKind.BooleanKeyword) {
+                             if (angleBracketStack > 0 && !classifyKeywordsInGenerics) {
+                                 // If it looks like we're could be in something generic, don't classify this 
+                                 // as a keyword.  We may just get overwritten by the syntactic classifier,
+                                 // causing a noisy experience for the user.
+                                 token = SyntaxKind.Identifier;
+                             }
                     }
 
                     lastNonTriviaToken = token;

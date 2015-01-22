@@ -32,7 +32,6 @@
 
 test.markers().forEach((m) => {
     goTo.position(m.position, m.fileName);
-    debugger;
     verify.not.completionListIsEmpty();
     verify.completionListIsBuilder();
 });
