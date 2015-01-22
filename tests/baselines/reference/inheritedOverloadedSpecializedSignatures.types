@@ -58,33 +58,78 @@ interface B  {
 >x : 'B2'
 }
 
-var b: B;
->b : B
+interface C1 extends B {
+>C1 : C1
 >B : B
 
-// non of these lines should error
-var x1: string[] = b('B2'); 
+	(x: 'C1'): number[];
+>x : 'C1'
+}
+
+interface C2 extends B {
+>C2 : C2
+>B : B
+
+	(x: 'C2'): boolean[];
+>x : 'C2'
+}
+
+interface C extends C1, C2 {
+>C : C
+>C1 : C1
+>C2 : C2
+
+	(x: 'C'): string;
+>x : 'C'
+}
+
+var c: C;
+>c : C
+>C : C
+
+// none of these lines should error
+var x1: string[] = c('B2');
 >x1 : string[]
->b('B2') : string[]
->b : B
+>c('B2') : string[]
+>c : C
 
-var x2: number = b('B1');
+var x2: number = c('B1');
 >x2 : number
->b('B1') : number
->b : B
+>c('B1') : number
+>c : C
 
-var x3: boolean = b('A2');
+var x3: boolean = c('A2');
 >x3 : boolean
->b('A2') : boolean
->b : B
+>c('A2') : boolean
+>c : C
 
-var x4: string = b('A1');
+var x4: string = c('A1');
 >x4 : string
->b('A1') : string
->b : B
+>c('A1') : string
+>c : C
 
-var x5: void = b('A0');
+var x5: void = c('A0');
 >x5 : void
->b('A0') : void
->b : B
+>c('A0') : void
+>c : C
+
+var x6: number[] = c('C1');
+>x6 : number[]
+>c('C1') : number[]
+>c : C
+
+var x7: boolean[] = c('C2');
+>x7 : boolean[]
+>c('C2') : boolean[]
+>c : C
+
+var x8: string = c('C');
+>x8 : string
+>c('C') : string
+>c : C
+
+var x9: void = c('generic');
+>x9 : void
+>c('generic') : void
+>c : C
 

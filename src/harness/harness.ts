@@ -22,6 +22,7 @@
 
 declare var require: any;
 declare var process: any;
+var Buffer = require('buffer').Buffer;
 
 // this will work in the browser via browserify
 var _chai: typeof chai = require('chai');
@@ -810,7 +811,9 @@ module Harness {
         export function createCompilerHost(inputFiles: { unitName: string; content: string; }[],
             writeFile: (fn: string, contents: string, writeByteOrderMark: boolean) => void,
             scriptTarget: ts.ScriptTarget,
-            useCaseSensitiveFileNames: boolean): ts.CompilerHost {
+            useCaseSensitiveFileNames: boolean,
+            // the currentDirectory is needed for rwcRunner to passed in specified current directory to compiler host
+            currentDirectory?: string): ts.CompilerHost {
 
             // Local get canonical file name function, that depends on passed in parameter for useCaseSensitiveFileNames
             function getCanonicalFileName(fileName: string): string {
@@ -818,6 +821,8 @@ module Harness {
             }
 
             var filemap: { [filename: string]: ts.SourceFile; } = {};
+            var getCurrentDirectory = currentDirectory === undefined ? ts.sys.getCurrentDirectory : () => currentDirectory;
+
             // Register input files
             function register(file: { unitName: string; content: string; }) {
                 if (file.content !== undefined) {
@@ -828,10 +833,14 @@ module Harness {
             inputFiles.forEach(register);
 
             return {
-                getCurrentDirectory: ts.sys.getCurrentDirectory,
+                getCurrentDirectory,
                 getSourceFile: (fn, languageVersion) => {
                     if (Object.prototype.hasOwnProperty.call(filemap, getCanonicalFileName(fn))) {
                         return filemap[getCanonicalFileName(fn)];
+                    }
+                    else if (currentDirectory) {
+                        var canonicalAbsolutePath = getCanonicalFileName(ts.getNormalizedAbsolutePath(fn, currentDirectory));
+                        return Object.prototype.hasOwnProperty.call(filemap, getCanonicalFileName(canonicalAbsolutePath)) ? filemap[canonicalAbsolutePath] : undefined;
                     }
                     else if (fn === fourslashFilename) {
                         var tsFn = 'tests/cases/fourslash/' + fourslashFilename;
@@ -909,7 +918,9 @@ module Harness {
                 otherFiles: { unitName: string; content: string }[],
                 onComplete: (result: CompilerResult, program: ts.Program) => void,
                 settingsCallback?: (settings: ts.CompilerOptions) => void,
-                options?: ts.CompilerOptions) {
+                options?: ts.CompilerOptions,
+                // Current directory is needed for rwcRunner to be able to use currentDirectory defined in json file
+                currentDirectory?: string) {
 
                 options = options || { noResolve: false };
                 options.target = options.target || ts.ScriptTarget.ES3;
@@ -1066,8 +1077,7 @@ module Harness {
                 var programFiles = inputFiles.map(file => file.unitName);
                 var program = ts.createProgram(programFiles, options, createCompilerHost(inputFiles.concat(otherFiles),
                     (fn, contents, writeByteOrderMark) => fileOutputs.push({ fileName: fn, code: contents, writeByteOrderMark: writeByteOrderMark }),
-                    options.target,
-                    useCaseSensitiveFileNames));
+                    options.target, useCaseSensitiveFileNames, currentDirectory));
 
                 var checker = program.getTypeChecker(/*produceDiagnostics*/ true);
 
@@ -1098,7 +1108,9 @@ module Harness {
                 otherFiles: { unitName: string; content: string; }[],
                 result: CompilerResult,
                 settingsCallback?: (settings: ts.CompilerOptions) => void,
-                options?: ts.CompilerOptions) {
+                options?: ts.CompilerOptions,
+                // Current directory is needed for rwcRunner to be able to use currentDirectory defined in json file
+                currentDirectory?: string) {
                 if (options.declaration && result.errors.length === 0 && result.declFilesCode.length !== result.files.length) {
                     throw new Error('There were no errors and declFiles generated did not match number of js files generated');
                 }
@@ -1111,9 +1123,8 @@ module Harness {
 
                     ts.forEach(inputFiles, file => addDtsFile(file, declInputFiles));
                     ts.forEach(otherFiles, file => addDtsFile(file, declOtherFiles));
-                    this.compileFiles(declInputFiles, declOtherFiles, function (compileResult) {
-                        declResult = compileResult;
-                    }, settingsCallback, options);
+                    this.compileFiles(declInputFiles, declOtherFiles, function (compileResult) { declResult = compileResult; },
+                        settingsCallback, options, currentDirectory);
 
                     return { declInputFiles, declOtherFiles, declResult };
                 }
@@ -1130,29 +1141,27 @@ module Harness {
                     }
 
                     function findResultCodeFile(fileName: string) {
-                        var dTsFileName = ts.forEach(result.program.getSourceFiles(), sourceFile => {
-                            if (sourceFile.filename === fileName) {
-                                // Is this file going to be emitted separately
-                                var sourceFileName: string;
-                                if (ts.isExternalModule(sourceFile) || !options.out) {
-                                    if (options.outDir) {
-                                        var sourceFilePath = ts.getNormalizedAbsolutePath(sourceFile.filename, result.currentDirectoryForProgram);
-                                        sourceFilePath = sourceFilePath.replace(result.program.getCommonSourceDirectory(), "");
-                                        sourceFileName = ts.combinePaths(options.outDir, sourceFilePath);
-                                    }
-                                    else {
-                                        sourceFileName = sourceFile.filename;
-                                    }
-                                }
-                                else {
-                                    // Goes to single --out file
-                                    sourceFileName = options.out;
-                                }
-
-                                return ts.removeFileExtension(sourceFileName) + ".d.ts";
+                        var sourceFile = result.program.getSourceFile(fileName);
+                        assert(sourceFile, "Program has no source file with name '" + fileName + "'");
+                        // Is this file going to be emitted separately
+                        var sourceFileName: string;
+                        if (ts.isExternalModule(sourceFile) || !options.out) {
+                            if (options.outDir) {
+                                var sourceFilePath = ts.getNormalizedAbsolutePath(sourceFile.filename, result.currentDirectoryForProgram);
+                                sourceFilePath = sourceFilePath.replace(result.program.getCommonSourceDirectory(), "");
+                                sourceFileName = ts.combinePaths(options.outDir, sourceFilePath);
                             }
-                        });
+                            else {
+                                sourceFileName = sourceFile.filename;
+                            }
+                        }
+                        else {
+                            // Goes to single --out file
+                            sourceFileName = options.out;
+                        }
 
+                        var dTsFileName = ts.removeFileExtension(sourceFileName) + ".d.ts";
+                        
                         return ts.forEach(result.declFilesCode, declFile => declFile.fileName === dTsFileName ? declFile : undefined);
                     }
 
@@ -1202,7 +1211,6 @@ module Harness {
 
         export function getErrorBaseline(inputFiles: { unitName: string; content: string }[], diagnostics: HarnessDiagnostic[]) {
             diagnostics.sort(compareDiagnostics);
-
             var outputLines: string[] = [];
             // Count up all the errors we find so we don't miss any
             var totalErrorsReported = 0;
@@ -1293,8 +1301,13 @@ module Harness {
                 return diagnostic.filename && isLibraryFile(diagnostic.filename);
             });
 
+            var numTest262HarnessDiagnostics = ts.countWhere(diagnostics, diagnostic => {
+                // Count an error generated from tests262-harness folder.This should only apply for test262
+                return diagnostic.filename && diagnostic.filename.indexOf("test262-harness") >= 0;
+            });
+
             // Verify we didn't miss any errors in total
-            assert.equal(totalErrorsReported + numLibraryDiagnostics, diagnostics.length, 'total number of errors');
+            assert.equal(totalErrorsReported + numLibraryDiagnostics + numTest262HarnessDiagnostics, diagnostics.length, 'total number of errors');
 
             return minimalDiagnosticsToString(diagnostics) +
                 ts.sys.newLine + ts.sys.newLine + outputLines.join('\r\n');
@@ -1637,7 +1650,8 @@ module Harness {
         }
 
         function writeComparison(expected: string, actual: string, relativeFilename: string, actualFilename: string, descriptionForDescribe: string) {
-            if (expected != actual) {
+            var encoded_actual = (new Buffer(actual)).toString('utf8')
+            if (expected != encoded_actual) {
                 // Overwrite & issue error
                 var errMsg = 'The baseline file ' + relativeFilename + ' has changed';
                 throw new Error(errMsg);

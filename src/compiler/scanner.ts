@@ -226,15 +226,15 @@ module ts {
     }
 
     function isUnicodeIdentifierStart(code: number, languageVersion: ScriptTarget) {
-        return languageVersion === ScriptTarget.ES3 ?
-            lookupInUnicodeMap(code, unicodeES3IdentifierStart) :
-            lookupInUnicodeMap(code, unicodeES5IdentifierStart);
+        return languageVersion >= ScriptTarget.ES5 ?
+            lookupInUnicodeMap(code, unicodeES5IdentifierStart) :
+            lookupInUnicodeMap(code, unicodeES3IdentifierStart);
     }
 
     function isUnicodeIdentifierPart(code: number, languageVersion: ScriptTarget) {
-        return languageVersion === ScriptTarget.ES3 ?
-            lookupInUnicodeMap(code, unicodeES3IdentifierPart) :
-            lookupInUnicodeMap(code, unicodeES5IdentifierPart);
+        return languageVersion >= ScriptTarget.ES5 ?
+            lookupInUnicodeMap(code, unicodeES5IdentifierPart) :
+            lookupInUnicodeMap(code, unicodeES3IdentifierPart);
     }
 
     function makeReverseMap(source: Map<number>): string[] {
@@ -281,7 +281,7 @@ module ts {
     }
 
     export function getPositionFromLineAndCharacter(lineStarts: number[], line: number, character: number): number {
-        Debug.assert(line > 0);
+        Debug.assert(line > 0 && line <= lineStarts.length );
         return lineStarts[line - 1] + character - 1;
     }
 
@@ -1042,7 +1042,7 @@ module ts {
                                 value = 0;
                             }
                             tokenValue = "" + value;
-                            return SyntaxKind.NumericLiteral;
+                            return token = SyntaxKind.NumericLiteral;
                         }
                         else if (pos + 2 < len && (text.charCodeAt(pos + 1) === CharacterCodes.O || text.charCodeAt(pos + 1) === CharacterCodes.o)) {
                             pos += 2;
@@ -1052,7 +1052,7 @@ module ts {
                                 value = 0;
                             }
                             tokenValue = "" + value;
-                            return SyntaxKind.NumericLiteral;
+                            return token = SyntaxKind.NumericLiteral;
                         }
                         // Try to parse as an octal
                         if (pos + 1 < len && isOctalDigit(text.charCodeAt(pos + 1))) {

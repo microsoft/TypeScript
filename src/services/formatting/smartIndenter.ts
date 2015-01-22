@@ -12,10 +12,15 @@ module ts.formatting {
                 return 0;
             }
 
-            // no indentation in string \regex literals
-            if ((precedingToken.kind === SyntaxKind.StringLiteral || precedingToken.kind === SyntaxKind.RegularExpressionLiteral) &&
-                precedingToken.getStart(sourceFile) <= position &&
-                precedingToken.end > position) {
+            // no indentation in string \regex\template literals
+            var precedingTokenIsLiteral =
+                precedingToken.kind === SyntaxKind.StringLiteral ||
+                precedingToken.kind === SyntaxKind.RegularExpressionLiteral ||
+                precedingToken.kind === SyntaxKind.NoSubstitutionTemplateLiteral ||
+                precedingToken.kind === SyntaxKind.TemplateHead ||
+                precedingToken.kind === SyntaxKind.TemplateMiddle ||
+                precedingToken.kind === SyntaxKind.TemplateTail;
+            if (precedingTokenIsLiteral && precedingToken.getStart(sourceFile) <= position &&  precedingToken.end > position) {
                 return 0;
             }
 

@@ -65,6 +65,7 @@ var servicesSources = [
     "rewriter.ts",
     "emitter.ts",
     "program.ts",
+    "commandLineParser.ts",
     "diagnosticInformationMap.generated.ts",
 	"factory.generated.ts"
 ].map(function (f) {
@@ -110,6 +111,7 @@ var internalDefinitionsRoots = [
     "compiler/core.d.ts",
     "compiler/sys.d.ts",
     "compiler/utilities.d.ts",
+    "compiler/commandLineParser.d.ts",
     "services/utilities.d.ts",
 ];
 
@@ -200,7 +202,7 @@ var compilerFilename = "tsc.js";
     * @param keepComments: false to compile using --removeComments
     * @param callback: a function to execute after the compilation process ends
     */
-function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, noOutFile, generateDeclarations, outDir, keepComments, noResolve, callback) {
+function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, noOutFile, generateDeclarations, outDir, preserveConstEnums, keepComments, noResolve, callback) {
     file(outFile, prereqs, function() {
         var dir = useBuiltCompiler ? builtLocalDirectory : LKGDirectory;
         var options = "--module commonjs -noImplicitAny";
@@ -213,7 +215,7 @@ function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, noOu
             options += " --declaration";
         }
 
-        if (useDebugMode) {
+        if (useDebugMode || preserveConstEnums) {
             options += " --preserveConstEnums";
         }
 
@@ -355,7 +357,15 @@ var tscFile = path.join(builtLocalDirectory, compilerFilename);
 compileFile(tscFile, compilerSources, [builtLocalDirectory, copyright].concat(compilerSources), [copyright], /*useBuiltCompiler:*/ false);
 
 var servicesFile = path.join(builtLocalDirectory, "typescriptServices.js");
-compileFile(servicesFile, servicesSources,[builtLocalDirectory, copyright].concat(servicesSources), [copyright], /*useBuiltCompiler*/ true);
+compileFile(servicesFile, servicesSources,[builtLocalDirectory, copyright].concat(servicesSources),
+            /*prefixes*/ [copyright],
+            /*useBuiltCompiler*/ true,
+            /*noOutFile*/ false,
+            /*generateDeclarations*/ false,
+            /*outDir*/ undefined,
+            /*preserveConstEnums*/ true,
+            /*keepComments*/ false,
+            /*noResolve*/ false);
 
 var nodeDefinitionsFile = path.join(builtLocalDirectory, "typescript.d.ts");
 var standaloneDefinitionsFile = path.join(builtLocalDirectory, "typescriptServices.d.ts");
@@ -368,6 +378,7 @@ compileFile(nodeDefinitionsFile, servicesSources,[builtLocalDirectory, copyright
             /*noOutFile*/ true,
             /*generateDeclarations*/ true,
             /*outDir*/ tempDirPath,
+            /*preserveConstEnums*/ true,
             /*keepComments*/ true,
             /*noResolve*/ true,
             /*callback*/ function () {

@@ -172,9 +172,10 @@ module ts {
     function writeCommentRange(currentSourceFile: SourceFile, writer: EmitTextWriter, comment: CommentRange, newLine: string){
         if (currentSourceFile.text.charCodeAt(comment.pos + 1) === CharacterCodes.asterisk) {
             var firstCommentLineAndCharacter = currentSourceFile.getLineAndCharacterFromPosition(comment.pos);
+            var lastLine = currentSourceFile.getLineStarts().length;
             var firstCommentLineIndent: number;
             for (var pos = comment.pos, currentLine = firstCommentLineAndCharacter.line; pos < comment.end; currentLine++) {
-                var nextLineStart = currentSourceFile.getPositionFromLineAndCharacter(currentLine + 1, /*character*/1);
+                var nextLineStart = currentLine === lastLine ? (comment.end + 1) : currentSourceFile.getPositionFromLineAndCharacter(currentLine + 1, /*character*/1);
 
                 if (pos !== comment.pos) {
                     // If we are not emitting first line, we need to write the spaces to adjust the alignment
@@ -341,6 +342,7 @@ module ts {
     function emitDeclarations(host: EmitHost, resolver: EmitResolver, diagnostics: Diagnostic[], jsFilePath: string, root?: SourceFile): DeclarationEmit {
         var newLine = host.getNewLine();
         var compilerOptions = host.getCompilerOptions();
+        var languageVersion = compilerOptions.target || ScriptTarget.ES3;
 
         var write: (s: string) => void;
         var writeLine: () => void;
@@ -1397,7 +1399,7 @@ module ts {
                 ? referencedFile.filename // Declaration file, use declaration file name
                 : shouldEmitToOwnFile(referencedFile, compilerOptions)
                     ? getOwnEmitOutputFilePath(referencedFile, host, ".d.ts") // Own output file so get the .d.ts file
-                : removeFileExtension(compilerOptions.out) + ".d.ts";// Global out file
+                    : removeFileExtension(compilerOptions.out) + ".d.ts";// Global out file
 
             declFileName = getRelativePathToDirectoryOrUrl(
                 getDirectoryPath(normalizeSlashes(jsFilePath)),
@@ -1464,17 +1466,6 @@ module ts {
         }
     }
 
-    export interface EmitHost extends ScriptReferenceHost {
-        getSourceFiles(): SourceFile[];
-        isEmitBlocked(sourceFile?: SourceFile): boolean;
-
-        getCommonSourceDirectory(): string;
-        getCanonicalFileName(fileName: string): string;
-        getNewLine(): string;
-
-        writeFile(filename: string, data: string, writeByteOrderMark: boolean, onError?: (message: string) => void): void;
-    }
-
     export function getDeclarationDiagnostics(host: EmitHost, resolver: EmitResolver, targetSourceFile: SourceFile): Diagnostic[] {
         var diagnostics: Diagnostic[] = [];
         var jsFilePath = getOwnEmitOutputFilePath(targetSourceFile, host, ".js");
@@ -1486,6 +1477,7 @@ module ts {
     export function emitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFile?: SourceFile): EmitResult {
         // var program = resolver.getProgram();
         var compilerOptions = host.getCompilerOptions();
+        var languageVersion = compilerOptions.target || ScriptTarget.ES3;
         var sourceMapDataList: SourceMapData[] = compilerOptions.sourceMap ? [] : undefined;
         var diagnostics: Diagnostic[] = [];
         var newLine = host.getNewLine();
@@ -1923,7 +1915,7 @@ module ts {
             function ensureLocals() {
                 if (!globals) {
                     globals = {};
-                }
+                    }
 
                 if (!locals) {
                     locals = createLocalsBuilder(resolver, localsScope, globals);
@@ -1934,17 +1926,17 @@ module ts {
                 if (locals) {
                     var variables = locals.getVariables();
                     if (variables) {
-                        if (newLine) {
-                            writeLine();
-                        }
-                        else {
-                            write(" ");
-                        }
-                        write("var ");
-                            emitCommaList(variables);
-                        write(";");
+                    if (newLine) {
+                        writeLine();
                     }
+                    else {
+                        write(" ");
+                    }
+                    write("var ");
+                            emitCommaList(variables);
+                    write(";");
                 }
+            }
             }
 
             function emitTokenText(tokenKind: SyntaxKind, startPos: number, emitFn?: () => void) {
@@ -2044,14 +2036,14 @@ module ts {
             }
 
             function emitLiteral(node: LiteralExpression) {
-                var text = compilerOptions.target < ScriptTarget.ES6 && isTemplateLiteralKind(node.kind) ? getTemplateLiteralAsStringLiteral(node) :
+                var text = languageVersion < ScriptTarget.ES6 && isTemplateLiteralKind(node.kind) ? getTemplateLiteralAsStringLiteral(node) :
                     node.parent && node.pos >= 0 ? getSourceTextOfNodeFromSourceFile(currentSourceFile, node) :
                     node.text;
                 if (compilerOptions.sourceMap && (node.kind === SyntaxKind.StringLiteral || isTemplateLiteralKind(node.kind))) {
                     writer.writeLiteral(text);
                 }
                 // For version below ES6, emit binary integer literal and octal integer literal in canonical form
-                else if (compilerOptions.target < ScriptTarget.ES6 && node.kind === SyntaxKind.NumericLiteral && isBinaryOrOctalIntegerLiteral(text)) {
+                else if (languageVersion < ScriptTarget.ES6 && node.kind === SyntaxKind.NumericLiteral && isBinaryOrOctalIntegerLiteral(text)) {
                     write(node.text);
                 }
                 else {
@@ -2066,7 +2058,7 @@ module ts {
             function emitTemplateExpression(node: TemplateExpression): void {
                 // In ES6 mode and above, we can simply emit each portion of a template in order, but in
                 // ES3 & ES5 we must convert the template expression into a series of string concatenations.
-                if (compilerOptions.target >= ScriptTarget.ES6) {
+                if (languageVersion >= ScriptTarget.ES6) {
                     forEachChild(node, emit);
                     return;
                 }
@@ -2080,9 +2072,15 @@ module ts {
                     write("(");
                 }
 
+                var headEmitted = false;
+                if (shouldEmitTemplateHead()) {
                 emitLiteral(node.head);
+                    headEmitted = true;
+                }
 
-                forEach(node.templateSpans, templateSpan => {
+                for (var i = 0; i < node.templateSpans.length; i++) {
+                    var templateSpan = node.templateSpans[i];
+
                     // Check if the expression has operands and binds its operands less closely than binary '+'.
                     // If it does, we need to wrap the expression in parentheses. Otherwise, something like
                     //    `abc${ 1 << 2 }`
@@ -2094,7 +2092,14 @@ module ts {
                     //    "abc" + (1 << 2) + ""
                     var needsParens = templateSpan.expression.kind !== SyntaxKind.ParenthesizedExpression
                         && comparePrecedenceToBinaryPlus(templateSpan.expression) !== Comparison.GreaterThan;
+
+                    if (i > 0 || headEmitted) {
+                        // If this is the first span and the head was not emitted, then this templateSpan's
+                        // expression will be the first to be emitted. Don't emit the preceding ' + ' in that
+                        // case.
                     write(" + ");
+                    }
+
                     emitParenthesized(templateSpan.expression, needsParens);
                     // Only emit if the literal is non-empty.
                     // The binary '+' operator is left-associative, so the first string concatenation
@@ -2104,10 +2109,32 @@ module ts {
                         write(" + ")
                         emitLiteral(templateSpan.literal);
                     }
-                });
+                }
 
                 if (emitOuterParens) {
                     write(")");
+                }
+
+                function shouldEmitTemplateHead() {
+                    // If this expression has an empty head literal and the first template span has a non-empty
+                    // literal, then emitting the empty head literal is not necessary.
+                    //     `${ foo } and ${ bar }`
+                    // can be emitted as
+                    //     foo + " and " + bar
+                    // This is because it is only required that one of the first two operands in the emit
+                    // output must be a string literal, so that the other operand and all following operands
+                    // are forced into strings.
+                    //
+                    // If the first template span has an empty literal, then the head must still be emitted.
+                    //     `${ foo }${ bar }`
+                    // must still be emitted as
+                    //     "" + foo + bar
+
+                    // There is always atleast one templateSpan in this code path, since
+                    // NoSubstitutionTemplateLiterals are directly emitted via emitLiteral()
+                    Debug.assert(node.templateSpans.length !== 0);
+
+                    return node.head.text.length !== 0 || node.templateSpans[0].literal.text.length === 0;
                 }
 
                 function templateNeedsParens(template: TemplateExpression, parent: Expression) {
@@ -2129,7 +2156,8 @@ module ts {
                  * or equal precedence to the binary '+' operator
                  */
                 function comparePrecedenceToBinaryPlus(expression: Expression): Comparison {
-                    // All binary expressions have lower precedence than '+' apart from '*', '/', and '%'.
+                    // All binary expressions have lower precedence than '+' apart from '*', '/', and '%'
+                    // which have greater precedence and '-' which has equal precedence.
                     // All unary operators have a higher precedence apart from yield.
                     // Arrow functions and conditionals have a lower precedence, 
                     // although we convert the former into regular function expressions in ES5 mode,
@@ -2137,7 +2165,7 @@ module ts {
                     // 
                     // TODO (drosen): Note that we need to account for the upcoming 'yield' and
                     //                spread ('...') unary operators that are anticipated for ES6.
-                    Debug.assert(compilerOptions.target <= ScriptTarget.ES5);
+                    Debug.assert(languageVersion < ScriptTarget.ES6);
                     switch (expression.kind) {
                         case SyntaxKind.BinaryExpression:
                             switch ((<BinaryExpression>expression).operator) {
@@ -2146,6 +2174,7 @@ module ts {
                                 case SyntaxKind.PercentToken:
                                     return Comparison.GreaterThan;
                                 case SyntaxKind.PlusToken:
+                                case SyntaxKind.MinusToken:
                                     return Comparison.EqualTo;
                                 default:
                                     return Comparison.LessThan;
@@ -2230,8 +2259,8 @@ module ts {
                     write(node.text);
                 }
                 else {
-                    writeTextOfNode(currentSourceFile, node);
-                }
+                writeTextOfNode(currentSourceFile, node);
+            }
             }
 
             function emitIdentifier(node: Identifier) {
@@ -2244,15 +2273,15 @@ module ts {
                         write(generatedName);
                     }
                     else if (!node.parent || nodeIsMissingOrGenerated(node)) {
-                        write(node.text);
-                    }
-                    else if (!isNotExpressionIdentifier(node)) {
-                        emitExpressionIdentifier(node);
-                    }
-                    else {
-                        writeTextOfNode(currentSourceFile, node);
-                    }
+                    write(node.text);
                 }
+                else if (!isNotExpressionIdentifier(node)) {
+                    emitExpressionIdentifier(node);
+                }
+                else {
+                    writeTextOfNode(currentSourceFile, node);
+                }
+            }
             }
 
             function emitThis(node: Node) {
@@ -2336,17 +2365,17 @@ module ts {
                     return;
                 }
 
-                if (compilerOptions.target < ScriptTarget.ES6) {
+                if (languageVersion < ScriptTarget.ES6) {
                     var rewritten = rewriteSpreadElementInArrayLiteral(node);
                     if (rewritten !== node) {
                         return emit(rewritten);
                     }
-                }
+                        }
 
-                write("[");
+                        write("[");
                 emitList(elements, 0, elements.length, /*multiLine*/(node.flags & NodeFlags.MultiLine) !== 0,
-                    /*trailingComma*/ elements.hasTrailingComma);
-                write("]");
+                            /*trailingComma*/ elements.hasTrailingComma);
+                        write("]");
             }
 
             function emitObjectLiteral(node: ObjectLiteralExpression) {
@@ -2358,7 +2387,7 @@ module ts {
                         write(" ");
                     }
                     emitList(properties, 0, properties.length, /*multiLine*/ multiLine,
-                        /*trailingComma*/ properties.hasTrailingComma && compilerOptions.target >= ScriptTarget.ES5);
+                        /*trailingComma*/ properties.hasTrailingComma && languageVersion >= ScriptTarget.ES5);
                     if (!multiLine) {
                         write(" ");
                     }
@@ -2378,7 +2407,7 @@ module ts {
                 }
                 emitLeadingComments(node);
                 emit(node.name);
-                if (compilerOptions.target < ScriptTarget.ES6) {
+                if (languageVersion < ScriptTarget.ES6) {
                     write(": function ");
                 }
                 emitSignatureAndBody(node);
@@ -2404,7 +2433,7 @@ module ts {
                 //      export var obj = { y };
                 //  }
                 //  The short-hand property in obj need to emit as such ... = { y : m.y } regardless of the TargetScript version
-                if (compilerOptions.target < ScriptTarget.ES6 || resolver.getExpressionNamePrefix(node.name)) {
+                if (languageVersion < ScriptTarget.ES6 || resolver.getExpressionNamePrefix(node.name)) {
                     // Emit identifier as an identifier
                     write(": ");
                     // Even though this is stored as identifier treat it as an expression
@@ -2486,7 +2515,7 @@ module ts {
             }
 
             function emitTaggedTemplateExpression(node: TaggedTemplateExpression): void {
-                Debug.assert(compilerOptions.target >= ScriptTarget.ES6, "Trying to emit a tagged template in pre-ES6 mode.");
+                Debug.assert(languageVersion >= ScriptTarget.ES6, "Trying to emit a tagged template in pre-ES6 mode.");
                 emit(node.tag);
                 write(" ");
                 emit(node.template);
@@ -2585,18 +2614,18 @@ module ts {
 
 
             function emitBinaryExpression(node: BinaryExpression) {
-                if (compilerOptions.target < ScriptTarget.ES6 && node.operator === SyntaxKind.EqualsToken &&
+                if (languageVersion < ScriptTarget.ES6 && node.operator === SyntaxKind.EqualsToken &&
                     (node.left.kind === SyntaxKind.ObjectLiteralExpression || node.left.kind === SyntaxKind.ArrayLiteralExpression)) {
                     ensureLocals();
                     node = rewriteDestructuring(node, locals);
                 }
 
-                emit(node.left);
-                if (node.operator !== SyntaxKind.CommaToken) write(" ");
-                write(tokenToString(node.operator));
-                write(" ");
-                emit(node.right);
-            }
+                    emit(node.left);
+                    if (node.operator !== SyntaxKind.CommaToken) write(" ");
+                    write(tokenToString(node.operator));
+                    write(" ");
+                    emit(node.right);
+                }
 
             function emitConditionalExpression(node: ConditionalExpression) {
                 emit(node.condition);
@@ -2869,7 +2898,7 @@ module ts {
             function emitVariableDeclaration(node: VariableDeclaration) {
                 emitLeadingComments(node);
                 if (isBindingPattern(node.name)) {
-                    if (compilerOptions.target < ScriptTarget.ES6) {
+                    if (languageVersion < ScriptTarget.ES6) {
                         ensureLocals();
                         emitCommaList(rewriteBindingElement(<BindingElement>node, locals));
                     }
@@ -2905,7 +2934,7 @@ module ts {
 
             function emitParameter(node: ParameterDeclaration) {
                 emitLeadingComments(node);
-                if (compilerOptions.target < ScriptTarget.ES6) {
+                if (languageVersion < ScriptTarget.ES6) {
                     if (isBindingPattern(node.name)) {
                         ensureLocals();
                         var name = locals.createUniqueIdentifier();
@@ -2930,37 +2959,37 @@ module ts {
             }
 
             function emitDefaultValueAssignments(node: FunctionLikeDeclaration) {
-                if (compilerOptions.target < ScriptTarget.ES6) {
-                var tempIndex = 0;
-                forEach(node.parameters, p => {
-                    if (isBindingPattern(p.name)) {
-                        writeLine();
-                        write("var ");
+                if (languageVersion < ScriptTarget.ES6) {
+                    var tempIndex = 0;
+                    forEach(node.parameters, p => {
+                        if (isBindingPattern(p.name)) {
+                            writeLine();
+                            write("var ");
                         emitCommaList(rewriteBindingElement(<BindingElement>p, locals, tempParameters[tempIndex]));
-                        write(";");
-                        tempIndex++;
-                    }
-                    else if (p.initializer) {
-                        writeLine();
-                        emitStart(p);
-                        write("if (");
-                        emitNode(p.name);
-                        write(" === void 0)");
-                        emitEnd(p);
-                        write(" { ");
-                        emitStart(p);
-                        emitNode(p.name);
-                        write(" = ");
-                        emitNode(p.initializer);
-                        emitEnd(p);
-                        write("; }");
-                    }
-                });
-            }
+                            write(";");
+                            tempIndex++;
+                        }
+                        else if (p.initializer) {
+                            writeLine();
+                            emitStart(p);
+                            write("if (");
+                            emitNode(p.name);
+                            write(" === void 0)");
+                            emitEnd(p);
+                            write(" { ");
+                            emitStart(p);
+                            emitNode(p.name);
+                            write(" = ");
+                            emitNode(p.initializer);
+                            emitEnd(p);
+                            write("; }");
+                        }
+                    });
+                }
             }
 
             function emitRestParameter(node: FunctionLikeDeclaration) {
-                if (compilerOptions.target < ScriptTarget.ES6 && hasRestParameters(node)) {
+                if (languageVersion < ScriptTarget.ES6 && hasRestParameters(node)) {
                     ensureLocals();
                     var restIndex = node.parameters.length - 1;
                     var restParam = node.parameters[restIndex];
@@ -3054,7 +3083,7 @@ module ts {
                 write("(");
                 if (node) {
                     var parameters = node.parameters;
-                    var omitCount = compilerOptions.target < ScriptTarget.ES6 && hasRestParameters(node) ? 1 : 0;
+                    var omitCount = languageVersion < ScriptTarget.ES6 && hasRestParameters(node) ? 1 : 0;
                     emitList(parameters, 0, parameters.length - omitCount, /*multiLine*/ false, /*trailingComma*/ false);
                 }
                 write(")");
@@ -3516,8 +3545,8 @@ module ts {
             }
 
             function emitModuleDeclaration(node: ModuleDeclaration) {
-                var shouldEmit = getModuleInstanceState(node) === ModuleInstanceState.Instantiated ||
-                    (getModuleInstanceState(node) === ModuleInstanceState.ConstEnumOnly && compilerOptions.preserveConstEnums);
+                // Emit only if this module is non-ambient.
+                var shouldEmit = isInstantiatedModule(node, compilerOptions.preserveConstEnums);
 
                 if (!shouldEmit) {
                     return emitPinnedOrTripleSlashComments(node);
@@ -3731,23 +3760,23 @@ module ts {
                 // emit prologue directives prior to __extends
                 var startIndex = emitDirectivePrologues(node.statements, /*startWithNewLine*/ false);
                 if (!compilerOptions.noHelpers) {
-                    if (!extendsEmitted && resolver.getNodeCheckFlags(node) & NodeCheckFlags.EmitExtends) {
-                        writeLine();
-                        write("var __extends = this.__extends || function (d, b) {");
-                        increaseIndent();
-                        writeLine();
-                        write("for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];");
-                        writeLine();
-                        write("function __() { this.constructor = d; }");
-                        writeLine();
-                        write("__.prototype = b.prototype;");
-                        writeLine();
-                        write("d.prototype = new __();");
-                        decreaseIndent();
-                        writeLine();
-                        write("};");
-                        extendsEmitted = true;
-                    }
+                if (!extendsEmitted && resolver.getNodeCheckFlags(node) & NodeCheckFlags.EmitExtends) {
+                    writeLine();
+                    write("var __extends = this.__extends || function (d, b) {");
+                    increaseIndent();
+                    writeLine();
+                    write("for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];");
+                    writeLine();
+                    write("function __() { this.constructor = d; }");
+                    writeLine();
+                    write("__.prototype = b.prototype;");
+                    writeLine();
+                    write("d.prototype = new __();");
+                    decreaseIndent();
+                    writeLine();
+                    write("};");
+                    extendsEmitted = true;
+                }
                     if (!awaiterEmitted && resolver.getNodeCheckFlags(node) & NodeCheckFlags.EmitAwaiter) {
                         writeLine();
                         write(`var __awaiter = __awaiter || function (g) {`);
