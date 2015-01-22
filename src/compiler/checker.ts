@@ -7957,24 +7957,15 @@ module ts {
             }
         }
 
-        /**
-         * Gets the result type when awaiting a value
-         * @param type The type to await
-         * @param candidatesOnly A value indicating whether to return `undefined` if an awaited type could not be found
-         * @returns The awaited type
-         */
         function getAwaitedType(type: Type, fallbackType?: Type): Type {
             var seen: boolean[] = [];
 
+            return getAwaitedTypeRecursive(type, fallbackType);
+
             function getAwaitedTypeRecursive(type: Type, fallbackType: Type): Type {
-                // NOTE: This function needs an overhaul. We could introduce a `Thenable<T>` into lib.d.ts for 
-                // the minimum supported interface for a thenable, which would likely be cleaner.
-                // NOTE: Currently missing is a test that the return type of the then call signature is itself thenable. 
-                // This would be easier if we switch to adding `Thenable<T>` (above).
-                if (!(type.flags & TypeFlags.ObjectType)) {
+                if (!type || !globalIPromiseType || !(type.flags & TypeFlags.ObjectType)) {
                     return fallbackType;
                 }
-
                 seen[type.id] = true;
                 if (checkTypeRelatedTo(type, globalIPromiseType, assignableRelation, undefined)) {
                     var thenProp = getPropertyOfType(type, "then");
@@ -7989,52 +7980,38 @@ module ts {
                     if (isTypeAssignableTo(type, thenableType)) {
                         error(null, ts.Diagnostics.Type_for_await_does_not_have_a_valid_callable_then_member);
                     }
-
                     return fallbackType;
                 }
             }
-
-            return getAwaitedTypeRecursive(type, fallbackType);
         }
 
-        /**
-         * Gets and checks whether the supplied type is a valid awaitable return type for an async method or function
-         * @param node The node used when reporting errors
-         * @param returnType The return type of the method or function
-         * @returns The awaited type for the return type
-         */
         function checkAwaitableReturnType(node: SignatureDeclaration, returnType: Type): Type {
-            // NOTE: This function needs an overhaul. We could introduce an interface into lib.d.ts that 
-            // represents a compatible Promise Construct signature, and rely on that and `Thenable<T>` instead.
-
             // an async function has a valid return type if the type has a construct signature that takes
             // in an `initializer` function that in turn supplies a `resolve` function as one of its arguments
             // and results in an object with a callable `then` signature.
-
-            if (!returnType) {
-                returnType = getReturnTypeOfSignature(getSignatureFromDeclaration(node));
-            }
-
-            if (returnType && returnType.symbol) {
-                var links = getSymbolLinks(returnType.symbol);
-                if (!links.promiseType) {
-                    var type = getTypeOfSymbol(returnType.symbol);
-                    if (isTypeAssignableTo(type, globalIPromiseConstructorType)) {
-                        links.promiseType = true;
-                    }
+            if (globalIPromiseConstructorType) {
+                if (!returnType) {
+                    returnType = getReturnTypeOfSignature(getSignatureFromDeclaration(node));
                 }
 
-                if (links.promiseType) {
-                    var awaitedType = getAwaitedType(returnType);
-                    if (awaitedType) {
-                        var promiseConstructor = getPromiseConstructor(node);
-                        checkExpressionOrQualifiedName(promiseConstructor);
+                if (returnType && returnType.symbol) {
+                    var links = getSymbolLinks(returnType.symbol);
+                    if (!links.promiseType) {
+                        var type = getTypeOfSymbol(returnType.symbol);
+                        if (isTypeAssignableTo(type, globalIPromiseConstructorType)) {
+                            links.promiseType = true;
+                        }
                     }
-
-                    return awaitedType;
+                    if (links.promiseType) {
+                        var awaitedType = getAwaitedType(returnType);
+                        if (awaitedType) {
+                            var promiseConstructor = getPromiseConstructor(node);
+                            checkExpressionOrQualifiedName(promiseConstructor);
+                        }
+                        return awaitedType;
+                    }
                 }
             }
-
             error(node, ts.Diagnostics.An_async_function_or_method_must_have_a_valid_awaitable_return_type);
         }
 
