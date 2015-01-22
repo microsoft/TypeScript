@@ -852,13 +852,13 @@ module ts {
     //
     export interface LanguageServiceHost extends Logger {
         getCompilationSettings(): CompilerOptions;
-        getNewLine? (): string;
+        getNewLine?(): string;
         getScriptFileNames(): string[];
         getScriptVersion(fileName: string): string;
         getScriptIsOpen(fileName: string): boolean;
         getScriptSnapshot(fileName: string): IScriptSnapshot;
-        getLocalizedDiagnosticMessages? (): any;
-        getCancellationToken? (): CancellationToken;
+        getLocalizedDiagnosticMessages?(): any;
+        getCancellationToken?(): CancellationToken;
         getCurrentDirectory(): string;
         getDefaultLibFilename(options: CompilerOptions): string;
     }
