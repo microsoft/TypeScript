@@ -5383,7 +5383,9 @@ module ts {
         }
 
         function isNumericComputedName(name: ComputedPropertyName): boolean {
-            return !!(checkExpression(name.expression).flags & TypeFlags.Number);
+            // It seems odd to consider an expression of type Any to result in a numeric name,
+            // but this behavior is consistent with checkIndexedAccess
+            return isTypeOfKind(checkExpression(name.expression), TypeFlags.Any | TypeFlags.NumberLike);
         }
 
         function isNumericLiteralName(name: string) {
@@ -5419,7 +5421,7 @@ module ts {
                 // This will only allow types number, string, or any. Any types more complex will
                 // be disallowed, even union types like string | number. In the future, we might consider
                 // allowing types like that.
-                if ((links.resolvedType.flags & (TypeFlags.Number | TypeFlags.String | TypeFlags.Any)) === 0) {
+                if (!isTypeOfKind(links.resolvedType, TypeFlags.Any | TypeFlags.NumberLike | TypeFlags.StringLike)) {
                     error(node, Diagnostics.A_computed_property_name_must_be_of_type_string_number_or_any);
                 }
             }
