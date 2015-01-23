@@ -1953,7 +1953,7 @@ module ts {
                 }
             }
 
-            function emitParenthesized(node: Node, parenthesized: boolean) {
+            function emitParenthesizedIf(node: Node, parenthesized: boolean) {
                 if (parenthesized) {
                     write("(");
                 }
@@ -2111,7 +2111,7 @@ module ts {
                         write(", ");
                         var needsParens = templateSpan.expression.kind === SyntaxKind.BinaryExpression
                             && (<BinaryExpression>templateSpan.expression).operator === SyntaxKind.CommaToken;
-                        emitParenthesized(templateSpan.expression, needsParens);
+                        emitParenthesizedIf(templateSpan.expression, needsParens);
                     });
                 }
                 write("))");
@@ -2149,7 +2149,7 @@ module ts {
                     var needsParens = templateSpan.expression.kind !== SyntaxKind.ParenthesizedExpression
                         && comparePrecedenceToBinaryPlus(templateSpan.expression) !== Comparison.GreaterThan;
                     write(" + ");
-                    emitParenthesized(templateSpan.expression, needsParens);
+                    emitParenthesizedIf(templateSpan.expression, needsParens);
                     // Only emit if the literal is non-empty.
                     // The binary '+' operator is left-associative, so the first string concatenation
                     // with the head will force the result up to this point to be a string.
@@ -2395,7 +2395,7 @@ module ts {
                     var e = elements[pos];
                     if (e.kind === SyntaxKind.SpreadElementExpression) {
                         e = (<SpreadElementExpression>e).expression;
-                        emitParenthesized(e, /*parenthesized*/ group === 0 && needsParenthesisForPropertyAccess(e));
+                        emitParenthesizedIf(e, /*parenthesized*/ group === 0 && needsParenthesisForPropertyAccess(e));
                         pos++;
                     }
                     else {
@@ -2703,7 +2703,7 @@ module ts {
 
             function emitExpressionStatement(node: ExpressionStatement) {
                 emitLeadingComments(node);
-                emitParenthesized(node.expression, /*parenthesized*/ node.expression.kind === SyntaxKind.ArrowFunction);
+                emitParenthesizedIf(node.expression, /*parenthesized*/ node.expression.kind === SyntaxKind.ArrowFunction);
                 write(";");
                 emitTrailingComments(node);
             }
