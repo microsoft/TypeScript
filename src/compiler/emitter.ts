@@ -2051,16 +2051,21 @@ module ts {
                 return '"' + escapeString(node.text) + '"';
             }
             
-            function emitDownlevelRawTemplateLiteral(node: LiteralExpression, isLast: boolean) {
+            function emitDownlevelRawTemplateLiteral(node: LiteralExpression) {
                 var text = getSourceTextOfNodeFromSourceFile(currentSourceFile, node);
                 
                 // text contains the original source, it will also contain quotes ("`"), dolar signs and braces ("${" and "}"),
                 // thus we need to remove those characters.
                 // First template piece starts with "`", others with "}"
                 // Last template piece ends with "`", others with "${"
+                var isLast = node.kind === SyntaxKind.NoSubstitutionTemplateLiteral || node.kind === SyntaxKind.TemplateTail;
                 text = text.substring(1, text.length - (isLast ? 1 : 2));
                 
-                write('"' + escapeString(text) + '"');
+                // Newline normalization
+                text = text.replace(/\r\n?/g, "\n");
+                text = escapeString(text);
+                
+                write('"' + text + '"');
             }
             
             function emitDownlevelTaggedTemplate(node: TaggedTemplateExpression) {
@@ -2074,8 +2079,8 @@ module ts {
                     emit(node.template);
                 }
                 else {
-                    emit((<TemplateExpression> node.template).head);
-                    forEach((<TemplateExpression> node.template).templateSpans, (child) => {
+                    emit((<TemplateExpression>node.template).head);
+                    forEach((<TemplateExpression>node.template).templateSpans, (child) => {
                         write(", ");
                         emit(child.literal);
                     });
@@ -2085,13 +2090,13 @@ module ts {
                 emit(tempVariable);
                 write(".raw = [");
                 if (node.template.kind === SyntaxKind.NoSubstitutionTemplateLiteral) {
-                    emitDownlevelRawTemplateLiteral(<LiteralExpression> node.template, true);
+                    emitDownlevelRawTemplateLiteral(<LiteralExpression>node.template);
                 }
                 else {
-                    emitDownlevelRawTemplateLiteral((<TemplateExpression> node.template).head, false);
-                    forEach((<TemplateExpression> node.template).templateSpans, (child, index) => {
+                    emitDownlevelRawTemplateLiteral((<TemplateExpression>node.template).head);
+                    forEach((<TemplateExpression>node.template).templateSpans, (child, index) => {
                         write(", ");
-                        emitDownlevelRawTemplateLiteral(child.literal, index === (<TemplateExpression> node.template).templateSpans.length - 1);
+                        emitDownlevelRawTemplateLiteral(child.literal);
                     });
                 }
                 write("], ");
@@ -2102,10 +2107,10 @@ module ts {
                 
                 // Now we emit the expressions
                 if (node.template.kind === SyntaxKind.TemplateExpression) {
-                    forEach((<TemplateExpression> node.template).templateSpans, templateSpan => {
+                    forEach((<TemplateExpression>node.template).templateSpans, templateSpan => {
                         write(", ");
                         var needsParens = templateSpan.expression.kind === SyntaxKind.BinaryExpression
-                            && (<BinaryExpression> templateSpan.expression).operator === SyntaxKind.CommaToken;
+                            && (<BinaryExpression>templateSpan.expression).operator === SyntaxKind.CommaToken;
                         emitParenthesized(templateSpan.expression, needsParens);
                     });
                 }
