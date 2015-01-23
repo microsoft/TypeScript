@@ -1,5 +1,5 @@
 tests/cases/compiler/instantiatedBaseTypeConstraints.ts(1,15): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
-tests/cases/compiler/instantiatedBaseTypeConstraints.ts(1,25): error TS2315: Type 'Foo' is not generic.
+tests/cases/compiler/instantiatedBaseTypeConstraints.ts(1,25): error TS2464: Illegal reference Foo in constraint.
 
 
 ==== tests/cases/compiler/instantiatedBaseTypeConstraints.ts (2 errors) ====
@@ -7,7 +7,7 @@ tests/cases/compiler/instantiatedBaseTypeConstraints.ts(1,25): error TS2315: Typ
                   ~~~~~~~~~~~~~~~~~~~
 !!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
                             ~~~~~~~~~
-!!! error TS2315: Type 'Foo' is not generic.
+!!! error TS2464: Illegal reference Foo in constraint.
       foo(bar: C): void;
     }
     

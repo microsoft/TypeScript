@@ -1,7 +1,7 @@
 tests/cases/compiler/recursiveTypes1.ts(1,18): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
-tests/cases/compiler/recursiveTypes1.ts(1,28): error TS2315: Type 'Entity' is not generic.
+tests/cases/compiler/recursiveTypes1.ts(1,28): error TS2464: Illegal reference Entity in constraint.
 tests/cases/compiler/recursiveTypes1.ts(6,18): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
-tests/cases/compiler/recursiveTypes1.ts(6,28): error TS2315: Type 'Person' is not generic.
+tests/cases/compiler/recursiveTypes1.ts(6,28): error TS2464: Illegal reference Person in constraint.
 
 
 ==== tests/cases/compiler/recursiveTypes1.ts (4 errors) ====
@@ -9,7 +9,7 @@ tests/cases/compiler/recursiveTypes1.ts(6,28): error TS2315: Type 'Person' is no
                      ~~~~~~~~~~~~~~~~~~~
 !!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
                                ~~~~~~~~~
-!!! error TS2315: Type 'Entity' is not generic.
+!!! error TS2464: Illegal reference Entity in constraint.
        X: T;
        Y: T;
     }
@@ -18,7 +18,7 @@ tests/cases/compiler/recursiveTypes1.ts(6,28): error TS2315: Type 'Person' is no
                      ~~~~~~~~~~~~~~~~~~~
 !!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
                                ~~~~~~~~~
-!!! error TS2315: Type 'Person' is not generic.
+!!! error TS2464: Illegal reference Person in constraint.
     	n: number;
     }
     

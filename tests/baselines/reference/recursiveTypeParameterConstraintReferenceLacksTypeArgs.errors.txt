@@ -1,7 +1,13 @@
+tests/cases/compiler/recursiveTypeParameterConstraintReferenceLacksTypeArgs.ts(1,9): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
 tests/cases/compiler/recursiveTypeParameterConstraintReferenceLacksTypeArgs.ts(1,19): error TS2314: Generic type 'A<T>' requires 1 type argument(s).
+tests/cases/compiler/recursiveTypeParameterConstraintReferenceLacksTypeArgs.ts(1,19): error TS2464: Illegal reference A in constraint.
 
 
-==== tests/cases/compiler/recursiveTypeParameterConstraintReferenceLacksTypeArgs.ts (1 errors) ====
+==== tests/cases/compiler/recursiveTypeParameterConstraintReferenceLacksTypeArgs.ts (3 errors) ====
     class A<T extends A> { }
+            ~~~~~~~~~~~
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
                       ~
 !!! error TS2314: Generic type 'A<T>' requires 1 type argument(s).
+                      ~
+!!! error TS2464: Illegal reference A in constraint.

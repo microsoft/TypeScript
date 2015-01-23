@@ -1,5 +1,5 @@
 tests/cases/conformance/types/typeParameters/typeArgumentLists/wrappedAndRecursiveConstraints2.ts(1,9): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
-tests/cases/conformance/types/typeParameters/typeArgumentLists/wrappedAndRecursiveConstraints2.ts(1,19): error TS2315: Type 'C' is not generic.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/wrappedAndRecursiveConstraints2.ts(1,19): error TS2464: Illegal reference C in constraint.
 
 
 ==== tests/cases/conformance/types/typeParameters/typeArgumentLists/wrappedAndRecursiveConstraints2.ts (2 errors) ====
@@ -7,7 +7,7 @@ tests/cases/conformance/types/typeParameters/typeArgumentLists/wrappedAndRecursi
             ~~~~~~~~~~~~~~
 !!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
                       ~~~~
-!!! error TS2315: Type 'C' is not generic.
+!!! error TS2464: Illegal reference C in constraint.
         constructor(x: T) { }
     }
     

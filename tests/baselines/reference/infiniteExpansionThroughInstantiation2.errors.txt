@@ -1,5 +1,5 @@
 tests/cases/conformance/types/typeRelationships/recursiveTypes/infiniteExpansionThroughInstantiation2.ts(4,14): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
-tests/cases/conformance/types/typeRelationships/recursiveTypes/infiniteExpansionThroughInstantiation2.ts(4,24): error TS2315: Type 'AA' is not generic.
+tests/cases/conformance/types/typeRelationships/recursiveTypes/infiniteExpansionThroughInstantiation2.ts(4,24): error TS2464: Illegal reference AA in constraint.
 
 
 ==== tests/cases/conformance/types/typeRelationships/recursiveTypes/infiniteExpansionThroughInstantiation2.ts (2 errors) ====
@@ -10,7 +10,7 @@ tests/cases/conformance/types/typeRelationships/recursiveTypes/infiniteExpansion
                  ~~~~~~~~~~~~~~~
 !!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
                            ~~~~~
-!!! error TS2315: Type 'AA' is not generic.
+!!! error TS2464: Illegal reference AA in constraint.
     {
         x: T
     }

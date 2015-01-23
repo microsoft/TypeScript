@@ -1,9 +1,9 @@
 tests/cases/compiler/instantiateConstraintsToTypeArguments2.ts(1,13): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
-tests/cases/compiler/instantiateConstraintsToTypeArguments2.ts(1,23): error TS2315: Type 'A' is not generic.
+tests/cases/compiler/instantiateConstraintsToTypeArguments2.ts(1,23): error TS2464: Illegal reference A in constraint.
 tests/cases/compiler/instantiateConstraintsToTypeArguments2.ts(1,32): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
 tests/cases/compiler/instantiateConstraintsToTypeArguments2.ts(1,42): error TS2315: Type 'A' is not generic.
 tests/cases/compiler/instantiateConstraintsToTypeArguments2.ts(2,13): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
-tests/cases/compiler/instantiateConstraintsToTypeArguments2.ts(2,23): error TS2315: Type 'B' is not generic.
+tests/cases/compiler/instantiateConstraintsToTypeArguments2.ts(2,23): error TS2464: Illegal reference B in constraint.
 tests/cases/compiler/instantiateConstraintsToTypeArguments2.ts(2,32): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
 tests/cases/compiler/instantiateConstraintsToTypeArguments2.ts(2,42): error TS2315: Type 'B' is not generic.
 
@@ -13,7 +13,7 @@ tests/cases/compiler/instantiateConstraintsToTypeArguments2.ts(2,42): error TS23
                 ~~~~~~~~~~~~~~~~~
 !!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
                           ~~~~~~~
-!!! error TS2315: Type 'A' is not generic.
+!!! error TS2464: Illegal reference A in constraint.
                                    ~~~~~~~~~~~~~~~~~
 !!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
                                              ~~~~~~~
@@ -22,7 +22,7 @@ tests/cases/compiler/instantiateConstraintsToTypeArguments2.ts(2,42): error TS23
                 ~~~~~~~~~~~~~~~~~
 !!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
                           ~~~~~~~
-!!! error TS2315: Type 'B' is not generic.
+!!! error TS2464: Illegal reference B in constraint.
                                    ~~~~~~~~~~~~~~~~~
 !!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
                                              ~~~~~~~

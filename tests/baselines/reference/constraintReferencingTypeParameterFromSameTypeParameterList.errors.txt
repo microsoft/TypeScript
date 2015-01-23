@@ -1,6 +1,6 @@
 tests/cases/compiler/constraintReferencingTypeParameterFromSameTypeParameterList.ts(5,15): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
 tests/cases/compiler/constraintReferencingTypeParameterFromSameTypeParameterList.ts(8,17): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
-tests/cases/compiler/constraintReferencingTypeParameterFromSameTypeParameterList.ts(8,27): error TS2315: Type 'I1' is not generic.
+tests/cases/compiler/constraintReferencingTypeParameterFromSameTypeParameterList.ts(8,27): error TS2464: Illegal reference I1 in constraint.
 tests/cases/compiler/constraintReferencingTypeParameterFromSameTypeParameterList.ts(10,17): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
 tests/cases/compiler/constraintReferencingTypeParameterFromSameTypeParameterList.ts(13,17): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
 tests/cases/compiler/constraintReferencingTypeParameterFromSameTypeParameterList.ts(21,17): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
@@ -21,7 +21,7 @@ tests/cases/compiler/constraintReferencingTypeParameterFromSameTypeParameterList
                     ~~~~~~~~~~~~~~~~~~~~
 !!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
                               ~~~~~~~~~~
-!!! error TS2315: Type 'I1' is not generic.
+!!! error TS2464: Illegal reference I1 in constraint.
     }
     interface I2<T, U extends T> {
                     ~~~~~~~~~~~

@@ -1,5 +1,5 @@
 tests/cases/compiler/recursiveIdenticalAssignment.ts(5,13): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
-tests/cases/compiler/recursiveIdenticalAssignment.ts(5,23): error TS2315: Type 'B' is not generic.
+tests/cases/compiler/recursiveIdenticalAssignment.ts(5,23): error TS2464: Illegal reference B in constraint.
 
 
 ==== tests/cases/compiler/recursiveIdenticalAssignment.ts (2 errors) ====
@@ -11,7 +11,7 @@ tests/cases/compiler/recursiveIdenticalAssignment.ts(5,23): error TS2315: Type '
                 ~~~~~~~~~~~~~~~~~
 !!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
                           ~~~~~~~
-!!! error TS2315: Type 'B' is not generic.
+!!! error TS2464: Illegal reference B in constraint.
         x: B<T>
     }
     
