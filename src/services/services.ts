@@ -4195,7 +4195,8 @@ module ts {
                 }
 
                 // if this symbol is visible from its parent container, e.g. exported, then bail out
-                if (symbol.parent) {
+                // if symbol correspond to the union property - bail out
+                if (symbol.parent || (symbol.getFlags() & SymbolFlags.UnionProperty)) {
                     return undefined;
                 }
 
