@@ -51,13 +51,13 @@ var b: { foo: string; baz?: string }
 var a2: S2 = { foo: '' };
 >a2 : S2
 >S2 : S2
->{ foo: '' } : { foo: string; }
+>{ foo: '' } : { foo: string; bar?: string; }
 >foo : string
 
 var b2: T2 = { foo: '' };
 >b2 : T2
 >T2 : T2
->{ foo: '' } : { foo: string; }
+>{ foo: '' } : { foo: string; baz?: string; }
 >foo : string
 
 s = t;
