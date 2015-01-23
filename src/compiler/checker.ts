@@ -2859,7 +2859,11 @@ module ts {
                             // forEach === exists
                             links.isIllegalTypeReferenceInConstraint = forEach(symbol.declarations, d => d.parent == typeParameter.parent);
                         }
+                        if (symbol && (symbol.flags & (SymbolFlags.Interface | SymbolFlags.Class ))) {
+                            links.isIllegalTypeReferenceInConstraint = forEach(symbol.declarations, d => d == typeParameter.parent);    
+                        }
                     }
+                    
                     if (links.isIllegalTypeReferenceInConstraint) {
                         error(typeParameter, Diagnostics.Constraint_of_a_type_parameter_cannot_reference_any_type_parameter_from_the_same_type_parameter_list);
                     }
@@ -2899,10 +2903,14 @@ module ts {
                             }
                         }
                         else {
-                            if (node.typeArguments) {
+                            if (type.flags & (TypeFlags.Class | TypeFlags.Interface) && getNodeLinks(node).isIllegalTypeReferenceInConstraint){
+                                error(node, Diagnostics.Illegal_reference_0_in_constraint, typeToString(type));
+                                type = undefined;
+                            }else if (node.typeArguments) {
                                 error(node, Diagnostics.Type_0_is_not_generic, typeToString(type));
                                 type = undefined;
                             }
+
                         }
                     }
                 }
@@ -7153,11 +7161,11 @@ module ts {
                 grammarErrorOnFirstToken(node.expression, Diagnostics.Type_expected);
             }
 
-            checkSourceElement(node.constraint);
             if (produceDiagnostics) {
                 checkTypeParameterHasIllegalReferencesInConstraint(node);
                 checkTypeNameIsReserved(node.name, Diagnostics.Type_parameter_name_cannot_be_0);
             }
+            checkSourceElement(node.constraint);
             // TODO: Check multiple declarations are identical
         }
 

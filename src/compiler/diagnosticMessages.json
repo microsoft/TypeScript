@@ -1286,6 +1286,10 @@
         "category": "Error",
         "code": 2463
     },
+    "Illegal reference {0} in constraint.": {
+        "category": "Error",
+        "code": 2464
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
