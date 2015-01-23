@@ -337,6 +337,15 @@ module ts {
                             break loop;
                         }
                         break;
+
+                    // It is not legal to reference a class's own type parameters from a computed property name that
+                    // belongs to the class. For example:
+                    //
+                    //   function foo<T>() { return '' }
+                    //   class C<T> { // <-- Class's own type parameter T
+                    //       [foo<T>()]() { } // <-- Reference to T from class's own computed property
+                    //   }
+                    //
                     case SyntaxKind.ComputedPropertyName:
                         var grandparent = location.parent.parent;
                         if (grandparent.kind === SyntaxKind.ClassDeclaration || grandparent.kind === SyntaxKind.InterfaceDeclaration) {
@@ -1716,7 +1725,7 @@ module ts {
             if (declaration.kind === SyntaxKind.Parameter) {
                 var func = <FunctionLikeDeclaration>declaration.parent;
                 // For a parameter of a set accessor, use the type of the get accessor if one is present
-                if (func.kind === SyntaxKind.SetAccessor && !hasComputedNameButNotSymbol(func)) {
+                if (func.kind === SyntaxKind.SetAccessor && !hasDynamicName(func)) {
                     var getter = <AccessorDeclaration>getDeclarationOfKind(declaration.parent.symbol, SyntaxKind.GetAccessor);
                     if (getter) {
                         return getReturnTypeOfSignature(getSignatureFromDeclaration(getter));
@@ -2632,7 +2641,7 @@ module ts {
                 else {
                     // TypeScript 1.0 spec (April 2014):
                     // If only one accessor includes a type annotation, the other behaves as if it had the same type annotation.
-                    if (declaration.kind === SyntaxKind.GetAccessor && !hasComputedNameButNotSymbol(declaration)) {
+                    if (declaration.kind === SyntaxKind.GetAccessor && !hasDynamicName(declaration)) {
                         var setter = <AccessorDeclaration>getDeclarationOfKind(declaration.symbol, SyntaxKind.SetAccessor);
                         returnType = getAnnotatedAccessorType(setter);
                     }
@@ -5165,7 +5174,7 @@ module ts {
             var objectLiteral = <ObjectLiteralExpression>element.parent;
             var type = getContextualType(objectLiteral);
             if (type) {
-                if (!hasComputedNameButNotSymbol(element)) {
+                if (!hasDynamicName(element)) {
                     // For a (non-symbol) computed property, there is no reason to look up the name
                     // in the type. It will just be "__computed", which does not appear in any
                     // SymbolTable.
@@ -5418,9 +5427,8 @@ module ts {
             if (!links.resolvedType) {
                 links.resolvedType = checkExpression(node.expression);
 
-                // This will only allow types number, string, or any. Any types more complex will
-                // be disallowed, even union types like string | number. In the future, we might consider
-                // allowing types like that.
+                // This will allow types number, string, or any. It will also allow enums, the unknown
+                // type, and any union of these types (like string | number).
                 if (!isTypeOfKind(links.resolvedType, TypeFlags.Any | TypeFlags.NumberLike | TypeFlags.StringLike)) {
                     error(node, Diagnostics.A_computed_property_name_must_be_of_type_string_number_or_any);
                 }
@@ -5477,7 +5485,7 @@ module ts {
                     checkAccessorDeclaration(<AccessorDeclaration>memberDecl);
                 }
 
-                if (!hasComputedNameButNotSymbol(memberDecl)) {
+                if (!hasDynamicName(memberDecl)) {
                     properties[member.name] = member;
                 }
             }
@@ -7079,7 +7087,7 @@ module ts {
         }
 
         function checkPropertyAssignment(node: PropertyAssignment, contextualMapper?: TypeMapper): Type {
-            if (hasComputedNameButNotSymbol(node)) {
+            if (hasDynamicName(node)) {
                 checkComputedPropertyName(<ComputedPropertyName>node.name);
             }
 
@@ -7090,7 +7098,7 @@ module ts {
             // Grammar checking
             checkGrammarMethod(node);
 
-            if (hasComputedNameButNotSymbol(node)) {
+            if (hasDynamicName(node)) {
                 checkComputedPropertyName(<ComputedPropertyName>node.name);
             }
 
@@ -7464,7 +7472,7 @@ module ts {
                     }
                 }
 
-                if (!hasComputedNameButNotSymbol(node)) {
+                if (!hasDynamicName(node)) {
                     // TypeScript 1.0 spec (April 2014): 8.4.3
                     // Accessors for the same member name must specify the same accessibility.
                     var otherKind = node.kind === SyntaxKind.GetAccessor ? SyntaxKind.SetAccessor : SyntaxKind.GetAccessor;
@@ -7902,7 +7910,7 @@ module ts {
         function checkFunctionLikeDeclaration(node: FunctionLikeDeclaration): void {
             checkSignatureDeclaration(node);
 
-            if (hasComputedNameButNotSymbol(node)) {
+            if (hasDynamicName(node)) {
                 // This check will account for methods in class/interface declarations,
                 // as well as accessors in classes/object literals
                 checkComputedPropertyName(<ComputedPropertyName>node.name);
@@ -8136,7 +8144,7 @@ module ts {
         function checkVariableLikeDeclaration(node: VariableLikeDeclaration) {
             checkSourceElement(node.type);
             // For a computed property, just check the initializer and exit
-            if (hasComputedNameButNotSymbol(node)) {
+            if (hasDynamicName(node)) {
                 checkComputedPropertyName(<ComputedPropertyName>node.name);
                 if (node.initializer) {
                     checkExpressionCached(node.initializer);
@@ -8501,7 +8509,7 @@ module ts {
                         // Only process instance properties with computed names here.
                         // Static properties cannot be in conflict with indexers,
                         // and properties with literal names were already checked.
-                        if (!(member.flags & NodeFlags.Static) && hasComputedNameButNotSymbol(member)) {
+                        if (!(member.flags & NodeFlags.Static) && hasDynamicName(member)) {
                             var propType = getTypeOfSymbol(member.symbol);
                             checkIndexConstraintForProperty(member.symbol, propType, type, declaredStringIndexer, stringIndexType, IndexKind.String);
                             checkIndexConstraintForProperty(member.symbol, propType, type, declaredNumberIndexer, numberIndexType, IndexKind.Number); 

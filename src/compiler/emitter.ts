@@ -932,7 +932,7 @@ module ts {
         }
 
         function emitPropertyDeclaration(node: Declaration) {
-            if (hasComputedNameButNotSymbol(node)) {
+            if (hasDynamicName(node)) {
                 return;
             }
 
@@ -1036,7 +1036,7 @@ module ts {
         }
 
         function emitAccessorDeclaration(node: AccessorDeclaration) {
-            if (hasComputedNameButNotSymbol(node)) {
+            if (hasDynamicName(node)) {
                 return;
             }
             
@@ -1117,7 +1117,7 @@ module ts {
         }
 
         function emitFunctionDeclaration(node: FunctionLikeDeclaration) {
-            if (hasComputedNameButNotSymbol(node)) {
+            if (hasDynamicName(node)) {
                 return;
             }
 

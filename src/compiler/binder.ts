@@ -50,12 +50,13 @@ module ts {
     }
 
     /**
-     * Returns false if any of the following are true:
-     *   1. declaration has no name
-     *   2. declaration has a literal name (not computed)
-     *   3. declaration has a computed property name that is a known symbol
+     * A declaration has a dynamic name if both of the following are true:
+     *   1. The declaration has a computed property name
+     *   2. The computed name is *not* expressed as Symbol.<name>, where name
+     *      is a property of the Symbol constructor that denotes a built in
+     *      Symbol.
      */
-    export function hasComputedNameButNotSymbol(declaration: Declaration): boolean {
+    export function hasDynamicName(declaration: Declaration): boolean {
         return declaration.name && declaration.name.kind === SyntaxKind.ComputedPropertyName;
     }
 
@@ -96,7 +97,7 @@ module ts {
                 if (node.kind === SyntaxKind.ModuleDeclaration && node.name.kind === SyntaxKind.StringLiteral) {
                     return '"' + (<LiteralExpression>node.name).text + '"';
                 }
-                Debug.assert(!hasComputedNameButNotSymbol(node));
+                Debug.assert(!hasDynamicName(node));
                 return (<Identifier | LiteralExpression>node.name).text;
             }
             switch (node.kind) {
@@ -118,7 +119,7 @@ module ts {
         }
 
         function declareSymbol(symbols: SymbolTable, parent: Symbol, node: Declaration, includes: SymbolFlags, excludes: SymbolFlags): Symbol {
-            Debug.assert(!hasComputedNameButNotSymbol(node));
+            Debug.assert(!hasDynamicName(node));
 
             var name = getDeclarationName(node);
             if (name !== undefined) {
@@ -508,7 +509,7 @@ module ts {
         }
 
         function bindPropertyOrMethodOrAccessor(node: Declaration, symbolKind: SymbolFlags, symbolExcludes: SymbolFlags, isBlockScopeContainer: boolean) {
-            if (hasComputedNameButNotSymbol(node)) {
+            if (hasDynamicName(node)) {
                 bindAnonymousDeclaration(node, symbolKind, "__computed", isBlockScopeContainer);
             }
             else {
