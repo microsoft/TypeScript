@@ -51,7 +51,7 @@ module ts.NavigationBar {
                         forEach((<BindingPattern>node).elements, visit);
                         break;
                     case SyntaxKind.VariableDeclaration:
-                        if (isBindingPattern(node)) {
+                        if (isBindingPattern((<VariableDeclaration>node).name)) {
                             visit((<VariableDeclaration>node).name);
                             break;
                         }
