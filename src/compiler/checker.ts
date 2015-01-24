@@ -10071,8 +10071,8 @@ module ts {
             if (symbol && (symbol.flags & SymbolFlags.EnumMember)) {
                 var declaration = symbol.valueDeclaration;
                 var constantValue: number;
-                if (declaration.kind === SyntaxKind.EnumMember && (constantValue = getNodeLinks(declaration).enumMemberValue) !== undefined) {
-                    return constantValue;
+                if (declaration.kind === SyntaxKind.EnumMember) {
+                    return getEnumMemberValue(<EnumMember>declaration);
                 }
             }
 
