@@ -3300,7 +3300,7 @@ module ts {
 
                 // When targeting ES6, emit arrow function natively in ES6
                 if (isES6ArrowFunction(node)) {
-                   write(" => ");
+                   write(" =>");
                 }
 
                 write(" {");
