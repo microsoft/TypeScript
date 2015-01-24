@@ -1,4 +1,3 @@
-error TS2318: Cannot find global type 'TemplateStringsArray'.
 error TS2318: Cannot find global type 'String'.
 error TS2318: Cannot find global type 'RegExp'.
 error TS2318: Cannot find global type 'Object'.
@@ -10,7 +9,6 @@ error TS2318: Cannot find global type 'Array'.
 test.ts(3,8): error TS2304: Cannot find name 'Array'.
 
 
-!!! error TS2318: Cannot find global type 'TemplateStringsArray'.
 !!! error TS2318: Cannot find global type 'String'.
 !!! error TS2318: Cannot find global type 'RegExp'.
 !!! error TS2318: Cannot find global type 'Object'.

@@ -2,4 +2,4 @@
 var x = x => `abc${ x }def`;
 
 //// [templateStringInArrowFunctionES6.js]
-var x = (x) =>  { return `abc${x}def`; };
+var x = (x) => { return `abc${x}def`; };

@@ -220,7 +220,7 @@ function F() {
     const c = 0;
     n = c;
 }
-var F2 = () =>  {
+var F2 = () => {
     const c = 0;
     n = c;
 };
@@ -269,7 +269,7 @@ var o = {
         const c = 0;
         n = c;
     },
-    f2: () =>  {
+    f2: () => {
         const c = 0;
         n = c;
     }

@@ -15,15 +15,15 @@ foo(() => {
 
 
 //// [emitArrowFunctionThisCapturingES6.js]
-var f1 = () =>  {
+var f1 = () => {
     this.age = 10;
 };
-var f2 = (x) =>  {
+var f2 = (x) => {
     this.name = x;
 };
 function foo(func) {
 }
-foo(() =>  {
+foo(() => {
     this.age = 100;
     return true;
 });

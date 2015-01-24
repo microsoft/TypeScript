@@ -236,7 +236,7 @@ function F() {
     let l = 0;
     n = l;
 }
-var F2 = () =>  {
+var F2 = () => {
     let l = 0;
     n = l;
 };
@@ -286,7 +286,7 @@ var o = {
         let l = 0;
         n = l;
     },
-    f2: () =>  {
+    f2: () => {
         let l = 0;
         n = l;
     }
