@@ -1,6 +1,57 @@
 /// <reference path="types.ts"/>
 /// <reference path="factory.ts"/>
 module ts {
+    export module Locals {
+        export function create(resolver: EmitResolver, context: Node, globals: Map<boolean>): Locals {
+            return { resolver, context, globals, tempCount: 0 };
+        }
+
+        export function createUniqueIdentifier(locals: Locals, name?: string, globallyUnique?: boolean): Identifier {
+            // when we generate a "global" unique identifier, we it to be unique in all contexts. This is 
+            // to reduce the possibility of collisions when generating names used to rename symbols during emit
+            // for downlevel rewrite of a catch block, and for future support for downlevel let/const.
+            // We do this here rather than introduce new symbols into symbol table of the containing scope so that we don't 
+            // make changes that would be compatible with incremental parse
+            while (true) {
+                if (name && locals.resolver.isUnknownIdentifier(locals.context, name)) {
+                    break;
+                }
+                // _a .. _h, _j ... _z, _0, _1, ...
+                name = "_" + (locals.tempCount < 25 ? String.fromCharCode(locals.tempCount + (locals.tempCount < 8 ? 0 : 1) + CharacterCodes.a) : locals.tempCount - 25);
+                locals.tempCount++;
+            }
+
+            if (globallyUnique) {
+                locals.globals[name] = true;
+            }
+
+            return Factory.createIdentifier(name);
+        }
+
+        export function recordVariable(locals: Locals, name: Identifier): void {
+            if (!locals.variables) {
+                locals.variables = [];
+            }
+
+            locals.variables.push(name);
+        }
+
+        export function ensureIdentifier(locals: Locals, expression: Expression, writeAssignment: (left: Identifier, right: Expression) => void): Identifier {
+            if (expression.kind !== SyntaxKind.Identifier) {
+                var local = createUniqueIdentifier(locals);
+                writeAssignment(local, expression);
+                return local;
+            }
+            return <Identifier>expression;
+        }
+
+        export function getValueOrDefault(locals: Locals, value: Expression, defaultValue: Expression, writeAssignment: (left: Identifier, right: Expression) => void): Expression {
+            value = ensureIdentifier(locals, value, writeAssignment);
+            var equalityExpression = Factory.createBinaryExpression(SyntaxKind.EqualsEqualsEqualsToken, value, Factory.createVoidZero());
+            var conditionalExpression = Factory.createConditionalExpression(equalityExpression, defaultValue, value);
+            return conditionalExpression;
+        }
+    }
 
     enum BlockAction {
         Open,
@@ -51,94 +102,20 @@ module ts {
         startLabel: Label;
         endLabel: Label;
     }
-
-    export function createLocalsBuilder(resolver: EmitResolver, context: Node, globals: Map<boolean>): LocalsBuilder {
-        var locals: Identifier[];
-        var tempCount = 0;
-
-        return {
-            createUniqueIdentifier,
-            recordVariable,
-            ensureIdentifier,
-            getValueOrDefault,
-            getVariables
-        };
-
-        function hasGlobalIdentifier(name: string): boolean {
-            if (globals && hasProperty(globals, name)) {
-                return true;
-            }
-        }
-
-        function isUnknownIdentifier(name: string): boolean {
-            return !hasGlobalIdentifier(name) && resolver.isUnknownIdentifier(context, name);
-        }
-
-        function createUniqueIdentifier(name?: string, globallyUnique?: boolean): Identifier {
-            // when we generate a "global" unique identifier, we it to be unique in all contexts. This is 
-            // to reduce the possibility of collisions when generating names used to rename symbols during emit
-            // for downlevel rewrite of a catch block, and for future support for downlevel let/const.
-            // We do this here rather than introduce new symbols into symbol table of the containing scope so that we don't 
-            // make changes that would be compatible with incremental parse
-            while (true) {
-                if (name && resolver.isUnknownIdentifier(context, name)) {
-                    break;
-                }
-                // _a .. _h, _j ... _z, _0, _1, ...
-                name = "_" + (tempCount < 25 ? String.fromCharCode(tempCount + (tempCount < 8 ? 0 : 1) + CharacterCodes.a) : tempCount - 25);
-                tempCount++;
-            }
-
-            if (globallyUnique) {
-                globals[name] = true;
-            }
-
-            return Factory.createIdentifier(name);
-        }
-
-        function recordVariable(name: Identifier): void {
-            if (!locals) {
-                locals = [];
-            }
-
-            locals.push(name);
-        }
-
-        function ensureIdentifier(expression: Expression, writeAssignment: (left: Identifier, right: Expression) => void): Identifier {
-            if (expression.kind !== SyntaxKind.Identifier) {
-                var local = createUniqueIdentifier();
-                writeAssignment(local, expression);
-                return local;
-            }
-
-            return <Identifier>expression;
-        }
-
-        function getValueOrDefault(value: Expression, defaultValue: Expression, writeAssignment: (left: Identifier, right: Expression) => void): Expression {
-            value = ensureIdentifier(value, writeAssignment);
-            var equalityExpression = Factory.createBinaryExpression(SyntaxKind.EqualsEqualsEqualsToken, value, Factory.createVoidZero());
-            var conditionalExpression = Factory.createConditionalExpression(equalityExpression, defaultValue, value);
-            return conditionalExpression;
-        }
-
-        function getVariables(): Identifier[] {
-            return locals;
-        }
-    }
-
-    export function createStatementsGenerator(locals: LocalsBuilder): StatementsGenerator {
+    
+    export function createStatementsGenerator(locals: Locals): StatementsGenerator {
         return <StatementsGenerator>createCodeGenerator(locals, /*isStatementsGenerator*/ true);
     }
 
-    export function createGeneratorFunctionGenerator(locals: LocalsBuilder): FunctionGenerator {
+    export function createGeneratorFunctionGenerator(locals: Locals): FunctionGenerator {
         return <FunctionGenerator>createCodeGenerator(locals, /*isStatementsGenerator*/ false);
     }
 
-    export function createAsyncFunctionGenerator(locals: LocalsBuilder, promiseConstructor: EntityName): FunctionGenerator {
+    export function createAsyncFunctionGenerator(locals: Locals, promiseConstructor: EntityName): FunctionGenerator {
         return <FunctionGenerator>createCodeGenerator(locals, /*isStatementsGenerator*/ false, promiseConstructor);
     }
 
-    function createCodeGenerator(locals: LocalsBuilder, isStatementsGenerator: boolean, promiseConstructor?: EntityName): CodeGenerator {
+    function createCodeGenerator(locals: Locals, isStatementsGenerator: boolean, promiseConstructor?: EntityName): CodeGenerator {
         // locations
         var pendingLocation: TextRange;
 
@@ -214,13 +191,13 @@ module ts {
         return isStatementsGenerator ? createStatementsGenerator() : createFunctionGenerator();
 
         function declareLocal(name?: string, globallyUnique?: boolean): Identifier {
-            var local = locals.createUniqueIdentifier(name, globallyUnique);
-            locals.recordVariable(local);
+            var local = Locals.createUniqueIdentifier(locals, name, globallyUnique);
+            Locals.recordVariable(locals, local);
             return local;
         }
 
         function createUniqueIdentifier(name?: string, globallyUnique?: boolean): Identifier {
-            return locals.createUniqueIdentifier(name, globallyUnique);
+            return Locals.createUniqueIdentifier(locals, name, globallyUnique);
         }
 
         function writeLocation(location: TextRange): void {
@@ -239,7 +216,7 @@ module ts {
         }
 
         function addVariable(name: Identifier, flags?: NodeFlags): void {
-            locals.recordVariable(name);
+            Locals.recordVariable(locals, name);
         }
 
         function addFunction(func: FunctionDeclaration): void {

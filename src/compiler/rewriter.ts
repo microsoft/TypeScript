@@ -13,7 +13,7 @@ module ts {
         thisArg?: Identifier;
     }
 
-    export function rewriteBindingElement(root: BindingElement, locals: LocalsBuilder, value?: Expression): VariableDeclaration[] {
+    export function rewriteBindingElement(root: BindingElement, locals: Locals, value?: Expression): VariableDeclaration[] {
         var variableDeclarations: VariableDeclaration[];
         var isDeclaration = root.kind === SyntaxKind.VariableDeclaration && !(getCombinedNodeFlags(root) & NodeFlags.Export) || root.kind === SyntaxKind.Parameter;
         rewriteBindingElementWorker(root, value);
@@ -22,7 +22,7 @@ module ts {
         function rewriteBindingElementWorker(node: BindingElement, value: Expression): void {
             if (node.initializer) {
                 // Combine value and initializer
-                value = value ? locals.getValueOrDefault(value, node.initializer, writeDeclaration) : node.initializer;
+                value = value ? Locals.getValueOrDefault(locals, value, node.initializer, writeDeclaration) : node.initializer;
             }
             else if (!value) {
                 // Use 'void 0' in absence of value and initializer
@@ -34,7 +34,7 @@ module ts {
                 if (elements.length !== 1) {
                     // For anything but a single element destructuring we need to generate a temporary
                     // to ensure value is evaluated exactly once.
-                    value = locals.ensureIdentifier(value, writeDeclaration);
+                    value = Locals.ensureIdentifier(locals, value, writeDeclaration);
                 }
                 for (var i = 0; i < elements.length; i++) {
                     var element = elements[i];
@@ -49,7 +49,7 @@ module ts {
                             rewriteBindingElementWorker(element, Factory.createElementAccessExpression(Factory.makeLeftHandSideExpression(value), Factory.createNumericLiteral(i)));
                         }
                         else if (i === elements.length - 1) {
-                            value = locals.ensureIdentifier(value, writeDeclaration);
+                            value = Locals.ensureIdentifier(locals, value, writeDeclaration);
                             var name = <Identifier>element.name;
                             var sliceExpression = Factory.createPropertyAccessExpression(Factory.makeLeftHandSideExpression(value), Factory.createIdentifier("slice"));
                             var callExpression = Factory.createCallExpression(sliceExpression, [Factory.createNumericLiteral(i)]);
@@ -66,7 +66,7 @@ module ts {
 
         function writeDeclaration(left: Identifier, right: Expression): void {
             if (!isDeclaration) {
-                locals.recordVariable(left);
+                Locals.recordVariable(locals, left);
             }
             writeAssignment(left, right);
         }
@@ -88,12 +88,12 @@ module ts {
         }
     }
 
-    export function rewriteDestructuring(root: BinaryExpression, locals: LocalsBuilder): BinaryExpression {
+    export function rewriteDestructuring(root: BinaryExpression, locals: Locals): BinaryExpression {
         var mergedAssignments: BinaryExpression;
         return rewriteWorker();
 
         function writeDeclaration(left: Identifier, right: Expression): void {
-            locals.recordVariable(left);
+            Locals.recordVariable(locals, left);
             writeAssignment(left, right);
         }
 
@@ -126,7 +126,7 @@ module ts {
 
         function rewriteDestructuringAssignment(target: Expression, value: Expression): void {
             if (target.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>target).operator === SyntaxKind.EqualsToken) {
-                value = locals.getValueOrDefault(value, (<BinaryExpression>target).right, writeDeclaration);
+                value = Locals.getValueOrDefault(locals, value, (<BinaryExpression>target).right, writeDeclaration);
                 target = (<BinaryExpression>target).left;
             }
             if (target.kind === SyntaxKind.ObjectLiteralExpression) {
@@ -145,7 +145,7 @@ module ts {
             if (properties.length !== 1) {
                 // For anything but a single element destructuring we need to generate a temporary
                 // to ensure value is evaluated exactly once.
-                value = locals.ensureIdentifier(value, writeDeclaration);
+                value = Locals.ensureIdentifier(locals, value, writeDeclaration);
             }
             for (var i = 0; i < properties.length; i++) {
                 var p = properties[i];
@@ -162,7 +162,7 @@ module ts {
             if (elements.length !== 1) {
                 // For anything but a single element destructuring we need to generate a temporary
                 // to ensure value is evaluated exactly once.
-                value = locals.ensureIdentifier(value, writeDeclaration);
+                value = Locals.ensureIdentifier(locals, value, writeDeclaration);
             }
             for (var i = 0; i < elements.length; i++) {
                 var e = elements[i];
@@ -172,7 +172,7 @@ module ts {
                     }
                     else {
                         if (i === elements.length - 1) {
-                            value = locals.ensureIdentifier(value, writeDeclaration);
+                            value = Locals.ensureIdentifier(locals, value, writeDeclaration);
                             var sliceExpression = Factory.createPropertyAccessExpression(Factory.makeLeftHandSideExpression(value), Factory.createIdentifier("slice"));
                             var callExpression = Factory.createCallExpression(sliceExpression, [Factory.createNumericLiteral(i)]);
                             writeAssignment(<Identifier>(<SpreadElementExpression>e).expression, callExpression);
@@ -189,7 +189,7 @@ module ts {
                 rewriteDestructuringAssignment(target, value);
             }
             else {
-                value = locals.ensureIdentifier(value, writeDeclaration);
+                value = Locals.ensureIdentifier(locals, value, writeDeclaration);
                 rewriteDestructuringAssignment(target, value);
                 mergedAssignments = Factory.createBinaryExpression(
                     SyntaxKind.CommaToken,
@@ -236,7 +236,7 @@ module ts {
         return callExpression;
     }
 
-    export function rewriteAsyncFunctionUplevel(node: FunctionLikeDeclaration, resolver: EmitResolver, locals: LocalsBuilder): FunctionLikeDeclaration {
+    export function rewriteAsyncFunctionUplevel(node: FunctionLikeDeclaration, resolver: EmitResolver, locals: Locals): FunctionLikeDeclaration {
         var visitorHandlers: VisitorHandlers = {
             visitAwaitExpression,
             visitExpressionStatement,
@@ -279,7 +279,7 @@ module ts {
                 var statements = Factory.createNodeArray<Statement>([returnStatement]);
             }
 
-            var resolve = locals.createUniqueIdentifier("_resolve");
+            var resolve = Locals.createUniqueIdentifier(locals, "_resolve");
             var generatorFunctionBody = Factory.createBlock(statements);
             var generatorFunction = Factory.createFunctionExpression(/*name*/ undefined, generatorFunctionBody, []);
             generatorFunction.asteriskToken = Factory.createTokenNode(SyntaxKind.AsteriskToken);
@@ -299,17 +299,17 @@ module ts {
         }
     }
 
-    export function rewriteAsyncFunctionDownlevel(node: FunctionLikeDeclaration, resolver: EmitResolver, locals: LocalsBuilder): FunctionLikeDeclaration {
+    export function rewriteAsyncFunctionDownlevel(node: FunctionLikeDeclaration, resolver: EmitResolver, locals: Locals): FunctionLikeDeclaration {
         var builder = createAsyncFunctionGenerator(locals, resolver.getPromiseConstructor(node));
         return rewriteAsyncOrGeneratorFunctionDownlevel(node, resolver, locals, builder);
     }
 
-    export function rewriteGeneratorFunctionDownlevel(node: FunctionLikeDeclaration, resolver: EmitResolver, locals: LocalsBuilder): FunctionLikeDeclaration {
+    export function rewriteGeneratorFunctionDownlevel(node: FunctionLikeDeclaration, resolver: EmitResolver, locals: Locals): FunctionLikeDeclaration {
         var builder = createGeneratorFunctionGenerator(locals);
         return rewriteAsyncOrGeneratorFunctionDownlevel(node, resolver, locals, builder);
     }
 
-    function rewriteAsyncOrGeneratorFunctionDownlevel(node: FunctionLikeDeclaration, resolver: EmitResolver, locals: LocalsBuilder, builder: FunctionGenerator): FunctionLikeDeclaration {
+    function rewriteAsyncOrGeneratorFunctionDownlevel(node: FunctionLikeDeclaration, resolver: EmitResolver, locals: Locals, builder: FunctionGenerator): FunctionLikeDeclaration {
         var isAsync = (node.flags & NodeFlags.Async) !== 0;
         var isGenerator = !!node.asteriskToken;
         if (!isAsync && !isGenerator) {
@@ -1225,7 +1225,7 @@ module ts {
             var parameterName: Identifier;
             builder.writeLocation(node);
             if (isBindingPattern(node.name)) {
-                parameterName = locals.createUniqueIdentifier();
+                parameterName = Locals.createUniqueIdentifier(locals);
             }
             else {
                 parameterName = <Identifier>node.name;

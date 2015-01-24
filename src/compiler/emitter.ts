@@ -1499,7 +1499,7 @@ module ts {
             // holds the node used for scoping unique names
             var localsScope: Node;
             // holds locals for the current scope
-            var locals: LocalsBuilder;
+            var locals: Locals;
             // holds locals that should be unique in all contexts, this is for downlevel rewrite of catch clauses and downlevel let/const
             var globals: Map<boolean>;
 
@@ -1918,14 +1918,13 @@ module ts {
                 }
 
                 if (!locals) {
-                    locals = createLocalsBuilder(resolver, localsScope, globals);
+                    locals = Locals.create(resolver, localsScope, globals);
                 }
             }
 
             function emitTempDeclarations(newLine: boolean) {
                 if (locals) {
-                    var variables = locals.getVariables();
-                    if (variables) {
+                    if (locals.variables) {
                         if (newLine) {
                             writeLine();
                         }
@@ -1933,7 +1932,7 @@ module ts {
                             write(" ");
                         }
                         write("var ");
-                        emitCommaList(variables);
+                        emitCommaList(locals.variables);
                         write(";");
                     }
                 }
@@ -2937,7 +2936,7 @@ module ts {
                 if (languageVersion < ScriptTarget.ES6) {
                     if (isBindingPattern(node.name)) {
                         ensureLocals();
-                        var name = locals.createUniqueIdentifier();
+                        var name = Locals.createUniqueIdentifier(locals);
                         if (!tempParameters) {
                             tempParameters = [];
                         }
@@ -2993,7 +2992,7 @@ module ts {
                     ensureLocals();
                     var restIndex = node.parameters.length - 1;
                     var restParam = node.parameters[restIndex];
-                    var tempName = locals.createUniqueIdentifier("_i").text;
+                    var tempName = Locals.createUniqueIdentifier(locals, "_i").text;
                     writeLine();
                     emitLeadingComments(restParam);
                     emitStart(restParam);

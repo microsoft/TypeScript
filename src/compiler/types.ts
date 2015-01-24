@@ -989,12 +989,12 @@ module ts {
 
     export type Label = number;
 
-    export interface LocalsBuilder {
-        createUniqueIdentifier(name?: string, globallyUnique?: boolean): Identifier;
-        recordVariable(name: Identifier): void;
-        ensureIdentifier(expression: Expression, writeAssignment: (left: Identifier, right: Expression, location?: TextRange) => void): Identifier;
-        getValueOrDefault(value: Expression, defaultValue: Expression, writeAssignment: (left: Identifier, right: Expression, location?: TextRange) => void): Expression;
-        getVariables(): Identifier[];
+    export interface Locals {
+        resolver: EmitResolver;
+        context: Node;
+        globals: Map<boolean>;
+        tempCount: number;
+        variables?: Identifier[];
     }
 
     export interface CodeGenerator {
