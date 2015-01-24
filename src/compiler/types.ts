@@ -1283,12 +1283,15 @@ module ts {
         Union               = 0x00004000,  // Union
         Anonymous           = 0x00008000,  // Anonymous
         FromSignature       = 0x00010000,  // Created for signature assignment check
-        Unwidened           = 0x00020000,  // Unwidened type (is or contains Undefined or Null type)
+        ObjectLiteral       = 0x00020000,  // Originates in an object literal
+        ContainsUndefined   = 0x00040000,  // Type is or contains Undefined or Null type
+        ContainsLiteral     = 0x00080000,  // Type is or contains object literal type
 
         Intrinsic = Any | String | Number | Boolean | Void | Undefined | Null,
         StringLike = String | StringLiteral,
         NumberLike = Number | Enum,
         ObjectType = Class | Interface | Reference | Tuple | Anonymous,
+        RequiresWidening = ContainsUndefined | ContainsLiteral
     }
 
     // Properties common to all types
