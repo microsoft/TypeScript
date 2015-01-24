@@ -34,27 +34,27 @@ class Bug {
 >{} : { [x: string]: undefined; }
 
         this.values['comments'] = { italic: true };
->this.values['comments'] = { italic: true } : { italic: boolean; bold?: boolean; }
+>this.values['comments'] = { italic: true } : { italic: boolean; }
 >this.values['comments'] : IOptions
 >this.values : IMap
 >this : Bug
 >values : IMap
->{ italic: true } : { italic: boolean; bold?: boolean; }
+>{ italic: true } : { italic: boolean; }
 >italic : boolean
     }
     shouldBeOK() {
 >shouldBeOK : () => void
 
         this.values = {
->this.values = {            comments: { italic: true }        } : { [x: string]: { italic: boolean; bold?: boolean; }; comments: { italic: boolean; bold?: boolean; }; }
+>this.values = {            comments: { italic: true }        } : { [x: string]: { italic: boolean; }; comments: { italic: boolean; }; }
 >this.values : IMap
 >this : Bug
 >values : IMap
->{            comments: { italic: true }        } : { [x: string]: { italic: boolean; bold?: boolean; }; comments: { italic: boolean; bold?: boolean; }; }
+>{            comments: { italic: true }        } : { [x: string]: { italic: boolean; }; comments: { italic: boolean; }; }
 
             comments: { italic: true }
->comments : { italic: boolean; bold?: boolean; }
->{ italic: true } : { italic: boolean; bold?: boolean; }
+>comments : { italic: boolean; }
+>{ italic: true } : { italic: boolean; }
 >italic : boolean
 
         };
