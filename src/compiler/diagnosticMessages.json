@@ -224,7 +224,7 @@
     "A 'declare' modifier cannot be used with an import declaration.": {
         "category": "Error",
         "code": 1079,
-        "isEarly":  true
+        "isEarly": true
     },
     "Invalid 'reference' directive syntax.": {
         "category": "Error",
@@ -654,7 +654,7 @@
     "An implementation cannot be declared in ambient contexts.": {
         "category": "Error",
         "code": 1184,
-        "isEarly":  true
+        "isEarly": true
     },
     "Modifiers cannot appear here.": {
         "category": "Error",
@@ -667,6 +667,10 @@
     "A rest element cannot have an initializer.": {
         "category": "Error",
         "code": 1186
+    },
+    "A parameter property may not be a binding pattern.": {
+        "category": "Error",
+        "code":  1187
     },
 
     "Duplicate identifier '{0}'.": {
@@ -1277,6 +1281,10 @@
         "category": "Error",
         "code": 2462
     },
+    "A binding pattern parameter cannot be optional in an implementation signature.": {
+        "category": "Error",
+        "code":  2463
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
@@ -1567,9 +1575,10 @@
         "category": "Error",
         "code": 4084
     },
-    "Index expression arguments in 'const' enums must be of type 'string'.": {
+    "A const enum member can only be accessed using a string literal.": {
         "category": "Error",
-        "code": 4085
+        "code": 4085,
+        "isEarly": true
     },
     "'const' enum member initializer was evaluated to a non-finite value.": {
         "category": "Error",
@@ -1578,6 +1587,11 @@
     "'const' enum member initializer was evaluated to disallowed value 'NaN'.": {
         "category": "Error",
         "code": 4087
+    },
+    "Property '{0}' does not exist on 'const' enum '{1}'.": {
+        "category": "Error",
+        "code": 4088,
+        "isEarly":  true
     },
     "The current host does not support the '{0}' option.": {
         "category": "Error",
@@ -1599,25 +1613,33 @@
         "category": "Error",
         "code": 5023
     },
+    "Compiler option '{0}' requires a value of type {1}.": {
+        "category": "Error",
+        "code": 5024
+    },
     "Could not write file '{0}': {1}": {
         "category": "Error",
         "code": 5033
     },
-    "Option mapRoot cannot be specified without specifying sourcemap option.": {
+    "Option 'mapRoot' cannot be specified without specifying 'sourcemap' option.": {
         "category": "Error",
         "code": 5038
     },
-    "Option sourceRoot cannot be specified without specifying sourcemap option.": {
+    "Option 'sourceRoot' cannot be specified without specifying 'sourcemap' option.": {
         "category": "Error",
         "code": 5039
     },
-    "Option noEmit cannot be specified with option out or outDir.": {
+    "Option 'noEmit' cannot be specified with option 'out' or 'outDir'.": {
         "category": "Error",
         "code": 5040
     },
-    "Option noEmit cannot be specified with option declaration.": {
+    "Option 'noEmit' cannot be specified with option 'declaration'.": {
         "category": "Error",
         "code": 5041
+    },
+    "Option 'project' cannot be mixed with source files on a command line.": {
+        "category": "Error",
+        "code": 5042
     },
     "Concatenate and emit output to single file.": {
         "category": "Message",
@@ -1675,6 +1697,10 @@
         "category": "Message",
         "code": 6019
     },
+    "Compile the project in the given directory.": {
+        "category": "Message",
+        "code": 6020
+    },
     "Syntax: {0}": {
         "category": "Message",
         "code": 6023
@@ -1703,7 +1729,7 @@
         "category": "Message",
         "code": 6030
     },
-    "File change detected. Compiling...": {
+    "File change detected. Starting incremental compilation...": {
         "category": "Message",
         "code": 6032
     },
@@ -1767,7 +1793,7 @@
         "category": "Error",
         "code": 6051
     },
-    "Warn on expressions and declarations with an implied 'any' type.": {
+    "Raise error on expressions and declarations with an implied 'any' type.": {
         "category": "Message",
         "code": 6052
     },

@@ -11,8 +11,8 @@
 >obj : {}
 ><PropertyDescriptor>({                get: function () {                    eval("public = 1;");                    return 11;                },                set: function (v) {                }            }) : PropertyDescriptor
 >PropertyDescriptor : PropertyDescriptor
->({                get: function () {                    eval("public = 1;");                    return 11;                },                set: function (v) {                }            }) : { get: () => number; set: (v: any) => void; }
->{                get: function () {                    eval("public = 1;");                    return 11;                },                set: function (v) {                }            } : { get: () => number; set: (v: any) => void; }
+>({                get: function () {                    eval("public = 1;");                    return 11;                },                set: function (v) {                }            }) : { get: () => number; set: (v: any) => void; configurable?: boolean; enumerable?: boolean; value?: any; writable?: boolean; }
+>{                get: function () {                    eval("public = 1;");                    return 11;                },                set: function (v) {                }            } : { get: () => number; set: (v: any) => void; configurable?: boolean; enumerable?: boolean; value?: any; writable?: boolean; }
 
                 get: function () {
 >get : () => number

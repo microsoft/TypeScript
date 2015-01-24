@@ -146,7 +146,9 @@ module ts {
         function invokeEmitter(targetSourceFile?: SourceFile) {
             var resolver = getDiagnosticsProducingTypeChecker().getEmitResolver();
             return emitFiles(resolver, getEmitHost(), targetSourceFile);
-        }        function getSourceFile(filename: string) {
+        }
+        
+        function getSourceFile(filename: string) {
             filename = host.getCanonicalFileName(filename);
             return hasProperty(filesByName, filename) ? filesByName[filename] : undefined;
         }
@@ -185,7 +187,10 @@ module ts {
                 }
             }
             else {
-                if (!(findSourceFile(filename + ".ts", isDefaultLib, refFile, refPos, refEnd) || findSourceFile(filename + ".d.ts", isDefaultLib, refFile, refPos, refEnd))) {
+                if (options.allowNonTsExtensions && !findSourceFile(filename, isDefaultLib, refFile, refPos, refEnd)) {
+                    diagnostic = Diagnostics.File_0_not_found;
+                }
+                else if (!findSourceFile(filename + ".ts", isDefaultLib, refFile, refPos, refEnd) && !findSourceFile(filename + ".d.ts", isDefaultLib, refFile, refPos, refEnd)) {
                     diagnostic = Diagnostics.File_0_not_found;
                     filename += ".ts";
                 }
@@ -337,7 +342,7 @@ module ts {
             }
 
             var firstExternalModule = forEach(files, f => isExternalModule(f) ? f : undefined);
-            if (firstExternalModule && options.module === ModuleKind.None) {
+            if (firstExternalModule && !options.module) {
                 // We cannot use createDiagnosticFromNode because nodes do not have parents yet
                 var externalModuleErrorSpan = getErrorSpanForNode(firstExternalModule.externalModuleIndicator);
                 var errorStart = skipTrivia(firstExternalModule.text, externalModuleErrorSpan.pos);

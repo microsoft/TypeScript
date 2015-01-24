@@ -1,0 +1,81 @@
+=== tests/cases/conformance/expressions/contextualTyping/objectLiteralContextualTyping.ts ===
+// Tests related to #1774
+
+interface Item {
+>Item : Item
+
+    name: string;
+>name : string
+
+    description?: string;
+>description : string
+}
+
+declare function foo(item: Item): string;
+>foo : { (item: Item): string; (item: any): number; }
+>item : Item
+>Item : Item
+
+declare function foo(item: any): number;
+>foo : { (item: Item): string; (item: any): number; }
+>item : any
+
+var x = foo({ name: "Sprocket" });
+>x : string
+>foo({ name: "Sprocket" }) : string
+>foo : { (item: Item): string; (item: any): number; }
+>{ name: "Sprocket" } : { name: string; description?: string; }
+>name : string
+
+var x: string;
+>x : string
+
+var y = foo({ name: "Sprocket", description: "Bumpy wheel" });
+>y : string
+>foo({ name: "Sprocket", description: "Bumpy wheel" }) : string
+>foo : { (item: Item): string; (item: any): number; }
+>{ name: "Sprocket", description: "Bumpy wheel" } : { name: string; description: string; }
+>name : string
+>description : string
+
+var y: string;
+>y : string
+
+var z = foo({ name: "Sprocket", description: false });
+>z : number
+>foo({ name: "Sprocket", description: false }) : number
+>foo : { (item: Item): string; (item: any): number; }
+>{ name: "Sprocket", description: false } : { name: string; description: boolean; }
+>name : string
+>description : boolean
+
+var z: number;
+>z : number
+
+var w = foo({ a: 10 });
+>w : number
+>foo({ a: 10 }) : number
+>foo : { (item: Item): string; (item: any): number; }
+>{ a: 10 } : { a: number; }
+>a : number
+
+var w: number;
+>w : number
+
+declare function bar<T>(param: { x?: T }): T;
+>bar : <T>(param: { x?: T; }) => T
+>T : T
+>param : { x?: T; }
+>x : T
+>T : T
+>T : T
+
+var b = bar({});
+>b : {}
+>bar({}) : {}
+>bar : <T>(param: { x?: T; }) => T
+>{} : { x?: {}; }
+
+var b: {};
+>b : {}
+

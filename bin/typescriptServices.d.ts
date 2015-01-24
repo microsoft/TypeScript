@@ -189,29 +189,29 @@ declare module ts {
         ConditionalExpression = 164,
         TemplateExpression = 165,
         YieldExpression = 166,
-        OmittedExpression = 167,
-        TemplateSpan = 168,
-        Block = 169,
-        VariableStatement = 170,
-        EmptyStatement = 171,
-        ExpressionStatement = 172,
-        IfStatement = 173,
-        DoStatement = 174,
-        WhileStatement = 175,
-        ForStatement = 176,
-        ForInStatement = 177,
-        ContinueStatement = 178,
-        BreakStatement = 179,
-        ReturnStatement = 180,
-        WithStatement = 181,
-        SwitchStatement = 182,
-        LabeledStatement = 183,
-        ThrowStatement = 184,
-        TryStatement = 185,
-        TryBlock = 186,
-        FinallyBlock = 187,
-        DebuggerStatement = 188,
-        VariableDeclaration = 189,
+        SpreadElementExpression = 167,
+        OmittedExpression = 168,
+        TemplateSpan = 169,
+        Block = 170,
+        VariableStatement = 171,
+        EmptyStatement = 172,
+        ExpressionStatement = 173,
+        IfStatement = 174,
+        DoStatement = 175,
+        WhileStatement = 176,
+        ForStatement = 177,
+        ForInStatement = 178,
+        ContinueStatement = 179,
+        BreakStatement = 180,
+        ReturnStatement = 181,
+        WithStatement = 182,
+        SwitchStatement = 183,
+        LabeledStatement = 184,
+        ThrowStatement = 185,
+        TryStatement = 186,
+        DebuggerStatement = 187,
+        VariableDeclaration = 188,
+        VariableDeclarationList = 189,
         FunctionDeclaration = 190,
         ClassDeclaration = 191,
         InterfaceDeclaration = 192,
@@ -230,9 +230,8 @@ declare module ts {
         ShorthandPropertyAssignment = 205,
         EnumMember = 206,
         SourceFile = 207,
-        Program = 208,
-        SyntaxList = 209,
-        Count = 210,
+        SyntaxList = 208,
+        Count = 209,
         FirstAssignment = 52,
         LastAssignment = 63,
         FirstReservedWord = 65,
@@ -253,8 +252,6 @@ declare module ts {
         LastLiteralToken = 10,
         FirstTemplateToken = 10,
         LastTemplateToken = 13,
-        FirstOperator = 22,
-        LastOperator = 63,
         FirstBinaryOperator = 24,
         LastBinaryOperator = 63,
         FirstNode = 121,
@@ -331,9 +328,13 @@ declare module ts {
         type?: TypeNode;
     }
     interface VariableDeclaration extends Declaration {
+        parent?: VariableDeclarationList;
         name: Identifier | BindingPattern;
         type?: TypeNode;
         initializer?: Expression;
+    }
+    interface VariableDeclarationList extends Node {
+        declarations: NodeArray<VariableDeclaration>;
     }
     interface ParameterDeclaration extends Declaration {
         dotDotDotToken?: Node;
@@ -514,6 +515,9 @@ declare module ts {
     interface ArrayLiteralExpression extends PrimaryExpression {
         elements: NodeArray<Expression>;
     }
+    interface SpreadElementExpression extends Expression {
+        expression: Expression;
+    }
     interface ObjectLiteralExpression extends PrimaryExpression, Declaration {
         properties: NodeArray<ObjectLiteralElement>;
     }
@@ -548,7 +552,7 @@ declare module ts {
         statements: NodeArray<Statement>;
     }
     interface VariableStatement extends Statement {
-        declarations: NodeArray<VariableDeclaration>;
+        declarationList: VariableDeclarationList;
     }
     interface ExpressionStatement extends Statement {
         expression: Expression;
@@ -568,14 +572,12 @@ declare module ts {
         expression: Expression;
     }
     interface ForStatement extends IterationStatement {
-        declarations?: NodeArray<VariableDeclaration>;
-        initializer?: Expression;
+        initializer?: VariableDeclarationList | Expression;
         condition?: Expression;
         iterator?: Expression;
     }
     interface ForInStatement extends IterationStatement {
-        declarations?: NodeArray<VariableDeclaration>;
-        variable?: Expression;
+        initializer: VariableDeclarationList | Expression;
         expression: Expression;
     }
     interface BreakOrContinueStatement extends Statement {
@@ -682,12 +684,12 @@ declare module ts {
         getLineAndCharacterFromPosition(position: number): LineAndCharacter;
         getPositionFromLineAndCharacter(line: number, character: number): number;
         getLineStarts(): number[];
+        update(newText: string, textChangeRange: TextChangeRange): SourceFile;
         amdDependencies: string[];
         amdModuleName: string;
         referencedFiles: FileReference[];
         referenceDiagnostics: Diagnostic[];
         parseDiagnostics: Diagnostic[];
-        grammarDiagnostics: Diagnostic[];
         getSyntacticDiagnostics(): Diagnostic[];
         semanticDiagnostics: Diagnostic[];
         hasNoDefaultLib: boolean;
@@ -698,15 +700,21 @@ declare module ts {
         languageVersion: ScriptTarget;
         identifiers: Map<string>;
     }
-    interface Program {
-        getSourceFile(filename: string): SourceFile;
-        getSourceFiles(): SourceFile[];
+    interface ScriptReferenceHost {
         getCompilerOptions(): CompilerOptions;
+        getSourceFile(filename: string): SourceFile;
+        getCurrentDirectory(): string;
+    }
+    interface Program extends ScriptReferenceHost {
+        getSourceFiles(): SourceFile[];
         getCompilerHost(): CompilerHost;
         getDiagnostics(sourceFile?: SourceFile): Diagnostic[];
         getGlobalDiagnostics(): Diagnostic[];
-        getTypeChecker(fullTypeCheckMode: boolean): TypeChecker;
+        getDeclarationDiagnostics(sourceFile: SourceFile): Diagnostic[];
+        getTypeChecker(produceDiagnostics: boolean): TypeChecker;
         getCommonSourceDirectory(): string;
+        emitFiles(targetSourceFile?: SourceFile): EmitResult;
+        isEmitBlocked(sourceFile?: SourceFile): boolean;
     }
     interface SourceMapSpan {
         emittedLine: number;
@@ -740,16 +748,20 @@ declare module ts {
         diagnostics: Diagnostic[];
         sourceMaps: SourceMapData[];
     }
+    interface TypeCheckerHost {
+        getCompilerOptions(): CompilerOptions;
+        getCompilerHost(): CompilerHost;
+        getSourceFiles(): SourceFile[];
+        getSourceFile(filename: string): SourceFile;
+    }
     interface TypeChecker {
-        getProgram(): Program;
+        getEmitResolver(): EmitResolver;
         getDiagnostics(sourceFile?: SourceFile): Diagnostic[];
-        getDeclarationDiagnostics(sourceFile: SourceFile): Diagnostic[];
         getGlobalDiagnostics(): Diagnostic[];
         getNodeCount(): number;
         getIdentifierCount(): number;
         getSymbolCount(): number;
         getTypeCount(): number;
-        emitFiles(targetSourceFile?: SourceFile): EmitResult;
         getTypeOfSymbolAtLocation(symbol: Symbol, node: Node): Type;
         getDeclaredTypeOfSymbol(symbol: Symbol): Type;
         getPropertiesOfType(type: Type): Symbol[];
@@ -773,7 +785,6 @@ declare module ts {
         isImplementationOfOverload(node: FunctionLikeDeclaration): boolean;
         isUndefinedSymbol(symbol: Symbol): boolean;
         isArgumentsSymbol(symbol: Symbol): boolean;
-        isEmitBlocked(sourceFile?: SourceFile): boolean;
         getEnumMemberValue(node: EnumMember): number;
         isValidPropertyAccess(node: PropertyAccessExpression | QualifiedName, propertyName: string): boolean;
         getAliasedSymbol(symbol: Symbol): Symbol;
@@ -833,7 +844,6 @@ declare module ts {
         errorModuleName?: string;
     }
     interface EmitResolver {
-        getProgram(): Program;
         getLocalNameOfContainer(container: ModuleDeclaration | EnumDeclaration): string;
         getExpressionNamePrefix(node: Identifier): string;
         getExportAssignmentName(node: SourceFile): string;
@@ -849,7 +859,6 @@ declare module ts {
         isSymbolAccessible(symbol: Symbol, enclosingDeclaration: Node, meaning: SymbolFlags): SymbolAccessiblityResult;
         isEntityNameVisible(entityName: EntityName, enclosingDeclaration: Node): SymbolVisibilityResult;
         getConstantValue(node: PropertyAccessExpression | ElementAccessExpression): number;
-        isEmitBlocked(sourceFile?: SourceFile): boolean;
         isUnknownIdentifier(location: Node, name: string): boolean;
     }
     const enum SymbolFlags {
@@ -1019,8 +1028,6 @@ declare module ts {
     }
     interface GenericType extends InterfaceType, TypeReference {
         instantiations: Map<TypeReference>;
-        openReferenceTargets: GenericType[];
-        openReferenceChecks: Map<boolean>;
     }
     interface TupleType extends ObjectType {
         elementTypes: Type[];
@@ -1119,6 +1126,7 @@ declare module ts {
         locale?: string;
         mapRoot?: string;
         module?: ModuleKind;
+        noEmit?: boolean;
         noEmitOnError?: boolean;
         noErrorTruncation?: boolean;
         noImplicitAny?: boolean;
@@ -1303,13 +1311,18 @@ declare module ts {
         useCaseSensitiveFileNames(): boolean;
         getNewLine(): string;
     }
+    interface TextSpan {
+        start: number;
+        length: number;
+    }
+    interface TextChangeRange {
+        span: TextSpan;
+        newLength: number;
+    }
 }
 declare module ts {
     interface ErrorCallback {
-        (message: DiagnosticMessage): void;
-    }
-    interface CommentCallback {
-        (pos: number, end: number): void;
+        (message: DiagnosticMessage, length: number): void;
     }
     interface Scanner {
         getStartPos(): number;
@@ -1355,17 +1368,19 @@ declare module ts {
 declare module ts {
     function getNodeConstructor(kind: SyntaxKind): new () => Node;
     function createNode(kind: SyntaxKind): Node;
-    function forEachChild<T>(node: Node, cbNode: (node: Node) => T, cbNodes?: (nodes: Node[]) => T): T;
-    function createCompilerHost(options: CompilerOptions): CompilerHost;
+    function forEachChild<T>(node: Node, cbNode: (node: Node) => T, cbNodeArray?: (nodes: Node[]) => T): T;
     function modifierToFlag(token: SyntaxKind): NodeFlags;
     function isEvalOrArgumentsIdentifier(node: Node): boolean;
     function createSourceFile(filename: string, sourceText: string, languageVersion: ScriptTarget, setParentNodes?: boolean): SourceFile;
     function isLeftHandSideExpression(expr: Expression): boolean;
     function isAssignmentOperator(token: SyntaxKind): boolean;
-    function createProgram(rootNames: string[], options: CompilerOptions, host: CompilerHost): Program;
 }
 declare module ts {
-    function createTypeChecker(program: Program, fullTypeCheck: boolean): TypeChecker;
+    function createTypeChecker(host: TypeCheckerHost, produceDiagnostics: boolean): TypeChecker;
+}
+declare module ts {
+    function createCompilerHost(options: CompilerOptions): CompilerHost;
+    function createProgram(rootNames: string[], options: CompilerOptions, host: CompilerHost): Program;
 }
 declare module ts {
     var servicesVersion: string;
@@ -1412,9 +1427,8 @@ declare module ts {
     interface SourceFile {
         isOpen: boolean;
         version: string;
-        getScriptSnapshot(): IScriptSnapshot;
+        scriptSnapshot: IScriptSnapshot;
         getNamedDeclarations(): Declaration[];
-        update(scriptSnapshot: IScriptSnapshot, version: string, isOpen: boolean, textChangeRange: TextChangeRange): SourceFile;
     }
     /**
      * Represents an immutable snapshot of a script at a specified time.Once acquired, the
@@ -1495,96 +1509,6 @@ declare module ts {
         getEmitOutput(fileName: string): EmitOutput;
         getSourceFile(filename: string): SourceFile;
         dispose(): void;
-    }
-    class TextSpan {
-        private _start;
-        private _length;
-        /**
-            * Creates a TextSpan instance beginning with the position Start and having the Length
-            * specified with length.
-            */
-        constructor(start: number, length: number);
-        toJSON(key: any): any;
-        start(): number;
-        length(): number;
-        end(): number;
-        isEmpty(): boolean;
-        /**
-            * Determines whether the position lies within the span. Returns true if the position is greater than or equal to Start and strictly less
-            * than End, otherwise false.
-            * @param position The position to check.
-            */
-        containsPosition(position: number): boolean;
-        /**
-            * Determines whether span falls completely within this span. Returns true if the specified span falls completely within this span, otherwise false.
-            * @param span The span to check.
-            */
-        containsTextSpan(span: TextSpan): boolean;
-        /**
-            * Determines whether the given span overlaps this span. Two spans are considered to overlap
-            * if they have positions in common and neither is empty. Empty spans do not overlap with any
-            * other span. Returns true if the spans overlap, false otherwise.
-            * @param span The span to check.
-            */
-        overlapsWith(span: TextSpan): boolean;
-        /**
-            * Returns the overlap with the given span, or undefined if there is no overlap.
-            * @param span The span to check.
-            */
-        overlap(span: TextSpan): TextSpan;
-        /**
-            * Determines whether span intersects this span. Two spans are considered to
-            * intersect if they have positions in common or the end of one span
-            * coincides with the start of the other span. Returns true if the spans intersect, false otherwise.
-            * @param The span to check.
-            */
-        intersectsWithTextSpan(span: TextSpan): boolean;
-        intersectsWith(start: number, length: number): boolean;
-        /**
-            * Determines whether the given position intersects this span.
-            * A position is considered to intersect if it is between the start and
-            * end positions (inclusive) of this span. Returns true if the position intersects, false otherwise.
-            * @param position The position to check.
-            */
-        intersectsWithPosition(position: number): boolean;
-        /**
-            * Returns the intersection with the given span, or undefined if there is no intersection.
-            * @param span The span to check.
-            */
-        intersection(span: TextSpan): TextSpan;
-        /**
-            * Creates a new TextSpan from the given start and end positions
-            * as opposed to a position and length.
-            */
-        static fromBounds(start: number, end: number): TextSpan;
-    }
-    class TextChangeRange {
-        static unchanged: TextChangeRange;
-        private _span;
-        private _newLength;
-        /**
-            * Initializes a new instance of TextChangeRange.
-            */
-        constructor(span: TextSpan, newLength: number);
-        /**
-            * The span of text before the edit which is being changed
-            */
-        span(): TextSpan;
-        /**
-            * Width of the span after the edit.  A 0 here would represent a delete
-            */
-        newLength(): number;
-        newSpan(): TextSpan;
-        isUnchanged(): boolean;
-        /**
-            * Called to merge all the changes that occurred across several versions of a script snapshot
-            * into a single change.  i.e. if a user keeps making successive edits to a script we will
-            * have a text change from V1 to V2, V2 to V3, ..., Vn.
-            *
-            * This function will then merge those changes into a single change range valid between V1 and
-            * Vn.
-            */
-        static collapseChangesAcrossMultipleVersions(changes: TextChangeRange[]): TextChangeRange;
     }
     interface ClassifiedSpan {
         textSpan: TextSpan;
@@ -1877,6 +1801,8 @@ declare module ts {
         throwIfCancellationRequested(): void;
     }
     function createLanguageServiceSourceFile(filename: string, scriptSnapshot: IScriptSnapshot, scriptTarget: ScriptTarget, version: string, isOpen: boolean, setNodeParents: boolean): SourceFile;
+    var disableIncrementalParsing: boolean;
+    function updateLanguageServiceSourceFile(sourceFile: SourceFile, scriptSnapshot: IScriptSnapshot, version: string, isOpen: boolean, textChangeRange: TextChangeRange): SourceFile;
     function createDocumentRegistry(): DocumentRegistry;
     function preProcessFile(sourceText: string, readImportFiles?: boolean): PreProcessedFileInfo;
     function createLanguageService(host: LanguageServiceHost, documentRegistry: DocumentRegistry): LanguageService;
