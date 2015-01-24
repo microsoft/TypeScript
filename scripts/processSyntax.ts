@@ -89,9 +89,8 @@ module ts {
             writer.writeln();
             writer.writeln(`module ts {`);
             writer.indent();
-            writeVisitorHandlerInterface();
-            writeVisitorInterface();
             writeFactoryModule();
+            writeVisitorInterface();
             writeVisitorModule();
             writer.dedent();
             writer.writeln(`}`);
@@ -272,12 +271,12 @@ module ts {
             lastWriteSucceeded = true;
         }
 
-        function writeVisitorHandlerInterface(): void {
-            writer.writeln(`export interface VisitorHandler {`);
+        function writeVisitorInterface(): void {
+            writer.writeln(`export interface VisitorHandlers {`);
             writer.indent();
 
             for (var i = 0; i < syntax.length; i++) {
-                writeVisitorHandlerMethodSignatureForNode(syntax[i]);
+                writeVisitorMethodSignatureForNode(syntax[i]);
             }
 
             writer.dedent();
@@ -285,7 +284,7 @@ module ts {
             writer.writeln();
         }
 
-        function writeVisitorHandlerMethodSignatureForNode(nodeType: SyntaxNodeType): void {
+        function writeVisitorMethodSignatureForNode(nodeType: SyntaxNodeType): void {
             if (!nodeType.visit || !nodeType.handler) {
                 return;
             }
@@ -295,128 +294,16 @@ module ts {
             var name = nodeType.name || kind || type;
             var handlerType = nodeType.handlerType || type;
 
-            writer.writeln(`visit${formatName(name) }? (node: ${formatType(type) }): ${formatType(handlerType) };`);
-        }
-
-        function writeVisitorInterface(): void {
-            writer.writeln(`export interface Visitor {`);
-            writer.indent();
-
-            for (var i = 0; i < syntax.length; i++) {
-                writeVisitorInterfaceMethodSignatureForNode(syntax[i]);
-            }
-
-            writer.dedent();
-            writer.writeln(`}`);
-            writer.writeln();
-        }
-
-        function writeVisitorInterfaceMethodSignatureForNode(nodeType: SyntaxNodeType): void {
-            if (!nodeType.visit) {
-                return;
-            }
-
-            var kind = nodeType.kind;
-            var type = nodeType.type || nodeType.baseType;
-            var name = nodeType.name || kind || type;
-            var handlerType = nodeType.handlerType || type;
-
-            writer.writeln(`visit${formatName(name) }(node: ${formatType(type) }): ${formatType(handlerType) };`);
+            writer.writeln(`visit${formatName(name) }? (handlers: VisitorHandlers, node: ${formatType(type) }): ${formatType(handlerType) };`);
         }
 
         function writeVisitorModule(): void {
             writer.writeln(`export module Visitor {`);
             writer.indent();
-            writer.writeln(`var activeVisitor: Visitor;`);
-            writer.writeln();
-            writeVisitorModuleCreateFunction();
             writeVisitorModuleFunctions();
             writeVisitorModuleFooter();
             writer.dedent();
             writer.writeln(`}`);
-        }
-
-        function writeVisitorModuleCreateFunction(): void {
-            writer.writeln(`export function create(handler: VisitorHandler): Visitor {`);
-            writer.indent();
-            writer.writeln(`var visitor: Visitor = {`);
-            writer.indent();
-
-            for (var i = 0; i < syntax.length; i++) {
-                var nodeType = syntax[i];
-                if (!nodeType.visit) {
-                    continue;
-                }
-
-                var kind = nodeType.kind;
-                var type = nodeType.type || nodeType.baseType;
-                var name = nodeType.name || kind || type;
-
-                writer.writeln(`visit${formatName(name) },`);
-            }
-
-            writer.dedent();
-            writer.writeln(`};`);
-            writer.writeln();
-            writer.writeln(`return visitor;`);
-            writer.writeln();
-
-            lastWriteSucceeded = false;
-            for (var i = 0; i < syntax.length; i++) {
-                writeVisitorCreateFunctionVisitFunctionForNode(syntax[i]);
-            }
-
-            writeVisitorCreateFunctionVisitNodeFunction();
-
-            writer.dedent();
-            writer.writeln(`}`);
-            writer.writeln();
-        }
-
-        function writeVisitorCreateFunctionVisitFunctionForNode(nodeType: SyntaxNodeType): void {
-            if (!nodeType.visit) {
-                return;
-            }
-
-            if (lastWriteSucceeded) {
-                writer.writeln();
-            }
-
-            var kind = nodeType.kind;
-            var type = nodeType.type || nodeType.baseType;
-            var name = nodeType.name || kind || type;
-            var handlerType = nodeType.handlerType || type;
-
-            writer.writeln(`function visit${formatName(name) }(node: ${formatType(type) }): ${formatType(handlerType) } {`);
-            writer.indent();
-            writer.write(`return visitNode(node, Visitor.visit${formatName(name) }`);
-
-            if (nodeType.handler) {
-                writer.write(`, handler.visit${formatName(name) }`);
-            }
-
-            writer.writeln(`);`);
-            writer.dedent();
-            writer.writeln(`}`);
-
-            lastWriteSucceeded = true;
-        }
-
-        function writeVisitorCreateFunctionVisitNodeFunction(): void {
-            writer.suspendIndenting();
-            writer.writeln(`
-            function visitNode<TNode extends Node, TResult extends Node>(node: TNode, coreVisitor: (node: TNode) => TResult, handlerVisitor?: (node: TNode) => TResult): TResult {
-                if (!node) {
-                    return <TResult><Node>node;
-                }
-
-                var savedVisitor = activeVisitor;
-                activeVisitor = visitor;
-                var result = handlerVisitor ? handlerVisitor(node) : coreVisitor(node);
-                activeVisitor = savedVisitor;
-                return result;
-            }`);
-            writer.resumeIndenting();
         }
 
         function writeVisitorModuleFunctions(): void {
@@ -439,14 +326,14 @@ module ts {
             var type = nodeType.type || nodeType.baseType;
             var name = nodeType.name || kind || type;
 
-            writer.writeln(`export function visit${formatName(name) }(node: ${formatType(type) }): ${formatType(type) } {`);
+            writer.writeln(`export function visit${formatName(name) }(handlers: VisitorHandlers, node: ${formatType(type) }): ${formatType(type) } {`);
             writer.indent();
 
             if (nodeType.shallow) {
                 writer.writeln(`return node;`);
             }
             else {
-                writer.writeln(`if (!node || !activeVisitor) {`);
+                writer.writeln(`if (!node || !handlers) {`);
                 writer.indent();
                 writer.writeln(`return node;`);
                 writer.dedent();
@@ -527,7 +414,6 @@ module ts {
         }
 
         function writeVisitorFunctionBodyCasesForSubTypes(nodeType: SyntaxNodeType, outerType: SyntaxNodeType, lastWriteWasVisit: boolean): boolean {
-
             if (nodeType.kind) {
                 var kind = nodeType.kind;
                 var type = nodeType.type || nodeType.baseType;
@@ -639,17 +525,17 @@ module ts {
         function writeVisitorFunctionBodyVisitMember(member: SyntaxMember): void {
             var memberNodeType = getProperty(syntaxTypeTable, member.type);
             if (!memberNodeType || !memberNodeType.visit) {
-                writer.write(`node.${formatName(member.name)}`);
+                writer.write(`node.${formatName(member.name) }`);
             }
             else {
                 var kind = memberNodeType.kind;
                 var type = memberNodeType.type || memberNodeType.baseType;
                 var name = memberNodeType.name || kind || type;
                 if (member.isNodeArray) {
-                    writer.write(`visitNodes(node.${formatName(member.name) }, activeVisitor.visit${formatName(name) })`);
+                    writeVisitMemberArray(member.name, memberNodeType);
                 }
                 else {
-                    writer.write(`activeVisitor.visit${formatName(name) }(node.${formatName(member.name) })`);
+                    writeVisitMember(member.name, memberNodeType);
                 }
             }
         }
@@ -672,34 +558,83 @@ module ts {
                     }
 
                     if (outerNodeType.nodeTest) {
-                        writer.writeln(`var visited = activeVisitor.visit${formatName(name) }(<${formatType(type)}>node);`);
+                        writer.write(`var visited = `);
+                        writeVisitNode(nodeType);
+                        writer.writeln(';');
                         writer.writeln(`if (visited && !${outerNodeType.nodeTest}(visited)) {`);
                         writer.indent();
                         writer.writeln(`reportUnexpectedNodeAfterVisit(visited, node);`);
                         writer.writeln(`return node;`);
                         writer.dedent();
                         writer.writeln(`}`);
-                        writer.writeln(`return <${formatType(intersection)}>visited;`);
+                        writer.writeln(`return <${formatType(intersection) }>visited;`);
                         return;
                     }
 
-                    writer.writeln(`// warning: visitor returns possibly incompatible node type, add a nodeTest.`);
-                    writer.writeln(`return <${formatType(intersection) }>activeVisitor.visit${formatName(name)}(<${formatType(type)}>node);`);
+                    writer.writeln(`// warning: VisitorHandlers returns possibly incompatible node type, add a nodeTest.`);
+                    writer.write(`return <${formatType(intersection) }>`);
+                    writeVisitNode(nodeType);
+                    writer.writeln(`;`);
                     return;
                 }
 
-                writer.writeln(`return activeVisitor.visit${formatName(name) }(<${formatType(type) }>node);`);
+                writer.write(`return `);
+                writeVisitNode(nodeType);
+                writer.writeln(`;`);
             }
             else {
                 writer.writeln(`return node;`);
             }
         }
 
+        function writeVisitNode(nodeType: SyntaxNodeType): void {
+            var kind = nodeType.kind;
+            var type = nodeType.type || nodeType.types || nodeType.baseType;
+            var name = nodeType.name || kind || type;
+            if (nodeType.handler) {
+                writer.write(`visitNode(handlers, <${formatType(type) }>node, handlers.visit${formatName(name) } || visit${formatName(name) })`);
+            }
+            else {
+                writer.write(`visitNode(handlers, <${formatType(type) }>node, visit${formatName(name) })`);
+            }
+        }
+
+        function writeVisitMember(member: string, nodeType: SyntaxNodeType): void {
+            var kind = nodeType.kind;
+            var type = nodeType.type || nodeType.types || nodeType.baseType;
+            var name = nodeType.name || kind || type;
+            if (nodeType.handler) {
+                writer.write(`visitNode(handlers, <${formatType(type) }>node.${formatName(member)}, handlers.visit${formatName(name) } || visit${formatName(name) })`);
+            }
+            else {
+                writer.write(`visitNode(handlers, <${formatType(type) }>node.${formatName(member)}, visit${formatName(name) })`);
+            }
+        }
+
+        function writeVisitMemberArray(member: string, nodeType: SyntaxNodeType): void {
+            var kind = nodeType.kind;
+            var type = nodeType.type || nodeType.types || nodeType.baseType;
+            var name = nodeType.name || kind || type;
+            if (nodeType.handler) {
+                writer.write(`visitNodes(handlers, node.${formatName(member) }, (handlers.visit${formatName(name) } || visit${formatName(name) }))`);
+            }
+            else {
+                writer.write(`visitNodes(handlers, node.${formatName(member) }, visit${formatName(name) })`);
+            }
+        }
+
         function writeVisitorModuleFooter(): void {
             writer.suspendIndenting();
             writer.writeln(`
-        export function visitNodes<TNode extends Node>(nodes: NodeArray<TNode>, visitNode: (node: TNode) => TNode, shouldCacheNode?: (node: Node) => boolean, cacheNode?: (node: TNode) => TNode, removeMissingNodes?: boolean): NodeArray<TNode> {
-            if (!nodes || !activeVisitor) {
+        function visitNode<TNode extends Node>(handlers: VisitorHandlers, node: TNode, visitNode: (handlers: VisitorHandlers, node: TNode) => TNode): TNode {
+            if (!node || !handlers) {
+                return node;
+            }
+            return visitNode(handlers, node);
+        }
+
+        export function visitNodes<TNode extends Node>(handlers: VisitorHandlers, nodes: NodeArray<TNode>, visitNode: (handlers: VisitorHandlers, node: TNode) => TNode, shouldCacheNode?: (node: Node) => boolean, cacheNode?: (node: TNode) => TNode, removeMissingNodes?: boolean): NodeArray<TNode> {
+            if (!nodes || !handlers) {
                 return nodes;
             }
 
@@ -722,7 +657,7 @@ module ts {
                     }
                     cacheOffset = updatedIndex;
                 }
-                var updatedNode = visitNode(node);
+                var updatedNode = visitNode(handlers, node);
                 if ((updatedNodes || updatedNode !== node || (!updatedNode && removeMissingNodes))) {
                     if (!updatedNodes) {
                         updatedNodes = nodes.slice(0, i);
@@ -735,11 +670,9 @@ module ts {
                     }
                 }
             }
-
             if (updatedNodes) {
                 return Factory.createNodeArray(updatedNodes, nodes);
             }
-
             return nodes;
         }`);
             writer.resumeIndenting();

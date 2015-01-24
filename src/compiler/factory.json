@@ -44,6 +44,7 @@
         "baseType": "LeftHandSideExpression",
         "visit": true,
         "handler": true,
+        "shallow": true,
         "children": [
             { "name": "text", "type": "string" }
         ]

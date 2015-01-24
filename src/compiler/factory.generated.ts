@@ -2,140 +2,6 @@
 /// <reference path="factory.ts"/>
 
 module ts {
-    export interface VisitorHandler {
-        visitIdentifier? (node: Identifier): Identifier;
-        visitComputedPropertyName? (node: ComputedPropertyName): DeclarationName;
-        visitMethodDeclaration? (node: MethodDeclaration): ClassElement | ObjectLiteralElement;
-        visitGetAccessor? (node: AccessorDeclaration): ClassElement | ObjectLiteralElement;
-        visitSetAccessor? (node: AccessorDeclaration): ClassElement | ObjectLiteralElement;
-        visitObjectBindingPattern? (node: BindingPattern): BindingPattern | Identifier;
-        visitArrayBindingPattern? (node: BindingPattern): BindingPattern | Identifier;
-        visitBindingElement? (node: BindingElement): BindingElement;
-        visitArrayLiteralExpression? (node: ArrayLiteralExpression): LeftHandSideExpression;
-        visitObjectLiteralExpression? (node: ObjectLiteralExpression): LeftHandSideExpression;
-        visitPropertyAccessExpression? (node: PropertyAccessExpression): LeftHandSideExpression;
-        visitElementAccessExpression? (node: ElementAccessExpression): LeftHandSideExpression;
-        visitCallExpression? (node: CallExpression): LeftHandSideExpression;
-        visitNewExpression? (node: NewExpression): LeftHandSideExpression;
-        visitTaggedTemplateExpression? (node: TaggedTemplateExpression): LeftHandSideExpression;
-        visitTypeAssertion? (node: TypeAssertion): UnaryExpression;
-        visitParenthesizedExpression? (node: ParenthesizedExpression): LeftHandSideExpression;
-        visitFunctionExpression? (node: FunctionExpression): LeftHandSideExpression;
-        visitArrowFunction? (node: FunctionExpression): LeftHandSideExpression;
-        visitDeleteExpression? (node: DeleteExpression): UnaryExpression;
-        visitTypeOfExpression? (node: TypeOfExpression): UnaryExpression;
-        visitVoidExpression? (node: VoidExpression): UnaryExpression;
-        visitAwaitExpression? (node: AwaitExpression): UnaryExpression;
-        visitPrefixUnaryExpression? (node: PrefixUnaryExpression): UnaryExpression;
-        visitPostfixUnaryExpression? (node: PostfixUnaryExpression): UnaryExpression;
-        visitBinaryExpression? (node: BinaryExpression): Expression;
-        visitConditionalExpression? (node: ConditionalExpression): Expression;
-        visitTemplateExpression? (node: TemplateExpression): LeftHandSideExpression | LiteralExpression | TemplateExpression;
-        visitYieldExpression? (node: YieldExpression): Expression;
-        visitSpreadElementExpression? (node: SpreadElementExpression): Expression;
-        visitOmittedExpression? (node: Expression): Expression;
-        visitTemplateSpan? (node: TemplateSpan): TemplateSpan;
-        visitBlock? (node: Block): Block;
-        visitVariableStatement? (node: VariableStatement): Statement;
-        visitEmptyStatement? (node: Statement): Statement;
-        visitExpressionStatement? (node: ExpressionStatement): Statement;
-        visitIfStatement? (node: IfStatement): Statement;
-        visitDoStatement? (node: DoStatement): Statement;
-        visitWhileStatement? (node: WhileStatement): Statement;
-        visitForStatement? (node: ForStatement): Statement;
-        visitForInStatement? (node: ForInStatement): Statement;
-        visitContinueStatement? (node: BreakOrContinueStatement): Statement;
-        visitBreakStatement? (node: BreakOrContinueStatement): Statement;
-        visitReturnStatement? (node: ReturnStatement): Statement;
-        visitWithStatement? (node: WithStatement): Statement;
-        visitSwitchStatement? (node: SwitchStatement): Statement;
-        visitLabeledStatement? (node: LabeledStatement): Statement;
-        visitThrowStatement? (node: ThrowStatement): Statement;
-        visitTryStatement? (node: TryStatement): Statement;
-        visitDebuggerStatement? (node: Statement): Statement;
-        visitVariableDeclaration? (node: VariableDeclaration): VariableDeclaration;
-        visitVariableDeclarationList? (node: VariableDeclarationList): VariableDeclarationList;
-        visitVariableDeclarationListOrExpression? (node: Expression | VariableDeclarationList): Expression | VariableDeclarationList;
-        visitFunctionDeclaration? (node: FunctionDeclaration): Statement;
-        visitCaseClause? (node: CaseClause): CaseOrDefaultClause;
-        visitDefaultClause? (node: DefaultClause): CaseOrDefaultClause;
-        visitCatchClause? (node: CatchClause): CatchClause;
-        visitPropertyAssignment? (node: PropertyAssignment): ObjectLiteralElement;
-        visitShorthandPropertyAssignment? (node: ShorthandPropertyAssignment): ObjectLiteralElement;
-    }
-
-    export interface Visitor {
-        visitIdentifier(node: Identifier): Identifier;
-        visitDeclarationName(node: DeclarationName): DeclarationName;
-        visitComputedPropertyName(node: ComputedPropertyName): DeclarationName;
-        visitMethodDeclaration(node: MethodDeclaration): ClassElement | ObjectLiteralElement;
-        visitGetAccessor(node: AccessorDeclaration): ClassElement | ObjectLiteralElement;
-        visitSetAccessor(node: AccessorDeclaration): ClassElement | ObjectLiteralElement;
-        visitIdentifierOrBindingPattern(node: BindingPattern | Identifier): BindingPattern | Identifier;
-        visitObjectBindingPattern(node: BindingPattern): BindingPattern | Identifier;
-        visitArrayBindingPattern(node: BindingPattern): BindingPattern | Identifier;
-        visitBindingElement(node: BindingElement): BindingElement;
-        visitExpression(node: Expression): Expression;
-        visitUnaryExpression(node: UnaryExpression): UnaryExpression;
-        visitLeftHandSideExpression(node: LeftHandSideExpression): LeftHandSideExpression;
-        visitTemplateLiteralOrTemplateExpression(node: LiteralExpression | TemplateExpression): LiteralExpression | TemplateExpression;
-        visitArrayLiteralExpression(node: ArrayLiteralExpression): LeftHandSideExpression;
-        visitObjectLiteralExpression(node: ObjectLiteralExpression): LeftHandSideExpression;
-        visitPropertyAccessExpression(node: PropertyAccessExpression): LeftHandSideExpression;
-        visitElementAccessExpression(node: ElementAccessExpression): LeftHandSideExpression;
-        visitCallExpression(node: CallExpression): LeftHandSideExpression;
-        visitNewExpression(node: NewExpression): LeftHandSideExpression;
-        visitTaggedTemplateExpression(node: TaggedTemplateExpression): LeftHandSideExpression;
-        visitTypeAssertion(node: TypeAssertion): UnaryExpression;
-        visitParenthesizedExpression(node: ParenthesizedExpression): LeftHandSideExpression;
-        visitExpressionOrBlock(node: Block | Expression): Block | Expression;
-        visitFunctionExpression(node: FunctionExpression): LeftHandSideExpression;
-        visitArrowFunction(node: FunctionExpression): LeftHandSideExpression;
-        visitDeleteExpression(node: DeleteExpression): UnaryExpression;
-        visitTypeOfExpression(node: TypeOfExpression): UnaryExpression;
-        visitVoidExpression(node: VoidExpression): UnaryExpression;
-        visitAwaitExpression(node: AwaitExpression): UnaryExpression;
-        visitPrefixUnaryExpression(node: PrefixUnaryExpression): UnaryExpression;
-        visitPostfixUnaryExpression(node: PostfixUnaryExpression): UnaryExpression;
-        visitBinaryExpression(node: BinaryExpression): Expression;
-        visitConditionalExpression(node: ConditionalExpression): Expression;
-        visitTemplateExpression(node: TemplateExpression): LeftHandSideExpression | LiteralExpression | TemplateExpression;
-        visitYieldExpression(node: YieldExpression): Expression;
-        visitSpreadElementExpression(node: SpreadElementExpression): Expression;
-        visitOmittedExpression(node: Expression): Expression;
-        visitTemplateSpan(node: TemplateSpan): TemplateSpan;
-        visitStatement(node: Statement): Statement;
-        visitBlock(node: Block): Block;
-        visitVariableStatement(node: VariableStatement): Statement;
-        visitEmptyStatement(node: Statement): Statement;
-        visitExpressionStatement(node: ExpressionStatement): Statement;
-        visitIfStatement(node: IfStatement): Statement;
-        visitDoStatement(node: DoStatement): Statement;
-        visitWhileStatement(node: WhileStatement): Statement;
-        visitForStatement(node: ForStatement): Statement;
-        visitForInStatement(node: ForInStatement): Statement;
-        visitContinueStatement(node: BreakOrContinueStatement): Statement;
-        visitBreakStatement(node: BreakOrContinueStatement): Statement;
-        visitReturnStatement(node: ReturnStatement): Statement;
-        visitWithStatement(node: WithStatement): Statement;
-        visitSwitchStatement(node: SwitchStatement): Statement;
-        visitLabeledStatement(node: LabeledStatement): Statement;
-        visitThrowStatement(node: ThrowStatement): Statement;
-        visitTryStatement(node: TryStatement): Statement;
-        visitDebuggerStatement(node: Statement): Statement;
-        visitVariableDeclaration(node: VariableDeclaration): VariableDeclaration;
-        visitVariableDeclarationList(node: VariableDeclarationList): VariableDeclarationList;
-        visitVariableDeclarationListOrExpression(node: Expression | VariableDeclarationList): Expression | VariableDeclarationList;
-        visitFunctionDeclaration(node: FunctionDeclaration): Statement;
-        visitCaseOrDefaultClause(node: CaseOrDefaultClause): CaseOrDefaultClause;
-        visitCaseClause(node: CaseClause): CaseOrDefaultClause;
-        visitDefaultClause(node: DefaultClause): CaseOrDefaultClause;
-        visitCatchClause(node: CatchClause): CatchClause;
-        visitObjectLiteralElement(node: ObjectLiteralElement): ObjectLiteralElement;
-        visitPropertyAssignment(node: PropertyAssignment): ObjectLiteralElement;
-        visitShorthandPropertyAssignment(node: ShorthandPropertyAssignment): ObjectLiteralElement;
-    }
-
     export module Factory {
         export function createStringLiteral(text: string, location?: TextRange, flags?: NodeFlags): StringLiteralExpression {
             var node = beginNode<StringLiteralExpression>(SyntaxKind.StringLiteral);
@@ -926,393 +792,86 @@ module ts {
         }
     }
 
+    export interface VisitorHandlers {
+        visitIdentifier? (handlers: VisitorHandlers, node: Identifier): Identifier;
+        visitComputedPropertyName? (handlers: VisitorHandlers, node: ComputedPropertyName): DeclarationName;
+        visitMethodDeclaration? (handlers: VisitorHandlers, node: MethodDeclaration): ClassElement | ObjectLiteralElement;
+        visitGetAccessor? (handlers: VisitorHandlers, node: AccessorDeclaration): ClassElement | ObjectLiteralElement;
+        visitSetAccessor? (handlers: VisitorHandlers, node: AccessorDeclaration): ClassElement | ObjectLiteralElement;
+        visitObjectBindingPattern? (handlers: VisitorHandlers, node: BindingPattern): BindingPattern | Identifier;
+        visitArrayBindingPattern? (handlers: VisitorHandlers, node: BindingPattern): BindingPattern | Identifier;
+        visitBindingElement? (handlers: VisitorHandlers, node: BindingElement): BindingElement;
+        visitArrayLiteralExpression? (handlers: VisitorHandlers, node: ArrayLiteralExpression): LeftHandSideExpression;
+        visitObjectLiteralExpression? (handlers: VisitorHandlers, node: ObjectLiteralExpression): LeftHandSideExpression;
+        visitPropertyAccessExpression? (handlers: VisitorHandlers, node: PropertyAccessExpression): LeftHandSideExpression;
+        visitElementAccessExpression? (handlers: VisitorHandlers, node: ElementAccessExpression): LeftHandSideExpression;
+        visitCallExpression? (handlers: VisitorHandlers, node: CallExpression): LeftHandSideExpression;
+        visitNewExpression? (handlers: VisitorHandlers, node: NewExpression): LeftHandSideExpression;
+        visitTaggedTemplateExpression? (handlers: VisitorHandlers, node: TaggedTemplateExpression): LeftHandSideExpression;
+        visitTypeAssertion? (handlers: VisitorHandlers, node: TypeAssertion): UnaryExpression;
+        visitParenthesizedExpression? (handlers: VisitorHandlers, node: ParenthesizedExpression): LeftHandSideExpression;
+        visitFunctionExpression? (handlers: VisitorHandlers, node: FunctionExpression): LeftHandSideExpression;
+        visitArrowFunction? (handlers: VisitorHandlers, node: FunctionExpression): LeftHandSideExpression;
+        visitDeleteExpression? (handlers: VisitorHandlers, node: DeleteExpression): UnaryExpression;
+        visitTypeOfExpression? (handlers: VisitorHandlers, node: TypeOfExpression): UnaryExpression;
+        visitVoidExpression? (handlers: VisitorHandlers, node: VoidExpression): UnaryExpression;
+        visitAwaitExpression? (handlers: VisitorHandlers, node: AwaitExpression): UnaryExpression;
+        visitPrefixUnaryExpression? (handlers: VisitorHandlers, node: PrefixUnaryExpression): UnaryExpression;
+        visitPostfixUnaryExpression? (handlers: VisitorHandlers, node: PostfixUnaryExpression): UnaryExpression;
+        visitBinaryExpression? (handlers: VisitorHandlers, node: BinaryExpression): Expression;
+        visitConditionalExpression? (handlers: VisitorHandlers, node: ConditionalExpression): Expression;
+        visitTemplateExpression? (handlers: VisitorHandlers, node: TemplateExpression): LeftHandSideExpression | LiteralExpression | TemplateExpression;
+        visitYieldExpression? (handlers: VisitorHandlers, node: YieldExpression): Expression;
+        visitSpreadElementExpression? (handlers: VisitorHandlers, node: SpreadElementExpression): Expression;
+        visitOmittedExpression? (handlers: VisitorHandlers, node: Expression): Expression;
+        visitTemplateSpan? (handlers: VisitorHandlers, node: TemplateSpan): TemplateSpan;
+        visitBlock? (handlers: VisitorHandlers, node: Block): Block;
+        visitVariableStatement? (handlers: VisitorHandlers, node: VariableStatement): Statement;
+        visitEmptyStatement? (handlers: VisitorHandlers, node: Statement): Statement;
+        visitExpressionStatement? (handlers: VisitorHandlers, node: ExpressionStatement): Statement;
+        visitIfStatement? (handlers: VisitorHandlers, node: IfStatement): Statement;
+        visitDoStatement? (handlers: VisitorHandlers, node: DoStatement): Statement;
+        visitWhileStatement? (handlers: VisitorHandlers, node: WhileStatement): Statement;
+        visitForStatement? (handlers: VisitorHandlers, node: ForStatement): Statement;
+        visitForInStatement? (handlers: VisitorHandlers, node: ForInStatement): Statement;
+        visitContinueStatement? (handlers: VisitorHandlers, node: BreakOrContinueStatement): Statement;
+        visitBreakStatement? (handlers: VisitorHandlers, node: BreakOrContinueStatement): Statement;
+        visitReturnStatement? (handlers: VisitorHandlers, node: ReturnStatement): Statement;
+        visitWithStatement? (handlers: VisitorHandlers, node: WithStatement): Statement;
+        visitSwitchStatement? (handlers: VisitorHandlers, node: SwitchStatement): Statement;
+        visitLabeledStatement? (handlers: VisitorHandlers, node: LabeledStatement): Statement;
+        visitThrowStatement? (handlers: VisitorHandlers, node: ThrowStatement): Statement;
+        visitTryStatement? (handlers: VisitorHandlers, node: TryStatement): Statement;
+        visitDebuggerStatement? (handlers: VisitorHandlers, node: Statement): Statement;
+        visitVariableDeclaration? (handlers: VisitorHandlers, node: VariableDeclaration): VariableDeclaration;
+        visitVariableDeclarationList? (handlers: VisitorHandlers, node: VariableDeclarationList): VariableDeclarationList;
+        visitVariableDeclarationListOrExpression? (handlers: VisitorHandlers, node: Expression | VariableDeclarationList): Expression | VariableDeclarationList;
+        visitFunctionDeclaration? (handlers: VisitorHandlers, node: FunctionDeclaration): Statement;
+        visitCaseClause? (handlers: VisitorHandlers, node: CaseClause): CaseOrDefaultClause;
+        visitDefaultClause? (handlers: VisitorHandlers, node: DefaultClause): CaseOrDefaultClause;
+        visitCatchClause? (handlers: VisitorHandlers, node: CatchClause): CatchClause;
+        visitPropertyAssignment? (handlers: VisitorHandlers, node: PropertyAssignment): ObjectLiteralElement;
+        visitShorthandPropertyAssignment? (handlers: VisitorHandlers, node: ShorthandPropertyAssignment): ObjectLiteralElement;
+    }
+
     export module Visitor {
-        var activeVisitor: Visitor;
-
-        export function create(handler: VisitorHandler): Visitor {
-            var visitor: Visitor = {
-                visitIdentifier,
-                visitDeclarationName,
-                visitComputedPropertyName,
-                visitMethodDeclaration,
-                visitGetAccessor,
-                visitSetAccessor,
-                visitIdentifierOrBindingPattern,
-                visitObjectBindingPattern,
-                visitArrayBindingPattern,
-                visitBindingElement,
-                visitExpression,
-                visitUnaryExpression,
-                visitLeftHandSideExpression,
-                visitTemplateLiteralOrTemplateExpression,
-                visitArrayLiteralExpression,
-                visitObjectLiteralExpression,
-                visitPropertyAccessExpression,
-                visitElementAccessExpression,
-                visitCallExpression,
-                visitNewExpression,
-                visitTaggedTemplateExpression,
-                visitTypeAssertion,
-                visitParenthesizedExpression,
-                visitExpressionOrBlock,
-                visitFunctionExpression,
-                visitArrowFunction,
-                visitDeleteExpression,
-                visitTypeOfExpression,
-                visitVoidExpression,
-                visitAwaitExpression,
-                visitPrefixUnaryExpression,
-                visitPostfixUnaryExpression,
-                visitBinaryExpression,
-                visitConditionalExpression,
-                visitTemplateExpression,
-                visitYieldExpression,
-                visitSpreadElementExpression,
-                visitOmittedExpression,
-                visitTemplateSpan,
-                visitStatement,
-                visitBlock,
-                visitVariableStatement,
-                visitEmptyStatement,
-                visitExpressionStatement,
-                visitIfStatement,
-                visitDoStatement,
-                visitWhileStatement,
-                visitForStatement,
-                visitForInStatement,
-                visitContinueStatement,
-                visitBreakStatement,
-                visitReturnStatement,
-                visitWithStatement,
-                visitSwitchStatement,
-                visitLabeledStatement,
-                visitThrowStatement,
-                visitTryStatement,
-                visitDebuggerStatement,
-                visitVariableDeclaration,
-                visitVariableDeclarationList,
-                visitVariableDeclarationListOrExpression,
-                visitFunctionDeclaration,
-                visitCaseOrDefaultClause,
-                visitCaseClause,
-                visitDefaultClause,
-                visitCatchClause,
-                visitObjectLiteralElement,
-                visitPropertyAssignment,
-                visitShorthandPropertyAssignment,
-            };
-
-            return visitor;
-
-            function visitIdentifier(node: Identifier): Identifier {
-                return visitNode(node, Visitor.visitIdentifier, handler.visitIdentifier);
-            }
-
-            function visitDeclarationName(node: DeclarationName): DeclarationName {
-                return visitNode(node, Visitor.visitDeclarationName);
-            }
-
-            function visitComputedPropertyName(node: ComputedPropertyName): DeclarationName {
-                return visitNode(node, Visitor.visitComputedPropertyName, handler.visitComputedPropertyName);
-            }
-
-            function visitMethodDeclaration(node: MethodDeclaration): ClassElement | ObjectLiteralElement {
-                return visitNode(node, Visitor.visitMethodDeclaration, handler.visitMethodDeclaration);
-            }
-
-            function visitGetAccessor(node: AccessorDeclaration): ClassElement | ObjectLiteralElement {
-                return visitNode(node, Visitor.visitGetAccessor, handler.visitGetAccessor);
-            }
-
-            function visitSetAccessor(node: AccessorDeclaration): ClassElement | ObjectLiteralElement {
-                return visitNode(node, Visitor.visitSetAccessor, handler.visitSetAccessor);
-            }
-
-            function visitIdentifierOrBindingPattern(node: BindingPattern | Identifier): BindingPattern | Identifier {
-                return visitNode(node, Visitor.visitIdentifierOrBindingPattern);
-            }
-
-            function visitObjectBindingPattern(node: BindingPattern): BindingPattern | Identifier {
-                return visitNode(node, Visitor.visitObjectBindingPattern, handler.visitObjectBindingPattern);
-            }
-
-            function visitArrayBindingPattern(node: BindingPattern): BindingPattern | Identifier {
-                return visitNode(node, Visitor.visitArrayBindingPattern, handler.visitArrayBindingPattern);
-            }
-
-            function visitBindingElement(node: BindingElement): BindingElement {
-                return visitNode(node, Visitor.visitBindingElement, handler.visitBindingElement);
-            }
-
-            function visitExpression(node: Expression): Expression {
-                return visitNode(node, Visitor.visitExpression);
-            }
-
-            function visitUnaryExpression(node: UnaryExpression): UnaryExpression {
-                return visitNode(node, Visitor.visitUnaryExpression);
-            }
-
-            function visitLeftHandSideExpression(node: LeftHandSideExpression): LeftHandSideExpression {
-                return visitNode(node, Visitor.visitLeftHandSideExpression);
-            }
-
-            function visitTemplateLiteralOrTemplateExpression(node: LiteralExpression | TemplateExpression): LiteralExpression | TemplateExpression {
-                return visitNode(node, Visitor.visitTemplateLiteralOrTemplateExpression);
-            }
-
-            function visitArrayLiteralExpression(node: ArrayLiteralExpression): LeftHandSideExpression {
-                return visitNode(node, Visitor.visitArrayLiteralExpression, handler.visitArrayLiteralExpression);
-            }
-
-            function visitObjectLiteralExpression(node: ObjectLiteralExpression): LeftHandSideExpression {
-                return visitNode(node, Visitor.visitObjectLiteralExpression, handler.visitObjectLiteralExpression);
-            }
-
-            function visitPropertyAccessExpression(node: PropertyAccessExpression): LeftHandSideExpression {
-                return visitNode(node, Visitor.visitPropertyAccessExpression, handler.visitPropertyAccessExpression);
-            }
-
-            function visitElementAccessExpression(node: ElementAccessExpression): LeftHandSideExpression {
-                return visitNode(node, Visitor.visitElementAccessExpression, handler.visitElementAccessExpression);
-            }
-
-            function visitCallExpression(node: CallExpression): LeftHandSideExpression {
-                return visitNode(node, Visitor.visitCallExpression, handler.visitCallExpression);
-            }
-
-            function visitNewExpression(node: NewExpression): LeftHandSideExpression {
-                return visitNode(node, Visitor.visitNewExpression, handler.visitNewExpression);
-            }
-
-            function visitTaggedTemplateExpression(node: TaggedTemplateExpression): LeftHandSideExpression {
-                return visitNode(node, Visitor.visitTaggedTemplateExpression, handler.visitTaggedTemplateExpression);
-            }
-
-            function visitTypeAssertion(node: TypeAssertion): UnaryExpression {
-                return visitNode(node, Visitor.visitTypeAssertion, handler.visitTypeAssertion);
-            }
-
-            function visitParenthesizedExpression(node: ParenthesizedExpression): LeftHandSideExpression {
-                return visitNode(node, Visitor.visitParenthesizedExpression, handler.visitParenthesizedExpression);
-            }
-
-            function visitExpressionOrBlock(node: Block | Expression): Block | Expression {
-                return visitNode(node, Visitor.visitExpressionOrBlock);
-            }
-
-            function visitFunctionExpression(node: FunctionExpression): LeftHandSideExpression {
-                return visitNode(node, Visitor.visitFunctionExpression, handler.visitFunctionExpression);
-            }
-
-            function visitArrowFunction(node: FunctionExpression): LeftHandSideExpression {
-                return visitNode(node, Visitor.visitArrowFunction, handler.visitArrowFunction);
-            }
-
-            function visitDeleteExpression(node: DeleteExpression): UnaryExpression {
-                return visitNode(node, Visitor.visitDeleteExpression, handler.visitDeleteExpression);
-            }
-
-            function visitTypeOfExpression(node: TypeOfExpression): UnaryExpression {
-                return visitNode(node, Visitor.visitTypeOfExpression, handler.visitTypeOfExpression);
-            }
-
-            function visitVoidExpression(node: VoidExpression): UnaryExpression {
-                return visitNode(node, Visitor.visitVoidExpression, handler.visitVoidExpression);
-            }
-
-            function visitAwaitExpression(node: AwaitExpression): UnaryExpression {
-                return visitNode(node, Visitor.visitAwaitExpression, handler.visitAwaitExpression);
-            }
-
-            function visitPrefixUnaryExpression(node: PrefixUnaryExpression): UnaryExpression {
-                return visitNode(node, Visitor.visitPrefixUnaryExpression, handler.visitPrefixUnaryExpression);
-            }
-
-            function visitPostfixUnaryExpression(node: PostfixUnaryExpression): UnaryExpression {
-                return visitNode(node, Visitor.visitPostfixUnaryExpression, handler.visitPostfixUnaryExpression);
-            }
-
-            function visitBinaryExpression(node: BinaryExpression): Expression {
-                return visitNode(node, Visitor.visitBinaryExpression, handler.visitBinaryExpression);
-            }
-
-            function visitConditionalExpression(node: ConditionalExpression): Expression {
-                return visitNode(node, Visitor.visitConditionalExpression, handler.visitConditionalExpression);
-            }
-
-            function visitTemplateExpression(node: TemplateExpression): LeftHandSideExpression | LiteralExpression | TemplateExpression {
-                return visitNode(node, Visitor.visitTemplateExpression, handler.visitTemplateExpression);
-            }
-
-            function visitYieldExpression(node: YieldExpression): Expression {
-                return visitNode(node, Visitor.visitYieldExpression, handler.visitYieldExpression);
-            }
-
-            function visitSpreadElementExpression(node: SpreadElementExpression): Expression {
-                return visitNode(node, Visitor.visitSpreadElementExpression, handler.visitSpreadElementExpression);
-            }
-
-            function visitOmittedExpression(node: Expression): Expression {
-                return visitNode(node, Visitor.visitOmittedExpression, handler.visitOmittedExpression);
-            }
-
-            function visitTemplateSpan(node: TemplateSpan): TemplateSpan {
-                return visitNode(node, Visitor.visitTemplateSpan, handler.visitTemplateSpan);
-            }
-
-            function visitStatement(node: Statement): Statement {
-                return visitNode(node, Visitor.visitStatement);
-            }
-
-            function visitBlock(node: Block): Block {
-                return visitNode(node, Visitor.visitBlock, handler.visitBlock);
-            }
-
-            function visitVariableStatement(node: VariableStatement): Statement {
-                return visitNode(node, Visitor.visitVariableStatement, handler.visitVariableStatement);
-            }
-
-            function visitEmptyStatement(node: Statement): Statement {
-                return visitNode(node, Visitor.visitEmptyStatement, handler.visitEmptyStatement);
-            }
-
-            function visitExpressionStatement(node: ExpressionStatement): Statement {
-                return visitNode(node, Visitor.visitExpressionStatement, handler.visitExpressionStatement);
-            }
-
-            function visitIfStatement(node: IfStatement): Statement {
-                return visitNode(node, Visitor.visitIfStatement, handler.visitIfStatement);
-            }
-
-            function visitDoStatement(node: DoStatement): Statement {
-                return visitNode(node, Visitor.visitDoStatement, handler.visitDoStatement);
-            }
-
-            function visitWhileStatement(node: WhileStatement): Statement {
-                return visitNode(node, Visitor.visitWhileStatement, handler.visitWhileStatement);
-            }
-
-            function visitForStatement(node: ForStatement): Statement {
-                return visitNode(node, Visitor.visitForStatement, handler.visitForStatement);
-            }
-
-            function visitForInStatement(node: ForInStatement): Statement {
-                return visitNode(node, Visitor.visitForInStatement, handler.visitForInStatement);
-            }
-
-            function visitContinueStatement(node: BreakOrContinueStatement): Statement {
-                return visitNode(node, Visitor.visitContinueStatement, handler.visitContinueStatement);
-            }
-
-            function visitBreakStatement(node: BreakOrContinueStatement): Statement {
-                return visitNode(node, Visitor.visitBreakStatement, handler.visitBreakStatement);
-            }
-
-            function visitReturnStatement(node: ReturnStatement): Statement {
-                return visitNode(node, Visitor.visitReturnStatement, handler.visitReturnStatement);
-            }
-
-            function visitWithStatement(node: WithStatement): Statement {
-                return visitNode(node, Visitor.visitWithStatement, handler.visitWithStatement);
-            }
-
-            function visitSwitchStatement(node: SwitchStatement): Statement {
-                return visitNode(node, Visitor.visitSwitchStatement, handler.visitSwitchStatement);
-            }
-
-            function visitLabeledStatement(node: LabeledStatement): Statement {
-                return visitNode(node, Visitor.visitLabeledStatement, handler.visitLabeledStatement);
-            }
-
-            function visitThrowStatement(node: ThrowStatement): Statement {
-                return visitNode(node, Visitor.visitThrowStatement, handler.visitThrowStatement);
-            }
-
-            function visitTryStatement(node: TryStatement): Statement {
-                return visitNode(node, Visitor.visitTryStatement, handler.visitTryStatement);
-            }
-
-            function visitDebuggerStatement(node: Statement): Statement {
-                return visitNode(node, Visitor.visitDebuggerStatement, handler.visitDebuggerStatement);
-            }
-
-            function visitVariableDeclaration(node: VariableDeclaration): VariableDeclaration {
-                return visitNode(node, Visitor.visitVariableDeclaration, handler.visitVariableDeclaration);
-            }
-
-            function visitVariableDeclarationList(node: VariableDeclarationList): VariableDeclarationList {
-                return visitNode(node, Visitor.visitVariableDeclarationList, handler.visitVariableDeclarationList);
-            }
-
-            function visitVariableDeclarationListOrExpression(node: Expression | VariableDeclarationList): Expression | VariableDeclarationList {
-                return visitNode(node, Visitor.visitVariableDeclarationListOrExpression, handler.visitVariableDeclarationListOrExpression);
-            }
-
-            function visitFunctionDeclaration(node: FunctionDeclaration): Statement {
-                return visitNode(node, Visitor.visitFunctionDeclaration, handler.visitFunctionDeclaration);
-            }
-
-            function visitCaseOrDefaultClause(node: CaseOrDefaultClause): CaseOrDefaultClause {
-                return visitNode(node, Visitor.visitCaseOrDefaultClause);
-            }
-
-            function visitCaseClause(node: CaseClause): CaseOrDefaultClause {
-                return visitNode(node, Visitor.visitCaseClause, handler.visitCaseClause);
-            }
-
-            function visitDefaultClause(node: DefaultClause): CaseOrDefaultClause {
-                return visitNode(node, Visitor.visitDefaultClause, handler.visitDefaultClause);
-            }
-
-            function visitCatchClause(node: CatchClause): CatchClause {
-                return visitNode(node, Visitor.visitCatchClause, handler.visitCatchClause);
-            }
-
-            function visitObjectLiteralElement(node: ObjectLiteralElement): ObjectLiteralElement {
-                return visitNode(node, Visitor.visitObjectLiteralElement);
-            }
-
-            function visitPropertyAssignment(node: PropertyAssignment): ObjectLiteralElement {
-                return visitNode(node, Visitor.visitPropertyAssignment, handler.visitPropertyAssignment);
-            }
-
-            function visitShorthandPropertyAssignment(node: ShorthandPropertyAssignment): ObjectLiteralElement {
-                return visitNode(node, Visitor.visitShorthandPropertyAssignment, handler.visitShorthandPropertyAssignment);
-            }
-
-            function visitNode<TNode extends Node, TResult extends Node>(node: TNode, coreVisitor: (node: TNode) => TResult, handlerVisitor?: (node: TNode) => TResult): TResult {
-                if (!node) {
-                    return <TResult><Node>node;
-                }
-
-                var savedVisitor = activeVisitor;
-                activeVisitor = visitor;
-                var result = handlerVisitor ? handlerVisitor(node) : coreVisitor(node);
-                activeVisitor = savedVisitor;
-                return result;
-            }
-        }
-
-        export function visitIdentifier(node: Identifier): Identifier {
-            if (!node || !activeVisitor) {
-                return node;
-            }
+        export function visitIdentifier(handlers: VisitorHandlers, node: Identifier): Identifier {
             return node;
         }
 
-        export function visitDeclarationName(node: DeclarationName): DeclarationName {
-            if (!node || !activeVisitor) {
+        export function visitDeclarationName(handlers: VisitorHandlers, node: DeclarationName): DeclarationName {
+            if (!node || !handlers) {
                 return node;
             }
             switch (node.kind) {
                 case SyntaxKind.ObjectBindingPattern:
-                    return activeVisitor.visitObjectBindingPattern(<BindingPattern>node);
+                    return visitNode(handlers, <BindingPattern>node, handlers.visitObjectBindingPattern || visitObjectBindingPattern);
                 case SyntaxKind.ArrayBindingPattern:
-                    return activeVisitor.visitArrayBindingPattern(<BindingPattern>node);
+                    return visitNode(handlers, <BindingPattern>node, handlers.visitArrayBindingPattern || visitArrayBindingPattern);
                 case SyntaxKind.ComputedPropertyName:
-                    return activeVisitor.visitComputedPropertyName(<ComputedPropertyName>node);
+                    return visitNode(handlers, <ComputedPropertyName>node, handlers.visitComputedPropertyName || visitComputedPropertyName);
                 case SyntaxKind.Identifier:
-                    return activeVisitor.visitIdentifier(<Identifier>node);
+                    return visitNode(handlers, <Identifier>node, handlers.visitIdentifier || visitIdentifier);
                 case SyntaxKind.StringLiteral:
                 case SyntaxKind.NumericLiteral:
                 case SyntaxKind.RegularExpressionLiteral:
@@ -1327,124 +886,124 @@ module ts {
             }
         }
 
-        export function visitComputedPropertyName(node: ComputedPropertyName): ComputedPropertyName {
-            if (!node || !activeVisitor) {
+        export function visitComputedPropertyName(handlers: VisitorHandlers, node: ComputedPropertyName): ComputedPropertyName {
+            if (!node || !handlers) {
                 return node;
             }
             return Factory.updateComputedPropertyName(
                 node,
-                activeVisitor.visitExpression(node.expression))
+                visitNode(handlers, <Expression>node.expression, visitExpression))
         }
 
-        export function visitMethodDeclaration(node: MethodDeclaration): MethodDeclaration {
+        export function visitMethodDeclaration(handlers: VisitorHandlers, node: MethodDeclaration): MethodDeclaration {
             return node;
         }
 
-        export function visitGetAccessor(node: AccessorDeclaration): AccessorDeclaration {
+        export function visitGetAccessor(handlers: VisitorHandlers, node: AccessorDeclaration): AccessorDeclaration {
             return node;
         }
 
-        export function visitSetAccessor(node: AccessorDeclaration): AccessorDeclaration {
+        export function visitSetAccessor(handlers: VisitorHandlers, node: AccessorDeclaration): AccessorDeclaration {
             return node;
         }
 
-        export function visitIdentifierOrBindingPattern(node: BindingPattern | Identifier): BindingPattern | Identifier {
-            if (!node || !activeVisitor) {
+        export function visitIdentifierOrBindingPattern(handlers: VisitorHandlers, node: BindingPattern | Identifier): BindingPattern | Identifier {
+            if (!node || !handlers) {
                 return node;
             }
             switch (node.kind) {
                 case SyntaxKind.ObjectBindingPattern:
-                    return activeVisitor.visitObjectBindingPattern(<BindingPattern>node);
+                    return visitNode(handlers, <BindingPattern>node, handlers.visitObjectBindingPattern || visitObjectBindingPattern);
                 case SyntaxKind.ArrayBindingPattern:
-                    return activeVisitor.visitArrayBindingPattern(<BindingPattern>node);
+                    return visitNode(handlers, <BindingPattern>node, handlers.visitArrayBindingPattern || visitArrayBindingPattern);
                 case SyntaxKind.Identifier:
-                    return activeVisitor.visitIdentifier(<Identifier>node);
+                    return visitNode(handlers, <Identifier>node, handlers.visitIdentifier || visitIdentifier);
                 default:
                     reportUnexpectedNode(node);
                     return node;
             }
         }
 
-        export function visitObjectBindingPattern(node: BindingPattern): BindingPattern {
-            if (!node || !activeVisitor) {
+        export function visitObjectBindingPattern(handlers: VisitorHandlers, node: BindingPattern): BindingPattern {
+            if (!node || !handlers) {
                 return node;
             }
             return Factory.updateObjectBindingPattern(
                 node,
-                visitNodes(node.elements, activeVisitor.visitBindingElement))
+                visitNodes(handlers, node.elements, (handlers.visitBindingElement || visitBindingElement)))
         }
 
-        export function visitArrayBindingPattern(node: BindingPattern): BindingPattern {
-            if (!node || !activeVisitor) {
+        export function visitArrayBindingPattern(handlers: VisitorHandlers, node: BindingPattern): BindingPattern {
+            if (!node || !handlers) {
                 return node;
             }
             return Factory.updateArrayBindingPattern(
                 node,
-                visitNodes(node.elements, activeVisitor.visitBindingElement))
+                visitNodes(handlers, node.elements, (handlers.visitBindingElement || visitBindingElement)))
         }
 
-        export function visitBindingElement(node: BindingElement): BindingElement {
-            if (!node || !activeVisitor) {
+        export function visitBindingElement(handlers: VisitorHandlers, node: BindingElement): BindingElement {
+            if (!node || !handlers) {
                 return node;
             }
             return Factory.updateBindingElement(
                 node,
-                activeVisitor.visitIdentifierOrBindingPattern(node.name),
-                activeVisitor.visitIdentifier(node.propertyName),
-                activeVisitor.visitExpression(node.initializer))
+                visitNode(handlers, <BindingPattern | Identifier>node.name, visitIdentifierOrBindingPattern),
+                visitNode(handlers, <Identifier>node.propertyName, handlers.visitIdentifier || visitIdentifier),
+                visitNode(handlers, <Expression>node.initializer, visitExpression))
         }
 
-        export function visitExpression(node: Expression): Expression {
-            if (!node || !activeVisitor) {
+        export function visitExpression(handlers: VisitorHandlers, node: Expression): Expression {
+            if (!node || !handlers) {
                 return node;
             }
             switch (node.kind) {
                 case SyntaxKind.BinaryExpression:
-                    return activeVisitor.visitBinaryExpression(<BinaryExpression>node);
+                    return visitNode(handlers, <BinaryExpression>node, handlers.visitBinaryExpression || visitBinaryExpression);
                 case SyntaxKind.ConditionalExpression:
-                    return activeVisitor.visitConditionalExpression(<ConditionalExpression>node);
+                    return visitNode(handlers, <ConditionalExpression>node, handlers.visitConditionalExpression || visitConditionalExpression);
                 case SyntaxKind.YieldExpression:
-                    return activeVisitor.visitYieldExpression(<YieldExpression>node);
+                    return visitNode(handlers, <YieldExpression>node, handlers.visitYieldExpression || visitYieldExpression);
                 case SyntaxKind.SpreadElementExpression:
-                    return activeVisitor.visitSpreadElementExpression(<SpreadElementExpression>node);
+                    return visitNode(handlers, <SpreadElementExpression>node, handlers.visitSpreadElementExpression || visitSpreadElementExpression);
                 case SyntaxKind.OmittedExpression:
-                    return activeVisitor.visitOmittedExpression(<Expression>node);
+                    return visitNode(handlers, <Expression>node, handlers.visitOmittedExpression || visitOmittedExpression);
                 default:
-                    return activeVisitor.visitUnaryExpression(<UnaryExpression>node);
+                    return visitNode(handlers, <UnaryExpression>node, visitUnaryExpression);
             }
         }
 
-        export function visitUnaryExpression(node: UnaryExpression): UnaryExpression {
-            if (!node || !activeVisitor) {
+        export function visitUnaryExpression(handlers: VisitorHandlers, node: UnaryExpression): UnaryExpression {
+            if (!node || !handlers) {
                 return node;
             }
             switch (node.kind) {
                 case SyntaxKind.TypeAssertionExpression:
-                    return activeVisitor.visitTypeAssertion(<TypeAssertion>node);
+                    return visitNode(handlers, <TypeAssertion>node, handlers.visitTypeAssertion || visitTypeAssertion);
                 case SyntaxKind.DeleteExpression:
-                    return activeVisitor.visitDeleteExpression(<DeleteExpression>node);
+                    return visitNode(handlers, <DeleteExpression>node, handlers.visitDeleteExpression || visitDeleteExpression);
                 case SyntaxKind.TypeOfExpression:
-                    return activeVisitor.visitTypeOfExpression(<TypeOfExpression>node);
+                    return visitNode(handlers, <TypeOfExpression>node, handlers.visitTypeOfExpression || visitTypeOfExpression);
                 case SyntaxKind.VoidExpression:
-                    return activeVisitor.visitVoidExpression(<VoidExpression>node);
+                    return visitNode(handlers, <VoidExpression>node, handlers.visitVoidExpression || visitVoidExpression);
                 case SyntaxKind.AwaitExpression:
-                    return activeVisitor.visitAwaitExpression(<AwaitExpression>node);
+                    return visitNode(handlers, <AwaitExpression>node, handlers.visitAwaitExpression || visitAwaitExpression);
                 case SyntaxKind.PrefixUnaryExpression:
-                    return activeVisitor.visitPrefixUnaryExpression(<PrefixUnaryExpression>node);
+                    return visitNode(handlers, <PrefixUnaryExpression>node, handlers.visitPrefixUnaryExpression || visitPrefixUnaryExpression);
                 case SyntaxKind.PostfixUnaryExpression:
-                    return activeVisitor.visitPostfixUnaryExpression(<PostfixUnaryExpression>node);
+                    return visitNode(handlers, <PostfixUnaryExpression>node, handlers.visitPostfixUnaryExpression || visitPostfixUnaryExpression);
                 default:
-                    return activeVisitor.visitLeftHandSideExpression(<LeftHandSideExpression>node);
+                    return visitNode(handlers, <LeftHandSideExpression>node, visitLeftHandSideExpression);
             }
         }
 
-        export function visitLeftHandSideExpression(node: LeftHandSideExpression): LeftHandSideExpression {
-            if (!node || !activeVisitor) {
+        export function visitLeftHandSideExpression(handlers: VisitorHandlers, node: LeftHandSideExpression): LeftHandSideExpression {
+            if (!node || !handlers) {
                 return node;
             }
             switch (node.kind) {
                 case SyntaxKind.Identifier:
-                    return activeVisitor.visitIdentifier(<Identifier>node);
+                    return visitNode(handlers, <Identifier>node, handlers.visitIdentifier || visitIdentifier);
                 case SyntaxKind.ThisKeyword:
                     return node;
                 case SyntaxKind.SuperKeyword:
@@ -1456,34 +1015,34 @@ module ts {
                 case SyntaxKind.FalseKeyword:
                     return node;
                 case SyntaxKind.ArrayLiteralExpression:
-                    return activeVisitor.visitArrayLiteralExpression(<ArrayLiteralExpression>node);
+                    return visitNode(handlers, <ArrayLiteralExpression>node, handlers.visitArrayLiteralExpression || visitArrayLiteralExpression);
                 case SyntaxKind.ObjectLiteralExpression:
-                    return activeVisitor.visitObjectLiteralExpression(<ObjectLiteralExpression>node);
+                    return visitNode(handlers, <ObjectLiteralExpression>node, handlers.visitObjectLiteralExpression || visitObjectLiteralExpression);
                 case SyntaxKind.PropertyAccessExpression:
-                    return activeVisitor.visitPropertyAccessExpression(<PropertyAccessExpression>node);
+                    return visitNode(handlers, <PropertyAccessExpression>node, handlers.visitPropertyAccessExpression || visitPropertyAccessExpression);
                 case SyntaxKind.ElementAccessExpression:
-                    return activeVisitor.visitElementAccessExpression(<ElementAccessExpression>node);
+                    return visitNode(handlers, <ElementAccessExpression>node, handlers.visitElementAccessExpression || visitElementAccessExpression);
                 case SyntaxKind.CallExpression:
-                    return activeVisitor.visitCallExpression(<CallExpression>node);
+                    return visitNode(handlers, <CallExpression>node, handlers.visitCallExpression || visitCallExpression);
                 case SyntaxKind.NewExpression:
-                    return activeVisitor.visitNewExpression(<NewExpression>node);
+                    return visitNode(handlers, <NewExpression>node, handlers.visitNewExpression || visitNewExpression);
                 case SyntaxKind.TaggedTemplateExpression:
-                    return activeVisitor.visitTaggedTemplateExpression(<TaggedTemplateExpression>node);
+                    return visitNode(handlers, <TaggedTemplateExpression>node, handlers.visitTaggedTemplateExpression || visitTaggedTemplateExpression);
                 case SyntaxKind.ParenthesizedExpression:
-                    return activeVisitor.visitParenthesizedExpression(<ParenthesizedExpression>node);
+                    return visitNode(handlers, <ParenthesizedExpression>node, handlers.visitParenthesizedExpression || visitParenthesizedExpression);
                 case SyntaxKind.FunctionExpression:
-                    return activeVisitor.visitFunctionExpression(<FunctionExpression>node);
+                    return visitNode(handlers, <FunctionExpression>node, handlers.visitFunctionExpression || visitFunctionExpression);
                 case SyntaxKind.ArrowFunction:
-                    return activeVisitor.visitArrowFunction(<FunctionExpression>node);
+                    return visitNode(handlers, <FunctionExpression>node, handlers.visitArrowFunction || visitArrowFunction);
                 case SyntaxKind.TemplateExpression:
-                    return activeVisitor.visitTemplateExpression(<TemplateExpression>node);
+                    return visitNode(handlers, <TemplateExpression>node, handlers.visitTemplateExpression || visitTemplateExpression);
                 default:
                     return node;
             }
         }
 
-        export function visitTemplateLiteralOrTemplateExpression(node: LiteralExpression | TemplateExpression): LiteralExpression | TemplateExpression {
-            if (!node || !activeVisitor) {
+        export function visitTemplateLiteralOrTemplateExpression(handlers: VisitorHandlers, node: LiteralExpression | TemplateExpression): LiteralExpression | TemplateExpression {
+            if (!node || !handlers) {
                 return node;
             }
             switch (node.kind) {
@@ -1496,7 +1055,7 @@ module ts {
                 case SyntaxKind.TemplateTail:
                     return node;
                 case SyntaxKind.TemplateExpression:
-                    var visited = activeVisitor.visitTemplateExpression(<TemplateExpression>node);
+                    var visited = visitNode(handlers, <TemplateExpression>node, handlers.visitTemplateExpression || visitTemplateExpression);
                     if (visited && !isTemplateLiteralOrTemplateExpression(visited)) {
                         reportUnexpectedNodeAfterVisit(visited, node);
                         return node;
@@ -1508,586 +1067,593 @@ module ts {
             }
         }
 
-        export function visitArrayLiteralExpression(node: ArrayLiteralExpression): ArrayLiteralExpression {
-            if (!node || !activeVisitor) {
+        export function visitArrayLiteralExpression(handlers: VisitorHandlers, node: ArrayLiteralExpression): ArrayLiteralExpression {
+            if (!node || !handlers) {
                 return node;
             }
             return Factory.updateArrayLiteralExpression(
                 node,
-                visitNodes(node.elements, activeVisitor.visitExpression))
+                visitNodes(handlers, node.elements, visitExpression))
         }
 
-        export function visitObjectLiteralExpression(node: ObjectLiteralExpression): ObjectLiteralExpression {
-            if (!node || !activeVisitor) {
+        export function visitObjectLiteralExpression(handlers: VisitorHandlers, node: ObjectLiteralExpression): ObjectLiteralExpression {
+            if (!node || !handlers) {
                 return node;
             }
             return Factory.updateObjectLiteralExpression(
                 node,
-                visitNodes(node.properties, activeVisitor.visitObjectLiteralElement))
+                visitNodes(handlers, node.properties, visitObjectLiteralElement))
         }
 
-        export function visitPropertyAccessExpression(node: PropertyAccessExpression): PropertyAccessExpression {
-            if (!node || !activeVisitor) {
+        export function visitPropertyAccessExpression(handlers: VisitorHandlers, node: PropertyAccessExpression): PropertyAccessExpression {
+            if (!node || !handlers) {
                 return node;
             }
             return Factory.updatePropertyAccessExpression(
                 node,
-                activeVisitor.visitLeftHandSideExpression(node.expression),
-                activeVisitor.visitIdentifier(node.name))
+                visitNode(handlers, <LeftHandSideExpression>node.expression, visitLeftHandSideExpression),
+                visitNode(handlers, <Identifier>node.name, handlers.visitIdentifier || visitIdentifier))
         }
 
-        export function visitElementAccessExpression(node: ElementAccessExpression): ElementAccessExpression {
-            if (!node || !activeVisitor) {
+        export function visitElementAccessExpression(handlers: VisitorHandlers, node: ElementAccessExpression): ElementAccessExpression {
+            if (!node || !handlers) {
                 return node;
             }
             return Factory.updateElementAccessExpression(
                 node,
-                activeVisitor.visitLeftHandSideExpression(node.expression),
-                activeVisitor.visitExpression(node.argumentExpression))
+                visitNode(handlers, <LeftHandSideExpression>node.expression, visitLeftHandSideExpression),
+                visitNode(handlers, <Expression>node.argumentExpression, visitExpression))
         }
 
-        export function visitCallExpression(node: CallExpression): CallExpression {
-            if (!node || !activeVisitor) {
+        export function visitCallExpression(handlers: VisitorHandlers, node: CallExpression): CallExpression {
+            if (!node || !handlers) {
                 return node;
             }
             return Factory.updateCallExpression(
                 node,
-                activeVisitor.visitLeftHandSideExpression(node.expression),
-                visitNodes(node.arguments, activeVisitor.visitExpression))
+                visitNode(handlers, <LeftHandSideExpression>node.expression, visitLeftHandSideExpression),
+                visitNodes(handlers, node.arguments, visitExpression))
         }
 
-        export function visitNewExpression(node: NewExpression): NewExpression {
-            if (!node || !activeVisitor) {
+        export function visitNewExpression(handlers: VisitorHandlers, node: NewExpression): NewExpression {
+            if (!node || !handlers) {
                 return node;
             }
             return Factory.updateNewExpression(
                 node,
-                activeVisitor.visitLeftHandSideExpression(node.expression),
-                visitNodes(node.arguments, activeVisitor.visitExpression))
+                visitNode(handlers, <LeftHandSideExpression>node.expression, visitLeftHandSideExpression),
+                visitNodes(handlers, node.arguments, visitExpression))
         }
 
-        export function visitTaggedTemplateExpression(node: TaggedTemplateExpression): TaggedTemplateExpression {
-            if (!node || !activeVisitor) {
+        export function visitTaggedTemplateExpression(handlers: VisitorHandlers, node: TaggedTemplateExpression): TaggedTemplateExpression {
+            if (!node || !handlers) {
                 return node;
             }
             return Factory.updateTaggedTemplateExpression(
                 node,
-                activeVisitor.visitLeftHandSideExpression(node.tag),
-                activeVisitor.visitTemplateLiteralOrTemplateExpression(node.template))
+                visitNode(handlers, <LeftHandSideExpression>node.tag, visitLeftHandSideExpression),
+                visitNode(handlers, <LiteralExpression | TemplateExpression>node.template, visitTemplateLiteralOrTemplateExpression))
         }
 
-        export function visitTypeAssertion(node: TypeAssertion): TypeAssertion {
-            if (!node || !activeVisitor) {
+        export function visitTypeAssertion(handlers: VisitorHandlers, node: TypeAssertion): TypeAssertion {
+            if (!node || !handlers) {
                 return node;
             }
             return Factory.updateTypeAssertion(
                 node,
-                activeVisitor.visitUnaryExpression(node.expression))
+                visitNode(handlers, <UnaryExpression>node.expression, visitUnaryExpression))
         }
 
-        export function visitParenthesizedExpression(node: ParenthesizedExpression): ParenthesizedExpression {
-            if (!node || !activeVisitor) {
+        export function visitParenthesizedExpression(handlers: VisitorHandlers, node: ParenthesizedExpression): ParenthesizedExpression {
+            if (!node || !handlers) {
                 return node;
             }
             return Factory.updateParenthesizedExpression(
                 node,
-                activeVisitor.visitExpression(node.expression))
+                visitNode(handlers, <Expression>node.expression, visitExpression))
         }
 
-        export function visitExpressionOrBlock(node: Block | Expression): Block | Expression {
-            if (!node || !activeVisitor) {
+        export function visitExpressionOrBlock(handlers: VisitorHandlers, node: Block | Expression): Block | Expression {
+            if (!node || !handlers) {
                 return node;
             }
             if (isExpression(node)) {
-                return activeVisitor.visitExpression(<Expression>node);
+                return visitNode(handlers, <Expression>node, visitExpression);
             }
             switch (node.kind) {
                 case SyntaxKind.Block:
-                    return activeVisitor.visitBlock(<Block>node);
+                    return visitNode(handlers, <Block>node, handlers.visitBlock || visitBlock);
                 default:
                     reportUnexpectedNode(node);
                     return node;
             }
         }
 
-        export function visitFunctionExpression(node: FunctionExpression): FunctionExpression {
-            if (!node || !activeVisitor) {
+        export function visitFunctionExpression(handlers: VisitorHandlers, node: FunctionExpression): FunctionExpression {
+            if (!node || !handlers) {
                 return node;
             }
             return Factory.updateFunctionExpression(
                 node,
-                activeVisitor.visitIdentifier(node.name),
-                activeVisitor.visitExpressionOrBlock(node.body),
+                visitNode(handlers, <Identifier>node.name, handlers.visitIdentifier || visitIdentifier),
+                visitNode(handlers, <Block | Expression>node.body, visitExpressionOrBlock),
                 node.parameters)
         }
 
-        export function visitArrowFunction(node: FunctionExpression): FunctionExpression {
-            if (!node || !activeVisitor) {
+        export function visitArrowFunction(handlers: VisitorHandlers, node: FunctionExpression): FunctionExpression {
+            if (!node || !handlers) {
                 return node;
             }
             return Factory.updateArrowFunction(
                 node,
-                activeVisitor.visitExpressionOrBlock(node.body),
+                visitNode(handlers, <Block | Expression>node.body, visitExpressionOrBlock),
                 node.parameters)
         }
 
-        export function visitDeleteExpression(node: DeleteExpression): DeleteExpression {
-            if (!node || !activeVisitor) {
+        export function visitDeleteExpression(handlers: VisitorHandlers, node: DeleteExpression): DeleteExpression {
+            if (!node || !handlers) {
                 return node;
             }
             return Factory.updateDeleteExpression(
                 node,
-                activeVisitor.visitUnaryExpression(node.expression))
+                visitNode(handlers, <UnaryExpression>node.expression, visitUnaryExpression))
         }
 
-        export function visitTypeOfExpression(node: TypeOfExpression): TypeOfExpression {
-            if (!node || !activeVisitor) {
+        export function visitTypeOfExpression(handlers: VisitorHandlers, node: TypeOfExpression): TypeOfExpression {
+            if (!node || !handlers) {
                 return node;
             }
             return Factory.updateTypeOfExpression(
                 node,
-                activeVisitor.visitUnaryExpression(node.expression))
+                visitNode(handlers, <UnaryExpression>node.expression, visitUnaryExpression))
         }
 
-        export function visitVoidExpression(node: VoidExpression): VoidExpression {
-            if (!node || !activeVisitor) {
+        export function visitVoidExpression(handlers: VisitorHandlers, node: VoidExpression): VoidExpression {
+            if (!node || !handlers) {
                 return node;
             }
             return Factory.updateVoidExpression(
                 node,
-                activeVisitor.visitUnaryExpression(node.expression))
+                visitNode(handlers, <UnaryExpression>node.expression, visitUnaryExpression))
         }
 
-        export function visitAwaitExpression(node: AwaitExpression): AwaitExpression {
-            if (!node || !activeVisitor) {
+        export function visitAwaitExpression(handlers: VisitorHandlers, node: AwaitExpression): AwaitExpression {
+            if (!node || !handlers) {
                 return node;
             }
             return Factory.updateAwaitExpression(
                 node,
-                activeVisitor.visitUnaryExpression(node.expression))
+                visitNode(handlers, <UnaryExpression>node.expression, visitUnaryExpression))
         }
 
-        export function visitPrefixUnaryExpression(node: PrefixUnaryExpression): PrefixUnaryExpression {
-            if (!node || !activeVisitor) {
+        export function visitPrefixUnaryExpression(handlers: VisitorHandlers, node: PrefixUnaryExpression): PrefixUnaryExpression {
+            if (!node || !handlers) {
                 return node;
             }
             return Factory.updatePrefixUnaryExpression(
                 node,
-                activeVisitor.visitUnaryExpression(node.operand))
+                visitNode(handlers, <UnaryExpression>node.operand, visitUnaryExpression))
         }
 
-        export function visitPostfixUnaryExpression(node: PostfixUnaryExpression): PostfixUnaryExpression {
-            if (!node || !activeVisitor) {
+        export function visitPostfixUnaryExpression(handlers: VisitorHandlers, node: PostfixUnaryExpression): PostfixUnaryExpression {
+            if (!node || !handlers) {
                 return node;
             }
             return Factory.updatePostfixUnaryExpression(
                 node,
-                activeVisitor.visitLeftHandSideExpression(node.operand))
+                visitNode(handlers, <LeftHandSideExpression>node.operand, visitLeftHandSideExpression))
         }
 
-        export function visitBinaryExpression(node: BinaryExpression): BinaryExpression {
-            if (!node || !activeVisitor) {
+        export function visitBinaryExpression(handlers: VisitorHandlers, node: BinaryExpression): BinaryExpression {
+            if (!node || !handlers) {
                 return node;
             }
             return Factory.updateBinaryExpression(
                 node,
-                activeVisitor.visitExpression(node.left),
-                activeVisitor.visitExpression(node.right))
+                visitNode(handlers, <Expression>node.left, visitExpression),
+                visitNode(handlers, <Expression>node.right, visitExpression))
         }
 
-        export function visitConditionalExpression(node: ConditionalExpression): ConditionalExpression {
-            if (!node || !activeVisitor) {
+        export function visitConditionalExpression(handlers: VisitorHandlers, node: ConditionalExpression): ConditionalExpression {
+            if (!node || !handlers) {
                 return node;
             }
             return Factory.updateConditionalExpression(
                 node,
-                activeVisitor.visitExpression(node.condition),
-                activeVisitor.visitExpression(node.whenTrue),
-                activeVisitor.visitExpression(node.whenFalse))
+                visitNode(handlers, <Expression>node.condition, visitExpression),
+                visitNode(handlers, <Expression>node.whenTrue, visitExpression),
+                visitNode(handlers, <Expression>node.whenFalse, visitExpression))
         }
 
-        export function visitTemplateExpression(node: TemplateExpression): TemplateExpression {
-            if (!node || !activeVisitor) {
+        export function visitTemplateExpression(handlers: VisitorHandlers, node: TemplateExpression): TemplateExpression {
+            if (!node || !handlers) {
                 return node;
             }
             return Factory.updateTemplateExpression(
                 node,
                 node.head,
-                visitNodes(node.templateSpans, activeVisitor.visitTemplateSpan))
+                visitNodes(handlers, node.templateSpans, (handlers.visitTemplateSpan || visitTemplateSpan)))
         }
 
-        export function visitYieldExpression(node: YieldExpression): YieldExpression {
-            if (!node || !activeVisitor) {
+        export function visitYieldExpression(handlers: VisitorHandlers, node: YieldExpression): YieldExpression {
+            if (!node || !handlers) {
                 return node;
             }
             return Factory.updateYieldExpression(
                 node,
-                activeVisitor.visitExpression(node.expression))
+                visitNode(handlers, <Expression>node.expression, visitExpression))
         }
 
-        export function visitSpreadElementExpression(node: SpreadElementExpression): SpreadElementExpression {
-            if (!node || !activeVisitor) {
+        export function visitSpreadElementExpression(handlers: VisitorHandlers, node: SpreadElementExpression): SpreadElementExpression {
+            if (!node || !handlers) {
                 return node;
             }
             return Factory.updateSpreadElementExpression(
                 node,
-                activeVisitor.visitExpression(node.expression))
+                visitNode(handlers, <Expression>node.expression, visitExpression))
         }
 
-        export function visitOmittedExpression(node: Expression): Expression {
+        export function visitOmittedExpression(handlers: VisitorHandlers, node: Expression): Expression {
             return node;
         }
 
-        export function visitTemplateSpan(node: TemplateSpan): TemplateSpan {
-            if (!node || !activeVisitor) {
+        export function visitTemplateSpan(handlers: VisitorHandlers, node: TemplateSpan): TemplateSpan {
+            if (!node || !handlers) {
                 return node;
             }
             return Factory.updateTemplateSpan(
                 node,
-                activeVisitor.visitExpression(node.expression),
+                visitNode(handlers, <Expression>node.expression, visitExpression),
                 node.literal)
         }
 
-        export function visitStatement(node: Statement): Statement {
-            if (!node || !activeVisitor) {
+        export function visitStatement(handlers: VisitorHandlers, node: Statement): Statement {
+            if (!node || !handlers) {
                 return node;
             }
             switch (node.kind) {
                 case SyntaxKind.Block:
-                    return activeVisitor.visitBlock(<Block>node);
+                    return visitNode(handlers, <Block>node, handlers.visitBlock || visitBlock);
                 case SyntaxKind.VariableStatement:
-                    return activeVisitor.visitVariableStatement(<VariableStatement>node);
+                    return visitNode(handlers, <VariableStatement>node, handlers.visitVariableStatement || visitVariableStatement);
                 case SyntaxKind.EmptyStatement:
-                    return activeVisitor.visitEmptyStatement(<Statement>node);
+                    return visitNode(handlers, <Statement>node, handlers.visitEmptyStatement || visitEmptyStatement);
                 case SyntaxKind.ExpressionStatement:
-                    return activeVisitor.visitExpressionStatement(<ExpressionStatement>node);
+                    return visitNode(handlers, <ExpressionStatement>node, handlers.visitExpressionStatement || visitExpressionStatement);
                 case SyntaxKind.IfStatement:
-                    return activeVisitor.visitIfStatement(<IfStatement>node);
+                    return visitNode(handlers, <IfStatement>node, handlers.visitIfStatement || visitIfStatement);
                 case SyntaxKind.DoStatement:
-                    return activeVisitor.visitDoStatement(<DoStatement>node);
+                    return visitNode(handlers, <DoStatement>node, handlers.visitDoStatement || visitDoStatement);
                 case SyntaxKind.WhileStatement:
-                    return activeVisitor.visitWhileStatement(<WhileStatement>node);
+                    return visitNode(handlers, <WhileStatement>node, handlers.visitWhileStatement || visitWhileStatement);
                 case SyntaxKind.ForStatement:
-                    return activeVisitor.visitForStatement(<ForStatement>node);
+                    return visitNode(handlers, <ForStatement>node, handlers.visitForStatement || visitForStatement);
                 case SyntaxKind.ForInStatement:
-                    return activeVisitor.visitForInStatement(<ForInStatement>node);
+                    return visitNode(handlers, <ForInStatement>node, handlers.visitForInStatement || visitForInStatement);
                 case SyntaxKind.ContinueStatement:
-                    return activeVisitor.visitContinueStatement(<BreakOrContinueStatement>node);
+                    return visitNode(handlers, <BreakOrContinueStatement>node, handlers.visitContinueStatement || visitContinueStatement);
                 case SyntaxKind.BreakStatement:
-                    return activeVisitor.visitBreakStatement(<BreakOrContinueStatement>node);
+                    return visitNode(handlers, <BreakOrContinueStatement>node, handlers.visitBreakStatement || visitBreakStatement);
                 case SyntaxKind.ReturnStatement:
-                    return activeVisitor.visitReturnStatement(<ReturnStatement>node);
+                    return visitNode(handlers, <ReturnStatement>node, handlers.visitReturnStatement || visitReturnStatement);
                 case SyntaxKind.WithStatement:
-                    return activeVisitor.visitWithStatement(<WithStatement>node);
+                    return visitNode(handlers, <WithStatement>node, handlers.visitWithStatement || visitWithStatement);
                 case SyntaxKind.SwitchStatement:
-                    return activeVisitor.visitSwitchStatement(<SwitchStatement>node);
+                    return visitNode(handlers, <SwitchStatement>node, handlers.visitSwitchStatement || visitSwitchStatement);
                 case SyntaxKind.LabeledStatement:
-                    return activeVisitor.visitLabeledStatement(<LabeledStatement>node);
+                    return visitNode(handlers, <LabeledStatement>node, handlers.visitLabeledStatement || visitLabeledStatement);
                 case SyntaxKind.ThrowStatement:
-                    return activeVisitor.visitThrowStatement(<ThrowStatement>node);
+                    return visitNode(handlers, <ThrowStatement>node, handlers.visitThrowStatement || visitThrowStatement);
                 case SyntaxKind.TryStatement:
-                    return activeVisitor.visitTryStatement(<TryStatement>node);
+                    return visitNode(handlers, <TryStatement>node, handlers.visitTryStatement || visitTryStatement);
                 case SyntaxKind.DebuggerStatement:
-                    return activeVisitor.visitDebuggerStatement(<Statement>node);
+                    return visitNode(handlers, <Statement>node, handlers.visitDebuggerStatement || visitDebuggerStatement);
                 case SyntaxKind.FunctionDeclaration:
-                    return activeVisitor.visitFunctionDeclaration(<FunctionDeclaration>node);
+                    return visitNode(handlers, <FunctionDeclaration>node, handlers.visitFunctionDeclaration || visitFunctionDeclaration);
                 default:
                     reportUnexpectedNode(node);
                     return node;
             }
         }
 
-        export function visitBlock(node: Block): Block {
-            if (!node || !activeVisitor) {
+        export function visitBlock(handlers: VisitorHandlers, node: Block): Block {
+            if (!node || !handlers) {
                 return node;
             }
             return Factory.updateBlock(
                 node,
-                visitNodes(node.statements, activeVisitor.visitStatement))
+                visitNodes(handlers, node.statements, visitStatement))
         }
 
-        export function visitVariableStatement(node: VariableStatement): VariableStatement {
-            if (!node || !activeVisitor) {
+        export function visitVariableStatement(handlers: VisitorHandlers, node: VariableStatement): VariableStatement {
+            if (!node || !handlers) {
                 return node;
             }
             return Factory.updateVariableStatement(
                 node,
-                activeVisitor.visitVariableDeclarationList(node.declarationList))
+                visitNode(handlers, <VariableDeclarationList>node.declarationList, handlers.visitVariableDeclarationList || visitVariableDeclarationList))
         }
 
-        export function visitEmptyStatement(node: Statement): Statement {
+        export function visitEmptyStatement(handlers: VisitorHandlers, node: Statement): Statement {
             return node;
         }
 
-        export function visitExpressionStatement(node: ExpressionStatement): ExpressionStatement {
-            if (!node || !activeVisitor) {
+        export function visitExpressionStatement(handlers: VisitorHandlers, node: ExpressionStatement): ExpressionStatement {
+            if (!node || !handlers) {
                 return node;
             }
             return Factory.updateExpressionStatement(
                 node,
-                activeVisitor.visitExpression(node.expression))
+                visitNode(handlers, <Expression>node.expression, visitExpression))
         }
 
-        export function visitIfStatement(node: IfStatement): IfStatement {
-            if (!node || !activeVisitor) {
+        export function visitIfStatement(handlers: VisitorHandlers, node: IfStatement): IfStatement {
+            if (!node || !handlers) {
                 return node;
             }
             return Factory.updateIfStatement(
                 node,
-                activeVisitor.visitExpression(node.expression),
-                activeVisitor.visitStatement(node.thenStatement),
-                activeVisitor.visitStatement(node.elseStatement))
+                visitNode(handlers, <Expression>node.expression, visitExpression),
+                visitNode(handlers, <Statement>node.thenStatement, visitStatement),
+                visitNode(handlers, <Statement>node.elseStatement, visitStatement))
         }
 
-        export function visitDoStatement(node: DoStatement): DoStatement {
-            if (!node || !activeVisitor) {
+        export function visitDoStatement(handlers: VisitorHandlers, node: DoStatement): DoStatement {
+            if (!node || !handlers) {
                 return node;
             }
             return Factory.updateDoStatement(
                 node,
-                activeVisitor.visitStatement(node.statement),
-                activeVisitor.visitExpression(node.expression))
+                visitNode(handlers, <Statement>node.statement, visitStatement),
+                visitNode(handlers, <Expression>node.expression, visitExpression))
         }
 
-        export function visitWhileStatement(node: WhileStatement): WhileStatement {
-            if (!node || !activeVisitor) {
+        export function visitWhileStatement(handlers: VisitorHandlers, node: WhileStatement): WhileStatement {
+            if (!node || !handlers) {
                 return node;
             }
             return Factory.updateWhileStatement(
                 node,
-                activeVisitor.visitExpression(node.expression),
-                activeVisitor.visitStatement(node.statement))
+                visitNode(handlers, <Expression>node.expression, visitExpression),
+                visitNode(handlers, <Statement>node.statement, visitStatement))
         }
 
-        export function visitForStatement(node: ForStatement): ForStatement {
-            if (!node || !activeVisitor) {
+        export function visitForStatement(handlers: VisitorHandlers, node: ForStatement): ForStatement {
+            if (!node || !handlers) {
                 return node;
             }
             return Factory.updateForStatement(
                 node,
-                activeVisitor.visitVariableDeclarationListOrExpression(node.initializer),
-                activeVisitor.visitExpression(node.condition),
-                activeVisitor.visitExpression(node.iterator),
-                activeVisitor.visitStatement(node.statement))
+                visitNode(handlers, <Expression | VariableDeclarationList>node.initializer, handlers.visitVariableDeclarationListOrExpression || visitVariableDeclarationListOrExpression),
+                visitNode(handlers, <Expression>node.condition, visitExpression),
+                visitNode(handlers, <Expression>node.iterator, visitExpression),
+                visitNode(handlers, <Statement>node.statement, visitStatement))
         }
 
-        export function visitForInStatement(node: ForInStatement): ForInStatement {
-            if (!node || !activeVisitor) {
+        export function visitForInStatement(handlers: VisitorHandlers, node: ForInStatement): ForInStatement {
+            if (!node || !handlers) {
                 return node;
             }
             return Factory.updateForInStatement(
                 node,
-                activeVisitor.visitVariableDeclarationListOrExpression(node.initializer),
-                activeVisitor.visitExpression(node.expression),
-                activeVisitor.visitStatement(node.statement))
+                visitNode(handlers, <Expression | VariableDeclarationList>node.initializer, handlers.visitVariableDeclarationListOrExpression || visitVariableDeclarationListOrExpression),
+                visitNode(handlers, <Expression>node.expression, visitExpression),
+                visitNode(handlers, <Statement>node.statement, visitStatement))
         }
 
-        export function visitContinueStatement(node: BreakOrContinueStatement): BreakOrContinueStatement {
+        export function visitContinueStatement(handlers: VisitorHandlers, node: BreakOrContinueStatement): BreakOrContinueStatement {
             return node;
         }
 
-        export function visitBreakStatement(node: BreakOrContinueStatement): BreakOrContinueStatement {
+        export function visitBreakStatement(handlers: VisitorHandlers, node: BreakOrContinueStatement): BreakOrContinueStatement {
             return node;
         }
 
-        export function visitReturnStatement(node: ReturnStatement): ReturnStatement {
-            if (!node || !activeVisitor) {
+        export function visitReturnStatement(handlers: VisitorHandlers, node: ReturnStatement): ReturnStatement {
+            if (!node || !handlers) {
                 return node;
             }
             return Factory.updateReturnStatement(
                 node,
-                activeVisitor.visitExpression(node.expression))
+                visitNode(handlers, <Expression>node.expression, visitExpression))
         }
 
-        export function visitWithStatement(node: WithStatement): WithStatement {
-            if (!node || !activeVisitor) {
+        export function visitWithStatement(handlers: VisitorHandlers, node: WithStatement): WithStatement {
+            if (!node || !handlers) {
                 return node;
             }
             return Factory.updateWithStatement(
                 node,
-                activeVisitor.visitExpression(node.expression),
-                activeVisitor.visitStatement(node.statement))
+                visitNode(handlers, <Expression>node.expression, visitExpression),
+                visitNode(handlers, <Statement>node.statement, visitStatement))
         }
 
-        export function visitSwitchStatement(node: SwitchStatement): SwitchStatement {
-            if (!node || !activeVisitor) {
+        export function visitSwitchStatement(handlers: VisitorHandlers, node: SwitchStatement): SwitchStatement {
+            if (!node || !handlers) {
                 return node;
             }
             return Factory.updateSwitchStatement(
                 node,
-                activeVisitor.visitExpression(node.expression),
-                visitNodes(node.clauses, activeVisitor.visitCaseOrDefaultClause))
+                visitNode(handlers, <Expression>node.expression, visitExpression),
+                visitNodes(handlers, node.clauses, visitCaseOrDefaultClause))
         }
 
-        export function visitLabeledStatement(node: LabeledStatement): LabeledStatement {
-            if (!node || !activeVisitor) {
+        export function visitLabeledStatement(handlers: VisitorHandlers, node: LabeledStatement): LabeledStatement {
+            if (!node || !handlers) {
                 return node;
             }
             return Factory.updateLabeledStatement(
                 node,
-                activeVisitor.visitIdentifier(node.label),
-                activeVisitor.visitStatement(node.statement))
+                visitNode(handlers, <Identifier>node.label, handlers.visitIdentifier || visitIdentifier),
+                visitNode(handlers, <Statement>node.statement, visitStatement))
         }
 
-        export function visitThrowStatement(node: ThrowStatement): ThrowStatement {
-            if (!node || !activeVisitor) {
+        export function visitThrowStatement(handlers: VisitorHandlers, node: ThrowStatement): ThrowStatement {
+            if (!node || !handlers) {
                 return node;
             }
             return Factory.updateThrowStatement(
                 node,
-                activeVisitor.visitExpression(node.expression))
+                visitNode(handlers, <Expression>node.expression, visitExpression))
         }
 
-        export function visitTryStatement(node: TryStatement): TryStatement {
-            if (!node || !activeVisitor) {
+        export function visitTryStatement(handlers: VisitorHandlers, node: TryStatement): TryStatement {
+            if (!node || !handlers) {
                 return node;
             }
             return Factory.updateTryStatement(
                 node,
-                activeVisitor.visitBlock(node.tryBlock),
-                activeVisitor.visitCatchClause(node.catchClause),
-                activeVisitor.visitBlock(node.finallyBlock))
+                visitNode(handlers, <Block>node.tryBlock, handlers.visitBlock || visitBlock),
+                visitNode(handlers, <CatchClause>node.catchClause, handlers.visitCatchClause || visitCatchClause),
+                visitNode(handlers, <Block>node.finallyBlock, handlers.visitBlock || visitBlock))
         }
 
-        export function visitDebuggerStatement(node: Statement): Statement {
+        export function visitDebuggerStatement(handlers: VisitorHandlers, node: Statement): Statement {
             return node;
         }
 
-        export function visitVariableDeclaration(node: VariableDeclaration): VariableDeclaration {
-            if (!node || !activeVisitor) {
+        export function visitVariableDeclaration(handlers: VisitorHandlers, node: VariableDeclaration): VariableDeclaration {
+            if (!node || !handlers) {
                 return node;
             }
             return Factory.updateVariableDeclaration(
                 node,
-                activeVisitor.visitIdentifierOrBindingPattern(node.name),
-                activeVisitor.visitExpression(node.initializer))
+                visitNode(handlers, <BindingPattern | Identifier>node.name, visitIdentifierOrBindingPattern),
+                visitNode(handlers, <Expression>node.initializer, visitExpression))
         }
 
-        export function visitVariableDeclarationList(node: VariableDeclarationList): VariableDeclarationList {
-            if (!node || !activeVisitor) {
+        export function visitVariableDeclarationList(handlers: VisitorHandlers, node: VariableDeclarationList): VariableDeclarationList {
+            if (!node || !handlers) {
                 return node;
             }
             return Factory.updateVariableDeclarationList(
                 node,
-                visitNodes(node.declarations, activeVisitor.visitVariableDeclaration))
+                visitNodes(handlers, node.declarations, (handlers.visitVariableDeclaration || visitVariableDeclaration)))
         }
 
-        export function visitVariableDeclarationListOrExpression(node: Expression | VariableDeclarationList): Expression | VariableDeclarationList {
-            if (!node || !activeVisitor) {
+        export function visitVariableDeclarationListOrExpression(handlers: VisitorHandlers, node: Expression | VariableDeclarationList): Expression | VariableDeclarationList {
+            if (!node || !handlers) {
                 return node;
             }
             if (isExpression(node)) {
-                return activeVisitor.visitExpression(<Expression>node);
+                return visitNode(handlers, <Expression>node, visitExpression);
             }
             switch (node.kind) {
                 case SyntaxKind.VariableDeclarationList:
-                    return activeVisitor.visitVariableDeclarationList(<VariableDeclarationList>node);
+                    return visitNode(handlers, <VariableDeclarationList>node, handlers.visitVariableDeclarationList || visitVariableDeclarationList);
                 default:
                     reportUnexpectedNode(node);
                     return node;
             }
         }
 
-        export function visitFunctionDeclaration(node: FunctionDeclaration): FunctionDeclaration {
+        export function visitFunctionDeclaration(handlers: VisitorHandlers, node: FunctionDeclaration): FunctionDeclaration {
             return node;
         }
 
-        export function visitCaseOrDefaultClause(node: CaseOrDefaultClause): CaseOrDefaultClause {
-            if (!node || !activeVisitor) {
+        export function visitCaseOrDefaultClause(handlers: VisitorHandlers, node: CaseOrDefaultClause): CaseOrDefaultClause {
+            if (!node || !handlers) {
                 return node;
             }
             switch (node.kind) {
                 case SyntaxKind.CaseClause:
-                    return activeVisitor.visitCaseClause(<CaseClause>node);
+                    return visitNode(handlers, <CaseClause>node, handlers.visitCaseClause || visitCaseClause);
                 case SyntaxKind.DefaultClause:
-                    return activeVisitor.visitDefaultClause(<DefaultClause>node);
+                    return visitNode(handlers, <DefaultClause>node, handlers.visitDefaultClause || visitDefaultClause);
                 default:
                     reportUnexpectedNode(node);
                     return node;
             }
         }
 
-        export function visitCaseClause(node: CaseClause): CaseClause {
-            if (!node || !activeVisitor) {
+        export function visitCaseClause(handlers: VisitorHandlers, node: CaseClause): CaseClause {
+            if (!node || !handlers) {
                 return node;
             }
             return Factory.updateCaseClause(
                 node,
-                activeVisitor.visitExpression(node.expression),
-                visitNodes(node.statements, activeVisitor.visitStatement))
+                visitNode(handlers, <Expression>node.expression, visitExpression),
+                visitNodes(handlers, node.statements, visitStatement))
         }
 
-        export function visitDefaultClause(node: DefaultClause): DefaultClause {
-            if (!node || !activeVisitor) {
+        export function visitDefaultClause(handlers: VisitorHandlers, node: DefaultClause): DefaultClause {
+            if (!node || !handlers) {
                 return node;
             }
             return Factory.updateDefaultClause(
                 node,
-                visitNodes(node.statements, activeVisitor.visitStatement))
+                visitNodes(handlers, node.statements, visitStatement))
         }
 
-        export function visitCatchClause(node: CatchClause): CatchClause {
-            if (!node || !activeVisitor) {
+        export function visitCatchClause(handlers: VisitorHandlers, node: CatchClause): CatchClause {
+            if (!node || !handlers) {
                 return node;
             }
             return Factory.updateCatchClause(
                 node,
-                activeVisitor.visitIdentifier(node.name),
-                activeVisitor.visitBlock(node.block))
+                visitNode(handlers, <Identifier>node.name, handlers.visitIdentifier || visitIdentifier),
+                visitNode(handlers, <Block>node.block, handlers.visitBlock || visitBlock))
         }
 
-        export function visitObjectLiteralElement(node: ObjectLiteralElement): ObjectLiteralElement {
-            if (!node || !activeVisitor) {
+        export function visitObjectLiteralElement(handlers: VisitorHandlers, node: ObjectLiteralElement): ObjectLiteralElement {
+            if (!node || !handlers) {
                 return node;
             }
             switch (node.kind) {
                 case SyntaxKind.MethodDeclaration:
-                    var visited = activeVisitor.visitMethodDeclaration(<MethodDeclaration>node);
+                    var visited = visitNode(handlers, <MethodDeclaration>node, handlers.visitMethodDeclaration || visitMethodDeclaration);
                     if (visited && !isObjectLiteralElement(visited)) {
                         reportUnexpectedNodeAfterVisit(visited, node);
                         return node;
                     }
                     return <ObjectLiteralElement>visited;
                 case SyntaxKind.GetAccessor:
-                    var visited = activeVisitor.visitGetAccessor(<AccessorDeclaration>node);
+                    var visited = visitNode(handlers, <AccessorDeclaration>node, handlers.visitGetAccessor || visitGetAccessor);
                     if (visited && !isObjectLiteralElement(visited)) {
                         reportUnexpectedNodeAfterVisit(visited, node);
                         return node;
                     }
                     return <ObjectLiteralElement>visited;
                 case SyntaxKind.SetAccessor:
-                    var visited = activeVisitor.visitSetAccessor(<AccessorDeclaration>node);
+                    var visited = visitNode(handlers, <AccessorDeclaration>node, handlers.visitSetAccessor || visitSetAccessor);
                     if (visited && !isObjectLiteralElement(visited)) {
                         reportUnexpectedNodeAfterVisit(visited, node);
                         return node;
                     }
                     return <ObjectLiteralElement>visited;
                 case SyntaxKind.PropertyAssignment:
-                    return activeVisitor.visitPropertyAssignment(<PropertyAssignment>node);
+                    return visitNode(handlers, <PropertyAssignment>node, handlers.visitPropertyAssignment || visitPropertyAssignment);
                 case SyntaxKind.ShorthandPropertyAssignment:
-                    return activeVisitor.visitShorthandPropertyAssignment(<ShorthandPropertyAssignment>node);
+                    return visitNode(handlers, <ShorthandPropertyAssignment>node, handlers.visitShorthandPropertyAssignment || visitShorthandPropertyAssignment);
                 default:
                     reportUnexpectedNode(node);
                     return node;
             }
         }
 
-        export function visitPropertyAssignment(node: PropertyAssignment): PropertyAssignment {
-            if (!node || !activeVisitor) {
+        export function visitPropertyAssignment(handlers: VisitorHandlers, node: PropertyAssignment): PropertyAssignment {
+            if (!node || !handlers) {
                 return node;
             }
             return Factory.updatePropertyAssignment(
                 node,
-                activeVisitor.visitDeclarationName(node.name),
-                activeVisitor.visitExpression(node.initializer))
+                visitNode(handlers, <DeclarationName>node.name, visitDeclarationName),
+                visitNode(handlers, <Expression>node.initializer, visitExpression))
         }
 
-        export function visitShorthandPropertyAssignment(node: ShorthandPropertyAssignment): ShorthandPropertyAssignment {
+        export function visitShorthandPropertyAssignment(handlers: VisitorHandlers, node: ShorthandPropertyAssignment): ShorthandPropertyAssignment {
             return node;
         }
 
-        export function visitNodes<TNode extends Node>(nodes: NodeArray<TNode>, visitNode: (node: TNode) => TNode, shouldCacheNode?: (node: Node) => boolean, cacheNode?: (node: TNode) => TNode, removeMissingNodes?: boolean): NodeArray<TNode> {
-            if (!nodes || !activeVisitor) {
+        function visitNode<TNode extends Node>(handlers: VisitorHandlers, node: TNode, visitNode: (handlers: VisitorHandlers, node: TNode) => TNode): TNode {
+            if (!node || !handlers) {
+                return node;
+            }
+            return visitNode(handlers, node);
+        }
+
+        export function visitNodes<TNode extends Node>(handlers: VisitorHandlers, nodes: NodeArray<TNode>, visitNode: (handlers: VisitorHandlers, node: TNode) => TNode, shouldCacheNode?: (node: Node) => boolean, cacheNode?: (node: TNode) => TNode, removeMissingNodes?: boolean): NodeArray<TNode> {
+            if (!nodes || !handlers) {
                 return nodes;
             }
 
@@ -2110,7 +1676,7 @@ module ts {
                     }
                     cacheOffset = updatedIndex;
                 }
-                var updatedNode = visitNode(node);
+                var updatedNode = visitNode(handlers, node);
                 if ((updatedNodes || updatedNode !== node || (!updatedNode && removeMissingNodes))) {
                     if (!updatedNodes) {
                         updatedNodes = nodes.slice(0, i);
@@ -2123,11 +1689,9 @@ module ts {
                     }
                 }
             }
-
             if (updatedNodes) {
                 return Factory.createNodeArray(updatedNodes, nodes);
             }
-
             return nodes;
         }
     }

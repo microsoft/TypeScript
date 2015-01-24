@@ -16,7 +16,7 @@ module ts {
         }
 
         export function createVoidZero(location?: TextRange, flags?: NodeFlags): VoidExpression {
-            return Factory.createVoidExpression(Factory.createNumericLiteral(0, location, flags), location, flags);
+            return createVoidExpression(createNumericLiteral(0, location, flags), location, flags);
         }
 
         export function makeLeftHandSideExpression(expression: Expression): LeftHandSideExpression {
@@ -24,7 +24,7 @@ module ts {
                 return <LeftHandSideExpression>expression;
             }
 
-            return Factory.createParenthesizedExpression(expression);
+            return createParenthesizedExpression(expression);
         }
 
         export function createPropertyOrElementAccessExpression(expression: LeftHandSideExpression, propName: Identifier | LiteralExpression): LeftHandSideExpression {
@@ -107,7 +107,7 @@ module ts {
     }
 
     export module Visitor {
-        export function ignore<TNode extends Node>(node: TNode): TNode {
+        export function ignoreNode<TNode extends Node>(handlers: VisitorHandlers, node: TNode): TNode {
             return node;
         }
     }
