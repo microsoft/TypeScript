@@ -4832,9 +4832,12 @@ module ts {
                 container = getThisContainer(container, /* includeArrowFunctions */ false);
 
                 // When targeting es6, arrow function lexically bind "this" so we do not need to do the work of binding "this" in emitted code
-                if (compilerOptions.target < ScriptTarget.ES6) {
-                    needToCaptureLexicalThis = true;
+                if (compilerOptions.target >= ScriptTarget.ES6) {
+                    needToCaptureLexicalThis = false;
                 }
+				else {
+					needToCaptureLexicalThis = true;
+				}
             }
 
             switch (container.kind) {
