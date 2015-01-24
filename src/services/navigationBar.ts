@@ -50,6 +50,7 @@ module ts.NavigationBar {
                     case SyntaxKind.ArrayBindingPattern:
                         forEach((<BindingPattern>node).elements, visit);
                         break;
+                    case SyntaxKind.BindingElement:
                     case SyntaxKind.VariableDeclaration:
                         if (isBindingPattern((<VariableDeclaration>node).name)) {
                             visit((<VariableDeclaration>node).name);
@@ -262,17 +263,34 @@ module ts.NavigationBar {
                     return createItem(node, getTextOfNode((<FunctionLikeDeclaration>node).name), ts.ScriptElementKind.functionElement);
 
                 case SyntaxKind.VariableDeclaration:
-                    if (isBindingPattern((<VariableDeclaration>node).name)) {
-                        break;
-                    }
-                    if (isConst(node)) {
-                        return createItem(node, getTextOfNode((<VariableDeclaration>node).name), ts.ScriptElementKind.constElement);
-                    }
-                    else if (isLet(node)) {
-                        return createItem(node, getTextOfNode((<VariableDeclaration>node).name), ts.ScriptElementKind.letElement);
+                case SyntaxKind.BindingElement:
+                    var variableDeclarationNode: Node;
+                    var name: Node;
+
+                    if (node.kind === SyntaxKind.BindingElement) {
+                        name = (<BindingElement>node).name;
+                        variableDeclarationNode = node;
+                        // binding elements are added only for variable declarations
+                        // bubble up to the containing variable declaration
+                        while (variableDeclarationNode && variableDeclarationNode.kind !== SyntaxKind.VariableDeclaration) {
+                            variableDeclarationNode = variableDeclarationNode.parent;
+                        }
+                        Debug.assert(variableDeclarationNode !== undefined);
                     }
                     else {
-                        return createItem(node, getTextOfNode((<VariableDeclaration>node).name), ts.ScriptElementKind.variableElement);
+                        Debug.assert(!isBindingPattern((<VariableDeclaration>node).name));
+                        variableDeclarationNode = node;
+                        name = (<VariableDeclaration>node).name;
+                    }
+
+                    if (isConst(variableDeclarationNode)) {
+                        return createItem(node, getTextOfNode(name), ts.ScriptElementKind.constElement);
+                    }
+                    else if (isLet(variableDeclarationNode)) {
+                        return createItem(node, getTextOfNode(name), ts.ScriptElementKind.letElement);
+                    }
+                    else {
+                        return createItem(node, getTextOfNode(name), ts.ScriptElementKind.variableElement);
                     }
                 
                 case SyntaxKind.Constructor:
