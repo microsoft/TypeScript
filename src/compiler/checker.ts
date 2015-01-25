@@ -107,6 +107,21 @@ module ts {
         var diagnostics: Diagnostic[] = [];
         var diagnosticsModified: boolean = false;
 
+        var primitiveTypeInfo: Map<{ type: Type; flags: TypeFlags }> = {
+            "string": {
+                type: stringType,
+                flags: TypeFlags.StringLike
+            },
+            "number": {
+                type: numberType,
+                flags: TypeFlags.NumberLike
+            },
+            "boolean": {
+                type: booleanType,
+                flags: TypeFlags.Boolean
+            }
+        };
+
         function addDiagnostic(diagnostic: Diagnostic) {
             diagnostics.push(diagnostic);
             diagnosticsModified = true;
@@ -4454,12 +4469,15 @@ module ts {
             Debug.fail("should not get here");
         }
 
-        // Remove one or more primitive types from a union type
-        function subtractPrimitiveTypes(type: Type, subtractMask: TypeFlags): Type {
+        // For a union type, remove all constituent types for which the given flags have the given state
+        function removeTypesFromUnionType(type: Type, maskFlags: TypeFlags, maskState: boolean): Type {
             if (type.flags & TypeFlags.Union) {
                 var types = (<UnionType>type).types;
-                if (forEach(types, t => t.flags & subtractMask)) {
-                    return getUnionType(filter(types, t => !(t.flags & subtractMask)));
+                if (forEach(types, t => !(t.flags & maskFlags) !== maskState)) {
+                    var reducedType = getUnionType(filter(types, t => !(t.flags & maskFlags) === maskState));
+                    if (reducedType !== emptyObjectType) {
+                        return reducedType;
+                    }
                 }
             }
             return type;
@@ -4635,8 +4653,8 @@ module ts {
                             // Stop at the first containing function or module declaration
                             break loop;
                     }
-                    // Use narrowed type if it is a subtype and construct contains no assignments to variable
-                    if (narrowedType !== type && isTypeSubtypeOf(narrowedType, type)) {
+                    // Use narrowed type if construct contains no assignments to variable
+                    if (narrowedType !== type) {
                         if (isVariableAssignedWithin(symbol, node)) {
                             break;
                         }
@@ -4656,20 +4674,29 @@ module ts {
                 if (left.expression.kind !== SyntaxKind.Identifier || getResolvedSymbol(<Identifier>left.expression) !== symbol) {
                     return type;
                 }
-                var t = right.text;
-                var checkType: Type = t === "string" ? stringType : t === "number" ? numberType : t === "boolean" ? booleanType : emptyObjectType;
+                var typeInfo = primitiveTypeInfo[right.text];
                 if (expr.operator === SyntaxKind.ExclamationEqualsEqualsToken) {
                     assumeTrue = !assumeTrue;
                 }
                 if (assumeTrue) {
-                    // The assumed result is true. If check was for a primitive type, that type is the narrowed type. Otherwise we can
-                    // remove the primitive types from the narrowed type.
-                    return checkType === emptyObjectType ? subtractPrimitiveTypes(type, TypeFlags.String | TypeFlags.Number | TypeFlags.Boolean) : checkType;
+                    // Assumed result is true. If check was not for a primitive type, remove all primitive types
+                    if (!typeInfo) {
+                        return removeTypesFromUnionType(type, TypeFlags.StringLike | TypeFlags.NumberLike | TypeFlags.Boolean, true);
+                    }
+                    // Check was for a primitive type, return that primitive type if it is a subtype
+                    if (isTypeSubtypeOf(typeInfo.type, type)) {
+                        return typeInfo.type;
+                    }
+                    // Otherwise, remove all types that aren't of the primitive type kind
+                    return removeTypesFromUnionType(type, typeInfo.flags, false);
                 }
                 else {
-                    // The assumed result is false. If check was for a primitive type we can remove that type from the narrowed type.
+                    // Assumed result is false. If check was for a primitive type, remove that primitive type
+                    if (typeInfo) {
+                        return removeTypesFromUnionType(type, typeInfo.flags, true);
+                    }
                     // Otherwise we don't have enough information to do anything.
-                    return checkType === emptyObjectType ? type : subtractPrimitiveTypes(type, checkType.flags);
+                    return type;
                 }
             }
 
