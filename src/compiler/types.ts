@@ -236,6 +236,9 @@ module ts {
         StarExports,
         ExportClause,
         ExportBinding,
+        DefaultFunctionDeclaration,
+        DefaultClassDeclaration,
+        DefaultAssignmentExpression,
 
         // Module references
         ExternalModuleReference,
@@ -904,6 +907,16 @@ module ts {
     export interface ExportClauseDeclaration extends Declaration, ModuleElement {
         namedBindings: NodeArray<Binding>;
         moduleSpecifier?: StringLiteralExpression;
+    }
+
+    export interface DefaultFunctionDeclaration extends FunctionLikeDeclaration, ModuleElement {
+    }
+
+    export interface DefaultClassDeclaration extends ClassDeclaration, ModuleElement {
+    }
+
+    export interface DefaultAssignmentExpression extends Statement, ModuleElement {
+        expression: Expression;
     }
 
     export interface ExportAssignment extends Statement, ModuleElement {

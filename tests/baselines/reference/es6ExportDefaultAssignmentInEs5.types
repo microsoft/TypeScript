@@ -1,0 +1,6 @@
+=== tests/cases/compiler/es6ExportDefaultAssignmentInEs5.ts ===
+
+function b() {
+>b : () => void
+}
+export default b();

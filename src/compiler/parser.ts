@@ -1397,7 +1397,8 @@ module ts {
             var isTokenExport = token === SyntaxKind.ExportKeyword;
 
             nextToken();
-            if (isTokenExport && (token === SyntaxKind.AsteriskToken || token === SyntaxKind.OpenBraceToken)) {
+            if (isTokenExport && (token === SyntaxKind.AsteriskToken ||
+                token === SyntaxKind.OpenBraceToken || token === SyntaxKind.DefaultKeyword)) {
                 // Export is not modifier if it is followed by '*'
                 return false;
             }
@@ -4385,6 +4386,10 @@ module ts {
             setModifiers(node, modifiers);
             parseExpected(SyntaxKind.ClassKeyword);
             node.name = parseIdentifier();
+            return parseClassDeclarationTail(node);
+        }
+
+        function parseClassDeclarationTail(node: ClassDeclaration) {
             node.typeParameters = parseTypeParameters();
             node.heritageClauses = parseHeritageClauses(/*isClassHeritageClause:*/ true);
 
@@ -4726,6 +4731,31 @@ module ts {
             return finishNode(node);
         }
 
+        function parseDefaultHoistableDeclaration(fullStart: number, modifiers: ModifiersArray): DefaultFunctionDeclaration {
+            var node = <DefaultFunctionDeclaration>createNode(SyntaxKind.DefaultFunctionDeclaration, fullStart);
+            setModifiers(node, modifiers);
+            node.asteriskToken = parseOptionalToken(SyntaxKind.AsteriskToken);
+            node.name = parseOptionalIdentifier();
+            fillSignature(SyntaxKind.ColonToken, /*yieldAndGeneratorParameterContext:*/ !!node.asteriskToken, /*requireCompleteParameterList:*/ false, node);
+            node.body = parseFunctionBlockOrSemicolon(!!node.asteriskToken, Diagnostics.or_expected);
+            return finishNode(node);
+        }
+
+        function parseDefaultClassDeclaration(fullStart: number, modifiers: ModifiersArray): DefaultClassDeclaration {
+            var node = <DefaultClassDeclaration>createNode(SyntaxKind.DefaultClassDeclaration, fullStart);
+            setModifiers(node, modifiers);
+            node.name = parseOptionalIdentifier();
+            return parseClassDeclarationTail(node);
+        }
+
+        function parseDefaultAssignmentExpression(fullStart: number, modifiers: ModifiersArray): DefaultAssignmentExpression {
+            var node = <DefaultAssignmentExpression>createNode(SyntaxKind.DefaultAssignmentExpression, fullStart);
+            setModifiers(node, modifiers);
+            node.expression = parseAssignmentExpressionOrHigher();
+            parseSemicolon();
+            return finishNode(node);
+        }
+
         function isLetDeclaration() {
             // It is let declaration if in strict mode or next token is identifier on same line.
             // otherwise it needs to be treated like identifier
@@ -4754,7 +4784,7 @@ module ts {
                     return lookAhead(nextTokenIsIdentifierOrKeywordOrStringLiteral);
                 case SyntaxKind.ExportKeyword:
                     // Check for export assignment or modifier on source element
-                    return lookAhead(nextTokenIsEqualsTokenOrAsteriskOrOpenBraceOrDeclarationStart);
+                    return lookAhead(nextTokenIsEqualsTokenOrAsteriskOrOpenBraceOrDefaultOrDeclarationStart);
                 case SyntaxKind.DeclareKeyword:
                 case SyntaxKind.PublicKeyword:
                 case SyntaxKind.PrivateKeyword:
@@ -4785,9 +4815,13 @@ module ts {
                 token === SyntaxKind.AsteriskToken || token === SyntaxKind.OpenBraceToken;
         }
 
-        function nextTokenIsEqualsTokenOrAsteriskOrOpenBraceOrDeclarationStart() {
+        function nextTokenIsEqualsTokenOrAsteriskOrOpenBraceOrDefaultOrDeclarationStart() {
             nextToken();
-            return token === SyntaxKind.EqualsToken  || token === SyntaxKind.AsteriskToken|| token === SyntaxKind.OpenBraceToken || isDeclarationStart();
+            return token === SyntaxKind.EqualsToken ||
+                token === SyntaxKind.AsteriskToken ||
+                token === SyntaxKind.OpenBraceToken ||
+                token === SyntaxKind.DefaultKeyword ||
+                isDeclarationStart();
         }
 
         function nextTokenIsDeclarationStart() {
@@ -4808,6 +4842,17 @@ module ts {
                 }
                 if (parseOptional(SyntaxKind.OpenBraceToken)) {
                     return parseExportClause(fullStart, modifiers);
+                }
+                if (parseOptional(SyntaxKind.DefaultKeyword)) {
+                    if (parseOptional(SyntaxKind.FunctionKeyword)) {
+                        return parseDefaultHoistableDeclaration(fullStart, modifiers);
+                    }
+                    else if (parseOptional(SyntaxKind.ClassKeyword)) {
+                        return parseDefaultClassDeclaration(fullStart, modifiers);
+                    }
+                    else {
+                        return parseDefaultAssignmentExpression(fullStart, modifiers);
+                    }
                 }
             }
 

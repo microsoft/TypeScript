@@ -1,0 +1,5 @@
+=== tests/cases/compiler/es6ExportDefaultFunctionDeclarationInEs5.ts ===
+
+No type information for this code.export default function b() {
+No type information for this code.}
+No type information for this code.

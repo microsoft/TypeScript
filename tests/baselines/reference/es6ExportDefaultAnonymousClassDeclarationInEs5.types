@@ -1,0 +1,6 @@
+=== tests/cases/compiler/es6ExportDefaultAnonymousClassDeclarationInEs5.ts ===
+
+No type information for this code.export default class {
+No type information for this code.    member = 10;
+No type information for this code.}
+No type information for this code.
