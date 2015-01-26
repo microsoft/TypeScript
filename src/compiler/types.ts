@@ -1286,6 +1286,7 @@ module ts {
         Unwidened           = 0x00020000,  // Unwidened type (is or contains Undefined or Null type)
 
         Intrinsic = Any | String | Number | Boolean | Void | Undefined | Null,
+        Primitive = String | Number | Boolean | Void | Undefined | Null | StringLiteral | Enum,
         StringLike = String | StringLiteral,
         NumberLike = Number | Enum,
         ObjectType = Class | Interface | Reference | Tuple | Anonymous,
