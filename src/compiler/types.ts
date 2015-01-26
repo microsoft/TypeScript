@@ -129,6 +129,8 @@ module ts {
         PublicKeyword,
         StaticKeyword,
         YieldKeyword,
+        FromKeyword,
+        AsKeyword,
         // TypeScript keywords
         AnyKeyword,
         BooleanKeyword,
@@ -234,6 +236,12 @@ module ts {
 
         // Module references
         ExternalModuleReference,
+
+        // Import clauses
+        ImportedDefaultBinding,
+        NameSpaceImport,
+        NamedImports,
+        ImportedBinding,
 
         // Clauses
         CaseClause,
@@ -863,7 +871,19 @@ module ts {
     }
 
     export interface ES6StyleImportDeclaration extends Declaration, ModuleElement {
+        importClause?: ImportClause;
         moduleSpecifier: StringLiteralExpression;
+    }
+
+    export interface Binding extends Node {
+        name: Identifier;
+        identifierName?: Identifier;
+    }
+
+    export interface ImportClause extends Node {
+    }
+
+    export interface NameSpaceImport extends ImportClause, Binding {
     }
 
     export interface ExportAssignment extends Statement, ModuleElement {

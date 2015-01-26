@@ -4521,7 +4521,8 @@ module ts {
         function parseImportDeclaration(fullStart: number, modifiers: ModifiersArray): ImportDeclaration | ES6StyleImportDeclaration {
             parseExpected(SyntaxKind.ImportKeyword);
 
-            if (token === SyntaxKind.StringLiteral) {
+            if (token === SyntaxKind.StringLiteral ||
+                token === SyntaxKind.AsteriskToken) {
                 return parseES6StyleImportDeclaration(fullStart, modifiers);
             }
             var node = <ImportDeclaration>createNode(SyntaxKind.ImportDeclaration, fullStart);
@@ -4563,8 +4564,17 @@ module ts {
             var node = <ES6StyleImportDeclaration>createNode(SyntaxKind.ES6StyleImportDeclaration, fullStart);
             setModifiers(node, modifiers);
 
+            // Parse bindings or module specifier
             // ImportDeclaration:
+            //  import ImportClause FromClause ;
             //  import ModuleSpecifier ;
+            // FromClause:
+            //  from ModuleSpecifier
+            if (token !== SyntaxKind.StringLiteral) {
+                // ImportDeclaration:
+                node.importClause = parseImportClause();
+                parseExpected(SyntaxKind.FromKeyword);
+            }
             node.moduleSpecifier = parseModuleSpecifier();
             parseSemicolon();
             return finishNode(node);
@@ -4584,6 +4594,25 @@ module ts {
             // that features like 'find refs' will look inside this file when search for its name.
             var moduleSpecifier = <StringLiteralExpression>parseLiteralNode(/*internName*/ true);
             return moduleSpecifier;
+        }
+
+        function parseImportClause(): ImportClause {
+            //ImportClause:
+            //  ImportedDefaultBinding
+            //  NameSpaceImport
+            //  NamedImports
+            //  ImportedDefaultBinding, NameSpaceImport
+            //  ImportedDefaultBinding, NamedImports
+
+            if (token === SyntaxKind.AsteriskToken) {
+                // NameSpaceImport:
+                //  * as ImportedBinding
+                var nameSpaceImport = <NameSpaceImport>createNode(SyntaxKind.NameSpaceImport);
+                parseExpected(SyntaxKind.AsteriskToken);
+                parseExpected(SyntaxKind.AsKeyword);
+                nameSpaceImport.name = parseIdentifier();
+                return finishNode(nameSpaceImport);
+            }
         }
 
         function parseExportAssignmentTail(fullStart: number, modifiers: ModifiersArray): ExportAssignment {
@@ -4615,6 +4644,8 @@ module ts {
                     // Not true keywords so ensure an identifier follows
                     return lookAhead(nextTokenIsIdentifierOrKeyword);
                 case SyntaxKind.ImportKeyword:
+                    // Not true keywords so ensure an identifier follows or is string literal or asterisk
+                    return lookAhead(nextTokenIsIdentifierOrKeywordOrStringLiteralOrAsterisk) ;
                 case SyntaxKind.ModuleKeyword:
                     // Not a true keyword so ensure an identifier or string literal follows
                     return lookAhead(nextTokenIsIdentifierOrKeywordOrStringLiteral);
@@ -4643,6 +4674,12 @@ module ts {
         function nextTokenIsIdentifierOrKeywordOrStringLiteral() {
             nextToken();
             return isIdentifierOrKeyword() || token === SyntaxKind.StringLiteral;
+        }
+
+        function nextTokenIsIdentifierOrKeywordOrStringLiteralOrAsterisk() {
+            nextToken();
+            return isIdentifierOrKeyword() || token === SyntaxKind.StringLiteral ||
+                token === SyntaxKind.AsteriskToken;
         }
 
         function nextTokenIsEqualsTokenOrDeclarationStart() {
