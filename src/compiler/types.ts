@@ -234,6 +234,8 @@ module ts {
         ExportAssignment,
         ES6StyleImportDeclaration,
         StarExports,
+        ExportClause,
+        ExportBinding,
 
         // Module references
         ExternalModuleReference,
@@ -897,6 +899,11 @@ module ts {
 
     export interface StarExports extends Declaration, ModuleElement {
         moduleSpecifier: StringLiteralExpression;
+    }
+    
+    export interface ExportClauseDeclaration extends Declaration, ModuleElement {
+        namedBindings: NodeArray<Binding>;
+        moduleSpecifier?: StringLiteralExpression;
     }
 
     export interface ExportAssignment extends Statement, ModuleElement {

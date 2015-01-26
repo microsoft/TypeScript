@@ -288,6 +288,7 @@ module ts {
         TupleElementTypes,       // Element types in tuple element type list
         HeritageClauses,         // Heritage clauses for a class or interface declaration.
         NamedImportBindings,     // Named import bindings
+        NamedExportBindings,     // Named export bindings
         Count                    // Number of parsing contexts
     }
 
@@ -320,6 +321,7 @@ module ts {
             case ParsingContext.TupleElementTypes:      return Diagnostics.Type_expected;
             case ParsingContext.HeritageClauses:        return Diagnostics.Unexpected_token_expected;
             case ParsingContext.NamedImportBindings:    return Diagnostics.Identifier_expected;
+            case ParsingContext.NamedExportBindings:    return Diagnostics.Identifier_expected;
         }
     };
 
@@ -1395,7 +1397,7 @@ module ts {
             var isTokenExport = token === SyntaxKind.ExportKeyword;
 
             nextToken();
-            if (isTokenExport && token === SyntaxKind.AsteriskToken) {
+            if (isTokenExport && (token === SyntaxKind.AsteriskToken || token === SyntaxKind.OpenBraceToken)) {
                 // Export is not modifier if it is followed by '*'
                 return false;
             }
@@ -1459,6 +1461,7 @@ module ts {
                 case ParsingContext.HeritageClauses:
                     return isHeritageClause();
                 case ParsingContext.NamedImportBindings:
+                case ParsingContext.NamedExportBindings:
                     return isIdentifier();
             }
 
@@ -1497,6 +1500,7 @@ module ts {
                 case ParsingContext.ObjectLiteralMembers:
                 case ParsingContext.ObjectBindingElements:
                 case ParsingContext.NamedImportBindings:
+                case ParsingContext.NamedExportBindings:
                     return token === SyntaxKind.CloseBraceToken;
                 case ParsingContext.SwitchClauseStatements:
                     return token === SyntaxKind.CloseBraceToken || token === SyntaxKind.CaseKeyword || token === SyntaxKind.DefaultKeyword;
@@ -1561,6 +1565,10 @@ module ts {
             }
 
             return false;
+        }
+
+        function isParsingContext(kind: ParsingContext) {
+            return !!(parsingContext & (1 << kind));
         }
 
         // Parses a list of elements
@@ -4670,7 +4678,8 @@ module ts {
         }
 
         function parseBinding(): Binding {
-            var node = <Binding>createNode(SyntaxKind.ImportedBinding);
+            Debug.assert(isParsingContext(ParsingContext.NamedImportBindings) || isParsingContext(ParsingContext.NamedExportBindings));
+            var node = <Binding>createNode(isParsingContext(ParsingContext.NamedImportBindings) ? SyntaxKind.ImportedBinding : SyntaxKind.ExportBinding);
             // ImportSpecifier:
             //  ImportedBinding
             //  IdentifierName as ImportedBinding
@@ -4703,6 +4712,20 @@ module ts {
             return finishNode(node);
         }
 
+        function parseExportClause(fullStart: number, modifiers: ModifiersArray): ExportClauseDeclaration {
+            var node = <ExportClauseDeclaration>createNode(SyntaxKind.ExportClause, fullStart);
+            setModifiers(node, modifiers);
+
+            node.namedBindings = parseDelimitedList(ParsingContext.NamedExportBindings, parseBinding);
+            parseExpected(SyntaxKind.CloseBraceToken);
+
+            if (parseOptional(SyntaxKind.FromKeyword)) {
+                node.moduleSpecifier = parseModuleSpecifier();
+            }
+            parseSemicolon();
+            return finishNode(node);
+        }
+
         function isLetDeclaration() {
             // It is let declaration if in strict mode or next token is identifier on same line.
             // otherwise it needs to be treated like identifier
@@ -4731,7 +4754,7 @@ module ts {
                     return lookAhead(nextTokenIsIdentifierOrKeywordOrStringLiteral);
                 case SyntaxKind.ExportKeyword:
                     // Check for export assignment or modifier on source element
-                    return lookAhead(nextTokenIsEqualsTokenOrAsteriskOrDeclarationStart);
+                    return lookAhead(nextTokenIsEqualsTokenOrAsteriskOrOpenBraceOrDeclarationStart);
                 case SyntaxKind.DeclareKeyword:
                 case SyntaxKind.PublicKeyword:
                 case SyntaxKind.PrivateKeyword:
@@ -4762,9 +4785,9 @@ module ts {
                 token === SyntaxKind.AsteriskToken || token === SyntaxKind.OpenBraceToken;
         }
 
-        function nextTokenIsEqualsTokenOrAsteriskOrDeclarationStart() {
+        function nextTokenIsEqualsTokenOrAsteriskOrOpenBraceOrDeclarationStart() {
             nextToken();
-            return token === SyntaxKind.EqualsToken  || token === SyntaxKind.AsteriskToken|| isDeclarationStart();
+            return token === SyntaxKind.EqualsToken  || token === SyntaxKind.AsteriskToken|| token === SyntaxKind.OpenBraceToken || isDeclarationStart();
         }
 
         function nextTokenIsDeclarationStart() {
@@ -4782,6 +4805,9 @@ module ts {
                 }
                 if (parseOptional(SyntaxKind.AsteriskToken)) {
                     return parseStarExports(fullStart, modifiers);
+                }
+                if (parseOptional(SyntaxKind.OpenBraceToken)) {
+                    return parseExportClause(fullStart, modifiers);
                 }
             }
 
