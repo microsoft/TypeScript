@@ -230,6 +230,7 @@ module ts {
         ModuleBlock,
         ImportDeclaration,
         ExportAssignment,
+        ES6StyleImportDeclaration,
 
         // Module references
         ExternalModuleReference,
@@ -859,6 +860,10 @@ module ts {
 
     export interface ExternalModuleReference extends Node {
         expression?: Expression;
+    }
+
+    export interface ES6StyleImportDeclaration extends Declaration, ModuleElement {
+        moduleSpecifier: StringLiteralExpression;
     }
 
     export interface ExportAssignment extends Statement, ModuleElement {

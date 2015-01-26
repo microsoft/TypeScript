@@ -1511,7 +1511,6 @@ module ts {
                     return token === SyntaxKind.GreaterThanToken || token === SyntaxKind.OpenParenToken;
                 case ParsingContext.HeritageClauses:
                     return token === SyntaxKind.OpenBraceToken || token === SyntaxKind.CloseBraceToken;
-
             }
         }
 
@@ -4519,10 +4518,14 @@ module ts {
             return nextToken() === SyntaxKind.OpenParenToken;
         }
 
-        function parseImportDeclaration(fullStart: number, modifiers: ModifiersArray): ImportDeclaration {
+        function parseImportDeclaration(fullStart: number, modifiers: ModifiersArray): ImportDeclaration | ES6StyleImportDeclaration {
+            parseExpected(SyntaxKind.ImportKeyword);
+
+            if (token === SyntaxKind.StringLiteral) {
+                return parseES6StyleImportDeclaration(fullStart, modifiers);
+            }
             var node = <ImportDeclaration>createNode(SyntaxKind.ImportDeclaration, fullStart);
             setModifiers(node, modifiers);
-            parseExpected(SyntaxKind.ImportKeyword);
             node.name = parseIdentifier();
             parseExpected(SyntaxKind.EqualsToken);
             node.moduleReference = parseModuleReference();
@@ -4556,6 +4559,33 @@ module ts {
             return finishNode(node);
         }
 
+        function parseES6StyleImportDeclaration(fullStart: number, modifiers: ModifiersArray): ES6StyleImportDeclaration {
+            var node = <ES6StyleImportDeclaration>createNode(SyntaxKind.ES6StyleImportDeclaration, fullStart);
+            setModifiers(node, modifiers);
+
+            // ImportDeclaration:
+            //  import ModuleSpecifier ;
+            node.moduleSpecifier = parseModuleSpecifier();
+            parseSemicolon();
+            return finishNode(node);
+        }
+
+        function parseModuleSpecifier(): StringLiteralExpression {
+            // ModuleSpecifier:
+            //  StringLiteral
+
+            if (token !== SyntaxKind.StringLiteral) {
+                parseErrorAtCurrentToken(Diagnostics.String_literal_expected);
+                nextToken();
+                return;
+            }
+
+            // Ensure the string being required is in our 'identifier' table.  This will ensure 
+            // that features like 'find refs' will look inside this file when search for its name.
+            var moduleSpecifier = <StringLiteralExpression>parseLiteralNode(/*internName*/ true);
+            return moduleSpecifier;
+        }
+
         function parseExportAssignmentTail(fullStart: number, modifiers: ModifiersArray): ExportAssignment {
             var node = <ExportAssignment>createNode(SyntaxKind.ExportAssignment, fullStart);
             setModifiers(node, modifiers);
@@ -4581,10 +4611,10 @@ module ts {
                 case SyntaxKind.ClassKeyword:
                 case SyntaxKind.InterfaceKeyword:
                 case SyntaxKind.EnumKeyword:
-                case SyntaxKind.ImportKeyword:
                 case SyntaxKind.TypeKeyword:
                     // Not true keywords so ensure an identifier follows
                     return lookAhead(nextTokenIsIdentifierOrKeyword);
+                case SyntaxKind.ImportKeyword:
                 case SyntaxKind.ModuleKeyword:
                     // Not a true keyword so ensure an identifier or string literal follows
                     return lookAhead(nextTokenIsIdentifierOrKeywordOrStringLiteral);
