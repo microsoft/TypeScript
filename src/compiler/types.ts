@@ -881,6 +881,10 @@ module ts {
     }
 
     export interface ImportClause extends Node {
+        defaultBinding?: Binding;
+    }
+
+    export interface ImportedDefaultBinding extends ImportClause, Binding {
     }
 
     export interface NameSpaceImport extends ImportClause, Binding {

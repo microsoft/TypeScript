@@ -1,0 +1,21 @@
+=== tests/cases/compiler/es6ImportDefaultBindingFollowedWithNamedImportInEs5_0.ts ===
+
+export var a = 10;
+>a : number
+
+export var x = a;
+>x : number
+>a : number
+
+export var m = a;
+>m : number
+>a : number
+
+=== tests/cases/compiler/es6ImportDefaultBindingFollowedWithNamedImportInEs5_1.ts ===
+import defaultBinding, { } from "es6ImportDefaultBindingFollowedWithNamedImportInEs5_0";
+No type information for this code.import defaultBinding, { a } from "es6ImportDefaultBindingFollowedWithNamedImportInEs5_0";
+No type information for this code.import defaultBinding, { a as b } from "es6ImportDefaultBindingFollowedWithNamedImportInEs5_0";
+No type information for this code.import defaultBinding, { x, a as y } from "es6ImportDefaultBindingFollowedWithNamedImportInEs5_0";
+No type information for this code.import defaultBinding, { x as z,  } from "es6ImportDefaultBindingFollowedWithNamedImportInEs5_0";
+No type information for this code.import defaultBinding, { m,  } from "es6ImportDefaultBindingFollowedWithNamedImportInEs5_0";
+No type information for this code.

@@ -4523,12 +4523,19 @@ module ts {
             return nextToken() === SyntaxKind.OpenParenToken;
         }
 
+        function nextTokenIsCommaOrFromKeyword() {
+            nextToken();
+            return token === SyntaxKind.CommaToken ||
+                token === SyntaxKind.FromKeyword;
+        }
+
         function parseImportDeclaration(fullStart: number, modifiers: ModifiersArray): ImportDeclaration | ES6StyleImportDeclaration {
             parseExpected(SyntaxKind.ImportKeyword);
 
             if (token === SyntaxKind.StringLiteral ||
                 token === SyntaxKind.AsteriskToken ||
-                token === SyntaxKind.OpenBraceToken) {
+                token === SyntaxKind.OpenBraceToken ||
+                (isIdentifier() && lookAhead(nextTokenIsCommaOrFromKeyword))) {
                 return parseES6StyleImportDeclaration(fullStart, modifiers);
             }
             var node = <ImportDeclaration>createNode(SyntaxKind.ImportDeclaration, fullStart);
@@ -4610,10 +4617,26 @@ module ts {
             //  ImportedDefaultBinding, NameSpaceImport
             //  ImportedDefaultBinding, NamedImports
 
+            if (isIdentifier()) {
+                // ImportedDefaultBinding:
+                //  ImportedBinding
+                var defaultBinding = <ImportedDefaultBinding>createNode(SyntaxKind.ImportedDefaultBinding);
+                defaultBinding.name = parseIdentifier();
+                defaultBinding = finishNode(defaultBinding);
+                if (token !== SyntaxKind.CommaToken) {
+                    return defaultBinding;
+                }
+                else {
+                    // Consume comma token and parse named import/namespace import
+                    nextToken();
+                }
+            }
+
             if (token === SyntaxKind.AsteriskToken) {
                 // NameSpaceImport:
                 //  * as ImportedBinding
-                var nameSpaceImport = <NameSpaceImport>createNode(SyntaxKind.NameSpaceImport);
+                var nameSpaceImport = <NameSpaceImport>createNode(SyntaxKind.NameSpaceImport, defaultBinding ? defaultBinding.pos : undefined);
+                nameSpaceImport.defaultBinding = defaultBinding;
                 parseExpected(SyntaxKind.AsteriskToken);
                 parseExpected(SyntaxKind.AsKeyword);
                 nameSpaceImport.name = parseIdentifier();
@@ -4622,7 +4645,8 @@ module ts {
             else {
                 // NameSpaceImport:
                 //  * as ImportedBinding
-                var namedImports = <NamedImports>createNode(SyntaxKind.NamedImports);
+                var namedImports = <NamedImports>createNode(SyntaxKind.NamedImports, defaultBinding ? defaultBinding.pos : undefined);
+                namedImports.defaultBinding = defaultBinding;
 
                 // NamedImports:
                 //  { }
