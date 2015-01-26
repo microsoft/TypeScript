@@ -5684,6 +5684,11 @@ module ts {
             var token = SyntaxKind.Unknown;
             var lastNonTriviaToken = SyntaxKind.Unknown;
 
+            // Empty out the template stack for reuse.
+            while (templateStack.length > 0) {
+                templateStack.pop();
+            }
+
             // If we're in a string literal, then prepend: "\
             // (and a newline).  That way when we lex we'll think we're still in a string literal.
             //
@@ -5703,21 +5708,15 @@ module ts {
                     offset = 3;
                     break;
                 case EndOfLineState.InTemplateHeadOrNoSubstitutionTemplate:
-                    if (syntacticClassifierAbsent) {
-                        text = "`\n" + text;
-                        offset = 2;
-                    }
+                    text = "`\n" + text;
+                    offset = 2;
                     break;
                 case EndOfLineState.InTemplateMiddleOrTail:
-                    if (syntacticClassifierAbsent) {
-                        text = "}\n" + text;
-                        offset = 2;
-                    }
+                    text = "}\n" + text;
+                    offset = 2;
                     // fallthrough
                 case EndOfLineState.InTemplateSubstitutionPosition:
-                    if (syntacticClassifierAbsent) {
-                        templateStack = [SyntaxKind.TemplateHead];
-                    }
+                    templateStack.push(SyntaxKind.TemplateHead);
                     break;
             }
 
@@ -5748,11 +5747,6 @@ module ts {
             // weak heuristic where we track < and > tokens.  It's a weak heuristic, but should
             // work well enough in practice.
             var angleBracketStack = 0;
-
-            // Empty out the template stack for reuse.
-            while (templateStack.length > 0) {
-                templateStack.pop();
-            }
 
             do {
                 token = scanner.scan();
@@ -5795,17 +5789,17 @@ module ts {
                             token = SyntaxKind.Identifier;
                         }
                     }
-                    else if (token === SyntaxKind.TemplateHead && syntacticClassifierAbsent) {
+                    else if (token === SyntaxKind.TemplateHead) {
                         templateStack.push(token);
                     }
-                    else if (token === SyntaxKind.OpenBraceToken && syntacticClassifierAbsent) {
+                    else if (token === SyntaxKind.OpenBraceToken) {
                         // If we don't have anything on the template stack,
                         // then we aren't trying to keep track of a previously scanned template head.
                         if (templateStack.length > 0) {
                             templateStack.push(token);
                         }
                     }
-                    else if (token === SyntaxKind.CloseBraceToken && syntacticClassifierAbsent) {
+                    else if (token === SyntaxKind.CloseBraceToken) {
                         // If we don't have anything on the template stack,
                         // then we aren't trying to keep track of a previously scanned template head.
                         if (templateStack.length > 0) {
@@ -5842,7 +5836,7 @@ module ts {
                 var start = scanner.getTokenPos();
                 var end = scanner.getTextPos();
 
-                addResult(end - start, classFromKind(token, syntacticClassifierAbsent));
+                addResult(end - start, classFromKind(token));
 
                 if (end >= text.length) {
                     if (token === SyntaxKind.StringLiteral) {
@@ -5871,7 +5865,7 @@ module ts {
                             result.finalLexState = EndOfLineState.InMultiLineCommentTrivia;
                         }
                     }
-                    else if (isTemplateLiteralKind(token) && syntacticClassifierAbsent) {
+                    else if (isTemplateLiteralKind(token)) {
                         if (scanner.isUnterminated()) {
                             if (token === SyntaxKind.TemplateTail) {
                                 result.finalLexState = EndOfLineState.InTemplateMiddleOrTail;
@@ -5964,7 +5958,7 @@ module ts {
             return token >= SyntaxKind.FirstKeyword && token <= SyntaxKind.LastKeyword;
         }
 
-        function classFromKind(token: SyntaxKind, syntacticClassifierAbsent?: boolean) {
+        function classFromKind(token: SyntaxKind) {
             if (isKeyword(token)) {
                 return TokenClass.Keyword;
             }
@@ -5989,9 +5983,8 @@ module ts {
                     return TokenClass.Whitespace;
                 case SyntaxKind.Identifier:
                 default:
-                    // Only give a classification if nothing will more accurately classify.
-                    if (syntacticClassifierAbsent && isTemplateLiteralKind(token)) {
-                        return TokenClass.StringLiteral; // should make a TemplateLiteral
+                    if (isTemplateLiteralKind(token)) {
+                        return TokenClass.StringLiteral; // maybe make a TemplateLiteral
                     }
                     return TokenClass.Identifier;
             }
