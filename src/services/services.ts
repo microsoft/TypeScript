@@ -5641,6 +5641,10 @@ module ts {
         noRegexTable[SyntaxKind.TrueKeyword] = true;
         noRegexTable[SyntaxKind.FalseKeyword] = true;
 
+        // Just a stack of TemplateHeads and OpenCurlyBraces, used
+        // to perform rudimentary classification on templates.
+        var templateStack: SyntaxKind[] = [];
+
         function isAccessibilityModifier(kind: SyntaxKind) {
             switch (kind) {
                 case SyntaxKind.PublicKeyword:
@@ -5679,7 +5683,6 @@ module ts {
             var offset = 0;
             var token = SyntaxKind.Unknown;
             var lastNonTriviaToken = SyntaxKind.Unknown;
-            var templateStack: SyntaxKind[];
 
             // If we're in a string literal, then prepend: "\
             // (and a newline).  That way when we lex we'll think we're still in a string literal.
@@ -5746,6 +5749,11 @@ module ts {
             // work well enough in practice.
             var angleBracketStack = 0;
 
+            // Empty out the template stack for reuse.
+            while (templateStack.length > 0) {
+                templateStack.pop();
+            }
+
             do {
                 token = scanner.scan();
 
@@ -5788,24 +5796,19 @@ module ts {
                         }
                     }
                     else if (token === SyntaxKind.TemplateHead && syntacticClassifierAbsent) {
-                        if (!templateStack) {
-                            templateStack = [token];
-                        }
-                        else {
-                            templateStack.push(token);
-                        }
+                        templateStack.push(token);
                     }
                     else if (token === SyntaxKind.OpenBraceToken && syntacticClassifierAbsent) {
                         // If we don't have anything on the template stack,
                         // then we aren't trying to keep track of a previously scanned template head.
-                        if (templateStack && templateStack.length > 0) {
+                        if (templateStack.length > 0) {
                             templateStack.push(token);
                         }
                     }
                     else if (token === SyntaxKind.CloseBraceToken && syntacticClassifierAbsent) {
                         // If we don't have anything on the template stack,
                         // then we aren't trying to keep track of a previously scanned template head.
-                        if (templateStack && templateStack.length > 0) {
+                        if (templateStack.length > 0) {
                             var lastTemplateStackToken = lastOrUndefined(templateStack);
 
                             if (lastTemplateStackToken === SyntaxKind.TemplateHead) {
@@ -5881,7 +5884,7 @@ module ts {
                             }
                         }
                     }
-                    else if (templateStack && templateStack.length > 0 && lastOrUndefined(templateStack) === SyntaxKind.TemplateHead) {
+                    else if (templateStack.length > 0 && lastOrUndefined(templateStack) === SyntaxKind.TemplateHead) {
                         result.finalLexState = EndOfLineState.InTemplateSubstitutionPosition;
                     }
                 }
