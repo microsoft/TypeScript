@@ -835,6 +835,13 @@ module ts {
         return SyntaxKind.FirstTriviaToken <= token && token <= SyntaxKind.LastTriviaToken;
     }
 
+    export function isESSymbolTypeNode(node: Node): boolean {
+        return node.kind === SyntaxKind.TypeReference &&
+            (<TypeReferenceNode>node).typeArguments === undefined &&
+            (<TypeReferenceNode>node).typeName.kind === SyntaxKind.Identifier &&
+            (<Identifier>(<TypeReferenceNode>node).typeName).text === "Symbol";
+    }
+
     export function isModifier(token: SyntaxKind): boolean {
         switch (token) {
             case SyntaxKind.PublicKeyword:

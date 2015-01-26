@@ -67,7 +67,7 @@
         "category": "Error",
         "code": 1022
     },
-    "An index signature parameter type must be 'string' or 'number'.": {
+    "An index signature parameter type must be 'string', 'number', or 'Symbol'.": {
         "category": "Error",
         "code": 1023
     },
@@ -578,6 +578,11 @@
     "A parameter property may not be a binding pattern.": {
         "category": "Error",
         "code": 1187
+    },
+    "'Symbol' indexers are only available when targeting ECMAScript 6 and higher.": {
+        "category": "Error",
+        "code": 1188,
+        "isEarly": true
     },
 
     "Duplicate identifier '{0}'.": {

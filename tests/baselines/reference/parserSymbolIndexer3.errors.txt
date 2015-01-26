@@ -1,0 +1,9 @@
+tests/cases/conformance/parser/ecmascript6/Symbols/parserSymbolIndexer3.ts(2,5): error TS1145: Modifiers not permitted on index signature members.
+
+
+==== tests/cases/conformance/parser/ecmascript6/Symbols/parserSymbolIndexer3.ts (1 errors) ====
+    class C {
+        static [s: Symbol]: string;
+        ~~~~~~
+!!! error TS1145: Modifiers not permitted on index signature members.
+    }
