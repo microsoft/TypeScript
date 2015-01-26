@@ -287,6 +287,8 @@ module ts {
         TypeArguments,           // Type arguments in type argument list
         TupleElementTypes,       // Element types in tuple element type list
         HeritageClauses,         // Heritage clauses for a class or interface declaration.
+        NamedImportBindings,     // Named import bindings
+        NamedExportBindings,     // Named export bindings
         Count                    // Number of parsing contexts
     }
 
@@ -306,7 +308,7 @@ module ts {
             case ParsingContext.TypeMembers:            return Diagnostics.Property_or_signature_expected;
             case ParsingContext.ClassMembers:           return Diagnostics.Unexpected_token_A_constructor_method_accessor_or_property_was_expected;
             case ParsingContext.EnumMembers:            return Diagnostics.Enum_member_expected;
-            case ParsingContext.TypeReferences:     return Diagnostics.Type_reference_expected;
+            case ParsingContext.TypeReferences:         return Diagnostics.Type_reference_expected;
             case ParsingContext.VariableDeclarations:   return Diagnostics.Variable_declaration_expected;
             case ParsingContext.ObjectBindingElements:  return Diagnostics.Property_destructuring_pattern_expected;
             case ParsingContext.ArrayBindingElements:   return Diagnostics.Array_element_destructuring_pattern_expected;
@@ -318,6 +320,8 @@ module ts {
             case ParsingContext.TypeArguments:          return Diagnostics.Type_argument_expected;
             case ParsingContext.TupleElementTypes:      return Diagnostics.Type_expected;
             case ParsingContext.HeritageClauses:        return Diagnostics.Unexpected_token_expected;
+            case ParsingContext.NamedImportBindings:    return Diagnostics.Identifier_expected;
+            case ParsingContext.NamedExportBindings:    return Diagnostics.Identifier_expected;
         }
     };
 
@@ -1390,7 +1394,14 @@ module ts {
                 return nextToken() === SyntaxKind.EnumKeyword;
             }
 
+            var isTokenExport = token === SyntaxKind.ExportKeyword;
+
             nextToken();
+            if (isTokenExport && (token === SyntaxKind.AsteriskToken ||
+                token === SyntaxKind.OpenBraceToken || token === SyntaxKind.DefaultKeyword)) {
+                // Export is not modifier if it is followed by '*'
+                return false;
+            }
             return canFollowModifier();
         }
 
@@ -1450,6 +1461,9 @@ module ts {
                     return token === SyntaxKind.CommaToken || isStartOfType();
                 case ParsingContext.HeritageClauses:
                     return isHeritageClause();
+                case ParsingContext.NamedImportBindings:
+                case ParsingContext.NamedExportBindings:
+                    return isIdentifier();
             }
 
             Debug.fail("Non-exhaustive case in 'isListElement'.");
@@ -1486,6 +1500,8 @@ module ts {
                 case ParsingContext.EnumMembers:
                 case ParsingContext.ObjectLiteralMembers:
                 case ParsingContext.ObjectBindingElements:
+                case ParsingContext.NamedImportBindings:
+                case ParsingContext.NamedExportBindings:
                     return token === SyntaxKind.CloseBraceToken;
                 case ParsingContext.SwitchClauseStatements:
                     return token === SyntaxKind.CloseBraceToken || token === SyntaxKind.CaseKeyword || token === SyntaxKind.DefaultKeyword;
@@ -1511,7 +1527,6 @@ module ts {
                     return token === SyntaxKind.GreaterThanToken || token === SyntaxKind.OpenParenToken;
                 case ParsingContext.HeritageClauses:
                     return token === SyntaxKind.OpenBraceToken || token === SyntaxKind.CloseBraceToken;
-
             }
         }
 
@@ -1551,6 +1566,10 @@ module ts {
             }
 
             return false;
+        }
+
+        function isParsingContext(kind: ParsingContext) {
+            return !!(parsingContext & (1 << kind));
         }
 
         // Parses a list of elements
@@ -4367,6 +4386,10 @@ module ts {
             setModifiers(node, modifiers);
             parseExpected(SyntaxKind.ClassKeyword);
             node.name = parseIdentifier();
+            return parseClassDeclarationTail(node);
+        }
+
+        function parseClassDeclarationTail(node: ClassDeclaration) {
             node.typeParameters = parseTypeParameters();
             node.heritageClauses = parseHeritageClauses(/*isClassHeritageClause:*/ true);
 
@@ -4519,10 +4542,23 @@ module ts {
             return nextToken() === SyntaxKind.OpenParenToken;
         }
 
-        function parseImportDeclaration(fullStart: number, modifiers: ModifiersArray): ImportDeclaration {
+        function nextTokenIsCommaOrFromKeyword() {
+            nextToken();
+            return token === SyntaxKind.CommaToken ||
+                token === SyntaxKind.FromKeyword;
+        }
+
+        function parseImportDeclaration(fullStart: number, modifiers: ModifiersArray): ImportDeclaration | ES6StyleImportDeclaration {
+            parseExpected(SyntaxKind.ImportKeyword);
+
+            if (token === SyntaxKind.StringLiteral ||
+                token === SyntaxKind.AsteriskToken ||
+                token === SyntaxKind.OpenBraceToken ||
+                (isIdentifier() && lookAhead(nextTokenIsCommaOrFromKeyword))) {
+                return parseES6StyleImportDeclaration(fullStart, modifiers);
+            }
             var node = <ImportDeclaration>createNode(SyntaxKind.ImportDeclaration, fullStart);
             setModifiers(node, modifiers);
-            parseExpected(SyntaxKind.ImportKeyword);
             node.name = parseIdentifier();
             parseExpected(SyntaxKind.EqualsToken);
             node.moduleReference = parseModuleReference();
@@ -4556,10 +4592,166 @@ module ts {
             return finishNode(node);
         }
 
+        function parseES6StyleImportDeclaration(fullStart: number, modifiers: ModifiersArray): ES6StyleImportDeclaration {
+            var node = <ES6StyleImportDeclaration>createNode(SyntaxKind.ES6StyleImportDeclaration, fullStart);
+            setModifiers(node, modifiers);
+
+            // Parse bindings or module specifier
+            // ImportDeclaration:
+            //  import ImportClause FromClause ;
+            //  import ModuleSpecifier ;
+            // FromClause:
+            //  from ModuleSpecifier
+            if (token !== SyntaxKind.StringLiteral) {
+                // ImportDeclaration:
+                node.importClause = parseImportClause();
+                parseExpected(SyntaxKind.FromKeyword);
+            }
+            node.moduleSpecifier = parseModuleSpecifier();
+            parseSemicolon();
+            return finishNode(node);
+        }
+
+        function parseModuleSpecifier(): StringLiteralExpression {
+            // ModuleSpecifier:
+            //  StringLiteral
+
+            if (token !== SyntaxKind.StringLiteral) {
+                parseErrorAtCurrentToken(Diagnostics.String_literal_expected);
+                nextToken();
+                return;
+            }
+
+            // Ensure the string being required is in our 'identifier' table.  This will ensure 
+            // that features like 'find refs' will look inside this file when search for its name.
+            var moduleSpecifier = <StringLiteralExpression>parseLiteralNode(/*internName*/ true);
+            return moduleSpecifier;
+        }
+
+        function parseImportClause(): ImportClause {
+            //ImportClause:
+            //  ImportedDefaultBinding
+            //  NameSpaceImport
+            //  NamedImports
+            //  ImportedDefaultBinding, NameSpaceImport
+            //  ImportedDefaultBinding, NamedImports
+
+            if (isIdentifier()) {
+                // ImportedDefaultBinding:
+                //  ImportedBinding
+                var defaultBinding = <ImportedDefaultBinding>createNode(SyntaxKind.ImportedDefaultBinding);
+                defaultBinding.name = parseIdentifier();
+                defaultBinding = finishNode(defaultBinding);
+                if (token !== SyntaxKind.CommaToken) {
+                    return defaultBinding;
+                }
+                else {
+                    // Consume comma token and parse named import/namespace import
+                    nextToken();
+                }
+            }
+
+            if (token === SyntaxKind.AsteriskToken) {
+                // NameSpaceImport:
+                //  * as ImportedBinding
+                var nameSpaceImport = <NameSpaceImport>createNode(SyntaxKind.NameSpaceImport, defaultBinding ? defaultBinding.pos : undefined);
+                nameSpaceImport.defaultBinding = defaultBinding;
+                parseExpected(SyntaxKind.AsteriskToken);
+                parseExpected(SyntaxKind.AsKeyword);
+                nameSpaceImport.name = parseIdentifier();
+                return finishNode(nameSpaceImport);
+            }
+            else {
+                // NameSpaceImport:
+                //  * as ImportedBinding
+                var namedImports = <NamedImports>createNode(SyntaxKind.NamedImports, defaultBinding ? defaultBinding.pos : undefined);
+                namedImports.defaultBinding = defaultBinding;
+
+                // NamedImports:
+                //  { }
+                //  { ImportsList }
+                //  { ImportsList, }
+
+                // ImportsList:
+                //  ImportSpecifier
+                //  ImportsList, ImportSpecifier
+                parseExpected(SyntaxKind.OpenBraceToken);
+                namedImports.namedBindings = parseDelimitedList(ParsingContext.NamedImportBindings, parseBinding);
+                parseExpected(SyntaxKind.CloseBraceToken);
+                return finishNode(namedImports);
+            }
+        }
+
+        function parseBinding(): Binding {
+            Debug.assert(isParsingContext(ParsingContext.NamedImportBindings) || isParsingContext(ParsingContext.NamedExportBindings));
+            var node = <Binding>createNode(isParsingContext(ParsingContext.NamedImportBindings) ? SyntaxKind.ImportedBinding : SyntaxKind.ExportBinding);
+            // ImportSpecifier:
+            //  ImportedBinding
+            //  IdentifierName as ImportedBinding
+            var name = parseIdentifier();
+            if (parseOptional(SyntaxKind.AsKeyword)) {
+                node.identifierName = name;
+                node.name = parseIdentifier();
+            }
+            else {
+                node.name = name;
+            }
+
+            return finishNode(node);
+        }
+
         function parseExportAssignmentTail(fullStart: number, modifiers: ModifiersArray): ExportAssignment {
             var node = <ExportAssignment>createNode(SyntaxKind.ExportAssignment, fullStart);
             setModifiers(node, modifiers);
             node.exportName = parseIdentifier();
+            parseSemicolon();
+            return finishNode(node);
+        }
+
+        function parseStarExports(fullStart: number, modifiers: ModifiersArray): StarExports {
+            var node = <StarExports>createNode(SyntaxKind.StarExports, fullStart);
+            setModifiers(node, modifiers);
+            parseExpected(SyntaxKind.FromKeyword);
+            node.moduleSpecifier = parseModuleSpecifier();
+            parseSemicolon();
+            return finishNode(node);
+        }
+
+        function parseExportClause(fullStart: number, modifiers: ModifiersArray): ExportClauseDeclaration {
+            var node = <ExportClauseDeclaration>createNode(SyntaxKind.ExportClause, fullStart);
+            setModifiers(node, modifiers);
+
+            node.namedBindings = parseDelimitedList(ParsingContext.NamedExportBindings, parseBinding);
+            parseExpected(SyntaxKind.CloseBraceToken);
+
+            if (parseOptional(SyntaxKind.FromKeyword)) {
+                node.moduleSpecifier = parseModuleSpecifier();
+            }
+            parseSemicolon();
+            return finishNode(node);
+        }
+
+        function parseDefaultHoistableDeclaration(fullStart: number, modifiers: ModifiersArray): DefaultFunctionDeclaration {
+            var node = <DefaultFunctionDeclaration>createNode(SyntaxKind.DefaultFunctionDeclaration, fullStart);
+            setModifiers(node, modifiers);
+            node.asteriskToken = parseOptionalToken(SyntaxKind.AsteriskToken);
+            node.name = parseOptionalIdentifier();
+            fillSignature(SyntaxKind.ColonToken, /*yieldAndGeneratorParameterContext:*/ !!node.asteriskToken, /*requireCompleteParameterList:*/ false, node);
+            node.body = parseFunctionBlockOrSemicolon(!!node.asteriskToken, Diagnostics.or_expected);
+            return finishNode(node);
+        }
+
+        function parseDefaultClassDeclaration(fullStart: number, modifiers: ModifiersArray): DefaultClassDeclaration {
+            var node = <DefaultClassDeclaration>createNode(SyntaxKind.DefaultClassDeclaration, fullStart);
+            setModifiers(node, modifiers);
+            node.name = parseOptionalIdentifier();
+            return parseClassDeclarationTail(node);
+        }
+
+        function parseDefaultAssignmentExpression(fullStart: number, modifiers: ModifiersArray): DefaultAssignmentExpression {
+            var node = <DefaultAssignmentExpression>createNode(SyntaxKind.DefaultAssignmentExpression, fullStart);
+            setModifiers(node, modifiers);
+            node.expression = parseAssignmentExpressionOrHigher();
             parseSemicolon();
             return finishNode(node);
         }
@@ -4581,16 +4773,18 @@ module ts {
                 case SyntaxKind.ClassKeyword:
                 case SyntaxKind.InterfaceKeyword:
                 case SyntaxKind.EnumKeyword:
-                case SyntaxKind.ImportKeyword:
                 case SyntaxKind.TypeKeyword:
                     // Not true keywords so ensure an identifier follows
                     return lookAhead(nextTokenIsIdentifierOrKeyword);
+                case SyntaxKind.ImportKeyword:
+                    // Not true keywords so ensure an identifier follows or is string literal or asterisk or open brace
+                    return lookAhead(nextTokenIsIdentifierOrKeywordOrStringLiteralOrAsteriskOrOpenBrace) ;
                 case SyntaxKind.ModuleKeyword:
                     // Not a true keyword so ensure an identifier or string literal follows
                     return lookAhead(nextTokenIsIdentifierOrKeywordOrStringLiteral);
                 case SyntaxKind.ExportKeyword:
                     // Check for export assignment or modifier on source element
-                    return lookAhead(nextTokenIsEqualsTokenOrDeclarationStart);
+                    return lookAhead(nextTokenIsEqualsTokenOrAsteriskOrOpenBraceOrDefaultOrDeclarationStart);
                 case SyntaxKind.DeclareKeyword:
                 case SyntaxKind.PublicKeyword:
                 case SyntaxKind.PrivateKeyword:
@@ -4615,9 +4809,19 @@ module ts {
             return isIdentifierOrKeyword() || token === SyntaxKind.StringLiteral;
         }
 
-        function nextTokenIsEqualsTokenOrDeclarationStart() {
+        function nextTokenIsIdentifierOrKeywordOrStringLiteralOrAsteriskOrOpenBrace() {
             nextToken();
-            return token === SyntaxKind.EqualsToken || isDeclarationStart();
+            return isIdentifierOrKeyword() || token === SyntaxKind.StringLiteral ||
+                token === SyntaxKind.AsteriskToken || token === SyntaxKind.OpenBraceToken;
+        }
+
+        function nextTokenIsEqualsTokenOrAsteriskOrOpenBraceOrDefaultOrDeclarationStart() {
+            nextToken();
+            return token === SyntaxKind.EqualsToken ||
+                token === SyntaxKind.AsteriskToken ||
+                token === SyntaxKind.OpenBraceToken ||
+                token === SyntaxKind.DefaultKeyword ||
+                isDeclarationStart();
         }
 
         function nextTokenIsDeclarationStart() {
@@ -4632,6 +4836,23 @@ module ts {
                 nextToken();
                 if (parseOptional(SyntaxKind.EqualsToken)) {
                     return parseExportAssignmentTail(fullStart, modifiers);
+                }
+                if (parseOptional(SyntaxKind.AsteriskToken)) {
+                    return parseStarExports(fullStart, modifiers);
+                }
+                if (parseOptional(SyntaxKind.OpenBraceToken)) {
+                    return parseExportClause(fullStart, modifiers);
+                }
+                if (parseOptional(SyntaxKind.DefaultKeyword)) {
+                    if (parseOptional(SyntaxKind.FunctionKeyword)) {
+                        return parseDefaultHoistableDeclaration(fullStart, modifiers);
+                    }
+                    else if (parseOptional(SyntaxKind.ClassKeyword)) {
+                        return parseDefaultClassDeclaration(fullStart, modifiers);
+                    }
+                    else {
+                        return parseDefaultAssignmentExpression(fullStart, modifiers);
+                    }
                 }
             }
 

@@ -1,0 +1,29 @@
+tests/cases/compiler/es6ImportNamedImportParsingError_1.ts(1,10): error TS1003: Identifier expected.
+tests/cases/compiler/es6ImportNamedImportParsingError_1.ts(1,12): error TS1128: Declaration or statement expected.
+tests/cases/compiler/es6ImportNamedImportParsingError_1.ts(1,14): error TS2304: Cannot find name 'from'.
+tests/cases/compiler/es6ImportNamedImportParsingError_1.ts(1,19): error TS1005: ';' expected.
+tests/cases/compiler/es6ImportNamedImportParsingError_1.ts(2,24): error TS1005: '{' expected.
+tests/cases/compiler/es6ImportNamedImportParsingError_1.ts(2,29): error TS1005: ',' expected.
+
+
+==== tests/cases/compiler/es6ImportNamedImportParsingError_0.ts (0 errors) ====
+    
+    export var a = 10;
+    export var x = a;
+    export var m = a;
+    
+==== tests/cases/compiler/es6ImportNamedImportParsingError_1.ts (6 errors) ====
+    import { * } from "es6ImportNamedImportParsingError_0";
+             ~
+!!! error TS1003: Identifier expected.
+               ~
+!!! error TS1128: Declaration or statement expected.
+                 ~~~~
+!!! error TS2304: Cannot find name 'from'.
+                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1005: ';' expected.
+    import defaultBinding, from "es6ImportNamedImportParsingError_0";
+                           ~~~~
+!!! error TS1005: '{' expected.
+                                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1005: ',' expected.

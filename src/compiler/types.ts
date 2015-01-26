@@ -129,6 +129,8 @@ module ts {
         PublicKeyword,
         StaticKeyword,
         YieldKeyword,
+        FromKeyword,
+        AsKeyword,
         // TypeScript keywords
         AnyKeyword,
         BooleanKeyword,
@@ -230,9 +232,22 @@ module ts {
         ModuleBlock,
         ImportDeclaration,
         ExportAssignment,
+        ES6StyleImportDeclaration,
+        StarExports,
+        ExportClause,
+        ExportBinding,
+        DefaultFunctionDeclaration,
+        DefaultClassDeclaration,
+        DefaultAssignmentExpression,
 
         // Module references
         ExternalModuleReference,
+
+        // Import clauses
+        ImportedDefaultBinding,
+        NameSpaceImport,
+        NamedImports,
+        ImportedBinding,
 
         // Clauses
         CaseClause,
@@ -859,6 +874,49 @@ module ts {
 
     export interface ExternalModuleReference extends Node {
         expression?: Expression;
+    }
+
+    export interface ES6StyleImportDeclaration extends Declaration, ModuleElement {
+        importClause?: ImportClause;
+        moduleSpecifier: StringLiteralExpression;
+    }
+
+    export interface Binding extends Node {
+        name: Identifier;
+        identifierName?: Identifier;
+    }
+
+    export interface ImportClause extends Node {
+        defaultBinding?: Binding;
+    }
+
+    export interface ImportedDefaultBinding extends ImportClause, Binding {
+    }
+
+    export interface NameSpaceImport extends ImportClause, Binding {
+    }
+
+    export interface NamedImports extends ImportClause {
+        namedBindings: NodeArray<Binding>;
+    }
+
+    export interface StarExports extends Declaration, ModuleElement {
+        moduleSpecifier: StringLiteralExpression;
+    }
+    
+    export interface ExportClauseDeclaration extends Declaration, ModuleElement {
+        namedBindings: NodeArray<Binding>;
+        moduleSpecifier?: StringLiteralExpression;
+    }
+
+    export interface DefaultFunctionDeclaration extends FunctionLikeDeclaration, ModuleElement {
+    }
+
+    export interface DefaultClassDeclaration extends ClassDeclaration, ModuleElement {
+    }
+
+    export interface DefaultAssignmentExpression extends Statement, ModuleElement {
+        expression: Expression;
     }
 
     export interface ExportAssignment extends Statement, ModuleElement {
