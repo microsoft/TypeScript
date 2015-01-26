@@ -1,0 +1,21 @@
+=== tests/cases/compiler/es6ImportNamedImport_0.ts ===
+
+export var a = 10;
+>a : number
+
+export var x = a;
+>x : number
+>a : number
+
+export var m = a;
+>m : number
+>a : number
+
+=== tests/cases/compiler/es6ImportNamedImport_1.ts ===
+import { } from "es6ImportNamedImport_0";
+No type information for this code.import { a } from "es6ImportNamedImport_0";
+No type information for this code.import { a as b } from "es6ImportNamedImport_0";
+No type information for this code.import { x, a as y } from "es6ImportNamedImport_0";
+No type information for this code.import { x as z,  } from "es6ImportNamedImport_0";
+No type information for this code.import { m,  } from "es6ImportNamedImport_0";
+No type information for this code.

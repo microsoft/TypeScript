@@ -886,6 +886,10 @@ module ts {
     export interface NameSpaceImport extends ImportClause, Binding {
     }
 
+    export interface NamedImports extends ImportClause {
+        namedBindings: NodeArray<Binding>;
+    }
+
     export interface ExportAssignment extends Statement, ModuleElement {
         exportName: Identifier;
     }
