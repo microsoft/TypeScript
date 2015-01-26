@@ -4469,14 +4469,16 @@ module ts {
             Debug.fail("should not get here");
         }
 
-        // For a union type, remove all constituent types for which the given flags have the given state
-        function removeTypesFromUnionType(type: Type, maskFlags: TypeFlags, maskState: boolean): Type {
+        // For a union type, remove all constituent types for that are of the given type kind (when isOfTypeKind is true)
+        // or not of the given type kind (when isOfTypeKind is false)
+        function removeTypesFromUnionType(type: Type, typeKind: TypeFlags, isOfTypeKind: boolean): Type {
             if (type.flags & TypeFlags.Union) {
                 var types = (<UnionType>type).types;
-                if (forEach(types, t => !(t.flags & maskFlags) !== maskState)) {
-                    var reducedType = getUnionType(filter(types, t => !(t.flags & maskFlags) === maskState));
-                    if (reducedType !== emptyObjectType) {
-                        return reducedType;
+                if (forEach(types, t => !!(t.flags & typeKind) === isOfTypeKind)) {
+                    // Above we checked if we have anything to remove, now use the opposite test to do the removal
+                    var narrowedType = getUnionType(filter(types, t => !(t.flags & typeKind) === isOfTypeKind));
+                    if (narrowedType !== emptyObjectType) {
+                        return narrowedType;
                     }
                 }
             }
@@ -4687,7 +4689,8 @@ module ts {
                     if (isTypeSubtypeOf(typeInfo.type, type)) {
                         return typeInfo.type;
                     }
-                    // Otherwise, remove all types that aren't of the primitive type kind
+                    // Otherwise, remove all types that aren't of the primitive type kind. This can happen when the type is
+                    // union of enum types and other types.
                     return removeTypesFromUnionType(type, typeInfo.flags, false);
                 }
                 else {
@@ -4757,7 +4760,8 @@ module ts {
                 return type;
             }
 
-            // Narrow the given type based on the given expression having the assumed boolean value
+            // Narrow the given type based on the given expression having the assumed boolean value. The returned type
+            // will be a subtype or the same type as the argument.
             function narrowType(type: Type, expr: Expression, assumeTrue: boolean): Type {
                 switch (expr.kind) {
                     case SyntaxKind.ParenthesizedExpression:
