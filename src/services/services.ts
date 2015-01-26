@@ -5796,7 +5796,7 @@ module ts {
                                 }
                             }
                             else {
-                                Debug.assert(token === SyntaxKind.CloseBraceToken, "Should have been an open brace. Was: " + token);
+                                Debug.assert(lastTemplateStackToken === SyntaxKind.OpenBraceToken, "Should have been an open brace. Was: " + token);
                                 templateStack.pop();
                             }
                         }
