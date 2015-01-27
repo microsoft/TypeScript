@@ -1266,32 +1266,32 @@ module ts {
     }
 
     export const enum TypeFlags {
-        Any                 = 0x00000001,
-        String              = 0x00000002,
-        Number              = 0x00000004,
-        Boolean             = 0x00000008,
-        Void                = 0x00000010,
-        Undefined           = 0x00000020,
-        Null                = 0x00000040,
-        Enum                = 0x00000080,  // Enum type
-        StringLiteral       = 0x00000100,  // String literal type
-        TypeParameter       = 0x00000200,  // Type parameter
-        Class               = 0x00000400,  // Class
-        Interface           = 0x00000800,  // Interface
-        Reference           = 0x00001000,  // Generic type reference
-        Tuple               = 0x00002000,  // Tuple
-        Union               = 0x00004000,  // Union
-        Anonymous           = 0x00008000,  // Anonymous
-        FromSignature       = 0x00010000,  // Created for signature assignment check
-        ObjectLiteral       = 0x00020000,  // Originates in an object literal
-        ContainsUndefined   = 0x00040000,  // Type is or contains Undefined or Null type
-        ContainsLiteral     = 0x00080000,  // Type is or contains object literal type
+        Any                     = 0x00000001,
+        String                  = 0x00000002,
+        Number                  = 0x00000004,
+        Boolean                 = 0x00000008,
+        Void                    = 0x00000010,
+        Undefined               = 0x00000020,
+        Null                    = 0x00000040,
+        Enum                    = 0x00000080,  // Enum type
+        StringLiteral           = 0x00000100,  // String literal type
+        TypeParameter           = 0x00000200,  // Type parameter
+        Class                   = 0x00000400,  // Class
+        Interface               = 0x00000800,  // Interface
+        Reference               = 0x00001000,  // Generic type reference
+        Tuple                   = 0x00002000,  // Tuple
+        Union                   = 0x00004000,  // Union
+        Anonymous               = 0x00008000,  // Anonymous
+        FromSignature           = 0x00010000,  // Created for signature assignment check
+        ObjectLiteral           = 0x00020000,  // Originates in an object literal
+        ContainsUndefinedOrNull = 0x00040000,  // Type is or contains Undefined or Null type
+        ContainsObjectLiteral   = 0x00080000,  // Type is or contains object literal type
 
         Intrinsic = Any | String | Number | Boolean | Void | Undefined | Null,
         StringLike = String | StringLiteral,
         NumberLike = Number | Enum,
         ObjectType = Class | Interface | Reference | Tuple | Anonymous,
-        RequiresWidening = ContainsUndefined | ContainsLiteral
+        RequiresWidening = ContainsUndefinedOrNull | ContainsObjectLiteral
     }
 
     // Properties common to all types

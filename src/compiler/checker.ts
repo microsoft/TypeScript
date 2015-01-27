@@ -66,8 +66,8 @@ module ts {
         var numberType = createIntrinsicType(TypeFlags.Number, "number");
         var booleanType = createIntrinsicType(TypeFlags.Boolean, "boolean");
         var voidType = createIntrinsicType(TypeFlags.Void, "void");
-        var undefinedType = createIntrinsicType(TypeFlags.Undefined | TypeFlags.ContainsUndefined, "undefined");
-        var nullType = createIntrinsicType(TypeFlags.Null | TypeFlags.ContainsUndefined, "null");
+        var undefinedType = createIntrinsicType(TypeFlags.Undefined | TypeFlags.ContainsUndefinedOrNull, "undefined");
+        var nullType = createIntrinsicType(TypeFlags.Null | TypeFlags.ContainsUndefinedOrNull, "null");
         var unknownType = createIntrinsicType(TypeFlags.Any, "unknown");
         var resolvingType = createIntrinsicType(TypeFlags.Any, "__resolving__");
 
@@ -2807,6 +2807,9 @@ module ts {
             }
         }
 
+        // This function is used to propagate widening flags when creating new object types references and union types.
+        // It is only necessary to do so if a constituent type might be the undefined type, the null type, or the type
+        // of an object literal (since those types have widening related information we need to track).
         function getWideningFlagsOfTypes(types: Type[]): TypeFlags {
             var result: TypeFlags = 0;
             for (var i = 0; i < types.length; i++) {
@@ -4111,7 +4114,7 @@ module ts {
                     var symbol = <TransientSymbol>createSymbol(p.flags | SymbolFlags.Transient, p.name);
                     symbol.declarations = p.declarations;
                     symbol.parent = p.parent;
-                    symbol.type = getWidenedType(getTypeOfSymbol(p));
+                    symbol.type = widenedType;
                     symbol.target = p;
                     if (p.valueDeclaration) symbol.valueDeclaration = p.valueDeclaration;
                     p = symbol;
@@ -4160,7 +4163,7 @@ module ts {
                 var errorReported = false;
                 forEach(getPropertiesOfObjectType(type), p => {
                     var t = getTypeOfSymbol(p);
-                    if (t.flags & TypeFlags.ContainsUndefined) {
+                    if (t.flags & TypeFlags.ContainsUndefinedOrNull) {
                         if (!reportWideningErrorsInType(t)) {
                             error(p.valueDeclaration, Diagnostics.Object_literal_s_property_0_implicitly_has_an_1_type, p.name, typeToString(getWidenedType(t)));
                         }
@@ -4204,7 +4207,7 @@ module ts {
         }
 
         function reportErrorsFromWidening(declaration: Declaration, type: Type) {
-            if (produceDiagnostics && compilerOptions.noImplicitAny && type.flags & TypeFlags.ContainsUndefined) {
+            if (produceDiagnostics && compilerOptions.noImplicitAny && type.flags & TypeFlags.ContainsUndefinedOrNull) {
                 // Report implicit any error within type if possible, otherwise report error on declaration
                 if (!reportWideningErrorsInType(type)) {
                     reportImplicitAnyError(declaration, type);
@@ -5464,7 +5467,7 @@ module ts {
             var stringIndexType = getIndexType(IndexKind.String);
             var numberIndexType = getIndexType(IndexKind.Number);
             var result = createAnonymousType(node.symbol, properties, emptyArray, emptyArray, stringIndexType, numberIndexType);
-            result.flags |= TypeFlags.ObjectLiteral | TypeFlags.ContainsLiteral | (typeFlags & TypeFlags.ContainsUndefined);
+            result.flags |= TypeFlags.ObjectLiteral | TypeFlags.ContainsObjectLiteral | (typeFlags & TypeFlags.ContainsUndefinedOrNull);
             return result;
 
             function getIndexType(kind: IndexKind) {
