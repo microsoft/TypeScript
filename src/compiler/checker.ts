@@ -5978,16 +5978,21 @@ module ts {
             return args;
         }
 
-        // In a 'super' call, type arguments are not provided within the CallExpression node itself.
-        // Instead, they must be fetched from the class declaration's base type node.
+        /**
+         * In a 'super' call, type arguments are not provided within the CallExpression node itself.
+         * Instead, they must be fetched from the class declaration's base type node.
+         *
+         * If 'node' is a 'super' call (e.g. super(...), new super(...)), then we attempt to fetch
+         * the type arguments off the containing class's first heritage clause (if one exists). Note that if
+         * type arguments are supplied on the 'super' call, they are ignored (though this is syntactically incorrect).
+         *
+         * In all other cases, the call's explicit type arguments are returned.
+         */
         function getEffectiveTypeArguments(callExpression: CallExpression): TypeNode[] {
             if (callExpression.expression.kind === SyntaxKind.SuperKeyword) {
-                // TODO (drosen): 1) Discuss if checking needs to be done at this point.
-                //                2) Have a test where type arguments are not provided on the base class.
-                //                3) Have a test where the base class is not generic.
                 var containingClass = <ClassDeclaration>getAncestor(callExpression, SyntaxKind.ClassDeclaration);
-                var baseClassTypeNode = getClassBaseTypeNode(containingClass);
-                return baseClassTypeNode.typeArguments;
+                var baseClassTypeNode = containingClass && getClassBaseTypeNode(containingClass);
+                return baseClassTypeNode && baseClassTypeNode.typeArguments;
             }
             else {
                 // Ordinary case - simple function invocation.
