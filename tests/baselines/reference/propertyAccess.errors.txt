@@ -1,16 +1,16 @@
-tests/cases/conformance/expressions/propertyAccess/propertyAccess.ts(9,22): error TS2304: Cannot find name 'HTMLElement'.
-tests/cases/conformance/expressions/propertyAccess/propertyAccess.ts(10,22): error TS2304: Cannot find name 'HTMLDivElement'.
-tests/cases/conformance/expressions/propertyAccess/propertyAccess.ts(37,14): error TS2339: Property 'qqq' does not exist on type '{ 10: string; x: string; y: number; z: { n: string; m: number; o: () => boolean; }; 'literal property': number; }'.
-tests/cases/conformance/expressions/propertyAccess/propertyAccess.ts(72,19): error TS2304: Cannot find name 'window'.
-tests/cases/conformance/expressions/propertyAccess/propertyAccess.ts(109,18): error TS2304: Cannot find name 'window'.
-tests/cases/conformance/expressions/propertyAccess/propertyAccess.ts(117,9): error TS2304: Cannot find name 'HTMLDivElement'.
-tests/cases/conformance/expressions/propertyAccess/propertyAccess.ts(121,9): error TS2304: Cannot find name 'HTMLDivElement'.
-tests/cases/conformance/expressions/propertyAccess/propertyAccess.ts(125,9): error TS2304: Cannot find name 'HTMLElement'.
-tests/cases/conformance/expressions/propertyAccess/propertyAccess.ts(129,9): error TS2304: Cannot find name 'HTMLElement'.
-tests/cases/conformance/expressions/propertyAccess/propertyAccess.ts(132,22): error TS2304: Cannot find name 'window'.
+tests/cases/conformance/expressions/propertyAccess/propertyAccess.ts(45,14): error TS2339: Property 'qqq' does not exist on type '{ 10: string; x: string; y: number; z: { n: string; m: number; o: () => boolean; }; 'literal property': number; }'.
+tests/cases/conformance/expressions/propertyAccess/propertyAccess.ts(80,10): error TS2342: An index expression argument must be of type 'string', 'number', or 'any'.
+tests/cases/conformance/expressions/propertyAccess/propertyAccess.ts(117,10): error TS2342: An index expression argument must be of type 'string', 'number', or 'any'.
+tests/cases/conformance/expressions/propertyAccess/propertyAccess.ts(140,12): error TS2342: An index expression argument must be of type 'string', 'number', or 'any'.
 
 
-==== tests/cases/conformance/expressions/propertyAccess/propertyAccess.ts (10 errors) ====
+==== tests/cases/conformance/expressions/propertyAccess/propertyAccess.ts (4 errors) ====
+    class A {
+        a: number;
+    }
+    class B extends A {
+        b: number;
+    }
     enum Compass {
         North, South, East, West
     }
@@ -19,12 +19,8 @@ tests/cases/conformance/expressions/propertyAccess/propertyAccess.ts(132,22): er
     var strIndex: { [n: string]: Compass } = { 'N': Compass.North, 'E': Compass.East };
     var bothIndex:
         {
-            [n: string]: HTMLElement;
-                         ~~~~~~~~~~~
-!!! error TS2304: Cannot find name 'HTMLElement'.
-            [m: number]: HTMLDivElement;
-                         ~~~~~~~~~~~~~~
-!!! error TS2304: Cannot find name 'HTMLDivElement'.
+            [n: string]: A;
+            [m: number]: B;
         };
     
     function noIndex() { }
@@ -37,6 +33,8 @@ tests/cases/conformance/expressions/propertyAccess/propertyAccess.ts(132,22): er
         'literal property': 100
     };
     var anyVar: any = {};
+    var stringOrNumber: string | number;
+    var someObject: { name: string };
     
     // Assign to a property access
     obj.y = 4;
@@ -88,9 +86,9 @@ tests/cases/conformance/expressions/propertyAccess/propertyAccess.ts(132,22): er
     var kk: any;
     
     // Bracket notation property access using value of other type on type with numeric index signature and no string index signature
-    var ll = numIndex[window]; // Error
-                      ~~~~~~
-!!! error TS2304: Cannot find name 'window'.
+    var ll = numIndex[someObject]; // Error
+             ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2342: An index expression argument must be of type 'string', 'number', or 'any'.
     
     // Bracket notation property access using string value on type with string index signature and no numeric index signature
     var mm = strIndex['N'];
@@ -127,9 +125,9 @@ tests/cases/conformance/expressions/propertyAccess/propertyAccess.ts(132,22): er
     var tt: any;
     
     // Bracket notation property access using values of other types on type with no index signatures
-    var uu = noIndex[window]; // Error
-                     ~~~~~~
-!!! error TS2304: Cannot find name 'window'.
+    var uu = noIndex[someObject]; // Error
+             ~~~~~~~~~~~~~~~~~~~
+!!! error TS2342: An index expression argument must be of type 'string', 'number', or 'any'.
     
     // Bracket notation property access using numeric value on type with numeric index signature and string index signature
     var vv = noIndex[32];
@@ -137,29 +135,31 @@ tests/cases/conformance/expressions/propertyAccess/propertyAccess.ts(132,22): er
     
     // Bracket notation property access using enum value on type with numeric index signature and string index signature
     var ww = bothIndex[Compass.East];
-    var ww: HTMLDivElement;
-            ~~~~~~~~~~~~~~
-!!! error TS2304: Cannot find name 'HTMLDivElement'.
+    var ww: B;
     
     // Bracket notation property access using value of type 'any' on type with numeric index signature and string index signature
     var xx = bothIndex[<any>null];
-    var xx: HTMLDivElement;
-            ~~~~~~~~~~~~~~
-!!! error TS2304: Cannot find name 'HTMLDivElement'.
+    var xx: B;
     
     // Bracket notation property access using string value on type with numeric index signature and string index signature
     var yy = bothIndex['foo'];
-    var yy: HTMLElement;
-            ~~~~~~~~~~~
-!!! error TS2304: Cannot find name 'HTMLElement'.
+    var yy: A;
     
     // Bracket notation property access using numeric string value on type with numeric index signature and string index signature
     var zz = bothIndex['1.0'];
-    var zz: HTMLElement;
-            ~~~~~~~~~~~
-!!! error TS2304: Cannot find name 'HTMLElement'.
+    var zz: A;
     
     // Bracket notation property access using value of other type on type with numeric index signature and no string index signature and string index signature
-    var zzzz = bothIndex[window]; // Error
-                         ~~~~~~
-!!! error TS2304: Cannot find name 'window'.
+    var zzzz = bothIndex[someObject]; // Error
+               ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2342: An index expression argument must be of type 'string', 'number', or 'any'.
+    
+    var x1 = numIndex[stringOrNumber];
+    var x1: any;
+    
+    var x2 = strIndex[stringOrNumber];
+    var x2: Compass;
+    
+    var x3 = bothIndex[stringOrNumber];
+    var x3: A;
+    

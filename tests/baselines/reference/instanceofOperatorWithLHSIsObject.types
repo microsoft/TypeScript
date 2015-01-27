@@ -20,6 +20,10 @@ var c: C;
 >c : C
 >C : C
 
+var d: string | C;
+>d : string | C
+>C : C
+
 var r1 = a instanceof x1;
 >r1 : boolean
 >a instanceof x1 : boolean
@@ -36,5 +40,11 @@ var r3 = c instanceof x1;
 >r3 : boolean
 >c instanceof x1 : boolean
 >c : C
+>x1 : any
+
+var r4 = d instanceof x1;
+>r4 : boolean
+>d instanceof x1 : boolean
+>d : string | C
 >x1 : any
 

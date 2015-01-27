@@ -9,8 +9,8 @@ module ts {
 
     export function getModuleInstanceState(node: Node): ModuleInstanceState {
         // A module is uninstantiated if it contains only 
-        // 1. interface declarations
-        if (node.kind === SyntaxKind.InterfaceDeclaration) {
+        // 1. interface declarations, type alias declarations
+        if (node.kind === SyntaxKind.InterfaceDeclaration || node.kind === SyntaxKind.TypeAliasDeclaration) {
             return ModuleInstanceState.NonInstantiated;
         }
         // 2. const enum declarations don't make module instantiated
@@ -50,12 +50,13 @@ module ts {
     }
 
     /**
-     * Returns false if any of the following are true:
-     *   1. declaration has no name
-     *   2. declaration has a literal name (not computed)
-     *   3. declaration has a computed property name that is a known symbol
+     * A declaration has a dynamic name if both of the following are true:
+     *   1. The declaration has a computed property name
+     *   2. The computed name is *not* expressed as Symbol.<name>, where name
+     *      is a property of the Symbol constructor that denotes a built in
+     *      Symbol.
      */
-    export function hasComputedNameButNotSymbol(declaration: Declaration): boolean {
+    export function hasDynamicName(declaration: Declaration): boolean {
         return declaration.name && declaration.name.kind === SyntaxKind.ComputedPropertyName;
     }
 
@@ -96,7 +97,7 @@ module ts {
                 if (node.kind === SyntaxKind.ModuleDeclaration && node.name.kind === SyntaxKind.StringLiteral) {
                     return '"' + (<LiteralExpression>node.name).text + '"';
                 }
-                Debug.assert(!hasComputedNameButNotSymbol(node));
+                Debug.assert(!hasDynamicName(node));
                 return (<Identifier | LiteralExpression>node.name).text;
             }
             switch (node.kind) {
@@ -118,11 +119,7 @@ module ts {
         }
 
         function declareSymbol(symbols: SymbolTable, parent: Symbol, node: Declaration, includes: SymbolFlags, excludes: SymbolFlags): Symbol {
-            // Nodes with computed property names will not get symbols, because the type checker
-            // does not make properties for them.
-            if (hasComputedNameButNotSymbol(node)) {
-                return undefined;
-            }
+            Debug.assert(!hasDynamicName(node));
 
             var name = getDeclarationName(node);
             if (name !== undefined) {
@@ -395,14 +392,14 @@ module ts {
                     break;
                 case SyntaxKind.PropertyDeclaration:
                 case SyntaxKind.PropertySignature:
-                    bindDeclaration(<Declaration>node, SymbolFlags.Property | ((<PropertyDeclaration>node).questionToken ? SymbolFlags.Optional : 0), SymbolFlags.PropertyExcludes, /*isBlockScopeContainer*/ false);
+                    bindPropertyOrMethodOrAccessor(<Declaration>node, SymbolFlags.Property | ((<PropertyDeclaration>node).questionToken ? SymbolFlags.Optional : 0), SymbolFlags.PropertyExcludes, /*isBlockScopeContainer*/ false);
                     break;
                 case SyntaxKind.PropertyAssignment:
                 case SyntaxKind.ShorthandPropertyAssignment:
-                    bindDeclaration(<Declaration>node, SymbolFlags.Property, SymbolFlags.PropertyExcludes, /*isBlockScopeContainer*/ false);
+                    bindPropertyOrMethodOrAccessor(<Declaration>node, SymbolFlags.Property, SymbolFlags.PropertyExcludes, /*isBlockScopeContainer*/ false);
                     break;
                 case SyntaxKind.EnumMember:
-                    bindDeclaration(<Declaration>node, SymbolFlags.EnumMember, SymbolFlags.EnumMemberExcludes, /*isBlockScopeContainer*/ false);
+                    bindPropertyOrMethodOrAccessor(<Declaration>node, SymbolFlags.EnumMember, SymbolFlags.EnumMemberExcludes, /*isBlockScopeContainer*/ false);
                     break;
                 case SyntaxKind.CallSignature:
                 case SyntaxKind.ConstructSignature:
@@ -415,7 +412,7 @@ module ts {
                     // as other properties in the object literal.  So we use SymbolFlags.PropertyExcludes
                     // so that it will conflict with any other object literal members with the same
                     // name.
-                    bindDeclaration(<Declaration>node, SymbolFlags.Method | ((<MethodDeclaration>node).questionToken ? SymbolFlags.Optional : 0),
+                    bindPropertyOrMethodOrAccessor(<Declaration>node, SymbolFlags.Method | ((<MethodDeclaration>node).questionToken ? SymbolFlags.Optional : 0),
                         isObjectLiteralMethod(node) ? SymbolFlags.PropertyExcludes : SymbolFlags.MethodExcludes, /*isBlockScopeContainer*/ true);
                     break;
                 case SyntaxKind.FunctionDeclaration:
@@ -425,10 +422,10 @@ module ts {
                     bindDeclaration(<Declaration>node, SymbolFlags.Constructor, /*symbolExcludes:*/ 0, /*isBlockScopeContainer:*/ true);
                     break;
                 case SyntaxKind.GetAccessor:
-                    bindDeclaration(<Declaration>node, SymbolFlags.GetAccessor, SymbolFlags.GetAccessorExcludes, /*isBlockScopeContainer*/ true);
+                    bindPropertyOrMethodOrAccessor(<Declaration>node, SymbolFlags.GetAccessor, SymbolFlags.GetAccessorExcludes, /*isBlockScopeContainer*/ true);
                     break;
                 case SyntaxKind.SetAccessor:
-                    bindDeclaration(<Declaration>node, SymbolFlags.SetAccessor, SymbolFlags.SetAccessorExcludes, /*isBlockScopeContainer*/ true);
+                    bindPropertyOrMethodOrAccessor(<Declaration>node, SymbolFlags.SetAccessor, SymbolFlags.SetAccessorExcludes, /*isBlockScopeContainer*/ true);
                     break;
 
                 case SyntaxKind.FunctionType:
@@ -508,6 +505,15 @@ module ts {
 
                 var classDeclaration = <ClassDeclaration>node.parent.parent;
                 declareSymbol(classDeclaration.symbol.members, classDeclaration.symbol, node, SymbolFlags.Property, SymbolFlags.PropertyExcludes);
+            }
+        }
+
+        function bindPropertyOrMethodOrAccessor(node: Declaration, symbolKind: SymbolFlags, symbolExcludes: SymbolFlags, isBlockScopeContainer: boolean) {
+            if (hasDynamicName(node)) {
+                bindAnonymousDeclaration(node, symbolKind, "__computed", isBlockScopeContainer);
+            }
+            else {
+                bindDeclaration(node, symbolKind, symbolExcludes, isBlockScopeContainer);
             }
         }
     }
