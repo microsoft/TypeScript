@@ -4469,7 +4469,7 @@ module ts {
             Debug.fail("should not get here");
         }
 
-        // For a union type, remove all constituent types for that are of the given type kind (when isOfTypeKind is true)
+        // For a union type, remove all constituent types that are of the given type kind (when isOfTypeKind is true)
         // or not of the given type kind (when isOfTypeKind is false)
         function removeTypesFromUnionType(type: Type, typeKind: TypeFlags, isOfTypeKind: boolean): Type {
             if (type.flags & TypeFlags.Union) {
@@ -4683,7 +4683,7 @@ module ts {
                 if (assumeTrue) {
                     // Assumed result is true. If check was not for a primitive type, remove all primitive types
                     if (!typeInfo) {
-                        return removeTypesFromUnionType(type, TypeFlags.StringLike | TypeFlags.NumberLike | TypeFlags.Boolean, true);
+                        return removeTypesFromUnionType(type, /*typeKind*/ TypeFlags.StringLike | TypeFlags.NumberLike | TypeFlags.Boolean, /*isOfTypeKind*/ true);
                     }
                     // Check was for a primitive type, return that primitive type if it is a subtype
                     if (isTypeSubtypeOf(typeInfo.type, type)) {
@@ -4691,12 +4691,12 @@ module ts {
                     }
                     // Otherwise, remove all types that aren't of the primitive type kind. This can happen when the type is
                     // union of enum types and other types.
-                    return removeTypesFromUnionType(type, typeInfo.flags, false);
+                    return removeTypesFromUnionType(type, /*typeKind*/ typeInfo.flags, /*isOfTypeKind*/ false);
                 }
                 else {
                     // Assumed result is false. If check was for a primitive type, remove that primitive type
                     if (typeInfo) {
-                        return removeTypesFromUnionType(type, typeInfo.flags, true);
+                        return removeTypesFromUnionType(type, /*typeKind*/ typeInfo.flags, /*isOfTypeKind*/ true);
                     }
                     // Otherwise we don't have enough information to do anything.
                     return type;
