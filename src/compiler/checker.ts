@@ -5441,7 +5441,8 @@ module ts {
             // Grammar checking
             checkGrammarObjectLiteralExpression(node);
 
-            var properties: SymbolTable = {};
+            var propertiesTable: SymbolTable = {};
+            var propertiesArray: Symbol[] = [];
             var contextualType = getContextualType(node);
             var typeFlags: TypeFlags;
 
@@ -5486,8 +5487,9 @@ module ts {
                 }
 
                 if (!hasDynamicName(memberDecl)) {
-                    properties[member.name] = member;
+                    propertiesTable[member.name] = member;
                 }
+                propertiesArray.push(member);
             }
 
             // If object literal is contextually (but not inferentially) typed, copy missing optional properties from
@@ -5495,25 +5497,29 @@ module ts {
             // were omitted. There is no need to create new property objects as nothing in them needs to change.
             if (contextualType && !isInferentialContext(contextualMapper)) {
                 forEach(getPropertiesOfObjectType(contextualType), p => {
-                    if (p.flags & SymbolFlags.Optional && !hasProperty(properties, p.name)) {
-                        properties[p.name] = p;
+                    if (p.flags & SymbolFlags.Optional && !hasProperty(propertiesTable, p.name)) {
+                        propertiesTable[p.name] = p;
                     }
                 });
             }
 
             var stringIndexType = getIndexType(IndexKind.String);
             var numberIndexType = getIndexType(IndexKind.Number);
-            var result = createAnonymousType(node.symbol, properties, emptyArray, emptyArray, stringIndexType, numberIndexType);
+            var result = createAnonymousType(node.symbol, propertiesTable, emptyArray, emptyArray, stringIndexType, numberIndexType);
             result.flags |= (typeFlags & TypeFlags.Unwidened);
             return result;
 
             function getIndexType(kind: IndexKind) {
                 if (contextualType && contextualTypeHasIndexSignature(contextualType, kind)) {
                     var propTypes: Type[] = [];
-                    for (var i = 0; i < node.properties.length; i++) {
+                    for (var i = 0; i < propertiesArray.length; i++) {
                         var propertyDecl = node.properties[i];
                         if (kind === IndexKind.String || isNumericName(propertyDecl.name)) {
-                            var type = getTypeOfSymbol(getSymbolOfNode(propertyDecl));
+                            // Do not call getSymbolOfNode(propertyDecl), as that will get the
+                            // original symbol for the node. We actually want to get the symbol
+                            // created by checkObjectLiteral, since that will be appropriately
+                            // contextually typed and resolved.
+                            var type = getTypeOfSymbol(propertiesArray[i]);
                             if (!contains(propTypes, type)) {
                                 propTypes.push(type);
                             }
