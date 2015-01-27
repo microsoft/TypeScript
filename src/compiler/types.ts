@@ -293,6 +293,8 @@ module ts {
         Const =             0x00001000,  // Variable declaration
         OctalLiteral =      0x00002000,
 
+        SimpleArrowFunction =      0x00004000,  // Arrow function without parenthesized parameters
+
         Modifier = Export | Ambient | Public | Private | Protected | Static,
         AccessibilityModifier = Public | Private | Protected,
         BlockScoped = Let | Const

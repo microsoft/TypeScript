@@ -136,14 +136,14 @@ someGenerics5 `${null}${null}`;
 // Generic tag with multiple arguments of function types that each have parameters of the same generic type
 function someGenerics6(strs, a, b, c) {
 }
-someGenerics6 `${(n) => { return n; }}${(n) => { return n; }}${(n) => { return n; }}`;
-someGenerics6 `${(n) => { return n; }}${(n) => { return n; }}${(n) => { return n; }}`;
+someGenerics6 `${n => { return n; }}${n => { return n; }}${n => { return n; }}`;
+someGenerics6 `${n => { return n; }}${n => { return n; }}${n => { return n; }}`;
 someGenerics6 `${(n) => { return n; }}${(n) => { return n; }}${(n) => { return n; }}`;
 // Generic tag with multiple arguments of function types that each have parameters of different generic type
 function someGenerics7(strs, a, b, c) {
 }
-someGenerics7 `${(n) => { return n; }}${(n) => { return n; }}${(n) => { return n; }}`;
-someGenerics7 `${(n) => { return n; }}${(n) => { return n; }}${(n) => { return n; }}`;
+someGenerics7 `${n => { return n; }}${n => { return n; }}${n => { return n; }}`;
+someGenerics7 `${n => { return n; }}${n => { return n; }}${n => { return n; }}`;
 someGenerics7 `${(n) => { return n; }}${(n) => { return n; }}${(n) => { return n; }}`;
 // Generic tag with argument of generic function type
 function someGenerics8(strs, n) {

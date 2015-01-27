@@ -25,11 +25,11 @@ var h = tempFun `${ (x => x) } ${ (((x => x))) } ${ undefined }`
 function tempFun(tempStrs, g, x) {
     return g(x);
 }
-var a = tempFun `${(x) => { return x; }}  ${10}`;
-var b = tempFun `${((x) => { return x; })}  ${10}`;
-var c = tempFun `${(((x) => { return x; }))} ${10}`;
-var d = tempFun `${(x) => { return x; }} ${(x) => { return x; }} ${10}`;
-var e = tempFun `${(x) => { return x; }} ${((x) => { return x; })} ${10}`;
-var f = tempFun `${(x) => { return x; }} ${(((x) => { return x; }))} ${10}`;
-var g = tempFun `${((x) => { return x; })} ${((((x) => { return x; })))} ${10}`;
-var h = tempFun `${((x) => { return x; })} ${((((x) => { return x; })))} ${undefined}`;
+var a = tempFun `${x => { return x; }}  ${10}`;
+var b = tempFun `${(x => { return x; })}  ${10}`;
+var c = tempFun `${((x => { return x; }))} ${10}`;
+var d = tempFun `${x => { return x; }} ${x => { return x; }} ${10}`;
+var e = tempFun `${x => { return x; }} ${(x => { return x; })} ${10}`;
+var f = tempFun `${x => { return x; }} ${((x => { return x; }))} ${10}`;
+var g = tempFun `${(x => { return x; })} ${(((x => { return x; })))} ${10}`;
+var h = tempFun `${(x => { return x; })} ${(((x => { return x; })))} ${undefined}`;

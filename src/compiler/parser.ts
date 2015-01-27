@@ -2883,6 +2883,9 @@ module ts {
             node.parameters = <NodeArray<ParameterDeclaration>>[parameter];
             node.parameters.pos = parameter.pos;
             node.parameters.end = parameter.end;
+            // Add node flags for simple arrow function(no parenthesis around parameters)
+            // so that in emit state we can check this flag and preserve users original text
+            node.flags |= NodeFlags.SimpleArrowFunction;
 
             parseExpected(SyntaxKind.EqualsGreaterThanToken);
             node.body = parseArrowFunctionExpressionBody();

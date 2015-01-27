@@ -3289,6 +3289,21 @@ module ts {
                 decreaseIndent();
             }
 
+			function emitSignatureParametersES6(node: FunctionLikeDeclaration) {
+				// Check the node's parameters whether it contains flags indicating that it has no parenthesis around the parameters
+				// Preserver no-parenthesis
+				if (node && node.flags & NodeFlags.SimpleArrowFunction) {
+					increaseIndent();
+                    var parameters = node.parameters;
+                    var omitCount = languageVersion < ScriptTarget.ES6 && hasRestParameters(node) ? 1 : 0;
+					emitList(parameters, 0, parameters.length - omitCount, /*multiLine*/ false, /*trailingComma*/ false);
+					decreaseIndent();
+				}
+				else {
+					emitSignatureParameters(node);
+				}
+			}
+
             function emitSignatureAndBody(node: FunctionLikeDeclaration) {
                 var saveTempCount = tempCount;
                 var saveTempVariables = tempVariables;
@@ -3296,12 +3311,15 @@ module ts {
                 tempCount = 0;
                 tempVariables = undefined;
                 tempParameters = undefined;
-                emitSignatureParameters(node);
 
                 // When targeting ES6, emit arrow function natively in ES6
                 if (isES6ArrowFunction(node)) {
-                   write(" =>");
+					emitSignatureParametersES6(node);
+					write(" =>");
                 }
+				else {
+					emitSignatureParameters(node);
+				}
 
                 write(" {");
                 scopeEmitStart(node);

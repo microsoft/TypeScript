@@ -26,18 +26,18 @@ function tempTag1(...rest) {
 // Otherwise, the arrow functions' parameters will be typed as 'any',
 // and it is an error to invoke an any-typed value with type arguments,
 // so this test will error.
-tempTag1 `${(x) => {
+tempTag1 `${x => {
     x(undefined);
     return x;
 }}${10}`;
-tempTag1 `${(x) => {
+tempTag1 `${x => {
     x(undefined);
     return x;
-}}${(y) => {
+}}${y => {
     y(undefined);
     return y;
 }}${10}`;
-tempTag1 `${(x) => {
+tempTag1 `${x => {
     x(undefined);
     return x;
 }}${(y) => {
@@ -47,7 +47,7 @@ tempTag1 `${(x) => {
 tempTag1 `${(x) => {
     x(undefined);
     return x;
-}}${(y) => {
+}}${y => {
     y(undefined);
     return y;
 }}${undefined}`;
