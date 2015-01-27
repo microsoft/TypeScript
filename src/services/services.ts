@@ -5658,6 +5658,8 @@ module ts {
             return true;
         }
         
+        // If there is a syntactic classifier ('syntacticClassifierAbsent' is false),
+        // we will be more conservative in order to avoid conflicting with the syntactic classifier.
         function getClassificationsForLine(text: string, lexState: EndOfLineState, syntacticClassifierAbsent?: boolean): ClassificationResult {
             var offset = 0;
             var token = SyntaxKind.Unknown;
