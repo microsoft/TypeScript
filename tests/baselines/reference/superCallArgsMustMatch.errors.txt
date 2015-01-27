@@ -1,0 +1,29 @@
+tests/cases/compiler/superCallArgsMustMatch.ts(15,15): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+
+
+==== tests/cases/compiler/superCallArgsMustMatch.ts (1 errors) ====
+    class T5<T>{
+    
+        public foo: T;
+    
+        constructor(public bar: T) { }
+    
+    }
+    
+     
+    
+    class T6 extends T5<number>{
+    
+        constructor() {
+    
+            super("hi"); // Should error, base constructor has type T for first arg, which is fixed as number in the extends clause
+                  ~~~~
+!!! error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+    
+            var x: number = this.foo;
+    
+        }
+    
+    }
+    
+    
