@@ -107,6 +107,21 @@ module ts {
         var diagnostics: Diagnostic[] = [];
         var diagnosticsModified: boolean = false;
 
+        var primitiveTypeInfo: Map<{ type: Type; flags: TypeFlags }> = {
+            "string": {
+                type: stringType,
+                flags: TypeFlags.StringLike
+            },
+            "number": {
+                type: numberType,
+                flags: TypeFlags.NumberLike
+            },
+            "boolean": {
+                type: booleanType,
+                flags: TypeFlags.Boolean
+            }
+        };
+
         function addDiagnostic(diagnostic: Diagnostic) {
             diagnostics.push(diagnostic);
             diagnosticsModified = true;
@@ -4482,12 +4497,17 @@ module ts {
             Debug.fail("should not get here");
         }
 
-        // Remove one or more primitive types from a union type
-        function subtractPrimitiveTypes(type: Type, subtractMask: TypeFlags): Type {
+        // For a union type, remove all constituent types that are of the given type kind (when isOfTypeKind is true)
+        // or not of the given type kind (when isOfTypeKind is false)
+        function removeTypesFromUnionType(type: Type, typeKind: TypeFlags, isOfTypeKind: boolean): Type {
             if (type.flags & TypeFlags.Union) {
                 var types = (<UnionType>type).types;
-                if (forEach(types, t => t.flags & subtractMask)) {
-                    return getUnionType(filter(types, t => !(t.flags & subtractMask)));
+                if (forEach(types, t => !!(t.flags & typeKind) === isOfTypeKind)) {
+                    // Above we checked if we have anything to remove, now use the opposite test to do the removal
+                    var narrowedType = getUnionType(filter(types, t => !(t.flags & typeKind) === isOfTypeKind));
+                    if (narrowedType !== emptyObjectType) {
+                        return narrowedType;
+                    }
                 }
             }
             return type;
@@ -4663,8 +4683,8 @@ module ts {
                             // Stop at the first containing function or module declaration
                             break loop;
                     }
-                    // Use narrowed type if it is a subtype and construct contains no assignments to variable
-                    if (narrowedType !== type && isTypeSubtypeOf(narrowedType, type)) {
+                    // Use narrowed type if construct contains no assignments to variable
+                    if (narrowedType !== type) {
                         if (isVariableAssignedWithin(symbol, node)) {
                             break;
                         }
@@ -4684,20 +4704,30 @@ module ts {
                 if (left.expression.kind !== SyntaxKind.Identifier || getResolvedSymbol(<Identifier>left.expression) !== symbol) {
                     return type;
                 }
-                var t = right.text;
-                var checkType: Type = t === "string" ? stringType : t === "number" ? numberType : t === "boolean" ? booleanType : emptyObjectType;
+                var typeInfo = primitiveTypeInfo[right.text];
                 if (expr.operator === SyntaxKind.ExclamationEqualsEqualsToken) {
                     assumeTrue = !assumeTrue;
                 }
                 if (assumeTrue) {
-                    // The assumed result is true. If check was for a primitive type, that type is the narrowed type. Otherwise we can
-                    // remove the primitive types from the narrowed type.
-                    return checkType === emptyObjectType ? subtractPrimitiveTypes(type, TypeFlags.String | TypeFlags.Number | TypeFlags.Boolean) : checkType;
+                    // Assumed result is true. If check was not for a primitive type, remove all primitive types
+                    if (!typeInfo) {
+                        return removeTypesFromUnionType(type, /*typeKind*/ TypeFlags.StringLike | TypeFlags.NumberLike | TypeFlags.Boolean, /*isOfTypeKind*/ true);
+                    }
+                    // Check was for a primitive type, return that primitive type if it is a subtype
+                    if (isTypeSubtypeOf(typeInfo.type, type)) {
+                        return typeInfo.type;
+                    }
+                    // Otherwise, remove all types that aren't of the primitive type kind. This can happen when the type is
+                    // union of enum types and other types.
+                    return removeTypesFromUnionType(type, /*typeKind*/ typeInfo.flags, /*isOfTypeKind*/ false);
                 }
                 else {
-                    // The assumed result is false. If check was for a primitive type we can remove that type from the narrowed type.
+                    // Assumed result is false. If check was for a primitive type, remove that primitive type
+                    if (typeInfo) {
+                        return removeTypesFromUnionType(type, /*typeKind*/ typeInfo.flags, /*isOfTypeKind*/ true);
+                    }
                     // Otherwise we don't have enough information to do anything.
-                    return checkType === emptyObjectType ? type : subtractPrimitiveTypes(type, checkType.flags);
+                    return type;
                 }
             }
 
@@ -4758,7 +4788,8 @@ module ts {
                 return type;
             }
 
-            // Narrow the given type based on the given expression having the assumed boolean value
+            // Narrow the given type based on the given expression having the assumed boolean value. The returned type
+            // will be a subtype or the same type as the argument.
             function narrowType(type: Type, expr: Expression, assumeTrue: boolean): Type {
                 switch (expr.kind) {
                     case SyntaxKind.ParenthesizedExpression:
@@ -6789,7 +6820,7 @@ module ts {
             // and the right operand to be of type Any or a subtype of the 'Function' interface type. 
             // The result is always of the Boolean primitive type.
             // NOTE: do not raise error if leftType is unknown as related error was already reported
-            if (!isTypeOfKind(leftType, TypeFlags.Any | TypeFlags.ObjectType | TypeFlags.TypeParameter)) {
+            if (isTypeOfKind(leftType, TypeFlags.Primitive)) {
                 error(node.left, Diagnostics.The_left_hand_side_of_an_instanceof_expression_must_be_of_type_any_an_object_type_or_a_type_parameter);
             }
             // NOTE: do not raise error if right is unknown as related error was already reported

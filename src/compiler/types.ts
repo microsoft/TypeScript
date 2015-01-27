@@ -1288,6 +1288,7 @@ module ts {
         ContainsObjectLiteral   = 0x00080000,  // Type is or contains object literal type
 
         Intrinsic = Any | String | Number | Boolean | Void | Undefined | Null,
+        Primitive = String | Number | Boolean | Void | Undefined | Null | StringLiteral | Enum,
         StringLike = String | StringLiteral,
         NumberLike = Number | Enum,
         ObjectType = Class | Interface | Reference | Tuple | Anonymous,
