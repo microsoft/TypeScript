@@ -228,7 +228,7 @@ module ts {
         EnumDeclaration,
         ModuleDeclaration,
         ModuleBlock,
-        ImportDeclaration,
+        ImportEqualsDeclaration,
         ExportAssignment,
 
         // Module references
@@ -849,7 +849,7 @@ module ts {
         statements: NodeArray<ModuleElement>
     }
 
-    export interface ImportDeclaration extends Declaration, ModuleElement {
+    export interface ImportEqualsDeclaration extends Declaration, ModuleElement {
         name: Identifier;
 
         // 'EntityName' for an internal module reference, 'ExternalModuleReference' for an external
@@ -1099,7 +1099,7 @@ module ts {
 
     export interface SymbolVisibilityResult {
         accessibility: SymbolAccessibility;
-        aliasesToMakeVisible?: ImportDeclaration[]; // aliases that need to have this symbol visible
+        aliasesToMakeVisible?: ImportEqualsDeclaration[]; // aliases that need to have this symbol visible
         errorSymbolName?: string; // Optional symbol name that results in error
         errorNode?: Node; // optional node that results in error
     }
@@ -1112,8 +1112,8 @@ module ts {
         getLocalNameOfContainer(container: ModuleDeclaration | EnumDeclaration): string;
         getExpressionNamePrefix(node: Identifier): string;
         getExportAssignmentName(node: SourceFile): string;
-        isReferencedImportDeclaration(node: ImportDeclaration): boolean;
-        isTopLevelValueImportWithEntityName(node: ImportDeclaration): boolean;
+        isReferencedImportEqualsDeclaration(node: ImportEqualsDeclaration): boolean;
+        isTopLevelValueImportEqualsWithEntityName(node: ImportEqualsDeclaration): boolean;
         getNodeCheckFlags(node: Node): NodeCheckFlags;
         getEnumMemberValue(node: EnumMember): number;
         hasSemanticErrors(sourceFile?: SourceFile): boolean;
