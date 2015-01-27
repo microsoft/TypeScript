@@ -335,13 +335,14 @@ module ts {
             var paramTag = "@param";
             var jsDocCommentParts: SymbolDisplayPart[] = [];
 
-            ts.forEach(declarations,(declaration, indexOfDeclaration) => {
+            ts.forEach(declarations, (declaration, indexOfDeclaration) => {
+                // Make sure we are collecting doc comment from declaration once,
+                // In case of union property there might be same declaration multiple times 
+                // which only varies in type parameter
+                // Eg. var a: Array<string> | Array<number>; a.length
+                // The property length will have two declarations of property length coming 
+                // from Array<T> - Array<string> and Array<number>
                 if (indexOf(declarations, declaration) === indexOfDeclaration) {
-                    // Already collected the doc comments from this declaration.
-                    // Eg. var a: Array<string> | Array<number>; a.length
-                    // The property length will have two declarations of property length coming 
-                    // from Array<T> - Array<string> and Array<number>
-                
                     var sourceFileOfDeclaration = getSourceFileOfNode(declaration);
                     // If it is parameter - try and get the jsDoc comment with @param tag from function declaration's jsDoc comments
                     if (canUseParsedParamTagComments && declaration.kind === SyntaxKind.Parameter) {
