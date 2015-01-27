@@ -1317,11 +1317,11 @@ compiled2({ epithet: "stooge" });
 >epithet : string
 
 _.templateSettings = {
->_.templateSettings = {    interpolate: /\{\{(.+?)\}\}/g} : { interpolate: RegExp; evaluate?: RegExp; escape?: RegExp; }
+>_.templateSettings = {    interpolate: /\{\{(.+?)\}\}/g} : { interpolate: RegExp; }
 >_.templateSettings : Underscore.TemplateSettings
 >_ : Underscore.Static
 >templateSettings : Underscore.TemplateSettings
->{    interpolate: /\{\{(.+?)\}\}/g} : { interpolate: RegExp; evaluate?: RegExp; escape?: RegExp; }
+>{    interpolate: /\{\{(.+?)\}\}/g} : { interpolate: RegExp; }
 
     interpolate: /\{\{(.+?)\}\}/g
 >interpolate : RegExp
@@ -1347,7 +1347,7 @@ _.template("Using 'with': <%= data.answer %>", { answer: 'no' }, { variable: 'da
 >template : { (templateString: string): (data: any) => string; (templateString: string, data: any, settings?: Underscore.TemplateSettings): string; }
 >{ answer: 'no' } : { answer: string; }
 >answer : string
->{ variable: 'data' } : { variable: string; evaluate?: RegExp; interpolate?: RegExp; escape?: RegExp; }
+>{ variable: 'data' } : { variable: string; }
 >variable : string
 
 === tests/cases/compiler/underscoreTest1_underscore.ts ===

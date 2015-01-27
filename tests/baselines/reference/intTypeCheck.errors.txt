@@ -41,8 +41,8 @@ tests/cases/compiler/intTypeCheck.ts(148,5): error TS2322: Type 'boolean' is not
 tests/cases/compiler/intTypeCheck.ts(148,21): error TS1109: Expression expected.
 tests/cases/compiler/intTypeCheck.ts(148,22): error TS2304: Cannot find name 'i4'.
 tests/cases/compiler/intTypeCheck.ts(149,17): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
-tests/cases/compiler/intTypeCheck.ts(154,5): error TS2322: Type '{ p1?: any; p2?: string; p4?(): any; p5?(): void; p7?(pa1: any, pa2: any): void; }' is not assignable to type 'i5'.
-  Property 'p' is missing in type '{ p1?: any; p2?: string; p4?(): any; p5?(): void; p7?(pa1: any, pa2: any): void; }'.
+tests/cases/compiler/intTypeCheck.ts(154,5): error TS2322: Type '{}' is not assignable to type 'i5'.
+  Property 'p' is missing in type '{}'.
 tests/cases/compiler/intTypeCheck.ts(155,5): error TS2322: Type 'Object' is not assignable to type 'i5'.
   Property 'p' is missing in type 'Object'.
 tests/cases/compiler/intTypeCheck.ts(156,17): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
@@ -321,8 +321,8 @@ tests/cases/compiler/intTypeCheck.ts(205,17): error TS2351: Cannot use 'new' wit
     var obj44: i5;
     var obj45: i5 = {};
         ~~~~~
-!!! error TS2322: Type '{ p1?: any; p2?: string; p4?(): any; p5?(): void; p7?(pa1: any, pa2: any): void; }' is not assignable to type 'i5'.
-!!! error TS2322:   Property 'p' is missing in type '{ p1?: any; p2?: string; p4?(): any; p5?(): void; p7?(pa1: any, pa2: any): void; }'.
+!!! error TS2322: Type '{}' is not assignable to type 'i5'.
+!!! error TS2322:   Property 'p' is missing in type '{}'.
     var obj46: i5 = new Object();
         ~~~~~
 !!! error TS2322: Type 'Object' is not assignable to type 'i5'.
