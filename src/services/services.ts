@@ -2045,12 +2045,12 @@ module ts {
 
             // Now create a new compiler
             program = createProgram(hostfilenames, compilationSettings, {
-                getSourceFile: getSourceFile,
+                getSourceFile,
                 getCancellationToken: () => cancellationToken,
                 getCanonicalFileName: filename => useCaseSensitivefilenames ? filename : filename.toLowerCase(),
                 useCaseSensitiveFileNames: () => useCaseSensitivefilenames,
                 getNewLine: () => host.getNewLine ? host.getNewLine() : "\r\n",
-                getDefaultLibFilename: getDefaultLibraryFilename,
+                getDefaultLibFilename,
                 writeFile: (filename, data, writeByteOrderMark) => { },
                 getCurrentDirectory: () => host.getCurrentDirectory()
             });
@@ -5698,16 +5698,16 @@ module ts {
 
     /// getDefaultLibraryFilePath
     declare var __dirname: string;
-    declare var module: any;
-
+    
     /**
       * Get the path of the default library file (lib.d.ts) as distributed with the typescript
       * node package.
       * The functionality is not supported if the ts module is consumed outside of a node module. 
       */
     export function getDefaultLibraryFilePath(options: CompilerOptions): string {
-        if (typeof module !== "undefined" && module.exports) {
-            return __dirname + directorySeparator + getDefaultLibraryFilename(options);
+        // Check __dirname is defined and that we are on a node.js system.
+        if (typeof __dirname !== "undefined") {
+            return __dirname + directorySeparator + getDefaultLibFilename(options);
         }
 
         throw new Error("getDefaultLibraryFilename is only supported when consumed as a node module. ");

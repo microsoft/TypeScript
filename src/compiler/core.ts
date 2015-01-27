@@ -633,7 +633,7 @@ module ts {
         }
     }
 
-    export function getDefaultLibraryFilename(options: CompilerOptions): string {
+    export function getDefaultLibFilename(options: CompilerOptions): string {
         return options.target === ScriptTarget.ES6 ? "lib.es6.d.ts" : "lib.d.ts";
     }
 
