@@ -11,10 +11,10 @@
 ////}
 
 goTo.marker('1');
-verify.quickInfoIs('(var) value: number');
+verify.quickInfoIs('(parameter) value: number');
 
 goTo.marker('2');
-verify.quickInfoIs('(var) value: number');
+verify.quickInfoIs('(parameter) value: number');
 
 goTo.marker('3');
 verify.quickInfoIs('(method) Number.toExponential(fractionDigits?: number): string');
