@@ -5996,7 +5996,7 @@ module ts {
             }
             else {
                 // Ordinary case - simple function invocation.
-                return (<CallExpression>callExpression).typeArguments;
+                return callExpression.typeArguments;
             }
         }
 
