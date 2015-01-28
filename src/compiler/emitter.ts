@@ -3687,13 +3687,13 @@ module ts {
                 }
             }
 
-            function shouldEnumModuleDeclaration(node: ModuleDeclaration) {
+            function shouldEmitModuleDeclaration(node: ModuleDeclaration) {
                 return isInstantiatedModule(node, compilerOptions.preserveConstEnums);
             }
 
             function emitModuleDeclaration(node: ModuleDeclaration) {
                 // Emit only if this module is non-ambient.
-                var shouldEmit = shouldEnumModuleDeclaration(node);
+                var shouldEmit = shouldEmitModuleDeclaration(node);
 
                 if (!shouldEmit) {
                     return emitPinnedOrTripleSlashComments(node);
@@ -3967,7 +3967,7 @@ module ts {
                     case SyntaxKind.ModuleDeclaration:
                         // Only emit the leading/trailing comments for a module if we're actually 
                         // emitting the module as well.
-                        return shouldEnumModuleDeclaration(<ModuleDeclaration>node);
+                        return shouldEmitModuleDeclaration(<ModuleDeclaration>node);
 
                     case SyntaxKind.EnumDeclaration:
                         // Only emit the leading/trailing comments for an enum if we're actually 
