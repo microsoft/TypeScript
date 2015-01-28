@@ -287,6 +287,7 @@ module ts {
         TypeArguments,           // Type arguments in type argument list
         TupleElementTypes,       // Element types in tuple element type list
         HeritageClauses,         // Heritage clauses for a class or interface declaration.
+        ImportSpecifiers,        // Named import clause's import specifier list
         Count                    // Number of parsing contexts
     }
 
@@ -306,7 +307,7 @@ module ts {
             case ParsingContext.TypeMembers:            return Diagnostics.Property_or_signature_expected;
             case ParsingContext.ClassMembers:           return Diagnostics.Unexpected_token_A_constructor_method_accessor_or_property_was_expected;
             case ParsingContext.EnumMembers:            return Diagnostics.Enum_member_expected;
-            case ParsingContext.TypeReferences:     return Diagnostics.Type_reference_expected;
+            case ParsingContext.TypeReferences:         return Diagnostics.Type_reference_expected;
             case ParsingContext.VariableDeclarations:   return Diagnostics.Variable_declaration_expected;
             case ParsingContext.ObjectBindingElements:  return Diagnostics.Property_destructuring_pattern_expected;
             case ParsingContext.ArrayBindingElements:   return Diagnostics.Array_element_destructuring_pattern_expected;
@@ -318,6 +319,7 @@ module ts {
             case ParsingContext.TypeArguments:          return Diagnostics.Type_argument_expected;
             case ParsingContext.TupleElementTypes:      return Diagnostics.Type_expected;
             case ParsingContext.HeritageClauses:        return Diagnostics.Unexpected_token_expected;
+            case ParsingContext.ImportSpecifiers:       return Diagnostics.Identifier_expected;
         }
     };
 
@@ -1450,6 +1452,8 @@ module ts {
                     return token === SyntaxKind.CommaToken || isStartOfType();
                 case ParsingContext.HeritageClauses:
                     return isHeritageClause();
+                case ParsingContext.ImportSpecifiers:
+                    return isIdentifierOrKeyword();
             }
 
             Debug.fail("Non-exhaustive case in 'isListElement'.");
@@ -1486,6 +1490,7 @@ module ts {
                 case ParsingContext.EnumMembers:
                 case ParsingContext.ObjectLiteralMembers:
                 case ParsingContext.ObjectBindingElements:
+                case ParsingContext.ImportSpecifiers:
                     return token === SyntaxKind.CloseBraceToken;
                 case ParsingContext.SwitchClauseStatements:
                     return token === SyntaxKind.CloseBraceToken || token === SyntaxKind.CaseKeyword || token === SyntaxKind.DefaultKeyword;
@@ -4521,7 +4526,8 @@ module ts {
         function parseImportDeclarationOrStatement(fullStart: number, modifiers: ModifiersArray): ImportEqualsDeclaration | ImportStatement {
             parseExpected(SyntaxKind.ImportKeyword);
             if (token === SyntaxKind.StringLiteral ||
-                token === SyntaxKind.AsteriskToken) {
+                token === SyntaxKind.AsteriskToken ||
+                token === SyntaxKind.OpenBraceToken) {
                 return parseImportStatement(fullStart, modifiers);
             }
 
@@ -4598,7 +4604,7 @@ module ts {
             //  ImportedDefaultBinding, NamedImports from
 
             var importClause = <ImportClause>createNode(SyntaxKind.ImportClause);
-            importClause.bindings = parseNamespaceImport();
+            importClause.bindings = token === SyntaxKind.AsteriskToken ? parseNamespaceImport() : parseNamedImports();
             parseExpected(SyntaxKind.FromKeyword);
             return finishNode(importClause);
         }
@@ -4611,6 +4617,36 @@ module ts {
             parseExpected(SyntaxKind.AsKeyword);
             namespaceImport.name = parseIdentifier();
             return finishNode(namespaceImport);
+        }
+
+        function parseNamedImports(): NamedImports {
+            var namedImports = <NamedImports>createNode(SyntaxKind.NamedImports);
+
+            // NamedImports:
+            //  { }
+            //  { ImportsList }
+            //  { ImportsList, }
+
+            // ImportsList:
+            //  ImportSpecifier
+            //  ImportsList, ImportSpecifier
+            parseExpected(SyntaxKind.OpenBraceToken);
+            namedImports.elements = parseDelimitedList(ParsingContext.ImportSpecifiers, parseImportSpecifier);
+            parseExpected(SyntaxKind.CloseBraceToken);
+            return finishNode(namedImports);
+        }
+
+        function parseImportSpecifier(): ImportSpecifier {
+            var node = <ImportSpecifier>createNode(SyntaxKind.ImportSpecifier);
+            // ImportSpecifier:
+            //  ImportedBinding
+            //  IdentifierName as ImportedBinding
+            if (lookAhead(nextTokenIsAsKeyword)) {
+                node.propertyName = parseIdentifierName();
+                parseExpected(SyntaxKind.AsKeyword);
+            }
+            node.name = parseIdentifier();
+            return finishNode(node);
         }
 
         function parseExportAssignmentTail(fullStart: number, modifiers: ModifiersArray): ExportAssignment {
@@ -4642,8 +4678,8 @@ module ts {
                     // Not true keywords so ensure an identifier follows
                     return lookAhead(nextTokenIsIdentifierOrKeyword);
                 case SyntaxKind.ImportKeyword:
-                    // Not true keywords so ensure an identifier follows or is string literal or asterisk
-                    return lookAhead(nextTokenIsIdentifierOrKeywordOrStringLiteralOrAsterisk) ;
+                    // Not true keywords so ensure an identifier follows or is string literal or asterisk or open brace
+                    return lookAhead(nextTokenIsIdentifierOrKeywordOrStringLiteralOrAsteriskOrOpenBrace) ;
                 case SyntaxKind.ModuleKeyword:
                     // Not a true keyword so ensure an identifier or string literal follows
                     return lookAhead(nextTokenIsIdentifierOrKeywordOrStringLiteral);
@@ -4674,10 +4710,10 @@ module ts {
             return isIdentifierOrKeyword() || token === SyntaxKind.StringLiteral;
         }
 
-        function nextTokenIsIdentifierOrKeywordOrStringLiteralOrAsterisk() {
+        function nextTokenIsIdentifierOrKeywordOrStringLiteralOrAsteriskOrOpenBrace() {
             nextToken();
             return isIdentifierOrKeyword() || token === SyntaxKind.StringLiteral ||
-                token === SyntaxKind.AsteriskToken;
+                token === SyntaxKind.AsteriskToken || token === SyntaxKind.OpenBraceToken;
         }
 
         function nextTokenIsEqualsTokenOrDeclarationStart() {
@@ -4688,6 +4724,10 @@ module ts {
         function nextTokenIsDeclarationStart() {
             nextToken();
             return isDeclarationStart();
+        }
+
+        function nextTokenIsAsKeyword() {
+            return nextToken() === SyntaxKind.AsKeyword;
         }
 
         function parseDeclaration(): ModuleElement {
