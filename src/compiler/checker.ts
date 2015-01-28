@@ -16,6 +16,8 @@ module ts {
         var emptySymbols: SymbolTable = {};
 
         var compilerOptions = host.getCompilerOptions();
+        var languageVersion = compilerOptions.target || ScriptTarget.ES3;
+
         var emitResolver = createResolver();
 
         var checker: TypeChecker = {
@@ -333,6 +335,25 @@ module ts {
                                 return undefined;
                             }
                             break loop;
+                        }
+                        break;
+
+                    // It is not legal to reference a class's own type parameters from a computed property name that
+                    // belongs to the class. For example:
+                    //
+                    //   function foo<T>() { return '' }
+                    //   class C<T> { // <-- Class's own type parameter T
+                    //       [foo<T>()]() { } // <-- Reference to T from class's own computed property
+                    //   }
+                    //
+                    case SyntaxKind.ComputedPropertyName:
+                        var grandparent = location.parent.parent;
+                        if (grandparent.kind === SyntaxKind.ClassDeclaration || grandparent.kind === SyntaxKind.InterfaceDeclaration) {
+                            // A reference to this grandparent's type parameters would be an error
+                            if (result = getSymbol(getSymbolOfNode(grandparent).members, name, meaning & SymbolFlags.Type)) {
+                                error(errorLocation, Diagnostics.A_computed_property_name_cannot_reference_a_type_parameter_from_its_containing_type);
+                                return undefined;
+                            }
                         }
                         break;
                     case SyntaxKind.MethodDeclaration:
@@ -1658,7 +1679,7 @@ module ts {
                 // Use type of the specified property, or otherwise, for a numeric name, the type of the numeric index signature,
                 // or otherwise the type of the string index signature.
                 var type = getTypeOfPropertyOfType(parentType, name.text) ||
-                    isNumericName(name.text) && getIndexTypeOfType(parentType, IndexKind.Number) ||
+                    isNumericLiteralName(name.text) && getIndexTypeOfType(parentType, IndexKind.Number) ||
                     getIndexTypeOfType(parentType, IndexKind.String);
                 if (!type) {
                     error(name, Diagnostics.Type_0_has_no_property_1_and_no_string_index_signature, typeToString(parentType), declarationNameToString(name));
@@ -1704,7 +1725,7 @@ module ts {
             if (declaration.kind === SyntaxKind.Parameter) {
                 var func = <FunctionLikeDeclaration>declaration.parent;
                 // For a parameter of a set accessor, use the type of the get accessor if one is present
-                if (func.kind === SyntaxKind.SetAccessor && !hasComputedNameButNotSymbol(func)) {
+                if (func.kind === SyntaxKind.SetAccessor && !hasDynamicName(func)) {
                     var getter = <AccessorDeclaration>getDeclarationOfKind(declaration.parent.symbol, SyntaxKind.GetAccessor);
                     if (getter) {
                         return getReturnTypeOfSignature(getSignatureFromDeclaration(getter));
@@ -2620,7 +2641,7 @@ module ts {
                 else {
                     // TypeScript 1.0 spec (April 2014):
                     // If only one accessor includes a type annotation, the other behaves as if it had the same type annotation.
-                    if (declaration.kind === SyntaxKind.GetAccessor && !hasComputedNameButNotSymbol(declaration)) {
+                    if (declaration.kind === SyntaxKind.GetAccessor && !hasDynamicName(declaration)) {
                         var setter = <AccessorDeclaration>getDeclarationOfKind(declaration.symbol, SyntaxKind.SetAccessor);
                         returnType = getAnnotatedAccessorType(setter);
                     }
@@ -4757,6 +4778,7 @@ module ts {
                 return type;
             }
         }
+
         /*Transitively mark all linked imports as referenced*/
         function markLinkedImportsAsReferenced(node: ImportDeclaration): void {
             var nodeLinks = getNodeLinks(node);
@@ -4853,6 +4875,9 @@ module ts {
                         // do not return here so in case if lexical this is captured - it will be reflected in flags on NodeLinks
                     }
                     break;
+                case SyntaxKind.ComputedPropertyName:
+                    error(node, Diagnostics.this_cannot_be_referenced_in_a_computed_property_name);
+                    break;
             }
 
             if (needToCaptureLexicalThis) {
@@ -4865,26 +4890,6 @@ module ts {
                 return container.flags & NodeFlags.Static ? getTypeOfSymbol(symbol) : getDeclaredTypeOfSymbol(symbol);
             }
             return anyType;
-        }
-
-        function getSuperContainer(node: Node): Node {
-            while (true) {
-                node = node.parent;
-                if (!node) return node;
-                switch (node.kind) {
-                    case SyntaxKind.FunctionDeclaration:
-                    case SyntaxKind.FunctionExpression:
-                    case SyntaxKind.ArrowFunction:
-                    case SyntaxKind.PropertyDeclaration:
-                    case SyntaxKind.PropertySignature:
-                    case SyntaxKind.MethodDeclaration:
-                    case SyntaxKind.MethodSignature:
-                    case SyntaxKind.Constructor:
-                    case SyntaxKind.GetAccessor:
-                    case SyntaxKind.SetAccessor:
-                        return node;
-                }
-            }
         }
 
         function isInConstructorArgumentInitializer(node: Node, constructorDecl: Node): boolean {
@@ -4910,7 +4915,7 @@ module ts {
                 return unknownType;
             }
 
-            var container = getSuperContainer(node);
+            var container = getSuperContainer(node, /*includeFunctions*/ true);
 
             if (container) {
                 var canUseSuperExpression = false;
@@ -4928,7 +4933,7 @@ module ts {
                     // super property access might appear in arrow functions with arbitrary deep nesting
                     var needToCaptureLexicalThis = false;
                     while (container && container.kind === SyntaxKind.ArrowFunction) {
-                        container = getSuperContainer(container);
+                        container = getSuperContainer(container, /*includeFunctions*/ true);
                         needToCaptureLexicalThis = true;
                     }
 
@@ -4983,7 +4988,10 @@ module ts {
                 }
             }
 
-            if (isCallExpression) {
+            if (container.kind === SyntaxKind.ComputedPropertyName) {
+                error(node, Diagnostics.super_cannot_be_referenced_in_a_computed_property_name);
+            }
+            else if (isCallExpression) {
                 error(node, Diagnostics.Super_calls_are_not_permitted_outside_constructors_or_in_nested_functions_inside_constructors);
             }
             else {
@@ -5165,13 +5173,22 @@ module ts {
         function getContextualTypeForObjectLiteralElement(element: ObjectLiteralElement) {
             var objectLiteral = <ObjectLiteralExpression>element.parent;
             var type = getContextualType(objectLiteral);
-            // TODO(jfreeman): Handle this case for computed names and symbols
-            var name = (<Identifier>element.name).text;
-            if (type && name) {
-                return getTypeOfPropertyOfContextualType(type, name) ||
-                    isNumericName(name) && getIndexTypeOfContextualType(type, IndexKind.Number) ||
+            if (type) {
+                if (!hasDynamicName(element)) {
+                    // For a (non-symbol) computed property, there is no reason to look up the name
+                    // in the type. It will just be "__computed", which does not appear in any
+                    // SymbolTable.
+                    var symbolName = getSymbolOfNode(element).name;
+                    var propertyType = getTypeOfPropertyOfContextualType(type, symbolName);
+                    if (propertyType) {
+                        return propertyType;
+                    }
+                }
+                
+                return isNumericName(element.name) && getIndexTypeOfContextualType(type, IndexKind.Number) ||
                     getIndexTypeOfContextualType(type, IndexKind.String);
             }
+
             return undefined;
         }
 
@@ -5370,7 +5387,17 @@ module ts {
             return createArrayType(getUnionType(elementTypes));
         }
 
-        function isNumericName(name: string) {
+        function isNumericName(name: DeclarationName): boolean {
+            return name.kind === SyntaxKind.ComputedPropertyName ? isNumericComputedName(<ComputedPropertyName>name) : isNumericLiteralName((<Identifier>name).text);
+        }
+
+        function isNumericComputedName(name: ComputedPropertyName): boolean {
+            // It seems odd to consider an expression of type Any to result in a numeric name,
+            // but this behavior is consistent with checkIndexedAccess
+            return isTypeOfKind(checkComputedPropertyName(name), TypeFlags.Any | TypeFlags.NumberLike);
+        }
+
+        function isNumericLiteralName(name: string) {
             // The intent of numeric names is that
             //     - they are names with text in a numeric form, and that
             //     - setting properties/indexing with them is always equivalent to doing so with the numeric literal 'numLit',
@@ -5395,62 +5422,83 @@ module ts {
             return (+name).toString() === name;
         }
 
+        function checkComputedPropertyName(node: ComputedPropertyName): Type {
+            var links = getNodeLinks(node.expression);
+            if (!links.resolvedType) {
+                links.resolvedType = checkExpression(node.expression);
+
+                // This will allow types number, string, or any. It will also allow enums, the unknown
+                // type, and any union of these types (like string | number).
+                if (!isTypeOfKind(links.resolvedType, TypeFlags.Any | TypeFlags.NumberLike | TypeFlags.StringLike)) {
+                    error(node, Diagnostics.A_computed_property_name_must_be_of_type_string_number_or_any);
+                }
+            }
+
+            return links.resolvedType;
+        }
+
         function checkObjectLiteral(node: ObjectLiteralExpression, contextualMapper?: TypeMapper): Type {
             // Grammar checking
             checkGrammarObjectLiteralExpression(node);
 
-            var members = node.symbol.members;
             var properties: SymbolTable = {};
             var contextualType = getContextualType(node);
             var typeFlags: TypeFlags;
 
-            for (var id in members) {
-                if (hasProperty(members, id)) {
-                    var member = members[id];
-                    if (member.flags & SymbolFlags.Property || isObjectLiteralMethod(member.declarations[0])) {
-                        var memberDecl = <ObjectLiteralElement>member.declarations[0];
-                        if (memberDecl.kind === SyntaxKind.PropertyAssignment) {
-                            var type = checkExpression((<PropertyAssignment>memberDecl).initializer, contextualMapper);
-                        }
-                        else if (memberDecl.kind === SyntaxKind.MethodDeclaration) {
-                            var type = checkObjectLiteralMethod(<MethodDeclaration>memberDecl, contextualMapper);
-                        }
-                        else {
-                            Debug.assert(memberDecl.kind === SyntaxKind.ShorthandPropertyAssignment);
-                            var type = memberDecl.name.kind === SyntaxKind.ComputedPropertyName
-                                ? unknownType
-                                : checkExpression(<Identifier>memberDecl.name, contextualMapper);
-                        }
-                        typeFlags |= type.flags;
-                        var prop = <TransientSymbol>createSymbol(SymbolFlags.Property | SymbolFlags.Transient | member.flags, member.name);
-                        prop.declarations = member.declarations;
-                        prop.parent = member.parent;
-                        if (member.valueDeclaration) {
-                            prop.valueDeclaration = member.valueDeclaration;
-                        }
-
-                        prop.type = type;
-                        prop.target = member;
-                        member = prop;
+            for (var i = 0; i < node.properties.length; i++) {
+                var memberDecl = node.properties[i];
+                var member = memberDecl.symbol;
+                if (memberDecl.kind === SyntaxKind.PropertyAssignment ||
+                    memberDecl.kind === SyntaxKind.ShorthandPropertyAssignment ||
+                    isObjectLiteralMethod(memberDecl)) {
+                    if (memberDecl.kind === SyntaxKind.PropertyAssignment) {
+                        var type = checkPropertyAssignment(<PropertyAssignment>memberDecl, contextualMapper);
+                    }
+                    else if (memberDecl.kind === SyntaxKind.MethodDeclaration) {
+                        var type = checkObjectLiteralMethod(<MethodDeclaration>memberDecl, contextualMapper);
                     }
                     else {
-                        // TypeScript 1.0 spec (April 2014)
-                        // A get accessor declaration is processed in the same manner as 
-                        // an ordinary function declaration(section 6.1) with no parameters.
-                        // A set accessor declaration is processed in the same manner 
-                        // as an ordinary function declaration with a single parameter and a Void return type.
-                        var getAccessor = <AccessorDeclaration>getDeclarationOfKind(member, SyntaxKind.GetAccessor);
-                        if (getAccessor) {
-                            checkAccessorDeclaration(getAccessor);
-                        }
-
-                        var setAccessor = <AccessorDeclaration>getDeclarationOfKind(member, SyntaxKind.SetAccessor);
-                        if (setAccessor) {
-                            checkAccessorDeclaration(setAccessor);
-                        }
+                        Debug.assert(memberDecl.kind === SyntaxKind.ShorthandPropertyAssignment);
+                        var type = memberDecl.name.kind === SyntaxKind.ComputedPropertyName
+                            ? unknownType
+                            : checkExpression(<Identifier>memberDecl.name, contextualMapper);
                     }
+                    typeFlags |= type.flags;
+                    var prop = <TransientSymbol>createSymbol(SymbolFlags.Property | SymbolFlags.Transient | member.flags, member.name);
+                    prop.declarations = member.declarations;
+                    prop.parent = member.parent;
+                    if (member.valueDeclaration) {
+                        prop.valueDeclaration = member.valueDeclaration;
+                    }
+
+                    prop.type = type;
+                    prop.target = member;
+                    member = prop;
+                }
+                else {
+                    // TypeScript 1.0 spec (April 2014)
+                    // A get accessor declaration is processed in the same manner as 
+                    // an ordinary function declaration(section 6.1) with no parameters.
+                    // A set accessor declaration is processed in the same manner 
+                    // as an ordinary function declaration with a single parameter and a Void return type.
+                    Debug.assert(memberDecl.kind === SyntaxKind.GetAccessor || memberDecl.kind === SyntaxKind.SetAccessor);
+                    checkAccessorDeclaration(<AccessorDeclaration>memberDecl);
+                }
+
+                if (!hasDynamicName(memberDecl)) {
                     properties[member.name] = member;
                 }
+            }
+
+            // If object literal is contextually (but not inferentially) typed, copy missing optional properties from
+            // the contextual type such that the resulting type becomes a subtype in cases where only optional properties
+            // were omitted. There is no need to create new property objects as nothing in them needs to change.
+            if (contextualType && !isInferentialContext(contextualMapper)) {
+                forEach(getPropertiesOfObjectType(contextualType), p => {
+                    if (p.flags & SymbolFlags.Optional && !hasProperty(properties, p.name)) {
+                        properties[p.name] = p;
+                    }
+                });
             }
 
             var stringIndexType = getIndexType(IndexKind.String);
@@ -5462,13 +5510,12 @@ module ts {
             function getIndexType(kind: IndexKind) {
                 if (contextualType && contextualTypeHasIndexSignature(contextualType, kind)) {
                     var propTypes: Type[] = [];
-                    for (var id in properties) {
-                        if (hasProperty(properties, id)) {
-                            if (kind === IndexKind.String || isNumericName(id)) {
-                                var type = getTypeOfSymbol(properties[id]);
-                                if (!contains(propTypes, type)) {
-                                    propTypes.push(type);
-                                }
+                    for (var i = 0; i < node.properties.length; i++) {
+                        var propertyDecl = node.properties[i];
+                        if (kind === IndexKind.String || isNumericName(propertyDecl.name)) {
+                            var type = getTypeOfSymbol(getSymbolOfNode(propertyDecl));
+                            if (!contains(propTypes, type)) {
+                                propTypes.push(type);
                             }
                         }
                     }
@@ -5618,7 +5665,7 @@ module ts {
             }
 
             var isConstEnum = isConstEnumObjectType(objectType);
-            if (isConstEnum && 
+            if (isConstEnum &&
                 (!node.argumentExpression || node.argumentExpression.kind !== SyntaxKind.StringLiteral)) {
                 error(node.argumentExpression, Diagnostics.A_const_enum_member_can_only_be_accessed_using_a_string_literal);
                 return unknownType;
@@ -5650,10 +5697,10 @@ module ts {
             }
 
             // Check for compatible indexer types.
-            if (indexType.flags & (TypeFlags.Any | TypeFlags.StringLike | TypeFlags.NumberLike)) { 
+            if (isTypeOfKind(indexType, TypeFlags.Any | TypeFlags.StringLike | TypeFlags.NumberLike)) {
 
                 // Try to use a number indexer.
-                if (indexType.flags & (TypeFlags.Any | TypeFlags.NumberLike)) {
+                if (isTypeOfKind(indexType, TypeFlags.Any | TypeFlags.NumberLike)) {
                     var numberIndexType = getIndexTypeOfType(objectType, IndexKind.Number);
                     if (numberIndexType) {
                         return numberIndexType;
@@ -6357,7 +6404,7 @@ module ts {
 
         function checkTaggedTemplateExpression(node: TaggedTemplateExpression): Type {
             // Grammar checking
-            if (compilerOptions.target < ScriptTarget.ES6) {
+            if (languageVersion < ScriptTarget.ES6) {
                 grammarErrorOnFirstToken(node.template, Diagnostics.Tagged_templates_are_only_available_when_targeting_ECMAScript_6_and_higher);
             }
 
@@ -6554,7 +6601,7 @@ module ts {
         }
 
         function checkArithmeticOperandType(operand: Node, type: Type, diagnostic: DiagnosticMessage): boolean {
-            if (!(type.flags & (TypeFlags.Any | TypeFlags.NumberLike))) {
+            if (!isTypeOfKind(type, TypeFlags.Any | TypeFlags.NumberLike)) {
                 error(operand, diagnostic);
                 return false;
             }
@@ -6705,12 +6752,21 @@ module ts {
             return numberType;
         }
 
-        // Return true if type an object type, a type parameter, or a union type composed of only those kinds of types
-        function isStructuredType(type: Type): boolean {
-            if (type.flags & TypeFlags.Union) {
-                return !forEach((<UnionType>type).types, t => !isStructuredType(t));
+        // Return true if type has the given flags, or is a union type composed of types that all have those flags
+        function isTypeOfKind(type: Type, kind: TypeFlags): boolean {
+            if (type.flags & kind) {
+                return true;
             }
-            return (type.flags & (TypeFlags.ObjectType | TypeFlags.TypeParameter)) !== 0;
+            if (type.flags & TypeFlags.Union) {
+                var types = (<UnionType>type).types;
+                for (var i = 0; i < types.length; i++) {
+                    if (!(types[i].flags & kind)) {
+                        return false;
+                    }
+                }
+                return true;
+            }
+            return false;
         }
 
         function isConstEnumObjectType(type: Type): boolean {
@@ -6727,7 +6783,7 @@ module ts {
             // and the right operand to be of type Any or a subtype of the 'Function' interface type. 
             // The result is always of the Boolean primitive type.
             // NOTE: do not raise error if leftType is unknown as related error was already reported
-            if (!(leftType.flags & TypeFlags.Any || isStructuredType(leftType))) {
+            if (!isTypeOfKind(leftType, TypeFlags.Any | TypeFlags.ObjectType | TypeFlags.TypeParameter)) {
                 error(node.left, Diagnostics.The_left_hand_side_of_an_instanceof_expression_must_be_of_type_any_an_object_type_or_a_type_parameter);
             }
             // NOTE: do not raise error if right is unknown as related error was already reported
@@ -6742,10 +6798,10 @@ module ts {
             // The in operator requires the left operand to be of type Any, the String primitive type, or the Number primitive type,
             // and the right operand to be of type Any, an object type, or a type parameter type.
             // The result is always of the Boolean primitive type.
-            if (leftType !== anyType && leftType !== stringType && leftType !== numberType) {
+            if (!isTypeOfKind(leftType, TypeFlags.Any | TypeFlags.StringLike | TypeFlags.NumberLike)) {
                 error(node.left, Diagnostics.The_left_hand_side_of_an_in_expression_must_be_of_types_any_string_or_number);
             }
-            if (!(rightType.flags & TypeFlags.Any || isStructuredType(rightType))) {
+            if (!isTypeOfKind(rightType, TypeFlags.Any | TypeFlags.ObjectType | TypeFlags.TypeParameter)) {
                 error(node.right, Diagnostics.The_right_hand_side_of_an_in_expression_must_be_of_type_any_an_object_type_or_a_type_parameter);
             }
             return booleanType;
@@ -6760,7 +6816,7 @@ module ts {
                     var name = <Identifier>(<PropertyAssignment>p).name;
                     var type = sourceType.flags & TypeFlags.Any ? sourceType :
                         getTypeOfPropertyOfType(sourceType, name.text) ||
-                        isNumericName(name.text) && getIndexTypeOfType(sourceType, IndexKind.Number) ||
+                        isNumericLiteralName(name.text) && getIndexTypeOfType(sourceType, IndexKind.Number) ||
                         getIndexTypeOfType(sourceType, IndexKind.String);
                     if (type) {
                         checkDestructuringAssignment((<PropertyAssignment>p).initializer || name, type);
@@ -6906,16 +6962,16 @@ module ts {
                     if (rightType.flags & (TypeFlags.Undefined | TypeFlags.Null)) rightType = leftType;
 
                     var resultType: Type;
-                    if (leftType.flags & TypeFlags.NumberLike && rightType.flags & TypeFlags.NumberLike) {
+                    if (isTypeOfKind(leftType, TypeFlags.NumberLike) && isTypeOfKind(rightType, TypeFlags.NumberLike)) {
                         // Operands of an enum type are treated as having the primitive type Number.
                         // If both operands are of the Number primitive type, the result is of the Number primitive type.
                         resultType = numberType;
                     }
-                    else if (leftType.flags & TypeFlags.StringLike || rightType.flags & TypeFlags.StringLike) {
+                    else if (isTypeOfKind(leftType, TypeFlags.StringLike) || isTypeOfKind(rightType, TypeFlags.StringLike)) {
                         // If one or both operands are of the String primitive type, the result is of the String primitive type.
                         resultType = stringType;
                     }
-                    else if (leftType.flags & TypeFlags.Any || leftType === unknownType || rightType.flags & TypeFlags.Any || rightType === unknownType) {
+                    else if (leftType.flags & TypeFlags.Any || rightType.flags & TypeFlags.Any) {
                         // Otherwise, the result is of type Any.
                         // NOTE: unknown type here denotes error type. Old compiler treated this case as any type so do we.
                         resultType = anyType;
@@ -7041,9 +7097,21 @@ module ts {
             return links.resolvedType;
         }
 
+        function checkPropertyAssignment(node: PropertyAssignment, contextualMapper?: TypeMapper): Type {
+            if (hasDynamicName(node)) {
+                checkComputedPropertyName(<ComputedPropertyName>node.name);
+            }
+
+            return checkExpression((<PropertyAssignment>node).initializer, contextualMapper);
+        }
+
         function checkObjectLiteralMethod(node: MethodDeclaration, contextualMapper?: TypeMapper): Type {
             // Grammar checking
             checkGrammarMethod(node);
+
+            if (hasDynamicName(node)) {
+                checkComputedPropertyName(<ComputedPropertyName>node.name);
+            }
 
             var uninstantiatedType = checkFunctionExpressionOrObjectLiteralMethod(node, contextualMapper);
             return instantiateTypeWithSingleGenericCallSignature(node, uninstantiatedType, contextualMapper);
@@ -7415,7 +7483,7 @@ module ts {
                     }
                 }
 
-                if (!hasComputedNameButNotSymbol(node)) {
+                if (!hasDynamicName(node)) {
                     // TypeScript 1.0 spec (April 2014): 8.4.3
                     // Accessors for the same member name must specify the same accessibility.
                     var otherKind = node.kind === SyntaxKind.GetAccessor ? SyntaxKind.SetAccessor : SyntaxKind.GetAccessor;
@@ -7435,9 +7503,9 @@ module ts {
                             }
                         }
                     }
-
-                    checkAndStoreTypeOfAccessors(getSymbolOfNode(node));
                 }
+
+                checkAndStoreTypeOfAccessors(getSymbolOfNode(node));
             }
 
             checkFunctionLikeDeclaration(node);
@@ -7853,7 +7921,12 @@ module ts {
         function checkFunctionLikeDeclaration(node: FunctionLikeDeclaration): void {
             checkSignatureDeclaration(node);
 
-            if (!hasComputedNameButNotSymbol(node)) {
+            if (hasDynamicName(node)) {
+                // This check will account for methods in class/interface declarations,
+                // as well as accessors in classes/object literals
+                checkComputedPropertyName(<ComputedPropertyName>node.name);
+            }
+            else {
                 // first we want to check the local symbol that contain this declaration
                 // - if node.localSymbol !== undefined - this is current declaration is exported and localSymbol points to the local symbol
                 // - if node.localSymbol === undefined - this node is non-exported so we can just pick the result of getSymbolOfNode
@@ -8082,7 +8155,8 @@ module ts {
         function checkVariableLikeDeclaration(node: VariableLikeDeclaration) {
             checkSourceElement(node.type);
             // For a computed property, just check the initializer and exit
-            if (hasComputedNameButNotSymbol(node)) {
+            if (hasDynamicName(node)) {
+                checkComputedPropertyName(<ComputedPropertyName>node.name);
                 if (node.initializer) {
                     checkExpressionCached(node.initializer);
                 }
@@ -8271,7 +8345,7 @@ module ts {
             var exprType = checkExpression(node.expression);
             // unknownType is returned i.e. if node.expression is identifier whose name cannot be resolved
             // in this case error about missing name is already reported - do not report extra one
-            if (!(exprType.flags & TypeFlags.Any || isStructuredType(exprType))) {
+            if (!isTypeOfKind(exprType, TypeFlags.Any | TypeFlags.ObjectType | TypeFlags.TypeParameter)) {
                 error(node.expression, Diagnostics.The_right_hand_side_of_a_for_in_statement_must_be_of_type_any_an_object_type_or_a_type_parameter);
             }
 
@@ -8425,45 +8499,7 @@ module ts {
             if (node.finallyBlock) checkBlock(node.finallyBlock);
         }
 
-        function checkIndexConstraints(type: Type) { 
-
-            function checkIndexConstraintForProperty(prop: Symbol, propertyType: Type, indexDeclaration: Declaration, indexType: Type, indexKind: IndexKind): void {
-                if (!indexType) {
-                    return;
-                }
-
-                // index is numeric and property name is not valid numeric literal
-                if (indexKind === IndexKind.Number && !isNumericName(prop.name)) {
-                    return;
-                }
-
-                // perform property check if property or indexer is declared in 'type'
-                // this allows to rule out cases when both property and indexer are inherited from the base class
-                var errorNode: Node;
-                if (prop.parent === type.symbol) {
-                    errorNode = prop.valueDeclaration;
-                }
-                else if (indexDeclaration) {
-                    errorNode = indexDeclaration;
-                }
-
-                else if (type.flags & TypeFlags.Interface) {
-                    // for interfaces property and indexer might be inherited from different bases
-                    // check if any base class already has both property and indexer.
-                    // check should be performed only if 'type' is the first type that brings property\indexer together
-                    var someBaseClassHasBothPropertyAndIndexer = forEach((<InterfaceType>type).baseTypes, base => getPropertyOfObjectType(base, prop.name) && getIndexTypeOfType(base, indexKind));
-                    errorNode = someBaseClassHasBothPropertyAndIndexer ? undefined : type.symbol.declarations[0];
-                }
-
-                if (errorNode && !isTypeAssignableTo(propertyType, indexType)) {
-                    var errorMessage =
-                        indexKind === IndexKind.String
-                        ? Diagnostics.Property_0_of_type_1_is_not_assignable_to_string_index_type_2
-                        : Diagnostics.Property_0_of_type_1_is_not_assignable_to_numeric_index_type_2;
-                    error(errorNode, errorMessage, symbolToString(prop), typeToString(propertyType), typeToString(indexType));
-                }
-            }
-
+        function checkIndexConstraints(type: Type) {
             var declaredNumberIndexer = getIndexDeclarationOfSymbol(type.symbol, IndexKind.Number);
             var declaredStringIndexer = getIndexDeclarationOfSymbol(type.symbol, IndexKind.String);
 
@@ -8473,9 +8509,24 @@ module ts {
             if (stringIndexType || numberIndexType) {
                 forEach(getPropertiesOfObjectType(type), prop => {
                     var propType = getTypeOfSymbol(prop);
-                    checkIndexConstraintForProperty(prop, propType, declaredStringIndexer, stringIndexType, IndexKind.String);
-                    checkIndexConstraintForProperty(prop, propType, declaredNumberIndexer, numberIndexType, IndexKind.Number);
+                    checkIndexConstraintForProperty(prop, propType, type, declaredStringIndexer, stringIndexType, IndexKind.String);
+                    checkIndexConstraintForProperty(prop, propType, type, declaredNumberIndexer, numberIndexType, IndexKind.Number);
                 });
+
+                if (type.flags & TypeFlags.Class && type.symbol.valueDeclaration.kind === SyntaxKind.ClassDeclaration) {
+                    var classDeclaration = <ClassDeclaration>type.symbol.valueDeclaration;
+                    for (var i = 0; i < classDeclaration.members.length; i++) {
+                        var member = classDeclaration.members[i];
+                        // Only process instance properties with computed names here.
+                        // Static properties cannot be in conflict with indexers,
+                        // and properties with literal names were already checked.
+                        if (!(member.flags & NodeFlags.Static) && hasDynamicName(member)) {
+                            var propType = getTypeOfSymbol(member.symbol);
+                            checkIndexConstraintForProperty(member.symbol, propType, type, declaredStringIndexer, stringIndexType, IndexKind.String);
+                            checkIndexConstraintForProperty(member.symbol, propType, type, declaredNumberIndexer, numberIndexType, IndexKind.Number); 
+                        }
+                    }
+                }
             }
 
             var errorNode: Node;
@@ -8492,9 +8543,51 @@ module ts {
                 error(errorNode, Diagnostics.Numeric_index_type_0_is_not_assignable_to_string_index_type_1,
                     typeToString(numberIndexType), typeToString(stringIndexType));
             }
+
+            function checkIndexConstraintForProperty(
+                prop: Symbol,
+                propertyType: Type,
+                containingType: Type,
+                indexDeclaration: Declaration,
+                indexType: Type,
+                indexKind: IndexKind): void {
+
+                if (!indexType) {
+                    return;
+                }
+
+                // index is numeric and property name is not valid numeric literal
+                if (indexKind === IndexKind.Number && !isNumericName(prop.valueDeclaration.name)) {
+                    return;
+                }
+
+                // perform property check if property or indexer is declared in 'type'
+                // this allows to rule out cases when both property and indexer are inherited from the base class
+                var errorNode: Node;
+                if (prop.valueDeclaration.name.kind === SyntaxKind.ComputedPropertyName || prop.parent === containingType.symbol) {
+                    errorNode = prop.valueDeclaration;
+                }
+                else if (indexDeclaration) {
+                    errorNode = indexDeclaration;
+                }
+                else if (containingType.flags & TypeFlags.Interface) {
+                    // for interfaces property and indexer might be inherited from different bases
+                    // check if any base class already has both property and indexer.
+                    // check should be performed only if 'type' is the first type that brings property\indexer together
+                    var someBaseClassHasBothPropertyAndIndexer = forEach((<InterfaceType>containingType).baseTypes, base => getPropertyOfObjectType(base, prop.name) && getIndexTypeOfType(base, indexKind));
+                    errorNode = someBaseClassHasBothPropertyAndIndexer ? undefined : containingType.symbol.declarations[0];
+                }
+
+                if (errorNode && !isTypeAssignableTo(propertyType, indexType)) {
+                    var errorMessage =
+                        indexKind === IndexKind.String
+                            ? Diagnostics.Property_0_of_type_1_is_not_assignable_to_string_index_type_2
+                            : Diagnostics.Property_0_of_type_1_is_not_assignable_to_numeric_index_type_2;
+                    error(errorNode, errorMessage, symbolToString(prop), typeToString(propertyType), typeToString(indexType));
+                }
+            }
         }
 
-        // TODO(jfreeman): Decide what to do for computed properties
         function checkTypeNameIsReserved(name: DeclarationName, message: DiagnosticMessage): void {
             // TS 1.0 spec (April 2014): 3.6.1
             // The predefined type keywords are reserved and cannot be used as names of user defined types.
@@ -8788,8 +8881,7 @@ module ts {
                 var enumIsConst = isConst(node);
 
                 forEach(node.members, member => {
-                    // TODO(jfreeman): Check that it is not a computed name
-                    if(isNumericName((<Identifier>member.name).text)) {
+                    if (member.name.kind !== SyntaxKind.ComputedPropertyName && isNumericLiteralName((<Identifier>member.name).text)) {
                         error(member.name, Diagnostics.An_enum_member_cannot_have_a_numeric_name);
                     }
                     var initializer = member.initializer;
@@ -9979,8 +10071,8 @@ module ts {
             if (symbol && (symbol.flags & SymbolFlags.EnumMember)) {
                 var declaration = symbol.valueDeclaration;
                 var constantValue: number;
-                if (declaration.kind === SyntaxKind.EnumMember && (constantValue = getNodeLinks(declaration).enumMemberValue) !== undefined) {
-                    return constantValue;
+                if (declaration.kind === SyntaxKind.EnumMember) {
+                    return getEnumMemberValue(<EnumMember>declaration);
                 }
             }
 
@@ -10055,7 +10147,7 @@ module ts {
             globalRegExpType = getGlobalType("RegExp");
             // If we're in ES6 mode, load the TemplateStringsArray.
             // Otherwise, default to 'unknown' for the purposes of type checking in LS scenarios.
-            globalTemplateStringsArrayType = compilerOptions.target >= ScriptTarget.ES6
+            globalTemplateStringsArrayType = languageVersion >= ScriptTarget.ES6
                 ? getGlobalType("TemplateStringsArray")
                 : unknownType;
             anyArrayType = createArrayType(anyType);
@@ -10416,22 +10508,18 @@ module ts {
             return false;
         }
 
-        function checkGrammarComputedPropertyName(node: Node): void {
+        function checkGrammarComputedPropertyName(node: Node): boolean {
             // If node is not a computedPropertyName, just skip the grammar checking
             if (node.kind !== SyntaxKind.ComputedPropertyName) {
-                return;
+                return false;
             }
-            // Since computed properties are not supported in the type checker, disallow them in TypeScript 1.4
-            // Once full support is added, remove this error.
-            grammarErrorOnNode(node, Diagnostics.Computed_property_names_are_not_currently_supported);
-            return;
 
             var computedPropertyName = <ComputedPropertyName>node;
-            if (compilerOptions.target < ScriptTarget.ES6) {
-                grammarErrorOnNode(node, Diagnostics.Computed_property_names_are_only_available_when_targeting_ECMAScript_6_and_higher);
+            if (languageVersion < ScriptTarget.ES6) {
+                return grammarErrorOnNode(node, Diagnostics.Computed_property_names_are_only_available_when_targeting_ECMAScript_6_and_higher);
             }
             else if (computedPropertyName.expression.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>computedPropertyName.expression).operator === SyntaxKind.CommaToken) {
-                grammarErrorOnNode(computedPropertyName.expression, Diagnostics.A_comma_expression_is_not_allowed_in_a_computed_property_name);
+                return grammarErrorOnNode(computedPropertyName.expression, Diagnostics.A_comma_expression_is_not_allowed_in_a_computed_property_name);
             }
         }
 
@@ -10527,7 +10615,7 @@ module ts {
 
         function checkGrammarAccessor(accessor: MethodDeclaration): boolean {
             var kind = accessor.kind;
-            if (compilerOptions.target < ScriptTarget.ES5) {
+            if (languageVersion < ScriptTarget.ES5) {
                 return grammarErrorOnNode(accessor.name, Diagnostics.Accessors_are_only_available_when_targeting_ECMAScript_5_and_higher);
             }
             else if (isInAmbientContext(accessor)) {
@@ -10732,7 +10820,7 @@ module ts {
                 return grammarErrorAtPos(getSourceFileOfNode(declarationList), declarations.pos, declarations.end - declarations.pos, Diagnostics.Variable_declaration_list_cannot_be_empty);
             }
 
-            if (compilerOptions.target  < ScriptTarget.ES6) {
+            if (languageVersion < ScriptTarget.ES6) {
                 if (isLet(declarationList)) {
                     return grammarErrorOnFirstToken(declarationList, Diagnostics.let_declarations_are_only_available_when_targeting_ECMAScript_6_and_higher);
                 }
@@ -10834,7 +10922,7 @@ module ts {
         function grammarErrorOnFirstToken(node: Node, message: DiagnosticMessage, arg0?: any, arg1?: any, arg2?: any): boolean {
             var sourceFile = getSourceFileOfNode(node);
             if (!hasParseDiagnostics(sourceFile)) {
-                var scanner = createScanner(compilerOptions.target, /*skipTrivia*/ true, sourceFile.text);
+                var scanner = createScanner(languageVersion, /*skipTrivia*/ true, sourceFile.text);
                 var start = scanToken(scanner, node.pos);
                 diagnostics.push(createFileDiagnostic(sourceFile, start, scanner.getTextPos() - start, message, arg0, arg1, arg2));
                 return true;
@@ -10976,7 +11064,7 @@ module ts {
                 if (node.parserContextFlags & ParserContextFlags.StrictMode) {
                     return grammarErrorOnNode(node, Diagnostics.Octal_literals_are_not_allowed_in_strict_mode);
                 }
-                else if (compilerOptions.target >= ScriptTarget.ES5) {
+                else if (languageVersion >= ScriptTarget.ES5) {
                     return grammarErrorOnNode(node, Diagnostics.Octal_literals_are_not_available_when_targeting_ECMAScript_5_and_higher);
                 }
             }
@@ -10985,7 +11073,7 @@ module ts {
         function grammarErrorAfterFirstToken(node: Node, message: DiagnosticMessage, arg0?: any, arg1?: any, arg2?: any): boolean {
             var sourceFile = getSourceFileOfNode(node);
             if (!hasParseDiagnostics(sourceFile)) {
-                var scanner = createScanner(compilerOptions.target, /*skipTrivia*/ true, sourceFile.text);
+                var scanner = createScanner(languageVersion, /*skipTrivia*/ true, sourceFile.text);
                 scanToken(scanner, node.pos);
                 diagnostics.push(createFileDiagnostic(sourceFile, scanner.getTextPos(), 0, message, arg0, arg1, arg2));
                 return true;

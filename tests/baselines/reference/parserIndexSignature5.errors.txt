@@ -1,9 +1,12 @@
 tests/cases/conformance/parser/ecmascript5/IndexSignatures/parserIndexSignature5.ts(2,3): error TS1169: Computed property names are not allowed in interfaces.
+tests/cases/conformance/parser/ecmascript5/IndexSignatures/parserIndexSignature5.ts(2,4): error TS2304: Cannot find name 'a'.
 
 
-==== tests/cases/conformance/parser/ecmascript5/IndexSignatures/parserIndexSignature5.ts (1 errors) ====
+==== tests/cases/conformance/parser/ecmascript5/IndexSignatures/parserIndexSignature5.ts (2 errors) ====
     interface I {
-      [a]
+      [a] // Used to be indexer, now it is a computed property
       ~~~
 !!! error TS1169: Computed property names are not allowed in interfaces.
+       ~
+!!! error TS2304: Cannot find name 'a'.
     }

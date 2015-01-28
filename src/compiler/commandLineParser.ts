@@ -34,12 +34,17 @@ module ts {
             description: Diagnostics.Print_this_message,
         },
         {
+            name: "listFiles",
+            type: "boolean",
+        },
+        {
             name: "locale",
             type: "string",
         },
         {
             name: "mapRoot",
             type: "string",
+            isFilePath: true,
             description: Diagnostics.Specifies_the_location_where_debugger_should_locate_map_files_instead_of_generated_locations,
             paramType: Diagnostics.LOCATION,
         },
@@ -90,6 +95,7 @@ module ts {
         {
             name: "outDir",
             type: "string",
+            isFilePath: true,
             description: Diagnostics.Redirect_output_structure_to_the_directory,
             paramType: Diagnostics.DIRECTORY,
         },
@@ -97,6 +103,14 @@ module ts {
             name: "preserveConstEnums",
             type: "boolean",
             description: Diagnostics.Do_not_erase_const_enum_declarations_in_generated_code
+        },
+        {
+            name: "project",
+            shortName: "p",
+            type: "string",
+            isFilePath: true,
+            description: Diagnostics.Compile_the_project_in_the_given_directory,
+            paramType: Diagnostics.DIRECTORY
         },
         {
             name: "removeComments",
@@ -111,6 +125,7 @@ module ts {
         {
             name: "sourceRoot",
             type: "string",
+            isFilePath: true,
             description: Diagnostics.Specifies_the_location_where_debugger_should_locate_TypeScript_files_instead_of_source_locations,
             paramType: Diagnostics.LOCATION,
         },
@@ -141,26 +156,19 @@ module ts {
         }
     ];
     
-    var shortOptionNames: Map<string> = {};
-    var optionNameMap: Map<CommandLineOption> = {};
-
-    forEach(optionDeclarations, option => {
-        optionNameMap[option.name.toLowerCase()] = option;
-
-        if (option.shortName) {
-            shortOptionNames[option.shortName] = option.name;
-        }
-    });
-
     export function parseCommandLine(commandLine: string[]): ParsedCommandLine {
-        // Set default compiler option values
-        var options: CompilerOptions = {
-            target: ScriptTarget.ES3,
-            module: ModuleKind.None
-        };
+        var options: CompilerOptions = {};
         var filenames: string[] = [];
         var errors: Diagnostic[] = [];
+        var shortOptionNames: Map<string> = {};
+        var optionNameMap: Map<CommandLineOption> = {};
 
+        forEach(optionDeclarations, option => {
+            optionNameMap[option.name.toLowerCase()] = option;
+            if (option.shortName) {
+                shortOptionNames[option.shortName] = option.name;
+            }
+        });
         parseStrings(commandLine);
         return {
             options,
@@ -254,6 +262,86 @@ module ts {
                 }
             }
             parseStrings(args);
+        }
+    }
+
+    export function readConfigFile(filename: string): any {
+        try {
+            var text = sys.readFile(filename);
+            return /\S/.test(text) ? JSON.parse(text) : {};
+        }
+        catch (e) {
+        }
+    }
+
+    export function parseConfigFile(json: any, basePath?: string): ParsedCommandLine {
+        var errors: Diagnostic[] = [];
+
+        return {
+            options: getCompilerOptions(),
+            filenames: getFiles(),
+            errors
+        };
+
+        function getCompilerOptions(): CompilerOptions {
+            var options: CompilerOptions = {};
+            var optionNameMap: Map<CommandLineOption> = {};
+            forEach(optionDeclarations, option => {
+                optionNameMap[option.name] = option;
+            });
+            var jsonOptions = json["compilerOptions"];
+            if (jsonOptions) {
+                for (var id in jsonOptions) {
+                    if (hasProperty(optionNameMap, id)) {
+                        var opt = optionNameMap[id];
+                        var optType = opt.type;
+                        var value = jsonOptions[id];
+                        var expectedType = typeof optType === "string" ? optType : "string";
+                        if (typeof value === expectedType) {
+                            if (typeof optType !== "string") {
+                                var key = value.toLowerCase();
+                                if (hasProperty(optType, key)) {
+                                    value = optType[key];
+                                }
+                                else {
+                                    errors.push(createCompilerDiagnostic(opt.error));
+                                    value = 0;
+                                }
+                            }
+                            if (opt.isFilePath) {
+                                value = normalizePath(combinePaths(basePath, value));
+                            }
+                            options[opt.name] = value;
+                        }
+                        else {
+                            errors.push(createCompilerDiagnostic(Diagnostics.Compiler_option_0_requires_a_value_of_type_1, id, expectedType));
+                        }
+                    }
+                    else {
+                        errors.push(createCompilerDiagnostic(Diagnostics.Unknown_compiler_option_0, id));
+                    }
+                }
+            }
+            return options;
+        }
+
+        function getFiles(): string[] {
+            var files: string[] = [];
+            if (hasProperty(json, "files")) {
+                if (json["files"] instanceof Array) {
+                    var files = map(<string[]>json["files"], s => combinePaths(basePath, s));
+                }
+            }
+            else {
+                var sysFiles = sys.readDirectory(basePath, ".ts");
+                for (var i = 0; i < sysFiles.length; i++) {
+                    var name = sysFiles[i];
+                    if (!fileExtensionIs(name, ".d.ts") || !contains(sysFiles, name.substr(0, name.length - 5) + ".ts")) {
+                        files.push(name);
+                    }
+                }
+            }
+            return files;
         }
     }
 }

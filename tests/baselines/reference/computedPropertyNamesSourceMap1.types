@@ -1,0 +1,8 @@
+=== tests/cases/conformance/es6/computedProperties/computedPropertyNamesSourceMap1.ts ===
+class C {
+>C : C
+
+    ["hello"]() {
+        debugger;
+    }
+}

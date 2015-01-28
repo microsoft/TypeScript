@@ -58,7 +58,7 @@ module ts {
     export interface SourceFile {
         version: string;
         scriptSnapshot: IScriptSnapshot;
-
+        nameTable: Map<string>;
         getNamedDeclarations(): Declaration[];
     }
 
@@ -750,6 +750,7 @@ module ts {
         public version: string;
         public languageVersion: ScriptTarget;
         public identifiers: Map<string>;
+        public nameTable: Map<string>;
 
         private namedDeclarations: Declaration[];
 
@@ -1537,6 +1538,8 @@ module ts {
     export function createLanguageServiceSourceFile(filename: string, scriptSnapshot: IScriptSnapshot, scriptTarget: ScriptTarget, version: string, setNodeParents: boolean): SourceFile {
         var sourceFile = createSourceFile(filename, scriptSnapshot.getText(0, scriptSnapshot.getLength()), scriptTarget, setNodeParents);
         setSourceFileFields(sourceFile, scriptSnapshot, version);
+        // after full parsing we can use table with interned strings as name table
+        sourceFile.nameTable = sourceFile.identifiers;
         return sourceFile;
     }
 
@@ -1568,6 +1571,9 @@ module ts {
                 if (!disableIncrementalParsing) {
                     var newSourceFile = sourceFile.update(scriptSnapshot.getText(0, scriptSnapshot.getLength()), textChangeRange);
                     setSourceFileFields(newSourceFile, scriptSnapshot, version);
+                    // after incremental parsing nameTable might not be up-to-date
+                    // drop it so it can be lazily recreated later
+                    newSourceFile.nameTable = undefined;
                     return newSourceFile;
                 }
             }
@@ -3207,7 +3213,7 @@ module ts {
 
             if (node.kind === SyntaxKind.Identifier || node.kind === SyntaxKind.ThisKeyword || node.kind === SyntaxKind.SuperKeyword ||
                 isLiteralNameOfPropertyDeclarationOrIndexAccess(node) || isNameOfExternalModuleImportOrDeclaration(node)) {
-                return getReferencesForNode(node, [sourceFile], /*findInStrings:*/ false, /*findInComments:*/ false);
+                return getReferencesForNode(node, [sourceFile], /*searchOnlyInCurrentFile*/ true, /*findInStrings:*/ false, /*findInComments:*/ false);
             }
 
             switch (node.kind) {
@@ -3760,10 +3766,31 @@ module ts {
             }
 
             Debug.assert(node.kind === SyntaxKind.Identifier || node.kind === SyntaxKind.NumericLiteral || node.kind === SyntaxKind.StringLiteral);
-            return getReferencesForNode(node, program.getSourceFiles(), findInStrings, findInComments);
+            return getReferencesForNode(node, program.getSourceFiles(), /*searchOnlyInCurrentFile*/ false, findInStrings, findInComments);
         }
 
-        function getReferencesForNode(node: Node, sourceFiles: SourceFile[], findInStrings: boolean, findInComments: boolean): ReferenceEntry[] {
+        function initializeNameTable(sourceFile: SourceFile): void {
+            var nameTable: Map<string> = {};
+
+            walk(sourceFile);
+            sourceFile.nameTable = nameTable;
+
+            function walk(node: Node) {
+                switch (node.kind) {
+                    case SyntaxKind.Identifier:
+                        nameTable[(<Identifier>node).text] = (<Identifier>node).text;
+                        break;
+                    case SyntaxKind.StringLiteral:
+                    case SyntaxKind.NumericLiteral:
+                        nameTable[(<LiteralExpression>node).text] = (<LiteralExpression>node).text;
+                        break;
+                    default:
+                        forEachChild(node, walk);
+                }
+            } 
+        }
+
+        function getReferencesForNode(node: Node, sourceFiles: SourceFile[], searchOnlyInCurrentFile: boolean, findInStrings: boolean, findInComments: boolean): ReferenceEntry[] {
             // Labels
             if (isLabelName(node)) {
                 if (isJumpStatementTarget(node)) {
@@ -3819,15 +3846,28 @@ module ts {
                 getReferencesInNode(scope, symbol, declaredName, node, searchMeaning, findInStrings, findInComments, result);
             }
             else {
-                var internedName = getInternedName(symbol, declarations)
-                forEach(sourceFiles, sourceFile => {
-                    cancellationToken.throwIfCancellationRequested();
+                if (searchOnlyInCurrentFile) {
+                    Debug.assert(sourceFiles.length === 1);
+                    result = [];
+                    getReferencesInNode(sourceFiles[0], symbol, declaredName, node, searchMeaning, findInStrings, findInComments, result);
+                }
+                else {
+                    var internedName = getInternedName(symbol, declarations)
+                    forEach(sourceFiles, sourceFile => {
+                        cancellationToken.throwIfCancellationRequested();
 
-                    if (lookUp(sourceFile.identifiers, internedName)) {
-                        result = result || [];
-                        getReferencesInNode(sourceFile, symbol, declaredName, node, searchMeaning, findInStrings, findInComments, result);
-                    }
-                });
+                        if (!sourceFile.nameTable) {
+                            initializeNameTable(sourceFile)
+                        }
+
+                        Debug.assert(sourceFile.nameTable !== undefined);
+
+                        if (lookUp(sourceFile.nameTable, internedName)) {
+                            result = result || [];
+                            getReferencesInNode(sourceFile, symbol, declaredName, node, searchMeaning, findInStrings, findInComments, result);
+                        }
+                    });
+                }
             }
 
             return result;
@@ -4086,7 +4126,7 @@ module ts {
             }
 
             function getReferencesForSuperKeyword(superKeyword: Node): ReferenceEntry[] {
-                var searchSpaceNode = getSuperContainer(superKeyword);
+                var searchSpaceNode = getSuperContainer(superKeyword, /*includeFunctions*/ false);
                 if (!searchSpaceNode) {
                     return undefined;
                 }
@@ -4121,7 +4161,7 @@ module ts {
                         return;
                     }
 
-                    var container = getSuperContainer(node);
+                    var container = getSuperContainer(node, /*includeFunctions*/ false);
 
                     // If we have a 'super' container, we must have an enclosing class.
                     // Now make sure the owning class is the same as the search-space
@@ -4163,6 +4203,8 @@ module ts {
                     case SyntaxKind.FunctionDeclaration:
                     case SyntaxKind.FunctionExpression:
                         break;
+                    // Computed properties in classes are not handled here because references to this are illegal,
+                    // so there is no point finding references to them.
                     default:
                         return undefined;
                 }
