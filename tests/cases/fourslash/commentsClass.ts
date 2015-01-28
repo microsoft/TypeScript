@@ -60,7 +60,7 @@
 
 // this line triggers a semantic/syntactic error check, remove line when 788570 is fixed
 edit.insert('');
-
+debugger;
 goTo.marker('1');
 verify.quickInfoIs("class c2", "This is class c2 without constuctor");
 

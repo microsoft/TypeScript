@@ -239,8 +239,18 @@ module ts.formatting {
         }
 
         var precedingToken = findPrecedingToken(originalSpan.start, sourceFile);
-        // no preceding token found - start from the beginning of enclosing node
-        return precedingToken ? spanEnd(precedingToken) : enclosingNode.start;
+        if (!precedingToken) {
+            // no preceding token found - start from the beginning of enclosing node
+            return enclosingNode.start;
+        }
+
+        // preceding token ends after the start of original range (i.e when originaRange.pos falls in the middle of literal)
+        // start from the beginning of enclosingNode to handle the entire 'originalRange'
+        if (spanEnd(precedingToken) >= originalSpan.start) {
+            return enclosingNode.start;
+        }
+
+        return spanEnd(precedingToken);
     }
 
     /*

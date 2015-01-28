@@ -1,5 +1,6 @@
 ﻿/// <reference path="fourslash.ts" />
 
+// @module: CommonJS
 // @declaration: true
 //// interface privateInterface {}
 //// export class Bar implements /*1*/privateInterface/*2*/{ }

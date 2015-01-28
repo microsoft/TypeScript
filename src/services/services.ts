@@ -59,7 +59,7 @@ module ts {
         isOpen: boolean;
         version: string;
         scriptSnapshot: IScriptSnapshot;
-
+        nameTable: Map<string>;
         getNamedDeclarations(): Declaration[];
     }
 
@@ -336,41 +336,49 @@ module ts {
             var paramTag = "@param";
             var jsDocCommentParts: SymbolDisplayPart[] = [];
 
-            ts.forEach(declarations, declaration => {
-                var sourceFileOfDeclaration = getSourceFileOfNode(declaration);
-                // If it is parameter - try and get the jsDoc comment with @param tag from function declaration's jsDoc comments
-                if (canUseParsedParamTagComments && declaration.kind === SyntaxKind.Parameter) {
-                    ts.forEach(getJsDocCommentSpan(declaration.parent, sourceFileOfDeclaration), jsDocCommentTextRange => {
-                        var cleanedParamJsDocComment = getCleanedParamJsDocComment(jsDocCommentTextRange.start, spanEnd(jsDocCommentTextRange), sourceFileOfDeclaration);
-                        if (cleanedParamJsDocComment) {
-                            jsDocCommentParts.push.apply(jsDocCommentParts, cleanedParamJsDocComment);
-                        }
-                    });
+            ts.forEach(declarations, (declaration, indexOfDeclaration) => {
+                // Make sure we are collecting doc comment from declaration once,
+                // In case of union property there might be same declaration multiple times 
+                // which only varies in type parameter
+                // Eg. var a: Array<string> | Array<number>; a.length
+                // The property length will have two declarations of property length coming 
+                // from Array<T> - Array<string> and Array<number>
+                if (indexOf(declarations, declaration) === indexOfDeclaration) {
+                    var sourceFileOfDeclaration = getSourceFileOfNode(declaration);
+                    // If it is parameter - try and get the jsDoc comment with @param tag from function declaration's jsDoc comments
+                    if (canUseParsedParamTagComments && declaration.kind === SyntaxKind.Parameter) {
+                        ts.forEach(getJsDocCommentSpans(declaration.parent, sourceFileOfDeclaration), jsDocComment => {
+                            var cleanedParamJsDocComment = getCleanedParamJsDocComment(jsDocComment.start, spanEnd(jsDocComment), sourceFileOfDeclaration);
+                            if (cleanedParamJsDocComment) {
+                                jsDocCommentParts.push.apply(jsDocCommentParts, cleanedParamJsDocComment);
+                            }
+                        });
+                    }
+
+                    // If this is left side of dotted module declaration, there is no doc comments associated with this node
+                    if (declaration.kind === SyntaxKind.ModuleDeclaration && (<ModuleDeclaration>declaration).body.kind === SyntaxKind.ModuleDeclaration) {
+                        return;
+                    }
+
+                    // If this is dotted module name, get the doc comments from the parent
+                    while (declaration.kind === SyntaxKind.ModuleDeclaration && declaration.parent.kind === SyntaxKind.ModuleDeclaration) {
+                        declaration = <ModuleDeclaration>declaration.parent;
+                    } 
+
+                    // Get the cleaned js doc comment text from the declaration
+                    ts.forEach(getJsDocCommentSpans(
+                        declaration.kind === SyntaxKind.VariableDeclaration ? declaration.parent.parent : declaration, sourceFileOfDeclaration), jsDocComment => {
+                            var cleanedJsDocComment = getCleanedJsDocComment(jsDocComment.start, spanEnd(jsDocComment), sourceFileOfDeclaration);
+                            if (cleanedJsDocComment) {
+                                jsDocCommentParts.push.apply(jsDocCommentParts, cleanedJsDocComment);
+                            }
+                        });
                 }
-
-                // If this is left side of dotted module declaration, there is no doc comments associated with this node
-                if (declaration.kind === SyntaxKind.ModuleDeclaration && (<ModuleDeclaration>declaration).body.kind === SyntaxKind.ModuleDeclaration) {
-                    return;
-                }
-
-                // If this is dotted module name, get the doc comments from the parent
-                while (declaration.kind === SyntaxKind.ModuleDeclaration && declaration.parent.kind === SyntaxKind.ModuleDeclaration) {
-                    declaration = <ModuleDeclaration>declaration.parent;
-                } 
-
-                // Get the cleaned js doc comment text from the declaration
-                ts.forEach(getJsDocCommentSpan(
-                    declaration.kind === SyntaxKind.VariableDeclaration ? declaration.parent.parent : declaration, sourceFileOfDeclaration), jsDocCommentTextRange => {
-                        var cleanedJsDocComment = getCleanedJsDocComment(jsDocCommentTextRange.start, spanEnd(jsDocCommentTextRange), sourceFileOfDeclaration);
-                        if (cleanedJsDocComment) {
-                            jsDocCommentParts.push.apply(jsDocCommentParts, cleanedJsDocComment);
-                        }
-                    });
             });
 
             return jsDocCommentParts;
 
-            function getJsDocCommentSpan(node: Node, sourceFile: SourceFile): Span[] {
+            function getJsDocCommentSpans(node: Node, sourceFile: SourceFile): Span[] {
                 return ts.map(getJsDocComments(node, sourceFile),
                     jsDocComment => {
                         return createSpanFromBounds(
@@ -751,6 +759,7 @@ module ts {
         public isOpen: boolean;
         public languageVersion: ScriptTarget;
         public identifiers: Map<string>;
+        public nameTable: Map<string>;
 
         private namedDeclarations: Declaration[];
 
@@ -1547,6 +1556,8 @@ module ts {
     export function createLanguageServiceSourceFile(filename: string, scriptSnapshot: IScriptSnapshot, scriptTarget: ScriptTarget, version: string, isOpen: boolean, setNodeParents: boolean): SourceFile {
         var sourceFile = createSourceFile(filename, scriptSnapshot.getText(0, scriptSnapshot.getLength()), scriptTarget, setNodeParents);
         setSourceFileFields(sourceFile, scriptSnapshot, version, isOpen);
+        // after full parsing we can use table with interned strings as name table
+        sourceFile.nameTable = sourceFile.identifiers;
         return sourceFile;
     }
 
@@ -1578,6 +1589,9 @@ module ts {
                 if (!disableIncrementalParsing) {
                     var newSourceFile = sourceFile.update(scriptSnapshot.getText(0, scriptSnapshot.getLength()), textChangeRange);
                     setSourceFileFields(newSourceFile, scriptSnapshot, version, isOpen);
+                    // after incremental parsing nameTable might not be up-to-date
+                    // drop it so it can be lazily recreated later
+                    newSourceFile.nameTable = undefined;
                     return newSourceFile;
                 }
             }
@@ -3236,7 +3250,7 @@ module ts {
 
             if (node.kind === SyntaxKind.Identifier || node.kind === SyntaxKind.ThisKeyword || node.kind === SyntaxKind.SuperKeyword ||
                 isLiteralNameOfPropertyDeclarationOrIndexAccess(node) || isNameOfExternalModuleImportOrDeclaration(node)) {
-                return getReferencesForNode(node, [sourceFile], /*findInStrings:*/ false, /*findInComments:*/ false);
+                return getReferencesForNode(node, [sourceFile], /*searchOnlyInCurrentFile*/ true, /*findInStrings:*/ false, /*findInComments:*/ false);
             }
 
             switch (node.kind) {
@@ -3789,10 +3803,31 @@ module ts {
             }
 
             Debug.assert(node.kind === SyntaxKind.Identifier || node.kind === SyntaxKind.NumericLiteral || node.kind === SyntaxKind.StringLiteral);
-            return getReferencesForNode(node, program.getSourceFiles(), findInStrings, findInComments);
+            return getReferencesForNode(node, program.getSourceFiles(), /*searchOnlyInCurrentFile*/ false, findInStrings, findInComments);
         }
 
-        function getReferencesForNode(node: Node, sourceFiles: SourceFile[], findInStrings: boolean, findInComments: boolean): ReferenceEntry[] {
+        function initializeNameTable(sourceFile: SourceFile): void {
+            var nameTable: Map<string> = {};
+
+            walk(sourceFile);
+            sourceFile.nameTable = nameTable;
+
+            function walk(node: Node) {
+                switch (node.kind) {
+                    case SyntaxKind.Identifier:
+                        nameTable[(<Identifier>node).text] = (<Identifier>node).text;
+                        break;
+                    case SyntaxKind.StringLiteral:
+                    case SyntaxKind.NumericLiteral:
+                        nameTable[(<LiteralExpression>node).text] = (<LiteralExpression>node).text;
+                        break;
+                    default:
+                        forEachChild(node, walk);
+                }
+            } 
+        }
+
+        function getReferencesForNode(node: Node, sourceFiles: SourceFile[], searchOnlyInCurrentFile: boolean, findInStrings: boolean, findInComments: boolean): ReferenceEntry[] {
             // Labels
             if (isLabelName(node)) {
                 if (isJumpStatementTarget(node)) {
@@ -3848,15 +3883,28 @@ module ts {
                 getReferencesInNode(scope, symbol, declaredName, node, searchMeaning, findInStrings, findInComments, result);
             }
             else {
-                var internedName = getInternedName(symbol, declarations)
-                forEach(sourceFiles, sourceFile => {
-                    cancellationToken.throwIfCancellationRequested();
+                if (searchOnlyInCurrentFile) {
+                    Debug.assert(sourceFiles.length === 1);
+                    result = [];
+                    getReferencesInNode(sourceFiles[0], symbol, declaredName, node, searchMeaning, findInStrings, findInComments, result);
+                }
+                else {
+                    var internedName = getInternedName(symbol, declarations)
+                    forEach(sourceFiles, sourceFile => {
+                        cancellationToken.throwIfCancellationRequested();
 
-                    if (lookUp(sourceFile.identifiers, internedName)) {
-                        result = result || [];
-                        getReferencesInNode(sourceFile, symbol, declaredName, node, searchMeaning, findInStrings, findInComments, result);
-                    }
-                });
+                        if (!sourceFile.nameTable) {
+                            initializeNameTable(sourceFile)
+                        }
+
+                        Debug.assert(sourceFile.nameTable !== undefined);
+
+                        if (lookUp(sourceFile.nameTable, internedName)) {
+                            result = result || [];
+                            getReferencesInNode(sourceFile, symbol, declaredName, node, searchMeaning, findInStrings, findInComments, result);
+                        }
+                    });
+                }
             }
 
             return result;
@@ -3904,7 +3952,8 @@ module ts {
                 }
 
                 // if this symbol is visible from its parent container, e.g. exported, then bail out
-                if (symbol.parent) {
+                // if symbol correspond to the union property - bail out
+                if (symbol.parent || (symbol.getFlags() & SymbolFlags.UnionProperty)) {
                     return undefined;
                 }
 
@@ -4115,7 +4164,7 @@ module ts {
             }
 
             function getReferencesForSuperKeyword(superKeyword: Node): ReferenceEntry[] {
-                var searchSpaceNode = getSuperContainer(superKeyword);
+                var searchSpaceNode = getSuperContainer(superKeyword, /*includeFunctions*/ false);
                 if (!searchSpaceNode) {
                     return undefined;
                 }
@@ -4150,7 +4199,7 @@ module ts {
                         return;
                     }
 
-                    var container = getSuperContainer(node);
+                    var container = getSuperContainer(node, /*includeFunctions*/ false);
 
                     // If we have a 'super' container, we must have an enclosing class.
                     // Now make sure the owning class is the same as the search-space
@@ -4192,6 +4241,8 @@ module ts {
                     case SyntaxKind.FunctionDeclaration:
                     case SyntaxKind.FunctionExpression:
                         break;
+                    // Computed properties in classes are not handled here because references to this are illegal,
+                    // so there is no point finding references to them.
                     default:
                         return undefined;
                 }

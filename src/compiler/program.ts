@@ -146,7 +146,9 @@ module ts {
         function invokeEmitter(targetSourceFile?: SourceFile) {
             var resolver = getDiagnosticsProducingTypeChecker().getEmitResolver();
             return emitFiles(resolver, getEmitHost(), targetSourceFile);
-        }        function getSourceFile(filename: string) {
+        }
+        
+        function getSourceFile(filename: string) {
             filename = host.getCanonicalFileName(filename);
             return hasProperty(filesByName, filename) ? filesByName[filename] : undefined;
         }
@@ -340,7 +342,7 @@ module ts {
             }
 
             var firstExternalModule = forEach(files, f => isExternalModule(f) ? f : undefined);
-            if (firstExternalModule && options.module === ModuleKind.None) {
+            if (firstExternalModule && !options.module) {
                 // We cannot use createDiagnosticFromNode because nodes do not have parents yet
                 var externalModuleErrorSpan = getErrorSpanForNode(firstExternalModule.externalModuleIndicator);
                 var errorStart = skipTrivia(firstExternalModule.text, externalModuleErrorSpan.start);
