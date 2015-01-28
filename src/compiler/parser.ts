@@ -4523,11 +4523,18 @@ module ts {
             return nextToken() === SyntaxKind.OpenParenToken;
         }
 
+        function nextTokenIsCommaOrFromKeyword() {
+            nextToken();
+            return token === SyntaxKind.CommaToken ||
+                token === SyntaxKind.FromKeyword;
+        }
+
         function parseImportDeclarationOrStatement(fullStart: number, modifiers: ModifiersArray): ImportEqualsDeclaration | ImportStatement {
             parseExpected(SyntaxKind.ImportKeyword);
             if (token === SyntaxKind.StringLiteral ||
                 token === SyntaxKind.AsteriskToken ||
-                token === SyntaxKind.OpenBraceToken) {
+                token === SyntaxKind.OpenBraceToken ||
+                (isIdentifier() && lookAhead(nextTokenIsCommaOrFromKeyword))) {
                 return parseImportStatement(fullStart, modifiers);
             }
 
@@ -4604,7 +4611,19 @@ module ts {
             //  ImportedDefaultBinding, NamedImports from
 
             var importClause = <ImportClause>createNode(SyntaxKind.ImportClause);
-            importClause.bindings = token === SyntaxKind.AsteriskToken ? parseNamespaceImport() : parseNamedImports();
+            if (isIdentifier()) {
+                // ImportedDefaultBinding:
+                //  ImportedBinding
+                importClause.defaultBinding = parseIdentifier();
+            }
+
+            // If there was no default import or if there is comma token after default import 
+            // parse namespace or named imports
+            if (!importClause.defaultBinding ||
+                parseOptional(SyntaxKind.CommaToken)) {
+                importClause.bindings = token === SyntaxKind.AsteriskToken ? parseNamespaceImport() : parseNamedImports();
+            }
+
             parseExpected(SyntaxKind.FromKeyword);
             return finishNode(importClause);
         }
