@@ -848,7 +848,7 @@ module ts {
             !isWellKnownSymbolSyntactically((<ComputedPropertyName>declaration.name).expression);
     }
 
-    export function isWellKnownSymbolSyntactically(node: Node): boolean {
+    export function isWellKnownSymbolSyntactically(node: Expression): boolean {
         return node.kind === SyntaxKind.PropertyAccessExpression && isESSymbolIdentifier((<PropertyAccessExpression>node).expression);
     }
 

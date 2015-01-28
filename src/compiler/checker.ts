@@ -706,9 +706,15 @@ module ts {
             return type;
         }
 
-        // A reserved member name starts with two underscores followed by a non-underscore
+        // A reserved member name starts with two underscores, but the third character cannot be an underscore
+        // or the @ symbol. A third underscore indicates an escaped form of an identifer that started
+        // with at least two underscores. The @ character indicates that the name is denoted by a well known ES
+        // Symbol instance.
         function isReservedMemberName(name: string) {
-            return name.charCodeAt(0) === CharacterCodes._ && name.charCodeAt(1) === CharacterCodes._ && name.charCodeAt(2) !== CharacterCodes._;
+            return name.charCodeAt(0) === CharacterCodes._ &&
+                name.charCodeAt(1) === CharacterCodes._ &&
+                name.charCodeAt(2) !== CharacterCodes._ &&
+                name.charCodeAt(2) !== CharacterCodes.at;
         }
 
         function getNamedMembers(members: SymbolTable): Symbol[] {

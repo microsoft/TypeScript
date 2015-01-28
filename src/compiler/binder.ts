@@ -87,13 +87,18 @@ module ts {
             if (symbolKind & SymbolFlags.Value && !symbol.valueDeclaration) symbol.valueDeclaration = node;
         }
 
-        // Should not be called on a declaration with a computed property name.
+        // Should not be called on a declaration with a computed property name,
+        // unless it is a well known Symbol.
         function getDeclarationName(node: Declaration): string {
             if (node.name) {
                 if (node.kind === SyntaxKind.ModuleDeclaration && node.name.kind === SyntaxKind.StringLiteral) {
                     return '"' + (<LiteralExpression>node.name).text + '"';
                 }
-                Debug.assert(!hasDynamicName(node));
+                if (node.name.kind === SyntaxKind.ComputedPropertyName) {
+                    var nameExpression = (<ComputedPropertyName>node.name).expression;
+                    Debug.assert(isWellKnownSymbolSyntactically(nameExpression));
+                    return "__@" + (<PropertyAccessExpression>nameExpression).name.text;
+                }
                 return (<Identifier | LiteralExpression>node.name).text;
             }
             switch (node.kind) {
