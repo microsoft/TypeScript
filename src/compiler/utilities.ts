@@ -835,6 +835,17 @@ module ts {
         return SyntaxKind.FirstTriviaToken <= token && token <= SyntaxKind.LastTriviaToken;
     }
 
+    /**
+     * A declaration has a dynamic name if both of the following are true:
+     *   1. The declaration has a computed property name
+     *   2. The computed name is *not* expressed as Symbol.<name>, where name
+     *      is a property of the Symbol constructor that denotes a built in
+     *      Symbol.
+     */
+    export function hasDynamicName(declaration: Declaration): boolean {
+        return declaration.name && declaration.name.kind === SyntaxKind.ComputedPropertyName;
+    }
+
     export function isWellKnownSymbolSyntactically(node: Node): boolean {
         return node.kind === SyntaxKind.PropertyAccessExpression && isESSymbolIdentifier((<PropertyAccessExpression>node).expression);
     }
