@@ -1,0 +1,9 @@
+tests/cases/conformance/parser/ecmascript6/Symbols/parserSymbolProperty2.ts(2,5): error TS2464: A computed property name must be of type 'string', 'number', or 'any'.
+
+
+==== tests/cases/conformance/parser/ecmascript6/Symbols/parserSymbolProperty2.ts (1 errors) ====
+    interface I {
+        [Symbol.unscopables](): string;
+        ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2464: A computed property name must be of type 'string', 'number', or 'any'.
+    }

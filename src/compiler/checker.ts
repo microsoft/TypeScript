@@ -7487,7 +7487,7 @@ module ts {
 
         function checkPropertyDeclaration(node: PropertyDeclaration) {
             // Grammar checking
-            checkGrammarModifiers(node) || checkGrammarProperty(node);
+            checkGrammarModifiers(node) || checkGrammarProperty(node) || checkGrammarComputedPropertyName(node.name);
 
             checkVariableLikeDeclaration(node);
         }
@@ -10771,8 +10771,8 @@ module ts {
             }
         }
 
-        function checkGrammarForDisallowedComputedProperty(node: DeclarationName, message: DiagnosticMessage) {
-            if (node.kind === SyntaxKind.ComputedPropertyName) {
+        function checkGrammarForNonSymbolComputedProperty(node: DeclarationName, message: DiagnosticMessage) {
+            if (node.kind === SyntaxKind.ComputedPropertyName && !isWellKnownSymbolSyntactically((<ComputedPropertyName>node).expression)) {
                 return grammarErrorOnNode(node, message);
             }
         }
@@ -10803,17 +10803,17 @@ module ts {
                 // and accessors are not allowed in ambient contexts in general,
                 // so this error only really matters for methods.
                 if (isInAmbientContext(node)) {
-                    return checkGrammarForDisallowedComputedProperty(node.name, Diagnostics.A_computed_property_name_in_an_ambient_context_must_directly_refer_to_a_built_in_Symbol);
+                    return checkGrammarForNonSymbolComputedProperty(node.name, Diagnostics.A_computed_property_name_in_an_ambient_context_must_directly_refer_to_a_built_in_Symbol);
                 }
                 else if (!node.body) {
-                    return checkGrammarForDisallowedComputedProperty(node.name, Diagnostics.A_computed_property_name_in_a_method_overload_must_directly_refer_to_a_built_in_Symbol);
+                    return checkGrammarForNonSymbolComputedProperty(node.name, Diagnostics.A_computed_property_name_in_a_method_overload_must_directly_refer_to_a_built_in_Symbol);
                 }
             }
             else if (node.parent.kind === SyntaxKind.InterfaceDeclaration) {
-                return checkGrammarForDisallowedComputedProperty(node.name, Diagnostics.A_computed_property_name_in_an_interface_must_directly_refer_to_a_built_in_Symbol);
+                return checkGrammarForNonSymbolComputedProperty(node.name, Diagnostics.A_computed_property_name_in_an_interface_must_directly_refer_to_a_built_in_Symbol);
             }
             else if (node.parent.kind === SyntaxKind.TypeLiteral) {
-                return checkGrammarForDisallowedComputedProperty(node.name, Diagnostics.A_computed_property_name_in_a_type_literal_must_directly_refer_to_a_built_in_Symbol);
+                return checkGrammarForNonSymbolComputedProperty(node.name, Diagnostics.A_computed_property_name_in_a_type_literal_must_directly_refer_to_a_built_in_Symbol);
             }
         }
 
@@ -11084,17 +11084,17 @@ module ts {
         function checkGrammarProperty(node: PropertyDeclaration) {
             if (node.parent.kind === SyntaxKind.ClassDeclaration) {
                 if (checkGrammarForInvalidQuestionMark(node, node.questionToken, Diagnostics.A_class_member_cannot_be_declared_optional) ||
-                    checkGrammarForDisallowedComputedProperty(node.name, Diagnostics.A_computed_property_name_in_a_class_property_declaration_must_directly_refer_to_a_built_in_Symbol)) {
+                    checkGrammarForNonSymbolComputedProperty(node.name, Diagnostics.A_computed_property_name_in_a_class_property_declaration_must_directly_refer_to_a_built_in_Symbol)) {
                     return true;
                 }
             }
             else if (node.parent.kind === SyntaxKind.InterfaceDeclaration) {
-                if (checkGrammarForDisallowedComputedProperty(node.name, Diagnostics.A_computed_property_name_in_an_interface_must_directly_refer_to_a_built_in_Symbol)) {
+                if (checkGrammarForNonSymbolComputedProperty(node.name, Diagnostics.A_computed_property_name_in_an_interface_must_directly_refer_to_a_built_in_Symbol)) {
                     return true;
                 }
             }
             else if (node.parent.kind === SyntaxKind.TypeLiteral) {
-                if (checkGrammarForDisallowedComputedProperty(node.name, Diagnostics.A_computed_property_name_in_a_type_literal_must_directly_refer_to_a_built_in_Symbol)) {
+                if (checkGrammarForNonSymbolComputedProperty(node.name, Diagnostics.A_computed_property_name_in_a_type_literal_must_directly_refer_to_a_built_in_Symbol)) {
                     return true;
                 }
             }

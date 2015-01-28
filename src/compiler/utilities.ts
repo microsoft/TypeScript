@@ -835,11 +835,21 @@ module ts {
         return SyntaxKind.FirstTriviaToken <= token && token <= SyntaxKind.LastTriviaToken;
     }
 
+    export function isWellKnownSymbolSyntactically(node: Node): boolean {
+        return node.kind === SyntaxKind.PropertyAccessExpression && isESSymbolIdentifier((<PropertyAccessExpression>node).expression);
+    }
+
     export function isESSymbolTypeNode(node: Node): boolean {
         return node.kind === SyntaxKind.TypeReference &&
             (<TypeReferenceNode>node).typeArguments === undefined &&
-            (<TypeReferenceNode>node).typeName.kind === SyntaxKind.Identifier &&
-            (<Identifier>(<TypeReferenceNode>node).typeName).text === "Symbol";
+            isESSymbolIdentifier((<TypeReferenceNode>node).typeName);
+    }
+
+    /**
+     * Includes the word "Symbol" with unicode escapes
+     */
+    export function isESSymbolIdentifier(node: Node): boolean {
+        return node.kind === SyntaxKind.Identifier && (<Identifier>node).text === "Symbol";
     }
 
     export function isModifier(token: SyntaxKind): boolean {
