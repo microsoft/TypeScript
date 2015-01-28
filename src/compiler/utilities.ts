@@ -843,7 +843,9 @@ module ts {
      *      Symbol.
      */
     export function hasDynamicName(declaration: Declaration): boolean {
-        return declaration.name && declaration.name.kind === SyntaxKind.ComputedPropertyName;
+        return declaration.name &&
+            declaration.name.kind === SyntaxKind.ComputedPropertyName &&
+            !isWellKnownSymbolSyntactically((<ComputedPropertyName>declaration.name).expression);
     }
 
     export function isWellKnownSymbolSyntactically(node: Node): boolean {
