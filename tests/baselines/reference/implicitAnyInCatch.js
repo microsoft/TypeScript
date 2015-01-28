@@ -15,6 +15,7 @@ class C {
 
 
 //// [implicitAnyInCatch.js]
+// this should not be an error
 try {
 }
 catch (error) {
