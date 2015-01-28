@@ -75,13 +75,6 @@ module ts {
         getLength(): number;
 
         /**
-         * This call returns the array containing the start position of every line.  
-         * i.e."[0, 10, 55]".  TODO: consider making this optional.  The language service could
-         * always determine this (albeit in a more expensive manner).
-         */
-        getLineStartPositions(): number[];
-
-        /**
          * Gets the TextChangeRange that describe how the text changed between this text and 
          * an older version.  This information is used by the incremental parser to determine
          * what sections of the script need to be re-parsed.  'undefined' can be returned if the 
@@ -104,14 +97,6 @@ module ts {
 
             public getLength(): number {
                 return this.text.length;
-            }
-
-            public getLineStartPositions(): number[] {
-                if (!this._lineStartPositions) {
-                    this._lineStartPositions = computeLineStarts(this.text);
-                }
-
-                return this._lineStartPositions;
             }
 
             public getChangeRange(oldSnapshot: IScriptSnapshot): TextChangeRange {

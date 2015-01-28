@@ -237,9 +237,6 @@ module FourSlash {
             getLength: () => {
                 return sourceText.length;
             },
-            getLineStartPositions: () => {
-                return <number[]>[];
-            },
             getChangeRange: (oldSnapshot: ts.IScriptSnapshot) => {
                 return <ts.TextChangeRange>undefined;
             }

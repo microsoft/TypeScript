@@ -72,14 +72,6 @@ module Harness.LanguageService {
             return this.textSnapshot.length;
         }
 
-        public getLineStartPositions(): string {
-            if (this.lineMap === null) {
-                this.lineMap = ts.computeLineStarts(this.textSnapshot);
-            }
-
-            return JSON.stringify(this.lineMap);
-        }
-
         public getChangeRange(oldScript: ts.ScriptSnapshotShim): string {
             var oldShim = <ScriptSnapshotShim>oldScript;
             var range = this.scriptInfo.getTextChangeRangeBetweenVersions(oldShim.version, this.version);

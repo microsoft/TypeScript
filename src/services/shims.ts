@@ -25,9 +25,6 @@ module ts {
         /** Gets the length of this script snapshot. */
         getLength(): number;
 
-        /** This call returns the JSON-encoded array of the type: number[] */
-        getLineStartPositions(): string;
-
         /**
          * Returns a JSON-encoded value of the type:
          *   { span: { start: number; length: number }; newLength: number }
@@ -190,14 +187,6 @@ module ts {
 
         public getLength(): number {
             return this.scriptSnapshotShim.getLength();
-        }
-
-        public getLineStartPositions(): number[] {
-            if (this.lineStartPositions == null) {
-                this.lineStartPositions = JSON.parse(this.scriptSnapshotShim.getLineStartPositions());
-            }
-
-            return this.lineStartPositions;
         }
 
         public getChangeRange(oldSnapshot: IScriptSnapshot): TextChangeRange {
