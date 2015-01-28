@@ -914,6 +914,8 @@ module ts {
 
         getEmitOutput(fileName: string): EmitOutput;
 
+        getProgram(): Program;
+
         getSourceFile(filename: string): SourceFile;
 
         dispose(): void;
@@ -2073,6 +2075,12 @@ module ts {
                 // If the compilation settings do no match, then the program is not up-to-date
                 return compareDataObjects(program.getCompilerOptions(), hostCache.compilationSettings());
             }
+        }
+
+        function getProgram(): Program {
+            synchronizeHostData();
+
+            return program;
         }
 
         /**
@@ -5444,6 +5452,7 @@ module ts {
             getFormattingEditsAfterKeystroke,
             getEmitOutput,
             getSourceFile: getCurrentSourceFile,
+            getProgram
         };
     }
 
