@@ -120,6 +120,8 @@ module ts {
         WhileKeyword,
         WithKeyword,
         // Strict mode reserved words
+        AsKeyword,
+        FromKeyword,
         ImplementsKeyword,
         InterfaceKeyword,
         LetKeyword,

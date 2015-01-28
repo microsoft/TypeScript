@@ -4520,7 +4520,8 @@ module ts {
 
         function parseImportDeclarationOrStatement(fullStart: number, modifiers: ModifiersArray): ImportEqualsDeclaration | ImportStatement {
             parseExpected(SyntaxKind.ImportKeyword);
-            if (token === SyntaxKind.StringLiteral) {
+            if (token === SyntaxKind.StringLiteral ||
+                token === SyntaxKind.AsteriskToken) {
                 return parseImportStatement(fullStart, modifiers);
             }
 
@@ -4564,7 +4565,12 @@ module ts {
             setModifiers(node, modifiers);
 
             // ImportDeclaration:
+            //  import ImportClause ModuleSpecifier ;
             //  import ModuleSpecifier;
+            if (token !== SyntaxKind.StringLiteral) {
+                // ImportDeclaration:
+                node.importClause = parseImportClause();
+            }
             node.moduleSpecifier = parseModuleSpecifier();
             parseSemicolon();
             return finishNode(node);
@@ -4581,6 +4587,30 @@ module ts {
             }
 
             parseErrorAtCurrentToken(Diagnostics.String_literal_expected);
+        }
+
+        function parseImportClause(): ImportClause {
+            //ImportClause:
+            //  ImportedDefaultBinding from
+            //  NameSpaceImport from
+            //  NamedImports from
+            //  ImportedDefaultBinding, NameSpaceImport from
+            //  ImportedDefaultBinding, NamedImports from
+
+            var importClause = <ImportClause>createNode(SyntaxKind.ImportClause);
+            importClause.bindings = parseNamespaceImport();
+            parseExpected(SyntaxKind.FromKeyword);
+            return finishNode(importClause);
+        }
+
+        function parseNamespaceImport(): NamespaceImport {
+            // NameSpaceImport:
+            //  * as ImportedBinding
+            var namespaceImport = <NamespaceImport>createNode(SyntaxKind.NamespaceImport);
+            parseExpected(SyntaxKind.AsteriskToken);
+            parseExpected(SyntaxKind.AsKeyword);
+            namespaceImport.name = parseIdentifier();
+            return finishNode(namespaceImport);
         }
 
         function parseExportAssignmentTail(fullStart: number, modifiers: ModifiersArray): ExportAssignment {
@@ -4612,6 +4642,8 @@ module ts {
                     // Not true keywords so ensure an identifier follows
                     return lookAhead(nextTokenIsIdentifierOrKeyword);
                 case SyntaxKind.ImportKeyword:
+                    // Not true keywords so ensure an identifier follows or is string literal or asterisk
+                    return lookAhead(nextTokenIsIdentifierOrKeywordOrStringLiteralOrAsterisk) ;
                 case SyntaxKind.ModuleKeyword:
                     // Not a true keyword so ensure an identifier or string literal follows
                     return lookAhead(nextTokenIsIdentifierOrKeywordOrStringLiteral);
@@ -4640,6 +4672,12 @@ module ts {
         function nextTokenIsIdentifierOrKeywordOrStringLiteral() {
             nextToken();
             return isIdentifierOrKeyword() || token === SyntaxKind.StringLiteral;
+        }
+
+        function nextTokenIsIdentifierOrKeywordOrStringLiteralOrAsterisk() {
+            nextToken();
+            return isIdentifierOrKeyword() || token === SyntaxKind.StringLiteral ||
+                token === SyntaxKind.AsteriskToken;
         }
 
         function nextTokenIsEqualsTokenOrDeclarationStart() {

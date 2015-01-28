@@ -38,6 +38,7 @@ module ts {
 
     var textToToken: Map<SyntaxKind> = {
         "any": SyntaxKind.AnyKeyword,
+        "as": SyntaxKind.AsKeyword,
         "boolean": SyntaxKind.BooleanKeyword,
         "break": SyntaxKind.BreakKeyword,
         "case": SyntaxKind.CaseKeyword,
@@ -58,6 +59,7 @@ module ts {
         "false": SyntaxKind.FalseKeyword,
         "finally": SyntaxKind.FinallyKeyword,
         "for": SyntaxKind.ForKeyword,
+        "from": SyntaxKind.FromKeyword,
         "function": SyntaxKind.FunctionKeyword,
         "get": SyntaxKind.GetKeyword,
         "if": SyntaxKind.IfKeyword,
