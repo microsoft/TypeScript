@@ -1155,13 +1155,62 @@ module ts {
         getClassificationsForLine(text: string, lexState: EndOfLineState, classifyKeywordsInGenerics?: boolean): ClassificationResult;
     }
 
+    /**
+      * The document registry represents a store of SourceFile objects that can be shared between 
+      * multiple LanguageService instances. A LanguageService instance holds on the SourceFile (AST)
+      * of files in the context. 
+      * SourceFile objects account for most of the memory usage by the language service. Sharing 
+      * the same DocumentRegistry instance between different instances of LanguageService allow 
+      * for more efficient memory utilization since all projects will share at least the library 
+      * file (lib.d.ts).
+      *
+      * A more advanced use of the document registry is to serialize sourceFile objects to disk 
+      * and re-hydrate them when needed.
+      *
+      * To create a default DocumentRegistry, use createDocumentRegistry to create one, and pass it 
+      * to all subsequent createLanguageService calls.
+      */
     export interface DocumentRegistry {
+        /**
+          * Request a stored SourceFile with a given filename and compilationSettings.
+          * The first call to acquire will call createLanguageServiceSourceFile to generate
+          * the SourceFile if was not found in the registry.
+          *
+          * @param filename The name of the file requested
+          * @param compilationSettings Some compilation settings like target affects the 
+          * shape of a the resulting SourceFile. This allows the DocumentRegistry to store
+          * multiple copies of the same file for different compilation settings.
+          * @parm scriptSnapshot Text of the file. Only used if the file was not found
+          * in the registry and a new one was created.
+          * @parm version Current version of the file. Only used if the file was not found
+          * in the registry and a new one was created.
+          */
         acquireDocument(
             filename: string,
             compilationSettings: CompilerOptions,
             scriptSnapshot: IScriptSnapshot,
             version: string): SourceFile;
 
+        /**
+          * Request an updated version of an already existing SourceFile with a given filename
+          * and compilationSettings. The update will intern call updateLanguageServiceSourceFile
+          * to get an updated SourceFile.
+          *
+          * Note: It is not allowed to call update on a SourceFile that was not acquired from this
+          * registry originally.
+          *
+          * @param sourceFile The original sourceFile object to update
+          * @param filename The name of the file requested
+          * @param compilationSettings Some compilation settings like target affects the 
+          * shape of a the resulting SourceFile. This allows the DocumentRegistry to store
+          * multiple copies of the same file for different compilation settings.
+          * @parm scriptSnapshot Text of the file. Only used if the file was not found
+          * in the registry and a new one was created.
+          * @parm version Current version of the file. Only used if the file was not found
+          * in the registry and a new one was created.
+          * @parm textChangeRange Change ranges since the last snapshot. Only used if the file 
+          * was not found in the registry and a new one was created.
+          */
         updateDocument(
             sourceFile: SourceFile,
             filename: string,
@@ -1170,6 +1219,15 @@ module ts {
             version: string,
             textChangeRange: TextChangeRange): SourceFile;
 
+        /**
+          * Informs the DocumentRegistry that a file is not needed any longer.
+          *
+          * Note: It is not allowed to call release on a SourceFile that was not acquired from
+          * this registry originally.
+          *
+          * @param filename The name of the file to be released
+          * @param compilationSettings The compilation settings used to acquire the file
+          */
         releaseDocument(filename: string, compilationSettings: CompilerOptions): void
     }
 
