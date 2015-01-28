@@ -7344,7 +7344,7 @@ interface Event {
 }
 declare var Event: {
     prototype: Event;
-    new(): Event;
+    new(type: string): Event;
     CAPTURING_PHASE: number;
     AT_TARGET: number;
     BUBBLING_PHASE: number;
