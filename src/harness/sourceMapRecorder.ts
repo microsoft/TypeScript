@@ -217,12 +217,16 @@ module Harness.SourceMapRecoder {
         var prevWrittenJsLine: number;
         var spanMarkerContinues: boolean;
 
-        export function intializeSourceMapSpanWriter(sourceMapRecordWriter: Compiler.WriterAggregator, sourceMapData: ts.SourceMapData, currentJsFile: Compiler.GeneratedFile) {
+        export function intializeSourceMapSpanWriter(sourceMapRecordWriter: Compiler.WriterAggregator, sourceMapData: ts.SourceMapData, jsFiles: Compiler.GeneratedFile[]) {
             sourceMapRecoder = sourceMapRecordWriter;
             sourceMapSources = sourceMapData.sourceMapSources;
             sourceMapNames = sourceMapData.sourceMapNames;
 
-            jsFile = currentJsFile;
+            jsFile = ts.forEach(jsFiles, jsFile => {
+                if ((jsFile.fileName + ".map") === sourceMapData.sourceMapFilePath) {
+                    return jsFile;
+                }
+            });
             jsLineMap = ts.computeLineStarts(jsFile.code);
 
             spansOnSingleLine = [];
@@ -440,7 +444,7 @@ module Harness.SourceMapRecoder {
             var sourceMapData = sourceMapDataList[i];
             var prevSourceFile: ts.SourceFile = null;
 
-            SourceMapSpanWriter.intializeSourceMapSpanWriter(sourceMapRecoder, sourceMapData, jsFiles[i]);
+            SourceMapSpanWriter.intializeSourceMapSpanWriter(sourceMapRecoder, sourceMapData, jsFiles);
             for (var j = 0; j < sourceMapData.sourceMapDecodedMappings.length; j++) {
                 var decodedSourceMapping = sourceMapData.sourceMapDecodedMappings[j];
                 var currentSourceFile = program.getSourceFile(sourceMapData.inputSourceFileNames[decodedSourceMapping.sourceIndex]);
