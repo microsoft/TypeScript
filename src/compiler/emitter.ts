@@ -3307,7 +3307,9 @@ module ts {
                     write(" ");
                     emitStart(node.body);
                     write("return ");
-                    // Don't emit comments on this body.  We'll have already taken care of it above.
+
+                    // Don't emit comments on this body.  We'll have already taken care of it above 
+                    // when we called emitDetachedComments.
                     emitNode(node.body, /*disableComments:*/ true);
                     emitEnd(node.body);
                     write(";");
@@ -3979,7 +3981,7 @@ module ts {
 
             function shouldEmitLeadingAndTrailingComments(node: Node) {
                 switch (node.kind) {
-                    // All of thes entities are emitted in a specialized fashion.  As such, we allow
+                    // All of these entities are emitted in a specialized fashion.  As such, we allow
                     // the specilized methods for each to handle the comments on the nodes.
                     case SyntaxKind.InterfaceDeclaration:
                     case SyntaxKind.FunctionDeclaration:
