@@ -1,0 +1,23 @@
+tests/cases/compiler/superNewCall1.ts(9,5): error TS2377: Constructors for derived classes must contain a 'super' call.
+tests/cases/compiler/superNewCall1.ts(10,9): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
+
+
+==== tests/cases/compiler/superNewCall1.ts (2 errors) ====
+    
+    class A<T1, T2> {
+        constructor(private map: (value: T1) => T2) {
+    
+        }
+    }
+    
+    class B extends A<number, string> {
+        constructor() {
+        ~~~~~~~~~~~~~~~
+            new super(value => String(value));
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
+        }
+    ~~~~~
+!!! error TS2377: Constructors for derived classes must contain a 'super' call.
+    }

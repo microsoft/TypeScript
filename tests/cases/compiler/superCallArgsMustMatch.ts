@@ -12,7 +12,9 @@ class T6 extends T5<number>{
 
     constructor() {
 
-        super("hi"); // Should error, base constructor has type T for first arg, which is fixed as number in the extends clause
+        // Should error; base constructor has type T for first arg,
+        // which is instantiated with 'number' in the extends clause
+        super("hi");
 
         var x: number = this.foo;
 

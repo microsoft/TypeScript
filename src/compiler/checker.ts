@@ -6009,11 +6009,41 @@ module ts {
             return args;
         }
 
+        /**
+         * In a 'super' call, type arguments are not provided within the CallExpression node itself.
+         * Instead, they must be fetched from the class declaration's base type node.
+         *
+         * If 'node' is a 'super' call (e.g. super(...), new super(...)), then we attempt to fetch
+         * the type arguments off the containing class's first heritage clause (if one exists). Note that if
+         * type arguments are supplied on the 'super' call, they are ignored (though this is syntactically incorrect).
+         *
+         * In all other cases, the call's explicit type arguments are returned.
+         */
+        function getEffectiveTypeArguments(callExpression: CallExpression): TypeNode[] {
+            if (callExpression.expression.kind === SyntaxKind.SuperKeyword) {
+                var containingClass = <ClassDeclaration>getAncestor(callExpression, SyntaxKind.ClassDeclaration);
+                var baseClassTypeNode = containingClass && getClassBaseTypeNode(containingClass);
+                return baseClassTypeNode && baseClassTypeNode.typeArguments;
+            }
+            else {
+                // Ordinary case - simple function invocation.
+                return callExpression.typeArguments;
+            }
+        }
+
         function resolveCall(node: CallLikeExpression, signatures: Signature[], candidatesOutArray: Signature[]): Signature {
             var isTaggedTemplate = node.kind === SyntaxKind.TaggedTemplateExpression;
 
-            var typeArguments = isTaggedTemplate ? undefined : (<CallExpression>node).typeArguments;
-            forEach(typeArguments, checkSourceElement);
+            var typeArguments: TypeNode[];
+
+            if (!isTaggedTemplate) {
+                typeArguments = getEffectiveTypeArguments(<CallExpression>node);
+
+                // We already perform checking on the type arguments on the class declaration itself.
+                if ((<CallExpression>node).expression.kind !== SyntaxKind.SuperKeyword) {
+                    forEach(typeArguments, checkSourceElement);
+                }
+            }
 
             var candidates = candidatesOutArray || [];
             // collectCandidates fills up the candidates array directly
@@ -6279,7 +6309,7 @@ module ts {
                 // Another error has already been reported
                 return resolveErrorCall(node);
             }
-            
+
             // Technically, this signatures list may be incomplete. We are taking the apparent type,
             // but we are not including call signatures that may have been added to the Object or
             // Function interface, since they have none by default. This is a bit of a leap of faith
