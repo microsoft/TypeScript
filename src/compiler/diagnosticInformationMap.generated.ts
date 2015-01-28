@@ -299,6 +299,10 @@ module ts {
         Type_0_is_not_an_array_type: { code: 2461, category: DiagnosticCategory.Error, key: "Type '{0}' is not an array type." },
         A_rest_element_must_be_last_in_an_array_destructuring_pattern: { code: 2462, category: DiagnosticCategory.Error, key: "A rest element must be last in an array destructuring pattern" },
         A_binding_pattern_parameter_cannot_be_optional_in_an_implementation_signature: { code: 2463, category: DiagnosticCategory.Error, key: "A binding pattern parameter cannot be optional in an implementation signature." },
+        A_computed_property_name_must_be_of_type_string_number_or_any: { code: 2464, category: DiagnosticCategory.Error, key: "A computed property name must be of type 'string', 'number', or 'any'." },
+        this_cannot_be_referenced_in_a_computed_property_name: { code: 2465, category: DiagnosticCategory.Error, key: "'this' cannot be referenced in a computed property name." },
+        super_cannot_be_referenced_in_a_computed_property_name: { code: 2466, category: DiagnosticCategory.Error, key: "'super' cannot be referenced in a computed property name." },
+        A_computed_property_name_cannot_reference_a_type_parameter_from_its_containing_type: { code: 2466, category: DiagnosticCategory.Error, key: "A computed property name cannot reference a type parameter from its containing type." },
         Import_declaration_0_is_using_private_name_1: { code: 4000, category: DiagnosticCategory.Error, key: "Import declaration '{0}' is using private name '{1}'." },
         Type_parameter_0_of_exported_class_has_or_is_using_private_name_1: { code: 4002, category: DiagnosticCategory.Error, key: "Type parameter '{0}' of exported class has or is using private name '{1}'." },
         Type_parameter_0_of_exported_interface_has_or_is_using_private_name_1: { code: 4004, category: DiagnosticCategory.Error, key: "Type parameter '{0}' of exported interface has or is using private name '{1}'." },
@@ -448,6 +452,5 @@ module ts {
         You_cannot_rename_this_element: { code: 8000, category: DiagnosticCategory.Error, key: "You cannot rename this element." },
         yield_expressions_are_not_currently_supported: { code: 9000, category: DiagnosticCategory.Error, key: "'yield' expressions are not currently supported.", isEarly: true },
         Generators_are_not_currently_supported: { code: 9001, category: DiagnosticCategory.Error, key: "Generators are not currently supported.", isEarly: true },
-        Computed_property_names_are_not_currently_supported: { code: 9002, category: DiagnosticCategory.Error, key: "Computed property names are not currently supported.", isEarly: true },
     };
 }

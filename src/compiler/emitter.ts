@@ -932,6 +932,10 @@ module ts {
         }
 
         function emitPropertyDeclaration(node: Declaration) {
+            if (hasDynamicName(node)) {
+                return;
+            }
+
             emitJsDocComments(node);
             emitClassMemberDeclarationFlags(node);
             emitVariableDeclaration(<VariableDeclaration>node);
@@ -939,11 +943,13 @@ module ts {
             writeLine();
         }
 
-        // TODO(jfreeman): Factor out common part of property definition, but treat name differently
         function emitVariableDeclaration(node: VariableDeclaration) {
             // If we are emitting property it isn't moduleElement and hence we already know it needs to be emitted
             // so there is no check needed to see if declaration is visible
             if (node.kind !== SyntaxKind.VariableDeclaration || resolver.isDeclarationVisible(node)) {
+                // If this node is a computed name, it can only be a symbol, because we've already skipped
+                // it if it's not a well known symbol. In that case, the text of the name will be exactly
+                // what we want, namely the name expression enclosed in brackets.
                 writeTextOfNode(currentSourceFile, node.name);
                 // If optional property emit ?
                 if ((node.kind === SyntaxKind.PropertyDeclaration || node.kind === SyntaxKind.PropertySignature) && hasQuestionToken(node)) {
@@ -1030,6 +1036,10 @@ module ts {
         }
 
         function emitAccessorDeclaration(node: AccessorDeclaration) {
+            if (hasDynamicName(node)) {
+                return;
+            }
+            
             var accessors = getAllAccessorDeclarations(<ClassDeclaration>node.parent, node);
             if (node === accessors.firstAccessor) {
                 emitJsDocComments(accessors.getAccessor);
@@ -1107,6 +1117,10 @@ module ts {
         }
 
         function emitFunctionDeclaration(node: FunctionLikeDeclaration) {
+            if (hasDynamicName(node)) {
+                return;
+            }
+
             // If we are emitting Method/Constructor it isn't moduleElement and hence already determined to be emitting
             // so no need to verify if the declaration is visible
             if ((node.kind !== SyntaxKind.FunctionDeclaration || resolver.isDeclarationVisible(node)) &&
@@ -1723,7 +1737,14 @@ module ts {
                         if (scopeName) {
                             var parentIndex = getSourceMapNameIndex();
                             if (parentIndex !== -1) {
-                                scopeName = sourceMapData.sourceMapNames[parentIndex] + "." + scopeName;
+                                // Child scopes are always shown with a dot (even if they have no name),
+                                // unless it is a computed property. Then it is shown with brackets,
+                                // but the brackets are included in the name.
+                                var name = (<Declaration>node).name;
+                                if (!name || name.kind !== SyntaxKind.ComputedPropertyName) {
+                                    scopeName = "." + scopeName;
+                                }
+                                scopeName = sourceMapData.sourceMapNames[parentIndex] + scopeName;
                             }
 
                             scopeNameIndex = getProperty(sourceMapNameIndexMap, scopeName);
@@ -1751,8 +1772,11 @@ module ts {
                         node.kind === SyntaxKind.EnumDeclaration) {
                         // Declaration and has associated name use it
                         if ((<Declaration>node).name) {
-                            // TODO(jfreeman): Ask shkamat about what this name should be for source maps
-                            scopeName = (<Identifier>(<Declaration>node).name).text;
+                            var name = (<Declaration>node).name;
+                            // For computed property names, the text will include the brackets
+                            scopeName = name.kind === SyntaxKind.ComputedPropertyName
+                                ? getTextOfNode(name)
+                                : (<Identifier>(<Declaration>node).name).text;
                         }
                         recordScopeNameStart(scopeName);
                     }
