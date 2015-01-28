@@ -2645,6 +2645,7 @@ module ts {
             }
 
             function emitBlock(node: Block) {
+                emitLeadingComments(node);
                 emitToken(SyntaxKind.OpenBraceToken, node.pos);
                 increaseIndent();
                 scopeEmitStart(node.parent);
@@ -2659,6 +2660,7 @@ module ts {
                 decreaseIndent();
                 writeLine();
                 emitToken(SyntaxKind.CloseBraceToken, node.statements.end);
+                emitTrailingComments(node);
                 scopeEmitEnd();
             }
 
