@@ -483,11 +483,11 @@
         "category": "Error",
         "code": 1164
     },
-    "Computed property names are not allowed in an ambient context.": {
+    "A computed property name in an ambient context must directly refer to a built-in Symbol.": {
         "category": "Error",
         "code": 1165
     },
-    "Computed property names are not allowed in class property declarations.": {
+    "A computed property name in a class property declaration must directly refer to a built-in Symbol.": {
         "category": "Error",
         "code": 1166
     },
@@ -495,15 +495,15 @@
         "category": "Error",
         "code": 1167
     },
-    "Computed property names are not allowed in method overloads.": {
+    "A computed property name in a method overload must directly refer to a built-in Symbol.": {
         "category": "Error",
         "code": 1168
     },
-    "Computed property names are not allowed in interfaces.": {
+    "A computed property name in an interface must directly refer to a built-in Symbol.": {
         "category": "Error",
         "code": 1169
     },
-    "Computed property names are not allowed in type literals.": {
+    "A computed property name in a type literal must directly refer to a built-in Symbol.": {
         "category": "Error",
         "code": 1170
     },
