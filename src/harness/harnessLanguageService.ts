@@ -156,11 +156,15 @@ module Harness.LanguageService {
         }
 
         private getScriptInfo(fileName: string): ScriptInfo {
-            return this.fileNameToScript[fileName];
+            return ts.lookUp(this.fileNameToScript, fileName);
         }
 
         public addScript(fileName: string, content: string) {
             this.fileNameToScript[fileName] = new ScriptInfo(fileName, content);
+        }
+
+        private contains(fileName: string): boolean {
+            return ts.hasProperty(this.fileNameToScript, fileName);
         }
 
         public updateScript(fileName: string, content: string) {
@@ -214,18 +218,28 @@ module Harness.LanguageService {
             return "";
         }
 
+        public getDefaultLibFilename(): string {
+            return "";
+        }
+
         public getScriptFileNames(): string {
             var fileNames: string[] = [];
-            ts.forEachKey(this.fileNameToScript, (fileName) => { fileNames.push(fileName); });
+            ts.forEachKey(this.fileNameToScript,(fileName) => { fileNames.push(fileName); });
             return JSON.stringify(fileNames);
         }
 
         public getScriptSnapshot(fileName: string): ts.ScriptSnapshotShim {
-            return new ScriptSnapshotShim(this.getScriptInfo(fileName));
+            if (this.contains(fileName)) {
+                return new ScriptSnapshotShim(this.getScriptInfo(fileName));
+            }
+            return undefined;
         }
 
         public getScriptVersion(fileName: string): string {
-            return this.getScriptInfo(fileName).version.toString();
+            if (this.contains(fileName)) {
+                return this.getScriptInfo(fileName).version.toString();
+            }
+            return undefined;
         }
 
         public getLocalizedDiagnosticMessages(): string {

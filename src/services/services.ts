@@ -862,6 +862,7 @@ module ts {
         getLocalizedDiagnosticMessages?(): any;
         getCancellationToken?(): CancellationToken;
         getCurrentDirectory(): string;
+        getDefaultLibFilename(options: CompilerOptions): string;
         log? (s: string): void;
         trace? (s: string): void;
         error? (s: string): void;
@@ -1319,9 +1320,9 @@ module ts {
 
     // Information about a specific host file.
     interface HostFileInformation {
-        filename: string;
+        hostFilename: string;
         version: string;
-        sourceText?: IScriptSnapshot;
+        scriptSnapshot: IScriptSnapshot;
     }
 
     interface DocumentRegistryEntry {
@@ -1409,15 +1410,13 @@ module ts {
             // script id => script index
             this.filenameToEntry = {};
 
-            var filenames = host.getScriptFileNames();
-            for (var i = 0, n = filenames.length; i < n; i++) {
-                var filename = filenames[i];
-                this.filenameToEntry[normalizeSlashes(filename)] = {
-                    filename: filename,
-                    version: host.getScriptVersion(filename)
-                };
+            // Initialize the list with the root file names
+            var rootFilenames = host.getScriptFileNames();
+            for (var i = 0, n = rootFilenames.length; i < n; i++) {
+                this.createEntry(rootFilenames[i]);
             }
 
+            // store the compilation settings
             this._compilationSettings = host.getCompilationSettings() || getDefaultCompilerOptions();
         }
 
@@ -1425,28 +1424,41 @@ module ts {
             return this._compilationSettings;
         }
 
+        private createEntry(filename: string) {
+            var entry: HostFileInformation;
+            var scriptSnapshot = this.host.getScriptSnapshot(filename);
+            if (scriptSnapshot) {
+                entry = {
+                    hostFilename: filename,
+                    version: this.host.getScriptVersion(filename),
+                    scriptSnapshot: scriptSnapshot
+                };
+            }
+
+            return this.filenameToEntry[normalizeSlashes(filename)] = entry;
+        }
+
         public getEntry(filename: string): HostFileInformation {
-            filename = normalizeSlashes(filename);
-            return lookUp(this.filenameToEntry, filename);
+            return lookUp(this.filenameToEntry, normalizeSlashes(filename));
         }
 
         public contains(filename: string): boolean {
-            return !!this.getEntry(filename);
+            return hasProperty(this.filenameToEntry, normalizeSlashes(filename));
         }
 
-        public getHostfilename(filename: string) {
-            var hostCacheEntry = this.getEntry(filename);
-            if (hostCacheEntry) {
-                return hostCacheEntry.filename;
+        public getOrCreateEntry(filename: string): HostFileInformation {
+            if (this.contains(filename)) {
+                return this.getEntry(filename);
             }
-            return filename;
+
+            return this.createEntry(filename);
         }
 
-        public getFilenames(): string[] {
+        public getRootFilenames(): string[] {
             var fileNames: string[] = [];
 
             forEachKey(this.filenameToEntry, key => {
-                if (hasProperty(this.filenameToEntry, key))
+                if (hasProperty(this.filenameToEntry, key) && this.filenameToEntry[key])
                     fileNames.push(key);
             });
 
@@ -1454,15 +1466,13 @@ module ts {
         }
 
         public getVersion(filename: string): string {
-            return this.getEntry(filename).version;
+            var file = this.getEntry(filename);
+            return file && file.version;
         }
 
         public getScriptSnapshot(filename: string): IScriptSnapshot {
             var file = this.getEntry(filename);
-            if (!file.sourceText) {
-                file.sourceText = this.host.getScriptSnapshot(file.filename);
-            }
-            return file.sourceText;
+            return file && file.scriptSnapshot;
         }
 
         public getChangeRange(filename: string, lastKnownVersion: string, oldScriptSnapshot: IScriptSnapshot): TextChangeRange {
@@ -1918,14 +1928,12 @@ module ts {
     export function createLanguageService(host: LanguageServiceHost, documentRegistry: DocumentRegistry): LanguageService {
         var syntaxTreeCache: SyntaxTreeCache = new SyntaxTreeCache(host);
         var ruleProvider: formatting.RulesProvider;
-        var hostCache: HostCache; // A cache of all the information about the files on the host side.
         var program: Program;
 
         // this checker is used to answer all LS questions except errors 
         var typeInfoResolver: TypeChecker;
 
         var useCaseSensitivefilenames = false;
-        var sourceFilesByName: Map<SourceFile> = {};
         var documentRegistry = documentRegistry;
         var cancellationToken = new CancellationTokenObject(host.getCancellationToken && host.getCancellationToken());
         var activeCompletionSession: CompletionSession;         // The current active completion session, used to get the completion entry details
@@ -1946,7 +1954,7 @@ module ts {
         }
 
         function getSourceFile(filename: string): SourceFile {
-            return lookUp(sourceFilesByName, getCanonicalFileName(filename));
+            return program.getSourceFile(getCanonicalFileName(filename));
         }
 
         function getDiagnosticsProducingTypeChecker() {
@@ -1963,112 +1971,108 @@ module ts {
             return ruleProvider;
         }
 
-        function sourceFileUpToDate(sourceFile: SourceFile): boolean {
-            return sourceFile && sourceFile.version === hostCache.getVersion(sourceFile.filename);
-        }
-
-        function programUpToDate(): boolean {
-            // If we haven't create a program yet, then it is not up-to-date
-            if (!program) {
-                return false;
-            }
-
-            // If number of files in the program do not match, it is not up-to-date
-            var hostFilenames = hostCache.getFilenames();
-            if (program.getSourceFiles().length !== hostFilenames.length) {
-                return false;
-            }
-
-            // If any file is not up-to-date, then the whole program is not up-to-date
-            for (var i = 0, n = hostFilenames.length; i < n; i++) {
-                if (!sourceFileUpToDate(program.getSourceFile(hostFilenames[i]))) {
-                    return false;
-                }
-            }
-
-            // If the compilation settings do no match, then the program is not up-to-date
-            return compareDataObjects(program.getCompilerOptions(), hostCache.compilationSettings());
-        }
-
         function synchronizeHostData(): void {
-            // Reset the cache at start of every refresh
-            hostCache = new HostCache(host);
+            // Get a fresh cache of the host information
+            var hostCache = new HostCache(host);
 
             // If the program is already up-to-date, we can reuse it
             if (programUpToDate()) {
                 return;
             }
 
-            var compilationSettings = hostCache.compilationSettings();
-
-            // Now, remove any files from the compiler that are no longer in the host.
-            var oldProgram = program;
-            if (oldProgram) {
-                var oldSettings = program.getCompilerOptions();
-                // If the language version changed, then that affects what types of things we parse. So
-                // we have to dump all syntax trees.
-                // TODO: handle propagateEnumConstants
-                // TODO: is module still needed
-                var settingsChangeAffectsSyntax = oldSettings.target !== compilationSettings.target || oldSettings.module !== compilationSettings.module;
-
-                var changesInCompilationSettingsAffectSyntax =
-                    oldSettings && compilationSettings && !compareDataObjects(oldSettings, compilationSettings) && settingsChangeAffectsSyntax;
-                var oldSourceFiles = program.getSourceFiles();
-
-                for (var i = 0, n = oldSourceFiles.length; i < n; i++) {
-                    cancellationToken.throwIfCancellationRequested();
-                    var filename = oldSourceFiles[i].filename;
-                    if (!hostCache.contains(filename) || changesInCompilationSettingsAffectSyntax) {
-                        documentRegistry.releaseDocument(filename, oldSettings);
-                        delete sourceFilesByName[getCanonicalFileName(filename)];
-                    }
-                }
-            }
-
-            // Now, for every file the host knows about, either add the file (if the compiler
-            // doesn't know about it.).  Or notify the compiler about any changes (if it does
-            // know about it.)
-            var hostfilenames = hostCache.getFilenames();
-            for (var i = 0, n = hostfilenames.length; i < n; i++) {
-                var filename = hostfilenames[i];
-
-                var version = hostCache.getVersion(filename);
-                var scriptSnapshot = hostCache.getScriptSnapshot(filename);
-
-                var sourceFile: SourceFile = getSourceFile(filename);
-                if (sourceFile) {
-                    //
-                    // If the sourceFile is the same, assume no update
-                    //
-                    if (sourceFileUpToDate(sourceFile)) {
-                        continue;
-                    }
-
-                    var textChangeRange: TextChangeRange = null;
-                    textChangeRange = hostCache.getChangeRange(filename, sourceFile.version, sourceFile.scriptSnapshot);
-
-                    sourceFile = documentRegistry.updateDocument(sourceFile, filename, compilationSettings, scriptSnapshot, version, textChangeRange);
-                }
-                else {
-                    sourceFile = documentRegistry.acquireDocument(filename, compilationSettings, scriptSnapshot, version);
-                }
-
-                // Remember the new sourceFile
-                sourceFilesByName[getCanonicalFileName(filename)] = sourceFile;
-            }
+            var oldSettings = program && program.getCompilerOptions();
+            var newSettings = hostCache.compilationSettings();
+            var changesInCompilationSettingsAffectSyntax = oldSettings && oldSettings.target !== newSettings.target;
 
             // Now create a new compiler
-            program = createProgram(hostfilenames, compilationSettings, {
-                getSourceFile,
+            var newProgram = createProgram(hostCache.getRootFilenames(), newSettings, {
+                getSourceFile: getOrCreateSourceFile,
                 getCancellationToken: () => cancellationToken,
-                getCanonicalFileName: filename => useCaseSensitivefilenames ? filename : filename.toLowerCase(),
+                getCanonicalFileName: (filename) => useCaseSensitivefilenames ? filename : filename.toLowerCase(),
                 useCaseSensitiveFileNames: () => useCaseSensitivefilenames,
                 getNewLine: () => host.getNewLine ? host.getNewLine() : "\r\n",
-                getDefaultLibFilename,
+                getDefaultLibFilename: (options) => host.getDefaultLibFilename(options),
                 writeFile: (filename, data, writeByteOrderMark) => { },
                 getCurrentDirectory: () => host.getCurrentDirectory()
             });
+
+            // Release any files we have acquired in the old program but are 
+            // not part of the new program.
+            if (program) {
+                var oldSourceFiles = program.getSourceFiles();
+                for (var i = 0, n = oldSourceFiles.length; i < n; i++) {
+                    var filename = oldSourceFiles[i].filename;
+                    if (!newProgram.getSourceFile(filename) || changesInCompilationSettingsAffectSyntax) {
+                        documentRegistry.releaseDocument(filename, oldSettings);
+                    }
+                }
+            }
+
+            program = newProgram;
             typeInfoResolver = program.getTypeChecker(/*produceDiagnostics*/ false);
+
+            return;
+
+            function getOrCreateSourceFile(filename: string): SourceFile {
+                cancellationToken.throwIfCancellationRequested();
+
+                // The program is asking for this file, check first if the host can locate it.
+                // If the host can not locate the file, then it does not exist. return undefined
+                // to the program to allow reporting of errors for missing files.
+                var hostFileInformation = hostCache.getOrCreateEntry(filename);
+                if (!hostFileInformation) {
+                    return undefined;
+                }
+
+                // Check if the language version has changed since we last created a program; if they are the same,
+                // it is safe to reuse the souceFiles; if not, then the shape of the AST can change, and the oldSourceFile
+                // can not be reused. we have to dump all syntax trees and create new ones.
+                if (!changesInCompilationSettingsAffectSyntax) {
+
+                    // Check if the old program had this file already
+                    var oldSourceFile = program && program.getSourceFile(filename);
+                    if (oldSourceFile) {
+                        // This SourceFile is safe to reuse, return it
+                        if (sourceFileUpToDate(oldSourceFile)) {
+                            return oldSourceFile;
+                        }
+
+                        // We have an older version of the sourceFile, incrementally parse the changes
+                        var textChangeRange = hostCache.getChangeRange(filename, oldSourceFile.version, oldSourceFile.scriptSnapshot);
+                        return documentRegistry.updateDocument(oldSourceFile, filename, newSettings, hostFileInformation.scriptSnapshot, hostFileInformation.version, textChangeRange);
+                    }
+                }
+
+                // Could not find this file in the old program, create a new SourceFile for it.
+                return documentRegistry.acquireDocument(filename, newSettings, hostFileInformation.scriptSnapshot, hostFileInformation.version);
+            }
+
+            function sourceFileUpToDate(sourceFile: SourceFile): boolean {
+                return sourceFile && sourceFile.version === hostCache.getVersion(sourceFile.filename);
+            }
+
+            function programUpToDate(): boolean {
+                // If we haven't create a program yet, then it is not up-to-date
+                if (!program) {
+                    return false;
+                }
+
+                // If number of files in the program do not match, it is not up-to-date
+                var rootFilenames = hostCache.getRootFilenames();
+                if (program.getSourceFiles().length !== rootFilenames.length) {
+                    return false;
+                }
+
+                // If any file is not up-to-date, then the whole program is not up-to-date
+                for (var i = 0, n = rootFilenames.length; i < n; i++) {
+                    if (!sourceFileUpToDate(program.getSourceFile(rootFilenames[i]))) {
+                        return false;
+                    }
+                }
+
+                // If the compilation settings do no match, then the program is not up-to-date
+                return compareDataObjects(program.getCompilerOptions(), hostCache.compilationSettings());
+            }
         }
 
         /**

@@ -54,6 +54,7 @@ module ts {
         getLocalizedDiagnosticMessages(): string;
         getCancellationToken(): CancellationToken;
         getCurrentDirectory(): string;
+        getDefaultLibFilename(options: string): string;
     }
 
     ///
@@ -243,7 +244,8 @@ module ts {
         }
 
         public getScriptSnapshot(fileName: string): IScriptSnapshot {
-            return new ScriptSnapshotShimAdapter(this.shimHost.getScriptSnapshot(fileName));
+            var scriptSnapshot = this.shimHost.getScriptSnapshot(fileName);
+            return scriptSnapshot && new ScriptSnapshotShimAdapter(scriptSnapshot);
         }
 
         public getScriptVersion(fileName: string): string {
@@ -271,6 +273,10 @@ module ts {
 
         public getCurrentDirectory(): string {
             return this.shimHost.getCurrentDirectory();
+        }
+
+        public getDefaultLibFilename(options: CompilerOptions): string {
+            return this.shimHost.getDefaultLibFilename(JSON.stringify(options));
         }
     }
 
