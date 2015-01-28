@@ -66,8 +66,8 @@ module ts {
         var numberType = createIntrinsicType(TypeFlags.Number, "number");
         var booleanType = createIntrinsicType(TypeFlags.Boolean, "boolean");
         var voidType = createIntrinsicType(TypeFlags.Void, "void");
-        var undefinedType = createIntrinsicType(TypeFlags.Undefined | TypeFlags.Unwidened, "undefined");
-        var nullType = createIntrinsicType(TypeFlags.Null | TypeFlags.Unwidened, "null");
+        var undefinedType = createIntrinsicType(TypeFlags.Undefined | TypeFlags.ContainsUndefinedOrNull, "undefined");
+        var nullType = createIntrinsicType(TypeFlags.Null | TypeFlags.ContainsUndefinedOrNull, "null");
         var unknownType = createIntrinsicType(TypeFlags.Any, "unknown");
         var resolvingType = createIntrinsicType(TypeFlags.Any, "__resolving__");
 
@@ -106,6 +106,21 @@ module ts {
 
         var diagnostics: Diagnostic[] = [];
         var diagnosticsModified: boolean = false;
+
+        var primitiveTypeInfo: Map<{ type: Type; flags: TypeFlags }> = {
+            "string": {
+                type: stringType,
+                flags: TypeFlags.StringLike
+            },
+            "number": {
+                type: numberType,
+                flags: TypeFlags.NumberLike
+            },
+            "boolean": {
+                type: booleanType,
+                flags: TypeFlags.Boolean
+            }
+        };
 
         function addDiagnostic(diagnostic: Diagnostic) {
             diagnostics.push(diagnostic);
@@ -2826,15 +2841,22 @@ module ts {
             }
         }
 
-        function getUnwidenedFlagOfTypes(types: Type[]): TypeFlags {
-            return forEach(types, t => t.flags & TypeFlags.Unwidened) || 0;
+        // This function is used to propagate widening flags when creating new object types references and union types.
+        // It is only necessary to do so if a constituent type might be the undefined type, the null type, or the type
+        // of an object literal (since those types have widening related information we need to track).
+        function getWideningFlagsOfTypes(types: Type[]): TypeFlags {
+            var result: TypeFlags = 0;
+            for (var i = 0; i < types.length; i++) {
+                result |= types[i].flags;
+            }
+            return result & TypeFlags.RequiresWidening;
         }
 
         function createTypeReference(target: GenericType, typeArguments: Type[]): TypeReference {
             var id = getTypeListId(typeArguments);
             var type = target.instantiations[id];
             if (!type) {
-                var flags = TypeFlags.Reference | getUnwidenedFlagOfTypes(typeArguments);
+                var flags = TypeFlags.Reference | getWideningFlagsOfTypes(typeArguments);
                 type = target.instantiations[id] = <TypeReference>createObjectType(flags, target.symbol);
                 type.target = target;
                 type.typeArguments = typeArguments;
@@ -3095,7 +3117,7 @@ module ts {
             var id = getTypeListId(sortedTypes);
             var type = unionTypes[id];
             if (!type) {
-                type = unionTypes[id] = <UnionType>createObjectType(TypeFlags.Union | getUnwidenedFlagOfTypes(sortedTypes));
+                type = unionTypes[id] = <UnionType>createObjectType(TypeFlags.Union | getWideningFlagsOfTypes(sortedTypes));
                 type.types = sortedTypes;
             }
             return type;
@@ -3711,12 +3733,13 @@ module ts {
                 }
                 var result = Ternary.True;
                 var properties = getPropertiesOfObjectType(target);
+                var requireOptionalProperties = relation === subtypeRelation && !(source.flags & TypeFlags.ObjectLiteral);
                 for (var i = 0; i < properties.length; i++) {
                     var targetProp = properties[i];
                     var sourceProp = getPropertyOfType(source, targetProp.name);
                     if (sourceProp !== targetProp) {
                         if (!sourceProp) {
-                            if (relation === subtypeRelation || !(targetProp.flags & SymbolFlags.Optional)) {
+                            if (!(targetProp.flags & SymbolFlags.Optional) || requireOptionalProperties) {
                                 if (reportErrors) {
                                     reportError(Diagnostics.Property_0_is_missing_in_type_1, symbolToString(targetProp), typeToString(source));
                                 }
@@ -4107,10 +4130,6 @@ module ts {
                 errorMessageChainHead);
         }
 
-        function isTypeOfObjectLiteral(type: Type): boolean {
-            return (type.flags & TypeFlags.Anonymous) && type.symbol && (type.symbol.flags & SymbolFlags.ObjectLiteral) ? true : false;
-        }
-
         function isArrayType(type: Type): boolean {
             return type.flags & TypeFlags.Reference && (<TypeReference>type).target === globalArrayType;
         }
@@ -4123,13 +4142,18 @@ module ts {
             var properties = getPropertiesOfObjectType(type);
             var members: SymbolTable = {};
             forEach(properties, p => {
-                var symbol = <TransientSymbol>createSymbol(p.flags | SymbolFlags.Transient, p.name);
-                symbol.declarations = p.declarations;
-                symbol.parent = p.parent;
-                symbol.type = getWidenedType(getTypeOfSymbol(p));
-                symbol.target = p;
-                if (p.valueDeclaration) symbol.valueDeclaration = p.valueDeclaration;
-                members[symbol.name] = symbol;
+                var propType = getTypeOfSymbol(p);
+                var widenedType = getWidenedType(propType);
+                if (propType !== widenedType) {
+                    var symbol = <TransientSymbol>createSymbol(p.flags | SymbolFlags.Transient, p.name);
+                    symbol.declarations = p.declarations;
+                    symbol.parent = p.parent;
+                    symbol.type = widenedType;
+                    symbol.target = p;
+                    if (p.valueDeclaration) symbol.valueDeclaration = p.valueDeclaration;
+                    p = symbol;
+                }
+                members[p.name] = p;
             });
             var stringIndexType = getIndexTypeOfType(type, IndexKind.String);
             var numberIndexType = getIndexTypeOfType(type, IndexKind.Number);
@@ -4139,15 +4163,15 @@ module ts {
         }
 
         function getWidenedType(type: Type): Type {
-            if (type.flags & TypeFlags.Unwidened) {
+            if (type.flags & TypeFlags.RequiresWidening) {
                 if (type.flags & (TypeFlags.Undefined | TypeFlags.Null)) {
                     return anyType;
                 }
+                if (type.flags & TypeFlags.ObjectLiteral) {
+                    return getWidenedTypeOfObjectLiteral(type);
+                }
                 if (type.flags & TypeFlags.Union) {
                     return getUnionType(map((<UnionType>type).types, getWidenedType));
-                }
-                if (isTypeOfObjectLiteral(type)) {
-                    return getWidenedTypeOfObjectLiteral(type);
                 }
                 if (isArrayType(type)) {
                     return createArrayType(getWidenedType((<TypeReference>type).typeArguments[0]));
@@ -4169,11 +4193,11 @@ module ts {
             if (isArrayType(type)) {
                 return reportWideningErrorsInType((<TypeReference>type).typeArguments[0]);
             }
-            if (isTypeOfObjectLiteral(type)) {
+            if (type.flags & TypeFlags.ObjectLiteral) {
                 var errorReported = false;
                 forEach(getPropertiesOfObjectType(type), p => {
                     var t = getTypeOfSymbol(p);
-                    if (t.flags & TypeFlags.Unwidened) {
+                    if (t.flags & TypeFlags.ContainsUndefinedOrNull) {
                         if (!reportWideningErrorsInType(t)) {
                             error(p.valueDeclaration, Diagnostics.Object_literal_s_property_0_implicitly_has_an_1_type, p.name, typeToString(getWidenedType(t)));
                         }
@@ -4217,7 +4241,7 @@ module ts {
         }
 
         function reportErrorsFromWidening(declaration: Declaration, type: Type) {
-            if (produceDiagnostics && compilerOptions.noImplicitAny && type.flags & TypeFlags.Unwidened) {
+            if (produceDiagnostics && compilerOptions.noImplicitAny && type.flags & TypeFlags.ContainsUndefinedOrNull) {
                 // Report implicit any error within type if possible, otherwise report error on declaration
                 if (!reportWideningErrorsInType(type)) {
                     reportImplicitAnyError(declaration, type);
@@ -4473,12 +4497,17 @@ module ts {
             Debug.fail("should not get here");
         }
 
-        // Remove one or more primitive types from a union type
-        function subtractPrimitiveTypes(type: Type, subtractMask: TypeFlags): Type {
+        // For a union type, remove all constituent types that are of the given type kind (when isOfTypeKind is true)
+        // or not of the given type kind (when isOfTypeKind is false)
+        function removeTypesFromUnionType(type: Type, typeKind: TypeFlags, isOfTypeKind: boolean): Type {
             if (type.flags & TypeFlags.Union) {
                 var types = (<UnionType>type).types;
-                if (forEach(types, t => t.flags & subtractMask)) {
-                    return getUnionType(filter(types, t => !(t.flags & subtractMask)));
+                if (forEach(types, t => !!(t.flags & typeKind) === isOfTypeKind)) {
+                    // Above we checked if we have anything to remove, now use the opposite test to do the removal
+                    var narrowedType = getUnionType(filter(types, t => !(t.flags & typeKind) === isOfTypeKind));
+                    if (narrowedType !== emptyObjectType) {
+                        return narrowedType;
+                    }
                 }
             }
             return type;
@@ -4654,8 +4683,8 @@ module ts {
                             // Stop at the first containing function or module declaration
                             break loop;
                     }
-                    // Use narrowed type if it is a subtype and construct contains no assignments to variable
-                    if (narrowedType !== type && isTypeSubtypeOf(narrowedType, type)) {
+                    // Use narrowed type if construct contains no assignments to variable
+                    if (narrowedType !== type) {
                         if (isVariableAssignedWithin(symbol, node)) {
                             break;
                         }
@@ -4675,20 +4704,30 @@ module ts {
                 if (left.expression.kind !== SyntaxKind.Identifier || getResolvedSymbol(<Identifier>left.expression) !== symbol) {
                     return type;
                 }
-                var t = right.text;
-                var checkType: Type = t === "string" ? stringType : t === "number" ? numberType : t === "boolean" ? booleanType : emptyObjectType;
+                var typeInfo = primitiveTypeInfo[right.text];
                 if (expr.operator === SyntaxKind.ExclamationEqualsEqualsToken) {
                     assumeTrue = !assumeTrue;
                 }
                 if (assumeTrue) {
-                    // The assumed result is true. If check was for a primitive type, that type is the narrowed type. Otherwise we can
-                    // remove the primitive types from the narrowed type.
-                    return checkType === emptyObjectType ? subtractPrimitiveTypes(type, TypeFlags.String | TypeFlags.Number | TypeFlags.Boolean) : checkType;
+                    // Assumed result is true. If check was not for a primitive type, remove all primitive types
+                    if (!typeInfo) {
+                        return removeTypesFromUnionType(type, /*typeKind*/ TypeFlags.StringLike | TypeFlags.NumberLike | TypeFlags.Boolean, /*isOfTypeKind*/ true);
+                    }
+                    // Check was for a primitive type, return that primitive type if it is a subtype
+                    if (isTypeSubtypeOf(typeInfo.type, type)) {
+                        return typeInfo.type;
+                    }
+                    // Otherwise, remove all types that aren't of the primitive type kind. This can happen when the type is
+                    // union of enum types and other types.
+                    return removeTypesFromUnionType(type, /*typeKind*/ typeInfo.flags, /*isOfTypeKind*/ false);
                 }
                 else {
-                    // The assumed result is false. If check was for a primitive type we can remove that type from the narrowed type.
+                    // Assumed result is false. If check was for a primitive type, remove that primitive type
+                    if (typeInfo) {
+                        return removeTypesFromUnionType(type, /*typeKind*/ typeInfo.flags, /*isOfTypeKind*/ true);
+                    }
                     // Otherwise we don't have enough information to do anything.
-                    return checkType === emptyObjectType ? type : subtractPrimitiveTypes(type, checkType.flags);
+                    return type;
                 }
             }
 
@@ -4749,7 +4788,8 @@ module ts {
                 return type;
             }
 
-            // Narrow the given type based on the given expression having the assumed boolean value
+            // Narrow the given type based on the given expression having the assumed boolean value. The returned type
+            // will be a subtype or the same type as the argument.
             function narrowType(type: Type, expr: Expression, assumeTrue: boolean): Type {
                 switch (expr.kind) {
                     case SyntaxKind.ParenthesizedExpression:
@@ -5441,7 +5481,8 @@ module ts {
             // Grammar checking
             checkGrammarObjectLiteralExpression(node);
 
-            var properties: SymbolTable = {};
+            var propertiesTable: SymbolTable = {};
+            var propertiesArray: Symbol[] = [];
             var contextualType = getContextualType(node);
             var typeFlags: TypeFlags;
 
@@ -5486,40 +5527,36 @@ module ts {
                 }
 
                 if (!hasDynamicName(memberDecl)) {
-                    properties[member.name] = member;
+                    propertiesTable[member.name] = member;
                 }
-            }
-
-            // If object literal is contextually (but not inferentially) typed, copy missing optional properties from
-            // the contextual type such that the resulting type becomes a subtype in cases where only optional properties
-            // were omitted. There is no need to create new property objects as nothing in them needs to change.
-            if (contextualType && !isInferentialContext(contextualMapper)) {
-                forEach(getPropertiesOfObjectType(contextualType), p => {
-                    if (p.flags & SymbolFlags.Optional && !hasProperty(properties, p.name)) {
-                        properties[p.name] = p;
-                    }
-                });
+                propertiesArray.push(member);
             }
 
             var stringIndexType = getIndexType(IndexKind.String);
             var numberIndexType = getIndexType(IndexKind.Number);
-            var result = createAnonymousType(node.symbol, properties, emptyArray, emptyArray, stringIndexType, numberIndexType);
-            result.flags |= (typeFlags & TypeFlags.Unwidened);
+            var result = createAnonymousType(node.symbol, propertiesTable, emptyArray, emptyArray, stringIndexType, numberIndexType);
+            result.flags |= TypeFlags.ObjectLiteral | TypeFlags.ContainsObjectLiteral | (typeFlags & TypeFlags.ContainsUndefinedOrNull);
             return result;
 
             function getIndexType(kind: IndexKind) {
                 if (contextualType && contextualTypeHasIndexSignature(contextualType, kind)) {
                     var propTypes: Type[] = [];
-                    for (var i = 0; i < node.properties.length; i++) {
+                    for (var i = 0; i < propertiesArray.length; i++) {
                         var propertyDecl = node.properties[i];
                         if (kind === IndexKind.String || isNumericName(propertyDecl.name)) {
-                            var type = getTypeOfSymbol(getSymbolOfNode(propertyDecl));
+                            // Do not call getSymbolOfNode(propertyDecl), as that will get the
+                            // original symbol for the node. We actually want to get the symbol
+                            // created by checkObjectLiteral, since that will be appropriately
+                            // contextually typed and resolved.
+                            var type = getTypeOfSymbol(propertiesArray[i]);
                             if (!contains(propTypes, type)) {
                                 propTypes.push(type);
                             }
                         }
                     }
-                    return propTypes.length ? getUnionType(propTypes) : undefinedType;
+                    var result = propTypes.length ? getUnionType(propTypes) : undefinedType;
+                    typeFlags |= result.flags;
+                    return result;
                 }
                 return undefined;
             }
@@ -5972,11 +6009,41 @@ module ts {
             return args;
         }
 
+        /**
+         * In a 'super' call, type arguments are not provided within the CallExpression node itself.
+         * Instead, they must be fetched from the class declaration's base type node.
+         *
+         * If 'node' is a 'super' call (e.g. super(...), new super(...)), then we attempt to fetch
+         * the type arguments off the containing class's first heritage clause (if one exists). Note that if
+         * type arguments are supplied on the 'super' call, they are ignored (though this is syntactically incorrect).
+         *
+         * In all other cases, the call's explicit type arguments are returned.
+         */
+        function getEffectiveTypeArguments(callExpression: CallExpression): TypeNode[] {
+            if (callExpression.expression.kind === SyntaxKind.SuperKeyword) {
+                var containingClass = <ClassDeclaration>getAncestor(callExpression, SyntaxKind.ClassDeclaration);
+                var baseClassTypeNode = containingClass && getClassBaseTypeNode(containingClass);
+                return baseClassTypeNode && baseClassTypeNode.typeArguments;
+            }
+            else {
+                // Ordinary case - simple function invocation.
+                return callExpression.typeArguments;
+            }
+        }
+
         function resolveCall(node: CallLikeExpression, signatures: Signature[], candidatesOutArray: Signature[]): Signature {
             var isTaggedTemplate = node.kind === SyntaxKind.TaggedTemplateExpression;
 
-            var typeArguments = isTaggedTemplate ? undefined : (<CallExpression>node).typeArguments;
-            forEach(typeArguments, checkSourceElement);
+            var typeArguments: TypeNode[];
+
+            if (!isTaggedTemplate) {
+                typeArguments = getEffectiveTypeArguments(<CallExpression>node);
+
+                // We already perform checking on the type arguments on the class declaration itself.
+                if ((<CallExpression>node).expression.kind !== SyntaxKind.SuperKeyword) {
+                    forEach(typeArguments, checkSourceElement);
+                }
+            }
 
             var candidates = candidatesOutArray || [];
             // collectCandidates fills up the candidates array directly
@@ -6242,7 +6309,7 @@ module ts {
                 // Another error has already been reported
                 return resolveErrorCall(node);
             }
-            
+
             // Technically, this signatures list may be incomplete. We are taking the apparent type,
             // but we are not including call signatures that may have been added to the Object or
             // Function interface, since they have none by default. This is a bit of a leap of faith
@@ -6783,7 +6850,7 @@ module ts {
             // and the right operand to be of type Any or a subtype of the 'Function' interface type. 
             // The result is always of the Boolean primitive type.
             // NOTE: do not raise error if leftType is unknown as related error was already reported
-            if (!isTypeOfKind(leftType, TypeFlags.Any | TypeFlags.ObjectType | TypeFlags.TypeParameter)) {
+            if (isTypeOfKind(leftType, TypeFlags.Primitive)) {
                 error(node.left, Diagnostics.The_left_hand_side_of_an_instanceof_expression_must_be_of_type_any_an_object_type_or_a_type_parameter);
             }
             // NOTE: do not raise error if right is unknown as related error was already reported

@@ -336,36 +336,44 @@ module ts {
             var paramTag = "@param";
             var jsDocCommentParts: SymbolDisplayPart[] = [];
 
-            ts.forEach(declarations, declaration => {
-                var sourceFileOfDeclaration = getSourceFileOfNode(declaration);
-                // If it is parameter - try and get the jsDoc comment with @param tag from function declaration's jsDoc comments
-                if (canUseParsedParamTagComments && declaration.kind === SyntaxKind.Parameter) {
-                    ts.forEach(getJsDocCommentTextRange(declaration.parent, sourceFileOfDeclaration), jsDocCommentTextRange => {
-                        var cleanedParamJsDocComment = getCleanedParamJsDocComment(jsDocCommentTextRange.pos, jsDocCommentTextRange.end, sourceFileOfDeclaration);
-                        if (cleanedParamJsDocComment) {
-                            jsDocCommentParts.push.apply(jsDocCommentParts, cleanedParamJsDocComment);
-                        }
-                    });
+            ts.forEach(declarations, (declaration, indexOfDeclaration) => {
+                // Make sure we are collecting doc comment from declaration once,
+                // In case of union property there might be same declaration multiple times 
+                // which only varies in type parameter
+                // Eg. var a: Array<string> | Array<number>; a.length
+                // The property length will have two declarations of property length coming 
+                // from Array<T> - Array<string> and Array<number>
+                if (indexOf(declarations, declaration) === indexOfDeclaration) {
+                    var sourceFileOfDeclaration = getSourceFileOfNode(declaration);
+                    // If it is parameter - try and get the jsDoc comment with @param tag from function declaration's jsDoc comments
+                    if (canUseParsedParamTagComments && declaration.kind === SyntaxKind.Parameter) {
+                        ts.forEach(getJsDocCommentTextRange(declaration.parent, sourceFileOfDeclaration), jsDocCommentTextRange => {
+                            var cleanedParamJsDocComment = getCleanedParamJsDocComment(jsDocCommentTextRange.pos, jsDocCommentTextRange.end, sourceFileOfDeclaration);
+                            if (cleanedParamJsDocComment) {
+                                jsDocCommentParts.push.apply(jsDocCommentParts, cleanedParamJsDocComment);
+                            }
+                        });
+                    }
+
+                    // If this is left side of dotted module declaration, there is no doc comments associated with this node
+                    if (declaration.kind === SyntaxKind.ModuleDeclaration && (<ModuleDeclaration>declaration).body.kind === SyntaxKind.ModuleDeclaration) {
+                        return;
+                    }
+
+                    // If this is dotted module name, get the doc comments from the parent
+                    while (declaration.kind === SyntaxKind.ModuleDeclaration && declaration.parent.kind === SyntaxKind.ModuleDeclaration) {
+                        declaration = <ModuleDeclaration>declaration.parent;
+                    } 
+
+                    // Get the cleaned js doc comment text from the declaration
+                    ts.forEach(getJsDocCommentTextRange(
+                        declaration.kind === SyntaxKind.VariableDeclaration ? declaration.parent.parent : declaration, sourceFileOfDeclaration), jsDocCommentTextRange => {
+                            var cleanedJsDocComment = getCleanedJsDocComment(jsDocCommentTextRange.pos, jsDocCommentTextRange.end, sourceFileOfDeclaration);
+                            if (cleanedJsDocComment) {
+                                jsDocCommentParts.push.apply(jsDocCommentParts, cleanedJsDocComment);
+                            }
+                        });
                 }
-
-                // If this is left side of dotted module declaration, there is no doc comments associated with this node
-                if (declaration.kind === SyntaxKind.ModuleDeclaration && (<ModuleDeclaration>declaration).body.kind === SyntaxKind.ModuleDeclaration) {
-                    return;
-                }
-
-                // If this is dotted module name, get the doc comments from the parent
-                while (declaration.kind === SyntaxKind.ModuleDeclaration && declaration.parent.kind === SyntaxKind.ModuleDeclaration) {
-                    declaration = <ModuleDeclaration>declaration.parent;
-                } 
-
-                // Get the cleaned js doc comment text from the declaration
-                ts.forEach(getJsDocCommentTextRange(
-                    declaration.kind === SyntaxKind.VariableDeclaration ? declaration.parent.parent : declaration, sourceFileOfDeclaration), jsDocCommentTextRange => {
-                        var cleanedJsDocComment = getCleanedJsDocComment(jsDocCommentTextRange.pos, jsDocCommentTextRange.end, sourceFileOfDeclaration);
-                        if (cleanedJsDocComment) {
-                            jsDocCommentParts.push.apply(jsDocCommentParts, cleanedJsDocComment);
-                        }
-                    });
             });
 
             return jsDocCommentParts;
@@ -3915,7 +3923,8 @@ module ts {
                 }
 
                 // if this symbol is visible from its parent container, e.g. exported, then bail out
-                if (symbol.parent) {
+                // if symbol correspond to the union property - bail out
+                if (symbol.parent || (symbol.getFlags() & SymbolFlags.UnionProperty)) {
                     return undefined;
                 }
 

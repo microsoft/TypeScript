@@ -124,21 +124,21 @@ var m1d;
 var m1d = 1; // error
 function m2() {
 }
-;
+; // ok since the module is not instantiated
 var m2a;
 (function (m2a) {
     var y = 2;
 })(m2a || (m2a = {}));
 function m2a() {
 }
-;
+; // error since the module is instantiated
 var m2b;
 (function (m2b) {
     m2b.y = 2;
 })(m2b || (m2b = {}));
 function m2b() {
 }
-;
+; // error since the module is instantiated
 // should be errors to have function first
 function m2c() {
 }

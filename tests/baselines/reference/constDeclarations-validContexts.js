@@ -153,6 +153,7 @@ if (true) {
 while (false) {
     label2: label3: label4: const c9 = 0;
 }
+// Try/catch/finally
 try {
     const c10 = 0;
 }
@@ -162,6 +163,7 @@ catch (e) {
 finally {
     const c12 = 0;
 }
+// Switch
 switch (0) {
     case 0:
         const c13 = 0;
@@ -170,6 +172,7 @@ switch (0) {
         const c14 = 0;
         break;
 }
+// blocks
 {
     const c15 = 0;
     {

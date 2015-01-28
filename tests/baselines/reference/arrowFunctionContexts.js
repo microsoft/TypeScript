@@ -103,6 +103,7 @@ var __extends = this.__extends || function (d, b) {
     __.prototype = b.prototype;
     d.prototype = new __();
 };
+// Arrow function used in with statement
 with (window) {
     var p = function () { return this; };
 }
@@ -142,6 +143,7 @@ var M;
 // Repeat above for module members that are functions? (necessary to redo all of them?)
 var M2;
 (function (M2) {
+    // Arrow function used in with statement
     with (window) {
         var p = function () { return this; };
     }
