@@ -1,0 +1,46 @@
+tests/cases/conformance/es6/arrowFunction/emitArrowFunctionWhenUsingArguments.ts(2,15): error TS9002: An argument object has different behaviour across Javascript versions. Use function expression or rest parameters instead
+tests/cases/conformance/es6/arrowFunction/emitArrowFunctionWhenUsingArguments.ts(7,19): error TS9002: An argument object has different behaviour across Javascript versions. Use function expression or rest parameters instead
+tests/cases/conformance/es6/arrowFunction/emitArrowFunctionWhenUsingArguments.ts(13,13): error TS9002: An argument object has different behaviour across Javascript versions. Use function expression or rest parameters instead
+tests/cases/conformance/es6/arrowFunction/emitArrowFunctionWhenUsingArguments.ts(19,15): error TS9002: An argument object has different behaviour across Javascript versions. Use function expression or rest parameters instead
+
+
+==== tests/cases/conformance/es6/arrowFunction/emitArrowFunctionWhenUsingArguments.ts (4 errors) ====
+    var a = () => {
+        var arg = arguments[0];  // error
+                  ~~~~~~~~~
+!!! error TS9002: An argument object has different behaviour across Javascript versions. Use function expression or rest parameters instead
+    }
+    
+    var b = function () {
+        var a = () => {
+            var arg = arguments[0];  // error
+                      ~~~~~~~~~
+!!! error TS9002: An argument object has different behaviour across Javascript versions. Use function expression or rest parameters instead
+        }
+    }
+    
+    function baz() {
+    	() => {
+    		var arg = arguments[0];
+    		          ~~~~~~~~~
+!!! error TS9002: An argument object has different behaviour across Javascript versions. Use function expression or rest parameters instead
+    	}
+    }
+    
+    function foo(inputFunc: () => void) { }
+    foo(() => {
+        var arg = arguments[0];  // error
+                  ~~~~~~~~~
+!!! error TS9002: An argument object has different behaviour across Javascript versions. Use function expression or rest parameters instead
+    });
+    
+    function bar() {
+        var arg = arguments[0];  // no error
+    }
+    
+    
+    () => {
+    	function foo() {
+    		var arg = arguments[0];  // no error
+    	}
+    }
