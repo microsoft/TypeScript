@@ -30,8 +30,7 @@ function func() {
                     return [4 /*yield*/, p];
                 case 1:
                     switch (_a) {
-                        case _state.sent:
-                            return [3 /*break*/, 2];
+                        case _state.sent: return [3 /*break*/, 2];
                         case 1:
                             return [3 /*break*/, 3];
                     }

@@ -1481,7 +1481,7 @@ var ts;
     function main() {
         if (ts.sys.args.length < 1) {
             ts.sys.write("Usage:" + ts.sys.newLine);
-            ts.sys.write("\tnode processSyntax.js <synatx-json-input-file>" + ts.sys.newLine);
+            ts.sys.write("\tnode processSyntax.js <syntax-json-input-file>" + ts.sys.newLine);
             return;
         }
         var inputFilePath = ts.sys.args[0].replace(/\\/g, "/");
@@ -1505,21 +1505,27 @@ var ts;
             syntaxSubTypesTable = {};
             for (var i = 0; i < syntax.length; i++) {
                 var nodeType = syntax[i];
-                nodeType.handlerType = normalizeType(nodeType.handlerType);
-                nodeType.types = normalizeType(nodeType.types);
-                nodeType.type = normalizeType(nodeType.type);
-                if (nodeType.kind) {
-                    nodeType.kind = nodeType.kind.replace(/\s+/g, "");
+                var kind = nodeType.kind;
+                var type = nodeType.type;
+                var baseType = nodeType.baseType;
+                var types = nodeType.types;
+                var name = nodeType.name;
+                if (kind) {
+                    nodeType.kind = kind.replace(/\s+/g, "");
                     syntaxKindTable[nodeType.kind] = nodeType;
                 }
-                if (!nodeType.type) {
-                    nodeType.type = nodeType.types;
-                }
-                if (nodeType.type) {
+                if (type) {
+                    nodeType.type = normalizeType(type);
                     syntaxTypeTable[nodeType.type] = nodeType;
                 }
-                if (nodeType.baseType) {
-                    nodeType.baseType = normalizeType(nodeType.baseType);
+                else {
+                    nodeType.type = normalizeType(nodeType.types || nodeType.baseType);
+                }
+                if (types) {
+                    nodeType.types = normalizeType(types);
+                }
+                if (baseType) {
+                    nodeType.baseType = normalizeType(baseType);
                     var subTypes = getProperty(syntaxSubTypesTable, nodeType.baseType);
                     if (!subTypes) {
                         subTypes = [];
@@ -1527,17 +1533,24 @@ var ts;
                     }
                     subTypes.push(nodeType);
                 }
-                if (nodeType.name) {
-                    nodeType.name = nodeType.name.replace(/\s+/g, "");
+                if (name) {
+                    nodeType.name = formatName(nodeType.name);
                 }
                 else {
-                    nodeType.name = nodeType.kind || nodeType.type;
+                    nodeType.name = formatName(nodeType.kind || nodeType.type);
                 }
                 var children = nodeType.children;
                 if (children) {
                     for (var j = 0; j < children.length; j++) {
                         var member = children[j];
                         member.type = normalizeType(member.type);
+                        member.name = formatName(member.name);
+                        if (!member.paramName) {
+                            member.paramName = member.name;
+                        }
+                        else {
+                            member.paramName = formatName(member.paramName);
+                        }
                     }
                 }
             }
@@ -1555,7 +1568,6 @@ var ts;
             writer.writeln("module ts {");
             writer.indent();
             writeFactoryModule();
-            writeVisitorInterface();
             writeVisitorModule();
             writer.dedent();
             writer.writeln("}");
@@ -1567,14 +1579,14 @@ var ts;
             lastWriteSucceeded = false;
             for (var i = 0; i < syntax.length; i++) {
                 var nodeType = syntax[i];
-                writeFactoryModuleCreateFunctionForNode(nodeType);
-                writeFactoryModuleUpdateFunctionForNode(nodeType);
+                writeCreateNodeFunction(nodeType);
+                writeUpdateNodeFunction(nodeType);
             }
             writer.dedent();
             writer.writeln("}");
             writer.writeln();
         }
-        function writeFactoryModuleCreateFunctionForNode(nodeType) {
+        function writeCreateNodeFunction(nodeType) {
             if (!nodeType.kind || !nodeType.children) {
                 return;
             }
@@ -1584,36 +1596,40 @@ var ts;
             var kind = nodeType.kind;
             var type = nodeType.type || nodeType.baseType;
             var name = nodeType.name || kind || type;
+            var modifiers;
             var children = nodeType.children;
-            writer.write("export function create" + formatName(name) + "(");
+            writer.write("export function create" + nodeType.name + "(");
             for (var i = 0; i < children.length; i++) {
                 var member = children[i];
-                writer.write(member.paramName || member.name);
+                writer.write(member.paramName);
                 if (member.optional) {
                     writer.write("?");
                 }
-                writer.write(": " + formatType(member.type));
-                if (member.isNodeArray) {
+                writer.write(": " + member.type);
+                if (member.isModifiersArray) {
+                    modifiers = member.paramName;
+                }
+                if (member.isNodeArray || member.isModifiersArray) {
                     writer.write("[]");
                 }
                 writer.write(", ");
             }
             writer.write("location?: TextRange, flags?: NodeFlags");
-            if (nodeType.modifiers) {
-                writer.write(", modifiers?: Node[]");
-            }
-            writer.writeln("): " + formatType(type) + " {");
+            writer.writeln("): " + nodeType.type + " {");
             writer.indent();
-            writer.writeln("var node = beginNode<" + formatType(type) + ">(SyntaxKind." + kind + ");");
+            writer.writeln("var node = beginNode<" + nodeType.type + ">(SyntaxKind." + nodeType.kind + ");");
             for (var i = 0; i < children.length; i++) {
                 var member = children[i];
                 var paramName = member.paramName || member.name;
-                writer.write("node." + formatName(member.name) + " = ");
+                writer.write("node." + member.name + " = ");
                 if (member.converter) {
                     writer.write(member.converter + "(");
                 }
                 else if (member.isNodeArray) {
                     writer.write("createNodeArray(");
+                }
+                else if (member.isModifiersArray) {
+                    writer.write("<ModifiersArray>");
                 }
                 writer.write(paramName);
                 if (member.converter || member.isNodeArray) {
@@ -1622,26 +1638,23 @@ var ts;
                 writer.writeln(";");
             }
             writer.write("return finishNode(node, location, flags");
-            if (nodeType.modifiers) {
-                writer.write(", modifiers");
+            if (modifiers) {
+                writer.write(", " + modifiers);
             }
             writer.writeln(");");
             writer.dedent();
             writer.writeln("}");
             lastWriteSucceeded = true;
         }
-        function writeFactoryModuleUpdateFunctionForNode(nodeType) {
-            if (!nodeType.update || !nodeType.kind || !nodeType.children) {
+        function writeUpdateNodeFunction(syntaxNode) {
+            if (!syntaxNode.update || !syntaxNode.kind || !syntaxNode.children) {
                 return;
             }
             if (lastWriteSucceeded) {
                 writer.writeln();
             }
-            var kind = nodeType.kind;
-            var type = nodeType.type || nodeType.baseType;
-            var name = nodeType.name || kind || type;
-            var children = nodeType.children;
-            writer.write("export function update" + formatName(name) + "(node: " + formatType(type));
+            writer.write("export function update" + syntaxNode.name + "(node: " + syntaxNode.type);
+            var children = syntaxNode.children;
             for (var i = 0; i < children.length; i++) {
                 var member = children[i];
                 if (member.readonly) {
@@ -1650,12 +1663,12 @@ var ts;
                 writer.write(", ");
                 var paramName = member.paramName || member.name;
                 writer.write(formatName(paramName));
-                writer.write(": " + formatType(member.type));
-                if (member.isNodeArray) {
+                writer.write(": " + member.type);
+                if (member.isNodeArray || member.isModifiersArray) {
                     writer.write("[]");
                 }
             }
-            writer.writeln("): " + formatType(type) + " {");
+            writer.writeln("): " + syntaxNode.type + " {");
             writer.indent();
             writer.write("if (");
             lastWriteSucceeded = false;
@@ -1668,16 +1681,16 @@ var ts;
                     writer.write(" || ");
                 }
                 var paramName = member.paramName || member.name;
-                writer.write("node." + formatName(member.name) + " !== " + formatName(paramName));
+                writer.write("node." + member.name + " !== " + member.paramName);
                 lastWriteSucceeded = true;
             }
             writer.writeln(") {");
             writer.indent();
-            writer.write("return create" + formatName(name) + "(");
+            writer.write("return create" + syntaxNode.name + "(");
             for (var i = 0; i < children.length; i++) {
                 var member = children[i];
                 if (member.readonly) {
-                    writer.write("node." + formatName(member.name));
+                    writer.write("node." + member.name);
                 }
                 else {
                     var paramName = member.paramName || member.name;
@@ -1685,325 +1698,95 @@ var ts;
                 }
                 writer.write(", ");
             }
-            writer.write("node, node.flags");
-            if (nodeType.modifiers) {
-                writer.write(", node.modifiers");
-            }
-            writer.writeln(");");
+            writer.writeln("node, node.flags);");
             writer.dedent();
             writer.writeln("}");
             writer.writeln("return node;");
             writer.dedent();
             writer.writeln("}");
             lastWriteSucceeded = true;
-        }
-        function writeVisitorInterface() {
-            writer.writeln("export interface VisitorHandlers {");
-            writer.indent();
-            for (var i = 0; i < syntax.length; i++) {
-                writeVisitorMethodSignatureForNode(syntax[i]);
-            }
-            writer.dedent();
-            writer.writeln("}");
-            writer.writeln();
-        }
-        function writeVisitorMethodSignatureForNode(nodeType) {
-            if (!nodeType.visit || !nodeType.handler) {
-                return;
-            }
-            var kind = nodeType.kind;
-            var type = nodeType.type || nodeType.baseType;
-            var name = nodeType.name || kind || type;
-            var handlerType = nodeType.handlerType || type;
-            writer.writeln("visit" + formatName(name) + "? (handlers: VisitorHandlers, node: " + formatType(type) + "): " + formatType(handlerType) + ";");
         }
         function writeVisitorModule() {
             writer.writeln("export module Visitor {");
             writer.indent();
-            writeVisitorModuleFunctions();
-            writeVisitorModuleFooter();
+            writeVisitNodeFallbackFunction();
+            writeVisitMemberFunction();
             writer.dedent();
             writer.writeln("}");
         }
-        function writeVisitorModuleFunctions() {
-            lastWriteSucceeded = false;
+        function writeVisitNodeFallbackFunction() {
+            writer.writeln("function accept(node: Node, cbNode: Visitor, state?: any): Node {");
+            writer.indent();
+            writer.writeln("switch (node.kind) {");
+            writer.indent();
+            var pendingReturnNode = false;
             for (var i = 0; i < syntax.length; i++) {
-                writeVisitorModuleFunctionForNode(syntax[i]);
-            }
-        }
-        function writeVisitorModuleFunctionForNode(nodeType) {
-            if (!nodeType.visit) {
-                return;
-            }
-            if (lastWriteSucceeded) {
-                writer.writeln();
-            }
-            var kind = nodeType.kind;
-            var type = nodeType.type || nodeType.baseType;
-            var name = nodeType.name || kind || type;
-            writer.writeln("export function visit" + formatName(name) + "(handlers: VisitorHandlers, node: " + formatType(type) + "): " + formatType(type) + " {");
-            writer.indent();
-            if (nodeType.shallow) {
-                writer.writeln("return node;");
-            }
-            else {
-                writer.writeln("if (!node || !handlers) {");
-                writer.indent();
-                writer.writeln("return node;");
-                writer.dedent();
-                writer.writeln("}");
-                if (nodeType.types) {
-                    writeVisitorFunctionBodyForTypeUnion(nodeType);
+                var syntaxNode = syntax[i];
+                if (!syntaxNode.kind) {
+                    continue;
                 }
-                else if (!nodeType.kind) {
-                    writeVisitorFunctionBodyForSuperType(nodeType);
+                if (!syntaxNode.update) {
+                    pendingReturnNode = true;
                 }
-                else if (nodeType.update) {
-                    writeVisitorFunctionBodyForNode(nodeType);
-                }
-                else {
+                else if (pendingReturnNode) {
+                    pendingReturnNode = false;
+                    writer.indent();
                     writer.writeln("return node;");
-                }
-            }
-            writer.dedent();
-            writer.writeln("}");
-            lastWriteSucceeded = true;
-        }
-        function writeVisitorFunctionBodyForTypeUnion(unionType) {
-            var returnType = unionType.type || unionType.baseType;
-            var types = splitUnionType(unionType.types);
-            for (var i = 0; i < types.length; i++) {
-                var nodeType = getProperty(syntaxTypeTable, types[i]);
-                if (!nodeType) {
-                    ts.sys.write(("warning: could not find entry with type \"" + types[i] + "\"") + ts.sys.newLine);
-                    continue;
-                }
-                if (!nodeType.nodeTest) {
-                    continue;
-                }
-                writer.writeln("if (" + nodeType.nodeTest + "(node)) {");
-                writer.indent();
-                writeVisitorFunctionBodyVisitNode(nodeType, unionType);
-                writer.dedent();
-                writer.writeln("}");
-            }
-            writer.writeln("switch (node.kind) {");
-            writer.indent();
-            var lastWriteWasVisit = true;
-            for (var i = 0; i < types.length; i++) {
-                var nodeType = getProperty(syntaxTypeTable, types[i]);
-                if (!nodeType || nodeType.nodeTest) {
-                    continue;
-                }
-                var kind = nodeType.kind;
-                var type = nodeType.type || nodeType.baseType;
-                var name = nodeType.name || kind || type;
-                lastWriteWasVisit = writeVisitorFunctionBodyCasesForSubTypes(nodeType, unionType, lastWriteWasVisit);
-            }
-            if (!lastWriteWasVisit) {
-                writer.indent();
-                writer.writeln("return node;");
-                writer.dedent();
-            }
-            writer.writeln("default:");
-            writer.indent();
-            writer.writeln("reportUnexpectedNode(node);");
-            writer.writeln("return node;");
-            writer.dedent();
-            writer.dedent();
-            writer.writeln("}");
-        }
-        function writeVisitorFunctionBodyCasesForSubTypes(nodeType, outerType, lastWriteWasVisit) {
-            if (nodeType.kind) {
-                var kind = nodeType.kind;
-                var type = nodeType.type || nodeType.baseType;
-                var name = nodeType.name || kind;
-                if (nodeType.visit) {
-                    if (!lastWriteWasVisit) {
-                        writer.indent();
-                        writer.writeln("return node;");
-                        writer.dedent();
-                    }
-                }
-                writer.writeln("case SyntaxKind." + kind + ":");
-                if (nodeType.visit) {
-                    writer.indent();
-                    writeVisitorFunctionBodyVisitNode(nodeType, outerType);
                     writer.dedent();
                 }
-                lastWriteWasVisit = nodeType.visit;
-            }
-            else {
-                var subTypes = getProperty(syntaxSubTypesTable, nodeType.type);
-                if (!subTypes) {
-                    ts.sys.write(("warning: could not find subtypes for type \"" + nodeType.type + "\"") + ts.sys.newLine);
-                }
-                else {
-                    for (var i = 0; i < subTypes.length; i++) {
-                        lastWriteWasVisit = writeVisitorFunctionBodyCasesForSubTypes(subTypes[i], outerType, lastWriteWasVisit);
-                    }
-                }
-            }
-            return lastWriteWasVisit;
-        }
-        function writeVisitorFunctionBodyForSuperType(nodeType) {
-            var subTypes = getProperty(syntaxSubTypesTable, nodeType.type);
-            if (!subTypes) {
-                ts.sys.write(("warning: could not find subtypes for type '" + nodeType.type + "'") + ts.sys.newLine);
-                return;
-            }
-            writer.writeln("switch (node.kind) {");
-            writer.indent();
-            var remainingTypes = [];
-            for (var i = 0; i < subTypes.length; i++) {
-                var subType = subTypes[i];
-                var kind = subType.kind;
-                var type = subType.type || subType.baseType;
-                var name = subType.name || kind || type;
-                if (subType.kind) {
-                    writer.writeln("case SyntaxKind." + kind + ":");
+                writer.writeln("case SyntaxKind." + syntaxNode.kind + ":");
+                if (syntaxNode.update) {
                     writer.indent();
-                    writeVisitorFunctionBodyVisitNode(subType, nodeType);
+                    writeUpdateNode(syntaxNode);
                     writer.dedent();
                 }
-                else {
-                    remainingTypes.push(subType);
-                }
             }
-            if (remainingTypes.length === 1) {
-                var subType = remainingTypes[0];
-                writer.writeln("default:");
+            if (pendingReturnNode) {
                 writer.indent();
-                writeVisitorFunctionBodyVisitNode(subType, nodeType);
-                writer.dedent();
-            }
-            else {
-                if (remainingTypes.length > 0) {
-                    ts.sys.write("warning: too many subtypes." + ts.sys.newLine);
-                }
-                writer.writeln("default:");
-                writer.indent();
-                writer.writeln("reportUnexpectedNode(node);");
                 writer.writeln("return node;");
                 writer.dedent();
             }
             writer.dedent();
             writer.writeln("}");
+            writer.dedent();
+            writer.writeln("}");
         }
-        function writeVisitorFunctionBodyForNode(nodeType) {
-            var kind = nodeType.kind;
-            var type = nodeType.type;
-            var name = nodeType.name || kind || type;
-            writer.writeln("return Factory.update" + formatName(name) + "(");
+        function writeUpdateNode(syntaxNode) {
+            writer.writeln("return Factory.update" + syntaxNode.name + "(");
             writer.indent();
-            writer.write("node");
-            var children = nodeType.children;
-            for (var i = 0; i < children.length; i++) {
-                var member = children[i];
-                if (member.readonly) {
-                    continue;
+            writer.write("<" + syntaxNode.type + ">node");
+            var children = syntaxNode.children;
+            if (children) {
+                for (var i = 0; i < children.length; i++) {
+                    var member = children[i];
+                    if (member.readonly) {
+                        continue;
+                    }
+                    writer.writeln(",");
+                    writeVisitMember(syntaxNode, member);
                 }
-                writer.writeln(",");
-                writeVisitorFunctionBodyVisitMember(member);
             }
-            writer.writeln(")");
+            writer.writeln(");");
             writer.dedent();
         }
-        function writeVisitorFunctionBodyVisitMember(member) {
-            var memberNodeType = getProperty(syntaxTypeTable, member.type);
-            if (!memberNodeType || !memberNodeType.visit) {
-                writer.write("node." + formatName(member.name));
-            }
-            else {
-                var kind = memberNodeType.kind;
-                var type = memberNodeType.type || memberNodeType.baseType;
-                var name = memberNodeType.name || kind || type;
+        function writeVisitMember(syntaxNode, member) {
+            var memberSyntaxNode = getProperty(syntaxTypeTable, member.type);
+            if (memberSyntaxNode) {
                 if (member.isNodeArray) {
-                    writeVisitMemberArray(member.name, memberNodeType);
+                    writer.write("visitNodes<" + member.type + ">(");
                 }
                 else {
-                    writeVisitMember(member.name, memberNodeType);
+                    writer.write("visit<" + member.type + ">(");
                 }
             }
-        }
-        function writeVisitorFunctionBodyVisitNode(nodeType, outerNodeType) {
-            if (nodeType.visit) {
-                var kind = nodeType.kind;
-                var type = nodeType.type || nodeType.types || nodeType.baseType;
-                var name = nodeType.name || kind || type;
-                var handlerType = nodeType.handlerType || type;
-                var outerType = outerNodeType.type || outerNodeType.types || outerNodeType.baseType;
-                if (!isTypeAssignableTo(handlerType, outerType)) {
-                    var intersection = getIntersectionType(handlerType, outerType);
-                    if (!intersection) {
-                        ts.sys.write(("warning: no intersection of types between " + handlerType + " and " + outerType) + ts.sys.newLine);
-                        writer.writeln("// warning: no intersection of types between " + handlerType + " and " + outerType);
-                        writer.writeln("return node;");
-                        return;
-                    }
-                    if (outerNodeType.nodeTest) {
-                        writer.write("var visited = ");
-                        writeVisitNode(nodeType);
-                        writer.writeln(';');
-                        writer.writeln("if (visited && !" + outerNodeType.nodeTest + "(visited)) {");
-                        writer.indent();
-                        writer.writeln("reportUnexpectedNodeAfterVisit(visited, node);");
-                        writer.writeln("return node;");
-                        writer.dedent();
-                        writer.writeln("}");
-                        writer.writeln("return <" + formatType(intersection) + ">visited;");
-                        return;
-                    }
-                    writer.writeln("// warning: VisitorHandlers returns possibly incompatible node type, add a nodeTest.");
-                    writer.write("return <" + formatType(intersection) + ">");
-                    writeVisitNode(nodeType);
-                    writer.writeln(";");
-                    return;
-                }
-                writer.write("return ");
-                writeVisitNode(nodeType);
-                writer.writeln(";");
-            }
-            else {
-                writer.writeln("return node;");
+            writer.write("(<" + syntaxNode.type + ">node)." + member.name);
+            if (memberSyntaxNode) {
+                writer.write(", cbNode, state)");
             }
         }
-        function writeVisitNode(nodeType) {
-            var kind = nodeType.kind;
-            var type = nodeType.type || nodeType.types || nodeType.baseType;
-            var name = nodeType.name || kind || type;
-            if (nodeType.handler) {
-                writer.write("visitNode(handlers, <" + formatType(type) + ">node, handlers.visit" + formatName(name) + " || visit" + formatName(name) + ")");
-            }
-            else {
-                writer.write("visitNode(handlers, <" + formatType(type) + ">node, visit" + formatName(name) + ")");
-            }
-        }
-        function writeVisitMember(member, nodeType) {
-            var kind = nodeType.kind;
-            var type = nodeType.type || nodeType.types || nodeType.baseType;
-            var name = nodeType.name || kind || type;
-            if (nodeType.handler) {
-                writer.write("visitNode(handlers, <" + formatType(type) + ">node." + formatName(member) + ", handlers.visit" + formatName(name) + " || visit" + formatName(name) + ")");
-            }
-            else {
-                writer.write("visitNode(handlers, <" + formatType(type) + ">node." + formatName(member) + ", visit" + formatName(name) + ")");
-            }
-        }
-        function writeVisitMemberArray(member, nodeType) {
-            var kind = nodeType.kind;
-            var type = nodeType.type || nodeType.types || nodeType.baseType;
-            var name = nodeType.name || kind || type;
-            if (nodeType.handler) {
-                writer.write("visitNodes(handlers, node." + formatName(member) + ", (handlers.visit" + formatName(name) + " || visit" + formatName(name) + "))");
-            }
-            else {
-                writer.write("visitNodes(handlers, node." + formatName(member) + ", visit" + formatName(name) + ")");
-            }
-        }
-        function writeVisitorModuleFooter() {
+        function writeVisitMemberFunction() {
             writer.suspendIndenting();
-            writer.writeln("\n        function visitNode<TNode extends Node>(handlers: VisitorHandlers, node: TNode, visitNode: (handlers: VisitorHandlers, node: TNode) => TNode): TNode {\n            if (!node || !handlers) {\n                return node;\n            }\n            return visitNode(handlers, node);\n        }\n\n        export function visitNodes<TNode extends Node>(handlers: VisitorHandlers, nodes: NodeArray<TNode>, visitNode: (handlers: VisitorHandlers, node: TNode) => TNode, shouldCacheNode?: (node: Node) => boolean, cacheNode?: (node: TNode) => TNode, removeMissingNodes?: boolean): NodeArray<TNode> {\n            if (!nodes || !handlers) {\n                return nodes;\n            }\n\n            var updatedNodes: TNode[];\n            var updatedOffset = 0;\n            var cacheOffset = 0;\n\n            for (var i = 0; i < nodes.length; i++) {\n                var updatedIndex = i - updatedOffset;\n                var node = nodes[i];\n                if (shouldCacheNode && shouldCacheNode(node)) {\n                    if (!updatedNodes) {\n                        updatedNodes = nodes.slice(0, i);\n                    }\n                    if (cacheNode) {\n                        while (cacheOffset < updatedIndex) {\n                            updatedNodes[cacheOffset] = cacheNode(updatedNodes[cacheOffset]);\n                            cacheOffset++;\n                        }\n                    }\n                    cacheOffset = updatedIndex;\n                }\n                var updatedNode = visitNode(handlers, node);\n                if ((updatedNodes || updatedNode !== node || (!updatedNode && removeMissingNodes))) {\n                    if (!updatedNodes) {\n                        updatedNodes = nodes.slice(0, i);\n                    }\n                    if (!updatedNode && removeMissingNodes) {\n                        updatedOffset++;\n                    }\n                    else {\n                        updatedNodes[i - updatedOffset] = updatedNode;\n                    }\n                }\n            }\n            if (updatedNodes) {\n                return Factory.createNodeArray(updatedNodes, nodes);\n            }\n            return nodes;\n        }");
+            writer.writeln("\n        export function fallback<TNode extends Node>(node: TNode, cbNode: Visitor, state?: any): TNode {\n            if (!cbNode || !node) {\n                return node;\n            }\n            return <TNode>accept(node, cbNode, state);\n        }");
             writer.resumeIndenting();
         }
         function normalizeType(type) {
@@ -2015,7 +1798,7 @@ var ts;
                     type = types.join("|");
                 }
             }
-            return type;
+            return formatType(type);
         }
         function getCompatibleTypeSubset(source, target) {
             if (!source || !target) {
@@ -2165,15 +1948,15 @@ var ts;
         }
         function formatName(type) {
             if (!type) {
-                return type;
+                return;
             }
-            return type.replace(/\|/g, "Or");
+            return type.replace(/\s*\|\s*/g, "Or");
         }
         function formatType(type) {
             if (!type) {
-                return "any";
+                return;
             }
-            return type.replace(/\|/g, " | ");
+            return type.replace(/\s*\|\s*/g, " | ");
         }
     }
     var TextWriter = (function () {

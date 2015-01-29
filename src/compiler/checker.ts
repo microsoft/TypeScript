@@ -6756,6 +6756,9 @@ module ts {
             if (!(node.parserContextFlags & ParserContextFlags.Await)) {
                 grammarErrorOnFirstToken(node, Diagnostics.await_expression_must_be_contained_within_an_async_function);
             }
+            else if (node.parserContextFlags & ParserContextFlags.AsyncParameter) {
+                grammarErrorAfterFirstToken(node, Diagnostics._0_expression_is_not_allowed_in_an_initializer, "await");
+            }
 
             var operandType = checkExpression(node.expression);
             return getAwaitedType(operandType, /*fallbackType*/ operandType);
@@ -7113,6 +7116,9 @@ module ts {
             // Grammar checking
             if (!(node.parserContextFlags & ParserContextFlags.Yield)) {
                 grammarErrorOnFirstToken(node, Diagnostics.yield_expression_must_be_contained_within_a_generator_declaration);
+            }
+            else if (node.parserContextFlags & ParserContextFlags.GeneratorParameter) {
+                grammarErrorAfterFirstToken(node, Diagnostics._0_expression_is_not_allowed_in_an_initializer, "yield");
             }
             else {
                 //checkExpression(node.expression);

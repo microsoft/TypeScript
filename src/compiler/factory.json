@@ -55,6 +55,10 @@
         "types": "Identifier | LiteralExpression | ComputedPropertyName | BindingPattern"
     },
     {
+        "type": "EntityName",
+        "types": "Identifier | QualifiedName"
+    },
+    {
         "kind": "ThisKeyword",
         "baseType": "LeftHandSideExpression"
     },
@@ -78,15 +82,18 @@
     {
         "type": "QualifiedName",
         "kind": "QualifiedName",
+        "create": true,
+        "update": true,
         "children": [
-            { "name": "left", "type": "EntityName" },
-            { "name": "right", "type": "Identifier" }
+            { "name": "left", "type": "EntityName", "visit": true },
+            { "name": "right", "type": "Identifier", "visit": true }
         ]
     },
     {
         "type": "ComputedPropertyName",
         "kind": "ComputedPropertyName",
         "handlerType": "DeclarationName",
+        "create": true,
         "update": true,
         "visit": true,
         "handler": true,
@@ -94,65 +101,233 @@
             { "name": "expression", "type": "Expression", "visit": true }
         ]
     },
+    {
+        "kind": "TypeParameter",
+        "type": "TypeParameterDeclaration",
+        "create": true,
+        "update": true,
+        "children": [
+            { "name": "name", "type": "Identifier" },
+            { "name": "constraint", "type": "TypeNode", "optional": true },
+            { "name": "expression", "type": "Expression", "optional": true, "readonly": true }
+        ]
+    },
 
     {
         "name": "ParameterDeclaration",
         "kind": "Parameter",
         "type": "ParameterDeclaration",
+        "create": true,
         "update": true,
+        "modifiers": true,
         "children": [
             { "name": "name", "type": "Identifier | BindingPattern" },
-            { "name": "initializer", "type": "Expression", "optional": "true" }
+            { "name": "initializer", "type": "Expression", "optional": "true" },
+            { "name": "type", "type": "TypeNode", "optional": "true" },
+            { "name": "modifiers", "type": "Node", "optional": "true", "isModifiersArray": true, "readonly": true },
+            { "name": "dotDotDotToken", "type": "Node", "optional": "true", "readonly": true },
+            { "name": "questionToken", "type": "Node", "optional": "true", "readonly": true }
         ]
     },
 
     {
-        "kind": "MethodDeclaration",
-        "type": "MethodDeclaration",
-        "baseType": "ObjectLiteralElement",
-        "modifiers": true,
+        "kind": "PropertySignature",
+        "type": "PropertyDeclaration",
+        "create": true,
         "update": true,
-        "visit": true,
-        "shallow": true,
-        "handler": true,
-        "handlerType": "ObjectLiteralElement | ClassElement",
         "children": [
             { "name": "name", "type": "DeclarationName" },
+            { "name": "type", "type": "TypeNode", "optional": "true" },
+            { "name": "questionToken", "type": "Node", "optional": "true", "readonly": true }
+        ]
+    },
+    {
+        "kind": "PropertyDeclaration",
+        "type": "PropertyDeclaration",
+        "create": true,
+        "update": true,
+        "children": [
+            { "name": "name", "type": "DeclarationName" },
+            { "name": "initializer", "type": "Expression", "optional": "true" },
+            { "name": "type", "type": "TypeNode", "optional": "true" },
+            { "name": "questionToken", "type": "Node", "optional": "true", "readonly": true }
+        ]
+    },
+
+    {
+        "kind": "MethodSignature",
+        "type": "MethodDeclaration",
+        "create": true,
+        "update": true,
+        "visit": true,
+        "children": [
+            { "name": "name", "type": "DeclarationName" },
+            { "name": "parameters", "type": "ParameterDeclaration", "isNodeArray": true },
+            { "name": "typeParameters", "type": "TypeParameterDeclaration", "isNodeArray": true, "optional": true, "readonly": true },
+            { "name": "type", "type": "TypeNode", "optional": true, "readonly": true },
+            { "name": "modifiers", "type": "Node", "optional": true, "isModifiersArray": true, "readonly": true },
+            { "name": "asteriskToken", "type": "Node", "optional": true, "readonly": true },
+            { "name": "questionToken", "type": "Node", "optional": true, "readonly": true }
+        ]
+    },
+    {
+        "kind": "MethodDeclaration",
+        "type": "MethodDeclaration",
+        "create": true,
+        "update": true,
+        "visit": true,
+        "children": [
+            { "name": "name", "type": "DeclarationName" },
+            { "name": "parameters", "type": "ParameterDeclaration", "isNodeArray": true },
             { "name": "body", "type": "Block" },
-            { "name": "parameters", "type": "ParameterDeclaration", "isNodeArray": true }
+            { "name": "typeParameters", "type": "TypeParameterDeclaration", "isNodeArray": true, "optional": true, "readonly": true },
+            { "name": "type", "type": "TypeNode", "optional": true, "readonly": true },
+            { "name": "modifiers", "type": "Node", "optional": true, "isModifiersArray": true, "readonly": true },
+            { "name": "asteriskToken", "type": "Node", "optional": true, "readonly": true }
+        ]
+    },
+    {
+        "kind": "Constructor",
+        "type": "ConstructorDeclaration",
+        "create": true,
+        "update": true,
+        "visit": true,
+        "children": [
+            { "name": "parameters", "type": "ParameterDeclaration", "isNodeArray": true },
+            { "name": "body", "type": "Block" },
+            { "name": "typeParameters", "type": "TypeParameterDeclaration", "isNodeArray": true, "optional": true, "readonly": true },
+            { "name": "type", "type": "TypeNode", "optional": true, "readonly": true },
+            { "name": "modifiers", "type": "Node", "optional": true, "isModifiersArray": true, "readonly": true }
         ]
     },
     {
         "kind": "GetAccessor",
         "type": "AccessorDeclaration",
         "baseType": "ObjectLiteralElement",
-        "modifiers": true,
+        "create": true,
         "update": true,
         "visit": true,
-        "shallow": true,
-        "handler": true,
-        "handlerType": "ObjectLiteralElement | ClassElement",
         "children": [
             { "name": "name", "type": "DeclarationName" },
+            { "name": "parameters", "type": "ParameterDeclaration", "isNodeArray": true },
             { "name": "body", "type": "Block" },
-            { "name": "parameters", "type": "ParameterDeclaration", "isNodeArray": true }
+            { "name": "typeParameters", "type": "TypeParameterDeclaration", "isNodeArray": true, "optional": true, "readonly": true },
+            { "name": "type", "type": "TypeNode", "optional": true, "readonly": true },
+            { "name": "modifiers", "type": "Node", "optional": "true", "isModifiersArray": true, "readonly": true }
         ]
     },
     {
         "kind": "SetAccessor",
         "type": "AccessorDeclaration",
         "baseType": "ObjectLiteralElement",
-        "modifiers": true,
+        "create": true,
         "update": true,
         "visit": true,
-        "shallow": true,
-        "handler": true,
-        "handlerType": "ObjectLiteralElement | ClassElement",
         "children": [
             { "name": "name", "type": "DeclarationName" },
+            { "name": "parameters", "type": "ParameterDeclaration", "isNodeArray": true },
             { "name": "body", "type": "Block" },
-            { "name": "parameters", "type": "ParameterDeclaration", "isNodeArray": true }
+            { "name": "typeParameters", "type": "TypeParameterDeclaration", "isNodeArray": true, "optional": true, "readonly": true },
+            { "name": "type", "type": "TypeNode", "optional": true, "readonly": true },
+            { "name": "modifiers", "type": "Node", "optional": "true", "isModifiersArray": true, "readonly": true }
         ]
+    },
+    {
+        "kind": "CallSignature",
+        "type": "SignatureDeclaration",
+        "create": true,
+        "update": true,
+        "visit": true,
+        "children": [
+            { "name": "parameters", "type": "ParameterDeclaration", "isNodeArray": true },
+            { "name": "typeParameters", "type": "TypeParameterDeclaration", "isNodeArray": true, "optional": true, "readonly": true },
+            { "name": "type", "type": "TypeNode", "optional": true, "readonly": true },
+            { "name": "modifiers", "type": "Node", "optional": "true", "isModifiersArray": true, "readonly": true }
+        ]
+    },
+    {
+        "kind": "ConstructSignature",
+        "type": "SignatureDeclaration",
+        "create": true,
+        "update": true,
+        "visit": true,
+        "children": [
+            { "name": "parameters", "type": "ParameterDeclaration", "isNodeArray": true },
+            { "name": "typeParameters", "type": "TypeParameterDeclaration", "isNodeArray": true, "optional": true, "readonly": true },
+            { "name": "type", "type": "TypeNode", "optional": true, "readonly": true },
+            { "name": "modifiers", "type": "Node", "optional": "true", "isModifiersArray": true, "readonly": true }
+        ]
+    },
+    {
+        "kind": "IndexSignature",
+        "type": "IndexSignatureDeclaration",
+        "create": true,
+        "update": true,
+        "visit": true,
+        "children": [
+            { "name": "parameters", "type": "ParameterDeclaration", "isNodeArray": true },
+            { "name": "typeParameters", "type": "TypeParameterDeclaration", "isNodeArray": true, "optional": true, "readonly": true },
+            { "name": "type", "type": "TypeNode", "optional": true, "readonly": true },
+            { "name": "modifiers", "type": "Node", "optional": "true", "isModifiersArray": true, "readonly": true }
+        ]
+    },
+
+    {
+        "type": "TypeNode"
+    },
+
+    {
+        "kind": "TypeReference",
+        "type": "TypeReferenceNode",
+        "baseType": "TypeNode"
+    },
+
+    {
+        "kind": "FunctionType",
+        "type": "FunctionOrConstructorTypeNode",
+        "baseType": "TypeNode"
+    },
+
+    {
+        "kind": "ConstructorType",
+        "type": "FunctionOrConstructorTypeNode",
+        "baseType": "TypeNode"
+    },
+
+    {
+        "kind": "TypeQuery",
+        "type": "TypeQueryNode",
+        "baseType": "TypeNode"
+    },
+
+    {
+        "kind": "TypeLiteral",
+        "type": "TypeLiteralNode",
+        "baseType": "TypeNode"
+    },
+
+    {
+        "kind": "ArrayType",
+        "type": "ArrayTypeNode",
+        "baseType": "TypeNode"
+    },
+
+    {
+        "kind": "TupleType",
+        "type": "TupleTypeNode",
+        "baseType": "TypeNode"
+    },
+
+    {
+        "kind": "UnionType",
+        "type": "UnionTypeNode",
+        "baseType": "TypeNode"
+    },
+
+    {
+        "kind": "ParenthesizedType",
+        "type": "ParenthesizedTypeNode",
+        "baseType": "TypeNode"
     },
 
     {
@@ -167,10 +342,9 @@
     {
         "kind": "ObjectBindingPattern",
         "baseType": "BindingPattern",
+        "create": true,
         "update": true,
         "visit": true,
-        "handler": true,
-        "handlerType": "BindingPattern | Identifier",
         "children": [
             { "name": "elements", "type": "BindingElement", "isNodeArray": true }
         ]
@@ -178,6 +352,7 @@
     {
         "kind": "ArrayBindingPattern",
         "baseType": "BindingPattern",
+        "create": true,
         "update": true,
         "visit": true,
         "handler": true,
@@ -189,6 +364,7 @@
     {
         "kind": "BindingElement",
         "type": "BindingElement",
+        "create": true,
         "update": true,
         "visit": true,
         "handler": true,
@@ -231,6 +407,7 @@
         "kind": "ArrayLiteralExpression",
         "type": "ArrayLiteralExpression",
         "baseType": "LeftHandSideExpression",
+        "create": true,
         "update": true,
         "visit": true,
         "handler": true,
@@ -243,6 +420,7 @@
         "kind": "ObjectLiteralExpression",
         "type": "ObjectLiteralExpression",
         "baseType": "LeftHandSideExpression",
+        "create": true,
         "update": true,
         "visit": true,
         "handler": true,
@@ -255,6 +433,7 @@
         "kind": "PropertyAccessExpression",
         "type": "PropertyAccessExpression",
         "baseType": "LeftHandSideExpression",
+        "create": true,
         "update": true,
         "visit": true,
         "handler": true,
@@ -268,6 +447,7 @@
         "kind": "ElementAccessExpression",
         "type": "ElementAccessExpression",
         "baseType": "LeftHandSideExpression",
+        "create": true,
         "update": true,
         "visit": true,
         "handler": true,
@@ -281,6 +461,7 @@
         "kind": "CallExpression",
         "type": "CallExpression",
         "baseType": "LeftHandSideExpression",
+        "create": true,
         "update": true,
         "visit": true,
         "handler": true,
@@ -294,6 +475,7 @@
         "kind": "NewExpression",
         "type": "NewExpression",
         "baseType": "LeftHandSideExpression",
+        "create": true,
         "update": true,
         "visit": true,
         "handler": true,
@@ -307,6 +489,7 @@
         "kind": "TaggedTemplateExpression",
         "type": "TaggedTemplateExpression",
         "baseType": "LeftHandSideExpression",
+        "create": true,
         "update": true,
         "visit": true,
         "handler": true,
@@ -321,6 +504,7 @@
         "kind": "TypeAssertionExpression",
         "type": "TypeAssertion",
         "baseType": "UnaryExpression",
+        "create": true,
         "update": true,
         "visit": true,
         "handler": true,
@@ -334,6 +518,7 @@
         "kind": "ParenthesizedExpression",
         "type": "ParenthesizedExpression",
         "baseType": "LeftHandSideExpression",
+        "create": true,
         "update": true,
         "visit": true,
         "handler": true,
@@ -352,6 +537,7 @@
         "kind": "FunctionExpression",
         "type": "FunctionExpression",
         "baseType": "LeftHandSideExpression",
+        "create": true,
         "update": true,
         "visit": true,
         "modifiers": true,
@@ -359,28 +545,34 @@
         "handlerType": "LeftHandSideExpression",
         "children": [
             { "name": "name", "type": "Identifier" },
+            { "name": "parameters", "type": "ParameterDeclaration", "isNodeArray": true },
             { "name": "body", "type": "Expression | Block" },
-            { "name": "parameters", "type": "ParameterDeclaration", "isNodeArray": true }
+            { "name": "typeParameters", "type": "TypeParameterDeclaration", "isNodeArray": true, "optional": true, "readonly": true },
+            { "name": "type", "type": "TypeNode", "optional": true, "readonly": true },
+            { "name": "modifiers", "type": "Node", "optional": true, "isModifiersArray": true, "readonly": true },
+            { "name": "asteriskToken", "type": "Node", "optional": true, "readonly": true }
         ]
     },
     {
         "kind": "ArrowFunction",
         "type": "FunctionExpression",
         "baseType": "LeftHandSideExpression",
+        "create": true,
         "update": true,
         "visit": true,
-        "modifiers": true,
-        "handler": true,
-        "handlerType": "LeftHandSideExpression",
         "children": [
+            { "name": "parameters", "type": "ParameterDeclaration", "isNodeArray": true },
             { "name": "body", "type": "Expression | Block" },
-            { "name": "parameters", "type": "ParameterDeclaration", "isNodeArray": true }
+            { "name": "typeParameters", "type": "TypeParameterDeclaration", "isNodeArray": true, "optional": true, "readonly": true },
+            { "name": "type", "type": "TypeNode", "optional": true, "readonly": true },
+            { "name": "modifiers", "type": "Node", "optional": true, "isModifiersArray": true, "readonly": true }
         ]
     },
     {
         "kind": "DeleteExpression",
         "type": "DeleteExpression",
         "baseType": "UnaryExpression",
+        "create": true,
         "update": true,
         "visit": true,
         "handler": true,
@@ -393,6 +585,7 @@
         "kind": "TypeOfExpression",
         "type": "TypeOfExpression",
         "baseType": "UnaryExpression",
+        "create": true,
         "update": true,
         "visit": true,
         "handler": true,
@@ -405,6 +598,7 @@
         "kind": "VoidExpression",
         "type": "VoidExpression",
         "baseType": "UnaryExpression",
+        "create": true,
         "update": true,
         "visit": true,
         "handler": true,
@@ -417,6 +611,7 @@
         "kind": "AwaitExpression",
         "type": "AwaitExpression",
         "baseType": "UnaryExpression",
+        "create": true,
         "update": true,
         "visit": true,
         "handler": true,
@@ -429,6 +624,7 @@
         "kind": "PrefixUnaryExpression",
         "type": "PrefixUnaryExpression",
         "baseType": "UnaryExpression",
+        "create": true,
         "update": true,
         "visit": true,
         "handler": true,
@@ -442,6 +638,7 @@
         "kind": "PostfixUnaryExpression",
         "type": "PostfixUnaryExpression",
         "baseType": "UnaryExpression",
+        "create": true,
         "update": true,
         "visit": true,
         "handler": true,
@@ -455,6 +652,7 @@
         "kind": "BinaryExpression",
         "type": "BinaryExpression",
         "baseType": "Expression",
+        "create": true,
         "update": true,
         "visit": true,
         "handler": true,
@@ -469,6 +667,7 @@
         "kind": "ConditionalExpression",
         "type": "ConditionalExpression",
         "baseType": "Expression",
+        "create": true,
         "update": true,
         "visit": true,
         "handler": true,
@@ -483,6 +682,7 @@
         "kind": "TemplateExpression",
         "type": "TemplateExpression",
         "baseType": "LeftHandSideExpression",
+        "create": true,
         "update": true,
         "visit": true,
         "handler": true,
@@ -496,6 +696,7 @@
         "kind": "YieldExpression",
         "type": "YieldExpression",
         "baseType": "Expression",
+        "create": true,
         "update": true,
         "visit": true,
         "handler": true,
@@ -517,6 +718,7 @@
         "kind": "SpreadElementExpression",
         "type": "SpreadElementExpression",
         "baseType": "Expression",
+        "create": true,
         "update": true,
         "visit": true,
         "handler": true,
@@ -539,6 +741,7 @@
     {
         "kind": "TemplateSpan",
         "type": "TemplateSpan",
+        "create": true,
         "update": true,
         "visit": true,
         "handler": true,
@@ -557,6 +760,7 @@
         "kind": "Block",
         "type": "Block",
         "baseType": "Statement",
+        "create": true,
         "update": true,
         "visit": true,
         "handler": true,
@@ -569,6 +773,7 @@
         "kind": "VariableStatement",
         "type": "VariableStatement",
         "baseType": "Statement",
+        "create": true,
         "update": true,
         "visit": true,
         "handler": true,
@@ -591,6 +796,7 @@
         "kind": "ExpressionStatement",
         "type": "ExpressionStatement",
         "baseType": "Statement",
+        "create": true,
         "update": true,
         "visit": true,
         "handler": true,
@@ -603,6 +809,7 @@
         "kind": "IfStatement",
         "type": "IfStatement",
         "baseType": "Statement",
+        "create": true,
         "update": true,
         "visit": true,
         "handler": true,
@@ -617,6 +824,7 @@
         "kind": "DoStatement",
         "type": "DoStatement",
         "baseType": "Statement",
+        "create": true,
         "update": true,
         "visit": true,
         "handler": true,
@@ -630,6 +838,7 @@
         "kind": "WhileStatement",
         "type": "WhileStatement",
         "baseType": "Statement",
+        "create": true,
         "update": true,
         "visit": true,
         "handler": true,
@@ -643,6 +852,7 @@
         "kind": "ForStatement",
         "type": "ForStatement",
         "baseType": "Statement",
+        "create": true,
         "update": true,
         "visit": true,
         "handler": true,
@@ -658,6 +868,7 @@
         "kind": "ForInStatement",
         "type": "ForInStatement",
         "baseType": "Statement",
+        "create": true,
         "update": true,
         "visit": true,
         "handler": true,
@@ -696,6 +907,7 @@
         "kind": "ReturnStatement",
         "type": "ReturnStatement",
         "baseType": "Statement",
+        "create": true,
         "update": true,
         "visit": true,
         "handler": true,
@@ -708,6 +920,7 @@
         "kind": "WithStatement",
         "type": "WithStatement",
         "baseType": "Statement",
+        "create": true,
         "update": true,
         "visit": true,
         "handler": true,
@@ -721,6 +934,7 @@
         "kind": "SwitchStatement",
         "type": "SwitchStatement",
         "baseType": "Statement",
+        "create": true,
         "update": true,
         "visit": true,
         "handler": true,
@@ -734,6 +948,7 @@
         "kind": "LabeledStatement",
         "type": "LabeledStatement",
         "baseType": "Statement",
+        "create": true,
         "update": true,
         "visit": true,
         "handler": true,
@@ -747,6 +962,7 @@
         "kind": "ThrowStatement",
         "type": "ThrowStatement",
         "baseType": "Statement",
+        "create": true,
         "update": true,
         "visit": true,
         "handler": true,
@@ -759,6 +975,7 @@
         "kind": "TryStatement",
         "type": "TryStatement",
         "baseType": "Statement",
+        "create": true,
         "update": true,
         "visit": true,
         "handler": true,
@@ -782,6 +999,7 @@
     {
         "kind": "VariableDeclaration",
         "type": "VariableDeclaration",
+        "create": true,
         "update": true,
         "visit": true,
         "handler": true,
@@ -793,6 +1011,7 @@
     {
         "kind": "VariableDeclarationList",
         "type": "VariableDeclarationList",
+        "create": true,
         "update": true,
         "visit": true,
         "handler": true,
@@ -812,15 +1031,17 @@
         "type": "FunctionDeclaration",
         "baseType": "Statement",
         "modifiers": true,
+        "create": true,
         "update": true,
         "visit": true,
-        "shallow": true,
-        "handler": true,
-        "handlerType": "Statement",
         "children": [
             { "name": "name", "type": "Identifier" },
+            { "name": "parameters", "type": "ParameterDeclaration", "isNodeArray": true },
             { "name": "body", "type": "Block" },
-            { "name": "parameters", "type": "ParameterDeclaration", "isNodeArray": true }
+            { "name": "typeParameters", "type": "TypeParameterDeclaration", "isNodeArray": true, "optional": true, "readonly": true },
+            { "name": "type", "type": "TypeNode", "optional": true, "readonly": true },
+            { "name": "modifiers", "type": "Node", "optional": true, "isModifiersArray": true, "readonly": true },
+            { "name": "asteriskToken", "type": "Node", "optional": true, "readonly": true }
         ]
     },
 
@@ -833,6 +1054,7 @@
     {
         "kind": "CaseClause",
         "type": "CaseClause",
+        "create": true,
         "update": true,
         "visit": true,
         "handler": true,
@@ -845,6 +1067,7 @@
     {
         "kind": "DefaultClause",
         "type": "DefaultClause",
+        "create": true,
         "update": true,
         "visit": true,
         "handler": true,
@@ -856,6 +1079,7 @@
     {
         "kind": "CatchClause",
         "type": "CatchClause",
+        "create": true,
         "update": true,
         "visit": true,
         "handler": true,
@@ -876,6 +1100,7 @@
         "type": "PropertyAssignment",
         "baseType": "ObjectLiteralElement",
         "handlerType": "ObjectLiteralElement",
+        "create": true,
         "update": true,
         "visit": true,
         "handler": true,

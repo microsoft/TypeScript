@@ -161,7 +161,7 @@
         "code": 1042,
         "isEarly": true
     },
-    "'{0}' modifier cannot appear on a data property.": { 
+    "'{0}' modifier cannot appear on a data property.": {
         "category": "Error",
         "code": 1043
     },
@@ -224,7 +224,7 @@
         "code": 1057,
         "isEarly": true
     },
-    "Type for `await` does not have a valid callable `then` member.": {
+    "Type for 'await' does not have a valid callable 'then' member.": {
         "category": "Error",
         "code": 1058,
         "isEarly": true
@@ -744,6 +744,11 @@
     "A parameter property may not be a binding pattern.": {
         "category": "Error",
         "code":  1310
+    },
+    "'{0}' expression is not allowed in an initializer.": {
+        "category": "Error",
+        "code": 1311,
+        "isEarly": true
     },
 
     "Duplicate identifier '{0}'.": {

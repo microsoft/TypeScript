@@ -13,11 +13,10 @@ async function func([ x = a ]): Promise<void> {
 
 //// [awaitBindingElement9.js]
 function func(_a) {
+    var _b = _a[0], x = _b === void 0 ? a : _b;
     return new Promise(function (_resolve) {
         _resolve(__awaiter(__generator(function (_state) {
-            _b = _a[0], x = _b === void 0 ? a : _b;
             return [2 /*return*/];
         })));
     });
-    var _b, x;
 }

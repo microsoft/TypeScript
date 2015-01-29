@@ -1,0 +1,17 @@
+tests/cases/conformance/async/downlevel/awaitBindingElement/awaitBindingElement8.ts(9,34): error TS1311: 'await' expression is not allowed in an initializer.
+
+
+==== tests/cases/conformance/async/downlevel/awaitBindingElement/awaitBindingElement8.ts (1 errors) ====
+    declare class Promise<T> {
+        constructor(init: (resolve: (value?: T | IPromise<T>) => void, reject: (reason?: any) => void) => void);
+        then<TResult>(onfulfilled?: (value: T) => TResult | IPromise<TResult>, onrejected?: (reason: any) => TResult | IPromise<TResult>): Promise<TResult>;
+    }
+    declare var a: number;
+    declare var ar: number[];
+    declare var pa: Promise<number>;
+    declare var par: Promise<number[]>;
+    async function func([ x ] = await par): Promise<void> {
+                                     
+!!! error TS1311: 'await' expression is not allowed in an initializer.
+    }
+    

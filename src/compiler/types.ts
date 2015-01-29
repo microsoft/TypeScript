@@ -992,8 +992,8 @@ module ts {
     export interface Locals {
         resolver: EmitResolver;
         context: Node;
-        globals: Map<boolean>;
         tempCount: number;
+        globals?: Map<boolean>;
         variables?: Identifier[];
     }
 

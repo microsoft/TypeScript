@@ -6,6 +6,18 @@ module ts {
             return { resolver, context, globals, tempCount: 0 };
         }
 
+        export function copy(source: Locals, target: Locals): Locals {
+            if (!source || target === source) {
+                return target;
+            }
+            target.context = source.context;
+            target.globals = source.globals;
+            target.resolver = source.resolver;
+            target.tempCount = source.tempCount;
+            target.variables = source.variables;
+            return target;
+        }
+
         export function createUniqueIdentifier(locals: Locals, name?: string, globallyUnique?: boolean): Identifier {
             // when we generate a "global" unique identifier, we it to be unique in all contexts. This is 
             // to reduce the possibility of collisions when generating names used to rename symbols during emit
@@ -36,17 +48,17 @@ module ts {
             locals.variables.push(name);
         }
 
-        export function ensureIdentifier(locals: Locals, expression: Expression, writeAssignment: (left: Identifier, right: Expression) => void): Identifier {
+        export function ensureIdentifier(locals: Locals, expression: Expression, writeAssignment: (left: Identifier, right: Expression, state: any) => void, state?: any): Identifier {
             if (expression.kind !== SyntaxKind.Identifier) {
                 var local = createUniqueIdentifier(locals);
-                writeAssignment(local, expression);
+                writeAssignment(local, expression, state);
                 return local;
             }
             return <Identifier>expression;
         }
 
-        export function getValueOrDefault(locals: Locals, value: Expression, defaultValue: Expression, writeAssignment: (left: Identifier, right: Expression) => void): Expression {
-            value = ensureIdentifier(locals, value, writeAssignment);
+        export function getValueOrDefault(locals: Locals, value: Expression, defaultValue: Expression, writeAssignment: (left: Identifier, right: Expression, state: any) => void, state?: any): Expression {
+            value = ensureIdentifier(locals, value, writeAssignment, state);
             var equalityExpression = Factory.createBinaryExpression(SyntaxKind.EqualsEqualsEqualsToken, value, Factory.createVoidZero());
             var conditionalExpression = Factory.createConditionalExpression(equalityExpression, defaultValue, value);
             return conditionalExpression;
@@ -102,7 +114,7 @@ module ts {
         startLabel: Label;
         endLabel: Label;
     }
-    
+
     export function createStatementsGenerator(locals: Locals): StatementsGenerator {
         return <StatementsGenerator>createCodeGenerator(locals, /*isStatementsGenerator*/ true);
     }
@@ -212,7 +224,15 @@ module ts {
 
         function addParameter(name: Identifier, flags?: NodeFlags): void {
             if (!parameters) parameters = [];
-            parameters.push(Factory.createParameterDeclaration(name, undefined, readLocation(), flags));
+            parameters.push(Factory.createParameterDeclaration(
+                name, 
+                /*initializer*/ undefined,
+                /*type*/ undefined, 
+                /*modifiers*/ undefined, 
+                /*dotDotDotToken*/ undefined,
+                /*questionToken*/ undefined,
+                readLocation(),
+                flags));
         }
 
         function addVariable(name: Identifier, flags?: NodeFlags): void {
@@ -575,7 +595,7 @@ module ts {
             statements = buildHoistedFunctionDeclarations(statements);
             var generatorStatements = buildStatements(/*forceReturn*/ true);
             var generatorFunctionBody = Factory.createBlock(generatorStatements);
-            var generatorFunction = Factory.createFunctionExpression(/*name*/ undefined, generatorFunctionBody, [Factory.createParameterDeclaration(getState())]);
+            var generatorFunction = Factory.createFunctionExpression(/*name*/ undefined, [Factory.createParameterDeclaration(getState())], generatorFunctionBody);
             var generatorExpression = Factory.createCallExpression(Factory.createIdentifier("__generator"), [generatorFunction]);
             if (promiseConstructor) {
                 var resolve = createUniqueIdentifier("_resolve");
@@ -583,7 +603,7 @@ module ts {
                 var awaiterExpression = Factory.createCallExpression(Factory.createIdentifier("__awaiter"), [generatorExpression]);
                 var resolveExpression = Factory.createCallExpression(resolve, [awaiterExpression]);
                 var promiseFunctionBody = Factory.createBlock([Factory.createExpressionStatement(resolveExpression)]);
-                var promiseFunction = Factory.createFunctionExpression(/*name*/ undefined, promiseFunctionBody, [Factory.createParameterDeclaration(resolve)]);
+                var promiseFunction = Factory.createFunctionExpression(/*name*/ undefined, [Factory.createParameterDeclaration(resolve)], promiseFunctionBody);
                 var newPromiseExpression = Factory.createNewExpression(promiseConstructorExpression, [promiseFunction]);
                 var returnStatement = Factory.createReturnStatement(newPromiseExpression);
                 statements.push(returnStatement);
@@ -596,21 +616,21 @@ module ts {
             var node: FunctionLikeDeclaration;
             switch (kind) {
                 case SyntaxKind.FunctionDeclaration:
-                    return Factory.createFunctionDeclaration(<Identifier>name, body, parameters, location, flags, modifiers);
+                    return Factory.createFunctionDeclaration(<Identifier>name, parameters, body, undefined, undefined, modifiers, undefined, location, flags);
                 case SyntaxKind.MethodDeclaration:
-                    return Factory.createMethodDeclaration(name, body, parameters, location, flags, modifiers);
+                    return Factory.createMethodDeclaration(name, parameters, body, undefined, undefined, modifiers, undefined, location, flags);
                 case SyntaxKind.GetAccessor:
-                    return Factory.createGetAccessor(name, body, parameters, location, flags, modifiers);
+                    return Factory.createGetAccessor(name, parameters, body, undefined, undefined, modifiers, location, flags);
                 case SyntaxKind.FunctionExpression:
-                    return Factory.createFunctionExpression(<Identifier>name, body, parameters, location, flags, modifiers);
+                    return Factory.createFunctionExpression(<Identifier>name, parameters, body, undefined, undefined, modifiers, undefined, location, flags);
                 case SyntaxKind.ArrowFunction:
-                    return Factory.createArrowFunction(body, parameters, location, flags, modifiers);
+                    return Factory.createArrowFunction(parameters, body, undefined, undefined, modifiers, location, flags);
                 default:
                     reportUnexpectedNode(node);
                     return node;
             }
         }
-        
+
         function buildHoistedFunctionDeclarations(statements: Statement[]): Statement[] {
             if (functions) {
                 statements = statements.concat(functions);
@@ -741,7 +761,7 @@ module ts {
                 clauses.push(clause);
                 statements = undefined;
             }
-            
+
             function tryEnterLabel(): void {
                 if (!labels) {
                     return;

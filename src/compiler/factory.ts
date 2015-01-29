@@ -35,19 +35,17 @@ module ts {
         }
 
         export function updateFunctionLikeDeclaration(node: FunctionLikeDeclaration, name: DeclarationName, body: Expression | Block, parameters: ParameterDeclaration[]): FunctionLikeDeclaration {
-            if (node.name !== name || node.body !== body || node.parameters !== parameters) {
-                switch (node.kind) {
-                    case SyntaxKind.FunctionDeclaration:
-                        return createFunctionDeclaration(<Identifier>name, <Block>body, parameters, node, node.flags, node.modifiers);
-                    case SyntaxKind.MethodDeclaration:
-                        return createMethodDeclaration(name, <Block>body, parameters, node, node.flags, node.modifiers);
-                    case SyntaxKind.GetAccessor:
-                        return createGetAccessor(name, <Block>body, parameters, node, node.flags, node.modifiers);
-                    case SyntaxKind.FunctionExpression:
-                        return createFunctionExpression(<Identifier>name, body, parameters, node, node.flags, node.modifiers);
-                    case SyntaxKind.ArrowFunction:
-                        return createArrowFunction(body, parameters, node, node.flags, node.modifiers);
-                }
+            switch (node.kind) {
+                case SyntaxKind.FunctionDeclaration:
+                    return updateFunctionDeclaration(<FunctionDeclaration>node, <Identifier>name, parameters, <Block>body);
+                case SyntaxKind.MethodDeclaration:
+                    return updateMethodDeclaration(<MethodDeclaration>node, name, parameters, <Block>body);
+                case SyntaxKind.GetAccessor:
+                    return updateGetAccessor(<AccessorDeclaration>node, name, parameters, <Block>body);
+                case SyntaxKind.FunctionExpression:
+                    return updateFunctionExpression(<FunctionExpression>node, <Identifier>name, parameters, body);
+                case SyntaxKind.ArrowFunction:
+                    return updateArrowFunction(<FunctionExpression>node, parameters, body);
             }
             return node;
         }
@@ -106,9 +104,58 @@ module ts {
         }
     }
 
+    export interface Visitor { <TNode extends Node>(node: TNode, state?: any): TNode; }
+
     export module Visitor {
-        export function ignoreNode<TNode extends Node>(handlers: VisitorHandlers, node: TNode): TNode {
-            return node;
+        export function visit<TNode extends Node>(node: TNode, cbNode: Visitor, state?: any): TNode {
+            if (!cbNode || !node) {
+                return node;
+            }
+
+            return <TNode>cbNode(node, state);
+        }
+
+        export function visitNodes<TNode extends Node>(nodes: NodeArray<TNode>, cbNode: Visitor, state?: any, shouldCacheNode?: (node: Node, state: any) => boolean, cacheNode?: (node: TNode, state: any) => TNode, removeMissingNodes?: boolean): NodeArray<TNode> {
+            if (!nodes || !cbNode) {
+                return nodes;
+            }
+
+            var updatedNodes: TNode[];
+            var updatedOffset = 0;
+            var cacheOffset = 0;
+
+            for (var i = 0; i < nodes.length; i++) {
+                var updatedIndex = i - updatedOffset;
+                var node = nodes[i];
+                if (shouldCacheNode && shouldCacheNode(node, state)) {
+                    if (!updatedNodes) {
+                        updatedNodes = nodes.slice(0, i);
+                    }
+                    if (cacheNode) {
+                        while (cacheOffset < updatedIndex) {
+                            updatedNodes[cacheOffset] = cacheNode(updatedNodes[cacheOffset], state);
+                            cacheOffset++;
+                        }
+                    }
+                    cacheOffset = updatedIndex;
+                }
+                var updatedNode = <TNode>visit(node, cbNode, state);
+                if ((updatedNodes || updatedNode !== node || (!updatedNode && removeMissingNodes))) {
+                    if (!updatedNodes) {
+                        updatedNodes = nodes.slice(0, i);
+                    }
+                    if (!updatedNode && removeMissingNodes) {
+                        updatedOffset++;
+                    }
+                    else {
+                        updatedNodes[i - updatedOffset] = updatedNode;
+                    }
+                }
+            }
+            if (updatedNodes) {
+                return Factory.createNodeArray(updatedNodes, nodes);
+            }
+            return nodes;
         }
     }
 }

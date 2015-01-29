@@ -2365,7 +2365,7 @@ module ts {
                 }
 
                 if (languageVersion < ScriptTarget.ES6) {
-                    var rewritten = rewriteSpreadElementInArrayLiteral(node);
+                    var rewritten = SpreadElementRewriter.rewrite(node);
                     if (rewritten !== node) {
                         return emit(rewritten);
                     }
@@ -2616,7 +2616,8 @@ module ts {
                 if (languageVersion < ScriptTarget.ES6 && node.operator === SyntaxKind.EqualsToken &&
                     (node.left.kind === SyntaxKind.ObjectLiteralExpression || node.left.kind === SyntaxKind.ArrayLiteralExpression)) {
                     ensureLocals();
-                    node = rewriteDestructuring(node, locals);
+                    var oldNode = node;
+                    node = DestructuringAssignmentRewriter.rewrite(node, locals);
                 }
 
                 emit(node.left);
@@ -2899,7 +2900,7 @@ module ts {
                 if (isBindingPattern(node.name)) {
                     if (languageVersion < ScriptTarget.ES6) {
                         ensureLocals();
-                        emitCommaList(rewriteBindingElement(<BindingElement>node, locals));
+                        emitCommaList(BindingElementRewriter.rewrite(<BindingElement>node, locals));
                     }
                     else {
                         emit(node.name);
@@ -2964,7 +2965,7 @@ module ts {
                         if (isBindingPattern(p.name)) {
                             writeLine();
                             write("var ");
-                            emitCommaList(rewriteBindingElement(<BindingElement>p, locals, tempParameters[tempIndex]));
+                            emitCommaList(BindingElementRewriter.rewrite(<BindingElement>p, locals, tempParameters[tempIndex]));
                             write(";");
                             tempIndex++;
                         }
@@ -3097,17 +3098,14 @@ module ts {
                 locals = undefined;
                 tempParameters = undefined;
 
-                if (node.flags & NodeFlags.Async || node.asteriskToken && compilerOptions.target <= ScriptTarget.ES5) {
+                if (node.flags & NodeFlags.Async) {
                     ensureLocals();
-                    if (compilerOptions.target >= ScriptTarget.ES6) {
-                        node = rewriteAsyncFunctionUplevel(node, resolver, locals);
-                    }
-                    else if (node.flags & NodeFlags.Async) {
-                        node = rewriteAsyncFunctionDownlevel(node, resolver, locals);
-                    }
-                    else {
-                        node = rewriteGeneratorFunctionDownlevel(node, resolver, locals);
-                    }
+                    node = AsyncFunctionRewriter.rewrite(node, resolver, locals, compilerOptions);
+                }
+
+                if (node.asteriskToken && compilerOptions.target <= ScriptTarget.ES5) {
+                    ensureLocals();
+                    node = GeneratorFunctionRewriter.rewrite(node, resolver, locals);
                 }
 
                 emitSignatureParameters(node);
