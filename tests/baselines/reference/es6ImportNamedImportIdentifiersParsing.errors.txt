@@ -1,0 +1,18 @@
+tests/cases/compiler/es6ImportNamedImportIdentifiersParsing.ts(3,10): error TS1003: Identifier expected.
+tests/cases/compiler/es6ImportNamedImportIdentifiersParsing.ts(4,19): error TS1003: Identifier expected.
+tests/cases/compiler/es6ImportNamedImportIdentifiersParsing.ts(6,21): error TS1003: Identifier expected.
+
+
+==== tests/cases/compiler/es6ImportNamedImportIdentifiersParsing.ts (3 errors) ====
+    
+    import { yield } from "somemodule"; // Allowed
+    import { default } from "somemodule"; // Error - as this is keyword that is not allowed as identifier
+             ~~~~~~~
+!!! error TS1003: Identifier expected.
+    import { yield as default } from "somemodule"; // error to use default as binding name
+                      ~~~~~~~
+!!! error TS1003: Identifier expected.
+    import { default as yield } from "somemodule"; // no error 
+    import { default as default } from "somemodule"; // default as is ok, error of default binding name
+                        ~~~~~~~
+!!! error TS1003: Identifier expected.
