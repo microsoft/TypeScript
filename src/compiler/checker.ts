@@ -4318,6 +4318,9 @@ module ts {
             }
 
             function inferFromTypes(source: Type, target: Type) {
+                if (source === anyFunctionType) {
+                    return;
+                }
                 if (target.flags & TypeFlags.TypeParameter) {
                     // If target is a type parameter, make an inference
                     var typeParameters = context.typeParameters;
@@ -5885,22 +5888,20 @@ module ts {
         function inferTypeArguments(signature: Signature, args: Expression[], excludeArgument?: boolean[]): InferenceContext {
             var typeParameters = signature.typeParameters;
             var context = createInferenceContext(typeParameters, /*inferUnionTypes*/ false);
-            var mapper = createInferenceMapper(context);
-            // First infer from arguments that are not context sensitive
+            var inferenceMapper = createInferenceMapper(context);
+
+            // First infer from all arguments using wildcards for all context sensitive function expressions
             for (var i = 0; i < args.length; i++) {
                 if (args[i].kind === SyntaxKind.OmittedExpression) {
                     continue;
                 }
-                if (!excludeArgument || excludeArgument[i] === undefined) {
-                    var parameterType = getTypeAtPosition(signature, i);
-
-                    if (i === 0 && args[i].parent.kind === SyntaxKind.TaggedTemplateExpression) {
-                        inferTypes(context, globalTemplateStringsArrayType, parameterType);
-                        continue;
-                    }
-
-                    inferTypes(context, checkExpressionWithContextualType(args[i], parameterType, mapper), parameterType);
+                var parameterType = getTypeAtPosition(signature, i);
+                if (i === 0 && args[i].parent.kind === SyntaxKind.TaggedTemplateExpression) {
+                    inferTypes(context, globalTemplateStringsArrayType, parameterType);
+                    continue;
                 }
+                var mapper = !excludeArgument || excludeArgument[i] === undefined ? inferenceMapper : identityMapper;
+                inferTypes(context, checkExpressionWithContextualType(args[i], parameterType, mapper), parameterType);
             }
 
             // Next, infer from those context sensitive arguments that are no longer excluded
@@ -5912,10 +5913,11 @@ module ts {
                     // No need to special-case tagged templates; their excludeArgument value will be 'undefined'.
                     if (excludeArgument[i] === false) {
                         var parameterType = getTypeAtPosition(signature, i);
-                        inferTypes(context, checkExpressionWithContextualType(args[i], parameterType, mapper), parameterType);
+                        inferTypes(context, checkExpressionWithContextualType(args[i], parameterType, inferenceMapper), parameterType);
                     }
                 }
             }
+
             var inferredTypes = getInferredTypes(context);
             // Inference has failed if the inferenceFailureType type is in list of inferences
             context.failedTypeParameterIndex = indexOf(inferredTypes, inferenceFailureType);
@@ -6609,7 +6611,7 @@ module ts {
             }
 
             // The identityMapper object is used to indicate that function expressions are wildcards
-            if (contextualMapper === identityMapper) {
+            if (contextualMapper === identityMapper && isContextSensitive(node)) {
                 return anyFunctionType;
             }
             var links = getNodeLinks(node);
@@ -7283,7 +7285,7 @@ module ts {
                 case SyntaxKind.TypeAssertionExpression:
                     return checkTypeAssertion(<TypeAssertion>node);
                 case SyntaxKind.ParenthesizedExpression:
-                    return checkExpression((<ParenthesizedExpression>node).expression);
+                    return checkExpression((<ParenthesizedExpression>node).expression, contextualMapper);
                 case SyntaxKind.FunctionExpression:
                 case SyntaxKind.ArrowFunction:
                     return checkFunctionExpressionOrObjectLiteralMethod(<FunctionExpression>node, contextualMapper);
