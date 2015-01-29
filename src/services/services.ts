@@ -5809,13 +5809,13 @@ module ts {
       * node package.
       * The functionality is not supported if the ts module is consumed outside of a node module. 
       */
-    export function getDefaultLibraryFilePath(options: CompilerOptions): string {
+    export function getDefaultLibFilePath(options: CompilerOptions): string {
         // Check __dirname is defined and that we are on a node.js system.
         if (typeof __dirname !== "undefined") {
             return __dirname + directorySeparator + getDefaultLibFilename(options);
         }
 
-        throw new Error("getDefaultLibraryFilename is only supported when consumed as a node module. ");
+        throw new Error("getDefaultLibFilePath is only supported when consumed as a node module. ");
     }
 
     function initializeServices() {
