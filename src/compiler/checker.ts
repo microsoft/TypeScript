@@ -3471,7 +3471,7 @@ module ts {
                 // where errors were being reported.
                 if (errorInfo.next === undefined) {
                     errorInfo = undefined;
-                    isRelatedTo(source, target, errorNode !== undefined, headMessage, true);
+                    isRelatedTo(source, target, errorNode !== undefined, headMessage, /* mustRecompute */ true);
                 }
                 if (containingMessageChain) {
                     errorInfo = concatenateDiagnosticMessageChains(containingMessageChain, errorInfo);
@@ -3652,8 +3652,11 @@ module ts {
                 }
                 var id = relation !== identityRelation || source.id < target.id ? source.id + "," + target.id : target.id + "," + source.id;
                 var related = relation[id];
+                //var related: RelationComparisonResult = undefined; // relation[id];
                 if (related !== undefined) {
-                    if (!elaborateErrors || related === RelationComparisonResult.FailedAndReported) {
+                    // If we computed this relation already and it was failed and reported, or if we're not being asked to elaborate
+                    // errors, we can use the cached value. Otherwise, recompute the relation
+                    if (!elaborateErrors || (related === RelationComparisonResult.FailedAndReported)) {
                         return related === RelationComparisonResult.Succeeded ? Ternary.True : Ternary.False;
                     }
                 }
@@ -3706,9 +3709,14 @@ module ts {
                 if (result) {
                     var maybeCache = maybeStack[depth];
                     // If result is definitely true, copy assumptions to global cache, else copy to next level up
-                    var destinationCache = result === Ternary.True || depth === 0 ? relation : maybeStack[depth - 1];
-                    for (var key in maybeCache) {
-                        destinationCache[key] = maybeCache[key] ? RelationComparisonResult.Succeeded : RelationComparisonResult.Failed;
+                    if (result === Ternary.True || depth === 0) {
+                        var key: string;
+                        for (key in maybeCache) {
+                            relation[key] = maybeCache[key] ? RelationComparisonResult.Succeeded : (reportErrors ? RelationComparisonResult.FailedAndReported : RelationComparisonResult.Failed);
+                        }
+                    }
+                    else {
+                        copyMap(maybeCache, maybeStack[depth - 1]);
                     }
                 }
                 else {
