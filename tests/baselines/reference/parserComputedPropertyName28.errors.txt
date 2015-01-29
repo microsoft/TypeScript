@@ -1,13 +1,19 @@
 tests/cases/conformance/parser/ecmascript6/ComputedPropertyNames/parserComputedPropertyName28.ts(2,5): error TS1166: Computed property names are not allowed in class property declarations.
+tests/cases/conformance/parser/ecmascript6/ComputedPropertyNames/parserComputedPropertyName28.ts(2,6): error TS2304: Cannot find name 'e'.
 tests/cases/conformance/parser/ecmascript6/ComputedPropertyNames/parserComputedPropertyName28.ts(3,5): error TS1166: Computed property names are not allowed in class property declarations.
+tests/cases/conformance/parser/ecmascript6/ComputedPropertyNames/parserComputedPropertyName28.ts(3,6): error TS2304: Cannot find name 'e2'.
 
 
-==== tests/cases/conformance/parser/ecmascript6/ComputedPropertyNames/parserComputedPropertyName28.ts (2 errors) ====
+==== tests/cases/conformance/parser/ecmascript6/ComputedPropertyNames/parserComputedPropertyName28.ts (4 errors) ====
     class C {
         [e]: number = 0;
         ~~~
 !!! error TS1166: Computed property names are not allowed in class property declarations.
+         ~
+!!! error TS2304: Cannot find name 'e'.
         [e2]: number
         ~~~~
 !!! error TS1166: Computed property names are not allowed in class property declarations.
+         ~~
+!!! error TS2304: Cannot find name 'e2'.
     }

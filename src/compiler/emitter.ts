@@ -170,9 +170,10 @@ module ts {
     function writeCommentRange(currentSourceFile: SourceFile, writer: EmitTextWriter, comment: CommentRange, newLine: string){
         if (currentSourceFile.text.charCodeAt(comment.pos + 1) === CharacterCodes.asterisk) {
             var firstCommentLineAndCharacter = currentSourceFile.getLineAndCharacterFromPosition(comment.pos);
+            var lastLine = currentSourceFile.getLineStarts().length;
             var firstCommentLineIndent: number;
             for (var pos = comment.pos, currentLine = firstCommentLineAndCharacter.line; pos < comment.end; currentLine++) {
-                var nextLineStart = currentSourceFile.getPositionFromLineAndCharacter(currentLine + 1, /*character*/1);
+                var nextLineStart = currentLine === lastLine ? (comment.end + 1) : currentSourceFile.getPositionFromLineAndCharacter(currentLine + 1, /*character*/1);
 
                 if (pos !== comment.pos) {
                     // If we are not emitting first line, we need to write the spaces to adjust the alignment
@@ -339,6 +340,7 @@ module ts {
     function emitDeclarations(host: EmitHost, resolver: EmitResolver, diagnostics: Diagnostic[], jsFilePath: string, root?: SourceFile): DeclarationEmit {
         var newLine = host.getNewLine();
         var compilerOptions = host.getCompilerOptions();
+        var languageVersion = compilerOptions.target || ScriptTarget.ES3;
 
         var write: (s: string) => void;
         var writeLine: () => void;
@@ -930,6 +932,10 @@ module ts {
         }
 
         function emitPropertyDeclaration(node: Declaration) {
+            if (hasDynamicName(node)) {
+                return;
+            }
+
             emitJsDocComments(node);
             emitClassMemberDeclarationFlags(node);
             emitVariableDeclaration(<VariableDeclaration>node);
@@ -937,11 +943,13 @@ module ts {
             writeLine();
         }
 
-        // TODO(jfreeman): Factor out common part of property definition, but treat name differently
         function emitVariableDeclaration(node: VariableDeclaration) {
             // If we are emitting property it isn't moduleElement and hence we already know it needs to be emitted
             // so there is no check needed to see if declaration is visible
             if (node.kind !== SyntaxKind.VariableDeclaration || resolver.isDeclarationVisible(node)) {
+                // If this node is a computed name, it can only be a symbol, because we've already skipped
+                // it if it's not a well known symbol. In that case, the text of the name will be exactly
+                // what we want, namely the name expression enclosed in brackets.
                 writeTextOfNode(currentSourceFile, node.name);
                 // If optional property emit ?
                 if ((node.kind === SyntaxKind.PropertyDeclaration || node.kind === SyntaxKind.PropertySignature) && hasQuestionToken(node)) {
@@ -1028,6 +1036,10 @@ module ts {
         }
 
         function emitAccessorDeclaration(node: AccessorDeclaration) {
+            if (hasDynamicName(node)) {
+                return;
+            }
+            
             var accessors = getAllAccessorDeclarations(<ClassDeclaration>node.parent, node);
             if (node === accessors.firstAccessor) {
                 emitJsDocComments(accessors.getAccessor);
@@ -1105,6 +1117,10 @@ module ts {
         }
 
         function emitFunctionDeclaration(node: FunctionLikeDeclaration) {
+            if (hasDynamicName(node)) {
+                return;
+            }
+
             // If we are emitting Method/Constructor it isn't moduleElement and hence already determined to be emitting
             // so no need to verify if the declaration is visible
             if ((node.kind !== SyntaxKind.FunctionDeclaration || resolver.isDeclarationVisible(node)) &&
@@ -1473,6 +1489,7 @@ module ts {
     export function emitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFile?: SourceFile): EmitResult {
         // var program = resolver.getProgram();
         var compilerOptions = host.getCompilerOptions();
+        var languageVersion = compilerOptions.target || ScriptTarget.ES3;
         var sourceMapDataList: SourceMapData[] = compilerOptions.sourceMap ? [] : undefined;
         var diagnostics: Diagnostic[] = [];
         var newLine = host.getNewLine();
@@ -1720,7 +1737,14 @@ module ts {
                         if (scopeName) {
                             var parentIndex = getSourceMapNameIndex();
                             if (parentIndex !== -1) {
-                                scopeName = sourceMapData.sourceMapNames[parentIndex] + "." + scopeName;
+                                // Child scopes are always shown with a dot (even if they have no name),
+                                // unless it is a computed property. Then it is shown with brackets,
+                                // but the brackets are included in the name.
+                                var name = (<Declaration>node).name;
+                                if (!name || name.kind !== SyntaxKind.ComputedPropertyName) {
+                                    scopeName = "." + scopeName;
+                                }
+                                scopeName = sourceMapData.sourceMapNames[parentIndex] + scopeName;
                             }
 
                             scopeNameIndex = getProperty(sourceMapNameIndexMap, scopeName);
@@ -1748,8 +1772,11 @@ module ts {
                         node.kind === SyntaxKind.EnumDeclaration) {
                         // Declaration and has associated name use it
                         if ((<Declaration>node).name) {
-                            // TODO(jfreeman): Ask shkamat about what this name should be for source maps
-                            scopeName = (<Identifier>(<Declaration>node).name).text;
+                            var name = (<Declaration>node).name;
+                            // For computed property names, the text will include the brackets
+                            scopeName = name.kind === SyntaxKind.ComputedPropertyName
+                                ? getTextOfNode(name)
+                                : (<Identifier>(<Declaration>node).name).text;
                         }
                         recordScopeNameStart(scopeName);
                     }
@@ -2021,14 +2048,14 @@ module ts {
             }
 
             function emitLiteral(node: LiteralExpression) {
-                var text = compilerOptions.target < ScriptTarget.ES6 && isTemplateLiteralKind(node.kind) ? getTemplateLiteralAsStringLiteral(node) :
+                var text = languageVersion < ScriptTarget.ES6 && isTemplateLiteralKind(node.kind) ? getTemplateLiteralAsStringLiteral(node) :
                     node.parent ? getSourceTextOfNodeFromSourceFile(currentSourceFile, node) :
                     node.text;
                 if (compilerOptions.sourceMap && (node.kind === SyntaxKind.StringLiteral || isTemplateLiteralKind(node.kind))) {
                     writer.writeLiteral(text);
                 }
                 // For version below ES6, emit binary integer literal and octal integer literal in canonical form
-                else if (compilerOptions.target < ScriptTarget.ES6 && node.kind === SyntaxKind.NumericLiteral && isBinaryOrOctalIntegerLiteral(text)) {
+                else if (languageVersion < ScriptTarget.ES6 && node.kind === SyntaxKind.NumericLiteral && isBinaryOrOctalIntegerLiteral(text)) {
                     write(node.text);
                 }
                 else {
@@ -2043,7 +2070,7 @@ module ts {
             function emitTemplateExpression(node: TemplateExpression): void {
                 // In ES6 mode and above, we can simply emit each portion of a template in order, but in
                 // ES3 & ES5 we must convert the template expression into a series of string concatenations.
-                if (compilerOptions.target >= ScriptTarget.ES6) {
+                if (languageVersion >= ScriptTarget.ES6) {
                     forEachChild(node, emit);
                     return;
                 }
@@ -2150,7 +2177,7 @@ module ts {
                     // 
                     // TODO (drosen): Note that we need to account for the upcoming 'yield' and
                     //                spread ('...') unary operators that are anticipated for ES6.
-                    Debug.assert(compilerOptions.target <= ScriptTarget.ES5);
+                    Debug.assert(languageVersion < ScriptTarget.ES6);
                     switch (expression.kind) {
                         case SyntaxKind.BinaryExpression:
                             switch ((<BinaryExpression>expression).operator) {
@@ -2335,7 +2362,7 @@ module ts {
                     write("[]");
                     return;
                 }
-                if (compilerOptions.target >= ScriptTarget.ES6) {
+                if (languageVersion >= ScriptTarget.ES6) {
                     write("[");
                     emitList(elements, 0, elements.length, /*multiLine*/(node.flags & NodeFlags.MultiLine) !== 0,
                         /*trailingComma*/ elements.hasTrailingComma);
@@ -2385,7 +2412,7 @@ module ts {
                         write(" ");
                     }
                     emitList(properties, 0, properties.length, /*multiLine*/ multiLine,
-                        /*trailingComma*/ properties.hasTrailingComma && compilerOptions.target >= ScriptTarget.ES5);
+                        /*trailingComma*/ properties.hasTrailingComma && languageVersion >= ScriptTarget.ES5);
                     if (!multiLine) {
                         write(" ");
                     }
@@ -2400,28 +2427,20 @@ module ts {
             }
 
             function emitMethod(node: MethodDeclaration) {
-                if (!isObjectLiteralMethod(node)) {
-                    return;
-                }
-                emitLeadingComments(node);
                 emit(node.name);
-                if (compilerOptions.target < ScriptTarget.ES6) {
+                if (languageVersion < ScriptTarget.ES6) {
                     write(": function ");
                 }
                 emitSignatureAndBody(node);
-                emitTrailingComments(node);
             }
 
             function emitPropertyAssignment(node: PropertyDeclaration) {
-                emitLeadingComments(node);
                 emit(node.name);
                 write(": ");
                 emit(node.initializer);
-                emitTrailingComments(node);
             }
 
             function emitShorthandPropertyAssignment(node: ShorthandPropertyAssignment) {
-                emitLeadingComments(node);
                 emit(node.name);
                 // If short-hand property has a prefix, then regardless of the target version, we will emit it as normal property assignment. For example:
                 //  module m {
@@ -2431,14 +2450,13 @@ module ts {
                 //      export var obj = { y };
                 //  }
                 //  The short-hand property in obj need to emit as such ... = { y : m.y } regardless of the TargetScript version
-                if (compilerOptions.target < ScriptTarget.ES6 || resolver.getExpressionNamePrefix(node.name)) {
+                if (languageVersion < ScriptTarget.ES6 || resolver.getExpressionNamePrefix(node.name)) {
                     // Emit identifier as an identifier
                     write(": ");
                     // Even though this is stored as identifier treat it as an expression
                     // Short-hand, { x }, is equivalent of normal form { x: x }
                     emitExpressionIdentifier(node.name);
                 }
-                emitTrailingComments(node);
             }
 
             function tryEmitConstantValue(node: PropertyAccessExpression | ElementAccessExpression): boolean {
@@ -2513,7 +2531,7 @@ module ts {
             }
 
             function emitTaggedTemplateExpression(node: TaggedTemplateExpression): void {
-                Debug.assert(compilerOptions.target >= ScriptTarget.ES6, "Trying to emit a tagged template in pre-ES6 mode.");
+                Debug.assert(languageVersion >= ScriptTarget.ES6, "Trying to emit a tagged template in pre-ES6 mode.");
                 emit(node.tag);
                 write(" ");
                 emit(node.template);
@@ -2605,7 +2623,7 @@ module ts {
 
 
             function emitBinaryExpression(node: BinaryExpression) {
-                if (compilerOptions.target < ScriptTarget.ES6 && node.operator === SyntaxKind.EqualsToken &&
+                if (languageVersion < ScriptTarget.ES6 && node.operator === SyntaxKind.EqualsToken &&
                     (node.left.kind === SyntaxKind.ObjectLiteralExpression || node.left.kind === SyntaxKind.ArrayLiteralExpression)) {
                     emitDestructuring(node);
                 }
@@ -2658,14 +2676,11 @@ module ts {
             }
 
             function emitExpressionStatement(node: ExpressionStatement) {
-                emitLeadingComments(node);
                 emitParenthesized(node.expression, /*parenthesized*/ node.expression.kind === SyntaxKind.ArrowFunction);
                 write(";");
-                emitTrailingComments(node);
             }
 
             function emitIfStatement(node: IfStatement) {
-                emitLeadingComments(node);
                 var endPos = emitToken(SyntaxKind.IfKeyword, node.pos);
                 write(" ");
                 endPos = emitToken(SyntaxKind.OpenParenToken, endPos);
@@ -2683,7 +2698,6 @@ module ts {
                         emitEmbeddedStatement(node.elseStatement);
                     }
                 }
-                emitTrailingComments(node);
             }
 
             function emitDoStatement(node: DoStatement) {
@@ -2771,11 +2785,9 @@ module ts {
             }
 
             function emitReturnStatement(node: ReturnStatement) {
-                emitLeadingComments(node);
                 emitToken(SyntaxKind.ReturnKeyword, node.pos);
                 emitOptional(" ", node.expression);
                 write(";");
-                emitTrailingComments(node);
             }
 
             function emitWithStatement(node: WhileStatement) {
@@ -3099,9 +3111,8 @@ module ts {
             }
 
             function emitVariableDeclaration(node: VariableDeclaration) {
-                emitLeadingComments(node);
                 if (isBindingPattern(node.name)) {
-                    if (compilerOptions.target < ScriptTarget.ES6) {
+                    if (languageVersion < ScriptTarget.ES6) {
                         emitDestructuring(node);
                     }
                     else {
@@ -3113,11 +3124,9 @@ module ts {
                     emitModuleMemberName(node);
                     emitOptional(" = ", node.initializer);
                 }
-                emitTrailingComments(node);
             }
 
             function emitVariableStatement(node: VariableStatement) {
-                emitLeadingComments(node);
                 if (!(node.flags & NodeFlags.Export)) {
                     if (isLet(node.declarationList)) {
                         write("let ");
@@ -3131,12 +3140,10 @@ module ts {
                 }
                 emitCommaList(node.declarationList.declarations);
                 write(";");
-                emitTrailingComments(node);
             }
 
             function emitParameter(node: ParameterDeclaration) {
-                emitLeadingComments(node);
-                if (compilerOptions.target < ScriptTarget.ES6) {
+                if (languageVersion < ScriptTarget.ES6) {
                     if (isBindingPattern(node.name)) {
                         var name = createTempVariable(node);
                         if (!tempParameters) {
@@ -3156,11 +3163,10 @@ module ts {
                     emit(node.name);
                     emitOptional(" = ", node.initializer);
                 }
-                emitTrailingComments(node);
             }
 
             function emitDefaultValueAssignments(node: FunctionLikeDeclaration) {
-                if (compilerOptions.target < ScriptTarget.ES6) {
+                if (languageVersion < ScriptTarget.ES6) {
                     var tempIndex = 0;
                     forEach(node.parameters, p => {
                         if (isBindingPattern(p.name)) {
@@ -3190,7 +3196,7 @@ module ts {
             }
 
             function emitRestParameter(node: FunctionLikeDeclaration) {
-                if (compilerOptions.target < ScriptTarget.ES6 && hasRestParameters(node)) {
+                if (languageVersion < ScriptTarget.ES6 && hasRestParameters(node)) {
                     var restIndex = node.parameters.length - 1;
                     var restParam = node.parameters[restIndex];
                     var tempName = createTempVariable(node, /*forLoopVariable*/ true).text;
@@ -3229,11 +3235,9 @@ module ts {
             }
 
             function emitAccessor(node: AccessorDeclaration) {
-                emitLeadingComments(node);
                 write(node.kind === SyntaxKind.GetAccessor ? "get " : "set ");
                 emit(node.name);
                 emitSignatureAndBody(node);
-                emitTrailingComments(node);
             }
 
             function emitFunctionDeclaration(node: FunctionLikeDeclaration) {
@@ -3269,7 +3273,7 @@ module ts {
                 write("(");
                 if (node) {
                     var parameters = node.parameters;
-                    var omitCount = compilerOptions.target < ScriptTarget.ES6 && hasRestParameters(node) ? 1 : 0;
+                    var omitCount = languageVersion < ScriptTarget.ES6 && hasRestParameters(node) ? 1 : 0;
                     emitList(parameters, 0, parameters.length - omitCount, /*multiLine*/ false, /*trailingComma*/ false);
                 }
                 write(")");
@@ -3303,7 +3307,10 @@ module ts {
                     write(" ");
                     emitStart(node.body);
                     write("return ");
-                    emitNode(node.body);
+
+                    // Don't emit comments on this body.  We'll have already taken care of it above 
+                    // when we called emitDetachedComments.
+                    emitNode(node.body, /*disableComments:*/ true);
                     emitEnd(node.body);
                     write(";");
                     emitTempDeclarations(/*newLine*/ false);
@@ -3320,7 +3327,7 @@ module ts {
                         writeLine();
                         emitLeadingComments(node.body);
                         write("return ");
-                        emit(node.body);
+                        emit(node.body, /*disableComments:*/ true);
                         write(";");
                         emitTrailingComments(node.body);
                     }
@@ -3501,7 +3508,6 @@ module ts {
             }
 
             function emitClassDeclaration(node: ClassDeclaration) {
-                emitLeadingComments(node);
                 write("var ");
                 emit(node.name);
                 write(" = (function (");
@@ -3551,7 +3557,6 @@ module ts {
                     emitEnd(node);
                     write(";");
                 }
-                emitTrailingComments(node);
 
                 function emitConstructorOfClass() {
                     var saveTempCount = tempCount;
@@ -3630,13 +3635,17 @@ module ts {
                 emitPinnedOrTripleSlashComments(node);
             }
 
+            function shouldEmitEnumDeclaration(node: EnumDeclaration) {
+                var isConstEnum = isConst(node);
+                return !isConstEnum || compilerOptions.preserveConstEnums;
+            }
+
             function emitEnumDeclaration(node: EnumDeclaration) {
                 // const enums are completely erased during compilation.
-                var isConstEnum = isConst(node);
-                if (isConstEnum && !compilerOptions.preserveConstEnums) {
+                if (!shouldEmitEnumDeclaration(node)) {
                     return;
                 }
-                emitLeadingComments(node);
+
                 if (!(node.flags & NodeFlags.Export)) {
                     emitStart(node);
                     write("var ");
@@ -3653,7 +3662,7 @@ module ts {
                 write(") {");
                 increaseIndent();
                 scopeEmitStart(node);
-                emitEnumMemberDeclarations(isConstEnum);
+                emitLines(node.members);
                 decreaseIndent();
                 writeLine();
                 emitToken(SyntaxKind.CloseBraceToken, node.members.end);
@@ -3674,32 +3683,27 @@ module ts {
                     emitEnd(node);
                     write(";");
                 }
-                emitTrailingComments(node);
+            }
 
-                function emitEnumMemberDeclarations(isConstEnum: boolean) {
-                    forEach(node.members, member => {
-                        writeLine();
-                        emitLeadingComments(member);
-                        emitStart(member);
-                        write(resolver.getLocalNameOfContainer(node));
-                        write("[");
-                        write(resolver.getLocalNameOfContainer(node));
-                        write("[");
-                        emitExpressionForPropertyName(member.name);
-                        write("] = ");
-                        if (member.initializer && !isConstEnum) {
-                            emit(member.initializer);
-                        }
-                        else {
-                            write(resolver.getEnumMemberValue(member).toString());
-                        }
-                        write("] = ");
-                        emitExpressionForPropertyName(member.name);
-                        emitEnd(member);
-                        write(";");
-                        emitTrailingComments(member);
-                    });
+            function emitEnumMember(node: EnumMember) {
+                var enumParent = <EnumDeclaration>node.parent;
+                emitStart(node);
+                write(resolver.getLocalNameOfContainer(enumParent));
+                write("[");
+                write(resolver.getLocalNameOfContainer(enumParent));
+                write("[");
+                emitExpressionForPropertyName(node.name);
+                write("] = ");
+                if (node.initializer && !isConst(enumParent)) {
+                    emit(node.initializer);
                 }
+                else {
+                    write(resolver.getEnumMemberValue(node).toString());
+                }
+                write("] = ");
+                emitExpressionForPropertyName(node.name);
+                emitEnd(node);
+                write(";");
             }
 
             function getInnerMostModuleDeclarationFromDottedModule(moduleDeclaration: ModuleDeclaration): ModuleDeclaration {
@@ -3709,14 +3713,18 @@ module ts {
                 }
             }
 
+            function shouldEmitModuleDeclaration(node: ModuleDeclaration) {
+                return isInstantiatedModule(node, compilerOptions.preserveConstEnums);
+            }
+
             function emitModuleDeclaration(node: ModuleDeclaration) {
                 // Emit only if this module is non-ambient.
-                var shouldEmit = isInstantiatedModule(node, compilerOptions.preserveConstEnums);
+                var shouldEmit = shouldEmitModuleDeclaration(node);
 
                 if (!shouldEmit) {
                     return emitPinnedOrTripleSlashComments(node);
                 }
-                emitLeadingComments(node);
+
                 emitStart(node);
                 write("var ");
                 emit(node.name);
@@ -3761,7 +3769,6 @@ module ts {
                 emitModuleMemberName(node);
                 write(" = {}));");
                 emitEnd(node);
-                emitTrailingComments(node);
             }
 
             function emitImportDeclaration(node: ImportDeclaration) {
@@ -3951,7 +3958,7 @@ module ts {
                 emitLeadingComments(node.endOfFileToken);
             }
 
-            function emitNode(node: Node): void {
+            function emitNode(node: Node, disableComments?:boolean): void {
                 if (!node) {
                     return;
                 }
@@ -3959,6 +3966,46 @@ module ts {
                 if (node.flags & NodeFlags.Ambient) {
                     return emitPinnedOrTripleSlashComments(node);
                 }
+
+                var emitComments = !disableComments && shouldEmitLeadingAndTrailingComments(node);
+                if (emitComments) {
+                    emitLeadingComments(node);
+                }
+
+                emitJavaScriptWorker(node);
+
+                if (emitComments) {
+                    emitTrailingComments(node);
+                }
+            }
+
+            function shouldEmitLeadingAndTrailingComments(node: Node) {
+                switch (node.kind) {
+                    // All of these entities are emitted in a specialized fashion.  As such, we allow
+                    // the specilized methods for each to handle the comments on the nodes.
+                    case SyntaxKind.InterfaceDeclaration:
+                    case SyntaxKind.FunctionDeclaration:
+                    case SyntaxKind.ImportDeclaration:
+                    case SyntaxKind.TypeAliasDeclaration:
+                    case SyntaxKind.ExportAssignment:
+                        return false;
+
+                    case SyntaxKind.ModuleDeclaration:
+                        // Only emit the leading/trailing comments for a module if we're actually 
+                        // emitting the module as well.
+                        return shouldEmitModuleDeclaration(<ModuleDeclaration>node);
+
+                    case SyntaxKind.EnumDeclaration:
+                        // Only emit the leading/trailing comments for an enum if we're actually 
+                        // emitting the module as well.
+                        return shouldEmitEnumDeclaration(<EnumDeclaration>node);
+                }
+
+                // Emit comments for everything else.
+                return true;
+            }
+
+            function emitJavaScriptWorker(node: Node) {
                 // Check if the node can be emitted regardless of the ScriptTarget
                 switch (node.kind) {
                     case SyntaxKind.Identifier:
@@ -4096,6 +4143,8 @@ module ts {
                         return emitInterfaceDeclaration(<InterfaceDeclaration>node);
                     case SyntaxKind.EnumDeclaration:
                         return emitEnumDeclaration(<EnumDeclaration>node);
+                    case SyntaxKind.EnumMember:
+                        return emitEnumMember(<EnumMember>node);
                     case SyntaxKind.ModuleDeclaration:
                         return emitModuleDeclaration(<ModuleDeclaration>node);
                     case SyntaxKind.ImportDeclaration:
@@ -4125,17 +4174,19 @@ module ts {
 
             function getLeadingCommentsToEmit(node: Node) {
                 // Emit the leading comments only if the parent's pos doesn't match because parent should take care of emitting these comments
-                if (node.parent.kind === SyntaxKind.SourceFile || node.pos !== node.parent.pos) {
-                    var leadingComments: CommentRange[];
-                    if (hasDetachedComments(node.pos)) {
-                        // get comments without detached comments
-                        leadingComments = getLeadingCommentsWithoutDetachedComments();
+                if (node.parent) {
+                    if (node.parent.kind === SyntaxKind.SourceFile || node.pos !== node.parent.pos) {
+                        var leadingComments: CommentRange[];
+                        if (hasDetachedComments(node.pos)) {
+                            // get comments without detached comments
+                            leadingComments = getLeadingCommentsWithoutDetachedComments();
+                        }
+                        else {
+                            // get the leading comments from the node
+                            leadingComments = getLeadingCommentRangesOfNode(node, currentSourceFile);
+                        }
+                        return leadingComments;
                     }
-                    else {
-                        // get the leading comments from the node
-                        leadingComments = getLeadingCommentRangesOfNode(node, currentSourceFile);
-                    }
-                    return leadingComments;
                 }
             }
 
@@ -4148,10 +4199,12 @@ module ts {
 
             function emitTrailingDeclarationComments(node: Node) {
                 // Emit the trailing comments only if the parent's end doesn't match
-                if (node.parent.kind === SyntaxKind.SourceFile || node.end !== node.parent.end) {
-                    var trailingComments = getTrailingCommentRanges(currentSourceFile.text, node.end);
-                    // trailing comments are emitted at space/*trailing comment1 */space/*trailing comment*/
-                    emitComments(currentSourceFile, writer, trailingComments, /*trailingSeparator*/ false, newLine, writeComment);                    
+                if (node.parent) {
+                    if (node.parent.kind === SyntaxKind.SourceFile || node.end !== node.parent.end) {
+                        var trailingComments = getTrailingCommentRanges(currentSourceFile.text, node.end);
+                        // trailing comments are emitted at space/*trailing comment1 */space/*trailing comment*/
+                        emitComments(currentSourceFile, writer, trailingComments, /*trailingSeparator*/ false, newLine, writeComment);
+                    }
                 }
             }
 

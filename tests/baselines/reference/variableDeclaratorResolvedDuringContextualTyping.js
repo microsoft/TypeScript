@@ -131,12 +131,12 @@ var WinJS;
 })(WinJS || (WinJS = {}));
 var Errors;
 (function (Errors) {
-    var ConnectionError = (function () {
-        function ConnectionError(request) {
+    var ConnectionError /* extends Error */ = (function () {
+        function ConnectionError /* extends Error */(request) {
         }
-        return ConnectionError;
+        return ConnectionError /* extends Error */;
     })();
-    Errors.ConnectionError = ConnectionError;
+    Errors.ConnectionError /* extends Error */ = ConnectionError /* extends Error */;
 })(Errors || (Errors = {}));
 var FileService = (function () {
     function FileService() {

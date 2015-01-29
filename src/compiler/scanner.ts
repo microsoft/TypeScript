@@ -224,15 +224,15 @@ module ts {
     }
 
     function isUnicodeIdentifierStart(code: number, languageVersion: ScriptTarget) {
-        return languageVersion === ScriptTarget.ES3 ?
-            lookupInUnicodeMap(code, unicodeES3IdentifierStart) :
-            lookupInUnicodeMap(code, unicodeES5IdentifierStart);
+        return languageVersion >= ScriptTarget.ES5 ?
+            lookupInUnicodeMap(code, unicodeES5IdentifierStart) :
+            lookupInUnicodeMap(code, unicodeES3IdentifierStart);
     }
 
     function isUnicodeIdentifierPart(code: number, languageVersion: ScriptTarget) {
-        return languageVersion === ScriptTarget.ES3 ?
-            lookupInUnicodeMap(code, unicodeES3IdentifierPart) :
-            lookupInUnicodeMap(code, unicodeES5IdentifierPart);
+        return languageVersion >= ScriptTarget.ES5 ?
+            lookupInUnicodeMap(code, unicodeES5IdentifierPart) :
+            lookupInUnicodeMap(code, unicodeES3IdentifierPart);
     }
 
     function makeReverseMap(source: Map<number>): string[] {
@@ -279,7 +279,7 @@ module ts {
     }
 
     export function getPositionFromLineAndCharacter(lineStarts: number[], line: number, character: number): number {
-        Debug.assert(line > 0);
+        Debug.assert(line > 0 && line <= lineStarts.length );
         return lineStarts[line - 1] + character - 1;
     }
 

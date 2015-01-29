@@ -399,6 +399,21 @@ module ts {
                 return undefined;
             }
             switch (node.kind) {
+                case SyntaxKind.ComputedPropertyName:
+                    // If the grandparent node is an object literal (as opposed to a class),
+                    // then the computed property is not a 'this' container.
+                    // A computed property name in a class needs to be a this container
+                    // so that we can error on it.
+                    if (node.parent.parent.kind === SyntaxKind.ClassDeclaration) {
+                        return node;
+                    }
+                    // If this is a computed property, then the parent should not
+                    // make it a this container. The parent might be a property
+                    // in an object literal, like a method or accessor. But in order for
+                    // such a parent to be a this container, the reference must be in
+                    // the *body* of the container.
+                    node = node.parent;
+                    break;
                 case SyntaxKind.ArrowFunction:
                     if (!includeArrowFunctions) {
                         continue;
@@ -421,13 +436,32 @@ module ts {
         }
     }
 
-    export function getSuperContainer(node: Node): Node {
+    export function getSuperContainer(node: Node, includeFunctions: boolean): Node {
         while (true) {
             node = node.parent;
-            if (!node) {
-                return undefined;
-            }
+            if (!node) return node;
             switch (node.kind) {
+                case SyntaxKind.ComputedPropertyName:
+                    // If the grandparent node is an object literal (as opposed to a class),
+                    // then the computed property is not a 'super' container.
+                    // A computed property name in a class needs to be a super container
+                    // so that we can error on it.
+                    if (node.parent.parent.kind === SyntaxKind.ClassDeclaration) {
+                        return node;
+                    }
+                    // If this is a computed property, then the parent should not
+                    // make it a super container. The parent might be a property
+                    // in an object literal, like a method or accessor. But in order for
+                    // such a parent to be a super container, the reference must be in
+                    // the *body* of the container.
+                    node = node.parent;
+                    break;
+                case SyntaxKind.FunctionDeclaration:
+                case SyntaxKind.FunctionExpression:
+                case SyntaxKind.ArrowFunction:
+                    if (!includeFunctions) {
+                        continue;
+                    }
                 case SyntaxKind.PropertyDeclaration:
                 case SyntaxKind.PropertySignature:
                 case SyntaxKind.MethodDeclaration:
@@ -527,6 +561,8 @@ module ts {
                         return node === (<TypeAssertion>parent).expression;
                     case SyntaxKind.TemplateSpan:
                         return node === (<TemplateSpan>parent).expression;
+                    case SyntaxKind.ComputedPropertyName:
+                        return node === (<ComputedPropertyName>parent).expression;
                     default:
                         if (isExpression(parent)) {
                             return true;
