@@ -4621,7 +4621,7 @@ module ts {
             // parse namespace or named imports
             if (!importClause.defaultBinding ||
                 parseOptional(SyntaxKind.CommaToken)) {
-                importClause.bindings = token === SyntaxKind.AsteriskToken ? parseNamespaceImport() : parseNamedImports();
+                importClause.namedBindings = token === SyntaxKind.AsteriskToken ? parseNamespaceImport() : parseNamedImports();
             }
 
             parseExpected(SyntaxKind.FromKeyword);

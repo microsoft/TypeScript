@@ -875,7 +875,7 @@ module ts {
 
     export interface ImportClause extends Node {
         defaultBinding?: Identifier;
-        bindings?: NamespaceImport | NamedImports;
+        namedBindings?: NamespaceImport | NamedImports;
     }
 
     export interface NamespaceImport extends Declaration {
