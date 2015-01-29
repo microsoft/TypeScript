@@ -3453,7 +3453,7 @@ module ts {
             var errorInfo: DiagnosticMessageChain;
             var sourceStack: ObjectType[];
             var targetStack: ObjectType[];
-            var maybeStack: Map<boolean>[];
+            var maybeStack: Map<RelationComparisonResult>[];
             var expandingFlags: number;
             var depth = 0;
             var overflow = false;
@@ -3471,7 +3471,7 @@ module ts {
                 // where errors were being reported.
                 if (errorInfo.next === undefined) {
                     errorInfo = undefined;
-                    isRelatedTo(source, target, errorNode !== undefined, headMessage, /* mustRecompute */ true);
+                    isRelatedTo(source, target, errorNode !== undefined, headMessage, /* elaborateErrors */ true);
                 }
                 if (containingMessageChain) {
                     errorInfo = concatenateDiagnosticMessageChains(containingMessageChain, errorInfo);
@@ -3488,7 +3488,7 @@ module ts {
             // Ternary.True if they are related with no assumptions,
             // Ternary.Maybe if they are related with assumptions of other relationships, or
             // Ternary.False if they are not related.
-            function isRelatedTo(source: Type, target: Type, reportErrors?: boolean, headMessage?: DiagnosticMessage, mustRecompute = false): Ternary {
+            function isRelatedTo(source: Type, target: Type, reportErrors?: boolean, headMessage?: DiagnosticMessage, elaborateErrors = false): Ternary {
                 var result: Ternary;
                 // both types are the same - covers 'they are the same primitive type or both are Any' or the same type parameter cases
                 if (source === target) return Ternary.True;
@@ -3555,7 +3555,7 @@ module ts {
                     // identity relation does not use apparent type
                     var sourceOrApparentType = relation === identityRelation ? source : getApparentType(source);
                     if (sourceOrApparentType.flags & TypeFlags.ObjectType && target.flags & TypeFlags.ObjectType &&
-                        (result = objectTypeRelatedTo(sourceOrApparentType, <ObjectType>target, reportStructuralErrors, mustRecompute))) {
+                        (result = objectTypeRelatedTo(sourceOrApparentType, <ObjectType>target, reportStructuralErrors, elaborateErrors))) {
                         errorInfo = saveErrorInfo;
                         return result;
                     }
@@ -3681,7 +3681,7 @@ module ts {
                 sourceStack[depth] = source;
                 targetStack[depth] = target;
                 maybeStack[depth] = {};
-                maybeStack[depth][id] = true;
+                maybeStack[depth][id] = RelationComparisonResult.Succeeded;
                 depth++;
                 var saveExpandingFlags = expandingFlags;
                 if (!(expandingFlags & 1) && isDeeplyNestedGeneric(source, sourceStack)) expandingFlags |= 1;
@@ -3709,15 +3709,8 @@ module ts {
                 if (result) {
                     var maybeCache = maybeStack[depth];
                     // If result is definitely true, copy assumptions to global cache, else copy to next level up
-                    if (result === Ternary.True || depth === 0) {
-                        var key: string;
-                        for (key in maybeCache) {
-                            relation[key] = maybeCache[key] ? RelationComparisonResult.Succeeded : (reportErrors ? RelationComparisonResult.FailedAndReported : RelationComparisonResult.Failed);
-                        }
-                    }
-                    else {
-                        copyMap(maybeCache, maybeStack[depth - 1]);
-                    }
+                    var destinationCache = (result === Ternary.True || depth === 0) ? relation : maybeStack[depth - 1];
+                    copyMap(maybeCache, destinationCache);
                 }
                 else {
                     // A false result goes straight into global cache (when something is false under assumptions it

@@ -331,9 +331,9 @@ module ts {
     }
 
     export const enum RelationComparisonResult {
-        Succeeded = 0,
-        Failed = 1,
-        FailedAndReported = 2
+        Succeeded = 1, // Should be truthy
+        Failed = 2,
+        FailedAndReported = 3
     }
 
     export interface Node extends TextRange {
