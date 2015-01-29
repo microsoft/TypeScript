@@ -868,11 +868,21 @@ module ts {
         expression?: Expression;
     }
 
+    // In case of:
+    // import "mod"  => importClause = undefined, moduleSpecifier = "mod"
+    // In rest of the cases, module specifier is string literal corresponding to module
+    // ImportClause information is shown at its declaration below.
     export interface ImportStatement extends Statement, ModuleElement {
         importClause?: ImportClause;
         moduleSpecifier: StringLiteralExpression;
     }
 
+    // In case of: 
+    // import d from "mod" => defaultBinding = d, namedBinding = undefined
+    // import * as ns from "mod" => defaultBinding = undefined, namedBinding: NamespaceImport = { name: ns }
+    // import d, * as ns from "mod" => defaultBinding = d, namedBinding: NamespaceImport = { name: ns }
+    // import { a, b as x } from "mod" => defaultBinding = undefined, namedBinding: NamedImports = { elements: [{ name: a }, { name: x, propertyName: b}]}
+    // import d, { a, b as x } from "mod" => defaultBinding = d, namedBinding: NamedImports = { elements: [{ name: a }, { name: x, propertyName: b}]}
     export interface ImportClause extends Node {
         defaultBinding?: Identifier;
         namedBindings?: NamespaceImport | NamedImports;

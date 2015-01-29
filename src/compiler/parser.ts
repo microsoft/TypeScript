@@ -4531,20 +4531,61 @@ module ts {
 
         function parseImportDeclarationOrStatement(fullStart: number, modifiers: ModifiersArray): ImportEqualsDeclaration | ImportStatement {
             parseExpected(SyntaxKind.ImportKeyword);
-            if (token === SyntaxKind.StringLiteral ||
-                token === SyntaxKind.AsteriskToken ||
-                token === SyntaxKind.OpenBraceToken ||
-                (isIdentifier() && lookAhead(nextTokenIsCommaOrFromKeyword))) {
-                return parseImportStatement(fullStart, modifiers);
+            var identifier: Identifier;
+            if (isIdentifier()) {
+                identifier = parseIdentifier();
+                if (token !== SyntaxKind.CommaToken && token !== SyntaxKind.FromKeyword) {
+                    // ImportEquals declaration of type:
+                    // import x = require("mod"); or
+                    // import x = M.x;
+                    var importEqualsDeclaration = <ImportEqualsDeclaration>createNode(SyntaxKind.ImportEqualsDeclaration, fullStart);
+                    setModifiers(importEqualsDeclaration, modifiers);
+                    importEqualsDeclaration.name = identifier;
+                    parseExpected(SyntaxKind.EqualsToken);
+                    importEqualsDeclaration.moduleReference = parseModuleReference();
+                    parseSemicolon();
+                    return finishNode(importEqualsDeclaration);
+                }
             }
 
-            var node = <ImportEqualsDeclaration>createNode(SyntaxKind.ImportEqualsDeclaration, fullStart);
-            setModifiers(node, modifiers);
-            node.name = parseIdentifier();
-            parseExpected(SyntaxKind.EqualsToken);
-            node.moduleReference = parseModuleReference();
+            // Import statement
+            var importStatement = <ImportStatement>createNode(SyntaxKind.ImportStatement, fullStart);
+            setModifiers(importStatement, modifiers);
+
+            // ImportDeclaration:
+            //  import ImportClause from ModuleSpecifier ;
+            //  import ModuleSpecifier;
+            if (identifier || // import id
+                token === SyntaxKind.AsteriskToken || // import * 
+                token === SyntaxKind.OpenBraceToken) { // import {
+                //ImportClause:
+                //  ImportedDefaultBinding
+                //  NameSpaceImport
+                //  NamedImports
+                //  ImportedDefaultBinding, NameSpaceImport
+                //  ImportedDefaultBinding, NamedImports
+
+                var importClause = <ImportClause>createNode(SyntaxKind.ImportClause);
+                if (identifier) {
+                    // ImportedDefaultBinding:
+                    //  ImportedBinding
+                    importClause.defaultBinding = identifier;
+                }
+
+                // If there was no default import or if there is comma token after default import 
+                // parse namespace or named imports
+                if (!importClause.defaultBinding ||
+                    parseOptional(SyntaxKind.CommaToken)) {
+                    importClause.namedBindings = token === SyntaxKind.AsteriskToken ? parseNamespaceImport() : parseNamedImports();
+                }
+
+                importStatement.importClause = finishNode(importClause);
+                parseExpected(SyntaxKind.FromKeyword);
+            }
+
+            importStatement.moduleSpecifier = parseModuleSpecifier();
             parseSemicolon();
-            return finishNode(node);
+            return finishNode(importStatement);
         }
 
         function parseModuleReference() {
@@ -4573,59 +4614,16 @@ module ts {
             return finishNode(node);
         }
 
-        function parseImportStatement(fullStart: number, modifiers: ModifiersArray): ImportStatement {
-            var node = <ImportStatement>createNode(SyntaxKind.ImportStatement, fullStart);
-            setModifiers(node, modifiers);
-
-            // ImportDeclaration:
-            //  import ImportClause ModuleSpecifier ;
-            //  import ModuleSpecifier;
-            if (token !== SyntaxKind.StringLiteral) {
-                // ImportDeclaration:
-                node.importClause = parseImportClause();
-            }
-            node.moduleSpecifier = parseModuleSpecifier();
-            parseSemicolon();
-            return finishNode(node);
-        }
-
         function parseModuleSpecifier(): StringLiteralExpression {
             // ModuleSpecifier:
             //  StringLiteral
             if (token === SyntaxKind.StringLiteral) {
                 // Ensure the string being required is in our 'identifier' table.  This will ensure 
                 // that features like 'find refs' will look inside this file when search for its name.
-                var moduleSpecifier = <StringLiteralExpression>parseLiteralNode(/*internName*/ true);
-                return moduleSpecifier;
+                return <StringLiteralExpression>parseLiteralNode(/*internName*/ true);
             }
 
             parseErrorAtCurrentToken(Diagnostics.String_literal_expected);
-        }
-
-        function parseImportClause(): ImportClause {
-            //ImportClause:
-            //  ImportedDefaultBinding from
-            //  NameSpaceImport from
-            //  NamedImports from
-            //  ImportedDefaultBinding, NameSpaceImport from
-            //  ImportedDefaultBinding, NamedImports from
-
-            var importClause = <ImportClause>createNode(SyntaxKind.ImportClause);
-            if (isIdentifier()) {
-                // ImportedDefaultBinding:
-                //  ImportedBinding
-                importClause.defaultBinding = parseIdentifier();
-            }
-
-            // If there was no default import or if there is comma token after default import 
-            // parse namespace or named imports
-            if (!importClause.defaultBinding ||
-                parseOptional(SyntaxKind.CommaToken)) {
-                importClause.namedBindings = token === SyntaxKind.AsteriskToken ? parseNamespaceImport() : parseNamedImports();
-            }
-
-            parseExpected(SyntaxKind.FromKeyword);
-            return finishNode(importClause);
         }
 
         function parseNamespaceImport(): NamespaceImport {
@@ -4649,9 +4647,7 @@ module ts {
             // ImportsList:
             //  ImportSpecifier
             //  ImportsList, ImportSpecifier
-            parseExpected(SyntaxKind.OpenBraceToken);
-            namedImports.elements = parseDelimitedList(ParsingContext.ImportSpecifiers, parseImportSpecifier);
-            parseExpected(SyntaxKind.CloseBraceToken);
+            namedImports.elements = parseBracketedList(ParsingContext.ImportSpecifiers, parseImportSpecifier, SyntaxKind.OpenBraceToken, SyntaxKind.CloseBraceToken);
             return finishNode(namedImports);
         }
 
@@ -4698,7 +4694,7 @@ module ts {
                     return lookAhead(nextTokenIsIdentifierOrKeyword);
                 case SyntaxKind.ImportKeyword:
                     // Not true keywords so ensure an identifier follows or is string literal or asterisk or open brace
-                    return lookAhead(nextTokenIsIdentifierOrKeywordOrStringLiteralOrAsteriskOrOpenBrace) ;
+                    return lookAhead(nextTokenCanFollowImportKeyword);
                 case SyntaxKind.ModuleKeyword:
                     // Not a true keyword so ensure an identifier or string literal follows
                     return lookAhead(nextTokenIsIdentifierOrKeywordOrStringLiteral);
@@ -4729,7 +4725,7 @@ module ts {
             return isIdentifierOrKeyword() || token === SyntaxKind.StringLiteral;
         }
 
-        function nextTokenIsIdentifierOrKeywordOrStringLiteralOrAsteriskOrOpenBrace() {
+        function nextTokenCanFollowImportKeyword() {
             nextToken();
             return isIdentifierOrKeyword() || token === SyntaxKind.StringLiteral ||
                 token === SyntaxKind.AsteriskToken || token === SyntaxKind.OpenBraceToken;
