@@ -11,6 +11,12 @@ export var m = a;
 >m : number
 >a : number
 
+export var a1 = 10;
+>a1 : number
+
+export var x1 = 10;
+>x1 : number
+
 === tests/cases/compiler/es6ImportNamedImportInEs5_1.ts ===
 import { } from "es6ImportNamedImportInEs5_0";
 No type information for this code.import { a } from "es6ImportNamedImportInEs5_0";
@@ -18,4 +24,6 @@ No type information for this code.import { a as b } from "es6ImportNamedImportIn
 No type information for this code.import { x, a as y } from "es6ImportNamedImportInEs5_0";
 No type information for this code.import { x as z,  } from "es6ImportNamedImportInEs5_0";
 No type information for this code.import { m,  } from "es6ImportNamedImportInEs5_0";
+No type information for this code.import { a1, x1 } from "es6ImportNamedImportInEs5_0";
+No type information for this code.import { a1 as a11, x1 as x11 } from "es6ImportNamedImportInEs5_0";
 No type information for this code.
