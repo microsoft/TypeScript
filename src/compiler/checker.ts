@@ -4836,6 +4836,16 @@ module ts {
         function checkIdentifier(node: Identifier): Type {
             var symbol = getResolvedSymbol(node);
 
+			// As noted in ECMAScript 6 language spec, arrow functions never have an arguments objects.
+			// Although in down-level emit of arrow function, we emit it using function expression which means that
+			// arguments objects will be inner bound while emitting arrow function natively in ES6, arguments objects
+			// will be bound to non-arrow function that contain this arrow function. This results in inconsistent bahaviour.
+			// To avoid that we will give an error to users if they use arguments objects in arrow function so that they
+			// can explicitly bound arguments objects
+			if (symbol === argumentsSymbol && getContainingFunction(node).kind === SyntaxKind.ArrowFunction) {
+				error(node, Diagnostics.An_argument_object_has_different_behaviour_across_Javascript_versions_Use_function_expression_or_rest_parameters_instead);
+			}
+
             if (symbol.flags & SymbolFlags.Import) {
                 var symbolLinks = getSymbolLinks(symbol);
                 if (!symbolLinks.referenced) {
