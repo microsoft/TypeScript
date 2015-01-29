@@ -4905,7 +4905,7 @@ module ts {
                 if (compilerOptions.target >= ScriptTarget.ES6) {
                     needToCaptureLexicalThis = false;
                 }
-				        else {
+                else {
                     needToCaptureLexicalThis = true;
                 }
             }
