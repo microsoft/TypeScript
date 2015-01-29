@@ -189,6 +189,7 @@ while (false) {
     label2: label3: label4: const c = 0;
     n = c;
 }
+// Try/catch/finally
 try {
     const c = 0;
     n = c;
@@ -201,12 +202,14 @@ finally {
     const c = 0;
     n = c;
 }
+// Switch
 switch (0) {
     case 0:
         const c = 0;
         n = c;
         break;
 }
+// blocks
 {
     const c = 0;
     n = c;

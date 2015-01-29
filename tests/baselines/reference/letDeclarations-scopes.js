@@ -205,6 +205,7 @@ for (let l = 0; n = l; l++) {
 }
 for (let l in {}) {
 }
+// Try/catch/finally
 try {
     let l = 0;
     n = l;
@@ -217,12 +218,14 @@ finally {
     let l = 0;
     n = l;
 }
+// Switch
 switch (0) {
     case 0:
         let l = 0;
         n = l;
         break;
 }
+// blocks
 {
     let l = 0;
     n = l;

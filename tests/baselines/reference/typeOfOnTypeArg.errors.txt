@@ -1,4 +1,5 @@
 tests/cases/compiler/typeOfOnTypeArg.ts(7,6): error TS2345: Argument of type 'number' is not assignable to parameter of type '{ '': number; }'.
+  Property '''' is missing in type 'Number'.
 
 
 ==== tests/cases/compiler/typeOfOnTypeArg.ts (1 errors) ====
@@ -11,4 +12,5 @@ tests/cases/compiler/typeOfOnTypeArg.ts(7,6): error TS2345: Argument of type 'nu
     fill(32);
          ~~
 !!! error TS2345: Argument of type 'number' is not assignable to parameter of type '{ '': number; }'.
+!!! error TS2345:   Property '''' is missing in type 'Number'.
     

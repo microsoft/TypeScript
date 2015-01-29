@@ -3408,9 +3408,9 @@ module ts {
 
         // TYPE CHECKING
 
-        var subtypeRelation: Map<boolean> = {};
-        var assignableRelation: Map<boolean> = {};
-        var identityRelation: Map<boolean> = {};
+        var subtypeRelation: Map<RelationComparisonResult> = {};
+        var assignableRelation: Map<RelationComparisonResult> = {};
+        var identityRelation: Map<RelationComparisonResult> = {};
 
         function isTypeIdenticalTo(source: Type, target: Type): boolean {
             return checkTypeRelatedTo(source, target, identityRelation, /*errorNode*/ undefined);
@@ -3445,7 +3445,7 @@ module ts {
         function checkTypeRelatedTo(
             source: Type,
             target: Type,
-            relation: Map<boolean>,
+            relation: Map<RelationComparisonResult>,
             errorNode: Node,
             headMessage?: DiagnosticMessage,
             containingMessageChain?: DiagnosticMessageChain): boolean {
@@ -3453,7 +3453,7 @@ module ts {
             var errorInfo: DiagnosticMessageChain;
             var sourceStack: ObjectType[];
             var targetStack: ObjectType[];
-            var maybeStack: Map<boolean>[];
+            var maybeStack: Map<RelationComparisonResult>[];
             var expandingFlags: number;
             var depth = 0;
             var overflow = false;
@@ -3465,6 +3465,14 @@ module ts {
                 error(errorNode, Diagnostics.Excessive_stack_depth_comparing_types_0_and_1, typeToString(source), typeToString(target));
             }
             else if (errorInfo) {
+                // If we already computed this relation, but in a context where we didn't want to report errors (e.g. overload resolution),
+                // then we'll only have a top-level error (e.g. 'Class X does not implement interface Y') without any details. If this happened,
+                // request a recompuation to get a complete error message. This will be skipped if we've already done this computation in a context
+                // where errors were being reported.
+                if (errorInfo.next === undefined) {
+                    errorInfo = undefined;
+                    isRelatedTo(source, target, errorNode !== undefined, headMessage, /* elaborateErrors */ true);
+                }
                 if (containingMessageChain) {
                     errorInfo = concatenateDiagnosticMessageChains(containingMessageChain, errorInfo);
                 }
@@ -3480,7 +3488,7 @@ module ts {
             // Ternary.True if they are related with no assumptions,
             // Ternary.Maybe if they are related with assumptions of other relationships, or
             // Ternary.False if they are not related.
-            function isRelatedTo(source: Type, target: Type, reportErrors?: boolean, headMessage?: DiagnosticMessage): Ternary {
+            function isRelatedTo(source: Type, target: Type, reportErrors?: boolean, headMessage?: DiagnosticMessage, elaborateErrors = false): Ternary {
                 var result: Ternary;
                 // both types are the same - covers 'they are the same primitive type or both are Any' or the same type parameter cases
                 if (source === target) return Ternary.True;
@@ -3547,7 +3555,7 @@ module ts {
                     // identity relation does not use apparent type
                     var sourceOrApparentType = relation === identityRelation ? source : getApparentType(source);
                     if (sourceOrApparentType.flags & TypeFlags.ObjectType && target.flags & TypeFlags.ObjectType &&
-                        (result = objectTypeRelatedTo(sourceOrApparentType, <ObjectType>target, reportStructuralErrors))) {
+                        (result = objectTypeRelatedTo(sourceOrApparentType, <ObjectType>target, reportStructuralErrors, elaborateErrors))) {
                         errorInfo = saveErrorInfo;
                         return result;
                     }
@@ -3638,14 +3646,19 @@ module ts {
             // Third, check if both types are part of deeply nested chains of generic type instantiations and if so assume the types are
             // equal and infinitely expanding. Fourth, if we have reached a depth of 100 nested comparisons, assume we have runaway recursion
             // and issue an error. Otherwise, actually compare the structure of the two types.
-            function objectTypeRelatedTo(source: ObjectType, target: ObjectType, reportErrors: boolean): Ternary {
+            function objectTypeRelatedTo(source: ObjectType, target: ObjectType, reportErrors: boolean, elaborateErrors = false): Ternary {
                 if (overflow) {
                     return Ternary.False;
                 }
                 var id = relation !== identityRelation || source.id < target.id ? source.id + "," + target.id : target.id + "," + source.id;
                 var related = relation[id];
+                //var related: RelationComparisonResult = undefined; // relation[id];
                 if (related !== undefined) {
-                    return related ? Ternary.True : Ternary.False;
+                    // If we computed this relation already and it was failed and reported, or if we're not being asked to elaborate
+                    // errors, we can use the cached value. Otherwise, recompute the relation
+                    if (!elaborateErrors || (related === RelationComparisonResult.FailedAndReported)) {
+                        return related === RelationComparisonResult.Succeeded ? Ternary.True : Ternary.False;
+                    }
                 }
                 if (depth > 0) {
                     for (var i = 0; i < depth; i++) {
@@ -3668,7 +3681,7 @@ module ts {
                 sourceStack[depth] = source;
                 targetStack[depth] = target;
                 maybeStack[depth] = {};
-                maybeStack[depth][id] = true;
+                maybeStack[depth][id] = RelationComparisonResult.Succeeded;
                 depth++;
                 var saveExpandingFlags = expandingFlags;
                 if (!(expandingFlags & 1) && isDeeplyNestedGeneric(source, sourceStack)) expandingFlags |= 1;
@@ -3696,13 +3709,13 @@ module ts {
                 if (result) {
                     var maybeCache = maybeStack[depth];
                     // If result is definitely true, copy assumptions to global cache, else copy to next level up
-                    var destinationCache = result === Ternary.True || depth === 0 ? relation : maybeStack[depth - 1];
-                    copyMap(/*source*/maybeCache, /*target*/destinationCache);
+                    var destinationCache = (result === Ternary.True || depth === 0) ? relation : maybeStack[depth - 1];
+                    copyMap(maybeCache, destinationCache);
                 }
                 else {
                     // A false result goes straight into global cache (when something is false under assumptions it
                     // will also be false without assumptions)
-                    relation[id] = false;
+                    relation[id] = reportErrors ? RelationComparisonResult.FailedAndReported : RelationComparisonResult.Failed;
                 }
                 return result;
             }
@@ -5966,7 +5979,7 @@ module ts {
             return typeArgumentsAreAssignable;
         }
 
-        function checkApplicableSignature(node: CallLikeExpression, args: Node[], signature: Signature, relation: Map<boolean>, excludeArgument: boolean[], reportErrors: boolean) {
+        function checkApplicableSignature(node: CallLikeExpression, args: Node[], signature: Signature, relation: Map<RelationComparisonResult>, excludeArgument: boolean[], reportErrors: boolean) {
             for (var i = 0; i < args.length; i++) {
                 var arg = args[i];
                 var argType: Type;
@@ -6026,11 +6039,41 @@ module ts {
             return args;
         }
 
+        /**
+         * In a 'super' call, type arguments are not provided within the CallExpression node itself.
+         * Instead, they must be fetched from the class declaration's base type node.
+         *
+         * If 'node' is a 'super' call (e.g. super(...), new super(...)), then we attempt to fetch
+         * the type arguments off the containing class's first heritage clause (if one exists). Note that if
+         * type arguments are supplied on the 'super' call, they are ignored (though this is syntactically incorrect).
+         *
+         * In all other cases, the call's explicit type arguments are returned.
+         */
+        function getEffectiveTypeArguments(callExpression: CallExpression): TypeNode[] {
+            if (callExpression.expression.kind === SyntaxKind.SuperKeyword) {
+                var containingClass = <ClassDeclaration>getAncestor(callExpression, SyntaxKind.ClassDeclaration);
+                var baseClassTypeNode = containingClass && getClassBaseTypeNode(containingClass);
+                return baseClassTypeNode && baseClassTypeNode.typeArguments;
+            }
+            else {
+                // Ordinary case - simple function invocation.
+                return callExpression.typeArguments;
+            }
+        }
+
         function resolveCall(node: CallLikeExpression, signatures: Signature[], candidatesOutArray: Signature[]): Signature {
             var isTaggedTemplate = node.kind === SyntaxKind.TaggedTemplateExpression;
 
-            var typeArguments = isTaggedTemplate ? undefined : (<CallExpression>node).typeArguments;
-            forEach(typeArguments, checkSourceElement);
+            var typeArguments: TypeNode[];
+
+            if (!isTaggedTemplate) {
+                typeArguments = getEffectiveTypeArguments(<CallExpression>node);
+
+                // We already perform checking on the type arguments on the class declaration itself.
+                if ((<CallExpression>node).expression.kind !== SyntaxKind.SuperKeyword) {
+                    forEach(typeArguments, checkSourceElement);
+                }
+            }
 
             var candidates = candidatesOutArray || [];
             // collectCandidates fills up the candidates array directly
@@ -6160,7 +6203,7 @@ module ts {
 
             return resolveErrorCall(node);
 
-            function chooseOverload(candidates: Signature[], relation: Map<boolean>) {
+            function chooseOverload(candidates: Signature[], relation: Map<RelationComparisonResult>) {
                 for (var i = 0; i < candidates.length; i++) {
                     if (!hasCorrectArity(node, args, candidates[i])) {
                         continue;
@@ -6296,7 +6339,7 @@ module ts {
                 // Another error has already been reported
                 return resolveErrorCall(node);
             }
-            
+
             // Technically, this signatures list may be incomplete. We are taking the apparent type,
             // but we are not including call signatures that may have been added to the Object or
             // Function interface, since they have none by default. This is a bit of a leap of faith

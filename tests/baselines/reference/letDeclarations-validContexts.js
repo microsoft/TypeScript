@@ -173,6 +173,7 @@ if (true) {
 while (false) {
     label2: label3: label4: let l9 = 0;
 }
+// Try/catch/finally
 try {
     let l10 = 0;
 }
@@ -182,6 +183,7 @@ catch (e) {
 finally {
     let l12 = 0;
 }
+// Switch
 switch (0) {
     case 0:
         let l13 = 0;
@@ -190,6 +192,7 @@ switch (0) {
         let l14 = 0;
         break;
 }
+// blocks
 {
     let l15 = 0;
     {
@@ -247,6 +250,7 @@ var o = {
         let l29 = 0;
     }
 };
+// labels
 label: let l30 = 0;
 {
     label2: let l31 = 0;
