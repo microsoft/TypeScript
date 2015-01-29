@@ -3263,7 +3263,7 @@ module ts {
                 emitTrailingComments(node);
             }
 
-            function isES6ArrowFunction(node: FunctionLikeDeclaration): boolean {
+            function shouldEmitAsArrowFunction(node: FunctionLikeDeclaration): boolean {
                 return node.kind === SyntaxKind.ArrowFunction && compilerOptions.target >= ScriptTarget.ES6;
             }
 
@@ -3279,7 +3279,7 @@ module ts {
 
                 // For targeting below es6, emit functions-like declaration including arrow function using function keyword.
                 // When targeting ES6, emit arrow function natively in ES6 by omitting function keyword and using fat arrow instead
-                if (!isES6ArrowFunction(node)) {
+                if (!shouldEmitAsArrowFunction(node)) {
                     write("function ");
                 }
 
@@ -3314,9 +3314,8 @@ module ts {
             }
 
             function emitSignatureParametersForArrow(node: FunctionLikeDeclaration) {
-                // Check the node's parameters whether it contains flags indicating that it has no parenthesis around the parameters
-                // Preserve no-parenthesis
-                if (node && node.flags & NodeFlags.SimpleArrowFunction) {
+                // Check whether the parameter list needs parentheses and preserve no-parenthesis
+                if (node.flags & NodeFlags.SimpleArrowFunction) {
                     increaseIndent();
                     var parameters = node.parameters;
                     var omitCount = hasRestParameters(node) ? 1 : 0;
@@ -3337,13 +3336,13 @@ module ts {
                 tempParameters = undefined;
 
                 // When targeting ES6, emit arrow function natively in ES6
-                if (isES6ArrowFunction(node)) {
+                if (shouldEmitAsArrowFunction(node)) {
                     emitSignatureParametersForArrow(node);
-					write(" =>");
+                    write(" =>");
                 }
-				else {
-					emitSignatureParameters(node);
-				}
+                else {
+                    emitSignatureParameters(node);
+                }
 
                 write(" {");
                 scopeEmitStart(node);
