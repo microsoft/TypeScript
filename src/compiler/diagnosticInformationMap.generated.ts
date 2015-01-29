@@ -300,7 +300,7 @@ module ts {
         Type_0_is_not_an_array_type: { code: 2461, category: DiagnosticCategory.Error, key: "Type '{0}' is not an array type." },
         A_rest_element_must_be_last_in_an_array_destructuring_pattern: { code: 2462, category: DiagnosticCategory.Error, key: "A rest element must be last in an array destructuring pattern" },
         A_binding_pattern_parameter_cannot_be_optional_in_an_implementation_signature: { code: 2463, category: DiagnosticCategory.Error, key: "A binding pattern parameter cannot be optional in an implementation signature." },
-        A_computed_property_name_must_be_of_type_string_number_or_any: { code: 2464, category: DiagnosticCategory.Error, key: "A computed property name must be of type 'string', 'number', or 'any'." },
+        A_computed_property_name_must_be_of_type_string_number_Symbol_or_any: { code: 2464, category: DiagnosticCategory.Error, key: "A computed property name must be of type 'string', 'number', 'Symbol', or 'any'." },
         this_cannot_be_referenced_in_a_computed_property_name: { code: 2465, category: DiagnosticCategory.Error, key: "'this' cannot be referenced in a computed property name." },
         super_cannot_be_referenced_in_a_computed_property_name: { code: 2466, category: DiagnosticCategory.Error, key: "'super' cannot be referenced in a computed property name." },
         A_computed_property_name_cannot_reference_a_type_parameter_from_its_containing_type: { code: 2466, category: DiagnosticCategory.Error, key: "A computed property name cannot reference a type parameter from its containing type." },

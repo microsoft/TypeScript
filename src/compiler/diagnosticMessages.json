@@ -1193,7 +1193,7 @@
         "category": "Error",
         "code": 2463
     },
-    "A computed property name must be of type 'string', 'number', or 'any'.": {
+    "A computed property name must be of type 'string', 'number', 'Symbol', or 'any'.": {
         "category": "Error",
         "code": 2464
     },

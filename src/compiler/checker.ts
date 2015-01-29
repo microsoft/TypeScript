@@ -5517,7 +5517,7 @@ module ts {
                 // This will allow types number, string, or any. It will also allow enums, the unknown
                 // type, and any union of these types (like string | number).
                 if (!isTypeOfKind(links.resolvedType, TypeFlags.Any | TypeFlags.NumberLike | TypeFlags.StringLike)) {
-                    error(node, Diagnostics.A_computed_property_name_must_be_of_type_string_number_or_any);
+                    error(node, Diagnostics.A_computed_property_name_must_be_of_type_string_number_Symbol_or_any);
                 }
             }
 
