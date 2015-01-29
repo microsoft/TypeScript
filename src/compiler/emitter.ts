@@ -2463,7 +2463,7 @@ module ts {
                 var constantValue = resolver.getConstantValue(node);
                 if (constantValue !== undefined) {
                     var propertyName = node.kind === SyntaxKind.PropertyAccessExpression ? declarationNameToString((<PropertyAccessExpression>node).name) : getTextOfNode((<ElementAccessExpression>node).argumentExpression);
-                    write(constantValue.toString() + " /* " + propertyName + " */");
+                    write(constantValue.toString() + (!compilerOptions.removeComments ? " /* " + propertyName + " */" : ""));
                     return true;
                 }
                 return false;
