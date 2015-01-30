@@ -1,46 +1,46 @@
 {
-	"name": "typescript",
-	"author": "Microsoft Corp.",
-	"homepage": "http://typescriptlang.org/",
-	"version": "1.5.0",
-	"licenses": [
-		{
-			"type": "Apache License 2.0", 
-			"url": "https://github.com/Microsoft/TypeScript/blob/master/LICENSE.txt"
-		}
-	],
-	"description": "TypeScript is a language for application scale JavaScript development",
-	"keywords": [
-		"TypeScript", 
-		"Microsoft", 
-		"compiler", 
-		"language", 
-		"javascript"
-	],
-	"bugs": {
-		"url" : "https://github.com/Microsoft/TypeScript/issues"
-	},
-	"repository" : { 
-		"type" : "git",	
-		"url" : "https://github.com/Microsoft/TypeScript.git"  
-	},
-	"preferGlobal" : true,
-	"main" : "./bin/typescriptServices.js",
-	"bin" : { 
-		"tsc" : "./bin/tsc" 
-	},
-	"engines" : { 
-		"node" : ">=0.8.0" 
-	},
-	"devDependencies": {
-		"jake" : "latest",
-		"mocha" : "latest",
-		"chai" : "latest",
-		"browserify" : "latest",
-		"istanbul": "latest",
-		"codeclimate-test-reporter": "latest"
-	},
-	"scripts": {
-		"test": "jake generate-code-coverage"
-	}
+    "name": "typescript",
+    "author": "Microsoft Corp.",
+    "homepage": "http://typescriptlang.org/",
+    "version": "1.5.0",
+    "licenses": [
+        {
+            "type": "Apache License 2.0",
+            "url": "https://github.com/Microsoft/TypeScript/blob/master/LICENSE.txt"
+        }
+    ],
+    "description": "TypeScript is a language for application scale JavaScript development",
+    "keywords": [
+        "TypeScript",
+        "Microsoft",
+        "compiler",
+        "language",
+        "javascript"
+    ],
+    "bugs": {
+        "url": "https://github.com/Microsoft/TypeScript/issues"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/Microsoft/TypeScript.git"
+    },
+    "preferGlobal": true,
+    "main": "./bin/typescriptServices.js",
+    "bin": {
+        "tsc": "./bin/tsc"
+    },
+    "engines": {
+        "node": ">=0.8.0"
+    },
+    "devDependencies": {
+        "jake": "latest",
+        "mocha": "latest",
+        "chai": "latest",
+        "browserify": "latest",
+        "istanbul": "latest",
+        "codeclimate-test-reporter": "latest"
+    },
+    "scripts": {
+        "test": "jake generate-code-coverage"
+    }
 }
