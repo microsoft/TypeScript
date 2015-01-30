@@ -289,14 +289,14 @@ desc("Builds the library targets");
 task("lib", libraryTargets);
 
 // Generate factory
-var processSyntaxJs = path.join(scriptsDirectory, "processSyntax.js");
-var processSyntaxTs = path.join(scriptsDirectory, "processSyntax.ts");
+var processFactoryJs = path.join(scriptsDirectory, "processFactory.js");
+var processFactoryTs = path.join(scriptsDirectory, "processFactory.ts");
 var factoryJson = path.join(compilerDirectory, "factory.json");
 var factoryGeneratedTs = path.join(compilerDirectory, "factory.generated.ts");
-file(processSyntaxTs);
-compileFile(processSyntaxJs, [processSyntaxTs], [processSyntaxTs], [], /*useBuiltCompile*/ false);
-file(factoryGeneratedTs, [processSyntaxJs, factoryJson], function() {
-    var cmd = "node " + processSyntaxJs + " "  + factoryJson;
+file(processFactoryTs);
+compileFile(processFactoryJs, [processFactoryTs], [processFactoryTs], [], /*useBuiltCompile*/ false);
+file(factoryGeneratedTs, [processFactoryJs, factoryJson], function() {
+    var cmd = "node " + processFactoryJs + " "  + factoryJson;
     console.log(cmd);
     var ex = jake.createExec([cmd]);
     // Add listeners for output and error

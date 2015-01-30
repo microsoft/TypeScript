@@ -287,6 +287,31 @@ var ts;
         OpCode[OpCode["Endfinally"] = 9] = "Endfinally";
     })(ts.OpCode || (ts.OpCode = {}));
     var OpCode = ts.OpCode;
+    (function (BlockAction) {
+        BlockAction[BlockAction["Open"] = 0] = "Open";
+        BlockAction[BlockAction["Close"] = 1] = "Close";
+    })(ts.BlockAction || (ts.BlockAction = {}));
+    var BlockAction = ts.BlockAction;
+    (function (BlockKind) {
+        BlockKind[BlockKind["Exception"] = 0] = "Exception";
+        BlockKind[BlockKind["ScriptBreak"] = 1] = "ScriptBreak";
+        BlockKind[BlockKind["Break"] = 2] = "Break";
+        BlockKind[BlockKind["ScriptContinue"] = 3] = "ScriptContinue";
+        BlockKind[BlockKind["Continue"] = 4] = "Continue";
+        BlockKind[BlockKind["With"] = 5] = "With";
+    })(ts.BlockKind || (ts.BlockKind = {}));
+    var BlockKind = ts.BlockKind;
+    (function (ExceptionBlockState) {
+        ExceptionBlockState[ExceptionBlockState["Try"] = 0] = "Try";
+        ExceptionBlockState[ExceptionBlockState["Catch"] = 1] = "Catch";
+        ExceptionBlockState[ExceptionBlockState["Finally"] = 2] = "Finally";
+        ExceptionBlockState[ExceptionBlockState["Done"] = 3] = "Done";
+    })(ts.ExceptionBlockState || (ts.ExceptionBlockState = {}));
+    var ExceptionBlockState = ts.ExceptionBlockState;
+    (function (FunctionBuilderFlags) {
+        FunctionBuilderFlags[FunctionBuilderFlags["HasProtectedRegions"] = 0x1] = "HasProtectedRegions";
+    })(ts.FunctionBuilderFlags || (ts.FunctionBuilderFlags = {}));
+    var FunctionBuilderFlags = ts.FunctionBuilderFlags;
     (function (EmitReturnStatus) {
         EmitReturnStatus[EmitReturnStatus["Succeeded"] = 0] = "Succeeded";
         EmitReturnStatus[EmitReturnStatus["AllOutputGenerationSkipped"] = 1] = "AllOutputGenerationSkipped";
@@ -1472,12 +1497,16 @@ var ts;
 })(ts || (ts = {}));
 var ts;
 (function (ts) {
-    var Ternary;
-    (function (Ternary) {
-        Ternary[Ternary["False"] = 0] = "False";
-        Ternary[Ternary["Maybe"] = 1] = "Maybe";
-        Ternary[Ternary["True"] = -1] = "True";
-    })(Ternary || (Ternary = {}));
+    var syntax;
+    var syntaxKindTable;
+    var syntaxTypeTable;
+    var syntaxSubTypesTable;
+    var lastWriteSucceeded;
+    var parts = [];
+    var indentDepth = 0;
+    var newlineRequested = false;
+    var indentingSuspendedDepth = 0;
+    var indentLevels = ["", "    "];
     function main() {
         if (ts.sys.args.length < 1) {
             ts.sys.write("Usage:" + ts.sys.newLine);
@@ -1486,564 +1515,360 @@ var ts;
         }
         var inputFilePath = ts.sys.args[0].replace(/\\/g, "/");
         var inputStr = ts.sys.readFile(inputFilePath);
-        var syntax = JSON.parse(inputStr);
-        var output = buildSyntaxOutput(syntax);
+        syntax = JSON.parse(inputStr);
+        computeSyntaxTables();
+        writeFile();
+        var output = parts.join("");
         var inputDirectory = inputFilePath.substr(0, inputFilePath.lastIndexOf("/"));
         var outputPath = inputDirectory + "/factory.generated.ts";
         ts.sys.writeFile(outputPath, output);
     }
-    function buildSyntaxOutput(syntax) {
-        var syntaxKindTable;
-        var syntaxTypeTable;
-        var syntaxSubTypesTable;
-        var lastWriteSucceeded;
-        var writer;
-        return writeFileWorker();
-        function computeSyntaxTables() {
-            syntaxKindTable = {};
-            syntaxTypeTable = {};
-            syntaxSubTypesTable = {};
-            for (var i = 0; i < syntax.length; i++) {
-                var nodeType = syntax[i];
-                var kind = nodeType.kind;
-                var type = nodeType.type;
-                var baseType = nodeType.baseType;
-                var types = nodeType.types;
-                var name = nodeType.name;
-                if (kind) {
-                    nodeType.kind = kind.replace(/\s+/g, "");
-                    syntaxKindTable[nodeType.kind] = nodeType;
-                }
-                if (type) {
-                    nodeType.type = normalizeType(type);
-                    syntaxTypeTable[nodeType.type] = nodeType;
-                }
-                else {
-                    nodeType.type = normalizeType(nodeType.types || nodeType.baseType);
-                }
-                if (types) {
-                    nodeType.types = normalizeType(types);
-                }
-                if (baseType) {
-                    nodeType.baseType = normalizeType(baseType);
-                    var subTypes = getProperty(syntaxSubTypesTable, nodeType.baseType);
-                    if (!subTypes) {
-                        subTypes = [];
-                        syntaxSubTypesTable[nodeType.baseType] = subTypes;
-                    }
-                    subTypes.push(nodeType);
-                }
-                if (name) {
-                    nodeType.name = formatName(nodeType.name);
-                }
-                else {
-                    nodeType.name = formatName(nodeType.kind || nodeType.type);
-                }
-                var children = nodeType.children;
-                if (children) {
-                    for (var j = 0; j < children.length; j++) {
-                        var member = children[j];
-                        member.type = normalizeType(member.type);
-                        member.name = formatName(member.name);
-                        if (!member.paramName) {
-                            member.paramName = member.name;
-                        }
-                        else {
-                            member.paramName = formatName(member.paramName);
-                        }
-                    }
-                }
-            }
-        }
-        function writeFileWorker() {
-            writer = new TextWriter();
-            computeSyntaxTables();
-            writeFile();
-            return writer.toString();
-        }
-        function writeFile() {
-            writer.writeln("/// <reference path=\"parser.ts\"/>");
-            writer.writeln("/// <reference path=\"factory.ts\"/>");
-            writer.writeln();
-            writer.writeln("module ts {");
-            writer.indent();
-            writeFactoryModule();
-            writeVisitorModule();
-            writer.dedent();
-            writer.writeln("}");
-            writer.dedent();
-        }
-        function writeFactoryModule() {
-            writer.writeln("export module Factory {");
-            writer.indent();
-            lastWriteSucceeded = false;
-            for (var i = 0; i < syntax.length; i++) {
-                var nodeType = syntax[i];
-                writeCreateNodeFunction(nodeType);
-                writeUpdateNodeFunction(nodeType);
-            }
-            writer.dedent();
-            writer.writeln("}");
-            writer.writeln();
-        }
-        function writeCreateNodeFunction(nodeType) {
-            if (!nodeType.kind || !nodeType.children) {
-                return;
-            }
-            if (lastWriteSucceeded) {
-                writer.writeln();
-            }
+    function computeSyntaxTables() {
+        syntaxKindTable = {};
+        syntaxTypeTable = {};
+        syntaxSubTypesTable = {};
+        for (var i = 0; i < syntax.length; i++) {
+            var nodeType = syntax[i];
             var kind = nodeType.kind;
-            var type = nodeType.type || nodeType.baseType;
-            var name = nodeType.name || kind || type;
-            var modifiers;
+            var type = nodeType.type;
+            var baseType = nodeType.baseType;
+            var types = nodeType.types;
+            var name = nodeType.name;
+            if (kind) {
+                nodeType.kind = kind.replace(/\s+/g, "");
+                syntaxKindTable[nodeType.kind] = nodeType;
+            }
+            if (type) {
+                nodeType.type = normalizeType(type);
+                syntaxTypeTable[nodeType.type] = nodeType;
+            }
+            else {
+                nodeType.type = normalizeType(nodeType.types || nodeType.baseType);
+            }
+            if (types) {
+                nodeType.types = normalizeType(types);
+            }
+            if (baseType) {
+                nodeType.baseType = normalizeType(baseType);
+                var subTypes = getProperty(syntaxSubTypesTable, nodeType.baseType);
+                if (!subTypes) {
+                    subTypes = [];
+                    syntaxSubTypesTable[nodeType.baseType] = subTypes;
+                }
+                subTypes.push(nodeType);
+            }
+            if (name) {
+                nodeType.name = formatName(nodeType.name);
+            }
+            else {
+                nodeType.name = formatName(nodeType.kind || nodeType.type);
+            }
             var children = nodeType.children;
-            writer.write("export function create" + nodeType.name + "(");
+            if (children) {
+                for (var j = 0; j < children.length; j++) {
+                    var member = children[j];
+                    member.type = normalizeType(member.type);
+                    member.name = formatName(member.name);
+                    if (!member.paramName) {
+                        member.paramName = member.name;
+                    }
+                    else {
+                        member.paramName = formatName(member.paramName);
+                    }
+                }
+            }
+        }
+    }
+    function writeFile() {
+        writeln("// <auto-generated />");
+        writeln("/// <reference path=\"parser.ts\"/>");
+        writeln("/// <reference path=\"factory.ts\"/>");
+        writeln();
+        writeln("module ts {");
+        indent();
+        writeFactoryModule();
+        writeVisitorModule();
+        dedent();
+        writeln("}");
+        dedent();
+    }
+    function writeFactoryModule() {
+        writeln("export module Factory {");
+        indent();
+        lastWriteSucceeded = false;
+        for (var i = 0; i < syntax.length; i++) {
+            var nodeType = syntax[i];
+            writeCreateFunctionForNode(nodeType);
+            writeUpdateFunctionForNode(nodeType);
+        }
+        dedent();
+        writeln("}");
+        writeln();
+    }
+    function writeCreateFunctionForNode(syntaxNode) {
+        if (!canCreate(syntaxNode)) {
+            return;
+        }
+        if (lastWriteSucceeded) {
+            writeln();
+        }
+        var kind = syntaxNode.kind;
+        var type = syntaxNode.type || syntaxNode.baseType;
+        var name = syntaxNode.name || kind || type;
+        var modifiers;
+        var children = syntaxNode.children;
+        write("export function create" + syntaxNode.name + "(");
+        if (children) {
             for (var i = 0; i < children.length; i++) {
                 var member = children[i];
-                writer.write(member.paramName);
+                write(member.paramName);
                 if (member.optional) {
-                    writer.write("?");
+                    write("?");
                 }
-                writer.write(": " + member.type);
+                write(": " + member.type);
                 if (member.isModifiersArray) {
                     modifiers = member.paramName;
                 }
                 if (member.isNodeArray || member.isModifiersArray) {
-                    writer.write("[]");
+                    write("[]");
                 }
-                writer.write(", ");
+                write(", ");
             }
-            writer.write("location?: TextRange, flags?: NodeFlags");
-            writer.writeln("): " + nodeType.type + " {");
-            writer.indent();
-            writer.writeln("var node = beginNode<" + nodeType.type + ">(SyntaxKind." + nodeType.kind + ");");
+        }
+        write("location?: TextRange, flags?: NodeFlags");
+        writeln("): " + syntaxNode.type + " {");
+        indent();
+        writeln("var node = beginNode<" + syntaxNode.type + ">(SyntaxKind." + syntaxNode.kind + ");");
+        if (children) {
             for (var i = 0; i < children.length; i++) {
                 var member = children[i];
                 var paramName = member.paramName || member.name;
-                writer.write("node." + member.name + " = ");
+                write("node." + member.name + " = ");
                 if (member.converter) {
-                    writer.write(member.converter + "(");
+                    write(member.converter + "(");
                 }
                 else if (member.isNodeArray) {
-                    writer.write("createNodeArray(");
+                    write("createNodeArray(");
                 }
                 else if (member.isModifiersArray) {
-                    writer.write("<ModifiersArray>");
+                    write("<ModifiersArray>");
                 }
-                writer.write(paramName);
+                write(paramName);
                 if (member.converter || member.isNodeArray) {
-                    writer.write(")");
+                    write(")");
                 }
-                writer.writeln(";");
+                writeln(";");
             }
-            writer.write("return finishNode(node, location, flags");
-            if (modifiers) {
-                writer.write(", " + modifiers);
-            }
-            writer.writeln(");");
-            writer.dedent();
-            writer.writeln("}");
-            lastWriteSucceeded = true;
         }
-        function writeUpdateNodeFunction(syntaxNode) {
-            if (!syntaxNode.update || !syntaxNode.kind || !syntaxNode.children) {
-                return;
+        write("return finishNode(node, location, flags");
+        if (modifiers) {
+            write(", " + modifiers);
+        }
+        writeln(");");
+        dedent();
+        writeln("}");
+        lastWriteSucceeded = true;
+    }
+    function writeUpdateFunctionForNode(syntaxNode) {
+        if (!canUpdate(syntaxNode)) {
+            return;
+        }
+        if (lastWriteSucceeded) {
+            writeln();
+        }
+        write("export function update" + syntaxNode.name + "(node: " + syntaxNode.type);
+        var children = syntaxNode.children;
+        for (var i = 0; i < children.length; i++) {
+            var member = children[i];
+            if (member.readonly) {
+                continue;
+            }
+            write(", ");
+            write(member.paramName || member.name);
+            write(": " + member.type);
+            if (member.isNodeArray || member.isModifiersArray) {
+                write("[]");
+            }
+        }
+        writeln("): " + syntaxNode.type + " {");
+        indent();
+        write("if (");
+        lastWriteSucceeded = false;
+        for (var i = 0; i < children.length; i++) {
+            var member = children[i];
+            if (member.readonly) {
+                continue;
             }
             if (lastWriteSucceeded) {
-                writer.writeln();
+                write(" || ");
             }
-            writer.write("export function update" + syntaxNode.name + "(node: " + syntaxNode.type);
-            var children = syntaxNode.children;
-            for (var i = 0; i < children.length; i++) {
-                var member = children[i];
-                if (member.readonly) {
-                    continue;
-                }
-                writer.write(", ");
-                var paramName = member.paramName || member.name;
-                writer.write(formatName(paramName));
-                writer.write(": " + member.type);
-                if (member.isNodeArray || member.isModifiersArray) {
-                    writer.write("[]");
-                }
-            }
-            writer.writeln("): " + syntaxNode.type + " {");
-            writer.indent();
-            writer.write("if (");
-            lastWriteSucceeded = false;
-            for (var i = 0; i < children.length; i++) {
-                var member = children[i];
-                if (member.readonly) {
-                    continue;
-                }
-                if (lastWriteSucceeded) {
-                    writer.write(" || ");
-                }
-                var paramName = member.paramName || member.name;
-                writer.write("node." + member.name + " !== " + member.paramName);
-                lastWriteSucceeded = true;
-            }
-            writer.writeln(") {");
-            writer.indent();
-            writer.write("return create" + syntaxNode.name + "(");
-            for (var i = 0; i < children.length; i++) {
-                var member = children[i];
-                if (member.readonly) {
-                    writer.write("node." + member.name);
-                }
-                else {
-                    var paramName = member.paramName || member.name;
-                    writer.write(paramName);
-                }
-                writer.write(", ");
-            }
-            writer.writeln("node, node.flags);");
-            writer.dedent();
-            writer.writeln("}");
-            writer.writeln("return node;");
-            writer.dedent();
-            writer.writeln("}");
+            var paramName = member.paramName || member.name;
+            write("node." + member.name + " !== " + member.paramName);
             lastWriteSucceeded = true;
         }
-        function writeVisitorModule() {
-            writer.writeln("export module Visitor {");
-            writer.indent();
-            writeVisitNodeFallbackFunction();
-            writeVisitMemberFunction();
-            writer.dedent();
-            writer.writeln("}");
+        writeln(") {");
+        indent();
+        write("return create" + syntaxNode.name + "(");
+        for (var i = 0; i < children.length; i++) {
+            var member = children[i];
+            if (member.readonly) {
+                write("node." + member.name);
+            }
+            else {
+                var paramName = member.paramName || member.name;
+                write(paramName);
+            }
+            write(", ");
         }
-        function writeVisitNodeFallbackFunction() {
-            writer.writeln("function accept(node: Node, cbNode: Visitor, state?: any): Node {");
-            writer.indent();
-            writer.writeln("switch (node.kind) {");
-            writer.indent();
-            var pendingReturnNode = false;
-            for (var i = 0; i < syntax.length; i++) {
-                var syntaxNode = syntax[i];
-                if (!syntaxNode.kind) {
+        writeln("node, node.flags);");
+        dedent();
+        writeln("}");
+        writeln("return node;");
+        dedent();
+        writeln("}");
+        lastWriteSucceeded = true;
+    }
+    function writeVisitorModule() {
+        writeln("export module Visitor {");
+        indent();
+        writeFallbackFunction();
+        writeAcceptFunction();
+        dedent();
+        writeln("}");
+    }
+    function writeFallbackFunction() {
+        writeln("export function fallback<TNode extends Node>(node: TNode, cbNode: Visitor, state?: any): TNode {");
+        indent();
+        writeln("if (!cbNode || !node) {");
+        indent();
+        writeln("return node;");
+        dedent();
+        writeln("}");
+        writeln("return <TNode>accept(node, cbNode, state);");
+        dedent();
+        writeln("}");
+        writeln();
+    }
+    function writeAcceptFunction() {
+        writeln("function accept(node: Node, cbNode: Visitor, state?: any): Node {");
+        indent();
+        writeln("switch (node.kind) {");
+        indent();
+        var returnNodeIsPending = false;
+        for (var i = 0; i < syntax.length; i++) {
+            var syntaxNode = syntax[i];
+            if (!canCreate(syntaxNode)) {
+                continue;
+            }
+            var hasUpdate = canUpdate(syntaxNode);
+            if (!hasUpdate) {
+                returnNodeIsPending = true;
+            }
+            else if (returnNodeIsPending) {
+                returnNodeIsPending = false;
+                indent();
+                writeln("return node;");
+                dedent();
+            }
+            writeln("case SyntaxKind." + syntaxNode.kind + ":");
+            if (hasUpdate) {
+                indent();
+                writeUpdateNode(syntaxNode);
+                dedent();
+            }
+        }
+        if (returnNodeIsPending) {
+            indent();
+            writeln("return node;");
+            dedent();
+        }
+        dedent();
+        writeln("}");
+        dedent();
+        writeln("}");
+    }
+    function writeUpdateNode(syntaxNode) {
+        writeln("return Factory.update" + syntaxNode.name + "(");
+        indent();
+        write("<" + syntaxNode.type + ">node");
+        var children = syntaxNode.children;
+        if (children) {
+            for (var i = 0; i < children.length; i++) {
+                var member = children[i];
+                if (member.readonly) {
                     continue;
                 }
-                if (!syntaxNode.update) {
-                    pendingReturnNode = true;
-                }
-                else if (pendingReturnNode) {
-                    pendingReturnNode = false;
-                    writer.indent();
-                    writer.writeln("return node;");
-                    writer.dedent();
-                }
-                writer.writeln("case SyntaxKind." + syntaxNode.kind + ":");
-                if (syntaxNode.update) {
-                    writer.indent();
-                    writeUpdateNode(syntaxNode);
-                    writer.dedent();
-                }
+                writeln(",");
+                writeVisitMember(syntaxNode, member);
             }
-            if (pendingReturnNode) {
-                writer.indent();
-                writer.writeln("return node;");
-                writer.dedent();
-            }
-            writer.dedent();
-            writer.writeln("}");
-            writer.dedent();
-            writer.writeln("}");
         }
-        function writeUpdateNode(syntaxNode) {
-            writer.writeln("return Factory.update" + syntaxNode.name + "(");
-            writer.indent();
-            writer.write("<" + syntaxNode.type + ">node");
+        writeln(");");
+        dedent();
+    }
+    function writeVisitMember(syntaxNode, member) {
+        var memberSyntaxNode = getProperty(syntaxTypeTable, member.type);
+        if (memberSyntaxNode) {
+            if (member.isNodeArray) {
+                write("visitNodes<" + member.type + ">(");
+            }
+            else {
+                write("visit<" + member.type + ">(");
+            }
+        }
+        write("(<" + syntaxNode.type + ">node)." + member.name);
+        if (memberSyntaxNode) {
+            write(", cbNode, state)");
+        }
+    }
+    function normalizeType(type) {
+        if (type) {
+            type = type.replace(/\s+/g, "");
+            if (isUnionType(type)) {
+                var types = splitUnionType(type);
+                types.sort();
+                type = types.join("|");
+            }
+        }
+        return formatType(type);
+    }
+    function isUnionType(type) {
+        return type && type.indexOf('|') !== -1;
+    }
+    function splitUnionType(type) {
+        if (!type) {
+            return [];
+        }
+        return type.split(/\|/g).sort();
+    }
+    function formatName(type) {
+        if (!type) {
+            return;
+        }
+        return type.replace(/\s*\|\s*/g, "Or");
+    }
+    function formatType(type) {
+        if (!type) {
+            return;
+        }
+        return type.replace(/\s*\|\s*/g, " | ");
+    }
+    function canCreate(syntaxNode) {
+        return !!syntaxNode.kind;
+    }
+    function canUpdate(syntaxNode) {
+        if (canCreate(syntaxNode)) {
             var children = syntaxNode.children;
             if (children) {
                 for (var i = 0; i < children.length; i++) {
                     var member = children[i];
-                    if (member.readonly) {
-                        continue;
-                    }
-                    writer.writeln(",");
-                    writeVisitMember(syntaxNode, member);
-                }
-            }
-            writer.writeln(");");
-            writer.dedent();
-        }
-        function writeVisitMember(syntaxNode, member) {
-            var memberSyntaxNode = getProperty(syntaxTypeTable, member.type);
-            if (memberSyntaxNode) {
-                if (member.isNodeArray) {
-                    writer.write("visitNodes<" + member.type + ">(");
-                }
-                else {
-                    writer.write("visit<" + member.type + ">(");
-                }
-            }
-            writer.write("(<" + syntaxNode.type + ">node)." + member.name);
-            if (memberSyntaxNode) {
-                writer.write(", cbNode, state)");
-            }
-        }
-        function writeVisitMemberFunction() {
-            writer.suspendIndenting();
-            writer.writeln("\n        export function fallback<TNode extends Node>(node: TNode, cbNode: Visitor, state?: any): TNode {\n            if (!cbNode || !node) {\n                return node;\n            }\n            return <TNode>accept(node, cbNode, state);\n        }");
-            writer.resumeIndenting();
-        }
-        function normalizeType(type) {
-            if (type) {
-                type = type.replace(/\s+/g, "");
-                if (isUnionType(type)) {
-                    var types = splitUnionType(type);
-                    types.sort();
-                    type = types.join("|");
-                }
-            }
-            return formatType(type);
-        }
-        function getCompatibleTypeSubset(source, target) {
-            if (!source || !target) {
-                return;
-            }
-            if (source === target) {
-                return source;
-            }
-            var flatSource = flattenType(source);
-            var flatTarget = flattenType(target);
-            var flatIntersection = getIntersectionType(flatSource, flatTarget);
-            return flatIntersection;
-        }
-        function flattenType(type) {
-            if (!type) {
-                return void 0;
-            }
-            var parts = [];
-            var seen = {};
-            flattenTypeWorker(type);
-            parts.sort();
-            return parts.join("|");
-            function flattenTypeWorker(type) {
-                if (isAliasType(type)) {
-                    flattenTypeWorker(getAliasType(type));
-                }
-                else if (isUnionType(type)) {
-                    var types = splitUnionType(type);
-                    for (var i = 0; i < types.length; i++) {
-                        flattenTypeWorker(types[i]);
+                    if (!member.readonly) {
+                        return true;
                     }
                 }
-                else {
-                    writeType(type);
-                }
-            }
-            function writeType(type) {
-                if (!hasProperty(seen, type)) {
-                    seen[type] = true;
-                    parts.push(type);
-                }
             }
         }
-        function isTypeAssignableTo(source, target) {
-            if (!source || !target) {
-                return false;
-            }
-            if (source === target) {
-                return true;
-            }
-            if (isUnionType(source)) {
-                return isUnionTypeAssignableToType(source, target);
-            }
-            else if (isUnionType(target)) {
-                return isTypeAssignableToUnionType(source, target);
-            }
-            else if (isAliasType(source)) {
-                return isTypeAssignableTo(getAliasType(source), target);
-            }
-            else if (isAliasType(target)) {
-                return isTypeAssignableTo(source, getAliasType(target));
-            }
-            else {
-                return isSubtypeOfType(source, target);
-            }
-        }
-        function isUnionTypeAssignableToType(sourceUnion, target) {
-            if (!sourceUnion || !target) {
-                return false;
-            }
-            var sourceTypes = splitUnionType(sourceUnion);
-            for (var i = 0, l = sourceTypes.length; i < l; i++) {
-                var related = isTypeAssignableTo(sourceTypes[i], target);
-                if (!related) {
-                    return false;
-                }
-            }
-            return true;
-        }
-        function isTypeAssignableToUnionType(source, targetUnion) {
-            if (!source || !targetUnion) {
-                return false;
-            }
-            var targetTypes = splitUnionType(targetUnion);
-            for (var i = 0, l = targetTypes.length; i < l; i++) {
-                if (isTypeAssignableTo(source, targetTypes[i])) {
-                    return true;
-                }
-            }
-            return false;
-        }
-        function isSubtypeOfType(source, superType) {
-            if (!source || !superType) {
-                return false;
-            }
-            var sourceNode = syntaxTypeTable[source];
-            if (!sourceNode || !sourceNode.baseType) {
-                return false;
-            }
-            return isTypeAssignableTo(sourceNode.baseType, superType);
-        }
-        function isUnionType(type) {
-            if (type) {
-                return type.indexOf("|") !== -1;
-            }
-            return false;
-        }
-        function isAliasType(type) {
-            if (type) {
-                var nodeType = syntaxTypeTable[type];
-                if (nodeType && nodeType.types) {
-                    return true;
-                }
-            }
-            return false;
-        }
-        function getAliasType(type) {
-            if (type) {
-                var nodeType = syntaxTypeTable[type];
-                if (nodeType && nodeType.types) {
-                    return nodeType.types;
-                }
-            }
-        }
-        function splitUnionType(type) {
-            if (!type) {
-                return [];
-            }
-            return type.split(/\|/g).sort();
-        }
-        function getIntersectionType(flatLeft, flatRight) {
-            var left = splitUnionType(flatLeft);
-            var right = splitUnionType(flatRight);
-            var set = {};
-            var result = [];
-            for (var i = 0; i < left.length; i++) {
-                set[left[i]] = true;
-            }
-            for (var i = 0; i < right.length; i++) {
-                if (hasProperty(set, right[i])) {
-                    result.push(right[i]);
-                }
-            }
-            if (result.length) {
-                return result.sort().join("|");
-            }
-        }
-        function formatName(type) {
-            if (!type) {
-                return;
-            }
-            return type.replace(/\s*\|\s*/g, "Or");
-        }
-        function formatType(type) {
-            if (!type) {
-                return;
-            }
-            return type.replace(/\s*\|\s*/g, " | ");
-        }
+        return false;
     }
-    var TextWriter = (function () {
-        function TextWriter(text) {
-            this._parts = [];
-            this._indent = 0;
-            this._newlineRequested = false;
-            this._indentingSuspendedDepth = 0;
-            this._indentLevels = ["", "    "];
-            this.length = 0;
-            if (text) {
-                this.write(text);
-            }
-        }
-        TextWriter.prototype.write = function (text) {
-            if (text) {
-                var lines = text.split(/\r\n|\r|\n/g);
-                for (var i = 0; i < lines.length; i++) {
-                    var line = lines[i];
-                    if (i > 0) {
-                        this._newlineRequested = true;
-                    }
-                    this.tryWriteNewline();
-                    this._parts.push(line);
-                    this.length += line.length;
-                }
-            }
-        };
-        TextWriter.prototype.writeln = function (text) {
-            if (text) {
-                this.write(text);
-            }
-            else if (this._newlineRequested) {
-                this.writeNewline();
-            }
-            this._newlineRequested = true;
-        };
-        TextWriter.prototype.indent = function () {
-            this._indent++;
-        };
-        TextWriter.prototype.dedent = function () {
-            this._indent = Math.max(0, this._indent - 1);
-        };
-        TextWriter.prototype.suspendIndenting = function () {
-            this._indentingSuspendedDepth++;
-        };
-        TextWriter.prototype.resumeIndenting = function () {
-            this._indentingSuspendedDepth = Math.max(0, this._indentingSuspendedDepth - 1);
-        };
-        TextWriter.prototype.clear = function () {
-            this.length = 0;
-            this._parts.length = 0;
-        };
-        TextWriter.prototype.toString = function () {
-            var text = this._parts.join("");
-            return text;
-        };
-        TextWriter.prototype.tryWriteIndent = function () {
-            if (this._indentingSuspendedDepth || !this._indent) {
-                return;
-            }
-            var indent = this.getIndent(this._indent);
-            this._parts.push(indent);
-            this.length += indent.length;
-        };
-        TextWriter.prototype.tryWriteNewline = function () {
-            if (!this._newlineRequested) {
-                return;
-            }
-            this._newlineRequested = false;
-            this.writeNewline();
-            this.tryWriteIndent();
-        };
-        TextWriter.prototype.writeNewline = function () {
-            this._parts.push(ts.sys.newLine);
-            this.length += ts.sys.newLine.length;
-        };
-        TextWriter.prototype.getIndent = function (level) {
-            if (level in this._indentLevels) {
-                return this._indentLevels[level];
-            }
-            var indent = this.getIndent(level - 1) + this._indentLevels[1];
-            this._indentLevels[level] = indent;
-            return indent;
-        };
-        return TextWriter;
-    })();
     function hasProperty(map, key) {
         if (map) {
             return Object.prototype.hasOwnProperty.call(map, key);
@@ -2054,6 +1879,66 @@ var ts;
             return map[key];
         }
     }
+    function write(text) {
+        if (text) {
+            var lines = text.split(/\r\n|\r|\n/g);
+            for (var i = 0; i < lines.length; i++) {
+                var line = lines[i];
+                if (i > 0) {
+                    newlineRequested = true;
+                }
+                tryWriteNewline();
+                parts.push(line);
+            }
+        }
+    }
+    function writeln(text) {
+        if (text) {
+            write(text);
+        }
+        else if (newlineRequested) {
+            writeNewline();
+        }
+        newlineRequested = true;
+    }
+    function indent() {
+        indentDepth++;
+    }
+    function dedent() {
+        indentDepth = Math.max(0, indentDepth - 1);
+    }
+    function suspendIndenting() {
+        indentingSuspendedDepth++;
+    }
+    function resumeIndenting() {
+        indentingSuspendedDepth = Math.max(0, indentingSuspendedDepth - 1);
+    }
+    function tryWriteIndent() {
+        if (indentingSuspendedDepth || !indentDepth) {
+            return;
+        }
+        var indent = getIndent(indentDepth);
+        parts.push(indent);
+    }
+    function tryWriteNewline() {
+        if (!newlineRequested) {
+            return;
+        }
+        newlineRequested = false;
+        writeNewline();
+        tryWriteIndent();
+    }
+    function writeNewline() {
+        parts.push(ts.sys.newLine);
+    }
+    function getIndent(level) {
+        if (level in indentLevels) {
+            return indentLevels[level];
+        }
+        var indent = getIndent(level - 1) + indentLevels[1];
+        indentLevels[level] = indent;
+        return indent;
+    }
     main();
 })(ts || (ts = {}));
-//# sourceMappingURL=file:///C:/dev/TypeScript/scripts/processSyntax.js.map
+//# sourceMappingURL=file:///C:/dev/TypeScript/scripts/processFactory.js.map

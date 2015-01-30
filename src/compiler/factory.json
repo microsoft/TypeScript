@@ -42,16 +42,12 @@
         "kind": "Identifier",
         "type": "Identifier",
         "baseType": "LeftHandSideExpression",
-        "visit": true,
-        "handler": true,
-        "shallow": true,
         "children": [
             { "name": "text", "type": "string" }
         ]
     },
     {
         "type": "DeclarationName",
-        "visit": true,
         "types": "Identifier | LiteralExpression | ComputedPropertyName | BindingPattern"
     },
     {
