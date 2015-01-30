@@ -16,66 +16,9 @@ module ts {
             return finishNode(node, location, flags);
         }
 
-        export function createRegularExpressionLiteral(location?: TextRange, flags?: NodeFlags): LiteralExpression {
-            var node = beginNode<LiteralExpression>(SyntaxKind.RegularExpressionLiteral);
-            return finishNode(node, location, flags);
-        }
-
-        export function createNoSubstitutionTemplateLiteral(location?: TextRange, flags?: NodeFlags): LiteralExpression {
-            var node = beginNode<LiteralExpression>(SyntaxKind.NoSubstitutionTemplateLiteral);
-            return finishNode(node, location, flags);
-        }
-
-        export function createTemplateHead(location?: TextRange, flags?: NodeFlags): LiteralExpression {
-            var node = beginNode<LiteralExpression>(SyntaxKind.TemplateHead);
-            return finishNode(node, location, flags);
-        }
-
-        export function createTemplateMiddle(location?: TextRange, flags?: NodeFlags): LiteralExpression {
-            var node = beginNode<LiteralExpression>(SyntaxKind.TemplateMiddle);
-            return finishNode(node, location, flags);
-        }
-
-        export function createTemplateTail(location?: TextRange, flags?: NodeFlags): LiteralExpression {
-            var node = beginNode<LiteralExpression>(SyntaxKind.TemplateTail);
-            return finishNode(node, location, flags);
-        }
-
         export function createIdentifier(text: string, location?: TextRange, flags?: NodeFlags): Identifier {
             var node = beginNode<Identifier>(SyntaxKind.Identifier);
             node.text = text;
-            return finishNode(node, location, flags);
-        }
-
-        export function updateIdentifier(node: Identifier, text: string): Identifier {
-            if (node.text !== text) {
-                return createIdentifier(text, node, node.flags);
-            }
-            return node;
-        }
-
-        export function createThisKeyword(location?: TextRange, flags?: NodeFlags): LeftHandSideExpression {
-            var node = beginNode<LeftHandSideExpression>(SyntaxKind.ThisKeyword);
-            return finishNode(node, location, flags);
-        }
-
-        export function createSuperKeyword(location?: TextRange, flags?: NodeFlags): LeftHandSideExpression {
-            var node = beginNode<LeftHandSideExpression>(SyntaxKind.SuperKeyword);
-            return finishNode(node, location, flags);
-        }
-
-        export function createNullKeyword(location?: TextRange, flags?: NodeFlags): LeftHandSideExpression {
-            var node = beginNode<LeftHandSideExpression>(SyntaxKind.NullKeyword);
-            return finishNode(node, location, flags);
-        }
-
-        export function createTrueKeyword(location?: TextRange, flags?: NodeFlags): LeftHandSideExpression {
-            var node = beginNode<LeftHandSideExpression>(SyntaxKind.TrueKeyword);
-            return finishNode(node, location, flags);
-        }
-
-        export function createFalseKeyword(location?: TextRange, flags?: NodeFlags): LeftHandSideExpression {
-            var node = beginNode<LeftHandSideExpression>(SyntaxKind.FalseKeyword);
             return finishNode(node, location, flags);
         }
 
@@ -307,51 +250,6 @@ module ts {
                 return createIndexSignature(parameters, node.typeParameters, node.type, node.modifiers, node, node.flags);
             }
             return node;
-        }
-
-        export function createTypeReference(location?: TextRange, flags?: NodeFlags): TypeReferenceNode {
-            var node = beginNode<TypeReferenceNode>(SyntaxKind.TypeReference);
-            return finishNode(node, location, flags);
-        }
-
-        export function createFunctionType(location?: TextRange, flags?: NodeFlags): FunctionOrConstructorTypeNode {
-            var node = beginNode<FunctionOrConstructorTypeNode>(SyntaxKind.FunctionType);
-            return finishNode(node, location, flags);
-        }
-
-        export function createConstructorType(location?: TextRange, flags?: NodeFlags): FunctionOrConstructorTypeNode {
-            var node = beginNode<FunctionOrConstructorTypeNode>(SyntaxKind.ConstructorType);
-            return finishNode(node, location, flags);
-        }
-
-        export function createTypeQuery(location?: TextRange, flags?: NodeFlags): TypeQueryNode {
-            var node = beginNode<TypeQueryNode>(SyntaxKind.TypeQuery);
-            return finishNode(node, location, flags);
-        }
-
-        export function createTypeLiteral(location?: TextRange, flags?: NodeFlags): TypeLiteralNode {
-            var node = beginNode<TypeLiteralNode>(SyntaxKind.TypeLiteral);
-            return finishNode(node, location, flags);
-        }
-
-        export function createArrayType(location?: TextRange, flags?: NodeFlags): ArrayTypeNode {
-            var node = beginNode<ArrayTypeNode>(SyntaxKind.ArrayType);
-            return finishNode(node, location, flags);
-        }
-
-        export function createTupleType(location?: TextRange, flags?: NodeFlags): TupleTypeNode {
-            var node = beginNode<TupleTypeNode>(SyntaxKind.TupleType);
-            return finishNode(node, location, flags);
-        }
-
-        export function createUnionType(location?: TextRange, flags?: NodeFlags): UnionTypeNode {
-            var node = beginNode<UnionTypeNode>(SyntaxKind.UnionType);
-            return finishNode(node, location, flags);
-        }
-
-        export function createParenthesizedType(location?: TextRange, flags?: NodeFlags): ParenthesizedTypeNode {
-            var node = beginNode<ParenthesizedTypeNode>(SyntaxKind.ParenthesizedType);
-            return finishNode(node, location, flags);
         }
 
         export function createObjectBindingPattern(elements: BindingElement[], location?: TextRange, flags?: NodeFlags): BindingPattern {
@@ -1088,24 +986,6 @@ module ts {
 
         function accept(node: Node, cbNode: Visitor, state?: any): Node {
             switch (node.kind) {
-                case SyntaxKind.StringLiteral:
-                case SyntaxKind.NumericLiteral:
-                case SyntaxKind.RegularExpressionLiteral:
-                case SyntaxKind.NoSubstitutionTemplateLiteral:
-                case SyntaxKind.TemplateHead:
-                case SyntaxKind.TemplateMiddle:
-                case SyntaxKind.TemplateTail:
-                    return node;
-                case SyntaxKind.Identifier:
-                    return Factory.updateIdentifier(
-                        <Identifier>node,
-                        visit<string>((<Identifier>node).text, cbNode, state));
-                case SyntaxKind.ThisKeyword:
-                case SyntaxKind.SuperKeyword:
-                case SyntaxKind.NullKeyword:
-                case SyntaxKind.TrueKeyword:
-                case SyntaxKind.FalseKeyword:
-                    return node;
                 case SyntaxKind.QualifiedName:
                     return Factory.updateQualifiedName(
                         <QualifiedName>node,
@@ -1177,16 +1057,6 @@ module ts {
                     return Factory.updateIndexSignature(
                         <IndexSignatureDeclaration>node,
                         visitNodes<ParameterDeclaration>((<IndexSignatureDeclaration>node).parameters, cbNode, state));
-                case SyntaxKind.TypeReference:
-                case SyntaxKind.FunctionType:
-                case SyntaxKind.ConstructorType:
-                case SyntaxKind.TypeQuery:
-                case SyntaxKind.TypeLiteral:
-                case SyntaxKind.ArrayType:
-                case SyntaxKind.TupleType:
-                case SyntaxKind.UnionType:
-                case SyntaxKind.ParenthesizedType:
-                    return node;
                 case SyntaxKind.ObjectBindingPattern:
                     return Factory.updateObjectBindingPattern(
                         <BindingPattern>node,
@@ -1297,14 +1167,10 @@ module ts {
                     return Factory.updateYieldExpression(
                         <YieldExpression>node,
                         visit<Expression>((<YieldExpression>node).expression, cbNode, state));
-                case SyntaxKind.GeneratedLabel:
-                    return node;
                 case SyntaxKind.SpreadElementExpression:
                     return Factory.updateSpreadElementExpression(
                         <SpreadElementExpression>node,
                         visit<Expression>((<SpreadElementExpression>node).expression, cbNode, state));
-                case SyntaxKind.OmittedExpression:
-                    return node;
                 case SyntaxKind.TemplateSpan:
                     return Factory.updateTemplateSpan(
                         <TemplateSpan>node,
@@ -1318,8 +1184,6 @@ module ts {
                     return Factory.updateVariableStatement(
                         <VariableStatement>node,
                         visit<VariableDeclarationList>((<VariableStatement>node).declarationList, cbNode, state));
-                case SyntaxKind.EmptyStatement:
-                    return node;
                 case SyntaxKind.ExpressionStatement:
                     return Factory.updateExpressionStatement(
                         <ExpressionStatement>node,
@@ -1390,8 +1254,6 @@ module ts {
                         visit<Block>((<TryStatement>node).tryBlock, cbNode, state),
                         visit<CatchClause>((<TryStatement>node).catchClause, cbNode, state),
                         visit<Block>((<TryStatement>node).finallyBlock, cbNode, state));
-                case SyntaxKind.DebuggerStatement:
-                    return node;
                 case SyntaxKind.VariableDeclaration:
                     return Factory.updateVariableDeclaration(
                         <VariableDeclaration>node,

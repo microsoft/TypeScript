@@ -1740,32 +1740,14 @@ var ts;
         indent();
         writeln("switch (node.kind) {");
         indent();
-        var returnNodeIsPending = false;
         for (var i = 0; i < syntax.length; i++) {
             var syntaxNode = syntax[i];
-            if (!canCreate(syntaxNode)) {
+            if (!canUpdate(syntaxNode)) {
                 continue;
             }
-            var hasUpdate = canUpdate(syntaxNode);
-            if (!hasUpdate) {
-                returnNodeIsPending = true;
-            }
-            else if (returnNodeIsPending) {
-                returnNodeIsPending = false;
-                indent();
-                writeln("return node;");
-                dedent();
-            }
             writeln("case SyntaxKind." + syntaxNode.kind + ":");
-            if (hasUpdate) {
-                indent();
-                writeUpdateNode(syntaxNode);
-                dedent();
-            }
-        }
-        if (returnNodeIsPending) {
             indent();
-            writeln("return node;");
+            writeUpdateNode(syntaxNode);
             dedent();
         }
         writeln("default:");

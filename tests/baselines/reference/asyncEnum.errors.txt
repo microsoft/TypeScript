@@ -1,4 +1,4 @@
-tests/cases/conformance/async/downlevel/asyncEnum.ts(6,1): error TS1303: 'async' modifier cannot be used with an enum declaration.
+tests/cases/conformance/async/downlevel/asyncEnum.ts(6,1): error TS1042: 'async' modifier cannot be used here.
 
 
 ==== tests/cases/conformance/async/downlevel/asyncEnum.ts (1 errors) ====
@@ -9,6 +9,6 @@ tests/cases/conformance/async/downlevel/asyncEnum.ts(6,1): error TS1303: 'async'
     
     async enum E {  
     ~~~~~
-!!! error TS1303: 'async' modifier cannot be used with an enum declaration.
+!!! error TS1042: 'async' modifier cannot be used here.
       Value
     }

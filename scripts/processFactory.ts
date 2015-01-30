@@ -21,7 +21,6 @@ module ts {
         isModifiersArray?: boolean;
         optional?: string;
         converter?: string;
-        visit?: string;
         readonly?: boolean;
     }
 
@@ -324,39 +323,16 @@ module ts {
         writeln(`switch (node.kind) {`);
         indent();
 
-        var returnNodeIsPending = false;
         for (var i = 0; i < syntax.length; i++) {
             var syntaxNode = syntax[i];
-            if (!canCreate(syntaxNode)) {
+            if (!canUpdate(syntaxNode)) {
                 continue;
-            }
-
-            // combine runs of non-updatable nodes
-            var hasUpdate = canUpdate(syntaxNode);
-            if (!hasUpdate) {
-                returnNodeIsPending = true;
-            }
-            else if (returnNodeIsPending) {
-                returnNodeIsPending = false;
-                indent();
-                writeln(`return node;`);
-                dedent();
             }
 
             // write case
             writeln(`case SyntaxKind.${syntaxNode.kind}:`);
-
-            // if updatable, write update and recursive visit
-            if (hasUpdate) {
-                indent();
-                writeUpdateNode(syntaxNode);
-                dedent();
-            }
-        }
-
-        if (returnNodeIsPending) {
             indent();
-            writeln(`return node;`);
+            writeUpdateNode(syntaxNode);
             dedent();
         }
 

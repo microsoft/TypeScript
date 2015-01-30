@@ -10568,12 +10568,12 @@ module ts {
             switch (node.kind) {
                 case SyntaxKind.SetAccessor:
                 case SyntaxKind.Constructor:
+                case SyntaxKind.InterfaceDeclaration:
                 case SyntaxKind.PropertyDeclaration:
                 case SyntaxKind.PropertyAssignment:
                 case SyntaxKind.ShorthandPropertyAssignment:
                 case SyntaxKind.IndexSignature:
                 case SyntaxKind.ClassDeclaration:
-                case SyntaxKind.InterfaceDeclaration:
                 case SyntaxKind.ModuleDeclaration:
                 case SyntaxKind.EnumDeclaration:
                 case SyntaxKind.ExportAssignment:

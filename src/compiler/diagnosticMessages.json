@@ -158,8 +158,7 @@
     },
     "'{0}' modifier cannot be used here.": {
         "category": "Error",
-        "code": 1042,
-        "isEarly": true
+        "code": 1042
     },
     "'{0}' modifier cannot appear on a data property.": {
         "category": "Error",

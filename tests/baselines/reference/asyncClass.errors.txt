@@ -1,4 +1,4 @@
-tests/cases/conformance/async/downlevel/asyncClass.ts(6,1): error TS1041: 'async' modifier cannot be used with a class declaration.
+tests/cases/conformance/async/downlevel/asyncClass.ts(6,1): error TS1042: 'async' modifier cannot be used here.
 
 
 ==== tests/cases/conformance/async/downlevel/asyncClass.ts (1 errors) ====
@@ -9,5 +9,5 @@ tests/cases/conformance/async/downlevel/asyncClass.ts(6,1): error TS1041: 'async
     
     async class C {  
     ~~~~~
-!!! error TS1041: 'async' modifier cannot be used with a class declaration.
+!!! error TS1042: 'async' modifier cannot be used here.
     }
