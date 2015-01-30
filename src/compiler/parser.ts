@@ -4656,21 +4656,27 @@ module ts {
             // ImportSpecifier:
             //  ImportedBinding
             //  IdentifierName as ImportedBinding
-            var isfirstIdentifierNameNotAnIdentifier = isKeyword(token) && !isIdentifier();
+            var isFirstIdentifierNameNotAnIdentifier = isKeyword(token) && !isIdentifier();
             var start = scanner.getTokenPos();
             var identifierName = parseIdentifierName();
             if (token === SyntaxKind.AsKeyword) {
                 node.propertyName = identifierName;
                 parseExpected(SyntaxKind.AsKeyword);
-                node.name = parseIdentifier();
+                if (isIdentifier()) {
+                    node.name = parseIdentifierName();
+                }
+                else {
+                    parseErrorAtCurrentToken(Diagnostics.Identifier_expected);
+                }
             }
             else {
                 node.name = identifierName;
-                if (isfirstIdentifierNameNotAnIdentifier) {
+                if (isFirstIdentifierNameNotAnIdentifier) {
                     // Report error identifier expected
                     parseErrorAtPosition(start, identifierName.end - start, Diagnostics.Identifier_expected);
                 }
             }
+
             return finishNode(node);
         }
 
