@@ -800,7 +800,7 @@ module ts {
                         case SyntaxKind.TypeAliasDeclaration:
                         case SyntaxKind.EnumDeclaration:
                         case SyntaxKind.ModuleDeclaration:
-                        case SyntaxKind.ImportDeclaration:
+                        case SyntaxKind.ImportEqualsDeclaration:
                         case SyntaxKind.GetAccessor:
                         case SyntaxKind.SetAccessor:
                         case SyntaxKind.TypeLiteral:
@@ -1864,7 +1864,7 @@ module ts {
     function isNameOfExternalModuleImportOrDeclaration(node: Node): boolean {
         if (node.kind === SyntaxKind.StringLiteral) {
             return isNameOfModuleDeclaration(node) ||
-                (isExternalModuleImportDeclaration(node.parent.parent) && getExternalModuleImportDeclarationExpression(node.parent.parent) === node);
+                (isExternalModuleImportEqualsDeclaration(node.parent.parent) && getExternalModuleImportEqualsDeclarationExpression(node.parent.parent) === node);
         }
 
         return false;
@@ -2942,19 +2942,19 @@ module ts {
                 displayParts.push(spacePart());
                 addFullSymbolName(symbol);
                 ts.forEach(symbol.declarations, declaration => {
-                    if (declaration.kind === SyntaxKind.ImportDeclaration) {
-                        var importDeclaration = <ImportDeclaration>declaration;
-                        if (isExternalModuleImportDeclaration(importDeclaration)) {
+                    if (declaration.kind === SyntaxKind.ImportEqualsDeclaration) {
+                        var importEqualsDeclaration = <ImportEqualsDeclaration>declaration;
+                        if (isExternalModuleImportEqualsDeclaration(importEqualsDeclaration)) {
                             displayParts.push(spacePart());
                             displayParts.push(operatorPart(SyntaxKind.EqualsToken));
                             displayParts.push(spacePart());
                             displayParts.push(keywordPart(SyntaxKind.RequireKeyword));
                             displayParts.push(punctuationPart(SyntaxKind.OpenParenToken));
-                            displayParts.push(displayPart(getTextOfNode(getExternalModuleImportDeclarationExpression(importDeclaration)), SymbolDisplayPartKind.stringLiteral));
+                            displayParts.push(displayPart(getTextOfNode(getExternalModuleImportEqualsDeclarationExpression(importEqualsDeclaration)), SymbolDisplayPartKind.stringLiteral));
                             displayParts.push(punctuationPart(SyntaxKind.CloseParenToken));
                         }
                         else {
-                            var internalAliasSymbol = typeResolver.getSymbolAtLocation(importDeclaration.moduleReference);
+                            var internalAliasSymbol = typeResolver.getSymbolAtLocation(importEqualsDeclaration.moduleReference);
                             if (internalAliasSymbol) {
                                 displayParts.push(spacePart());
                                 displayParts.push(operatorPart(SyntaxKind.EqualsToken));
@@ -4675,7 +4675,7 @@ module ts {
                         return SemanticMeaning.Namespace;
                     }
 
-                case SyntaxKind.ImportDeclaration:
+                case SyntaxKind.ImportEqualsDeclaration:
                     return SemanticMeaning.Value | SemanticMeaning.Type | SemanticMeaning.Namespace;
 
                 // An external module can be a Value
@@ -4710,10 +4710,10 @@ module ts {
             while (node.parent.kind === SyntaxKind.QualifiedName) {
                 node = node.parent;
             }
-            return isInternalModuleImportDeclaration(node.parent) && (<ImportDeclaration>node.parent).moduleReference === node;
+            return isInternalModuleImportEqualsDeclaration(node.parent) && (<ImportEqualsDeclaration>node.parent).moduleReference === node;
         }
 
-        function getMeaningFromRightHandSideOfImport(node: Node) {
+        function getMeaningFromRightHandSideOfImportEquals(node: Node) {
             Debug.assert(node.kind === SyntaxKind.Identifier);
 
             //     import a = |b|; // Namespace
@@ -4722,7 +4722,7 @@ module ts {
 
             if (node.parent.kind === SyntaxKind.QualifiedName &&
                 (<QualifiedName>node.parent).right === node &&
-                node.parent.parent.kind === SyntaxKind.ImportDeclaration) {
+                node.parent.parent.kind === SyntaxKind.ImportEqualsDeclaration) {
                 return SemanticMeaning.Value | SemanticMeaning.Type | SemanticMeaning.Namespace;
             }
             return SemanticMeaning.Namespace;
@@ -4733,7 +4733,7 @@ module ts {
                 return SemanticMeaning.Value | SemanticMeaning.Type | SemanticMeaning.Namespace;
             }
             else if (isInRightSideOfImport(node)) {
-                return getMeaningFromRightHandSideOfImport(node);
+                return getMeaningFromRightHandSideOfImportEquals(node);
             }
             else if (isDeclarationOrFunctionExpressionOrCatchVariableName(node)) {
                 return getMeaningFromDeclaration(node.parent);

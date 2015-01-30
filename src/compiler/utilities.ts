@@ -578,17 +578,17 @@ module ts {
                (preserveConstEnums && moduleState === ModuleInstanceState.ConstEnumOnly);
     }
 
-    export function isExternalModuleImportDeclaration(node: Node) {
-        return node.kind === SyntaxKind.ImportDeclaration && (<ImportDeclaration>node).moduleReference.kind === SyntaxKind.ExternalModuleReference;
+    export function isExternalModuleImportEqualsDeclaration(node: Node) {
+        return node.kind === SyntaxKind.ImportEqualsDeclaration && (<ImportEqualsDeclaration>node).moduleReference.kind === SyntaxKind.ExternalModuleReference;
     }
 
-    export function getExternalModuleImportDeclarationExpression(node: Node) {
-        Debug.assert(isExternalModuleImportDeclaration(node));
-        return (<ExternalModuleReference>(<ImportDeclaration>node).moduleReference).expression;
+    export function getExternalModuleImportEqualsDeclarationExpression(node: Node) {
+        Debug.assert(isExternalModuleImportEqualsDeclaration(node));
+        return (<ExternalModuleReference>(<ImportEqualsDeclaration>node).moduleReference).expression;
     }
 
-    export function isInternalModuleImportDeclaration(node: Node) {
-        return node.kind === SyntaxKind.ImportDeclaration && (<ImportDeclaration>node).moduleReference.kind !== SyntaxKind.ExternalModuleReference;
+    export function isInternalModuleImportEqualsDeclaration(node: Node) {
+        return node.kind === SyntaxKind.ImportEqualsDeclaration && (<ImportEqualsDeclaration>node).moduleReference.kind !== SyntaxKind.ExternalModuleReference;
     }
 
     export function hasDotDotDotToken(node: Node) {
@@ -667,7 +667,7 @@ module ts {
             case SyntaxKind.TypeAliasDeclaration:
             case SyntaxKind.EnumDeclaration:
             case SyntaxKind.ModuleDeclaration:
-            case SyntaxKind.ImportDeclaration:
+            case SyntaxKind.ImportEqualsDeclaration:
                 return true;
         }
         return false;
@@ -764,7 +764,7 @@ module ts {
                         case SyntaxKind.InterfaceDeclaration:
                         case SyntaxKind.TypeAliasDeclaration:
                         case SyntaxKind.ModuleDeclaration:
-                        case SyntaxKind.ImportDeclaration:
+                        case SyntaxKind.ImportEqualsDeclaration:
                             // early exit cases - declarations cannot be nested in classes
                             return undefined;
                         default:

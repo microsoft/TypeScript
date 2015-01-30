@@ -276,10 +276,10 @@ module ts {
 
         function processImportedModules(file: SourceFile, basePath: string) {
             forEach(file.statements, node => {
-                if (isExternalModuleImportDeclaration(node) &&
-                    getExternalModuleImportDeclarationExpression(node).kind === SyntaxKind.StringLiteral) {
+                if (isExternalModuleImportEqualsDeclaration(node) &&
+                    getExternalModuleImportEqualsDeclarationExpression(node).kind === SyntaxKind.StringLiteral) {
 
-                    var nameLiteral = <LiteralExpression>getExternalModuleImportDeclarationExpression(node);
+                    var nameLiteral = <LiteralExpression>getExternalModuleImportEqualsDeclarationExpression(node);
                     var moduleName = nameLiteral.text;
                     if (moduleName) {
                         var searchPath = basePath;
@@ -304,10 +304,10 @@ module ts {
                     // The StringLiteral must specify a top - level external module name.
                     // Relative external module names are not permitted
                     forEachChild((<ModuleDeclaration>node).body, node => {
-                        if (isExternalModuleImportDeclaration(node) &&
-                            getExternalModuleImportDeclarationExpression(node).kind === SyntaxKind.StringLiteral) {
+                        if (isExternalModuleImportEqualsDeclaration(node) &&
+                            getExternalModuleImportEqualsDeclarationExpression(node).kind === SyntaxKind.StringLiteral) {
 
-                            var nameLiteral = <LiteralExpression>getExternalModuleImportDeclarationExpression(node);
+                            var nameLiteral = <LiteralExpression>getExternalModuleImportEqualsDeclarationExpression(node);
                             var moduleName = nameLiteral.text;
                             if (moduleName) {
                                 // TypeScript 1.0 spec (April 2014): 12.1.6

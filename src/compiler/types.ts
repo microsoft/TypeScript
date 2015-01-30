@@ -120,6 +120,8 @@ module ts {
         WhileKeyword,
         WithKeyword,
         // Strict mode reserved words
+        AsKeyword,
+        FromKeyword,
         ImplementsKeyword,
         InterfaceKeyword,
         LetKeyword,
@@ -228,8 +230,13 @@ module ts {
         EnumDeclaration,
         ModuleDeclaration,
         ModuleBlock,
-        ImportDeclaration,
+        ImportEqualsDeclaration,
         ExportAssignment,
+        ImportDeclaration,
+        ImportClause,
+        NamespaceImport,
+        NamedImports,
+        ImportSpecifier,
 
         // Module references
         ExternalModuleReference,
@@ -849,7 +856,7 @@ module ts {
         statements: NodeArray<ModuleElement>
     }
 
-    export interface ImportDeclaration extends Declaration, ModuleElement {
+    export interface ImportEqualsDeclaration extends Declaration, ModuleElement {
         name: Identifier;
 
         // 'EntityName' for an internal module reference, 'ExternalModuleReference' for an external
@@ -859,6 +866,39 @@ module ts {
 
     export interface ExternalModuleReference extends Node {
         expression?: Expression;
+    }
+
+    // In case of:
+    // import "mod"  => importClause = undefined, moduleSpecifier = "mod"
+    // In rest of the cases, module specifier is string literal corresponding to module
+    // ImportClause information is shown at its declaration below.
+    export interface ImportDeclaration extends Statement, ModuleElement {
+        importClause?: ImportClause;
+        moduleSpecifier: StringLiteralExpression;
+    }
+
+    // In case of: 
+    // import d from "mod" => name = d, namedBinding = undefined
+    // import * as ns from "mod" => name = undefined, namedBinding: NamespaceImport = { name: ns }
+    // import d, * as ns from "mod" => name = d, namedBinding: NamespaceImport = { name: ns }
+    // import { a, b as x } from "mod" => name = undefined, namedBinding: NamedImports = { elements: [{ name: a }, { name: x, propertyName: b}]}
+    // import d, { a, b as x } from "mod" => name = d, namedBinding: NamedImports = { elements: [{ name: a }, { name: x, propertyName: b}]}
+    export interface ImportClause extends Declaration {
+        name?: Identifier; // Default binding
+        namedBindings?: NamespaceImport | NamedImports;
+    }
+
+    export interface NamespaceImport extends Declaration {
+        name: Identifier;
+    }
+
+    export interface NamedImports extends Node {
+        elements: NodeArray<ImportSpecifier>;
+    }
+
+    export interface ImportSpecifier extends Declaration {
+        propertyName?: Identifier; // Property name to be imported from module
+        name: Identifier; // element name to be imported in the scope
     }
 
     export interface ExportAssignment extends Statement, ModuleElement {
@@ -1099,7 +1139,7 @@ module ts {
 
     export interface SymbolVisibilityResult {
         accessibility: SymbolAccessibility;
-        aliasesToMakeVisible?: ImportDeclaration[]; // aliases that need to have this symbol visible
+        aliasesToMakeVisible?: ImportEqualsDeclaration[]; // aliases that need to have this symbol visible
         errorSymbolName?: string; // Optional symbol name that results in error
         errorNode?: Node; // optional node that results in error
     }
@@ -1112,8 +1152,8 @@ module ts {
         getLocalNameOfContainer(container: ModuleDeclaration | EnumDeclaration): string;
         getExpressionNamePrefix(node: Identifier): string;
         getExportAssignmentName(node: SourceFile): string;
-        isReferencedImportDeclaration(node: ImportDeclaration): boolean;
-        isTopLevelValueImportWithEntityName(node: ImportDeclaration): boolean;
+        isReferencedImportEqualsDeclaration(node: ImportEqualsDeclaration): boolean;
+        isTopLevelValueImportEqualsWithEntityName(node: ImportEqualsDeclaration): boolean;
         getNodeCheckFlags(node: Node): NodeCheckFlags;
         getEnumMemberValue(node: EnumMember): number;
         hasSemanticErrors(sourceFile?: SourceFile): boolean;
