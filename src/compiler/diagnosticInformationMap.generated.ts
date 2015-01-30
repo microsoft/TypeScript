@@ -36,7 +36,7 @@ module ts {
         Initializers_are_not_allowed_in_ambient_contexts: { code: 1039, category: DiagnosticCategory.Error, key: "Initializers are not allowed in ambient contexts.", isEarly: true },
         _0_modifier_cannot_be_used_in_an_ambient_context: { code: 1040, category: DiagnosticCategory.Error, key: "'{0}' modifier cannot be used in an ambient context." },
         _0_modifier_cannot_be_used_with_a_class_declaration: { code: 1041, category: DiagnosticCategory.Error, key: "'{0}' modifier cannot be used with a class declaration." },
-        _0_modifier_cannot_be_used_on_a_1_accessor: { code: 1042, category: DiagnosticCategory.Error, key: "'{0}' modifier cannot be used on a '{1}' accessor.", isEarly: true },
+        _0_modifier_cannot_be_used_here: { code: 1042, category: DiagnosticCategory.Error, key: "'{0}' modifier cannot be used here.", isEarly: true },
         _0_modifier_cannot_appear_on_a_data_property: { code: 1043, category: DiagnosticCategory.Error, key: "'{0}' modifier cannot appear on a data property." },
         _0_modifier_cannot_appear_on_a_module_element: { code: 1044, category: DiagnosticCategory.Error, key: "'{0}' modifier cannot appear on a module element.", isEarly: true },
         _0_modifier_cannot_be_used_with_an_interface_declaration: { code: 1045, category: DiagnosticCategory.Error, key: "'{0}' modifier cannot be used with an interface declaration.", isEarly: true },

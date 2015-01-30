@@ -10567,35 +10567,21 @@ module ts {
         function checkAsyncModifier(node: Node, asyncModifier: Node): boolean {
             switch (node.kind) {
                 case SyntaxKind.SetAccessor:
-                    return grammarErrorOnNode(asyncModifier, Diagnostics._0_modifier_cannot_be_used_on_a_1_accessor, "async", "set");
                 case SyntaxKind.Constructor:
-                    return grammarErrorOnNode(asyncModifier, Diagnostics._0_modifier_cannot_appear_on_a_constructor_declaration, "async");
                 case SyntaxKind.PropertyDeclaration:
-                    return grammarErrorOnNode(asyncModifier, Diagnostics._0_modifier_cannot_appear_on_a_data_property, "async");
                 case SyntaxKind.PropertyAssignment:
-                    return grammarErrorOnNode(asyncModifier, Diagnostics._0_modifier_cannot_appear_on_a_data_property, "async");
                 case SyntaxKind.ShorthandPropertyAssignment:
-                    return grammarErrorOnNode(asyncModifier, Diagnostics._0_modifier_cannot_appear_on_a_data_property, "async");
                 case SyntaxKind.IndexSignature:
-                    return grammarErrorOnNode(asyncModifier, Diagnostics._0_modifier_cannot_be_used_in_an_ambient_context, "async");
                 case SyntaxKind.ClassDeclaration:
-                    return grammarErrorOnNode(asyncModifier, Diagnostics._0_modifier_cannot_be_used_with_a_class_declaration, "async");
                 case SyntaxKind.InterfaceDeclaration:
-                    return grammarErrorOnNode(asyncModifier, Diagnostics._0_modifier_cannot_be_used_with_an_interface_declaration, "async");
                 case SyntaxKind.ModuleDeclaration:
-                    return grammarErrorOnNode(asyncModifier, Diagnostics._0_modifier_cannot_be_used_with_a_module_declaration, "async");
                 case SyntaxKind.EnumDeclaration:
-                    return grammarErrorOnNode(asyncModifier, Diagnostics._0_modifier_cannot_be_used_with_an_enum_declaration, "async");
                 case SyntaxKind.ExportAssignment:
-                    return grammarErrorOnNode(asyncModifier, Diagnostics._0_modifier_cannot_be_used_with_an_export_assignment_declaration, "async");
                 case SyntaxKind.VariableStatement:
-                    return grammarErrorOnNode(asyncModifier, Diagnostics._0_modifier_cannot_be_used_on_a_variable_statement, "async");
                 case SyntaxKind.TypeAliasDeclaration:
-                    return grammarErrorOnNode(asyncModifier, Diagnostics._0_modifier_cannot_be_used_with_a_type_declaration, "async");
                 case SyntaxKind.ImportDeclaration:
-                    return grammarErrorOnNode(asyncModifier, Diagnostics._0_modifier_cannot_be_used_with_an_import_declaration, "async");
                 case SyntaxKind.Parameter:
-                    return grammarErrorOnNode(asyncModifier, Diagnostics._0_modifier_cannot_be_used_with_a_parameter_declaration, "async");
+                    return grammarErrorOnNode(asyncModifier, Diagnostics._0_modifier_cannot_be_used_here, "async");
                 default:
                     return false;
             }

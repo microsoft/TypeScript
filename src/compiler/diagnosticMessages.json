@@ -156,7 +156,7 @@
         "category": "Error",
         "code": 1041
     },
-    "'{0}' modifier cannot be used on a '{1}' accessor.": {
+    "'{0}' modifier cannot be used here.": {
         "category": "Error",
         "code": 1042,
         "isEarly": true
