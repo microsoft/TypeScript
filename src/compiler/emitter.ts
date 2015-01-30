@@ -2462,8 +2462,11 @@ module ts {
             function tryEmitConstantValue(node: PropertyAccessExpression | ElementAccessExpression): boolean {
                 var constantValue = resolver.getConstantValue(node);
                 if (constantValue !== undefined) {
-                    var propertyName = node.kind === SyntaxKind.PropertyAccessExpression ? declarationNameToString((<PropertyAccessExpression>node).name) : getTextOfNode((<ElementAccessExpression>node).argumentExpression);
-                    write(constantValue.toString() + (!compilerOptions.removeComments ? " /* " + propertyName + " */" : ""));
+                    write(constantValue.toString());
+                    if (!compilerOptions.removeComments) {
+                        var propertyName: string = node.kind === SyntaxKind.PropertyAccessExpression ? declarationNameToString((<PropertyAccessExpression>node).name) : getTextOfNode((<ElementAccessExpression>node).argumentExpression);
+                        write(" /* " + propertyName + " */");
+                    }
                     return true;
                 }
                 return false;
