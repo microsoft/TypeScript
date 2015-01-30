@@ -240,6 +240,7 @@ module ts {
         ExportAll,
         ExportClauseDeclaration,
         ExportClause,
+        DefaultAssignmentExpression,
 
         // Module references
         ExternalModuleReference,
@@ -302,8 +303,9 @@ module ts {
         Let =               0x00000800,  // Variable declaration
         Const =             0x00001000,  // Variable declaration
         OctalLiteral =      0x00002000,
+        Default =           0x00004000,  // default
 
-        Modifier = Export | Ambient | Public | Private | Protected | Static,
+        Modifier = Export | Ambient | Public | Private | Protected | Static | Default,
         AccessibilityModifier = Public | Private | Protected,
         BlockScoped = Let | Const
     }
@@ -913,6 +915,10 @@ module ts {
     export interface ExportClauseDeclaration extends Declaration, ModuleElement {
         exportClause: ExportClause;
         moduleSpecifier?: StringLiteralExpression;
+    }
+
+    export interface DefaultAssignmentExpression extends Statement, ModuleElement {
+        expression: Expression;
     }
 
     export interface ExportAssignment extends Statement, ModuleElement {

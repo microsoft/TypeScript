@@ -1,0 +1,14 @@
+=== tests/cases/compiler/es6ExportDefaultAssignmentWithIn.ts ===
+
+function b() {
+>b : () => { a: number; }
+
+    return {
+>{        a: 10    } : { a: number; }
+
+        a: 10
+>a : number
+
+    };
+}
+export default a in b();

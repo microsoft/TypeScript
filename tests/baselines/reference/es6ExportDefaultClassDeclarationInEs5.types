@@ -1,0 +1,8 @@
+=== tests/cases/compiler/es6ExportDefaultClassDeclarationInEs5.ts ===
+
+export default class c {
+>c : c
+
+    member = 10;
+>member : number
+}

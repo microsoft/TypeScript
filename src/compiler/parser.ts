@@ -332,6 +332,7 @@ module ts {
             case SyntaxKind.ExportKeyword: return NodeFlags.Export;
             case SyntaxKind.DeclareKeyword: return NodeFlags.Ambient;
             case SyntaxKind.ConstKeyword: return NodeFlags.Const;
+            case SyntaxKind.DefaultKeyword: return NodeFlags.Default;
         }
         return 0;
     }
@@ -1392,13 +1393,30 @@ module ts {
                 return nextToken() === SyntaxKind.EnumKeyword;
             }
 
+            // default function/class is modifier while default anythingElse is not
+            if (token === SyntaxKind.DefaultKeyword) {
+                // default is modifier if it is followed by class or function
+                return nextTokenIsClassOrFunctionKeyword();
+            }
+
             var isTokenExport = token === SyntaxKind.ExportKeyword;
 
             nextToken();
-            if (isTokenExport && (token === SyntaxKind.AsteriskToken || token === SyntaxKind.OpenBraceToken)) {
-                // Export is not modifier if it is followed by '*' or '{'
-                return false;
+            if (isTokenExport) {
+                // If this is export default
+                // export default function/class makes export as well as default modifier
+                // export default AnythingElse makes both export and default not modifier
+                if (token === SyntaxKind.DefaultKeyword) {
+                    // default is modifier if it is followed by class or function
+                    return lookAhead(nextTokenIsClassOrFunctionKeyword);
+                }
+
+                if (token === SyntaxKind.AsteriskToken || token === SyntaxKind.OpenBraceToken) {
+                    // Export is not modifier if it is followed by '*' or '{'
+                    return false;
+                }
             }
+            
             return canFollowModifier();
         }
 
@@ -1407,6 +1425,11 @@ module ts {
                 || token === SyntaxKind.OpenBraceToken
                 || token === SyntaxKind.AsteriskToken
                 || isLiteralPropertyName();
+        }
+
+        function nextTokenIsClassOrFunctionKeyword(): boolean {
+            nextToken();
+            return token === SyntaxKind.ClassKeyword || token === SyntaxKind.FunctionKeyword;
         }
 
         // True if positioned at the start of a list element
@@ -4200,7 +4223,7 @@ module ts {
             setModifiers(node, modifiers);
             parseExpected(SyntaxKind.FunctionKeyword);
             node.asteriskToken = parseOptionalToken(SyntaxKind.AsteriskToken);
-            node.name = parseIdentifier();
+            node.name = isDefault(node) ? parseOptionalIdentifier() : parseIdentifier();
             fillSignature(SyntaxKind.ColonToken, /*yieldAndGeneratorParameterContext:*/ !!node.asteriskToken, /*requireCompleteParameterList:*/ false, node);
             node.body = parseFunctionBlockOrSemicolon(!!node.asteriskToken, Diagnostics.or_expected);
             return finishNode(node);
@@ -4376,7 +4399,7 @@ module ts {
             var node = <ClassDeclaration>createNode(SyntaxKind.ClassDeclaration, fullStart);
             setModifiers(node, modifiers);
             parseExpected(SyntaxKind.ClassKeyword);
-            node.name = parseIdentifier();
+            node.name = isDefault(node) ? parseOptionalIdentifier() : parseIdentifier();
             node.typeParameters = parseTypeParameters();
             node.heritageClauses = parseHeritageClauses(/*isClassHeritageClause:*/ true);
 
@@ -4731,6 +4754,16 @@ module ts {
             return finishNode(node);
         }
 
+        function parseDefaultAssignmentExpression(fullStart: number, modifiers: ModifiersArray): DefaultAssignmentExpression {
+            var node = <DefaultAssignmentExpression>createNode(SyntaxKind.DefaultAssignmentExpression, fullStart);
+            setModifiers(node, modifiers);
+            // ExportDeclaration: 
+            //  export default [lookahead != { function, class }]  AssignmentExpression[In];
+            node.expression = allowInAnd(parseAssignmentExpressionOrHigher);
+            parseSemicolon();
+            return finishNode(node);
+        }
+
         function isLetDeclaration() {
             // It is let declaration if in strict mode or next token is identifier on same line.
             // otherwise it needs to be treated like identifier
@@ -4792,7 +4825,11 @@ module ts {
 
         function nextTokenFollowingExportMakesDeclaration() {
             nextToken();
-            return token === SyntaxKind.EqualsToken  || token === SyntaxKind.AsteriskToken || token === SyntaxKind.OpenBraceToken || isDeclarationStart();
+            return token === SyntaxKind.EqualsToken ||
+                token === SyntaxKind.AsteriskToken ||
+                token === SyntaxKind.OpenBraceToken ||
+                token === SyntaxKind.DefaultKeyword ||
+                isDeclarationStart();
         }
 
         function nextTokenIsDeclarationStart() {
@@ -4817,6 +4854,13 @@ module ts {
                 }
                 if (token === SyntaxKind.OpenBraceToken) {
                     return parseExportClauseDeclaration(fullStart, modifiers);
+                }
+            }
+
+            if (parseOptional(SyntaxKind.DefaultKeyword)) {
+                if (token !== SyntaxKind.FunctionKeyword &&
+                    token !== SyntaxKind.ClassKeyword) {
+                    return parseDefaultAssignmentExpression(fullStart, modifiers);
                 }
             }
 
@@ -4921,11 +4965,13 @@ module ts {
         function setExternalModuleIndicator(sourceFile: SourceFile) {
             sourceFile.externalModuleIndicator = forEach(sourceFile.statements, node =>
                 node.flags & NodeFlags.Export
+                || node.flags & NodeFlags.Default
                 || node.kind === SyntaxKind.ImportEqualsDeclaration && (<ImportEqualsDeclaration>node).moduleReference.kind === SyntaxKind.ExternalModuleReference
                 || node.kind === SyntaxKind.ExportAssignment
                 || node.kind === SyntaxKind.ImportDeclaration
                 || node.kind === SyntaxKind.ExportAll
                 || node.kind === SyntaxKind.ExportClauseDeclaration
+                || node.kind === SyntaxKind.DefaultAssignmentExpression
                     ? node
                     : undefined);
         }

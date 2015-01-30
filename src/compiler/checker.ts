@@ -8660,7 +8660,10 @@ module ts {
             // Grammar checking
             checkGrammarClassDeclarationHeritageClauses(node);
 
-            checkTypeNameIsReserved(node.name, Diagnostics.Class_name_cannot_be_0);
+            // TODO(shkamat): Fix this later for anonymous class declaration
+            if (node.name) {
+                checkTypeNameIsReserved(node.name, Diagnostics.Class_name_cannot_be_0);
+            }
             checkTypeParameters(node.typeParameters);
             checkCollisionWithCapturedThisVariable(node, node.name);
             checkCollisionWithRequireExportsInGeneratedCode(node, node.name);
