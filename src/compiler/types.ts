@@ -878,13 +878,13 @@ module ts {
     }
 
     // In case of: 
-    // import d from "mod" => defaultBinding = d, namedBinding = undefined
-    // import * as ns from "mod" => defaultBinding = undefined, namedBinding: NamespaceImport = { name: ns }
-    // import d, * as ns from "mod" => defaultBinding = d, namedBinding: NamespaceImport = { name: ns }
-    // import { a, b as x } from "mod" => defaultBinding = undefined, namedBinding: NamedImports = { elements: [{ name: a }, { name: x, propertyName: b}]}
-    // import d, { a, b as x } from "mod" => defaultBinding = d, namedBinding: NamedImports = { elements: [{ name: a }, { name: x, propertyName: b}]}
-    export interface ImportClause extends Node {
-        defaultBinding?: Identifier;
+    // import d from "mod" => name = d, namedBinding = undefined
+    // import * as ns from "mod" => name = undefined, namedBinding: NamespaceImport = { name: ns }
+    // import d, * as ns from "mod" => name = d, namedBinding: NamespaceImport = { name: ns }
+    // import { a, b as x } from "mod" => name = undefined, namedBinding: NamedImports = { elements: [{ name: a }, { name: x, propertyName: b}]}
+    // import d, { a, b as x } from "mod" => name = d, namedBinding: NamedImports = { elements: [{ name: a }, { name: x, propertyName: b}]}
+    export interface ImportClause extends Declaration {
+        name?: Identifier; // Default binding
         namedBindings?: NamespaceImport | NamedImports;
     }
 

@@ -4569,12 +4569,12 @@ module ts {
                 if (identifier) {
                     // ImportedDefaultBinding:
                     //  ImportedBinding
-                    importClause.defaultBinding = identifier;
+                    importClause.name = identifier;
                 }
 
                 // If there was no default import or if there is comma token after default import 
                 // parse namespace or named imports
-                if (!importClause.defaultBinding ||
+                if (!importClause.name ||
                     parseOptional(SyntaxKind.CommaToken)) {
                     importClause.namedBindings = token === SyntaxKind.AsteriskToken ? parseNamespaceImport() : parseNamedImports();
                 }
